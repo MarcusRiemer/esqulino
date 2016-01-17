@@ -1,0 +1,5 @@
+*.mp4	filter=lfs diff=lfs merge=lfs -text
+*.pptx	filter=lfs diff=lfs merge=lfs -text
+doc/**/*.png filter=lfs diff=lfs merge=lfs -text
+doc/**/*.pdf filter=lfs diff=lfs merge=lfs -text
+data/**/*.sqlite filter=lfs diff=lfs merge=lfs -text
