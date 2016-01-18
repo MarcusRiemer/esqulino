@@ -1,0 +1,7 @@
+auto
+report.pdf
+*.aux
+*.log
+*.out
+*.tdo
+*.toc
