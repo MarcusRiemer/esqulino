@@ -1,0 +1,138 @@
+\documentclass[paper=a4,fontsize=11pt,parskip=half]{scrartcl}
+
+%% packages
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[draft]{optional}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{textcomp,amsfonts,amssymb}
+\usepackage{csquotes}
+\usepackage[absolute]{textpos}
+\usepackage{adjustbox}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+\usepackage[colorinlistoftodos,prependcaption]{todonotes}
+
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{\textbf{Unsure}: #2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{\textbf{Change}: #2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{\textbf{Info}: #2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{\textbf{Improve}: #2}}
+
+%% additional ressources
+\input{tex-definitions}
+
+\usetikzlibrary{calc,intersections,shapes}
+
+%% meta informations
+\hypersetup{
+  pdftitle={\doctitle},
+  pdfsubject={\docsubtitle},
+  pdfauthor={\docpdfauthors},
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+}
+
+\title{\doctitle}
+\subtitle{\docsubtitle}
+\author{\docauthors}
+\date{\today{}}
+
+
+%% document
+\begin{document}
+\pagenumbering{Roman}
+\input{titlepage}
+\newpage{}
+
+\tableofcontents{}
+\newpage{}
+
+\pagenumbering{arabic}
+
+%% content
+
+\section{Einleitung}
+
+Diese Arbeit beschäftigt sich mit der Konzeption und Implementierung einer einsteigerfreundlichen Entwicklungsumgebung für den Umgang mit Datenbanken. Zielgruppe dieser Software sind Schülerinnen und Schüler der Mittelstufe sowie deren Lehrkräfte.
+
+\section{Anforderungsanalyse}
+
+\begin{description}
+\item[Semantik vor Syntax] \hfill\\
+  Den Lernenden sollen kontextsensitiv sinnvolle Operationen angeboten werden, optimalerweise mit einer kurzen Erläuterung warum gerade nur diese Teilmenge an Operationen möglich ist. Die eigentliche Programmierung der Abfragen erfolgt dann durch die Kombination von grafischen Bausteinen, ähnlich wie bei der Lernsoftware ''Scratch''.
+\item[Motivation durch praktisch vorzeigbare Ergebnissen] \hfill\\
+  Typischerweise ist der Einstieg in die Programmierung von relativ langweiligen Programmen geprägt, häufig textbasierte Konsolenanwendungen. Im Sonderfall der Vermittlung von SQL Kenntnissen ist das Ergebnis der Arbeit sogar überhaupt nicht sinnvoll zu demonstrieren, weil die erstellten Abfragen isoliert für sich stehen und auch nur in der Entwicklungsumgebung der jeweiligen Datenbank ausführbar sind. Mit der im Rahmen dieser Arbeit zu erstellenden Software sollen sich praktisch relevante Datenbankapplikationen umsetzen lassen.
+\item[Fortführung der entwickelten Projekte] \hfill \\
+  Viele Lernumgebungen sind in sich geschlossene Systeme deren Arbeitsergebnisse nur schwer in anderen Kontexten von Nutzen sind. Sobald der Lernende dann die Grenzen der verwendeten Lernsoftware erreicht hat, steckt er in einer Sackgasse fest. Die Arbeitsergebnisse dieser zu entwickelnden Software sollen daher zumindest einfach einsehbar sein, optimalerweise sogar einfach mit gängigen externen Programmen erweiterbar.
+\item[Einfache Inbetriebnahme (für Schüler)] \hfill \\
+  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf ''normalen'' Rechnern führt immer wieder zu Problemen aufgrund von fehlenden Rechten beim Starten von Systemdiensten oder Dateizugriffen. 
+\item[Optional: Datenmodellierung] \hfill \\
+  Der Schwerpunkt dieser Arbeit liegt zunächst auf der Vermittlung von Kenntnissen
+\end{description}
+
+\section{Vergleichbare Arbeiten}
+
+Entwicklungsumgebungen für Datenbanken und auch Generatoren für Abfragemasken gibt es zuhauf. Diese Sektion stellt einige der schon vefügbaren Programme vor, insbesondere im Hinblick auf für diese Arbeit zu treffende Designentscheidungen.
+
+\subsection{Scratch}
+
+\info[inline]{Missing}
+
+\subsection{Microsoft Lightswitch}
+
+\info[inline]{Missing}
+
+\subsection{Microsoft Access}
+
+\info[inline]{Missing}
+
+\subsection{MySQL Workbench}
+
+\info[inline]{Missing}
+
+\section{Umsetzungsanalyse}
+
+Die naheliegendste zu treffende Entscheidung ist die Wahl des zu lehrenden Datenbanksystems. Im Hinblick auf die einfache Installation und Verwendung bietet sich eine eingebettete Datenbank an, da die Skalierung der von den Lernenden entwickelten Applikation vernachlässigt werden kann.
+
+Um die einfachste Inbetriebnahme der Software für Lernende zu gewährleisten wird die Anwendung für Webbrowser entwickelt. Um erste Schritte mit SQL zu machen reicht dann ein beliebiger aktueller Browser. Diese Entscheidung bedeutet praktisch vor allem eine Verschiebung der Probleme mit der Inbetriebnahme auf z.B. eine Lehrperson.
+
+\unsure[inline]{Unterscheidung zwischen Ansichts- und Entwicklermodus}
+
+\subsection{Systemübersicht}
+
+\begin{description}
+\item[Server: Ruby mit Sinatra] \hfill\\
+  Die Aufgaben des Servers sollen sich konzeptionell möglichst auf die Auslieferung und Speicherung von Daten beschränken. Die Interaktion findet dabei primär über eine REST-artiges JSON Schnittstelle statt.
+\item[Client: Typescript mit Angular 2] \hfill\\
+  
+\end{description}
+
+\subsection{Arbeitsschritte}
+\begin{description}
+\item[Abstrakte Repräsentation von SQL(ite) Schemata] \hfill\\
+  Als unmittelbare Eingabe für die Entwicklungsumgebung sollen einigermaßen einfache, aber beliebige SQLite Datenbanken dienen. Diese kommen
+\end{description}
+
+\listoftodos[Notes]
+
+\begin{thebibliography}{9}
+
+
+\end{thebibliography}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
