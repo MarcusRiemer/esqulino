@@ -7,11 +7,8 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amsmath}
-\usepackage{textcomp,amsfonts,amssymb}
-\usepackage{csquotes}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage[absolute]{textpos}
-\usepackage{adjustbox}
-\usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{hyperref}
 \usepackage{caption}
@@ -63,70 +60,147 @@
 
 \section{Einleitung}
 
-Diese Arbeit beschäftigt sich mit der Konzeption und Implementierung einer einsteigerfreundlichen Entwicklungsumgebung für den Umgang mit Datenbanken. Zielgruppe dieser Software sind Schülerinnen und Schüler der Mittelstufe sowie deren Lehrkräfte.
+Diese Arbeit beschäftigt sich mit der Konzeption und Implementierung einer einsteigerfreundlichen Entwicklungsumgebung für den Umgang mit SQL-Datenbanken. Zielgruppen dieser Software sind Schülerinnen und Schüler der Mittelstufe sowie deren Lehrkräfte. Sie sollen in die Lage versetzt werden, zu einem gegebenen Datenmodell sowohl inhaltliche Fragen mit Bezug zu einem konkreten Datenbestand zu beantworten als auch neue Daten in das Modell einzupflegen.
 
-\section{Anforderungsanalyse}
+\subsection{Eine spezielle Entwicklungsumgebung}
+
+Die wesentliche Anforderung an die im Rahmen dieser Arbeit zu erstellende Software ergibt sich also schon aus dem Titel der Arbeit: Es geht um die Vermittlung von praktischen Kenntnissen zur Abfrage- und Manipulation von komplexen Datenbeständen in Anlehnung an die Projektideen der Lehrpläne bzw. Fachanforderungen für Informatik des Landes Schleswig-Holstein\footnote{Die exakte Verortung oder auch die Konzeption von konkreten Schulstunden ist hingegen nicht Teil dieser Arbeit.}. Auch wenn sich aktuell eine zunehmende Pluralität von Paradigmen zur Datenspeicherung abzeichnet, die das relationale Modell in Frage stellen oder ergänzen, behandelt diese Arbeit explizit die Vermittlung von SQL-Kenntnissen.
+
+Da der Inhalt dieser Arbeit die Konzeption und Umsetzung einer Software ist, deren Zweck wiederum die Entwicklung anderer Software ist, bedarf es zunächst eines gemeinsamen Verständnisses für die Bezeichnungen der beteiligten Systeme.
 
 \begin{description}
-\item[Semantik vor Syntax] \hfill\\
-  Den Lernenden sollen kontextsensitiv sinnvolle Operationen angeboten werden, optimalerweise mit einer kurzen Erläuterung warum gerade nur diese Teilmenge an Operationen möglich ist. Die eigentliche Programmierung der Abfragen erfolgt dann durch die Kombination von grafischen Bausteinen, ähnlich wie bei der Lernsoftware ''Scratch''.
-\item[Motivation durch praktisch vorzeigbare Ergebnissen] \hfill\\
-  Typischerweise ist der Einstieg in die Programmierung von relativ langweiligen Programmen geprägt, häufig textbasierte Konsolenanwendungen. Im Sonderfall der Vermittlung von SQL Kenntnissen ist das Ergebnis der Arbeit sogar überhaupt nicht sinnvoll zu demonstrieren, weil die erstellten Abfragen isoliert für sich stehen und auch nur in der Entwicklungsumgebung der jeweiligen Datenbank ausführbar sind. Mit der im Rahmen dieser Arbeit zu erstellenden Software sollen sich praktisch relevante Datenbankapplikationen umsetzen lassen.
-\item[Fortführung der entwickelten Projekte] \hfill \\
-  Viele Lernumgebungen sind in sich geschlossene Systeme deren Arbeitsergebnisse nur schwer in anderen Kontexten von Nutzen sind. Sobald der Lernende dann die Grenzen der verwendeten Lernsoftware erreicht hat, steckt er in einer Sackgasse fest. Die Arbeitsergebnisse dieser zu entwickelnden Software sollen daher zumindest einfach einsehbar sein, optimalerweise sogar einfach mit gängigen externen Programmen erweiterbar.
-\item[Einfache Inbetriebnahme (für Schüler)] \hfill \\
-  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf ''normalen'' Rechnern führt immer wieder zu Problemen aufgrund von fehlenden Rechten beim Starten von Systemdiensten oder Dateizugriffen. 
-\item[Optional: Datenmodellierung] \hfill \\
-  Der Schwerpunkt dieser Arbeit liegt zunächst auf der Vermittlung von Kenntnissen
+\item[(Schüler-)Entwicklungsumgebung] \hfill\\ 
+  Bezeichnet die von den Lernenden zu nutzende Software, die im Rahmen dieser Arbeit erstellt wurde. Sofern Verwechslungen mit anderen Entwicklungsumgebungen (engl. ``integrated development environment'', IDE) auftreten könnten, wird explizit das Präfix ``Schüler'' genutzt. Letztere Unterscheidung wird insbesondere bei Vergleichen relevant sein.
+\item[(Schüler-)Projekt] \hfill\\
+  Bezeichnet die von den Lernenden, unter Nutzung der Schülerentwicklungsumgebung, erstellte Software.
 \end{description}
 
 \section{Vergleichbare Arbeiten}
 
-Entwicklungsumgebungen für Datenbanken und auch Generatoren für Abfragemasken gibt es zuhauf. Diese Sektion stellt einige der schon vefügbaren Programme vor, insbesondere im Hinblick auf für diese Arbeit zu treffende Designentscheidungen.
+Andere Entwicklungsumgebungen für Datenbanken und auch Generatoren für Abfragemasken gibt es zuhauf. Dieses Kapitel stellt einige der vefügbaren Programme vor, insbesondere im Hinblick auf für diese Arbeit formulierten Prinzipien und unter Betrachtung der avisierten Zielgruppe.
 
 \subsection{Scratch}
 
-\info[inline]{Missing}
+\info[inline]{Paradebeispiel für eine Schülerorientierte Entwicklungsumgebung, insbesondere auch eine Betrachtung der visuellen Programmierung.}
 
-\subsection{Microsoft Lightswitch}
+\subsection{Visual Studio Lightswitch}
 
-\info[inline]{Missing}
+\info[inline]{Generator für Datengetriebene Geschäftsanwendung mit überschaubarer Applikationslogik.}
 
 \subsection{Microsoft Access}
 
-\info[inline]{Missing}
+\info[inline]{Eher eine Datenbank als eine sinnvolle Eingabemaske für unversierte Benutzer.}
 
 \subsection{MySQL Workbench}
 
-\info[inline]{Missing}
+\info[inline]{Wirklich ein Datenbanktool, keinerlei Benutzerschnittstelle für ``normale'' Benutzer.}
+
+\section{Anforderungsanalyse}
+
+\subsection{Grundprinzipien}
+
+Nach diesem kurzen Umriss der Zielgruppe, ist es an der Zeit ein paar allgemeine Grundprinzipien zu formulieren. Diese Prinzipien sollen als Leitfaden dienen, um besser abzuschätzen, ob sich die Implementierung einer bestimmten Idee lohnt.
+
+\begin{description}
+\item[Semantik vor Syntax] \hfill\\
+  Den Lernenden sollen kontextsensitiv sinnvolle Operationen angeboten werden, optimalerweise mit einer kurzen Erläuterung, warum gerade nur diese Teilmenge an Operationen möglich ist. Die eigentliche Programmierung der Abfragen erfolgt dann durch die Kombination von grafischen Bausteinen, ähnlich wie bei der Lernsoftware ``Scratch''. Durch kontinuirliches Feedback durch die Entwicklungsumgebung sollen die Lernenden in die Lage versetzt werden, auch ohne eine ständige Rückversicherung bei der Lehrkraft die eigenen Ansätze zu erproben.
+\item[Motivation durch praktisch vorzeigbare Ergebnissen] \hfill\\
+  Typischerweise ist der Einstieg in die Programmierung von relativ langweiligen Programmen geprägt, häufig textbasierte Konsolenanwendungen. Im Sonderfall der Vermittlung von SQL Kenntnissen ist das Ergebnis der Arbeit sogar überhaupt nicht sinnvoll zu demonstrieren, weil die erstellten Abfragen isoliert für sich stehen und häufig auch nur in der Entwicklungsumgebung der jeweiligen Datenbank ausführbar sind. Mit der im Rahmen dieser Arbeit zu erstellenden Software sollen sich praktisch relevante Datenbankapplikationen umsetzen lassen. Diese verfügen über von den Lernenden erstellte Eingabemasken um Daten einzufügen oder zu manipulieren und verschiedene Ausgabesichten um den Datenbestand sinnvoll zu präsentieren.
+\item[Fortführung der entwickelten Projekte] \hfill \\
+  Viele Lernumgebungen sind in sich geschlossene Systeme, deren Arbeitsergebnisse nur schwer in anderen Programmen oder Kontexten von Nutzen sind. Sobald der Lernende dann die Grenzen der verwendeten Lernsoftware erreicht hat, steckt er in einer Sackgasse fest. Die Arbeitsergebnisse dieser zu entwickelnden Software sollen daher zumindest einfach einsehbar sein, optimalerweise sogar einfach mit gängigen externen Programmen erweiterbar.
+\item[Einfache Inbetriebnahme (für Schüler)] \hfill \\
+  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten oder fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, hat eine möglichst einfache Inbetriebnahme dementsprechend Priorität.
+\item[Einfacher Betrieb (für Lehrkräfte)] \hfill \\
+  Prinzipiell stehen Informatiklehrkräfte bei dem Betrieb der jeweiligen Programme vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu typischerweise restriktiv gehandhabte Rechte
+  
+\end{description}
+
+Umgekehrt ist es auch wichtig, den Umfang des Projekts für die Thesis zu begrenzen. Die folgenden Ideen wären mehr oder minder naheliegende Ergänzungen, welche den Rahmen dieser Thesis aber wohl sprengen würden.
+
+\begin{description}
+\item[Datenmodellierung] \hfill \\
+  Der Schwerpunkt dieser Arbeit liegt zunächst auf der Vermittlung von Kenntnissen zur Abfrage und Manipulation von Daten in einem bestehenden Schema. Änderungen an diesem Schema sind nicht vorgesehen, demzufolge ist auch der Neuentwurf eines Schemas mit externen Mitteln zu bewerkstelligen. Völlig außerhalb des Umfangs dieser Arbeit ist die Überführung von konzeptionellen Modellen (z.B. ER-Schemata) in physikalische Modelle.
+\item[Aufwändiges Design von Benutzerschnittstellen] \hfill \\
+  Auch wenn die Konzeption der Benutzerschnittstelle für die verschiedenen Masken in den eben aufgezählten Prinzipien auftaucht, ist es wichtig den engen Rahmen dieses Aspektes zu verstehen. Es geht um die Schaffung von einfachen, datenzentrierten Eingabemöglichkeiten, nicht um die Umsetzung besonders kreativer Bedienkonzepte. Dementsprechend ist z.B. die Erweiterung der zur Verfügung stehenden Eingabeelemente durch die Lernenden außerhalb des Rahmens dieser Arbeit.
+\end{description}
+
+\subsection{Datenbanksystem}
+
+Eine der naheliegendsten zu treffenden Entscheidungen ist die Wahl des zu lehrenden Datenbanksystems. Im Hinblick auf die einfache Installation und Verwendung bietet sich eine eingebettete Datenbank an, da die Skalierung der von den Lernenden entwickelten Applikation vernachlässigt werden kann. Optimalerweise ist ein Backup des gesamten Datenbestandes mit einer einfachen Kopie einer Datei zu erledigen.
+
+Theoretisch ist die Menge an verfügbaren Systemen fast unüberschaubar groß, praktisch sticht SQLite aus der Masse an Optionen heraus.
+
 
 \section{Umsetzungsanalyse}
 
-Die naheliegendste zu treffende Entscheidung ist die Wahl des zu lehrenden Datenbanksystems. Im Hinblick auf die einfache Installation und Verwendung bietet sich eine eingebettete Datenbank an, da die Skalierung der von den Lernenden entwickelten Applikation vernachlässigt werden kann.
+Um die einfachste Inbetriebnahme der Software für Lernende zu gewährleisten, wird die Anwendung für Webbrowser entwickelt. Um erste Schritte mit SQL zu machen reicht dann ein beliebiger aktueller Browser. Diese Entscheidung bedeutet praktisch vor allem eine Verschiebung der Probleme mit der Inbetriebnahme auf z.B. eine Lehrperson.
 
-Um die einfachste Inbetriebnahme der Software für Lernende zu gewährleisten wird die Anwendung für Webbrowser entwickelt. Um erste Schritte mit SQL zu machen reicht dann ein beliebiger aktueller Browser. Diese Entscheidung bedeutet praktisch vor allem eine Verschiebung der Probleme mit der Inbetriebnahme auf z.B. eine Lehrperson.
+Ebenfalls aus Gründen der einfacheren Zugänglichkeit sollte eine einzelne dazugehörige Serverinstanz in der Lage sein, mehrere Projekte simultan zu bedienen. Die Lehrperson kann also mit einem einzigen Serverprozess eine ganze Klasse versorgen.
 
-\unsure[inline]{Unterscheidung zwischen Ansichts- und Entwicklermodus}
+\unsure[inline]{Unterscheidung zwischen Ansichts- und Entwicklermodus.}
 
 \subsection{Systemübersicht}
 
 \begin{description}
 \item[Server: Ruby mit Sinatra] \hfill\\
-  Die Aufgaben des Servers sollen sich konzeptionell möglichst auf die Auslieferung und Speicherung von Daten beschränken. Die Interaktion findet dabei primär über eine REST-artiges JSON Schnittstelle statt.
+  Die Aufgaben des Servers sollen sich konzeptionell möglichst auf die Auslieferung und Speicherung von Daten beschränken. Die Interaktion findet dabei primär über eine REST-artige JSON Schnittstelle statt.
 \item[Client: Typescript mit Angular 2] \hfill\\
-  
+  Aufgrund des hohen Grades an Interaktivität bietet sich eine rein clientseitige Visualisierung an, die weitestgehend auf Roundtrips zum Server verzichtet.
 \end{description}
 
-\subsection{Arbeitsschritte}
+\subsection{Editor für SELECT-Statements}
+
+Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren. Zum Einsatz kommen farbcodierte Blöcke für die verschiedenen Bestandteile einer SQL Abfrage. Der grafische Editor soll nicht unbedingt die Konzeption von beliebigen Abfragen ermöglichen, stattdessen sollen die folgenden exemplarischen Arbeitsabläufe unterstützt werden.
+
+\subsubsection{Hervorhebung von Platzierungsmöglichkeiten}
+
+Anders als bei Scratch muss nicht zwingend Drag \& Drop das beherrschende Bedienparadigma sein. Da der Benutzer immer nur eine Abfrage zur Zeit bearbeiten können soll, ergibt sich der einzig mögliche Platz für viele Blöcke automatisch. Darüber hinaus ist die Reihenfolge eines Großteils der Komponenten einer Abfrage sehr strikt festgelegt, so kann eine \texttt{GROUP BY} Komponente immer nur nach der \texttt{FROM} oder \texttt{WHERE} Anweisung.
+
+Die Verwendung einer Seitenleiste (bei Scratch ``Toolbox'' genannt) wäre daher denkbar, sollte aber nicht zwingend Drag \& Drop erzwingen. Die Alternative dazu wäre eine Anzeige von ``Platzhaltern'' für die entsprechenden Komponenten unterhalb der eigenen Abfrage. Ein Klick auf den Platzhalter wandelt diesen dann in einen konkreten Block um und fordert zur Angabe der benötigten Parameter auf.
+
+\unsure[inline]{Ich tendiere momentan dazu, eine von Scratch inspirierte Seitenleiste einfach wegzulassen.}
+
+\subsubsection{Beispielhafte Abfragen}
+
+In den folgenden Beispielen steht jeder nummerierte Punkt für einen vom Lernenden abgeschlossenen Schritt, nach welchem die entstandene Query syntaktisch korrekt sein sollte und daher unmittelbar ausgeführt wird. So erhält der Benutzer ein unmittelbares Feedback über die Auswirkung seiner Änderung.
+
+Wir beginnen zunächst mit einer einfachen Abfrage aus nur einer Tabelle, deren Daten relativ einfach eingeschränkt und projiziert werden sollen.
+
+\begin{enumerate}
+  \item Zu diesem Zeitpunkt steht dem Benutzer nur die Auswahl einer Tabelle für die \texttt{FROM}-Komponente offen. Da eine Abfrage ohne Angabe einer \texttt{SELECT}-Komponente ungültig wäre, wird diese automatisch ergänzt. Eine Einschränkung der Spalten findet dabei nicht statt, es handelt sich also konkret um einen \texttt{SELECT * FROM <table>} Ausdruck.
+  \item Nun soll die Ergebnismenge mit einer \texttt{WHERE}-Komponente eingeschränkt werden. Zur Verfügung stehen dem Benutzer die Vergleichsoperatoren \texttt{LIKE} und die typischen Vergleichsoperaten \texttt{=}, \texttt{<>}, \texttt{>}, \texttt{<}, \texttt{>=} und \texttt{<=}. Der Benutzer wählt zunächst den Vergleichsoperator und
+  \item Die Angabe von weiteren Ausdrücken erfordert nun die Angabe eines logischen Operators. Da in SQLite das logische \texttt{AND} Vorrang vor dem logischen \texttt{OR} hat, werden die Ausdrücke zur visuellen Unterstützung immer entsprechend geklammert.
+\end{enumerate}
+
+\subsection{Roadmap}
+
+Diese Arbeitsschritte stellen eine eher technische Roadmap der technischen Umsetzung dar.
+
 \begin{description}
 \item[Abstrakte Repräsentation von SQL(ite) Schemata] \hfill\\
-  Als unmittelbare Eingabe für die Entwicklungsumgebung sollen einigermaßen einfache, aber beliebige SQLite Datenbanken dienen. Diese kommen
+  Als unmittelbare Eingabe für die Entwicklungsumgebung sollen einigermaßen einfache, aber grundsätzlich beliebige SQLite Datenbanken dienen. Diese Datenbanken stellen den Ausgangspunkt für die Schülerprojekte dar und wurden von einem externen Tool oder der Lehrkraft erzeugt.
+\item[Visualisierung des Schemas] \hfill\\
+  Auch wenn die Projekte der Lernenden im Normallfall auf sehr überschaubare Datenbanken aufbauen werden, ist eine vernünftige Visualisierung der beteiligten Tabellen und deren Beziehung untereinander essentiell.
+\item[Visualisierung der Daten] \hfill\\
+  In diesem Schritt werden keine Experimente vorgenommen: Es geht um die einfache tabellarische Auflistung der Daten.
+\item[Ausführung von beliebigen SELECT-Abfragen] \hfill\\
+  Dieser Schritt dient der Vorbereitung des im nächsten Schritt zu implementierenden grafischen Editors und beinhaltet insbesondere die Konzeption von begleitenden Bedienelementen.
+\item[Grafischer Editor für SELECT-Abfragen] \hfill\\
+  Als alternative zu dem Freitexteditor soll nun ein grafischer Editor implementiert werden. Dieser benutzt eine abstrakten interne Darstellung um aufwändige Parsingvorgänge von SQL-Strings zu vermeiden.
+\item[Optional: Limitierung der verfügbaren Möglichkeiten] \hfill
+  
 \end{description}
 
 \listoftodos[Notes]
 
 \begin{thebibliography}{9}
 
+\bibitem{lehrplan-inf-sek-1}
+  \emph{Lehrplan für Angewandte Informatik in der Sekundarstufe I}, Land Schleswig-Holstein, 2010, \url{http://lehrplan.lernnetz.de/index.php?wahl=138}
+
+\bibitem{lehrplan-inf-sek-2}
+  \emph{Lehrplan für Informatik in der Sekundarstufe II}, Land Schleswig-Holstein, 2002 \\
+  \url{http://lehrplan.lernnetz.de/index.php?DownloadID=73}
 
 \end{thebibliography}
 
