@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SQL Blocks</title>
+    <meta charset="utf-8"/>
+    <style type="text/css">
+     .block-container {
+         background: #DDDDDD;
+     }
+
+     .block {
+         border: 1px solid black;
+         border-radius: 5px;
+     }
+
+     .block:after {
+         content:"";
+         display:table;
+         clear:both;
+     }
+
+     .block .name {
+         float: left;
+         font-size: 40px;
+         margin-left: 5px;
+         margin-top: 5px;
+         margin-bottom: 5px;
+     }
+
+     .select {
+         background: green;
+     }
+
+     .select ul {
+         list-style-type:none;
+     }
+
+     .select ul li {
+         padding-left: 15px;
+         font-size: 25px;
+         display:inline;
+         float:left;
+     }
+
+     .where {
+         background: #1111AA;
+     }
+
+     .where ul {
+         list-style-type:none;
+     }
+
+     .where ul li {
+         padding-left: 15px;
+         font-size: 25px;
+         display:inline;
+         float:left;
+     }
+    </style>
+  </head>
+  <body>
+    <div class="block-container">
+      <div class="block select">
+        <div class="name">SELECT</div>
+        <ul>
+          <li>id</li>
+          <li>name</li>
+          <li>alter</li>
+        </ul>
+      </div>
+      <div class="block where">
+        <div class="name">WHERE</div>
+        <ul>
+          <li>id</li>
+          <li>name</li>
+          <li>alter</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
