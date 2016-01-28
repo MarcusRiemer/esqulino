@@ -16,6 +16,7 @@
 \usepackage{listings}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{wrapfig}
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
 \usepackage[colorinlistoftodos,prependcaption]{todonotes}
 \usepackage{dirtree}
@@ -56,6 +57,17 @@
 \input{titlepage}
 \newpage{}
 
+\section*{Unfertige Arbeit!}
+
+An dieser Arbeit ist noch nichts fertig! Ich habe sie online gestellt, um einigen hilfreichen Personen ein einfaches ``mitlesen'' zu ermöglichen.
+
+Momentan lassen sich die folgenden Kapitel einigermaßen sinnvoll lesen. Das heißt nicht, dass sie in irgendeiner Form ``fertig'' sind. Aber sie enthalten dann zumindest einige Kommentare an Stellen, wo der Inhalt noch sehr wenig endgültig ist. Sofern nicht anders erwähnt sind alle Unterkapitel zu einem Überkapitel ebenfalls mit eingeschlossen.
+
+\begin{itemize}
+  \item Schon einigermaßen endgültig und vollständig sind die \ref{sec:principles} \nameref{sec:principles}. Auch endgültig, aber weniger völlständig ist der Ausschlußkatalog: \ref{sec:out-of-scope}. \nameref{sec:out-of-scope}
+  \item \ref{sec:design-sql-editor} \nameref{sec:design-sql-editor} steckt zwar voller TODO-Hinweise, lässt sich aber schon ganz gut lesen.
+\end{itemize}
+
 \tableofcontents{}
 \newpage{}
 
@@ -77,7 +89,7 @@ Da der Inhalt dieser Arbeit die Konzeption und Umsetzung einer Software ist, der
 \item[(Schüler-)Entwicklungsumgebung] \hfill\\ 
   Bezeichnet die von den Lernenden zu nutzende Software, die im Rahmen dieser Arbeit erstellt wurde. Sofern Verwechslungen mit anderen Entwicklungsumgebungen (engl. ``integrated development environment'', IDE) auftreten könnten, wird explizit das Präfix ``Schüler'' genutzt. Letztere Unterscheidung wird insbesondere bei Vergleichen relevant sein.
 \item[(Schüler-)Projekt] \hfill\\
-  Bezeichnet die von den Lernenden, unter Nutzung der Schülerentwicklungsumgebung, erstellte Software.
+  Bezeichnet die von den Lernenden, unter Nutzung der Schülerentwicklungsumgebung, erstellte Software. Dazu gehört unter anderem das Datenbankschema, die verschiedenen Abfragen und die gestaltete Benutzeroberfläche.
 \end{description}
 
 \section{Vergleichbare Arbeiten}
@@ -108,34 +120,36 @@ Andere Entwicklungsumgebungen für Datenbanken und auch Generatoren für Abfrage
 
 \section{Anforderungsanalyse}
 
-Dieses Kapitel beschreibt die generellen Anforderungen an das Projekt, ohne auf Details wie die technische Machbarkeit zu analysieren oder konkrete Umsetzungsstrategien zu planen. Diese softwaretechnischen Aspekte werden im nächsten Kapitel (\ref{sec:implementation-analysis} \nameref{sec:implementation-analysis}) besprochen.
+Dieses Kapitel beschreibt die generellen Anforderungen an das Projekt, ohne auf Details wie die technische Machbarkeit ausführlich zu analysieren oder konkrete Umsetzungsstrategien zu planen. Diese softwaretechnischen Aspekte werden im nächsten Kapitel (\ref{sec:implementation-analysis} \nameref{sec:implementation-analysis}) besprochen.
 
 \info[inline]{Der Verzicht auf die technischen Hintergründe in diesem Kapitel soll es auch für ``normale'' Informatiklehrer verständlich machen, ohne Sie gleich mit den Hintergründen der technischen Realisierung zu erschlagen.}
 
-Grundsätzlich unterschieden werden muss dann, ähnlich wie bei Scratch, noch zwischen zwei Betriebsmodi für ein Projekt: Zunächst wird ein Projekt im Entwicklermodus betrieben, in diesem Fall stehen dem Benutzer alle Entwicklungstools zur Verfügung. Wenn es dann später einmal fertig ist und zum Beispiel an Bekannte weitergegeben wird, sollen diese natürlich nur die normale Benutzeroberfläche sehen.
-
 \subsection{Grundprinzipien}
+\label{sec:principles}
 
-Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit bereits existierenden Alternativen, ist es nun an der Zeit ein paar allgemeine Grundprinzipien zu formulieren. Diese Prinzipien dienen für die gesamte Philosophie hinter der Schülerentwicklungsumgebung als Leitfaden. Praktisch erlaubt das vor allem eine relativ akkurate Abschätzung, ob sich die Implementierung einer bestimmten Idee lohnt und wie sie zu priorisieren ist.
+Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit bereits existierenden Alternativen, ist es nun an der Zeit ein paar allgemeine Grundprinzipien zu formulieren. Diese Prinzipien bilden die Philosophie hinter der Schülerentwicklungsumgebung ab und dienen als Leitfaden.
+
+Praktisch erlaubt das vor allem eine relativ akkurate Abschätzung, ob sich die Implementierung einer bestimmten Idee lohnt und wie sie zu priorisieren ist. Daher sind auch diese Prinzipien ihrer Bedeutung für diese Arbeit nach absteigend sortiert. Die sich dabei ergebende Auswahl Reihenfolge berücksichtigt auch den Zeitrahmen der Masterthesis, ist also nicht nach rein didaktischen Gesichtspunkten zu bewerten.
 
 \begin{description}
 \item[Semantik vor Syntax] \hfill\\
-  Den Lernenden sollen kontextsensitiv sinnvolle Operationen angeboten werden, optimalerweise mit einer kurzen Erläuterung, warum gerade nur diese Teilmenge an Operationen möglich ist. Die eigentliche Programmierung der Abfragen erfolgt dann durch die Kombination von grafischen Bausteinen, ähnlich wie bei der Lernsoftware ``Scratch''. Durch kontinuirliches Feedback durch die Entwicklungsumgebung sollen die Lernenden in die Lage versetzt werden, auch ohne eine ständige Rückversicherung bei der Lehrkraft die eigenen Ansätze zu erproben.
+  Den Lernenden sollen kontextsensitiv sinnvolle Operationen angeboten werden, optimalerweise mit einer kurzen Erläuterung, warum gerade nur diese Teilmenge an Operationen möglich ist. Die eigentliche Programmierung der Abfragen erfolgt dann durch die Kombination von Bausteinen, ähnlich wie bei der Lernsoftware ``Scratch''. Durch kontinuirliches Feedback der Entwicklungsumgebung sollen die Lernenden in die Lage versetzt werden, auch ohne eine ständige Rückversicherung bei der Lehrkraft die eigenen Ansätze zu erproben.
 \item[Motivation durch praktisch vorzeigbare Ergebnissen] \hfill\\
-  Typischerweise ist der Einstieg in die Programmierung von relativ langweiligen Programmen geprägt, häufig textbasierte Konsolenanwendungen. Im Sonderfall der Vermittlung von SQL Kenntnissen ist das Ergebnis der Arbeit sogar überhaupt nicht sinnvoll zu demonstrieren, weil die erstellten Abfragen isoliert für sich stehen und häufig auch nur in der Entwicklungsumgebung der jeweiligen Datenbank ausführbar sind. Mit der im Rahmen dieser Arbeit zu erstellenden Software sollen sich praktisch relevante Datenbankapplikationen umsetzen lassen. Diese verfügen über von den Lernenden erstellte Eingabemasken um Daten einzufügen oder zu manipulieren und verschiedene Ausgabesichten um den Datenbestand sinnvoll zu präsentieren.
+  Typischerweise ist der Einstieg in die Programmierung von relativ langweiligen Programmen geprägt, häufig textbasierten Konsolenanwendungen. Im Sonderfall der Vermittlung von SQL Kenntnissen ist das Ergebnis der Arbeit sogar überhaupt nicht sinnvoll zu demonstrieren, weil die erstellten Abfragen isoliert für sich stehen und häufig auch nur in der Entwicklungsumgebung der jeweiligen Datenbank ausführbar sind. Mit der im Rahmen dieser Arbeit zu erstellenden Software sollen sich hingen praktisch relevante, allerdings sehr datenorientierte Programme umsetzen lassen. Diese verfügen über von den Lernenden zusammengestellte Eingabemasken um Daten einzufügen oder zu manipulieren und verschiedene Ausgabesichten um den Datenbestand sinnvoll zu präsentieren.
+\item[Einfache Inbetriebnahme] \hfill \\
+  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten oder fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, hat eine möglichst einfache Inbetriebnahme dementsprechend Priorität. Prinzipiell stehen Informatiklehrkräfte bei dem Betrieb der jeweiligen Programme vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren diesen Umstand zusätzlich.
+\item[Schrittweise komplexere Benutzeroberfläche] \hfill \\
+  Konventionelle Entwicklungsumgebungen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. Gerade wenn man aber dabei ist etwas Neues zu lernen kann es sinnvoll sein, die Menge der möglichen Optionen zu beschränken. In diesem Sinne sollte auch die Lehrkraft die Möglichkeit haben den Funktionsumfang der Entwicklungsumgebung für Schüler gezielt zu reduzieren, falls einzelne Konzepte sich als noch zu fortgeschritten erweisen sollten.
 \item[Fortführung der entwickelten Projekte] \hfill \\
   Viele Lernumgebungen sind in sich geschlossene Systeme, deren Arbeitsergebnisse nur schwer in anderen Programmen oder Kontexten von Nutzen sind. Sobald der Lernende dann die Grenzen der verwendeten Lernsoftware erreicht hat, steckt er in einer Sackgasse fest. Die Arbeitsergebnisse dieser zu entwickelnden Software sollen daher zumindest einfach einsehbar sein, optimalerweise nach einem Export sogar einfach mit gängigen externen Programmen erweiterbar.
-\item[Einfache Inbetriebnahme] \hfill \\
-  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten oder fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, hat eine möglichst einfache Inbetriebnahme dementsprechend Priorität. Prinzipiell stehen Informatiklehrkräfte bei dem Betrieb der jeweiligen Programme vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren diesen Umstand aber zusätzlich.
-\item[Schrittweise komplexere Oberfläche] \hfill \\
-  Konventionelle Entwicklungsumgebungen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. Gerade wenn man aber dabei ist etwas Neues zu lernen kann es sinnvoll sein, die Menge der möglichen Optionen zu beschränken. In diesem Sinne sollte auch die Lehrkraft die Möglichkeit haben den Funktionsumfang der Entwicklungsumgebung für Schüler gezielt zu reduzieren, falls einzelne Konzepte sich als noch zu fortgeschritten erweisen sollten.
   
   
 \end{description}
 
 \subsection{``Out-of-Scope''\todo{Deutsch?}}
+\label{sec:out-of-scope}
 
-Umgekehrt ist es auch wichtig, den Umfang des Projekts für die Thesis zu begrenzen. Die folgenden Ideen wären mehr oder minder naheliegende Ergänzungen, welche den Rahmen dieser Thesis aber wohl sprengen würden.
+Umgekehrt ist es auch wichtig, den Umfang des Projekts für die Thesis zu begrenzen. Die folgenden Ideen wären mehr oder minder naheliegende Ergänzungen, welche den Rahmen dieser Thesis aber sprengen würden.
 
 \begin{description}
 \item[Datenmodellierung] \hfill \\
@@ -146,27 +160,34 @@ Umgekehrt ist es auch wichtig, den Umfang des Projekts für die Thesis zu begren
 
 \subsection{Datenbanksystem}
 
-Eine der naheliegendsten zu treffenden Entscheidungen ist die Wahl des zu lehrenden Datenbanksystems. Im Hinblick auf die einfache Installation und Verwendung bietet sich eine eingebettete Datenbank an, da die Skalierung der von den Lernenden entwickelten Applikation vernachlässigt werden kann. Optimalerweise ist ein Backup des gesamten Datenbestandes mit einer einfachen Kopie einer Datei zu erledigen.
+Eine der naheliegendsten zu treffenden Entscheidungen hat zwar einen technischen Hintergrund, ist aber trotzdem unbedingt Bestandteil dieser Anforderungsanalyse: Es geht um die Wahl des zu lehrenden Datenbanksystems. Dieser Aspekt hat einen unmittelbaren Einfluss auf die Inbetriebnahme der Entwicklingsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
+
+Im Hinblick auf die einfache Installation und Verwendung bietet sich eine eingebettete Datenbank an, da die Skalierung der von den Lernenden entwickelten Applikation vernachlässigt werden kann. Optimalerweise ist ein Backup des gesamten Datenbestandes mit einer einfachen Kopie einer Datei zu erledigen.
 
 \unsure[inline]{Theoretisch ist die Menge an denkbaren Systemen fast unüberschaubar groß, praktisch sticht SQLite aus der Masse an Optionen heraus. Wie ausführlich muss ich das begründen?}
 
-\subsection{Editor für SELECT-Statements}
+\subsection{Zwei Modi: Entwickeln und Anschauen}
 
-Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren. Zum Einsatz kommen farbcodierte Blöcke für die verschiedenen Bestandteile einer SQL Abfrage. Der grafische Editor soll nicht unbedingt die Konzeption von beliebigen Abfragen ermöglichen, stattdessen sollen die in Kapitel \ref{sec:example-queries} \nameref{sec:example-queries} beschriebenen exemplarischen Arbeitsabläufe unterstützt werden.
+Grundsätzlich unterschieden werden muss bei der Schülerentwicklungsumgebung, ähnlich wie bei Scratch, zwischen zwei Betriebsmodi für ein Projekt: Zunächst wird ein Projekt im Entwicklermodus betrieben, in diesem Fall stehen dem Benutzer alle Entwicklungstools zur Verfügung. Wenn es dann später einmal fertig ist und zum Beispiel an Bekannte weitergegeben wird, sollen diese natürlich nur die normale Benutzeroberfläche sehen. Der Wechsel zwischen diesen beiden Modi sollte dabei zu jedem Zeitpunkt möglich sein.
+
+\subsection{Einfaches anlegen und kopieren von Projekten}
+
+Im Sinne einer möglichst niedrigen Einstiegshürde soll es den Anwendern leicht gemacht werden, bestehende Projekte zu übernehmen. Im Informatikunterricht müssen häufiger zu Beginn bestimmte Schritte einfach ausgeführt werden, ``weil das nun mal so'' (also eine ausführliche Erklärung zu diesem Zeitpunkt zu weit gehen würde). Im Falle des Sprachumfangs von SQL ist das zwar im Vergleich zu z.B. Java (``Herr Lehrer, was macht eigentlich dieses public static void?'') nicht ganz so dramatisch, aber nach Möglichkeit zu vermeiden.
+
+Dementsprechend sollte möglichst jeder Schritt beim Anlegen eines neuen Projektes für die Schüler nachvollziehbar sein. Wenn dann doch einmal eine Serie von ``mechanisch auszuführenden'' Anweisungen erforderlich sein sollte, wäre es aber dennoch praktisch das durch eine Kopie eines schon bestehenden Projektes abzukürzen. Die Lehrkraft würde in diesem Fall also ein Projekt für ihre Schüler vorbereiten, welches diese dann optimalerweise mit einem einzigen Klick importieren können.
+
+\subsection{Editor für SQL}
+\label{sec:design-sql-editor}
+
+Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren. Es kommen also distinkte Bedienelemente für die verschiedenen Komponenten einer SQL Abfrage zum Einsatz, kein reiner Texteditor. Der komponentenorientierte Editor soll dabei nicht unbedingt die Konzeption von beliebigen Abfragen ermöglichen, wohl aber die in Kapitel \ref{sec:example-queries} \nameref{sec:example-queries} beschriebenen exemplarischen Arbeitsabläufe unterstützen. 
+
+Wenn ein Anwender der Entwicklungsumgebung an die Grenzen des unterstützenden Editors stößt, sollte er die Möglichkeit haben einmalig und für diese konkrete Abfrage eine Umwandlung in eine textbasierte Darstellung vornehmen zu können. Der umgekehrte Weg, also der Import von beliebigen SQL-Abfragen in den grafischen Editor, ist jedoch explizit ausgeschlossen.
 
 Grundsätzlich bedürfen einige Komponenten der Abfrage besonderer Aufmerksamkeit, weil sie große Auswirkungen auf das Verhalten der anderer Komponenten haben. Vorrangig ist hier die \texttt{GROUP-BY} Komponente zu nennen. Sobald die Query mit einer \texttt{GROUP BY} Komponente ausgestattet wird ist der Zugriff auf die konkreten Spalten einzelner Zeilen z.B. im allgemeinen Fall nicht mehr möglich. Das hinzufügen (oder entfernen) dieser Komponente hat also große Auswirkungen auf die Korrektheit der gesamten Abfrage.
 
-\subsubsection{Grundsätzlicher Aufbau des Editors}
-
-Anders als bei Scratch muss dabei jedoch nicht zwingend Drag \& Drop das beherrschende Bedienparadigma sein. Da der Benutzer immer nur eine Abfrage zur Zeit bearbeiten können soll, ergibt sich der einzig mögliche Platz für viele Blöcke automatisch. Darüber hinaus ist die Reihenfolge eines Großteils der Komponenten einer Abfrage sehr strikt festgelegt, so kann eine \texttt{GROUP BY} Komponente nicht an beliebigen Stellen verwendet werden, sondern nur nach der \texttt{FROM} oder der \texttt{WHERE} Anweisung. Andere Komponenten wie z.B. \texttt{HAVING} oder logische Verknüpfungen mit \texttt{AND} oder \texttt{OR} sind nicht nur von der Reihenfolge, sondern auch von der Existenz anderer Bestandteile abhängig.
-
-Die Verwendung einer Seitenleiste (bei Scratch ``Toolbox'' genannt) wäre daher denkbar, sollte aber nicht zwingend Drag \& Drop erzwingen. Die Alternative dazu wäre eine Anzeige von ``Platzhaltern'' für die entsprechenden Komponenten unterhalb der eigenen Abfrage. Ein Klick auf den Platzhalter wandelt diesen dann in einen konkreten Block um und fordert ggfs. zur Angabe der benötigten Parameter auf.
-
-\info[inline]{Ich tendiere momentan dazu, eine von Scratch inspirierte Seitenleiste einfach wegzulassen.}
-
 \subsubsection{Visuelle Gestaltung}
 
-Ebenfalls ist im Voraus zu klären ob es sinnvoll wäre, das sehr bunte, blockige Design von Scratch zu imitieren. Abbildung \ref{fig:compare-colourful} zeigt einen Vergleich eines frühen Prototypen in einem an Syntax-Highlighting angelehnten Design und in einem wesentlich bunteren, blockigen Design.
+Für technische Details irrelevant, aber unbedingt ebenfalls im Voraus zu klären ist die Frage, ob es sinnvoll wäre, das sehr bunte, blockige Design von Scratch zu imitieren. Abbildung \ref{fig:compare-colourful} zeigt einen Vergleich eines frühen Prototypen in einem an Syntax-Highlighting angelehnten Design und in einem wesentlich bunteren, blockigen Design.
 
 \todo[inline]{\textbf{Todo}: Quelle mit Beleg für ``Kinderfreundliches'' buntes Design suchen. Das wird man bei Scratch schon aus gutem Grund gemacht haben. Relevante Frage: Zielgruppe (in Jahren) von Scratch vs. Zielgruppe dieses Projektes?}
 
@@ -178,22 +199,75 @@ Letztendlich überwiegt aber ein sehr viel profanerer Fakt: Der Autor dieser Arb
 
 \begin{figure}
   \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth]{images/sql-sketch-early-syntax-highlight}
-    \caption{Syntax-Highlighting, ähnlich einer IDE}
-    \label{fig:screen-sql-editor-early-syntax-highlighting}
-  \end{subfigure} \hfill
-  \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{images/sql-sketch-early-colourful}
     \caption{Starke Farbakzente, ähnlich zu Scratch}
     \label{fig:screen-sql-editor-early-colourful}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{images/sql-sketch-early-syntax-highlight}
+    \caption{Syntax-Highlighting, ähnlich einer IDE}
+    \label{fig:screen-sql-editor-early-syntax-highlighting}
   \end{subfigure}
   \caption{Vergleich unterschiedlicher Gestaltungsansätze}
   \label{fig:compare-colourful}
 \end{figure}
 
-\subsubsection{Umgang mit \texttt{GROUP BY}}
+\subsubsection{Grundsätzlicher Aufbau des Editors}
 
-\subsubsection{Beispielhafte Abfragen}
+Ein grundsätzlicher Nachteil dieses Komponentenorientierten Bedienkonzeptes ist der nötige Platz für die Unterbringung aller verwendbaren Komponenten. Es muss sorgfältig geplant werden, wie diese anzuordnen sind und welche Optionen in welchem Kontext gerade sichtbar sein müssen. Anders als bei Scratch muss dabei nicht unbedingt Drag \& Drop das vorherrschende Bedienparadigma sein. Da der Benutzer immer nur eine Abfrage zur Zeit bearbeiten können soll, ergibt sich der einzig mögliche Platz für viele Blöcke automatisch. Darüber hinaus ist die Reihenfolge eines Großteils der Komponenten einer Abfrage sehr strikt festgelegt, so kann eine \texttt{GROUP BY} Komponente nicht an beliebigen Stellen verwendet werden, sondern nur nach der \texttt{FROM} oder der \texttt{WHERE} Anweisung. Andere Komponenten wie z.B. \texttt{HAVING} oder logische Verknüpfungen mit \texttt{AND} oder \texttt{OR} sind nicht nur von der Reihenfolge, sondern auch von der Existenz anderer Bestandteile abhängig. Die Verwendung eines separaten Bereichs mit allen Bestandteilen einer SQL-Abfrage (bei Scratch ``Toolbox'' genannt) wäre also zwar denkbar, sollte aber zumindest keinesfalls Drag \& Drop erzwingen, sofern das hinzufügen der Komponente nur an einer einzigen Stelle möglich ist.
+
+\begin{wrapfigure}{r}{0.46\textwidth}
+  \includegraphics[width=0.45\textwidth]{images/sql-sketch-all-editing}
+  \caption{Simultane Anzeige (fast) aller Möglichkeiten}
+  \label{fig:screen-sql-editor-all-editing}
+\end{wrapfigure}
+
+Die Alternative dazu wäre eine Anzeige von ``Platzhaltern'' für die entsprechenden Komponenten unterhalb der eigenen Abfrage. Ein Klick auf den Platzhalter wandelt diesen dann in einen konkreten Block um und fordert ggfs. zur Angabe der benötigten Parameter auf. Im Rahmen der entwickelten Prototypen hat sich herausgestellt, dass eine permanente Anzeige aller Editierungsmöglichkeiten mit einem sehr überladen wirkenden Benutzerinterface einher geht, insbesondere was die Einblendung von Platzhaltern angeht. Abbildung \ref{fig:screen-sql-editor-all-editing} zeigt einen Screenshot des Prototypen, bei dem nahezu alle denkbaren Editierungsoptionen gleichzeitig verfügbar sind.
+
+Dementsprechend wird ein anderer Ansatz verfolgt werden müssen: Es lässt sich immer ein Block zur Zeit in einen ``editieren'' Modus versetzen. Nur innerhalb dieses Blocks erlauben die Bedienelemente dann eine Änderung der Komponente. Für einige Komponenten, speziell \texttt{FROM}, \texttt{WHERE} und \texttt{HAVING} lassen sich neu anzuhängende Komponenten auch sehr gut im Rahmen dieses Modus anbieten. Es stellt sich dann natürlich die Frage, wie man Blöcke ohne einen eindeutig passenden Kontext, z.B. ein \texttt{ORDER BY}, der Abfrage hinzufügen kann. Eine Antwort darauf wird sich vermutlich erst durch reale Tests mit der Oberfläche finden lassen, die folgenden Ansätze sind aber denkbar:
+
+\begin{itemize}
+  \item Die \texttt{SELECT}-Komponente hat einen losen Bezug zu allen anderen Komponenten. Schwierig einzuordnende Komponenten wie \texttt{WHERE}, \texttt{GROUP BY}, \texttt{ORDER BY} \texttt{LIMIT} oder auch \texttt{UNION} werden immer dann angeboten, wenn die \texttt{SELECT}-Komponente gerade editiert wird.
+  \item Eine Leiste mit möglichen Komponenten ohne eindeutigen Kontext erlaubt deren Ergänzung zu jedem Zeitpunkt.
+\end{itemize}
+
+\info[inline]{Im Editor immer zu sehen, aber aktuell nicht beschrieben: Eine Tabelle mit den Daten, welche die Abfrage im aktuellen Zustand liefern würde.}
+
+\subsubsection{Deaktivierbare Komponenten}
+
+Unmittelbar nach dem Hinzufügen einer neuen Komponente sind möglicherweise noch nicht alle nötigen Informationen verfügbar. Daher werden Komponenten immer in einem deaktivierten Zustand hinzugefügt, sie lassen sich erst aktivieren wenn alle relevanten Informationen eingetragen worden sind. Genau so werden Komponenten mit inhaltlichen Fehlern deaktiviert, bis der Fehler behoben worden ist. Und natürlich kann es auch Gründe geben eine Komponente freiwillig zu deaktivieren, auch das soll selbstverständlich möglich sein.
+
+Speziell für die \texttt{WHERE} und \texttt{HAVING} Komponenten ist zu klären, welche Auswirkung eine Deaktivierung haben soll. Sollen alle Kinder ebenfalls deaktiviert werden oder wird die nächste folgende Komponente zum \texttt{WHERE} bzw. \texttt{HAVING}? Auch hier sind beide Möglichkeiten denkbar, die bessere Alternative muss sich durch Tests mit realen Benutzern zeigen.
+
+\subsubsection{Änderung der Reihenfolge}
+
+Wiederum für die \texttt{WHERE} und \texttt{HAVING}, aber auch für die \texttt{JOIN} Komponenten wäre es sehr hilfreich, die Reihenfolge durch eine Schaltfläche oder auch Drag \& Drop variieren zu können.
+
+\subsubsection{\texttt{GROUP BY}}
+
+Sobald in einer Abfrage eine \texttt{GROUP BY} Komponente auftaucht, hat dies Auswirkungen auf die Möglichkeiten innerhalb der \texttt{SELECT} Anweisung. Da keine Auswahl von ungruppierten und nicht-aggregierten Spalten möglich sein darf, müssen diese entfernt werden. Insbesondere wenn der Benutzer vorher schon mit komplizierten Ausdrücken im \texttt{SELECT} gearbeitet haben sollte, ist also zumindest eine Warnung nötig.
+
+\subsubsection{Funktionen}
+
+An allen Stellen bei denen in SQL Werte verglichen oder ausgegeben werden ist es möglich, diese durch Funktionen zu verändern oder durch Ausdrücke zu berechnen. Es wird kaum möglich sein den vollen Umfang aller denkbaren Funktionen bereitzustellen und auch Ausdrücke können sehr schnell enorm kompliziert werden.
+
+\unsure[inline]{Ich bin mir noch nicht sicher, wie ich das gerne handhaben möchte. Möglicherweise ein separater Editor für Ausdrücke in einer Leiste ``unterhalb'' der eigentlichen Abfrage? Auf jeden Fall muss ich hier den Umfang sehr deutlich vorher abstecken.}
+
+\subsubsection{Unterabfragen}
+
+Noch komplizierter wird der Umgang mit Ausdrücken, wenn man in diesen auch Unterabfragen zulassen möchte.
+
+\unsure[inline]{Hier das gleiche Problem wie mit Ausdrücke, ich tendiere momentan zu ``mach ich nicht, sehe ich wenn überhaupt konzeptuell vor''.}
+
+\subsubsection{Abfragen mit Parametern}
+
+\info[inline]{Neben festgelegten Vergleichen mit Beziehungen oder konstanten Werten soll es möglich sein einzelne Werte zur Laufzeit vom Benutzer zu erfragen. Dieser Aspekt der Beschreibung hat also viel Bedeutung für den Editor der Oberflächen.}
+
+\subsubsection{Manipulation von Daten}
+
+\info[inline]{Bisher viel Query Language beschrieben, \texttt{INSERT}, \texttt{UPDATE} und \texttt{DELETE} sollten sich aber vergleichsweise einfach implementieren lassen.}
+
+\subsection{Beispielhafte Abfragen}
 \label{sec:example-queries}
 
 In den folgenden Beispielen steht jeder nummerierte Punkt für einen vom Lernenden abgeschlossenen Schritt, nach welchem die entstandene Query syntaktisch korrekt sein sollte und daher unmittelbar ausgeführt wird. So erhält der Benutzer ein unmittelbares Feedback über die Auswirkung seiner Änderung.
@@ -202,9 +276,19 @@ Wir beginnen zunächst mit einer einfachen Abfrage aus nur einer Tabelle, deren 
 
 \begin{enumerate}
   \item Zu diesem Zeitpunkt steht dem Benutzer nur die Auswahl einer Tabelle für die \texttt{FROM}-Komponente offen. Da eine Abfrage ohne Angabe einer \texttt{SELECT}-Komponente ungültig wäre, wird diese automatisch ergänzt. Eine Einschränkung der Spalten findet dabei nicht statt, es handelt sich also konkret um einen \texttt{SELECT * FROM <table>} Ausdruck.
-  \item Nun soll die Ergebnismenge mit einer \texttt{WHERE}-Komponente eingeschränkt werden. Zur Verfügung stehen dem Benutzer die Vergleichsoperatoren \texttt{LIKE} und die typischen Vergleichsoperaten \texttt{=}, \texttt{<>}, \texttt{>}, \texttt{<}, \texttt{>=} und \texttt{<=}. Der Benutzer wählt zunächst den Vergleichsoperator und
-  \item Die Angabe von weiteren Ausdrücken erfordert nun die Angabe eines logischen Operators. Da in SQLite das logische \texttt{AND} Vorrang vor dem logischen \texttt{OR} hat, werden die Ausdrücke zur visuellen Unterstützung immer entsprechend geklammert.
+  \item Nun soll die Ergebnismenge mit einer \texttt{WHERE}-Komponente eingeschränkt werden. Zur Verfügung steht dem Benutzer der unscharfe Vergleich von Strings mit \texttt{LIKE} und die typischen Vergleichsoperaten \texttt{=}, \texttt{<>}, \texttt{>}, \texttt{<}, \texttt{>=} und \texttt{<=}.
+  \item Die Angabe von weiteren Ausdrücken erfordert nun die Angabe eines logischen Operators. Da in SQLite das logische \texttt{AND} Vorrang vor dem logischen \texttt{OR}, wäre eine entsprechende Hervorhebung vermutlich hilfreich.
 \end{enumerate}
+
+\subsection{Oberflächen für Endbenutzer}
+
+\info[inline]{Binden von Werten aus der Abfrage an einfache Eingabelemente wie Textfelder oder Komboboxen.}
+
+\subsubsection{Navigation}
+
+\subsubsection{Erfassen von Beziehungen}
+
+\info[inline]{Das vermutlich komplizierteste Bedienelement.}
 
 
 
