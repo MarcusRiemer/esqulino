@@ -88,7 +88,7 @@ Andere Entwicklungsumgebungen für Datenbanken und auch Generatoren für Abfrage
 
 \subsection{Software: Scratch}
 
-\info[inline]{Paradebeispiel für eine Schülerorientierte Entwicklungsumgebung, insbesondere auch eine Betrachtung der visuellen Programmierung.}
+\info[inline]{Paradebeispiel für eine schülerorientierte Entwicklungsumgebung, insbesondere auch eine Betrachtung der visuellen Programmierung.}
 
 \subsection{Software: Visual Studio Lightswitch}
 
@@ -125,10 +125,11 @@ Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit be
   Typischerweise ist der Einstieg in die Programmierung von relativ langweiligen Programmen geprägt, häufig textbasierte Konsolenanwendungen. Im Sonderfall der Vermittlung von SQL Kenntnissen ist das Ergebnis der Arbeit sogar überhaupt nicht sinnvoll zu demonstrieren, weil die erstellten Abfragen isoliert für sich stehen und häufig auch nur in der Entwicklungsumgebung der jeweiligen Datenbank ausführbar sind. Mit der im Rahmen dieser Arbeit zu erstellenden Software sollen sich praktisch relevante Datenbankapplikationen umsetzen lassen. Diese verfügen über von den Lernenden erstellte Eingabemasken um Daten einzufügen oder zu manipulieren und verschiedene Ausgabesichten um den Datenbestand sinnvoll zu präsentieren.
 \item[Fortführung der entwickelten Projekte] \hfill \\
   Viele Lernumgebungen sind in sich geschlossene Systeme, deren Arbeitsergebnisse nur schwer in anderen Programmen oder Kontexten von Nutzen sind. Sobald der Lernende dann die Grenzen der verwendeten Lernsoftware erreicht hat, steckt er in einer Sackgasse fest. Die Arbeitsergebnisse dieser zu entwickelnden Software sollen daher zumindest einfach einsehbar sein, optimalerweise nach einem Export sogar einfach mit gängigen externen Programmen erweiterbar.
-\item[Einfache Inbetriebnahme (für Schüler)] \hfill \\
-  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten oder fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, hat eine möglichst einfache Inbetriebnahme dementsprechend Priorität.
-\item[Einfacher Betrieb (für Lehrkräfte)] \hfill \\
-  Prinzipiell stehen Informatiklehrkräfte bei dem Betrieb der jeweiligen Programme vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren diesen Umstand aber zusätzlich.
+\item[Einfache Inbetriebnahme] \hfill \\
+  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten oder fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, hat eine möglichst einfache Inbetriebnahme dementsprechend Priorität. Prinzipiell stehen Informatiklehrkräfte bei dem Betrieb der jeweiligen Programme vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren diesen Umstand aber zusätzlich.
+\item[Schrittweise komplexere Oberfläche] \hfill \\
+  Konventionelle Entwicklungsumgebungen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. Gerade wenn man aber dabei ist etwas Neues zu lernen kann es sinnvoll sein, die Menge der möglichen Optionen zu beschränken. In diesem Sinne sollte auch die Lehrkraft die Möglichkeit haben den Funktionsumfang der Entwicklungsumgebung für Schüler gezielt zu reduzieren, falls einzelne Konzepte sich als noch zu fortgeschritten erweisen sollten.
+  
   
 \end{description}
 
@@ -162,6 +163,33 @@ Anders als bei Scratch muss dabei jedoch nicht zwingend Drag \& Drop das beherrs
 Die Verwendung einer Seitenleiste (bei Scratch ``Toolbox'' genannt) wäre daher denkbar, sollte aber nicht zwingend Drag \& Drop erzwingen. Die Alternative dazu wäre eine Anzeige von ``Platzhaltern'' für die entsprechenden Komponenten unterhalb der eigenen Abfrage. Ein Klick auf den Platzhalter wandelt diesen dann in einen konkreten Block um und fordert ggfs. zur Angabe der benötigten Parameter auf.
 
 \info[inline]{Ich tendiere momentan dazu, eine von Scratch inspirierte Seitenleiste einfach wegzulassen.}
+
+\subsubsection{Visuelle Gestaltung}
+
+Ebenfalls ist im Voraus zu klären ob es sinnvoll wäre, das sehr bunte, blockige Design von Scratch zu imitieren. Abbildung \ref{fig:compare-colourful} zeigt einen Vergleich eines frühen Prototypen in einem an Syntax-Highlighting angelehnten Design und in einem wesentlich bunteren, blockigen Design.
+
+\todo[inline]{\textbf{Todo}: Quelle mit Beleg für ``Kinderfreundliches'' buntes Design suchen. Das wird man bei Scratch schon aus gutem Grund gemacht haben. Relevante Frage: Zielgruppe (in Jahren) von Scratch vs. Zielgruppe dieses Projektes?}
+
+Aber auch wenn man den sehr bunten Stil gegen einen etwas nüchtereren, aber immer noch ``blockartigen'' Stil austauschen würde, ergeben sich dadurch nur vergleichsweise wenige Vorteile. In Scratch zeigen z.B. die Konnektoren des Blocks für eine Endlosschleife sehr deutlich, wie sich der Kontrollfluss durch dieses Element verändern wird. Für eine vollständige Programmiersprache ist das mit Sicherheit eine gute Wahl, aber für den sehr linearen Ablauf einer SQL-Abfrage ist dieser Umstand nicht von Bedeutung.
+
+Ein weiterer Vorteil eines etwas nüchterneren, IDE-ähnlichen Designs wäre zudem die größere Nähe zu ``normalen'' Entwicklerprogrammen. Diese wirken möglicherweise weniger einschüchternd, wenn man sich schon an den Anblick von recht viel Text mit Syntax-Highlighting gewöhnt hat.
+
+Letztendlich überwiegt aber ein sehr viel profanerer Fakt: Der Autor dieser Arbeit ist kein Grafikdesigner und würde vermutlich kein ansprechendes und zugleich buntes Farbkonzept auf die Beine stellen können.
+
+\begin{figure}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{images/sql-sketch-early-syntax-highlight}
+    \caption{Syntax-Highlighting, ähnlich einer IDE}
+    \label{fig:screen-sql-editor-early-syntax-highlighting}
+  \end{subfigure} \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{images/sql-sketch-early-colourful}
+    \caption{Starke Farbakzente, ähnlich zu Scratch}
+    \label{fig:screen-sql-editor-early-colourful}
+  \end{subfigure}
+  \caption{Vergleich unterschiedlicher Gestaltungsansätze}
+  \label{fig:compare-colourful}
+\end{figure}
 
 \subsubsection{Umgang mit \texttt{GROUP BY}}
 
