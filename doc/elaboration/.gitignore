@@ -5,3 +5,7 @@ report.pdf
 *.out
 *.tdo
 *.toc
+*.bbl
+*.bcf
+*.blg
+*.run.xml
