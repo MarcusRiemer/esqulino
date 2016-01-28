@@ -10,8 +10,8 @@
 
      .block {
          margin-bottom: 2px;
-         /*border: 1px solid black;
-         border-radius: 5px;*/
+         /* border: 1px solid black;
+         border-radius: 5px; */
          cursor: default;
      }
 
@@ -35,7 +35,7 @@
          font-size: 30px;
          padding-right: 15px;
      }
-
+ 
      .block .constant {
          color: red;
      }
@@ -63,7 +63,7 @@
      }   
 
      .select {
-         /*background: lime;*/
+         /* background: lime; */
      }
 
      .select .column, .from .table {
@@ -71,7 +71,7 @@
      }
 
      .from {
-         /*background: orange;*/
+        /* background: orange; */
      }
 
      .join {
@@ -79,7 +79,7 @@
      }
 
      .where {
-        /* background: cornflowerblue;*/
+        /* background: cornflowerblue; */
      }
 
      .blueprint {
@@ -147,25 +147,102 @@
       <div class="block where">
         <div class="syntax">WHERE</div>
         <ul>
-          <li class="column">p.id</li>
-          <li>&ge;</li>
-          <li class="constant">5</li>
+          <li class="column">
+            <select>
+              <option value="p.id">p.id</option> 
+              <option value="p.name">p.name</option>
+              <option value="p.geb_dat" selected>p.geb_dat</option>
+            </select>
+          </li>
+          <li>
+            <select>
+              <option value="ge">&ge;</option>
+            </select>
+          </li>
+          <br />
+          <li>
+            <label>
+              <input type="radio" name="col_1" />Konstant
+            </label>
+            <input type="text" name="col_1" value="5" />
+            <br />
+            <label>
+              <input type="radio" name="col_1" />Andere Spalte
+            </label>
+            <select>
+              <option value="p.id">p.id</option> 
+              <option value="p.name">p.name</option>
+              <option value="p.geb_dat" selected>p.geb_dat</option>
+            </select>
+          </li>
         </ul>
       </div>
+
       <div class="block where and">
         <div class="syntax">AND</div>
         <ul>
-          <li class="column">p.id</li>
-          <li>&le;</li>
-          <li class="constant">10</li>
+          <li class="column">
+            <select>
+              <option value="p.id" selected>p.id</option> 
+              <option value="p.name">p.name</option>
+              <option value="p.geb_dat">p.geb_dat</option>
+            </select>
+          </li>
+          <li>
+            <select>
+              <option value="le">&le;</option>
+            </select>
+          </li>
+          <br />
+          <li>
+            <label>
+              <input type="radio" name="col_1" />Konstant
+            </label>
+            <input type="text" name="col_1" value="10" />
+            <br />
+            <label>
+              <input type="radio" name="col_1" />Andere Spalte
+            </label>
+            <select>
+              <option value="p.id">p.id</option> 
+              <option value="p.name">p.name</option>
+              <option value="p.geb_dat" selected>p.geb_dat</option>
+            </select>
+          </li>
         </ul>
       </div>
+
       <div class="block where or">
         <div class="syntax">OR</div>
         <ul>
-          <li class="column">p.name</li>
-          <li>=</li>
-          <li class="constant">"Hans"</li>
+          <li class="column">
+            <select>
+              <option value="p.id">p.id</option> 
+              <option value="p.name" selected>p.name</option>
+              <option value="p.geb_dat">p.geb_dat</option>
+            </select>
+          </li>
+          <li>
+            <select>
+              <option value="le">=</option>
+            </select>
+          </li>
+          <br />
+          <li>
+            <label>
+              <input type="radio" name="col_1" />Konstant
+            </label>
+            <input type="text" name="col_1" value="Hans" />
+            <br />
+            <label>
+              <input type="radio" name="col_2" />Andere Spalte
+            </label>
+            <select>
+              <option value="p.id">p.id</option> 
+              <option value="p.name">p.name</option>
+              <option value="p.geb_dat" selected>p.geb_dat</option>
+            </select>
+          </li>
         </ul>
       </div>
 
