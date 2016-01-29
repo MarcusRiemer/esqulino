@@ -20,11 +20,20 @@
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
 \usepackage[colorinlistoftodos,prependcaption]{todonotes}
 \usepackage{dirtree}
+\usepackage{newfloat}
 
 \newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{\textbf{Unsure}: #2}}
 \newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{\textbf{Change}: #2}}
 \newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{\textbf{Info}: #2}}
 \newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{\textbf{Improve}: #2}}
+
+\DeclareFloatingEnvironment[
+    fileext=lod,
+    listname=Liste von Ordnerstrukturen,
+    name=Ordnerstruktur,
+    placement=tbhp,
+    within=none,
+]{dirstruct}
 
 %% Citing stuff
 \usepackage[backend=biber,defernumbers=true]{biblatex}
@@ -312,7 +321,18 @@ Ebenfalls aus Gründen der einfacheren Zugänglichkeit sollte eine einzelne dazu
 
 \subsection{Verwaltung von Projekten}
 
-Um den Betrieb für Schüler und Lehrer zu vereinfachen, wird eine Instanz des Servers also in der Lage sein mehrere Schülerprojekte gleichzeitig bereitzustellen. Dafür ist es aber zunächst einmal notwendig zu definieren, wie ein solches Projekt überhaupt strukturiert ist.
+Um den Betrieb für Schüler und Lehrer zu vereinfachen, wird eine Instanz des Servers also in der Lage sein mehrere Schülerprojekte gleichzeitig bereitzustellen. Dafür ist es aber zunächst einmal notwendig zu definieren, wie ein solches Projekt überhaupt strukturiert ist. Grundsätzlich ist ein Projekt eine Sammlung von Dateien in einer festgelegten Ordnerstruktur.
+
+\begin{dirstruct}
+  \dirtree{%
+    .1 empty-project/.
+    .2 queries/.
+    .2 pages/.
+    .2 config.yaml.
+    .2 db.sqlite.
+  }
+  \caption{Leeres Projekt}
+\end{dirstruct}
 
 \subsection{Verwendung von Domänenspezfischen Sprachen}
 
