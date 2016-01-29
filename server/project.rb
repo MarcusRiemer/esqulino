@@ -42,7 +42,7 @@ class SchemaTable
   end
 
   def to_json(options)
-    { :name => @name, :columns => @columns.map {|col| col.to_json(options) } }.to_json(options)
+    { :name => @name, :columns => @columns }.to_json(options)
   end
 end
 
