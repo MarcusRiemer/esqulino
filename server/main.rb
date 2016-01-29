@@ -5,6 +5,8 @@ require 'sinatra/json'
 
 require 'yaml'
 
+require './project.rb'
+
 class ScratchSqlApp < Sinatra::Base
   enable :logging
   
@@ -16,15 +18,23 @@ class ScratchSqlApp < Sinatra::Base
   # Static HTML files are served from here
   set :public_folder, File.dirname(__FILE__) + "/../client"
 
+  def given_data_dir
+    ARGV[1] || "../data/dev/"
+  end
+  
   # Listing all projects that are available
   get '/project' do
-    given_data_dir = ARGV[1] || "../data/dev/"
-    project_dirs = Dir.entries(given_data_dir)
-                   .select { |entry| !(entry =='.' || entry == '..') }
-                   .map { |entry| YAML.load_file(File.join(given_data_dir, entry, "config.yaml")) }
+    projects = Dir.entries(given_data_dir)
+               .select { |entry| !(entry =='.' || entry == '..') }
+               .map { |entry| YAML.load_file(File.join(given_data_dir, entry, "config.yaml")) }
     
 
-    json project_dirs
+    json projects
+  end
+
+  get '/project/:name/schema.json' do |name|
+    sqlite_path = File.join(given_data_dir, name, "db.sqlite")
+    json database_describe_schema(sqlite_path)
   end
 
   get '/' do
