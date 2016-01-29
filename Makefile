@@ -4,5 +4,8 @@ watch-tsc :
 run-server :
 	cd server && rackup config.ru
 
+all-doc :
+	make -C doc/elaboration thesis
+
 .PHONY : run
 
