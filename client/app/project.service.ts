@@ -2,7 +2,7 @@ import 'rxjs/Rx';
 
 import {Injectable} from 'angular2/core';
 import {Http, Response} from 'angular2/http';
-import {Project} from './project'
+import {Project, ProjectDescription} from './project'
 
 /**
  * Wraps access to projects
@@ -10,11 +10,11 @@ import {Project} from './project'
 @Injectable()
 export class ProjectService {
     // The project cache
-    private cached_projects : Project[];
+    private cached_projects : ProjectDescription[];
 
     // If a request is currently in progress, there is no need to fire
     // a second request.
-    private  in_progress :Promise<Project[]>;
+    private  in_progress :Promise<ProjectDescription[]>;
 
     /**
      * @param _http Dependently injected
@@ -25,7 +25,7 @@ export class ProjectService {
      * Immediatly retrieve cached projects or, if no projects are present,
      * fire up a requests for those projects.
      */
-    getProjects() : Promise<Project[]> {
+    getProjects() : Promise<ProjectDescription[]> {
         // First stop: A cached result
         if (this.cached_projects) {            
             return Promise.resolve(this.cached_projects);
@@ -43,9 +43,9 @@ export class ProjectService {
     /**
      * Fetch a new set of projects and also place them in the cache.
      */
-    fetchProjects() : Promise<Project[]> {
+    fetchProjects() : Promise<ProjectDescription[]> {
         this.in_progress = this._http.get('/project')
-            .map(ProjectService.mapProject)
+            .map(res => <ProjectDescription[]> res.json())
             .toPromise();
 
         this.in_progress.then(projects => {
@@ -54,14 +54,5 @@ export class ProjectService {
         });
 
         return this.in_progress
-    }
-
-    /**
-     * Maps the given HTTP response to an array of projects
-     */
-    private static mapProject(res : Response) {
-        var json : any[] = res.json();
-
-        return json.map( item => new Project(item.name) )
     }
 }
