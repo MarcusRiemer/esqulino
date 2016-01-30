@@ -12,6 +12,10 @@ export class ProjectService {
     // The project cache
     private cached_projects : Project[];
 
+    // If a request is currently in progress, there is no need to fire
+    // a second request.
+    private  in_progress :Promise<Project[]>;
+
     /**
      * @param _http Dependently injected
      */
@@ -22,9 +26,16 @@ export class ProjectService {
      * fire up a requests for those projects.
      */
     getProjects() : Promise<Project[]> {
+        // First stop: A cached result
         if (this.cached_projects) {            
             return Promise.resolve(this.cached_projects);
-        } else {
+        }
+        // Second stop: A request that is currently in progress
+        else if (this.in_progress) {
+            return this.in_progress;
+        }
+        // Third stop: A new request
+        else {
             return this.fetchProjects()
         }
     }
@@ -33,13 +44,16 @@ export class ProjectService {
      * Fetch a new set of projects and also place them in the cache.
      */
     fetchProjects() : Promise<Project[]> {
-        var promise = this._http.get('/project')
+        this.in_progress = this._http.get('/project')
             .map(ProjectService.mapProject)
             .toPromise();
 
-        promise.then(projects => this.cached_projects = projects);
+        this.in_progress.then(projects => {
+            this.cached_projects = projects
+            this.in_progress = null
+        });
 
-        return promise
+        return this.in_progress
     }
 
     /**
