@@ -3,3 +3,6 @@ install-deps :
 
 watch :
 	npm run "tsc:w"
+
+compile :
+	npm run "tsc"
