@@ -10,9 +10,14 @@ install-deps :
 	make -C server install-deps
 	make -C client install-deps
 
-# Continously compiles the clients typescript files
+# Continously compiles the clients typescript files, useful during
+# development.
 client-watch :
 	make -C client watch
+
+# One-shot compilation of client
+client-compile :
+	make -C client compile
 
 # Runs the server in development mode, this is probably not a good idea to
 # do in a productive environment. It simply uses a built-in Sinatra server,
