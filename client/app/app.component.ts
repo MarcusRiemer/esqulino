@@ -1,13 +1,24 @@
-import {Component} from 'angular2/core';
+import {Component, OnInit}    from 'angular2/core';
+import {HTTP_PROVIDERS}       from 'angular2/http';
+import {CORE_DIRECTIVES}      from 'angular2/common';
 import {ProjectListComponent} from './project.component';
-import {Project} from './project'
+import {ProjectService}       from './project.service'
+import {Project}              from './project'
 
 @Component({
     selector: 'sql-scratch',
     templateUrl: 'app/templates/index.html',
-    directives: [ProjectListComponent]
+    directives: [CORE_DIRECTIVES, ProjectListComponent],
+    providers: [HTTP_PROVIDERS, ProjectService]
 })
 
-export class SqlScratchComponent {
-    title = 'SQL-Pad 2'
+export class SqlScratchComponent implements OnInit {
+    public title = 'SQL-Pad 2';
+    public selectedProject : Project;
+
+    constructor(private _projectService: ProjectService) { }
+
+    ngOnInit() {
+        this._projectService.fetchProjects()
+    }
 }
