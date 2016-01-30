@@ -13,7 +13,7 @@ import {Project}              from './project'
 })
 
 export class SqlScratchComponent implements OnInit {
-    public title = 'SQL-Pad 2';
+    public title = 'SQL-Pad';
     public selectedProject : Project;
 
     constructor(private _projectService: ProjectService) { }
