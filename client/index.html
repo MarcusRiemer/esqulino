@@ -1,8 +1,15 @@
+<!DOCTYPE html>
 <html>
 
   <head>
-    <title>Angular 2 QuickStart</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    
+    <title>Something, Something, SQL</title>
 
+    <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+    
     <!-- 1. Load libraries -->
     <script src="node_modules/es6-shim/es6-shim.js"></script>
     <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
@@ -23,12 +30,13 @@
      System.import('app/boot')
            .then(null, console.error.bind(console));
     </script>
-
   </head>
 
   <!-- 3. Display the application -->
   <body>
-    <sql-scratch>Loading...</sql-scratch>
+    <div class="container-fluid">
+      <sql-scratch>Loading...</sql-scratch>
+    </div>
   </body>
 
 </html>
