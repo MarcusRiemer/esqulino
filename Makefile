@@ -22,6 +22,7 @@ server-run :
 
 # Compile every part of the documentation, including the thesis.
 doc :
+	make -C server doc
 	make -C doc/elaboration thesis
 
 .PHONY : install-deps client-watch server-run doc
