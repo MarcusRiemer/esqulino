@@ -35,16 +35,16 @@ class ScratchSqlApp < Sinatra::Base
 
   # Info about a specific project
   get '/api/project/:id' do
+    # Load data from disk and strip any private data
     project_id = params['id']
     project = YAML.load_file(File.join(given_data_dir, project_id, "config.yaml"));
-
-    json project_public_info(project)
-  end
-
-  # Info about a specific schema
-  get '/api/project/:name/schema.json' do |name|
-    sqlite_path = File.join(given_data_dir, name, "db.sqlite")
-    json database_describe_schema(sqlite_path)
+    project = project_public_info(project);
+    
+    # Put the schema into it
+    sqlite_path = File.join(given_data_dir, project_id, "db.sqlite")
+    project['schema'] = database_describe_schema(sqlite_path)
+    
+    json project
   end
 
   # Catchall for the rest of routes

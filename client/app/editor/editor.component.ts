@@ -6,6 +6,7 @@ import {RouteConfig, RouteParams, ROUTER_DIRECTIVES} from 'angular2/router';
 import {SchemaComponent} from './schema.component';
 import {Project}         from './project';
 import {ProjectService}  from './project.service';
+import {Table}           from './table'
 
 @Component({
     templateUrl: 'app/editor/templates/index.html',
@@ -34,7 +35,7 @@ export class EditorComponent implements OnInit {
      */
     ngOnInit() {
         var projectId = this._routeParams.get('id');
-        this._projectService.fetchProject(projectId)
-            .then(project => this.project = project);
+        this._projectService.getProject(projectId)
+            .then(res => this.project = res);
     }
 }

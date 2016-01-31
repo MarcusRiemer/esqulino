@@ -1,15 +1,35 @@
-import {Component, OnInit}              from 'angular2/core';
-import {CORE_DIRECTIVES}                from 'angular2/common';
-import {Router, ROUTER_DIRECTIVES}      from 'angular2/router';
+import {Component, OnInit}                      from 'angular2/core';
+import {CORE_DIRECTIVES}                        from 'angular2/common';
+import {Router, RouteParams, ROUTER_DIRECTIVES} from 'angular2/router';
+
+import {Project}        from './project'
+import {ProjectService} from './project.service'
+import {Table}          from './table'
 
 @Component({
     templateUrl: 'app/editor/templates/schema.html',
     directives: [ROUTER_DIRECTIVES]
 })
 export class SchemaComponent implements OnInit {
+    /**
+     * The currently edited project
+     */
+    public project : Project;
 
+    /**
+     * Used for dependency injection.
+     */
+    constructor(
+        private _projectService: ProjectService,
+        private _routeParams: RouteParams
+    ) { }
 
+    /**
+     * Load the project to access the schema
+     */
     ngOnInit() {
-        console.log("Schema running");
+        var projectId = this._routeParams.get('id');
+        this._projectService.getProject(projectId)
+            .then(res => this.project = res);
     }
 }

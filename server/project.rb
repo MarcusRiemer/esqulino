@@ -65,7 +65,7 @@ def database_describe_schema(sqlite_file_path)
                        WHERE type='table'
                        ORDER BY name;")
 
-  tables = Hash.new
+  tables = []
 
   # Fill in the column for each table
   table_names.each do |name|
@@ -78,7 +78,7 @@ def database_describe_schema(sqlite_file_path)
       table_schema.add_column(column_schema)
     end
 
-    tables[name] = table_schema
+    tables << table_schema
   end
 
   return tables
