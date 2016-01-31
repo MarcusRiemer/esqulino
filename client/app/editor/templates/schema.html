@@ -1,27 +1,26 @@
 <h1>Tabellen von {{ project?.name }}</h1>
-<div class="row">
-  <div class="col-sm-1">
-    Idx
-  </div>
-  <div class="col-sm-1">
-    PK
-  </div>
-  <div class="col-sm-1">
-    NN
-  </div>
-  <div class="col-sm-2">
-    Name
-  </div>
-  <div class="col-sm-2">
-    Typ
-  </div>
-  <div class="col-sm-2">
-    Standardwert
-  </div>
-</div>
-
 <div *ngFor="#table of project?.schema">
   <h3>{{ table.name }}</h3>
+  <div class="row">
+    <div class="col-sm-1">
+      Idx
+    </div>
+    <div class="col-sm-1">
+      PK
+    </div>
+    <div class="col-sm-1">
+      NN
+    </div>
+    <div class="col-sm-2">
+      Name
+    </div>
+    <div class="col-sm-2">
+      Typ
+    </div>
+    <div class="col-sm-2">
+      Standardwert
+    </div>
+  </div>
   <div *ngFor="#column of table.columns"
        class="row">
     <div class="col-sm-1">
