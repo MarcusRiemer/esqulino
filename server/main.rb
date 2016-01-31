@@ -41,12 +41,13 @@ class ScratchSqlApp < Sinatra::Base
     json project_public_info(project)
   end
 
-
+  # Info about a specific schema
   get '/api/project/:name/schema.json' do |name|
     sqlite_path = File.join(given_data_dir, name, "db.sqlite")
     json database_describe_schema(sqlite_path)
   end
 
+  # Catchall for the rest of routes
   get '/*' do
     send_file File.expand_path('index.html', settings.public_folder)
   end
