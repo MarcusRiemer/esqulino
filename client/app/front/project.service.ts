@@ -1,8 +1,9 @@
 import 'rxjs/Rx';
 
-import {Injectable} from 'angular2/core';
+import {Injectable}     from 'angular2/core';
 import {Http, Response} from 'angular2/http';
-import {Project, ProjectDescription} from './project'
+
+import {ProjectDescription} from './project'
 
 /**
  * Wraps access to projects

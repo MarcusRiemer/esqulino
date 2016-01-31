@@ -6,13 +6,11 @@ import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
 import {SchemaComponent} from './schema.component';
 
 @Component({
-    selector: 'sql-editor',
     templateUrl: 'app/editor/templates/index.html',
     directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES]
 })
 @RouteConfig([
-    { path: '/schema',       name : "Schema",         component : SchemaComponent, useAsDefault: true },
+    { path: '/schema', name : "Schema", component : SchemaComponent, useAsDefault: true },
 ])
 export class EditorComponent {
-
 }

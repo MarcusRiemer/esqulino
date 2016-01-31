@@ -6,14 +6,14 @@
         <h2 class="card-title">{{ project.name }}</h2>
         <h4 class="card-subtitle text-muted">{{ project.description }}</h4>
         <button type="button"
-                class="btn btn-primary btn-block">
+                class="btn btn-primary btn-block"
+                (click)="navigateEditor(project)">
           Ansehen
         </button>
-        <button type="button"
-                class="btn btn-info btn-block"
-                (click)="navigateEditor(project)">
+        <a class="btn btn-info btn-block"
+           [routerLink]="['About']">
           Bearbeiten
-        </button>
+        </a>
       </div>
     </div>
   </div>
