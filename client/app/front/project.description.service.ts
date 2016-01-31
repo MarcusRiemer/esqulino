@@ -3,19 +3,19 @@ import 'rxjs/Rx';
 import {Injectable}     from 'angular2/core';
 import {Http, Response} from 'angular2/http';
 
-import {ProjectDescription} from './project'
+import {ProjectDescription} from './project.description'
 
 /**
- * Wraps access to projects
+ * Wraps access to project descriptions.
  */
 @Injectable()
-export class ProjectService {
+export class ProjectDescriptionService {
     // The project cache
     private cached_projects : ProjectDescription[];
 
     // If a request is currently in progress, there is no need to fire
     // a second request.
-    private  in_progress :Promise<ProjectDescription[]>;
+    private  in_progress : Promise<ProjectDescription[]>;
 
     /**
      * @param _http Dependently injected
