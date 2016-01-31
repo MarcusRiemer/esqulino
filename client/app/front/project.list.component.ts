@@ -1,8 +1,8 @@
-import {Component, OnInit} from 'angular2/core';
-import {Router}            from 'angular2/router';
+import {Component, OnInit}         from 'angular2/core';
+import {Router, ROUTER_DIRECTIVES} from 'angular2/router';
 
-import {ProjectService}              from './project.service'
-import {Project, ProjectDescription} from './project'
+import {ProjectService}     from './project.service'
+import {ProjectDescription} from './project'
 
 
 /**
@@ -10,10 +10,11 @@ import {Project, ProjectDescription} from './project'
  */
 @Component({
     selector: 'project-list',
-    templateUrl: 'app/templates/project-list.html'
+    templateUrl: 'app/front/templates/project-list.html',
+    directives: [ROUTER_DIRECTIVES]
 })
 export class ProjectListComponent implements OnInit {
-    public projects : Project[]
+    public projects : ProjectDescription[]
 
     /**
      * Used for dependency injection.
@@ -33,7 +34,7 @@ export class ProjectListComponent implements OnInit {
     /**
      * Navigate to a project in edit mode
      */
-    navigateEditor(projectDescription : ProjectDescription) {
-        this._router.navigate(['Editor', { name : projectDescription.name }]);
+    navigateEditor(d : ProjectDescription) {
+        this._router.navigate(['/Editor', { id : d.id }]);
     }
 }

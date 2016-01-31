@@ -6,14 +6,5 @@
 export interface ProjectDescription {
     name : string;
     description : string;
-}
-
-/**
- * A single project in greater detail, including means of
- * manipulating it.
- */
-export class Project {
-    constructor(public name:string) {
-
-    }
+    id : string;
 }
