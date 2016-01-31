@@ -1,0 +1,69 @@
+import {Component}                      from 'angular2/core';
+import {Router, RouteParams}            from 'angular2/router';
+
+import {Project}                from './project'
+import {ProjectService}         from './project.service'
+import {Query, QueryComponent}  from './query';
+
+@Component({
+    templateUrl: 'app/editor/templates/query-editor.html',
+    directives: [QueryComponent]
+})
+export class QueryEditorComponent {
+    /**
+     * The currently edited query
+     */
+    public query : Query;
+
+    /**
+     * The currently edited project
+     */
+    public project : Project;
+
+    /**
+     * Used for dependency injection.
+     */
+    constructor(
+        private _projectService: ProjectService,
+        private _routeParams: RouteParams
+    ) { }
+
+    /**
+     * Load the project to access the schema
+     */
+    ngOnInit() {
+        var projectId = this._routeParams.get('id');
+        this._projectService.getProject(projectId)
+            .then(res => {
+                this.project = res;
+                // Build a new query in place for testing purposes
+                this.query = new Query(this.project.schema,
+                                       this.generateQueryModel());
+
+                console.log(this.query);
+            });
+    }
+
+    onClick() {
+        this.query = new Query(this.project.schema,
+                               this.generateQueryModel());
+
+        console.log("New Query");
+    }
+
+    generateQueryModel() {
+        return ({
+            select : {
+                columns : [
+                    { column : "id", asName : "person_id" },
+                    { column : "name", asName : "person_name" }
+                ]
+            },
+
+            from : [
+                { table : "person", alias : "p" }
+            ]
+        });
+            
+    }
+}

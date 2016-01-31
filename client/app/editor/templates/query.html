@@ -1,0 +1,15 @@
+<div *ngIf="query"
+     class="block-container">
+  <div class="block select">
+    <div class="syntax">SELECT</div>
+    <span *ngFor="#column of query.model.select.columns; #last = last"
+          class="column">
+      {{ column.column }} AS {{ column.asName }}<span *ngIf="!last">,</span>
+    </span>
+  </div>
+  <div class="block from">
+    <div class="syntax">FROM</div>
+    <span class="table-name">person p</span>
+  </div>
+</div>
+<pre *ngIf="query">{{ query | sqlString }}</pre>

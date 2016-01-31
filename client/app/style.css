@@ -1,0 +1,84 @@
+.block-container {
+    font-family: monospace;
+}
+
+.block {
+    border: 1px solid transparent;
+    margin-bottom: 2px;
+    cursor: default;
+}
+
+.block:hover {
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer; 
+}
+
+.block label {
+    white-space: nowrap;
+}
+
+/* I don't want to put an artifical clearfix after every element. */
+.block:after {
+    content:"";
+    display:table;
+    clear:both;
+}
+
+.block .syntax {
+    color: blue;
+    float: left;
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 30px;
+    padding-right: 15px;
+}
+
+.block .constant {
+    color: red;
+}
+
+.block .column {
+    color: green;
+}
+
+.block .table-name {
+    color: limegreen;
+}
+
+.block ul, .select .column, .from .table-name {
+    list-style-type: none;
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    padding-left: 0px;
+    padding-right: 0px;
+    float: left;
+}
+
+.block ul li {
+    display:inline;
+}   
+
+.select {
+    /*background: lime;*/
+}
+
+
+.from {
+    /*background: orange;*/
+}
+
+.join {
+
+}
+
+.where {
+    /* background: cornflowerblue;*/
+}
+
+/* Every WHERE block after a WHERE block needs to be indented, as needs every subsequent JOIN */
+.where ~ .where, .from ~ .from {
+    margin-left: 15px;
+}

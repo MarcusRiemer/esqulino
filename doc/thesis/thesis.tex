@@ -11,7 +11,7 @@
 \usepackage[absolute]{textpos}
 \usepackage{tikz}
 \usepackage{hyperref}
-\usepackage{caption}
+\usepackage[format=plain,labelfont=bf]{caption}
 \usepackage{subcaption}
 \usepackage{listings}
 \usepackage{booktabs}
@@ -227,7 +227,7 @@ Ein grundsätzlicher Nachteil dieses Komponentenorientierten Bedienkonzeptes ist
 
 \begin{wrapfigure}{r}{0.46\textwidth}
   \includegraphics[width=0.45\textwidth]{images/sql-sketch-all-editing}
-  \caption{Simultane Anzeige (fast) aller Möglichkeiten}
+  \caption{So nicht! Simultane Anzeige (fast) aller Möglichkeiten}
   \label{fig:screen-sql-editor-all-editing}
 \end{wrapfigure}
 
@@ -242,6 +242,14 @@ Dementsprechend wird ein anderer Ansatz verfolgt werden müssen: Es lässt sich 
 
 \info[inline]{Im Editor immer zu sehen, aber aktuell nicht beschrieben: Eine Tabelle mit den Daten, welche die Abfrage im aktuellen Zustand liefern würde.}
 
+\subsubsection{Editoren für Werte}
+
+Die Abbildungen des Prototypen haben einen Umstand schon vorweggenommen: Die Vergleiche in den \texttt{ON} und \texttt{WHERE} Ausdrücken sollten nach Möglichkeit keine einfachen Textfelder sein, sondern dem Benutzer sinnvolle, kontextabhängige Vorschläge machen.
+
+Da es an allen Stellen, bei denen in SQL Werte verglichen oder ausgegeben werden, möglich ist, diese durch Funktionen zu verändern oder durch Ausdrücke zu berechnen, wird allerdings ein Rückgriff auf freie Ausdrücke vorgesehen werden müssen. Es wird kaum möglich sein, den vollen Umfang aller denkbaren Funktionen bereitzustellen und spätestens geschachtelte Ausdrücke können sehr schnell enorm kompliziert werden.
+
+\unsure[inline]{Ich bin mir noch nicht sicher, wie ich das gerne handhaben möchte. Möglicherweise ein separater Editor für Ausdrücke in einer Leiste ``unterhalb'' der eigentlichen Abfrage? Auf jeden Fall muss ich hier den Umfang sehr deutlich vorher abstecken.}
+
 \subsubsection{Deaktivierbare Komponenten}
 
 Unmittelbar nach dem Hinzufügen einer neuen Komponente sind möglicherweise noch nicht alle nötigen Informationen verfügbar. Daher werden Komponenten immer in einem deaktivierten Zustand hinzugefügt, sie lassen sich erst aktivieren wenn alle relevanten Informationen eingetragen worden sind. Genau so werden Komponenten mit inhaltlichen Fehlern deaktiviert, bis der Fehler behoben worden ist. Und natürlich kann es auch Gründe geben eine Komponente freiwillig zu deaktivieren, auch das soll selbstverständlich möglich sein.
@@ -255,12 +263,6 @@ Wiederum für die \texttt{WHERE} und \texttt{HAVING}, aber auch für die \texttt
 \subsubsection{\texttt{GROUP BY}}
 
 Sobald in einer Abfrage eine \texttt{GROUP BY} Komponente auftaucht, hat dies Auswirkungen auf die Möglichkeiten innerhalb der \texttt{SELECT} Anweisung. Da keine Auswahl von ungruppierten und nicht-aggregierten Spalten möglich sein darf, müssen diese entfernt werden. Insbesondere wenn der Benutzer vorher schon mit komplizierten Ausdrücken im \texttt{SELECT} gearbeitet haben sollte, ist also zumindest eine Warnung nötig.
-
-\subsubsection{Funktionen}
-
-An allen Stellen bei denen in SQL Werte verglichen oder ausgegeben werden ist es möglich, diese durch Funktionen zu verändern oder durch Ausdrücke zu berechnen. Es wird kaum möglich sein den vollen Umfang aller denkbaren Funktionen bereitzustellen und auch Ausdrücke können sehr schnell enorm kompliziert werden.
-
-\unsure[inline]{Ich bin mir noch nicht sicher, wie ich das gerne handhaben möchte. Möglicherweise ein separater Editor für Ausdrücke in einer Leiste ``unterhalb'' der eigentlichen Abfrage? Auf jeden Fall muss ich hier den Umfang sehr deutlich vorher abstecken.}
 
 \subsubsection{Unterabfragen}
 

@@ -61,9 +61,9 @@ def database_describe_schema(sqlite_file_path)
 
   # Find out names of tables
   table_names = db.execute("SELECT name
-                       FROM sqlite_master
-                       WHERE type='table'
-                       ORDER BY name;")
+                            FROM sqlite_master
+                            WHERE type='table'
+                            ORDER BY name;")
 
   tables = []
 
