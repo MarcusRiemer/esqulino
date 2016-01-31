@@ -33,6 +33,15 @@ class ScratchSqlApp < Sinatra::Base
     json projects
   end
 
+  # Info about a specific project
+  get '/api/project/:id' do
+    project_id = params['id']
+    project = YAML.load_file(File.join(given_data_dir, project_id, "config.yaml"));
+
+    json project_public_info(project)
+  end
+
+
   get '/api/project/:name/schema.json' do |name|
     sqlite_path = File.join(given_data_dir, name, "db.sqlite")
     json database_describe_schema(sqlite_path)

@@ -1,8 +1,8 @@
 import {Component, OnInit}         from 'angular2/core';
 import {Router, ROUTER_DIRECTIVES} from 'angular2/router';
 
-import {ProjectService}     from './project.service'
-import {ProjectDescription} from './project'
+import {ProjectDescription}        from './project.description';
+import {ProjectDescriptionService} from './project.description.service';
 
 
 /**
@@ -20,7 +20,7 @@ export class ProjectListComponent implements OnInit {
      * Used for dependency injection.
      */
     constructor(
-        private _projectService: ProjectService,
+        private _projectService: ProjectDescriptionService,
         private _router: Router
     ) { }
 
