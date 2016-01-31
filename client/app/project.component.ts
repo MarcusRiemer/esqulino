@@ -20,3 +20,11 @@ export class ProjectListComponent implements OnInit {
         console.log("I have done something");
     }
 }
+
+@Component({
+    selector: 'project-detail',
+    templateUrl: 'app/templates/project-detail.html'
+})
+export class ProjectDetailComponent {
+
+}
