@@ -11,7 +11,7 @@ import {ProjectDescription} from './project.description'
 @Injectable()
 export class ProjectDescriptionService {
     // The project cache
-    private cached_projects : ProjectDescription[];
+    private cache : ProjectDescription[];
 
     // If a request is currently in progress, there is no need to fire
     // a second request.
@@ -28,8 +28,8 @@ export class ProjectDescriptionService {
      */
     getProjects() : Promise<ProjectDescription[]> {
         // First stop: A cached result
-        if (this.cached_projects) {            
-            return Promise.resolve(this.cached_projects);
+        if (this.cache) {            
+            return Promise.resolve(this.cache);
         }
         // Second stop: A request that is currently in progress
         else if (this.in_progress) {
@@ -50,7 +50,7 @@ export class ProjectDescriptionService {
             .toPromise();
 
         this.in_progress.then(projects => {
-            this.cached_projects = projects
+            this.cache = projects
             this.in_progress = null
         });
 
