@@ -44,7 +44,7 @@ export class ProjectService {
      * Fetch a new set of projects and also place them in the cache.
      */
     fetchProjects() : Promise<ProjectDescription[]> {
-        this.in_progress = this._http.get('/project')
+        this.in_progress = this._http.get('/api/project')
             .map(res => <ProjectDescription[]> res.json())
             .toPromise();
 

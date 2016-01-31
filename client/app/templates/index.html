@@ -1,7 +1,6 @@
 <h1>{{ title }}</h1>
-<p>Willkommen beim SQL-Scratchpad</p>
-
-<ol class="breadcrumb">
-  <li class="active">Home</li>
-</ol>
-<project-list></project-list>
+<nav>
+  <a [routerLink]="['About']">Über dieses Projekt</a>
+  <a [routerLink]="['ProjectList']">Verfügbare Projekte</a>
+</nav>
+<router-outlet></router-outlet>

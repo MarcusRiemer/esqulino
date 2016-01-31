@@ -23,7 +23,7 @@ class ScratchSqlApp < Sinatra::Base
   end
   
   # Listing all projects that are available
-  get '/project' do
+  get '/api/project' do
     projects = Dir.entries(given_data_dir)
                .select { |entry| !(entry =='.' || entry == '..') }
                .map { |entry| YAML.load_file(File.join(given_data_dir, entry, "config.yaml")) }
@@ -33,12 +33,12 @@ class ScratchSqlApp < Sinatra::Base
     json projects
   end
 
-  get '/project/:name/schema.json' do |name|
+  get '/api/project/:name/schema.json' do |name|
     sqlite_path = File.join(given_data_dir, name, "db.sqlite")
     json database_describe_schema(sqlite_path)
   end
 
-  get '/' do
+  get '/*' do
     send_file File.expand_path('index.html', settings.public_folder)
   end
 end
