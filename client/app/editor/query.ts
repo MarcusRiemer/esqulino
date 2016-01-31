@@ -3,35 +3,70 @@ import {Pipe, PipeTransform}            from 'angular2/core';
 
 import {Table}                          from './table';
 
-export interface Select {
-    columns : SelectColumn[];
+/**
+ * Maps the JSON structure that is used to represent the data
+ * behind the queries.
+ */
+module Model {
+    export interface Select {
+        columns : SelectColumn[];
+    }
+
+    export interface SelectColumn {
+        column : string;
+        asName : string;
+    }
+
+    export interface From {
+        table : string;
+        alias : string;
+    }
+
+    export interface Query {
+        select : Select;
+        from : From[];
+    }
 }
 
-export interface SelectColumn {
-    column : string;
-    asName : string;
+class Editable {
+    public editing = false;
+
+    invertEdit() {
+        this.editing = !this.editing;
+    }
 }
 
-export interface From {
-    table : string;
-    alias : string;
+@Component({
+    selector : 'sql-select',
+    templateUrl : 'app/editor/templates/query-select.html',
+    inputs: ['select'],
+})
+class SelectComponent extends Editable {
+    public select : Model.Select;
 }
 
-export interface QueryModel {
-    select : Select;
-    from : From[];
+@Component({
+    selector : 'sql-from',
+    templateUrl : 'app/editor/templates/query-from.html',
+    inputs: ['from'],
+})
+class FromComponent extends Editable {
+    public from : Model.From;
 }
 
 export class Query {
     public schema : Table[];
-    public model : QueryModel;
+    public model : Model.Query;
     
-    constructor(schema : Table[], model : QueryModel) {
+    constructor(schema : Table[], model : Model.Query) {
         this.schema = schema;
         this.model = model;
     }
 }
 
+/**
+ * Transforms a query into its string expression.
+ */
 @Pipe({name: 'sqlString'})
 export class SqlStringPipe implements PipeTransform {
     public transform(value : Query, args : string[]) : any {
@@ -56,7 +91,8 @@ export class SqlStringPipe implements PipeTransform {
     selector: 'sql-query',
     templateUrl: 'app/editor/templates/query.html',
     inputs: ['query'],
-    pipes: [SqlStringPipe]
+    pipes: [SqlStringPipe],
+    directives: [SelectComponent, FromComponent]
 })
 export class QueryComponent {
     public query : Query;

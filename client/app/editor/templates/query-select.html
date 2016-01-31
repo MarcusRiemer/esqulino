@@ -1,0 +1,23 @@
+<div class="block select">
+  <div *ngIf="!editing">     
+    <span (click)="invertEdit()"
+          class="syntax">SELECT</span>
+    <span *ngFor="#column of select.columns; #last = last"
+          class="column">
+      {{ column.column }} AS {{ column.asName }}<span *ngIf="!last">,</span>
+    </span>
+  </div>
+  
+  <div *ngIf="editing">
+    <div (click)="invertEdit()"
+         class="syntax">
+      SELECT
+    </div>
+    <div *ngFor="#column of select.columns;"
+         class="row">
+      <div class="col-xs-offset-1 col-xs-11">
+        <input value="{{ column.column }}"> AS {{ column.asName }}
+      </div>
+    </div>
+  </div>
+</div>
