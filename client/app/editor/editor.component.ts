@@ -9,13 +9,16 @@ import {ProjectService}  from './project.service';
 
 @Component({
     templateUrl: 'app/editor/templates/index.html',
-    providers: [ProjectService],
-    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES]
+    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES],
+    providers: [HTTP_PROVIDERS, ProjectService]
 })
 @RouteConfig([
-    { path: '/schema', name : "Schema", component : SchemaComponent, useAsDefault: true },
+    { path: '/', name : "Schema", component : SchemaComponent, useAsDefault: true },
 ])
 export class EditorComponent implements OnInit {
+    /**
+     * The currently edited project
+     */
     public project : Project;
 
     /**
@@ -26,6 +29,9 @@ export class EditorComponent implements OnInit {
         private _routeParams: RouteParams
     ) { }
 
+    /**
+     * Load the project for all sub-components.
+     */
     ngOnInit() {
         var projectId = this._routeParams.get('id');
         this._projectService.fetchProject(projectId)

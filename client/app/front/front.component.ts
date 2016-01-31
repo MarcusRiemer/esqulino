@@ -9,7 +9,7 @@ import {AboutComponent}            from './about.component';
 
 @Component({
     templateUrl: 'app/front/templates/index.html',
-    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, ProjectListComponent],
+    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES],
     providers: [HTTP_PROVIDERS, ProjectDescriptionService]
 })
 @RouteConfig([
