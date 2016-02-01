@@ -11,7 +11,7 @@ $(PDF_FILENAME) : $(TEX_FILES)
 	pdflatex thesis.tex
 
 publish-draft: $(PDF_FILENAME)
-	scp report.pdf marcus@ssh.rapunzel.gurxite.de:/srv/htdocs/playground.marcusriemer.de/master-thesis-sql.pdf
+	scp $(PDF_FILENAME) marcus@ssh.rapunzel.gurxite.de:/srv/htdocs/playground.marcusriemer.de/master-thesis-sql.pdf
 	touch publish-draft
 
 .PHONY : all
