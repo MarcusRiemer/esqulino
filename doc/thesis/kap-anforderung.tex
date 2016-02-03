@@ -132,13 +132,13 @@ Und trotzdem lässt sich ein Großteil der für die Schüler nötigen Verknüpfu
 
 \unsure[inline]{Ich bin mir noch nicht sicher, wie ich das gerne handhaben möchte. Vermutlich ein mehr oder minder separater Editor für Ausdrücke? Auf jeden Fall muss ich hier den Umfang sehr deutlich vorher abstecken. Gerade an dieser Stelle wäre ein Scratch-ähnlicher Editor dann doch wieder ein echter Gewinn. Für den Anfang wird es aber auch ein einfaches Textfeld tun müssen, von da aus kann ich dann schauen wie weit ich komme.}
 
-\subsubsection{\texttt{GROUP BY} \& Editor für Aggregatsfunktionen}
+\subsubsection{\texttt{GROUP BY}}
 
 Sobald in einer Abfrage eine \texttt{GROUP BY} Komponente auftaucht, hat dies Auswirkungen auf die Möglichkeiten innerhalb der \texttt{SELECT} Anweisung. Da keine Auswahl von ungruppierten und nicht-aggregierten Spalten möglich sein darf, müssen diese entfernt werden. Insbesondere wenn der Benutzer vorher schon mit komplizierten Ausdrücken im \texttt{SELECT} gearbeitet haben sollte, ist also zumindest eine Warnung nötig.
 
 Danach verhält es sich mit den Aggregatsfunktionen nicht anders als mit den im vorigen Abschnitt beschriebenen Vergleichen und Ausdrücken, nur dass halt in diesem Kontext andere Funktionen zur Verfügung stehen.
 
-\subsubsection{Kombinationen mit \texttt{JOIN}}
+\subsubsection{Verknüpfungen mit \texttt{JOIN}}
 
 Sofern ein Editor für Ausdrücke (siehe \ref{sec:sql-compare-and-expression}) vorausgesetzt werden kann, lassen sich Verknüpfungen ohne größeren Mehraufwand fast vollumfänglich umsetzen. Im Falle von \texttt{JOIN}-Ausdrücken mit \texttt{USING} wird sich im Regelfall sogar exakt eine Spalte für die Verknüpfung anbieten. Bei Ausdrücken mit \texttt{ON} muss dann der Rückgriff auf den Editor für Ausdrücke erfolgen.
 
@@ -171,13 +171,15 @@ Neben den bisher ausführlich besprochenen \texttt{SELECT}-Anweisungen müssen s
 
 Das vorige Kapitel hat schon viele praktische Probleme bei einer uneingeschränkten Umsetzung des SQL-Standards aufgezeigt und dabei wiederholt von einer nicht näher definierten ``sinnvollen Teilmenge'' gesprochen. Genau diese Definition wird nun in diesem Kapitel nachgeholt.
 
-\subsubsection{Mögliche Einschränkungen}
+\subsubsection{Mögliche Isolierte Einschränkungen}
 
-Dazu Bedarf es zunächst einer Klärung, welche Features von SQL überhaupt umsetzbar sind und wie diese voneinander abhängen. Technisch gesehen soll es für Lehrkräfte möglich sein, fast beliebige Teilmengen für ihre Schüler vorzugeben, nicht nur die im Rahmen dieser Arbeit als sinnvoll erachteten Kombinationen. Das grundsätzliche Vorgehen sollte dabei einer Whitelist entsprechen: Jede nicht explizit erlaubte Funktionalität steht nicht zur Verfügung.
+\warning{Nicht alle hier beschriebenen Funktionen sind notwendigerweise in der Entwicklungsumbegung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von SQL. Um zu sehen, welche Funktionalität tatsächlich implemtiert worden ist lohnt sich ein Blick auf Anhang \ref{app:implemented-features}: \nameref{app:implemented-features}.}
+
+Dazu Bedarf es zunächst einer Klärung, welche Features von SQL überhaupt umsetzbar sind und wie diese voneinander abhängen. Technisch gesehen soll es für Lehrkräfte möglich sein, fast beliebige Teilmengen für ihre Schüler vorzugeben, nicht nur die im Rahmen dieser Arbeit als sinnvoll erachteten Kombinationen. Das grundsätzliche Vorgehen sollte dabei einer Whitelist entsprechen: Jede explizit erlaubte Funktionalität steht zur Verfügung. Und sofern eine Funktionalität nicht erlaubt sein sollte, ist sie auch nicht verfügbar.
 
 \begin{enumerate}
 \item \texttt{SELECT} \\
-  Kann selbst natürlich nicht ausgeschlossen werden. Außerdem muss mindestens \ref{feat:select-all} $\lor$ \ref{feat:select-column} erlaubt sein, sonst können keine gültigen SQL-Abfragen erstellt werden.
+  Diese Komponente als solche kann natürlich nicht ausgeschlossen werden. Außerdem muss mindestens \ref{feat:select-all} $\lor$ \ref{feat:select-column} erlaubt sein, sonst können keine gültigen SQL-Abfragen erstellt werden.
   \begin{enumerate}
   \item \label{feat:select-all} Auswahl aller Spalten (``Sternchen-Operator'' \texttt{SELECT *})
   \item \label{feat:select-column} Auswahl von Spalten
@@ -186,7 +188,7 @@ Dazu Bedarf es zunächst einer Klärung, welche Features von SQL überhaupt umse
   \item \label{feat:select-sub} Unterabfragen in Ausdrücken zulassen
   \end{enumerate}
 \item \texttt{FROM} \\
-  Auch die Auslassung dieser Komponente ist im Regelfall nicht zulässig. Die Funktionalität der \texttt{ON}-Bedingung \ref{feat:from-on} hängt von den Möglichkeiten im  \texttt{WHERE} und \texttt{HAVING} ab.
+  Auch die Auslassung dieser Komponente ist im Regelfall nicht zulässig. Die Funktionalität der komplexen \texttt{ON}-Bedingung \ref{feat:from-on-expression} hängt von den Möglichkeiten im  \texttt{WHERE} und \texttt{HAVING} ab.
   \begin{enumerate}
   \item \label{feat:from-cross-join} Kreuzprodukt (\texttt{JOIN}) zulassen
   \item \label{feat:from-cross-comma} Kreuzprodukt (komma-separierte Schreibweise) zulassen
@@ -196,12 +198,13 @@ Dazu Bedarf es zunächst einer Klärung, welche Features von SQL überhaupt umse
   \item \label{feat:from-right-join} Rechte äußere Verknüpfung zulassen (\texttt{RIGHT OUTER JOIN}), erfordert \ref{feat:from-using} $\lor$ \ref{feat:from-on}
   \item \label{feat:from-full-join} Volle äußere Verknüpfung zulassen (\texttt{FULL OUTER JOIN}), erfordert \ref{feat:from-using} $\lor$ \ref{feat:from-on}
   \item \label{feat:from-using} \texttt{USING}-Bedingung zulassen
-  \item \label{feat:from-on} \texttt{ON}-Bedingung zulassen
+  \item \label{feat:from-on-simple} Einfache \texttt{ON}-Bedingung mit Vergleichsoperator zulassen
+  \item \label{feat:from-on-expression} Allgemeine Ausdrücke in \texttt{ON}-Bedingung zulassen
   \item \label{feat:from-recursive} Rekursive Verknüpfung zulassen 
   \item \label{feat:from-sub} Unterabfragen zulassen
   \end{enumerate}
 \item \texttt{WHERE} und \texttt{HAVING} \\
-  Da an dieser Stelle Ausdrücke zum Einsatz kommen, sind prinzipiell zwei unterschiedliche Ansätze denkbar. Zunächst ist es möglich eine Reihe von ``typischen'' Vergleichen zuzulassen. Die Features \ref{feat:where-compare-const}, \ref{feat:where-compare-null}, \ref{feat:where-compare-other-col}, \ref{feat:where-compare-simple-func}, \ref{feat:where-compare-simple-expression} und \ref{feat:where-compare-negate} sind nichts weiter als eine Aneinanderreihung von speziellen Vergleichen, mit denen sich aber der Großteil aller Einschränkungen vornehmen lassen können sollte. Dem gegenüber steht der Ansatz einfach beliebige boolesche Ausdrücke zu erlauben, was sowohl die Komplexität der möglichen Ausdrücke steigert als auch den Anspruch an den Benutzer erhöht.
+  Da an dieser Stelle Ausdrücke zum Einsatz kommen, sind prinzipiell zwei unterschiedliche Ansätze denkbar. Zunächst ist es möglich eine Reihe von ``typischen'' Vergleichen zuzulassen. Die Optionen \ref{feat:where-compare-const}, \ref{feat:where-compare-null}, \ref{feat:where-compare-other-col}, \ref{feat:where-compare-simple-func}, \ref{feat:where-compare-simple-expression} und \ref{feat:where-compare-negate} sind nichts weiter als eine Aneinanderreihung von speziellen Vergleichen, mit denen sich aber der Großteil aller Einschränkungen vornehmen lassen können sollte. Dem gegenüber steht der Ansatz einfach beliebige boolesche Ausdrücke zu erlauben, was sowohl die Komplexität der möglichen Ausdrücke steigert als auch den Anspruch an den Benutzer erhöht.
   \begin{enumerate}
   \item \label{feat:where-allow} \texttt{WHERE} zulassen
   \item \label{feat:having-allow} \texttt{HAVING} zulassen
@@ -222,6 +225,24 @@ Dazu Bedarf es zunächst einer Klärung, welche Features von SQL überhaupt umse
   \begin{enumerate}
   \item \label{feat:group-allow} \texttt{GROUP BY} zulassen
   \item \label{feat:group-multiple} Grupperierung mehrerer Spalten zulassen
+  \end{enumerate}
+\item \texttt{ORDER BY} \\
+  Bei dieser Komponente fehlt bewusst die Möglichkeit anhand eines Spaltenindexes aus dem \texttt{SELECT} zu sortieren. Da die gute Lesbarkeit der Abfragen ein erklärtes Ziel der Entwicklungsumgebung ist, wurde auf diese redundante Möglichkeit der Spaltenauswahl verzichtet.
+  \begin{enumerate}
+  \item \label{feat:order-allow} \texttt{ORDER BY} zulassen, die Auswahl der Richtung (\texttt{ASC} und \text{DESC}) ist dann grundsätzlich möglich
+  \item \label{feat:order-select} Sortierung nach im \texttt{SELECT} erwähnten Spalten oder Ausdrücken zulassen
+  \item \label{feat:order-any-column} Sortierung nach beliebigen Spalten zulassen
+  \item \label{feat:order-expression} Sortierung anhand eines beliebigen Ausdrucks zulassen
+  \end{enumerate}
+\end{enumerate}
+
+Nach dieser Betrachtung der mit der unmittelbaren SQL-Syntax zusammenhängenden Funktionalität ist es nun an der Zeit, sich den Ausdrücken ausführlicher zu widmen.
+
+\begin{enumerate}
+\item Funktionen \\
+  Für Schüler ist zu erwarten, dass fast jede Funktion einer eigenen Einführung bedarf.
+  \begin{enumerate}
+  \item \label{feat:fun-length} \texttt{LENGTH}
   \end{enumerate}
 \end{enumerate}
 

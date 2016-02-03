@@ -9,18 +9,20 @@
 \usepackage{amsmath}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage[absolute]{textpos}
-\usepackage{tikz}
 \usepackage{hyperref}
 \usepackage[format=plain,labelfont=bf]{caption}
 \usepackage{subcaption}
 \usepackage{listings}
-\usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{wrapfig}
-\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+\usepackage{xargs}   % Use more than one optional parameter in a new commands
 \usepackage[colorinlistoftodos,prependcaption]{todonotes}
 \usepackage{dirtree}
 \usepackage{newfloat}
+\usepackage{framed}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
 
 %% additional ressources
 \input{tex-definitions}
@@ -70,6 +72,9 @@ Momentan lassen sich die unten aufgeführten Kapitel einigermaßen sinnvoll lese
 \include{kap-anforderung}
 \include{kap-umsetzung}
 
+\appendix{}
+
+\include{anh-implementierte-features}
   
 \end{description}
 

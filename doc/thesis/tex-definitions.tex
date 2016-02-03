@@ -55,6 +55,12 @@
 \newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{\textbf{Info}: #2}}
 \newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{\textbf{Improve}: #2}}
 
+\newcommand{\warning}[1]{
+  \begin{framed}
+    \textbf{Achtung}: #1
+  \end{framed}
+}
+
 \DeclareFloatingEnvironment[
     fileext=lod,
     listname=Liste von Ordnerstrukturen,
