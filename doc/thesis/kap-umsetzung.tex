@@ -1,0 +1,61 @@
+
+\section{Umsetzungsanalyse}
+\label{sec:implementation-analysis}
+
+\info[inline]{Das ist jetzt der Abschnitt für Software-Ingenieure.}
+
+Um die einfachste Inbetriebnahme der Software für Lernende zu gewährleisten, wird die Anwendung für Webbrowser entwickelt. Um erste Schritte mit SQL zu machen reicht dann ein beliebiger aktueller Browser. Diese Entscheidung bedeutet praktisch vor allem eine Verschiebung der Probleme mit der Inbetriebnahme auf z.B. eine Lehrperson.
+
+Ebenfalls aus Gründen der einfacheren Zugänglichkeit sollte eine einzelne dazugehörige Serverinstanz in der Lage sein, mehrere Projekte simultan zu bedienen. Die Lehrperson kann also mit einem einzigen Serverprozess eine ganze Klasse versorgen.
+
+\subsection{Systemübersicht}
+
+\begin{description}
+\item[Server: Ruby mit Sinatra] \hfill\\
+  Die Aufgaben des Servers sollen sich konzeptionell möglichst auf die Auslieferung und Speicherung von Daten beschränken. Die Interaktion findet dabei primär über eine REST-artige JSON Schnittstelle statt.
+\item[Client: Typescript mit Angular 2] \hfill\\
+  Aufgrund des hohen Grades an Interaktivität bietet sich eine rein clientseitige Visualisierung an, die weitestgehend auf Roundtrips zum Server verzichtet.
+\end{description}
+
+\subsection{Verwaltung von Projekten}
+
+Um den Betrieb für Schüler und Lehrer zu vereinfachen, wird eine Instanz des Servers also in der Lage sein mehrere Schülerprojekte gleichzeitig bereitzustellen. Dafür ist es aber zunächst einmal notwendig zu definieren, wie ein solches Projekt überhaupt strukturiert ist. Grundsätzlich ist ein Projekt eine Sammlung von Dateien in einer festgelegten Ordnerstruktur.
+
+\begin{dirstruct}
+  \dirtree{%
+    .1 empty-project/.
+    .2 queries/.
+    .2 pages/.
+    .2 config.yaml.
+    .2 db.sqlite.
+  }
+  \caption{Leeres Projekt}
+\end{dirstruct}
+
+\subsection{Verwendung von Domänenspezfischen Sprachen}
+
+Da die Verarbeitung von beliebig komplexen SQL-Abfragen ebenfalls nicht Bestandteil dieser Arbeit ist, erfolgt die Speicherung der Abfrage in einer eigenen, maschinenlesbaren Notation. Gleiches gilt für die Beschreibung der Benutzeroberfläche.
+
+Aus praktischen Gründen setzen beide dieser Sprachen auf XML auf, ganz konkret sogar auf HTML.
+
+\subsection{Roadmap}
+
+Diese Arbeitsschritte stellen eine eher technische Roadmap der technischen Umsetzung dar.
+
+\begin{description}
+\item[Abstrakte Repräsentation von SQL(ite) Schemata] \hfill\\
+  Als unmittelbare Eingabe für die Entwicklungsumgebung sollen einigermaßen einfache, aber grundsätzlich beliebige SQLite Datenbanken dienen. Diese Datenbanken stellen den Ausgangspunkt für die Schülerprojekte dar und wurden von einem externen Tool oder der Lehrkraft erzeugt.
+\item[Visualisierung des Schemas] \hfill\\
+  Auch wenn die Projekte der Lernenden im Normallfall auf sehr überschaubare Datenbanken aufbauen werden, ist eine vernünftige Visualisierung der beteiligten Tabellen und deren Beziehung untereinander essentiell.
+\item[Visualisierung der Daten] \hfill\\
+  In diesem Schritt werden keine Experimente vorgenommen: Es geht um die einfache tabellarische Auflistung der Daten.
+\item[Ausführung von beliebigen SELECT-Abfragen] \hfill\\
+  Dieser Schritt dient der Vorbereitung des im nächsten Schritt zu implementierenden grafischen Editors und beinhaltet insbesondere die Konzeption von begleitenden Bedienelementen.
+\item[Grafischer Editor für SELECT-Abfragen] \hfill\\
+  Als alternative zu dem Freitexteditor soll nun ein grafischer Editor implementiert werden. Dieser benutzt eine abstrakten interne Darstellung um aufwändige Parsingvorgänge von SQL-Strings zu vermeiden.
+\item[Optional: Limitierung der verfügbaren Möglichkeiten] \hfill
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:
