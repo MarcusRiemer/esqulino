@@ -168,16 +168,22 @@ Um eine Interaktion mit Endbenutzern zu ermöglichen können in Abfragen auch be
 Neben den bisher ausführlich besprochenen \texttt{SELECT}-Anweisungen müssen sich natürlich \texttt{INSERT}-, \texttt{UPDATE}- und \texttt{DELETE}-Anweisungen umsetzen lassen. Da diese ihrer Natur nach nicht idempotent sind verbietet sich natürlich eine wiederholte, automatische Ausführung während der Entwicklungszeit. Es ist zu erwarten, dass die meisten von den Schülern verfassten Abfragen ausführlichen Gebrauch von den in Kapitel \ref{sec:design-query-params} beschriebenen Parametern machen.
 
 \subsection{Didaktisch sinvolle Teilmengen von SQL}
+\label{sec:sql-subset}
 
 Das vorige Kapitel hat schon viele praktische Probleme bei einer uneingeschränkten Umsetzung des SQL-Standards aufgezeigt und dabei wiederholt von einer nicht näher definierten ``sinnvollen Teilmenge'' gesprochen. Genau diese Definition wird nun in diesem Kapitel nachgeholt.
 
 \subsubsection{Mögliche lokale Einschränkungen}
+\label{sec:sql-subset-local}
 
 \warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in der Entwicklungsumbegung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von SQL. Um zu sehen, welche Funktionalität tatsächlich implemtiert worden ist lohnt sich ein Blick in Anhang \ref{app:implemented-features}:~\nameref{app:implemented-features}.}
 
-Dazu Bedarf es zunächst einer Klärung, welche Features von SQL überhaupt umsetzbar sind und wie diese voneinander abhängen. Glücklicherweise erlaubt die Struktur von SQL auch die Angabe von sehr lokalen Einschränkungen, deren Auswirkungen sich sehr gut abschätzen lassen. Einzig der Umgang mit Ausdrücken überspannt viele Bereiche von SQL: Diese können an sehr vielen Stellen auftreten und müssen dementsprechend sorgfältig analysiert werden. Daher beschränken sich alle Stellen an denen der Einsatz von Ausdrücken sinnvoll möglich ist auf eine einfache ``Ausdrücke zulassen'' Option, deren Details dann später separat geregelt werden.
+Wir klären in diesem Kapitel zunächst, welche Features von SQL überhaupt für die Entwicklungsumgebung von Belang sind und wie diese voneinander abhängen. Die Abgrenzung von Teilsprachen baut auf diesen hier herausgearbeiteten Optionen auf und ist Gegenstand von Kapitel \ref{sec:sql-subset-ranks}.
 
-Technisch gesehen soll es für Lehrkräfte möglich sein, fast beliebige Teilmengen von SQL für ihre Schüler vorzugeben, nicht nur die im Rahmen dieser Arbeit als sinnvoll erachteten Kombinationen. Das grundsätzliche Vorgehen sollte dabei einer Whitelist entsprechen: Jede explizit erlaubte Funktionalität steht zur Verfügung. Und sofern eine Funktionalität nicht erlaubt sein sollte, ist sie auch nicht verfügbar.
+Glücklicherweise erlaubt die Struktur von SQL die Angabe von sehr lokalen Einschränkungen, deren Auswirkungen sich sehr gut abschätzen lassen. Einzig der Umgang mit Ausdrücken überspannt viele Bereiche von SQL: Diese können an sehr vielen Stellen auftreten und müssen dementsprechend sorgfältig analysiert werden. Daher beschränken sich alle Stellen an denen der Einsatz von Ausdrücken sinnvoll möglich ist auf eine einfache ``Ausdrücke zulassen'' Option, deren Details dann später separat geregelt werden.
+
+\unsure[inline]{Erwähnen, inwiefern das herauslösen von Sprachfeatures bei einer ``normalen'' Programmiersprache komplizierter wäre? Es gibt bei SQL halt vergleichsweise wenige Abhängigkeiten und daher viele mögliche Reihenfolgen in denen man die Features aktivieren kann. Bei einer Sprache wie z.B. Java bauen die einzelnen Sprachfeatures sehr viel stärker aufeinander auf, es ergeben sich deutlich weniger Reihenfolgen in denen man diese sinnvoll aktivieren könnte.}
+
+Technisch gesehen soll es für Lehrkräfte möglich sein, fast beliebige Teilmengen von SQL für ihre Schüler vorzugeben, nicht nur die im Rahmen dieser Arbeit als sinnvoll erachteten Kombinationen. Das grundsätzliche Vorgehen sollte dabei einer Whitelist entsprechen: Jede explizit erlaubte Funktionalität steht im SQL-Editor (siehe \ref{sec:design-sql-editor}) zur Verfügung. Und sofern eine Funktionalität nicht erlaubt sein sollte, ist sie auch nicht verfügbar.
 
 Prinzipiell wäre es auch denkbar, in unterschiedlichen Komponenten verschiedene Teilmengen der Ausdrücke zuzulassen, inhaltlich erscheint das aber wenig sinnvoll. Die Schüler sollen durchaus verstehen, dass es sich bei Ausdrücken in SQL um ein allgemeines Konzept handelt, welches Prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Das folgende Beispiel erklärt den Gedankengang dahinter etwas griffiger: Wenn sich die Schüler aus didaktischen Gründen erstmal nur mit Ausdrücke im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt.
 
@@ -269,18 +275,48 @@ Nach dieser Betrachtung der mit der unmittelbaren SQL-Syntax zusammenhängenden 
   \end{enumerate}
 \end{enumerate}
 
-\subsection{Oberflächen für Endbenutzer}
+\subsubsection{Sprachstufen}
+\label{sec:sql-subset-ranks}
+
+Angelehnt an die bei Racket genutzte Idee der Feature-Levels soll dieses Kapitel einige sinnvolle Untermengen von SQL definieren, auf denen die mitgelieferten Beispielprojekte aufbauen. Es handelt sich dabei um Vorschläge, nicht um die einzig möglichen Ausprägungen von sinnvoll reduzierten SQL-Varianten.
+
+\missing[inline]{Ich muss erst noch ein paar mehr Beispiele an der Hand haben, bis ich mich diesem Kapitel erneut widme.}
+
+\subsection{Editor für Oberflächen}
 \label{sec:design-ui-editor}
 
 Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von normalen Endanwendern bedienen lassen können Bedarf es natürlich einer entsprechenden Benutzeroberfläche. Hier bietet sich aus Gründen der einfachen Weitergabe eine webbasierte Oberfläche an: So entfällt bei den Endanwendern jegliche Installation und gerade für datenzentrierte Anwendungen ist eine einheitliche Sicht auf den gleichen Datenbestand selbstverständlich essentiell. Beides Umstände die sich gut mit einem zentralen Datenbestand auf einem Server erreichen lassen.
 
-\subsubsection{Navigation \& Seitenstruktur}
+Diese Oberflächen werden in HTML mit einigen Erweiterungen durch Angular 2 definiert, was vor den Anwendern der Schülerentwicklungsumgebung allerdings verborgen wird. Ähnlich wie für die SQL Abfragen ist also auch für diese Oberflächen ein dezidierter Editor zu implementieren.
 
-Die grundsätzliche Struktur entspricht der eines Baumes mit einer einzigen Wurzel, der logischen Einstiegsseite. Unter diese Wurzelseite können dann weitere Seiten eingepflegt werden, die ggfs. auch Eigenschaften ihrer Eltern übernehmen können.
+\subsubsection{Bindung von Daten an die Oberfläche}
 
-\subsubsection{Erfassen von Beziehungen}
+Ein Großteil der Oberflächenelemente wird einige Eigenschaften aufweisen, deren Inhalte erst zur Laufzeit dynamisch gebunden werden. Dabei stellt sich die Frage, wie die Struktur der zur Verfügung stehenden Daten eigentlich definiert wird.
 
-\info[inline]{Das vermutlich komplizierteste Bedienelement.}
+Im Falle von Abfragen ohne Parameter ist diese Frage einigermaßen einfach zu beantworten: Der Nutzer der Entwicklungsumgebung definiert, dass für eine bestimmte Seite eine Menge von Abfragen auszuführen ist. Jede Query in dieser Menge erhält einen eindeutigen Namen und da die Spalten ebenfalls über eindeutige Namen verfügen, lassen sich diese auch ansprechen.
+
+Der Umgang mit den Zeilen einer Abfrage ist ein bisschen komplizierter, da in den meisten Fällen nicht sinnvoll automatisch bestimmt werden kann, ob eine Abfrage exakt eine oder mehrere Zeilen liefert. Diese Angabe ist daher vom Entwickler der Abfrage zu machen, wenn eine Abfrage jemals mehr als eine Zeile liefern sollte muss dies mit einer Fehlermeldung quittiert werden.
+
+Sofern das Ergebnis einer Abfrage garantiert aus nur einer Zeile besteht, soll es wie ein einzelner Wert verwendet werden können. Wenn diese Garantie nicht gegeben ist, muss der Editor davon ausgehen, dass die Ergebnismenge beliebig groß ist. Diese Unterscheidung beinflusst daher auch die zur Verfügung stehenden Bedienelemente.
+
+\missingfigure{Hierarchie der Bedienelemente}
+
+\subsubsection{Anzeigende Bedienelemente}
+
+Anzeigende Bedienelemente unterscheiden sich grundsätzlich in zwei Kategorien: Sofern sie mit mehreren Zeilen einer Abfrage umgehen können handelt es sich um ``wiederholende Elemente'', andernfalls um ``atomare Elemente''. Im Gegensatz zu editierenden Bedienelementen nehmen sie keine Benutzereingaben entgegen.
+
+\begin{description}
+  \item[Überschriften und Absätze] (Atomar) \hfill \\
+    Als grundsätzliche textuelle Elemente müssen natürlich Überschriften und Absätze bereitstehen.
+  \item[Automatische Tabellen] (Wiederholend) \hfill \\
+    Anzeige aller Zeilen und Spalten einer Abfrage.
+  \item[Schleifen] (Wiederholend) \hfill \\
+    Dieses Bedienelement hat kein eigenes visuelles Aussehen, sondern nimmt eine Menge von beliebig vielen Zeilen und bindet jede Zeile an ein bestimmtes atomares Bedienelement.    
+\end{description}
+
+\subsubsection{Seitenstruktur}
+
+Die grundsätzliche Struktur entspricht der eines Baumes mit einer einzigen Wurzel, der Einstiegsseite. Unter diese Wurzelseite können dann weitere Seiten eingepflegt werden, die ggfs. auch Eigenschaften ihrer Eltern übernehmen können. Diese streng hierarchische Struktur macht es vergleichsweise leicht, optional ein sehr einfaches Templating-System zu definieren.
 
 \subsection{Beispielhafte Datenbasen}
 \label{sec:example-queries}
