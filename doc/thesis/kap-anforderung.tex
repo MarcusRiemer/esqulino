@@ -1,6 +1,6 @@
 \section{Anforderungsanalyse}
 
-Dieses Kapitel beschreibt die generellen Anforderungen an das Projekt, ohne auf Details wie die technische Machbarkeit ausführlich zu analysieren oder konkrete Umsetzungsstrategien zu planen. Diese softwaretechnischen Aspekte werden im nächsten Kapitel (\ref{sec:implementation-analysis} \nameref{sec:implementation-analysis}) besprochen.
+Dieses Kapitel beschreibt die generellen Anforderungen an das Projekt, ohne auf Details wie die technische Machbarkeit ausführlich zu analysieren oder konkrete Umsetzungsstrategien zu planen. Diese softwaretechnischen Aspekte werden in Kapitel \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis} besprochen.
 
 \info[inline]{Der Verzicht auf die technischen Hintergründe der Implementierung in diesem Kapitel soll es auch für ``normale'' Informatiklehrer verständlich machen, ohne Sie gleich mit den Details der Realisierung zu erschlagen.}
 
@@ -290,41 +290,57 @@ Angelehnt an die bei Racket genutzte Idee der Feature-Levels soll dieses Kapitel
 
 \missing[inline]{Ich muss erst noch ein paar mehr Beispiele an der Hand haben, bis ich mich diesem Kapitel erneut widme.}
 
-\subsection{Editor für Oberflächen}
+\subsection{Konzept für Oberflächen}
 \label{sec:design-ui-editor}
 
-Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von normalen Endanwendern bedienen lassen können Bedarf es natürlich einer entsprechenden Benutzeroberfläche. Hier bietet sich aus Gründen der einfachen Weitergabe eine webbasierte Oberfläche an: So entfällt bei den Endanwendern jegliche Installation und gerade für datenzentrierte Anwendungen ist eine einheitliche Sicht auf den gleichen Datenbestand selbstverständlich essentiell. Beides Umstände die sich gut mit einem zentralen Datenbestand auf einem Server erreichen lassen.
+Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von normalen Endanwendern bedienen lassen können Bedarf es natürlich einer entsprechenden Benutzeroberfläche. Hier bietet sich aus Gründen der einfachen Weitergabe eine webbasierte Oberfläche an: So entfällt bei den Endanwendern jegliche Installation und gerade für datenzentrierte, verteilte Anwendungen ist eine einheitliche Sicht auf den Datenbestand selbstverständlich essentiell. Beides Umstände, die sich gut mit einem zentralen Datenbestand auf einem Server erreichen lassen.
 
-Diese Oberflächen werden in HTML mit einigen Erweiterungen durch Angular 2 definiert, was vor den Anwendern der Schülerentwicklungsumgebung allerdings verborgen wird. Ähnlich wie für die SQL Abfragen ist also auch für diese Oberflächen ein dezidierter Editor zu implementieren.
+Diese Oberflächen werden in HTML mit einigen Erweiterungen durch Angular 2 definiert, was vor den Anwendern der Schülerentwicklungsumgebung allerdings verborgen wird. Ähnlich wie für die SQL Abfragen ist also auch für diese Oberflächen ein dezidierter Editor zu implementieren. Die Schüler sollten zu keinem Zeitpunkt selber HTML-Code schreiben müssen, optional aber durchaus die Möglichkeit dazu haben.
+
+\subsubsection{Bedienelemente ohne Bindung an Daten}
+
+Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trotzdem muss es natürlich eine Möglichkeit geben statische Texte ohne Bindung an irgendwelche Abfragen zur Anzeige zu bringen.
+
+\begin{description}
+  \item[Überschriften] \hfill \\
+    HTML sieht die Verwendung von Überschriften in sechs Hierarchiebenen vor und stellt dafür distinkte Elemente zur Verfügung (\texttt{<h1>} bis \texttt{<h6>}). Dieser Umstand soll nicht unmittelbar im Bedienkonzept des Editors abgebildet werden: Hier soll es das allgemeine Bedienelement ``Überschrift'' geben, zu dem sich dann eine Ebene auswählen lässt.
+  \item[Absätze] \hfill \\
+    Blöcke von zusammenhängendem Text werden als Absatz ausgezeichnet, das entsprechende HTML-Äquivalent ist das \texttt{<p>}-Element.
+  \item[Listen] \hfill \\
+    Strukturiert zusammenhängende Daten werden als sortierte oder unsortierte Liste (\texttt{<ol>} bzw. \texttt{<ul>} in HTML) gruppiert.
+      
+\end{description}
 
 \subsubsection{Bindung von Daten an die Oberfläche}
 
 Ein Großteil der Oberflächenelemente wird einige Eigenschaften aufweisen, deren Inhalte erst zur Laufzeit dynamisch gebunden werden. Dabei stellt sich die Frage, wie die Struktur der zur Verfügung stehenden Daten eigentlich definiert wird.
 
-Im Falle von Abfragen ohne Parameter ist diese Frage einigermaßen einfach zu beantworten: Der Nutzer der Entwicklungsumgebung definiert, dass für eine bestimmte Seite eine Menge von Abfragen auszuführen ist. Jede Query in dieser Menge erhält einen eindeutigen Namen und da die Spalten ebenfalls über eindeutige Namen verfügen, lassen sich diese auch ansprechen.
+Im Falle von Abfragen ohne Parameter mit einer einzigen Ergebniszeile ist diese Frage einigermaßen einfach zu beantworten: Der Nutzer der Entwicklungsumgebung definiert, dass für eine bestimmte Seite eine Menge von Abfragen auszuführen ist. Jede Abfrage in dieser Menge erhält einen eindeutigen Namen und da die Spalten ebenfalls über eindeutige Namen verfügen, lassen sich diese auch ansprechen. Sofern das Ergebnis einer Abfrage garantiert aus nur einer Zeile besteht, soll es wie ein einzelner Wert verwendet werden können. Wenn diese Garantie nicht gegeben ist, muss der Editor davon ausgehen, dass die Ergebnismenge beliebig groß ist.
 
 Der Umgang mit den Zeilen einer Abfrage ist ein bisschen komplizierter, da in den meisten Fällen nicht sinnvoll automatisch bestimmt werden kann, ob eine Abfrage exakt eine oder mehrere Zeilen liefert. Diese Angabe ist daher vom Entwickler der Abfrage zu machen, wenn eine Abfrage jemals mehr als eine Zeile liefern sollte muss dies mit einer Fehlermeldung quittiert werden.
 
-Sofern das Ergebnis einer Abfrage garantiert aus nur einer Zeile besteht, soll es wie ein einzelner Wert verwendet werden können. Wenn diese Garantie nicht gegeben ist, muss der Editor davon ausgehen, dass die Ergebnismenge beliebig groß ist. Diese Unterscheidung beinflusst daher auch die zur Verfügung stehenden Bedienelemente.
+Ebenfalls zu unterscheiden ist zwischen Ein- und Ausgabe. Typischerweise sollen die Ergebnisse von Abfragen angezeigt werden und dabei nicht weiter editiert werden können.
 
-\missingfigure{Hierarchie der Bedienelemente}
+Diese Unterscheidung bezüglich der Anzahl der zu erwartenden Zeilen und den nötigen Eingabeoptionen beinflusst folglich die zur Verfügung stehenden Bedienelemente. Abbildung \ref{fig:ui-element-concept} verdeutlicht diese Möglichkeiten anhand einer 4-Felder-Matrix. Jedes Bedienelement 
 
-\subsubsection{Anzeigende Bedienelemente}
+\begin{figure}
+  \centering \input{images/ui-element-concept}
+  \caption{Einordnung von Bedienelementen}
+  \label{fig:ui-element-concept}
+\end{figure}
 
-Anzeigende Bedienelemente unterscheiden sich grundsätzlich in zwei Kategorien: Sofern sie mit mehreren Zeilen einer Abfrage umgehen können handelt es sich um ``wiederholende Elemente'', andernfalls um ``atomare Elemente''. Im Gegensatz zu editierenden Bedienelementen nehmen sie keine Benutzereingaben entgegen.
+\subsubsection{Anzeige von einzelnen Zeilen}
 
-\begin{description}
-  \item[Überschriften und Absätze] (Atomar) \hfill \\
-    Als grundsätzliche textuelle Elemente müssen natürlich Überschriften und Absätze bereitstehen.
-  \item[Automatische Tabellen] (Wiederholend) \hfill \\
-    Anzeige aller Zeilen und Spalten einer Abfrage.
-  \item[Schleifen] (Wiederholend) \hfill \\
-    Dieses Bedienelement hat kein eigenes visuelles Aussehen, sondern nimmt eine Menge von beliebig vielen Zeilen und bindet jede Zeile an ein bestimmtes atomares Bedienelement.    
+Einzelne Werte kommen typischerweise in Fließtexten oder bei Detailseiten zu einzelnen Zeilen zum Einsatz.
+
 \end{description}
 
 \subsubsection{Seitenstruktur}
 
 Die grundsätzliche Struktur entspricht der eines Baumes mit einer einzigen Wurzel, der Einstiegsseite. Unter diese Wurzelseite können dann weitere Seiten eingepflegt werden, die ggfs. auch Eigenschaften ihrer Eltern übernehmen können. Diese streng hierarchische Struktur macht es vergleichsweise leicht, optional ein sehr einfaches Templating-System zu definieren.
+
+\subsection{Editor für Oberflächen}
+
 
 \subsection{Beispielhafte Datenbasen}
 \label{sec:example-queries}
