@@ -24,7 +24,7 @@ An Angular 2.0 app, even though Angular 2.0 is still in beta. I hope this change
 
 # License
 
-This project is licensed under the terms of the [GNU Affero General Public License (AGPL)](https://www.gnu.org/licenses/agpl.html).
+This project itself is licensed under the terms of the [GNU Affero General Public License (AGPL)](https://www.gnu.org/licenses/agpl.html). For the documentation, including the masters thesis, is licensed under [CC-BY-SA](https://creativecommons.org/licenses/by-sa/4.0/).
 
 # Dependencies and Licenses
 
