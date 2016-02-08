@@ -1,0 +1,37 @@
+\begin{tikzpicture}
+  \tikzset{square matrix/.style={
+      column sep=-\pgflinewidth, row sep=-\pgflinewidth,
+      nodes={
+        minimum height=#1,
+        anchor=center,
+        text width=#1,
+        align=center,
+        inner sep=6pt
+      },
+    },
+    square matrix/.default=3.50cm
+  }
+
+
+  \matrix[square matrix] (my matrix) at (0,0)
+  {
+    \node (single)   {Unmittelbare Ausgabe, z.B. in einem Text}; &
+    \node (passive)  {Einfaches Eingabelement, z.B. eine Textbox}; \\
+    \node (multiple) {Wiederholte Ausgabe, z.B. eine Tabelle}; &
+    \node (input)    {Eingabelement mit Mehrfachauswahl}; \\
+  };
+  \draw [thick,-] (my matrix.east)  |- (my matrix.west);
+  \draw [thick,-] (my matrix.south) |- (my matrix.north);
+
+  \node [left=of single, anchor=north, rotate=90] {\textsc{Eine Zeile}};
+  \node [left=of multiple, anchor=north, rotate=90] {\textsc{Beliebig}};
+  \node [above=of single, anchor=north] {\textsc{Keine Eingabe}};
+  \node [above=of passive, anchor=north] {\textsc{Eingabe}};
+\end{tikzpicture}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:
