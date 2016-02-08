@@ -259,6 +259,13 @@ Einige der hier beschriebenen Optionen sind redundant. Das liegt zum einen an SQ
 Nach dieser Betrachtung der mit der unmittelbaren SQL-Syntax zusammenhängenden Funktionalität ist es nun an der Zeit, sich den Ausdrücken ausführlicher zu widmen.
 
 \begin{enumerate}
+\item \textbf{Platzhalter und Verschachtelungen} \\
+  Diese Optionen betreffen prinzipiell alle Ausdrücke und sollen nicht bezüglich der Verwendung innerhalb einer Komponente eingeschränkt werden.
+  \begin{enumerate}
+  \item \label{feat:expr-allow-placeholder} Verwendung von Platzhaltern zulassen
+  \item \label{feat:expr-allow-subquery} Verwendung von Unterabfragen zulassen
+  \end{enumerate}
+
 \item \textbf{Allgemeine Funktionen (in alphabetischer Reihenfolge)} \\
   In einem Umfeld für Anfänger ist zu erwarten, dass fast jede Funktion (bzw. jede logische Gruppe an Funktionen) einer eigenen Einführung bedarf. Die Lehrkräfte sollen diese daher isoliert zur Verfügung stellen können, ohne Ablenkung durch nicht benötigte Funktionen. Ferner werden verschiedene Variante der gleichen Funktionen vermieden, um Irritationen zu vermeiden.
   \begin{enumerate}
@@ -297,9 +304,9 @@ Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von norm
 
 Diese Oberflächen werden in HTML mit einigen Erweiterungen durch Angular 2 definiert, was vor den Anwendern der Schülerentwicklungsumgebung allerdings verborgen wird. Ähnlich wie für die SQL Abfragen ist also auch für diese Oberflächen ein dezidierter Editor zu implementieren. Die Schüler sollten zu keinem Zeitpunkt selber HTML-Code schreiben müssen, optional aber durchaus die Möglichkeit dazu haben.
 
-\subsubsection{Bedienelemente ohne Bindung an Daten}
+\subsubsection{Allgemeine Bedienelemente}
 
-Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trotzdem muss es natürlich eine Möglichkeit geben statische Texte ohne Bindung an irgendwelche Abfragen zur Anzeige zu bringen.
+Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trotzdem muss es natürlich eine Möglichkeit geben statische Texte ohne Bindung an irgendwelche Abfragen zur Anzeige zu bringen. Die hier vorgestellten Bedienelemente funktionieren auch ohne jede Datenquelle, die folgenden Kapitel stellen ggfs. aber noch Erweiterungen mit Datenanbindung vor.
 
 \begin{description}
   \item[Überschriften] \hfill \\
