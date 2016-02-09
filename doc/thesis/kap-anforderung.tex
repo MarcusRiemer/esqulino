@@ -297,16 +297,24 @@ Angelehnt an die bei Racket genutzte Idee der Feature-Levels soll dieses Kapitel
 
 \missing[inline]{Ich muss erst noch ein paar mehr Beispiele an der Hand haben, bis ich mich diesem Kapitel erneut widme.}
 
-\subsection{Konzept für Oberflächen}
+\subsection{Konzept für Oberflächen mit HTML}
 \label{sec:design-ui-editor}
+
+\warning{Diese Oberflächen werden nicht in reinem HTML verfasst, es kommen noch einige Erweiterungen in Form einer Templatingengine zum Einsatz. Diese technischen Details bleiben den Entwicklern allerdings verborgen, im Normalfall sehen sie nicht einmal den ``normalen'' HTML-Code. Ähnlich wie für die SQL-Abfragen wird also auch für die Oberflächen ein dezidierter Editor implementiert. Die Schüler sollten zu keinem Zeitpunkt selber Quelltexte tippen müssen, optional aber durchaus die Möglichkeit dazu haben.}
 
 Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von normalen Endanwendern bedienen lassen können Bedarf es natürlich einer entsprechenden Benutzeroberfläche. Hier bietet sich aus Gründen der einfachen Weitergabe eine webbasierte Oberfläche an: So entfällt bei den Endanwendern jegliche Installation und gerade für datenzentrierte, verteilte Anwendungen ist eine einheitliche Sicht auf den Datenbestand selbstverständlich essentiell. Beides Umstände, die sich gut mit einem zentralen Datenbestand auf einem Server erreichen lassen.
 
-Diese Oberflächen werden in HTML mit einigen Erweiterungen durch Angular 2 definiert, was vor den Anwendern der Schülerentwicklungsumgebung allerdings verborgen wird. Ähnlich wie für die SQL Abfragen ist also auch für diese Oberflächen ein dezidierter Editor zu implementieren. Die Schüler sollten zu keinem Zeitpunkt selber HTML-Code schreiben müssen, optional aber durchaus die Möglichkeit dazu haben.
+Grundsätzlich unterschieden werden alle Bedienelemente anhand der Anzahl der zu erwartenden Zeilen und den nötigen Eingabeoptionen. Die Kapitel \ref{sec:design-ui-bind-output} \nameref{sec:design-ui-bind-output} und \ref{sec:design-ui-bind-input} \nameref{sec:design-ui-bind-input} erläutern diese Unterscheidung noch einmal ausführlich. Abbildung \ref{fig:ui-element-concept} verdeutlicht diese Kategorisierung aber schon einmal Anhand einiger Beispiele.
+
+\begin{figure}[h]
+  \centering \input{images/ui-element-concept}
+  \caption{Einordnung von Bedienelementen}
+  \label{fig:ui-element-concept}
+\end{figure}
 
 \subsubsection{Allgemeine Bedienelemente}
 
-Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trotzdem muss es natürlich eine Möglichkeit geben statische Texte ohne Bindung an irgendwelche Abfragen zur Anzeige zu bringen. Die hier vorgestellten Bedienelemente funktionieren auch ohne jede Datenquelle, die folgenden Kapitel stellen ggfs. aber noch Erweiterungen mit Datenanbindung vor.
+Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trotzdem muss es natürlich eine Möglichkeit geben statische Texte ohne Bindung an irgendwelche Abfragen zur Anzeige zu bringen. Die hier vorgestellten Bedienelemente funktionieren auch ohne jede Datenquelle, die folgenden Kapitel stellen ggfs. aber noch Erweiterungen mit Datenanbindung vor. Ferner ersetzen diese kurzen Beschreibungen keinesfalls die technische Dokumentation.
 
 \begin{description}
   \item[Überschriften] \hfill \\
@@ -314,39 +322,94 @@ Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trot
   \item[Absätze] \hfill \\
     Blöcke von zusammenhängendem Text werden als Absatz ausgezeichnet, das entsprechende HTML-Äquivalent ist das \texttt{<p>}-Element.
   \item[Listen] \hfill \\
-    Strukturiert zusammenhängende Daten werden als sortierte oder unsortierte Liste (\texttt{<ol>} bzw. \texttt{<ul>} in HTML) gruppiert.
-      
+    Strukturiert zusammenhängende Daten werden als sortierte oder unsortierte Liste (\texttt{<ol>} bzw. \texttt{<ul>} in HTML) gruppiert. Wie schon bei den Überschriften soll an dieser Stelle nur ein logisches Listenelement zum Einsatz kommen, dass dafür über eine Eigenschaft ``Nummerierung'' verfügt.      
+  \item[Bilder] \hfill \\
+    Technisch gesehen nicht nötig, aber für Schüler vermutlich motivierend, ist die Einbindung von Bildern.
 \end{description}
+
+Spätestens durch die Aufnahme von Bildern ist auch für statische Webseiten eindeutig, dass es möglich sein muss diese Bedienelemente über die Angabe von Parametern zu beinflussen. Praktisch werden diese Parameter im Regelfall jedoch erst zur Laufzeit durch die Ausführung einer Abfrage mit konkreten Werten angegeben.
+
 
 \subsubsection{Bindung von Daten an die Oberfläche}
+\label{sec:design-ui-bind-output}
 
-Ein Großteil der Oberflächenelemente wird einige Eigenschaften aufweisen, deren Inhalte erst zur Laufzeit dynamisch gebunden werden. Dabei stellt sich die Frage, wie die Struktur der zur Verfügung stehenden Daten eigentlich definiert wird.
+Ein Großteil der Oberflächenelemente wird also einige Eigenschaften aufweisen, deren Inhalte erst zur Laufzeit dynamisch gebunden werden. Dabei stellt sich die Frage, wie die Struktur der zur Verfügung stehenden Daten eigentlich definiert wird bzw. aussehen soll?
 
-Im Falle von Abfragen ohne Parameter mit einer einzigen Ergebniszeile ist diese Frage einigermaßen einfach zu beantworten: Der Nutzer der Entwicklungsumgebung definiert, dass für eine bestimmte Seite eine Menge von Abfragen auszuführen ist. Jede Abfrage in dieser Menge erhält einen eindeutigen Namen und da die Spalten ebenfalls über eindeutige Namen verfügen, lassen sich diese auch ansprechen. Sofern das Ergebnis einer Abfrage garantiert aus nur einer Zeile besteht, soll es wie ein einzelner Wert verwendet werden können. Wenn diese Garantie nicht gegeben ist, muss der Editor davon ausgehen, dass die Ergebnismenge beliebig groß ist.
+Auf abstrakter Ebene ist die Beantwortung dieser Frage eindeutig: Da das Ergebnis einer SQL-Abfrage grundsätzlich eine Tabellenstruktur mit Zeilen, Spalten und Zellen ist, wird dieses Datenmodell auch für die Oberfläche zugrunde gelegt. Die an die Bedienelemente zu bindenden Daten sind also grundsätzlich tabellarischer Natur.
 
-Der Umgang mit den Zeilen einer Abfrage ist ein bisschen komplizierter, da in den meisten Fällen nicht sinnvoll automatisch bestimmt werden kann, ob eine Abfrage exakt eine oder mehrere Zeilen liefert. Diese Angabe ist daher vom Entwickler der Abfrage zu machen, wenn eine Abfrage jemals mehr als eine Zeile liefern sollte muss dies mit einer Fehlermeldung quittiert werden.
+Um im Falle von mehreren in Frage kommenden Abfragen eine eindeutige Zuordnung vornehmen zu können, müssen Abfragen, deren Ergebnis an die Oberfläche gebunden werden soll, mit einem eindeutigen Namen bezeichnet werden. Dieser Name kann von den Entwicklern frei gewählt werden, sollte aber, analog zu einem Funktionsbezeichner, sinnvoll darüber Auskunft geben was eine Abfrage bewirkt. Der Umgang mit den Zeilen erfordert keine Sonderbehandlung, hier genügt die Angabe eines Zeilenindex. Für die Spalten entfällt glücklicherweise eine ``künstliche'' Benennung, diese werden trivialerweise über ihren Namen entsprechend der \texttt{SELECT}-Komponente angesprochen. Mit diesen drei Werten (Name der Abfrage, Zeilenindex, Spaltenname) lässt sich jede Zelle einer Menge von Abfragen eindeutig identifizieren.
 
-Ebenfalls zu unterscheiden ist zwischen Ein- und Ausgabe. Typischerweise sollen die Ergebnisse von Abfragen angezeigt werden und dabei nicht weiter editiert werden können.
+Aus praktischen Gründen sollten Abfragen allerdings bezüglich der Anzahl der erwarteten Zeilen annotiert werden können, konkret unterschieden werden muss dabei zwischen ``exakt eine Zeile'' und ``beliebig viele (auch keine) Zeilen''. Im Falle einer Abfrage mit nur einer Zeile entfällt dann Notwendigkeit einen Zeilenindex anzugeben, dieser bezieht sich trivalerweise immer auf die einzige, zur Verfügung stehende Zeile. Wenn Daten an die Oberflächen gebunden werden entfällt durch diese Abkürzung die permanente Angabe einer redundanten Information.
 
-Diese Unterscheidung bezüglich der Anzahl der zu erwartenden Zeilen und den nötigen Eingabeoptionen beinflusst folglich die zur Verfügung stehenden Bedienelemente. Abbildung \ref{fig:ui-element-concept} verdeutlicht diese Möglichkeiten anhand einer 4-Felder-Matrix. Jedes Bedienelement 
+Listing \ref{lst:sql:person-days} zeigt eine Abfrage die in Listing \ref{lst:html:person-days-index} und \ref{lst:html:person-days} einmal mit und einmal ohne Index gebunden wird. Das ist zwar ein kleiner Vorgriff, demonstriert aber wie diese Annotation der Lesbarkeit zu gute kommt.
 
-\begin{figure}
-  \centering \input{images/ui-element-concept}
-  \caption{Einordnung von Bedienelementen}
-  \label{fig:ui-element-concept}
-\end{figure}
+\begin{lstlisting}[language=SQL, caption=Abfrage mit garantiert einer Ergebniszeile,label=lst:sql:person-days]
+SELECT name, geburtstag
+FROM   person
+LIMIT  1;
+\end{lstlisting}
 
-\subsubsection{Anzeige von einzelnen Zeilen}
+\begin{lstlisting}[language=HTML, caption=String-Interpolation mit Indexzugriff, label=lst:html:person-days-index]
+<!-- benutzer = Listing (*@\ref{lst:sql:person-days}: \nameref{lst:sql:person-days}@*) -->
+<p>Hallo {{ benutzer[0].name }}, du bist am {{ benutzer[0].geburtstag }} geboren.</p>
+\end{lstlisting}
 
-Einzelne Werte kommen typischerweise in Fließtexten oder bei Detailseiten zu einzelnen Zeilen zum Einsatz.
+\begin{lstlisting}[language=HTML, caption=String-Interpolation mit implizitem Index, label=lst:html:person-days]
+<!-- benutzer = Listing (*@\ref{lst:sql:person-days}: \nameref{lst:sql:person-days}@*) -->
+<p>Hallo {{ benutzer.name }}, du bist am {{ benutzer.geburtstag }} geboren.</p>
+\end{lstlisting}
 
-\end{description}
+Diese Annotation muss jedoch vom Entwickler manuell gesetzt werden, eine automatische Berechnung wäre für beliebige Abfragen unmöglich\footnote{Viele SQL-Dialekte sind Turing-Vollständig und schon das Halteproblem ist nicht entscheidbar.} und auch für speziell strukturierte Abfragen ist diese Unterscheidung zumindest nicht trivial. Oder um es anders auszudrücken: Die Erweiterung der Entwicklungsumgebung um diese automatische Vorhersage wäre Stoff für eine weitere wissenschaftliche Arbeit, keinesfalls aber Gegenstand dieser Arbeit. Praktischerweise lässt sich eine auftretende Verletzung dieser Annotation aber sehr gut erkennen und daher auch sinnvoll an den Entwickler kommunizieren. Und letzten Endes könnte ein Entwickler die Garantie durch die Einführung einer \texttt{LIMIT 1}-Komponente selber geben, was möglicherweise aber zu überraschendem Verhalten zur Laufzeit führt.
+
+Diese gesonderte Behandlung von bestimmten Tabellendimensionen ist übrigens keine Erfindung dieser Thesis: Auch SQL selbst hebt einige Abfragen mit speziellen Strukturen hervor! Tabellen mit nur einer Zelle können als skalarer Wert eingesetzt werden, bei nur einer Spalte können Abfragen z.B. für \texttt{IN}-Ausdrücke verwendet werden.
+
+Der Umgang mit den Zeilen einer Abfrage ist im Rahmen der Oberfläche ein bisschen komplizierter, da hier technisch gesehen mindestens zwei verschiedene Bedienelemente zum Einsatz kommen müssen: Ein Containerelement und ein sich wiederholendes Element. Auch an dieser Stelle tätigen wir daher mit Listing \ref{lst:sql:people-days} und \ref{lst:html:people-days} einen kurzen Vorgriff, um den grundsätzlichen Unterbau zu demonstrieren. An dieser Stelle sei noch einmal angemerkt, dass diese Listings nur die \textit{Struktur} der Oberfläche wiedergeben sollen, die Schüler werden diesen HTML-Code im Normalfall nicht zu Gesicht bekommen.
+
+\begin{lstlisting}[language=SQL, caption=Abfrage mit beliebig vielen Ergebniszeilen,label=lst:sql:people-days]
+SELECT name, geburtstag
+FROM   person;
+\end{lstlisting}
+
+\begin{lstlisting}[language=HTML, caption=Containerelemente mit Kindern, label=lst:html:people-days]
+<!-- alleBenutzer = Listing (*@\ref{lst:sql:people-days}: \nameref{lst:sql:people-days}@*) -->
+<ul>
+  <template ngFor #benutzer [ngForOf]="alleBenutzer">
+    <li>
+      {{ benutzer.name }} wurde am {{ benutzer.geburtstag }} geboren.
+    </li>
+  </template>
+</ul>
+\end{lstlisting}
+
+Es fällt auf, dass die Angabe des Containerelementes \texttt{<ul>} ohne besondere Auszeichnung auskommt. Die exakte Syntax der Wiederholung, also das \texttt{<template>} Element ist die spezifische Syntax von Angular 2 und weder für Entwickler noch Endanwender von Belang. Der Inhalt des sich wiederholenden Elements ist wiederum trivial und entspricht der Bindung an eine Abfrage mit exakt einer Ergebniszeile. Eine mögliche Alternative zu dieser Vorgehensweise wäre wiederum das hochzählen eines Index, statt dem impliziten erneuten Binden der \texttt{benutzer} Variable in jedem Durchlauf.
+
+\unsure[inline]{Es gibt 1001-HTML-Templating Sprachen da draußen, von denen Angular 2 nicht gerade die einsteigerfreundlichste Syntax hat. Allerdings verwende ich für den Editor Angular 2, die Engine ist also ``schon da''.  Ich muss nochmal schauen ob ich das ändern mag, dann wäre für die ``normale'' Endbenutzeranzeige der Projekte aber noch ein weiteres Programm zu schreiben.}
+
+\subsubsection{Eingabe von Daten über die Oberfläche}
+\label{sec:design-ui-bind-input}
+
+Immer wenn eine Abfrage mit Platzhaltern an eine Seite gebunden wird, ist es notwendig dem Benutzer eine Möglichkeit zu geben diese Platzhalter zu füllen. Im einfachsten Fall kann diese Bindung über einfache \texttt{<input type=text>}-Elemente hergestellt werden. Das ist für viele Arten von Such- und Eingabemasken auch sicherlich ausreichend, führt jedoch zu Problemen bei Beziehungen zwischen Entitäten. In diesem Fall müsste in das Textfeld vom Benutzer ein Primärschlüssel angegeben werden, was ganz sicher kein besonders Benutzerfreundliches Konzept darstellt.
+
+In einem solchen Fall soll es also möglich sein auch Bedienelememente wie Comboboxen zu verwenden, die ihrerseits wieder eine Abfrage zur Anzeige der zur Verfügung stehenden Daten benötigen. Dabei muss klar zwischen zwei benötigten Informationen unterschieden werden. Auf der einen Seite muss das Resultat eines solchen Bedienelements vermutlich einen Primärschlüssel zurückliefern. Auf der anderen Seite erwarten die Benutzer aber die Anzeige von ``intuitiven'' Informationen, anhand derer Sie ihre Auswahl treffen können. Der Primärschlüssel ist typischerweise eine künstliche Spalte, die für den Endanwender keinerlei Informationsgehalt hat. Praktischerweise ist auch diese Unterscheidung in HTML vorgesehen
+
+\begin{lstlisting}[language=HTML, caption=Containerelemente mit Kindern, label=lst:html:select-example]
+<!-- alleBenutzer = Listing (*@\ref{lst:sql:people-days}: \nameref{lst:sql:people-days}@*) -->
+<select>
+  <template ngFor #benutzer [ngForOf]="alleBenutzer">
+    <option [value]="benutzer.rowid">
+      {{ benutzer.rowid }}: {{ benutzer.name }}
+    </option>
+  </template>
+</select>
+\end{lstlisting}
 
 \subsubsection{Seitenstruktur}
 
-Die grundsätzliche Struktur entspricht der eines Baumes mit einer einzigen Wurzel, der Einstiegsseite. Unter diese Wurzelseite können dann weitere Seiten eingepflegt werden, die ggfs. auch Eigenschaften ihrer Eltern übernehmen können. Diese streng hierarchische Struktur macht es vergleichsweise leicht, optional ein sehr einfaches Templating-System zu definieren.
+Die grundsätzliche Struktur entspricht der eines Baumes mit einer Wurzel, also der Einstiegsseite. Unter diese Wurzelseite können dann weitere Seiten eingepflegt werden, die ggfs. auch Eigenschaften ihrer Eltern übernehmen können. Diese streng hierarchische Struktur macht es vergleichsweise leicht, optional ein sehr einfaches Templating-System zu definieren.
 
 \subsection{Editor für Oberflächen}
+
+\warning{Nicht alle hier beschriebenen Bedienelemente sind notwendigerweise in der Entwicklungsumbegung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Bedienelementen einer Benutzeroberfläche. Um zu sehen, welche Funktionalität tatsächlich implemtiert worden ist lohnt sich ein Blick in Anhang \ref{app:implemented-features}:~\nameref{app:implemented-features}.}
 
 
 \subsection{Beispielhafte Datenbasen}
