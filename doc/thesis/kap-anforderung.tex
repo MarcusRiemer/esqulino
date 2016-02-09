@@ -1,8 +1,8 @@
 \section{Anforderungsanalyse}
 
-Dieses Kapitel beschreibt die generellen Anforderungen an das Projekt, ohne auf Details wie die technische Machbarkeit ausführlich zu analysieren oder konkrete Umsetzungsstrategien zu planen. Diese softwaretechnischen Aspekte werden in Kapitel \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis} besprochen.
+Dieses Kapitel beschreibt die generellen Anforderungen an das Projekt. Dabei werden auch einige theoretische Hintergründe betrachtet, speziell didaktische Konzepte für die Vermittlung von SQL oder die Vorgehensweisen bei der Entwicklung von Oberflächen. Nicht Bestandteil dieses Kapitels ist eine ausführliche Analyse der Machbarkeit, den Schwerpunkt bildet also die Beschreibung eines didaktisch sinnvollen Konzeptes, welches dann möglicherweise nicht sofort mit allen Details umgesetzt werden kann. Auch die Planung konkreter Umsetzungsstrategien wird nicht vorgenommen, diese softwaretechnischen Aspekte werden in Kapitel \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis} besprochen. 
 
-\info[inline]{Der Verzicht auf die technischen Hintergründe der Implementierung in diesem Kapitel soll es auch für ``normale'' Informatiklehrer verständlich machen, ohne Sie gleich mit den Details der Realisierung zu erschlagen.}
+\info[inline]{Der Verzicht auf die technischen Hintergründe der Implementierung in diesem Kapitel soll es auch für ``normale'' Informatiklehrer verständlich machen, ohne Sie gleich mit den ``unwichtigen'' Details der Realisierung zu erschlagen.}
 
 \subsection{Grundprinzipien}
 \label{sec:principles}
@@ -38,7 +38,18 @@ Umgekehrt ist es auch wichtig, den Umfang des Projekts für die Thesis zu begren
   Auch wenn die Konzeption der Benutzerschnittstelle für die verschiedenen Masken in den eben aufgezählten Prinzipien auftaucht, ist es wichtig den engen Rahmen dieses Aspektes zu verstehen. Es geht um die Schaffung von einfachen, datenzentrierten Eingabemöglichkeiten, nicht um die Umsetzung besonders kreativer Bedienkonzepte. Dementsprechend ist z.B. die Erweiterung der zur Verfügung stehenden Eingabeelemente durch die Lernenden außerhalb des Rahmens dieser Arbeit.
 \end{description}
 
-\subsection{Datenbanksystem}
+\subsection{Allgemeines Konzept der Entwicklungsumgebung}
+\label{sec:design-general-concept}
+
+Dieses Kapitel beschreibt sehr allgemeinen Anforderungen an die Entwicklungsumgebung, die Details dazu werden in den spezifischeren Kapiteln besprochen, welche nach Möglichkeit verlinkt sind.
+
+Um die einfachste Inbetriebnahme der Software für Lernende zu gewährleisten, wird die Anwendung für Webbrowser entwickelt. Um erste Schritte mit SQL zu machen reicht dann ein beliebiger aktueller Browser. Diese Entscheidung bedeutet praktisch vor allem eine Verschiebung der Probleme mit der Inbetriebnahme auf z.B. eine Lehrperson. Es ist jedoch davon auszugehen, dass die Bereitstellung eines Serverdienstes in Zeiten von Virtualisierungs- und Containerdiensten keine nennenswerte Hürde mehr darstellt.
+
+Nicht verschwiegen werden soll dabei allerdings auch der Nebeneffekt, dass der Betrieb der Entwicklungsumgebung auch für Schüler, im Gegensatz zum sehr einfachen Zugriff, deutlich erschwert wird. Im Endeffekt wird die Bereitstellung einer dezidierten Umgebung für den Server zur Pflichtaufgabe der jeweiligen Lehrperson. Dabei handelt es sich möglicherweise um einen Server in der Schule, einen ``privat greifbaren'' Server oder eine Cloud-Computing-Instanz im Internet.
+
+Ebenfalls aus Gründen der einfacheren Zugänglichkeit sollte eine einzelne Serverinstanz in der Lage sein, mehrere Projekte simultan zu bedienen. Die Lehrperson kann also mit einem einzigen Serverprozess eine ganze Klasse versorgen. Eine Begleiterscheinung dieser Anforderung ist allerdings die notwendige Implementierung von zumindest rudimentären Zugriffsbeschränkungen.
+
+\subsubsection{Datenbanksystem}
 
 Eine der naheliegendsten zu treffenden Entscheidungen hat zwar einen technischen Hintergrund, ist aber trotzdem unbedingt Bestandteil dieser Anforderungsanalyse: Es geht um die Wahl des zu lehrenden Datenbanksystems. Dieser Aspekt hat einen unmittelbaren Einfluss auf die Inbetriebnahme der Entwicklingsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
 
@@ -46,15 +57,196 @@ Im Hinblick auf die einfache Installation und Verwendung bietet sich eine eingeb
 
 \unsure[inline]{Theoretisch ist die Menge an denkbaren Systemen fast unüberschaubar groß, praktisch sticht SQLite aus der Masse an Optionen heraus. Wie ausführlich muss ich das begründen?}
 
-\subsection{Zwei Modi: Entwickeln und Anschauen}
+\subsubsection{Zwei Modi: Entwickeln und Anschauen}
 
-Grundsätzlich unterschieden werden muss bei der Schülerentwicklungsumgebung, ähnlich wie bei Scratch, zwischen zwei Betriebsmodi für ein Projekt: Zunächst wird ein Projekt im Entwicklermodus betrieben, in diesem Fall stehen dem Benutzer alle Entwicklungstools zur Verfügung. Wenn es dann später einmal fertig ist und an Endanwender, z.B. Bekannte oder Freunde, weitergegeben wird, erwarte diese natürlich eine normale Benutzeroberfläche zu sehen. Der Wechsel zwischen diesen beiden Modi sollte dabei, ebenfalls analog zu Scratch, zu jedem Zeitpunkt möglich sein. Das ``Verstecken'' von Vorgehensweisen in Projekten ist also nicht vorgesehen. Im Endeffekt jedes Projekt auch als Vorlage für die Umsetzung eigener Ideen dienen können.
+Grundsätzlich unterschieden werden muss bei der Schülerentwicklungsumgebung, ähnlich wie bei Scratch, zwischen zwei Betriebsmodi für ein Projekt: Zunächst wird ein Projekt im Entwicklermodus betrieben, in diesem Fall stehen dem Benutzer alle Entwicklungstools zur Verfügung. Wenn es dann später einmal fertig ist und an Endanwender, z.B. Bekannte oder Freunde, weitergegeben wird, erwarte diese natürlich eine normale Benutzeroberfläche zu sehen. Der Wechsel zwischen diesen beiden Modi sollte dabei, ebenfalls analog zu Scratch, zu jedem Zeitpunkt möglich sein. Das ``Verstecken'' von Vorgehensweisen in Projekten ist nicht vorgesehen, jedes fremde Projekt soll auch als Inspiration für die Umsetzung eigener Ideen dienen können.
 
-\subsection{Einfaches anlegen und kopieren von Projekten}
+\subsubsection{Projekte}
 
-Im Sinne einer möglichst niedrigen Einstiegshürde soll es den Anwendern leicht gemacht werden, bestehende Projekte zu übernehmen. Im Informatikunterricht müssen häufiger zu Beginn bestimmte Schritte ausgeführt werden, ``weil das nun mal so'' (also eine ausführliche Erklärung zu diesem Zeitpunkt zu weit gehen würde). Im Falle des Sprachumfangs von SQL ist das zwar im Vergleich zu z.B. Java (``Herr Lehrer, was macht eigentlich dieses \texttt{public static void}?'') nicht ganz so dramatisch, aber nach Möglichkeit zu vermeiden.
+Nachdem der Begriff des ``Projekts'' nun schon einige Male gefallen ist, wird es Zeit diesen eindeutig zu definieren. Abstrakt betrachtet handelt es sich bei einem Projekt um eine Datenbasis in Form einer Datenbank. Zu dieser Datenbasis kann man als Entwickler SQL-Abfragen entwickeln (\ref{sec:design-sql-editor} \nameref{sec:design-sql-editor}) und einige dieser Abfragen mit einer Oberfläche für Endbenutzer versehen (\ref{sec:design-ui-editor} \nameref{sec:design-ui-editor}).
 
-Dementsprechend sollte möglichst jeder Schritt beim Anlegen eines neuen Projektes für die Schüler nachvollziehbar sein. Wenn dann doch einmal eine Serie von ``mechanisch auszuführenden'' Anweisungen erforderlich sein sollte, wäre es aber dennoch praktisch das durch eine Kopie eines schon bestehenden Projektes abzukürzen. Die Lehrkraft würde in diesem Fall also ein Projekt für ihre Schüler vorbereiten, welches diese dann optimalerweise mit einem einzigen Klick importieren können.
+Schon um Vandalismus zu vermeiden, sind leider einfache Zugriffskontrollen auf Projektebene nötig. Um etwaige Missverständnisse von vornerein zu vermeiden: Ziel dieser Kontrollen ist es zu verhindern, dass z.B. die Quellen für die Abfragen oder Benutzeroberfläche eines Projektes entstellt oder gelöscht werden. \textbf{Nicht geschützt} werden können die eigentlichen Daten, also die Zeilen, in der Datenbank. Sobald in der Benutzeroberfläche für Endanwender Funktionalität zum Löschen oder Editieren von Datensätzen vorgesehen ist, gibt es keine einfache Möglichkeit legitime Veränderungen von illegalen Veränderungen zu unterscheiden.
+
+Um zumindest einen grundsätzlichen Schutz zu ermöglichen, können für ein Projekt aber zwischen drei schreibenden Zugriffsarten für angelegte Benutzer gewählt werden.
+
+\begin{description}
+  \item[Entwickler] \hfill \\
+    Mit diesem Zugangslevel hat ein legitimierter Benutzer das Recht beliebige Änderungen an dem Projekt vorzunehmen.
+  \item[Benutzer] \hfill \\
+    Diese Personengruppe hat keine Möglichkeit den Quelltext eines Projektes zu editieren, kann aber uneingeschränkt auf die Funktionalität der Oberfläche für Endbenutzer zugreifen. Sofern z.B. das Löschen von bestimmten Datensätzen über die Oberfläche für Endbenutzer nicht möglich ist, können diese Daten von dieser Personengruppe auch nicht gelöscht werden.
+  \item[Gast] \hfill \\
+    Gäste können keinerlei Schreibzugriffe vornehmen, weder über die Entwicklungsumgebung, noch über die Oberfläche für Endbenutzer.
+\end{description}
+
+\warning{Nur zur Sicherheit sei an dieser Stelle nochmals deutlich erwähnt, dass dieser Schutz nur für schreibende Zugriffe greift. Der lesende Zugriff auf den gesamten Datenbestand ist über die Entwicklungsumgebung auch für Gäste stets uneingeschränkt möglich.}
+
+\missingfigure{UI-Konzept mit traditioneller ``Seitenleiste'' und ``Editorbereich''}
+
+\subsubsection{Einfaches anlegen und kopieren von Projekten}
+
+Im Sinne einer möglichst niedrigen Einstiegshürde soll es den Anwendern leicht gemacht werden, bestehende Projekte zu übernehmen. Im Informatikunterricht müssen häufiger zu Beginn bestimmte Schritte ausgeführt werden, ``weil das nun mal so ist'' (also eine ausführliche Erklärung zu diesem Zeitpunkt zu weit gehen würde). Im Falle des Sprachumfangs von SQL ist das zwar im Vergleich zu z.B. Java nicht ganz so dramatisch\footnote{``Herr Lehrer, was macht eigentlich dieses \texttt{public static void}?''}, aber nach Möglichkeit zu vermeiden.
+
+Dementsprechend sollte normalerweise jeder Schritt beim Anlegen eines neuen Projektes für die Schüler nachvollziehbar sein. Wenn dann aber doch einmal eine Serie von ``mechanisch auszuführenden'' Anweisungen erforderlich sein sollte, wäre es aber dennoch praktisch, diesen Vorgang durch eine Kopie eines schon bestehenden Projektes abzukürzen. Die Lehrkraft würde in diesem Fall ein Projekt für ihre Schüler vorbereiten, welches diese dann mit einem Klick in ein anders benanntes Projekt kopieren können. Es werden dann alle Bestandteile, mit Ausnahme der Zugriffsrechte, unter dem neuen Namen verfügbar gemacht.
+
+\subsection{Didaktisch sinvolle Teilmengen von SQL}
+\label{sec:sql-subset}
+
+\warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in der Entwicklungsumbegung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von SQL. Um zu sehen, welche Funktionalität tatsächlich implemtiert worden ist lohnt sich ein Blick in Anhang \ref{app:implemented-features}:~\nameref{app:implemented-features}.}
+
+Die uneingeschränkte Umsetzung des SQL-Standards würden sowohl für den Verfasser dieser Arbeit als auch für die Anwender der Entwicklungsumgebung viele unpraktische Probleme aufwerfen. Der SQL-Sprachumfang ist mittlerweile gewaltig und die Anzahl der verschiedenen Dialekte unüberschaubar groß. ``Normale'' Entwicklungsumgebungen für SQL werden von großen Entwicklerteams konzipiert und umgesetzt, der Autor dieser Arbeit bildet hingegen ein (immerhin motiviertes) Ein-Mann-Team.
+
+Glücklicherweise wäre aber auch der Zielgruppe dieser Entwicklungsumgebung mit einer vollständigen Umsetzung des SQL-Standards überhaupt nicht gedient. Im Gegensatz zu allen anderen Entwicklungsumgebungen da draußen soll die Stärke dieser Entwicklungsumgebung in einer sinnvollen Reduktion liegen. Dieses Kapitel beschreibt daher, wie man zum ``normalen'' SQL kompatible Untermengen definieren kann, um einige spezifische Aufgaben zu erfüllen. Oder in Anlehnung an die 80/20 Regel ausgedrückt: Es gilt jene 20\% des Sprachumfangs abzubilden, mit denen sich 80\% der typischen Aufgaben gut lösen lassen.
+
+Passenderweise erlaubt die Struktur von SQL die Angabe von sehr lokalen Einschränkungen, deren Auswirkungen sich sehr gut abschätzen lassen. Einzig der Umgang mit Ausdrücken überspannt viele Bereiche von SQL: Diese können an sehr vielen Stellen auftreten und müssen dementsprechend sorgfältig analysiert werden. Diese Arbeit wird dabei demonstrieren, dass es aus didaktischer Sicht sinnvoll ist, die Mächtigkeit der Ausdrücke initial zu beschränken. An deren Stelle tritt dann eine übersichtliche Anzahl von ``einfachen'' Ausdrücken, mit denen sich jedoch der überwiegende Teil aller auftretenden Fragestellungen lösen lässt.
+
+\unsure[inline]{Erwähnen, inwiefern das herauslösen von Sprachfeatures bei einer ``normalen'' Programmiersprache komplizierter wäre? Es gibt bei SQL halt vergleichsweise wenige Abhängigkeiten und daher viele mögliche Reihenfolgen in denen man die Features aktivieren kann. Bei einer Sprache wie z.B. Java bauen die einzelnen Sprachfeatures sehr viel stärker aufeinander auf, es ergeben sich deutlich weniger Reihenfolgen in denen man diese sinnvoll aktivieren könnte.}
+
+Wir klären in diesem Kapitel zunächst, welche Features von SQL überhaupt für die Entwicklungsumgebung von Belang sind und wie diese voneinander abhängen. Die Abgrenzung von Teilsprachen baut auf diesen hier herausgearbeiteten Optionen auf und ist Gegenstand von Kapitel \ref{sec:sql-subset-ranks}.
+
+Technisch gesehen soll es für Lehrkräfte möglich sein, fast beliebige Teilmengen von SQL für ihre Schüler vorzugeben, nicht nur die im Rahmen dieser Arbeit als sinnvoll erachteten Kombinationen. Das grundsätzliche Vorgehen sollte dabei normalerweise einer Whitelist entsprechen: Jede explizit erlaubte Funktionalität steht im SQL-Editor (siehe Kapitel \ref{sec:design-sql-editor}) zur Verfügung. Und sofern eine Funktionalität nicht erlaubt sein sollte, ist sie auch nicht verfügbar. Der Begriff ``Einschränkung'' ist aus der Sicht einer Whitelist also zwar nicht ganz optimal gewählt, beschreibt die stattfindende Reduktion des Umfangs von SQL aber akkurat.
+
+Alternativ sollen sich auch wortwörtliche Einschränkungen im Sinne einer Blacklist angeben lassen. Für die in der Regel sehr übersichtlichen Teilsprachen die in dieser Arbeit konzipiert werden, ist diese Variante allerdings bei weitem nicht so gut lesbar: Man muss den größtmöglichen Umfang des hier beschriebenen Dialekts immer im Hinterkopf haben. Außerdem kommen im Falle einer Erweiterung des Sprachumfangs, z.B. durch ein späteres Update der Entwicklungsumgebung, möglicherweise unerwünschte Möglichkeiten hinzu.
+
+\subsubsection{Mögliche Einschränkungen der Komponenten}
+\label{sec:sql-subset-local}
+
+Zunächst definieren wir einige mögliche Einschränkungen anhand der grundlegenden Struktur jeder SQL-Abfrage. Da die Reihenfolge der Komponenten nicht beliebig ist, ergibt sich eine sehr klare Struktur in der einige Komponenten auch ohne Probleme übersprungen werden können. Abbildung \ref{fig:sql-steps} wurde aus den Vorlesungsunterlagen von Prof. Dr. Hoffmann entnommen und demonstriert den logischen Ablauf bei der Verarbeitung einer SQL-Abfrage inklusive aller Zwischenschritte und optionaler Komponenten. Daraus ist folglich gut ersichtlich, dass alle Komponenten bis auf die logisch Erste (\texttt{FROM}) und Letzte (\texttt{SELECT}) optional sind.
+
+\begin{figure}
+  \centering \includegraphics{images/sql-steps.png}
+  \caption{Komponenten und sich ergebende Zwischenschritte bei der Verarbeitung einer SQL-Abfrage}
+  \label{fig:sql-steps}
+\end{figure}
+
+Einige der hier beschriebenen Optionen sind redundant. Das liegt zum einen an SQL selbst, die Sprache sieht schlichtweg mehrere syntaktische Varianten für semantisch äquivalente Sachverhalte vor. Zum anderen kann es aber auch aus didaktischen Gründen sinnvoll sein, die Wissensvermittlung mit einer Reihe von Spezialfällen zu beginnen\todo{Beleg}.
+
+\begin{enumerate}
+\item \textbf{Projektionen mit \texttt{SELECT}} \\
+  Diese Komponente als solche kann natürlich nicht ausgeschlossen werden. Außerdem muss mindestens \ref{feat:select-all} $\lor$ \ref{feat:select-column} erlaubt sein, sonst können keine gültigen SQL-Abfragen erstellt werden.
+  \begin{enumerate}
+  \item \label{feat:select-all} Auswahl aller Spalten (``Sternchen-Operator'' \texttt{SELECT *})
+  \item \label{feat:select-column} Auswahl von Spalten
+  \item \label{feat:select-single-function} Ausdrücke aus einfachen Funktionsaufrufen zulassen
+  \item \label{feat:select-limit} Beschränkung der Datenmenge mit \texttt{LIMIT}
+  \end{enumerate}
+\item \textbf{Angabe von Datenquellen mit \texttt{FROM}} \\
+  Auch die Auslassung dieser Komponente ist nicht zulässig, obwohl einige SQL Dialekte dies durchaus erlauben. Der Mehrwert dieser Auslassung wäre aus didaktischer Sicht aber nicht gegeben: Die Schüler sollen SQL Abfragen grundsätzlich auf Tabellen beziehen und keine Daten ``aus der Luft greifen''.
+  \begin{enumerate}
+  \item \label{feat:from-cross-join} Kreuzprodukt (\texttt{JOIN}) zulassen
+  \item \label{feat:from-cross-comma} Kreuzprodukt (komma-separierte Schreibweise) zulassen
+  \item \label{feat:from-natural-join} Automatische innere Verknüpfung zulassen (\texttt{NATURAL JOIN})
+  \item \label{feat:from-inner-join} Innere Verknüpfung zulassen (\texttt{INNER JOIN}), erfordert \ref{feat:from-using} $\lor$ \ref{feat:from-on-simple}
+  \item \label{feat:from-left-join} Linke äußere Verknüpfung zulassen (\texttt{LEFT OUTER JOIN}), erfordert \ref{feat:from-using} $\lor$ \ref{feat:from-on-simple}
+  \item \label{feat:from-right-join} Rechte äußere Verknüpfung zulassen (\texttt{RIGHT OUTER JOIN}), erfordert \ref{feat:from-using} $\lor$ \ref{feat:from-on-simple}
+  \item \label{feat:from-full-join} Volle äußere Verknüpfung zulassen (\texttt{FULL OUTER JOIN}), erfordert \ref{feat:from-using} $\lor$ \ref{feat:from-on-simple}
+  \item \label{feat:from-using} \texttt{USING}-Bedingung zulassen
+  \item \label{feat:from-on-simple} Einfache \texttt{ON}-Bedingung mit einfachen vergleichenden Ausdrücken zulassen
+  \item \label{feat:from-recursive} Rekursive Verknüpfung zulassen 
+  \item \label{feat:from-sub} Unterabfragen zulassen
+  \end{enumerate}
+\item \textbf{Filterung mit \texttt{WHERE} und \texttt{HAVING}} \\
+  Da an dieser Stelle Ausdrücke zum Einsatz kommen, sind prinzipiell zwei unterschiedliche Ansätze denkbar. Zum einen die Verwendung einer vordefinierten Menge an Vergleichen mit einer einfachen Struktur, diese werden in \ref{sec:sql-subset-expression} beschrieben. Dem gegenüber steht der Ansatz fast beliebige Ausdrücke zu erlauben, was auf der einen Seite einen Ausbruch aus einem zu simplen Schema gleichkommen kann, auf der anderen Seite möglicher aber auch den Lernenden mit einem zu großen Freiheitsgrad überfordert.
+  \begin{enumerate}
+  \item \label{feat:where-allow} \texttt{WHERE} zulassen
+  \item \label{feat:having-allow} \texttt{HAVING} zulassen
+  \item \label{feat:where-and} Verknüpfungen mit \texttt{AND}
+  \item \label{feat:where-or} Verknüpfungen mit \texttt{OR}
+  \end{enumerate}
+\item \textbf{Bildung von Gruppen mit \texttt{GROUP BY}}
+  \begin{enumerate}
+  \item \label{feat:group-allow} \texttt{GROUP BY} zulassen
+  \item \label{feat:group-multiple} Grupperierung mehrerer Spalten zulassen
+  \end{enumerate}
+\item \textbf{Sortierung mit \texttt{ORDER BY}} \\
+  Bei dieser Komponente fehlt bewusst die Möglichkeit anhand eines Spaltenindexes aus dem \texttt{SELECT} zu sortieren. Da die gute Lesbarkeit der Abfragen ein erklärtes Ziel der Entwicklungsumgebung ist, wurde auf diese redundante Möglichkeit der Spaltenauswahl verzichtet.
+  \begin{enumerate}
+  \item \label{feat:order-allow} \texttt{ORDER BY} zulassen, die Auswahl der Richtung (\texttt{ASC} und \text{DESC}) ist dann grundsätzlich möglich
+  \item \label{feat:order-select} Sortierung nach im \texttt{SELECT} erwähnten Spalten oder Ausdrücken zulassen
+  \item \label{feat:order-any-column} Sortierung nach beliebigen Spalten zulassen
+  \item \label{feat:order-expression} Sortierung anhand eines beliebigen Ausdrucks zulassen
+  \end{enumerate}
+\end{enumerate}
+
+\subsubsection{Mögliche Einschränkungen der Ausdrücke}
+\label{sec:sql-subset-expression}
+
+Nach dieser Betrachtung der mit der unmittelbaren SQL-Struktur zusammenhängenden Funktionalität ist es nun an der Zeit, sich den Ausdrücken ausführlicher zu widmen. Um eine graduelle Lernkurve sowie eine sinnvolle Unterstützung durch den Editor zu gewährleisten, werden diese in drei Klassen eingeteilt:
+
+\begin{description}
+\item[Einfache Ausdrücke] \hfill\\
+  Einfache Ausdrücke unterliegen einer ganz festen Struktur, die keinerlei Schachtelung oder Verkettung von Ausdrücken zulässt, außer ggfs. der Negation. Für jeden möglichen einfachen Ausdruck steht eine dezidierte Eingabemöglichkeit im SQL-Editor zur Verfügung.
+\item[Komplexe Ausdrücke] \hfill\\
+  Komplexe Ausdrücke lassen sich schachteln bzw. verketten und könnten mit einem Scratch-ähnlichen Editor für Blöcke bearbeitet werden.
+\item[Beliebige Ausdrücke] \hfill\\
+  Textuell notierte Ausdrücke, die vom SQL-Editor nicht weiter geprüft werden sondern ungefiltert in die Abfrage eingesetzt werden. Sofern diese Art von Ausdrücken zugelassen wird erfolgt also auch keinerlei inhaltliche Einschränkung der zur Verfügung stehenden Möglichkeiten oder eine Syntaxüberprüfung.
+\end{description}
+
+Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisch sinvollen Einschränkungen definieren. Prinzipiell wäre es dabei auch denkbar, in unterschiedlichen Komponenten verschiedene Teilmengen der Ausdrücke zuzulassen, inhaltlich erscheint das aber wenig sinnvoll. Die Schüler sollen durchaus verstehen, dass es sich bei Ausdrücken in SQL um ein allgemeines Konzept handelt, welches Prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Oder plastisch ausgedrückt: Wenn sich die Schüler aus didaktischen Gründen erstmal nur mit Ausdrücke im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt.
+
+\begin{enumerate}
+\item \textbf{Allgemeine Optionen} \\
+  Diese Optionen betreffen prinzipiell alle Stellen, an denen die entsprechenden Arten von Ausdrücken zugelassen werden.
+  \begin{enumerate}
+  \item \label{feat:expr-allow-any-text} Ausdrücke als beliebigen Text zulassen, diese Option erlaubt die Umgehung aller Einschränkungen für einfache Ausdrücke!
+  \item \label{feat:expr-allow-placeholder} An Stelle von Konstanten auch die Verwendung von Platzhaltern zulassen
+  \end{enumerate}
+
+\item \label{feat:expr-compute}  \textbf{Einfache Berechnende Ausdrücke} \\
+  Diese Ausdrücke tauchen normalerweise in \texttt{SELECT}- oder \texttt{ORDER BY}-Komponenten auf, möglicherweise aber auch als Bestandteil eines einfachen Vergleichs.
+  \begin{enumerate}
+      \item \label{feat:expr-compute-simple-func} Einfacher Funktionsaufruf mit Spalten oder Konstanten als Argument
+      \item \label{feat:expr-compute-simple-arithmetic} Einfache Rechenausdrücke mit einer mathematischen Operation und einer Konstanten
+      \item \label{feat:expr-compute-simple-concat} Konkatenation von Strings
+  \end{enumerate}
+
+\item \textbf{Einfache Vergleichende Ausdrücke} \\
+  Diese ``typischen'' Vergleichsausdrücke sollten ausreichen um einen Großteil der nötigen Vergleiche in \texttt{WHERE}, \texttt{HAVING} und \texttt{ON} Komponenten abzudecken. Die linke Seite dieser Ausdrücke ist stets eine zur Verfügung stehende Spalte, der Vergleichsoperator und die rechte Seite eine der hier aufgezählten Möglichkeiten.
+
+  \missing[inline]{Testen wie weit man mit diesen einfachen Ausdrücken bei den Aufgaben von SqlZoo oder der Übung Datenbanken kommt.}
+  \begin{enumerate}
+  \item \label{feat:expr-compare-const} Vergleich einer Spalte mit einem konstanten Wert
+  \item \label{feat:expr-compare-null} Vergleich einer Spalte gegen \texttt{NULL}
+  \item \label{feat:expr-compare-other-col} Vergleich einer Spalte mit einer anderen Spalte
+  \item \label{feat:expr-compare-simple-func} Vergleich einer Spalte mit einem einfachem berechnenden Ausdruck (siehe \ref{feat:expr-compute})
+  \item \label{feat:expr-compare-between} Test einer Spalte mit dem \texttt{BETWEEN}-Operator und zwei Konstanten
+  \item \label{feat:expr-compare-like} Nutzung des \texttt{LIKE}-Operators mit einer Konstanten
+  \item \label{feat:expr-compare-in} Nutzung des \texttt{IN}-Operators mit einer Liste von Konstanten
+  \item \label{feat:expr-compare-negate} Negation aller einfachen Ausdrücke
+  \end{enumerate}
+
+\item \textbf{Allgemeine Funktionen (in alphabetischer Reihenfolge)} \\
+  In einem Umfeld für Anfänger ist zu erwarten, dass fast jede Funktion (bzw. jede logische Gruppe an Funktionen) einer eigenen Einführung bedarf. Die Lehrkräfte sollen diese daher isoliert zur Verfügung stellen können, ohne Ablenkung durch nicht benötigte Funktionen.
+
+  Beim Unterschiedlich überladene Varianten der gleichen Funktion werden vermieden, um Irritationen zu vermeiden.
+  \begin{enumerate}
+  \item \label{feat:fun-abs} \texttt{ABS(X)}
+  \item \label{feat:fun-coalesce} \texttt{COALESCE(X,Y,...)}
+  \item \label{feat:fun-length} \texttt{LENGTH(X)}
+  \item \label{feat:fun-casing} \texttt{LOWER(X)} und \texttt{UPPER(X)}
+  \item \label{feat:fun-random} \texttt{RANDOM()}
+  \item \label{feat:fun-round} \texttt{ROUND(X,Y)}
+  \item \label{feat:fun-trim} \texttt{TRIM(X)} sowie \texttt{LTRIM(X)} und \texttt{RTRIM(X)}
+  \end{enumerate}
+
+\item \textbf{Aggregierende Funktionen (in alphabetischer Reihenfolge)} \\
+  Die Verfügbarkeit dieser Funktionen hängt von der Verfügbarkeit der \texttt{GROUP BY}-Komponente ab (\ref{feat:group-allow}).
+  \begin{enumerate}
+  \item \label{feat:fun-avg} \texttt{AVG(X)}
+  \item \label{feat:fun-count} \texttt{COUNT(X)}
+  \item \label{feat:fun-group-concat} \texttt{GROUP\_CONCAT(X,Y)}
+  \item \label{feat:fun-max-min} \texttt{MAX(X)} und \texttt{MIN(X)}
+  \item \label{feat:fun-sum} \texttt{SUM(X)}, gibt im Falle von komplett fehlenden Werten \texttt{NULL} zurück
+  \item \label{feat:fun-total} \texttt{TOTAL(X)}, gibt im Falle von komplett fehlenden Werten \texttt{0.0} zurück
+  \end{enumerate}
+\end{enumerate}
+
+\subsubsection{Sprachstufen}
+\label{sec:sql-subset-ranks}
+
+Angelehnt an die bei Racket genutzte Idee der Feature-Levels soll dieses Kapitel einige sinnvolle Untermengen von SQL definieren, auf denen die mitgelieferten Beispielprojekte aufbauen. Es handelt sich dabei um Vorschläge, nicht um die einzig möglichen Ausprägungen von sinnvoll reduzierten SQL-Varianten.
+
+\missing[inline]{Ich muss erst noch ein paar mehr Beispiele an der Hand haben, bis ich mich diesem Kapitel erneut widme.}
+
 
 \subsection{Editor für SQL}
 \label{sec:design-sql-editor}
@@ -107,20 +299,18 @@ Die Alternative dazu wäre eine Anzeige von ``Platzhaltern'' für die entspreche
 Dementsprechend wird ein anderer Ansatz verfolgt werden müssen: Es lässt sich immer ein Block zur Zeit in einen ``editieren'' Modus versetzen. Nur innerhalb dieses Blocks erlauben die Bedienelemente dann eine Änderung der Komponente. Für einige Komponenten, speziell \texttt{FROM}, \texttt{WHERE} und \texttt{HAVING} lassen sich neu anzuhängende Komponenten auch sehr gut im Rahmen dieses Modus anbieten. Es stellt sich dann natürlich die Frage, wie man Blöcke ohne einen eindeutig passenden Kontext, z.B. ein \texttt{ORDER BY}, der Abfrage hinzufügen kann. Eine Antwort darauf wird sich vermutlich erst durch reale Tests mit der Oberfläche finden lassen, die folgenden Ansätze sind aber denkbar:
 
 \begin{itemize}
-  \item Die \texttt{SELECT}-Komponente hat einen losen Bezug zu allen anderen Komponenten. Schwierig einzuordnende Komponenten wie \texttt{WHERE}, \texttt{GROUP BY}, \texttt{ORDER BY} \texttt{LIMIT} oder auch \texttt{UNION} werden immer dann angeboten, wenn die \texttt{SELECT}-Komponente gerade editiert wird.
-  \item Eine Leiste mit möglichen Komponenten ohne eindeutigen Kontext erlaubt deren Ergänzung zu jedem Zeitpunkt.
+\item Die \texttt{SELECT}-Komponente hat einen losen Bezug zu allen anderen Komponenten. Schwierig einzuordnende Komponenten wie \texttt{WHERE}, \texttt{GROUP BY}, \texttt{ORDER BY} \texttt{LIMIT} oder auch \texttt{UNION} werden immer dann angeboten, wenn die \texttt{SELECT}-Komponente gerade editiert wird.
+\item Eine Leiste mit möglichen Komponenten ohne eindeutigen Kontext erlaubt deren Ergänzung zu jedem Zeitpunkt.
 \end{itemize}
 
 \info[inline]{Im Editor immer zu sehen, aber aktuell nicht beschrieben: Eine Tabelle mit den Daten, welche die Abfrage im aktuellen Zustand liefern würde.}
 
-\subsubsection{Vergleiche und Ausdrücke}
+\subsubsection{Unterstützung bei Ausdrücken und Vergleichen}
 \label{sec:sql-compare-and-expression}
 
 Die Abbildungen des Prototypen haben einen Umstand schon vorweggenommen: Die Vergleiche in den \texttt{ON} und \texttt{WHERE} Ausdrücken sollten nach Möglichkeit keine einfachen Textfelder sein, sondern dem Benutzer sinnvolle, kontextabhängige Vorschläge machen.
 
-Da es an allen Stellen, bei denen in SQL Werte verglichen oder ausgegeben werden, möglich ist, diese durch Funktionen zu verändern oder durch Ausdrücke zu berechnen, wird allerdings ein Rückgriff auf freie Ausdrücke vorgesehen werden müssen. Es wird kaum möglich sein, einen gestützten Editor für den vollen Umfang aller denkbaren Funktionen bereitzustellen: spätestens aufgrund der möglichen Schachtelung von Ausdrücke können diese sehr schnell enorm kompliziert werden. Eine inhaltliche Prüfung dieser Ausdrücke ist zumindest im Rahmen dieser Arbeit nicht zu leisten.
-
-Und trotzdem lässt sich ein Großteil der für die Schüler nötigen Verknüpfungen oder Ausdrückeganz gut kontextgestützt implementieren. Dieser Unterstützungsprozess basiert dabei auf Datentypen und geht immer von der Auswahl einer Spalte der Abfrage aus. Wenn ein Schüler also einen neuen Vergleich hinzufügen möchte, wählt er zunächst eine Spalte und erhält dann Vorschläge für mögliche Operatoren und die rechte Seite des Vergleichs. Für Ausdrücke im \texttt{SELECT} ist dieses Vorgehen ähnlich, das Ergebnis des Ausdrucks muss dann nur nicht zwingend ein Boolescher Wert sein.
+Der überwiegende Teil an für Schüler sinnvollen Verknüpfungen oder Ausdrücken lässt sich gut kontextgestützt implementieren. Dazu werden im Editor einige typische Schablonen hinterlegt, zu deren ``Löchern'' dann Vorschläge von der Entwicklungsumgebung gemacht werden. Dieser Unterstützungsprozess basiert dabei auf Datentypen und geht immer von der Auswahl einer Spalte der Abfrage aus. Wenn ein Schüler also einen neuen Vergleich hinzufügen möchte, wählt er zunächst eine Spalte und erhält dann Vorschläge für mögliche Operatoren und die rechte Seite des Vergleichs. Für Ausdrücke im \texttt{SELECT} ist dieses Vorgehen ähnlich, das Ergebnis des Ausdrucks muss dann nur nicht zwingend ein Boolescher Wert sein. Im Rahmen dieser Arbeit werden diese strukturell vordefinierten Ausdrücke als \textbf{einfache Ausdrücke} bezeichnet und könnten z.B. die folgenden Szenarien unterstützen:
 
 \begin{itemize}
 \item Für \texttt{TEXT} Spalten können in Ausdrücken einige einfache Stringfunktionen wie \texttt{LOWER} oder \texttt{UPPER}) angeboten werden. Ebenfalls interessant wäre eine Implementierung der \texttt{LENGTH}-Funktion, da diese einen vom Parametertyp abweichenden Rückgabetyp aufweist.
@@ -129,6 +319,10 @@ Und trotzdem lässt sich ein Großteil der für die Schüler nötigen Verknüpfu
 \item Für Vergleiche von \texttt{TEXT} Spalten bietet sich der unscharfe Vergleich mit dem \texttt{LIKE} Ausdruck an.
 \item Perspektivisch interessant, aber vermutlich schon außerhalb des Umfangs dieser Arbeit, wäre der Umgang mit Datums und Zeitfunktionen.
 \end{itemize}
+
+Da es an allen Stellen, bei denen in SQL Werte verglichen oder ausgegeben werden, möglich ist, diese durch Funktionen zu verändern oder durch Ausdrücke zu berechnen, wird allerdings ein Rückgriff auf beliebige, textuelle Ausdrücke vorgesehen werden müssen. Es wird kaum möglich sein, einen gestützten Editor für den vollen Umfang aller denkbaren Ausdrücke bereitzustellen: spätestens aufgrund der möglichen Schachtelung und Verkettung können diese sehr schnell enorm kompliziert werden. Eine inhaltliche Prüfung solcher \textbf{beliebiger Ausdrücke} wäre zumindest im Rahmen dieser Arbeit nicht zu leisten.
+
+Zwischen diesen beiden Extremen läge die Möglichkeit einen allgemeinen Editor für Ausdrücke zu implementieren. Dieser würde, ähnlich wie Ausdrücke in Scratch, die Schachtelung und Verkettung von mehr oder minder beliebigen, aber stets syntaktisch korrekten, Teil-Ausdrücken unterstützen. Abfragen mit dieser strukturellen Freiheit werden als \textbf{komplexe Ausdrücke} bezeichnet.
 
 \unsure[inline]{Ich bin mir noch nicht sicher, wie ich das gerne handhaben möchte. Vermutlich ein mehr oder minder separater Editor für Ausdrücke? Auf jeden Fall muss ich hier den Umfang sehr deutlich vorher abstecken. Gerade an dieser Stelle wäre ein Scratch-ähnlicher Editor dann doch wieder ein echter Gewinn. Für den Anfang wird es aber auch ein einfaches Textfeld tun müssen, von da aus kann ich dann schauen wie weit ich komme.}
 
@@ -165,142 +359,12 @@ Um eine Interaktion mit Endbenutzern zu ermöglichen können in Abfragen auch be
 
 \subsubsection{Manipulation von Daten}
 
-Neben den bisher ausführlich besprochenen \texttt{SELECT}-Anweisungen müssen sich natürlich \texttt{INSERT}-, \texttt{UPDATE}- und \texttt{DELETE}-Anweisungen umsetzen lassen. Da diese ihrer Natur nach nicht idempotent sind verbietet sich natürlich eine wiederholte, automatische Ausführung während der Entwicklungszeit. Es ist zu erwarten, dass die meisten von den Schülern verfassten Abfragen ausführlichen Gebrauch von den in Kapitel \ref{sec:design-query-params} beschriebenen Parametern machen.
+Neben den bisher ausführlich besprochenen \texttt{SELECT}-Anweisungen müssen sich natürlich \texttt{INSERT}-, \texttt{UPDATE}- und \texttt{DELETE}-Anweisungen umsetzen lassen. Da diese ihrer Natur nach nicht idempotent sind verbietet sich natürlich eine wiederholte, automatische Ausführung während der Entwicklungszeit. Es ist zu erwarten, dass die meisten von den Schülern verfassten Abfragen dieser Art ausführlichen Gebrauch von den in Kapitel \ref{sec:design-query-params} beschriebenen Parametern machen.
 
-\subsection{Didaktisch sinvolle Teilmengen von SQL}
-\label{sec:sql-subset}
+\subsection{Konzept für Oberflächen}
+\label{sec:design-ui-concept}
 
-Das vorige Kapitel hat schon viele praktische Probleme bei einer uneingeschränkten Umsetzung des SQL-Standards aufgezeigt und dabei wiederholt von einer nicht näher definierten ``sinnvollen Teilmenge'' gesprochen. Genau diese Definition wird nun in diesem Kapitel nachgeholt.
-
-\subsubsection{Mögliche lokale Einschränkungen}
-\label{sec:sql-subset-local}
-
-\warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in der Entwicklungsumbegung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von SQL. Um zu sehen, welche Funktionalität tatsächlich implemtiert worden ist lohnt sich ein Blick in Anhang \ref{app:implemented-features}:~\nameref{app:implemented-features}.}
-
-Wir klären in diesem Kapitel zunächst, welche Features von SQL überhaupt für die Entwicklungsumgebung von Belang sind und wie diese voneinander abhängen. Die Abgrenzung von Teilsprachen baut auf diesen hier herausgearbeiteten Optionen auf und ist Gegenstand von Kapitel \ref{sec:sql-subset-ranks}.
-
-Glücklicherweise erlaubt die Struktur von SQL die Angabe von sehr lokalen Einschränkungen, deren Auswirkungen sich sehr gut abschätzen lassen. Einzig der Umgang mit Ausdrücken überspannt viele Bereiche von SQL: Diese können an sehr vielen Stellen auftreten und müssen dementsprechend sorgfältig analysiert werden. Daher beschränken sich alle Stellen an denen der Einsatz von Ausdrücken sinnvoll möglich ist auf eine einfache ``Ausdrücke zulassen'' Option, deren Details dann später separat geregelt werden.
-
-\unsure[inline]{Erwähnen, inwiefern das herauslösen von Sprachfeatures bei einer ``normalen'' Programmiersprache komplizierter wäre? Es gibt bei SQL halt vergleichsweise wenige Abhängigkeiten und daher viele mögliche Reihenfolgen in denen man die Features aktivieren kann. Bei einer Sprache wie z.B. Java bauen die einzelnen Sprachfeatures sehr viel stärker aufeinander auf, es ergeben sich deutlich weniger Reihenfolgen in denen man diese sinnvoll aktivieren könnte.}
-
-Technisch gesehen soll es für Lehrkräfte möglich sein, fast beliebige Teilmengen von SQL für ihre Schüler vorzugeben, nicht nur die im Rahmen dieser Arbeit als sinnvoll erachteten Kombinationen. Das grundsätzliche Vorgehen sollte dabei einer Whitelist entsprechen: Jede explizit erlaubte Funktionalität steht im SQL-Editor (siehe \ref{sec:design-sql-editor}) zur Verfügung. Und sofern eine Funktionalität nicht erlaubt sein sollte, ist sie auch nicht verfügbar.
-
-Prinzipiell wäre es auch denkbar, in unterschiedlichen Komponenten verschiedene Teilmengen der Ausdrücke zuzulassen, inhaltlich erscheint das aber wenig sinnvoll. Die Schüler sollen durchaus verstehen, dass es sich bei Ausdrücken in SQL um ein allgemeines Konzept handelt, welches Prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Das folgende Beispiel erklärt den Gedankengang dahinter etwas griffiger: Wenn sich die Schüler aus didaktischen Gründen erstmal nur mit Ausdrücke im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt.
-
-Einige der hier beschriebenen Optionen sind redundant. Das liegt zum einen an SQL selbst, die Sprache sieht schlichtweg mehrere syntaktische Varianten für semantisch äquivalente Sachverhalte vor. Zum anderen kann es aber auch aus didaktischen Gründen sinnvoll sein, die Wissensvermittlung mit einer Reihe von Spezialfällen zu beginnen\todo{Beleg}.
-
-\begin{enumerate}
-\item \textbf{Projektionen mit \texttt{SELECT}} \\
-  Diese Komponente als solche kann natürlich nicht ausgeschlossen werden. Außerdem muss mindestens \ref{feat:select-all} $\lor$ \ref{feat:select-column} erlaubt sein, sonst können keine gültigen SQL-Abfragen erstellt werden.
-  \begin{enumerate}
-  \item \label{feat:select-all} Auswahl aller Spalten (``Sternchen-Operator'' \texttt{SELECT *})
-  \item \label{feat:select-column} Auswahl von Spalten
-  \item \label{feat:select-alias} Vergabe von Aliasnamen
-  \item \label{feat:select-expression} Anwendung von Ausdrücken
-  \item \label{feat:select-sub} Unterabfragen in Ausdrücken zulassen
-  \end{enumerate}
-\item \textbf{Angabe von Datenquellen mit \texttt{FROM}} \\
-  Auch die Auslassung dieser Komponente ist nicht zulässig, obwohl einige SQL Dialekte dies durchaus erlauben. Der Mehrwert dieser Auslassung wäre aus didaktischer Sicht aber nicht gegeben: Die Schüler sollen SQL Abfragen grundsätzlich auf Tabellen beziehen und keine Daten ``aus der Luft greifen''. Die Funktionalität der komplexen \texttt{ON}-Bedingung \ref{feat:from-on-expression} hängt von den Möglichkeiten im \texttt{WHERE} und \texttt{HAVING} ab.
-  \begin{enumerate}
-  \item \label{feat:from-cross-join} Kreuzprodukt (\texttt{JOIN}) zulassen
-  \item \label{feat:from-cross-comma} Kreuzprodukt (komma-separierte Schreibweise) zulassen
-  \item \label{feat:from-natural-join} Automatische innere Verknüpfung zulassen (\texttt{NATURAL JOIN})
-  \item \label{feat:from-inner-join} Innere Verknüpfung zulassen (\texttt{INNER JOIN}), erfordert \ref{feat:from-using} $\lor$ \ref{feat:from-on-simple} $\lor$ \ref{feat:from-on-expression}
-  \item \label{feat:from-left-join} Linke äußere Verknüpfung zulassen (\texttt{LEFT OUTER JOIN}), \ref{feat:from-using} $\lor$ \ref{feat:from-on-simple} $\lor$ \ref{feat:from-on-expression}
-  \item \label{feat:from-right-join} Rechte äußere Verknüpfung zulassen (\texttt{RIGHT OUTER JOIN}), \ref{feat:from-using} $\lor$ \ref{feat:from-on-simple} $\lor$ \ref{feat:from-on-expression}
-  \item \label{feat:from-full-join} Volle äußere Verknüpfung zulassen (\texttt{FULL OUTER JOIN}), \ref{feat:from-using} $\lor$ \ref{feat:from-on-simple} $\lor$ \ref{feat:from-on-expression}
-  \item \label{feat:from-using} \texttt{USING}-Bedingung zulassen
-  \item \label{feat:from-on-simple} Einfache \texttt{ON}-Bedingung mit Vergleichsoperator zulassen
-  \item \label{feat:from-on-expression} Allgemeine Ausdrücke in \texttt{ON}-Bedingung zulassen
-  \item \label{feat:from-recursive} Rekursive Verknüpfung zulassen 
-  \item \label{feat:from-sub} Unterabfragen zulassen
-  \end{enumerate}
-\item \textbf{Filterung mit \texttt{WHERE} und \texttt{HAVING}} \\
-  Da an dieser Stelle Ausdrücke zum Einsatz kommen, sind prinzipiell zwei unterschiedliche Ansätze denkbar. Zunächst ist es möglich eine Reihe von ``typischen'' Vergleichen zuzulassen. Die Optionen \ref{feat:where-compare-const}, \ref{feat:where-compare-null}, \ref{feat:where-compare-other-col}, \ref{feat:where-compare-simple-func}, \ref{feat:where-compare-simple-expression} und \ref{feat:where-compare-negate} sind nichts weiter als eine Aneinanderreihung von speziellen Vergleichen, mit denen sich aber der Großteil aller Einschränkungen vornehmen lassen können sollte. Dem gegenüber steht der Ansatz einfach beliebige boolesche Ausdrücke zu erlauben, was sowohl die Komplexität der möglichen Ausdrücke steigert als auch den Anspruch an den Benutzer erhöht.
-  \begin{enumerate}
-  \item \label{feat:where-allow} \texttt{WHERE} zulassen
-  \item \label{feat:having-allow} \texttt{HAVING} zulassen
-  \item \label{feat:where-and} Verknüpfungen mit \texttt{AND}
-  \item \label{feat:where-or} Verknüpfungen mit \texttt{OR}
-  \item \label{feat:where-compare-const} Vergleich einer Spalte der Ergebnismenge mit einem konstanten Wert
-  \item \label{feat:where-compare-null} Vergleich einer Spalte der Ergebnismenge gegen \texttt{NULL}
-  \item \label{feat:where-compare-other-col} Vergleich einer Spalte der Ergebnismenge mit einer anderen Spalte der Ergebnismenge
-  \item \label{feat:where-compare-simple-func} Vergleich einer Spalte der Ergebnismenge mit einem einfachen (nicht geschachtelten) Funktionsausdruck
-  \item \label{feat:where-compare-simple-expression} Vergleich einer Spalte der Ergebnismenge mit einem einfachen Rechenausdruck
-  \item \label{feat:where-compare-negate} Negation simpler Ausdrücke
-  \item \label{feat:where-any-expression} Beliebige Vergleichsausdrücke, also keine strukturelle Einschränkung der Vergleiche
-  \item \label{feat:where-like} Nutzung des \texttt{LIKE}-Operators
-  \item \label{feat:where-between} Nutzung des \texttt{BETWEEN}-Operators
-  \item \label{feat:where-in} Nutzung des \texttt{IN}-Operators
-
-    \unsure[inline]{Umgang mit Platzhaltern}
-  \end{enumerate}
-\item \textbf{Bildung von Gruppen mit \texttt{GROUP BY}}
-  \begin{enumerate}
-  \item \label{feat:group-allow} \texttt{GROUP BY} zulassen
-  \item \label{feat:group-multiple} Grupperierung mehrerer Spalten zulassen
-  \end{enumerate}
-\item \textbf{Sortierung mit \texttt{ORDER BY}} \\
-  Bei dieser Komponente fehlt bewusst die Möglichkeit anhand eines Spaltenindexes aus dem \texttt{SELECT} zu sortieren. Da die gute Lesbarkeit der Abfragen ein erklärtes Ziel der Entwicklungsumgebung ist, wurde auf diese redundante Möglichkeit der Spaltenauswahl verzichtet.
-  \begin{enumerate}
-  \item \label{feat:order-allow} \texttt{ORDER BY} zulassen, die Auswahl der Richtung (\texttt{ASC} und \text{DESC}) ist dann grundsätzlich möglich
-  \item \label{feat:order-select} Sortierung nach im \texttt{SELECT} erwähnten Spalten oder Ausdrücken zulassen
-  \item \label{feat:order-any-column} Sortierung nach beliebigen Spalten zulassen
-  \item \label{feat:order-expression} Sortierung anhand eines beliebigen Ausdrucks zulassen
-    \unsure[inline]{Umgang mit Platzhaltern}
-  \end{enumerate}
-  
-  \begin{enumerate}
-  \item \textbf{Beschränkung der Datenmenge mit \texttt{LIMIT}} \\  
-    \unsure[inline]{Vermutlich nötig für Oberfläche}
-  \end{enumerate}
-\end{enumerate}
-
-Nach dieser Betrachtung der mit der unmittelbaren SQL-Syntax zusammenhängenden Funktionalität ist es nun an der Zeit, sich den Ausdrücken ausführlicher zu widmen.
-
-\begin{enumerate}
-\item \textbf{Platzhalter und Verschachtelungen} \\
-  Diese Optionen betreffen prinzipiell alle Ausdrücke und sollen nicht bezüglich der Verwendung innerhalb einer Komponente eingeschränkt werden.
-  \begin{enumerate}
-  \item \label{feat:expr-allow-placeholder} Verwendung von Platzhaltern zulassen
-  \item \label{feat:expr-allow-subquery} Verwendung von Unterabfragen zulassen
-  \end{enumerate}
-
-\item \textbf{Allgemeine Funktionen (in alphabetischer Reihenfolge)} \\
-  In einem Umfeld für Anfänger ist zu erwarten, dass fast jede Funktion (bzw. jede logische Gruppe an Funktionen) einer eigenen Einführung bedarf. Die Lehrkräfte sollen diese daher isoliert zur Verfügung stellen können, ohne Ablenkung durch nicht benötigte Funktionen. Ferner werden verschiedene Variante der gleichen Funktionen vermieden, um Irritationen zu vermeiden.
-  \begin{enumerate}
-  \item \label{feat:fun-abs} \texttt{ABS(X)}
-  \item \label{feat:fun-coalesce} \texttt{COALESCE(X,Y,...)}
-  \item \label{feat:fun-length} \texttt{LENGTH(X)}
-  \item \label{feat:fun-casing} \texttt{LOWER(X)} und \texttt{UPPER(X)}
-  \item \label{feat:fun-random} \texttt{RANDOM()}
-  \item \label{feat:fun-round} \texttt{ROUND(X,Y)}
-  \item \label{feat:fun-trim} \texttt{TRIM(X)} sowie \texttt{LTRIM(X)} und \texttt{RTRIM(X)}
-  \end{enumerate}
-
-\item \textbf{Aggregierende Funktionen (in alphabetischer Reihenfolge)} \\
-  Die Verfügbarkeit dieser Funktionen hängt von der Verfügbarkeit der \texttt{GROUP BY}-Komponente ab (\ref{feat:group-allow}).
-  \begin{enumerate}
-  \item \label{feat:fun-avg} \texttt{AVG(X)}
-  \item \label{feat:fun-count} \texttt{COUNT(X)}
-  \item \label{feat:fun-group-concat} \texttt{GROUP\_CONCAT(X,Y)}
-  \item \label{feat:fun-max-min} \texttt{MAX(X)} und \texttt{MIN(X)}
-  \item \label{feat:fun-sum} \texttt{SUM(X)}, gibt im Falle von komplett fehlenden Werten \texttt{NULL} zurück
-  \item \label{feat:fun-total} \texttt{TOTAL(X)}, gibt im Falle von komplett fehlenden Werten \texttt{0.0} zurück
-  \end{enumerate}
-\end{enumerate}
-
-\subsubsection{Sprachstufen}
-\label{sec:sql-subset-ranks}
-
-Angelehnt an die bei Racket genutzte Idee der Feature-Levels soll dieses Kapitel einige sinnvolle Untermengen von SQL definieren, auf denen die mitgelieferten Beispielprojekte aufbauen. Es handelt sich dabei um Vorschläge, nicht um die einzig möglichen Ausprägungen von sinnvoll reduzierten SQL-Varianten.
-
-\missing[inline]{Ich muss erst noch ein paar mehr Beispiele an der Hand haben, bis ich mich diesem Kapitel erneut widme.}
-
-\subsection{Konzept für Oberflächen mit HTML}
-\label{sec:design-ui-editor}
-
-\warning{Diese Oberflächen werden nicht in reinem HTML verfasst, es kommen noch einige Erweiterungen in Form einer Templatingengine zum Einsatz. Diese technischen Details bleiben den Entwicklern allerdings verborgen, im Normalfall sehen sie nicht einmal den ``normalen'' HTML-Code. Ähnlich wie für die SQL-Abfragen wird also auch für die Oberflächen ein dezidierter Editor implementiert. Die Schüler sollten zu keinem Zeitpunkt selber Quelltexte tippen müssen, optional aber durchaus die Möglichkeit dazu haben.}
+\warning{Diese Oberflächen werden nicht in reinem HTML verfasst, es kommen noch einige Erweiterungen in Form einer Templatingengine zum Einsatz. Diese technischen Details bleiben den Entwicklern allerdings verborgen, im Normalfall sehen sie nicht einmal den ``normalen'' HTML-Code. Ähnlich wie für die SQL-Abfragen wird also auch für die Oberflächen ein dezidierter Editor (Kapitel \ref{sec:design-ui-editor}) implementiert. Die Schüler sollten zu keinem Zeitpunkt selber Quelltexte tippen müssen, optional aber durchaus die Möglichkeit dazu haben.}
 
 Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von normalen Endanwendern bedienen lassen können Bedarf es natürlich einer entsprechenden Benutzeroberfläche. Hier bietet sich aus Gründen der einfachen Weitergabe eine webbasierte Oberfläche an: So entfällt bei den Endanwendern jegliche Installation und gerade für datenzentrierte, verteilte Anwendungen ist eine einheitliche Sicht auf den Datenbestand selbstverständlich essentiell. Beides Umstände, die sich gut mit einem zentralen Datenbestand auf einem Server erreichen lassen.
 
@@ -314,21 +378,20 @@ Grundsätzlich unterschieden werden alle Bedienelemente anhand der Anzahl der zu
 
 \subsubsection{Allgemeine Bedienelemente}
 
-Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trotzdem muss es natürlich eine Möglichkeit geben statische Texte ohne Bindung an irgendwelche Abfragen zur Anzeige zu bringen. Die hier vorgestellten Bedienelemente funktionieren auch ohne jede Datenquelle, die folgenden Kapitel stellen ggfs. aber noch Erweiterungen mit Datenanbindung vor. Ferner ersetzen diese kurzen Beschreibungen keinesfalls die technische Dokumentation.
+Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trotzdem muss es natürlich eine Möglichkeit geben statische Texte ohne Bindung an irgendwelche Abfragen zur Anzeige zu bringen. Die hier vorgestellten Bedienelemente funktionieren auch ohne jede Datenquelle, die folgenden Kapitel stellen aber noch Erweiterungen zur Datenanbindung vor. Ferner ersetzen diese kurzen Beschreibungen keinesfalls die technische Dokumentation, diese findet sich im Anhang.
 
 \begin{description}
-  \item[Überschriften] \hfill \\
-    HTML sieht die Verwendung von Überschriften in sechs Hierarchiebenen vor und stellt dafür distinkte Elemente zur Verfügung (\texttt{<h1>} bis \texttt{<h6>}). Dieser Umstand soll nicht unmittelbar im Bedienkonzept des Editors abgebildet werden: Hier soll es das allgemeine Bedienelement ``Überschrift'' geben, zu dem sich dann eine Ebene auswählen lässt.
-  \item[Absätze] \hfill \\
-    Blöcke von zusammenhängendem Text werden als Absatz ausgezeichnet, das entsprechende HTML-Äquivalent ist das \texttt{<p>}-Element.
-  \item[Listen] \hfill \\
-    Strukturiert zusammenhängende Daten werden als sortierte oder unsortierte Liste (\texttt{<ol>} bzw. \texttt{<ul>} in HTML) gruppiert. Wie schon bei den Überschriften soll an dieser Stelle nur ein logisches Listenelement zum Einsatz kommen, dass dafür über eine Eigenschaft ``Nummerierung'' verfügt.      
-  \item[Bilder] \hfill \\
-    Technisch gesehen nicht nötig, aber für Schüler vermutlich motivierend, ist die Einbindung von Bildern.
+\item[Überschriften] \hfill \\
+  HTML sieht die Verwendung von Überschriften in sechs Hierarchiebenen vor und stellt dafür distinkte Elemente zur Verfügung (\texttt{<h1>} bis \texttt{<h6>}). Dieser Umstand soll nicht unmittelbar abgebildet werden. Stattdessen gibt es ein allgemeines Bedienelement ``Überschrift'', zu dem sich dann eine Ebene auswählen lässt.
+\item[Absätze] \hfill \\
+  Blöcke von zusammenhängendem Text werden als Absatz ausgezeichnet, das entsprechende HTML-Äquivalent ist das \texttt{<p>}-Element.
+\item[Listen] \hfill \\
+  Strukturiert zusammenhängende Daten werden als sortierte oder unsortierte Liste (\texttt{<ol>} bzw. \texttt{<ul>} in HTML) gruppiert. Wie schon bei den Überschriften soll an dieser Stelle nur ein logisches Listenelement zum Einsatz kommen, dass dafür über eine Eigenschaft ``Nummerierung'' verfügt.      
+\item[Bilder] \hfill \\
+  Zwar technisch betrachtet ein eher simples Unterfangen, für Schüler erfahrungsgemäß aber motivierend, ist die Einbindung von Bildern. Diese entsprechen einem HTML \texttt{<img>}-Element, für welches das \texttt{src}-Attribut gesetzt werden muss.
 \end{description}
 
-Spätestens durch die Aufnahme von Bildern ist auch für statische Webseiten eindeutig, dass es möglich sein muss diese Bedienelemente über die Angabe von Parametern zu beinflussen. Praktisch werden diese Parameter im Regelfall jedoch erst zur Laufzeit durch die Ausführung einer Abfrage mit konkreten Werten angegeben.
-
+Spätestens durch die Aufnahme von Bildern ist auch für statische Webseiten eindeutig, dass es möglich sein muss diese Bedienelemente über die Angabe von Parametern zu beinflussen. In den meisten Fällen werden diese Parameter zur Laufzeit durch die Ausführung einer Abfrage mit konkreten Werten bestückt, die Angabe von konstanten Werten ist aber ebenfalls möglich.
 
 \subsubsection{Bindung von Daten an die Oberfläche}
 \label{sec:design-ui-bind-output}
@@ -403,14 +466,34 @@ In einem solchen Fall soll es also möglich sein auch Bedienelememente wie Combo
 </select>
 \end{lstlisting}
 
-\subsubsection{Seitenstruktur}
+\subsubsection{Seitenstruktur und Navigation}
 
-Die grundsätzliche Struktur entspricht der eines Baumes mit einer Wurzel, also der Einstiegsseite. Unter diese Wurzelseite können dann weitere Seiten eingepflegt werden, die ggfs. auch Eigenschaften ihrer Eltern übernehmen können. Diese streng hierarchische Struktur macht es vergleichsweise leicht, optional ein sehr einfaches Templating-System zu definieren.
+Zunächst ist festzuhalten, dass die serverseitige Erzeugung von Seiten zur Laufzeit nicht vorgesehen ist. Stattdessen definiert der Entwickler eine Reihe von serverseitig statischen HTML-Seiten samt einiger Datenquellen, die dann vom Client des Anwenders ausgeführt werden. Der Client analysiert dann zunächst die in der Seite hinterlegten Datenquellen und führt ggfs. weitere HTTP-Anfragen aus, um alle Daten einzusammenln.
+
+Die Seiten können beliebig in einer Ordnerstruktur organisiert werden, die Dateipfade bilden nicht die Grundlage für das Routing. Diese Entkoppelung der Pfade im Dateisystem von den URLs erlaubt es den Schülern die Übergabe von Parametern und auch die sonstige Navigationsstruktur frei zu gestalten.
+
+Zu jeder dieser Seiten können eigene Datenquellen hinterlegt werden. Dabei sind bisher die folgenden Möglichkeiten vorgesehen:
+
+\begin{description}
+  \item[Parameter aus URLs] \hfill \\
+    Zur Übergabe von Informationen zwischen Seiten können Teile der URL als Parameter für die Seite markiert werden.
+  \item[Abfragen] \hfill \\
+    Die ``typische'' Datenquelle für Seiten.
+  \item[Variablen \& Konstanten] \hfill \\
+    Manchmal kann es nötig sein, verschiedene Konstrukte ohne eine Datenbank im Hintergrund zu erproben. In diesem Fall bietet sich die Verwendung von vordefinierten Werten an.
+\end{description}
+
+Damit für jede Seite eindeutig ist, über welche kanonischen URLs sie angesprochen werden kann muss der Entwickler eine Routing-Konfiguration hinterlegen. In dieser wird einem einfachen Pfad, ggfs. auch mit Platzhaltern für Parameter, ein eindeutiger Name sowie eine anzuzeigende HTML-Seite zugewiesen. Der Name ist nötig um, unabhängig von einer sich möglicherweise ändernden Pfadangabe, ein eindeutiges Ziel für Links angeben zu können. Nur wenn diese Eindeutigkeit hergestellt ist, kann der Entwickler auf z.B. nicht existierende Linkziele oder fehlende Parameter hingewiesen werden.
+
+Für einen einfachen Blog wäre z.B. die folgende interne Repräsentation der Konfiguration denkbar:
+
+\begin{lstlisting}[language=JavaScript, caption=Einfache Routen für einen Blog, label=lst:json:simple-routing-blog]
+{ path : "/",            name : "Hauptseite", page : "index.html",
+  path : "/beitrag/:id", name : "Beitrag",    page : "beitrag.html" }
+\end{lstlisting}
 
 \subsection{Editor für Oberflächen}
-
-\warning{Nicht alle hier beschriebenen Bedienelemente sind notwendigerweise in der Entwicklungsumbegung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Bedienelementen einer Benutzeroberfläche. Um zu sehen, welche Funktionalität tatsächlich implemtiert worden ist lohnt sich ein Blick in Anhang \ref{app:implemented-features}:~\nameref{app:implemented-features}.}
-
+\label{sec:design-ui-editor}
 
 \subsection{Beispielhafte Datenbasen}
 \label{sec:example-queries}
