@@ -41,7 +41,6 @@
    basicstyle=\footnotesize\ttfamily,
    showstringspaces=false,
    showspaces=false,
-   numbers=left,
    numberstyle=\footnotesize,
    numbersep=9pt,
    tabsize=2,
@@ -49,6 +48,8 @@
    showtabs=false,
    captionpos=b
 }
+
+\lstset{escapeinside={(*@}{@*)}}
 
 \newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{\textbf{Unsure}: #2}}
 \newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{\textbf{Change}: #2}}
