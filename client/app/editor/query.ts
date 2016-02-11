@@ -100,7 +100,7 @@ export class Query {
         for (var i = 0; i < this.model.from.joins.length; ++i) {
             var join = this.model.from.joins[i];
 
-            var keyword;
+            var keyword : string;
             switch(join.type) {
             case "comma":
                 keyword = ",";
@@ -108,7 +108,7 @@ export class Query {
                 keyword = "JOIN";
             }
 
-            fromSeries += `\n${keyword} ${join.table} ${join.alias}`;
+            fromSeries += `\n\t${keyword} ${join.table} ${join.alias}`;
         }
             
 

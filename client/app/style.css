@@ -20,6 +20,14 @@
     color: limegreen;
 }
 
+.block.select .column:after {
+    content: ", ";
+}
+
+.block.select .column:last-child:after {
+    content: "";
+}
+
 
 
 nav.front {
