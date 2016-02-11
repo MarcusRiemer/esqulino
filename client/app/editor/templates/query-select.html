@@ -1,22 +1,30 @@
 <div class="block select">
-  <div *ngIf="!editing">     
-    <span (click)="invertEdit()"
-          class="syntax">SELECT</span>
-    <span *ngFor="#column of select.columns; #last = last"
-          class="column">
-      {{ column.column }} AS {{ column.asName }}<span *ngIf="!last">,</span>
-    </span>
-  </div>
-  
-  <div *ngIf="editing">
-    <div (click)="invertEdit()"
-         class="syntax">
-      SELECT
+  <div class="row">
+    <div class="col-xs-2"
+         (click)="invertEdit()">
+      <span class="keyword">SELECT</span>
     </div>
-    <div *ngFor="#column of select.columns;"
-         class="row">
-      <div class="col-xs-offset-1 col-xs-11">
-        <input value="{{ column.column }}"> AS {{ column.asName }}
+    <div class="col-xs-10">
+      <div *ngIf="!editing">
+        <span *ngFor="#column of select.columns; #last = last"
+              class="column">
+          {{ column.column }}&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.asName }}<span *ngIf="!last">,</span>
+        </span>
+      </div>
+      
+      <div *ngIf="editing">
+        <div *ngFor="#column of select.columns;"
+             class="row">
+          <div class="col-xs-5">
+            <input  class="form-control" value="{{ column.column }}">
+          </div>
+          <div class="col-xs-1 keyword">
+            AS
+          </div>
+          <div class="col-xs-5">
+            <input class="form-control" value="{{ column.asName }}">
+          </div>
+        </div>
       </div>
     </div>
   </div>
