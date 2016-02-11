@@ -374,11 +374,30 @@ Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von norm
 
 Grundsätzlich unterschieden werden alle Bedienelemente anhand der Anzahl der zu erwartenden Zeilen und den nötigen Eingabeoptionen. Die Kapitel \ref{sec:design-ui-bind-output} \nameref{sec:design-ui-bind-output} und \ref{sec:design-ui-bind-input} \nameref{sec:design-ui-bind-input} erläutern diese Unterscheidung noch einmal ausführlich. Abbildung \ref{fig:ui-element-concept} verdeutlicht diese Kategorisierung aber schon einmal Anhand einiger Beispiele.
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering \input{images/ui-element-concept}
   \caption{Einordnung von Bedienelementen}
   \label{fig:ui-element-concept}
 \end{figure}
+
+\subsubsection{Layout}
+
+Eine immer wiederkehrende Frage bei der Entwicklung von Webseiten ist die nach dem Layout der gesamten Seite. Technisch gesehen erfolgt die Umsetzung des Layouts heutzutage über eine Vielzahl unterschiedlicher CSS-Direktiven, deren Erstellung keinesfalls ein Kernbereich der Entwicklungsumgebung ist. Allerdings lassen sich auf den meisten Seiten immer wiederkehrende Strukturen feststellen: Die Unterteilung der Seite in ein Raster aus Zeilen und Spalten. Abbildung \ref{fig:grid-example} zeigt ein solches Layout. Dabei werden die beiden obersten Zeilen für den Header und die Pfadangabe nicht weiter in Spalten unterteilt. Die dritte Zeile enthält drei Spalten (Navigation, Inhalt und eine Leiste für Module), wobei diese letzte Modulspalte wiederum mehrere Zeilen enthält.
+
+\begin{figure}[p]
+  \includegraphics[width=\textwidth]{sketches/grid-example}
+  \caption{Seite mit einem Raster aus Zeilen und Spalten}
+  \label{fig:grid-example}
+\end{figure}
+
+Diese Layoutstruktur wird mittlerweile von einer Vielzahl von vorhandenen CSS-Bibliotheken unterstützt und soll auch das grundsätzliche Gedankenmodell für die hier beschriebenen Oberflächen sein. Es ergeben sich daraus die folgenden Layoutelemente:
+
+\begin{description}
+\item[Zeilen] \hfill \\
+  Zeilen enthalten eine oder mehrere Spalten, wobei jeder Inhalt zwingend in einer Spalte platziert werden muss.
+\item[Spalten] \hfill \\
+  Spalten verfügen über eine ganzzahlige Breite, wobe die maximale Breite einer Zeile 12 beträgt. Sollte die Summe der Spalten einer Zeile diese Breite überschreiten, wird sie umgebrochen.
+\end{description}
 
 \subsubsection{Allgemeine Bedienelemente}
 
