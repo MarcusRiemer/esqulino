@@ -1,10 +1,15 @@
-
 \section{Umsetzungsanalyse}
 \label{sec:implementation-analysis}
 
 \info[inline]{Das ist jetzt der Abschnitt für Software-Ingenieure.}
 
-\subsection{Systemübersicht}
+Um eine zu ambitionierte Planung zu vermeiden, soll in diesem Kapitel eine Strukturierung des Vorhabens in konkrete Arbeitspakete unternommen werden. Da diese Pakete untereinander Abhängigkeiten aufweisen werden, wird dann in einem weiteren Schritt ein Netzplan angefertigt, um einen besseren Überblick über die Abhängigkeiten zu erhalten. Auf Basis dieses Netzplans können dann anhand einer topologischen Sortierung mögliche Reihenfolge der Implementierung diskutiert werden. Diese Reihenfolge ist insofern entscheidend, als dass eine frühe Einplanung eines Arbeitspaketes die Realisierung wahrscheinlicher macht.
+
+Sollten während dieser Priorisierung Ideen für neue Arbeitspakete, also bisher nicht bedachte Funktionalität, ergeben, so werden diese in Anlehnung an den ``Minus 100 Points''-Artikel von Eric Gunnerson\cite{gunnerson-minus-100} geprüft:
+
+\subsection{Verwendete Sprachen und Bibliotheken}
+
+Der softwaretechnische Unterbau der Entwicklungsumgebung wurde schon vor dem eigentlichen Beginn der Thesis in Gesprächen mit Dr. Huch und Dr. Hoffmann festgelegt.
 
 \begin{description}
 \item[Server: Ruby mit Sinatra] \hfill\\
@@ -13,43 +18,68 @@
   Aufgrund des hohen Grades an Interaktivität bietet sich eine rein clientseitige Visualisierung an, die weitestgehend auf Roundtrips zum Server verzichtet.
 \end{description}
 
-\subsection{Verwaltung von Projekten}
+\subsection{Arbeitspakete}
 
-Um den Betrieb für Schüler und Lehrer zu vereinfachen, wird eine Instanz des Servers also in der Lage sein mehrere Schülerprojekte gleichzeitig bereitzustellen. Dafür ist es aber zunächst einmal notwendig zu definieren, wie ein solches Projekt überhaupt strukturiert ist. Grundsätzlich ist ein Projekt eine Sammlung von Dateien in einer festgelegten Ordnerstruktur.
+Arbeitspakete werden in Kategorien eingeteilt, Abhängigkeiten von Paketen werden typischerweise vom Client zum Server oder zu anderen Paketen der gleichen Kategorie bestehen.
 
-\begin{dirstruct}
-  \dirtree{%
-    .1 empty-project/.
-    .2 queries/.
-    .2 pages/.
-    .2 config.yaml.
-    .2 db.sqlite.
-  }
-  \caption{Leeres Projekt}
-\end{dirstruct}
+\subsubsection{Server}
 
-\subsection{Verwendung von Domänenspezfischen Sprachen}
+Die Aufgaben des Servers in diesem Projekt beschränken sich weitestgehend auf die Bereitstellung und Speicherung von Daten unter Berücksichtigung der Zugriffsrechte. Die dabei transferierten Daten fallen hauptsächlich in zwei Kategorien: Ergebnisse von SQL Abfragen oder Projektdateien.
 
-Da die Verarbeitung von beliebig komplexen SQL-Abfragen ebenfalls nicht Bestandteil dieser Arbeit ist, erfolgt die Speicherung der Abfrage in einer eigenen, maschinenlesbaren Notation. Gleiches gilt für die Beschreibung der Benutzeroberfläche.
+\begin{description}
+\item[srv:project-format] \hfill\\
+  Projekte werden auf dem Server abelegt und müssen dort mit allen notwendigen Informationen gespeichert werden.
+\item[srv:sql-schema] \hfill\\
+  Der Server soll die Struktur einer beliebigen SQL-Datenbank in einer JSON-Beschreibung von Tabellen mit deren Spalten und Beziehungen anbieten können.
+\item[srv:sql-query-dev] \hfill\\
+  Da die Datenbank auf dem Server verbleibt, muss dieser in der Lage sein zumindestens für authorisierte Benutzer beliebige SQL-Abfragen auszuführen.
+\item[srv:sql-query-store] \hfill\\
+  Der Server dient als Datenspeicher für SQL-Abfragen. Diese müssen zur Speicherung mit einem eindeutigen Namen assoziiert werden.
+\item[srv:sql-query-guest] \hfill\\
+  Für Endanwender sollen aus Sicherheitsgründen nur vordefinierte Abfragen ausgeführt werden.
+\end{description}
 
-Aus praktischen Gründen setzen beide dieser Sprachen auf XML auf, ganz konkret sogar auf HTML.
+\subsubsection{IDE: Allgemein}
+
+\begin{description}
+\item[ide:all-projects] \hfill \\
+  Da ein IDE-Server den Zugriff auf viele Projekte erlaubt, müssen diese aufgezählt und ausgewählt werden können.
+\item[ide:hiding-features] \hfill \\
+  Das Verstecken von nicht erwünschten Funktionen überspannt alle Bereiche und sollte daher an einer zentralen Stelle hinterlegt werden.
+  
+\end{description}
+
+\subsubsection{IDE: SQL-Editor}
+
+\begin{description}
+\item[ide-sql:schema-text] \hfill\\
+  Das Schema der Datenbank soll sich in einem textuellen Format betrachten lassen, in der alle technischen Details einer Tabelle bzw. Spalte sichtbar sind.
+\item[ide-sql:schema-graph] \hfill\\
+  Das Schema der Datenbank soll sich in einem grafisch aufbereiteten Format betrachten lassen, welches vor allem die Beziehungen der Tabellen untereinander verdeutlicht.
+\item[ide-sql:table-content] \hfill\\
+  Auch wenn es sich technisch gesehen nur um die Ausführung einer \lstinline{SELECT * FROM <tabelle>} Abfrage handelt, ist es unerläßlich den kompletten Datenbestand einer Tabelle auf einen Schlag sichten zu können.
+\item[ide-sql:query-editor-simple] \hfill\\
+  Als Grundlage für die interne Repräsentation der Abfrage sollte zunächst die strukturell einfachste Abfragen implementiert werden: Ein \lstinline{SELECT *} für eine einzige Tabelle.
+\item[ide-sql:query-editor-select-column] \hfill\\
+  Angabe von zu selektierenden Spalten anstelle des \lstinline{*}-Operators.
+\item[ide-sql:query-editor-select-as] \hfill\\
+  Vergabe von Aliasnamen für Spalten
+\item[ide-sql:query-from-join-comma] \hfill\\
+  Komma-separierte Aufzählung von Tabellen zur Bildung des Kreuzproduktes in der \lstinline{FROM} Komponente.
+\end{description}
+
+\subsubsection{IDE: Oberflächen-Editor}
+
+\subsubsection{Oberfläche für Endanwender}
 
 \subsection{Roadmap}
 
 Diese Arbeitsschritte stellen eine eher technische Roadmap der technischen Umsetzung dar.
 
 \begin{description}
-\item[Abstrakte Repräsentation von SQL(ite) Schemata] \hfill\\
-  Als unmittelbare Eingabe für die Entwicklungsumgebung sollen einigermaßen einfache, aber grundsätzlich beliebige SQLite Datenbanken dienen. Diese Datenbanken stellen den Ausgangspunkt für die Schülerprojekte dar und wurden von einem externen Tool oder der Lehrkraft erzeugt.
-\item[Visualisierung des Schemas] \hfill\\
-  Auch wenn die Projekte der Lernenden im Normallfall auf sehr überschaubare Datenbanken aufbauen werden, ist eine vernünftige Visualisierung der beteiligten Tabellen und deren Beziehung untereinander essentiell.
-\item[Visualisierung der Daten] \hfill\\
-  In diesem Schritt werden keine Experimente vorgenommen: Es geht um die einfache tabellarische Auflistung der Daten.
-\item[Ausführung von beliebigen SELECT-Abfragen] \hfill\\
-  Dieser Schritt dient der Vorbereitung des im nächsten Schritt zu implementierenden grafischen Editors und beinhaltet insbesondere die Konzeption von begleitenden Bedienelementen.
-\item[Grafischer Editor für SELECT-Abfragen] \hfill\\
-  Als alternative zu dem Freitexteditor soll nun ein grafischer Editor implementiert werden. Dieser benutzt eine abstrakten interne Darstellung um aufwändige Parsingvorgänge von SQL-Strings zu vermeiden.
+
 \item[Optional: Limitierung der verfügbaren Möglichkeiten] \hfill
+\end{description}
 
 %%% Local Variables:
 %%% mode: latex
