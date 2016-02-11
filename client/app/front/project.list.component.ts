@@ -37,4 +37,11 @@ export class ProjectListComponent implements OnInit {
     navigateEditor(d : ProjectDescription) {
         this._router.navigate(['/Editor', { id : d.id }]);
     }
+
+    /**
+     * Navigate to a project in view mode
+     */
+    navigateView(d : ProjectDescription) {
+        this._router.navigate(['/View', { id : d.id }]);
+    }
 }
