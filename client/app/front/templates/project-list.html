@@ -7,11 +7,11 @@
         <h4 class="card-subtitle text-muted">{{ project.description }}</h4>
         <button type="button"
                 class="btn btn-primary btn-block"
-                (click)="navigateEditor(project)">
+                (click)="navigateView(project)">
           Ansehen
         </button>
         <a class="btn btn-info btn-block"
-           [routerLink]="['About']">
+           (click)="navigateEditor(project)">
           Bearbeiten
         </a>
       </div>
