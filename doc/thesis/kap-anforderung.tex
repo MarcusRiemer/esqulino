@@ -273,7 +273,7 @@ Ein weiterer Vorteil eines etwas nüchterneren, IDE-ähnlichen Designs wäre zud
 
 Letztendlich überwiegt aber ein sehr viel profanerer Fakt: Der Autor dieser Arbeit ist kein Grafikdesigner und würde vermutlich kein ansprechendes und zugleich buntes Farbkonzept auf die Beine stellen können.
 
-\begin{figure}
+\begin{figure}[h]
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{images/sql-sketch-early-colourful}
     \caption{Starke Farbakzente, ähnlich zu Scratch}
@@ -517,6 +517,20 @@ Für einen einfachen Blog wäre z.B. die folgende interne Repräsentation der Ko
 
 \subsection{Editor für Oberflächen}
 \label{sec:design-ui-editor}
+
+Der Editor für Oberflächen nimmt die Konzepte aus dem vorigen Kapitel und macht sie den Entwicklern auf eine intuitive Art zugänglich. Abbildung \ref{fig:ui-editor-sketch-first} zeigt den grundsätzlichen Aufbau der Oberfläche aus einem zentralen Designbereich und einer Seitenleiste. Die Verbindungen zwischen den Bedienelementen und den Daten aus der Seitenleiste verdeutlichen zu Illustrationszwecken deren Zusammenhang. In der endgültigen Fassung des Editors soll der Zusammenhang nicht durch Linien dargestellt werden, sondern durch einen Hervorhebungseffekt wenn einer der beiden Seiten aktuell ausgewählt ist.
+
+\unsure[inline]{Eigentlich würde ich gerne auf Tabs in der Seitenleiste verzichten, die Daten könnte man ja auch innerhalb des Designbereiches darstellen. Diesen Weg der Platzierung von nicht sichtbaren Elementen hat auch schon die Delphi IDE betreten und so dramatisch schlimm fand ich das nicht.}
+
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{sketches/ui-sketch-first}
+  \caption{Skizze des Oberflächeneditors mit Tabs}
+  \label{fig:ui-editor-sketch-first}
+\end{figure}
+
+Wenn der Benutzer auf den Tab für die Bedienelemente wechselt, bekommt er eine Übersicht aller verfügbaren Bedienelemente. Diese können dann per Drag \& Drop auf dem Designbereich platziert werden. Einige Bedienelemente verfügen über komplexere Eigenschaften, diese werden dann separat dargestellt.
+
+\unsure[inline]{Ich bin noch absolut unentschlossen, wie bzw. wo ich die weiteren Eigenschaften von komplexen Eigenschaften unterbringen soll. Die ``klassische'' Variante aller aktuellen Entwicklungsumgebungen ist eine weitere Seitenleiste, die hätte dann in diesem Fall dann allerdings drei Tabs. Daher überlege ich alternativ möglichst viele Informationen unmittelbar im Designbereich unterzubringen. Wenn man dann ein Bedienelement anklickt klappt sich darunter (oder sonstwo) ein Bereich auf, in dem die weiteren Einstellungen vorgenommen werden können.}
 
 \subsection{Beispielhafte Datenbasen}
 \label{sec:example-queries}
