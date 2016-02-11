@@ -51,6 +51,10 @@ export class QueryEditorComponent {
         console.log("New Query");
     }
 
+    /**
+     * Generates an artificial query on the fly that is currently
+     * used as test query.
+     */
     generateQueryModel() {
         return ({
             select : {
@@ -60,9 +64,15 @@ export class QueryEditorComponent {
                 ]
             },
 
-            from : [
-                { table : "person", alias : "p" }
-            ]
+            from : { table : "person",
+                     alias : "pe",
+                     joins : [
+                         { table : "ort",
+                           alias  : "o",
+                           type : "cross"
+                         }
+                     ]}
+           
         });
             
     }

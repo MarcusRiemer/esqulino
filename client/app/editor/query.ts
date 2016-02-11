@@ -16,18 +16,28 @@ module Model {
         column : string;
         asName : string;
     }
-
+    
     export interface From {
         table : string;
         alias : string;
+        joins? : Join[];
+    }
+
+    export interface Join {
+        table : string,
+        alias : string,
+        type : string
     }
 
     export interface Query {
         select : Select;
-        from : From[];
+        from : From;   
     }
 }
 
+/**
+ * Base class for all SQL top-level components.
+ */
 class Editable {
     public editing = false;
 
@@ -54,6 +64,9 @@ class FromComponent extends Editable {
     public from : Model.From;
 }
 
+/**
+ * A logical query
+ */
 export class Query {
     public schema : Table[];
     public model : Model.Query;
@@ -61,6 +74,47 @@ export class Query {
     constructor(schema : Table[], model : Model.Query) {
         this.schema = schema;
         this.model = model;
+    }
+
+    /**
+     * Calculates the SQL String representation of this query.
+     */
+    public toSqlString() : string {
+        var selectColumns = "";
+
+        // Putting together the comma separated columns in the
+        // select statement.
+        for (var i = 0; i < this.model.select.columns.length; ++i) {
+            if (i != 0) {
+                selectColumns += ", ";
+            }
+
+            var column = this.model.select.columns[i];
+            selectColumns += `${column.column} AS ${column.asName}`;
+        }
+
+        // Putting together the JOIN separated tables in the
+        // FROM component of this query, starting with a single table.
+        var fromSeries = this.model.from.table;
+
+        for (var i = 0; i < this.model.from.joins.length; ++i) {
+            var join = this.model.from.joins[i];
+
+            var keyword;
+            switch(join.type) {
+            case "comma":
+                keyword = ",";
+            case "cross":
+                keyword = "JOIN";
+            }
+
+            fromSeries += `\n${keyword} ${join.table} ${join.alias}`;
+        }
+            
+
+        
+
+        return (`SELECT ${selectColumns}\nFROM ${fromSeries}`);
     }
 }
 
@@ -70,20 +124,7 @@ export class Query {
 @Pipe({name: 'sqlString'})
 export class SqlStringPipe implements PipeTransform {
     public transform(value : Query, args : string[]) : any {
-        var selectColumns = "";
-
-        for (var i = 0; i < value.model.select.columns.length; ++i) {
-            if (i != 0) {
-                selectColumns += ", ";
-            }
-
-            var column = value.model.select.columns[i];
-            selectColumns += `${column.column} AS ${column.asName}`;
-        }
-
-        var fromSeries = value.model.from[0].table;
-
-        return (`SELECT ${selectColumns}\nFROM ${fromSeries}`);
+        return (value.toSqlString());
     }
 }
 

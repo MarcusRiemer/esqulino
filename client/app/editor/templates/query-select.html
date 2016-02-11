@@ -16,15 +16,16 @@
         <div *ngFor="#column of select.columns;"
              class="row">
           <div class="col-xs-5">
-            <input  class="form-control" value="{{ column.column }}">
+            <input  class="form-control" [(ngModel)]="column.column">
           </div>
           <div class="col-xs-1 keyword">
             AS
           </div>
-          <div class="col-xs-5">
-            <input class="form-control" value="{{ column.asName }}">
+          <div class="col-xs-6">
+            <input class="form-control" [(ngModel)]="column.asName">
           </div>
         </div>
+        <button class="btn btn-success btn-block">Spalte hinzufügen</button>
       </div>
     </div>
   </div>
