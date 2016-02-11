@@ -1,21 +1,19 @@
-<div class="row card-columns">
-  <div *ngFor="#project of projects"
-       class="col-sm-4 col-lg-3">
-    <div class="card">
-      <div class="card-block">
-        <h2 class="card-title">{{ project.name }}</h2>
-        <h4 class="card-subtitle text-muted">{{ project.description }}</h4>
-        <button type="button"
-                class="btn btn-primary btn-block"
-                (click)="navigateView(project)">
-          Ansehen
-        </button>
-        <a class="btn btn-info btn-block"
-           (click)="navigateEditor(project)">
-          Bearbeiten
-        </a>
+  <div class="card-columns">
+    <div *ngFor="#project of projects">
+      <div class="card">
+        <div class="card-block">
+          <h2 class="card-title">{{ project.name }}</h2>
+          <p class="card-text">{{ project.description }}</p>
+          <button type="button"
+                  class="btn btn-primary btn-block"
+                  (click)="navigateView(project)">
+            Ansehen
+          </button>
+          <a class="btn btn-info btn-block"
+             (click)="navigateEditor(project)">
+            Bearbeiten
+          </a>
+        </div>
       </div>
     </div>
   </div>
-
-</div>
