@@ -1,7 +1,7 @@
 import {Component, OnInit}              from 'angular2/core';
 import {HTTP_PROVIDERS}                 from 'angular2/http';
 import {CORE_DIRECTIVES}                from 'angular2/common';
-import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
+import {RouteConfig, ROUTER_DIRECTIVES, Location} from 'angular2/router';
 
 import {ProjectDescriptionService} from './project.description.service';
 import {ProjectListComponent}      from './project.list.component';
@@ -17,4 +17,19 @@ import {AboutComponent}            from './about.component';
     { path: '/project', name: "ProjectList", component: ProjectListComponent},
 ])
 export class FrontComponent {
+
+    constructor(private _location: Location) { }
+
+    /**
+     * Tests whether a certain path is currently visited.
+     */
+    isCurrentlyVisited(path : string) {
+        if(path === this._location.path()){
+            return true;
+        }
+        else if(path.length > 0){
+            return this._location.path().indexOf(path) > -1;
+        }
+    }
+    
 }
