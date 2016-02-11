@@ -85,3 +85,7 @@
 .where ~ .where, .from ~ .from {
     margin-left: 15px;
 }
+
+nav.front {
+    margin-bottom: 15px;
+}

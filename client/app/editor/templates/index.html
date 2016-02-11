@@ -1,23 +1,25 @@
-<div class="row">
-  <div class="col-md-3">
-    <h3>{{ project?.name }}</h3>
-    <nav>
-      <ul class="nav nav-pills nav-stacked">
-        <li class="nav-item">
-          <a class="nav-link disabled" [routerLink]="['Settings']">Einstellungen</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" [routerLink]="['Schema']">Schema</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" [routerLink]="['Query']">Abfrage</a>
-        </li>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <h3>{{ project?.name }}</h3>
+      <nav>
+        <ul class="nav nav-pills nav-stacked">
+          <li class="nav-item">
+            <a class="nav-link disabled" [routerLink]="['Settings']">Einstellungen</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['Schema']">Schema</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['Query']">Abfrage</a>
+          </li>
 
-      </ul>
-    </nav>
-  </div>
-  <div class="col-md-9">
-    <router-outlet [project]="project"></router-outlet>
+        </ul>
+      </nav>
+    </div>
+    <div class="col-md-9">
+      <router-outlet [project]="project"></router-outlet>
+    </div>
   </div>
 </div>
 

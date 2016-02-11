@@ -1,11 +1,13 @@
-<nav class="navbar navbar-light bg-faded">
-  <a class="navbar-brand" [routerLink]="['About']">esqulino</a>
-  <ul class="nav navbar-nav">
-    <li class="nav-item">
-      <a class="nav-link active"
-         [class.active]="isCurrentlyVisited('/project')"
-         [routerLink]="['ProjectList']">Verfügbare Projekte</a>
-    </li>
-  </ul>
-</nav>
-<router-outlet></router-outlet>
+<div class="container">
+  <nav class="front navbar navbar-light bg-faded">
+    <a class="navbar-brand" [routerLink]="['About']">esqulino</a>
+    <ul class="nav navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link active"
+           [class.active]="isCurrentlyVisited('/project')"
+           [routerLink]="['ProjectList']">Verfügbare Projekte</a>
+      </li>
+    </ul>
+  </nav>
+  <router-outlet></router-outlet>
+</div>
