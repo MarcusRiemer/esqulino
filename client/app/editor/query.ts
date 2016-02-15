@@ -5,9 +5,14 @@ import {Table}                          from './table';
 
 /**
  * Maps the JSON structure that is used to represent the data
- * behind the queries.
+ * over the wire or on disk.
  */
 module Model {
+
+    export interface Expression {
+        type : string;
+    }
+    
     export interface Select {
         columns : SelectColumn[];
     }
@@ -36,36 +41,20 @@ module Model {
 }
 
 /**
- * Base class for all SQL top-level components.
+ * The internal representation of an SQL query.
  */
-class Editable {
-    public editing = false;
+module SyntaxTree {
+    class Node {
+        
+    }
 
-    invertEdit() {
-        this.editing = !this.editing;
+    class Expression extends Node {
+        
     }
 }
 
-@Component({
-    selector : 'sql-select',
-    templateUrl : 'app/editor/templates/query-select.html',
-    inputs: ['select'],
-})
-class SelectComponent extends Editable {
-    public select : Model.Select;
-}
-
-@Component({
-    selector : 'sql-from',
-    templateUrl : 'app/editor/templates/query-from.html',
-    inputs: ['from'],
-})
-class FromComponent extends Editable {
-    public from : Model.From;
-}
-
 /**
- * A logical query
+ * Facade for a query that allows meaningful mapping to the UI.
  */
 export class Query {
     public schema : Table[];
@@ -110,12 +99,43 @@ export class Query {
 
             fromSeries += `\n\t${keyword} ${join.table} ${join.alias}`;
         }
-            
-
         
-
         return (`SELECT ${selectColumns}\nFROM ${fromSeries}`);
     }
+
+    public toModel() : Model.Query {
+        return (null);
+    }
+}
+
+
+/**
+ * Base class for all SQL top-level components.
+ */
+class Editable {
+    public isEditing = false;
+
+    invertEdit() {
+        this.isEditing = !this.isEditing;
+    }
+}
+
+@Component({
+    selector : 'sql-select',
+    templateUrl : 'app/editor/templates/query-select.html',
+    inputs: ['select'],
+})
+class SelectComponent extends Editable {
+    public select : Model.Select;
+}
+
+@Component({
+    selector : 'sql-from',
+    templateUrl : 'app/editor/templates/query-from.html',
+    inputs: ['from'],
+})
+class FromComponent extends Editable {
+    public from : Model.From;
 }
 
 /**
