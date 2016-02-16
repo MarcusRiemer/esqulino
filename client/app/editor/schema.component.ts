@@ -2,9 +2,10 @@ import {Component, OnInit}                      from 'angular2/core';
 import {CORE_DIRECTIVES}                        from 'angular2/common';
 import {Router, RouteParams, ROUTER_DIRECTIVES} from 'angular2/router';
 
+import {Table}          from '../shared/table'
+
 import {Project}        from './project'
 import {ProjectService} from './project.service'
-import {Table}          from './table'
 
 @Component({
     templateUrl: 'app/editor/templates/schema.html',

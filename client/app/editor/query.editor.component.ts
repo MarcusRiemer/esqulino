@@ -1,9 +1,11 @@
 import {Component}                      from 'angular2/core';
 import {Router, RouteParams}            from 'angular2/router';
 
+import {Query}                  from '../shared/query';
+
 import {Project}                from './project'
 import {ProjectService}         from './project.service'
-import {Query, QueryComponent}  from './query';
+import {QueryComponent}         from './query';
 
 @Component({
     templateUrl: 'app/editor/templates/query-editor.html',
