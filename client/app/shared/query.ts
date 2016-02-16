@@ -15,10 +15,12 @@ export module Model {
     }
 
     export interface SelectColumn {
-        simple? : {
+        single? : {
             column : string;
-            asName : string;
+            table : string;
+            alias? : string;
         }
+        as? : string;
     }
     
     export interface From {
@@ -76,7 +78,9 @@ export module SyntaxTree {
 
         constructor(model : Model.SelectColumn) {
             super();
-            this._columnName = model.simple.column;
+            this._columnName = model.single.column;
+            this._tableName = model.single.table;
+            this._tableAlias = model.single.alias;
         }
 
         get ColumnName() {
@@ -127,9 +131,9 @@ export module SyntaxTree {
             select.columns.forEach(v => {
                 var toAdd : NamedExpression;
                 
-                if (v.simple) {
+                if (v.single) {
                     toAdd = {
-                        name : v.simple.asName,
+                        name : v.as,
                         expr : new ColumnExpression(v)
                     };
                 }
@@ -149,16 +153,30 @@ export module SyntaxTree {
             return (this._columns.length);
         }
 
+        /**
+         * @return The column with index i
+         */
         getColumn(i : number) {
             return this._columns[i].expr;
         }
 
+        /**
+         * @return "SELECT [columns]"
+         */
         toString() : string {
-            // We start of with the normal keyword
+            // We start of with the normal keyword and DO NOT
+            // add a trailing space as this will be inserted
+            // in the loop below.
             var toReturn = "SELECT";
 
             // And add all those columns
-            this._columns.forEach(c => {
+            this._columns.forEach((c, i) => {
+                // Comma squibbling for every column except
+                // the first.
+                if (i != 0) {
+                    toReturn += ",";
+                }
+                
                 // Every column is separated by a single space
                 toReturn += " " + c.expr.toString();
 

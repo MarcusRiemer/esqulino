@@ -71,23 +71,54 @@ let schema : Table[] =
         }
     ];
 
+describe('ColumnExpression', () => {
+    it('simple with only table', () => {
+        let c = new SyntaxTree.ColumnExpression({
+            single : {
+                column : "name",
+                table : "person"
+            }
+        });
+
+        expect(c.ColumnName).toBe("name");
+        expect(c.TableQualifier).toBe("person");
+    });
+
+    it('simple with table alias', () => {
+        let c = new SyntaxTree.ColumnExpression({
+            single : {
+                column : "name",
+                table : "person",
+                alias : "p"
+            }
+        });
+
+        expect(c.ColumnName).toBe("name");
+        expect(c.TableQualifier).toBe("p");
+    });
+});
+
+
 describe('SELECT', () => {
-    it('with two simple columns', () => {
+    it('with three simple columns', () => {
         let s = new SyntaxTree.Select({
             columns : [
-                { simple : {column : "id", asName : "person_id" } },
-                { simple : {column : "name", asName : "person_name" } }
+                { single : {column : "id", table : "person", alias : "p" } },
+                { single : {column : "name" , table : "person" } },
+                { single : {column : "alter" , table : "person" }, as : "alter" }
             ]});
 
-        expect(s.NumberOfColumns).toEqual(2);
+        expect(s.NumberOfColumns).toEqual(3);
 
         let col0 = <SyntaxTree.ColumnExpression> s.getColumn(0);
         expect(col0.TableQualifier).toEqual("p");
         expect(col0.ColumnName).toEqual("id");
 
-        let col1 = <SyntaxTree.ColumnExpression> s.getColumn(0);
-        expect(col1.TableQualifier).toEqual("p");
+        let col1 = <SyntaxTree.ColumnExpression> s.getColumn(1);
+        expect(col1.TableQualifier).toEqual("person");
         expect(col1.ColumnName).toEqual("name");
+
+        expect(s.toString()).toBe('SELECT p.id, person.name, person.alter AS alter');
         
     });
 });
@@ -97,8 +128,8 @@ describe('Query', () => {
         let model : Model.Query = {
             select : {
                 columns : [
-                    { simple : {column : "id", asName : "person_id" } },
-                    { simple : {column : "name", asName : "person_name" } }
+                    { single : {column : "id", table : "person" } },
+                    { single : {column : "name" , table : "person" } }
                 ]
             },
 
