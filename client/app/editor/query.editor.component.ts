@@ -1,7 +1,7 @@
 import {Component}                      from 'angular2/core';
 import {Router, RouteParams}            from 'angular2/router';
 
-import {Query}                  from '../shared/query';
+import {Query, Model}           from '../shared/query';
 
 import {Project}                from './project'
 import {ProjectService}         from './project.service'
@@ -57,12 +57,12 @@ export class QueryEditorComponent {
      * Generates an artificial query on the fly that is currently
      * used as test query.
      */
-    generateQueryModel() {
+    generateQueryModel() : Model.Query {
         return ({
             select : {
                 columns : [
-                    { column : "id", asName : "person_id" },
-                    { column : "name", asName : "person_name" }
+                    { single : {column : "id", table : "person" } },
+                    { single : {column : "name" , table : "person" } }
                 ]
             },
 
@@ -74,8 +74,8 @@ export class QueryEditorComponent {
                            type : "cross"
                          }
                      ]}
-           
-        });
             
+        });
+        
     }
 }
