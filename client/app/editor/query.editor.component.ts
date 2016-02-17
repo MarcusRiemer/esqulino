@@ -71,7 +71,7 @@ export class QueryEditorComponent {
                      joins : [
                          { table : "ort",
                            alias  : "o",
-                           type : "cross"
+                           cross : "cross"
                          }
                      ]}
             

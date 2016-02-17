@@ -141,7 +141,7 @@ describe('FROM', () => {
             table : "person",
             alias : "pe",
             joins : [
-                { table : "ort", type : "comma" }
+                { table : "ort", cross : "comma" }
             ]
         })
 
@@ -158,7 +158,7 @@ describe('FROM', () => {
             table : "person",
             alias : "pe",
             joins : [
-                { table : "ort", type : "cross" }
+                { table : "ort", cross : "cross" }
             ]
         })
 
@@ -170,6 +170,30 @@ describe('FROM', () => {
 
         expect(f.toString()).toEqual("FROM person pe\n\t JOIN ort");
     });
+
+    it('with a two table INNER JOIN', () => {
+        let f = new SyntaxTree.From({
+            table : "person",
+            alias : "pe",
+            joins : [
+                { table : "ort",
+                  inner : {
+                      method : "using",
+                      expr : { singleColumn : "bla" }
+                  }
+                }
+            ]
+        })
+
+        expect(f.Initial.Name).toEqual("person");
+        expect(f.Initial.Alias).toEqual("pe");
+        expect(f.Initial.NameWithAlias).toEqual("person pe");
+        expect(f.getJoin(0).Name).toEqual("ort");
+        expect(f.getJoin(0).NameWithAlias).toEqual("ort");
+
+        expect(f.toString()).toEqual("FROM person pe\n\t INNER JOIN ort USING(bla)");
+    });
+    
 });
 
 describe('Query', () => {
@@ -187,7 +211,7 @@ describe('Query', () => {
                      joins : [
                          { table : "ort",
                            alias  : "o",
-                           type : "cross"
+                           cross : "cross"
                          }
                      ]}
 

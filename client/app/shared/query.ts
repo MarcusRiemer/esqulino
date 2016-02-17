@@ -7,7 +7,7 @@ import {Table}                          from './table';
 export module Model {
 
     export interface Expression {
-        type : string;
+        singleColumn? : string;
     }
     
     export interface Select {
@@ -17,7 +17,7 @@ export module Model {
     export interface SelectColumn {
         single? : {
             column : string;
-            table : string;
+            table? : string;
             alias? : string;
         }
         as? : string;
@@ -32,7 +32,11 @@ export module Model {
     export interface Join {
         table : string,
         alias? : string,
-        type : string
+        cross? : string,
+        inner? : {
+            method : string,
+            expr : Expression
+        }
     }
 
     export interface Query {
@@ -64,8 +68,19 @@ export module SyntaxTree {
      */
     abstract class Expression {
         public abstract toString() : string;
-    }
 
+        /**
+         * Maps the "one size fits all"-interface for expressions
+         * to their concrete classes.
+         */
+        static load(expr : Model.Expression) : Expression {
+            if (expr.singleColumn) {
+                return new ColumnExpression({ single : { column : expr.singleColumn } });
+            }
+            throw "Unknown expression: ${expr}"
+        }
+    }
+   
     /**
      * An expression that maps a single column without any
      * transformations that are taking place.
@@ -83,6 +98,9 @@ export module SyntaxTree {
             this._tableAlias = model.single.alias;
         }
 
+        /**
+         * @return The name of the column
+         */
         get ColumnName() {
             return (this._columnName);
         }
@@ -99,18 +117,32 @@ export module SyntaxTree {
                 // Table names are the fallback
                 return (this._tableName);
             } else {
-                // Each column *must* have an associated table for now
-                throw "No known alias name";
+                return "";
             }
         }
 
+        /**
+         * @return True, if any qualifier is set.
+         */
+        get hasTableQualifier() : boolean {
+            return (!!this._tableAlias || !!this._tableName);
+        }
+
+        /**
+         * @return The fully qualified column name
+         */
         toString() : string {
-            return `${this.TableQualifier}.${this._columnName}`;
+            if (this.hasTableQualifier) {
+                return `${this.TableQualifier}.${this._columnName}`;
+            } else {
+                return (this._columnName);
+            }
+            
         }
     }
 
     /**
-     * Allows an expression to be named, typically in SELECT expr AS name 
+     * Allows an expression to be named, typically in "SELECT <expr> AS <name>" 
      * contexts.
      */
     interface NamedExpression {
@@ -269,7 +301,7 @@ export module SyntaxTree {
         constructor(join : Model.Join) {
             super(join.table, join.alias);
 
-            switch(join.type) {
+            switch(join.cross) {
             case "comma":
                 this._separator = ",";
                 break;
@@ -277,7 +309,7 @@ export module SyntaxTree {
                 this._separator = " JOIN"
                 break;
             default:
-                throw `Unknown type in cross join: ${join.type}`;
+                throw `Unknown type in cross join: ${join.cross}`;
             }
         }
 
@@ -285,6 +317,25 @@ export module SyntaxTree {
             // There is no way around the separator and the name of
             // the table.
             return (`${this._separator} ${this.NameWithAlias}`);
+        }
+    }
+
+    /**
+     * All types of INNER JOINs.
+     */
+    export class InnerJoin extends Join {
+        private _method : string;
+        private _expr : Expression;
+
+        constructor(join : Model.Join) {
+            super(join.table, join.alias);
+
+            this._expr = join.inner.expr;
+            this._method = join.inner.method;
+        }
+        
+        toString() : string {
+            return (`INNER JOIN ${this.NameWithAlias} ${this._method} (${this._expr.toString()})`);
         }
     }
 
@@ -302,13 +353,13 @@ export module SyntaxTree {
 
             if (from.joins) {
                 from.joins.forEach(j => {
-                    switch(j.type) {
-                    case "comma":
-                    case "cross":
+                    if(j.cross) {
                         this._joins.push(new CrossJoin(j));
-                        break;
-                    default:
-                        throw `Unknown JOIN type: ${j.type}`;
+                    } else if (j.inner) {
+                        this._joins.push(new InnerJoin(j));
+                    } else {
+                        throw `Unknown JOIN type: ${j.cross}`;
+
                     }
                 });
             }
