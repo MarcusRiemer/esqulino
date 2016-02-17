@@ -25,13 +25,13 @@ export module Model {
     
     export interface From {
         table : string;
-        alias : string;
+        alias? : string;
         joins? : Join[];
     }
 
     export interface Join {
         table : string,
-        alias : string,
+        alias? : string,
         type : string
     }
 
@@ -189,6 +189,153 @@ export module SyntaxTree {
             return (toReturn);
         }
     }
+
+    /**
+     * Base class for all joins.
+     *
+     * @todo This ignores the possibility of sub-SELECTs in the FROM
+     *       clause.
+     */
+    abstract class Join {
+        
+        protected _tableName : string;
+        protected _tableAlias : string;
+
+        constructor(tableName : string, tableAlias? : string) {
+            this._tableName = tableName;
+            this._tableAlias = tableAlias;
+        }
+
+
+        /**
+         * @return The name of the table that is JOINed
+         */
+        get Name() {
+            return (this._tableName);
+        }
+
+        /**
+         * @return the alias name of the JOINed table
+         */
+        get Alias() {
+            return (this._tableAlias);
+        }
+        
+        /**
+         * @return The name of this table with it's alias, if there is an
+         * alias given.
+         */
+        get NameWithAlias() {
+            let toReturn = this._tableName;
+
+            // But the alias is optional
+            if (this._tableAlias) {
+                toReturn += ` ${this._tableAlias}`;
+            }
+
+            return (toReturn);
+        }
+        
+        
+        /**
+         * @return A string representing a join with a single table
+         */
+        abstract toString() : string;
+    }
+
+    /**
+     * Although there is not really a SQL keyword for this,
+     * the first table in the FROM component needs to be
+     * treated seperatly.
+     */
+    export class InitialJoin extends Join {
+
+        constructor(name : string, alias? : string) {
+            super(name, alias);
+        }
+        
+        toString() : string {
+            return this.NameWithAlias;
+        }
+    }
+
+    /**
+     * Represents a cross join, no matter whether its using a
+     * comma or the JOIN keyword.
+     */
+    export class CrossJoin extends Join {
+        private _separator = ",";
+
+        constructor(join : Model.Join) {
+            super(join.table, join.alias);
+
+            switch(join.type) {
+            case "comma":
+                this._separator = ",";
+                break;
+            case "cross":
+                this._separator = " JOIN"
+                break;
+            default:
+                throw `Unknown type in cross join: ${join.type}`;
+            }
+        }
+
+        toString() : string {
+            // There is no way around the separator and the name of
+            // the table.
+            return (`${this._separator} ${this.NameWithAlias}`);
+        }
+    }
+
+    /**
+     * The SQL FROM clause with 0..n subsequent JOINs.
+     */
+    export class From extends Component {
+        private _first : InitialJoin;
+        private _joins : Join[] = [];
+
+        constructor(from : Model.From) {
+            super();
+
+            this._first = new InitialJoin(from.table, from.alias);
+
+            if (from.joins) {
+                from.joins.forEach(j => {
+                    switch(j.type) {
+                    case "comma":
+                    case "cross":
+                        this._joins.push(new CrossJoin(j));
+                        break;
+                    default:
+                        throw `Unknown JOIN type: ${j.type}`;
+                    }
+                });
+            }
+        }
+
+        get Initial() : InitialJoin {
+            return (this._first);
+        }
+        
+        /**
+         * @param n Starting at 0
+         * @return The n-th join of this FROM clause
+         */
+        getJoin(n : number) : Join {
+            return (this._joins[n]);
+        }
+        
+        toString() : string {
+            let toReturn = `FROM ${this._first.NameWithAlias}`;
+
+            this._joins.forEach(j => {
+                toReturn += "\n\t" + j.toString();
+            });
+
+            return (toReturn);
+        }
+    }
 }
 
 /**
@@ -207,6 +354,9 @@ export class Query {
         this._select = new SyntaxTree.Select(model.select);
     }
 
+    /**
+     * @return The select component of this query, guaranteed to be present.
+     */
     get Select() {
         return (this._select);
     }
