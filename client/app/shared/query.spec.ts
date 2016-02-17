@@ -119,7 +119,56 @@ describe('SELECT', () => {
         expect(col1.ColumnName).toEqual("name");
 
         expect(s.toString()).toBe('SELECT p.id, person.name, person.alter AS alter');
-        
+
+    });
+});
+
+describe('FROM', () => {
+    it('with a single table', () => {
+        let f = new SyntaxTree.From({
+            table : "person",
+            alias : "pe"
+        })
+
+        expect(f.Initial.Name).toEqual("person");
+        expect(f.Initial.Alias).toEqual("pe");
+        expect(f.Initial.NameWithAlias).toEqual("person pe");
+        expect(f.toString()).toEqual("FROM person pe");
+    });
+
+    it('with a two table comma join', () => {
+        let f = new SyntaxTree.From({
+            table : "person",
+            alias : "pe",
+            joins : [
+                { table : "ort", type : "comma" }
+            ]
+        })
+
+        expect(f.Initial.Name).toEqual("person");
+        expect(f.Initial.Alias).toEqual("pe");
+        expect(f.Initial.NameWithAlias).toEqual("person pe");
+        expect(f.getJoin(0).Name).toEqual("ort");
+        expect(f.getJoin(0).NameWithAlias).toEqual("ort");
+        expect(f.toString()).toEqual("FROM person pe\n\t, ort");
+    });
+
+    it('with a two table cross join', () => {
+        let f = new SyntaxTree.From({
+            table : "person",
+            alias : "pe",
+            joins : [
+                { table : "ort", type : "cross" }
+            ]
+        })
+
+        expect(f.Initial.Name).toEqual("person");
+        expect(f.Initial.Alias).toEqual("pe");
+        expect(f.Initial.NameWithAlias).toEqual("person pe");
+        expect(f.getJoin(0).Name).toEqual("ort");
+        expect(f.getJoin(0).NameWithAlias).toEqual("ort");
+
+        expect(f.toString()).toEqual("FROM person pe\n\t JOIN ort");
     });
 });
 
@@ -141,7 +190,7 @@ describe('Query', () => {
                            type : "cross"
                          }
                      ]}
-            
+
         };
 
         let q = new Query(schema, model);
