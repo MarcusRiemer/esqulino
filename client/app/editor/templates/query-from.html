@@ -9,28 +9,12 @@
     </div>
   </div>
   <div *ngFor="#join of from.joins">
-
-    <span [ngSwitch]="join.type">
-      <div *ngSwitchWhen="'comma'" class="row">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-1">
-          ,
-        </div>
-        <div class="col-xs-9">
-          <span class="table-name">{{ join.table }}</span>
-        </div>
+    <div class="row">
+      <div class="col-xs-2"><span class="keyword">{{ join.sqlJoinKeyword }}</span></div>
+      <div class="col-xs-10">
+        <span class="table-name">{{ join.name }}</span>
+        <span>{{ join.alias }}</span>
       </div>
-      <div *ngSwitchWhen="'cross'" class="row">
-        <div class="col-xs-1"></div>
-        <div class="col-xs-1">
-          <span class="keyword">JOIN</span>
-        </div>
-        <div class="col-xs-9">
-          <span class="table-name">{{ join.table }}</span>
-          <span>{{ join.alias }}</span>
-        </div>
-      </div>
-    </span>
-
+    </div>
   </div>
 </div>

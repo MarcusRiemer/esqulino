@@ -177,6 +177,7 @@ describe('FROM', () => {
         expect(f.initial.nameWithAlias).toEqual("person pe");
         expect(f.getJoin(0).name).toEqual("ort");
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
+        expect(f.getJoin(0).sqlJoinKeyword).toEqual(",");
         expect(f.toString()).toEqual("FROM person pe\n\t, ort");
     });
 
@@ -194,6 +195,7 @@ describe('FROM', () => {
         expect(f.initial.nameWithAlias).toEqual("person pe");
         expect(f.getJoin(0).name).toEqual("ort");
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
+        expect(f.getJoin(0).sqlJoinKeyword).toEqual("JOIN");
 
         expect(f.toString()).toEqual("FROM person pe\n\tJOIN ort");
     });
