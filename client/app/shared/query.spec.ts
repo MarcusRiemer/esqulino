@@ -234,7 +234,6 @@ describe('Query', () => {
             },
 
             from : { table : "person",
-                     alias : "pe",
                      joins : [
                          { table : "ort",
                            alias  : "o",
@@ -247,6 +246,9 @@ describe('Query', () => {
         let q = new Query(schema, model);
 
         expect(q.select.numberOfColumns).toEqual(2);
+        expect(q.from.numberOfJoins).toEqual(1);
+
+        expect(q.toSqlString()).toEqual("SELECT person.id, person.name\nFROM person\n\tJOIN ort o");
     });
 
 });
