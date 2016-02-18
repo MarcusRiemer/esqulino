@@ -79,7 +79,7 @@ describe('ColumnExpression', () => {
             }
         });
 
-        expect(c.ColumnName).toEqual("name");
+        expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeFalsy();
         expect(c.toString()).toEqual("name");
     });
@@ -92,9 +92,9 @@ describe('ColumnExpression', () => {
             }
         });
 
-        expect(c.ColumnName).toEqual("name");
+        expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeTruthy();
-        expect(c.TableQualifier).toEqual("person");
+        expect(c.tableQualifier).toEqual("person");
         expect(c.toString()).toEqual("person.name");
     });
 
@@ -107,9 +107,9 @@ describe('ColumnExpression', () => {
             }
         });
 
-        expect(c.ColumnName).toEqual("name");
+        expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeTruthy();
-        expect(c.TableQualifier).toEqual("p");
+        expect(c.tableQualifier).toEqual("p");
         expect(c.toString()).toEqual("p.name");
     });
 });
@@ -125,7 +125,7 @@ describe('SELECT', () => {
             ]});
 
         // Grand picture
-        expect(s.NumberOfColumns).toEqual(3);
+        expect(s.numberOfColumns).toEqual(3);
 
         // Alias names
         expect(s.getAlias(0)).toBeUndefined();
@@ -134,16 +134,16 @@ describe('SELECT', () => {
 
         // Details of those columns
         let col0 = <SyntaxTree.ColumnExpression> s.getColumn(0);
-        expect(col0.TableQualifier).toEqual("p");
-        expect(col0.ColumnName).toEqual("id");
+        expect(col0.tableQualifier).toEqual("p");
+        expect(col0.columnName).toEqual("id");
 
         let col1 = <SyntaxTree.ColumnExpression> s.getColumn(1);
-        expect(col1.TableQualifier).toEqual("person");
-        expect(col1.ColumnName).toEqual("name");
+        expect(col1.tableQualifier).toEqual("person");
+        expect(col1.columnName).toEqual("name");
 
         let col2 = <SyntaxTree.ColumnExpression> s.getColumn(2);
-        expect(col2.TableQualifier).toEqual("person");
-        expect(col2.ColumnName).toEqual("alter");
+        expect(col2.tableQualifier).toEqual("person");
+        expect(col2.columnName).toEqual("alter");
 
         expect(s.toString()).toBe('SELECT p.id, person.name, person.alter AS dasAlter');
 
@@ -157,9 +157,9 @@ describe('FROM', () => {
             alias : "pe"
         })
 
-        expect(f.Initial.Name).toEqual("person");
-        expect(f.Initial.Alias).toEqual("pe");
-        expect(f.Initial.NameWithAlias).toEqual("person pe");
+        expect(f.initial.name).toEqual("person");
+        expect(f.initial.alias).toEqual("pe");
+        expect(f.initial.nameWithAlias).toEqual("person pe");
         expect(f.toString()).toEqual("FROM person pe");
     });
 
@@ -172,11 +172,11 @@ describe('FROM', () => {
             ]
         })
 
-        expect(f.Initial.Name).toEqual("person");
-        expect(f.Initial.Alias).toEqual("pe");
-        expect(f.Initial.NameWithAlias).toEqual("person pe");
-        expect(f.getJoin(0).Name).toEqual("ort");
-        expect(f.getJoin(0).NameWithAlias).toEqual("ort");
+        expect(f.initial.name).toEqual("person");
+        expect(f.initial.alias).toEqual("pe");
+        expect(f.initial.nameWithAlias).toEqual("person pe");
+        expect(f.getJoin(0).name).toEqual("ort");
+        expect(f.getJoin(0).nameWithAlias).toEqual("ort");
         expect(f.toString()).toEqual("FROM person pe\n\t, ort");
     });
 
@@ -189,11 +189,11 @@ describe('FROM', () => {
             ]
         })
 
-        expect(f.Initial.Name).toEqual("person");
-        expect(f.Initial.Alias).toEqual("pe");
-        expect(f.Initial.NameWithAlias).toEqual("person pe");
-        expect(f.getJoin(0).Name).toEqual("ort");
-        expect(f.getJoin(0).NameWithAlias).toEqual("ort");
+        expect(f.initial.name).toEqual("person");
+        expect(f.initial.alias).toEqual("pe");
+        expect(f.initial.nameWithAlias).toEqual("person pe");
+        expect(f.getJoin(0).name).toEqual("ort");
+        expect(f.getJoin(0).nameWithAlias).toEqual("ort");
 
         expect(f.toString()).toEqual("FROM person pe\n\tJOIN ort");
     });
@@ -212,11 +212,11 @@ describe('FROM', () => {
             ]
         })
 
-        expect(f.Initial.Name).toEqual("person");
-        expect(f.Initial.Alias).toEqual("pe");
-        expect(f.Initial.NameWithAlias).toEqual("person pe");
-        expect(f.getJoin(0).Name).toEqual("ort");
-        expect(f.getJoin(0).NameWithAlias).toEqual("ort");
+        expect(f.initial.name).toEqual("person");
+        expect(f.initial.alias).toEqual("pe");
+        expect(f.initial.nameWithAlias).toEqual("person pe");
+        expect(f.getJoin(0).name).toEqual("ort");
+        expect(f.getJoin(0).nameWithAlias).toEqual("ort");
 
         expect(f.toString()).toEqual("FROM person pe\n\tINNER JOIN ort USING(bla)");
     });
@@ -246,7 +246,7 @@ describe('Query', () => {
 
         let q = new Query(schema, model);
 
-        expect(q.Select.NumberOfColumns).toEqual(2);
+        expect(q.select.numberOfColumns).toEqual(2);
     });
 
 });

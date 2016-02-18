@@ -103,7 +103,7 @@ export module SyntaxTree {
         /**
          * @return The name of the column
          */
-        get ColumnName() {
+        get columnName() {
             return (this._columnName);
         }
 
@@ -111,7 +111,7 @@ export module SyntaxTree {
          * Retrieves the highest ranked name that should be used to
          * qualify the name of this column.
          */  
-        get TableQualifier() {
+        get tableQualifier() {
             if (this._tableAlias) {
                 // Table alias has the highest weight to be returned
                 return (this._tableAlias);
@@ -135,7 +135,7 @@ export module SyntaxTree {
          */
         toString() : string {
             if (this.hasTableQualifier) {
-                return `${this.TableQualifier}.${this._columnName}`;
+                return `${this.tableQualifier}.${this._columnName}`;
             } else {
                 return (this._columnName);
             }
@@ -183,7 +183,7 @@ export module SyntaxTree {
         /**
          * @return The number of columns this select statement retrieves
          */
-        get NumberOfColumns() {
+        get numberOfColumns() {
             return (this._columns.length);
         }
 
@@ -204,7 +204,7 @@ export module SyntaxTree {
         /**
          * @return All columns
          */
-        get Columns() : NamedExpression[] {
+        get columns() : NamedExpression[] {
             return (this._columns);
         }
 
@@ -258,14 +258,14 @@ export module SyntaxTree {
         /**
          * @return The name of the table that is JOINed
          */
-        get Name() {
+        get name() {
             return (this._tableName);
         }
 
         /**
          * @return the alias name of the JOINed table
          */
-        get Alias() {
+        get alias() {
             return (this._tableAlias);
         }
         
@@ -273,7 +273,7 @@ export module SyntaxTree {
          * @return The name of this table with it's alias, if there is an
          * alias given.
          */
-        get NameWithAlias() {
+        get nameWithAlias() {
             let toReturn = this._tableName;
 
             // But the alias is optional
@@ -303,7 +303,7 @@ export module SyntaxTree {
         }
         
         toString() : string {
-            return this.NameWithAlias;
+            return this.nameWithAlias;
         }
     }
 
@@ -332,7 +332,7 @@ export module SyntaxTree {
         toString() : string {
             // There is no way around the separator and the name of
             // the table.
-            return (`${this._separator} ${this.NameWithAlias}`);
+            return (`${this._separator} ${this.nameWithAlias}`);
         }
     }
 
@@ -351,7 +351,7 @@ export module SyntaxTree {
         }
         
         toString() : string {
-            return (`INNER JOIN ${this.NameWithAlias} ${this._method.toUpperCase()}(${this._expr.toString()})`);
+            return (`INNER JOIN ${this.nameWithAlias} ${this._method.toUpperCase()}(${this._expr.toString()})`);
         }
     }
 
@@ -381,7 +381,7 @@ export module SyntaxTree {
             }
         }
 
-        get Initial() : InitialJoin {
+        get initial() : InitialJoin {
             return (this._first);
         }
         
@@ -394,7 +394,7 @@ export module SyntaxTree {
         }
         
         toString() : string {
-            let toReturn = `FROM ${this._first.NameWithAlias}`;
+            let toReturn = `FROM ${this._first.nameWithAlias}`;
 
             this._joins.forEach(j => {
                 toReturn += "\n\t" + j.toString();
@@ -424,7 +424,7 @@ export class Query {
     /**
      * @return The select component of this query, guaranteed to be present.
      */
-    get Select() {
+    get select() {
         return (this._select);
     }
 
