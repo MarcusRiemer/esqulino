@@ -163,16 +163,16 @@ export module SyntaxTree {
             // Mapping the model types to concrete instances of the
             // syntax tree.
             select.columns.forEach(v => {
-                var toAdd : NamedExpression;
+                var toAdd : NamedExpression = {
+                    name : v.as,
+                    expr : null
+                };
                 
                 if (v.single) {
-                    toAdd = {
-                        name : v.as,
-                        expr : new ColumnExpression(v)
-                    };
+                    toAdd.expr = new ColumnExpression(v);
                 }
 
-                if (toAdd === null) {
+                if (toAdd.expr === null) {
                     throw "Unknown column expression";
                 }
 
@@ -192,6 +192,20 @@ export module SyntaxTree {
          */
         getColumn(i : number) {
             return this._columns[i].expr;
+        }
+
+        /**
+         * @return The alias for column i
+         */
+        getAlias(i : number) {
+            return this._columns[i].name;
+        }
+
+        /**
+         * @return All columns
+         */
+        get Columns() : NamedExpression[] {
+            return (this._columns);
         }
 
         /**
@@ -396,7 +410,7 @@ export module SyntaxTree {
  */
 export class Query {
     public schema : Table[];
-    public model : Model.Query;
+    private model : Model.Query;
 
     private _select : SyntaxTree.Select;
     

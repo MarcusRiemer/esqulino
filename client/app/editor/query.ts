@@ -1,8 +1,8 @@
-import {Component}                      from 'angular2/core';
+import {Component, Input}               from 'angular2/core';
 import {Pipe, PipeTransform}            from 'angular2/core';
 
 import {Table}                          from '../shared/table';
-import {Query, Model}                   from '../shared/query';
+import {Query, Model, SyntaxTree}       from '../shared/query';
 
 /**
  * Base class for all SQL top-level components.
@@ -18,19 +18,17 @@ class Editable {
 @Component({
     selector : 'sql-select',
     templateUrl : 'app/editor/templates/query-select.html',
-    inputs: ['select'],
 })
 class SelectComponent extends Editable {
-    public select : Model.Select;
+    @Input() select : SyntaxTree.Select;
 }
 
 @Component({
     selector : 'sql-from',
     templateUrl : 'app/editor/templates/query-from.html',
-    inputs: ['from'],
 })
 class FromComponent extends Editable {
-    public from : Model.From;
+    @Input() from : Model.From;
 }
 
 /**
