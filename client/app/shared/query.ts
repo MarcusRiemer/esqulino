@@ -245,11 +245,12 @@ export module SyntaxTree {
      *       clause.
      */
     abstract class Join {
-        
+        protected _sqlJoinKeyword : string;
         protected _tableName : string;
         protected _tableAlias : string;
 
-        constructor(tableName : string, tableAlias? : string) {
+        constructor(sqlJoinKeyword : string, tableName : string, tableAlias? : string) {
+            this._sqlJoinKeyword = sqlJoinKeyword;
             this._tableName = tableName;
             this._tableAlias = tableAlias;
         }
@@ -267,6 +268,16 @@ export module SyntaxTree {
          */
         get alias() {
             return (this._tableAlias);
+        }
+
+        /**
+         * This is not exactly nice, but the frontend templating engine
+         * needs to display something.
+         *
+         * @return The used JOIN Method
+         */
+        get sqlJoinKeyword() {
+            return (this._sqlJoinKeyword);
         }
         
         /**
@@ -299,7 +310,8 @@ export module SyntaxTree {
     export class InitialJoin extends Join {
 
         constructor(name : string, alias? : string) {
-            super(name, alias);
+            // No SQL Keyword for the first statement
+            super(null, name, alias);
         }
         
         toString() : string {
@@ -312,27 +324,26 @@ export module SyntaxTree {
      * comma or the JOIN keyword.
      */
     export class CrossJoin extends Join {
-        private _separator = ",";
-
         constructor(join : Model.Join) {
-            super(join.table, join.alias);
-
+            var separator : string;
             switch(join.cross) {
             case "comma":
-                this._separator = ",";
+                separator = ",";
                 break;
             case "cross":
-                this._separator = "JOIN"
+                separator = "JOIN"
                 break;
             default:
                 throw `Unknown type in cross join: ${join.cross}`;
             }
+            
+            super(separator, join.table, join.alias);
         }
 
         toString() : string {
             // There is no way around the separator and the name of
             // the table.
-            return (`${this._separator} ${this.nameWithAlias}`);
+            return (`${this._sqlJoinKeyword} ${this.nameWithAlias}`);
         }
     }
 
@@ -344,14 +355,14 @@ export module SyntaxTree {
         private _expr : Expression;
 
         constructor(join : Model.Join) {
-            super(join.table, join.alias);
+            super("INNER JOIN", join.table, join.alias);
 
             this._expr = SyntaxTree.loadExpression(join.inner.expr);
             this._method = join.inner.method;
         }
         
         toString() : string {
-            return (`INNER JOIN ${this.nameWithAlias} ${this._method.toUpperCase()}(${this._expr.toString()})`);
+            return (`${this._sqlJoinKeyword} ${this.nameWithAlias} ${this._method.toUpperCase()}(${this._expr.toString()})`);
         }
     }
 
@@ -381,8 +392,18 @@ export module SyntaxTree {
             }
         }
 
+        /**
+         * @return The table that starts the JOIN-chain.
+         */
         get initial() : InitialJoin {
             return (this._first);
+        }
+
+        /**
+         * @return The number of joins in the chain
+         */
+        get numberOfJoins() : number {
+            return (this._joins.length);
         }
         
         /**
@@ -392,7 +413,10 @@ export module SyntaxTree {
         getJoin(n : number) : Join {
             return (this._joins[n]);
         }
-        
+
+        /**
+         * @return The SQL-string-representation of this clause
+         */
         toString() : string {
             let toReturn = `FROM ${this._first.nameWithAlias}`;
 
@@ -413,29 +437,39 @@ export class Query {
     private model : Model.Query;
 
     private _select : SyntaxTree.Select;
+    private _from   : SyntaxTree.From;
     
     constructor(schema : Table[], model : Model.Query) {
         this.schema = schema;
         this.model = model;
 
         this._select = new SyntaxTree.Select(model.select);
+        this._from = new SyntaxTree.From(model.from);
     }
 
     /**
-     * @return The select component of this query, guaranteed to be present.
+     * @return The FROM component of this query, guaranteed to be present.
      */
     get select() {
         return (this._select);
     }
 
     /**
+     * @return The FROM component of this query, guaranteed to be present.
+     */
+    get from() {
+        return (this._from);
+    }
+
+
+    /**
      * Calculates the SQL String representation of this query.
      */
     public toSqlString() : string {
         var toReturn = this._select.toString();
+        toReturn += "\n" + this._from.toString();
 
         return (toReturn);
-        
     }
 
     public toModel() : Model.Query {

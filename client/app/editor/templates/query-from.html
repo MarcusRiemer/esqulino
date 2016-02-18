@@ -4,12 +4,12 @@
       <span class="keyword">FROM</span>
     </div>
     <div class="col-xs-10">
-      <span class="table-name">{{ from.table }}</span>
-      <span>{{ from.alias }}</span>     
+      <span class="table-name">{{ from.initial.name }}</span>
+      <span>{{ from.initial.alias }}</span>
     </div>
   </div>
   <div *ngFor="#join of from.joins">
-    
+
     <span [ngSwitch]="join.type">
       <div *ngSwitchWhen="'comma'" class="row">
         <div class="col-xs-1"></div>
@@ -27,10 +27,10 @@
         </div>
         <div class="col-xs-9">
           <span class="table-name">{{ join.table }}</span>
-          <span>{{ join.alias }}</span>   
+          <span>{{ join.alias }}</span>
         </div>
       </div>
     </span>
-    
+
   </div>
 </div>
