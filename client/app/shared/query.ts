@@ -255,7 +255,6 @@ export module SyntaxTree {
             this._tableAlias = tableAlias;
         }
 
-
         /**
          * @return The name of the table that is JOINed
          */
@@ -294,8 +293,7 @@ export module SyntaxTree {
 
             return (toReturn);
         }
-        
-        
+                
         /**
          * @return A string representing a join with a single table
          */
@@ -404,6 +402,10 @@ export module SyntaxTree {
          */
         get numberOfJoins() : number {
             return (this._joins.length);
+        }
+
+        get joins() : Join[] {
+            return (this._joins);
         }
         
         /**
