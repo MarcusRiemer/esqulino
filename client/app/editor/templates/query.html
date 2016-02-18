@@ -1,5 +1,5 @@
 <div *ngIf="query"
      class="block-container">
-  <sql-select [select]="query.Select"></sql-select>
+  <sql-select [select]="query.select"></sql-select>
 </div>
 <pre *ngIf="query">{{ query | sqlString }}</pre>
