@@ -28,8 +28,27 @@
     content: "";
 }
 
-
-
 nav.front {
     margin-bottom: 15px;
+}
+
+.project-list-item .card-img-top {
+    opacity: 0.2 ;
+    transition: opacity 0.3s;
+}
+
+.project-list-item:hover .card-img-top {
+    opacity: 1.0 ;
+    transition: opacity 0.3s;
+}
+
+.project-list-item .card-img-overlay {
+    opacity: 1 ;
+    transition: opacity 0.3s;
+}
+
+.project-list-item:hover .card-img-overlay {
+    opacity: 0.0 ;
+    visibility: hidden;
+    transition: opacity 0.3s;
 }

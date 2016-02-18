@@ -47,6 +47,23 @@ class ScratchSqlApp < Sinatra::Base
     json project
   end
 
+  # Preview image for a specific project
+  get '/api/project/:id/preview' do
+    # Load the project to find out whether a preview image is set
+    project_id = params['id']
+    project_path = File.join(given_data_dir, project_id)
+    project = YAML.load_file(File.join(project_path, "config.yaml"));
+
+    # Return the preview image if it exists
+    if project.key?("preview") then
+      send_file File.expand_path(project["preview"], project_path)
+    else
+      halt 404
+    end
+    
+  end
+  
+
   # Catchall for the rest of routes
   get '/*' do
     send_file File.expand_path('index.html', settings.public_folder)
