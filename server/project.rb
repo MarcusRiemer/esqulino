@@ -98,6 +98,7 @@ def project_public_info(whole_info)
   to_return['name'] = whole_info['name']
   to_return['description'] = whole_info['description']
   to_return['id'] = whole_info['id']
+  to_return['preview'] = whole_info['preview']
 
 
   return to_return;

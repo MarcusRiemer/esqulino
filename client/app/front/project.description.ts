@@ -7,4 +7,5 @@ export interface ProjectDescription {
     name : string;
     description : string;
     id : string;
+    preview? : string;
 }
