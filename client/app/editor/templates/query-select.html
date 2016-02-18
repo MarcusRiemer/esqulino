@@ -6,8 +6,8 @@
     </div>
     <div class="col-xs-10">
       <div *ngIf="!editing">
-        <span *ngFor="#column of select.columns; #last = last"
-              class="column">{{ column.column }}&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.asName }}</span>
+        <span *ngFor="#column of select.Columns; #last = last"
+              class="column">{{ column.expr.toString() }}&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.name }}</span>
       </div>
       
       <div *ngIf="editing">

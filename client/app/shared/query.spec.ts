@@ -121,11 +121,18 @@ describe('SELECT', () => {
             columns : [
                 { single : {column : "id", table : "person", alias : "p" } },
                 { single : {column : "name" , table : "person" } },
-                { single : {column : "alter" , table : "person" }, as : "alter" }
+                { single : {column : "alter" , table : "person" }, as : "dasAlter" }
             ]});
 
+        // Grand picture
         expect(s.NumberOfColumns).toEqual(3);
 
+        // Alias names
+        expect(s.getAlias(0)).toBeUndefined();
+        expect(s.getAlias(1)).toBeUndefined();
+        expect(s.getAlias(2)).toEqual("dasAlter");
+
+        // Details of those columns
         let col0 = <SyntaxTree.ColumnExpression> s.getColumn(0);
         expect(col0.TableQualifier).toEqual("p");
         expect(col0.ColumnName).toEqual("id");
@@ -134,7 +141,11 @@ describe('SELECT', () => {
         expect(col1.TableQualifier).toEqual("person");
         expect(col1.ColumnName).toEqual("name");
 
-        expect(s.toString()).toBe('SELECT p.id, person.name, person.alter AS alter');
+        let col2 = <SyntaxTree.ColumnExpression> s.getColumn(2);
+        expect(col2.TableQualifier).toEqual("person");
+        expect(col2.ColumnName).toEqual("alter");
+
+        expect(s.toString()).toBe('SELECT p.id, person.name, person.alter AS dasAlter');
 
     });
 });

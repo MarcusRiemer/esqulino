@@ -61,8 +61,8 @@ export class QueryEditorComponent {
         return ({
             select : {
                 columns : [
-                    { single : {column : "id", table : "person" } },
-                    { single : {column : "name" , table : "person" } }
+                    { single : {column : "id", table : "person" }, as : "pId" },
+                    { single : {column : "name" , table : "person" }, as : "pName" }
                 ]
             },
 
