@@ -72,7 +72,19 @@ let schema : Table[] =
     ];
 
 describe('ColumnExpression', () => {
-    it('simple with only table', () => {
+    it('with only a name', () => {
+        let c = new SyntaxTree.ColumnExpression({
+            single : {
+                column : "name"
+            }
+        });
+
+        expect(c.ColumnName).toEqual("name");
+        expect(c.hasTableQualifier).toBeFalsy();
+        expect(c.toString()).toEqual("name");
+    });
+
+    it('with name and table', () => {
         let c = new SyntaxTree.ColumnExpression({
             single : {
                 column : "name",
@@ -80,11 +92,13 @@ describe('ColumnExpression', () => {
             }
         });
 
-        expect(c.ColumnName).toBe("name");
-        expect(c.TableQualifier).toBe("person");
+        expect(c.ColumnName).toEqual("name");
+        expect(c.hasTableQualifier).toBeTruthy();
+        expect(c.TableQualifier).toEqual("person");
+        expect(c.toString()).toEqual("person.name");
     });
 
-    it('simple with table alias', () => {
+    it('with name, table and table alias', () => {
         let c = new SyntaxTree.ColumnExpression({
             single : {
                 column : "name",
@@ -93,8 +107,10 @@ describe('ColumnExpression', () => {
             }
         });
 
-        expect(c.ColumnName).toBe("name");
-        expect(c.TableQualifier).toBe("p");
+        expect(c.ColumnName).toEqual("name");
+        expect(c.hasTableQualifier).toBeTruthy();
+        expect(c.TableQualifier).toEqual("p");
+        expect(c.toString()).toEqual("p.name");
     });
 });
 
@@ -168,7 +184,7 @@ describe('FROM', () => {
         expect(f.getJoin(0).Name).toEqual("ort");
         expect(f.getJoin(0).NameWithAlias).toEqual("ort");
 
-        expect(f.toString()).toEqual("FROM person pe\n\t JOIN ort");
+        expect(f.toString()).toEqual("FROM person pe\n\tJOIN ort");
     });
 
     it('with a two table INNER JOIN', () => {
@@ -191,7 +207,7 @@ describe('FROM', () => {
         expect(f.getJoin(0).Name).toEqual("ort");
         expect(f.getJoin(0).NameWithAlias).toEqual("ort");
 
-        expect(f.toString()).toEqual("FROM person pe\n\t INNER JOIN ort USING(bla)");
+        expect(f.toString()).toEqual("FROM person pe\n\tINNER JOIN ort USING(bla)");
     });
     
 });

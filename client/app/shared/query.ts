@@ -66,20 +66,22 @@ export module SyntaxTree {
      * Base class for all expressions, no matter how many arguments they
      * require or what the return type is.
      */
-    abstract class Expression {
+    export abstract class Expression {
         public abstract toString() : string;
-
-        /**
-         * Maps the "one size fits all"-interface for expressions
-         * to their concrete classes.
-         */
-        static load(expr : Model.Expression) : Expression {
-            if (expr.singleColumn) {
-                return new ColumnExpression({ single : { column : expr.singleColumn } });
-            }
-            throw "Unknown expression: ${expr}"
-        }
     }
+
+    /**
+     * Maps the "one size fits all"-interface for expressions
+     * to their concrete classes.
+     */
+    export function loadExpression(expr : Model.Expression) : Expression {
+        if (expr.singleColumn) {
+            return new ColumnExpression({ single : { column : expr.singleColumn } });
+        }
+        throw "Unknown expression: ${expr}"
+    }
+
+    
    
     /**
      * An expression that maps a single column without any
@@ -306,7 +308,7 @@ export module SyntaxTree {
                 this._separator = ",";
                 break;
             case "cross":
-                this._separator = " JOIN"
+                this._separator = "JOIN"
                 break;
             default:
                 throw `Unknown type in cross join: ${join.cross}`;
@@ -330,12 +332,12 @@ export module SyntaxTree {
         constructor(join : Model.Join) {
             super(join.table, join.alias);
 
-            this._expr = join.inner.expr;
+            this._expr = SyntaxTree.loadExpression(join.inner.expr);
             this._method = join.inner.method;
         }
         
         toString() : string {
-            return (`INNER JOIN ${this.NameWithAlias} ${this._method} (${this._expr.toString()})`);
+            return (`INNER JOIN ${this.NameWithAlias} ${this._method.toUpperCase()}(${this._expr.toString()})`);
         }
     }
 
