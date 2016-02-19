@@ -1,4 +1,4 @@
-# This makefile does not much work itself, but it can route the targets
+# This makefile does not much work itself, but it routes the available targets
 # to the specific targets for server, client or whatever. If you want to e.g.
 # ONLY install dependencies for the client, change to the `client` folder
 # first and call `install-deps` there.
