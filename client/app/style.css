@@ -4,6 +4,10 @@
     font-size: 20px;
 }
 
+.block .keyword.indent {
+    margin-left: 15px;
+}
+
 .block .keyword {
     color: blue;
 }

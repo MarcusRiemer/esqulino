@@ -7,9 +7,32 @@ import {Query, Model, SyntaxTree}       from '../shared/query';
 /**
  * Base class for all SQL top-level components.
  */
-class Editable {
+class SqlComponent {
     public isEditing = false;
 
+    /**
+     * The width specification of the keyword part of a
+     * bootstrap column, e.g. "col-xs-10".
+     *
+     * @return Whitespace delimited bootstrap column specifiers
+     */
+    public get bootstrapColsKeyword() {
+        return ("col-xs-2 col-lg-1")
+    }
+
+    /**
+     * The width specification of the expression part of a
+     * bootstrap column, e.g. "col-xs-10".
+     *
+     * @return Whitespace delimited bootstrap column specifiers
+     */
+    public get bootstrapColsExpr() {
+        return ("col-xs-10 col-lg-11");
+    }
+
+    /**
+     * Toggles editing mode
+     */
     invertEdit() {
         this.isEditing = !this.isEditing;
     }
@@ -19,7 +42,7 @@ class Editable {
     selector : 'sql-select',
     templateUrl : 'app/editor/templates/query-select.html',
 })
-class SelectComponent extends Editable {
+class SelectComponent extends SqlComponent {
     @Input() select : SyntaxTree.Select;
 }
 
@@ -27,7 +50,7 @@ class SelectComponent extends Editable {
     selector : 'sql-from',
     templateUrl : 'app/editor/templates/query-from.html',
 })
-class FromComponent extends Editable {
+class FromComponent extends SqlComponent {
     @Input() from : Model.From;
 }
 
