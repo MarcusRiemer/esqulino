@@ -9,7 +9,7 @@ ALL_JS_MAP_FILES = $(JS_FILES:.js=.js.map)
 all : compile
 
 # Uses the `package.json` file to grab all dependencies
-install-deps :
+install-deps : has-npm
 	npm install
 
 # Continously watches the .ts files for changes and recompiles
@@ -31,3 +31,11 @@ clean :
 # `.ts` file, but still this should be handled with care ...
 clean-all :
 	rm -f $(ALL_JS_FILES) $(ALL_JS_MAP_FILES)
+
+# Ensures the npm "binary" is available
+has-npm :
+ifeq (, $(shell which npm 2>/dev/null))
+	$(error "Node Paketmanager (npm) ist nicht im PATH")
+endif
+
+.PHONY : all install-deps watch compile clean clean-all has-npm
