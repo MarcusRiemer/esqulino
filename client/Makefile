@@ -3,7 +3,7 @@ TS_JS_FILES = $(TS_FILES:.ts=.js)
 TS_JS_MAP_FILES = $(TS_FILES:.ts=.js.map)
 
 ALL_JS_FILES = $(shell find app -iname "*.js")
-ALL_JS_MAP_FILES = $(JS_FILES:.js=.js.map)
+ALL_JS_MAP_FILES = $(ALL_JS_FILES:.js=.js.map)
 
 # Compile by default
 all : compile
@@ -11,6 +11,10 @@ all : compile
 # Uses the `package.json` file to grab all dependencies
 install-deps : has-npm
 	npm install
+# This is a godawful hack, but for some reason grunt-ts
+# does not correctly pick up the exclude property of the
+# tsconfig.json.
+	rm -rf typings/main*
 
 # Continously watches the .ts files for changes and recompiles
 # them on the fly. Useful during development.
