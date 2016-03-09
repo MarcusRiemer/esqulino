@@ -12,11 +12,11 @@ class ScratchSqlApp < Sinatra::Base
   
   # Activate reloading when developing
   configure :development do
-    register Sinatra::Reloader
+    #register Sinatra::Reloader
   end
 
   # Static HTML files are served from here
-  set :public_folder, File.dirname(__FILE__) + "/../client"
+  set :public_folder, File.dirname(__FILE__) + "/../dist/client/"
 
   def given_data_dir
     ARGV[1] || "../data/dev/"
@@ -62,9 +62,15 @@ class ScratchSqlApp < Sinatra::Base
     end
     
   end
-  
 
-  # Catchall for the rest of routes
+  # Seperatly serve application Javascript files, as these are not
+  # compiled "inside" the normal project source
+  #get '/app/*.js*' do
+  #end
+
+  # Catchall for the rest of routes. This enables meaningful navigation
+  # even if the user submits a "deep link" to somewhere inside the
+  # application.
   get '/*' do
     send_file File.expand_path('index.html', settings.public_folder)
   end
