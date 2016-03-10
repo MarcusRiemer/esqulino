@@ -1,8 +1,8 @@
 import {Component, OnInit, Input}  from 'angular2/core';
 import {Router, ROUTER_DIRECTIVES} from 'angular2/router';
 
-import {ProjectDescription}        from './project.description';
-import {ProjectDescriptionService} from './project.description.service';
+import {ProjectDescription}        from '../shared/project.description';
+import {ProjectDescriptionService} from '../shared/project.description.service';
 
 @Component({
     selector: 'project-list-item',
@@ -14,6 +14,9 @@ export class ProjectListItemComponent implements OnInit {
 
     public hasImage = false;
 
+    /**
+     * @return The image URL of this project
+     */
     public get imageUrl() : string {
         return (`/api/project/${this.project.id}/preview`);
     }

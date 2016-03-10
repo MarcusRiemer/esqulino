@@ -2,6 +2,10 @@
 
 Dieses Kapitel beschreibt das Projektformat und die Kommunikation zwischen Server und Client.
 
+\subsection{Umgang mit Referenzen}
+
+Prinzipiell soll jede Resource, also Abfrage oder Seite, vom Benutzer beliebig umbenannt werden können, ohne das dadurch eine Re-organisation aller Verweise nötig wird. Deswegen werden solche Referenzen immer durch eine künstliche ID, technisch exakt eine UUID, hergestellt.
+
 \subsection{Verwaltung von Projekten}
 
 Um den Betrieb für Schüler und Lehrer zu vereinfachen, wird eine Instanz des Servers also in der Lage sein mehrere Schülerprojekte gleichzeitig bereitzustellen. Dafür ist es aber zunächst einmal notwendig zu definieren, wie ein solches Projekt überhaupt strukturiert ist. Grundsätzlich ist ein Projekt eine Sammlung von Dateien in einer festgelegten Ordnerstruktur.
@@ -16,6 +20,8 @@ Um den Betrieb für Schüler und Lehrer zu vereinfachen, wird eine Instanz des S
   }
   \caption{Leeres Projekt}
 \end{dirstruct}
+
+
 
 %%% Local Variables:
 %%% mode: latex

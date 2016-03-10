@@ -3,7 +3,7 @@ import {HTTP_PROVIDERS}                 from 'angular2/http';
 import {CORE_DIRECTIVES}                from 'angular2/common';
 import {RouteConfig, ROUTER_DIRECTIVES, Location} from 'angular2/router';
 
-import {ProjectDescriptionService} from './project.description.service';
+import {ProjectDescriptionService} from '../shared/project.description.service';
 import {ProjectListComponent}      from './project.list.component';
 import {AboutComponent}            from './about.component';
 

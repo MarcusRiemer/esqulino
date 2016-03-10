@@ -228,6 +228,8 @@ describe('FROM', () => {
 describe('Query', () => {
     it ('Whole Query', () => {
         let model : Model.Query = {
+            name : 'test-whole',
+            id : 'id',
             select : {
                 columns : [
                     { single : {column : "id", table : "person" } },
@@ -246,6 +248,8 @@ describe('Query', () => {
         };
 
         let q = new Query(schema, model);
+        expect(q.name).toEqual("test-whole");
+        expect(q.id).toEqual("id");
 
         expect(q.select.numberOfColumns).toEqual(2);
         expect(q.from.numberOfJoins).toEqual(1);
