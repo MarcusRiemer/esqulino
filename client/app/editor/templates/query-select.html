@@ -5,26 +5,8 @@
       <span class="keyword">SELECT</span>
     </div>
     <div [ngClass]="bootstrapColsExpr">
-      <div *ngIf="!editing">
         <span *ngFor="#column of select.columns; #last = last"
               class="column">{{ column.expr.toString() }}&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.name }}</span>
-      </div>
-      
-      <div *ngIf="editing">
-        <div *ngFor="#column of select.columns;"
-             class="row">
-          <div class="col-xs-5">
-            <input  class="form-control" [(ngModel)]="column.column">
-          </div>
-          <div class="col-xs-1 keyword">
-            AS
-          </div>
-          <div class="col-xs-6">
-            <input class="form-control" [(ngModel)]="column.asName">
-          </div>
-        </div>
-        <button class="btn btn-success btn-block">Spalte hinzufügen</button>
-      </div>
     </div>
   </div>
 </div>
