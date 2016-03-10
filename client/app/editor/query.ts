@@ -54,6 +54,15 @@ class FromComponent extends SqlComponent {
     @Input() from : Model.From;
 }
 
+@Component({
+    selector : 'sql-where',
+    templateUrl : 'app/editor/templates/query-where.html',
+})
+class WhereComponent extends SqlComponent {
+    @Input() from : Model.From;
+}
+
+
 /**
  * Transforms a query into its string expression.
  */
@@ -69,7 +78,7 @@ export class SqlStringPipe implements PipeTransform {
     templateUrl: 'app/editor/templates/query.html',
     inputs: ['query'],
     pipes: [SqlStringPipe],
-    directives: [SelectComponent, FromComponent]
+    directives: [SelectComponent, FromComponent, WhereComponent]
 })
 export class QueryComponent {
     public query : Query;

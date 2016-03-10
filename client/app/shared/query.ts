@@ -6,8 +6,18 @@ import {Table}                          from './table';
  */
 export module Model {
 
+    /**
+     * We use a single base type for all kinds of expression, as
+     * this vastly simplifies the storage process. Each kind of
+     * concrete expression is stored under a key.
+     */
     export interface Expression {
         singleColumn? : string;
+        simpleComparision? : {
+            lhs : string,
+            operator : string,
+            rhs : string
+        }
     }
     
     export interface Select {
@@ -37,6 +47,10 @@ export module Model {
             method : string,
             expr : Expression
         }
+    }
+
+    export interface Where {
+        first : Expression;
     }
 
     /**

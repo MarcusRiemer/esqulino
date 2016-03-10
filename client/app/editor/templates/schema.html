@@ -1,45 +1,28 @@
 <h1>Tabellen von {{ project?.name }}</h1>
-<div *ngFor="#table of project?.schema">
-  <h3>{{ table.name }}</h3>
-  <div class="row">
-    <div class="col-sm-1">
-      Idx
-    </div>
-    <div class="col-sm-1">
-      PK
-    </div>
-    <div class="col-sm-1">
-      NN
-    </div>
-    <div class="col-sm-2">
-      Name
-    </div>
-    <div class="col-sm-2">
-      Typ
-    </div>
-    <div class="col-sm-2">
-      Standardwert
-    </div>
-  </div>
-  <div *ngFor="#column of table.columns"
-       class="row">
-    <div class="col-sm-1">
-      {{ column.index }}
-    </div>
-    <div class="col-sm-1">
-      {{ column.primary }}
-    </div>
-    <div class="col-sm-1">
-      {{ column.not_null }}
-    </div>
-    <div class="col-sm-2">
-      {{ column.name }}
-    </div>
-    <div class="col-sm-2">
-      {{ column.type }}
-    </div>
-    <div class="col-sm-2">
-      {{ column.dflt_value }}
-    </div>
-  </div>
+<div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>PK</th>
+        <th>Not Null</th>
+        <th>Name</th>
+        <th>Typ</th>
+        <th>Standardwert</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="#table of project?.schema">
+      <tr>
+        <td colspan="6">Tabelle <code>{{ table.name }}</code></td>
+      </tr>
+      <tr *ngFor="#column of table.columns">
+        <td>{{ column.index }}</td>
+        <td>{{ column.primary }}</td>
+        <td>{{ column.not_null }}</td>
+        <td>{{ column.name }}</td>
+        <td>{{ column.type }}</td>
+        <td>{{ column.dflt_value }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
