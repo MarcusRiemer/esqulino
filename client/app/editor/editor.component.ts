@@ -19,7 +19,7 @@ import {ProjectService}       from './project.service';
 @RouteConfig([
     { path: '/', name : "Schema",   component : SchemaComponent, useAsDefault: true },
     { path: '/settings', name : "Settings", component : SettingsComponent },
-    { path: '/query', name : "Query", component : QueryEditorComponent },
+    { path: '/query/:queryId', name : "Query", component : QueryEditorComponent },
 ])
 export class EditorComponent implements OnInit {
     /**

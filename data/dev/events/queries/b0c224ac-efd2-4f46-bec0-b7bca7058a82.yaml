@@ -1,0 +1,11 @@
+{
+   "name": "Ereignisse",
+   "select":{
+      "columns":[
+      ]
+   },
+   "from":{
+      "table":"ereignis",
+      "alias":"e"
+   }
+}
