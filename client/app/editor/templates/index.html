@@ -3,19 +3,31 @@
     <div class="col-sm-3 col-md-2">
       <h3>esqulino</h3>
       <nav>
-        <ul class="nav nav-pills nav-stacked">
+        <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link disabled" [routerLink]="['Settings']">Einstellungen</a>
+            <a class="nav-link disabled" [routerLink]="['Settings']">
+              <span class="fa fa-cog fa-fw"></span>
+              Einstellungen
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['Schema']">Schema</a>
+            <a class="nav-link" [routerLink]="['Schema']">
+              <span class="fa fa-table fa-fw"></span>
+              Schema
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['Query']">Neue Abfrage</a>
-            <ul class="nav nav-pills nav-stacked nav-query">
+            <a class="nav-link" [routerLink]="['Query']">
+              <span class="fa fa-plus fa-fw"></span>
+              Neue Abfrage
+            </a>
+            <ul class="nav nav-query">
               <li class="nav-item"
                   *ngFor="#query of availableQueries">
-                <a class="nav-link" [routerLink]="['Query']">{{ query.name }}</a>
+                <a class="nav-link" [routerLink]="['Query']">
+                  <span class="fa fa-search fa-fw"></span>
+                  {{ query.name }}
+                </a>
               </li>
             </ul>
           </li>

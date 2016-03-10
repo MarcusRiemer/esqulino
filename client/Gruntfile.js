@@ -45,7 +45,13 @@ module.exports = function (grunt) {
         files: [
           {
             expand: true,
-            src: ['index.html', 'test.html', 'app/**/*.html', 'app/**/*.ts', 'app/**/*.css', 'vendor/**/*.css'],
+            src: ['index.html', 'test.html', 'app/**/*.html', 'app/**/*.ts', 'app/**/*.css'],
+            dest: destPath,
+            filter: 'isFile'
+          },
+          {
+            expand: true,
+            src: ['vendor/**'],
             dest: destPath,
             filter: 'isFile'
           },
