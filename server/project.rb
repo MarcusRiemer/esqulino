@@ -2,7 +2,6 @@ require 'sqlite3'
 require 'json'
 require 'yaml'
 require 'securerandom'
-require 'pathname'
 
 # Describes a single column of a SQLite Table
 class SchemaColumn
@@ -118,7 +117,7 @@ def project_load_queries(project_folder, whole_info)
     sql_model = YAML.load_file(query_file)
 
     # Put the id into the model, as it's normally part of the filename
-    id = Pathname.new(query_file).basename
+    id = File.basename(query_file, ".yaml")
     sql_model['id'] = id
 
     # Append it to the list of values that should be returned

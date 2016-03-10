@@ -35,13 +35,14 @@ export class QueryEditorComponent {
      */
     ngOnInit() {
         var projectId = this._routeParams.get('id');
+        var queryId = this._routeParams.get('queryId');
+        
         this._projectService.getProject(projectId)
             .then(res => {
+                // Project is loaded, display a query
                 this.project = res;
-                // Build a new query in place for testing purposes
-                this.query = new Query(this.project.schema,
-                                       this.generateQueryModel());
-
+                this.query = this.project.getQueryById(queryId);
+                
                 console.log(this.query);
             });
     }

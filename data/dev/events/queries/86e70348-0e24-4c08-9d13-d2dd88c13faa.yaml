@@ -1,5 +1,5 @@
 {
-   "name": "Alles",
+   "name": "Personen",
    "select":{
       "columns":[
          {
@@ -20,13 +20,6 @@
    },
    "from":{
       "table":"person",
-      "alias":"p",
-      "joins":[
-         {
-            "table":"ereignis",
-            "alias":"e",
-            "cross":"cross"
-         }
-      ]
+      "alias":"p"
    }
 }

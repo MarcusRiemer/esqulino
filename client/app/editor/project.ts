@@ -29,7 +29,19 @@ export class Project {
         });
     }
 
+    /**
+     * @return All available queries, with no guaranteed order.
+     */
     public get queries() {
         return (this._queries);
+    }
+
+    /**
+     * @return A single query identified by it's ID
+     */
+    public getQueryById(id : string) : Query {
+        return (this._queries.find(item => {
+            return (item.id == id);
+        }));
     }
 }

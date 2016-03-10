@@ -1,7 +1,6 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-3 col-md-2">
-      <h3>esqulino</h3>
       <nav>
         <ul class="nav">
           <li class="nav-item">
@@ -17,19 +16,25 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['Query']">
+            <a class="nav-link disabled">
               <span class="fa fa-plus fa-fw"></span>
               Neue Abfrage
             </a>
             <ul class="nav nav-query">
               <li class="nav-item"
                   *ngFor="#query of availableQueries">
-                <a class="nav-link" [routerLink]="['Query']">
+                <a class="nav-link" [routerLink]="['Query', {queryId : query.id}]">
                   <span class="fa fa-search fa-fw"></span>
                   {{ query.name }}
                 </a>
               </li>
             </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled">
+              <span class="fa fa-plus fa-fw"></span>
+              Neue Seite
+            </a>
           </li>
         </ul>
       </nav>
