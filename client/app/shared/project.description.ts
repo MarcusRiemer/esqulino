@@ -1,3 +1,6 @@
+import {Model}    from "./query"
+import {Table}    from "./table"
+
 /**
  * The properties of a project that can be queried from the
  * server. Only contains publically visible data, not the
@@ -8,4 +11,7 @@ export interface ProjectDescription {
     description : string;
     id : string;
     preview? : string;
+
+    schema? : Table[];
+    queries? : [Model.Query]
 }

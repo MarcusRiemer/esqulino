@@ -36,6 +36,10 @@ nav.front {
     margin-bottom: 15px;
 }
 
+nav .nav-query {
+    margin-left: 15px;
+}
+
 .project-list-item .card-img-top {
     opacity: 0.2 ;
     transition: opacity 0.3s;

@@ -59,22 +59,35 @@ export class QueryEditorComponent {
      */
     generateQueryModel() : Model.Query {
         return ({
-            select : {
-                columns : [
-                    { single : {column : "id", table : "person" }, as : "pId" },
-                    { single : {column : "name" , table : "person" }, as : "pName" }
+            "select":{
+                "columns":[
+                    {
+                        "single":{
+                            "column":"id",
+                            "table":"person"
+                        },
+                        "as":"pId"
+                    },
+                    {
+                        "single":{
+                            "column":"name",
+                            "table":"person"
+                        },
+                        "as":"pName"
+                    }
                 ]
             },
-
-            from : { table : "person",
-                     alias : "pe",
-                     joins : [
-                         { table : "ort",
-                           alias  : "o",
-                           cross : "cross"
-                         }
-                     ]}
-            
+            "from":{
+                "table":"person",
+                "alias":"pe",
+                "joins":[
+                    {
+                        "table":"ort",
+                        "alias":"o",
+                        "cross":"cross"
+                    }
+                ]
+            }
         });
         
     }

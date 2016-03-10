@@ -25,7 +25,7 @@ export class EditorComponent implements OnInit {
     /**
      * The currently edited project
      */
-    public project : Project;
+    public project : Project = null;
 
     /**
      * Used for dependency injection.
@@ -42,5 +42,13 @@ export class EditorComponent implements OnInit {
         var projectId = this._routeParams.get('id');
         this._projectService.getProject(projectId)
             .then(res => this.project = res);
+    }
+
+    get availableQueries() {
+        if (this.project) {
+            return (this.project.queries);
+        } else {
+            return ([]);
+        }
     }
 }

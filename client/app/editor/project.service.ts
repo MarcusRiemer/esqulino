@@ -3,7 +3,8 @@ import 'rxjs/Rx';
 import {Injectable}     from 'angular2/core';
 import {Http, Response} from 'angular2/http';
 
-import {Project}        from './project'
+import {ProjectDescription} from '../shared/project.description'
+import {Project}            from './project'
 
 /**
  * Wraps access to a whole project.
@@ -15,7 +16,7 @@ export class ProjectService {
 
     // If a request is currently in progress, there is no need to fire
     // a second request.
-    private  in_progress : Promise<Project>;
+    private in_progress : Promise<Project>;
 
     /**
      * @param _http Dependently injected

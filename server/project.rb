@@ -1,6 +1,8 @@
-require "sqlite3"
-require "json"
-
+require 'sqlite3'
+require 'json'
+require 'yaml'
+require 'securerandom'
+require 'pathname'
 
 # Describes a single column of a SQLite Table
 class SchemaColumn
@@ -100,6 +102,28 @@ def project_public_info(whole_info)
   to_return['id'] = whole_info['id']
   to_return['preview'] = whole_info['preview']
 
-
   return to_return;
+end
+
+# Retrieves all queries that are part of the given project.
+#
+# @param project_folder The projects root folder
+# @param whole_info The "over-the-wire" format that describes a project
+def project_load_queries(project_folder, whole_info)
+  to_return = []
+
+  query_folder = File.join(project_folder, "queries")
+  Dir.glob(query_folder + "/*.yaml").each do |query_file|
+    # Load the model from disk
+    sql_model = YAML.load_file(query_file)
+
+    # Put the id into the model, as it's normally part of the filename
+    id = Pathname.new(query_file).basename
+    sql_model['id'] = id
+
+    # Append it to the list of values that should be returned
+    to_return << sql_model
+  end
+
+  return to_return
 end

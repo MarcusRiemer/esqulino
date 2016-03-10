@@ -45,13 +45,15 @@ module.exports = function (grunt) {
         files: [
           {
             expand: true,
-            src: ['index.html', 'app/**/*.html', 'app/**/*.css', 'vendor/**/*.css'],
+            src: ['index.html', 'test.html', 'app/**/*.html', 'app/**/*.ts', 'app/**/*.css', 'vendor/**/*.css'],
             dest: destPath,
             filter: 'isFile'
           },
           {
             expand: true,
             src: ['node_modules/es6-shim/**/*.js',
+                  'node_modules/jasmine-core/**/*.js',
+                  'node_modules/jasmine-core/**/*.css',
                   'node_modules/systemjs/dist/**/*.js',
                   'node_modules/rxjs/bundles/**/*.js',
                   'node_modules/angular2/bundles/**/*.js'],

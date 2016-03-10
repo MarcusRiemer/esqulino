@@ -39,9 +39,15 @@ export module Model {
         }
     }
 
+    /**
+     * Outermost description of a query. This contains
+     * the whole structure and some identifying properties.
+     */
     export interface Query {
         select : Select;
-        from : From;   
+        from : From;
+        name? : string;
+        id? : string;
     }
 }
 
@@ -438,10 +444,16 @@ export class Query {
     public schema : Table[];
     private model : Model.Query;
 
+    private _name : string;
+    private _id   : string;
+
     private _select : SyntaxTree.Select;
     private _from   : SyntaxTree.From;
     
     constructor(schema : Table[], model : Model.Query) {
+        this._name = model.name;
+        this._id = model.id;
+        
         this.schema = schema;
         this.model = model;
 
@@ -461,6 +473,20 @@ export class Query {
      */
     get from() {
         return (this._from);
+    }
+
+    /**
+     * @return A "meaningful" name for the query.
+     */
+    get name() {
+        return (this._name);
+    }
+    
+    /**
+     * @return A "meaningful" name for the query.
+     */
+    get id() {
+        return (this._id);
     }
 
 

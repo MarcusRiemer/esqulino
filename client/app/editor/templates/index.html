@@ -11,9 +11,14 @@
             <a class="nav-link" [routerLink]="['Schema']">Schema</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['Query']">Abfrage</a>
+            <a class="nav-link" [routerLink]="['Query']">Neue Abfrage</a>
+            <ul class="nav nav-pills nav-stacked nav-query">
+              <li class="nav-item"
+                  *ngFor="#query of availableQueries">
+                <a class="nav-link" [routerLink]="['Query']">{{ query.name }}</a>
+              </li>
+            </ul>
           </li>
-
         </ul>
       </nav>
     </div>
