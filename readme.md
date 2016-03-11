@@ -1,16 +1,18 @@
-# The "Lets try the Scratch-Approach for SQL"-Project
+# The esqulino-Project
 
-For a lack of a better name, this is all I have got at the moment.
+For a lack of a better name, this is all I have got at the moment. It's meant to be a phonetic play on the `SQL`-abbreviation ending in "lino", as many popular programs on the german KIKA ("KinderKanal", german for "childrens channel").
 
 # Installing and Running
 
-This project consists of two components: A Ruby-webserver and a Angular2-client. I know there are loads of fancy task-runners out there, but my "normal" interface to all programming-related tasks is still a Makefile.
+This project consists of two components: A Ruby-webserver and a Angular2-client. I know there are loads of fancy task-runners out there, but my "normal" interface to all programming-related tasks is still a Makefile. Grunt is used to compile and copy stuff for the frontend, but all relevant commands are wrapped in the Makefile.
 
-* If you have the "big" dependencies installed (Ruby for the Server and Node.js for the client), a simple `make install-deps` should pull all dependencies.
+* If you have the "big" dependencies installed (`ruby` for the Server and `node.js` for the client), a simple `make install-deps` should pull all dependencies.
 
 * After that, the client needs to be compiled once: `make client-compile`.
 
 * You may now run the server, to do this locally simply use `make server-run` and it will spin up a local webrick instance at port `9292`.
+
+Currently it is assumed that this project will run on a UNIX-like environment. Although running it on Windows should be possible, all helper scripts (and Makefiles) make a lot of UNIX-centric assumptions.
 
 ## Server
 
@@ -36,6 +38,6 @@ Name                                                       | Used for           
 [Ruby](https://www.ruby-lang.org/)                         | Server-side scripting language                           | Server       | Ruby
 [Sinatra](http://www.sinatrarb.com/)                       | HTTP Handling and routing for backend                    | Server       | MIT
 [Sinatra Contrib](http://www.sinatrarb.com/contrib/)       | Config-File, Code-Reloading and JSON serialization       | Server       | MIT
-[SQLite 3](https://www.sqlite.org/)                        | Database backend for projects                            | Both         | CC0
+[SQLite 3](https://www.sqlite.org/)                        | Database backend for projects                            | Server       | CC0
 [Typescript](http://www.typescriptlang.org/)               | Client-side scripting language                           | Client       | Apache 2.0
 
