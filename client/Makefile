@@ -19,22 +19,17 @@ install-deps : has-npm
 # Continously watches the .ts files for changes and recompiles
 # them on the fly. Useful during development.
 watch :
-	npm run "tsc:w"
+	grunt watch
 
 # One-shot compilation.
 compile :
-	npm run "tsc"
+	grunt default
 
-# Getting rid of all `.js` and `.js.map` files that have a corresponding
-# `.ts` file.
+# Removes the dist/client directory which is one level upwards.
+# This is probably not very good style, but required to ensure
+# that `make clean compile` actually sets of with an empty folder.
 clean :
-	rm -f $(TS_JS_FILES) $(TS_JS_MAP_FILES)
-
-# Getting rid of all `.js` and `.js.map` files in the app folder. There
-# is no reason anything in that folder does not have a corresponding
-# `.ts` file, but still this should be handled with care ...
-clean-all :
-	rm -f $(ALL_JS_FILES) $(ALL_JS_MAP_FILES)
+	rm -rf ../dist/client
 
 # Ensures the npm "binary" is available
 has-npm :
