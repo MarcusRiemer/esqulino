@@ -16,13 +16,13 @@ doc : has-yard
 # Ensures the bundle "binary" is available
 has-bundle :
 ifeq (, $(wildcard $(BUNDLE_BIN)))
-	$(error "Ruby Bundler (bundle) is not in PATH")
+	$(error "Ruby Bundler (bundle) not in PATH")
 endif
 
 # Ensures the yard "binary" is available
 has-yard :
 ifeq (, $(wildcard $(BUNDLE_BIN)))
-	$(error "Ruby documentation generation (yard) is not in PATH")
+	$(error "Ruby documentation generation (yard) not in PATH")
 endif
 
 
