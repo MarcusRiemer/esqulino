@@ -18,11 +18,11 @@ install-deps : has-npm
 
 # Continously watches the .ts files for changes and recompiles
 # them on the fly. Useful during development.
-watch :
+watch : has-grunt
 	grunt watch
 
 # One-shot compilation.
-compile :
+compile : has-grunt
 	grunt default
 
 # Removes the dist/client directory which is one level upwards.
@@ -34,7 +34,14 @@ clean :
 # Ensures the npm "binary" is available
 has-npm :
 ifeq (, $(shell which npm 2>/dev/null))
-	$(error "Node Paketmanager (npm) ist nicht im PATH")
+	$(error "Node Paketmanager (npm) not in PATH")
 endif
+
+# Ensures the npm "binary" is available
+has-grunt :
+ifeq (, $(shell which grunt 2>/dev/null))
+	$(error "Grunt Taskrunner (grunt) not in PATH")
+endif
+
 
 .PHONY : all install-deps watch compile clean clean-all has-npm
