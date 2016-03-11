@@ -7,32 +7,44 @@ import {Table}                          from './table';
 export module Model {
 
     /**
+     * The logical leaf of every expression tree, ends recursion.
+     */
+    export interface SingleColumnExpression {
+        column : string;
+        table? : string;
+        alias? : string;
+    }
+
+    /**
+     * Combines two expressions with a binary operator.
+     */
+    export interface BinaryExpression {
+        lhs : Expression;
+        operator : string;
+        rhs : Expression;
+        simple : boolean;
+    }
+
+    /**
      * We use a single base type for all kinds of expression, as
      * this vastly simplifies the storage process. Each kind of
-     * concrete expression is stored under a key.
+     * concrete expression is stored under a key. Only one of these
+     * keys may be set at runtime.
      */
     export interface Expression {
-        singleColumn? : string;
-        simpleComparision? : {
-            lhs : string,
-            operator : string,
-            rhs : string
-        }
+        singleColumn? : SingleColumnExpression;
+        binary? : BinaryExpression;
     }
-    
+
     export interface Select {
         columns : SelectColumn[];
     }
 
     export interface SelectColumn {
-        single? : {
-            column : string;
-            table? : string;
-            alias? : string;
-        }
+        expr : Expression;
         as? : string;
     }
-    
+
     export interface From {
         table : string;
         alias? : string;
@@ -44,8 +56,8 @@ export module Model {
         alias? : string,
         cross? : string,
         inner? : {
-            method : string,
-            expr : Expression
+            using? : string,
+            on? : Expression
         }
     }
 
@@ -77,7 +89,7 @@ export module SyntaxTree {
      */
     abstract class Component {
         /**
-         * 
+         *
          */
         public abstract toString() : string;
     }
@@ -96,16 +108,17 @@ export module SyntaxTree {
      */
     export function loadExpression(expr : Model.Expression) : Expression {
         if (expr.singleColumn) {
-            return new ColumnExpression({ single : { column : expr.singleColumn } });
+            return new ColumnExpression(expr.singleColumn);
+        } else if (expr.binary) {
+            return new BinaryExpression(expr.binary);
         }
-        throw "Unknown expression: ${expr}"
+        throw `Unknown expression: ${JSON.stringify(expr)}`
     }
 
-    
-   
     /**
      * An expression that maps a single column without any
-     * transformations that are taking place.
+     * transformations that are taking place. Logically a leaf
+     * of an Expression Tree
      */
     export class ColumnExpression extends Expression {
         private _tableName : string = null;
@@ -113,11 +126,11 @@ export module SyntaxTree {
 
         private _columnName : string;
 
-        constructor(model : Model.SelectColumn) {
+        constructor(model : Model.SingleColumnExpression) {
             super();
-            this._columnName = model.single.column;
-            this._tableName = model.single.table;
-            this._tableAlias = model.single.alias;
+            this._columnName = model.column;
+            this._tableName = model.table;
+            this._tableAlias = model.alias;
         }
 
         /**
@@ -130,7 +143,7 @@ export module SyntaxTree {
         /**
          * Retrieves the highest ranked name that should be used to
          * qualify the name of this column.
-         */  
+         */
         get tableQualifier() {
             if (this._tableAlias) {
                 // Table alias has the highest weight to be returned
@@ -159,12 +172,61 @@ export module SyntaxTree {
             } else {
                 return (this._columnName);
             }
-            
+
         }
     }
 
     /**
-     * Allows an expression to be named, typically in "SELECT <expr> AS <name>" 
+     * Combines two expressions into a single expression.
+     */
+    export class BinaryExpression extends Expression {
+        private _lhs : Expression;
+        private _rhs : Expression;
+
+        private _operator : string;
+        private _isSimple : boolean;
+
+        public constructor(expr : Model.BinaryExpression) {
+            super();
+
+            this._lhs = loadExpression(expr.lhs);
+            this._rhs = loadExpression(expr.rhs);
+            this._isSimple = expr.simple;
+            this._operator = expr.operator;
+        }
+
+        /**
+         * @return The string representation of both operands with
+         *         the operator in between.
+         */
+        public toString() : string {
+            return (`${this._lhs} ${this._operator} ${this._rhs}`)
+        }
+
+        /**
+         * @return The used operator
+         */
+        public get operator() {
+            return (this._operator);
+        }
+
+        /**
+         * @return The left operand
+         */
+        public get lhs() {
+            return (this._lhs);
+        }
+
+        /**
+         * @return The right operand
+         */
+        public get rhs() {
+            return (this._rhs);
+        }
+    }
+
+    /**
+     * Allows an expression to be named, typically in "SELECT <expr> AS <name>"
      * contexts.
      */
     interface NamedExpression {
@@ -185,16 +247,8 @@ export module SyntaxTree {
             select.columns.forEach(v => {
                 var toAdd : NamedExpression = {
                     name : v.as,
-                    expr : null
+                    expr : loadExpression(v.expr)
                 };
-                
-                if (v.single) {
-                    toAdd.expr = new ColumnExpression(v);
-                }
-
-                if (toAdd.expr === null) {
-                    throw "Unknown column expression";
-                }
 
                 this._columns.push(toAdd);
             });
@@ -244,7 +298,7 @@ export module SyntaxTree {
                 if (i != 0) {
                     toReturn += ",";
                 }
-                
+
                 // Every column is separated by a single space
                 toReturn += " " + c.expr.toString();
 
@@ -298,7 +352,7 @@ export module SyntaxTree {
         get sqlJoinKeyword() {
             return (this._sqlJoinKeyword);
         }
-        
+
         /**
          * @return The name of this table with it's alias, if there is an
          * alias given.
@@ -313,7 +367,7 @@ export module SyntaxTree {
 
             return (toReturn);
         }
-                
+
         /**
          * @return A string representing a join with a single table
          */
@@ -331,7 +385,7 @@ export module SyntaxTree {
             // No SQL Keyword for the first statement
             super(null, name, alias);
         }
-        
+
         toString() : string {
             return this.nameWithAlias;
         }
@@ -354,7 +408,7 @@ export module SyntaxTree {
             default:
                 throw `Unknown type in cross join: ${join.cross}`;
             }
-            
+
             super(separator, join.table, join.alias);
         }
 
@@ -369,18 +423,32 @@ export module SyntaxTree {
      * All types of INNER JOINs.
      */
     export class InnerJoin extends Join {
-        private _method : string;
-        private _expr : Expression;
+        private _using : string;
+        private _on : Expression;
 
         constructor(join : Model.Join) {
             super("INNER JOIN", join.table, join.alias);
 
-            this._expr = SyntaxTree.loadExpression(join.inner.expr);
-            this._method = join.inner.method;
+            // Ensure USING XOR ON
+            if ((join.inner.on && join.inner.using) ||
+                (!join.inner.on && !join.inner.using)) {
+                throw { msg : "USING ^ ON check failed" };
+            }
+
+            // Load expression would throw on a null value, so
+            // we need to wrap this.
+            if (join.inner.on) {
+                this._on = SyntaxTree.loadExpression(join.inner.on);
+            }
+            
+            this._using = join.inner.using;
         }
-        
+
         toString() : string {
-            return (`${this._sqlJoinKeyword} ${this.nameWithAlias} ${this._method.toUpperCase()}(${this._expr.toString()})`);
+            let method = (this._using) ? "USING" : "ON";
+            let expr = (this._using) ? this._using : this._on.toString();
+            
+            return (`${this._sqlJoinKeyword} ${this.nameWithAlias} ${method}(${expr})`);
         }
     }
 
@@ -427,7 +495,7 @@ export module SyntaxTree {
         get joins() : Join[] {
             return (this._joins);
         }
-        
+
         /**
          * @param n Starting at 0
          * @return The n-th join of this FROM clause
@@ -463,11 +531,11 @@ export class Query {
 
     private _select : SyntaxTree.Select;
     private _from   : SyntaxTree.From;
-    
+
     constructor(schema : Table[], model : Model.Query) {
         this._name = model.name;
         this._id = model.id;
-        
+
         this.schema = schema;
         this.model = model;
 
@@ -495,7 +563,7 @@ export class Query {
     get name() {
         return (this._name);
     }
-    
+
     /**
      * @return A "meaningful" name for the query.
      */

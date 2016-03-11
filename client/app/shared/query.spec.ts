@@ -74,9 +74,7 @@ let schema : Table[] =
 describe('ColumnExpression', () => {
     it('with only a name', () => {
         let c = new SyntaxTree.ColumnExpression({
-            single : {
-                column : "name"
-            }
+            column : "name"
         });
 
         expect(c.columnName).toEqual("name");
@@ -86,10 +84,8 @@ describe('ColumnExpression', () => {
 
     it('with name and table', () => {
         let c = new SyntaxTree.ColumnExpression({
-            single : {
-                column : "name",
-                table : "person"
-            }
+            column : "name",
+            table : "person"
         });
 
         expect(c.columnName).toEqual("name");
@@ -100,11 +96,9 @@ describe('ColumnExpression', () => {
 
     it('with name, table and table alias', () => {
         let c = new SyntaxTree.ColumnExpression({
-            single : {
-                column : "name",
-                table : "person",
-                alias : "p"
-            }
+            column : "name",
+            table : "person",
+            alias : "p"
         });
 
         expect(c.columnName).toEqual("name");
@@ -114,14 +108,37 @@ describe('ColumnExpression', () => {
     });
 });
 
+describe('SimpleCompareExpression', () => {
+    it('Basic', () => {
+        let e = new SyntaxTree.BinaryExpression({
+            lhs : { singleColumn : { column : "name", table : "person" } },
+            rhs : { singleColumn : { column : "name", table : "stadt" } },
+            operator : "<>",
+            simple : true
+        });
+
+        expect(e.operator).toEqual("<>");
+        let lhs = <SyntaxTree.ColumnExpression> e.lhs;
+        let rhs = <SyntaxTree.ColumnExpression> e.rhs;
+
+        expect(lhs.columnName).toEqual("name");
+        expect(lhs.tableQualifier).toEqual("person");
+
+        expect(rhs.columnName).toEqual("name");
+        expect(rhs.tableQualifier).toEqual("stadt");
+
+        expect(e.toString()).toEqual("person.name <> stadt.name");
+    });
+});
+
 
 describe('SELECT', () => {
     it('with three simple columns', () => {
         let s = new SyntaxTree.Select({
             columns : [
-                { single : {column : "id", table : "person", alias : "p" } },
-                { single : {column : "name" , table : "person" } },
-                { single : {column : "alter" , table : "person" }, as : "dasAlter" }
+                { expr : { singleColumn : {column : "id", table : "person", alias : "p" } } },
+                { expr : { singleColumn : {column : "name" , table : "person" } } },
+                { expr : { singleColumn : {column : "alter" , table : "person" } }, as : "dasAlter" }
             ]});
 
         // Grand picture
@@ -207,8 +224,7 @@ describe('FROM', () => {
             joins : [
                 { table : "ort",
                   inner : {
-                      method : "using",
-                      expr : { singleColumn : "bla" }
+                      using : "bla"
                   }
                 }
             ]
@@ -232,8 +248,8 @@ describe('Query', () => {
             id : 'id',
             select : {
                 columns : [
-                    { single : {column : "id", table : "person" } },
-                    { single : {column : "name" , table : "person" } }
+                    { expr : { singleColumn : {column : "id", table : "person" } } },
+                    { expr : {singleColumn : {column : "name" , table : "person" } } }
                 ]
             },
 

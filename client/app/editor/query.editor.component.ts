@@ -63,16 +63,20 @@ export class QueryEditorComponent {
             "select":{
                 "columns":[
                     {
-                        "single":{
+                        "expr" : {
+                            "singleColumn":{
                             "column":"id",
                             "table":"person"
+                            },
                         },
                         "as":"pId"
                     },
                     {
-                        "single":{
-                            "column":"name",
-                            "table":"person"
+                        "expr" : {
+                            "singleColumn":{
+                                "column":"name",
+                                "table":"person"
+                            },
                         },
                         "as":"pName"
                     }
