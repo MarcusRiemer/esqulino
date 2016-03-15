@@ -31,6 +31,10 @@ compile : has-grunt
 clean :
 	rm -rf ../dist/client
 
+# Remove everything that has been downloaded by `install-deps`
+clean-deps:
+	rm -rf node_modules typings
+
 # Ensures the npm "binary" is available
 has-npm :
 ifeq (, $(shell which npm 2>/dev/null))
