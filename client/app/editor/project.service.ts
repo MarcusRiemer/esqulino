@@ -13,29 +13,38 @@ import {Project}            from './project'
  */
 @Injectable()
 export class ProjectService {
-    // The project cache
-    private cache : Project;
-
-    // If a request is currently in progress, there is no need to fire
-    // a second request.
-    private in_progress : Promise<Project>;
-
+    // The same instance should be shared among all projects
+    private cache : {
+        observable : Observable<Project>,
+        id : string
+    };
+    
     /**
-     * @param _http Dependently injected
+     * @param _http Dependently injected by Angular2
      */
     constructor(private _http: Http) { }
 
     /**
-     * Immediatly retrieve cached projects or, if no projects are present,
-     * fire up a requests for those projects.
+     * @param id The id of the project to retrieve
+     * @return An observable that updates itself if the selected project changes.
      */
     getProject(id : string) : Observable<Project> {
-        console.log(`Getting ${id}`);
+        // TODO: Actually cache the result, this seems to fire up a new request every time.
         
-        return this._http.get('/api/project/' + id)
-            .do(res => console.log(res.json()))
-            .map(res => new Project(res.json()))
-            .catch(this.handleError);
+        if (!this.cache || this.cache.id != id) {
+            let obs = this._http.get('/api/project/' + id)
+                .do(res => console.log(res.json()))
+                .map(res => new Project(res.json()))
+                .catch(this.handleError);
+                    
+            this.cache = {
+                observable : obs,
+                id : id
+            }
+        }
+        
+        
+        return this.cache.observable.share();
         
     }
 

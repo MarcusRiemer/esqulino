@@ -44,14 +44,11 @@ export class QueryEditorComponent {
         var projectId = this._parentRouteParams.get('projectId');
         var queryId = this._routeParams.get('queryId');
 
-
         this._projectService.getProject(projectId)
             .subscribe(res => {
                 // Project is loaded, display a query
                 this.project = res;
                 this.query = this.project.getQueryById(queryId);
-
-                console.log(this.query);
             });
     }
 }
