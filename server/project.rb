@@ -112,7 +112,7 @@ def project_load_queries(project_folder, whole_info)
   to_return = []
 
   query_folder = File.join(project_folder, "queries")
-  Dir.glob(query_folder + "/*.yaml").each do |query_file|
+  Dir.glob(query_folder + "/*.json").each do |query_file|
     # Load the model from disk
     sql_model = YAML.load_file(query_file)
 
