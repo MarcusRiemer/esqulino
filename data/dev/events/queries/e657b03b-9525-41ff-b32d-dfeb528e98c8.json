@@ -1,32 +1,36 @@
 {
-   "name": "Alles",
-   "select":{
-      "columns":[
-         {
-            "expr" : { "singleColumn":{
-               "column":"id",
-               "table":"person"
-            } },
-            "as":"pId"
-         },
-         {
-            "expr" : { "singleColumn":{
-               "column":"name",
-               "table":"person"
-            } },
-            "as":"pName"
-         }
-      ]
-   },
-   "from":{
-      "table":"person",
-      "alias":"p",
-      "joins":[
-         {
-            "table":"ereignis",
-            "alias":"e",
-            "cross":"cross"
-         }
-      ]
-   }
+  "name": "Alles",
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "id",
+            "table": "person"
+          }
+        },
+        "as": "pId"
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "name",
+            "table": "person"
+          }
+        },
+        "as": "pName"
+      }
+    ]
+  },
+  "from": {
+    "table": "person",
+    "alias": "p",
+    "joins": [
+      {
+        "table": "ereignis",
+        "alias": "e",
+        "cross": "cross"
+      }
+    ]
+  }
 }
