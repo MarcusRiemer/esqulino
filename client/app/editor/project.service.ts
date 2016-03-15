@@ -3,6 +3,8 @@ import 'rxjs/Rx';
 import {Injectable}     from 'angular2/core';
 import {Http, Response} from 'angular2/http';
 
+import {Observable}     from 'rxjs/Observable';
+
 import {ProjectDescription} from '../shared/project.description'
 import {Project}            from './project'
 
@@ -27,34 +29,20 @@ export class ProjectService {
      * Immediatly retrieve cached projects or, if no projects are present,
      * fire up a requests for those projects.
      */
-    getProject(id : string) : Promise<Project> {
-        // First stop: A cached result
-        if (this.cache) {            
-            return Promise.resolve(this.cache);
-        }
-        // Second stop: A request that is currently in progress
-        else if (this.in_progress) {
-            return this.in_progress;
-        }
-        // Third stop: A new request
-        else {
-            return this.fetchProject(id)
-        }
+    getProject(id : string) : Observable<Project> {
+        console.log(`Getting ${id}`);
+        
+        return this._http.get('/api/project/' + id)
+            .do(res => console.log(res.json()))
+            .map(res => new Project(res.json()))
+            .catch(this.handleError);
+        
     }
 
-    /**
-     * Fetch a new set of projects and also place them in the cache.
-     */
-    fetchProject(id : string) : Promise<Project> {
-        this.in_progress = this._http.get('/api/project/' + id)
-            .map(res => new Project(res.json()))
-            .toPromise();
-
-        this.in_progress.then(res => {
-            this.cache = res
-            this.in_progress = null
-        });
-
-        return this.in_progress
+    private handleError (error: Response) {
+        // in a real world app, we may send the error to some remote logging infrastructure
+        // instead of just logging it to the console
+        console.error(error);
+        return Observable.throw(error);
     }
 }

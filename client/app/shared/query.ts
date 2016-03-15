@@ -440,14 +440,14 @@ export module SyntaxTree {
             if (join.inner.on) {
                 this._on = SyntaxTree.loadExpression(join.inner.on);
             }
-            
+
             this._using = join.inner.using;
         }
 
         toString() : string {
             let method = (this._using) ? "USING" : "ON";
             let expr = (this._using) ? this._using : this._on.toString();
-            
+
             return (`${this._sqlJoinKeyword} ${this.nameWithAlias} ${method}(${expr})`);
         }
     }

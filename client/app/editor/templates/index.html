@@ -22,7 +22,7 @@
             </a>
             <ul class="nav nav-query">
               <li class="nav-item"
-                  *ngFor="#query of availableQueries">
+                  *ngFor="#query of project?.queries">
                 <a class="nav-link" [routerLink]="['Query', {queryId : query.id}]">
                   <span class="fa fa-search fa-fw"></span>
                   {{ query.name }}
