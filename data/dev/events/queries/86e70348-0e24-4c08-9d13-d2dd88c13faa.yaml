@@ -3,17 +3,17 @@
    "select":{
       "columns":[
          {
-            "single":{
+            "expr" : { "singleColumn":{
                "column":"id",
                "table":"person"
-            },
+            } },
             "as":"pId"
          },
          {
-            "single":{
+            "expr" : {"singleColumn":{
                "column":"name",
                "table":"person"
-            },
+            } },
             "as":"pName"
          }
       ]
