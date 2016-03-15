@@ -1,25 +1,29 @@
 {
-   "name": "Personen",
-   "select":{
-      "columns":[
-         {
-            "expr" : { "singleColumn":{
-               "column":"id",
-               "table":"person"
-            } },
-            "as":"pId"
-         },
-         {
-            "expr" : {"singleColumn":{
-               "column":"name",
-               "table":"person"
-            } },
-            "as":"pName"
-         }
-      ]
-   },
-   "from":{
-      "table":"person",
-      "alias":"p"
-   }
+  "name": "Personen",
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "id",
+            "table": "person"
+          }
+        },
+        "as": "pId"
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "name",
+            "table": "person"
+          }
+        },
+        "as": "pName"
+      }
+    ]
+  },
+  "from": {
+    "table": "person",
+    "alias": "p"
+  }
 }
