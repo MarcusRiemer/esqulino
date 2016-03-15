@@ -39,9 +39,14 @@ export class EditorComponent implements OnInit {
      * Load the project for all sub-components.
      */
     ngOnInit() {
-        var projectId = this._routeParams.get('id');
+        var projectId = this._routeParams.get('projectId');
+
+        console.log(`Loading project with id "${projectId}"`);
+        
         this._projectService.getProject(projectId)
-            .then(res => this.project = res);
+            .subscribe(
+                res => this.project = res
+            );
     }
 
     get availableQueries() {

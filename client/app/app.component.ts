@@ -14,8 +14,8 @@ import {FrontComponent}  from './front/front.component';
     providers: [HTTP_PROVIDERS]
 })
 @RouteConfig([
-    { path: 'front/...', name: "Front", component: FrontComponent, useAsDefault : true },
-    { path: 'editor/:id/...', name: "Editor", component: EditorComponent }
+    { path: '/front/...', name: "Front", component: FrontComponent, useAsDefault : true },
+    { path: '/editor/:projectId/...', name: "Editor", component: EditorComponent }
 ])
 export class SqlScratchComponent {
 
