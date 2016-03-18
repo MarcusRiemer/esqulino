@@ -106,8 +106,8 @@ end
 
 # Retrieves all queries that are part of the given project.
 #
-# @param project_folder The projects root folder
-# @param whole_info The "over-the-wire" format that describes a project
+# @param project_folder [string] The projects root folder
+# @param whole_info [Hash] The "over-the-wire" format that describes a project
 def project_load_queries(project_folder, whole_info)
   to_return = []
 
@@ -116,9 +116,9 @@ def project_load_queries(project_folder, whole_info)
     # Load the model from disk
     sql_model = YAML.load_file(query_file)
 
-    # Put the id into the model, as it's normally part of the filename
-    id = File.basename(query_file, ".yaml")
-    sql_model['id'] = id.slice(0, id.index(".json"))
+    # Put the id into the model, which is part of the filename
+    sql_model['id'] = File.basename(query_file, ".json")
+    
 
     # Append it to the list of values that should be returned
     to_return << sql_model
