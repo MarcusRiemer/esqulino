@@ -73,49 +73,63 @@ let schema : Table[] =
 
 describe('ColumnExpression', () => {
     it('with only a name', () => {
-        let c = new SyntaxTree.ColumnExpression({
+        const model = {
             column : "name"
-        });
+        };
+        
+        let c = new SyntaxTree.ColumnExpression(model);
 
         expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeFalsy();
+        
         expect(c.toString()).toEqual("name");
+        expect(c.toModel().singleColumn).toEqual(model);
     });
 
     it('with name and table', () => {
-        let c = new SyntaxTree.ColumnExpression({
+        const model = {
             column : "name",
             table : "person"
-        });
+        };
+        
+        let c = new SyntaxTree.ColumnExpression(model);
 
         expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeTruthy();
         expect(c.tableQualifier).toEqual("person");
+        
         expect(c.toString()).toEqual("person.name");
+        expect(c.toModel().singleColumn).toEqual(model);
     });
 
     it('with name, table and table alias', () => {
-        let c = new SyntaxTree.ColumnExpression({
+        const model = {
             column : "name",
             table : "person",
             alias : "p"
-        });
+        };
+        
+        let c = new SyntaxTree.ColumnExpression(model);
 
         expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeTruthy();
         expect(c.tableQualifier).toEqual("p");
+        
         expect(c.toString()).toEqual("p.name");
+        expect(c.toModel().singleColumn).toEqual(model);
     });
 });
 
 describe('SimpleCompareExpression', () => {
     it('Basic', () => {
-        let e = new SyntaxTree.BinaryExpression({
+        const model = {
             lhs : { singleColumn : { column : "name", table : "person" } },
             rhs : { singleColumn : { column : "name", table : "stadt" } },
             operator : "<>",
             simple : true
-        });
+        };
+        
+        let e = new SyntaxTree.BinaryExpression(model);
 
         expect(e.operator).toEqual("<>");
         let lhs = <SyntaxTree.ColumnExpression> e.lhs;
@@ -128,18 +142,21 @@ describe('SimpleCompareExpression', () => {
         expect(rhs.tableQualifier).toEqual("stadt");
 
         expect(e.toString()).toEqual("person.name <> stadt.name");
+        expect(e.toModel()).toEqual(model);
     });
 });
 
 
 describe('SELECT', () => {
     it('with three simple columns', () => {
-        let s = new SyntaxTree.Select({
+        const model = {
             columns : [
                 { expr : { singleColumn : {column : "id", table : "person", alias : "p" } } },
                 { expr : { singleColumn : {column : "name" , table : "person" } } },
                 { expr : { singleColumn : {column : "alter" , table : "person" } }, as : "dasAlter" }
-            ]});
+            ]};
+        
+        const s = new SyntaxTree.Select(model);
 
         // Grand picture
         expect(s.numberOfColumns).toEqual(3);
@@ -150,100 +167,127 @@ describe('SELECT', () => {
         expect(s.getAlias(2)).toEqual("dasAlter");
 
         // Details of those columns
-        let col0 = <SyntaxTree.ColumnExpression> s.getColumn(0);
+        const col0 = <SyntaxTree.ColumnExpression> s.getColumn(0);
         expect(col0.tableQualifier).toEqual("p");
         expect(col0.columnName).toEqual("id");
 
-        let col1 = <SyntaxTree.ColumnExpression> s.getColumn(1);
+        const col1 = <SyntaxTree.ColumnExpression> s.getColumn(1);
         expect(col1.tableQualifier).toEqual("person");
         expect(col1.columnName).toEqual("name");
 
-        let col2 = <SyntaxTree.ColumnExpression> s.getColumn(2);
+        const col2 = <SyntaxTree.ColumnExpression> s.getColumn(2);
         expect(col2.tableQualifier).toEqual("person");
         expect(col2.columnName).toEqual("alter");
 
         expect(s.toString()).toBe('SELECT p.id, person.name, person.alter AS dasAlter');
-
+        expect(s.toModel()).toEqual(model);
     });
 });
 
 describe('FROM', () => {
     it('with a single table', () => {
-        let f = new SyntaxTree.From({
-            table : "person",
-            alias : "pe"
-        })
+        const model : Model.From = {
+            first : {
+                name : "person",
+                alias : "pe"
+            }
+        };
+        
+        let f = new SyntaxTree.From(model)
 
-        expect(f.initial.name).toEqual("person");
-        expect(f.initial.alias).toEqual("pe");
-        expect(f.initial.nameWithAlias).toEqual("person pe");
+        expect(f.first.name).toEqual("person");
+        expect(f.first.alias).toEqual("pe");
+        expect(f.first.nameWithAlias).toEqual("person pe");
+
         expect(f.toString()).toEqual("FROM person pe");
+        expect(f.toModel()).toEqual(model);
     });
 
     it('with a two table comma join', () => {
-        let f = new SyntaxTree.From({
-            table : "person",
-            alias : "pe",
+        const model = {
+            first : {
+                name : "person",
+                alias : "pe"
+            },
             joins : [
-                { table : "ort", cross : "comma" }
+                { table : { name : "ort" }, cross : "comma" }
             ]
-        })
+        };
+        
+        let f = new SyntaxTree.From(model)
 
-        expect(f.initial.name).toEqual("person");
-        expect(f.initial.alias).toEqual("pe");
-        expect(f.initial.nameWithAlias).toEqual("person pe");
+        expect(f.first.name).toEqual("person");
+        expect(f.first.alias).toEqual("pe");
+        expect(f.first.nameWithAlias).toEqual("person pe");
+        
         expect(f.getJoin(0).name).toEqual("ort");
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
         expect(f.getJoin(0).sqlJoinKeyword).toEqual(",");
+        
         expect(f.toString()).toEqual("FROM person pe\n\t, ort");
+        expect(f.toModel()).toEqual(model);
     });
 
     it('with a two table cross join', () => {
-        let f = new SyntaxTree.From({
-            table : "person",
-            alias : "pe",
+        const model = {
+            first : {
+                name : "person",
+                alias : "pe"
+            },
             joins : [
-                { table : "ort", cross : "cross" }
+                { table : { name : "ort" }, cross : "cross" }
             ]
-        })
+        };
+        
+        let f = new SyntaxTree.From(model)
 
-        expect(f.initial.name).toEqual("person");
-        expect(f.initial.alias).toEqual("pe");
-        expect(f.initial.nameWithAlias).toEqual("person pe");
+        expect(f.first.name).toEqual("person");
+        expect(f.first.alias).toEqual("pe");
+        expect(f.first.nameWithAlias).toEqual("person pe");
         expect(f.getJoin(0).name).toEqual("ort");
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
         expect(f.getJoin(0).sqlJoinKeyword).toEqual("JOIN");
 
         expect(f.toString()).toEqual("FROM person pe\n\tJOIN ort");
+        expect(f.toModel()).toEqual(model);
     });
 
     it('with a two table INNER JOIN', () => {
-        let f = new SyntaxTree.From({
-            table : "person",
-            alias : "pe",
+        const model = {
+            first : {
+                name : "person",
+                alias : "pe"
+            },
             joins : [
-                { table : "ort",
-                  inner : {
-                      using : "bla"
-                  }
+                {
+                    table : {
+                        name : "ort"
+                    },
+                    inner : {
+                        using : "bla"
+                    }
                 }
             ]
-        })
+        };
 
-        expect(f.initial.name).toEqual("person");
-        expect(f.initial.alias).toEqual("pe");
-        expect(f.initial.nameWithAlias).toEqual("person pe");
+        let f = new SyntaxTree.From(model)
+
+        expect(f.first.name).toEqual("person");
+        expect(f.first.alias).toEqual("pe");
+        expect(f.first.nameWithAlias).toEqual("person pe");
+        
         expect(f.getJoin(0).name).toEqual("ort");
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
 
         expect(f.toString()).toEqual("FROM person pe\n\tINNER JOIN ort USING(bla)");
+        expect(f.toModel()).toEqual(model);
     });
     
 });
 
 describe('Query', () => {
     it ('Whole Query', () => {
-        let model : Model.Query = {
+        const model : Model.Query = {
             name : 'test-whole',
             id : 'id',
             select : {
@@ -253,14 +297,20 @@ describe('Query', () => {
                 ]
             },
 
-            from : { table : "person",
-                     joins : [
-                         { table : "ort",
-                           alias  : "o",
-                           cross : "cross"
-                         }
-                     ]}
-
+            from : {
+                first : {
+                    name : "person"
+                },
+                joins : [
+                    {
+                        table : {
+                            name : "ort",
+                            alias  : "o"
+                        },
+                        cross : "cross"
+                    }
+                ]
+            }
         };
 
         let q = new Query(schema, model);
@@ -271,6 +321,7 @@ describe('Query', () => {
         expect(q.from.numberOfJoins).toEqual(1);
 
         expect(q.toSqlString()).toEqual("SELECT person.id, person.name\nFROM person\n\tJOIN ort o");
+        expect(q.toModel()).toEqual(model);
     });
 
 });

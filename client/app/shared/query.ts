@@ -25,6 +25,11 @@ export module Model {
         simple : boolean;
     }
 
+    export interface SingleTable {
+        name : string,
+        alias? : string
+    }
+
     /**
      * We use a single base type for all kinds of expression, as
      * this vastly simplifies the storage process. Each kind of
@@ -46,14 +51,12 @@ export module Model {
     }
 
     export interface From {
-        table : string;
-        alias? : string;
-        joins? : Join[];
+        first : SingleTable,
+        joins? : Join[]
     }
 
     export interface Join {
-        table : string,
-        alias? : string,
+        table : SingleTable,
         cross? : string,
         inner? : {
             using? : string,
@@ -89,9 +92,14 @@ export module SyntaxTree {
      */
     abstract class Component {
         /**
-         *
+         * @return SQL String representation
          */
         public abstract toString() : string;
+
+        /**
+         * @return JSON model representation
+         */
+        public abstract toModel() : any;
     }
 
     /**
@@ -99,7 +107,15 @@ export module SyntaxTree {
      * require or what the return type is.
      */
     export abstract class Expression {
+        /**
+         * @return SQL String representation
+         */
         public abstract toString() : string;
+
+        /**
+         * @return JSON model representation
+         */
+        public abstract toModel() : any;
     }
 
     /**
@@ -174,6 +190,19 @@ export module SyntaxTree {
             }
 
         }
+
+        toModel() : Model.Expression {
+            let core : Model.SingleColumnExpression = {
+                column : this._columnName
+            };
+
+            if (this._tableName)  core.table = this._tableName;
+            if (this._tableAlias) core.alias = this._tableAlias;
+
+            return ({
+                singleColumn : core
+            });
+        }
     }
 
     /**
@@ -186,7 +215,7 @@ export module SyntaxTree {
         private _operator : string;
         private _isSimple : boolean;
 
-        public constructor(expr : Model.BinaryExpression) {
+        constructor(expr : Model.BinaryExpression) {
             super();
 
             this._lhs = loadExpression(expr.lhs);
@@ -199,29 +228,38 @@ export module SyntaxTree {
          * @return The string representation of both operands with
          *         the operator in between.
          */
-        public toString() : string {
+        toString() : string {
             return (`${this._lhs} ${this._operator} ${this._rhs}`)
         }
 
         /**
          * @return The used operator
          */
-        public get operator() {
+        get operator() {
             return (this._operator);
         }
 
         /**
          * @return The left operand
          */
-        public get lhs() {
+        get lhs() {
             return (this._lhs);
         }
 
         /**
          * @return The right operand
          */
-        public get rhs() {
+        get rhs() {
             return (this._rhs);
+        }
+
+        toModel() : Model.BinaryExpression {
+            return ({
+                lhs : this._lhs.toModel(),
+                rhs : this._rhs.toModel(),
+                operator : this._operator,
+                simple : this._isSimple
+            })
         }
     }
 
@@ -310,6 +348,24 @@ export module SyntaxTree {
 
             return (toReturn);
         }
+
+        toModel() : Model.Select {
+            const toReturn = this._columns.map( v => {
+                const core : Model.SelectColumn = {
+                    expr : v.expr.toModel()
+                }
+
+                if (v.name) {
+                    core.as = v.name;
+                }
+                
+                return (core);
+            });
+            
+            return ({
+                columns : toReturn
+            });
+        }
     }
 
     /**
@@ -320,27 +376,29 @@ export module SyntaxTree {
      */
     abstract class Join {
         protected _sqlJoinKeyword : string;
-        protected _tableName : string;
-        protected _tableAlias : string;
 
-        constructor(sqlJoinKeyword : string, tableName : string, tableAlias? : string) {
+        protected _table : Model.SingleTable;
+
+        /**
+         * Stores base data
+         */
+        constructor(sqlJoinKeyword : string, table : Model.SingleTable) {
             this._sqlJoinKeyword = sqlJoinKeyword;
-            this._tableName = tableName;
-            this._tableAlias = tableAlias;
+            this._table = table;
         }
 
         /**
          * @return The name of the table that is JOINed
          */
         get name() {
-            return (this._tableName);
+            return (this._table.name);
         }
 
         /**
          * @return the alias name of the JOINed table
          */
         get alias() {
-            return (this._tableAlias);
+            return (this._table.alias);
         }
 
         /**
@@ -358,11 +416,11 @@ export module SyntaxTree {
          * alias given.
          */
         get nameWithAlias() {
-            let toReturn = this._tableName;
+            let toReturn = this._table.name;
 
             // But the alias is optional
-            if (this._tableAlias) {
-                toReturn += ` ${this._tableAlias}`;
+            if (this._table.alias) {
+                toReturn += ` ${this._table.alias}`;
             }
 
             return (toReturn);
@@ -372,6 +430,8 @@ export module SyntaxTree {
          * @return A string representing a join with a single table
          */
         abstract toString() : string;
+
+        abstract toModel() : Model.Join;
     }
 
     /**
@@ -381,13 +441,19 @@ export module SyntaxTree {
      */
     export class InitialJoin extends Join {
 
-        constructor(name : string, alias? : string) {
+        constructor(table : Model.SingleTable) {
             // No SQL Keyword for the first statement
-            super(null, name, alias);
+            super(null, table);
         }
 
         toString() : string {
             return this.nameWithAlias;
+        }
+
+        toModel() : Model.Join {
+            return ({
+                table : this._table
+            });
         }
     }
 
@@ -409,13 +475,22 @@ export module SyntaxTree {
                 throw `Unknown type in cross join: ${join.cross}`;
             }
 
-            super(separator, join.table, join.alias);
+            super(separator, join.table);
         }
 
         toString() : string {
             // There is no way around the separator and the name of
             // the table.
             return (`${this._sqlJoinKeyword} ${this.nameWithAlias}`);
+        }
+
+        toModel() : Model.Join {
+            const crossType = this._sqlJoinKeyword == ',' ? "comma" : "cross";
+            
+            return ({
+                table : this._table,
+                cross : crossType
+            });
         }
     }
 
@@ -427,7 +502,7 @@ export module SyntaxTree {
         private _on : Expression;
 
         constructor(join : Model.Join) {
-            super("INNER JOIN", join.table, join.alias);
+            super("INNER JOIN", join.table);
 
             // Ensure USING XOR ON
             if ((join.inner.on && join.inner.using) ||
@@ -450,6 +525,26 @@ export module SyntaxTree {
 
             return (`${this._sqlJoinKeyword} ${this.nameWithAlias} ${method}(${expr})`);
         }
+
+        toModel() : Model.Join {
+            let toReturn : Model.Join = {
+                table : this._table
+            };
+
+            if (this._on) {
+                toReturn.inner = {
+                    on : this._on.toModel()
+                }
+            }
+
+            if (this._using) {
+                toReturn.inner = {
+                    using : this._using
+                }
+            }
+            
+            return (toReturn);
+        }
     }
 
     /**
@@ -462,7 +557,7 @@ export module SyntaxTree {
         constructor(from : Model.From) {
             super();
 
-            this._first = new InitialJoin(from.table, from.alias);
+            this._first = new InitialJoin(from.first);
 
             if (from.joins) {
                 from.joins.forEach(j => {
@@ -475,13 +570,16 @@ export module SyntaxTree {
 
                     }
                 });
+            } else {
+                // There should at least be a list
+                this._joins = [];
             }
         }
 
         /**
          * @return The table that starts the JOIN-chain.
          */
-        get initial() : InitialJoin {
+        get first() : InitialJoin {
             return (this._first);
         }
 
@@ -514,6 +612,18 @@ export module SyntaxTree {
                 toReturn += "\n\t" + j.toString();
             });
 
+            return (toReturn);
+        }
+
+        toModel() : Model.From {
+            let toReturn : Model.From = {
+                first : this._first.toModel().table,
+            };
+
+            if (this._joins.length > 0) {
+                toReturn.joins = this._joins.map( j => j.toModel());
+            }
+            
             return (toReturn);
         }
     }
@@ -571,7 +681,6 @@ export class Query {
         return (this._id);
     }
 
-
     /**
      * Calculates the SQL String representation of this query.
      */
@@ -583,6 +692,13 @@ export class Query {
     }
 
     public toModel() : Model.Query {
-        return (null);
+        let toReturn : Model.Query = {
+            name : this._name,
+            id : this._id,
+            from : this._from.toModel(),
+            select : this._select.toModel()
+        }
+        
+        return (toReturn);
     }
 }

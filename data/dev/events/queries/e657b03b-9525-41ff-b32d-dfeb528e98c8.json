@@ -23,12 +23,16 @@
     ]
   },
   "from": {
-    "table": "person",
-    "alias": "p",
+    "first": {
+      "name": "person",
+      "alias": "p"
+    },
     "joins": [
       {
-        "table": "ereignis",
-        "alias": "e",
+        "table" : {
+          "name": "ereignis",
+          "alias": "e"
+        },
         "cross": "cross"
       }
     ]

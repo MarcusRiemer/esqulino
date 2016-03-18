@@ -69,16 +69,19 @@ class WhereComponent extends SqlComponent {
 @Pipe({name: 'sqlString'})
 export class SqlStringPipe implements PipeTransform {
     public transform(value : Query, args : string[]) : any {
-        return (value.toSqlString());
+        try {
+            return (value.toSqlString());
+        } catch (e) {
+            return (e);
+        }
     }
 }
 
 @Component({
     selector: 'sql-query',
     templateUrl: 'app/editor/templates/query.html',
-    inputs: ['query'],
     directives: [SelectComponent, FromComponent, WhereComponent]
 })
 export class QueryComponent {
-    public query : Query;
+    @Input() public query : Query;
 }

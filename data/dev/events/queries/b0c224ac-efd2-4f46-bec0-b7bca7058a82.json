@@ -4,7 +4,9 @@
     "columns": []
   },
   "from": {
-    "table": "ereignis",
-    "alias": "e"
+    "first": {
+      "name": "ereignis",
+      "alias": "e"
+    }
   }
 }
