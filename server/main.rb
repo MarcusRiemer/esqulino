@@ -66,10 +66,10 @@ class ScratchSqlApp < Sinatra::Base
     
   end
 
-  # Seperatly serve application Javascript files, as these are not
-  # compiled "inside" the normal project source
-  #get '/app/*.js*' do
-  #end
+  # Updating a query
+  post '/api/project/:id/query/:queryId' do
+
+  end
 
   # Catchall for the rest of routes. This enables meaningful navigation
   # even if the user submits a "deep link" to somewhere inside the

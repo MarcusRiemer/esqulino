@@ -129,3 +129,14 @@ def project_load_queries(project_folder)
 
   return to_return
 end
+
+# Executes a query in the context of a given project
+#
+# @param project_folder [string] The projects root folder
+# @param query_id [string] The id of the query to execute
+# @param params [Hash] Query parameters
+#
+# @return [Hash] "Over-the-wire" JSON response
+def project_execute_query(project_folder, query_id, params)
+
+end
