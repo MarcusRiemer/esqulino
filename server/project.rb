@@ -118,7 +118,7 @@ def project_load_queries(project_folder, whole_info)
 
     # Put the id into the model, as it's normally part of the filename
     id = File.basename(query_file, ".yaml")
-    sql_model['id'] = id
+    sql_model['id'] = id.slice(0, id.index(".json"))
 
     # Append it to the list of values that should be returned
     to_return << sql_model
