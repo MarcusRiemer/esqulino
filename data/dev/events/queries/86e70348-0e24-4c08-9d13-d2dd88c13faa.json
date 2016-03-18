@@ -23,7 +23,9 @@
     ]
   },
   "from": {
-    "table": "person",
-    "alias": "p"
+    "first": {
+      "name": "person",
+      "alias": "p"
+    }
   }
 }

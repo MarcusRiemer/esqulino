@@ -4,8 +4,8 @@
       <span class="keyword">FROM</span>
     </div>
     <div [ngClass]="bootstrapColsExpr">
-      <span class="table-name">{{ from.initial.name }}</span>
-      <span>{{ from.initial.alias }}</span>
+      <span class="table-name">{{ from.first.name }}</span>
+      <span>{{ from.first.alias }}</span>
     </div>
   </div>
   <div *ngFor="#join of from.joins">
