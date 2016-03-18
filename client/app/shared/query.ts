@@ -48,30 +48,34 @@ export module Model {
     export interface Expression {
         singleColumn? : SingleColumnExpression,
         binary? : BinaryExpression,
-        constant? : ConstantExpression,
+        constant? : ConstantExpression
     }
 
-    export interface SingleTable {
+    export interface Select {
+        columns : SelectColumn[],
+        allData? : boolean
+    }
+
+    export interface SelectColumn {
+        expr : Expression,
+        as? : string
+    }
+
+    /**
+     * Named tables as described in the FROM
+     */
+    export interface TableNameDefinition {
         name : string,
         alias? : string
     }
 
-    export interface Select {
-        columns : SelectColumn[];
-    }
-
-    export interface SelectColumn {
-        expr : Expression;
-        as? : string;
-    }
-
     export interface From {
-        first : SingleTable,
+        first : TableNameDefinition,
         joins? : Join[]
     }
 
     export interface Join {
-        table : SingleTable,
+        table : TableNameDefinition,
         cross? : string,
         inner? : {
             using? : string,
@@ -80,7 +84,7 @@ export module Model {
     }
 
     export interface Where {
-        first : Expression;
+        first : Expression
     }
 
     /**
@@ -88,10 +92,11 @@ export module Model {
      * the whole structure and some identifying properties.
      */
     export interface Query {
-        select : Select;
-        from : From;
-        name? : string;
-        id? : string;
+        select : Select,
+        from : From,
+        where? : Where,
+        name : string,
+        id : string
     }
 }
 
@@ -371,13 +376,22 @@ export module SyntaxTree {
     }
 
     /**
-     * A select statement
+     * A select statement with a list of column expressions.
      */
     export class Select extends Component {
         private _columns : NamedExpression[] = [];
 
+        /**
+         * If this is set to true, a "*" operator is appended
+         * to the column expressions.
+         */
+        private _allData : boolean;
+
         constructor(select : Model.Select) {
             super();
+
+            this._allData = !!select.allData;
+            
             // Mapping the model types to concrete instances of the
             // syntax tree.
             select.columns.forEach(v => {
@@ -418,6 +432,10 @@ export module SyntaxTree {
             return (this._columns);
         }
 
+        get allData() : boolean {
+            return (this._allData);
+        }
+
         /**
          * @return "SELECT [columns]"
          */
@@ -444,6 +462,16 @@ export module SyntaxTree {
                 }
             });
 
+            // Possibly add a trailing "*" Operator
+            if (this._allData) {
+                if (this.columns.length > 0) {
+                    toReturn += ", *";
+                } else {
+                    toReturn += " *";
+                }
+                
+            }
+
             return (toReturn);
         }
 
@@ -461,7 +489,8 @@ export module SyntaxTree {
             });
             
             return ({
-                columns : toReturn
+                columns : toReturn,
+                allData : this._allData
             });
         }
     }
@@ -475,12 +504,12 @@ export module SyntaxTree {
     abstract class Join {
         protected _sqlJoinKeyword : string;
 
-        protected _table : Model.SingleTable;
+        protected _table : Model.TableNameDefinition;
 
         /**
          * Stores base data
          */
-        constructor(sqlJoinKeyword : string, table : Model.SingleTable) {
+        constructor(sqlJoinKeyword : string, table : Model.TableNameDefinition) {
             this._sqlJoinKeyword = sqlJoinKeyword;
             this._table = table;
         }
@@ -539,7 +568,7 @@ export module SyntaxTree {
      */
     export class InitialJoin extends Join {
 
-        constructor(table : Model.SingleTable) {
+        constructor(table : Model.TableNameDefinition) {
             // No SQL Keyword for the first statement
             super(null, table);
         }
@@ -688,6 +717,9 @@ export module SyntaxTree {
             return (this._joins.length);
         }
 
+        /**
+         * @return Accessing all joins together
+         */
         get joins() : Join[] {
             return (this._joins);
         }
@@ -765,6 +797,7 @@ export class Query {
 
     private _select : SyntaxTree.Select;
     private _from   : SyntaxTree.From;
+    private _where  : SyntaxTree.Where;
 
     constructor(schema : Table[], model : Model.Query) {
         this._name = model.name;
@@ -775,6 +808,10 @@ export class Query {
 
         this._select = new SyntaxTree.Select(model.select);
         this._from = new SyntaxTree.From(model.from);
+
+        if (model.where) {
+            this._where = new SyntaxTree.Where(model.where);
+        }
     }
 
     /**
@@ -812,6 +849,10 @@ export class Query {
         var toReturn = this._select.toString();
         toReturn += "\n" + this._from.toString();
 
+        if (this._where) {
+            toReturn += "\n" + this._where.toString();
+        }
+
         return (toReturn);
     }
 
@@ -821,6 +862,10 @@ export class Query {
             id : this._id,
             from : this._from.toModel(),
             select : this._select.toModel()
+        };
+
+        if (this._where) {
+            toReturn.where = this._where.toModel();
         }
         
         return (toReturn);
