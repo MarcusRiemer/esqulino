@@ -249,12 +249,14 @@ describe('SimpleCompareExpression', () => {
 
 describe('SELECT', () => {
     it('with three simple columns', () => {
-        const model = {
+        const model : Model.Select = {
             columns : [
                 { expr : { singleColumn : {column : "id", table : "person", alias : "p" } } },
                 { expr : { singleColumn : {column : "name" , table : "person" } } },
                 { expr : { singleColumn : {column : "alter" , table : "person" } }, as : "dasAlter" }
-            ]};
+            ],
+            allData : false
+        };
         
         const s = new SyntaxTree.Select(model);
 
@@ -282,6 +284,10 @@ describe('SELECT', () => {
         // Model and String serialization
         expect(s.toString()).toBe('SELECT p.id, person.name, person.alter AS dasAlter');
         expect(s.toModel()).toEqual(model);
+    });
+
+    it('', () => {
+
     });
 });
 
@@ -425,14 +431,15 @@ describe('WHERE', () => {
 });
 
 describe('Query', () => {
-    it ('Whole Query', () => {
-        const model : Model.Query = {
+    it ('SELECT person.id, person.name FROM person JOIN ort o', () => {
+        let model : Model.Query = {
             name : 'test-whole',
             id : 'id',
             select : {
+                allData : false,
                 columns : [
                     { expr : { singleColumn : {column : "id", table : "person" } } },
-                    { expr : {singleColumn : {column : "name" , table : "person" } } }
+                    { expr : { singleColumn : {column : "name" , table : "person" } } }
                 ]
             },
 
@@ -444,12 +451,12 @@ describe('Query', () => {
                     {
                         table : {
                             name : "ort",
-                            alias  : "o"
+                            alias : "o"
                         },
                         cross : "cross"
                     }
-                ]
-            }
+                ]}
+
         };
 
         let q = new Query(schema, model);
@@ -460,6 +467,36 @@ describe('Query', () => {
         expect(q.from.numberOfJoins).toEqual(1);
 
         expect(q.toSqlString()).toEqual("SELECT person.id, person.name\nFROM person\n\tJOIN ort o");
+    });
+    
+    it ('SELECT * FROM person WHERE 1', () => {
+        const model : Model.Query = {
+            name : 'simple-where',
+            id : 'where-1',
+            select : {
+                allData : true,
+                columns : []
+            },
+            from : {
+                first : {
+                    name : "person"
+                }
+            },
+            where : {
+                first : {
+                    constant : { type : "INTEGER", value : "1" }
+                }
+            }
+        };
+
+        let q = new Query(schema, model);
+        expect(q.name).toEqual("simple-where");
+        expect(q.id).toEqual("where-1");
+
+        expect(q.select.numberOfColumns).toEqual(0);
+        expect(q.from.numberOfJoins).toEqual(0);
+
+        expect(q.toSqlString()).toEqual("SELECT *\nFROM person\nWHERE 1");
         expect(q.toModel()).toEqual(model);
     });
 
