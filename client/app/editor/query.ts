@@ -77,7 +77,6 @@ export class SqlStringPipe implements PipeTransform {
     selector: 'sql-query',
     templateUrl: 'app/editor/templates/query.html',
     inputs: ['query'],
-    pipes: [SqlStringPipe],
     directives: [SelectComponent, FromComponent, WhereComponent]
 })
 export class QueryComponent {

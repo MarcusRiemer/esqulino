@@ -40,14 +40,14 @@ export class ProjectListItemComponent implements OnInit {
      * Navigate to a project in edit mode
      */
     navigateEditor() {
-        this._router.navigate(['/Editor', { id : this.project.id }]);
+        this._router.navigate(['/Editor', { projectId : this.project.id }]);
     }
 
     /**
      * Navigate to a project in view mode
      */
     navigateView() {
-        this._router.navigate(['/View', { id : this.project.id }]);
+        this._router.navigate(['/View', { projectId : this.project.id }]);
     }
 }
 
