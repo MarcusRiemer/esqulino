@@ -43,7 +43,7 @@ export class EditorComponent implements OnInit {
 
         console.log(`Loading project with id "${projectId}"`);
         
-        this._projectService.getProject(projectId)
+        this._projectService.setActiveProject(projectId)
             .subscribe(
                 res => this.project = res
             );

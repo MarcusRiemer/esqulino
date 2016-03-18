@@ -9,15 +9,14 @@ import {ProjectDescription} from '../shared/project.description'
 import {Project}            from './project'
 
 /**
- * Wraps access to a whole project.
+ * Wraps access to a single project, which is deemed to be "active"
+ * and should be displayed in the editor view.
  */
 @Injectable()
 export class ProjectService {
-    // The same instance should be shared among all projects
-    private cache : {
-        observable : Observable<Project>,
-        id : string
-    };
+    private inProgress : Observable<Project>;
+
+    private cachedProject : Project;
     
     /**
      * @param _http Dependently injected by Angular2
@@ -28,24 +27,32 @@ export class ProjectService {
      * @param id The id of the project to retrieve
      * @return An observable that updates itself if the selected project changes.
      */
-    getProject(id : string) : Observable<Project> {
-        // TODO: Actually cache the result, this seems to fire up a new request every time.
-        
-        if (!this.cache || this.cache.id != id) {
-            let obs = this._http.get('/api/project/' + id)
-                .do(res => console.log(res.json()))
+    setActiveProject(id : string) : Observable<Project> {
+        if (this.inProgress) {
+            return this.inProgress;
+        } else if (this.cachedProject) {
+            return Observable.of(this.cachedProject);
+        } else {
+            this.inProgress = this._http.get('/api/project/' + id)
                 .map(res => new Project(res.json()))
+                .do(res => {
+                    this.cachedProject = res;
+                    this.inProgress = null;
+                })
                 .catch(this.handleError);
-                    
-            this.cache = {
-                observable : obs,
-                id : id
-            }
+
+            return (this.inProgress);
         }
-        
-        
-        return this.cache.observable.share();
-        
+    }
+
+    get ActiveProject() : Observable<Project> {
+        if (this.inProgress) {
+            return this.inProgress;
+        } else if (this.cachedProject) {
+            return Observable.of(this.cachedProject);
+        } else {
+            throw { error : "No active project known" };
+        }
     }
 
     private handleError (error: Response) {
