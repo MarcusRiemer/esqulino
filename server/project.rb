@@ -55,9 +55,10 @@ end
 # Describes the schema of a whole database as a handy dictionary
 # of tables with their columns.
 #
-# @param sqlite_file_path [String] Path to database file
+# @param project_folder [string] The projects root folder
 # @return [Hash] A hash of SchemaTable instances
-def database_describe_schema(sqlite_file_path)
+def database_describe_schema(project_folder)
+  sqlite_file_path = File.join(project_folder, "db.sqlite")
   db = SQLite3::Database.new(sqlite_file_path)
 
   # Find out names of tables
@@ -93,6 +94,8 @@ end
 # will be visible on the client.
 #
 # @param whole_info [Hash] The whole JSON / YAML structure
+#
+# @return [Hash] The filtered JSON / YAML structure
 def project_public_info(whole_info)
   to_return = {}
 
@@ -107,8 +110,9 @@ end
 # Retrieves all queries that are part of the given project.
 #
 # @param project_folder [string] The projects root folder
-# @param whole_info [Hash] The "over-the-wire" format that describes a project
-def project_load_queries(project_folder, whole_info)
+#
+# @return [List] A list of "over the wire" descriptions of queries
+def project_load_queries(project_folder)
   to_return = []
 
   query_folder = File.join(project_folder, "queries")
@@ -118,7 +122,6 @@ def project_load_queries(project_folder, whole_info)
 
     # Put the id into the model, which is part of the filename
     sql_model['id'] = File.basename(query_file, ".json")
-    
 
     # Append it to the list of values that should be returned
     to_return << sql_model
