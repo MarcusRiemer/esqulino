@@ -5,29 +5,38 @@ import {Table}                          from './table';
  * over the wire or on disk.
  */
 export module Model {
-
     /**
-     * The logical leaf of every expression tree, ends recursion.
+     * Valid string values for data types
+     */
+    export type DataTypeStrings = "INTEGER" | "REAL" | "TEXT";
+    
+    /**
+     * One "typical" logical leaf of an expression tree, postpones
+     * the actual value lookup to execution time and ends recursion.
      */
     export interface SingleColumnExpression {
-        column : string;
-        table? : string;
-        alias? : string;
+        column : string,
+        table? : string,
+        alias? : string
+    }
+
+    /**
+     * The other "typical" leaf, a compile time expression that also
+     * ends recursion.
+     */
+    export interface ConstantExpression {
+        type : DataTypeStrings,
+        value : string
     }
 
     /**
      * Combines two expressions with a binary operator.
      */
     export interface BinaryExpression {
-        lhs : Expression;
-        operator : string;
-        rhs : Expression;
-        simple : boolean;
-    }
-
-    export interface SingleTable {
-        name : string,
-        alias? : string
+        lhs : Expression,
+        operator : string,
+        rhs : Expression,
+        simple : boolean
     }
 
     /**
@@ -37,8 +46,14 @@ export module Model {
      * keys may be set at runtime.
      */
     export interface Expression {
-        singleColumn? : SingleColumnExpression;
-        binary? : BinaryExpression;
+        singleColumn? : SingleColumnExpression,
+        binary? : BinaryExpression,
+        constant? : ConstantExpression,
+    }
+
+    export interface SingleTable {
+        name : string,
+        alias? : string
     }
 
     export interface Select {
@@ -84,6 +99,44 @@ export module Model {
  * The internal representation of an SQL query.
  */
 export module SyntaxTree {
+
+    /**
+     * Basic data types as inspired by SQLite.
+     */
+    export enum DataType {
+        Integer,
+        Real,
+        Text
+    }
+
+    /**
+     * Translates "over the wire" representations of a datatype
+     * to an enum.
+     */
+    export function parseDataType(str : string) : DataType {
+        switch (str) {
+        case "INTEGER": return (DataType.Integer);
+        case "REAL"   : return (DataType.Real);
+        case "TEXT"   : return (DataType.Text);
+        }
+
+        throw { "error" : `parseDataType: Unknown datatype "${str}` };
+    }
+
+    /**
+     * Translates enum representation of data type to "over the wire"
+     * representation.
+     */
+    export function serializeDataType(t : DataType) : Model.DataTypeStrings {
+        switch(t) {
+        case DataType.Integer: return "INTEGER";
+        case DataType.Real   : return "REAL";
+        case DataType.Text   : return "TEXT";
+        }
+
+        throw { "error" : `serializeDataType: Unknown datatype "${t}` };
+    }
+    
     /**
      * Base class for all components of an SQL Statement (SELECT,
      * FROM, WHERE, GROUP BY, HAVING, ORDER BY). Additionally, this
@@ -120,15 +173,60 @@ export module SyntaxTree {
 
     /**
      * Maps the "one size fits all"-interface for expressions
-     * to their concrete classes.
+     * to their concrete classes. Essentially a factory-function.
      */
     export function loadExpression(expr : Model.Expression) : Expression {
         if (expr.singleColumn) {
             return new ColumnExpression(expr.singleColumn);
         } else if (expr.binary) {
             return new BinaryExpression(expr.binary);
+        } else if (expr.constant) {
+            return new ConstantExpression(expr.constant);
         }
-        throw `Unknown expression: ${JSON.stringify(expr)}`
+        throw { "error" : `Unknown expression: ${JSON.stringify(expr)}` }
+    }
+
+    /**
+     * A compile time constant, logically a leaf of an Expression
+     * Tree.
+     */
+    export class ConstantExpression extends Expression {
+        private _type : DataType;
+        private _value : string;
+        
+        constructor(expr : Model.ConstantExpression) {
+            super();
+
+            this._type = parseDataType(expr.type);
+            this._value = expr.value;
+        }
+
+        get type() : DataType {
+            return (this._type);
+        }
+
+        get value() : string {
+            return (this._value);
+        }
+
+        toString() : string {
+            switch(this._type) {
+            case DataType.Integer:
+            case DataType.Real:
+                return (this._value);
+            case DataType.Text:
+                return (`"${this._value}"`);
+            }
+        }
+
+        toModel() : Model.Expression {
+            return ({
+                constant : {
+                    type : serializeDataType(this._type),
+                    value : this._value
+                }
+            })
+        }
     }
 
     /**
@@ -626,6 +724,32 @@ export module SyntaxTree {
             
             return (toReturn);
         }
+    }
+
+    /**
+     * The SQL WHERE clause with at least one expression and 
+     * 0..n subsequent conditions.
+     */
+    export class Where extends Component {
+
+        private _first : Expression;
+        
+        constructor(where : Model.Where) {
+            super();
+
+            this._first = loadExpression(where.first);
+        }
+
+        toString() : string {
+            return (`WHERE ${this._first.toString()}`);
+        }
+
+        toModel() : Model.Where {
+            return ({
+                first : this._first.toModel()
+            });
+        }
+
     }
 }
 

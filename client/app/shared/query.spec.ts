@@ -71,6 +71,48 @@ let schema : Table[] =
         }
     ];
 
+describe('DataType', () => {
+    it('serialisation', () => {
+        expect(SyntaxTree.parseDataType("INTEGER")).toBe(SyntaxTree.DataType.Integer);
+        expect(SyntaxTree.parseDataType("REAL")).toBe(SyntaxTree.DataType.Real);
+        expect(SyntaxTree.parseDataType("TEXT")).toBe(SyntaxTree.DataType.Text);
+    });
+
+    it('deserialisation', () => {
+        expect(SyntaxTree.serializeDataType(SyntaxTree.DataType.Integer)).toEqual("INTEGER");
+        expect(SyntaxTree.serializeDataType(SyntaxTree.DataType.Real)).toEqual("REAL");
+        expect(SyntaxTree.serializeDataType(SyntaxTree.DataType.Text)).toEqual("TEXT");
+    });
+});
+
+describe('ConstantExpression', () => {
+    it('Valid Integer', () => {
+        const model : Model.ConstantExpression = {
+            type : "INTEGER",
+            value : "0"
+        }
+
+        const c = new SyntaxTree.ConstantExpression(model);
+
+        // Model and String serialization
+        expect(c.toString()).toEqual("0");
+        expect(c.toModel().constant).toEqual(model);
+    });
+
+    it('Valid String', () => {
+        const model : Model.ConstantExpression = {
+            type : "TEXT",
+            value : "0"
+        }
+
+        const c = new SyntaxTree.ConstantExpression(model);
+
+        // Model and String serialization
+        expect(c.toString()).toEqual(`"0"`);
+        expect(c.toModel().constant).toEqual(model);
+    });
+});
+
 describe('ColumnExpression', () => {
     it('with only a name', () => {
         const model = {
@@ -81,7 +123,8 @@ describe('ColumnExpression', () => {
 
         expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeFalsy();
-        
+
+        // Model and String serialization
         expect(c.toString()).toEqual("name");
         expect(c.toModel().singleColumn).toEqual(model);
     });
@@ -97,7 +140,8 @@ describe('ColumnExpression', () => {
         expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeTruthy();
         expect(c.tableQualifier).toEqual("person");
-        
+
+        // Model and String serialization
         expect(c.toString()).toEqual("person.name");
         expect(c.toModel().singleColumn).toEqual(model);
     });
@@ -114,14 +158,15 @@ describe('ColumnExpression', () => {
         expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeTruthy();
         expect(c.tableQualifier).toEqual("p");
-        
+
+        // Model and String serialization
         expect(c.toString()).toEqual("p.name");
         expect(c.toModel().singleColumn).toEqual(model);
     });
 });
 
 describe('SimpleCompareExpression', () => {
-    it('with two columns', () => {
+    it('testing two columns for inequality', () => {
         const model = {
             lhs : { singleColumn : { column : "name", table : "person" } },
             rhs : { singleColumn : { column : "name", table : "stadt" } },
@@ -141,7 +186,62 @@ describe('SimpleCompareExpression', () => {
         expect(rhs.columnName).toEqual("name");
         expect(rhs.tableQualifier).toEqual("stadt");
 
+        // Model and String serialization
         expect(e.toString()).toEqual("person.name <> stadt.name");
+        expect(e.toModel()).toEqual(model);
+    });
+
+    it('testing two integer constants for equality', () => {
+        const strTypeInt = <Model.DataTypeStrings>"INTEGER";
+        
+        const model = {
+            lhs : { constant : { type : strTypeInt, value : "0" } },
+            rhs : { constant : { type : strTypeInt, value : "1" } },
+            operator : "=",
+            simple : true
+        };
+        
+        let e = new SyntaxTree.BinaryExpression(model);
+
+        expect(e.operator).toEqual("=");
+        let lhs = <SyntaxTree.ConstantExpression> e.lhs;
+        let rhs = <SyntaxTree.ConstantExpression> e.rhs;
+
+        expect(lhs.type).toEqual(SyntaxTree.DataType.Integer);
+        expect(lhs.value).toEqual("0");
+
+        expect(rhs.type).toEqual(SyntaxTree.DataType.Integer);
+        expect(rhs.value).toEqual("1");
+        
+        // Model and String serialization
+        expect(e.toString()).toEqual("0 = 1");
+        expect(e.toModel()).toEqual(model);
+    });
+
+    it('testing two string constants with the LIKE operator', () => {
+        const strTypeStr = <Model.DataTypeStrings>"TEXT";
+        
+        const model = {
+            lhs : { constant : { type : strTypeStr, value : "w a s d" } },
+            rhs : { constant : { type : strTypeStr, value : "%a%" } },
+            operator : "LIKE",
+            simple : true
+        };
+        
+        let e = new SyntaxTree.BinaryExpression(model);
+
+        expect(e.operator).toEqual("LIKE");
+        let lhs = <SyntaxTree.ConstantExpression> e.lhs;
+        let rhs = <SyntaxTree.ConstantExpression> e.rhs;
+
+        expect(lhs.type).toEqual(SyntaxTree.DataType.Text);
+        expect(lhs.value).toEqual("w a s d");
+
+        expect(rhs.type).toEqual(SyntaxTree.DataType.Text);
+        expect(rhs.value).toEqual("%a%");
+        
+        // Model and String serialization
+        expect(e.toString()).toEqual(`"w a s d" LIKE "%a%"`);
         expect(e.toModel()).toEqual(model);
     });
 });
@@ -306,8 +406,22 @@ describe('FROM', () => {
 
         expect(f.toString()).toEqual("FROM person pe\n\tINNER JOIN ort USING(bla)");
         expect(f.toModel()).toEqual(model);
+    });    
+});
+
+describe('WHERE', () => {
+    it('with a constant truthy value', () => {
+        const model : Model.Where = {
+            first : {
+                constant : { type : "INTEGER", value : "1" }
+            }
+        }
+
+        const w = new SyntaxTree.Where(model);
+
+        expect(w.toString()).toEqual("WHERE 1");
+        expect(w.toModel()).toEqual(model);
     });
-    
 });
 
 describe('Query', () => {
