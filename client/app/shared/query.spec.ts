@@ -121,7 +121,7 @@ describe('ColumnExpression', () => {
 });
 
 describe('SimpleCompareExpression', () => {
-    it('Basic', () => {
+    it('with two columns', () => {
         const model = {
             lhs : { singleColumn : { column : "name", table : "person" } },
             rhs : { singleColumn : { column : "name", table : "stadt" } },
@@ -179,8 +179,33 @@ describe('SELECT', () => {
         expect(col2.tableQualifier).toEqual("person");
         expect(col2.columnName).toEqual("alter");
 
+        // Model and String serialization
         expect(s.toString()).toBe('SELECT p.id, person.name, person.alter AS dasAlter');
         expect(s.toModel()).toEqual(model);
+    });
+});
+
+
+describe('INNER JOIN', () => {
+    it('Invalid: ON and USING', () => {
+        // Model should be valid as far as the isolated syntax of both
+        // parts is concerned
+        const model : Model.Join = {
+            table : { name : "tmp" },
+            inner : {
+                on : {
+                    binary : {
+                        lhs : { singleColumn : { column : "name", table : "person" } },
+                        rhs : { singleColumn : { column : "name", table : "stadt" } },
+                        operator : "<>",
+                        simple : true
+                    }
+                },
+                using : "tmp"
+            }
+        }
+
+        expect( () => { new SyntaxTree.InnerJoin(model) }).toThrow();
     });
 });
 
