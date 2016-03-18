@@ -6,14 +6,14 @@ require "json"
 # Not strictly a unit test, as it requires the use of external files.
 # But for the moment this is what we will roll with, as this does
 # show how the SQLite API behaves.
-class TestProject < Test::Unit::TestCase
+class TestEventsProject < Test::Unit::TestCase
  
   def test_describe_events_schema
-    schema = database_describe_schema "../data/dev/events/db.sqlite"
+    schema = database_describe_schema "../data/dev/events/"
 
     assert_equal(2, schema.count)
 
-    table_person = schema['person']
+    table_person = schema[schema.index { |v| v.name == "person" }]
     column_person_id = table_person[0]
     assert_equal("person_id", column_person_id.name)
     assert_equal("INTEGER", column_person_id.type)

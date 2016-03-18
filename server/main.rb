@@ -42,11 +42,10 @@ class ScratchSqlApp < Sinatra::Base
     project = project_public_info(project);
     
     # Put the schema into it
-    sqlite_path = File.join(given_data_dir, project_id, "db.sqlite")
-    project['schema'] = database_describe_schema(sqlite_path)
+    project['schema'] = database_describe_schema(project_folder)
 
     # Load all related queries
-    project['queries'] = project_load_queries(project_folder, project)
+    project['queries'] = project_load_queries(project_folder)
     
     json project
   end
