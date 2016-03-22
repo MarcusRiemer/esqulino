@@ -7,6 +7,14 @@
             [hidden]="!isSaving"></span>
       Speichern
     </button>
+
+    <button (click)="run()">
+      <span class="fa fa-spinner fa-pulse"
+            [hidden]="!isQuerying"></span>
+      Ausführen
+    </button>
+
+    <sql-result [result]="result"></sql-result>
     
     <div *ngIf="query"
          class="card card-outline-warning">
