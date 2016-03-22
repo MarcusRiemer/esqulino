@@ -1,14 +1,15 @@
 import {Component, Injector}            from 'angular2/core';
 import {Router, RouteParams}            from 'angular2/router';
 
-import {Query, Model}                   from '../shared/query';
+import {Query, Model}                   from '../../shared/query';
 
-import {Project}                        from './project'
-import {ProjectService}                 from './project.service'
+import {Project}                        from '../project'
+import {ProjectService}                 from '../project.service'
+
 import {QueryComponent, SqlStringPipe}  from './query';
 
 @Component({
-    templateUrl: 'app/editor/templates/query-editor.html',
+    templateUrl: 'app/editor/query/templates/query-editor.html',
     directives: [QueryComponent],
     pipes: [SqlStringPipe],
 })
