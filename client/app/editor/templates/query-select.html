@@ -5,8 +5,10 @@
       <span class="keyword">SELECT</span>
     </div>
     <div [ngClass]="bootstrapColsExpr">
-        <span *ngFor="#column of select.columns; #last = last"
-              class="column">{{ column.expr.toString() }}&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.name }}</span>
+      <span *ngFor="#column of select.columns; #last = last"
+            class="column">{{ column.expr.toString() }}&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.name }}</span>
+      <span *ngIf="select.allData"
+            class="column">*</span>
     </div>
   </div>
 </div>

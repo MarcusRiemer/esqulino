@@ -29,12 +29,20 @@
     },
     "joins": [
       {
-        "table" : {
+        "table": {
           "name": "ereignis",
           "alias": "e"
         },
         "cross": "cross"
       }
     ]
+  },
+  "where": {
+    "first": {
+      "constant": {
+        "type": "INTEGER",
+        "value": "1"
+      }
+    }
   }
 }

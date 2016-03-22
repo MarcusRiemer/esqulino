@@ -188,7 +188,7 @@ describe('SimpleCompareExpression', () => {
 
         // Model and String serialization
         expect(e.toString()).toEqual("person.name <> stadt.name");
-        expect(e.toModel()).toEqual(model);
+        expect(e.toModel().binary).toEqual(model);
     });
 
     it('testing two integer constants for equality', () => {
@@ -215,7 +215,7 @@ describe('SimpleCompareExpression', () => {
         
         // Model and String serialization
         expect(e.toString()).toEqual("0 = 1");
-        expect(e.toModel()).toEqual(model);
+        expect(e.toModel().binary).toEqual(model);
     });
 
     it('testing two string constants with the LIKE operator', () => {
@@ -242,12 +242,21 @@ describe('SimpleCompareExpression', () => {
         
         // Model and String serialization
         expect(e.toString()).toEqual(`"w a s d" LIKE "%a%"`);
-        expect(e.toModel()).toEqual(model);
+        expect(e.toModel().binary).toEqual(model);
     });
 });
 
 
 describe('SELECT', () => {
+    it('with the *-Operator', () => {
+        const model : Model.Select = {
+            columns : [],
+            allData : true
+        };
+        
+        const s = new SyntaxTree.Select(model);
+    });
+    
     it('with three simple columns', () => {
         const model : Model.Select = {
             columns : [
@@ -284,10 +293,6 @@ describe('SELECT', () => {
         // Model and String serialization
         expect(s.toString()).toBe('SELECT p.id, person.name, person.alter AS dasAlter');
         expect(s.toModel()).toEqual(model);
-    });
-
-    it('', () => {
-
     });
 });
 
@@ -471,7 +476,7 @@ describe('Query', () => {
     
     it ('SELECT * FROM person WHERE 1', () => {
         const model : Model.Query = {
-            name : 'simple-where',
+            name : 'where-simple',
             id : 'where-1',
             select : {
                 allData : true,
@@ -490,13 +495,49 @@ describe('Query', () => {
         };
 
         let q = new Query(schema, model);
-        expect(q.name).toEqual("simple-where");
+        expect(q.name).toEqual("where-simple");
         expect(q.id).toEqual("where-1");
 
         expect(q.select.numberOfColumns).toEqual(0);
         expect(q.from.numberOfJoins).toEqual(0);
 
         expect(q.toSqlString()).toEqual("SELECT *\nFROM person\nWHERE 1");
+        expect(q.toModel()).toEqual(model);
+    });
+
+    it ('SELECT * FROM person WHERE 1 <= 2', () => {
+        const model : Model.Query = {
+            name : 'where-compare',
+            id : 'where-2',
+            select : {
+                allData : true,
+                columns : []
+            },
+            from : {
+                first : {
+                    name : "person"
+                }
+            },
+            where : {
+                first : {
+                    binary : {
+                        lhs : { constant : { type : "INTEGER", value : "1" } },
+                        rhs : { constant : { type : "INTEGER", value : "2" } },
+                        operator : "<=",
+                        simple : true
+                    }
+                }
+            }
+        };
+
+        let q = new Query(schema, model);
+        expect(q.name).toEqual("where-compare");
+        expect(q.id).toEqual("where-2");
+
+        expect(q.select.numberOfColumns).toEqual(0);
+        expect(q.from.numberOfJoins).toEqual(0);
+
+        expect(q.toSqlString()).toEqual("SELECT *\nFROM person\nWHERE 1 <= 2");
         expect(q.toModel()).toEqual(model);
     });
 

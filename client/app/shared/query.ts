@@ -160,20 +160,41 @@ export module SyntaxTree {
         public abstract toModel() : any;
     }
 
+    type TemplateId = "constant" | "column" | "binary";
+
     /**
      * Base class for all expressions, no matter how many arguments they
      * require or what the return type is.
      */
     export abstract class Expression {
+
+        /**
+         * @param _templateidentifier The type of template needed to render
+         *                            this expression.
+         */
+        constructor(private _templateIdentifier : TemplateId)
+        {}
+        
         /**
          * @return SQL String representation
          */
-        public abstract toString() : string;
+        abstract toString() : string;
 
         /**
          * @return JSON model representation
          */
-        public abstract toModel() : any;
+        abstract toModel() : any;
+
+        /**
+         * This is a more or less leaky abstraction, but the HTML rendering
+         * template needs to know which kind of expression it is dealing
+         * with.
+         *
+         * @return The template identifier to use
+         */
+        get templateIdentifier() : TemplateId {
+            return (this._templateIdentifier);
+        }
     }
 
     /**
@@ -200,7 +221,7 @@ export module SyntaxTree {
         private _value : string;
         
         constructor(expr : Model.ConstantExpression) {
-            super();
+            super("constant");
 
             this._type = parseDataType(expr.type);
             this._value = expr.value;
@@ -246,7 +267,7 @@ export module SyntaxTree {
         private _columnName : string;
 
         constructor(model : Model.SingleColumnExpression) {
-            super();
+            super("column");
             this._columnName = model.column;
             this._tableName = model.table;
             this._tableAlias = model.alias;
@@ -319,7 +340,7 @@ export module SyntaxTree {
         private _isSimple : boolean;
 
         constructor(expr : Model.BinaryExpression) {
-            super();
+            super("binary");
 
             this._lhs = loadExpression(expr.lhs);
             this._rhs = loadExpression(expr.rhs);
@@ -356,12 +377,14 @@ export module SyntaxTree {
             return (this._rhs);
         }
 
-        toModel() : Model.BinaryExpression {
+        toModel() : Model.Expression {
             return ({
-                lhs : this._lhs.toModel(),
-                rhs : this._rhs.toModel(),
-                operator : this._operator,
-                simple : this._isSimple
+                binary :{
+                    lhs : this._lhs.toModel(),
+                    rhs : this._rhs.toModel(),
+                    operator : this._operator,
+                    simple : this._isSimple
+                }
             })
         }
     }
@@ -469,7 +492,6 @@ export module SyntaxTree {
                 } else {
                     toReturn += " *";
                 }
-                
             }
 
             return (toReturn);
@@ -772,6 +794,10 @@ export module SyntaxTree {
             this._first = loadExpression(where.first);
         }
 
+        get first() : Expression {
+            return (this._first);
+        }
+
         toString() : string {
             return (`WHERE ${this._first.toString()}`);
         }
@@ -826,6 +852,14 @@ export class Query {
      */
     get from() {
         return (this._from);
+    }
+
+    /**
+     * @return The WHERE component of this query, may or may not be present,
+     *         depending on the underlying model.
+     */
+    get where() {
+        return (this._where);
     }
 
     /**

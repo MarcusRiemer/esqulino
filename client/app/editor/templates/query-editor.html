@@ -10,3 +10,13 @@
     <pre>{{ query | sqlString }}</pre>
   </div>
 </div>
+
+<div *ngIf="query"
+     class="card card-outline-warning">
+  <div class="card-header">
+    <span class="fa fa-bug"></span> JSON-Darstellung
+  </div>
+  <div class="card-block">
+    <pre>{{ query | json }}</pre>
+  </div>
+</div>
