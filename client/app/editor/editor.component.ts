@@ -7,7 +7,7 @@ import {Table}                from '../shared/table'
 
 import {SettingsComponent}    from './settings.component';
 import {SchemaComponent}      from './schema.component';
-import {QueryEditorComponent} from './query/query.editor.component';
+import {QueryEditorComponent} from './query/editor.component';
 import {Project}              from './project';
 import {ProjectService}       from './project.service';
 

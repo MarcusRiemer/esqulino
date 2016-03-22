@@ -111,5 +111,5 @@ export class SqlStringPipe implements PipeTransform {
     directives: [ExpressionComponent, SelectComponent, FromComponent, WhereComponent]
 })
 export class QueryComponent {
-    @Input() public query : Query;
+    @Input() query : Query;
 }

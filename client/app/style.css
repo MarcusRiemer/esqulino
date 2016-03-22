@@ -12,8 +12,25 @@
     color: blue;
 }
 
+.block .expression {
+    border-radius: 500px;
+    background-color: yellow;
+}
+
+.block .expression:hover {
+    border-radius: 500px;
+    background-color: orange;
+}
+
 .block .constant {
-    color: red;
+    text-align: center;
+    border-radius: 500px;
+    border-color: black;
+    border-width: 1px;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: cornflowerblue;
+    color: black;
 }
 
 .block .column {
