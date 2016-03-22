@@ -14,7 +14,7 @@
       <input type="text"
              (blur)="expr.isEditing = false"
              [(ngModel)]="expr.value"
-             [size]="expr.value.length">
+             [size]="expr.value.length + 1">
     </span>
   </template>
   <template ngSwitchWhen="column">

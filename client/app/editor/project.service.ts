@@ -102,7 +102,7 @@ export class ProjectService {
         const body = JSON.stringify(bodyJson);
 
         const toReturn = this._http.post(url, body, options)
-            .map( (res) => res.json() )
+            .map( (res) => "" )
             .catch(this.handleError);
 
         return (toReturn);

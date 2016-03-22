@@ -1,3 +1,3 @@
 SELECT *
 FROM ereignis e
-WHERE 1 + 2 <= 2
+WHERE 1 + 2 <= 71
