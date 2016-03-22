@@ -76,6 +76,19 @@ class ScratchSqlApp < Sinatra::Base
     status project_store_query(project_path, JSON.parse(request.body.read))
   end
 
+  # Running a query
+  post '/api/project/:id/query/:queryId/run' do
+    project_id = params['id']
+    project_path = File.join(given_data_dir, project_id)
+
+    query_id = params['queryId']
+    query_params = JSON.parse(request.body.read)
+    
+    result = project_run_query(project_path, query_id, query_params)
+    status 200
+    json result
+  end
+
   index_path = File.expand_path('index.html', settings.public_folder)
   
   # Catchall for the rest of routes. This enables meaningful navigation

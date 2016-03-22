@@ -3,10 +3,13 @@ import 'rxjs/Rx';
 import {Injectable}                              from 'angular2/core';
 import {Http, Response, Headers, RequestOptions} from 'angular2/http';
 
-import {Observable}         from 'rxjs/Observable';
+import {Observable}             from 'rxjs/Observable';
 
-import {ProjectDescription} from '../shared/project.description'
-import {Model}              from '../shared/query'
+import {ProjectDescription}     from '../shared/project.description'
+import {Model}                  from '../shared/query'
+import {QueryResult, RawResult} from '../shared/result'
+
+
 import {Project}            from './project'
 
 /**
@@ -58,6 +61,24 @@ export class ProjectService {
 
     
     /**
+     * Sends a certain query to the server to be executed.
+     */
+    runQuery(id : string) {
+        const query = this.cachedProject.getQueryById(id);
+        
+        const url = '/api/project/' + this.cachedProject.id + '/query/' + id + '/run';
+        
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        const toReturn = this._http.post(url, "{}", options)
+            .map( (res) => new QueryResult(query, <RawResult> res.json()))
+            .catch(this.handleError);
+
+        return (toReturn);
+    }
+    
+    /**
      * Saves a certain query
      */
     saveQuery(id : string) {
@@ -81,13 +102,11 @@ export class ProjectService {
         const body = JSON.stringify(bodyJson);
 
         const toReturn = this._http.post(url, body, options)
-            .map( (res) => res.json )
+            .map( (res) => res.json() )
             .catch(this.handleError);
 
         return (toReturn);
-            
     }
-
 
     private handleError (error: Response) {
         // in a real world app, we may send the error to some remote logging infrastructure

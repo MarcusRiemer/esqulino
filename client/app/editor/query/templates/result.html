@@ -1,0 +1,18 @@
+<div *ngIf="result">
+  <table class="table">
+    <thead>
+      <tr>
+        <th *ngFor="#colHead of result.cols">
+          {{ colHead }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="#row of result.rows">
+        <td *ngFor="#cell of row.cells">
+          {{ cell.value }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

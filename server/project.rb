@@ -153,6 +153,18 @@ end
 # @param params [Hash] Query parameters
 #
 # @return [Hash] "Over-the-wire" JSON response
-def project_execute_query(project_folder, query_id, params)
+def project_run_query(project_folder, query_id, params)
+  sqlite_file_path = File.join(project_folder, "db.sqlite")
+  
+  db = SQLite3::Database.new(sqlite_file_path)
 
+  query_folder = File.join(project_folder, "queries")
+  query_file = File.join(query_folder, query_id + ".sql")
+  
+  query_sql = File.read(query_file)
+
+  toReturn = db.execute(query_sql, params)
+
+  puts toReturn
+  return toReturn
 end
