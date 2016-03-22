@@ -1,5 +1,5 @@
 import {Table}              from '../shared/table'
-import {Query}              from '../shared/query'
+import {Query, Model}       from '../shared/query'
 import {ProjectDescription} from '../shared/project.description'
 
 /**
@@ -32,14 +32,14 @@ export class Project {
     /**
      * @return All available queries, with no guaranteed order.
      */
-    public get queries() {
+    get queries() {
         return (this._queries);
     }
 
     /**
      * @return A single query identified by it's ID
      */
-    public getQueryById(id : string) : Query {
+    getQueryById(id : string) : Query {
         return (this._queries.find(item => {
             return (item.id == id);
         }));

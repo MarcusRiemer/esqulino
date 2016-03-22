@@ -46,6 +46,8 @@ class ScratchSqlApp < Sinatra::Base
 
     # Load all related queries
     project['queries'] = project_load_queries(project_folder)
+
+    content_type :json
     
     json project
   end
@@ -68,14 +70,19 @@ class ScratchSqlApp < Sinatra::Base
 
   # Updating a query
   post '/api/project/:id/query/:queryId' do
-
+    project_id = params['id']
+    project_path = File.join(given_data_dir, project_id)
+    
+    status project_store_query(project_path, JSON.parse(request.body.read))
   end
 
+  index_path = File.expand_path('index.html', settings.public_folder)
+  
   # Catchall for the rest of routes. This enables meaningful navigation
   # even if the user submits a "deep link" to somewhere inside the
   # application.
   get '/*' do
-    send_file File.expand_path('index.html', settings.public_folder)
+    send_file index_path
   end
 end
 

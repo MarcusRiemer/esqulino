@@ -2,6 +2,12 @@
   <div class="col-sm-7 col-md-8 col-lg-9">
     <sql-query [query]="query"></sql-query>
 
+    <button (click)="save()">
+      <span class="fa fa-spinner fa-pulse"
+            [hidden]="!isSaving"></span>
+      Speichern
+    </button>
+    
     <div *ngIf="query"
          class="card card-outline-warning">
       <div class="card-header">

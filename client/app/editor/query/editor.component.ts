@@ -24,6 +24,8 @@ export class QueryEditorComponent {
      * The currently edited project
      */
     public project : Project;
+
+    private _isSaving = false;
     
     /**
      * Used for dependency injection.
@@ -47,5 +49,14 @@ export class QueryEditorComponent {
                 this.project = res;
                 this.query = this.project.getQueryById(queryId);
             });
+    }
+
+    /**
+     * Saves this project to the server.
+     */
+    save() {
+        this._isSaving = true;
+        this._projectService.saveQuery(this.query.id)
+            .subscribe(res => this._isSaving = false);
     }
 }
