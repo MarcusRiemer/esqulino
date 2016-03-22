@@ -45,6 +45,48 @@ class SqlComponent {
 })
 class ExpressionComponent {
     @Input() expr : SyntaxTree.Expression;
+
+    //
+    private _currentDragOver : boolean = false;
+
+    onConstantClick() {
+        let constant = <SyntaxTree.ConstantExpression> this.expr;
+        constant.value = prompt("New Value?", constant.value);
+
+        console.log(constant.value);
+
+        return (true);
+    }
+
+    /**
+     *
+     */
+    onConstantDrag(evt : DragEvent) {
+        this._currentDragOver = true;
+        // Indicates we can drop here
+        evt.preventDefault();
+    }
+
+    /**
+     *
+     */
+    onConstantDragLeave(evt : DragEvent) {
+        this._currentDragOver = false;
+    }
+
+    onConstantDrop(evt : DragEvent) {
+        this._currentDragOver = false;
+        this.expr = new SyntaxTree.ConstantExpression({
+            type : "INTEGER",
+            value : "13"
+        });
+
+        evt.preventDefault();
+    }
+
+    get isCurrentDropTarget() : boolean {
+        return (this._currentDragOver);
+    }
 }
 
 @Component({

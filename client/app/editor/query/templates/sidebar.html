@@ -1,9 +1,32 @@
-<h1>Sidebar</h1>
+<div class="sidebar">
+  <div class="block-container block">
+    <div (dragstart)="onDragStart($event)"
+         class="constant"
+         draggable="true">
+      Konstante Zahl
+    </div>
+  </div>
 
-<div class="block-container block">
-  <div class="constant"
-       draggable="true"
-       (dragstart)="onDragStart($event)">
-    Konstante Zahl
+  <hr />
+
+  <div class="block-container block">
+    <template ngFor #table [ngForOf]="schema" #last="last" >
+      <div (dragstart)="onDragStart($event)"
+           class="table"
+           draggable="true">
+        <span class="fa fa-table fa-fw"></span>
+        {{ table.name }}
+      </div>
+      <ul>
+        <li *ngFor="#column of table.columns">
+          <span (dragstart)="onDragStart($event)"
+                class="column indent"
+                draggable="true">
+            {{ column.name }}
+          </span>
+        </li>
+      </ul>
+      <hr [hidden]="last">
+    </template>
   </div>
 </div>

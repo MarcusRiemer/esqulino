@@ -4,7 +4,7 @@
     font-size: 20px;
 }
 
-.block .keyword.indent {
+.block .indent {
     margin-left: 15px;
 }
 
@@ -18,8 +18,22 @@
 }
 
 .block .expression:hover {
+    background-color: orange;
+}
+
+.block .expression {
     border-radius: 500px;
     background-color: orange;
+}
+
+.block .current-drop-target {
+    font-size: 30px;
+}
+
+.block input, .block input:focus {
+    background-color: transparent;
+    border: 0px solid;
+    outline: none;
 }
 
 .block .constant {
@@ -33,8 +47,23 @@
     color: black;
 }
 
+.block .table {
+    border-radius: 500px;
+    border-color: black;
+    border-width: 1px;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: yellow;
+    color: black;
+}
+
 .block .column {
-    color: green;
+    border-radius: 500px;
+    border-color: black;
+    border-width: 1px;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: lime;
 }
 
 .block .table-name {
@@ -47,6 +76,10 @@
 
 .block.select .column:last-child:after {
     content: "";
+}
+
+.sidebar .block .column {
+    margin-bottom: 10px;
 }
 
 nav.front {
