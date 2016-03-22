@@ -1,12 +1,45 @@
 {
   "name": "Ereignisse",
   "select": {
-    "columns": []
+    "columns": [],
+    "allData": true
   },
   "from": {
     "first": {
       "name": "ereignis",
       "alias": "e"
+    }
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "binary": {
+            "lhs": {
+              "constant": {
+                "type": "INTEGER",
+                "value": "1"
+              }
+            },
+            "rhs": {
+              "constant": {
+                "type": "INTEGER",
+                "value": "2"
+              }
+            },
+            "operator": "+",
+            "simple": true
+          }            
+        },
+        "rhs": {
+          "constant": {
+            "type": "INTEGER",
+            "value": "2"
+          }
+        },
+        "operator": "<=",
+        "simple": true
+      }
     }
   }
 }

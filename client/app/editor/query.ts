@@ -39,11 +39,38 @@ class SqlComponent {
 }
 
 @Component({
+    selector : 'sql-expr',
+    templateUrl : 'app/editor/templates/query-expr.html',
+    directives: [ExpressionComponent]
+})
+class ExpressionComponent {
+    @Input() expr : SyntaxTree.Expression;
+}
+
+@Component({
     selector : 'sql-select',
     templateUrl : 'app/editor/templates/query-select.html',
+    directives: [ExpressionComponent]
 })
 class SelectComponent extends SqlComponent {
     @Input() select : SyntaxTree.Select;
+
+    /**
+     * 
+     */
+    get starExpression() {
+        let toReturn = "";
+        
+        if (this.select.allData) {
+            toReturn = "*";
+            
+            if (this.select.numberOfColumns == 0) {
+                toReturn += ", ";
+            }
+        }
+        
+        return (toReturn);
+    }
 }
 
 @Component({
@@ -51,15 +78,16 @@ class SelectComponent extends SqlComponent {
     templateUrl : 'app/editor/templates/query-from.html',
 })
 class FromComponent extends SqlComponent {
-    @Input() from : Model.From;
+    @Input() from : SyntaxTree.From;
 }
 
 @Component({
     selector : 'sql-where',
     templateUrl : 'app/editor/templates/query-where.html',
+    directives: [ExpressionComponent]
 })
 class WhereComponent extends SqlComponent {
-    @Input() from : Model.From;
+    @Input() where : SyntaxTree.Where;
 }
 
 
@@ -80,7 +108,7 @@ export class SqlStringPipe implements PipeTransform {
 @Component({
     selector: 'sql-query',
     templateUrl: 'app/editor/templates/query.html',
-    directives: [SelectComponent, FromComponent, WhereComponent]
+    directives: [ExpressionComponent, SelectComponent, FromComponent, WhereComponent]
 })
 export class QueryComponent {
     @Input() public query : Query;

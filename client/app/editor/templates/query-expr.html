@@ -1,0 +1,14 @@
+<span [ngSwitch]="expr.templateIdentifier">
+  <template ngSwitchWhen="constant">
+    {{ expr }}
+  </template>
+  <template ngSwitchWhen="column">
+    {{ expr }}
+  </template>
+  <template ngSwitchWhen="binary">
+    <sql-expr [expr]="expr.lhs"></sql-expr> {{ expr.operator }} <sql-expr [expr]="expr.rhs"></sql-expr>
+  </template>
+  <template ngSwitchDefault>
+    Error: Unknown expression type identifier
+  </template>
+</span>

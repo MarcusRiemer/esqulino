@@ -30,9 +30,13 @@ doc :
 	make -C server doc
 	make -C doc/elaboration thesis
 
-# Used during development: Prettyprints all available JSON Files
+# Used during development: Prettyprints all available JSON Files, the use of
+# sponge is basically a substitute for "jq . < {} > {}" (in place editing of
+# the same file).
+# BEWARE: If any of the input files is not syntactically valid JSON (this
+# *includes* quoted keys) the output file will be empty.
 dev-pretty-json-data :
-	find data -iname "*.json" -exec bash -c 'jq "." < {} | sponge {}' \;
+	find data -iname "*.json" -exec bash -c 'jq . < {} | sponge {}' \;
 
 
 .PHONY : install-deps client-watch server-run doc
