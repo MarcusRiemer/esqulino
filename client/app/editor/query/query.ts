@@ -1,8 +1,10 @@
-import {Component, Input}               from 'angular2/core';
-import {Pipe, PipeTransform}            from 'angular2/core';
+import {Component, Input}               from 'angular2/core'
+import {Pipe, PipeTransform}            from 'angular2/core'
 
-import {Table}                          from '../../shared/table';
-import {Query, Model, SyntaxTree}       from '../../shared/query';
+import {ProjectService}                 from '../project.service'
+
+import {Table}                          from '../../shared/table'
+import {Query, Model, SyntaxTree}       from '../../shared/query'
 
 /**
  * Base class for all SQL top-level components.
@@ -154,4 +156,10 @@ export class SqlStringPipe implements PipeTransform {
 })
 export class QueryComponent {
     @Input() query : Query;
+
+    /**
+     * Used for dependency injection.
+     */
+    constructor(private _projectService: ProjectService)
+    {}
 }

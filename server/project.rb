@@ -130,6 +130,22 @@ def project_load_queries(project_folder)
   return to_return
 end
 
+def project_store_query(project_folder, query_info)
+  query_folder = File.join(project_folder, "queries")
+  # Filename without extension
+  query_filename = File.join(query_folder, query_info['model']['id'])
+
+  File.open(query_filename + ".json", "w") do |f|
+    f.write(query_info['model'].to_json)
+  end
+
+  File.open(query_filename + ".sql", "w") do |f|
+    f.write(query_info['sql'])
+  end
+
+  return 200
+end
+
 # Executes a query in the context of a given project
 #
 # @param project_folder [string] The projects root folder
