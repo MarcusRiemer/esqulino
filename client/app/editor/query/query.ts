@@ -1,8 +1,8 @@
 import {Component, Input}               from 'angular2/core';
 import {Pipe, PipeTransform}            from 'angular2/core';
 
-import {Table}                          from '../shared/table';
-import {Query, Model, SyntaxTree}       from '../shared/query';
+import {Table}                          from '../../shared/table';
+import {Query, Model, SyntaxTree}       from '../../shared/query';
 
 /**
  * Base class for all SQL top-level components.
@@ -40,7 +40,7 @@ class SqlComponent {
 
 @Component({
     selector : 'sql-expr',
-    templateUrl : 'app/editor/templates/query-expr.html',
+    templateUrl : 'app/editor/query/templates/query-expr.html',
     directives: [ExpressionComponent]
 })
 class ExpressionComponent {
@@ -49,7 +49,7 @@ class ExpressionComponent {
 
 @Component({
     selector : 'sql-select',
-    templateUrl : 'app/editor/templates/query-select.html',
+    templateUrl : 'app/editor/query/templates/query-select.html',
     directives: [ExpressionComponent]
 })
 class SelectComponent extends SqlComponent {
@@ -75,7 +75,7 @@ class SelectComponent extends SqlComponent {
 
 @Component({
     selector : 'sql-from',
-    templateUrl : 'app/editor/templates/query-from.html',
+    templateUrl : 'app/editor/query/templates/query-from.html',
 })
 class FromComponent extends SqlComponent {
     @Input() from : SyntaxTree.From;
@@ -83,7 +83,7 @@ class FromComponent extends SqlComponent {
 
 @Component({
     selector : 'sql-where',
-    templateUrl : 'app/editor/templates/query-where.html',
+    templateUrl : 'app/editor/query/templates/query-where.html',
     directives: [ExpressionComponent]
 })
 class WhereComponent extends SqlComponent {
@@ -107,7 +107,7 @@ export class SqlStringPipe implements PipeTransform {
 
 @Component({
     selector: 'sql-query',
-    templateUrl: 'app/editor/templates/query.html',
+    templateUrl: 'app/editor/query/templates/query.html',
     directives: [ExpressionComponent, SelectComponent, FromComponent, WhereComponent]
 })
 export class QueryComponent {
