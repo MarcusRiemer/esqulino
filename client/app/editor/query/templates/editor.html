@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-sm-10">
+    <sql-query [query]="query"></sql-query>
+
+    <div *ngIf="query"
+         class="card card-outline-warning">
+      <div class="card-header">
+        <span class="fa fa-bug"></span> SQL-Darstellung
+      </div>
+      <div class="card-block">
+        <pre>{{ query | sqlString }}</pre>
+      </div>
+    </div>
+
+    <div *ngIf="query"
+         class="card card-outline-warning">
+      <div class="card-header">
+        <span class="fa fa-bug"></span> JSON-Darstellung
+      </div>
+      <div class="card-block">
+        <pre>{{ query | json }}</pre>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <sql-sidebar [query]="query"></sql-sidebar>
+  </div>
+</div>
