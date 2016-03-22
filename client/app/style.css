@@ -30,9 +30,12 @@
     font-size: 30px;
 }
 
-.block input, .block input:focus {
+.block input {
     background-color: transparent;
     border: 0px solid;
+}
+
+.block input:focus {
     outline: none;
 }
 

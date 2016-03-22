@@ -48,17 +48,7 @@ class SqlComponent {
 class ExpressionComponent {
     @Input() expr : SyntaxTree.Expression;
 
-    //
     private _currentDragOver : boolean = false;
-
-    onConstantClick() {
-        let constant = <SyntaxTree.ConstantExpression> this.expr;
-        constant.value = prompt("New Value?", constant.value);
-
-        console.log(constant.value);
-
-        return (true);
-    }
 
     /**
      *
