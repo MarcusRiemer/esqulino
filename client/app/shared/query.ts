@@ -174,6 +174,16 @@ export module SyntaxTree {
          */
         constructor(private _templateIdentifier : TemplateId)
         {}
+
+        /**
+         * Because the user can construct new Queries with "holes", not every
+         * query can be represented as SQL string.
+         *
+         * @return true, if this expression could be turned into an SQL string.
+         */
+        isComplete() : boolean {
+            return (true);
+        }
         
         /**
          * @return SQL String representation
@@ -233,6 +243,10 @@ export module SyntaxTree {
 
         get value() : string {
             return (this._value);
+        }
+
+        set value(val) {
+            this._value = val;
         }
 
         toString() : string {
@@ -794,6 +808,9 @@ export module SyntaxTree {
             this._first = loadExpression(where.first);
         }
 
+        /**
+         * The first expression this WHERE clause.
+         */
         get first() : Expression {
             return (this._first);
         }
@@ -890,6 +907,10 @@ export class Query {
         return (toReturn);
     }
 
+    /**
+     * Serializes the whole query to the "over-the-wire" format.
+     * @return The "over-the-wire" JSON representation
+     */
     public toModel() : Model.Query {
         let toReturn : Model.Query = {
             name : this._name,

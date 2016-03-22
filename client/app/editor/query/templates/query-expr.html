@@ -1,6 +1,21 @@
 <span [ngSwitch]="expr.templateIdentifier">
   <template ngSwitchWhen="constant">
-    <span class="constant">{{ expr }}</span>
+    <span *ngIf="!expr.isEditing"
+          (dragover)="onConstantDrag($event)"
+          (dragleave)="onConstantDragLeave($event)"
+          (drop)="onConstantDrop($event)"
+          (click)="expr.isEditing = true"
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"
+          class="constant">
+      {{ expr }}
+    </span>
+    <span *ngIf="expr.isEditing"
+          class="constant">
+      <input type="text"
+             (blur)="expr.isEditing = false"
+             [(ngModel)]="expr.value"
+             [size]="expr.value.length">
+    </span>
   </template>
   <template ngSwitchWhen="column">
     {{ expr }}

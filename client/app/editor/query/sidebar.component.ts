@@ -9,7 +9,13 @@ import {Query}                       from '../../shared/query'
 export class SidebarComponent {
     @Input() query : Query;
 
+    get schema() {
+        return (this.query.schema);
+    }
+    
     onDragStart(evt : DragEvent) {
+        evt.dataTransfer.effectAllowed = 'copy';
+        evt.dataTransfer.setData('Text', 'constant');
         console.log(evt);
     }
 }
