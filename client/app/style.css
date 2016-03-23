@@ -2,6 +2,7 @@
     font-family: monospace;
     cursor: default;
     font-size: 20px;
+    transition: font-size 200ms ease-in;
 }
 
 .block .indent {
@@ -13,6 +14,7 @@
 }
 
 .block .expression {
+    padding: 2px;
     border-radius: 500px;
     background-color: yellow;
 }
@@ -26,15 +28,17 @@
     background-color: orange;
 }
 
-.block .current-drop-target {
+.block-container .current-drop-target {
+    transition: font-size 200ms ease-in;
     font-size: 30px;
 }
 
 .block input {
     background-color: transparent;
     border: 0px solid;
+    padding: 0px;
+    margin: 0px;
 }
-
 .block input:focus {
     outline: none;
 }
