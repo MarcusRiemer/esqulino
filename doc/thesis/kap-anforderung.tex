@@ -394,10 +394,12 @@ Diese Layoutstruktur wird mittlerweile von einer Vielzahl von vorhandenen CSS-Bi
 
 \begin{description}
 \item[Zeilen] \hfill \\
-  Zeilen enthalten eine oder mehrere Spalten, wobei jeder Inhalt zwingend in einer Spalte platziert werden muss.
+  Zeilen enthalten eine oder mehrere Spalten, wobei jeder Inhalt zwingend in einer Spalte platziert werden muss. Die Höhe einer Zeile entspricht der Höhe der höchsten Spalte.
 \item[Spalten] \hfill \\
-  Spalten verfügen über eine ganzzahlige Breite, wobe die maximale Breite einer Zeile 12 beträgt. Sollte die Summe der Spalten einer Zeile diese Breite überschreiten, wird sie umgebrochen.
+  Die Breite einer Spalte wird in einem relativen Maß mit Bezug zu einer bestimmten Bildschirmgröße angegeben. So können für breite Bildschirme z.B. drei Spalten vorgesehen werden, für sehr schmale Geräte wie Smartphones hingegen nur eine Spalte. Sollte die Summe dieser Breitenangaben der Spalten die maximale Breite einer Zeile überschreiten, werden diese auf mehrere Zeilen umgebrochen.
 \end{description}
+
+\missing[inline]{Visuelles Beispiel für den Umbruch}
 
 \subsubsection{Allgemeine Bedienelemente}
 
