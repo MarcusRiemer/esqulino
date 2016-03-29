@@ -85,6 +85,20 @@ describe('DataType', () => {
     });
 });
 
+describe('MissingExpression', () => {
+    it('Only case', () => {
+        const model : Model.MissingExpression = {
+
+        }
+
+        const c = new SyntaxTree.MissingExpression(model);
+
+        // Model and String serialization
+        expect( () => { c.toString() }).toThrow()
+        expect(c.toModel().missing).toEqual(model);
+    });
+});
+
 describe('ConstantExpression', () => {
     it('Valid Integer', () => {
         const model : Model.ConstantExpression = {

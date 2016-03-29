@@ -1,4 +1,7 @@
 <span [ngSwitch]="expr.templateIdentifier">
+  <template ngSwitchWhen="missing">
+    <span class="fa fa-question-circle"></span>
+  </template>
   <template ngSwitchWhen="constant">
     <span *ngIf="!expr.isEditing"
           (dragover)="onConstantDrag($event)"
