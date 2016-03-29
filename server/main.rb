@@ -7,6 +7,13 @@ require 'yaml'
 
 require './project.rb'
 
+# Mainly parses paramaters and routes calls to apropriate functions.
+# Very little real logic should take place in this class.
+#
+# All routed paths begin with "/api/", as other URLs may be legitemately
+# used by the client. These URLs are mapped to the index.html file, which
+# *does* cause some trouble with missing resources, as they get redirected
+# to the mainpage. To fix this, a list of all valid URLs would be required ...
 class ScratchSqlApp < Sinatra::Base
   enable :logging
   
@@ -18,6 +25,7 @@ class ScratchSqlApp < Sinatra::Base
   # Static HTML files are served from here
   set :public_folder, File.dirname(__FILE__) + "/../dist/client/"
 
+  # The data directory to serve projects from
   def given_data_dir
     ARGV[1] || "../data/dev/"
   end
@@ -38,6 +46,10 @@ class ScratchSqlApp < Sinatra::Base
     # Load data from disk and strip any private data
     project_id = params['id']
     project_folder = File.join(given_data_dir, project_id);
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
+    
     project = YAML.load_file(File.join(project_folder, "config.yaml"));
     project = project_public_info(project);
     
@@ -56,35 +68,60 @@ class ScratchSqlApp < Sinatra::Base
   get '/api/project/:id/preview' do
     # Load the project to find out whether a preview image is set
     project_id = params['id']
-    project_path = File.join(given_data_dir, project_id)
-    project = YAML.load_file(File.join(project_path, "config.yaml"));
+    project_folder = File.join(given_data_dir, project_id)
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
+    
+    project = YAML.load_file(File.join(project_folder, "config.yaml"));
 
     # Return the preview image if it exists
     if project.key?("preview") then
-      send_file File.expand_path(project["preview"], project_path)
+      send_file File.expand_path(project["preview"], project_folder)
     else
       halt 404
     end
     
   end
 
+  # Creating a query
+  post '/api/project/:id/query/create/:table' do
+    project_id = params['id']
+    project_folder = File.join(given_data_dir, project_id)
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
+
+    query = project_create_query(project_folder, params['table'])
+    project_store_query(project_folder, query)
+
+    # Return the ID of the newly created query
+    return (query["model"]["id"]);
+  end
+  
   # Updating a query
   post '/api/project/:id/query/:queryId' do
     project_id = params['id']
-    project_path = File.join(given_data_dir, project_id)
+    project_folder = File.join(given_data_dir, project_id)
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
     
-    status project_store_query(project_path, JSON.parse(request.body.read))
+    status project_store_query(project_folder, JSON.parse(request.body.read))
   end
 
   # Running a query
   post '/api/project/:id/query/:queryId/run' do
     project_id = params['id']
-    project_path = File.join(given_data_dir, project_id)
+    project_folder = File.join(given_data_dir, project_id)
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
 
     query_id = params['queryId']
     query_params = JSON.parse(request.body.read)
     
-    result = project_run_query(project_path, query_id, query_params)
+    result = project_run_query(project_folder, query_id, query_params)
     status 200
     json result
   end

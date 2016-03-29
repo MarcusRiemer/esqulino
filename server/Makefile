@@ -13,6 +13,10 @@ run : has-bundle
 doc : has-yard
 	$(YARD_BIN) doc
 
+# Used during development: Shows which ruby entities require documentation
+dev-doc : has-yard
+	$(YARD_BIN) doc --list-undoc
+
 # Ensures the bundle "binary" is available
 has-bundle :
 ifeq (, $(wildcard $(BUNDLE_BIN)))

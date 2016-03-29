@@ -1,1 +1,46 @@
-{"name":"Ereignisse","id":"b0c224ac-efd2-4f46-bec0-b7bca7058a82","from":{"first":{"name":"ereignis","alias":"e"}},"select":{"columns":[],"allData":true},"where":{"first":{"binary":{"lhs":{"binary":{"lhs":{"constant":{"type":"INTEGER","value":"1"}},"rhs":{"constant":{"type":"INTEGER","value":"2"}},"operator":"+","simple":true}},"rhs":{"constant":{"type":"INTEGER","value":"71"}},"operator":"<=","simple":true}}}}
+{
+  "name": "Ereignisse",
+  "id": "b0c224ac-efd2-4f46-bec0-b7bca7058a82",
+  "from": {
+    "first": {
+      "name": "ereignis",
+      "alias": "e"
+    }
+  },
+  "select": {
+    "columns": [],
+    "allData": true
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "binary": {
+            "lhs": {
+              "constant": {
+                "type": "INTEGER",
+                "value": "1"
+              }
+            },
+            "rhs": {
+              "constant": {
+                "type": "INTEGER",
+                "value": "2"
+              }
+            },
+            "operator": "+",
+            "simple": true
+          }
+        },
+        "rhs": {
+          "constant": {
+            "type": "INTEGER",
+            "value": "71"
+          }
+        },
+        "operator": "<=",
+        "simple": true
+      }
+    }
+  }
+}

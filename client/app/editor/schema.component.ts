@@ -34,4 +34,9 @@ export class SchemaComponent implements OnInit {
         this._projectService.ActiveProject
             .subscribe(res => this.project = res);
     }
+
+    onCreateQuery(tableName : string) {
+        this._projectService.createQuery(tableName)
+            .subscribe( res => { });
+    }
 }
