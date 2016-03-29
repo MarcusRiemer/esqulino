@@ -15,8 +15,8 @@ export module Model {
      * the actual value lookup to execution time and ends recursion.
      */
     export interface SingleColumnExpression {
-        column : string,
-        table? : string,
+        column : string
+        table? : string
         alias? : string
     }
 
@@ -25,7 +25,7 @@ export module Model {
      * ends recursion.
      */
     export interface ConstantExpression {
-        type : DataTypeStrings,
+        type : DataTypeStrings
         value : string
     }
 
@@ -33,10 +33,17 @@ export module Model {
      * Combines two expressions with a binary operator.
      */
     export interface BinaryExpression {
-        lhs : Expression,
-        operator : string,
-        rhs : Expression,
+        lhs : Expression
+        operator : string
+        rhs : Expression
         simple : boolean
+    }
+
+    /**
+     * Denotes an expression that is intentionally missing.
+     */
+    export interface MissingExpression {
+
     }
 
     /**
@@ -46,9 +53,10 @@ export module Model {
      * keys may be set at runtime.
      */
     export interface Expression {
-        singleColumn? : SingleColumnExpression,
-        binary? : BinaryExpression,
+        singleColumn? : SingleColumnExpression
+        binary? : BinaryExpression
         constant? : ConstantExpression
+        missing? : MissingExpression
     }
 
     export interface Select {
@@ -160,7 +168,11 @@ export module SyntaxTree {
         public abstract toModel() : any;
     }
 
-    type TemplateId = "constant" | "column" | "binary";
+    /**
+     * Valid template identifiers. Sadly a leaky abstraction that needs
+     * to be kept in sync with the templates.
+     */
+    type TemplateId = "constant" | "column" | "binary" | "missing";
 
     /**
      * Base class for all expressions, no matter how many arguments they
@@ -181,9 +193,7 @@ export module SyntaxTree {
          *
          * @return true, if this expression could be turned into an SQL string.
          */
-        isComplete() : boolean {
-            return (true);
-        }
+        abstract isComplete() : boolean;
         
         /**
          * @return SQL String representation
@@ -198,7 +208,8 @@ export module SyntaxTree {
         /**
          * This is a more or less leaky abstraction, but the HTML rendering
          * template needs to know which kind of expression it is dealing
-         * with.
+         * with. Ideally this model wouldn't need to do anything frontend-
+         * related.
          *
          * @return The template identifier to use
          */
@@ -223,6 +234,34 @@ export module SyntaxTree {
     }
 
     /**
+     * Denotes an intentionally missing value in an expression. These values
+     * are meant to be replaced by the user and block serialization.
+     */
+    export class MissingExpression extends Expression {
+
+        constructor(_expr : Model.MissingExpression) {
+            super("missing");
+        }
+
+        isComplete() : boolean {
+            return (false);
+        }
+
+        toString() : string {
+            throw {
+                err : "Statement contains missing expression"
+            }
+        }
+
+        toModel() : Model.Expression {
+            return ({
+                missing : {
+                }
+            })
+        }
+    }
+
+    /**
      * A compile time constant, logically a leaf of an Expression
      * Tree.
      */
@@ -235,6 +274,10 @@ export module SyntaxTree {
 
             this._type = parseDataType(expr.type);
             this._value = expr.value;
+        }
+
+        isComplete() : boolean {
+            return (true);
         }
 
         get type() : DataType {
@@ -285,6 +328,10 @@ export module SyntaxTree {
             this._columnName = model.column;
             this._tableName = model.table;
             this._tableAlias = model.alias;
+        }
+
+        isComplete() : boolean {
+            return (true);
         }
 
         /**
@@ -360,6 +407,10 @@ export module SyntaxTree {
             this._rhs = loadExpression(expr.rhs);
             this._isSimple = expr.simple;
             this._operator = expr.operator;
+        }
+
+        isComplete() : boolean {
+            return (this._lhs.isComplete() && this._rhs.isComplete())
         }
 
         /**
