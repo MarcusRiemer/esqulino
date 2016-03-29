@@ -1,7 +1,8 @@
 require 'sqlite3'
 require 'json'
 require 'yaml'
-require 'securerandom'
+require 'securerandom' # To generate UUIDs
+require 'fileutils'    # To create directory trees
 
 # Describes a single column of a SQLite Table
 class SchemaColumn
@@ -16,6 +17,8 @@ class SchemaColumn
     @primary = pk == 1
   end
 
+  # Serialises this column to JSON, according to the over-the-wire format
+  # described in Typescript.
   def to_json(options)
     {
       :index => @index, :name => @name, :type => @type,
@@ -46,7 +49,9 @@ class SchemaTable
   def [](idx)
     return @columns[idx]
   end
-
+  
+  # Serialises this table to JSON, according to the over-the-wire format
+  # described in Typescript.
   def to_json(options)
     { :name => @name, :columns => @columns }.to_json(options)
   end
@@ -84,6 +89,22 @@ def database_describe_schema(project_folder)
   end
 
   return tables
+end
+
+# Throws an exception if the given folder is not a valid
+# esqulino project.
+#
+# @param project_folder [string] The projects root folder
+def assert_project_dir(project_folder)
+  
+  if not File.directory? project_folder
+    raise %{Project folder "#{project_folder}" does not exist}
+  end
+  
+  project_config_file = File.join(project_folder, "config.yaml")
+  if not File.exists? project_config_file
+    raise %{"config.yaml" does not exist in "#{project_folder}"}
+  end
 end
 
 # Strips information from a project description that is not meant to be
@@ -130,8 +151,20 @@ def project_load_queries(project_folder)
   return to_return
 end
 
+# Stores a given query in the context of a given project. For the moment
+# this requires the client to provide the serialized SQL string, because
+# the implementation of that serialization step is written in Typescript.
+#
+# @param project_folder [string] The projects root folder
+# @param query_info [Hash] The query model and it's SQL representation.
 def project_store_query(project_folder, query_info)
   query_folder = File.join(project_folder, "queries")
+
+  # Ensuring that the project folder has a "queries" subfolder
+  if not File.directory?(query_folder)
+    FileUtils.mkdir_p(query_folder)
+  end
+  
   # Filename without extension
   query_filename = File.join(query_folder, query_info['model']['id'])
 
@@ -144,6 +177,36 @@ def project_store_query(project_folder, query_info)
   end
 
   return 200
+end
+
+# Creates a new Query which basically represents a
+# "SELECT * FROM initial_table". This function does not actually store
+# anything to disk, but returns a hash that can be used in conjunction
+# with the project_store_query function.
+#
+# @param project_folder [string] The projects root folder
+# @param initial_table [string] The name of the initial table to enumerate
+def project_create_query(project_folder, initial_table)
+  query_model = {
+    "name" => "Neue Abfrage",
+    "id" => SecureRandom.uuid,
+    "select" => {
+      "columns" => [],
+      "allData" => true
+    },
+    "from" => {
+      "first" => {
+        "name" => initial_table
+      }
+    }
+  }
+
+  query_sql = "SELECT *\nFROM #{initial_table}"
+  
+  return {
+    "model" => query_model,
+    "sql" => query_sql
+  }
 end
 
 # Executes a query in the context of a given project

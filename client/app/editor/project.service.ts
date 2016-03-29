@@ -49,6 +49,10 @@ export class ProjectService {
         }
     }
 
+    /**
+     * Retrieves an observable that always points to the active
+     * project.
+     */
     get ActiveProject() : Observable<Project> {
         if (this.inProgress) {
             return this.inProgress;
@@ -103,6 +107,19 @@ export class ProjectService {
 
         const toReturn = this._http.post(url, body, options)
             .map( (res) => "" )
+            .catch(this.handleError);
+
+        return (toReturn);
+    }
+
+    /**
+     * Creates a new query on the given table.
+     */
+    createQuery(table : string) {
+        const url = `/api/project/${this.cachedProject.id}/query/create/${table}`;
+        const body = "";
+        
+        const toReturn = this._http.post(url, body)
             .catch(this.handleError);
 
         return (toReturn);

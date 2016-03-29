@@ -1,7 +1,19 @@
 <h1>Tabellen von {{ project?.name }}</h1>
 <div>
   <table class="table">
-    <thead>
+    <tbody *ngFor="#table of project?.schema">
+      <tr>
+        <td colspan="5">
+          <h3>Tabelle <code>{{ table.name }}</code></h3>
+        </td>
+        <td>
+          <button (click)="onCreateQuery(table.name)"
+                  class="btn btn-primary">
+            <span class="fa fa-plus-circle"></span>
+            Neue Abfrage
+          </button>
+        </td>
+      </tr>
       <tr>
         <th>#</th>
         <th>PK</th>
@@ -9,11 +21,6 @@
         <th>Name</th>
         <th>Typ</th>
         <th>Standardwert</th>
-      </tr>
-    </thead>
-    <tbody *ngFor="#table of project?.schema">
-      <tr>
-        <td colspan="6">Tabelle <code>{{ table.name }}</code></td>
       </tr>
       <tr *ngFor="#column of table.columns">
         <td>{{ column.index }}</td>

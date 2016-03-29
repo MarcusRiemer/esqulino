@@ -1,1 +1,33 @@
-{"name":"Personen","id":"86e70348-0e24-4c08-9d13-d2dd88c13faa","from":{"first":{"name":"person","alias":"p"}},"select":{"columns":[{"expr":{"singleColumn":{"column":"person_id","alias":"p"}},"as":"pId"},{"expr":{"singleColumn":{"column":"vorname","alias":"p"}},"as":"pName"}],"allData":false}}
+{
+  "name": "Personen",
+  "id": "86e70348-0e24-4c08-9d13-d2dd88c13faa",
+  "from": {
+    "first": {
+      "name": "person",
+      "alias": "p"
+    }
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "person_id",
+            "alias": "p"
+          }
+        },
+        "as": "pId"
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "vorname",
+            "alias": "p"
+          }
+        },
+        "as": "pName"
+      }
+    ],
+    "allData": false
+  }
+}

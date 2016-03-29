@@ -1,1 +1,50 @@
-{"name":"Alles","id":"e657b03b-9525-41ff-b32d-dfeb528e98c8","from":{"first":{"name":"person","alias":"p"},"joins":[{"table":{"name":"ereignis","alias":"e"},"cross":"cross"}]},"select":{"columns":[{"expr":{"singleColumn":{"column":"person_id","alias":"p"}},"as":"pId"},{"expr":{"singleColumn":{"column":"vorname","alias":"p"}},"as":"pName"}],"allData":false},"where":{"first":{"constant":{"type":"INTEGER","value":"3"}}}}
+{
+  "name": "Alles",
+  "id": "e657b03b-9525-41ff-b32d-dfeb528e98c8",
+  "from": {
+    "first": {
+      "name": "person",
+      "alias": "p"
+    },
+    "joins": [
+      {
+        "table": {
+          "name": "ereignis",
+          "alias": "e"
+        },
+        "cross": "cross"
+      }
+    ]
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "person_id",
+            "alias": "p"
+          }
+        },
+        "as": "pId"
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "vorname",
+            "alias": "p"
+          }
+        },
+        "as": "pName"
+      }
+    ],
+    "allData": false
+  },
+  "where": {
+    "first": {
+      "constant": {
+        "type": "INTEGER",
+        "value": "3"
+      }
+    }
+  }
+}
