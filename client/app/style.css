@@ -85,6 +85,18 @@ nav.front {
     margin-bottom: 15px;
 }
 
+nav .router-link-active {
+    font-weight: bold;
+    border-radius: 500px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    color: black;
+    transition: background-color, padding, border-radius;
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+    background-color: cornflowerblue;
+}
+
 nav .nav-query {
     margin-left: 15px;
 }
