@@ -10,11 +10,13 @@ import {SchemaComponent}      from './schema.component';
 import {QueryEditorComponent} from './query/editor.component';
 import {Project}              from './project';
 import {ProjectService}       from './project.service';
+import {ToolbarComponent}     from './toolbar.component';
+import {ToolbarService}       from './toolbar.service';
 
 @Component({
     templateUrl: 'app/editor/templates/index.html',
-    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES],
-    providers: [HTTP_PROVIDERS, ProjectService]
+    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, ToolbarComponent],
+    providers: [HTTP_PROVIDERS, ProjectService, ToolbarService]
 })
 @RouteConfig([
     { path: '/', name : "Schema",   component : SchemaComponent, useAsDefault: true },

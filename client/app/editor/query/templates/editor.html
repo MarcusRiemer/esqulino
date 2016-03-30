@@ -1,27 +1,20 @@
 <div class="row">
   <div class="col-sm-7 col-md-8 col-lg-9">
-    <div class="card">
-      <div class="card-header">
-        Abfrage "{{ query.name }}"
-      </div>
-      <div class="card-block">
-        <sql-query [query]="query"></sql-query>
+    <sql-query [query]="query"></sql-query>
 
-        <button (click)="save()">
-          <span class="fa fa-spinner fa-pulse"
-                [hidden]="!isSaving"></span>
-          Speichern
-        </button>
+    <button (click)="save()">
+      <span class="fa fa-spinner fa-pulse"
+            [hidden]="!isSaving"></span>
+      Speichern
+    </button>
 
-        <button (click)="run()">
-          <span class="fa fa-spinner fa-pulse"
-                [hidden]="!isQuerying"></span>
-          Ausführen
-        </button>
+    <button (click)="run()">
+      <span class="fa fa-spinner fa-pulse"
+            [hidden]="!isQuerying"></span>
+      Ausführen
+    </button>
 
-        <sql-result [result]="result"></sql-result>
-      </div>
-    </div>
+    <sql-result [result]="result"></sql-result>
     
     <div *ngIf="query"
          class="card card-outline-warning">
