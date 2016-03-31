@@ -29,10 +29,6 @@ $component-indent: 15px;
   align-items: stretch;
 }
 
-.editor .sql .content {
-  flex-grow: 1;
-}
-
 nav.editor .router-link-active {
   font-weight: bold;
   border-radius: 500px;

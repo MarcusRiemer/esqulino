@@ -1,0 +1,37 @@
+<nav>
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link" [routerLink]="['Settings']">
+        <span class="fa fa-cog fa-fw"></span>
+        Einstellungen
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [routerLink]="['Schema']">
+        <span class="fa fa-table fa-fw"></span>
+        Schema
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled">
+        <span class="fa fa-plus fa-fw"></span>
+        Neue Abfrage
+      </a>
+      <ul class="nav nav-query">
+        <li class="nav-item"
+            *ngFor="#query of project?.queries">
+          <a class="nav-link" [routerLink]="['Query', {queryId : query.id}]">
+            <span class="fa fa-search fa-fw"></span>
+            {{ query.name }}
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled">
+        <span class="fa fa-plus fa-fw"></span>
+        Neue Seite
+      </a>
+    </li>
+  </ul>
+</nav>

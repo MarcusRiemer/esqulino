@@ -1,7 +1,7 @@
 import {Component, OnInit}              from 'angular2/core';
 import {CORE_DIRECTIVES}                from 'angular2/common';
 import {HTTP_PROVIDERS}                 from 'angular2/http';
-import {RouteConfig, RouteParams, ROUTER_DIRECTIVES} from 'angular2/router';
+import {RouteConfig, RouteParams,ROUTER_DIRECTIVES} from 'angular2/router';
 
 import {Table}                from '../shared/table'
 
@@ -10,12 +10,13 @@ import {SchemaComponent}      from './schema.component';
 import {QueryEditorComponent} from './query/editor.component';
 import {Project}              from './project';
 import {ProjectService}       from './project.service';
+import {NavbarComponent}      from './navbar.component';
 import {ToolbarComponent}     from './toolbar.component';
 import {ToolbarService}       from './toolbar.service';
 
 @Component({
     templateUrl: 'app/editor/templates/index.html',
-    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, ToolbarComponent],
+    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, ToolbarComponent, NavbarComponent],
     providers: [HTTP_PROVIDERS, ProjectService, ToolbarService]
 })
 @RouteConfig([
