@@ -1,11 +1,3 @@
-body {
-  min-width: 1000px;
-}
-
-nav.front {
-  margin-bottom: 15px;
-}
-
 $sidebar-width:   250px;
 $component-width:  90px;
 $component-indent: 15px;
@@ -19,9 +11,13 @@ $component-indent: 15px;
   flex-grow: 1;
 }
 
-.editor nav {
+.editor nav.toolbar .navbar-brand {
+  /* Hack: Account for margin and padding of Bootstraps stuff */
+  min-width: $sidebar-width - 31px;
+}
+
+.editor nav.leftbar {
   min-width: $sidebar-width;
-  
 }
 
 .editor .sql {
@@ -29,31 +25,29 @@ $component-indent: 15px;
   align-items: stretch;
 }
 
-nav.editor .router-link-active {
-  font-weight: bold;
-  border-radius: 500px;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  color: black;
-  transition: background-color, padding, border-radius;
-  transition-duration: 200ms;
-  transition-timing-function: ease-in-out;
-  background-color: cornflowerblue;
+.editor nav.leftbar {
+  .router-link-active {
+    font-weight: bold;
+    border-radius: 500px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    color: black;
+    transition: background-color, padding, border-radius;
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+    background-color: cornflowerblue;
+  }
+  
+  .nav-query {
+    margin-left: 15px;
+  }
 }
-
-nav .nav-query {
-  margin-left: 15px;
-}
-
+      
 .block-container {
   font-family: monospace;
   cursor: default;
   font-size: 20px;
   transition: font-size 200ms ease-in;
-}
-
-.block .indent {
-  margin-left: 15px;
 }
 
 .block .keyword {
@@ -67,6 +61,7 @@ nav .nav-query {
 }
 
 .block .component.indent {
+  margin-left: $component-indent;
   width: $component-width - $component-indent;
 }
 
@@ -143,23 +138,30 @@ nav .nav-query {
   margin-bottom: 10px;
 }
 
-.project-list-item .card-img-top {
-  opacity: 0.2;
-  transition: opacity 0.3s;
-}
+.front {
+  nav {
+    /* Put some space below the navigation */
+    margin-bottom: 15px;
+  }
+  
+  .project-list-item .card-img-top {
+    opacity: 0.2;
+    transition: opacity 0.3s;
+  }
 
-.project-list-item:hover .card-img-top {
-  opacity: 1;
-  transition: opacity 0.3s;
-}
+  .project-list-item:hover .card-img-top {
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
 
-.project-list-item .card-img-overlay {
-  opacity: 1;
-  transition: opacity 0.3s;
-}
+  .project-list-item .card-img-overlay {
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
 
-.project-list-item:hover .card-img-overlay {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s;
+  .project-list-item:hover .card-img-overlay {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+  }
 }
