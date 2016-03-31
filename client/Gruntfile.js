@@ -62,7 +62,8 @@ module.exports = function (grunt) {
                   'node_modules/jasmine-core/**/*.css',
                   'node_modules/systemjs/dist/**/*.js',
                   'node_modules/rxjs/bundles/**/*.js',
-                  'node_modules/angular2/bundles/**/*.js'],
+                  'node_modules/angular2/bundles/**/*.js',
+                  'node_modules/angular2/es6/**/*.js'],
             dest: destPath,
             filter: 'isFile'
           }
