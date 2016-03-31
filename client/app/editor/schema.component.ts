@@ -6,6 +6,7 @@ import {Table}          from '../shared/table'
 
 import {Project}        from './project'
 import {ProjectService} from './project.service'
+import {ToolbarService} from './toolbar.service'
 
 @Component({
     templateUrl: 'app/editor/templates/schema.html',
@@ -22,6 +23,7 @@ export class SchemaComponent implements OnInit {
      */
     constructor(
         private _projectService: ProjectService,
+        private _toolbarService: ToolbarService,
         private _routeParams: RouteParams,
         _injector: Injector
     ) {
@@ -30,7 +32,9 @@ export class SchemaComponent implements OnInit {
     /**
      * Load the project to access the schema
      */
-    ngOnInit() {        
+    ngOnInit() {
+        this._toolbarService.savingEnabled = false;
+        
         this._projectService.ActiveProject
             .subscribe(res => this.project = res);
     }

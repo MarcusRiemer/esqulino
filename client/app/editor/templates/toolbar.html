@@ -1,8 +1,9 @@
-<nav class="navbar navbar-fixed-top navbar-light bg-faded">
+<nav class="toolbar navbar navbar-fixed-top navbar-light bg-faded">
   <a class="navbar-brand" href="/">esqulino</a>
-  <ul class="nav navbar-nav pull-xs-right">
-    <li class="nav-item">
-      <a class="nav-link active" href="#"><span class="fa fa-floppy-o"></span> Speichern</a>
+  <ul class="nav navbar-nav">
+    <li *ngIf="toolbarService.savingEnabled"
+        class="nav-item">
+      <button class="btn btn-primary" href="#"><span class="fa fa-floppy-o"></span> Speichern</button>
     </li>
   </ul>
 </nav>
