@@ -3,7 +3,9 @@ import 'rxjs/Rx'
 import {Injectable}                              from 'angular2/core'
 import {Http, Response, Headers, RequestOptions} from 'angular2/http'
 
-import {Observable}             from 'rxjs/Observable'
+import {ReplaySubject}                           from 'rxjs/subject/ReplaySubject'
+import {Observable}                              from 'rxjs/Observable'
+import {Observer}                                from 'rxjs/Observer'
 
 import {ProjectDescription}     from '../shared/project.description'
 import {Model}                  from '../shared/query'
@@ -18,35 +20,62 @@ import {Project}            from './project'
  */
 @Injectable()
 export class ProjectService {
-    private inProgress : Observable<Project>;
 
-    private cachedProject : Project;
+    /**
+     * If a HTTP request is in progress, this is it.
+     */
+    private _httpRequest : Observable<Project>;
+
+    /**
+     * The project instance that is currently delivered to all
+     * subscribers.
+     */
+    private _cachedProject : Project;
+
+    /**
+     * Handed out to clients so they can subscribe to something.
+     */
+    private _observable : Observable<Project>;
+
+    /**
+     * Used to emit events to clients.
+     */
+    private _observer : Observer<Project>;
     
     /**
      * @param _http Dependently injected by Angular2
      */
-    constructor(private _http: Http) { }
+    constructor(private _http: Http) {
+        // Create observable and observer once and for all. These instances
+        // are not allowed to changed as they are passed on to every subscriber.
+        this._observable = Observable.create( (obs : Observer<Project>) => {
+            this._observer = obs;
+        });     
+    }
 
     /**
-     * @param id The id of the project to retrieve
-     * @return An observable that updates itself if the selected project changes.
+     * @param id The id of the project to set for all subscribers
      */
-    setActiveProject(id : string) : Observable<Project> {
-        if (this.inProgress) {
-            return this.inProgress;
-        } else if (this.cachedProject) {
-            return Observable.of(this.cachedProject);
-        } else {
-            this.inProgress = this._http.get('/api/project/' + id)
-                .map(res => new Project(res.json()))
-                .do(res => {
-                    this.cachedProject = res;
-                    this.inProgress = null;
-                })
-                .catch(this.handleError);
-
-            return (this.inProgress);
+    setActiveProject(id : string) {
+        // Projects shouldn't change while other requests are in progress
+        if (this._httpRequest) {
+            throw { "err" : "HTTP request in progress" };
         }
+        
+        this._httpRequest = this._http.get('/api/project/' + id)
+            .catch(this.handleError)
+            .map(res => new Project(res.json()));
+
+        this._httpRequest.subscribe(res => {
+            // Cache the project
+            this._cachedProject = res;
+            // Show that there are no more requests
+            this._httpRequest = null;
+            // Inform subscribers
+            this._observer.next(this._cachedProject)
+
+            console.log("Got project");
+        });
     }
 
     /**
@@ -54,13 +83,7 @@ export class ProjectService {
      * project.
      */
     get ActiveProject() : Observable<Project> {
-        if (this.inProgress) {
-            return this.inProgress;
-        } else if (this.cachedProject) {
-            return Observable.of(this.cachedProject);
-        } else {
-            throw { error : "No active project known" };
-        }
+        return (this._observable);
     }
 
     
@@ -68,9 +91,9 @@ export class ProjectService {
      * Sends a certain query to the server to be executed.
      */
     runQuery(id : string) {
-        const query = this.cachedProject.getQueryById(id);
+        const query = this._cachedProject.getQueryById(id);
         
-        const url = '/api/project/' + this.cachedProject.id + '/query/' + id + '/run';
+        const url = '/api/project/' + this._cachedProject.id + '/query/' + id + '/run';
         
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
@@ -92,11 +115,11 @@ export class ProjectService {
             sql : string
         }
 
-        const query = this.cachedProject.getQueryById(id);
+        const query = this._cachedProject.getQueryById(id);
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        const url = '/api/project/' + this.cachedProject.id + '/query/' + id;
+        const url = '/api/project/' + this._cachedProject.id + '/query/' + id;
 
         const bodyJson : QueryUpdate = {
             model : query.toModel(),
@@ -116,7 +139,7 @@ export class ProjectService {
      * Creates a new query on the given table.
      */
     createQuery(table : string) {
-        const url = `/api/project/${this.cachedProject.id}/query/create/${table}`;
+        const url = `/api/project/${this._cachedProject.id}/query/create/${table}`;
         const body = "";
         
         const toReturn = this._http.post(url, body)
