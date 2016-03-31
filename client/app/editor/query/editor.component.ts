@@ -6,6 +6,7 @@ import {QueryResult, RawResult}         from '../../shared/result'
 
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
+import {ToolbarService}                 from '../toolbar.service'
 
 import {QueryComponent, SqlStringPipe}  from './query'
 import {SidebarComponent}               from './sidebar.component'
@@ -38,6 +39,7 @@ export class QueryEditorComponent {
      */
     constructor(
         private _projectService: ProjectService,
+        private _toolbarService: ToolbarService,
         private _routeParams: RouteParams,
         _injector: Injector
     ) {
@@ -59,6 +61,8 @@ export class QueryEditorComponent {
      * Load the project to access the schema
      */
     ngOnInit() {
+        this._toolbarService.savingEnabled = true;
+        
         var queryId = this._routeParams.get('queryId');
 
         this._projectService.ActiveProject
