@@ -1,62 +1,64 @@
-<div class="card">
-  <div class="card-header">
-    Projekteinstellungen
-  </div>
-  <div class="card-block">
-    In diesem Abschnitt kannst du Einstellungen vornehmen, die das gesamte Projekt betreffen.
-  </div>
-  <div *ngIf="project"
-       class="card-block">
-    <form>
-      <div class="form-group row">
-        <label for="project-name"
-               class="col-sm-2 form-control-label">
-          Name
-        </label>
-        <div class="col-sm-10">
-          <input [(ngModel)]="project.name"
-                 class="form-control"
-                 id="project-name"
-                 placeholder="Name des Projekts">
-          <small class="text-muted">Dieser Name muss eindeutig sein, du kannst also keinen Namen nutzen der schon vergeben ist.</small>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="project-description"
-               class="col-sm-2 form-control-label">
-          Beschreibung
-        </label>
-        <div class="col-sm-10">
-          <textarea [(ngModel)]="project.description"
-                    class="form-control"
-                    id="project-description"
-                    placeholder="Beschreibung des Projekts"
-                    rows="3">
-          </textarea>
-          
-          <small class="text-muted">Beschreibe dein Projekt mit ein paar kurzen Sätzen. Erläutere dabei welche Probleme du damit löst oder welche Dinge du erklären möchtest.</small>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-<div class="card">
-  <div class="card-header">
-    Abfragen
-  </div>
-  <ul class="list-group list-group-flush">
-    <li *ngFor="#query of project?.queries"
-        class="list-group-item">
+<div class="content">
+  <div class="card">
+    <div class="card-header">
+      Projekteinstellungen
+    </div>
+    <div class="card-block">
+      In diesem Abschnitt kannst du Einstellungen vornehmen, die das gesamte Projekt betreffen.
+    </div>
+    <div *ngIf="project"
+         class="card-block">
       <form>
-        <button (click)="onDeleteQuery(query.id)"
-                class="btn btn-warning pull-right">
-          <span class="fa fa-trash"></span> Löschen
-        </button>
-        <input [(ngModel)]="query.name"
-               type="text">
+        <div class="form-group row">
+          <label for="project-name"
+                 class="col-sm-2 form-control-label">
+            Name
+          </label>
+          <div class="col-sm-10">
+            <input [(ngModel)]="project.name"
+                   class="form-control"
+                   id="project-name"
+                   placeholder="Name des Projekts">
+            <small class="text-muted">Dieser Name muss eindeutig sein, du kannst also keinen Namen nutzen der schon vergeben ist.</small>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="project-description"
+                 class="col-sm-2 form-control-label">
+            Beschreibung
+          </label>
+          <div class="col-sm-10">
+            <textarea [(ngModel)]="project.description"
+                      class="form-control"
+                      id="project-description"
+                      placeholder="Beschreibung des Projekts"
+                      rows="3">
+            </textarea>
+            
+            <small class="text-muted">Beschreibe dein Projekt mit ein paar kurzen Sätzen. Erläutere dabei welche Probleme du damit löst oder welche Dinge du erklären möchtest.</small>
+          </div>
+        </div>
       </form>
-    </li>
-  </ul>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <div class="card-header">
+      Abfragen
+    </div>
+    <ul class="list-group list-group-flush">
+      <li *ngFor="#query of project?.queries"
+          class="list-group-item">
+        <form>
+          <button (click)="onDeleteQuery(query.id)"
+                  class="btn btn-warning pull-right">
+            <span class="fa fa-trash"></span> Löschen
+          </button>
+          <input [(ngModel)]="query.name"
+                 type="text">
+        </form>
+      </li>
+    </ul>
+  </div>
 </div>
