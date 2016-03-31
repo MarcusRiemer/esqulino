@@ -1,49 +1,45 @@
-<div class="container-fluid"
+<editor-toolbar></editor-toolbar>
+<div class="editor"
      style="padding-top: 4rem;">
-  <editor-toolbar></editor-toolbar>
-  <div class="row">
-    <div class="col-sm-3 col-md-2">
-      <nav class="editor">
-        <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="['Settings']">
-              <span class="fa fa-cog fa-fw"></span>
-              Einstellungen
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="['Schema']">
-              <span class="fa fa-table fa-fw"></span>
-              Schema
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">
-              <span class="fa fa-plus fa-fw"></span>
-              Neue Abfrage
-            </a>
-            <ul class="nav nav-query">
-              <li class="nav-item"
-                  *ngFor="#query of project?.queries">
-                <a class="nav-link" [routerLink]="['Query', {queryId : query.id}]">
-                  <span class="fa fa-search fa-fw"></span>
-                  {{ query.name }}
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">
-              <span class="fa fa-plus fa-fw"></span>
-              Neue Seite
+  <nav>
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['Settings']">
+          <span class="fa fa-cog fa-fw"></span>
+          Einstellungen
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['Schema']">
+          <span class="fa fa-table fa-fw"></span>
+          Schema
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled">
+          <span class="fa fa-plus fa-fw"></span>
+          Neue Abfrage
+        </a>
+        <ul class="nav nav-query">
+          <li class="nav-item"
+              *ngFor="#query of project?.queries">
+            <a class="nav-link" [routerLink]="['Query', {queryId : query.id}]">
+              <span class="fa fa-search fa-fw"></span>
+              {{ query.name }}
             </a>
           </li>
         </ul>
-      </nav>
-    </div>
-    <div class="col-sm-9 col-md-10">
-      <router-outlet [project]="project"></router-outlet>
-    </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled">
+          <span class="fa fa-plus fa-fw"></span>
+          Neue Seite
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="content">
+    <router-outlet></router-outlet>
   </div>
 </div>
 

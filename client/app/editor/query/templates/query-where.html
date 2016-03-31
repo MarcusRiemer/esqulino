@@ -1,11 +1,7 @@
 <div class="block where"
      *ngIf="where">
-  <div class="row">
-    <div [ngClass]="bootstrapColsKeyword">
-      <span class="keyword">WHERE</span>
-    </div>
-    <div [ngClass]="bootstrapColsExpr">
-      <sql-expr [expr]="where.first"></sql-expr>
-    </div>
+  <div>
+    <div class="component">WHERE</div>
+    <sql-expr [expr]="where.first"></sql-expr>
   </div>
 </div>

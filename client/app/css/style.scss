@@ -1,7 +1,36 @@
-$nav-width: 300px;
+body {
+  min-width: 1000px;
+}
 
 nav.front {
   margin-bottom: 15px;
+}
+
+$sidebar-width:   250px;
+$component-width:  90px;
+$component-indent: 15px;
+
+.editor {
+  display: flex;
+  align-items: stretch;
+}
+
+.editor .content {
+  flex-grow: 1;
+}
+
+.editor nav {
+  min-width: $sidebar-width;
+  
+}
+
+.editor .sql {
+  display: flex;
+  align-items: stretch;
+}
+
+.editor .sql .content {
+  flex-grow: 1;
 }
 
 nav.editor .router-link-active {
@@ -32,7 +61,18 @@ nav .nav-query {
 }
 
 .block .keyword {
-  color: blue; }
+  color: blue;
+}
+
+.block .component {
+  color: blue;
+  float: left;
+  width: $component-width;
+}
+
+.block .component.indent {
+  width: $component-width - $component-indent;
+}
 
 .block .expression {
   padding: 2px;
@@ -97,6 +137,10 @@ nav .nav-query {
 
 .block .table-name {
   color: limegreen;
+}
+
+.sidebar {
+  width: $sidebar-width;
 }
 
 .sidebar .block .column {

@@ -1,22 +1,12 @@
 <div class="block from">
-  <div class="row">
-    <div [ngClass]="bootstrapColsKeyword">
-      <span class="keyword">FROM</span>
-    </div>
-    <div [ngClass]="bootstrapColsExpr">
-      <span class="table-name">{{ from.first.name }}</span>
-      <span>{{ from.first.alias }}</span>
-    </div>
+  <div class="component">FROM</div>
+  <div>
+    <span class="table-name">{{ from.first.name }}</span>
+    <span>{{ from.first.alias }}</span>
   </div>
   <div *ngFor="#join of from.joins">
-    <div class="row">
-      <div [ngClass]="bootstrapColsKeyword">
-        <span class="keyword indent">{{ join.sqlJoinKeyword }}</span>
-      </div>
-      <div [ngClass]="bootstrapColsExpr">
-        <span class="table-name">{{ join.name }}</span>
-        <span>{{ join.alias }}</span>
-      </div>
-    </div>
+    <span class="component indent">{{ join.sqlJoinKeyword }}</span>
+    <span class="table-name">{{ join.name }}</span>
+    <span>{{ join.alias }}</span>
   </div>
 </div>
