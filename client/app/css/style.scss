@@ -1,0 +1,125 @@
+$nav-width: 300px;
+
+nav.front {
+  margin-bottom: 15px;
+}
+
+nav.editor .router-link-active {
+  font-weight: bold;
+  border-radius: 500px;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  color: black;
+  transition: background-color, padding, border-radius;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+  background-color: cornflowerblue;
+}
+
+nav .nav-query {
+  margin-left: 15px;
+}
+
+.block-container {
+  font-family: monospace;
+  cursor: default;
+  font-size: 20px;
+  transition: font-size 200ms ease-in;
+}
+
+.block .indent {
+  margin-left: 15px;
+}
+
+.block .keyword {
+  color: blue; }
+
+.block .expression {
+  padding: 2px;
+  border-radius: 500px;
+  background-color: yellow;
+}
+
+.block .expression:hover {
+  background-color: orange;
+}
+
+.block .expression {
+  border-radius: 500px;
+  background-color: orange;
+}
+
+.block-container .current-drop-target {
+  transition: font-size 200ms ease-in;
+  font-size: 30px;
+}
+
+.block input {
+  background-color: transparent;
+  border: 0px solid;
+  padding: 0px;
+  margin: 0px;
+}
+
+.block input:focus {
+  outline: none;
+}
+
+.block .constant {
+  text-align: center;
+  border-radius: 500px;
+  border-color: black;
+  border-width: 1px;
+  padding-left: 1em;
+  padding-right: 1em;
+  background-color: cornflowerblue;
+  color: black;
+}
+
+.block .table {
+  border-radius: 500px;
+  border-color: black;
+  border-width: 1px;
+  padding-left: 1em;
+  padding-right: 1em;
+  background-color: yellow;
+  color: black;
+}
+
+.block .column {
+  border-radius: 500px;
+  border-color: black;
+  border-width: 1px;
+  padding-left: 1em;
+  padding-right: 1em;
+  background-color: lime;
+}
+
+.block .table-name {
+  color: limegreen;
+}
+
+.sidebar .block .column {
+  margin-bottom: 10px;
+}
+
+.project-list-item .card-img-top {
+  opacity: 0.2;
+  transition: opacity 0.3s;
+}
+
+.project-list-item:hover .card-img-top {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.project-list-item .card-img-overlay {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.project-list-item:hover .card-img-overlay {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+}
