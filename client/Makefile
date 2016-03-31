@@ -1,9 +1,7 @@
-TS_FILES = $(shell find app -iname "*.ts")
-TS_JS_FILES = $(TS_FILES:.ts=.js)
-TS_JS_MAP_FILES = $(TS_FILES:.ts=.js.map)
+SASS_FILES      = $(shell find app -iname "*.scss")
+DIST_CSS_FILES  = $(addprefix ../dist/client/, $(SASS_FILES:.scss=.css))
 
-ALL_JS_FILES = $(shell find app -iname "*.js")
-ALL_JS_MAP_FILES = $(ALL_JS_FILES:.js=.js.map)
+SASS_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "sass")')
 
 # Compile by default
 all : compile
@@ -21,9 +19,19 @@ install-deps : has-npm
 watch : has-grunt
 	grunt watch
 
+# Creates relevant dist dirs
+dev-mk-dist-dirs :
+	mkdir -p ../dist/client/app/css
+
 # One-shot compilation.
-compile : has-grunt
+compile : has-grunt compile-sass
 	grunt default
+
+# Compiles all SASS files
+compile-sass : dev-mk-dist-dirs $(DIST_CSS_FILES)
+
+$(DIST_CSS_FILES) : $(SASS_FILES)
+	sass $^ $@
 
 # Removes the dist/client directory which is one level upwards.
 # This is probably not very good style, but required to ensure
@@ -47,5 +55,9 @@ ifeq (, $(shell which grunt 2>/dev/null))
 	$(error "Grunt Taskrunner (grunt) not in PATH")
 endif
 
+has-sass :
+ifeq (, $(wildcard $(SASS_BIN)))
+	$(error "SASS CSS preprocessor not in PATH")
+endif
 
-.PHONY : all install-deps watch compile clean clean-all has-npm
+.PHONY : all clean clean-deps compile dev-mk-dist-dirs has-grunt has-npm has-sass install-deps watch
