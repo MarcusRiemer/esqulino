@@ -45,11 +45,11 @@ export class EditorComponent implements OnInit {
         var projectId = this._routeParams.get('projectId');
 
         console.log(`Loading project with id "${projectId}"`);
-        
-        this._projectService.setActiveProject(projectId)
-            .subscribe(
-                res => this.project = res
-            );
+
+        this._projectService.setActiveProject(projectId);
+        this._projectService.ActiveProject.subscribe(
+            res => this.project = res
+        );
     }
 
     get availableQueries() {
