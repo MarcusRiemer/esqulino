@@ -3,20 +3,20 @@
     <span class="fa fa-question-circle"></span>
   </template>
   <template ngSwitchWhen="constant">
-    <span *ngIf="!expr.isEditing"
+    <span *ngIf="!isEditing"
           (dragenter)="onConstantDrag($event)"
           (dragover)="onConstantDrag($event)"
           (dragleave)="onConstantDragLeave($event)"
           (drop)="onConstantDrop($event)"
-          (click)="expr.isEditing = true"
+          (click)="isEditing = true"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"
           class="constant">
       {{ expr }}
     </span>
-    <span *ngIf="expr.isEditing"
+    <span *ngIf="isEditing"
           class="constant">
       <input type="text"
-             (blur)="expr.isEditing = false"
+             (blur)="onBlur()"
              [(ngModel)]="expr.value"
              [size]="expr.value.length + 1">
     </span>
