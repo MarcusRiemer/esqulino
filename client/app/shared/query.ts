@@ -149,6 +149,21 @@ export module SyntaxTree {
 
         throw { "error" : `serializeDataType: Unknown datatype "${t}` };
     }
+
+    /**
+     * Something that is able to host an expression.
+     */
+    interface ExpressionParent {
+        /**
+         * Replaces a child of this expression. This is used by
+         * outside components, which need a way to change the structure
+         * of a query whilst leaving the "root pointer" intact.
+         *
+         * @param formerChild The instance that previously was a child
+         * @param newChild    The instance that should take the place
+         */
+        replaceChild(formerChild : Expression, newChild : Expression) : void;
+    }
     
     /**
      * Base class for all components of an SQL Statement (SELECT,
@@ -178,14 +193,19 @@ export module SyntaxTree {
      * Base class for all expressions, no matter how many arguments they
      * require or what the return type is.
      */
-    export abstract class Expression {
+    export abstract class Expression implements ExpressionParent {
 
+        private _parent : ExpressionParent;
+        
         /**
          * @param _templateidentifier The type of template needed to render
          *                            this expression.
          */
-        constructor(private _templateIdentifier : TemplateId)
-        {}
+        constructor(private _templateIdentifier : TemplateId) {
+
+        }
+
+        abstract replaceChild(formerChild : Expression, newChild : Expression) : void;
 
         /**
          * Because the user can construct new Queries with "holes", not every
@@ -253,6 +273,12 @@ export module SyntaxTree {
             }
         }
 
+        replaceChild(formerChild : Expression, newChild : Expression) {
+            throw {
+                err : "The missing statement should never have children"
+            }
+        }
+
         toModel() : Model.Expression {
             return ({
                 missing : {
@@ -309,6 +335,12 @@ export module SyntaxTree {
                     value : this._value
                 }
             })
+        }
+
+        replaceChild(formerChild : Expression, newChild : Expression) {
+            throw {
+                err : "The constant expression should never have children"
+            }
         }
     }
 
@@ -388,6 +420,12 @@ export module SyntaxTree {
                 singleColumn : core
             });
         }
+
+        replaceChild(formerChild : Expression, newChild : Expression) {
+            throw {
+                err : "The column expression should never have children"
+            }
+        }
     }
 
     /**
@@ -451,6 +489,16 @@ export module SyntaxTree {
                     simple : this._isSimple
                 }
             })
+        }
+
+        replaceChild(formerChild : Expression, newChild : Expression) {
+            if (this._lhs == formerChild) {
+                this._lhs = newChild;
+            } else if (this._rhs == formerChild) {
+                this._rhs = newChild;
+            } else {
+                //throw  "Given child is not a direct child";
+            }
         }
     }
 

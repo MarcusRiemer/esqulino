@@ -179,7 +179,7 @@ describe('ColumnExpression', () => {
     });
 });
 
-describe('SimpleCompareExpression', () => {
+describe('BinaryExpression', () => {
     it('testing two columns for inequality', () => {
         const model = {
             lhs : { singleColumn : { column : "name", table : "person" } },
@@ -257,6 +257,29 @@ describe('SimpleCompareExpression', () => {
         // Model and String serialization
         expect(e.toString()).toEqual(`"w a s d" LIKE "%a%"`);
         expect(e.toModel().binary).toEqual(model);
+    });
+
+    it('replacing children', () => {
+        const strTypeStr = <Model.DataTypeStrings>"TEXT";
+        
+        const model = {
+            lhs : { constant : { type : strTypeStr, value : "w a s d" } },
+            rhs : { constant : { type : strTypeStr, value : "%a%" } },
+            operator : "LIKE",
+            simple : true
+        };
+        
+        let e = new SyntaxTree.BinaryExpression(model);
+        const lhs = <SyntaxTree.ConstantExpression> e.lhs;
+        const rhs = <SyntaxTree.ConstantExpression> e.rhs;
+
+        const newLhs = new SyntaxTree.MissingExpression({});
+        const newRhs = new SyntaxTree.MissingExpression({});
+
+        e.replaceChild(lhs, newLhs);
+        expect(e.lhs).toBe(newLhs);
+        e.replaceChild(rhs, newRhs);
+        expect(e.rhs).toBe(newRhs);
     });
 });
 
