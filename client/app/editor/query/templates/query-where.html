@@ -1,7 +1,8 @@
 <div class="block where"
-     *ngIf="where">
+     *ngIf="query">
   <div>
     <div class="component">WHERE</div>
-    <sql-expr [expr]="where.first"></sql-expr>
+    <sql-expr [expr]="query.where.first"
+              [query]="query"></sql-expr>
   </div>
 </div>

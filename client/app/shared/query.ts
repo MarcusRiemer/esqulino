@@ -201,8 +201,22 @@ export module SyntaxTree {
          * @param _templateidentifier The type of template needed to render
          *                            this expression.
          */
-        constructor(private _templateIdentifier : TemplateId) {
+        constructor(private _templateIdentifier : TemplateId,
+                    parent : ExpressionParent) {
+            this._parent = parent;
+        }
 
+        /**
+         * Replaces this expression with the given expression in it's
+         * parent.
+         *
+         * @return The new child
+         */
+        replaceSelf(newChildDesc : Model.Expression) : Expression {
+            const newChild = loadExpression(newChildDesc, this._parent);
+            this._parent.replaceChild(this, newChild);
+
+            return (newChild);
         }
 
         abstract replaceChild(formerChild : Expression, newChild : Expression) : void;
@@ -242,13 +256,16 @@ export module SyntaxTree {
      * Maps the "one size fits all"-interface for expressions
      * to their concrete classes. Essentially a factory-function.
      */
-    export function loadExpression(expr : Model.Expression) : Expression {
+    export function loadExpression(expr : Model.Expression,
+                                   parent : ExpressionParent) : Expression {
         if (expr.singleColumn) {
-            return new ColumnExpression(expr.singleColumn);
+            return new ColumnExpression(expr.singleColumn, parent);
         } else if (expr.binary) {
-            return new BinaryExpression(expr.binary);
+            return new BinaryExpression(expr.binary, parent);
         } else if (expr.constant) {
-            return new ConstantExpression(expr.constant);
+            return new ConstantExpression(expr.constant, parent);
+        } else if (expr.missing) {
+            return new MissingExpression(expr.missing, parent);
         }
         throw { "error" : `Unknown expression: ${JSON.stringify(expr)}` }
     }
@@ -259,8 +276,9 @@ export module SyntaxTree {
      */
     export class MissingExpression extends Expression {
 
-        constructor(_expr : Model.MissingExpression) {
-            super("missing");
+        constructor(_expr : Model.MissingExpression,
+                    parent : ExpressionParent) {
+            super("missing", parent);
         }
 
         isComplete() : boolean {
@@ -295,8 +313,9 @@ export module SyntaxTree {
         private _type : DataType;
         private _value : string;
         
-        constructor(expr : Model.ConstantExpression) {
-            super("constant");
+        constructor(expr : Model.ConstantExpression,
+                    parent : ExpressionParent) {
+            super("constant", parent);
 
             this._type = parseDataType(expr.type);
             this._value = expr.value;
@@ -355,8 +374,9 @@ export module SyntaxTree {
 
         private _columnName : string;
 
-        constructor(model : Model.SingleColumnExpression) {
-            super("column");
+        constructor(model : Model.SingleColumnExpression,
+                    parent : ExpressionParent) {
+            super("column", parent);
             this._columnName = model.column;
             this._tableName = model.table;
             this._tableAlias = model.alias;
@@ -438,11 +458,12 @@ export module SyntaxTree {
         private _operator : string;
         private _isSimple : boolean;
 
-        constructor(expr : Model.BinaryExpression) {
-            super("binary");
+        constructor(expr : Model.BinaryExpression,
+                    parent : ExpressionParent) {
+            super("binary", parent);
 
-            this._lhs = loadExpression(expr.lhs);
-            this._rhs = loadExpression(expr.rhs);
+            this._lhs = loadExpression(expr.lhs, this);
+            this._rhs = loadExpression(expr.rhs, this);
             this._isSimple = expr.simple;
             this._operator = expr.operator;
         }
@@ -514,7 +535,7 @@ export module SyntaxTree {
     /**
      * A select statement with a list of column expressions.
      */
-    export class Select extends Component {
+    export class Select extends Component implements ExpressionParent {
         private _columns : NamedExpression[] = [];
 
         /**
@@ -533,7 +554,7 @@ export module SyntaxTree {
             select.columns.forEach(v => {
                 var toAdd : NamedExpression = {
                     name : v.as,
-                    expr : loadExpression(v.expr)
+                    expr : loadExpression(v.expr, this)
                 };
 
                 this._columns.push(toAdd);
@@ -627,6 +648,12 @@ export module SyntaxTree {
                 columns : toReturn,
                 allData : this._allData
             });
+        }
+
+        replaceChild(formerChild : Expression, newChild : Expression) {
+            throw {
+                err : "Not implemented"
+            }
         }
     }
 
@@ -759,7 +786,7 @@ export module SyntaxTree {
     /**
      * All types of INNER JOINs.
      */
-    export class InnerJoin extends Join {
+    export class InnerJoin extends Join implements ExpressionParent {
         private _using : string;
         private _on : Expression;
 
@@ -775,7 +802,7 @@ export module SyntaxTree {
             // Load expression would throw on a null value, so
             // we need to wrap this.
             if (join.inner.on) {
-                this._on = SyntaxTree.loadExpression(join.inner.on);
+                this._on = SyntaxTree.loadExpression(join.inner.on, this);
             }
 
             this._using = join.inner.using;
@@ -806,6 +833,14 @@ export module SyntaxTree {
             }
             
             return (toReturn);
+        }
+
+        replaceChild(formerChild : Expression, newChild : Expression) {
+            if (this._on == formerChild) {
+                this._on = newChild;
+            } else {
+                throw { err : "Not implemented" }
+            }
         }
     }
 
@@ -897,14 +932,14 @@ export module SyntaxTree {
      * The SQL WHERE clause with at least one expression and 
      * 0..n subsequent conditions.
      */
-    export class Where extends Component {
+    export class Where extends Component implements ExpressionParent {
 
         private _first : Expression;
         
         constructor(where : Model.Where) {
             super();
 
-            this._first = loadExpression(where.first);
+            this._first = loadExpression(where.first, this);
         }
 
         /**
@@ -922,6 +957,14 @@ export module SyntaxTree {
             return ({
                 first : this._first.toModel()
             });
+        }
+
+        replaceChild(formerChild : Expression, newChild : Expression) {
+            if (this._first == formerChild) {
+                this._first = newChild;
+            } else {
+                throw { err : "Not implemented" }
+            }
         }
 
     }

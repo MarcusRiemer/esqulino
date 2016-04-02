@@ -11,7 +11,7 @@ export class SidebarComponent {
     
     onDragStart(evt : DragEvent) {
         evt.dataTransfer.effectAllowed = 'copy';
-        evt.dataTransfer.setData('Text', 'constant');
+        evt.dataTransfer.setData('Text', 'google');
         console.log(evt);
     }
 }
