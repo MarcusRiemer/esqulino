@@ -24,6 +24,10 @@
             <span class="fa fa-search fa-fw"></span>
             {{ query.name }}
           </a>
+          <span [hidden]="!query.isDirty"
+                class="dirty label label-warning pull-right">
+            <span class="fa fa-floppy-o"></span>
+          </span>
         </li>
       </ul>
     </li>
