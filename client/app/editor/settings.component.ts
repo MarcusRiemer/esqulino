@@ -28,7 +28,7 @@ export class SettingsComponent {
      */
     ngOnInit() {
         this._toolbarService.savingEnabled = true;
-        this._projectService.ActiveProject
+        this._projectService.activeProject
             .subscribe(res => this.project = res);
     }
 }

@@ -10,7 +10,7 @@
   <hr />
 
   <div class="block-container block">
-    <template ngFor #table [ngForOf]="project?.schema" #last="last" >
+    <template ngFor #table [ngForOf]="query?.schema" #last="last" >
       <div (dragstart)="onDragStart($event)"
            class="table"
            draggable="true">

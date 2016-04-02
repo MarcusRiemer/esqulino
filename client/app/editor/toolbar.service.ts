@@ -14,13 +14,6 @@ export class ToolbarService {
     savingEnabled = false;
 
     constructor() {
-        let test : Observable<boolean> = Observable.create( (obs : Observer<boolean>) => {
-            console.log(obs);
-            obs.next(true);
-        });
 
-        test.subscribe( (x) => {
-            console.log(`Got ${x} from observable`);
-        });
     }
 }
