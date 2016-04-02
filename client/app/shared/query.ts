@@ -281,16 +281,28 @@ export module SyntaxTree {
             super("missing", parent);
         }
 
+        /**
+         * A missing expression is never complete.
+         *
+         * @return false
+         */
         isComplete() : boolean {
             return (false);
         }
 
+        /**
+         * Will throw an exception, as missing expressions can't be
+         * converted to strings.
+         */
         toString() : string {
             throw {
                 err : "Statement contains missing expression"
             }
         }
 
+        /**
+         * The missing expression can never have children.
+         */
         replaceChild(formerChild : Expression, newChild : Expression) {
             throw {
                 err : "The missing statement should never have children"
