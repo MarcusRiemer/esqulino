@@ -8,7 +8,7 @@ import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
 import {ToolbarService}                 from '../toolbar.service'
 
-import {QueryComponent, SqlStringPipe}  from './query'
+import {QueryComponent, SqlStringPipe}  from './sql.component'
 import {SidebarComponent}               from './sidebar.component'
 import {ResultComponent}                from './result.component'
 

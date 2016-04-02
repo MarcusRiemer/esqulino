@@ -60,7 +60,7 @@ class ExpressionComponent {
     }
 
     /**
-     *
+2     *
      */
     onConstantDragLeave(evt : DragEvent) {
         this._currentDragOver = false;
