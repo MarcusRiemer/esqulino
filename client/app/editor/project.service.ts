@@ -85,7 +85,7 @@ export class ProjectService {
     runQuery(id : string) {
         const query = this.cachedProject.getQueryById(id);
         
-        const url = '/api/project/' + this.cachedProject.id + '/query/' + id + '/run';
+        const url = `/api/project/${this.cachedProject.id}/query/${id}/run`;
         
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });

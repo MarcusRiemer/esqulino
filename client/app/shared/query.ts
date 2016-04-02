@@ -886,6 +886,8 @@ export class Query {
     public schema : Table[];
     private model : Model.Query;
 
+    private _isDirty = false;
+
     private _name : string;
     private _id   : string;
 
@@ -931,10 +933,26 @@ export class Query {
     }
 
     /**
+     * @return True, if this instance requires a save.
+     */
+    get isDirty() {
+        return (this._isDirty);
+    }
+
+
+    /**
      * @return A "meaningful" name for the query.
      */
     get name() {
         return (this._name);
+    }
+
+    /**
+     * @param value The new "meaningful" name for this query
+     */
+    set name(value : string) {
+        this._isDirty = true;
+        this._name = value;
     }
 
     /**

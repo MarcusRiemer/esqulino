@@ -1,5 +1,7 @@
 import {Component}                      from 'angular2/core';
 
+import {Query}          from '../shared/query'
+
 import {Project}        from './project'
 import {ProjectService} from './project.service'
 import {ToolbarService} from './toolbar.service'
@@ -30,5 +32,10 @@ export class SettingsComponent {
         this._toolbarService.savingEnabled = true;
         this._projectService.activeProject
             .subscribe(res => this.project = res);
+    }
+
+    onChangeQueryName(query : Query, newName : string) {
+        console.log(newName);
+        query.name = newName;
     }
 }

@@ -51,11 +51,11 @@
       <li *ngFor="#query of project?.queries"
           class="list-group-item">
         <form>
-          <button (click)="onDeleteQuery(query.id)"
-                  class="btn btn-warning pull-right">
+          <button class="btn btn-warning pull-right">
             <span class="fa fa-trash"></span> Löschen
           </button>
           <input [(ngModel)]="query.name"
+                 (keyup.enter)="onChangeQueryName(query, $event.target.value)"
                  type="text">
         </form>
       </li>
