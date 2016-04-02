@@ -6,40 +6,6 @@ import {ProjectService}                 from '../project.service'
 import {Table}                          from '../../shared/table'
 import {Query, Model, SyntaxTree}       from '../../shared/query'
 
-/**
- * Base class for all SQL top-level components.
- */
-class SqlComponent {
-    public isEditing = false;
-
-    /**
-     * The width specification of the keyword part of a
-     * bootstrap column, e.g. "col-xs-10".
-     *
-     * @return Whitespace delimited bootstrap column specifiers
-     */
-    public get bootstrapColsKeyword() {
-        return ("col-xs-2 col-lg-1")
-    }
-
-    /**
-     * The width specification of the expression part of a
-     * bootstrap column, e.g. "col-xs-10".
-     *
-     * @return Whitespace delimited bootstrap column specifiers
-     */
-    public get bootstrapColsExpr() {
-        return ("col-xs-10 col-lg-11");
-    }
-
-    /**
-     * Toggles editing mode
-     */
-    invertEdit() {
-        this.isEditing = !this.isEditing;
-    }
-}
-
 @Component({
     selector : 'sql-expr',
     templateUrl : 'app/editor/query/templates/query-expr.html',
@@ -47,6 +13,7 @@ class SqlComponent {
 })
 class ExpressionComponent {
     @Input() expr : SyntaxTree.Expression;
+    @Input() query : Query;
 
     private _currentDragOver : boolean = false;
 
@@ -60,7 +27,7 @@ class ExpressionComponent {
     }
 
     /**
-2     *
+     *
      */
     onConstantDragLeave(evt : DragEvent) {
         this._currentDragOver = false;
@@ -68,9 +35,12 @@ class ExpressionComponent {
 
     onConstantDrop(evt : DragEvent) {
         this._currentDragOver = false;
-        this.expr = new SyntaxTree.ConstantExpression({
-            type : "INTEGER",
-            value : "13"
+        
+        this.expr = this.expr.replaceSelf({
+            constant : {
+                type : "INTEGER",
+                value : "13"
+            }
         });
 
         evt.preventDefault();
@@ -86,7 +56,7 @@ class ExpressionComponent {
     templateUrl : 'app/editor/query/templates/query-select.html',
     directives: [ExpressionComponent]
 })
-class SelectComponent extends SqlComponent {
+class SelectComponent {
     @Input() select : SyntaxTree.Select;
 
     /**
@@ -111,7 +81,7 @@ class SelectComponent extends SqlComponent {
     selector : 'sql-from',
     templateUrl : 'app/editor/query/templates/query-from.html',
 })
-class FromComponent extends SqlComponent {
+class FromComponent {
     @Input() from : SyntaxTree.From;
 }
 
@@ -120,8 +90,8 @@ class FromComponent extends SqlComponent {
     templateUrl : 'app/editor/query/templates/query-where.html',
     directives: [ExpressionComponent]
 })
-class WhereComponent extends SqlComponent {
-    @Input() where : SyntaxTree.Where;
+class WhereComponent {
+    @Input() query : Query;
 }
 
 

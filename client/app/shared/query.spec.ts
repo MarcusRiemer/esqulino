@@ -91,7 +91,7 @@ describe('MissingExpression', () => {
 
         }
 
-        const c = new SyntaxTree.MissingExpression(model);
+        const c = new SyntaxTree.MissingExpression(model, null);
 
         // Model and String serialization
         expect( () => { c.toString() }).toThrow()
@@ -106,7 +106,7 @@ describe('ConstantExpression', () => {
             value : "0"
         }
 
-        const c = new SyntaxTree.ConstantExpression(model);
+        const c = new SyntaxTree.ConstantExpression(model, null);
 
         // Model and String serialization
         expect(c.toString()).toEqual("0");
@@ -119,7 +119,7 @@ describe('ConstantExpression', () => {
             value : "0"
         }
 
-        const c = new SyntaxTree.ConstantExpression(model);
+        const c = new SyntaxTree.ConstantExpression(model, null);
 
         // Model and String serialization
         expect(c.toString()).toEqual(`"0"`);
@@ -133,7 +133,7 @@ describe('ColumnExpression', () => {
             column : "name"
         };
         
-        let c = new SyntaxTree.ColumnExpression(model);
+        let c = new SyntaxTree.ColumnExpression(model, null);
 
         expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeFalsy();
@@ -149,7 +149,7 @@ describe('ColumnExpression', () => {
             table : "person"
         };
         
-        let c = new SyntaxTree.ColumnExpression(model);
+        let c = new SyntaxTree.ColumnExpression(model, null);
 
         expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeTruthy();
@@ -167,7 +167,7 @@ describe('ColumnExpression', () => {
             alias : "p"
         };
         
-        let c = new SyntaxTree.ColumnExpression(model);
+        let c = new SyntaxTree.ColumnExpression(model, null);
 
         expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeTruthy();
@@ -188,7 +188,7 @@ describe('BinaryExpression', () => {
             simple : true
         };
         
-        let e = new SyntaxTree.BinaryExpression(model);
+        let e = new SyntaxTree.BinaryExpression(model, null);
 
         expect(e.operator).toEqual("<>");
         let lhs = <SyntaxTree.ColumnExpression> e.lhs;
@@ -215,7 +215,7 @@ describe('BinaryExpression', () => {
             simple : true
         };
         
-        let e = new SyntaxTree.BinaryExpression(model);
+        let e = new SyntaxTree.BinaryExpression(model, null);
 
         expect(e.operator).toEqual("=");
         let lhs = <SyntaxTree.ConstantExpression> e.lhs;
@@ -242,7 +242,7 @@ describe('BinaryExpression', () => {
             simple : true
         };
         
-        let e = new SyntaxTree.BinaryExpression(model);
+        let e = new SyntaxTree.BinaryExpression(model, null);
 
         expect(e.operator).toEqual("LIKE");
         let lhs = <SyntaxTree.ConstantExpression> e.lhs;
@@ -269,12 +269,12 @@ describe('BinaryExpression', () => {
             simple : true
         };
         
-        let e = new SyntaxTree.BinaryExpression(model);
+        let e = new SyntaxTree.BinaryExpression(model, null);
         const lhs = <SyntaxTree.ConstantExpression> e.lhs;
         const rhs = <SyntaxTree.ConstantExpression> e.rhs;
 
-        const newLhs = new SyntaxTree.MissingExpression({});
-        const newRhs = new SyntaxTree.MissingExpression({});
+        const newLhs = new SyntaxTree.MissingExpression({}, null);
+        const newRhs = new SyntaxTree.MissingExpression({}, null);
 
         e.replaceChild(lhs, newLhs);
         expect(e.lhs).toBe(newLhs);

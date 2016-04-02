@@ -16,7 +16,7 @@
 
     <sql-result [result]="result"></sql-result>
 
-    <div *ngIf="query && false">
+    <div *ngIf="query">
       <span class="fa fa-bug"></span> SQL-Darstellung
       <pre>{{ query | sqlString }}</pre>
     </div>
