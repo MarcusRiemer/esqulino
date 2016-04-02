@@ -4,6 +4,7 @@
   </template>
   <template ngSwitchWhen="constant">
     <span *ngIf="!expr.isEditing"
+          (dragenter)="onConstantDrag($event)"
           (dragover)="onConstantDrag($event)"
           (dragleave)="onConstantDragLeave($event)"
           (drop)="onConstantDrop($event)"
@@ -25,9 +26,15 @@
   </template>
   <template ngSwitchWhen="binary">
     <span class="expression">
-      <sql-expr [expr]="expr.lhs"></sql-expr>
+      <sql-expr [expr]="expr.lhs"
+                [query]="query"
+                [topLevel]="'false'">
+      </sql-expr>
       <span class="operator">{{ expr.operator }}</span>
-      <sql-expr [expr]="expr.rhs" [topLevel]="'false'"></sql-expr>
+      <sql-expr [expr]="expr.rhs"
+                [query]="query"
+                [topLevel]="'false'">
+      </sql-expr>
     </span>
   </template>
   <template ngSwitchDefault>

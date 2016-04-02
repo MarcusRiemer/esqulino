@@ -21,29 +21,41 @@ class ExpressionComponent {
      *
      */
     onConstantDrag(evt : DragEvent) {
-        this._currentDragOver = true;
         // Indicates we can drop here
         evt.preventDefault();
+        
+        this._currentDragOver = true;
     }
 
     /**
      *
      */
     onConstantDragLeave(evt : DragEvent) {
+        evt.preventDefault();
+        
         this._currentDragOver = false;
+        return (false)
     }
 
     onConstantDrop(evt : DragEvent) {
+        // Without this prevention firefox will redirect the page to
+        // the drop data.
+        evt.preventDefault();
+
+        // Remove visual dragging indicator
         this._currentDragOver = false;
-        
-        this.expr = this.expr.replaceSelf({
+
+        // Actually replace the current node
+        this.expr.replaceSelf({
             constant : {
                 type : "INTEGER",
                 value : "13"
             }
         });
 
-        evt.preventDefault();
+        // Logging the changes
+        const sqlString = this.query.toSqlString();
+        console.log(`New Query:\n${sqlString}`)
     }
 
     get isCurrentDropTarget() : boolean {
