@@ -65,7 +65,7 @@ export class QueryEditorComponent {
         
         var queryId = this._routeParams.get('queryId');
 
-        this._projectService.ActiveProject
+        this._projectService.activeProject
             .subscribe(res => {
                 // Project is loaded, display a query
                 this.project = res;

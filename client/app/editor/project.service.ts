@@ -3,9 +3,8 @@ import 'rxjs/Rx'
 import {Injectable}                              from 'angular2/core'
 import {Http, Response, Headers, RequestOptions} from 'angular2/http'
 
-import {ReplaySubject}                           from 'rxjs/subject/ReplaySubject'
+import {BehaviorSubject}                         from 'rxjs/subject/BehaviorSubject'
 import {Observable}                              from 'rxjs/Observable'
-import {Observer}                                from 'rxjs/Observer'
 
 import {ProjectDescription}     from '../shared/project.description'
 import {Model}                  from '../shared/query'
@@ -27,30 +26,17 @@ export class ProjectService {
     private _httpRequest : Observable<Project>;
 
     /**
-     * The project instance that is currently delivered to all
-     * subscribers.
+     * The project instance that is delivered to all subscribers.
      */
-    private _cachedProject : Project;
-
-    /**
-     * Handed out to clients so they can subscribe to something.
-     */
-    private _observable : Observable<Project>;
-
-    /**
-     * Used to emit events to clients.
-     */
-    private _observer : Observer<Project>;
+    private _subject : BehaviorSubject<Project>;
     
     /**
      * @param _http Dependently injected by Angular2
      */
     constructor(private _http: Http) {
-        // Create observable and observer once and for all. These instances
-        // are not allowed to changed as they are passed on to every subscriber.
-        this._observable = Observable.create( (obs : Observer<Project>) => {
-            this._observer = obs;
-        });     
+        // Create a single subject once and for all. This instanc is not
+        // allowed to changed as it is passed on to every subscriber.
+        this._subject = new BehaviorSubject<Project>(null);
     }
 
     /**
@@ -67,12 +53,10 @@ export class ProjectService {
             .map(res => new Project(res.json()));
 
         this._httpRequest.subscribe(res => {
-            // Cache the project
-            this._cachedProject = res;
             // Show that there are no more requests
             this._httpRequest = null;
             // Inform subscribers
-            this._observer.next(this._cachedProject)
+            this._subject.next(res)
 
             console.log("Got project");
         });
@@ -82,18 +66,26 @@ export class ProjectService {
      * Retrieves an observable that always points to the active
      * project.
      */
-    get ActiveProject() : Observable<Project> {
-        return (this._observable);
+    get activeProject() : Observable<Project> {
+        return (this._subject);
     }
 
-    
+    /**
+     * Unwraps the project from the observable.
+     *
+     * @return The project that is currently shared to all subscribers.
+     */
+    private get cachedProject() : Project {
+        return (this._subject.getValue())
+    }
+
     /**
      * Sends a certain query to the server to be executed.
      */
     runQuery(id : string) {
-        const query = this._cachedProject.getQueryById(id);
+        const query = this.cachedProject.getQueryById(id);
         
-        const url = '/api/project/' + this._cachedProject.id + '/query/' + id + '/run';
+        const url = '/api/project/' + this.cachedProject.id + '/query/' + id + '/run';
         
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
@@ -115,11 +107,11 @@ export class ProjectService {
             sql : string
         }
 
-        const query = this._cachedProject.getQueryById(id);
+        const query = this.cachedProject.getQueryById(id);
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        const url = '/api/project/' + this._cachedProject.id + '/query/' + id;
+        const url = `/api/project/${this.cachedProject.id}/query/${id}`;
 
         const bodyJson : QueryUpdate = {
             model : query.toModel(),
@@ -139,7 +131,7 @@ export class ProjectService {
      * Creates a new query on the given table.
      */
     createQuery(table : string) {
-        const url = `/api/project/${this._cachedProject.id}/query/create/${table}`;
+        const url = `/api/project/${this.cachedProject.id}/query/create/${table}`;
         const body = "";
         
         const toReturn = this._http.post(url, body)

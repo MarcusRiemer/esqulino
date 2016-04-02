@@ -35,7 +35,7 @@ export class SchemaComponent implements OnInit {
     ngOnInit() {
         this._toolbarService.savingEnabled = false;
         
-        this._projectService.ActiveProject
+        this._projectService.activeProject
             .subscribe(res => this.project = res);
     }
 

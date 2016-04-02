@@ -47,7 +47,7 @@ export class EditorComponent implements OnInit {
         console.log(`Loading project with id "${projectId}"`);
 
         this._projectService.setActiveProject(projectId);
-        this._projectService.ActiveProject.subscribe(
+        this._projectService.activeProject.subscribe(
             res => this.project = res
         );
     }
