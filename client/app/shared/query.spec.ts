@@ -292,6 +292,10 @@ describe('SELECT', () => {
         };
         
         const s = new SyntaxTree.Select(model);
+        expect(s.allData).toBeTruthy();
+        expect(s.numberOfColumns).toEqual(0);
+        expect(s.toString()).toEqual("SELECT *");
+        expect(s.toModel()).toEqual(model);
     });
     
     it('with three simple columns', () => {
