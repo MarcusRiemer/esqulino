@@ -15,6 +15,8 @@ class ExpressionComponent {
     @Input() expr : SyntaxTree.Expression;
     @Input() query : Query;
 
+    isEditing = false;
+
     private _currentDragOver : boolean = false;
 
     /**
@@ -55,7 +57,14 @@ class ExpressionComponent {
 
         // Logging the changes
         const sqlString = this.query.toSqlString();
-        console.log(`New Query:\n${sqlString}`)
+        console.log(`onConstantDrop:\n${sqlString}`)
+    }
+
+    onBlur() {
+        this.isEditing = false;
+        // Logging the changes
+        const sqlString = this.query.toSqlString();
+        console.log(`onBlur:\n${sqlString}`)
     }
 
     get isCurrentDropTarget() : boolean {
