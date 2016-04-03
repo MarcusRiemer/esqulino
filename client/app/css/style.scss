@@ -55,32 +55,32 @@ $component-indent: 15px;
     transition: font-size 200ms ease-in;
 }
 
-.block .keyword {
+.block-container .keyword {
     color: blue;
 }
 
-.block .component {
+.block-container .component {
     color: blue;
     float: left;
     width: $component-width;
 }
 
-.block .component.indent {
+.block-container .component.indent {
     margin-left: $component-indent;
     width: $component-width - $component-indent;
 }
 
-.block .expression {
+.block-container .expression {
     padding: 2px;
     border-radius: 500px;
     background-color: yellow;
 }
 
-.block .expression:hover {
+.block-container .expression:hover {
     background-color: orange;
 }
 
-.block .expression {
+.block-container .expression {
     border-radius: 500px;
     background-color: orange;
 }
@@ -90,18 +90,18 @@ $component-indent: 15px;
     font-size: 30px;
 }
 
-.block input {
+.block-container input {
     background-color: transparent;
     border: 0px solid;
     padding: 0px;
     margin: 0px;
 }
 
-.block input:focus {
+.block-container input:focus {
     outline: none;
 }
 
-.block .constant {
+.block-container .constant {
     text-align: center;
     border-radius: 500px;
     border-color: black;
@@ -112,7 +112,7 @@ $component-indent: 15px;
     color: black;
 }
 
-.block .table {
+.block-container .table {
     border-radius: 500px;
     border-color: black;
     border-width: 1px;
@@ -122,7 +122,7 @@ $component-indent: 15px;
     color: black;
 }
 
-.block .column {
+.block-container .column {
     border-radius: 500px;
     border-color: black;
     border-width: 1px;
@@ -131,7 +131,13 @@ $component-indent: 15px;
     background-color: lime;
 }
 
-.block .table-name {
+.block-container .column.blueprint {
+  border-radius: 500px;
+  border: 2px dashed blue;
+  background-color: white;
+}
+
+.block-container .table-name {
     color: limegreen;
 }
 

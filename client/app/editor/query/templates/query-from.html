@@ -1,12 +1,14 @@
 <div class="block from">
   <div class="component">FROM</div>
   <div>
-    <span class="table-name">{{ from.first.name }}</span>
-    <span>{{ from.first.alias }}</span>
+    <span class="table">
+      {{ from.first.name }} {{ from.first.alias }}
+    </span>
   </div>
   <div *ngFor="#join of from.joins">
     <span class="component indent">{{ join.sqlJoinKeyword }}</span>
-    <span class="table-name">{{ join.name }}</span>
-    <span>{{ join.alias }}</span>
+    <span class="table">
+      {{ join.name }} {{ join.alias }}
+    </span>
   </div>
 </div>

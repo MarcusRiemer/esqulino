@@ -15,11 +15,6 @@ export class SidebarComponent {
      */
     @Input() query : Query;
 
-    constructor(private _dragService : DragService) {
-    }
-    
-    
-    onDragStart(evt : DragEvent) {
-        this._dragService.startConstantDrag(evt);
+    constructor(private dragService : DragService) {
     }
 }
