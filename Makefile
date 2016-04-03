@@ -38,6 +38,12 @@ doc :
 dev-pretty-json-data :
 	find data -iname "*.json" -exec bash -c 'jq . < {} | sponge {}' \;
 
+# Used during development: Strips all trailing whitespace from "own"
+# sourcefiles.
+dev-delete-trailing-whitespace :
+	find client/app \( -name '*.ts' -o -name '*.html' -o -name '*.scss' \) -exec sed --in-place 's/[[^:space]]\+[[:space:]]\+$$//' {} \+
+	find server -type f \( -name '*.rb' \) -exec sed --in-place 's/[[^:space]]\+[[:space:]]\+$$//' {} \+
+
 
 .PHONY : install-deps client-watch server-run doc
 
