@@ -1,37 +1,44 @@
 import 'rxjs/Rx';
 
-import {Observable}             from 'rxjs/Observable'
+import {Subject}                from 'rxjs/Subject'
 import {Injectable}             from 'angular2/core';
 
 /**
  * The scopes a drag event could affect
  */
-enum SqlScope {
-    Select,
-    From,
-    Where,
-    GroupBy,
-    Having,
-    OrderBy,
-    Expression
-}
+export type SqlScope = "expr" | "column" | "constant" | "compund" | "table";
 
 /**
  * Abstract information about the drag event.
  */
-interface SqlDragEvent {
+export interface SqlDragEvent {
     scope : SqlScope
 }
 
+/**
+ * Coordinates dragging events among all components that make use of
+ * drag & drop to construct queries.
+ */
 @Injectable()
-class DragService {
-    private _source : Observable<SqlDragEvent>;
+export class DragService {
+    private _eventSource : Subject<SqlDragEvent>;
 
     constructor() {
-        this._source = Observable.create();
+        this._eventSource = new Subject();
     }
 
-    fireEvent(dragEvent : SqlDragEvent) {
+    /**
+     * Starts a drag event.
+     *
+     * @param evt The DOM drag event to enrich
+     */
+    startConstantDrag(evt : DragEvent) {
+        const expr : SqlScope = "expr";
+        const constant : SqlScope = "constant";
+        const dragType = `${expr}, ${constant}`;
 
+        evt.dataTransfer.effectAllowed = 'copy';
+        evt.dataTransfer.setData('text/plain', dragType);
+        console.log(`Drag started: ${dragType}`);
     }
 }
