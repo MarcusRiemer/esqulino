@@ -574,6 +574,40 @@ export module SyntaxTree {
         }
 
         /**
+         * If neither a column is specified nor all columns should be
+         * selected, the query can't be represented in SQL.
+         *
+         * @return True, if this query is completly defined
+         */
+        isComplete() : boolean {
+            return (this.numberOfColumns == 0 && !this._allData);
+        }
+
+        /**
+         * Appends a new column to this SELECT statement
+         *
+         * @param table The name of the table the column belongs to
+         * @param column The name of the column itself
+         * @param as The alias name for this column
+         */
+        appendColumn(table : string, column : string, as? : string) {
+            let toAdd : NamedExpression = {
+                expr : new SyntaxTree.ColumnExpression({
+                    column : column,
+                    table : table
+                }, this)
+            }
+
+            if (as) {
+                toAdd.name = as;
+            }
+            
+            this._columns.push(toAdd);
+
+            return (toAdd);
+        }
+
+        /**
          * @return The number of columns this select statement retrieves
          */
         get numberOfColumns() {
@@ -609,6 +643,10 @@ export module SyntaxTree {
          * @return "SELECT [columns]"
          */
         toString() : string {
+            if (this.isComplete()) {
+                throw { "err" : "No columns and not using all columns" }
+            }
+            
             // We start of with the normal keyword and DO NOT
             // add a trailing space as this will be inserted
             // in the loop below.

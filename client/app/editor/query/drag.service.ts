@@ -23,22 +23,71 @@ export interface SqlDragEvent {
 export class DragService {
     private _eventSource : Subject<SqlDragEvent>;
 
+    private _currentDrag : [SqlScope];
+
     constructor() {
         this._eventSource = new Subject();
     }
 
     /**
-     * Starts a drag event.
+     * Starts a drag operation for the given scope.
      *
-     * @param evt The DOM drag event to enrich
+     * @param scope The scope that the dragged item matches.
      */
-    startConstantDrag(evt : DragEvent) {
-        const expr : SqlScope = "expr";
-        const constant : SqlScope = "constant";
-        const dragType = `${expr}, ${constant}`;
+    private dragStart(evt : DragEvent, scope : [SqlScope]) {
+        this._currentDrag = scope;
+        const dragType = this._currentDrag.join(", ");
 
         evt.dataTransfer.effectAllowed = 'copy';
         evt.dataTransfer.setData('text/plain', dragType);
         console.log(`Drag started: ${dragType}`);
+
+        evt.target.addEventListener("dragend", () => {
+            this._currentDrag = null;
+            console.log(`Drag ended: ${dragType}`);
+        });
+    }
+
+    /**
+     * Starts a drag event involving a constant
+     *
+     * @param evt The DOM drag event to enrich
+     */
+    startConstantDrag(evt : DragEvent) {
+        this.dragStart(evt, ["expr", "constant"]);
+    }
+
+    /**
+     * Starts a drag event involving a column
+     *
+     * @param evt The DOM drag event to enrich
+     */
+    startColumnDrag(evt : DragEvent, table : string, column : string) {
+        this.dragStart(evt, ["expr", "column"]);
+        evt.dataTransfer.setData("column", column);
+        evt.dataTransfer.setData("table", table);
+    }
+
+    /**
+     * Starts a drag event involving a table.
+     *
+     * @param evt The DOM drag event to enrich
+     */
+    startTableDrag(evt : DragEvent) {
+        this.dragStart(evt, ["table"]);
+    }
+
+    /**
+     * @return True, if a constant is involved in the current drag operation
+     */
+    get activeConstant() {
+        return (this._currentDrag && this._currentDrag.indexOf("constant") >= 0);
+    }
+
+    /**
+     * @return True, if a column is involved in the current drag operation
+     */
+    get activeColumn() {
+        return (this._currentDrag && this._currentDrag.indexOf("column") >= 0);
     }
 }

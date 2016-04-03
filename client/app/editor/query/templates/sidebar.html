@@ -1,6 +1,6 @@
 <div class="sidebar">
   <div class="block-container block">
-    <div (dragstart)="onDragStart($event)"
+    <div (dragstart)="dragService.startConstantDrag($event)"
          class="constant"
          draggable="true">
       Konstante Zahl
@@ -11,7 +11,7 @@
 
   <div class="block-container block">
     <template ngFor #table [ngForOf]="query?.schema" #last="last" >
-      <div (dragstart)="onDragStart($event)"
+      <div (dragstart)="dragService.startTableDrag($event)"
            class="table"
            draggable="true">
         <span class="fa fa-table fa-fw"></span>
@@ -19,7 +19,7 @@
       </div>
       <ul>
         <li *ngFor="#column of table.columns">
-          <span (dragstart)="onDragStart($event)"
+          <span (dragstart)="dragService.startColumnDrag($event, table.name, column.name)"
                 class="column indent"
                 draggable="true">
             {{ column.name }}

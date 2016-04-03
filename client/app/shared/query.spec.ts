@@ -335,6 +335,68 @@ describe('SELECT', () => {
         expect(s.toString()).toBe('SELECT p.id, person.name, person.alter AS dasAlter');
         expect(s.toModel()).toEqual(model);
     });
+
+    it('can\'t be represented as string if entirely empty', () => {
+        const model : Model.Select = {
+            columns : [],
+            allData : false
+        };
+
+        const s = new SyntaxTree.Select(model);
+        expect(s.toModel()).toEqual(model);
+        expect( () => s.toString()).toThrow();
+    })
+
+    it('adding a named column', () => {
+        const model : Model.Select = {
+            columns : [],
+            allData : false
+        };
+
+        const resultModel : Model.Select = {
+            columns : [
+                {
+                    expr : {
+                        singleColumn : {column : "name" , table : "person" }
+                    },
+                    as : "pname"
+                }
+            ],
+            allData : false
+        }
+
+        const s = new SyntaxTree.Select(model);
+        s.appendColumn("person", "name", "pname");
+
+        expect(s.numberOfColumns).toEqual(1);
+        expect(s.toModel()).toEqual(resultModel);
+        expect(s.toString()).toEqual("SELECT person.name AS pname");
+    });
+
+    it('adding a unnamed column', () => {
+        const model : Model.Select = {
+            columns : [],
+            allData : false
+        };
+
+        const resultModel : Model.Select = {
+            columns : [
+                {
+                    expr : {
+                        singleColumn : {column : "name" , table : "person" }
+                    }
+                }
+            ],
+            allData : false
+        }
+
+        const s = new SyntaxTree.Select(model);
+        s.appendColumn("person", "name");
+
+        expect(s.numberOfColumns).toEqual(1);
+        expect(s.toModel()).toEqual(resultModel);
+        expect(s.toString()).toEqual("SELECT person.name");
+    });
 });
 
 

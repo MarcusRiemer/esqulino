@@ -1,8 +1,14 @@
 <div class="block select">
   <div class="component">SELECT</div>
-  <span *ngFor="#column of select.columns; #last = last">
-    <span class="column">{{ column.expr.toString() }}&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.name }}</span>
-  </span>
   <span *ngIf="select.allData"
-        class="column">*</span>
+        class="column"><span class="fa fa-star"></span></span>
+  <span *ngFor="#column of select.columns; #last = last">
+    <span class="column">{{ column.expr.toString() }}<span *ngIf="column.name">&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.name }}</span></span>
+  </span>
+  <span *ngIf="showBlueprintDropTarget"
+        (dragover)="onBlueprintColumnDrag($event)"
+        (drop)="onBlueprintColumnDrop($event)"
+        class="column blueprint">
+    <span class="fa fa-plus"></span>
+  </span>
 </div>

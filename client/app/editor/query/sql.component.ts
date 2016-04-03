@@ -1,6 +1,8 @@
 import {Component, Input}               from 'angular2/core'
 import {Pipe, PipeTransform}            from 'angular2/core'
 
+import {DragService}                    from './drag.service'
+
 import {ProjectService}                 from '../project.service'
 
 import {Table}                          from '../../shared/table'
@@ -33,7 +35,7 @@ class ExpressionComponent {
     onConstantDrag(evt : DragEvent) {
         // Indicates we can drop here
         evt.preventDefault();
-        
+
         this._currentDragOver = true;
     }
 
@@ -41,10 +43,7 @@ class ExpressionComponent {
      *
      */
     onConstantDragLeave(evt : DragEvent) {
-        evt.preventDefault();
-        
         this._currentDragOver = false;
-        return (false)
     }
 
     onConstantDrop(evt : DragEvent) {
@@ -95,21 +94,31 @@ class ExpressionComponent {
 class SelectComponent {
     @Input() select : SyntaxTree.Select;
 
+    constructor(public dragService : DragService) {
+
+    }
+
+    onBlueprintColumnDrag(evt : DragEvent) {
+        // Indicates we can drop here
+        evt.preventDefault();
+    }
+
+    onBlueprintColumnDrop(evt : DragEvent) {
+        // Indicates we can drop here
+        evt.preventDefault();
+
+        const table = evt.dataTransfer.getData("table");
+        const column = evt.dataTransfer.getData("column");
+
+        this.select.appendColumn(table, column);
+    }
+
     /**
-     *
+     * Read Only View Accessor
+     * @return True, if a drop target for a new column should be shown.
      */
-    get starExpression() {
-        let toReturn = "";
-        
-        if (this.select.allData) {
-            toReturn = "*";
-            
-            if (this.select.numberOfColumns == 0) {
-                toReturn += ", ";
-            }
-        }
-        
-        return (toReturn);
+    get showBlueprintDropTarget() {
+        return (this.dragService.activeColumn);
     }
 }
 

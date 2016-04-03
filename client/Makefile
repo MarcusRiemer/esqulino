@@ -31,7 +31,7 @@ compile : has-grunt compile-sass
 compile-sass : dev-mk-dist-dirs $(DIST_CSS_FILES)
 
 $(DIST_CSS_FILES) : $(SASS_FILES)
-	$(SASS_BIN) --sourcemap=none $^ $@
+	$(SASS_BIN) --sourcemap=none --style=expanded $^ $@
 
 # Removes the dist/client directory which is one level upwards.
 # This is probably not very good style, but required to ensure
