@@ -11,10 +11,12 @@ import {ToolbarService}                 from '../toolbar.service'
 import {QueryComponent, SqlStringPipe}  from './sql.component'
 import {SidebarComponent}               from './sidebar.component'
 import {ResultComponent}                from './result.component'
+import {DragService}                    from './drag.service'
 
 @Component({
     templateUrl: 'app/editor/query/templates/editor.html',
     directives: [QueryComponent, SidebarComponent, ResultComponent],
+    providers: [DragService],
     pipes: [SqlStringPipe],
 })
 export class QueryEditorComponent {

@@ -1,5 +1,7 @@
 import {Component, Input}            from 'angular2/core'
 
+import {DragService}                 from './drag.service'
+
 import {Query}                       from '../../shared/query'
 
 @Component({
@@ -7,11 +9,17 @@ import {Query}                       from '../../shared/query'
     selector : 'sql-sidebar'
 })
 export class SidebarComponent {
+    /**
+     * View Variable:
+     * The currently edited query
+     */
     @Input() query : Query;
+
+    constructor(private _dragService : DragService) {
+    }
+    
     
     onDragStart(evt : DragEvent) {
-        evt.dataTransfer.effectAllowed = 'copy';
-        evt.dataTransfer.setData('Text', 'google');
-        console.log(evt);
+        this._dragService.startConstantDrag(evt);
     }
 }

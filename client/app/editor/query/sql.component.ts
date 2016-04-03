@@ -15,8 +15,16 @@ class ExpressionComponent {
     @Input() expr : SyntaxTree.Expression;
     @Input() query : Query;
 
+    /**
+     * View Variable:
+     * Is this expression in editing mode?
+     */
     isEditing = false;
 
+    /**
+     * Read Only View Variable:
+     * Is something currently dragging above this expression?
+     */
     private _currentDragOver : boolean = false;
 
     /**
@@ -60,6 +68,9 @@ class ExpressionComponent {
         console.log(`onConstantDrop:\n${sqlString}`)
     }
 
+    /**
+     * Focus has been lost.
+     */
     onBlur() {
         this.isEditing = false;
         // Logging the changes
@@ -67,6 +78,10 @@ class ExpressionComponent {
         console.log(`onBlur:\n${sqlString}`)
     }
 
+    /**
+     * Read Only Accessor
+     * @return Whether this expression is currently the relevant drop target.
+     */
     get isCurrentDropTarget() : boolean {
         return (this._currentDragOver);
     }
@@ -81,7 +96,7 @@ class SelectComponent {
     @Input() select : SyntaxTree.Select;
 
     /**
-     * 
+     *
      */
     get starExpression() {
         let toReturn = "";

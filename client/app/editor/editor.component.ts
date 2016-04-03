@@ -28,7 +28,7 @@ export class EditorComponent implements OnInit {
     /**
      * The currently edited project
      */
-    public project : Project = null;
+    private _project : Project = null;
 
     /**
      * Used for dependency injection.
@@ -48,15 +48,29 @@ export class EditorComponent implements OnInit {
 
         this._projectService.setActiveProject(projectId);
         this._projectService.activeProject.subscribe(
-            res => this.project = res
+            res => this._project = res
         );
     }
 
+    /**
+     * All currently available queries, but possibly an empty list.
+     * Using this property ensures that the template does not throw
+     * any null pointer exceptions.
+     *
+     * @return A possibly empty list of queries
+     */
     get availableQueries() {
-        if (this.project) {
-            return (this.project.queries);
+        if (this._project) {
+            return (this._project.queries);
         } else {
             return ([]);
         }
+    }
+
+    /**
+     * Read only access to currently edited project.
+     */
+    get project() {
+        return (this._project);
     }
 }
