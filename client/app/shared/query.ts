@@ -1,6 +1,6 @@
 import {Table}                          from './table'
 import {Model}                          from './query.model'
-import {SyntaxTree}                     from './query.syntaxtree'
+import * as SyntaxTree                  from './query.syntaxtree'
 
 export {Model, SyntaxTree}
 
