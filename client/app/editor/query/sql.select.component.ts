@@ -1,6 +1,6 @@
 import {Component, Input}               from 'angular2/core'
 
-import {DragService}                    from './drag.service'
+import {DragService, SqlDragEvent}      from './drag.service'
 import {ExpressionComponent}            from './sql.expr.component'
 
 import {Query, Model, SyntaxTree}       from '../../shared/query'
@@ -17,19 +17,20 @@ export class SelectComponent {
 
     }
 
-    onBlueprintColumnDrag(evt : DragEvent) {
+    onBlueprintDrag(evt : DragEvent) {
         // Indicates we can drop here
         evt.preventDefault();
     }
 
-    onBlueprintColumnDrop(evt : DragEvent) {
+    onBlueprintDrop(evt : DragEvent) {
         // Indicates we can drop here
         evt.preventDefault();
 
-        const table = evt.dataTransfer.getData("table");
-        const column = evt.dataTransfer.getData("column");
+        // Extract the new expression and append it
+        const sqlEvt = <SqlDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
+        this.select.appendExpression(sqlEvt.expr);
 
-        this.select.appendColumn(table, column);
+        console.log(`Select.onBlueprintDrop:\n${this.select.toString()}`)
     }
 
     /**
@@ -37,7 +38,7 @@ export class SelectComponent {
      * @return True, if a drop target for a new column should be shown.
      */
     get showBlueprintDropTarget() {
-        return (this.dragService.activeColumn);
+        return (this.dragService.activeExpression);
     }
 }
 

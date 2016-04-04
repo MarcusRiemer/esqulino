@@ -6,8 +6,8 @@
     <span class="column">{{ column.expr.toString() }}<span *ngIf="column.name">&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.name }}</span></span>
   </span>
   <span *ngIf="showBlueprintDropTarget"
-        (dragover)="onBlueprintColumnDrag($event)"
-        (drop)="onBlueprintColumnDrop($event)"
+        (dragover)="onBlueprintDrag($event)"
+        (drop)="onBlueprintDrop($event)"
         class="column blueprint">
     <span class="fa fa-plus"></span>
   </span>
