@@ -1,13 +1,22 @@
 {
-  "name": "Neue Abfrage",
+  "name": "key_value",
   "id": "a0495663-6fd3-42b2-8167-acfebe778ed5",
-  "select": {
-    "columns": [],
-    "allData": true
-  },
   "from": {
     "first": {
       "name": "key_value"
     }
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "key",
+            "table": "key_value"
+          }
+        }
+      }
+    ],
+    "allData": true
   }
 }
