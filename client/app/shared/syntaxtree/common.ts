@@ -3,7 +3,7 @@ import {Model}                          from '../query.model'
 
 import { Expression, loadExpression }   from './expression'
 
-export { Expression }
+export { Expression, loadExpression }
 
 /**
  * Basic data types as inspired by SQLite.

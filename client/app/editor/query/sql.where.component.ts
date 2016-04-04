@@ -25,6 +25,23 @@ export class WhereComponent {
     onBlueprintDrop(evt : DragEvent) {
         // Indicates we can drop here
         evt.preventDefault();
+
+        // Introduce a "dummy" where element if it does not yet exist
+        if (!this.query.where) {
+            this.query.where = new SyntaxTree.Where({
+                first : { missing : { } }
+            });
+        }
+
+        // Add a binary expression
+        this.query.where.first.replaceSelf({
+            binary : {
+                lhs : { missing : { } },
+                operator : "=",
+                rhs : { missing : { } },
+                simple : true
+            }
+        });
     }
 
     /**

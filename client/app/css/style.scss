@@ -80,7 +80,7 @@ $component-indent: 15px;
 }
 
 .block-container .expression {
-    padding: 1px;
+    padding: 2px;
     border-radius: 500px;
     background-color: yellow;
 }
@@ -110,11 +110,18 @@ $component-indent: 15px;
     outline: none;
 }
 
+.block-container .missing {
+    text-align: center;
+    border-radius: 500px;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: red;
+    color: black;
+}
+
 .block-container .constant {
     text-align: center;
     border-radius: 500px;
-    border-color: black;
-    border-width: 1px;
     padding-left: 1em;
     padding-right: 1em;
     background-color: cornflowerblue;
@@ -123,8 +130,6 @@ $component-indent: 15px;
 
 .block-container .table {
     border-radius: 500px;
-    border-color: black;
-    border-width: 1px;
     padding-left: 1em;
     padding-right: 1em;
     background-color: yellow;
@@ -133,8 +138,6 @@ $component-indent: 15px;
 
 .block-container .column {
     border-radius: 500px;
-    border-color: black;
-    border-width: 1px;
     padding-left: 1em;
     padding-right: 1em;
     background-color: lime;
