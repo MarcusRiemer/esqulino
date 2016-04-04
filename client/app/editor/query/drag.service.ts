@@ -1,5 +1,7 @@
 import 'rxjs/Rx';
 
+import {Model}                  from '../../shared/query.model'
+
 import {Subject}                from 'rxjs/Subject'
 import {Injectable}             from 'angular2/core';
 
@@ -13,7 +15,9 @@ export type OriginFlags = "query" | "sidebar";
  * Abstract information about the drag event.
  */
 export interface SqlDragEvent {
-    scope : ScopeFlags
+    scope : ScopeFlags[]
+    origin : OriginFlags
+    expr? : Model.Expression
 }
 
 /**
@@ -24,7 +28,7 @@ export interface SqlDragEvent {
 export class DragService {
     private _eventSource : Subject<SqlDragEvent>;
 
-    private _currentDrag : [ScopeFlags];
+    private _currentDrag : SqlDragEvent;
 
     constructor() {
         this._eventSource = new Subject();
@@ -35,17 +39,17 @@ export class DragService {
      *
      * @param scope The scope that the dragged item matches.
      */
-    private dragStart(evt : DragEvent, scope : [ScopeFlags]) {
-        this._currentDrag = scope;
-        const dragType = this._currentDrag.join(", ");
+    private dragStart(evt : DragEvent, sqlEvt : SqlDragEvent) {
+        this._currentDrag = sqlEvt;
+        const dragData = JSON.stringify(this._currentDrag);
 
         evt.dataTransfer.effectAllowed = 'copy';
-        evt.dataTransfer.setData('text/plain', dragType);
-        console.log(`Drag started: ${dragType}`);
+        evt.dataTransfer.setData('text/plain', dragData);
+        console.log(`Drag started: ${dragData}`);
 
         evt.target.addEventListener("dragend", () => {
             this._currentDrag = null;
-            console.log(`Drag ended: ${dragType}`);
+            console.log(`Drag ended: ${dragData}`);
         });
     }
 
@@ -55,7 +59,16 @@ export class DragService {
      * @param evt The DOM drag event to enrich
      */
     startConstantDrag(evt : DragEvent) {
-        this.dragStart(evt, ["expr", "constant"]);
+        this.dragStart(evt, {
+            scope : ["expr", "constant"],
+            origin : "sidebar",
+            expr : {
+                constant : {
+                    type : "INTEGER",
+                    value : "1"
+                }
+            }
+        });
     }
 
     /**
@@ -64,9 +77,16 @@ export class DragService {
      * @param evt The DOM drag event to enrich
      */
     startColumnDrag(evt : DragEvent, table : string, column : string) {
-        this.dragStart(evt, ["expr", "column"]);
-        evt.dataTransfer.setData("column", column);
-        evt.dataTransfer.setData("table", table);
+        this.dragStart(evt, {
+            scope : ["expr", "column"],
+            origin : "sidebar",
+            expr : {
+                singleColumn : {
+                    column : column,
+                    table : table
+                }
+            }
+        });
     }
 
     /**
@@ -75,7 +95,10 @@ export class DragService {
      * @param evt The DOM drag event to enrich
      */
     startCompoundDrag(evt : DragEvent) {
-        this.dragStart(evt, ["expr", "compound"]);
+        this.dragStart(evt, {
+            scope : ["expr", "compound"],
+            origin : "sidebar"
+        });
     }
 
     /**
@@ -84,27 +107,37 @@ export class DragService {
      * @param evt The DOM drag event to enrich
      */
     startTableDrag(evt : DragEvent) {
-        this.dragStart(evt, ["table"]);
+        this.dragStart(evt, {
+            scope : ["table"],
+            origin : "sidebar"
+        });
+    }
+
+    /**
+     * @return True, if a constant is involved in the current drag operation
+     */
+    get activeExpression() {
+        return (this._currentDrag && this._currentDrag.scope.indexOf("expr") >= 0);
     }
 
     /**
      * @return True, if a constant is involved in the current drag operation
      */
     get activeConstant() {
-        return (this._currentDrag && this._currentDrag.indexOf("constant") >= 0);
+        return (this._currentDrag && this._currentDrag.scope.indexOf("constant") >= 0);
     }
 
     /**
      * @return True, if a column is involved in the current drag operation
      */
     get activeColumn() {
-        return (this._currentDrag && this._currentDrag.indexOf("column") >= 0);
+        return (this._currentDrag && this._currentDrag.scope.indexOf("column") >= 0);
     }
 
     /**
      * @return True, if a column is involved in the current drag operation
      */
     get activeCompound() {
-        return (this._currentDrag && this._currentDrag.indexOf("compound") >= 0);
+        return (this._currentDrag && this._currentDrag.scope.indexOf("compound") >= 0);
     }
 }

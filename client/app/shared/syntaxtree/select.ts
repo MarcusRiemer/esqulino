@@ -65,17 +65,26 @@ export class Select extends Component implements ExpressionParent {
      * @param as The alias name for this column
      */
     appendColumn(table : string, column : string, as? : string) {
-        let toAdd : NamedExpression = {
-            expr : new ColumnExpression({
+        return (this.appendExpression({
+            singleColumn : {
                 column : column,
                 table : table
-            }, this)
+            }
+        }, as));
+    }
+
+    appendExpression(expr : Model.Expression, as? : string) {
+        // Load the model of the expression
+        let toAdd : NamedExpression = {
+            expr : loadExpression(expr, this)
         }
 
+        // Possibly add the name
         if (as) {
             toAdd.name = as;
         }
-        
+
+        // Actually store the column
         this._columns.push(toAdd);
 
         return (toAdd);

@@ -42,6 +42,8 @@ export class WhereComponent {
                 simple : true
             }
         });
+
+        console.log(`onBlueprintDrop:\n${this.query.toSqlString()}`)
     }
 
     /**
