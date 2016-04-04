@@ -1,4 +1,7 @@
+/* Editor layout */
 $sidebar-width:   250px;
+
+/* SQL components */
 $component-width:  90px;
 $component-indent: 15px;
 
@@ -9,6 +12,7 @@ $component-indent: 15px;
 
 .editor .content {
     flex-grow: 1;
+    margin-right: 10px;
 }
 
 .editor nav.toolbar .navbar-brand {
@@ -48,6 +52,11 @@ $component-indent: 15px;
     }
 }
 
+.sidebar .block-container.center {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
 .block-container {
     font-family: monospace;
     cursor: default;
@@ -71,7 +80,7 @@ $component-indent: 15px;
 }
 
 .block-container .expression {
-    padding: 2px;
+    padding: 1px;
     border-radius: 500px;
     background-color: yellow;
 }
