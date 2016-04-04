@@ -1,3 +1,9 @@
+import './syntaxtree/common.spec'
+import './syntaxtree/expression.spec'
+import './syntaxtree/select.spec'
+import './syntaxtree/from.spec'
+import './syntaxtree/where.spec'
+
 import {Query, Model, SyntaxTree} from './query'
 import {Column, Table}            from './table'
 
@@ -178,3 +184,4 @@ describe('Query', () => {
     });
 
 });
+
