@@ -1,11 +1,7 @@
 \section{Umsetzungsanalyse}
 \label{sec:implementation-analysis}
 
-\info[inline]{Das ist jetzt der Abschnitt für Software-Ingenieure.}
-
-Um eine zu ambitionierte Planung zu vermeiden, soll in diesem Kapitel eine Strukturierung des Vorhabens in konkrete Arbeitspakete unternommen werden. Da diese Pakete untereinander Abhängigkeiten aufweisen werden, wird dann in einem weiteren Schritt ein Netzplan angefertigt, um einen besseren Überblick über die Abhängigkeiten zu erhalten. Auf Basis dieses Netzplans können dann anhand einer topologischen Sortierung mögliche Reihenfolge der Implementierung diskutiert werden. Diese Reihenfolge ist insofern entscheidend, als dass eine frühe Einplanung eines Arbeitspaketes die Realisierung wahrscheinlicher macht.
-
-Sollten während dieser Priorisierung Ideen für neue Arbeitspakete, also bisher nicht bedachte Funktionalität, ergeben, so werden diese in Anlehnung an den ``Minus 100 Points''-Artikel von Eric Gunnerson\cite{gunnerson-minus-100} geprüft:
+\info[inline]{Dieser Abschnitt richtet sich an Software-Ingenieure, die Erweiterungen am bestehenden Code von esqulino vornehmen möchten.}
 
 \subsection{Verwendete Sprachen und Bibliotheken}
 
@@ -15,73 +11,14 @@ Der softwaretechnische Unterbau der Entwicklungsumgebung wurde schon vor dem eig
 \item[Server: Ruby mit Sinatra] \hfill\\
   Die Aufgaben des Servers sollen sich konzeptionell möglichst auf die Auslieferung und Speicherung von Daten beschränken. Die Interaktion findet dabei primär über eine REST-artige JSON Schnittstelle statt.
 \item[Client: Typescript mit Angular 2] \hfill\\
-  Aufgrund des hohen Grades an Interaktivität bietet sich eine rein clientseitige Visualisierung an, die weitestgehend auf Roundtrips zum Server verzichtet.
+  Aufgrund des hohen Grades an Interaktivität bietet sich eine rein clientseitige Visualisierung an, die weitestgehend auf Roundtrips zum Server verzichtet. Zu Beginn der Arbeit befand sich Angular 2 noch in der Betaphase.
 \end{description}
 
-\subsection{Arbeitspakete}
+\subsection{Hinweise zum Client}
 
-Arbeitspakete werden in Kategorien eingeteilt, Abhängigkeiten von Paketen werden typischerweise vom Client zum Server oder zu anderen Paketen der gleichen Kategorie bestehen.
+Der verwendete Typescript Compiler hat zum Zeitpunkt der Anfertigung dieser Arbeit einen bekannten Bug in der Codegenerierung \cite{ts-compiler-class-order-bug} um den wiederholt herumgearbeitet werden musste. Konkret äussert sich dieser Fehler, wenn die Definition der Oberklasse einer sich davon ableitenden Klasse erst im Nachhinein erfolgt (Listing \ref{lst:ts:class-order-bug}). In diesem Fall kommt es zu keiner Warnung durch den Compiler, sondern zu einem Laufzeitfehler im kompilierten Javascript-Code.
 
-\subsubsection{Server}
-
-Die Aufgaben des Servers in diesem Projekt beschränken sich weitestgehend auf die Bereitstellung und Speicherung von Daten unter Berücksichtigung der Zugriffsrechte. Die dabei transferierten Daten fallen hauptsächlich in zwei Kategorien: Ergebnisse von SQL Abfragen oder Projektdateien.
-
-\begin{description}
-\item[srv:project-format] \hfill\\
-  Projekte werden auf dem Server abelegt und müssen dort mit allen notwendigen Informationen gespeichert werden.
-\item[srv:sql-schema] \hfill\\
-  Der Server soll die Struktur einer beliebigen SQL-Datenbank in einer JSON-Beschreibung von Tabellen mit deren Spalten und Beziehungen anbieten können.
-\item[srv:sql-query-dev] \hfill\\
-  Da die Datenbank auf dem Server verbleibt, muss dieser in der Lage sein zumindestens für authorisierte Benutzer beliebige SQL-Abfragen auszuführen.
-\item[srv:sql-query-store] \hfill\\
-  Der Server dient als Datenspeicher für SQL-Abfragen. Diese müssen zur Speicherung mit einem eindeutigen Namen assoziiert werden.
-\item[srv:sql-query-guest] \hfill\\
-  Für Endanwender sollen aus Sicherheitsgründen nur vordefinierte Abfragen ausgeführt werden.
-\end{description}
-
-\subsubsection{IDE: Allgemein}
-
-\begin{description}
-\item[ide:all-projects] \hfill \\
-  Da ein IDE-Server den Zugriff auf viele Projekte erlaubt, müssen diese aufgezählt und ausgewählt werden können.
-\item[ide:hiding-features] \hfill \\
-  Das Verstecken von nicht erwünschten Funktionen überspannt alle Bereiche und sollte daher an einer zentralen Stelle hinterlegt werden.
-  
-\end{description}
-
-\subsubsection{IDE: SQL-Editor}
-
-\begin{description}
-\item[ide-sql:schema-text] \hfill\\
-  Das Schema der Datenbank soll sich in einem textuellen Format betrachten lassen, in der alle technischen Details einer Tabelle bzw. Spalte sichtbar sind.
-\item[ide-sql:schema-graph] \hfill\\
-  Das Schema der Datenbank soll sich in einem grafisch aufbereiteten Format betrachten lassen, welches vor allem die Beziehungen der Tabellen untereinander verdeutlicht.
-\item[ide-sql:table-content] \hfill\\
-  Auch wenn es sich technisch gesehen nur um die Ausführung einer \lstinline{SELECT * FROM <tabelle>} Abfrage handelt, ist es unerläßlich den kompletten Datenbestand einer Tabelle auf einen Schlag sichten zu können.
-\item[ide-sql:query-editor-simple] \hfill\\
-  Als Grundlage für die interne Repräsentation der Abfrage sollte zunächst die strukturell einfachste Abfragen implementiert werden: Ein \lstinline{SELECT *} für eine einzige Tabelle.
-\item[ide-sql:query-editor-select-column] \hfill\\
-  Angabe von zu selektierenden Spalten anstelle des \lstinline{*}-Operators.
-\item[ide-sql:query-editor-select-as] \hfill\\
-  Vergabe von Aliasnamen für Spalten.
-\item[ide-sql:query-from-join-comma] \hfill\\
-  Komma-separierte Aufzählung von Tabellen zur Bildung des Kreuzproduktes in der \lstinline{FROM} Komponente.
-\item[ide-sql:query-expression-simple-compare] \hfill\\
-  Strukturell einfache Vergleiche von zwei Werten anhand eines relationalen Operators.
-\end{description}
-
-\subsubsection{IDE: Oberflächen-Editor}
-
-\subsubsection{Oberfläche für Endanwender}
-
-\subsection{Roadmap}
-
-Diese Arbeitsschritte stellen eine eher technische Roadmap der technischen Umsetzung dar.
-
-\begin{description}
-
-\item[Optional: Limitierung der verfügbaren Möglichkeiten] \hfill
-\end{description}
+\lstinputlisting[language=JavaScript,caption=Falsche Reihenfolge der Klassendefinition, label=lst:ts:class-order-bug]{snippets/class-inheritance-order-bug.ts}
 
 %%% Local Variables:
 %%% mode: latex
