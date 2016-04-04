@@ -1,10 +1,77 @@
 import {
-    Expression, ExpressionParent, DataType,
-    serializeDataType, parseDataType
+    ExpressionParent, DataType, serializeDataType, parseDataType
 } from './common'
 import {Model}      from '../query.model'
 
+/**
+ * Valid template identifiers. Sadly a leaky abstraction that needs
+ * to be kept in sync with the templates.
+ */
+type TemplateId = "constant" | "column" | "binary" | "missing";
 
+
+/**
+ * Base class for all expressions, no matter how many arguments they
+ * require or what the return type is.
+ */
+export abstract class Expression implements ExpressionParent {
+
+    private _parent : ExpressionParent;
+    
+    /**
+     * @param _templateidentifier The type of template needed to render
+     *                            this expression.
+     */
+    constructor(private _templateIdentifier : TemplateId,
+                parent : ExpressionParent) {
+        this._parent = parent;
+    }
+
+    /**
+     * Replaces this expression with the given expression in it's
+     * parent.
+     *
+     * @return The new child
+     */
+    replaceSelf(newChildDesc : Model.Expression) : Expression {
+        const newChild = loadExpression(newChildDesc, this._parent);
+        this._parent.replaceChild(this, newChild);
+
+        return (newChild);
+    }
+
+    abstract replaceChild(formerChild : Expression, newChild : Expression) : void;
+
+    /**
+     * Because the user can construct new Queries with "holes", not every
+     * query can be represented as SQL string.
+     *
+     * @return true, if this expression could be turned into an SQL string.
+     */
+    abstract isComplete() : boolean;
+    
+    /**
+     * @return SQL String representation
+     */
+    abstract toString() : string;
+
+    /**
+     * @return JSON model representation
+     */
+    abstract toModel() : any;
+
+    /**
+     * This is a more or less leaky abstraction, but the HTML rendering
+     * template needs to know which kind of expression it is dealing
+     * with. Ideally this model wouldn't need to do anything frontend-
+     * related.
+     *
+     * @return The template identifier to use
+     */
+    get templateIdentifier() : TemplateId {
+        return (this._templateIdentifier);
+    }
+}
 
 /**
  * Denotes an intentionally missing value in an expression. These values
