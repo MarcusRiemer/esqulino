@@ -58,6 +58,19 @@ export class Query {
     }
 
     /**
+     * Allows to set a new WHERE component, if it is not already present.
+     *
+     * @param where The new WHERE component
+     */
+    set where(where : SyntaxTree.Where) {
+        if (this._where) {
+            throw { "err" : "WHERE clause already present" }
+        }
+
+        this._where = where;
+    }
+
+    /**
      * @return True, if this instance requires a save.
      */
     get isDirty() {

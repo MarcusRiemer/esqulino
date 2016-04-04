@@ -1,12 +1,18 @@
 <span [ngSwitch]="expr.templateIdentifier">
   <template ngSwitchWhen="missing">
-    <span class="fa fa-question-circle"></span>
+    <span (dragenter)="onAllowedDrag($event)"
+          (dragover)="onAllowedDrag($event)"
+          (dragleave)="onAllowedDragLeave($event)"
+          (drop)="onMissingDrop($event)"
+          class="missing">
+      <span class="fa fa-question-circle"></span>
+    </span>
   </template>
   <template ngSwitchWhen="constant">
     <span *ngIf="!isEditing"
-          (dragenter)="onConstantDrag($event)"
-          (dragover)="onConstantDrag($event)"
-          (dragleave)="onConstantDragLeave($event)"
+          (dragenter)="onAllowedDrag($event)"
+          (dragover)="onAllowedDrag($event)"
+          (dragleave)="onAllowedDragLeave($event)"
           (drop)="onConstantDrop($event)"
           (click)="isEditing = true"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"
