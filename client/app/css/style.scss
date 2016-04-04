@@ -17,7 +17,7 @@ $component-indent: 15px;
 }
 
 .editor nav.leftbar {
-    min-width: $sidebar-width;
+    min-width: $sidebar-width - 10px;
     margin-right: 10px;
 }
 

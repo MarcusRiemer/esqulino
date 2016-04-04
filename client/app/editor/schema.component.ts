@@ -33,6 +33,7 @@ export class SchemaComponent implements OnInit {
      * Load the project to access the schema
      */
     ngOnInit() {
+        this._toolbarService.resetItems();
         this._toolbarService.savingEnabled = false;
         
         this._projectService.activeProject

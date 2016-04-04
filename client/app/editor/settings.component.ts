@@ -29,7 +29,9 @@ export class SettingsComponent {
      * Load the project to access the schema
      */
     ngOnInit() {
+        this._toolbarService.resetItems();
         this._toolbarService.savingEnabled = true;
+        
         this._projectService.activeProject
             .subscribe(res => this.project = res);
     }
