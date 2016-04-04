@@ -28,7 +28,7 @@ server-run :
 # Compile every part of the documentation, including the thesis.
 doc :
 	make -C server doc
-	make -C doc/elaboration thesis
+	make -C doc/thesis all
 
 # Used during development: Prettyprints all available JSON Files, the use of
 # sponge is basically a substitute for "jq . < {} > {}" (in place editing of
