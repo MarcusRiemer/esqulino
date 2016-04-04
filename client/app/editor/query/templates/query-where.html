@@ -7,3 +7,15 @@
     </sql-expr>
   </div>
 </div>
+
+<div class="block where"
+     *ngIf="query && showBlueprintDropTarget">
+  <div>
+    <div class="component">WHERE</div>
+    <span (dragover)="onBlueprintDrag($event)"
+          (drop)="onBlueprintDrop($event)"
+          class="column blueprint">
+      <span class="fa fa-plus"></span>
+    </span>
+  </div>
+</div>

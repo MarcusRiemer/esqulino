@@ -1,7 +1,11 @@
 <div class="sql">
   <div class="content">
     <sql-query [query]="query"></sql-query>
+
     <sql-result [result]="result"></sql-result>
+
+    <hr />
+
     <div *ngIf="query">
       <span class="fa fa-bug"></span> SQL-Darstellung
       <pre>{{ query | sqlString }}</pre>

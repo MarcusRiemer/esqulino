@@ -86,6 +86,9 @@ export class QueryEditorComponent {
                 // Project is loaded, display a query
                 this.project = res;
                 this.query = this.project.getQueryById(queryId);
+
+                // And immediatly execute it
+                queryItem.fire();
             });
     }
 }

@@ -1,5 +1,5 @@
 <div class="sidebar">
-  <div class="block-container block">
+  <div class="block-container center">
     <div (dragstart)="dragService.startConstantDrag($event)"
          class="constant"
          draggable="true">
@@ -7,6 +7,17 @@
     </div>
   </div>
 
+  <div class="block-container center">
+    <div (dragstart)="dragService.startCompoundDrag($event)"
+         class="expression"
+         draggable="true">
+      <span class="constant"><span class="fa fa-question-circle"></span></span>
+      <span class="operator"> == </span>
+      <span class="constant"><span class="fa fa-question-circle"></span></span>
+    </div>
+  </div>
+
+  
   <hr />
 
   <div class="block-container block">

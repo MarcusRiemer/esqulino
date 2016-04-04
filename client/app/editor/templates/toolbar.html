@@ -5,10 +5,10 @@
         class="nav-item">
       <button (click)="item.fire()"
               class="btn btn-primary">
-        <span class="fa fa-spinner fa-pulse"
+        <span class="fa fa-fw fa-spinner fa-pulse"
               [hidden]="!item.isInProgress">
         </span>
-        <span class="fa fa-{{ item._icon }}"
+        <span class="fa fa-fw fa-{{ item._icon }}"
               [hidden]="item.isInProgress">
         </span> {{ item._caption }}
       </button>
