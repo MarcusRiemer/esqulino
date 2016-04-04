@@ -1,10 +1,10 @@
 \section{Schnittstellen und Formate}
 
-Dieses Kapitel beschreibt das Projektformat und die Kommunikation zwischen Server und Client.
+Dieses Kapitel beschreibt das Projektformat sowie die Kommunikation zwischen Server und Client. Da der Funktionsumfang des serverseitigen Teils vergleichsweise überschaubar gehalten werden kann, sollte sich nur auf Basis dieses Kapitels ein alternativer esqulino-Server implementieren lassen.
 
 \subsection{Umgang mit Referenzen}
 
-Prinzipiell soll jede Resource, also Abfrage oder Seite, vom Benutzer beliebig umbenannt werden können, ohne das dadurch eine Re-organisation aller Verweise nötig wird. Deswegen werden solche Referenzen immer durch eine künstliche ID, technisch exakt eine UUID, hergestellt.
+Prinzipiell soll jede nenutzerdefinierte Resource, also Abfrage oder Seite, beliebig umbenannt werden können, ohne das dadurch eine Re-organisation aller Verweise nötig wird. Deswegen werden solche Referenzen immer durch eine künstliche ID, technisch exakt eine UUID, hergestellt. Durch diesen Verzicht auf Benutzerdefinierte Attribute in den Verweisen können beliebige Umbenennungen oder Verschiebung der Hierarchieebenen mit wenig Aufwand unterstützt werden.
 
 \subsection{Verwaltung von Projekten}
 
