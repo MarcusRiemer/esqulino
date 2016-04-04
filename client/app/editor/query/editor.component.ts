@@ -30,10 +30,6 @@ export class QueryEditorComponent {
      */
     public project : Project;
 
-    private _isSaving = false;
-
-    private _isQuerying = false;
-
     private _result : QueryResult;
     
     /**
@@ -47,14 +43,9 @@ export class QueryEditorComponent {
     ) {
     }
 
-    get isSaving() {
-        return (this._isSaving);
-    }
-
-    get isQuerying() {
-        return (this._isQuerying);
-    }
-
+    /**
+     * @return The result set of the last query
+     */
     get result() {
         return (this._result);
     }
@@ -63,7 +54,30 @@ export class QueryEditorComponent {
      * Load the project to access the schema
      */
     ngOnInit() {
+        this._toolbarService.resetItems();
+        
+        // Reacting to saving
         this._toolbarService.savingEnabled = true;
+        let saveItem = this._toolbarService.saveItem;
+        
+        saveItem.onClick.subscribe( (res) => {
+            saveItem.isInProgress = true;
+            this._projectService.saveQuery(this.query.id)
+                // Always delay visual feedback by 500ms
+                .delay(500)
+                .subscribe(res => saveItem.isInProgress = false);
+        });
+
+        // Reacting to querying
+        let queryItem = this._toolbarService.addButton("Ausführen", "search");
+        queryItem.onClick.subscribe( (res) => {
+            queryItem.isInProgress = true;
+            this._projectService.runQuery(this.query.id)
+                .subscribe(res => {
+                    queryItem.isInProgress = false;
+                    this._result = res;
+                });
+        });
         
         var queryId = this._routeParams.get('queryId');
 
@@ -72,27 +86,6 @@ export class QueryEditorComponent {
                 // Project is loaded, display a query
                 this.project = res;
                 this.query = this.project.getQueryById(queryId);
-            });
-    }
-    
-    /**
-     * Saves the currently edited query to the server.
-     */
-    save() {
-        this._isSaving = true;
-        this._projectService.saveQuery(this.query.id)
-            .subscribe(res => this._isSaving = false);
-    }
-
-    /**
-     * Runs the currently edited query on the server.
-     */
-    run() {
-        this._isQuerying = true;
-        this._projectService.runQuery(this.query.id)
-            .subscribe(res => {
-                this._isQuerying = false;
-                this._result = res;
             });
     }
 }

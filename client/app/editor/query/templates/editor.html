@@ -1,21 +1,7 @@
 <div class="sql">
   <div class="content">
     <sql-query [query]="query"></sql-query>
-
-    <button (click)="save()">
-      <span class="fa fa-spinner fa-pulse"
-            [hidden]="!isSaving"></span>
-      Speichern
-    </button>
-
-    <button (click)="run()">
-      <span class="fa fa-spinner fa-pulse"
-            [hidden]="!isQuerying"></span>
-      Ausführen
-    </button>
-
     <sql-result [result]="result"></sql-result>
-
     <div *ngIf="query">
       <span class="fa fa-bug"></span> SQL-Darstellung
       <pre>{{ query | sqlString }}</pre>
