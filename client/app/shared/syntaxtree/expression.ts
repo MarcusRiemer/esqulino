@@ -1,5 +1,5 @@
 import {
-    ExpressionParent, DataType, serializeDataType, parseDataType
+    ExpressionParent, Removable, DataType, serializeDataType, parseDataType
 } from './common'
 import {Model}      from '../query.model'
 
@@ -14,7 +14,7 @@ type TemplateId = "constant" | "column" | "parameter" | "binary" | "missing";
  * Base class for all expressions, no matter how many arguments they
  * require or what the return type is.
  */
-export abstract class Expression implements ExpressionParent {
+export abstract class Expression implements ExpressionParent, Removable {
 
     private _parent : ExpressionParent;
     
@@ -40,6 +40,18 @@ export abstract class Expression implements ExpressionParent {
         return (newChild);
     }
 
+    /**
+     * Replaces the current place this expression is stored with an unknown
+     * expression.
+     */
+    removeSelf() {
+        const missing = new MissingExpression({}, this._parent);
+        this._parent.replaceChild(this, missing);
+    }
+
+    /**
+     * Expressions need to decide themselves on how to replace their children.
+     */
     abstract replaceChild(formerChild : Expression, newChild : Expression) : void;
 
     /**

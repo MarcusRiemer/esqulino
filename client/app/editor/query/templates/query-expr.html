@@ -9,27 +9,28 @@
     </span>
   </template>
   <template ngSwitchWhen="constant">
-    <span *ngIf="!isEditing"
-          (dragenter)="onAllowedDrag($event)"
+    <span (dragenter)="onAllowedDrag($event)"
           (dragover)="onAllowedDrag($event)"
           (dragleave)="onAllowedDragLeave($event)"
           (drop)="onConstantDrop($event)"
-          (click)="isEditing = true"
+          (dragstart)="onConstantDragStart($event)"
+          draggable="true"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"
           class="constant">{{ expr }}</span>
-    <span *ngIf="isEditing"
-          class="constant">
-      <input type="text"
-             (blur)="onBlur()"
-             [(ngModel)]="expr.value"
-             [size]="expr.value.length + 1">
-    </span>
   </template>
   <template ngSwitchWhen="column">
-    {{ expr }}
+    <span (dragenter)="onAllowedDrag($event)"
+          (dragover)="onAllowedDrag($event)"
+          (dragleave)="onAllowedDragLeave($event)"
+          (drop)="onColumnDrop($event)"
+          class="column">{{ expr }}</span>
   </template>
   <template ngSwitchWhen="parameter">
-    <span class="parameter">
+    <span (dragenter)="onAllowedDrag($event)"
+          (dragover)="onAllowedDrag($event)"
+          (dragleave)="onAllowedDragLeave($event)"
+          (drop)="onParameterDrop($event)"
+          class="parameter">
       <span class="fa fa-user-plus"></span> {{ expr.key }}
     </span>
   </template>

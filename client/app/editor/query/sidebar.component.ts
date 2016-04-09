@@ -15,6 +15,79 @@ export class SidebarComponent {
      */
     @Input() query : Query;
 
-    constructor(private dragService : DragService) {
+    constructor(private _dragService : DragService) {
+    }
+
+    /**
+     * Starts a drag event involving a constant
+     *
+     * @param evt The DOM drag event to enrich
+     */
+    startConstantDrag(evt : DragEvent) {
+        this._dragService.startConstantDrag("sidebar", evt);
+    }
+
+    /**
+     * Starts a drag event involving a column
+     *
+     * @param evt The DOM drag event to enrich
+     * @param table The name of the table
+     * @param column The name of the column
+     */
+    startColumnDrag(evt : DragEvent, table : string, column : string) {
+        this._dragService.startColumnDrag(table, column, "sidebar", evt);
+    }
+
+    /**
+     * Starts a drag event involving a compound expression
+     *
+     * @param evt The DOM drag event to enrich
+     */
+    startCompoundDrag(evt : DragEvent) {
+        this._dragService.startCompoundDrag("sidebar", evt);
+    }
+
+    /**
+     * Starts a drag event involving a parameter expression
+     *
+     * @param evt The DOM drag event to enrich
+     */
+    startParameterDrag(evt : DragEvent) {
+        this._dragService.startParameterDrag("sidebar", evt);
+    }
+
+    /**
+     * Starts a drag event involving a table.
+     *
+     * @param evt The DOM drag event to enrich
+     */
+    startTableDrag(evt : DragEvent) {
+        this._dragService.startTableDrag("sidebar", evt);
+    }
+
+    /**
+     * Something has been dropped on the delete indicator
+     */
+    onDeleteDrop(evt : DragEvent) {
+        // Indicates we can drop here
+        evt.preventDefault();
+
+        this._dragService.activeSource.removeSelf();
+    }
+
+    /**
+     * Something hovers over the delete indicator
+     */
+    onDeleteDrag(evt : DragEvent) {
+        // Making sure Firefox does not start some kind of navigation
+        evt.preventDefault();
+    }
+    
+    /**
+     * @return True, if the trashcan should be shown.
+     */
+    get hideTrash() : boolean {
+        const source = this._dragService.activeSource;
+        return (!source);
     }
 }

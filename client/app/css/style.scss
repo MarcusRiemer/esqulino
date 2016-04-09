@@ -57,6 +57,11 @@ $component-indent: 15px;
     text-align: center;
 }
 
+.sidebar .delete {
+    background-color: red;
+    border-radius: 500px;                      
+}
+
 .block-container {
     font-family: monospace;
     cursor: default;

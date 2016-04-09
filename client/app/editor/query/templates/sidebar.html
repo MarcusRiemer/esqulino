@@ -1,6 +1,14 @@
 <div class="sidebar">
+  <div [hidden]="hideTrash"
+       (dragenter)="onDeleteDrag($event)"
+       (dragover)="onDeleteDrag($event)"
+       (drop)="onDeleteDrop($event)"
+       class="block-container center delete">
+    <span class="fa fa-trash fa-5x"></span>
+  </div>
+  
   <div class="block-container center">
-    <div (dragstart)="dragService.startConstantDrag($event)"
+    <div (dragstart)="startConstantDrag($event)"
          class="constant"
          draggable="true">
       Fester Wert
@@ -8,7 +16,7 @@
   </div>
 
   <div class="block-container center">
-    <div (dragstart)="dragService.startParameterDrag($event)"
+    <div (dragstart)="startParameterDrag($event)"
          class="parameter"
          draggable="true">
       Wert vom Benutzer
@@ -16,21 +24,20 @@
   </div>
 
   <div class="block-container center">
-    <div (dragstart)="dragService.startCompoundDrag($event)"
+    <div (dragstart)="startCompoundDrag($event)"
          class="expression"
          draggable="true">
       <span class="constant"><span class="fa fa-question-circle"></span></span>
-      <span class="operator"> == </span>
+      <span class="operator"> = </span>
       <span class="constant"><span class="fa fa-question-circle"></span></span>
     </div>
   </div>
 
-  
   <hr />
 
   <div class="block-container block">
     <template ngFor #table [ngForOf]="query?.schema" #last="last" >
-      <div (dragstart)="dragService.startTableDrag($event)"
+      <div (dragstart)="startTableDrag($event)"
            class="table"
            draggable="true">
         <span class="fa fa-table fa-fw"></span>
@@ -38,7 +45,7 @@
       </div>
       <ul>
         <li *ngFor="#column of table.columns">
-          <span (dragstart)="dragService.startColumnDrag($event, table.name, column.name)"
+          <span (dragstart)="startColumnDrag($event, table.name, column.name)"
                 class="column indent"
                 draggable="true">
             {{ column.name }}

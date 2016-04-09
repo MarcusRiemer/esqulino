@@ -1,6 +1,7 @@
 import 'rxjs/Rx';
 
 import {Model}                  from '../../shared/query.model'
+import {Removable}              from '../../shared/syntaxtree/common'
 
 import {Subject}                from 'rxjs/Subject'
 import {Injectable}             from 'angular2/core';
@@ -8,15 +9,15 @@ import {Injectable}             from 'angular2/core';
 /**
  * The scopes a drag event could affect
  */
-export type ScopeFlags = "expr" | "column" | "constant" | "parameter" | "compound" | "table";
-export type OriginFlags = "query" | "sidebar";
+export type ScopeFlag = "expr" | "column" | "constant" | "parameter" | "compound" | "table";
+export type OriginFlag = "query" | "sidebar";
 
 /**
  * Abstract information about the drag event.
  */
 export interface SqlDragEvent {
-    scope : ScopeFlags[]
-    origin : OriginFlags
+    scope : ScopeFlag[]
+    origin : OriginFlag
     expr? : Model.Expression
 }
 
@@ -30,6 +31,14 @@ export class DragService {
 
     private _currentDrag : SqlDragEvent;
 
+    // This seems like an awful hack, but here we go:
+    // Because it isn't possible to put references to actual Javascript
+    // Objects into the Drag & Drop events, the source reference needs
+    // to be stored elsewhere. This property comes into play, when any
+    // kind of operation needs to occur at the "origin" end in reaction
+    // to a drag & drop operation.
+    private _currentSource : Removable;
+
     constructor() {
         this._eventSource = new Subject();
     }
@@ -39,8 +48,10 @@ export class DragService {
      *
      * @param scope The scope that the dragged item matches.
      */
-    private dragStart(evt : DragEvent, sqlEvt : SqlDragEvent) {
+    private dragStart(evt : DragEvent, sqlEvt : SqlDragEvent, source? : Removable) {
         this._currentDrag = sqlEvt;
+        this._currentSource = source;
+        
         const dragData = JSON.stringify(this._currentDrag);
 
         evt.dataTransfer.effectAllowed = 'copy';
@@ -49,6 +60,7 @@ export class DragService {
 
         evt.target.addEventListener("dragend", () => {
             this._currentDrag = null;
+            this._currentSource = null;
             console.log(`Drag ended: ${dragData}`);
         });
     }
@@ -56,37 +68,40 @@ export class DragService {
     /**
      * Starts a drag event involving a constant
      *
+     * @param origin The logical source of this operation
      * @param evt The DOM drag event to enrich
      */
-    startConstantDrag(evt : DragEvent) {
+    startConstantDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {
         this.dragStart(evt, {
             scope : ["expr", "constant"],
-            origin : "sidebar",
+            origin : origin,
             expr : {
                 constant : {
                     type : "INTEGER",
                     value : "1"
                 }
             }
-        });
+        }, source);
     }
 
     /**
      * Starts a drag event involving a column
      *
+     * @param origin The logical source of this operation
      * @param evt The DOM drag event to enrich
      */
-    startColumnDrag(evt : DragEvent, table : string, column : string) {
+    startColumnDrag(table : string, column : string,
+                    origin : OriginFlag, evt : DragEvent, source? : Removable) {
         this.dragStart(evt, {
             scope : ["expr", "column"],
-            origin : "sidebar",
+            origin : origin,
             expr : {
                 singleColumn : {
                     column : column,
                     table : table
                 }
             }
-        });
+        }, source);
     }
 
     /**
@@ -94,11 +109,11 @@ export class DragService {
      *
      * @param evt The DOM drag event to enrich
      */
-    startCompoundDrag(evt : DragEvent) {
+    startCompoundDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {
         this.dragStart(evt, {
             scope : ["expr", "compound"],
-            origin : "sidebar"
-        });
+            origin : origin
+        }, source);
     }
 
     /**
@@ -106,16 +121,16 @@ export class DragService {
      *
      * @param evt The DOM drag event to enrich
      */
-    startParameterDrag(evt : DragEvent) {
+    startParameterDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {
         this.dragStart(evt, {
             scope : ["expr", "parameter"],
-            origin : "sidebar",
+            origin : origin,
             expr : {
                 parameter : {
                     key : "key"
                 }
             }                
-        });
+        }, source);
     }
 
     /**
@@ -123,11 +138,25 @@ export class DragService {
      *
      * @param evt The DOM drag event to enrich
      */
-    startTableDrag(evt : DragEvent) {
+    startTableDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {
         this.dragStart(evt, {
             scope : ["table"],
-            origin : "sidebar"
-        });
+            origin : origin
+        }, source);
+    }
+
+    /**
+     * @return True, if the current drag operation originated in the query
+     */
+    get activeFromQuery() {
+        return (this._currentDrag && this._currentDrag.origin == "query");
+    }
+
+    /**
+     * @return True, if the current drag operation originated in the sidebar
+     */
+    get activeFromSidebar() {
+        return (this._currentDrag && this._currentDrag.origin == "sidebar");
     }
 
     /**
@@ -156,5 +185,12 @@ export class DragService {
      */
     get activeCompound() {
         return (this._currentDrag && this._currentDrag.scope.indexOf("compound") >= 0);
+    }
+
+    /**
+     * @return The source of the drag operation.
+     */
+    get activeSource() : Removable {
+        return (this._currentSource);
     }
 }
