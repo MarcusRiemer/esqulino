@@ -112,7 +112,7 @@ export class ProjectService {
         // Over the wire format
         interface QueryUpdate {
             model : Model.Query,
-            sql : string
+            sql? : string
         }
 
         const query = this.cachedProject.getQueryById(id);
@@ -121,9 +121,12 @@ export class ProjectService {
         let options = new RequestOptions({ headers: headers });
         const url = this._server.getQueryUrl(this.cachedProject.id, query.id);
 
-        const bodyJson : QueryUpdate = {
-            model : query.toModel(),
-            sql : query.toSqlString()
+        let bodyJson : QueryUpdate = {
+            model : query.toModel()
+        }
+
+        if (query.isComplete) {
+            bodyJson.sql = query.toSqlString();
         }
 
         const body = JSON.stringify(bodyJson);

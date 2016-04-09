@@ -165,15 +165,23 @@ def project_store_query(project_folder, query_info)
     FileUtils.mkdir_p(query_folder)
   end
   
-  # Filename without extension
+  # Filename with various extensions
   query_filename = File.join(query_folder, query_info['model']['id'])
+  query_filename_sql = query_filename + ".sql"
 
   File.open(query_filename + ".json", "w") do |f|
     f.write(query_info['model'].to_json)
   end
 
-  File.open(query_filename + ".sql", "w") do |f|
-    f.write(query_info['sql'])
+  # Is the SQL string part of the information?
+  if query_info.has_key? 'sql' then
+    # Yes, simply store it
+    File.open(query_filename_sql, "w") do |f|
+      f.write(query_info['sql'])
+    end
+  else
+    # No, delete a possibly existing sql file
+    File.delete query_filename_sql if File.exists? query_filename_sql
   end
 
   return 200
