@@ -45,4 +45,11 @@ export class ServerApiService {
     getSpecificRunQueryUrl(projectId : string, queryId : string) : string {
         return (`/api/project/${projectId}/query/${queryId}/run`);
     }
+
+    /**
+     * Retrieves the URL that is used to run a query against a certain project.
+     */
+    getRunQueryUrl(projectId : string) : string {
+        return (`/api/project/${projectId}/query/run`);
+    }
 }

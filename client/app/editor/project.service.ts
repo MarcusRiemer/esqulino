@@ -88,12 +88,17 @@ export class ProjectService {
     runQuery(id : string) {
         const query = this.cachedProject.getQueryById(id);
         
-        const url = this._server.getSpecificRunQueryUrl(this.cachedProject.id, id);
+        const url = this._server.getRunQueryUrl(this.cachedProject.id);
         
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
 
-        const toReturn = this._http.post(url, "{}", options)
+        const body = {
+            sql : query.toSqlString(),
+            params : { }
+        }
+        
+        const toReturn = this._http.post(url, JSON.stringify(body), options)
             .map( (res) => new QueryResult(query, <RawResult> res.json()))
             .catch(this.handleError);
 

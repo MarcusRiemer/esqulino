@@ -9,6 +9,10 @@ install-deps : has-bundle
 run : has-bundle
 	$(BUNDLE_BIN) exec rackup
 
+# Run unit tests
+test :
+	ruby project.test.rb
+
 # Generate the latest documentation
 doc : has-yard
 	$(YARD_BIN) doc
@@ -30,4 +34,4 @@ ifeq (, $(wildcard $(BUNDLE_BIN)))
 endif
 
 
-.PHONY : run install-deps doc
+.PHONY : dev-doc doc has-bundle has-yard install-deps run test
