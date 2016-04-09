@@ -8,6 +8,14 @@
   </div>
 
   <div class="block-container center">
+    <div (dragstart)="dragService.startParameterDrag($event)"
+         class="parameter"
+         draggable="true">
+      Wert vom Benutzer
+    </div>
+  </div>
+
+  <div class="block-container center">
     <div (dragstart)="dragService.startCompoundDrag($event)"
          class="expression"
          draggable="true">

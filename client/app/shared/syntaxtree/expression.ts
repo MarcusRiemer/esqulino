@@ -7,7 +7,7 @@ import {Model}      from '../query.model'
  * Valid template identifiers. Sadly a leaky abstraction that needs
  * to be kept in sync with the templates.
  */
-type TemplateId = "constant" | "column" | "binary" | "missing";
+type TemplateId = "constant" | "column" | "parameter" | "binary" | "missing";
 
 
 /**
@@ -174,6 +174,72 @@ export class ConstantExpression extends Expression {
     replaceChild(formerChild : Expression, newChild : Expression) {
         throw {
             err : "The constant expression should never have children"
+        }
+    }
+}
+
+/**
+ * A compile time constant, logically a leaf of an Expression
+ * Tree.
+ */
+export class ParameterExpression extends Expression {
+    private _key : string;
+    
+    constructor(expr : Model.ParameterExpression,
+                parent : ExpressionParent) {
+        super("parameter", parent);
+
+        // We assign this to the property, as this ensures the
+        // value is actually a valid key.
+        this.key = expr.key;
+    }
+
+    /**
+     * Technically, this can't be asessed during compile time, so
+     * we assume that the value will actually be filled in.
+     */
+    isComplete() : boolean {
+        return (true);
+    }
+
+    /**
+     * @return The key this parameter uses
+     */
+    get key() : string {
+        return (this._key);
+    }
+
+    /**
+     * @param val The key this parameter uses
+     */
+    set key(val) {
+        // Ensuring the key begins with a letter followed by only
+        // alpha-numeric characters or an underscore
+        if (!/^[a-zA-Z]+[a-zA-Z0-9_]*$/.test(val)) {
+            throw { "err" : `Invalid parameter key: ${val}` };
+        }
+        
+        this._key = val;
+    }
+
+    /**
+     * @return The key of this parameter in SQLites '@' notation
+     */
+    toString() : string {
+        return (`@${this._key}`);
+    }
+
+    toModel() : Model.Expression {
+        return ({
+            parameter : {
+                key : this._key
+            }
+        })
+    }
+
+    replaceChild(formerChild : Expression, newChild : Expression) {
+        throw {
+            err : "The parameter expression should never have children"
         }
     }
 }
@@ -353,6 +419,8 @@ export function loadExpression(expr : Model.Expression,
         return new ConstantExpression(expr.constant, parent);
     } else if (expr.missing) {
         return new MissingExpression(expr.missing, parent);
+    } else if (expr.parameter) {
+        return new ParameterExpression(expr.parameter, parent);
     }
     throw { "error" : `Unknown expression: ${JSON.stringify(expr)}` }
 }

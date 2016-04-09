@@ -40,6 +40,13 @@ export module Model {
     }
 
     /**
+     * Denotes a value that needs to be bound at the runtime of the query.
+     */
+    export interface ParameterExpression {
+        key : string
+    }
+
+    /**
      * Denotes an expression that is intentionally missing.
      */
     export interface MissingExpression {
@@ -57,6 +64,7 @@ export module Model {
         binary? : BinaryExpression
         constant? : ConstantExpression
         missing? : MissingExpression
+        parameter? : ParameterExpression
     }
 
     export interface Select {

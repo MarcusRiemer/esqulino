@@ -28,6 +28,11 @@
   <template ngSwitchWhen="column">
     {{ expr }}
   </template>
+  <template ngSwitchWhen="parameter">
+    <span class="parameter">
+      <span class="fa fa-user-plus"></span> {{ expr.key }}
+    </span>
+  </template>
   <template ngSwitchWhen="binary">
     <span class="expression">
       <sql-expr [expr]="expr.lhs"

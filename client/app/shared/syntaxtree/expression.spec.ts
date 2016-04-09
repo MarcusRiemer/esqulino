@@ -44,6 +44,37 @@ describe('ConstantExpression', () => {
     });
 });
 
+describe('ParameterExpression', () => {
+    it('Valid Key', () => {
+        const model : Model.ParameterExpression = {
+            key : "valid"
+        }
+
+        const c = new SyntaxTree.ParameterExpression(model, null);
+
+        // Model and String serialization
+        expect(c.toString()).toEqual(`@${model.key}`);
+        expect(c.toModel().parameter).toEqual(model);
+    });
+
+    it('Invalid Key: empty string', () => {
+        expect(() => new SyntaxTree.ParameterExpression({key:""}, null) ).toThrow();
+    });
+
+    it('Invalid Key: contains space', () => {
+        expect(() => new SyntaxTree.ParameterExpression({key:"v a l"}, null) ).toThrow();
+    });
+    
+    it('Invalid Key: Begins with a number', () => {
+        expect(() => new SyntaxTree.ParameterExpression({key:"1valid"}, null) ).toThrow();
+    });
+
+    it('Invalid Key: Begins with an underscore', () => {
+        expect(() => new SyntaxTree.ParameterExpression({key:"_valid"}, null) ).toThrow();
+    });
+});
+
+
 describe('ColumnExpression', () => {
     it('with only a name', () => {
         const model = {
@@ -52,11 +83,11 @@ describe('ColumnExpression', () => {
         
         let c = new SyntaxTree.ColumnExpression(model, null);
 
-        expect(c.columnName).toEqual("name");
+        expect(c.columnName).toEqual(model.column);
         expect(c.hasTableQualifier).toBeFalsy();
 
         // Model and String serialization
-        expect(c.toString()).toEqual("name");
+        expect(c.toString()).toEqual(model.column);
         expect(c.toModel().singleColumn).toEqual(model);
     });
 

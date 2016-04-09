@@ -1,6 +1,6 @@
 import {Component, Input}               from 'angular2/core'
 
-import {DragService}                    from './drag.service'
+import {DragService, SqlDragEvent}      from './drag.service'
 
 import {Query, Model, SyntaxTree}       from '../../shared/query'
 
@@ -42,6 +42,9 @@ export class ExpressionComponent {
         this._currentDragOver = false;
     }
 
+    /**
+     * Something has been dropped onto a missing value
+     */
     onMissingDrop(evt : DragEvent) {
         // Without this prevention firefox will redirect the page to
         // the drop data.
@@ -63,6 +66,9 @@ export class ExpressionComponent {
         console.log(`onMissingDrop:\n${sqlString}`)
     }
 
+    /**
+     * Something has been dropped onto a constant value
+     */
     onConstantDrop(evt : DragEvent) {
         // Without this prevention firefox will redirect the page to
         // the drop data.
@@ -71,13 +77,24 @@ export class ExpressionComponent {
         // Remove visual dragging indicator
         this._currentDragOver = false;
 
-        // Actually replace the current node
-        this.expr.replaceSelf({
-            constant : {
-                type : "INTEGER",
-                value : "13"
+        // Grab the actual sql drag event
+        const sqlEvt = <SqlDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
+
+        // And react according to the kind of the expression
+        if (sqlEvt.expr.constant) {
+            // Prompt for a constant value
+            const actualValue = prompt("Wert?");
+            if (actualValue) {
+                sqlEvt.expr.constant.value = actualValue;
+                this.expr.replaceSelf(sqlEvt.expr);
             }
-        });
+        } else if (sqlEvt.expr.parameter) {
+            const actualValue = prompt("Name?");
+            if (actualValue) {
+                sqlEvt.expr.parameter.key = actualValue;
+                this.expr.replaceSelf(sqlEvt.expr);
+            }
+        }
 
         // Logging the changes
         const sqlString = this.query.toSqlString();

@@ -38,7 +38,7 @@ export class SelectComponent {
      * @return True, if a drop target for a new column should be shown.
      */
     get showBlueprintDropTarget() {
-        return (this.dragService.activeExpression);
+        return (this.dragService.activeColumn);
     }
 }
 
