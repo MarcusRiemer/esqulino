@@ -49,7 +49,7 @@ export class SidebarComponent {
      * @param evt The DOM drag event to enrich
      */
     startCompoundDrag(evt : DragEvent) {
-        this._dragService.startCompoundDrag("sidebar", evt);
+        this._dragService.startCompoundDrag("=", "sidebar", evt);
     }
 
     /**

@@ -51,6 +51,6 @@ export class WhereComponent {
      * @return True, if a drop target for a new column should be shown.
      */
     get showBlueprintDropTarget() {
-        return (this.dragService.activeCompound);
+        return (this.query.where == null && this.dragService.activeCompound);
     }
 }

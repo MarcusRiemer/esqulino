@@ -54,7 +54,11 @@ export class DragService {
         
         const dragData = JSON.stringify(this._currentDrag);
 
-        evt.dataTransfer.effectAllowed = 'copy';
+        if (sqlEvt.origin == "sidebar") {
+            evt.dataTransfer.effectAllowed = 'copy';
+        } else {
+            evt.dataTransfer.effectAllowed = 'move';
+        }
         evt.dataTransfer.setData('text/plain', dragData);
         console.log(`Drag started: ${dragData}`);
 
@@ -109,10 +113,18 @@ export class DragService {
      *
      * @param evt The DOM drag event to enrich
      */
-    startCompoundDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {
+    startCompoundDrag(operator : string, origin : OriginFlag, evt : DragEvent, source? : Removable) {
         this.dragStart(evt, {
             scope : ["expr", "compound"],
-            origin : origin
+            origin : origin,
+            expr : {
+                binary : {
+                    lhs : { missing : { } },
+                    rhs : { missing : { } },
+                    operator : operator,
+                    simple : true
+                }
+            }
         }, source);
     }
 
