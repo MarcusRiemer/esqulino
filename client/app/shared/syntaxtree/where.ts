@@ -23,6 +23,13 @@ export class Where extends Component implements ExpressionParent {
     }
 
     /**
+     * @return True, if all expressions are either complete or disabled.
+     */
+    get isComplete() : boolean {
+        return (this._first.isComplete());
+    }
+
+    /**
      * The first expression this WHERE clause.
      */
     get first() : Expression {

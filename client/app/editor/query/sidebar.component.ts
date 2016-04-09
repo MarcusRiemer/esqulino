@@ -4,6 +4,11 @@ import {DragService}                 from './drag.service'
 
 import {Query}                       from '../../shared/query'
 
+/**
+ * The sidebar hosts elements that can be dragged onto the currently active
+ * query. Additionally it sometimes offers a "trashcan" where items can be
+ * dropped if they are meant to be deleted.
+ */
 @Component({
     templateUrl: 'app/editor/query/templates/sidebar.html',
     selector : 'sql-sidebar'

@@ -223,6 +223,13 @@ export class From extends Component {
     }
 
     /**
+     * @return At the present state, the FROM component must be complete.
+     */
+    get isComplete() : boolean {
+        return (true);
+    }
+
+    /**
      * @return The table that starts the JOIN-chain.
      */
     get first() : InitialJoin {

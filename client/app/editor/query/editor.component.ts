@@ -88,7 +88,8 @@ export class QueryEditorComponent {
                 this.query = this.project.getQueryById(queryId);
 
                 // And immediatly execute it
-                queryItem.fire();
+                //queryItem.fire();
+
             });
     }
 }

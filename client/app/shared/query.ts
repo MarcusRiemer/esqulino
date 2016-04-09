@@ -36,6 +36,15 @@ export class Query {
     }
 
     /**
+     * @return True, if this query can be serialized to an SQL string
+     */
+    get isComplete() {
+        return (this._select.isComplete &&
+                this._from.isComplete &&
+                (!this.where || this.where.isComplete));
+    }
+
+    /**
      * @return The FROM component of this query, guaranteed to be present.
      */
     get select() {

@@ -4,16 +4,14 @@
           (dragover)="onAllowedDrag($event)"
           (dragleave)="onAllowedDragLeave($event)"
           (drop)="onMissingDrop($event)"
-          class="missing">
-      <span class="fa fa-question-circle"></span>
-    </span>
+          class="missing"><span class="fa fa-question-circle"></span></span>
   </template>
   <template ngSwitchWhen="constant">
     <span (dragenter)="onAllowedDrag($event)"
           (dragover)="onAllowedDrag($event)"
           (dragleave)="onAllowedDragLeave($event)"
           (drop)="onConstantDrop($event)"
-          (dragstart)="onConstantDragStart($event)"
+          (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"
           class="constant">{{ expr }}</span>
@@ -23,6 +21,8 @@
           (dragover)="onAllowedDrag($event)"
           (dragleave)="onAllowedDragLeave($event)"
           (drop)="onColumnDrop($event)"
+          (dragstart)="onExpressionDragStart($event)"
+          draggable="true"
           class="column">{{ expr }}</span>
   </template>
   <template ngSwitchWhen="parameter">
@@ -30,6 +30,8 @@
           (dragover)="onAllowedDrag($event)"
           (dragleave)="onAllowedDragLeave($event)"
           (drop)="onParameterDrop($event)"
+          (dragstart)="onExpressionDragStart($event)"
+          draggable="true"
           class="parameter">
       <span class="fa fa-user-plus"></span> {{ expr.key }}
     </span>
