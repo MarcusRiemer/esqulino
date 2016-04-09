@@ -135,6 +135,15 @@ export class Select extends Component implements ExpressionParent {
         // in the loop below.
         var toReturn = "SELECT";
 
+        // Possibly add leading "*" Operator
+        if (this._allData) {
+            if (this.columns.length > 0) {
+                toReturn += " *,";
+            } else {
+                toReturn += " *";
+            }
+        }
+
         // And add all those columns
         this._columns.forEach((c, i) => {
             // Comma squibbling for every column except
@@ -151,15 +160,6 @@ export class Select extends Component implements ExpressionParent {
                 toReturn += ` AS ${c.name}`;
             }
         });
-
-        // Possibly add a trailing "*" Operator
-        if (this._allData) {
-            if (this.columns.length > 0) {
-                toReturn += ", *";
-            } else {
-                toReturn += " *";
-            }
-        }
 
         return (toReturn);
     }

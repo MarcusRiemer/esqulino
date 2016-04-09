@@ -17,7 +17,32 @@ export class ServerApiService {
         this._apiBaseUrl = "/api";
     }
 
-    get projectListUri() : string {
+    /**
+     * Retrieves the URL that is used to list all public projects.
+     */
+    getProjectListUrl() : string {
         return (`${this._apiBaseUrl}/project`)
+    }
+
+    /**
+     * Retrieves the URL that uniquely describes a project.
+     */
+    getProjectUrl(projectId : string) : string {
+        return (`/api/project/${projectId}`);
+    }
+
+    /**
+     * Retrieves the URL that uniquely describes a query inside a project.
+     */
+    getQueryUrl(projectId : string, queryId : string) : string {
+        return (`/api/project/${projectId}/query/${queryId}`);
+    }
+
+    /**
+     * Formats an URL that can be used to run a specific query on the
+     * server.
+     */
+    getSpecificRunQueryUrl(projectId : string, queryId : string) : string {
+        return (`/api/project/${projectId}/query/${queryId}/run`);
     }
 }
