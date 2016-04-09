@@ -8,7 +8,7 @@ import {Injectable}             from 'angular2/core';
 /**
  * The scopes a drag event could affect
  */
-export type ScopeFlags = "expr" | "column" | "constant" | "compound" | "table" ;
+export type ScopeFlags = "expr" | "column" | "constant" | "parameter" | "compound" | "table";
 export type OriginFlags = "query" | "sidebar";
 
 /**
@@ -98,6 +98,23 @@ export class DragService {
         this.dragStart(evt, {
             scope : ["expr", "compound"],
             origin : "sidebar"
+        });
+    }
+
+    /**
+     * Starts a drag event involving a parameter expression
+     *
+     * @param evt The DOM drag event to enrich
+     */
+    startParameterDrag(evt : DragEvent) {
+        this.dragStart(evt, {
+            scope : ["expr", "parameter"],
+            origin : "sidebar",
+            expr : {
+                parameter : {
+                    key : "key"
+                }
+            }                
         });
     }
 
