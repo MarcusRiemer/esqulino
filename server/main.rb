@@ -98,6 +98,35 @@ class ScratchSqlApp < Sinatra::Base
     # Return the ID of the newly created query
     return (query["model"]["id"]);
   end
+
+  # Running an arbitrary query (Dangerous!)
+  post '/api/project/:id/query/run' do
+    project_id = params['id']
+    project_folder = File.join(given_data_dir, project_id)
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
+
+    request_data = JSON.parse(request.body.read)
+    result = project_run_query(project_folder, request_data.fetch('sql'), request_data.fetch('params'))
+    
+    json result
+  end
+
+  # Running a query that has already been stored on the server
+  post '/api/project/:id/query/:queryId/run' do
+    project_id = params['id']
+    project_folder = File.join(given_data_dir, project_id)
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
+
+    query_id = params['queryId']
+    query_params = JSON.parse(request.body.read)
+    
+    result = project_run_stored_query(project_folder, query_id, query_params)
+    json result
+  end
   
   # Updating a query
   post '/api/project/:id/query/:queryId' do
@@ -109,23 +138,7 @@ class ScratchSqlApp < Sinatra::Base
     
     status project_store_query(project_folder, JSON.parse(request.body.read))
   end
-
-  # Running a query
-  post '/api/project/:id/query/:queryId/run' do
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id)
-
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder
-
-    query_id = params['queryId']
-    query_params = JSON.parse(request.body.read)
-    
-    result = project_run_query(project_folder, query_id, query_params)
-    status 200
-    json result
-  end
-
+  
   index_path = File.expand_path('index.html', settings.public_folder)
   
   # Catchall for the rest of routes. This enables meaningful navigation

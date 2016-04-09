@@ -209,25 +209,33 @@ def project_create_query(project_folder, initial_table)
   }
 end
 
-# Executes a query in the context of a given project
+# Executes a query in the context of a given project. This is of course
+# a major security concern and shouldn't be done lightly.
+#
+# @param project_folder [string] The projects root folder
+# @params sql [string] The SQL query
+# @param params [Hash] Query parameters
+#
+# @return [Hash] "Over-the-wire" JSON response
+def project_run_query(project_folder, sql, params)
+  sqlite_file_path = File.join(project_folder, "db.sqlite")
+  db = SQLite3::Database.new(sqlite_file_path)
+
+  toReturn = db.execute(sql, params)
+  return toReturn
+end
+
+# Executes a query that is part of a certain project
 #
 # @param project_folder [string] The projects root folder
 # @param query_id [string] The id of the query to execute
 # @param params [Hash] Query parameters
 #
 # @return [Hash] "Over-the-wire" JSON response
-def project_run_query(project_folder, query_id, params)
-  sqlite_file_path = File.join(project_folder, "db.sqlite")
-  
-  db = SQLite3::Database.new(sqlite_file_path)
-
+def project_run_stored_query(project_folder, query_id, params)
   query_folder = File.join(project_folder, "queries")
   query_file = File.join(query_folder, query_id + ".sql")
-  
   query_sql = File.read(query_file)
 
-  toReturn = db.execute(query_sql, params)
-
-  puts toReturn
-  return toReturn
+  return (project_run_query(project_folder, query_sql, params))
 end

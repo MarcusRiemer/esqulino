@@ -53,8 +53,7 @@ class Project < Test::Unit::TestCase
 
     # Ensure "FROM key_value"
     model_from_first = query["model"]["from"]["first"]
-    assert_equal(table_name, model_from_first["name"])
-    
+    assert_equal(table_name, model_from_first["name"])    
   end
   
 end
