@@ -1,7 +1,10 @@
 import 'rxjs/Rx';
 
-import {Injectable}     from 'angular2/core';
-import {Http, Response} from 'angular2/http';
+import {BehaviorSubject}    from 'rxjs/subject/BehaviorSubject'
+import {Observable}         from 'rxjs/Observable'
+
+import {Injectable}         from 'angular2/core';
+import {Http, Response}     from 'angular2/http';
 
 import {ServerApiService}   from './serverapi.service'
 import {ProjectDescription} from './project.description'
@@ -11,12 +14,13 @@ import {ProjectDescription} from './project.description'
  */
 @Injectable()
 export class ProjectDescriptionService {
-    // The project cache
-    private cache : ProjectDescription[];
+    /**
+     * If a HTTP request is in progress, this is it.
+     */
+    private _httpRequest : Observable<ProjectDescription[]>;
 
-    // If a request is currently in progress, there is no need to fire
-    // a second request.
-    private  in_progress : Promise<ProjectDescription[]>;
+    // The project cache
+    private _cache : BehaviorSubject<ProjectDescription[]>;
 
     /**
      * @param _http Dependently injected
@@ -24,41 +28,30 @@ export class ProjectDescriptionService {
     constructor(
         private _http : Http,
         private _serverApi : ServerApiService) {
+        this._cache = new BehaviorSubject<ProjectDescription[]>([]);
     }
 
     /**
      * Immediatly retrieve cached projects or, if no projects are present,
      * fire up a requests for those projects.
      */
-    getProjects() : Promise<ProjectDescription[]> {
-        // First stop: A cached result
-        if (this.cache) {            
-            return Promise.resolve(this.cache);
-        }
-        // Second stop: A request that is currently in progress
-        else if (this.in_progress) {
-            return this.in_progress;
-        }
-        // Third stop: A new request
-        else {
-            return this.fetchProjects()
-        }
+    getProjects() : Observable<ProjectDescription[]> {
+        return (this._cache);
     }
 
     /**
      * Fetch a new set of projects and also place them in the cache.
      */
-    fetchProjects() : Promise<ProjectDescription[]> {
-        const uri = this._serverApi.projectListUri;
-        this.in_progress = this._http.get(uri)
-            .map(res => <ProjectDescription[]> res.json())
-            .toPromise();
+    fetchProjects() : Observable<ProjectDescription[]> {
+        const uri = this._serverApi.getProjectListUrl();
+        this._httpRequest = this._http.get(uri)
+            .map(res => <ProjectDescription[]> res.json());
 
-        this.in_progress.then(projects => {
-            this.cache = projects
-            this.in_progress = null
+        this._httpRequest.subscribe(projects => {
+            this._cache.next(projects)
+            this._httpRequest = null
         });
 
-        return this.in_progress
+        return (this._cache);
     }
 }

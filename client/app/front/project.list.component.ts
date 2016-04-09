@@ -4,6 +4,9 @@ import {Router, ROUTER_DIRECTIVES} from 'angular2/router';
 import {ProjectDescription}        from '../shared/project.description';
 import {ProjectDescriptionService} from '../shared/project.description.service';
 
+/**
+ * A single project list item entry.
+ */
 @Component({
     selector: 'project-list-item',
     templateUrl: 'app/front/templates/project-list-item.html',
@@ -74,6 +77,6 @@ export class ProjectListComponent implements OnInit {
      * Ensures that the project service has projects available
      */
     ngOnInit() {
-        this._projectService.getProjects().then(projects => this.projects = projects)
+        this._projectService.fetchProjects().subscribe(projects => this.projects = projects)
     }
 }

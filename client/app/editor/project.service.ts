@@ -6,12 +6,12 @@ import {Http, Response, Headers, RequestOptions} from 'angular2/http'
 import {BehaviorSubject}                         from 'rxjs/subject/BehaviorSubject'
 import {Observable}                              from 'rxjs/Observable'
 
-import {ProjectDescription}     from '../shared/project.description'
-import {Model}                  from '../shared/query'
-import {QueryResult, RawResult} from '../shared/result'
+import {ServerApiService}                        from '../shared/serverapi.service'
+import {ProjectDescription}                      from '../shared/project.description'
+import {Model}                                   from '../shared/query'
+import {QueryResult, RawResult}                  from '../shared/result'
 
-
-import {Project}            from './project'
+import {Project}                                 from './project'
 
 /**
  * Wraps access to a single project, which is deemed to be "active"
@@ -33,7 +33,10 @@ export class ProjectService {
     /**
      * @param _http Dependently injected by Angular2
      */
-    constructor(private _http: Http) {
+    constructor(
+        private _http : Http,
+        private _server : ServerApiService
+    ) {
         // Create a single subject once and for all. This instanc is not
         // allowed to changed as it is passed on to every subscriber.
         this._subject = new BehaviorSubject<Project>(null);
@@ -48,7 +51,7 @@ export class ProjectService {
             throw { "err" : "HTTP request in progress" };
         }
         
-        this._httpRequest = this._http.get('/api/project/' + id)
+        this._httpRequest = this._http.get(this._server.getProjectUrl(id))
             .catch(this.handleError)
             .map(res => new Project(res.json()));
 
@@ -85,7 +88,7 @@ export class ProjectService {
     runQuery(id : string) {
         const query = this.cachedProject.getQueryById(id);
         
-        const url = `/api/project/${this.cachedProject.id}/query/${id}/run`;
+        const url = this._server.getSpecificRunQueryUrl(this.cachedProject.id, id);
         
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
@@ -111,7 +114,7 @@ export class ProjectService {
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        const url = `/api/project/${this.cachedProject.id}/query/${id}`;
+        const url = this._server.getQueryUrl(this.cachedProject.id, query.id);
 
         const bodyJson : QueryUpdate = {
             model : query.toModel(),
