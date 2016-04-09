@@ -3,6 +3,7 @@ import 'rxjs/Rx';
 import {Injectable}     from 'angular2/core';
 import {Http, Response} from 'angular2/http';
 
+import {ServerApiService}   from './serverapi.service'
 import {ProjectDescription} from './project.description'
 
 /**
@@ -20,7 +21,10 @@ export class ProjectDescriptionService {
     /**
      * @param _http Dependently injected
      */
-    constructor(private _http: Http) { }
+    constructor(
+        private _http : Http,
+        private _serverApi : ServerApiService) {
+    }
 
     /**
      * Immediatly retrieve cached projects or, if no projects are present,
@@ -45,7 +49,8 @@ export class ProjectDescriptionService {
      * Fetch a new set of projects and also place them in the cache.
      */
     fetchProjects() : Promise<ProjectDescription[]> {
-        this.in_progress = this._http.get('/api/project')
+        const uri = this._serverApi.projectListUri;
+        this.in_progress = this._http.get(uri)
             .map(res => <ProjectDescription[]> res.json())
             .toPromise();
 
