@@ -49,21 +49,21 @@ export class ExpressionComponent {
      * Something has been dropped onto a missing value
      */
     onMissingDrop(evt : DragEvent) {
-        this.onReplaceSameLevel(evt);
+        this.replaceWithDragged(evt);
     }
 
     /**
      * Something has been dropped onto a column
      */
     onColumnDrop(evt : DragEvent) {
-        this.onReplaceSameLevel(evt);
+        this.replaceWithDragged(evt);
     }
 
     /**
      * Something has been dropped onto a constant value
      */
     onConstantDrop(evt : DragEvent) {
-        this.onReplaceSameLevel(evt);
+        this.replaceWithDragged(evt);
     }
 
     /**
@@ -77,13 +77,13 @@ export class ExpressionComponent {
      * Something has been dropped onto a constant value
      */
     onParameterDrop(evt : DragEvent) {
-        this.onReplaceSameLevel(evt);
+        this.replaceWithDragged(evt);
     }
 
     /**
      * Replaces the current expression with the given expression.
      */
-    onReplaceSameLevel(evt : DragEvent) {
+    private replaceWithDragged(evt : DragEvent) {
         // Without this prevention firefox will redirect the page to
         // the drop data.
         evt.preventDefault();
@@ -109,14 +109,19 @@ export class ExpressionComponent {
                 sqlEvt.expr.parameter.key = actualValue;
                 this.expr.replaceSelf(sqlEvt.expr);
             }
-        } else if (sqlEvt.expr.singleColumn) {
-            // A column name
+        } else {
+            // Things that do not require any user interaction
             this.expr.replaceSelf(sqlEvt.expr);
         }
 
         // Logging the changes
-        const sqlString = this.query.toSqlString();
-        console.log(`onReplaceSameLevel:\n${sqlString}`)
+        if (this.query.isComplete) {
+            // Query is complete, show it
+            const sqlString = this.query.toSqlString();
+            console.log(`onReplaceSameLevel:\n${sqlString}`)
+        } else {
+            console.log(`onReplaceSameLevel: Query is not complete`);
+        }
     }
 
     /**

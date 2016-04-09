@@ -37,7 +37,9 @@
     </span>
   </template>
   <template ngSwitchWhen="binary">
-    <span class="expression">
+    <span class="expression"
+          (dragstart)="onExpressionDragStart($event)"
+          draggable="true">
       <sql-expr [expr]="expr.lhs"
                 [query]="query"
                 [topLevel]="'false'">
