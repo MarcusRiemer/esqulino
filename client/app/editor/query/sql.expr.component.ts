@@ -13,6 +13,9 @@ export class ExpressionComponent {
     @Input() expr : SyntaxTree.Expression;
     @Input() query : Query;
 
+    constructor(private _dragService : DragService) {
+    }
+
     /**
      * View Variable:
      * Is this expression in editing mode?
@@ -46,30 +49,41 @@ export class ExpressionComponent {
      * Something has been dropped onto a missing value
      */
     onMissingDrop(evt : DragEvent) {
-        // Without this prevention firefox will redirect the page to
-        // the drop data.
-        evt.preventDefault();
+        this.onReplaceSameLevel(evt);
+    }
 
-        // Remove visual dragging indicator
-        this._currentDragOver = false;
-
-        // Actually replace the current node
-        this.expr.replaceSelf({
-            constant : {
-                type : "INTEGER",
-                value : "13"
-            }
-        });
-
-        // Logging the changes
-        const sqlString = this.query.toSqlString();
-        console.log(`onMissingDrop:\n${sqlString}`)
+    /**
+     * Something has been dropped onto a column
+     */
+    onColumnDrop(evt : DragEvent) {
+        this.onReplaceSameLevel(evt);
     }
 
     /**
      * Something has been dropped onto a constant value
      */
     onConstantDrop(evt : DragEvent) {
+        this.onReplaceSameLevel(evt);
+    }
+
+    /**
+     * Something has been dropped onto a constant value
+     */
+    onConstantDragStart(evt : DragEvent) {
+        this._dragService.startConstantDrag("query", evt, this.expr);
+    }
+
+    /**
+     * Something has been dropped onto a constant value
+     */
+    onParameterDrop(evt : DragEvent) {
+        this.onReplaceSameLevel(evt);
+    }
+
+    /**
+     * Replaces the current expression with the given expression.
+     */
+    onReplaceSameLevel(evt : DragEvent) {
         // Without this prevention firefox will redirect the page to
         // the drop data.
         evt.preventDefault();
@@ -82,23 +96,27 @@ export class ExpressionComponent {
 
         // And react according to the kind of the expression
         if (sqlEvt.expr.constant) {
-            // Prompt for a constant value
+            // A constant value: But which value exactly?
             const actualValue = prompt("Wert?");
             if (actualValue) {
                 sqlEvt.expr.constant.value = actualValue;
                 this.expr.replaceSelf(sqlEvt.expr);
             }
         } else if (sqlEvt.expr.parameter) {
+            // A named parameter: But what's the name?
             const actualValue = prompt("Name?");
             if (actualValue) {
                 sqlEvt.expr.parameter.key = actualValue;
                 this.expr.replaceSelf(sqlEvt.expr);
             }
+        } else if (sqlEvt.expr.singleColumn) {
+            // A column name
+            this.expr.replaceSelf(sqlEvt.expr);
         }
 
         // Logging the changes
         const sqlString = this.query.toSqlString();
-        console.log(`onConstantDrop:\n${sqlString}`)
+        console.log(`onReplaceSameLevel:\n${sqlString}`)
     }
 
     /**

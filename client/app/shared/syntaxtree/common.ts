@@ -57,6 +57,14 @@ export interface ExpressionParent {
     replaceChild(formerChild : Expression, newChild : Expression) : void;
 }
 
+/**
+ * A part of an SQL expression that can remove it's own reference from
+ * the parenting query "thing".
+ */
+export interface Removable {
+    removeSelf() : void;
+}
+
 
 /**
  * Base class for all components of an SQL Statement (SELECT,
