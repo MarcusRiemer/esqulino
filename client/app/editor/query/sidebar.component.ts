@@ -2,7 +2,7 @@ import {Component, Input}            from 'angular2/core'
 
 import {DragService}                 from './drag.service'
 
-import {Query}                       from '../../shared/query'
+import {QuerySelect}                       from '../../shared/query'
 
 /**
  * The sidebar hosts elements that can be dragged onto the currently active
@@ -18,7 +18,7 @@ export class SidebarComponent {
      * View Variable:
      * The currently edited query
      */
-    @Input() query : Query;
+    @Input() query : QuerySelect;
 
     constructor(private _dragService : DragService) {
     }

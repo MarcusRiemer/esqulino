@@ -1,5 +1,5 @@
 import {Table}              from '../shared/table'
-import {Query, Model}       from '../shared/query'
+import {QuerySelect, Model}       from '../shared/query'
 import {ProjectDescription} from '../shared/project.description'
 
 /**
@@ -11,7 +11,7 @@ export class Project {
     public description : string;
     public schema : Table[];
 
-    private _queries : Query[];
+    private _queries : QuerySelect[];
 
     /**
      * Construct a new project and a whole slew of other
@@ -25,7 +25,7 @@ export class Project {
 
         // Map all abstract queries to concrete query objects
         this._queries = json.queries.map( val => {
-            return (new Query(this.schema, val)); 
+            return (new QuerySelect(this.schema, val)); 
         });
     }
 
@@ -39,7 +39,7 @@ export class Project {
     /**
      * @return A single query identified by it's ID
      */
-    getQueryById(id : string) : Query {
+    getQueryById(id : string) : QuerySelect {
         return (this._queries.find(item => {
             return (item.id == id);
         }));
