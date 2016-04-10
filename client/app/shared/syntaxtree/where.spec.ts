@@ -9,7 +9,7 @@ describe('WHERE', () => {
             }
         }
 
-        const w = new SyntaxTree.Where(model);
+        const w = new SyntaxTree.Where(model, null);
 
         expect(w.toString()).toEqual("WHERE 1");
         expect(w.toModel()).toEqual(model);

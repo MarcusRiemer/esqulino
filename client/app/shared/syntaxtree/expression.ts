@@ -45,8 +45,8 @@ export abstract class Expression implements ExpressionParent, Removable {
      * expression.
      */
     removeSelf() {
-        const missing = new MissingExpression({}, this._parent);
-        this._parent.replaceChild(this, missing);
+        console.log(`Expression.removeSelf()`);
+        this._parent.removeChild(this);
     }
 
     /**
@@ -54,6 +54,16 @@ export abstract class Expression implements ExpressionParent, Removable {
      */
     abstract replaceChild(formerChild : Expression, newChild : Expression) : void;
 
+    /**
+     * Replaces the given place in this expression with an unknown
+     * expression.
+     */
+    removeChild(formerChild : Expression) {
+        console.log(`Expression.removeChild()`);
+        const missing = new MissingExpression({}, this);
+        this.replaceChild(formerChild, missing);
+    }
+    
     /**
      * Because the user can construct new Queries with "holes", not every
      * query can be represented as SQL string.
@@ -406,6 +416,7 @@ export class BinaryExpression extends Expression {
     }
 
     replaceChild(formerChild : Expression, newChild : Expression) {
+        console.log(`BinaryExpression.replaceChild()`);
         if (this._lhs == formerChild) {
             this._lhs = newChild;
         } else if (this._rhs == formerChild) {

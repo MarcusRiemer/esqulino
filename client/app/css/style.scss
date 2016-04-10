@@ -79,6 +79,11 @@ $component-indent: 15px;
     width: $component-width;
 }
 
+/* DELETE is supposed to be in it's own line */
+.block-container .component.delete {
+    float: none;
+}
+
 .block-container .component.indent {
     margin-left: $component-indent;
     width: $component-width - $component-indent;

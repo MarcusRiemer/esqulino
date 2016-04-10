@@ -188,5 +188,11 @@ export class Select extends Component implements ExpressionParent {
             err : "Not implemented"
         }
     }
+
+    removeChild(formerChild : Expression) {
+        throw {
+            err : "Not implemented"
+        }
+    }
 }
 

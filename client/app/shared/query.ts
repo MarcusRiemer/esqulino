@@ -7,7 +7,7 @@ export {Model, SyntaxTree}
 /**
  * Facade for a query that allows meaningful mapping to the UI.
  */
-export abstract class Query {
+export abstract class Query implements SyntaxTree.RemovableHost {
     public schema : Table[];
     private model : Model.Query;
     
@@ -116,8 +116,14 @@ export abstract class Query {
      * 
      * @param toReturn The model that will be returned and needs to be enriched.
      */
-     protected abstract toModelImpl(toReturn : Model.Query) : Model.Query;
+    protected abstract toModelImpl(toReturn : Model.Query) : Model.Query;
 
+
+    /**
+     * Each query-type needs to see for his own how to remove 
+     * SQL-components.
+     */
+    abstract removeChild(formerChild : SyntaxTree.Removable) : void;
 }
 
 /**
@@ -153,7 +159,7 @@ export class QuerySelect extends Query implements QueryWhere {
         this._from = new SyntaxTree.From(model.from);
 
         if (model.where) {
-            this._where = new SyntaxTree.Where(model.where);
+            this._where = new SyntaxTree.Where(model.where, this);
         }
     }
 
@@ -164,6 +170,18 @@ export class QuerySelect extends Query implements QueryWhere {
         return (this._select.isComplete &&
                 this._from.isComplete &&
                 (!this.where || this.where.isComplete));
+    }
+
+    /**
+     * Not everything can be removed from a SELECT query, but the following
+     * components are fine:
+     * * WHERE
+     */
+    removeChild(formerChild : SyntaxTree.Removable) : void {
+        if (this._where == formerChild) {
+            this._where = null;
+            this.markDirty();
+        }
     }
 
     /**
@@ -257,7 +275,7 @@ export class QueryDelete extends Query implements QueryWhere {
         this._from = new SyntaxTree.From(model.from);
 
         if (model.where) {
-            this._where = new SyntaxTree.Where(model.where);
+            this._where = new SyntaxTree.Where(model.where, this);
         }
     }
 
@@ -295,6 +313,20 @@ export class QueryDelete extends Query implements QueryWhere {
         this._where = where;
         this.markDirty();
     }
+
+    
+    /**
+     * Not everything can be removed from a DELETE query, but the following
+     * components are fine:
+     * * WHERE
+     */
+    removeChild(formerChild : SyntaxTree.Removable) : void {
+        if (this._where == formerChild) {
+            this._where = null;
+            this.markDirty();
+        }
+    }
+
 
     /**
      * @return True, if all existing components are complete

@@ -1,6 +1,8 @@
 import {Model}              from '../query.model'
 
-import {loadExpression}     from './expression'
+import {
+    loadExpression, MissingExpression
+} from './expression'
 import {
     Component, Expression, ExpressionParent
 } from './common'
@@ -187,6 +189,14 @@ export class InnerJoin extends Join implements ExpressionParent {
     replaceChild(formerChild : Expression, newChild : Expression) {
         if (this._on == formerChild) {
             this._on = newChild;
+        } else {
+            throw { err : "Not implemented" }
+        }
+    }
+
+    removeChild(formerChild : Expression) {
+        if (this._on == formerChild) {
+            this.replaceChild(formerChild, new MissingExpression({}, this));
         } else {
             throw { err : "Not implemented" }
         }
