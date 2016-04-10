@@ -8,7 +8,7 @@ import {Observable}                              from 'rxjs/Observable'
 
 import {ServerApiService}                        from '../shared/serverapi.service'
 import {ProjectDescription}                      from '../shared/project.description'
-import {Model}                                   from '../shared/query'
+import {Model, QuerySelect, QueryDelete}         from '../shared/query'
 import {QueryResult, RawResult}                  from '../shared/result'
 
 import {Project}                                 from './project'
@@ -86,8 +86,7 @@ export class ProjectService {
      * Sends a certain query to the server to be executed.
      */
     runQuery(id : string) {
-        const query = this.cachedProject.getQueryById(id);
-        
+        const query = this.cachedProject.getQueryById(id);        
         const url = this._server.getRunQueryUrl(this.cachedProject.id);
         
         let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -99,7 +98,16 @@ export class ProjectService {
         }
         
         const toReturn = this._http.post(url, JSON.stringify(body), options)
-            .map( (res) => new QueryResult(query, <RawResult> res.json()))
+            .map( (res) =>  {
+                // The result changes dependending on the concrete type
+                // of the query.
+                if (query instanceof QuerySelect) {
+                    return (new QueryResult(query, <RawResult> res.json()))
+                } else if (query instanceof QueryDelete) {
+                    console.log(res.json);
+                    return (null)
+                }
+            })
             .catch(this.handleError);
 
         return (toReturn);

@@ -7,7 +7,7 @@ export {Model, SyntaxTree}
 /**
  * Facade for a query that allows meaningful mapping to the UI.
  */
-abstract class Query {
+export abstract class Query {
     public schema : Table[];
     private model : Model.Query;
     
@@ -121,9 +121,16 @@ abstract class Query {
 }
 
 /**
+ * A query that provides a WHERE component
+ */
+export interface QueryWhere extends Query {
+    where : SyntaxTree.Where;
+}
+
+/**
  * A query that reads data, but never mutates anything.
  */
-export class QuerySelect extends Query {
+export class QuerySelect extends Query implements QueryWhere {
 
     private _select : SyntaxTree.Select;
     private _from   : SyntaxTree.From;
@@ -228,7 +235,7 @@ export class QuerySelect extends Query {
 /**
  * An SQL DELETE query.
  */
-export class QueryDelete extends Query {
+export class QueryDelete extends Query implements QueryWhere {
     private _delete : SyntaxTree.Delete;
     private _from   : SyntaxTree.From;
     private _where  : SyntaxTree.Where;
@@ -252,6 +259,41 @@ export class QueryDelete extends Query {
         if (model.where) {
             this._where = new SyntaxTree.Where(model.where);
         }
+    }
+
+    /**
+     * The DELETE component of the query
+     */
+    get delete() : SyntaxTree.Delete {
+        return (this._delete);
+    }
+
+    /**
+     * The FROM component of the query
+     */
+    get from() : SyntaxTree.From {
+        return (this._from);
+    }
+
+    /**
+     * @return The WHERE component of the query
+     */
+    get where() : SyntaxTree.Where {
+        return (this._where);
+    }
+
+    /**
+     * Allows to set a new WHERE component, if it is not already present.
+     *
+     * @param where The new WHERE component
+     */
+    set where(where : SyntaxTree.Where) {
+        if (this._where) {
+            throw { "err" : "WHERE clause already present" }
+        }
+
+        this._where = where;
+        this.markDirty();
     }
 
     /**
@@ -291,4 +333,33 @@ export class QueryDelete extends Query {
 
         return (toReturn);
     }
+}
+
+/**
+ * Maps the given model to the correct type of query.
+ *
+ * @param toLoad The model to load
+ *
+ * @return A correct instance of a Query
+ */
+export function loadQuery(schema : Table[], toLoad : Model.Query) : Query {
+    // The number of distinctive top-level components that
+    // are present in the model.
+    let topLevelList = [toLoad.delete, toLoad.select]
+        .filter( v => !!v);
+
+    // There must be a single top-level component
+    if (topLevelList.length !== 1) {
+        throw { "err" : `There must be a single top level component, got ${topLevelList.length}` }
+    }
+
+    // From here on we are sure, that only a single to level element is set
+    if (toLoad.select) {
+        return (new QuerySelect(schema, toLoad));
+    }
+    else if (toLoad.delete) {
+        return (new QueryDelete(schema, toLoad));
+    }
+
+    throw { "err" : "Unknown top-level component" }
 }

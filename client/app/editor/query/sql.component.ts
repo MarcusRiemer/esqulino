@@ -2,12 +2,13 @@ import {Component, Input}               from 'angular2/core'
 import {Pipe, PipeTransform}            from 'angular2/core'
 
 import {Table}                          from '../../shared/table'
-import {QuerySelect, Model, SyntaxTree}       from '../../shared/query'
+import {Query, Model, SyntaxTree}       from '../../shared/query'
 
 import {ProjectService}                 from '../project.service'
 
 import {DragService}                    from './drag.service'
 import {SelectComponent}                from './sql.select.component'
+import {DeleteComponent}                from './sql.delete.component'
 import {FromComponent}                  from './sql.from.component'
 import {WhereComponent}                 from './sql.where.component'
 
@@ -16,7 +17,7 @@ import {WhereComponent}                 from './sql.where.component'
  */
 @Pipe({name: 'sqlString'})
 export class SqlStringPipe implements PipeTransform {
-    public transform(value : QuerySelect, args : string[]) : any {
+    public transform(value : Query, args : string[]) : any {
         try {
             return (value.toSqlString());
         } catch (e) {
@@ -28,10 +29,10 @@ export class SqlStringPipe implements PipeTransform {
 @Component({
     selector: 'sql-query',
     templateUrl: 'app/editor/query/templates/query.html',
-    directives: [SelectComponent, FromComponent, WhereComponent]
+    directives: [SelectComponent, DeleteComponent, FromComponent, WhereComponent]
 })
 export class QueryComponent {
-    @Input() query : QuerySelect;
+    @Input() query : Query;
 
     /**
      * Used for dependency injection.
