@@ -1,7 +1,7 @@
 import 'rxjs/Rx';
 
 import {Model}                  from '../../shared/query.model'
-import {Removable}              from '../../shared/syntaxtree/common'
+import {Removable, Expression}  from '../../shared/syntaxtree/common'
 
 import {Subject}                from 'rxjs/Subject'
 import {Injectable}             from 'angular2/core';
@@ -49,24 +49,60 @@ export class DragService {
      * @param scope The scope that the dragged item matches.
      */
     private dragStart(evt : DragEvent, sqlEvt : SqlDragEvent, source? : Removable) {
+        // There can only be a single drag event at once
+        if (this._currentDrag || this._currentSource) {
+            throw { "err" : "Attempted to start a second drag" }
+        }
+        
         this._currentDrag = sqlEvt;
         this._currentSource = source;
-        
-        const dragData = JSON.stringify(this._currentDrag);
 
+        // Serialize the dragged "thing"
+        const dragData = JSON.stringify(this._currentDrag);
+        evt.dataTransfer.setData('text/plain', dragData);
+        
+        // We are only interested in the top level drag element, if
+        // we wouldn't stop the propagation, the parent of the current
+        // drag element would fire another dragstart.
+        evt.stopPropagation();
+
+        // Controls how the mouse cursor looks when hovering over
+        // allowed targets.
         if (sqlEvt.origin == "sidebar") {
             evt.dataTransfer.effectAllowed = 'copy';
         } else {
             evt.dataTransfer.effectAllowed = 'move';
         }
-        evt.dataTransfer.setData('text/plain', dragData);
-        console.log(`Drag started: ${dragData}`);
 
+        // Reset everything once the operation has ended
         evt.target.addEventListener("dragend", () => {
             this._currentDrag = null;
             this._currentSource = null;
             console.log(`Drag ended: ${dragData}`);
         });
+
+        console.log(`Drag started: ${dragData}`);
+    }
+
+    startExpressionDrag(origin : OriginFlag, evt : DragEvent, expr : Expression) {
+        // Convert the expression to the correct scope flags
+        const model = expr.toModel();
+        let scope : ScopeFlag[] = ["expr"];
+        if (model.binary) {
+            scope.push("compound");
+        } else if (model.constant) {
+            scope.push("constant");
+        } else if (model.parameter) {
+            scope.push("parameter");
+        } else if (model.singleColumn) {
+            scope.push("column");
+        }
+
+        this.dragStart(evt, {
+            scope : scope,
+            origin : origin,
+            expr : model
+        }, expr);
     }
 
     /**

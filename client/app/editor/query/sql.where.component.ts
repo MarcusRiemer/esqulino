@@ -30,7 +30,7 @@ export class WhereComponent {
         if (!this.query.where) {
             this.query.where = new SyntaxTree.Where({
                 first : { missing : { } }
-            });
+            }, this.query);
         }
 
         // Add a binary expression

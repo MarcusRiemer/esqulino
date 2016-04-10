@@ -4,7 +4,7 @@ import {
     ColumnExpression, loadExpression
 } from './expression'
 import {
-    Component, Expression, ExpressionParent
+    Component, Expression, ExpressionParent, RemovableHost, Removable
 } from './common'
 
 
@@ -12,14 +12,17 @@ import {
  * The SQL WHERE clause with at least one expression and 
  * 0..n subsequent conditions.
  */
-export class Where extends Component implements ExpressionParent {
+export class Where extends Component implements ExpressionParent, Removable {
 
     private _first : Expression;
+
+    private _parent : RemovableHost;
     
-    constructor(where : Model.Where) {
+    constructor(where : Model.Where, parent : RemovableHost) {
         super();
 
         this._first = loadExpression(where.first, this);
+        this._parent = parent;
     }
 
     /**
@@ -52,6 +55,21 @@ export class Where extends Component implements ExpressionParent {
         } else {
             throw { err : "Not implemented" }
         }
+    }
+
+    removeChild(formerChild : Expression) {
+        // Is this the only expression?
+        if (this._first == formerChild) {
+            // Then remove this expression instead of leaving
+            // a dangling MissingExpression
+            this.removeSelf();
+        } else {
+            throw { err : "Not implemented" }
+        }
+    }
+
+    removeSelf() {
+        this._parent.removeChild(this);
     }
 
 }

@@ -1,5 +1,5 @@
 export {
-    Expression, loadExpression
+    Expression, loadExpression, RemovableHost, Removable
 } from './syntaxtree/common'
 
 export {
