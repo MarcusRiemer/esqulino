@@ -3,7 +3,7 @@ import {Component, Input}               from 'angular2/core'
 import {DragService}                    from './drag.service'
 import {ExpressionComponent}            from './sql.expr.component'
 
-import {Query, Model, SyntaxTree}       from '../../shared/query'
+import {QuerySelect, Model, SyntaxTree}       from '../../shared/query'
 
 @Component({
     selector : 'sql-where',
@@ -11,7 +11,7 @@ import {Query, Model, SyntaxTree}       from '../../shared/query'
     directives: [ExpressionComponent]
 })
 export class WhereComponent {
-    @Input() query : Query;
+    @Input() query : QuerySelect;
 
     constructor(public dragService : DragService) {
 

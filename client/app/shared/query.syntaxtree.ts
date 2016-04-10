@@ -14,3 +14,7 @@ export {
     Where
 } from './syntaxtree/where'
 
+export {
+    Delete
+} from './syntaxtree/delete'
+

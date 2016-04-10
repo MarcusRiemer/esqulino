@@ -2,7 +2,7 @@ import {Component, Input}               from 'angular2/core'
 import {Pipe, PipeTransform}            from 'angular2/core'
 
 import {Table}                          from '../../shared/table'
-import {Query, Model, SyntaxTree}       from '../../shared/query'
+import {QuerySelect, Model, SyntaxTree}       from '../../shared/query'
 
 import {ProjectService}                 from '../project.service'
 
@@ -16,7 +16,7 @@ import {WhereComponent}                 from './sql.where.component'
  */
 @Pipe({name: 'sqlString'})
 export class SqlStringPipe implements PipeTransform {
-    public transform(value : Query, args : string[]) : any {
+    public transform(value : QuerySelect, args : string[]) : any {
         try {
             return (value.toSqlString());
         } catch (e) {
@@ -31,7 +31,7 @@ export class SqlStringPipe implements PipeTransform {
     directives: [SelectComponent, FromComponent, WhereComponent]
 })
 export class QueryComponent {
-    @Input() query : Query;
+    @Input() query : QuerySelect;
 
     /**
      * Used for dependency injection.

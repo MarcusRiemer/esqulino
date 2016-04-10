@@ -7,26 +7,141 @@ export {Model, SyntaxTree}
 /**
  * Facade for a query that allows meaningful mapping to the UI.
  */
-export class Query {
+abstract class Query {
     public schema : Table[];
     private model : Model.Query;
-
+    
     private _isDirty = false;
 
     private _name : string;
     private _id   : string;
 
-    private _select : SyntaxTree.Select;
-    private _from   : SyntaxTree.From;
-    private _where  : SyntaxTree.Where;
-
+    /**
+     * Stores all basic information about a string.
+     */
     constructor(schema : Table[], model : Model.Query) {
         this._name = model.name;
         this._id = model.id;
 
         this.schema = schema;
         this.model = model;
+    }
 
+    /**
+     * @return True, if this query could be serialized to SQL.
+     */
+    protected abstract isCompleteImpl() : boolean;
+
+    /**
+     * @return The SQL representation of this query.
+     */
+    protected abstract toSqlStringImpl() : string;
+
+    /**
+     * Retrieves the SQL representation of this query.
+     *
+     * @pre The query needs to be complete.
+     * @return An SQL string that represents this query.
+     */
+    public toSqlString() : string {
+        if (!this.isComplete) {
+            throw { "err" : `Query "${this.name}" is incomplete and can't be serialized to SQL` }
+        }
+
+        return (this.toSqlStringImpl());
+    }
+    
+    /**
+     * @return True, if this instance has changes that could be saved..
+     */
+    get isDirty() {
+        return (this._isDirty);
+    }
+
+    /**
+     * Called when a query has been made to this change.
+     */
+    protected markDirty() : void {
+        this._isDirty = true;
+    }
+
+    /**
+     * @return True, if this query can be serialized to an SQL string
+     */
+    get isComplete() : boolean {
+        return (this.isCompleteImpl());
+    }
+
+    /**
+     * @return A "meaningful" name for the query.
+     */
+    get name() {
+        return (this._name);
+    }
+
+    /**
+     * @param value The new "meaningful" name for this query
+     */
+    set name(value : string) {
+        this._isDirty = true;
+        this._name = value;
+    }
+
+    /**
+     * @return A "meaningful" name for the query.
+     */
+    get id() {
+        return (this._id);
+    }
+
+    /**
+     * Serializes the whole query to the "over-the-wire" format.
+     * @return The "over-the-wire" JSON representation
+     */
+    public toModel() : Model.Query {
+        // Fill in basic information
+        let toReturn : Model.Query = {
+            name : this._name,
+            id : this._id
+        };
+
+        // And let the deriving classes do the hard work
+        toReturn = this.toModelImpl(toReturn);
+        
+        return (toReturn);
+    }
+
+    /**
+     * Called in deriving methods to actually construct the model.
+     * 
+     * @param toReturn The model that will be returned and needs to be enriched.
+     */
+     protected abstract toModelImpl(toReturn : Model.Query) : Model.Query;
+
+}
+
+/**
+ * A query that reads data, but never mutates anything.
+ */
+export class QuerySelect extends Query {
+
+    private _select : SyntaxTree.Select;
+    private _from   : SyntaxTree.From;
+    private _where  : SyntaxTree.Where;
+
+    constructor(schema : Table[], model : Model.Query) {
+        super(schema, model);
+
+        // Ensure that the model is valid
+        if (!model.select) {
+            throw { "err" : "QuerySelect without Select model" }
+        }
+
+        if (!model.from) {
+            throw { "err" : "QuerySelect without From model" }
+        }
+
+        // Build SQL components from model
         this._select = new SyntaxTree.Select(model.select);
         this._from = new SyntaxTree.From(model.from);
 
@@ -36,9 +151,9 @@ export class Query {
     }
 
     /**
-     * @return True, if this query can be serialized to an SQL string
+     * @return True, if all existing components are complete
      */
-    get isComplete() {
+    protected isCompleteImpl() {
         return (this._select.isComplete &&
                 this._from.isComplete &&
                 (!this.where || this.where.isComplete));
@@ -77,42 +192,13 @@ export class Query {
         }
 
         this._where = where;
-    }
-
-    /**
-     * @return True, if this instance requires a save.
-     */
-    get isDirty() {
-        return (this._isDirty);
-    }
-
-
-    /**
-     * @return A "meaningful" name for the query.
-     */
-    get name() {
-        return (this._name);
-    }
-
-    /**
-     * @param value The new "meaningful" name for this query
-     */
-    set name(value : string) {
-        this._isDirty = true;
-        this._name = value;
-    }
-
-    /**
-     * @return A "meaningful" name for the query.
-     */
-    get id() {
-        return (this._id);
+        this.markDirty();
     }
 
     /**
      * Calculates the SQL String representation of this query.
      */
-    public toSqlString() : string {
+    protected toSqlStringImpl() : string {
         var toReturn = this._select.toString();
         toReturn += "\n" + this._from.toString();
 
@@ -127,18 +213,82 @@ export class Query {
      * Serializes the whole query to the "over-the-wire" format.
      * @return The "over-the-wire" JSON representation
      */
-    public toModel() : Model.Query {
-        let toReturn : Model.Query = {
-            name : this._name,
-            id : this._id,
-            from : this._from.toModel(),
-            select : this._select.toModel()
-        };
+    protected toModelImpl(toReturn : Model.Query) : Model.Query {
+        toReturn.from = this._from.toModel();
+        toReturn.select = this._select.toModel();
 
         if (this._where) {
             toReturn.where = this._where.toModel();
         }
         
+        return (toReturn);
+    }
+}
+
+/**
+ * An SQL DELETE query.
+ */
+export class QueryDelete extends Query {
+    private _delete : SyntaxTree.Delete;
+    private _from   : SyntaxTree.From;
+    private _where  : SyntaxTree.Where;
+
+    constructor(schema : Table[], model : Model.Query) {
+        super(schema, model);
+
+        // Ensure that the model is valid
+        if (!model.delete) {
+            throw { "err" : "QuerySelect without Delete model" }
+        }
+
+        if (!model.from) {
+            throw { "err" : "QuerySelect without From model" }
+        }
+
+        // Build SQL components from model
+        this._delete = new SyntaxTree.Delete(model.delete);
+        this._from = new SyntaxTree.From(model.from);
+
+        if (model.where) {
+            this._where = new SyntaxTree.Where(model.where);
+        }
+    }
+
+    /**
+     * @return True, if all existing components are complete
+     */
+    protected isCompleteImpl() {
+        return (this._delete.isComplete &&
+                this._from.isComplete &&
+                (!this._where || this._where.isComplete));
+    }
+
+    /**
+     * Calculates the SQL String representation of this query.
+     */
+    protected toSqlStringImpl() : string {
+        var toReturn = this._delete.toString();
+        toReturn += "\n" + this._from.toString();
+
+        if (this._where) {
+            toReturn += "\n" + this._where.toString();
+        }
+
+        return (toReturn);
+    }
+
+    /**
+     * Serializes the whole query to the "over-the-wire" format.
+     * @return The "over-the-wire" JSON representation
+     */
+    protected toModelImpl(toReturn : Model.Query) : Model.Query {
+        toReturn.delete = this._delete.toModel();
+        toReturn.from = this._from.toModel();
+
+        if (this._where) {
+            toReturn.where = this._where.toModel();
+        }
+
         return (toReturn);
     }
 }

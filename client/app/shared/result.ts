@@ -1,4 +1,4 @@
-import {Query, Model}                   from './query'
+import {QuerySelect, Model}                   from './query'
 
 /**
  * Not much ado about type safety here, in the raw
@@ -15,11 +15,11 @@ export type RawResult = [RawRow]
  * Provides some extra type information for a certain cell.
  */
 class Cell {
-    private _query : Query;
+    private _query : QuerySelect;
     private _index : number;
     private _value : string;
 
-    constructor(query : Query, index : number, value : string) {
+    constructor(query : QuerySelect, index : number, value : string) {
         this._query = query;
         this._index = index;
         this._value = value;
@@ -37,10 +37,10 @@ class Cell {
  * Allows to adress columns by name or index.
  */
 class Row {
-    private _query : Query;
+    private _query : QuerySelect;
     private _cells : Cell[];
     
-    constructor(query : Query, raw : RawRow) {
+    constructor(query : QuerySelect, raw : RawRow) {
         this._query = query;
         this._cells = raw.map( (v,k) => new Cell(query, k, v));
     }
@@ -51,11 +51,11 @@ class Row {
 }
 
 export class QueryResult {
-    private _query : Query;
+    private _query : QuerySelect;
 
     private _rows : Row[];
     
-    constructor(query : Query, raw : RawResult) {
+    constructor(query : QuerySelect, raw : RawResult) {
         this._query = query;
         this._rows = raw.map( v => new Row(query, v));
     }

@@ -1,11 +1,14 @@
 import './syntaxtree/common.spec'
 import './syntaxtree/expression.spec'
 import './syntaxtree/select.spec'
+import './syntaxtree/delete.spec'
 import './syntaxtree/from.spec'
 import './syntaxtree/where.spec'
 
-import {Query, Model, SyntaxTree} from './query'
-import {Column, Table}            from './table'
+import {
+    QuerySelect, QueryDelete, Model, SyntaxTree
+} from './query'
+import {Column, Table}                  from './table'
 
 let schema : Table[] =
     [
@@ -77,7 +80,7 @@ let schema : Table[] =
         }
     ];
 
-describe('Query', () => {
+describe('SELECT Query', () => {
     it ('SELECT person.id, person.name FROM person JOIN ort o', () => {
         let model : Model.Query = {
             name : 'test-whole',
@@ -106,7 +109,7 @@ describe('Query', () => {
 
         };
 
-        let q = new Query(schema, model);
+        let q = new QuerySelect(schema, model);
         expect(q.name).toEqual("test-whole");
         expect(q.id).toEqual("id");
 
@@ -136,7 +139,7 @@ describe('Query', () => {
             }
         };
 
-        let q = new Query(schema, model);
+        let q = new QuerySelect(schema, model);
         expect(q.name).toEqual("where-simple");
         expect(q.id).toEqual("where-1");
 
@@ -172,7 +175,7 @@ describe('Query', () => {
             }
         };
 
-        let q = new Query(schema, model);
+        let q = new QuerySelect(schema, model);
         expect(q.name).toEqual("where-compare");
         expect(q.id).toEqual("where-2");
 
@@ -183,5 +186,61 @@ describe('Query', () => {
         expect(q.toModel()).toEqual(model);
     });
 
+});
+
+describe('DELETE Query', () => {
+    it('DELETE FROM person', () => {
+        const model : Model.Query = {
+            name : 'delete-everything',
+            id : 'del-1',
+            delete : { },
+            from : {
+                first : {
+                    name : "person"
+                }
+            }
+        }
+
+        let q = new QueryDelete(schema, model);
+        expect(q.toModel()).toEqual(model);
+        expect(q.toSqlString()).toEqual("DELETE\nFROM person");
+    });
+
+    it('DELETE FROM person WHERE person.name = "Hans"', () => {
+        const model : Model.Query = {
+            name : 'delete-everything',
+            id : 'del-1',
+            delete : { },
+            from : {
+                first : {
+                    name : "person"
+                }
+            },
+            where : {
+                first : {
+                    binary : {
+                        lhs : {
+                            singleColumn : {
+                                table : "person",
+                                column : "name"
+                            }
+                        },
+                        operator : "=",
+                        rhs : {
+                            constant : {
+                                type : "TEXT",
+                                value : "Hans"
+                            }
+                        },
+                        simple : true
+                    }
+                }
+            }
+        }
+
+        let q = new QueryDelete(schema, model);
+        expect(q.toModel()).toEqual(model);
+        expect(q.toSqlString()).toEqual("DELETE\nFROM person\nWHERE person.name = \"Hans\"");
+    });
 });
 

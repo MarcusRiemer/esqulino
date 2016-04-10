@@ -1,6 +1,6 @@
 import {Component}                      from 'angular2/core';
 
-import {Query}          from '../shared/query'
+import {QuerySelect}          from '../shared/query'
 
 import {Project}        from './project'
 import {ProjectService} from './project.service'
@@ -36,7 +36,7 @@ export class SettingsComponent {
             .subscribe(res => this.project = res);
     }
 
-    onChangeQueryName(query : Query, newName : string) {
+    onChangeQueryName(query : QuerySelect, newName : string) {
         console.log(newName);
         query.name = newName;
     }

@@ -90,6 +90,16 @@ export module Model {
         joins? : Join[]
     }
 
+    /**
+     * There doesn't seem to be any data associated with the
+     * SQLite DELETE keyword itself. But it didn't seem practical
+     * to go with a "simple" type that breaks the "normal" 
+     * structure of the model.
+     */
+    export interface Delete {
+
+    }
+
     export interface Join {
         table : TableNameDefinition,
         cross? : string,
@@ -108,8 +118,9 @@ export module Model {
      * the whole structure and some identifying properties.
      */
     export interface Query {
-        select : Select,
-        from : From,
+        select? : Select,
+        delete? : Delete,
+        from? : From,
         where? : Where,
         name : string,
         id : string

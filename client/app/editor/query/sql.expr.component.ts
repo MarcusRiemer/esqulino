@@ -2,7 +2,7 @@ import {Component, Input}               from 'angular2/core'
 
 import {DragService, SqlDragEvent}      from './drag.service'
 
-import {Query, Model, SyntaxTree}       from '../../shared/query'
+import {QuerySelect, Model, SyntaxTree}       from '../../shared/query'
 
 @Component({
     selector : 'sql-expr',
@@ -11,7 +11,7 @@ import {Query, Model, SyntaxTree}       from '../../shared/query'
 })
 export class ExpressionComponent {
     @Input() expr : SyntaxTree.Expression;
-    @Input() query : Query;
+    @Input() query : QuerySelect;
 
     constructor(private _dragService : DragService) {
     }
