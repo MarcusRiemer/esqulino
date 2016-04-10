@@ -1,6 +1,6 @@
-import {Table}              from '../shared/table'
-import {QuerySelect, Model}       from '../shared/query'
-import {ProjectDescription} from '../shared/project.description'
+import {Table}                   from '../shared/table'
+import {Query, Model, loadQuery} from '../shared/query'
+import {ProjectDescription}      from '../shared/project.description'
 
 /**
  * A project with editing capatabilities.
@@ -11,7 +11,7 @@ export class Project {
     public description : string;
     public schema : Table[];
 
-    private _queries : QuerySelect[];
+    private _queries : Query[];
 
     /**
      * Construct a new project and a whole slew of other
@@ -25,7 +25,7 @@ export class Project {
 
         // Map all abstract queries to concrete query objects
         this._queries = json.queries.map( val => {
-            return (new QuerySelect(this.schema, val)); 
+            return (loadQuery(this.schema, val));
         });
     }
 
@@ -39,7 +39,7 @@ export class Project {
     /**
      * @return A single query identified by it's ID
      */
-    getQueryById(id : string) : QuerySelect {
+    getQueryById(id : string) : Query {
         return (this._queries.find(item => {
             return (item.id == id);
         }));
