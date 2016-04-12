@@ -62,15 +62,16 @@ export interface Expression {
     parameter? : ParameterExpression
 }
 
+export interface SelectColumn {
+    expr : Expression,
+    as? : string
+}
+
 export interface Select {
     columns : SelectColumn[],
     allData? : boolean
 }
 
-export interface SelectColumn {
-    expr : Expression,
-    as? : string
-}
 
 /**
  * Named tables as described in the FROM

@@ -1,0 +1,20 @@
+swagger: '2.0'
+
+info:
+  version: "0.1.0"
+  title: esqulino
+
+# Describe your paths here
+paths:
+  /api/project:
+    get:
+      description: |
+        Retrieves all publicly available projects
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfProjects
+            type: array
+              
+              
