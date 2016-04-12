@@ -19,7 +19,7 @@ class ScratchSqlApp < Sinatra::Base
   
   # Activate reloading when developing
   configure :development do
-    #register Sinatra::Reloader
+    register Sinatra::Reloader
   end
 
   # Static HTML files are served from here
@@ -43,25 +43,23 @@ class ScratchSqlApp < Sinatra::Base
 
   # Info about a specific project
   get '/api/project/:id' do
-    # Load data from disk and strip any private data
     project_id = params['id']
     project_folder = File.join(given_data_dir, project_id);
 
     # Ensure this is actually a project directory
     assert_project_dir project_folder
-    
-    project = YAML.load_file(File.join(project_folder, "config.yaml"));
-    project = project_public_info(project);
-    
-    # Put the schema into it
-    project['schema'] = database_describe_schema(project_folder)
-
-    # Load all related queries
-    project['queries'] = project_load_queries(project_folder)
-
-    content_type :json
+    project = read_project project_folder
     
     json project
+  end
+
+  # Updating a specific project
+  post '/api/project/:id' do
+    project_id = params['id']
+    project_folder = File.join(given_data_dir, project_id);
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
   end
 
   # Preview image for a specific project
