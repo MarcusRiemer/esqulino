@@ -39,8 +39,6 @@ class ScratchSqlApp < Sinatra::Base
                .select { |entry| !(entry =='.' || entry == '..') }
                .map { |entry| YAML.load_file(File.join(given_data_dir, entry, "config.yaml")) }
                .map { |entry| project_public_info entry }
-    
-
     json projects
   end
 
