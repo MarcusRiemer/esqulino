@@ -128,6 +128,33 @@ def project_public_info(whole_info)
   return to_return;
 end
 
+# Loads a project from disk
+#
+# @param project_folder [string] The projects root folder
+#
+# @return [Hash] The
+def read_project(project_folder)
+  # Load data from disk and strip any private data
+  project = YAML.load_file(File.join(project_folder, "config.yaml"));
+  project = project_public_info(project);
+  
+  # Put the schema into it
+  project['schema'] = database_describe_schema(project_folder)
+  
+  # Load all related queries
+  project['queries'] = project_load_queries(project_folder)
+
+  return (project)
+end
+
+# Updates the project at the given path with the information found
+# in the
+#
+#
+def update_project_description(project_folder, updated_project)
+
+end
+
 # Retrieves all queries that are part of the given project.
 #
 # @param project_folder [string] The projects root folder
