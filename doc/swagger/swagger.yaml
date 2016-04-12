@@ -14,7 +14,24 @@ paths:
         200:
           description: Successful response
           schema:
-            title: ArrayOfProjects
             type: array
-              
-              
+            title: ArrayOfProjects
+            items:
+              "$ref": "/ProjectDescription.json"
+  /api/project/{id}:
+    get:
+      description: |
+        Retrieves a specific project.
+      parameters:
+        - name: id
+          in: path
+          description: Id of the project to fetch
+          required: true
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: |
+            Succesful retrieval of a project.
+          schema:
+            "$ref": "/ProjectDescription.json"
