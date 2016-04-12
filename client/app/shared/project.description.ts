@@ -1,6 +1,3 @@
-/// <reference path="./query.model.ts"/>
-/// <reference path="./table.ts"/>
-
 import {Model}    from "./query"
 import {Table}    from "./table"
 
