@@ -1,0 +1,202 @@
+{
+    "description": "Outermost description of a query. This contains\n\nthe whole structure and some identifying properties.",
+    "type": "object",
+    "properties": {
+        "select": {
+            "$ref": "#/definitions/Select"
+        },
+        "delete": {
+            "$ref": "#/definitions/Delete"
+        },
+        "from": {
+            "$ref": "#/definitions/From"
+        },
+        "where": {
+            "$ref": "#/definitions/Where"
+        },
+        "name": {
+            "type": "string"
+        },
+        "id": {
+            "type": "string"
+        }
+    },
+    "definitions": {
+        "Select": {
+            "type": "object",
+            "properties": {
+                "columns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SelectColumn"
+                    }
+                },
+                "allData": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "SelectColumn": {
+            "type": "object",
+            "properties": {
+                "expr": {
+                    "$ref": "#/definitions/Expression"
+                },
+                "as": {
+                    "type": "string"
+                }
+            }
+        },
+        "Expression": {
+            "description": "We use a single base type for all kinds of expression, as\n\nthis vastly simplifies the storage process. Each kind of\n\nconcrete expression is stored under a key. Only one of these\n\nkeys may be set at runtime.",
+            "type": "object",
+            "properties": {
+                "singleColumn": {
+                    "$ref": "#/definitions/SingleColumnExpression"
+                },
+                "binary": {
+                    "$ref": "#/definitions/BinaryExpression"
+                },
+                "constant": {
+                    "$ref": "#/definitions/ConstantExpression"
+                },
+                "missing": {
+                    "$ref": "#/definitions/MissingExpression"
+                },
+                "parameter": {
+                    "$ref": "#/definitions/ParameterExpression"
+                }
+            }
+        },
+        "SingleColumnExpression": {
+            "description": "One \"typical\" logical leaf of an expression tree, postpones\n\nthe actual value lookup to execution time and ends recursion.",
+            "type": "object",
+            "properties": {
+                "column": {
+                    "type": "string"
+                },
+                "table": {
+                    "type": "string"
+                },
+                "alias": {
+                    "type": "string"
+                }
+            }
+        },
+        "BinaryExpression": {
+            "description": "Combines two expressions with a binary operator.",
+            "type": "object",
+            "properties": {
+                "lhs": {
+                    "$ref": "#/definitions/Expression"
+                },
+                "operator": {
+                    "type": "string"
+                },
+                "rhs": {
+                    "$ref": "#/definitions/Expression"
+                },
+                "simple": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "ConstantExpression": {
+            "description": "The other \"typical\" leaf, a compile time expression that also\n\nends recursion.",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$ref": "#/definitions/\"../../client/app/shared/query.model\".DataTypeStrings"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "\"../../client/app/shared/query.model\".DataTypeStrings": {
+            "description": "Valid string values for data types",
+            "type": "string",
+            "enum": [
+                "INTEGER",
+                "REAL",
+                "TEXT"
+            ]
+        },
+        "MissingExpression": {
+            "description": "Denotes an expression that is intentionally missing.",
+            "type": "object",
+            "properties": {}
+        },
+        "ParameterExpression": {
+            "description": "Denotes a value that needs to be bound at the runtime of the query.",
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                }
+            }
+        },
+        "Delete": {
+            "description": "There doesn't seem to be any data associated with the\n\nSQLite DELETE keyword itself. But it didn't seem practical\n\nto go with a \"simple\" type that breaks the \"normal\"\n\nstructure of the model.",
+            "type": "object",
+            "properties": {}
+        },
+        "From": {
+            "type": "object",
+            "properties": {
+                "first": {
+                    "$ref": "#/definitions/TableNameDefinition"
+                },
+                "joins": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Join"
+                    }
+                }
+            }
+        },
+        "TableNameDefinition": {
+            "description": "Named tables as described in the FROM",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "alias": {
+                    "type": "string"
+                }
+            }
+        },
+        "Join": {
+            "type": "object",
+            "properties": {
+                "table": {
+                    "$ref": "#/definitions/TableNameDefinition"
+                },
+                "cross": {
+                    "type": "string"
+                },
+                "inner": {
+                    "type": "object",
+                    "properties": {
+                        "using": {
+                            "type": "string"
+                        },
+                        "on": {
+                            "$ref": "#/definitions/Expression"
+                        }
+                    }
+                }
+            }
+        },
+        "Where": {
+            "type": "object",
+            "properties": {
+                "first": {
+                    "$ref": "#/definitions/Expression"
+                }
+            }
+        }
+    },
+    "$schema": "http://json-schema.org/draft-04/schema#"
+}

@@ -4,13 +4,21 @@ info:
   version: "0.1.0"
   title: "esqulino"
 
+  description: |
+    esqulino is a data orientated IDE for lerners in schools and elsewhere.
+
+  license:
+    name: GNU Affero General Public License v3
+    url: http://www.gnu.org/licenses/agpl-3.0.en.html
+
 host: "esqulino.marcusriemer.de"
+basePath: /api
 schemes:
   - https
 
 # Describe your paths here
 paths:
-  /api/project:
+  /project:
     get:
       tags: [project]
       description: |
@@ -23,7 +31,7 @@ paths:
             title: ArrayOfProjects
             items:
               "$ref": "/ProjectListDescription.json"
-  /api/project/{id}:
+  /project/{id}:
     get:
       tags: [project]
       description: |
@@ -40,7 +48,57 @@ paths:
             Succesful retrieval of a project.
           schema:
             "$ref": "/ProjectDescription.json"
-  /api/project/{id}/query/{queryId}/run:
+  /project/{id}/query/{queryId}:
+    post:
+      tags: [query]
+      description: |
+        Updating or creating a query on the server.
+      parameters:
+        - name: id
+          in: path
+          description: Id of the project the query belongs to.
+          required: true
+          type: string
+        - name: queryId
+          in: path
+          description: Id of the query to update. If this is left out a new query will be created.
+          required: false
+          type: string
+          format: uuid
+        - name: Query
+          in: body
+          description: The syntax tree and SQL representation of the query. If this representation should have an ID assigned, it will be ignored.
+          required: false
+          schema:
+            $ref: "/QueryUpdateRequestDescription.json"
+      responses:
+        200:
+          description: |
+            The query has been created or updated.
+          schema:
+            "$ref": "/QueryResultDescription.json"
+    delete:
+      tags: [query]
+      description: |
+        Deleting an existing query
+      parameters:
+        - name: id
+          in: path
+          description: Id of the project the query belongs to.
+          required: true
+          type: string
+        - name: queryId
+          in: path
+          description: Id of the query to update. If this is left out a new query will be created.
+          required: true
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: |
+            Succesful deletion of query
+
+  /project/{id}/query/{queryId}/run:
     post:
       tags: [query]
       description: |
@@ -69,7 +127,7 @@ paths:
             Succesful execution of the query.
           schema:
             "$ref": "/QueryResultDescription.json"
-  /api/project/{id}/query/run:
+  /project/{id}/query/run:
     post:
       tags: [query]
       description: |

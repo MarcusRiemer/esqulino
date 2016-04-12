@@ -36,8 +36,10 @@ export class SettingsComponent {
             .subscribe(res => this.project = res);
     }
 
-    onChangeQueryName(query : QuerySelect, newName : string) {
-        console.log(newName);
-        query.name = newName;
+    /**
+     * The user has decided to delete a query.
+     */
+    onQueryDelete(queryId : string) {
+        this._projectService.deleteQuery(queryId);
     }
 }

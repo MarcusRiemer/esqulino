@@ -1,7 +1,6 @@
 import {Injectable}     from 'angular2/core';
 import {Http, Response} from 'angular2/http';
 
-
 /**
  * Instead of constructing URLs on the fly, they should be created using
  * this service. It ensures that the server actually provides the
@@ -32,9 +31,18 @@ export class ServerApiService {
     }
 
     /**
-     * Retrieves the URL that uniquely describes a query inside a project.
+     * Retrieves an URL that can be used to run requests
+     * where the ID is transfered as part of the body.
      */
-    getQueryUrl(projectId : string, queryId : string) : string {
+    getQueryUrl(projectId : string) : string {
+        return (`/api/project/${projectId}/query/`);
+    }
+
+    /**
+     * Retrieves an URL that can be used to run requests
+     * where the ID is transferred as part of the request string.
+     */
+    getQuerySpecificUrl(projectId : string, queryId : string) : string {
         return (`/api/project/${projectId}/query/${queryId}`);
     }
 

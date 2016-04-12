@@ -5,6 +5,14 @@ import * as SyntaxTree                  from './query.syntaxtree'
 export {Model, SyntaxTree}
 
 /**
+ * Storing a query on the server
+ */
+export interface QueryUpdateRequestDescription {
+    model : Model.Query,
+    sql? : string
+}
+
+/**
  * Facade for a query that allows meaningful mapping to the UI.
  */
 export abstract class Query implements SyntaxTree.RemovableHost {

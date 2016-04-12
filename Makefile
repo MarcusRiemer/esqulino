@@ -29,6 +29,7 @@ server-run :
 doc :
 	make -C server doc
 	make -C doc/thesis all
+	make -C doc/swagger all
 
 # Used during development: Prettyprints all available JSON Files, the use of
 # sponge is basically a substitute for "jq . < {} > {}" (in place editing of

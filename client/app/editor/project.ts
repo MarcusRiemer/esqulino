@@ -44,4 +44,16 @@ export class Project {
             return (item.id == id);
         }));
     }
+
+    /**
+     * @return A single query identified by it's ID
+     */
+    removeQueryById(id : string) {
+        const index = this._queries.findIndex( q => q.id === id);
+
+        // Remove at index
+        if (index >= 0) {
+            this.queries.splice(index, 1);
+        }
+    }
 }
