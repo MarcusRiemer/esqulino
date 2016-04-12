@@ -1,4 +1,4 @@
-import {Model}         from '../query.model'
+import {Model}         from '../query'
 import * as SyntaxTree from './select'
 
 describe('SELECT', () => {

@@ -1,5 +1,5 @@
 import {Table}                          from '../table'
-import {Model}                          from '../query.model'
+import {Model}                          from '../query'
 
 import { Expression, loadExpression }   from './expression'
 
