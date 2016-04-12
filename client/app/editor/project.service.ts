@@ -8,7 +8,9 @@ import {Observable}                              from 'rxjs/Observable'
 
 import {ServerApiService}                        from '../shared/serverapi.service'
 import {ProjectDescription}                      from '../shared/project.description'
-import {Model, QuerySelect, QueryDelete}         from '../shared/query'
+import {
+    Model, QuerySelect, QueryDelete, QueryUpdateRequestDescription
+} from '../shared/query'
 import {QueryResult}                             from '../shared/query.result'
 
 import {Project}                                 from './project'
@@ -114,28 +116,26 @@ export class ProjectService {
     }
     
     /**
-     * Saves a certain query
+     * Request to save a certain query.
      */
     saveQuery(id : string) {
-        // Over the wire format
-        interface QueryUpdate {
-            model : Model.Query,
-            sql? : string
-        }
-
         const query = this.cachedProject.getQueryById(id);
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        const url = this._server.getQueryUrl(this.cachedProject.id, query.id);
+        const url = this._server.getQuerySpecificUrl(this.cachedProject.id, id);
 
-        let bodyJson : QueryUpdate = {
+        let bodyJson : QueryUpdateRequestDescription = {
             model : query.toModel()
         }
 
+        // Add the SQL representation, if applicable
         if (query.isComplete) {
             bodyJson.sql = query.toSqlString();
         }
+
+        // Id is part of the URL
+        delete bodyJson.model.id;
 
         const body = JSON.stringify(bodyJson);
 
@@ -147,16 +147,57 @@ export class ProjectService {
     }
 
     /**
-     * Creates a new query on the given table.
+     * Request to create a new query on the given table.
+     *
+     * @param table The name of the table to query initially
      */
     createQuery(table : string) {
-        const url = `/api/project/${this.cachedProject.id}/query/create/${table}`;
-        const body = "";
+        const url = this._server.getQueryUrl(this.cachedProject.id);
+
+        let model : Model.Query = {
+            id : null,
+            name : table,
+            select : {
+                columns : [],
+                allData : true
+            },
+            from : {
+                first : {
+                    name : table
+                }
+            }
+        }
+
+        const query = new QuerySelect(this.cachedProject.schema, model);
         
-        const toReturn = this._http.post(url, body)
+        let bodyJson : QueryUpdateRequestDescription = {
+            model : model,
+            sql : query.toSqlString()
+        }
+        
+        const toReturn = this._http.post(url, JSON.stringify(bodyJson))
             .catch(this.handleError);
 
-        return (toReturn);
+        // Once the query has been created, add it to the list of queries
+        // that are part of this project.
+        toReturn.subscribe( queryId => {
+                console.log("onNext");
+                model.id = queryId.text();
+                this.cachedProject.queries.push(new QuerySelect(this.cachedProject.schema, model));
+            });
+
+        return (toReturn.toPromise());
+    }
+
+    deleteQuery(queryId : string) {
+        const url = this._server.getQuerySpecificUrl(this.cachedProject.id, queryId);
+
+        const toReturn = this._http.delete(url)
+            .catch(this.handleError);
+
+        toReturn.subscribe( res => {
+            this.cachedProject.removeQueryById(queryId);
+        });
     }
 
     private handleError (error: Response) {

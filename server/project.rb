@@ -184,19 +184,27 @@ end
 #
 # @param project_folder [string] The projects root folder
 # @param query_info [Hash] The query model and it's SQL representation.
-def project_store_query(project_folder, query_info)
+# @param given_query_id [string] The id of this query
+#
+# @return The id of the stored query
+def project_store_query(project_folder, query_info, given_query_id)
   query_folder = File.join(project_folder, "queries")
 
   # Ensuring that the project folder has a "queries" subfolder
   if not File.directory?(query_folder)
     FileUtils.mkdir_p(query_folder)
   end
+
+  # Possibly set a new query id
+  query_id = given_query_id || SecureRandom.uuid
+  query_info['model']['id'] = query_id
   
   # Filename with various extensions
-  query_filename = File.join(query_folder, query_info['model']['id'])
+  query_filename = File.join(query_folder, query_id)
   query_filename_sql = query_filename + ".sql"
+  query_filename_json = query_filename + ".json"
 
-  File.open(query_filename + ".json", "w") do |f|
+  File.open(query_filename_json, "w") do |f|
     f.write(query_info['model'].to_json)
   end
 
@@ -207,41 +215,28 @@ def project_store_query(project_folder, query_info)
       f.write(query_info['sql'])
     end
   else
-    # No, delete a possibly existing sql file
+    # No, delete a possibly existing sql file. We prefer having no SQL
+    # string at all instead of working with a older state of the query.
     File.delete query_filename_sql if File.exists? query_filename_sql
   end
 
-  return 200
+  return query_id
 end
 
-# Creates a new Query which basically represents a
-# "SELECT * FROM initial_table". This function does not actually store
-# anything to disk, but returns a hash that can be used in conjunction
-# with the project_store_query function.
+# Deletes an existing query
 #
 # @param project_folder [string] The projects root folder
-# @param initial_table [string] The name of the initial table to enumerate
-def project_create_query(project_folder, initial_table)
-  query_model = {
-    "name" => "Neue Abfrage",
-    "id" => SecureRandom.uuid,
-    "select" => {
-      "columns" => [],
-      "allData" => true
-    },
-    "from" => {
-      "first" => {
-        "name" => initial_table
-      }
-    }
-  }
+# @param query_id [string] The id of the query
+def project_delete_query(project_folder, query_id)
+  query_folder = File.join(project_folder, "queries")
 
-  query_sql = "SELECT *\nFROM #{initial_table}"
-  
-  return {
-    "model" => query_model,
-    "sql" => query_sql
-  }
+  # Filename with various extensions
+  query_filename = File.join(query_folder, query_id)
+  query_filename_sql = query_filename + ".sql"
+  query_filename_json = query_filename + ".json"
+
+  File.delete query_filename_json if File.exists? query_filename_json
+  File.delete query_filename_sql if File.exists? query_filename_sql
 end
 
 # Executes a query in the context of a given project. This is of course

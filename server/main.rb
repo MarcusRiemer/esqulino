@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'sinatra/reloader'
 require 'sinatra/config_file'
 require 'sinatra/json'
+require "sinatra/multi_route"
 
 require 'yaml'
 
@@ -16,6 +17,8 @@ require './project.rb'
 # to the mainpage. To fix this, a list of all valid URLs would be required ...
 class ScratchSqlApp < Sinatra::Base
   enable :logging
+
+  register Sinatra::MultiRoute
   
   # Activate reloading when developing
   configure :development do
@@ -79,22 +82,36 @@ class ScratchSqlApp < Sinatra::Base
     else
       halt 404
     end
-    
   end
 
-  # Creating a query
-  post '/api/project/:id/query/create/:table' do
+  # Storing a query
+  post '/api/project/:id/query/:queryId?' do
     project_id = params['id']
     project_folder = File.join(given_data_dir, project_id)
 
     # Ensure this is actually a project directory
     assert_project_dir project_folder
 
-    query = project_create_query(project_folder, params['table'])
-    project_store_query(project_folder, query)
+    given_query_id = params['queryId']
+    
+    query_id = project_store_query(project_folder, JSON.parse(request.body.read), given_query_id)
 
-    # Return the ID of the newly created query
-    return (query["model"]["id"]);
+    return (query_id)
+  end
+
+  # Deleting a query
+  delete '/api/project/:id/query/:queryId' do
+    project_id = params['id']
+    project_folder = File.join(given_data_dir, project_id)
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
+
+    query_id = params['queryId']
+
+    project_delete_query(project_folder, query_id)
+
+    status 200
   end
 
   # Running an arbitrary query (Dangerous!)
@@ -126,24 +143,18 @@ class ScratchSqlApp < Sinatra::Base
     json result
   end
   
-  # Updating a query
-  post '/api/project/:id/query/:queryId' do
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id)
-
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder
-    
-    status project_store_query(project_folder, JSON.parse(request.body.read))
-  end
-  
   index_path = File.expand_path('index.html', settings.public_folder)
   
-  # Catchall for the rest of routes. This enables meaningful navigation
+  # Matching the meaningful routes the client knows. This enables navigation
   # even if the user submits a "deep link" to somewhere inside the
   # application.
-  get '/*' do
+  get '/', '/front/*', '/editor/*' do
     send_file index_path
+  end
+
+  # Catchall for everything that goes wrong
+  get '/*' do
+    status 404
   end
 end
 

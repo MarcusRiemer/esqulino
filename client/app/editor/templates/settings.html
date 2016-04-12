@@ -50,14 +50,12 @@
     <ul class="list-group list-group-flush">
       <li *ngFor="#query of project?.queries"
           class="list-group-item">
-        <form>
-          <button class="btn btn-warning pull-right">
-            <span class="fa fa-trash"></span> Löschen
-          </button>
-          <input [(ngModel)]="query.name"
-                 (keyup.enter)="onChangeQueryName(query, $event.target.value)"
-                 type="text">
-        </form>
+        <button (click)="onQueryDelete(query.id)"
+                class="btn btn-warning pull-right">
+          <span class="fa fa-trash"></span> Löschen
+        </button>
+        <input [(ngModel)]="query.name"
+               type="text">
       </li>
     </ul>
   </div>
