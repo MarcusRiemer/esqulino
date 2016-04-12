@@ -1,0 +1,19 @@
+{
+    "description": "The properties of a project that can be queried from the\n\nserver when asking for all available projecs.\n\n\n\nThis is a stripped down version of all possibly\n\nexisting project properties that is used to list available\n\nprojects.",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "id": {
+            "type": "string"
+        },
+        "preview": {
+            "type": "string"
+        }
+    },
+    "$schema": "http://json-schema.org/draft-04/schema#"
+}

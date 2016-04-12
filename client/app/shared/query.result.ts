@@ -9,7 +9,23 @@ type RawRow = [string]
 /**
  * A result is simply a list of rows.
  */
-export type RawResult = [RawRow]
+type QueryResultDescription = RawRow[]
+
+/**
+ * Parameters are simply a key-value dictionary. Whenever a query
+ * makes use of user-bound parameters, these are transferred via
+ * this kind of object.
+ */
+export type QueryParamsDescription = { [paramKey:string] : string }
+
+/**
+ * Some servers support execution of arbitrary queries. This is intended
+ * to be used during development and can be done via this request-type.
+ */
+export type ArbitraryQueryRequestDescription = {
+    params : QueryParamsDescription
+    sql : string
+}
 
 /**
  * Provides some extra type information for a certain cell.
@@ -50,12 +66,15 @@ class Row {
     }
 }
 
+/**
+ * Adds type information to a raw QueryResultDescription.
+ */
 export class QueryResult {
     private _query : QuerySelect;
 
     private _rows : Row[];
     
-    constructor(query : QuerySelect, raw : RawResult) {
+    constructor(query : QuerySelect, raw : QueryResultDescription) {
         this._query = query;
         this._rows = raw.map( v => new Row(query, v));
     }
