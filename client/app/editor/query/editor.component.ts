@@ -2,7 +2,7 @@ import {Component, Injector}            from 'angular2/core'
 import {Router, RouteParams}            from 'angular2/router'
 
 import {Query, Model}                   from '../../shared/query'
-import {QueryResult, RawResult}         from '../../shared/result'
+import {QueryResult}                    from '../../shared/query.result'
 
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'

@@ -9,7 +9,7 @@ import {Observable}                              from 'rxjs/Observable'
 import {ServerApiService}                        from '../shared/serverapi.service'
 import {ProjectDescription}                      from '../shared/project.description'
 import {Model, QuerySelect, QueryDelete}         from '../shared/query'
-import {QueryResult, RawResult}                  from '../shared/result'
+import {QueryResult}                             from '../shared/query.result'
 
 import {Project}                                 from './project'
 
@@ -102,7 +102,7 @@ export class ProjectService {
                 // The result changes dependending on the concrete type
                 // of the query.
                 if (query instanceof QuerySelect) {
-                    return (new QueryResult(query, <RawResult> res.json()))
+                    return (new QueryResult(query, <any> res.json()))
                 } else if (query instanceof QueryDelete) {
                     console.log(res.json);
                     return (null)

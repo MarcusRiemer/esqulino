@@ -1,19 +1,7 @@
 {
-    "description": "The properties of a project that can be queried from the\n\nserver. Only contains publically visible data, not the\n\npassword or other private information.",
+    "description": "The properties of a project that can be queried from the\n\nserver when asking for a specific project.\n\n\n\nOnly contains publically visible data, not the\n\npassword or other private information.",
     "type": "object",
     "properties": {
-        "name": {
-            "type": "string"
-        },
-        "description": {
-            "type": "string"
-        },
-        "id": {
-            "type": "string"
-        },
-        "preview": {
-            "type": "string"
-        },
         "schema": {
             "type": "array",
             "items": {
@@ -26,6 +14,18 @@
                 "$ref": "#/definitions/Query",
                 "description": "Outermost description of a query. This contains\n\nthe whole structure and some identifying properties."
             }
+        },
+        "name": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "id": {
+            "type": "string"
+        },
+        "preview": {
+            "type": "string"
         }
     },
     "definitions": {
