@@ -1,6 +1,6 @@
 import 'rxjs/Rx';
 
-import {Model}                  from '../../shared/query.model'
+import {Model}                  from '../../shared/query'
 import {Removable, Expression}  from '../../shared/syntaxtree/common'
 
 import {Subject}                from 'rxjs/Subject'

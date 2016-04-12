@@ -1,3 +1,6 @@
+/// <reference path="./query.model.ts"/>
+/// <reference path="./table.ts"/>
+
 import {Model}    from "./query"
 import {Table}    from "./table"
 
@@ -7,11 +10,11 @@ import {Table}    from "./table"
  * password or other private information.
  */
 export interface ProjectDescription {
-    name : string;
-    description : string;
-    id : string;
-    preview? : string;
+    name : string
+    description : string
+    id : string
+    preview? : string
 
-    schema? : Table[];
-    queries? : [Model.Query]
+    schema? : Table[]
+    queries? : Model.Query[]
 }

@@ -1,7 +1,7 @@
 import {
     ExpressionParent, Removable, DataType, serializeDataType, parseDataType
 } from './common'
-import {Model}      from '../query.model'
+import {Model}      from '../query'
 
 /**
  * Valid template identifiers. Sadly a leaky abstraction that needs

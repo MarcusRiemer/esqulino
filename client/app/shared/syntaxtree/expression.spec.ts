@@ -1,4 +1,4 @@
-import {Model}         from '../query.model'
+import {Model}         from '../query'
 import {DataType}      from './common'
 import * as SyntaxTree from './expression'
 
