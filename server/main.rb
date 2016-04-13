@@ -82,6 +82,36 @@ class ScratchSqlApp < Sinatra::Base
     end
   end
 
+  # Running an arbitrary query (Dangerous!)
+  post '/api/project/:id/query/run' do
+    project_id = params['id']
+    project_folder = File.join(given_data_dir, project_id)
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
+
+    request_data = JSON.parse(request.body.read)
+    result = project_run_query(project_folder, request_data.fetch('sql'), request_data.fetch('params'))
+    
+    json result
+  end
+
+  # Running a query that has already been stored on the server
+  post '/api/project/:id/query/:queryId/run' do
+    project_id = params['id']
+    project_folder = File.join(given_data_dir, project_id)
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
+
+    query_id = params['queryId']
+    query_params = JSON.parse(request.body.read)
+    
+    result = project_run_stored_query(project_folder, query_id, query_params)
+    json result
+  end
+
+
   # Storing a query
   post '/api/project/:id/query/:queryId?' do
     project_id = params['id']
@@ -110,35 +140,6 @@ class ScratchSqlApp < Sinatra::Base
     project_delete_query(project_folder, query_id)
 
     status 200
-  end
-
-  # Running an arbitrary query (Dangerous!)
-  post '/api/project/:id/query/run' do
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id)
-
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder
-
-    request_data = JSON.parse(request.body.read)
-    result = project_run_query(project_folder, request_data.fetch('sql'), request_data.fetch('params'))
-    
-    json result
-  end
-
-  # Running a query that has already been stored on the server
-  post '/api/project/:id/query/:queryId/run' do
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id)
-
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder
-
-    query_id = params['queryId']
-    query_params = JSON.parse(request.body.read)
-    
-    result = project_run_stored_query(project_folder, query_id, query_params)
-    json result
   end
   
   index_path = File.expand_path('index.html', settings.public_folder)

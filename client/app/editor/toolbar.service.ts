@@ -82,7 +82,7 @@ export class ToolbarService {
 
     // Shortcut to the well known "Save" items which may be used
     // by multiple components.
-    private _saveItem = new ToolbarItem("Speichern", "floppy-o", true);
+    private _saveItem : ToolbarItem;
 
     /**
      * Other components may add new special purpose buttons.
@@ -103,10 +103,12 @@ export class ToolbarService {
     }
 
     /**
-     * Removes any non-native items from the toolbar.
+     * Removes any non-native items from the toolbar and resets
+     * the state of any known button.
      */
     resetItems() {
-        this._items = this._items.filter(val => val.isNative);
+        this._saveItem = new ToolbarItem("Speichern", "floppy-o", true);
+        this._items = [this._saveItem];
     }
     
     /**
