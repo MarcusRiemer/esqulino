@@ -17,13 +17,20 @@ export class WhereComponent {
 
     }
 
+    /**
+     * Fired when something is being dragged over this target.
+     */
     onBlueprintDrag(evt : DragEvent) {
         // Indicates we can drop here
         evt.preventDefault();
     }
 
+    /**
+     * Fired when something is dropped onto this target.
+     */
     onBlueprintDrop(evt : DragEvent) {
-        // Indicates we can drop here
+        // Make sure that no redirection to the data associated with
+        // the drop target occurs
         evt.preventDefault();
 
         // Introduce a "dummy" where element if it does not yet exist

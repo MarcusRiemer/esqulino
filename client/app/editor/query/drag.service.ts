@@ -19,6 +19,7 @@ export interface SqlDragEvent {
     scope : ScopeFlag[]
     origin : OriginFlag
     expr? : Model.Expression
+    join? : Model.Join
 }
 
 /**
@@ -186,10 +187,12 @@ export class DragService {
      *
      * @param evt The DOM drag event to enrich
      */
-    startTableDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {
+    startTableDrag(join : Model.Join,
+                   origin : OriginFlag, evt : DragEvent, source? : Removable) {
         this.dragStart(evt, {
             scope : ["table"],
-            origin : origin
+            origin : origin,
+            join : join
         }, source);
     }
 
@@ -234,6 +237,14 @@ export class DragService {
     get activeCompound() {
         return (this._currentDrag && this._currentDrag.scope.indexOf("compound") >= 0);
     }
+
+    /**
+     * @return True, if a table is involved in the current drag operation
+     */
+    get activeTable() {
+        return (this._currentDrag && this._currentDrag.scope.indexOf("table") >= 0);
+    }
+
 
     /**
      * @return The source of the drag operation.

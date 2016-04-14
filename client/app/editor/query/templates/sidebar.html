@@ -37,7 +37,7 @@
 
   <div class="block-container block">
     <template ngFor #table [ngForOf]="query?.schema" #last="last" >
-      <div (dragstart)="startTableDrag($event)"
+      <div (dragstart)="startTableDrag(table.name, $event)"
            class="table"
            draggable="true">
         <span class="fa fa-table fa-fw"></span>

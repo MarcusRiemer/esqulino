@@ -2,13 +2,24 @@
   <div class="component">FROM</div>
   <div>
     <span class="table">
-      {{ from.first.name }} {{ from.first.alias }}
+      {{ query.from.first.name }} {{ query.from.first.alias }}
     </span>
   </div>
-  <div *ngFor="#join of from.joins">
+  <div *ngFor="#join of query.from.joins"
+       (dragstart)="onJoinDragStart(join, $event)"
+       draggable="true">
     <span class="component indent">{{ join.sqlJoinKeyword }}</span>
     <span class="table">
       {{ join.name }} {{ join.alias }}
+    </span>
+  </div>
+
+  <div *ngIf="showBlueprintJoinDropTarget">
+    <span class="component indent">JOIN</span>
+    <span (dragover)="onBlueprintDrag($event)"
+          (drop)="onBlueprintJoinDrop($event)"
+          class="table blueprint">
+      <span class="fa fa-plus"></span>
     </span>
   </div>
 </div>

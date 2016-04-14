@@ -4,7 +4,7 @@ import {
     loadExpression, MissingExpression
 } from './expression'
 import {
-    Component, Expression, ExpressionParent
+    Component, Expression, ExpressionParent, Removable
 } from './common'
 
 
@@ -14,15 +14,18 @@ import {
  * @todo This ignores the possibility of sub-SELECTs in the FROM
  *       clause.
  */
-abstract class Join {
+export abstract class Join implements Removable {
     protected _sqlJoinKeyword : string;
 
     protected _table : Model.TableNameDefinition;
 
+    protected _from : From;
+
     /**
      * Stores base data
      */
-    constructor(sqlJoinKeyword : string, table : Model.TableNameDefinition) {
+    constructor(from : From, sqlJoinKeyword : string, table : Model.TableNameDefinition) {
+        this._from = from;
         this._sqlJoinKeyword = sqlJoinKeyword;
         this._table = table;
     }
@@ -67,6 +70,13 @@ abstract class Join {
     }
 
     /**
+     * Removes this JOIN from the parenting FROM component.
+     */
+    removeSelf() {
+        this._from.removeJoin(this);
+    }
+
+    /**
      * @return A string representing a join with a single table
      */
     abstract toString() : string;
@@ -81,9 +91,9 @@ abstract class Join {
  */
 export class InitialJoin extends Join {
 
-    constructor(table : Model.TableNameDefinition) {
+    constructor(from : From, table : Model.TableNameDefinition) {
         // No SQL Keyword for the first statement
-        super(null, table);
+        super(from, null, table);
     }
 
     toString() : string {
@@ -102,7 +112,7 @@ export class InitialJoin extends Join {
  * comma or the JOIN keyword.
  */
 export class CrossJoin extends Join {
-    constructor(join : Model.Join) {
+    constructor(from : From, join : Model.Join) {
         var separator : string;
         switch(join.cross) {
         case "comma":
@@ -115,7 +125,7 @@ export class CrossJoin extends Join {
             throw `Unknown type in cross join: ${join.cross}`;
         }
 
-        super(separator, join.table);
+        super(from, separator, join.table);
     }
 
     toString() : string {
@@ -125,7 +135,7 @@ export class CrossJoin extends Join {
     }
 
     toModel() : Model.Join {
-        const crossType = this._sqlJoinKeyword == ',' ? "comma" : "cross";
+        const crossType : Model.InnerJoinType = this._sqlJoinKeyword == ',' ? "comma" : "cross";
         
         return ({
             table : this._table,
@@ -141,13 +151,13 @@ export class InnerJoin extends Join implements ExpressionParent {
     private _using : string;
     private _on : Expression;
 
-    constructor(join : Model.Join) {
-        super("INNER JOIN", join.table);
+    constructor(from : From, join : Model.Join) {
+        super(from, "INNER JOIN", join.table);
 
         // Ensure USING XOR ON
         if ((join.inner.on && join.inner.using) ||
             (!join.inner.on && !join.inner.using)) {
-            throw { msg : "USING ^ ON check failed" };
+            throw { msg : "Only USING xor ON may be used" };
         }
 
         // Load expression would throw on a null value, so
@@ -213,22 +223,13 @@ export class From extends Component {
     constructor(from : Model.From) {
         super();
 
-        this._first = new InitialJoin(from.first);
+        // The initial JOIN is guaranteed to be present, otherwise
+        // the whole FROM component would be missing
+        this._first = new InitialJoin(this, from.first);
 
+        // Possibly adding subsequent joins.
         if (from.joins) {
-            from.joins.forEach(j => {
-                if(j.cross) {
-                    this._joins.push(new CrossJoin(j));
-                } else if (j.inner) {
-                    this._joins.push(new InnerJoin(j));
-                } else {
-                    throw `Unknown JOIN type: ${j.cross}`;
-
-                }
-            });
-        } else {
-            // There should at least be a list
-            this._joins = [];
+            from.joins.forEach(this.addJoin, this);
         }
     }
 
@@ -269,6 +270,60 @@ export class From extends Component {
     }
 
     /**
+     * Appends the given JOIN to the list of current JOINs.
+     *
+     * @param toAdd The definition of the JOIN to add
+     *
+     * @return A SyntaxTree.Join instance matching the type of the model.
+     */
+    addJoin(toAdd : Model.Join) {
+        let toReturn : Join;
+
+        // Construct an instance of a matching type
+        if(toAdd.cross) {
+            toReturn = new CrossJoin(this, toAdd);
+        } else if (toAdd.inner) {
+            toReturn = new InnerJoin(this, toAdd);
+        } else {
+            throw `Unknown JOIN type: ${toAdd}`;
+        }
+
+        // Persist the new instance
+        this._joins.push(toReturn);
+
+        return (toReturn);
+    }
+
+    /**
+     * Removes a specific JOIN instance that is already part
+     * of this FROM clause.
+     */
+    removeJoin(toRemove : Join) {
+        // Is this the only table that is part of the FROM clause?
+        if (this._first === toRemove && this._joins.length === 0) {
+            throw { "err" : "Can't remove only table" }
+        }
+
+        // Do we need to re-assign the first item?
+        if (this._first === toRemove) {
+            // Remove an item from the list of subsequent JOINs
+            const newInitial = this._joins.pop();
+
+            // And make it the new inital JOIN
+            const newInitialTable = newInitial.toModel().table;
+            this._first = new InitialJoin(this, newInitialTable);
+        } else {
+            // Remove JOIN from list of subsequent JOINs
+            const removalIndex = this._joins.indexOf(toRemove);
+            if (removalIndex >= 0) {
+                this._joins.splice(removalIndex, 1);
+            } else {
+                throw { "err" : "Attempted to remove not existing JOIN" }
+            }
+        }
+    }
+
+    /**
      * @return The SQL-string-representation of this clause
      */
     toString() : string {
@@ -281,6 +336,10 @@ export class From extends Component {
         return (toReturn);
     }
 
+    /**
+     * @return A description that could be used to create a new
+     *         instance that is equal to this instance.
+     */
     toModel() : Model.From {
         let toReturn : Model.From = {
             first : this._first.toModel().table,
