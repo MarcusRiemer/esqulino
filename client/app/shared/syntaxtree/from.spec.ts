@@ -21,7 +21,7 @@ describe('INNER JOIN', () => {
             }
         }
 
-        expect( () => { new SyntaxTree.InnerJoin(model) }).toThrow();
+        expect( () => { new SyntaxTree.InnerJoin(null, model) }).toThrow();
     });
 });
 
@@ -45,7 +45,7 @@ describe('FROM', () => {
     });
 
     it('with a two table comma join', () => {
-        const model = {
+        const model : Model.From = {
             first : {
                 name : "person",
                 alias : "pe"
@@ -70,7 +70,7 @@ describe('FROM', () => {
     });
 
     it('with a two table cross join', () => {
-        const model = {
+        const model : Model.From = {
             first : {
                 name : "person",
                 alias : "pe"
@@ -94,7 +94,7 @@ describe('FROM', () => {
     });
 
     it('with a two table INNER JOIN', () => {
-        const model = {
+        const model : Model.From = {
             first : {
                 name : "person",
                 alias : "pe"
@@ -122,6 +122,52 @@ describe('FROM', () => {
 
         expect(f.toString()).toEqual("FROM person pe\n\tINNER JOIN ort USING(bla)");
         expect(f.toModel()).toEqual(model);
-    });    
+    });
+
+    it('removal of initial join', () => {
+        const model : Model.From = {
+            first : { name : "first" },
+            joins : [
+                {
+                    cross: "cross",
+                    table: { "name" : "second" }
+                }
+            ]
+        };
+
+        let f = new SyntaxTree.From(model);
+        f.removeJoin(f.first);
+
+        expect(f.numberOfJoins).toEqual(0);
+        expect(f.first.toModel().table).toEqual(model.joins[0].table);
+    });
+
+    it('invalid removal of only join', () => {
+        const model : Model.From = {
+            first : { name : "first" },
+            joins : []
+        };
+
+        let f = new SyntaxTree.From(model);
+        expect( () => f.removeJoin(f.first)).toThrow();
+    });
+
+    it('removal of subsequent join', () => {
+        const model : Model.From = {
+            first : { name : "first" },
+            joins : [
+                {
+                    cross: "cross",
+                    table: { "name" : "second" }
+                }
+            ]
+        };
+
+        let f = new SyntaxTree.From(model);
+        f.removeJoin(f.getJoin(0));
+
+        expect(f.numberOfJoins).toEqual(0);
+        expect(f.first.toModel().table).toEqual(model.first);
+    });
 });
 

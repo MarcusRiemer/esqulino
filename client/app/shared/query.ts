@@ -138,13 +138,22 @@ export abstract class Query implements SyntaxTree.RemovableHost {
  * A query that provides a WHERE component
  */
 export interface QueryWhere extends Query {
-    where : SyntaxTree.Where;
+    where : SyntaxTree.Where
+}
+
+/**
+ * A query that provides a FROM component. Practically this should be
+ * the case for most of the queries that are written using esqulino,
+ * but theoretically it could be missing.
+ */
+export interface QueryFrom extends Query {
+    from : SyntaxTree.From
 }
 
 /**
  * A query that reads data, but never mutates anything.
  */
-export class QuerySelect extends Query implements QueryWhere {
+export class QuerySelect extends Query implements QueryFrom, QueryWhere {
 
     private _select : SyntaxTree.Select;
     private _from   : SyntaxTree.From;
@@ -261,7 +270,7 @@ export class QuerySelect extends Query implements QueryWhere {
 /**
  * An SQL DELETE query.
  */
-export class QueryDelete extends Query implements QueryWhere {
+export class QueryDelete extends Query implements QueryFrom, QueryWhere {
     private _delete : SyntaxTree.Delete;
     private _from   : SyntaxTree.From;
     private _where  : SyntaxTree.Where;

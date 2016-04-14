@@ -6,6 +6,11 @@ import {Table}                          from './table'
 export type DataTypeStrings = "INTEGER" | "REAL" | "TEXT";
 
 /**
+ * Types of INNER JOINs
+ */
+export type InnerJoinType = "cross" | "comma"
+
+/**
  * One "typical" logical leaf of an expression tree, postpones
  * the actual value lookup to execution time and ends recursion.
  */
@@ -98,7 +103,7 @@ export interface Delete {
 
 export interface Join {
     table : TableNameDefinition,
-    cross? : string,
+    cross? : InnerJoinType,
     inner? : {
         using? : string,
         on? : Expression

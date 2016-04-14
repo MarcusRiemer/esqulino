@@ -5,6 +5,9 @@ $sidebar-width:   250px;
 $component-width:  90px;
 $component-indent: 15px;
 
+/* This colour is used for the navigational parts of the UI */
+$background-nav: #f7f7f9;
+
 .editor {
     display: flex;
     align-items: stretch;
@@ -163,6 +166,12 @@ $component-indent: 15px;
 }
 
 .block-container .column.blueprint {
+  border-radius: 500px;
+  border: 2px dashed blue;
+  background-color: white;
+}
+
+.block-container .table.blueprint {
   border-radius: 500px;
   border: 2px dashed blue;
   background-color: white;

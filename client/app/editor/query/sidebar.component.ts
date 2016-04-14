@@ -66,8 +66,13 @@ export class SidebarComponent {
      *
      * @param evt The DOM drag event to enrich
      */
-    startTableDrag(evt : DragEvent) {
-        this._dragService.startTableDrag("sidebar", evt);
+    startTableDrag(table : string, evt : DragEvent) {
+        this._dragService.startTableDrag({
+                cross : "cross",
+                table : {
+                    name : table
+                }
+            }, "sidebar", evt);
     }
 
     /**
