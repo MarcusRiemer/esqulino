@@ -1,5 +1,5 @@
 import {
-    ExpressionParent, Removable, DataType, serializeDataType, parseDataType
+    ExpressionParent, Removable
 } from './common'
 import {Model}      from '../query'
 
@@ -8,6 +8,19 @@ import {Model}      from '../query'
  * to be kept in sync with the templates.
  */
 type TemplateId = "constant" | "column" | "parameter" | "binary" | "missing";
+
+/**
+ * Calculates the SQL type of the given string.
+ */
+export function determineType(constant : string) : Model.DataType {
+    if (/^-?\d+$/.test(constant)) {
+        return "INTEGER";
+    } else if (/^-?(\d+\.?\d*)$|(\d*\.?\d+)$/.test(constant)) {
+        return "REAL";
+    } else {
+        return "TEXT";
+    }
+}
 
 
 /**
@@ -147,14 +160,14 @@ export class MissingExpression extends Expression {
  * Tree.
  */
 export class ConstantExpression extends Expression {
-    private _type : DataType;
+    private _type : Model.DataType;
     private _value : string;
     
     constructor(expr : Model.ConstantExpression,
                 parent : ExpressionParent) {
         super("constant", parent);
 
-        this._type = parseDataType(expr.type);
+        this._type = expr.type;
         this._value = expr.value;
     }
 
@@ -165,7 +178,7 @@ export class ConstantExpression extends Expression {
         return (true);
     }
 
-    get type() : DataType {
+    get type() : Model.DataType {
         return (this._type);
     }
 
@@ -179,10 +192,10 @@ export class ConstantExpression extends Expression {
 
     toString() : string {
         switch(this._type) {
-        case DataType.Integer:
-        case DataType.Real:
+        case <Model.DataType>"INTEGER":
+        case <Model.DataType>"REAL":
             return (this._value);
-        case DataType.Text:
+        case <Model.DataType>"TEXT":
             return (`"${this._value}"`);
         }
     }
@@ -190,7 +203,7 @@ export class ConstantExpression extends Expression {
     toModel() : Model.Expression {
         return ({
             constant : {
-                type : serializeDataType(this._type),
+                type : this._type,
                 value : this._value
             }
         })

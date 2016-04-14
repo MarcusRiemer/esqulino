@@ -1,9 +1,10 @@
 import {Table}                          from './table'
 
 /**
- * Valid string values for data types
+ * Basic data types as inspired by SQLite.
  */
-export type DataTypeStrings = "INTEGER" | "REAL" | "TEXT";
+export type DataType = "INTEGER" | "REAL" | "TEXT";
+
 
 /**
  * Types of INNER JOINs
@@ -25,7 +26,7 @@ export interface SingleColumnExpression {
  * ends recursion.
  */
 export interface ConstantExpression {
-    type : DataTypeStrings
+    type : DataType
     value : string
 }
 
