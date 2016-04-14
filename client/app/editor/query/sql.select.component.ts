@@ -3,7 +3,8 @@ import {Component, Input}               from 'angular2/core'
 import {DragService, SqlDragEvent}      from './drag.service'
 import {ExpressionComponent}            from './sql.expr.component'
 
-import {QuerySelect, Model, SyntaxTree}       from '../../shared/query'
+import {QuerySelect, Model, SyntaxTree} from '../../shared/query'
+import {NamedExpression}                from '../../shared/syntaxtree/select'
 
 @Component({
     selector : 'sql-select',
@@ -15,6 +16,10 @@ export class SelectComponent {
 
     constructor(public dragService : DragService) {
 
+    }
+
+    onColumnDragStart(expr : NamedExpression, evt : DragEvent) {
+        this.dragService.startExpressionDrag("query", evt, expr.expr);
     }
 
     onBlueprintDrag(evt : DragEvent) {

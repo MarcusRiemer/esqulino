@@ -13,7 +13,7 @@ export { ColumnExpression };
  * Allows an expression to be named, typically in "SELECT <expr> AS <name>"
  * contexts.
  */
-interface NamedExpression {
+export interface NamedExpression {
     name? : string;
     expr : Expression;
 }
@@ -190,8 +190,10 @@ export class Select extends Component implements ExpressionParent {
     }
 
     removeChild(formerChild : Expression) {
-        throw {
-            err : "Not implemented"
+        const removalIndex = this.columns.findIndex(v => v.expr === formerChild);
+
+        if (removalIndex >= 0) {
+            this.columns.splice(removalIndex, 1);
         }
     }
 }

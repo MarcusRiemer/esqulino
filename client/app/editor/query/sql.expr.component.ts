@@ -96,8 +96,14 @@ export class ExpressionComponent {
 
         // And react according to the kind of the expression
         if (sqlEvt.expr.constant) {
-            // A constant value: But which value exactly?
-            const actualValue = prompt("Wert?");
+            // A constant value
+            let actualValue = sqlEvt.expr.constant.value;
+
+            // But if it comes from the sidebar, the value is only a placeholder
+            if (sqlEvt.origin === "sidebar") {
+                actualValue = prompt("Wert?");
+            }
+            
             if (actualValue) {
                 sqlEvt.expr.constant.value = actualValue;
                 this.expr.replaceSelf(sqlEvt.expr);
@@ -112,6 +118,10 @@ export class ExpressionComponent {
         } else {
             // Things that do not require any user interaction
             this.expr.replaceSelf(sqlEvt.expr);
+        }
+
+        if (this._dragService.activeSource) {
+            this._dragService.activeSource.removeSelf();
         }
 
         // Logging the changes
