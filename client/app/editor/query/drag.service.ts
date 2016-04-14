@@ -112,7 +112,7 @@ export class DragService {
      * @param origin The logical source of this operation
      * @param evt The DOM drag event to enrich
      */
-    startConstantDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {
+    startConstantDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {        
         this.dragStart(evt, {
             scope : ["expr", "constant"],
             origin : origin,

@@ -158,6 +158,9 @@ export class ConstantExpression extends Expression {
         this._value = expr.value;
     }
 
+    /**
+     * A constant expression always has a value.
+     */
     isComplete() : boolean {
         return (true);
     }

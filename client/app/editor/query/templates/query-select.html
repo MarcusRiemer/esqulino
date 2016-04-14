@@ -4,7 +4,9 @@
   <span *ngIf="select.allData"
         class="column"><span class="fa fa-star"></span></span>
   <span *ngFor="#column of select.columns; #last = last">
-    <span class="column">{{ column.expr.toString() }}<span *ngIf="column.name">&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.name }}</span></span>
+    <span class="column"
+          (dragstart)="onColumnDragStart(column, $event)"
+          draggable="true">{{ column.expr.toString() }}<span *ngIf="column.name">&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.name }}</span></span>
   </span>
   <span *ngIf="showBlueprintDropTarget"
         (dragover)="onBlueprintDrag($event)"
