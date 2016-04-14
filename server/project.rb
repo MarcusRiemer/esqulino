@@ -152,7 +152,19 @@ end
 #
 #
 def update_project_description(project_folder, updated_project)
+  # Load project from disk
+  project_filename = File.join(project_folder, "config.yaml")
+  project = YAML.load_file(project_filename);
 
+  # Override properties from this project with properties from the
+  # updated project.
+  to_store = project.merge(updated_project)
+
+  File.open(project_filename, "w") do |f|
+    f.write(to_store.to_yaml)
+  end
+
+  return (to_store['id'])
 end
 
 # Retrieves all queries that are part of the given project.

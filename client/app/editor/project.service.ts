@@ -85,6 +85,22 @@ export class ProjectService {
     }
 
     /**
+     * Stores the description of the given project on the server. This will
+     * not store any queries or pages, just the user facing description.
+     *
+     * @param proj The project with the relevant description.
+     */
+    storeProjectDescription(proj : Project) {
+        const desc = proj.toModel();
+        const url = this._server.getProjectUrl(proj.id);
+
+        const toReturn = this._http.post(url, JSON.stringify(desc))
+            .catch(this.handleError);
+
+        return (toReturn);
+    }
+    
+    /**
      * Sends a certain query to the server to be executed.
      */
     runQuery(id : string) {
