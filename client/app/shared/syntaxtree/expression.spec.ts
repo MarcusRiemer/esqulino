@@ -1,6 +1,22 @@
 import {Model}         from '../query'
-import {DataType}      from './common'
 import * as SyntaxTree from './expression'
+
+describe('DataType', () => {
+    it('INTEGER', () => {
+        expect(SyntaxTree.determineType("1")).toEqual(<Model.DataType>"INTEGER");
+        expect(SyntaxTree.determineType("-1")).toEqual(<Model.DataType>"INTEGER");
+        expect(SyntaxTree.determineType("100")).toEqual(<Model.DataType>"INTEGER");
+    });
+
+    it('REAL', () => {
+        expect(SyntaxTree.determineType("1.")).toEqual(<Model.DataType>"REAL");
+        expect(SyntaxTree.determineType(".1")).toEqual(<Model.DataType>"REAL");
+        expect(SyntaxTree.determineType("1.1")).toEqual(<Model.DataType>"REAL");
+        expect(SyntaxTree.determineType("-1.")).toEqual(<Model.DataType>"REAL");
+        expect(SyntaxTree.determineType("-.1")).toEqual(<Model.DataType>"REAL");
+        expect(SyntaxTree.determineType("-1.1")).toEqual(<Model.DataType>"REAL");
+    });
+})
 
 describe('MissingExpression', () => {
     it('Only case', () => {
@@ -154,7 +170,7 @@ describe('BinaryExpression', () => {
     });
 
     it('testing two integer constants for equality', () => {
-        const strTypeInt = <Model.DataTypeStrings>"INTEGER";
+        const strTypeInt = <Model.DataType>"INTEGER";
         
         const model = {
             lhs : { constant : { type : strTypeInt, value : "0" } },
@@ -169,10 +185,10 @@ describe('BinaryExpression', () => {
         let lhs = <SyntaxTree.ConstantExpression> e.lhs;
         let rhs = <SyntaxTree.ConstantExpression> e.rhs;
 
-        expect(lhs.type).toEqual(DataType.Integer);
+        expect(lhs.type).toEqual(<Model.DataType>"INTEGER");
         expect(lhs.value).toEqual("0");
 
-        expect(rhs.type).toEqual(DataType.Integer);
+        expect(rhs.type).toEqual(<Model.DataType>"INTEGER");
         expect(rhs.value).toEqual("1");
         
         // Model and String serialization
@@ -181,7 +197,7 @@ describe('BinaryExpression', () => {
     });
 
     it('testing two string constants with the LIKE operator', () => {
-        const strTypeStr = <Model.DataTypeStrings>"TEXT";
+        const strTypeStr = <Model.DataType>"TEXT";
         
         const model = {
             lhs : { constant : { type : strTypeStr, value : "w a s d" } },
@@ -196,10 +212,10 @@ describe('BinaryExpression', () => {
         let lhs = <SyntaxTree.ConstantExpression> e.lhs;
         let rhs = <SyntaxTree.ConstantExpression> e.rhs;
 
-        expect(lhs.type).toEqual(DataType.Text);
+        expect(lhs.type).toEqual(<Model.DataType>"TEXT");
         expect(lhs.value).toEqual("w a s d");
 
-        expect(rhs.type).toEqual(DataType.Text);
+        expect(rhs.type).toEqual(<Model.DataType>"TEXT");
         expect(rhs.value).toEqual("%a%");
         
         // Model and String serialization
@@ -208,7 +224,7 @@ describe('BinaryExpression', () => {
     });
 
     it('replacing children', () => {
-        const strTypeStr = <Model.DataTypeStrings>"TEXT";
+        const strTypeStr = <Model.DataType>"TEXT";
         
         const model = {
             lhs : { constant : { type : strTypeStr, value : "w a s d" } },
