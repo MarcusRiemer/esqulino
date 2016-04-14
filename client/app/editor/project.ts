@@ -56,4 +56,12 @@ export class Project {
             this.queries.splice(index, 1);
         }
     }
+
+    toModel() : ProjectDescription {
+        return ({
+            id : this.id,
+            name : this.name,
+            description : this.description
+        });
+    }
 }

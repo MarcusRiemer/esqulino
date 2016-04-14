@@ -31,6 +31,13 @@ export class SettingsComponent {
     ngOnInit() {
         this._toolbarService.resetItems();
         this._toolbarService.savingEnabled = true;
+
+        let saveItem = this._toolbarService.saveItem;
+        saveItem.onClick.subscribe( (res) => {
+            saveItem.isInProgress = true;
+            this._projectService.storeProjectDescription(this.project)
+                .subscribe(res => saveItem.isInProgress = false);
+        });
         
         this._projectService.activeProject
             .subscribe(res => this.project = res);

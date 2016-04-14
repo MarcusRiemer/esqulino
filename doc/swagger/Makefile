@@ -4,8 +4,11 @@ DIST_FILES = ProjectDescription.json ProjectListDescription.json QueryResultDesc
 
 all : $(DIST_FILES)
 
+html/index.html : $(DIST_FILES) swagger.yaml
+	java -jar ~/bin/swagger-codegen-cli.jar generate -i swagger.yaml -l html -o html
 clean :
 	rm -f $(DIST_FILES)
+	rm -rf html
 
 ProjectDescription.json : $(SRC_PATH)/project.description.ts
 	typescript-json-schema $^ $(basename $@) > $@

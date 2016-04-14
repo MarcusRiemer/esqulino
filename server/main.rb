@@ -42,10 +42,22 @@ class ScratchSqlApp < Sinatra::Base
     json projects
   end
 
+  # Updating a specific project
+  post '/api/project/:id' do
+    project_id = params['id']
+    project_folder = File.join(given_data_dir, project_id)
+
+    # Ensure this is actually a project directory
+    assert_project_dir project_folder
+
+    return update_project_description(project_folder, JSON.parse(request.body.read))
+  end
+  
+
   # Info about a specific project
   get '/api/project/:id' do
     project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id);
+    project_folder = File.join(given_data_dir, project_id)
 
     # Ensure this is actually a project directory
     assert_project_dir project_folder
