@@ -22,6 +22,7 @@ class ScratchSqlApp < Sinatra::Base
   
   # Activate reloading and disable any caching when developing
   configure :development do
+    puts "esqulino is running in development mode"
     register Sinatra::Reloader
     set :static_cache_control, [:no_cache, :max_age => 0]
   end

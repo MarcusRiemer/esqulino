@@ -3,8 +3,7 @@
   <div class="component">SELECT</div>
   <span *ngFor="#column of select.columns; #last = last">
     <sql-expr [query]="query"
-              [expr]="column.expr">
-    </sql-expr>
+              [expr]="column.expr"></sql-expr>
   </span>
   <span *ngIf="showBlueprintDropTarget"
         (dragover)="onBlueprintDrag($event)"
