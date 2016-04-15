@@ -4,9 +4,9 @@
   <span *ngIf="select.allData"
         class="column"><span class="fa fa-star"></span></span>
   <span *ngFor="#column of select.columns; #last = last">
-    <span class="column"
-          (dragstart)="onColumnDragStart(column, $event)"
-          draggable="true">{{ column.expr.toString() }}<span *ngIf="column.name">&nbsp;<span class="keyword">AS</span>&nbsp;{{ column.name }}</span></span>
+    <sql-expr [query]="query"
+              [expr]="column">
+    </sql-expr>
   </span>
   <span *ngIf="showBlueprintDropTarget"
         (dragover)="onBlueprintDrag($event)"
