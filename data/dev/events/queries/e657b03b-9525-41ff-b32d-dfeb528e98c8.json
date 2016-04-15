@@ -1,6 +1,5 @@
 {
   "name": "Alles",
-  "id": "e657b03b-9525-41ff-b32d-dfeb528e98c8",
   "from": {
     "first": {
       "name": "person",
@@ -41,10 +40,23 @@
   },
   "where": {
     "first": {
-      "constant": {
-        "type": "INTEGER",
-        "value": "3"
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "geb_jahr",
+            "table": "person"
+          }
+        },
+        "rhs": {
+          "singleColumn": {
+            "column": "beginn",
+            "table": "ereignis"
+          }
+        },
+        "operator": "=",
+        "simple": true
       }
     }
-  }
+  },
+  "id": "e657b03b-9525-41ff-b32d-dfeb528e98c8"
 }
