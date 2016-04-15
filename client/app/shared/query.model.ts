@@ -55,6 +55,14 @@ export interface MissingExpression {
 }
 
 /**
+ * Denotes a *-Expression, that may be limited to a subset of
+ * existing tables.
+ */
+export interface StarExpression {
+    limitedTo? : TableNameDefinition
+}
+
+/**
  * We use a single base type for all kinds of expression, as
  * this vastly simplifies the storage process. Each kind of
  * concrete expression is stored under a key. Only one of these
@@ -66,6 +74,7 @@ export interface Expression {
     constant? : ConstantExpression
     missing? : MissingExpression
     parameter? : ParameterExpression
+    star? : StarExpression
 }
 
 export interface SelectColumn {
