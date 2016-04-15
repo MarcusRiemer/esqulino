@@ -1,6 +1,6 @@
 <div *ngIf="query"
      class="block-container">
-  <sql-select [select]="query.select"></sql-select>
+  <sql-select [query]="query"></sql-select>
   <sql-delete [query]="query"></sql-delete>
   <sql-from [query]="query"></sql-from>
   <sql-where [query]="query"></sql-where>

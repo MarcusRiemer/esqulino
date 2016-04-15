@@ -1,7 +1,8 @@
-import {Model}              from '../query'
+import {Model, Query, QueryFrom}   from '../query'
+import {Table}                     from '../table'
 
 import {
-    ColumnExpression, loadExpression
+    ColumnExpression, StarExpression, loadExpression
 } from './expression'
 import {
     Component, Expression, ExpressionParent
@@ -24,16 +25,8 @@ export interface NamedExpression {
 export class Select extends Component implements ExpressionParent {
     private _columns : NamedExpression[] = [];
 
-    /**
-     * If this is set to true, a "*" operator is appended
-     * to the column expressions.
-     */
-    private _allData : boolean;
-
-    constructor(select : Model.Select) {
-        super();
-
-        this._allData = !!select.allData;
+    constructor(select : Model.Select, query : Query) {
+        super(query);
         
         // Mapping the model types to concrete instances of the
         // syntax tree.
@@ -54,11 +47,13 @@ export class Select extends Component implements ExpressionParent {
      * @return True, if this query is completly defined
      */
     isComplete() : boolean {
-        return (this.numberOfColumns == 0 && !this._allData);
+        return (this._columns.length > 0);
     }
 
     /**
-     * Appends a new column to this SELECT statement
+     * Appends a new column to this SELECT statement. This is 
+     * essentially a shortcut for the more general appendExpression 
+     * method.
      *
      * @param table The name of the table the column belongs to
      * @param column The name of the column itself
@@ -73,6 +68,14 @@ export class Select extends Component implements ExpressionParent {
         }, as));
     }
 
+    /**
+     * Appends a new expression to the SELECT component.
+     *
+     * @param expr The expression to add
+     * @param as   The name of the expression
+     *
+     * @return The SyntaxTree node that matches the given model.
+     */
     appendExpression(expr : Model.Expression, as? : string) {
         // Load the model of the expression
         let toAdd : NamedExpression = {
@@ -91,10 +94,47 @@ export class Select extends Component implements ExpressionParent {
     }
 
     /**
-     * @return The number of columns this select statement retrieves
+     * Retrieves the number of columns that are involved in the SELECT
+     * statement. The result depends on the schema, because the number 
+     * of columns in the StarExpression can't be retrieved without
+     * the schema.
+     *
+     * @return The number of columns this SELECT statement retrieves
+     *
+     * @pre Hosting query has a schema
      */
     get numberOfColumns() {
-        return (this._columns.length);
+        // A star column may attribute to more then a single column
+        return (this._columns.map( val => {
+            if (val.expr instanceof StarExpression) {
+                // The number of columns in the StarExpression depends
+                // on the number of involved tables of the current schema.
+                const starExpr = <StarExpression> val.expr;
+                let tables : Table[] = [];
+                
+                if (starExpr.isLimited) {
+                    // If it is limited, only count that table
+                    tables.push(this._query.schema.find(t => t.name == starExpr.limitedTable));
+                } else {
+                    // Otherwise count all used tables
+                    let from = (<QueryFrom> this._query).from;
+
+                    // Don't forget the first table
+                    from.joins.concat(from.first).forEach( j => {
+                        tables.push(this._query.schema.find(t => t.name == j.name))
+                    });
+                }
+
+                // Combine number of all participating tables
+                return (tables
+                        .map( t => t.columns.length )
+                        .reduce( (l,r) => l + r, 0));
+            } else {
+                // Every expression that is not a StarExpression only
+                // add a single column.
+                return (1);
+            }
+        })).reduce( (l,r) => l + r, 0);
     }
 
     /**
@@ -118,31 +158,18 @@ export class Select extends Component implements ExpressionParent {
         return (this._columns);
     }
 
-    get allData() : boolean {
-        return (this._allData);
-    }
-
     /**
      * @return "SELECT [columns]"
      */
     toString() : string {
-        if (this.isComplete()) {
-            throw { "err" : "No columns and not using all columns" }
+        if (!this.isComplete()) {
+            throw new Error("Query is not complete");
         }
         
         // We start of with the normal keyword and DO NOT
         // add a trailing space as this will be inserted
         // in the loop below.
         var toReturn = "SELECT";
-
-        // Possibly add leading "*" Operator
-        if (this._allData) {
-            if (this.columns.length > 0) {
-                toReturn += " *,";
-            } else {
-                toReturn += " *";
-            }
-        }
 
         // And add all those columns
         this._columns.forEach((c, i) => {
@@ -178,8 +205,7 @@ export class Select extends Component implements ExpressionParent {
         });
         
         return ({
-            columns : toReturn,
-            allData : this._allData
+            columns : toReturn
         });
     }
 

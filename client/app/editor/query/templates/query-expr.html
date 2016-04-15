@@ -7,6 +7,9 @@
     <span (drop)="onMissingDrop($event)"
           class="missing"><span class="fa fa-question-circle"></span></span>
   </template>
+  <template ngSwitchWhen="star">
+    <span class="fa fa-star"></span>
+  </template>
   <template ngSwitchWhen="constant">
     <span (drop)="onConstantDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
@@ -43,6 +46,6 @@
     </span>
   </template>
   <template ngSwitchDefault>
-    Error: Unknown expression type identifier
+    Error: Unknown expression type identifier "{{expr.templateIdentifier}}"
   </template>
 </span>

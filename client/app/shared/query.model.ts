@@ -84,7 +84,6 @@ export interface SelectColumn {
 
 export interface Select {
     columns : SelectColumn[],
-    allData? : boolean
 }
 
 

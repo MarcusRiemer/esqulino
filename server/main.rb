@@ -20,9 +20,10 @@ class ScratchSqlApp < Sinatra::Base
 
   register Sinatra::MultiRoute
   
-  # Activate reloading when developing
+  # Activate reloading and disable any caching when developing
   configure :development do
     register Sinatra::Reloader
+    set :static_cache_control, [:no_cache, :max_age => 0]
   end
 
   # Static HTML files are served from here

@@ -1,4 +1,6 @@
-import {Model}              from '../query'
+import {
+    Model, Query
+} from '../query'
 
 import {
     Component
@@ -9,8 +11,8 @@ import {
  * SQLite.
  */
 export class Delete extends Component {
-    constructor(del : Model.Delete) {
-        super();
+    constructor(del : Model.Delete, query : Query) {
+        super(query);
     }
 
     toString() : string {

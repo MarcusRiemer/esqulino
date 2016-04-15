@@ -1,4 +1,4 @@
-import {Model}              from '../query'
+import {Model, Query}            from '../query'
 
 import {
     loadExpression, MissingExpression
@@ -220,8 +220,8 @@ export class From extends Component {
     private _first : InitialJoin;
     private _joins : Join[] = [];
 
-    constructor(from : Model.From) {
-        super();
+    constructor(from : Model.From, query : Query) {
+        super(query);
 
         // The initial JOIN is guaranteed to be present, otherwise
         // the whole FROM component would be missing

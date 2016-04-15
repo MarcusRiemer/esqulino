@@ -1,5 +1,5 @@
 import {Table}                          from '../table'
-import {Model}                          from '../query'
+import {Model, Query}                   from '../query'
 
 import { Expression, loadExpression }   from './expression'
 
@@ -52,6 +52,13 @@ export interface ExpressionParent extends RemovableHost {
  * because this eases development for beginners.
  */
 export abstract class Component {
+    // The query this component is part of
+    protected _query : Query;
+
+    constructor(query : Query) {
+        this._query = query;
+    }
+    
     /**
      * @return SQL String representation
      */

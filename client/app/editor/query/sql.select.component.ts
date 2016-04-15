@@ -12,7 +12,7 @@ import {NamedExpression}                from '../../shared/syntaxtree/select'
     directives: [ExpressionComponent]
 })
 export class SelectComponent {
-    @Input() select : SyntaxTree.Select;
+    @Input() query : QuerySelect;
 
     constructor(public dragService : DragService) {
 
@@ -38,6 +38,14 @@ export class SelectComponent {
         console.log(`Select.onBlueprintDrop:\n${this.select.toString()}`)
     }
 
+    /**
+     * Read Only View Accessor
+     * @return The SELECT part of the edited query.
+     */
+    get select() {
+        return (this.query.select);
+    }
+    
     /**
      * Read Only View Accessor
      * @return True, if a drop target for a new column should be shown.

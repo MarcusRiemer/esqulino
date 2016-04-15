@@ -172,8 +172,8 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
         }
 
         // Build SQL components from model
-        this._select = new SyntaxTree.Select(model.select);
-        this._from = new SyntaxTree.From(model.from);
+        this._select = new SyntaxTree.Select(model.select, this);
+        this._from = new SyntaxTree.From(model.from, this);
 
         if (model.where) {
             this._where = new SyntaxTree.Where(model.where, this);
@@ -288,8 +288,8 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
         }
 
         // Build SQL components from model
-        this._delete = new SyntaxTree.Delete(model.delete);
-        this._from = new SyntaxTree.From(model.from);
+        this._delete = new SyntaxTree.Delete(model.delete, this);
+        this._from = new SyntaxTree.From(model.from, this);
 
         if (model.where) {
             this._where = new SyntaxTree.Where(model.where, this);

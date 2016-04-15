@@ -9,7 +9,7 @@ import {Model}      from '../query'
  * expression is added, a template identifier needs to be added here
  * and a reaction is required in the expression HTML template file.
  */
-type TemplateId = "constant" | "column" | "parameter" | "binary" | "missing" | "star";
+export type TemplateId = "constant" | "column" | "parameter" | "binary" | "missing" | "star";
 
 /**
  * Calculates the SQL type of the given string.
@@ -385,6 +385,21 @@ export class StarExpression extends Expression {
         this._limitedTo = model.limitedTo;
     }
 
+    /**
+     * @return The schema name of the table that this expression is
+     *         limited to.
+     */
+    get limitedTable() {
+        return (this._limitedTo.name);
+    }
+
+    /**
+     * @return True, if this expression is somehow limited.
+     */
+    get isLimited() {
+        return (!!this._limitedTo);
+    }
+
     toString() {
         if (this._limitedTo) {
             const qualifier = (this._limitedTo.alias) ? this._limitedTo.alias : this._limitedTo.name;
@@ -518,8 +533,10 @@ export function loadExpression(expr : Model.Expression,
         return new MissingExpression(expr.missing, parent);
     } else if (expr.parameter) {
         return new ParameterExpression(expr.parameter, parent);
+    } else if (expr.star) {
+        return new StarExpression(expr.star, parent);
     }
-    throw { "error" : `Unknown expression: ${JSON.stringify(expr)}` }
+    throw new Error(`Unknown expression: ${JSON.stringify(expr)}`);
 }
 
 
