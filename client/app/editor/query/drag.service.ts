@@ -9,7 +9,7 @@ import {Injectable}             from 'angular2/core';
 /**
  * The scopes a drag event could affect
  */
-export type ScopeFlag = "expr" | "column" | "constant" | "parameter" | "compound" | "table";
+export type ScopeFlag = "expr" | "column" | "constant" | "parameter" | "compound" | "table" | "star";
 export type OriginFlag = "query" | "sidebar";
 
 /**
@@ -85,9 +85,14 @@ export class DragService {
         console.log(`Drag started: ${dragData}`);
     }
 
-    startExpressionDrag(origin : OriginFlag, evt : DragEvent, expr : Expression) {
-        // Convert the expression to the correct scope flags
-        const model = expr.toModel();
+    /**
+     * Calculates the scope flags for an expression model.
+     *
+     * @param model The expression model we want to scope.
+     *
+     * @return A list of scopes matching the model.
+     */
+    private calculateScopeFlags(model : Model.Expression) {
         let scope : ScopeFlag[] = ["expr"];
         if (model.binary) {
             scope.push("compound");
@@ -97,13 +102,40 @@ export class DragService {
             scope.push("parameter");
         } else if (model.singleColumn) {
             scope.push("column");
+        } else if (model.star) {
+            scope.push("column");
+            scope.push("star");
         }
 
+        return (scope);
+    }
+
+    /**
+     * Start dragging an arbitrary expression, which may or may not have
+     * some kind of source attached.
+
+     * @param model The model to insert at the drop location
+     * @param origin The logical source of this operation
+     * @param evt The DOM drag event to enrich
+     * @param source A node that is associated as a logical source.
+     */
+    startExpressionModelDrag(model : Model.Expression,
+                             origin : OriginFlag, evt : DragEvent, source? : Removable) {
         this.dragStart(evt, {
-            scope : scope,
+            scope : this.calculateScopeFlags(model),
             origin : origin,
             expr : model
-        }, expr);
+        }, source);
+    }
+
+    /**
+     * Start to drag an existing expression.
+     *
+     * @param origin The logical source of this operation
+     * @param evt The DOM drag event to enrich
+     */
+    startExistingExpressionDrag(origin : OriginFlag, evt : DragEvent, expr : Expression) {
+        this.startExpressionModelDrag(expr.toModel(), origin, evt, expr);
     }
 
     /**
@@ -113,16 +145,12 @@ export class DragService {
      * @param evt The DOM drag event to enrich
      */
     startConstantDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {        
-        this.dragStart(evt, {
-            scope : ["expr", "constant"],
-            origin : origin,
-            expr : {
-                constant : {
-                    type : "INTEGER",
-                    value : "1"
-                }
+        this.startExpressionModelDrag({
+            constant : {
+                type : "INTEGER",
+                value : "1"
             }
-        }, source);
+        }, origin, evt, source);
     }
 
     /**
@@ -133,16 +161,12 @@ export class DragService {
      */
     startColumnDrag(table : string, column : string,
                     origin : OriginFlag, evt : DragEvent, source? : Removable) {
-        this.dragStart(evt, {
-            scope : ["expr", "column"],
-            origin : origin,
-            expr : {
-                singleColumn : {
-                    column : column,
-                    table : table
-                }
+        this.startExpressionModelDrag({
+            singleColumn : {
+                column : column,
+                table : table
             }
-        }, source);
+        }, origin, evt, source);
     }
 
     /**
@@ -151,18 +175,14 @@ export class DragService {
      * @param evt The DOM drag event to enrich
      */
     startCompoundDrag(operator : string, origin : OriginFlag, evt : DragEvent, source? : Removable) {
-        this.dragStart(evt, {
-            scope : ["expr", "compound"],
-            origin : origin,
-            expr : {
-                binary : {
-                    lhs : { missing : { } },
-                    rhs : { missing : { } },
-                    operator : operator,
-                    simple : true
-                }
+        this.startExpressionModelDrag({
+            binary : {
+                lhs : { missing : { } },
+                rhs : { missing : { } },
+                operator : operator,
+                simple : true
             }
-        }, source);
+        }, origin, evt, source);
     }
 
     /**
@@ -171,15 +191,12 @@ export class DragService {
      * @param evt The DOM drag event to enrich
      */
     startParameterDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {
-        this.dragStart(evt, {
-            scope : ["expr", "parameter"],
-            origin : origin,
-            expr : {
-                parameter : {
-                    key : "key"
-                }
-            }                
-        }, source);
+        this.startExpressionModelDrag({
+            parameter : {
+                key : "key"
+            }
+        }, origin, evt, source);
+       
     }
 
     /**

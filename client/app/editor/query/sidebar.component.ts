@@ -33,6 +33,16 @@ export class SidebarComponent {
     }
 
     /**
+     * Starts a drag event involving a star operator
+     *
+     * @param evt The DOM drag event to enrich
+     */
+    startStarDrag(evt : DragEvent) {
+        this._dragService.startExpressionModelDrag({ star : { } }, "sidebar", evt);
+    }
+
+
+    /**
      * Starts a drag event involving a column
      *
      * @param evt The DOM drag event to enrich

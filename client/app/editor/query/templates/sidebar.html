@@ -24,6 +24,14 @@
   </div>
 
   <div class="block-container center">
+    <div (dragstart)="startStarDrag($event)"
+         class="column"
+         draggable="true">
+      <span class="fa fa-star" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <div class="block-container center">
     <div (dragstart)="startCompoundDrag($event)"
          class="expression"
          draggable="true">
