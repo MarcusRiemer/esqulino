@@ -1,6 +1,5 @@
 {
   "name": "Personen",
-  "id": "86e70348-0e24-4c08-9d13-d2dd88c13faa",
   "from": {
     "first": {
       "name": "person",
@@ -27,7 +26,7 @@
         },
         "as": "pName"
       }
-    ],
-    "allData": false
-  }
+    ]
+  },
+  "id": "86e70348-0e24-4c08-9d13-d2dd88c13faa"
 }

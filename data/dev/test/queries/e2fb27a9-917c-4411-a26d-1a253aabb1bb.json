@@ -1,5 +1,5 @@
 {
-  "name": "key_value 2",
+  "name": "Test 2",
   "from": {
     "first": {
       "name": "key_value"
@@ -18,15 +18,15 @@
     "first": {
       "binary": {
         "lhs": {
-          "constant": {
-            "type": "TEXT",
-            "value": "zwei"
+          "singleColumn": {
+            "column": "key",
+            "table": "key_value"
           }
         },
         "rhs": {
-          "singleColumn": {
-            "column": "value",
-            "table": "key_value"
+          "constant": {
+            "type": "INTEGER",
+            "value": "3"
           }
         },
         "operator": "=",
@@ -34,5 +34,5 @@
       }
     }
   },
-  "id": "a0495663-6fd3-42b2-8167-acfebe778ed5"
+  "id": "e2fb27a9-917c-4411-a26d-1a253aabb1bb"
 }

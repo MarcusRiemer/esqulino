@@ -1,0 +1,30 @@
+{
+  "name": "Löschende Abfrage",
+  "delete": {},
+  "from": {
+    "first": {
+      "name": "key_value"
+    }
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "key",
+            "table": "key_value"
+          }
+        },
+        "rhs": {
+          "constant": {
+            "type": "INTEGER",
+            "value": "1"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  },
+  "id": "ddb116df-8025-4b96-bef5-29cb36936161"
+}
