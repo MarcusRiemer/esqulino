@@ -19,7 +19,7 @@ export class SelectComponent {
     }
 
     onColumnDragStart(expr : NamedExpression, evt : DragEvent) {
-        this.dragService.startExpressionDrag("query", evt, expr.expr);
+        this.dragService.startExistingExpressionDrag("query", evt, expr.expr);
     }
 
     onBlueprintDrag(evt : DragEvent) {

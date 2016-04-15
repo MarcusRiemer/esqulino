@@ -70,7 +70,7 @@ export class ExpressionComponent {
      * Something has been dropped onto a constant value
      */
     onExpressionDragStart(evt : DragEvent) {
-        this._dragService.startExpressionDrag("query", evt, this.expr);
+        this._dragService.startExistingExpressionDrag("query", evt, this.expr);
     }
 
     /**

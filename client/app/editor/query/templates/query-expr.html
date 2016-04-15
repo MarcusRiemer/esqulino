@@ -8,7 +8,10 @@
           class="missing"><span class="fa fa-question-circle"></span></span>
   </template>
   <template ngSwitchWhen="star">
-    <span class="fa fa-star"></span>
+    <span (dragstart)="onExpressionDragStart($event)"
+          class="column">
+      <span class="fa fa-star"></span>
+    </span>
   </template>
   <template ngSwitchWhen="constant">
     <span (drop)="onConstantDrop($event)"
