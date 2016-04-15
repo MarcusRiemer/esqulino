@@ -21,7 +21,7 @@
         <li class="nav-item"
             *ngFor="#query of project?.queries">
           <a class="nav-link" [routerLink]="['Query', {queryId : query.id}]">
-            <span class="fa fa-search fa-fw"></span>
+            <span class="fa {{ iconForQuery(query) }} fa-fw"></span>
             {{ query.name }}
           </a>
           <span [hidden]="!query.isDirty"
