@@ -5,9 +5,11 @@ import {Model}      from '../query'
 
 /**
  * Valid template identifiers. Sadly a leaky abstraction that needs
- * to be kept in sync with the templates.
+ * to be kept in sync with the templates. Every time a new type of
+ * expression is added, a template identifier needs to be added here
+ * and a reaction is required in the expression HTML template file.
  */
-type TemplateId = "constant" | "column" | "parameter" | "binary" | "missing";
+type TemplateId = "constant" | "column" | "parameter" | "binary" | "missing" | "star";
 
 /**
  * Calculates the SQL type of the given string.
@@ -363,6 +365,62 @@ export class ColumnExpression extends Expression {
     replaceChild(formerChild : Expression, newChild : Expression) {
         throw {
             err : "The column expression should never have children"
+        }
+    }
+}
+
+/**
+ * Represents the SQL "*" Operator that is most commonly used in
+ * the SELECT component. This expression can be limited to a certain
+ * table, but expands over all tables if it is not limited.
+ */
+export class StarExpression extends Expression {
+    // The table definition this expression is limited to
+    private _limitedTo : Model.TableNameDefinition;
+
+    constructor(model : Model.StarExpression,
+                parent : ExpressionParent) {
+        super("star", parent);
+
+        this._limitedTo = model.limitedTo;
+    }
+
+    toString() {
+        if (this._limitedTo) {
+            const qualifier = (this._limitedTo.alias) ? this._limitedTo.alias : this._limitedTo.name;
+            return (`${qualifier}.*`);
+        } else {
+            return ("*");
+        }
+    }
+    
+
+    toModel() : Model.Expression {
+        let coreData : Model.StarExpression = {};
+
+        if (this._limitedTo) {
+            coreData.limitedTo = this._limitedTo;
+        }
+        
+        return ({
+            star : coreData
+        });
+    }
+
+    /**
+     * @return True, a StarExpression is complete by definition
+     */
+    isComplete() {
+        return (true);
+    }
+
+    /**
+     * Throws an exception, as a StarExpression is not allowed to
+     * have any children.
+     */
+    replaceChild(formerChild : Expression, newChild : Expression) {
+        throw {
+            err : "The star expression should never have children"
         }
     }
 }

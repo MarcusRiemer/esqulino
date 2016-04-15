@@ -143,6 +143,44 @@ describe('ColumnExpression', () => {
     });
 });
 
+describe('StarExpression', () => {
+    it('for all columns', () => {
+        const model : Model.StarExpression = { };
+
+        let s = new SyntaxTree.StarExpression(model, null);
+
+        expect(s.toModel().star).toEqual(model);
+        expect(s.toString()).toEqual("*");
+    });
+
+    it('for a specific table', () => {
+        const model : Model.StarExpression = {
+            limitedTo : {
+                name : "table"
+            }
+        };
+
+        let s = new SyntaxTree.StarExpression(model, null);
+
+        expect(s.toModel().star).toEqual(model);
+        expect(s.toString()).toEqual("table.*");
+    });
+    
+    it('for a specific table with alias', () => {
+        const model : Model.StarExpression = {
+            limitedTo : {
+                name : "table",
+                alias : "t"
+            }
+        };
+
+        let s = new SyntaxTree.StarExpression(model, null);
+
+        expect(s.toModel().star).toEqual(model);
+        expect(s.toString()).toEqual("t.*");
+    });
+});
+
 describe('BinaryExpression', () => {
     it('testing two columns for inequality', () => {
         const model = {
