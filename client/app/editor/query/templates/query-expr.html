@@ -1,22 +1,21 @@
 <span (dragenter)="onAllowedDrag($event)"
       (dragover)="onAllowedDrag($event)"
       (dragleave)="onAllowedDragLeave($event)"
-      [ngSwitch]="expr.templateIdentifier"
-      draggable="true">
+      [ngSwitch]="expr.templateIdentifier">
   <template ngSwitchWhen="missing">
     <span (drop)="onMissingDrop($event)"
           class="missing"><span class="fa fa-question-circle"></span></span>
   </template>
   <template ngSwitchWhen="star">
     <span (dragstart)="onExpressionDragStart($event)"
-          class="column">
-      <span class="fa fa-star"></span>
-    </span>
+          draggable="true"
+          class="column"><span class="fa fa-star"></span></span>
   </template>
   <template ngSwitchWhen="constant">
     <span (drop)="onConstantDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"
+          draggable="true"
           class="constant">{{ expr }}</span>
   </template>
   <template ngSwitchWhen="column">
@@ -29,9 +28,7 @@
     <span (drop)="onParameterDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
-          class="parameter">
-      <span class="fa fa-user-plus"></span> {{ expr.key }}
-    </span>
+          class="parameter"><span class="fa fa-user-plus"></span>{{ expr.key }}</span>
   </template>
   <template ngSwitchWhen="binary">
     <span (dragstart)="onExpressionDragStart($event)"

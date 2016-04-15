@@ -52,7 +52,7 @@ export class DragService {
     private dragStart(evt : DragEvent, sqlEvt : SqlDragEvent, source? : Removable) {
         // There can only be a single drag event at once
         if (this._currentDrag || this._currentSource) {
-            throw { "err" : "Attempted to start a second drag" }
+            throw new Error ("Attempted to start a second drag");
         }
         
         this._currentDrag = sqlEvt;
