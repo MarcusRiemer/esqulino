@@ -1,35 +1,26 @@
-<span [ngSwitch]="expr.templateIdentifier">
+<span (dragenter)="onAllowedDrag($event)"
+      (dragover)="onAllowedDrag($event)"
+      (dragleave)="onAllowedDragLeave($event)"
+      [ngSwitch]="expr.templateIdentifier"
+      draggable="true">
   <template ngSwitchWhen="missing">
-    <span (dragenter)="onAllowedDrag($event)"
-          (dragover)="onAllowedDrag($event)"
-          (dragleave)="onAllowedDragLeave($event)"
-          (drop)="onMissingDrop($event)"
+    <span (drop)="onMissingDrop($event)"
           class="missing"><span class="fa fa-question-circle"></span></span>
   </template>
   <template ngSwitchWhen="constant">
-    <span (dragenter)="onAllowedDrag($event)"
-          (dragover)="onAllowedDrag($event)"
-          (dragleave)="onAllowedDragLeave($event)"
-          (drop)="onConstantDrop($event)"
+    <span (drop)="onConstantDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
-          draggable="true"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"
           class="constant">{{ expr }}</span>
   </template>
   <template ngSwitchWhen="column">
-    <span (dragenter)="onAllowedDrag($event)"
-          (dragover)="onAllowedDrag($event)"
-          (dragleave)="onAllowedDragLeave($event)"
-          (drop)="onColumnDrop($event)"
+    <span (drop)="onColumnDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           class="column">{{ expr }}</span>
   </template>
   <template ngSwitchWhen="parameter">
-    <span (dragenter)="onAllowedDrag($event)"
-          (dragover)="onAllowedDrag($event)"
-          (dragleave)="onAllowedDragLeave($event)"
-          (drop)="onParameterDrop($event)"
+    <span (drop)="onParameterDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           class="parameter">
