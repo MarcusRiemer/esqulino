@@ -34,7 +34,7 @@ describe('FROM', () => {
             }
         };
         
-        let f = new SyntaxTree.From(model)
+        let f = new SyntaxTree.From(model, null)
 
         expect(f.first.name).toEqual("person");
         expect(f.first.alias).toEqual("pe");
@@ -55,7 +55,7 @@ describe('FROM', () => {
             ]
         };
         
-        let f = new SyntaxTree.From(model)
+        let f = new SyntaxTree.From(model, null)
 
         expect(f.first.name).toEqual("person");
         expect(f.first.alias).toEqual("pe");
@@ -80,7 +80,7 @@ describe('FROM', () => {
             ]
         };
         
-        let f = new SyntaxTree.From(model)
+        let f = new SyntaxTree.From(model, null)
 
         expect(f.first.name).toEqual("person");
         expect(f.first.alias).toEqual("pe");
@@ -111,7 +111,7 @@ describe('FROM', () => {
             ]
         };
 
-        let f = new SyntaxTree.From(model)
+        let f = new SyntaxTree.From(model, null)
 
         expect(f.first.name).toEqual("person");
         expect(f.first.alias).toEqual("pe");
@@ -135,7 +135,7 @@ describe('FROM', () => {
             ]
         };
 
-        let f = new SyntaxTree.From(model);
+        let f = new SyntaxTree.From(model, null);
         f.removeJoin(f.first);
 
         expect(f.numberOfJoins).toEqual(0);
@@ -148,7 +148,7 @@ describe('FROM', () => {
             joins : []
         };
 
-        let f = new SyntaxTree.From(model);
+        let f = new SyntaxTree.From(model, null);
         expect( () => f.removeJoin(f.first)).toThrow();
     });
 
@@ -163,7 +163,7 @@ describe('FROM', () => {
             ]
         };
 
-        let f = new SyntaxTree.From(model);
+        let f = new SyntaxTree.From(model, null);
         f.removeJoin(f.getJoin(0));
 
         expect(f.numberOfJoins).toEqual(0);

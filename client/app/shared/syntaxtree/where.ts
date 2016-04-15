@@ -1,4 +1,4 @@
-import {Model}              from '../query'
+import {Model, Query}          from '../query'
 
 import {
     ColumnExpression, loadExpression
@@ -15,14 +15,11 @@ import {
 export class Where extends Component implements ExpressionParent, Removable {
 
     private _first : Expression;
-
-    private _parent : RemovableHost;
     
-    constructor(where : Model.Where, parent : RemovableHost) {
-        super();
+    constructor(where : Model.Where, query : Query) {
+        super(query);
 
         this._first = loadExpression(where.first, this);
-        this._parent = parent;
     }
 
     /**
@@ -69,7 +66,7 @@ export class Where extends Component implements ExpressionParent, Removable {
     }
 
     removeSelf() {
-        this._parent.removeChild(this);
+        this._query.removeChild(this);
     }
 
 }

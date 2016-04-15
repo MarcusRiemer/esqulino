@@ -174,8 +174,11 @@ export class ProjectService {
             id : null,
             name : table,
             select : {
-                columns : [],
-                allData : true
+                columns : [{
+                    expr : {
+                        star : { }
+                    }
+                }]
             },
             from : {
                 first : {

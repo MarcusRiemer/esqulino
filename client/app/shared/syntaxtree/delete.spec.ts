@@ -6,7 +6,7 @@ describe('DELETE', () => {
         const model : Model.Delete = {
         }
 
-        const w = new SyntaxTree.Delete(model);
+        const w = new SyntaxTree.Delete(model, null);
 
         expect(w.toString()).toEqual("DELETE");
         expect(w.toModel()).toEqual(model);

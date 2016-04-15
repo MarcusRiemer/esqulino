@@ -2,15 +2,14 @@ import {Model}         from '../query'
 import * as SyntaxTree from './select'
 
 describe('SELECT', () => {
-    it('with the *-Operator', () => {
+    it('with only the *-Operator', () => {
         const model : Model.Select = {
-            columns : [],
-            allData : true
+            columns : [{
+                expr : { star : { } }
+            }]
         };
         
-        const s = new SyntaxTree.Select(model);
-        expect(s.allData).toBeTruthy();
-        expect(s.numberOfColumns).toEqual(0);
+        const s = new SyntaxTree.Select(model, null);
         expect(s.toString()).toEqual("SELECT *");
         expect(s.toModel()).toEqual(model);
     });
@@ -21,11 +20,10 @@ describe('SELECT', () => {
                 { expr : { singleColumn : {column : "id", table : "person", alias : "p" } } },
                 { expr : { singleColumn : {column : "name" , table : "person" } } },
                 { expr : { singleColumn : {column : "alter" , table : "person" } }, as : "dasAlter" }
-            ],
-            allData : false
+            ]
         };
         
-        const s = new SyntaxTree.Select(model);
+        const s = new SyntaxTree.Select(model, null);
 
         // Grand picture
         expect(s.numberOfColumns).toEqual(3);
@@ -55,11 +53,10 @@ describe('SELECT', () => {
 
     it('can\'t be represented as string if entirely empty', () => {
         const model : Model.Select = {
-            columns : [],
-            allData : false
+            columns : []
         };
 
-        const s = new SyntaxTree.Select(model);
+        const s = new SyntaxTree.Select(model, null);
         expect(s.toModel()).toEqual(model);
         expect( () => s.toString()).toThrow();
     })
@@ -67,7 +64,6 @@ describe('SELECT', () => {
     it('adding a named column', () => {
         const model : Model.Select = {
             columns : [],
-            allData : false
         };
 
         const resultModel : Model.Select = {
@@ -78,11 +74,10 @@ describe('SELECT', () => {
                     },
                     as : "pname"
                 }
-            ],
-            allData : false
+            ]
         }
 
-        const s = new SyntaxTree.Select(model);
+        const s = new SyntaxTree.Select(model, null);
         s.appendColumn("person", "name", "pname");
 
         expect(s.numberOfColumns).toEqual(1);
@@ -92,8 +87,7 @@ describe('SELECT', () => {
 
     it('adding a unnamed column', () => {
         const model : Model.Select = {
-            columns : [],
-            allData : false
+            columns : []
         };
 
         const resultModel : Model.Select = {
@@ -103,11 +97,10 @@ describe('SELECT', () => {
                         singleColumn : {column : "name" , table : "person" }
                     }
                 }
-            ],
-            allData : false
+            ]
         }
 
-        const s = new SyntaxTree.Select(model);
+        const s = new SyntaxTree.Select(model, null);
         s.appendColumn("person", "name");
 
         expect(s.numberOfColumns).toEqual(1);

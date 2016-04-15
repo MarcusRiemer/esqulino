@@ -29,6 +29,7 @@ describe('MissingExpression', () => {
         // Model and String serialization
         expect( () => { c.toString() }).toThrow()
         expect(c.toModel().missing).toEqual(model);
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"missing")
     });
 });
 
@@ -44,6 +45,7 @@ describe('ConstantExpression', () => {
         // Model and String serialization
         expect(c.toString()).toEqual("0");
         expect(c.toModel().constant).toEqual(model);
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"constant")
     });
 
     it('Valid String', () => {
@@ -57,6 +59,7 @@ describe('ConstantExpression', () => {
         // Model and String serialization
         expect(c.toString()).toEqual(`"0"`);
         expect(c.toModel().constant).toEqual(model);
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"constant")
     });
 });
 
@@ -71,6 +74,7 @@ describe('ParameterExpression', () => {
         // Model and String serialization
         expect(c.toString()).toEqual(`@${model.key}`);
         expect(c.toModel().parameter).toEqual(model);
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"parameter")
     });
 
     it('Invalid Key: empty string', () => {
@@ -101,7 +105,8 @@ describe('ColumnExpression', () => {
 
         expect(c.columnName).toEqual(model.column);
         expect(c.hasTableQualifier).toBeFalsy();
-
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"column")
+        
         // Model and String serialization
         expect(c.toString()).toEqual(model.column);
         expect(c.toModel().singleColumn).toEqual(model);
@@ -118,6 +123,7 @@ describe('ColumnExpression', () => {
         expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeTruthy();
         expect(c.tableQualifier).toEqual("person");
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"column")
 
         // Model and String serialization
         expect(c.toString()).toEqual("person.name");
@@ -136,6 +142,7 @@ describe('ColumnExpression', () => {
         expect(c.columnName).toEqual("name");
         expect(c.hasTableQualifier).toBeTruthy();
         expect(c.tableQualifier).toEqual("p");
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"column")
 
         // Model and String serialization
         expect(c.toString()).toEqual("p.name");
@@ -147,10 +154,11 @@ describe('StarExpression', () => {
     it('for all columns', () => {
         const model : Model.StarExpression = { };
 
-        let s = new SyntaxTree.StarExpression(model, null);
+        let c = new SyntaxTree.StarExpression(model, null);
 
-        expect(s.toModel().star).toEqual(model);
-        expect(s.toString()).toEqual("*");
+        expect(c.toModel().star).toEqual(model);
+        expect(c.toString()).toEqual("*");
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"star")
     });
 
     it('for a specific table', () => {
@@ -160,10 +168,11 @@ describe('StarExpression', () => {
             }
         };
 
-        let s = new SyntaxTree.StarExpression(model, null);
+        let c = new SyntaxTree.StarExpression(model, null);
 
-        expect(s.toModel().star).toEqual(model);
-        expect(s.toString()).toEqual("table.*");
+        expect(c.toModel().star).toEqual(model);
+        expect(c.toString()).toEqual("table.*");
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"star")
     });
     
     it('for a specific table with alias', () => {
@@ -174,10 +183,11 @@ describe('StarExpression', () => {
             }
         };
 
-        let s = new SyntaxTree.StarExpression(model, null);
+        let c = new SyntaxTree.StarExpression(model, null);
 
-        expect(s.toModel().star).toEqual(model);
-        expect(s.toString()).toEqual("t.*");
+        expect(c.toModel().star).toEqual(model);
+        expect(c.toString()).toEqual("t.*");
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"star")
     });
 });
 
@@ -205,6 +215,7 @@ describe('BinaryExpression', () => {
         // Model and String serialization
         expect(e.toString()).toEqual("person.name <> stadt.name");
         expect(e.toModel().binary).toEqual(model);
+        expect(e.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"binary")
     });
 
     it('testing two integer constants for equality', () => {
@@ -232,6 +243,7 @@ describe('BinaryExpression', () => {
         // Model and String serialization
         expect(e.toString()).toEqual("0 = 1");
         expect(e.toModel().binary).toEqual(model);
+        expect(e.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"binary")
     });
 
     it('testing two string constants with the LIKE operator', () => {
@@ -259,6 +271,7 @@ describe('BinaryExpression', () => {
         // Model and String serialization
         expect(e.toString()).toEqual(`"w a s d" LIKE "%a%"`);
         expect(e.toModel().binary).toEqual(model);
+        expect(e.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"binary")
     });
 
     it('replacing children', () => {

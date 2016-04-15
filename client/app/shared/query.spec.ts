@@ -86,7 +86,6 @@ describe('SELECT Query', () => {
             name : 'test-whole',
             id : 'id',
             select : {
-                allData : false,
                 columns : [
                     { expr : { singleColumn : {column : "id", table : "person" } } },
                     { expr : { singleColumn : {column : "name" , table : "person" } } }
@@ -124,8 +123,7 @@ describe('SELECT Query', () => {
             name : 'where-simple',
             id : 'where-1',
             select : {
-                allData : true,
-                columns : []
+                columns : [{ expr : { star : { } } }]
             },
             from : {
                 first : {
@@ -143,7 +141,7 @@ describe('SELECT Query', () => {
         expect(q.name).toEqual("where-simple");
         expect(q.id).toEqual("where-1");
 
-        expect(q.select.numberOfColumns).toEqual(0);
+        expect(q.select.numberOfColumns).toEqual(3);
         expect(q.from.numberOfJoins).toEqual(0);
 
         expect(q.toSqlString()).toEqual("SELECT *\nFROM person\nWHERE 1");
@@ -155,8 +153,7 @@ describe('SELECT Query', () => {
             name : 'where-compare',
             id : 'where-2',
             select : {
-                allData : true,
-                columns : []
+                columns : [{ expr : { star : { } } }]
             },
             from : {
                 first : {
@@ -179,7 +176,7 @@ describe('SELECT Query', () => {
         expect(q.name).toEqual("where-compare");
         expect(q.id).toEqual("where-2");
 
-        expect(q.select.numberOfColumns).toEqual(0);
+        expect(q.select.numberOfColumns).toEqual(3);
         expect(q.from.numberOfJoins).toEqual(0);
 
         expect(q.toSqlString()).toEqual("SELECT *\nFROM person\nWHERE 1 <= 2");
