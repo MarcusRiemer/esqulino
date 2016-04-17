@@ -1,18 +1,10 @@
 # The esqulino-Project
 
-For a lack of a better name, this is all I have got at the moment. It's meant to be a phonetic play on the `SQL`-abbreviation ending in "lino", as many popular programs on the german KIKA ("KinderKanal", german for "childrens channel").
+For a lack of a better name, this is all I have got at the moment. It's meant to be a phonetic play on the `SQL`-abbreviation ending in "lino", which is used by many popular programs on the german KIKA ("KinderKanal", german for "childrens channel").
 
-# Installing and Running
+# The components
 
-This project consists of two components: A Ruby-webserver and a Angular2-client. I know there are loads of fancy task-runners out there, but my "normal" interface to all programming-related tasks is still a Makefile. Grunt is used to compile and copy stuff for the frontend, but all relevant commands are wrapped in the Makefile.
-
-* If you have the "big" dependencies installed (`ruby` for the Server and `node.js` for the client), a simple `make install-deps` should pull all dependencies.
-
-* After that, the client needs to be compiled once: `make client-compile`.
-
-* You may now run the server, to do this locally simply use `make server-run` and it will spin up a local webrick instance at port `9292`.
-
-Currently it is assumed that this project will run on a UNIX-like environment. Although running it on Windows should be possible, all helper scripts (and Makefiles) make a lot of UNIX-centric assumptions.
+This project consists of two components: A Ruby-webserver and a Angular2-client. I know there are loads of fancy task-runners out there, but my "normal" interface to all programming-related tasks is still a Makefile.
 
 ## Server
 
@@ -23,6 +15,20 @@ Requires `gem` and `bundle` to be available, dependencies are provided in a `Gem
 ## Client
 
 An Angular 2.0 app, even though Angular 2.0 is still in beta. I hope this changes once the thesis is complete ... It uses Typescript, because I really like my compiler to catch dumb errors.
+
+# Installing, Compiling and Running
+
+* If you have the "big" dependencies installed (`ruby` for the Server, `node.js` for the client), a simple `make install-deps` should pull all dependencies.
+
+* After that, the client needs to be compiled once: `make client-compile`.
+
+* You may now run the server, to do this locally simply use `make server-run` and it will spin up a local server instance listening on port `9292`.
+
+## About Windows ...
+
+Currently it is assumed that this project will built on a UNIX-like environment. Although building it on Windows should be possible, all helper scripts (and Makefiles) make a lot of UNIX-centric assumptions.
+
+But don't worry if you are only interested in *running* a esqulino instance. You will be better off using a pre-compiled distribution of the client, but running the server should work just fine.
 
 # License
 
