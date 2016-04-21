@@ -1,29 +1,34 @@
 \section{Anforderungsanalyse}
 
-Dieses Kapitel beschreibt die generellen Anforderungen an die Entwicklungsumgebung und einiger Beispielprojekte. Dabei werden auch einige theoretische Hintergründe betrachtet, speziell didaktische Konzepte für die Vermittlung von SQL oder mögliche Vorgehensweisen um Schüler bei der Entwicklung von Oberflächen sinnvoll anzuleiten. Den Schwerpunkt bildet die Beschreibung der beiden wichtigsten Komponenten der Entwicklungsumgebung: Den Editoren für SQL und Oberflächen.
+Dieses Kapitel beschreibt die generellen Anforderungen an die Entwicklungsumgebung und einiger Beispielprojekte. Dabei werden auch einige theoretische Hintergründe betrachtet, speziell didaktische Konzepte für die Vermittlung von SQL oder mögliche Vorgehensweisen um Schüler bei der Entwicklung von Oberflächen sinnvoll anzuleiten. Den Schwerpunkt bildet die Beschreibung der beiden wichtigsten Komponenten der Entwicklungsumgebung: Den spezialisierten Editoren für SQL und Oberflächen.
 
-Die hier ``erträumte'' Konzeption wird möglicherweise aufgrund der Endlichkeit der mir im Rahmen der Master-Thesis zur Verfügung stehenden Zeitspanne nicht vollständig umgesetzt werden können. Trotzdem ist eine möglichst vollständige Erfassung von Anforderungen unerläßlich, um im Falle einer Fortführung der Entwicklung nicht aufgrund von unberücksichtigten Anforderungen große Umbauarbeiten vornehmen zu müssen. Die Planung konkreter Umsetzungsstrategien, inklusive einer Erläuterung der notwendigen Schnittstellen, werden in Kapitel \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis} besprochen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, so wurden diese in Anlehnung an den ``Minus 100 Points''-Artikel von Eric Gunnerson\cite{gunnerson-minus-100} geprüft.
+Die hier ``erträumte'' Konzeption wird möglicherweise aufgrund der Endlichkeit der im Rahmen einer Master-Thesis zur Verfügung stehenden Zeitspanne nicht vollständig umgesetzt werden können. Trotzdem ist eine möglichst vollständige Erfassung von Anforderungen unerläßlich, um im Falle einer Fortführung der Entwicklung nicht aufgrund von unberücksichtigten Anforderungen große Umbauarbeiten vornehmen zu müssen. Die Planung konkreter Umsetzungsstrategien, inklusive einer Erläuterung der notwendigen Schnittstellen, werden in Kapitel \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis} besprochen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, so wurden diese in Anlehnung an den ``Minus 100 Points''-Artikel von Eric Gunnerson \cite{gunnerson-minus-100} geprüft.
 
 \info[inline]{Der Verzicht auf die technischen Hintergründe der Implementierung in diesem Kapitel soll es auch für ``normale'' Informatiklehrer verständlich machen, ohne Sie gleich mit den ``unwichtigen'' Details der Realisierung zu erschlagen.}
+
+\subsection{Zielgruppe}
+\label{sec:target-audience}
+
+\missing[inline]{Fehlt noch, halt Schüler ohne vertiefte Mathe- oder Englischkenntnisse.}
 
 \subsection{Grundprinzipien}
 \label{sec:principles}
 
-Nach der Betrachtung der zu bedienenden Zielgruppe \todo{Fehlt noch} und der Beschäftigung mit bereits existierenden Alternativen, ist es zunächst sinnvoll ein paar allgemeine Grundprinzipien zu formulieren. Diese Prinzipien bilden die Philosophie hinter der Schülerentwicklungsumgebung ab und dienen als Leitfaden für Designentscheidungen.
+Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit bereits existierenden Alternativen, ist es zunächst sinnvoll ein paar allgemeine Grundprinzipien zu formulieren. Diese Prinzipien bilden die Philosophie hinter der Schülerentwicklungsumgebung ab und dienen als Leitfaden für Designentscheidungen.
 
-Praktisch erlaubt das vor allem eine relativ akkurate Abschätzung, ob sich die Implementierung einer bestimmten Idee lohnt und wie sie zu priorisieren ist. Daher sind auch diese Prinzipien ihrer Bedeutung für diese Arbeit nach absteigend sortiert.
+Praktisch erlaubt das vor allem eine relativ akkurate Abschätzung, ob sich die Implementierung einer bestimmten Idee lohnt und wie sie zu priorisieren ist. Diese Sortierung dieser Prinzipien ist entsprechend ihrer Bedeutung absteigend sortiert, das wichtigste Prinzip wird also zuerst genannt..
 
 \begin{description}
 \item[Semantik vor Syntax] \hfill\\
   Den Lernenden sollen kontextsensitiv sinnvolle Operationen angeboten werden, optimalerweise mit einer kurzen Erläuterung, warum gerade nur diese Teilmenge an Operationen möglich ist. Die eigentliche Programmierung erfolgt dann durch die Kombination von Bausteinen, ähnlich wie bei der Lernsoftware ``Scratch''. Durch kontinuirliches Feedback der Entwicklungsumgebung sollen die Lernenden in die Lage versetzt werden, auch ohne ständige Rückversicherung bei der Lehrkraft eigene Ansätze zu erproben.
 \item[Motivation durch praktisch vorzeigbare Ergebnissen] \hfill\\
-  Typischerweise ist der Einstieg in die Programmierung von relativ langweiligen Programmen geprägt, häufig textbasierten Konsolenanwendungen. Im Sonderfall der Vermittlung von SQL Kenntnissen ist das Ergebnis der Arbeit sogar überhaupt nicht sinnvoll zu demonstrieren, weil die erstellten Abfragen isoliert für sich stehen und häufig auch nur in der Entwicklungsumgebung der jeweiligen Datenbank ausführbar sind. Mit der im Rahmen dieser Arbeit zu erstellenden Software sollen sich hingen praktisch relevante, allerdings sehr datenorientierte Programme umsetzen lassen. Diese verfügen über von den Lernenden zusammengestellte Eingabemasken um Daten einzufügen oder zu manipulieren und verschiedene Ausgabesichten um den Datenbestand sinnvoll zu präsentieren.
-\item[Schrittweise komplexere Benutzeroberfläche] \hfill \\
+  Der Einstieg in die Programmierung ist oftmals von relativ langweiligen Programmen geprägt, häufig textbasierten Konsolenanwendungen, welche sich nicht gut im Freundes- oder Bekanntenkreis präsentieren lassen. Im Sonderfall der Vermittlung von SQL Kenntnissen ist das Ergebnis der Arbeit sogar überhaupt nicht sinnvoll zu demonstrieren, weil die erstellten Abfragen isoliert für sich stehen und häufig auch nur in der Entwicklungsumgebung der jeweiligen Datenbank ausführbar sind. Mit der im Rahmen dieser Arbeit zu erstellenden Software sollen sich hingen praktisch relevante, allerdings sehr datenorientierte Programme umsetzen lassen. Diese verfügen über von den Lernenden zusammengestellte Eingabemasken um Daten einzufügen oder zu manipulieren und verschiedene Ausgabesichten um den Datenbestand sinnvoll zu präsentieren.
+\item[Schrittweise komplexere Benutzeroberfläche der Entwicklungsumgebung] \hfill \\
   Konventionelle Entwicklungsumgebungen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. Gerade wenn man aber dabei ist etwas Neues zu lernen kann es sinnvoll sein, die Menge der möglichen Optionen zu beschränken. In diesem Sinne sollte die Lehrkraft die Möglichkeit haben, den Funktionsumfang der Entwicklungsumgebung für Schüler gezielt zu reduzieren. Es sollten sich also Funktionen der Entwicklungsumgebung ausblenden lassen, wenn dies aus didaktischen Gründen sinnvoll erscheint. Zum Beispiel könnten bestimmte Bedienelemente oder Bestandteile von SQL ausgeblendet werden, wenn diese noch nicht behandelt worden sind.
 \item[Einfache Inbetriebnahme] \hfill \\
-  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten oder fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, hat eine möglichst einfache Inbetriebnahme dementsprechend Priorität. Prinzipiell stehen Informatiklehrkräfte bei dem Betrieb der jeweiligen Programme in der Schule vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren dieses Szenario zusätzlich.
+  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten, fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS \cite{statista-os-verbreitung}, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, ist eine möglichst einfache Inbetriebnahme von entsprechender Bedeutung. Die Informatiklehrkräfte stehen bei dem Betrieb der jeweiligen Programme in der Schule vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren dieses Szenario zusätzlich.
 \item[Fortführung der entwickelten Projekte] \hfill \\
-  Viele Lernumgebungen sind in sich geschlossene Systeme, deren Arbeitsergebnisse nur schwer in anderen Programmen oder Kontexten von Nutzen sind. Sobald der Lernende dann die Grenzen der verwendeten Lernsoftware erreicht hat, steckt er in einer Sackgasse fest. Die Arbeitsergebnisse dieser zu entwickelnden Software sollen daher zumindest einfach einsehbar sein, optimalerweise nach einem Export sogar mit gängigen externen Programmen erweiterbar.
+  Lernumgebungen wie Scratch oder der AppInventor sind in sich geschlossene Systeme, deren Arbeitsergebnisse nur schwer in anderen Programmen oder Kontexten von Nutzen sind. Sobald der Lernende dann die Grenzen der verwendeten Lernsoftware erreicht hat, steckt er in einem Dilemma: Es ist für ihn notwendig auf eine andere Software auszuweichen, in diese kann er sein bestehendes Projekt aber nicht einfach mitnehmen. Die Arbeitsergebnisse dieser zu entwickelnden Software sollen daher zumindest einfach einsehbar sein, optimalerweise nach einem Export sogar mit gängigen Entwicklungsumgebungen oder Texteditoren erweiterbar.
   
   
 \end{description}
@@ -31,7 +36,7 @@ Praktisch erlaubt das vor allem eine relativ akkurate Abschätzung, ob sich die 
 \subsection{``Out-of-Scope''\todo{Deutsch?}}
 \label{sec:out-of-scope}
 
-Umgekehrt ist es auch wichtig, den Umfang des Projekts für die Thesis zu begrenzen. Die folgenden Ideen wären mehr oder minder naheliegende Ergänzungen, welche den Rahmen dieser Thesis aber definitiv sprengen würden.
+Umgekehrt ist es auch wichtig, den Umfang des zu entwickelnden Programms auf einem im Rahmen der Thesis machbaren Umfang zu begrenzen. Die folgenden Ideen wären mehr oder minder naheliegende Ergänzungen, welche aufgrund der zur Verfügung stehenden Zeit aber nicht implementiert werden sollen.
 
 \begin{description}
 \item[Datenmodellierung] \hfill \\
@@ -45,17 +50,32 @@ Umgekehrt ist es auch wichtig, den Umfang des Projekts für die Thesis zu begren
 
 Dieses Kapitel beschreibt sehr allgemeinen Anforderungen an die Entwicklungsumgebung, die Details dazu werden in den spezifischeren Kapiteln besprochen, welche nach Möglichkeit verlinkt sind.
 
-Um die einfachste Inbetriebnahme der Software für Lernende zu gewährleisten, wird die Anwendung für Webbrowser entwickelt. Für die ersten Schritte der Softwareentwicklung mit SQL reicht dann ein beliebiger aktueller Browser. Diese Entscheidung bedeutet praktisch vor allem eine Verschiebung der Probleme mit der Inbetriebnahme auf z.B. eine Lehrperson. Es ist jedoch davon auszugehen, dass die Bereitstellung eines Serverdienstes in Zeiten von Virtualisierungs- und Containerdiensten keine nennenswerte Hürde mehr darstellt.
+Um die einfachste Inbetriebnahme der Software für Lernende zu gewährleisten, wird die Anwendung für Webbrowser entwickelt. Für die ersten Schritte der Softwareentwicklung mit SQL reicht dann ein beliebiger aktueller Browser. Diese Entscheidung bedeutet praktisch vor allem eine Verschiebung der Probleme mit der Inbetriebnahme auf z.B. eine Lehrperson. Es ist jedoch davon auszugehen, dass die Bereitstellung eines Serverdienstes in Zeiten von Virtualisierungs- und Containerumgebungen keine nennenswerte Hürde mehr darstellt.
 
-Nicht verschwiegen werden soll dabei allerdings auch der Nebeneffekt, dass der Betrieb der Entwicklungsumgebung auch für Schüler, im Gegensatz zum sehr einfachen Zugriff, deutlich erschwert wird. Im Endeffekt wird die Bereitstellung einer dezidierten Umgebung für den Server zur Pflichtaufgabe der jeweiligen Lehrperson. Dabei handelt es sich möglicherweise um einen Server in der Schule, einen ``privat greifbaren'' Server oder eine Cloud-Computing-Instanz im Internet.
+Nicht verschwiegen werden soll dabei allerdings auch der Nebeneffekt, dass der Betrieb der Entwicklungsumgebung auch für Schüler, im Gegensatz zum sehr einfachen Zugriff, deutlich erschwert wird. Faktisch wird die Bereitstellung einer dezidierten Umgebung für den Server zur Pflichtaufgabe der jeweiligen Lehrperson. Vom Betrieb eines dedizierten Servers in der Schule, über die Verwendung eines ``privat greifbaren'' Servers der Lehrperson bis hin zur Verwendung einer Cloud-Computing-Instanz im Internet sind unterschiedlichste Szenarien denkbar.
 
-Ebenfalls aus Gründen der einfacheren Zugänglichkeit sollte eine einzelne Serverinstanz in der Lage sein, mehrere Projekte simultan zu bedienen. Die Lehrperson kann also mit einem einzigen Serverprozess eine ganze Klasse versorgen. Eine Begleiterscheinung dieser Anforderung ist allerdings die notwendige Implementierung von zumindest rudimentären Zugriffsbeschränkungen.
+Ebenfalls aus Gründen der einfacheren Zugänglichkeit sollte eine einzelne Serverinstanz in der Lage sein, mehrere Projekte simultan zu bedienen. Die Lehrperson kann also mit einem einzigen Serverprozess eine ganze Klasse versorgen. Eine Begleiterscheinung dieser Anforderung ist allerdings die notwendige Implementierung von zumindest rudimentären Zugriffsbeschränkungen: im Normalfall sollen Schüler die Projekte ihrer Klassenkameraden zwar jederzeit begutachten, aber nicht modifizieren können.
 
 \subsubsection{Datenbanksystem}
 
-Eine der naheliegendsten zu treffenden Entscheidungen hat zwar einen technischen Hintergrund, ist aber trotzdem unbedingt Bestandteil dieser Anforderungsanalyse: Es geht um die Wahl des zu lehrenden Datenbanksystems. Dieser Aspekt hat einen unmittelbaren Einfluss auf die Inbetriebnahme der Entwicklingsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
+Eine der naheliegendsten zu treffenden Entscheidungen hat zwar einen technischen Hintergrund, ist aber trotzdem unbedingt Bestandteil dieser Anforderungsanalyse: Es geht um die Wahl des zu lehrenden Datenbanksystems. Dieser Aspekt hat einen unmittelbaren Einfluss auf den Betrieb der Entwicklingsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
 
-Im Hinblick auf die einfache Installation und Verwendung bietet sich eine eingebettete Datenbank an, da die Skalierung der von den Lernenden entwickelten Applikation vernachlässigt werden kann. Optimalerweise ist ein Backup des gesamten Datenbestandes mit einer einfachen Kopie einer Datei zu erledigen.
+Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbeständen sollten normalerweise im Bereich nur einiger Megabyte liegen und die in der Praxis möglicherweise einzige Unterscheidung von Zugriffsrechten wäre zwischen lesendem und schreibenden Zugriff. Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien zugrunde gelegt:
+
+\begin{description}  
+\item[Kostenlose Verfügbarkeit] \hfill \\
+  Der Betrieb des Datenbanksystems darf nicht mit Lizenzkosten für Schulen, Lehrkräft oder Lernende verbunden sein.
+\item[Einfacher Betrieb] \hfill \\
+  Zwar ist für den Einsatz von esqulino aufgrund des Browsers als Client schon die Nutzung eines Servers nötig, das Datenbanksystem sollte den Betrieb dennoch nicht mehr als unbedingt notwendig weiter verkomplizieren. Eine wesentliche Rolle spielt dabei die Platformunabhängigkeit: Das Datenbanksystem sollte auf jedem gängigen Betriebssystem lauffähig sein.  
+\item[Einfache Backups] \hfill \\
+  Die gewünschte Exportfunktion für Projekte macht es nötig, den gesamten Datenbestand vergleichsweise einfach exportieren und importieren zu können. Darüber hinaus sollte es auch für Lehrkräfte möglichst einfach sein mit allen Projekten zu einem anderen esqulino-Server umzuziehen.
+\item[Tools zur Modellierung] \hfill \\
+  Da diese Arbeit sich nicht mit der Datenmodellierung befasst, muss das entsprechende Datenbankschema extern erzeugt werden. Von einer guten Unterstützung für Modellierungsvorhaben profitiert dementsprechend indirekt auch esqulino.
+\item[Tools zur Entwicklung von SQL-Abfragen] \hfill \\
+  Sobald ein Entwickler an die Grenzen des SQL-Editor von esqulino stößt, soll es so einfach wie möglich sein die Abfragen in einem externen Editor zu schreiben und danach in Textform wieder an esqulino zu übergeben.
+\end{description}
+
+Das Kriterium der ``kostenlosen Verfügbarkeit'' ist dankenswerterweise sehr einfach zu erfüllen: Es existiert eine Vielzahl von praktisch eingesetzten quelloffenen Datenbanksystemen. Die Kriterien ``einfacher Betrieb'' und ``einfache Backups'' teilen die denkbaren Systeme recht eindeutig in zwei Lager: Eingebette Datenbanken lassen sich sehr einfach betreiben und sichern. Das starten eines weiteren SQL-Server-Prozesses ist bei dieser Betriebsart nicht nötig, der Im- oder Export des gesamten Datenbestandes erfordert nur das kopieren einer einzigen Datei.
 
 \unsure[inline]{Theoretisch ist die Menge an denkbaren Systemen fast unüberschaubar groß, praktisch sticht SQLite aus der Masse an Optionen heraus. Wie ausführlich muss ich das begründen?}
 
@@ -90,7 +110,7 @@ Um zumindest einen grundsätzlichen Schutz zu ermöglichen, können für ein Pro
 
 Im Sinne einer möglichst niedrigen Einstiegshürde soll es den Anwendern leicht gemacht werden, bestehende Projekte zu übernehmen. Im Informatikunterricht müssen häufiger zu Beginn bestimmte Schritte ausgeführt werden, ``weil das nun mal so ist'' (also eine ausführliche Erklärung zu diesem Zeitpunkt zu weit gehen würde). Im Falle des Sprachumfangs von SQL ist das zwar im Vergleich zu z.B. Java nicht ganz so dramatisch\footnote{``Herr Lehrer, was macht eigentlich dieses \texttt{public static void}?''}, aber nach Möglichkeit zu vermeiden.
 
-Dementsprechend sollte normalerweise jeder Schritt beim Anlegen eines neuen Projektes für die Schüler nachvollziehbar sein. Wenn dann aber doch einmal eine Serie von ``mechanisch auszuführenden'' Anweisungen erforderlich sein sollte, wäre es aber dennoch praktisch, diesen Vorgang durch eine Kopie eines schon bestehenden Projektes abzukürzen. Die Lehrkraft würde in diesem Fall ein Projekt für ihre Schüler vorbereiten, welches diese dann mit einem Klick in ein anders benanntes Projekt kopieren können. Es werden dann alle Bestandteile, mit Ausnahme der Zugriffsrechte, unter dem neuen Namen verfügbar gemacht.
+Dementsprechend sollte normalerweise jeder Schritt beim Anlegen eines neuen Projektes für die Schüler nachvollziehbar sein. Wenn dann aber doch einmal eine Serie von ``mechanisch auszuführenden'' Anweisungen erforderlich sein sollte, wäre es aber dennoch praktisch, diesen Vorgang durch eine Kopie eines schon bestehenden Projektes abzukürzen. Die Lehrkraft würde in diesem Fall ein Projekt für ihre Schüler vorbereiten, welches diese dann mit einem Klick in ein anders benanntes Projekt kopieren können. Es werden dann alle Bestandteile, möglicherweise mit einer einfachen Anpassung der Zugriffsrechte, unter dem neuen Namen verfügbar gemacht.
 
 \subsection{Didaktisch sinvolle Teilmengen von SQL}
 \label{sec:sql-subset}
@@ -118,11 +138,11 @@ Zunächst definieren wir einige mögliche Einschränkungen anhand der grundlegen
 
 \begin{figure}
   \centering \includegraphics{images/sql-steps.png}
-  \caption{Komponenten und sich ergebende Zwischenschritte bei der Verarbeitung einer SQL-Abfrage}
+  \caption{Komponenten und sich ergebende Zwischenschritte bei der Verarbeitung einer SQL-Abfrage von Prof. Dr. Ulrich Hoffmann.}
   \label{fig:sql-steps}
 \end{figure}
 
-Einige der hier beschriebenen Optionen sind redundant. Das liegt zum einen an SQL selbst, die Sprache sieht schlichtweg mehrere syntaktische Varianten für semantisch äquivalente Sachverhalte vor. Zum anderen kann es aber auch aus didaktischen Gründen sinnvoll sein, die Wissensvermittlung mit einer Reihe von Spezialfällen zu beginnen\todo{Beleg}.
+Einige der im folgenden beschriebenen Optionen sind redundant. Das liegt zum einen an SQL selbst, die Sprache sieht schlichtweg mehrere syntaktische Varianten für semantisch äquivalente Sachverhalte vor. Zum anderen kann es aber auch aus didaktischen Gründen sinnvoll sein, die Wissensvermittlung mit einer Reihe von Spezialfällen zu beginnen\todo{Beleg}.
 
 \begin{enumerate}
 \item \textbf{Projektionen mit \texttt{SELECT}} \\
@@ -131,6 +151,8 @@ Einige der hier beschriebenen Optionen sind redundant. Das liegt zum einen an SQ
   \item \label{feat:select-all} Auswahl aller Spalten (``Sternchen-Operator'' \texttt{SELECT *})
   \item \label{feat:select-column} Auswahl von Spalten
   \item \label{feat:select-single-function} Ausdrücke aus einfachen Funktionsaufrufen zulassen
+  \item \label{feat:select-simple-expression} Einfache Ausdrücke zulassen.
+  \item \label{feat:select-expression} Ausdrücke zulassen.
   \item \label{feat:select-limit} Beschränkung der Datenmenge mit \texttt{LIMIT}
   \end{enumerate}
 \item \textbf{Angabe von Datenquellen mit \texttt{FROM}} \\
@@ -144,7 +166,7 @@ Einige der hier beschriebenen Optionen sind redundant. Das liegt zum einen an SQ
   \item \label{feat:from-right-join} Rechte äußere Verknüpfung zulassen (\texttt{RIGHT OUTER JOIN}), erfordert \ref{feat:from-using} $\lor$ \ref{feat:from-on-simple}
   \item \label{feat:from-full-join} Volle äußere Verknüpfung zulassen (\texttt{FULL OUTER JOIN}), erfordert \ref{feat:from-using} $\lor$ \ref{feat:from-on-simple}
   \item \label{feat:from-using} \texttt{USING}-Bedingung zulassen
-  \item \label{feat:from-on-simple} Einfache \texttt{ON}-Bedingung mit einfachen vergleichenden Ausdrücken zulassen
+  \item \label{feat:from-on-simple} \texttt{ON}-Bedingung mit einfachen Ausdrücken zulassen
   \item \label{feat:from-recursive} Rekursive Verknüpfung zulassen 
   \item \label{feat:from-sub} Unterabfragen zulassen
   \end{enumerate}
@@ -155,6 +177,8 @@ Einige der hier beschriebenen Optionen sind redundant. Das liegt zum einen an SQ
   \item \label{feat:having-allow} \texttt{HAVING} zulassen
   \item \label{feat:where-and} Verknüpfungen mit \texttt{AND}
   \item \label{feat:where-or} Verknüpfungen mit \texttt{OR}
+  \item \label{feat:where-simple-expression} Einfachen Ausdrücke zulassen
+  \item \label{feat:where-expression} Beliebige Ausdrücke zulassen
   \end{enumerate}
 \item \textbf{Bildung von Gruppen mit \texttt{GROUP BY}}
   \begin{enumerate}
@@ -178,14 +202,16 @@ Nach dieser Betrachtung der mit der unmittelbaren SQL-Struktur zusammenhängende
 
 \begin{description}
 \item[Einfache Ausdrücke] \hfill\\
-  Einfache Ausdrücke unterliegen einer ganz festen Struktur, die keinerlei Schachtelung oder Verkettung von Ausdrücken zulässt, außer ggfs. der Negation. Für jeden möglichen einfachen Ausdruck steht eine dezidierte Eingabemöglichkeit im SQL-Editor zur Verfügung.
+  Einfache Ausdrücke unterliegen einer ganz festen Struktur, die nur sehr begrenzt die Schachtelung oder Verkettung von zusammengesetzten Ausdrücken zulässt. Vereinfacht gesagt soll die Auswertungsreihenfolge dieser Ausdrücke auch ohne die Verwendung von Klammern ``intuitiv'' eindeutig sein.
+  
+  Die Bearbeitung dieser Ausdrücke ist nicht völlig frei, sondern kann auch hinsichtlich der möglichen Operatoren oder der Struktur eingeschränkt werden. In diesem Fall kann die Lehrkraft einige Teilausdrücke für die Bearbeitung sperren.
 \item[Komplexe Ausdrücke] \hfill\\
-  Komplexe Ausdrücke lassen sich schachteln bzw. verketten und könnten mit einem Scratch-ähnlichen Editor für Blöcke bearbeitet werden.
+  Komplexe Ausdrücke lassen sich schachteln bzw. verketten und könnten mit dem Scratch-ähnlichen SQL-Editor frei bearbeitet werden.
 \item[Beliebige Ausdrücke] \hfill\\
   Textuell notierte Ausdrücke, die vom SQL-Editor nicht weiter geprüft werden sondern ungefiltert in die Abfrage eingesetzt werden. Sofern diese Art von Ausdrücken zugelassen wird erfolgt also auch keinerlei inhaltliche Einschränkung der zur Verfügung stehenden Möglichkeiten oder eine Syntaxüberprüfung.
 \end{description}
 
-Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisch sinvollen Einschränkungen definieren. Prinzipiell wäre es dabei auch denkbar, in unterschiedlichen Komponenten verschiedene Teilmengen der Ausdrücke zuzulassen, inhaltlich erscheint das aber wenig sinnvoll. Die Schüler sollen durchaus verstehen, dass es sich bei Ausdrücken in SQL um ein allgemeines Konzept handelt, welches Prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Oder plastisch ausgedrückt: Wenn sich die Schüler aus didaktischen Gründen erstmal nur mit Ausdrücke im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt.
+Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisch sinvollen Einschränkungen definieren. Prinzipiell wäre es dabei auch denkbar, in unterschiedlichen Komponenten verschiedene Teilmengen der Ausdrücke zuzulassen, inhaltlich erscheint das aber wenig sinnvoll\todo{Treffen: Meinung geändert}. Die Schüler sollen durchaus verstehen, dass es sich bei Ausdrücken in SQL um ein allgemeines Konzept handelt, welches Prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Oder plastisch ausgedrückt: Wenn sich die Schüler aus didaktischen Gründen erstmal nur mit Ausdrücke im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt.
 
 \begin{enumerate}
 \item \textbf{Allgemeine Optionen} \\
@@ -257,7 +283,7 @@ Angelehnt an die bei Racket genutzte Idee der Feature-Levels soll dieses Kapitel
 
 Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren. Es kommen also distinkte Bedienelemente für die verschiedenen Komponenten einer SQL Abfrage zum Einsatz, kein reiner Texteditor. Der komponentenorientierte Editor soll dabei nicht unbedingt die Konzeption von beliebigen Abfragen ermöglichen, wohl aber die in Kapitel \ref{sec:example-queries} \nameref{sec:example-queries} beschriebenen exemplarischen Arbeitsabläufe unterstützen. 
 
-Wenn ein Anwender der Entwicklungsumgebung an die Grenzen des unterstützenden Editors stößt, sollte er die Möglichkeit haben einmalig und für diese konkrete Abfrage eine Umwandlung in eine textbasierte Darstellung vornehmen zu können. Der umgekehrte Weg, also der Import von beliebigen SQL-Abfragen in den grafischen Editor, ist jedoch explizit ausgeschlossen.
+Wenn ein Anwender der Entwicklungsumgebung an die Grenzen des unterstützenden Editors stößt, sollte er die Möglichkeit haben einmalig und für diese konkrete Abfrage eine Umwandlung in eine textbasierte Darstellung vornehmen zu können. Der umgekehrte Weg, also der Import von beliebigen SQL-Abfragen in den grafischen Editor, ist dann jedoch nicht mehr möglich\todo{Treffen: Doof für UI}.
 
 Grundsätzlich bedürfen einige Komponenten der Abfrage besonderer Aufmerksamkeit, weil sie große Auswirkungen auf das Verhalten der anderer Komponenten haben. Vorrangig ist hier die \texttt{GROUP-BY} Komponente zu nennen. Sobald die Query mit einer \texttt{GROUP BY} Komponente ausgestattet wird ist der Zugriff auf die konkreten Spalten einzelner Zeilen z.B. im allgemeinen Fall nicht mehr möglich. Das hinzufügen (oder entfernen) dieser Komponente hat also große Auswirkungen auf die Korrektheit der gesamten Abfrage.
 
