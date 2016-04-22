@@ -209,20 +209,35 @@ export class Select extends Component implements ExpressionParent {
         });
     }
 
+    /**
+     * Replace an expression of this SELECT component.
+     * 
+     * @param formerChild The child to replace
+     * @param newChild The child that takes the place.
+     */
     replaceChild(formerChild : Expression, newChild : Expression) {
         const replaceIndex = this.columns.findIndex(v => v.expr === formerChild);
         if (replaceIndex >= 0) {
             this._columns[replaceIndex] = {
                 expr : newChild
             };
+        } else {
+            throw new Error("Attempted to replace non-existant child");
         }
     }
 
+    /**
+     * Remove an expression from this SELECT component.
+     * 
+     * @param formerChild The child to remove
+     */
     removeChild(formerChild : Expression) {
         const removalIndex = this.columns.findIndex(v => v.expr === formerChild);
 
         if (removalIndex >= 0) {
             this.columns.splice(removalIndex, 1);
+        } else {
+            throw new Error("Attempted to remove non-existant child");
         }
     }
 }
