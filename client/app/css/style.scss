@@ -1,5 +1,6 @@
 /* Editor layout */
-$sidebar-width:   250px;
+$sidebar-width: 250px;
+$navbar-height:  54px;
 
 /* SQL components */
 $component-width:  90px;
@@ -178,11 +179,16 @@ $background-nav: #f7f7f9;
 }
 
 .block-container .table-name {
-    color: limegreen;
+  color: limegreen;
 }
 
 .sidebar {
-    width: $sidebar-width;
+  position: fixed;
+  top: $navbar-height + 10px;
+  bottom: 0;
+  right: 0;
+  width: $sidebar-width;
+  overflow: scroll-y;
 }
 
 .sidebar .block .column {
