@@ -1,2 +1,2 @@
-SELECT p.person_id AS pId, p.vorname AS pName
-FROM person p
+SELECT person_id AS pId, vorname AS pName
+FROM person

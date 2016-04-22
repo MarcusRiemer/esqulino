@@ -1,4 +1,4 @@
-SELECT p.person_id AS pId, p.vorname AS pName
-FROM person p
-	JOIN ereignis e
+SELECT person_id AS pId, vorname AS pName, *
+FROM person
+	JOIN ereignis
 WHERE person.geb_jahr = ereignis.beginn
