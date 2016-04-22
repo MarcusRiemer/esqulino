@@ -1,5 +1,7 @@
+---
 password: test
 name: Ereignisse
 id: events
-description: Historische Ereignisse & Personen mit einigen Datumsangaben und einer kurzen Beschreibung
-preview : preview.jpg
+description: Historische Ereignisse & Personen mit einigen Datumsangaben und einer
+  kurzen Beschreibung
+preview: preview.jpg
