@@ -210,8 +210,11 @@ export class Select extends Component implements ExpressionParent {
     }
 
     replaceChild(formerChild : Expression, newChild : Expression) {
-        throw {
-            err : "Not implemented"
+        const replaceIndex = this.columns.findIndex(v => v.expr === formerChild);
+        if (replaceIndex >= 0) {
+            this._columns[replaceIndex] = {
+                expr : newChild
+            };
         }
     }
 

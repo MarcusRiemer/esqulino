@@ -36,6 +36,13 @@ export abstract class Query implements SyntaxTree.RemovableHost {
     }
 
     /**
+     * @return The schema definition of a table with the given name.
+     */
+    getTableSchema(name : string) {
+        return (this.schema.find(t => t.name == name));
+    }
+
+    /**
      * @return True, if this query could be serialized to SQL.
      */
     protected abstract isCompleteImpl() : boolean;
@@ -330,7 +337,6 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
         this._where = where;
         this.markDirty();
     }
-
     
     /**
      * Not everything can be removed from a DELETE query, but the following

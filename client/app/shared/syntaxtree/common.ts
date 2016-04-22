@@ -58,15 +58,22 @@ export abstract class Component {
     constructor(query : Query) {
         this._query = query;
     }
+
+    /**
+     * @return The query this component belongs to.
+     */
+    get query() : Query {
+        return (this._query);
+    }
     
     /**
      * @return SQL String representation
      */
-    public abstract toString() : string;
+    abstract toString() : string;
 
     /**
      * @return JSON model representation
      */
-    public abstract toModel() : any;
+    abstract toModel() : any;
 }
 

@@ -53,6 +53,13 @@ export class ExpressionComponent {
     }
 
     /**
+     * Something has been dropped onto a star expression
+     */
+    onStarDrop(evt : DragEvent) {
+        this.replaceWithDragged(evt);
+    }
+
+    /**
      * Something has been dropped onto a column
      */
     onColumnDrop(evt : DragEvent) {
