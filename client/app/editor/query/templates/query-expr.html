@@ -7,7 +7,8 @@
           class="missing"><span class="fa fa-question-circle"></span></span>
   </template>
   <template ngSwitchWhen="star">
-    <span (dragstart)="onExpressionDragStart($event)"
+    <span (drop)="onStarDrop($event)"
+          (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           class="column"><span class="fa fa-star"></span></span>
   </template>

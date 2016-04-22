@@ -44,6 +44,10 @@ export abstract class Join implements Removable {
         return (this._table.alias);
     }
 
+    get tableSchema() {
+        return (this._from.query.getTableSchema(this._table.name));
+    }
+
     /**
      * This is not exactly nice, but the frontend templating engine
      * needs to display something.
@@ -234,6 +238,20 @@ export class From extends Component {
     }
 
     /**
+     * @return All tables that are not used by this query.
+     */
+    get unusedTables() {
+        return (this._query.schema.filter( t => !this.isUsingTable(t.name)));
+    }
+
+    /**
+     * @return True, if the given table is used in this query.
+     */
+    isUsingTable(tableName : string) {
+        return (this.joinsAndInitial.find(j => j.name == tableName) != null);
+    }
+
+    /**
      * @return At the present state, the FROM component must be complete.
      */
     get isComplete() : boolean {
@@ -255,10 +273,17 @@ export class From extends Component {
     }
 
     /**
-     * @return Accessing all joins together
+     * @return Accessing all join apart from the first
      */
     get joins() : Join[] {
         return (this._joins);
+    }
+
+    /**
+     * @return All joins, including the initially mentioned table
+     */
+    get joinsAndInitial() : Join[] {
+        return ([this._first].concat(this._joins));
     }
 
     /**

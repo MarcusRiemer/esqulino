@@ -44,22 +44,30 @@
   <hr />
 
   <div class="block-container block">
-    <template ngFor #table [ngForOf]="query?.schema" #last="last" >
-      <div (dragstart)="startTableDrag(table.name, $event)"
+    <template ngFor #join [ngForOf]="query?.from.joinsAndInitial" #last="last" >
+      <div (dragstart)="startTableDrag(join.name, $event)"
            class="table"
            draggable="true">
         <span class="fa fa-table fa-fw"></span>
-        {{ table.name }}
+        {{ join.name }}
       </div>
       <ul>
-        <li *ngFor="#column of table.columns">
-          <span (dragstart)="startColumnDrag($event, table.name, column.name)"
+        <li *ngFor="#column of join.tableSchema.columns">
+          <span (dragstart)="startColumnDrag($event, join.name, column.name)"
                 class="column indent"
                 draggable="true">
             {{ column.name }}
           </span>
         </li>
       </ul>
+    </template>
+    <template ngFor #table [ngForOf]="query?.from.unusedTables" #last="last" >
+      <div (dragstart)="startTableDrag(table.name, $event)"
+           class="table"
+           draggable="true">
+        <span class="fa fa-table fa-fw"></span>
+        {{ table.name }}
+      </div>
       <hr [hidden]="last">
     </template>
   </div>
