@@ -19,7 +19,7 @@ export class SelectComponent {
     }
 
     onColumnDragStart(expr : NamedExpression, evt : DragEvent) {
-        this.dragService.startExistingExpressionDrag("query", evt, expr.expr);
+        this.dragService.startExistingExpressionDrag("select", evt, expr.expr);
     }
 
     onBlueprintDrag(evt : DragEvent) {
@@ -51,7 +51,7 @@ export class SelectComponent {
      * @return True, if a drop target for a new column should be shown.
      */
     get showBlueprintDropTarget() {
-        return (this.dragService.activeColumn);
+        return (this.dragService.activeColumn) && ! (this.dragService.activeFromSelect);
     }
 }
 

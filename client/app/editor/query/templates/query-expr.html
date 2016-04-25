@@ -4,37 +4,43 @@
       [ngSwitch]="expr.templateIdentifier">
   <template ngSwitchWhen="missing">
     <span (drop)="onMissingDrop($event)"
-          class="missing"><span class="fa fa-question-circle"></span></span>
+          class="missing"
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"><span class="fa fa-question-circle"></span></span>
   </template>
   <template ngSwitchWhen="star">
     <span (drop)="onStarDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
-          class="column"><span class="fa fa-star"></span></span>
+          class="column"
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"><span class="fa fa-star"></span></span>
   </template>
   <template ngSwitchWhen="constant">
     <span (drop)="onConstantDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
-          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"
           draggable="true"
-          class="constant">{{ expr }}</span>
+          class="constant"
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">{{ expr }}</span>
   </template>
   <template ngSwitchWhen="column">
     <span (drop)="onColumnDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
-          class="column">{{ expr }}</span>
+          class="column"
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">{{ expr }}</span>
   </template>
   <template ngSwitchWhen="parameter">
     <span (drop)="onParameterDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
-          class="parameter"><span class="fa fa-user-plus"></span>{{ expr.key }}</span>
+          class="parameter"
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"><span class="fa fa-user-plus"></span>{{ expr.key }}</span>
   </template>
   <template ngSwitchWhen="binary">
-    <span (dragstart)="onExpressionDragStart($event)"
+    <span (drop)="onBinaryDrop($event)"
+          (dragstart)="onExpressionDragStart($event)"
           draggable="true"
-          class="expression">
+          class="expression"
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">
       <sql-expr [expr]="expr.lhs"
                 [query]="query"
                 [topLevel]="'false'">

@@ -1,5 +1,5 @@
 export {
-    Expression, loadExpression, RemovableHost, Removable
+    Expression, ExpressionParent, loadExpression, RemovableHost, Removable
 } from './syntaxtree/common'
 
 export {
@@ -11,7 +11,7 @@ export {
 } from './syntaxtree/from'
 
 export {
-    Where
+    Where, WhereSubsequent
 } from './syntaxtree/where'
 
 export {
