@@ -70,7 +70,7 @@ $background-nav: #f7f7f9;
     font-family: monospace;
     cursor: default;
     font-size: 20px;
-    transition: font-size 200ms ease-in;
+    border: 2px solid transparent;
 }
 
 .block-container .keyword {
@@ -94,13 +94,10 @@ $background-nav: #f7f7f9;
 }
 
 .block-container .expression {
-    padding: 2px;
     border-radius: 500px;
+    border: 2px solid white;
     background-color: yellow;
-}
-
-.block-container .expression:hover {
-    background-color: orange;
+    border: 2px solid transparent
 }
 
 .block-container .expression {
@@ -109,8 +106,8 @@ $background-nav: #f7f7f9;
 }
 
 .block-container .current-drop-target {
-    transition: font-size 200ms ease-in;
-    font-size: 30px;
+    border-radius: 500px;
+    border: 2px solid black;
 }
 
 .block-container input {

@@ -1,6 +1,8 @@
 import {Component, Input}               from 'angular2/core'
 
-import {DragService, SqlDragEvent}      from './drag.service'
+import {
+    DragService, SqlDragEvent, OriginFlag
+} from './drag.service'
 
 import {Query, Model, SyntaxTree}       from '../../shared/query'
 
@@ -29,12 +31,37 @@ export class ExpressionComponent {
     private _currentDragOver : boolean = false;
 
     /**
+     * Searches for the top-level host of a certain expression.
+     */
+    private getDragOrigin(given : SyntaxTree.Expression) : OriginFlag {
+        // We don't care about the type too much during the search,
+        // but the final type will NOT be an expression.
+        let expr : any = given;
+
+        while (expr instanceof SyntaxTree.Expression) {
+            expr = expr.parent;
+        }
+
+        if (expr instanceof SyntaxTree.Select) {
+            return ("select");
+        } else if (expr instanceof SyntaxTree.From) {
+            return ("from");
+        } else if (expr instanceof SyntaxTree.Where ||
+                   expr instanceof SyntaxTree.WhereSubsequent) {
+            return ("where");
+        }
+
+        throw new Error(`Unknown drag origin: ${JSON.stringify(expr)}`);
+    }
+    
+    /**
      *
      */
     onAllowedDrag(evt : DragEvent) {
         // Indicates we can drop here
         evt.preventDefault();
-
+        evt.cancelBubble = true;
+        
         this._currentDragOver = true;
     }
 
@@ -74,10 +101,30 @@ export class ExpressionComponent {
     }
 
     /**
+     * Something has been dropped onto a binary expression
+     */
+    onBinaryDrop(evt : DragEvent) {
+        this.replaceWithDragged(evt);
+    }
+
+
+    /**
+     * Something has been dropped where this was not anticipated
+     */
+    onFallbackDrop(evt : DragEvent) {
+        // Without this prevention firefox will redirect the page to
+        // the drop data.
+        evt.preventDefault();
+
+        console.log("Unexpected drop");
+    }
+
+    /**
      * Something has been dropped onto a constant value
      */
     onExpressionDragStart(evt : DragEvent) {
-        this._dragService.startExistingExpressionDrag("query", evt, this.expr);
+        const scope = this.getDragOrigin(this.expr);
+        this._dragService.startExistingExpressionDrag(scope, evt, this.expr);
     }
 
     /**
@@ -94,9 +141,16 @@ export class ExpressionComponent {
         // Without this prevention firefox will redirect the page to
         // the drop data.
         evt.preventDefault();
+        evt.cancelBubble = true;
 
         // Remove visual dragging indicator
         this._currentDragOver = false;
+
+        // Chicken out early, if the drop target is the drag origin
+        if (this.expr == this._dragService.activeSource) {
+            console.log("Skipped drop on self");
+            return;
+        }
 
         // Grab the actual sql drag event
         const sqlEvt = <SqlDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
@@ -127,7 +181,9 @@ export class ExpressionComponent {
             this.expr.replaceSelf(sqlEvt.expr);
         }
 
-        if (this._dragService.activeSource) {
+        // Compare the origins, remove only if the have the same origin
+        if (this._dragService.activeSource &&
+            this.getDragOrigin(this.expr) === this._dragService.activeOrigin) {
             this._dragService.activeSource.removeSelf();
         }
 

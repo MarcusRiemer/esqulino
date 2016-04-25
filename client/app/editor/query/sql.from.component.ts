@@ -18,7 +18,7 @@ export class FromComponent {
     }
 
     onJoinDragStart(join : Join, evt : DragEvent) {
-        this.dragService.startTableDrag(join.toModel(), "query", evt, join);
+        this.dragService.startTableDrag(join.toModel(), "from", evt, join);
     }
 
     /**

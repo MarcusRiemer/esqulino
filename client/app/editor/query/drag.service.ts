@@ -10,7 +10,7 @@ import {Injectable}             from 'angular2/core';
  * The scopes a drag event could affect
  */
 export type ScopeFlag = "expr" | "column" | "constant" | "parameter" | "compound" | "table" | "star";
-export type OriginFlag = "query" | "sidebar";
+export type OriginFlag = "select"| "from" | "where" | "sidebar";
 
 /**
  * Abstract information about the drag event.
@@ -213,18 +213,43 @@ export class DragService {
         }, source);
     }
 
+    get activeOrigin() : OriginFlag {
+        return (this._currentDrag && this._currentDrag.origin);
+    }
+
     /**
      * @return True, if the current drag operation originated in the query
      */
     get activeFromQuery() {
-        return (this._currentDrag && this._currentDrag.origin == "query");
+        return (this._currentDrag && this._currentDrag.origin != <OriginFlag>"sidebar");
+    }
+
+    /**
+     * @return True, if the current drag operation originated in the SELECT of a query.
+     */
+    get activeFromSelect() {
+        return (this._currentDrag && this._currentDrag.origin == <OriginFlag>"select");
+    }
+
+    /**
+     * @return True, if the current drag operation originated in the FROM component of a query.
+     */
+    get activeFromFrom() {
+        return (this._currentDrag && this._currentDrag.origin == <OriginFlag>"from");
+    }
+
+    /**
+     * @return True, if the current drag operation originated in the WHERE component of a query.
+     */
+    get activeFromWhere() {
+        return (this._currentDrag && this._currentDrag.origin == <OriginFlag>"where");
     }
 
     /**
      * @return True, if the current drag operation originated in the sidebar
      */
     get activeFromSidebar() {
-        return (this._currentDrag && this._currentDrag.origin == "sidebar");
+        return (this._currentDrag && this._currentDrag.origin == <OriginFlag>"sidebar");
     }
 
     /**

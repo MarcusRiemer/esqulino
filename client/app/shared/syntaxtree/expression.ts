@@ -43,6 +43,13 @@ export abstract class Expression implements ExpressionParent, Removable {
     }
 
     /**
+     * @return The parent of this expression.
+     */
+    get parent() : ExpressionParent {
+        return (this._parent);
+    }
+
+    /**
      * Replaces this expression with the given expression in it's
      * parent.
      *
