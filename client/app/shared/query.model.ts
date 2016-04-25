@@ -78,12 +78,12 @@ export interface Expression {
 }
 
 export interface SelectColumn {
-    expr : Expression,
+    expr : Expression
     as? : string
 }
 
 export interface Select {
-    columns : SelectColumn[],
+    columns : SelectColumn[]
 }
 
 
@@ -91,12 +91,12 @@ export interface Select {
  * Named tables as described in the FROM
  */
 export interface TableNameDefinition {
-    name : string,
+    name : string
     alias? : string
 }
 
 export interface From {
-    first : TableNameDefinition,
+    first : TableNameDefinition
     joins? : Join[]
 }
 
@@ -111,16 +111,31 @@ export interface Delete {
 }
 
 export interface Join {
-    table : TableNameDefinition,
-    cross? : InnerJoinType,
+    table : TableNameDefinition
+    cross? : InnerJoinType
     inner? : {
         using? : string,
         on? : Expression
     }
 }
 
+export type LogicalOperator = "AND" | "OR";
+
+/**
+ * All Expressions after the first in a WHERE clause need the
+ * logical operation defined. This is redundant, as the 
+ * BinaryExpression would be perfectly capable of expressing
+ * arbitrarily deep nested logical expressions, but in that
+ * case the UI would be less then thrilling.
+ */
+export interface WhereSubsequent {
+    expr : Expression
+    logical : LogicalOperator
+}
+
 export interface Where {
     first : Expression
+    following? : WhereSubsequent[]
 }
 
 /**
@@ -128,11 +143,11 @@ export interface Where {
  * the whole structure and some identifying properties.
  */
 export interface Query {
-    select? : Select,
-    delete? : Delete,
-    from? : From,
-    where? : Where,
-    name : string,
+    select? : Select
+    delete? : Delete
+    from? : From
+    where? : Where
+    name : string
     id : string
 }
 

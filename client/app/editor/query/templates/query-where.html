@@ -9,11 +9,45 @@
 </div>
 
 <div class="block where"
-     *ngIf="query && showBlueprintDropTarget">
+     *ngFor="#sub of query?.where?.subsequent">
+  <div>
+    <div class="component">{{ sub.operator }}</div>
+    <sql-expr [query]="query"
+              [expr]="sub.expr">
+    </sql-expr>
+  </div>
+</div>
+
+<div class="block where"
+     *ngIf="query && showBlueprintWhere">
   <div>
     <div class="component">WHERE</div>
     <span (dragover)="onBlueprintDrag($event)"
-          (drop)="onBlueprintDrop($event)"
+          (drop)="onBlueprintWhereDrop($event)"
+          class="column blueprint">
+      <span class="fa fa-plus"></span>
+    </span>
+  </div>
+</div>
+
+<div class="block where"
+     *ngIf="query && showBlueprintSubsequent">
+  <div>
+    <div class="component">AND</div>
+    <span (dragover)="onBlueprintDrag($event)"
+          (drop)="onBlueprintSubsequentDrop($event, 'AND')"
+          class="column blueprint">
+      <span class="fa fa-plus"></span>
+    </span>
+  </div>
+</div>
+
+<div class="block where"
+     *ngIf="query && showBlueprintSubsequent">
+  <div>
+    <div class="component">OR</div>
+    <span (dragover)="onBlueprintDrag($event)"
+          (drop)="onBlueprintSubsequentDrop($event, 'OR')"
           class="column blueprint">
       <span class="fa fa-plus"></span>
     </span>
