@@ -1,4 +1,4 @@
-import {Component, Injector}            from 'angular2/core'
+import {Component, Injector, Input}     from 'angular2/core'
 import {Router, RouteParams}            from 'angular2/router'
 
 import {Query, Model}                   from '../../shared/query'
@@ -23,7 +23,7 @@ export class QueryEditorComponent {
     /**
      * The currently edited query
      */
-    public query : Query;
+    @Input() public query : Query;
 
     /**
      * The currently edited project

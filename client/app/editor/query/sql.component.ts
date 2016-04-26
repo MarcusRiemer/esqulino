@@ -21,7 +21,7 @@ export class SqlStringPipe implements PipeTransform {
         try {
             return (value.toSqlString());
         } catch (e) {
-            return (e);
+            return (JSON.stringify(e));
         }
     }
 }
@@ -29,7 +29,8 @@ export class SqlStringPipe implements PipeTransform {
 @Component({
     selector: 'sql-query',
     templateUrl: 'app/editor/query/templates/query.html',
-    directives: [SelectComponent, DeleteComponent, FromComponent, WhereComponent]
+    directives: [SelectComponent, DeleteComponent, FromComponent, WhereComponent],
+    pipes: [SqlStringPipe]
 })
 export class QueryComponent {
     @Input() query : Query;

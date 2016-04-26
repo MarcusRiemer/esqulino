@@ -4,17 +4,29 @@ import {
     DragService, SqlDragEvent, OriginFlag
 } from './drag.service'
 
-import {Query, Model, SyntaxTree}       from '../../shared/query'
+import {OperatorPipe}                   from './operator.pipe'
+
+import {
+    Query, Model, SyntaxTree
+} from '../../shared/query'
+
+import {
+    BinaryExpression    
+} from '../../shared/syntaxtree/expression'
 
 @Component({
     selector : 'sql-expr',
     templateUrl : 'app/editor/query/templates/query-expr.html',
-    directives: [ExpressionComponent]
+    directives: [ExpressionComponent],
+    pipes: [OperatorPipe]
 })
 export class ExpressionComponent {
     @Input() expr : SyntaxTree.Expression;
     @Input() query : Query;
 
+    /**
+     * Constructor for dependency injection.
+     */
     constructor(private _dragService : DragService) {
     }
 
@@ -31,7 +43,11 @@ export class ExpressionComponent {
     private _currentDragOver : boolean = false;
 
     /**
-     * Searches for the top-level host of a certain expression.
+     * Searches for the kind of the top-level host of a certain expression.
+     *
+     * @param given The expression whose top-level component needs to be determined
+     *
+     * @return The type of the top-level component
      */
     private getDragOrigin(given : SyntaxTree.Expression) : OriginFlag {
         // We don't care about the type too much during the search,
@@ -52,6 +68,10 @@ export class ExpressionComponent {
         }
 
         throw new Error(`Unknown drag origin: ${JSON.stringify(expr)}`);
+    }
+
+    onOperatorClick() {
+        console.log("Operator clicked");
     }
     
     /**
@@ -155,30 +175,40 @@ export class ExpressionComponent {
         // Grab the actual sql drag event
         const sqlEvt = <SqlDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
 
-        // And react according to the kind of the expression
-        if (sqlEvt.expr.constant) {
-            // A constant value
-            let actualValue = sqlEvt.expr.constant.value;
+        // It could be a new operator
+        if (sqlEvt.operator) {
+            // Which is only valid for a binary expression
+            if (this.expr instanceof BinaryExpression) {
+                (<BinaryExpression>this.expr).operator = sqlEvt.operator;
+            }
+        }
+        // Or an expression
+        else if (sqlEvt.expr) {       
+            // React according to the kind of the expression
+            if (sqlEvt.expr.constant) {
+                // A constant value
+                let actualValue = sqlEvt.expr.constant.value;
 
-            // But if it comes from the sidebar, the value is only a placeholder
-            if (sqlEvt.origin === "sidebar") {
-                actualValue = prompt("Wert?");
-            }
-            
-            if (actualValue) {
-                sqlEvt.expr.constant.value = actualValue;
+                // But if it comes from the sidebar, the value is only a placeholder
+                if (sqlEvt.origin === "sidebar") {
+                    actualValue = prompt("Wert?");
+                }
+                
+                if (actualValue) {
+                    sqlEvt.expr.constant.value = actualValue;
+                    this.expr.replaceSelf(sqlEvt.expr);
+                }
+            } else if (sqlEvt.expr.parameter) {
+                // A named parameter: But what's the name?
+                const actualValue = prompt("Name?");
+                if (actualValue) {
+                    sqlEvt.expr.parameter.key = actualValue;
+                    this.expr.replaceSelf(sqlEvt.expr);
+                }
+            } else {
+                // Things that do not require any user interaction
                 this.expr.replaceSelf(sqlEvt.expr);
             }
-        } else if (sqlEvt.expr.parameter) {
-            // A named parameter: But what's the name?
-            const actualValue = prompt("Name?");
-            if (actualValue) {
-                sqlEvt.expr.parameter.key = actualValue;
-                this.expr.replaceSelf(sqlEvt.expr);
-            }
-        } else {
-            // Things that do not require any user interaction
-            this.expr.replaceSelf(sqlEvt.expr);
         }
 
         // Compare the origins, remove only if the have the same origin

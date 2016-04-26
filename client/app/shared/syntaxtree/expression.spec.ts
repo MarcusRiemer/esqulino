@@ -196,7 +196,7 @@ describe('BinaryExpression', () => {
         const model = {
             lhs : { singleColumn : { column : "name", table : "person" } },
             rhs : { singleColumn : { column : "name", table : "stadt" } },
-            operator : "<>",
+            operator : <Model.Operator>"<>",
             simple : true
         };
         
@@ -224,7 +224,7 @@ describe('BinaryExpression', () => {
         const model = {
             lhs : { constant : { type : strTypeInt, value : "0" } },
             rhs : { constant : { type : strTypeInt, value : "1" } },
-            operator : "=",
+            operator : <Model.Operator>"=",
             simple : true
         };
         
@@ -252,7 +252,7 @@ describe('BinaryExpression', () => {
         const model = {
             lhs : { constant : { type : strTypeStr, value : "w a s d" } },
             rhs : { constant : { type : strTypeStr, value : "%a%" } },
-            operator : "LIKE",
+            operator : <Model.Operator>"LIKE",
             simple : true
         };
         
@@ -280,7 +280,7 @@ describe('BinaryExpression', () => {
         const model = {
             lhs : { constant : { type : strTypeStr, value : "w a s d" } },
             rhs : { constant : { type : strTypeStr, value : "%a%" } },
-            operator : "LIKE",
+            operator : <Model.Operator>"LIKE",
             simple : true
         };
         

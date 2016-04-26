@@ -1,8 +1,9 @@
 import {Component, Input}            from 'angular2/core'
 
-import {DragService}                 from './drag.service'
+import {QuerySelect, Model}          from '../../shared/query'
 
-import {QuerySelect}                       from '../../shared/query'
+import {DragService}                 from './drag.service'
+import {OperatorPipe}                from './operator.pipe'
 
 /**
  * The sidebar hosts elements that can be dragged onto the currently active
@@ -11,7 +12,8 @@ import {QuerySelect}                       from '../../shared/query'
  */
 @Component({
     templateUrl: 'app/editor/query/templates/sidebar.html',
-    selector : 'sql-sidebar'
+    selector : 'sql-sidebar',
+    pipes : [OperatorPipe]
 })
 export class SidebarComponent {
     /**
@@ -20,7 +22,24 @@ export class SidebarComponent {
      */
     @Input() query : QuerySelect;
 
+    /**
+     * View Variable:
+     * The current operation the binary operator should use
+     */
+    @Input() binaryOperation : Model.Operator = "=";
+
     constructor(private _dragService : DragService) {
+    }
+
+    /**
+     * @return A list of currently allowed logic operators
+     */
+    get allowedLogic() {
+        return (["<", "<=", "=", ">=", ">"]);
+    }
+
+    get allowedMath() {
+        return (["+", "-", "*", "/"]);
     }
 
     /**
@@ -59,7 +78,7 @@ export class SidebarComponent {
      * @param evt The DOM drag event to enrich
      */
     startCompoundDrag(evt : DragEvent) {
-        this._dragService.startCompoundDrag("=", "sidebar", evt);
+        this._dragService.startCompoundDrag(this.binaryOperation, "sidebar", evt);
     }
 
     /**
@@ -69,6 +88,15 @@ export class SidebarComponent {
      */
     startParameterDrag(evt : DragEvent) {
         this._dragService.startParameterDrag("sidebar", evt);
+    }
+
+    /**
+     * Starts a drag event involving a parameter expression
+     *
+     * @param evt The DOM drag event to enrich
+     */
+    startOperatorDrag(op : Model.Operator, evt : DragEvent) {
+        this._dragService.startOperatorDrag(op, "sidebar", evt);
     }
 
     /**

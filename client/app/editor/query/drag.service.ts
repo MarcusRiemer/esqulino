@@ -9,7 +9,7 @@ import {Injectable}             from 'angular2/core';
 /**
  * The scopes a drag event could affect
  */
-export type ScopeFlag = "expr" | "column" | "constant" | "parameter" | "compound" | "table" | "star";
+export type ScopeFlag = "expr" | "column" | "constant" | "parameter" | "compound" | "operator" | "table" | "star";
 export type OriginFlag = "select"| "from" | "where" | "sidebar";
 
 /**
@@ -20,6 +20,7 @@ export interface SqlDragEvent {
     origin : OriginFlag
     expr? : Model.Expression
     join? : Model.Join
+    operator? : Model.Operator
 }
 
 /**
@@ -174,7 +175,8 @@ export class DragService {
      *
      * @param evt The DOM drag event to enrich
      */
-    startCompoundDrag(operator : string, origin : OriginFlag, evt : DragEvent, source? : Removable) {
+    startCompoundDrag(operator : Model.Operator,
+                      origin : OriginFlag, evt : DragEvent, source? : Removable) {
         this.startExpressionModelDrag({
             binary : {
                 lhs : { missing : { } },
@@ -183,6 +185,21 @@ export class DragService {
                 simple : true
             }
         }, origin, evt, source);
+    }
+
+    /**
+     * Starts a drag event involving only an operator
+     *
+     * @param operator The operator to drag
+     * @param evt The DOM drag event to enrich
+     */
+    startOperatorDrag(operator : Model.Operator,
+                      origin : OriginFlag, evt : DragEvent) {
+        this.dragStart(evt, {
+            operator : operator,
+            origin : origin,
+            scope : ["operator"]
+        });
     }
 
     /**
@@ -271,6 +288,13 @@ export class DragService {
      */
     get activeColumn() {
         return (this._currentDrag && this._currentDrag.scope.indexOf("column") >= 0);
+    }
+
+    /**
+     * @return True, if an operator is involved in the current drag operation
+     */
+    get activeOperator() {
+        return (this._currentDrag && this._currentDrag.scope.indexOf("operator") >= 0);
     }
 
     /**
