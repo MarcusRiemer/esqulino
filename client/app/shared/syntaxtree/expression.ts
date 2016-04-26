@@ -454,7 +454,7 @@ export class BinaryExpression extends Expression {
     private _lhs : Expression;
     private _rhs : Expression;
 
-    private _operator : string;
+    private _operator : Model.Operator;
     private _isSimple : boolean;
 
     constructor(expr : Model.BinaryExpression,
@@ -484,6 +484,10 @@ export class BinaryExpression extends Expression {
      */
     get operator() {
         return (this._operator);
+    }
+
+    set operator(operator : Model.Operator) {
+        this._operator = operator;
     }
 
     /**

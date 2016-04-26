@@ -45,7 +45,9 @@
                 [query]="query"
                 [topLevel]="'false'">
       </sql-expr>
-      <span class="operator">{{ expr.operator }}</span>
+      <span (click)="onOperatorClick()"
+            [innerHtml]="expr.operator | operator"
+            class="operator"></span>
       <sql-expr [expr]="expr.rhs"
                 [query]="query"
                 [topLevel]="'false'">

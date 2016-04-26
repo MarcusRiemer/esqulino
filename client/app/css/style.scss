@@ -156,6 +156,17 @@ $background-nav: #f7f7f9;
     color: black;
 }
 
+.block-container .operator {
+    font-weight: bold;
+    border-radius: 500px;
+    border: 2px solid transparent;
+}
+
+.block-container .operator.selectable:hover {
+    cursor: pointer;
+    border-color: black;
+}
+
 .block-container .column {
     border-radius: 500px;
     padding-left: 1em;

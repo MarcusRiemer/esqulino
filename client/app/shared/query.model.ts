@@ -30,12 +30,14 @@ export interface ConstantExpression {
     value : string
 }
 
+export type Operator = "<" | "<=" | "=" | "<>" | ">=" | ">" | "LIKE" | "+" | "-" | "*" | "/"
+
 /**
  * Combines two expressions with a binary operator.
  */
 export interface BinaryExpression {
     lhs : Expression
-    operator : string
+    operator : Operator
     rhs : Expression
     simple : boolean
 }

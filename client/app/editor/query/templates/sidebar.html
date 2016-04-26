@@ -31,14 +31,34 @@
     </div>
   </div>
 
+  <hr />
+
   <div class="block-container center">
     <div (dragstart)="startCompoundDrag($event)"
          class="expression"
          draggable="true">
       <span class="constant"><span class="fa fa-question-circle"></span></span>
-      <span class="operator"> = </span>
+      <span class="opererator" [innerHtml]="binaryOperation | operator"></span>
       <span class="constant"><span class="fa fa-question-circle"></span></span>
     </div>
+  </div>
+
+  <div class="block-container center">
+    <span *ngFor="#op of allowedLogic"
+          (click)="binaryOperation = op"
+          (dragstart)="startOperatorDrag(op, $event)"
+          [innerHtml]="op | operator"
+          draggable="true"
+          class="expression selectable operator">
+    </span>
+
+    <span *ngFor="#op of allowedMath"
+          (click)="binaryOperation = op"
+          (dragstart)="startOperatorDrag(op, $event)"
+          [innerHtml]="op | operator"
+          draggable="true"
+          class="expression selectable operator">
+    </span>
   </div>
 
   <hr />
