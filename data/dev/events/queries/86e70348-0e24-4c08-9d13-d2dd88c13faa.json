@@ -1,1 +1,1 @@
-{"name":"Personen","from":{"first":{"name":"person"}},"select":{"columns":[{"expr":{"singleColumn":{"column":"person_id"}},"as":"pId"},{"expr":{"singleColumn":{"column":"vorname"}},"as":"pName"}]},"id":"86e70348-0e24-4c08-9d13-d2dd88c13faa"}
+{"name":"Personen","from":{"first":{"name":"person"}},"select":{"columns":[{"expr":{"star":{}}}]},"id":"86e70348-0e24-4c08-9d13-d2dd88c13faa"}

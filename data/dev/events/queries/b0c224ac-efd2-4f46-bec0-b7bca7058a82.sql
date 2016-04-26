@@ -1,4 +1,2 @@
-SELECT person.vorname
+SELECT *
 FROM ereignis
-	JOIN person
-WHERE 1 <= 71
