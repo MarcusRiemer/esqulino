@@ -282,7 +282,7 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
     private _from   : SyntaxTree.From;
     private _where  : SyntaxTree.Where;
 
-    constructor(schema : TableDescription[], model : Model.Query) {
+    constructor(schema : Schema, model : Model.Query) {
         super(schema, model);
 
         // Ensure that the model is valid
@@ -397,7 +397,7 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
  *
  * @return A correct instance of a Query
  */
-export function loadQuery(schema : TableDescription[], toLoad : Model.Query) : Query {
+export function loadQuery(schema : Schema, toLoad : Model.Query) : Query {
     // The number of distinctive top-level components that
     // are present in the model.
     let topLevelList = [toLoad.delete, toLoad.select]

@@ -3,12 +3,12 @@
  * inside a table.
  */
 export interface ColumnDescription {
-    index : number;
-    name : string;
-    type : string;
-    not_null : boolean;
-    dflt_value : string;
-    primary : boolean;
+    index : number
+    name : string
+    type : string
+    not_null : boolean
+    dflt_value? : string
+    primary : boolean
 }
 
 /**
@@ -16,6 +16,6 @@ export interface ColumnDescription {
  * with all of its columns.
  */
 export interface TableDescription {
-    name : string;
-    columns : ColumnDescription[];
+    name : string
+    columns : ColumnDescription[]
 }

@@ -1,5 +1,5 @@
 import {Model, Query, QueryFrom}   from '../query'
-import {TableDescription}                     from '../table'
+import {TableDescription}          from '../schema.description'
 
 import {
     ColumnExpression, StarExpression, loadExpression
@@ -114,14 +114,14 @@ export class Select extends Component implements ExpressionParent {
                 
                 if (starExpr.isLimited) {
                     // If it is limited, only count that table
-                    tables.push(this._query.schema.find(t => t.name == starExpr.limitedTable));
+                    tables.push(this._query.schema.getTable(starExpr.limitedTable));
                 } else {
                     // Otherwise count all used tables
                     let from = (<QueryFrom> this._query).from;
 
                     // Don't forget the first table
                     from.joins.concat(from.first).forEach( j => {
-                        tables.push(this._query.schema.find(t => t.name == j.name))
+                        tables.push(this._query.schema.getTable(j.name))
                     });
                 }
 

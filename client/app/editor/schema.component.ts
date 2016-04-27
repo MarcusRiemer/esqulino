@@ -2,7 +2,7 @@ import {Component, Input, Injector, OnInit}     from 'angular2/core';
 import {CORE_DIRECTIVES}                        from 'angular2/common';
 import {Router, RouteParams, ROUTER_DIRECTIVES} from 'angular2/router';
 
-import {TableDescription}          from '../shared/table'
+import {TableDescription}                       from '../shared/schema.description'
 
 import {Project}        from './project'
 import {ProjectService} from './project.service'

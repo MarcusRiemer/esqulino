@@ -1,4 +1,4 @@
-import {TableDescription, ColumnDescription}          from './table'
+import {TableDescription, ColumnDescription}          from './schema.description'
 
 /**
  * A database schema against which a query could be tested.
@@ -14,6 +14,19 @@ export class Schema {
      * @return The schema definition of a table with the given name.
      */
     getTable(name : string) {
-        return (this._tables.find(t => t.name == name));
+        const toReturn = this._tables.find(t => t.name == name);
+
+        if (!toReturn) {
+            throw new Error(`Can't find table ${name}`);
+        }
+
+        return (toReturn);
+    }
+
+    /**
+     * @return Schemas for all available tables.
+     */
+    get tables() {
+        return (this._tables);
     }
 }

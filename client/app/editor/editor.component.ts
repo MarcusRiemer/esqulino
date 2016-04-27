@@ -3,7 +3,7 @@ import {CORE_DIRECTIVES}                from 'angular2/common';
 import {HTTP_PROVIDERS}                 from 'angular2/http';
 import {RouteConfig, RouteParams,ROUTER_DIRECTIVES} from 'angular2/router';
 
-import {TableDescription}                from '../shared/table'
+import {TableDescription}                from '../shared/schema.description'
 
 import {SettingsComponent}    from './settings.component';
 import {SchemaComponent}      from './schema.component';

@@ -1,7 +1,7 @@
 import {Component, Input}               from 'angular2/core'
 import {Pipe, PipeTransform}            from 'angular2/core'
 
-import {TableDescription}                          from '../../shared/table'
+import {TableDescription}               from '../../shared/schema.description'
 import {Query, Model, SyntaxTree}       from '../../shared/query'
 
 import {ProjectService}                 from '../project.service'

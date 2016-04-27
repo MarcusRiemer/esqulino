@@ -8,77 +8,77 @@ import './syntaxtree/where.spec'
 import {
     QuerySelect, QueryDelete, Model, SyntaxTree
 } from './query'
-import {ColumnDescription, TableDescription}                  from './table'
 
-let schema : TableDescription[] =
-    [
-        {
-            "name": "ereignis",
-            "columns": [
-                {
-                    "index": 0,
-                    "name": "ereignis_id",
-                    "type": "INTEGER",
-                    "not_null": true,
-                    "dflt_value": null,
-                    "primary": true
-                },
-                {
-                    "index": 1,
-                    "name": "bezeichnung",
-                    "type": "TEXT",
-                    "not_null": true,
-                    "dflt_value": null,
-                    "primary": false
-                },
-                {
-                    "index": 2,
-                    "name": "beginn",
-                    "type": "INTEGER",
-                    "not_null": true,
-                    "dflt_value": null,
-                    "primary": false
-                },
-                {
-                    "index": 3,
-                    "name": "ende",
-                    "type": "INTEGER",
-                    "not_null": true,
-                    "dflt_value": null,
-                    "primary": false
-                }
-            ]
-        },
-        {
-            "name": "person",
-            "columns": [
-                {
-                    "index": 0,
-                    "name": "person_id",
-                    "type": "INTEGER",
-                    "not_null": true,
-                    "dflt_value": null,
-                    "primary": true
-                },
-                {
-                    "index": 1,
-                    "name": "name",
-                    "type": "TEXT",
-                    "not_null": true,
-                    "dflt_value": null,
-                    "primary": false
-                },
-                {
-                    "index": 2,
-                    "name": "geb_dat",
-                    "type": "INTEGER",
-                    "not_null": true,
-                    "dflt_value": null,
-                    "primary": false
-                }
-            ]
-        }
-    ];
+import {Schema}                  from './schema'
+
+let schema  = new Schema([
+    {
+        "name": "ereignis",
+        "columns": [
+            {
+                "index": 0,
+                "name": "ereignis_id",
+                "type": "INTEGER",
+                "not_null": true,
+                "dflt_value": null,
+                "primary": true
+            },
+            {
+                "index": 1,
+                "name": "bezeichnung",
+                "type": "TEXT",
+                "not_null": true,
+                "dflt_value": null,
+                "primary": false
+            },
+            {
+                "index": 2,
+                "name": "beginn",
+                "type": "INTEGER",
+                "not_null": true,
+                "dflt_value": null,
+                "primary": false
+            },
+            {
+                "index": 3,
+                "name": "ende",
+                "type": "INTEGER",
+                "not_null": true,
+                "dflt_value": null,
+                "primary": false
+            }
+        ]
+    },
+    {
+        "name": "person",
+        "columns": [
+            {
+                "index": 0,
+                "name": "person_id",
+                "type": "INTEGER",
+                "not_null": true,
+                "dflt_value": null,
+                "primary": true
+            },
+            {
+                "index": 1,
+                "name": "name",
+                "type": "TEXT",
+                "not_null": true,
+                "dflt_value": null,
+                "primary": false
+            },
+            {
+                "index": 2,
+                "name": "geb_dat",
+                "type": "INTEGER",
+                "not_null": true,
+                "dflt_value": null,
+                "primary": false
+            }
+        ]
+    }
+]);
 
 describe('SELECT Query', () => {
     it ('SELECT person.id, person.name FROM person JOIN ort o', () => {
