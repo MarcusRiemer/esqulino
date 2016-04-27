@@ -1,5 +1,7 @@
 import {Model, Query, QueryFrom}   from '../query'
-import {TableDescription}          from '../schema.description'
+import {
+    TableDescription, ColumnDescription
+} from '../schema.description'
 
 import {
     ColumnExpression, StarExpression, loadExpression
@@ -17,6 +19,10 @@ export { ColumnExpression };
 export interface NamedExpression {
     name? : string;
     expr : Expression;
+}
+
+export interface ResultColumnDescription {
+    name : string;
 }
 
 /**
@@ -103,7 +109,7 @@ export class Select extends Component implements ExpressionParent {
      *
      * @pre Hosting query has a schema
      */
-    get numberOfColumns() {
+    get actualNumberOfColumns() {
         // A star column may attribute to more then a single column
         return (this._columns.map( val => {
             if (val.expr instanceof StarExpression) {
@@ -135,6 +141,64 @@ export class Select extends Component implements ExpressionParent {
                 return (1);
             }
         })).reduce( (l,r) => l + r, 0);
+    }
+
+    /**
+     * Retrieves the actual column names that are involved in the SELECT
+     * statement. The result depends on the schema, because the exact 
+     * columns in the StarExpression can't be retrieved without
+     * the schema.
+     *
+     * @return Descriptions of columns in this SELECT component.
+     *
+     * @pre Hosting query has a schema
+     */
+    get actualColums() : ResultColumnDescription[] {
+        let toReturn : ResultColumnDescription[] = [];
+        
+        this._columns.forEach( val => {
+            // A star column may attribute to more then a single column
+            if (val.expr instanceof StarExpression) {
+                // The number of columns in the StarExpression depends
+                // on the number of involved tables of the current schema.
+                const starExpr = <StarExpression> val.expr;
+                let tables : TableDescription[] = [];
+                
+                if (starExpr.isLimited) {
+                    // If it is limited, only count that table
+                    tables.push(this._query.schema.getTable(starExpr.limitedTable));
+                } else {
+                    // Otherwise count all used tables
+                    let from = (<QueryFrom> this._query).from;
+
+                    // Don't forget the first table
+                    from.joins.concat(from.first).forEach( j => {
+                        tables.push(this._query.schema.getTable(j.name))
+                    });
+                }
+
+                // Remember each of those columns we found
+                tables.forEach(t => {
+                    t.columns.forEach(c => {
+                        toReturn.push({
+                            name : `${t.name}.${c.name}`
+                        });
+                    });
+                })
+                
+            } else if (val.expr instanceof ColumnExpression) {
+                // Column expressions add exactly a single column
+                const colExpr = <ColumnExpression> val.expr;
+                
+                toReturn.push({
+                    name : colExpr.toString()
+                });
+            } else {
+                throw new Error ("Unknown colum type in result description");
+            }
+        });
+
+        return (toReturn);
     }
 
     /**

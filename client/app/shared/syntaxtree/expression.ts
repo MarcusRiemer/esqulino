@@ -322,6 +322,13 @@ export class ColumnExpression extends Expression {
     }
 
     /**
+     * @return The name of the table
+     */
+    get tableName() {
+        return (this._tableName);
+    }
+
+    /**
      * Retrieves the highest ranked name that should be used to
      * qualify the name of this column.
      */
@@ -353,7 +360,6 @@ export class ColumnExpression extends Expression {
         } else {
             return (this._columnName);
         }
-
     }
 
     toModel() : Model.Expression {

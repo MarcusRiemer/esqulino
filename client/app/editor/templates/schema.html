@@ -1,6 +1,6 @@
 <div class="content">
   <table class="table">
-    <tbody *ngFor="#table of project?.schema">
+    <tbody *ngFor="#table of project?.schema.tables">
       <tr>
         <td colspan="5">
           <h3>Tabelle <code>{{ table.name }}</code></h3>

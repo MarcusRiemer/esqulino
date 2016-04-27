@@ -54,7 +54,7 @@ let schema  = new Schema([
         "columns": [
             {
                 "index": 0,
-                "name": "person_id",
+                "name": "personId",
                 "type": "INTEGER",
                 "not_null": true,
                 "dflt_value": null,
@@ -70,7 +70,7 @@ let schema  = new Schema([
             },
             {
                 "index": 2,
-                "name": "geb_dat",
+                "name": "gebDat",
                 "type": "INTEGER",
                 "not_null": true,
                 "dflt_value": null,
@@ -87,7 +87,7 @@ describe('SELECT Query', () => {
             id : 'id',
             select : {
                 columns : [
-                    { expr : { singleColumn : {column : "id", table : "person" } } },
+                    { expr : { singleColumn : {column : "personId", table : "person" } } },
                     { expr : { singleColumn : {column : "name" , table : "person" } } }
                 ]
             },
@@ -112,10 +112,21 @@ describe('SELECT Query', () => {
         expect(q.name).toEqual("test-whole");
         expect(q.id).toEqual("id");
 
-        expect(q.select.numberOfColumns).toEqual(2);
+        // SELECT
+        expect(q.select.actualNumberOfColumns).toEqual(2);
+        expect(q.select.columns.length).toEqual(2);
+
+        const columns = q.select.actualColums;
+        expect(columns.length).toEqual(2);
+        expect(columns[0].name).toEqual("person.personId");
+        expect(columns[1].name).toEqual("person.name");
+        
+        
+        // FROM
         expect(q.from.numberOfJoins).toEqual(1);
 
-        expect(q.toSqlString()).toEqual("SELECT person.id, person.name\nFROM person\n\tJOIN ort o");
+        expect(q.toSqlString()).toEqual("SELECT person.personId, person.name\nFROM person\n\tJOIN ort o");
+        expect(q.toModel()).toEqual(model);
     });
     
     it ('SELECT * FROM person WHERE 1', () => {
@@ -141,7 +152,14 @@ describe('SELECT Query', () => {
         expect(q.name).toEqual("where-simple");
         expect(q.id).toEqual("where-1");
 
-        expect(q.select.numberOfColumns).toEqual(3);
+        // SELECT
+        const columns = q.select.actualColums;
+        expect(columns.length).toEqual(3);
+        expect(columns[0].name).toEqual("person.personId");
+        expect(columns[1].name).toEqual("person.name");
+        expect(columns[2].name).toEqual("person.gebDat");
+        
+        // FROM
         expect(q.from.numberOfJoins).toEqual(0);
 
         expect(q.toSqlString()).toEqual("SELECT *\nFROM person\nWHERE 1");
@@ -176,7 +194,7 @@ describe('SELECT Query', () => {
         expect(q.name).toEqual("where-compare");
         expect(q.id).toEqual("where-2");
 
-        expect(q.select.numberOfColumns).toEqual(3);
+        expect(q.select.actualNumberOfColumns).toEqual(3);
         expect(q.from.numberOfJoins).toEqual(0);
 
         expect(q.toSqlString()).toEqual("SELECT *\nFROM person\nWHERE 1 <= 2");

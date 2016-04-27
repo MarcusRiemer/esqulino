@@ -26,7 +26,7 @@ describe('SELECT', () => {
         const s = new SyntaxTree.Select(model, null);
 
         // Grand picture
-        expect(s.numberOfColumns).toEqual(3);
+        expect(s.actualNumberOfColumns).toEqual(3);
 
         // Alias names
         expect(s.getAlias(0)).toBeUndefined();
@@ -80,7 +80,7 @@ describe('SELECT', () => {
         const s = new SyntaxTree.Select(model, null);
         s.appendColumn("person", "name", "pname");
 
-        expect(s.numberOfColumns).toEqual(1);
+        expect(s.actualNumberOfColumns).toEqual(1);
         expect(s.toModel()).toEqual(resultModel);
         expect(s.toString()).toEqual("SELECT person.name AS pname");
     });
@@ -103,7 +103,7 @@ describe('SELECT', () => {
         const s = new SyntaxTree.Select(model, null);
         s.appendColumn("person", "name");
 
-        expect(s.numberOfColumns).toEqual(1);
+        expect(s.actualNumberOfColumns).toEqual(1);
         expect(s.toModel()).toEqual(resultModel);
         expect(s.toString()).toEqual("SELECT person.name");
     });

@@ -79,11 +79,17 @@ export class QueryResult {
         this._rows = raw.map( v => new Row(query, v));
     }
 
+    /**
+     * @return All result rows
+     */
     get rows() {
         return (this._rows);
     }
 
+    /**
+     * @return The names of the columns involved in this result.
+     */
     get cols() {
-        return (this._query.select.columns.map(v => v.name));
+        return (this._query.select.actualColums);
     }
 }
