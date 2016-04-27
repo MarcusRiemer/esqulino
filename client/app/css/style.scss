@@ -199,6 +199,10 @@ $background-nav: #f7f7f9;
   overflow-y: scroll;
 }
 
+.sidebar-hack {
+  width: $sidebar-width;
+}
+
 .sidebar .block .column {
     margin-bottom: 10px;
 }
