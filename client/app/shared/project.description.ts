@@ -1,5 +1,5 @@
-import {Model}    from "./query"
-import {TableDescription}    from "./table"
+import {Model}               from "./query"
+import {TableDescription}    from "./schema.description"
 
 /**
  * The properties of a project that can be queried from the

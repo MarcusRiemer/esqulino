@@ -1,4 +1,4 @@
-import {TableDescription}                          from '../table'
+import {TableDescription}               from '../schema.description'
 import {Model, Query}                   from '../query'
 
 import { Expression, loadExpression }   from './expression'

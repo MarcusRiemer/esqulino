@@ -1,4 +1,4 @@
-import {TableDescription}                   from '../shared/table'
+import {Schema}                  from '../shared/schema'
 import {Query, Model, loadQuery} from '../shared/query'
 import {ProjectDescription}      from '../shared/project.description'
 
@@ -9,7 +9,7 @@ export class Project {
     public id : string;
     public name : string;
     public description : string;
-    public schema : TableDescription[];
+    public schema : Schema;
 
     private _queries : Query[];
 
@@ -21,7 +21,7 @@ export class Project {
         this.id = json.id;
         this.name = json.name;
         this.description = json.description;
-        this.schema = json.schema;
+        this.schema = new Schema(json.schema);
 
         // Map all abstract queries to concrete query objects
         this._queries = json.queries.map( val => {

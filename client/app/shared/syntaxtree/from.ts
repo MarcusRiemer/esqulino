@@ -241,7 +241,7 @@ export class From extends Component {
      * @return All tables that are not used by this query.
      */
     get unusedTables() {
-        return (this._query.schema.filter( t => !this.isUsingTable(t.name)));
+        return (this._query.schema.tables.filter( t => !this.isUsingTable(t.name)));
     }
 
     /**
