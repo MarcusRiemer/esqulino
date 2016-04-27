@@ -1,1 +1,18 @@
-{"name":"Ereignisse","from":{"first":{"name":"ereignis"}},"select":{"columns":[{"expr":{"star":{}}}]},"id":"b0c224ac-efd2-4f46-bec0-b7bca7058a82"}
+{
+  "name": "Ereignisse",
+  "from": {
+    "first": {
+      "name": "ereignis"
+    }
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {}
+        }
+      }
+    ]
+  },
+  "id": "b0c224ac-efd2-4f46-bec0-b7bca7058a82"
+}
