@@ -1,4 +1,4 @@
-import {Table}                          from './table'
+import {TableDescription}                          from './table'
 
 /**
  * Basic data types as inspired by SQLite.

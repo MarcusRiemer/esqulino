@@ -1,4 +1,4 @@
-import {Table}                          from '../table'
+import {TableDescription}                          from '../table'
 import {Model, Query}                   from '../query'
 
 import { Expression, loadExpression }   from './expression'

@@ -1,4 +1,4 @@
-import {Table}                   from '../shared/table'
+import {TableDescription}                   from '../shared/table'
 import {Query, Model, loadQuery} from '../shared/query'
 import {ProjectDescription}      from '../shared/project.description'
 
@@ -9,7 +9,7 @@ export class Project {
     public id : string;
     public name : string;
     public description : string;
-    public schema : Table[];
+    public schema : TableDescription[];
 
     private _queries : Query[];
 

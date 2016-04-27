@@ -8,9 +8,9 @@ import './syntaxtree/where.spec'
 import {
     QuerySelect, QueryDelete, Model, SyntaxTree
 } from './query'
-import {Column, Table}                  from './table'
+import {ColumnDescription, TableDescription}                  from './table'
 
-let schema : Table[] =
+let schema : TableDescription[] =
     [
         {
             "name": "ereignis",
