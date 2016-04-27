@@ -1,5 +1,5 @@
 import {Model, Query, QueryFrom}   from '../query'
-import {Table}                     from '../table'
+import {TableDescription}                     from '../table'
 
 import {
     ColumnExpression, StarExpression, loadExpression
@@ -110,7 +110,7 @@ export class Select extends Component implements ExpressionParent {
                 // The number of columns in the StarExpression depends
                 // on the number of involved tables of the current schema.
                 const starExpr = <StarExpression> val.expr;
-                let tables : Table[] = [];
+                let tables : TableDescription[] = [];
                 
                 if (starExpr.isLimited) {
                     // If it is limited, only count that table

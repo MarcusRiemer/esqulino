@@ -1,4 +1,4 @@
-import {Table}                          from './table'
+import {Schema}                         from './schema'
 import * as Model                       from './query.model'
 import * as SyntaxTree                  from './query.syntaxtree'
 
@@ -16,7 +16,7 @@ export interface QueryUpdateRequestDescription {
  * Facade for a query that allows meaningful mapping to the UI.
  */
 export abstract class Query implements SyntaxTree.RemovableHost {
-    public schema : Table[];
+    public schema : Schema;
     private model : Model.Query;
     
     private _isDirty = false;
@@ -27,7 +27,7 @@ export abstract class Query implements SyntaxTree.RemovableHost {
     /**
      * Stores all basic information about a string.
      */
-    constructor(schema : Table[], model : Model.Query) {
+    constructor(schema : Schema, model : Model.Query) {
         this._name = model.name;
         this._id = model.id;
 
@@ -39,7 +39,7 @@ export abstract class Query implements SyntaxTree.RemovableHost {
      * @return The schema definition of a table with the given name.
      */
     getTableSchema(name : string) {
-        return (this.schema.find(t => t.name == name));
+        return (this.schema.getTable(name));
     }
 
     /**
@@ -166,7 +166,7 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
     private _from   : SyntaxTree.From;
     private _where  : SyntaxTree.Where;
 
-    constructor(schema : Table[], model : Model.Query) {
+    constructor(schema : Schema, model : Model.Query) {
         super(schema, model);
 
         // Ensure that the model is valid
@@ -282,7 +282,7 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
     private _from   : SyntaxTree.From;
     private _where  : SyntaxTree.Where;
 
-    constructor(schema : Table[], model : Model.Query) {
+    constructor(schema : TableDescription[], model : Model.Query) {
         super(schema, model);
 
         // Ensure that the model is valid
@@ -397,7 +397,7 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
  *
  * @return A correct instance of a Query
  */
-export function loadQuery(schema : Table[], toLoad : Model.Query) : Query {
+export function loadQuery(schema : TableDescription[], toLoad : Model.Query) : Query {
     // The number of distinctive top-level components that
     // are present in the model.
     let topLevelList = [toLoad.delete, toLoad.select]

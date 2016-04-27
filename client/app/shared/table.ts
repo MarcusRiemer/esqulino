@@ -1,4 +1,8 @@
-export interface Column {
+/**
+ * The "over-the-wire" description of a single column
+ * inside a table.
+ */
+export interface ColumnDescription {
     index : number;
     name : string;
     type : string;
@@ -7,7 +11,11 @@ export interface Column {
     primary : boolean;
 }
 
-export interface Table {
+/**
+ * The "over-the-wire" description of a single table 
+ * with all of its columns.
+ */
+export interface TableDescription {
     name : string;
-    columns : Column[];
+    columns : ColumnDescription[];
 }

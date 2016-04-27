@@ -1,5 +1,5 @@
 import {Model}    from "./query"
-import {Table}    from "./table"
+import {TableDescription}    from "./table"
 
 /**
  * The properties of a project that can be queried from the
@@ -26,6 +26,6 @@ export interface ProjectListDescription {
  *
  */
 export interface ProjectDescription extends ProjectListDescription {
-    schema? : Table[]
+    schema? : TableDescription[]
     queries? : Model.Query[]
 }
