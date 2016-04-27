@@ -1,6 +1,13 @@
 <div *ngIf="result"
      class="result">
   <table class="table">
+    <thead>
+      <tr>
+        <th *ngFor="#col of result.cols">
+          {{ col.name }}
+        </th>
+      </tr>
+    </thead>
     <tbody>
       <tr *ngFor="#row of result.rows">
         <td *ngFor="#cell of row.cells">
