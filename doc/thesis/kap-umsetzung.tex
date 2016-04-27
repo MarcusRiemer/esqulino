@@ -3,6 +3,33 @@
 
 \info[inline]{Dieser Abschnitt richtet sich an Software-Ingenieure, die Erweiterungen am bestehenden Code von esqulino vornehmen möchten.}
 
+\subsection{Datenbanksystem}
+\label{sec:implementation-database-system}
+
+Eine der naheliegendsten zu treffenden Entscheidungen hat zwar einen technischen Hintergrund, ist aber trotzdem unbedingt Bestandteil dieser Anforderungsanalyse: Es geht um die Wahl des zu verwendenden Datenbanksystems. Dieser Aspekt hat einen unmittelbaren Einfluss auf die exakte Variante der SQL Syntax, auf den Betrieb der Entwicklingsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
+
+Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbeständen sollten normalerweise im Bereich nur einiger Megabyte liegen und die in der Praxis möglicherweise einzige Unterscheidung von Zugriffsrechten wäre zwischen lesendem und schreibenden Zugriff. Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien gewählt und hinsichtlich ihrer Relevanz sortiert:
+
+\begin{description}  
+\item[Kostenlose Verfügbarkeit] \hfill \\
+  Der Betrieb des Datenbanksystems soll nicht mit Lizenzkosten für Schulen, Lehrkräft, Lernende oder auch freiwillige Entwickler verbunden sein.
+\item[Einfacher Betrieb] \hfill \\
+  Zwar ist für den Einsatz von esqulino aufgrund des Browsers als Client schon die Nutzung eines Servers nötig, das Datenbanksystem sollte den Betrieb dennoch nicht mehr als unbedingt notwendig weiter verkomplizieren. Eine wesentliche Rolle spielt dabei die Platformunabhängigkeit: Das Datenbanksystem sollte, wie auch der esqulino Server, auf jedem gängigen Betriebssystem lauffähig sein.
+\item[Einfache Backups] \hfill \\
+  Die gewünschte Exportfunktion für Projekte macht es nötig, den gesamten Datenbestand vergleichsweise einfach exportieren und importieren zu können. Darüber hinaus sollte es auch für Lehrkräfte möglichst einfach sein mit allen Projekten zu einem anderen esqulino-Server umzuziehen.
+\item[Tools zur Modellierung] \hfill \\
+  Da diese Arbeit sich nicht mit der Datenmodellierung befasst, muss das entsprechende Datenbankschema extern erzeugt werden. Von einer guten Unterstützung für Modellierungsvorhaben profitiert dementsprechend indirekt auch esqulino.
+\item[Tools zur Entwicklung von SQL-Abfragen] \hfill \\
+  Sobald ein Entwickler an die Grenzen des SQL-Editor von esqulino stößt, soll es so einfach wie möglich sein die Abfragen in einem externen Editor zu schreiben und danach in Textform wieder an esqulino zu übergeben.
+\end{description}
+
+Das Kriterium der ``kostenlosen Verfügbarkeit'' ist dankenswerterweise sehr einfach zu erfüllen: Es existiert eine Vielzahl von praktisch eingesetzten quelloffenen Datenbanksystemen. Die Kriterien ``einfacher Betrieb'' und ``einfache Backups'' teilen die denkbaren Systeme recht eindeutig in zwei Lager: Eingebette Datenbanken lassen sich sehr einfach betreiben und sichern. Das starten eines weiteren SQL-Server-Prozesses ist bei dieser Betriebsart nicht nötig, der Im- oder Export des gesamten Datenbestandes erfordert nur das kopieren einer einzigen Datei.
+
+Um den Betrieb folglich so einfach wie möglich zu halten, wurden für esqulino zunächst eingebettete Datenbanksysteme betrachtet. Aus der Masse an verfügbaren Systemen sticht das SQLite-System jedoch sehr weit hinaus: Der Quelltext ist gemeinfrei, der Betrieb sogar auf exotischen Systemen möglich und es existiert eine Fülle von verschiedensten Programmen für alle Betriebssysteme.
+
+\unsure[inline]{Theoretisch ist die Menge an denkbaren Systemen fast unüberschaubar groß, praktisch sticht SQLite aus der Masse an Optionen heraus. Wie ausführlich muss ich das begründen?}
+
+
 \subsection{Verwendete Sprachen und Bibliotheken}
 
 Der softwaretechnische Unterbau der Entwicklungsumgebung wurde schon vor dem eigentlichen Beginn der Thesis in Gesprächen mit Dr. Huch und Dr. Hoffmann festgelegt.
