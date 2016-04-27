@@ -1,5 +1,5 @@
 /* Editor layout */
-$sidebar-width: 250px;
+$sidebar-width: 270px;
 $navbar-height:  54px;
 
 /* SQL components */
@@ -196,7 +196,7 @@ $background-nav: #f7f7f9;
   bottom: 0;
   right: 0;
   width: $sidebar-width;
-  overflow: scroll-y;
+  overflow-y: scroll;
 }
 
 .sidebar .block .column {
