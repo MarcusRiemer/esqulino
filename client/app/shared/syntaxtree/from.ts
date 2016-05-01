@@ -1,5 +1,5 @@
 import {
-    Model, Query, QueryValidation
+    Model, Query, ValidationResult
 } from '../query'
 import {
     Schema
@@ -259,8 +259,8 @@ export class From extends Component {
     /**
      * Reacts to missing tables and wrong expressions in JOINs.
      */
-    validate(validation : QueryValidation) : void {
-
+    validate(schema : Schema) : ValidationResult {
+        return (ValidationResult.VALID);
     }
 
     /**

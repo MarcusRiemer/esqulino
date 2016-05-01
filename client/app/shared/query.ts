@@ -2,12 +2,12 @@ import {
     Schema
 } from './schema'
 import {
-    QueryValidation, Validateable
+    ValidationResult, Validateable
 } from './query.validation'
 import * as Model                       from './query.model'
 import * as SyntaxTree                  from './query.syntaxtree'
 
-export {Model, SyntaxTree, QueryValidation, Validateable}
+export {Model, SyntaxTree, ValidationResult, Validateable}
 
 /**
  * Storing a query on the server
@@ -50,7 +50,7 @@ export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
     /**
      * @return True, if this query could be serialized to SQL.
      */
-    protected abstract validateImpl(validation : QueryValidation) : void;
+    protected abstract validateImpl(schema : Schema) : ValidationResult;
 
     /**
      * @return The SQL representation of this query.
@@ -88,11 +88,8 @@ export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
     /**
      * @return A validation report
      */
-    validate() : QueryValidation {
-        let validation = new QueryValidation(this.schema);
-        this.validateImpl(validation);
-
-        return (validation);
+    validate() : ValidationResult {
+        return (this.validateImpl(this.schema));
     }
     
     /**
@@ -205,10 +202,17 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
     /**
      * @return True, if all existing components are complete
      */
-    protected validateImpl(validation : QueryValidation) {
-        return (this._select.validate(validation) &&
-                this._from.validate(validation) &&
-                (!this.where || this.where.validate(validation)));
+    protected validateImpl(schema : Schema) : ValidationResult {
+        let children = [
+            this._select.validate(schema),
+            this._from.validate(schema)
+        ];
+
+        if (this._where) {
+            children.push(this._where.validate(schema));
+        }
+
+        return (new ValidationResult([], children));
     }
 
     /**
@@ -369,10 +373,17 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
     /**
      * @return True, if all existing components are complete
      */
-    protected validateImpl(validation : QueryValidation) {
-        return (this._delete.validate(validation) &&
-                this._from.validate(validation) &&
-                (!this._where || this._where.validate(validation)));
+    protected validateImpl(schema : Schema) : ValidationResult {
+        let children = [
+            this._delete.validate(schema),
+            this._from.validate(schema)
+        ];
+
+        if (this._where) {
+            children.push(this._where.validate(schema));
+        }
+
+        return (new ValidationResult([], children));
     }
 
     /**

@@ -1,5 +1,5 @@
 import {
-    Model, QueryValidation
+    Model, ValidationResult
 } from '../query'
 import {
     Schema
@@ -64,11 +64,9 @@ describe('SELECT', () => {
             columns : []
         };
 
-        let v = new QueryValidation(emptySchema);
-
         const s = new SyntaxTree.Select(model, null);
         expect(s.toModel()).toEqual(model);
-        expect(s.validate(v)).toBeFalsy();
+        expect(s.validate(emptySchema).isValid).toBeFalsy();
     })
 
     it('adding a named column', () => {
