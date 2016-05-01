@@ -2,6 +2,9 @@ import {
     Model, ValidationResult
 } from '../query'
 import {
+    ValidationError
+} from '../query.validation'
+import {
     Schema
 } from '../schema'
 
@@ -156,6 +159,58 @@ describe('ColumnExpression', () => {
         expect(c.toString()).toEqual("p.name");
         expect(c.toModel().singleColumn).toEqual(model);
     });
+
+    it('Invalid: With a table that does not exist', () => {
+        const model : Model.SingleColumnExpression = {
+            column : "noncolumn",
+            table : "nontable",
+            alias : "n"
+        };
+        
+        let c = new SyntaxTree.ColumnExpression(model, null);
+
+        expect(c.columnName).toEqual(model.column);
+        expect(c.hasTableQualifier).toBeTruthy();
+        expect(c.tableQualifier).toEqual(model.alias);
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"column")
+
+        // Model and String serialization
+        expect(c.toString()).toEqual("n.noncolumn");
+        expect(c.toModel().singleColumn).toEqual(model);
+
+        // Validity
+        const v = c.validate(new Schema([]));
+        expect(v.isValid).toBeFalsy();
+        expect(v.getError(0).errorMessage).toContain(model.table);
+    });
+
+    it('Invalid: With a column that does not exist', () => {
+        const model : Model.SingleColumnExpression = {
+            column : "noncolumn",
+            table : "person",
+            alias : "n"
+        };
+        
+        let c = new SyntaxTree.ColumnExpression(model, null);
+
+        expect(c.columnName).toEqual(model.column);
+        expect(c.hasTableQualifier).toBeTruthy();
+        expect(c.tableQualifier).toEqual(model.alias);
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"column")
+
+        // Model and String serialization
+        expect(c.toString()).toEqual("n.noncolumn");
+        expect(c.toModel().singleColumn).toEqual(model);
+
+        // Validity
+        const v = c.validate(new Schema([{
+            name : "person",
+            columns : []
+        }]));
+        expect(v.isValid).toBeFalsy();
+        expect(v.getError(0).errorMessage).toContain(model.table);
+        expect(v.getError(0).errorMessage).toContain(model.column);
+    });
 });
 
 describe('StarExpression', () => {
@@ -196,6 +251,24 @@ describe('StarExpression', () => {
         expect(c.toModel().star).toEqual(model);
         expect(c.toString()).toEqual("t.*");
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"star")
+    });
+
+    it('Invalid: For an unknown table', () => {
+        const model : Model.StarExpression = {
+            limitedTo : {
+                name : "table"
+            }
+        };
+
+        let c = new SyntaxTree.StarExpression(model, null);
+
+        expect(c.toModel().star).toEqual(model);
+        expect(c.toString()).toEqual("table.*");
+        expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"star")
+
+        // Validity
+        const v = c.validate(new Schema([]));
+        expect(v.isValid).toBeFalsy();
     });
 });
 

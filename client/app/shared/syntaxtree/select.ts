@@ -2,12 +2,14 @@ import {
     Model, Query, QueryFrom, ValidationResult
 } from '../query'
 import {
-    TableDescription, ColumnDescription
-} from '../schema.description'
-
+    ValidationError
+} from '../query.validation'
 import {
     Schema
 } from '../schema'
+import {
+    TableDescription, ColumnDescription
+} from '../schema.description'
 
 import {
     ColumnExpression, StarExpression, loadExpression
@@ -60,7 +62,9 @@ export class Select extends Component implements ExpressionParent {
     validate(schema : Schema) : ValidationResult {
         if (this._columns.length === 0) {
             // No columns are not allowed
-            return (new ValidationResult([{}]));
+            return (new ValidationResult([
+                new ValidationError.EmptySelect()
+            ]));
         } else {
             // Any error in a child is also not allowed
             const children = this._columns.map(c => c.expr.validate(schema));

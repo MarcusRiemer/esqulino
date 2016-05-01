@@ -13,8 +13,66 @@ export interface Validateable {
     validate(schema : Schema) : ValidationResult;
 }
 
+/**
+ * An error that occured during schema validation
+ */
 export interface SchemaError {
-    
+    errorMessage : string;
+}
+
+/**
+ * All types of error that can be detected during a validation.
+ */
+export module ValidationError {
+
+    /**
+     * Represents a column that is unknown.
+     */
+    export class UnknownColumn implements SchemaError {
+        constructor(public table : string,
+                    public column : string) {
+        }
+
+        get errorMessage() {
+            return (`Unknown column "${this.column}" in table "${this.table}"`);
+        }
+    }
+
+    /**
+     * Represents a table that is unknown.
+     */
+    export class UnknownTable implements SchemaError {
+        constructor(public table : string) {
+        }
+
+        get errorMessage() {
+            return (`Unknown table "${this.table}"`);
+        }
+    }
+
+    /**
+     * Represents an expression that is missing.
+     */
+    export class MissingExpression implements SchemaError {
+        constructor() {
+        }
+
+        get errorMessage() {
+            return (`Missing Expression`);
+        }
+    }
+
+    /**
+     * The SELECT component must not be empty.
+     */
+    export class EmptySelect implements SchemaError {
+        constructor() {
+        }
+
+        get errorMessage() {
+            return (`SELECT must not be empty`);
+        }
+    }
 }
 
 /**
@@ -46,5 +104,13 @@ export class ValidationResult {
      */
     get isValid() {
         return (this._errors.length === 0);
+    }
+
+    get numErrors() {
+        return (this._errors.length);
+    }
+
+    getError(i : number) {
+        return (this._errors[i]);
     }
 }

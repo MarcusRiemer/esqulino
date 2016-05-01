@@ -59,6 +59,16 @@ export class Schema {
     }
 
     /**
+     * @return True, if a column with the given name exists inside the given
+     *         table.
+     */
+    hasColumn(tableName : string, columnName : string) {
+        const table = this._tables.find(t => t.name == tableName);
+
+        return (table && table.columns.find(c => c.name == columnName));
+    }
+
+    /**
      * @return Schemas for all available tables.
      */
     get tables() {

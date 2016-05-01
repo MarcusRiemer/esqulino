@@ -5,6 +5,11 @@ import {
 import {
     Model, ValidationResult, Validateable
 } from '../query'
+
+import {
+    ValidationError
+} from '../query.validation'
+
 import {
     Schema
 } from '../schema'
@@ -148,7 +153,7 @@ export class MissingExpression extends Expression {
      * @return false
      */
     validate(schema : Schema) : ValidationResult {
-        return (new ValidationResult([{}]));
+        return (new ValidationResult([new ValidationError.MissingExpression()]));
     }
 
     /**
@@ -328,12 +333,22 @@ export class ColumnExpression extends Expression {
      * @return True, if the column this expression references does exist.
      */
     validate(schema : Schema) : ValidationResult {
-        try {
-            schema.getColumn(this._tableName, this._columnName);
-            return (ValidationResult.VALID);
-        } catch (e) {
-            return (new ValidationResult([{}]));
+        // Does the table exist?
+        if (!schema.hasTable(this._tableName)) {
+            return (new ValidationResult([
+                new ValidationError.UnknownTable(this._tableName)
+            ]));
         }
+
+        // Does the column exist?
+        if (!schema.hasColumn(this._tableName, this._columnName)) {
+            return (new ValidationResult([
+                new ValidationError.UnknownColumn(this._tableName, this._columnName)
+            ]));
+        }
+
+        // Everything exists
+        return (ValidationResult.VALID);
     }
 
     /**
@@ -463,7 +478,9 @@ export class StarExpression extends Expression {
      */
     validate(schema : Schema) : ValidationResult {
         if (this.isLimited && !schema.hasTable(this.limitedTable)) {
-            return (new ValidationResult([{}]));
+            return (new ValidationResult([
+                new ValidationError.UnknownTable(this.limitedTable)
+            ]));
         } else {
             return (ValidationResult.VALID);
         }
