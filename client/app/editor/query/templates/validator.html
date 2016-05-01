@@ -1,0 +1,15 @@
+<template [ngIf]="!result.isValid">
+  <h6>Fehler in der Abfrage</h6>
+  <table class="table">
+    <thead>
+      <tr>
+        <th width="200">Wo?</th>
+        <th>Fehler</th>
+      </tr>
+    </thead>
+    <tr *ngFor="#error of result.errors">
+      <td>Irgendwo</td>
+      <td>{{ error.errorMessage }}</td>
+    </tr>
+  </table>
+</template>
