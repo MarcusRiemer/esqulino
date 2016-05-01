@@ -218,7 +218,7 @@ export class ExpressionComponent {
         }
 
         // Logging the changes
-        if (this.query.isComplete) {
+        if (this.query.validate) {
             // Query is complete, show it
             const sqlString = this.query.toSqlString();
             console.log(`onReplaceSameLevel:\n${sqlString}`)

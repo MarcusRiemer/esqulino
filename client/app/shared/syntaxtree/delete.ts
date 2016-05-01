@@ -23,7 +23,7 @@ export class Delete extends Component {
         return ({});
     }
 
-    get isComplete() : boolean {
-        return (true);
+    validate(validation : any) : void {
+
     }
 }

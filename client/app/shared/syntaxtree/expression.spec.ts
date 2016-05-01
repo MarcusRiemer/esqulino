@@ -1,4 +1,10 @@
-import {Model}         from '../query'
+import {
+    Model, QueryValidation
+} from '../query'
+import {
+    Schema
+} from '../schema'
+
 import * as SyntaxTree from './expression'
 
 describe('DataType', () => {
@@ -30,6 +36,10 @@ describe('MissingExpression', () => {
         expect( () => { c.toString() }).toThrow()
         expect(c.toModel().missing).toEqual(model);
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"missing")
+
+        let v = new QueryValidation(new Schema([]));
+        c.validate(v);
+        expect(v.isValid).toBeFalsy();
     });
 });
 

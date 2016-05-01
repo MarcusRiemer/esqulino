@@ -11,7 +11,6 @@ describe('WHERE', () => {
 
         const w = new SyntaxTree.Where(model, null);
 
-        expect(w.isComplete).toBeTruthy();
         expect(w.subsequent.length).toEqual(0);
         expect(w.toString()).toEqual("WHERE 1");
         expect(w.toModel()).toEqual(model);
@@ -32,7 +31,6 @@ describe('WHERE', () => {
 
         const w = new SyntaxTree.Where(model, null);
 
-        expect(w.isComplete).toBeTruthy();
         expect(w.subsequent.length).toEqual(1);
         expect(w.toString()).toEqual("WHERE 1\n\tOR 2");
         expect(w.toModel()).toEqual(model);

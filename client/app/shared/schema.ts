@@ -1,7 +1,16 @@
 import {TableDescription, ColumnDescription}          from './schema.description'
 
+export {TableDescription, ColumnDescription}
+
 /**
- * A database schema against which a query could be tested.
+ * A database schema against which a query could be tested. All get methods
+ * of this class throw an exception if the specified instance can't be found,
+ * because the absence of a table or column that is expected to exist by the
+ * caller is a pretty fundamental assumption that should not fail without
+ * a bang.
+ *
+ * This class is basically a convenient frontend to ask questions about a
+ * list of table descriptions.
  */
 export class Schema {
     private _tables : TableDescription[];
@@ -21,6 +30,13 @@ export class Schema {
         }
 
         return (toReturn);
+    }
+    
+    /**
+     * @return True, if a table with that name exists.
+     */
+    hasTable(name : string) {
+        return (!!this._tables.find(t => t.name == name));
     }
 
     /**

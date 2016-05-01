@@ -1,8 +1,13 @@
-import {Schema}                         from './schema'
+import {
+    Schema
+} from './schema'
+import {
+    QueryValidation, Validateable
+} from './query.validation'
 import * as Model                       from './query.model'
 import * as SyntaxTree                  from './query.syntaxtree'
 
-export {Model, SyntaxTree}
+export {Model, SyntaxTree, QueryValidation, Validateable}
 
 /**
  * Storing a query on the server
@@ -15,7 +20,7 @@ export interface QueryUpdateRequestDescription {
 /**
  * Facade for a query that allows meaningful mapping to the UI.
  */
-export abstract class Query implements SyntaxTree.RemovableHost {
+export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
     public schema : Schema;
     private model : Model.Query;
     
@@ -45,7 +50,7 @@ export abstract class Query implements SyntaxTree.RemovableHost {
     /**
      * @return True, if this query could be serialized to SQL.
      */
-    protected abstract isCompleteImpl() : boolean;
+    protected abstract validateImpl(validation : QueryValidation) : void;
 
     /**
      * @return The SQL representation of this query.
@@ -59,8 +64,8 @@ export abstract class Query implements SyntaxTree.RemovableHost {
      * @return An SQL string that represents this query.
      */
     public toSqlString() : string {
-        if (!this.isComplete) {
-            throw { "err" : `Query "${this.name}" is incomplete and can't be serialized to SQL` }
+        if (!this.isValid) {
+            throw new Error(`Query "${this.name}" is invalid and can't be serialized to SQL`);
         }
 
         return (this.toSqlStringImpl());
@@ -81,10 +86,20 @@ export abstract class Query implements SyntaxTree.RemovableHost {
     }
 
     /**
-     * @return True, if this query can be serialized to an SQL string
+     * @return A validation report
      */
-    get isComplete() : boolean {
-        return (this.isCompleteImpl());
+    validate() : QueryValidation {
+        let validation = new QueryValidation(this.schema);
+        this.validateImpl(validation);
+
+        return (validation);
+    }
+    
+    /**
+     * @return True, if this query is actually valid.
+     */
+    get isValid() : boolean {
+        return (this.validate().isValid);
     }
 
     /**
@@ -190,10 +205,10 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
     /**
      * @return True, if all existing components are complete
      */
-    protected isCompleteImpl() {
-        return (this._select.isComplete &&
-                this._from.isComplete &&
-                (!this.where || this.where.isComplete));
+    protected validateImpl(validation : QueryValidation) {
+        return (this._select.validate(validation) &&
+                this._from.validate(validation) &&
+                (!this.where || this.where.validate(validation)));
     }
 
     /**
@@ -354,10 +369,10 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
     /**
      * @return True, if all existing components are complete
      */
-    protected isCompleteImpl() {
-        return (this._delete.isComplete &&
-                this._from.isComplete &&
-                (!this._where || this._where.isComplete));
+    protected validateImpl(validation : QueryValidation) {
+        return (this._delete.validate(validation) &&
+                this._from.validate(validation) &&
+                (!this._where || this._where.validate(validation)));
     }
 
     /**

@@ -1,4 +1,9 @@
-import {Model, Query}          from '../query'
+import {
+    Model, Query, QueryValidation
+} from '../query'
+import {
+    Schema
+} from '../schema'
 
 import {
     ColumnExpression, loadExpression
@@ -42,8 +47,8 @@ export class WhereSubsequent extends Component implements ExpressionParent, Remo
         return (this._operator);
     }
 
-    get isComplete() : boolean {
-        return (this._expr.isComplete());
+    isValid(validation : QueryValidation) : void {
+        this._expr.validate(validation);
     }
 
     toString() : string {
@@ -103,8 +108,9 @@ export class Where extends Component implements ExpressionParent, Removable {
     /**
      * @return True, if all expressions are complete.
      */
-    get isComplete() : boolean {
-        return (this._first.isComplete() && this._subsequent.every(s => s.isComplete));
+    validate(validation : QueryValidation) : void {
+        this._first.validate(validation);
+        this._subsequent.forEach(s => s.expr.validate(validation));
     }
 
     /**
