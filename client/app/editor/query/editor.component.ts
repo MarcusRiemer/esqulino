@@ -11,11 +11,12 @@ import {ToolbarService}                 from '../toolbar.service'
 import {QueryComponent, SqlStringPipe}  from './sql.component'
 import {SidebarComponent}               from './sidebar.component'
 import {ResultComponent}                from './result.component'
+import {ValidatorComponent}             from './validator.component'
 import {DragService}                    from './drag.service'
 
 @Component({
     templateUrl: 'app/editor/query/templates/editor.html',
-    directives: [QueryComponent, SidebarComponent, ResultComponent],
+    directives: [QueryComponent, SidebarComponent, ResultComponent, ValidatorComponent],
     providers: [DragService],
     pipes: [SqlStringPipe],
 })

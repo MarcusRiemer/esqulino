@@ -134,6 +134,10 @@ export class ValidationResult {
         return (this._errors.length);
     }
 
+    get errors() {
+        return (this._errors);
+    }
+
     getError(i : number) {
         return (this._errors[i]);
     }
