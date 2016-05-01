@@ -60,14 +60,9 @@ export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
     /**
      * Retrieves the SQL representation of this query.
      *
-     * @pre The query needs to be complete.
      * @return An SQL string that represents this query.
      */
     public toSqlString() : string {
-        if (!this.isValid) {
-            throw new Error(`Query "${this.name}" is invalid and can't be serialized to SQL`);
-        }
-
         return (this.toSqlStringImpl());
     }
     

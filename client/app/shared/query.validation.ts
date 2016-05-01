@@ -73,6 +73,30 @@ export module ValidationError {
             return (`SELECT must not be empty`);
         }
     }
+
+    /**
+     * A JOIN introduces an ambiguous table alias.
+     */
+    export class AmbiguousTableAlias implements SchemaError {
+        constructor(public tablealias : string) {
+        }
+        
+        get errorMessage() {
+            return (`Ambiguous table alias "${this.tablealias}" `);
+        }
+    }
+
+    /**
+     * A self JOIN misses a table alias
+     */
+    export class MissingTableAlias implements SchemaError {
+        constructor(public tablename : string) {
+        }
+        
+        get errorMessage() {
+            return (`Missing table alias for table "${this.tablename}" `);
+        }
+    }
 }
 
 /**

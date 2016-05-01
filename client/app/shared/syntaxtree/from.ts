@@ -2,6 +2,9 @@ import {
     Model, Query, ValidationResult
 } from '../query'
 import {
+    SchemaError, ValidationError
+} from '../query.validation'
+import {
     Schema
 } from '../schema'
 
@@ -260,7 +263,51 @@ export class From extends Component {
      * Reacts to missing tables and wrong expressions in JOINs.
      */
     validate(schema : Schema) : ValidationResult {
-        return (ValidationResult.VALID);
+        let errors : SchemaError[] = [];
+
+        // Group tables by name
+        let grouped : { [tablename : string] : Join[] } = {};
+        this.joinsAndInitial.forEach(j => {
+            if (grouped[j.name]) {
+                grouped[j.name].push(j)
+            } else {
+                grouped[j.name] = [j]
+            }
+        });
+
+        // Check every group for duplicates
+        for (let tableName in grouped) {
+            let group = grouped[tableName];
+
+            // Ensure there is only a single table in the group
+            // or eveything has an alias.
+            if(group.length > 1 &&  !group.every(j => !!j.alias)) {
+                errors.push(new ValidationError.MissingTableAlias(tableName));
+            }
+        }
+
+        // Ensure no duplicate identifiers are used
+        let names : { [aliasname : string] : number } = {};
+        
+        this.joinsAndInitial.forEach(t => {
+            // Count every alias that exists
+            if (t.alias) {
+                if (names[t.alias]) {
+                    names[t.alias]++;
+                } else {
+                    names[t.alias] = 1;
+                }
+            }
+        });
+
+        // Report nun-unique names
+        for (let alias in names) {
+            if (names[alias] > 1) {
+                errors.push(new ValidationError.AmbiguousTableAlias(alias));
+            }
+        }
+        
+        return (new ValidationResult(errors));
     }
 
     /**
