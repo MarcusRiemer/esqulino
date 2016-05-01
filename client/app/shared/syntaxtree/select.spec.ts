@@ -1,4 +1,10 @@
-import {Model}         from '../query'
+import {
+    Model, QueryValidation
+} from '../query'
+import {
+    Schema
+} from '../schema'
+
 import * as SyntaxTree from './select'
 
 describe('SELECT', () => {
@@ -51,14 +57,18 @@ describe('SELECT', () => {
         expect(s.toModel()).toEqual(model);
     });
 
-    it('can\'t be represented as string if entirely empty', () => {
+    it('Invalid: Entirely empty', () => {
+        const emptySchema = new Schema([]);
+        
         const model : Model.Select = {
             columns : []
         };
 
+        let v = new QueryValidation(emptySchema);
+
         const s = new SyntaxTree.Select(model, null);
         expect(s.toModel()).toEqual(model);
-        expect( () => s.toString()).toThrow();
+        expect(s.validate(v)).toBeFalsy();
     })
 
     it('adding a named column', () => {

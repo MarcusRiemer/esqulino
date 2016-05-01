@@ -80,8 +80,8 @@ let schema  = new Schema([
     }
 ]);
 
-describe('SELECT Query', () => {
-    it ('SELECT person.id, person.name FROM person JOIN ort o', () => {
+describe('Valid SELECT Queries', () => {
+    it ('SELECT person.personId, person.name FROM person JOIN ort o', () => {
         let model : Model.Query = {
             name : 'test-whole',
             id : 'id',
@@ -203,6 +203,31 @@ describe('SELECT Query', () => {
 
 });
 
+describe('Invalid SELECT Queries', () => {
+    it ('Unknown column: SELECT person.nonexistant FROM person', () => {
+        const model : Model.Query = {
+            name : 'select-nonexistant-column',
+            id : 'invalid-select-1',
+            select : {
+                columns : [
+                    { expr : { singleColumn : {column : "nonexistant", table : "person" } } },
+                ]
+            },
+            from : {
+                first : {
+                    name : "person"
+                }
+            }
+        };
+
+        let q = new QuerySelect(schema, model);
+
+        expect(q.toModel()).toEqual(model);
+        expect(q.validate().isValid).toBeFalsy();
+    });
+});
+        
+
 describe('DELETE Query', () => {
     it('DELETE FROM person', () => {
         const model : Model.Query = {
@@ -255,6 +280,7 @@ describe('DELETE Query', () => {
 
         let q = new QueryDelete(schema, model);
         expect(q.toModel()).toEqual(model);
+        expect(q.validate).toBeTruthy();
         expect(q.toSqlString()).toEqual("DELETE\nFROM person\nWHERE person.name = \"Hans\"");
     });
 });

@@ -1,7 +1,13 @@
-import {Model, Query, QueryFrom}   from '../query'
+import {
+    Model, Query, QueryFrom, QueryValidation
+} from '../query'
 import {
     TableDescription, ColumnDescription
 } from '../schema.description'
+
+import {
+    Schema
+} from '../schema'
 
 import {
     ColumnExpression, StarExpression, loadExpression
@@ -47,13 +53,18 @@ export class Select extends Component implements ExpressionParent {
     }
 
     /**
-     * If neither a column is specified nor all columns should be
-     * selected, the query can't be represented in SQL.
-     *
-     * @return True, if this query is completly defined
+     * If no columns are specified at all or even a single column
+     * consists of an invalid expression the whole SELECT 
+     * component is invalid.
      */
-    isComplete() : boolean {
-        return (this._columns.length > 0);
+    validate(validation : QueryValidation) : void {
+        if (this._columns.length === 0) {
+            validation.addError({
+
+            });
+        } else {
+            this._columns.forEach(c => c.expr.validate(validation));
+        }
     }
 
     /**
@@ -225,11 +236,7 @@ export class Select extends Component implements ExpressionParent {
     /**
      * @return "SELECT [columns]"
      */
-    toString() : string {
-        if (!this.isComplete()) {
-            throw new Error("Query is not complete");
-        }
-        
+    toString() : string {        
         // We start of with the normal keyword and DO NOT
         // add a trailing space as this will be inserted
         // in the loop below.

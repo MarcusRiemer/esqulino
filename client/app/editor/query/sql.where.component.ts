@@ -48,7 +48,7 @@ export class WhereComponent {
         // to exist now.
         this.query.where.first.replaceSelf(sqlEvt.expr);
 
-        if (this.query.isComplete) {
+        if (this.query.validate) {
             console.log(`onBlueprintDrop:\n${this.query.toSqlString()}`)
         }
     }

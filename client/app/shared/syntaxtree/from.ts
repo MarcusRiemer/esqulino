@@ -1,4 +1,9 @@
-import {Model, Query}            from '../query'
+import {
+    Model, Query, QueryValidation
+} from '../query'
+import {
+    Schema
+} from '../schema'
 
 import {
     loadExpression, MissingExpression
@@ -252,10 +257,10 @@ export class From extends Component {
     }
 
     /**
-     * @return At the present state, the FROM component must be complete.
+     * Reacts to missing tables and wrong expressions in JOINs.
      */
-    get isComplete() : boolean {
-        return (true);
+    validate(validation : QueryValidation) : void {
+
     }
 
     /**

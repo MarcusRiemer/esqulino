@@ -146,7 +146,7 @@ export class ProjectService {
         }
 
         // Add the SQL representation, if applicable
-        if (query.isComplete) {
+        if (query.validate) {
             bodyJson.sql = query.toSqlString();
         }
 

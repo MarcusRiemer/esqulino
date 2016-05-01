@@ -1,7 +1,13 @@
 import {
     ExpressionParent, Removable
 } from './common'
-import {Model}      from '../query'
+
+import {
+    Model, QueryValidation, Validateable
+} from '../query'
+import {
+    Schema
+} from '../schema'
 
 /**
  * Valid template identifiers. Sadly a leaky abstraction that needs
@@ -29,13 +35,18 @@ export function determineType(constant : string) : Model.DataType {
  * Base class for all expressions, no matter how many arguments they
  * require or what the return type is.
  */
-export abstract class Expression implements ExpressionParent, Removable {
+export abstract class Expression implements ExpressionParent, Removable, Validateable {
 
+    /** 
+     * The host of this expression. May be another expression or a
+     * a top level component like SELECT
+     */
     private _parent : ExpressionParent;
     
     /**
      * @param _templateidentifier The type of template needed to render
      *                            this expression.
+     * @param parent the parent of this expression.
      */
     constructor(private _templateIdentifier : TemplateId,
                 parent : ExpressionParent) {
@@ -43,7 +54,8 @@ export abstract class Expression implements ExpressionParent, Removable {
     }
 
     /**
-     * @return The parent of this expression.
+     * @return The parent of this expression. May be another expression or a
+     * a top level component like SELECT.
      */
     get parent() : ExpressionParent {
         return (this._parent);
@@ -88,11 +100,13 @@ export abstract class Expression implements ExpressionParent, Removable {
     
     /**
      * Because the user can construct new Queries with "holes", not every
-     * query can be represented as SQL string.
+     * query can be represented as SQL string. On top of that, the schema
+     * could change behind the back of the application, which could mean 
+     * that certain tables or columns are not available anymore.
      *
      * @return true, if this expression could be turned into an SQL string.
      */
-    abstract isComplete() : boolean;
+    abstract validate(validation : QueryValidation) : void;
     
     /**
      * @return SQL String representation
@@ -133,8 +147,10 @@ export class MissingExpression extends Expression {
      *
      * @return false
      */
-    isComplete() : boolean {
-        return (false);
+    validate(validation : QueryValidation) : void {
+        validation.addError({
+            
+        })
     }
 
     /**
@@ -183,8 +199,8 @@ export class ConstantExpression extends Expression {
     /**
      * A constant expression always has a value.
      */
-    isComplete() : boolean {
-        return (true);
+    validate(validation : QueryValidation) : void {
+
     }
 
     get type() : Model.DataType {
@@ -245,8 +261,8 @@ export class ParameterExpression extends Expression {
      * Technically, this can't be asessed during compile time, so
      * we assume that the value will actually be filled in.
      */
-    isComplete() : boolean {
-        return (true);
+    validate(validation : QueryValidation) : void {
+
     }
 
     /**
@@ -310,8 +326,17 @@ export class ColumnExpression extends Expression {
         this._tableAlias = model.alias;
     }
 
-    isComplete() : boolean {
-        return (true);
+    /**
+     * @return True, if the column this expression references does exist.
+     */
+    validate(validation : QueryValidation) : void {
+        try {
+            validation.schema.getColumn(this._tableName, this._columnName);
+        } catch (e) {
+            validation.addError({
+
+            });
+        }
     }
 
     /**
@@ -436,10 +461,15 @@ export class StarExpression extends Expression {
     }
 
     /**
-     * @return True, a StarExpression is complete by definition
+     * @return True, a StarExpression is complete by definition if it is not limited.
+     *         Otherwise the referenced table must exist.
      */
-    isComplete() {
-        return (true);
+    validate(validation : QueryValidation) : void {
+        if (this.isLimited && !validation.schema.hasTable(this.limitedTable)) {
+            validation.addError({
+
+            });
+        }
     }
 
     /**
@@ -473,8 +503,8 @@ export class BinaryExpression extends Expression {
         this._operator = expr.operator;
     }
 
-    isComplete() : boolean {
-        return (this._lhs.isComplete() && this._rhs.isComplete())
+    validate(validation : QueryValidation) : void {
+        return (this._lhs.validate(validation) && this._rhs.validate(validation))
     }
 
     /**
