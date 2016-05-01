@@ -1,5 +1,5 @@
 import {
-    Model, Query, QueryFrom, QueryValidation
+    Model, Query, QueryFrom, ValidationResult
 } from '../query'
 import {
     TableDescription, ColumnDescription
@@ -57,13 +57,14 @@ export class Select extends Component implements ExpressionParent {
      * consists of an invalid expression the whole SELECT 
      * component is invalid.
      */
-    validate(validation : QueryValidation) : void {
+    validate(schema : Schema) : ValidationResult {
         if (this._columns.length === 0) {
-            validation.addError({
-
-            });
+            // No columns are not allowed
+            return (new ValidationResult([{}]));
         } else {
-            this._columns.forEach(c => c.expr.validate(validation));
+            // Any error in a child is also not allowed
+            const children = this._columns.map(c => c.expr.validate(schema));
+            return (new ValidationResult([], children));
         }
     }
 

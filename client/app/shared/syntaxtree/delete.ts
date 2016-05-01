@@ -1,5 +1,5 @@
 import {
-    Model, Query
+    Model, Query, ValidationResult
 } from '../query'
 
 import {
@@ -23,7 +23,7 @@ export class Delete extends Component {
         return ({});
     }
 
-    validate(validation : any) : void {
-
+    validate(schema : any) : ValidationResult {
+        return (ValidationResult.VALID);
     }
 }

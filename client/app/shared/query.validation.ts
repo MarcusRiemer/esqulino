@@ -10,7 +10,7 @@ export interface Validateable {
      * @param validation The validation that is currently in
      *        progress.
      */
-    validate(validation : QueryValidation) : void;
+    validate(schema : Schema) : ValidationResult;
 }
 
 export interface SchemaError {
@@ -20,27 +20,25 @@ export interface SchemaError {
 /**
  * Represents a schema validation.
  */
-export class QueryValidation {
-    private _schema : Schema
+export class ValidationResult {
     private _errors : SchemaError[] = [];
 
-    constructor(schema : Schema) {
-        this._schema = schema;
-    }
-
     /**
-     * Adds a new error to this validation, effectively ensuring that this
-     * validation will be invalid.
+     * The valid validation result.
      */
-    addError(error : SchemaError) {
-        this._errors.push(error);
-    }
+    static VALID = new ValidationResult();
 
-    /**
-     * @return The schema 
-     */
-    get schema() {
-        return (this._schema);
+    constructor(errors? : SchemaError[],
+                prev? : ValidationResult[]) {
+        // Copy over current errors, if there are any
+        if (errors) {
+            this._errors = errors;
+        }
+
+        // Copy over previous errors, if there are any
+        if (prev) {
+            prev.forEach(p => this._errors = this._errors.concat(p._errors));
+        }
     }
 
     /**

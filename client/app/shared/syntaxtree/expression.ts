@@ -3,7 +3,7 @@ import {
 } from './common'
 
 import {
-    Model, QueryValidation, Validateable
+    Model, ValidationResult, Validateable
 } from '../query'
 import {
     Schema
@@ -106,7 +106,7 @@ export abstract class Expression implements ExpressionParent, Removable, Validat
      *
      * @return true, if this expression could be turned into an SQL string.
      */
-    abstract validate(validation : QueryValidation) : void;
+    abstract validate(schema : Schema) : ValidationResult;
     
     /**
      * @return SQL String representation
@@ -147,10 +147,8 @@ export class MissingExpression extends Expression {
      *
      * @return false
      */
-    validate(validation : QueryValidation) : void {
-        validation.addError({
-            
-        })
+    validate(schema : Schema) : ValidationResult {
+        return (new ValidationResult([{}]));
     }
 
     /**
@@ -199,8 +197,8 @@ export class ConstantExpression extends Expression {
     /**
      * A constant expression always has a value.
      */
-    validate(validation : QueryValidation) : void {
-
+    validate(schema : Schema) : ValidationResult {
+        return (ValidationResult.VALID);
     }
 
     get type() : Model.DataType {
@@ -261,8 +259,8 @@ export class ParameterExpression extends Expression {
      * Technically, this can't be asessed during compile time, so
      * we assume that the value will actually be filled in.
      */
-    validate(validation : QueryValidation) : void {
-
+    validate(schema : Schema) : ValidationResult {
+        return (ValidationResult.VALID);
     }
 
     /**
@@ -329,13 +327,12 @@ export class ColumnExpression extends Expression {
     /**
      * @return True, if the column this expression references does exist.
      */
-    validate(validation : QueryValidation) : void {
+    validate(schema : Schema) : ValidationResult {
         try {
-            validation.schema.getColumn(this._tableName, this._columnName);
+            schema.getColumn(this._tableName, this._columnName);
+            return (ValidationResult.VALID);
         } catch (e) {
-            validation.addError({
-
-            });
+            return (new ValidationResult([{}]));
         }
     }
 
@@ -464,11 +461,11 @@ export class StarExpression extends Expression {
      * @return True, a StarExpression is complete by definition if it is not limited.
      *         Otherwise the referenced table must exist.
      */
-    validate(validation : QueryValidation) : void {
-        if (this.isLimited && !validation.schema.hasTable(this.limitedTable)) {
-            validation.addError({
-
-            });
+    validate(schema : Schema) : ValidationResult {
+        if (this.isLimited && !schema.hasTable(this.limitedTable)) {
+            return (new ValidationResult([{}]));
+        } else {
+            return (ValidationResult.VALID);
         }
     }
 
@@ -503,8 +500,11 @@ export class BinaryExpression extends Expression {
         this._operator = expr.operator;
     }
 
-    validate(validation : QueryValidation) : void {
-        return (this._lhs.validate(validation) && this._rhs.validate(validation))
+    validate(schema : Schema) : ValidationResult {
+        return (new ValidationResult([], [
+            this._lhs.validate(schema),
+            this._rhs.validate(schema)
+        ]));
     }
 
     /**

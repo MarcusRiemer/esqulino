@@ -1,5 +1,5 @@
 import {
-    Model, Query, QueryValidation
+    Model, Query, ValidationResult
 } from '../query'
 import {
     Schema
@@ -47,8 +47,9 @@ export class WhereSubsequent extends Component implements ExpressionParent, Remo
         return (this._operator);
     }
 
-    isValid(validation : QueryValidation) : void {
-        this._expr.validate(validation);
+    validate(schema : Schema) : ValidationResult {
+        // Ask the child expression wether it is valid
+        return (this._expr.validate(schema));
     }
 
     toString() : string {
@@ -108,9 +109,12 @@ export class Where extends Component implements ExpressionParent, Removable {
     /**
      * @return True, if all expressions are complete.
      */
-    validate(validation : QueryValidation) : void {
-        this._first.validate(validation);
-        this._subsequent.forEach(s => s.expr.validate(validation));
+    validate(schema : Schema) : ValidationResult {
+        const children =
+            [this._first.validate(schema)]
+            .concat(this._subsequent.map(s => s.validate(schema)));
+        
+        return (new ValidationResult([], children));
     }
 
     /**
