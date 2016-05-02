@@ -12,6 +12,14 @@ type RawRow = [string]
 type QueryResultDescription = RawRow[]
 
 /**
+ * Over the wire format to describe a query that could not
+ * be run on the server.
+ */
+export interface QueryRunErrorDescription {
+    error : string
+}
+
+/**
  * Parameters are simply a key-value dictionary. Whenever a query
  * makes use of user-bound parameters, these are transferred via
  * this kind of object.
@@ -66,17 +74,48 @@ class Row {
     }
 }
 
+function isQueryRunErrorDescription(arg : any) : arg is QueryRunErrorDescription {
+    return (arg.error !== undefined);
+}
+
+function isQueryResultDescription(arg : any) : arg is QueryResultDescription {
+    return (Array.isArray(arg));
+}
+
 /**
  * Adds type information to a raw QueryResultDescription.
  */
 export class QueryResult {
     private _query : QuerySelect;
 
-    private _rows : Row[];
+    private _rows : Row[] = [];
+
+    private _error : QueryRunErrorDescription;
     
-    constructor(query : QuerySelect, raw : QueryResultDescription) {
+    constructor(query : QuerySelect, res : QueryResultDescription | QueryRunErrorDescription) {
         this._query = query;
-        this._rows = raw.map( v => new Row(query, v));
+
+        console.log(res);
+
+        if (isQueryRunErrorDescription(res)) {
+            this._error = res;
+        } else if (isQueryResultDescription(res)) {
+            this._rows = res.map( v => new Row(query, v));
+        }
+    }
+
+    /**
+     * @return True, if this result is an error.
+     */
+    get isError() : boolean {
+        return (!!this._error);
+    }
+
+    /**
+     * @return The servers error message.
+     */
+    get errorMessage() {
+        return (this._error.error);
     }
 
     /**
