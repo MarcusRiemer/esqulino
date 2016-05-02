@@ -42,7 +42,7 @@ export class DragService {
     private _currentSource : Removable;
 
     constructor() {
-        this._eventSource = new Subject();
+        this._eventSource = new Subject<SqlDragEvent>();
     }
 
     /**

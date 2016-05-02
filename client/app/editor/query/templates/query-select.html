@@ -1,7 +1,7 @@
 <div *ngIf="select"
      class="block select">
   <div class="component">SELECT</div>
-  <span *ngFor="#column of select.columns; #last = last">
+  <span *ngFor="let column of select.columns; let last = last">
     <sql-expr [query]="query"
               [expr]="column.expr"></sql-expr>
   </span>

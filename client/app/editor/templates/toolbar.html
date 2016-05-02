@@ -1,7 +1,7 @@
 <nav class="toolbar navbar navbar-fixed-top navbar-light bg-faded">
   <a class="navbar-brand" href="/">esqulino</a>
   <ul class="nav navbar-nav">
-    <li *ngFor="#item of toolbarService.items"
+    <li *ngFor="let item of toolbarService.items"
         class="nav-item">
       <button (click)="item.fire()"
               class="btn btn-primary">

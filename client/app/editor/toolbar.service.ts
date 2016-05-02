@@ -33,7 +33,7 @@ export class ToolbarItem {
         this._icon = icon;
         this._native = native;
 
-        this._onClick = new Subject();
+        this._onClick = new Subject<string>();
     }
 
     /**
