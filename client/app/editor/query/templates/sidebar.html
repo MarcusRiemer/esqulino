@@ -73,7 +73,7 @@
       </div>
       <ul>
         <li *ngFor="let column of join.tableSchema.columns">
-          <span (dragstart)="startColumnDrag($event, join.name, column.name)"
+          <span (dragstart)="startColumnDrag($event, join.tableName, column.name)"
                 class="column indent"
                 draggable="true">
             {{ column.name }}
