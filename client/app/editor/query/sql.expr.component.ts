@@ -31,12 +31,6 @@ export class ExpressionComponent {
     }
 
     /**
-     * View Variable:
-     * Is this expression in editing mode?
-     */
-    isEditing = false;
-
-    /**
      * Read Only View Variable:
      * Is something currently dragging above this expression?
      */
@@ -78,6 +72,11 @@ export class ExpressionComponent {
      *
      */
     onAllowedDrag(evt : DragEvent) {
+        // Is the dragged thing at least an expression?
+        if (!this._dragService.activeExpression) {
+            return;
+        }
+       
         // Indicates we can drop here
         evt.preventDefault();
         evt.cancelBubble = true;
@@ -124,6 +123,7 @@ export class ExpressionComponent {
      * Something has been dropped onto a binary expression
      */
     onBinaryDrop(evt : DragEvent) {
+        console.log("Dropped Binary");
         this.replaceWithDragged(evt);
     }
 
@@ -218,23 +218,13 @@ export class ExpressionComponent {
         }
 
         // Logging the changes
-        if (this.query.validate) {
+        if (this.query.isValid) {
             // Query is complete, show it
             const sqlString = this.query.toSqlString();
             console.log(`onReplaceSameLevel:\n${sqlString}`)
         } else {
             console.log(`onReplaceSameLevel: Query is not complete`);
         }
-    }
-
-    /**
-     * Focus has been lost.
-     */
-    onBlur() {
-        this.isEditing = false;
-        // Logging the changes
-        const sqlString = this.query.toSqlString();
-        console.log(`onBlur:\n${sqlString}`)
     }
 
     /**
