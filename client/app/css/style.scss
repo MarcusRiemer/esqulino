@@ -95,30 +95,13 @@ $background-nav: #f7f7f9;
 
 .block-container .expression {
     border-radius: 500px;
-    border: 2px solid white;
-    background-color: yellow;
-    border: 2px solid transparent
-}
-
-.block-container .expression {
-    border-radius: 500px;
+    border: 2px solid transparent;
     background-color: orange;
 }
 
 .block-container .current-drop-target {
     border-radius: 500px;
     border: 2px solid black;
-}
-
-.block-container input {
-    background-color: transparent;
-    border: 0px solid;
-    padding: 0px;
-    margin: 0px;
-}
-
-.block-container input:focus {
-    outline: none;
 }
 
 .block-container .missing {
@@ -162,6 +145,11 @@ $background-nav: #f7f7f9;
     border: 2px solid transparent;
 }
 
+.block-container .operator.selectable {
+    cursor: pointer;
+    border-color: transparent;
+}
+
 .block-container .operator.selectable:hover {
     cursor: pointer;
     border-color: black;
@@ -200,11 +188,16 @@ $background-nav: #f7f7f9;
 }
 
 .sidebar-hack {
-  width: $sidebar-width;
+  min-width: $sidebar-width;
 }
 
 .sidebar .block .column {
     margin-bottom: 10px;
+}
+
+.alert h6 {
+    text-align: center;
+    font-weight: bold;
 }
 
 .front {

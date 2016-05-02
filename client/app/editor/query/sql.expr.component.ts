@@ -72,8 +72,18 @@ export class ExpressionComponent {
      *
      */
     onAllowedDrag(evt : DragEvent) {
-        // Is the dragged thing at least an expression?
-        if (!this._dragService.activeExpression) {
+        
+        
+        // Only the binary expression takes things that
+        // are not expressions.
+        if (!(this.expr instanceof BinaryExpression) &&
+            !this._dragService.activeExpression) {
+            return;
+        }
+
+        // And the thing it takes are only operators
+        if (this.expr instanceof BinaryExpression &&
+            !this._dragService.activeOperator) {
             return;
         }
        

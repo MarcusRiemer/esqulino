@@ -39,10 +39,28 @@ export type ArbitraryQueryRequestDescription = {
  * Provides some extra type information for a certain cell.
  */
 class Cell {
+    /**
+     * The query this cell is a result of
+     */
     private _query : QuerySelect;
+
+    /**
+     * The column index of this cell
+     */
     private _index : number;
+
+    /**
+     * The value of this cell
+     */
     private _value : string;
 
+    /**
+     * Constructs a concrete cell
+     *
+     * @param query The query this cell is a result of
+     * @param index The column index of this cell
+     * @param value The value of this cell
+     */
     constructor(query : QuerySelect, index : number, value : string) {
         this._query = query;
         this._index = index;
@@ -90,12 +108,19 @@ export class QueryResult {
 
     private _rows : Row[] = [];
 
+    /**
+     * If this field is set, the query was not succesfull
+     */
     private _error : QueryRunErrorDescription;
-    
+
+    /**
+     * A result may be an error or a list of rows.
+     *
+     * @param query The query that was running
+     * @param res   The result of the run
+     */
     constructor(query : QuerySelect, res : QueryResultDescription | QueryRunErrorDescription) {
         this._query = query;
-
-        console.log(res);
 
         if (isQueryRunErrorDescription(res)) {
             this._error = res;
