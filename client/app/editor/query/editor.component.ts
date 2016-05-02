@@ -74,7 +74,7 @@ export class QueryEditorComponent {
         });
 
         // Reacting to querying
-        let queryItem = this._toolbarService.addButton("Ausführen", "search");
+        let queryItem = this._toolbarService.addButton("Ausführen", "search", "r");
         queryItem.onClick.subscribe( (res) => {
             queryItem.isInProgress = true;
             this._projectService.runQuery(this.query.id)

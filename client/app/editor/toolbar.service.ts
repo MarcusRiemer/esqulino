@@ -1,6 +1,6 @@
 import 'rxjs/Rx'
 
-import {Injectable}             from 'angular2/core'
+import {Injectable, OnInit}     from 'angular2/core'
 
 import {Observable}             from 'rxjs/Observable'
 import {Subject}                from 'rxjs/Subject'
@@ -19,6 +19,7 @@ export class ToolbarItem {
     private _caption : string;
     private _icon : string;
     private _native : boolean;
+    private _key : string;
     private _inProgress : boolean = false;
     
     private _onClick : Subject<string>;
@@ -26,11 +27,13 @@ export class ToolbarItem {
     /**
      * @param caption The text to display on the button
      * @param icon    The icon to show on the button
+     * @param key     The key this item should be bound to
      * @param native  True, if this is a native item of the toolbar
      */
-    constructor(caption : string, icon : string, native : boolean) {
+    constructor(caption : string, icon : string, key : string, native : boolean) {
         this._caption = caption;
         this._icon = icon;
+        this._key = key.toLowerCase();
         this._native = native;
 
         this._onClick = new Subject<string>();
@@ -41,6 +44,13 @@ export class ToolbarItem {
      */  
     get isNative() {
         return (this._native);
+    }
+
+    /**
+     * @return The keyboard shortcut this item listens to
+     */
+    get key() {
+        return (this._key);
     }
 
     /**
@@ -84,17 +94,34 @@ export class ToolbarService {
     // by multiple components.
     private _saveItem : ToolbarItem;
 
+    constructor() {
+        if (window) {
+            console.log("Toolbar");
+            window.addEventListener("keydown", evt => {
+                // Possibly intercept control keys
+                if(evt.ctrlKey) {
+                    let item = this._items.find(i => i.key == evt.key);
+                    if (item) {
+                        evt.preventDefault();
+                        item.fire();
+                    }
+                }
+            });
+        }
+    }
+
     /**
      * Other components may add new special purpose buttons.
      *
      * @param caption The text to display on the button
      * @param icon    The icon to show on the button
+     * @param key     The keyboard shortcut character
      *
      * @return The click handler for the new button
      */
-    addButton(caption : string, icon : string) : ToolbarItem {
+    addButton(caption : string, icon : string, key : string) : ToolbarItem {
         // Create a new non-native icon
-        let item = new ToolbarItem(caption, icon, false);
+        let item = new ToolbarItem(caption, icon, key, false);
 
         // Show the item on the toolbar
         this._items.push(item);
@@ -107,7 +134,7 @@ export class ToolbarService {
      * the state of any known button.
      */
     resetItems() {
-        this._saveItem = new ToolbarItem("Speichern", "floppy-o", true);
+        this._saveItem = new ToolbarItem("Speichern", "floppy-o", "s", true);
         this._items = [this._saveItem];
     }
     
