@@ -12,6 +12,7 @@ export class OperatorPipe implements PipeTransform {
         case "<" : return ("&lt;");
         case "<=": return ("&le;");
         case "=" : return ("=");
+        case "<>": return ("&ne;");
         case ">=": return ("&ge;");
         case ">" : return ("&gt;");
         case "+" : return ("+");

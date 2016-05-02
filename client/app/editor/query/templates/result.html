@@ -3,10 +3,16 @@
   <div *ngIf="result.isError"
        class="alert alert-danger"
        role="alert">
-    <strong>SQL Fehler!</strong> Bei der Bearbeitung dieser Abfrage hat die Datenbank den folgenden Fehler gemeldet: <samp>"{{ result.errorMessage }}"</samp>
+    <h6>
+      <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
+      SQL Fehler!
+    </h6>
+    <p>
+      Bei der Bearbeitung dieser Abfrage hat die Datenbank den folgenden Fehler gemeldet: <samp>"{{ result.errorMessage }}"</samp>.
+    </p>
   </div>
   <table *ngIf="!result.isError"
-         class="table">
+         class="table table-sm table-hover">
     <thead>
       <tr>
         <th *ngFor="let col of result.cols">

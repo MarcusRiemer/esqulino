@@ -35,7 +35,7 @@ export class SidebarComponent {
      * @return A list of currently allowed logic operators
      */
     get allowedLogic() {
-        return (["<", "<=", "=", ">=", ">"]);
+        return (["<", "<=", "=", "<>", ">=", ">"]);
     }
 
     /**

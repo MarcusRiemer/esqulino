@@ -47,10 +47,6 @@ export class WhereComponent {
         // Add the correct expression, the WHERE component is guaranteed
         // to exist now.
         this.query.where.first.replaceSelf(sqlEvt.expr);
-
-        if (this.query.validate) {
-            console.log(`onBlueprintDrop:\n${this.query.toSqlString()}`)
-        }
     }
 
     /**
@@ -72,8 +68,6 @@ export class WhereComponent {
 
         // And append something
         this.query.where.appendExpression(sqlEvt.expr, logical);
-
-        console.log(JSON.stringify(this.query.where.toModel()));
     }
 
     /**

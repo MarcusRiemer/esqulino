@@ -5,11 +5,13 @@
     <sql-result [result]="result"></sql-result>
 
     <sql-validator [query]="query"></sql-validator>
-    
-    <hr />
 
-    <div *ngIf="query">
-      <span class="fa fa-bug"></span> SQL-Darstellung
+    <div *ngIf="query"
+         class="alert alert-info">
+      <h6>
+        <span class="fa fa-bug"></span>
+        SQL-Darstellung
+      </h6>
       <pre>{{ query | sqlString }}</pre>
     </div>
 
