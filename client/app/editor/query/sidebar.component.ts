@@ -38,6 +38,9 @@ export class SidebarComponent {
         return (["<", "<=", "=", ">=", ">"]);
     }
 
+    /**
+     * @return A list of currently allowed math operators
+     */
     get allowedMath() {
         return (["+", "-", "*", "/"]);
     }

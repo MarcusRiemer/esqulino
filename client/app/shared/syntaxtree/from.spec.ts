@@ -225,16 +225,6 @@ describe('FROM', () => {
         expect(v.numErrors).toEqual(0);
     });
 
-    it('invalid removal of only join', () => {
-        const model : Model.From = {
-            first : { name : "first" },
-            joins : []
-        };
-
-        let f = new SyntaxTree.From(model, null);
-        expect( () => f.removeJoin(f.first)).toThrow();
-    });
-
     it('removal of subsequent join', () => {
         const model : Model.From = {
             first : { name : "first" },
@@ -255,6 +245,16 @@ describe('FROM', () => {
         // Validity
         let v = f.validate(new Schema(matchingTables(model)));
         expect(v.numErrors).toEqual(0);
+    });
+
+    it('Error: removal of only join', () => {
+        const model : Model.From = {
+            first : { name : "first" },
+            joins : []
+        };
+
+        let f = new SyntaxTree.From(model, null);
+        expect( () => f.removeJoin(f.first) ).toThrowError();
     });
 
     it('Invalid: Self-Join without alias', () => {
