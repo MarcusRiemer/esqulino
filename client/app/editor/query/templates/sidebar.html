@@ -44,7 +44,7 @@
   </div>
 
   <div class="block-container center">
-    <span *ngFor="#op of allowedLogic"
+    <span *ngFor="let op of allowedLogic"
           (click)="binaryOperation = op"
           (dragstart)="startOperatorDrag(op, $event)"
           [innerHtml]="op | operator"
@@ -52,7 +52,7 @@
           class="expression selectable operator">
     </span>
 
-    <span *ngFor="#op of allowedMath"
+    <span *ngFor="let op of allowedMath"
           (click)="binaryOperation = op"
           (dragstart)="startOperatorDrag(op, $event)"
           [innerHtml]="op | operator"
@@ -64,7 +64,7 @@
   <hr />
 
   <div class="block-container block">
-    <template ngFor #join [ngForOf]="query?.from.joinsAndInitial" #last="last" >
+    <template ngFor let-join [ngForOf]="query?.from.joinsAndInitial" let-last="last">
       <div (dragstart)="startTableDrag(join.name, $event)"
            class="table"
            draggable="true">
@@ -72,7 +72,7 @@
         {{ join.name }}
       </div>
       <ul>
-        <li *ngFor="#column of join.tableSchema.columns">
+        <li *ngFor="let column of join.tableSchema.columns">
           <span (dragstart)="startColumnDrag($event, join.name, column.name)"
                 class="column indent"
                 draggable="true">
@@ -81,14 +81,13 @@
         </li>
       </ul>
     </template>
-    <template ngFor #table [ngForOf]="query?.from.unusedTables" #last="last" >
-      <div (dragstart)="startTableDrag(table.name, $event)"
-           class="table"
-           draggable="true">
-        <span class="fa fa-table fa-fw"></span>
-        {{ table.name }}
-      </div>
-      <hr [hidden]="last">
-    </template>
+    <div *ngFor="let table of query?.from.unusedTables; let is-last=last"
+         (dragstart)="startTableDrag(table.name, $event)"
+      class="table"
+      draggable="true">
+      <span class="fa fa-table fa-fw"></span>
+      {{ table.name }}
+    </div>
+    <hr [hidden]="is-last">
   </div>
 </div>

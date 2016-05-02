@@ -1,6 +1,6 @@
 import 'rxjs/Rx';
 
-import {BehaviorSubject}    from 'rxjs/subject/BehaviorSubject'
+import {BehaviorSubject}    from 'rxjs/BehaviorSubject'
 import {Observable}         from 'rxjs/Observable'
 
 import {Injectable}         from 'angular2/core';

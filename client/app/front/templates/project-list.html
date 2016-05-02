@@ -1,5 +1,5 @@
 <div class="card-columns">
-  <div *ngFor="#project of projects">
+  <div *ngFor="let project of projects">
     <project-list-item [project]="project"></project-list-item>
   </div>
 </div>

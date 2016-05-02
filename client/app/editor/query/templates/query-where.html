@@ -9,7 +9,7 @@
 </div>
 
 <div class="block where"
-     *ngFor="#sub of query?.where?.subsequent">
+     *ngFor="let sub of query?.where?.subsequent">
   <div>
     <div class="component indent">{{ sub.operator }}</div>
     <sql-expr [query]="query"

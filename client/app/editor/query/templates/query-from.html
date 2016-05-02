@@ -5,7 +5,7 @@
       {{ query.from.first.name }} {{ query.from.first.alias }}
     </span>
   </div>
-  <div *ngFor="#join of query.from.joins"
+  <div *ngFor="let join of query.from.joins"
        (dragstart)="onJoinDragStart(join, $event)"
        draggable="true">
     <span class="component indent">{{ join.sqlJoinKeyword }}</span>
