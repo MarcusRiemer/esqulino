@@ -67,7 +67,7 @@ describe('FROM', () => {
         
         let f = new SyntaxTree.From(model, null)
 
-        expect(f.first.name).toEqual("person");
+        expect(f.first.tableName).toEqual("person");
         expect(f.first.alias).toEqual("pe");
         expect(f.first.nameWithAlias).toEqual("person pe");
 
@@ -92,11 +92,11 @@ describe('FROM', () => {
         
         let f = new SyntaxTree.From(model, null)
 
-        expect(f.first.name).toEqual(model.first.name);
+        expect(f.first.tableName).toEqual(model.first.name);
         expect(f.first.alias).toEqual(model.first.alias);
         expect(f.first.nameWithAlias).toEqual("person pe");
         
-        expect(f.getJoin(0).name).toEqual(model.joins[0].table.name);
+        expect(f.getJoin(0).tableName).toEqual(model.joins[0].table.name);
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
         expect(f.getJoin(0).sqlJoinKeyword).toEqual(",");
         
@@ -124,11 +124,11 @@ describe('FROM', () => {
         
         let f = new SyntaxTree.From(model, null)
 
-        expect(f.first.name).toEqual(model.first.name);
+        expect(f.first.tableName).toEqual(model.first.name);
         expect(f.first.alias).toEqual(model.first.alias);
         expect(f.first.nameWithAlias).toEqual("person lhs");
         
-        expect(f.getJoin(0).name).toEqual(model.joins[0].table.name);
+        expect(f.getJoin(0).tableName).toEqual(model.joins[0].table.name);
         expect(f.getJoin(0).nameWithAlias).toEqual("person rhs");
         expect(f.getJoin(0).sqlJoinKeyword).toEqual(",");
         
@@ -153,10 +153,10 @@ describe('FROM', () => {
         
         let f = new SyntaxTree.From(model, null)
 
-        expect(f.first.name).toEqual("person");
+        expect(f.first.tableName).toEqual("person");
         expect(f.first.alias).toEqual("pe");
         expect(f.first.nameWithAlias).toEqual("person pe");
-        expect(f.getJoin(0).name).toEqual("ort");
+        expect(f.getJoin(0).tableName).toEqual("ort");
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
         expect(f.getJoin(0).sqlJoinKeyword).toEqual("JOIN");
 
@@ -188,11 +188,11 @@ describe('FROM', () => {
 
         let f = new SyntaxTree.From(model, null)
 
-        expect(f.first.name).toEqual("person");
+        expect(f.first.tableName).toEqual("person");
         expect(f.first.alias).toEqual("pe");
         expect(f.first.nameWithAlias).toEqual("person pe");
         
-        expect(f.getJoin(0).name).toEqual("ort");
+        expect(f.getJoin(0).tableName).toEqual("ort");
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
 
         expect(f.toString()).toEqual("FROM person pe\n\tINNER JOIN ort USING(bla)");

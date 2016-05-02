@@ -2,7 +2,7 @@ import {
     Model, Query, ValidationResult
 } from '../query'
 import {
-    SchemaError, ValidationError
+    ValidationError
 } from '../query.validation'
 import {
     Schema
@@ -41,7 +41,7 @@ export abstract class Join implements Removable {
     /**
      * @return The name of the table that is JOINed
      */
-    get name() {
+    get tableName() {
         return (this._table.name);
     }
 
@@ -216,6 +216,10 @@ export class InnerJoin extends Join implements ExpressionParent {
         }
     }
 
+    getLocationDescription() : string {
+        return ("INNER JOIN");
+    }
+
     removeChild(formerChild : Expression) {
         if (this._on == formerChild) {
             this.replaceChild(formerChild, new MissingExpression({}, this));
@@ -256,22 +260,22 @@ export class From extends Component {
      * @return True, if the given table is used in this query.
      */
     isUsingTable(tableName : string) {
-        return (this.joinsAndInitial.find(j => j.name == tableName) != null);
+        return (this.joinsAndInitial.find(j => j.tableName == tableName) != null);
     }
 
     /**
      * Reacts to missing tables and wrong expressions in JOINs.
      */
     validate(schema : Schema) : ValidationResult {
-        let errors : SchemaError[] = [];
+        let errors : ValidationError[] = [];
 
         // Group tables by name
         let grouped : { [tablename : string] : Join[] } = {};
         this.joinsAndInitial.forEach(j => {
-            if (grouped[j.name]) {
-                grouped[j.name].push(j)
+            if (grouped[j.tableName]) {
+                grouped[j.tableName].push(j)
             } else {
-                grouped[j.name] = [j]
+                grouped[j.tableName] = [j]
             }
         });
 
@@ -282,7 +286,7 @@ export class From extends Component {
             // Ensure there is only a single table in the group
             // or eveything has an alias.
             if(group.length > 1 &&  !group.every(j => !!j.alias)) {
-                errors.push(new ValidationError.MissingTableAlias(tableName));
+                errors.push(new ValidationError.MissingTableAlias(tableName, "FROM"));
             }
         }
 

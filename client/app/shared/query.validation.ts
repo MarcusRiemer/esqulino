@@ -1,5 +1,17 @@
 import {Schema} from './schema'
 
+import {
+    Locateable
+} from './syntaxtree/common'
+
+import {
+    Expression, ColumnExpression
+} from './syntaxtree/expression'
+
+import {
+    Join
+} from './syntaxtree/from'
+
 /**
  * Represents something that can be validated.
  */ 
@@ -16,8 +28,16 @@ export interface Validateable {
 /**
  * An error that occured during schema validation
  */
-export interface SchemaError {
+export interface ValidationError {
+    /**
+     * @return A human readable description of the error
+     */
     errorMessage : string;
+
+    /**
+     * @return The human readable location of this error
+     */
+    location : string;
 }
 
 /**
@@ -26,38 +46,84 @@ export interface SchemaError {
 export module ValidationError {
 
     /**
-     * Represents a column that is unknown.
+     * Helps implementing errors that are based on expressions.
      */
-    export class UnknownColumn implements SchemaError {
-        constructor(public table : string,
-                    public column : string) {
+    abstract class LocateableError<TLoc extends Locateable>
+        implements ValidationError {
+
+        /**
+         * The faulty expression.
+         */
+        protected _loc : TLoc;
+
+        constructor(expr : TLoc) {
+            this._loc = expr;
         }
 
-        get errorMessage() {
-            return (`Unknown column "${this.column}" in table "${this.table}"`);
+        /**
+         * @return A human readable description of the error location
+         */     
+        get location() : string {
+            return (this._loc.getLocationDescription());
         }
+        
+        /**
+         * @remark As Typescript 1.8 does not allow abstract
+         *         properties, this is an ugly indirection step.
+         *
+         * @return A human readable description of the error
+         */
+        get errorMessage() : string {
+            return (this.errorMessageImpl());
+        }
+
+        /**
+         * As Typescript 1.8 does not allow abstract properties, this
+         * is an ugly indirection step and simply called by the not
+         * abstract errorMessage accessor.
+         */
+        abstract errorMessageImpl() : string;
+    }
+    
+    /**
+     * Represents a column that is unknown.
+     */
+    export class UnknownColumn extends LocateableError<ColumnExpression> {        
+        constructor(expr : ColumnExpression) {
+            super(expr);
+        }
+
+        errorMessageImpl() {
+            return (`Unknown column "${this._loc.columnName}" in table "${this._loc.tableName}"`);
+        }
+    }
+
+    interface TableEntity extends Locateable {
+        tableName : string
     }
 
     /**
      * Represents a table that is unknown.
      */
-    export class UnknownTable implements SchemaError {
-        constructor(public table : string) {
+    export class UnknownTable extends LocateableError<TableEntity> {  
+        constructor(entity : TableEntity) {
+            super(entity);
         }
 
-        get errorMessage() {
-            return (`Unknown table "${this.table}"`);
+        errorMessageImpl() {
+            return (`Unknown table "${this._loc.tableName}"`);
         }
     }
 
     /**
      * Represents an expression that is missing.
      */
-    export class MissingExpression implements SchemaError {
-        constructor() {
+    export class MissingExpression extends LocateableError<Expression> {
+        constructor(expr : Expression) {
+            super(expr);
         }
 
-        get errorMessage() {
+        errorMessageImpl() {
             return (`Missing Expression`);
         }
     }
@@ -65,36 +131,44 @@ export module ValidationError {
     /**
      * The SELECT component must not be empty.
      */
-    export class EmptySelect implements SchemaError {
+    export class EmptySelect implements ValidationError {
         constructor() {
         }
 
         get errorMessage() {
             return (`SELECT must not be empty`);
         }
+
+        get location() {
+            return ("SELECT");
+        }
     }
 
     /**
      * A JOIN introduces an ambiguous table alias.
      */
-    export class AmbiguousTableAlias implements SchemaError {
+    export class AmbiguousTableAlias implements ValidationError {
         constructor(public tablealias : string) {
         }
         
         get errorMessage() {
-            return (`Ambiguous table alias "${this.tablealias}" `);
+            return (`Multiple JOINs use the alias "${this.tablealias}" `);
+        }
+
+        get location() {
+            return ("FROM");
         }
     }
 
     /**
      * A self JOIN misses a table alias
      */
-    export class MissingTableAlias implements SchemaError {
-        constructor(public tablename : string) {
+    export class MissingTableAlias implements ValidationError {
+        constructor(public tableName : string, public location : string) {
         }
         
         get errorMessage() {
-            return (`Missing table alias for table "${this.tablename}" `);
+            return (`Missing table alias for table "${this.tableName}" `);
         }
     }
 }
@@ -103,14 +177,14 @@ export module ValidationError {
  * Represents a schema validation.
  */
 export class ValidationResult {
-    private _errors : SchemaError[] = [];
+    private _errors : ValidationError[] = [];
 
     /**
      * The valid validation result.
      */
     static VALID = new ValidationResult();
 
-    constructor(errors? : SchemaError[],
+    constructor(errors? : ValidationError[],
                 prev? : ValidationResult[]) {
         // Copy over current errors, if there are any
         if (errors) {
