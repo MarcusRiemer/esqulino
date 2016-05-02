@@ -56,6 +56,10 @@ export class WhereSubsequent extends Component implements ExpressionParent, Remo
         return(`${this._operator} ${this._expr.toString()}`);
     }
 
+    getLocationDescription() : string {
+        return (`WHERE:${this.operator}`);
+    }
+
     toModel() : Model.WhereSubsequent {
         return ({
             expr : this._expr.toModel(),
@@ -129,6 +133,10 @@ export class Where extends Component implements ExpressionParent, Removable {
      */
     get first() : Expression {
         return (this._first);
+    }
+
+    getLocationDescription() : string {
+        return (`WHERE`);
     }
 
     /**

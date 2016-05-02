@@ -1,5 +1,6 @@
 <template [ngIf]="!result.isValid">
-  <h6>Fehler in der Abfrage</h6>
+  <h6><span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
+Fehler in der Abfrage</h6>
   <table class="table">
     <thead>
       <tr>
@@ -8,7 +9,7 @@
       </tr>
     </thead>
     <tr *ngFor="let error of result.errors">
-      <td>Irgendwo</td>
+      <td>{{ error.location }}</td>
       <td>{{ error.errorMessage }}</td>
     </tr>
   </table>

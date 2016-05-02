@@ -23,7 +23,14 @@ export class Delete extends Component {
         return ({});
     }
 
+    /**
+     *
+     */
     validate(schema : any) : ValidationResult {
         return (ValidationResult.VALID);
+    }
+
+    getLocationDescription() : string {
+        return ("DELETE");
     }
 }

@@ -35,7 +35,6 @@ export function determineType(constant : string) : Model.DataType {
     }
 }
 
-
 /**
  * Base class for all expressions, no matter how many arguments they
  * require or what the return type is.
@@ -124,6 +123,15 @@ export abstract class Expression implements ExpressionParent, Removable, Validat
     abstract toModel() : any;
 
     /**
+     * Most expressions won't be helpful when trying to track down their
+     * exact locations. So the default implementation is simply "ask the
+     * parent".
+     */
+    getLocationDescription() : string {
+        return (this._parent.getLocationDescription());
+    }
+
+    /**
      * This is a more or less leaky abstraction, but the HTML rendering
      * template needs to know which kind of expression it is dealing
      * with. Ideally this model wouldn't need to do anything frontend-
@@ -148,12 +156,10 @@ export class MissingExpression extends Expression {
     }
 
     /**
-     * A missing expression is never complete.
-     *
-     * @return false
+     * A missing expression is always invalid.
      */
     validate(schema : Schema) : ValidationResult {
-        return (new ValidationResult([new ValidationError.MissingExpression()]));
+        return (new ValidationResult([new ValidationError.MissingExpression(this)]));
     }
 
     /**
@@ -336,14 +342,14 @@ export class ColumnExpression extends Expression {
         // Does the table exist?
         if (!schema.hasTable(this._tableName)) {
             return (new ValidationResult([
-                new ValidationError.UnknownTable(this._tableName)
+                new ValidationError.UnknownTable(this)
             ]));
         }
 
         // Does the column exist?
         if (!schema.hasColumn(this._tableName, this._columnName)) {
             return (new ValidationResult([
-                new ValidationError.UnknownColumn(this._tableName, this._columnName)
+                new ValidationError.UnknownColumn(this)
             ]));
         }
 
@@ -439,7 +445,7 @@ export class StarExpression extends Expression {
      * @return The schema name of the table that this expression is
      *         limited to.
      */
-    get limitedTable() {
+    get tableName() {
         return (this._limitedTo.name);
     }
 
@@ -477,9 +483,9 @@ export class StarExpression extends Expression {
      *         Otherwise the referenced table must exist.
      */
     validate(schema : Schema) : ValidationResult {
-        if (this.isLimited && !schema.hasTable(this.limitedTable)) {
+        if (this.isLimited && !schema.hasTable(this.tableName)) {
             return (new ValidationResult([
-                new ValidationError.UnknownTable(this.limitedTable)
+                new ValidationError.UnknownTable(this)
             ]));
         } else {
             return (ValidationResult.VALID);

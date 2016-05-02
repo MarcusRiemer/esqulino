@@ -14,7 +14,9 @@ export interface Removable {
 }
 
 /**
- * Something that can host something that can remove itself.
+ * Something that can host something that could remove itself. This is
+ * most likely an expression or a component, but could also be something 
+ * non-functional like a comment.
  */
 export interface RemovableHost {
      /**
@@ -31,9 +33,20 @@ export interface RemovableHost {
 }
 
 /**
+ * Something that can reason about it's place in the AST.
+ */
+export interface Locateable {
+    /**
+     * Calculates a human-readable representation of the location
+     * where the expression can be found.
+     */
+    getLocationDescription() : string;
+}
+
+/**
  * Something that is able to host an expression.
  */
-export interface ExpressionParent extends RemovableHost {
+export interface ExpressionParent extends RemovableHost, Locateable {
     /**
      * Replaces a child of this expression. This is used by
      * outside components, which need a way to change the structure

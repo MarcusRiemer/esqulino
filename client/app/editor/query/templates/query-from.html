@@ -2,7 +2,7 @@
   <div class="component">FROM</div>
   <div>
     <span class="table">
-      {{ query.from.first.name }} {{ query.from.first.alias }}
+      {{ query.from.first.tableName }} {{ query.from.first.alias }}
     </span>
   </div>
   <div *ngFor="let join of query.from.joins"
@@ -10,7 +10,7 @@
        draggable="true">
     <span class="component indent">{{ join.sqlJoinKeyword }}</span>
     <span class="table">
-      {{ join.name }} {{ join.alias }}
+      {{ join.tableName }} {{ join.alias }}
     </span>
   </div>
 
