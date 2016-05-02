@@ -178,11 +178,11 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
 
         // Ensure that the model is valid
         if (!model.select) {
-            throw { "err" : "QuerySelect without Select model" }
+            throw new Error("QuerySelect without Select model");
         }
 
         if (!model.from) {
-            throw { "err" : "QuerySelect without From model" }
+            throw new Error("QuerySelect without From model");
         }
 
         // Build SQL components from model
@@ -251,7 +251,7 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
      */
     set where(where : SyntaxTree.Where) {
         if (this._where) {
-            throw { "err" : "WHERE clause already present" }
+            throw new Error("WHERE clause already present");
         }
 
         this._where = where;
@@ -301,11 +301,11 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
 
         // Ensure that the model is valid
         if (!model.delete) {
-            throw { "err" : "QuerySelect without Delete model" }
+            throw new Error("QuerySelect without Delete model");
         }
 
         if (!model.from) {
-            throw { "err" : "QuerySelect without From model" }
+            throw new Error("QuerySelect without From model");
         }
 
         // Build SQL components from model
@@ -345,7 +345,7 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
      */
     set where(where : SyntaxTree.Where) {
         if (this._where) {
-            throw { "err" : "WHERE clause already present" }
+            throw new Error("WHERE clause already present");
         }
 
         this._where = where;
@@ -426,7 +426,7 @@ export function loadQuery(schema : Schema, toLoad : Model.Query) : Query {
 
     // There must be a single top-level component
     if (topLevelList.length !== 1) {
-        throw { "err" : `There must be a single top level component, got ${topLevelList.length}` }
+        throw new Error(`There must be a single top level component, got ${topLevelList.length}`);
     }
 
     // From here on we are sure, that only a single to level element is set
@@ -437,5 +437,5 @@ export function loadQuery(schema : Schema, toLoad : Model.Query) : Query {
         return (new QueryDelete(schema, toLoad));
     }
 
-    throw { "err" : "Unknown top-level component" }
+    throw new Error("Unknown top-level component");
 }

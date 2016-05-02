@@ -41,12 +41,12 @@ export function determineType(constant : string) : Model.DataType {
  */
 export abstract class Expression implements ExpressionParent, Removable, Validateable {
 
-    /** 
+    /**
      * The host of this expression. May be another expression or a
      * a top level component like SELECT
      */
     private _parent : ExpressionParent;
-    
+
     /**
      * @param _templateidentifier The type of template needed to render
      *                            this expression.
@@ -101,17 +101,17 @@ export abstract class Expression implements ExpressionParent, Removable, Validat
         const missing = new MissingExpression({}, this);
         this.replaceChild(formerChild, missing);
     }
-    
+
     /**
      * Because the user can construct new Queries with "holes", not every
      * query can be represented as SQL string. On top of that, the schema
-     * could change behind the back of the application, which could mean 
+     * could change behind the back of the application, which could mean
      * that certain tables or columns are not available anymore.
      *
      * @return true, if this expression could be turned into an SQL string.
      */
     abstract validate(schema : Schema) : ValidationResult;
-    
+
     /**
      * @return SQL String representation
      */
@@ -167,18 +167,14 @@ export class MissingExpression extends Expression {
      * converted to strings.
      */
     toString() : string {
-        throw {
-            err : "Statement contains missing expression"
-        }
+        throw new Error("Statement contains missing expression");
     }
 
     /**
      * The missing expression can never have children.
      */
     replaceChild(formerChild : Expression, newChild : Expression) {
-        throw {
-            err : "The missing statement should never have children"
-        }
+        throw new Error("The missing statement should never have children");
     }
 
     toModel() : Model.Expression {
@@ -196,7 +192,7 @@ export class MissingExpression extends Expression {
 export class ConstantExpression extends Expression {
     private _type : Model.DataType;
     private _value : string;
-    
+
     constructor(expr : Model.ConstantExpression,
                 parent : ExpressionParent) {
         super("constant", parent);
@@ -244,9 +240,7 @@ export class ConstantExpression extends Expression {
     }
 
     replaceChild(formerChild : Expression, newChild : Expression) {
-        throw {
-            err : "The constant expression should never have children"
-        }
+        throw new Error("The constant expression should never have children")
     }
 }
 
@@ -256,7 +250,7 @@ export class ConstantExpression extends Expression {
  */
 export class ParameterExpression extends Expression {
     private _key : string;
-    
+
     constructor(expr : Model.ParameterExpression,
                 parent : ExpressionParent) {
         super("parameter", parent);
@@ -288,9 +282,9 @@ export class ParameterExpression extends Expression {
         // Ensuring the key begins with a letter followed by only
         // alpha-numeric characters or an underscore
         if (!/^[a-zA-Z]+[a-zA-Z0-9_]*$/.test(val)) {
-            throw { "err" : `Invalid parameter key: ${val}` };
+            throw new Error(`Invalid parameter key: ${val}`);
         }
-        
+
         this._key = val;
     }
 
@@ -310,9 +304,7 @@ export class ParameterExpression extends Expression {
     }
 
     replaceChild(formerChild : Expression, newChild : Expression) {
-        throw {
-            err : "The parameter expression should never have children"
-        }
+        throw new Error("The parameter expression should never have children");
     }
 }
 
@@ -419,9 +411,7 @@ export class ColumnExpression extends Expression {
     }
 
     replaceChild(formerChild : Expression, newChild : Expression) {
-        throw {
-            err : "The column expression should never have children"
-        }
+        throw new Error("The column expression should never have children");
     }
 }
 
@@ -464,7 +454,7 @@ export class StarExpression extends Expression {
             return ("*");
         }
     }
-    
+
 
     toModel() : Model.Expression {
         let coreData : Model.StarExpression = {};
@@ -472,7 +462,7 @@ export class StarExpression extends Expression {
         if (this._limitedTo) {
             coreData.limitedTo = this._limitedTo;
         }
-        
+
         return ({
             star : coreData
         });
@@ -497,9 +487,7 @@ export class StarExpression extends Expression {
      * have any children.
      */
     replaceChild(formerChild : Expression, newChild : Expression) {
-        throw {
-            err : "The star expression should never have children"
-        }
+        throw new Error("The star expression should never have children");
     }
 }
 
@@ -580,8 +568,6 @@ export class BinaryExpression extends Expression {
             this._lhs = newChild;
         } else if (this._rhs == formerChild) {
             this._rhs = newChild;
-        } else {
-            //throw  "Given child is not a direct child";
         }
     }
 }
@@ -608,5 +594,3 @@ export function loadExpression(expr : Model.Expression,
     }
     throw new Error(`Unknown expression: ${JSON.stringify(expr)}`);
 }
-
-

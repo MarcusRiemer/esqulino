@@ -134,7 +134,7 @@ export class CrossJoin extends Join {
             separator = "JOIN"
             break;
         default:
-            throw `Unknown type in cross join: ${join.cross}`;
+            throw new Error(`Unknown type in cross join: ${join.cross}`);
         }
 
         super(from, separator, join.table);
@@ -212,7 +212,7 @@ export class InnerJoin extends Join implements ExpressionParent {
         if (this._on == formerChild) {
             this._on = newChild;
         } else {
-            throw { err : "Not implemented" }
+            throw new Error("Not implemented");
         }
     }
 
@@ -224,7 +224,7 @@ export class InnerJoin extends Join implements ExpressionParent {
         if (this._on == formerChild) {
             this.replaceChild(formerChild, new MissingExpression({}, this));
         } else {
-            throw { err : "Not implemented" }
+            throw new Error("Not implemented");
         }
     }
 }
@@ -366,7 +366,7 @@ export class From extends Component {
         } else if (toAdd.inner) {
             toReturn = new InnerJoin(this, toAdd);
         } else {
-            throw `Unknown JOIN type: ${toAdd}`;
+            throw new Error(`Unknown JOIN type: ${toAdd}`);
         }
 
         // Persist the new instance
@@ -382,7 +382,7 @@ export class From extends Component {
     removeJoin(toRemove : Join) {
         // Is this the only table that is part of the FROM clause?
         if (this._first === toRemove && this._joins.length === 0) {
-            throw { "err" : "Can't remove only table" }
+            throw new Error("Can't remove only table");
         }
 
         // Do we need to re-assign the first item?
@@ -399,7 +399,7 @@ export class From extends Component {
             if (removalIndex >= 0) {
                 this._joins.splice(removalIndex, 1);
             } else {
-                throw { "err" : "Attempted to remove not existing JOIN" }
+                throw new Error("Attempted to remove not existing JOIN");
             }
         }
     }
