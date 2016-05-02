@@ -105,9 +105,14 @@ class ScratchSqlApp < Sinatra::Base
     assert_project_dir project_folder
 
     request_data = JSON.parse(request.body.read)
-    result = project_run_query(project_folder, request_data.fetch('sql'), request_data.fetch('params'))
-    
-    json result
+
+    begin
+      result = project_run_query(project_folder, request_data.fetch('sql'), request_data.fetch('params'))
+      json result
+    rescue SQLite3::SQLException => e
+      status 400
+      json({ :error => e })
+    end
   end
 
   # Running a query that has already been stored on the server

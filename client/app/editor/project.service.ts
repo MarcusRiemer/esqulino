@@ -9,9 +9,11 @@ import {Observable}                              from 'rxjs/Observable'
 import {ServerApiService}                        from '../shared/serverapi.service'
 import {ProjectDescription}                      from '../shared/project.description'
 import {
-    Model, QuerySelect, QueryDelete, QueryUpdateRequestDescription
+    Model, QuerySelect, QueryDelete, QueryUpdateRequestDescription,
 } from '../shared/query'
-import {QueryResult}                             from '../shared/query.result'
+import {
+    QueryResult, QueryRunErrorDescription
+} from '../shared/query.result'
 
 import {Project}                                 from './project'
 
@@ -116,6 +118,14 @@ export class ProjectService {
         }
         
         const toReturn = this._http.post(url, JSON.stringify(body), options)
+            .catch( (error : any) => {
+                if (query instanceof QuerySelect) {
+                    return (Observable.of(error));
+                    
+                } else {
+                    return Observable.throw(error);
+                }
+            })
             .map( (res) =>  {
                 // The result changes dependending on the concrete type
                 // of the query.
@@ -125,8 +135,7 @@ export class ProjectService {
                     console.log(res.json);
                     return (null)
                 }
-            })
-            .catch(this.handleError);
+            });
 
         return (toReturn);
     }

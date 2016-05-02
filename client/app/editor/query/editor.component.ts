@@ -1,8 +1,12 @@
 import {Component, Injector, Input}     from 'angular2/core'
 import {Router, RouteParams}            from 'angular2/router'
 
+import {Observable}                     from 'rxjs/Observable'
+
 import {Query, Model}                   from '../../shared/query'
-import {QueryResult}                    from '../../shared/query.result'
+import {
+    QueryResult, QueryRunErrorDescription
+} from '../../shared/query.result'
 
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
@@ -84,13 +88,9 @@ export class QueryEditorComponent {
 
         this._projectService.activeProject
             .subscribe(res => {
-                // Project is loaded, display a query
+                // Project is loaded, display the correct  query
                 this.project = res;
                 this.query = this.project.getQueryById(queryId);
-
-                // And immediatly execute it
-                //queryItem.fire();
-
             });
     }
 }

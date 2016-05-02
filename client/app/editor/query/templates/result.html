@@ -1,6 +1,12 @@
 <div *ngIf="result"
      class="result">
-  <table class="table">
+  <div *ngIf="result.isError"
+       class="alert alert-danger"
+       role="alert">
+    <strong>SQL Fehler!</strong> Bei der Bearbeitung dieser Abfrage hat die Datenbank den folgenden Fehler gemeldet: <samp>"{{ result.errorMessage }}"</samp>
+  </div>
+  <table *ngIf="!result.isError"
+         class="table">
     <thead>
       <tr>
         <th *ngFor="let col of result.cols">
