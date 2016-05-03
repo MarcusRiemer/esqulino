@@ -1,0 +1,10 @@
+{
+    "description": "Over the wire format to describe a query that could not\n\nbe run on the server.",
+    "type": "object",
+    "properties": {
+        "error": {
+            "type": "string"
+        }
+    },
+    "$schema": "http://json-schema.org/draft-04/schema#"
+}

@@ -82,7 +82,7 @@ let schema  = new Schema([
 
 describe('Valid SELECT Queries', () => {
     it ('SELECT person.personId, person.name FROM person JOIN ort o', () => {
-        let model : Model.Query = {
+        let model : Model.QueryDescription = {
             name : 'test-whole',
             id : 'id',
             select : {
@@ -130,7 +130,7 @@ describe('Valid SELECT Queries', () => {
     });
     
     it ('SELECT * FROM person WHERE 1', () => {
-        const model : Model.Query = {
+        const model : Model.QueryDescription = {
             name : 'where-simple',
             id : 'where-1',
             select : {
@@ -167,7 +167,7 @@ describe('Valid SELECT Queries', () => {
     });
 
     it ('SELECT * FROM person WHERE 1 <= 2', () => {
-        const model : Model.Query = {
+        const model : Model.QueryDescription = {
             name : 'where-compare',
             id : 'where-2',
             select : {
@@ -205,7 +205,7 @@ describe('Valid SELECT Queries', () => {
 
 describe('Invalid SELECT Queries', () => {
     it ('Unknown column: SELECT person.nonexistant FROM person', () => {
-        const model : Model.Query = {
+        const model : Model.QueryDescription = {
             name : 'select-nonexistant-column',
             id : 'invalid-select-1',
             select : {
@@ -230,7 +230,7 @@ describe('Invalid SELECT Queries', () => {
 
 describe('DELETE Query', () => {
     it('DELETE FROM person', () => {
-        const model : Model.Query = {
+        const model : Model.QueryDescription = {
             name : 'delete-everything',
             id : 'del-1',
             delete : { },
@@ -247,7 +247,7 @@ describe('DELETE Query', () => {
     });
 
     it('DELETE FROM person WHERE person.name = "Hans"', () => {
-        const model : Model.Query = {
+        const model : Model.QueryDescription = {
             name : 'delete-everything',
             id : 'del-1',
             delete : { },

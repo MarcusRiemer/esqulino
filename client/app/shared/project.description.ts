@@ -27,5 +27,5 @@ export interface ProjectListDescription {
  */
 export interface ProjectDescription extends ProjectListDescription {
     schema? : TableDescription[]
-    queries? : Model.Query[]
+    queries? : Model.QueryDescription[]
 }

@@ -179,7 +179,7 @@ export class ProjectService {
     createQuery(table : string) {
         const url = this._server.getQueryUrl(this.cachedProject.id);
 
-        let model : Model.Query = {
+        let model : Model.QueryDescription = {
             id : null,
             name : table,
             select : {

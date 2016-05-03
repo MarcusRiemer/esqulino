@@ -144,7 +144,7 @@ export interface Where {
  * Outermost description of a query. This contains
  * the whole structure and some identifying properties.
  */
-export interface Query {
+export interface QueryDescription {
     select? : Select
     delete? : Delete
     from? : From
