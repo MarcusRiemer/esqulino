@@ -13,7 +13,7 @@ export {Model, SyntaxTree, ValidationResult, Validateable}
  * Storing a query on the server
  */
 export interface QueryUpdateRequestDescription {
-    model : Model.Query,
+    model : Model.QueryDescription,
     sql? : string
 }
 
@@ -22,7 +22,7 @@ export interface QueryUpdateRequestDescription {
  */
 export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
     public schema : Schema;
-    private model : Model.Query;
+    private model : Model.QueryDescription;
     
     private _isDirty = false;
 
@@ -32,7 +32,7 @@ export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
     /**
      * Stores all basic information about a string.
      */
-    constructor(schema : Schema, model : Model.Query) {
+    constructor(schema : Schema, model : Model.QueryDescription) {
         this._name = model.name;
         this._id = model.id;
 
@@ -120,9 +120,9 @@ export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
      * Serializes the whole query to the "over-the-wire" format.
      * @return The "over-the-wire" JSON representation
      */
-    public toModel() : Model.Query {
+    public toModel() : Model.QueryDescription {
         // Fill in basic information
-        let toReturn : Model.Query = {
+        let toReturn : Model.QueryDescription = {
             name : this._name,
             id : this._id
         };
@@ -138,7 +138,7 @@ export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
      * 
      * @param toReturn The model that will be returned and needs to be enriched.
      */
-    protected abstract toModelImpl(toReturn : Model.Query) : Model.Query;
+    protected abstract toModelImpl(toReturn : Model.QueryDescription) : Model.QueryDescription;
 
 
     /**
@@ -173,7 +173,7 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
     private _from   : SyntaxTree.From;
     private _where  : SyntaxTree.Where;
 
-    constructor(schema : Schema, model : Model.Query) {
+    constructor(schema : Schema, model : Model.QueryDescription) {
         super(schema, model);
 
         // Ensure that the model is valid
@@ -276,7 +276,7 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
      * Serializes the whole query to the "over-the-wire" format.
      * @return The "over-the-wire" JSON representation
      */
-    protected toModelImpl(toReturn : Model.Query) : Model.Query {
+    protected toModelImpl(toReturn : Model.QueryDescription) : Model.QueryDescription {
         toReturn.from = this._from.toModel();
         toReturn.select = this._select.toModel();
 
@@ -296,7 +296,7 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
     private _from   : SyntaxTree.From;
     private _where  : SyntaxTree.Where;
 
-    constructor(schema : Schema, model : Model.Query) {
+    constructor(schema : Schema, model : Model.QueryDescription) {
         super(schema, model);
 
         // Ensure that the model is valid
@@ -399,7 +399,7 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
      * Serializes the whole query to the "over-the-wire" format.
      * @return The "over-the-wire" JSON representation
      */
-    protected toModelImpl(toReturn : Model.Query) : Model.Query {
+    protected toModelImpl(toReturn : Model.QueryDescription) : Model.QueryDescription {
         toReturn.delete = this._delete.toModel();
         toReturn.from = this._from.toModel();
 
@@ -418,7 +418,7 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
  *
  * @return A correct instance of a Query
  */
-export function loadQuery(schema : Schema, toLoad : Model.Query) : Query {
+export function loadQuery(schema : Schema, toLoad : Model.QueryDescription) : Query {
     // The number of distinctive top-level components that
     // are present in the model.
     let topLevelList = [toLoad.delete, toLoad.select]

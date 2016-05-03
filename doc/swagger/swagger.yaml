@@ -51,7 +51,7 @@ paths:
           type: string
       responses:
         200:
-          description: |
+          description: >-
             Succesful retrieval of a project.
           schema:
             "$ref": "./ProjectDescription.json"
@@ -121,7 +121,7 @@ paths:
           format: uuid
       responses:
         200:
-          description: |
+          description: >-
             Succesful deletion of query
 
   /project/{id}/query/{queryId}/run:
@@ -150,16 +150,21 @@ paths:
             $ref: "./QueryParamsDescription.json"
       responses:
         200:
-          description: |
+          description: >-
             Succesful execution of the query.
           schema:
             "$ref": "./QueryResultDescription.json"
+        400:
+          description: >-
+            Something went wrong while executing the query
+          schema:
+            "$ref": "./QueryRunErrorDescription.json"
+
   /project/{id}/query/run:
     post:
       operationId : runArbitraryQuery
       tags: [query]
-      description: >-
-        Running an arbitrary query that is part of the body of the request. This is usually done during development with the integrated editor.
+      description: Running an arbitrary query that is part of the body of the request. This is usually done during development with the integrated editor.
       parameters:
         - name: id
           in: path
@@ -168,13 +173,17 @@ paths:
           type: string
         - name: Query Parameters
           in: body
-          description: "As the server doesn't have the SQL representation available, it needs to be part of the request. If the query makes use of user defined values, these need to be transferred in the body."
-          required: false
+          description: As the server does not have the SQL representation available, it needs to be part of the request. If the query makes use of user defined values, these need to be transferred in the body.
+          required: true
           schema:
             $ref: "./ArbitraryQueryRequestDescription.json"
       responses:
         200:
-          description: >-
-            Succesful execution of the query.
+          description: Succesful execution of the query.
           schema:
             "$ref": "./QueryResultDescription.json"
+        400:
+          description: Something went wrong while executing the query
+          schema:
+            "$ref": "./QueryRunErrorDescription.json"
+

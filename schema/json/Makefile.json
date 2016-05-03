@@ -1,0 +1,38 @@
+SRC_PATH = ../../client/app/shared
+SRC_PROJECT = ../../client/tsconfig.json
+TYPESCRIPT_JSON_SCHEMA_BIN = ../../client/node_modules/typescript-json-schema/bin/typescript-json-schema
+
+DIST_FILES = ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json QueryRunErrorDescription.json
+
+ProjectDescription.json : $(SRC_PATH)/project.description.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+
+ProjectListDescription.json : $(SRC_PATH)/project.description.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+
+QueryDescription.json : $(SRC_PATH)/query.model.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+
+QueryUpdateRequestDescription.json : $(SRC_PATH)/query.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+
+QueryResultDescription.json : $(SRC_PATH)/query.result.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+
+QueryRunErrorDescription.json : $(SRC_PATH)/query.result.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+
+QueryParamsDescription.json : $(SRC_PATH)/query.result.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+
+ArbitraryQueryRequestDescription.json : $(SRC_PATH)/query.result.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+
+# Ensure the typescript-json-schema "binary" is part of the node_modules folder
+has-generator :
+ifeq (, $(wildcard $(TYPESCRIPT_JSON_SCHEMA_BIN)))
+	$(error "Typescript JSON schema generator not in node_modules")
+endif
+
+.PHONY :
+

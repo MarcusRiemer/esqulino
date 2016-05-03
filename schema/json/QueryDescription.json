@@ -30,9 +30,6 @@
                     "items": {
                         "$ref": "#/definitions/SelectColumn"
                     }
-                },
-                "allData": {
-                    "type": "boolean"
                 }
             }
         },
@@ -65,6 +62,9 @@
                 },
                 "parameter": {
                     "$ref": "#/definitions/ParameterExpression"
+                },
+                "star": {
+                    "$ref": "#/definitions/StarExpression"
                 }
             }
         },
@@ -91,7 +91,7 @@
                     "$ref": "#/definitions/Expression"
                 },
                 "operator": {
-                    "type": "string"
+                    "$ref": "#/definitions/\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".Operator"
                 },
                 "rhs": {
                     "$ref": "#/definitions/Expression"
@@ -101,20 +101,36 @@
                 }
             }
         },
+        "\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".Operator": {
+            "type": "string",
+            "enum": [
+                "<",
+                "<=",
+                "=",
+                "<>",
+                ">=",
+                ">",
+                "LIKE",
+                "+",
+                "-",
+                "*",
+                "/"
+            ]
+        },
         "ConstantExpression": {
             "description": "The other \"typical\" leaf, a compile time expression that also\n\nends recursion.",
             "type": "object",
             "properties": {
                 "type": {
-                    "$ref": "#/definitions/\"../../client/app/shared/query.model\".DataTypeStrings"
+                    "$ref": "#/definitions/\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".DataType"
                 },
                 "value": {
                     "type": "string"
                 }
             }
         },
-        "\"../../client/app/shared/query.model\".DataTypeStrings": {
-            "description": "Valid string values for data types",
+        "\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".DataType": {
+            "description": "Basic data types as inspired by SQLite.",
             "type": "string",
             "enum": [
                 "INTEGER",
@@ -132,6 +148,27 @@
             "type": "object",
             "properties": {
                 "key": {
+                    "type": "string"
+                }
+            }
+        },
+        "StarExpression": {
+            "description": "Denotes a *-Expression, that may be limited to a subset of\n\nexisting tables.",
+            "type": "object",
+            "properties": {
+                "limitedTo": {
+                    "$ref": "#/definitions/TableNameDefinition"
+                }
+            }
+        },
+        "TableNameDefinition": {
+            "description": "Named tables as described in the FROM",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "alias": {
                     "type": "string"
                 }
             }
@@ -155,18 +192,6 @@
                 }
             }
         },
-        "TableNameDefinition": {
-            "description": "Named tables as described in the FROM",
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "alias": {
-                    "type": "string"
-                }
-            }
-        },
         "Join": {
             "type": "object",
             "properties": {
@@ -174,7 +199,7 @@
                     "$ref": "#/definitions/TableNameDefinition"
                 },
                 "cross": {
-                    "type": "string"
+                    "$ref": "#/definitions/\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".InnerJoinType"
                 },
                 "inner": {
                     "type": "object",
@@ -189,13 +214,46 @@
                 }
             }
         },
+        "\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".InnerJoinType": {
+            "description": "Types of INNER JOINs",
+            "type": "string",
+            "enum": [
+                "cross",
+                "comma"
+            ]
+        },
         "Where": {
             "type": "object",
             "properties": {
                 "first": {
                     "$ref": "#/definitions/Expression"
+                },
+                "following": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/WhereSubsequent",
+                        "description": "All Expressions after the first in a WHERE clause need the\n\nlogical operation defined. This is redundant, as the\n\nBinaryExpression would be perfectly capable of expressing\n\narbitrarily deep nested logical expressions, but in that\n\ncase the UI would be less then thrilling."
+                    }
                 }
             }
+        },
+        "WhereSubsequent": {
+            "type": "object",
+            "properties": {
+                "expr": {
+                    "$ref": "#/definitions/Expression"
+                },
+                "logical": {
+                    "$ref": "#/definitions/\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".LogicalOperator"
+                }
+            }
+        },
+        "\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".LogicalOperator": {
+            "type": "string",
+            "enum": [
+                "AND",
+                "OR"
+            ]
         }
     },
     "$schema": "http://json-schema.org/draft-04/schema#"
