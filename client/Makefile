@@ -33,16 +33,13 @@ DIST_NODE_FILES = $(addprefix $(BUILD_DIR), $(NODE_FILES))
 SASS_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "sass")')
 TSC_BIN = node_modules/typescript/bin/tsc
 
+# Meta target: Build the client part of the application.
+dist : dist-sass dist-compile dist-templates dist-vendor dist-node
+
+
 # Uses the `package.json` file to grab all dependencies
 install-deps : has-npm
 	npm install
-# This is a godawful hack, but for some reason grunt-ts
-# does not correctly pick up the exclude property of the
-# tsconfig.json.
-	rm -rf typings/main*
-
-# Meta target: Build the client part of the application.
-dist : dist-sass dist-compile dist-templates dist-vendor dist-node
 
 # Meta target: Compiles all SASS files
 dist-sass : msg-pre-sass $(DIST_CSS_FILES)
