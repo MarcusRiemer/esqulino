@@ -32,12 +32,44 @@ class ScratchSqlApp < Sinatra::Base
   configure :development do
     puts "esqulino is running in development mode"
     register Sinatra::Reloader
+
+    # No caching
     set :static_cache_control, [:no_cache, :max_age => 0]
+    # Preferring our own exceptions
+    set :show_exceptions, :after_handler
   end
 
   # The data directory to serve projects from
   def given_data_dir
     ARGV[1] || "../data/dev/"
+  end
+
+  # Ensure that routes with projects do have projects available.
+  before '/api/project/:id/?*' do
+    @project_id = params['id']
+    @project_folder = File.join(given_data_dir, @project_id)
+
+    # Ensure this is actually a project directory
+    assert_project_dir @project_folder, @project_id
+  end
+
+  # Ensure that routes with queries do have queries available.
+  before '/api/project/:id/query/:queryId/?*' do
+    # Only match numeric IDs, everything else may be a valid
+    # sub-route like "run"
+    if /\d+.*/ =~ params['queryId'] then
+      @query_id = params['queryId']
+      
+      assert_query @project_folder, @project_id, @query_id
+    end
+  end
+
+  # React on esqulino errors
+  error EsqulinoError do
+    exception = env['sinatra.error']
+
+    status exception.code
+    json exception
   end
   
   # Listing all projects that are available
@@ -51,50 +83,27 @@ class ScratchSqlApp < Sinatra::Base
 
   # Updating a specific project
   post '/api/project/:id' do
-    begin
-      project_id = params['id']
-      project_folder = File.join(given_data_dir, project_id)
+    updated_project = @@validator.ensure_request("ProjectListDescription", request.body.read)
 
-      # Ensure this is actually a project directory
-      assert_project_dir project_folder, project_id
-
-      updated_project = @@validator.ensure_request("ProjectListDescription", request.body.read)
-
-      return update_project_description(project_folder, updated_project)
-    rescue EsqulinoError => e
-      status e.code
-      json e
-    end
+    update_project_description(@project_folder, updated_project)
+    status 200
   end
   
 
   # Info about a specific project
-  get '/api/project/:id' do
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id)
-
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder, project_id
-    
-    project = read_project project_folder
+  get '/api/project/:id' do 
+    project = read_project @project_folder
     
     json project
   end
 
   # Preview image for a specific project
-  get '/api/project/:id/preview' do
-    # Load the project to find out whether a preview image is set
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id)
-
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder, project_id
-    
-    project = YAML.load_file(File.join(project_folder, "config.yaml"));
+  get '/api/project/:id/preview' do    
+    project = YAML.load_file(File.join(@project_folder, "config.yaml"));
 
     # Return the preview image if it exists
     if project.key?("preview") then
-      send_file File.expand_path(project["preview"], project_folder)
+      send_file File.expand_path(project["preview"], @project_folder)
     else
       halt 404
     end
@@ -102,67 +111,40 @@ class ScratchSqlApp < Sinatra::Base
 
   # Running an arbitrary query (Dangerous!)
   post '/api/project/:id/query/run' do
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id)
-
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder, project_id
-
     request_data = JSON.parse(request.body.read)
 
     begin
-      result = project_run_query(project_folder, request_data.fetch('sql'), request_data.fetch('params'))
+      result = project_run_query(@project_folder, request_data.fetch('sql'), request_data.fetch('params'))
       json result
     rescue SQLite3::SQLException => e
       status 400
-      json({ :error => e })
+      json({ :message => e })
     end
   end
 
   # Running a query that has already been stored on the server
   post '/api/project/:id/query/:queryId/run' do
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id)
-
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder, project_id
-
-    query_id = params['queryId']
     query_params = JSON.parse(request.body.read)
     
-    result = project_run_stored_query(project_folder, query_id, query_params)
+    result = project_run_stored_query(@project_folder, @query_id, query_params)
     json result
   end
 
 
   # Storing a query
-  post '/api/project/:id/query/:queryId?' do
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id)
+  post '/api/project/:id/query/:queryId?' do    
+    query_id = project_store_query(@project_folder, JSON.parse(request.body.read), @query_id)
 
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder, project_id
-
-    given_query_id = params['queryId']
-    
-    query_id = project_store_query(project_folder, JSON.parse(request.body.read), given_query_id)
-
-    return (query_id)
+    return [200, query_id]
   end
 
   # Deleting a query
   delete '/api/project/:id/query/:queryId' do
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id)
-
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder, project_id
-
     query_id = params['queryId']
 
-    project_delete_query(project_folder, query_id)
+    project_delete_query(@project_folder, query_id)
 
-    status 200
+    return 200;
   end
   
   index_path = File.expand_path('index.html', settings.public_folder)

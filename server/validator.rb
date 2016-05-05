@@ -38,7 +38,7 @@ class Validator
     
     # Making sure it fits against a schema
     result = JSON::Validator.fully_validate(schema, body,
-                                            :strict => true,
+                                            :strict => false,
                                             :errors_as_objects => true,
                                             :parse_data => false)
 
