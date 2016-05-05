@@ -1,6 +1,6 @@
 include Makefile.json
 
-all : $(DIST_FILES)
+all : $(JSON_SCHEMA_FILES)
 
 # Uses the `package.json` file to grab all dependencies
 install-deps : has-npm
@@ -8,7 +8,7 @@ install-deps : has-npm
 
 # Removes all generated schema files
 clean :
-	rm -f $(DIST_FILES)
+	rm -f $(JSON_SCHEMA_FILES)
 
 .PHONY : all clean
 

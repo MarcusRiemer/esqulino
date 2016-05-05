@@ -1,14 +1,19 @@
-SCHEMA_PATH = ../../schema/json
+include ../../schema/json/Makefile.json
+
 SWAGGER_JAR = ~/bin/swagger-codegen-cli.jar
 
-include $(SCHEMA_PATH)/Makefile.json
 
-all : html/index.html
+copy-schema : $(JSON_SCHEMA_FILE_NAMES)
 
-html/index.html : $(DIST_FILES) swagger.yaml
+%.json : $(SCHEMA_PATH)/%.json
+	cp $^ $@
+
+all : $(JSON_SCHEMA_FILE_NAMES) html/index.html
+
+html/index.html : $(JSON_SCHEMA_FILES) swagger.yaml
 	java -jar $(SWAGGER_JAR) generate -i swagger.yaml -l html -o html
 clean :
-	rm -f $(DIST_FILES)
+	rm -f $(JSON_SCHEMA_FILE_NAMES)
 	rm -rf html
 
 .PHONY : all clean

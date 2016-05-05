@@ -1,32 +1,49 @@
-SRC_PATH = ../../client/app/shared
-SRC_PROJECT = ../../client/tsconfig.json
-TYPESCRIPT_JSON_SCHEMA_BIN = node_modules/typescript-json-schema/bin/typescript-json-schema
+# Ugly hack to grab the correct path of the typescript-json-schema "binary"
+# Taken from: http://blog.jgc.org/2007/01/what-makefile-am-i-in.html
+where-am-i = $(dir $(CURDIR)/$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))
 
-DIST_FILES = ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json QueryRunErrorDescription.json
+# Path to the clients source and its project file
+SRC_PATH = $(realpath ../../client/app/shared)
+SRC_PROJECT = $(realpath ../../client/tsconfig.json)
 
-ProjectDescription.json : $(SRC_PATH)/project.description.ts
-	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+# The absolute path of the directory the schemas reside in
+SCHEMA_PATH = $(realpath $(call where-am-i))
 
-ProjectListDescription.json : $(SRC_PATH)/project.description.ts
-	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+# Full path of typescript-json-schema
+TYPESCRIPT_JSON_SCHEMA_BIN = $(SCHEMA_PATH)/node_modules/typescript-json-schema/bin/typescript-json-schema
 
-QueryDescription.json : $(SRC_PATH)/query.model.ts
-	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+# Names of the schema files to generate
+JSON_SCHEMA_FILE_NAMES = ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json QueryRunErrorDescription.json
 
-QueryUpdateRequestDescription.json : $(SRC_PATH)/query.ts
-	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+# Paths of the schema files to generate
+JSON_SCHEMA_FILES = $(addprefix $(SCHEMA_PATH)/, $(JSON_SCHEMA_FILE_NAMES))
 
-QueryResultDescription.json : $(SRC_PATH)/query.result.ts
-	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+##################################
+# Not so nice: Repeated rules
+##################################
+$(SCHEMA_PATH)/ProjectDescription.json : $(SRC_PATH)/project.description.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@
 
-QueryRunErrorDescription.json : $(SRC_PATH)/query.result.ts
-	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+$(SCHEMA_PATH)/ProjectListDescription.json : $(SRC_PATH)/project.description.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@	
 
-QueryParamsDescription.json : $(SRC_PATH)/query.result.ts
-	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+$(SCHEMA_PATH)/QueryDescription.json : $(SRC_PATH)/query.model.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@	
 
-ArbitraryQueryRequestDescription.json : $(SRC_PATH)/query.result.ts
-	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(basename $@) --out $@
+$(SCHEMA_PATH)/QueryUpdateRequestDescription.json : $(SRC_PATH)/query.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@
+
+$(SCHEMA_PATH)/QueryResultDescription.json : $(SRC_PATH)/query.result.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@
+
+$(SCHEMA_PATH)/QueryRunErrorDescription.json : $(SRC_PATH)/query.result.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@
+
+$(SCHEMA_PATH)/QueryParamsDescription.json : $(SRC_PATH)/query.result.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@
+
+$(SCHEMA_PATH)/ArbitraryQueryRequestDescription.json : $(SRC_PATH)/query.result.ts
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@
 
 # Ensure the typescript-json-schema "binary" is part of the node_modules folder
 has-generator :
