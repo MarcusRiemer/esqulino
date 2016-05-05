@@ -4,7 +4,7 @@ import {Model}                  from '../../shared/query'
 import {Removable, Expression}  from '../../shared/syntaxtree/common'
 
 import {Subject}                from 'rxjs/Subject'
-import {Injectable}             from 'angular2/core';
+import {Injectable}             from '@angular/core';
 
 /**
  * The scopes a drag event could affect

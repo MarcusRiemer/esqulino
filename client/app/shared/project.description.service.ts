@@ -3,8 +3,8 @@ import 'rxjs/Rx';
 import {BehaviorSubject}    from 'rxjs/BehaviorSubject'
 import {Observable}         from 'rxjs/Observable'
 
-import {Injectable}         from 'angular2/core';
-import {Http, Response}     from 'angular2/http';
+import {Injectable}         from '@angular/core';
+import {Http, Response}     from '@angular/http';
 
 import {ServerApiService}   from './serverapi.service'
 import {ProjectDescription} from './project.description'

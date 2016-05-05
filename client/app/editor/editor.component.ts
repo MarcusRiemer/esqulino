@@ -1,7 +1,7 @@
-import {Component, OnInit}              from 'angular2/core';
-import {CORE_DIRECTIVES}                from 'angular2/common';
-import {HTTP_PROVIDERS}                 from 'angular2/http';
-import {RouteConfig, RouteParams,ROUTER_DIRECTIVES} from 'angular2/router';
+import {Component, OnInit}              from '@angular/core';
+import {CORE_DIRECTIVES}                from '@angular/common';
+import {HTTP_PROVIDERS}                 from '@angular/http';
+import {RouteConfig, RouteParams,ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
 import {TableDescription}                from '../shared/schema.description'
 

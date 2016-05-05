@@ -1,7 +1,7 @@
-import {Component, OnInit}              from 'angular2/core'
-import {HTTP_PROVIDERS}                 from 'angular2/http'
-import {CORE_DIRECTIVES, NgForm}        from 'angular2/common'
-import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router'
+import {Component, OnInit}              from '@angular/core'
+import {HTTP_PROVIDERS}                 from '@angular/http'
+import {CORE_DIRECTIVES, NgForm}        from '@angular/common'
+import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated'
 
 import {ServerApiService}               from './shared/serverapi.service'
 

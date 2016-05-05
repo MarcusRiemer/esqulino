@@ -1,6 +1,6 @@
 import 'rxjs/Rx'
 
-import {Injectable, OnInit}     from 'angular2/core'
+import {Injectable, OnInit}     from '@angular/core'
 
 import {Observable}             from 'rxjs/Observable'
 import {Subject}                from 'rxjs/Subject'
