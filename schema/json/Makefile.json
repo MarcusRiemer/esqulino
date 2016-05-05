@@ -13,7 +13,7 @@ SCHEMA_PATH = $(realpath $(call where-am-i))
 TYPESCRIPT_JSON_SCHEMA_BIN = $(SCHEMA_PATH)/node_modules/typescript-json-schema/bin/typescript-json-schema
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILE_NAMES = ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json QueryRunErrorDescription.json
+JSON_SCHEMA_FILE_NAMES = ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json
 
 # Paths of the schema files to generate
 JSON_SCHEMA_FILES = $(addprefix $(SCHEMA_PATH)/, $(JSON_SCHEMA_FILE_NAMES))
@@ -36,7 +36,7 @@ $(SCHEMA_PATH)/QueryUpdateRequestDescription.json : $(SRC_PATH)/query.ts
 $(SCHEMA_PATH)/QueryResultDescription.json : $(SRC_PATH)/query.result.ts
 	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@
 
-$(SCHEMA_PATH)/QueryRunErrorDescription.json : $(SRC_PATH)/query.result.ts
+$(SCHEMA_PATH)/RequestErrorDescription.json : $(SRC_PATH)/query.result.ts
 	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@
 
 $(SCHEMA_PATH)/QueryParamsDescription.json : $(SRC_PATH)/query.result.ts

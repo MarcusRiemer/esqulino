@@ -95,15 +95,15 @@ end
 # esqulino project.
 #
 # @param project_folder [string] The projects root folder
-def assert_project_dir(project_folder)
+def assert_project_dir(project_folder, project_id)
   
   if not File.directory? project_folder
-    raise %{Project folder "#{project_folder}" does not exist}
+    raise UnknownProjectError, project_id
   end
   
   project_config_file = File.join(project_folder, "config.yaml")
   if not File.exists? project_config_file
-    raise %{"config.yaml" does not exist in "#{project_folder}"}
+    raise UnknownProjectError, project_id
   end
 end
 

@@ -1,4 +1,6 @@
 import {QuerySelect, Model}                   from './query'
+import {RequestErrorDescription}              from './serverapi.service'
+
 
 /**
  * Not much ado about type safety here, in the raw
@@ -15,8 +17,8 @@ type QueryResultDescription = RawRow[]
  * Over the wire format to describe a query that could not
  * be run on the server.
  */
-export interface QueryRunErrorDescription {
-    error : string
+export interface QueryRunErrorDescription extends RequestErrorDescription {
+
 }
 
 /**
@@ -93,7 +95,7 @@ class Row {
 }
 
 function isQueryRunErrorDescription(arg : any) : arg is QueryRunErrorDescription {
-    return (arg.error !== undefined);
+    return (arg.message !== undefined);
 }
 
 function isQueryResultDescription(arg : any) : arg is QueryResultDescription {
@@ -140,7 +142,7 @@ export class QueryResult {
      * @return The servers error message.
      */
     get errorMessage() {
-        return (this._error.error);
+        return (this._error.message);
     }
 
     /**
