@@ -107,6 +107,18 @@ def assert_project_dir(project_folder, project_id)
   end
 end
 
+# Throws an exception if the given folder is not a valid
+# esqulino project.
+#
+# @param project_folder [string] The projects root folder
+def assert_query(project_folder, project_id, query_id)
+  query_folder = File.join(project_folder, "queries")
+
+  if not File.exists? File.join(query_folder, query_id + ".json")
+    raise UnknownQueryError.new(project_id, query_id)
+  end
+end
+
 # Strips information from a project description that is not meant to be
 # public. Technically this works by copying over a subset of properties
 # that are known, so unknown properties will *always* get stripped. Or

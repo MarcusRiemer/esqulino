@@ -23,6 +23,13 @@ class UnknownProjectError < EsqulinoError
   end
 end
 
+# Thrown when a query inside a project is unknown
+class UnknownQueryError < EsqulinoError
+  def initialize(project_id, query_id)
+    super "Unknown query \"#{query_id}\" in project \"#{project_id}\"", 404
+  end
+end
+
 # Thrown when a request does not fulfill a certain schema
 class InvalidSchemaError < EsqulinoError
   attr_reader :schema_name, :errors
