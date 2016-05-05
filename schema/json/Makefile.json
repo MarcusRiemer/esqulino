@@ -1,6 +1,6 @@
 SRC_PATH = ../../client/app/shared
 SRC_PROJECT = ../../client/tsconfig.json
-TYPESCRIPT_JSON_SCHEMA_BIN = ../../client/node_modules/typescript-json-schema/bin/typescript-json-schema
+TYPESCRIPT_JSON_SCHEMA_BIN = node_modules/typescript-json-schema/bin/typescript-json-schema
 
 DIST_FILES = ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json QueryRunErrorDescription.json
 

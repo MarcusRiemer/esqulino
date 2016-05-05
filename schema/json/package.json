@@ -1,0 +1,9 @@
+{
+  "name": "esqulino-schema-generation",
+  "version": "0.1.0",
+  "license": "AGPL",
+  "private": true,
+  "devDependencies": {
+    "typescript-json-schema": "^0.1.1"
+  }
+}
