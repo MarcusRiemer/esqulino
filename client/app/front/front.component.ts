@@ -1,9 +1,9 @@
-import {Component, OnInit}              from 'angular2/core';
-import {HTTP_PROVIDERS}                 from 'angular2/http';
-import {CORE_DIRECTIVES}                from 'angular2/common';
+import {Component, OnInit}              from '@angular/core';
+import {HTTP_PROVIDERS}                 from '@angular/http';
+import {CORE_DIRECTIVES}                from '@angular/common';
 import {
     RouteConfig, ROUTER_DIRECTIVES
-} from 'angular2/router';
+} from '@angular/router-deprecated';
 
 import {ProjectDescriptionService} from '../shared/project.description.service';
 import {ProjectListComponent}      from './project.list.component';

@@ -1,5 +1,5 @@
-import {Component, OnInit, Input}  from 'angular2/core';
-import {Router, ROUTER_DIRECTIVES} from 'angular2/router';
+import {Component, OnInit, Input}  from '@angular/core';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
 import {ProjectDescription}        from '../shared/project.description';
 import {ProjectDescriptionService} from '../shared/project.description.service';

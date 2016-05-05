@@ -12,18 +12,16 @@ DIST_JS_FILES = $(addprefix $(BUILD_DIR), $(TS_FILES:.ts=.js))
 VENDOR_FILES = $(shell find vendor -type f)
 DIST_VENDOR_FILES = $(addprefix $(BUILD_DIR), $(VENDOR_FILES))
 
-# The node files dependencies are painstakingly managed by hand,
-# we don't want to bloat the dist archive.
-NODE_FILES = node_modules/systemjs/dist/system-polyfills.js \
-	         node_modules/es6-shim/es6-shim.min.js \
-             node_modules/angular2/es6/dev/src/testing/shims_for_IE.js \
+# The node files dependencies are painstakingly managed by hand
+# because we don't want to bloat the dist archive.
+NODE_FILES = systemjs.config.js \
+             node_modules/es6-shim/es6-shim.min.js \
+			 node_modules/zone.js/dist/zone.js\
+             node_modules/reflect-metadata/Reflect.js \
              node_modules/systemjs/dist/system.src.js \
-             node_modules/angular2/bundles/angular2-polyfills.js \
-             node_modules/rxjs/bundles/Rx.js \
-             node_modules/angular2/bundles/router.dev.js \
-             node_modules/angular2/bundles/http.dev.js \
-             node_modules/angular2/bundles/angular2.dev.js \
-             node_modules/jasmine-core/lib/jasmine-core/jasmine.js \
+             $(shell find node_modules/rxjs -iname "*.js") \
+			 $(shell find node_modules/@angular -iname "*.js") \
+			 node_modules/jasmine-core/lib/jasmine-core/jasmine.js \
              node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js \
 	         node_modules/jasmine-core/lib/jasmine-core/boot.js \
              node_modules/jasmine-core/lib/jasmine-core/jasmine.css
@@ -79,7 +77,8 @@ dist-node: msg-pre-node $(DIST_NODE_FILES)
 # Actually copy node.js dependencies
 $(DIST_NODE_FILES) : $(NODE_FILES)
 	@mkdir -p $(BUILD_DIR)
-	cp --parents $^ $(BUILD_DIR)
+	@echo "Copying loads of dist files ..."
+	@cp --parents $^ $(BUILD_DIR)
 
 # Removes the dist/client directory which is one level upwards.
 # This is probably not very good style, but required to ensure

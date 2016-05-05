@@ -1,5 +1,5 @@
-import {Component, Injector, Input}     from 'angular2/core'
-import {Router, RouteParams}            from 'angular2/router'
+import {Component, Injector, Input}     from '@angular/core'
+import {Router, RouteParams}            from '@angular/router-deprecated'
 
 import {Observable}                     from 'rxjs/Observable'
 

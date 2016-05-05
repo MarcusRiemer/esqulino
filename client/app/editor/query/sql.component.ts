@@ -1,5 +1,5 @@
-import {Component, Input}               from 'angular2/core'
-import {Pipe, PipeTransform}            from 'angular2/core'
+import {Component, Input}               from '@angular/core'
+import {Pipe, PipeTransform}            from '@angular/core'
 
 import {TableDescription}               from '../../shared/schema.description'
 import {Query, Model, SyntaxTree}       from '../../shared/query'
