@@ -111,7 +111,7 @@ class ScratchSqlApp < Sinatra::Base
 
   # Running an arbitrary query (Dangerous!)
   post '/api/project/:id/query/run' do
-    request_data = JSON.parse(request.body.read)
+    request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
     begin
       result = project_run_query(@project_folder, request_data.fetch('sql'), request_data.fetch('params'))
@@ -124,10 +124,15 @@ class ScratchSqlApp < Sinatra::Base
 
   # Running a query that has already been stored on the server
   post '/api/project/:id/query/:queryId/run' do
-    query_params = JSON.parse(request.body.read)
-    
-    result = project_run_stored_query(@project_folder, @query_id, query_params)
-    json result
+    query_params = @@validator.ensure_request("QueryParamsDescription", request.body.read)
+
+    begin
+      result = project_run_stored_query(@project_folder, @query_id, query_params)
+      json result
+    rescue SQLite3::SQLException => e
+      status 400
+      json({ :message => e })
+    end
   end
 
 
