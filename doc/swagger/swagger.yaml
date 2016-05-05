@@ -4,8 +4,7 @@ info:
   version: "0.1.0"
   title: "esqulino"
 
-  description: >-
-    esqulino is a data orientated IDE for lerners in schools and elsewhere.
+  description: esqulino is a data orientated IDE for lerners in schools and elsewhere.
 
   contact:
     name: Marcus Riemer
@@ -27,8 +26,9 @@ paths:
     get:
       operationId : getAvailableProjects
       tags: [project]
-      description: >-
-        Retrieves all publicly available projects
+      description: Retrieves all publicly available projects
+      produces:
+        - application/json
       responses:
         200:
           description: Successful response
@@ -41,8 +41,7 @@ paths:
     get:
       operationId : getProjectById
       tags: [project]
-      description: >-
-        Retrieves a specific project with all available information. As this includes the whole syntax-tree for every query, this description is quite exhaustive.
+      description: Retrieves a specific project with all available information. As this includes the whole syntax-tree for every query, this description is quite exhaustive.
       parameters:
         - name: id
           in: path
@@ -51,15 +50,13 @@ paths:
           type: string
       responses:
         200:
-          description: >-
-            Succesful retrieval of a project.
+          description: Succesful retrieval of a project.
           schema:
             "$ref": "./ProjectDescription.json"
     post:
       operationId : updateProjectById
       tags: [project]
-      description: >-
-        Updates properties of the project itself, but does not change any query or page. To change any of those entities, call the matching `update` endpoints.
+      description: Updates properties of the project itself, but does not change any query or page. To change any of those entities, call the matching `update` endpoints.
       parameters:
         - name: id
           in: path
@@ -72,12 +69,36 @@ paths:
           required: true
           schema:
             $ref: "./ProjectListDescription.json"
+      responses:
+        200:
+          description: Project was updated
+  /project/{id}/query/:
+    post:
+      operationId : createQuery
+      tags: [query]
+      description: Creating a query on the server.
+      parameters:
+        - name: id
+          in: path
+          description: Id of the project the query belongs to.
+          required: true
+          type: string
+        - name: Query
+          in: body
+          description: The syntax tree and SQL representation of the query. If this representation should have an ID assigned, it will be ignored.
+          required: false
+          schema:
+            $ref: "./QueryUpdateRequestDescription.json"
+      responses:
+        200:
+          description: The query has been created.
+          schema:
+            "$ref": "./QueryResultDescription.json"
   /project/{id}/query/{queryId}:
     post:
       operationId : updateQueryById
       tags: [query]
-      description: >-
-        Updating or creating a query on the server.
+      description: Updating a query on the server.
       parameters:
         - name: id
           in: path
@@ -86,8 +107,8 @@ paths:
           type: string
         - name: queryId
           in: path
-          description: Id of the query to update. If this is left out a new query will be created.
-          required: false
+          description: Id of the query to update.
+          required: true
           type: string
           format: uuid
         - name: Query
@@ -98,15 +119,13 @@ paths:
             $ref: "./QueryUpdateRequestDescription.json"
       responses:
         200:
-          description: >-
-            The query has been created or updated.
+          description: The query has been updated.
           schema:
             "$ref": "./QueryResultDescription.json"
     delete:
       operationId : deleteQueryById
       tags: [query]
-      description: >-
-        Deleting an existing query
+      description: Deleting an existing query
       parameters:
         - name: id
           in: path
@@ -121,15 +140,13 @@ paths:
           format: uuid
       responses:
         200:
-          description: >-
-            Succesful deletion of query
+          description: Succesful deletion of query
 
   /project/{id}/query/{queryId}/run:
     post:
       operationId : runQueryById
       tags: [query]
-      description: >-
-        Running a query that has already been stored on this server.
+      description: Running a query that has already been stored on this server.
       parameters:
         - name: id
           in: path
@@ -150,13 +167,11 @@ paths:
             $ref: "./QueryParamsDescription.json"
       responses:
         200:
-          description: >-
-            Succesful execution of the query.
+          description: Succesful execution of the query.
           schema:
             "$ref": "./QueryResultDescription.json"
         400:
-          description: >-
-            Something went wrong while executing the query
+          description: Something went wrong while executing the query
           schema:
             "$ref": "./QueryRunErrorDescription.json"
 
