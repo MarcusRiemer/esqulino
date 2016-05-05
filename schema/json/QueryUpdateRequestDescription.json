@@ -9,6 +9,7 @@
             "type": "string"
         }
     },
+    "additionalProperties": false,
     "definitions": {
         "QueryDescription": {
             "description": "Outermost description of a query. This contains\n\nthe whole structure and some identifying properties.",
@@ -32,7 +33,8 @@
                 "id": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "Select": {
             "type": "object",
@@ -43,7 +45,8 @@
                         "$ref": "#/definitions/SelectColumn"
                     }
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "SelectColumn": {
             "type": "object",
@@ -54,7 +57,8 @@
                 "as": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "Expression": {
             "description": "We use a single base type for all kinds of expression, as\n\nthis vastly simplifies the storage process. Each kind of\n\nconcrete expression is stored under a key. Only one of these\n\nkeys may be set at runtime.",
@@ -78,7 +82,8 @@
                 "star": {
                     "$ref": "#/definitions/StarExpression"
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "SingleColumnExpression": {
             "description": "One \"typical\" logical leaf of an expression tree, postpones\n\nthe actual value lookup to execution time and ends recursion.",
@@ -93,7 +98,8 @@
                 "alias": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "BinaryExpression": {
             "description": "Combines two expressions with a binary operator.",
@@ -103,7 +109,7 @@
                     "$ref": "#/definitions/Expression"
                 },
                 "operator": {
-                    "$ref": "#/definitions/\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".Operator"
+                    "$ref": "#/definitions/Operator"
                 },
                 "rhs": {
                     "$ref": "#/definitions/Expression"
@@ -111,9 +117,10 @@
                 "simple": {
                     "type": "boolean"
                 }
-            }
+            },
+            "additionalProperties": false
         },
-        "\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".Operator": {
+        "Operator": {
             "type": "string",
             "enum": [
                 "<",
@@ -134,14 +141,15 @@
             "type": "object",
             "properties": {
                 "type": {
-                    "$ref": "#/definitions/\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".DataType"
+                    "$ref": "#/definitions/DataType"
                 },
                 "value": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false
         },
-        "\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".DataType": {
+        "DataType": {
             "description": "Basic data types as inspired by SQLite.",
             "type": "string",
             "enum": [
@@ -153,7 +161,8 @@
         "MissingExpression": {
             "description": "Denotes an expression that is intentionally missing.",
             "type": "object",
-            "properties": {}
+            "properties": {},
+            "additionalProperties": false
         },
         "ParameterExpression": {
             "description": "Denotes a value that needs to be bound at the runtime of the query.",
@@ -162,7 +171,8 @@
                 "key": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "StarExpression": {
             "description": "Denotes a *-Expression, that may be limited to a subset of\n\nexisting tables.",
@@ -171,7 +181,8 @@
                 "limitedTo": {
                     "$ref": "#/definitions/TableNameDefinition"
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "TableNameDefinition": {
             "description": "Named tables as described in the FROM",
@@ -183,12 +194,14 @@
                 "alias": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "Delete": {
             "description": "There doesn't seem to be any data associated with the\n\nSQLite DELETE keyword itself. But it didn't seem practical\n\nto go with a \"simple\" type that breaks the \"normal\"\n\nstructure of the model.",
             "type": "object",
-            "properties": {}
+            "properties": {},
+            "additionalProperties": false
         },
         "From": {
             "type": "object",
@@ -202,7 +215,8 @@
                         "$ref": "#/definitions/Join"
                     }
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "Join": {
             "type": "object",
@@ -211,7 +225,7 @@
                     "$ref": "#/definitions/TableNameDefinition"
                 },
                 "cross": {
-                    "$ref": "#/definitions/\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".InnerJoinType"
+                    "$ref": "#/definitions/InnerJoinType"
                 },
                 "inner": {
                     "type": "object",
@@ -222,11 +236,13 @@
                         "on": {
                             "$ref": "#/definitions/Expression"
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 }
-            }
+            },
+            "additionalProperties": false
         },
-        "\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".InnerJoinType": {
+        "InnerJoinType": {
             "description": "Types of INNER JOINs",
             "type": "string",
             "enum": [
@@ -247,7 +263,8 @@
                         "description": "All Expressions after the first in a WHERE clause need the\n\nlogical operation defined. This is redundant, as the\n\nBinaryExpression would be perfectly capable of expressing\n\narbitrarily deep nested logical expressions, but in that\n\ncase the UI would be less then thrilling."
                     }
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "WhereSubsequent": {
             "type": "object",
@@ -256,11 +273,12 @@
                     "$ref": "#/definitions/Expression"
                 },
                 "logical": {
-                    "$ref": "#/definitions/\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".LogicalOperator"
+                    "$ref": "#/definitions/LogicalOperator"
                 }
-            }
+            },
+            "additionalProperties": false
         },
-        "\"/home/marcus/projects/scratch-sql/client/app/shared/query.model\".LogicalOperator": {
+        "LogicalOperator": {
             "type": "string",
             "enum": [
                 "AND",
