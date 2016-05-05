@@ -40,6 +40,7 @@ class Validator
     result = JSON::Validator.fully_validate(schema, body,
                                             :strict => false,
                                             :errors_as_objects => true,
+                                            :validate_schema => true,
                                             :parse_data => false)
 
     if result.length > 0 then

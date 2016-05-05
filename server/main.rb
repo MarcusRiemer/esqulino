@@ -132,8 +132,9 @@ class ScratchSqlApp < Sinatra::Base
 
 
   # Storing a query
-  post '/api/project/:id/query/:queryId?' do    
-    query_id = project_store_query(@project_folder, JSON.parse(request.body.read), @query_id)
+  post '/api/project/:id/query/:queryId?' do
+    new_query = @@validator.ensure_request("QueryUpdateRequestDescription", request.body.read)
+    query_id = project_store_query(@project_folder, new_query, @query_id)
 
     return [200, query_id]
   end

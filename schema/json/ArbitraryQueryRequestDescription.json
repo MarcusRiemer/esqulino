@@ -2,14 +2,20 @@
     "type": "object",
     "properties": {
         "params": {
+            "$ref": "#/definitions/QueryParamsDescription"
+        },
+        "sql": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "definitions": {
+        "QueryParamsDescription": {
             "description": "Parameters are simply a key-value dictionary. Whenever a query\n\nmakes use of user-bound parameters, these are transferred via\n\nthis kind of object.",
             "type": "object",
             "additionalProperties": {
                 "type": "string"
             }
-        },
-        "sql": {
-            "type": "string"
         }
     },
     "$schema": "http://json-schema.org/draft-04/schema#"
