@@ -7,6 +7,9 @@ require "sinatra/multi_route"
 require 'yaml'
 
 require './project.rb'
+require './validator.rb'
+require './error.rb'
+
 
 # Mainly parses paramaters and routes calls to apropriate functions.
 # Very little real logic should take place in this class.
@@ -19,6 +22,11 @@ class ScratchSqlApp < Sinatra::Base
   enable :logging
 
   register Sinatra::MultiRoute
+
+  # Static HTML files are served from here
+  set :public_folder, File.dirname(__FILE__) + "/../dist/client/"
+
+  @@validator = Validator.new(File.dirname(__FILE__) + "/../schema/json")
   
   # Activate reloading and disable any caching when developing
   configure :development do
@@ -26,9 +34,6 @@ class ScratchSqlApp < Sinatra::Base
     register Sinatra::Reloader
     set :static_cache_control, [:no_cache, :max_age => 0]
   end
-
-  # Static HTML files are served from here
-  set :public_folder, File.dirname(__FILE__) + "/../dist/client/"
 
   # The data directory to serve projects from
   def given_data_dir
@@ -46,13 +51,20 @@ class ScratchSqlApp < Sinatra::Base
 
   # Updating a specific project
   post '/api/project/:id' do
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id)
+    begin
+      project_id = params['id']
+      project_folder = File.join(given_data_dir, project_id)
 
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder
+      # Ensure this is actually a project directory
+      assert_project_dir project_folder, project_id
 
-    return update_project_description(project_folder, JSON.parse(request.body.read))
+      updated_project = @@validator.ensure_request("ProjectListDescription", request.body.read)
+
+      return update_project_description(project_folder, updated_project)
+    rescue EsqulinoError => e
+      status e.code
+      json e
+    end
   end
   
 
@@ -62,19 +74,11 @@ class ScratchSqlApp < Sinatra::Base
     project_folder = File.join(given_data_dir, project_id)
 
     # Ensure this is actually a project directory
-    assert_project_dir project_folder
+    assert_project_dir project_folder, project_id
+    
     project = read_project project_folder
     
     json project
-  end
-
-  # Updating a specific project
-  post '/api/project/:id' do
-    project_id = params['id']
-    project_folder = File.join(given_data_dir, project_id);
-
-    # Ensure this is actually a project directory
-    assert_project_dir project_folder
   end
 
   # Preview image for a specific project
@@ -84,7 +88,7 @@ class ScratchSqlApp < Sinatra::Base
     project_folder = File.join(given_data_dir, project_id)
 
     # Ensure this is actually a project directory
-    assert_project_dir project_folder
+    assert_project_dir project_folder, project_id
     
     project = YAML.load_file(File.join(project_folder, "config.yaml"));
 
@@ -102,7 +106,7 @@ class ScratchSqlApp < Sinatra::Base
     project_folder = File.join(given_data_dir, project_id)
 
     # Ensure this is actually a project directory
-    assert_project_dir project_folder
+    assert_project_dir project_folder, project_id
 
     request_data = JSON.parse(request.body.read)
 
@@ -121,7 +125,7 @@ class ScratchSqlApp < Sinatra::Base
     project_folder = File.join(given_data_dir, project_id)
 
     # Ensure this is actually a project directory
-    assert_project_dir project_folder
+    assert_project_dir project_folder, project_id
 
     query_id = params['queryId']
     query_params = JSON.parse(request.body.read)
@@ -137,7 +141,7 @@ class ScratchSqlApp < Sinatra::Base
     project_folder = File.join(given_data_dir, project_id)
 
     # Ensure this is actually a project directory
-    assert_project_dir project_folder
+    assert_project_dir project_folder, project_id
 
     given_query_id = params['queryId']
     
@@ -152,7 +156,7 @@ class ScratchSqlApp < Sinatra::Base
     project_folder = File.join(given_data_dir, project_id)
 
     # Ensure this is actually a project directory
-    assert_project_dir project_folder
+    assert_project_dir project_folder, project_id
 
     query_id = params['queryId']
 

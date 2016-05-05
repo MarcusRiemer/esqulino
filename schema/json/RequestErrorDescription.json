@@ -1,8 +1,8 @@
 {
-    "description": "Over the wire format to describe a query that could not\n\nbe run on the server.",
+    "description": "The format of error messages the server might return.",
     "type": "object",
     "properties": {
-        "error": {
+        "message": {
             "type": "string"
         }
     },
