@@ -19,7 +19,7 @@ export interface QueryUpdateRequestDescription {
 
 export {
     Model, SyntaxTree, ValidationResult, Validateable,
-    Query, QuerySelect, QueryDelete, QueryFrom, QueryWhere
+    Query, QuerySelect, QueryDelete, QueryInsert, QueryFrom, QueryWhere
 }
 
 /**

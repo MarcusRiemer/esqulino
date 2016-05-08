@@ -5,10 +5,10 @@ import {ExpressionComponent}            from './sql.expr.component'
 import {QueryInsert}                    from '../../shared/query'
 
 @Component({
-    selector : 'sql-from',
-    templateUrl : 'app/editor/query/templates/query-from.html',
+    selector : 'sql-insert',
+    templateUrl : 'app/editor/query/templates/query-insert.html',
 })
-export class FromComponent {
+export class InsertComponent {
     @Input() query : QueryInsert;
 
     constructor() {

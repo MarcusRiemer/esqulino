@@ -64,7 +64,7 @@
   <hr />
 
   <div class="block-container block">
-    <template ngFor let-join [ngForOf]="query?.from.joinsAndInitial" let-last="last">
+    <template ngFor let-join [ngForOf]="query?.from?.joinsAndInitial" let-last="last">
       <div (dragstart)="startTableDrag(join.tableName, $event)"
            class="table"
            draggable="true">
@@ -81,7 +81,7 @@
         </li>
       </ul>
     </template>
-    <div *ngFor="let table of query?.from.unusedTables; let is-last=last"
+    <div *ngFor="let table of query?.from?.unusedTables; let is-last=last"
          (dragstart)="startTableDrag(table.tableName, $event)"
       class="table"
       draggable="true">

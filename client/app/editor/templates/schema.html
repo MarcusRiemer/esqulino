@@ -6,10 +6,15 @@
           <h3>Tabelle <code>{{ table.name }}</code></h3>
         </td>
         <td>
-          <button (click)="onCreateQuery(table.name)"
+          <button (click)="onCreateSelect(table.name)"
+                  class="btn btn-primary">
+            <span class="fa fa-search"></span>
+            Neues SELECT
+          </button>
+          <button (click)="onCreateInsert(table.name)"
                   class="btn btn-primary">
             <span class="fa fa-plus-circle"></span>
-            Neue Abfrage
+            Neues INSERT
           </button>
         </td>
       </tr>

@@ -11,6 +11,7 @@ import {SelectComponent}                from './sql.select.component'
 import {DeleteComponent}                from './sql.delete.component'
 import {FromComponent}                  from './sql.from.component'
 import {WhereComponent}                 from './sql.where.component'
+import {InsertComponent}                from './sql.insert.component'
 
 /**
  * Transforms a query into its string expression.
@@ -29,7 +30,8 @@ export class SqlStringPipe implements PipeTransform {
 @Component({
     selector: 'sql-query',
     templateUrl: 'app/editor/query/templates/query.html',
-    directives: [SelectComponent, DeleteComponent, FromComponent, WhereComponent],
+    directives: [SelectComponent, DeleteComponent, FromComponent, WhereComponent,
+                 InsertComponent],
     pipes: [SqlStringPipe]
 })
 export class QueryComponent {

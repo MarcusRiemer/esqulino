@@ -25,11 +25,11 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
 
         // Ensure that the model is valid
         if (!model.delete) {
-            throw new Error("QuerySelect without Delete model");
+            throw new Error("QueryDelete without Delete model");
         }
 
         if (!model.from) {
-            throw new Error("QuerySelect without From model");
+            throw new Error("QueryDelete without From model");
         }
 
         // Build SQL components from model
