@@ -21,6 +21,9 @@
                 "delete": {
                     "$ref": "#/definitions/Delete"
                 },
+                "insert": {
+                    "$ref": "#/definitions/Insert"
+                },
                 "from": {
                     "$ref": "#/definitions/From"
                 },
@@ -203,6 +206,53 @@
             "properties": {},
             "additionalProperties": false
         },
+        "Insert": {
+            "description": "A complete INSERT statement.",
+            "type": "object",
+            "properties": {
+                "table": {
+                    "type": "string"
+                },
+                "columns": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Expression",
+                        "description": "We use a single base type for all kinds of expression, as\n\nthis vastly simplifies the storage process. Each kind of\n\nconcrete expression is stored under a key. Only one of these\n\nkeys may be set at runtime."
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "Expression": {
+            "type": "object",
+            "properties": {
+                "singleColumn": {
+                    "$ref": "#/definitions/SingleColumnExpression"
+                },
+                "binary": {
+                    "$ref": "#/definitions/BinaryExpression"
+                },
+                "constant": {
+                    "$ref": "#/definitions/ConstantExpression"
+                },
+                "missing": {
+                    "$ref": "#/definitions/MissingExpression"
+                },
+                "parameter": {
+                    "$ref": "#/definitions/ParameterExpression"
+                },
+                "star": {
+                    "$ref": "#/definitions/StarExpression"
+                }
+            },
+            "additionalProperties": false
+        },
         "From": {
             "type": "object",
             "properties": {
@@ -251,6 +301,7 @@
             ]
         },
         "Where": {
+            "description": "A WHERE component with at least one expression.",
             "type": "object",
             "properties": {
                 "first": {

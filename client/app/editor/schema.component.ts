@@ -40,10 +40,13 @@ export class SchemaComponent implements OnInit {
             .subscribe(res => this.project = res);
     }
 
-    onCreateQuery(tableName : string) {
-        console.log("onCreateQuery");
-        
-        this._projectService.createQuery(tableName)
-            .then( (res) => console.log(`Created query for table "${tableName}"`));
+    onCreateSelect(tableName : string) {
+        this._projectService.createSelect(tableName)
+            .then( (res) => console.log(`Created SELECT query for table "${tableName}"`));
+    }
+
+    onCreateInsert(tableName : string) {
+        this._projectService.createInsert(tableName)
+            .then( (res) => console.log(`Created INSERT query for table "${tableName}"`));
     }
 }

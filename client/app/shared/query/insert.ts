@@ -18,6 +18,7 @@ export class QueryInsert extends Query {
     // The table this query inserts something into.
     private _tableName : string;
 
+    // The currently stored values
     private _values : { [matchingIndex:number] : SyntaxTree.Expression } = {};
     
     constructor(schema : Schema, model : Model.QueryDescription) {
@@ -41,6 +42,13 @@ export class QueryInsert extends Query {
      */
     get values() {
         return (this._columnIndices.map(i => this._values[i]));
+    }
+
+    /**
+     * @return The name of the table new data will be inserted to
+     */
+    get tableName() {
+        return (this._tableName);
     }
 
     getLocationDescription() {

@@ -9,7 +9,7 @@ import {Observable}                              from 'rxjs/Observable'
 import {ServerApiService}                        from '../shared/serverapi.service'
 import {ProjectDescription}                      from '../shared/project.description'
 import {
-    Model, QuerySelect, QueryDelete, QueryUpdateRequestDescription,
+    Model, QuerySelect, QueryDelete, QueryInsert, QueryUpdateRequestDescription,
 } from '../shared/query'
 import {
     QueryResult, QueryRunErrorDescription
@@ -176,11 +176,11 @@ export class ProjectService {
      *
      * @param table The name of the table to query initially
      */
-    createQuery(table : string) {
+    createSelect(table : string) {
         const url = this._server.getQueryUrl(this.cachedProject.id);
 
         let model : Model.QueryDescription = {
-            id : null,
+            id : undefined,
             name : table,
             select : {
                 columns : [{
@@ -212,6 +212,44 @@ export class ProjectService {
                 console.log("onNext");
                 model.id = queryId.text();
                 this.cachedProject.queries.push(new QuerySelect(this.cachedProject.schema, model));
+            });
+
+        return (toReturn.toPromise());
+    }
+
+    /**
+     * Request to create a new query on the given table.
+     *
+     * @param table The name of the table to query initially
+     */
+    createInsert(tableName : string) {
+        const url = this._server.getQueryUrl(this.cachedProject.id);
+
+        let model : Model.QueryDescription = {
+            id : undefined,
+            name : tableName,
+            insert : {
+                table : tableName,
+                columns : [],
+                values : []
+            }
+        }
+
+        const query = new QueryInsert(this.cachedProject.schema, model);
+        
+        let bodyJson : QueryUpdateRequestDescription = {
+            model : model,
+            sql : query.toSqlString()
+        }
+        
+        const toReturn = this._http.post(url, JSON.stringify(bodyJson))
+            .catch(this.handleError);
+
+        // Once the query has been created, add it to the list of queries
+        // that are part of this project.
+        toReturn.subscribe( queryId => {
+                model.id = queryId.text();
+                this.cachedProject.queries.push(new QueryInsert(this.cachedProject.schema, model));
             });
 
         return (toReturn.toPromise());

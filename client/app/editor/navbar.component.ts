@@ -3,7 +3,7 @@ import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
 import {Project}           from './project'
 import {
-    Query, QuerySelect, QueryDelete
+    Query, QuerySelect, QueryDelete, QueryInsert
 } from '../shared/query'
 
 @Component({
@@ -23,6 +23,8 @@ export class NavbarComponent {
     iconForQuery(query : Query) {
         if (query instanceof QueryDelete) {
             return ("fa-ban");
+        } else if (query instanceof QueryInsert) {
+            return ("fa-plus-circle");
         } else {
             return ("fa-search");
         } 
