@@ -40,7 +40,29 @@ export class Schema {
     }
 
     /**
-     * @return The column definition of a certain table
+     * @param tableName The name of the table the column belongs to.
+     * @param columnIndex The index of the column, starts at 0
+     *
+     * @return All known type information about the requested column.
+     */
+    getColumnByIndex(tableName : string, columnIndex : number) {
+        const table = this._tables.find(t => t.name == tableName);
+
+        if (!table) {
+            throw new Error(`Can't even find table ${tableName} for column #${columnIndex}`);
+        }
+
+        if (columnIndex > table.columns.length) {
+            throw new Error(`Table ${tableName} has no column #${columnIndex}, maximum is ${table.columns.length}`);
+        }
+
+        return (table.columns[columnIndex]);
+    }
+
+    /**
+     * @param tableName The name of the table the column belongs to.
+     *
+     * @return All known type information about the requested column.
      */
     getColumn(tableName : string, columnName : string) {
         const table = this._tables.find(t => t.name == tableName);

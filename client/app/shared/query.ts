@@ -7,6 +7,7 @@ import {ValidationResult, Validateable}  from './query.validation'
 import {Query, QueryFrom, QueryWhere}    from './query/base'
 import {QuerySelect}                     from './query/select'
 import {QueryDelete}                     from './query/delete'
+import {QueryInsert}                     from './query/insert'
 
 /**
  * Storing a query on the server
@@ -31,7 +32,7 @@ export {
 export function loadQuery(schema : Schema, toLoad : Model.QueryDescription) : Query {
     // The number of distinctive top-level components that
     // are present in the model.
-    let topLevelList = [toLoad.delete, toLoad.select]
+    let topLevelList = [toLoad.delete, toLoad.select, toLoad.insert]
         .filter( v => !!v);
 
     // There must be a single top-level component
@@ -45,6 +46,9 @@ export function loadQuery(schema : Schema, toLoad : Model.QueryDescription) : Qu
     }
     else if (toLoad.delete) {
         return (new QueryDelete(schema, toLoad));
+    }
+    else if (toLoad.insert) {
+        return (new QueryInsert(schema, toLoad));
     }
 
     throw new Error("Unknown top-level component");

@@ -135,9 +135,21 @@ export interface WhereSubsequent {
     logical : LogicalOperator
 }
 
+/**
+ * A WHERE component with at least one expression.
+ */
 export interface Where {
     first : Expression
     following? : WhereSubsequent[]
+}
+
+/**
+ * A complete INSERT statement.
+ */
+export interface Insert {
+    table: string,
+    columns: number[],
+    values: Expression[]
 }
 
 /**
@@ -147,6 +159,7 @@ export interface Where {
 export interface QueryDescription {
     select? : Select
     delete? : Delete
+    insert? : Insert
     from? : From
     where? : Where
     name : string
