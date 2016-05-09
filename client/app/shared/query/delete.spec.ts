@@ -72,7 +72,7 @@ let schema  = new Schema([
     }
 ]);
 
-describe('DELETE Query', () => {
+describe('Valid DELETE Queries', () => {
     it('DELETE FROM person', () => {
         const model : Model.QueryDescription = {
             name : 'delete-everything',

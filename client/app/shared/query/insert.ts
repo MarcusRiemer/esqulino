@@ -51,6 +51,42 @@ export class QueryInsert extends Query {
         return (this._tableName);
     }
 
+    getValueForColumn(columnIndex : number) {
+        return (this._values[columnIndex]);
+    }
+
+    /**
+     *
+     */
+    changeActivationState(index : number, active : boolean) {
+        const alreadyActivated = this._columnIndices.some( v => v == index);
+        
+        // Is the new state active?
+        if (active) {
+            // Is it activated already?
+            if (alreadyActivated) {
+                // It shouldn't be
+                const column = this.schema.getColumnByIndex(this.tableName, index);
+                throw new Error(`Activating: Column #${index} (${column.name}) is already active`);
+            } else {
+                // Activate it
+                this._columnIndices.push(index);
+                this._values[index] = loadExpression({ missing : {} }, this);
+            }
+        } else {
+            // Is it already deactivated?
+            if (alreadyActivated == false) {
+                // It shouldn't be
+                const column = this.schema.getColumnByIndex(this.tableName, index);
+                throw new Error(`Deactivating: Column #${index} (${column.name}) is already deactivated`);
+            } else {
+                // Deactivate it by removing all references to it
+                this._columnIndices.splice(this._columnIndices.indexOf(index), 1);
+                delete this._values[index];
+            }
+        }
+    }
+
     getLocationDescription() {
         return ("VALUES");
     }
