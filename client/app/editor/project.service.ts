@@ -4,6 +4,7 @@ import {Injectable}                              from '@angular/core'
 import {Http, Response, Headers, RequestOptions} from '@angular/http'
 
 import {BehaviorSubject}                         from 'rxjs/BehaviorSubject'
+import {AsyncSubject}                            from 'rxjs/AsyncSubject';
 import {Observable}                              from 'rxjs/Observable'
 
 import {ServerApiService}                        from '../shared/serverapi.service'
@@ -155,7 +156,7 @@ export class ProjectService {
         }
 
         // Add the SQL representation, if applicable
-        if (query.validate) {
+        if (query.validate().isValid) {
             bodyJson.sql = query.toSqlString();
         }
 
@@ -203,18 +204,23 @@ export class ProjectService {
             sql : query.toSqlString()
         }
         
-        const toReturn = this._http.post(url, JSON.stringify(bodyJson))
+        const request = this._http.post(url, JSON.stringify(bodyJson))
             .catch(this.handleError);
+
+        const toReturn = new AsyncSubject<QuerySelect>();
 
         // Once the query has been created, add it to the list of queries
         // that are part of this project.
-        toReturn.subscribe( queryId => {
-                console.log("onNext");
-                model.id = queryId.text();
-                this.cachedProject.queries.push(new QuerySelect(this.cachedProject.schema, model));
-            });
+        request.subscribe( queryId => {
+            model.id = queryId.text();
 
-        return (toReturn.toPromise());
+            const newQuery = new QuerySelect(this.cachedProject.schema, model);
+            this.cachedProject.queries.push(newQuery);
+
+            toReturn.next(newQuery);
+        });
+
+        return (toReturn);
     }
 
     /**
@@ -242,17 +248,26 @@ export class ProjectService {
             sql : query.toSqlString()
         }
         
-        const toReturn = this._http.post(url, JSON.stringify(bodyJson))
+        const request = this._http.post(url, JSON.stringify(bodyJson))
             .catch(this.handleError);
+
+        const toReturn = new AsyncSubject<QueryInsert>();
 
         // Once the query has been created, add it to the list of queries
         // that are part of this project.
-        toReturn.subscribe( queryId => {
-                model.id = queryId.text();
-                this.cachedProject.queries.push(new QueryInsert(this.cachedProject.schema, model));
-            });
+        request.subscribe( queryId => {
+            model.id = queryId.text();
 
-        return (toReturn.toPromise());
+            const newQuery = new QueryInsert(this.cachedProject.schema, model);
+            this.cachedProject.queries.push(newQuery);
+
+            // And inform the caller
+            toReturn.next(newQuery);
+        });
+
+        
+
+        return (toReturn);
     }
 
     deleteQuery(queryId : string) {

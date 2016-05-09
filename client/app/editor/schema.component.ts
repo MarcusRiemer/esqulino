@@ -42,11 +42,11 @@ export class SchemaComponent implements OnInit {
 
     onCreateSelect(tableName : string) {
         this._projectService.createSelect(tableName)
-            .then( (res) => console.log(`Created SELECT query for table "${tableName}"`));
+            .subscribe( (res) => console.log(`Created SELECT query for table "${tableName}"`));
     }
 
     onCreateInsert(tableName : string) {
         this._projectService.createInsert(tableName)
-            .then( (res) => console.log(`Created INSERT query for table "${tableName}"`));
+            .subscribe( (res) => console.log(`Created INSERT query for table "${tableName}"`));
     }
 }
