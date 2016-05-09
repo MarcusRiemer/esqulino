@@ -35,7 +35,74 @@ let schema  = new Schema([
     }
 ]);
 
-describe('INSERT Query', () => {
+describe('INSERT', () => {
+    it('activating previously unused columns', () => {
+        const m : Model.QueryDescription = {
+            name : "insert-1",
+            id : "insert-1",
+            insert : {
+                columns : [0],
+                table : "person",
+                values : [
+                    { constant : { type: "INTEGER", value : "0" } },
+                ]
+            }
+        }
+
+        const q = new QueryInsert(schema, m);
+        q.changeActivationState(2, true);
+
+        expect(q.activeColumns.length).toEqual(2);
+        expect(q.activeColumns[0]).toEqual(schema.getColumn("person", "p1"));
+        expect(q.activeColumns[1]).toEqual(schema.getColumn("person", "p3"));
+
+        expect(q.values.length).toEqual(2);
+        expect(q.values[0].templateIdentifier).toEqual("constant");
+        expect(q.values[1].templateIdentifier).toEqual("missing");
+    });
+
+    it('deactivating previously used columns', () => {
+        const m : Model.QueryDescription = {
+            name : "insert-1",
+            id : "insert-1",
+            insert : {
+                columns : [0],
+                table : "person",
+                values : [
+                    { constant : { type: "INTEGER", value : "0" } },
+                ]
+            }
+        }
+
+        const q = new QueryInsert(schema, m);
+        q.changeActivationState(0, false);
+
+        expect(q.activeColumns.length).toEqual(0);
+        expect(q.values.length).toEqual(0);
+    });
+
+    it('Error: activating or deactivating in same state', () => {
+        const m : Model.QueryDescription = {
+            name : "insert-1",
+            id : "insert-1",
+            insert : {
+                columns : [0],
+                table : "person",
+                values : [
+                    { constant : { type: "INTEGER", value : "0" } },
+                ]
+            }
+        }
+
+        const q = new QueryInsert(schema, m);
+
+        expect( () => q.changeActivationState(0, true)).toThrowError();
+        expect( () => q.changeActivationState(1, false)).toThrowError();
+        expect( () => q.changeActivationState(2, false)).toThrowError();
+    });
+});
+
+describe('Valid INSERT Queries', () => {    
     it('INSERT INTO person (p1,p2,p3) VALUES (0, "1", 2)', () => {
         const m : Model.QueryDescription = {
             name : "insert-1",
@@ -61,5 +128,4 @@ describe('INSERT Query', () => {
 
         expect(q.toSqlString()).toEqual(`INSERT INTO person (p1, p2, p3)\nVALUES (0, "1", 2)`);
     });
-
 });
