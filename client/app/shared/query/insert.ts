@@ -100,7 +100,7 @@ export class QueryInsert extends Query {
     }
 
     protected validateImpl(schema : Schema) : ValidationResult {
-        return (new ValidationResult([]));
+        return (new ValidationResult([], this.values.map(v => v.validate(schema))));
     }
 
     /**
@@ -118,6 +118,13 @@ export class QueryInsert extends Query {
      * @return The "over-the-wire" JSON representation
      */
     protected toModelImpl(toReturn : Model.QueryDescription) : Model.QueryDescription {
+        
+        toReturn.insert = {
+            columns : this._columnIndices,
+            values : this._columnIndices.map(i => this._values[i].toModel()),
+            table : this.tableName,
+        };
+        
         return (toReturn);
     }
 
