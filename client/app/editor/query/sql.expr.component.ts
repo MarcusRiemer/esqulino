@@ -72,8 +72,6 @@ export class ExpressionComponent {
      *
      */
     onAllowedDrag(evt : DragEvent) {
-        
-        
         // Only the binary expression takes things that
         // are not expressions.
         if (!(this.expr instanceof BinaryExpression) &&
@@ -92,12 +90,15 @@ export class ExpressionComponent {
         evt.cancelBubble = true;
         
         this._currentDragOver = true;
+
+        console.log("Drag Enter");
     }
 
     /**
      *
      */
     onAllowedDragLeave(evt : DragEvent) {
+        console.log("Drag Leave");
         this._currentDragOver = false;
     }
 
@@ -105,6 +106,7 @@ export class ExpressionComponent {
      * Something has been dropped onto a missing value
      */
     onMissingDrop(evt : DragEvent) {
+        console.log("Missing Drop");
         this.replaceWithDragged(evt);
     }
 
