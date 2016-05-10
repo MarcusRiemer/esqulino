@@ -1,6 +1,6 @@
 import {Query}                            from './base'
 
-import {loadExpression, ExpressionParent} from '../query.syntaxtree'
+import {loadExpression, Expression}       from '../query.syntaxtree'
 import {Schema}                           from '../schema'
 import {ValidationResult, Validateable}   from '../query.validation'
 
@@ -91,8 +91,15 @@ export class QueryInsert extends Query {
         return ("VALUES");
     }
 
-    replaceChild(formerChild : ExpressionParent, newChild : ExpressionParent) : void {
-        throw new Error("Not implemented");
+    replaceChild(formerChild : Expression, newChild : Expression) : void {
+        for (let index in this._values) {
+            if (this._values[index] == formerChild) {
+                this._values[index] = newChild;
+                return;
+            }
+        }
+
+        throw new Error("Could not find child");
     }
 
     removeChild(formerChild : SyntaxTree.Removable) : void {
