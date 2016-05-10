@@ -91,7 +91,7 @@ export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
      * @param value The new "meaningful" name for this query
      */
     set name(value : string) {
-        this._isDirty = true;
+        this.markDirty();
         this._name = value;
     }
 

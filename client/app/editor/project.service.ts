@@ -10,7 +10,7 @@ import {Observable}                              from 'rxjs/Observable'
 import {ServerApiService}                        from '../shared/serverapi.service'
 import {ProjectDescription}                      from '../shared/project.description'
 import {
-    Model, QuerySelect, QueryDelete, QueryInsert, QueryUpdateRequestDescription,
+    Model, Query, QuerySelect, QueryDelete, QueryInsert, QueryUpdateRequestDescription,
 } from '../shared/query'
 import {
     QueryResult, QueryRunErrorDescription
@@ -120,9 +120,8 @@ export class ProjectService {
         
         const toReturn = this._http.post(url, JSON.stringify(body), options)
             .catch( (error : any) => {
-                if (query instanceof QuerySelect) {
-                    return (Observable.of(error));
-                    
+                if (query instanceof Query) {
+                    return (Observable.of(error));                
                 } else {
                     return Observable.throw(error);
                 }
@@ -132,9 +131,9 @@ export class ProjectService {
                 // of the query.
                 if (query instanceof QuerySelect) {
                     return (new QueryResult(query, <any> res.json()))
-                } else if (query instanceof QueryDelete) {
-                    console.log(res.json);
-                    return (null)
+                } else if (query instanceof QueryInsert) {
+                    // TODO: Create special result class for inserts
+                    return (new QueryResult(undefined, <any> res.json()))
                 }
             });
 

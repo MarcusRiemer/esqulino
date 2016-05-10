@@ -43,7 +43,7 @@ export class InsertComponent {
     /**
      * @return All columns that have values set.
      */  
-    get allColumns() : InsertingColumn[] {
+    get allColumns() : InsertingColumn[] {        
         if (!this._allColumnsCache) {
             const allColumns = this.query.getTableSchema(this.query.tableName).columns;
 
