@@ -26,10 +26,10 @@
         </span>
       </td>
       <td>
-        <span *ngIf="curr.expr"
-              class="block-container">
+        <div *ngIf="curr.expr"
+             class="block-container">
           <sql-expr [expr]="curr.expr" [query]="query"></sql-expr>
-        </span>
+        </div>
       </td>
     </tr>
   </table>
