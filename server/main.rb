@@ -158,7 +158,7 @@ class ScratchSqlApp < Sinatra::Base
   # Matching the meaningful routes the client knows. This enables navigation
   # even if the user submits a "deep link" to somewhere inside the
   # application.
-  get '/', '/front/*', '/editor/*' do
+  get '/', '/front/?*', '/editor/*' do
     send_file index_path
   end
 
