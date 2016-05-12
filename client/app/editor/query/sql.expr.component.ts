@@ -1,4 +1,4 @@
-import {Component, Input}               from '@angular/core'
+import {Component, Input, ChangeDetectorRef} from '@angular/core'
 
 import {
     DragService, SqlDragEvent, OriginFlag
@@ -27,7 +27,8 @@ export class ExpressionComponent {
     /**
      * Constructor for dependency injection.
      */
-    constructor(private _dragService : DragService) {
+    constructor(private _dragService : DragService,
+                private _cd : ChangeDetectorRef) {
     }
 
     /**
@@ -88,7 +89,9 @@ export class ExpressionComponent {
         // Indicates we can drop here
         evt.preventDefault();
         evt.cancelBubble = true;
-        
+
+        this._cd.detach();
+        this._cd.markForCheck();
         this._currentDragOver = true;
 
         console.log("Drag Enter");
@@ -98,6 +101,7 @@ export class ExpressionComponent {
      *
      */
     onAllowedDragLeave(evt : DragEvent) {
+        this._cd.reattach();
         console.log("Drag Leave");
         this._currentDragOver = false;
     }
@@ -228,6 +232,9 @@ export class ExpressionComponent {
             this.getDragOrigin(this.expr) === this._dragService.activeOrigin) {
             this._dragService.activeSource.removeSelf();
         }
+
+        // Pick up changes again
+        this._cd.reattach();
 
         // Logging the changes
         if (this.query.isValid) {

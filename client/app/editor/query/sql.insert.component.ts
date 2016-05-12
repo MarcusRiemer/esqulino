@@ -1,4 +1,7 @@
-import {Component, Input, ChangeDetectionStrategy} from '@angular/core'
+import {
+    Component, Input,
+    ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core'
 
 import {ExpressionComponent}            from './sql.expr.component'
 
@@ -29,7 +32,7 @@ export class InsertComponent {
 
     private _allColumnsCache : InsertingColumn[];
     
-    constructor() {
+    constructor(private _cd: ChangeDetectorRef) {
 
     }
 
@@ -43,7 +46,7 @@ export class InsertComponent {
     /**
      * @return All columns that have values set.
      */  
-    get allColumns() : InsertingColumn[] {        
+    get allColumns() : InsertingColumn[] {
         if (!this._allColumnsCache) {
             const allColumns = this.query.getTableSchema(this.query.tableName).columns;
 
@@ -53,15 +56,15 @@ export class InsertComponent {
                 expr : this.query.getValueForColumn(v.index)
             })});
         }
-        
-        return (this._allColumnsCache)
+
+        return (this._allColumnsCache);
     }
 
     onColumnUsageChanged(index : number) {
-        const isActive = this.query.activeColumns.some(c => c.index == index);
-        
+        const isActive = this.query.activeColumns.some(c => c.index == index);        
         this.query.changeActivationState(index, !isActive);
 
         this._allColumnsCache = undefined;
+        this._cd.markForCheck();
     }
 }
