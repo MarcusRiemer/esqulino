@@ -8,4 +8,5 @@ import './syntaxtree/where.spec'
 import './query/delete.spec'
 import './query/select.spec'
 import './query/insert.spec'
+import './query/update.spec'
 

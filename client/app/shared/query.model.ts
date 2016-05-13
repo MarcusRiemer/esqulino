@@ -144,12 +144,41 @@ export interface Where {
 }
 
 /**
- * A complete INSERT statement.
+ * An expression that will be assigned to a certain column.
+ * Currently used in UPDATE component.
+ * 
+ * TODO: Re-use in INSERT component.
+ */
+export interface ColumnAssignment {
+    column : string
+    expr : Expression
+}
+
+/**
+ * A complete INSERT statement. Technically this does not 
+ * require any other component, although the use of
+ * expressions is common.
  */
 export interface Insert {
-    table: string,
-    columns: number[],
+    table: string
+    /**
+     * The indices of the used columns, order is relevant.
+     */
+    columns: number[]
+    /**
+     * The expressions to be inserted, order depends on the
+     * columns property.
+     */
     values: Expression[]
+}
+
+/**
+ * The column-expression pairs and the table that define the
+ * UPDATE component.
+ */
+export interface Update {
+    table : string
+    assignments : ColumnAssignment[]
 }
 
 /**
@@ -160,6 +189,7 @@ export interface QueryDescription {
     select? : Select
     delete? : Delete
     insert? : Insert
+    update? : Update
     from? : From
     where? : Where
     name : string
