@@ -59,6 +59,8 @@ export class ExpressionComponent {
         } else if (expr instanceof SyntaxTree.Where ||
                    expr instanceof SyntaxTree.WhereSubsequent) {
             return ("where");
+        } else if (expr instanceof SyntaxTree.Delete) {
+            return ("delete");
         }
 
         throw new Error(`Unknown drag origin: ${JSON.stringify(expr)}`);

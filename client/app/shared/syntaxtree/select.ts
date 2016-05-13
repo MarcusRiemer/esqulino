@@ -2,7 +2,7 @@ import {
     Model, Query, QueryFrom, ValidationResult
 } from '../query'
 import {
-    ValidationError
+    ValidationErrors
 } from '../query.validation'
 import {
     Schema
@@ -63,7 +63,7 @@ export class Select extends Component implements ExpressionParent {
         if (this._columns.length === 0) {
             // No columns are not allowed
             return (new ValidationResult([
-                new ValidationError.EmptySelect()
+                new ValidationErrors.EmptySelect()
             ]));
         } else {
             // Any error in a child is also not allowed

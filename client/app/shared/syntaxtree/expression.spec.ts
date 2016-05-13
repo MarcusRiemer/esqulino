@@ -2,7 +2,7 @@ import {
     Model, ValidationResult
 } from '../query'
 import {
-    ValidationError
+    ValidationErrors
 } from '../query.validation'
 import {
     Schema

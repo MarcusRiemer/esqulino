@@ -2,7 +2,7 @@ import {
     Model, Query, ValidationResult
 } from '../query'
 import {
-    ValidationError
+    ValidationErrors, ValidationError
 } from '../query.validation'
 import {
     Schema
@@ -286,7 +286,7 @@ export class From extends Component {
             // Ensure there is only a single table in the group
             // or eveything has an alias.
             if(group.length > 1 &&  !group.every(j => !!j.alias)) {
-                errors.push(new ValidationError.MissingTableAlias(tableName, "FROM"));
+                errors.push(new ValidationErrors.MissingTableAlias(tableName, "FROM"));
             }
         }
 
@@ -307,7 +307,7 @@ export class From extends Component {
         // Report nun-unique names
         for (let alias in names) {
             if (names[alias] > 1) {
-                errors.push(new ValidationError.AmbiguousTableAlias(alias));
+                errors.push(new ValidationErrors.AmbiguousTableAlias(alias));
             }
         }
         

@@ -10,7 +10,7 @@ import {Injectable}             from '@angular/core';
  * The scopes a drag event could affect
  */
 export type ScopeFlag = "expr" | "column" | "constant" | "parameter" | "compound" | "operator" | "table" | "star";
-export type OriginFlag = "select"| "from" | "where" | "sidebar";
+export type OriginFlag = "select"| "from" | "where" | "delete" | "sidebar";
 
 /**
  * Abstract information about the drag event.
