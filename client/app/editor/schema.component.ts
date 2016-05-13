@@ -4,13 +4,14 @@ import {Router, RouteParams, ROUTER_DIRECTIVES} from '@angular/router-deprecated
 
 import {TableDescription}                       from '../shared/schema.description'
 
-import {Project}        from './project'
-import {ProjectService} from './project.service'
-import {ToolbarService} from './toolbar.service'
+import {Project}              from './project'
+import {ProjectService}       from './project.service'
+import {ToolbarService}       from './toolbar.service'
+import {SchemaTableComponent} from './schema.table.component'
 
 @Component({
     templateUrl: 'app/editor/templates/schema.html',
-    directives: [ROUTER_DIRECTIVES]
+    directives: [ROUTER_DIRECTIVES, SchemaTableComponent]
 })
 export class SchemaComponent implements OnInit {
     /**
