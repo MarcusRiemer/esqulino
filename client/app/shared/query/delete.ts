@@ -6,7 +6,7 @@ import {
     Schema
 } from '../schema'
 import {
-    ValidationResult, Validateable
+    ValidationResult, ValidationError,  ValidationErrors, Validateable
 } from '../query.validation'
 
 import * as Model                       from '../query.model'
@@ -102,7 +102,12 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
             children.push(this._where.validate(schema));
         }
 
-        return (new ValidationResult([], children));
+        let ownErrors : ValidationError[] = [];
+        if (this._from.numberOfJoins > 0) {
+            ownErrors.push(new ValidationErrors.SingleTableRequired("DELETE"));
+        }
+
+        return (new ValidationResult(ownErrors, children));
     }
 
     /**

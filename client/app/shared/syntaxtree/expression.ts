@@ -7,7 +7,7 @@ import {
 } from '../query'
 
 import {
-    ValidationError
+    ValidationErrors
 } from '../query.validation'
 
 import {
@@ -159,7 +159,7 @@ export class MissingExpression extends Expression {
      * A missing expression is always invalid.
      */
     validate(schema : Schema) : ValidationResult {
-        return (new ValidationResult([new ValidationError.MissingExpression(this)]));
+        return (new ValidationResult([new ValidationErrors.MissingExpression(this)]));
     }
 
     /**
@@ -334,14 +334,14 @@ export class ColumnExpression extends Expression {
         // Does the table exist?
         if (!schema.hasTable(this._tableName)) {
             return (new ValidationResult([
-                new ValidationError.UnknownTable(this)
+                new ValidationErrors.UnknownTable(this)
             ]));
         }
 
         // Does the column exist?
         if (!schema.hasColumn(this._tableName, this._columnName)) {
             return (new ValidationResult([
-                new ValidationError.UnknownColumn(this)
+                new ValidationErrors.UnknownColumn(this)
             ]));
         }
 
@@ -475,7 +475,7 @@ export class StarExpression extends Expression {
     validate(schema : Schema) : ValidationResult {
         if (this.isLimited && !schema.hasTable(this.tableName)) {
             return (new ValidationResult([
-                new ValidationError.UnknownTable(this)
+                new ValidationErrors.UnknownTable(this)
             ]));
         } else {
             return (ValidationResult.VALID);

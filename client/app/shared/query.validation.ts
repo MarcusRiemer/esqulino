@@ -43,7 +43,7 @@ export interface ValidationError {
 /**
  * All types of error that can be detected during a validation.
  */
-export module ValidationError {
+export module ValidationErrors {
 
     /**
      * Helps implementing errors that are based on expressions.
@@ -112,6 +112,23 @@ export module ValidationError {
 
         errorMessageImpl() {
             return (`Unknown table "${this._loc.tableName}"`);
+        }
+    }
+
+    /**
+     * Used for components that don't allow JOINs.
+     */
+    export class SingleTableRequired implements ValidationError {
+        constructor(private _componentName : string) {
+
+        }
+
+        get errorMessage() {
+            return (`Only a single table allowed`);
+        }
+
+        get location() {
+            return (this._componentName);
         }
     }
 
