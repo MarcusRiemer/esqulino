@@ -20,7 +20,7 @@ Praktisch erlaubt das vor allem eine relativ akkurate Abschätzung, ob sich die 
 
 \begin{description}
 \item[Semantik vor Syntax] \hfill\\
-  Den Lernenden sollen kontextsensitiv sinnvolle Operationen angeboten werden, optimalerweise mit einer kurzen Erläuterung, warum gerade nur diese Teilmenge an Operationen möglich ist. Die eigentliche Programmierung erfolgt dann durch die Kombination von Bausteinen, ähnlich wie bei der Lernsoftware ``Scratch''. Durch kontinuirliches Feedback der Entwicklungsumgebung sollen die Lernenden in die Lage versetzt werden, auch ohne ständige Rückversicherung bei der Lehrkraft eigene Ansätze zu erproben.
+  Den Lernenden sollen kontextsensitiv sinnvolle Operationen angeboten werden, optimalerweise mit einer kurzen Erläuterung, warum gerade nur diese Teilmenge an Operationen möglich ist. Die eigentliche Programmierung erfolgt dann durch die Kombination von Bausteinen, ähnlich wie bei der Lernsoftware ``Scratch''. Durch kontinuirliches Feedback der Entwicklungsumgebung sollen die Lernenden in die Lage versetzt werden, auch ohne ständige Rückversicherung bei der Lehrkraft eigene Ansätze zu erproben. Syntaxfehler werden durch dieses Vorgehen konstruktiv verhindert.
 \item[Motivation durch praktisch vorzeigbare Ergebnissen] \hfill\\
   Der Einstieg in die Programmierung ist oftmals von relativ langweiligen Programmen geprägt, häufig textbasierten Konsolenanwendungen, welche sich nicht gut im Freundes- oder Bekanntenkreis präsentieren lassen. Im Sonderfall der Vermittlung von SQL Kenntnissen ist das Ergebnis der Arbeit sogar überhaupt nicht sinnvoll zu demonstrieren, weil die erstellten Abfragen isoliert für sich stehen und häufig auch nur in der Entwicklungsumgebung der jeweiligen Datenbank ausführbar sind. Mit der im Rahmen dieser Arbeit zu erstellenden Software sollen sich hingen praktisch relevante, allerdings sehr datenorientierte Programme umsetzen lassen. Diese verfügen über von den Lernenden zusammengestellte Eingabemasken um Daten einzufügen oder zu manipulieren und verschiedene Ausgabesichten um den Datenbestand sinnvoll zu präsentieren.
 \item[Schrittweise komplexere Benutzeroberfläche der Entwicklungsumgebung] \hfill \\
@@ -48,13 +48,21 @@ Umgekehrt ist es auch wichtig, den Umfang des zu entwickelnden Programms auf ein
 \subsection{Allgemeines Konzept der Entwicklungsumgebung}
 \label{sec:design-general-concept}
 
-Dieses Kapitel beschreibt sehr allgemeinen Anforderungen an die Entwicklungsumgebung, die Details dazu werden in den spezifischeren Kapiteln besprochen, welche nach Möglichkeit verlinkt sind.
+\missingfigure{UI-Konzept mit traditioneller ``Seitenleiste'' und ``Editorbereich''}
 
-Um die einfachste Verwendung der Software für Lernende zu gewährleisten, wird die esqulino als Webanwendung entwickelt. Für die ersten Schritte der Softwareentwicklung mit SQL reicht dann ein beliebiger aktueller Browser. Wie aus Kapitel \ref{sec:related-work} \nameref{sec:related-work} ersichtlich, befindet sich esqulino mit diesem Ansatz in guter Gesellschaft: Das ``große Vorbild'' Scratch ist über den Browser erreichbar, genau so wie auch die anderen explizit als Lernsoftware beschrieben Anwendungen.
+Dieses Kapitel beschreibt sehr allgemein Anforderungen an die Entwicklungsumgebung, die Details dazu werden in den spezifischeren Kapiteln besprochen, welche nach Möglichkeit verlinkt sind.
 
-Selbstverständlich muss eine Entscheidung mit einer solchen Tragweite natürlich dennoch genauer hinterfragt werden. Das vergleichbare Arbeiten sich ebenfalls für diesen Ansatz entschieden haben ist zwar ein starkes Indiz, isoliert betrachtet aber natürlich keine ausreichende Begründung. Immerhin existiert von Scratch auch eine lokal installierbare Fassung, welche der Entwicklung der Webversion allerdings leicht hinterherhinkt\footnote{https://scratch.mit.edu/scratch2download/ "The backpack is not yet available."}.
+\subsubsection{Zwei Modi: Entwickeln und Anschauen}
 
-Praktisch bedeutet dieser Ansatz vor allem eine Verschiebung der Probleme mit der Inbetriebnahme auf z.B. eine Lehrperson. Bei der Konzeption von esqulino wurde davon ausgegangen, dass die Bereitstellung eines Serverdienstes in Zeiten von Virtualisierungs- und Containerumgebungen für Informatik-affine Lehrkräfte keine nennenswerte Hürde mehr darstellt.
+Grundsätzlich unterschieden werden muss bei der Schülerentwicklungsumgebung, ähnlich wie bei Scratch, zwischen zwei Betriebsmodi für ein Projekt: Zunächst wird ein Projekt im Entwicklermodus betrieben, in diesem Fall stehen dem Benutzer alle Entwicklungstools zur Verfügung. Wenn es dann später einmal fertig ist und an Endanwender, z.B. Bekannte oder Freunde, weitergegeben wird, erwarte diese natürlich eine normale Benutzeroberfläche zu sehen. Der Wechsel zwischen diesen beiden Modi sollte dabei, ebenfalls analog zu Scratch, zu jedem Zeitpunkt möglich sein. Das ``Verstecken'' von Vorgehensweisen in Projekten ist im Lehrbetrieb nicht vorgesehen, jedes fremde Projekt soll auch als Inspiration für die Umsetzung eigener Ideen dienen können.
+
+\subsubsection{Webanwendung}
+
+Um die einfachste Verwendung der Software für Lernende zu gewährleisten, wird esqulino als Webanwendung entwickelt. Für die ersten Schritte der Softwareentwicklung mit SQL reicht auf Seite der Lernenden dann ein beliebiger, aktueller Browser. Wie aus Kapitel \ref{sec:related-work} \nameref{sec:related-work} ersichtlich, befindet sich esqulino mit diesem Ansatz in guter Gesellschaft: Das ``große Vorbild'' Scratch ist über den Browser erreichbar, genau so wie auch die anderen explizit als Lernsoftware beschrieben Anwendungen.
+
+Selbstverständlich muss eine Entscheidung mit einer solchen Tragweite dennoch gut abgewogen werden. Das vergleichbare Arbeiten sich ebenfalls für diesen Ansatz entschieden haben ist zwar ein starkes Indiz, isoliert betrachtet aber natürlich keine stichhaltige Begründung. Immerhin existiert von Scratch auch eine lokal installierbare Fassung, welche der Entwicklung der Webversion allerdings leicht hinterherhinkt\footnote{https://scratch.mit.edu/scratch2download/ "The backpack is not yet available."}.
+
+Praktisch bedeutet dieser Ansatz vor allem eine Verschiebung der Probleme mit der Inbetriebnahme auf die Lehrperson. Bei der Konzeption von esqulino wird davon ausgegangen, dass die Bereitstellung eines Serverdienstes in Zeiten von Virtualisierungs- und Containerumgebungen für Informatik-affine Lehrkräfte keine nennenswerte Hürde mehr darstellt.
 
 Ebenfalls aus Gründen der einfacheren Zugänglichkeit sollte eine einzelne Serverinstanz in der Lage sein, mehrere Projekte simultan zu bedienen. Die Lehrperson kann also mit einem einzigen Serverprozess eine ganze Klasse versorgen. Eine Begleiterscheinung dieses zentralen Angebots ist allerdings die notwendige Implementierung von zumindest rudimentären Zugriffsbeschränkungen: im Normalfall sollen Schüler die Projekte ihrer Klassenkameraden zwar jederzeit begutachten, aber nicht modifizieren können. Würde die Entwicklungsumgebung von den Schülern lokal betrieben, entfiele die unmittelbare Notwendigkeit einer Zugriffsbeschränkung.
 
@@ -64,15 +72,23 @@ Ein weiterer Vorteil eines zentralen Servers ergibt sich in der praktischen Vorz
 
 Nicht verschwiegen werden sollen allerdings auch die negativen Nebeneffekt dieser grundsätzlichen Entscheidung: Zunächst einmal wird dadurch ein eigenständiger Betrieb der Entwicklungsumgebung durch Schüler deutlich erschwert wird. Diese müssten auf ihrem eigenen Rechner plötzlich doch eine Server-Instanz betreiben. Faktisch wird die Bereitstellung einer dezidierten Umgebung für den Server also zur Pflichtaufgabe der jeweiligen Lehrperson. Vom Betrieb eines dedizierten Servers in der Schule, über die Verwendung eines ``privat greifbaren'' Servers der Lehrperson bis hin zur Verwendung einer Cloud-Computing-Instanz im Internet sind unterschiedlichste Szenarien denkbar. Der erfolgreiche Einsatz von esqulino hängt in der Praxis dann aber auch maßgeblich von der Verfügbarkeit dieses Serverdienstes ab.
 
+Softwaretechnisch nachteilig ist die Tatsache, dass esqulino im Falle einer Entwicklung als ``traditionelle Desktopawendung'' auf ein großes Ökosystem aus bestehenden Entwicklungsumgebungen zurückgreifen könnte. Jede größere Entwicklungsumbegung (Eclipse, Visual Studio, ...) bietet eine Plugin-Schnittstelle, auf die man mit esqulino hätte aufsetzen können. Ähnlich gut erprobte Umgebungen für Browser gibt es hingegen leider nicht, es müssen daher relativ viele technisch triviale Kleinigkeiten (Toolbars, Projektbrowser, ...) extra für esqulino entwickelt werden.
+
 \subsubsection{Projektbasiert}
 
 Nachdem der Begriff des ``Projekts'' nun schon einige Male gefallen ist, wird es Zeit diesen eindeutig zu definieren. Abstrakt betrachtet handelt es sich bei einem Projekt um eine Datenbasis in Form einer Datenbank. Zu dieser Datenbasis kann man als Entwickler SQL-Abfragen entwickeln (\ref{sec:design-sql-editor} \nameref{sec:design-sql-editor}) und einige dieser Abfragen mit einer Oberfläche für Endbenutzer versehen (\ref{sec:design-ui-editor} \nameref{sec:design-ui-editor}).
 
 Als unmittelbare Ausgangspunkt eines Projektes sollen einigermaßen einfache, aber grundsätzlich beliebige SQLite-Datenbanken dienen\footnote{Kapitel \ref{sec:implementation-database-system} \nameref{sec:implementation-database-system} erläutert, warum ausgerechnet SQLite zum Einsatz kommt und nicht ein anderes DBMS.}. Diese Schemata werden vorher mit externen Programmen erzeugt, was sowohl im Dialog mit den Schülern als auch ``einfach so'' erfolgt sein kann.
 
-Schon um Vandalismus zu vermeiden, sind leider einfache Zugriffskontrollen auf Projektebene nötig. Um etwaige Missverständnisse von vornerein zu vermeiden: Ziel dieser Kontrollen ist es zu verhindern, dass z.B. die Quellen für die Abfragen oder Benutzeroberfläche eines Projektes entstellt oder gelöscht werden. \textbf{Nicht geschützt} werden können die eigentlichen Daten, also die Zeilen, in der Datenbank. Sobald in der Benutzeroberfläche für Endanwender Funktionalität zum Löschen oder Editieren von Datensätzen vorgesehen ist, gibt es keine einfache Möglichkeit legitime Veränderungen von illegalen Veränderungen zu unterscheiden.
+Im Sinne einer möglichst niedrigen Einstiegshürde soll es den Anwendern leicht gemacht werden, bestehende Projekte zu übernehmen. Im Informatikunterricht müssen häufiger zu Beginn bestimmte Schritte ausgeführt werden, ``weil das nun mal so ist'' (also eine ausführliche Erklärung zu diesem Zeitpunkt zu weit gehen würde). Im Falle des Sprachumfangs von SQL ist das zwar im Vergleich zu z.B. Java nicht ganz so dramatisch\footnote{``Herr Lehrer, was macht eigentlich dieses \texttt{public static void}?''}, aber nach Möglichkeit zu vermeiden.
 
-Um zumindest einen grundsätzlichen Schutz zu ermöglichen, können für ein Projekt aber zwischen drei schreibenden Zugriffsarten für angelegte Benutzer gewählt werden.
+Dementsprechend sollte normalerweise jeder Schritt beim Anlegen eines neuen Projektes für die Schüler nachvollziehbar sein. Wenn dann aber doch einmal eine Serie von ``mechanisch auszuführenden'' Anweisungen erforderlich sein sollte, wäre es aber dennoch praktisch, diesen Vorgang durch eine Kopie eines schon bestehenden Projektes abzukürzen. Die Lehrkraft würde in diesem Fall ein Projekt für ihre Schüler vorbereiten, welches diese dann mit einem Klick in ein anders benanntes Projekt kopieren können. Es werden dann alle Bestandteile, möglicherweise mit einer einfachen Anpassung der Zugriffsrechte, unter dem neuen Namen verfügbar gemacht.
+
+\subsubsection{Zugriffskontrollen}
+
+Schon um Vandalismus zu vermeiden, sind leider einfache Zugriffskontrollen auf Projektebene nötig. Um etwaige Missverständnisse von vornerein zu vermeiden: Ziel dieser Kontrollen ist es zu verhindern, dass z.B. die Quellen für die Abfragen oder Benutzeroberfläche eines Projektes entstellt oder gelöscht werden. \textbf{Nicht geschützt} werden können die eigentlichen Daten, also die Zeilen, in der Datenbank. Sobald in der Benutzeroberfläche für Endanwender Funktionalität zum Löschen oder Editieren von Datensätzen vorgesehen ist, gibt es keine einfache Möglichkeit legitime Veränderungen von unerwünschtem Vandalismus zu unterscheiden.
+
+Um zumindest einen grundsätzlichen Schutz zu ermöglichen, sollten für ein Projekt aber zwischen drei schreibenden Zugriffsarten für angelegte Benutzer gewählt werden können:
 
 \begin{description}
   \item[Entwickler] \hfill \\
@@ -85,19 +101,6 @@ Um zumindest einen grundsätzlichen Schutz zu ermöglichen, können für ein Pro
 
 \warning{Nur zur Sicherheit sei an dieser Stelle nochmals deutlich erwähnt, dass dieser Schutz nur für schreibende Zugriffe greift. Der lesende Zugriff auf den gesamten Datenbestand ist über die Entwicklungsumgebung auch für Gäste stets uneingeschränkt möglich.}
 
-\missingfigure{UI-Konzept mit traditioneller ``Seitenleiste'' und ``Editorbereich''}
-
-\subsubsection{Einfaches anlegen und kopieren von Projekten}
-
-Im Sinne einer möglichst niedrigen Einstiegshürde soll es den Anwendern leicht gemacht werden, bestehende Projekte zu übernehmen. Im Informatikunterricht müssen häufiger zu Beginn bestimmte Schritte ausgeführt werden, ``weil das nun mal so ist'' (also eine ausführliche Erklärung zu diesem Zeitpunkt zu weit gehen würde). Im Falle des Sprachumfangs von SQL ist das zwar im Vergleich zu z.B. Java nicht ganz so dramatisch\footnote{``Herr Lehrer, was macht eigentlich dieses \texttt{public static void}?''}, aber nach Möglichkeit zu vermeiden.
-
-Dementsprechend sollte normalerweise jeder Schritt beim Anlegen eines neuen Projektes für die Schüler nachvollziehbar sein. Wenn dann aber doch einmal eine Serie von ``mechanisch auszuführenden'' Anweisungen erforderlich sein sollte, wäre es aber dennoch praktisch, diesen Vorgang durch eine Kopie eines schon bestehenden Projektes abzukürzen. Die Lehrkraft würde in diesem Fall ein Projekt für ihre Schüler vorbereiten, welches diese dann mit einem Klick in ein anders benanntes Projekt kopieren können. Es werden dann alle Bestandteile, möglicherweise mit einer einfachen Anpassung der Zugriffsrechte, unter dem neuen Namen verfügbar gemacht.
-
-\subsubsection{Zwei Modi: Entwickeln und Anschauen}
-
-Grundsätzlich unterschieden werden muss bei der Schülerentwicklungsumgebung, ähnlich wie bei Scratch, zwischen zwei Betriebsmodi für ein Projekt: Zunächst wird ein Projekt im Entwicklermodus betrieben, in diesem Fall stehen dem Benutzer alle Entwicklungstools zur Verfügung. Wenn es dann später einmal fertig ist und an Endanwender, z.B. Bekannte oder Freunde, weitergegeben wird, erwarte diese natürlich eine normale Benutzeroberfläche zu sehen. Der Wechsel zwischen diesen beiden Modi sollte dabei, ebenfalls analog zu Scratch, zu jedem Zeitpunkt möglich sein. Das ``Verstecken'' von Vorgehensweisen in Projekten ist nicht vorgesehen, jedes fremde Projekt soll auch als Inspiration für die Umsetzung eigener Ideen dienen können.
-
-
 \subsection{Didaktisch sinvolle Teilmengen von SQL}
 \label{sec:sql-subset}
 
@@ -107,18 +110,22 @@ Die uneingeschränkte Umsetzung des SQL-Standards würden sowohl für den Verfas
 
 Glücklicherweise wäre aber auch der Zielgruppe dieser Entwicklungsumgebung mit einer vollständigen Umsetzung des SQL-Standards überhaupt nicht gedient. Im Gegensatz zu allen anderen Entwicklungsumgebungen da draußen soll die Stärke dieser Entwicklungsumgebung in einer sinnvollen Reduktion liegen. Dieses Kapitel beschreibt daher, wie man zum ``normalen'' SQL kompatible Untermengen definieren kann, um einige spezifische Aufgaben zu erfüllen. Oder in Anlehnung an die 80/20 Regel ausgedrückt: Es gilt jene 20\% des Sprachumfangs abzubilden, mit denen sich 80\% der typischen Aufgaben gut lösen lassen.
 
-Passenderweise erlaubt die Struktur von SQL die Angabe von sehr lokalen Einschränkungen, deren Auswirkungen sich sehr gut abschätzen lassen. Einzig der Umgang mit Ausdrücken überspannt fast alle Bereiche von SQL: Diese können an sehr vielen Stellen auftreten und müssen dementsprechend sorgfältig analysiert werden. Diese Arbeit wird dabei demonstrieren, dass es aus didaktischer Sicht sinnvoll ist, die Mächtigkeit der Ausdrücke initial zu beschränken. An deren Stelle tritt dann eine übersichtliche Anzahl von ``einfachen'' Ausdrücken, mit denen sich jedoch der überwiegende Teil aller auftretenden Fragestellungen lösen lässt.
+Passenderweise erlaubt die Struktur von SQL die Angabe von sehr lokalen Einschränkungen, deren Auswirkungen sich gut abschätzen lassen. Einzig der Umgang mit Ausdrücken überspannt fast alle Bereiche von SQL: Diese können an sehr vielen Stellen auftreten und müssen dementsprechend sorgfältig analysiert werden. Diese Arbeit wird daher auch demonstrieren, dass es aus didaktischer Sicht sinnvoll ist, die Mächtigkeit der Ausdrücke initial zu beschränken. An deren Stelle tritt dann eine übersichtliche Anzahl von ``einfachen'' Ausdrücken, mit denen sich jedoch der überwiegende Teil aller auftretenden Fragestellungen lösen lässt \todo{Obsolet?}.
 
 \unsure[inline]{Erwähnen, inwiefern das herauslösen von Sprachfeatures bei einer ``normalen'' Programmiersprache komplizierter wäre? Es gibt bei SQL halt vergleichsweise wenige Abhängigkeiten und daher viele mögliche Reihenfolgen in denen man die Features aktivieren kann. Bei einer Sprache wie z.B. Java bauen die einzelnen Sprachfeatures sehr viel stärker aufeinander auf, es ergeben sich deutlich weniger Reihenfolgen in denen man diese sinnvoll aktivieren könnte.}
 
 Wir klären in diesem Kapitel daher zunächst, welche Features von SQL überhaupt für die Entwicklungsumgebung von Belang sind und wie diese voneinander abhängen. Die Abgrenzung von Teilsprachen baut auf diesen hier herausgearbeiteten Optionen auf und ist Gegenstand von Kapitel \ref{sec:sql-subset-ranks} \nameref{sec:sql-subset-ranks}.
 
-\unsure[inline]{Technisch gesehen soll es für Lehrkräfte möglich sein, fast beliebige Teilmengen von SQL für ihre Schüler vorzugeben, nicht nur die im Rahmen dieser Arbeit als sinnvoll erachteten Kombinationen. Das grundsätzliche Vorgehen sollte dabei normalerweise einer Whitelist entsprechen: Jede explizit erlaubte Funktionalität steht im SQL-Editor (siehe Kapitel \ref{sec:design-sql-editor} \nameref{sec:design-sql-editor}) zur Verfügung. Und sofern eine Funktionalität nicht erlaubt sein sollte, ist sie auch nicht verfügbar. Der Begriff ``Einschränkung'' ist aus der Sicht einer Whitelist also zwar nicht ganz optimal gewählt, beschreibt die stattfindende Reduktion des Umfangs von SQL aber akkurat.\newline Alternativ sollen sich auch wortwörtliche Einschränkungen im Sinne einer Blacklist angeben lassen. Für die in der Regel sehr übersichtlichen Teilsprachen die in dieser Arbeit konzipiert werden, ist diese Variante allerdings bei weitem nicht so gut lesbar: Man muss den größtmöglichen Umfang des hier beschriebenen Dialekts immer im Hinterkopf haben. Außerdem kommen im Falle einer Erweiterung des Sprachumfangs, z.B. durch ein späteres Update der Entwicklungsumgebung, möglicherweise unerwünschte Möglichkeiten hinzu.}
+Diese Reduktion soll jedoch nicht in technisch starren Strukturen vordiktiert werden. Vielmehr soll es für Lehrkräfte möglich sein, fast beliebige Teilmengen von SQL für ihre Schüler vorzugeben, nicht nur die im Rahmen dieser Arbeit als sinnvoll erachteten Kombinationen. Das grundsätzliche Vorgehen sollte dabei normalerweise einer Whitelist entsprechen: Jede explizit erlaubte Funktionalität steht im SQL-Editor (siehe Kapitel \ref{sec:design-sql-editor} \nameref{sec:design-sql-editor}) zur Verfügung. Und sofern eine Funktionalität nicht erlaubt sein sollte, ist sie auch nicht verfügbar. Der Begriff ``Einschränkung'' ist aus der Sicht einer Whitelist also zwar nicht ganz optimal gewählt, beschreibt die stattfindende Reduktion des Umfangs von SQL aber akkurat.
+
+Alternativ sollen sich auch wortwörtliche Einschränkungen im Sinne einer Blacklist angeben lassen. Für die in der Regel sehr übersichtlichen Teilsprachen die in dieser Arbeit konzipiert werden, ist diese Variante häufig schlechter lesbar: Man muss den größtmöglichen Umfang des hier beschriebenen Dialekts immer im Hinterkopf haben. Außerdem kommen im Falle einer Erweiterung des Sprachumfangs, z.B. durch ein späteres Update der Entwicklungsumgebung, möglicherweise unerwünschte Möglichkeiten hinzu.
 
 \subsubsection{Mögliche Einschränkungen der Komponenten}
 \label{sec:sql-subset-local}
 
-Zunächst definieren wir einige mögliche Einschränkungen anhand der grundlegenden Struktur jeder SQL-Abfrage. Da die Reihenfolge der Komponenten nicht beliebig ist, ergibt sich eine sehr klare Struktur in der einige Komponenten auch ohne Probleme übersprungen werden können. Abbildung \ref{fig:sql-steps} wurde aus den Vorlesungsunterlagen von Prof. Dr. Hoffmann entnommen und demonstriert den logischen Ablauf bei der Verarbeitung einer SQL-Abfrage inklusive aller Zwischenschritte und optionaler Komponenten. Daraus ist folglich gut ersichtlich, dass alle Komponenten bis auf die logisch Erste (\texttt{FROM}) und Letzte (\texttt{SELECT}) optional sind.
+Die folgende Beschreibung untersucht zunächst nur die Komponenten einer \texttt{SELECT}-Suchanfrage. Diese sind, im Gegensatz zu \texttt{DELETE}, \texttt{UPDATE} und \texttt{INSERT} nicht auf eine Tabelle beschränkt und auch von der schieren Anzahl der verfügbaren Optionen her deutlich mächtiger.
+
+Zunächst definieren wir einige mögliche Einschränkungen anhand der grundlegenden Struktur jeder suchenden SQL-Abfrage. Da die Reihenfolge der Komponenten nicht beliebig ist, ergibt sich eine sehr klare Struktur in der einige Komponenten auch allerdings übersprungen werden können. Abbildung \ref{fig:sql-steps} wurde aus den Vorlesungsunterlagen von Prof. Dr. Hoffmann entnommen und demonstriert den logischen Ablauf bei der Verarbeitung einer SQL-Abfrage inklusive aller Zwischenschritte und optionaler Komponenten. Daraus ist folglich gut ersichtlich, dass alle Komponenten einer Suchanfrage bis auf die logisch Erste (\texttt{FROM}) und Letzte (\texttt{SELECT}) optional sind.
 
 \begin{figure}
   \centering \includegraphics{images/sql-steps.png}
@@ -130,13 +137,14 @@ Einige der im folgenden beschriebenen Optionen sind redundant. Das liegt zum ein
 
 \begin{enumerate}
 \item \textbf{Projektionen mit \texttt{SELECT}} \\
-  Diese Komponente als solche kann natürlich nicht ausgeschlossen werden. Außerdem muss mindestens \ref{feat:select-all} $\lor$ \ref{feat:select-column} erlaubt sein, sonst können keine gültigen SQL-Abfragen erstellt werden.
+  Diese Komponente als solche kann für Suchabfragen nicht ausgeschlossen werden. Außerdem muss mindestens \ref{feat:select-all} $\lor$ \ref{feat:select-column} erlaubt sein, sonst können keine gültigen SQL-Abfragen erstellt werden.
   \begin{enumerate}
   \item \label{feat:select-all} Auswahl aller Spalten (``Sternchen-Operator'' \texttt{SELECT *})
   \item \label{feat:select-column} Auswahl von Spalten
   \item \label{feat:select-single-function} Ausdrücke aus einfachen Funktionsaufrufen zulassen
   \item \label{feat:select-simple-expression} Einfache Ausdrücke zulassen.
   \item \label{feat:select-expression} Ausdrücke zulassen.
+  \item \label{feat:select-distinct} Nur einzigartige Ergebniszeilen zulassen.
   \item \label{feat:select-limit} Beschränkung der Datenmenge mit \texttt{LIMIT}
   \end{enumerate}
 \item \textbf{Angabe von Datenquellen mit \texttt{FROM}} \\
@@ -151,6 +159,7 @@ Einige der im folgenden beschriebenen Optionen sind redundant. Das liegt zum ein
   \item \label{feat:from-full-join} Volle äußere Verknüpfung zulassen (\texttt{FULL OUTER JOIN}), erfordert \ref{feat:from-using} $\lor$ \ref{feat:from-on-simple}
   \item \label{feat:from-using} \texttt{USING}-Bedingung zulassen
   \item \label{feat:from-on-simple} \texttt{ON}-Bedingung mit einfachen Ausdrücken zulassen
+  \item \label{feat:from-on-expression} \texttt{ON}-Bedingung mit beliebigen Ausdrücken zulassen
   \item \label{feat:from-recursive} Rekursive Verknüpfung zulassen 
   \item \label{feat:from-sub} Unterabfragen zulassen
   \end{enumerate}
@@ -186,23 +195,26 @@ Nach dieser Betrachtung der mit der unmittelbaren SQL-Struktur zusammenhängende
 
 \begin{description}
 \item[Einfache Ausdrücke] \hfill\\
-  Einfache Ausdrücke unterliegen einer ganz festen Struktur, die nur sehr begrenzt die Schachtelung oder Verkettung von zusammengesetzten Ausdrücken zulässt. Vereinfacht gesagt soll die Auswertungsreihenfolge dieser Ausdrücke auch ohne die Verwendung von Klammern ``intuitiv'' eindeutig sein.
+  Einfache Ausdrücke unterliegen einer ganz festen Struktur, die nur sehr begrenzt die Schachtelung oder Verkettung von zusammengesetzten Ausdrücken zulässt. Griffig ausgedrückt: Die Auswertungsreihenfolge dieser Ausdrücke soll auch ohne die Verwendung von Klammern ``intuitiv'' eindeutig sein.
   
-  Die Bearbeitung dieser Ausdrücke ist nicht völlig frei, sondern kann auch hinsichtlich der möglichen Operatoren oder der Struktur eingeschränkt werden. In diesem Fall kann die Lehrkraft einige Teilausdrücke für die Bearbeitung sperren.
+  Die Bearbeitung dieser Ausdrücke ist nicht notwendigerweise völlig frei, sondern könnte auch hinsichtlich der möglichen Operatoren oder der Struktur eingeschränkt werden.
 \item[Komplexe Ausdrücke] \hfill\\
-  Komplexe Ausdrücke lassen sich schachteln bzw. verketten und könnten mit dem Scratch-ähnlichen SQL-Editor frei bearbeitet werden.
+  Komplexe Ausdrücke lassen sich schachteln bzw. verketten und können mit einem Scratch-ähnlichen Editor für Ausdrücke frei bearbeitet werden. Die korrekte Beachtung von Auswertungsreihenfolgen ist Aufgabe der Lernenden, weswegen diese ggfs. die Ausdrücke auch selber Klammern müssen.
+
 \item[Beliebige Ausdrücke] \hfill\\
-  Textuell notierte Ausdrücke, die vom SQL-Editor nicht weiter geprüft werden sondern ungefiltert in die Abfrage eingesetzt werden. Sofern diese Art von Ausdrücken zugelassen wird erfolgt also auch keinerlei inhaltliche Einschränkung der zur Verfügung stehenden Möglichkeiten oder eine Syntaxüberprüfung.
+  Beliebige Ausdrücke werden textuell notierte und vom SQL-Editor nicht weiter geprüft, sondern ungefiltert in die Abfrage eingesetzt werden. Sofern diese Art von Ausdrücken zugelassen wird erfolgt also auch keinerlei inhaltliche Einschränkung der zur Verfügung stehenden Möglichkeiten oder eine Syntaxüberprüfung.
+
+  Diese Option soll es besonders fortgeschrittenen Lernenden erlauben, auch in nicht von esqulino unterstützte Szenarien noch weiterarbeiten zu können. Damit wird verhindert, dass zu große Fortschritte der Lernenden esqulino sofort obsolet machen.
 \end{description}
 
-Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisch sinvollen Einschränkungen definieren. Prinzipiell wäre es dabei auch denkbar, in unterschiedlichen Komponenten verschiedene Teilmengen der Ausdrücke zuzulassen, inhaltlich erscheint das aber wenig sinnvoll\todo{Treffen: Meinung geändert}. Die Schüler sollen durchaus verstehen, dass es sich bei Ausdrücken in SQL um ein allgemeines Konzept handelt, welches Prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Oder plastisch ausgedrückt: Wenn sich die Schüler aus didaktischen Gründen erstmal nur mit Ausdrücke im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt.
+Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisch sinvollen Einschränkungen definieren. Die Schüler sollen dabei durchaus auch Lernen, dass es sich bei Ausdrücken (nicht nur in SQL) um ein allgemeines Konzept handelt, welches Prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Oder plastisch ausgedrückt: Wenn sich die Schüler aus didaktischen Gründen erstmal nur mit Ausdrücke im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt \todo{Besprechen}.
 
 \begin{enumerate}
 \item \textbf{Allgemeine Optionen} \\
   Diese Optionen betreffen prinzipiell alle Stellen, an denen die entsprechenden Arten von Ausdrücken zugelassen werden.
   \begin{enumerate}
   \item \label{feat:expr-allow-any-text} Ausdrücke als beliebigen Text zulassen, diese Option erlaubt die Umgehung aller Einschränkungen für einfache Ausdrücke!
-  \item \label{feat:expr-allow-placeholder} An Stelle von Konstanten auch die Verwendung von Platzhaltern zulassen
+  \item \label{feat:expr-allow-placeholder} An Stelle von Konstanten auch die Verwendung von Platzhaltern zur Bindung von Daten aus der Oberfläche zulassen.
   \end{enumerate}
 
 \item \label{feat:expr-compute}  \textbf{Einfache Berechnende Ausdrücke} \\
@@ -231,7 +243,7 @@ Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisc
 \item \textbf{Allgemeine Funktionen (in alphabetischer Reihenfolge)} \\
   In einem Umfeld für Anfänger ist zu erwarten, dass fast jede Funktion (bzw. jede logische Gruppe an Funktionen) einer eigenen Einführung bedarf. Die Lehrkräfte sollen diese daher isoliert zur Verfügung stellen können, ohne Ablenkung durch nicht benötigte Funktionen.
 
-  Beim Unterschiedlich überladene Varianten der gleichen Funktion werden vermieden, um Irritationen zu vermeiden.
+  Bei unterschiedlich überladene Varianten der gleichen Funktion wird in esqulin immer nur die vollständigste Variante implementiert. Die Schüler müssen daher nicht die implizit bekannten Werte der jeweiligen Funktion auswendig kennen.
   \begin{enumerate}
   \item \label{feat:fun-abs} \texttt{ABS(X)}
   \item \label{feat:fun-coalesce} \texttt{COALESCE(X,Y,...)}
@@ -260,12 +272,11 @@ Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisc
 Angelehnt an die bei Racket genutzte Idee der Feature-Levels soll dieses Kapitel einige sinnvolle Untermengen von SQL definieren, auf denen die mitgelieferten Beispielprojekte aufbauen. Es handelt sich dabei um Vorschläge, nicht um die einzig möglichen Ausprägungen von sinnvoll reduzierten SQL-Varianten.
 
 \missing[inline]{Ich muss erst noch ein paar mehr Beispiele an der Hand haben, bis ich mich diesem Kapitel erneut widme.}
-
-
-\subsection{Editor für SQL}
+\missing[inline]{Suche ohne Beachtung von Groß- bzw. Kleinschreibung.}
+\subsection{Drag \& Drop Editor für SQL}
 \label{sec:design-sql-editor}
 
-Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren. Es kommen also distinkte Bedienelemente für die verschiedenen Komponenten einer SQL Abfrage zum Einsatz, kein reiner Texteditor. Der komponentenorientierte Editor soll dabei nicht unbedingt die Konzeption von beliebigen Abfragen ermöglichen, wohl aber die in Kapitel \ref{sec:example-queries} \nameref{sec:example-queries} beschriebenen exemplarischen Arbeitsabläufe unterstützen. 
+Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren können. Es kommen also distinkte Bedienelemente für die verschiedenen Komponenten einer SQL Abfrage zum Einsatz, kein reiner Texteditor. Der komponentenorientierte Editor soll dabei nicht unbedingt die Konzeption von beliebigen Abfragen ermöglichen, wohl aber die in Kapitel \ref{sec:example-queries} \nameref{sec:example-queries} beschriebenen exemplarischen Arbeitsabläufe unterstützen. 
 
 Wenn ein Anwender der Entwicklungsumgebung an die Grenzen des unterstützenden Editors stößt, sollte er die Möglichkeit haben einmalig und für diese konkrete Abfrage eine Umwandlung in eine textbasierte Darstellung vornehmen zu können. Der umgekehrte Weg, also der Import von beliebigen SQL-Abfragen in den grafischen Editor, ist dann jedoch nicht mehr möglich. Die Implementierung eines Parsers für die Umwandlung der textuellen SQL-Repräsentation in die interne Darstellung von esqulino würde im Verhältnis zum marginalen Nutzen einen unverhältnismäßigen Aufwand bedeuten.
 
@@ -273,20 +284,24 @@ Grundsätzlich bedürfen einige Komponenten der Abfrage besonderer Aufmerksamkei
 
 \subsubsection{Visuelle Gestaltung}
 
-Für technische Details irrelevant, aber unbedingt ebenfalls im Voraus zu klären ist die Frage, ob es sinnvoll wäre, das sehr bunte, blockige Design von Scratch zu imitieren. Abbildung \ref{fig:compare-colourful} zeigt einen Vergleich eines frühen Prototypen in einem an Syntax-Highlighting angelehnten Design und in einem wesentlich bunteren, blockigen Design.
+Für technische Details irrelevant, aber unbedingt ebenfalls im Voraus zu klären ist die Frage inwiefern es sinnvoll wäre, das sehr bunte, blockige Design von Scratch zu imitieren. Abbildung \ref{fig:compare-colourful} zeigt einen Vergleich zweier Prototypen aus der Konzeptionsphase von esqulino: Einmal ein sehr buntes und ``blockig'' und einmal angelehnt an konventionelles Syntax-Highlighting.
 
 \todo[inline]{\textbf{Todo}: Quelle mit Beleg für ``Kinderfreundliches'' buntes Design suchen. Das wird man bei Scratch schon aus gutem Grund gemacht haben. Relevante Frage: Zielgruppe (in Jahren) von Scratch vs. Zielgruppe dieses Projektes?}
 
-Aber auch wenn man den sehr bunten Stil gegen einen etwas nüchtereren, aber immer noch ``blockartigen'' Stil austauschen würde, ergeben sich dadurch nur vergleichsweise wenige Vorteile. In Scratch zeigen z.B. die Konnektoren des Blocks für eine Endlosschleife sehr deutlich, wie sich der Kontrollfluss durch dieses Element verändern wird. Für eine vollständige Programmiersprache ist das mit Sicherheit eine gute Wahl, aber für den sehr linearen Ablauf einer SQL-Abfrage ist dieser Umstand nicht von Bedeutung.
+Das blockige Design orientiert sich an Scratch und macht visuell sehr deutlich welche Komponenten stark zusammenhängen. Im Laufe der Entwicklung des Prototypen wurde aber immer deutlicher, dass die Zusammenhänge der Komponenten hier eher überbetont werden. In Scratch ist dieser deutliche visuelle Zusammenhang notwendig. So zeigen z.B. die Konnektoren des Blocks für eine Endlosschleife sehr deutlich, wie sich der Kontrollfluss durch dieses Element verändern wird: Es wird schon visuell deutlich, dass ein Anhängen von Blöcken nach der Schleife weder möglich noch sinnvoll ist.  Für eine vollständige Programmiersprache ist das mit Sicherheit eine gute Wahl, aber für den sehr linearen Ablauf einer SQL-Abfrage ist diese so starke visuelle Hierarchie im Regelfall nicht nötig.
 
-Ein weiterer Vorteil eines etwas nüchterneren, IDE-ähnlichen Designs wäre zudem die größere Nähe zu ``normalen'' Entwicklerprogrammen. Diese wirken möglicherweise weniger einschüchternd, wenn man sich schon an den Anblick von recht viel Text mit Syntax-Highlighting gewöhnt hat.
+Die in den Prototypen noch zu sehende Nutzung von ``normalen'' Bedienelementen wie Text- oder Listboxen wurde schon früh in der Entwicklung zugunsten eines auf Drag \& Drop aufbauenden Konzeptes aufgegeben. Die Bedienelemente haben sich zum einen schon rein visuell die Lesbarkeit merklich gestört und hätten häufig ausgeblendet werden müssen. Zudem ist bei der Bearbeitung von Ausdrücken ist eine starke visuelle Hierarchie sehr von Vorteil. Diese Hierarchie lässt sich am einfachsten durch die konsequente Verwendung von klar kodierten Formen und Farben erreichen, was sich für vom Browser bereitgestellte Bedienelemente aber nur in engen Grenzen umsetzen lässt.
 
-Letztendlich überwiegt aber ein sehr viel profanerer Fakt: Der Autor dieser Arbeit ist kein Grafikdesigner und würde vermutlich kein ansprechendes und zugleich buntes Farbkonzept auf die Beine stellen können.
+Darüber hinaus existiert noch ein weiterer Faktor, der zwar keinen Einfluss auf die technischen Details von esqulino hat, aber trotzdem eine etwas ausführlichere Betrachung rechtfertigt: Die größere Nähe des etwas nüchterneren, IDE-ähnlichen Designs zu ``normalen'' Entwicklerprogrammen. Diese wirken möglicherweise weniger einschüchternd, wenn man sich schon an den Anblick von recht viel Text mit Syntax-Highlighting gewöhnt hat. Es ändert sich dann bei der Verwendung von ``echten'' Entwicklerprogrammen dann ``nur noch'' das Bedienparadigma sehr stark (Text schreiben statt Drag \& Drop), aber nicht mehr der visuelle Ersteindruck.
+
+Letztendlich existiert aber auch noch ein sehr viel profanerer Faktor: Der Autor dieser Arbeit ist kein Grafikdesigner und würde ohne Hilfe vermutlich kein ansprechendes ``blockiges'' Gesamtkonzept auf die Beine stellen können. 
+
+Das endgültige Design lehnt sich bei dem Editor für Ausdrücke also visuell an Scratch an, nutzt zur Visualisierung der Komponenten jedoch eine an Syntax-Highlighting orienierte Darstellung.
 
 \begin{figure}[h]
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{images/sql-sketch-early-colourful}
-    \caption{Starke Farbakzente, ähnlich zu Scratch}
+    \caption{Starke Betonung der Blöcke}
     \label{fig:screen-sql-editor-early-colourful}
   \end{subfigure}\hfill
   \begin{subfigure}[b]{0.45\textwidth}
