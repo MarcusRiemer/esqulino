@@ -14,7 +14,7 @@ TYPESCRIPT_JSON_SCHEMA_BIN = node --stack-size=65500 $(SCHEMA_PATH)/node_modules
 SCHEMA_OPTIONS = --refs true --aliasRefs --false --noExtraProps true
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILE_NAMES = ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json
+JSON_SCHEMA_FILE_NAMES = ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json PageDescription.json
 
 # Paths of the schema files to generate
 JSON_SCHEMA_FILES = $(addprefix $(SCHEMA_PATH)/, $(JSON_SCHEMA_FILE_NAMES))
@@ -26,7 +26,7 @@ JSON_SCHEMA_FILES = $(addprefix $(SCHEMA_PATH)/, $(JSON_SCHEMA_FILE_NAMES))
 # Okay, there is some ugly hackery going on here on multiple levels
 # 1) Some names in esqulino are used multiple times, but imported with
 #    a named alias. However, on the global scope these namens need to be
-#    distuingished and the generator uses the filename for that.
+#    distuingished and the schema generator uses the filename for that.
 # 2) We know that we only generate descriptions, where some names will
 #    clash. But because we don't generate schema files for internal
 #    structures, this clash actually does not matter.
@@ -64,6 +64,10 @@ $(SCHEMA_PATH)/QueryParamsDescription.json : $(SRC_PATH)/query.result.ts
 
 $(SCHEMA_PATH)/ArbitraryQueryRequestDescription.json : $(SRC_PATH)/query.result.ts
 	$(CONVERT_COMMAND)
+
+$(SCHEMA_PATH)/PageDescription.json : $(SRC_PATH)/page/page.description.ts
+	$(CONVERT_COMMAND)
+
 
 # This rule would only work for files with identical names
 $(SCHEMA_PATH)/%.json : $(SRC_PATH)/%.ts

@@ -11,6 +11,9 @@
         "insert": {
             "$ref": "#/definitions/Insert"
         },
+        "update": {
+            "$ref": "#/definitions/Update"
+        },
         "from": {
             "$ref": "#/definitions/From"
         },
@@ -194,19 +197,21 @@
             "additionalProperties": false
         },
         "Insert": {
-            "description": "A complete INSERT statement.",
+            "description": "A complete INSERT statement. Technically this does not\n\nrequire any other component, although the use of\n\nexpressions is common.",
             "type": "object",
             "properties": {
                 "table": {
                     "type": "string"
                 },
                 "columns": {
+                    "description": "The indices of the used columns, order is relevant.",
                     "type": "array",
                     "items": {
                         "type": "number"
                     }
                 },
                 "values": {
+                    "description": "The expressions to be inserted, order depends on the\n\ncolumns property.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/Expression",
@@ -236,6 +241,35 @@
                 },
                 "star": {
                     "$ref": "#/definitions/StarExpression"
+                }
+            },
+            "additionalProperties": false
+        },
+        "Update": {
+            "description": "The column-expression pairs and the table that define the\n\nUPDATE component.",
+            "type": "object",
+            "properties": {
+                "table": {
+                    "type": "string"
+                },
+                "assignments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ColumnAssignment",
+                        "description": "An expression that will be assigned to a certain column.\n\nCurrently used in UPDATE component.\n\n\n\nTODO: Re-use in INSERT component."
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "ColumnAssignment": {
+            "type": "object",
+            "properties": {
+                "column": {
+                    "type": "string"
+                },
+                "expr": {
+                    "$ref": "#/definitions/Expression"
                 }
             },
             "additionalProperties": false
