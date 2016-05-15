@@ -1,10 +1,8 @@
-import 'rxjs/Rx'
-
 import {Injectable}                              from '@angular/core'
 import {Http, Response, Headers, RequestOptions} from '@angular/http'
 
 import {BehaviorSubject}                         from 'rxjs/BehaviorSubject'
-import {AsyncSubject}                            from 'rxjs/AsyncSubject';
+import {AsyncSubject}                            from 'rxjs/AsyncSubject'
 import {Observable}                              from 'rxjs/Observable'
 
 import {ServerApiService}                        from '../shared/serverapi.service'
@@ -102,182 +100,12 @@ export class ProjectService {
 
         return (toReturn);
     }
-    
-    /**
-     * Sends a certain query to the server to be executed.
-     */
-    runQuery(id : string) {
-        const query = this.cachedProject.getQueryById(id);        
-        const url = this._server.getRunQueryUrl(this.cachedProject.id);
-        
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
-
-        const body = {
-            sql : query.toSqlString(),
-            params : { }
-        }
-        
-        const toReturn = this._http.post(url, JSON.stringify(body), options)
-            .catch( (error : any) => {
-                if (query instanceof Query) {
-                    return (Observable.of(error));                
-                } else {
-                    return Observable.throw(error);
-                }
-            })
-            .map( (res) =>  {
-                // The result changes dependending on the concrete type
-                // of the query.
-                if (query instanceof QuerySelect) {
-                    return (new QueryResult(query, <any> res.json()))
-                } else if (query instanceof QueryInsert) {
-                    // TODO: Create special result class for inserts
-                    return (new QueryResult(undefined, <any> res.json()))
-                }
-            });
-
-        return (toReturn);
-    }
-    
-    /**
-     * Request to save a certain query.
-     */
-    saveQuery(id : string) {
-        const query = this.cachedProject.getQueryById(id);
-
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
-        const url = this._server.getQuerySpecificUrl(this.cachedProject.id, id);
-
-        let bodyJson : QueryUpdateRequestDescription = {
-            model : query.toModel()
-        }
-
-        // Add the SQL representation, if applicable
-        if (query.validate().isValid) {
-            bodyJson.sql = query.toSqlString();
-        }
-
-        // Id is part of the URL
-        delete bodyJson.model.id;
-
-        const body = JSON.stringify(bodyJson);
-
-        const toReturn = this._http.post(url, body, options)
-            .map( (res) => "" )
-            .catch(this.handleError);
-
-        return (toReturn);
-    }
 
     /**
-     * Request to create a new query on the given table.
-     *
-     * @param table The name of the table to query initially
+     * Creates a new page with the given name.
      */
-    createSelect(table : string) {
-        const url = this._server.getQueryUrl(this.cachedProject.id);
-
-        let model : Model.QueryDescription = {
-            id : undefined,
-            name : table,
-            select : {
-                columns : [{
-                    expr : {
-                        star : { }
-                    }
-                }]
-            },
-            from : {
-                first : {
-                    name : table
-                }
-            }
-        }
-
-        const query = new QuerySelect(this.cachedProject.schema, model);
-        
-        let bodyJson : QueryUpdateRequestDescription = {
-            model : model,
-            sql : query.toSqlString()
-        }
-        
-        const request = this._http.post(url, JSON.stringify(bodyJson))
-            .catch(this.handleError);
-
-        const toReturn = new AsyncSubject<QuerySelect>();
-
-        // Once the query has been created, add it to the list of queries
-        // that are part of this project.
-        request.subscribe( queryId => {
-            model.id = queryId.text();
-
-            const newQuery = new QuerySelect(this.cachedProject.schema, model);
-            this.cachedProject.queries.push(newQuery);
-
-            toReturn.next(newQuery);
-        });
-
-        return (toReturn);
-    }
-
-    /**
-     * Request to create a new query on the given table.
-     *
-     * @param table The name of the table to query initially
-     */
-    createInsert(tableName : string) {
-        const url = this._server.getQueryUrl(this.cachedProject.id);
-
-        let model : Model.QueryDescription = {
-            id : undefined,
-            name : tableName,
-            insert : {
-                table : tableName,
-                columns : [],
-                values : []
-            }
-        }
-
-        const query = new QueryInsert(this.cachedProject.schema, model);
-        
-        let bodyJson : QueryUpdateRequestDescription = {
-            model : model,
-            sql : query.toSqlString()
-        }
-        
-        const request = this._http.post(url, JSON.stringify(bodyJson))
-            .catch(this.handleError);
-
-        const toReturn = new AsyncSubject<QueryInsert>();
-
-        // Once the query has been created, add it to the list of queries
-        // that are part of this project.
-        request.subscribe( queryId => {
-            model.id = queryId.text();
-
-            const newQuery = new QueryInsert(this.cachedProject.schema, model);
-            this.cachedProject.queries.push(newQuery);
-
-            // And inform the caller
-            toReturn.next(newQuery);
-        });
-
-        
-
-        return (toReturn);
-    }
-
-    deleteQuery(queryId : string) {
-        const url = this._server.getQuerySpecificUrl(this.cachedProject.id, queryId);
-
-        const toReturn = this._http.delete(url)
-            .catch(this.handleError);
-
-        toReturn.subscribe( res => {
-            this.cachedProject.removeQueryById(queryId);
-        });
+    createPage(name : string) {
+        const url = this._server.getPageUrl(this.cachedProject.id);
     }
 
     private handleError (error: Response) {

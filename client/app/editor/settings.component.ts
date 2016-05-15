@@ -1,11 +1,11 @@
-import {Component}                      from '@angular/core';
+import {Component}            from '@angular/core';
 
 import {QuerySelect}          from '../shared/query'
 
-import {Project}        from './project'
-import {ProjectService} from './project.service'
-import {ToolbarService} from './toolbar.service'
-
+import {Project}              from './project'
+import {ProjectService}       from './project.service'
+import {ToolbarService}       from './toolbar.service'
+import {QueryService}         from './query.service'
 
 @Component({
     templateUrl: 'app/editor/templates/settings.html'
@@ -21,6 +21,7 @@ export class SettingsComponent {
      */
     constructor(
         private _projectService: ProjectService,
+        private _queryService: QueryService,
         private _toolbarService: ToolbarService
     ) {
     }
@@ -47,6 +48,6 @@ export class SettingsComponent {
      * The user has decided to delete a query.
      */
     onQueryDelete(queryId : string) {
-        this._projectService.deleteQuery(queryId);
+        this._queryService.deleteQuery(this.project, queryId);
     }
 }

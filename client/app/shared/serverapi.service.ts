@@ -68,4 +68,18 @@ export class ServerApiService {
     getRunQueryUrl(projectId : string) : string {
         return (`/api/project/${projectId}/query/run`);
     }
+
+    /**
+     * Retrieves an URL that can be used to create pages.
+     */
+    getPageUrl(projectId : string) : string {
+        return (`/api/project/${projectId}/page/`);
+    }
+
+    /**
+     * Retrieves an URL that can be used to create pages.
+     */
+    getPageSpecificUrl(projectId : string, queryId : string) : string {
+        return (`/api/project/${projectId}/page/${queryId}`);
+    }
 }
