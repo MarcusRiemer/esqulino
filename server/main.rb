@@ -7,6 +7,7 @@ require "sinatra/multi_route"
 require 'yaml'
 
 require './project.rb'
+require './schema.rb'
 require './validator.rb'
 require './error.rb'
 
