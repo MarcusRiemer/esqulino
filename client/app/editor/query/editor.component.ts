@@ -11,6 +11,7 @@ import {
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
 import {ToolbarService}                 from '../toolbar.service'
+import {QueryService}                   from '../query.service'
 
 import {QueryComponent, SqlStringPipe}  from './sql.component'
 import {SidebarComponent}               from './sidebar.component'
@@ -41,7 +42,8 @@ export class QueryEditorComponent {
      * Used for dependency injection.
      */
     constructor(
-        private _projectService: ProjectService,
+        private _projectService : ProjectService,
+        private _queryService : QueryService,
         private _toolbarService: ToolbarService,
         private _routeParams: RouteParams,
         _injector: Injector
@@ -60,6 +62,15 @@ export class QueryEditorComponent {
      */
     ngOnInit() {
         this._toolbarService.resetItems();
+
+        // Grab the correct project and query
+        var queryId = this._routeParams.get('queryId');
+        this._projectService.activeProject
+            .subscribe(res => {
+                // Project is loaded, display the correct  query
+                this.project = res;
+                this.query = this.project.getQueryById(queryId);
+            });
         
         // Reacting to saving
         this._toolbarService.savingEnabled = true;
@@ -67,7 +78,7 @@ export class QueryEditorComponent {
         
         saveItem.onClick.subscribe( (res) => {
             saveItem.isInProgress = true;
-            this._projectService.saveQuery(this.query.id)
+            this._queryService.saveQuery(this.project, this.query)
                 // Always delay visual feedback by 500ms
                 .delay(500)
                 .subscribe(res => saveItem.isInProgress = false);
@@ -77,20 +88,11 @@ export class QueryEditorComponent {
         let queryItem = this._toolbarService.addButton("Ausführen", "search", "r");
         queryItem.onClick.subscribe( (res) => {
             queryItem.isInProgress = true;
-            this._projectService.runQuery(this.query.id)
+            this._queryService.runQuery(this.project, this.query)
                 .subscribe(res => {
                     queryItem.isInProgress = false;
                     this._result = res;
                 });
         });
-        
-        var queryId = this._routeParams.get('queryId');
-
-        this._projectService.activeProject
-            .subscribe(res => {
-                // Project is loaded, display the correct  query
-                this.project = res;
-                this.query = this.project.getQueryById(queryId);
-            });
     }
 }

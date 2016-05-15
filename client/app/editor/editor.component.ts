@@ -1,28 +1,31 @@
-import {Component, OnInit}              from '@angular/core';
-import {CORE_DIRECTIVES}                from '@angular/common';
-import {HTTP_PROVIDERS}                 from '@angular/http';
-import {RouteConfig, RouteParams,ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {Component, OnInit}              from '@angular/core'
+import {CORE_DIRECTIVES}                from '@angular/common'
+import {HTTP_PROVIDERS}                 from '@angular/http'
+import {RouteConfig, RouteParams,ROUTER_DIRECTIVES} from '@angular/router-deprecated'
 
 import {TableDescription}                from '../shared/schema.description'
 
-import {SettingsComponent}    from './settings.component';
-import {SchemaComponent}      from './schema.component';
-import {QueryEditorComponent} from './query/editor.component';
-import {Project}              from './project';
-import {ProjectService}       from './project.service';
-import {NavbarComponent}      from './navbar.component';
-import {ToolbarComponent}     from './toolbar.component';
-import {ToolbarService}       from './toolbar.service';
+import {Project}              from './project'
+import {ProjectService}       from './project.service'
+import {QueryService}         from './query.service'
+import {ToolbarService}       from './toolbar.service'
+import {NavbarComponent}      from './navbar.component'
+import {ToolbarComponent}     from './toolbar.component'
 
+import {SettingsComponent}    from './settings.component'
+import {SchemaComponent}      from './schema.component'
+import {PageEditorComponent}  from './page/editor.component'
+import {QueryEditorComponent} from './query/editor.component'
 @Component({
     templateUrl: 'app/editor/templates/index.html',
     directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, ToolbarComponent, NavbarComponent],
-    providers: [HTTP_PROVIDERS, ProjectService, ToolbarService]
+    providers: [HTTP_PROVIDERS, ProjectService, QueryService, ToolbarService]
 })
 @RouteConfig([
-    { path: '/', name : "Schema",   component : SchemaComponent, useAsDefault: true },
+    { path: '/schema', name : "Schema",   component : SchemaComponent, useAsDefault: true },
     { path: '/settings', name : "Settings", component : SettingsComponent },
     { path: '/query/:queryId', name : "Query", component : QueryEditorComponent },
+    { path: '/page/:pageId', name : "Page", component : PageEditorComponent },
 ])
 export class EditorComponent implements OnInit {
     /**
