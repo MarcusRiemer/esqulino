@@ -14,7 +14,11 @@ export class ValidatorComponent {
     @Input() query : Query;
 
     get result() : ValidationResult {
-        return (this.query.validate());
+        if (this.query) {
+            return (this.query.validate());
+        } else {
+            return (undefined);
+        }
     }
 }
            

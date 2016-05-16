@@ -46,7 +46,7 @@ export class PageEditorComponent implements OnInit {
         this._toolbarService.resetItems();
 
         // Grab the correct project and query
-        var pageId = this._routeParams.get('pageId');
+        var pageId = this._routeParams.getParam('pageId');
         this._projectService.activeProject
             .subscribe(res => {
                 if (res) {

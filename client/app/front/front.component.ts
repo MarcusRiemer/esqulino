@@ -2,7 +2,7 @@ import {Component, OnInit}              from '@angular/core';
 import {HTTP_PROVIDERS}                 from '@angular/http';
 import {CORE_DIRECTIVES}                from '@angular/common';
 import {
-    RouteConfig, ROUTER_DIRECTIVES
+    Routes, ROUTER_DIRECTIVES
 } from '@angular/router';
 
 import {ProjectDescriptionService} from '../shared/project.description.service';
@@ -14,9 +14,9 @@ import {AboutComponent}            from './about.component';
     directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES],
     providers: [HTTP_PROVIDERS, ProjectDescriptionService]
 })
-@RouteConfig([
-    { path: '/',        name: "About",       component: AboutComponent, useAsDefault: true},
-    { path: '/project', name: "ProjectList", component: ProjectListComponent},
+@Routes([
+    { path: 'projects', component: ProjectListComponent},
+    { path: '',    component: AboutComponent},
 ])
 export class FrontComponent {
 }

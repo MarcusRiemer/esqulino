@@ -7,12 +7,11 @@
     <h2 [hidden]="hasImage" class="card-title">{{ project.name }}</h2>
     <p class="card-text">{{ project.description }}</p>
     <button type="button"
-            class="btn btn-primary btn-block"
-            (click)="navigateView()">
+            class="btn btn-primary btn-block">
       Ansehen
     </button>
-    <a class="btn btn-info btn-block"
-       (click)="navigateEditor()">
+    <a [routerLink]="['/editor/', project.id]"
+       class="btn btn-info btn-block">
       Bearbeiten
     </a>
   </div>

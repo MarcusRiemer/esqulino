@@ -42,7 +42,9 @@ export class ProjectService {
     ) {
         // Create a single subject once and for all. This instanc is not
         // allowed to changed as it is passed on to every subscriber.
-        this._subject = new BehaviorSubject<Project>(null);
+        // TODO: Make this blocking until the first value was loaded
+        //       instead of filling it with `undefined`.
+        this._subject = new BehaviorSubject<Project>(undefined);
     }
 
     /**

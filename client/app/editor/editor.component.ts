@@ -22,10 +22,11 @@ import {QueryEditorComponent} from './query/editor.component'
     providers: [HTTP_PROVIDERS, ProjectService, QueryService, ToolbarService]
 })
 @Routes([
-    { path: '/schema', name : "Schema",   component : SchemaComponent, useAsDefault: true },
-    { path: '/settings', name : "Settings", component : SettingsComponent },
-    { path: '/query/:queryId', name : "Query", component : QueryEditorComponent },
-    { path: '/page/:pageId', name : "Page", component : PageEditorComponent },
+    { path: '', component : SettingsComponent },
+    { path: 'settings', component : SettingsComponent },
+    { path: 'schema', component : SchemaComponent },
+    { path: 'query/:queryId', component : QueryEditorComponent },
+    { path: 'page/:pageId', component : PageEditorComponent },
 ])
 export class EditorComponent implements OnInit {
     /**
@@ -45,7 +46,7 @@ export class EditorComponent implements OnInit {
      * Load the project for all sub-components.
      */
     ngOnInit() {
-        var projectId = this._routeParams.get('projectId');
+        var projectId = this._routeParams.getParam('projectId');
 
         console.log(`Loading project with id "${projectId}"`);
 

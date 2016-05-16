@@ -1,13 +1,13 @@
 <nav class="leftbar">
   <ul class="nav">
     <li class="nav-item">
-      <a class="nav-link" [routerLink]="['Settings']">
+      <a class="nav-link" [routerLink]="['settings']">
         <span class="fa fa-cog fa-fw"></span>
         Einstellungen
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" [routerLink]="['Schema']">
+      <a class="nav-link" [routerLink]="['schema']">
         <span class="fa fa-table fa-fw"></span>
         Schema
       </a>
@@ -20,7 +20,7 @@
       <ul class="nav nav-query">
         <li class="nav-item"
             *ngFor="let query of project?.queries">
-          <a class="nav-link" [routerLink]="['Query', {queryId : query.id}]">
+          <a class="nav-link" [routerLink]="['query', query.id]">
             <span class="fa {{ iconForQuery(query) }} fa-fw"></span>
             {{ query.name }}
           </a>
@@ -39,7 +39,7 @@
       <ul class="nav nav-page">
         <li class="nav-item"
             *ngFor="let page of project?.pages">
-          <a class="nav-link" [routerLink]="['Page', {pageId : page.id}]">
+          <a class="nav-link" [routerLink]="['page', page.id]">
             <span class="fa {{ iconForPage(page) }} fa-fw"></span>
             {{ page.name }}
           </a>
