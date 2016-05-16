@@ -63,12 +63,14 @@ export class QueryEditorComponent implements OnInit {
         this._toolbarService.resetItems();
 
         // Grab the correct project and query
-        var queryId = this._routeParams.get('queryId');
+        var queryId = this._routeParams.getParam('queryId');
         this._projectService.activeProject
             .subscribe(res => {
-                // Project is loaded, display the correct  query
-                this.project = res;
-                this.query = this.project.getQueryById(queryId);
+                if (res) {
+                    // Project is loaded, display the correct  query
+                    this.project = res;
+                    this.query = this.project.getQueryById(queryId);
+                }
             });
         
         // Reacting to saving

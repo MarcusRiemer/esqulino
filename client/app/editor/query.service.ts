@@ -91,7 +91,7 @@ export class QueryService {
     saveQuery(project : Project, query : Query) {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        const url = this._server.getQuerySpecificUrl(query.id, project.id);
+        const url = this._server.getQuerySpecificUrl(project.id, query.id);
 
         let bodyJson : QueryUpdateRequestDescription = {
             model : query.toModel()

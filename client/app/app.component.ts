@@ -1,7 +1,7 @@
 import {Component, OnInit}              from '@angular/core'
 import {HTTP_PROVIDERS}                 from '@angular/http'
 import {CORE_DIRECTIVES, NgForm}        from '@angular/common'
-import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router'
+import {Routes, Router, ROUTER_DIRECTIVES}      from '@angular/router'
 
 import {ServerApiService}               from './shared/serverapi.service'
 
@@ -15,10 +15,15 @@ import {FrontComponent}                 from './front/front.component'
     directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES],
     providers: [HTTP_PROVIDERS, ServerApiService]
 })
-@RouteConfig([
-    { path: '/front/...', name: "Front", component: FrontComponent, useAsDefault : true },
-    { path: '/editor/:projectId/...', name: "Editor", component: EditorComponent }
+@Routes([
+    { path: 'editor/:projectId', component: EditorComponent },
+    { path: 'about', component: FrontComponent },
+    { path: '', component: FrontComponent }
 ])
 export class SqlScratchComponent {
+    constructor(private _router: Router) {}
 
+    ngOnInit() {
+
+    }
 }

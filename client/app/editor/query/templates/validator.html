@@ -1,4 +1,4 @@
-<div *ngIf="!result.isValid"
+<div *ngIf="!result?.isValid"
      class="alert alert-danger"
      role="alert">
   <h6>
@@ -10,7 +10,7 @@
       <th width="200">Wo?</th>
       <th>Fehler</th>
     </tr>
-    <tr *ngFor="let error of result.errors"
+    <tr *ngFor="let error of result?.errors"
         class="table-danger">
       <td>{{ error.location }}</td>
       <td>{{ error.errorMessage }}</td>
