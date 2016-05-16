@@ -1,4 +1,4 @@
-import {Component, Injector, Input}     from '@angular/core'
+import {Component, Input, OnInit}       from '@angular/core'
 import {Router, RouteParams}            from '@angular/router-deprecated'
 
 import {Observable}                     from 'rxjs/Observable'
@@ -25,11 +25,11 @@ import {DragService}                    from './drag.service'
     providers: [DragService],
     pipes: [SqlStringPipe],
 })
-export class QueryEditorComponent {
+export class QueryEditorComponent implements OnInit {
     /**
      * The currently edited query
      */
-    @Input() public query : Query;
+    public query : Query;
 
     /**
      * The currently edited project
@@ -45,8 +45,7 @@ export class QueryEditorComponent {
         private _projectService : ProjectService,
         private _queryService : QueryService,
         private _toolbarService: ToolbarService,
-        private _routeParams: RouteParams,
-        _injector: Injector
+        private _routeParams: RouteParams
     ) {
     }
 
@@ -58,7 +57,7 @@ export class QueryEditorComponent {
     }
 
     /**
-     * Load the project to access the schema
+     * Load the project to access the schema and the queries.
      */
     ngOnInit() {
         this._toolbarService.resetItems();

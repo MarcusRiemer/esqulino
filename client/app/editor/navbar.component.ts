@@ -1,10 +1,11 @@
-import {Component, Input}  from '@angular/core';
+import {Component, Input}  from '@angular/core'
 import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
 import {Project}           from './project'
 import {
-    Query, QuerySelect, QueryDelete, QueryInsert
+    Query, QuerySelect, QueryDelete, QueryInsert, QueryUpdate
 } from '../shared/query'
+import {Page}              from '../shared/page/page'
 
 @Component({
     templateUrl: 'app/editor/templates/navbar.html',
@@ -18,6 +19,8 @@ export class NavbarComponent {
     @Input() project : Project;
 
     /**
+     * @param query The query that needs an icon.
+     *
      * @return A Font Awesome CSS icon class
      */
     iconForQuery(query : Query) {
@@ -25,8 +28,19 @@ export class NavbarComponent {
             return ("fa-ban");
         } else if (query instanceof QueryInsert) {
             return ("fa-plus-circle");
-        } else {
+        } else if (query instanceof QueryUpdate) {
+            return ("fa-pencil");
+        }else {
             return ("fa-search");
         } 
+    }
+
+    /**
+     * @param page The page that needs an icon.
+     *
+     * @return A Font Awesome CSS icon class
+     */
+    iconForPage(page : Page) {
+        return ("fa-file-text-o");
     }
 }

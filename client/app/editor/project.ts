@@ -2,6 +2,8 @@ import {Schema}                  from '../shared/schema'
 import {Query, Model, loadQuery} from '../shared/query'
 import {ProjectDescription}      from '../shared/project.description'
 
+import {Page}                    from '../shared/page/page'
+
 /**
  * A project with editing capatabilities.
  */
@@ -12,6 +14,7 @@ export class Project {
     public schema : Schema;
 
     private _queries : Query[];
+    private _pages : Page[];
 
     /**
      * Construct a new project and a whole slew of other
@@ -24,25 +27,36 @@ export class Project {
         this.schema = new Schema(json.schema);
 
         // Map all abstract queries to concrete query objects
-        this._queries = json.queries.map( val => {
-            return (loadQuery(this.schema, val));
-        });
+        this._queries = json.queries.map( val => loadQuery(this.schema, val) );
+        this._pages = json.pages.map( val => new Page(val));
     }
 
     /**
-     * @return All available queries, with no guaranteed order.
+     * @return All available queries, no order guaranteed.
      */
     get queries() {
         return (this._queries);
     }
 
     /**
+     * @return All available pages, no order guaranteed.
+     */
+    get pages() {
+        return (this._pages);
+    }
+
+    /**
      * @return A single query identified by it's ID
      */
     getQueryById(id : string) : Query {
-        return (this._queries.find(item => {
-            return (item.id == id);
-        }));
+        return (this._queries.find(item => (item.id == id)));
+    }
+
+    /**
+     * @return A single page identified by it's ID
+     */
+    getPageById(id : string) : Page {
+        return (this._pages.find(item => (item.id == id)));
     }
 
     /**

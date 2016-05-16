@@ -8,6 +8,7 @@ import {Query, QueryFrom, QueryWhere}    from './query/base'
 import {QuerySelect}                     from './query/select'
 import {QueryDelete}                     from './query/delete'
 import {QueryInsert}                     from './query/insert'
+import {QueryUpdate}                     from './query/update'
 
 /**
  * Storing a query on the server
@@ -19,7 +20,7 @@ export interface QueryUpdateRequestDescription {
 
 export {
     Model, SyntaxTree, ValidationResult, Validateable,
-    Query, QuerySelect, QueryDelete, QueryInsert, QueryFrom, QueryWhere
+    Query, QuerySelect, QueryDelete, QueryInsert, QueryFrom, QueryWhere, QueryUpdate
 }
 
 /**
