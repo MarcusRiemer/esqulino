@@ -44,14 +44,16 @@ This project itself is licensed under the terms of the [GNU Affero General Publi
 
 # Dependencies and Licenses
 
-This project relies on a rich set of other projects, the most notable ones are listed here.
+This project relies on a rich set of other projects, the most notable ones are listed here in alphabetical order.
 
-Name                                                       | Used for                                                 | Runs on      | License
+Name                                                       | Used for                                                 | Site         | License
 ---------------------------------------------------------- | -------------------------------------------------------- | ------------ | -------
 [Angular 2.0](https://angular.io/)                         | Frontend GUI                                             | Client       | MIT
+[Font Awesome](http://fontawesome.io)                      | Icons for the Frontend User Interface                    | Client       | SIL Open Font
 [Ruby](https://www.ruby-lang.org/)                         | Server-side scripting language                           | Server       | Ruby
 [Sinatra](http://www.sinatrarb.com/)                       | HTTP Handling and routing for backend                    | Server       | MIT
 [Sinatra Contrib](http://www.sinatrarb.com/contrib/)       | Config-File, Code-Reloading and JSON serialization       | Server       | MIT
 [SQLite 3](https://www.sqlite.org/)                        | Database backend for projects                            | Server       | CC0
 [Typescript](http://www.typescriptlang.org/)               | Client-side scripting language                           | Client       | Apache 2.0
+[Typescript JSON Schema](https://github.com/YousefED/typescript-json-schema) | JSON Schema Generation                 | Development  | Apache 2.0
 
