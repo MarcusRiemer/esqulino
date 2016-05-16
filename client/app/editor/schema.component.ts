@@ -1,5 +1,5 @@
 import {Component, Input, Injector, OnInit}     from '@angular/core';
-import {Router, RouteParams, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {Router, RouteSegment, ROUTER_DIRECTIVES} from '@angular/router';
 
 import {Project}              from './project'
 import {ProjectService}       from './project.service'
@@ -23,7 +23,7 @@ export class SchemaComponent implements OnInit {
     constructor(
         private _projectService: ProjectService,
         private _toolbarService: ToolbarService,
-        private _routeParams: RouteParams,
+        private _routeParams: RouteSegment,
         _injector: Injector
     ) {
     }

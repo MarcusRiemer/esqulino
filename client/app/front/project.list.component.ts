@@ -1,5 +1,5 @@
 import {Component, OnInit, Input}  from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 
 import {ProjectDescription}        from '../shared/project.description';
 import {ProjectDescriptionService} from '../shared/project.description.service';

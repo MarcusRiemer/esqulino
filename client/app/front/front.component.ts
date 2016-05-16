@@ -3,7 +3,7 @@ import {HTTP_PROVIDERS}                 from '@angular/http';
 import {CORE_DIRECTIVES}                from '@angular/common';
 import {
     RouteConfig, ROUTER_DIRECTIVES
-} from '@angular/router-deprecated';
+} from '@angular/router';
 
 import {ProjectDescriptionService} from '../shared/project.description.service';
 import {ProjectListComponent}      from './project.list.component';
