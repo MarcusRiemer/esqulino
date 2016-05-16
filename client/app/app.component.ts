@@ -1,7 +1,7 @@
 import {Component, OnInit}              from '@angular/core'
 import {HTTP_PROVIDERS}                 from '@angular/http'
 import {CORE_DIRECTIVES, NgForm}        from '@angular/common'
-import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated'
+import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router'
 
 import {ServerApiService}               from './shared/serverapi.service'
 

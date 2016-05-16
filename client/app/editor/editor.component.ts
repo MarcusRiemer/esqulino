@@ -1,7 +1,7 @@
 import {Component, OnInit}              from '@angular/core'
 import {CORE_DIRECTIVES}                from '@angular/common'
 import {HTTP_PROVIDERS}                 from '@angular/http'
-import {RouteConfig, RouteParams,ROUTER_DIRECTIVES} from '@angular/router-deprecated'
+import {Routes, RouteSegment, ROUTER_DIRECTIVES} from '@angular/router'
 
 import {TableDescription}                from '../shared/schema.description'
 
@@ -21,7 +21,7 @@ import {QueryEditorComponent} from './query/editor.component'
     directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, ToolbarComponent, NavbarComponent],
     providers: [HTTP_PROVIDERS, ProjectService, QueryService, ToolbarService]
 })
-@RouteConfig([
+@Routes([
     { path: '/schema', name : "Schema",   component : SchemaComponent, useAsDefault: true },
     { path: '/settings', name : "Settings", component : SettingsComponent },
     { path: '/query/:queryId', name : "Query", component : QueryEditorComponent },
@@ -38,7 +38,7 @@ export class EditorComponent implements OnInit {
      */
     constructor(
         private _projectService: ProjectService,
-        private _routeParams: RouteParams
+        private _routeParams: RouteSegment
     ) { }
 
     /**

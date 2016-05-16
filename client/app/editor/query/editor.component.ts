@@ -1,5 +1,5 @@
 import {Component, Input, OnInit}       from '@angular/core'
-import {Router, RouteParams}            from '@angular/router-deprecated'
+import {Router, RouteSegment}            from '@angular/router'
 
 import {Observable}                     from 'rxjs/Observable'
 
@@ -45,7 +45,7 @@ export class QueryEditorComponent implements OnInit {
         private _projectService : ProjectService,
         private _queryService : QueryService,
         private _toolbarService: ToolbarService,
-        private _routeParams: RouteParams
+        private _routeParams: RouteSegment
     ) {
     }
 
