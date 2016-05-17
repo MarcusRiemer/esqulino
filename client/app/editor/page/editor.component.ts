@@ -49,11 +49,9 @@ export class PageEditorComponent implements OnInit {
         var pageId = this._routeParams.getParam('pageId');
         this._projectService.activeProject
             .subscribe(res => {
-                if (res) {
-                    // Project is loaded, display the correct page to edit
-                    this._project = res;
-                    this._page = this._project.getPageById(pageId);
-                }
+                // Project is loaded, display the correct page to edit
+                this._project = res;
+                this._page = this._project.getPageById(pageId);
             });
     }
 

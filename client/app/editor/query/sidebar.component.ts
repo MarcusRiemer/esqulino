@@ -48,14 +48,12 @@ export class SidebarComponent {
             this._projectService.activeProject
                 .first() // One shot subscription
                 .subscribe(res => {
-                    if (res) {
-                        // Grab the correct query id
-                        const childRoute = this._router.routeTree.firstChild(this._routeParams);
-                        const queryId = childRoute.getParam('queryId');
-
-                        // Project is loaded, display the correct  query
-                        this.query = res.getQueryById(queryId);
-                    }
+                    // Grab the correct query id
+                    const childRoute = this._router.routeTree.firstChild(this._routeParams);
+                    const queryId = childRoute.getParam('queryId');
+                    
+                    // Project is loaded, display the correct  query
+                    this.query = res.getQueryById(queryId);
                 });
         });
     }
