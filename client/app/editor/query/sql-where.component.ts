@@ -1,7 +1,7 @@
 import {Component, Input}               from '@angular/core'
 
 import {DragService, SqlDragEvent}      from './drag.service'
-import {ExpressionComponent}            from './sql.expr.component'
+import {ExpressionComponent}            from './sql-expr.component'
 
 import {QueryWhere, Model, SyntaxTree}  from '../../shared/query'
 
