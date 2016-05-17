@@ -75,7 +75,8 @@ export class ProjectService {
      * project.
      */
     get activeProject() : Observable<Project> {
-        return (this._subject);
+        return (this._subject
+                .filter(v => !!v));
     }
 
     /**
