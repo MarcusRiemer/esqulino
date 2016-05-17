@@ -1,0 +1,4 @@
+<div *ngIf="sidebarType != 'none'">
+  <sql-sidebar *ngIf="sidebarType == 'query'"></sql-sidebar>
+  <page-sidebar *ngIf="sidebarType == 'page'"></page-sidebar>
+</div>

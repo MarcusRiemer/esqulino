@@ -1,95 +1,93 @@
-<div class="sidebar">
-  <div [hidden]="hideTrash"
-       (dragenter)="onDeleteDrag($event)"
-       (dragover)="onDeleteDrag($event)"
-       (drop)="onDeleteDrop($event)"
-       class="block-container center delete">
-    <span class="fa fa-trash fa-5x"></span>
+<div [hidden]="hideTrash"
+     (dragenter)="onDeleteDrag($event)"
+     (dragover)="onDeleteDrag($event)"
+     (drop)="onDeleteDrop($event)"
+     class="block-container center delete">
+  <span class="fa fa-trash fa-5x"></span>
+</div>
+
+<div class="block-container center">
+  <div (dragstart)="startConstantDrag($event)"
+       class="constant"
+       draggable="true">
+    Fester Wert
   </div>
-  
-  <div class="block-container center">
-    <div (dragstart)="startConstantDrag($event)"
-         class="constant"
-         draggable="true">
-      Fester Wert
-    </div>
+</div>
+
+<div class="block-container center">
+  <div (dragstart)="startParameterDrag($event)"
+       class="parameter"
+       draggable="true">
+    Wert vom Benutzer
   </div>
+</div>
 
-  <div class="block-container center">
-    <div (dragstart)="startParameterDrag($event)"
-         class="parameter"
-         draggable="true">
-      Wert vom Benutzer
-    </div>
+<div class="block-container center">
+  <div (dragstart)="startStarDrag($event)"
+       class="column"
+       draggable="true">
+    <span class="fa fa-star" aria-hidden="true"></span>
   </div>
+</div>
 
-  <div class="block-container center">
-    <div (dragstart)="startStarDrag($event)"
-         class="column"
-         draggable="true">
-      <span class="fa fa-star" aria-hidden="true"></span>
-    </div>
+<hr />
+
+<div class="block-container center">
+  <div (dragstart)="startCompoundDrag($event)"
+       class="expression"
+       draggable="true">
+    <span class="constant"><span class="fa fa-question-circle"></span></span>
+    <span class="opererator" [innerHtml]="binaryOperation | operator"></span>
+    <span class="constant"><span class="fa fa-question-circle"></span></span>
   </div>
+</div>
 
-  <hr />
+<div class="block-container center">
+  <span *ngFor="let op of allowedLogic"
+        (click)="binaryOperation = op"
+        (dragstart)="startOperatorDrag(op, $event)"
+        [innerHtml]="op | operator"
+        draggable="true"
+        class="expression selectable operator">
+  </span>
 
-  <div class="block-container center">
-    <div (dragstart)="startCompoundDrag($event)"
-         class="expression"
-         draggable="true">
-      <span class="constant"><span class="fa fa-question-circle"></span></span>
-      <span class="opererator" [innerHtml]="binaryOperation | operator"></span>
-      <span class="constant"><span class="fa fa-question-circle"></span></span>
-    </div>
-  </div>
+  <span *ngFor="let op of allowedMath"
+        (click)="binaryOperation = op"
+        (dragstart)="startOperatorDrag(op, $event)"
+        [innerHtml]="op | operator"
+        draggable="true"
+        class="expression selectable operator">
+  </span>
+</div>
 
-  <div class="block-container center">
-    <span *ngFor="let op of allowedLogic"
-          (click)="binaryOperation = op"
-          (dragstart)="startOperatorDrag(op, $event)"
-          [innerHtml]="op | operator"
-          draggable="true"
-          class="expression selectable operator">
-    </span>
+<hr />
 
-    <span *ngFor="let op of allowedMath"
-          (click)="binaryOperation = op"
-          (dragstart)="startOperatorDrag(op, $event)"
-          [innerHtml]="op | operator"
-          draggable="true"
-          class="expression selectable operator">
-    </span>
-  </div>
-
-  <hr />
-
-  <div class="block-container block">
-    <!-- Tables that are already present in the query are shown with their columns -->
-    <template ngFor let-join [ngForOf]="query?.from?.joinsAndInitial" let-last="last">
-      <div (dragstart)="startTableDrag(join.tableName, $event)"
-           class="table"
-           draggable="true">
-        <span class="fa fa-table fa-fw"></span>
-        {{ join.tableName }}
-      </div>
-      <ul>
-        <li *ngFor="let column of join.tableSchema.columns">
-          <span (dragstart)="startColumnDrag($event, join.tableName, column.name)"
-                class="column indent"
-                draggable="true">
-            {{ column.name }}
-          </span>
-        </li>
-      </ul>
-    </template>
-    <!-- All other tables are only shown as table -->
-    <div *ngFor="let table of query?.from?.unusedTables; let is-last=last"
-         (dragstart)="startTableDrag(table.tableName, $event)"
+<div class="block-container block">
+  <!-- Tables that are already present in the query are shown with their columns -->
+  <template ngFor let-join [ngForOf]="query?.from?.joinsAndInitial" let-last="last">
+    <div (dragstart)="startTableDrag(join.tableName, $event)"
          class="table"
          draggable="true">
       <span class="fa fa-table fa-fw"></span>
-      {{ table.name }}
+      {{ join.tableName }}
     </div>
-    <hr [hidden]="is-last">
+    <ul>
+      <li *ngFor="let column of join.tableSchema.columns">
+        <span (dragstart)="startColumnDrag($event, join.tableName, column.name)"
+              class="column indent"
+              draggable="true">
+          {{ column.name }}
+        </span>
+      </li>
+    </ul>
+  </template>
+  <!-- All other tables are only shown as table -->
+  <div *ngFor="let table of query?.from?.unusedTables; let is-last=last"
+       (dragstart)="startTableDrag(table.tableName, $event)"
+       class="table"
+       draggable="true">
+    <span class="fa fa-table fa-fw"></span>
+    {{ table.name }}
   </div>
+  <hr [hidden]="is-last">
 </div>

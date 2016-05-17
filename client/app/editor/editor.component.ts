@@ -1,25 +1,31 @@
 import {Component, OnInit}              from '@angular/core'
 import {CORE_DIRECTIVES}                from '@angular/common'
 import {HTTP_PROVIDERS}                 from '@angular/http'
-import {Routes, RouteSegment, ROUTER_DIRECTIVES} from '@angular/router'
+import {
+    Routes, RouteSegment, ROUTER_DIRECTIVES
+} from '@angular/router'
 
-import {TableDescription}                from '../shared/schema.description'
+import {TableDescription}               from '../shared/schema.description'
 
-import {Project}              from './project'
-import {ProjectService}       from './project.service'
-import {QueryService}         from './query.service'
-import {ToolbarService}       from './toolbar.service'
-import {NavbarComponent}      from './navbar.component'
-import {ToolbarComponent}     from './toolbar.component'
+import {Project}                        from './project'
+import {ProjectService}                 from './project.service'
+import {QueryService}                   from './query.service'
+import {ToolbarService}                 from './toolbar.service'
+import {ToolbarComponent}               from './toolbar.component'
+import {NavbarComponent}                from './navbar.component'
+import {SidebarPlaceholderComponent}    from './sidebar-placeholder.component'
+import {SettingsComponent}              from './settings.component'
+import {SchemaComponent}                from './schema.component'
 
-import {SettingsComponent}    from './settings.component'
-import {SchemaComponent}      from './schema.component'
-import {PageEditorComponent}  from './page/editor.component'
-import {QueryEditorComponent} from './query/editor.component'
+import {PageEditorComponent}            from './page/editor.component'
+import {QueryEditorComponent}           from './query/editor.component'
+import {DragService}                    from './query/drag.service'
+
 @Component({
     templateUrl: 'app/editor/templates/index.html',
-    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, ToolbarComponent, NavbarComponent],
-    providers: [HTTP_PROVIDERS, ProjectService, QueryService, ToolbarService]
+    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES,
+                 ToolbarComponent, NavbarComponent, SidebarPlaceholderComponent],
+    providers: [HTTP_PROVIDERS, ProjectService, QueryService, DragService, ToolbarService]
 })
 @Routes([
     { path: '', component : SettingsComponent },

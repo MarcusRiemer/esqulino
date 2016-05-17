@@ -1,6 +1,9 @@
-import {Component, Input}            from '@angular/core'
+import {Component, Input, OnInit}    from '@angular/core'
+import {RouteSegment, Router}        from '@angular/router'
 
-import {QuerySelect, Model}          from '../../shared/query'
+import {Query, Model}                from '../../shared/query'
+
+import {ProjectService}              from '../project.service'
 
 import {DragService}                 from './drag.service'
 import {OperatorPipe}                from './operator.pipe'
@@ -12,7 +15,7 @@ import {OperatorPipe}                from './operator.pipe'
  */
 @Component({
     templateUrl: 'app/editor/query/templates/sidebar.html',
-    selector : 'sql-sidebar',
+    selector : "sql-sidebar",
     pipes : [OperatorPipe]
 })
 export class SidebarComponent {
@@ -20,7 +23,7 @@ export class SidebarComponent {
      * View Variable:
      * The currently edited query
      */
-    @Input() query : QuerySelect;
+    @Input() query : Query;
 
     /**
      * View Variable:
@@ -28,8 +31,36 @@ export class SidebarComponent {
      */
     @Input() binaryOperation : Model.Operator = "=";
 
-    constructor(private _dragService : DragService) {
+    /**
+     * @param _dragService The sidebar relies on the SQL Editors DragService
+     */
+    constructor(
+        private _dragService : DragService,
+        private _projectService : ProjectService,        
+        private _routeParams : RouteSegment,
+        private _router : Router) {
     }
+
+    ngOnInit() {
+        // Every time the URL changes
+        this._router.changes.subscribe( () => {
+            // Grab the current project
+            this._projectService.activeProject
+                .first() // One shot subscription
+                .subscribe(res => {
+                    if (res) {
+                        // Grab the correct query id
+                        const childRoute = this._router.routeTree.firstChild(this._routeParams);
+                        const queryId = childRoute.getParam('queryId');
+
+                        // Project is loaded, display the correct  query
+                        this.query = res.getQueryById(queryId);
+                    }
+                });
+        });
+    }
+
+    
 
     /**
      * @return A list of currently allowed logic operators
