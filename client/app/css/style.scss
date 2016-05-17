@@ -166,6 +166,13 @@ $background-nav: #f7f7f9;
     background-color: lime;
 }
 
+.block-container .layout {
+    border-radius: 500px;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: gainsboro;
+}
+
 .block-container .column.blueprint {
   border-radius: 500px;
   border: 2px dashed blue;

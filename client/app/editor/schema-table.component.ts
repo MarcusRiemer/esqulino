@@ -7,14 +7,22 @@ import {ProjectService}                 from './project.service'
 import {QueryService}                   from './query.service'
 
 
-
+/**
+ * Displays the schema for a list of tables.
+ */
 @Component({
     templateUrl: 'app/editor/templates/schema.table.html',
     selector: "sql-table"
 })
 export class SchemaTableComponent {
+    /**
+     * The tables to display.
+     */
     @Input() tables : TableDescription[];
 
+    /**
+     * True, if creation should be allowed from this component.
+     */
     @Input() allowCreate : boolean = false;
 
     /**
@@ -36,11 +44,17 @@ export class SchemaTableComponent {
             .subscribe(res => this._project = res);
     }
 
+    /**
+     * Create a new SELECT query for a certain table.
+     */
     onCreateSelect(tableName : string) {
         this._queryService.createSelect(this._project, tableName)
             .subscribe( (res) => console.log(`Created SELECT query for table "${tableName}"`));
     }
-
+    
+    /**
+     * Create a new INSERT query for a certain table.
+     */
     onCreateInsert(tableName : string) {
         this._queryService.createInsert(this._project, tableName)
             .subscribe( (res) => console.log(`Created INSERT query for table "${tableName}"`));

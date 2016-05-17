@@ -5,7 +5,8 @@ import {ProjectDescription}      from '../shared/project.description'
 import {Page}                    from '../shared/page/page'
 
 /**
- * A project with editing capatabilities.
+ * A loaded project with editing capatabilities. This is were all
+ * information is lumped together.
  */
 export class Project {
     public id : string;
