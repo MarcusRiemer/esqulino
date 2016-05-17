@@ -1,5 +1,5 @@
 import {Component, Input, OnInit}       from '@angular/core'
-import {Router, RouteSegment}            from '@angular/router'
+import {Router, RouteSegment}           from '@angular/router'
 
 import {Observable}                     from 'rxjs/Observable'
 

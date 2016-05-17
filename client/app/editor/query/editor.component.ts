@@ -1,5 +1,5 @@
 import {Component, Input, OnInit}       from '@angular/core'
-import {Router, RouteSegment}            from '@angular/router'
+import {Router, RouteSegment}           from '@angular/router'
 
 import {Observable}                     from 'rxjs/Observable'
 
@@ -17,12 +17,11 @@ import {QueryComponent, SqlStringPipe}  from './sql.component'
 import {SidebarComponent}               from './sidebar.component'
 import {ResultComponent}                from './result.component'
 import {ValidatorComponent}             from './validator.component'
-import {DragService}                    from './drag.service'
 
 @Component({
     templateUrl: 'app/editor/query/templates/editor.html',
     directives: [QueryComponent, SidebarComponent, ResultComponent, ValidatorComponent],
-    providers: [DragService],
+    providers: [],
     pipes: [SqlStringPipe],
 })
 export class QueryEditorComponent implements OnInit {
