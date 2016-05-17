@@ -7,11 +7,11 @@ import {Query, Model, SyntaxTree}       from '../../shared/query'
 import {ProjectService}                 from '../project.service'
 
 import {DragService}                    from './drag.service'
-import {SelectComponent}                from './sql.select.component'
-import {DeleteComponent}                from './sql.delete.component'
-import {FromComponent}                  from './sql.from.component'
-import {WhereComponent}                 from './sql.where.component'
-import {InsertComponent}                from './sql.insert.component'
+import {SelectComponent}                from './sql-select.component'
+import {DeleteComponent}                from './sql-delete.component'
+import {FromComponent}                  from './sql-from.component'
+import {WhereComponent}                 from './sql-where.component'
+import {InsertComponent}                from './sql-insert.component'
 
 /**
  * Transforms a query into its string expression.

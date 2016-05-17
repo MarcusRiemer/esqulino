@@ -1,6 +1,6 @@
 import {Component, Input, ChangeDetectionStrategy} from '@angular/core'
 
-import {ExpressionComponent}            from './sql.expr.component'
+import {ExpressionComponent}            from './sql-expr.component'
 
 import {Expression}                     from '../../shared/query.syntaxtree'
 import {ColumnDescription}              from '../../shared/schema.description'
