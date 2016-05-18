@@ -30,10 +30,11 @@ DIST_NODE_FILES = $(addprefix $(BUILD_DIR), $(NODE_FILES))
 
 SASS_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "sass")')
 TSC_BIN = node_modules/typescript/bin/tsc
+PROTRACTOR_BIN = node_modules/protractor/bin/protractor
+WEBDRIVER_MANAGER_BIN = node_modules/protractor/bin/webdriver-manager
 
 # Meta target: Build the client part of the application.
 dist : dist-sass dist-compile dist-templates dist-vendor dist-node
-
 
 # Uses the `package.json` file to grab all dependencies
 install-deps : has-npm
@@ -90,6 +91,24 @@ clean :
 clean-deps:
 	rm -rf node_modules typings
 
+
+##################################
+# Test targets
+##################################
+
+webdriver-manager-update:
+	$(WEBDRIVER_MANAGER_BIN) update
+
+webdriver-manager-start:
+	$(WEBDRIVER_MANAGER_BIN) start
+
+protractor-run:
+	$(PROTRACTOR_BIN) test-protractor-conf.js
+
+##################################
+# Ensural targets
+##################################
+
 # Ensures the npm "binary" is available
 has-npm :
 ifeq (, $(shell which npm 2>/dev/null))
@@ -127,4 +146,4 @@ msg-pre-templates :
 msg-pre-vendor :
 	@tput setaf 2; echo \#\# Copying vendor-dependencies; tput sgr0
 
-.PHONY : clean clean-deps dist dist-sass dist-templates dist-compile dist-vendor dist-node has-npm has-sass install-deps watch
+.PHONY : clean clean-deps dist dist-sass dist-templates dist-compile dist-vendor dist-node has-npm has-sass install-deps watch webdriver-manager-update
