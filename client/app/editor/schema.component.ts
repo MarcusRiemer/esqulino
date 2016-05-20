@@ -1,8 +1,9 @@
-import {Component, Input, Injector, OnInit}     from '@angular/core';
+import {Component, Input, OnInit}     from '@angular/core';
 import {Router, RouteSegment, ROUTER_DIRECTIVES} from '@angular/router';
 
 import {Project}              from './project'
 import {ProjectService}       from './project.service'
+import {SidebarService}       from './sidebar.service'
 import {ToolbarService}       from './toolbar.service'
 
 import {SchemaTableComponent} from './schema-table.component'
@@ -24,8 +25,9 @@ export class SchemaComponent implements OnInit {
         private _projectService: ProjectService,
         private _toolbarService: ToolbarService,
         private _routeParams: RouteSegment,
-        _injector: Injector
+        private _sidebarService: SidebarService
     ) {
+        this._sidebarService.hideSidebar();
     }
 
     /**

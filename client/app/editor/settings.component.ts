@@ -4,6 +4,7 @@ import {QuerySelect}          from '../shared/query'
 
 import {Project}              from './project'
 import {ProjectService}       from './project.service'
+import {SidebarService}       from './sidebar.service'
 import {ToolbarService}       from './toolbar.service'
 import {QueryService}         from './query.service'
 
@@ -22,8 +23,10 @@ export class SettingsComponent {
     constructor(
         private _projectService: ProjectService,
         private _queryService: QueryService,
-        private _toolbarService: ToolbarService
+        private _toolbarService: ToolbarService,
+        private _sidebarService: SidebarService
     ) {
+        this._sidebarService.hideSidebar();
     }
 
     /**
@@ -32,6 +35,7 @@ export class SettingsComponent {
     ngOnInit() {
         this._toolbarService.resetItems();
         this._toolbarService.savingEnabled = true;
+        
 
         let saveItem = this._toolbarService.saveItem;
         saveItem.onClick.subscribe( (res) => {

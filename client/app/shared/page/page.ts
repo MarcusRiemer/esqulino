@@ -23,4 +23,8 @@ export class Page {
     get id() {
         return (this._id);
     }
+
+    get rows() {
+        return (this._rows);
+    }
 }

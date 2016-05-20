@@ -1,7 +1,7 @@
 BUILD_DIR = ../dist/client/
 
 SASS_FILES      = $(shell find app -iname "*.scss")
-DIST_CSS_FILES  = $(addprefix $(BUILD_DIR), "style.css")
+DIST_CSS_FILES  = $(addprefix $(BUILD_DIR), app/css/style.css)
 
 HTML_FILES = $(shell find app -iname "*.html") index.html test.html
 DIST_HTML_FILES = $(addprefix $(BUILD_DIR), $(HTML_FILES))

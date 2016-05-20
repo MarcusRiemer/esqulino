@@ -11,6 +11,7 @@ import {
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
 import {ToolbarService}                 from '../toolbar.service'
+import {SidebarService}                 from '../sidebar.service'
 import {QueryService}                   from '../query.service'
 
 import {QueryComponent, SqlStringPipe}  from './sql.component'
@@ -36,16 +37,19 @@ export class QueryEditorComponent implements OnInit {
     public project : Project;
 
     private _result : QueryResult;
-    
+
     /**
      * Used for dependency injection.
      */
     constructor(
         private _projectService : ProjectService,
         private _queryService : QueryService,
-        private _toolbarService: ToolbarService,
-        private _routeParams: RouteSegment
+        private _toolbarService : ToolbarService,
+        private _routeParams : RouteSegment,
+        private _sidebarService : SidebarService
     ) {
+        this._sidebarService.showSidebar("query");
+        this._toolbarService.resetItems();
     }
 
     /**
@@ -59,8 +63,6 @@ export class QueryEditorComponent implements OnInit {
      * Load the project to access the schema and the queries.
      */
     ngOnInit() {
-        this._toolbarService.resetItems();
-
         // Grab the correct project and query
         var queryId = this._routeParams.getParam('queryId');
         this._projectService.activeProject
@@ -69,11 +71,11 @@ export class QueryEditorComponent implements OnInit {
                 this.project = res;
                 this.query = this.project.getQueryById(queryId);
             });
-        
+
         // Reacting to saving
         this._toolbarService.savingEnabled = true;
         let saveItem = this._toolbarService.saveItem;
-        
+
         saveItem.onClick.subscribe( (res) => {
             saveItem.isInProgress = true;
             this._queryService.saveQuery(this.project, this.query)
