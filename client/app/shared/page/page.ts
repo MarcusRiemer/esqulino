@@ -16,15 +16,32 @@ export class Page {
         this._rows = desc.rows.map(rowDesc => new Row(rowDesc));
     }
 
+    /**
+     * @return The name the user has given to this page
+     */
     get name() {
         return (this._name);
     }
 
+    /**
+     * @return The automatically generated id for this page
+     */
     get id() {
         return (this._id);
     }
 
+    /**
+     * @return All rows of this page
+     */
     get rows() {
         return (this._rows);
+    }
+
+    toModel() : PageDescription {
+        return ({
+            id : this._id,
+            name : this._name,
+            rows : this._rows.map(r => r.toModel())
+        });
     }
 }
