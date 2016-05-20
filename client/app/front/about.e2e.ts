@@ -1,7 +1,10 @@
 describe('About Page', () => {
-    it('Shows all relevant links', () => {
+    it('shows all relevant links', () => {
         browser.get('/');
         expect(browser.getTitle()).toEqual("esqulino");
+
+        // 4 navigation buttons should be present
+        expect(by.id("about-examples")).toBeTruthy();
         expect(by.id("about-pupils")).toBeTruthy();
         expect(by.id("about-teachers")).toBeTruthy();
         expect(by.id("about-developers")).toBeTruthy();

@@ -128,4 +128,29 @@ describe('Valid INSERT Queries', () => {
 
         expect(q.toSqlString()).toEqual(`INSERT INTO person (p1, p2, p3)\nVALUES (0, "1", 2)`);
     });
+
+    it('INSERT INTO person (p3,p1) VALUES (3, 1)', () => {
+        const m : Model.QueryDescription = {
+            name : "insert-2",
+            id : "insert-2",
+            insert : {
+                columns : [3,1],
+                table : "person",
+                values : [
+                    { constant : { type: "INTEGER", value : "3" } },
+                    { constant : { type: "INTEGER", value : "1" } }
+                ]
+            }
+        }
+
+        const q = new QueryInsert(schema, m);
+        expect(q.activeColumns).toEqual(schema.tables[0].columns);
+        expect(q.isValid).toBeTruthy();
+
+        const v = q.values;
+        expect(v[0].toModel()).toEqual(m.insert.values[0]);
+        expect(v[2].toModel()).toEqual(m.insert.values[2]);
+
+        expect(q.toSqlString()).toEqual(`INSERT INTO person (p3, p1)\nVALUES (3, 1)`);
+    });
 });
