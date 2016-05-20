@@ -47,6 +47,7 @@ export class PageEditorComponent implements OnInit {
      */
     ngOnInit() {
         this._toolbarService.resetItems();
+        this._toolbarService.savingEnabled = false;
 
         // Grab the correct project and query
         var pageId = this._routeParams.getParam('pageId');
@@ -64,6 +65,10 @@ export class PageEditorComponent implements OnInit {
 
     get page() {
         return (this._page);
+    }
+
+    onSave() {
+        
     }
 }
 

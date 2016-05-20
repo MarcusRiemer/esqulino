@@ -1,17 +1,23 @@
-<div class="editor"
-     style="padding-top: 4rem;">
+<div style="padding-top: 4rem;">
   <editor-toolbar></editor-toolbar>
-  <editor-navbar [project]="project"></editor-navbar>
-  <div class="content">
-    <router-outlet></router-outlet>
-  </div>
-  <div *ngIf="isSidebarVisible"
-       class="sidebar">
-    <sidebar-placeholder></sidebar-placeholder>
-  </div>
-  <div *ngIf="isSidebarVisible"
-       class="sidebar-hack">
-    <!-- Dirty hack to ensure the main content is not too wide -->
+
+  <div class="editor">    
+    <div class="navbar">
+      <editor-navbar [project]="project"></editor-navbar>
+    </div>
+
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+    <div *ngIf="isSidebarVisible"
+         class="sidebar">
+      <sidebar-placeholder></sidebar-placeholder>
+    </div>
+    <div *ngIf="isSidebarVisible"
+         class="sidebar-hack">
+      <!-- Dirty hack to ensure the main content is not too wide -->
+    </div>
   </div>
 </div>
 

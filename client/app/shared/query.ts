@@ -34,7 +34,7 @@ export function loadQuery(schema : Schema, toLoad : Model.QueryDescription) : Qu
     // The number of distinctive top-level components that
     // are present in the model.
     let topLevelList = [toLoad.delete, toLoad.select, toLoad.insert]
-        .filter( v => !!v);
+        .filter(v => !!v);
 
     // There must be a single top-level component
     if (topLevelList.length !== 1) {

@@ -8,12 +8,12 @@
     margin-right: 10px;
 }
 
-.editor nav.toolbar .navbar-brand {
+nav.toolbar .navbar-brand {
     /* Hack: Account for margin and padding of Bootstraps stuff */
     min-width: $sidebar-width - 31px;
 }
 
-.editor nav.leftbar {
+.editor .navbar {
     min-width: $sidebar-width - 10px;
     margin-right: 10px;
 }
@@ -23,7 +23,7 @@
     align-items: stretch;
 }
 
-.editor nav.leftbar {
+.editor .navbar {
     .label.dirty {
         cursor: pointer;
     }
