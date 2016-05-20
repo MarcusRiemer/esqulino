@@ -1,7 +1,7 @@
 BUILD_DIR = ../dist/client/
 
 SASS_FILES      = $(shell find app -iname "*.scss")
-DIST_CSS_FILES  = $(addprefix $(BUILD_DIR), $(SASS_FILES:.scss=.css))
+DIST_CSS_FILES  = $(addprefix $(BUILD_DIR), "style.css")
 
 HTML_FILES = $(shell find app -iname "*.html") index.html test.html
 DIST_HTML_FILES = $(addprefix $(BUILD_DIR), $(HTML_FILES))
@@ -46,7 +46,7 @@ dist-sass : msg-pre-sass $(DIST_CSS_FILES)
 # Actually compile SASS files
 $(DIST_CSS_FILES) : $(SASS_FILES)
 	@mkdir -p ../dist/client/app/css
-	$(SASS_BIN) --sourcemap=none --style=expanded $^ $@
+	$(SASS_BIN) --sourcemap=none --style=expanded app/css/style.scss $@
 
 # Meta target: "Compile" templates
 dist-templates: msg-pre-templates $(DIST_HTML_FILES)
@@ -118,7 +118,7 @@ endif
 # Ensure the sass "binary" is available
 has-sass :
 ifeq (, $(wildcard $(SASS_BIN)))
-	$(error "SASS CSS preprocessor not in PATH")
+	$(error "SASS CSS preprocessor not available as gem")
 endif
 
 # Ensure the tsc "binary" is part of the node_modules folder

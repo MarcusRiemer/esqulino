@@ -1,0 +1,118 @@
+.block-container {
+    font-family: monospace;
+    cursor: default;
+    font-size: 20px;
+    border: 2px solid transparent;
+}
+
+.block-container .keyword {
+    color: blue;
+}
+
+.block-container .component {
+    color: blue;
+    float: left;
+    width: $component-width;
+}
+
+/* DELETE is supposed to be in it's own line */
+.block-container .component.delete {
+    float: none;
+}
+
+.block-container .component.indent {
+    margin-left: $component-indent;
+    width: $component-width - $component-indent;
+}
+
+.block-container .expression {
+    border-radius: 500px;
+    border: 2px solid transparent;
+    background-color: orange;
+}
+
+.block-container .current-drop-target {
+    border-radius: 500px;
+    border: 2px solid black;
+}
+
+.block-container .missing {
+    text-align: center;
+    border-radius: 500px;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: red;
+    color: black;
+}
+
+.block-container .constant {
+    text-align: center;
+    border-radius: 500px;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: cornflowerblue;
+    color: black;
+}
+
+.block-container .parameter {
+    text-align: center;
+    border-radius: 500px;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: #8181F7;
+    color: black;
+}
+
+.block-container .table {
+    border-radius: 500px;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: yellow;
+    color: black;
+}
+
+.block-container .operator {
+    font-weight: bold;
+    border-radius: 500px;
+    border: 2px solid transparent;
+}
+
+.block-container .operator.selectable {
+    cursor: pointer;
+    border-color: transparent;
+}
+
+.block-container .operator.selectable:hover {
+    cursor: pointer;
+    border-color: black;
+}
+
+.block-container .column {
+    border-radius: 500px;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: lime;
+}
+
+.block-container .layout {
+    border-radius: 500px;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: gainsboro;
+}
+
+.block-container .column.blueprint {
+  border-radius: 500px;
+  border: 2px dashed blue;
+  background-color: white;
+}
+
+.block-container .table.blueprint {
+  border-radius: 500px;
+  border: 2px dashed blue;
+  background-color: white;
+}
+
+.block-container .table-name {
+  color: limegreen;
+}
