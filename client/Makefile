@@ -102,7 +102,7 @@ webdriver-manager-update:
 webdriver-manager-start:
 	$(WEBDRIVER_MANAGER_BIN) start
 
-protractor-run:
+test-e2e:
 	$(PROTRACTOR_BIN) test-protractor-conf.js
 
 ##################################

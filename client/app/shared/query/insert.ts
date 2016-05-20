@@ -20,7 +20,11 @@ export class QueryInsert extends Query {
 
     // The currently stored values
     private _values : { [matchingIndex:number] : SyntaxTree.Expression } = {};
-    
+
+    /**
+     * Constructs a new INSERT Query from a model and matching
+     * to a schema.
+     */
     constructor(schema : Schema, model : Model.QueryDescription) {
         super (schema, model);
 
@@ -45,18 +49,21 @@ export class QueryInsert extends Query {
     }
 
     /**
-     * @return The name of the table new data will be inserted to
+     * @return The name of the table new data will be inserted to.
      */
     get tableName() {
         return (this._tableName);
     }
 
+    /**
+     * @return The expression that is associated with that column.
+     */
     getValueForColumn(columnIndex : number) {
         return (this._values[columnIndex]);
     }
 
     /**
-     *
+     * Activates or deactivates the inclusion of the given column.
      */
     changeActivationState(index : number, active : boolean) {
         const alreadyActivated = this._columnIndices.some( v => v == index);

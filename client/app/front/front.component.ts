@@ -6,7 +6,7 @@ import {
 } from '@angular/router';
 
 import {ProjectDescriptionService} from '../shared/project.description.service';
-import {ProjectListComponent}      from './project.list.component';
+import {ProjectListComponent}      from './project-list.component';
 import {AboutComponent}            from './about.component';
 
 @Component({

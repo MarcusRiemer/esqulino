@@ -4,6 +4,7 @@
     <li *ngFor="let item of toolbarService.items"
         class="nav-item">
       <button (click)="item.fire()"
+              id="toolbar-btn-{{item.id}}"
               class="btn btn-primary">
         <span class="fa fa-fw fa-spinner fa-pulse"
               [hidden]="!item.isInProgress">

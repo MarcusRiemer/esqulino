@@ -1,16 +1,22 @@
 <div class="card project-list-item">
-  <img *ngIf="hasImage" class="card-img-top img-fluid" [src]="imageUrl" alt="Preview Image">
+  <img *ngIf="hasImage"
+       class="card-img-top img-fluid"
+       [src]="imageUrl"
+       alt="Preview Image">
   <div class="card-img-overlay">
     <h2 class="card-title">{{ project.name }}</h2>
   </div>
   <div class="card-block">
-    <h2 [hidden]="hasImage" class="card-title">{{ project.name }}</h2>
+    <h2 [hidden]="hasImage"
+        class="card-title">{{ project.name }}</h2>
     <p class="card-text">{{ project.description }}</p>
-    <button type="button"
-            class="btn btn-primary btn-block">
+    <a href="#"
+       name="btn-view"
+       class="btn btn-primary btn-block">
       Ansehen
-    </button>
+    </a>
     <a [routerLink]="['/editor/', project.id]"
+       name="btn-edit"
        class="btn btn-info btn-block">
       Bearbeiten
     </a>

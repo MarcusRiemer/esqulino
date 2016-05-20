@@ -3,10 +3,13 @@ exports.config = {
   seleniumAddress: 'http://localhost:4444/wd/hub',
   useAllAngular2AppRoots: true,
   baseUrl: 'http://localhost:9292',
-  specs: ['app/front/about.spec.ts'],
-  multiCapabilities: [{
+  suites: {
+    front : ['app/front/*.e2e.ts'],
+    projectSettings : ['app/editor/settings.e2e.ts']
+  },
+  multiCapabilities: [/*{
     'browserName': 'firefox'
-  }, {
+  },*/ {
     'browserName': 'chrome'
   }]
 }
