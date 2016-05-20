@@ -1,4 +1,41 @@
 {
   "name": "Page 1",
-  "rows": []
+  "rows": [
+    {
+      "columns": [
+        {
+          "width": 6
+        },
+        {
+          "width": 6
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 6
+        },
+        {
+          "width": 3
+        },
+        {
+          "width": 3
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 4
+        },
+        {
+          "width": 4
+        },
+        {
+          "width": 4
+        }
+      ]
+    }
+  ]
 }

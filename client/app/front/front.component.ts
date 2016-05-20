@@ -6,6 +6,7 @@ import {
 } from '@angular/router';
 
 import {ProjectDescriptionService} from '../shared/project.description.service';
+
 import {ProjectListComponent}      from './project-list.component';
 import {AboutComponent}            from './about.component';
 
@@ -19,4 +20,7 @@ import {AboutComponent}            from './about.component';
     { path: '',    component: AboutComponent},
 ])
 export class FrontComponent {
+
+    constructor() {
+    }
 }

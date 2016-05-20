@@ -13,9 +13,9 @@ import {QueryService}                   from './query.service'
 import {ToolbarService}                 from './toolbar.service'
 import {ToolbarComponent}               from './toolbar.component'
 import {NavbarComponent}                from './navbar.component'
-import {
-    SidebarPlaceholderComponent, sidebarType
-} from './sidebar-placeholder.component'
+import {SidebarPlaceholderComponent}    from './sidebar-placeholder.component'
+import {SidebarService}                 from './sidebar.service'
+
 import {SettingsComponent}              from './settings.component'
 import {SchemaComponent}                from './schema.component'
 
@@ -27,7 +27,8 @@ import {DragService}                    from './query/drag.service'
     templateUrl: 'app/editor/templates/index.html',
     directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES,
                  ToolbarComponent, NavbarComponent, SidebarPlaceholderComponent],
-    providers: [HTTP_PROVIDERS, ProjectService, QueryService, DragService, ToolbarService]
+    providers: [HTTP_PROVIDERS, SidebarService,
+                ProjectService, QueryService, DragService, ToolbarService]
 })
 @Routes([
     { path: '', component : SettingsComponent },
@@ -47,6 +48,7 @@ export class EditorComponent implements OnInit {
      */
     constructor(
         private _projectService: ProjectService,
+        private _sidebarService: SidebarService,
         private _routeParams: RouteSegment,
         private _router : Router
     ) { }
@@ -83,8 +85,8 @@ export class EditorComponent implements OnInit {
     /**
      * @return True, if the sidebar should be visible.
      */
-    get isSidebarVisible() : boolean {
-        return (sidebarType(this._router, this._routeParams) != "none");
+    get isSidebarVisible() {
+        return (this._sidebarService.isSidebarVisible);
     }
 
     /**

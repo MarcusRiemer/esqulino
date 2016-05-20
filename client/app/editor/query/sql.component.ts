@@ -16,7 +16,7 @@ import {InsertComponent}                from './sql-insert.component'
 /**
  * Transforms a query into its string expression.
  */
-@Pipe({name: 'sqlString'})
+@Pipe({name: 'sqlString', pure: false})
 export class SqlStringPipe implements PipeTransform {
     public transform(value : Query, args : string[]) : any {
         try {

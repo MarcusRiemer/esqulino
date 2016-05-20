@@ -15,8 +15,11 @@
       <pre>{{ query | sqlString }}</pre>
     </div>
 
-    <div *ngIf="query && false">
-      <span class="fa fa-bug"></span> JSON-Darstellung
+    <div *ngIf="query && false"
+         class="alert alert-info">
+      <h6>
+        <span class="fa fa-bug"></span> JSON-Darstellung
+      </h6>
       <pre>{{ query | json }}</pre>
     </div>
   </div>

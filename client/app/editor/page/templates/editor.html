@@ -1,3 +1,19 @@
 <div class="page">
-  Page Editor
+  <div class="container-fluid page-preview">
+    <div *ngFor="let row of page?.rows"
+         class="row">
+      <div *ngFor="let col of row.columns"
+           [ngClass]="col.columnClasses">
+        Spalte
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="page"
+       class="alert alert-info">
+    <h6>
+      <span class="fa fa-bug"></span> JSON-Darstellung
+    </h6>
+    <pre>{{ page | json }}</pre>
+  </div>
 </div>

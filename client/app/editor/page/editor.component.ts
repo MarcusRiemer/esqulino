@@ -8,6 +8,7 @@ import {Page}                           from '../../shared/page/page'
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
 import {QueryService}                   from '../query.service'
+import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 
 
@@ -35,8 +36,10 @@ export class PageEditorComponent implements OnInit {
         private _projectService : ProjectService,
         private _queryService : QueryService,
         private _toolbarService: ToolbarService,
-        private _routeParams: RouteSegment
+        private _routeParams: RouteSegment,
+        private _sidebarService : SidebarService
     ) {
+        this._sidebarService.showSidebar("page");
     }
 
     /**
