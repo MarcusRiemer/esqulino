@@ -24,6 +24,9 @@
                 "insert": {
                     "$ref": "#/definitions/Insert"
                 },
+                "update": {
+                    "$ref": "#/definitions/Update"
+                },
                 "from": {
                     "$ref": "#/definitions/From"
                 },
@@ -207,48 +210,47 @@
             "additionalProperties": false
         },
         "Insert": {
-            "description": "A complete INSERT statement.",
+            "description": "A complete INSERT statement. Technically this does not\n\nrequire any other component, although the use of\n\nexpressions is common.",
             "type": "object",
             "properties": {
                 "table": {
                     "type": "string"
                 },
-                "columns": {
+                "assignments": {
                     "type": "array",
                     "items": {
-                        "type": "number"
-                    }
-                },
-                "values": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Expression",
-                        "description": "We use a single base type for all kinds of expression, as\n\nthis vastly simplifies the storage process. Each kind of\n\nconcrete expression is stored under a key. Only one of these\n\nkeys may be set at runtime."
+                        "$ref": "#/definitions/ColumnAssignment",
+                        "description": "An expression that will be assigned to a certain column."
                     }
                 }
             },
             "additionalProperties": false
         },
-        "Expression": {
+        "ColumnAssignment": {
             "type": "object",
             "properties": {
-                "singleColumn": {
-                    "$ref": "#/definitions/SingleColumnExpression"
+                "column": {
+                    "type": "string"
                 },
-                "binary": {
-                    "$ref": "#/definitions/BinaryExpression"
+                "expr": {
+                    "$ref": "#/definitions/Expression"
+                }
+            },
+            "additionalProperties": false
+        },
+        "Update": {
+            "description": "The column-expression pairs and the table that define the\n\nUPDATE component.",
+            "type": "object",
+            "properties": {
+                "table": {
+                    "type": "string"
                 },
-                "constant": {
-                    "$ref": "#/definitions/ConstantExpression"
-                },
-                "missing": {
-                    "$ref": "#/definitions/MissingExpression"
-                },
-                "parameter": {
-                    "$ref": "#/definitions/ParameterExpression"
-                },
-                "star": {
-                    "$ref": "#/definitions/StarExpression"
+                "assignments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ColumnAssignment",
+                        "description": "An expression that will be assigned to a certain column."
+                    }
                 }
             },
             "additionalProperties": false

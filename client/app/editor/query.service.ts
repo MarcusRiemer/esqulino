@@ -178,8 +178,7 @@ export class QueryService {
             name : tableName,
             insert : {
                 table : tableName,
-                columns : [],
-                values : []
+                assignments : []
             }
         }
 

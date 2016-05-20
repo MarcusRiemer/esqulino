@@ -1,25 +1,27 @@
 import {Query}                            from './base'
 
 import {loadExpression, Expression}       from '../query.syntaxtree'
-import {Schema}                           from '../schema'
+import {Schema, ColumnDescription}        from '../schema'
 import {ValidationResult, Validateable}   from '../query.validation'
 
 import * as Model                         from '../query.model'
 import * as SyntaxTree                    from '../query.syntaxtree'
+
+interface InsertAssignment {
+    columnName : string
+    expr : Expression
+}
 
 /**
  * An SQL Insert query.
  */
 export class QueryInsert extends Query {
 
-    // The indices of the columns that are filled with this query
-    private _columnIndices : number[];
-
     // The table this query inserts something into.
     private _tableName : string;
 
     // The currently stored values
-    private _values : { [matchingIndex:number] : SyntaxTree.Expression } = {};
+    private _values : InsertAssignment[] = [];
 
     /**
      * Constructs a new INSERT Query from a model and matching
@@ -29,67 +31,78 @@ export class QueryInsert extends Query {
         super (schema, model);
 
         this._tableName = model.insert.table;
-        this._columnIndices = model.insert.columns;
 
-        model.insert.values.forEach( (expr, i) => this._values[i] = loadExpression(expr, this));
+        model.insert.assignments.forEach( (desc) => {
+            this._values.push({
+                columnName : desc.column,
+                expr : loadExpression(desc.expr, this)
+            });
+        });
     }
 
     /**
      * @return All columns this insert would use.
      */
-    get activeColumns() {
-        return (this._columnIndices.map(i => this.schema.getColumnByIndex(this._tableName,  i)));
+    get activeColumns() : ColumnDescription[] {
+        return (this._values.map(assign => this.schema.getColumn(this._tableName, assign.columnName)));
     }
 
     /**
      * @return The values that would be inserted.
      */
-    get values() {
-        return (this._columnIndices.map(i => this._values[i]));
+    get values() : Expression[] {
+        return (this._values.map(v => v.expr));
     }
 
     /**
      * @return The name of the table new data will be inserted to.
      */
-    get tableName() {
+    get tableName() : string {
         return (this._tableName);
     }
 
     /**
      * @return The expression that is associated with that column.
      */
-    getValueForColumn(columnIndex : number) {
-        return (this._values[columnIndex]);
+    getValueForColumn(columnName : string) : Expression {
+        const col = this._values.find(v => v.columnName == columnName);
+        if (col) {
+            return (col.expr);
+        } else {
+            return (undefined);
+        }
     }
 
     /**
      * Activates or deactivates the inclusion of the given column.
      */
-    changeActivationState(index : number, active : boolean) {
-        const alreadyActivated = this._columnIndices.some( v => v == index);
+    changeActivationState(columnName : string, active : boolean) {
+        const alreadyActivated = this._values.some(v => v.columnName == columnName);
         
         // Is the new state active?
         if (active) {
             // Is it activated already?
             if (alreadyActivated) {
                 // It shouldn't be
-                const column = this.schema.getColumnByIndex(this.tableName, index);
-                throw new Error(`Activating: Column #${index} (${column.name}) is already active`);
+                const column = this.schema.getColumn(this.tableName, columnName);
+                throw new Error(`Activating: Column "${column.name}" is already active`);
             } else {
                 // Activate it
-                this._columnIndices.push(index);
-                this._values[index] = loadExpression({ missing : {} }, this);
+                this._values.push({
+                    columnName : columnName,
+                    expr : loadExpression({ missing : {} }, this)
+                });
             }
         } else {
             // Is it already deactivated?
             if (alreadyActivated == false) {
                 // It shouldn't be
-                const column = this.schema.getColumnByIndex(this.tableName, index);
-                throw new Error(`Deactivating: Column #${index} (${column.name}) is already deactivated`);
+                const column = this.schema.getColumn(this.tableName, columnName);
+                throw new Error(`Deactivating: Column "${column.name}" is already deactivated`);
             } else {
                 // Deactivate it by removing all references to it
-                this._columnIndices.splice(this._columnIndices.indexOf(index), 1);
-                delete this._values[index];
+                const index = this._values.findIndex(v => v.columnName == columnName);
+                this._values.splice(index, 1);
             }
         }
     }
@@ -99,14 +112,13 @@ export class QueryInsert extends Query {
     }
 
     replaceChild(formerChild : Expression, newChild : Expression) : void {
-        for (let index in this._values) {
-            if (this._values[index] == formerChild) {
-                this._values[index] = newChild;
-                return;
-            }
+        const replaceIndex = this._values.findIndex(v => v.expr == formerChild);
+        
+        if (replaceIndex >= 0) {
+            this._values[replaceIndex].expr = newChild;
+        } else {
+            throw new Error("Could not find child");
         }
-
-        throw new Error("Could not find child");
     }
 
     removeChild(formerChild : SyntaxTree.Removable) : void {
@@ -114,7 +126,7 @@ export class QueryInsert extends Query {
     }
 
     protected validateImpl(schema : Schema) : ValidationResult {
-        return (new ValidationResult([], this.values.map(v => v.validate(schema))));
+        return (new ValidationResult([], this._values.map(v => v.expr.validate(schema))));
     }
 
     /**
@@ -134,8 +146,12 @@ export class QueryInsert extends Query {
     protected toModelImpl(toReturn : Model.QueryDescription) : Model.QueryDescription {
         
         toReturn.insert = {
-            columns : this._columnIndices,
-            values : this._columnIndices.map(i => this._values[i].toModel()),
+            assignments : this._values.map(v => {
+                return ({
+                    expr : v.expr.toModel(),
+                    column : v.columnName
+                });
+            }),
             table : this.tableName,
         };
         

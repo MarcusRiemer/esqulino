@@ -9,6 +9,28 @@ import * as Query from './query/sidebar.component'
 import * as Page from './page/sidebar.component'
 
 /**
+ * Checks whether the currently active route should display a
+ * sidebar or not.
+ *
+ * @param router The global router instance
+ * @param segment A router segment from the editor
+ */
+export function sidebarType(router : Router, routeSegment : RouteSegment) {
+    // Careful, magic strings ahead! These values depend on the
+    // chosen URL segments for the respective editors.
+    const queryTree = router.createUrlTree(['query'], routeSegment);
+    const pageTree = router.createUrlTree(['page'], routeSegment);
+    
+    if (router.urlTree.contains(queryTree)) {
+        return ("query");
+    } else if (router.urlTree.contains(pageTree)) {
+        return ("page");
+    } else {
+        return ("none");
+    }
+}
+
+/**
  * Shows the correct type of sidebar depending on the URL
  */
 @Component({
@@ -31,17 +53,6 @@ export class SidebarPlaceholderComponent {
     }
 
     get sidebarType() {
-        // Careful magic strings ahead! These values depend on the
-        // chosen URL segments for the respective editors.
-        const queryTree = this._router.createUrlTree(['query'], this._routeSegment);
-        const pageTree = this._router.createUrlTree(['page'], this._routeSegment);
-        
-        if (this._router.urlTree.contains(queryTree)) {
-            return ("query");
-        } else if (this._router.urlTree.contains(pageTree)) {
-            return ("page");
-        } else {
-            return ("none");
-        }
+        return (sidebarType(this._router, this._routeSegment));
     }
 }

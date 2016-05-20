@@ -145,9 +145,6 @@ export interface Where {
 
 /**
  * An expression that will be assigned to a certain column.
- * Currently used in UPDATE component.
- * 
- * TODO: Re-use in INSERT component.
  */
 export interface ColumnAssignment {
     column : string
@@ -161,15 +158,7 @@ export interface ColumnAssignment {
  */
 export interface Insert {
     table: string
-    /**
-     * The indices of the used columns, order is relevant.
-     */
-    columns: number[]
-    /**
-     * The expressions to be inserted, order depends on the
-     * columns property.
-     */
-    values: Expression[]
+    assignments : ColumnAssignment[];
 }
 
 /**

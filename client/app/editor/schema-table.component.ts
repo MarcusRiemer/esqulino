@@ -11,7 +11,7 @@ import {QueryService}                   from './query.service'
  * Displays the schema for a list of tables.
  */
 @Component({
-    templateUrl: 'app/editor/templates/schema.table.html',
+    templateUrl: 'app/editor/templates/schema-table.html',
     selector: "sql-table"
 })
 export class SchemaTableComponent {

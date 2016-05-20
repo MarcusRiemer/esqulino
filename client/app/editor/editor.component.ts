@@ -2,7 +2,7 @@ import {Component, OnInit}              from '@angular/core'
 import {CORE_DIRECTIVES}                from '@angular/common'
 import {HTTP_PROVIDERS}                 from '@angular/http'
 import {
-    Routes, RouteSegment, ROUTER_DIRECTIVES
+    Router, Routes, RouteSegment, ROUTER_DIRECTIVES
 } from '@angular/router'
 
 import {TableDescription}               from '../shared/schema.description'
@@ -13,7 +13,9 @@ import {QueryService}                   from './query.service'
 import {ToolbarService}                 from './toolbar.service'
 import {ToolbarComponent}               from './toolbar.component'
 import {NavbarComponent}                from './navbar.component'
-import {SidebarPlaceholderComponent}    from './sidebar-placeholder.component'
+import {
+    SidebarPlaceholderComponent, sidebarType
+} from './sidebar-placeholder.component'
 import {SettingsComponent}              from './settings.component'
 import {SchemaComponent}                from './schema.component'
 
@@ -45,7 +47,8 @@ export class EditorComponent implements OnInit {
      */
     constructor(
         private _projectService: ProjectService,
-        private _routeParams: RouteSegment
+        private _routeParams: RouteSegment,
+        private _router : Router
     ) { }
 
     /**
@@ -75,6 +78,13 @@ export class EditorComponent implements OnInit {
         } else {
             return ([]);
         }
+    }
+
+    /**
+     * @return True, if the sidebar should be visible.
+     */
+    get isSidebarVisible() : boolean {
+        return (sidebarType(this._router, this._routeParams) != "none");
     }
 
     /**

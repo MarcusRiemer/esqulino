@@ -50,18 +50,19 @@ export class InsertComponent {
             this._allColumnsCache = allColumns.map( v => { return ({
                 column : v,
                 index : v.index,
-                expr : this.query.getValueForColumn(v.index)
+                expr : this.query.getValueForColumn(v.name)
             })});
         }
         
         return (this._allColumnsCache)
     }
 
-    onColumnUsageChanged(index : number) {
-        const isActive = this.query.activeColumns.some(c => c.index == index);
+    onColumnUsageChanged(columnName : string) {
+        const isActive = this.query.activeColumns.some(c => c.name == columnName);
         
-        this.query.changeActivationState(index, !isActive);
+        this.query.changeActivationState(columnName, !isActive);
 
+        // Reset the cache
         this._allColumnsCache = undefined;
     }
 }
