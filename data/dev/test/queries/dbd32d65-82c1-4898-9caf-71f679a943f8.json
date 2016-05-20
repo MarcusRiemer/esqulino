@@ -1,0 +1,21 @@
+{
+  "name": "Einfügende Abfrage",
+  "insert": {
+    "assignments": [
+      {
+        "expr": {
+          "missing": {}
+        },
+        "column": "key"
+      },
+      {
+        "expr": {
+          "missing": {}
+        },
+        "column": "value"
+      }
+    ],
+    "table": "key_value"
+  },
+  "id": "dbd32d65-82c1-4898-9caf-71f679a943f8"
+}

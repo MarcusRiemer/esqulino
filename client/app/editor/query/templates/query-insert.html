@@ -8,10 +8,9 @@
         <th>Neuer Wert</th>
       </tr>
     </thead>
-
     <tr *ngFor="let curr of allColumns">
       <td>
-        <input (change)="onColumnUsageChanged(curr.index)"
+        <input (change)="onColumnUsageChanged(curr.column.name)"
                [checked]="!!curr.expr"
                type="checkbox">
       </td>
@@ -28,7 +27,9 @@
       <td>
         <div *ngIf="curr.expr"
              class="block-container">
-          <sql-expr [expr]="curr.expr" [query]="query"></sql-expr>
+          <sql-expr [expr]="curr.expr"
+                    [query]="query">
+          </sql-expr>
         </div>
       </td>
     </tr>

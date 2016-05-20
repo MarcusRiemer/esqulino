@@ -16,6 +16,13 @@
                 "description": "Outermost description of a query. This contains\n\nthe whole structure and some identifying properties."
             }
         },
+        "pages": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/PageDescription",
+                "description": "Describes a page as a whole"
+            }
+        },
         "name": {
             "type": "string"
         },
@@ -79,6 +86,12 @@
                 },
                 "delete": {
                     "$ref": "#/definitions/Delete"
+                },
+                "insert": {
+                    "$ref": "#/definitions/Insert"
+                },
+                "update": {
+                    "$ref": "#/definitions/Update"
                 },
                 "from": {
                     "$ref": "#/definitions/From"
@@ -262,6 +275,52 @@
             "properties": {},
             "additionalProperties": false
         },
+        "Insert": {
+            "description": "A complete INSERT statement. Technically this does not\n\nrequire any other component, although the use of\n\nexpressions is common.",
+            "type": "object",
+            "properties": {
+                "table": {
+                    "type": "string"
+                },
+                "assignments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ColumnAssignment",
+                        "description": "An expression that will be assigned to a certain column."
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "ColumnAssignment": {
+            "type": "object",
+            "properties": {
+                "column": {
+                    "type": "string"
+                },
+                "expr": {
+                    "$ref": "#/definitions/Expression"
+                }
+            },
+            "additionalProperties": false
+        },
+        "Update": {
+            "description": "The column-expression pairs and the table that define the\n\nUPDATE component.",
+            "type": "object",
+            "properties": {
+                "table": {
+                    "type": "string"
+                },
+                "assignments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ColumnAssignment",
+                        "description": "An expression that will be assigned to a certain column."
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
         "From": {
             "type": "object",
             "properties": {
@@ -310,6 +369,7 @@
             ]
         },
         "Where": {
+            "description": "A WHERE component with at least one expression.",
             "type": "object",
             "properties": {
                 "first": {
@@ -343,6 +403,38 @@
                 "AND",
                 "OR"
             ]
+        },
+        "PageDescription": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rows": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RowDescription",
+                        "description": "Describes a row that can host certain cells."
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "RowDescription": {
+            "type": "object",
+            "properties": {
+                "columns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ColumnDescription",
+                        "description": "Describes a column that can host certain widgets"
+                    }
+                }
+            },
+            "additionalProperties": false
         }
     },
     "$schema": "http://json-schema.org/draft-04/schema#"

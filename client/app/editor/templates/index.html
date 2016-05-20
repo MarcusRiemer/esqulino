@@ -5,10 +5,11 @@
   <div class="content">
     <router-outlet></router-outlet>
   </div>
-  <div class="sidebar">
-    <sidebar-placeholder #sidebar></sidebar-placeholder>
+  <div *ngIf="isSidebarVisible"
+       class="sidebar">
+    <sidebar-placeholder></sidebar-placeholder>
   </div>
-  <div *ngIf="sidebar.isVisible"
+  <div *ngIf="isSidebarVisible"
        class="sidebar-hack">
     <!-- Dirty hack to ensure the main content is not too wide -->
   </div>

@@ -203,44 +203,24 @@
                 "table": {
                     "type": "string"
                 },
-                "columns": {
-                    "description": "The indices of the used columns, order is relevant.",
+                "assignments": {
                     "type": "array",
                     "items": {
-                        "type": "number"
-                    }
-                },
-                "values": {
-                    "description": "The expressions to be inserted, order depends on the\n\ncolumns property.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Expression",
-                        "description": "We use a single base type for all kinds of expression, as\n\nthis vastly simplifies the storage process. Each kind of\n\nconcrete expression is stored under a key. Only one of these\n\nkeys may be set at runtime."
+                        "$ref": "#/definitions/ColumnAssignment",
+                        "description": "An expression that will be assigned to a certain column."
                     }
                 }
             },
             "additionalProperties": false
         },
-        "Expression": {
+        "ColumnAssignment": {
             "type": "object",
             "properties": {
-                "singleColumn": {
-                    "$ref": "#/definitions/SingleColumnExpression"
+                "column": {
+                    "type": "string"
                 },
-                "binary": {
-                    "$ref": "#/definitions/BinaryExpression"
-                },
-                "constant": {
-                    "$ref": "#/definitions/ConstantExpression"
-                },
-                "missing": {
-                    "$ref": "#/definitions/MissingExpression"
-                },
-                "parameter": {
-                    "$ref": "#/definitions/ParameterExpression"
-                },
-                "star": {
-                    "$ref": "#/definitions/StarExpression"
+                "expr": {
+                    "$ref": "#/definitions/Expression"
                 }
             },
             "additionalProperties": false
@@ -256,20 +236,8 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/ColumnAssignment",
-                        "description": "An expression that will be assigned to a certain column.\n\nCurrently used in UPDATE component.\n\n\n\nTODO: Re-use in INSERT component."
+                        "description": "An expression that will be assigned to a certain column."
                     }
-                }
-            },
-            "additionalProperties": false
-        },
-        "ColumnAssignment": {
-            "type": "object",
-            "properties": {
-                "column": {
-                    "type": "string"
-                },
-                "expr": {
-                    "$ref": "#/definitions/Expression"
                 }
             },
             "additionalProperties": false

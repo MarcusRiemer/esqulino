@@ -38,19 +38,21 @@ let schema  = new Schema([
 describe('INSERT', () => {
     it('activating previously unused columns', () => {
         const m : Model.QueryDescription = {
-            name : "insert-1",
-            id : "insert-1",
+            name : "insert-spec",
+            id : "insert-spec",
             insert : {
-                columns : [0],
                 table : "person",
-                values : [
-                    { constant : { type: "INTEGER", value : "0" } },
+                assignments : [
+                    {
+                        expr : { constant : { type: "INTEGER", value : "0" } },
+                        column : "p1"
+                    }
                 ]
             }
         }
 
         const q = new QueryInsert(schema, m);
-        q.changeActivationState(2, true);
+        q.changeActivationState("p3", true);
 
         expect(q.activeColumns.length).toEqual(2);
         expect(q.activeColumns[0]).toEqual(schema.getColumn("person", "p1"));
@@ -66,16 +68,18 @@ describe('INSERT', () => {
             name : "insert-1",
             id : "insert-1",
             insert : {
-                columns : [0],
                 table : "person",
-                values : [
-                    { constant : { type: "INTEGER", value : "0" } },
+                assignments : [
+                    {
+                        expr : { constant : { type: "INTEGER", value : "0" } },
+                        column : "p1"
+                    }
                 ]
             }
         }
 
         const q = new QueryInsert(schema, m);
-        q.changeActivationState(0, false);
+        q.changeActivationState("p1", false);
 
         expect(q.activeColumns.length).toEqual(0);
         expect(q.values.length).toEqual(0);
@@ -86,20 +90,43 @@ describe('INSERT', () => {
             name : "insert-1",
             id : "insert-1",
             insert : {
-                columns : [0],
                 table : "person",
-                values : [
-                    { constant : { type: "INTEGER", value : "0" } },
+                assignments : [
+                    {
+                        expr : { constant : { type: "INTEGER", value : "0" } },
+                        column : "p1"
+                    }
                 ]
             }
         }
 
         const q = new QueryInsert(schema, m);
 
-        expect( () => q.changeActivationState(0, true)).toThrowError();
-        expect( () => q.changeActivationState(1, false)).toThrowError();
-        expect( () => q.changeActivationState(2, false)).toThrowError();
+        expect( () => q.changeActivationState("p1", true)).toThrowError();
+        expect( () => q.changeActivationState("p2", false)).toThrowError();
+        expect( () => q.changeActivationState("p3", false)).toThrowError();
     });
+
+    it('retrieving columns', () => {
+        const m : Model.QueryDescription = {
+            name : "insert-spec",
+            id : "insert-spec",
+            insert : {
+                table : "person",
+                assignments : [
+                    {
+                        expr : { constant : { type: "INTEGER", value : "0" } },
+                        column : "p1"
+                    }
+                ]
+            }
+        }
+
+        const q = new QueryInsert(schema, m);
+        expect(q.getValueForColumn("p1")).toBeTruthy();
+        expect(q.getValueForColumn("p2")).toBeFalsy();
+    });
+
 });
 
 describe('Valid INSERT Queries', () => {    
@@ -108,12 +135,20 @@ describe('Valid INSERT Queries', () => {
             name : "insert-1",
             id : "insert-1",
             insert : {
-                columns : [0,1,2],
                 table : "person",
-                values : [
-                    { constant : { type: "INTEGER", value : "0" } },
-                    { constant : { type: "TEXT", value : "1" } },
-                    { constant : { type: "INTEGER", value : "2" } }
+                assignments : [
+                    {
+                        expr : { constant : { type: "INTEGER", value : "0" } },
+                        column : "p1"
+                    },
+                    {
+                        expr : { constant : { type: "TEXT", value : "1" } },
+                        column : "p2"
+                    },
+                    {
+                        expr : { constant : { type: "INTEGER", value : "2" } },
+                        column : "p3"
+                    }
                 ]
             }
         }
@@ -121,36 +156,33 @@ describe('Valid INSERT Queries', () => {
         const q = new QueryInsert(schema, m);
         expect(q.activeColumns).toEqual(schema.tables[0].columns);
 
-        const v = q.values;
-        expect(v[0].toModel()).toEqual(m.insert.values[0]);
-        expect(v[1].toModel()).toEqual(m.insert.values[1]);
-        expect(v[2].toModel()).toEqual(m.insert.values[2]);
-
+        expect(q.toModel()).toEqual(m, "Model mismatch");
         expect(q.toSqlString()).toEqual(`INSERT INTO person (p1, p2, p3)\nVALUES (0, "1", 2)`);
     });
 
-    it('INSERT INTO person (p3,p1) VALUES (3, 1)', () => {
+    it('INSERT INTO person (p1,p3) VALUES (1, 3)', () => {
         const m : Model.QueryDescription = {
             name : "insert-2",
             id : "insert-2",
             insert : {
-                columns : [3,1],
                 table : "person",
-                values : [
-                    { constant : { type: "INTEGER", value : "3" } },
-                    { constant : { type: "INTEGER", value : "1" } }
+                assignments : [
+                    {
+                        expr : { constant : { type: "INTEGER", value : "1" } },
+                        column : "p1"
+                    },
+                    {
+                        expr : { constant : { type: "INTEGER", value : "3" } },
+                        column : "p3"
+                    }
                 ]
             }
         }
 
         const q = new QueryInsert(schema, m);
-        expect(q.activeColumns).toEqual(schema.tables[0].columns);
-        expect(q.isValid).toBeTruthy();
+        expect(q.isValid).toBeTruthy("Not valid");
 
-        const v = q.values;
-        expect(v[0].toModel()).toEqual(m.insert.values[0]);
-        expect(v[2].toModel()).toEqual(m.insert.values[2]);
-
-        expect(q.toSqlString()).toEqual(`INSERT INTO person (p3, p1)\nVALUES (3, 1)`);
+        expect(q.toModel()).toEqual(m, "Model mismatch");
+        expect(q.toSqlString()).toEqual(`INSERT INTO person (p1, p3)\nVALUES (1, 3)`);
     });
 });
