@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "scripts": {
     "postinstall": "typings install",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
     "typings": "typings"
   },
   "license": "AGPL",

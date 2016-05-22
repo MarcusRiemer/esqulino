@@ -19,8 +19,8 @@ NODE_FILES = systemjs.config.js \
 			 node_modules/zone.js/dist/zone.js\
              node_modules/reflect-metadata/Reflect.js \
              node_modules/systemjs/dist/system.src.js \
-             $(shell find node_modules/rxjs -iname "*.js") \
-			 $(shell find node_modules/@angular -iname "*.js") \
+             $(shell find node_modules/rxjs -iname "*.js*") \
+			 $(shell find node_modules/@angular -iname "*.js*") \
 			 node_modules/jasmine-core/lib/jasmine-core/jasmine.js \
              node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js \
 	         node_modules/jasmine-core/lib/jasmine-core/boot.js \
@@ -80,12 +80,6 @@ $(DIST_NODE_FILES) : $(NODE_FILES)
 	@mkdir -p $(BUILD_DIR)
 	@echo "Copying loads of dist files ..."
 	@cp --parents $^ $(BUILD_DIR)
-
-# Removes the dist/client directory which is one level upwards.
-# This is probably not very good style, but required to ensure
-# that `make clean compile` actually sets of with an empty folder.
-clean :
-	rm -rf ../dist/client
 
 # Remove everything that has been downloaded by `install-deps`
 clean-deps:
