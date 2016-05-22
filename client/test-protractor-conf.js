@@ -5,7 +5,8 @@ exports.config = {
   baseUrl: 'http://localhost:9292',
   suites: {
     front : ['app/front/*.e2e.ts'],
-    projectSettings : ['app/editor/settings.e2e.ts']
+    projectSettings : ['app/editor/settings.e2e.ts'],
+    projectSchema : ['app/editor/schema.e2e.ts']
   },
   multiCapabilities: [{
     'browserName': 'firefox'

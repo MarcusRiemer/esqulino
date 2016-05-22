@@ -1,5 +1,6 @@
 <div class="content">
-  <sql-table [tables]="project?.schema?.tables"
+  <sql-table id="schema-tables"
+             [tables]="project?.schema?.tables"
              [allowCreate]="true">
   </sql-table>
 </div>
