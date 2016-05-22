@@ -85,7 +85,7 @@ export class QueryEditorComponent implements OnInit {
         });
 
         // Reacting to querying
-        let queryItem = this._toolbarService.addButton("Ausführen", "search", "r");
+        let queryItem = this._toolbarService.addButton("run", "Ausführen", "search", "r");
         queryItem.onClick.subscribe( (res) => {
             queryItem.isInProgress = true;
             this._queryService.runQuery(this.project, this.query)

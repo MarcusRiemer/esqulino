@@ -18,6 +18,7 @@ export type ClickHandler = Observable<string>;
 export class ToolbarItem {
     private _caption : string;
     private _icon : string;
+    private _id : string;
     private _native : boolean;
     private _key : string;
     private _inProgress : boolean = false;
@@ -30,9 +31,10 @@ export class ToolbarItem {
      * @param key     The key this item should be bound to
      * @param native  True, if this is a native item of the toolbar
      */
-    constructor(caption : string, icon : string, key : string, native : boolean) {
+    constructor(id : string, caption : string, icon : string, key : string, native : boolean) {
         this._caption = caption;
         this._icon = icon;
+        this._id = id;
         this._key = key.toLowerCase();
         this._native = native;
 
@@ -51,6 +53,13 @@ export class ToolbarItem {
      */
     get key() {
         return (this._key);
+    }
+
+    /**
+     * @return The ID that is associated with this item
+     */
+    get id() {
+        return (this._id);
     }
 
     /**
@@ -95,8 +104,8 @@ export class ToolbarService {
     private _saveItem : ToolbarItem;
 
     constructor() {
+        // Globally registering keypresses
         if (window) {
-            console.log("Toolbar");
             window.addEventListener("keydown", evt => {
                 // Possibly intercept control keys
                 if(evt.ctrlKey) {
@@ -119,9 +128,9 @@ export class ToolbarService {
      *
      * @return The click handler for the new button
      */
-    addButton(caption : string, icon : string, key : string) : ToolbarItem {
+    addButton(id : string, caption : string, icon : string, key : string) : ToolbarItem {
         // Create a new non-native icon
-        let item = new ToolbarItem(caption, icon, key, false);
+        let item = new ToolbarItem(id, caption, icon, key, false);
 
         // Show the item on the toolbar
         this._items.push(item);
@@ -134,7 +143,7 @@ export class ToolbarService {
      * the state of any known button.
      */
     resetItems() {
-        this._saveItem = new ToolbarItem("Speichern", "floppy-o", "s", true);
+        this._saveItem = new ToolbarItem("save", "Speichern", "floppy-o", "s", true);
         this._items = [this._saveItem];
     }
     
