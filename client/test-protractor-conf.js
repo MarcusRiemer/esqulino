@@ -7,9 +7,9 @@ exports.config = {
     front : ['app/front/*.e2e.ts'],
     projectSettings : ['app/editor/settings.e2e.ts']
   },
-  multiCapabilities: [/*{
+  multiCapabilities: [{
     'browserName': 'firefox'
-  },*/ {
+  },/*{
     'browserName': 'chrome'
-  }]
+  }*/]
 }
