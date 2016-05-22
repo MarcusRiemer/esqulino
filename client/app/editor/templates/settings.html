@@ -47,7 +47,8 @@
     <div class="card-header">
       Abfragen
     </div>
-    <ul class="list-group list-group-flush">
+    <ul id="project-queries"
+        class="list-group list-group-flush">
       <li *ngFor="let query of project?.queries"
           class="list-group-item">
         <button (click)="onQueryDelete(query.id)"

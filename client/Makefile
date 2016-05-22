@@ -102,8 +102,11 @@ webdriver-manager-update:
 webdriver-manager-start:
 	$(WEBDRIVER_MANAGER_BIN) start
 
-test-e2e:
-	$(PROTRACTOR_BIN) test-protractor-conf.js
+test-reset:
+	git checkout -- $(shell git rev-parse --show-toplevel)/data/dev/test
+
+test-e2e: test-reset dist
+	$(PROTRACTOR_BIN) test-protractor-conf.js $(E2E_ARGS)
 
 ##################################
 # Ensural targets
@@ -146,4 +149,4 @@ msg-pre-templates :
 msg-pre-vendor :
 	@tput setaf 2; echo \#\# Copying vendor-dependencies; tput sgr0
 
-.PHONY : clean clean-deps dist dist-sass dist-templates dist-compile dist-vendor dist-node has-npm has-sass install-deps watch webdriver-manager-update
+.PHONY : clean clean-deps dist dist-sass dist-templates dist-compile dist-vendor dist-node has-npm has-sass install-deps test-e2e test-reset webdriver-manager-update
