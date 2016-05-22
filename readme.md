@@ -38,6 +38,26 @@ Currently it is assumed that this project will built on a UNIX-like environment.
 
 But don't worry if you are only interested in *running* a esqulino instance. You will be better off using a pre-compiled distribution of the client, but running the server should work just fine.
 
+# Testing
+
+esqulino aims to be thoroughly tested and does this on more or less three levels.
+
+## Client-Side Unit Tests
+
+Every time `make dist` is run, all unit tests are part of the resulting compilation. They can be run in the browser using the `test.html` page that should be served by the normal server.
+
+## Server-Side Unit Tests
+
+As the server logic more or less always includes some disk-IO, these are tricky to route. Currently there are not many server side tests, but they could be run by executing the `*.spec.rb` files with ruby.
+
+## End-To-End (e2e) Tests
+
+These tests build upon Angular Protractor and Selenium to run certain tests in real browsers. Most of these tests wreck havoc on the supplied `test`-project which should be restored to the original state after each run. Usually these end-to-end tests are run like this from the `client` folder:
+
+    make E2E_ARGS="--suite=projectSettings" test-e2e
+
+The `Makefile` ensures that the `test` project is in a clean state, allows to specify certain suites to be executed and builds the client before actually running the tests.
+
 # License
 
 This project itself is licensed under the terms of the [GNU Affero General Public License (AGPL)](https://www.gnu.org/licenses/agpl.html). For the documentation, including the masters thesis, is licensed under [CC-BY-SA](https://creativecommons.org/licenses/by-sa/4.0/).
