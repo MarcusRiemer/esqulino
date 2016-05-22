@@ -1,0 +1,9 @@
+{
+  "name": "esqulino-client",
+  "version": "0.1.0",
+  "license": "AGPL",
+  "private": true,
+  "devDependencies": {
+    "systemjs-builder": "^0.15.17"
+  }
+}

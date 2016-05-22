@@ -9,10 +9,15 @@
 install-deps :
 	make -C server install-deps
 	make -C client install-deps
+	make -C dist install-deps
 
 # One-shot compilation of client
 dist :
 	make -C client dist
+	make -C dist all
+
+clean :
+	make -C dist clean
 
 # Runs the server in development mode, this is probably not a good idea to
 # do in a productive environment. It simply uses a built-in Sinatra server,
