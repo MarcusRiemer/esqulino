@@ -1,0 +1,33 @@
+# Contains paths for all assets that are part of the client.
+# Requires the BUILD_DIR and CLIENT_DIR variables to be set
+
+APP_DIR = $(addprefix $(CLIENT_DIR), app)
+
+SASS_FILES      = $(shell find $(APP_DIR) -iname "*.scss")
+DIST_CSS_FILES  = $(abspath $(addprefix $(BUILD_DIR), app/css/style.css))
+
+HTML_FILES = $(shell find $(APP_DIR) -iname "*.html") index.html test.html
+DIST_HTML_FILES = $(abspath $(addprefix $(BUILD_DIR), $(HTML_FILES)))
+
+TS_FILES = $(shell find $(APP_DIR) -iname "*.ts") 
+DIST_JS_FILES = $(abspath $(addprefix $(BUILD_DIR), $(TS_FILES:.ts=.js)))
+
+VENDOR_FILES = $(shell find $(addprefix $(CLIENT_DIR), vendor) -type f)
+DIST_VENDOR_FILES = $(abspath $(addprefix $(BUILD_DIR), $(VENDOR_FILES)))
+
+# The node files dependencies are painstakingly managed by hand
+# because we don't want to bloat the dist archive.
+NODE_FILES = $(addprefix $(CLIENT_DIR),\
+             systemjs.config.js \
+             node_modules/es6-shim/es6-shim.min.js \
+			 node_modules/zone.js/dist/zone.js\
+             node_modules/reflect-metadata/Reflect.js \
+             node_modules/systemjs/dist/system.src.js \
+             $(shell find node_modules/rxjs -iname "*.js*") \
+			 $(shell find node_modules/@angular -iname "*.js*") \
+			 node_modules/jasmine-core/lib/jasmine-core/jasmine.js \
+             node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js \
+	         node_modules/jasmine-core/lib/jasmine-core/boot.js \
+             node_modules/jasmine-core/lib/jasmine-core/jasmine.css)
+
+DIST_NODE_FILES = $(abspath $(addprefix $(BUILD_DIR), $(NODE_FILES)))

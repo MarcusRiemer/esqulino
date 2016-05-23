@@ -1,6 +1,26 @@
-include Makefile.json
+# Ugly hack to grab the correct path of the typescript-json-schema "binary"
+# Taken from: http://blog.jgc.org/2007/01/what-makefile-am-i-in.html
+where-am-i = $(dir $(CURDIR)/$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))
 
-all : $(JSON_SCHEMA_FILES)
+# Path to the clients source and its project file
+SRC_PATH = $(realpath ../../client/app/shared)
+SRC_PROJECT = $(realpath ../../client/tsconfig.json)
+
+# The absolute path of the directory the schemas reside in
+SCHEMA_PATH = $(realpath $(call where-am-i))
+
+# Full path of typescript-json-schema
+TYPESCRIPT_JSON_SCHEMA_BIN = node --stack-size=65500 $(SCHEMA_PATH)/node_modules/typescript-json-schema/bin/typescript-json-schema
+SCHEMA_OPTIONS = --refs true --aliasRefs --false --noExtraProps true
+
+# Names of the schema files to generate
+JSON_SCHEMA_FILE_NAMES = ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json PageDescription.json
+
+# Paths of the schema files to generate
+JSON_SCHEMA_FILES = $(addprefix $(SCHEMA_PATH)/, $(JSON_SCHEMA_FILE_NAMES))
+
+# Generating all schemas
+all : msg-pre-schema $(JSON_SCHEMA_FILES)
 
 # Uses the `package.json` file to grab all dependencies
 install-deps : has-npm
@@ -10,11 +30,14 @@ install-deps : has-npm
 clean :
 	rm -f $(JSON_SCHEMA_FILES)
 
-.PHONY : all clean
+##################################
+# Messaging targets
+##################################
 
-# Ensures the npm "binary" is available
-has-npm :
-ifeq (, $(shell which npm 2>/dev/null))
-	$(error "Node Paketmanager (npm) not in PATH")
-endif
+msg-pre-schema :
+	@tput setaf 2; echo \#\# Schema: Re-Generating out-of-date schemas; tput sgr0
 
+.PHONY : all clean install-deps msg-pre-schema
+
+include ../../Makefile.common
+include Makefile.json

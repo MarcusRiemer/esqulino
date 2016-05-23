@@ -1,40 +1,18 @@
 BUILD_DIR = ../dist/client/
+CLIENT_DIR = ./
 
-SASS_FILES      = $(shell find app -iname "*.scss")
-DIST_CSS_FILES  = $(addprefix $(BUILD_DIR), app/css/style.css)
+include Makefile.files
 
-HTML_FILES = $(shell find app -iname "*.html") index.html test.html
-DIST_HTML_FILES = $(addprefix $(BUILD_DIR), $(HTML_FILES))
-
-TS_FILES = $(shell find app -iname "*.ts") 
-DIST_JS_FILES = $(addprefix $(BUILD_DIR), $(TS_FILES:.ts=.js))
-
-VENDOR_FILES = $(shell find vendor -type f)
-DIST_VENDOR_FILES = $(addprefix $(BUILD_DIR), $(VENDOR_FILES))
-
-# The node files dependencies are painstakingly managed by hand
-# because we don't want to bloat the dist archive.
-NODE_FILES = systemjs.config.js \
-             node_modules/es6-shim/es6-shim.min.js \
-			 node_modules/zone.js/dist/zone.js\
-             node_modules/reflect-metadata/Reflect.js \
-             node_modules/systemjs/dist/system.src.js \
-             $(shell find node_modules/rxjs -iname "*.js*") \
-			 $(shell find node_modules/@angular -iname "*.js*") \
-			 node_modules/jasmine-core/lib/jasmine-core/jasmine.js \
-             node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js \
-	         node_modules/jasmine-core/lib/jasmine-core/boot.js \
-             node_modules/jasmine-core/lib/jasmine-core/jasmine.css
-
-DIST_NODE_FILES = $(addprefix $(BUILD_DIR), $(NODE_FILES))
-
+# We expect SASS to be a gem
 SASS_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "sass")')
+
+# We expect the following tools to be provided by npm
 TSC_BIN = node_modules/typescript/bin/tsc
 PROTRACTOR_BIN = node_modules/protractor/bin/protractor
 WEBDRIVER_MANAGER_BIN = node_modules/protractor/bin/webdriver-manager
 
 # Meta target: Build the client part of the application.
-dist : dist-sass dist-compile dist-templates dist-vendor dist-node
+all : dist-sass dist-compile dist-templates dist-vendor dist-node
 
 # Uses the `package.json` file to grab all dependencies
 install-deps : has-npm
@@ -45,7 +23,7 @@ dist-sass : msg-pre-sass $(DIST_CSS_FILES)
 
 # Actually compile SASS files
 $(DIST_CSS_FILES) : $(SASS_FILES)
-	@mkdir -p ../dist/client/app/css
+	@mkdir -p $(addprefix $(BUILD_DIR), /app/css)
 	$(SASS_BIN) --sourcemap=none --style=expanded app/css/style.scss $@
 
 # Meta target: "Compile" templates
@@ -96,51 +74,31 @@ webdriver-manager-update:
 webdriver-manager-start:
 	$(WEBDRIVER_MANAGER_BIN) start
 
-test-reset:
-	git checkout -- $(shell git rev-parse --show-toplevel)/data/dev/test
-
-test-e2e: test-reset dist
+test-e2e: msg-pre-test-e2e
 	$(PROTRACTOR_BIN) test-protractor-conf.js $(E2E_ARGS)
-
-##################################
-# Ensural targets
-##################################
-
-# Ensures the npm "binary" is available
-has-npm :
-ifeq (, $(shell which npm 2>/dev/null))
-	$(error "Node Paketmanager (npm) not in PATH")
-endif
-
-# Ensure the sass "binary" is available
-has-sass :
-ifeq (, $(wildcard $(SASS_BIN)))
-	$(error "SASS CSS preprocessor not available as gem")
-endif
-
-# Ensure the tsc "binary" is part of the node_modules folder
-has-tsc :
-ifeq (, $(wildcard $(TSC_BIN)))
-	$(error "Typescript Compiler (tsc) not in node_modules")
-endif
 
 ##################################
 # Utility targets
 ##################################
 
 msg-pre-compile :
-	@tput setaf 2; echo \#\# Running Typescript Compiler; tput sgr0
+	@tput setaf 2; echo \#\# Client: Running Typescript Compiler; tput sgr0
 
 msg-pre-node :
-	@tput setaf 2; echo \#\# Copying node.js-dependencies; tput sgr0
+	@tput setaf 2; echo \#\# Client: Copying node.js-dependencies; tput sgr0
 
 msg-pre-sass :
-	@tput setaf 2; echo \#\# Running SASS Compiler; tput sgr0	
+	@tput setaf 2; echo \#\# Client: Running SASS Compiler; tput sgr0	
 
 msg-pre-templates :
-	@tput setaf 2; echo \#\# Copying HTML-Templates; tput sgr0
+	@tput setaf 2; echo \#\# Client: Copying HTML-Templates; tput sgr0
 
 msg-pre-vendor :
-	@tput setaf 2; echo \#\# Copying vendor-dependencies; tput sgr0
+	@tput setaf 2; echo \#\# Client: Copying vendor-dependencies; tput sgr0
 
-.PHONY : clean clean-deps dist dist-sass dist-templates dist-compile dist-vendor dist-node has-npm has-sass install-deps test-e2e test-reset webdriver-manager-update
+msg-pre-test-e2e :
+	@tput setaf 2; echo "## Test  : Running end-to-end tests"; tput sgr0
+
+.PHONY : clean clean-deps dist dist-sass dist-templates dist-compile dist-vendor dist-node install-deps test-e2e test-reset webdriver-manager-update
+
+include ../Makefile.common

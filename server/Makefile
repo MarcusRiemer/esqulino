@@ -21,17 +21,6 @@ doc : has-yard
 dev-doc : has-yard
 	$(YARD_BIN) doc --list-undoc
 
-# Ensures the bundle "binary" is available
-has-bundle :
-ifeq (, $(wildcard $(BUNDLE_BIN)))
-	$(error "Ruby Bundler (bundle) not in PATH")
-endif
+.PHONY : dev-doc doc install-deps run test
 
-# Ensures the yard "binary" is available
-has-yard :
-ifeq (, $(wildcard $(BUNDLE_BIN)))
-	$(error "Ruby documentation generation (yard) not in PATH")
-endif
-
-
-.PHONY : dev-doc doc has-bundle has-yard install-deps run test
+include ../Makefile.common
