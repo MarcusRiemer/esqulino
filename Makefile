@@ -26,6 +26,15 @@ clean :
 	$(SUBDIR_MAKE) schema/json clean
 	$(SUBDIR_MAKE) dist clean
 
+# Reverts the test project to the most recent state in git
+test-reset: msg-pre-test-reset
+	git checkout -- $(shell git rev-parse --show-toplevel)/data/dev/test
+	cd $(shell git rev-parse --show-toplevel)/data/dev/test && git clean -f
+
+# Runs end to end tests. This relies on two other servers that must be
+# running already:
+# * The esqulino webserver
+# * The Selenium testdriver
 test-e2e : dist
 	$(SUBDIR_MAKE) client test-e2e
 
@@ -40,10 +49,6 @@ doc :
 	$(SUBDIR_MAKE) server doc
 	$(SUBDIR_MAKE) doc/thesis all
 	$(SUBDIR_MAKE) doc/swagger all
-
-# Reverts the test project to the most recent state in git
-test-reset: msg-pre-test-reset
-	git checkout -- $(shell git rev-parse --show-toplevel)/data/dev/test
 
 ##################################
 # Development targets
