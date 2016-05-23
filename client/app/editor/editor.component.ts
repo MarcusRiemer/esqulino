@@ -20,6 +20,8 @@ import {SettingsComponent}              from './settings.component'
 import {SchemaComponent}                from './schema.component'
 
 import {PageEditorComponent}            from './page/editor.component'
+
+import {QueryCreateComponent}           from './query/create.component'
 import {QueryEditorComponent}           from './query/editor.component'
 import {DragService}                    from './query/drag.service'
 
@@ -34,6 +36,7 @@ import {DragService}                    from './query/drag.service'
     { path: '', component : SettingsComponent },
     { path: 'settings', component : SettingsComponent },
     { path: 'schema', component : SchemaComponent },
+    { path: 'query/create', component : QueryCreateComponent },
     { path: 'query/:queryId', component : QueryEditorComponent },
     { path: 'page/:pageId', component : PageEditorComponent },
 ])

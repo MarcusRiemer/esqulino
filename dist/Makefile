@@ -10,7 +10,7 @@ client-lib-bundle : msg-pre-lib-bundle client/lib-bundle.js
 
 # For some reason the systemjs bundler only works when run in the directory
 # it is told to bundle.
-client/lib-bundle.js : $(DIST_JS_FILES)
+client/lib-bundle.js : $(DIST_NODE_FILES)
 	cd client && node ../bundle.deps.js
 
 # For some reason the systemjs bundler only works when run in the directory

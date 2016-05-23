@@ -115,16 +115,38 @@ export class QueryService {
     }
 
     /**
+     * Creates a new query.
+     *
+     * @param project The project this query belongs to.
+     * @param queryType The type of the query to create.
+     * @param name The name of the query.
+     * @param table The initial table of the query.
+     */
+    createQuery(project : Project,
+                queryType : string,
+                name : string,
+                table : string) : AsyncSubject<Query> {
+        switch (queryType) {
+        case "select":
+            return (this.createSelect(project, name, table));
+        case "insert":
+            return (this.createInsert(project, name, table));
+        default:
+            throw new Error(`createQuery: unknown queryType "${queryType}"`);
+        }
+    }
+
+    /**
      * Request to create a new query on the given table.
      *
      * @param table The name of the table to query initially
      */
-    createSelect(project : Project, table : string) {
+    createSelect(project : Project, queryName : string, table : string) {
         const url = this._server.getQueryUrl(project.id);
 
         let model : Model.QueryDescription = {
             id : undefined,
-            name : table,
+            name : queryName,
             select : {
                 columns : [{
                     expr : {
@@ -159,7 +181,9 @@ export class QueryService {
             const newQuery = new QuerySelect(project.schema, model);
             project.queries.push(newQuery);
 
+            // And inform the listener about the new query
             toReturn.next(newQuery);
+            toReturn.complete();
         });
 
         return (toReturn);
@@ -170,12 +194,12 @@ export class QueryService {
      *
      * @param table The name of the table to query initially
      */
-    createInsert(project : Project, tableName : string) {
+    createInsert(project : Project, queryName : string, tableName : string) {
         const url = this._server.getQueryUrl(project.id);
 
         let model : Model.QueryDescription = {
             id : undefined,
-            name : tableName,
+            name : queryName,
             insert : {
                 table : tableName,
                 assignments : []
@@ -204,6 +228,7 @@ export class QueryService {
 
             // And inform the caller
             toReturn.next(newQuery);
+            toReturn.complete();
         });
 
         return (toReturn);
