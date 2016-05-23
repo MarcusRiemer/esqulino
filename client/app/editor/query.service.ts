@@ -8,7 +8,8 @@ import {Observable}                              from 'rxjs/Observable'
 import {ServerApiService}                        from '../shared/serverapi.service'
 import {ProjectDescription}                      from '../shared/project.description'
 import {
-    Model, Query, QuerySelect, QueryDelete, QueryInsert, QueryUpdateRequestDescription,
+    Model, QueryUpdateRequestDescription, loadQuery,
+    Query, QuerySelect, QueryDelete, QueryInsert
 } from '../shared/query'
 import {
     QueryResult, QueryRunErrorDescription
@@ -131,19 +132,64 @@ export class QueryService {
             return (this.createSelect(project, name, table));
         case "insert":
             return (this.createInsert(project, name, table));
+        case "delete":
+            return (this.createDelete(project, name, table));
         default:
             throw new Error(`createQuery: unknown queryType "${queryType}"`);
         }
     }
 
     /**
-     * Request to create a new query on the given table.
+     * Prepares a creation request for the given model, and
+     * can handle the response.
+     *
+     * @param model   The model that was used to build the request
+     * @param project The project the respons should be added to
+     *
+     * @return An AsyncSubject that is fired once the query is part of the project
+     */
+    private handleCreationResponse(model : Model.QueryDescription,
+                                   project : Project) {
+        const url = this._server.getQueryUrl(project.id);
+        
+        const query = loadQuery(project.schema, model);
+        let bodyJson : QueryUpdateRequestDescription = {
+            model : model,
+            sql : query.toSqlString()
+        }
+
+        const request = this._http.post(url, JSON.stringify(bodyJson));
+        request.catch(this.handleError);
+
+        const toReturn = new AsyncSubject<Query>();
+
+        // Once the query has been created, add it to the list of queries
+        // that are part of this project.
+        request.subscribe( queryId => {
+            // Use the server-assigned id
+            model.id = queryId.text();
+
+            // Load the query and append it to the model
+            const newQuery = loadQuery(project.schema, model);
+            project.queries.push(newQuery);
+
+            // And inform the listener about the new query, as this
+            // is an AsyncSubject, the stream needs to be closed
+            // explicitly.
+            toReturn.next(newQuery);
+            toReturn.complete();
+        });
+
+        return (toReturn);
+    }
+
+    /**
+     * Request to create a new SELECT query on the given table.
      *
      * @param table The name of the table to query initially
      */
     createSelect(project : Project, queryName : string, table : string) {
-        const url = this._server.getQueryUrl(project.id);
-
+        // Build the initial model
         let model : Model.QueryDescription = {
             id : undefined,
             name : queryName,
@@ -161,32 +207,26 @@ export class QueryService {
             }
         }
 
-        const query = new QuerySelect(project.schema, model);
-        
-        let bodyJson : QueryUpdateRequestDescription = {
-            model : model,
-            sql : query.toSqlString()
+        return (this.handleCreationResponse(model, project));
+    }
+
+    /**
+     * Request to create a new DELETE query on the given table.
+     */
+    createDelete(project : Project, queryName : string, table : string) {
+        // Build the initial model
+        let model : Model.QueryDescription = {
+            id : undefined,
+            name : queryName,
+            delete : {},
+            from : {
+                first : {
+                    name : table
+                }
+            }
         }
-        
-        const request = this._http.post(url, JSON.stringify(bodyJson))
-            .catch(this.handleError);
 
-        const toReturn = new AsyncSubject<QuerySelect>();
-
-        // Once the query has been created, add it to the list of queries
-        // that are part of this project.
-        request.subscribe( queryId => {
-            model.id = queryId.text();
-
-            const newQuery = new QuerySelect(project.schema, model);
-            project.queries.push(newQuery);
-
-            // And inform the listener about the new query
-            toReturn.next(newQuery);
-            toReturn.complete();
-        });
-
-        return (toReturn);
+        return (this.handleCreationResponse(model, project));
     }
 
     /**
@@ -195,8 +235,7 @@ export class QueryService {
      * @param table The name of the table to query initially
      */
     createInsert(project : Project, queryName : string, tableName : string) {
-        const url = this._server.getQueryUrl(project.id);
-
+        // Build the initial model
         let model : Model.QueryDescription = {
             id : undefined,
             name : queryName,
@@ -206,32 +245,7 @@ export class QueryService {
             }
         }
 
-        const query = new QueryInsert(project.schema, model);
-        
-        let bodyJson : QueryUpdateRequestDescription = {
-            model : model,
-            sql : query.toSqlString()
-        }
-        
-        const request = this._http.post(url, JSON.stringify(bodyJson))
-            .catch(this.handleError);
-
-        const toReturn = new AsyncSubject<QueryInsert>();
-
-        // Once the query has been created, add it to the list of queries
-        // that are part of this project.
-        request.subscribe( queryId => {
-            model.id = queryId.text();
-
-            const newQuery = new QueryInsert(project.schema, model);
-            project.queries.push(newQuery);
-
-            // And inform the caller
-            toReturn.next(newQuery);
-            toReturn.complete();
-        });
-
-        return (toReturn);
+        return (this.handleCreationResponse(model, project));
     }
 
     deleteQuery(project : Project, queryId : string) {
