@@ -1,9 +1,21 @@
-all : client/libs-bundle.js client/app-bundle.js
+CLIENT_DIR = ../client/
+BUILD_DIR  = ./client/
 
-client/libs-bundle.js : client/systemjs.config.js
+include $(addprefix $(CLIENT_DIR), Makefile.files)
+
+all : client-lib-bundle client-app-bundle
+
+client-app-bundle : msg-pre-app-bundle client-lib-bundle client/app-bundle.js
+client-lib-bundle : msg-pre-lib-bundle client/lib-bundle.js
+
+# For some reason the systemjs bundler only works when run in the directory
+# it is told to bundle.
+client/lib-bundle.js : $(DIST_JS_FILES)
 	cd client && node ../bundle.deps.js
 
-client/app-bundle.js : client/systemjs.config.js
+# For some reason the systemjs bundler only works when run in the directory
+# it is told to bundle.
+client/app-bundle.js : $(DIST_JS_FILES)
 	cd client && node ../bundle.app.js
 
 clean :
@@ -13,9 +25,16 @@ clean :
 install-deps : has-npm
 	npm install
 
-# Ensures the npm "binary" is available
-has-npm :
-ifeq (, $(shell which npm 2>/dev/null))
-	$(error "Node Paketmanager (npm) not in PATH")
-endif
+##################################
+# Messaging targets
+##################################
+
+msg-pre-app-bundle :
+	@tput setaf 2; echo "## Dist  : Bundling client"; tput sgr0
+
+msg-pre-lib-bundle :
+	@tput setaf 2; echo "## Dist  : Bundling client dependencies"; tput sgr0
+
+
+include ../Makefile.common
 
