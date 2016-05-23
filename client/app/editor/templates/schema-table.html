@@ -2,22 +2,8 @@
        class="table">
   <tbody *ngFor="let table of tables">
     <tr>
-      <td colspan="5">
+      <td colspan="6">
         <h3>Tabelle <code>{{ table.name }}</code></h3>
-      </td>
-      <td>
-        <button *ngIf="allowCreate"
-                (click)="onCreateSelect(table.name)"
-                class="btn btn-primary">
-          <span class="fa fa-search"></span>
-          Neues SELECT
-        </button>
-        <button *ngIf="allowCreate"
-                (click)="onCreateInsert(table.name)"
-                class="btn btn-primary">
-          <span class="fa fa-plus-circle"></span>
-          Neues INSERT
-        </button>
       </td>
     </tr>
     

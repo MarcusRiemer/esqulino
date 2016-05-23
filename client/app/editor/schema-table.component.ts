@@ -1,4 +1,4 @@
-import {Component, Input}               from '@angular/core';
+import {Component, Input, OnInit}       from '@angular/core';
 
 import {TableDescription}               from '../shared/schema.description'
 
@@ -14,7 +14,7 @@ import {QueryService}                   from './query.service'
     templateUrl: 'app/editor/templates/schema-table.html',
     selector: "sql-table"
 })
-export class SchemaTableComponent {
+export class SchemaTableComponent implements OnInit {
     /**
      * The tables to display.
      */
@@ -42,21 +42,5 @@ export class SchemaTableComponent {
     ngOnInit() {
         this._projectService.activeProject
             .subscribe(res => this._project = res);
-    }
-
-    /**
-     * Create a new SELECT query for a certain table.
-     */
-    onCreateSelect(tableName : string) {
-        this._queryService.createSelect(this._project, tableName)
-            .subscribe( (res) => console.log(`Created SELECT query for table "${tableName}"`));
-    }
-    
-    /**
-     * Create a new INSERT query for a certain table.
-     */
-    onCreateInsert(tableName : string) {
-        this._queryService.createInsert(this._project, tableName)
-            .subscribe( (res) => console.log(`Created INSERT query for table "${tableName}"`));
     }
 }

@@ -74,23 +74,23 @@ export class QueryEditorComponent implements OnInit {
 
         // Reacting to saving
         this._toolbarService.savingEnabled = true;
-        let saveItem = this._toolbarService.saveItem;
+        let btnSave = this._toolbarService.saveItem;
 
-        saveItem.onClick.subscribe( (res) => {
-            saveItem.isInProgress = true;
+        btnSave.onClick.subscribe( (res) => {
+            btnSave.isInProgress = true;
             this._queryService.saveQuery(this.project, this.query)
                 // Always delay visual feedback by 500ms
                 .delay(500)
-                .subscribe(res => saveItem.isInProgress = false);
+                .subscribe(res => btnSave.isInProgress = false);
         });
 
         // Reacting to querying
-        let queryItem = this._toolbarService.addButton("run", "Ausführen", "search", "r");
-        queryItem.onClick.subscribe( (res) => {
-            queryItem.isInProgress = true;
+        let btnQuery = this._toolbarService.addButton("run", "Ausführen", "search", "r");
+        btnQuery.onClick.subscribe( (res) => {
+            btnQuery.isInProgress = true;
             this._queryService.runQuery(this.project, this.query)
                 .subscribe(res => {
-                    queryItem.isInProgress = false;
+                    btnQuery.isInProgress = false;
                     this._result = res;
                 });
         });
