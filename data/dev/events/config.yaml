@@ -2,6 +2,6 @@
 password: test
 name: Ereignisse
 id: events
-description: Historische Ereignisse & Personen mit einigen Datumsangaben und einer
-  kurzen Beschreibung
+description: Historische Ereignisse & Personen mit ihren jeweiligen zeitlichen Daten.
+  Welcher Wissenschaftler hat eigentlich zu Zeiten der ersten olympischen Spiele gelebt?
 preview: preview.jpg
