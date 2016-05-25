@@ -19,7 +19,12 @@
 
     <!-- Required for the Angular 2 router -->
     <base href="/">
-    
+  </head>
+
+  <!-- 3. Display the application -->
+  <body>
+    <sql-scratch>Loading...</sql-scratch>
+
     <!-- 1. Load libraries -->
     <!-- Polyfill(s) for older browsers -->
     <script src="/node_modules/es6-shim/es6-shim.min.js"></script>  
@@ -35,11 +40,6 @@
     <script>
      System.import('app').catch(console.log.bind(console));
     </script>
-  </head>
-
-  <!-- 3. Display the application -->
-  <body>
-    <sql-scratch>Loading...</sql-scratch>
   </body>
 
 </html>
