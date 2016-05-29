@@ -1,5 +1,5 @@
 /**
- * Something that can be placed inside a cell.
+ * Something that can be used to create a page.
  */
 export abstract class Widget {
     
