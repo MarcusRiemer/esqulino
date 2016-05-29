@@ -6,7 +6,7 @@ export interface ParagraphDescription extends WidgetDescription {
 }
 
 export interface WidgetDescription {
-
+    type : string
 }
 
 /**

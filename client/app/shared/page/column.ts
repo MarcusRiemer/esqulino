@@ -2,11 +2,18 @@ import {
     PageDescription, ColumnDescription, RowDescription
 } from './page.description'
 
+import {
+    loadWidget, Widget
+} from './widgets/index'
+
 export class Column {
     private _width : number;
 
+    private _widgets : Widget[];
+
     constructor(desc : ColumnDescription) {
         this._width = desc.width;
+        this._widgets = desc.widgets.map( (wiDesc) => loadWidget(wiDesc) );
     }
 
     /**
@@ -14,6 +21,13 @@ export class Column {
      */
     get width() {
         return (this._width);
+    }
+
+    /**
+     * @return The widgets for this cell
+     */
+    get widgets() {
+        return (this._widgets);
     }
 
     /**

@@ -1,1 +1,60 @@
-undefined
+{
+    "description": "Describes a page as a whole",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "rows": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/RowDescription",
+                "description": "Describes a row that can host certain cells."
+            }
+        }
+    },
+    "additionalProperties": false,
+    "definitions": {
+        "RowDescription": {
+            "type": "object",
+            "properties": {
+                "columns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ColumnDescription",
+                        "description": "Describes a column that can host certain widgets"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "ColumnDescription": {
+            "type": "object",
+            "properties": {
+                "width": {
+                    "type": "number"
+                },
+                "widgets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/WidgetDescription"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "WidgetDescription": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "$schema": "http://json-schema.org/draft-04/schema#"
+}

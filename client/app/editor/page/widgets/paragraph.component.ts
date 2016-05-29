@@ -1,11 +1,13 @@
-import{Component, Input, OnInit} from '@angular/core'
+import {Component, Input, OnInit} from '@angular/core'
 
-import {Paragraph} from '../../../shared/page/widgets/index'
+import {WidgetComponent}          from './widget.component'
+
+import {Paragraph}                from '../../../shared/page/widgets/index'
 
 @Component({
     templateUrl: 'app/editor/page/widgets/templates/paragraph.html',
     selector: "esqulino-paragraph"
 })
-export class ParagraphComponent {
-
+export class ParagraphComponent<Paragraph> {
+    
 }
