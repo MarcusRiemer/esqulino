@@ -18,7 +18,7 @@ export class Column {
 
     /**
      * @return The CSS classes that should be applied when
-     *         rendering this column.
+     *         rendering this column for the editor preview.
      */
     get columnClasses() : [string] {
         return ([`col-md-${this._width}`]);
@@ -26,7 +26,8 @@ export class Column {
 
     toModel() : ColumnDescription {
         return ({
-            width : this._width
+            width : this._width,
+            widgets : []
         });
     }
 }

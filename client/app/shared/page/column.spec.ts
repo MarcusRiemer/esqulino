@@ -5,7 +5,8 @@ import {Column}                     from './column'
 describe('Page Columns', () => {
     it('CSS classes', () => {
         const m : ColumnDescription = {
-            width : 6
+            width : 6,
+            widgets : []
         }
 
         let c = new Column(m);

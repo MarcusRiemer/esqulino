@@ -4,6 +4,7 @@ import {Router, RouteSegment}           from '@angular/router'
 import {Observable}                     from 'rxjs/Observable'
 
 import {Page}                           from '../../shared/page/page'
+import {Paragraph}                      from '../../shared/page/widgets/index'
 
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
@@ -11,13 +12,15 @@ import {QueryService}                   from '../query.service'
 import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 
+import {WidgetLoaderComponent}          from './widget-loader.component'
+
 
 /**
  * Top level component to edit esqulino pages
  */
 @Component({
     templateUrl: 'app/editor/page/templates/editor.html',
-    directives: [],
+    directives: [WidgetLoaderComponent],
     providers: [],
     pipes: []
 })
