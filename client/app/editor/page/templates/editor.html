@@ -4,7 +4,8 @@
          class="row">
       <div *ngFor="let col of row.columns"
            [ngClass]="col.columnClasses">
-        <esqulino-widget-loader>
+        <esqulino-widget-loader
+            [widgets]="col.widgets">
         </esqulino-widget-loader>
       </div>
     </div>

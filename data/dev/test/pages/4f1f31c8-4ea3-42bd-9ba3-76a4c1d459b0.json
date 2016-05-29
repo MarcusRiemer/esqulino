@@ -4,36 +4,54 @@
     {
       "columns": [
         {
-          "width": 6
+          "width": 6,
+          "widgets" : [
+            {
+              "type": "paragraph",
+              "text": "Dies ist ein Absatz"
+            }
+          ]
         },
         {
-          "width": 6
+          "width": 6,
+          "widgets" : []
         }
       ]
     },
     {
       "columns": [
         {
-          "width": 6
+          "width": 6,
+          "widgets" : []
         },
         {
-          "width": 3
+          "width": 3,
+          "widgets" : []
         },
         {
-          "width": 3
+          "width": 3,
+          "widgets" :[
+            {
+              "type": "paragraph",
+              "text": "Und noch ein Absatz"
+            }
+          ]
         }
       ]
     },
     {
       "columns": [
         {
-          "width": 4
+          "width": 4,
+          "widgets" : []
         },
         {
-          "width": 4
+          "width": 4,
+          "widgets" : []
         },
         {
-          "width": 4
+          "width": 4,
+          "widgets" : []
         }
       ]
     }
