@@ -176,6 +176,13 @@ export class Where extends Component implements ExpressionParent, Removable {
         return (toReturn);
     }
 
+    getLeaves() : Expression[] {
+        const nestedLeaves = this.subsequent.map(s => s.expr.getLeaves());
+        const flatLeaves = [].concat.apply([], nestedLeaves);
+
+        return (flatLeaves.concat(this._first.getLeaves()));
+    }
+
     replaceChild(formerChild : Expression, newChild : Expression) {
         if (this._first == formerChild) {
             this._first = newChild;

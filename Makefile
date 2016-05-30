@@ -22,6 +22,7 @@ dist :
 	$(SUBDIR_MAKE) client all
 	$(SUBDIR_MAKE) dist all
 
+# Removing all intermediate targets
 clean :
 	$(SUBDIR_MAKE) schema/json clean
 	$(SUBDIR_MAKE) dist clean

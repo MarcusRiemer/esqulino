@@ -41,7 +41,7 @@ export class Select extends Component implements ExpressionParent {
 
     constructor(select : Model.Select, query : Query) {
         super(query);
-        
+
         // Mapping the model types to concrete instances of the
         // syntax tree.
         select.columns.forEach(v => {
@@ -56,7 +56,7 @@ export class Select extends Component implements ExpressionParent {
 
     /**
      * If no columns are specified at all or even a single column
-     * consists of an invalid expression the whole SELECT 
+     * consists of an invalid expression the whole SELECT
      * component is invalid.
      */
     validate(schema : Schema) : ValidationResult {
@@ -73,8 +73,8 @@ export class Select extends Component implements ExpressionParent {
     }
 
     /**
-     * Appends a new column to this SELECT statement. This is 
-     * essentially a shortcut for the more general appendExpression 
+     * Appends a new column to this SELECT statement. This is
+     * essentially a shortcut for the more general appendExpression
      * method.
      *
      * @param table The name of the table the column belongs to
@@ -121,7 +121,7 @@ export class Select extends Component implements ExpressionParent {
 
     /**
      * Retrieves the number of columns that are involved in the SELECT
-     * statement. The result depends on the schema, because the number 
+     * statement. The result depends on the schema, because the number
      * of columns in the StarExpression can't be retrieved without
      * the schema.
      *
@@ -137,7 +137,7 @@ export class Select extends Component implements ExpressionParent {
                 // on the number of involved tables of the current schema.
                 const starExpr = <StarExpression> val.expr;
                 let tables : TableDescription[] = [];
-                
+
                 if (starExpr.isLimited) {
                     // If it is limited, only count that table
                     tables.push(this._query.schema.getTable(starExpr.tableName));
@@ -165,7 +165,7 @@ export class Select extends Component implements ExpressionParent {
 
     /**
      * Retrieves the actual column names that are involved in the SELECT
-     * statement. The result depends on the schema, because the exact 
+     * statement. The result depends on the schema, because the exact
      * columns in the StarExpression can't be retrieved without
      * the schema.
      *
@@ -175,7 +175,7 @@ export class Select extends Component implements ExpressionParent {
      */
     get actualColums() : ResultColumnDescription[] {
         let toReturn : ResultColumnDescription[] = [];
-        
+
         this._columns.forEach( val => {
             // A star column may attribute to more then a single column
             if (val.expr instanceof StarExpression) {
@@ -183,7 +183,7 @@ export class Select extends Component implements ExpressionParent {
                 // on the number of involved tables of the current schema.
                 const starExpr = <StarExpression> val.expr;
                 let tables : TableDescription[] = [];
-                
+
                 if (starExpr.isLimited) {
                     // If it is limited, only count that table
                     tables.push(this._query.schema.getTable(starExpr.tableName));
@@ -205,11 +205,11 @@ export class Select extends Component implements ExpressionParent {
                         });
                     });
                 })
-                
+
             } else if (val.expr instanceof ColumnExpression) {
                 // Column expressions add exactly a single column
                 const colExpr = <ColumnExpression> val.expr;
-                
+
                 toReturn.push({
                     name : colExpr.toString()
                 });
@@ -245,7 +245,7 @@ export class Select extends Component implements ExpressionParent {
     /**
      * @return "SELECT [columns]"
      */
-    toString() : string {        
+    toString() : string {
         // We start of with the normal keyword and DO NOT
         // add a trailing space as this will be inserted
         // in the loop below.
@@ -280,18 +280,25 @@ export class Select extends Component implements ExpressionParent {
             if (v.name) {
                 core.as = v.name;
             }
-            
+
             return (core);
         });
-        
+
         return ({
             columns : toReturn
         });
     }
 
+    getLeaves() : Expression[] {
+        const nestedLeaves = this._columns.map( v => v.expr.getLeaves());
+
+        // Flatten the result
+        return ([].concat.apply([], nestedLeaves));
+    }
+
     /**
      * Replace an expression of this SELECT component.
-     * 
+     *
      * @param formerChild The child to replace
      * @param newChild The child that takes the place.
      */
@@ -308,7 +315,7 @@ export class Select extends Component implements ExpressionParent {
 
     /**
      * Remove an expression from this SELECT component.
-     * 
+     *
      * @param formerChild The child to remove
      */
     removeChild(formerChild : Expression) {
@@ -321,4 +328,3 @@ export class Select extends Component implements ExpressionParent {
         }
     }
 }
-
