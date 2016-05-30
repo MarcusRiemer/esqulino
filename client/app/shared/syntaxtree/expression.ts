@@ -113,14 +113,25 @@ export abstract class Expression implements ExpressionParent, Removable, Validat
     abstract validate(schema : Schema) : ValidationResult;
 
     /**
+     * If the expression itself is valid it can be represented as an SQL
+     * string. 
+     *
      * @return SQL String representation
      */
     abstract toString() : string;
 
     /**
+     * Every expression can be serialized at any time, no matter how incomplete
+     * or wrong the current state is.
+     *
      * @return JSON model representation
      */
     abstract toModel() : any;
+
+    /**
+     * Retrieves all leaves of this expression tree.
+     */
+    abstract getLeaves() : Expression[];
 
     /**
      * Most expressions won't be helpful when trying to track down their
@@ -183,6 +194,10 @@ export class MissingExpression extends Expression {
             }
         })
     }
+
+    getLeaves() : Expression[] {
+        return [this];
+    }
 }
 
 /**
@@ -220,6 +235,10 @@ export class ConstantExpression extends Expression {
         this._value = val;
     }
 
+    replaceChild(formerChild : Expression, newChild : Expression) {
+        throw new Error("The constant expression should never have children")
+    }
+
     toString() : string {
         switch(this._type) {
         case <Model.DataType>"INTEGER":
@@ -239,8 +258,8 @@ export class ConstantExpression extends Expression {
         })
     }
 
-    replaceChild(formerChild : Expression, newChild : Expression) {
-        throw new Error("The constant expression should never have children")
+    getLeaves() : Expression[] {
+        return [this];
     }
 }
 
@@ -276,16 +295,21 @@ export class ParameterExpression extends Expression {
     }
 
     /**
+     * Ensures the key begins with a letter followed by only
+     * alpha-numeric characters or an underscore.
+     * 
      * @param val The key this parameter uses
      */
     set key(val) {
-        // Ensuring the key begins with a letter followed by only
-        // alpha-numeric characters or an underscore
         if (!/^[a-zA-Z]+[a-zA-Z0-9_]*$/.test(val)) {
             throw new Error(`Invalid parameter key: ${val}`);
         }
 
         this._key = val;
+    }
+
+    replaceChild(formerChild : Expression, newChild : Expression) {
+        throw new Error("The parameter expression should never have children");
     }
 
     /**
@@ -303,8 +327,8 @@ export class ParameterExpression extends Expression {
         })
     }
 
-    replaceChild(formerChild : Expression, newChild : Expression) {
-        throw new Error("The parameter expression should never have children");
+    getLeaves() : Expression[] {
+        return [this];
     }
 }
 
@@ -413,6 +437,10 @@ export class ColumnExpression extends Expression {
     replaceChild(formerChild : Expression, newChild : Expression) {
         throw new Error("The column expression should never have children");
     }
+
+    getLeaves() : Expression[] {
+        return [this];
+    }
 }
 
 /**
@@ -488,6 +516,10 @@ export class StarExpression extends Expression {
      */
     replaceChild(formerChild : Expression, newChild : Expression) {
         throw new Error("The star expression should never have children");
+    }
+
+    getLeaves() : Expression[] {
+        return [this];
     }
 }
 
@@ -569,6 +601,10 @@ export class BinaryExpression extends Expression {
         } else if (this._rhs == formerChild) {
             this._rhs = newChild;
         }
+    }
+
+    getLeaves() : Expression[] {
+        return this._lhs.getLeaves().concat(this._rhs.getLeaves());
     }
 }
 

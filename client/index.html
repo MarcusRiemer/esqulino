@@ -21,7 +21,7 @@
     <base href="/">
   </head>
 
-  <!-- 3. Display the application -->
+  <!-- 4. Displaying esqulino -->
   <body>
     <sql-scratch>
       <div class="loading">
@@ -33,11 +33,12 @@
     <!-- Polyfill(s) for older browsers -->
     <script src="/node_modules/es6-shim/es6-shim.min.js"></script>  
 
-    <!-- Angular 2 dependencies -->
+    <!-- 2. Angular 2 dependencies -->
     <script src="/node_modules/zone.js/dist/zone.js"></script>
     <script src="/node_modules/reflect-metadata/Reflect.js"></script>
     <script src="/node_modules/systemjs/dist/system.src.js"></script>
 
+    <!-- 3. Actually loading esqulino -->
     <script src="/systemjs.config.js"></script>
     <script src="/lib-bundle.js"></script>
     <script src="/app-bundle.js"></script>
