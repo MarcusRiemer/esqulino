@@ -86,6 +86,8 @@ describe('Valid DELETE Queries', () => {
         }
 
         let q = new QueryDelete(schema, model);
+        expect(q.getLeaves().length).toEqual(0);
+        
         expect(q.toModel()).toEqual(model);
         expect(q.toSqlString()).toEqual("DELETE\nFROM person");
     });
@@ -123,6 +125,12 @@ describe('Valid DELETE Queries', () => {
         }
 
         let q = new QueryDelete(schema, model);
+
+        const leaves = q.getLeaves();
+        expect(leaves.length).toEqual(2);
+        expect(leaves[0].toModel()).toEqual(model.where.first.binary.lhs);
+        expect(leaves[1].toModel()).toEqual(model.where.first.binary.rhs);
+        
         expect(q.toModel()).toEqual(model);
         expect(q.validate).toBeTruthy();
         expect(q.toSqlString()).toEqual("DELETE\nFROM person\nWHERE person.name = \"Hans\"");

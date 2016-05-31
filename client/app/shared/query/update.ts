@@ -9,7 +9,7 @@ import * as SyntaxTree                    from '../query.syntaxtree'
 
 
 /**
- * An assignment that happens during an update
+ * An assignment that happens during an update.
  */
 class UpdateAssign implements SyntaxTree.ExpressionParent {
 
@@ -21,6 +21,13 @@ class UpdateAssign implements SyntaxTree.ExpressionParent {
         this._query = query;
         this._columnName = model.column;
         this._expr = loadExpression(model.expr, this);
+    }
+
+    /**
+     * @return The expression that is used in this assignment.
+     */
+    get expr() : Expression {
+        return (this._expr);
     }
 
     replaceChild(formerChild : Expression, newChild : Expression) : void {
@@ -84,6 +91,9 @@ export class QueryUpdate extends Query implements QueryWhere {
         return (this._tableName);
     }
 
+    /**
+     * @return The WHERE clause this UPDATE component uses.
+     */
     get where() {
         return (this._where);
     }
@@ -127,6 +137,19 @@ export class QueryUpdate extends Query implements QueryWhere {
         let toReturn = `UPDATE ${this.tableName}\nSET ${values}`;        
         
         return (toReturn);
+    }
+
+    public getLeaves() : SyntaxTree.Expression[] {
+        let updates : SyntaxTree.Expression[] = [];
+
+        if (this._updates) {
+            const updatesNested = this._updates.map(u => u.expr.getLeaves());
+            updates = [].concat.apply([], updatesNested);
+        }
+
+        const where = this._where ? this.where.getLeaves() : [];
+        
+        return (updates.concat(where));
     }
 
 }

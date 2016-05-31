@@ -104,6 +104,11 @@ describe('Valid SELECT Queries', () => {
         expect(q.name).toEqual("test-whole");
         expect(q.id).toEqual("id");
 
+        const leaves = q.getLeaves();
+        expect(leaves.length).toEqual(2);
+        expect(leaves[0].toModel()).toEqual(model.select.columns[0].expr);
+        expect(leaves[1].toModel()).toEqual(model.select.columns[1].expr);
+
         // SELECT
         expect(q.select.actualNumberOfColumns).toEqual(2);
         expect(q.select.columns.length).toEqual(2);
@@ -143,6 +148,11 @@ describe('Valid SELECT Queries', () => {
         let q = new QuerySelect(schema, model);
         expect(q.name).toEqual("where-simple");
         expect(q.id).toEqual("where-1");
+
+        const leaves = q.getLeaves();
+        expect(leaves.length).toEqual(2);
+        expect(leaves[0].toModel()).toEqual(model.select.columns[0].expr);
+        expect(leaves[1].toModel()).toEqual(model.where.first);
 
         // SELECT
         const columns = q.select.actualColums;
@@ -186,6 +196,12 @@ describe('Valid SELECT Queries', () => {
         expect(q.name).toEqual("where-compare");
         expect(q.id).toEqual("where-2");
 
+        const leaves = q.getLeaves();
+        expect(leaves.length).toEqual(3);
+        expect(leaves[0].toModel()).toEqual(model.select.columns[0].expr);
+        expect(leaves[1].toModel()).toEqual(model.where.first.binary.lhs);
+        expect(leaves[2].toModel()).toEqual(model.where.first.binary.rhs);
+
         expect(q.select.actualNumberOfColumns).toEqual(3);
         expect(q.from.numberOfJoins).toEqual(0);
 
@@ -213,6 +229,11 @@ describe('Invalid SELECT Queries', () => {
         };
 
         let q = new QuerySelect(schema, model);
+
+        const leaves = q.getLeaves();
+        expect(leaves.length).toEqual(1);
+        expect(leaves[0].toModel()).toEqual(model.select.columns[0].expr);
+
 
         expect(q.toModel()).toEqual(model);
         expect(q.validate().isValid).toBeFalsy();

@@ -135,4 +135,12 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
         
         return (toReturn);
     }
+
+    public getLeaves() : SyntaxTree.Expression[] {
+        const leavesSelect = this._select ? this._select.getLeaves() : [];
+        const leavesWhere = this._where ? this._where.getLeaves() : [];
+        
+        
+        return (leavesSelect.concat(leavesWhere));
+    }
 }
