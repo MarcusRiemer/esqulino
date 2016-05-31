@@ -23,6 +23,9 @@ export class WidgetLoaderComponent implements OnInit {
      */
     @Input() widgets : Widget[];
 
+    /**
+     * TODO: Allow widgets to somehow register themself.
+     */
     private _typeMapping : { [typeName:string] : Type} = {
         "paragraph" : ParagraphComponent
     };
@@ -48,9 +51,7 @@ export class WidgetLoaderComponent implements OnInit {
     }
 
     public ngOnInit() {
-        console.log("WidgetLoaderComponent.ngOnInit()");
-        console.log(this);
-
+        // Dynamically load each referenced component
         this.widgets.forEach( (widget, index) => {
             const componentType = this.getComponentType(widget.type);
             this._resolver.resolveComponent(componentType)

@@ -3,7 +3,7 @@ import {Router, RouteSegment}           from '@angular/router'
 
 import {Observable}                     from 'rxjs/Observable'
 
-import {Page}                           from '../../shared/page/page'
+import {Page}                           from '../../shared/page/index'
 import {Paragraph}                      from '../../shared/page/widgets/index'
 
 import {Project}                        from '../project'
@@ -13,7 +13,6 @@ import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 
 import {WidgetLoaderComponent}          from './widget-loader.component'
-
 
 /**
  * Top level component to edit esqulino pages
@@ -62,10 +61,16 @@ export class PageEditorComponent implements OnInit {
             });
     }
 
+    /*
+     * @return The currently edited project
+     */
     get project() {
         return (this._project);
     }
 
+    /*
+     * @return The currently edited page
+     */
     get page() {
         return (this._page);
     }

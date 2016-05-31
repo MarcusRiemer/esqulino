@@ -14,3 +14,13 @@
     Spalte
   </div>
 </div>
+
+<div class="block-container block">
+  <div *ngFor="let query of queries; let is-last=last"
+       class="table">
+    <span class="fa fa-table fa-fw"></span>
+    {{ query.query.name }}
+  </div>
+  <hr [hidden]="is-last">
+</div>
+
