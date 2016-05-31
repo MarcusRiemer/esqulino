@@ -46,14 +46,14 @@ export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
     /**
      * @return All expressions that are leaves of the expression tree.
      */
-    public abstract getLeaves() : SyntaxTree.Expression[];
+    abstract getLeaves() : SyntaxTree.Expression[];
 
     /**
      * Retrieves the SQL representation of this query.
      *
      * @return An SQL string that represents this query.
      */
-    public toSqlString() : string {
+    toSqlString() : string {
         return (this.toSqlStringImpl());
     }
     

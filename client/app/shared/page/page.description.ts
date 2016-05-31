@@ -28,8 +28,25 @@ export interface RowDescription {
  * Describes a page as a whole
  */
 export interface PageDescription {
+    /**
+     * The (at least) project-wide unique ID of this page.
+     */
     id : string
+
+    /**
+     * A user-defined name of this page.
+     */
     name : string
 
+    /**
+     * Rows are the top-level element for the whole layout,
+     * for the moment no other type of widget is expected.
+     */
     rows : RowDescription[]
+
+    /**
+     * IDs of queries that are referenced in this page. Only
+     * these queries provide 
+     */
+    referencedQueries : string[]
 }
