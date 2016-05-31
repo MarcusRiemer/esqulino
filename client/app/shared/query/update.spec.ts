@@ -59,6 +59,11 @@ describe('UPDATE', () => {
         const q = new QueryUpdate(schema, m);
         expect(q.toModel()).toEqual(m);
         expect(q.toSqlString()).toEqual("UPDATE person\nSET p1 = 2");
+
+        const leaves = q.getLeaves();
+        expect(leaves.length).toEqual(1);
+        expect(leaves[0].toModel()).toEqual(m.update.assignments[0].expr);
+
     });
 
     it('Invalid: Missing Expression', () => {

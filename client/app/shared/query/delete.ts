@@ -138,4 +138,10 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
 
         return (toReturn);
     }
+
+    public getLeaves() : SyntaxTree.Expression[] {
+        const leavesWhere = this._where ? this._where.getLeaves() : [];
+        
+        return (leavesWhere);
+    }
 }

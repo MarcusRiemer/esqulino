@@ -10,6 +10,11 @@ export { Expression, loadExpression }
  * the parenting query "thing".
  */
 export interface Removable {
+
+    /**
+     * Remove this instance from its parent. It is the job of the parent
+     * to decide how to fill the void.
+     */
     removeSelf() : void;
 }
 

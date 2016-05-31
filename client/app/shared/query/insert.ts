@@ -158,4 +158,10 @@ export class QueryInsert extends Query {
         return (toReturn);
     }
 
+    public getLeaves() : SyntaxTree.Expression[] {
+        const nested = this._values.map(v => v.expr.getLeaves());
+
+        return ([].concat.apply([], nested));
+    }
+
 }

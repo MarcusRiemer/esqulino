@@ -156,6 +156,12 @@ describe('Valid INSERT Queries', () => {
         const q = new QueryInsert(schema, m);
         expect(q.activeColumns).toEqual(schema.tables[0].columns);
 
+        const leaves = q.getLeaves();
+        expect(leaves.length).toEqual(3);
+        expect(leaves[0].toModel()).toEqual(m.insert.assignments[0].expr);
+        expect(leaves[1].toModel()).toEqual(m.insert.assignments[1].expr);
+        expect(leaves[2].toModel()).toEqual(m.insert.assignments[2].expr);
+
         expect(q.toModel()).toEqual(m, "Model mismatch");
         expect(q.toSqlString()).toEqual(`INSERT INTO person (p1, p2, p3)\nVALUES (0, "1", 2)`);
     });
@@ -181,6 +187,11 @@ describe('Valid INSERT Queries', () => {
 
         const q = new QueryInsert(schema, m);
         expect(q.isValid).toBeTruthy("Not valid");
+
+        const leaves = q.getLeaves();
+        expect(leaves.length).toEqual(2);
+        expect(leaves[0].toModel()).toEqual(m.insert.assignments[0].expr);
+        expect(leaves[1].toModel()).toEqual(m.insert.assignments[1].expr);
 
         expect(q.toModel()).toEqual(m, "Model mismatch");
         expect(q.toSqlString()).toEqual(`INSERT INTO person (p1, p3)\nVALUES (1, 3)`);
