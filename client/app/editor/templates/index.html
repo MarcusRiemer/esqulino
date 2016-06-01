@@ -6,13 +6,13 @@
       <editor-navbar [project]="project"></editor-navbar>
     </div>
 
-
     <div class="content">
       <router-outlet></router-outlet>
     </div>
+    
     <div *ngIf="isSidebarVisible"
          class="sidebar">
-      <sidebar-placeholder></sidebar-placeholder>
+      <sidebar-loader></sidebar-loader>
     </div>
     <div *ngIf="isSidebarVisible"
          class="sidebar-hack">

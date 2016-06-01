@@ -13,7 +13,7 @@ import {QueryService}                   from './query.service'
 import {ToolbarService}                 from './toolbar.service'
 import {ToolbarComponent}               from './toolbar.component'
 import {NavbarComponent}                from './navbar.component'
-import {SidebarPlaceholderComponent}    from './sidebar-placeholder.component'
+import {SidebarLoaderComponent}         from './sidebar-loader.component'
 import {SidebarService}                 from './sidebar.service'
 
 import {SettingsComponent}              from './settings.component'
@@ -28,7 +28,7 @@ import {DragService}                    from './query/drag.service'
 @Component({
     templateUrl: 'app/editor/templates/index.html',
     directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES,
-                 ToolbarComponent, NavbarComponent, SidebarPlaceholderComponent],
+                 ToolbarComponent, NavbarComponent, SidebarLoaderComponent],
     providers: [HTTP_PROVIDERS, SidebarService,
                 ProjectService, QueryService, DragService, ToolbarService]
 })
@@ -45,6 +45,12 @@ export class EditorComponent implements OnInit {
      * The currently edited project
      */
     private _project : Project = null;
+
+    /**
+     * Cached state of the sidebar, the UI template doesn't
+     * like observables.
+     */
+    private _sidebarVisible = false;
 
     /**
      * Used for dependency injection.
@@ -68,6 +74,8 @@ export class EditorComponent implements OnInit {
         this._projectService.activeProject.subscribe(
             res => this._project = res
         );
+
+        this._sidebarService.isSidebarVisible.subscribe(v => this._sidebarVisible = v);
     }
 
     /**
@@ -89,7 +97,7 @@ export class EditorComponent implements OnInit {
      * @return True, if the sidebar should be visible.
      */
     get isSidebarVisible() {
-        return (this._sidebarService.isSidebarVisible);
+        return (this._sidebarVisible);
     }
 
     /**
