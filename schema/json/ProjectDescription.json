@@ -408,16 +408,26 @@
             "type": "object",
             "properties": {
                 "id": {
+                    "description": "The (at least) project-wide unique ID of this page.",
                     "type": "string"
                 },
                 "name": {
+                    "description": "A user-defined name of this page.",
                     "type": "string"
                 },
                 "rows": {
+                    "description": "Rows are the top-level element for the whole layout,\n\nfor the moment no other type of widget is expected.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/RowDescription",
                         "description": "Describes a row that can host certain cells."
+                    }
+                },
+                "referencedQueries": {
+                    "description": "IDs of queries that are referenced in this page. Only\n\nthese queries provide",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
                     }
                 }
             },
