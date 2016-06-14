@@ -1,3 +1,10 @@
+<div *ngIf="!query"
+     class="alert alert-danger"
+     role="alert">
+  <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
+  Keine Abfrage
+</div>
+
 <div [hidden]="hideTrash"
      (dragenter)="onDeleteDrag($event)"
      (dragover)="onDeleteDrag($event)"

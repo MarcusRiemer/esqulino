@@ -42,20 +42,16 @@ export class SidebarComponent {
     }
 
     ngOnInit() {
-        // Every time the URL changes
-        this._router.changes.subscribe( () => {
-            // Grab the current project
-            this._projectService.activeProject
-                .first() // One shot subscription
-                .subscribe(res => {
-                    // Grab the correct query id
-                    const childRoute = this._router.routeTree.firstChild(this._routeParams);
-                    const queryId = childRoute.getParam('queryId');
-                    
-                    // Project is loaded, display the correct  query
-                    this.query = res.getQueryById(queryId);
-                });
-        });
+        // Grab the current project
+        this._projectService.activeProject
+            .subscribe(res => {
+                // Grab the correct query id
+                const childRoute = this._router.routeTree.firstChild(this._routeParams);
+                const queryId = childRoute.getParam('queryId');
+                
+                // Project is loaded, display the correct  query
+                this.query = res.getQueryById(queryId);
+            });
     }
 
     
