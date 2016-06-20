@@ -48,7 +48,7 @@ export class QueryEditorComponent implements OnInit {
         private _routeParams : RouteSegment,
         private _sidebarService : SidebarService
     ) {
-        this._sidebarService.showSidebar("query");
+        this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
         this._toolbarService.resetItems();
     }
 

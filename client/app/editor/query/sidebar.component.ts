@@ -20,6 +20,12 @@ import {OperatorPipe}                from './operator.pipe'
 })
 export class SidebarComponent {
     /**
+     * This ID is used to register this sidebar with the sidebar loader
+     */
+    public static get SIDEBAR_IDENTIFIER() { return "query" };
+
+    
+    /**
      * View Variable:
      * The currently edited query
      */
