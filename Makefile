@@ -3,6 +3,8 @@
 # ONLY install dependencies for the client, change to the `client` folder
 # first and call `install-deps` there.
 
+all : install-deps dist
+
 # All those "entering directory" messages are usually just visual clutter,
 # but in case something path-related goes horribly wrong during compilation
 # this is the escape hatch to easily add the messages back in.

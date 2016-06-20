@@ -23,12 +23,7 @@ export class WidgetLoaderComponent implements OnInit {
      */
     @Input() widgets : Widget[];
 
-    /**
-     * TODO: Allow widgets to somehow register themself.
-     */
-    private _typeMapping : { [typeName:string] : Type} = {
-        "paragraph" : ParagraphComponent
-    };
+    private _typeMapping : { [typeName:string] : Type} = {}
 
     constructor(
         private _dcl: DynamicComponentLoader,
@@ -36,7 +31,12 @@ export class WidgetLoaderComponent implements OnInit {
         private _selfRef : ViewContainerRef,
         private _resolver : ComponentResolver
     ) {
-
+        /**
+         * TODO: Allow widgets to somehow register themself.
+         */
+        this._typeMapping = {
+            "paragraph" : ParagraphComponent
+        };
     }
 
     /**
@@ -50,13 +50,25 @@ export class WidgetLoaderComponent implements OnInit {
         return (this._typeMapping[widgetType]);
     }
 
-    public ngOnInit() {
-        // Dynamically load each referenced component
+    /**
+     * Dynamically loads the required components.
+     */
+    ngOnInit() {
+        if (this.widgets.length) {
+            console.log(`Loading ${this.widgets.length} widgets`);
+        }
+        
         this.widgets.forEach( (widget, index) => {
+            console.log(`Resolving widget type "${widget.type}"`);
             const componentType = this.getComponentType(widget.type);
+            
+            
+            // TODO: Call the correct constructor instead of setting the property afterwards
             this._resolver.resolveComponent(componentType)
-                .then( (fac) => this._selfRef.createComponent(fac, index, this._injector))
-                .then( (com) => (<WidgetComponent<Widget>>com.instance).model = widget);
+                .then( (fac) => {
+                    const com = this._selfRef.createComponent(fac, index, this._injector);
+                    (<WidgetComponent<Widget>>com.instance).model = widget;
+                });
         });
     }
 }
