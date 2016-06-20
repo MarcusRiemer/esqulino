@@ -45,10 +45,6 @@ export class SidebarComponent implements OnInit {
         private _projectService : ProjectService,        
         private _routeParams : RouteSegment,
         private _router : Router) {
-
-        this._router.changes.subscribe( () => {
-            this.updateCache();
-        });
     }
 
     /**

@@ -6,11 +6,6 @@ import {Observable}                  from 'rxjs/Observable'
 
 import * as Query                   from './query/sidebar.component'
 import * as Page                    from './page/sidebar.component'
-import {ParagraphComponent}         from './page/widgets/paragraph.component'
-
-const pageId = Page.SidebarComponent.SIDEBAR_IDENTIFIER;
-const pageParagraphId = ParagraphComponent.SIDEBAR_IDENTIFIER;
-const queryId = Query.SidebarComponent.SIDEBAR_IDENTIFIER;
 
 /**
  * Manages the global state of the sidebar.
@@ -28,9 +23,11 @@ export class SidebarService {
     constructor() {
         this._sidebar = new BehaviorSubject<string>(undefined);
 
-        this._knownTypes[pageId] = Page.SidebarComponent;
-        this._knownTypes[pageParagraphId] = ParagraphComponent;
-        this._knownTypes[queryId] = Query.SidebarComponent;
+        const pageId = Page.SidebarComponent.SIDEBAR_IDENTIFIER;
+        const queryId = Query.SidebarComponent.SIDEBAR_IDENTIFIER;
+
+        this.registerType(pageId, Page.SidebarComponent);
+        this.registerType(queryId, Query.SidebarComponent);
     }
 
     /**
@@ -38,6 +35,20 @@ export class SidebarService {
      */
     hideSidebar() {
         this._sidebar.next(undefined);
+    }
+
+    /**
+     * Registers a new type of sidebar that is ready for use.
+     *
+     * @param newType The string ID that is used to request this type.
+     * @param component The component constructr that should be used.
+     */
+    registerType(newType : string, componentType : Type) {
+        if (this.isValidType(newType)) {
+            throw new Error(`Attempted to override sidebar type "${newType}"`);
+        }
+
+        this._knownTypes[newType] = componentType;        
     }
 
     /**

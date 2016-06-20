@@ -21,9 +21,5 @@ import {FrontComponent}                 from './front/front.component'
     { path: '', component: FrontComponent }
 ])
 export class SqlScratchComponent {
-    constructor(private _router: Router) {}
 
-    ngOnInit() {
-
-    }
 }
