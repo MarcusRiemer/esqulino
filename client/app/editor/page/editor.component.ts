@@ -13,6 +13,7 @@ import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 
 import {WidgetLoaderComponent}          from './widget-loader.component'
+import {SidebarComponent}               from './sidebar.component'
 
 /**
  * Top level component to edit esqulino pages
@@ -41,7 +42,7 @@ export class PageEditorComponent implements OnInit {
         private _routeParams: RouteSegment,
         private _sidebarService : SidebarService
     ) {
-        this._sidebarService.showSidebar("page");
+        this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
     }
 
     /**

@@ -9,5 +9,9 @@ import {Paragraph}                from '../../../shared/page/widgets/index'
     selector: "esqulino-paragraph"
 })
 export class ParagraphComponent<Paragraph> {
+    /**
+     * This ID is used to register this sidebar with the sidebar loader
+     */
+    public static get SIDEBAR_IDENTIFIER() { return "page-paragraph" };
     
 }

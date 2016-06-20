@@ -26,7 +26,11 @@ interface UsableQuery {
     selector : "page-sidebar",
 })
 export class SidebarComponent implements OnInit {
-
+    /**
+     * This ID is used to register this sidebar with the sidebar loader
+     */
+    public static get SIDEBAR_IDENTIFIER() { return "page" };
+    
     /**
      * The currently edited project
      */
@@ -92,3 +96,8 @@ export class SidebarComponent implements OnInit {
         }
     }
 }
+
+/**
+ * This ID is used to register this sidebar with the sidebar loader
+ */
+export const SIDEBAR_IDENTIFIER = "page";
