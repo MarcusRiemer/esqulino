@@ -1,5 +1,5 @@
-import {Component, Input, OnInit}       from '@angular/core'
-import {RouteSegment, Router}           from '@angular/router'
+import {Component, OnInit, OnDestroy}   from '@angular/core'
+import {ActivatedRoute, Router}         from '@angular/router'
 
 import {Query}                          from '../../shared/query'
 import {Page}                           from '../../shared/page/index'
@@ -25,7 +25,7 @@ interface UsableQuery {
     templateUrl: 'app/editor/page/templates/sidebar.html',
     selector : "page-sidebar",
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
     /**
      * This ID is used to register this sidebar with the sidebar loader
      */
@@ -41,9 +41,14 @@ export class SidebarComponent implements OnInit {
      */
     private _page : Page;
 
+    /**
+     * Subscriptions that need to be released
+     */
+    private _subscriptionRefs : any[] = [];
+
     constructor(
         private _projectService : ProjectService,        
-        private _routeParams : RouteSegment,
+        private _routeParams : ActivatedRoute,
         private _router : Router) {
     }
 
@@ -55,6 +60,14 @@ export class SidebarComponent implements OnInit {
         this.updateCache();
     }
 
+    ngOnDestroy() {
+        this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
+        this._subscriptionRefs = [];
+    }
+
+    /**
+     * View Variable: The currently edited page
+     */
     get page() {
         return (this._page);
     }
@@ -67,11 +80,16 @@ export class SidebarComponent implements OnInit {
                 this._project = p;
                 
                 // Grab the correct query id
-                const childRoute = this._router.routeTree.firstChild(this._routeParams);
-                const pageId = childRoute.getParam('pageId');
+                const childRoute = this._router.routerState.firstChild(this._routeParams);
+
+                const routeRef = childRoute.params.subscribe(param => {
+                    const pageId = param['pageId'];
                 
-                // Project is loaded, display the correct  query
-                this._page = this._project.getPageById(pageId);
+                    // Project is loaded, display the correct  query
+                    this._page = this._project.getPageById(pageId);
+                });
+                
+                this._subscriptionRefs.push(routeRef);
             });
     }
 

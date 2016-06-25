@@ -19,7 +19,7 @@ DIST_VENDOR_FILES = $(abspath $(addprefix $(BUILD_DIR), $(VENDOR_FILES)))
 # because we don't want to bloat the dist archive.
 NODE_FILES = $(addprefix $(CLIENT_DIR),\
              systemjs.config.js \
-             node_modules/es6-shim/es6-shim.min.js \
+             node_modules/core-js/client/shim.min.js \
 			 node_modules/zone.js/dist/zone.js\
              node_modules/reflect-metadata/Reflect.js \
              node_modules/systemjs/dist/system.src.js \

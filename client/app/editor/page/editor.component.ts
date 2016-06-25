@@ -1,5 +1,5 @@
-import {Component, Input, OnInit}       from '@angular/core'
-import {Router, RouteSegment}           from '@angular/router'
+import {Component, OnInit, OnDestroy}   from '@angular/core'
+import {Router, ActivatedRoute}         from '@angular/router'
 
 import {Observable}                     from 'rxjs/Observable'
 
@@ -24,7 +24,7 @@ import {SidebarComponent}               from './sidebar.component'
     providers: [],
     pipes: []
 })
-export class PageEditorComponent implements OnInit {
+export class PageEditorComponent implements OnInit, OnDestroy {
     /**
      * The currently edited project
      */
@@ -35,11 +35,13 @@ export class PageEditorComponent implements OnInit {
      */
     private _page : Page;
 
+    private _routeRef : any;
+
     constructor(
         private _projectService : ProjectService,
         private _queryService : QueryService,
         private _toolbarService: ToolbarService,
-        private _routeParams: RouteSegment,
+        private _routeParams: ActivatedRoute,
         private _sidebarService : SidebarService
     ) {
         this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
@@ -53,13 +55,22 @@ export class PageEditorComponent implements OnInit {
         this._toolbarService.savingEnabled = false;
 
         // Grab the correct project and query
-        var pageId = this._routeParams.getParam('pageId');
-        this._projectService.activeProject
-            .subscribe(res => {
-                // Project is loaded, display the correct page to edit
-                this._project = res;
-                this._page = this._project.getPageById(pageId);
-            });
+        this._routeParams.params.subscribe(params => {
+            var pageId = params['pageId'];
+            this._projectService.activeProject
+                .subscribe(res => {
+                    // Project is loaded, display the correct page to edit
+                    this._project = res;
+                    this._page = this._project.getPageById(pageId);
+                });
+        })
+    }
+
+    /**
+     * Subscriptions need to be explicitly released
+     */
+    ngOnDestroy() {
+        this._routeRef.unsubscribe();
     }
 
     /*

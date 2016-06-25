@@ -1,5 +1,4 @@
 import {Component, Input, OnInit}     from '@angular/core';
-import {Router, RouteSegment, ROUTER_DIRECTIVES} from '@angular/router';
 
 import {Project}              from './project'
 import {ProjectService}       from './project.service'
@@ -10,7 +9,7 @@ import {SchemaTableComponent} from './schema-table.component'
 
 @Component({
     templateUrl: 'app/editor/templates/schema.html',
-    directives: [ROUTER_DIRECTIVES, SchemaTableComponent]
+    directives: [SchemaTableComponent]
 })
 export class SchemaComponent implements OnInit {
     /**
@@ -24,7 +23,6 @@ export class SchemaComponent implements OnInit {
     constructor(
         private _projectService: ProjectService,
         private _toolbarService: ToolbarService,
-        private _routeParams: RouteSegment,
         private _sidebarService: SidebarService
     ) {
         this._sidebarService.hideSidebar();

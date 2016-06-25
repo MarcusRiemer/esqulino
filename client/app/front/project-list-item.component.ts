@@ -1,8 +1,8 @@
-import {Component, OnInit, Input}  from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Component, OnInit, Input}  from '@angular/core'
+import {ROUTER_DIRECTIVES}         from '@angular/router'
 
-import {ProjectDescription}        from '../shared/project.description';
-import {ProjectDescriptionService} from '../shared/project.description.service';
+import {ProjectDescription}        from '../shared/project.description'
+import {ProjectDescriptionService} from '../shared/project.description.service'
 
 /**
  * A single project list item entry.
@@ -23,34 +23,12 @@ export class ProjectListItemComponent implements OnInit {
     public get imageUrl() : string {
         return (`/api/project/${this.project.id}/preview`);
     }
-    
-    /**
-     * Used for dependency injection.
-     */
-    constructor(
-        private _router: Router
-    )
-    {}
 
     /**
      * Check whether there should be an image.
      */
     ngOnInit() {
         this.hasImage = !!this.project.preview;
-    }
-
-    /**
-     * Navigate to a project in edit mode
-     */
-    navigateEditor() {
-        this._router.navigate(['/Editor', { projectId : this.project.id }]);
-    }
-
-    /**
-     * Navigate to a project in view mode
-     */
-    navigateView() {
-        this._router.navigate(['/View', { projectId : this.project.id }]);
     }
 }
 

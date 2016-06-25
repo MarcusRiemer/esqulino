@@ -1,5 +1,5 @@
 import {Component, Input, OnInit}       from '@angular/core'
-import {Router, RouteSegment}           from '@angular/router'
+import {Router, ActivatedRoute}         from '@angular/router'
 
 import {Observable}                     from 'rxjs/Observable'
 
@@ -36,7 +36,15 @@ export class QueryEditorComponent implements OnInit {
      */
     public project : Project;
 
+    /**
+     * The result of the most recently run query
+     */
     private _result : QueryResult;
+
+    /**
+     * Subscriptions that need to be released
+     */
+    private _subscriptionRefs : any[] = [];
 
     /**
      * Used for dependency injection.
@@ -45,7 +53,7 @@ export class QueryEditorComponent implements OnInit {
         private _projectService : ProjectService,
         private _queryService : QueryService,
         private _toolbarService : ToolbarService,
-        private _routeParams : RouteSegment,
+        private _routeParams : ActivatedRoute,
         private _sidebarService : SidebarService
     ) {
         this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
@@ -64,13 +72,17 @@ export class QueryEditorComponent implements OnInit {
      */
     ngOnInit() {
         // Grab the correct project and query
-        var queryId = this._routeParams.getParam('queryId');
-        this._projectService.activeProject
-            .subscribe(res => {
-                // Project is loaded, display the correct  query
-                this.project = res;
-                this.query = this.project.getQueryById(queryId);
-            });
+        let subRef = this._routeParams.params.subscribe(param => {
+            var queryId = param['queryId'];
+            this._projectService.activeProject
+                .subscribe(res => {
+                    // Project is loaded, display the correct  query
+                    this.project = res;
+                    this.query = this.project.getQueryById(queryId);
+                });
+        });
+
+        this._subscriptionRefs.push(subRef);
 
         // Reacting to saving
         this._toolbarService.savingEnabled = true;
@@ -94,5 +106,10 @@ export class QueryEditorComponent implements OnInit {
                     this._result = res;
                 });
         });
+    }
+
+    ngOnDestroy() {
+        this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
+        this._subscriptionRefs = [];
     }
 }

@@ -1,8 +1,8 @@
-import {Component, OnInit}              from '@angular/core'
+import {Component, OnInit, OnDestroy}   from '@angular/core'
 import {CORE_DIRECTIVES}                from '@angular/common'
 import {HTTP_PROVIDERS}                 from '@angular/http'
 import {
-    Router, Routes, RouteSegment, ROUTER_DIRECTIVES
+    Router, ActivatedRoute, ROUTER_DIRECTIVES
 } from '@angular/router'
 
 import {TableDescription}               from '../shared/schema.description'
@@ -16,13 +16,6 @@ import {NavbarComponent}                from './navbar.component'
 import {SidebarLoaderComponent}         from './sidebar-loader.component'
 import {SidebarService}                 from './sidebar.service'
 
-import {SettingsComponent}              from './settings.component'
-import {SchemaComponent}                from './schema.component'
-
-import {PageEditorComponent}            from './page/editor.component'
-
-import {QueryCreateComponent}           from './query/create.component'
-import {QueryEditorComponent}           from './query/editor.component'
 import {DragService}                    from './query/drag.service'
 
 @Component({
@@ -32,15 +25,7 @@ import {DragService}                    from './query/drag.service'
     providers: [HTTP_PROVIDERS, SidebarService,
                 ProjectService, QueryService, DragService, ToolbarService]
 })
-@Routes([
-    { path: '', component : SettingsComponent },
-    { path: 'settings', component : SettingsComponent },
-    { path: 'schema', component : SchemaComponent },
-    { path: 'query/create', component : QueryCreateComponent },
-    { path: 'query/:queryId', component : QueryEditorComponent },
-    { path: 'page/:pageId', component : PageEditorComponent },
-])
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, OnDestroy {
     /**
      * The currently edited project
      */
@@ -52,13 +37,15 @@ export class EditorComponent implements OnInit {
      */
     private _sidebarVisible = false;
 
+    private _routeRef : any;
+
     /**
      * Used for dependency injection.
      */
     constructor(
         private _projectService: ProjectService,
         private _sidebarService: SidebarService,
-        private _routeParams: RouteSegment,
+        private _routeParams: ActivatedRoute,
         private _router : Router
     ) { }
 
@@ -66,16 +53,25 @@ export class EditorComponent implements OnInit {
      * Load the project for all sub-components.
      */
     ngOnInit() {
-        var projectId = this._routeParams.getParam('projectId');
-
-        console.log(`Loading project with id "${projectId}"`);
-
-        this._projectService.setActiveProject(projectId);
-        this._projectService.activeProject.subscribe(
-            res => this._project = res
-        );
-
+        this._routeRef = this._routeParams.params.subscribe(params => {
+            let projectId = params['projectId'];
+            
+            console.log(`Loading project with id "${projectId}"`);
+            
+            this._projectService.setActiveProject(projectId);
+            this._projectService.activeProject.subscribe(
+                res => this._project = res
+             );
+        });
+        
         this._sidebarService.isSidebarVisible.subscribe(v => this._sidebarVisible = v);
+    }
+
+    /**
+     * Subscriptions need to be explicitly released
+     */
+    ngOnDestroy() {
+        this._routeRef.unsubscribe();
     }
 
     /**
