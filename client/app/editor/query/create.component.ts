@@ -1,5 +1,5 @@
 import {Component, OnInit}              from '@angular/core'
-import {Router, RouteSegment}           from '@angular/router'
+import {Router}                         from '@angular/router'
 
 import {TableDescription}               from '../../shared/schema.description'
 
@@ -26,8 +26,7 @@ export class QueryCreateComponent implements OnInit {
         private _toolbarService: ToolbarService,
         private _sidebarService: SidebarService,
         private _queryService: QueryService,
-        private _router: Router,
-        private _routeSegment: RouteSegment
+        private _router: Router
     ) {
         this._sidebarService.hideSidebar();
     }

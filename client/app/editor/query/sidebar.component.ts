@@ -1,5 +1,7 @@
-import {Component, Input, OnInit}    from '@angular/core'
-import {RouteSegment, Router}        from '@angular/router'
+import {
+    Component, Input, OnInit, OnDestroy
+} from '@angular/core'
+import {ActivatedRoute, Router}      from '@angular/router'
 
 import {Query, Model}                from '../../shared/query'
 
@@ -18,7 +20,7 @@ import {OperatorPipe}                from './operator.pipe'
     selector : "sql-sidebar",
     pipes : [OperatorPipe]
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit, OnDestroy {
     /**
      * This ID is used to register this sidebar with the sidebar loader
      */
@@ -38,26 +40,39 @@ export class SidebarComponent {
     @Input() binaryOperation : Model.Operator = "=";
 
     /**
+     * Subscriptions that need to be released
+     */
+    private _subscriptionRefs : any[] = [];
+
+    /**
      * @param _dragService The sidebar relies on the SQL Editors DragService
      */
     constructor(
         private _dragService : DragService,
         private _projectService : ProjectService,        
-        private _routeParams : RouteSegment,
+        private _routeParams : ActivatedRoute,
         private _router : Router) {
     }
 
     ngOnInit() {
         // Grab the current project
-        this._projectService.activeProject
+        const subProj = this._projectService.activeProject
             .subscribe(res => {
-                // Grab the correct query id
-                const childRoute = this._router.routeTree.firstChild(this._routeParams);
-                const queryId = childRoute.getParam('queryId');
+                // New project, discard the current query
+                this.query = undefined;
                 
-                // Project is loaded, display the correct  query
-                this.query = res.getQueryById(queryId);
+                // Grab the correct query id
+                const childRoute = this._router.routerState.firstChild(this._routeParams);
+                const subQuery = childRoute.params.subscribe(param => {
+                    // Project is loaded, display the correct  query
+                    this.query = res.getQueryById(param['queryId']);
+                })
             });
+    }
+
+    ngOnDestroy() {
+        this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
+        this._subscriptionRefs = [];
     }
 
     
