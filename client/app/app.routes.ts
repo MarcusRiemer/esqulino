@@ -6,8 +6,8 @@ import {EditorRoutes}                   from './editor/editor.routes'
 import {FrontRoutes}                    from './front/front.routes'
 
 export const routes : RouterConfig = [
-    ...EditorRoutes,
     ...FrontRoutes,
+    ...EditorRoutes,
 ]
 
 export const APP_ROUTER_PROVIDERS = [
