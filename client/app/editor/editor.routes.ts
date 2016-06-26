@@ -15,7 +15,7 @@ export const EditorRoutes : RouterConfig = [
         path: "editor/:projectId",
         component : EditorComponent,
         children : [
-            { path: '', component : SettingsComponent },
+            { path: '', redirectTo: 'settings', terminal: true},
             { path: 'settings', component : SettingsComponent },
             { path: 'schema', component : SchemaComponent },
             { path: 'query/create', component : QueryCreateComponent },
