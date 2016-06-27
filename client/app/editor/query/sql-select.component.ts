@@ -35,7 +35,7 @@ export class SelectComponent {
         const sqlEvt = <SqlDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
         this.select.appendExpression(sqlEvt.expr);
 
-        console.log(`Select.onBlueprintDrop:\n${this.select.toString()}`)
+        console.log(`Select.onBlueprintDrop:\n${this.select.toSqlString()}`)
     }
 
     /**

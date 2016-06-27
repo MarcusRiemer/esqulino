@@ -16,7 +16,7 @@ describe('SELECT', () => {
         };
         
         const s = new SyntaxTree.Select(model, null);
-        expect(s.toString()).toEqual("SELECT *");
+        expect(s.toSqlString()).toEqual("SELECT *");
         expect(s.toModel()).toEqual(model);
     });
     
@@ -53,7 +53,7 @@ describe('SELECT', () => {
         expect(col2.columnName).toEqual("alter");
 
         // Model and String serialization
-        expect(s.toString()).toBe('SELECT p.id, person.name, person.alter AS dasAlter');
+        expect(s.toSqlString()).toBe('SELECT p.id, person.name, person.alter AS dasAlter');
         expect(s.toModel()).toEqual(model);
     });
 
@@ -90,7 +90,7 @@ describe('SELECT', () => {
 
         expect(s.actualNumberOfColumns).toEqual(1);
         expect(s.toModel()).toEqual(resultModel);
-        expect(s.toString()).toEqual("SELECT person.name AS pname");
+        expect(s.toSqlString()).toEqual("SELECT person.name AS pname");
     });
 
     it('adding a unnamed column', () => {
@@ -113,7 +113,7 @@ describe('SELECT', () => {
 
         expect(s.actualNumberOfColumns).toEqual(1);
         expect(s.toModel()).toEqual(resultModel);
-        expect(s.toString()).toEqual("SELECT person.name");
+        expect(s.toSqlString()).toEqual("SELECT person.name");
     });
 });
 

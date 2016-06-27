@@ -12,7 +12,7 @@ describe('WHERE', () => {
         const w = new SyntaxTree.Where(model, null);
 
         expect(w.subsequent.length).toEqual(0);
-        expect(w.toString()).toEqual("WHERE 1");
+        expect(w.toSqlString()).toEqual("WHERE 1");
         expect(w.toModel()).toEqual(model);
     });
 
@@ -32,7 +32,7 @@ describe('WHERE', () => {
         const w = new SyntaxTree.Where(model, null);
 
         expect(w.subsequent.length).toEqual(1);
-        expect(w.toString()).toEqual("WHERE 1\n\tOR 2");
+        expect(w.toSqlString()).toEqual("WHERE 1\n\tOR 2");
         expect(w.toModel()).toEqual(model);
     });
 
@@ -54,7 +54,7 @@ describe('WHERE', () => {
         w.removeChild(w.first);
 
         expect(w.subsequent.length).toEqual(0);
-        expect(w.toString()).toEqual("WHERE 2");
+        expect(w.toSqlString()).toEqual("WHERE 2");
     });
 
     it('removing first subsequent', () => {
@@ -75,7 +75,7 @@ describe('WHERE', () => {
         w.subsequent[0].removeSelf();
 
         expect(w.subsequent.length).toEqual(0);
-        expect(w.toString()).toEqual("WHERE 1");
+        expect(w.toSqlString()).toEqual("WHERE 1");
     });
 
     it('adding a third condition', () => {
@@ -95,6 +95,6 @@ describe('WHERE', () => {
         w.appendExpression({ constant : { type : "INTEGER", value : "3" } }, "OR");
 
         expect(w.subsequent.length).toEqual(2);
-        expect(w.toString()).toEqual("WHERE 1\n\tOR 2\n\tOR 3");
+        expect(w.toSqlString()).toEqual("WHERE 1\n\tOR 2\n\tOR 3");
     });
 });

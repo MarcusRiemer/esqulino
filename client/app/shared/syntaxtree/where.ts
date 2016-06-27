@@ -52,8 +52,8 @@ export class WhereSubsequent extends Component implements ExpressionParent, Remo
         return (this._expr.validate(schema));
     }
 
-    toString() : string {
-        return(`${this._operator} ${this._expr.toString()}`);
+    toSqlString() : string {
+        return(`${this._operator} ${this._expr.toSqlString()}`);
     }
 
     getLocationDescription() : string {
@@ -154,11 +154,11 @@ export class Where extends Component implements ExpressionParent, Removable {
         }));
     }
 
-    toString() : string {
-        let toReturn = `WHERE ${this._first.toString()}`;
+    toSqlString() : string {
+        let toReturn = `WHERE ${this._first.toSqlString()}`;
 
         this._subsequent.forEach(s => {
-            toReturn += `\n\t${s.toString()}`;
+            toReturn += `\n\t${s.toSqlString()}`;
         });
         
         return (toReturn);

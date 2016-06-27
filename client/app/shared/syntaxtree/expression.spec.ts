@@ -36,7 +36,7 @@ describe('MissingExpression', () => {
         const c = new SyntaxTree.MissingExpression(model, null);
 
         // Model and String serialization
-        expect( () => { c.toString() }).toThrow()
+        expect( () => { c.toSqlString() }).toThrow()
         expect(c.toModel().missing).toEqual(model);
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"missing")
 
@@ -54,7 +54,7 @@ describe('ConstantExpression', () => {
         const c = new SyntaxTree.ConstantExpression(model, null);
 
         // Model and String serialization
-        expect(c.toString()).toEqual("0");
+        expect(c.toSqlString()).toEqual("0");
         expect(c.toModel().constant).toEqual(model);
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"constant")
     });
@@ -68,7 +68,7 @@ describe('ConstantExpression', () => {
         const c = new SyntaxTree.ConstantExpression(model, null);
 
         // Model and String serialization
-        expect(c.toString()).toEqual(`"0"`);
+        expect(c.toSqlString()).toEqual(`"0"`);
         expect(c.toModel().constant).toEqual(model);
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"constant")
     });
@@ -83,7 +83,7 @@ describe('ParameterExpression', () => {
         const c = new SyntaxTree.ParameterExpression(model, null);
 
         // Model and String serialization
-        expect(c.toString()).toEqual(`@${model.key}`);
+        expect(c.toSqlString()).toEqual(`@${model.key}`);
         expect(c.toModel().parameter).toEqual(model);
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"parameter")
     });
@@ -119,7 +119,7 @@ describe('ColumnExpression', () => {
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"column")
         
         // Model and String serialization
-        expect(c.toString()).toEqual(model.column);
+        expect(c.toSqlString()).toEqual(model.column);
         expect(c.toModel().singleColumn).toEqual(model);
     });
 
@@ -137,7 +137,7 @@ describe('ColumnExpression', () => {
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"column")
 
         // Model and String serialization
-        expect(c.toString()).toEqual("person.name");
+        expect(c.toSqlString()).toEqual("person.name");
         expect(c.toModel().singleColumn).toEqual(model);
     });
 
@@ -156,7 +156,7 @@ describe('ColumnExpression', () => {
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"column")
 
         // Model and String serialization
-        expect(c.toString()).toEqual("p.name");
+        expect(c.toSqlString()).toEqual("p.name");
         expect(c.toModel().singleColumn).toEqual(model);
     });
 
@@ -175,7 +175,7 @@ describe('ColumnExpression', () => {
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"column")
 
         // Model and String serialization
-        expect(c.toString()).toEqual("n.noncolumn");
+        expect(c.toSqlString()).toEqual("n.noncolumn");
         expect(c.toModel().singleColumn).toEqual(model);
 
         // Validity
@@ -199,7 +199,7 @@ describe('ColumnExpression', () => {
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"column")
 
         // Model and String serialization
-        expect(c.toString()).toEqual("n.noncolumn");
+        expect(c.toSqlString()).toEqual("n.noncolumn");
         expect(c.toModel().singleColumn).toEqual(model);
 
         // Validity
@@ -220,7 +220,7 @@ describe('StarExpression', () => {
         let c = new SyntaxTree.StarExpression(model, null);
 
         expect(c.toModel().star).toEqual(model);
-        expect(c.toString()).toEqual("*");
+        expect(c.toSqlString()).toEqual("*");
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"star")
     });
 
@@ -234,7 +234,7 @@ describe('StarExpression', () => {
         let c = new SyntaxTree.StarExpression(model, null);
 
         expect(c.toModel().star).toEqual(model);
-        expect(c.toString()).toEqual("table.*");
+        expect(c.toSqlString()).toEqual("table.*");
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"star")
     });
     
@@ -249,7 +249,7 @@ describe('StarExpression', () => {
         let c = new SyntaxTree.StarExpression(model, null);
 
         expect(c.toModel().star).toEqual(model);
-        expect(c.toString()).toEqual("t.*");
+        expect(c.toSqlString()).toEqual("t.*");
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"star")
     });
 
@@ -263,7 +263,7 @@ describe('StarExpression', () => {
         let c = new SyntaxTree.StarExpression(model, null);
 
         expect(c.toModel().star).toEqual(model);
-        expect(c.toString()).toEqual("table.*");
+        expect(c.toSqlString()).toEqual("table.*");
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"star")
 
         // Validity
@@ -294,7 +294,7 @@ describe('BinaryExpression', () => {
         expect(rhs.tableQualifier).toEqual("stadt");
 
         // Model and String serialization
-        expect(e.toString()).toEqual("person.name <> stadt.name");
+        expect(e.toSqlString()).toEqual("person.name <> stadt.name");
         expect(e.toModel().binary).toEqual(model);
         expect(e.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"binary")
     });
@@ -322,7 +322,7 @@ describe('BinaryExpression', () => {
         expect(rhs.value).toEqual("1");
         
         // Model and String serialization
-        expect(e.toString()).toEqual("0 = 1");
+        expect(e.toSqlString()).toEqual("0 = 1");
         expect(e.toModel().binary).toEqual(model);
         expect(e.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"binary")
     });
@@ -350,7 +350,7 @@ describe('BinaryExpression', () => {
         expect(rhs.value).toEqual("%a%");
         
         // Model and String serialization
-        expect(e.toString()).toEqual(`"w a s d" LIKE "%a%"`);
+        expect(e.toSqlString()).toEqual(`"w a s d" LIKE "%a%"`);
         expect(e.toModel().binary).toEqual(model);
         expect(e.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"binary")
     });

@@ -19,14 +19,14 @@
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           class="constant"
-          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">{{ expr }}</span>
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">{{ expr.toSqlString() }}</span>
   </template>
   <template ngSwitchCase="column">
     <span (drop)="onColumnDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           class="column"
-          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">{{ expr }}</span>
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">{{ expr.toSqlString() }}</span>
   </template>
   <template ngSwitchCase="parameter">
     <span (drop)="onParameterDrop($event)"

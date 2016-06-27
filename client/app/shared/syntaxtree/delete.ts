@@ -15,7 +15,7 @@ export class Delete extends Component {
         super(query);
     }
 
-    toString() : string {
+    toSqlString() : string {
         return ("DELETE");
     }
 
