@@ -154,19 +154,27 @@ class ScratchSqlApp < Sinatra::Base
     return 200;
   end
   
-  index_path = File.expand_path('index.html', settings.public_folder)
+    # By now I have too often mistakenly attempted to load other assets than
+    # HTML files from "user facing" URLs, mostly due to paths that should have
+    # been absolute but weren't. This route attempts to catch all these
+    # mistakes rather early, so that the show up as a nice 404 error in the
+    # browsers debugging tools
+    get /^\/(about|editor)\/.*\.(css|js)/ do
+      halt 404, "There are no assets in `editor` or `about` routes"
+    end
+    
+    # Matching the meaningful routes the client knows. This enables navigation
+    # even if the user submits a "deep link" to somewhere inside the
+    # application.
+    index_path = File.expand_path('index.html', settings.public_folder)
+    get '/', '/about/?*', '/editor/*' do
+      send_file index_path
+    end
   
-  # Matching the meaningful routes the client knows. This enables navigation
-  # even if the user submits a "deep link" to somewhere inside the
-  # application.
-  get '/', '/about/?*', '/editor/*' do
-    send_file index_path
-  end
-
-  # Catchall for everything that goes wrong
-  get '/*' do
-    status 404
-  end
+    # Catchall for everything that goes wrong
+    get '/*' do
+      halt 404, "Not found"
+    end
 end
 
 require_relative 'project'
