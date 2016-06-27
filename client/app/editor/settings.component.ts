@@ -18,6 +18,11 @@ export class SettingsComponent {
     public project : Project;
 
     /**
+     * Subscriptions that need to be released
+     */
+    private _subscriptionRefs : any[] = [];
+
+    /**
      * Used for dependency injection.
      */
     constructor(
@@ -38,14 +43,23 @@ export class SettingsComponent {
         
 
         let saveItem = this._toolbarService.saveItem;
-        saveItem.onClick.subscribe( (res) => {
+        let subRef = saveItem.onClick.subscribe( (res) => {
             saveItem.isInProgress = true;
             this._projectService.storeProjectDescription(this.project)
                 .subscribe(res => saveItem.isInProgress = false);
         });
+
+        this._subscriptionRefs.push(subRef);
         
-        this._projectService.activeProject
+        subRef = this._projectService.activeProject
             .subscribe(res => this.project = res);
+
+        this._subscriptionRefs.push(subRef);
+    }
+
+    ngOnDestroy() {
+        this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
+        this._subscriptionRefs = [];
     }
 
     /**

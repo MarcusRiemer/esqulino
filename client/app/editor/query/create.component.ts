@@ -1,4 +1,4 @@
-import {Component, OnInit}              from '@angular/core'
+import {Component, OnInit, OnDestroy}   from '@angular/core'
 import {Router}                         from '@angular/router'
 
 import {TableDescription}               from '../../shared/schema.description'
@@ -12,7 +12,7 @@ import {QueryService}                   from '../query.service'
 @Component({
     templateUrl: 'app/editor/query/templates/create.html',
 })
-export class QueryCreateComponent implements OnInit {
+export class QueryCreateComponent implements OnInit, OnDestroy {
     private _project : Project;
     
     public queryType : string = "select";
@@ -20,6 +20,11 @@ export class QueryCreateComponent implements OnInit {
     public queryName : string = "";
 
     public queryTable : string;
+
+    /**
+     * Subscriptions that need to be released
+     */
+    private _subscriptionRefs : any[] = [];
 
     constructor(
         private _projectService: ProjectService,
@@ -38,12 +43,14 @@ export class QueryCreateComponent implements OnInit {
         this._toolbarService.resetItems();
         this._toolbarService.savingEnabled = false;
         
-        this._projectService.activeProject
+        let subRef = this._projectService.activeProject
             .subscribe(res => this._project = res);
+
+        this._subscriptionRefs.push(subRef);
 
         // Actually allow creation
         let btnCreate = this._toolbarService.addButton("create", "Erstellen", "plus", "n");
-        btnCreate.onClick.subscribe( (res) => {
+        subRef = btnCreate.onClick.subscribe( (res) => {
             if (this.isValid) {
                 const res = this._queryService.createQuery(this._project,
                                                            this.queryType,
@@ -56,6 +63,13 @@ export class QueryCreateComponent implements OnInit {
                 });
             }
         });
+
+        this._subscriptionRefs.push(subRef);
+    }
+
+    ngOnDestroy() {
+        this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
+        this._subscriptionRefs = [];
     }
 
     public get isNameValid() {
