@@ -1,4 +1,4 @@
-import {Page} from './page'
+import {Page, PageUpdateRequestDescription} from './page'
 import {Renderer} from './renderer'
 
-export {Page, Renderer}
+export {Page, PageUpdateRequestDescription, Renderer}

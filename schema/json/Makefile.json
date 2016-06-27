@@ -20,6 +20,13 @@
 CONVERT_COMMAND = $(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@ $(SCHEMA_OPTIONS); \
 	sed -i "s/\\\\\"\/\(.*\)\"\.//g" $@
 
+$(SCHEMA_PATH)/PageUpdateRequestDescription.json : $(SRC_PATH)/page/page.description.ts
+	$(CONVERT_COMMAND)
+
+$(SCHEMA_PATH)/PageDescription.json : $(SRC_PATH)/page/page.description.ts
+	$(CONVERT_COMMAND)
+
+
 $(SCHEMA_PATH)/ProjectDescription.json : $(SRC_PATH)/project.description.ts
 	$(CONVERT_COMMAND)
 
@@ -42,9 +49,6 @@ $(SCHEMA_PATH)/QueryParamsDescription.json : $(SRC_PATH)/query.result.ts
 	$(CONVERT_COMMAND)
 
 $(SCHEMA_PATH)/ArbitraryQueryRequestDescription.json : $(SRC_PATH)/query.result.ts
-	$(CONVERT_COMMAND)
-
-$(SCHEMA_PATH)/PageDescription.json : $(SRC_PATH)/page/page.description.ts
 	$(CONVERT_COMMAND)
 
 # Ensure the typescript-json-schema "binary" is part of the node_modules folder

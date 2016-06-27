@@ -54,7 +54,7 @@ export class SettingsComponent {
         subRef = this._projectService.activeProject
             .subscribe(res => this.project = res);
 
-        this._subscriptionRefs.push(subRef);
+        this._subscriptionRefs.push(subRef);2
     }
 
     ngOnDestroy() {

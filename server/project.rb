@@ -19,15 +19,29 @@ def assert_project_dir(project_folder, project_id)
   end
 end
 
-# Throws an exception if the given folder is not a valid
-# esqulino project.
+# Throws an exception if the given query does not exist.
 #
 # @param project_folder [string] The projects root folder
+# @param project_id [string] The ID of the project
+# @param query_id [string] The ID of the query
 def assert_query(project_folder, project_id, query_id)
   query_folder = File.join(project_folder, "queries")
 
   if not File.exists? File.join(query_folder, query_id + ".json")
     raise UnknownQueryError.new(project_id, query_id)
+  end
+end
+
+# Throws an exception if the given page does not exist.
+#
+# @param project_folder [string] The projects root folder
+# @param project_id [string] The ID of the project
+# @param page_id [string] The ID of the page
+def assert_page(project_folder, project_id, page_id)
+  page_folder = File.join(project_folder, "pages")
+
+  if not File.exists? File.join(page_folder, page_id + ".json")
+    raise UnknownQueryError.new(project_id, page_id)
   end
 end
 

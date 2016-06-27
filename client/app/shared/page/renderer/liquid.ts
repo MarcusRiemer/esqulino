@@ -5,6 +5,8 @@ import {Page}                  from '../page'
 import {Renderer}              from '../renderer'
 import {Widget, Row, Column, Paragraph}   from '../widgets/index'
 
+export {Renderer}
+
 type WidgetRenderer = (w: Widget) => string;
 
 function renderParagraph(w: Widget) : string {

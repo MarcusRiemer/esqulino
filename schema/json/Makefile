@@ -14,7 +14,7 @@ TYPESCRIPT_JSON_SCHEMA_BIN = node --stack-size=65500 $(SCHEMA_PATH)/node_modules
 SCHEMA_OPTIONS = --refs true --aliasRefs --false --noExtraProps true
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILE_NAMES = ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json PageDescription.json
+JSON_SCHEMA_FILE_NAMES = PageDescription.json PageUpdateRequestDescription.json ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json
 
 # Paths of the schema files to generate
 JSON_SCHEMA_FILES = $(addprefix $(SCHEMA_PATH)/, $(JSON_SCHEMA_FILE_NAMES))
