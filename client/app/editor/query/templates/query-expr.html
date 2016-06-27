@@ -2,40 +2,40 @@
       (dragover)="onAllowedDrag($event)"
       (dragleave)="onAllowedDragLeave($event)"
       [ngSwitch]="expr.templateIdentifier">
-  <template ngSwitchWhen="missing">
+  <template ngSwitchCase="missing">
     <span (drop)="onMissingDrop($event)"
           class="missing"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"><span class="fa fa-question-circle"></span></span>
   </template>
-  <template ngSwitchWhen="star">
+  <template ngSwitchCase="star">
     <span (drop)="onStarDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           class="column"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"><span class="fa fa-star"></span></span>
   </template>
-  <template ngSwitchWhen="constant">
+  <template ngSwitchCase="constant">
     <span (drop)="onConstantDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           class="constant"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">{{ expr }}</span>
   </template>
-  <template ngSwitchWhen="column">
+  <template ngSwitchCase="column">
     <span (drop)="onColumnDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           class="column"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">{{ expr }}</span>
   </template>
-  <template ngSwitchWhen="parameter">
+  <template ngSwitchCase="parameter">
     <span (drop)="onParameterDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           class="parameter"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"><span class="fa fa-user-plus"></span>{{ expr.key }}</span>
   </template>
-  <template ngSwitchWhen="binary">
+  <template ngSwitchCase="binary">
     <span (drop)="onBinaryDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
