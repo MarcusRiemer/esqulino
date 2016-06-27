@@ -1,5 +1,8 @@
-import {RowDescription}            from './page.description'
+import {RowDescription}            from '../page.description'
+
 import {Column}                    from './column'
+
+export {RowDescription}
 
 export class Row {
     private _columns : Column[];

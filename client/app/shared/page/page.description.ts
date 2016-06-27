@@ -2,7 +2,8 @@
  * Describes a paragraph widget.
  */
 export interface ParagraphDescription extends WidgetDescription {
-    text : string
+    text : string,
+    type : "paragraph"
 }
 
 export interface WidgetDescription {

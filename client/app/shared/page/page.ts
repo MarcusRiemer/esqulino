@@ -1,5 +1,5 @@
 import {PageDescription}          from './page.description'
-import {Row}                      from './row'
+import {Row}                      from './widgets/row'
 
 /**
  * The in-memory representation of a page.

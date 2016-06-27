@@ -1,11 +1,17 @@
-import {Widget}                from './widget'
 import {
     WidgetDescription, ParagraphDescription
 } from '../page.description'
 
-import {Paragraph}             from './paragraph'
+import {Widget}                          from './widget'
 
+import {Row, RowDescription}             from './row'
+import {Column, ColumnDescription}       from './column'
 
+import {Paragraph}                       from './paragraph'
+
+/**
+ * @return A Widget instance that matches the description
+ */
 function loadWidget(desc : WidgetDescription) : Widget {
     switch (desc.type) {
     case "paragraph":
@@ -16,5 +22,9 @@ function loadWidget(desc : WidgetDescription) : Widget {
 }
 
 export {
-    Widget, Paragraph, loadWidget
+    Widget, WidgetDescription,
+    Row, RowDescription,
+    Column, ColumnDescription,
+    Paragraph, ParagraphDescription,
+    loadWidget
 }

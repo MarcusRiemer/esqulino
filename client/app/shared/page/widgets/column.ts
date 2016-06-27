@@ -1,10 +1,12 @@
 import {
     PageDescription, ColumnDescription, RowDescription
-} from './page.description'
+} from '../page.description'
 
 import {
     loadWidget, Widget
-} from './widgets/index'
+} from './index'
+
+export {ColumnDescription}
 
 export class Column {
     private _width : number;
