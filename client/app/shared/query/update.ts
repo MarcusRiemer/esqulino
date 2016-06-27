@@ -47,7 +47,7 @@ class UpdateAssign implements SyntaxTree.ExpressionParent {
     }
 
     toSqlString() : string {
-        return (`${this._columnName} = ${this._expr.toString()}`);
+        return (`${this._columnName} = ${this._expr.toSqlString()}`);
     }
 
     toModel() : Model.ColumnAssignment {

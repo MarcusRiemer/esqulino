@@ -211,7 +211,7 @@ export class Select extends Component implements ExpressionParent {
                 const colExpr = <ColumnExpression> val.expr;
 
                 toReturn.push({
-                    name : colExpr.toString()
+                    name : colExpr.toSqlString()
                 });
             } else {
                 throw new Error ("Unknown colum type in result description");
@@ -245,7 +245,7 @@ export class Select extends Component implements ExpressionParent {
     /**
      * @return "SELECT [columns]"
      */
-    toString() : string {
+    toSqlString() : string {
         // We start of with the normal keyword and DO NOT
         // add a trailing space as this will be inserted
         // in the loop below.
@@ -260,7 +260,7 @@ export class Select extends Component implements ExpressionParent {
             }
 
             // Every column is separated by a single space
-            toReturn += " " + c.expr.toString();
+            toReturn += " " + c.expr.toSqlString();
 
             // Optionally, there may be an alias name for the column
             if (c.name) {

@@ -118,7 +118,7 @@ export abstract class Expression implements ExpressionParent, Removable, Validat
      *
      * @return SQL String representation
      */
-    abstract toString() : string;
+    abstract toSqlString() : string;
 
     /**
      * Every expression can be serialized at any time, no matter how incomplete
@@ -176,9 +176,13 @@ export class MissingExpression extends Expression {
     /**
      * Will throw an exception, as missing expressions can't be
      * converted to strings.
+     *
+     * @TODO: Throwing here may not be smart, as the Angular 2 change detector
+     *        seems to call this sometimes.
      */
-    toString() : string {
+    toSqlString() : string {
         throw new Error("Statement contains missing expression");
+        //return ("##Missing##");
     }
 
     /**
@@ -239,7 +243,7 @@ export class ConstantExpression extends Expression {
         throw new Error("The constant expression should never have children")
     }
 
-    toString() : string {
+    toSqlString() : string {
         switch(this._type) {
         case <Model.DataType>"INTEGER":
         case <Model.DataType>"REAL":
@@ -315,7 +319,7 @@ export class ParameterExpression extends Expression {
     /**
      * @return The key of this parameter in SQLites '@' notation
      */
-    toString() : string {
+    toSqlString() : string {
         return (`@${this._key}`);
     }
 
@@ -413,7 +417,7 @@ export class ColumnExpression extends Expression {
     /**
      * @return The fully qualified column name
      */
-    toString() : string {
+    toSqlString() : string {
         if (this.hasTableQualifier) {
             return `${this.tableQualifier}.${this._columnName}`;
         } else {
@@ -474,7 +478,7 @@ export class StarExpression extends Expression {
         return (!!this._limitedTo);
     }
 
-    toString() {
+    toSqlString() {
         if (this._limitedTo) {
             const qualifier = (this._limitedTo.alias) ? this._limitedTo.alias : this._limitedTo.name;
             return (`${qualifier}.*`);
@@ -554,8 +558,8 @@ export class BinaryExpression extends Expression {
      * @return The string representation of both operands with
      *         the operator in between.
      */
-    toString() : string {
-        return (`${this._lhs} ${this._operator} ${this._rhs}`)
+    toSqlString() : string {
+        return (`${this._lhs.toSqlString()} ${this._operator} ${this._rhs.toSqlString()}`)
     }
 
     /**

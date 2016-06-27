@@ -134,7 +134,7 @@ export class QueryInsert extends Query {
      */
     protected toSqlStringImpl() : string {
         const columnNames = this.activeColumns.map(c => c.name).join(", ");
-        const expressions = this.values.map(v => v.toString()).join(", ");
+        const expressions = this.values.map(v => v.toSqlString()).join(", ");
     
         return (`INSERT INTO ${this._tableName} (${columnNames})\nVALUES (${expressions})`);
     }

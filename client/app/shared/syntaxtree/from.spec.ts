@@ -71,7 +71,7 @@ describe('FROM', () => {
         expect(f.first.alias).toEqual("pe");
         expect(f.first.nameWithAlias).toEqual("person pe");
 
-        expect(f.toString()).toEqual("FROM person pe");
+        expect(f.toSqlString()).toEqual("FROM person pe");
         expect(f.toModel()).toEqual(model);
 
         // Validity
@@ -100,7 +100,7 @@ describe('FROM', () => {
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
         expect(f.getJoin(0).sqlJoinKeyword).toEqual(",");
         
-        expect(f.toString()).toEqual("FROM person pe\n\t, ort");
+        expect(f.toSqlString()).toEqual("FROM person pe\n\t, ort");
         expect(f.toModel()).toEqual(model);
 
         // Validity
@@ -132,7 +132,7 @@ describe('FROM', () => {
         expect(f.getJoin(0).nameWithAlias).toEqual("person rhs");
         expect(f.getJoin(0).sqlJoinKeyword).toEqual(",");
         
-        expect(f.toString()).toEqual("FROM person lhs\n\t, person rhs");
+        expect(f.toSqlString()).toEqual("FROM person lhs\n\t, person rhs");
         expect(f.toModel()).toEqual(model);
 
         // Validity
@@ -160,7 +160,7 @@ describe('FROM', () => {
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
         expect(f.getJoin(0).sqlJoinKeyword).toEqual("JOIN");
 
-        expect(f.toString()).toEqual("FROM person pe\n\tJOIN ort");
+        expect(f.toSqlString()).toEqual("FROM person pe\n\tJOIN ort");
         expect(f.toModel()).toEqual(model);
 
         // Validity
@@ -195,7 +195,7 @@ describe('FROM', () => {
         expect(f.getJoin(0).tableName).toEqual("ort");
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
 
-        expect(f.toString()).toEqual("FROM person pe\n\tINNER JOIN ort USING(bla)");
+        expect(f.toSqlString()).toEqual("FROM person pe\n\tINNER JOIN ort USING(bla)");
         expect(f.toModel()).toEqual(model);
 
         // Validity
@@ -272,7 +272,7 @@ describe('FROM', () => {
         let f = new SyntaxTree.From(model, null)
 
         // Basic serialization
-        expect(f.toString()).toEqual("FROM person\n\t, person");
+        expect(f.toSqlString()).toEqual("FROM person\n\t, person");
         expect(f.toModel()).toEqual(model);
 
         // Validity
@@ -298,7 +298,7 @@ describe('FROM', () => {
         let f = new SyntaxTree.From(model, null)
 
         // Basic serialization
-        expect(f.toString()).toEqual("FROM person o\n\t, ort o");
+        expect(f.toSqlString()).toEqual("FROM person o\n\t, ort o");
         expect(f.toModel()).toEqual(model);
 
         // Validity

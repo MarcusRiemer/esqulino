@@ -87,7 +87,7 @@ export abstract class Component {
     /**
      * @return SQL String representation
      */
-    abstract toString() : string;
+    abstract toSqlString() : string;
 
     /**
      * @return JSON model representation

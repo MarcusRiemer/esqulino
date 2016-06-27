@@ -111,11 +111,11 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
      * Calculates the SQL String representation of this query.
      */
     protected toSqlStringImpl() : string {
-        var toReturn = this._select.toString();
-        toReturn += "\n" + this._from.toString();
+        var toReturn = this._select.toSqlString();
+        toReturn += "\n" + this._from.toSqlString();
 
         if (this._where) {
-            toReturn += "\n" + this._where.toString();
+            toReturn += "\n" + this._where.toSqlString();
         }
 
         return (toReturn);

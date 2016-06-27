@@ -22,7 +22,7 @@ export class SqlStringPipe implements PipeTransform {
         try {
             return (value.toSqlString());
         } catch (e) {
-            return (JSON.stringify(e));
+            return (`${e}`);
         }
     }
 }

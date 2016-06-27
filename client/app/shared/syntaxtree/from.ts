@@ -91,7 +91,7 @@ export abstract class Join implements Removable {
     /**
      * @return A string representing a join with a single table
      */
-    abstract toString() : string;
+    abstract toSqlString() : string;
 
     abstract toModel() : Model.Join;
 }
@@ -108,7 +108,7 @@ export class InitialJoin extends Join {
         super(from, null, table);
     }
 
-    toString() : string {
+    toSqlString() : string {
         return this.nameWithAlias;
     }
 
@@ -140,7 +140,7 @@ export class CrossJoin extends Join {
         super(from, separator, join.table);
     }
 
-    toString() : string {
+    toSqlString() : string {
         // There is no way around the separator and the name of
         // the table.
         return (`${this._sqlJoinKeyword} ${this.nameWithAlias}`);
@@ -181,9 +181,9 @@ export class InnerJoin extends Join implements ExpressionParent {
         this._using = join.inner.using;
     }
 
-    toString() : string {
+    toSqlString() : string {
         let method = (this._using) ? "USING" : "ON";
-        let expr = (this._using) ? this._using : this._on.toString();
+        let expr = (this._using) ? this._using : this._on.toSqlString();
 
         return (`${this._sqlJoinKeyword} ${this.nameWithAlias} ${method}(${expr})`);
     }
@@ -407,11 +407,11 @@ export class From extends Component {
     /**
      * @return The SQL-string-representation of this clause
      */
-    toString() : string {
+    toSqlString() : string {
         let toReturn = `FROM ${this._first.nameWithAlias}`;
 
         this._joins.forEach(j => {
-            toReturn += "\n\t" + j.toString();
+            toReturn += "\n\t" + j.toSqlString();
         });
 
         return (toReturn);

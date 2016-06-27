@@ -8,7 +8,7 @@ describe('DELETE', () => {
 
         const w = new SyntaxTree.Delete(model, null);
 
-        expect(w.toString()).toEqual("DELETE");
+        expect(w.toSqlString()).toEqual("DELETE");
         expect(w.toModel()).toEqual(model);
     });
 });
