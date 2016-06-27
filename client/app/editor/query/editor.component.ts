@@ -88,7 +88,7 @@ export class QueryEditorComponent implements OnInit {
         this._toolbarService.savingEnabled = true;
         let btnSave = this._toolbarService.saveItem;
 
-        btnSave.onClick.subscribe( (res) => {
+        subRef = btnSave.onClick.subscribe( (res) => {
             btnSave.isInProgress = true;
             this._queryService.saveQuery(this.project, this.query)
                 // Always delay visual feedback by 500ms
@@ -96,9 +96,11 @@ export class QueryEditorComponent implements OnInit {
                 .subscribe(res => btnSave.isInProgress = false);
         });
 
+        this._subscriptionRefs.push(subRef)
+
         // Reacting to querying
         let btnQuery = this._toolbarService.addButton("run", "Ausführen", "search", "r");
-        btnQuery.onClick.subscribe( (res) => {
+        subRef = btnQuery.onClick.subscribe( (res) => {
             btnQuery.isInProgress = true;
             this._queryService.runQuery(this.project, this.query)
                 .subscribe(res => {
@@ -106,6 +108,8 @@ export class QueryEditorComponent implements OnInit {
                     this._result = res;
                 });
         });
+
+        this._subscriptionRefs.push(subRef)
     }
 
     ngOnDestroy() {

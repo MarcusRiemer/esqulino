@@ -35,7 +35,11 @@ export class PageEditorComponent implements OnInit, OnDestroy {
      */
     private _page : Page;
 
-    private _routeRef : any;
+    /**
+     * Subscriptions that need to be released
+     */
+    private _subscriptionRefs : any[] = [];
+
 
     constructor(
         private _projectService : ProjectService,
@@ -55,7 +59,7 @@ export class PageEditorComponent implements OnInit, OnDestroy {
         this._toolbarService.savingEnabled = false;
 
         // Grab the correct project and query
-        this._routeParams.params.subscribe(params => {
+        let unsubRef = this._routeParams.params.subscribe(params => {
             var pageId = params['pageId'];
             this._projectService.activeProject
                 .subscribe(res => {
@@ -64,13 +68,16 @@ export class PageEditorComponent implements OnInit, OnDestroy {
                     this._page = this._project.getPageById(pageId);
                 });
         })
+
+        this._subscriptionRefs.push(unsubRef);
     }
 
     /**
      * Subscriptions need to be explicitly released
      */
     ngOnDestroy() {
-        this._routeRef.unsubscribe();
+        this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
+        this._subscriptionRefs = [];
     }
 
     /*
@@ -85,10 +92,6 @@ export class PageEditorComponent implements OnInit, OnDestroy {
      */
     get page() {
         return (this._page);
-    }
-
-    onSave() {
-        
     }
 }
 
