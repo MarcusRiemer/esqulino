@@ -1,6 +1,8 @@
 import {Widget}                    from './widget'
 import {ParagraphDescription}      from '../page.description'
 
+export {ParagraphDescription}
+
 export class Paragraph extends Widget {
     private _text : string;
     

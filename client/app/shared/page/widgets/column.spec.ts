@@ -1,6 +1,4 @@
-import {ColumnDescription}          from './page.description'
-import {Column}                     from './column'
-
+import {Column, ColumnDescription}  from './column'
 
 describe('Page Columns', () => {
     it('CSS classes', () => {

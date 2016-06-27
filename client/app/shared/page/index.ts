@@ -1,3 +1,4 @@
-import {Page} from './page.ts'
+import {Page} from './page'
+import {Renderer} from './renderer'
 
-export {Page}
+export {Page, Renderer}
