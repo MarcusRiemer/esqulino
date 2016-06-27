@@ -7,6 +7,7 @@ import {
 
 import {TableDescription}               from '../shared/schema.description'
 
+import {PageService}                    from './page.service'
 import {Project}                        from './project'
 import {ProjectService}                 from './project.service'
 import {QueryService}                   from './query.service'
@@ -22,7 +23,7 @@ import {DragService}                    from './query/drag.service'
     templateUrl: 'app/editor/templates/index.html',
     directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES,
                  ToolbarComponent, NavbarComponent, SidebarLoaderComponent],
-    providers: [HTTP_PROVIDERS, SidebarService,
+    providers: [HTTP_PROVIDERS, SidebarService, PageService,
                 ProjectService, QueryService, DragService, ToolbarService]
 })
 export class EditorComponent implements OnInit, OnDestroy {

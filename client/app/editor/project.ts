@@ -16,7 +16,7 @@ export class Project {
 
     private _queries : Query[];
     private _pages : Page[];
-
+    
     /**
      * Construct a new project and a whole slew of other
      * objects based on the JSON wire format.

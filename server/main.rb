@@ -27,6 +27,7 @@ class ScratchSqlApp < Sinatra::Base
   # Static HTML files are served from here
   set :public_folder, File.dirname(__FILE__) + "/../dist/client/"
 
+  # There is a single validator for the whole esqulino instance
   @@validator = Validator.new(File.dirname(__FILE__) + "/../schema/json")
   
   # Activate reloading and disable any caching when developing
@@ -54,7 +55,7 @@ class ScratchSqlApp < Sinatra::Base
     assert_project_dir @project_folder, @project_id
   end
 
-  # Ensure that routes with queries do have queries available.
+  # Ensure that routes with queries do have the query available.
   before '/api/project/:id/query/:queryId/?*' do
     # Only match numeric IDs, everything else may be a valid
     # sub-route like "run"
@@ -62,6 +63,17 @@ class ScratchSqlApp < Sinatra::Base
       @query_id = params['queryId']
       
       assert_query @project_folder, @project_id, @query_id
+    end
+  end
+
+  # Ensure that routes with pages do have the page available.
+  before '/api/project/:id/page/:pageId/?*' do
+    # Only match numeric IDs, everything else may be a valid
+    # sub-route like "run"
+    if /\d+.*/ =~ params['pageId'] then
+      @page_id = params['pageId']
+      
+      assert_page @project_folder, @project_id, @page_id
     end
   end
 
@@ -136,7 +148,6 @@ class ScratchSqlApp < Sinatra::Base
     end
   end
 
-
   # Storing a query
   post '/api/project/:id/query/:queryId?' do
     new_query = @@validator.ensure_request("QueryUpdateRequestDescription", request.body.read)
@@ -151,30 +162,37 @@ class ScratchSqlApp < Sinatra::Base
 
     project_delete_query(@project_folder, query_id)
 
-    return 200;
+    return 200
+  end
+
+  # Storing a page
+  post '/api/project/:id/page/:pageId?' do
+    new_query = @@validator.ensure_request("PageUpdateRequestDescription", request.body.read)
+
+    return 200
   end
   
-    # By now I have too often mistakenly attempted to load other assets than
-    # HTML files from "user facing" URLs, mostly due to paths that should have
-    # been absolute but weren't. This route attempts to catch all these
-    # mistakes rather early, so that the show up as a nice 404 error in the
-    # browsers debugging tools
-    get /^\/(about|editor)\/.*\.(css|js)/ do
-      halt 404, "There are no assets in `editor` or `about` routes"
-    end
-    
-    # Matching the meaningful routes the client knows. This enables navigation
-    # even if the user submits a "deep link" to somewhere inside the
-    # application.
-    index_path = File.expand_path('index.html', settings.public_folder)
-    get '/', '/about/?*', '/editor/*' do
-      send_file index_path
-    end
+  # By now I have too often mistakenly attempted to load other assets than
+  # HTML files from "user facing" URLs, mostly due to paths that should have
+  # been absolute but weren't. This route attempts to catch all these
+  # mistakes rather early, so that the show up as a nice 404 error in the
+  # browsers debugging tools
+  get /^\/(about|editor)\/.*\.(css|js)/ do
+    halt 404, "There are no assets in `editor` or `about` routes"
+  end
   
-    # Catchall for everything that goes wrong
-    get '/*' do
-      halt 404, "Not found"
-    end
+  # Matching the meaningful routes the client knows. This enables navigation
+  # even if the user submits a "deep link" to somewhere inside the
+  # application.
+  index_path = File.expand_path('index.html', settings.public_folder)
+  get '/', '/about/?*', '/editor/*' do
+    send_file index_path
+  end
+  
+  # Catchall for everything that goes wrong
+  get '/*' do
+    halt 404, "Not found"
+  end
 end
 
 require_relative 'project'

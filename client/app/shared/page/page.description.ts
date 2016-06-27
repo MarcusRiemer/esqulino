@@ -47,7 +47,16 @@ export interface PageDescription {
 
     /**
      * IDs of queries that are referenced in this page. Only
-     * these queries provide 
+     * these queries provide additional DB information that can
+     * be used on this page.
      */
     referencedQueries : string[]
+}
+
+/**
+ * Storing a page on the server
+ */
+export interface PageUpdateRequestDescription {
+    model : PageDescription
+    source? : string
 }

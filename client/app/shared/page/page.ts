@@ -1,5 +1,10 @@
-import {PageDescription}          from './page.description'
+import {
+    PageDescription, PageUpdateRequestDescription
+} from './page.description'
 import {Row}                      from './widgets/row'
+import {Renderer, LiquidRenderer} from './renderer/liquid'
+
+export {PageDescription, PageUpdateRequestDescription}
 
 /**
  * The in-memory representation of a page.
@@ -9,10 +14,14 @@ export class Page {
     private _name : string;
     private _rows : Row[];
     private _referencedQueries : string[]
+
+    private _renderer : Renderer;
     
     constructor(desc : PageDescription) {
         this._id = desc.id;
         this._name = desc.name;
+
+        this._renderer = new LiquidRenderer();
 
         this._rows = desc.rows.map(rowDesc => new Row(rowDesc));
         this._referencedQueries = desc.referencedQueries.splice(0);
@@ -30,6 +39,13 @@ export class Page {
      */
     get id() {
         return (this._id);
+    }
+
+    /**
+     * @return A renderer that can be used to render this page
+     */
+    get renderer() {
+        return (this._renderer);
     }
 
     /**

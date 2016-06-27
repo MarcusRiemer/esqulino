@@ -201,4 +201,31 @@ paths:
           description: Something went wrong while executing the query
           schema:
             "$ref": "./RequestErrorDescription.json"
+  /project/{id}/page/{pageId}:
+    post:
+      operationId : updatePageById
+      tags: [page]
+      description: Updating a page on the server.
+      parameters:
+        - name: id
+          in: path
+          description: Id of the project the page belongs to.
+          required: true
+          type: string
+        - name: pageId
+          in: path
+          description: Id of the page to update.
+          required: true
+          type: string
+          format: uuid
+        - name: Page
+          in: body
+          description: The syntax tree and the renderable representation of the page. If this representation should have an ID assigned, it will be ignored.
+          required: false
+          schema:
+            $ref: "./PageUpdateRequestDescription.json"
+      responses:
+        200:
+          description: The page has been updated.
+          schema:
 

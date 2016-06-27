@@ -1,0 +1,83 @@
+{
+    "description": "Storing a page on the server",
+    "type": "object",
+    "properties": {
+        "model": {
+            "$ref": "#/definitions/PageDescription"
+        },
+        "source": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "definitions": {
+        "PageDescription": {
+            "description": "Describes a page as a whole",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "The (at least) project-wide unique ID of this page.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "A user-defined name of this page.",
+                    "type": "string"
+                },
+                "rows": {
+                    "description": "Rows are the top-level element for the whole layout,\n\nfor the moment no other type of widget is expected.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RowDescription",
+                        "description": "Describes a row that can host certain cells."
+                    }
+                },
+                "referencedQueries": {
+                    "description": "IDs of queries that are referenced in this page. Only\n\nthese queries provide additional DB information that can\n\nbe used on this page.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "RowDescription": {
+            "type": "object",
+            "properties": {
+                "columns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ColumnDescription",
+                        "description": "Describes a column that can host certain widgets"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "ColumnDescription": {
+            "type": "object",
+            "properties": {
+                "width": {
+                    "type": "number"
+                },
+                "widgets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/WidgetDescription"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "WidgetDescription": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "$schema": "http://json-schema.org/draft-04/schema#"
+}

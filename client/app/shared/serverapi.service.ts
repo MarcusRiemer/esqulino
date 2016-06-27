@@ -71,15 +71,20 @@ export class ServerApiService {
 
     /**
      * Retrieves an URL that can be used to create pages.
+     *
+     * @projectId The ID of the project
      */
     getPageUrl(projectId : string) : string {
         return (`/api/project/${projectId}/page/`);
     }
 
     /**
-     * Retrieves an URL that can be used to create pages.
+     * Retrieves an URL that can be used to access specific pages.
+     *
+     * @projectId The ID of the project
+     * @pageId The ID of the query
      */
-    getPageSpecificUrl(projectId : string, queryId : string) : string {
-        return (`/api/project/${projectId}/page/${queryId}`);
+    getPageSpecificUrl(projectId : string, pageId : string) : string {
+        return (`/api/project/${projectId}/page/${pageId}`);
     }
 }

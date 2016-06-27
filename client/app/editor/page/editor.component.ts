@@ -8,7 +8,7 @@ import {Paragraph}                      from '../../shared/page/widgets/index'
 
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
-import {QueryService}                   from '../query.service'
+import {PageService}                    from '../page.service'
 import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 
@@ -43,7 +43,7 @@ export class PageEditorComponent implements OnInit, OnDestroy {
 
     constructor(
         private _projectService : ProjectService,
-        private _queryService : QueryService,
+        private _pageService : PageService,
         private _toolbarService: ToolbarService,
         private _routeParams: ActivatedRoute,
         private _sidebarService : SidebarService
@@ -56,10 +56,9 @@ export class PageEditorComponent implements OnInit, OnDestroy {
      */
     ngOnInit() {
         this._toolbarService.resetItems();
-        this._toolbarService.savingEnabled = false;
 
         // Grab the correct project and query
-        let unsubRef = this._routeParams.params.subscribe(params => {
+        let subRef = this._routeParams.params.subscribe(params => {
             var pageId = params['pageId'];
             this._projectService.activeProject
                 .subscribe(res => {
@@ -69,7 +68,22 @@ export class PageEditorComponent implements OnInit, OnDestroy {
                 });
         })
 
-        this._subscriptionRefs.push(unsubRef);
+        this._subscriptionRefs.push(subRef);
+
+        // Reacting to saving
+        this._toolbarService.savingEnabled = true;
+        let btnSave = this._toolbarService.saveItem;
+
+        subRef = btnSave.onClick.subscribe( (res) => {
+            btnSave.isInProgress = true;
+            this._pageService.savePage(this.project, this._page)
+            // Always delay visual feedback by 500ms
+                .delay(500)
+                .subscribe(res => btnSave.isInProgress = false);
+        });
+
+        this._subscriptionRefs.push(subRef)
+
     }
 
     /**
