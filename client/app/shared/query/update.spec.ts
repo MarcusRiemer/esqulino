@@ -84,5 +84,7 @@ describe('UPDATE', () => {
         }
 
         const q = new QueryUpdate(schema, m);
+        expect(q.toModel()).toEqual(m);
+        expect(() => q.toSqlString()).toThrowError();
     });
 });

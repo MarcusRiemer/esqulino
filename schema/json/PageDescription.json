@@ -49,18 +49,7 @@
                 },
                 "widgets": {
                     "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/WidgetDescription"
-                    }
-                }
-            },
-            "additionalProperties": false
-        },
-        "WidgetDescription": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string"
+                    "items": {}
                 }
             },
             "additionalProperties": false
