@@ -59,7 +59,7 @@ export class QueryCreateComponent implements OnInit, OnDestroy {
 
                 res.subscribe( query => {
                     console.log(`New query ${query.id}`);
-                    this._router.navigate(["editor", this._project.id ,"query", query.id]);
+                    this._router.navigate(["/editor", this._project.id ,"query", query.id]);
                 });
             }
         });
