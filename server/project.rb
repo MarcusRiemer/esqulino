@@ -171,9 +171,8 @@ def project_store_query(project_folder, query_info, given_query_id)
     FileUtils.mkdir_p(query_folder)
   end
 
-  # Possibly set a new query id
+  # Possibly generate a new query id
   query_id = given_query_id || SecureRandom.uuid
-  query_info['model']['id'] = query_id
   
   # Filename with various extensions
   query_filename = File.join(query_folder, query_id)
@@ -216,9 +215,8 @@ def project_store_page(project_folder, page_info, given_page_id)
     FileUtils.mkdir_p(page_folder)
   end
 
-  # Possibly set a new page id
+  # Possibly generate a new page id
   page_id = given_page_id || SecureRandom.uuid
-  page_info['model']['id'] = page_id
   
   # Filename with various extensions
   page_filename = File.join(page_folder, page_id)
@@ -239,8 +237,6 @@ def project_store_page(project_folder, page_info, given_page_id)
   if page_info.has_key? 'sources' then    
     # Yes, simply store them
     page_info['sources'].each do |key,value|
-      puts "#{key} => #{value}"
-      
       File.open(page_filename + "." + key, "w") do |f|
         f.write(value)
       end
