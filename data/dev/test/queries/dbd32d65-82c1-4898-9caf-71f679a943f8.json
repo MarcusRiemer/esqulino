@@ -4,13 +4,17 @@
     "assignments": [
       {
         "expr": {
-          "missing": {}
+          "parameter": {
+            "key": "ganzzahl"
+          }
         },
         "column": "key"
       },
       {
         "expr": {
-          "missing": {}
+          "parameter": {
+            "key": "zahlwort"
+          }
         },
         "column": "value"
       }

@@ -128,13 +128,15 @@ export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
      * Called in deriving methods to actually construct the model.
      * 
      * @param toReturn The model that will be returned and needs to be enriched.
+     *
+     * @return The enriched model
      */
     protected abstract toModelImpl(toReturn : Model.QueryDescription) : Model.QueryDescription;
 
-
     /**
      * Each query-type needs to see for his own how to remove 
-     * SQL-components.
+     * SQL-components. Sometimes this is possible (WHERE), sometimes
+     * it should be disallowed (FROM).
      */
     abstract removeChild(formerChild : SyntaxTree.Removable) : void;
 }

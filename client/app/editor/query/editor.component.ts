@@ -3,7 +3,7 @@ import {Router, ActivatedRoute}         from '@angular/router'
 
 import {Observable}                     from 'rxjs/Observable'
 
-import {Query, Model}                   from '../../shared/query'
+import {Query, Model, SyntaxTree}       from '../../shared/query'
 import {
     QueryResult, QueryRunErrorDescription
 } from '../../shared/query.result'
@@ -47,6 +47,11 @@ export class QueryEditorComponent implements OnInit {
     private _subscriptionRefs : any[] = [];
 
     /**
+     * Cache for user input
+     */
+    private _arguments : { [key:string]:string } = { }
+       
+    /**
      * Used for dependency injection.
      */
     constructor(
@@ -65,6 +70,16 @@ export class QueryEditorComponent implements OnInit {
      */
     get result() {
         return (this._result);
+    }
+
+    get requiredParameters() : string[] {
+        if (this.query) {
+            return (this.query.getLeaves()
+                    .filter(e => e instanceof SyntaxTree.ParameterExpression)
+                    .map( (e : SyntaxTree.ParameterExpression) => e.key));
+        } else {
+            return ([]);
+        }
     }
 
     /**
