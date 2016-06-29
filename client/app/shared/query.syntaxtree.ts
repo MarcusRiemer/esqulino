@@ -3,6 +3,10 @@ export {
 } from './syntaxtree/common'
 
 export {
+    ParameterExpression
+} from './syntaxtree/expression'
+
+export {
     Select
 } from './syntaxtree/select'
 
