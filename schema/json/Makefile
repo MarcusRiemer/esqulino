@@ -14,7 +14,7 @@ TYPESCRIPT_JSON_SCHEMA_BIN = $(SCHEMA_PATH)/node_modules/typescript-json-schema/
 SCHEMA_OPTIONS = --noExtraProps true
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILE_NAMES = PageDescription.json PageUpdateRequestDescription.json ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json
+JSON_SCHEMA_FILE_NAMES = PageDescription.json PageUpdateRequestDescription.json PageRenderRequestDescription.json ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json
 
 # Paths of the schema files to generate
 JSON_SCHEMA_FILES = $(addprefix $(SCHEMA_PATH)/, $(JSON_SCHEMA_FILE_NAMES))

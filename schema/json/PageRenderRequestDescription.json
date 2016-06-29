@@ -1,0 +1,35 @@
+{
+    "description": "Fully self-contained request to render an arbitrary page. Because\n\nthe development state in the browser could differ significantly\n\nfrom the state stored on the server this description specifies all\n\nrelevant data at once.",
+    "type": "object",
+    "properties": {
+        "sourceType": {
+            "type": "string"
+        },
+        "source": {
+            "type": "string"
+        },
+        "queries": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "sql": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "params": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-04/schema#"
+}

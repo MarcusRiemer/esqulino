@@ -14,6 +14,9 @@ export interface RequestErrorDescription {
  * this service. It ensures that the server actually provides the
  * capatabilities to respond to the request, abstracts away the concrete
  * URL to call and can do some basic parameter checks.
+ *
+ * TODO: Cleanup code so that these methods rely on each other instead
+ *       of constructing the same base-url over and over again.
  */
 @Injectable()
 export class ServerApiService {
@@ -35,7 +38,7 @@ export class ServerApiService {
      * Retrieves the URL that uniquely describes a project.
      */
     getProjectUrl(projectId : string) : string {
-        return (`/api/project/${projectId}`);
+        return (`${this._apiBaseUrl}/project/${projectId}`);
     }
 
     /**
@@ -43,7 +46,7 @@ export class ServerApiService {
      * where the ID is transfered as part of the body.
      */
     getQueryUrl(projectId : string) : string {
-        return (`/api/project/${projectId}/query/`);
+        return (`${this._apiBaseUrl}/project/${projectId}/query/`);
     }
 
     /**
@@ -51,7 +54,7 @@ export class ServerApiService {
      * where the ID is transferred as part of the request string.
      */
     getQuerySpecificUrl(projectId : string, queryId : string) : string {
-        return (`/api/project/${projectId}/query/${queryId}`);
+        return (`${this._apiBaseUrl}/project/${projectId}/query/${queryId}`);
     }
 
     /**
@@ -59,14 +62,16 @@ export class ServerApiService {
      * server.
      */
     getSpecificRunQueryUrl(projectId : string, queryId : string) : string {
-        return (`/api/project/${projectId}/query/${queryId}/run`);
+        return (`${this._apiBaseUrl}/project/${projectId}/query/${queryId}/run`);
     }
 
     /**
-     * Retrieves the URL that is used to run a query against a certain project.
+     * Retrieves the URL that is used to run an arbitrary
+     * query against a certain project. This may not be allowed by the
+     * server if the client is not authorized.
      */
     getRunQueryUrl(projectId : string) : string {
-        return (`/api/project/${projectId}/query/run`);
+        return (`${this._apiBaseUrl}/project/${projectId}/query/run`);
     }
 
     /**
@@ -75,7 +80,7 @@ export class ServerApiService {
      * @projectId The ID of the project
      */
     getPageUrl(projectId : string) : string {
-        return (`/api/project/${projectId}/page/`);
+        return (`${this._apiBaseUrl}/project/${projectId}/page`);
     }
 
     /**
@@ -85,6 +90,25 @@ export class ServerApiService {
      * @pageId The ID of the query
      */
     getPageSpecificUrl(projectId : string, pageId : string) : string {
-        return (`/api/project/${projectId}/page/${pageId}`);
+        return (`${this.getPageUrl(projectId)}/${pageId}`);
+    }
+
+    /**
+     * Retrieves an URL that can be used to render specific pages.
+     *
+     * @projectId The ID of the project
+     * @pageId The ID of the query
+     */
+    getPageRenderUrl(projectId : string, pageId : string) : string {
+        return (this.getPageSpecificUrl(projectId, pageId) + "/render/");
+    }
+
+    /**
+     * Retrieves an URL that can be used to render arbitrary pages.
+     *
+     * @projectId The ID of the project
+     */
+    getArbitraryRenderUrl(projectId : string) : string {
+        return (this.getPageUrl(projectId) + "/render");
     }
 }

@@ -16,14 +16,6 @@ export {
 }
 
 /**
- * Storing a query on the server
- */
-export interface QueryUpdateRequestDescription {
-    model : Model.QueryDescription,
-    sql? : string
-}
-
-/**
  * Maps the given model to the correct type of query.
  *
  * @param toLoad The model to load

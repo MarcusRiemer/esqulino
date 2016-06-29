@@ -8,7 +8,7 @@ import {Observable}                              from 'rxjs/Observable'
 import {ServerApiService}                        from '../shared/serverapi.service'
 import {ProjectDescription}                      from '../shared/project.description'
 import {
-    Model, Query, QuerySelect, QueryDelete, QueryInsert, QueryUpdateRequestDescription,
+    Model, Query, QuerySelect, QueryDelete, QueryInsert
 } from '../shared/query'
 import {
     QueryResult, QueryRunErrorDescription

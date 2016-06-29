@@ -40,6 +40,8 @@ export class PageEditorComponent implements OnInit, OnDestroy {
      */
     private _subscriptionRefs : any[] = [];
 
+    private _renderPreview : string;
+
 
     constructor(
         private _projectService : ProjectService,
@@ -83,6 +85,20 @@ export class PageEditorComponent implements OnInit, OnDestroy {
         });
 
         this._subscriptionRefs.push(subRef)
+
+        // Reacting to rendering
+        let btnRender = this._toolbarService.addButton("render", "Vorschau", "search", "r");
+        subRef = btnRender.onClick.subscribe( (res) => {
+            btnRender.isInProgress = true;
+            this._pageService.renderPage(this.project, this.page)
+                .subscribe(res => {
+                    this._renderPreview = res;
+                    btnRender.isInProgress = false;
+                });
+        });
+
+        this._subscriptionRefs.push(subRef)
+
 
     }
 

@@ -6,9 +6,41 @@ import {AsyncSubject}                            from 'rxjs/AsyncSubject'
 import {Observable}                              from 'rxjs/Observable'
 
 import {ServerApiService}                        from '../shared/serverapi.service'
-import {Page, PageUpdateRequestDescription}      from '../shared/page/index'
+import {Page,PageDescription}                    from '../shared/page/index'
 
+import {QueryParamsDescription}                  from './query.service'
 import {Project}                                 from './project'
+
+/**
+ * Storing a page on the server
+ */
+export interface PageUpdateRequestDescription {
+    /**
+     * The backend model to store.
+     */
+    model : PageDescription
+
+    /**
+     * Serialized representations to store.
+     */
+    sources? : { [sourceType:string] : string }
+}
+
+/**
+ * Fully self-contained request to render an arbitrary page. Because
+ * the development state in the browser could differ significantly
+ * from the state stored on the server this description specifies all
+ * relevant data at once.
+ */  
+export interface PageRenderRequestDescription {
+    sourceType : string,
+    source : string,
+    queries : {
+        id : string,
+        sql : string
+    }[],
+    params : QueryParamsDescription
+}
 
 /**
  * Provides means to communicate with a server that can store or run
@@ -26,7 +58,15 @@ export class PageService {
     ) {
     }
 
-    savePage(project : Project, page : Page) {
+    /**
+     * Saves the given page
+     * 
+     * @param project The project the given page is part of
+     * @param page The page to save
+     *
+     * @return An observable that resolves to the ID of the saved page
+     */
+    savePage(project : Project, page : Page) : Observable<string> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
 
@@ -47,10 +87,43 @@ export class PageService {
         const body = JSON.stringify(bodyJson);
 
         const toReturn = this._http.post(url, body, options)
-            .map( (res) => "" )
+            .map( (res) => res.text() )
             .catch(this.handleError);
 
         return (toReturn);        
+    }
+
+    /**
+     * Attempts to render the given page on the server
+     */  
+    renderPage(project : Project, page : Page) : Observable<string> {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        const url = this._server.getArbitraryRenderUrl(project.id);
+
+        const fullQueries =
+            // Retrieve the matching queries
+            project.getQueriesById(page.referencedQueryIds)
+            // And extract the (id,sql) "tuples"
+            .map(q => { return {
+                id : q.id,
+                sql : q.toSqlString()
+            } });
+        
+        const bodyJson : PageRenderRequestDescription  = {
+            sourceType : page.renderer.type,
+            source : page.renderer.renderPage(page),
+            queries : fullQueries,
+            params : {}
+        }
+
+        const toReturn = this._http.post(url, bodyJson, options)
+            .map( (res) => res.text() )
+            .catch(this.handleError);
+
+        return (toReturn);        
+
     }
 
     private handleError (error: Response) {

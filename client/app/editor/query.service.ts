@@ -8,7 +8,7 @@ import {Observable}                              from 'rxjs/Observable'
 import {ServerApiService}                        from '../shared/serverapi.service'
 import {ProjectDescription}                      from '../shared/project.description'
 import {
-    Model, QueryUpdateRequestDescription, loadQuery,
+    Model, loadQuery,
     Query, QuerySelect, QueryDelete, QueryInsert
 } from '../shared/query'
 import {
@@ -16,6 +16,30 @@ import {
 } from '../shared/query.result'
 
 import {Project}                                 from './project'
+
+/**
+ * Storing a query on the server
+ */
+export interface QueryUpdateRequestDescription {
+    model : Model.QueryDescription,
+    sql? : string
+}
+
+/**
+ * Parameters are simply a key-value dictionary. Whenever a query
+ * makes use of user-bound parameters, these are transferred via
+ * this kind of object.
+ */
+export type QueryParamsDescription = { [paramKey:string] : string }
+
+/**
+ * Some servers support execution of arbitrary queries. This is intended
+ * to be used during development and can be done via this request-type.
+ */
+export type ArbitraryQueryRequestDescription = {
+    params : QueryParamsDescription
+    sql : string
+}
 
 /**
  * Provides means to communicate with a server that can store or run

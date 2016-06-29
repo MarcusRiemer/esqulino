@@ -17,7 +17,6 @@
     "additionalProperties": false,
     "definitions": {
         "PageDescription": {
-            "description": "Describes a page as a whole",
             "type": "object",
             "properties": {
                 "id": {
