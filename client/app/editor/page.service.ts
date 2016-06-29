@@ -40,6 +40,8 @@ export class PageService {
         // Store all rendered page representations
         bodyJson.sources[page.renderer.type] = page.renderer.renderPage(page);
 
+        // Remove the ID from the model, the ID is part of the
+        // request URL already.
         delete bodyJson.model.id;
 
         const body = JSON.stringify(bodyJson);

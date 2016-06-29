@@ -1,13 +1,13 @@
-import {
-    PageDescription, ColumnDescription, RowDescription
-} from '../page.description'
-
-import {
-    loadWidget, Widget
-} from './index'
+import {ColumnDescription} from '../page.description'
+import {Widget}            from './widget'
+import {loadWidget}        from './widget-loader'
 
 export {ColumnDescription}
 
+/**
+ * Columns live "inside" a row and act as "table-cells" for content. They
+ * usually have no appearance of their and provide nothing but the layout.
+ */
 export class Column {
     private _width : number;
 
@@ -43,7 +43,7 @@ export class Column {
     toModel() : ColumnDescription {
         return ({
             width : this._width,
-            widgets : []
+            widgets : this._widgets.map(w => w.toModel())
         });
     }
 }

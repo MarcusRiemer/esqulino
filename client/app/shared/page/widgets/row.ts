@@ -4,10 +4,14 @@ import {Column}                    from './column'
 
 export {RowDescription}
 
+/**
+ * Rows are the top-level element of most pages.
+ */
 export class Row {
     private _columns : Column[];
 
     constructor(desc : RowDescription) {
+        // Create all referenced columns
         this._columns = desc.columns.map(columnDesc => new Column(columnDesc));
     }
 

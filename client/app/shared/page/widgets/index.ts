@@ -1,25 +1,10 @@
-import {
-    WidgetDescription, ParagraphDescription
-} from '../page.description'
-
-import {Widget}                          from './widget'
+import {Widget, WidgetDescription}       from './widget'
+import {loadWidget}                      from './widget-loader'
 
 import {Row, RowDescription}             from './row'
 import {Column, ColumnDescription}       from './column'
 
-import {Paragraph}                       from './paragraph'
-
-/**
- * @return A Widget instance that matches the description
- */
-function loadWidget(desc : WidgetDescription) : Widget {
-    switch (desc.type) {
-    case "paragraph":
-        return new Paragraph(<ParagraphDescription> desc);
-    default:
-        throw new Error(`Unknown widget type "${desc.type}"`);
-    }
-}
+import {Paragraph, ParagraphDescription} from './paragraph'
 
 export {
     Widget, WidgetDescription,

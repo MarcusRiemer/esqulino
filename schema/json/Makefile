@@ -11,7 +11,7 @@ SCHEMA_PATH = $(realpath $(call where-am-i))
 
 # Full path of typescript-json-schema
 TYPESCRIPT_JSON_SCHEMA_BIN = node --stack-size=65500 $(SCHEMA_PATH)/node_modules/typescript-json-schema/bin/typescript-json-schema
-SCHEMA_OPTIONS = --refs true --aliasRefs --false --noExtraProps true
+SCHEMA_OPTIONS = --noExtraProps true
 
 # Names of the schema files to generate
 JSON_SCHEMA_FILE_NAMES = PageDescription.json PageUpdateRequestDescription.json ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json

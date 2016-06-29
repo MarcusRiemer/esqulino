@@ -6,8 +6,13 @@ export interface ParagraphDescription extends WidgetDescription {
     type : "paragraph"
 }
 
+/**
+ * A widget **requires** at least a type, all other fields are
+ * mandated by deriving descriptions.
+ */
 export interface WidgetDescription {
     type : string
+    [x: string]: any 
 }
 
 /**
@@ -15,7 +20,10 @@ export interface WidgetDescription {
  */
 export interface ColumnDescription {
     width : number
-    widgets : WidgetDescription[]
+    // TODO: The any[] option is only here to allow generation of
+    //       correct JSON schemas, see
+    //       https://github.com/YousefED/typescript-json-schema/issues/44
+    widgets : any[]
 }
 
 /**
