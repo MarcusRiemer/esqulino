@@ -424,7 +424,7 @@
                     }
                 },
                 "referencedQueries": {
-                    "description": "IDs of queries that are referenced in this page. Only\n\nthese queries provide",
+                    "description": "IDs of queries that are referenced in this page. Only\n\nthese queries provide additional DB information that can\n\nbe used on this page.",
                     "type": "array",
                     "items": {
                         "type": "string"

@@ -35,6 +35,11 @@ export class LiquidRenderer extends Renderer {
   </body>
 </html>
 `
+    constructor() {
+        super("liquid");
+    }
+    
+    
     /**
      * All known renderers for widgets
      */

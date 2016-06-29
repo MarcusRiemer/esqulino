@@ -3,10 +3,15 @@
     "type": "object",
     "properties": {
         "model": {
-            "$ref": "#/definitions/PageDescription"
+            "$ref": "#/definitions/PageDescription",
+            "description": "The backend model to store."
         },
-        "source": {
-            "type": "string"
+        "sources": {
+            "description": "Serialized representations to store.",
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
         }
     },
     "additionalProperties": false,

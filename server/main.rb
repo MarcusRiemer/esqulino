@@ -167,9 +167,10 @@ class ScratchSqlApp < Sinatra::Base
 
   # Storing a page
   post '/api/project/:id/page/:pageId?' do
-    new_query = @@validator.ensure_request("PageUpdateRequestDescription", request.body.read)
-
-    return 200
+    new_page = @@validator.ensure_request("PageUpdateRequestDescription", request.body.read)
+    page_id = project_store_page(@project_folder, new_page, @page_id)
+    
+    return [200, page_id]
   end
   
   # By now I have too often mistakenly attempted to load other assets than
