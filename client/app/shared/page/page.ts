@@ -1,10 +1,8 @@
-import {
-    PageDescription, PageUpdateRequestDescription
-} from './page.description'
+import {PageDescription}          from './page.description'
 import {Row}                      from './widgets/row'
 import {Renderer, LiquidRenderer} from './renderer/liquid'
 
-export {PageDescription, PageUpdateRequestDescription}
+export {PageDescription}
 
 /**
  * The in-memory representation of a page.
@@ -53,6 +51,10 @@ export class Page {
      */
     get rows() {
         return (this._rows);
+    }
+
+    get referencedQueryIds() {
+        return (this._referencedQueries);
     }
 
     /**

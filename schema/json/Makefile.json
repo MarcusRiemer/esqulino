@@ -47,10 +47,13 @@ $(SCHEMA_PATH)/QueryResultDescription.json : $(SRC_PATH)/shared/query.result.ts
 $(SCHEMA_PATH)/RequestErrorDescription.json : $(SRC_PATH)/shared/query.result.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/QueryParamsDescription.json : $(SRC_PATH)/shared/query.result.ts
+$(SCHEMA_PATH)/QueryParamsDescription.json : $(SRC_PATH)/editor/query.service.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/ArbitraryQueryRequestDescription.json : $(SRC_PATH)/shared/query.result.ts
+$(SCHEMA_PATH)/ArbitraryQueryRequestDescription.json : $(SRC_PATH)/editor/query.service.ts
+	$(CONVERT_COMMAND)
+
+$(SCHEMA_PATH)/PageRenderRequestDescription.json : $(SRC_PATH)/editor/page.service.ts
 	$(CONVERT_COMMAND)
 
 # Ensure the typescript-json-schema "binary" is part of the node_modules folder

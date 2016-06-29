@@ -61,17 +61,3 @@ export interface PageDescription {
     referencedQueries : string[]
 }
 
-/**
- * Storing a page on the server
- */
-export interface PageUpdateRequestDescription {
-    /**
-     * The backend model to store.
-     */
-    model : PageDescription
-
-    /**
-     * Serialized representations to store.
-     */
-    sources? : { [sourceType:string] : string }
-}

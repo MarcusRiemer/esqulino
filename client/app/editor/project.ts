@@ -40,6 +40,24 @@ export class Project {
     }
 
     /**
+     * Retrieves queries by ID. If any ID does not match exactly
+     * one query an exception is thrown.
+     *
+     * @param ids The requested IDs
+     *
+     * @return One query for each of the given IDs.
+     */
+    getQueriesById(ids : string[]) : Query[] {
+        const toReturn = this._queries.filter(q => ids.some(id => q.id === id) );
+
+        if (toReturn.length != ids.length) {
+            throw new Error(`Found ${toReturn.length} elements, expected ${ids.length}`);
+        }
+
+        return (toReturn);        
+    }
+
+    /**
      * @return All available pages, no order guaranteed.
      */
     get pages() {
