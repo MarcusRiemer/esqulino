@@ -1,16 +1,17 @@
 {
   "name": "Page 2",
-  "referencedQueries": ["a0495663-6fd3-42b2-8167-acfebe778ed5"],
   "rows": [
     {
       "columns": [
         {
           "width": 12,
-          "widgets" : [
-            
-          ]
+          "widgets": []
         }
       ]
-    },
-  ]
+    }
+  ],
+  "referencedQueries": [
+    "a0495663-6fd3-42b2-8167-acfebe778ed5"
+  ],
+  "id": "990e0c9e-4b3a-4038-b5ee-66523ba2e5b6"
 }

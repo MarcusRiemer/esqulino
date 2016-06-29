@@ -199,6 +199,57 @@ def project_store_query(project_folder, query_info, given_query_id)
   return query_id
 end
 
+# Stores a given page in the context of a given project. For the moment
+# this requires the client to provide the rendered HTML string, because
+# the implementation of that serialization step is written in Typescript.
+#
+# @param project_folder [string] The projects root folder
+# @param query_info [Hash] The page model and it's HTML representation.
+# @param given_query_id [string] The id of this page
+#
+# @return The id of the stored query
+def project_store_page(project_folder, page_info, given_page_id)
+  page_folder = File.join(project_folder, "pages")
+
+  # Ensuring that the project folder has a "pages" subfolder
+  if not File.directory?(page_folder)
+    FileUtils.mkdir_p(page_folder)
+  end
+
+  # Possibly set a new page id
+  page_id = given_page_id || SecureRandom.uuid
+  page_info['model']['id'] = page_id
+  
+  # Filename with various extensions
+  page_filename = File.join(page_folder, page_id)
+  page_filename_json = page_filename + ".json"
+
+  File.open(page_filename_json, "w") do |f|
+    f.write(page_info['model'].to_json)
+  end
+
+  # Delete a possibly existing rendered files. We prefer having 
+  # no string representation at all instead of silently working
+  # with an older state of the page.
+  Dir.glob(page_filename + ".*") do |page_filename_rendered|
+      File.delete page_filename_rendered if not page_filename_rendered == page_filename_json
+  end
+
+  # Are rendered strings part of the information?
+  if page_info.has_key? 'sources' then    
+    # Yes, simply store them
+    page_info['sources'].each do |key,value|
+      puts "#{key} => #{value}"
+      
+      File.open(page_filename + "." + key, "w") do |f|
+        f.write(value)
+      end
+    end
+  end
+
+  return page_id
+end
+
 # Deletes an existing query
 #
 # @param project_folder [string] The projects root folder

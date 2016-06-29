@@ -6,7 +6,7 @@
       "columns": [
         {
           "width": 6,
-          "widgets" : [
+          "widgets": [
             {
               "type": "paragraph",
               "text": "Dies ist ein Absatz"
@@ -15,7 +15,7 @@
         },
         {
           "width": 6,
-          "widgets" : []
+          "widgets": []
         }
       ]
     },
@@ -23,15 +23,15 @@
       "columns": [
         {
           "width": 6,
-          "widgets" : []
+          "widgets": []
         },
         {
           "width": 3,
-          "widgets" : []
+          "widgets": []
         },
         {
           "width": 3,
-          "widgets" :[
+          "widgets": [
             {
               "type": "paragraph",
               "text": "Und noch ein Absatz"
@@ -44,15 +44,15 @@
       "columns": [
         {
           "width": 4,
-          "widgets" : []
+          "widgets": []
         },
         {
           "width": 4,
-          "widgets" : []
+          "widgets": []
         },
         {
           "width": 4,
-          "widgets" : []
+          "widgets": []
         }
       ]
     }

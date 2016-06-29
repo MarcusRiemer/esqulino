@@ -34,8 +34,11 @@ export class PageService {
 
         const bodyJson : PageUpdateRequestDescription  = {
             model : page.toModel(),
-            source : page.renderer.renderPage(page)
+            sources : { }
         }
+
+        // Store all rendered page representations
+        bodyJson.sources[page.renderer.type] = page.renderer.renderPage(page);
 
         delete bodyJson.model.id;
 

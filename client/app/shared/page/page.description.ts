@@ -57,6 +57,13 @@ export interface PageDescription {
  * Storing a page on the server
  */
 export interface PageUpdateRequestDescription {
+    /**
+     * The backend model to store.
+     */
     model : PageDescription
-    source? : string
+
+    /**
+     * Serialized representations to store.
+     */
+    sources? : { [sourceType:string] : string }
 }

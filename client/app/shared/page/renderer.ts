@@ -8,6 +8,19 @@ import {Page}                  from './page'
  */
 export abstract class Renderer {
 
+    private _type : string;
+
+    constructor(typeId : string) {
+        this._type = typeId;
+    }
+
+    /**
+     * @return A type identifier for this renderer
+     */
+    get type() {
+        return (this._type);
+    }
+    
     /**
      * Attempt to render the given page.
      */
