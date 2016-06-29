@@ -17,38 +17,40 @@
 
 # For some reason I need FOUR backslashes to escape the one backslash at the
 # beginning. I assume this is due to make AND bash stripping those
-CONVERT_COMMAND = $(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@ $(SCHEMA_OPTIONS); \
-	sed -i "s/\\\\\"\/\(.*\)\"\.//g" $@
+define CONVERT_COMMAND
+	@echo "Creating $(notdir $(basename $@)).json"
+	@$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@ $(SCHEMA_OPTIONS);
+	@sed -i "s/\\\\\"\/\(.*\)\"\.//g" $@
+endef
 
-$(SCHEMA_PATH)/PageUpdateRequestDescription.json : $(SRC_PATH)/page/page.description.ts
+$(SCHEMA_PATH)/PageUpdateRequestDescription.json : $(SRC_PATH)/editor/page.service.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/PageDescription.json : $(SRC_PATH)/page/page.description.ts
+$(SCHEMA_PATH)/PageDescription.json : $(SRC_PATH)/shared/page/page.description.ts
 	$(CONVERT_COMMAND)
 
-
-$(SCHEMA_PATH)/ProjectDescription.json : $(SRC_PATH)/project.description.ts
+$(SCHEMA_PATH)/ProjectDescription.json : $(SRC_PATH)/shared/project.description.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/ProjectListDescription.json : $(SRC_PATH)/project.description.ts
+$(SCHEMA_PATH)/ProjectListDescription.json : $(SRC_PATH)/shared/project.description.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/QueryDescription.json : $(SRC_PATH)/query.model.ts
+$(SCHEMA_PATH)/QueryDescription.json : $(SRC_PATH)/shared/query.model.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/QueryUpdateRequestDescription.json : $(SRC_PATH)/query.ts
+$(SCHEMA_PATH)/QueryUpdateRequestDescription.json : $(SRC_PATH)/editor/query.service.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/QueryResultDescription.json : $(SRC_PATH)/query.result.ts
+$(SCHEMA_PATH)/QueryResultDescription.json : $(SRC_PATH)/shared/query.result.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/RequestErrorDescription.json : $(SRC_PATH)/query.result.ts
+$(SCHEMA_PATH)/RequestErrorDescription.json : $(SRC_PATH)/shared/query.result.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/QueryParamsDescription.json : $(SRC_PATH)/query.result.ts
+$(SCHEMA_PATH)/QueryParamsDescription.json : $(SRC_PATH)/shared/query.result.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/ArbitraryQueryRequestDescription.json : $(SRC_PATH)/query.result.ts
+$(SCHEMA_PATH)/ArbitraryQueryRequestDescription.json : $(SRC_PATH)/shared/query.result.ts
 	$(CONVERT_COMMAND)
 
 # Ensure the typescript-json-schema "binary" is part of the node_modules folder
