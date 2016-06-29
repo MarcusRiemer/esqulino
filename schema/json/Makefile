@@ -3,14 +3,14 @@
 where-am-i = $(dir $(CURDIR)/$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))
 
 # Path to the clients source and its project file
-SRC_PATH = $(realpath ../../client/app/shared)
+SRC_PATH = $(realpath ../../client/app)
 SRC_PROJECT = $(realpath ../../client/tsconfig.json)
 
 # The absolute path of the directory the schemas reside in
 SCHEMA_PATH = $(realpath $(call where-am-i))
 
 # Full path of typescript-json-schema
-TYPESCRIPT_JSON_SCHEMA_BIN = node --stack-size=65500 $(SCHEMA_PATH)/node_modules/typescript-json-schema/bin/typescript-json-schema
+TYPESCRIPT_JSON_SCHEMA_BIN = $(SCHEMA_PATH)/node_modules/typescript-json-schema/bin/typescript-json-schema
 SCHEMA_OPTIONS = --noExtraProps true
 
 # Names of the schema files to generate
@@ -27,15 +27,18 @@ install-deps : has-npm
 	npm install
 
 # Removes all generated schema files
-clean :
+clean : msg-pre-clean
 	rm -f $(JSON_SCHEMA_FILES)
 
 ##################################
 # Messaging targets
 ##################################
 
+msg-pre-clean :
+	@tput setaf 2; echo "## Schema: Cleaning"; tput sgr0
+
 msg-pre-schema :
-	@tput setaf 2; echo \#\# Schema: Re-Generating out-of-date schemas; tput sgr0
+	@tput setaf 2; echo "## Schema: Re-Generating out-of-date schemas"; tput sgr0
 
 .PHONY : all clean install-deps msg-pre-schema
 

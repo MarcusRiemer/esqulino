@@ -15,7 +15,7 @@ WEBDRIVER_MANAGER_BIN = node_modules/protractor/bin/webdriver-manager
 all : dist-sass dist-compile dist-templates dist-vendor dist-node
 
 # Uses the `package.json` file to grab all dependencies
-install-deps : has-npm
+install-deps : msg-pre-deps-install has-npm
 	npm install
 
 # Meta target: Compiles all SASS files
@@ -78,23 +78,26 @@ test-e2e: msg-pre-test-e2e
 	$(PROTRACTOR_BIN) test-protractor-conf.js $(E2E_ARGS)
 
 ##################################
-# Utility targets
+# Messaging targets
 ##################################
 
+msg-pre-deps-install :
+	@tput setaf 2; echo "## Client: Installing dependencies"; tput sgr0
+
 msg-pre-compile :
-	@tput setaf 2; echo \#\# Client: Running Typescript Compiler; tput sgr0
+	@tput setaf 2; echo "## Client: Running Typescript Compiler"; tput sgr0
 
 msg-pre-node :
-	@tput setaf 2; echo \#\# Client: Copying node.js-dependencies; tput sgr0
+	@tput setaf 2; echo "## Client: Copying node.js-dependencies"; tput sgr0
 
 msg-pre-sass :
-	@tput setaf 2; echo \#\# Client: Running SASS Compiler; tput sgr0	
+	@tput setaf 2; echo "## Client: Running SASS Compiler"; tput sgr0	
 
 msg-pre-templates :
-	@tput setaf 2; echo \#\# Client: Copying HTML-Templates; tput sgr0
+	@tput setaf 2; echo "## Client: Copying HTML-Templates"; tput sgr0
 
 msg-pre-vendor :
-	@tput setaf 2; echo \#\# Client: Copying vendor-dependencies; tput sgr0
+	@tput setaf 2; echo "## Client: Copying vendor-dependencies"; tput sgr0
 
 msg-pre-test-e2e :
 	@tput setaf 2; echo "## Test  : Running end-to-end tests"; tput sgr0

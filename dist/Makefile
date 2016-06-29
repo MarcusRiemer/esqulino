@@ -18,7 +18,7 @@ client/lib-bundle.js : $(DIST_NODE_FILES)
 client/app-bundle.js : $(DIST_JS_FILES)
 	cd client && node ../bundle.app.js
 
-clean :
+clean : msg-pre-app-clean
 	rm -rf client/*
 
 # Uses the `package.json` file to grab all dependencies
@@ -28,6 +28,9 @@ install-deps : has-npm
 ##################################
 # Messaging targets
 ##################################
+
+msg-pre-app-clean :
+	@tput setaf 2; echo "## Dist  : Cleaning"; tput sgr0
 
 msg-pre-app-bundle :
 	@tput setaf 2; echo "## Dist  : Bundling client"; tput sgr0
