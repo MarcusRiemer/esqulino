@@ -134,6 +134,9 @@ export class QueryService {
             return (this.createInsert(project, name, table));
         case "delete":
             return (this.createDelete(project, name, table));
+        case "update":
+            return (this.createUpdate(project, name, table));
+
         default:
             throw new Error(`createQuery: unknown queryType "${queryType}"`);
         }
@@ -240,6 +243,25 @@ export class QueryService {
             id : undefined,
             name : queryName,
             insert : {
+                table : tableName,
+                assignments : []
+            }
+        }
+
+        return (this.handleCreationResponse(model, project));
+    }
+
+    /**
+     * Request to create a new query on the given table.
+     *
+     * @param table The name of the table to query initially
+     */
+    createUpdate(project : Project, queryName : string, tableName : string) {
+        // Build the initial model
+        let model : Model.QueryDescription = {
+            id : undefined,
+            name : queryName,
+            update : {
                 table : tableName,
                 assignments : []
             }

@@ -107,7 +107,12 @@ export class QueryUpdate extends Query implements QueryWhere {
     }
 
     protected validateImpl(schema : Schema) : ValidationResult {
-        throw new Error("Not implemented");
+        let errors = this._updates.map(v => v.expr.validate(schema));
+        if (this._where) {
+            errors.push(this._where.validate(schema))
+        }
+
+        return (new ValidationResult([], errors));
     }
 
     /**

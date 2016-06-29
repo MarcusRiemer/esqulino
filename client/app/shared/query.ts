@@ -33,7 +33,7 @@ export interface QueryUpdateRequestDescription {
 export function loadQuery(schema : Schema, toLoad : Model.QueryDescription) : Query {
     // The number of distinctive top-level components that
     // are present in the model.
-    let topLevelList = [toLoad.delete, toLoad.select, toLoad.insert]
+    let topLevelList = [toLoad.delete, toLoad.select, toLoad.insert, toLoad.update]
         .filter(v => !!v);
 
     // There must be a single top-level component
@@ -50,6 +50,9 @@ export function loadQuery(schema : Schema, toLoad : Model.QueryDescription) : Qu
     }
     else if (toLoad.insert) {
         return (new QueryInsert(schema, toLoad));
+    }
+    else if (toLoad.update) {
+        return (new QueryUpdate(schema, toLoad));
     }
 
     throw new Error("Unknown top-level component");
