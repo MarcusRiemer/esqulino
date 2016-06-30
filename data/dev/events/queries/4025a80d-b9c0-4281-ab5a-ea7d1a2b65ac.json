@@ -1,0 +1,40 @@
+{
+  "name": "Person Anlegen",
+  "insert": {
+    "assignments": [
+      {
+        "expr": {
+          "parameter": {
+            "key": "vorname"
+          }
+        },
+        "column": "vorname"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "nachname"
+          }
+        },
+        "column": "nachname"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "geboren"
+          }
+        },
+        "column": "geb_jahr"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "gestorben"
+          }
+        },
+        "column": "tod_jahr"
+      }
+    ],
+    "table": "person"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Person Löschen",
+  "delete": {},
+  "from": {
+    "first": {
+      "name": "person"
+    }
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "person_id",
+            "table": "person"
+          }
+        },
+        "rhs": {
+          "parameter": {
+            "key": "id"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}
