@@ -83,7 +83,7 @@ describe('ParameterExpression', () => {
         const c = new SyntaxTree.ParameterExpression(model, null);
 
         // Model and String serialization
-        expect(c.toSqlString()).toEqual(`@${model.key}`);
+        expect(c.toSqlString()).toEqual(`:${model.key}`);
         expect(c.toModel().parameter).toEqual(model);
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"parameter")
     });

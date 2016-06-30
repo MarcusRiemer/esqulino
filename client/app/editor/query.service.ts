@@ -12,7 +12,7 @@ import {
     Query, QuerySelect, QueryDelete, QueryInsert
 } from '../shared/query'
 import {
-    QueryResult, QueryRunErrorDescription
+    SelectQueryResult, QueryRunErrorDescription
 } from '../shared/query.result'
 
 import {Project}                                 from './project'
@@ -77,7 +77,7 @@ export class QueryService {
     /**
      * Sends a certain query to the server to be executed.
      */
-    runQuery(project : Project, query : Query) {
+    runQuery(project : Project, query : Query, params : QueryParamsDescription) {
         const url = this._server.getRunQueryUrl(project.id);
         
         let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -85,7 +85,7 @@ export class QueryService {
 
         const body = {
             sql : query.toSqlString(),
-            params : { }
+            params : params
         }
         
         const toReturn = this._http.post(url, JSON.stringify(body), options)
@@ -100,10 +100,9 @@ export class QueryService {
                 // The result changes dependending on the concrete type
                 // of the query.
                 if (query instanceof QuerySelect) {
-                    return (new QueryResult(query, <any> res.json()))
-                } else if (query instanceof QueryInsert) {
-                    // TODO: Create special result class for inserts
-                    return (new QueryResult(undefined, <any> res.json()))
+                    return (new SelectQueryResult(query, <any> res.json()))
+                } else {
+                    return (undefined);
                 }
             });
 

@@ -4,7 +4,7 @@
       <div class="card-block">
         <h4 class="card-title">Abfrage-Editor</h4>
         <p class="card-text">
-          Hier wird deine SQL-Anfragen bearbeitet. Ziehe dazu einfach aus der Seitenleiste die passenden Blöcke auf deine Anfrage.
+          Hier wird deine SQL-Anfragen bearbeitet. Ziehe einfach aus der Seitenleiste die passenden Blöcke auf deine Anfrage.
         </p>
       </div>
       <div class="card-block">
@@ -15,9 +15,9 @@
     <div *ngIf="requiredParameters.length > 0"
          class="card">
       <div class="card-block">
-        <h4 class="card-title">Parameter</h4>
+        <h4 class="card-title">Parameter erforderlich!</h4>
         <p class="card-text">
-          Deine Abfrage verwendet Parameter und funktioniert nicht ohne Eingaben vom Benutzer. Wenn du sie trotzdem gerne ausprobieren möchtest, musst du hier testweise Werte eingeben.
+          Deine Abfrage verwendet Parameter und funktioniert daher nicht ohne Eingaben vom Benutzer. Wenn du sie trotzdem gerne ausprobieren möchtest, musst du hier testweise Werte eingeben.
         </p>
       </div>
       <ul class="list-group list-group-flush">
@@ -29,7 +29,9 @@
               <code>{{ param }}</code>
             </span>
             <input type="text"
-                   class="form-control">
+                   class="form-control"
+                   [(ngModel)]="cachedArguments[param]"
+                   name="parameter-{{param}}">
           </div>
         </li>
       </ul>

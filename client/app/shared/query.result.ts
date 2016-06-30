@@ -89,7 +89,7 @@ function isQueryResultDescription(arg : any) : arg is QueryResultDescription {
 /**
  * Adds type information to a raw QueryResultDescription.
  */
-export class QueryResult {
+export class SelectQueryResult {
     private _query : QuerySelect;
 
     private _rows : Row[] = [];
