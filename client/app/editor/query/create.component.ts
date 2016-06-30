@@ -10,7 +10,7 @@ import {ToolbarService}                 from '../toolbar.service'
 import {QueryService}                   from '../query.service'
 
 @Component({
-    templateUrl: 'app/editor/query/templates/create.html',
+    templateUrl: 'app/editor/query/templates/create.html'
 })
 export class QueryCreateComponent implements OnInit, OnDestroy {
     private _project : Project;

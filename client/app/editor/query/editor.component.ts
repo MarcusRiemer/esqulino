@@ -72,6 +72,9 @@ export class QueryEditorComponent implements OnInit {
         return (this._result);
     }
 
+    /**
+     * Retrieves all ParameterExpressions from the query.
+     */
     get requiredParameters() : string[] {
         if (this.query) {
             return (this.query.getLeaves()

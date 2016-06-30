@@ -3,11 +3,10 @@
     <label for="inputName" class="col-sm-2 form-control-label">Name?</label>
     <div class="col-sm-10">
       <input [(ngModel)]="queryName"
-             ngControl="queryName"
-             #name="ngForm"
+             #name="ngModel"
+             name="inputName"
              type="text"
-             class="form-control"
-             id="inputName">
+             class="form-control">
       <div [hidden]="isNameValid || name.pristine"
            class="alert alert-danger">
         Bitte wähle einen eindeutigen Namen
