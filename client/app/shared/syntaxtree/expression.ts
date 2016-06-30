@@ -320,7 +320,7 @@ export class ParameterExpression extends Expression {
      * @return The key of this parameter in SQLites '@' notation
      */
     toSqlString() : string {
-        return (`@${this._key}`);
+        return (`:${this._key}`);
     }
 
     toModel() : Model.Expression {

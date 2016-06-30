@@ -1,6 +1,6 @@
 import {Component, Input}               from '@angular/core'
 
-import {QueryResult}                    from '../../shared/query.result'
+import {SelectQueryResult}                    from '../../shared/query.result'
 
 @Component({
     templateUrl: 'app/editor/query/templates/result.html',
@@ -10,6 +10,6 @@ export class ResultComponent {
     /**
      * The result to show
      */
-    @Input() public result : QueryResult;
+    @Input() public result : SelectQueryResult;
 }
            

@@ -1,4 +1,6 @@
-# The most general esqulino error
+# The most general esqulino error, this base-class is required
+# to distinguish "ordinary" ruby errors from those that are
+# specific to esqulino.
 class EsqulinoError < StandardError
   attr_reader :code
   

@@ -5,14 +5,16 @@ import {Observable}                     from 'rxjs/Observable'
 
 import {Query, Model, SyntaxTree}       from '../../shared/query'
 import {
-    QueryResult, QueryRunErrorDescription
+    SelectQueryResult, QueryRunErrorDescription
 } from '../../shared/query.result'
 
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
 import {ToolbarService}                 from '../toolbar.service'
 import {SidebarService}                 from '../sidebar.service'
-import {QueryService}                   from '../query.service'
+import {
+    QueryService, QueryParamsDescription
+} from '../query.service'
 
 import {QueryComponent, SqlStringPipe}  from './sql.component'
 import {SidebarComponent}               from './sidebar.component'
@@ -39,7 +41,7 @@ export class QueryEditorComponent implements OnInit {
     /**
      * The result of the most recently run query
      */
-    private _result : QueryResult;
+    private _result : SelectQueryResult;
 
     /**
      * Subscriptions that need to be released
@@ -49,7 +51,7 @@ export class QueryEditorComponent implements OnInit {
     /**
      * Cache for user input
      */
-    private _arguments : { [key:string]:string } = { }
+    private _arguments : QueryParamsDescription = { }
        
     /**
      * Used for dependency injection.
@@ -86,9 +88,32 @@ export class QueryEditorComponent implements OnInit {
     }
 
     /**
+     * Retrieves all arguments that are stored in the current session.
+     */
+    get cachedArguments() : QueryParamsDescription {
+        return (this._arguments);
+    }
+
+    /**
+     * Retrieves all arguments that are used by the current query
+     */
+    get relevantArguments() : QueryParamsDescription {
+        const required = this.requiredParameters;
+        let toReturn : QueryParamsDescription = {};
+
+        // TODO: There must be a nicer way to express this
+        required.forEach(key => {
+            toReturn[key] = this._arguments[key];
+        });
+        
+        return (toReturn);
+    }
+
+    /**
      * Load the project to access the schema and the queries.
      */
     ngOnInit() {
+        
         // Grab the correct project and query
         let subRef = this._routeParams.params.subscribe(param => {
             var queryId = param['queryId'];
@@ -120,7 +145,7 @@ export class QueryEditorComponent implements OnInit {
         let btnQuery = this._toolbarService.addButton("run", "Ausführen", "search", "r");
         subRef = btnQuery.onClick.subscribe( (res) => {
             btnQuery.isInProgress = true;
-            this._queryService.runQuery(this.project, this.query)
+            this._queryService.runQuery(this.project, this.query, this.relevantArguments)
                 .subscribe(res => {
                     btnQuery.isInProgress = false;
                     this._result = res;
