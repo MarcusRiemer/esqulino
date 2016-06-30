@@ -19,7 +19,7 @@ client/app-bundle.js : $(DIST_JS_FILES)
 	cd client && node ../bundle.app.js
 
 clean : msg-pre-app-clean
-	rm -rf client/*
+	rm -rf $(realpath client)/*
 
 # Uses the `package.json` file to grab all dependencies
 install-deps : has-npm
