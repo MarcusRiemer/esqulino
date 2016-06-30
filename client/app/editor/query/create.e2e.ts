@@ -18,7 +18,7 @@ class QueryCreatePage {
     }
 
     get nameEle() {
-        return (element(by.id("inputName")));
+        return (element(by.name("inputName")));
     }
 
     get btnCreate() {

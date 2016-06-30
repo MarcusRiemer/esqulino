@@ -16,6 +16,7 @@
           </label>
           <div class="col-sm-10">
             <input [(ngModel)]="project.name"
+                   name="project-name"
                    class="form-control"
                    id="project-name"
                    placeholder="Name des Projekts">
@@ -29,6 +30,7 @@
           </label>
           <div class="col-sm-10">
             <textarea [(ngModel)]="project.description"
+                      name="project-description"
                       class="form-control"
                       id="project-description"
                       placeholder="Beschreibung des Projekts"
@@ -56,6 +58,7 @@
           <span class="fa fa-trash"></span> Löschen
         </button>
         <input [(ngModel)]="query.name"
+               name="name-{{query.id}}"
                type="text">
       </li>
     </ul>
