@@ -1,5 +1,5 @@
 import {
-    Component, Input, OnInit
+    Component, Input, OnInit, ElementRef
 } from '@angular/core'
 import {DomSanitizationService}         from '@angular/platform-browser';
 
@@ -27,6 +27,7 @@ export class ServerPreviewComponent implements OnInit {
     private _renderPreview : string;
 
     constructor(
+        private _elementRef: ElementRef,
         private _pageService : PageService,
         private _sanitizer: DomSanitizationService
     ) {
@@ -43,7 +44,12 @@ export class ServerPreviewComponent implements OnInit {
         
     }
 
-    refresh() : Observable<boolean> {
+    refreshHeight() {
+        const iframe = this._elementRef.nativeElement.querySelector("iframe");
+        iframe.height = (iframe.contentWindow.document.body.scrollHeight + 10) + "px"
+    }
+
+    refresh() : Observable<boolean> {   
         const toReturn = new Subject<boolean>();
         
         this._pageService.renderPage(this.project, this.page)
@@ -52,6 +58,10 @@ export class ServerPreviewComponent implements OnInit {
                 this._renderPreview = res;
                 toReturn.next(true);
                 toReturn.complete();
+
+
+                Observable.timer(100)
+                    .subscribe(t => this.refreshHeight());
             });
 
         return (toReturn);
