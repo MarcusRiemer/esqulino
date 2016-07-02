@@ -1,0 +1,21 @@
+<div class="card">
+  <div class="card-block">
+    <h4 class="card-title">Seiten-Layout Bearbeiten</h4>
+    <p class="card-text">
+      In diesem Editor kannst du das Layout deiner Seite mit Hilfe von Zeilen und Spalten festlegen.
+    </p>
+  </div>
+  <div class="card-block">      
+    <div class="container-fluid page-preview">
+      <div *ngFor="let row of page?.rows"
+           class="row">
+        <div *ngFor="let col of row.columns"
+             [ngClass]="col.columnClasses">
+          <esqulino-widget-loader
+              [widgets]="col.widgets">
+          </esqulino-widget-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

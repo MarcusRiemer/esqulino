@@ -1,4 +1,6 @@
-import {Component, OnInit, OnDestroy}   from '@angular/core'
+import {
+    Component, OnInit, OnDestroy, ViewChild, Input
+} from '@angular/core'
 import {Router, ActivatedRoute}         from '@angular/router'
 
 import {Observable}                     from 'rxjs/Observable'
@@ -12,7 +14,8 @@ import {PageService}                    from '../page.service'
 import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 
-import {WidgetLoaderComponent}          from './widget-loader.component'
+import {PageLayoutComponent}            from './page-layout.component'
+import {ServerPreviewComponent}         from './server-preview.component'
 import {SidebarComponent}               from './sidebar.component'
 
 /**
@@ -20,9 +23,7 @@ import {SidebarComponent}               from './sidebar.component'
  */
 @Component({
     templateUrl: 'app/editor/page/templates/editor.html',
-    directives: [WidgetLoaderComponent],
-    providers: [],
-    pipes: []
+    directives: [PageLayoutComponent, ServerPreviewComponent]
 })
 export class PageEditorComponent implements OnInit, OnDestroy {
     /**
@@ -40,7 +41,11 @@ export class PageEditorComponent implements OnInit, OnDestroy {
      */
     private _subscriptionRefs : any[] = [];
 
-    private _renderPreview : string;
+    @Input()
+    public doRenderPreview = false;
+
+    @ViewChild(ServerPreviewComponent)
+    private _serverPreview : ServerPreviewComponent;
 
 
     constructor(
@@ -90,9 +95,10 @@ export class PageEditorComponent implements OnInit, OnDestroy {
         let btnRender = this._toolbarService.addButton("render", "Vorschau", "search", "r");
         subRef = btnRender.onClick.subscribe( (res) => {
             btnRender.isInProgress = true;
-            this._pageService.renderPage(this.project, this.page)
+
+            this._serverPreview.refresh()
                 .subscribe(res => {
-                    this._renderPreview = res;
+                    this.doRenderPreview = true;
                     btnRender.isInProgress = false;
                 });
         });
