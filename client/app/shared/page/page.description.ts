@@ -1,4 +1,13 @@
 /**
+ * Describes a heading widget.
+ */
+export interface HeadingDescription extends WidgetDescription {
+    text : string,
+    level : number,
+    type : "heading"
+}
+
+/**
  * Describes a paragraph widget.
  */
 export interface ParagraphDescription extends WidgetDescription {

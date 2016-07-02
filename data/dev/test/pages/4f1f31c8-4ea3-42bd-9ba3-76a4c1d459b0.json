@@ -4,17 +4,35 @@
     {
       "columns": [
         {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "text": "Große Überschrift",
+              "level": 1
+            }]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
           "width": 6,
           "widgets": [
             {
               "type": "paragraph",
-              "text": "Dies ist ein Absatz"
+              "text": "Dies ist ein Absatz auf der linken Seite"
             }
           ]
         },
         {
           "width": 6,
-          "widgets": []
+          "widgets": [
+            {
+              "type": "paragraph",
+              "text": "Dies ist ein Absatz auf der rechten Seite"
+            }
+          ]
         }
       ]
     },
@@ -33,7 +51,7 @@
           "widgets": [
             {
               "type": "paragraph",
-              "text": "Und noch ein Absatz"
+              "text": "Und noch ein Absatz, an einer etwas merkwürdigen Stelle"
             }
           ]
         }

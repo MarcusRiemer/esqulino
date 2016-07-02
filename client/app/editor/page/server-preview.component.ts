@@ -32,6 +32,9 @@ export class ServerPreviewComponent implements OnInit {
     ) {
     }
 
+    /**
+     * Retrieves the "raw" HTML string that was computed by the server.
+     */
     get renderPreview() {
         return (this._sanitizer.bypassSecurityTrustHtml(this._renderPreview));
     }

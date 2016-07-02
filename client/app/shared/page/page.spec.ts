@@ -1,4 +1,5 @@
 import './widgets/column.spec'
+import './widgets/heading.spec'
 import './widgets/paragraph.spec'
 
 import {
