@@ -3,7 +3,10 @@ import {Type}                  from '@angular/core'
 import {Page}                  from '../page'
 
 import {Renderer}              from '../renderer'
-import {Widget, Row, Column, Paragraph}   from '../widgets/index'
+import {
+    Widget, Row, Column,
+    Paragraph, Heading
+} from '../widgets/index'
 
 export {Renderer}
 
@@ -12,6 +15,12 @@ type WidgetRenderer = (w: Widget) => string;
 function renderParagraph(w: Widget) : string {
     const paragraph = <Paragraph> w;
     return (`<p>${paragraph.text}</p>`);
+}
+
+function renderHeading(w: Widget) : string {
+    const heading = <Heading> w;
+    const tagname = `h${heading.level}`;
+    return (`<${tagname}>${heading.text}</${tagname}>`);
 }
 
 /**
@@ -48,7 +57,8 @@ export class LiquidRenderer extends Renderer {
      * All known renderers for widgets
      */
     private _widgetRenderers : { [widgetType : string]: WidgetRenderer} = {
-        "paragraph" : renderParagraph
+        "paragraph" : renderParagraph,
+        "heading" : renderHeading
     };
     
     /**

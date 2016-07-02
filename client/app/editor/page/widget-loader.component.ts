@@ -9,6 +9,7 @@ import {Widget}             from '../../shared/page/widgets/index'
 
 import {WidgetComponent}    from './widgets/widget.component'
 import {ParagraphComponent} from './widgets/paragraph.component'
+import {HeadingComponent}   from './widgets/heading.component'
 
 /**
  * Loads the editor-representation of widgets.
@@ -35,7 +36,8 @@ export class WidgetLoaderComponent implements OnInit {
          * TODO: Allow widgets to somehow register themself.
          */
         this._typeMapping = {
-            "paragraph" : ParagraphComponent
+            "paragraph" : ParagraphComponent,
+            "heading" : HeadingComponent
         };
     }
 

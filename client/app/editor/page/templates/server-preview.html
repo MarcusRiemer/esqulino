@@ -6,7 +6,8 @@
         So wird diese Seite für einen Besucher aussehen.
       </p>
     </div>
-    <div class="card-block">      
+    <div *ngIf="renderPreview"
+         class="card-block">      
       <iframe [srcdoc]="renderPreview"
               seamless
               width="100%">
