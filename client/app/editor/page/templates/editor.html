@@ -1,16 +1,12 @@
 <div class="page">
-  <div class="container-fluid page-preview">
-    <div *ngFor="let row of page?.rows"
-         class="row">
-      <div *ngFor="let col of row.columns"
-           [ngClass]="col.columnClasses">
-        <esqulino-widget-loader
-            [widgets]="col.widgets">
-        </esqulino-widget-loader>
-      </div>
-    </div>
-  </div>
+  <esqulino-page-layout [project]="project"
+                        [page]="page">
+  </esqulino-page-layout>
 
+  <esqulino-server-preview [project]="project"
+                           [page]="page"
+                           [isRendering]="doRenderPreview">
+  </esqulino-server-preview>
   <div *ngIf="page"
        class="alert alert-info">
     <h6>

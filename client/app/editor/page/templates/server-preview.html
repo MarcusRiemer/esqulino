@@ -1,0 +1,16 @@
+<div *ngIf="isRendering">
+  <div class="card">
+    <div class="card-block">
+      <h4 class="card-title">Vorschau</h4>
+      <p class="card-text">
+        So wird diese Seite für einen Besucher aussehen.
+      </p>
+    </div>
+    <div class="card-block">      
+      <iframe [srcdoc]="renderPreview"
+              seamless
+              width="100%">
+      </iframe>
+    </div>
+  </div>
+</div>
