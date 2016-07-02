@@ -1,15 +1,20 @@
 <div *ngIf="isRendering">
   <div class="card">
     <div class="card-block">
-      <h4 class="card-title">Vorschau</h4>
+      <h4 class="card-title">
+        <a (click)="refreshHeight()"
+           class="btn btn-primary pull-right">
+          <span class="fa fa-bug"></span> Höhe anpassen
+        </a>
+        Vorschau
+      </h4>
       <p class="card-text">
-        So wird diese Seite für einen Besucher aussehen.
+        So wird die Seite für einen Besucher aussehen.
       </p>
     </div>
     <div *ngIf="renderPreview"
          class="card-block">      
       <iframe [srcdoc]="renderPreview"
-              seamless
               width="100%">
       </iframe>
     </div>

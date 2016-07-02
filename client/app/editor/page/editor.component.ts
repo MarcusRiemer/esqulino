@@ -72,6 +72,8 @@ export class PageEditorComponent implements OnInit, OnDestroy {
                     // Project is loaded, display the correct page to edit
                     this._project = res;
                     this._page = this._project.getPageById(pageId);
+
+                    this.doRenderPreview = false;
                 });
         })
 
