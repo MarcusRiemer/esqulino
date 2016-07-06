@@ -40,7 +40,8 @@
         </div>
       </div>
 
-      <div class="form-group row">
+      <div *ngIf="project?.pages.length > 0"
+           class="form-group row">
         <label for="project-description"
                class="col-sm-2 form-control-label">
           Startseite
@@ -62,41 +63,70 @@
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-header">
-      Abfragen
+  <div class="row">
+    <div class="col-md-12 col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          Abfragen
+        </div>
+        <ul id="project-queries"
+            class="list-group list-group-flush">
+          <li *ngFor="let query of project?.queries"
+              class="list-group-item">
+            <div class="input-group">
+              <input [(ngModel)]="query.name"
+                     name="query-{{query.id}}"
+                     class="form-control"
+                     type="text">
+              <span class="input-group-btn">
+                <button (click)="onQueryDelete(query.id)"
+                        class="btn btn-warning pull-right">
+                  <span class="fa fa-trash"></span>
+                </button>
+              </span>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-    <ul id="project-queries"
-        class="list-group list-group-flush">
-      <li *ngFor="let query of project?.queries"
-          class="list-group-item">
-        <button (click)="onQueryDelete(query.id)"
-                class="btn btn-warning pull-right">
-          <span class="fa fa-trash"></span> Löschen
-        </button>
-        <input [(ngModel)]="query.name"
-               name="query-{{query.id}}"
-               type="text">
-      </li>
-    </ul>
-  </div>
 
-  <div class="card">
-    <div class="card-header">
-      Seiten
+    <div class="col-md-12 col-lg-6">
+      <div class="card card-inverse card-info">
+        <div *ngIf="project?.pages?.length > 0"
+             class="card-header">
+          Seiten
+        </div>
+        <div *ngIf="project?.pages?.length == 0"
+             class="card-block">
+          <p>
+            <strong>Momentan ist dein Projekt für normale Besucher noch nicht sichtbar!</strong>
+             Erstelle eine Startseite, wenn du dieses Projekt gerne mit deinen Bekannten teilen möchtest.
+          </p>
+
+          <a href="#" class="btn btn-primary">
+            <span class="fa fa-plus fa-fw"></span>
+            Neue Seite erstellen
+          </a>
+        </div>
+        <ul id="project-pages"
+            class="list-group list-group-flush">
+          <li *ngFor="let page of project?.pages"
+              class="list-group-item">
+            <div class="input-group">
+              <input [(ngModel)]="page.name"
+                     name="page-{{page.id}}"
+                     class="form-control"
+                     type="text">
+              <span class="input-group-btn">
+                <button (click)="onPageDelete(query.id)"
+                        class="btn btn-warning pull-right">
+                  <span class="fa fa-trash"></span>
+                </button>
+              </span>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-    <ul id="project-pages"
-        class="list-group list-group-flush">
-      <li *ngFor="let page of project?.pages"
-          class="list-group-item">
-        <button (click)="onPageDelete(query.id)"
-                class="btn btn-warning pull-right">
-          <span class="fa fa-trash"></span> Löschen
-        </button>
-        <input [(ngModel)]="page.name"
-               name="page-{{page.id}}"
-               type="text">
-      </li>
-    </ul>
   </div>
 </div>
