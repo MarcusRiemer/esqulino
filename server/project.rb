@@ -85,3 +85,12 @@ def update_project_description(project_folder, updated_project)
   return (to_store['id'])
 end
 
+# Checks whether the given string is a valid Id.
+#
+# @param [string] A string that could be an Id
+#
+# @return True, if the given string is an Id.
+def is_string_id?(maybe_id)
+  /^\h{8}-\h{4}-\h{4}-\h{4}-\h{12}$/ === maybe_id
+end
+

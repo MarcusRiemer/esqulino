@@ -59,7 +59,7 @@ class ScratchSqlApp < Sinatra::Base
   before '/api/project/:project_id/query/:query_id/?*' do
     # Only match numeric IDs, everything else may be a valid
     # sub-route like "run"
-    if /\d+.*/ =~ params['query_id'] then
+    if is_string_id? params['query_id'] then
       @query_id = params['query_id']
 
       assert_query @project_folder, @project_id, @query_id
@@ -70,7 +70,7 @@ class ScratchSqlApp < Sinatra::Base
   before '/api/project/:id/page/:page_id/?*' do
     # Only match numeric IDs, everything else may be a valid
     # sub-route like "run"
-    if /\d+.*/ =~ params['page_id'] then
+    if is_string_id? params['page_id'] then
       @page_id = params['page_id']
 
       assert_page @project_folder, @project_id, @page_id
@@ -78,7 +78,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Ensure that viewing pages have all resources available
-  before '/view/:project_id/:page_name?' do
+  before '/view/:project_id/:page_name_or_id?' do
     @project_id = params['project_id']
     @project_folder = File.join(given_data_dir, @project_id)
 
@@ -86,7 +86,15 @@ class ScratchSqlApp < Sinatra::Base
     assert_project_dir @project_folder, @project_id
 
     # Ensure that there is actually a page
-    @page_id = params['pageId'] ||
+    page_name_or_id = params['page_name_or_id']
+
+    # Distinguish between page names and ids
+    if is_string_id? page_name_or_id then
+      @page_id = page_name_or_id
+    else
+
+    end
+    
     assert_page @project_folder, @project_id, @page_id
   end
 
@@ -192,6 +200,11 @@ class ScratchSqlApp < Sinatra::Base
     page_id = project_store_page(@project_folder, new_page, @page_id)
 
     return [200, page_id]
+  end
+
+  # Viewing a specific page
+  get '/view/:project_id/:page_name?' do
+    return project_render_stored_page(@project_folder, @page_id)
   end
 
   # By now I have too often mistakenly attempted to load other assets than
