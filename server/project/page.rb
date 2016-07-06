@@ -125,17 +125,23 @@ def project_render_stored_page(project_folder, page_id)
   page_model = project_load_page(project_folder, page_id)
 
   return project_render_page_template(project_folder, page_model,
-                                      "liquid", [], {})
+                                      "liquid", {})
 end
 
 
+# The actual rendering of a page with all of it's queries and other
+# data. Absolutly no disk IO takes place in this method, everything
+# has been fetched from disk already.
 #
 # @param project_folder [string] The projects root folder
+# @param page_model [Hash] The model of the page
 # @param render_engine The render engine to use
+# @param params [Hash] All arguments that are required to render this page
+#
+# @return [string] The rendered HTML representation of the page
 def project_render_page_template(project_folder,
                                  page_model,
                                  render_engine,
-                                 query_models,
                                  params)
   template_string = project_load_page_template(project_folder,
                                                page_model['id'],

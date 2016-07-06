@@ -14,7 +14,8 @@ export interface ProjectListDescription {
     name : string
     description : string
     id : string
-    preview? : string
+    preview? : string,
+    indexPageId? : string
 }
 
 

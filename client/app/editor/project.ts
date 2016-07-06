@@ -16,6 +16,7 @@ export class Project {
 
     private _queries : Query[];
     private _pages : Page[];
+    private _indexPageId : string;
     
     /**
      * Construct a new project and a whole slew of other
@@ -25,11 +26,12 @@ export class Project {
         this.id = json.id;
         this.name = json.name;
         this.description = json.description;
+        this._indexPageId = json.indexPageId;
         this.schema = new Schema(json.schema);
 
         // Map all abstract queries to concrete query objects
         this._queries = json.queries.map( val => loadQuery(this.schema, val) );
-        this._pages = json.pages.map( val => new Page(val));
+        this._pages = json.pages.map( val => new Page(val) );
     }
 
     /**
@@ -37,6 +39,27 @@ export class Project {
      */
     get queries() {
         return (this._queries);
+    }
+
+    /**
+     * @return All available pages, no order guaranteed.
+     */
+    get pages() {
+        return (this._pages);
+    }
+
+    /**
+     * @return The id of the index page.
+     */
+    get indexPageId() {
+        return (this._indexPageId);
+    }
+
+    /**
+     * @param newId The id of the index page.
+     */
+    set indexPageId(newId : string) {
+        this._indexPageId = newId;
     }
 
     /**
@@ -55,13 +78,6 @@ export class Project {
         }
 
         return (toReturn);        
-    }
-
-    /**
-     * @return All available pages, no order guaranteed.
-     */
-    get pages() {
-        return (this._pages);
     }
 
     /**
@@ -94,7 +110,8 @@ export class Project {
         return ({
             id : this.id,
             name : this.name,
-            description : this.description
+            description : this.description,
+            indexPageId : this.indexPageId
         });
     }
 }

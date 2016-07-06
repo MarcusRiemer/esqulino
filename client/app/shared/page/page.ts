@@ -12,8 +12,9 @@ export class Page {
     private _name : string;
     private _rows : Row[];
     private _referencedQueries : string[]
-
     private _renderer : Renderer;
+
+    private _isDirty = false;
     
     constructor(desc : PageDescription) {
         this._id = desc.id;
@@ -30,6 +31,11 @@ export class Page {
      */
     get name() {
         return (this._name);
+    }
+
+    set name(newName : string) {
+        this._name = newName;
+        this.markDirty();
     }
 
     /**
@@ -56,6 +62,21 @@ export class Page {
     get referencedQueryIds() {
         return (this._referencedQueries);
     }
+
+    /**
+     * @return True, if this instance has changes that could be saved..
+     */
+    get isDirty() {
+        return (this._isDirty);
+    }
+
+    /**
+     * Called when a query has been made to this change.
+     */
+    protected markDirty() : void {
+        this._isDirty = true;
+    }
+
 
     /**
      * @param queryId The ID of the query in question.
