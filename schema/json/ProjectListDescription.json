@@ -13,6 +13,9 @@
         },
         "preview": {
             "type": "string"
+        },
+        "indexPageId": {
+            "type": "string"
         }
     },
     "additionalProperties": false,
