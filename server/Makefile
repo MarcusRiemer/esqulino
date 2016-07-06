@@ -1,6 +1,8 @@
 BUNDLE_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "bundle")')
 YARD_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "yard")')
 
+SOURCES = $(shell find . -not -path '*/\.*' -iname "*.rb")
+
 # Install ruby dependencies
 install-deps : msg-pre-deps-install has-bundle
 	$(BUNDLE_BIN) install
@@ -15,11 +17,11 @@ test :
 
 # Generate the latest documentation
 doc : has-yard
-	$(YARD_BIN) doc
+	$(YARD_BIN) doc $(SOURCES)
 
 # Used during development: Shows which ruby entities require documentation
 dev-doc : has-yard
-	$(YARD_BIN) doc --list-undoc
+	$(YARD_BIN) stats --list-undoc $(SOURCES)
 
 .PHONY : dev-doc doc install-deps run test
 

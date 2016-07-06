@@ -6,6 +6,10 @@ require './error.rb'
 # Validates JSON requests and responses against pre-loaded
 # JSON schemas.
 class Validator
+
+  # Loads all schemas from the given directory
+  #
+  # @param schema_dir [string] A path containing JSON schema files
   def initialize(schema_dir)
     @schemas = { }
 
@@ -26,6 +30,12 @@ class Validator
     end
   end
 
+
+  # Ensures that the given body of a request matches the given schema
+  #
+  # @param schema_name [string] The ID of the schema to validate against
+  # @param body_string [string] The string representation of the object
+  #                             that requires a check.
   def ensure_request(schema_name, body_string)
     # Ensuring the schema exists
     schema = @schemas[schema_name]

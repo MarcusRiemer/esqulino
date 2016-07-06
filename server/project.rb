@@ -203,8 +203,8 @@ end
 # the implementation of that serialization step is written in Typescript.
 #
 # @param project_folder [string] The projects root folder
-# @param query_info [Hash] The page model and it's HTML representation.
-# @param given_query_id [string] The id of this page
+# @param page_info [Hash] The page model and it's HTML representation.
+# @param given_page_id [string] The id of this page
 #
 # @return The id of the stored query
 def project_store_page(project_folder, page_info, given_page_id)
@@ -266,7 +266,7 @@ end
 # a major security concern and shouldn't be done lightly.
 #
 # @param project_folder [string] The projects root folder
-# @params sql [string] The SQL query
+# @param sql [string] The SQL query
 # @param params [Hash] Query parameters
 #
 # @return [Hash] "Over-the-wire" JSON response
