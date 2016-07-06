@@ -8,9 +8,10 @@
           "widgets": [
             {
               "type": "heading",
-              "text": "Große Überschrift",
-              "level": 1
-            }]
+              "level": 1,
+              "text": "Große Überschrift"
+            }
+          ]
         }
       ]
     },
