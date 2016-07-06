@@ -3,13 +3,13 @@
 
 APP_DIR = $(addprefix $(CLIENT_DIR), app)
 
-SASS_FILES      = $(shell find $(APP_DIR) -iname "*.scss")
+SASS_FILES      = $(shell find $(APP_DIR) -not -path '*/\.*' -iname "*.scss")
 DIST_CSS_FILES  = $(abspath $(addprefix $(BUILD_DIR), app/css/style.css))
 
-HTML_FILES = $(shell find $(APP_DIR) -iname "*.html") index.html test.html
+HTML_FILES = $(shell find $(APP_DIR) -not -path '*/\.*' -iname "*.html") index.html test.html
 DIST_HTML_FILES = $(abspath $(addprefix $(BUILD_DIR), $(HTML_FILES)))
 
-TS_FILES = $(shell find $(APP_DIR) -iname "*.ts") 
+TS_FILES = $(shell find $(APP_DIR) -not -path '*/\.*' -iname "*.ts") 
 DIST_JS_FILES = $(abspath $(addprefix $(BUILD_DIR), $(TS_FILES:.ts=.js)))
 
 VENDOR_FILES = $(shell find $(addprefix $(CLIENT_DIR), vendor) -type f)
