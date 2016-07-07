@@ -91,7 +91,9 @@
     </div>
 
     <div class="col-md-12 col-lg-6">
-      <div class="card card-inverse card-info">
+      <div class="card"
+           [class.card-inverse]="project?.pages?.length == 0"
+           [class.card-info]="project?.pages?.length == 0">
         <div *ngIf="project?.pages?.length > 0"
              class="card-header">
           Seiten
