@@ -19,3 +19,7 @@ export const FrontRoutes : RouterConfig = [
         ]
     }
 ]
+
+export const FrontComponents = [
+    FrontComponent, ProjectListComponent, AboutComponent
+]
