@@ -55,7 +55,6 @@ export class PageEditorComponent implements OnInit, OnDestroy {
         private _routeParams: ActivatedRoute,
         private _sidebarService : SidebarService
     ) {
-        this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
     }
 
     /**
@@ -73,23 +72,11 @@ export class PageEditorComponent implements OnInit, OnDestroy {
                     this._project = res;
                     this._page = this._project.getPageById(pageId);
 
+                    // Reset render preview and sidebar
+                    this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
                     this.doRenderPreview = false;
                 });
         })
-
-        this._subscriptionRefs.push(subRef);
-
-        // Reacting to saving
-        this._toolbarService.savingEnabled = true;
-        let btnSave = this._toolbarService.saveItem;
-
-        subRef = btnSave.onClick.subscribe( (res) => {
-            btnSave.isInProgress = true;
-            this._pageService.savePage(this.project, this._page)
-            // Always delay visual feedback by 500ms
-                .delay(500)
-                .subscribe(res => btnSave.isInProgress = false);
-        });
 
         this._subscriptionRefs.push(subRef)
 
@@ -105,9 +92,24 @@ export class PageEditorComponent implements OnInit, OnDestroy {
                 });
         });
 
+        this._subscriptionRefs.push(subRef);
+
+        // Reacting to saving
+        this._toolbarService.savingEnabled = true;
+        let btnSave = this._toolbarService.saveItem;
+
+        subRef = btnSave.onClick.subscribe( (res) => {
+            btnSave.isInProgress = true;
+            this._pageService.savePage(this.project, this._page)
+            // Always delay visual feedback by 500ms
+                .delay(500)
+                .subscribe(res => {
+                    btnRender.fire();
+                    btnSave.isInProgress = false;
+                });
+        });
+
         this._subscriptionRefs.push(subRef)
-
-
     }
 
     /**

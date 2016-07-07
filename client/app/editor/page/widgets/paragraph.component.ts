@@ -1,18 +1,28 @@
-import {Component, Input, OnInit} from '@angular/core'
+import {Component, Inject, OnInit}    from '@angular/core'
 
-import {Paragraph}                from '../../../shared/page/widgets/index'
+import {Paragraph}                    from '../../../shared/page/widgets/index'
 
-import {SidebarService}           from '../../sidebar.service'
+import {SidebarService}               from '../../sidebar.service'
+import {SIDEBAR_MODEL_TOKEN}          from '../../sidebar.token'
 
-import {WidgetComponent}          from './widget.component'
+import {WidgetComponent}              from './widget.component'
+import {
+    PARAGRAPH_SIDEBAR_IDENTIFIER, ParagraphSidebarComponent
+} from './paragraph.sidebar.component'
+
+export {Paragraph}
 
 @Component({
     templateUrl: 'app/editor/page/widgets/templates/paragraph.html',
-    selector: "esqulino-paragraph",
-    inputs: ["model"]
+    selector: "esqulino-paragraph"
 })
 export class ParagraphComponent extends WidgetComponent<Paragraph> {
-    constructor(_sidebarService : SidebarService) {
-        super(_sidebarService);
+    
+    constructor(@Inject(SidebarService) sidebarService : SidebarService,
+                @Inject(SIDEBAR_MODEL_TOKEN) model : Paragraph) {
+        super(sidebarService, model, {
+            id : PARAGRAPH_SIDEBAR_IDENTIFIER,
+            type : ParagraphSidebarComponent
+        });
     }
 }

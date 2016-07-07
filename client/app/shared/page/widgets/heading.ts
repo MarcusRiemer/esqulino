@@ -20,8 +20,16 @@ export class Heading extends Widget {
         return (this._level);
     }
 
+    set level(newLevel : number) {
+        this._level = newLevel;
+    }
+
     get text() {
         return (this._text);
+    }
+
+    set text(newText : string) {
+        this._text = newText;
     }
 
     protected toModelImpl() : WidgetDescription {

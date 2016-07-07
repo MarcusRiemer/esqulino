@@ -1,3 +1,5 @@
+import {OpaqueToken, Type}              from '@angular/core'
+
 import {SidebarService}                 from '../../sidebar.service'
 
 /**
@@ -7,9 +9,27 @@ import {SidebarService}                 from '../../sidebar.service'
 export class WidgetComponent<TModel> {
     private _model : TModel;
     private _isEditing : boolean;
+    private _sidebarTypeId : string;
 
-    constructor(private _sidebarService : SidebarService) {
+    constructor(protected _sidebarService : SidebarService,
+                model : TModel,
+                sidebarDefinition? : {
+                    id : string,
+                    type : Type
+                }) {
+        this._model = model;
 
+        // TODO: Find a static place for this, there is no actual
+        //       need to check this again and again for every constructed
+        //       component.
+        // Possibly register a sidebar definition
+        if (sidebarDefinition) {
+            this._sidebarTypeId = sidebarDefinition.id;
+            
+            if (!_sidebarService.isKnownType(sidebarDefinition.id)) {
+                _sidebarService.registerType(sidebarDefinition.id, sidebarDefinition.type);
+            }
+        }
     }
     
     /**
@@ -30,7 +50,7 @@ export class WidgetComponent<TModel> {
      * Puts this component into "editing mode".
      */
     startEditing() {
-        if (!this._isEditing) {
+        if (!this._isEditing || true) {
             console.log("Started editing");
             
             this._isEditing = true;
@@ -54,7 +74,9 @@ export class WidgetComponent<TModel> {
      * does not do anything at all.
      */
     protected onBeginEditing() {
-
+        if (this._sidebarTypeId) {
+            this._sidebarService.showSidebar(this._sidebarTypeId, this.model);
+        }
     }
 
     /**

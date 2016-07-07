@@ -1,0 +1,25 @@
+<div class="card">
+  <div class="card-block">
+    <h4>Überschrift</h4>
+    <fieldset class="form-group">
+      <label for="heading-sidebar-text">Text</label>
+      <textarea [(ngModel)]="model.text"
+                class="form-control"
+                id="heading-sidebar-text">
+      </textarea>
+    </fieldset>
+    <fieldset class="form-group">
+      <label for="heading-sidebar-level">Ebene</label>
+      <select [(ngModel)]="model.level"
+              class="form-control">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option> 
+      </select>
+    </fieldset>
+
+  </div>
+</div>

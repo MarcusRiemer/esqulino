@@ -2,11 +2,14 @@ import{
     Component, Input, OnInit,
     DynamicComponentLoader, Injector,
     ViewContainerRef, ComponentResolver,
-    Type
+    Type, provide, ReflectiveInjector
 } from '@angular/core'
 
+import {SIDEBAR_MODEL_TOKEN}         from './sidebar.token'
 
-import {SidebarService}      from './sidebar.service'
+import {
+    SidebarService, SidebarModel
+} from './sidebar.service'
 
 /**
  * Shows the correct type of sidebar depending on the URL
@@ -15,7 +18,7 @@ import {SidebarService}      from './sidebar.service'
     selector: 'sidebar-loader',
     template: ''
 })
-export class SidebarLoaderComponent {
+export class SidebarLoaderComponent {   
     constructor(
         private _sidebarService : SidebarService,
         private _dcl: DynamicComponentLoader,
@@ -23,21 +26,29 @@ export class SidebarLoaderComponent {
         private _selfRef : ViewContainerRef,
         private _resolver : ComponentResolver
     ) {
-        this._sidebarService.sidebarType.subscribe(t => this.onChangedType(t));
+        this._sidebarService.sidebarModel.subscribe(t => this.onChangedType(t));
         
     }
 
-    private onChangedType(newType : string) {
+    private onChangedType(newModel : SidebarModel) {
         this._selfRef.clear();
 
-        if (newType) {
-            const componentType = this._sidebarService.getComponentType(newType);
-            this._resolver.resolveComponent(componentType)
-                .then( (fac) => this._selfRef.createComponent(fac, undefined, this._injector));
-        }
-    }
+        if (newModel) {
+            // Find out what type to construct
+            const componentType = this._sidebarService.getComponentType(newModel.type);
 
-    get sidebarType() {
-        return (this._sidebarService.sidebarType);
+            // Possibly inject data
+            let injector = this._injector;
+            if (newModel.param) {
+                injector = ReflectiveInjector.resolveAndCreate([
+                    provide(SIDEBAR_MODEL_TOKEN, {useValue: newModel.param })
+                ], this._injector);
+            }
+            
+            this._resolver.resolveComponent(componentType)
+                .then( (fac) => {
+                    this._selfRef.createComponent(fac, undefined, injector);
+                });
+        }
     }
 }

@@ -1,18 +1,28 @@
-import {Injectable, Type}            from '@angular/core'
+import {
+    Injectable, Type
+} from '@angular/core'
 
 import {BehaviorSubject}             from 'rxjs/BehaviorSubject'
 import {Observable}                  from 'rxjs/Observable'
 
+import {SIDEBAR_MODEL_TOKEN}         from './sidebar.token'
 
-import * as Query                   from './query/sidebar.component'
-import * as Page                    from './page/sidebar.component'
+/*import {
+    ParagraphSidebarComponent, PARAGRAPH_SIDEBAR_IDENTIFIER
+} from './page/widgets/paragraph.sidebar.component'
+import {
+    HeadingSidebarComponent
+} from './page/widgets/heading.sidebar.component'*/
+import * as Query                    from './query/sidebar.component'
+import * as Page                     from './page/sidebar.component'
 
 /**
  * Manages the global state of the sidebar.
  */
 @Injectable()
 export class SidebarService {
-    private _sidebar : BehaviorSubject<string>;
+    
+    private _model : BehaviorSubject<SidebarModel>;
 
     /**
      * Valid types for sidebars.
@@ -21,12 +31,15 @@ export class SidebarService {
     private _knownTypes : { [typeName:string] : Type} = { };
 
     constructor() {
-        this._sidebar = new BehaviorSubject<string>(undefined);
+        this._model = new BehaviorSubject<SidebarModel>(undefined);
 
         const pageId = Page.SidebarComponent.SIDEBAR_IDENTIFIER;
         const queryId = Query.SidebarComponent.SIDEBAR_IDENTIFIER;
 
         this.registerType(pageId, Page.SidebarComponent);
+        //this.registerType("page-paragraph", ParagraphSidebarComponent);
+        //this.registerType("page-heading", Page.SidebarComponent);
+
         this.registerType(queryId, Query.SidebarComponent);
     }
 
@@ -34,7 +47,7 @@ export class SidebarService {
      * Hides the currently shown sidebar.
      */
     hideSidebar() {
-        this._sidebar.next(undefined);
+        this._model.next(undefined);
     }
 
     /**
@@ -44,7 +57,7 @@ export class SidebarService {
      * @param component The component constructr that should be used.
      */
     registerType(newType : string, componentType : Type) {
-        if (this.isValidType(newType)) {
+        if (this.isKnownType(newType)) {
             throw new Error(`Attempted to override sidebar type "${newType}"`);
         }
 
@@ -54,7 +67,7 @@ export class SidebarService {
     /**
      * @return True, if the given type could be shown by the sidebar.
      */
-    isValidType(newType : string) : boolean {
+    isKnownType(newType : string) : boolean {
         return (!!this._knownTypes[newType]);
     }
 
@@ -73,12 +86,15 @@ export class SidebarService {
      *          SIDEBAR_IDENTIFIER property of the Sidebar Component you
      *          are using.
      */
-    showSidebar(newType : string) {
-        if (!this.isValidType(newType)) {
+    showSidebar(newType : string, param? : any) {
+        if (!this.isKnownType(newType)) {
             throw new Error(`Unknown sidebar type: ${newType}`);
         }
 
-        this._sidebar.next(newType);
+        this._model.next({
+            type : newType,
+            param : param
+        });
     }
 
     /**
@@ -86,13 +102,22 @@ export class SidebarService {
      *         the visibilit changes.
      */
     get isSidebarVisible() : Observable<boolean> {
-        return (this._sidebar.map(s => !!s));
+        return (this._model.map(s => !!s));
     }
 
     /**
      * @return An observable for the current type of the sidebar
      */
-    get sidebarType() : Observable<string> {
-        return (this._sidebar);
+    get sidebarModel() : Observable<SidebarModel> {
+        return (this._model);
     }
 }
+
+/**
+ *
+ */
+export interface SidebarModel {
+    type : string
+    param? : any
+}
+
