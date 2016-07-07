@@ -65,6 +65,9 @@ doc :
 dev-pretty-json-data :
 	find data -iname "*.json" -exec bash -c 'jq . < {} | sponge {}' \;
 
+dev-pretty-html-data :
+	find data -iname "*.liquid" -exec tidy -config tidy-config.txt -o {} {} \;2
+
 # Used during development: Strips all trailing whitespace from "own"
 # sourcefiles.
 dev-delete-trailing-whitespace :
