@@ -9,7 +9,6 @@ import {PageEditorComponent}            from './page/editor.component'
 import {QueryCreateComponent}           from './query/create.component'
 import {QueryEditorComponent}           from './query/editor.component'
 
-
 export const EditorRoutes : RouterConfig = [
     {
         path: "editor/:projectId",
@@ -23,4 +22,10 @@ export const EditorRoutes : RouterConfig = [
             { path: 'page/:pageId', component : PageEditorComponent },
         ]
     }
+]
+
+export const EditorComponents = [
+    EditorComponent, SettingsComponent, SchemaComponent,
+    QueryCreateComponent, QueryEditorComponent,
+    PageEditorComponent
 ]
