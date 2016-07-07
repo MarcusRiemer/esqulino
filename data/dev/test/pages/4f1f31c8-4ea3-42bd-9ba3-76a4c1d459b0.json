@@ -9,7 +9,7 @@
             {
               "type": "heading",
               "level": 1,
-              "text": "Große Überschrift"
+              "text": "Überschrift"
             }
           ]
         }
@@ -22,7 +22,7 @@
           "widgets": [
             {
               "type": "paragraph",
-              "text": "Dies ist ein Absatz auf der linken Seite"
+              "text": "Dies ist ein Absatz auf der linken Seite."
             }
           ]
         },
@@ -31,7 +31,7 @@
           "widgets": [
             {
               "type": "paragraph",
-              "text": "Dies ist ein Absatz auf der rechten Seite"
+              "text": "Dies ist ein Absatz auf der rechten Seite."
             }
           ]
         }
@@ -52,7 +52,7 @@
           "widgets": [
             {
               "type": "paragraph",
-              "text": "Und noch ein Absatz, an einer etwas merkwürdigen Stelle"
+              "text": "Und noch ein Absatz, an einer etwas merkwürdigen Stelle."
             }
           ]
         }

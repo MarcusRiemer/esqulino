@@ -1,13 +1,19 @@
 import{
     Component, Input, OnInit,
-    DynamicComponentLoader, Injector,
+    Injector,
     ViewContainerRef, ComponentResolver,
-    Type
+    Type, provide, ReflectiveInjector
 } from '@angular/core'
 
-import {Widget}             from '../../shared/page/widgets/index'
+import {Widget}                from '../../shared/page/widgets/index'
 
-import {WidgetComponent}    from './widgets/widget.component'
+import {SidebarService}        from '../sidebar.service'
+
+import {SIDEBAR_MODEL_TOKEN}   from '../sidebar.token'
+
+import {
+    WidgetComponent
+} from './widgets/widget.component'
 import {ParagraphComponent} from './widgets/paragraph.component'
 import {HeadingComponent}   from './widgets/heading.component'
 
@@ -27,7 +33,6 @@ export class WidgetLoaderComponent implements OnInit {
     private _typeMapping : { [typeName:string] : Type} = {}
 
     constructor(
-        private _dcl: DynamicComponentLoader,
         private _injector: Injector,
         private _selfRef : ViewContainerRef,
         private _resolver : ComponentResolver
@@ -63,13 +68,24 @@ export class WidgetLoaderComponent implements OnInit {
         this.widgets.forEach( (widget, index) => {
             console.log(`Resolving widget type "${widget.type}"`);
             const componentType = this.getComponentType(widget.type);
-            
+
+            // Inject the widget model            
+            let injector = ReflectiveInjector.resolveAndCreate([
+                provide(SIDEBAR_MODEL_TOKEN, {useValue : widget})
+            ],this._injector);
+
+            if (!injector.get(SIDEBAR_MODEL_TOKEN)) {
+                console.log("Couldn't get back widget model")
+            }
+
+            if (!injector.get(SidebarService)) {
+                console.log("Couldn't get back sidebar service")
+            }
             
             // TODO: Call the correct constructor instead of setting the property afterwards
             this._resolver.resolveComponent(componentType)
                 .then( (fac) => {
-                    const com = this._selfRef.createComponent(fac, index, this._injector);
-                    (<WidgetComponent<Widget>>com.instance).model = widget;
+                    this._selfRef.createComponent(fac, index, injector);
                 });
         });
     }

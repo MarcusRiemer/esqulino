@@ -18,6 +18,10 @@ export class Paragraph extends Widget {
         return (this._text);
     }
 
+    set text(newText : string) {
+        this._text = newText;
+    }
+
     protected toModelImpl() : WidgetDescription {
         const toReturn : ParagraphDescription = {
             type : "paragraph",
