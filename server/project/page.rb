@@ -11,6 +11,14 @@ def assert_page(project_folder, project_id, page_id)
   end
 end
 
+# Allows iteration over all pages that are stored on disk
+#
+# @param project_folder [string] The projects root folder
+def all_pages(project_folder)
+  page_folder = File.join(project_folder, "pages")
+  Dir.glob(page_folder + "/*.json")
+end
+
 # Loads a single project with a known ID.
 #
 # @param project_folder [string] The projects root folder
@@ -40,14 +48,30 @@ def project_load_page(project_folder, page_ref)
   return page_model
 end
 
+# Retrieves a page by its name
+#
+# @param project_folder [string] The projects root folder
+# @param page_name [name] The name the page is known under
+def project_find_page(project_folder, page_name)
+  # This is not quite nice, but it works ... #find returns
+  # the path to the project in question, but we actually
+  # want to return the loaded model.
+  to_return = nil
+  Dir.glob(all_pages project_folder).find do |page_file|
+    to_return = project_load_page(project_folder, page_file)
+    to_return['name'] == page_name
+  end
+
+  return to_return if to_return['name'] == page_name
+end
+
 # Retrieves all pages that are part of the given project.
 #
 # @param project_folder [string] The projects root folder
 #
 # @return [List] A list of "over the wire" descriptions of pages
 def project_load_pages(project_folder)
-  page_folder = File.join(project_folder, "pages")
-  Dir.glob(page_folder + "/*.json").map do |page_file|
+  Dir.glob(all_pages project_folder).map do |page_file|
     project_load_page(project_folder, page_file)
   end
 end
