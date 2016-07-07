@@ -5,6 +5,7 @@ require 'sinatra/json'
 require "sinatra/multi_route"
 
 require 'yaml'
+require 'uri' # To unescape URIs
 
 require './project.rb'
 require './schema.rb'
@@ -20,26 +21,31 @@ require './error.rb'
 # *does* cause some trouble with missing resources, as they get redirected
 # to the mainpage. To fix this, a list of all valid URLs would be required ...
 class ScratchSqlApp < Sinatra::Base
-  enable :logging
-
+  # Required to catch the various instances of "default" routes that should
+  # also map to the index.html
   register Sinatra::MultiRoute
 
   # Static HTML files are served from here
   set :public_folder, File.dirname(__FILE__) + "/../dist/client/"
 
-  # There is a single validator for the whole esqulino instance
+  # There is a single validator for the whole esqulino instance.
+  # All schemas are currently loaded when the server is started and are
+  # cached for the time being. If the schemas change, a server restart
+  # is required.
   @@validator = Validator.new(File.dirname(__FILE__) + "/../schema/json")
 
   # Activate reloading and disable any caching when developing
   configure :development do
     puts "esqulino is running in development mode"
     register Sinatra::Reloader
+    enable :logging
 
     # No caching
     set :static_cache_control, [:no_cache, :max_age => 0]
-    # Preferring our own exceptions
-    set :show_exceptions, :after_handler
   end
+
+  # Preferring our own exceptions
+  set :show_exceptions, :after_handler
 
   # The data directory to serve projects from
   def given_data_dir
@@ -78,7 +84,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Ensure that viewing pages have all resources available
-  before '/view/:project_id/:page_name_or_id?' do
+  before '/view/:project_id/?:page_name_or_id?' do
     @project_id = params['project_id']
     @project_folder = File.join(given_data_dir, @project_id)
 
@@ -88,11 +94,19 @@ class ScratchSqlApp < Sinatra::Base
     # Ensure that there is actually a page
     page_name_or_id = params['page_name_or_id']
 
-    # Distinguish between page names and ids
-    if is_string_id? page_name_or_id then
+    # Distinguish between index page, page names and ids
+    if page_name_or_id.nil? || page_name_or_id.empty? then
+      # Index page
+      project = read_project @project_folder
+      @page_id = project['indexPageId']
+    elsif is_string_id? page_name_or_id then
+      # Specific ID
       @page_id = page_name_or_id
     else
-
+      # User-facing name
+      page_name = URI.unescape(page_name_or_id)
+      page = project_find_page(@project_folder, page_name_or_id)
+      @page_id = page['id']
     end
     
     assert_page @project_folder, @project_id, @page_id
@@ -203,7 +217,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Viewing a specific page
-  get '/view/:project_id/:page_name?' do
+  get '/view/:project_id/?:page_name?' do
     return project_render_stored_page(@project_folder, @page_id)
   end
 

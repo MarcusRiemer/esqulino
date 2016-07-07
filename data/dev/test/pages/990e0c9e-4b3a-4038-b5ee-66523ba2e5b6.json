@@ -5,7 +5,13 @@
       "columns": [
         {
           "width": 12,
-          "widgets": []
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "Seite 2"
+            }
+          ]
         }
       ]
     }
