@@ -5,12 +5,18 @@ import {Page}                  from '../page'
 import {Renderer}              from '../renderer'
 import {
     Widget, Row, Column,
-    Paragraph, Heading
+    Paragraph, Heading, QueryTable 
 } from '../widgets/index'
 
 export {Renderer}
 
 type WidgetRenderer = (w: Widget) => string;
+
+function renderQueryTable(w: Widget) : string {
+    const queryTable = <QueryTable> w;
+    return (`<code>QueryTable</code>`);
+}
+
 
 function renderParagraph(w: Widget) : string {
     const paragraph = <Paragraph> w;
@@ -57,6 +63,7 @@ export class LiquidRenderer extends Renderer {
      * All known renderers for widgets
      */
     private _widgetRenderers : { [widgetType : string]: WidgetRenderer} = {
+        "query-table" : renderQueryTable,
         "paragraph" : renderParagraph,
         "heading" : renderHeading
     };

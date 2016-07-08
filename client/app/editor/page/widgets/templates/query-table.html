@@ -1,0 +1,10 @@
+<div>
+  <h5>Tabelle: {{ query?.name }}</h5>
+  <table class="table">
+    <tr>
+      <th *ngFor="let column of Columns">
+        {{ column.name }}
+      </th>
+    </tr>
+  </table>
+</div>

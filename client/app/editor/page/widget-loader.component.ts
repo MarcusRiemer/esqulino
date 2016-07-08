@@ -11,11 +11,10 @@ import {SidebarService}        from '../sidebar.service'
 
 import {SIDEBAR_MODEL_TOKEN}   from '../sidebar.token'
 
-import {
-    WidgetComponent
-} from './widgets/widget.component'
-import {ParagraphComponent} from './widgets/paragraph.component'
-import {HeadingComponent}   from './widgets/heading.component'
+import {WidgetComponent}       from './widgets/widget.component'
+import {ParagraphComponent}    from './widgets/paragraph.component'
+import {HeadingComponent}      from './widgets/heading.component'
+import {QueryTableComponent}   from './widgets/query-table.component'
 
 /**
  * Loads the editor-representation of widgets.
@@ -42,7 +41,8 @@ export class WidgetLoaderComponent implements OnInit {
          */
         this._typeMapping = {
             "paragraph" : ParagraphComponent,
-            "heading" : HeadingComponent
+            "heading" : HeadingComponent,
+            "query-table": QueryTableComponent
         };
     }
 
