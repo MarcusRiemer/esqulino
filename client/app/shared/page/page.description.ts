@@ -1,4 +1,12 @@
 /**
+ * Describes a table that shows the results of a query.
+ */
+export interface QueryTableDescription {
+    queryId : string,
+    type: "query-table"
+}
+
+/**
  * Describes a heading widget.
  */
 export interface HeadingDescription extends WidgetDescription {

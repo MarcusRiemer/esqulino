@@ -1,11 +1,12 @@
-import {Widget, WidgetDescription}       from './widget'
-import {loadWidget}                      from './widget-loader'
+import {Widget, WidgetDescription}         from './widget'
+import {loadWidget}                        from './widget-loader'
 
-import {Row, RowDescription}             from './row'
-import {Column, ColumnDescription}       from './column'
+import {Row, RowDescription}               from './row'
+import {Column, ColumnDescription}         from './column'
 
-import {Paragraph, ParagraphDescription} from './paragraph'
-import {Heading, HeadingDescription}     from './heading'
+import {Paragraph, ParagraphDescription}   from './paragraph'
+import {Heading, HeadingDescription}       from './heading'
+import {QueryTable, QueryTableDescription} from './query-table'
 
 export {
     Widget, WidgetDescription,
@@ -13,5 +14,6 @@ export {
     Column, ColumnDescription,
     Paragraph, ParagraphDescription,
     Heading, HeadingDescription,
+    QueryTable, QueryTableDescription,
     loadWidget
 }
