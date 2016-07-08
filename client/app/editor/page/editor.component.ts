@@ -55,6 +55,7 @@ export class PageEditorComponent implements OnInit, OnDestroy {
         private _routeParams: ActivatedRoute,
         private _sidebarService : SidebarService
     ) {
+        this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
     }
 
     /**
@@ -63,7 +64,7 @@ export class PageEditorComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this._toolbarService.resetItems();
 
-        // Grab the correct project and query
+        // Grab the correct project and page
         let subRef = this._routeParams.params.subscribe(params => {
             var pageId = params['pageId'];
             this._projectService.activeProject
@@ -72,7 +73,7 @@ export class PageEditorComponent implements OnInit, OnDestroy {
                     this._project = res;
                     this._page = this._project.getPageById(pageId);
 
-                    // Reset render preview and sidebar
+                    // The active page has changed: Reset render preview and sidebar
                     this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
                     this.doRenderPreview = false;
                 });

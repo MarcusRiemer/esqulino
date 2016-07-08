@@ -37,9 +37,6 @@ export class SidebarService {
         const queryId = Query.SidebarComponent.SIDEBAR_IDENTIFIER;
 
         this.registerType(pageId, Page.SidebarComponent);
-        //this.registerType("page-paragraph", ParagraphSidebarComponent);
-        //this.registerType("page-heading", Page.SidebarComponent);
-
         this.registerType(queryId, Query.SidebarComponent);
     }
 
@@ -99,7 +96,7 @@ export class SidebarService {
 
     /**
      * @return An observable that raises events when
-     *         the visibilit changes.
+     *         the visibility of the sidebar changes.
      */
     get isSidebarVisible() : Observable<boolean> {
         return (this._model.map(s => !!s));
