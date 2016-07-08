@@ -1,4 +1,6 @@
-import {Component, OnInit, OnDestroy}   from '@angular/core'
+import {
+    Component, OnInit, OnDestroy, ChangeDetectorRef
+} from '@angular/core'
 import {CORE_DIRECTIVES}                from '@angular/common'
 import {HTTP_PROVIDERS}                 from '@angular/http'
 import {
@@ -47,7 +49,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         private _projectService: ProjectService,
         private _sidebarService: SidebarService,
         private _routeParams: ActivatedRoute,
-        private _router : Router
+        private _router : Router,
+        private _changeDetectorRef : ChangeDetectorRef
     ) { }
 
     /**
@@ -65,7 +68,15 @@ export class EditorComponent implements OnInit, OnDestroy {
              );
         });
         
-        this._sidebarService.isSidebarVisible.subscribe(v => this._sidebarVisible = v);
+        this._sidebarService.isSidebarVisible.subscribe(v => {
+            // TODO: Causes change-detection-error on change
+            // This more or less globally changes the application state,
+            // we need to tell the change detector we are aware of this
+            // otherwise Angular freaks out:
+            // http://stackoverflow.com/questions/38262707/
+            this._sidebarVisible = v;
+            this._changeDetectorRef.markForCheck();
+        });
     }
 
     /**
