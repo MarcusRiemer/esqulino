@@ -6,18 +6,20 @@ import {QueryTable}                         from '../../../shared/page/widgets/i
 import {ProjectService}                     from '../../project.service'
 import {SIDEBAR_MODEL_TOKEN}                from '../../sidebar.token'
 
+import {QueryTableComponent}                from './query-table.component'
+
 @Component({
     templateUrl: 'app/editor/page/widgets/templates/query-table-sidebar.html',
 })
 export class QueryTableSidebarComponent {
 
-    private _model : QueryTable;
+    private _component : QueryTableComponent;
 
     private _availableQueries : QuerySelect[];
     
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) model : QueryTable,
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : QueryTableComponent,
                 private _projectService : ProjectService) {
-        this._model = model;
+        this._component = com;
 
         // Grabbing all SELECT queries
         this._projectService.activeProject.subscribe( (project) => {
@@ -25,8 +27,17 @@ export class QueryTableSidebarComponent {
         });
     }
 
+    get referencedQueryId() {
+        return (this.model.queryId);
+    }
+
+    set referencedQueryId(newId : string) {
+        this._component.setQuery(newId);
+        console.log("Referenced query changed");
+    }
+
     get model() {
-        return (this._model);
+        return (this._component.model);
     }
 
     get availableQueries() {

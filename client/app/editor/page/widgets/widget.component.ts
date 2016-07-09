@@ -4,7 +4,8 @@ import {SidebarService}                 from '../../sidebar.service'
 
 /**
  * Base class for all widget visualizations. Exposes the model itself and
- * stores the editing state.
+ * stores the editing state. If a sidebar definition is supplied, the 
+ * default editing action is to show that sidebar.
  */
 export class WidgetComponent<TModel> {
     private _model : TModel;
@@ -75,7 +76,7 @@ export class WidgetComponent<TModel> {
      */
     protected onBeginEditing() {
         if (this._sidebarTypeId) {
-            this._sidebarService.showSidebar(this._sidebarTypeId, this.model);
+            this._sidebarService.showSidebar(this._sidebarTypeId, this);
         }
     }
 

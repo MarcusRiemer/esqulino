@@ -16,6 +16,8 @@ import {
 
 import {Project}                                 from './project'
 
+export {Project}
+
 /**
  * Wraps access to a single project, which is deemed to be "active"
  * and should be displayed in the editor view.

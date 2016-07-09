@@ -1,8 +1,10 @@
 import {Component, Inject, Optional}        from '@angular/core'
 
+import {Paragraph}                          from '../../../shared/page/widgets/index'
+
 import {SIDEBAR_MODEL_TOKEN}                from '../../sidebar.token'
 
-import {Paragraph}                          from '../../../shared/page/widgets/index'
+import {ParagraphComponent}                 from './paragraph.component'
 
 @Component({
     templateUrl: 'app/editor/page/widgets/templates/paragraph-sidebar.html',
@@ -11,8 +13,8 @@ export class ParagraphSidebarComponent {
 
     private _model : Paragraph;
     
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) model : Paragraph) {
-        this._model = model;
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : ParagraphComponent) {
+        this._model = com.model;
     }
 
     get model() {

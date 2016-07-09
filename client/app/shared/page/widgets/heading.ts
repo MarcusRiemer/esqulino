@@ -16,12 +16,25 @@ export class Heading extends Widget {
         this._level = desc.level;
     }
 
-    get level() {
+    /**
+     * @return The level of this heading, always a number.
+     */
+    get level() : number {
         return (this._level);
     }
 
+    /**
+     * 
+     *
+     * @param newLevel The new level to set.
+     */
     set level(newLevel : number) {
-        this._level = newLevel;
+        // This is creepy ... The Angular 2 bindings may violate the
+        // type system and then pass in a string to this method.
+        // In order to ensure we *definetly* have a number in the end,
+        // we convert the argument to something that must be a string
+        // and read it back.
+        this._level = parseInt("" + newLevel);
     }
 
     get text() {
