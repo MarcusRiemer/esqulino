@@ -18,10 +18,6 @@ export class ParagraphSidebarComponent {
     get model() {
         return (this._model);
     }
-    
-    /*constructor(@Optional() private _paragraph : ParagraphComponent) {
-        console.log(`Model for ${_paragraph.model.text}`);
-    }*/
 }
 
 export const PARAGRAPH_SIDEBAR_IDENTIFIER = "page-paragraph";
