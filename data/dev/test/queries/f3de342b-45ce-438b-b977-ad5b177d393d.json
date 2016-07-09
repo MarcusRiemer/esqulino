@@ -11,6 +11,14 @@
         "expr": {
           "star": {}
         }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "key",
+            "table": "key_value"
+          }
+        }
       }
     ]
   },

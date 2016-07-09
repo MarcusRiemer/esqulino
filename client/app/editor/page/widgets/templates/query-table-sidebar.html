@@ -5,7 +5,7 @@
            class="form-control-label">
       <code>SELECT</code>-Abfrage
     </label>
-    <select [(ngModel)]="model.queryId"
+    <select [(ngModel)]="referencedQueryId"
             id="table-selected-query"
             class="form-control">
       <option *ngFor="let query of availableQueries"

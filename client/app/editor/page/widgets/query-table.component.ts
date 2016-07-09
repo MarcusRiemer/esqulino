@@ -1,9 +1,11 @@
-import {Component, Inject, OnInit} from '@angular/core'
+import {
+    Component, Inject, OnInit, ChangeDetectorRef
+} from '@angular/core'
 
 import {QuerySelect}               from '../../../shared/query'
 import {QueryTable}                from '../../../shared/page/widgets/index'
 
-import {ProjectService}            from '../../project.service'
+import {ProjectService, Project}   from '../../project.service'
 import {SidebarService}            from '../../sidebar.service'
 import {SIDEBAR_MODEL_TOKEN}       from '../../sidebar.token'
 
@@ -22,9 +24,11 @@ export {QueryTable}
 })
 export class QueryTableComponent extends WidgetComponent<QueryTable> {
 
+    private _project : Project;
     private _query : QuerySelect;
     
     constructor(@Inject(SIDEBAR_MODEL_TOKEN) model : QueryTable,
+                private _cdRef: ChangeDetectorRef,
                 sidebarService : SidebarService,
                 projectService : ProjectService) {
         super(sidebarService, model, {
@@ -34,15 +38,27 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
 
         // Grab the correct query from the loaded project
         projectService.activeProject.subscribe(proj => {
-            const query = proj.getQueryById(this.model.queryId);
-            if (query instanceof QuerySelect) {
-                this._query = query;
-            }
+            this._project = proj;
+            this.refreshQuery();
         })
     }
 
     get query() : QuerySelect {
         return (this._query);
+    }
+
+    setQuery(queryId : string) {
+        this.model.queryId = queryId;
+        this.refreshQuery();
+    }
+
+    refreshQuery() {
+        const query = this._project.getQueryById(this.model.queryId);
+        if (query instanceof QuerySelect) {
+            this._query = query;
+        }
+
+        this._cdRef.markForCheck();
     }
 
     /**
