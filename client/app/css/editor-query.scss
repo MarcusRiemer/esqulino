@@ -1,52 +1,6 @@
-.editor {
-    display: flex;
-    align-items: stretch;
-}
-
-.editor .content {
-    flex-grow: 1;
-    margin-right: 10px;
-}
-
-nav.toolbar .navbar-brand {
-    /* Hack: Account for margin and padding of Bootstraps stuff */
-    min-width: $sidebar-width - 31px;
-}
-
-.editor .navbar {
-    min-width: $sidebar-width - 10px;
-    margin-right: 10px;
-}
-
 .editor .sql {
     display: flex;
     align-items: stretch;
-}
-
-.editor .navbar {
-    .label.dirty {
-        cursor: pointer;
-    }
-    
-    .router-link-active {
-        font-weight: bold;
-        border-radius: 500px;
-        padding-left: 0.5em;
-        padding-right: 0.5em;
-        color: black;
-        transition: background-color, padding, border-radius;
-        transition-duration: 200ms;
-        transition-timing-function: ease-in-out;
-        background-color: cornflowerblue;
-    }
-    
-    .nav-query {
-        margin-left: 15px;
-    }
-
-    .nav-page {
-        margin-left: 15px;
-    }
 }
 
 .sidebar .block-container.center {
@@ -57,19 +11,6 @@ nav.toolbar .navbar-brand {
 .sidebar .delete {
     background-color: red;
     border-radius: 500px;                      
-}
-
-.sidebar {
-  position: fixed;
-  top: $navbar-height + 10px;
-  bottom: 0;
-  right: 0;
-  width: $sidebar-width;
-  overflow-y: scroll;
-}
-
-.sidebar-hack {
-  min-width: $sidebar-width;
 }
 
 .sidebar .block .column {

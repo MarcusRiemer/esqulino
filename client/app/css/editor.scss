@@ -1,0 +1,67 @@
+.editor {
+    display: flex;
+    overflow: hidden;
+    height: 100vh;
+    margin-top: -$navbar-height;
+    padding-top: $navbar-height;
+    position: relative;
+    width: 100%;
+    backface-visibility: hidden;
+    will-change: overflow;
+}
+
+.editor .navbar, .editor .content, .editor .sidebar {
+    overflow: auto;
+    height: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.editor .content {
+    flex: 1 1;
+}
+
+.editor .navbar {    
+    .label.dirty {
+        cursor: pointer;
+    }
+    
+    .router-link-active {
+        font-weight: bold;
+        border-radius: 500px;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        color: black;
+        transition: background-color, padding, border-radius;
+        transition-duration: 200ms;
+        transition-timing-function: ease-in-out;
+        background-color: cornflowerblue;
+    }
+    
+    .nav-query {
+        margin-left: 15px;
+    }
+
+    .nav-page {
+        margin-left: 15px;
+    }
+}
+
+
+nav.toolbar .navbar-brand {
+    /* Hack: Account for margin and padding of Bootstraps stuff */
+    min-width: $sidebar-width - 16px;
+}
+
+.editor .navbar {
+    flex: 0 0 $sidebar-width;
+}
+
+.editor .sidebar {
+    flex: 0 0 $sidebar-width;
+}
+
+.sidebar textarea {
+    resize: vertical;
+}
+

@@ -10,6 +10,10 @@
               "type": "heading",
               "level": 1,
               "text": "Seite 2"
+            },
+            {
+              "type": "paragraph",
+              "text": "Hier ist ein Absatz, der was zur zweiten Seite erzählt. Unter diesem Absatz ist dann noch eine Tabelle zu sehen."
             }
           ]
         },
