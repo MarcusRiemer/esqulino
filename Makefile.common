@@ -23,14 +23,14 @@ endif
 # Ensures the bundle "binary" is available
 has-bundle :
 ifeq (, $(wildcard $(BUNDLE_BIN)))
-	$(error "Ruby Bundler (bundle) not in PATH")
+	$(error "Ruby Bundler (bundle) not in gems")
 endif
 
 # Ensures the yard "binary" is available
 has-yard :
-ifeq (, $(wildcard $(BUNDLE_BIN)))
-	$(error "Ruby documentation generation (yard) not in PATH")
+ifeq (, $(wildcard $(YARD_BIN)))
+	$(error "Ruby documentation generation (yard) not in gems")
 endif
 
 
-.PHONY : has-npm has-sass has-tsc has-bundle has-yard 
+.PHONY : has-npm has-sass has-tsc has-bundle has-yard

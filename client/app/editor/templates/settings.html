@@ -42,12 +42,13 @@
 
       <div *ngIf="project?.pages.length > 0"
            class="form-group row">
-        <label for="project-description"
+        <label for="project-index-page"
                class="col-sm-2 form-control-label">
           Startseite
         </label>
         <div class="col-sm-10">
           <select [(ngModel)]="project.indexPageId"
+                  id="project-index-page"
                   class="form-control">
             <option *ngFor="let page of project?.pages"
                     [value]="page.id">

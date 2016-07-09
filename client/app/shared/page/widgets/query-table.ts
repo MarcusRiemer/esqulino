@@ -18,6 +18,10 @@ export class QueryTable extends Widget {
         return (this._queryId);
     }
 
+    set queryId(newId : string) {
+        this._queryId = newId;
+    }
+
     protected toModelImpl() : WidgetDescription {
         const toReturn : QueryTableDescription = {
             type : "query-table",
