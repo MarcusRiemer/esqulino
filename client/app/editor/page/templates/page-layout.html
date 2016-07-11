@@ -1,5 +1,7 @@
 <div class="card">
-  <div class="card-block">
+  <div class="card-block"
+       (dragover)="onBlueprintRowDrag($event, 0)"
+       (drop)="onBlueprintRowDrop($event, 0)">
     <h4 class="card-title">Seitenlayout</h4>
     <p class="card-text">
       In diesem Editor kannst du das Layout deiner Seite mit Hilfe von Zeilen und Spalten festlegen.
@@ -11,15 +13,23 @@
            (dragover)="onBlueprintRowDrag($event, 0)"
            (drop)="onBlueprintRowDrop($event, 0)"
            class="row blueprint">
-        <div class="col-xs-12">
+        <div *ngFor="let col of draggedRow?.row?.columns"
+             [ngClass]="col.columnClasses">
+          <esqulino-widget-loader
+              [widgets]="col.widgets">
+          </esqulino-widget-loader>
+        </div>
+        <div *ngIf="!draggedRow"
+             class="col-xs-12">
           <h4><span class="fa fa-plus"></span></h4>
         </div>
       </div>
       <template ngFor let-row [ngForOf]="page?.rows" let-rowIndex="index">
-        <div class="row"
-             (dragover)="onBlueprintRowDrag($event, rowIndex + 1)"
+        <div (dragover)="onBlueprintRowDrag($event, rowIndex + 1)"
              (drop)="onBlueprintRowDrop($event, rowIndex + 1)"
-             (dragstart)="startRowDrag($event, row)"
+             (dragstart)="startRowDrag($event, row, rowIndex)"
+             [hidden]="!showRow(rowIndex)"
+             class="row"
              draggable="true">
           <div *ngFor="let col of row.columns"
                [ngClass]="col.columnClasses">
@@ -28,11 +38,18 @@
             </esqulino-widget-loader>
           </div>
         </div>
-        <div *ngIf="showBlueprintRow(rowIndex + 1)"
+        <div *ngIf="showRow(rowIndex) && showBlueprintRow(rowIndex + 1)"
              (dragover)="onBlueprintRowDrag($event, rowIndex + 1)"
              (drop)="onBlueprintRowDrop($event, rowIndex + 1)"
              class="row blueprint">
-          <div class="col-xs-12">
+          <div *ngFor="let col of draggedRow?.row?.columns"
+               [ngClass]="col.columnClasses">
+            <esqulino-widget-loader
+                [widgets]="col.widgets">
+            </esqulino-widget-loader>
+          </div>
+          <div *ngIf="!draggedRow"
+               class="col-xs-12">
             <h4><span class="fa fa-plus"></span></h4>
           </div>
         </div>

@@ -30,6 +30,14 @@ export class PageLayoutComponent {
      * cursor was dragged over the last time.
      */
     private _hoveredDropIndex : number;
+
+    /**
+     * Rows may be hidden during reordering operations.
+     */
+    @Input() draggedRow : {
+        row : Row
+        index : number
+    }
     
     /**
      * A blueprint is hovering over some row.
@@ -70,11 +78,17 @@ export class PageLayoutComponent {
     /**
      * Starts a drag action for a row that is placed in the layout.
      */
-    startRowDrag(evt : DragEvent, draggedRow : Row) {
+    startRowDrag(evt : DragEvent, draggedRow : Row, rowIndex : number) {
+        this.draggedRow = {
+            index : rowIndex,
+            row : draggedRow
+        };
+        
         // Make sure to remove this row on any valid drop
         this._dragService.startRowDrag(evt, "page", draggedRow.toModel(), {
             onRemove : () => this.page.removeRow(draggedRow),
-            onRow : (_) => this.page.removeRow(draggedRow)
+            onRow : (_) => this.page.removeRow(draggedRow),
+            onDragEnd : () => this.draggedRow = undefined
         });
     }
 
@@ -85,6 +99,15 @@ export class PageLayoutComponent {
      */
     showBlueprintRow(dropIndex : number) : boolean {
         return (this._dragService.activeRow &&
-                (dropIndex == this._hoveredDropIndex || dropIndex == 0));
+                (dropIndex == this._hoveredDropIndex));
+    }
+
+    /**
+     * @rowIndex The index of the row according to the current page state
+     *
+     * @return True, if the row should be shown
+     */
+    showRow(rowIndex : number) : boolean {
+        return (!this.draggedRow || this.draggedRow.index != rowIndex);
     }
 }

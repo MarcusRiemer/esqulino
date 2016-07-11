@@ -13,8 +13,20 @@ export type OriginFlag = "sidebar" | "page"
  * Possible callbacks for drop operations
  */
 export interface DropCallbacks {
+    /**
+     * Called when dropped into the trash
+     */
     onRemove? : () => void
+
+    /**
+     * Called when dropped on an existing row
+     */
     onRow? : (r : Row) => void
+
+    /**
+     * Called when dragging has stopped
+     */
+    onDragEnd? : () => void
 }
 
 /**
@@ -35,7 +47,7 @@ export interface PageDragEvent {
 export class DragService {
 
     private _currentDrag : PageDragEvent;
-    
+
     /**
      * Starts a drag operation for the given scope.
      *
@@ -46,13 +58,13 @@ export class DragService {
         if (this._currentDrag) {
             throw new Error ("Attempted to start a second drag");
         }
-        
+
         this._currentDrag = pageEvt;
 
         // Serialize the dragged "thing"
         const dragData = JSON.stringify(this._currentDrag);
         evt.dataTransfer.setData('text/plain', dragData);
-        
+
         // We are only interested in the top level drag element, if
         // we wouldn't stop the propagation, the parent of the current
         // drag element would fire another dragstart.
@@ -67,9 +79,15 @@ export class DragService {
         }
 
         // Reset everything once the operation has ended
-        evt.target.addEventListener("dragend", () => {            
-            this._currentDrag = null;
+        evt.target.addEventListener("dragend", () => {
+            // Possibly inform listeners
+            if (this.currentDrag.callbacks &&
+                this.currentDrag.callbacks.onDragEnd) {
+                this.currentDrag.callbacks.onDragEnd();
+            }
             
+            this._currentDrag = null;
+
             console.log(`Page-Drag ended: ${dragData}`);
         });
 

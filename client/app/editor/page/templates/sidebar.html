@@ -1,37 +1,36 @@
-<div class="block-container center delete"
-     (dragover)="onTrashDrag($event)"
-     (drop)="onTrashDrop($event)"
-     [hidden]="hideTrash">
-  <span class="fa fa-trash fa-5x"></span>
-</div>  
+<div class="card-block">
+  <div class="block-container center delete"
+       (dragover)="onTrashDrag($event)"
+       (drop)="onTrashDrop($event)"
+       [hidden]="hideTrash">
+    <span class="fa fa-trash fa-5x"></span>
+  </div>  
 
-<div class="page-preview">
-  <div (dragstart)="startRowDrag($event)"
-       draggable="true"
-       class="row-preview">
-    <div class="column-preview">
-      Zeile
+  <div class="page-preview">
+    <div (dragstart)="startRowDrag($event)"
+         draggable="true"
+         class="row-preview">
+      <div class="column-preview">
+        Zeile
+      </div>
+    </div>
+
+    <div (dragstart)="startColumnDrag($event)"
+         class="center">
+      <div class="column-preview">
+        Spalte
+      </div>
     </div>
   </div>
+</div>
 
-  <div (dragstart)="startColumnDrag($event)"
-       class="center">
-    <div class="column-preview">
-      Spalte
+<div class="card-block">
+  <div class="block-container block">
+    <div *ngFor="let query of queries; let is-last=last"
+         class="table">
+      <span class="fa fa-table fa-fw"></span>
+      {{ query.query.name }}
     </div>
+    <hr [hidden]="is-last">
   </div>
 </div>
-
-<div class="page-preview">
-  
-</div>
-
-<div class="block-container block">
-  <div *ngFor="let query of queries; let is-last=last"
-       class="table">
-    <span class="fa fa-table fa-fw"></span>
-    {{ query.query.name }}
-  </div>
-  <hr [hidden]="is-last">
-</div>
-

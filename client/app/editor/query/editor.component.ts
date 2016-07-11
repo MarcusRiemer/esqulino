@@ -10,6 +10,7 @@ import {
 
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
+import {PreferencesService}             from '../preferences.service'
 import {ToolbarService}                 from '../toolbar.service'
 import {SidebarService}                 from '../sidebar.service'
 import {
@@ -61,7 +62,8 @@ export class QueryEditorComponent implements OnInit {
         private _queryService : QueryService,
         private _toolbarService : ToolbarService,
         private _routeParams : ActivatedRoute,
-        private _sidebarService : SidebarService
+        private _sidebarService : SidebarService,
+        private _preferences : PreferencesService
     ) {
         this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
         this._toolbarService.resetItems();
@@ -72,6 +74,13 @@ export class QueryEditorComponent implements OnInit {
      */
     get result() {
         return (this._result);
+    }
+
+    /**
+     * @return True, if a debug JSON model should be shown.
+     */
+    get showJsonModel() {
+        return (this._preferences.showJsonModel);
     }
 
     /**
