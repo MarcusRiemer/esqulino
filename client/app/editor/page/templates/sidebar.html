@@ -3,16 +3,25 @@
   <span class="fa fa-trash fa-5x"></span>
 </div>  
 
-<div class="block-container center">
-  <div class="layout">
-    Zeile
+<div class="page-preview">
+  <div (dragstart)="startRowDrag($event)"
+       draggable="true"
+       class="row-preview">
+    <div class="column-preview">
+      Zeile
+    </div>
+  </div>
+
+  <div (dragstart)="startColumnDrag($event)"
+       class="center">
+    <div class="column-preview">
+      Spalte
+    </div>
   </div>
 </div>
 
-<div class="block-container center">
-  <div class="layout">
-    Spalte
-  </div>
+<div class="page-preview">
+  
 </div>
 
 <div class="block-container block">

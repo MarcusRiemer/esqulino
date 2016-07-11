@@ -5,12 +5,10 @@ import {Router, ActivatedRoute}         from '@angular/router'
 
 import {Observable}                     from 'rxjs/Observable'
 
-import {Page}                           from '../../shared/page/index'
 import {Paragraph}                      from '../../shared/page/widgets/index'
 
-import {Project}                        from '../project'
-import {ProjectService}                 from '../project.service'
-import {PageService}                    from '../page.service'
+import {ProjectService, Project}        from '../project.service'
+import {PageService, Page}              from '../page.service'
 import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 

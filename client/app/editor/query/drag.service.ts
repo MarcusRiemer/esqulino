@@ -1,10 +1,9 @@
-import 'rxjs/Rx';
+import {Subject}                from 'rxjs/Subject'
+
+import {Injectable}             from '@angular/core'
 
 import {Model}                  from '../../shared/query'
 import {Removable, Expression}  from '../../shared/syntaxtree/common'
-
-import {Subject}                from 'rxjs/Subject'
-import {Injectable}             from '@angular/core';
 
 /**
  * The scopes a drag event could affect
@@ -25,7 +24,8 @@ export interface SqlDragEvent {
 
 /**
  * Coordinates dragging events among all components that make use of
- * drag & drop to construct queries.
+ * drag & drop to construct queries. This is the shared state that
+ * is required to make things work out correctly.
  */
 @Injectable()
 export class DragService {
@@ -80,10 +80,10 @@ export class DragService {
         evt.target.addEventListener("dragend", () => {
             this._currentDrag = null;
             this._currentSource = null;
-            console.log(`Drag ended: ${dragData}`);
+            console.log(`Query-Drag ended: ${dragData}`);
         });
 
-        console.log(`Drag started: ${dragData}`);
+        console.log(`Query-Drag started: ${dragData}`);
     }
 
     /**
@@ -237,80 +237,79 @@ export class DragService {
     /**
      * @return True, if the current drag operation originated in the query
      */
-    get activeFromQuery() {
+    get activeFromQuery() : boolean {
         return (this._currentDrag && this._currentDrag.origin != <OriginFlag>"sidebar");
     }
 
     /**
      * @return True, if the current drag operation originated in the SELECT of a query.
      */
-    get activeFromSelect() {
+    get activeFromSelect() : boolean {
         return (this._currentDrag && this._currentDrag.origin == <OriginFlag>"select");
     }
 
     /**
      * @return True, if the current drag operation originated in the FROM component of a query.
      */
-    get activeFromFrom() {
+    get activeFromFrom() : boolean {
         return (this._currentDrag && this._currentDrag.origin == <OriginFlag>"from");
     }
 
     /**
      * @return True, if the current drag operation originated in the WHERE component of a query.
      */
-    get activeFromWhere() {
+    get activeFromWhere() : boolean {
         return (this._currentDrag && this._currentDrag.origin == <OriginFlag>"where");
     }
 
     /**
      * @return True, if the current drag operation originated in the sidebar
      */
-    get activeFromSidebar() {
+    get activeFromSidebar() : boolean {
         return (this._currentDrag && this._currentDrag.origin == <OriginFlag>"sidebar");
     }
 
     /**
-     * @return True, if a constant is involved in the current drag operation
+     * @return True, if a expression is involved in the current drag operation
      */
-    get activeExpression() {
+    get activeExpression() : boolean {
         return (this._currentDrag && this._currentDrag.scope.indexOf("expr") >= 0);
     }
 
     /**
      * @return True, if a constant is involved in the current drag operation
      */
-    get activeConstant() {
+    get activeConstant() : boolean {
         return (this._currentDrag && this._currentDrag.scope.indexOf("constant") >= 0);
     }
 
     /**
      * @return True, if a column is involved in the current drag operation
      */
-    get activeColumn() {
+    get activeColumn() : boolean {
         return (this._currentDrag && this._currentDrag.scope.indexOf("column") >= 0);
     }
 
     /**
      * @return True, if an operator is involved in the current drag operation
      */
-    get activeOperator() {
+    get activeOperator() : boolean {
         return (this._currentDrag && this._currentDrag.scope.indexOf("operator") >= 0);
     }
 
     /**
      * @return True, if a column is involved in the current drag operation
      */
-    get activeCompound() {
+    get activeCompound() : boolean {
         return (this._currentDrag && this._currentDrag.scope.indexOf("compound") >= 0);
     }
 
     /**
      * @return True, if a table is involved in the current drag operation
      */
-    get activeTable() {
+    get activeTable() : boolean {
         return (this._currentDrag && this._currentDrag.scope.indexOf("table") >= 0);
     }
-
 
     /**
      * @return The source of the drag operation.

@@ -142,7 +142,7 @@ export class QueryEditorComponent implements OnInit {
         this._subscriptionRefs.push(subRef)
 
         // Reacting to querying
-        let btnQuery = this._toolbarService.addButton("run", "Ausführen", "search", "r");
+        let btnQuery = this._toolbarService.addButton("run", "Ausführen", "play", "r");
         subRef = btnQuery.onClick.subscribe( (res) => {
             btnQuery.isInProgress = true;
             this._queryService.runQuery(this.project, this.query, this.relevantArguments)

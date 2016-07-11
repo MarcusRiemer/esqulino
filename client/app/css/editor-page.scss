@@ -1,13 +1,32 @@
+.sidebar .page-preview {
+    font-family: monospace;
+    cursor: default;
+    font-size: 20px;
+    text-align: center;
+}
+
+.sidebar .page-preview > div {
+    margin-bottom: .75rem;
+}
+
 .page-preview {
-    .row {
+    .row, .row-preview {
         border-left: 5px solid blue;
+    }
+
+    .blueprint {
+        border-left: 5px dotted blue;
+        text-align: center;
+    }
+
+    .row > [class^="col-"], .column-preview {
+        background-color: rgba(86,61,124,.15);
+        border: 1px solid rgba(86,61,124,.2);
     }
 
     .row > [class^="col-"] {
         padding-top: .75rem;
         padding-bottom: .75rem;
-        background-color: rgba(86,61,124,.15);
-        border: 1px solid rgba(86,61,124,.2);
     }
 
     .row {
@@ -16,7 +35,7 @@
 
     .widget-preview {
         background-color: whitesmoke;
-        padding: 7px;
+        padding: 5px;
     }
 
     .widget-preview:hover {
