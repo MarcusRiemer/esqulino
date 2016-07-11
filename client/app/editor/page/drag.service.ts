@@ -2,11 +2,26 @@ import {Subject}                from 'rxjs/Subject'
 
 import {Injectable}             from '@angular/core'
 
+import {RowDescription}         from '../../shared/page/widgets/index'
+
+/**
+ * Hints about the origin of a drag operation
+ */
 export type OriginFlag = "sidebar" | "page"
 
+/**
+ * Signature for functions that are executed on removal.
+ */
+export type RemovalCallback = () => void;
+
+/**
+ * The "one-size-fits-all"-approach to shared state: A record
+ * with loads of optional values.
+ */
 export interface PageDragEvent {
     origin : OriginFlag
-    row? : boolean
+    trashCallback? : RemovalCallback
+    row? : RowDescription
 }
 
 /**
@@ -49,22 +64,41 @@ export class DragService {
         }
 
         // Reset everything once the operation has ended
-        evt.target.addEventListener("dragend", () => {
+        evt.target.addEventListener("dragend", () => {            
             this._currentDrag = null;
+            
             console.log(`Page-Drag ended: ${dragData}`);
         });
 
         console.log(`Page-Drag started: ${dragData}`);
     }
 
-    startRowDrag(origin : OriginFlag, evt : DragEvent) {
+    startRowDrag(evt : DragEvent, origin : OriginFlag, rowDesc : RowDescription, trashCallback? : RemovalCallback ) {
         this.dragStart(evt, {
             origin : origin,
-            row : true
+            row : rowDesc,
+            trashCallback : trashCallback
         })
     }
 
-    get activeRow() {
+    /**
+     * @return The drag operation that is currently in progress
+     */
+    get currentDrag() {
+        return (this._currentDrag);
+    }
+
+    /**
+     * @return The active origin flag, if any origin is present
+     */
+    get activeOrigin() : OriginFlag {
+        return (this._currentDrag && this._currentDrag.origin);
+    }
+
+    /**
+     * @return True, if currently a row is being dragged
+     */
+    get activeRow() : RowDescription {
         return (this._currentDrag && this._currentDrag.row)
     }
 }

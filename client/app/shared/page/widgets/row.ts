@@ -16,6 +16,19 @@ export class Row {
     }
 
     /**
+     * A description for a row that is empty. This currently defaults to a row
+     * with a column that spans the whole row.
+     */
+    static get emptyDescription() : RowDescription {
+        return ({
+            columns : [{
+                widgets : [],
+                width : 12
+            }]
+        });
+    }
+
+    /**
      * @return All columns that are part of this row
      */
     get columns() {

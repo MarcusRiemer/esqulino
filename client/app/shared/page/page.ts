@@ -64,15 +64,16 @@ export class Page {
      * 
      * @index The index to insert the row at, 0 is the very beginning
      */
-    addRow(index : number) {
-        const newRow = new Row({
-            columns : [{
-                widgets : [],
-                width : 12
-            }]
-        })
-        
+    addEmptyRow(index : number) {
+        const newRow = new Row(Row.emptyDescription)
         this._rows.splice(index, 0, newRow);
+    }
+
+    removeRow(row : Row) {
+        const index = this._rows.indexOf(row);
+        if (index >= 0) {
+            this._rows.splice(index, 1);
+        }
     }
 
     /**

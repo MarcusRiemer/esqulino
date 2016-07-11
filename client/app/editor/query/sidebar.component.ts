@@ -176,7 +176,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
      * Something hovers over the delete indicator
      */
     onDeleteDrag(evt : DragEvent) {
-        // Making sure Firefox does not start some kind of navigation
+        // Indicates we can drop here
         evt.preventDefault();
     }
     
