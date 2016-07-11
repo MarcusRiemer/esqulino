@@ -7,7 +7,7 @@
   </div>
   <div class="card-block">      
     <div class="container-fluid page-preview">
-      <div *ngIf="showBlueprintRow"
+      <div *ngIf="showBlueprintRow(0)"
            (dragover)="onBlueprintRowDrag($event, 0)"
            (drop)="onBlueprintRowDrop($event, 0)"
            class="row blueprint">
@@ -17,6 +17,8 @@
       </div>
       <template ngFor let-row [ngForOf]="page?.rows" let-rowIndex="index">
         <div class="row"
+             (dragover)="onBlueprintRowDrag($event, rowIndex + 1)"
+             (drop)="onBlueprintRowDrop($event, rowIndex + 1)"
              (dragstart)="startRowDrag($event, row)"
              draggable="true">
           <div *ngFor="let col of row.columns"
@@ -26,7 +28,7 @@
             </esqulino-widget-loader>
           </div>
         </div>
-        <div *ngIf="showBlueprintRow"
+        <div *ngIf="showBlueprintRow(rowIndex + 1)"
              (dragover)="onBlueprintRowDrag($event, rowIndex + 1)"
              (drop)="onBlueprintRowDrop($event, rowIndex + 1)"
              class="row blueprint">

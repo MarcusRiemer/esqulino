@@ -2,7 +2,7 @@ import {Subject}                from 'rxjs/Subject'
 
 import {Injectable}             from '@angular/core'
 
-import {RowDescription}         from '../../shared/page/widgets/index'
+import {Row,RowDescription}     from '../../shared/page/widgets/index'
 
 /**
  * Hints about the origin of a drag operation
@@ -10,9 +10,12 @@ import {RowDescription}         from '../../shared/page/widgets/index'
 export type OriginFlag = "sidebar" | "page"
 
 /**
- * Signature for functions that are executed on removal.
+ * Possible callbacks for drop operations
  */
-export type RemovalCallback = () => void;
+export interface DropCallbacks {
+    onRemove? : () => void
+    onRow? : (r : Row) => void
+}
 
 /**
  * The "one-size-fits-all"-approach to shared state: A record
@@ -20,7 +23,7 @@ export type RemovalCallback = () => void;
  */
 export interface PageDragEvent {
     origin : OriginFlag
-    trashCallback? : RemovalCallback
+    callbacks? : DropCallbacks
     row? : RowDescription
 }
 
@@ -73,11 +76,11 @@ export class DragService {
         console.log(`Page-Drag started: ${dragData}`);
     }
 
-    startRowDrag(evt : DragEvent, origin : OriginFlag, rowDesc : RowDescription, trashCallback? : RemovalCallback ) {
+    startRowDrag(evt : DragEvent, origin : OriginFlag, rowDesc : RowDescription, callbacks? : DropCallbacks ) {
         this.dragStart(evt, {
             origin : origin,
             row : rowDesc,
-            trashCallback : trashCallback
+            callbacks : callbacks
         })
     }
 
