@@ -25,38 +25,66 @@ export class PageLayoutComponent {
     ) {}
 
     /**
-     * A blueprint is hovering over some row.
+     * If a drag operation is currently taking place, this
+     * variable represents the index of the row that the
+     * cursor was dragged over the last time.
      */
-    onBlueprintRowDrag(evt : DragEvent) {
+    private _hoveredDropIndex : number;
+    
+    /**
+     * A blueprint is hovering over some row.
+     *
+     * @param dropIndex The drop index, 0 is above the first row
+     */
+    onBlueprintRowDrag(evt : DragEvent, dropIndex : number) {
         // Indicates we can drop here
         evt.preventDefault();
+
+        this._hoveredDropIndex = dropIndex;
     }
 
     /**
      * A blueprint row has been dropped.
+     *
+     * @param dropIndex The drop index, 0 is above the first row
      */
-    onBlueprintRowDrop(evt : DragEvent, index : number) {
+    onBlueprintRowDrop(evt : DragEvent, dropIndex : number) {
         // Indicates we can drop here
         evt.preventDefault();
 
-        // Extract the new expression and append it
+        // Add the new row
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        this.page.addEmptyRow(index);
+        this.page.addRow(dropIndex, pageEvt.row);
+
+        // Possibly inform callbacks about the drop
+        if (this._dragService.currentDrag.callbacks &&
+            this._dragService.currentDrag.callbacks.onRow) {
+            const droppedRow = this.page.rows[dropIndex];
+            this._dragService.currentDrag.callbacks.onRow(droppedRow);
+        }
+
+        // And reset all hovering state
+        this._hoveredDropIndex = undefined;
     }
 
     /**
      * Starts a drag action for a row that is placed in the layout.
      */
-    startRowDrag(evt : DragEvent, row : Row) {
-        this._dragService.startRowDrag(evt, "page", row, () => {
-            this.page.removeRow(row);
+    startRowDrag(evt : DragEvent, draggedRow : Row) {
+        // Make sure to remove this row on any valid drop
+        this._dragService.startRowDrag(evt, "page", draggedRow.toModel(), {
+            onRemove : () => this.page.removeRow(draggedRow),
+            onRow : (_) => this.page.removeRow(draggedRow)
         });
     }
 
     /**
-     * True, if the blueprint for rows should be shown.
+     * @param dropIndex The drop index, 0 is above the first row
+     *
+     * @return True, if the blueprint for row the given row should be shown.
      */
-    get showBlueprintRow() {
-        return (this._dragService.activeRow && this._dragService.activeOrigin == "sidebar");
+    showBlueprintRow(dropIndex : number) : boolean {
+        return (this._dragService.activeRow &&
+                (dropIndex == this._hoveredDropIndex || dropIndex == 0));
     }
 }

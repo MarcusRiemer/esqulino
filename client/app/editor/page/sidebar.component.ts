@@ -110,8 +110,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
         // Indicates we can drop here
         evt.preventDefault();
         
-        if (this._dragService.currentDrag.trashCallback) {
-            this._dragService.currentDrag.trashCallback();
+        if (this._dragService.currentDrag.callbacks &&
+            this._dragService.currentDrag.callbacks.onRemove) {
+            this._dragService.currentDrag.callbacks.onRemove();
         }
     }
 

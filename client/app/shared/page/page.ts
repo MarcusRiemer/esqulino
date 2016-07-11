@@ -1,5 +1,5 @@
 import {PageDescription}          from './page.description'
-import {Row}                      from './widgets/row'
+import {Row, RowDescription}      from './widgets/row'
 import {Renderer, LiquidRenderer} from './renderer/liquid'
 
 export {PageDescription}
@@ -65,14 +65,39 @@ export class Page {
      * @index The index to insert the row at, 0 is the very beginning
      */
     addEmptyRow(index : number) {
-        const newRow = new Row(Row.emptyDescription)
+        this.addRow(index, Row.emptyDescription);
+    }
+
+    /**
+     * Adds a new row according to the given specification.
+     * 
+     * @index The index to insert the row at, 0 is the very beginning
+     */
+    addRow(index : number, newRowDesc : RowDescription) {
+        const newRow = new Row(newRowDesc);
         this._rows.splice(index, 0, newRow);
     }
 
+    /**
+     * Removes the given row.
+     */
     removeRow(row : Row) {
         const index = this._rows.indexOf(row);
         if (index >= 0) {
-            this._rows.splice(index, 1);
+            this.removeRowByIndex(index);
+        } else {
+            throw new Error(`Attempted to remove unknown row: ${JSON.stringify(row.toModel())}`);
+        }
+    }
+
+    /**
+     * Removes the given row.
+     */
+    removeRowByIndex(rowIndex : number) {
+        if (rowIndex >= 0 && rowIndex < this._rows.length) {
+            this._rows.splice(rowIndex, 1);
+        } else {
+            throw new Error(`Attempted to remove invalid row index ${rowIndex}`);
         }
     }
 
