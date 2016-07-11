@@ -3,6 +3,7 @@ import {ActivatedRoute, Router}         from '@angular/router'
 
 import {Query}                          from '../../shared/query'
 import {Page}                           from '../../shared/page/index'
+import {Row}                            from '../../shared/page/widgets/index'
 
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
@@ -59,10 +60,29 @@ export class SidebarComponent implements OnInit, OnDestroy {
      * Load the project to access the schema and its pages.
      */
     ngOnInit() {
-        // Once initially and every time the URL changes
-        this.refreshViewState();
+        // Grab the current project
+        this._projectService.activeProject
+            .first()
+            .subscribe(p => {
+                this._project = p;
+                
+                // Grab the correct query id
+                const childRoute = this._router.routerState.firstChild(this._routeParams);
+
+                const routeRef = childRoute.params.subscribe(param => {
+                    const pageId = param['pageId'];
+                    
+                    // Project is loaded, display the correct  query
+                    this._page = this._project.getPageById(pageId);
+                });
+                
+                this._subscriptionRefs.push(routeRef);
+            });
     }
 
+    /**
+     * Freeing all subscriptions
+     */
     ngOnDestroy() {
         this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
         this._subscriptionRefs = [];
@@ -75,31 +95,38 @@ export class SidebarComponent implements OnInit, OnDestroy {
         return (this._page);
     }
 
+    /**
+     * Something has been dragged over the trash
+     */
+    onTrashDrag(evt : DragEvent) {
+        // Indicates we can drop here
+        evt.preventDefault();
+    }
+
+    /**
+     * Something has been dropped in the trash
+     */
+    onTrashDrop(evt : DragEvent) {
+        // Indicates we can drop here
+        evt.preventDefault();
+        
+        if (this._dragService.currentDrag.trashCallback) {
+            this._dragService.currentDrag.trashCallback();
+        }
+    }
+
+    /**
+     * View Variabe: True, if the trash shouldn't be shown. This
+     *               inversion is useful to bind to the `hidden`
+     *               DOM property.
+     */
+    get hideTrash() {
+        return (!(this._dragService.activeOrigin == "page"));
+    }
+
     startRowDrag(evt : DragEvent) {
-        this._dragService.startRowDrag("sidebar", evt);
+        this._dragService.startRowDrag(evt, "sidebar", Row.emptyDescription);
     }
-
-    private refreshViewState() {
-        // Grab the current project
-        this._projectService.activeProject
-            .first() // One shot subscription
-            .subscribe(p => {
-                this._project = p;
-                
-                // Grab the correct query id
-                const childRoute = this._router.routerState.firstChild(this._routeParams);
-
-                const routeRef = childRoute.params.subscribe(param => {
-                    const pageId = param['pageId'];
-                
-                    // Project is loaded, display the correct  query
-                    this._page = this._project.getPageById(pageId);
-                });
-                
-                this._subscriptionRefs.push(routeRef);
-            });
-    }
-
     
     /**
      * @return All queries that could be possibly used on this page.

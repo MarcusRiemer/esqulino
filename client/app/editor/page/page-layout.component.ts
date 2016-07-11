@@ -1,6 +1,7 @@
 import {Component, Input}               from '@angular/core'
 
 import {Page}                           from '../../shared/page/index'
+import {Row}                            from '../../shared/page/widgets/index'
 
 import {SidebarService}                 from '../sidebar.service'
 
@@ -23,24 +24,39 @@ export class PageLayoutComponent {
         private _dragService : DragService
     ) {}
 
+    /**
+     * A blueprint is hovering over some row.
+     */
     onBlueprintRowDrag(evt : DragEvent) {
         // Indicates we can drop here
         evt.preventDefault();
     }
 
+    /**
+     * A blueprint row has been dropped.
+     */
     onBlueprintRowDrop(evt : DragEvent, index : number) {
         // Indicates we can drop here
         evt.preventDefault();
 
         // Extract the new expression and append it
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        this.page.addRow(index);
+        this.page.addEmptyRow(index);
+    }
+
+    /**
+     * Starts a drag action for a row that is placed in the layout.
+     */
+    startRowDrag(evt : DragEvent, row : Row) {
+        this._dragService.startRowDrag(evt, "page", row, () => {
+            this.page.removeRow(row);
+        });
     }
 
     /**
      * True, if the blueprint for rows should be shown.
      */
     get showBlueprintRow() {
-        return (this._dragService.activeRow);
+        return (this._dragService.activeRow && this._dragService.activeOrigin == "sidebar");
     }
 }

@@ -1,4 +1,6 @@
 <div class="block-container center delete"
+     (dragover)="onTrashDrag($event)"
+     (drop)="onTrashDrop($event)"
      [hidden]="hideTrash">
   <span class="fa fa-trash fa-5x"></span>
 </div>  
