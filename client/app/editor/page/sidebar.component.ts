@@ -7,6 +7,8 @@ import {Page}                           from '../../shared/page/index'
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
 
+import {DragService}                    from './drag.service'
+
 /**
  * Used in UI to determine whether a query is referenced from this
  * page or not.
@@ -47,6 +49,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private _subscriptionRefs : any[] = [];
 
     constructor(
+        private _dragService : DragService,
         private _projectService : ProjectService,        
         private _routeParams : ActivatedRoute,
         private _router : Router) {
@@ -57,7 +60,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
      */
     ngOnInit() {
         // Once initially and every time the URL changes
-        this.updateCache();
+        this.refreshViewState();
     }
 
     ngOnDestroy() {
@@ -72,7 +75,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
         return (this._page);
     }
 
-    updateCache() {
+    startRowDrag(evt : DragEvent) {
+        this._dragService.startRowDrag("sidebar", evt);
+    }
+
+    private refreshViewState() {
         // Grab the current project
         this._projectService.activeProject
             .first() // One shot subscription

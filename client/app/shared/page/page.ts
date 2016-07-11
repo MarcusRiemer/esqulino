@@ -59,6 +59,25 @@ export class Page {
         return (this._rows);
     }
 
+    /**
+     * Adds a new row with a default column that spans over the whole row.
+     * 
+     * @index The index to insert the row at, 0 is the very beginning
+     */
+    addRow(index : number) {
+        const newRow = new Row({
+            columns : [{
+                widgets : [],
+                width : 12
+            }]
+        })
+        
+        this._rows.splice(index, 0, newRow);
+    }
+
+    /**
+     * @return Ids of all queries that are referenced by this page.
+     */
     get referencedQueryIds() {
         return (this._referencedQueries);
     }

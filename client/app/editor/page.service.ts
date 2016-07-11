@@ -11,6 +11,8 @@ import {Page,PageDescription}                    from '../shared/page/index'
 import {QueryParamsDescription}                  from './query.service'
 import {Project}                                 from './project'
 
+export {Page}
+
 /**
  * Storing a page on the server
  */

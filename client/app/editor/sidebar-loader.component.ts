@@ -1,8 +1,7 @@
 import{
     Component, Input, OnInit,
-    DynamicComponentLoader, Injector,
     ViewContainerRef, ComponentResolver,
-    Type, provide, ReflectiveInjector
+    Type, provide, Injector, ReflectiveInjector
 } from '@angular/core'
 
 import {SIDEBAR_MODEL_TOKEN}         from './sidebar.token'
@@ -18,22 +17,44 @@ import {
     selector: 'sidebar-loader',
     template: ''
 })
-export class SidebarLoaderComponent {   
+export class SidebarLoaderComponent implements OnInit {
+
+    private _prevType : string;
+    private _prevParam : any;
+    
+    /**
+     * Used for dependency injection
+     */ 
     constructor(
         private _sidebarService : SidebarService,
-        private _dcl: DynamicComponentLoader,
         private _injector: Injector,
         private _selfRef : ViewContainerRef,
         private _resolver : ComponentResolver
-    ) {
+    ) {}
+
+    /**
+     * Wiring up subscriptions
+     */
+    ngOnInit() {
         this._sidebarService.sidebarModel.subscribe(t => this.onChangedType(t));
-        
     }
 
+    /**
+     * The sidebar service has signaled, that the model to render the sidebar
+     * has changed.
+     */
     private onChangedType(newModel : SidebarModel) {
-        this._selfRef.clear();
+        // Is this really a new sidebar?
+        if (newModel && (newModel.type !== this._prevType || newModel.param !== this._prevParam)) {
+            console.log(`Got new model, now got ${this._selfRef.length}`);
 
-        if (newModel) {
+            // Clean up previous components
+            this._selfRef.clear();
+
+            // Remember previous parameters
+            this._prevType = newModel.type;
+            this._prevParam = newModel.param;
+            
             // Find out what type to construct
             const componentType = this._sidebarService.getComponentType(newModel.type);
 

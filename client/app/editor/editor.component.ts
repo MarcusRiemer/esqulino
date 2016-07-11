@@ -19,14 +19,16 @@ import {NavbarComponent}                from './navbar.component'
 import {SidebarLoaderComponent}         from './sidebar-loader.component'
 import {SidebarService}                 from './sidebar.service'
 
-import {DragService}                    from './query/drag.service'
+import * as Query                       from './query/drag.service'
+import * as Page                        from './page/drag.service'
 
 @Component({
     templateUrl: 'app/editor/templates/index.html',
     directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES,
                  ToolbarComponent, NavbarComponent, SidebarLoaderComponent],
     providers: [HTTP_PROVIDERS, SidebarService, PageService,
-                ProjectService, QueryService, DragService, ToolbarService]
+                ProjectService, QueryService, ToolbarService,
+                Query.DragService, Page.DragService]
 })
 export class EditorComponent implements OnInit, OnDestroy {
     /**

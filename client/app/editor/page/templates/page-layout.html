@@ -7,15 +7,24 @@
   </div>
   <div class="card-block">      
     <div class="container-fluid page-preview">
-      <div *ngFor="let row of page?.rows"
-           class="row">
-        <div *ngFor="let col of row.columns"
-             [ngClass]="col.columnClasses">
-          <esqulino-widget-loader
-              [widgets]="col.widgets">
-          </esqulino-widget-loader>
+      <template ngFor let-row [ngForOf]="page?.rows" let-rowIndex="index">
+        <div class="row">
+          <div *ngFor="let col of row.columns"
+               [ngClass]="col.columnClasses">
+            <esqulino-widget-loader
+                [widgets]="col.widgets">
+            </esqulino-widget-loader>
+          </div>
         </div>
-      </div>
+        <div *ngIf="showBlueprintRow"
+             (dragover)="onBlueprintRowDrag($event, rowIndex + 1)"
+             (drop)="onBlueprintRowDrop($event, rowIndex + 1)"
+             class="row blueprint">
+          <div class="col-xs-12">
+            <h4><span class="fa fa-plus"></span></h4>
+          </div>
+        </div>
+      </template>
     </div>
   </div>
 </div>
