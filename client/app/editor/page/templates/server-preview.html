@@ -2,14 +2,20 @@
   <div class="card">
     <div class="card-block">
       <h4 class="card-title">
-        <a (click)="refreshHeight()"
+        <button (click)="refreshHeight()"
            class="btn btn-primary pull-right">
           <span class="fa fa-bug"></span> Höhe anpassen
+        </button>
+        <a href="/view/{{project.id}}/{{project.indexPageId}}"
+           target="_blank"
+           style="margin-right: 5px;"
+           class="btn btn-primary pull-right">
+          <span class="fa fa-bug"></span> Neues Fenster
         </a>
         Vorschau
       </h4>
       <p class="card-text">
-        So wird die Seite für einen Besucher aussehen.
+        So wird die Seite für einen Besucher <em>ungefähr</em> aussehen.
       </p>
     </div>
     <div *ngIf="renderPreview"

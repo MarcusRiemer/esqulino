@@ -1,18 +1,9 @@
-import {
-    Injectable, Type
-} from '@angular/core'
+import {Injectable, Type}             from '@angular/core'
 
 import {BehaviorSubject}             from 'rxjs/BehaviorSubject'
 import {Observable}                  from 'rxjs/Observable'
 
 import {SIDEBAR_MODEL_TOKEN}         from './sidebar.token'
-
-/*import {
-    ParagraphSidebarComponent, PARAGRAPH_SIDEBAR_IDENTIFIER
-} from './page/widgets/paragraph.sidebar.component'
-import {
-    HeadingSidebarComponent
-} from './page/widgets/heading.sidebar.component'*/
 import * as Query                    from './query/sidebar.component'
 import * as Page                     from './page/sidebar.component'
 

@@ -9,6 +9,7 @@ import {Paragraph}                      from '../../shared/page/widgets/index'
 
 import {ProjectService, Project}        from '../project.service'
 import {PageService, Page}              from '../page.service'
+import {PreferencesService}             from '../preferences.service'
 import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 
@@ -45,13 +46,13 @@ export class PageEditorComponent implements OnInit, OnDestroy {
     @ViewChild(ServerPreviewComponent)
     private _serverPreview : ServerPreviewComponent;
 
-
     constructor(
         private _projectService : ProjectService,
         private _pageService : PageService,
         private _toolbarService: ToolbarService,
         private _routeParams: ActivatedRoute,
-        private _sidebarService : SidebarService
+        private _sidebarService : SidebarService,
+        private _preferences : PreferencesService
     ) {
         this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
     }
@@ -117,6 +118,13 @@ export class PageEditorComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
         this._subscriptionRefs = [];
+    }
+
+    /**
+     * @return True, if a debug JSON model should be shown.
+     */
+    get showJsonModel() {
+        return (this._preferences.showJsonModel);
     }
 
     /*

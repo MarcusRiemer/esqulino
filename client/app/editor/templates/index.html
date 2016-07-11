@@ -1,19 +1,22 @@
 <div style="padding-top: 4rem;">
   <editor-toolbar></editor-toolbar>
 
-  <div class="editor">    
-    <div class="navbar">
+  <div class="editor">
+    <div class="navbar card"
+         [style.order]="paneOrder.navbar">
       <editor-navbar [project]="project"></editor-navbar>
     </div>
 
-    <div class="content">
+    <div class="content"
+         [style.order]="paneOrder.content">
       <router-outlet></router-outlet>
     </div>
-    
+
     <div *ngIf="isSidebarVisible"
-         class="sidebar">
-      <sidebar-loader></sidebar-loader>
+         class="sidebar card"
+         [style.order]="paneOrder.sidebar">
+      <sidebar-loader>
+      </sidebar-loader>
     </div>
   </div>
 </div>
-

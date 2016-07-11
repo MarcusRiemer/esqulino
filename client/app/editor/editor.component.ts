@@ -18,6 +18,7 @@ import {ToolbarComponent}               from './toolbar.component'
 import {NavbarComponent}                from './navbar.component'
 import {SidebarLoaderComponent}         from './sidebar-loader.component'
 import {SidebarService}                 from './sidebar.service'
+import {PreferencesService}             from './preferences.service'
 
 import * as Query                       from './query/drag.service'
 import * as Page                        from './page/drag.service'
@@ -26,7 +27,7 @@ import * as Page                        from './page/drag.service'
     templateUrl: 'app/editor/templates/index.html',
     directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES,
                  ToolbarComponent, NavbarComponent, SidebarLoaderComponent],
-    providers: [HTTP_PROVIDERS, SidebarService, PageService,
+    providers: [HTTP_PROVIDERS, SidebarService, PageService, PreferencesService,
                 ProjectService, QueryService, ToolbarService,
                 Query.DragService, Page.DragService]
 })
@@ -52,7 +53,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         private _sidebarService: SidebarService,
         private _routeParams: ActivatedRoute,
         private _router : Router,
-        private _changeDetectorRef : ChangeDetectorRef
+        private _changeDetectorRef : ChangeDetectorRef,
+        private _preferences : PreferencesService
     ) { }
 
     /**
@@ -115,5 +117,9 @@ export class EditorComponent implements OnInit, OnDestroy {
      */
     get project() {
         return (this._project);
+    }
+
+    get paneOrder() {
+        return (this._preferences.paneOrder);
     }
 }

@@ -1,64 +1,66 @@
-<nav>
-  <ul class="nav">
-    <li class="nav-item">
-      <a class="nav-link"
-         [routerLink]="['settings']"
-         routerLinkActive="router-link-active">
-        <span class="fa fa-cog fa-fw"></span>
-        Einstellungen
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link"
-         [routerLink]="['schema']"
-         routerLinkActive="router-link-active">
-        <span class="fa fa-table fa-fw"></span>
-        Schema
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link"
-         [routerLink]="['query', 'create']"
-         routerLinkActive="router-link-active">
-        <span class="fa fa-plus fa-fw"></span>
-        Neue Abfrage
-      </a>
-      <ul class="nav nav-query">
-        <li class="nav-item"
-            *ngFor="let query of project?.queries">
-          <a class="nav-link"
-             [routerLink]="['query', query.id]"
-             routerLinkActive="router-link-active">
-            <span class="fa {{ iconForQuery(query) }} fa-fw"></span>
-            {{ query.name }}
-          </a>
-          <span [hidden]="!query.isDirty"
-                class="dirty label label-warning pull-right">
-            <span class="fa fa-floppy-o"></span>
-          </span>
-        </li>
-      </ul>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link disabled">
-        <span class="fa fa-plus fa-fw"></span>
-        Neue Seite
-      </a>
-      <ul class="nav nav-page">
-        <li class="nav-item"
-            *ngFor="let page of project?.pages">
-          <a class="nav-link"
-             [routerLink]="['page', page.id]"
-             routerLinkActive="router-link-active">
-            <span class="fa {{ iconForPage(page) }} fa-fw"></span>
-            {{ page.name }}
-          </a>
-          <span [hidden]="!page.isDirty"
-                class="dirty label label-warning pull-right">
-            <span class="fa fa-floppy-o"></span>
-          </span>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</nav>
+<div>
+  <nav>
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link"
+           [routerLink]="['settings']"
+           routerLinkActive="router-link-active">
+          <span class="fa fa-cog fa-fw"></span>
+          Einstellungen
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"
+           [routerLink]="['schema']"
+           routerLinkActive="router-link-active">
+          <span class="fa fa-table fa-fw"></span>
+          Schema
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"
+           [routerLink]="['query', 'create']"
+           routerLinkActive="router-link-active">
+          <span class="fa fa-plus fa-fw"></span>
+          Neue Abfrage
+        </a>
+        <ul class="nav nav-query">
+          <li class="nav-item"
+              *ngFor="let query of project?.queries">
+            <a class="nav-link"
+               [routerLink]="['query', query.id]"
+               routerLinkActive="router-link-active">
+              <span class="fa {{ iconForQuery(query) }} fa-fw"></span>
+              {{ query.name }}
+            </a>
+            <span [hidden]="!query.isDirty"
+                  class="dirty label label-warning pull-right">
+              <span class="fa fa-floppy-o"></span>
+            </span>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled">
+          <span class="fa fa-plus fa-fw"></span>
+          Neue Seite
+        </a>
+        <ul class="nav nav-page">
+          <li class="nav-item"
+              *ngFor="let page of project?.pages">
+            <a class="nav-link"
+               [routerLink]="['page', page.id]"
+               routerLinkActive="router-link-active">
+              <span class="fa {{ iconForPage(page) }} fa-fw"></span>
+              {{ page.name }}
+            </a>
+            <span [hidden]="!page.isDirty"
+                  class="dirty label label-warning pull-right">
+              <span class="fa fa-floppy-o"></span>
+            </span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</div>

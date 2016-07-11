@@ -1,31 +1,35 @@
 <div *ngIf="result"
-     class="result">
-  <div *ngIf="result.isError"
-       class="alert alert-danger"
-       role="alert">
-    <h6>
-      <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
-      SQL Fehler!
-    </h6>
-    <p>
-      Bei der Bearbeitung dieser Abfrage hat die Datenbank den folgenden Fehler gemeldet: <samp>"{{ result.errorMessage }}"</samp>.
-    </p>
+     class="result card">
+  <div class="card-block">
+    <h4>Ergebnisse</h4>
+    <p>Hier kannst du das Ergebnis der Abfrage sehen.</p>
+    <div *ngIf="result.isError"
+         class="alert alert-danger"
+         role="alert">
+      <h6>
+        <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
+        SQL Fehler!
+      </h6>
+      <p>
+        Bei der Bearbeitung dieser Abfrage hat die Datenbank den folgenden Fehler gemeldet: <samp>"{{ result.errorMessage }}"</samp>.
+      </p>
+    </div>
+    <table *ngIf="!result.isError"
+           class="table table-sm table-hover">
+      <thead>
+        <tr>
+          <th *ngFor="let col of result.cols">
+            {{ col.name }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of result.rows">
+          <td *ngFor="let cell of row.cells">
+            {{ cell.value }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <table *ngIf="!result.isError"
-         class="table table-sm table-hover">
-    <thead>
-      <tr>
-        <th *ngFor="let col of result.cols">
-          {{ col.name }}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let row of result.rows">
-        <td *ngFor="let cell of row.cells">
-          {{ cell.value }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </div>
