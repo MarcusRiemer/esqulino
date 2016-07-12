@@ -9,7 +9,7 @@ import {Widget}                from '../../shared/page/widgets/index'
 
 import {SidebarService}        from '../sidebar.service'
 
-import {SIDEBAR_MODEL_TOKEN}   from '../sidebar.token'
+import {WIDGET_MODEL_TOKEN}    from '../sidebar.token'
 
 import {WidgetComponent}       from './widgets/widget.component'
 import {ParagraphComponent}    from './widgets/paragraph.component'
@@ -71,10 +71,10 @@ export class WidgetLoaderComponent implements OnInit {
 
             // Inject the widget model            
             let injector = ReflectiveInjector.resolveAndCreate([
-                provide(SIDEBAR_MODEL_TOKEN, {useValue : widget})
+                provide(WIDGET_MODEL_TOKEN, {useValue : widget})
             ],this._injector);
 
-            if (!injector.get(SIDEBAR_MODEL_TOKEN)) {
+            if (!injector.get(WIDGET_MODEL_TOKEN)) {
                 console.log("Couldn't get back widget model")
             }
 

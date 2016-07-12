@@ -3,7 +3,7 @@ import {Component, Inject, OnInit} from '@angular/core'
 import {Heading}                  from '../../../shared/page/widgets/index'
 
 import {SidebarService}           from '../../sidebar.service'
-import {SIDEBAR_MODEL_TOKEN}      from '../../sidebar.token'
+import {WIDGET_MODEL_TOKEN}       from '../../sidebar.token'
 
 import {WidgetComponent}          from './widget.component'
 import {
@@ -18,7 +18,7 @@ export {Heading}
 })
 export class HeadingComponent extends WidgetComponent<Heading> {    
     constructor(@Inject(SidebarService) sidebarService : SidebarService,
-                @Inject(SIDEBAR_MODEL_TOKEN) model : Heading) {
+                @Inject(WIDGET_MODEL_TOKEN) model : Heading) {
         super(sidebarService, model, {
             id: HEADING_SIDEBAR_IDENTIFIER,
             type : HeadingSidebarComponent

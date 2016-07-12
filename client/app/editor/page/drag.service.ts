@@ -2,7 +2,10 @@ import {Subject}                from 'rxjs/Subject'
 
 import {Injectable}             from '@angular/core'
 
-import {Row,RowDescription}     from '../../shared/page/widgets/index'
+import {ReferencedQuery}        from '../../shared/page/index'
+import {
+    Row, RowDescription,
+} from '../../shared/page/widgets/index'
 
 /**
  * Hints about the origin of a drag operation
@@ -37,6 +40,7 @@ export interface PageDragEvent {
     origin : OriginFlag
     callbacks? : DropCallbacks
     row? : RowDescription
+    queryRef? : ReferencedQuery
 }
 
 /**
@@ -85,21 +89,45 @@ export class DragService {
                 this.currentDrag.callbacks.onDragEnd) {
                 this.currentDrag.callbacks.onDragEnd();
             }
-            
-            this._currentDrag = null;
 
+            // And stop the drag
+            this._currentDrag = null;
             console.log(`Page-Drag ended: ${dragData}`);
         });
 
         console.log(`Page-Drag started: ${dragData}`);
     }
 
-    startRowDrag(evt : DragEvent, origin : OriginFlag, rowDesc : RowDescription, callbacks? : DropCallbacks ) {
+    /**
+     * Starts dragging a row
+     *
+     * @param evt The DragEvent that is provided by the browser?
+     * @param origin Where did this drag start?
+     * @param rowDesc How does the dragged row look like?
+     * @param callbacks Which events could be fired?
+     */
+    startRowDrag(evt : DragEvent, origin : OriginFlag, rowDesc : RowDescription, callbacks? : DropCallbacks) {
         this.dragStart(evt, {
             origin : origin,
             row : rowDesc,
             callbacks : callbacks
         })
+    }
+
+    /**
+     * Starts dragging a reference to a query.
+     *
+     * @param evt The DragEvent that is provided by the browser?
+     * @param origin Where did this drag start?
+     * @param rowDesc Which query should be referenced?
+     * @param callbacks Which events could be fired?
+     */
+    startQueryRefDrag(evt : DragEvent, origin : OriginFlag, queryRef : ReferencedQuery, callbacks? : DropCallbacks) {
+        this.dragStart(evt, {
+            origin : origin,
+            queryRef : queryRef,
+            callbacks : callbacks
+        });
     }
 
     /**

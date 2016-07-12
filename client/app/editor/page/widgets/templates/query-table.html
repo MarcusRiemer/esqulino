@@ -1,6 +1,14 @@
 <div (click)="startEditing()"
      class="widget-preview">
-  <h5>Abfrage: <code>{{ query?.name }}</code></h5>
+  <h5>Abfrage:
+    <span (dragover)="onDragOver($event)"
+          (drop)="onDrop($event)"
+          class="block-container block">
+      <span class="table">
+        {{ query?.name }}
+      </span>
+    </span>
+  </h5>
   <table class="table">
     <tr>
       <th *ngFor="let column of columns">
