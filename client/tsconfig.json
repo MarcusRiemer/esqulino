@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": true,
+    "noImplicitReturns": true,
     "noEmitOnError": true,
     "outDir" : "../dist/client/app"
   },
