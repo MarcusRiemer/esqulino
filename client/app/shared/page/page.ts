@@ -1,8 +1,8 @@
-import {PageDescription}          from './page.description'
-import {Row, RowDescription}      from './widgets/row'
-import {Renderer, LiquidRenderer} from './renderer/liquid'
+import {PageDescription, ReferencedQuery}     from './page.description'
+import {Row, RowDescription}                  from './widgets/row'
+import {Renderer, LiquidRenderer}             from './renderer/liquid'
 
-export {PageDescription}
+export {PageDescription, ReferencedQuery}
 
 /**
  * The in-memory representation of a page.
@@ -11,7 +11,7 @@ export class Page {
     private _id : string;
     private _name : string;
     private _rows : Row[];
-    private _referencedQueries : string[]
+    private _referencedQueries : ReferencedQuery[]
     private _renderer : Renderer;
 
     private _isDirty = false;
@@ -20,9 +20,13 @@ export class Page {
         this._id = desc.id;
         this._name = desc.name;
 
+        // We only render stuff via liquid for the moment
         this._renderer = new LiquidRenderer();
 
+        // Map descriptions to actual representations
         this._rows = desc.rows.map(rowDesc => new Row(rowDesc));
+
+        // Making a copy of those references
         this._referencedQueries = desc.referencedQueries.splice(0);
     }
 
@@ -33,6 +37,9 @@ export class Page {
         return (this._name);
     }
 
+    /**
+     * @param newName The new name to set
+     */
     set name(newName : string) {
         this._name = newName;
         this.markDirty();
@@ -104,7 +111,14 @@ export class Page {
     /**
      * @return Ids of all queries that are referenced by this page.
      */
-    get referencedQueryIds() {
+    get referencedQueryIds() : string[] {
+        return (this._referencedQueries.map(q => q.queryId));
+    }
+
+    /**
+     * @return All referenced queries alongside their name
+     */
+    get referencedQueries() : ReferencedQuery[] {
         return (this._referencedQueries);
     }
 
@@ -129,7 +143,7 @@ export class Page {
      * @return True, if this query is used by this page.
      */
     isUsingQuery(queryId : string) {
-        return (this._referencedQueries.some(refId => queryId == refId));
+        return (this._referencedQueries.some(ref => queryId == ref.queryId));
     }
 
     toModel() : PageDescription {

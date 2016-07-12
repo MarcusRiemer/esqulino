@@ -26,10 +26,9 @@
 
 <div class="card-block">
   <div class="block-container block">
-    <div *ngFor="let query of usedQueries; let is-last=last"
+    <div *ngFor="let ref of usedQueries; let is-last=last"
          class="table">
-      <span class="fa fa-table fa-fw"></span>
-      {{ query.query.name }}
+      <span class="fa fa-table fa-fw"></span>{{ ref.name }} <small style="display: inline-block;">({{ ref.query.name }})</small>
     </div>
   </div>
 </div>
