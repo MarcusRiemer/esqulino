@@ -125,6 +125,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
         return (!(this._dragService.activeOrigin == "page"));
     }
 
+    /**
+     * Informs the drag service about a started drag operation.
+     */
     startRowDrag(evt : DragEvent) {
         this._dragService.startRowDrag(evt, "sidebar", Row.emptyDescription);
     }
@@ -143,6 +146,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
         } else {
             return ([]);
         }
+    }
+
+    /**
+     * @return All queries that are actually used on this page.
+     */
+    get usedQueries() : UsableQuery[] {
+        return (this.queries.filter(q => q.used));
     }
 }
 
