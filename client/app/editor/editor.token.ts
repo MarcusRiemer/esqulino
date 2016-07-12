@@ -9,12 +9,6 @@ import {OpaqueToken} from '@angular/core'
 export const SIDEBAR_MODEL_TOKEN = new OpaqueToken("sidebar.model");
 
 /**
- * This token is used to give widget-editing components access to
- * the page the widget belongs to.
- */
-export const WIDGET_PAGE_TOKEN = new OpaqueToken("widget.page");
-
-/**
  * This token is used to give widget components access to the model
  * they should display.
  */

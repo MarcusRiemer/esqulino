@@ -2,7 +2,7 @@
  * Describes a table that shows the results of a query.
  */
 export interface QueryTableDescription {
-    queryId : string,
+    queryRef? : ReferencedQuery,
     type: "query-table"
 }
 

@@ -251,6 +251,8 @@ export class ConstantExpression extends Expression {
         case <Model.DataType>"TEXT":
             return (`"${this._value}"`);
         }
+
+        throw new Error(`Unknown datatype "${this._type}"`);
     }
 
     toModel() : Model.Expression {

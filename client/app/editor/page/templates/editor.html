@@ -1,9 +1,11 @@
 <div class="page">
-  <esqulino-page-layout [project]="project"
+  <esqulino-page-layout *ngIf="page"
+                        [project]="project"
                         [page]="page">
   </esqulino-page-layout>
 
-  <esqulino-server-preview [project]="project"
+  <esqulino-server-preview *ngIf="page"
+                           [project]="project"
                            [page]="page"
                            [isRendering]="doRenderPreview">
   </esqulino-server-preview>

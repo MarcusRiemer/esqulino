@@ -22,7 +22,10 @@
           "widgets": [
             {
               "type": "query-table",
-              "queryId": "f3de342b-45ce-438b-b977-ad5b177d393d"
+              "queryRef": {
+                "queryId": "f3de342b-45ce-438b-b977-ad5b177d393d",
+                "name": "A"
+              }
             }
           ]
         }

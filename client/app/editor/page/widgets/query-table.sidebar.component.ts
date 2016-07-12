@@ -1,13 +1,26 @@
 import {Component, Inject, Optional}        from '@angular/core'
 
 import {QuerySelect}                        from '../../../shared/query'
+import {Page, ReferencedQuery}              from '../../../shared/page/index'
 import {QueryTable}                         from '../../../shared/page/widgets/index'
 
-import {ProjectService}                     from '../../project.service'
-import {SIDEBAR_MODEL_TOKEN}                from '../../editor.token'
+import {ProjectService, Project}            from '../../project.service'
+import {
+    SIDEBAR_MODEL_TOKEN
+} from '../../editor.token'
 
 import {QueryTableComponent}                from './query-table.component'
 
+interface AvailableQuery {
+    name : string
+    queryId: string
+    queryName : string
+}
+
+/**
+ * The sidebar-editor for a QueryTable. This is currently in a quite
+ * convoluted state due to too many ad-hoc datastructures.
+ */
 @Component({
     templateUrl: 'app/editor/page/widgets/templates/query-table-sidebar.html',
 })
@@ -15,33 +28,70 @@ export class QueryTableSidebarComponent {
 
     private _component : QueryTableComponent;
 
-    private _availableQueries : QuerySelect[];
+    private _project : Project;
     
     constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : QueryTableComponent,
-                private _projectService : ProjectService) {
+                projectService : ProjectService) {
         this._component = com;
+        
+        if (!this._component.page) {
+            throw new Error(`QueryTableSidebarComponent has no access to page`);
+        }
 
-        // Grabbing all SELECT queries
-        this._projectService.activeProject.subscribe( (project) => {
-            this._availableQueries = <QuerySelect[]>project.queries.filter(q => q instanceof QuerySelect);
+        projectService.activeProject.subscribe(project => {
+            this._project = project;
         });
     }
 
-    get referencedQueryId() {
-        return (this.model.queryId);
+    /**
+     * As the DOM only saves & compares string values, we need a unique
+     * and reversible string-representation of a referenced query.
+     */
+    buildReferenceString(value : AvailableQuery) : string {
+        return (JSON.stringify({
+            name : value.name,
+            queryId : value.queryId
+        }));
     }
 
-    set referencedQueryId(newId : string) {
+    /**
+     * @return A JSON representation of the query reference
+     */
+    get referencedString() : string {
+        return (JSON.stringify(this.referencedQuery));
+    }
+
+    /**
+     * @param newValue A JSON representation of the query reference
+     */
+    set referencedString(newValue : string) {
+        this.referencedQuery = JSON.parse(newValue);
+    }
+
+    get referencedQuery() {
+        return (this.model.queryReference);
+    }
+
+    set referencedQuery(newId : ReferencedQuery) {
         this._component.setQuery(newId);
-        console.log("Referenced query changed");
     }
 
     get model() {
         return (this._component.model);
     }
 
-    get availableQueries() {
-        return (this._availableQueries);
+    get availableQueries() : AvailableQuery[] {
+        if (this._project) {
+        return (this._component.page.referencedQueries.map(ref => {
+            return ({
+                name : ref.name,
+                queryId: ref.queryId,
+                queryName : this._project.getQueryById(ref.queryId).name
+            })
+        }));
+        } else {
+            return ([]);
+        }
     }
 }
 

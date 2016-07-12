@@ -2,13 +2,15 @@ import {
     Component, Inject, OnInit, ChangeDetectorRef
 } from '@angular/core'
 
-import {ReferencedQuery}            from '../../../shared/page/index'
+import {Page, ReferencedQuery}      from '../../../shared/page/index'
 import {QuerySelect}                from '../../../shared/query'
 import {QueryTable}                 from '../../../shared/page/widgets/index'
 
 import {ProjectService, Project}    from '../../project.service'
 import {SidebarService}             from '../../sidebar.service'
-import {WIDGET_MODEL_TOKEN}         from '../../editor.token'
+import {
+    WIDGET_MODEL_TOKEN
+} from '../../editor.token'
 
 import {DragService, PageDragEvent} from '../drag.service'
 
@@ -25,8 +27,7 @@ export {QueryTable}
  */
 @Component({
     templateUrl: 'app/editor/page/widgets/templates/query-table.html',
-    selector: "esqulino-query-table",
-    inputs: []
+    selector: "esqulino-query-table"
 })
 export class QueryTableComponent extends WidgetComponent<QueryTable> {
 
@@ -35,6 +36,7 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
     private _queryReference: ReferencedQuery;
     
     constructor(@Inject(WIDGET_MODEL_TOKEN) model : QueryTable,
+                private _page : Page,
                 private _cdRef: ChangeDetectorRef,
                 sidebarService : SidebarService,
                 projectService : ProjectService) {
@@ -42,7 +44,7 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
             id : QUERY_TABLE_SIDEBAR_IDENTIFIER,
             type : QueryTableSidebarComponent
         });
-
+        
         // Grab the correct query from the loaded project
         projectService.activeProject.subscribe(proj => {
             this._project = proj;
@@ -57,8 +59,16 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
         return (this._query);
     }
 
-    setQuery(queryId : string) {
-        this.model.queryId = queryId;
+    /**
+     * @return The page this widget belongs to
+     */
+    get page() : Page {
+        return (this._page);
+    }
+
+    
+    setQuery(ref : ReferencedQuery) {
+        this.model.queryReference = ref;
         this.refreshQuery();
     }
 
@@ -80,17 +90,22 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
             evt.preventDefault();
             evt.stopPropagation();
 
-            this.setQuery(pageEvt.queryRef.queryId);
+            this.setQuery(pageEvt.queryRef);
         }
     }
 
+    /**
+     * Updates the query that is used in the view.
+     */
     refreshQuery() {
-        const query = this._project.getQueryById(this.model.queryId);
-        if (query instanceof QuerySelect) {
-            this._query = query;
-        }
+        if (this.model.queryReference) {
+            const query = this._project.getQueryById(this.model.queryReference.queryId);
+            if (query instanceof QuerySelect) {
+                this._query = query;
+            }
 
-        this._cdRef.markForCheck();
+            this._cdRef.markForCheck();
+        }
     }
 
     /**

@@ -1,5 +1,7 @@
 import {Widget, WidgetDescription} from './widget'
-import {QueryTableDescription}     from '../page.description'
+import {
+    QueryTableDescription, ReferencedQuery
+} from '../page.description'
 
 export {QueryTableDescription}
 
@@ -7,25 +9,25 @@ export {QueryTableDescription}
  * Renders a table for a query.
  */
 export class QueryTable extends Widget {
-    private _queryId : string;
+    private _queryRef : ReferencedQuery;
 
     constructor(desc : QueryTableDescription) {
         super("query-table");
-        this._queryId = desc.queryId;
+        this._queryRef = desc.queryRef;
     }
 
-    get queryId() {
-        return (this._queryId);
+    get queryReference() {
+        return (this._queryRef);
     }
 
-    set queryId(newId : string) {
-        this._queryId = newId;
+    set queryReference(ref : ReferencedQuery) {
+        this._queryRef = ref;
     }
 
     protected toModelImpl() : WidgetDescription {
         const toReturn : QueryTableDescription = {
             type : "query-table",
-            queryId : this._queryId
+            queryRef : this._queryRef
         }
 
         return (toReturn);

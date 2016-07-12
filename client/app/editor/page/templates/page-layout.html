@@ -16,7 +16,8 @@
         <div *ngFor="let col of draggedRow?.row?.columns"
              [ngClass]="col.columnClasses">
           <esqulino-widget-loader
-              [widgets]="col.widgets">
+              [widgets]="col.widgets"
+              [page]="page">
           </esqulino-widget-loader>
         </div>
         <div *ngIf="!draggedRow"
@@ -34,7 +35,8 @@
           <div *ngFor="let col of row.columns"
                [ngClass]="col.columnClasses">
             <esqulino-widget-loader
-                [widgets]="col.widgets">
+                [widgets]="col.widgets"
+                [page]="page">
             </esqulino-widget-loader>
           </div>
         </div>
@@ -45,7 +47,8 @@
           <div *ngFor="let col of draggedRow?.row?.columns"
                [ngClass]="col.columnClasses">
             <esqulino-widget-loader
-                [widgets]="col.widgets">
+                [widgets]="col.widgets"
+                [page]="page">
             </esqulino-widget-loader>
           </div>
           <div *ngIf="!draggedRow"
