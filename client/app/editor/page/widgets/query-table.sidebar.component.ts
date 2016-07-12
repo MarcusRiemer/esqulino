@@ -4,7 +4,7 @@ import {QuerySelect}                        from '../../../shared/query'
 import {QueryTable}                         from '../../../shared/page/widgets/index'
 
 import {ProjectService}                     from '../../project.service'
-import {SIDEBAR_MODEL_TOKEN}                from '../../sidebar.token'
+import {WIDGET_MODEL_TOKEN}                 from '../../sidebar.token'
 
 import {QueryTableComponent}                from './query-table.component'
 
@@ -17,7 +17,7 @@ export class QueryTableSidebarComponent {
 
     private _availableQueries : QuerySelect[];
     
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : QueryTableComponent,
+    constructor(@Inject(WIDGET_MODEL_TOKEN) com : QueryTableComponent,
                 private _projectService : ProjectService) {
         this._component = com;
 

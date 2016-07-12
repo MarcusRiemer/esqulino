@@ -30,7 +30,7 @@ export class NavbarComponent {
             return ("fa-plus-circle");
         } else if (query instanceof QueryUpdate) {
             return ("fa-pencil");
-        }else {
+        } else {
             return ("fa-search");
         } 
     }

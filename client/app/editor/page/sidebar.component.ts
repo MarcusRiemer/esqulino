@@ -2,7 +2,7 @@ import {Component, OnInit, OnDestroy}   from '@angular/core'
 import {ActivatedRoute, Router}         from '@angular/router'
 
 import {Query}                          from '../../shared/query'
-import {Page}                           from '../../shared/page/index'
+import {Page, ReferencedQuery}          from '../../shared/page/index'
 import {Row}                            from '../../shared/page/widgets/index'
 
 import {Project}                        from '../project'
@@ -127,10 +127,29 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Informs the drag service about a started drag operation.
+     * Informs the drag service about a started drag operation for an
+     * empty row.
      */
     startRowDrag(evt : DragEvent) {
         this._dragService.startRowDrag(evt, "sidebar", Row.emptyDescription);
+    }
+
+    /**
+     * Informs the drag service about a started drag operation for a
+     * query reference
+     */
+    startReferencedQueryDrag(evt : DragEvent, ref : UsableQuery) {
+        this._dragService.startQueryRefDrag(evt, "sidebar", {
+            queryId : ref.query.id,
+            name : ref.name
+        });
+    }
+
+    /**
+     *
+     */
+    queryTrackBy(ref: UsableQuery) {
+        return(`${ref.name}.{ref.query.id}`);
     }
     
     /**
@@ -153,13 +172,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
      * @return All queries that are actually used on this page.
      */
     get usedQueries() : UsableQuery[] {
-        return (this.page.referencedQueries.map(ref => {
-            return ({
-                query : this._project.getQueryById(ref.queryId),
-                name : ref.name,
-                used : true
-            })
-        }));
+        if (this._page) {
+            return (this.page.referencedQueries.map(ref => {
+                return ({
+                    query : this._project.getQueryById(ref.queryId),
+                    name : ref.name,
+                    used : true
+                })
+            }));
+        } else {
+            return ([]);
+        }
     }
 }
 

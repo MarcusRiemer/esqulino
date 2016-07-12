@@ -1,6 +1,6 @@
 import {Component, Input}               from '@angular/core'
 
-import {Page}                           from '../../shared/page/index'
+import {Page, ReferencedQuery}          from '../../shared/page/index'
 import {Row}                            from '../../shared/page/widgets/index'
 
 import {SidebarService}                 from '../sidebar.service'
@@ -45,10 +45,13 @@ export class PageLayoutComponent {
      * @param dropIndex The drop index, 0 is above the first row
      */
     onBlueprintRowDrag(evt : DragEvent, dropIndex : number) {
-        // Indicates we can drop here
-        evt.preventDefault();
-
-        this._hoveredDropIndex = dropIndex;
+        // Is the thing that could be possibly dropped a row?
+        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
+        if (pageEvt.row) {
+            // Indicates we can drop here
+            evt.preventDefault();
+            this._hoveredDropIndex = dropIndex;
+        }
     }
 
     /**
@@ -60,19 +63,21 @@ export class PageLayoutComponent {
         // Indicates we can drop here
         evt.preventDefault();
 
-        // Add the new row
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        this.page.addRow(dropIndex, pageEvt.row);
+        if (pageEvt.row) {
+            // Add the new row
+            this.page.addRow(dropIndex, pageEvt.row);
 
-        // Possibly inform callbacks about the drop
-        if (this._dragService.currentDrag.callbacks &&
-            this._dragService.currentDrag.callbacks.onRow) {
-            const droppedRow = this.page.rows[dropIndex];
-            this._dragService.currentDrag.callbacks.onRow(droppedRow);
+            // Possibly inform callbacks about the drop
+            if (this._dragService.currentDrag.callbacks &&
+                this._dragService.currentDrag.callbacks.onRow) {
+                const droppedRow = this.page.rows[dropIndex];
+                this._dragService.currentDrag.callbacks.onRow(droppedRow);
+            }
+
+            // And reset all hovering state
+            this._hoveredDropIndex = undefined;
         }
-
-        // And reset all hovering state
-        this._hoveredDropIndex = undefined;
     }
 
     /**

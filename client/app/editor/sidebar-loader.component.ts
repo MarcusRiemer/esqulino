@@ -4,7 +4,7 @@ import{
     Type, provide, Injector, ReflectiveInjector
 } from '@angular/core'
 
-import {SIDEBAR_MODEL_TOKEN}         from './sidebar.token'
+import {WIDGET_MODEL_TOKEN}          from './sidebar.token'
 
 import {
     SidebarService, SidebarModel
@@ -62,7 +62,7 @@ export class SidebarLoaderComponent implements OnInit {
             let injector = this._injector;
             if (newModel.param) {
                 injector = ReflectiveInjector.resolveAndCreate([
-                    provide(SIDEBAR_MODEL_TOKEN, {useValue: newModel.param })
+                    provide(WIDGET_MODEL_TOKEN, {useValue: newModel.param })
                 ], this._injector);
             }
             
