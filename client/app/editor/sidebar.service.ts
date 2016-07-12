@@ -3,7 +3,7 @@ import {Injectable, Type}            from '@angular/core'
 import {BehaviorSubject}             from 'rxjs/BehaviorSubject'
 import {Observable}                  from 'rxjs/Observable'
 
-import {WIDGET_MODEL_TOKEN}          from './sidebar.token'
+import {SIDEBAR_MODEL_TOKEN}         from './editor.token'
 import * as Query                    from './query/sidebar.component'
 import * as Page                     from './page/sidebar.component'
 
