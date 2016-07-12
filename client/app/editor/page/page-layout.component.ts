@@ -1,4 +1,4 @@
-import {Component, Input}               from '@angular/core'
+import {Component, Input, OnInit}       from '@angular/core'
 
 import {Page, ReferencedQuery}          from '../../shared/page/index'
 import {Row}                            from '../../shared/page/widgets/index'
@@ -16,13 +16,8 @@ import {WidgetLoaderComponent}          from './widget-loader.component'
     templateUrl: 'app/editor/page/templates/page-layout.html',
     directives: [WidgetLoaderComponent]
 })
-export class PageLayoutComponent {
+export class PageLayoutComponent implements OnInit {
     @Input() page : Page;
-
-    constructor(
-        private _sidebarService : SidebarService,
-        private _dragService : DragService
-    ) {}
 
     /**
      * If a drag operation is currently taking place, this
@@ -37,6 +32,17 @@ export class PageLayoutComponent {
     @Input() draggedRow : {
         row : Row
         index : number
+    }
+    
+    constructor(
+        private _sidebarService : SidebarService,
+        private _dragService : DragService
+    ) {}
+
+    ngOnInit() {
+        if (!this.page) {
+            throw new Error("PageLayoutComponent doesn't have a page");
+        }
     }
     
     /**

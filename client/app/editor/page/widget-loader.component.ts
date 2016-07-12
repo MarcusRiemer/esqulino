@@ -5,11 +5,15 @@ import {
     Type, provide, ReflectiveInjector
 } from '@angular/core'
 
+import {Page}                  from '../../shared/page/index'
+
 import {Widget}                from '../../shared/page/widgets/index'
 
 import {SidebarService}        from '../sidebar.service'
 
-import {WIDGET_MODEL_TOKEN}    from '../editor.token'
+import {
+    WIDGET_MODEL_TOKEN
+} from '../editor.token'
 
 import {WidgetComponent}       from './widgets/widget.component'
 import {ParagraphComponent}    from './widgets/paragraph.component'
@@ -25,9 +29,14 @@ import {QueryTableComponent}   from './widgets/query-table.component'
 })
 export class WidgetLoaderComponent implements OnInit {
     /**
-     * The type to load
+     * The widgets that require an editor representation.
      */
     @Input() widgets : Widget[];
+
+    /**
+     * The page all these widgets are placed on.
+     */
+    @Input() page : Page;
 
     private _typeMapping : { [typeName:string] : Type} = {}
 
@@ -69,9 +78,14 @@ export class WidgetLoaderComponent implements OnInit {
             console.log(`Resolving widget type "${widget.type}"`);
             const componentType = this.getComponentType(widget.type);
 
+            if (!this.page) {
+                throw new Error("WidgetLoaderComponent doesn't have a page");
+            }
+            
             // Inject the widget model            
             let injector = ReflectiveInjector.resolveAndCreate([
-                provide(WIDGET_MODEL_TOKEN, {useValue : widget})
+                provide(WIDGET_MODEL_TOKEN, {useValue : widget}),
+                provide(Page, {useValue : this.page})
             ],this._injector);
             
             // And create the component
