@@ -30,6 +30,9 @@
     }
   ],
   "referencedQueries": [
-    "a0495663-6fd3-42b2-8167-acfebe778ed5"
+    {
+      "queryId": "a0495663-6fd3-42b2-8167-acfebe778ed5",
+      "name": "A"
+    }
   ]
 }

@@ -16,6 +16,7 @@ import {DragService}                    from './drag.service'
  */
 interface UsableQuery {
     query : Query
+    name? : string
     used : boolean
 }
 
@@ -152,7 +153,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
      * @return All queries that are actually used on this page.
      */
     get usedQueries() : UsableQuery[] {
-        return (this.queries.filter(q => q.used));
+        return (this.page.referencedQueries.map(ref => {
+            return ({
+                query : this._project.getQueryById(ref.queryId),
+                name : ref.name,
+                used : true
+            })
+        }));
     }
 }
 

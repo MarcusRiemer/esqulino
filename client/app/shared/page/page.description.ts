@@ -51,6 +51,16 @@ export interface RowDescription {
 }
 
 /**
+ * Referenced queries may (optionally) accompanied by a human-readable
+ * name. This is required if the same query is going to be used 
+ * multiple times on a single page.
+ */
+export interface ReferencedQuery {
+    queryId : string,
+    name? : string
+}
+
+/**
  * Describes a page as a whole
  */
 export interface PageDescription {
@@ -75,6 +85,6 @@ export interface PageDescription {
      * these queries provide additional DB information that can
      * be used on this page.
      */
-    referencedQueries : string[]
+    referencedQueries : ReferencedQuery[]
 }
 
