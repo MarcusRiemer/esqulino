@@ -3,7 +3,7 @@ import {Component, Inject, OnInit} from '@angular/core'
 import {Heading}                  from '../../../shared/page/widgets/index'
 
 import {SidebarService}           from '../../sidebar.service'
-import {WIDGET_MODEL_TOKEN}       from '../../sidebar.token'
+import {WIDGET_MODEL_TOKEN}      from '../../editor.token'
 
 import {WidgetComponent}          from './widget.component'
 import {

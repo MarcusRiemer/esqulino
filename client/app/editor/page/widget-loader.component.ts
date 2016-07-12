@@ -9,7 +9,7 @@ import {Widget}                from '../../shared/page/widgets/index'
 
 import {SidebarService}        from '../sidebar.service'
 
-import {WIDGET_MODEL_TOKEN}    from '../sidebar.token'
+import {WIDGET_MODEL_TOKEN}    from '../editor.token'
 
 import {WidgetComponent}       from './widgets/widget.component'
 import {ParagraphComponent}    from './widgets/paragraph.component'
@@ -73,16 +73,8 @@ export class WidgetLoaderComponent implements OnInit {
             let injector = ReflectiveInjector.resolveAndCreate([
                 provide(WIDGET_MODEL_TOKEN, {useValue : widget})
             ],this._injector);
-
-            if (!injector.get(WIDGET_MODEL_TOKEN)) {
-                console.log("Couldn't get back widget model")
-            }
-
-            if (!injector.get(SidebarService)) {
-                console.log("Couldn't get back sidebar service")
-            }
             
-            // TODO: Call the correct constructor instead of setting the property afterwards
+            // And create the component
             this._resolver.resolveComponent(componentType)
                 .then( (fac) => {
                     this._selfRef.createComponent(fac, index, injector);

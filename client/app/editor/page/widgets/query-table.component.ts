@@ -8,7 +8,7 @@ import {QueryTable}                 from '../../../shared/page/widgets/index'
 
 import {ProjectService, Project}    from '../../project.service'
 import {SidebarService}             from '../../sidebar.service'
-import {WIDGET_MODEL_TOKEN}         from '../../sidebar.token'
+import {WIDGET_MODEL_TOKEN}         from '../../editor.token'
 
 import {DragService, PageDragEvent} from '../drag.service'
 

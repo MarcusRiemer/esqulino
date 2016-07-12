@@ -1,6 +1,6 @@
 import {Component, Inject, Optional}        from '@angular/core'
 
-import {WIDGET_MODEL_TOKEN}                 from '../../sidebar.token'
+import {SIDEBAR_MODEL_TOKEN}                from '../../editor.token'
 
 import {HeadingComponent, Heading}          from './heading.component'
 
@@ -14,7 +14,7 @@ export class HeadingSidebarComponent {
 
     private _model : Heading;
 
-    constructor(@Inject(WIDGET_MODEL_TOKEN) com : HeadingComponent) {
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : HeadingComponent) {
         this._model = com.model;
     }
 

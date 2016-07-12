@@ -72,7 +72,7 @@ export class WidgetComponent<TModel> {
     /**
      * This method is meant to be overwritten by specialised classes and
      * allows reacting to editing events. The default implementation
-     * does not do anything at all.
+     * attempts to show a sidebar with this widget as a parameter.
      */
     protected onBeginEditing() {
         if (this._sidebarTypeId) {
