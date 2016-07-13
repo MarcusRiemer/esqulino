@@ -164,7 +164,7 @@ class ScratchSqlApp < Sinatra::Base
 
     begin
       result = project_run_query(@project_folder, request_data.fetch('sql'), request_data.fetch('params'))
-      json result
+      json(result['rows'])
     rescue SQLite3::SQLException, SQLite3::ConstraintException => e
       status 400
       json({ :message => e })
@@ -177,7 +177,7 @@ class ScratchSqlApp < Sinatra::Base
 
     begin
       result = project_run_stored_query(@project_folder, @query_id, query_params)
-      json result
+      json(result['rows'])
     rescue SQLite3::SQLException, SQLite3::ConstraintException => e
       status 400
       json({ :message => e })

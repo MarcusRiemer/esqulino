@@ -16,27 +16,75 @@ def assert_query(project_folder, project_id, query_id)
   end
 end
 
+# Allows iteration over all queries that are stored on disk
+#
+# @param project_folder [string] The projects root folder
+def all_queries(project_folder)
+  page_folder = File.join(project_folder, "queries")
+  Dir.glob(page_folder + "/*.json")
+end
+
 # Retrieves all queries that are part of the given project.
 #
 # @param project_folder [string] The projects root folder
 #
 # @return [List] A list of "over the wire" descriptions of queries
 def project_load_queries(project_folder)
-  to_return = []
+  all_queries(project_folder).map do |query_file|
+    project_load_query(project_folder, query_file)
+  end
+end
 
-  query_folder = File.join(project_folder, "queries")
-  Dir.glob(query_folder + "/*.json").each do |query_file|
-    # Load the model from disk
-    sql_model = YAML.load_file(query_file)
-
-    # Put the id into the model, which is part of the filename
-    sql_model['id'] = File.basename(query_file, ".json")
-
-    # Append it to the list of values that should be returned
-    to_return << sql_model
+# Loads a single query model with a known ID.
+#
+# @param project_folder [string] The projects root folder
+# @param query_ref [string] The id of the page or the
+#                           path to the whole file.
+#
+# @return [Hash] All properties of a page
+def project_load_query(project_folder, query_ref)
+  # Distinguish between paths and Ids
+  if File.exists? query_ref then
+    query_id = File.basename(query_ref, ".json")
+    query_file = query_ref
+  elsif is_string_id? query_ref then
+    query_id = query_ref
+    query_folder = File.join(project_folder, "queries")
+    query_file = File.join(query_folder, "#{query_id}.json")
+  else
+    raise UnknownPageError.new(query_ref)
   end
 
-  return to_return
+  # Load the model from disk
+  query_model = YAML.load_file(query_file)
+
+  # Put the id into the model, which is part of the filename
+  query_model['id'] = query_id
+
+  return query_model
+end
+
+# Loads the SQL representation of single query with a known ID.
+#
+# @param project_folder [string] The projects root folder
+# @param query_ref [string] The id of the page or the
+#                           path to the whole file.
+#
+# @return [Hash] All properties of a page
+def project_load_sql(project_folder, query_ref)
+  # Distinguish between paths and Ids
+  if File.exists? query_ref then
+    query_id = File.basename(query_ref, ".sql")
+    query_file = query_ref
+  elsif is_string_id? query_ref then
+    query_id = query_ref
+    query_folder = File.join(project_folder, "queries")
+    query_file = File.join(query_folder, "#{query_id}.sql")
+  else
+    raise UnknownPageError.new(query_ref)
+  end
+
+  return (File.read query_file)
 end
 
 # Stores a given query in the context of a given project. For the moment
@@ -106,13 +154,18 @@ end
 # @param sql [string] The SQL query
 # @param params [Hash] Query parameters
 #
-# @return [Hash] "Over-the-wire" JSON response
+# @return [Hash] { columns :: List, rows :: List of List }
+#                
 def project_run_query(project_folder, sql, params)
   sqlite_file_path = File.join(project_folder, "db.sqlite")
   db = SQLite3::Database.new(sqlite_file_path)
 
-  toReturn = db.execute(sql, params)
-  return toReturn
+  # execute2 returns the names of the columns in the first row
+  result = db.execute2(sql, params)
+  return {
+    'columns' => result.first,
+    'rows' => result.drop(1)
+  }
 end
 
 # Executes a query that is part of a certain project

@@ -1,3 +1,5 @@
+require_relative './query.rb'
+
 # Throws an exception if the given page does not exist.
 #
 # @param project_folder [string] The projects root folder
@@ -19,11 +21,11 @@ def all_pages(project_folder)
   Dir.glob(page_folder + "/*.json")
 end
 
-# Loads a single project with a known ID.
+# Loads a single page with a known ID.
 #
 # @param project_folder [string] The projects root folder
-# @param page_id_or_file [string] The id of the page or the
-#                                 path to the whole file.
+# @param page_ref [string] The id of the page or the
+#                          path to the whole file.
 #
 # @return [Hash] All properties of a page
 def project_load_page(project_folder, page_ref)
@@ -71,7 +73,7 @@ end
 #
 # @return [List] A list of "over the wire" descriptions of pages
 def project_load_pages(project_folder)
-  Dir.glob(all_pages project_folder).map do |page_file|
+  all_pages(project_folder).map do |page_file|
     project_load_page(project_folder, page_file)
   end
 end
@@ -146,10 +148,72 @@ end
 # @param project_folder [string] The projects root folder
 # @param given_page_id [string] The id of the page to render
 def project_render_stored_page(project_folder, page_id)
+  # Load the page model
   page_model = project_load_page(project_folder, page_id)
 
+  # Load all referenced queries
+  queries = page_model['referencedQueries'].map do |ref|
+    {
+      'name' => ref['name'],
+      'sql' => project_load_sql(project_folder, ref['queryId'])
+    }
+  end
+
+  # And hand over to do some actual rendering
+  project_render_page(project_folder, page_model, queries, {})
+end
+
+# Render a page from the given complete set of required things,
+# this step has no disk-interaction at all.
+#
+# @param project_folder [string] The projects root folder
+# @param given_page_id [string] The id of the page to render
+def project_render_page(project_folder, page_model, queries, params)
+  # Enrich the params with the executed queries
+  params = project_execute_page_queries(project_folder, queries, params)
+
   return project_render_page_template(project_folder, page_model,
-                                      "liquid", {})
+                                      'liquid', params)
+end
+
+# Run all given queries and transform the output to be useful
+# for Liquid-template bindings.
+#
+# @param project_folder [string] The projects root folder
+# @param queries [Hash] { name :: string, sql :: string }
+#                       A named SQL query
+# @param params [Hash] Parameters that are known before the
+#                      query was executed. These can work as
+#                      input for the queries and are returned
+#                      enriched with the query data.
+def project_execute_page_queries(project_folder, queries, params)
+  # Hashes are passed by reference and we don't want to destroy
+  # anything on the callsite
+  params = params.dup
+  
+  queries.each do |query|
+    # Ensure every query is fully defined
+    name = query.fetch('name')
+    sql = query.fetch('sql')
+
+    # Run the query
+    result = project_run_query(project_folder, sql, {})
+
+    # Liquid works much better with 'sensible' keys as names, so we
+    # map the column names into each row. This basically transforms
+    # rows like [1,2,3] to { "column-name-1" => 1, ... }
+    mapped = result['rows'].map { |r| Hash[result['columns'].zip r] }
+
+    # Rows with a single value allow a short-hand notation. The user
+    # shouldn't be forced to write {{ row[0].column }} every time he
+    # **knows** there is only a single row.
+    mapped = mapped.first if mapped.length == 1
+
+    # Store the 
+    params[name] = mapped
+  end
+
+  return (params)
 end
 
 
@@ -173,5 +237,7 @@ def project_render_page_template(project_folder,
 
   template = Liquid::Template::parse(template_string)
 
-  return (template.render())
+  puts "Rendering with #{params.to_s}"
+  
+  return (template.render(params))
 end

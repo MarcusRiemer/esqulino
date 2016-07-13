@@ -38,7 +38,7 @@ export interface PageRenderRequestDescription {
     sourceType : string,
     source : string,
     queries : {
-        id : string,
+        name : string,
         sql : string
     }[],
     params : QueryParamsDescription
@@ -106,12 +106,12 @@ export class PageService {
 
         const fullQueries =
             // Retrieve the matching queries
-            project.getQueriesById(page.referencedQueryIds)
-            // And extract the (id,sql) "tuples"
-            .map(q => { return {
-                id : q.id,
-                sql : q.toSqlString()
-            } });
+            page.referencedQueries.map( ref => {
+                return ({
+                    name : ref.name,
+                    sql : project.getQueryById(ref.queryId).toSqlString()
+                })
+            });
         
         const bodyJson : PageRenderRequestDescription  = {
             sourceType : page.renderer.type,
