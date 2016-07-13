@@ -205,7 +205,12 @@ class ScratchSqlApp < Sinatra::Base
   post '/api/project/:project_id/page/render' do
     render_request = @@validator.ensure_request("PageRenderRequestDescription", request.body.read)
 
-    return [200, render_request['source']]
+    params = render_request['params']
+    queries = render_request['queries']
+    page_template = render_request['source']
+    render_engine = render_request['sourceType']
+
+    project_render_page(@project_folder, page_template, queries, params, render_engine)
   end
 
   # Storing a page
