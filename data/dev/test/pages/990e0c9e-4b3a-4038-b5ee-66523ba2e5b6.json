@@ -28,6 +28,15 @@
               }
             }
           ]
+        },
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "paragraph",
+              "text": "In diesem Absatz werden am Ende die <a href=\"https://shopify.github.io/liquid/basics/introduction/\">Liquid Ausdrücke</a> {% raw %}{{ B.key }} -> {{ B.value }}{% endraw %} ausgewertet: {{ B.key }} -> {{ B.value }}"
+            }
+          ]
         }
       ]
     }
