@@ -159,8 +159,14 @@ def project_render_stored_page(project_folder, page_id)
     }
   end
 
+  render_engine = 'liquid'
+  
+  template = project_load_page_template(project_folder,
+                                        page_model['id'],
+                                        render_engine)
+
   # And hand over to do some actual rendering
-  project_render_page(project_folder, page_model, queries, {})
+  project_render_page(project_folder, template, queries, {}, render_engine)
 end
 
 # Render a page from the given complete set of required things,
@@ -168,12 +174,12 @@ end
 #
 # @param project_folder [string] The projects root folder
 # @param given_page_id [string] The id of the page to render
-def project_render_page(project_folder, page_model, queries, params)
+def project_render_page(project_folder, page_template, queries, params, render_engine)
   # Enrich the params with the executed queries
   params = project_execute_page_queries(project_folder, queries, params)
 
-  return project_render_page_template(project_folder, page_model,
-                                      'liquid', params)
+  return project_render_page_template(project_folder, page_template,
+                                      render_engine, params)
 end
 
 # Run all given queries and transform the output to be useful
@@ -222,20 +228,18 @@ end
 # has been fetched from disk already.
 #
 # @param project_folder [string] The projects root folder
-# @param page_model [Hash] The model of the page
+# @param page_template [string] A renderable version of the page
 # @param render_engine The render engine to use
 # @param params [Hash] All arguments that are required to render this page
 #
 # @return [string] The rendered HTML representation of the page
 def project_render_page_template(project_folder,
-                                 page_model,
+                                 page_template,
                                  render_engine,
                                  params)
-  template_string = project_load_page_template(project_folder,
-                                               page_model['id'],
-                                               render_engine)
+  
 
-  template = Liquid::Template::parse(template_string)
+  template = Liquid::Template::parse(page_template)
 
   puts "Rendering with #{params.to_s}"
   
