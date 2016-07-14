@@ -6,8 +6,9 @@ require 'fileutils'    # To create directory trees
 require './project/query.rb'
 require './project/page.rb'
 
-# Represents an esqulino project. Almost all attributes of this
-# class are loaded lazily on demand.
+# Represents an esqulino project. Attributes of this
+# class are loaded lazily on demand, so there is no harm
+# in creating loads of instances.
 class Project
   # @param project_folder [string] The projects root folder
   def initialize(project_folder)
@@ -18,8 +19,14 @@ class Project
     @queries = nil
   end
 
+  # The path to the folder this project is stored in
   def folder
     @project_folder
+  end
+
+  # The path to the folder this project stores its pages.
+  def folder_pages
+    File.join(@project_folder, "pages")
   end
 
   # @return True, if at least the project folder and a model file exist
@@ -27,7 +34,8 @@ class Project
     File.directory? @project_folder and File.exists? description_filename
   end
 
-  # Loads the whole model at once
+  # Loads all parts of the model that have not been loaded so far. This
+  # does explicitly not reload parts that have been loaded already!
   def load!
     load_description! if @whole_description.nil?
     load_schema! if @schema.nil?
@@ -35,6 +43,7 @@ class Project
     load_queries! if @queries.nil?
   end
 
+  # Turn a project into a JSON description
   def to_json(options)
     # The JSON representation is always meant to be complete
     load!
@@ -55,7 +64,6 @@ class Project
   # Loads the projects model from disk
   def load_description!
     @whole_description = YAML.load_file(description_filename);
-    puts @whole_description
   end
 
   # @return Every information about the core project itself.
@@ -150,13 +158,48 @@ class Project
 
   # Loads all pages that are associated with this project
   def load_pages!
-    @pages = project_load_pages(@project_folder)
+    # Glob all JSON files in the pages folder
+    page_folder = File.join(@project_folder, "pages")
+    @pages = Dir.glob(page_folder + "/*.json").map do |page_file|
+      page_id = File.basename(page_file, ".json")
+      Page.new(self, page_id, nil)
+    end
   end
 
-  # All queries that are associated with this project
+  # All pages that are associated with this project
   def pages
     load_pages! if @pages.nil?
     return (@pages)
+  end
+
+  # Retrieves a page by its name
+  #
+  # @param id The id of the searched page
+  def page_by_id(id)
+    to_return = pages.find {|page| page.id == id}
+    raise UnknownPageError.new(id, name) if to_return.nil?
+
+    return (to_return)
+  end
+  
+  # Retrieves a page by its name
+  #
+  # @param name The name of the searched page
+  def page_by_name(name)
+    to_return = pages.find {|page| page.name == name}
+    raise UnknownPageError.new(id, name) if to_return.nil?
+
+    return (to_return)
+  end
+
+  # @return The page model for the index page
+  def index_page
+    # Read the ID of the index page
+    page_id = whole_description['indexPageId']
+    raise EsqulinoError.new("Project has no index page") if page_id.nil?
+
+    # And return that page
+    page_by_id(page_id)
   end
 end
 

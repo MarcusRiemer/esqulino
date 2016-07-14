@@ -1,185 +1,153 @@
 require_relative './query.rb'
 
-# Throws an exception if the given page does not exist.
-#
-# @param project_folder [string] The projects root folder
-# @param project_id [string] The ID of the project
-# @param page_id [string] The ID of the page
-def assert_page(project_folder, project_id, page_id)
-  page_folder = File.join(project_folder, "pages")
+# Represents a esqulino page, which must be part of a project.
+# Attributes of this class are loaded lazily on demand, so there
+# is no harm in creating loads of instances.
+class Page
 
-  if not File.exists? File.join(page_folder, page_id + ".json")
-    raise UnknownQueryError.new(project_id, page_id)
-  end
-end
-
-# Allows iteration over all pages that are stored on disk
-#
-# @param project_folder [string] The projects root folder
-def all_pages(project_folder)
-  page_folder = File.join(project_folder, "pages")
-  Dir.glob(page_folder + "/*.json")
-end
-
-# Loads a single page with a known ID.
-#
-# @param project_folder [string] The projects root folder
-# @param page_ref [string] The id of the page or the
-#                          path to the whole file.
-#
-# @return [Hash] All properties of a page
-def project_load_page(project_folder, page_ref)
-  # Distinguish between paths and Ids
-  if File.exists? page_ref then
-    page_id = File.basename(page_ref, ".json")
-    page_file = page_ref
-  elsif is_string_id? page_ref then
-    page_id = page_ref
-    page_folder = File.join(project_folder, "pages")
-    page_file = File.join(page_folder, "#{page_id}.json")
-  else
-    raise UnknownPageError.new(page_ref)
+  def initialize(project, id, model = nil)
+    @project = project
+    # Generate a new random ID if no ID is specified
+    @id =  id || SecureRandom.uuid
+    @model = model
   end
 
-  # Load the model from disk
-  page_model = YAML.load_file(page_file)
-
-  # Put the id into the model, which is part of the filename
-  page_model['id'] = page_id
-
-  return page_model
-end
-
-# Retrieves a page by its name
-#
-# @param project_folder [string] The projects root folder
-# @param page_name [name] The name the page is known under
-def project_find_page(project_folder, page_name)
-  # This is not quite nice, but it works ... #find returns
-  # the path to the project in question, but we actually
-  # want to return the loaded model.
-  to_return = nil
-  Dir.glob(all_pages project_folder).find do |page_file|
-    to_return = project_load_page(project_folder, page_file)
-    to_return['name'] == page_name
+  # @return True, if at least the project folder and a model file exist
+  def exists?
+    File.directory? @project.folder_pages and File.exists? page_file_path
   end
 
-  return to_return if to_return['name'] == page_name
-end
-
-# Retrieves all pages that are part of the given project.
-#
-# @param project_folder [string] The projects root folder
-#
-# @return [List] A list of "over the wire" descriptions of pages
-def project_load_pages(project_folder)
-  all_pages(project_folder).map do |page_file|
-    project_load_page(project_folder, page_file)
-  end
-end
-
-# Loads the template for a given page
-#
-# @param project_folder [string] The projects root folder
-# @param page_id [string] The ID of the page
-# @param template_type [string]
-def project_load_page_template(project_folder, page_id, template_type)
-  # Todo: Work with more then one template engine
-  raise EsqulinoError.new("Unknown template type \"#{template_type}\"") if template_type != "liquid"
-  template_extension = "liquid"
-  
-  page_folder = File.join(project_folder, "pages")
-  template_file = File.join(page_folder, "#{page_id}.#{template_extension}")
-
-  return (File.read(template_file))
-end
-
-# Stores a given page in the context of a given project. For the moment
-# this requires the client to provide the rendered HTML string, because
-# the implementation of that serialization step is written in Typescript.
-#
-# @param project_folder [string] The projects root folder
-# @param page_info [Hash] The page model and it's HTML representation.
-# @param given_page_id [string] The id of the page to store
-#
-# @return The id of the stored query
-def project_store_page(project_folder, page_info, given_page_id)
-  page_folder = File.join(project_folder, "pages")
-
-  # Ensuring that the project folder has a "pages" subfolder
-  if not File.directory?(page_folder)
-    FileUtils.mkdir_p(page_folder)
+  # @return A file path to a page related resource
+  def page_file_path(extension = "json")
+    File.join(@project.folder_pages, "#{@id}.#{extension}")
   end
 
-  # Possibly generate a new page id
-  page_id = given_page_id || SecureRandom.uuid
-
-  # Filename with various extensions
-  page_filename = File.join(page_folder, page_id)
-  page_filename_json = page_filename + ".json"
-
-  File.open(page_filename_json, "w") do |f|
-    f.write(page_info['model'].to_json)
+  # @return Paths to all files that are associated with this page
+  def page_files
+    Dir.glob(File.join(@project.folder_pages, "#{@id}.*"))
   end
 
-  # Delete a possibly existing rendered files. We prefer having
-  # no string representation at all instead of silently working
+  # Loads the page model from disk
+  def load_model!
+    raise UnknownPageError.new(@project.id, @id) unless File.exists? page_file_path
+    
+    @model = YAML.load_file(page_file_path)
+    @model['id'] = @id
+  end
+
+  def to_json(options)
+    # The JSON representation is always meant to be complete
+    load_model!
+    @model.to_json(options)
+  end
+
+  # Saves the abstract representation of this page but deletes every saved
+  # template that was stored alongside the model. We prefer having
+  # no template representation at all instead of silently working
   # with an older state of the page.
-  Dir.glob(page_filename + ".*") do |page_filename_rendered|
-      File.delete page_filename_rendered if not page_filename_rendered == page_filename_json
+  #
+  # This requires the page to be currently
+  # loaded. If it is not loaded an exception is thrown because
+  #
+  # a) Writing an unloaded page would destroy the previously stored model
+  # b) Loading and immediatly saving is effectively a NOOP
+  #
+  # Or to put in other terms: Saving something that hasn't been loaded smells like
+  # something that would never happen on purpose.
+  def save_model
+    raise EsqulinoError, "Attempted to save unloaded page" if @model.nil?
+    
+    page_folder = File.join(@project.folder, "pages")
+
+    # Ensuring that the project folder has a "pages" subfolder
+    if not File.directory?(page_folder)
+      FileUtils.mkdir_p(page_folder)
+    end
+
+    # Actually write to disk
+    File.open(page_file_path, "w") do |f|
+      f.write(@model.to_json)
+    end
+
+    # Deleting everything that is not the model
+    page_files do |page_template|
+      File.delete page_template unless File.extname(page_template) == '.json'
+    end
   end
 
-  # Are rendered strings part of the information?
-  if page_info.has_key? 'sources' then
-    # Yes, simply store them
-    page_info['sources'].each do |key,value|
-      File.open(page_filename + "." + key, "w") do |f|
-        f.write(value)
+  # Saves all templates that are part of the given hash. The key is expected
+  # to be an identifier for the rendering engine, the value is the template
+  # itself.
+  #
+  # @param templates [Hash] Templates with associated rendering engine
+  def save_templates(templates)
+    templates.each do |engine_type,template|
+      File.open(page_file_path(engine_type), 'w') do |f|
+        f.write(template)
       end
     end
   end
 
-  return page_id
-end
-
-# Gather all things from disk that are required to render a page
-# and then actually renders it.
-#
-# @param project_folder [string] The projects root folder
-# @param given_page_id [string] The id of the page to render
-def project_render_stored_page(project_folder, page_id)
-  # Load the page model
-  page_model = project_load_page(project_folder, page_id)
-
-  # Load all referenced queries
-  queries = page_model['referencedQueries'].map do |ref|
-    {
-      'name' => ref['name'],
-      'sql' => project_load_sql(project_folder, ref['queryId'])
-    }
+  # @return The id of this page
+  def id
+    model['id']
+  end
+  
+  # @return The user-facing name of this page
+  def name
+    model['name']
   end
 
-  render_engine = 'liquid'
-  
-  template = project_load_page_template(project_folder,
-                                        page_model['id'],
-                                        render_engine)
+  # @return The whole backing model of this page
+  def model
+    load_model! if @model.nil?
+    @model
+  end
 
-  # And hand over to do some actual rendering
-  project_render_page(project_folder, template, queries, {}, render_engine)
-end
+  # @param value The new backing model of this page
+  def model=(value)
+    @model = value
+  end
 
-# Render a page from the given complete set of required things,
-# this step has no disk-interaction at all.
-#
-# @param project_folder [string] The projects root folder
-# @param given_page_id [string] The id of the page to render
-def project_render_page(project_folder, page_template, queries, params, render_engine)
-  # Enrich the params with the executed queries
-  params = project_execute_page_queries(project_folder, queries, params)
+  # Render this page. This will read quite a few things from disk:
+  #
+  # * The page model to find all referenced queries
+  # * Each query that has been mentioned
+  # * The template file matching the render engine
+  #
+  # Then all referenced queries will be executed, this will also involve quite
+  # a bit of disk I/O.
+  #
+  # And finally all parameters, including the query result, will be handed off
+  # to the template engine. The result of this render process is then returned.
+  def render(params, render_engine = "liquid")
+    load_model!
+    
+    # Load all referenced queries
+    queries = @model['referencedQueries'].map do |ref|
+      {
+        'name' => ref['name'],
+        'sql' => project_load_sql(@project.folder, ref['queryId'])
+      }
+    end
 
-  return project_render_page_template(project_folder, page_template,
-                                      render_engine, params)
+    # And execute them
+    params = project_execute_page_queries(@project.folder, queries, params)
+
+    # Load the template string
+    template = read_template(render_engine)
+
+    # And hand over to do some actual rendering
+    project_render_page_template(@project.folder, template, render_engine, params)
+  end
+
+  # Read a template specification for this page
+  def read_template(extension = ".liquid")
+    # Todo: Work with more than one template engine
+    raise EsqulinoError.new("Unknown template type \"#{extension}\"") if extension != "liquid"
+
+    File.read(page_file_path "liquid")
+  end
 end
 
 # Run all given queries and transform the output to be useful
@@ -233,15 +201,16 @@ end
 # @param params [Hash] All arguments that are required to render this page
 #
 # @return [string] The rendered HTML representation of the page
-def project_render_page_template(project_folder,
+def project_render_page_template(project,
                                  page_template,
                                  render_engine,
                                  params)
+  # Setting up load paths
   
-
+  
+  # Load the basic liquid template
   template = Liquid::Template::parse(page_template)
 
-  puts "Rendering with #{params.to_s}"
-  
+  # Render it alongside the known parameters
   return (template.render(params))
 end
