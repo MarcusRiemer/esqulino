@@ -4,9 +4,14 @@ require "test/unit"
 require "json"
 
 # Tests all aspect of project creation and modification
-class Project < Test::Unit::TestCase
+class ProjectTest < Test::Unit::TestCase
   @@project_path = "../data/dev/test/"
 
+  def test_initialise
+    proj = Project.new @@project_path
+    assert_true(proj.exists?)
+  end
+  
   def test_is_string_id?
     assert_true(is_string_id?("00000000-1111-2222-3333-444444444444"))
     assert_true(is_string_id?("AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"))
