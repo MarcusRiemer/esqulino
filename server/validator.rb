@@ -56,7 +56,6 @@ class Validator
     if result.length > 0 then
       raise InvalidSchemaError.new(schema_name, result)
     else
-      puts "Request is valid against #{schema_name}"
       return body
     end
   end

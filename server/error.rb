@@ -49,9 +49,9 @@ end
 # Thrown when a page inside a project is unknown
 class UnknownPageError < EsqulinoError
   # @param project_id [string] The id of the unknown project
-  # @param page_id [string] The id of the unknown page
-  def initialize(project_id, page_id)
-    super "Unknown page \"#{page_id}\" in project \"#{project_id}\"", 404
+  # @param page_ref [string] The id or name of the unknown page
+  def initialize(project_id, page_ref)
+    super "Unknown page \"#{page_ref}\" in project \"#{project_id}\"", 404
   end
 end
 

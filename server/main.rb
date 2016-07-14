@@ -58,7 +58,7 @@ class ScratchSqlApp < Sinatra::Base
     @project = Project.new File.join(given_data_dir, project_id)
 
     # Ensure this is actually a project directory
-    raise UnknownProjectError, project_id if not @project.exists?
+    raise UnknownProjectError, project_id unless @project.exists?
   end
 
   # Ensure that routes with queries do have the query available.
@@ -77,16 +77,15 @@ class ScratchSqlApp < Sinatra::Base
     # Only match numeric IDs, everything else may be a valid
     # sub-route like "run"
     if is_string_id? params['page_id'] then
-      @page_id = params['page_id']
-
-      assert_page @project.folder, @project_id, @page_id
+      page_id = params['page_id']
+      @page = Page.new(@project, page_id)
     end
   end
 
   # Ensure that viewing pages have all resources available
   before '/view/:project_id/?:page_name_or_id?' do
     project_id = params['project_id']
-    @project = Project.new File.join(given_data_dir, @project_id)
+    @project = Project.new File.join(given_data_dir, project_id)
 
     # Ensure this is actually a project directory
     raise UnknownProjectError, project_id if not @project.exists?
@@ -97,19 +96,18 @@ class ScratchSqlApp < Sinatra::Base
     # Distinguish between index page, page names and ids
     if page_name_or_id.nil? || page_name_or_id.empty? then
       # Index page
-      project = read_project @project.folder
-      @page_id = project['indexPageId']
+      @page = @project.index_page
     elsif is_string_id? page_name_or_id then
       # Specific ID
-      @page_id = page_name_or_id
+      @page = @project.page_by_id page_name_or_id
     else
-      # User-facing name
+      # User-facing name, this needs to be unescaped to turn
+      # things like %20 back into spaces
       page_name = URI.unescape(page_name_or_id)
-      page = project_find_page(@project.folder, page_name_or_id)
-      @page_id = page['id']
+      @page = @project.page_by_name page_name_or_id
     end
     
-    assert_page @project.folder, @project.id, @page_id
+    raise UnknownPageError.new(@project.id, @page.id) unless @page.exists?
   end
 
 
@@ -143,7 +141,6 @@ class ScratchSqlApp < Sinatra::Base
 
   # Info about a specific project
   get '/api/project/:project_id' do
-    puts (@project.to_s)
     json @project
   end
 
@@ -204,26 +201,35 @@ class ScratchSqlApp < Sinatra::Base
   # Rendering an arbitrary page
   post '/api/project/:project_id/page/render' do
     render_request = @@validator.ensure_request("PageRenderRequestDescription", request.body.read)
-
+    
     params = render_request['params']
     queries = render_request['queries']
+
+    params = project_execute_page_queries(@project.folder, queries, params)
+    
     page_template = render_request['source']
     render_engine = render_request['sourceType']
 
-    project_render_page(@project.folder, page_template, queries, params, render_engine)
+    project_render_page_template(@project, page_template, render_engine, params)
   end
 
   # Storing a page
   post '/api/project/:project_id/page/:page_id?' do
     new_page = @@validator.ensure_request("PageUpdateRequestDescription", request.body.read)
-    page_id = project_store_page(@project.folder, new_page, @page_id)
 
-    return [200, page_id]
+    # Store the new model
+    @page.model = new_page['model']
+    @page.save_model
+
+    # Store all templates
+    @page.save_templates new_page['sources']
+
+    return [200, @page.id]
   end
 
   # Viewing a specific page
   get '/view/:project_id/?:page_name?' do
-    return project_render_stored_page(@project.folder, @page_id)
+    return @page.render({})
   end
 
   # By now I have too often mistakenly attempted to load other assets than
