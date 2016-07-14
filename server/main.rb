@@ -54,11 +54,11 @@ class ScratchSqlApp < Sinatra::Base
 
   # Ensure that routes with projects do have projects available.
   before '/api/project/:project_id/?*' do
-    @project_id = params['project_id']
-    @project_folder = File.join(given_data_dir, @project_id)
+    project_id = params['project_id']
+    @project = Project.new File.join(given_data_dir, project_id)
 
     # Ensure this is actually a project directory
-    assert_project_dir @project_folder, @project_id
+    raise UnknownProjectError, project_id if not @project.exists?
   end
 
   # Ensure that routes with queries do have the query available.
@@ -68,7 +68,7 @@ class ScratchSqlApp < Sinatra::Base
     if is_string_id? params['query_id'] then
       @query_id = params['query_id']
 
-      assert_query @project_folder, @project_id, @query_id
+      assert_query @project.folder, @project_id, @query_id
     end
   end
 
@@ -79,17 +79,17 @@ class ScratchSqlApp < Sinatra::Base
     if is_string_id? params['page_id'] then
       @page_id = params['page_id']
 
-      assert_page @project_folder, @project_id, @page_id
+      assert_page @project.folder, @project_id, @page_id
     end
   end
 
   # Ensure that viewing pages have all resources available
   before '/view/:project_id/?:page_name_or_id?' do
-    @project_id = params['project_id']
-    @project_folder = File.join(given_data_dir, @project_id)
+    project_id = params['project_id']
+    @project = Project.new File.join(given_data_dir, @project_id)
 
     # Ensure this is actually a project directory
-    assert_project_dir @project_folder, @project_id
+    raise UnknownProjectError, project_id if not @project.exists?
 
     # Ensure that there is actually a page
     page_name_or_id = params['page_name_or_id']
@@ -97,7 +97,7 @@ class ScratchSqlApp < Sinatra::Base
     # Distinguish between index page, page names and ids
     if page_name_or_id.nil? || page_name_or_id.empty? then
       # Index page
-      project = read_project @project_folder
+      project = read_project @project.folder
       @page_id = project['indexPageId']
     elsif is_string_id? page_name_or_id then
       # Specific ID
@@ -105,11 +105,11 @@ class ScratchSqlApp < Sinatra::Base
     else
       # User-facing name
       page_name = URI.unescape(page_name_or_id)
-      page = project_find_page(@project_folder, page_name_or_id)
+      page = project_find_page(@project.folder, page_name_or_id)
       @page_id = page['id']
     end
     
-    assert_page @project_folder, @project_id, @page_id
+    assert_page @project.folder, @project.id, @page_id
   end
 
 
@@ -124,9 +124,9 @@ class ScratchSqlApp < Sinatra::Base
   # Listing all projects that are available
   get '/api/project' do
     projects = Dir.entries(given_data_dir)
-               .select { |entry| !(entry =='.' || entry == '..') }
-               .map { |entry| YAML.load_file(File.join(given_data_dir, entry, "config.yaml")) }
-               .map { |entry| project_public_info entry }
+               .select { |entry| entry != '.' and entry != '..' }
+               .map { |entry| Project.new File.join(given_data_dir, entry) }
+               .map { |project| project.public_description }
     json projects
   end
 
@@ -134,25 +134,25 @@ class ScratchSqlApp < Sinatra::Base
   post '/api/project/:project_id' do
     updated_project = @@validator.ensure_request("ProjectListDescription", request.body.read)
 
-    update_project_description(@project_folder, updated_project)
+    @project.update_description! updated_project
+    @project.save_description
+    
     status 200
   end
 
 
   # Info about a specific project
   get '/api/project/:project_id' do
-    project = read_project @project_folder
-
-    json project
+    puts (@project.to_s)
+    json @project
   end
 
   # Preview image for a specific project
   get '/api/project/:project_id/preview' do
-    project = YAML.load_file(File.join(@project_folder, "config.yaml"));
-
     # Return the preview image if it exists
-    if project.key?("preview") then
-      send_file File.expand_path(project["preview"], @project_folder)
+    image_path = @project.preview_image_path
+    if image_path then
+      send_file image_path
     else
       halt 404
     end
@@ -163,7 +163,7 @@ class ScratchSqlApp < Sinatra::Base
     request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
     begin
-      result = project_run_query(@project_folder, request_data.fetch('sql'), request_data.fetch('params'))
+      result = project_run_query(@project.folder, request_data.fetch('sql'), request_data.fetch('params'))
       json(result['rows'])
     rescue SQLite3::SQLException, SQLite3::ConstraintException => e
       status 400
@@ -176,7 +176,7 @@ class ScratchSqlApp < Sinatra::Base
     query_params = @@validator.ensure_request("QueryParamsDescription", request.body.read)
 
     begin
-      result = project_run_stored_query(@project_folder, @query_id, query_params)
+      result = project_run_stored_query(@project.folder, @query_id, query_params)
       json(result['rows'])
     rescue SQLite3::SQLException, SQLite3::ConstraintException => e
       status 400
@@ -187,7 +187,7 @@ class ScratchSqlApp < Sinatra::Base
   # Storing a query
   post '/api/project/:project_id/query/:query_id?' do
     new_query = @@validator.ensure_request("QueryUpdateRequestDescription", request.body.read)
-    query_id = project_store_query(@project_folder, new_query, @query_id)
+    query_id = project_store_query(@project.folder, new_query, @query_id)
 
     return [200, query_id]
   end
@@ -196,7 +196,7 @@ class ScratchSqlApp < Sinatra::Base
   delete '/api/project/:project_id/query/:query_id' do
     query_id = params['query_id']
 
-    project_delete_query(@project_folder, query_id)
+    project_delete_query(@project.folder, query_id)
 
     return 200
   end
@@ -210,20 +210,20 @@ class ScratchSqlApp < Sinatra::Base
     page_template = render_request['source']
     render_engine = render_request['sourceType']
 
-    project_render_page(@project_folder, page_template, queries, params, render_engine)
+    project_render_page(@project.folder, page_template, queries, params, render_engine)
   end
 
   # Storing a page
   post '/api/project/:project_id/page/:page_id?' do
     new_page = @@validator.ensure_request("PageUpdateRequestDescription", request.body.read)
-    page_id = project_store_page(@project_folder, new_page, @page_id)
+    page_id = project_store_page(@project.folder, new_page, @page_id)
 
     return [200, page_id]
   end
 
   # Viewing a specific page
   get '/view/:project_id/?:page_name?' do
-    return project_render_stored_page(@project_folder, @page_id)
+    return project_render_stored_page(@project.folder, @page_id)
   end
 
   # By now I have too often mistakenly attempted to load other assets than
@@ -249,4 +249,3 @@ class ScratchSqlApp < Sinatra::Base
   end
 end
 
-require_relative 'project'
