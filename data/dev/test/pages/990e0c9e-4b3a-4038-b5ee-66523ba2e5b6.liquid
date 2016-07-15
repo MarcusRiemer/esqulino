@@ -15,15 +15,10 @@
         <p>Hier ist ein Absatz, der was zur zweiten Seite erzählt. Unter diesem Absatz ist dann noch eine Tabelle zu sehen.</p>
       </div>
       <div class="col-md-12">
-        <code>QueryTable</code>
+        {% include "query_table" table: A %}
       </div>
       <div class="col-md-12">
         <p>In diesem Absatz werden am Ende die <a href="https://shopify.github.io/liquid/basics/introduction/">Liquid Ausdrücke</a> {% raw %}{{ B.key }} -&gt; {{ B.value }}{% endraw %} ausgewertet: {{ B.key }} -&gt; {{ B.value }}</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <p>{% include "test" %}</p>
       </div>
     </div>
   </div>
