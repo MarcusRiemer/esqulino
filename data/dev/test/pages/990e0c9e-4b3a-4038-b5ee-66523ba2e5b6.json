@@ -39,19 +39,6 @@
           ]
         }
       ]
-    },
-    {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "paragraph",
-              "text": "{% include \"test\" %}"
-            }
-          ]
-        }
-      ]
     }
   ],
   "referencedQueries": [

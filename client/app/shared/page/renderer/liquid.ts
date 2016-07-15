@@ -14,7 +14,8 @@ type WidgetRenderer = (w: Widget) => string;
 
 function renderQueryTable(w: Widget) : string {
     const queryTable = <QueryTable> w;
-    return (`<code>QueryTable</code>`);
+    const queryName = queryTable.queryReference.name;
+    return (`{% include "query_table" table: ${queryName} %}`);
 }
 
 
