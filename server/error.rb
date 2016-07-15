@@ -41,8 +41,8 @@ end
 class UnknownQueryError < EsqulinoError
   # @param project_id [string] The id of the unknown project
   # @param query_id [string] The id of the unknown query
-  def initialize(project_id, query_id)
-    super "Unknown query \"#{query_id}\" in project \"#{project_id}\"", 404
+  def initialize(project_id, query_id, part = "model")
+    super "Unknown query (#{part}) \"#{query_id}\" in project \"#{project_id}\"", 404
   end
 end
 
@@ -50,8 +50,8 @@ end
 class UnknownPageError < EsqulinoError
   # @param project_id [string] The id of the unknown project
   # @param page_ref [string] The id or name of the unknown page
-  def initialize(project_id, page_ref)
-    super "Unknown page \"#{page_ref}\" in project \"#{project_id}\"", 404
+  def initialize(project_id, page_ref, part = "model")
+    super "Unknown page (#{part}) \"#{page_ref}\" in project \"#{project_id}\"", 404
   end
 end
 

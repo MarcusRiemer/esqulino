@@ -29,6 +29,17 @@ class Project
     File.join(@project_folder, "pages")
   end
 
+  # The path to the folder this project stores its queries.
+  def folder_queries
+    File.join(@project_folder, "queries")
+  end
+
+  # The path to the SQLite database
+  def file_path_sqlite
+    File.join(@project_folder, "db.sqlite")
+  end
+
+
   # @return True, if at least the project folder and a model file exist
   def exists?
     File.directory? @project_folder and File.exists? description_filename
@@ -147,7 +158,12 @@ class Project
 
   # Loads all queries that are associated with this project
   def load_queries!
-    @queries = project_load_queries(@project_folder)
+    # Glob all JSON files in the queries folder
+    @queries = Dir.glob(File.join(folder_queries,"*.json")).map do |query_file|
+      # Each filename contains an ID
+      query_id = File.basename(query_file, ".json")
+      Query.new(self, query_id, nil)
+    end
   end
 
   # All queries that are associated with this project
@@ -156,11 +172,80 @@ class Project
     return (@queries)
   end
 
+  # @param query_id The ID of the query
+  def query_by_id(query_id)
+    to_return = queries.find {|query| query.id == query_id}
+    raise UnknownQueryError.new(@id, query_id) if to_return.nil?
+
+    return (to_return)
+  end
+
+  # Executes a query in the context of this project. This is of course
+  # a major security concern and shouldn't be done lightly.
+  #
+  # @param project_folder [string] The projects root folder
+  # @param sql [string] The SQL query
+  # @param params [Hash] Query parameters
+  #
+  # @return [Hash] { columns :: List, rows :: List of List }
+  #                
+  def execute_sql(sql, params)
+    db = SQLite3::Database.new(file_path_sqlite)
+
+    # execute2 returns the names of the columns in the first row. But we want
+    # those to go in a hash with explicit names.
+    result = db.execute2(sql, params)
+    return {
+      'columns' => result.first,
+      'rows' => result.drop(1)
+    }
+  end
+
+  # Run all given queries and transform the output to be useful
+  # for template bindings.
+  #
+  # @param project_folder [string] The projects root folder
+  # @param queries [[Hash]] [{ name :: string, sql :: string }]
+  #                       A named SQL query
+  # @param params [Hash] Parameters that are known before the
+  #                      query was executed. These can work as
+  #                      input for the queries and are returned
+  #                      enriched with the query data.
+  def execute_page_queries(queries, params)
+    # Hashes are passed by reference and we don't want to destroy
+    # anything on the callsite
+    params = params.dup
+    
+    queries.each do |query|
+      # Ensure every query is fully defined
+      name = query.fetch('name')
+      sql = query.fetch('sql')
+
+      # Run the query
+      result = execute_sql(sql, {})
+
+      # Templating engines works much better with 'sensible' keys as names,
+      # so we map the column names into each row. This basically transforms
+      # rows like [1,2,3] to { "column-name-1" => 1, ... }
+      mapped = result['rows'].map { |r| Hash[result['columns'].zip r] }
+
+      # Rows with a single value allow a short-hand notation. The user
+      # shouldn't be forced to write {{ row[0].column }} every time he
+      # **knows** there is only a single row.
+      mapped = mapped.first if mapped.length == 1
+
+      # Store the 
+      params[name] = mapped
+    end
+
+    return (params)
+  end
+
   # Loads all pages that are associated with this project
   def load_pages!
     # Glob all JSON files in the pages folder
-    page_folder = File.join(@project_folder, "pages")
-    @pages = Dir.glob(page_folder + "/*.json").map do |page_file|
+    @pages = Dir.glob(File.join(folder_pages,"*.json")).map do |page_file|
+      # Each filename contains an ID
       page_id = File.basename(page_file, ".json")
       Page.new(self, page_id, nil)
     end

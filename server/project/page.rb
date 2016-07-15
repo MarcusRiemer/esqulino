@@ -34,7 +34,8 @@ class Page
     @model = YAML.load_file(page_file_path)
     @model['id'] = @id
   end
-
+  
+  # Retrieves the JSON representation of this page
   def to_json(options)
     # The JSON representation is always meant to be complete
     load_model!
@@ -56,12 +57,10 @@ class Page
   # something that would never happen on purpose.
   def save_model
     raise EsqulinoError, "Attempted to save unloaded page" if @model.nil?
-    
-    page_folder = File.join(@project.folder, "pages")
 
     # Ensuring that the project folder has a "pages" subfolder
-    if not File.directory?(page_folder)
-      FileUtils.mkdir_p(page_folder)
+    if not File.directory?(@project.folder_pages)
+      FileUtils.mkdir_p(@project.folder_pages)
     end
 
     # Actually write to disk
@@ -106,7 +105,8 @@ class Page
 
   # @param value The new backing model of this page
   def model=(value)
-    @model = value
+    @model = value.dup
+    @model.delete "id"
   end
 
   # Render this page. This will read quite a few things from disk:
@@ -127,18 +127,18 @@ class Page
     queries = @model['referencedQueries'].map do |ref|
       {
         'name' => ref['name'],
-        'sql' => project_load_sql(@project.folder, ref['queryId'])
+        'sql' => @project.query_by_id(ref['queryId']).sql
       }
     end
 
-    # And execute them
-    params = project_execute_page_queries(@project.folder, queries, params)
+    # And execute them, enriching the parameters with query data
+    params = @project.execute_page_queries(queries, params)
 
     # Load the template string
     template = read_template(render_engine)
 
     # And hand over to do some actual rendering
-    project_render_page_template(@project.folder, template, render_engine, params)
+    project_render_page_template(@project, template, render_engine, params)
   end
 
   # Read a template specification for this page
@@ -146,50 +146,15 @@ class Page
     # Todo: Work with more than one template engine
     raise EsqulinoError.new("Unknown template type \"#{extension}\"") if extension != "liquid"
 
-    File.read(page_file_path "liquid")
+    # Model file must still exist, otherwise the state of this page is inconsistent
+    raise UnknownPageError.new(@project.id, @id) unless File.exists? page_file_path
+    
+    # Template file must exist
+    raise UnknownPageError.new(@project.id, @id, extension) unless File.exists? page_file_path extension
+    
+    File.read(page_file_path extension)
   end
 end
-
-# Run all given queries and transform the output to be useful
-# for Liquid-template bindings.
-#
-# @param project_folder [string] The projects root folder
-# @param queries [Hash] { name :: string, sql :: string }
-#                       A named SQL query
-# @param params [Hash] Parameters that are known before the
-#                      query was executed. These can work as
-#                      input for the queries and are returned
-#                      enriched with the query data.
-def project_execute_page_queries(project_folder, queries, params)
-  # Hashes are passed by reference and we don't want to destroy
-  # anything on the callsite
-  params = params.dup
-  
-  queries.each do |query|
-    # Ensure every query is fully defined
-    name = query.fetch('name')
-    sql = query.fetch('sql')
-
-    # Run the query
-    result = project_run_query(project_folder, sql, {})
-
-    # Liquid works much better with 'sensible' keys as names, so we
-    # map the column names into each row. This basically transforms
-    # rows like [1,2,3] to { "column-name-1" => 1, ... }
-    mapped = result['rows'].map { |r| Hash[result['columns'].zip r] }
-
-    # Rows with a single value allow a short-hand notation. The user
-    # shouldn't be forced to write {{ row[0].column }} every time he
-    # **knows** there is only a single row.
-    mapped = mapped.first if mapped.length == 1
-
-    # Store the 
-    params[name] = mapped
-  end
-
-  return (params)
-end
-
 
 # The actual rendering of a page with all of it's queries and other
 # data. Absolutly no disk IO takes place in this method, everything
