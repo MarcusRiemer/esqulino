@@ -1,4 +1,5 @@
-require_relative './query.rb'
+require_relative './query'
+require_relative './liquid'
 
 # Represents a esqulino page, which must be part of a project.
 # Attributes of this class are loaded lazily on demand, so there
@@ -143,9 +144,6 @@ class Page
 
   # Read a template specification for this page
   def read_template(extension = ".liquid")
-    # Todo: Work with more than one template engine
-    raise EsqulinoError.new("Unknown template type \"#{extension}\"") if extension != "liquid"
-
     # Model file must still exist, otherwise the state of this page is inconsistent
     raise UnknownPageError.new(@project.id, @id) unless File.exists? page_file_path
     
@@ -170,12 +168,8 @@ def project_render_page_template(project,
                                  page_template,
                                  render_engine,
                                  params)
-  # Setting up load paths
-  
-  
-  # Load the basic liquid template
-  template = Liquid::Template::parse(page_template)
+  # Todo: Work with more than one template engine
+  raise EsqulinoError.new("Unknown template type \"#{render_engine}\"") if render_engine != "liquid"
 
-  # Render it alongside the known parameters
-  return (template.render(params))
+  liquid_render_page(project, page_template, params)
 end
