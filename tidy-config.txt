@@ -3,3 +3,4 @@ indent-spaces: 2
 quiet: yes
 tidy-mark: no
 wrap: 0
+show-body-only: auto
