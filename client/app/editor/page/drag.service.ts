@@ -4,7 +4,7 @@ import {Injectable}             from '@angular/core'
 
 import {ReferencedQuery}        from '../../shared/page/index'
 import {
-    Row, RowDescription,
+    Row, RowDescription, WidgetDescription
 } from '../../shared/page/widgets/index'
 
 /**
@@ -41,6 +41,7 @@ export interface PageDragEvent {
     callbacks? : DropCallbacks
     row? : RowDescription
     queryRef? : ReferencedQuery
+    widget? : WidgetDescription
 }
 
 /**
@@ -128,6 +129,14 @@ export class DragService {
             queryRef : queryRef,
             callbacks : callbacks
         });
+    }
+
+    startWidgetDrag(evt : DragEvent, origin : OriginFlag, widget : WidgetDescription, callbacks? : DropCallbacks) {
+        this.dragStart(evt, {
+            origin : origin,
+            widget : widget,
+            callbacks : callbacks,
+        })
     }
 
     /**

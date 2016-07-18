@@ -51,7 +51,7 @@ export class PageLayoutComponent implements OnInit {
      * @param dropIndex The drop index, 0 is above the first row
      */
     onBlueprintRowDrag(evt : DragEvent, dropIndex : number) {
-        // Is the thing that could be possibly dropped a row?
+        // Is the thing that could be possibly dropped on a row?
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
         if (pageEvt.row) {
             // Indicates we can drop here
@@ -61,16 +61,17 @@ export class PageLayoutComponent implements OnInit {
     }
 
     /**
-     * A blueprint row has been dropped.
+     * Something has been dropped onto a blueprint row.
      *
      * @param dropIndex The drop index, 0 is above the first row
      */
     onBlueprintRowDrop(evt : DragEvent, dropIndex : number) {
-        // Indicates we can drop here
+        // Always technically accept the drop event, but not necesarily
+        // do anything.
         evt.preventDefault();
 
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        if (pageEvt.row) {
+        if (pageEvt.row) {           
             // Add the new row
             this.page.addRow(dropIndex, pageEvt.row);
 
@@ -83,6 +84,38 @@ export class PageLayoutComponent implements OnInit {
 
             // And reset all hovering state
             this._hoveredDropIndex = undefined;
+        }
+    }
+
+    /**
+     * Something has been dropped onto a column.
+     *
+     * @param dropIndex The drop index, 0 is above the first row
+     */
+    onBlueprintColumnDrag(evt : DragEvent, rowDropIndex : number, columnDropIndex : number) {
+        // Is the thing that could be possibly dropped a row?
+        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
+        if (pageEvt.widget) {
+            // Indicates we can drop here
+            evt.preventDefault();
+        }
+    }
+
+    /**
+     * Something has been dropped onto a column.
+     *
+     * @param dropIndex The drop index, 0 is above the first row
+     */
+    onBlueprintColumnDrop(evt : DragEvent, rowDropIndex : number, columnDropIndex : number) {
+        // Is the thing that could be possibly dropped on a column?
+        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
+        if (pageEvt.widget) {
+            // Indicates we can drop here
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            // Actually place the widget
+            this.page.addWidget(pageEvt.widget, rowDropIndex - 1, columnDropIndex - 1, 0);
         }
     }
 

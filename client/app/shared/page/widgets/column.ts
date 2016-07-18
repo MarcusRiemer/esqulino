@@ -1,6 +1,6 @@
-import {ColumnDescription} from '../page.description'
-import {Widget}            from './widget'
-import {loadWidget}        from './widget-loader'
+import {ColumnDescription}              from '../page.description'
+import {Widget, WidgetDescription}      from './widget'
+import {loadWidget}                     from './widget-loader'
 
 export {ColumnDescription}
 
@@ -30,6 +30,26 @@ export class Column {
      */
     get widgets() {
         return (this._widgets);
+    }
+
+    /**
+     * Adds a new widget at the given position.
+     *
+     * @param widget The widget to add
+     * @param widgetIndex The index the widget is positioned at
+     *
+     * @return The instance of the loaded widget
+     */
+    addWidget(widgetDesc : WidgetDescription, widgetIndex : number) {
+        // Ensure widget index
+        if (widgetIndex >= this._widgets.length) {
+            throw new Error(`Widget ("${JSON.stringify(widgetDesc)}") exceeds widget count (given: ${widgetIndex}, length ${this._widgets.length}`);
+        }
+
+        const widget = loadWidget(widgetDesc);
+        this._widgets.splice(widgetIndex, 0, widget);
+
+        return (widget);
     }
 
     /**

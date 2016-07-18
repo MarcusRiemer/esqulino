@@ -19,7 +19,15 @@
          draggable="true"
          class="center">
       <div class="column-preview">
-        Spalte
+        <span class="fa fa-columns" aria-hidden="true"></span> Spalte
+      </div>
+    </div>
+
+    <div (dragstart)="startParagraphDrag($event)"
+         draggable="true"
+         class="center">
+      <div class="column-preview">
+        <span class="fa fa-paragraph" aria-hidden="true"></span> Absatz
       </div>
     </div>
   </div>
