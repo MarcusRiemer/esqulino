@@ -121,7 +121,7 @@ class ScratchSqlApp < Sinatra::Base
   # Listing all projects that are available
   get '/api/project' do
     projects = Dir.entries(given_data_dir)
-               .select { |entry| entry != '.' and entry != '..' }
+               .select { |entry| entry != '.' and entry != '..' and not entry.start_with? "_" }
                .map { |entry| Project.new File.join(given_data_dir, entry) }
                .map { |project| project.public_description }
     json projects
