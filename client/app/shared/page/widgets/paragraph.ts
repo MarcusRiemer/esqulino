@@ -14,6 +14,13 @@ export class Paragraph extends Widget {
         this._text = desc.text;
     }
 
+    static get emptyDescription() : ParagraphDescription {
+        return ({
+            type : "paragraph",
+            text : "Absatz"
+        })
+    }
+
     get text() {
         return (this._text);
     }

@@ -9,22 +9,28 @@
   </div>
   <div class="card-block">      
     <div class="container-fluid page-preview">
+      <!-- "Zeroeth row" -->
       <div *ngIf="showBlueprintRow(0)"
            (dragover)="onBlueprintRowDrag($event, 0)"
            (drop)="onBlueprintRowDrop($event, 0)"
            class="row blueprint">
+        <!-- Blueprint columns for a valid dragged row -->
         <div *ngFor="let col of draggedRow?.row?.columns"
+             (dragover)="onBlueprintColumnDrag($event, rowIndex + 1, colIndex + 1)"
+             (drop)="onBlueprintColumnDrop($event, rowIndex + 1, colIndex + 1)"
              [ngClass]="col.columnClasses">
           <esqulino-widget-loader
               [widgets]="col.widgets"
               [page]="page">
           </esqulino-widget-loader>
         </div>
+        <!-- Blueprint columns for a empty dragged row -->
         <div *ngIf="!draggedRow"
              class="col-xs-12">
           <h4><span class="fa fa-plus"></span></h4>
         </div>
       </div>
+      <!-- Actual rows, structure identical to above -->
       <template ngFor let-row [ngForOf]="page?.rows" let-rowIndex="index">
         <div (dragover)="onBlueprintRowDrag($event, rowIndex + 1)"
              (drop)="onBlueprintRowDrop($event, rowIndex + 1)"
@@ -32,7 +38,9 @@
              [hidden]="!showRow(rowIndex)"
              class="row"
              draggable="true">
-          <div *ngFor="let col of row.columns"
+          <div *ngFor="let col of row.columns; let colIndex = index;"
+               (dragover)="onBlueprintColumnDrag($event, rowIndex + 1, colIndex + 1)"
+               (drop)="onBlueprintColumnDrop($event, rowIndex + 1, colIndex + 1)"
                [ngClass]="col.columnClasses">
             <esqulino-widget-loader
                 [widgets]="col.widgets"

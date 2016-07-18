@@ -1,4 +1,6 @@
-import {PageDescription, ReferencedQuery}     from './page.description'
+import {
+    PageDescription, ReferencedQuery, WidgetDescription
+} from './page.description'
 import {Row, RowDescription}                  from './widgets/row'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
 
@@ -106,6 +108,27 @@ export class Page {
         } else {
             throw new Error(`Attempted to remove invalid row index ${rowIndex}`);
         }
+    }
+
+    addWidget(widget : WidgetDescription,
+              rowIndex : number, columnIndex : number,
+              widgetIndex : number) {
+        // Ensure row index
+        if (rowIndex >= this._rows.length) {
+            throw new Error(`Widget ("${JSON.stringify(widget)}") exceeds row count (given: ${rowIndex}, length ${this._rows.length}`);
+        }
+
+        // Ensure column index
+        const row = this._rows[rowIndex];
+        if (columnIndex >= row.columns.length) {
+            throw new Error(`Widget ("${JSON.stringify(widget)}") exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.columns.length}`);
+        }
+
+        // Attempt to add the widget
+        const column = row.columns[columnIndex];
+        column.addWidget(widget, widgetIndex);
+
+        this.markDirty();
     }
 
     /**
