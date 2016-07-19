@@ -9,25 +9,25 @@
   <div class="page-preview">
     <div (dragstart)="startRowDrag($event)"
          draggable="true"
-         class="row-preview">
+         class="border-row-preview">
       <div class="column-preview">
-        Zeile
+        <span class="fa fa-fw fa-align-justify" aria-hidden="true"></span>Zeile
       </div>
     </div>
 
     <div (dragstart)="startRowDrag($event)"
          draggable="true"
-         class="center">
+         class="widget-row-preview">
       <div class="column-preview">
-        <span class="fa fa-columns" aria-hidden="true"></span> Spalte
+        <span class="fa fa-fw fa-columns" aria-hidden="true"></span>Spalte
       </div>
     </div>
 
     <div (dragstart)="startParagraphDrag($event)"
          draggable="true"
-         class="center">
+         class="widget-row-preview">
       <div class="column-preview">
-        <span class="fa fa-paragraph" aria-hidden="true"></span> Absatz
+        <span class="fa fa-fw fa-paragraph" aria-hidden="true"></span>Absatz
       </div>
     </div>
   </div>
