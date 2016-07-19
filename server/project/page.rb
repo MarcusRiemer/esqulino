@@ -31,7 +31,7 @@ class Page
 
   # Loads the page model from disk
   def load_model!
-    raise UnknownPageError.new(@project.id, @id) unless File.exists? page_file_path
+    raise UnknownPageError.new(@project.id, @id) unless exists?
     
     @model = YAML.load_file(page_file_path)
     @model['id'] = @id

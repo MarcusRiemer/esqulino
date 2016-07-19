@@ -74,6 +74,9 @@ class Project
   
   # Loads the projects model from disk
   def load_description!
+    # Ensure this is actually a loadable project
+    puts "Inside: #{id}"
+    raise UnknownProjectError.new(id) unless self.exists?
     @whole_description = YAML.load_file(description_filename);
   end
 
@@ -150,8 +153,7 @@ class Project
 
   # @return The id of this project
   def id
-    load_description! if @whole_description.nil?
-    return (@whole_description['id'])
+    File.basename @project_folder
   end
 
   # @return Path to the preview image, may be nil of no image is set
