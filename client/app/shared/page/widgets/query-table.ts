@@ -16,6 +16,15 @@ export class QueryTable extends Widget {
         this._queryRef = desc.queryRef;
     }
 
+    /**
+     * This describes a minimal query table
+     */
+    static get emptyDescription() : QueryTableDescription {
+        return ({
+            type : "query-table"
+        })
+    }
+
     get queryReference() {
         return (this._queryRef);
     }

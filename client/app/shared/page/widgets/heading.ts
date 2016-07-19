@@ -17,6 +17,19 @@ export class Heading extends Widget {
     }
 
     /**
+     * This describes a minimal Heading with localized text.
+     *
+     * TODO: Localize
+     */
+    static get emptyDescription() : HeadingDescription {
+        return ({
+            type : "heading",
+            text : "Überschrift",
+            level : 1
+        })
+    }
+
+    /**
      * @return The level of this heading, always a number.
      */
     get level() : number {

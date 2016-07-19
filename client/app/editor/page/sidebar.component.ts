@@ -3,7 +3,9 @@ import {ActivatedRoute, Router}         from '@angular/router'
 
 import {Query}                          from '../../shared/query'
 import {Page, ReferencedQuery}          from '../../shared/page/index'
-import {Row, Paragraph}                 from '../../shared/page/widgets/index'
+import {
+    Heading, Row, Paragraph, QueryTable
+} from '../../shared/page/widgets/index'
 
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
@@ -135,10 +137,24 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
 
      /**
-     * Starts a drag action for a paragraph.
-     */
+      * Starts a drag action for a paragraph.
+      */
     startParagraphDrag(evt : DragEvent) {
         this._dragService.startWidgetDrag(evt, "sidebar", Paragraph.emptyDescription);
+    }
+
+    /**
+      * Starts a drag action for a Heading.
+      */
+    startHeadingDrag(evt : DragEvent) {
+        this._dragService.startWidgetDrag(evt, "sidebar", Heading.emptyDescription);
+    }
+
+    /**
+     * Starts a drag action for a query table.
+      */
+    startQueryTableDrag(evt : DragEvent) {
+        this._dragService.startWidgetDrag(evt, "sidebar", QueryTable.emptyDescription);
     }
 
     /**
