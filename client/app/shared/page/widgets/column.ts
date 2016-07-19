@@ -41,8 +41,8 @@ export class Column {
      * @return The instance of the loaded widget
      */
     addWidget(widgetDesc : WidgetDescription, widgetIndex : number) {
-        // Ensure widget index
-        if (widgetIndex != 0 && widgetIndex >= this._widgets.length) {
+        // Ensure widget index at least touches the current array
+        if (widgetIndex != 0 && widgetIndex > this._widgets.length) {
             throw new Error(`Adding Widget ("${JSON.stringify(widgetDesc)}") exceeds widget count (given: ${widgetIndex}, length ${this._widgets.length}`);
         }
 
@@ -57,7 +57,7 @@ export class Column {
      *
      * @param widgetIndex The index to remove at.
      */
-    removeWidget(widgetIndex : number) {
+    removeWidgetByIndex(widgetIndex : number) {
         // Ensure widget index
         if (widgetIndex != 0 && widgetIndex >= this._widgets.length) {
             throw new Error(`Removing widget exceeds widget count (given: ${widgetIndex}, length ${this._widgets.length}`);

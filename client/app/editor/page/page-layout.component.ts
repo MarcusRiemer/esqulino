@@ -110,12 +110,13 @@ export class PageLayoutComponent implements OnInit {
      *
      * @param dropIndex The drop index, 0 is above the first row
      */
-    onBlueprintColumnDrag(evt : DragEvent, rowDropIndex : number, columnDropIndex : number) {
-        // Is the thing that could be possibly dropped a row?
+    onBlueprintColumnDrag(evt : DragEvent, rowDropIndex : number, columnDropIndex : number, widgetDropIndex : number) {
+        // Is the thing that could be possibly dropped a column?
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
         if (pageEvt.widget) {
             // Indicates we can drop here
             evt.preventDefault();
+            evt.stopPropagation();
         }
     }
 
@@ -124,7 +125,7 @@ export class PageLayoutComponent implements OnInit {
      *
      * @param dropIndex The drop index, 0 is above the first row
      */
-    onBlueprintColumnDrop(evt : DragEvent, rowDropIndex : number, columnDropIndex : number) {
+    onBlueprintColumnDrop(evt : DragEvent, rowDropIndex : number, columnDropIndex : number, widgetDropIndex : number) {
         // Is the thing that could be possibly dropped on a column?
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
         if (pageEvt.widget) {
@@ -134,16 +135,22 @@ export class PageLayoutComponent implements OnInit {
 
             const rowIndex = rowDropIndex - 1;
             const columnIndex = columnDropIndex - 1;
-            const widgetIndex = 0;
+            const widgetIndex = widgetDropIndex - 1;
 
-            // Actually place the widget
-            this.page.addWidget(pageEvt.widget, rowIndex, columnIndex, 0);
+            // Is this a drop on different place than the one that has started the drag?
+            if (pageEvt.origin == "sidebar" ||
+                this.draggedWidget.rowIndex != rowIndex ||
+                this.draggedWidget.columnIndex != columnIndex ||
+                this.draggedWidget.widgetIndex != widgetIndex) {
+                // Actually place the widget
+                this.page.addWidget(pageEvt.widget, rowIndex, columnIndex, widgetDropIndex);
 
-            // Possibly inform callbacks about the drop
-            if (this._dragService.currentDrag.callbacks &&
-                this._dragService.currentDrag.callbacks.onColumn) {
-                const droppedOn = this.page.rows[rowIndex].columns[columnIndex];
-                this._dragService.currentDrag.callbacks.onColumn(droppedOn);
+                // Possibly inform callbacks about the drop
+                if (this._dragService.currentDrag.callbacks &&
+                    this._dragService.currentDrag.callbacks.onColumn) {
+                    const droppedOn = this.page.rows[rowIndex].columns[columnIndex];
+                    this._dragService.currentDrag.callbacks.onColumn(droppedOn);
+                }
             }
         }
     }
@@ -180,8 +187,8 @@ export class PageLayoutComponent implements OnInit {
         
         // Make sure to remove this row on any valid drop
         this._dragService.startWidgetDrag(evt, "page", draggedWidget.toModel(), {
-            onRemove : () => this.page.removeWidget(rowIndex, columnIndex, widgetIndex),
-            onColumn : () => this.page.removeWidget(rowIndex, columnIndex, widgetIndex),
+            onRemove : () => this.page.removeWidgetByIndex(rowIndex, columnIndex, widgetIndex),
+            onColumn : () => this.page.removeWidget(draggedWidget),
             onDragEnd : () => this.draggedWidget = undefined
         });
     }
@@ -204,5 +211,19 @@ export class PageLayoutComponent implements OnInit {
      */
     showRow(rowIndex : number) : boolean {
         return (!this.draggedRow || this.draggedRow.index != rowIndex);
+    }
+
+    /**
+     * @rowIndex The index of the row according to the current page state
+     * @columnIndex The index of the column according to the current page state
+     * @widgetIndex The index of the widget according to the current page state
+     *
+     * @return True, if the widget should be shown
+     */
+    showWidget(rowIndex : number, columnIndex : number, widgetIndex : number) {
+        return (!this.draggedWidget ||
+                (this.draggedWidget.rowIndex != rowIndex ||
+                 this.draggedWidget.columnIndex != columnIndex ||
+                 this.draggedWidget.widgetIndex != widgetIndex));
     }
 }
