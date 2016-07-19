@@ -15,6 +15,9 @@ import {ProjectDescriptionService} from '../shared/project.description.service'
 export class ProjectListItemComponent {
     @Input() project : ProjectDescription;
 
+    /**
+     * TODO: Make this configurable
+     */
     useSobdomain = true;
 
     /**
@@ -43,7 +46,9 @@ export class ProjectListItemComponent {
      */
     get viewUrl() : string {
         if (this.useSobdomain) {
-            return (`//${this.project.id}.${this.hostname}`);
+            // TODO: Find out whether it would be more or less trivially
+            //       possible to support HTTPs
+            return (`http://${this.project.id}.${this.hostname}`);
         } else {
             return (`/view/${this.project.id}/`)
         }
