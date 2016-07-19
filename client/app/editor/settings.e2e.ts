@@ -46,6 +46,24 @@ describe('Test Project: Settings', () => {
                     .then(res => expect(res.length).toEqual(1, "Exactly 1 item should have the new name"));
             })
     });
+
+    it('page rename reflected in navbar', () => {
+        browser.get(settingsUrl);
+
+        const someQuery = element.all(by.css('#project-pages input[type=text]')).first();
+        const nameVal = Math.random().toString(36).substr(2);
+
+        someQuery.clear()
+            .then( () => someQuery.sendKeys(nameVal))
+            .then( () => browser.waitForAngular())
+            .then( () => {
+                // Make sure the sidebar is updated correctly
+                const navQueries = element(by.css(".nav-page")).all(by.css("a.nav-link"));
+                navQueries
+                    .filter(n => n.getText().then(t => t.includes(nameVal)))
+                    .then(res => expect(res.length).toEqual(1, "Exactly 1 item should have the new name"));
+            })
+    });
     
     it('can delete all queries', () => {
         browser.get(settingsUrl);
@@ -60,6 +78,22 @@ describe('Test Project: Settings', () => {
                 // Reload page and assure there are no queries left
                 browser.get(settingsUrl);
                 expect(querBtnDelete.count()).toEqual(0);
+            });
+    });
+
+    it('can delete all pages', () => {
+        browser.get(settingsUrl);
+
+        const pageBtnDelete = element(by.id('project-pages'))
+            .all(by.css("button"));
+
+        pageBtnDelete
+            .map( e => e.click())
+            .then( () => browser.waitForAngular() )
+            .then( () => {
+                // Reload page and assure there are no queries left
+                browser.get(settingsUrl);
+                expect(pageBtnDelete.count()).toEqual(0);
             });
     });
 });

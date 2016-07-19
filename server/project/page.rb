@@ -6,7 +6,7 @@ require_relative './liquid'
 # is no harm in creating loads of instances.
 class Page
 
-  def initialize(project, id, model = nil)
+  def initialize(project, id = nil, model = nil)
     @project = project
     # Generate a new random ID if no ID is specified
     @id =  id || SecureRandom.uuid

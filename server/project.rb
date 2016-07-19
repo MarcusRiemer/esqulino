@@ -300,6 +300,11 @@ class Project
     return (to_return)
   end
 
+  # @return True, if this project has an index page
+  def index_page?
+    whole_description.key?('indexPageId')
+  end
+  
   # @return The page model for the index page
   def index_page
     # Read the ID of the index page
