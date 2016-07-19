@@ -89,7 +89,28 @@ class Project
   def update_description!(new_model)
     load_description! if @whole_description.nil?
 
-    @whole_description = @whole_description.merge new_model
+    # Merge in everything that is new
+    @whole_description.merge! new_model
+
+    # And remove everything that is nil
+    @whole_description.select! {|k,v| !v.nil?}
+
+    # Possibly remove the index page (if it doesn't exist)
+    check_index_page!
+  end
+
+  # Checks whether the current index page exists, deletes the
+  # page-ID from the model if it doesn't exist
+  def check_index_page!
+    index_page_id = whole_description['indexPageId']
+    if index_page_id then  
+      index_page = Page.new(self, index_page_id)
+      if not index_page.exists? then
+        puts "Removing reference to index page"
+        @whole_description.delete 'indexPageId'
+        puts @whole_description.to_s
+      end
+    end
   end
 
   # Saves the current model to disk. This requires the project to be currently

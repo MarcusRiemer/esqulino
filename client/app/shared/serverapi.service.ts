@@ -87,10 +87,14 @@ export class ServerApiService {
      * Retrieves an URL that can be used to access specific pages.
      *
      * @projectId The ID of the project
-     * @pageId The ID of the query
+     * @pageId The ID of the page. Omitted if undefined.
      */
     getPageSpecificUrl(projectId : string, pageId : string) : string {
-        return (`${this.getPageUrl(projectId)}/${pageId}`);
+        if (!pageId) {
+            return (this.getPageUrl(projectId));
+        } else {
+            return (`${this.getPageUrl(projectId)}/${pageId}`);
+        }
     }
 
     /**

@@ -25,7 +25,8 @@ class Page
 
   # @return Paths to all files that are associated with this page
   def page_files
-    Dir.glob(File.join(@project.folder_pages, "#{@id}.*"))
+    glob_string = File.join(@project.folder_pages, "#{@id}.*")
+    Dir.glob glob_string
   end
 
   # Loads the page model from disk
@@ -88,9 +89,17 @@ class Page
     end
   end
 
+  # Removes all files that belong to this query. The in-memory representation
+  # (this object) is left intact.
+  def delete!
+    page_files.each do |page_file|
+      File.delete page_file 
+    end
+  end
+
   # @return The id of this page
   def id
-    model['id']
+    @id
   end
   
   # @return The user-facing name of this page

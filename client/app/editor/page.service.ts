@@ -6,7 +6,7 @@ import {AsyncSubject}                            from 'rxjs/AsyncSubject'
 import {Observable}                              from 'rxjs/Observable'
 
 import {ServerApiService}                        from '../shared/serverapi.service'
-import {Page,PageDescription}                    from '../shared/page/index'
+import {Page,PageDescription, Row}               from '../shared/page/index'
 
 import {QueryParamsDescription}                  from './query.service'
 import {Project}                                 from './project'
@@ -68,7 +68,7 @@ export class PageService {
      *
      * @return An observable that resolves to the ID of the saved page
      */
-    savePage(project : Project, page : Page) : Observable<string> {
+    savePage(project : Project, page : Page) : Observable<Page> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
 
@@ -89,10 +89,71 @@ export class PageService {
         const body = JSON.stringify(bodyJson);
 
         const toReturn = this._http.post(url, body, options)
-            .map( (res) => res.text() )
+            .map( (res) => {
+                const pageId = res.text();
+
+                // Possibly create the newly created page as part of the project model
+                // on the client.
+                if (!project.hasPage(pageId)) {
+                    // Mutating an ID is not possible, so we create a new page that
+                    // is identical except for the id
+                    const pageModel = page.toModel();
+                    pageModel.id = pageId;
+                    const newPage = new Page(pageModel);
+
+                    // Make it part of the project
+                    project.addPage(newPage);
+
+                    // And return the new page
+                    return (newPage);
+                } else {
+                    // No new page, the old page will do fine
+                    return (page);
+                }
+            })
             .catch(this.handleError);
 
         return (toReturn);        
+    }
+
+    /**
+     * Creates a new page
+     *
+     * @param project The project the given page is part of
+     * @þaram name The name of the page to create
+     */
+    createPage(project : Project, name : string) {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        const url = this._server.getPageUrl(project.id);
+
+        // A new named page with a single row
+        const page = new Page({
+            id : undefined,
+            name : name,
+            referencedQueries : [],
+            rows : [Row.emptyDescription]
+        });
+
+        return (this.savePage(project, page));
+    }
+
+    /**
+     * Requests to delete a page.
+     *
+     * @param project The project the page belongs to.
+     * @param queryId The id of the page to delete
+     */
+    deletePage(project : Project, pageId : string) {
+        const url = this._server.getPageSpecificUrl(project.id, pageId);
+
+        const toReturn = this._http.delete(url)
+            .catch(this.handleError);
+
+        toReturn.subscribe( res => {
+            project.removePageById(pageId);
+        });
     }
 
     /**

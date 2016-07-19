@@ -4,7 +4,7 @@ import {
 import {Row, RowDescription, Widget}          from './widgets/index'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
 
-export {PageDescription, ReferencedQuery}
+export {PageDescription, ReferencedQuery, Row, Widget}
 
 /**
  * The in-memory representation of a page.
