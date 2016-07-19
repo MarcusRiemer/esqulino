@@ -19,7 +19,8 @@ exports.config = {
     editorGeneral : ['../dist/client/app/editor/editor.e2e.js'],
     projectSettings : ['../dist/client/app/editor/settings.e2e.js'],
     projectSchema : ['../dist/client/app/editor/schema.e2e.js'],
-    queryCreate : ['../dist/client/app/editor/query/create.e2e.js']
+    queryCreate : ['../dist/client/app/editor/query/create.e2e.js'],
+    pageCreate : ['../dist/client/app/editor/page/create.e2e.js']
   },
   multiCapabilities: [{
     'browserName': 'chrome'

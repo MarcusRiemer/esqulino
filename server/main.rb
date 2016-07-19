@@ -76,10 +76,17 @@ class ScratchSqlApp < Sinatra::Base
   # Ensures the @page instance variable, should be called before
   # actual request handling happens.
   def request_prepare_page(page_name_or_id)
+    puts "Name or id: #{page_name_or_id}"
     # Distinguish between index page, page names and ids
     if page_name_or_id.nil? || page_name_or_id.empty? then
-      # Index page
-      @page = @project.index_page
+      # Is there a matching index page?
+      if @project.index_page? then
+        # Yes, we use that
+        @page = @project.index_page
+      else
+        # No, we use an empty page
+        @page = Page.new(@project);
+      end
     elsif is_string_id? page_name_or_id then
       # Specific ID, this could be a page that does not exist yet
       @page = Page.new(@project, page_name_or_id)
