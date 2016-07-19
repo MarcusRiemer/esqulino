@@ -40,14 +40,17 @@
              class="row"
              draggable="true">
           <div *ngFor="let col of row.columns; let colIndex = index;"
-               (dragover)="onBlueprintColumnDrag($event, rowIndex + 1, colIndex + 1)"
-               (drop)="onBlueprintColumnDrop($event, rowIndex + 1, colIndex + 1)"
+               (dragover)="onBlueprintColumnDrag($event, rowIndex + 1, colIndex + 1, 0)"
+               (drop)="onBlueprintColumnDrop($event, rowIndex + 1, colIndex + 1, 0)"
                [ngClass]="col.columnClasses">
             <esqulino-widget-loader
                 *ngFor="let widget of col.widgets; let widgetIndex = index;"
+                (dragover)="onBlueprintColumnDrag($event, rowIndex + 1, colIndex + 1, widgetIndex + 1)"
+                (drop)="onBlueprintColumnDrop($event, rowIndex + 1, colIndex + 1, widgetIndex + 1)"
                 (dragstart)="startWidgetDrag($event, widget, rowIndex, colIndex, widgetIndex)"
                 [widget]="widget"
                 [page]="page"
+                [hidden]="!showWidget(rowIndex, colIndex, widgetIndex)"
                 draggable="true">
             </esqulino-widget-loader>
           </div>

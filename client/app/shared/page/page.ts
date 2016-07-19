@@ -1,7 +1,7 @@
 import {
     PageDescription, ReferencedQuery, WidgetDescription
 } from './page.description'
-import {Row, RowDescription}                  from './widgets/row'
+import {Row, RowDescription, Widget}          from './widgets/index'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
 
 export {PageDescription, ReferencedQuery}
@@ -139,7 +139,10 @@ export class Page {
         this.markDirty();
     }
 
-    removeWidget(rowIndex : number, columnIndex : number, widgetIndex : number) {
+    /**
+     * Remove a widgets with a position that is exactly known.
+     */
+    removeWidgetByIndex(rowIndex : number, columnIndex : number, widgetIndex : number) {
         // Ensure row index
         if (rowIndex >= this._rows.length) {
             throw new Error(`Removing widget exceeds row count (given: ${rowIndex}, length ${this._rows.length}`);
@@ -152,10 +155,40 @@ export class Page {
         }
 
         const column = row.columns[columnIndex];
-        column.removeWidget(widgetIndex);
+        column.removeWidgetByIndex(widgetIndex);
 
         this.markDirty();
     }
+
+    /**
+     *
+     */
+    removeWidget(widget : Widget) {
+        // As we have no information about the position, we need to check
+        // every row ...
+        const deleted = this._rows.some(r => {
+            // ... and every column ...
+            const toReturn = r.columns.some(c => {
+                // ... for the correct index to remove
+                const index = c.widgets.findIndex(w => w == widget);
+                if (index >= 0) {
+                    c.removeWidgetByIndex(index);
+                    this.markDirty();
+                    return (true);
+                } else {
+                    return (false);
+                }
+            });
+
+            return (toReturn);
+        });
+
+        if (!deleted) {
+            throw new Error(`Could not remove widget ("${JSON.stringify(widget)}"): Not found in any cell`);
+        }
+    }
+
+    
 
     /**
      * @return Ids of all queries that are referenced by this page.
