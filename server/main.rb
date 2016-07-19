@@ -72,7 +72,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Ensure that routes with pages do have the page available.
-  before '/api/project/:id/page/:page_id?/?*' do
+  before '/api/project/:id/page/?:page_id?/?*' do
     page_id = params['page_id']
     # Only match numeric or missing IDs, everything else may be a valid
     # sub-route like "run"
@@ -225,7 +225,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Storing a page
-  post '/api/project/:project_id/page/:page_id?' do
+  post '/api/project/:project_id/page/?:page_id?' do
     new_page = @@validator.ensure_request("PageUpdateRequestDescription", request.body.read)
 
     # Store the new model
@@ -236,6 +236,16 @@ class ScratchSqlApp < Sinatra::Base
     @page.save_templates new_page['sources']
 
     return [200, @page.id]
+  end
+
+  # Deleting a page
+  delete '/api/project/:project_id/page/:page_id' do    
+    @page.delete!
+
+    @project.check_index_page!
+    @project.save_description
+    
+    return 200
   end
 
   # Viewing a specific page

@@ -88,14 +88,16 @@ export class Project {
     }
 
     /**
-     * @return A single page identified by it's ID
+     * Adds a new query to this project.
+     *
+     * @param query The query to add.
      */
-    getPageById(id : string) : Page {
-        return (this._pages.find(item => (item.id == id)));
+    addQuery(query : Query) {
+        this._queries.push(query);
     }
 
     /**
-     * @return A single query identified by it's ID
+     * @param id A single query identified by it's ID
      */
     removeQueryById(id : string) {
         const index = this._queries.findIndex( q => q.id === id);
@@ -105,6 +107,61 @@ export class Project {
             this.queries.splice(index, 1);
         }
     }
+
+    /**
+     * @return A single page identified by it's ID
+     */
+    getPageById(id : string) : Page {
+        return (this._pages.find(item => (item.id == id)));
+    }
+
+    /**
+     * @return True, if the given page id is part of this project.
+     */
+    hasPage(id : string) : boolean {
+        return (this._pages.some(page => page.id == id));
+    }
+
+    /**
+     * @return True, if a page with the given name is part of this project.
+     */
+    hasPageByName(name : string) : boolean {
+        return (this._pages.some(page => page.name == name));
+    }
+
+    /**
+     * Adds a new page to this project.
+     * 
+     * @param page The page to add.
+     */
+    addPage(page : Page) {
+        this._pages.push(page);
+
+        // Is this the only page?
+        if (this._pages.length == 1) {
+            // Then it's the start page
+            this._indexPageId = page.id;
+        }
+    }
+
+    /**
+     * @param id A single page identified by it's ID
+     */
+    removePageById(id : string) {
+        const index = this._pages.findIndex(p => p.id === id);
+
+        // Remove at index
+        if (index >= 0) {
+            this._pages.splice(index, 1);
+        }
+
+        // Was this the last page or the index page?
+        if (this._pages.length == 0 || this._indexPageId == id) {
+            // Then there is no start page anymore
+            this._indexPageId = undefined;
+        }
+    }
+
 
     toModel() : ProjectDescription {
         return ({

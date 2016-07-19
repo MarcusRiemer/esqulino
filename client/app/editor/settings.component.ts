@@ -1,4 +1,6 @@
-import {Component}            from '@angular/core';
+import {Component}            from '@angular/core'
+import {ROUTER_DIRECTIVES}    from '@angular/router'
+
 
 import {QuerySelect}          from '../shared/query'
 
@@ -7,8 +9,10 @@ import {ProjectService}       from './project.service'
 import {SidebarService}       from './sidebar.service'
 import {ToolbarService}       from './toolbar.service'
 import {QueryService}         from './query.service'
+import {PageService}          from './page.service'
 
 @Component({
+    directives: [ROUTER_DIRECTIVES],
     templateUrl: 'app/editor/templates/settings.html'
 })
 export class SettingsComponent {
@@ -28,6 +32,7 @@ export class SettingsComponent {
     constructor(
         private _projectService: ProjectService,
         private _queryService: QueryService,
+        private _pageService: PageService,
         private _toolbarService: ToolbarService,
         private _sidebarService: SidebarService
     ) {
@@ -67,5 +72,12 @@ export class SettingsComponent {
      */
     onQueryDelete(queryId : string) {
         this._queryService.deleteQuery(this.project, queryId);
+    }
+
+    /**
+     * The user has decided to delete a page.
+     */
+    onPageDelete(pageid : string) {
+        this._pageService.deletePage(this.project, pageid);
     }
 }

@@ -170,7 +170,7 @@ export class QueryService {
      * can handle the response.
      *
      * @param model   The model that was used to build the request
-     * @param project The project the respons should be added to
+     * @param project The project the response should be added to
      *
      * @return An AsyncSubject that is fired once the query is part of the project
      */
@@ -197,7 +197,7 @@ export class QueryService {
 
             // Load the query and append it to the model
             const newQuery = loadQuery(project.schema, model);
-            project.queries.push(newQuery);
+            project.addQuery(newQuery);
 
             // And inform the listener about the new query, as this
             // is an AsyncSubject, the stream needs to be closed
@@ -212,6 +212,7 @@ export class QueryService {
     /**
      * Request to create a new SELECT query on the given table.
      *
+     * @param project The project this query belongs to.
      * @param table The name of the table to query initially
      */
     createSelect(project : Project, queryName : string, table : string) {
@@ -258,6 +259,8 @@ export class QueryService {
     /**
      * Request to create a new query on the given table.
      *
+     * @param project The project this query belongs to.
+     * @param queryName The name of the query itself
      * @param table The name of the table to query initially
      */
     createInsert(project : Project, queryName : string, tableName : string) {
@@ -277,6 +280,8 @@ export class QueryService {
     /**
      * Request to create a new query on the given table.
      *
+     * @param project The project this query belongs to.
+     * @param queryName The name of the query itself
      * @param table The name of the table to query initially
      */
     createUpdate(project : Project, queryName : string, tableName : string) {
@@ -293,6 +298,12 @@ export class QueryService {
         return (this.handleCreationResponse(model, project));
     }
 
+    /**
+     * Requests to delete a query.
+     *
+     * @param project The project this query belongs to.
+     * @param queryId The id of the query to delete
+     */
     deleteQuery(project : Project, queryId : string) {
         const url = this._server.getQuerySpecificUrl(project.id, queryId);
 
