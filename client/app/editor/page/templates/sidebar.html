@@ -23,11 +23,27 @@
       </div>
     </div>
 
+    <div (dragstart)="startHeadingDrag($event)"
+         draggable="true"
+         class="widget-row-preview">
+      <div class="column-preview">
+        <span class="fa fa-fw fa-header" aria-hidden="true"></span>Überschrift
+      </div>
+    </div>
+
     <div (dragstart)="startParagraphDrag($event)"
          draggable="true"
          class="widget-row-preview">
       <div class="column-preview">
         <span class="fa fa-fw fa-paragraph" aria-hidden="true"></span>Absatz
+      </div>
+    </div>
+
+    <div (dragstart)="startQueryTableDrag($event)"
+         draggable="true"
+         class="widget-row-preview">
+      <div class="column-preview">
+        <span class="fa fa-fw fa-table" aria-hidden="true"></span>Tabelle
       </div>
     </div>
   </div>

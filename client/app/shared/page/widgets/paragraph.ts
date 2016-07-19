@@ -14,6 +14,9 @@ export class Paragraph extends Widget {
         this._text = desc.text;
     }
 
+    /**
+     * This describes a "minimal" paragraph
+     */
     static get emptyDescription() : ParagraphDescription {
         return ({
             type : "paragraph",
