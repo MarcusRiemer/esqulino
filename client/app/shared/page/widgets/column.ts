@@ -42,14 +42,28 @@ export class Column {
      */
     addWidget(widgetDesc : WidgetDescription, widgetIndex : number) {
         // Ensure widget index
-        if (widgetIndex >= this._widgets.length) {
-            throw new Error(`Widget ("${JSON.stringify(widgetDesc)}") exceeds widget count (given: ${widgetIndex}, length ${this._widgets.length}`);
+        if (widgetIndex != 0 && widgetIndex >= this._widgets.length) {
+            throw new Error(`Adding Widget ("${JSON.stringify(widgetDesc)}") exceeds widget count (given: ${widgetIndex}, length ${this._widgets.length}`);
         }
 
         const widget = loadWidget(widgetDesc);
         this._widgets.splice(widgetIndex, 0, widget);
 
         return (widget);
+    }
+
+    /**
+     * Removes the widget at the given position.
+     *
+     * @param widgetIndex The index to remove at.
+     */
+    removeWidget(widgetIndex : number) {
+        // Ensure widget index
+        if (widgetIndex != 0 && widgetIndex >= this._widgets.length) {
+            throw new Error(`Removing widget exceeds widget count (given: ${widgetIndex}, length ${this._widgets.length}`);
+        }
+
+        this._widgets.splice(widgetIndex, 1);
     }
 
     /**
