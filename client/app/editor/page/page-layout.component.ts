@@ -1,7 +1,9 @@
-import {Component, Input, OnInit}       from '@angular/core'
+import {
+    Component, Input, OnInit, ChangeDetectorRef
+} from '@angular/core'
 
 import {Page, ReferencedQuery}          from '../../shared/page/index'
-import {Row}                            from '../../shared/page/widgets/index'
+import {Row, Widget}                    from '../../shared/page/widgets/index'
 
 import {SidebarService}                 from '../sidebar.service'
 
@@ -27,18 +29,34 @@ export class PageLayoutComponent implements OnInit {
     private _hoveredDropIndex : number;
 
     /**
-     * Rows may be hidden during reordering operations.
+     * Used during row reordering operations. Keeps track of the row to
+     * hide and adds a possibility to show a drop shadow.
      */
     @Input() draggedRow : {
         row : Row
         index : number
     }
     
+    /**
+     * Used during widget reordering operations. Keeps track of the widget to
+     * hide and adds a possibility to show a drop shadow.
+     */
+    @Input() draggedWidget : {
+        rowIndex : number
+        columnIndex : number
+        widgetIndex : number
+        widget : Widget
+    }
+    
     constructor(
         private _sidebarService : SidebarService,
-        private _dragService : DragService
+        private _dragService : DragService,
+        private _cdRef : ChangeDetectorRef
     ) {}
 
+    /**
+     * Occurs after databinding and catches some common errors.
+     */
     ngOnInit() {
         if (!this.page) {
             throw new Error("PageLayoutComponent doesn't have a page");
@@ -78,8 +96,8 @@ export class PageLayoutComponent implements OnInit {
             // Possibly inform callbacks about the drop
             if (this._dragService.currentDrag.callbacks &&
                 this._dragService.currentDrag.callbacks.onRow) {
-                const droppedRow = this.page.rows[dropIndex];
-                this._dragService.currentDrag.callbacks.onRow(droppedRow);
+                const droppedOn = this.page.rows[dropIndex];
+                this._dragService.currentDrag.callbacks.onRow(droppedOn);
             }
 
             // And reset all hovering state
@@ -114,8 +132,19 @@ export class PageLayoutComponent implements OnInit {
             evt.preventDefault();
             evt.stopPropagation();
 
+            const rowIndex = rowDropIndex - 1;
+            const columnIndex = columnDropIndex - 1;
+            const widgetIndex = 0;
+
             // Actually place the widget
-            this.page.addWidget(pageEvt.widget, rowDropIndex - 1, columnDropIndex - 1, 0);
+            this.page.addWidget(pageEvt.widget, rowIndex, columnIndex, 0);
+
+            // Possibly inform callbacks about the drop
+            if (this._dragService.currentDrag.callbacks &&
+                this._dragService.currentDrag.callbacks.onColumn) {
+                const droppedOn = this.page.rows[rowIndex].columns[columnIndex];
+                this._dragService.currentDrag.callbacks.onColumn(droppedOn);
+            }
         }
     }
 
@@ -135,6 +164,28 @@ export class PageLayoutComponent implements OnInit {
             onDragEnd : () => this.draggedRow = undefined
         });
     }
+
+    /**
+     * Starts a drag action for a widget that is placed in the layout.
+     */
+    startWidgetDrag(evt : DragEvent, draggedWidget : Widget,
+                    rowIndex : number, columnIndex : number, widgetIndex : number) {
+        this.draggedWidget = {
+            rowIndex : rowIndex,
+            columnIndex : columnIndex,
+            widgetIndex : widgetIndex,
+            widget : draggedWidget
+        }
+        
+        
+        // Make sure to remove this row on any valid drop
+        this._dragService.startWidgetDrag(evt, "page", draggedWidget.toModel(), {
+            onRemove : () => this.page.removeWidget(rowIndex, columnIndex, widgetIndex),
+            onColumn : () => this.page.removeWidget(rowIndex, columnIndex, widgetIndex),
+            onDragEnd : () => this.draggedWidget = undefined
+        });
+    }
+
 
     /**
      * @param dropIndex The drop index, 0 is above the first row

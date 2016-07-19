@@ -110,23 +110,49 @@ export class Page {
         }
     }
 
+    /**
+     * Adds a new widget to this page.
+     *
+     * @param widget The widget to add
+     * @param rowIndex The row this widget should be added
+     * @param columnIndex The column this widget should be added
+     * @param widgetIndex The position of the widget inside the column
+     */
     addWidget(widget : WidgetDescription,
               rowIndex : number, columnIndex : number,
               widgetIndex : number) {
         // Ensure row index
         if (rowIndex >= this._rows.length) {
-            throw new Error(`Widget ("${JSON.stringify(widget)}") exceeds row count (given: ${rowIndex}, length ${this._rows.length}`);
+            throw new Error(`Adding widget ("${JSON.stringify(widget)}") exceeds row count (given: ${rowIndex}, length ${this._rows.length}`);
         }
 
         // Ensure column index
         const row = this._rows[rowIndex];
         if (columnIndex >= row.columns.length) {
-            throw new Error(`Widget ("${JSON.stringify(widget)}") exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.columns.length}`);
+            throw new Error(`Adding widget ("${JSON.stringify(widget)}") exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.columns.length}`);
         }
 
         // Attempt to add the widget
         const column = row.columns[columnIndex];
         column.addWidget(widget, widgetIndex);
+
+        this.markDirty();
+    }
+
+    removeWidget(rowIndex : number, columnIndex : number, widgetIndex : number) {
+        // Ensure row index
+        if (rowIndex >= this._rows.length) {
+            throw new Error(`Removing widget exceeds row count (given: ${rowIndex}, length ${this._rows.length}`);
+        }
+
+        // Ensure column index
+        const row = this._rows[rowIndex];
+        if (columnIndex >= row.columns.length) {
+            throw new Error(`Removing widget exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.columns.length}`);
+        }
+
+        const column = row.columns[columnIndex];
+        column.removeWidget(widgetIndex);
 
         this.markDirty();
     }

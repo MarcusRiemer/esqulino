@@ -1,7 +1,7 @@
 import {
     Component, Input, OnInit,
-    Injector,
-    ViewContainerRef, ComponentResolver,
+    Injector, DynamicComponentLoader,
+    ViewChild, ViewContainerRef, ComponentResolver,
     Type, provide, ReflectiveInjector
 } from '@angular/core'
 
@@ -24,26 +24,35 @@ import {QueryTableComponent}   from './widgets/query-table.component'
  * Loads the editor-representation of widgets.
  */
 @Component({
-    template: '',
+    template: `<div *ngIf="isLoading">
+                 <span class="fa fa-spinner fa-spin"></span> Loading ...
+               </div>
+               <div #root>
+               </div>`,
     selector : "esqulino-widget-loader"
 })
 export class WidgetLoaderComponent implements OnInit {
     /**
-     * The widgets that require an editor representation.
+     * The widget that requires an editor representation.
      */
-    @Input() widgets : Widget[];
+    @Input() widget : Widget;
 
     /**
      * The page all these widgets are placed on.
      */
     @Input() page : Page;
 
+    @ViewChild('root', { read: ViewContainerRef}) viewRoot : ViewContainerRef;
+
     private _typeMapping : { [typeName:string] : Type} = {}
+
+    private _isLoading = true;
 
     constructor(
         private _injector: Injector,
         private _selfRef : ViewContainerRef,
-        private _resolver : ComponentResolver
+        private _resolver : ComponentResolver,
+        private _dcl : DynamicComponentLoader
     ) {
         /**
          * TODO: Allow widgets to somehow register themself.
@@ -53,6 +62,10 @@ export class WidgetLoaderComponent implements OnInit {
             "heading" : HeadingComponent,
             "query-table": QueryTableComponent
         };
+    }
+
+    get isLoading() {
+        return (this._isLoading);
     }
 
     /**
@@ -69,30 +82,24 @@ export class WidgetLoaderComponent implements OnInit {
     /**
      * Dynamically loads the required components.
      */
-    ngOnInit() {
-        if (this.widgets.length) {
-            console.log(`Loading ${this.widgets.length} widgets`);
+    ngOnInit() {        
+        console.log(`Resolving widget type "${this.widget.type}"`);
+        const componentType = this.getComponentType(this.widget.type);
+
+        if (!this.page) {
+            throw new Error("WidgetLoaderComponent doesn't have a page");
         }
         
-        this.widgets.forEach( (widget, index) => {
-            console.log(`Resolving widget type "${widget.type}"`);
-            const componentType = this.getComponentType(widget.type);
-
-            if (!this.page) {
-                throw new Error("WidgetLoaderComponent doesn't have a page");
-            }
-            
-            // Inject the widget model            
-            let injector = ReflectiveInjector.resolveAndCreate([
-                provide(WIDGET_MODEL_TOKEN, {useValue : widget}),
-                provide(Page, {useValue : this.page})
-            ],this._injector);
-            
-            // And create the component
-            this._resolver.resolveComponent(componentType)
-                .then( (fac) => {
-                    this._selfRef.createComponent(fac, index, injector);
-                });
-        });
+        // Inject the widget model            
+        let injector = ReflectiveInjector.resolveAndCreate([
+            provide(WIDGET_MODEL_TOKEN, {useValue : this.widget}),
+            provide(Page, {useValue : this.page})
+        ],this._injector);
+        
+        this._resolver.resolveComponent(componentType)
+            .then( (fac) => {
+                this.viewRoot.createComponent(fac, 0, injector);
+                this._isLoading = false;
+            });
     }
 }
