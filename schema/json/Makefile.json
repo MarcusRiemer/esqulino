@@ -1,4 +1,18 @@
 ##################################
+# Setting up shared paths
+##################################
+
+# Full path of typescript-json-schema
+TYPESCRIPT_JSON_SCHEMA_BIN = $(SCHEMA_PATH)/node_modules/typescript-json-schema/bin/typescript-json-schema
+SCHEMA_OPTIONS = --noExtraProps true
+
+# Names of the schema files to generate
+JSON_SCHEMA_FILE_NAMES = PageDescription.json PageUpdateRequestDescription.json PageRenderRequestDescription.json ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json
+
+# Paths of the schema files to generate
+JSON_SCHEMA_FILES = $(addprefix $(SCHEMA_PATH)/, $(JSON_SCHEMA_FILE_NAMES))
+
+##################################
 # Not so nice: Repeated rules
 ##################################
 
@@ -6,7 +20,7 @@
 # 1) Some names in esqulino are used multiple times, but imported with
 #    a named alias. However, on the global scope these namens need to be
 #    distuingished and the schema generator uses the filename for that.
-# 2) We know that we only generate descriptions, where some names will
+# 2) We know that we only generate descriptions, where some names *could*
 #    clash. But because we don't generate schema files for internal
 #    structures, this clash actually does not matter.
 # 3) Therefore, we can safely remove those path specifiers from the output.
@@ -61,5 +75,5 @@ ifeq (, $(wildcard $(TYPESCRIPT_JSON_SCHEMA_BIN)))
 	$(error "Typescript JSON schema generator not in node_modules")
 endif
 
-.PHONY :
+.PHONY : has-generator
 

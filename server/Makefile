@@ -16,8 +16,12 @@ test :
 	ruby project.test.rb
 
 # Generate the latest documentation
-doc : has-yard
-	$(YARD_BIN) doc $(SOURCES)
+doc : has-yard msg-pre-doc
+	@$(YARD_BIN) doc $(SOURCES)
+
+# Remove generated documentation
+doc-clean : msg-pre-doc-clean
+	rm -rf ../doc/server/
 
 # Used during development: Shows which ruby entities require documentation
 dev-doc : has-yard
@@ -30,7 +34,13 @@ dev-doc : has-yard
 ##################################
 
 msg-pre-deps-install :
-	@tput setaf 2; echo "## Server: Installing dependencies"; tput sgr0
+	@tput setaf 2; echo "## Server : Installing dependencies"; tput sgr0
+
+msg-pre-doc :
+	@tput setaf 2; echo "## Server : Generating documentation"; tput sgr0
+
+msg-pre-doc-clean :
+	@tput setaf 2; echo "## Server : Cleaning documentation"; tput sgr0
 
 
 include ../Makefile.common

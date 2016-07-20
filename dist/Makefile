@@ -30,13 +30,13 @@ install-deps : has-npm
 ##################################
 
 msg-pre-app-clean :
-	@tput setaf 2; echo "## Dist  : Cleaning"; tput sgr0
+	@tput setaf 2; echo "## Dist   : Cleaning"; tput sgr0
 
 msg-pre-app-bundle :
-	@tput setaf 2; echo "## Dist  : Bundling client"; tput sgr0
+	@tput setaf 2; echo "## Dist   : Bundling client"; tput sgr0
 
 msg-pre-lib-bundle :
-	@tput setaf 2; echo "## Dist  : Bundling client dependencies"; tput sgr0
+	@tput setaf 2; echo "## Dist   : Bundling client dependencies"; tput sgr0
 
 
 include ../Makefile.common

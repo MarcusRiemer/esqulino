@@ -82,25 +82,25 @@ test-e2e: msg-pre-test-e2e
 ##################################
 
 msg-pre-deps-install :
-	@tput setaf 2; echo "## Client: Installing dependencies"; tput sgr0
+	@tput setaf 2; echo "## Client : Installing dependencies"; tput sgr0
 
 msg-pre-compile :
-	@tput setaf 2; echo "## Client: Running Typescript Compiler"; tput sgr0
+	@tput setaf 2; echo "## Client : Running Typescript Compiler"; tput sgr0
 
 msg-pre-node :
-	@tput setaf 2; echo "## Client: Copying node.js-dependencies"; tput sgr0
+	@tput setaf 2; echo "## Client : Copying node.js-dependencies"; tput sgr0
 
 msg-pre-sass :
-	@tput setaf 2; echo "## Client: Running SASS Compiler"; tput sgr0	
+	@tput setaf 2; echo "## Client : Running SASS Compiler"; tput sgr0	
 
 msg-pre-templates :
-	@tput setaf 2; echo "## Client: Copying HTML-Templates"; tput sgr0
+	@tput setaf 2; echo "## Client : Copying HTML-Templates"; tput sgr0
 
 msg-pre-vendor :
-	@tput setaf 2; echo "## Client: Copying vendor-dependencies"; tput sgr0
+	@tput setaf 2; echo "## Client : Copying vendor-dependencies"; tput sgr0
 
 msg-pre-test-e2e :
-	@tput setaf 2; echo "## Test  : Running end-to-end tests"; tput sgr0
+	@tput setaf 2; echo "## Test   : Running end-to-end tests"; tput sgr0
 
 .PHONY : clean clean-deps dist dist-sass dist-templates dist-compile dist-vendor dist-node install-deps test-e2e test-reset webdriver-manager-update
 

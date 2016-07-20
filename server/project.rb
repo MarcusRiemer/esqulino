@@ -206,7 +206,6 @@ class Project
   # Executes a query in the context of this project. This is of course
   # a major security concern and shouldn't be done lightly.
   #
-  # @param project_folder [string] The projects root folder
   # @param sql [string] The SQL query
   # @param params [Hash] Query parameters
   #
@@ -227,7 +226,6 @@ class Project
   # Run all given queries and transform the output to be useful
   # for template bindings.
   #
-  # @param project_folder [string] The projects root folder
   # @param queries [[Hash]] [{ name :: string, sql :: string }]
   #                       A named SQL query
   # @param params [Hash] Parameters that are known before the
@@ -321,7 +319,7 @@ end
 
 # Checks whether the given string is a valid Id.
 #
-# @param [string] A string that could be an Id
+# @param [string] maybe_id A string that could be an Id
 #
 # @return True, if the given string is an Id.
 def is_string_id?(maybe_id)

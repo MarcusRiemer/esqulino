@@ -59,6 +59,16 @@ class LiquidFilesystem
   end
 end
 
+# The rendering process currently assumes that everything has
+# been loaded into memory already.
+#
+# Rendering shouldn't require any state, so this is not a class
+# but an ordinary function.
+#
+# @param project [Project] The project of which a page is going
+#                          to be rendered.
+# @param page_template [string] The template itself.
+# @param params [Hash] Parameters for this render step.
 def liquid_render_page(project, page_template, params)
   # Setting up load paths
   # TODO: Is there really no way to do this without manipulating

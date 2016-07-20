@@ -172,8 +172,6 @@ paths:
             "$ref": "./QueryResultDescription.json"
         400:
           description: Something went wrong while executing the query
-          schema:
-            "$ref": "./QueryRunErrorDescription.json"
 
   /project/{id}/query/run:
     post:
@@ -228,4 +226,24 @@ paths:
         200:
           description: The page has been updated.
           schema:
-
+    delete:
+      operationId: deletePageById
+      tags: [page]
+      description: Deleting a page on the serve
+      parameters:
+        - name: id
+          in: path
+          description: Id of the project the page belongs to.
+          required: true
+          type: string
+        - name: pageId
+          in: path
+          description: Id of the page to delete.
+          required: true
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: The page has been updated.
+          schema:
+  /project/{id}/page/{pageId}:
