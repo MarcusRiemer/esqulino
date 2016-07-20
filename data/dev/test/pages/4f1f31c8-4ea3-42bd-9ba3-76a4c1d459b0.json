@@ -1,1 +1,96 @@
-{"name":"index","rows":[{"columns":[{"width":12,"widgets":[{"type":"heading","level":1,"text":"Überschrift"}]}]},{"columns":[{"width":6,"widgets":[{"type":"paragraph","text":"Dies ist ein Absatz auf der linken Seite."}]},{"width":6,"widgets":[{"type":"paragraph","text":"Dies ist ein Absatz auf der rechten Seite."}]}]},{"columns":[{"width":6,"widgets":[]},{"width":3,"widgets":[]},{"width":3,"widgets":[{"type":"paragraph","text":"Und noch ein Absatz, an einer etwas merkwürdigen Stelle."}]}]},{"columns":[{"width":4,"widgets":[]},{"width":4,"widgets":[{"type":"paragraph","text":"Absatz 1"},{"type":"paragraph","text":"Absatz 2"},{"type":"paragraph","text":"Absatz 3"},{"type":"paragraph","text":"Absatz 4"}]},{"width":4,"widgets":[]}]}],"referencedQueries":[]}
+{
+  "name": "index",
+  "rows": [
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "Überschrift"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 6,
+          "widgets": [
+            {
+              "type": "paragraph",
+              "text": "Dies ist ein Absatz auf der linken Seite."
+            }
+          ]
+        },
+        {
+          "width": 6,
+          "widgets": [
+            {
+              "type": "paragraph",
+              "text": "Dies ist ein Absatz auf der rechten Seite."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 6,
+          "widgets": []
+        },
+        {
+          "width": 3,
+          "widgets": []
+        },
+        {
+          "width": 3,
+          "widgets": [
+            {
+              "type": "paragraph",
+              "text": "Und noch ein Absatz, an einer etwas merkwürdigen Stelle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 4,
+          "widgets": []
+        },
+        {
+          "width": 4,
+          "widgets": [
+            {
+              "type": "paragraph",
+              "text": "Absatz 1"
+            },
+            {
+              "type": "paragraph",
+              "text": "Absatz 2"
+            },
+            {
+              "type": "paragraph",
+              "text": "Absatz 3"
+            },
+            {
+              "type": "paragraph",
+              "text": "Absatz 4"
+            }
+          ]
+        },
+        {
+          "width": 4,
+          "widgets": []
+        }
+      ]
+    }
+  ],
+  "referencedQueries": []
+}
