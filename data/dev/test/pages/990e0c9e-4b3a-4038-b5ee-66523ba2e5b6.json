@@ -34,7 +34,7 @@
           "widgets": [
             {
               "type": "paragraph",
-              "text": "In diesem Absatz werden am Ende die <a href=\"https://shopify.github.io/liquid/basics/introduction/\">Liquid Ausdrücke</a> {% raw %}{{ B.key }} -> {{ B.value }}{% endraw %} ausgewertet: {{ B.key }} -> {{ B.value }}"
+              "text": "In diesem Absatz werden am Ende die <a href=\"https://shopify.github.io/liquid/basics/introduction/\">Liquid Ausdrücke</a> {% raw %}{{ query.B.key }} -> {{ query.B.value }}{% endraw %} ausgewertet: {{ query.B.key }} -> {{ query.B.value }}"
             }
           ]
         }

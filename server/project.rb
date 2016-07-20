@@ -238,6 +238,9 @@ class Project
     # Hashes are passed by reference and we don't want to destroy
     # anything on the callsite
     params = params.dup
+
+    # Ensure there is another hash for queries
+    params['query'] = {} unless params.key? 'query'
     
     queries.each do |query|
       # Ensure every query is fully defined
@@ -257,8 +260,8 @@ class Project
       # **knows** there is only a single row.
       mapped = mapped.first if mapped.length == 1
 
-      # Store the 
-      params[name] = mapped
+      # Store the result
+      params['query'][name] = mapped
     end
 
     return (params)

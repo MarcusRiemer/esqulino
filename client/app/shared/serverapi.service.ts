@@ -113,6 +113,6 @@ export class ServerApiService {
      * @projectId The ID of the project
      */
     getArbitraryRenderUrl(projectId : string) : string {
-        return (this.getPageUrl(projectId) + "/render");
+        return (this.getProjectUrl(projectId) + "/render");
     }
 }

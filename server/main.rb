@@ -215,10 +215,8 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Rendering an arbitrary page
-  post '/api/project/:project_id/page/render' do
+  post '/api/project/:project_id/render' do
     render_request = @@validator.ensure_request("PageRenderRequestDescription", request.body.read)
-
-
     params = render_request['params']
 
     # Queries are Hashes of the form { sql :: string, name :: string }
@@ -264,11 +262,6 @@ class ScratchSqlApp < Sinatra::Base
 
   subdomain do   
     get '/:page_name_or_id?' do
-      blabla = subdomain
-      puts "#{blabla}"
-      puts "#{subdomain}"
-      
-      
       request_prepare_project subdomain
       request_prepare_page params['page_name_or_id']
 
