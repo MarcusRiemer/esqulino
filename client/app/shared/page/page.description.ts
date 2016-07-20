@@ -25,11 +25,20 @@ export interface ParagraphDescription extends WidgetDescription {
 
 /**
  * A widget **requires** at least a type, all other fields are
- * mandated by deriving descriptions.
+ * mandated by deriving descriptions. As we don't necesarily
+ * know all deriving classes at compile time (they could be
+ * provided by a plugin) we poke a hole in the type system
+ * here.
+ *
+ * The following annotion is required to allow additional
+ * properties in the automatically generated JSON schema, see
+ * https://github.com/YousefED/typescript-json-schema/issues/44
+ *
+ * @TJS-additionalProperties true
  */
 export interface WidgetDescription {
     type : string
-    [x: string]: any 
+    [additional: string]: any
 }
 
 /**
@@ -37,10 +46,7 @@ export interface WidgetDescription {
  */
 export interface ColumnDescription {
     width : number
-    // TODO: The any[] option is only here to allow generation of
-    //       correct JSON schemas, see
-    //       https://github.com/YousefED/typescript-json-schema/issues/44
-    widgets : any[]
+    widgets : WidgetDescription[]
 }
 
 /**
@@ -52,7 +58,7 @@ export interface RowDescription {
 
 /**
  * Referenced queries may (optionally) accompanied by a human-readable
- * name. This is required if the same query is going to be used 
+ * name. This is required if the same query is going to be used
  * multiple times on a single page.
  */
 export interface ReferencedQuery {
@@ -87,4 +93,3 @@ export interface PageDescription {
      */
     referencedQueries : ReferencedQuery[]
 }
-
