@@ -7,11 +7,13 @@ require "json"
 class ProjectTest < Test::Unit::TestCase
   @@project_path = "../data/dev/test/"
 
+  # Checks whether a valid project is correctly loaded
   def test_initialise
     proj = Project.new @@project_path
     assert_true(proj.exists?)
   end
-  
+
+  # Tests whether certain strings are IDs
   def test_is_string_id?
     assert_true(is_string_id?("00000000-1111-2222-3333-444444444444"))
     assert_true(is_string_id?("AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"))

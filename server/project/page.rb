@@ -167,7 +167,7 @@ end
 # data. Absolutly no disk IO takes place in this method, everything
 # has been fetched from disk already.
 #
-# @param project_folder [string] The projects root folder
+# @param project [string] The project the page belongs to
 # @param page_template [string] A renderable version of the page
 # @param render_engine The render engine to use
 # @param params [Hash] All arguments that are required to render this page
