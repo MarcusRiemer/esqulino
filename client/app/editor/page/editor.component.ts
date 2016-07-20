@@ -14,15 +14,17 @@ import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 
 import {PageLayoutComponent}            from './page-layout.component'
+import {PageDataComponent}              from './page-data.component'
 import {ServerPreviewComponent}         from './server-preview.component'
 import {SidebarComponent}               from './sidebar.component'
 
 /**
- * Top level component to edit esqulino pages
+ * Top level component to edit esqulino pages. This components hosts
+ * the components that allow actual editing.
  */
 @Component({
     templateUrl: 'app/editor/page/templates/editor.html',
-    directives: [PageLayoutComponent, ServerPreviewComponent]
+    directives: [PageLayoutComponent, PageDataComponent, ServerPreviewComponent]
 })
 export class PageEditorComponent implements OnInit, OnDestroy {
     /**

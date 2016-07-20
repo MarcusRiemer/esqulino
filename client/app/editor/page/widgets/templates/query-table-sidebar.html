@@ -9,7 +9,7 @@
           class="form-control">
     <option *ngFor="let ref of availableQueries;"
             [value]="buildReferenceString(ref)">
-      {{ref.name}} ({{ ref.queryName }})
+      {{ref.varName}} ({{ ref.query.name }})
     </option>
   </select>
 </div>

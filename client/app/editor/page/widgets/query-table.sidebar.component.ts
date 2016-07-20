@@ -4,18 +4,14 @@ import {QuerySelect}                        from '../../../shared/query'
 import {Page, ReferencedQuery}              from '../../../shared/page/index'
 import {QueryTable}                         from '../../../shared/page/widgets/index'
 
-import {ProjectService, Project}            from '../../project.service'
+import {
+    ProjectService, Project, AvailableQuery
+} from '../../project.service'
 import {
     SIDEBAR_MODEL_TOKEN
 } from '../../editor.token'
 
 import {QueryTableComponent}                from './query-table.component'
-
-interface AvailableQuery {
-    name : string
-    queryId: string
-    queryName : string
-}
 
 /**
  * The sidebar-editor for a QueryTable. This is currently in a quite
@@ -49,8 +45,8 @@ export class QueryTableSidebarComponent {
      */
     buildReferenceString(value : AvailableQuery) : string {
         return (JSON.stringify({
-            name : value.name,
-            queryId : value.queryId
+            name : value.varName,
+            queryId : value.query.id
         }));
     }
 
@@ -80,15 +76,12 @@ export class QueryTableSidebarComponent {
         return (this._component.model);
     }
 
+    /**
+     * All queries that are actually in use on this page.
+     */
     get availableQueries() : AvailableQuery[] {
         if (this._project) {
-        return (this._component.page.referencedQueries.map(ref => {
-            return ({
-                name : ref.name,
-                queryId: ref.queryId,
-                queryName : this._project.getQueryById(ref.queryId).name
-            })
-        }));
+            return (this._project.getAvailableQueries(this._component.page));
         } else {
             return ([]);
         }

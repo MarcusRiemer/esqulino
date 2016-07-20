@@ -14,9 +14,9 @@ import {
     SelectQueryResult, QueryRunErrorDescription
 } from '../shared/query.result'
 
-import {Project}                                 from './project'
+import {Project, AvailableQuery}                 from './project'
 
-export {Project}
+export {Project, AvailableQuery}
 
 /**
  * Wraps access to a single project, which is deemed to be "active"
