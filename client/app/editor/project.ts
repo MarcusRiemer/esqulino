@@ -5,6 +5,14 @@ import {ProjectDescription}      from '../shared/project.description'
 import {Page}                    from '../shared/page/page'
 
 /**
+ * A query reference that is ready to be used.
+ */
+export class AvailableQuery {
+    varName : string
+    query : Query
+}
+
+/**
  * A loaded project with editing capatabilities. This is were all
  * information is lumped together.
  */
@@ -85,6 +93,18 @@ export class Project {
      */
     getQueryById(id : string) : Query {
         return (this._queries.find(item => (item.id == id)));
+    }
+
+    /**
+     * @return All queries (and their names) that are available on the given page.
+     */
+    getAvailableQueries(page : Page) : AvailableQuery[] {
+        return (page.referencedQueries.map(q => {
+            return ({
+                varName : q.name,
+                query : this.getQueryById(q.queryId)
+            })
+        }));
     }
 
     /**

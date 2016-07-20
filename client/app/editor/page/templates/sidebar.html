@@ -53,9 +53,10 @@
   <div class="block-container block">
     <div *ngFor="let ref of usedQueries; trackBy: queryTrackBy;"
          (dragstart)="startReferencedQueryDrag($event, ref)"
+         [title]="ref.query.name"
          draggable="true"
          class="table">
-      {{ ref.name }} <small>({{ ref.query.name }})</small>
+      {{ ref.varName }}
     </div>
   </div>
 </div>

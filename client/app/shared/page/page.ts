@@ -188,7 +188,27 @@ export class Page {
         }
     }
 
-    
+    /**
+     * Adds a new query reference to this page.
+     *
+     * @param ref The query reference to add.
+     */
+    addQueryReference(ref : ReferencedQuery) {
+        // Ensure this reference name isn't in use already
+        if (this.usesQueryName(ref.name)) {
+            throw new Error(`Name "${ref.name}" is already in use`);
+        }
+
+        this._referencedQueries.push(ref);
+        this.markDirty();
+    }
+
+    /**
+     * @return True, if the given name is already in use for a query.
+     */
+    usesQueryName(name : string) {
+        return (this._referencedQueries.some(q => q.name == name));
+    }
 
     /**
      * @return Ids of all queries that are referenced by this page.

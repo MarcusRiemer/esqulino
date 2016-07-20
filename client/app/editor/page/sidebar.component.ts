@@ -7,20 +7,11 @@ import {
     Heading, Row, Paragraph, QueryTable
 } from '../../shared/page/widgets/index'
 
-import {Project}                        from '../project'
-import {ProjectService}                 from '../project.service'
+import {
+    ProjectService, Project, AvailableQuery
+} from '../project.service'
 
 import {DragService}                    from './drag.service'
-
-/**
- * Used in UI to determine whether a query is referenced from this
- * page or not.
- */
-interface UsableQuery {
-    query : Query
-    name? : string
-    used : boolean
-}
 
 /**
  * The sidebar hosts elements that can be dragged onto the currently active
@@ -36,7 +27,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
      * This ID is used to register this sidebar with the sidebar loader
      */
     public static get SIDEBAR_IDENTIFIER() { return "page" };
-    
+
     /**
      * The currently edited project
      */
@@ -54,7 +45,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
     constructor(
         private _dragService : DragService,
-        private _projectService : ProjectService,        
+        private _projectService : ProjectService,
         private _routeParams : ActivatedRoute,
         private _router : Router) {
     }
@@ -68,17 +59,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
             .first()
             .subscribe(p => {
                 this._project = p;
-                
+
                 // Grab the correct query id
                 const childRoute = this._router.routerState.firstChild(this._routeParams);
 
                 const routeRef = childRoute.params.subscribe(param => {
                     const pageId = param['pageId'];
-                    
+
                     // Project is loaded, display the correct  query
                     this._page = this._project.getPageById(pageId);
                 });
-                
+
                 this._subscriptionRefs.push(routeRef);
             });
     }
@@ -112,7 +103,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     onTrashDrop(evt : DragEvent) {
         // Indicates we can drop here
         evt.preventDefault();
-        
+
         if (this._dragService.currentDrag.callbacks &&
             this._dragService.currentDrag.callbacks.onRemove) {
             this._dragService.currentDrag.callbacks.onRemove();
@@ -161,48 +152,26 @@ export class SidebarComponent implements OnInit, OnDestroy {
      * Informs the drag service about a started drag operation for a
      * query reference
      */
-    startReferencedQueryDrag(evt : DragEvent, ref : UsableQuery) {
+    startReferencedQueryDrag(evt : DragEvent, ref : AvailableQuery) {
         this._dragService.startQueryRefDrag(evt, "sidebar", {
             queryId : ref.query.id,
-            name : ref.name
+            name : ref.varName
         });
     }
 
     /**
      *
      */
-    queryTrackBy(ref: UsableQuery) {
-        return(`${ref.name}.{ref.query.id}`);
-    }
-    
-    /**
-     * @return All queries that could be possibly used on this page.
-     */
-    get queries() : UsableQuery[] {
-        if (this._page) {
-            return (this._project.queries.map(q => {
-                return ({
-                    query : q,
-                    used : this._page.isUsingQuery(q.id)
-                });
-            }));
-        } else {
-            return ([]);
-        }
+    queryTrackBy(ref: AvailableQuery) {
+        return(`${ref.varName}.{ref.query.id}`);
     }
 
     /**
      * @return All queries that are actually used on this page.
      */
-    get usedQueries() : UsableQuery[] {
+    get usedQueries() : AvailableQuery[] {
         if (this._page) {
-            return (this.page.referencedQueries.map(ref => {
-                return ({
-                    query : this._project.getQueryById(ref.queryId),
-                    name : ref.name,
-                    used : true
-                })
-            }));
+            return (this._project.getAvailableQueries(this._page));
         } else {
             return ([]);
         }

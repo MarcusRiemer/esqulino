@@ -1,7 +1,9 @@
 import {Component, OnInit, OnDestroy}   from '@angular/core'
 import {Router}                         from '@angular/router'
 
-import {assertValidName, isValidName}   from '../../shared/util'
+import {
+    assertValidResourceName, isValidResourceName
+} from '../../shared/util'
 
 import {Project}                        from '../project'
 import {ProjectService}                 from '../project.service'
@@ -69,7 +71,7 @@ export class PageCreateComponent implements OnInit, OnDestroy {
      * @return True, if the currently proposed name is valid
      */
     public isNameValid(name : string) {
-        return (isValidName(name) && this._project && !this._project.hasPageByName(name));
+        return (isValidResourceName(name) && this._project && !this._project.hasPageByName(name));
     }
 
     public get isValid() {

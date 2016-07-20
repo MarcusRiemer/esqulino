@@ -83,7 +83,7 @@
                     "type": "string"
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "ReferencedQuery": {
             "type": "object",

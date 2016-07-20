@@ -11,14 +11,18 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <h1>Seite 2</h1>
-        <p>Hier ist ein Absatz, der was zur zweiten Seite erzählt. Unter diesem Absatz ist dann noch eine Tabelle zu sehen.</p>
+        <h1>Historische Personen und Ereignisse</h1>
+        <p>Auf dieser Seite lassen sich die zeitlichen Zusammenhänge von historischen Persönlichkeiten und Ereignissen darstellen.</p>
       </div>
+    </div>
+    <div class="row">
       <div class="col-md-12">
-        {% include "query_table" table: query.A %}
+        <h2>Alle Personen</h2>{% include "query_table" table: query.Personen %}
       </div>
+    </div>
+    <div class="row">
       <div class="col-md-12">
-        <p>In diesem Absatz werden am Ende die <a href="https://shopify.github.io/liquid/basics/introduction/">Liquid Ausdrücke</a> {% raw %}{{ query.B.key }} -&gt; {{ query.B.value }}{% endraw %} ausgewertet: {{ query.B.key }} -&gt; {{ query.B.value }}</p>
+        <h2>Alle Ereignisse</h2>{% include "query_table" table: query.Ereignisse %}
       </div>
     </div>
   </div>
