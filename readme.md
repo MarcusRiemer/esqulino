@@ -34,9 +34,7 @@ Documentation for the API is provided following the OpenAPI-Specification, an [o
 
 ## About Windows ...
 
-Currently it is assumed that this project will built on a UNIX-like environment. Although building it on Windows should be possible, all helper scripts (and Makefiles) make a lot of UNIX-centric assumptions.
-
-But don't worry if you are only interested in *running* a esqulino instance. You will be better off using a pre-compiled distribution of the client, but running the server should work just fine.
+Currently it is assumed that this project will built on a UNIX-like environment. Although building it on Windows should be possible, all helper scripts (and Makefiles) make a lot of UNIX-centric assumptions. But don't worry if you are only interested in *running* a esqulino instance. You will be better off using a pre-compiled distribution of the client, but running the server should work just fine.
 
 # Testing
 
@@ -44,7 +42,7 @@ esqulino aims to be thoroughly tested and does this on more or less three levels
 
 ## Client-Side Unit Tests
 
-Every time `make dist` is run, all unit tests are part of the resulting compilation. They can be run in the browser using the `test.html` page that should be served by the normal server.
+Every time `make dist` is run, all unit tests are part of the resulting compilation. They can be run in the browser using the `test.html` page that should be served by the normal server. These files are also part of the 
 
 ## Server-Side Unit Tests
 
