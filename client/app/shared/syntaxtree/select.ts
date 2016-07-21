@@ -29,8 +29,12 @@ export interface NamedExpression {
     expr : Expression;
 }
 
+/**
+ * Describes the column of a result in detail.
+ */
 export interface ResultColumnDescription {
-    name : string;
+    fullName : string
+    shortName : string
 }
 
 /**
@@ -201,7 +205,8 @@ export class Select extends Component implements ExpressionParent {
                 tables.forEach(t => {
                     t.columns.forEach(c => {
                         toReturn.push({
-                            name : `${t.name}.${c.name}`
+                            fullName : `${t.name}.${c.name}`,
+                            shortName : c.name
                         });
                     });
                 })
@@ -211,7 +216,8 @@ export class Select extends Component implements ExpressionParent {
                 const colExpr = <ColumnExpression> val.expr;
 
                 toReturn.push({
-                    name : colExpr.toSqlString()
+                    fullName : colExpr.toSqlString(),
+                    shortName : colExpr.columnName
                 });
             } else {
                 throw new Error ("Unknown colum type in result description");

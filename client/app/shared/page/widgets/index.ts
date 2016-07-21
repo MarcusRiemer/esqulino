@@ -1,3 +1,7 @@
+import {
+    ValueReferenceDescription, ColumnReferenceDescription
+} from '../page.description'
+
 import {Widget, WidgetDescription}         from './widget'
 import {loadWidget}                        from './widget-loader'
 
@@ -15,5 +19,6 @@ export {
     Paragraph, ParagraphDescription,
     Heading, HeadingDescription,
     QueryTable, QueryTableDescription,
+    ValueReferenceDescription, ColumnReferenceDescription,
     loadWidget
 }

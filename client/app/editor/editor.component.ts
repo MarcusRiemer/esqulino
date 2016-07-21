@@ -1,5 +1,5 @@
 import {
-    Component, OnInit, OnDestroy, ChangeDetectorRef
+    Component, OnInit, OnDestroy, ChangeDetectorRef, ReflectiveInjector
 } from '@angular/core'
 import {CORE_DIRECTIVES}                from '@angular/common'
 import {HTTP_PROVIDERS}                 from '@angular/http'
@@ -10,8 +10,7 @@ import {
 import {TableDescription}               from '../shared/schema.description'
 
 import {PageService}                    from './page.service'
-import {Project}                        from './project'
-import {ProjectService}                 from './project.service'
+import {ProjectService, Project}        from './project.service'
 import {QueryService}                   from './query.service'
 import {ToolbarService}                 from './toolbar.service'
 import {ToolbarComponent}               from './toolbar.component'
@@ -67,9 +66,9 @@ export class EditorComponent implements OnInit, OnDestroy {
             console.log(`Loading project with id "${projectId}"`);
             
             this._projectService.setActiveProject(projectId);
-            this._projectService.activeProject.subscribe(
-                res => this._project = res
-             );
+            this._projectService.activeProject.subscribe(res => {
+                this._project = res
+            });
         });
         
         this._sidebarService.isSidebarVisible.subscribe(v => {

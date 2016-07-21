@@ -2,7 +2,8 @@
  * Describes a table that shows the results of a query.
  */
 export interface QueryTableDescription {
-    queryRef? : ReferencedQuery,
+    queryRef? : ReferencedQuery
+    columns : string[]
     type: "query-table"
 }
 
@@ -10,8 +11,8 @@ export interface QueryTableDescription {
  * Describes a heading widget.
  */
 export interface HeadingDescription extends WidgetDescription {
-    text : string,
-    level : number,
+    text : string
+    level : number
     type : "heading"
 }
 
@@ -19,7 +20,7 @@ export interface HeadingDescription extends WidgetDescription {
  * Describes a paragraph widget.
  */
 export interface ParagraphDescription extends WidgetDescription {
-    text : string,
+    text : string
     type : "paragraph"
 }
 
@@ -37,6 +38,7 @@ export interface ParagraphDescription extends WidgetDescription {
  * @TJS-additionalProperties true
  */
 export interface WidgetDescription {
+    // Discriminator value
     type : string
     [additional: string]: any
 }
@@ -62,8 +64,32 @@ export interface RowDescription {
  * multiple times on a single page.
  */
 export interface ReferencedQuery {
-    queryId : string,
-    name? : string
+    queryId : string
+    name : string
+}
+
+/**
+ * A single or repeating value of any origin, as long as it's
+ * referenceable by a variable name.
+ *
+ * @TJS-additionalProperties true
+ */
+export interface ValueReferenceDescription {
+    // Discriminator value
+    type : "column"
+}
+
+/**
+ * Can be used to denote a column of a row.
+ */
+export interface ColumnReferenceDescription extends ValueReferenceDescription {
+    type : "column"
+
+    // The query variable this column references
+    variableName : string
+
+    // The name of the column
+    columnName : string
 }
 
 /**

@@ -2,8 +2,7 @@ import {Component, Input, OnInit}       from '@angular/core';
 
 import {TableDescription}               from '../shared/schema.description'
 
-import {Project}                        from './project'
-import {ProjectService}                 from './project.service'
+import {ProjectService, Project}        from './project.service'
 import {QueryService}                   from './query.service'
 
 

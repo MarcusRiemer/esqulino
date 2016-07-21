@@ -6,7 +6,10 @@ import {AsyncSubject}                            from 'rxjs/AsyncSubject'
 import {Observable}                              from 'rxjs/Observable'
 
 import {ServerApiService}                        from '../shared/serverapi.service'
-import {ProjectDescription}                      from '../shared/project.description'
+import {
+    Project, ProjectDescription
+} from '../shared/project'
+
 import {
     Model, Query, QuerySelect, QueryDelete, QueryInsert
 } from '../shared/query'
@@ -14,9 +17,7 @@ import {
     SelectQueryResult, QueryRunErrorDescription
 } from '../shared/query.result'
 
-import {Project, AvailableQuery}                 from './project'
-
-export {Project, AvailableQuery}
+export {Project, ProjectDescription}
 
 /**
  * Wraps access to a single project, which is deemed to be "active"

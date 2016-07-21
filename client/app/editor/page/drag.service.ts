@@ -4,7 +4,8 @@ import {Injectable}             from '@angular/core'
 
 import {ReferencedQuery}        from '../../shared/page/index'
 import {
-    Column, Row, RowDescription, WidgetDescription
+    Column, Row, RowDescription, WidgetDescription, Widget,
+    ValueReferenceDescription, ColumnReferenceDescription
 } from '../../shared/page/widgets/index'
 
 /**
@@ -30,6 +31,11 @@ export interface DropCallbacks {
      * Called when dropped on an existing column
      */
     onColumn? : (c : Column) => void
+
+    /**
+     * Called when dropped on a widget
+     */
+    onWidget? : (w : Widget) => void
 
     /**
      * Called when dragging has stopped

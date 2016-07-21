@@ -75,7 +75,6 @@ class Project
   # Loads the projects model from disk
   def load_description!
     # Ensure this is actually a loadable project
-    puts "Inside: #{id}"
     raise UnknownProjectError.new(id) unless self.exists?
     @whole_description = YAML.load_file(description_filename);
   end
