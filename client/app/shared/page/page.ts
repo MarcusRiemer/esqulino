@@ -204,6 +204,23 @@ export class Page {
     }
 
     /**
+     * Remove an exact reference to a query. This does not take
+     * the name or the query id into account, it uses object equality
+     * so you need to obtain a matching reference first.
+     *
+     * @param ref The query reference to remove.
+     */
+    removeQueryReference(ref : ReferencedQuery) {
+        const index = this._referencedQueries.indexOf(ref);
+
+        if (index >= 0) {
+            this._referencedQueries.splice(index, 1);
+        } else {
+            throw new Error(`Could not remove reference "${ref.name}"`);
+        }
+    }
+
+    /**
      * @return True, if the given name is already in use for a query.
      */
     usesQueryName(name : string) {
