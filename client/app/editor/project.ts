@@ -98,6 +98,13 @@ export class Project {
     }
 
     /**
+     * @return True, if a query with the given name is part of this project.
+     */
+    hasQueryByName(name : string) : boolean {
+        return (this._queries.some(query => query.name == name));
+    }
+
+    /**
      * @return All queries (and their names) that are available on the given page.
      */
     getAvailableQueries(page : Page) : AvailableQuery[] {

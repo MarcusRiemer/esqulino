@@ -1,5 +1,11 @@
-import {Component, OnInit, OnDestroy}   from '@angular/core'
+import {
+    Component, OnInit, OnDestroy, Input
+} from '@angular/core'
 import {Router}                         from '@angular/router'
+
+import {
+    assertValidResourceName, isValidResourceName
+} from '../../shared/util'
 
 import {TableDescription}               from '../../shared/schema.description'
 
@@ -19,6 +25,7 @@ export class QueryCreateComponent implements OnInit, OnDestroy {
 
     public queryName : string = "";
 
+    @Input()
     public queryTable : string;
 
     /**
@@ -44,7 +51,11 @@ export class QueryCreateComponent implements OnInit, OnDestroy {
         this._toolbarService.savingEnabled = false;
         
         let subRef = this._projectService.activeProject
-            .subscribe(res => this._project = res);
+            .subscribe(res => {
+                this._project = res
+                // Assign the first table as an initial choice
+                this.queryTable = res.schema.tables[0].name;
+            });
 
         this._subscriptionRefs.push(subRef);
 
@@ -73,7 +84,9 @@ export class QueryCreateComponent implements OnInit, OnDestroy {
     }
 
     public get isNameValid() {
-        return (this.queryName && this.queryName.length >= 1);
+        return (this.queryName
+                && isValidResourceName(this.queryName)
+                && !this._project.hasQueryByName(this.queryName));
     }
 
     public get isTableValid() {
