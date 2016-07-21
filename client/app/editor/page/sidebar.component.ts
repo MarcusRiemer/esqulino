@@ -155,15 +155,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
     startReferencedQueryDrag(evt : DragEvent, ref : AvailableQuery) {
         this._dragService.startQueryRefDrag(evt, "sidebar", {
             queryId : ref.query.id,
-            name : ref.varName
+            name : ref.ref.name
         });
     }
 
     /**
      *
      */
-    queryTrackBy(ref: AvailableQuery) {
-        return(`${ref.varName}.{ref.query.id}`);
+    queryTrackBy(index : number, avail: AvailableQuery) {
+        return(`${avail.ref.name}.{avail.query.id}`);
     }
 
     /**

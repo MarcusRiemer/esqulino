@@ -7,9 +7,9 @@
   <select [(ngModel)]="referencedString"
           id="table-selected-query"
           class="form-control">
-    <option *ngFor="let ref of availableQueries;"
-            [value]="buildReferenceString(ref)">
-      {{ref.varName}} ({{ ref.query.name }})
+    <option *ngFor="let avail of availableQueries;"
+            [value]="buildReferenceString(avail)">
+      {{avail.ref.name}} ({{ avail.query.name }})
     </option>
   </select>
 </div>

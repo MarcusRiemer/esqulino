@@ -6,7 +6,8 @@
     <p class="card-text">
       Hier kannst du sehen welche Daten auf dieser Seite zur Verfügung stehen. Nutze Bedienelemente wie Textfelder, verwende von dir geschriebene Abfragen, ergänze Routeninformationen oder lege Werte statisch fest.
     </p>
-
+  </div>
+  <div class="card-block">
     <h5 class="card-title">
       Weitere Abfrage benutzen
     </h5>
@@ -15,7 +16,7 @@
         <select [(ngModel)]="toReference.queryId"
                 id="reference-selected-query"
                 class="form-control">
-          <option *ngFor="let q of availableQueries;"
+          <option *ngFor="let q of possibleQueries;"
                   [value]="q.id">
             {{q.name}}
           </option>
@@ -28,6 +29,22 @@
         </button>
       </div>
     </div>
-
   </div>
+  <ul class="list-group list-group-flush">
+    <li *ngFor="let used of usedQueries; trackBy: trackUsedQuery"
+        class="list-group-item">
+      <div class="input-group">
+        <input [(ngModel)]="used.ref.name"
+               name="ref-query-{{used.ref.name}}"
+               class="form-control"
+               type="text">
+        <span class="input-group-btn">
+          <button (click)="page.removeQueryReference(used.ref)"
+                  class="btn btn-warning pull-right">
+            <span class="fa fa-trash"></span>
+          </button>
+        </span>
+      </div>
+    </li>
+  </ul>
 </div>

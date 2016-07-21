@@ -2,13 +2,15 @@ import {Schema}                  from '../shared/schema'
 import {Query, Model, loadQuery} from '../shared/query'
 import {ProjectDescription}      from '../shared/project.description'
 
-import {Page}                    from '../shared/page/page'
+import {Page, ReferencedQuery}   from '../shared/page/page'
 
 /**
- * A query reference that is ready to be used.
+ * A query reference that is ready to be used. This class
+ * "glues together" the actual reference inside the page
+ * and the actual query that reference points to.
  */
 export class AvailableQuery {
-    varName : string
+    ref : ReferencedQuery
     query : Query
 }
 
@@ -101,7 +103,7 @@ export class Project {
     getAvailableQueries(page : Page) : AvailableQuery[] {
         return (page.referencedQueries.map(q => {
             return ({
-                varName : q.name,
+                ref : q,
                 query : this.getQueryById(q.queryId)
             })
         }));

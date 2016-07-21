@@ -45,7 +45,7 @@ export class QueryTableSidebarComponent {
      */
     buildReferenceString(value : AvailableQuery) : string {
         return (JSON.stringify({
-            name : value.varName,
+            name : value.ref.name,
             queryId : value.query.id
         }));
     }

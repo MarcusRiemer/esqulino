@@ -30,6 +30,10 @@
               "text": "Alle Personen"
             },
             {
+              "type": "paragraph",
+              "text": "Diese Personen sind in der Datenbank hinterlegt."
+            },
+            {
               "type": "query-table",
               "queryRef": {
                 "name": "Personen",
