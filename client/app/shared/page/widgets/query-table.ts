@@ -11,9 +11,15 @@ export {QueryTableDescription}
 export class QueryTable extends Widget {
     private _queryRef : ReferencedQuery;
 
+    /**
+     * The columns that should be displayed
+     */
+    private _columns: string[];
+
     constructor(desc : QueryTableDescription) {
         super("query-table");
         this._queryRef = desc.queryRef;
+        this._columns = desc.columns;
     }
 
     /**
@@ -21,7 +27,8 @@ export class QueryTable extends Widget {
      */
     static get emptyDescription() : QueryTableDescription {
         return ({
-            type : "query-table"
+            type : "query-table",
+            columns : []
         })
     }
 
@@ -29,14 +36,20 @@ export class QueryTable extends Widget {
         return (this._queryRef);
     }
 
+    /**
+     * Sets a new referenced query, cleaning the current
+     * columns as a side effect.
+     */
     set queryReference(ref : ReferencedQuery) {
         this._queryRef = ref;
+        this._columns = [];
     }
 
     protected toModelImpl() : WidgetDescription {
         const toReturn : QueryTableDescription = {
             type : "query-table",
-            queryRef : this._queryRef
+            queryRef : this._queryRef,
+            columns : []
         }
 
         return (toReturn);

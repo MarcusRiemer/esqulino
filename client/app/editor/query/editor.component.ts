@@ -8,8 +8,7 @@ import {
     SelectQueryResult, QueryRunErrorDescription
 } from '../../shared/query.result'
 
-import {Project}                        from '../project'
-import {ProjectService}                 from '../project.service'
+import {ProjectService, Project}        from '../project.service'
 import {PreferencesService}             from '../preferences.service'
 import {ToolbarService}                 from '../toolbar.service'
 import {SidebarService}                 from '../sidebar.service'

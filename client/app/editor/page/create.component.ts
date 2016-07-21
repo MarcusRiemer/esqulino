@@ -5,8 +5,7 @@ import {
     assertValidResourceName, isValidResourceName
 } from '../../shared/util'
 
-import {Project}                        from '../project'
-import {ProjectService}                 from '../project.service'
+import {ProjectService, Project}        from '../project.service'
 import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 import {PageService}                    from '../page.service'

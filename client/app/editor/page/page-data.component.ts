@@ -1,8 +1,10 @@
 import {Component, Input, OnInit}       from '@angular/core'
 
-import {Page, ReferencedQuery}          from '../../shared/page/index'
+import {
+    Page, AvailableQuery, ReferencedQuery
+} from '../../shared/page/index'
 
-import {Project, AvailableQuery}        from '../project'
+import {Project}                        from '../project.service'
 
 /**
  * Specifying the data that is available to a certain page.
@@ -64,7 +66,7 @@ export class PageDataComponent implements OnInit {
      * @return Queries that are referenced by this page
      */
     get usedQueries() {
-        return (this.project.getAvailableQueries(this.page));
+        return (this.page.getAvailableQueries());
     }
 
     /**

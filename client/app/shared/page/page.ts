@@ -1,26 +1,39 @@
+import {Project}                              from '../project'
+import {ProjectResource}                      from '../resource'
+import {Query}                                from '../query'
+
 import {
-    PageDescription, ReferencedQuery, WidgetDescription
+    PageDescription, ReferencedQuery, WidgetDescription,
+    ValueReferenceDescription, ColumnReferenceDescription
 } from './page.description'
 import {Row, RowDescription, Widget}          from './widgets/index'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
 
-export {PageDescription, ReferencedQuery, Row, Widget}
+export {
+    PageDescription, Row, Widget,
+    ValueReferenceDescription, ColumnReferenceDescription, ReferencedQuery
+}
+
+/**
+ * A query reference that is ready to be used. This class
+ * "glues together" the actual reference inside the page
+ * and the actual query that reference points to.
+ */
+export class AvailableQuery {
+    ref : ReferencedQuery
+    query : Query
+}
 
 /**
  * The in-memory representation of a page.
  */
-export class Page {
-    private _id : string;
-    private _name : string;
+export class Page extends ProjectResource {
     private _rows : Row[];
     private _referencedQueries : ReferencedQuery[]
     private _renderer : Renderer;
-
-    private _isDirty = false;
     
-    constructor(desc : PageDescription) {
-        this._id = desc.id;
-        this._name = desc.name;
+    constructor(desc : PageDescription, project : Project = undefined) {
+        super(desc.id, desc.name, project);
 
         // We only render stuff via liquid for the moment
         this._renderer = new LiquidRenderer();
@@ -30,28 +43,6 @@ export class Page {
 
         // Making a copy of those references
         this._referencedQueries = desc.referencedQueries.splice(0);
-    }
-
-    /**
-     * @return The name the user has given to this page
-     */
-    get name() {
-        return (this._name);
-    }
-
-    /**
-     * @param newName The new name to set
-     */
-    set name(newName : string) {
-        this._name = newName;
-        this.markDirty();
-    }
-
-    /**
-     * @return The automatically generated id for this page
-     */
-    get id() {
-        return (this._id);
     }
 
     /**
@@ -161,7 +152,7 @@ export class Page {
     }
 
     /**
-     *
+     * Removes a specific widget.
      */
     removeWidget(widget : Widget) {
         // As we have no information about the position, we need to check
@@ -242,19 +233,16 @@ export class Page {
     }
 
     /**
-     * @return True, if this instance has changes that could be saved..
+     * @return All queries (and their names) that are available on the given page.
      */
-    get isDirty() {
-        return (this._isDirty);
+    getAvailableQueries() : AvailableQuery[] {
+        return (this._referencedQueries.map(q => {
+            return ({
+                ref : q,
+                query : this.project.getQueryById(q.queryId)
+            })
+        }));
     }
-
-    /**
-     * Called when a query has been made to this change.
-     */
-    protected markDirty() : void {
-        this._isDirty = true;
-    }
-
 
     /**
      * @param queryId The ID of the query in question.
@@ -267,8 +255,8 @@ export class Page {
 
     toModel() : PageDescription {
         return ({
-            id : this._id,
-            name : this._name,
+            id : this.id,
+            name : this.name,
             rows : this._rows.map(r => r.toModel()),
             referencedQueries : this._referencedQueries
         });

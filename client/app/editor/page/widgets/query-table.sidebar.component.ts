@@ -1,11 +1,13 @@
 import {Component, Inject, Optional}        from '@angular/core'
 
 import {QuerySelect}                        from '../../../shared/query'
-import {Page, ReferencedQuery}              from '../../../shared/page/index'
+import {
+    Page, ReferencedQuery, AvailableQuery
+} from '../../../shared/page/index'
 import {QueryTable}                         from '../../../shared/page/widgets/index'
 
 import {
-    ProjectService, Project, AvailableQuery
+    ProjectService, Project
 } from '../../project.service'
 import {
     SIDEBAR_MODEL_TOKEN
@@ -77,11 +79,25 @@ export class QueryTableSidebarComponent {
     }
 
     /**
+     * @return The names of the columns that are currently available to render.
+     */
+    get availableColumns() {
+        if (this._project && this.referencedQuery && this.referencedQuery.queryId) {
+            const query = this._project.getQueryById(this.referencedQuery.queryId) as QuerySelect;
+            const columns = query.select.actualColums
+            return (columns);
+            
+        } else {
+            return ([]);
+        }
+    }
+
+    /**
      * All queries that are actually in use on this page.
      */
     get availableQueries() : AvailableQuery[] {
         if (this._project) {
-            return (this._project.getAvailableQueries(this._component.page));
+            return (this._component.page.getAvailableQueries());
         } else {
             return ([]);
         }

@@ -1,7 +1,7 @@
 import {Component, Input}  from '@angular/core'
 import {ROUTER_DIRECTIVES} from '@angular/router';
 
-import {Project}           from './project'
+import {Project}           from './project.service'
 import {
     Query, QuerySelect, QueryDelete, QueryInsert, QueryUpdate
 } from '../shared/query'

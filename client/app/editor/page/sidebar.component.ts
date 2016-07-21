@@ -2,13 +2,15 @@ import {Component, OnInit, OnDestroy}   from '@angular/core'
 import {ActivatedRoute, Router}         from '@angular/router'
 
 import {Query}                          from '../../shared/query'
-import {Page, ReferencedQuery}          from '../../shared/page/index'
+import {
+    Page, ReferencedQuery, AvailableQuery
+} from '../../shared/page/index'
 import {
     Heading, Row, Paragraph, QueryTable
 } from '../../shared/page/widgets/index'
 
 import {
-    ProjectService, Project, AvailableQuery
+    ProjectService, Project
 } from '../project.service'
 
 import {DragService}                    from './drag.service'
@@ -171,7 +173,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
      */
     get usedQueries() : AvailableQuery[] {
         if (this._page) {
-            return (this._project.getAvailableQueries(this._page));
+            return (this._page.getAvailableQueries());
         } else {
             return ([]);
         }

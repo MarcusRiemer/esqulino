@@ -115,8 +115,8 @@ describe('Valid SELECT Queries', () => {
 
         const columns = q.select.actualColums;
         expect(columns.length).toEqual(2);
-        expect(columns[0].name).toEqual("person.personId");
-        expect(columns[1].name).toEqual("person.name");
+        expect(columns[0].fullName).toEqual("person.personId");
+        expect(columns[1].fullName).toEqual("person.name");
         
         
         // FROM
@@ -157,9 +157,9 @@ describe('Valid SELECT Queries', () => {
         // SELECT
         const columns = q.select.actualColums;
         expect(columns.length).toEqual(3);
-        expect(columns[0].name).toEqual("person.personId");
-        expect(columns[1].name).toEqual("person.name");
-        expect(columns[2].name).toEqual("person.gebDat");
+        expect(columns[0].fullName).toEqual("person.personId");
+        expect(columns[1].fullName).toEqual("person.name");
+        expect(columns[2].fullName).toEqual("person.gebDat");
         
         // FROM
         expect(q.from.numberOfJoins).toEqual(0);

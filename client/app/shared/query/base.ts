@@ -1,29 +1,24 @@
-import {Schema}                          from '../schema'
-import {ValidationResult, Validateable}  from '../query.validation'
-import * as Model                        from '../query.model'
-import * as SyntaxTree                   from '../query.syntaxtree'
+import {Project}                              from '../project'
+import {ProjectResource}                      from '../resource'
+
+import {Schema}                               from '../schema'
+import {ValidationResult, Validateable}       from '../query.validation'
+import * as Model                             from '../query.model'
+import * as SyntaxTree                        from '../query.syntaxtree'
 
 /**
  * Facade for a query that allows meaningful mapping to the UI.
  */
-export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
-    public schema : Schema;
-    private model : Model.QueryDescription;
+export abstract class Query extends ProjectResource implements SyntaxTree.RemovableHost, Validateable {
     
-    private _isDirty = false;
-
-    private _name : string;
-    private _id   : string;
+    public schema : Schema;
 
     /**
      * Stores all basic information about a string.
      */
-    constructor(schema : Schema, model : Model.QueryDescription) {
-        this._name = model.name;
-        this._id = model.id;
-
+    constructor(schema : Schema, model : Model.QueryDescription, project : Project = undefined) {
+        super(model.id, model.name, project);
         this.schema = schema;
-        this.model = model;
     }
 
     /**
@@ -56,20 +51,6 @@ export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
     toSqlString() : string {
         return (this.toSqlStringImpl());
     }
-    
-    /**
-     * @return True, if this instance has changes that could be saved..
-     */
-    get isDirty() {
-        return (this._isDirty);
-    }
-
-    /**
-     * Called when a query has been made to this change.
-     */
-    protected markDirty() : void {
-        this._isDirty = true;
-    }
 
     /**
      * @return A validation report
@@ -86,36 +67,14 @@ export abstract class Query implements SyntaxTree.RemovableHost, Validateable {
     }
 
     /**
-     * @return A "meaningful" name for the query.
-     */
-    get name() {
-        return (this._name);
-    }
-
-    /**
-     * @param value The new "meaningful" name for this query
-     */
-    set name(value : string) {
-        this.markDirty();
-        this._name = value;
-    }
-
-    /**
-     * @return A "meaningful" name for the query.
-     */
-    get id() {
-        return (this._id);
-    }
-
-    /**
      * Serializes the whole query to the "over-the-wire" format.
      * @return The "over-the-wire" JSON representation
      */
     public toModel() : Model.QueryDescription {
         // Fill in basic information
         let toReturn : Model.QueryDescription = {
-            name : this._name,
-            id : this._id
+            name : this.name,
+            id : this.id
         };
 
         // And let the deriving classes do the hard work

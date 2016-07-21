@@ -28,20 +28,22 @@ install-deps :
 # Once these are in place, the client archives are packaged up,
 # ready to be distributed.
 dist :
-	$(SUBDIR_MAKE) schema/json all
 	$(SUBDIR_MAKE) client all
 	$(SUBDIR_MAKE) dist archive-use
+	$(SUBDIR_MAKE) schema/json all
+
 
 # Removing everything that is required to run esqulino
 dist-clean :
-	$(SUBDIR_MAKE) schema/json clean
 	$(SUBDIR_MAKE) dist clean
+	$(SUBDIR_MAKE) schema/json clean
+
 
 # One-shot compilation of all things that are required to run esqulino
 dist-dev :
-	$(SUBDIR_MAKE) schema/json all
 	$(SUBDIR_MAKE) client all
 	$(SUBDIR_MAKE) dist all
+	$(SUBDIR_MAKE) schema/json all
 
 # Reverts the test project to the most recent state in git
 test-reset: msg-pre-test-reset

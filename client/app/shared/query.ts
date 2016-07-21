@@ -1,4 +1,5 @@
 import {Schema}                          from './schema'
+import {Project}                         from './project'
 
 import * as Model                        from './query.model'
 import * as SyntaxTree                   from './query.syntaxtree'
@@ -22,7 +23,7 @@ export {
  *
  * @return A correct instance of a Query
  */
-export function loadQuery(schema : Schema, toLoad : Model.QueryDescription) : Query {
+export function loadQuery(toLoad : Model.QueryDescription, schema : Schema, project : Project) : Query {
     // The number of distinctive top-level components that
     // are present in the model.
     let topLevelList = [toLoad.delete, toLoad.select, toLoad.insert, toLoad.update]
