@@ -1,6 +1,7 @@
-import {QuerySelect, Model}                   from './query'
-import {RequestErrorDescription}              from './serverapi.service'
+import {RequestErrorDescription}              from '../serverapi.service'
 
+import {Model}                                from './base'
+import {QuerySelect}                          from './select'
 
 /**
  * Not much ado about type safety here, in the raw

@@ -7,11 +7,10 @@ import {
 } from '../schema'
 import {
     ValidationResult, Validateable
-} from '../query.validation'
+} from './validation'
 
-
-import * as Model                       from '../query.model'
-import * as SyntaxTree                  from '../query.syntaxtree'
+import * as Model                       from './description'
+import * as SyntaxTree                  from './syntaxtree'
 
 /**
  * A query that reads data, but never mutates anything.

@@ -1,16 +1,8 @@
-import {Schema} from './schema'
+import {Schema}                          from '../schema'
 
-import {
-    Locateable
-} from './syntaxtree/common'
-
-import {
-    Expression, ColumnExpression
-} from './syntaxtree/expression'
-
-import {
-    Join
-} from './syntaxtree/from'
+import {Locateable}                      from './syntaxtree/common'
+import {Expression, ColumnExpression}    from './syntaxtree/expression'
+import {Join}                            from './syntaxtree/from'
 
 /**
  * Represents something that can be validated.

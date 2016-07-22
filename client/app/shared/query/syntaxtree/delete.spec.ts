@@ -1,5 +1,4 @@
-import {Model}         from '../query'
-import * as SyntaxTree from './delete'
+import {Model, SyntaxTree}                     from '../base'
 
 describe('DELETE', () => {
     it('only case', () => {

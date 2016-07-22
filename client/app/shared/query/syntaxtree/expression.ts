@@ -1,18 +1,11 @@
-import {
-    ExpressionParent, Removable
-} from './common'
+import {Schema}                               from '../../schema'
 
+import * as Model                             from '../description'
 import {
-    Model, ValidationResult, Validateable
-} from '../query'
+    ValidationErrors, ValidationResult, Validateable
+} from '../validation'
 
-import {
-    ValidationErrors
-} from '../query.validation'
-
-import {
-    Schema
-} from '../schema'
+import {ExpressionParent, Removable}          from './common'
 
 /**
  * Valid template identifiers. Sadly a leaky abstraction that needs

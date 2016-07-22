@@ -76,8 +76,8 @@ describe('Test Project: Creating Queries', () => {
         expect(page.tablesEle.get(0).getAttribute('value')).toEqual("key_value");
     });
 
-    it("SELECT", () => page.createQuery("select", Math.random().toString(36).substr(2)));
-    it("INSERT", () => page.createQuery("insert", Math.random().toString(36).substr(2)));
-    it("UPDATE", () => page.createQuery("update", Math.random().toString(36).substr(2)));
-    it("DELETE", () => page.createQuery("delete", Math.random().toString(36).substr(2)));
+    it("SELECT", () => page.createQuery("select", "A" + Math.random().toString(36).substr(2)));
+    it("INSERT", () => page.createQuery("insert", "A" + Math.random().toString(36).substr(2)));
+    it("UPDATE", () => page.createQuery("update", "A" + Math.random().toString(36).substr(2)));
+    it("DELETE", () => page.createQuery("delete", "A" + Math.random().toString(36).substr(2)));
 });
