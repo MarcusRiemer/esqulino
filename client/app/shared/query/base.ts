@@ -2,9 +2,11 @@ import {Project}                              from '../project'
 import {ProjectResource}                      from '../resource'
 
 import {Schema}                               from '../schema'
-import {ValidationResult, Validateable}       from '../query.validation'
-import * as Model                             from '../query.model'
-import * as SyntaxTree                        from '../query.syntaxtree'
+import {ValidationResult, Validateable}       from './validation'
+import * as Model                             from './description'
+import * as SyntaxTree                        from './syntaxtree'
+
+export {Model, SyntaxTree}
 
 /**
  * Facade for a query that allows meaningful mapping to the UI.

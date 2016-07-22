@@ -1,11 +1,12 @@
+import {Schema, ColumnDescription}        from '../schema'
+
 import {Query}                            from './base'
 
-import {loadExpression, Expression}       from '../query.syntaxtree'
-import {Schema, ColumnDescription}        from '../schema'
-import {ValidationResult, Validateable}   from '../query.validation'
+import {loadExpression, Expression}       from './syntaxtree'
+import {ValidationResult, Validateable}   from './validation'
 
-import * as Model                         from '../query.model'
-import * as SyntaxTree                    from '../query.syntaxtree'
+import * as Model                         from './description'
+import * as SyntaxTree                    from './syntaxtree'
 
 interface InsertAssignment {
     columnName : string

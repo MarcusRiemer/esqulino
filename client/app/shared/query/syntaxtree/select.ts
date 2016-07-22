@@ -1,15 +1,10 @@
 import {
-    Model, Query, QueryFrom, ValidationResult
-} from '../query'
-import {
-    ValidationErrors
-} from '../query.validation'
-import {
-    Schema
-} from '../schema'
-import {
-    TableDescription, ColumnDescription
-} from '../schema.description'
+    Schema, TableDescription, ColumnDescription
+} from '../../schema'
+
+import * as Model                             from '../description'
+import {ValidationResult, ValidationErrors}   from '../validation'
+import {Query, QueryFrom}                     from '../base'
 
 import {
     ColumnExpression, StarExpression, loadExpression

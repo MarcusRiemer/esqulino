@@ -1,17 +1,19 @@
 export {
-    Expression, ExpressionParent, loadExpression, RemovableHost, Removable
+    Expression, 
+    ExpressionParent, loadExpression, RemovableHost, Removable
 } from './syntaxtree/common'
 
 export {
-    ParameterExpression
+    ParameterExpression, BinaryExpression, ColumnExpression, ConstantExpression,
+    MissingExpression, StarExpression
 } from './syntaxtree/expression'
 
 export {
-    Select
+    Select, NamedExpression
 } from './syntaxtree/select'
 
 export {
-    From
+    From, Join, CrossJoin, InnerJoin
 } from './syntaxtree/from'
 
 export {

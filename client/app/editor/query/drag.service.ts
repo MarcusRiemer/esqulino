@@ -2,8 +2,9 @@ import {Subject}                from 'rxjs/Subject'
 
 import {Injectable}             from '@angular/core'
 
-import {Model}                  from '../../shared/query'
-import {Removable, Expression}  from '../../shared/syntaxtree/common'
+import {
+    Model, SyntaxTree
+} from '../../shared/query'
 
 /**
  * The scopes a drag event could affect
@@ -39,7 +40,7 @@ export class DragService {
     // to be stored elsewhere. This property comes into play, when any
     // kind of operation needs to occur at the "origin" end in reaction
     // to a drag & drop operation.
-    private _currentSource : Removable;
+    private _currentSource : SyntaxTree.Removable;
 
     constructor() {
         this._eventSource = new Subject<SqlDragEvent>();
@@ -50,7 +51,7 @@ export class DragService {
      *
      * @param scope The scope that the dragged item matches.
      */
-    private dragStart(evt : DragEvent, sqlEvt : SqlDragEvent, source? : Removable) {
+    private dragStart(evt : DragEvent, sqlEvt : SqlDragEvent, source? : SyntaxTree.Removable) {
         // There can only be a single drag event at once
         if (this._currentDrag || this._currentSource) {
             throw new Error ("Attempted to start a second drag");
@@ -121,7 +122,9 @@ export class DragService {
      * @param source A node that is associated as a logical source.
      */
     startExpressionModelDrag(model : Model.Expression,
-                             origin : OriginFlag, evt : DragEvent, source? : Removable) {
+                             origin : OriginFlag,
+                             evt : DragEvent,
+                             source? : SyntaxTree.Removable) {
         this.dragStart(evt, {
             scope : this.calculateScopeFlags(model),
             origin : origin,
@@ -135,7 +138,9 @@ export class DragService {
      * @param origin The logical source of this operation
      * @param evt The DOM drag event to enrich
      */
-    startExistingExpressionDrag(origin : OriginFlag, evt : DragEvent, expr : Expression) {
+    startExistingExpressionDrag(origin : OriginFlag,
+                                evt : DragEvent,
+                                expr : SyntaxTree.Expression) {
         this.startExpressionModelDrag(expr.toModel(), origin, evt, expr);
     }
 
@@ -145,7 +150,9 @@ export class DragService {
      * @param origin The logical source of this operation
      * @param evt The DOM drag event to enrich
      */
-    startConstantDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {        
+    startConstantDrag(origin : OriginFlag,
+                      evt : DragEvent,
+                      source? : SyntaxTree.Removable) {        
         this.startExpressionModelDrag({
             constant : {
                 type : "INTEGER",
@@ -160,8 +167,11 @@ export class DragService {
      * @param origin The logical source of this operation
      * @param evt The DOM drag event to enrich
      */
-    startColumnDrag(table : string, column : string,
-                    origin : OriginFlag, evt : DragEvent, source? : Removable) {
+    startColumnDrag(table : string,
+                    column : string,
+                    origin : OriginFlag,
+                    evt : DragEvent,
+                    source? : SyntaxTree.Removable) {
         this.startExpressionModelDrag({
             singleColumn : {
                 column : column,
@@ -176,7 +186,9 @@ export class DragService {
      * @param evt The DOM drag event to enrich
      */
     startCompoundDrag(operator : Model.Operator,
-                      origin : OriginFlag, evt : DragEvent, source? : Removable) {
+                      origin : OriginFlag,
+                      evt : DragEvent,
+                      source? : SyntaxTree.Removable) {
         this.startExpressionModelDrag({
             binary : {
                 lhs : { missing : { } },
@@ -207,7 +219,9 @@ export class DragService {
      *
      * @param evt The DOM drag event to enrich
      */
-    startParameterDrag(origin : OriginFlag, evt : DragEvent, source? : Removable) {
+    startParameterDrag(origin : OriginFlag,
+                       evt : DragEvent,
+                       source? : SyntaxTree.Removable) {
         this.startExpressionModelDrag({
             parameter : {
                 key : "key"
@@ -222,7 +236,9 @@ export class DragService {
      * @param evt The DOM drag event to enrich
      */
     startTableDrag(join : Model.Join,
-                   origin : OriginFlag, evt : DragEvent, source? : Removable) {
+                   origin : OriginFlag,
+                   evt : DragEvent,
+                   source? : SyntaxTree.Removable) {
         this.dragStart(evt, {
             scope : ["table"],
             origin : origin,
@@ -314,7 +330,7 @@ export class DragService {
     /**
      * @return The source of the drag operation.
      */
-    get activeSource() : Removable {
+    get activeSource() : SyntaxTree.Removable {
         return (this._currentSource);
     }
 }

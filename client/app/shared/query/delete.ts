@@ -7,10 +7,10 @@ import {
 } from '../schema'
 import {
     ValidationResult, ValidationError,  ValidationErrors, Validateable
-} from '../query.validation'
+} from './validation'
 
-import * as Model                       from '../query.model'
-import * as SyntaxTree                  from '../query.syntaxtree'
+import * as Model                       from './description'
+import * as SyntaxTree                  from './syntaxtree'
 
 /**
  * An SQL DELETE query.

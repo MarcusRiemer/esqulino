@@ -1,19 +1,24 @@
 import {Schema}                          from './schema'
 import {Project}                         from './project'
 
-import * as Model                        from './query.model'
-import * as SyntaxTree                   from './query.syntaxtree'
-import {ValidationResult, Validateable}  from './query.validation'
-
-import {Query, QueryFrom, QueryWhere}    from './query/base'
+import {ValidationResult, Validateable}  from './query/validation'
 import {QuerySelect}                     from './query/select'
 import {QueryDelete}                     from './query/delete'
 import {QueryInsert}                     from './query/insert'
 import {QueryUpdate}                     from './query/update'
+import {
+    Model, SyntaxTree,
+    Query, QueryFrom, QueryWhere
+} from './query/base'
+import {
+    SelectQueryResult, QueryRunErrorDescription
+} from './query/result'
+
 
 export {
     Model, SyntaxTree, ValidationResult, Validateable,
-    Query, QuerySelect, QueryDelete, QueryInsert, QueryFrom, QueryWhere, QueryUpdate
+    Query, QuerySelect, QueryDelete, QueryInsert, QueryFrom, QueryWhere, QueryUpdate,
+    SelectQueryResult, QueryRunErrorDescription
 }
 
 /**

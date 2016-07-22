@@ -11,11 +11,9 @@ import {
 } from '../shared/project'
 
 import {
-    Model, Query, QuerySelect, QueryDelete, QueryInsert
-} from '../shared/query'
-import {
+    Model, Query, QuerySelect, QueryDelete, QueryInsert,
     SelectQueryResult, QueryRunErrorDescription
-} from '../shared/query.result'
+} from '../shared/query'
 
 export {Project, ProjectDescription}
 

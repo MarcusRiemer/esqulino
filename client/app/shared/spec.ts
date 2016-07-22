@@ -1,3 +1,5 @@
+import './project.spec'
+
 import './query.spec'
 import './schema.spec'
 
