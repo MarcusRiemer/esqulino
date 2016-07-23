@@ -11,7 +11,6 @@ class LiquidFilesystem
   # A filesystem is always relative to some project
   def initialize(project)
     @project = project
-    puts "New liquid filesystem for #{@project.folder}"
   end
 
   # @return The path were global partials are stored.

@@ -47,8 +47,8 @@ dist-dev :
 
 # Reverts the test project to the most recent state in git
 test-reset: msg-pre-test-reset
-	git checkout -- $(shell git rev-parse --show-toplevel)/data/dev/test
-	cd $(shell git rev-parse --show-toplevel)/data/dev/test && git clean -f
+	git checkout -- $(shell git rev-parse --show-toplevel)/data/dev/projects/test
+	cd $(shell git rev-parse --show-toplevel)/data/dev/projects/test && git clean -f
 
 # Runs end to end tests. This relies on two other servers that must be
 # running already:
