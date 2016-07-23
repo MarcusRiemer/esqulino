@@ -50,9 +50,14 @@ class ScratchSqlApp < Sinatra::Base
   # Preferring our own exceptions
   set :show_exceptions, :after_handler
 
-  # The data directory to serve projects from
+  # The data directory for this esqulino instance.
   def given_data_dir
     ARGV[1] || "../data/dev/"
+  end
+
+  # The directory all projects are served from.
+  def projects_dir
+    File.join(given_data_dir, "projects")
   end
 
   # Ensures the @project instance variable, should be called before
@@ -60,7 +65,7 @@ class ScratchSqlApp < Sinatra::Base
   #
   # @param project_id The id of the project to load
   def request_prepare_project(project_id)
-    @project = Project.new File.join(given_data_dir, project_id)
+    @project = Project.new File.join(projects_dir, project_id)
   end
 
   # Ensures the @query instance variable, should be called before
@@ -128,9 +133,9 @@ class ScratchSqlApp < Sinatra::Base
 
   # Listing all projects that are available
   get '/api/project' do
-    projects = Dir.entries(given_data_dir)
+    projects = Dir.entries(projects_dir)
                .select { |entry| entry != '.' and entry != '..' and not entry.start_with? "_" }
-               .map { |entry| Project.new File.join(given_data_dir, entry) }
+               .map { |entry| Project.new File.join(projects_dir, entry) }
                .map { |project| project.public_description }
     json projects
   end
