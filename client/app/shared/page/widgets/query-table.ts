@@ -40,6 +40,13 @@ export class QueryTable extends Widget {
         return (this._queryRefName);
     }
 
+    set columnNames(value : string[]) {
+        this._columns = value;
+    }
+    
+    /**
+     *
+     */
     get columnNames() {
         return (this._columns);
     }
@@ -57,7 +64,7 @@ export class QueryTable extends Widget {
         const toReturn : QueryTableDescription = {
             type : "query-table",
             queryRefName : this._queryRefName,
-            columns : []
+            columns : this._columns
         }
 
         return (toReturn);

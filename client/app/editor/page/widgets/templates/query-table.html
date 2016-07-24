@@ -11,9 +11,16 @@
   </h5>
   <table class="table">
     <tr>
-      <th *ngFor="let column of columns">
-        {{ column.shortName }}
-      </th>
+      <td *ngFor="let column of columns; trackBy: trackByColumn"
+          class="block-container block">
+        <span (dragover)="onQueryDragOver($event)"
+              (drop)="onQueryDrop($event)"
+              (dragstart)="startColumnRefDrag($event, column)"
+              draggable="true"
+              class="column">
+          {{ column.shortName }}
+        </span>
+      </td>
     </tr>
   </table>
 </div>

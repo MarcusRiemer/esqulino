@@ -154,7 +154,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
                     queryRef : QueryReference,
                     column : ResultColumn) {
         this._dragService.startColumnRefDrag(evt, "sidebar", {
-            columnName: column.shortName,
+            columnName: column.fullName,
             queryName : queryRef.name
         });
     }
