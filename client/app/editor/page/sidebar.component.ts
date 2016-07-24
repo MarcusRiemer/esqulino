@@ -1,7 +1,7 @@
 import {Component, OnInit, OnDestroy}   from '@angular/core'
 import {ActivatedRoute, Router}         from '@angular/router'
 
-import {Query}                          from '../../shared/query'
+import {Query, ResultColumn}            from '../../shared/query'
 import {
     Page, QueryReference
 } from '../../shared/page/index'
@@ -145,9 +145,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
     /**
      * Starts a drag action for a query table.
-      */
+     */
     startQueryTableDrag(evt : DragEvent) {
         this._dragService.startWidgetDrag(evt, "sidebar", QueryTable.emptyDescription);
+    }
+
+    startColumnDrag(evt : DragEvent,
+                    queryRef : QueryReference,
+                    column : ResultColumn) {
+        this._dragService.startColumnRefDrag(evt, "sidebar", {
+            columnName: column.shortName,
+            queryName : queryRef.name
+        });
     }
 
     /**
@@ -167,6 +176,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
         } else {
             return ([]);
         }
+    }
+
+    trackByColumnId(index : number, columnRef : ResultColumn) {
+        return (columnRef.fullName);
     }
 }
 

@@ -4,7 +4,9 @@ import {
 
 import * as Model                             from '../description'
 import {ValidationResult, ValidationErrors}   from '../validation'
-import {Query, QueryFrom}                     from '../base'
+import {
+    Query, QueryFrom, ResultColumn
+} from '../base'
 
 import {
     ColumnExpression, StarExpression, loadExpression
@@ -22,14 +24,6 @@ export { ColumnExpression };
 export interface NamedExpression {
     name? : string;
     expr : Expression;
-}
-
-/**
- * Describes the column of a result in detail.
- */
-export interface ResultColumnDescription {
-    fullName : string
-    shortName : string
 }
 
 /**
@@ -172,8 +166,8 @@ export class Select extends Component implements ExpressionParent {
      *
      * @pre Hosting query has a schema
      */
-    get actualColums() : ResultColumnDescription[] {
-        let toReturn : ResultColumnDescription[] = [];
+    get actualColums() : ResultColumn[] {
+        let toReturn : ResultColumn[] = [];
 
         this._columns.forEach( val => {
             // A star column may attribute to more then a single column
@@ -200,6 +194,7 @@ export class Select extends Component implements ExpressionParent {
                 tables.forEach(t => {
                     t.columns.forEach(c => {
                         toReturn.push({
+                            query : this._query,
                             fullName : `${t.name}.${c.name}`,
                             shortName : c.name
                         });
@@ -211,6 +206,7 @@ export class Select extends Component implements ExpressionParent {
                 const colExpr = <ColumnExpression> val.expr;
 
                 toReturn.push({
+                    query : this._query,
                     fullName : colExpr.toSqlString(),
                     shortName : colExpr.columnName
                 });

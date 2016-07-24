@@ -7,6 +7,12 @@ import {
     QueryReferenceDescription, ValueReferenceDescription, ColumnReferenceDescription
 } from '../../shared/page/widgets/index'
 
+export interface DragColumnDescription {
+    columnName : string,
+
+    queryName : string
+}
+
 /**
  * Hints about the origin of a drag operation
  */
@@ -22,12 +28,12 @@ export interface DropCallbacks {
     onRemove? : () => void
 
     /**
-     * Called when dropped on an existing row
+     * Called when dropped on an existing row of a page
      */
     onRow? : (r : Row) => void
 
     /**
-     * Called when dropped on an existing column
+     * Called when dropped on an existing column of a page
      */
     onColumn? : (c : Column) => void
 
@@ -51,6 +57,7 @@ export interface PageDragEvent {
     callbacks? : DropCallbacks
     row? : RowDescription
     queryRef? : QueryReferenceDescription
+    columnRef? : DragColumnDescription
     widget? : WidgetDescription
 }
 
@@ -148,6 +155,33 @@ export class DragService {
         });
     }
 
+    /**
+     * Starts dragging a reference to a column.
+     *
+     * @param evt The DragEvent that is provided by the browser?
+     * @param origin Where did this drag start?
+     * @param rowDesc Which query should be referenced?
+     * @param callbacks Which events could be fired?
+     */
+    startColumnRefDrag(evt : DragEvent,
+                       origin : OriginFlag,
+                       columnRef : DragColumnDescription,
+                       callbacks? : DropCallbacks) {
+        this.dragStart(evt, {
+            origin : origin,
+            columnRef : columnRef,
+            callbacks : callbacks
+        });
+    }
+
+    /**
+     * Starts dragging a widget that could be constructed when dropped.
+     *
+     * @param evt The DragEvent that is provided by the browser?
+     * @param origin Where did this drag start?
+     * @param widget The widget to drag
+     * @param callbacks Which events could be fired?
+     */
     startWidgetDrag(evt : DragEvent,
                     origin : OriginFlag,
                     widget : WidgetDescription,

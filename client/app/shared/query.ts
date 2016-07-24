@@ -2,7 +2,9 @@ import {Schema}                          from './schema'
 import {Project}                         from './project'
 
 import {ValidationResult, Validateable}  from './query/validation'
-import {QuerySelect}                     from './query/select'
+import {
+    QuerySelect, ResultColumn
+} from './query/select'
 import {QueryDelete}                     from './query/delete'
 import {QueryInsert}                     from './query/insert'
 import {QueryUpdate}                     from './query/update'
@@ -18,6 +20,7 @@ import {
 export {
     Model, SyntaxTree, ValidationResult, Validateable,
     Query, QuerySelect, QueryDelete, QueryInsert, QueryFrom, QueryWhere, QueryUpdate,
+    ResultColumn,
     SelectQueryResult, QueryRunErrorDescription
 }
 

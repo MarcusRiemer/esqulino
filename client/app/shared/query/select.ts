@@ -1,5 +1,5 @@
 import {
-    Query, QueryFrom, QueryWhere
+    Query, QueryFrom, QueryWhere, ResultColumn
 } from './base'
 
 import {
@@ -11,6 +11,8 @@ import {
 
 import * as Model                       from './description'
 import * as SyntaxTree                  from './syntaxtree'
+
+export {ResultColumn}
 
 /**
  * A query that reads data, but never mutates anything.
