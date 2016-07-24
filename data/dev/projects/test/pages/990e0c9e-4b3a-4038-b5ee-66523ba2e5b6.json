@@ -23,7 +23,10 @@
             {
               "type": "query-table",
               "queryRefName": "key_value_1",
-              "columns": []
+              "columns": [
+                "key_value.value",
+                "key_value.key"
+              ]
             }
           ]
         },

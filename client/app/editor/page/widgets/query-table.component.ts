@@ -3,7 +3,7 @@ import {
 } from '@angular/core'
 
 import {Page, QueryReference}       from '../../../shared/page/index'
-import {QuerySelect}                from '../../../shared/query'
+import {QuerySelect, ResultColumn}  from '../../../shared/query'
 import {QueryTable}                 from '../../../shared/page/widgets/index'
 
 import {ProjectService, Project}    from '../../project.service'
@@ -34,6 +34,7 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
     constructor(@Inject(WIDGET_MODEL_TOKEN) model : QueryTable,
                 private _page : Page,
                 private _cdRef: ChangeDetectorRef,
+                private _dragService : DragService,
                 sidebarService : SidebarService) {
         super(sidebarService, model, {
             id : QUERY_TABLE_SIDEBAR_IDENTIFIER,
@@ -67,7 +68,7 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
     onQueryDragOver(evt : DragEvent) {
         // Is the thing that could be possibly dropped a QueryReference?
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        if (pageEvt.queryRef) {
+        if (pageEvt.queryRef || pageEvt.columnRef) {
             // Indicates we can drop here
             evt.preventDefault();
             evt.stopPropagation();
@@ -87,6 +88,45 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
             
             this.referenceName = pageEvt.queryRef.name;
         }
+        else if (pageEvt.columnRef) {
+            // Indicates we can drop here
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            this.addColumn(pageEvt.columnRef.columnName);
+        }
+    }
+
+    startColumnRefDrag(evt: DragEvent, column : ResultColumn) {
+        this._dragService.startColumnRefDrag(evt, "page", {
+            columnName : column.fullName,
+            queryName : this.referenceName
+        }, {
+            onRemove: () => this.removeColumn(column.fullName)
+        });
+
+        evt.stopPropagation();
+    }
+
+    addColumn(fullName : string) {
+        this.model.columnNames.push(fullName);
+
+        this._cdRef.markForCheck();
+    }
+
+    /**
+     * Removes the given name from the query table
+     * 
+     * @param fullName The full name of the column that should be removed.
+     */
+    removeColumn(fullName : string) {
+        if (this.model.columnNames.length == 0) {
+            this.model.columnNames = this.columns.map(c => c.fullName);
+        }
+
+        this.model.columnNames = this.model.columnNames.filter(v => v != fullName);
+
+        this._cdRef.markForCheck();
     }
 
     /**
@@ -94,7 +134,7 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
      */
     get columns() {
         if (this.referenceName) {            
-            // 1) Get the reference
+            // 1) Get the reference itself
             const ref = this._page.getQueryReferenceByName(this.referenceName);
             // 2) Resolve the reference to the actual query to find all possible columns
             const query = ref.query as QuerySelect;
@@ -102,13 +142,17 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
             // 3) If the user has decided to narrow done the columns (or change
             //    their order) these need to be re-mapped.
             if (this.model.columnNames.length > 0) {
-                const orderedColumns = this.model.columnNames
-                    .map(name => columns.find(col => col.shortName == name));
+                columns = this.model.columnNames
+                    .map(name => columns.find(col => col.fullName == name));
             }
             
             return (columns);
         } else {
             return [];
         }
+    }
+
+    trackByColumn(index : number, column : ResultColumn) {
+        return (column.fullName);
     }
 }
