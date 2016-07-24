@@ -95,6 +95,13 @@ export class Project {
     hasQueryByName(name : string) : boolean {
         return (this._queries.some(query => query.name == name));
     }
+    
+    /**
+     * @return True, if a query with the given id is part of this project.
+     */
+    hasQueryById(id : string) : boolean {
+        return (this._queries.some(query => query.id == id));
+    }
 
     /**
      * Adds a new query to this project.
@@ -122,6 +129,13 @@ export class Project {
      */
     getPageById(id : string) : Page {
         return (this._pages.find(item => (item.id == id)));
+    }
+
+    /**
+     * @return True, if a page with this ID is part of this project.
+     */
+    hasPageById(id : string) : boolean {
+        return (this._pages.some(item => (item.id == id)));
     }
 
     /**

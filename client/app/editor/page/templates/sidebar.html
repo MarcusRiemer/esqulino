@@ -50,13 +50,23 @@
 </div>
 
 <div class="card-block">
-  <div class="block-container block">
-    <div *ngFor="let used of referencedQueries;"
-         (dragstart)="startReferencedQueryDrag($event, used)"
+  <div *ngFor="let used of referencedQueries;"
+       class="block-container block">
+    <div (dragstart)="startReferencedQueryDrag($event, used)"
          [title]="used.query.name"
          draggable="true"
          class="table">
       {{ used.name }}
     </div>
+    <ul>
+      <li *ngFor="let column of used.columns; trackBy: trackByColumnId;">
+        <span (dragstart)="startColumnDrag($event, used, column)"
+              class="column indent"
+              draggable="true">
+          {{ column.shortName }}
+        </span>
+      </li>
+    </ul>
+
   </div>
 </div>

@@ -117,3 +117,14 @@ export interface QueryWhere extends Query {
 export interface QueryFrom extends Query {
     from : SyntaxTree.From
 }
+
+/**
+ * Describes the column of a result in detail.
+ */
+export interface ResultColumn {
+    // The query this column is part of
+    query : Query
+    
+    fullName : string
+    shortName : string
+}

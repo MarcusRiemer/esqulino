@@ -70,7 +70,8 @@ export interface ValueReferenceDescription {
 }
 
 /**
- * Can be used to denote a column of a row.
+ * Can be used to denote a column of a row. This description is completly
+ * agnostic of the query it references.
  */
 export interface ColumnReferenceDescription extends ValueReferenceDescription {
     type : "column"
