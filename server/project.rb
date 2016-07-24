@@ -300,6 +300,13 @@ class Project
     return (to_return)
   end
 
+  # Checks whether a page with a certain name exists
+  #
+  # @param name The name of the searched page
+  def page_by_name?(name)
+    pages.any? {|page| page.name == name}
+  end
+
   # @return True, if this project has an index page
   def index_page?
     whole_description.key?('indexPageId')

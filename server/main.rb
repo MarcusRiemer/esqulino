@@ -80,11 +80,14 @@ class ScratchSqlApp < Sinatra::Base
 
   # Ensures the @page instance variable, should be called before
   # actual request handling happens.
-  def request_prepare_page(page_name_or_id)
+  #
+  # @param page_name_or_id [string] Name or ID of the page
+  # @param index_valid [boolean] Use index page on empty name or ID
+  def request_prepare_page(page_name_or_id, index_valid)
     # Distinguish between index page, page names and ids
     if page_name_or_id.nil? || page_name_or_id.empty? then
-      # Is there a matching index page?
-      if @project.index_page? then
+      # Is there a matching index page and should we use it?
+      if index_valid and @project.index_page? then
         # Yes, we use that
         @page = @project.index_page
       else
@@ -114,13 +117,13 @@ class ScratchSqlApp < Sinatra::Base
 
   # Ensure that routes with pages do have the page available.
   before '/api/project/:id/page/?:page_id?/?*' do
-    request_prepare_page params['page_id']
+    request_prepare_page(params['page_id'], false)
   end
 
   # Ensure that viewing pages have all resources available
   before '/view/:project_id/?:page_name_or_id?' do
     request_prepare_project params['project_id']
-    request_prepare_page params['page_name_or_id']
+    request_prepare_page(params['page_name_or_id'], true)
   end
 
   # React on esqulino errors
@@ -262,7 +265,7 @@ class ScratchSqlApp < Sinatra::Base
   subdomain do   
     get '/:page_name_or_id?' do
       request_prepare_project subdomain
-      request_prepare_page params['page_name_or_id']
+      request_prepare_page(params['page_name_or_id'], true)
 
       return @page.render({})
     end
