@@ -39,7 +39,7 @@
                 "name": "Personen",
                 "queryId": "86e70348-0e24-4c08-9d13-d2dd88c13faa"
               },
-              "columns" : []
+              "columns": []
             }
           ]
         }
@@ -61,7 +61,7 @@
                 "queryId": "b0c224ac-efd2-4f46-bec0-b7bca7058a82",
                 "name": "Ereignisse"
               },
-              "columns" : []
+              "columns": []
             }
           ]
         }
