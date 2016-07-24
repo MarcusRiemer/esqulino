@@ -1,12 +1,12 @@
 <div class="card-block">
   <!-- Query Selection -->
   <h5>Benutzte Abfrage</h5>
-  <select [(ngModel)]="referencedString"
+  <select [(ngModel)]="referencedQueryName"
           id="table-selected-query"
           class="form-control">
     <option *ngFor="let avail of availableQueries;"
-            [value]="buildReferenceString(avail)">
-      {{avail.ref.name}} ({{ avail.query.name }})
+            [value]="avail.name">
+      {{avail.name}} ({{ avail.query.name }})
     </option>
   </select>
 

@@ -31,15 +31,15 @@
     </div>
   </div>
   <ul class="list-group list-group-flush">
-    <li *ngFor="let used of usedQueries; trackBy: trackUsedQuery"
+    <li *ngFor="let used of referencedQueries"
         class="list-group-item">
       <div class="input-group">
-        <input [(ngModel)]="used.ref.name"
-               name="ref-query-{{used.ref.name}}"
+        <input [(ngModel)]="used.name"
+               name="ref-query-{{used.name}}"
                class="form-control"
                type="text">
         <span class="input-group-btn">
-          <button (click)="page.removeQueryReference(used.ref)"
+          <button (click)="page.removeQueryReference(used)"
                   class="btn btn-warning pull-right">
             <span class="fa fa-trash"></span>
           </button>

@@ -2,10 +2,9 @@ import {Subject}                from 'rxjs/Subject'
 
 import {Injectable}             from '@angular/core'
 
-import {ReferencedQuery}        from '../../shared/page/index'
 import {
-    Column, Row, RowDescription, WidgetDescription, Widget,
-    ValueReferenceDescription, ColumnReferenceDescription
+    Column, Row, RowDescription, WidgetDescription, Widget, 
+    QueryReferenceDescription, ValueReferenceDescription, ColumnReferenceDescription
 } from '../../shared/page/widgets/index'
 
 /**
@@ -51,7 +50,7 @@ export interface PageDragEvent {
     origin : OriginFlag
     callbacks? : DropCallbacks
     row? : RowDescription
-    queryRef? : ReferencedQuery
+    queryRef? : QueryReferenceDescription
     widget? : WidgetDescription
 }
 
@@ -69,7 +68,8 @@ export class DragService {
      *
      * @param scope The scope that the dragged item matches.
      */
-    private dragStart(evt : DragEvent, pageEvt : PageDragEvent) {
+    private dragStart(evt : DragEvent,
+                      pageEvt : PageDragEvent) {
         // There can only be a single drag event at once
         if (this._currentDrag) {
             throw new Error ("Attempted to start a second drag");
@@ -118,7 +118,10 @@ export class DragService {
      * @param rowDesc How does the dragged row look like?
      * @param callbacks Which events could be fired?
      */
-    startRowDrag(evt : DragEvent, origin : OriginFlag, rowDesc : RowDescription, callbacks? : DropCallbacks) {
+    startRowDrag(evt : DragEvent,
+                 origin : OriginFlag,
+                 rowDesc : RowDescription,
+                 callbacks? : DropCallbacks) {
         this.dragStart(evt, {
             origin : origin,
             row : rowDesc,
@@ -134,7 +137,10 @@ export class DragService {
      * @param rowDesc Which query should be referenced?
      * @param callbacks Which events could be fired?
      */
-    startQueryRefDrag(evt : DragEvent, origin : OriginFlag, queryRef : ReferencedQuery, callbacks? : DropCallbacks) {
+    startQueryRefDrag(evt : DragEvent,
+                      origin : OriginFlag,
+                      queryRef : QueryReferenceDescription,
+                      callbacks? : DropCallbacks) {
         this.dragStart(evt, {
             origin : origin,
             queryRef : queryRef,
@@ -142,7 +148,10 @@ export class DragService {
         });
     }
 
-    startWidgetDrag(evt : DragEvent, origin : OriginFlag, widget : WidgetDescription, callbacks? : DropCallbacks) {
+    startWidgetDrag(evt : DragEvent,
+                    origin : OriginFlag,
+                    widget : WidgetDescription,
+                    callbacks? : DropCallbacks) {
         this.dragStart(evt, {
             origin : origin,
             widget : widget,

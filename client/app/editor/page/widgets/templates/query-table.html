@@ -1,11 +1,11 @@
 <div (click)="startEditing()"
      class="widget-preview">
   <h5>Abfrage:
-    <span (dragover)="onDragOver($event)"
-          (drop)="onDrop($event)"
+    <span (dragover)="onQueryDragOver($event)"
+          (drop)="onQueryDrop($event)"
           class="block-container block">
       <span class="table">
-        {{ query?.name }}
+        {{ referenceName }}
       </span>
     </span>
   </h5>

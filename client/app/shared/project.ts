@@ -2,7 +2,7 @@ import {Schema}                  from './schema'
 import {Query, Model, loadQuery} from './query'
 import {ProjectDescription}      from './project.description'
 
-import {Page, ReferencedQuery}   from './page/page'
+import {Page}                    from './page/page'
 
 export {ProjectDescription}
 

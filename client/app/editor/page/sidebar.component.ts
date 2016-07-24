@@ -3,7 +3,7 @@ import {ActivatedRoute, Router}         from '@angular/router'
 
 import {Query}                          from '../../shared/query'
 import {
-    Page, ReferencedQuery, AvailableQuery
+    Page, QueryReference
 } from '../../shared/page/index'
 import {
     Heading, Row, Paragraph, QueryTable
@@ -154,26 +154,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
      * Informs the drag service about a started drag operation for a
      * query reference
      */
-    startReferencedQueryDrag(evt : DragEvent, ref : AvailableQuery) {
-        this._dragService.startQueryRefDrag(evt, "sidebar", {
-            queryId : ref.query.id,
-            name : ref.ref.name
-        });
-    }
-
-    /**
-     *
-     */
-    queryTrackBy(index : number, avail: AvailableQuery) {
-        return(`${avail.ref.name}.{avail.query.id}`);
+    startReferencedQueryDrag(evt : DragEvent, ref : QueryReference) {
+        this._dragService.startQueryRefDrag(evt, "sidebar", ref.toModel());
     }
 
     /**
      * @return All queries that are actually used on this page.
      */
-    get usedQueries() : AvailableQuery[] {
+    get referencedQueries() : QueryReference[] {
         if (this._page) {
-            return (this._page.getAvailableQueries());
+            return (this._page.referencedQueries);
         } else {
             return ([]);
         }

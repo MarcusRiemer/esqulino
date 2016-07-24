@@ -51,12 +51,12 @@
 
 <div class="card-block">
   <div class="block-container block">
-    <div *ngFor="let used of usedQueries; trackBy: queryTrackBy;"
+    <div *ngFor="let used of referencedQueries;"
          (dragstart)="startReferencedQueryDrag($event, used)"
          [title]="used.query.name"
          draggable="true"
          class="table">
-      {{ used.ref.name }}
+      {{ used.name }}
     </div>
   </div>
 </div>
