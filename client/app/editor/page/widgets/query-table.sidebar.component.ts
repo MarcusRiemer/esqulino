@@ -2,7 +2,7 @@ import {Component, Inject, Optional}        from '@angular/core'
 
 import {QuerySelect}                        from '../../../shared/query'
 import {
-    Page, ReferencedQuery, AvailableQuery
+    Page, QueryReference
 } from '../../../shared/page/index'
 import {QueryTable}                         from '../../../shared/page/widgets/index'
 
@@ -25,53 +25,21 @@ import {QueryTableComponent}                from './query-table.component'
 export class QueryTableSidebarComponent {
 
     private _component : QueryTableComponent;
-
-    private _project : Project;
     
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : QueryTableComponent,
-                projectService : ProjectService) {
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : QueryTableComponent) {
         this._component = com;
         
         if (!this._component.page) {
             throw new Error(`QueryTableSidebarComponent has no access to page`);
         }
-
-        projectService.activeProject.subscribe(project => {
-            this._project = project;
-        });
     }
 
-    /**
-     * As the DOM only saves & compares string values, we need a unique
-     * and reversible string-representation of a referenced query.
-     */
-    buildReferenceString(value : AvailableQuery) : string {
-        return (JSON.stringify({
-            name : value.ref.name,
-            queryId : value.query.id
-        }));
+    get referencedQueryName() {
+        return (this._component.referenceName);
     }
 
-    /**
-     * @return A JSON representation of the query reference
-     */
-    get referencedString() : string {
-        return (JSON.stringify(this.referencedQuery));
-    }
-
-    /**
-     * @param newValue A JSON representation of the query reference
-     */
-    set referencedString(newValue : string) {
-        this.referencedQuery = JSON.parse(newValue);
-    }
-
-    get referencedQuery() {
-        return (this.model.queryReference);
-    }
-
-    set referencedQuery(newId : ReferencedQuery) {
-        this._component.setQuery(newId);
+    set referencedQueryName(name : string) {
+        this._component.referenceName = name;
     }
 
     get model() {
@@ -82,8 +50,8 @@ export class QueryTableSidebarComponent {
      * @return The names of the columns that are currently available to render.
      */
     get availableColumns() {
-        if (this._project && this.referencedQuery && this.referencedQuery.queryId) {
-            const query = this._project.getQueryById(this.referencedQuery.queryId) as QuerySelect;
+        if (this._component.queryReference) {
+            const query = this._component.queryReference.query as QuerySelect;
             const columns = query.select.actualColums
             return (columns);
             
@@ -95,9 +63,9 @@ export class QueryTableSidebarComponent {
     /**
      * All queries that are actually in use on this page.
      */
-    get availableQueries() : AvailableQuery[] {
-        if (this._project) {
-            return (this._component.page.getAvailableQueries());
+    get availableQueries() {
+        if (this._component.page) {
+            return (this._component.page.referencedQueries);
         } else {
             return ([]);
         }

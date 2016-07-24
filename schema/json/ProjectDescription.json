@@ -430,8 +430,8 @@
                     "description": "IDs of queries that are referenced in this page. Only\n\nthese queries provide additional DB information that can\n\nbe used on this page.",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/ReferencedQuery",
-                        "description": "Referenced queries may (optionally) accompanied by a human-readable\n\nname. This is required if the same query is going to be used\n\nmultiple times on a single page."
+                        "$ref": "#/definitions/QueryReferenceDescription",
+                        "description": "Referenced queries are always accompanied by a human-readable\n\nname. This is required if the same query is going to be used\n\nmultiple times on a single page."
                     }
                 }
             },
@@ -450,9 +450,15 @@
             },
             "additionalProperties": false
         },
-        "ReferencedQuery": {
+        "QueryReferenceDescription": {
             "type": "object",
             "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "query"
+                    ]
+                },
                 "queryId": {
                     "type": "string"
                 },

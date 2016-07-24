@@ -1,7 +1,7 @@
 import {Component, Input, OnInit}       from '@angular/core'
 
 import {
-    Page, AvailableQuery, ReferencedQuery
+    Page, QueryReference, QueryReferenceDescription
 } from '../../shared/page/index'
 
 import {Project}                        from '../project.service'
@@ -28,17 +28,12 @@ export class PageDataComponent implements OnInit {
      * The "reference a new query" control uses this as
      * backing Data. Initially this is an empty reference.
      */
-    toReference : ReferencedQuery = {
+    toReference : QueryReferenceDescription = {
+        type : "query",
         name : undefined,
         queryId : undefined
     };
 
-    /**
-     * Caching the used queries as they are dynamically instanciated
-     * which doesn't fly well with angular.
-     */
-    private _usedQueries : AvailableQuery[];
-    
     /**
      * Occurs after databinding and catches some common errors.
      */
@@ -65,15 +60,8 @@ export class PageDataComponent implements OnInit {
     /**
      * @return Queries that are referenced by this page
      */
-    get usedQueries() {
-        return (this.page.getAvailableQueries());
-    }
-
-    /**
-     * Used queries are tracked by the reference to the 
-     */
-    trackUsedQuery(index : number, avail : AvailableQuery) {
-        return (avail.ref);
+    get referencedQueries() {
+        return (this.page.referencedQueries);
     }
 
     /**
@@ -81,22 +69,14 @@ export class PageDataComponent implements OnInit {
      * the name is actually available and prompt for a new name in case
      * of a name collision.
      */
-    onAddQueryReference(ref : ReferencedQuery) {
-        console.log(ref);
-        const query = this.project.getQueryById(ref.queryId);
-
-        // Build a new reference. Otherwise the `ReferencedQuery` instance
-        // passed to the page will be linked to this editor.
-        const newRef : ReferencedQuery = {
-            name: query.name,
-            queryId : ref.queryId
-        }
-
+    onAddQueryReference(ref : QueryReferenceDescription) {
+        ref.name = this.project.getQueryById(ref.queryId).name;
+        
         // Ensure the name is unique.
-        while (this.page.usesQueryName(newRef.name)) {
-            newRef.name = prompt("Name schon benutzt! Bitte einen neuen Namen eingeben.", newRef.name);
+        while (this.page.usesQueryName(ref.name)) {
+            ref.name = prompt("Name schon benutzt! Bitte einen neuen Namen eingeben.", ref.name);
         }
         
-        this.page.addQueryReference(newRef);
+        this.page.addQueryReference(ref);
     }
 }

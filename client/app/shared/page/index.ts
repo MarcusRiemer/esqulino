@@ -1,10 +1,10 @@
 import {
-    Page, PageDescription, Row, Widget, AvailableQuery,
-    ReferencedQuery, ValueReferenceDescription, ColumnReferenceDescription
+    Page, PageDescription, Row, Widget, QueryReference,
+    ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription
 } from './page'
 import {Renderer} from './renderer'
 
 export {
-    Page, PageDescription, Renderer, Row, Widget, AvailableQuery,
-    ReferencedQuery, ValueReferenceDescription, ColumnReferenceDescription
+    Page, PageDescription, Renderer, Row, Widget, QueryReference,
+    QueryReferenceDescription, ValueReferenceDescription, ColumnReferenceDescription
 }

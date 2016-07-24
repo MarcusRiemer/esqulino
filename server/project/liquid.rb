@@ -15,7 +15,7 @@ class LiquidFilesystem
 
   # @return The path were global partials are stored.
   def global_partials_path
-    File.absolute_path(File.join(@project.folder, "..", "_partials"))
+    File.absolute_path(File.join(@project.folder, "..", "..", "_partials"))
   end
 
   # @return The path were project partials are stored.
@@ -35,15 +35,17 @@ class LiquidFilesystem
     if File.extname(template_path) != ".liquid"
       template_path += ".liquid"
     end
+
+    search_path = [project_partials_path, global_partials_path]
     
     # Check all possible paths in the following order
     # Project -> Plugin -> Global
-    to_return = [project_partials_path, global_partials_path]
+    to_return = search_path
                 .map { |candidate| File.join(candidate, template_path) }
                 .find { |full_path| File.exists? full_path }
 
     # Missing templates are a serious matter
-    raise EsqulinoError.new("Template not found") if to_return.nil?
+    raise EsqulinoError.new("Template \"#{template_path}\" not found in #{search_path.inspect}") if to_return.nil?
     
     return (to_return)
   end

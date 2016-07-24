@@ -3,25 +3,20 @@ import {ProjectResource}                      from '../resource'
 import {Query}                                from '../query'
 
 import {
-    PageDescription, ReferencedQuery, WidgetDescription,
+    PageDescription, QueryReferenceDescription, WidgetDescription,
     ValueReferenceDescription, ColumnReferenceDescription
 } from './page.description'
 import {Row, RowDescription, Widget}          from './widgets/index'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
+import {
+    ValueReference, ColumnReference, QueryReference
+} from './value-reference'
 
 export {
     PageDescription, Row, Widget,
-    ValueReferenceDescription, ColumnReferenceDescription, ReferencedQuery
-}
-
-/**
- * A query reference that is ready to be used. This class
- * "glues together" the actual reference inside the page
- * and the actual query that reference points to.
- */
-export class AvailableQuery {
-    ref : ReferencedQuery
-    query : Query
+    ValueReferenceDescription, ColumnReferenceDescription,
+    QueryReferenceDescription,
+    ValueReference, ColumnReference, QueryReference
 }
 
 /**
@@ -29,7 +24,7 @@ export class AvailableQuery {
  */
 export class Page extends ProjectResource {
     private _rows : Row[];
-    private _referencedQueries : ReferencedQuery[]
+    private _referencedQueries : QueryReference[]
     private _renderer : Renderer;
     
     constructor(desc : PageDescription, project : Project = undefined) {
@@ -42,7 +37,7 @@ export class Page extends ProjectResource {
         this._rows = desc.rows.map(rowDesc => new Row(rowDesc));
 
         // Making a copy of those references
-        this._referencedQueries = desc.referencedQueries.splice(0);
+        this._referencedQueries = desc.referencedQueries.map(refDesc => new QueryReference(project, this, refDesc));
     }
 
     /**
@@ -184,13 +179,13 @@ export class Page extends ProjectResource {
      *
      * @param ref The query reference to add.
      */
-    addQueryReference(ref : ReferencedQuery) {
+    addQueryReference(ref : QueryReferenceDescription) {
         // Ensure this reference name isn't in use already
         if (this.usesQueryName(ref.name)) {
             throw new Error(`Name "${ref.name}" is already in use`);
         }
 
-        this._referencedQueries.push(ref);
+        this._referencedQueries.push(new QueryReference(this.project, this, ref));
         this.markDirty();
     }
 
@@ -201,7 +196,7 @@ export class Page extends ProjectResource {
      *
      * @param ref The query reference to remove.
      */
-    removeQueryReference(ref : ReferencedQuery) {
+    removeQueryReference(ref : QueryReference) {
         const index = this._referencedQueries.indexOf(ref);
 
         if (index >= 0) {
@@ -218,6 +213,10 @@ export class Page extends ProjectResource {
         return (this._referencedQueries.some(q => q.name == name));
     }
 
+    getQueryReferenceByName(name : string) {
+        return (this._referencedQueries.find(q => q.name == name));
+    }
+
     /**
      * @return Ids of all queries that are referenced by this page.
      */
@@ -228,20 +227,8 @@ export class Page extends ProjectResource {
     /**
      * @return All referenced queries alongside their name
      */
-    get referencedQueries() : ReferencedQuery[] {
+    get referencedQueries() : QueryReference[] {
         return (this._referencedQueries);
-    }
-
-    /**
-     * @return All queries (and their names) that are available on the given page.
-     */
-    getAvailableQueries() : AvailableQuery[] {
-        return (this._referencedQueries.map(q => {
-            return ({
-                ref : q,
-                query : this.project.getQueryById(q.queryId)
-            })
-        }));
     }
 
     /**
@@ -258,7 +245,7 @@ export class Page extends ProjectResource {
             id : this.id,
             name : this.name,
             rows : this._rows.map(r => r.toModel()),
-            referencedQueries : this._referencedQueries
+            referencedQueries : this._referencedQueries.map(r => r.toModel())
         });
     }
 }
