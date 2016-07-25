@@ -1,5 +1,6 @@
 import {Widget, WidgetDescription}         from './widget'
 
+import {Button, ButtonDescription}         from './button'
 import {Paragraph, ParagraphDescription}   from './paragraph'
 import {Heading, HeadingDescription}       from './heading'
 import {QueryTable, QueryTableDescription} from './query-table'
@@ -10,6 +11,8 @@ import {Input, InputDescription}           from './input'
  */
 export function loadWidget(desc : WidgetDescription) : Widget {
     switch (desc.type) {
+    case "button":
+        return new Button(desc as ButtonDescription);
     case "paragraph":
         return new Paragraph(desc as ParagraphDescription);
     case "heading":

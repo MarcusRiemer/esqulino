@@ -34,6 +34,10 @@
               "caption": "Freizulassendes Pokemon",
               "description": "Die ID des Pokemons, das freigelassen werden soll.",
               "inputType": "number"
+            },
+            {
+              "type": "button",
+              "text": "<strong>Jetzt Freilassen</strong>"
             }
           ]
         }

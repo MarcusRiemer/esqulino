@@ -6,7 +6,7 @@ import {
     Page, QueryReference
 } from '../../shared/page/index'
 import {
-    Heading, Row, Paragraph, QueryTable, Input
+    Heading, Row, Paragraph, QueryTable, Input, Button
 } from '../../shared/page/widgets/index'
 
 import {
@@ -155,6 +155,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
      */
     startInputDrag(evt : DragEvent) {
         this._dragService.startWidgetDrag(evt, "sidebar", Input.emptyDescription);
+    }
+
+    /**
+     * Starts a drag action for a button element
+     */
+    startButtonDrag(evt : DragEvent) {
+        this._dragService.startWidgetDrag(evt, "sidebar", Button.emptyDescription);
     }
 
     /**

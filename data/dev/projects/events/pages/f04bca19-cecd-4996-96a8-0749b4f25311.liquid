@@ -9,28 +9,30 @@
 </head>
 <body>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <h1>Historische Personen und Ereignisse</h1>
-        <p>Auf dieser Seite lassen sich die zeitlichen Zusammenhänge von historischen Persönlichkeiten und Ereignissen darstellen.</p>
+    <form>
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Historische Personen und Ereignisse</h1>
+          <p>Auf dieser Seite lassen sich die zeitlichen Zusammenhänge von historischen Persönlichkeiten und Ereignissen darstellen.</p>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <h2>Alle Personen</h2>
-        <p>Diese Personen sind in der Datenbank hinterlegt.</p>{% include "query_table" table: query.p_alle, columns: "nachname,vorname,geb_jahr,tod_jahr" %}
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Alle Personen</h2>
+          <p>Diese Personen sind in der Datenbank hinterlegt.</p>{% include "query_table" table: query.p_alle, columns: "nachname,vorname,geb_jahr,tod_jahr" %}
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <h2>Alle Ereignisse</h2>{% include "query_table" table: query.e_alle, columns: "bezeichnung,beginn_jahr,ende_jahr" %}
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Alle Ereignisse</h2>{% include "query_table" table: query.e_alle, columns: "bezeichnung,beginn_jahr,ende_jahr" %}
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <h2>Erlebte Ereignisse</h2>{% include "query_table" table: query.erlebt, columns: "nachname,bezeichnung,beginn_jahr,ende_jahr" %}
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Erlebte Ereignisse</h2>{% include "query_table" table: query.erlebt, columns: "nachname,bezeichnung,beginn_jahr,ende_jahr" %}
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </body>
 </html>
