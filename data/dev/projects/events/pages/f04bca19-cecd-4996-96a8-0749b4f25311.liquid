@@ -18,12 +18,17 @@
     <div class="row">
       <div class="col-md-12">
         <h2>Alle Personen</h2>
-        <p>Diese Personen sind in der Datenbank hinterlegt.</p>{% include "query_table" table: query.Personen %}
+        <p>Diese Personen sind in der Datenbank hinterlegt.</p>{% include "query_table" table: query.p_alle %}
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <h2>Alle Ereignisse</h2>{% include "query_table" table: query.Ereignisse %}
+        <h2>Alle Ereignisse</h2>{% include "query_table" table: query.e_alle %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Erlebte Ereignisse</h1>{% include "query_table" table: query.erlebt %}
       </div>
     </div>
   </div>
