@@ -1,5 +1,7 @@
-import {TableDescription}               from '../schema.description'
-import {Model, Query}                   from '../query'
+import {TableDescription}               from '../../schema.description'
+
+import * as Model                       from '../description'
+import {Query}                          from '../base'
 
 import { Expression, loadExpression }   from './expression'
 

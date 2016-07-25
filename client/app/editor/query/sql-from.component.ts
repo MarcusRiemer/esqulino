@@ -1,10 +1,9 @@
 import {Component, Input}               from '@angular/core'
 
+import {QueryFrom, SyntaxTree}          from '../../shared/query'
+
 import {DragService, SqlDragEvent}      from './drag.service'
 import {ExpressionComponent}            from './sql-expr.component'
-
-import {QueryFrom}                      from '../../shared/query'
-import {Join}                           from '../../shared/syntaxtree/from'
 
 @Component({
     selector : 'sql-from',
@@ -17,7 +16,7 @@ export class FromComponent {
 
     }
 
-    onJoinDragStart(join : Join, evt : DragEvent) {
+    onJoinDragStart(join : SyntaxTree.Join, evt : DragEvent) {
         this.dragService.startTableDrag(join.toModel(), "from", evt, join);
     }
 

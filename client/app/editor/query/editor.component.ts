@@ -3,13 +3,12 @@ import {Router, ActivatedRoute}         from '@angular/router'
 
 import {Observable}                     from 'rxjs/Observable'
 
-import {Query, Model, SyntaxTree}       from '../../shared/query'
 import {
+    Query, Model, SyntaxTree,
     SelectQueryResult, QueryRunErrorDescription
-} from '../../shared/query.result'
+} from '../../shared/query'
 
-import {Project}                        from '../project'
-import {ProjectService}                 from '../project.service'
+import {ProjectService, Project}        from '../project.service'
 import {PreferencesService}             from '../preferences.service'
 import {ToolbarService}                 from '../toolbar.service'
 import {SidebarService}                 from '../sidebar.service'

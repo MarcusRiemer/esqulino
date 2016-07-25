@@ -40,7 +40,7 @@ dist-compile: msg-pre-compile $(DIST_JS_FILES)
 # Actually compile Typescript files. This always happens in a single
 # batch, never individually per file
 $(DIST_JS_FILES) : $(TS_FILES) tsconfig.json
-	$(TSC_BIN) --pretty --project .
+	$(TSC_BIN) --project .
 
 # Meta target: "Compile" vendor files
 dist-vendor: msg-pre-vendor $(DIST_VENDOR_FILES)

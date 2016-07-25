@@ -2,15 +2,14 @@ import {Component, Input, ChangeDetectionStrategy} from '@angular/core'
 
 import {ExpressionComponent}            from './sql-expr.component'
 
-import {Expression}                     from '../../shared/query.syntaxtree'
 import {ColumnDescription}              from '../../shared/schema.description'
-import {QueryInsert}                    from '../../shared/query'
+import {QueryInsert, SyntaxTree}        from '../../shared/query'
 
 /**
  * A column that is actively attempting to insert something
  */
 interface InsertingColumn {
-    expr? : Expression
+    expr? : SyntaxTree.Expression
     column : ColumnDescription
     index : number
 }

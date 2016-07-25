@@ -2,10 +2,16 @@ import {Subject}                from 'rxjs/Subject'
 
 import {Injectable}             from '@angular/core'
 
-import {ReferencedQuery}        from '../../shared/page/index'
 import {
-    Column, Row, RowDescription, WidgetDescription
+    Column, Row, RowDescription, WidgetDescription, Widget, 
+    QueryReferenceDescription, ValueReferenceDescription, ColumnReferenceDescription
 } from '../../shared/page/widgets/index'
+
+export interface DragColumnDescription {
+    columnName : string,
+
+    queryName : string
+}
 
 /**
  * Hints about the origin of a drag operation
@@ -22,14 +28,19 @@ export interface DropCallbacks {
     onRemove? : () => void
 
     /**
-     * Called when dropped on an existing row
+     * Called when dropped on an existing row of a page
      */
     onRow? : (r : Row) => void
 
     /**
-     * Called when dropped on an existing column
+     * Called when dropped on an existing column of a page
      */
     onColumn? : (c : Column) => void
+
+    /**
+     * Called when dropped on a widget
+     */
+    onWidget? : (w : Widget) => void
 
     /**
      * Called when dragging has stopped
@@ -45,7 +56,8 @@ export interface PageDragEvent {
     origin : OriginFlag
     callbacks? : DropCallbacks
     row? : RowDescription
-    queryRef? : ReferencedQuery
+    queryRef? : QueryReferenceDescription
+    columnRef? : DragColumnDescription
     widget? : WidgetDescription
 }
 
@@ -63,7 +75,8 @@ export class DragService {
      *
      * @param scope The scope that the dragged item matches.
      */
-    private dragStart(evt : DragEvent, pageEvt : PageDragEvent) {
+    private dragStart(evt : DragEvent,
+                      pageEvt : PageDragEvent) {
         // There can only be a single drag event at once
         if (this._currentDrag) {
             throw new Error ("Attempted to start a second drag");
@@ -112,7 +125,10 @@ export class DragService {
      * @param rowDesc How does the dragged row look like?
      * @param callbacks Which events could be fired?
      */
-    startRowDrag(evt : DragEvent, origin : OriginFlag, rowDesc : RowDescription, callbacks? : DropCallbacks) {
+    startRowDrag(evt : DragEvent,
+                 origin : OriginFlag,
+                 rowDesc : RowDescription,
+                 callbacks? : DropCallbacks) {
         this.dragStart(evt, {
             origin : origin,
             row : rowDesc,
@@ -128,7 +144,10 @@ export class DragService {
      * @param rowDesc Which query should be referenced?
      * @param callbacks Which events could be fired?
      */
-    startQueryRefDrag(evt : DragEvent, origin : OriginFlag, queryRef : ReferencedQuery, callbacks? : DropCallbacks) {
+    startQueryRefDrag(evt : DragEvent,
+                      origin : OriginFlag,
+                      queryRef : QueryReferenceDescription,
+                      callbacks? : DropCallbacks) {
         this.dragStart(evt, {
             origin : origin,
             queryRef : queryRef,
@@ -136,7 +155,37 @@ export class DragService {
         });
     }
 
-    startWidgetDrag(evt : DragEvent, origin : OriginFlag, widget : WidgetDescription, callbacks? : DropCallbacks) {
+    /**
+     * Starts dragging a reference to a column.
+     *
+     * @param evt The DragEvent that is provided by the browser?
+     * @param origin Where did this drag start?
+     * @param rowDesc Which query should be referenced?
+     * @param callbacks Which events could be fired?
+     */
+    startColumnRefDrag(evt : DragEvent,
+                       origin : OriginFlag,
+                       columnRef : DragColumnDescription,
+                       callbacks? : DropCallbacks) {
+        this.dragStart(evt, {
+            origin : origin,
+            columnRef : columnRef,
+            callbacks : callbacks
+        });
+    }
+
+    /**
+     * Starts dragging a widget that could be constructed when dropped.
+     *
+     * @param evt The DragEvent that is provided by the browser?
+     * @param origin Where did this drag start?
+     * @param widget The widget to drag
+     * @param callbacks Which events could be fired?
+     */
+    startWidgetDrag(evt : DragEvent,
+                    origin : OriginFlag,
+                    widget : WidgetDescription,
+                    callbacks? : DropCallbacks) {
         this.dragStart(evt, {
             origin : origin,
             widget : widget,

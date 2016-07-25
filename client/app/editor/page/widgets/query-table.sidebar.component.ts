@@ -1,21 +1,19 @@
 import {Component, Inject, Optional}        from '@angular/core'
 
 import {QuerySelect}                        from '../../../shared/query'
-import {Page, ReferencedQuery}              from '../../../shared/page/index'
+import {
+    Page, QueryReference
+} from '../../../shared/page/index'
 import {QueryTable}                         from '../../../shared/page/widgets/index'
 
-import {ProjectService, Project}            from '../../project.service'
+import {
+    ProjectService, Project
+} from '../../project.service'
 import {
     SIDEBAR_MODEL_TOKEN
 } from '../../editor.token'
 
 import {QueryTableComponent}                from './query-table.component'
-
-interface AvailableQuery {
-    name : string
-    queryId: string
-    queryName : string
-}
 
 /**
  * The sidebar-editor for a QueryTable. This is currently in a quite
@@ -27,68 +25,47 @@ interface AvailableQuery {
 export class QueryTableSidebarComponent {
 
     private _component : QueryTableComponent;
-
-    private _project : Project;
     
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : QueryTableComponent,
-                projectService : ProjectService) {
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : QueryTableComponent) {
         this._component = com;
         
         if (!this._component.page) {
             throw new Error(`QueryTableSidebarComponent has no access to page`);
         }
-
-        projectService.activeProject.subscribe(project => {
-            this._project = project;
-        });
     }
 
-    /**
-     * As the DOM only saves & compares string values, we need a unique
-     * and reversible string-representation of a referenced query.
-     */
-    buildReferenceString(value : AvailableQuery) : string {
-        return (JSON.stringify({
-            name : value.name,
-            queryId : value.queryId
-        }));
+    get referencedQueryName() {
+        return (this._component.referenceName);
     }
 
-    /**
-     * @return A JSON representation of the query reference
-     */
-    get referencedString() : string {
-        return (JSON.stringify(this.referencedQuery));
-    }
-
-    /**
-     * @param newValue A JSON representation of the query reference
-     */
-    set referencedString(newValue : string) {
-        this.referencedQuery = JSON.parse(newValue);
-    }
-
-    get referencedQuery() {
-        return (this.model.queryReference);
-    }
-
-    set referencedQuery(newId : ReferencedQuery) {
-        this._component.setQuery(newId);
+    set referencedQueryName(name : string) {
+        this._component.referenceName = name;
     }
 
     get model() {
         return (this._component.model);
     }
 
-    get availableQueries() : AvailableQuery[] {
-        if (this._project) {
-        return (this._component.page.referencedQueries.map(ref => {
-            return ({
-                name : ref.name,
-                queryId: ref.queryId,
-                queryName : this._project.getQueryById(ref.queryId).name
-            })
-        }));
+    /**
+     * @return The names of the columns that are currently available to render.
+     */
+    get availableColumns() {
+        if (this._component.queryReference) {
+            const query = this._component.queryReference.query as QuerySelect;
+            const columns = query.select.actualColums
+            return (columns);
+            
+        } else {
+            return ([]);
+        }
+    }
+
+    /**
+     * All queries that are actually in use on this page.
+     */
+    get availableQueries() {
+        if (this._component.page) {
+            return (this._component.page.referencedQueries);
         } else {
             return ([]);
         }

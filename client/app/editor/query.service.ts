@@ -6,16 +6,13 @@ import {AsyncSubject}                            from 'rxjs/AsyncSubject'
 import {Observable}                              from 'rxjs/Observable'
 
 import {ServerApiService}                        from '../shared/serverapi.service'
-import {ProjectDescription}                      from '../shared/project.description'
 import {
     Model, loadQuery,
-    Query, QuerySelect, QueryDelete, QueryInsert
-} from '../shared/query'
-import {
+    Query, QuerySelect, QueryDelete, QueryInsert,
     SelectQueryResult, QueryRunErrorDescription
-} from '../shared/query.result'
+} from '../shared/query'
 
-import {Project}                                 from './project'
+import {Project, ProjectDescription}             from './project.service'
 
 /**
  * Storing a query on the server
@@ -178,7 +175,7 @@ export class QueryService {
                                    project : Project) {
         const url = this._server.getQueryUrl(project.id);
         
-        const query = loadQuery(project.schema, model);
+        const query = loadQuery(model, project.schema, project);
         let bodyJson : QueryUpdateRequestDescription = {
             model : model,
             sql : query.toSqlString()
@@ -196,7 +193,7 @@ export class QueryService {
             model.id = queryId.text();
 
             // Load the query and append it to the model
-            const newQuery = loadQuery(project.schema, model);
+            const newQuery = loadQuery(model, project.schema, project);
             project.addQuery(newQuery);
 
             // And inform the listener about the new query, as this

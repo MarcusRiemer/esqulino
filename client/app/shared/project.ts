@@ -1,8 +1,10 @@
-import {Schema}                  from '../shared/schema'
-import {Query, Model, loadQuery} from '../shared/query'
-import {ProjectDescription}      from '../shared/project.description'
+import {Schema}                  from './schema'
+import {Query, Model, loadQuery} from './query'
+import {ProjectDescription}      from './project.description'
 
-import {Page}                    from '../shared/page/page'
+import {Page}                    from './page/page'
+
+export {ProjectDescription}
 
 /**
  * A loaded project with editing capatabilities. This is were all
@@ -30,8 +32,8 @@ export class Project {
         this.schema = new Schema(json.schema);
 
         // Map all abstract queries to concrete query objects
-        this._queries = json.queries.map( val => loadQuery(this.schema, val) );
-        this._pages = json.pages.map( val => new Page(val) );
+        this._queries = json.queries.map( val => loadQuery(val, this.schema, this) );
+        this._pages = json.pages.map( val => new Page(val, this) );
     }
 
     /**
@@ -88,6 +90,20 @@ export class Project {
     }
 
     /**
+     * @return True, if a query with the given name is part of this project.
+     */
+    hasQueryByName(name : string) : boolean {
+        return (this._queries.some(query => query.name == name));
+    }
+    
+    /**
+     * @return True, if a query with the given id is part of this project.
+     */
+    hasQueryById(id : string) : boolean {
+        return (this._queries.some(query => query.id == id));
+    }
+
+    /**
      * Adds a new query to this project.
      *
      * @param query The query to add.
@@ -113,6 +129,13 @@ export class Project {
      */
     getPageById(id : string) : Page {
         return (this._pages.find(item => (item.id == id)));
+    }
+
+    /**
+     * @return True, if a page with this ID is part of this project.
+     */
+    hasPageById(id : string) : boolean {
+        return (this._pages.some(item => (item.id == id)));
     }
 
     /**

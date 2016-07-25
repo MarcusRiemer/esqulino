@@ -1,0 +1,50 @@
+<div class="card">
+  <div class="card-block">
+    <h4 class="card-title">
+      Daten
+    </h4>
+    <p class="card-text">
+      Hier kannst du sehen welche Daten auf dieser Seite zur Verfügung stehen. Nutze Bedienelemente wie Textfelder, verwende von dir geschriebene Abfragen, ergänze Routeninformationen oder lege Werte statisch fest.
+    </p>
+  </div>
+  <div class="card-block">
+    <h5 class="card-title">
+      Weitere Abfrage benutzen
+    </h5>
+    <div class="row">
+      <div class="col-sm-10">
+        <select [(ngModel)]="toReference.queryId"
+                id="reference-selected-query"
+                class="form-control">
+          <option *ngFor="let q of possibleQueries;"
+                  [value]="q.id">
+            {{q.name}}
+          </option>
+        </select>
+      </div>
+      <div class="col-sm-2">
+        <button (click)="onAddQueryReference(toReference)"
+                class="btn btn-primary btn-block">
+          Benutzen!
+        </button>
+      </div>
+    </div>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li *ngFor="let used of referencedQueries"
+        class="list-group-item">
+      <div class="input-group">
+        <input [(ngModel)]="used.name"
+               name="ref-query-{{used.name}}"
+               class="form-control"
+               type="text">
+        <span class="input-group-btn">
+          <button (click)="page.removeQueryReference(used)"
+                  class="btn btn-warning pull-right">
+            <span class="fa fa-trash"></span>
+          </button>
+        </span>
+      </div>
+    </li>
+  </ul>
+</div>

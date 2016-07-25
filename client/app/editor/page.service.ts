@@ -9,7 +9,7 @@ import {ServerApiService}                        from '../shared/serverapi.servi
 import {Page,PageDescription, Row}               from '../shared/page/index'
 
 import {QueryParamsDescription}                  from './query.service'
-import {Project}                                 from './project'
+import {Project}                                 from './project.service'
 
 export {Page}
 
@@ -99,7 +99,7 @@ export class PageService {
                     // is identical except for the id
                     const pageModel = page.toModel();
                     pageModel.id = pageId;
-                    const newPage = new Page(pageModel);
+                    const newPage = new Page(pageModel, project);
 
                     // Make it part of the project
                     project.addPage(newPage);
@@ -134,7 +134,7 @@ export class PageService {
             name : name,
             referencedQueries : [],
             rows : [Row.emptyDescription]
-        });
+        }, project);
 
         return (this.savePage(project, page));
     }

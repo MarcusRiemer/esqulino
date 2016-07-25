@@ -1,5 +1,5 @@
 import {
-    Query, QueryFrom, QueryWhere
+    Query, QueryFrom, QueryWhere, ResultColumn
 } from './base'
 
 import {
@@ -7,11 +7,12 @@ import {
 } from '../schema'
 import {
     ValidationResult, Validateable
-} from '../query.validation'
+} from './validation'
 
+import * as Model                       from './description'
+import * as SyntaxTree                  from './syntaxtree'
 
-import * as Model                       from '../query.model'
-import * as SyntaxTree                  from '../query.syntaxtree'
+export {ResultColumn}
 
 /**
  * A query that reads data, but never mutates anything.

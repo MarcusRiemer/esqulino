@@ -1,15 +1,22 @@
 <div class="card-block">
-  <h4>Tabelle</h4>
-  <label for="table-selected-query"
-         class="form-control-label">
-    <code>SELECT</code>-Abfrage
-  </label>
-  <select [(ngModel)]="referencedString"
+  <!-- Query Selection -->
+  <h5>Benutzte Abfrage</h5>
+  <select [(ngModel)]="referencedQueryName"
           id="table-selected-query"
           class="form-control">
-    <option *ngFor="let ref of availableQueries;"
-            [value]="buildReferenceString(ref)">
-      {{ref.name}} ({{ ref.queryName }})
+    <option *ngFor="let avail of availableQueries;"
+            [value]="avail.name">
+      {{avail.name}} ({{ avail.query.name }})
     </option>
   </select>
+
+  <!-- Column Selection -->
+  <h5>Mögliche Spalten</h5>
+  <div class="block-container block">
+    <div *ngFor="let column of availableColumns;"
+         class="column"
+         draggable="true">
+      {{ column.shortName }}
+    </div>
+  </div>
 </div>

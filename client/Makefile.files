@@ -4,30 +4,34 @@
 APP_DIR = $(addprefix $(CLIENT_DIR), app)
 
 SASS_FILES      = $(shell find $(APP_DIR) -not -path '*/\.*' -iname "*.scss")
-DIST_CSS_FILES  = $(abspath $(addprefix $(BUILD_DIR), app/css/style.css))
+DIST_CSS_FILES  = $(addprefix $(BUILD_DIR), app/css/style.css)
 
 HTML_FILES = $(shell find $(APP_DIR) -not -path '*/\.*' -iname "*.html") index.html test.html
-DIST_HTML_FILES = $(abspath $(addprefix $(BUILD_DIR), $(HTML_FILES)))
+DIST_HTML_FILES = $(addprefix $(BUILD_DIR), $(HTML_FILES))
 
-TS_FILES = $(shell find $(APP_DIR) -not -path '*/\.*' -iname "*.ts") 
-DIST_JS_FILES = $(abspath $(addprefix $(BUILD_DIR), $(TS_FILES:.ts=.js)))
+TS_FILES = $(shell find $(APP_DIR) -not -path '*/\.*' -iname "*.ts")
+DIST_JS_FILES = $(addprefix $(BUILD_DIR), $(TS_FILES:.ts=.js))
 
 VENDOR_FILES = $(shell find $(addprefix $(CLIENT_DIR), vendor) -type f)
-DIST_VENDOR_FILES = $(abspath $(addprefix $(BUILD_DIR), $(VENDOR_FILES)))
+DIST_VENDOR_FILES = $(addprefix $(BUILD_DIR), $(VENDOR_FILES))
 
 # The node files dependencies are painstakingly managed by hand
 # because we don't want to bloat the dist archive.
-NODE_FILES = $(addprefix $(CLIENT_DIR),\
-             systemjs.config.js \
-             node_modules/core-js/client/shim.min.js \
-			 node_modules/zone.js/dist/zone.js\
-             node_modules/reflect-metadata/Reflect.js \
-             node_modules/systemjs/dist/system.src.js \
-             $(shell find $(addprefix $(CLIENT_DIR), node_modules/rxjs) -iname "*.js*") \
-			 $(shell find $(addprefix $(CLIENT_DIR), node_modules/@angular) -iname "*.js*") \
-			 node_modules/jasmine-core/lib/jasmine-core/jasmine.js \
-             node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js \
-	         node_modules/jasmine-core/lib/jasmine-core/boot.js \
-             node_modules/jasmine-core/lib/jasmine-core/jasmine.css)
+PUBLISHED_NODE_FILES = $(addprefix $(CLIENT_DIR),\
+                       systemjs.config.js \
+                       node_modules/core-js/client/shim.min.js \
+                       node_modules/zone.js/dist/zone.js\
+                       node_modules/reflect-metadata/Reflect.js \
+                       node_modules/systemjs/dist/system.src.js \
+                       node_modules/jasmine-core/lib/jasmine-core/jasmine.js \
+                       node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js \
+                       node_modules/jasmine-core/lib/jasmine-core/boot.js \
+                       node_modules/jasmine-core/lib/jasmine-core/jasmine.css)
 
-DIST_NODE_FILES = $(abspath $(addprefix $(BUILD_DIR), $(NODE_FILES)))
+NODE_FILES = $(PUBLISHED_NODE_FILES) \
+             $(shell find $(addprefix $(CLIENT_DIR), node_modules/rxjs) -iname "*.js*") \
+             $(shell find $(addprefix $(CLIENT_DIR), node_modules/@angular) -iname "*.js*") \
+
+DIST_NODE_FILES = $(addprefix $(BUILD_DIR), $(NODE_FILES))
+
+DIST_PUBLISHED_NODE_FILES = $(addprefix $(BUILD_DIR), $(PUBLISHED_NODE_FILES))

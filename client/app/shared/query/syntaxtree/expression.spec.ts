@@ -1,12 +1,7 @@
-import {
-    Model, ValidationResult
-} from '../query'
-import {
-    ValidationErrors
-} from '../query.validation'
-import {
-    Schema
-} from '../schema'
+import {Schema}                                  from '../../schema'
+
+import {Model}                                   from '../base'
+import {ValidationErrors, ValidationResult}      from '../validation'
 
 import * as SyntaxTree from './expression'
 

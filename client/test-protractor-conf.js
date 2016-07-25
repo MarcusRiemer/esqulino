@@ -23,7 +23,7 @@ exports.config = {
     pageCreate : ['../dist/client/app/editor/page/create.e2e.js']
   },
   multiCapabilities: [{
-    'browserName': 'chrome'
+    'browserName': 'firefox'
   },/*{
     'browserName': 'chrome'
   }*/]

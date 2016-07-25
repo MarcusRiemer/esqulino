@@ -10,7 +10,7 @@ import {Page}                           from '../../shared/page/index'
 
 import {SidebarService}                 from '../sidebar.service'
 import {PageService}                    from '../page.service'
-import {Project}                        from '../project'
+import {Project}                        from '../project.service'
 
 /**
  * Previewing the rendered output from the server

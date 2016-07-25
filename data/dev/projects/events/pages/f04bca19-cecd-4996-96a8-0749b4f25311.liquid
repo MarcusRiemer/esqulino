@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Historische Personen und Ereignisse</h1>
+        <p>Auf dieser Seite lassen sich die zeitlichen Zusammenhänge von historischen Persönlichkeiten und Ereignissen darstellen.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Alle Personen</h2>
+        <p>Diese Personen sind in der Datenbank hinterlegt.</p>{% include "query_table" table: query.Personen %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Alle Ereignisse</h2>{% include "query_table" table: query.Ereignisse %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -4,7 +4,6 @@ import {DragService, SqlDragEvent}      from './drag.service'
 import {ExpressionComponent}            from './sql-expr.component'
 
 import {QuerySelect, Model, SyntaxTree} from '../../shared/query'
-import {NamedExpression}                from '../../shared/syntaxtree/select'
 
 @Component({
     selector : 'sql-select',
@@ -18,7 +17,7 @@ export class SelectComponent {
 
     }
 
-    onColumnDragStart(expr : NamedExpression, evt : DragEvent) {
+    onColumnDragStart(expr : SyntaxTree.NamedExpression, evt : DragEvent) {
         this.dragService.startExistingExpressionDrag("select", evt, expr.expr);
     }
 

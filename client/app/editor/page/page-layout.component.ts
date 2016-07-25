@@ -2,7 +2,7 @@ import {
     Component, Input, OnInit, ChangeDetectorRef
 } from '@angular/core'
 
-import {Page, ReferencedQuery}          from '../../shared/page/index'
+import {Page, QueryReference}           from '../../shared/page/index'
 import {Row, Widget}                    from '../../shared/page/widgets/index'
 
 import {SidebarService}                 from '../sidebar.service'

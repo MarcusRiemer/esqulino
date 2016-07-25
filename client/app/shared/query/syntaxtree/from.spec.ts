@@ -1,11 +1,5 @@
-import {
-    Model
-} from '../query'
-import {
-    Schema, TableDescription
-} from '../schema'
-
-import * as SyntaxTree from './from'
+import {Schema, TableDescription}                from '../../schema'
+import {Model, SyntaxTree}                       from '../base'
 
 /**
  * Used to generate a schema that exactly matches a given model,
