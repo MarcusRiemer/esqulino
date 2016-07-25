@@ -173,7 +173,7 @@ paths:
         400:
           description: Something went wrong while executing the query
 
-  /project/{id}/query/run:
+  /project/{id}/run:
     post:
       operationId : runArbitraryQuery
       tags: [query]
@@ -199,6 +199,28 @@ paths:
           description: Something went wrong while executing the query
           schema:
             "$ref": "./RequestErrorDescription.json"
+  /project/{id}/page/:
+    post:
+      operationId : createPage
+      tags: [page]
+      description: Creating a new page, expecting a ID back from the server.
+      parameters:
+        - name: id
+          in: path
+          description: Id of the project the page belongs to.
+          required: true
+          type: string
+        - name: Page
+          in: body
+          description: The syntax tree and the renderable representation of the page. If this representation should have an ID assigned, it will be ignored.
+          required: false
+          schema:
+            $ref: "./PageUpdateRequestDescription.json"
+      responses:
+        200:
+          description: The page has been created, this response is a naked string with the ID of the newly created page.
+          schema:
+            type: string
   /project/{id}/page/{pageId}:
     post:
       operationId : updatePageById
@@ -225,11 +247,10 @@ paths:
       responses:
         200:
           description: The page has been updated.
-          schema:
     delete:
       operationId: deletePageById
       tags: [page]
-      description: Deleting a page on the serve
+      description: Deletes a page on the server.
       parameters:
         - name: id
           in: path
@@ -244,6 +265,5 @@ paths:
           format: uuid
       responses:
         200:
-          description: The page has been updated.
-          schema:
-  /project/{id}/page/{pageId}:
+          description: "Page has been deleted"
+          
