@@ -238,4 +238,33 @@ describe('Invalid SELECT Queries', () => {
         expect(q.toModel()).toEqual(model);
         expect(q.validate().isValid).toBeFalsy();
     });
+
+    it ('Duplicate column name: SELECT *, person.name FROM person', () => {
+        const model : Model.QueryDescription = {
+            name : 'select-duplicate-column',
+            id : 'invalid-select-1',
+            select : {
+                columns : [
+                    { expr : { star : { } } },
+                    { expr : { singleColumn : {column : "name", table : "person" } } },
+                ]
+            },
+            from : {
+                first : {
+                    name : "person"
+                }
+            }
+        };
+
+        let q = new QuerySelect(schema, model);
+
+        const leaves = q.getLeaves();
+        expect(leaves.length).toEqual(2);
+        expect(leaves[0].toModel()).toEqual(model.select.columns[0].expr);
+        expect(leaves[1].toModel()).toEqual(model.select.columns[1].expr);
+
+
+        expect(q.toModel()).toEqual(model);
+        expect(q.validate().isValid).toBeFalsy();
+    });
 });

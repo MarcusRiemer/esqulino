@@ -1,5 +1,5 @@
 {
-  "name": "Einfügende Abfrage",
+  "name": "kv_insert",
   "insert": {
     "assignments": [
       {

@@ -49,15 +49,42 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
         return (this._page);
     }
 
+    /**
+     * @return The name of the reference this query table will receive
+     *         it's data from.
+     */
     get referenceName() {
         return (this.model.queryReferenceName);
     }
-    
+
+    /**
+     * @param value Update the reference name that this query table will
+     *              receive it's data from.
+     */
     set referenceName(value : string) {
         this.model.queryReferenceName = value;
+        this.useAllColumns()
         this._cdRef.markForCheck();
     }
 
+    /**
+     * @return True, if this reference can be resolved on the current page.
+     */
+    get hasValidReference() {
+        return (this._page.usesQueryReferenceByName(this.referenceName) &&
+                this.queryReference.isResolveable);
+    }
+
+    /**
+     * @return True, if this query table references any columns
+     */
+    get hasColumnReferences() {
+        return (this.model.columnNames.length > 0);
+    }
+
+    /**
+     * @return A (hopefully) resolveable reference to a query.
+     */
     get queryReference() {
         return (this._page.getQueryReferenceByName(this.referenceName));
     }
@@ -65,7 +92,7 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
     /**
      * Something has been dragged over the query name
      */
-    onQueryDragOver(evt : DragEvent) {
+    onDragOver(evt : DragEvent, colIndex? : number) {
         // Is the thing that could be possibly dropped a QueryReference?
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
         if (pageEvt.queryRef || pageEvt.columnRef) {
@@ -78,7 +105,7 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
     /**
      * Something has been dropped on the query name
      */
-    onQueryDrop(evt : DragEvent) {
+    onDrop(evt : DragEvent, colIndex? : number) {
         // Is the thing that could be possibly dropped a QueryReference?
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
         if (pageEvt.queryRef) {
@@ -93,10 +120,13 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
             evt.preventDefault();
             evt.stopPropagation();
 
-            this.addColumn(pageEvt.columnRef.columnName);
+            this.addColumn(pageEvt.columnRef.columnName, colIndex);
         }
     }
 
+    /**
+     * Start dragging a column reference.
+     */
     startColumnRefDrag(evt: DragEvent, column : ResultColumn) {
         this._dragService.startColumnRefDrag(evt, "page", {
             columnName : column.fullName,
@@ -108,8 +138,15 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
         evt.stopPropagation();
     }
 
-    addColumn(fullName : string) {
-        this.model.columnNames.push(fullName);
+    /**
+     * Adds a new column to the model of this query table.
+     */
+    addColumn(fullName : string, colIndex? : number) {
+        if (!colIndex) {
+            this.model.columnNames.push(fullName);
+        } else {
+            this.model.columnNames.splice(colIndex, 0, fullName);
+        }
 
         this._cdRef.markForCheck();
     }
@@ -120,11 +157,21 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
      * @param fullName The full name of the column that should be removed.
      */
     removeColumn(fullName : string) {
-        if (this.model.columnNames.length == 0) {
-            this.model.columnNames = this.columns.map(c => c.fullName);
-        }
-
         this.model.columnNames = this.model.columnNames.filter(v => v != fullName);
+
+        this._cdRef.markForCheck();
+    }
+
+    /**
+     * Updates the model to use all columns that are available.
+     */
+    useAllColumns() {
+        // Compute all possible columns
+        const ref = this._page.getQueryReferenceByName(this.referenceName);
+        const query = ref.query as QuerySelect;
+        const possibleColumns = query.select.actualColums;
+
+        this.model.columnNames = possibleColumns.map(c => c.fullName);
 
         this._cdRef.markForCheck();
     }
@@ -136,15 +183,12 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
         if (this.referenceName) {            
             // 1) Get the reference itself
             const ref = this._page.getQueryReferenceByName(this.referenceName);
-            // 2) Resolve the reference to the actual query to find all possible columns
+            // 2) Resolve the reference to the actual query
             const query = ref.query as QuerySelect;
-            let columns = query.select.actualColums;
-            // 3) If the user has decided to narrow done the columns (or change
-            //    their order) these need to be re-mapped.
-            if (this.model.columnNames.length > 0) {
-                columns = this.model.columnNames
-                    .map(name => columns.find(col => col.fullName == name));
-            }
+            const possibleColumns = query.select.actualColums;
+            // 3) Pick the columns that are wished by the user
+            const columns = this.model.columnNames
+                    .map(name => possibleColumns.find(col => col.fullName == name));
             
             return (columns);
         } else {

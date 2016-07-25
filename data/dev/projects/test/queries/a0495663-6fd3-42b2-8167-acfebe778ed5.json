@@ -1,5 +1,5 @@
 {
-  "name": "key_value 2",
+  "name": "kv_single",
   "from": {
     "first": {
       "name": "key_value"
