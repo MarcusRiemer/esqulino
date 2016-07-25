@@ -1,5 +1,6 @@
 BUNDLE_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "bundle")')
 YARD_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "yard")')
+RERUN_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "rerun")')
 
 SOURCES = $(shell find . -not -path '*/\.*' -iname "*.rb")
 
@@ -8,8 +9,19 @@ install-deps : msg-pre-deps-install has-bundle
 	$(BUNDLE_BIN) install
 
 # Run using a built-in ruby server
+#
+# TODO: Apparently `RACK_ENV` is technically not the correct variable to use,
+#       even if sinatra encourages this [0]. But this might change once [1]
+#       is merged.
+#
+# [0] http://www.sinatrarb.com/intro.html#Environments
+# [1] https://github.com/sinatra/sinatra/pull/984
 run : has-bundle
-	$(BUNDLE_BIN) exec rackup
+	RACK_ENV="production" $(BUNDLE_BIN) exec rackup
+
+# Run a built-in server that refreshes itself if relevant files chage
+run-dev : has-dev-rerun has-bundle
+	$(RERUN_BIN) --dir ".,./../schema/" --pattern "**/*.{rb,json}" -- $(BUNDLE_BIN) exec rackup
 
 # Run unit tests
 test :
@@ -41,6 +53,12 @@ msg-pre-doc :
 
 msg-pre-doc-clean :
 	@tput setaf 2; echo "## Server : Cleaning documentation"; tput sgr0
+
+# Ensures the rerurn "binary" is available
+has-dev-rerun :
+ifeq (, $(wildcard $(RERUN_BIN)))
+	$(error "Ruby script restarter (rerun) not in gems")
+endif
 
 
 include ../Makefile.common
