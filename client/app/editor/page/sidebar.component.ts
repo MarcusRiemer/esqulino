@@ -6,7 +6,7 @@ import {
     Page, QueryReference
 } from '../../shared/page/index'
 import {
-    Heading, Row, Paragraph, QueryTable
+    Heading, Row, Paragraph, QueryTable, Input
 } from '../../shared/page/widgets/index'
 
 import {
@@ -150,11 +150,21 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this._dragService.startWidgetDrag(evt, "sidebar", QueryTable.emptyDescription);
     }
 
+    /**
+     * Starts a drag action for an input element
+     */
+    startInputDrag(evt : DragEvent) {
+        this._dragService.startWidgetDrag(evt, "sidebar", Input.emptyDescription);
+    }
+
+    /**
+     * Starts a drag action for a column reference.
+     */
     startColumnDrag(evt : DragEvent,
                     queryRef : QueryReference,
                     column : ResultColumn) {
         this._dragService.startColumnRefDrag(evt, "sidebar", {
-            columnName: column.fullName,
+            columnName: column.shortName,
             queryName : queryRef.name
         });
     }

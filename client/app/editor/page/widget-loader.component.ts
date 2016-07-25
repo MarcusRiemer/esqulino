@@ -19,6 +19,7 @@ import {WidgetComponent}       from './widgets/widget.component'
 import {ParagraphComponent}    from './widgets/paragraph.component'
 import {HeadingComponent}      from './widgets/heading.component'
 import {QueryTableComponent}   from './widgets/query-table.component'
+import {InputComponent}        from './widgets/input.component'
 
 /**
  * Loads the editor-representation of widgets.
@@ -58,9 +59,10 @@ export class WidgetLoaderComponent implements OnInit {
          * TODO: Allow widgets to somehow register themself.
          */
         this._typeMapping = {
-            "paragraph" : ParagraphComponent,
-            "heading" : HeadingComponent,
-            "query-table": QueryTableComponent
+            "paragraph": ParagraphComponent,
+            "heading": HeadingComponent,
+            "query-table": QueryTableComponent,
+            "input": InputComponent
         };
     }
 

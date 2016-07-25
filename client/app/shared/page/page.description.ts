@@ -1,4 +1,15 @@
 /**
+ * Describes a input widget. These are usually text-orientated.
+ */
+export interface InputDescription extends WidgetDescription {
+    type : "input"
+    inputType : string
+    caption : string
+    description : string
+    outParamName : string
+}
+
+/**
  * Describes a table that shows the results of a query.
  */
 export interface QueryTableDescription {

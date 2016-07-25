@@ -11,6 +11,8 @@ import {Column, ColumnDescription}         from './column'
 import {Paragraph, ParagraphDescription}   from './paragraph'
 import {Heading, HeadingDescription}       from './heading'
 import {QueryTable, QueryTableDescription} from './query-table'
+import {Input, InputDescription}           from './input'
+
 
 export {
     Widget, WidgetDescription,
@@ -19,6 +21,7 @@ export {
     Paragraph, ParagraphDescription,
     Heading, HeadingDescription,
     QueryTable, QueryTableDescription,
+    Input, InputDescription,
     ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription,
     loadWidget
 }

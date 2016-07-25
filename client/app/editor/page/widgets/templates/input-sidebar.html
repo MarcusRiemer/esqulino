@@ -1,0 +1,25 @@
+<div class="card-block">
+  <h4>Eingabe</h4>
+  <fieldset class="form-group">
+    <label for="input-sidebar-caption">Titel</label>
+    <input [(ngModel)]="component.caption"
+           type="text"
+           class="form-control"
+           id="input-sidebar-caption">
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="input-sidebar-description">Beschreibung</label>
+    <input [(ngModel)]="model.description"
+           type="text"
+           class="form-control"
+           id="input-sidebar-description">
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="heading-sidebar-level">Eingabetyp</label>
+    <select [(ngModel)]="model.inputType"
+            class="form-control">
+      <option value="text">Text</option>
+      <option value="number">Zahl</option>
+    </select>
+  </fieldset>
+</div>

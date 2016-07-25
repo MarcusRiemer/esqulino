@@ -142,10 +142,10 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
      * Adds a new column to the model of this query table.
      */
     addColumn(name : string, colIndex? : number) {
-        if (!colIndex) {
-            this.model.columnNames.push(name);
+        if (colIndex >= 0) {
+            this.model.columnNames.splice(colIndex + 1, 0, name);
         } else {
-            this.model.columnNames.splice(colIndex, 0, name);
+            this.model.columnNames.push(name);
         }
 
         this._cdRef.markForCheck();
@@ -188,7 +188,8 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
             const possibleColumns = query.select.actualColums;
             // 3) Pick the columns that are wished by the user
             const columns = this.model.columnNames
-                    .map(name => possibleColumns.find(col => col.shortName == name));
+                .map(name => possibleColumns.find(col => col.shortName == name))
+                .filter(c => !!c)
             
             return (columns);
         } else {

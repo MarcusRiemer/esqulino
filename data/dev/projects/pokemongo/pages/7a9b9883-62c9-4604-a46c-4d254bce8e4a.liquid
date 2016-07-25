@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Pokemon Freilassen</h1>
+        <p>Die transferierten Pokeomen kommen zu Prof. Willow auf eine Farm und leben dort glücklich und zufrieden. Du wirst sie aber nie mehr zu Gesicht bekommen und kannst sie auch nicht besuchen.</p>
+        <p>What happens when I transfer a Pokémon to the Professor? The transferred pokemon go to a "farm" where they "live happily ever after" and you can never, ever see them or visit them again.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        {% include "input" caption: "Freizulassendes Pokemon", outParamName: "Neue_Eingabe", description: "Die ID des Pokemons, das freigelassen werden soll.", inputType: "number" %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
