@@ -129,10 +129,10 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
      */
     startColumnRefDrag(evt: DragEvent, column : ResultColumn) {
         this._dragService.startColumnRefDrag(evt, "page", {
-            columnName : column.fullName,
+            columnName : column.shortName,
             queryName : this.referenceName
         }, {
-            onRemove: () => this.removeColumn(column.fullName)
+            onRemove: () => this.removeColumn(column.shortName)
         });
 
         evt.stopPropagation();
@@ -141,11 +141,11 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
     /**
      * Adds a new column to the model of this query table.
      */
-    addColumn(fullName : string, colIndex? : number) {
+    addColumn(name : string, colIndex? : number) {
         if (!colIndex) {
-            this.model.columnNames.push(fullName);
+            this.model.columnNames.push(name);
         } else {
-            this.model.columnNames.splice(colIndex, 0, fullName);
+            this.model.columnNames.splice(colIndex, 0, name);
         }
 
         this._cdRef.markForCheck();
@@ -171,7 +171,7 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
         const query = ref.query as QuerySelect;
         const possibleColumns = query.select.actualColums;
 
-        this.model.columnNames = possibleColumns.map(c => c.fullName);
+        this.model.columnNames = possibleColumns.map(c => c.shortName);
 
         this._cdRef.markForCheck();
     }
@@ -188,7 +188,7 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
             const possibleColumns = query.select.actualColums;
             // 3) Pick the columns that are wished by the user
             const columns = this.model.columnNames
-                    .map(name => possibleColumns.find(col => col.fullName == name));
+                    .map(name => possibleColumns.find(col => col.shortName == name));
             
             return (columns);
         } else {

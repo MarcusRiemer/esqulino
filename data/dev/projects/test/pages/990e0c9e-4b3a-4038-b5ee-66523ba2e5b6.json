@@ -24,8 +24,7 @@
               "type": "query-table",
               "queryRefName": "kv_all",
               "columns": [
-                "key_value.key",
-                "key_value.value"
+                "value"
               ]
             }
           ]

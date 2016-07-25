@@ -18,17 +18,17 @@
     <div class="row">
       <div class="col-md-12">
         <h2>Alle Personen</h2>
-        <p>Diese Personen sind in der Datenbank hinterlegt.</p>{% include "query_table" table: query.p_alle %}
+        <p>Diese Personen sind in der Datenbank hinterlegt.</p>{% include "query_table" table: query.p_alle, columns: "nachname,vorname,geb_jahr,tod_jahr" %}
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <h2>Alle Ereignisse</h2>{% include "query_table" table: query.e_alle %}
+        <h2>Alle Ereignisse</h2>{% include "query_table" table: query.e_alle, columns: "bezeichnung,beginn_jahr,ende_jahr" %}
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <h1>Erlebte Ereignisse</h1>{% include "query_table" table: query.erlebt %}
+        <h2>Erlebte Ereignisse</h2>{% include "query_table" table: query.erlebt, columns: "nachname,bezeichnung,beginn_jahr,ende_jahr" %}
       </div>
     </div>
   </div>

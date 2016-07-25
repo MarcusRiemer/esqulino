@@ -94,6 +94,8 @@ doc-clean:
 dev-pretty-json-data :
 	find data -iname "*.json" -exec bash -c 'jq . < {} | sponge {}' \;
 
+# Prettyprints template data, but beware: Tidy does not mix well with the
+# liquid syntax, so this might destroy something ...
 dev-pretty-html-data :
 	find data -iname "*.liquid" -exec tidy -config tidy-config.txt -o {} {} \;
 
