@@ -1,5 +1,5 @@
 {
-  "name": "key_value 1",
+  "name": "kv_all",
   "from": {
     "first": {
       "name": "key_value"
@@ -10,14 +10,6 @@
       {
         "expr": {
           "star": {}
-        }
-      },
-      {
-        "expr": {
-          "singleColumn": {
-            "column": "key",
-            "table": "key_value"
-          }
         }
       }
     ]

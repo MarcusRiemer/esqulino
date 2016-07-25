@@ -71,7 +71,7 @@ class Query
     if not @sql.nil? then
       # Yes, simply store it
       File.open(query_file_path("sql"), "w") do |f|
-        f.write(query_file_path "sql")
+        f.write(@sql)
       end
     else
       # No, delete a possibly existing sql file.
