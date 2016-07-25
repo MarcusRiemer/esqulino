@@ -1,0 +1,80 @@
+{
+  "name": "Meine_Pokemon",
+  "from": {
+    "first": {
+      "name": "gefangen"
+    },
+    "joins": [
+      {
+        "table": {
+          "name": "pokedex"
+        },
+        "cross": "cross"
+      }
+    ]
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "staerke",
+            "table": "gefangen"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "nummer",
+            "table": "pokedex"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "name",
+            "table": "pokedex"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "typ",
+            "table": "pokedex"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "spitzname",
+            "table": "gefangen"
+          }
+        }
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "pokedex_nummer",
+            "table": "gefangen"
+          }
+        },
+        "rhs": {
+          "singleColumn": {
+            "column": "nummer",
+            "table": "pokedex"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}

@@ -97,7 +97,7 @@ dev-pretty-json-data :
 # Prettyprints template data, but beware: Tidy does not mix well with the
 # liquid syntax, so this might destroy something ...
 dev-pretty-html-data :
-	find data -iname "*.liquid" -exec tidy -config tidy-config.txt -o {} {} \;
+	find data/dev/projects -iname "*.liquid" -exec tidy -config tidy-config.txt -o {} {} \;
 
 # Used during development: Strips all trailing whitespace from "own"
 # sourcefiles.
