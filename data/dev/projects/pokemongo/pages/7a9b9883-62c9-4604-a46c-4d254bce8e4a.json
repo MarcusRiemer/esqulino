@@ -1,0 +1,50 @@
+{
+  "name": "Gefangen_Loeschen",
+  "rows": [
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "Pokemon Freilassen"
+            },
+            {
+              "type": "paragraph",
+              "text": "Die transferierten Pokeomen kommen zu Prof. Willow auf eine Farm und leben dort glücklich und zufrieden. Du wirst sie aber nie mehr zu Gesicht bekommen und kannst sie auch nicht besuchen."
+            },
+            {
+              "type": "paragraph",
+              "text": "What happens when I transfer a Pokémon to the Professor? The transferred pokemon go to a \"farm\" where they \"live happily ever after\" and you can never, ever see them or visit them again."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "input",
+              "outParamName": "Neue_Eingabe",
+              "caption": "Freizulassendes Pokemon",
+              "description": "Die ID des Pokemons, das freigelassen werden soll.",
+              "inputType": "number"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "Gefangen_Loeschen",
+      "queryId": "40bddeac-facc-4836-a27b-6a23222078d5"
+    }
+  ]
+}

@@ -118,10 +118,17 @@ export class QueryReference extends ValueReference {
     }
 
     /**
+     * @return True, if the referenced query has output columns.
+     */
+    get hasColumns() {
+        return (this.isResolveable && this.query instanceof QuerySelect);
+    }
+
+    /**
      * @return The columns that are exposed by this query.
      */
     get columns() {
-        if (this.isResolveable) {
+        if (this.hasColumns) {
             const selectQuery = this.query as QuerySelect;
             const columns = selectQuery.select.actualColums;
 

@@ -1,0 +1,28 @@
+{
+  "name": "Gefangen_Loeschen",
+  "delete": {},
+  "from": {
+    "first": {
+      "name": "gefangen"
+    }
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "gefangen_id",
+            "table": "gefangen"
+          }
+        },
+        "rhs": {
+          "parameter": {
+            "key": "gefangen_id"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}

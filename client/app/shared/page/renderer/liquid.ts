@@ -5,7 +5,7 @@ import {Page}                  from '../page'
 import {Renderer}              from '../renderer'
 import {
     Widget, Row, Column,
-    Paragraph, Heading, QueryTable 
+    Paragraph, Heading, QueryTable, Input
 } from '../widgets/index'
 
 export {Renderer}
@@ -30,6 +30,17 @@ function renderHeading(w: Widget) : string {
     const tagname = `h${heading.level}`;
     return (`<${tagname}>${heading.text}</${tagname}>`);
 }
+
+function renderInput(w: Widget) : string {
+    const input = w as Input;
+    const outParamName = `outParamName: "${input.outParamName}"`;
+    const caption = `caption: "${input.caption}"`
+    const description = `description: "${input.description}"`
+    const inputType = `inputType: "${input.inputType}"`
+    
+    return (`{% include "input" ${caption}, ${outParamName}, ${description}, ${inputType}  %}`);
+}
+
 
 /**
  * Generates sources that can be rendered via anything that
@@ -67,7 +78,8 @@ export class LiquidRenderer extends Renderer {
     private _widgetRenderers : { [widgetType : string]: WidgetRenderer} = {
         "query-table" : renderQueryTable,
         "paragraph" : renderParagraph,
-        "heading" : renderHeading
+        "heading" : renderHeading,
+        "input" : renderInput
     };
     
     /**

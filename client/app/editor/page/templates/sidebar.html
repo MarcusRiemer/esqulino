@@ -46,6 +46,15 @@
         <span class="fa fa-fw fa-table" aria-hidden="true"></span>Tabelle
       </div>
     </div>
+
+    <div (dragstart)="startInputDrag($event)"
+         draggable="true"
+         class="widget-row-preview">
+      <div class="column-preview">
+        <span class="fa fa-fw fa-keyboard-o" aria-hidden="true"></span>Eingabe
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -58,7 +67,7 @@
          class="table">
       {{ used.name }}
     </div>
-    <ul>
+    <ul *ngIf="used.hasColumns">
       <li *ngFor="let column of used.columns; trackBy: trackByColumnId;">
         <span (dragstart)="startColumnDrag($event, used, column)"
               class="column indent"

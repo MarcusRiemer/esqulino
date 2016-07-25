@@ -1,6 +1,7 @@
 <div (click)="startEditing()"
      class="widget-preview">
-  <h5>Abfrage:
+  <h5>
+    Abfrage:
     <span (dragover)="onDragOver($event)"
           (drop)="onDrop($event)"
           class="block-container block">
@@ -16,8 +17,7 @@
   <!-- If the query reference itself is valid, display column selection -->
   <template [ngIf]="hasValidReference">
     <!-- Are there columns to display? -->
-    <table *ngIf="hasColumnReferences"
-           class="table">
+    <table *ngIf="hasColumnReferences">
       <tr>
         <td *ngFor="let column of columns; trackBy: trackByColumn; let colIndex = index;"
             class="block-container block">

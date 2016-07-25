@@ -1,0 +1,25 @@
+<div class="widget-preview">
+  <fieldset (click)="startEditing()"
+            class="form-group">  
+    <h5>
+      Eingabe:
+      <span class="block-container block">
+        <span class="parameter">
+          {{ model.outParamName }}
+        </span>
+      </span>
+    </h5>
+    <label [attr.for]="model.outParamName">
+      {{ model.caption }}
+    </label>
+    <input type="model.inputType"
+           class="form-control"
+           disabled="true"
+           [id]="model.outParamName"
+           placeholder="">
+    <small *ngIf="model.description"
+           class="text-muted">
+      {{ model.description }}
+    </small>
+  </fieldset>
+</div>
