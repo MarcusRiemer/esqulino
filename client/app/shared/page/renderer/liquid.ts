@@ -5,7 +5,7 @@ import {Page}                  from '../page'
 import {Renderer}              from '../renderer'
 import {
     Widget, Row, Column,
-    Paragraph, Heading, QueryTable, Input
+    Button, Paragraph, Heading, QueryTable, Input
 } from '../widgets/index'
 
 export {Renderer}
@@ -41,6 +41,13 @@ function renderInput(w: Widget) : string {
     return (`{% include "input" ${caption}, ${outParamName}, ${description}, ${inputType}  %}`);
 }
 
+function renderButton(w: Widget) : string {
+    const button = w as Button;
+    const text = button.text;
+
+    return (`<button type="button" class="btn btn-secondary btn-block">${text}</button>`);    
+}
+
 
 /**
  * Generates sources that can be rendered via anything that
@@ -61,8 +68,10 @@ export class LiquidRenderer extends Renderer {
   </head>
   <body>
     <div class="container-fluid">
+      <form>
 `
     private static PAGE_FOOTER = `
+      </form>
     </div>
   </body>
 </html>
@@ -76,6 +85,7 @@ export class LiquidRenderer extends Renderer {
      * All known renderers for widgets
      */
     private _widgetRenderers : { [widgetType : string]: WidgetRenderer} = {
+        "button" : renderButton,
         "query-table" : renderQueryTable,
         "paragraph" : renderParagraph,
         "heading" : renderHeading,

@@ -16,6 +16,7 @@ import {
 } from '../editor.token'
 
 import {WidgetComponent}       from './widgets/widget.component'
+import {ButtonComponent}       from './widgets/button.component'
 import {ParagraphComponent}    from './widgets/paragraph.component'
 import {HeadingComponent}      from './widgets/heading.component'
 import {QueryTableComponent}   from './widgets/query-table.component'
@@ -59,6 +60,7 @@ export class WidgetLoaderComponent implements OnInit {
          * TODO: Allow widgets to somehow register themself.
          */
         this._typeMapping = {
+            "button": ButtonComponent,
             "paragraph": ParagraphComponent,
             "heading": HeadingComponent,
             "query-table": QueryTableComponent,

@@ -9,30 +9,44 @@ export interface InputDescription extends WidgetDescription {
     outParamName : string
 }
 
+export interface ButtonDescription extends WidgetDescription {
+    type : "button"
+
+    // The text on the button
+    text : string
+    
+    // The target URL
+    action : string
+
+    // This value allows the server to distinguish the action
+    // the user has chosen
+    value : string
+}
+
 /**
  * Describes a table that shows the results of a query.
  */
 export interface QueryTableDescription {
+    type: "query-table"
     queryRefName? : string
     columns : string[]
-    type: "query-table"
 }
 
 /**
  * Describes a heading widget.
  */
 export interface HeadingDescription extends WidgetDescription {
+    type : "heading"
     text : string
     level : number
-    type : "heading"
 }
 
 /**
  * Describes a paragraph widget.
  */
 export interface ParagraphDescription extends WidgetDescription {
-    text : string
     type : "paragraph"
+    text : string
 }
 
 /**

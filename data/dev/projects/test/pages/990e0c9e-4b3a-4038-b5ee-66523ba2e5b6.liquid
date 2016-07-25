@@ -9,18 +9,20 @@
 </head>
 <body>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <h1>Seite 2</h1>
-        <p>Hier ist ein Absatz, der was zur zweiten Seite erzählt. Unter diesem Absatz ist dann noch eine Tabelle zu sehen.</p>
+    <form>
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Seite 2</h1>
+          <p>Hier ist ein Absatz, der was zur zweiten Seite erzählt. Unter diesem Absatz ist dann noch eine Tabelle zu sehen.</p>
+        </div>
+        <div class="col-md-12">
+          {% include "query_table" table: query.kv_all, columns: "value" %}
+        </div>
+        <div class="col-md-12">
+          <p>In diesem Absatz werden am Ende die <a href="https://shopify.github.io/liquid/basics/introduction/">Liquid Ausdrücke</a> {% raw %}{{ query.kv_single.key }} -&gt; {{ query.kv_single.value }}{% endraw %} ausgewertet: {{ query.kv_single.key }} -&gt; {{ query.kv_single.value }}</p>
+        </div>
       </div>
-      <div class="col-md-12">
-        {% include "query_table" table: query.kv_all, columns: "value" %}
-      </div>
-      <div class="col-md-12">
-        <p>In diesem Absatz werden am Ende die <a href="https://shopify.github.io/liquid/basics/introduction/">Liquid Ausdrücke</a> {% raw %}{{ query.kv_single.key }} -&gt; {{ query.kv_single.value }}{% endraw %} ausgewertet: {{ query.kv_single.key }} -&gt; {{ query.kv_single.value }}</p>
-      </div>
-    </div>
+    </form>
   </div>
 </body>
 </html>

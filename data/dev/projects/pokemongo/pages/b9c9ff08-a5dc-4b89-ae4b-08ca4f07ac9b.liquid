@@ -9,17 +9,19 @@
 </head>
 <body>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <h1>Hallo auf meinem Pokedex</h1>
-        <p>Hier zeige ich alle Pokemon, die ich gefangen habe.</p>
+    <form>
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Hallo auf meinem Pokedex</h1>
+          <p>Hier zeige ich alle Pokemon, die ich gefangen habe.</p>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        {% include "query_table" table: query.Meine_Pokemon, columns: "spitzname,staerke,nummer,typ" %}
+      <div class="row">
+        <div class="col-md-12">
+          {% include "query_table" table: query.Meine_Pokemon, columns: "spitzname,staerke,nummer,typ" %}
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </body>
 </html>
