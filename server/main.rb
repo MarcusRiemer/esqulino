@@ -1,5 +1,4 @@
 require 'sinatra/base'
-require 'sinatra/reloader'
 require 'sinatra/config_file'
 require 'sinatra/json'
 require "sinatra/multi_route"
@@ -40,7 +39,6 @@ class ScratchSqlApp < Sinatra::Base
   # Activate reloading and disable any caching when developing
   configure :development do
     puts "esqulino is running in development mode"
-    register Sinatra::Reloader
     enable :logging
 
     # No caching

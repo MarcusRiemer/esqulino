@@ -1,14 +1,15 @@
 {% if table %}
+  {% assign columnNames = columns | split: ',' %}
   <table class="table">
     <tr>
-      {% for cell in table[0] %}
-        <th>{{ cell[0] }}</th>
+      {% for name in columnNames %}
+        <th>{{ name }}</th>
       {% endfor %}
     </tr>
     {% for row in table %}
       <tr>
-        {% for cell in row %}
-          <td>{{ cell[1] }}</td>
+        {% for name in columnNames %}
+          <td>{{ row[name] }}</td>
         {% endfor %}
       </tr>
     {% endfor %}

@@ -73,7 +73,7 @@ export class PageDataComponent implements OnInit {
         ref.name = this.project.getQueryById(ref.queryId).name;
         
         // Ensure the name is unique.
-        while (this.page.usesQueryName(ref.name)) {
+        while (this.page.usesQueryReferenceByName(ref.name)) {
             ref.name = prompt("Name schon benutzt! Bitte einen neuen Namen eingeben.", ref.name);
         }
         

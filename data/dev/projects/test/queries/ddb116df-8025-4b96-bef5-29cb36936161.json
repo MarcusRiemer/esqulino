@@ -1,5 +1,5 @@
 {
-  "name": "Löschende Abfrage",
+  "name": "kv_delete",
   "delete": {},
   "from": {
     "first": {
