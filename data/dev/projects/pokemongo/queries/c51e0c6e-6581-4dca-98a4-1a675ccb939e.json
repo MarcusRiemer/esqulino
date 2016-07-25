@@ -1,0 +1,17 @@
+{
+  "name": "Pokedex",
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {}
+        }
+      }
+    ]
+  },
+  "from": {
+    "first": {
+      "name": "pokedex"
+    }
+  }
+}

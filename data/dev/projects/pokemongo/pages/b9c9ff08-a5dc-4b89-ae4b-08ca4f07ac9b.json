@@ -1,0 +1,49 @@
+{
+  "name": "Hauptseite",
+  "rows": [
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "Hallo auf meinem Pokedex"
+            },
+            {
+              "type": "paragraph",
+              "text": "Hier zeige ich alle Pokemon, die ich gefangen habe."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "query-table",
+              "queryRefName": "Meine_Pokemon",
+              "columns": [
+                "spitzname",
+                "staerke",
+                "nummer",
+                "typ"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "Meine_Pokemon",
+      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35"
+    }
+  ]
+}

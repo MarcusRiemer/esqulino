@@ -1,0 +1,32 @@
+{
+  "name": "Pokedex_Neu",
+  "insert": {
+    "assignments": [
+      {
+        "expr": {
+          "parameter": {
+            "key": "nummer"
+          }
+        },
+        "column": "nummer"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "name"
+          }
+        },
+        "column": "name"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "typ"
+          }
+        },
+        "column": "typ"
+      }
+    ],
+    "table": "pokedex"
+  }
+}
