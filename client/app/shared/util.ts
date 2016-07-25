@@ -6,8 +6,8 @@
  *
  * @return True, if the given name could be used.
  */
-export function isValidName(name : string) : boolean {
-    return (name && /^[a-zA-Z]+(\w|-| )*$/.test(name));
+export function isValidResourceName(name : string) : boolean {
+    return (name && /^[a-zA-Z]+(\w|-)*$/.test(name));
 }
 
 /**
@@ -15,8 +15,9 @@ export function isValidName(name : string) : boolean {
  *
  * @param name The name to test.
  */
-export function assertValidName(name : string) : void {
-    if (!isValidName(name)) {
-        throw new Error(`${name} is not a valid esqulino name`);
+export function assertValidResourceName(name : string) : void {
+    if (!isValidResourceName(name)) {
+        throw new Error(`${name} is not a valid resource name`);
     }
 }
+

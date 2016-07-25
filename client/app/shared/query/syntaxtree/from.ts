@@ -1,12 +1,10 @@
+import {Schema}                               from '../../schema'
+
+import * as Model                             from '../description'
+import {Query}                                from '../base'
 import {
-    Model, Query, ValidationResult
-} from '../query'
-import {
-    ValidationErrors, ValidationError
-} from '../query.validation'
-import {
-    Schema
-} from '../schema'
+    ValidationResult, ValidationErrors, ValidationError
+} from '../validation'
 
 import {
     loadExpression, MissingExpression

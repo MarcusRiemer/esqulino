@@ -22,10 +22,11 @@
           "widgets": [
             {
               "type": "query-table",
-              "queryRef": {
-                "queryId": "f3de342b-45ce-438b-b977-ad5b177d393d",
-                "name": "A"
-              }
+              "queryRefName": "key_value_1",
+              "columns": [
+                "key_value.value",
+                "key_value.key"
+              ]
             }
           ]
         },
@@ -34,7 +35,7 @@
           "widgets": [
             {
               "type": "paragraph",
-              "text": "In diesem Absatz werden am Ende die <a href=\"https://shopify.github.io/liquid/basics/introduction/\">Liquid Ausdrücke</a> {% raw %}{{ query.B.key }} -> {{ query.B.value }}{% endraw %} ausgewertet: {{ query.B.key }} -> {{ query.B.value }}"
+              "text": "In diesem Absatz werden am Ende die <a href=\"https://shopify.github.io/liquid/basics/introduction/\">Liquid Ausdrücke</a> {% raw %}{{ query.key_value_2.key }} -> {{ query.key_value_2.value }}{% endraw %} ausgewertet: {{ query.key_value_2.key }} -> {{ query.key_value_2.value }}"
             }
           ]
         }
@@ -43,12 +44,14 @@
   ],
   "referencedQueries": [
     {
-      "queryId": "a0495663-6fd3-42b2-8167-acfebe778ed5",
-      "name": "B"
+      "type": "query",
+      "name": "key_value_1",
+      "queryId": "f3de342b-45ce-438b-b977-ad5b177d393d"
     },
     {
-      "queryId": "f3de342b-45ce-438b-b977-ad5b177d393d",
-      "name": "A"
+      "type": "query",
+      "name": "key_value_2",
+      "queryId": "a0495663-6fd3-42b2-8167-acfebe778ed5"
     }
   ]
 }

@@ -10,10 +10,6 @@ import {
     Query, Model, SyntaxTree
 } from '../../shared/query'
 
-import {
-    BinaryExpression    
-} from '../../shared/syntaxtree/expression'
-
 @Component({
     selector : 'sql-expr',
     templateUrl : 'app/editor/query/templates/query-expr.html',
@@ -76,13 +72,13 @@ export class ExpressionComponent {
     onAllowedDrag(evt : DragEvent) {
         // Only the binary expression takes things that
         // are not expressions.
-        if (!(this.expr instanceof BinaryExpression) &&
+        if (!(this.expr instanceof SyntaxTree.BinaryExpression) &&
             !this._dragService.activeExpression) {
             return;
         }
 
         // And the thing it takes are only operators
-        if (this.expr instanceof BinaryExpression &&
+        if (this.expr instanceof SyntaxTree.BinaryExpression &&
             !this._dragService.activeOperator) {
             return;
         }
@@ -192,8 +188,8 @@ export class ExpressionComponent {
         // It could be a new operator
         if (sqlEvt.operator) {
             // Which is only valid for a binary expression
-            if (this.expr instanceof BinaryExpression) {
-                (<BinaryExpression>this.expr).operator = sqlEvt.operator;
+            if (this.expr instanceof SyntaxTree.BinaryExpression) {
+                (this.expr as SyntaxTree.BinaryExpression).operator = sqlEvt.operator;
             }
         }
         // Or an expression

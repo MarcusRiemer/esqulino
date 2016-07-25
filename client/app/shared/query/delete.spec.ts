@@ -1,6 +1,6 @@
 import {Schema}                  from '../schema'
-import {Model, SyntaxTree}       from '../query'
 
+import {Model, SyntaxTree}       from './base'
 import {QueryDelete}             from './delete'
 
 let schema  = new Schema([

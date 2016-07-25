@@ -1,15 +1,13 @@
-import {Component}            from '@angular/core'
-import {ROUTER_DIRECTIVES}    from '@angular/router'
+import {Component}                        from '@angular/core'
+import {ROUTER_DIRECTIVES}                from '@angular/router'
 
+import {QuerySelect}                      from '../shared/query'
 
-import {QuerySelect}          from '../shared/query'
-
-import {Project}              from './project'
-import {ProjectService}       from './project.service'
-import {SidebarService}       from './sidebar.service'
-import {ToolbarService}       from './toolbar.service'
-import {QueryService}         from './query.service'
-import {PageService}          from './page.service'
+import {ProjectService, Project}          from './project.service'
+import {SidebarService}                   from './sidebar.service'
+import {ToolbarService}                   from './toolbar.service'
+import {QueryService}                     from './query.service'
+import {PageService}                      from './page.service'
 
 @Component({
     directives: [ROUTER_DIRECTIVES],

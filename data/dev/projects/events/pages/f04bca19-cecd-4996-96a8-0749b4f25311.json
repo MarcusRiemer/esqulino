@@ -1,0 +1,81 @@
+{
+  "name": "Hauptseite",
+  "rows": [
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "Historische Personen und Ereignisse"
+            },
+            {
+              "type": "paragraph",
+              "text": "Auf dieser Seite lassen sich die zeitlichen Zusammenhänge von historischen Persönlichkeiten und Ereignissen darstellen."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 2,
+              "text": "Alle Personen"
+            },
+            {
+              "type": "paragraph",
+              "text": "Diese Personen sind in der Datenbank hinterlegt."
+            },
+            {
+              "type": "query-table",
+              "queryRef": {
+                "name": "Personen",
+                "queryId": "86e70348-0e24-4c08-9d13-d2dd88c13faa"
+              },
+              "columns": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 2,
+              "text": "Alle Ereignisse"
+            },
+            {
+              "type": "query-table",
+              "queryRef": {
+                "queryId": "b0c224ac-efd2-4f46-bec0-b7bca7058a82",
+                "name": "Ereignisse"
+              },
+              "columns": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "referencedQueries": [
+    {
+      "name": "Personen",
+      "queryId": "86e70348-0e24-4c08-9d13-d2dd88c13faa"
+    },
+    {
+      "name": "Ereignisse",
+      "queryId": "b0c224ac-efd2-4f46-bec0-b7bca7058a82"
+    }
+  ]
+}

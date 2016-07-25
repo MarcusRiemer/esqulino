@@ -1,7 +1,7 @@
 import {Component, Input}               from '@angular/core'
 
 import {Query}                          from '../../shared/query'
-import {ValidationResult}               from '../../shared/query.validation'
+import {ValidationResult}               from '../../shared/query/validation'
 
 @Component({
     templateUrl: 'app/editor/query/templates/validator.html',

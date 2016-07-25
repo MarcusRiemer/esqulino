@@ -75,7 +75,6 @@ class Project
   # Loads the projects model from disk
   def load_description!
     # Ensure this is actually a loadable project
-    puts "Inside: #{id}"
     raise UnknownProjectError.new(id) unless self.exists?
     @whole_description = YAML.load_file(description_filename);
   end
@@ -299,6 +298,13 @@ class Project
     raise UnknownPageError.new(id, name) if to_return.nil?
 
     return (to_return)
+  end
+
+  # Checks whether a page with a certain name exists
+  #
+  # @param name The name of the searched page
+  def page_by_name?(name)
+    pages.any? {|page| page.name == name}
   end
 
   # @return True, if this project has an index page

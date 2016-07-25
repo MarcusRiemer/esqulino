@@ -2,7 +2,8 @@
  * Describes a table that shows the results of a query.
  */
 export interface QueryTableDescription {
-    queryRef? : ReferencedQuery,
+    queryRefName? : string
+    columns : string[]
     type: "query-table"
 }
 
@@ -10,8 +11,8 @@ export interface QueryTableDescription {
  * Describes a heading widget.
  */
 export interface HeadingDescription extends WidgetDescription {
-    text : string,
-    level : number,
+    text : string
+    level : number
     type : "heading"
 }
 
@@ -19,7 +20,7 @@ export interface HeadingDescription extends WidgetDescription {
  * Describes a paragraph widget.
  */
 export interface ParagraphDescription extends WidgetDescription {
-    text : string,
+    text : string
     type : "paragraph"
 }
 
@@ -37,6 +38,7 @@ export interface ParagraphDescription extends WidgetDescription {
  * @TJS-additionalProperties true
  */
 export interface WidgetDescription {
+    // Discriminator value
     type : string
     [additional: string]: any
 }
@@ -57,13 +59,43 @@ export interface RowDescription {
 }
 
 /**
- * Referenced queries may (optionally) accompanied by a human-readable
+ * A single or repeating value of any origin, as long as it's
+ * referenceable by a variable name.
+ *
+ * @TJS-additionalProperties true
+ */
+export interface ValueReferenceDescription {
+    // Discriminator value
+    type : "column" | "query"
+}
+
+/**
+ * Can be used to denote a column of a row. This description is completly
+ * agnostic of the query it references.
+ */
+export interface ColumnReferenceDescription extends ValueReferenceDescription {
+    type : "column"
+
+    // The query variable this column references
+    variableName : string
+
+    // The name of the column
+    columnName : string
+}
+
+/**
+ * Referenced queries are always accompanied by a human-readable
  * name. This is required if the same query is going to be used
  * multiple times on a single page.
  */
-export interface ReferencedQuery {
-    queryId : string,
-    name? : string
+export interface QueryReferenceDescription extends ValueReferenceDescription {
+    type : "query" 
+
+    // The id of the query this reference points to
+    queryId : string
+
+    // The user-defined name of the reference
+    name : string
 }
 
 /**
@@ -91,5 +123,5 @@ export interface PageDescription {
      * these queries provide additional DB information that can
      * be used on this page.
      */
-    referencedQueries : ReferencedQuery[]
+    referencedQueries : QueryReferenceDescription[]
 }

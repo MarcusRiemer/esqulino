@@ -1,11 +1,9 @@
-import {Query, QueryWhere}                from './base'
-
-import {loadExpression, Expression}       from '../query.syntaxtree'
 import {Schema}                           from '../schema'
-import {ValidationResult, Validateable}   from '../query.validation'
 
-import * as Model                         from '../query.model'
-import * as SyntaxTree                    from '../query.syntaxtree'
+import {ValidationResult, Validateable}   from './validation'
+import {Query, QueryWhere}                from './base'
+import * as Model                         from './description'
+import * as SyntaxTree                    from './syntaxtree'
 
 
 /**
@@ -15,28 +13,31 @@ class UpdateAssign implements SyntaxTree.ExpressionParent {
 
     private _query : QueryUpdate;
     private _columnName : string;
-    private _expr : Expression;
+    private _expr : SyntaxTree.Expression;
     
     constructor(query : QueryUpdate, model : Model.ColumnAssignment) {
         this._query = query;
         this._columnName = model.column;
-        this._expr = loadExpression(model.expr, this);
+        this._expr = SyntaxTree.loadExpression(model.expr, this);
     }
 
     /**
      * @return The expression that is used in this assignment.
      */
-    get expr() : Expression {
+    get expr() : SyntaxTree.Expression {
         return (this._expr);
     }
 
-    replaceChild(formerChild : Expression, newChild : Expression) : void {
+    replaceChild(formerChild : SyntaxTree.Expression, newChild : SyntaxTree.Expression) : void {
         throw new Error("Not implemented");
     }
 
+    /**
+     * Removing a former child replaces it by a missing expression.
+     */
     removeChild(formerChild : SyntaxTree.Removable) : void {
         if (this._expr == formerChild) {
-            this._expr = loadExpression({ missing : {}}, this);
+            this._expr = SyntaxTree.loadExpression({ missing : {}}, this);
         } else {
             throw new Error("Not implemented");
         }
@@ -98,7 +99,7 @@ export class QueryUpdate extends Query implements QueryWhere {
         return (this._where);
     }
 
-    replaceChild(formerChild : Expression, newChild : Expression) : void {
+    replaceChild(formerChild : SyntaxTree.Expression, newChild : SyntaxTree.Expression) : void {
         throw new Error("Not implemented");
     }
 

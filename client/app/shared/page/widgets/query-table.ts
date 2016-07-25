@@ -1,6 +1,6 @@
 import {Widget, WidgetDescription} from './widget'
 import {
-    QueryTableDescription, ReferencedQuery
+    QueryTableDescription
 } from '../page.description'
 
 export {QueryTableDescription}
@@ -9,11 +9,18 @@ export {QueryTableDescription}
  * Renders a table for a query.
  */
 export class QueryTable extends Widget {
-    private _queryRef : ReferencedQuery;
+    
+    private _queryRefName : string;
+
+    /**
+     * The columns that should be displayed
+     */
+    private _columns: string[];
 
     constructor(desc : QueryTableDescription) {
         super("query-table");
-        this._queryRef = desc.queryRef;
+        this._queryRefName = desc.queryRefName;
+        this._columns = desc.columns;
     }
 
     /**
@@ -21,22 +28,43 @@ export class QueryTable extends Widget {
      */
     static get emptyDescription() : QueryTableDescription {
         return ({
-            type : "query-table"
+            type : "query-table",
+            columns : []
         })
     }
 
-    get queryReference() {
-        return (this._queryRef);
+    /**
+     * @return The variable name that references the table
+     */
+    get queryReferenceName() {
+        return (this._queryRefName);
     }
 
-    set queryReference(ref : ReferencedQuery) {
-        this._queryRef = ref;
+    set columnNames(value : string[]) {
+        this._columns = value;
+    }
+    
+    /**
+     *
+     */
+    get columnNames() {
+        return (this._columns);
+    }
+
+    /**
+     * Sets a new referenced query, cleaning the current
+     * columns as a side effect.
+     */
+    set queryReferenceName(name : string) {
+        this._queryRefName = name;
+        this._columns = [];
     }
 
     protected toModelImpl() : WidgetDescription {
         const toReturn : QueryTableDescription = {
             type : "query-table",
-            queryRef : this._queryRef
+            queryRefName : this._queryRefName,
+            columns : this._columns
         }
 
         return (toReturn);

@@ -1,9 +1,8 @@
-import {
-    Model, Query, ValidationResult
-} from '../query'
-import {
-    Schema
-} from '../schema'
+import {Schema}                               from '../../schema'
+
+import * as Model                             from '../description'
+import {ValidationResult}                     from '../validation'
+import {Query}                                from '../base'
 
 import {
     ColumnExpression, loadExpression

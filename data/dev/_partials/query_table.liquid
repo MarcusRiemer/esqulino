@@ -1,15 +1,20 @@
-<h1>{{ test | upcase }}</h1>
-<table class="table">
-  <tr>
-    {% for cell in table[0] %}
-      <th>{{ cell[0] }}</th>
-    {% endfor %}
-  </tr>
-  {% for row in table %}
+{% if table %}
+  <table class="table">
     <tr>
-      {% for cell in row %}
-        <td>{{ cell[1] }}</td>
+      {% for cell in table[0] %}
+        <th>{{ cell[0] }}</th>
       {% endfor %}
     </tr>
-  {% endfor %}
-</table>
+    {% for row in table %}
+      <tr>
+        {% for cell in row %}
+          <td>{{ cell[1] }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <div class="alert alert-danger" role="alert">
+    Diese Tabelle kann nicht angezeigt werden, weil ihr <strong>keine Abfrage</strong> übergeben worden ist.
+  </div>
+{% endif %}

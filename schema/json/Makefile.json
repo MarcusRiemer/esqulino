@@ -48,16 +48,16 @@ $(SCHEMA_PATH)/ProjectDescription.json : $(SRC_PATH)/shared/project.description.
 $(SCHEMA_PATH)/ProjectListDescription.json : $(SRC_PATH)/shared/project.description.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/QueryDescription.json : $(SRC_PATH)/shared/query.model.ts
+$(SCHEMA_PATH)/QueryDescription.json : $(SRC_PATH)/shared/query/description.ts
 	$(CONVERT_COMMAND)
 
 $(SCHEMA_PATH)/QueryUpdateRequestDescription.json : $(SRC_PATH)/editor/query.service.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/QueryResultDescription.json : $(SRC_PATH)/shared/query.result.ts
+$(SCHEMA_PATH)/QueryResultDescription.json : $(SRC_PATH)/shared/query/result.ts
 	$(CONVERT_COMMAND)
 
-$(SCHEMA_PATH)/RequestErrorDescription.json : $(SRC_PATH)/shared/query.result.ts
+$(SCHEMA_PATH)/RequestErrorDescription.json : $(SRC_PATH)/shared/query/result.ts
 	$(CONVERT_COMMAND)
 
 $(SCHEMA_PATH)/QueryParamsDescription.json : $(SRC_PATH)/editor/query.service.ts

@@ -1,4 +1,4 @@
-import {TableDescription}                     from './schema.description'
+import {TableDescription}                     from '../schema.description'
 
 /**
  * Basic data types as inspired by SQLite.

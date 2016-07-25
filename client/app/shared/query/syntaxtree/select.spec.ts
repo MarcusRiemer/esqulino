@@ -1,11 +1,7 @@
-import {
-    Model, ValidationResult
-} from '../query'
-import {
-    Schema
-} from '../schema'
+import {Schema}                                  from '../../schema'
 
-import * as SyntaxTree from './select'
+import {Model, SyntaxTree}                       from '../base'
+import {ValidationResult}                        from '../validation'
 
 describe('SELECT', () => {
     it('with only the *-Operator', () => {

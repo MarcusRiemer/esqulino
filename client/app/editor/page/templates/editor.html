@@ -4,6 +4,11 @@
                         [page]="page">
   </esqulino-page-layout>
 
+  <esqulino-page-data *ngIf="page"
+                        [project]="project"
+                        [page]="page">
+  </esqulino-page-data>
+
   <esqulino-server-preview *ngIf="page"
                            [project]="project"
                            [page]="page"
