@@ -57,10 +57,18 @@ test-reset: msg-pre-test-reset
 test-e2e : dist
 	$(SUBDIR_MAKE) client test-e2e
 
-# Runs the server in development mode, this is probably not a good idea to
-# do in a productive environment.
+# Runs the server. Although this target will also serve static files, it is
+# strongly encouraged to run a more sophisticated server for static files
+# as a reverse proxy.
 server-run :
 	$(SUBDIR_MAKE) server run
+
+# Runs a development version of the server. This server will restart itself if
+# relevant files change and emit additional debug output. NOT RECOMMENDED for
+# productive use.
+server-run-dev :
+	$(SUBDIR_MAKE) server run-dev
+
 
 # Compile every part of the documentation, including the thesis.
 doc :
