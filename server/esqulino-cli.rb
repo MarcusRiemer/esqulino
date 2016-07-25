@@ -64,9 +64,13 @@ class EsqulinoCli
   end
 end
 
-begin
-  cli = EsqulinoCli.new
-  cli.parse! ARGV
-rescue EsqulinoError => e
-  puts "\e[31m#{e.class.name}\e[0m: #{e}"
+# Don't run if required from somewhere
+if __FILE__ == $0
+  begin
+    cli = EsqulinoCli.new
+    cli.parse! ARGV
+  rescue EsqulinoError => e
+    puts "\e[31m#{e.class.name}\e[0m: #{e}"
+  end
 end
+

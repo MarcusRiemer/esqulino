@@ -3,7 +3,9 @@ import {
 } from '../../schema'
 
 import * as Model                             from '../description'
-import {ValidationResult, ValidationErrors}   from '../validation'
+import {
+    ValidationResult, ValidationErrors, ValidationError
+} from '../validation'
 import {
     Query, QueryFrom, ResultColumn
 } from '../base'
@@ -53,6 +55,7 @@ export class Select extends Component implements ExpressionParent {
      * component is invalid.
      */
     validate(schema : Schema) : ValidationResult {
+        // Are there any columns at all?
         if (this._columns.length === 0) {
             // No columns are not allowed
             return (new ValidationResult([
@@ -61,8 +64,44 @@ export class Select extends Component implements ExpressionParent {
         } else {
             // Any error in a child is also not allowed
             const children = this._columns.map(c => c.expr.validate(schema));
-            return (new ValidationResult([], children));
+            const unique = this.validateUniqueColumnNames();
+            return (new ValidationResult(unique, children));
+
+            // No columns may share identical names
         }
+    }
+
+    /**
+     * Ensures that all column names are unique.
+     */
+    validateUniqueColumnNames() : ValidationError[] {
+        // Counting occurences of all full names
+        let dupliq : { [name:string] : number } = {};
+
+        this.actualColums
+            .map(c => c.fullName)
+            .forEach(c => {
+                // Ensure there is an index available
+                if (!dupliq[c]) {
+                    dupliq[c] = 0;
+                }
+
+                // Increment the index
+                dupliq[c]++;
+            });
+
+        // Warn about duplicate names
+        // TODO: There should be a nicer way of doing this using then
+        //       `keys` method, but for some reason that does not work.
+        let toReturn : ValidationError[] = [];
+        
+        for (let key in dupliq) {
+            if (dupliq.hasOwnProperty(key) && dupliq[key] > 1) {
+                toReturn.push(new ValidationErrors.AmbiguousColumnName(key))
+            }
+        }
+
+        return (toReturn);
     }
 
     /**

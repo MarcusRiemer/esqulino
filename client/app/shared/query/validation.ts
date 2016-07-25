@@ -154,6 +154,23 @@ export module ValidationErrors {
     }
 
     /**
+     * A SELECT column introduces an ambiguous name.
+     */
+    export class AmbiguousColumnName implements ValidationError {
+        constructor(public columnName : string) {
+        }
+        
+        get errorMessage() {
+            return (`Multiple columns use the alias "${this.columnName}" `);
+        }
+
+        get location() {
+            return ("SELECT");
+        }
+    }
+
+
+    /**
      * A JOIN introduces an ambiguous table alias.
      */
     export class AmbiguousTableAlias implements ValidationError {

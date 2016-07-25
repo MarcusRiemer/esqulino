@@ -1,5 +1,5 @@
 {
-  "name": "Person Löschen",
+  "name": "p_löschen",
   "delete": {},
   "from": {
     "first": {

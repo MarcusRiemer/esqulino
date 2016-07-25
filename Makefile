@@ -57,10 +57,18 @@ test-reset: msg-pre-test-reset
 test-e2e : dist
 	$(SUBDIR_MAKE) client test-e2e
 
-# Runs the server in development mode, this is probably not a good idea to
-# do in a productive environment.
+# Runs the server. Although this target will also serve static files, it is
+# strongly encouraged to run a more sophisticated server for static files
+# as a reverse proxy.
 server-run :
 	$(SUBDIR_MAKE) server run
+
+# Runs a development version of the server. This server will restart itself if
+# relevant files change and emit additional debug output. NOT RECOMMENDED for
+# productive use.
+server-run-dev :
+	$(SUBDIR_MAKE) server run-dev
+
 
 # Compile every part of the documentation, including the thesis.
 doc :
@@ -86,6 +94,8 @@ doc-clean:
 dev-pretty-json-data :
 	find data -iname "*.json" -exec bash -c 'jq . < {} | sponge {}' \;
 
+# Prettyprints template data, but beware: Tidy does not mix well with the
+# liquid syntax, so this might destroy something ...
 dev-pretty-html-data :
 	find data -iname "*.liquid" -exec tidy -config tidy-config.txt -o {} {} \;
 

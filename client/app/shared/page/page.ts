@@ -181,7 +181,7 @@ export class Page extends ProjectResource {
      */
     addQueryReference(ref : QueryReferenceDescription) {
         // Ensure this reference name isn't in use already
-        if (this.usesQueryName(ref.name)) {
+        if (this.usesQueryReferenceByName(ref.name)) {
             throw new Error(`Name "${ref.name}" is already in use`);
         }
 
@@ -209,10 +209,22 @@ export class Page extends ProjectResource {
     /**
      * @return True, if the given name is already in use for a query.
      */
-    usesQueryName(name : string) {
+    usesQueryReferenceByName(name : string) {
         return (this._referencedQueries.some(q => q.name == name));
     }
 
+    /**
+     * @param queryId The ID of the query in question.
+     *
+     * @return True, if this query is used by this page.
+     */
+    usesQueryById(queryId : string) {
+        return (this._referencedQueries.some(ref => queryId == ref.queryId));
+    }
+
+    /**
+     * @return The referenced query with the given name.
+     */
     getQueryReferenceByName(name : string) {
         return (this._referencedQueries.find(q => q.name == name));
     }
@@ -229,15 +241,6 @@ export class Page extends ProjectResource {
      */
     get referencedQueries() : QueryReference[] {
         return (this._referencedQueries);
-    }
-
-    /**
-     * @param queryId The ID of the query in question.
-     *
-     * @return True, if this query is used by this page.
-     */
-    isUsingQuery(queryId : string) {
-        return (this._referencedQueries.some(ref => queryId == ref.queryId));
     }
 
     toModel() : PageDescription {

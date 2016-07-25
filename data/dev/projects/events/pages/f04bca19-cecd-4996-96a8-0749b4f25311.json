@@ -35,11 +35,13 @@
             },
             {
               "type": "query-table",
-              "queryRef": {
-                "name": "Personen",
-                "queryId": "86e70348-0e24-4c08-9d13-d2dd88c13faa"
-              },
-              "columns": []
+              "queryRefName": "p_alle",
+              "columns": [
+                "nachname",
+                "vorname",
+                "geb_jahr",
+                "tod_jahr"
+              ]
             }
           ]
         }
@@ -57,11 +59,36 @@
             },
             {
               "type": "query-table",
-              "queryRef": {
-                "queryId": "b0c224ac-efd2-4f46-bec0-b7bca7058a82",
-                "name": "Ereignisse"
-              },
-              "columns": []
+              "queryRefName": "e_alle",
+              "columns": [
+                "bezeichnung",
+                "beginn_jahr",
+                "ende_jahr"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 2,
+              "text": "Erlebte Ereignisse"
+            },
+            {
+              "type": "query-table",
+              "queryRefName": "erlebt",
+              "columns": [
+                "nachname",
+                "bezeichnung",
+                "beginn_jahr",
+                "ende_jahr"
+              ]
             }
           ]
         }
@@ -70,12 +97,19 @@
   ],
   "referencedQueries": [
     {
-      "name": "Personen",
+      "type": "query",
+      "name": "p_alle",
       "queryId": "86e70348-0e24-4c08-9d13-d2dd88c13faa"
     },
     {
-      "name": "Ereignisse",
+      "type": "query",
+      "name": "e_alle",
       "queryId": "b0c224ac-efd2-4f46-bec0-b7bca7058a82"
+    },
+    {
+      "type": "query",
+      "name": "erlebt",
+      "queryId": "e657b03b-9525-41ff-b32d-dfeb528e98c8"
     }
   ]
 }
