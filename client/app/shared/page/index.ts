@@ -1,8 +1,9 @@
 import {
-    Page, PageDescription, Row, Widget, QueryReference,
+    Page, PageDescription, QueryReference,
     ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription
 } from './page'
-import {Renderer} from './renderer'
+import {Row, Widget}           from './widgets/index'
+import {Renderer}              from './renderer'
 
 export {
     Page, PageDescription, Renderer, Row, Widget, QueryReference,

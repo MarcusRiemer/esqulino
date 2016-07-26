@@ -4,16 +4,18 @@ import {Query}                                from '../query'
 
 import {
     PageDescription, QueryReferenceDescription, WidgetDescription,
-    ValueReferenceDescription, ColumnReferenceDescription
+    ValueReferenceDescription, ColumnReferenceDescription,
+    ColumnDescription, RowDescription
 } from './page.description'
-import {Row, RowDescription, Widget}          from './widgets/index'
+import {Row}                                  from './widgets/row'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
 import {
     ValueReference, ColumnReference, QueryReference
 } from './value-reference'
 
 export {
-    PageDescription, Row, Widget,
+    PageDescription, ColumnDescription, RowDescription,
+    Row, WidgetDescription,
     ValueReferenceDescription, ColumnReferenceDescription,
     QueryReferenceDescription,
     ValueReference, ColumnReference, QueryReference
@@ -27,14 +29,14 @@ export class Page extends ProjectResource {
     private _referencedQueries : QueryReference[]
     private _renderer : Renderer;
     
-    constructor(desc : PageDescription, project : Project = undefined) {
+    constructor(desc : PageDescription, project? : Project) {
         super(desc.id, desc.name, project);
 
         // We only render stuff via liquid for the moment
         this._renderer = new LiquidRenderer();
 
         // Map descriptions to actual representations
-        this._rows = desc.rows.map(rowDesc => new Row(rowDesc));
+        this._rows = desc.rows.map(rowDesc => new Row(rowDesc, this));
 
         // Making a copy of those references
         this._referencedQueries = desc.referencedQueries.map(refDesc => new QueryReference(project, this, refDesc));
@@ -69,7 +71,7 @@ export class Page extends ProjectResource {
      * @index The index to insert the row at, 0 is the very beginning
      */
     addRow(index : number, newRowDesc : RowDescription) {
-        const newRow = new Row(newRowDesc);
+        const newRow = new Row(newRowDesc, this);
         this._rows.splice(index, 0, newRow);
     }
 
@@ -149,14 +151,14 @@ export class Page extends ProjectResource {
     /**
      * Removes a specific widget.
      */
-    removeWidget(widget : Widget) {
+    removeWidget(widgetRef : any) {
         // As we have no information about the position, we need to check
         // every row ...
         const deleted = this._rows.some(r => {
             // ... and every column ...
             const toReturn = r.columns.some(c => {
                 // ... for the correct index to remove
-                const index = c.widgets.findIndex(w => w == widget);
+                const index = c.widgets.findIndex(w => w == widgetRef);
                 if (index >= 0) {
                     c.removeWidgetByIndex(index);
                     this.markDirty();
@@ -170,7 +172,7 @@ export class Page extends ProjectResource {
         });
 
         if (!deleted) {
-            throw new Error(`Could not remove widget ("${JSON.stringify(widget)}"): Not found in any cell`);
+            throw new Error(`Could not remove widget ("${JSON.stringify(widgetRef.toModel())}"): Not found in any cell`);
         }
     }
 

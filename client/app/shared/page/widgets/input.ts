@@ -1,5 +1,7 @@
-import {Widget, WidgetDescription} from './widget'
-import {InputDescription}          from '../page.description'
+import {Page}                            from '../page'
+import {InputDescription}                from '../page.description'
+
+import {Widget, WidgetDescription}       from './widget'
 
 export {InputDescription}
 
@@ -20,8 +22,8 @@ export class Input extends Widget {
     // The HTML `type` of this input
     private _inputType : string;
     
-    constructor(desc : InputDescription) {
-        super("input");
+    constructor(desc : InputDescription, page? : Page) {
+        super("input", page);
         this._outParamName = desc.outParamName;
         this._caption = desc.caption;
         this._description = desc.description;

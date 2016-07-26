@@ -18,7 +18,7 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
     /**
      * Stores all basic information about a string.
      */
-    constructor(schema : Schema, model : Model.QueryDescription, project : Project = undefined) {
+    constructor(schema : Schema, model : Model.QueryDescription, project? : Project) {
         super(model.id, model.name, project);
         this.schema = schema;
     }

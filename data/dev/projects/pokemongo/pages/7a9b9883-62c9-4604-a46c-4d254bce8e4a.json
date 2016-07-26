@@ -13,7 +13,7 @@
             },
             {
               "type": "paragraph",
-              "text": "Die transferierten Pokeomen kommen zu Prof. Willow auf eine Farm und leben dort glücklich und zufrieden. Du wirst sie aber nie mehr zu Gesicht bekommen und kannst sie auch nicht besuchen."
+              "text": "Die transferierten Pokeomen kommen zu Prof. Willow auf eine Farm und leben dort glücklich und zufrieden. Du wirst sie aber nie wieder zu Gesicht bekommen und kannst sie auch nicht besuchen."
             },
             {
               "type": "paragraph",
@@ -37,7 +37,11 @@
             },
             {
               "type": "button",
-              "text": "<strong>Jetzt Freilassen</strong>"
+              "text": "<strong>Jetzt Freilassen</strong>",
+              "action": {
+                "mapping": [],
+                "queryName": "Gefangen_Loeschen"
+              }
             }
           ]
         }

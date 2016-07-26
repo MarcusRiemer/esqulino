@@ -1,4 +1,4 @@
-import {ColumnDescription}              from '../page.description'
+import {Page, ColumnDescription}        from '../page'
 import {Widget, WidgetDescription}      from './widget'
 import {loadWidget}                     from './widget-loader'
 
@@ -13,9 +13,12 @@ export class Column {
 
     private _widgets : Widget[];
 
-    constructor(desc : ColumnDescription) {
+    private _page : Page;
+
+    constructor(desc : ColumnDescription, page? : Page) {
         this._width = desc.width;
-        this._widgets = desc.widgets.map( (wiDesc) => loadWidget(wiDesc) );
+        this._page = page;
+        this._widgets = desc.widgets.map( (wiDesc) => loadWidget(wiDesc, page) );
     }
 
     /**
@@ -46,7 +49,7 @@ export class Column {
             throw new Error(`Adding Widget ("${JSON.stringify(widgetDesc)}") exceeds widget count (given: ${widgetIndex}, length ${this._widgets.length}`);
         }
 
-        const widget = loadWidget(widgetDesc);
+        const widget = loadWidget(widgetDesc, this._page);
         this._widgets.splice(widgetIndex, 0, widget);
 
         return (widget);

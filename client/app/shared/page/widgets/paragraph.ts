@@ -1,5 +1,7 @@
-import {Widget, WidgetDescription} from './widget'
-import {ParagraphDescription}      from '../page.description'
+import {Page}                            from '../page'
+import {ParagraphDescription}            from '../page.description'
+
+import {Widget, WidgetDescription}       from './widget'
 
 export {ParagraphDescription}
 
@@ -9,8 +11,8 @@ export {ParagraphDescription}
 export class Paragraph extends Widget {
     private _text : string;
     
-    constructor(desc : ParagraphDescription) {
-        super("paragraph");
+    constructor(desc : ParagraphDescription, page? : Page) {
+        super("paragraph", page);
         this._text = desc.text;
     }
 

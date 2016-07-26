@@ -1,4 +1,4 @@
-import {RowDescription}            from '../page.description'
+import {Page, RowDescription}      from '../page'
 
 import {Column}                    from './column'
 
@@ -10,9 +10,13 @@ export {RowDescription}
 export class Row {
     private _columns : Column[];
 
-    constructor(desc : RowDescription) {
+    private _page : Page;
+
+    constructor(desc : RowDescription, page? : Page) {
+        this._page = page;
+        
         // Create all referenced columns
-        this._columns = desc.columns.map(columnDesc => new Column(columnDesc));
+        this._columns = desc.columns.map(columnDesc => new Column(columnDesc, page));
     }
 
     /**

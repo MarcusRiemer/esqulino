@@ -2,10 +2,12 @@ import {
     Component, Inject, OnInit, ChangeDetectorRef
 } from '@angular/core'
 
-import {Button}                       from '../../../shared/page/widgets/index'
+import {Button, QueryAction}          from '../../../shared/page/widgets/index'
 
 import {SidebarService}               from '../../sidebar.service'
 import {WIDGET_MODEL_TOKEN}           from '../../editor.token'
+
+import {DragService, PageDragEvent}   from '../drag.service'
 
 import {WidgetComponent}              from './widget.component'
 import {
@@ -28,5 +30,37 @@ export class ButtonComponent extends WidgetComponent<Button> {
             type : ButtonSidebarComponent
         });
     }
+
+    /**
+     * Something has been dragged over the button action
+     */
+    onActionDragOver(evt : DragEvent) {
+        // Is the thing that could be possibly dropped a QueryReference?
+        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
+        if (pageEvt.queryRef) {
+            // Indicates we can drop here
+            evt.preventDefault();
+            evt.stopPropagation();
+        }
+    }
+
+    /**
+     * Something has been dropped on the query name
+     */
+    onActionDrop(evt : DragEvent) {
+        // Is the thing that could be possibly dropped a QueryReference?
+        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
+        if (pageEvt.queryRef) {
+            // Indicates we can drop here
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            this.model.action = new QueryAction(this.model, {
+                mapping : [],
+                queryName : pageEvt.queryRef.name
+            });
+        }
+    }
+
 }
 

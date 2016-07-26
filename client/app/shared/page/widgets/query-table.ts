@@ -1,7 +1,7 @@
-import {Widget, WidgetDescription} from './widget'
-import {
-    QueryTableDescription
-} from '../page.description'
+import {Page}                            from '../page'
+import {QueryTableDescription}           from '../page.description'
+
+import {Widget, WidgetDescription}       from './widget'
 
 export {QueryTableDescription}
 
@@ -17,8 +17,8 @@ export class QueryTable extends Widget {
      */
     private _columns: string[];
 
-    constructor(desc : QueryTableDescription) {
-        super("query-table");
+    constructor(desc : QueryTableDescription, page? : Page) {
+        super("query-table", page);
         this._queryRefName = desc.queryRefName;
         this._columns = desc.columns;
     }
