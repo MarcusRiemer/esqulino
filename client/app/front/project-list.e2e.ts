@@ -5,9 +5,9 @@ describe('Project List Page', () => {
     it('shows all available projects', () => {
         browser.get('/about/projects');
 
-        // 2 Projects should be present
+        // Expected projects should be present
         expect(by.id("available-projects")).toBeTruthy();
-        expect(projects.count()).toEqual(2);
+        expect(projects.count()).toEqual(3, "Number of expected projects");
     });
 
     it('navigates to an editor', () => {
