@@ -1,4 +1,20 @@
 <div class="widget-preview">
+  <h5>
+    Aktion:
+    <span (dragover)="onActionDragOver($event)"
+          (drop)="onActionDrop($event)"
+          class="block-container block">
+      <span *ngIf="model.hasAction"
+            class="parameter">
+        {{ model.action.queryName }}
+      </span>
+      <span *ngIf="!model.hasAction"
+            class="missing">
+        Keine Aktion
+      </span>
+    </span>
+  </h5>
+
   <button (click)="startEditing()"
           type="button"
           class="btn btn-secondary btn-block">

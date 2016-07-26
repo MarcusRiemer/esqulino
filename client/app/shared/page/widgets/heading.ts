@@ -1,5 +1,7 @@
-import {Widget, WidgetDescription} from './widget'
-import {HeadingDescription}       from '../page.description'
+import {Page}                            from '../page'
+import {HeadingDescription}              from '../page.description'
+
+import {Widget, WidgetDescription}       from './widget'
 
 export {HeadingDescription}
 
@@ -10,8 +12,8 @@ export class Heading extends Widget {
     private _text : string;
     private _level : number;
     
-    constructor(desc : HeadingDescription) {
-        super("heading");
+    constructor(desc : HeadingDescription, page? : Page) {
+        super("heading", page);
         this._text = desc.text;
         this._level = desc.level;
     }

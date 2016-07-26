@@ -260,12 +260,18 @@ class ScratchSqlApp < Sinatra::Base
     return @page.render({})
   end
 
+  # Rendering subdomains
   subdomain do   
     get '/:page_name_or_id?' do
       request_prepare_project subdomain
       request_prepare_page(params['page_name_or_id'], true)
 
       return @page.render({})
+    end
+
+    post '/:queryId' do
+      puts "All Params: #{params.inspect}"
+      redirect back
     end
   end
 

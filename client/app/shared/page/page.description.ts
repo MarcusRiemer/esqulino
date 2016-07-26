@@ -1,4 +1,23 @@
 /**
+ * Inputs and outputs *may* use identical names but are not required
+ * to do so.
+ */
+export interface ParameterMappingDescription {
+    inputName : string
+
+    outputName : string
+}
+
+/**
+ * This action kicks of some mutation query
+ */
+export interface QueryActionDescription {
+    queryName : string
+
+    mapping : ParameterMappingDescription[]
+}
+
+/**
  * Describes a input widget. These are usually text-orientated.
  */
 export interface InputDescription extends WidgetDescription {
@@ -9,18 +28,18 @@ export interface InputDescription extends WidgetDescription {
     outParamName : string
 }
 
+/**
+ * Describes a button the user can press to execute some query or
+ * plugin action.
+ */
 export interface ButtonDescription extends WidgetDescription {
     type : "button"
 
     // The text on the button
     text : string
-    
-    // The target URL
-    action : string
 
-    // This value allows the server to distinguish the action
-    // the user has chosen
-    value : string
+    // What happens if the user presses the button?
+    action : QueryActionDescription
 }
 
 /**

@@ -1,4 +1,4 @@
-import {WidgetDescription}          from '../page.description'
+import {Page, WidgetDescription}          from '../page'
 
 export {WidgetDescription}
 
@@ -12,8 +12,22 @@ export abstract class Widget {
 
     private _type : string;
 
-    constructor(type : string) {
+    private _page : Page;
+
+    constructor(type : string, page : Page) {
         this._type = type;
+        this._page = page;
+    }
+
+    /**
+     * @return The page this widget is placed on.
+     */
+    get page() {
+        if (!this._page) {
+            throw new Error(`Widget of type "${this._type}" has no page`);
+        }
+
+        return (this._page);
     }
 
     /**

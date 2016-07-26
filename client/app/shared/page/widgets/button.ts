@@ -1,21 +1,31 @@
-import {Widget, WidgetDescription} from './widget'
-import {ButtonDescription}         from '../page.description'
+import {Page}                            from '../page'
+import {
+    ButtonDescription, QueryActionDescription
+} from '../page.description'
 
-export {ButtonDescription}
+import {QueryAction, ParameterMapping}   from './action'
+import {Widget, WidgetDescription}       from './widget'
 
+export {
+    ButtonDescription, QueryAction, ParameterMapping
+}
+
+/**
+ * A button the user can press.
+ */
 export class Button extends Widget {
-    private _value : string;
-
-    private _action : string;
+    private _action : QueryAction;
 
     private _text : string;
 
-    constructor(desc : ButtonDescription) {
-        super("button");
-
+    constructor(desc : ButtonDescription, page? : Page) {
+        super("button", page);
         this._text = desc.text;
-        this._value = desc.value;
-        this._action = desc.action;
+
+        // If there is an action, hold on to it
+        if (desc.action) {
+            this._action = new QueryAction(this, desc.action);
+        }
     }
 
     static get emptyDescription() : ButtonDescription {
@@ -41,6 +51,10 @@ export class Button extends Widget {
         this._text = value;
     }
 
+    get hasAction() {
+        return (!!this._action);
+    }
+    
     /**
      * @return The target URL
      */
@@ -51,32 +65,20 @@ export class Button extends Widget {
     /**
      * @param value The target URL
      */
-    set action(value : string) {
+    set action(value) {
         this._action = value;
     }
 
-    /**
-     * @return This value allows the server to distinguish the action
-     *         the user has chosen.
-     */
-    get value() {
-        return (this._value);
-    }
-
-    /**
-     * @param value This allows the server to distinguish the action
-     *              the user has chosen.
-     */
-    set value(value : string) {
-        this._value = value;
-    }     
-
     protected toModelImpl() : WidgetDescription {
+        let action : QueryActionDescription = undefined;
+        if (this._action) {
+            action = this._action.toModel();
+        }
+        
         return ({
             type : "button",
             text : this._text,
-            action : this._action,
-            value : this._value
+            action : action
         } as ButtonDescription);
     }
     
