@@ -20,7 +20,7 @@ export {Button, QueryAction}
     templateUrl: 'app/editor/page/widgets/templates/button.html',
     selector: "esqulino-paragraph"
 })
-export class ButtonComponent extends WidgetComponent<Button> {
+export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
     
     constructor(@Inject(WIDGET_MODEL_TOKEN) model : Button,
                 sidebarService : SidebarService,
@@ -29,6 +29,12 @@ export class ButtonComponent extends WidgetComponent<Button> {
             id: BUTTON_SIDEBAR_IDENTIFIER,
             type : ButtonSidebarComponent
         });
+    }
+
+    ngOnInit() {
+        if (this.model.action) {
+            this.model.action.ensureDefaultMappings();
+        }
     }
 
     get parameters() {

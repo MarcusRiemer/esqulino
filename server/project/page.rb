@@ -119,6 +119,12 @@ class Page
     @model.delete "id"
   end
 
+  # @return The queries that are referenced by this page.
+  def referenced_queries
+    load_model! if @model.nil?
+    @model['referencedQueries']
+  end
+
   # Render this page. This will read quite a few things from disk:
   #
   # * The page model to find all referenced queries
@@ -130,11 +136,9 @@ class Page
   #
   # And finally all parameters, including the query result, will be handed off
   # to the template engine. The result of this render process is then returned.
-  def render(params, render_engine = "liquid")
-    load_model!
-    
+  def render(params, render_engine = "liquid")    
     # Load all referenced queries
-    queries = @model['referencedQueries'].map do |ref|
+    queries = referenced_queries.map do |ref|
       {
         'name' => ref['name'],
         'sql' => @project.query_by_id(ref['queryId']).sql
@@ -160,6 +164,14 @@ class Page
     raise UnknownPageError.new(@project.id, @id, extension) unless File.exists? page_file_path extension
     
     File.read(page_file_path extension)
+  end
+
+  # Resolvey a query by the name of it's reference
+  def get_query_by_reference_name(ref_name)
+    ref_index = referenced_queries.find_index {|ref| ref['name'] == ref_name}
+    raise UnknownReferenceNameError.new(@project, self, ref_name) if ref_index.nil?
+
+    return @project.query_by_id referenced_queries[ref_index]['queryId']
   end
 end
 

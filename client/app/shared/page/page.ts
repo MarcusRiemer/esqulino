@@ -10,6 +10,9 @@ import {
 import {Row}                                  from './widgets/row'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
 import {
+    Widget, ParametrizedWidget, UserInputWidget
+} from './widgets/widget'
+import {
     ValueReference, ColumnReference, QueryReference
 } from './value-reference'
 
@@ -243,6 +246,20 @@ export class Page extends ProjectResource {
      */
     get referencedQueries() : QueryReference[] {
         return (this._referencedQueries);
+    }
+
+    /**
+     * @return All widgets that are in use on this page.
+     */
+    get allWidgets() : Widget[] {
+        const subs = this._rows.map(c => c.widgets);
+        return ([].concat(...subs));
+    }
+
+    hasUserInput(name : string) {
+        const parametrized = this.allWidgets.filter(w => w instanceof UserInputWidget) as UserInputWidget[];
+
+        return (parametrized.some(p => p.providesParameter(name)));
     }
 
     toModel() : PageDescription {

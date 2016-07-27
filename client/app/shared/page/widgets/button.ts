@@ -4,7 +4,9 @@ import {
 } from '../page.description'
 
 import {QueryAction, ParameterMapping}   from './action'
-import {Widget, WidgetDescription}       from './widget'
+import {
+    Widget, WidgetDescription, ParametrizedWidget
+} from './widget'
 
 export {
     ButtonDescription, QueryAction, ParameterMapping
@@ -13,7 +15,7 @@ export {
 /**
  * A button the user can press.
  */
-export class Button extends Widget {
+export class Button extends ParametrizedWidget {
     private _action : QueryAction;
 
     private _text : string;
@@ -69,6 +71,18 @@ export class Button extends Widget {
         this._action = value;
     }
 
+    /**
+     * @return The parameters that are required to run the action
+     *         behind this button.
+     */
+    getParameters() {
+        if (this._action) {
+            return (this._action.mappings);
+        } else {
+            return ([]);
+        }
+    }
+    
     protected toModelImpl() : WidgetDescription {
         let action : QueryActionDescription = undefined;
         if (this._action) {

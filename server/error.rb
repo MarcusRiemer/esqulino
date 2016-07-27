@@ -55,6 +55,13 @@ class UnknownPageError < EsqulinoError
   end
 end
 
+# Thrown when a reference is unknown
+class UnknownReferenceNameError < EsqulinoError
+  def initialize(project, page, name)
+    super "Could not find \"#{name}\" on page \"#{page.name}\" in project \"#{project.id}\""
+  end
+end
+
 # Thrown when a request does not fulfill a certain schema
 class InvalidSchemaError < EsqulinoError
   attr_reader :schema_name, :errors

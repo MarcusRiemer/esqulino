@@ -1,6 +1,7 @@
 import {Page, RowDescription}      from '../page'
 
 import {Column}                    from './column'
+import {Widget}                    from './widget'
 
 export {RowDescription}
 
@@ -37,6 +38,14 @@ export class Row {
      */
     get columns() {
         return (this._columns);
+    }
+
+    /**
+     * @return All widgets across all columns.
+     */
+    get widgets() : Widget[] {
+        const subs = this._columns.map(c => c.widgets);
+        return ([].concat(...subs));
     }
 
     toModel() : RowDescription {

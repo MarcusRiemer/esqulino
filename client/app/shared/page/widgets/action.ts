@@ -18,7 +18,11 @@ export class ParameterMapping {
 
     private _outputName : string;
 
+    private _action : Action;
+
     constructor(action : Action, desc : ParameterMappingDescription) {
+        this._action = action;
+        
         this._inputName = desc.inputName;
         this._outputName = desc.outputName;
     }
@@ -33,10 +37,24 @@ export class ParameterMapping {
     }
 
     /**
+     * @return True, if this mapping is fulfilled by the page it is assigned to.
+     */
+    get isSatisfied() : boolean {
+        return (this._inputName && this._action.page.hasUserInput(this._inputName));
+    }
+
+    /**
      * @return The name of the wired output
      */
     get outputName() {
         return (this._outputName);
+    }
+
+    /**
+     * @return The name of the wired input
+     */
+    get inputName() {
+        return (this._inputName);
     }
 
     toModel() : ParameterMappingDescription {
@@ -116,10 +134,6 @@ export class QueryAction extends Action {
     constructor(widget : Widget, desc : QueryActionDescription) {
         super(widget, desc);
         this._queryName = desc.queryName;
-
-        if (this.mappings.length == 0) {
-            this.assignDefaultMappings();
-        }
     }
 
     /**
@@ -132,7 +146,7 @@ export class QueryAction extends Action {
     /**
      * 
      */
-    get requiredParameters() {
+    get queryParameters() {
         return (this.queryReference.query.parameters);
     }
 
@@ -158,7 +172,8 @@ export class QueryAction extends Action {
      * @return The server-side URL to call.
      */
     get url() {
-        return (`/api/action/query/${this.queryName}`);
+        const pageName = this.page.name;
+        return (`/${pageName}/query/${this.queryName}`);
     }
 
     /**
@@ -166,11 +181,15 @@ export class QueryAction extends Action {
      */
     set queryName(value : string) {
         this._queryName = value;
-        this.assignDefaultMappings();
+        this.ensureDefaultMappings();
     }
 
-    assignDefaultMappings() {
-        if (this.hasValidQueryReference) {
+    /**
+     * If there are no current mappings, take the referenced
+     * thing and create mappings for all of its input.
+     */
+    ensureDefaultMappings() {
+        if (this.hasValidQueryReference && this.mappings.length == 0) {
             const query = this.queryReference.query;
             this.mappings = query.parameters.map(p => {
                 return new ParameterMapping(this, {
@@ -178,6 +197,8 @@ export class QueryAction extends Action {
                     outputName : undefined
                 });
             });
+
+            console.log(`Assigned default mappings, now ${this.mappings.length}`)
         }
     }
 
