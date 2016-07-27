@@ -14,14 +14,17 @@
         Keine Aktion
       </span>
     </span>
-  </h5>
 
-  <div *ngIf="model.hasAction">
-    Parameter:
-    <div *ngFor="let param of requiredParameters;">
-      {{ param.key }}
-    </div>
-  </div>
+    <template [ngIf]="model.hasAction">
+      <span *ngFor="let param of parameters;"
+            class="block-container">
+        <span class="constant">
+          <span *ngIf="param.isSatisfied" class="fa fa-fw fa-link" aria-hidden="true"></span>
+          {{ param.inputName }}
+        </span>
+      </span>
+    </template>
+  </h5>
 
   <button (click)="startEditing()"
           type="button"

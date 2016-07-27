@@ -269,8 +269,20 @@ class ScratchSqlApp < Sinatra::Base
       return @page.render({})
     end
 
-    post '/api/action/:actionType/:action' do
-      puts "All Params: #{params.inspect}"
+    post '/:page_name_or_id?/query/:query_ref_name' do |page_name_or_id, query_ref_name|
+      request_prepare_project subdomain
+      request_prepare_page(page_name_or_id, true)
+
+      # Grab all input values that are not empty and get rid of the "input." prefix
+      input = params
+        .select {|key,value| key.start_with? "input" and not value.strip.empty?}
+        .map {|key,value| { key[6..-1] => value} }
+
+      # Grab the query
+      query = @page.get_query_by_reference_name query_ref_name
+      @project.execute_sql(query.sql, input)
+
+      # Go back
       redirect back
     end
   end

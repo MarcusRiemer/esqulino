@@ -1,14 +1,16 @@
 import {Page}                            from '../page'
 import {InputDescription}                from '../page.description'
 
-import {Widget, WidgetDescription}       from './widget'
+import {
+    Widget, WidgetDescription, UserInputWidget
+} from './widget'
 
 export {InputDescription}
 
 /**
  * Asks for input from the user
  */
-export class Input extends Widget {
+export class Input extends UserInputWidget {
 
     // The name of the parameter this input provides
     private _outParamName : string
@@ -97,6 +99,13 @@ export class Input extends Widget {
      */
     set inputType(value : string) {
         this._inputType = value;
+    }
+
+    /**
+     * @return True, if this input provides the given name.
+     */ 
+    providesParameter(name : string) {
+        return (this._outParamName === name);
     }
 
     protected toModelImpl() : WidgetDescription {

@@ -25,9 +25,14 @@
               ]
             },
             {
+              "type": "heading",
+              "level": 2,
+              "text": "Fakten zu deinem Fang"
+            },
+            {
               "type": "input",
               "outParamName": "nummer",
-              "caption": "Nummer des Pokémon im Pokédex",
+              "caption": "Nummer im Pokédex",
               "description": "",
               "inputType": "number"
             },
@@ -41,13 +46,13 @@
             {
               "type": "input",
               "outParamName": "staerke",
-              "caption": "Staerke des neuen Pokémon",
+              "caption": "Stärke des neuen Pokémon",
               "description": "",
               "inputType": "text"
             },
             {
               "type": "button",
-              "text": "Speichern",
+              "text": "Hinzufügen",
               "action": {
                 "type": "query",
                 "mapping": [
@@ -63,6 +68,23 @@
                 ],
                 "queryName": "Gefangen_Neu"
               }
+            },
+            {
+              "type": "heading",
+              "level": 2,
+              "text": "Meine Pokémon"
+            },
+            {
+              "type": "query-table",
+              "queryRefName": "Meine_Pokemon",
+              "columns": [
+                "gefangen_id",
+                "nummer",
+                "name",
+                "typ",
+                "spitzname",
+                "staerke"
+              ]
             }
           ]
         }
@@ -79,6 +101,11 @@
       "type": "query",
       "name": "Gefangen_Neu",
       "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44"
+    },
+    {
+      "type": "query",
+      "name": "Meine_Pokemon",
+      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35"
     }
   ]
 }

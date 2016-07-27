@@ -36,7 +36,7 @@ export class WidgetComponent<TModel> {
     /**
      * @return The model that is currently edited
      */
-    get model() {
+    get model() : TModel {
         return (this._model);
     }
 

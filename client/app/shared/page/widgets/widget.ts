@@ -1,5 +1,7 @@
 import {Page, WidgetDescription}          from '../page'
 
+import {ParameterMapping}                 from './action'
+
 export {WidgetDescription}
 
 /**
@@ -60,4 +62,32 @@ export abstract class Widget {
     protected abstract toModelImpl() : WidgetDescription;
 }
 
+/**
+ * A widget that needs specific external input to work.
+ */
+export abstract class ParametrizedWidget extends Widget {
+
+    /**
+     * @return All parameters required for this widget
+     */
+    abstract getParameters() : ParameterMapping[];
+
+    /**
+     * @return True, if the given name is required as an input parameter.
+     */
+    hasInputParameter(name : string) {
+        return (this.getParameters().some(p => p.inputName == name));
+    }
+}
+
+/**
+ * A widget that provides external input
+ */
+export abstract class UserInputWidget extends Widget {
+
+    /**
+     * @return True, if this widget provides the required output.
+     */
+    abstract providesParameter(name : string) : boolean;
+}
 
