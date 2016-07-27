@@ -6,7 +6,8 @@
           class="form-control">
     <option *ngFor="let avail of availableQueries;"
             [value]="avail.name">
-      {{avail.name}} ({{ avail.query.name }})
+      {{avail.name}}
+      <span *ngIf="avail.name != avail.query.name">({{ avail.query.name }})</span>
     </option>
   </select>
 

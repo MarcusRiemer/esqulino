@@ -1,4 +1,5 @@
-<div class="widget-preview">
+<div (click)="startEditing()"
+     class="widget-preview">
   <h5>
     Aktion:
     <span (dragover)="onActionDragOver($event)"
@@ -14,6 +15,13 @@
       </span>
     </span>
   </h5>
+
+  <div *ngIf="model.hasAction">
+    Parameter:
+    <div *ngFor="let param of requiredParameters;">
+      {{ param.key }}
+    </div>
+  </div>
 
   <button (click)="startEditing()"
           type="button"

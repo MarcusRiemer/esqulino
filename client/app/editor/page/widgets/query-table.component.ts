@@ -72,7 +72,8 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
      */
     get hasValidReference() {
         return (this._page.usesQueryReferenceByName(this.referenceName) &&
-                this.queryReference.isResolveable);
+                this.queryReference.isResolveable &&
+                this.queryReference.query instanceof QuerySelect);
     }
 
     /**
@@ -166,14 +167,16 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
      * Updates the model to use all columns that are available.
      */
     useAllColumns() {
-        // Compute all possible columns
-        const ref = this._page.getQueryReferenceByName(this.referenceName);
-        const query = ref.query as QuerySelect;
-        const possibleColumns = query.select.actualColums;
+        if (this.hasValidReference) {
+            // Compute all possible columns
+            const ref = this._page.getQueryReferenceByName(this.referenceName);
+            const query = ref.query as QuerySelect;
+            const possibleColumns = query.select.actualColums;
 
-        this.model.columnNames = possibleColumns.map(c => c.shortName);
+            this.model.columnNames = possibleColumns.map(c => c.shortName);
 
-        this._cdRef.markForCheck();
+            this._cdRef.markForCheck();
+        }
     }
 
     /**

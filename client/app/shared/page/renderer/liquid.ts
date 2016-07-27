@@ -44,8 +44,12 @@ function renderInput(w: Widget) : string {
 function renderButton(w: Widget) : string {
     const button = w as Button;
     const text = button.text;
+    const cssClass = "btn btn-secondary btn-block";
 
-    return (`<button type="button" class="btn btn-secondary btn-block">${text}</button>`);    
+    const actionUrl = button.action.url;
+    const method = button.action.method;
+
+    return (`<button type="submit" formaction="${actionUrl}" formmethod="${method}" class="${cssClass}">${text}</button>`);    
 }
 
 

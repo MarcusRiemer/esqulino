@@ -14,7 +14,7 @@ import {
     BUTTON_SIDEBAR_IDENTIFIER, ButtonSidebarComponent
 } from './button.sidebar.component'
 
-export {Button}
+export {Button, QueryAction}
 
 @Component({
     templateUrl: 'app/editor/page/widgets/templates/button.html',
@@ -29,6 +29,14 @@ export class ButtonComponent extends WidgetComponent<Button> {
             id: BUTTON_SIDEBAR_IDENTIFIER,
             type : ButtonSidebarComponent
         });
+    }
+
+    get parameters() {
+        if (this.model.hasAction) {
+            return (this.model.action.mappings);
+        } else {
+            return ([]);
+        }
     }
 
     /**
@@ -56,6 +64,7 @@ export class ButtonComponent extends WidgetComponent<Button> {
             evt.stopPropagation();
 
             this.model.action = new QueryAction(this.model, {
+                type : "query",
                 mapping : [],
                 queryName : pageEvt.queryRef.name
             });

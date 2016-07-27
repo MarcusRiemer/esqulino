@@ -50,7 +50,10 @@ export class QueryTableSidebarComponent {
      * @return The names of the columns that are currently available to render.
      */
     get availableColumns() {
-        if (this._component.queryReference) {
+        if (this._component.queryReference &&
+            this._component.queryReference.isResolveable &&
+            this._component.queryReference.query instanceof QuerySelect) {
+
             const query = this._component.queryReference.query as QuerySelect;
             const columns = query.select.actualColums
             return (columns);
@@ -65,7 +68,7 @@ export class QueryTableSidebarComponent {
      */
     get availableQueries() {
         if (this._component.page) {
-            return (this._component.page.referencedQueries);
+            return (this._component.page.referencedQueries.filter(q => q.isResolveable && q.query instanceof QuerySelect));
         } else {
             return ([]);
         }

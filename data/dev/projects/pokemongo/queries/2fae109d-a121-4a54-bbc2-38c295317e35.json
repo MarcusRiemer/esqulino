@@ -18,7 +18,7 @@
       {
         "expr": {
           "singleColumn": {
-            "column": "staerke",
+            "column": "gefangen_id",
             "table": "gefangen"
           }
         }
@@ -51,6 +51,14 @@
         "expr": {
           "singleColumn": {
             "column": "spitzname",
+            "table": "gefangen"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "staerke",
             "table": "gefangen"
           }
         }

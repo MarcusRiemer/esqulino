@@ -9,11 +9,11 @@
             {
               "type": "heading",
               "level": 1,
-              "text": "Hallo auf meinem Pokedex"
+              "text": "Hallo auf meinem Pokédex"
             },
             {
               "type": "paragraph",
-              "text": "Hier zeige ich alle Pokemon, die ich gefangen habe."
+              "text": "Hier zeige ich alle Pokémon, die ich gefangen habe."
             }
           ]
         }

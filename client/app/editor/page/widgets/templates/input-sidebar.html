@@ -1,6 +1,13 @@
 <div class="card-block">
   <h4>Eingabe</h4>
   <fieldset class="form-group">
+    <label for="input-sidebar-caption">Parametername</label>
+    <input [(ngModel)]="model.outParamName"
+           type="text"
+           class="form-control"
+           id="input-sidebar-outParamName">
+  </fieldset>
+  <fieldset class="form-group">
     <label for="input-sidebar-caption">Titel</label>
     <input [(ngModel)]="component.caption"
            type="text"
