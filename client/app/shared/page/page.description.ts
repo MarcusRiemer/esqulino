@@ -9,12 +9,20 @@ export interface ParameterMappingDescription {
 }
 
 /**
- * This action kicks of some mutation query
+ * Actions specify the intent to change something on the server.
  */
-export interface QueryActionDescription {
-    queryName : string
+export interface ActionDescription {
+    // Discriminator value for inheritance
+    type : string
 
     mapping : ParameterMappingDescription[]
+}
+
+/**
+ * This action kicks of some mutation query
+ */
+export interface QueryActionDescription extends ActionDescription {
+    queryName : string
 }
 
 /**

@@ -104,7 +104,7 @@ export class QueryReference extends ValueReference {
     get query() {
         const query = this.project.getQueryById(this.queryId);
         if (!query) {
-            throw new Error(`QueryReference "${this.queryId}" could not be resolved`);
+            throw new Error(`QueryReference ${this.name} (=> "${this.queryId}") could not be resolved`);
         }
 
         return (query);

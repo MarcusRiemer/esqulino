@@ -2,7 +2,9 @@ import {Component, Inject, Optional}        from '@angular/core'
 
 import {SIDEBAR_MODEL_TOKEN}                from '../../editor.token'
 
-import {ButtonComponent, Button}            from './button.component'
+import {
+    ButtonComponent, Button, QueryAction
+} from './button.component'
 
 /**
  * Displays the sidebar editing component for a heading.
@@ -16,6 +18,22 @@ export class ButtonSidebarComponent {
 
     constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : ButtonComponent) {
         this._component = com;
+    }
+
+    get queryName() {
+        return (this.model.action && this.model.action.queryName);
+    }
+
+    set queryName(value : string) {
+        this.model.action = new QueryAction(this.model, {
+            mapping : [],
+            queryName : value,
+            type : "query"
+        });
+    }
+
+    get availableQueries() {
+        return (this.model.page.referencedQueries)
     }
 
     /**

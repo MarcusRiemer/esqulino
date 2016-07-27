@@ -46,6 +46,13 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
     abstract getLeaves() : SyntaxTree.Expression[];
 
     /**
+     * @return All parameters of this query.
+     */
+    get parameters() : SyntaxTree.ParameterExpression[] {
+        return (this.getLeaves().filter(e => e instanceof SyntaxTree.ParameterExpression) as SyntaxTree.ParameterExpression[] )
+    }
+
+    /**
      * Retrieves the SQL representation of this query.
      *
      * @return An SQL string that represents this query.

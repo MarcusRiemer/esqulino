@@ -5,10 +5,80 @@
       "columns": [
         {
           "width": 12,
-          "widgets": []
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "Pokémon Gefangen"
+            },
+            {
+              "type": "paragraph",
+              "text": "Herzlichen Glückwunsch, du hast also ein neues Pokémon gefangen. Hier kannst du es eintragen."
+            },
+            {
+              "type": "query-table",
+              "queryRefName": "Pokedex_1G",
+              "columns": [
+                "nummer",
+                "name",
+                "typ"
+              ]
+            },
+            {
+              "type": "input",
+              "outParamName": "nummer",
+              "caption": "Nummer des Pokémon im Pokédex",
+              "description": "",
+              "inputType": "number"
+            },
+            {
+              "type": "input",
+              "outParamName": "name",
+              "caption": "Spitzname",
+              "description": "",
+              "inputType": "text"
+            },
+            {
+              "type": "input",
+              "outParamName": "staerke",
+              "caption": "Staerke des neuen Pokémon",
+              "description": "",
+              "inputType": "text"
+            },
+            {
+              "type": "button",
+              "text": "Speichern",
+              "action": {
+                "type": "query",
+                "mapping": [
+                  {
+                    "inputName": "nummer"
+                  },
+                  {
+                    "inputName": "name"
+                  },
+                  {
+                    "inputName": "staerke"
+                  }
+                ],
+                "queryName": "Gefangen_Neu"
+              }
+            }
+          ]
         }
       ]
     }
   ],
-  "referencedQueries": []
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "Pokedex_1G",
+      "queryId": "0c396a9a-1947-4c2b-a5fb-195df2b91b84"
+    },
+    {
+      "type": "query",
+      "name": "Gefangen_Neu",
+      "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44"
+    }
+  ]
 }

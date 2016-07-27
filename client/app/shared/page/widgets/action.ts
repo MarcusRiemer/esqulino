@@ -1,5 +1,5 @@
 import {
-    QueryActionDescription, ParameterMappingDescription
+    ActionDescription, QueryActionDescription, ParameterMappingDescription
 } from '../page.description'
 import {Page, QueryReference}             from '../page'
 
@@ -18,7 +18,7 @@ export class ParameterMapping {
 
     private _outputName : string;
 
-    constructor(action : QueryAction, desc : ParameterMappingDescription) {
+    constructor(action : Action, desc : ParameterMappingDescription) {
         this._inputName = desc.inputName;
         this._outputName = desc.outputName;
     }
@@ -48,27 +48,18 @@ export class ParameterMapping {
 }
 
 /**
- * This action will run a query on the server. This is basically a mapping
- * of input elements on the page to the specific parameters the action
- * will require.
- *
- * If a queries input is mapped to a differently named output, a hidden form
- * field will be rendered onto the page. This form field will write the mapping
- * for the server to look up.
+ * Any kind of action that should be carried out on the server.
  */
-export class QueryAction {
-    private _queryName : string;
-
+export abstract class Action {
     private _widget : Widget;
 
     private _mappings : ParameterMapping[];
 
-    constructor(widget : Widget, desc : QueryActionDescription) {
+    constructor(widget : Widget, desc : ActionDescription) {
         this._widget = widget;
-        this._queryName = desc.queryName;
-        this._mappings = [];
 
         // Load mappings, if they are given
+        this._mappings = [];
         if (desc.mapping) {
             desc.mapping.map(p => new ParameterMapping(this, p));
         }
@@ -82,10 +73,74 @@ export class QueryAction {
     }
 
     /**
+     * @return The HTTP method that should be used with this action.
+     */
+    get method() {
+        return ("POST");
+    }
+
+    /**
+     * @return The server-side URL to call.
+     */
+    get url() : string {
+        throw new Error("This should be abstract, waiting for TS2 which allows abstract properties");
+    }
+
+    /**
+     * @return The mappings that are used in this action.
+     */
+    get mappings() : ParameterMapping[] {
+        return (this._mappings);
+    }
+
+    /**
+     * @param value The mappings that are used in this action.
+     */
+    set mappings(value : ParameterMapping[]) {
+        this._mappings = value;
+    }
+}
+
+/**
+ * This action will run a query on the server. This is basically a mapping
+ * of input elements on the page to the specific parameters the action
+ * will require.
+ *
+ * If a queries input is mapped to a differently named output, a hidden form
+ * field will be rendered onto the page. This form field will write the mapping
+ * for the server to look up.
+ */
+export class QueryAction extends Action {
+    private _queryName : string;
+
+    constructor(widget : Widget, desc : QueryActionDescription) {
+        super(widget, desc);
+        this._queryName = desc.queryName;
+
+        if (this.mappings.length == 0) {
+            this.assignDefaultMappings();
+        }
+    }
+
+    /**
+     * @return True, if the query reference could be retrieved.
+     */
+    get hasValidQueryReference() {
+        return (this.page.usesQueryReferenceByName(this.queryName));
+    }
+
+    /**
+     * 
+     */
+    get requiredParameters() {
+        return (this.queryReference.query.parameters);
+    }
+
+    /**
      * @return The reference this action would kick off.
      */
     get queryReference() : QueryReference {
-        if (!this.page.usesQueryReferenceByName(this.queryName)) {
+        if (!this.hasValidQueryReference) {
             throw new Error(`Page does not have a query named "${this.queryName}"`);
         }
 
@@ -100,22 +155,36 @@ export class QueryAction {
     }
 
     /**
+     * @return The server-side URL to call.
+     */
+    get url() {
+        return (`/api/action/query/${this.queryName}`);
+    }
+
+    /**
      * @param value The name of the query to run.
      */
     set queryName(value : string) {
         this._queryName = value;
+        this.assignDefaultMappings();
     }
 
-    /**
-     * @return The HTTP method that should be used with this action.
-     */
-    get method() {
-        return ("POST");
+    assignDefaultMappings() {
+        if (this.hasValidQueryReference) {
+            const query = this.queryReference.query;
+            this.mappings = query.parameters.map(p => {
+                return new ParameterMapping(this, {
+                    inputName : p.key,
+                    outputName : undefined
+                });
+            });
+        }
     }
 
     toModel() : QueryActionDescription {
         return ({
-            mapping : this._mappings.map(m => m.toModel()),
+            type : "query",
+            mapping : this.mappings.map(m => m.toModel()),
             queryName : this._queryName
         });
     }

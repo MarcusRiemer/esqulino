@@ -11,7 +11,10 @@
   <div class="container-fluid">
     <form>
       <div class="row">
-        <div class="col-md-12"></div>
+        <div class="col-md-12">
+          <h1>Pokémon Gefangen</h1>
+          <p>Herzlichen Glückwunsch, du hast also ein neues Pokémon gefangen. Hier kannst du es eintragen.</p>{% include "query_table" table: query.Pokedex_1G, columns: "nummer,name,typ" %}{% include "input" caption: "Nummer des Pokémon im Pokédex", outParamName: "nummer", description: "", inputType: "number" %}{% include "input" caption: "Spitzname", outParamName: "name", description: "", inputType: "text" %}{% include "input" caption: "Staerke des neuen Pokémon", outParamName: "staerke", description: "", inputType: "text" %}<button type="submit" formaction="/api/action/query/Gefangen_Neu" formmethod="POST" class="btn btn-secondary btn-block">Speichern</button>
+        </div>
       </div>
     </form>
   </div>

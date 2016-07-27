@@ -269,7 +269,7 @@ class ScratchSqlApp < Sinatra::Base
       return @page.render({})
     end
 
-    post '/:queryId' do
+    post '/api/action/:actionType/:action' do
       puts "All Params: #{params.inspect}"
       redirect back
     end

@@ -9,4 +9,16 @@
            id="button-sidebar-text">
   </fieldset>
 
+  <h5>Benutzte Abfrage</h5>
+  <select [(ngModel)]="queryName"
+          id="table-selected-query"
+          class="form-control">
+    <option *ngFor="let avail of availableQueries;"
+            [value]="avail.name">
+      {{avail.name}}
+      <span *ngIf="avail.name != avail.query.name">({{ avail.query.name }})</span>
+    </option>
+  </select>
+
+
 </div>

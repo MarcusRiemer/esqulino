@@ -212,7 +212,7 @@ export class Page extends ProjectResource {
      * @return True, if the given name is already in use for a query.
      */
     usesQueryReferenceByName(name : string) {
-        return (this._referencedQueries.some(q => q.name == name));
+        return (this._referencedQueries && this._referencedQueries.some(q => q.name == name));
     }
 
     /**
