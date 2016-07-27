@@ -138,7 +138,7 @@ class Page
   # to the template engine. The result of this render process is then returned.
   def render(params, render_engine = "liquid")    
     # Load all referenced queries
-    queries = referenced_queries.map do |ref|
+    all_queries = referenced_queries.map do |ref|
       {
         'name' => ref['name'],
         'sql' => @project.query_by_id(ref['queryId']).sql
@@ -146,7 +146,7 @@ class Page
     end
 
     # And execute them, enriching the parameters with query data
-    params = @project.execute_page_queries(queries, params)
+    params = @project.execute_page_queries(all_queries, params)
 
     # Load the template string
     template = read_template(render_engine)
