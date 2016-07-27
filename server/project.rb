@@ -212,14 +212,20 @@ class Project
   #                
   def execute_sql(sql, params)
     db = SQLite3::Database.new(file_path_sqlite)
+    db.execute("PRAGMA foreign_keys = ON")
 
-    # execute2 returns the names of the columns in the first row. But we want
-    # those to go in a hash with explicit names.
-    result = db.execute2(sql, params)
-    return {
-      'columns' => result.first,
-      'rows' => result.drop(1)
-    }
+    begin
+      # execute2 returns the names of the columns in the first row. But we want
+      # those to go in a hash with explicit names.
+      result = db.execute2(sql, params)
+      return {
+        'columns' => result.first,
+        'rows' => result.drop(1)
+      }
+    rescue SQLite3::ConstraintException, SQLite3::SQLException => e
+      raise DatabaseQueryError.new(self, sql, params, e)
+    end
+    
   end
 
   # Run all given queries and transform the output to be useful
@@ -243,6 +249,9 @@ class Project
       # Ensure every query is fully defined
       name = query.fetch('name')
       sql = query.fetch('sql')
+
+      # Skip queries that are not select queries
+      next unless sql.start_with? "SELECT"
 
       # Run the query
       result = execute_sql(sql, {})

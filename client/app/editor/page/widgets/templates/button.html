@@ -10,9 +10,7 @@
         {{ model.action.queryName }}
       </span>
       <span *ngIf="!model.hasAction"
-            class="missing">
-        Keine Aktion
-      </span>
+            class="missing">Keine Aktion</span>
     </span>
 
     <template [ngIf]="model.hasAction">

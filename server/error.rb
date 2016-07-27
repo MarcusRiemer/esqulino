@@ -62,6 +62,24 @@ class UnknownReferenceNameError < EsqulinoError
   end
 end
 
+# Something went wrong while executing a query
+class DatabaseQueryError < EsqulinoError
+  def initialize(project, sql, params, exception)
+    super(exception.to_s, 400)
+    @project = project
+    @sql = sql
+    @params = params
+  end
+
+  def json_data
+    {
+      :project => @project.id,
+      :sql => @sql,
+      :params => @params
+    }
+  end
+end
+
 # Thrown when a request does not fulfill a certain schema
 class InvalidSchemaError < EsqulinoError
   attr_reader :schema_name, :errors

@@ -24,7 +24,7 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          {% include "input" caption: "Freizulassendes Pokémon", outParamName: "Test", description: "Die <code>gefangen_id</code> des Pokémon, das freigelassen werden soll.", inputType: "number" %}<button type="submit" formaction="/api/action/query/Meine_Pokemon" formmethod="POST" class="btn btn-secondary btn-block"><strong>Jetzt Freilassen</strong></button>
+          {% include "input" caption: "Freizulassendes Pokémon", outParamName: "gefangen_id", description: "Die <code>gefangen_id</code> des Pokémon, das freigelassen werden soll.", inputType: "number" %}<button type="submit" formaction="/Gefangen_Loeschen/query/Gefangen_Loeschen" formmethod="POST" class="btn btn-secondary btn-block"><strong>Jetzt Freilassen</strong></button>
         </div>
       </div>
     </form>

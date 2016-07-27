@@ -49,7 +49,7 @@
           "widgets": [
             {
               "type": "input",
-              "outParamName": "Test",
+              "outParamName": "gefangen_id",
               "caption": "Freizulassendes Pokémon",
               "description": "Die <code>gefangen_id</code> des Pokémon, das freigelassen werden soll.",
               "inputType": "number"
@@ -59,8 +59,12 @@
               "text": "<strong>Jetzt Freilassen</strong>",
               "action": {
                 "type": "query",
-                "mapping": [],
-                "queryName": "Meine_Pokemon"
+                "mapping": [
+                  {
+                    "inputName": "gefangen_id"
+                  }
+                ],
+                "queryName": "Gefangen_Loeschen"
               }
             }
           ]

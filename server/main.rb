@@ -172,26 +172,16 @@ class ScratchSqlApp < Sinatra::Base
   post '/api/project/:project_id/query/run' do
     request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
-    begin
-      result = @project.execute_sql(request_data['sql'], request_data['params'])
-      json(result['rows'])
-    rescue SQLite3::SQLException, SQLite3::ConstraintException => e
-      status 400
-      json({ :message => e })
-    end
+    result = @project.execute_sql(request_data['sql'], request_data['params'])
+    json(result['rows'])
   end
 
   # Running a query that has already been stored on the server
   post '/api/project/:project_id/query/:query_id/run' do
     query_params = @@validator.ensure_request("QueryParamsDescription", request.body.read)
 
-    begin
-      result = @query.execute(query_params)
-      json(result['rows'])
-    rescue SQLite3::SQLException, SQLite3::ConstraintException => e
-      status 400
-      json({ :message => e })
-    end
+    result = @query.execute(query_params)
+    json(result['rows'])
   end
 
   # Storing a query
@@ -280,6 +270,8 @@ class ScratchSqlApp < Sinatra::Base
 
       # Grab the query
       query = @page.get_query_by_reference_name query_ref_name
+
+      # And actually execute it
       @project.execute_sql(query.sql, input)
 
       # Go back
