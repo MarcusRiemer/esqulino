@@ -13,6 +13,15 @@
     color: blue;
     float: left;
     width: $component-width;
+    flex: 0 0 $component-width;
+}
+
+.block-container .line {
+    display: flex;
+}
+
+.block-container .line .columns {
+    flex: 1;
 }
 
 /* DELETE is supposed to be in it's own line */
@@ -23,12 +32,14 @@
 .block-container .component.indent {
     margin-left: $component-indent;
     width: $component-width - $component-indent;
+    flex: 0 0 $component-width - $component-indent;
 }
 
 .block-container .expression {
     border-radius: 500px;
-    border: 2px solid transparent;
-    background-color: orange;
+    white-space: nowrap;
+    background-color: rgba(255, 165, 0, 0.3);
+    border: 2px solid rgba(255, 165, 0, 0.6);
 }
 
 .block-container .current-drop-target {
@@ -42,7 +53,6 @@
     padding-left: 1em;
     padding-right: 1em;
     background-color: red;
-    color: black;
 }
 
 .block-container .constant {
@@ -50,8 +60,8 @@
     border-radius: 500px;
     padding-left: 1em;
     padding-right: 1em;
-    background-color: cornflowerblue;
-    color: black;
+    border: 2px solid RGBA(100, 149, 237, 1);
+    background-color: RGBA(100, 149, 237, 0.4);
 }
 
 .block-container .parameter {
@@ -59,20 +69,21 @@
     border-radius: 500px;
     padding-left: 1em;
     padding-right: 1em;
-    background-color: #8181F7;
-    color: black;
+    background-color: RGBA(129, 129, 247, 0.4);
+    border: 2px solid RGBA(129, 129, 247, 1);
 }
 
 .block-container .table {
     border-radius: 500px;
     padding-left: 1em;
     padding-right: 1em;
-    background-color: yellow;
-    color: black;
+    background-color: rgba(255, 255, 0, 0.2);
+    border: 2px solid rgba(255, 255, 0, 0.9);
 }
 
 .block-container .table.error {
-    background-color: red;
+    background-color: rgba(255,0,0,0.6);
+    border: 2px solid rgba(255,0,0,1);
 }
 
 .block-container .operator {
@@ -95,14 +106,8 @@
     border-radius: 500px;
     padding-left: 1em;
     padding-right: 1em;
-    background-color: lime;
-}
-
-.block-container .layout {
-    border-radius: 500px;
-    padding-left: 1em;
-    padding-right: 1em;
-    background-color: gainsboro;
+    background-color: rgba(0, 255, 0, 0.15);
+    border: 2px solid rgba(0, 255, 0, 0.6);
 }
 
 .block-container .column.blueprint {

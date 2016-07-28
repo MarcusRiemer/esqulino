@@ -1,14 +1,16 @@
 <div *ngIf="select"
-     class="block select">
+     class="line">
   <div class="component">SELECT</div>
-  <span *ngFor="let column of select.columns; let last = last">
-    <sql-expr [query]="query"
-              [expr]="column.expr"></sql-expr>
-  </span>
-  <span *ngIf="showBlueprintDropTarget"
-        (dragover)="onBlueprintDrag($event)"
-        (drop)="onBlueprintDrop($event)"
-        class="column blueprint">
-    <span class="fa fa-plus"></span>
-  </span>
+  <div class="columns">
+    <span *ngFor="let column of select.columns; let last = last">
+      <sql-expr [query]="query"
+                [expr]="column.expr"></sql-expr>
+    </span>
+    <span *ngIf="showBlueprintDropTarget"
+          (dragover)="onBlueprintDrag($event)"
+          (drop)="onBlueprintDrop($event)"
+          class="column blueprint">
+      <span class="fa fa-plus"></span>
+    </span>
+  </div>
 </div>
