@@ -1,17 +1,18 @@
-<div class="block where"
-     *ngIf="query && query.where">
-  <div>
-    <div class="component">WHERE</div>
+<div *ngIf="query && query.where"
+     class="line">
+  
+  <div class="component">WHERE</div>
+  <div class="columns">
     <sql-expr [query]="query"
               [expr]="query.where.first">
     </sql-expr>
   </div>
 </div>
 
-<div class="block where"
+<div class="line"
      *ngFor="let sub of query?.where?.subsequent">
-  <div>
-    <div class="component indent">{{ sub.operator }}</div>
+  <div class="component indent">{{ sub.operator }}</div>
+  <div class="columns">
     <sql-expr [query]="query"
               [expr]="sub.expr">
     </sql-expr>
@@ -33,7 +34,7 @@
 <div class="block where"
      *ngIf="query && showBlueprintSubsequent">
   <div>
-    <div class="component">AND</div>
+    <div class="component indent">AND</div>
     <span (dragover)="onBlueprintDrag($event)"
           (drop)="onBlueprintSubsequentDrop($event, 'AND')"
           class="column blueprint">
@@ -45,7 +46,7 @@
 <div class="block where"
      *ngIf="query && showBlueprintSubsequent">
   <div>
-    <div class="component">OR</div>
+    <div class="component indent">OR</div>
     <span (dragover)="onBlueprintDrag($event)"
           (drop)="onBlueprintSubsequentDrop($event, 'OR')"
           class="column blueprint">

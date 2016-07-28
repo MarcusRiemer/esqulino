@@ -3,6 +3,14 @@
     align-items: stretch;
 }
 
+.editor .sql .block-container {
+    line-height: 2;
+}
+
+.editor .sql .block-container .expression {
+    padding: 4px;
+}
+
 .sidebar .block-container.center {
     margin-bottom: 10px;
     text-align: center;
