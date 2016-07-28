@@ -3,6 +3,7 @@
   <div class="component">FROM</div>
   <div>
     <span class="table">
+      <span class="fa fa-table fa-fw"></span>
       {{ query.from.first.tableName }} {{ query.from.first.alias }}
     </span>
   </div>
@@ -10,7 +11,7 @@
        (dragstart)="onJoinDragStart(join, $event)"
        draggable="true">
     <span class="component indent">{{ join.sqlJoinKeyword }}</span>
-    <span class="table">
+    <span class="table"><span class="fa fa-table fa-fw"></span>
       {{ join.tableName }} {{ join.alias }}
     </span>
   </div>

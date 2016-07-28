@@ -69,12 +69,12 @@
 <div class="card-block">
   <div *ngFor="let used of referencedQueries;"
        class="block-container block">
-    <div (dragstart)="startReferencedQueryDrag($event, used)"
+    <span (dragstart)="startReferencedQueryDrag($event, used)"
          [title]="used.query.name"
          draggable="true"
          class="table">
-      {{ used.name }}
-    </div>
+      <query-icon [query]="used.query"></query-icon>
+    </span>
     <ul *ngIf="used.hasColumns">
       <li *ngFor="let column of used.columns; trackBy: trackByColumnId;">
         <span (dragstart)="startColumnDrag($event, used, column)"

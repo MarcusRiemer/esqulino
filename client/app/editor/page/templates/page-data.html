@@ -18,7 +18,7 @@
                 class="form-control">
           <option *ngFor="let q of possibleQueries;"
                   [value]="q.id">
-            {{q.name}}
+            <query-icon [query]="q"></query-icon>
           </option>
         </select>
       </div>
@@ -34,6 +34,9 @@
     <li *ngFor="let used of referencedQueries"
         class="list-group-item">
       <div class="input-group">
+        <span class="input-group-addon">
+          <query-icon [query]="used.query" [showName]="false"></query-icon>
+        </span>
         <input [(ngModel)]="used.name"
                name="ref-query-{{used.name}}"
                class="form-control"

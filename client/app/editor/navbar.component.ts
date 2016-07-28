@@ -1,15 +1,17 @@
-import {Component, Input}  from '@angular/core'
-import {ROUTER_DIRECTIVES} from '@angular/router';
+import {Component, Input}    from '@angular/core'
+import {ROUTER_DIRECTIVES}   from '@angular/router';
 
-import {Project}           from './project.service'
 import {
     Query, QuerySelect, QueryDelete, QueryInsert, QueryUpdate
 } from '../shared/query'
-import {Page}              from '../shared/page/page'
+import {Page}                from '../shared/page/page'
+
+import {Project}             from './project.service'
+import {QueryIconComponent}  from './query-icon.component'
 
 @Component({
     templateUrl: 'app/editor/templates/navbar.html',
-    directives: [ROUTER_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, QueryIconComponent],
     selector: 'editor-navbar'
 })
 export class NavbarComponent {

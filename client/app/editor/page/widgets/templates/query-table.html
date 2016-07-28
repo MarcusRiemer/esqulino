@@ -10,7 +10,9 @@
         <i *ngIf="!hasValidReference"
            class="fa fa-exclamation-triangle"
            aria-hidden="true"></i>
-        {{ referenceName }}
+        <query-icon *ngIf="hasValidReference"
+                    [query]="queryReference.query">
+        </query-icon>
       </span>
     </span>
   </h5>
