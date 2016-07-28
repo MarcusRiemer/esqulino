@@ -6,6 +6,7 @@ import {Page, QueryReference}       from '../../../shared/page/index'
 import {QuerySelect, ResultColumn}  from '../../../shared/query'
 import {QueryTable}                 from '../../../shared/page/widgets/index'
 
+import {QueryIconComponent}         from '../../query-icon.component'
 import {ProjectService, Project}    from '../../project.service'
 import {SidebarService}             from '../../sidebar.service'
 import {
@@ -27,7 +28,8 @@ export {QueryTable}
  */
 @Component({
     templateUrl: 'app/editor/page/widgets/templates/query-table.html',
-    selector: "esqulino-query-table"
+    selector: "esqulino-query-table",
+    directives : [QueryIconComponent]
 })
 export class QueryTableComponent extends WidgetComponent<QueryTable> {
     

@@ -12,7 +12,7 @@
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           class="column"
-          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"><span class="fa fa-star"></span></span>
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"><span class="fa fa-fw fa-star"></span></span>
   </template>
   <template ngSwitchCase="constant">
     <span (drop)="onConstantDrop($event)"

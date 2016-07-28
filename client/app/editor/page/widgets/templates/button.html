@@ -7,7 +7,7 @@
           class="block-container block">
       <span *ngIf="model.hasAction"
             class="parameter">
-        {{ model.action.queryName }}
+        <query-icon [query]="model.action.queryReference.query"></query-icon>
       </span>
       <span *ngIf="!model.hasAction"
             class="missing">Keine Aktion</span>

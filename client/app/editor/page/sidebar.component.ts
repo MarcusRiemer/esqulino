@@ -12,6 +12,7 @@ import {
 import {
     ProjectService, Project
 } from '../project.service'
+import {QueryIconComponent}             from '../query-icon.component'
 
 import {DragService}                    from './drag.service'
 
@@ -23,6 +24,7 @@ import {DragService}                    from './drag.service'
 @Component({
     templateUrl: 'app/editor/page/templates/sidebar.html',
     selector : "page-sidebar",
+    directives : [QueryIconComponent]
 })
 export class SidebarComponent implements OnInit, OnDestroy {
     /**
