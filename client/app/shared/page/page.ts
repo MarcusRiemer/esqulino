@@ -3,7 +3,8 @@ import {ProjectResource}                      from '../resource'
 import {Query}                                from '../query'
 
 import {
-    PageDescription, QueryReferenceDescription, WidgetDescription,
+    PageDescription, PageParameterDescription,
+    QueryReferenceDescription, WidgetDescription,
     ValueReferenceDescription, ColumnReferenceDescription,
     ColumnDescription, RowDescription
 } from './page.description'
@@ -28,8 +29,9 @@ export {
  * The in-memory representation of a page.
  */
 export class Page extends ProjectResource {
-    private _rows : Row[];
-    private _referencedQueries : QueryReference[]
+    private _rows : Row[] = [];
+    private _referencedQueries : QueryReference[] = [];
+    private _parameters : PageParameter[] = [];
     private _renderer : Renderer;
     
     constructor(desc : PageDescription, project? : Project) {
@@ -38,11 +40,20 @@ export class Page extends ProjectResource {
         // We only render stuff via liquid for the moment
         this._renderer = new LiquidRenderer();
 
-        // Map descriptions to actual representations
-        this._rows = desc.rows.map(rowDesc => new Row(rowDesc, this));
+        // Map descriptions of widgets to actual representations
+        if (desc.rows) {
+            this._rows = desc.rows.map(rowDesc => new Row(rowDesc, this));
+        }
 
-        // Making a copy of those references
-        this._referencedQueries = desc.referencedQueries.map(refDesc => new QueryReference(project, this, refDesc));
+        // Resolve referenced queries
+        if (desc.referencedQueries) {
+            this._referencedQueries = desc.referencedQueries.map(refDesc => new QueryReference(project, this, refDesc));
+        }
+
+        // Obtain parameters
+        if (desc.parameters) {
+            this._parameters = desc.parameters.map(p => new PageParameter(this, p));
+        }
     }
 
     /**
@@ -212,6 +223,20 @@ export class Page extends ProjectResource {
     }
 
     /**
+     * Adds a new parameter to this page.
+     */
+    addParameter(desc : PageParameterDescription) {
+        this._parameters.push(new PageParameter(this, desc));
+    }
+
+    /**
+     * @return All parameters this page requires to operate.
+     */
+    get parameters() : PageParameter[] {
+        return (this._parameters);
+    }
+
+    /**
      * @return True, if the given name is already in use for a query.
      */
     usesQueryReferenceByName(name : string) {
@@ -263,11 +288,59 @@ export class Page extends ProjectResource {
     }
 
     toModel() : PageDescription {
-        return ({
+        // Some attributes are unconditional
+        const toReturn : PageDescription = {
             id : this.id,
             name : this.name,
-            rows : this._rows.map(r => r.toModel()),
-            referencedQueries : this._referencedQueries.map(r => r.toModel())
+        };
+
+        if (this._referencedQueries.length > 0) {
+            toReturn.referencedQueries = this._referencedQueries.map(r => r.toModel());
+        }
+
+        if (this._rows.length > 0) {
+            toReturn.rows = this._rows.map(r => r.toModel());
+        }
+
+        if (this._parameters.length > 0) {
+            toReturn.parameters = this._parameters.map(p => p.toModel());
+        }
+        
+        return (toReturn);
+    }
+}
+
+/**
+ * A parameter that is required to render a page
+ */
+export class PageParameter {
+    // The name of the parameter
+    private _name : string;
+
+    // The page this parameter is required on
+    private _page : Page;
+    
+    constructor(page : Page, desc : PageParameterDescription) {
+        this._name = desc.name;
+    }
+
+    /**
+     * @return The name of the parameter this instance provides
+     */
+    get name() {
+        return (this._name);
+    }
+
+    /**
+     * @param value The name of the parameter this instance provides
+     */
+    set name(value : string) {
+        this._name = value;
+    }
+
+    toModel() : PageParameterDescription {
+        return ({
+            name : this._name
         });
     }
 }

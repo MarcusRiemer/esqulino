@@ -1,4 +1,10 @@
 <div class="page">
+  <esqulino-server-preview *ngIf="page"
+                           [project]="project"
+                           [page]="page"
+                           [isRendering]="doRenderPreview">
+  </esqulino-server-preview>
+  
   <esqulino-page-layout *ngIf="page"
                         [project]="project"
                         [page]="page">
@@ -8,12 +14,6 @@
                         [project]="project"
                         [page]="page">
   </esqulino-page-data>
-
-  <esqulino-server-preview *ngIf="page"
-                           [project]="project"
-                           [page]="page"
-                           [isRendering]="doRenderPreview">
-  </esqulino-server-preview>
 
   <div *ngIf="page && showJsonModel"
        class="alert alert-info">

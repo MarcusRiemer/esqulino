@@ -151,6 +151,13 @@ export interface QueryReferenceDescription extends ValueReferenceDescription {
 }
 
 /**
+ * A parameter that is required to render a page.
+ */
+export interface PageParameterDescription {
+    name : string
+}
+
+/**
  * Describes a page as a whole
  */
 export interface PageDescription {
@@ -168,12 +175,18 @@ export interface PageDescription {
      * Rows are the top-level element for the whole layout,
      * for the moment no other type of widget is expected.
      */
-    rows : RowDescription[]
+    rows? : RowDescription[]
 
     /**
      * IDs of queries that are referenced in this page. Only
      * these queries provide additional DB information that can
      * be used on this page.
      */
-    referencedQueries : QueryReferenceDescription[]
+    referencedQueries? : QueryReferenceDescription[]
+
+    /**
+     * All parameters that are required to render this page. These
+     * are usually satisfied via GET parameters
+     */
+    parameters? : PageParameterDescription[]
 }

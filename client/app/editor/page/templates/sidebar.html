@@ -75,8 +75,19 @@
          class="table">
       <query-icon [query]="used.query"></query-icon>
     </span>
-    <ul *ngIf="used.hasColumns">
+    <ul *ngIf="used.query.hasParameters"
+        class="fa-ul">
+      <li *ngFor="let parameter of used.query.parameters;">
+        <span class="fa fa-li fa-sign-in" aria-hidden="true"></span>
+        <span class="parameter indent">
+          {{ parameter.key }}
+        </span>
+      </li>
+    </ul>
+    <ul *ngIf="used.hasColumns"
+        class="fa-ul">
       <li *ngFor="let column of used.columns; trackBy: trackByColumnId;">
+        <span class="fa fa-li fa-sign-out" aria-hidden="true"></span>
         <span (dragstart)="startColumnDrag($event, used, column)"
               class="column indent"
               draggable="true">
