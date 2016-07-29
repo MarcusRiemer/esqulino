@@ -2,7 +2,9 @@ import {Project}                              from '../project'
 import {ProjectResource}                      from '../resource'
 
 import {Schema}                               from '../schema'
-import {ValidationResult, Validateable}       from './validation'
+import {
+    Validateable, ValidationResult, ValidationError, ValidationErrors
+} from './validation'
 import * as Model                             from './description'
 import * as SyntaxTree                        from './syntaxtree'
 
@@ -16,11 +18,32 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
     public schema : Schema;
 
     /**
+     * True, if this query always returns a single row.
+     */
+    private _singleRow : boolean = false;
+
+    /**
      * Stores all basic information about a string.
      */
     constructor(schema : Schema, model : Model.QueryDescription, project? : Project) {
         super(model.id, model.name, project);
         this.schema = schema;
+        this._singleRow = !!model.singleRow;
+    }
+
+    /**
+     * @return True, if this query always returns a single row
+     */
+    get singleRow() : boolean {
+        return (this._singleRow);
+    }
+
+    /**
+     * @param value True, if this query always returns a single row
+     */
+    set singleRow(value : boolean) {
+        this._singleRow = value;
+        this.markDirty();
     }
 
     /**
@@ -65,7 +88,17 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
      * @return A validation report
      */
     validate() : ValidationResult {
-        return (this.validateImpl(this.schema));
+        const ownErrors : ValidationError[] = [];
+
+        if (this.singleRow) {
+            const where : QueryWhere = (this as any).where;
+
+            if (!where) {
+                ownErrors.push(new ValidationErrors.UnplausibleSingleRow(true));
+            }
+        }
+
+        return (new ValidationResult(ownErrors, [this.validateImpl(this.schema)]));
     }
     
     /**
@@ -85,6 +118,11 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
             name : this.name,
             id : this.id
         };
+
+        // Fill in the optional singleRow annotation
+        if (this.singleRow) {
+            toReturn.singleRow = this.singleRow;
+        }
 
         // And let the deriving classes do the hard work
         toReturn = this.toModelImpl(toReturn);

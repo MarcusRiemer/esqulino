@@ -4,7 +4,7 @@ import {Router, ActivatedRoute}         from '@angular/router'
 import {Observable}                     from 'rxjs/Observable'
 
 import {
-    Query, Model, SyntaxTree,
+    Query, Model, SyntaxTree, QuerySelect, QueryDelete, QueryUpdate,
     SelectQueryResult, QueryRunErrorDescription
 } from '../../shared/query'
 
@@ -49,7 +49,8 @@ export class QueryEditorComponent implements OnInit {
     private _subscriptionRefs : any[] = [];
 
     /**
-     * Cache for user input
+     * Cache for user input. This allows parameters to be preserved when the user
+     * switches back and forth between queries.
      */
     private _arguments : QueryParamsDescription = { }
        
@@ -80,6 +81,26 @@ export class QueryEditorComponent implements OnInit {
      */
     get showJsonModel() {
         return (this._preferences.showJsonModel);
+    }
+
+    /**
+     * @return True, if the "I promise this query only touches a single row"-checkbox
+     *         should be shown.
+     */
+    get showSingleRowCheckbox() {
+        const validQueryType =
+            this.query instanceof QuerySelect ||
+            this.query instanceof QueryUpdate ||
+            this.query instanceof QueryDelete;
+
+        // Show if the single row property actually makes sense and any of the
+        // following holds ...
+        //
+        // * The query currently promises a single row, the user must always
+        //   be able to undo this promise.
+        // * There is a `WHERE` component, without it would not make sense
+        //   to promise a single value.
+        return (validQueryType && (this.query.singleRow || (this.query as any).where))
     }
 
     /**
@@ -121,25 +142,11 @@ export class QueryEditorComponent implements OnInit {
      * Load the project to access the schema and the queries.
      */
     ngOnInit() {
-        
-        // Grab the correct project and query
-        let subRef = this._routeParams.params.subscribe(param => {
-            var queryId = param['queryId'];
-            this._projectService.activeProject
-                .subscribe(res => {
-                    // Project is loaded, display the correct  query
-                    this.project = res;
-                    this.query = this.project.getQueryById(queryId);
-                });
-        });
-
-        this._subscriptionRefs.push(subRef);
-
         // Reacting to saving
         this._toolbarService.savingEnabled = true;
         let btnSave = this._toolbarService.saveItem;
 
-        subRef = btnSave.onClick.subscribe( (res) => {
+        let subRef = btnSave.onClick.subscribe( (res) => {
             btnSave.isInProgress = true;
             this._queryService.saveQuery(this.project, this.query)
                 // Always delay visual feedback by 500ms
@@ -159,6 +166,31 @@ export class QueryEditorComponent implements OnInit {
                     this._result = res;
                 });
         });
+
+        // Grab the correct project and query
+        subRef = this._routeParams.params.subscribe(param => {
+            var queryId = param['queryId'];
+            this._projectService.activeProject
+                .subscribe(res => {
+                    // Project is loaded, display the correct  query
+                    this.project = res;
+                    this.query = this.project.getQueryById(queryId);
+
+                    // Reset previous result
+                    this._result = undefined;
+
+                    // But show new results for ...
+                    // * SELECT queries ...
+                    // * that are valid ...
+                    // * and have all parameters assigned
+                    if (this.query instanceof QuerySelect &&
+                        this.query.isValid &&
+                        this.query.parameters.length === 0) {
+                        btnQuery.fire();
+                    }
+                });
+        });
+        this._subscriptionRefs.push(subRef);
 
         this._subscriptionRefs.push(subRef)
     }

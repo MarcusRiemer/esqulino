@@ -117,6 +117,15 @@ export class SelectQueryResult {
     }
 
     /**
+     * @return True, if the promised row count matches the actual row count.
+     */
+    get hasValidSingleRowCount() {
+        // If this query does not expect a single row everything goes, otherwise
+        // the result must exactly be a single row!
+        return (!this._query.singleRow || this._rows.length === 1);
+    }
+
+    /**
      * @return True, if this result is an error.
      */
     get isError() : boolean {
