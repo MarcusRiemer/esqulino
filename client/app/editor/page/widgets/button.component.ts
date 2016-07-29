@@ -39,11 +39,24 @@ export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
         }
     }
 
+    /**
+     * @return The parameters that are required for this action.
+     */
     get parameters() {
         if (this.model.hasAction) {
             return (this.model.action.mappings);
         } else {
             return ([]);
+        }
+    }
+
+    getParameterIcon(inputName : string) {
+        if (inputName.startsWith("input.")) {
+            return ("fa-keyboard-o");
+        } else if (inputName.startsWith("get.")) {
+            return ("fa-link");
+        } else {
+            return ("fa-warning");
         }
     }
 
@@ -73,7 +86,6 @@ export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
 
             this.model.action = new QueryAction(this.model, {
                 type : "query",
-                mapping : [],
                 queryName : pageEvt.queryRef.name
             });
         }

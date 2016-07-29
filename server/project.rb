@@ -225,52 +225,6 @@ class Project
     rescue SQLite3::ConstraintException, SQLite3::SQLException => e
       raise DatabaseQueryError.new(self, sql, params, e)
     end
-    
-  end
-
-  # Run all given queries and transform the output to be useful
-  # for template bindings.
-  #
-  # @param queries [[Hash]] [{ name :: string, sql :: string }]
-  #                       A named SQL query
-  # @param params [Hash] Parameters that are known before the
-  #                      query was executed. These can work as
-  #                      input for the queries and are returned
-  #                      enriched with the query data.
-  def execute_page_queries(queries, params)
-    # Hashes are passed by reference and we don't want to destroy
-    # anything on the callsite
-    params = params.dup
-
-    # Ensure there is another hash for queries
-    params['query'] = {} unless params.key? 'query'
-    
-    queries.each do |query|
-      # Ensure every query is fully defined
-      name = query.fetch('name')
-      sql = query.fetch('sql')
-
-      # Skip queries that are not select queries
-      next unless sql.start_with? "SELECT"
-
-      # Run the query
-      result = execute_sql(sql, {})
-
-      # Templating engines works much better with 'sensible' keys as names,
-      # so we map the column names into each row. This basically transforms
-      # rows like [1,2,3] to { "column-name-1" => 1, ... }
-      mapped = result['rows'].map { |r| Hash[result['columns'].zip r] }
-
-      # Rows with a single value allow a short-hand notation. The user
-      # shouldn't be forced to write {{ row[0].column }} every time he
-      # **knows** there is only a single row.
-      mapped = mapped.first if mapped.length == 1
-
-      # Store the result
-      params['query'][name] = mapped
-    end
-
-    return (params)
   end
 
   # Loads all pages that are associated with this project

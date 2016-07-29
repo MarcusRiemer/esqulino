@@ -26,7 +26,6 @@ export class ButtonSidebarComponent {
 
     set queryName(value : string) {
         this.model.action = new QueryAction(this.model, {
-            mapping : [],
             queryName : value,
             type : "query"
         });

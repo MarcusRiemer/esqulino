@@ -4,12 +4,19 @@
     {
       "type": "query",
       "name": "Gefangen_Loeschen",
-      "queryId": "40bddeac-facc-4836-a27b-6a23222078d5"
+      "queryId": "40bddeac-facc-4836-a27b-6a23222078d5",
+      "mapping": [
+        {
+          "parameterName": "gefangen_id",
+          "providingName": "input.gefangen_id"
+        }
+      ]
     },
     {
       "type": "query",
       "name": "Meine_Pokemon",
-      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35"
+      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35",
+      "mapping": []
     }
   ],
   "rows": [
@@ -49,6 +56,13 @@
                 "name",
                 "spitzname"
               ]
+            },
+            {
+              "type": "input",
+              "outParamName": "gefangen_id",
+              "caption": "Neue Eingabe",
+              "description": "Beschreibung der neuen Eingabe",
+              "inputType": "text"
             }
           ]
         }
@@ -60,22 +74,10 @@
           "width": 12,
           "widgets": [
             {
-              "type": "input",
-              "outParamName": "gefangen_id",
-              "caption": "Freizulassendes Pokémon",
-              "description": "Die <code>gefangen_id</code> des Pokémon, das freigelassen werden soll.",
-              "inputType": "number"
-            },
-            {
               "type": "button",
               "text": "<strong>Jetzt Freilassen</strong>",
               "action": {
                 "type": "query",
-                "mapping": [
-                  {
-                    "inputName": "gefangen_id"
-                  }
-                ],
                 "queryName": "Gefangen_Loeschen"
               }
             }

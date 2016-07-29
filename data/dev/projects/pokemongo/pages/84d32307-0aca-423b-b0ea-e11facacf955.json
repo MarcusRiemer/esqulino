@@ -1,20 +1,36 @@
 {
   "name": "Gefangen_Einzeln",
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "Gefangen_Einzel",
+      "queryId": "59efc84a-945f-43f5-ab4b-98dc0ed1aee8",
+      "mapping": [
+        {
+          "parameterName": "gefangen_id",
+          "providingName": "get.gefangen_id"
+        }
+      ]
+    }
+  ],
   "rows": [
     {
       "columns": [
         {
           "width": 12,
-          "widgets": []
+          "widgets": [
+            {
+              "type": "paragraph",
+              "text": "Hier stelle ich {{ query.Gefangen_Einzel.spitzname }} vor"
+            }
+          ]
         }
       ]
     }
   ],
-  "referencedQueries": [
+  "parameters": [
     {
-      "type": "query",
-      "name": "Gefangen_Einzel",
-      "queryId": "59efc84a-945f-43f5-ab4b-98dc0ed1aee8"
+      "name": "gefangen_id"
     }
   ]
 }

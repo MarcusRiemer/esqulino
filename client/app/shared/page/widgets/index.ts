@@ -1,5 +1,6 @@
 import {
-    ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription
+    ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription,
+    ParameterMappingDescription
 } from '../page.description'
 
 import {Widget, WidgetDescription}         from './widget'
@@ -9,8 +10,8 @@ import {Row, RowDescription}               from './row'
 import {Column, ColumnDescription}         from './column'
 
 import {
-    QueryAction, ParameterMapping,
-    QueryActionDescription, ParameterMappingDescription
+    QueryAction, 
+    QueryActionDescription
 } from './action'
 
 import {Button, ButtonDescription}         from './button'
@@ -23,7 +24,7 @@ export {
     Widget, WidgetDescription,
     Row, RowDescription,
     Column, ColumnDescription,
-    QueryAction, ParameterMapping,
+    QueryAction,
     QueryActionDescription, ParameterMappingDescription,
     Button, ButtonDescription,
     Paragraph, ParagraphDescription,

@@ -7,7 +7,6 @@ describe('Page Buttons', () => {
             text : "Nochmal",
             action : {
                 type : "query",
-                mapping : [],
                 queryName : "Test"
             }
         }

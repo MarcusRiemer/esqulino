@@ -1,9 +1,9 @@
-import {Page}                            from '../page'
+import {Page, ParameterMapping}          from '../page'
 import {
     ButtonDescription, QueryActionDescription
 } from '../page.description'
 
-import {QueryAction, ParameterMapping}   from './action'
+import {QueryAction}                     from './action'
 import {
     Widget, WidgetDescription, ParametrizedWidget
 } from './widget'

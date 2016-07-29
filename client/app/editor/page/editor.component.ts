@@ -21,6 +21,10 @@ import {SidebarComponent}               from './sidebar.component'
 /**
  * Top level component to edit esqulino pages. This components hosts
  * the components that allow actual editing.
+ *
+ * On top of that this component provides a <datalist> with the id
+ * `page-required-parameters` that can be used for autocompletion in various
+ * sub-components.
  */
 @Component({
     templateUrl: 'app/editor/page/templates/editor.html',
@@ -141,6 +145,14 @@ export class PageEditorComponent implements OnInit, OnDestroy {
      */
     get page() {
         return (this._page);
+    }
+
+    get requiredParameterNames() {
+        if (this.page) {
+            return (this.page.requiredParameterNames);
+        } else {
+            return ([]);
+        }
     }
 }
 

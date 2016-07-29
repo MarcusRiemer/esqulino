@@ -206,19 +206,24 @@ class ScratchSqlApp < Sinatra::Base
 
   # Rendering an arbitrary page
   post '/api/project/:project_id/render' do
+    # Ensure this request is shaped as we would expect it
     render_request = @@validator.ensure_request("PageRenderRequestDescription", request.body.read)
+
+    # The known parameters for this request
     params = render_request['params']
 
     # Queries are Hashes of the form { sql :: string, name :: string }
     queries = render_request['queries']
 
-    # Enrich parameters with query data
-    params = @project.execute_page_queries(queries, params)
-
     page_template = render_request['source']
     render_engine = render_request['sourceType']
 
-    project_render_page_template(@project, page_template, render_engine, params)
+    
+    # This page is not stored on the server, we construct it in memory
+    page = Page.new(@project, nil, render_request['page'])
+
+    # Enrich parameters with query data
+    page.render(params, render_engine, page_template)
   end
 
   # Storing a page
@@ -256,23 +261,37 @@ class ScratchSqlApp < Sinatra::Base
       request_prepare_project subdomain
       request_prepare_page(params['page_name_or_id'], true)
 
-      return @page.render({})
+      query_params = {
+        "get" => request.GET
+      }
+
+      return @page.render(query_params)
     end
 
     post '/:page_name_or_id?/query/:query_ref_name' do |page_name_or_id, query_ref_name|
       request_prepare_project subdomain
       request_prepare_page(page_name_or_id, true)
 
+      
       # Grab all input values that are not empty and get rid of the "input." prefix
-      input = params
-        .select {|key,value| key.start_with? "input" and not value.strip.empty?}
-        .map {|key,value| { key[6..-1] => value} }
+      input_params = {}
 
-      # Grab the query
-      query = @page.get_query_by_reference_name query_ref_name
+      request.POST
+        .select {|key,value| key.start_with? "input" and not value.strip.empty?}
+        .each {|key,value| input_params[key[6..-1]] = value }
+
+      query_params = {
+        "input" => input_params
+      }
+
+      # Grab the query reference
+      query_ref = @page.get_query_reference_by_name query_ref_name
+
+      puts "POST action params: #{query_params}"
 
       # And actually execute it
-      @project.execute_sql(query.sql, input)
+      @page.execute_referenced_query(query_ref, query_params)
+
 
       # Go back
       redirect back

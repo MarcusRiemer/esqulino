@@ -1,8 +1,6 @@
-import {Page, WidgetDescription}          from '../page'
+import {Page, WidgetDescription, ParameterMapping}   from '../page'
 
-import {ParameterMapping}                 from './action'
-
-export {WidgetDescription}
+export {WidgetDescription, ParameterMapping}
 
 /**
  * The data model of something that can be more or less interactively
@@ -76,7 +74,7 @@ export abstract class ParametrizedWidget extends Widget {
      * @return True, if the given name is required as an input parameter.
      */
     hasInputParameter(name : string) {
-        return (this.getParameters().some(p => p.inputName == name));
+        return (this.getParameters().some(p => p.parameterName == name));
     }
 }
 

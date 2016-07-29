@@ -101,6 +101,16 @@ class Query
     model['name']
   end
 
+  # @return True, if this query should return a single row
+  def single_row?
+    model['singleRow']
+  end
+
+  # @return True, if this query is a SELECT query
+  def is_select?
+    model.key? "select"
+  end
+
   # @return The whole backing model of this query
   def model
     load_model! if @model.nil?

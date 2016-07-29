@@ -1,5 +1,38 @@
 {
   "name": "Gefangen_Neu",
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "Pokedex_1G",
+      "queryId": "0c396a9a-1947-4c2b-a5fb-195df2b91b84",
+      "mapping": []
+    },
+    {
+      "type": "query",
+      "name": "Gefangen_Neu",
+      "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44",
+      "mapping": [
+        {
+          "parameterName": "nummer",
+          "providingName": "input.nummer"
+        },
+        {
+          "parameterName": "name",
+          "providingName": "input.name"
+        },
+        {
+          "parameterName": "staerke",
+          "providingName": "input.staerke"
+        }
+      ]
+    },
+    {
+      "type": "query",
+      "name": "Meine_Pokemon",
+      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35",
+      "mapping": []
+    }
+  ],
   "rows": [
     {
       "columns": [
@@ -55,17 +88,6 @@
               "text": "Hinzufügen",
               "action": {
                 "type": "query",
-                "mapping": [
-                  {
-                    "inputName": "nummer"
-                  },
-                  {
-                    "inputName": "name"
-                  },
-                  {
-                    "inputName": "staerke"
-                  }
-                ],
                 "queryName": "Gefangen_Neu"
               }
             },
@@ -89,23 +111,6 @@
           ]
         }
       ]
-    }
-  ],
-  "referencedQueries": [
-    {
-      "type": "query",
-      "name": "Pokedex_1G",
-      "queryId": "0c396a9a-1947-4c2b-a5fb-195df2b91b84"
-    },
-    {
-      "type": "query",
-      "name": "Gefangen_Neu",
-      "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44"
-    },
-    {
-      "type": "query",
-      "name": "Meine_Pokemon",
-      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35"
     }
   ]
 }
