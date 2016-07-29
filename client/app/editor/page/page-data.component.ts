@@ -1,7 +1,7 @@
 import {Component, Input, OnInit}       from '@angular/core'
 
 import {
-    Page, QueryReference, QueryReferenceDescription
+    Page, PageParameter,  QueryReference, QueryReferenceDescription
 } from '../../shared/page/index'
 
 import {Project}                        from '../project.service'
@@ -64,6 +64,22 @@ export class PageDataComponent implements OnInit {
      */
     get referencedQueries() {
         return (this.page.referencedQueries);
+    }
+
+    /**
+     * @return All parameters this page itself requires to be rendered
+     */
+    get pageParameters() {
+        return (this.page.parameters);
+    }
+
+    /**
+     * @param name Add a new parameter this page requires to be rendered
+     */
+    addPageParameter(name : string) {
+        this.page.addParameter({
+            name : name
+        });
     }
 
     /**

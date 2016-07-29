@@ -1,0 +1,20 @@
+{
+  "name": "Gefangen_Einzeln",
+  "rows": [
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": []
+        }
+      ]
+    }
+  ],
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "Gefangen_Einzel",
+      "queryId": "59efc84a-945f-43f5-ab4b-98dc0ed1aee8"
+    }
+  ]
+}

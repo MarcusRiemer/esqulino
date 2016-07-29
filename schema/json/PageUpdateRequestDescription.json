@@ -42,6 +42,14 @@
                         "$ref": "#/definitions/QueryReferenceDescription",
                         "description": "Referenced queries are always accompanied by a human-readable\n\nname. This is required if the same query is going to be used\n\nmultiple times on a single page."
                     }
+                },
+                "parameters": {
+                    "description": "All parameters that are required to render this page. These\n\nare usually satisfied via GET parameters",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PageParameterDescription",
+                        "description": "A parameter that is required to render a page."
+                    }
                 }
             },
             "additionalProperties": false
@@ -97,6 +105,15 @@
                 "queryId": {
                     "type": "string"
                 },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "PageParameterDescription": {
+            "type": "object",
+            "properties": {
                 "name": {
                     "type": "string"
                 }

@@ -76,6 +76,13 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
     }
 
     /**
+     * @return True, if this query has any parameters.
+     */
+    get hasParameters() : boolean {
+        return (this.parameters.length > 0);
+    }
+
+    /**
      * Retrieves the SQL representation of this query.
      *
      * @return An SQL string that represents this query.

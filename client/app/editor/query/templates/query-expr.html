@@ -33,7 +33,10 @@
           (dragstart)="onExpressionDragStart($event)"
           draggable="true"
           class="parameter"
-          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }"><span class="fa fa-user-plus"></span>{{ expr.key }}</span>
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">
+      <span class="fa fa-sign-in"></span>
+      {{ expr.key }}
+    </span>
   </template>
   <template ngSwitchCase="binary">
     <span (drop)="onBinaryDrop($event)"
