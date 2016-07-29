@@ -16,10 +16,17 @@
     <template [ngIf]="model.hasAction">
       <span *ngFor="let param of parameters;"
             class="block-container">
-        <span class="constant">
-          <span *ngIf="param.isSatisfied" class="fa fa-fw fa-link" aria-hidden="true"></span>
-          {{ param.inputName }}
+        <span *ngIf="param.isSatisfied"
+              class="constant">
+          <span class="fa fa-fw {{ getParameterIcon(param.providingName) }}"
+                aria-hidden="true"></span>
+          {{ param.providingName }}
         </span>
+        <span *ngIf="!param.isSatisfied"
+              class="missing">
+          {{ param.parameterName }}
+        </span>
+
       </span>
     </template>
   </h5>

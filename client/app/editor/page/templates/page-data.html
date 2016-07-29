@@ -1,6 +1,18 @@
 <div class="card">
   <div class="card-block">
     <h4 class="card-title">
+      Mapping
+    </h4>
+    <p class="card-text">
+      Welche verfügbaren Eingaben sollen für welche Parameter genutzt werden?
+    </p>
+  </div>
+</div>
+    
+
+<div class="card">
+  <div class="card-block">
+    <h4 class="card-title">
       Daten
     </h4>
     <p class="card-text">
@@ -13,9 +25,13 @@
       Abfragen und SQL-Anweisungen
     </h5>
     <div class="row">
-      <div class="col-sm-10">
+      <label for="select-query-ref"
+             class="col-sm-2 form-control-label">
+        Weitere Abfrage
+      </label>
+      <div class="col-sm-8">
         <select [(ngModel)]="toReference.queryId"
-                id="reference-selected-query"
+                id="select-query-ref"
                 class="form-control">
           <option *ngFor="let q of possibleQueries;"
                   [value]="q.id">
@@ -39,7 +55,6 @@
           <query-icon [query]="used.query" [showName]="false"></query-icon>
         </span>
         <input [(ngModel)]="used.name"
-               name="ref-query-{{used.name}}"
                class="form-control"
                type="text">
         <span class="input-group-btn">
@@ -61,17 +76,21 @@
       Manche Seiten benötigen weitere Informationen damit sie dargestellt werden können. Eine "Suchen"-Seite muss zum Beispiel wissen, wonach überhaupt gesucht wird.
     </p>
     <div class="row">
-      <label for="paramName" class="col-sm-2 form-control-label">Parametername</label>
+      <label for="input-page-param-name"
+             class="col-sm-2 form-control-label">
+        Parametername
+      </label>
       <div class="col-sm-8">
         <input [(ngModel)]="paramName"
-               id="pageName"
+               list="page-required-parameters"
+               id="input-page-param-name"
                type="text"
                class="form-control">
       </div>
       <div class="col-sm-2">
         <button (click)="addPageParameter(paramName)"
                 class="btn btn-primary btn-block">
-          Benutzen!
+          Neuer Parameter
         </button>
       </div>
     </div>
@@ -80,7 +99,9 @@
   <ul class="list-group list-group-flush">
     <li *ngFor="let param of pageParameters;"
         class="list-group-item">
-      {{ param.name }}
+      <input [(ngModel)]="param.name"
+             class="form-control"
+             type="text">
     </li>
   </ul>
 </div>

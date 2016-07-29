@@ -1,11 +1,11 @@
 import {Project}                               from '../project'
-import {QuerySelect, ResultColumn}  from '../query'
+import {QuerySelect, ResultColumn}             from '../query'
 
 import {
     ValueReferenceDescription, ColumnReferenceDescription,
     QueryReferenceDescription
 } from './page.description'
-import {Page}                                  from './page'
+import {Page, ParameterMapping}                from './page'
 
 
 /**
@@ -64,11 +64,17 @@ export class QueryReference extends ValueReference {
     // The "variable name" of this reference
     private _name : string;
 
+    // How are these parameters fulfilled?
+    private _mapping : ParameterMapping[] = [];
+
     constructor(project : Project, page : Page, desc : QueryReferenceDescription) {
         super(project, page);
 
         this._queryId = desc.queryId;
         this._name = desc.name;
+        if (desc.mapping) {
+            this._mapping = desc.mapping.map(m => new ParameterMapping(page, m));
+        }
     }
 
     /**
@@ -96,6 +102,13 @@ export class QueryReference extends ValueReference {
      */
     get queryId() : string {
         return (this._queryId);
+    }
+
+    /**
+     * @return How the input parameters of this query should be mapped
+     */
+    get mapping() {
+        return (this._mapping);
     }
 
     /**
@@ -145,7 +158,8 @@ export class QueryReference extends ValueReference {
         return ({
             type : "query",
             name : this._name,
-            queryId : this._queryId
+            queryId : this._queryId,
+            mapping : this._mapping.map(m => m.toModel())
         })
     }
     

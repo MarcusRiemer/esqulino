@@ -4,6 +4,7 @@ import {Query}                                from '../query'
 
 import {
     PageDescription, PageParameterDescription,
+    ParameterMappingDescription,
     QueryReferenceDescription, WidgetDescription,
     ValueReferenceDescription, ColumnReferenceDescription,
     ColumnDescription, RowDescription
@@ -232,8 +233,19 @@ export class Page extends ProjectResource {
     /**
      * @return All parameters this page requires to operate.
      */
-    get parameters() : PageParameter[] {
+    get queryParameters() : PageParameter[] {
         return (this._parameters);
+    }
+
+    /**
+     * @return All parameter names that need to be given.
+     */
+    get requiredParameterNames() : string[] {
+        const queryParams = this._referencedQueries
+            .filter(r => r.isResolveable)
+            .map(r => r.query.parameters.map(p => p.key));
+
+        return ([].concat(...queryParams));
     }
 
     /**
@@ -281,10 +293,25 @@ export class Page extends ProjectResource {
         return ([].concat(...subs));
     }
 
-    hasUserInput(name : string) {
-        const parametrized = this.allWidgets.filter(w => w instanceof UserInputWidget) as UserInputWidget[];
+    /**
+     * @return All widgets that are in use on this page and require parameters to operate.
+     */
+    get parametrizedWidgets() : ParametrizedWidget[] {
+        return (this.allWidgets.filter(w => w instanceof ParametrizedWidget) as ParametrizedWidget[]);
+    }
 
-        return (parametrized.some(p => p.providesParameter(name)));
+    /**
+     * @return All widgets that are in use on this page and provide input for parameters.
+     */
+    get userInputWidgets() : UserInputWidget[] {
+        return (this.allWidgets.filter(w => w instanceof UserInputWidget) as UserInputWidget[]);
+    }
+
+    /**
+     * @return True, if the following input could be provided
+     */
+    hasUserInput(name : string) {
+        return (this.userInputWidgets.some(p => p.providesParameter(name)));
     }
 
     toModel() : PageDescription {
@@ -307,6 +334,54 @@ export class Page extends ProjectResource {
         }
         
         return (toReturn);
+    }
+}
+
+/**
+ * This class bridges the fact that the page uses a namespaced data model
+ * while the queries do not. This class maps variables with prefixes like 
+ * "input" or "get" (these are used on the page) to the unprefixed queries.
+ */
+export class ParameterMapping {
+    private _paramName : string;
+
+    private _providingName : string;
+
+    private _page : Page;
+
+    constructor(page : Page, desc : ParameterMappingDescription) {
+        this._page = page;
+        
+        this._paramName = desc.parameterName;
+        this._providingName = desc.providingName;
+    }
+
+    /**
+     * @return True, if this mapping is fulfilled by the page it is assigned to.
+     */
+    get isSatisfied() : boolean {
+        return (this._paramName && this._page.hasUserInput(this._providingName));
+    }
+
+    /**
+     * @return The name of the wired output
+     */
+    get providingName() {
+        return (this._providingName);
+    }
+
+    /**
+     * @return The name of the wired input
+     */
+    get parameterName() {
+        return (this._paramName);
+    }
+
+    toModel() : ParameterMappingDescription {
+        return ({
+            parameterName : this._paramName,
+            providingName : this._providingName
+        });
     }
 }
 

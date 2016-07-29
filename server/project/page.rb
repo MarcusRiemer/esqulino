@@ -136,23 +136,89 @@ class Page
   #
   # And finally all parameters, including the query result, will be handed off
   # to the template engine. The result of this render process is then returned.
-  def render(params, render_engine = "liquid")    
-    # Load all referenced queries
-    all_queries = referenced_queries.map do |ref|
-      {
-        'name' => ref['name'],
-        'sql' => @project.query_by_id(ref['queryId']).sql
-      }
+  def render(params, render_engine = "liquid", template_string = nil)    
+    # Stores the results of executed queries
+    result_queries = {}
+
+    # Taking a look at each referenced query
+    referenced_queries.each do |ref|
+      query = @project.query_by_id(ref['queryId'])
+
+      # Skip queries that are not select queries
+      next unless query.is_select?
+
+      # Execute the query and store the result in a hash under the query name
+      result = self.execute_referenced_query(ref, params)
+      result_queries[ref['name']] = result
     end
 
-    # And execute them, enriching the parameters with query data
-    params = @project.execute_page_queries(all_queries, params)
+    puts "Rendering #{name}, query results: #{result_queries.inspect}"
+
+    # Prepare parameters for rendering, this is basically the union of all
+    # previous parameters with the newly created query parameters
+    render_params = params.dup
+    render_params['query'] = result_queries
 
     # Load the template string
-    template = read_template(render_engine)
+    if template_string.nil? then
+      template_string = self.read_template(render_engine)
+    end
 
     # And hand over to do some actual rendering
-    project_render_page_template(@project, template, render_engine, params)
+    project_render_page_template(@project, template_string, render_engine, render_params)
+  end
+
+  # Execute a single query, translating the required parameters
+  #
+  # @param queryRef [Hash] A query reference
+  # @param initial_params [Hash] The initial set of parameters,
+  #                              probably mainly input and get
+  def execute_referenced_query(query_ref, initial_params)
+    puts "#{query_ref['name']} initial_params: #{initial_params.inspect}"
+    
+    # Each query gets its own fresh set of parameters
+    params = {}
+    query_ref['mapping'].each do |mapping|
+      puts "Handling mapping #{mapping.inspect}"
+
+      # Extract all relevant indizes
+      providing_prefix, providing_name = mapping.fetch('providingName').split "."
+      parameter_name = mapping.fetch('parameterName')
+      
+      # And do the actual mapping
+      mapped_value = initial_params
+                     .fetch(providing_prefix)
+                     .fetch(providing_name)
+      params[parameter_name] = mapped_value
+    end
+
+    puts "#{query_ref['name']} params: #{params.inspect}"
+
+    # Grab the actual query and execute it with the freshly constructed parameters
+    query = @project.query_by_id(query_ref['queryId'])
+    result = @project.execute_sql(query.sql, params)
+
+    # Prepare result for SELECT queries
+    
+    # Templating engines works much better with 'sensible' keys as names,
+    # so we map the column names into each row. This basically transforms
+    # rows like [1,2,3] to { "column-name-1" => 1, ... }
+    mapped = result['rows'].map { |r| Hash[result['columns'].zip r] }
+
+    # Rows with a single value allow a short-hand notation. The user
+    # shouldn't be forced to write {{ row[0].column }} every time he
+    # **knows** there is only a single row.
+    if query.single_row?
+      if mapped.length == 1
+        mapped = mapped.first
+      else
+        puts "INVALID ROW COUNT"
+      end
+    end
+
+    puts "#{query_ref['name']} result: #{mapped}"
+    
+    return (mapped);
   end
 
   # Read a template specification for this page
@@ -166,12 +232,12 @@ class Page
     File.read(page_file_path extension)
   end
 
-  # Resolvey a query by the name of it's reference
-  def get_query_by_reference_name(ref_name)
+  # Getting hold of a specific query reference
+  def get_query_reference_by_name(ref_name)
     ref_index = referenced_queries.find_index {|ref| ref['name'] == ref_name}
     raise UnknownReferenceNameError.new(@project, self, ref_name) if ref_index.nil?
 
-    return @project.query_by_id referenced_queries[ref_index]['queryId']
+    return referenced_queries[ref_index]
   end
 end
 

@@ -37,6 +37,7 @@ export interface PageUpdateRequestDescription {
 export interface PageRenderRequestDescription {
     sourceType : string,
     source : string,
+    page : PageDescription
     queries : {
         name : string,
         sql : string
@@ -177,6 +178,7 @@ export class PageService {
         const bodyJson : PageRenderRequestDescription  = {
             sourceType : page.renderer.type,
             source : page.renderer.renderPage(page),
+            page : page.toModel(),
             queries : fullQueries,
             params : {}
         }

@@ -18,7 +18,6 @@ import {
 const singleRowPage : PageDescription = {
     id : "testpage",
     name : "Serialization test",
-    referencedQueries : [],
     rows : [
         {
             columns : [

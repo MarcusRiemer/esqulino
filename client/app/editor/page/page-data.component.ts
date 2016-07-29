@@ -33,7 +33,8 @@ export class PageDataComponent implements OnInit {
     toReference : QueryReferenceDescription = {
         type : "query",
         name : undefined,
-        queryId : undefined
+        queryId : undefined,
+        mapping : undefined
     };
 
     /**
@@ -70,7 +71,7 @@ export class PageDataComponent implements OnInit {
      * @return All parameters this page itself requires to be rendered
      */
     get pageParameters() {
-        return (this.page.parameters);
+        return (this.page.queryParameters);
     }
 
     /**

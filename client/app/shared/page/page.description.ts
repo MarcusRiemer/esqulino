@@ -3,26 +3,36 @@
  * to do so.
  */
 export interface ParameterMappingDescription {
-    inputName : string
+    parameterName : string
 
-    outputName : string
+    providingName : string
 }
 
 /**
- * Actions specify the intent to change something on the server.
+ * Actions specify the intent, usually along with some parameters.
  */
 export interface ActionDescription {
     // Discriminator value for inheritance
     type : string
-
-    mapping : ParameterMappingDescription[]
 }
 
 /**
  * This action kicks of some mutation query
  */
 export interface QueryActionDescription extends ActionDescription {
+    type : "query"
+    
     queryName : string
+}
+
+/**
+ * This action takes the user to a different page
+ */
+export interface NavigateActionDescription extends ActionDescription {
+    type : "link"
+
+    // The id of the page that is the target of the navigation
+    pageId : string
 }
 
 /**
@@ -148,6 +158,9 @@ export interface QueryReferenceDescription extends ValueReferenceDescription {
 
     // The user-defined name of the reference
     name : string
+
+    // Which values should serve as parameters for this query?
+    mapping : ParameterMappingDescription[]
 }
 
 /**

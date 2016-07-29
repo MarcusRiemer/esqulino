@@ -49,14 +49,19 @@ export class Input extends UserInputWidget {
      * @return The name of the parameter this input provides
      */
     get outParamName() {
-        return (this._outParamName);
+        return ("input." + this._outParamName);
     }
 
     /**
-     * @param value The name of the parameter this input provides
+     * @param value The name of the parameter this input provides. If begins
+     *              with the prefix "input.", this prefix will be removed.
      */
     set outParamName(value : string) {
         this._outParamName = value;
+
+        if (this._outParamName.startsWith("input.")) {
+            this._outParamName = this._outParamName.substr(6);
+        }
     }
 
     /**
@@ -105,7 +110,7 @@ export class Input extends UserInputWidget {
      * @return True, if this input provides the given name.
      */ 
     providesParameter(name : string) {
-        return (this._outParamName === name);
+        return (this.outParamName === name);
     }
 
     protected toModelImpl() : WidgetDescription {

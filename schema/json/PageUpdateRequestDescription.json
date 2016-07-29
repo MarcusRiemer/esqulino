@@ -107,6 +107,25 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "mapping": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ParameterMappingDescription",
+                        "description": "Inputs and outputs *may* use identical names but are not required\n\nto do so."
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "ParameterMappingDescription": {
+            "type": "object",
+            "properties": {
+                "inputName": {
+                    "type": "string"
+                },
+                "outputName": {
+                    "type": "string"
                 }
             },
             "additionalProperties": false
