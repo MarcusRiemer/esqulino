@@ -125,6 +125,60 @@ describe('Valid SELECT Queries', () => {
         expect(q.toSqlString()).toEqual("SELECT person.personId, person.name\nFROM person\n\tJOIN ort o");
         expect(q.toModel()).toEqual(model);
     });
+
+    it ('SELECT * FROM person WHERE person.personId = :personId', () => {
+        const model : Model.QueryDescription = {
+            name : 'select-single-parameter',
+            id : 'select-single-parameter',
+            singleRow : true,
+            select : {
+                columns : [{ expr : { star : { } } }]
+            },
+            from : {
+                first : {
+                    name : "person"
+                }
+            },
+            where : {
+                first : {
+                    binary : {
+                        lhs : { singleColumn : { table : "person", column : "personId" } },
+                        rhs : { parameter : { key : "personId" } },
+                        operator : "=",
+                        simple : true
+                    }
+                }
+            }
+        };
+
+        let q = new QuerySelect(schema, model);
+        expect(q.singleRow).toEqual(true);
+
+        // Leaves
+        const leaves = q.getLeaves();
+        expect(leaves.length).toEqual(3);
+        expect(leaves[0].toModel()).toEqual(model.select.columns[0].expr);
+        expect(leaves[1].toModel()).toEqual(model.where.first.binary.lhs);
+        expect(leaves[2].toModel()).toEqual(model.where.first.binary.rhs);
+
+        // Parameters
+        expect(q.parameters.length).toEqual(1);
+        expect(q.parameters[0].toModel()).toEqual(model.where.first.binary.rhs);
+
+        // SELECT
+        const columns = q.select.actualColums;
+        expect(columns.length).toEqual(3);
+        expect(columns[0].fullName).toEqual("person.personId");
+        expect(columns[1].fullName).toEqual("person.name");
+        expect(columns[2].fullName).toEqual("person.gebDat");
+        
+        // FROM
+        expect(q.from.numberOfJoins).toEqual(0);
+
+        expect(q.toSqlString()).toEqual("SELECT *\nFROM person\nWHERE person.personId = :personId");
+        expect(q.toModel()).toEqual(model);
+    });
+
     
     it ('SELECT * FROM person WHERE 1', () => {
         const model : Model.QueryDescription = {
@@ -239,10 +293,33 @@ describe('Invalid SELECT Queries', () => {
         expect(q.validate().isValid).toBeFalsy();
     });
 
+    it ('SingleRow restriction enabled: No WHERE', () => {
+        const model : Model.QueryDescription = {
+            name : 'select-single-row-no-restrict',
+            id : 'invalid-select-2',
+            singleRow : true,
+            select : {
+                columns : [
+                    { expr : { star : { } } },
+                ]
+            },
+            from : {
+                first : {
+                    name : "person"
+                }
+            }
+        };
+
+        let q = new QuerySelect(schema, model);
+
+        expect(q.validate().isValid).toBeFalsy();
+
+    });
+
     it ('Duplicate column name: SELECT *, person.name FROM person', () => {
         const model : Model.QueryDescription = {
             name : 'select-duplicate-column',
-            id : 'invalid-select-1',
+            id : 'invalid-select-3',
             select : {
                 columns : [
                     { expr : { star : { } } },
@@ -262,7 +339,6 @@ describe('Invalid SELECT Queries', () => {
         expect(leaves.length).toEqual(2);
         expect(leaves[0].toModel()).toEqual(model.select.columns[0].expr);
         expect(leaves[1].toModel()).toEqual(model.select.columns[1].expr);
-
 
         expect(q.toModel()).toEqual(model);
         expect(q.validate().isValid).toBeFalsy();

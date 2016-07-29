@@ -25,6 +25,9 @@
         },
         "id": {
             "type": "string"
+        },
+        "singleRow": {
+            "type": "boolean"
         }
     },
     "additionalProperties": false,

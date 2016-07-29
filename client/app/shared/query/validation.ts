@@ -108,6 +108,24 @@ export module ValidationErrors {
     }
 
     /**
+     * A query that promises to only touch a single row, but probably will fail
+     * to do so.
+     */
+    export class UnplausibleSingleRow implements ValidationError {
+        constructor(public hasNoWhere : boolean) {
+
+        }
+        
+        get errorMessage() {
+            return (`This query should only touch a single row, but does not impose any restrictions.`);
+        }
+
+        get location() {
+            return (`GENERAL`);
+        }
+    }
+
+    /**
      * Used for components that don't allow JOINs.
      */
     export class SingleTableRequired implements ValidationError {

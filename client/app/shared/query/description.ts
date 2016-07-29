@@ -183,5 +183,12 @@ export interface QueryDescription {
     where? : Where
     name : string
     id : string
+
+    // Sometimes it is important to know in advance if a query will affect
+    // only a single row.
+    //
+    // * The SELECT query uses this to allow easier databinding to the UI
+    // * DELETE and UPDATE queries could use this as a safety net
+    singleRow? : boolean
 }
 

@@ -14,12 +14,25 @@
         Bei der Bearbeitung dieser Abfrage hat die Datenbank den folgenden Fehler gemeldet: <samp>"{{ result.errorMessage }}"</samp>.
       </p>
     </div>
+
+    <div *ngIf="!result.hasValidSingleRowCount"
+         class="alert alert-danger"
+         role="alert">
+      <h6>
+        <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
+        Nicht exakt eine Zeile!
+      </h6>
+      <p>
+        Diese Abfrage sollte immer exakt eine Zeile liefern, tatsächlich enthält das Ergebnis aber {{ result.rows.length }} Zeilen.
+      </p>
+    </div>
+    
     <table *ngIf="!result.isError"
            class="table table-sm table-hover">
       <thead>
         <tr>
           <th *ngFor="let col of result.cols">
-            {{ col.name }}
+            {{ col.fullName }}
           </th>
         </tr>
       </thead>
