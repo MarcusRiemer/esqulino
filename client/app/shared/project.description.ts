@@ -1,6 +1,11 @@
 import {Model}               from "./query"
 import {TableDescription}    from "./schema.description"
 import {PageDescription}     from "./page/page.description"
+import {
+    ApiVersion, ApiVersionToken, CURRENT_API_VERSION
+} from "./resource.description"
+
+export {ApiVersion, ApiVersionToken, CURRENT_API_VERSION}
 
 /**
  * The properties of a project that can be queried from the
@@ -10,7 +15,7 @@ import {PageDescription}     from "./page/page.description"
  * existing project properties that is used to list available
  * projects.
  */
-export interface ProjectListDescription {
+export interface ProjectListDescription extends ApiVersion {
     name : string
     description : string
     id : string

@@ -1,6 +1,8 @@
 import {Schema}                  from '../schema'
-import {Model, SyntaxTree}       from '../query'
 
+import {
+    Model, SyntaxTree, CURRENT_API_VERSION
+} from './base'
 import {QueryUpdate}             from './update'
 
 let schema  = new Schema([
@@ -40,6 +42,7 @@ describe('UPDATE', () => {
         const m : Model.QueryDescription = {
             name : "update-1",
             id : "update-1",
+            apiVersion : CURRENT_API_VERSION,
             update : {
                 table : "person",
                 assignments : [
@@ -70,6 +73,7 @@ describe('UPDATE', () => {
         const m : Model.QueryDescription = {
             name : "update-1",
             id : "update-1",
+            apiVersion : CURRENT_API_VERSION,
             update : {
                 table : "person",
                 assignments : [

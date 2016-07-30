@@ -36,5 +36,6 @@
       }
     ],
     "table": "person"
-  }
+  },
+  "apiVersion": "1"
 }

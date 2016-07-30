@@ -1,23 +1,51 @@
 import {Project}                              from './project'
+import {
+    ApiVersion, ApiVersionToken, ProjectResourceDescription,
+    CURRENT_API_VERSION
+} from './resource.description'
+
+export {
+    ApiVersion, ApiVersionToken, ProjectResourceDescription,
+    CURRENT_API_VERSION
+}
 
 /**
  * Any kind of resource for the esqulino project. Resources
  * always belong to a project and are uniquely identified
  * by an ID.
  */
-export abstract class ProjectResource {
+export abstract class ProjectResource implements ApiVersion {
     private _id : string;
     private _name : string;
     private _project : Project;
 
     private _isDirty = false;
 
-    constructor(id : string, name : string, project : Project) {
-        this._id = id;
-        this._name = name;
+    constructor(project : Project, desc : ProjectResourceDescription) {
+        this._id = desc.id;
+        this._name = desc.name;
         this._project = project;
+
+        // The esqulino client expects exactly matching versions. And because
+        // the JSON serialization may have circumvented the type system, we
+        // need to ensure we are actually loading something valid.
+        if (this.apiVersion != desc.apiVersion as string) {
+            throw new Error(`Attempted to load a resource with version ${desc.apiVersion}, current version is ${this.apiVersion}`);
+        }
     }
 
+    /**
+     * Convert this resource to it's JSON description
+     */
+    abstract toModel() : ProjectResourceDescription;
+
+    /**
+     * @return The API version of this resource
+     */
+    get apiVersion() : ApiVersionToken {
+        return (CURRENT_API_VERSION);
+    }
+    
     /**
      * @return The project this resource is associated with. Because the tests
      *         do not always provide a project, this does some sanity checking

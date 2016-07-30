@@ -1,5 +1,5 @@
 import {Project}                              from '../project'
-import {ProjectResource}                      from '../resource'
+import {ProjectResource, CURRENT_API_VERSION} from '../resource'
 
 import {Schema}                               from '../schema'
 import {
@@ -8,7 +8,7 @@ import {
 import * as Model                             from './description'
 import * as SyntaxTree                        from './syntaxtree'
 
-export {Model, SyntaxTree}
+export {Model, SyntaxTree, CURRENT_API_VERSION}
 
 /**
  * Facade for a query that allows meaningful mapping to the UI.
@@ -26,7 +26,7 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
      * Stores all basic information about a string.
      */
     constructor(schema : Schema, model : Model.QueryDescription, project? : Project) {
-        super(model.id, model.name, project);
+        super(project, model);
         this.schema = schema;
         this._singleRow = !!model.singleRow;
     }
@@ -97,6 +97,8 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
     validate() : ValidationResult {
         const ownErrors : ValidationError[] = [];
 
+        // Ensure there is a WHERE condition if this query promises to
+        // deliver a single row.
         if (this.singleRow) {
             const where : QueryWhere = (this as any).where;
 
@@ -116,14 +118,14 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
     }
 
     /**
-     * Serializes the whole query to the "over-the-wire" format.
      * @return The "over-the-wire" JSON representation
      */
     public toModel() : Model.QueryDescription {
         // Fill in basic information
         let toReturn : Model.QueryDescription = {
             name : this.name,
-            id : this.id
+            id : this.id,
+            apiVersion : this.apiVersion
         };
 
         // Fill in the optional singleRow annotation

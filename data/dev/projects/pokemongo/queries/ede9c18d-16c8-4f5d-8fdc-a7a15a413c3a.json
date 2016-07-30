@@ -28,5 +28,6 @@
       }
     ],
     "table": "pokedex"
-  }
+  },
+  "apiVersion": "1"
 }

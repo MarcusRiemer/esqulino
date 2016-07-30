@@ -32,5 +32,6 @@
     {
       "name": "gefangen_id"
     }
-  ]
+  ],
+  "apiVersion": "1"
 }

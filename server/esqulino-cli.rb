@@ -4,10 +4,28 @@ require 'optparse'
 
 require './project.rb'
 require './error.rb'
+require './version.rb'
+
+require './migrate/migrate.rb'
+
+# Some UNIX terminal colours
+# TODO: Make this cross platform
+class String
+  def black;          "\033[30m#{self}\033[0m" end
+  def red;            "\033[31m#{self}\033[0m" end
+  def green;          "\033[32m#{self}\033[0m" end
+  def brown;          "\033[33m#{self}\033[0m" end
+  def blue;           "\033[34m#{self}\033[0m" end
+  def magenta;        "\033[35m#{self}\033[0m" end
+  def cyan;           "\033[36m#{self}\033[0m" end
+  def gray;           "\033[37m#{self}\033[0m" end
+end
 
 # Wraps all possible esqulino commandline operations
 class EsqulinoCli
   def initialize()
+    @indent_level = 0
+    
     @parser = OptionParser.new do |opts|
       opts.banner = "Usage: esqulino-cli.rb [options]"
 
@@ -22,6 +40,10 @@ class EsqulinoCli
         @quiet = true
       end
 
+      opts.on("-d", "--data-dir PATH", "The data directory for this esqulino instance") do |path|
+        @data_dir = path
+        raise EsqulinoError.new("Data directory #{path} does not exist") unless Dir.exists? path
+      end
 
       # Setting a project path is required for all project-specific
       # operations.
@@ -43,7 +65,19 @@ class EsqulinoCli
         page = Page.new(@project, nil, model)
         page.save_model
 
-        project_status "Created page \"#{page.name}\""
+        status_project(@project, "Created page \"#{page.name}\"")
+      end
+
+      opts.on("migrate", "Updates resources to fit a newer API specification") do
+        projects = if @project.nil? then
+                     enumerate_projects File.join(@data_dir, "projects")
+                   else
+                     [@project]
+                   end
+
+        projects.each do |p|
+          migrate_project(self, p, ESQULINO_API_VERSION)
+        end
       end
     end
   end
@@ -53,14 +87,84 @@ class EsqulinoCli
     @parser.parse! argv
   end
 
+  # Format a status message for a project
+  def fmt_project(project, to_output)
+    "Project \"#{project.id}\": #{to_output}"
+  end
+
+  # Format a status message for a query
+  def fmt_query(query, to_output)
+    "Query \"#{query.name}\": #{to_output}"
+  end
+
+  # Format a status message for a page
+  def fmt_page(page, to_output)
+    "Page \"#{page.name}\": #{to_output}"
+  end
+
   # Prints a status message in the context of a project
-  def project_status(to_output)
-    status "Project \"#{@project.id}\": " + to_output
+  def status_project(project, to_output)
+    status fmt_project(project, to_output)
+  end
+
+  # Prints a status message in the context of a query
+  def status_query(query, to_output)
+    status fmt_query(query, to_output)
+  end
+
+  # Prints a status message in the context of a page
+  def status_page(page, to_output)
+    status fmt_page(page, to_output)
   end
   
   # Prints a status message
-  def status(to_output)
-    puts to_output unless @quiet
+  def status(to_output, newline = true)
+    if not @quiet
+      indented_output = "#{' ' * @indent_level}#{to_output}"
+      if newline then
+        puts indented_output
+      else
+        print indented_output
+        STDOUT.flush
+      end
+    end
+  end
+
+  # Print something indented
+  def print_indent
+    begin
+      self.indent!
+      yield
+    ensure
+      self.dedent!
+    end
+  end
+
+  # Print something that (hopefully) does not require any additional
+  # output.
+  def print_progress_line(message, done = "DONE", failed = "FAIL")
+    begin
+      yield
+      self.status_progress_prefix(done.green, message)
+    rescue StandardError => e
+      self.status_progress_prefix(failed.red, message)
+      self.print_indent {self.status e.to_s}
+    end
+  end
+
+  def status_progress_prefix(prefix, message)
+    status "[#{prefix}] #{message}"
+  end
+
+  # Increases indentation level
+  def indent!
+    @indent_level += 1
+  end
+
+  # Decreases indentation level, but never past 0
+  def dedent!
+    @indent_level -= 1
+    raise StandardError.new("Dedented past 0") if @indent_level < 0
   end
 end
 
@@ -70,7 +174,7 @@ if __FILE__ == $0
     cli = EsqulinoCli.new
     cli.parse! ARGV
   rescue EsqulinoError => e
-    puts "\e[31m#{e.class.name}\e[0m: #{e}"
+    puts "#{e.class.name.red}: #{e}"
   end
 end
 

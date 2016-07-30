@@ -20,5 +20,6 @@
       }
     ],
     "table": "key_value"
-  }
+  },
+  "apiVersion": "1"
 }

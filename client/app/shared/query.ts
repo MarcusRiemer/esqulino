@@ -1,5 +1,6 @@
 import {Schema}                          from './schema'
 import {Project}                         from './project'
+import {CURRENT_API_VERSION}             from './resource.description'
 
 import {ValidationResult, Validateable}  from './query/validation'
 import {
@@ -21,7 +22,8 @@ export {
     Model, SyntaxTree, ValidationResult, Validateable,
     Query, QuerySelect, QueryDelete, QueryInsert, QueryFrom, QueryWhere, QueryUpdate,
     ResultColumn,
-    SelectQueryResult, QueryRunErrorDescription
+    SelectQueryResult, QueryRunErrorDescription,
+    CURRENT_API_VERSION
 }
 
 /**

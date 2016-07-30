@@ -6,7 +6,9 @@ import {AsyncSubject}                            from 'rxjs/AsyncSubject'
 import {Observable}                              from 'rxjs/Observable'
 
 import {ServerApiService}                        from '../shared/serverapi.service'
-import {Page,PageDescription, Row}               from '../shared/page/index'
+import {
+    Page,PageDescription, Row, CURRENT_API_VERSION
+} from '../shared/page/index'
 
 import {QueryParamsDescription}                  from './query.service'
 import {Project}                                 from './project.service'
@@ -133,6 +135,7 @@ export class PageService {
         const page = new Page({
             id : undefined,
             name : name,
+            apiVersion : CURRENT_API_VERSION,
             referencedQueries : [],
             rows : [Row.emptyDescription]
         }, project);

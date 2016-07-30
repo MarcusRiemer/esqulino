@@ -134,9 +134,7 @@ class ScratchSqlApp < Sinatra::Base
 
   # Listing all projects that are available
   get '/api/project' do
-    projects = Dir.entries(projects_dir)
-               .select { |entry| entry != '.' and entry != '..' and not entry.start_with? "_" }
-               .map { |entry| Project.new File.join(projects_dir, entry) }
+    projects = enumerate_projects(projects_dir)
                .map { |project| project.public_description }
     json projects
   end
@@ -232,7 +230,7 @@ class ScratchSqlApp < Sinatra::Base
 
     # Store the new model
     @page.model = new_page['model']
-    @page.save_model
+    @page.save!
 
     # Store all templates
     @page.save_templates new_page['sources']
@@ -244,6 +242,7 @@ class ScratchSqlApp < Sinatra::Base
   delete '/api/project/:project_id/page/:page_id' do
     @page.delete!
 
+    # Was this the index page? Then remove it from the description
     @project.check_index_page!
     @project.save_description
 

@@ -1,3 +1,4 @@
+import {ProjectResourceDescription}           from '../resource.description'
 import {TableDescription}                     from '../schema.description'
 
 /**
@@ -174,15 +175,13 @@ export interface Update {
  * Outermost description of a query. This contains
  * the whole structure and some identifying properties.
  */
-export interface QueryDescription {
+export interface QueryDescription extends ProjectResourceDescription {
     select? : Select
     delete? : Delete
     insert? : Insert
     update? : Update
     from? : From
     where? : Where
-    name : string
-    id : string
 
     // Sometimes it is important to know in advance if a query will affect
     // only a single row.
