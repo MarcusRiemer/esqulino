@@ -5,7 +5,7 @@ import './widgets/paragraph.spec'
 import './widgets/input.spec'
 
 import {
-    Page, PageDescription
+    Page, PageDescription, CURRENT_API_VERSION
 } from './page'
 
 import {
@@ -18,6 +18,7 @@ import {
 const singleRowPage : PageDescription = {
     id : "testpage",
     name : "Serialization test",
+    apiVersion : CURRENT_API_VERSION,
     rows : [
         {
             columns : [

@@ -1,6 +1,8 @@
 import {Schema}                  from '../schema'
-import {Model, SyntaxTree}       from '../query'
 
+import {
+    Model, SyntaxTree, CURRENT_API_VERSION
+} from './base'
 import {QueryInsert}             from './insert'
 
 let schema  = new Schema([
@@ -40,6 +42,7 @@ describe('INSERT', () => {
         const m : Model.QueryDescription = {
             name : "insert-spec",
             id : "insert-spec",
+            apiVersion : CURRENT_API_VERSION,
             insert : {
                 table : "person",
                 assignments : [
@@ -67,6 +70,7 @@ describe('INSERT', () => {
         const m : Model.QueryDescription = {
             name : "insert-1",
             id : "insert-1",
+            apiVersion : CURRENT_API_VERSION,
             insert : {
                 table : "person",
                 assignments : [
@@ -89,6 +93,7 @@ describe('INSERT', () => {
         const m : Model.QueryDescription = {
             name : "insert-1",
             id : "insert-1",
+            apiVersion : CURRENT_API_VERSION,
             insert : {
                 table : "person",
                 assignments : [
@@ -111,6 +116,7 @@ describe('INSERT', () => {
         const m : Model.QueryDescription = {
             name : "insert-spec",
             id : "insert-spec",
+            apiVersion : CURRENT_API_VERSION,
             insert : {
                 table : "person",
                 assignments : [
@@ -134,6 +140,7 @@ describe('Valid INSERT Queries', () => {
         const m : Model.QueryDescription = {
             name : "insert-1",
             id : "insert-1",
+            apiVersion : CURRENT_API_VERSION,
             insert : {
                 table : "person",
                 assignments : [
@@ -170,6 +177,7 @@ describe('Valid INSERT Queries', () => {
         const m : Model.QueryDescription = {
             name : "insert-2",
             id : "insert-2",
+            apiVersion : CURRENT_API_VERSION,
             insert : {
                 table : "person",
                 assignments : [

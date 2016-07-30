@@ -44,6 +44,25 @@ class Query
   # SQL representation is present it is deleted.  We prefer having no SQL
   # string at all instead of working with an older state of the query.
   #
+  # @see Query.save_description
+  def save!
+    self.save_description
+    
+    # Is the SQL representation present?
+    if not @sql.nil? then
+      # Yes, simply store it
+      File.open(query_file_path("sql"), "w") do |f|
+        f.write(@sql)
+      end
+    else
+      # No, delete a possibly existing sql file.
+      File.delete query_file_path "sql" if File.exists? query_file_path "sql"
+    end
+  end
+
+  # Saves only the description of this query, but leaves the SQL files
+  # as they are.
+  #
   # This requires the query model to be currently loaded. If it is not loaded
   # an exception is thrown because
   #
@@ -52,7 +71,7 @@ class Query
   #
   # Or to put in other terms: Saving something that hasn't been loaded smells like
   # something that would never happen on purpose.
-  def save!
+  def save_description
     raise EsqulinoError, "Attempted to save unloaded query" if @model.nil?
     
     # Ensuring that the project folder has a "queries" subfolder
@@ -65,17 +84,6 @@ class Query
     filtered_model = @model.dup.tap { |m| m.delete "id" }
     File.open(query_file_path, "w") do |f|
       f.write(filtered_model.to_json)
-    end
-
-    # Is the SQL representation present?
-    if not @sql.nil? then
-      # Yes, simply store it
-      File.open(query_file_path("sql"), "w") do |f|
-        f.write(@sql)
-      end
-    else
-      # No, delete a possibly existing sql file.
-      File.delete query_file_path "sql" if File.exists? query_file_path "sql"
     end
   end
 
@@ -99,6 +107,11 @@ class Query
   # @return The user-facing name of this query
   def name
     model['name']
+  end
+
+  # @return The version of this query
+  def api_version
+    model['apiVersion']
   end
 
   # @return True, if this query should return a single row

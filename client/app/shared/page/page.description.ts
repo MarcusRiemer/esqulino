@@ -1,3 +1,9 @@
+import {
+    ProjectResourceDescription, CURRENT_API_VERSION
+} from '../resource.description'
+
+export {CURRENT_API_VERSION}
+
 /**
  * Inputs and outputs *may* use identical names but are not required
  * to do so.
@@ -173,17 +179,7 @@ export interface PageParameterDescription {
 /**
  * Describes a page as a whole
  */
-export interface PageDescription {
-    /**
-     * The (at least) project-wide unique ID of this page.
-     */
-    id : string
-
-    /**
-     * A user-defined name of this page.
-     */
-    name : string
-
+export interface PageDescription extends ProjectResourceDescription {
     /**
      * Rows are the top-level element for the whole layout,
      * for the moment no other type of widget is expected.

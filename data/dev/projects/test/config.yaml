@@ -5,3 +5,4 @@ id: test
 description: Dieses Projekt wird für automatische Tests benutzt und hat keine inhaltliche
   Bedeutung.
 indexPageId: 4f1f31c8-4ea3-42bd-9ba3-76a4c1d459b0
+apiVersion: '1'

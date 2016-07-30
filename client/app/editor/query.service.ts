@@ -9,7 +9,8 @@ import {ServerApiService}                        from '../shared/serverapi.servi
 import {
     Model, loadQuery,
     Query, QuerySelect, QueryDelete, QueryInsert,
-    SelectQueryResult, QueryRunErrorDescription
+    SelectQueryResult, QueryRunErrorDescription,
+    CURRENT_API_VERSION
 } from '../shared/query'
 
 import {Project, ProjectDescription}             from './project.service'
@@ -217,6 +218,7 @@ export class QueryService {
         let model : Model.QueryDescription = {
             id : undefined,
             name : queryName,
+            apiVersion : CURRENT_API_VERSION,
             select : {
                 columns : [{
                     expr : {
@@ -242,6 +244,7 @@ export class QueryService {
         let model : Model.QueryDescription = {
             id : undefined,
             name : queryName,
+            apiVersion : CURRENT_API_VERSION,
             delete : {},
             from : {
                 first : {
@@ -265,6 +268,7 @@ export class QueryService {
         let model : Model.QueryDescription = {
             id : undefined,
             name : queryName,
+            apiVersion : CURRENT_API_VERSION,
             insert : {
                 table : tableName,
                 assignments : []
@@ -286,6 +290,7 @@ export class QueryService {
         let model : Model.QueryDescription = {
             id : undefined,
             name : queryName,
+            apiVersion : CURRENT_API_VERSION,
             update : {
                 table : tableName,
                 assignments : []

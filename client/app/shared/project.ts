@@ -1,6 +1,8 @@
 import {Schema}                  from './schema'
 import {Query, Model, loadQuery} from './query'
-import {ProjectDescription}      from './project.description'
+import {
+    ProjectDescription, ApiVersion, ApiVersionToken, CURRENT_API_VERSION
+} from './project.description'
 
 import {Page}                    from './page/page'
 
@@ -10,15 +12,16 @@ export {ProjectDescription}
  * A loaded project with editing capatabilities. This is were all
  * information is lumped together.
  */
-export class Project {
+export class Project implements ApiVersion {
     public id : string;
     public name : string;
     public description : string;
     public schema : Schema;
 
-    private _queries : Query[];
-    private _pages : Page[];
-    private _indexPageId : string;
+    private _queries : Query[]
+    private _pages : Page[]
+    private _indexPageId : string
+    private _version : ApiVersionToken
     
     /**
      * Construct a new project and a whole slew of other
@@ -31,9 +34,20 @@ export class Project {
         this._indexPageId = json.indexPageId;
         this.schema = new Schema(json.schema);
 
+        if (json.apiVersion as string != this.apiVersion) {
+            throw new Error(`Attempted to load a project with version ${json.apiVersion}, current version is ${this.apiVersion}`);
+        }
+
         // Map all abstract queries to concrete query objects
         this._queries = json.queries.map( val => loadQuery(val, this.schema, this) );
         this._pages = json.pages.map( val => new Page(val, this) );
+    }
+
+    /**
+     * @return The version of this project
+     */
+    get apiVersion() : ApiVersionToken {
+        return (CURRENT_API_VERSION);
     }
 
     /**
@@ -190,6 +204,7 @@ export class Project {
         return ({
             id : this.id,
             name : this.name,
+            apiVersion : this.apiVersion,
             description : this.description,
             indexPageId : this.indexPageId
         });

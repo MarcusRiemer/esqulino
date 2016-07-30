@@ -57,7 +57,7 @@ class Page
   #
   # Or to put in other terms: Saving something that hasn't been loaded smells like
   # something that would never happen on purpose.
-  def save_model
+  def save!
     raise EsqulinoError, "Attempted to save unloaded page" if @model.nil?
 
     # Ensuring that the project folder has a "pages" subfolder
@@ -65,9 +65,12 @@ class Page
       FileUtils.mkdir_p(@project.folder_pages)
     end
 
-    # Actually write to disk
+    # Actually write to disk the model to disk, but without the ID as
+    # part of the model itself
+    filtered_model = @model.dup.tap { |m| m.delete "id" }
+
     File.open(page_file_path, "w") do |f|
-      f.write(@model.to_json)
+      f.write(filtered_model.to_json)
     end
 
     # Deleting everything that is not the model
@@ -105,6 +108,11 @@ class Page
   # @return The user-facing name of this page
   def name
     model['name']
+  end
+
+  # @return The API version of this page
+  def api_version
+    model['apiVersion']
   end
 
   # @return The whole backing model of this page

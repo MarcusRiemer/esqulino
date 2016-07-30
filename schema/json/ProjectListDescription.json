@@ -16,6 +16,13 @@
         },
         "indexPageId": {
             "type": "string"
+        },
+        "apiVersion": {
+            "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with.",
+            "type": "string",
+            "enum": [
+                "1"
+            ]
         }
     },
     "additionalProperties": false,

@@ -7,7 +7,8 @@ import {
     ParameterMappingDescription,
     QueryReferenceDescription, WidgetDescription,
     ValueReferenceDescription, ColumnReferenceDescription,
-    ColumnDescription, RowDescription
+    ColumnDescription, RowDescription,
+    CURRENT_API_VERSION
 } from './page.description'
 import {Row}                                  from './widgets/row'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
@@ -23,7 +24,8 @@ export {
     Row, WidgetDescription,
     ValueReferenceDescription, ColumnReferenceDescription,
     QueryReferenceDescription,
-    ValueReference, ColumnReference, QueryReference
+    ValueReference, ColumnReference, QueryReference,
+    CURRENT_API_VERSION
 }
 
 /**
@@ -36,7 +38,7 @@ export class Page extends ProjectResource {
     private _renderer : Renderer;
     
     constructor(desc : PageDescription, project? : Project) {
-        super(desc.id, desc.name, project);
+        super(project, desc);
 
         // We only render stuff via liquid for the moment
         this._renderer = new LiquidRenderer();
@@ -319,6 +321,7 @@ export class Page extends ProjectResource {
         const toReturn : PageDescription = {
             id : this.id,
             name : this.name,
+            apiVersion : this.apiVersion
         };
 
         if (this._referencedQueries.length > 0) {

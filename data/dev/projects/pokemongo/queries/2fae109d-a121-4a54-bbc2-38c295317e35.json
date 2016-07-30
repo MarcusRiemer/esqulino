@@ -84,5 +84,6 @@
         "simple": true
       }
     }
-  }
+  },
+  "apiVersion": "1"
 }

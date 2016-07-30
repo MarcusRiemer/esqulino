@@ -39,6 +39,10 @@ class Project
     File.join(@project_folder, "db.sqlite")
   end
 
+  # @return The id of this project
+  def id
+    File.basename @project_folder
+  end
 
   # @return True, if at least the project folder and a model file exist
   def exists?
@@ -146,13 +150,9 @@ class Project
     to_return['id'] = whole_info['id']
     to_return['preview'] = whole_info['preview']
     to_return['indexPageId'] = whole_info['indexPageId']
+    to_return['apiVersion'] = whole_info['apiVersion']
 
     return to_return;
-  end
-
-  # @return The id of this project
-  def id
-    File.basename @project_folder
   end
 
   # @return Path to the preview image, may be nil of no image is set
@@ -284,6 +284,20 @@ class Project
     # And return that page
     page_by_id(page_id)
   end
+
+  # @return The API version of this project
+  def api_version
+    whole_description['apiVersion']
+  end
+end
+
+# Enumerates all projects in the given directory
+#
+# @param projects_dir [string] The path to enumerate
+def enumerate_projects(projects_dir)
+  Dir.entries(projects_dir)
+    .select { |entry| entry != '.' and entry != '..' and not entry.start_with? "_" }
+    .map { |entry| Project.new File.join(projects_dir, entry) }
 end
 
 # Checks whether the given string is a valid Id.

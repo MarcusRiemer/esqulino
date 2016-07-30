@@ -92,5 +92,6 @@
       ]
     }
   ],
-  "referencedQueries": []
+  "referencedQueries": [],
+  "apiVersion": "1"
 }

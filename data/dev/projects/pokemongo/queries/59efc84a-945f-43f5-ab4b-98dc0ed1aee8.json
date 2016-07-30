@@ -64,5 +64,6 @@
         "logical": "AND"
       }
     ]
-  }
+  },
+  "apiVersion": "1"
 }

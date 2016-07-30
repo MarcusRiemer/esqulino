@@ -1,6 +1,8 @@
 import {Schema}                  from '../schema'
 
-import {Model, SyntaxTree}       from './base'
+import {
+    Model, SyntaxTree, CURRENT_API_VERSION
+} from './base'
 import {QueryDelete}             from './delete'
 
 let schema  = new Schema([
@@ -77,6 +79,7 @@ describe('Valid DELETE Queries', () => {
         const model : Model.QueryDescription = {
             name : 'delete-everything',
             id : 'del-1',
+            apiVersion : CURRENT_API_VERSION,
             delete : { },
             from : {
                 first : {
@@ -96,6 +99,7 @@ describe('Valid DELETE Queries', () => {
         const model : Model.QueryDescription = {
             name : 'delete-everything',
             id : 'del-1',
+            apiVersion : CURRENT_API_VERSION,
             delete : { },
             from : {
                 first : {

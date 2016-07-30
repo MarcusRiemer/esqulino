@@ -37,6 +37,13 @@
         },
         "indexPageId": {
             "type": "string"
+        },
+        "version": {
+            "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with.",
+            "type": "string",
+            "enum": [
+                "1"
+            ]
         }
     },
     "additionalProperties": false,
@@ -102,11 +109,23 @@
                 "where": {
                     "$ref": "#/definitions/Where"
                 },
-                "name": {
-                    "type": "string"
+                "singleRow": {
+                    "type": "boolean"
                 },
                 "id": {
+                    "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\n\nThese IDs must *never* change and should be UUIDs, so that they are\n\nglobally unique.",
                     "type": "string"
+                },
+                "name": {
+                    "description": "The user-chosen name of this resource. This property is free to change.",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with.",
+                    "type": "string",
+                    "enum": [
+                        "1"
+                    ]
                 }
             },
             "additionalProperties": false
@@ -410,14 +429,6 @@
         "PageDescription": {
             "type": "object",
             "properties": {
-                "id": {
-                    "description": "The (at least) project-wide unique ID of this page.",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "A user-defined name of this page.",
-                    "type": "string"
-                },
                 "rows": {
                     "description": "Rows are the top-level element for the whole layout,\n\nfor the moment no other type of widget is expected.",
                     "type": "array",
@@ -433,6 +444,29 @@
                         "$ref": "#/definitions/QueryReferenceDescription",
                         "description": "Referenced queries are always accompanied by a human-readable\n\nname. This is required if the same query is going to be used\n\nmultiple times on a single page."
                     }
+                },
+                "parameters": {
+                    "description": "All parameters that are required to render this page. These\n\nare usually satisfied via GET parameters",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PageParameterDescription",
+                        "description": "A parameter that is required to render a page."
+                    }
+                },
+                "id": {
+                    "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\n\nThese IDs must *never* change and should be UUIDs, so that they are\n\nglobally unique.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The user-chosen name of this resource. This property is free to change.",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with.",
+                    "type": "string",
+                    "enum": [
+                        "1"
+                    ]
                 }
             },
             "additionalProperties": false
@@ -462,6 +496,34 @@
                 "queryId": {
                     "type": "string"
                 },
+                "name": {
+                    "type": "string"
+                },
+                "mapping": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ParameterMappingDescription",
+                        "description": "Inputs and outputs *may* use identical names but are not required\n\nto do so."
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "ParameterMappingDescription": {
+            "type": "object",
+            "properties": {
+                "parameterName": {
+                    "type": "string"
+                },
+                "providingName": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "PageParameterDescription": {
+            "type": "object",
+            "properties": {
                 "name": {
                     "type": "string"
                 }

@@ -28,5 +28,6 @@
       }
     ],
     "table": "gefangen"
-  }
+  },
+  "apiVersion": "1"
 }
