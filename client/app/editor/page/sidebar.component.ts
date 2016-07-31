@@ -6,12 +6,13 @@ import {
     Page, QueryReference, ParameterMapping
 } from '../../shared/page/index'
 import {
-    Heading, Row, Paragraph, QueryTable, Input, Button
+    Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml
 } from '../../shared/page/widgets/index'
 
 import {
     ProjectService, Project
 } from '../project.service'
+
 import {QueryIconComponent}             from '../query-icon.component'
 
 import {DragService, PageDragEvent}     from './drag.service'
@@ -190,6 +191,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
      */
     startButtonDrag(evt : DragEvent) {
         this._dragService.startWidgetDrag(evt, "sidebar", Button.emptyDescription);
+    }
+
+    /**
+     * Starts a drag action for an empty HTML element
+     */
+    startEmbeddedHtmlDrag(evt : DragEvent) {
+        this._dragService.startWidgetDrag(evt, "sidebar", EmbeddedHtml.emptyDescription);
     }
 
     /**

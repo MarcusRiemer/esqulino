@@ -17,6 +17,7 @@ import {
 
 import {WidgetComponent}       from './widgets/widget.component'
 import {ButtonComponent}       from './widgets/button.component'
+import {EmbeddedHtmlComponent} from './widgets/embedded-html.component'
 import {ParagraphComponent}    from './widgets/paragraph.component'
 import {HeadingComponent}      from './widgets/heading.component'
 import {QueryTableComponent}   from './widgets/query-table.component'
@@ -61,6 +62,7 @@ export class WidgetLoaderComponent implements OnInit {
          */
         this._typeMapping = {
             "button": ButtonComponent,
+            "embedded-html": EmbeddedHtmlComponent,
             "paragraph": ParagraphComponent,
             "heading": HeadingComponent,
             "query-table": QueryTableComponent,
