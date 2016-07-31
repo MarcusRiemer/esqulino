@@ -1,0 +1,38 @@
+{
+  "name": "Pokemon_Einzel",
+  "apiVersion": "1",
+  "singleRow": true,
+  "from": {
+    "first": {
+      "name": "pokedex"
+    }
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {}
+        }
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "nummer",
+            "table": "pokedex"
+          }
+        },
+        "rhs": {
+          "parameter": {
+            "key": "nummer"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}

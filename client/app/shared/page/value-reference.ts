@@ -72,8 +72,17 @@ export class QueryReference extends ValueReference {
 
         this._queryId = desc.queryId;
         this._name = desc.name;
-        if (desc.mapping) {
+
+        // Can a previous mapping be loaded or is there need for a new mapping?
+        if (desc.mapping && desc.mapping.length > 0) {
+            // There is a specific mapping already provided, use that
             this._mapping = desc.mapping.map(m => new ParameterMapping(page, m));
+        } else if (this.isResolveable) {
+            // There are no mappings yet, but there is a query that possibly
+            // needs matching
+            this._mapping = this.query.parameters.map(qp => new ParameterMapping(page, {
+                parameterName : qp.key
+            }));
         }
     }
 

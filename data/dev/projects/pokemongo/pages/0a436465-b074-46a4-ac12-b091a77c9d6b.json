@@ -1,0 +1,51 @@
+{
+  "name": "Pokemon_Detail",
+  "apiVersion": "1",
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "pokemon",
+      "queryId": "9cebf28f-312c-4ee6-bd3e-28242863d888",
+      "mapping": [
+        {
+          "parameterName": "nummer",
+          "providingName": "get.nummer"
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "{{ query.pokemon.name }}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "paragraph",
+              "text": "#{{ get.nummer}} ist {{ query.pokemon.name }}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "name": "nummer"
+    }
+  ]
+}

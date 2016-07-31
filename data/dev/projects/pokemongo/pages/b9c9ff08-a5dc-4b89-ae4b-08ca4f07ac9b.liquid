@@ -1,27 +1,40 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Test</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <link rel="stylesheet" href="/vendor/css/bootstrap.css">
-</head>
-<body>
-  <div class="container-fluid">
-    <form>
-      <div class="row">
-        <div class="col-md-12">
-          <h1>Hallo auf meinem Pokédex</h1>
-          <p>Hier zeige ich alle Pokémon, die ich gefangen habe.</p>
+  <head>
+    <title>Test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <form>
+        <div class="row">
+          <div class="col-md-12">
+            <h1>Hallo auf meinem Pokédex</h1>
+            <p>Hier zeige ich alle Pokémon, die ich gefangen habe.</p>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          {% include "query_table" table: query.Meine_Pokemon, columns: "spitzname,staerke,nummer,typ" %}
+        <div class="row">
+          <div class="col-md-12">{% include "query_table" table: query.Meine_Pokemon, columns: "spitzname,staerke,nummer,typ" %}</div>
         </div>
-      </div>
-    </form>
-  </div>
-</body>
+        <div class="row">
+          <div class="col-md-12">
+            <h1>Alle Pokemon</h1>
+            <p>Hier wird geschummelt um alle Pokemon zu zeigen.</p>
+            <p>
+              <ul>
+                {% for pkmn in query.Pokedex_1G %}
+                <li>
+                  <a href="/Pokemon_Detail?nummer={{pkmn.nummer}}">{{ pkmn.name}}</a>
+                </li>
+                {% endfor %}</ul>
+            </p>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
 </html>
+

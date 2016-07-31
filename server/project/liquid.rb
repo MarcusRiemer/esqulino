@@ -79,6 +79,8 @@ def liquid_render_page(project, page_template, params)
   # Load the basic liquid template
   template = Liquid::Template::parse(page_template)
 
+  puts "Rendering with params #{params.inspect}"
+
   # Render it alongside the known parameters
   return (template.render(params))
 end

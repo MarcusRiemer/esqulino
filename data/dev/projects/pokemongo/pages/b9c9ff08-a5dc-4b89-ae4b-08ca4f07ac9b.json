@@ -1,5 +1,20 @@
 {
   "name": "Hauptseite",
+  "apiVersion": "1",
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "Meine_Pokemon",
+      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35",
+      "mapping": []
+    },
+    {
+      "type": "query",
+      "name": "Pokedex_1G",
+      "queryId": "0c396a9a-1947-4c2b-a5fb-195df2b91b84",
+      "mapping": []
+    }
+  ],
   "rows": [
     {
       "columns": [
@@ -37,14 +52,28 @@
           ]
         }
       ]
-    }
-  ],
-  "referencedQueries": [
+    },
     {
-      "type": "query",
-      "name": "Meine_Pokemon",
-      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35"
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "Alle Pokemon"
+            },
+            {
+              "type": "paragraph",
+              "text": "Hier wird geschummelt um alle Pokemon zu zeigen."
+            },
+            {
+              "type": "paragraph",
+              "text": "<ul>\n{% for pkmn in query.Pokedex_1G %}\n<li><a href=\"/Pokemon_Detail?nummer={{pkmn.nummer}}\">{{ pkmn.name}}</a></li>\n{% endfor %}</ul>"
+            }
+          ]
+        }
+      ]
     }
-  ],
-  "apiVersion": "1"
+  ]
 }

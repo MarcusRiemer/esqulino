@@ -50,16 +50,6 @@ export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
         }
     }
 
-    getParameterIcon(inputName : string) {
-        if (inputName.startsWith("input.")) {
-            return ("fa-keyboard-o");
-        } else if (inputName.startsWith("get.")) {
-            return ("fa-link");
-        } else {
-            return ("fa-warning");
-        }
-    }
-
     /**
      * Something has been dragged over the button action
      */

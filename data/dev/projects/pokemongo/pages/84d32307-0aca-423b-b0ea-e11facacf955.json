@@ -1,14 +1,15 @@
 {
   "name": "Gefangen_Einzeln",
+  "apiVersion": "1",
   "referencedQueries": [
     {
       "type": "query",
-      "name": "Gefangen_Einzel",
+      "name": "pokemon",
       "queryId": "59efc84a-945f-43f5-ab4b-98dc0ed1aee8",
       "mapping": [
         {
           "parameterName": "gefangen_id",
-          "providingName": "get.gefangen_id"
+          "providingName": "get.id"
         }
       ]
     }
@@ -21,7 +22,7 @@
           "widgets": [
             {
               "type": "paragraph",
-              "text": "Hier stelle ich {{ query.Gefangen_Einzel.spitzname }} vor"
+              "text": "Hier stelle ich mein Pokemon mit der ID {{get.id}} vor: {{ query.pokemon.spitzname }}"
             }
           ]
         }
@@ -30,8 +31,7 @@
   ],
   "parameters": [
     {
-      "name": "gefangen_id"
+      "name": "id"
     }
-  ],
-  "apiVersion": "1"
+  ]
 }

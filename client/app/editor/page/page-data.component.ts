@@ -71,7 +71,7 @@ export class PageDataComponent implements OnInit {
      * @return All parameters this page itself requires to be rendered
      */
     get pageParameters() {
-        return (this.page.queryParameters);
+        return (this.page.requestParameters);
     }
 
     /**

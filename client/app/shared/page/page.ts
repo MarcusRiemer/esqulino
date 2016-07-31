@@ -25,6 +25,7 @@ export {
     ValueReferenceDescription, ColumnReferenceDescription,
     QueryReferenceDescription,
     ValueReference, ColumnReference, QueryReference,
+    ParameterMappingDescription,
     CURRENT_API_VERSION
 }
 
@@ -232,10 +233,23 @@ export class Page extends ProjectResource {
         this._parameters.push(new PageParameter(this, desc));
     }
 
+
+    /**
+     * Removes an existing parameter from this page.
+     */
+    removeParameter(param : PageParameter) {
+        const index = this._parameters.findIndex(existing => param == existing);
+        if (index >= 0) {
+            this._parameters.splice(index, 1);
+        } else {
+            throw new Error(`Attempted to remove unknown parameter ${param.name}`);
+        }
+    }
+
     /**
      * @return All parameters this page requires to operate.
      */
-    get queryParameters() : PageParameter[] {
+    get requestParameters() : PageParameter[] {
         return (this._parameters);
     }
 
@@ -312,8 +326,10 @@ export class Page extends ProjectResource {
     /**
      * @return True, if the following input could be provided
      */
-    hasUserInput(name : string) {
-        return (this.userInputWidgets.some(p => p.providesParameter(name)));
+    hasParameterProvider(name : string) {
+        return (this._parameters.some(p => p.fullName == name) ||
+                this.userInputWidgets.some(p => p.providesParameter(name))
+        );
     }
 
     toModel() : PageDescription {
@@ -344,6 +360,9 @@ export class Page extends ProjectResource {
  * This class bridges the fact that the page uses a namespaced data model
  * while the queries do not. This class maps variables with prefixes like 
  * "input" or "get" (these are used on the page) to the unprefixed queries.
+ *
+ * As everything that is named a "parameter" does also act as a "value provider"
+ * for its receiving site the nomenclature is a bit difficult to come by.
  */
 export class ParameterMapping {
     private _paramName : string;
@@ -363,21 +382,64 @@ export class ParameterMapping {
      * @return True, if this mapping is fulfilled by the page it is assigned to.
      */
     get isSatisfied() : boolean {
-        return (this._paramName && this._page.hasUserInput(this._providingName));
+        return (this._paramName && this._page.hasParameterProvider(this._providingName));
     }
 
     /**
-     * @return The name of the wired output
+     * @return The name of the thing that provides the value to the required value.
      */
     get providingName() {
         return (this._providingName);
     }
 
     /**
-     * @return The name of the wired input
+     * @param value The name of the thing that provides the value to the required value.
+     */
+    set providingName(value : string) {
+        if (value.indexOf('.') < 0) {
+            throw new Error(`Attempted to set provider name without domain: ${value}`);
+        }
+        
+        this._providingName = value;
+    }
+
+    /**
+     * @return The name of the wired parameter
      */
     get parameterName() {
         return (this._paramName);
+    }
+
+    /**
+     * @param value The name of the wired parameter
+     */
+    set parameterName(value : string) {
+        this._paramName = value;
+    }
+
+    /**
+     * A not so nice leaky abstraction: The UI wants to display an icon for the
+     * providing side of the mapping in various places.
+     *
+     * @return A font-awesome iconclass for the 
+     */
+    get providingIconClass() {
+        if (!this.providingName || this.providingName.length == 0) {
+            // There is no provider set
+            return ("fa-sign-in");
+        } else if (!this.isSatisfied) {
+            // A provider is set, but it doesn't actually provide anything
+            return ("fa-warning");
+        } else if (this.providingName.startsWith("input.")) {
+            // Provider is an input element
+            return ("fa-keyboard-o");
+        } else if (this.providingName.startsWith("get.")) {
+            // Provider is a request parameter
+            return ("fa-link");
+        } else {
+            // Neutral icon: Provider still needed
+            return ("fa-sign-in");
+        }
     }
 
     toModel() : ParameterMappingDescription {
@@ -407,6 +469,13 @@ export class PageParameter {
      */
     get name() {
         return (this._name);
+    }
+
+    /**
+     * @return The fully qualified name of this page parameter.
+     */
+    get fullName() {
+        return (`get.${this.name}`);
     }
 
     /**

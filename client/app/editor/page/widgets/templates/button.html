@@ -18,7 +18,7 @@
             class="block-container">
         <span *ngIf="param.isSatisfied"
               class="constant">
-          <span class="fa fa-fw {{ getParameterIcon(param.providingName) }}"
+          <span class="fa fa-fw {{ param.providingIconClass }}"
                 aria-hidden="true"></span>
           {{ param.providingName }}
         </span>
