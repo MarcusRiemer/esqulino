@@ -22,15 +22,16 @@
         <div class="row">
           <div class="col-md-12">
             <h1>Alle Pokemon</h1>
-            <p>Hier wird geschummelt um alle Pokemon zu zeigen.</p>
-            <p>
-              <ul>
-                {% for pkmn in query.Pokedex_1G %}
-                <li>
-                  <a href="/Pokemon_Detail?nummer={{pkmn.nummer}}">{{ pkmn.name}}</a>
-                </li>
-                {% endfor %}</ul>
-            </p>
+            <p>Hier wird mit HTML geschummelt um alle Pokemon zu zeigen.</p>
+            <!-- Raw HTML begin -->
+            <ul>
+              {% for pkmn in query.Pokedex_1G %}
+              <li>
+                <a href="/Pokemon_Detail?nummer={{pkmn.nummer}}">{{ pkmn.name}}</a>
+              </li>
+              {% endfor %}
+            </ul>
+            <!-- Raw HTML end -->
           </div>
         </div>
       </form>

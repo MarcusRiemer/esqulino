@@ -65,11 +65,11 @@
             },
             {
               "type": "paragraph",
-              "text": "Hier wird geschummelt um alle Pokemon zu zeigen."
+              "text": "Hier wird mit HTML geschummelt um alle Pokemon zu zeigen."
             },
             {
-              "type": "paragraph",
-              "text": "<ul>\n{% for pkmn in query.Pokedex_1G %}\n<li><a href=\"/Pokemon_Detail?nummer={{pkmn.nummer}}\">{{ pkmn.name}}</a></li>\n{% endfor %}</ul>"
+              "type": "embedded-html",
+              "html": "<ul>\n  {% for pkmn in query.Pokedex_1G %}\n    <li><a href=\"/Pokemon_Detail?nummer={{pkmn.nummer}}\">{{ pkmn.name}}</a></li>\n  {% endfor %}\n</ul>"
             }
           ]
         }

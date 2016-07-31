@@ -46,7 +46,6 @@ export class SidebarLoaderComponent implements OnInit {
     private onChangedType(newModel : SidebarModel) {
         // Is this really a new sidebar?
         if (newModel && (newModel.type !== this._prevType || newModel.param !== this._prevParam)) {
-            console.log(`Got new model, now got ${this._selfRef.length}`);
 
             // Clean up previous components
             this._selfRef.clear();

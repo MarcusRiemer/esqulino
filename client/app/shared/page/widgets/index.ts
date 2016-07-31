@@ -14,11 +14,12 @@ import {
     QueryActionDescription
 } from './action'
 
-import {Button, ButtonDescription}         from './button'
-import {Heading, HeadingDescription}       from './heading'
-import {Input, InputDescription}           from './input'
-import {Paragraph, ParagraphDescription}   from './paragraph'
-import {QueryTable, QueryTableDescription} from './query-table'
+import {Button, ButtonDescription}             from './button'
+import {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
+import {Heading, HeadingDescription}           from './heading'
+import {Input, InputDescription}               from './input'
+import {Paragraph, ParagraphDescription}       from './paragraph'
+import {QueryTable, QueryTableDescription}     from './query-table'
 
 export {
     Widget, WidgetDescription,
@@ -27,6 +28,7 @@ export {
     QueryAction,
     QueryActionDescription, ParameterMappingDescription,
     Button, ButtonDescription,
+    EmbeddedHtml, EmbeddedHtmlDescription,
     Paragraph, ParagraphDescription,
     Heading, HeadingDescription,
     QueryTable, QueryTableDescription,

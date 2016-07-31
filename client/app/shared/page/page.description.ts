@@ -92,6 +92,16 @@ export interface ParagraphDescription extends WidgetDescription {
     text : string
 }
 
+/*
+ * Experienced users can embed raw HTML into pages. This widget
+ * (currently) does absolutly *no checking* whether the given
+ * html is valid or not.
+ */
+export interface EmbeddedHtmlDescription extends WidgetDescription {
+    type : "embedded-html",
+    html : string
+}
+
 /**
  * A widget **requires** at least a type, all other fields are
  * mandated by deriving descriptions. As we don't necesarily

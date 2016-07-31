@@ -79,6 +79,7 @@ export class SidebarService {
             throw new Error(`Unknown sidebar type: ${newType}`);
         }
 
+        // Kick off the rendering by placing a new value in the observable
         this._model.next({
             type : newType,
             param : param

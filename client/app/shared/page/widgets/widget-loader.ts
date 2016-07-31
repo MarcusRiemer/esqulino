@@ -1,12 +1,13 @@
-import {Page}                              from '../page'
+import {Page}                                  from '../page'
 
-import {Widget, WidgetDescription}         from './widget'
+import {Widget, WidgetDescription}             from './widget'
 
-import {Button, ButtonDescription}         from './button'
-import {Paragraph, ParagraphDescription}   from './paragraph'
-import {Heading, HeadingDescription}       from './heading'
-import {QueryTable, QueryTableDescription} from './query-table'
-import {Input, InputDescription}           from './input'
+import {Button, ButtonDescription}             from './button'
+import {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
+import {Paragraph, ParagraphDescription}       from './paragraph'
+import {Heading, HeadingDescription}           from './heading'
+import {QueryTable, QueryTableDescription}     from './query-table'
+import {Input, InputDescription}               from './input'
 
 /**
  * @return A Widget instance that matches the description
@@ -15,6 +16,8 @@ export function loadWidget(desc : WidgetDescription, page? : Page) : Widget {
     switch (desc.type) {
     case "button":
         return new Button(desc as ButtonDescription, page);
+    case "embedded-html":
+        return new EmbeddedHtml(desc as EmbeddedHtmlDescription, page);    
     case "paragraph":
         return new Paragraph(desc as ParagraphDescription, page);
     case "heading":

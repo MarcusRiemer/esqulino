@@ -5,13 +5,18 @@ import {Page}                  from '../page'
 import {Renderer}              from '../renderer'
 import {
     Widget, Row, Column,
-    Button, Paragraph, Heading, QueryTable, Input
+    Button, EmbeddedHtml, Paragraph, Heading, QueryTable, Input
 } from '../widgets/index'
 
 export {Renderer}
 
 type WidgetRenderer = (w: Widget) => string;
 
+/**
+ * Renders a query table by including the releveant template and
+ * passing the correct parameters to it. This rendering step therefore
+ * relies on data on the server!
+ */
 function renderQueryTable(w: Widget) : string {
     const queryTable = <QueryTable> w;
     const queryName = queryTable.queryReferenceName;
@@ -20,17 +25,28 @@ function renderQueryTable(w: Widget) : string {
 }
 
 
+/**
+ * Directly renders a paragraph.
+ */
 function renderParagraph(w: Widget) : string {
     const paragraph = <Paragraph> w;
     return (`<p>${paragraph.text}</p>`);
 }
 
+/**
+ * Directly renders a heading.
+ */
 function renderHeading(w: Widget) : string {
     const heading = <Heading> w;
     const tagname = `h${heading.level}`;
     return (`<${tagname}>${heading.text}</${tagname}>`);
 }
 
+/**
+ * Renders a <input> element by including the releveant template and
+ * passing the correct parameters to it. This rendering step therefore
+ * relies on data on the server!
+ */
 function renderInput(w: Widget) : string {
     const input = w as Input;
     const outParamName = `outParamName: "${input.outParamName}"`;
@@ -41,6 +57,10 @@ function renderInput(w: Widget) : string {
     return (`{% include "input" ${caption}, ${outParamName}, ${description}, ${inputType}  %}`);
 }
 
+/**
+ * Directly renders a heading without rendering the form context. Action
+ * and method are directly set via HTML5s `formaction` and `formmethod`.
+ */
 function renderButton(w: Widget) : string {
     const button = w as Button;
     const text = button.text;
@@ -50,6 +70,16 @@ function renderButton(w: Widget) : string {
     const method = button.action.method;
 
     return (`<button type="submit" formaction="${actionUrl}" formmethod="${method}" class="${cssClass}">${text}</button>`);    
+}
+
+/**
+ * Renders raw HTML content, but encloses it in a comment to ease debugging
+ * in case something goes wrong.
+ */
+function renderHtml(w: Widget) : string {
+    const embedded = w as EmbeddedHtml;
+
+    return (`<!-- Raw HTML begin -->${embedded.html}<!-- Raw HTML end -->`);    
 }
 
 
@@ -90,6 +120,7 @@ export class LiquidRenderer extends Renderer {
      */
     private _widgetRenderers : { [widgetType : string]: WidgetRenderer} = {
         "button" : renderButton,
+        "embedded-html" : renderHtml,
         "query-table" : renderQueryTable,
         "paragraph" : renderParagraph,
         "heading" : renderHeading,
