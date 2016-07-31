@@ -34,7 +34,7 @@
             "description": "The user-chosen name of this resource. This property is free to change.",
             "type": "string"
         },
-        "version": {
+        "apiVersion": {
             "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with.",
             "type": "string",
             "enum": [

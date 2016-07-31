@@ -7,6 +7,10 @@ import {
     QueryReferenceDescription, ValueReferenceDescription, ColumnReferenceDescription
 } from '../../shared/page/widgets/index'
 
+import {
+    Page, ParameterMapping, ParameterMappingDescription
+} from '../../shared/page/page'
+
 export interface DragColumnDescription {
     columnName : string,
 
@@ -19,7 +23,7 @@ export interface DragColumnDescription {
 export type OriginFlag = "sidebar" | "page"
 
 /**
- * Possible callbacks for drop operations
+ * Possible callbacks for drop operations.
  */
 export interface DropCallbacks {
     /**
@@ -43,6 +47,11 @@ export interface DropCallbacks {
     onWidget? : (w : Widget) => void
 
     /**
+     * Dropped on a parameter mapping
+     */
+    onParameterMapping? : (p : ParameterMapping) => void
+
+    /**
      * Called when dragging has stopped
      */
     onDragEnd? : () => void
@@ -59,6 +68,7 @@ export interface PageDragEvent {
     queryRef? : QueryReferenceDescription
     columnRef? : DragColumnDescription
     widget? : WidgetDescription
+    parameterValueProvider? : string
 }
 
 /**
@@ -82,7 +92,16 @@ export class DragService {
             throw new Error ("Attempted to start a second drag");
         }
 
+        // Remember the drag for later operations
         this._currentDrag = pageEvt;
+
+        // If there is no callback object at all, provide at least an
+        // "empty" substitute so callers everywhere don't need to check
+        // for undefined values.
+        if (!this._currentDrag.callbacks) {
+            this._currentDrag.callbacks = {}
+        }
+        
 
         // Serialize the dragged "thing"
         const dragData = JSON.stringify(this._currentDrag);
@@ -110,7 +129,7 @@ export class DragService {
             }
 
             // And stop the drag
-            this._currentDrag = null;
+            this._currentDrag = undefined;
             console.log(`Page-Drag ended: ${dragData}`);
         });
 
@@ -191,6 +210,20 @@ export class DragService {
             widget : widget,
             callbacks : callbacks,
         })
+    }
+
+    /**
+     * Starts dragging a value-reference that can be used in a parameter mapping.
+     */
+    startValueDrag(evt : DragEvent,
+                   origin : OriginFlag,
+                   valueProviderName : string,
+                   callbacks? : DropCallbacks) {
+        this.dragStart(evt, {
+            origin : origin,
+            parameterValueProvider : valueProviderName,
+            callbacks : callbacks
+        });
     }
 
     /**

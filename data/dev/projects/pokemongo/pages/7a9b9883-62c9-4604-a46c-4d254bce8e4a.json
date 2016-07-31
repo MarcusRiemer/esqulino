@@ -1,5 +1,6 @@
 {
   "name": "Gefangen_Loeschen",
+  "apiVersion": "1",
   "referencedQueries": [
     {
       "type": "query",
@@ -85,11 +86,5 @@
         }
       ]
     }
-  ],
-  "parameters": [
-    {
-      "name": "A123"
-    }
-  ],
-  "apiVersion": "1"
+  ]
 }

@@ -16,6 +16,8 @@ export class QueryIconComponent {
     @Input() query : Query;
 
     @Input() showName = true;
+
+    @Input() detailSelect = false;
     
     /**
      * @param query The query that needs an icon.
@@ -30,7 +32,15 @@ export class QueryIconComponent {
         } else if (query instanceof QueryUpdate) {
             return ("fa-pencil");
         } else if (query instanceof QuerySelect) {
-            return ("fa-search");
+            if (!this.detailSelect) {
+                return ("fa-search");
+            } else {
+                if (query.singleRow) {
+                    return ("fa-ellipsis-h");
+                } else {
+                    return ("fa-table");
+                }
+            }
         } else {
             return ("fa-bug");
         }

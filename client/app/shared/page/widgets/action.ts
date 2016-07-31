@@ -68,12 +68,16 @@ export class QueryAction extends Action {
     }
 
     /**
-     * 
+     * @return The "raw" parameters of the referenced quer.
      */
     get queryParameters() {
         return (this.queryReference.query.parameters);
     }
 
+    /**
+     * @return The mappings to the required query parameters that are
+     *         currently in place.
+     */
     get mappings() {
         return (this.queryReference.mapping);
     }

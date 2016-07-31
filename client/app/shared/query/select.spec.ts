@@ -168,6 +168,7 @@ describe('Valid SELECT Queries', () => {
         // Parameters
         expect(q.parameters.length).toEqual(1);
         expect(q.parameters[0].toModel()).toEqual(model.where.first.binary.rhs);
+        expect(q.hasParameters).toEqual(true);
 
         // SELECT
         const columns = q.select.actualColums;

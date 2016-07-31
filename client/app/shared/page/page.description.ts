@@ -11,7 +11,7 @@ export {CURRENT_API_VERSION}
 export interface ParameterMappingDescription {
     parameterName : string
 
-    providingName : string
+    providingName? : string
 }
 
 /**

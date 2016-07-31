@@ -3,7 +3,7 @@ import {ActivatedRoute, Router}         from '@angular/router'
 
 import {Query, ResultColumn}            from '../../shared/query'
 import {
-    Page, QueryReference
+    Page, QueryReference, ParameterMapping
 } from '../../shared/page/index'
 import {
     Heading, Row, Paragraph, QueryTable, Input, Button
@@ -14,7 +14,7 @@ import {
 } from '../project.service'
 import {QueryIconComponent}             from '../query-icon.component'
 
-import {DragService}                    from './drag.service'
+import {DragService, PageDragEvent}     from './drag.service'
 
 /**
  * The sidebar hosts elements that can be dragged onto the currently active
@@ -115,6 +115,32 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Something is beeing dragged over a parameter
+     */
+    onParameterDrag(evt : DragEvent) {
+        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
+        if (pageEvt.parameterValueProvider) {
+            evt.preventDefault();
+        }
+    }
+
+    /**
+     * Something is beeing dragged over a parameter
+     */
+    onParameterDrop(evt : DragEvent, param : ParameterMapping) {
+        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
+        if (pageEvt.parameterValueProvider) {
+            evt.preventDefault();
+
+            param.providingName = pageEvt.parameterValueProvider;
+
+            if (this._dragService.currentDrag.callbacks.onParameterMapping) {
+                this._dragService.currentDrag.callbacks.onParameterMapping(param);
+            }
+        }
+    }
+
+    /**
      * View Variabe: True, if the trash shouldn't be shown. This
      *               inversion is useful to bind to the `hidden`
      *               DOM property.
@@ -186,6 +212,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this._dragService.startQueryRefDrag(evt, "sidebar", ref.toModel());
     }
 
+    startParameterValueProviderDrag(evt : DragEvent, valueProviderName : string) {
+        this._dragService.startValueDrag(evt, "sidebar", valueProviderName);
+    }
+
     /**
      * @return All queries that are actually used on this page.
      */
@@ -197,8 +227,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Columns are tracked by their full name
+     */
     trackByColumnId(index : number, columnRef : ResultColumn) {
         return (columnRef.fullName);
+    }
+
+    /**
+     * @return True, if page request parameters should be shown
+     */
+    get showPageRequestParameters() {
+        return (this.page && this._page.requestParameters.length > 0);
     }
 }
 

@@ -35,7 +35,9 @@
                 class="form-control">
           <option *ngFor="let q of possibleQueries;"
                   [value]="q.id">
-            <query-icon [query]="q"></query-icon>
+            <query-icon [query]="q"
+                        [detailSelect]="true">
+            </query-icon>
           </option>
         </select>
       </div>
@@ -52,7 +54,10 @@
         class="list-group-item">
       <div class="input-group">
         <span class="input-group-addon">
-          <query-icon [query]="used.query" [showName]="false"></query-icon>
+          <query-icon [query]="used.query"
+                      [detailSelect]="true"
+                      [showName]="false">
+          </query-icon>
         </span>
         <input [(ngModel)]="used.name"
                class="form-control"
@@ -99,9 +104,17 @@
   <ul class="list-group list-group-flush">
     <li *ngFor="let param of pageParameters;"
         class="list-group-item">
-      <input [(ngModel)]="param.name"
-             class="form-control"
-             type="text">
+      <div class="input-group">
+        <input [(ngModel)]="param.name"
+               class="form-control"
+               type="text">
+        <span class="input-group-btn">
+          <button (click)="page.removeParameter(param)"
+                  class="btn btn-warning pull-right">
+            <span class="fa fa-trash"></span>
+          </button>
+        </span>
+      </div>
     </li>
   </ul>
 </div>
