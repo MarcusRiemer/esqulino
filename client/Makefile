@@ -18,6 +18,10 @@ all : dist-sass dist-compile dist-templates dist-vendor dist-node
 install-deps : msg-pre-deps-install has-npm
 	npm install
 
+# Remove everything that has been downloaded by `install-deps`
+clean-deps:
+	rm -rf node_modules typings
+
 # Meta target: Compiles all SASS files
 dist-sass : msg-pre-sass $(DIST_CSS_FILES)
 
@@ -58,11 +62,6 @@ $(DIST_NODE_FILES) : $(NODE_FILES)
 	@mkdir -p $(BUILD_DIR)
 	@echo "Copying loads of dist files ..."
 	@cp --parents $^ $(BUILD_DIR)
-
-# Remove everything that has been downloaded by `install-deps`
-clean-deps:
-	rm -rf node_modules typings
-
 
 ##################################
 # Test targets

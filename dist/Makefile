@@ -70,10 +70,13 @@ clean-archives:
 install-deps : has-npm
 	npm install
 
+# Remove everything that has been downloaded by `install-deps`
+clean-deps :
+	rm -rf "node_modules"
+
 ##################################
 # Messaging targets
 ##################################
-
 msg-pre-app-clean :
 	@tput setaf 2; echo "## Dist   : Cleaning"; tput sgr0
 
