@@ -23,6 +23,15 @@ install-deps :
 	$(SUBDIR_MAKE) server install-deps
 	$(SUBDIR_MAKE) client install-deps
 	$(SUBDIR_MAKE) dist install-deps
+	$(SUBDIR_MAKE) schema/json install-deps
+
+# Attempts to remove libraries or utilities that have been dowloaded.
+# This will not touch any globally installed gems, but merely delete
+# folders that contain these dependencies.
+clean-deps :
+	$(SUBDIR_MAKE) client install-deps
+	$(SUBDIR_MAKE) dist install-deps
+	$(SUBDIR_MAKE) schema/json install-deps
 
 # One-shot compilation of all things that are required to run esqulino.
 # Once these are in place, the client archives are packaged up,
@@ -34,7 +43,7 @@ dist :
 
 
 # Removing everything that is required to run esqulino
-dist-clean :
+clean-dist :
 	$(SUBDIR_MAKE) dist clean
 	$(SUBDIR_MAKE) schema/json clean
 
@@ -113,4 +122,3 @@ msg-pre-test-reset :
 	@tput setaf 2; echo "## Test   : Resetting test project"; tput sgr0
 
 .PHONY : all clean dev-delete-trailing-whitespace dev-pretty-json-data doc install-deps server-run dist
-

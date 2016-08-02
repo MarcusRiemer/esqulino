@@ -14,6 +14,10 @@ all : msg-pre-schema $(JSON_SCHEMA_FILES)
 install-deps : has-npm
 	npm install
 
+# Remove everything that has been downloaded by `install-deps`
+clean-deps :
+	rm -rf "node_modules"
+
 # Removes all generated schema files
 clean : msg-pre-clean
 	rm -f $(JSON_SCHEMA_FILES)
