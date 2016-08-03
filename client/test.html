@@ -11,7 +11,11 @@
     <script>
      System.config({
          packages: {
-             'app': {defaultExtension: 'js'}
+             'app': {defaultExtension: 'js'},
+             'rxjs': { defaultExtension: 'js' },
+         },
+         map: {
+             'rxjs': 'node_modules/rxjs',
          }
      });
 

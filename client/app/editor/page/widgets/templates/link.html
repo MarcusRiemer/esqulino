@@ -1,0 +1,11 @@
+<span (click)="startEditing()"
+      class="widget-preview">
+  <span class="link-preview">
+    {{ model.text }}
+  </span>
+  <small *ngIf="hasTarget">
+    <span class="fa fa-arrow-right" aria-hidden="true"></span>
+    <span class="fa {{ targetIcon }}" aria-hidden="true"></span>
+    {{ targetName }}
+  </small>
+</span>

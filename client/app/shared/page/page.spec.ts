@@ -1,3 +1,4 @@
+import './widgets/action.spec'
 import './widgets/button.spec'
 import './widgets/column.spec'
 import './widgets/heading.spec'

@@ -1,0 +1,34 @@
+<div class="card-block">
+  <h4>Link</h4>
+  <fieldset class="form-group">
+    <label for="link-sidebar-text">Text</label>
+    <input [(ngModel)]="model.text"
+           type="text"
+           class="form-control"
+           id="link-sidebar-text">
+  </fieldset>
+
+  <hr>
+
+  <fieldset class="form-group">
+    <label for="link-internal-target-page-id">Eigene Seite</label>
+    <select [(ngModel)]="currentPageId"
+            id="link-internal-target-page-id"
+            class="form-control">
+      <option *ngFor="let page of possiblePages;"
+              [value]="page.id">
+        {{page.name}}
+      </option>
+    </select>
+  </fieldset>
+
+  <h5 class="text-xs-center">&mdash; ODER &mdash;</h5>
+
+  <fieldset class="form-group">
+    <label for="link-sidebar-target-url">Externe URL</label>
+    <input [(ngModel)]="currentExternalUrl"
+           type="text"
+           class="form-control"
+           id="link-sidebar-target-url">
+  </fieldset>
+</div>

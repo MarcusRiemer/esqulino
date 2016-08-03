@@ -1,3 +1,6 @@
+import {Subject}                              from 'rxjs/Subject'
+import {Observable}                           from 'rxjs/Observable'
+
 import {Project}                              from './project'
 import {
     ApiVersion, ApiVersionToken, ProjectResourceDescription,
@@ -5,8 +8,25 @@ import {
 } from './resource.description'
 
 export {
-    ApiVersion, ApiVersionToken, ProjectResourceDescription,
-    CURRENT_API_VERSION
+    ProjectResourceDescription,
+    ApiVersion, ApiVersionToken, CURRENT_API_VERSION
+}
+
+/**
+ * Some changes to resources require updates to the visual representation,
+ * which may or may not have altered the serialized model state.
+ * 
+ * Invalidation *only* makes assumptions about the visual state, to find
+ * out whether something should be saved by the user is a different matter
+ * which is handled by the `RequiresSaving` (or `isDirty`) property.
+ *
+ * TODO: Streamline this.
+ */
+export interface Invalidateable {
+    /**
+     * Signals that the visual representation of this resource should be updated.
+     */
+    invalidate() : void;
 }
 
 /**
@@ -19,6 +39,11 @@ export abstract class ProjectResource implements ApiVersion {
     private _name : string;
     private _project : Project;
 
+    // Fired when this resource experiences some kind of change
+    // that requires the UI to be refreshed.
+    private _invalidateEvent : Subject<ProjectResource> = new Subject<ProjectResource>();
+    
+    // Does this resource require saving?
     private _isDirty = false;
 
     constructor(project : Project, desc : ProjectResourceDescription) {
@@ -83,10 +108,29 @@ export abstract class ProjectResource implements ApiVersion {
     }
 
     /**
-     * Called to signal that this resource requires saving.
+     * Called to signal that this resource requires saving. Per default this will
+     * also trigger an invalidation.
      */
-    protected markDirty() : void {
+    markDirty(invalidate = true) : void {
         this._isDirty = true;
+        if (invalidate) {
+            this.invalidate();
+        }
+    }
+
+    /**
+     * Signals that the visual representation of this resource should be updated.
+     */
+    invalidate() : void {
+        this._invalidateEvent.next(this);
+    }
+
+    /**
+     * @return An observable that is fired when this resource requires an update
+     *         to its visual representation.
+     */
+    get invalidateEvent() : Observable<ProjectResource> {
+        return (this._invalidateEvent);
     }
 
     /**

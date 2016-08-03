@@ -18,6 +18,7 @@ import {Button, ButtonDescription}             from './button'
 import {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
 import {Heading, HeadingDescription}           from './heading'
 import {Input, InputDescription}               from './input'
+import {Link, LinkDescription}                 from './link'
 import {Paragraph, ParagraphDescription}       from './paragraph'
 import {QueryTable, QueryTableDescription}     from './query-table'
 
@@ -33,6 +34,7 @@ export {
     Heading, HeadingDescription,
     QueryTable, QueryTableDescription,
     Input, InputDescription,
+    Link, LinkDescription,
     ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription,
     loadWidget
 }

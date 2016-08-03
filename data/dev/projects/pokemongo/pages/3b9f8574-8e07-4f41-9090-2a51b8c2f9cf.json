@@ -1,5 +1,6 @@
 {
   "name": "Gefangen_Neu",
+  "apiVersion": "1",
   "referencedQueries": [
     {
       "type": "query",
@@ -47,6 +48,17 @@
             {
               "type": "paragraph",
               "text": "Herzlichen Glückwunsch, du hast also ein neues Pokémon gefangen. Hier kannst du es eintragen."
+            },
+            {
+              "type": "link",
+              "text": "Zurück zur Hauptseite",
+              "action": {
+                "type": "navigate",
+                "internal": {
+                  "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
+                  "parameters": []
+                }
+              }
             },
             {
               "type": "query-table",
@@ -112,6 +124,5 @@
         }
       ]
     }
-  ],
-  "apiVersion": "1"
+  ]
 }

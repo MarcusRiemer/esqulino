@@ -26,6 +26,11 @@ export class ServerPreviewComponent implements OnInit {
 
     private _renderPreview : string;
 
+    /**
+     * TODO: Make this configurable
+     */
+    useSobdomain = true;
+    
     constructor(
         private _elementRef: ElementRef,
         private _pageService : PageService,
@@ -38,6 +43,23 @@ export class ServerPreviewComponent implements OnInit {
      */
     get renderPreview() {
         return (this._sanitizer.bypassSecurityTrustHtml(this._renderPreview));
+    }
+
+    /**
+     * @return The currently visited hostname
+     */
+    get hostname() : string {
+        return (window.location.host);
+    }
+
+    get viewUrl() : string {
+        if (this.useSobdomain) {
+            // TODO: Find out whether it would be more or less trivially
+            //       possible to support HTTPs
+            return (`http://${this.project.id}.${this.hostname}/${this.page.id}`);
+        } else {
+            return (`/view/${this.project.id}/${this.page.id}`)
+        }
     }
     
     ngOnInit() {
