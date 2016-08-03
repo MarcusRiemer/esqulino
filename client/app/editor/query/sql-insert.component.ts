@@ -1,4 +1,7 @@
-import {Component, Input, ChangeDetectionStrategy} from '@angular/core'
+import {
+    Component, Input, OnInit,
+    ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core'
 
 import {ExpressionComponent}            from './sql-expr.component'
 
@@ -21,15 +24,19 @@ interface InsertingColumn {
     selector : 'sql-insert',
     templateUrl : 'app/editor/query/templates/query-insert.html',
     directives : [ExpressionComponent],
-    changeDetection : ChangeDetectionStrategy.OnPush
+    //changeDetection : ChangeDetectionStrategy.OnPush
 })
-export class InsertComponent {
+export class InsertComponent implements OnInit {
     @Input() query : QueryInsert;
-
-    private _allColumnsCache : InsertingColumn[];
     
-    constructor() {
+    constructor(private _cdRef : ChangeDetectorRef) {
+        
+    }
 
+    ngOnInit() {
+        /*this.query.invalidateEvent.subscribe(v => {
+            this._cdRef.markForCheck();
+        });*/
     }
 
     /**
@@ -43,25 +50,21 @@ export class InsertComponent {
      * @return All columns that have values set.
      */  
     get allColumns() : InsertingColumn[] {        
-        if (!this._allColumnsCache) {
-            const allColumns = this.query.getTableSchema(this.query.tableName).columns;
+        const allColumns = this.query.getTableSchema(this.query.tableName).columns;
 
-            this._allColumnsCache = allColumns.map( v => { return ({
-                column : v,
-                index : v.index,
-                expr : this.query.getValueForColumn(v.name)
-            })});
-        }
-        
-        return (this._allColumnsCache)
+        return (allColumns.map( v => { return ({
+            column : v,
+            index : v.index,
+            expr : this.query.getValueForColumn(v.name)
+        })}));
+    }
+
+    trackByColumnName(index : number, value : InsertingColumn) {
+        return (value.column.name);
     }
 
     onColumnUsageChanged(columnName : string) {
-        const isActive = this.query.activeColumns.some(c => c.name == columnName);
-        
+        const isActive = this.query.activeColumns.some(c => c.name == columnName);        
         this.query.changeActivationState(columnName, !isActive);
-
-        // Reset the cache
-        this._allColumnsCache = undefined;
     }
 }
