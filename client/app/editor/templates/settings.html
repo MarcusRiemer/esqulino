@@ -66,9 +66,25 @@
 
   <div class="row">
     <div class="col-md-12 col-lg-6">
-      <div class="card">
-        <div class="card-header">
+      <div class="card"
+           [class.card-inverse]="project?.queries?.length == 0"
+           [class.card-info]="project?.queries?.length == 0">
+        <div *ngIf="project?.queries?.length > 0"
+             class="card-header">
           Abfragen
+        </div>
+        <div *ngIf="project?.queries?.length == 0"
+             class="card-block">
+          <p>
+            <strong>Dein Projekt hat noch keine Abfragen!</strong>
+            Schau dir am Besten mal das Schema an und überlege dir, welche Daten Besucher wohl interessieren würden.
+          </p>
+
+          <a [routerLink]="['/editor', project.id , 'query', 'create']"
+             class="btn btn-primary">
+            <span class="fa fa-plus fa-fw"></span>
+            Abfrage erstellen
+          </a>
         </div>
         <ul id="project-queries"
             class="list-group list-group-flush">
