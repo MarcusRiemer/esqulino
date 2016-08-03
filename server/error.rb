@@ -29,6 +29,13 @@ class EsqulinoError < StandardError
   end
 end
 
+# Some authentication went wrong
+class AuthorizationError < EsqulinoError
+  def initialize(msg = "Unauthorized", code = 401)
+    super msg, code
+  end
+end
+
 # Thrown when a project is unknown
 class UnknownProjectError < EsqulinoError
   # @param project_id [string] The id of the unknown project

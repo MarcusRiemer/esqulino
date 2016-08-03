@@ -63,7 +63,10 @@ class ScratchSqlApp < Sinatra::Base
   #
   # @param project_id The id of the project to load
   def request_prepare_project(project_id)
-    @project = Project.new File.join(projects_dir, project_id)
+    @project = Project.new File.join(projects_dir, project_id), false
+    @project.write_access = authorized?
+
+    puts "Project.write_access: #{@project.write_access}"
   end
 
   # Ensures the @query instance variable, should be called before
@@ -128,13 +131,41 @@ class ScratchSqlApp < Sinatra::Base
   error EsqulinoError do
     exception = env['sinatra.error']
 
+    # Possibly tell the browser that we expect login data
+    if exception.code == 401 then
+      headers['WWW-Authenticate'] = 'Basic realm="esqulino"'
+    end
+
     status exception.code
     json exception
   end
 
+  # Ensures further progress can only be made by authorized users and triggers
+  # a password entry if authorization failed.
+  def protected!
+    raise AuthorizationError.new unless authorized?
+  end
+
+  # Very basic check to see whether a certain user is authorized
+  # to do some kind of write on the server.
+  def authorized?
+    @auth ||= Rack::Auth::Basic::Request.new(request.env)
+
+    begin
+      if @auth.provided? and @auth.basic? then
+        user, pass = @auth.credentials
+        @project.verify_password user, pass
+      else
+        return false
+      end
+    rescue AuthorizationError => e
+      return false
+    end
+  end
+
   # Listing all projects that are available
   get '/api/project' do
-    projects = enumerate_projects(projects_dir)
+    projects = enumerate_projects(projects_dir, false)
                .map { |project| project.public_description }
     json projects
   end
@@ -167,7 +198,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Running an arbitrary query (Dangerous!)
-  post '/api/project/:project_id/query/run' do
+  post '/api/project/:project_id/query/run' do    
     request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
     result = @project.execute_sql(request_data['sql'], request_data['params'])
@@ -203,7 +234,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Rendering an arbitrary page
-  post '/api/project/:project_id/render' do
+  post '/api/project/:project_id/render' do   
     # Ensure this request is shaped as we would expect it
     render_request = @@validator.ensure_request("PageRenderRequestDescription", request.body.read)
 
@@ -271,7 +302,6 @@ class ScratchSqlApp < Sinatra::Base
       request_prepare_project subdomain
       request_prepare_page(page_name_or_id, true)
 
-      
       # Grab all input values that are not empty and get rid of the "input." prefix
       input_params = {}
 

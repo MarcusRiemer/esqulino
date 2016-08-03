@@ -45,7 +45,7 @@ class Query
   # string at all instead of working with an older state of the query.
   #
   # @see Query.save_description
-  def save!
+  def save!    
     self.save_description
     
     # Is the SQL representation present?
@@ -72,6 +72,7 @@ class Query
   # Or to put in other terms: Saving something that hasn't been loaded smells like
   # something that would never happen on purpose.
   def save_description
+    @project.assert_write_access!
     raise EsqulinoError, "Attempted to save unloaded query" if @model.nil?
     
     # Ensuring that the project folder has a "queries" subfolder
