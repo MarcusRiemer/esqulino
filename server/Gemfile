@@ -7,5 +7,6 @@ gem 'sqlite3'
 gem 'thin'
 gem 'json-schema'
 gem 'liquid'
+gem 'scrypt'
 
 gem 'rerun', :group => :development

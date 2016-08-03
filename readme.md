@@ -72,6 +72,7 @@ Name                                                       | Used for           
 [Sinatra](http://www.sinatrarb.com/)                       | HTTP Handling and routing for backend                    | Server       | MIT
 [Sinatra Contrib](http://www.sinatrarb.com/contrib/)       | Config-File, Code-Reloading and JSON serialization       | Server       | MIT
 [SQLite 3](https://www.sqlite.org/)                        | Database backend for projects                            | Server       | CC0
+[SCrypt for Ruby](https://github.com/pbhogan/scrypt)       | Password Storage                                         | Server       | BSD 3-Clause
 [Typescript](http://www.typescriptlang.org/)               | Client-side scripting language                           | Client       | Apache 2.0
 [Typescript JSON Schema](https://github.com/YousefED/typescript-json-schema) | JSON Schema Generation                 | Development  | Apache 2.0
 
