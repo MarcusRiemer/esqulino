@@ -1,5 +1,7 @@
 {
   "name": "kv_single",
+  "apiVersion": "1",
+  "singleRow": true,
   "from": {
     "first": {
       "name": "key_value"
@@ -33,6 +35,5 @@
         "simple": true
       }
     }
-  },
-  "apiVersion": "1"
+  }
 }

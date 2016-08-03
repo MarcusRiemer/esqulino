@@ -12,13 +12,17 @@ require './project/page.rb'
 # in creating loads of instances.
 class Project
   # @param project_folder [string] The projects root folder
-  def initialize(project_folder)
+  # @param write_access [Boolean] True, if this project should be openend in read-only mode
+  def initialize(project_folder, write_access)
     @project_folder = project_folder
     @whole_description = nil
     @schema = nil
     @pages = nil
     @queries = nil
+    @write_access = write_access
   end
+
+  attr_accessor :write_access
 
   # The path to the folder this project is stored in
   def folder
@@ -48,6 +52,11 @@ class Project
   # @return True, if at least the project folder and a model file exist
   def exists?
     File.directory? @project_folder and File.exists? description_filename
+  end
+
+  # Throws if the project was openend without write_access
+  def assert_write_access!
+    raise AuthorizationError.new "Project opened without write access!" unless @write_access
   end
 
   # Loads all parts of the model that have not been loaded so far. This
@@ -129,6 +138,8 @@ class Project
   # Or to put in other terms: Saving something that hasn't been loaded smells like
   # something that would never happen on purpose.
   def save_description
+    assert_write_access!
+    
     raise EsqulinoError, "Attempted to save unloaded project" if @whole_description.nil?
     
     File.open(description_filename, "w") do |f|
@@ -212,7 +223,7 @@ class Project
   # @return [Hash] { columns :: List, rows :: List of List }
   #                
   def execute_sql(sql, params)
-    db = SQLite3::Database.new(file_path_sqlite)
+    db = SQLite3::Database.new(file_path_sqlite, :read_only => @read_only)
     db.execute("PRAGMA foreign_keys = ON")
 
     begin
@@ -318,7 +329,7 @@ class Project
 
       password == plain_text_password
     rescue KeyError => e
-      raise EsqulinoError.new("Unknown user #{username}")
+      raise AuthorizationError.new
     end
   end
 end
@@ -326,10 +337,11 @@ end
 # Enumerates all projects in the given directory
 #
 # @param projects_dir [string] The path to enumerate
-def enumerate_projects(projects_dir)
+# @param write_access [Boolean] Should the projects be available for writing?
+def enumerate_projects(projects_dir, write_access)
   Dir.entries(projects_dir)
     .select { |entry| entry != '.' and entry != '..' and not entry.start_with? "_" }
-    .map { |entry| Project.new File.join(projects_dir, entry) }
+    .map { |entry| Project.new File.join(projects_dir, entry), write_access }
 end
 
 # Checks whether the given string is a valid Id.

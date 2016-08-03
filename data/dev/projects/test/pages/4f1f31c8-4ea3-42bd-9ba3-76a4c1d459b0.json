@@ -1,5 +1,6 @@
 {
   "name": "index",
+  "apiVersion": "1",
   "rows": [
     {
       "columns": [
@@ -91,7 +92,5 @@
         }
       ]
     }
-  ],
-  "referencedQueries": [],
-  "apiVersion": "1"
+  ]
 }

@@ -58,6 +58,8 @@ class Page
   # Or to put in other terms: Saving something that hasn't been loaded smells like
   # something that would never happen on purpose.
   def save!
+    @project.assert_write_access!
+    
     raise EsqulinoError, "Attempted to save unloaded page" if @model.nil?
 
     # Ensuring that the project folder has a "pages" subfolder
@@ -85,6 +87,8 @@ class Page
   #
   # @param templates [Hash] Templates with associated rendering engine
   def save_templates(templates)
+    @project.assert_write_access!
+    
     templates.each do |engine_type,template|
       File.open(page_file_path(engine_type), 'w') do |f|
         f.write(template)
@@ -95,6 +99,8 @@ class Page
   # Removes all files that belong to this query. The in-memory representation
   # (this object) is left intact.
   def delete!
+    @project.assert_write_access!
+    
     page_files.each do |page_file|
       File.delete page_file 
     end
@@ -130,7 +136,7 @@ class Page
   # @return The queries that are referenced by this page.
   def referenced_queries
     load_model! if @model.nil?
-    @model['referencedQueries']
+    @model.fetch('referencedQueries', [])
   end
 
   # Render this page. This will read quite a few things from disk:

@@ -1,5 +1,6 @@
 {
   "name": "kv_insert",
+  "apiVersion": "1",
   "insert": {
     "assignments": [
       {
@@ -20,6 +21,5 @@
       }
     ],
     "table": "key_value"
-  },
-  "apiVersion": "1"
+  }
 }

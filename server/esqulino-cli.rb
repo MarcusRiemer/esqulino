@@ -49,7 +49,7 @@ class EsqulinoCli
       # Setting a project path is required for all project-specific
       # operations.
       opts.on("-p", "--project-path PATH", "Specifies the project to operate on") do |path|
-        @project = Project.new path
+        @project = Project.new(path, true)
         raise UnknownProjectError.new(path) unless @project.exists?
       end
 
@@ -70,7 +70,7 @@ class EsqulinoCli
       end
 
       # Sets the password for a certain project
-      opts.on("--password USER [PASS]", "(Re)Set the password for a user") do |user,pass|
+      opts.on("--password USER", "(Re)Set the password for a user") do |user,pass|       
         # Ask the user for a password until he provides one
         while (pass.nil? or pass.empty?) do
           print "Enter new password: "
@@ -101,7 +101,7 @@ class EsqulinoCli
   # @return A Project enumerable
   def projects
     if @project.nil? then
-      enumerate_projects File.join(@data_dir, "projects")
+      enumerate_projects File.join(@data_dir, "projects"), true
     else
       [@project]
     end
