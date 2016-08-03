@@ -1,0 +1,37 @@
+{
+  "name": "kapitel_optionen",
+  "apiVersion": "1",
+  "from": {
+    "first": {
+      "name": "next_chapter"
+    }
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {}
+        }
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "chapter_from",
+            "table": "next_chapter"
+          }
+        },
+        "rhs": {
+          "parameter": {
+            "key": "von"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}
