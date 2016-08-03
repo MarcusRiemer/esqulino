@@ -20,6 +20,7 @@ import {ButtonComponent}       from './widgets/button.component'
 import {EmbeddedHtmlComponent} from './widgets/embedded-html.component'
 import {ParagraphComponent}    from './widgets/paragraph.component'
 import {HeadingComponent}      from './widgets/heading.component'
+import {LinkComponent}         from './widgets/link.component'
 import {QueryTableComponent}   from './widgets/query-table.component'
 import {InputComponent}        from './widgets/input.component'
 
@@ -65,6 +66,7 @@ export class WidgetLoaderComponent implements OnInit {
             "embedded-html": EmbeddedHtmlComponent,
             "paragraph": ParagraphComponent,
             "heading": HeadingComponent,
+            "link": LinkComponent,
             "query-table": QueryTableComponent,
             "input": InputComponent
         };

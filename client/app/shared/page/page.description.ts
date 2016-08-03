@@ -32,13 +32,26 @@ export interface QueryActionDescription extends ActionDescription {
 }
 
 /**
- * This action takes the user to a different page
+ * This action takes the user to a different page. This different page may
+ * be part of the same project (in this case we know which parameters are
+ * required) or somewhere else.
+ *
+ * The `internal` and `external` property may NOT be set both on the same
+ * description.
  */
 export interface NavigateActionDescription extends ActionDescription {
-    type : "link"
+    type : "navigate"
 
-    // The id of the page that is the target of the navigation
-    pageId : string
+    // If this link targets an internal page, this describes the page
+    // we want to go to.
+    internal? : {
+        pageId : string
+        parameters : ParameterMappingDescription[];
+    }
+
+    // If this link targets an external page we don't make any
+    // addtional assumptions.
+    external? : string
 }
 
 /**
@@ -64,6 +77,19 @@ export interface ButtonDescription extends WidgetDescription {
 
     // What happens if the user presses the button?
     action : QueryActionDescription
+}
+
+/**
+ * Describes another page the user would possibly like to navigate to.
+ */
+export interface LinkDescription extends WidgetDescription {
+    type : "link"
+
+    // The text on the link
+    text : string
+
+    // The action to perform
+    action : NavigateActionDescription
 }
 
 /**

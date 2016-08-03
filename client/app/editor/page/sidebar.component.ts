@@ -6,7 +6,7 @@ import {
     Page, QueryReference, ParameterMapping
 } from '../../shared/page/index'
 import {
-    Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml
+    Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml, Link
 } from '../../shared/page/widgets/index'
 
 import {
@@ -198,6 +198,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
      */
     startEmbeddedHtmlDrag(evt : DragEvent) {
         this._dragService.startWidgetDrag(evt, "sidebar", EmbeddedHtml.emptyDescription);
+    }
+
+    /**
+     * Starts a drag action for an link element
+     */
+    startLinkDrag(evt : DragEvent) {
+        this._dragService.startWidgetDrag(evt, "sidebar", Link.emptyDescription);
     }
 
     /**

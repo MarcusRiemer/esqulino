@@ -106,6 +106,9 @@ export class QueryInsert extends Query {
                 this._values.splice(index, 1);
             }
         }
+
+        // If the program flow reaches this point, a change has been made
+        this.markDirty();
     }
 
     getLocationDescription() {
@@ -117,6 +120,7 @@ export class QueryInsert extends Query {
         
         if (replaceIndex >= 0) {
             this._values[replaceIndex].expr = newChild;
+            this.markDirty();
         } else {
             throw new Error("Could not find child");
         }

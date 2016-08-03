@@ -63,6 +63,14 @@
       </div>
     </div>
 
+    <div (dragstart)="startLinkDrag($event)"
+         draggable="true"
+         class="widget-row-preview">
+      <div class="column-preview">
+        <span class="fa fa-fw fa-arrow-right" aria-hidden="true"></span>Link
+      </div>
+    </div>
+
     <div (dragstart)="startEmbeddedHtmlDrag($event)"
          draggable="true"
          class="widget-row-preview">

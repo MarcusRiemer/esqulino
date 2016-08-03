@@ -59,6 +59,37 @@
           "width": 12,
           "widgets": [
             {
+              "type": "link",
+              "text": "Pokémon freigelassen",
+              "action": {
+                "type": "navigate",
+                "internal": {
+                  "pageId": "7a9b9883-62c9-4604-a46c-4d254bce8e4a",
+                  "parameters": []
+                }
+              }
+            },
+            {
+              "type": "link",
+              "text": "Pokémon gefangen",
+              "action": {
+                "type": "navigate",
+                "internal": {
+                  "pageId": "3b9f8574-8e07-4f41-9090-2a51b8c2f9cf",
+                  "parameters": []
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
               "type": "heading",
               "level": 1,
               "text": "Alle Pokemon"

@@ -67,7 +67,7 @@ export abstract class Expression implements ExpressionParent, Removable, Validat
     replaceSelf(newChildDesc : Model.Expression) : Expression {
         const newChild = loadExpression(newChildDesc, this._parent);
         this._parent.replaceChild(this, newChild);
-
+        
         return (newChild);
     }
 
