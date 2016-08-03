@@ -1,0 +1,38 @@
+{
+  "name": "kapitel_einzeln",
+  "apiVersion": "1",
+  "singleRow": true,
+  "from": {
+    "first": {
+      "name": "chapter"
+    }
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {}
+        }
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "chapter_id",
+            "table": "chapter"
+          }
+        },
+        "rhs": {
+          "parameter": {
+            "key": "kapitel"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}
