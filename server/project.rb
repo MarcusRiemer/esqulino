@@ -2,6 +2,7 @@ require 'json'
 require 'yaml'
 require 'securerandom' # To generate UUIDs
 require 'fileutils'    # To create directory trees
+require 'scrypt'
 
 require './project/query.rb'
 require './project/page.rb'
@@ -288,6 +289,37 @@ class Project
   # @return The API version of this project
   def api_version
     whole_description['apiVersion']
+  end
+
+  # Updates the password for a specific user
+  #
+  # @param username [string] The name of the user
+  # @param plain_text_password [string] The password to store
+  def set_password(username, plain_text_password)
+    # Salt & hash the password
+    salt = SCrypt::Engine.generate_salt
+    password = SCrypt::Engine.hash_secret plain_text_password, salt
+
+    # Store it in the model
+    users = whole_description.fetch('users', {})
+    users[username] = password
+    whole_description['users'] = users
+  end
+
+  # Verifies whether a given user/pass combo matches a stored combination
+  #
+  # @param username [string] The name of the user
+  # @param plain_text_password [string] The password to verify
+  def verify_password(username, plain_text_password)
+    begin
+      # Load the password
+      stored_hash = whole_description.fetch('users').fetch(username)
+      password = SCrypt::Password.new(stored_hash)
+
+      password == plain_text_password
+    rescue KeyError => e
+      raise EsqulinoError.new("Unknown user #{username}")
+    end
   end
 end
 

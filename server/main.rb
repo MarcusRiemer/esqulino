@@ -1,7 +1,7 @@
 require 'sinatra/base'
 require 'sinatra/config_file'
 require 'sinatra/json'
-require "sinatra/multi_route"
+require 'sinatra/multi_route'
 
 require 'yaml'
 require 'uri' # To unescape URIs

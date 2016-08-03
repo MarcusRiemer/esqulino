@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'optparse'
+require 'io/console' # To read a password without echoing it
 
 require './project.rb'
 require './error.rb'
@@ -68,17 +69,41 @@ class EsqulinoCli
         status_project(@project, "Created page \"#{page.name}\"")
       end
 
-      opts.on("migrate", "Updates resources to fit a newer API specification") do
-        projects = if @project.nil? then
-                     enumerate_projects File.join(@data_dir, "projects")
-                   else
-                     [@project]
-                   end
+      # Sets the password for a certain project
+      opts.on("--password USER [PASS]", "(Re)Set the password for a user") do |user,pass|
+        # Ask the user for a password until he provides one
+        while (pass.nil? or pass.empty?) do
+          print "Enter new password: "
+          pass = STDIN.noecho(&:gets).strip
+          puts ""
+        end
+        
+        projects.each do |p|
+          self.print_progress_line (self.fmt_project p, "Setting password for user \"#{user}\"") do
+            p.set_password user, pass
+            p.save_description
+          end
+        end
+      end
 
+      # Migrates resources to newer API versions
+      opts.on("--migrate", "Updates resources to fit a newer API specification") do
         projects.each do |p|
           migrate_project(self, p, ESQULINO_API_VERSION)
         end
       end
+    end
+  end
+
+  # The user may specify one or multiple projects, this methods helps
+  # iterating over all specified projects no matter how they are specified.
+  #
+  # @return A Project enumerable
+  def projects
+    if @project.nil? then
+      enumerate_projects File.join(@data_dir, "projects")
+    else
+      [@project]
     end
   end
 
