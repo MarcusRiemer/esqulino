@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <form>
+        <div class="row">
+          <div class="col-md-12">
+            <h1>{{ query.artikel_detail.caption }}</h1>
+            <p>{{ query.artikel_detail.text }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h2>Kommentare</h2>
+            <!-- Raw HTML begin -->{% for kommentar in query.artikel_kommentare %}
+            <div>
+              <h3>
+                {{ kommentar.commenter_name}} sagt:
+              </h3>
+              <p>{{ kommentar.text }}</p>
+            </div>
+            {% endfor %}<!-- Raw HTML end -->
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
+

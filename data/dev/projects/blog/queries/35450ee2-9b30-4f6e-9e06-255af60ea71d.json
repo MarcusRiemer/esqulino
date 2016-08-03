@@ -1,0 +1,38 @@
+{
+  "name": "artikel_detail",
+  "apiVersion": "1",
+  "singleRow": true,
+  "from": {
+    "first": {
+      "name": "article"
+    }
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {}
+        }
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "article_id",
+            "table": "article"
+          }
+        },
+        "rhs": {
+          "parameter": {
+            "key": "id"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}

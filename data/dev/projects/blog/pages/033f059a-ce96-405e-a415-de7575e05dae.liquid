@@ -12,9 +12,18 @@
       <form>
         <div class="row">
           <div class="col-md-12">
-            <h1>Eine Abenteuergeschichte</h1>
-            <p>In dieser Geschichte spielst du die Hauptrolle. Entscheide von Kapitel zu Kapitel, wie es weitergehen soll. Wenn du stirbst, musst du halt von vorne anfangen. Alles klar?</p>
-            <a href="/Kapitel?nummer=1">Zum Anfang der Geschichte</a>
+            <h1>Mein Blog!</h1>
+            <!-- Raw HTML begin -->{% for artikel in query.artikel_alle %}
+            <div>
+              <h2>
+                <a href="/Artikel?id={{artikel.article_id}}">
+                  {{ artikel.caption }}
+                </a>
+              </h2>
+              <p>{{ artikel.text }}</p>
+            </div>
+            {% endfor %}
+            <!-- Raw HTML end -->
           </div>
         </div>
       </form>

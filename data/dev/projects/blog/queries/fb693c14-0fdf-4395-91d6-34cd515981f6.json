@@ -1,0 +1,87 @@
+{
+  "name": "artikel_kommentare",
+  "apiVersion": "1",
+  "from": {
+    "first": {
+      "name": "article"
+    },
+    "joins": [
+      {
+        "table": {
+          "name": "comment"
+        },
+        "cross": "cross"
+      }
+    ]
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "commenter_name",
+            "table": "comment"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "text",
+            "table": "comment"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "date",
+            "table": "comment"
+          }
+        }
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "article_id",
+            "table": "article"
+          }
+        },
+        "rhs": {
+          "singleColumn": {
+            "column": "article_id",
+            "table": "comment"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    },
+    "following": [
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "article_id",
+                "table": "comment"
+              }
+            },
+            "rhs": {
+              "parameter": {
+                "key": "artikel_id"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
+      }
+    ]
+  }
+}
