@@ -1,0 +1,18 @@
+{
+  "name": "artikel_alle",
+  "apiVersion": "1",
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {}
+        }
+      }
+    ]
+  },
+  "from": {
+    "first": {
+      "name": "article"
+    }
+  }
+}

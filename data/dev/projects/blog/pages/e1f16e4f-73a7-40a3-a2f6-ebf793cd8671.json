@@ -1,0 +1,71 @@
+{
+  "name": "Artikel",
+  "apiVersion": "1",
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "artikel_detail",
+      "queryId": "35450ee2-9b30-4f6e-9e06-255af60ea71d",
+      "mapping": [
+        {
+          "parameterName": "id",
+          "providingName": "get.id"
+        }
+      ]
+    },
+    {
+      "type": "query",
+      "name": "artikel_kommentare",
+      "queryId": "fb693c14-0fdf-4395-91d6-34cd515981f6",
+      "mapping": [
+        {
+          "parameterName": "artikel_id",
+          "providingName": "get.id"
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 1,
+              "text": "{{ query.artikel_detail.caption }}"
+            },
+            {
+              "type": "paragraph",
+              "text": "{{ query.artikel_detail.text }}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "width": 12,
+          "widgets": [
+            {
+              "type": "heading",
+              "level": 2,
+              "text": "Kommentare"
+            },
+            {
+              "type": "embedded-html",
+              "html": "{% for kommentar in query.artikel_kommentare %}\n<div>\n  <h3>\n   {{ kommentar.commenter_name}} sagt:\n  </h3>\n  <p>{{ kommentar.text }}</p>\n</div>\n{% endfor %}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "name": "id"
+    }
+  ]
+}
