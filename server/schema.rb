@@ -10,7 +10,7 @@ class SchemaColumn
     @type = type
     @not_null = not_null == 1
     @dflt_value = dflt_value
-    @primary = pk == 1
+    @primary = pk >= 1
   end
 
   # Serialises this column to JSON, according to the over-the-wire format
