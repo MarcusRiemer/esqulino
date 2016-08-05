@@ -79,7 +79,7 @@ export class Select extends Component implements ExpressionParent {
         let dupliq : { [name:string] : number } = {};
 
         this.actualColums
-            .map(c => c.fullName)
+            .map(c => c.shortName)
             .forEach(c => {
                 // Ensure there is an index available
                 if (!dupliq[c]) {
@@ -92,7 +92,9 @@ export class Select extends Component implements ExpressionParent {
 
         // Warn about duplicate names
         // TODO: There should be a nicer way of doing this using then
-        //       `keys` method, but for some reason that does not work.
+        //       `keys` method, but for some reason Typescript doesn't like
+        //       this and tells me:
+        //       Property 'keys' does not exist on type '{ [name: string]: number; }'
         let toReturn : ValidationError[] = [];
         
         for (let key in dupliq) {

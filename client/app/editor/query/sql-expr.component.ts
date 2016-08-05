@@ -20,6 +20,9 @@ export class ExpressionComponent {
     @Input() expr : SyntaxTree.Expression;
     @Input() query : Query;
 
+    // Only used for column expressions.
+    @Input() prefixTable = true;
+    
     /**
      * Constructor for dependency injection.
      */

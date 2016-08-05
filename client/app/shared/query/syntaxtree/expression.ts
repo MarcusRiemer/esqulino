@@ -387,6 +387,17 @@ export class ColumnExpression extends Expression {
     }
 
     /**
+     * @return The qualified name of this column.
+     */
+    get qualifiedName() {
+        if (this.hasTableQualifier) {
+            return(`${this.tableQualifier}.${this._columnName}`);
+        } else {
+            return (this._columnName);
+        }
+    }
+
+    /**
      * Retrieves the highest ranked name that should be used to
      * qualify the name of this column.
      */
@@ -410,14 +421,34 @@ export class ColumnExpression extends Expression {
     }
 
     /**
-     * @return The fully qualified column name
+     * Gets the name of this column in qualified or unqualified form.
+     */
+    getName(qualified : boolean) {
+        if (qualified) {
+            return (this.qualifiedName);
+        } else {
+            return (this.columnName);
+        }
+    }
+
+    /**
+     * @return A meaningful column-representation for SQL. Currently fully qualified,
+     *         although this won't motivate SQLite to include the tablename in the 
+     *         returned column name:
+     *
+     * sqlite> SELECT gefangen.gefangen_id, pokedex.nummer, pokedex.name, pokedex.typ, gefangen.spitzname, gefangen.staerke
+     *   ...> FROM gefangen
+     *   ...>         JOIN pokedex
+     *   ...> WHERE gefangen.pokedex_nummer = pokedex.nummer;
+     * gefangen_id  nummer      name        typ         spitzname    staerke   
+     * -----------  ----------  ----------  ----------  -----------  ----------
+     * 1            1           Bisasam     Pflanze     Bisi-Neeein  100       
+     * 2            1           Bisasam     Pflanze     Dingsbums    123       
+     * 3            1           Bisasam     Pflanze     Pupsi        12        
+     * 4            4           Glumanda    Feuer       Vier         4    
      */
     toSqlString() : string {
-        if (this.hasTableQualifier) {
-            return `${this.tableQualifier}.${this._columnName}`;
-        } else {
-            return (this._columnName);
-        }
+        return (this.qualifiedName);
     }
 
     toModel() : Model.Expression {

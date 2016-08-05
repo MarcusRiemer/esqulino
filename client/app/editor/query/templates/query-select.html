@@ -4,7 +4,8 @@
   <div class="columns">
     <span *ngFor="let column of select.columns; let last = last">
       <sql-expr [query]="query"
-                [expr]="column.expr"></sql-expr>
+                [expr]="column.expr"
+                [prefixTable]="true"></sql-expr>
     </span>
     <span *ngIf="showBlueprintDropTarget"
           (dragover)="onBlueprintDrag($event)"

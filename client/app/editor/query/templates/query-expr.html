@@ -24,9 +24,10 @@
   <template ngSwitchCase="column">
     <span (drop)="onColumnDrop($event)"
           (dragstart)="onExpressionDragStart($event)"
+          [title]="prefixTable ? '' : expr.qualifiedName"
           draggable="true"
           class="column"
-          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">{{ expr.toSqlString() }}</span>
+          [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">{{ expr.getName(prefixTable) }}</span>
   </template>
   <template ngSwitchCase="parameter">
     <span (drop)="onParameterDrop($event)"

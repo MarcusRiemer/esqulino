@@ -135,9 +135,10 @@
       <li *ngFor="let column of used.columns; trackBy: trackByColumnId;">
         <span class="fa fa-li fa-sign-out" aria-hidden="true"></span>
         <span (dragstart)="startColumnDrag($event, used, column)"
+              [title]="column.fullName"
               class="column indent"
               draggable="true">
-          {{ column.fullName }}
+          {{ column.shortName }}
         </span>
       </li>
     </ul>
