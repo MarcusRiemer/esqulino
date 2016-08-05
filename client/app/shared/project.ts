@@ -9,6 +9,22 @@ import {Page}                    from './page/page'
 export {ProjectDescription}
 
 /**
+ * Compares two named things in a case-insensitive manner.
+ */
+const compareIgnoreCase = (lhs : { name : string }, rhs : { name : string }) => {
+    const cmpLhs = lhs.name.toUpperCase();
+    const cmpRhs = rhs.name.toUpperCase();
+
+    if (cmpLhs < cmpRhs) {
+        return -1;
+    } else if (cmpLhs > cmpRhs) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/**
  * A loaded project with editing capatabilities. This is were all
  * information is lumped together.
  */
@@ -39,8 +55,12 @@ export class Project implements ApiVersion {
         }
 
         // Map all abstract queries to concrete query objects
-        this._queries = json.queries.map( val => loadQuery(val, this.schema, this) );
-        this._pages = json.pages.map( val => new Page(val, this) );
+        this._queries = json.queries
+            .map( val => loadQuery(val, this.schema, this) )
+            .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
+        this._pages = json.pages
+            .map( val => new Page(val, this) )
+            .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
     }
 
     /**
@@ -124,6 +144,7 @@ export class Project implements ApiVersion {
      */
     addQuery(query : Query) {
         this._queries.push(query);
+        this._queries.sort((lhs, rhs) => compareIgnoreCase(lhs, rhs))
     }
 
     /**
@@ -179,6 +200,8 @@ export class Project implements ApiVersion {
             // Then it's the start page
             this._indexPageId = page.id;
         }
+
+        this._pages.sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
     }
 
     /**
