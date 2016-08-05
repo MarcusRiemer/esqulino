@@ -21,28 +21,15 @@ export class NavbarComponent {
     @Input() project : Project;
 
     /**
-     * @param query The query that needs an icon.
-     *
-     * @return A Font Awesome CSS icon class
-     */
-    iconForQuery(query : Query) {
-        if (query instanceof QueryDelete) {
-            return ("fa-ban");
-        } else if (query instanceof QueryInsert) {
-            return ("fa-plus-circle");
-        } else if (query instanceof QueryUpdate) {
-            return ("fa-pencil");
-        } else {
-            return ("fa-search");
-        } 
-    }
-
-    /**
      * @param page The page that needs an icon.
      *
      * @return A Font Awesome CSS icon class
      */
     iconForPage(page : Page) {
-        return ("fa-file-text-o");
+        if (page.id === this.project.indexPageId) {
+            return ("fa-star-o");
+        } else {
+            return ("fa-file-text-o");
+        }
     }
 }
