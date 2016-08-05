@@ -30,14 +30,17 @@ const compareIgnoreCase = (lhs : { name : string }, rhs : { name : string }) => 
  */
 export class Project implements ApiVersion {
     public id : string;
-    public name : string;
-    public description : string;
     public schema : Schema;
+
+    private _name : string;
+    private _description : string;
 
     private _queries : Query[]
     private _pages : Page[]
     private _indexPageId : string
     private _version : ApiVersionToken
+
+    private _isDirty = false;
     
     /**
      * Construct a new project and a whole slew of other
@@ -45,8 +48,8 @@ export class Project implements ApiVersion {
      */
     constructor(json : ProjectDescription) {
         this.id = json.id;
-        this.name = json.name;
-        this.description = json.description;
+        this._name = json.name;
+        this._description = json.description;
         this._indexPageId = json.indexPageId;
         this.schema = new Schema(json.schema);
 
@@ -68,6 +71,50 @@ export class Project implements ApiVersion {
      */
     get apiVersion() : ApiVersionToken {
         return (CURRENT_API_VERSION);
+    }
+
+    /**
+     * @return True, if this project should be saved
+     */
+    get isDirty() {
+        return (this._isDirty);
+    }
+
+    /**
+     * Signals that this project should be saved.
+     */
+    markDirty() {
+        this._isDirty = true;
+    }
+
+    /**
+     * @return The name of this project
+     */
+    get name() {
+        return (this._name);
+    }
+
+    /**
+     * @param value The name of this project.
+     */
+    set name(value : string) {
+        this._name = value;
+        this.markDirty();
+    }
+
+    /**
+     * @return The description of this project.
+     */
+    get description() {
+        return (this._description);
+    }
+
+    /**
+     * @param value The description of this project.
+     */
+    set description(value : string) {
+        this._description = value;
+        this.markDirty();
     }
 
     /**
@@ -96,6 +143,7 @@ export class Project implements ApiVersion {
      */
     set indexPageId(newId : string) {
         this._indexPageId = newId;
+        this.markDirty();
     }
 
     /**
@@ -144,7 +192,8 @@ export class Project implements ApiVersion {
      */
     addQuery(query : Query) {
         this._queries.push(query);
-        this._queries.sort((lhs, rhs) => compareIgnoreCase(lhs, rhs))
+        this._queries.sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
+        this.markDirty();
     }
 
     /**
@@ -156,6 +205,9 @@ export class Project implements ApiVersion {
         // Remove at index
         if (index >= 0) {
             this.queries.splice(index, 1);
+            this.markDirty();
+        } else {
+            throw new Error(`Could not remove query with unknown id "${id}"`);
         }
     }
 
@@ -202,6 +254,7 @@ export class Project implements ApiVersion {
         }
 
         this._pages.sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
+        this.markDirty();
     }
 
     /**
@@ -220,6 +273,8 @@ export class Project implements ApiVersion {
             // Then there is no start page anymore
             this._indexPageId = undefined;
         }
+
+        this.markDirty();
     }
 
 
