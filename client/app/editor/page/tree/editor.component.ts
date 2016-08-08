@@ -12,12 +12,14 @@ import {ServerPreviewComponent}         from '../server-preview.component'
 import {SidebarComponent}               from '../sidebar.component'
 import {PageDataComponent}              from '../page-data.component'
 
+import {PageTreeComponent}              from './page-tree.component'
+
 /**
  * A DOM-orientated editor for pages.
  */
 @Component({
-    templateUrl: 'app/editor/page/wysiwyg/templates/editor.html',
-    directives: [PageDataComponent, ServerPreviewComponent]
+    templateUrl: 'app/editor/page/tree/templates/editor.html',
+    directives: [PageDataComponent, ServerPreviewComponent, PageTreeComponent]
 })
 export class PageTreeEditorComponent extends PageEditor {
     constructor(

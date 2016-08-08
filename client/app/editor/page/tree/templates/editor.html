@@ -11,6 +11,10 @@
                            [isRendering]="doRenderPreview">
   </esqulino-server-preview>
 
+  <esqulino-page-tree *ngIf="page"
+                      [page]="page">
+  </esqulino-page-tree>
+
   <esqulino-page-data *ngIf="page"
                       [project]="project"
                       [page]="page">
