@@ -8,7 +8,7 @@
           <span class="fa fa-cog fa-fw"></span>Projekt
         </a>
         <span *ngIf="project?.isDirty"
-              class="dirty label label-warning pull-right">
+              class="dirty pull-right">
           <span class="fa fa-floppy-o"></span>
         </span>
       </li>
@@ -37,7 +37,7 @@
               <query-icon [query]="query"></query-icon>
             </a>
             <span [hidden]="!query.isDirty"
-                  class="dirty label label-warning pull-right">
+                  class="dirty pull-right">
               <span class="fa fa-floppy-o"></span>
             </span>
           </li>
@@ -62,7 +62,7 @@
               <span class="fa {{ iconForPage(page) }} fa-fw"></span>{{ page.name }}
             </a>
             <span [hidden]="!page.isDirty"
-                  class="dirty label label-warning pull-right">
+                  class="dirty pull-right">
               <span class="fa fa-floppy-o"></span>
             </span>
           </li>
