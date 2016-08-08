@@ -132,7 +132,11 @@ export class CrossJoin extends Join {
             separator = "JOIN"
             break;
         default:
-            throw new Error(`Unknown type in cross join: ${join.cross}`);
+            // This actually shouldn't happen, but in case something
+            // is extended dynamically we make extra sure nothing
+            // goes undetected.
+            const joinType = (join as Model.Join).cross;
+            throw new Error(`Unknown type in cross join: ${joinType}`);
         }
 
         super(from, separator, join.table);
