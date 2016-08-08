@@ -3,6 +3,7 @@ import {Column, ColumnDescription}  from './column'
 describe('Page Columns', () => {
     it('Serialization', () => {
         const m : ColumnDescription = {
+            type : "column",
             width : 6,
             widgets : []
         }
@@ -13,6 +14,7 @@ describe('Page Columns', () => {
 
     it('CSS classes', () => {
         const m : ColumnDescription = {
+            type : "column",
             width : 6,
             widgets : []
         }

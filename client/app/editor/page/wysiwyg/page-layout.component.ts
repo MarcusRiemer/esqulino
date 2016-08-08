@@ -2,14 +2,14 @@ import {
     Component, Input, OnInit, ChangeDetectorRef
 } from '@angular/core'
 
-import {Page, QueryReference}           from '../../../shared/page/index'
-import {Row, Widget}                    from '../../../shared/page/widgets/index'
+import {Page, QueryReference}            from '../../../shared/page/index'
+import {Row, RowDescription, WidgetBase} from '../../../shared/page/widgets/index'
 
-import {SidebarService}                 from '../../sidebar.service'
+import {SidebarService}                  from '../../sidebar.service'
 
-import {DragService, PageDragEvent}     from '../drag.service'
+import {DragService, PageDragEvent}      from '../drag.service'
 
-import {WidgetLoaderComponent}          from './widget-loader.component'
+import {WidgetLoaderComponent}           from './widget-loader.component'
 
 /**
  * Editing the layout of esqulino pages
@@ -46,7 +46,7 @@ export class PageLayoutComponent implements OnInit {
         rowIndex : number
         columnIndex : number
         widgetIndex : number
-        widget : Widget
+        widget : WidgetBase
     }
     
     constructor(
@@ -149,7 +149,7 @@ export class PageLayoutComponent implements OnInit {
                 // Possibly inform callbacks about the drop
                 if (this._dragService.currentDrag.callbacks &&
                     this._dragService.currentDrag.callbacks.onColumn) {
-                    const droppedOn = this.page.rows[rowIndex].columns[columnIndex];
+                    const droppedOn = this.page.rows[rowIndex].children[columnIndex];
                     this._dragService.currentDrag.callbacks.onColumn(droppedOn);
                 }
             }
@@ -166,7 +166,8 @@ export class PageLayoutComponent implements OnInit {
         };
         
         // Make sure to remove this row on any valid drop
-        this._dragService.startRowDrag(evt, "page", draggedRow.toModel(), {
+        const desc = draggedRow.toModel() as RowDescription;
+        this._dragService.startRowDrag(evt, "page", desc, {
             onRemove : () => this.page.removeRow(draggedRow),
             onRow : (_) => this.page.removeRow(draggedRow),
             onDragEnd : () => this.draggedRow = undefined
@@ -176,7 +177,7 @@ export class PageLayoutComponent implements OnInit {
     /**
      * Starts a drag action for a widget that is placed in the layout.
      */
-    startWidgetDrag(evt : DragEvent, draggedWidget : Widget,
+    startWidgetDrag(evt : DragEvent, draggedWidget : WidgetBase,
                     rowIndex : number, columnIndex : number, widgetIndex : number) {
         this.draggedWidget = {
             rowIndex : rowIndex,
@@ -189,7 +190,7 @@ export class PageLayoutComponent implements OnInit {
         // Make sure to remove this row on any valid drop
         this._dragService.startWidgetDrag(evt, "page", draggedWidget.toModel(), {
             onRemove : () => this.page.removeWidgetByIndex(rowIndex, columnIndex, widgetIndex),
-            onColumn : () => this.page.removeWidget(draggedWidget),
+            onColumn : () => this.page.removeWidget(draggedWidget, true),
             onDragEnd : () => this.draggedWidget = undefined
         });
     }

@@ -1,9 +1,10 @@
 import {Page}                            from '../page'
 import {InputDescription}                from '../page.description'
+import {Widget, WidgetHost}              from '../hierarchy'
 
 import {
-    Widget, WidgetDescription, UserInputWidget
-} from './widget'
+    WidgetBase, WidgetDescription, UserInputWidget
+} from './widget-base'
 
 export {InputDescription}
 
@@ -24,8 +25,8 @@ export class Input extends UserInputWidget {
     // The HTML `type` of this input
     private _inputType : string;
     
-    constructor(desc : InputDescription, page? : Page) {
-        super("input", page);
+    constructor(desc : InputDescription, parent? : WidgetHost) {
+        super("input", parent);
         this._outParamName = desc.outParamName;
         this._caption = desc.caption;
         this._description = desc.description;

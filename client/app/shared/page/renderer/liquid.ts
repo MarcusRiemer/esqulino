@@ -4,19 +4,19 @@ import {Page}                  from '../page'
 
 import {Renderer}              from '../renderer'
 import {
-    Widget, Row, Column,
+    WidgetBase, Row, Column,
     Button, EmbeddedHtml, Heading, Input, Link, Paragraph, QueryTable
 } from '../widgets/index'
 
 export {Renderer}
 
-type WidgetRenderer = (w: Widget) => string;
+type WidgetRenderer = (w: WidgetBase) => string;
 
 /**
  * Directly renders a heading without rendering the form context. Action
  * and method are directly set via HTML5s `formaction` and `formmethod`.
  */
-function renderButton(w: Widget) : string {
+function renderButton(w: WidgetBase) : string {
     const button = w as Button;
     const text = button.text;
     const cssClass = "btn btn-secondary btn-block";
@@ -31,7 +31,7 @@ function renderButton(w: Widget) : string {
  * Renders raw HTML content, but encloses it in a comment to ease debugging
  * in case something goes wrong.
  */
-function renderHtml(w: Widget) : string {
+function renderHtml(w: WidgetBase) : string {
     const embedded = w as EmbeddedHtml;
 
     return (`<!-- Raw HTML begin -->${embedded.html}<!-- Raw HTML end -->`);    
@@ -40,7 +40,7 @@ function renderHtml(w: Widget) : string {
 /**
  * Directly renders a heading.
  */
-function renderHeading(w: Widget) : string {
+function renderHeading(w: WidgetBase) : string {
     const heading = <Heading> w;
     const tagname = `h${heading.level}`;
     return (`<${tagname}>${heading.text}</${tagname}>`);
@@ -51,7 +51,7 @@ function renderHeading(w: Widget) : string {
  * passing the correct parameters to it. This rendering step therefore
  * relies on data on the server!
  */
-function renderInput(w: Widget) : string {
+function renderInput(w: WidgetBase) : string {
     const input = w as Input;
     const outParamName = `outParamName: "${input.outParamName}"`;
     const caption = `caption: "${input.caption}"`
@@ -61,7 +61,7 @@ function renderInput(w: Widget) : string {
     return (`{% include "input" ${caption}, ${outParamName}, ${description}, ${inputType}  %}`);
 }
 
-function renderLink(w: Widget) : string {
+function renderLink(w: WidgetBase) : string {
     const link = w as Link;
     const action = link.action;
 
@@ -94,7 +94,7 @@ function renderLink(w: Widget) : string {
 /**
  * Directly renders a paragraph.
  */
-function renderParagraph(w: Widget) : string {
+function renderParagraph(w: WidgetBase) : string {
     const paragraph = <Paragraph> w;
     return (`<p>${paragraph.text}</p>`);
 }
@@ -104,7 +104,7 @@ function renderParagraph(w: Widget) : string {
  * passing the correct parameters to it. This rendering step therefore
  * relies on data on the server!
  */
-function renderQueryTable(w: Widget) : string {
+function renderQueryTable(w: WidgetBase) : string {
     const queryTable = <QueryTable> w;
     const queryName = queryTable.queryReferenceName;
     const columns = queryTable.columnNames.join(",");
@@ -159,7 +159,7 @@ export class LiquidRenderer extends Renderer {
     /**
      * Renders a single widget
      */
-    renderWidget(wid : Widget) : string {
+    renderWidget(wid : WidgetBase) : string {
         const renderer = this._widgetRenderers[wid.type];
         if (!renderer) {
             throw new Error(`No LiquidRenderer for ${wid.type}`);
@@ -172,7 +172,7 @@ export class LiquidRenderer extends Renderer {
      * Render a single column
      */
     renderColumn(col : Column) : string {
-        const children : string = col.widgets
+        const children : string = col.children
             .map(w => this.renderWidget(w))
             .join("");
 
@@ -183,7 +183,7 @@ export class LiquidRenderer extends Renderer {
      * Render a single row
      */
     renderRow(row : Row) : string {
-        const children : string = row.columns
+        const children : string = row.children
             .map(c => this.renderColumn(c))
             .join("");
         return `<div class="row">${children}</div>`

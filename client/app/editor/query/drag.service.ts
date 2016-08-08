@@ -246,8 +246,8 @@ export class DragService {
         }, source);
     }
 
-    get activeOrigin() : OriginFlag {
-        return (this._currentDrag && this._currentDrag.origin);
+    get activeOrigin() : OriginFlag | "" {
+        return (this._currentDrag && this._currentDrag.origin)
     }
 
     /**

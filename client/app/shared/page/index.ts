@@ -3,11 +3,11 @@ import {
     ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription,
     CURRENT_API_VERSION
 } from './page'
-import {Row, Widget}           from './widgets/index'
+import {Row, WidgetBase}           from './widgets/index'
 import {Renderer}              from './renderer'
 
 export {
-    Page, PageParameter, PageDescription, Renderer, Row, Widget, QueryReference,
+    Page, PageParameter, PageDescription, Renderer, Row, WidgetBase, QueryReference,
     ParameterMapping,
     QueryReferenceDescription, ValueReferenceDescription, ColumnReferenceDescription,
     CURRENT_API_VERSION

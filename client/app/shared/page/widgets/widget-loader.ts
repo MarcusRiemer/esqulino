@@ -1,6 +1,7 @@
 import {Page}                                  from '../page'
+import {Widget, WidgetHost}                    from '../hierarchy'
 
-import {Widget, WidgetDescription}             from './widget'
+import {WidgetBase, WidgetDescription}         from './widget-base'
 
 import {Button, ButtonDescription}             from './button'
 import {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
@@ -13,22 +14,22 @@ import {QueryTable, QueryTableDescription}     from './query-table'
 /**
  * @return A Widget instance that matches the description
  */
-export function loadWidget(desc : WidgetDescription, page? : Page) : Widget {
+export function loadWidget(desc : WidgetDescription, parent : WidgetHost) : WidgetBase {
     switch (desc.type) {
     case "button":
-        return new Button(desc as ButtonDescription, page);
+        return new Button(desc as ButtonDescription, parent);
     case "embedded-html":
-        return new EmbeddedHtml(desc as EmbeddedHtmlDescription, page);
+        return new EmbeddedHtml(desc as EmbeddedHtmlDescription, parent);
     case "heading":
-        return new Heading(desc as HeadingDescription, page);
+        return new Heading(desc as HeadingDescription, parent);
     case "input":
-        return new Input(desc as InputDescription, page);
+        return new Input(desc as InputDescription, parent);
     case "link":
-        return new Link(desc as LinkDescription, page);
+        return new Link(desc as LinkDescription, parent);
     case "paragraph":
-        return new Paragraph(desc as ParagraphDescription, page);
+        return new Paragraph(desc as ParagraphDescription, parent);
     case "query-table":
-        return new QueryTable(desc as QueryTableDescription, page);
+        return new QueryTable(desc as QueryTableDescription, parent);
     default:
         throw new Error(`Unknown widget type "${desc.type}"`);
     }

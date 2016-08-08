@@ -4,7 +4,7 @@ import {
     Paragraph, ParagraphDescription,
     Column, ColumnDescription,
     Row, RowDescription,
-    Widget, WidgetDescription
+    WidgetBase, WidgetDescription
 } from '../widgets/index'
 
 describe('Page Renderer: Liquid', () => {
@@ -23,6 +23,7 @@ describe('Page Renderer: Liquid', () => {
     
     it('Column', () => {
         const m : ColumnDescription = {
+            type : "column",
             width : 6,
             widgets : []
         }
@@ -45,6 +46,7 @@ describe('Page Renderer: Liquid', () => {
         };
         
         const m : ColumnDescription = {
+            type : "column",
             width : 6,
             widgets : [mp1, mp2]
         }
@@ -57,6 +59,7 @@ describe('Page Renderer: Liquid', () => {
 
     it('Row', () => {
         const m : RowDescription = {
+            type : "row",
             columns : []
         }
 
@@ -68,12 +71,15 @@ describe('Page Renderer: Liquid', () => {
 
     it('Row with two columns', () => {
         const m : RowDescription = {
+            type : "row",
             columns : [
                 {
+                    type : "column",
                     width : 3,
                     widgets : []
                 },
                 {
+                    type : "column",
                     width : 7,
                     widgets : []
                 }

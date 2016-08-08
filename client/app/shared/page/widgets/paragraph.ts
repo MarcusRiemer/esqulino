@@ -1,18 +1,19 @@
 import {Page}                            from '../page'
 import {ParagraphDescription}            from '../page.description'
+import {Widget, WidgetHost}              from '../hierarchy'
 
-import {Widget, WidgetDescription}       from './widget'
+import {WidgetBase, WidgetDescription}   from './widget-base'
 
 export {ParagraphDescription}
 
 /**
  * A text-orientated widget.
  */
-export class Paragraph extends Widget {
+export class Paragraph extends WidgetBase {
     private _text : string;
     
-    constructor(desc : ParagraphDescription, page? : Page) {
-        super("paragraph", page);
+    constructor(desc : ParagraphDescription, parent? : WidgetHost) {
+        super("paragraph", parent);
         this._text = desc.text;
     }
 

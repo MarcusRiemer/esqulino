@@ -1,6 +1,9 @@
 import {Page, ColumnDescription}        from '../page'
-import {Widget, WidgetDescription}      from './widget'
+
 import {loadWidget}                     from './widget-loader'
+import {
+    WidgetBase, WidgetDescription, HostingWidget, WidgetHost
+}  from './widget-base'
 
 export {ColumnDescription}
 
@@ -8,17 +11,16 @@ export {ColumnDescription}
  * Columns live "inside" a row and act as "table-cells" for content. They
  * usually have no appearance of their and provide nothing but the layout.
  */
-export class Column {
+export class Column extends HostingWidget {
     private _width : number;
 
-    private _widgets : Widget[];
+    private _widgets : WidgetBase[];
 
-    private _page : Page;
-
-    constructor(desc : ColumnDescription, page? : Page) {
+    constructor(desc : ColumnDescription, parent? : WidgetHost) {
+        super("column", parent);
+        
         this._width = desc.width;
-        this._page = page;
-        this._widgets = desc.widgets.map( (wiDesc) => loadWidget(wiDesc, page) );
+        this._widgets = desc.widgets.map( (wiDesc) => loadWidget(wiDesc, parent) );
     }
 
     /**
@@ -31,7 +33,7 @@ export class Column {
     /**
      * @return The widgets for this cell
      */
-    get widgets() {
+    get children() {
         return (this._widgets);
     }
 
@@ -49,24 +51,10 @@ export class Column {
             throw new Error(`Adding Widget ("${JSON.stringify(widgetDesc)}") exceeds widget count (given: ${widgetIndex}, length ${this._widgets.length}`);
         }
 
-        const widget = loadWidget(widgetDesc, this._page);
+        const widget = loadWidget(widgetDesc, this.page);
         this._widgets.splice(widgetIndex, 0, widget);
 
         return (widget);
-    }
-
-    /**
-     * Removes the widget at the given position.
-     *
-     * @param widgetIndex The index to remove at.
-     */
-    removeWidgetByIndex(widgetIndex : number) {
-        // Ensure widget index
-        if (widgetIndex != 0 && widgetIndex >= this._widgets.length) {
-            throw new Error(`Removing widget exceeds widget count (given: ${widgetIndex}, length ${this._widgets.length}`);
-        }
-
-        this._widgets.splice(widgetIndex, 1);
     }
 
     /**
@@ -77,8 +65,9 @@ export class Column {
         return ([`col-md-${this._width}`]);
     }
 
-    toModel() : ColumnDescription {
+    protected toModelImpl() : ColumnDescription {
         return ({
+            type : "column",
             width : this._width,
             widgets : this._widgets.map(w => w.toModel())
         });

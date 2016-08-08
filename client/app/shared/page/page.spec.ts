@@ -13,7 +13,7 @@ import {
     Paragraph, ParagraphDescription,
     Column, ColumnDescription,
     Row, RowDescription,
-    Widget, WidgetDescription
+    WidgetBase, WidgetDescription
 } from './widgets/index'
 
 const singleRowPage : PageDescription = {
@@ -22,8 +22,10 @@ const singleRowPage : PageDescription = {
     apiVersion : CURRENT_API_VERSION,
     rows : [
         {
+            type : "row",
             columns : [
                 {
+                    type : "column",
                     width : 4,
                     widgets : [
                             <ParagraphDescription>{
@@ -37,6 +39,7 @@ const singleRowPage : PageDescription = {
                     ]
                 },
                 {
+                    type : "column",
                     width : 4,
                     widgets : [
                             <ParagraphDescription>{

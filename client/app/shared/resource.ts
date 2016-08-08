@@ -18,7 +18,7 @@ export {
  * 
  * Invalidation *only* makes assumptions about the visual state, to find
  * out whether something should be saved by the user is a different matter
- * which is handled by the `RequiresSaving` (or `isDirty`) property.
+ * which is handled by the `isDirty` property.
  *
  * TODO: Streamline this.
  */
