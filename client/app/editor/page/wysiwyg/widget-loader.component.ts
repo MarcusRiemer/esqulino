@@ -5,15 +5,15 @@ import {
     Type, provide, ReflectiveInjector
 } from '@angular/core'
 
-import {Page}                  from '../../shared/page/index'
+import {Page}                  from '../../../shared/page/index'
 
-import {Widget}                from '../../shared/page/widgets/index'
+import {Widget}                from '../../../shared/page/widgets/index'
 
-import {SidebarService}        from '../sidebar.service'
+import {SidebarService}        from '../../sidebar.service'
 
 import {
     WIDGET_MODEL_TOKEN
-} from '../editor.token'
+} from '../../editor.token'
 
 import {WidgetComponent}       from './widgets/widget.component'
 import {ButtonComponent}       from './widgets/button.component'

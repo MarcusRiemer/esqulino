@@ -5,18 +5,19 @@ import {Router, ActivatedRoute}         from '@angular/router'
 
 import {Observable}                     from 'rxjs/Observable'
 
-import {Paragraph}                      from '../../shared/page/widgets/index'
+import {Paragraph}                      from '../../../shared/page/widgets/index'
 
-import {ProjectService, Project}        from '../project.service'
-import {PageService, Page}              from '../page.service'
-import {PreferencesService}             from '../preferences.service'
-import {SidebarService}                 from '../sidebar.service'
-import {ToolbarService}                 from '../toolbar.service'
+import {ProjectService, Project}        from '../../project.service'
+import {PageService, Page}              from '../../page.service'
+import {PreferencesService}             from '../../preferences.service'
+import {SidebarService}                 from '../../sidebar.service'
+import {ToolbarService}                 from '../../toolbar.service'
+
+import {ServerPreviewComponent}         from '.././server-preview.component'
+import {SidebarComponent}               from '.././sidebar.component'
 
 import {PageLayoutComponent}            from './page-layout.component'
 import {PageDataComponent}              from './page-data.component'
-import {ServerPreviewComponent}         from './server-preview.component'
-import {SidebarComponent}               from './sidebar.component'
 
 /**
  * Top level component to edit esqulino pages. This components hosts
@@ -27,7 +28,7 @@ import {SidebarComponent}               from './sidebar.component'
  * sub-components.
  */
 @Component({
-    templateUrl: 'app/editor/page/templates/editor.html',
+    templateUrl: 'app/editor/page/wysiwyg/templates/editor.html',
     directives: [PageLayoutComponent, PageDataComponent, ServerPreviewComponent]
 })
 export class PageEditorComponent implements OnInit, OnDestroy {

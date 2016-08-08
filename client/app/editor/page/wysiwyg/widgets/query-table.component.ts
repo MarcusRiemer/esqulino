@@ -2,18 +2,18 @@ import {
     Component, Inject, OnInit, ChangeDetectorRef
 } from '@angular/core'
 
-import {Page, QueryReference}       from '../../../shared/page/index'
-import {QuerySelect, ResultColumn}  from '../../../shared/query'
-import {QueryTable}                 from '../../../shared/page/widgets/index'
+import {Page, QueryReference}       from '../../../../shared/page/index'
+import {QuerySelect, ResultColumn}  from '../../../../shared/query'
+import {QueryTable}                 from '../../../../shared/page/widgets/index'
 
-import {QueryIconComponent}         from '../../query-icon.component'
-import {ProjectService, Project}    from '../../project.service'
-import {SidebarService}             from '../../sidebar.service'
+import {QueryIconComponent}         from '../../../query-icon.component'
+import {ProjectService, Project}    from '../../../project.service'
+import {SidebarService}             from '../../../sidebar.service'
 import {
     WIDGET_MODEL_TOKEN
-} from '../../editor.token'
+} from '../../../editor.token'
 
-import {DragService, PageDragEvent} from '../drag.service'
+import {DragService, PageDragEvent} from '../../drag.service'
 
 import {WidgetComponent}            from './widget.component'
 import {
@@ -27,7 +27,7 @@ export {QueryTable}
  * Editor preview for the query table
  */
 @Component({
-    templateUrl: 'app/editor/page/widgets/templates/query-table.html',
+    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/query-table.html',
     selector: "esqulino-query-table",
     directives : [QueryIconComponent]
 })

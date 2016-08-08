@@ -2,13 +2,13 @@ import {
     Component, Inject, OnInit, ChangeDetectorRef
 } from '@angular/core'
 
-import {Button, QueryAction}          from '../../../shared/page/widgets/index'
+import {Button, QueryAction}          from '../../../../shared/page/widgets/index'
 
-import {QueryIconComponent}           from '../../query-icon.component'
-import {SidebarService}               from '../../sidebar.service'
-import {WIDGET_MODEL_TOKEN}           from '../../editor.token'
+import {QueryIconComponent}           from '../../../query-icon.component'
+import {SidebarService}               from '../../../sidebar.service'
+import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
-import {DragService, PageDragEvent}   from '../drag.service'
+import {DragService, PageDragEvent}   from '../../drag.service'
 
 import {WidgetComponent}              from './widget.component'
 import {
@@ -18,7 +18,7 @@ import {
 export {Button, QueryAction}
 
 @Component({
-    templateUrl: 'app/editor/page/widgets/templates/button.html',
+    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/button.html',
     selector: "esqulino-paragraph",
     directives: [QueryIconComponent]
 })

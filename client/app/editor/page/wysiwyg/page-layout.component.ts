@@ -2,12 +2,13 @@ import {
     Component, Input, OnInit, ChangeDetectorRef
 } from '@angular/core'
 
-import {Page, QueryReference}           from '../../shared/page/index'
-import {Row, Widget}                    from '../../shared/page/widgets/index'
+import {Page, QueryReference}           from '../../../shared/page/index'
+import {Row, Widget}                    from '../../../shared/page/widgets/index'
 
-import {SidebarService}                 from '../sidebar.service'
+import {SidebarService}                 from '../../sidebar.service'
 
-import {DragService, PageDragEvent}     from './drag.service'
+import {DragService, PageDragEvent}     from '../drag.service'
+
 import {WidgetLoaderComponent}          from './widget-loader.component'
 
 /**
@@ -15,7 +16,7 @@ import {WidgetLoaderComponent}          from './widget-loader.component'
  */
 @Component({
     selector: 'esqulino-page-layout',
-    templateUrl: 'app/editor/page/templates/page-layout.html',
+    templateUrl: 'app/editor/page/wysiwyg/templates/page-layout.html',
     directives: [WidgetLoaderComponent]
 })
 export class PageLayoutComponent implements OnInit {

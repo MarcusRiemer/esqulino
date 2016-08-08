@@ -1,6 +1,6 @@
 import {Component, Inject, Optional}        from '@angular/core'
 
-import {SIDEBAR_MODEL_TOKEN}                from '../../editor.token'
+import {SIDEBAR_MODEL_TOKEN}                from '../../../editor.token'
 
 import {HeadingComponent, Heading}          from './heading.component'
 
@@ -8,7 +8,7 @@ import {HeadingComponent, Heading}          from './heading.component'
  * Displays the sidebar editing component for a heading.
  */
 @Component({
-    templateUrl: 'app/editor/page/widgets/templates/heading-sidebar.html',
+    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/heading-sidebar.html',
 })
 export class HeadingSidebarComponent {
 

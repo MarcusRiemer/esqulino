@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit}    from '@angular/core'
 
-import {Link}                         from '../../../shared/page/widgets/index'
+import {Link}                         from '../../../../shared/page/widgets/index'
 
-import {SidebarService}               from '../../sidebar.service'
-import {WIDGET_MODEL_TOKEN}           from '../../editor.token'
+import {SidebarService}               from '../../../sidebar.service'
+import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {WidgetComponent}              from './widget.component'
 import {
@@ -16,7 +16,7 @@ export {Link}
 declare var URL : any;
 
 @Component({
-    templateUrl: 'app/editor/page/widgets/templates/link.html',
+    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/link.html',
     selector: "esqulino-link"
 })
 export class LinkComponent extends WidgetComponent<Link> {

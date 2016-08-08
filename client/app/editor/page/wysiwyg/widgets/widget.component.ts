@@ -1,6 +1,6 @@
 import {OpaqueToken, Type}              from '@angular/core'
 
-import {SidebarService}                 from '../../sidebar.service'
+import {SidebarService}                 from '../../../sidebar.service'
 
 /**
  * Base class for all widget visualizations. Exposes the model itself and
