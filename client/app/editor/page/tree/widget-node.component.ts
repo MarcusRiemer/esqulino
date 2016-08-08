@@ -66,14 +66,22 @@ export class WidgetNode {
             }
             
             host.addWidget(pageEvt.widget, index);
+
+            if (this._dragService.currentDrag.callbacks.onWidget) {
+                this._dragService.currentDrag.callbacks.onWidget(host);
+            }
         } else {
             throw new Error("No valid drop target");
         }
     }
 
+    /**
+     * Something is going to be dragged.
+     */
     onDragStart(evt : DragEvent) {
         this._dragService.startWidgetDrag(evt, "page", this.widget.toModel(), {
             onRemove : () => this.widget.parent.removeWidget(this.widget, false),
+            onWidget : (_) => this.widget.parent.removeWidget(this.widget, false),
         });
     }
     

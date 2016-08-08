@@ -96,9 +96,9 @@ export class PageLayoutComponent implements OnInit {
 
             // Possibly inform callbacks about the drop
             if (this._dragService.currentDrag.callbacks &&
-                this._dragService.currentDrag.callbacks.onRow) {
+                this._dragService.currentDrag.callbacks.onWidget) {
                 const droppedOn = this.page.rows[dropIndex];
-                this._dragService.currentDrag.callbacks.onRow(droppedOn);
+                this._dragService.currentDrag.callbacks.onWidget(droppedOn);
             }
 
             // And reset all hovering state
@@ -148,9 +148,9 @@ export class PageLayoutComponent implements OnInit {
 
                 // Possibly inform callbacks about the drop
                 if (this._dragService.currentDrag.callbacks &&
-                    this._dragService.currentDrag.callbacks.onColumn) {
+                    this._dragService.currentDrag.callbacks.onWidget) {
                     const droppedOn = this.page.rows[rowIndex].children[columnIndex];
-                    this._dragService.currentDrag.callbacks.onColumn(droppedOn);
+                    this._dragService.currentDrag.callbacks.onWidget(droppedOn);
                 }
             }
         }
@@ -167,9 +167,9 @@ export class PageLayoutComponent implements OnInit {
         
         // Make sure to remove this row on any valid drop
         const desc = draggedRow.toModel() as RowDescription;
-        this._dragService.startRowDrag(evt, "page", desc, {
+        this._dragService.startWidgetDrag(evt, "page", desc, {
             onRemove : () => this.page.removeRow(draggedRow),
-            onRow : (_) => this.page.removeRow(draggedRow),
+            onWidget : (_) => this.page.removeRow(draggedRow),
             onDragEnd : () => this.draggedRow = undefined
         });
     }
@@ -190,7 +190,7 @@ export class PageLayoutComponent implements OnInit {
         // Make sure to remove this row on any valid drop
         this._dragService.startWidgetDrag(evt, "page", draggedWidget.toModel(), {
             onRemove : () => this.page.removeWidgetByIndex(rowIndex, columnIndex, widgetIndex),
-            onColumn : () => this.page.removeWidget(draggedWidget, true),
+            onWidget : () => this.page.removeWidget(draggedWidget, true),
             onDragEnd : () => this.draggedWidget = undefined
         });
     }
