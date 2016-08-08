@@ -20,7 +20,7 @@ export class Column extends HostingWidget {
         super("column", parent);
         
         this._width = desc.width;
-        this._widgets = desc.widgets.map( (wiDesc) => loadWidget(wiDesc, parent) );
+        this._widgets = desc.widgets.map( (wiDesc) => loadWidget(wiDesc, this) );
     }
 
     /**
@@ -37,24 +37,8 @@ export class Column extends HostingWidget {
         return (this._widgets);
     }
 
-    /**
-     * Adds a new widget at the given position.
-     *
-     * @param widget The widget to add
-     * @param widgetIndex The index the widget is positioned at
-     *
-     * @return The instance of the loaded widget
-     */
-    addWidget(widgetDesc : WidgetDescription, widgetIndex : number) {
-        // Ensure widget index at least touches the current array
-        if (widgetIndex != 0 && widgetIndex > this._widgets.length) {
-            throw new Error(`Adding Widget ("${JSON.stringify(widgetDesc)}") exceeds widget count (given: ${widgetIndex}, length ${this._widgets.length}`);
-        }
-
-        const widget = loadWidget(widgetDesc, this.page);
-        this._widgets.splice(widgetIndex, 0, widget);
-
-        return (widget);
+    acceptsWidget(desc : WidgetDescription) : boolean {
+        return (desc.type != this.type);
     }
 
     /**

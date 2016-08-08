@@ -1,6 +1,8 @@
 import {Page, WidgetDescription, ParameterMapping}   from '../page'
 import {Widget, WidgetHost, isWidgetHost}            from '../hierarchy'
 
+import {loadWidget}                                  from './widget-loader'
+
 export {
     WidgetDescription, ParameterMapping,
     Widget, WidgetHost
@@ -129,6 +131,35 @@ export abstract class HostingWidget extends WidgetBase implements WidgetHost {
             // Not found and no recursion allowed.
             return (false);
         }
+    }
+
+    /**
+     * Per default these widgets accept nothing.
+     */
+    acceptsWidget(desc : WidgetDescription) : boolean {
+        return (false);
+    }
+
+    /**
+     * @param desc The description of the widget to add.
+     * @param index The index the new widget will be added.
+     *
+     * @return The instantiated widget
+     */
+    addWidget(desc : WidgetDescription, index : number) : Widget {
+        if (!this.acceptsWidget(desc)) {
+            throw new Error(`Cant place ${desc.type} on ${this.type}`);
+        }
+
+        // Ensure widget index at least touches the current array
+        if (index != 0 && index > this.children.length) {
+            throw new Error(`Adding Widget ("${JSON.stringify(desc)}") exceeds widget count (given: ${index}, length ${this.children.length}`);
+        }
+
+        const widget = loadWidget(desc, this);
+        this.children.splice(index, 0, widget);
+
+        return (widget);
     }
 }
 

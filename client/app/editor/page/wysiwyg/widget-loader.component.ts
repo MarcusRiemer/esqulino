@@ -72,6 +72,9 @@ export class WidgetLoaderComponent implements OnInit {
         };
     }
 
+    /**
+     * @return True, if this loader is currently fetching the component to show.
+     */
     get isLoading() {
         return (this._isLoading);
     }

@@ -55,6 +55,20 @@ export interface WidgetHost {
     removeChildByIndex(index : number) : void;
 
     /**
+     * @return True, if the given widget is an acceptable child of this
+     *         widget.
+     */
+    acceptsWidget(desc : WidgetDescription) : boolean;
+
+    /**
+     * @param desc The description of the widget to add.
+     * @param index The index the new widget will be added.
+     *
+     * @return The instantiated widget
+     */
+    addWidget(desc : WidgetDescription, index : number) : Widget;
+
+    /**
      * @return The page this widget-host is placed on,
      */
     page : Page;
@@ -65,4 +79,11 @@ export interface WidgetHost {
  */
 export function isWidgetHost(obj : any): obj is WidgetHost {
     return ("children" in obj);
+}
+
+/**
+ * @return True if the given thing is an instance of WidgetHost
+ */
+export function isWidget(obj : any): obj is Widget {
+    return ("parent" in obj && "type" in obj && "page" in obj);
 }

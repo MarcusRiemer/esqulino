@@ -1,5 +1,9 @@
-<div class="tree-level block-container">
-  <span [class.block]="isBlock">
+<div (dragstart)="onDragStart($event)"
+     class="tree-level block-container"
+     draggable="true">
+  <span [class.block]="isBlock"
+        (dragover)="onDragOver($event, 0)"
+        (drop)="onDrop($event, 0)">
     <span class="widget">{{ widget.type }}</span>
   </span>
   <span *ngIf="widget.text"
@@ -9,7 +13,9 @@
                         [widget]="widget">
   </esqulino-widget-node>
 
-  <span [class.block]="isBlock">
+  <span [class.block]="isBlock"
+        (dragover)="onDragOver($event, afterLastChildIndex)"
+        (drop)="onDrop($event, afterLastChildIndex)">
     <span *ngIf="needsClosingNode"
           class="widget-close">{{ widget.type }}</span>
   </span>
