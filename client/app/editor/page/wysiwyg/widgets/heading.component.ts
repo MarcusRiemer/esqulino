@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core'
 
-import {Heading}                  from '../../../shared/page/widgets/index'
+import {Heading}                  from '../../../../shared/page/widgets/index'
 
-import {SidebarService}           from '../../sidebar.service'
-import {WIDGET_MODEL_TOKEN}      from '../../editor.token'
+import {SidebarService}           from '../../../sidebar.service'
+import {WIDGET_MODEL_TOKEN}       from '../../../editor.token'
 
 import {WidgetComponent}          from './widget.component'
 import {
@@ -13,7 +13,7 @@ import {
 export {Heading}
 
 @Component({
-    templateUrl: 'app/editor/page/widgets/templates/heading.html',
+    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/heading.html',
     selector: "esqulino-heading"
 })
 export class HeadingComponent extends WidgetComponent<Heading> {    

@@ -1,17 +1,17 @@
 import {Component, Inject, Optional}        from '@angular/core'
 
-import {QuerySelect}                        from '../../../shared/query'
+import {QuerySelect}                        from '../../../../shared/query'
 import {
     Page, QueryReference
-} from '../../../shared/page/index'
-import {QueryTable}                         from '../../../shared/page/widgets/index'
+} from '../../../../shared/page/index'
+import {QueryTable}                         from '../../../../shared/page/widgets/index'
 
 import {
     ProjectService, Project
-} from '../../project.service'
+} from '../../../project.service'
 import {
     SIDEBAR_MODEL_TOKEN
-} from '../../editor.token'
+} from '../../../editor.token'
 
 import {QueryTableComponent}                from './query-table.component'
 
@@ -20,7 +20,7 @@ import {QueryTableComponent}                from './query-table.component'
  * convoluted state due to too many ad-hoc datastructures.
  */
 @Component({
-    templateUrl: 'app/editor/page/widgets/templates/query-table-sidebar.html',
+    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/query-table-sidebar.html',
 })
 export class QueryTableSidebarComponent {
 

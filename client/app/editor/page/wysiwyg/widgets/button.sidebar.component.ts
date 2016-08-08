@@ -1,6 +1,6 @@
 import {Component, Inject, Optional}        from '@angular/core'
 
-import {SIDEBAR_MODEL_TOKEN}                from '../../editor.token'
+import {SIDEBAR_MODEL_TOKEN}                from '../../../editor.token'
 
 import {
     ButtonComponent, Button, QueryAction
@@ -10,7 +10,7 @@ import {
  * Displays the sidebar editing component for a heading.
  */
 @Component({
-    templateUrl: 'app/editor/page/widgets/templates/button-sidebar.html',
+    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/button-sidebar.html',
 })
 export class ButtonSidebarComponent {
 

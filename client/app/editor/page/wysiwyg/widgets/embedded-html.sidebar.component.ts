@@ -1,13 +1,13 @@
 import {Component, Inject, Optional}        from '@angular/core'
 
-import {EmbeddedHtml}                       from '../../../shared/page/widgets/index'
+import {EmbeddedHtml}                       from '../../../../shared/page/widgets/index'
 
-import {SIDEBAR_MODEL_TOKEN}                from '../../editor.token'
+import {SIDEBAR_MODEL_TOKEN}                from '../../../editor.token'
 
 import {EmbeddedHtmlComponent}              from './embedded-html.component'
 
 @Component({
-    templateUrl: 'app/editor/page/widgets/templates/embedded-html-sidebar.html',
+    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/embedded-html-sidebar.html',
 })
 export class EmbeddedHtmlSidebarComponent {
 

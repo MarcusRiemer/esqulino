@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit}    from '@angular/core'
 
-import {EmbeddedHtml}                 from '../../../shared/page/widgets/index'
+import {EmbeddedHtml}                 from '../../../../shared/page/widgets/index'
 
-import {SidebarService}               from '../../sidebar.service'
-import {WIDGET_MODEL_TOKEN}           from '../../editor.token'
+import {SidebarService}               from '../../../sidebar.service'
+import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {WidgetComponent}              from './widget.component'
 import {
@@ -13,7 +13,7 @@ import {
 export {EmbeddedHtml}
 
 @Component({
-    templateUrl: 'app/editor/page/widgets/templates/embedded-html.html',
+    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/embedded-html.html',
     selector: "esqulino-embedded-html"
 })
 export class EmbeddedHtmlComponent extends WidgetComponent<EmbeddedHtml> {

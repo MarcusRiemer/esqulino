@@ -2,10 +2,10 @@ import {
     Component, Inject, OnInit, ChangeDetectorRef
 } from '@angular/core'
 
-import {Input}                        from '../../../shared/page/widgets/index'
+import {Input}                        from '../../../../shared/page/widgets/index'
 
-import {SidebarService}               from '../../sidebar.service'
-import {WIDGET_MODEL_TOKEN}           from '../../editor.token'
+import {SidebarService}               from '../../../sidebar.service'
+import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {WidgetComponent}              from './widget.component'
 import {
@@ -16,7 +16,7 @@ import {
 export {Input}
 
 @Component({
-    templateUrl: 'app/editor/page/widgets/templates/input.html',
+    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/input.html',
     selector: "esqulino-paragraph"
 })
 export class InputComponent extends WidgetComponent<Input> {

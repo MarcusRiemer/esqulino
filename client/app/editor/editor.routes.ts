@@ -5,7 +5,7 @@ import {SettingsComponent}              from './settings.component'
 import {SchemaComponent}                from './schema.component'
 
 import {PageCreateComponent}            from './page/create.component'
-import {PageEditorComponent}            from './page/editor.component'
+import {PageEditorComponent}            from './page/wysiwyg/editor.component'
 
 import {QueryCreateComponent}           from './query/create.component'
 import {QueryEditorComponent}           from './query/editor.component'
