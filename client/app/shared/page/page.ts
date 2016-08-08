@@ -9,23 +9,22 @@ import {
     ColumnDescription, RowDescription,
     CURRENT_API_VERSION
 } from './page.description'
-
 import {
     ParameterMapping, ParameterMappingDescription
 } from './parameter-mapping'
-
 import {
     Widget, WidgetHost, isWidgetHost
 } from './hierarchy'
+import {
+    ValueReference, ColumnReference, QueryReference
+} from './value-reference'
 
 import {Row}                                  from './widgets/row'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
 import {
     WidgetBase, ParametrizedWidget, UserInputWidget
 } from './widgets/widget-base'
-import {
-    ValueReference, ColumnReference, QueryReference
-} from './value-reference'
+import {loadWidget}                           from './widgets/widget-loader'
 
 export {
     PageDescription, ColumnDescription, RowDescription,
@@ -132,6 +131,35 @@ export class Page extends ProjectResource implements WidgetHost {
     }
 
     /**
+     * Accepts everything per default.
+     */
+    acceptsWidget(desc : WidgetDescription) : boolean {
+        return (true);
+    }
+
+    /**
+     * @param desc The description of the widget to add.
+     * @param index The index the new widget will be added.
+     *
+     * @return The instantiated widget
+     */
+    addWidget(desc : WidgetDescription, index : number) : Widget {
+        if (!this.acceptsWidget(desc)) {
+            throw new Error(`Cant place ${desc.type} on page`);
+        }
+
+        // Ensure widget index at least touches the current array
+        if (index != 0 && index > this.children.length) {
+            throw new Error(`Adding Widget ("${JSON.stringify(desc)}") exceeds widget count (given: ${index}, length ${this.children.length}`);
+        }
+
+        const widget = loadWidget(desc, this);
+        this.children.splice(index, 0, widget);
+
+        return (widget);
+    }
+
+    /**
      * Adds a new widget to this page.
      *
      * @param widget The widget to add
@@ -139,9 +167,9 @@ export class Page extends ProjectResource implements WidgetHost {
      * @param columnIndex The column this widget should be added
      * @param widgetIndex The position of the widget inside the column
      */
-    addWidget(widget : WidgetDescription,
-              rowIndex : number, columnIndex : number,
-              widgetIndex : number) {
+    addWidgetDeep(widget : WidgetDescription,
+                  rowIndex : number, columnIndex : number,
+                  widgetIndex : number) {
         // Ensure row index
         if (rowIndex >= this._rows.length) {
             throw new Error(`Adding widget ("${JSON.stringify(widget)}") exceeds row count (given: ${rowIndex}, length ${this._rows.length}`);

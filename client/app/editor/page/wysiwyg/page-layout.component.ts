@@ -144,7 +144,7 @@ export class PageLayoutComponent implements OnInit {
                 this.draggedWidget.columnIndex != columnIndex ||
                 this.draggedWidget.widgetIndex != widgetIndex) {
                 // Actually place the widget
-                this.page.addWidget(pageEvt.widget, rowIndex, columnIndex, widgetDropIndex);
+                this.page.addWidgetDeep(pageEvt.widget, rowIndex, columnIndex, widgetDropIndex);
 
                 // Possibly inform callbacks about the drop
                 if (this._dragService.currentDrag.callbacks &&
