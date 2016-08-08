@@ -28,6 +28,10 @@
     visibility: hidden;
     transition: opacity 0.3s;
   }
+
+  .about-text {
+      hyphens: auto;
+  }
 }
 
 .loading {

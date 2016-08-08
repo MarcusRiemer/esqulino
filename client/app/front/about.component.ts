@@ -1,8 +1,10 @@
-import {Component} from '@angular/core';
+import {Component}                      from '@angular/core'
+import {ROUTER_DIRECTIVES}              from '@angular/router'
 
 @Component({
     selector: 'about',
-    templateUrl: 'app/front/templates/about.html'
+    templateUrl: 'app/front/templates/about.html',
+    directives: [ROUTER_DIRECTIVES],
 })
 export class AboutComponent {
 
