@@ -1,0 +1,26 @@
+<div class="page">
+  <!-- Allow browsers to autocomplete required parameter names -->
+  <datalist id="page-required-parameters">
+    <option *ngFor="let param of requiredParameterNames;"
+            [value]="param">
+  </datalist>
+  
+  <esqulino-server-preview *ngIf="page"
+                           [project]="project"
+                           [page]="page"
+                           [isRendering]="doRenderPreview">
+  </esqulino-server-preview>
+
+  <esqulino-page-data *ngIf="page"
+                      [project]="project"
+                      [page]="page">
+  </esqulino-page-data>
+
+  <div *ngIf="page && showJsonModel"
+       class="alert alert-info">
+    <h6>
+      <span class="fa fa-bug"></span> JSON-Darstellung
+    </h6>
+    <pre>{{ page.toModel() | json }}</pre>
+  </div>
+</div>

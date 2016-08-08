@@ -2,17 +2,17 @@ import {Component, Input, OnInit}       from '@angular/core'
 
 import {
     Page, PageParameter,  QueryReference, QueryReferenceDescription
-} from '../../../shared/page/index'
+} from '../../shared/page/index'
 
-import {Project}                        from '../../project.service'
-import {QueryIconComponent}             from '../../query-icon.component'
+import {Project}                        from '../project.service'
+import {QueryIconComponent}             from '../query-icon.component'
 
 /**
  * Specifying the data that is available to a certain page.
  */
 @Component({
     selector: 'esqulino-page-data',
-    templateUrl: 'app/editor/page/wysiwyg/templates/page-data.html',
+    templateUrl: 'app/editor/page/templates/page-data.html',
     directives : [QueryIconComponent]
 })
 export class PageDataComponent implements OnInit {
