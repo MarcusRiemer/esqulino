@@ -1,59 +1,63 @@
 <div class="jumbotron">
   <div class="container">
     <h1>Willkommen bei esqulino</h1>
-    <p>Eine schülerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Benutzeroberflächen.</p>
+    <p>Eine schülerfreundliche Entwicklungsumgebung für den Umgang mit SQL und Webprogrammierung.</p>
     <p>
-      <a class="btn btn-primary btn-lg"
+      <a [routerLink]="['projects']"
+         class="btn btn-primary btn-lg"
          id="about-examples"
-         href="#"
          role="button">
-        Das kann man damit machen &raquo;
+        Das kann man damit machen
       </a>
     </p>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-4">
-    <h2>Für Schüler</h2>
-    <p>
-      Du wolltest schon immer mal deine eigene Blogsoftware schreiben? Oder einen Geburtstagskalender? Oder eine Webseite zum erfassen von Sammelkarten? (Fast) egal worum es geht, mit esqulino kannst du deine eigenen Webseiten programmieren.
-    </p>
-    <p>
+<div class="card-group">
+  <div class="card">
+    <div class="card-block">
+      <h2 class="card-title">Für Schüler</h2>
+      <p class="card-text about-text">
+        Du wolltest schon immer mal deine eigene Blog&shy;software entwickeln? Oder deine stärksten Pokémon vorzeigen? Interaktive Abenteuer&shy;geschichten schreiben? (Fast) egal worum es geht, mit esqulino kannst du deine eigenen Webseiten programmieren und sie deinen Freunden zeigen.
+      </p>
       <a class="btn btn-secondary"
          id="about-pupils"
          href="#"
          role="button">
-        So funktioniert esqulino &raquo;
+        <span class="fa fa-play" aria-hidden="true"></span>
+        So legst du los
       </a>
-    </p>
+    </div>
   </div>
-  <div class="col-md-4">
-    <h2>Für Lehrer</h2>
-    <p>
-      Konventionelle Entwicklungsumgebungen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. esqulino hingegen passt sich an den Lernfortschritt der Klassengemeinschaft an!
-    </p>
-    <p>
+  <div class="card">
+    <div class="card-block">
+      <h2 class="card-title">Für Lehrer</h2>
+      <p class="card-text about-text">
+        Konventionelle Entwicklungsumgebungen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. esqulino hingegen passt sich an den Lernfortschritt der Klassengemeinschaft an!
+      </p>
       <a class="btn btn-secondary"
          id="about-teachers"
          href="#"
          role="button">
-        Das esqulino Konzept &raquo;
+        <span class="fa fa-cogs" aria-hidden="true"></span>
+        Das esqulino Konzept
       </a>
-    </p>
+    </div>
   </div>
-  <div class="col-md-4">
-    <h2>Für Entwickler</h2>
-    <p>
-      Leider gibt es viel zu wenig Lernsoftware für den Einstieg in die Webentwicklung. Wenn du dabei helfen möchtest, Kinder und Jugendliche für SQL und HTML zu begeistern, bist du herzlich dazu eingeladen zum quelloffenen esqulino Projet beizutragen.
-    </p>
-    <p>
+  <div class="card">
+    <div class="card-block">
+      <h2 class="card-title">Für Entwickler</h2>
+      <p class="card-text about-text">
+        Leider gibt es viel zu wenig Lern&shy;software für den Einstieg in die Web&shy;entwicklung. Wenn du dabei helfen möchtest, Kinder und Jugendliche für SQL und HTML zu begeistern, bist du herzlich dazu eingeladen zum quelloffenen esqulino Projekt beizutragen.
+      </p>
       <a class="btn btn-secondary"
          id="about-developers"
          href="https://bitbucket.org/marcusriemer/esqulino"
          role="button">
-        esqulino Git-Repository &raquo;
+        <span class="fa fa-code-fork" aria-hidden="true"></span>
+        esqulino Git-Repository
       </a>
-    </p>
+    </div>
   </div>
 </div>
+
