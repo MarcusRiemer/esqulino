@@ -36,6 +36,33 @@ class EsqulinoCli
         exit
       end
 
+      opts.on("--check-version", "Checks whether this installation is up2date") do
+        version = nil
+
+        self.print_progress_line "Version check - Fetching remote version" do
+          version = check_against_master_repo()
+        end
+
+        if not version.nil? then
+          self.print_indent do
+            self.status "Local Version:"
+            self.print_indent do
+              self.status "Rev : #{version[:local][:hash]}"
+              self.status "Date: #{version[:local][:date].httpdate}"
+            end
+          end
+          self.print_indent do
+            self.status "Remote Version:"
+            self.print_indent do
+              self.status "Rev : #{version[:remote][:hash]}"
+              self.status "Date: #{version[:remote][:date].httpdate}"
+            end
+          end
+
+          self.status "Most recent: #{version[:newest]}" unless version[:newest] == :same
+        end
+      end
+
       # Suppressing status output
       opts.on("-q", "--quiet", "Silences status output") do
         @quiet = true
