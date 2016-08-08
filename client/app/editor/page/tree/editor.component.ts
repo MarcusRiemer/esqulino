@@ -17,9 +17,6 @@ import {ServerPreviewComponent}         from '../server-preview.component'
 import {SidebarComponent}               from '../sidebar.component'
 import {PageDataComponent}              from '../page-data.component'
 
-import {PageLayoutComponent}            from './page-layout.component'
-
-
 /**
  * Top level component to edit esqulino pages. This components hosts
  * the components that allow actual editing.
@@ -29,8 +26,8 @@ import {PageLayoutComponent}            from './page-layout.component'
  * sub-components.
  */
 @Component({
-    templateUrl: 'app/editor/page/wysiwyg/templates/editor.html',
-    directives: [PageLayoutComponent, PageDataComponent, ServerPreviewComponent]
+    templateUrl: 'app/editor/page/tree/templates/editor.html',
+    directives: [PageDataComponent, ServerPreviewComponent]
 })
 export class PageEditorComponent implements OnInit, OnDestroy {
     /**
@@ -71,7 +68,7 @@ export class PageEditorComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this._toolbarService.resetItems();
 
-        // Grab the correct project and page
+2        // Grab the correct project and page
         let subRef = this._routeParams.params.subscribe(params => {
             var pageId = params['pageId'];
             this._projectService.activeProject
