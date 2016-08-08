@@ -3,7 +3,7 @@ import {Subject}                from 'rxjs/Subject'
 import {Injectable}             from '@angular/core'
 
 import {
-    Column, Row, RowDescription, WidgetDescription, Widget, 
+    Column, Row, RowDescription, WidgetDescription, WidgetBase, 
     QueryReferenceDescription, ValueReferenceDescription, ColumnReferenceDescription
 } from '../../shared/page/widgets/index'
 
@@ -44,7 +44,7 @@ export interface DropCallbacks {
     /**
      * Called when dropped on a widget
      */
-    onWidget? : (w : Widget) => void
+    onWidget? : (w : WidgetBase) => void
 
     /**
      * Dropped on a parameter mapping
@@ -236,8 +236,8 @@ export class DragService {
     /**
      * @return The active origin flag, if any origin is present
      */
-    get activeOrigin() : OriginFlag {
-        return (this._currentDrag && this._currentDrag.origin);
+    get activeOrigin() : OriginFlag | "" {
+        return (this._currentDrag && this._currentDrag.origin)
     }
 
     /**

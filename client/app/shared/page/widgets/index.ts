@@ -3,7 +3,7 @@ import {
     ParameterMappingDescription
 } from '../page.description'
 
-import {Widget, WidgetDescription}         from './widget'
+import {WidgetBase, WidgetDescription}     from './widget-base'
 import {loadWidget}                        from './widget-loader'
 
 import {Row, RowDescription}               from './row'
@@ -23,7 +23,7 @@ import {Paragraph, ParagraphDescription}       from './paragraph'
 import {QueryTable, QueryTableDescription}     from './query-table'
 
 export {
-    Widget, WidgetDescription,
+    WidgetBase, WidgetDescription,
     Row, RowDescription,
     Column, ColumnDescription,
     QueryAction,

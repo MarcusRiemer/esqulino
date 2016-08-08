@@ -129,6 +129,23 @@ export interface EmbeddedHtmlDescription extends WidgetDescription {
 }
 
 /**
+ * Describes a column that can host certain widgets
+ */
+export interface ColumnDescription extends WidgetDescription {
+    type : "column"
+    width : number
+    widgets : WidgetDescription[]
+}
+
+/**
+ * Describes a row that can host certain cells.
+ */
+export interface RowDescription extends WidgetDescription {
+    type : "row"
+    columns : ColumnDescription[]
+}
+
+/**
  * A widget **requires** at least a type, all other fields are
  * mandated by deriving descriptions. As we don't necesarily
  * know all deriving classes at compile time (they could be
@@ -145,21 +162,6 @@ export interface WidgetDescription {
     // Discriminator value
     type : string
     [additional: string]: any
-}
-
-/**
- * Describes a column that can host certain widgets
- */
-export interface ColumnDescription {
-    width : number
-    widgets : WidgetDescription[]
-}
-
-/**
- * Describes a row that can host certain cells.
- */
-export interface RowDescription {
-    columns : ColumnDescription[]
 }
 
 /**

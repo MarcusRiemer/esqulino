@@ -7,7 +7,7 @@ import {
 
 import {Page}                  from '../../../shared/page/index'
 
-import {Widget}                from '../../../shared/page/widgets/index'
+import {WidgetBase}                from '../../../shared/page/widgets/index'
 
 import {SidebarService}        from '../../sidebar.service'
 
@@ -39,7 +39,7 @@ export class WidgetLoaderComponent implements OnInit {
     /**
      * The widget that requires an editor representation.
      */
-    @Input() widget : Widget;
+    @Input() widget : WidgetBase;
 
     /**
      * The page all these widgets are placed on.

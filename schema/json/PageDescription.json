@@ -47,6 +47,12 @@
         "RowDescription": {
             "type": "object",
             "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "row"
+                    ]
+                },
                 "columns": {
                     "type": "array",
                     "items": {
@@ -60,6 +66,12 @@
         "ColumnDescription": {
             "type": "object",
             "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "column"
+                    ]
+                },
                 "width": {
                     "type": "number"
                 },

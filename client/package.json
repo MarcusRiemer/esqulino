@@ -26,7 +26,7 @@
   "devDependencies": {
     "jasmine-core": "2.4.1",
     "protractor": "3.3.0",
-    "typescript": "^1.8.10",
+    "typescript": "beta",
     "typings":"^1.0.4"
   }
 }

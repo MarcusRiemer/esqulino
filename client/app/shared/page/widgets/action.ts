@@ -6,7 +6,7 @@ import {
     Page, QueryReference, ParameterMapping}
 from '../page'
 
-import {Widget}                           from './widget'
+import {WidgetBase}                           from './widget-base'
 
 export {
     QueryActionDescription, NavigateActionDescription
@@ -16,9 +16,9 @@ export {
  * Any kind of action that should be carried out on the server.
  */
 export abstract class Action {
-    private _widget : Widget;
+    private _widget : WidgetBase;
 
-    constructor(widget : Widget) {
+    constructor(widget : WidgetBase) {
         this._widget = widget;
     }
 
@@ -55,7 +55,7 @@ export class NavigateAction extends Action {
 
     private _external : string;
 
-    constructor(desc : NavigateActionDescription, widget : Widget) {
+    constructor(desc : NavigateActionDescription, widget : WidgetBase) {
         super(widget);
 
         // Making sure the model is valid
@@ -210,7 +210,7 @@ export class NavigateAction extends Action {
 export class QueryAction extends Action {
     private _queryName : string;
 
-    constructor(widget : Widget, desc : QueryActionDescription) {
+    constructor(widget : WidgetBase, desc : QueryActionDescription) {
         super(widget);
         this._queryName = desc.queryName;
     }

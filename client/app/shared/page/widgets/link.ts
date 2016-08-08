@@ -1,19 +1,20 @@
 import {Page}                            from '../page'
+import {Widget, WidgetHost}              from '../hierarchy'
 import {
     LinkDescription, ParameterMappingDescription
 } from '../page.description'
 
-import {Widget, WidgetDescription}       from './widget'
-import {NavigateAction}                  from  './action'
+import {WidgetBase, WidgetDescription}       from './widget-base'
+import {NavigateAction}                      from './action'
 
 export {LinkDescription, ParameterMappingDescription, NavigateAction}
 
-export class Link extends Widget {
+export class Link extends WidgetBase {
     private _text : string
     private _action : NavigateAction
     
-    constructor(desc : LinkDescription, page? : Page) {
-        super("link", page);
+    constructor(desc : LinkDescription, parent? : WidgetHost) {
+        super("link", parent);
 
         this._text = desc.text;
         this._action = new NavigateAction(desc.action, this);

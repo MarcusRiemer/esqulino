@@ -1,19 +1,20 @@
 import {Page}                            from '../page'
 import {HeadingDescription}              from '../page.description'
+import {Widget, WidgetHost}              from '../hierarchy'
 
-import {Widget, WidgetDescription}       from './widget'
+import {WidgetBase, WidgetDescription}   from './widget-base'
 
 export {HeadingDescription}
 
 /**
  * A heading.
  */
-export class Heading extends Widget {
+export class Heading extends WidgetBase {
     private _text : string;
     private _level : number;
     
-    constructor(desc : HeadingDescription, page? : Page) {
-        super("heading", page);
+    constructor(desc : HeadingDescription, parent? : WidgetHost) {
+        super("heading", parent);
         this._text = desc.text;
         this._level = desc.level;
     }

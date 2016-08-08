@@ -1,14 +1,15 @@
 import {Page}                            from '../page'
 import {QueryTableDescription}           from '../page.description'
+import {Widget, WidgetHost}              from '../hierarchy'
 
-import {Widget, WidgetDescription}       from './widget'
+import {WidgetBase, WidgetDescription}   from './widget-base'
 
 export {QueryTableDescription}
 
 /**
  * Renders a table for a query.
  */
-export class QueryTable extends Widget {
+export class QueryTable extends WidgetBase {
     
     private _queryRefName : string;
 
@@ -17,8 +18,8 @@ export class QueryTable extends Widget {
      */
     private _columns: string[];
 
-    constructor(desc : QueryTableDescription, page? : Page) {
-        super("query-table", page);
+    constructor(desc : QueryTableDescription, parent? : WidgetHost) {
+        super("query-table", parent);
         this._queryRefName = desc.queryRefName;
         this._columns = desc.columns;
     }

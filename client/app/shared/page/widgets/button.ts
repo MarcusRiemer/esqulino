@@ -1,12 +1,13 @@
 import {Page, ParameterMapping}          from '../page'
+import {Widget, WidgetHost}              from '../hierarchy'
 import {
     ButtonDescription, QueryActionDescription
 } from '../page.description'
 
 import {QueryAction}                     from './action'
 import {
-    Widget, WidgetDescription, ParametrizedWidget
-} from './widget'
+    WidgetBase, WidgetDescription, ParametrizedWidget
+} from './widget-base'
 
 export {
     ButtonDescription, QueryAction, ParameterMapping
@@ -20,8 +21,8 @@ export class Button extends ParametrizedWidget {
 
     private _text : string;
 
-    constructor(desc : ButtonDescription, page? : Page) {
-        super("button", page);
+    constructor(desc : ButtonDescription, parent? : WidgetHost) {
+        super("button", parent);
         this._text = desc.text;
 
         // If there is an action, hold on to it

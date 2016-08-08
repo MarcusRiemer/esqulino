@@ -4,17 +4,25 @@ import {Query}                                from '../query'
 
 import {
     PageDescription, PageParameterDescription,
-    ParameterMappingDescription,
     QueryReferenceDescription, WidgetDescription,
     ValueReferenceDescription, ColumnReferenceDescription,
     ColumnDescription, RowDescription,
     CURRENT_API_VERSION
 } from './page.description'
+
+import {
+    ParameterMapping, ParameterMappingDescription
+} from './parameter-mapping'
+
+import {
+    Widget, WidgetHost, isWidgetHost
+} from './hierarchy'
+
 import {Row}                                  from './widgets/row'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
 import {
-    Widget, ParametrizedWidget, UserInputWidget
-} from './widgets/widget'
+    WidgetBase, ParametrizedWidget, UserInputWidget
+} from './widgets/widget-base'
 import {
     ValueReference, ColumnReference, QueryReference
 } from './value-reference'
@@ -25,14 +33,14 @@ export {
     ValueReferenceDescription, ColumnReferenceDescription,
     QueryReferenceDescription,
     ValueReference, ColumnReference, QueryReference,
-    ParameterMappingDescription,
+    ParameterMapping, ParameterMappingDescription,
     CURRENT_API_VERSION
 }
 
 /**
  * The in-memory representation of a page.
  */
-export class Page extends ProjectResource {
+export class Page extends ProjectResource implements WidgetHost {
     private _rows : Row[] = [];
     private _referencedQueries : QueryReference[] = [];
     private _parameters : PageParameter[] = [];
@@ -58,6 +66,13 @@ export class Page extends ProjectResource {
         if (desc.parameters) {
             this._parameters = desc.parameters.map(p => new PageParameter(this, p));
         }
+    }
+
+    /**
+     * @return This page, used to end recursion for `WidgetHost`s
+     */
+    get page() {
+        return (this);
     }
 
     /**
@@ -134,12 +149,12 @@ export class Page extends ProjectResource {
 
         // Ensure column index
         const row = this._rows[rowIndex];
-        if (columnIndex >= row.columns.length) {
-            throw new Error(`Adding widget ("${JSON.stringify(widget)}") exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.columns.length}`);
+        if (columnIndex >= row.children.length) {
+            throw new Error(`Adding widget ("${JSON.stringify(widget)}") exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.children.length}`);
         }
 
         // Attempt to add the widget
-        const column = row.columns[columnIndex];
+        const column = row.children[columnIndex];
         column.addWidget(widget, widgetIndex);
 
         this.markDirty();
@@ -156,12 +171,12 @@ export class Page extends ProjectResource {
 
         // Ensure column index
         const row = this._rows[rowIndex];
-        if (columnIndex >= row.columns.length) {
-            throw new Error(`Removing widget exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.columns.length}`);
+        if (columnIndex >= row.children.length) {
+            throw new Error(`Removing widget exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.children.length}`);
         }
 
-        const column = row.columns[columnIndex];
-        column.removeWidgetByIndex(widgetIndex);
+        const column = row.children[columnIndex];
+        column.removeChildByIndex(widgetIndex);
 
         this.markDirty();
     }
@@ -169,29 +184,34 @@ export class Page extends ProjectResource {
     /**
      * Removes a specific widget.
      */
-    removeWidget(widgetRef : any) {
-        // As we have no information about the position, we need to check
-        // every row ...
-        const deleted = this._rows.some(r => {
-            // ... and every column ...
-            const toReturn = r.columns.some(c => {
-                // ... for the correct index to remove
-                const index = c.widgets.findIndex(w => w == widgetRef);
-                if (index >= 0) {
-                    c.removeWidgetByIndex(index);
-                    this.markDirty();
-                    return (true);
-                } else {
-                    return (false);
-                }
-            });
-
-            return (toReturn);
-        });
-
-        if (!deleted) {
-            throw new Error(`Could not remove widget ("${JSON.stringify(widgetRef.toModel())}"): Not found in any cell`);
+    removeWidget(widgetRef : Widget, recursive : boolean) {
+        const index = this.children.findIndex(rhs => widgetRef === rhs);
+        if (index >= 0) {
+            // Immediatly found, what a success
+            this.removeChildByIndex(index);
+            return (true);
+        } else if (recursive) {
+            // Not found, but a child might be lucky enough.
+            // Yes, this is a call to `some` with a side-effect. That actually is
+            // a little creepy ...
+            return (this.hostingChildren.some(c => c.removeWidget(widgetRef, recursive)));
+        } else {
+            // Not found and no recursion allowed.
+            return (false);
         }
+    }
+
+    /**
+     * Removes something at a specific index.
+     */
+    removeChildByIndex(index : number) {
+        const length = this.children.length;
+        if (index < 0 || index >= length) {
+            throw new Error(`Attempted to remove child a ${index}, length is ${length}`);
+        }
+        
+        this.children.splice(index, 1);
+        this.markDirty();
     }
 
     /**
@@ -302,7 +322,22 @@ export class Page extends ProjectResource {
     }
 
     /**
-     * @return All widgets that are in use on this page.
+     * @return All immediate children of the page itself.
+     */
+    get children() : Widget[] {
+        return (this._rows);
+    }
+
+    /**
+     * @return All children that may have children themselves.
+     */
+    get hostingChildren() :  WidgetHost[] {
+        const toReturn : WidgetHost[] = (this.children.filter(isWidgetHost)) as any[];
+        return (toReturn);
+    }
+
+    /**
+     * @return All widgets are in use on this page.
      */
     get allWidgets() : Widget[] {
         const subs = this._rows.map(c => c.widgets);
@@ -345,7 +380,7 @@ export class Page extends ProjectResource {
         }
 
         if (this._rows.length > 0) {
-            toReturn.rows = this._rows.map(r => r.toModel());
+            toReturn.rows = this._rows.map(r => r.toModel()) as RowDescription[];
         }
 
         if (this._parameters.length > 0) {
@@ -353,100 +388,6 @@ export class Page extends ProjectResource {
         }
         
         return (toReturn);
-    }
-}
-
-/**
- * This class bridges the fact that the page uses a namespaced data model
- * while the queries do not. This class maps variables with prefixes like 
- * "input" or "get" (these are used on the page) to the unprefixed queries.
- *
- * As everything that is named a "parameter" does also act as a "value provider"
- * for its receiving site the nomenclature is a bit difficult to come by.
- */
-export class ParameterMapping {
-    private _paramName : string;
-
-    private _providingName : string;
-
-    private _page : Page;
-
-    constructor(page : Page, desc : ParameterMappingDescription) {
-        this._page = page;
-        
-        this._paramName = desc.parameterName;
-        this._providingName = desc.providingName;
-    }
-
-    /**
-     * @return True, if this mapping is fulfilled by the page it is assigned to.
-     */
-    get isSatisfied() : boolean {
-        return (this._paramName && this._page.hasParameterProvider(this._providingName));
-    }
-
-    /**
-     * @return The name of the thing that provides the value to the required value.
-     */
-    get providingName() {
-        return (this._providingName);
-    }
-
-    /**
-     * @param value The name of the thing that provides the value to the required value.
-     */
-    set providingName(value : string) {
-        if (value.indexOf('.') < 0) {
-            throw new Error(`Attempted to set provider name without domain: ${value}`);
-        }
-        
-        this._providingName = value;
-    }
-
-    /**
-     * @return The name of the wired parameter
-     */
-    get parameterName() {
-        return (this._paramName);
-    }
-
-    /**
-     * @param value The name of the wired parameter
-     */
-    set parameterName(value : string) {
-        this._paramName = value;
-    }
-
-    /**
-     * A not so nice leaky abstraction: The UI wants to display an icon for the
-     * providing side of the mapping in various places.
-     *
-     * @return A font-awesome iconclass for the 
-     */
-    get providingIconClass() {
-        if (!this.providingName || this.providingName.length == 0) {
-            // There is no provider set
-            return ("fa-sign-in");
-        } else if (!this.isSatisfied) {
-            // A provider is set, but it doesn't actually provide anything
-            return ("fa-warning");
-        } else if (this.providingName.startsWith("input.")) {
-            // Provider is an input element
-            return ("fa-keyboard-o");
-        } else if (this.providingName.startsWith("get.")) {
-            // Provider is a request parameter
-            return ("fa-link");
-        } else {
-            // Neutral icon: Provider still needed
-            return ("fa-sign-in");
-        }
-    }
-
-    toModel() : ParameterMappingDescription {
-        return ({
-            parameterName : this._paramName,
-            providingName : this._providingName
-        });
     }
 }
 

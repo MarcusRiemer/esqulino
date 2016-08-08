@@ -1,7 +1,8 @@
 import {Page}                            from '../page'
 import {EmbeddedHtmlDescription}         from '../page.description'
+import {Widget, WidgetHost}              from '../hierarchy'
 
-import {Widget, WidgetDescription}       from './widget'
+import {WidgetBase, WidgetDescription}   from './widget-base'
 
 export {EmbeddedHtmlDescription}
 
@@ -10,11 +11,11 @@ export {EmbeddedHtmlDescription}
  * (currently) does absolutly *no checking* whether the given
  * html is valid or not.
  */
-export class EmbeddedHtml extends Widget {
+export class EmbeddedHtml extends WidgetBase {
     private _html : string;
     
-    constructor(desc : EmbeddedHtmlDescription, page? : Page) {
-        super("embedded-html", page);
+    constructor(desc : EmbeddedHtmlDescription, parent? : WidgetHost) {
+        super("embedded-html", parent);
         this._html = desc.html;
     }
 

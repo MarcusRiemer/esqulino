@@ -1,23 +1,25 @@
-import {Page, RowDescription}      from '../page'
+import {
+    Page, RowDescription, ColumnDescription
+} from '../page'
 
 import {Column}                    from './column'
-import {Widget}                    from './widget'
+import {
+    HostingWidget, WidgetHost, WidgetBase,
+} from './widget-base'
 
 export {RowDescription}
 
 /**
  * Rows are the top-level element of most pages.
  */
-export class Row {
+export class Row extends HostingWidget {
     private _columns : Column[];
 
-    private _page : Page;
-
-    constructor(desc : RowDescription, page? : Page) {
-        this._page = page;
+    constructor(desc : RowDescription, parent? : WidgetHost) {
+        super("row", parent);
         
         // Create all referenced columns
-        this._columns = desc.columns.map(columnDesc => new Column(columnDesc, page));
+        this._columns = desc.columns.map(columnDesc => new Column(columnDesc, parent));
     }
 
     /**
@@ -26,7 +28,9 @@ export class Row {
      */
     static get emptyDescription() : RowDescription {
         return ({
+            type : "row",
             columns : [{
+                type : "column",
                 widgets : [],
                 width : 12
             }]
@@ -36,21 +40,14 @@ export class Row {
     /**
      * @return All columns that are part of this row
      */
-    get columns() {
+    get children() {
         return (this._columns);
     }
 
-    /**
-     * @return All widgets across all columns.
-     */
-    get widgets() : Widget[] {
-        const subs = this._columns.map(c => c.widgets);
-        return ([].concat(...subs));
-    }
-
-    toModel() : RowDescription {
+    protected toModelImpl() : RowDescription {
         return ({
-            columns : this._columns.map(c => c.toModel())
+            type : "row",
+            columns : this._columns.map(c => c.toModel()) as ColumnDescription[]
         });
     }
 }
