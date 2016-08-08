@@ -1,170 +1,176 @@
 {
-    "description": "Fully self-contained request to render an arbitrary page. Because\n\nthe development state in the browser could differ significantly\n\nfrom the state stored on the server this description specifies all\n\nrelevant data at once.",
-    "type": "object",
-    "properties": {
-        "sourceType": {
-            "type": "string"
-        },
-        "source": {
-            "type": "string"
-        },
-        "page": {
-            "$ref": "#/definitions/PageDescription"
-        },
-        "queries": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "sql": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": false
-            }
-        },
-        "params": {
-            "type": "object",
-            "additionalProperties": {
-                "type": "string"
-            }
-        }
+  "description": "Fully self-contained request to render an arbitrary page. Because\n\nthe development state in the browser could differ significantly\n\nfrom the state stored on the server this description specifies all\n\nrelevant data at once.",
+  "type": "object",
+  "properties": {
+    "sourceType": {
+      "type": "string"
     },
-    "additionalProperties": false,
-    "definitions": {
-        "PageDescription": {
-            "type": "object",
-            "properties": {
-                "rows": {
-                    "description": "Rows are the top-level element for the whole layout,\n\nfor the moment no other type of widget is expected.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/RowDescription",
-                        "description": "Describes a row that can host certain cells."
-                    }
-                },
-                "referencedQueries": {
-                    "description": "IDs of queries that are referenced in this page. Only\n\nthese queries provide additional DB information that can\n\nbe used on this page.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/QueryReferenceDescription",
-                        "description": "Referenced queries are always accompanied by a human-readable\n\nname. This is required if the same query is going to be used\n\nmultiple times on a single page."
-                    }
-                },
-                "parameters": {
-                    "description": "All parameters that are required to render this page. These\n\nare usually satisfied via GET parameters",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/PageParameterDescription",
-                        "description": "A parameter that is required to render a page."
-                    }
-                },
-                "id": {
-                    "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\n\nThese IDs must *never* change and should be UUIDs, so that they are\n\nglobally unique.",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "The user-chosen name of this resource. This property is free to change.",
-                    "type": "string"
-                },
-                "apiVersion": {
-                    "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with.",
-                    "type": "string",
-                    "enum": [
-                        "1"
-                    ]
-                }
-            },
-            "additionalProperties": false
+    "source": {
+      "type": "string"
+    },
+    "page": {
+      "$ref": "#/definitions/PageDescription"
+    },
+    "queries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "sql": {
+            "type": "string"
+          }
         },
-        "RowDescription": {
-            "type": "object",
-            "properties": {
-                "columns": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/ColumnDescription",
-                        "description": "Describes a column that can host certain widgets"
-                    }
-                }
-            },
-            "additionalProperties": false
+        "additionalProperties": false
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "PageDescription": {
+      "type": "object",
+      "properties": {
+        "rows": {
+          "description": "Rows are the top-level element for the whole layout,\n\nfor the moment no other type of widget is expected.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RowDescription",
+            "description": "Describes a row that can host certain cells."
+          }
         },
-        "ColumnDescription": {
-            "type": "object",
-            "properties": {
-                "width": {
-                    "type": "number"
-                },
-                "widgets": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/WidgetDescription",
-                        "description": "A widget **requires** at least a type, all other fields are\n\nmandated by deriving descriptions. As we don't necesarily\n\nknow all deriving classes at compile time (they could be\n\nprovided by a plugin) we poke a hole in the type system\n\nhere.\n\n\n\nThe following annotion is required to allow additional\n\nproperties in the automatically generated JSON schema, see\n\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
-                        "additionalProperties": true
-                    }
-                }
-            },
-            "additionalProperties": false
+        "referencedQueries": {
+          "description": "IDs of queries that are referenced in this page. Only\n\nthese queries provide additional DB information that can\n\nbe used on this page.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryReferenceDescription",
+            "description": "Referenced queries are always accompanied by a human-readable\n\nname. This is required if the same query is going to be used\n\nmultiple times on a single page."
+          }
         },
-        "WidgetDescription": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string"
-                }
-            },
+        "parameters": {
+          "description": "All parameters that are required to render this page. These\n\nare usually satisfied via GET parameters",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PageParameterDescription",
+            "description": "A parameter that is required to render a page."
+          }
+        },
+        "id": {
+          "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\n\nThese IDs must *never* change and should be UUIDs, so that they are\n\nglobally unique.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The user-chosen name of this resource. This property is free to change.",
+          "type": "string"
+        },
+        "apiVersion": {
+          "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with.",
+          "type": "string",
+          "enum": [
+            "1"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "RowDescription": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type" : "string"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ColumnDescription",
+            "description": "Describes a column that can host certain widgets"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ColumnDescription": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "number"
+        },
+        "type": {
+          "type" : "string"
+        },
+        "widgets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WidgetDescription",
+            "description": "A widget **requires** at least a type, all other fields are\n\nmandated by deriving descriptions. As we don't necesarily\n\nknow all deriving classes at compile time (they could be\n\nprovided by a plugin) we poke a hole in the type system\n\nhere.\n\n\n\nThe following annotion is required to allow additional\n\nproperties in the automatically generated JSON schema, see\n\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
             "additionalProperties": true
-        },
-        "QueryReferenceDescription": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "query"
-                    ]
-                },
-                "queryId": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "mapping": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/ParameterMappingDescription",
-                        "description": "Inputs and outputs *may* use identical names but are not required\n\nto do so."
-                    }
-                }
-            },
-            "additionalProperties": false
-        },
-        "ParameterMappingDescription": {
-            "type": "object",
-            "properties": {
-                "parameterName": {
-                    "type": "string"
-                },
-                "providingName": {
-                    "type": "string"
-                }
-            },
-            "additionalProperties": false
-        },
-        "PageParameterDescription": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            },
-            "additionalProperties": false
+          }
         }
+      },
+      "additionalProperties": false
     },
-    "$schema": "http://json-schema.org/draft-04/schema#"
+    "WidgetDescription": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "QueryReferenceDescription": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "query"
+          ]
+        },
+        "queryId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "mapping": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ParameterMappingDescription",
+            "description": "Inputs and outputs *may* use identical names but are not required\n\nto do so."
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ParameterMappingDescription": {
+      "type": "object",
+      "properties": {
+        "parameterName": {
+          "type": "string"
+        },
+        "providingName": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PageParameterDescription": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-04/schema#"
 }

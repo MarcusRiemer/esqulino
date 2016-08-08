@@ -7,6 +7,7 @@
       In diesem Editor kannst du das Layout deiner Seite mit Hilfe von Zeilen und Spalten festlegen.
     </p>
   </div>
+  
   <div class="card-block">      
     <div class="container-fluid page-preview">
       <!-- "Zeroeth row" -->
@@ -15,12 +16,12 @@
            (drop)="onBlueprintRowDrop($event, 0)"
            class="row blueprint">
         <!-- Blueprint columns for a valid dragged row -->
-        <div *ngFor="let col of draggedRow?.row?.columns"
+        <div *ngFor="let col of draggedRow?.row?.children"
              (dragover)="onBlueprintColumnDrag($event, rowIndex + 1, colIndex + 1)"
              (drop)="onBlueprintColumnDrop($event, rowIndex + 1, colIndex + 1)"
              [ngClass]="col.columnClasses">
           <esqulino-widget-loader
-              *ngFor="let widget of col.widgets; let widgetIndex = index;"
+              *ngFor="let widget of col.children; let widgetIndex = index;"
               [widget]="widget"
               [page]="page">
           </esqulino-widget-loader>
@@ -32,19 +33,19 @@
         </div>
       </div>
       <!-- Actual rows, structure identical to above -->
-      <template ngFor let-row [ngForOf]="page?.rows" let-rowIndex="index">
+      <template ngFor let-row [ngForOf]="page?.children" let-rowIndex="index">
         <div (dragover)="onBlueprintRowDrag($event, rowIndex + 1)"
              (drop)="onBlueprintRowDrop($event, rowIndex + 1)"
              (dragstart)="startRowDrag($event, row, rowIndex)"
              [hidden]="!showRow(rowIndex)"
              class="row"
              draggable="true">
-          <div *ngFor="let col of row.columns; let colIndex = index;"
+          <div *ngFor="let col of row.children; let colIndex = index;"
                (dragover)="onBlueprintColumnDrag($event, rowIndex + 1, colIndex + 1, 0)"
                (drop)="onBlueprintColumnDrop($event, rowIndex + 1, colIndex + 1, 0)"
                [ngClass]="col.columnClasses">
             <esqulino-widget-loader
-                *ngFor="let widget of col.widgets; let widgetIndex = index;"
+                *ngFor="let widget of col.children; let widgetIndex = index;"
                 (dragover)="onBlueprintColumnDrag($event, rowIndex + 1, colIndex + 1, widgetIndex + 1)"
                 (drop)="onBlueprintColumnDrop($event, rowIndex + 1, colIndex + 1, widgetIndex + 1)"
                 (dragstart)="startWidgetDrag($event, widget, rowIndex, colIndex, widgetIndex)"
@@ -59,10 +60,10 @@
              (dragover)="onBlueprintRowDrag($event, rowIndex + 1)"
              (drop)="onBlueprintRowDrop($event, rowIndex + 1)"
              class="row blueprint">
-          <div *ngFor="let col of draggedRow?.row?.columns"
+          <div *ngFor="let col of draggedRow?.row?.children"
                [ngClass]="col.columnClasses">
             <esqulino-widget-loader
-                *ngFor="let widget of col.widgets; let widgetIndex = index;"
+                *ngFor="let widget of col.children; let widgetIndex = index;"
                 [widget]="widget"
                 [page]="page">
             </esqulino-widget-loader>
