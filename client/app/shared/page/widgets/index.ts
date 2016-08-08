@@ -2,6 +2,10 @@ import {
     ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription,
     ParameterMappingDescription
 } from '../page.description'
+import {
+    isWidget, isWidgetHost, Widget, WidgetHost
+} from '../hierarchy'
+
 
 import {WidgetBase, WidgetDescription}     from './widget-base'
 import {loadWidget}                        from './widget-loader'
@@ -24,6 +28,7 @@ import {QueryTable, QueryTableDescription}     from './query-table'
 
 export {
     WidgetBase, WidgetDescription,
+    WidgetHost, Widget, isWidgetHost, isWidget,
     Row, RowDescription,
     Column, ColumnDescription,
     QueryAction,

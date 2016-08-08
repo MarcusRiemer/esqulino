@@ -3,7 +3,7 @@ import {Subject}                from 'rxjs/Subject'
 import {Injectable}             from '@angular/core'
 
 import {
-    Column, Row, RowDescription, WidgetDescription, WidgetBase, 
+    Column, Row, RowDescription, WidgetDescription, WidgetBase, WidgetHost, 
     QueryReferenceDescription, ValueReferenceDescription, ColumnReferenceDescription
 } from '../../shared/page/widgets/index'
 
@@ -32,19 +32,9 @@ export interface DropCallbacks {
     onRemove? : () => void
 
     /**
-     * Called when dropped on an existing row of a page
-     */
-    onRow? : (r : Row) => void
-
-    /**
-     * Called when dropped on an existing column of a page
-     */
-    onColumn? : (c : Column) => void
-
-    /**
      * Called when dropped on a widget
      */
-    onWidget? : (w : WidgetBase) => void
+    onWidget? : (w : WidgetHost) => void
 
     /**
      * Dropped on a parameter mapping
@@ -61,14 +51,21 @@ export interface DropCallbacks {
  * The "one-size-fits-all"-approach to shared state: A record
  * with loads of optional values.
  */
-export interface PageDragEvent {
+export class PageDragEvent {
     origin : OriginFlag
     callbacks? : DropCallbacks
-    row? : RowDescription
     queryRef? : QueryReferenceDescription
-    columnRef? : DragColumnDescription
     widget? : WidgetDescription
     parameterValueProvider? : string
+    columnRef? : DragColumnDescription
+    
+    get row() : RowDescription {
+        if (this.widget && this.widget.type === "row") {
+            return (this.widget as RowDescription);
+        } else {
+            return (undefined);
+        }
+    }
 }
 
 /**
@@ -102,7 +99,6 @@ export class DragService {
             this._currentDrag.callbacks = {}
         }
         
-
         // Serialize the dragged "thing"
         const dragData = JSON.stringify(this._currentDrag);
         evt.dataTransfer.setData('text/plain', dragData);
@@ -137,25 +133,6 @@ export class DragService {
     }
 
     /**
-     * Starts dragging a row
-     *
-     * @param evt The DragEvent that is provided by the browser?
-     * @param origin Where did this drag start?
-     * @param rowDesc How does the dragged row look like?
-     * @param callbacks Which events could be fired?
-     */
-    startRowDrag(evt : DragEvent,
-                 origin : OriginFlag,
-                 rowDesc : RowDescription,
-                 callbacks? : DropCallbacks) {
-        this.dragStart(evt, {
-            origin : origin,
-            row : rowDesc,
-            callbacks : callbacks
-        })
-    }
-
-    /**
      * Starts dragging a reference to a query.
      *
      * @param evt The DragEvent that is provided by the browser?
@@ -170,7 +147,8 @@ export class DragService {
         this.dragStart(evt, {
             origin : origin,
             queryRef : queryRef,
-            callbacks : callbacks
+            callbacks : callbacks,
+            row : undefined
         });
     }
 
@@ -189,7 +167,8 @@ export class DragService {
         this.dragStart(evt, {
             origin : origin,
             columnRef : columnRef,
-            callbacks : callbacks
+            callbacks : callbacks,
+            row : undefined
         });
     }
 
@@ -209,6 +188,7 @@ export class DragService {
             origin : origin,
             widget : widget,
             callbacks : callbacks,
+            row : undefined
         })
     }
 
@@ -222,7 +202,8 @@ export class DragService {
         this.dragStart(evt, {
             origin : origin,
             parameterValueProvider : valueProviderName,
-            callbacks : callbacks
+            callbacks : callbacks,
+            row : undefined
         });
     }
 

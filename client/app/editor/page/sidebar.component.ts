@@ -155,7 +155,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
      * empty row.
      */
     startRowDrag(evt : DragEvent) {
-        this._dragService.startRowDrag(evt, "sidebar", Row.emptyDescription);
+        this._dragService.startWidgetDrag(evt, "sidebar", Row.emptyDescription);
     }
 
      /**
