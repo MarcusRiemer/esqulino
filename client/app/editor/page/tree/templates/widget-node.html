@@ -1,0 +1,17 @@
+<div class="tree-level block-container">
+  <span [class.block]="isBlock">
+    <span class="widget">{{ widget.type }}</span>
+  </span>
+  <span *ngIf="widget.text"
+        class="text"
+        [class.block]="isBlock">{{ widget.text }}</span>
+  <esqulino-widget-node *ngFor="let widget of children"
+                        [widget]="widget">
+  </esqulino-widget-node>
+
+  <span [class.block]="isBlock">
+    <span *ngIf="needsClosingNode"
+          class="widget-close">{{ widget.type }}</span>
+  </span>
+
+</div>

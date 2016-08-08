@@ -1,0 +1,22 @@
+.page-preview {
+    /* First level is unstyled */
+    .tree-level {
+        border-left: 0px dotted grey;
+        padding-left: 0px;
+    }
+
+    /* All following level are styled */
+    .tree-level .tree-level {
+        border-left: 2px solid grey;
+        padding-left: 20px;
+    }
+
+    .block {
+        display: block;
+    }
+
+    .text {
+        line-height: 1;
+    }
+}
+

@@ -87,6 +87,24 @@
     border: 2px solid rgba(255, 255, 0, 0.9);
 }
 
+.block-container .widget {
+    border-radius: 5px;
+    white-space: nowrap;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(0, 0, 0, 0.9);
+}
+
+.block-container .widget-close {
+    border-radius: 5px;
+    white-space: nowrap;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(0, 0, 0, 0.4);
+}
+
 .block-container .table.error {
     background-color: rgba(255,0,0,0.6);
     border: 2px solid rgba(255,0,0,1);
