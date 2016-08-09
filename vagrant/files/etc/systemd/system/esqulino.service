@@ -1,0 +1,10 @@
+[Unit]
+Description=esqulino - A SQL IDE targeted at pupils
+
+[Install]
+WantedBy=default.target
+
+[Service]
+User=vagrant
+WorkingDirectory=/srv/esqulino/server/
+ExecStart=/usr/bin/make run
