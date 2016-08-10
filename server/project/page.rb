@@ -192,7 +192,10 @@ class Page
     
     # Each query gets its own fresh set of parameters
     params = {}
-    query_ref['mapping'].each do |mapping|
+
+    # Not-quite-so-wellformed models may omit the mapping, this
+    # shouldn't crash anything immediatly.
+    query_ref.fetch('mapping', {}).each do |mapping|
       puts "Handling mapping #{mapping.inspect}"
 
       # Extract all relevant indizes
