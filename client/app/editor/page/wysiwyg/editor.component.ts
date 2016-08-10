@@ -9,11 +9,11 @@ import {ToolbarService}                 from '../../toolbar.service'
 
 import {PageEditor}                     from '../page-editor'
 import {ServerPreviewComponent}         from '../server-preview.component'
-import {SidebarComponent}               from '../sidebar.component'
+import {SidebarDataComponent}           from '../sidebar-data.component'
+import {SidebarWidgetsComponent}        from '../sidebar-widgets.component'
 import {PageDataComponent}              from '../page-data.component'
 
 import {PageLayoutComponent}            from './page-layout.component'
-
 
 /**
  * A WYSIWYG-editor for pages.

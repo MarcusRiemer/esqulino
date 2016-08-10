@@ -4,8 +4,9 @@ import {BehaviorSubject}             from 'rxjs/BehaviorSubject'
 import {Observable}                  from 'rxjs/Observable'
 
 import {SIDEBAR_MODEL_TOKEN}         from './editor.token'
-import * as Query                    from './query/sidebar.component'
-import * as Page                     from './page/sidebar.component'
+import {SidebarComponent}            from './query/sidebar.component'
+import {SidebarDataComponent}        from './page/sidebar-data.component'
+import {SidebarWidgetsComponent}     from './page/sidebar-widgets.component'
 
 /**
  * Manages the global state of the sidebar.
@@ -13,7 +14,7 @@ import * as Page                     from './page/sidebar.component'
 @Injectable()
 export class SidebarService {
     
-    private _model : BehaviorSubject<SidebarModel>;
+    private _model : BehaviorSubject<SidebarModel[]>;
 
     /**
      * Valid types for sidebars.
@@ -22,20 +23,22 @@ export class SidebarService {
     private _knownTypes : { [typeName:string] : Type} = { };
 
     constructor() {
-        this._model = new BehaviorSubject<SidebarModel>(undefined);
+        this._model = new BehaviorSubject<SidebarModel[]>([]);
 
-        const pageId = Page.SidebarComponent.SIDEBAR_IDENTIFIER;
-        const queryId = Query.SidebarComponent.SIDEBAR_IDENTIFIER;
+        const pageDataId = SidebarDataComponent.SIDEBAR_IDENTIFIER;
+        const pageWidgetsId = SidebarWidgetsComponent.SIDEBAR_IDENTIFIER;
+        const queryId = SidebarComponent.SIDEBAR_IDENTIFIER;
 
-        this.registerType(pageId, Page.SidebarComponent);
-        this.registerType(queryId, Query.SidebarComponent);
+        this.registerType(pageDataId, SidebarDataComponent);
+        this.registerType(pageWidgetsId, SidebarWidgetsComponent);
+        this.registerType(queryId, SidebarComponent);
     }
 
     /**
      * Hides the currently shown sidebar.
      */
     hideSidebar() {
-        this._model.next(undefined);
+        this._model.next([]);
     }
 
     /**
@@ -69,21 +72,44 @@ export class SidebarService {
     /**
      * Triggers showing a different sidebar.
      * 
-     * @newType The new type of sidebar to show. This is a string, but
-     *          the identifier should be retrieved using the 
-     *          SIDEBAR_IDENTIFIER property of the Sidebar Component you
-     *          are using.
+     * @param newType The new type of sidebar to show. This is a
+     *    string, but the identifier should be retrieved using the 
+     *    SIDEBAR_IDENTIFIER property of the Sidebar Component you
+     *    are using.
+     * @param param The parameter to pass to the sidebar, this depends
+     *    on the sidebar that is going to be displayed.
      */
-    showSidebar(newType : string, param? : any) {
-        if (!this.isKnownType(newType)) {
-            throw new Error(`Unknown sidebar type: ${newType}`);
-        }
+    showSingleSidebar(newType : string, param? : any) {
+        this.showMultiple([
+            { type : newType, param : param }
+        ]);
+    }
+
+    /**
+     * Triggers showing multiple different sidebars.
+     */
+    showMultiple(mult : SidebarModel[]) {
+        // Ensure every type is known. This does not use `every`
+        // but `forEach` with a side-effect because we wan't to
+        // know the offending type.
+        mult.forEach(e => {
+            if (!this.isKnownType(e.type)) {
+                throw new Error(`Unknown sidebar type: ${e.type}`);
+            }
+        });
 
         // Kick off the rendering by placing a new value in the observable
-        this._model.next({
-            type : newType,
-            param : param
-        });
+        this._model.next(mult);
+    }
+
+    /**
+     * Hides a single sidebar.
+     */
+    hideByIndex(index : number) {
+        const model = this._model.getValue();
+        model.splice(index, 1);
+
+        this._model.next(model);
     }
 
     /**
@@ -91,19 +117,19 @@ export class SidebarService {
      *         the visibility of the sidebar changes.
      */
     get isSidebarVisible() : Observable<boolean> {
-        return (this._model.map(s => !!s));
+        return (this._model.map(s => s.length > 0));
     }
 
     /**
      * @return An observable for the current type of the sidebar
      */
-    get sidebarModel() : Observable<SidebarModel> {
+    get sidebarModel() : Observable<SidebarModel[]> {
         return (this._model);
     }
 }
 
 /**
- *
+ * Denotes a sidebar component that should be rendered.
  */
 export interface SidebarModel {
     type : string

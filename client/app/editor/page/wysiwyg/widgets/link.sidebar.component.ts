@@ -1,13 +1,15 @@
-import {Component, Inject, Optional}        from '@angular/core'
+import {Component, Inject, Optional}   from '@angular/core'
 
-import {Link}                               from '../../../../shared/page/widgets/index'
+import {Link}                          from '../../../../shared/page/widgets/index'
 
-import {SIDEBAR_MODEL_TOKEN}                from '../../../editor.token'
+import {SIDEBAR_MODEL_TOKEN}           from '../../../editor.token'
+import {SidebarItemHost}               from '../../../sidebar-item-host.component'
 
-import {LinkComponent}                      from './link.component'
+import {LinkComponent}                 from './link.component'
 
 @Component({
     templateUrl: 'app/editor/page/wysiwyg/widgets/templates/link-sidebar.html',
+    directives : [SidebarItemHost]
 })
 export class LinkSidebarComponent {
 

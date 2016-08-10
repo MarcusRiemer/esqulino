@@ -76,7 +76,7 @@ export class WidgetComponent<TModel> {
      */
     protected onBeginEditing() {
         if (this._sidebarTypeId) {
-            this._sidebarService.showSidebar(this._sidebarTypeId, this);
+            this._sidebarService.showSingleSidebar(this._sidebarTypeId, this);
         }
     }
 

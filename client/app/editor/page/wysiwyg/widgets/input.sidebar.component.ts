@@ -1,14 +1,16 @@
-import {Component, Inject, Optional}        from '@angular/core'
+import {Component, Inject, Optional}   from '@angular/core'
 
-import {SIDEBAR_MODEL_TOKEN}                from '../../../editor.token'
+import {SIDEBAR_MODEL_TOKEN}           from '../../../editor.token'
+import {SidebarItemHost}               from '../../../sidebar-item-host.component'
 
-import {InputComponent, Input}              from './input.component'
+import {InputComponent, Input}         from './input.component'
 
 /**
  * Displays the sidebar editing component for a heading.
  */
 @Component({
     templateUrl: 'app/editor/page/wysiwyg/widgets/templates/input-sidebar.html',
+    directives : [SidebarItemHost]
 })
 export class InputSidebarComponent {
 

@@ -65,7 +65,7 @@ export class QueryEditorComponent implements OnInit {
         private _sidebarService : SidebarService,
         private _preferences : PreferencesService
     ) {
-        this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
+        this._sidebarService.showSingleSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
         this._toolbarService.resetItems();
     }
 

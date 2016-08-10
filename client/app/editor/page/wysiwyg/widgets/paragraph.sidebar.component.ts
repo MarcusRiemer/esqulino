@@ -1,13 +1,15 @@
-import {Component, Inject, Optional}        from '@angular/core'
+import {Component, Inject, Optional}   from '@angular/core'
 
-import {Paragraph}                          from '../../../../shared/page/widgets/index'
+import {Paragraph}                     from '../../../../shared/page/widgets/index'
 
-import {SIDEBAR_MODEL_TOKEN}                from '../../../editor.token'
+import {SIDEBAR_MODEL_TOKEN}           from '../../../editor.token'
+import {SidebarItemHost}               from '../../../sidebar-item-host.component'
 
-import {ParagraphComponent}                 from './paragraph.component'
+import {ParagraphComponent}            from './paragraph.component'
 
 @Component({
     templateUrl: 'app/editor/page/wysiwyg/widgets/templates/paragraph-sidebar.html',
+    directives : [SidebarItemHost]
 })
 export class ParagraphSidebarComponent {
 

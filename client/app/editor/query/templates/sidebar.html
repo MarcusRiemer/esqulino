@@ -1,11 +1,11 @@
-<div *ngIf="!query"
-     class="alert alert-danger"
-     role="alert">
-  <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
-  Keine Abfrage
-</div>
+<sidebar-item-host>
+  <div *ngIf="!query"
+       class="alert alert-danger"
+       role="alert">
+    <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
+    Keine Abfrage
+  </div>
 
-<div class="card-block">
   <div [hidden]="hideTrash"
        (dragenter)="onDeleteDrag($event)"
        (dragover)="onDeleteDrag($event)"
@@ -39,8 +39,6 @@
     </div>
   </div>
 
-</div>
-<div class="card-block">
   <div class="block-container center">
     <div (dragstart)="startCompoundDrag($event)"
          class="expression"
@@ -69,8 +67,6 @@
     </span>
   </div>
 
-</div>
-<div class="card-block">
   <div class="block-container block">
     <!-- Tables that are already present in the query are shown with their columns -->
     <template ngFor let-join [ngForOf]="query?.from?.joinsAndInitial" let-last="last">
@@ -99,5 +95,4 @@
       {{ table.name }}
     </div>
   </div>
-</div>
-
+</sidebar-item-host>

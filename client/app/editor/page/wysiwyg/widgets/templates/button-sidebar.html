@@ -1,6 +1,4 @@
-<div class="card-block">
-  <h4>Knopf</h4>
-
+<sidebar-item-host header="Knopf">
   <fieldset class="form-group">
     <label for="button-sidebar-text">Text</label>
     <input [(ngModel)]="model.text"
@@ -19,6 +17,4 @@
       <span *ngIf="avail.name != avail.query.name">({{ avail.query.name }})</span>
     </option>
   </select>
-
-
-</div>
+</sidebar-item-host>
