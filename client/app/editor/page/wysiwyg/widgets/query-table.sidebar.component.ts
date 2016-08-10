@@ -1,19 +1,14 @@
-import {Component, Inject, Optional}        from '@angular/core'
+import {Component, Inject, Optional}   from '@angular/core'
 
-import {QuerySelect}                        from '../../../../shared/query'
-import {
-    Page, QueryReference
-} from '../../../../shared/page/index'
-import {QueryTable}                         from '../../../../shared/page/widgets/index'
+import {QuerySelect}                   from '../../../../shared/query'
+import {Page, QueryReference}          from '../../../../shared/page/index'
+import {QueryTable}                    from '../../../../shared/page/widgets/index'
 
-import {
-    ProjectService, Project
-} from '../../../project.service'
-import {
-    SIDEBAR_MODEL_TOKEN
-} from '../../../editor.token'
+import {ProjectService, Project}       from '../../../project.service'
+import {SIDEBAR_MODEL_TOKEN}           from '../../../editor.token'
+import {SidebarItemHost}               from '../../../sidebar-item-host.component'
 
-import {QueryTableComponent}                from './query-table.component'
+import {QueryTableComponent}           from './query-table.component'
 
 /**
  * The sidebar-editor for a QueryTable. This is currently in a quite
@@ -21,6 +16,7 @@ import {QueryTableComponent}                from './query-table.component'
  */
 @Component({
     templateUrl: 'app/editor/page/wysiwyg/widgets/templates/query-table-sidebar.html',
+    directives : [SidebarItemHost]
 })
 export class QueryTableSidebarComponent {
 

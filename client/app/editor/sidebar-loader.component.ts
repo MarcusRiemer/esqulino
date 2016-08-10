@@ -19,8 +19,7 @@ import {
 })
 export class SidebarLoaderComponent implements OnInit {
 
-    private _prevType : string;
-    private _prevParam : any;
+    private _prevModel : SidebarModel[] = [];
     
     /**
      * Used for dependency injection
@@ -43,32 +42,46 @@ export class SidebarLoaderComponent implements OnInit {
      * The sidebar service has signaled, that the model to render the sidebar
      * has changed.
      */
-    private onChangedType(newModel : SidebarModel) {
-        // Is this really a new sidebar?
-        if (newModel && (newModel.type !== this._prevType || newModel.param !== this._prevParam)) {
+    private onChangedType(newModel : SidebarModel[]) {
 
-            // Clean up previous components
+        // Checks two individual sidebar models for equality deeper then
+        // reference equality.
+        const modelEqual = (lhs : SidebarModel, rhs : SidebarModel) => {
+            return (lhs.type === rhs.type && lhs.param === rhs.param);
+        };
+
+        // Are those lists of model identical?
+        const identical =
+            newModel.length === this._prevModel.length &&
+            newModel.every((m,i) => modelEqual(m,this._prevModel[i]));
+        
+        // Is this really a new sidebar?
+        if (!identical) {
+            // Then clean up previous components
             this._selfRef.clear();
 
             // Remember previous parameters
-            this._prevType = newModel.type;
-            this._prevParam = newModel.param;
-            
-            // Find out what type to construct
-            const componentType = this._sidebarService.getComponentType(newModel.type);
+            this._prevModel = newModel;
 
-            // Possibly inject data
-            let injector = this._injector;
-            if (newModel.param) {
-                injector = ReflectiveInjector.resolveAndCreate([
-                    provide(SIDEBAR_MODEL_TOKEN, {useValue: newModel.param })
-                ], this._injector);
-            }
-            
-            this._resolver.resolveComponent(componentType)
-                .then( (fac) => {
-                    this._selfRef.createComponent(fac, undefined, injector);
-                });
+            // Add a component for each model
+            newModel.forEach(model => {                
+                // Find out what type to construct
+                const componentType = this._sidebarService.getComponentType(model.type);
+
+                // Possibly inject data
+                let injector = this._injector;
+                if (model.param) {
+                    injector = ReflectiveInjector.resolveAndCreate([
+                        provide(SIDEBAR_MODEL_TOKEN, {useValue: model.param })
+                    ], this._injector);
+                }
+
+                // And actually create the component
+                this._resolver.resolveComponent(componentType)
+                    .then( (fac) => {
+                        this._selfRef.createComponent(fac, undefined, injector);
+                    });
+            });
         }
     }
 }

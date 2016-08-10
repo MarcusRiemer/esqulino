@@ -14,7 +14,8 @@ import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 
 import {ServerPreviewComponent}         from './server-preview.component'
-import {SidebarComponent}               from './sidebar.component'
+import {SidebarDataComponent}           from './sidebar-data.component'
+import {SidebarWidgetsComponent}        from './sidebar-widgets.component'
 
 /**
  * Base class for components that edit esqulino pages.
@@ -53,7 +54,17 @@ export class PageEditor implements OnInit, OnDestroy {
         private _sidebarService : SidebarService,
         private _preferences : PreferencesService
     ) {
-        this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
+        this.showDefaultSidebars();
+    }
+
+    /**
+     * Reverts sidebars back to normal.
+     */
+    private showDefaultSidebars() : void {
+        this._sidebarService.showMultiple([
+            { type : SidebarWidgetsComponent.SIDEBAR_IDENTIFIER },
+            { type : SidebarDataComponent.SIDEBAR_IDENTIFIER }
+        ]);
     }
 
     /**
@@ -72,7 +83,7 @@ export class PageEditor implements OnInit, OnDestroy {
                     this._page = this._project.getPageById(pageId);
 
                     // The active page has changed: Reset render preview and sidebar
-                    this._sidebarService.showSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
+                    this.showDefaultSidebars();
                     this.doRenderPreview = false;
                 });
         })

@@ -1,10 +1,7 @@
 import {Component, OnInit, OnDestroy}   from '@angular/core'
 import {ActivatedRoute, Router}         from '@angular/router'
 
-import {Query, ResultColumn}            from '../../shared/query'
-import {
-    Page, QueryReference, ParameterMapping
-} from '../../shared/page/index'
+import {Page, ParameterMapping}         from '../../shared/page/index'
 import {
     Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml, Link
 } from '../../shared/page/widgets/index'
@@ -12,8 +9,7 @@ import {
 import {
     ProjectService, Project
 } from '../project.service'
-
-import {QueryIconComponent}             from '../query-icon.component'
+import {SidebarItemHost}                from '../sidebar-item-host.component'
 
 import {DragService, PageDragEvent}     from './drag.service'
 
@@ -23,15 +19,15 @@ import {DragService, PageDragEvent}     from './drag.service'
  * dropped if they are meant to be deleted.
  */
 @Component({
-    templateUrl: 'app/editor/page/templates/sidebar.html',
-    selector : "page-sidebar",
-    directives : [QueryIconComponent]
+    templateUrl: 'app/editor/page/templates/sidebar-widgets.html',
+    selector : "page-sidebar-widgets",
+    directives : [SidebarItemHost]
 })
-export class SidebarComponent implements OnInit, OnDestroy {
+export class SidebarWidgetsComponent implements OnInit, OnDestroy {
     /**
      * This ID is used to register this sidebar with the sidebar loader
      */
-    public static get SIDEBAR_IDENTIFIER() { return "page" };
+    public static get SIDEBAR_IDENTIFIER() { return "page-core-widgets" };
 
     /**
      * The currently edited project
@@ -206,58 +202,4 @@ export class SidebarComponent implements OnInit, OnDestroy {
     startLinkDrag(evt : DragEvent) {
         this._dragService.startWidgetDrag(evt, "sidebar", Link.emptyDescription);
     }
-
-    /**
-     * Starts a drag action for a column reference.
-     */
-    startColumnDrag(evt : DragEvent,
-                    queryRef : QueryReference,
-                    column : ResultColumn) {
-        this._dragService.startColumnRefDrag(evt, "sidebar", {
-            columnName: column.shortName,
-            queryName : queryRef.name
-        });
-    }
-
-    /**
-     * Informs the drag service about a started drag operation for a
-     * query reference
-     */
-    startReferencedQueryDrag(evt : DragEvent, ref : QueryReference) {
-        this._dragService.startQueryRefDrag(evt, "sidebar", ref.toModel());
-    }
-
-    startParameterValueProviderDrag(evt : DragEvent, valueProviderName : string) {
-        this._dragService.startValueDrag(evt, "sidebar", valueProviderName);
-    }
-
-    /**
-     * @return All queries that are actually used on this page.
-     */
-    get referencedQueries() : QueryReference[] {
-        if (this._page) {
-            return (this._page.referencedQueries);
-        } else {
-            return ([]);
-        }
-    }
-
-    /**
-     * Columns are tracked by their full name
-     */
-    trackByColumnId(index : number, columnRef : ResultColumn) {
-        return (columnRef.fullName);
-    }
-
-    /**
-     * @return True, if page request parameters should be shown
-     */
-    get showPageRequestParameters() {
-        return (this.page && this._page.requestParameters.length > 0);
-    }
 }
-
-/**
- * This ID is used to register this sidebar with the sidebar loader
- */
-export const SIDEBAR_IDENTIFIER = "page";

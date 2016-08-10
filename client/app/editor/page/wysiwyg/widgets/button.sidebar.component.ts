@@ -1,6 +1,8 @@
-import {Component, Inject, Optional}        from '@angular/core'
+import {Component, Inject, Optional}   from '@angular/core'
 
-import {SIDEBAR_MODEL_TOKEN}                from '../../../editor.token'
+import {SIDEBAR_MODEL_TOKEN}           from '../../../editor.token'
+
+import {SidebarItemHost}               from '../../../sidebar-item-host.component'
 
 import {
     ButtonComponent, Button, QueryAction
@@ -11,6 +13,7 @@ import {
  */
 @Component({
     templateUrl: 'app/editor/page/wysiwyg/widgets/templates/button-sidebar.html',
+    directives : [SidebarItemHost]
 })
 export class ButtonSidebarComponent {
 
