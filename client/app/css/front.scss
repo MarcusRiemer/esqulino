@@ -17,7 +17,7 @@
     opacity: 1;
     transition: opacity 0.3s;
   }
-    
+
   .project-list-item .card-img-overlay {
     opacity: 1;
     transition: opacity 0.3s;
@@ -30,8 +30,16 @@
   }
 
   .about-text {
-      hyphens: auto;
+    hyphens: auto;
   }
+
+  .footer {
+    margin-top: 10px;
+
+    a {
+      margin-left: 10px;
+    }
+  } 
 }
 
 .loading {
