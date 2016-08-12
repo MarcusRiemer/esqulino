@@ -1,6 +1,6 @@
 {
   "name": "Gefangen_Loeschen",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "referencedQueries": [
     {
       "type": "query",
@@ -20,7 +20,7 @@
       "mapping": []
     }
   ],
-  "rows": [
+  "widgets": [
     {
       "columns": [
         {
@@ -39,9 +39,11 @@
               "type": "paragraph",
               "text": "What happens when I transfer a Pokémon to the Professor? The transferred pokemon go to a \"farm\" where they \"live happily ever after\" and you can never, ever see them or visit them again."
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     },
     {
       "columns": [
@@ -59,9 +61,11 @@
                 }
               }
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     },
     {
       "columns": [
@@ -85,9 +89,11 @@
               "description": "Beschreibung der neuen Eingabe",
               "inputType": "text"
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     },
     {
       "columns": [
@@ -102,9 +108,11 @@
                 "queryName": "Gefangen_Loeschen"
               }
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     }
   ]
 }

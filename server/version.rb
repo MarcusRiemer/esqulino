@@ -7,7 +7,7 @@ require 'date'
 # instance should have exactly this version set.
 #
 # If you need to migrate your data, check out the esqulino CLI.
-ESQULINO_API_VERSION = "1"
+ESQULINO_API_VERSION = 2
 
 # Checks the locally deployed version against the version that is available
 # at Bitbucket

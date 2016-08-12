@@ -1,32 +1,23 @@
 {
   "name": "Hauptseite",
-  "apiVersion": "1",
-  "rows": [
+  "apiVersion": "2",
+  "widgets": [
     {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "heading",
-              "level": 1,
-              "text": "Eine Abenteuergeschichte"
-            },
-            {
-              "type": "paragraph",
-              "text": "In dieser Geschichte spielst du die Hauptrolle. Entscheide von Kapitel zu Kapitel, wie es weitergehen soll. Wenn du stirbst, musst du halt von vorne anfangen. Alles klar?"
-            },
-            {
-              "type": "link",
-              "text": "Zum Anfang der Geschichte",
-              "action": {
-                "type": "navigate",
-                "external": "/Kapitel?nummer=1"
-              }
-            }
-          ]
-        }
-      ]
+      "type": "heading",
+      "level": 1,
+      "text": "Eine Abenteuergeschichte"
+    },
+    {
+      "type": "paragraph",
+      "text": "In dieser Geschichte spielst du die Hauptrolle. Entscheide von Kapitel zu Kapitel, wie es weitergehen soll. Wenn du stirbst, musst du halt von vorne anfangen. Alles klar?"
+    },
+    {
+      "type": "link",
+      "text": "Zum Anfang der Geschichte",
+      "action": {
+        "type": "navigate",
+        "external": "/Kapitel?nummer=1"
+      }
     }
   ]
 }

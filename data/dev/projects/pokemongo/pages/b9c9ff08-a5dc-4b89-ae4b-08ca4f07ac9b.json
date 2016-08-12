@@ -1,6 +1,6 @@
 {
   "name": "Hauptseite",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "referencedQueries": [
     {
       "type": "query",
@@ -15,7 +15,7 @@
       "mapping": []
     }
   ],
-  "rows": [
+  "widgets": [
     {
       "columns": [
         {
@@ -30,9 +30,11 @@
               "type": "paragraph",
               "text": "Hier zeige ich alle Pokémon, die ich gefangen habe."
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     },
     {
       "columns": [
@@ -49,9 +51,11 @@
                 "typ"
               ]
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     },
     {
       "columns": [
@@ -80,9 +84,11 @@
                 }
               }
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     },
     {
       "columns": [
@@ -102,9 +108,11 @@
               "type": "embedded-html",
               "html": "<ul>\n  {% for pkmn in query.Pokedex_1G %}\n    <li><a href=\"/Pokemon_Detail?nummer={{pkmn.nummer}}\">{{ pkmn.name}}</a></li>\n  {% endfor %}\n</ul>"
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     }
   ]
 }

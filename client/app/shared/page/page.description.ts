@@ -219,10 +219,9 @@ export interface PageParameterDescription {
  */
 export interface PageDescription extends ProjectResourceDescription {
     /**
-     * Rows are the top-level element for the whole layout,
-     * for the moment no other type of widget is expected.
+     * All widgets that are part of this page
      */
-    rows? : RowDescription[]
+    widgets? : WidgetDescription[]
 
     /**
      * IDs of queries that are referenced in this page. Only

@@ -31,7 +31,7 @@ describe('Page Renderer: Liquid', () => {
         let c = new Column(m);
         let r = new LiquidRenderer();
 
-        expect(r.renderColumn(c)).toEqual(`<div class="col-md-6"></div>`);
+        expect(r.renderWidget(c)).toEqual(`<div class="col-md-6"></div>`);
     });
 
     it('Column with two paragraphs', () => {
@@ -54,7 +54,7 @@ describe('Page Renderer: Liquid', () => {
         let c = new Column(m);
         let r = new LiquidRenderer();
 
-        expect(r.renderColumn(c)).toEqual(`<div class="col-md-6"><p>1</p><p>2</p></div>`);
+        expect(r.renderWidget(c)).toEqual(`<div class="col-md-6"><p>1</p><p>2</p></div>`);
     });
 
     it('Row', () => {
@@ -66,7 +66,7 @@ describe('Page Renderer: Liquid', () => {
         let row = new Row(m);
         let r = new LiquidRenderer();
 
-        expect(r.renderRow(row)).toEqual(`<div class="row"></div>`);
+        expect(r.renderWidget(row)).toEqual(`<div class="row"></div>`);
     });
 
     it('Row with two columns', () => {
@@ -89,7 +89,7 @@ describe('Page Renderer: Liquid', () => {
         let row = new Row(m);
         let r = new LiquidRenderer();
 
-        expect(r.renderRow(row)).toEqual(`<div class="row"><div class="col-md-3"></div><div class="col-md-7"></div></div>`);
+        expect(r.renderWidget(row)).toEqual(`<div class="row"><div class="col-md-3"></div><div class="col-md-7"></div></div>`);
     });
 });
 

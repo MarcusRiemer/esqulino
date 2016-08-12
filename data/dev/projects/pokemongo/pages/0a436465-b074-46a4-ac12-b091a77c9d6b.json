@@ -1,6 +1,6 @@
 {
   "name": "Pokemon_Detail",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "referencedQueries": [
     {
       "type": "query",
@@ -14,7 +14,12 @@
       ]
     }
   ],
-  "rows": [
+  "parameters": [
+    {
+      "name": "nummer"
+    }
+  ],
+  "widgets": [
     {
       "columns": [
         {
@@ -25,9 +30,11 @@
               "level": 1,
               "text": "{{ query.pokemon.name }}"
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     },
     {
       "columns": [
@@ -38,9 +45,11 @@
               "type": "paragraph",
               "text": "#{{ get.nummer}} ist {{ query.pokemon.name }}"
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     },
     {
       "columns": [
@@ -58,14 +67,11 @@
                 }
               }
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
-    }
-  ],
-  "parameters": [
-    {
-      "name": "nummer"
+      ],
+      "type": "row"
     }
   ]
 }

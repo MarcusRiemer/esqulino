@@ -1,6 +1,6 @@
 {
   "name": "kv_all",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "from": {
     "first": {
       "name": "key_value"

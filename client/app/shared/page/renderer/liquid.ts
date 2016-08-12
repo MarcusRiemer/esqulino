@@ -10,7 +10,35 @@ import {
 
 export {Renderer}
 
-type WidgetRenderer = (w: WidgetBase) => string;
+/**
+ * A render function takes a widget and turns it into
+ * a string. As it might need to render additional children it is
+ * passed a function that renders arbitrary widgets itself.
+ */
+type WidgetRenderer = (w: WidgetBase, renderWidget : WidgetRenderer) => string;
+
+/**
+ * Render a single column with all children.
+ */
+function renderColumn(w: WidgetBase, renderWidget : WidgetRenderer) : string {
+    const col = w as Column;
+    const children : string = col.children
+        .map(w => renderWidget(w, renderWidget))
+        .join("");
+
+    return (`<div class="${col.columnClasses}">${children}</div>`);
+}
+
+/**
+ * Render a single row with all children
+ */
+function renderRow(w: WidgetBase, renderWidget : WidgetRenderer) : string {
+    const row = w as Row;
+    const children : string = row.children
+        .map(c => renderWidget(c, renderWidget))
+        .join("");
+    return `<div class="row">${children}</div>`
+}
 
 /**
  * Directly renders a heading without rendering the form context. Action
@@ -148,12 +176,14 @@ export class LiquidRenderer extends Renderer {
      */
     private _widgetRenderers : { [widgetType : string]: WidgetRenderer} = {
         "button" : renderButton,
+        "column" : renderColumn,
         "embedded-html" : renderHtml,
         "query-table" : renderQueryTable,
         "paragraph" : renderParagraph,
         "heading" : renderHeading,
         "input" : renderInput,
-        "link" : renderLink
+        "link" : renderLink,
+        "row" : renderRow,
     };
     
     /**
@@ -164,43 +194,22 @@ export class LiquidRenderer extends Renderer {
         if (!renderer) {
             throw new Error(`No LiquidRenderer for ${wid.type}`);
         } else {
-            return (renderer(wid));
+            return (renderer(wid, (w) => this.renderWidget(w) ));
         }        
-    }
-    
-    /**
-     * Render a single column
-     */
-    renderColumn(col : Column) : string {
-        const children : string = col.children
-            .map(w => this.renderWidget(w))
-            .join("");
-
-        return (`<div class="${col.columnClasses}">${children}</div>`);
-    }
-
-    /**
-     * Render a single row
-     */
-    renderRow(row : Row) : string {
-        const children : string = row.children
-            .map(c => this.renderColumn(c))
-            .join("");
-        return `<div class="row">${children}</div>`
     }
 
     /**
      * Render the body of a whole page.
      */
-    renderBody(rows : Row[]) : string {
+    renderBody(rows : WidgetBase[]) : string {
         return (rows
-                .map(r => this.renderRow(r))
+                .map(r => this.renderWidget(r))
                 .join(""));
     }
     
     
     protected renderImpl(page : Page) : string {
-        const body = this.renderBody(page.rows);
+        const body = this.renderBody(page.children);
         return (`${LiquidRenderer.PAGE_HEADER}\n` +
                 `${body}\n` +
                 `${LiquidRenderer.PAGE_FOOTER}\n`);

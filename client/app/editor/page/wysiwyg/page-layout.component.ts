@@ -97,7 +97,7 @@ export class PageLayoutComponent implements OnInit {
             // Possibly inform callbacks about the drop
             if (this._dragService.currentDrag.callbacks &&
                 this._dragService.currentDrag.callbacks.onWidget) {
-                const droppedOn = this.page.rows[dropIndex];
+                const droppedOn = this.page.getRow(dropIndex);
                 this._dragService.currentDrag.callbacks.onWidget(droppedOn);
             }
 
@@ -149,7 +149,7 @@ export class PageLayoutComponent implements OnInit {
                 // Possibly inform callbacks about the drop
                 if (this._dragService.currentDrag.callbacks &&
                     this._dragService.currentDrag.callbacks.onWidget) {
-                    const droppedOn = this.page.rows[rowIndex].children[columnIndex];
+                    const droppedOn = this.page.getRow(rowIndex).children[columnIndex];
                     this._dragService.currentDrag.callbacks.onWidget(droppedOn);
                 }
             }

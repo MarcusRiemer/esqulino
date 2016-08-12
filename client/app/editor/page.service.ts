@@ -137,7 +137,7 @@ export class PageService {
             name : name,
             apiVersion : CURRENT_API_VERSION,
             referencedQueries : [],
-            rows : [Row.emptyDescription]
+            widgets : [Row.emptyDescription]
         }, project);
 
         return (this.savePage(project, page));
