@@ -7,10 +7,10 @@ import {Input}                        from '../../../../shared/page/widgets/inde
 import {SidebarService}               from '../../../sidebar.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
-import {WidgetComponent}              from './widget.component'
+import {WidgetComponent}              from '../../widget.component'
 import {
     INPUT_SIDEBAR_IDENTIFIER, InputSidebarComponent
-} from './input.sidebar.component'
+} from '../../sidebar/input.sidebar.component'
 
 
 export {Input}

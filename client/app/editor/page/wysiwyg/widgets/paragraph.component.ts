@@ -5,10 +5,10 @@ import {Paragraph}                    from '../../../../shared/page/widgets/inde
 import {SidebarService}               from '../../../sidebar.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
-import {WidgetComponent}              from './widget.component'
+import {WidgetComponent}              from '../../widget.component'
 import {
     PARAGRAPH_SIDEBAR_IDENTIFIER, ParagraphSidebarComponent
-} from './paragraph.sidebar.component'
+} from '../../sidebar/paragraph.sidebar.component'
 
 export {Paragraph}
 

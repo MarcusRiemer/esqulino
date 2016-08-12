@@ -15,7 +15,8 @@ import {
     WIDGET_MODEL_TOKEN
 } from '../../editor.token'
 
-import {WidgetComponent}       from './widgets/widget.component'
+import {WidgetComponent}       from '../widget.component'
+
 import {ButtonComponent}       from './widgets/button.component'
 import {EmbeddedHtmlComponent} from './widgets/embedded-html.component'
 import {ParagraphComponent}    from './widgets/paragraph.component'

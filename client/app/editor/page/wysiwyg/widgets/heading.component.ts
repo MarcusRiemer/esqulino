@@ -5,10 +5,10 @@ import {Heading}                  from '../../../../shared/page/widgets/index'
 import {SidebarService}           from '../../../sidebar.service'
 import {WIDGET_MODEL_TOKEN}       from '../../../editor.token'
 
-import {WidgetComponent}          from './widget.component'
+import {WidgetComponent}          from '../../widget.component'
 import {
     HEADING_SIDEBAR_IDENTIFIER, HeadingSidebarComponent
-} from './heading.sidebar.component'
+} from '../../sidebar/heading.sidebar.component'
 
 export {Heading}
 

@@ -4,10 +4,12 @@ import{
     Type, provide, Injector, ReflectiveInjector
 } from '@angular/core'
 
-import {SIDEBAR_MODEL_TOKEN}         from './editor.token'
+import {
+    SIDEBAR_MODEL_TOKEN, SIDEBAR_ID_TOKEN
+} from './editor.token'
 
 import {
-    SidebarService, SidebarModel
+    SidebarService, InternalSidebarModel
 } from './sidebar.service'
 
 /**
@@ -19,7 +21,7 @@ import {
 })
 export class SidebarLoaderComponent implements OnInit {
 
-    private _prevModel : SidebarModel[] = [];
+    private _prevModel : InternalSidebarModel[] = [];
     
     /**
      * Used for dependency injection
@@ -42,12 +44,13 @@ export class SidebarLoaderComponent implements OnInit {
      * The sidebar service has signaled, that the model to render the sidebar
      * has changed.
      */
-    private onChangedType(newModel : SidebarModel[]) {
+    private onChangedType(newModel : InternalSidebarModel[]) {
 
         // Checks two individual sidebar models for equality deeper then
         // reference equality.
-        const modelEqual = (lhs : SidebarModel, rhs : SidebarModel) => {
-            return (lhs.type === rhs.type && lhs.param === rhs.param);
+        const modelEqual = (lhs : InternalSidebarModel,
+                            rhs : InternalSidebarModel) => {
+            return (lhs.id == rhs.id);
         };
 
         // Are those lists of model identical?
@@ -72,7 +75,8 @@ export class SidebarLoaderComponent implements OnInit {
                 let injector = this._injector;
                 if (model.param) {
                     injector = ReflectiveInjector.resolveAndCreate([
-                        provide(SIDEBAR_MODEL_TOKEN, {useValue: model.param })
+                        provide(SIDEBAR_MODEL_TOKEN, {useValue: model.param }),
+                        provide(SIDEBAR_ID_TOKEN, {useValue: model.id})
                     ], this._injector);
                 }
 

@@ -1,3 +1,5 @@
+import {QuerySelect, ResultColumn}       from '../../../shared/query'
+
 import {Page}                            from '../page'
 import {QueryTableDescription}           from '../page.description'
 import {Widget, WidgetHost}              from '../hierarchy'
@@ -41,6 +43,29 @@ export class QueryTable extends WidgetBase {
         return (this._queryRefName);
     }
 
+    /**
+     * @return True, if this query table references any columns
+     */
+    get hasColumnReferences() {
+        return (this.columnNames.length > 0);
+    }
+
+    /**
+     * @return A (hopefully) resolveable reference to a query.
+     */
+    get queryReference() {
+        return (this.page.getQueryReferenceByName(this.queryReferenceName));
+    }
+
+    /**
+     * @return True, if this reference can be resolved on the current page.
+     */
+    get hasValidReference() {
+        return (this.page.usesQueryReferenceByName(this.queryReferenceName) &&
+                this.queryReference.isResolveable &&
+                this.queryReference.query instanceof QuerySelect);
+    }
+
     set columnNames(value : string[]) {
         this._columns = value;
     }
@@ -50,6 +75,59 @@ export class QueryTable extends WidgetBase {
      */
     get columnNames() {
         return (this._columns);
+    }
+
+    /**
+     * Return used columns if they are currently known.
+     */
+    get columns() {
+        if (this.queryReferenceName) {            
+            // 1) Get the reference itself
+            const ref = this.queryReference
+            // 2) Resolve the reference to the actual query
+            const query = ref.query as QuerySelect;
+            const possibleColumns = query.select.actualColums;
+            // 3) Pick the columns that are wished by the user
+            const columns = this.columnNames
+                .map(name => possibleColumns.find(col => col.shortName == name))
+                .filter(c => !!c)
+            
+            return (columns);
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * @return The columns that are actually available to render.
+     */
+    get availableColumns() {
+        if (this.queryReference &&
+            this.queryReference.isResolveable &&
+            this.queryReference.query instanceof QuerySelect) {
+
+            const query = this.queryReference.query as QuerySelect;
+            const columns = query.select.actualColums
+            return (columns);
+            
+        } else {
+            return ([]);
+        }
+
+    }
+
+    /**
+     * Updates the model to use all columns that are available.
+     */
+    useAllColumns() {
+        if (this.hasValidReference) {
+            // Compute all possible columns
+            const ref = this.queryReference;
+            const query = ref.query as QuerySelect;
+            const possibleColumns = query.select.actualColums;
+
+            this.columnNames = possibleColumns.map(c => c.shortName);
+        }
     }
 
     /**

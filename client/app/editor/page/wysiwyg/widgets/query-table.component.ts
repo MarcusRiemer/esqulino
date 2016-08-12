@@ -14,11 +14,10 @@ import {
 } from '../../../editor.token'
 
 import {DragService, PageDragEvent} from '../../drag.service'
-
-import {WidgetComponent}            from './widget.component'
+import {WidgetComponent}            from '../../widget.component'
 import {
     QUERY_TABLE_SIDEBAR_IDENTIFIER, QueryTableSidebarComponent
-} from './query-table.sidebar.component'
+} from '../../sidebar/query-table.sidebar.component'
 
 
 export {QueryTable}
@@ -34,7 +33,6 @@ export {QueryTable}
 export class QueryTableComponent extends WidgetComponent<QueryTable> {
     
     constructor(@Inject(WIDGET_MODEL_TOKEN) model : QueryTable,
-                private _page : Page,
                 private _cdRef: ChangeDetectorRef,
                 private _dragService : DragService,
                 sidebarService : SidebarService) {
@@ -48,7 +46,7 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
      * @return The page this widget belongs to
      */
     get page() : Page {
-        return (this._page);
+        return (this.model.page);
     }
 
     /**
@@ -67,29 +65,6 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
         this.model.queryReferenceName = value;
         this.useAllColumns()
         this._cdRef.markForCheck();
-    }
-
-    /**
-     * @return True, if this reference can be resolved on the current page.
-     */
-    get hasValidReference() {
-        return (this._page.usesQueryReferenceByName(this.referenceName) &&
-                this.queryReference.isResolveable &&
-                this.queryReference.query instanceof QuerySelect);
-    }
-
-    /**
-     * @return True, if this query table references any columns
-     */
-    get hasColumnReferences() {
-        return (this.model.columnNames.length > 0);
-    }
-
-    /**
-     * @return A (hopefully) resolveable reference to a query.
-     */
-    get queryReference() {
-        return (this._page.getQueryReferenceByName(this.referenceName));
     }
 
     /**
@@ -169,36 +144,9 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
      * Updates the model to use all columns that are available.
      */
     useAllColumns() {
-        if (this.hasValidReference) {
-            // Compute all possible columns
-            const ref = this._page.getQueryReferenceByName(this.referenceName);
-            const query = ref.query as QuerySelect;
-            const possibleColumns = query.select.actualColums;
-
-            this.model.columnNames = possibleColumns.map(c => c.shortName);
-
+        if (this.model.hasValidReference) {
+            this.model.useAllColumns();
             this._cdRef.markForCheck();
-        }
-    }
-
-    /**
-     * Return used columns if they are currently known.
-     */
-    get columns() {
-        if (this.referenceName) {            
-            // 1) Get the reference itself
-            const ref = this._page.getQueryReferenceByName(this.referenceName);
-            // 2) Resolve the reference to the actual query
-            const query = ref.query as QuerySelect;
-            const possibleColumns = query.select.actualColums;
-            // 3) Pick the columns that are wished by the user
-            const columns = this.model.columnNames
-                .map(name => possibleColumns.find(col => col.shortName == name))
-                .filter(c => !!c)
-            
-            return (columns);
-        } else {
-            return [];
         }
     }
 

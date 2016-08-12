@@ -1,19 +1,22 @@
-import {OpaqueToken, Type}              from '@angular/core'
+import {OpaqueToken, Type, Input}       from '@angular/core'
 
-import {SidebarService}                 from '../../../sidebar.service'
+import {SidebarService}                 from '../sidebar.service'
+
+import {Page}                           from '../../shared/page/index'
+import {Widget}                         from '../../shared/page/widgets/index'
 
 /**
  * Base class for all widget visualizations. Exposes the model itself and
  * stores the editing state. If a sidebar definition is supplied, the 
  * default editing action is to show that sidebar.
  */
-export class WidgetComponent<TModel> {
+export class WidgetComponent<TModel extends Widget> {
     private _model : TModel;
     private _isEditing : boolean;
     private _sidebarTypeId : string;
 
     constructor(protected _sidebarService : SidebarService,
-                model : TModel,
+                model? : TModel,
                 sidebarDefinition? : {
                     id : string,
                     type : Type
@@ -45,6 +48,10 @@ export class WidgetComponent<TModel> {
      */
     set model(value : TModel) {
         this._model = value;
+    }
+
+    get page() : Page {
+        return (this._model.page);
     }
 
     /**
