@@ -109,6 +109,8 @@ export class SidebarService {
      * @return The IDs of these sidebars.
      */
     showMultiple(mult : SidebarModel[]) : number[] {
+        console.log(`Requested new Sidebars: ${mult.map(s => s.type).join(', ')}`);
+        
         // Ensure every type is known. This does not use `every`
         // but `forEach` with a side-effect because we wan't to
         // know the offending type.
