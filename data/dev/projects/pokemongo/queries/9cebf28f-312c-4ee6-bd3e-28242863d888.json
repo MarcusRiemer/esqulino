@@ -1,6 +1,6 @@
 {
   "name": "Pokemon_Einzel",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "singleRow": true,
   "from": {
     "first": {

@@ -1,6 +1,6 @@
 {
   "name": "artikel_detail",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "singleRow": true,
   "from": {
     "first": {

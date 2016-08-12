@@ -1,6 +1,6 @@
 {
   "name": "kv_insert",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "insert": {
     "assignments": [
       {

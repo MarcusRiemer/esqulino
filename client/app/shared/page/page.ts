@@ -40,7 +40,7 @@ export {
  * The in-memory representation of a page.
  */
 export class Page extends ProjectResource implements WidgetHost {
-    private _rows : Row[] = [];
+    private _widgets : WidgetBase[] = [];
     private _referencedQueries : QueryReference[] = [];
     private _parameters : PageParameter[] = [];
     private _renderer : Renderer;
@@ -52,8 +52,8 @@ export class Page extends ProjectResource implements WidgetHost {
         this._renderer = new LiquidRenderer();
 
         // Map descriptions of widgets to actual representations
-        if (desc.rows) {
-            this._rows = desc.rows.map(rowDesc => new Row(rowDesc, this));
+        if (desc.widgets) {
+            this._widgets = desc.widgets.map((desc, i) => loadWidget(desc, this));
         }
 
         // Resolve referenced queries
@@ -82,13 +82,6 @@ export class Page extends ProjectResource implements WidgetHost {
     }
 
     /**
-     * @return All rows of this page
-     */
-    get rows() {
-        return (this._rows);
-    }
-
-    /**
      * Adds a new row with a default column that spans over the whole row.
      * 
      * @index The index to insert the row at, 0 is the very beginning
@@ -104,14 +97,32 @@ export class Page extends ProjectResource implements WidgetHost {
      */
     addRow(index : number, newRowDesc : RowDescription) {
         const newRow = new Row(newRowDesc, this);
-        this._rows.splice(index, 0, newRow);
+        this._widgets.splice(index, 0, newRow);
+    }
+
+    /**
+     * Retrieves a row by the child index on this page. This method ensures
+     * the thing returned is actually a row.
+     */
+    getRow(rowIndex : number) : Row {
+        // Ensure valid row index
+        if (rowIndex >= this._widgets.length) {
+            throw new Error(`Retrieving row exceeds row count (given: ${rowIndex}, length ${this._widgets.length}`);
+        }
+
+        // Ensure it is a row
+        if (!(this._widgets[rowIndex] instanceof Row)) {
+            throw new Error(`Parent widget #${rowIndex} is not a row, but a ${this._widgets[rowIndex].type}`);
+        }
+
+        return (this._widgets[rowIndex] as Row);
     }
 
     /**
      * Removes the given row.
      */
     removeRow(row : Row) {
-        const index = this._rows.indexOf(row);
+        const index = this._widgets.indexOf(row);
         if (index >= 0) {
             this.removeRowByIndex(index);
         } else {
@@ -123,8 +134,8 @@ export class Page extends ProjectResource implements WidgetHost {
      * Removes the given row.
      */
     removeRowByIndex(rowIndex : number) {
-        if (rowIndex >= 0 && rowIndex < this._rows.length) {
-            this._rows.splice(rowIndex, 1);
+        if (rowIndex >= 0 && rowIndex < this._widgets.length) {
+            this._widgets.splice(rowIndex, 1);
         } else {
             throw new Error(`Attempted to remove invalid row index ${rowIndex}`);
         }
@@ -170,13 +181,8 @@ export class Page extends ProjectResource implements WidgetHost {
     addWidgetDeep(widget : WidgetDescription,
                   rowIndex : number, columnIndex : number,
                   widgetIndex : number) {
-        // Ensure row index
-        if (rowIndex >= this._rows.length) {
-            throw new Error(`Adding widget ("${JSON.stringify(widget)}") exceeds row count (given: ${rowIndex}, length ${this._rows.length}`);
-        }
-
         // Ensure column index
-        const row = this._rows[rowIndex];
+        const row = this.getRow(rowIndex);
         if (columnIndex >= row.children.length) {
             throw new Error(`Adding widget ("${JSON.stringify(widget)}") exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.children.length}`);
         }
@@ -192,13 +198,18 @@ export class Page extends ProjectResource implements WidgetHost {
      * Remove a widgets with a position that is exactly known.
      */
     removeWidgetByIndex(rowIndex : number, columnIndex : number, widgetIndex : number) {
-        // Ensure row index
-        if (rowIndex >= this._rows.length) {
-            throw new Error(`Removing widget exceeds row count (given: ${rowIndex}, length ${this._rows.length}`);
+        // Ensure valid row index
+        if (rowIndex >= this._widgets.length) {
+            throw new Error(`Removing widget exceeds row count (given: ${rowIndex}, length ${this._widgets.length}`);
+        }
+
+        // Ensure it is a row
+        if (!(this._widgets[rowIndex] instanceof Row)) {
+            throw new Error(`Parent widget #${rowIndex} is not a row, but a ${this._widgets[rowIndex].type}`);
         }
 
         // Ensure column index
-        const row = this._rows[rowIndex];
+        const row = this._widgets[rowIndex] as Row;
         if (columnIndex >= row.children.length) {
             throw new Error(`Removing widget exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.children.length}`);
         }
@@ -352,8 +363,8 @@ export class Page extends ProjectResource implements WidgetHost {
     /**
      * @return All immediate children of the page itself.
      */
-    get children() : Widget[] {
-        return (this._rows);
+    get children() : WidgetBase[] {
+        return (this._widgets);
     }
 
     /**
@@ -368,7 +379,9 @@ export class Page extends ProjectResource implements WidgetHost {
      * @return All widgets are in use on this page.
      */
     get allWidgets() : Widget[] {
-        const subs = this._rows.map(c => c.widgets);
+        const subs = this._widgets
+            .filter(w => isWidgetHost(w))
+            .map(w => ((w as any) as WidgetHost).children);
         return ([].concat(...subs));
     }
 
@@ -407,8 +420,8 @@ export class Page extends ProjectResource implements WidgetHost {
             toReturn.referencedQueries = this._referencedQueries.map(r => r.toModel());
         }
 
-        if (this._rows.length > 0) {
-            toReturn.rows = this._rows.map(r => r.toModel()) as RowDescription[];
+        if (this._widgets.length > 0) {
+            toReturn.widgets = this._widgets.map(r => r.toModel());
         }
 
         if (this._parameters.length > 0) {

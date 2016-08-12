@@ -1,6 +1,6 @@
 {
   "name": "Gefangen_Einzeln",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "referencedQueries": [
     {
       "type": "query",
@@ -14,7 +14,12 @@
       ]
     }
   ],
-  "rows": [
+  "parameters": [
+    {
+      "name": "id"
+    }
+  ],
+  "widgets": [
     {
       "columns": [
         {
@@ -24,9 +29,11 @@
               "type": "paragraph",
               "text": "Hier stelle ich mein Pokemon mit der ID {{get.id}} vor: {{ query.pokemon.spitzname }}"
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     },
     {
       "columns": [
@@ -44,14 +51,11 @@
                 }
               }
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
-    }
-  ],
-  "parameters": [
-    {
-      "name": "id"
+      ],
+      "type": "row"
     }
   ]
 }

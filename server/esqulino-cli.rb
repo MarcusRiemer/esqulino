@@ -200,7 +200,10 @@ class EsqulinoCli
       self.status_progress_prefix(done.green, message)
     rescue StandardError => e
       self.status_progress_prefix(failed.red, message)
-      self.print_indent {self.status e.to_s}
+      self.print_indent do
+        self.status e.to_s
+        e.backtrace.each {|l| self.status l }
+      end
     end
   end
 

@@ -1,6 +1,6 @@
 {
   "name": "artikel_alle",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "select": {
     "columns": [
       {

@@ -1,6 +1,6 @@
 {
   "name": "Hauptseite",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "referencedQueries": [
     {
       "type": "query",
@@ -9,7 +9,7 @@
       "mapping": []
     }
   ],
-  "rows": [
+  "widgets": [
     {
       "columns": [
         {
@@ -24,9 +24,11 @@
               "type": "embedded-html",
               "html": "{% for artikel in query.artikel_alle %}\n<div>\n  <h2>\n    <a href=\"/Artikel?id={{artikel.article_id}}\">\n      {{ artikel.caption }}\n    </a>\n  </h2>\n  <p>{{ artikel.text }}</p>\n</div>\n{% endfor %}"
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "Kapitel",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "referencedQueries": [
     {
       "type": "query",
@@ -25,28 +25,19 @@
       ]
     }
   ],
-  "rows": [
+  "widgets": [
     {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "heading",
-              "level": 1,
-              "text": "{{ query.kapitel_einzeln.caption }}"
-            },
-            {
-              "type": "paragraph",
-              "text": "{{ query.kapitel_einzeln.text }}"
-            },
-            {
-              "type": "embedded-html",
-              "html": "<ul>\n  {% for naechstes in query.kapitel_optionen %}\n    <li><a href=\"/Kapitel?nummer={{naechstes.chapter_to}}\">{{ naechstes.decision_text}}</a></li>\n  {% endfor %}\n</ul>"
-            }
-          ]
-        }
-      ]
+      "type": "heading",
+      "level": 1,
+      "text": "{{ query.kapitel_einzeln.caption }}"
+    },
+    {
+      "type": "paragraph",
+      "text": "{{ query.kapitel_einzeln.text }}"
+    },
+    {
+      "type": "embedded-html",
+      "html": "<ul>\n  {% for naechstes in query.kapitel_optionen %}\n    <li><a href=\"/Kapitel?nummer={{naechstes.chapter_to}}\">{{ naechstes.decision_text}}</a></li>\n  {% endfor %}\n</ul>"
     }
   ],
   "parameters": [

@@ -1,6 +1,6 @@
 {
   "name": "Artikel",
-  "apiVersion": "1",
+  "apiVersion": "2",
   "referencedQueries": [
     {
       "type": "query",
@@ -25,7 +25,12 @@
       ]
     }
   ],
-  "rows": [
+  "parameters": [
+    {
+      "name": "id"
+    }
+  ],
+  "widgets": [
     {
       "columns": [
         {
@@ -40,9 +45,11 @@
               "type": "paragraph",
               "text": "{{ query.artikel_detail.text }}"
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
+      ],
+      "type": "row"
     },
     {
       "columns": [
@@ -58,14 +65,11 @@
               "type": "embedded-html",
               "html": "{% for kommentar in query.artikel_kommentare %}\n<div>\n  <h3>\n   {{ kommentar.commenter_name}} sagt:\n  </h3>\n  <p>{{ kommentar.text }}</p>\n</div>\n{% endfor %}"
             }
-          ]
+          ],
+          "type": "column"
         }
-      ]
-    }
-  ],
-  "parameters": [
-    {
-      "name": "id"
+      ],
+      "type": "row"
     }
   ]
 }

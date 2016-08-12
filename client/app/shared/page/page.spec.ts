@@ -20,10 +20,10 @@ const singleRowPage : PageDescription = {
     id : "testpage",
     name : "Serialization test",
     apiVersion : CURRENT_API_VERSION,
-    rows : [
+    widgets : [
         {
             type : "row",
-            columns : [
+            widgets : [
                 {
                     type : "column",
                     width : 4,
@@ -57,6 +57,14 @@ const singleRowPage : PageDescription = {
     ]
 };
 
+/**
+ * Nasty casting function because we know better then the type
+ * system that rows and columns always have children.
+ */
+function getRowChild(row : RowDescription, colIndex : number, widgetIndex : number) {
+    return (row.columns[colIndex].widgets[widgetIndex])
+}
+
 describe('Page', () => {
     it('Serialization', () => {
         const m : PageDescription = singleRowPage;
@@ -70,9 +78,12 @@ describe('Page', () => {
 
         let p = new Page(m);
         const allWidgets = p.allWidgets;
-        expect(allWidgets[0].toModel()).toEqual(m.rows[0].columns[0].widgets[0]);
-        expect(allWidgets[1].toModel()).toEqual(m.rows[0].columns[0].widgets[1]);
-        expect(allWidgets[2].toModel()).toEqual(m.rows[0].columns[1].widgets[0]);
-        expect(allWidgets[3].toModel()).toEqual(m.rows[0].columns[1].widgets[1]);
+
+        // We know better then the type-system that this must be a row
+        const firstRow = (m.widgets[0] as RowDescription);
+        expect(allWidgets[0].toModel()).toEqual(firstRow.columns[0].widgets[0]);
+        expect(allWidgets[1].toModel()).toEqual(firstRow.columns[0].widgets[1]);
+        expect(allWidgets[2].toModel()).toEqual(firstRow.columns[1].widgets[0]);
+        expect(allWidgets[3].toModel()).toEqual(firstRow.columns[1].widgets[1]);
     });
 })
