@@ -22,10 +22,10 @@ import {
 export class SidebarLoaderComponent implements OnInit {
 
     private _prevModel : InternalSidebarModel[] = [];
-    
+
     /**
      * Used for dependency injection
-     */ 
+     */
     constructor(
         private _sidebarService : SidebarService,
         private _injector: Injector,
@@ -57,17 +57,21 @@ export class SidebarLoaderComponent implements OnInit {
         const identical =
             newModel.length === this._prevModel.length &&
             newModel.every((m,i) => modelEqual(m,this._prevModel[i]));
-        
+
+        console.log(`Rendering new Sidebars: identical = ${identical}, types = ${newModel.map(s => s.type).join(', ')}`);
+
         // Is this really a new sidebar?
         if (!identical) {
             // Then clean up previous components
             this._selfRef.clear();
 
+            console.log(`Number of sidebar items after clearing: ${this._selfRef.length}`);
+
             // Remember previous parameters
             this._prevModel = newModel;
 
             // Add a component for each model
-            newModel.forEach(model => {                
+            newModel.forEach(model => {
                 // Find out what type to construct
                 const componentType = this._sidebarService.getComponentType(model.type);
 
