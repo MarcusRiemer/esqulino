@@ -1,14 +1,16 @@
 import {Component, Inject, Optional}   from '@angular/core'
 
-import {Link}                          from '../../../../shared/page/widgets/index'
+import {Link}                          from '../../../shared/page/widgets/index'
 
-import {SIDEBAR_MODEL_TOKEN}           from '../../../editor.token'
-import {SidebarItemHost}               from '../../../sidebar-item-host.component'
+import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
+import {SidebarItemHost}               from '../../sidebar-item-host.component'
 
-import {LinkComponent}                 from './link.component'
+import {WidgetComponent}               from '../widget.component'
+
+type Component = WidgetComponent<Link>
 
 @Component({
-    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/link-sidebar.html',
+    templateUrl: 'app/editor/page/sidebar/templates/link-sidebar.html',
     directives : [SidebarItemHost]
 })
 export class LinkSidebarComponent {
@@ -17,7 +19,7 @@ export class LinkSidebarComponent {
 
     private _currentPageId : string;
     
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : LinkComponent) {
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : Component) {
         this._model = com.model;
     }
 

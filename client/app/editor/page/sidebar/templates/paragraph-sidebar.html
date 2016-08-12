@@ -1,4 +1,5 @@
-<sidebar-item-host>
+<sidebar-item-host [showClose]="true"
+                   [sidebarId]="id">
   <fieldset class="form-group">
     <label for="paragraph-sidebar-text">Text</label>
     <textarea [(ngModel)]="model.text"

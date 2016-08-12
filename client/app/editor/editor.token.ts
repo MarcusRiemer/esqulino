@@ -9,6 +9,12 @@ import {OpaqueToken} from '@angular/core'
 export const SIDEBAR_MODEL_TOKEN = new OpaqueToken("sidebar.model");
 
 /**
+ * Tells the sidebar the ID that was assigned to it. This ID is
+ * required to close a sidebar.
+ */
+export const SIDEBAR_ID_TOKEN = new OpaqueToken("sidebar.id");
+
+/**
  * This token is used to give widget components access to the model
  * they should display.
  */

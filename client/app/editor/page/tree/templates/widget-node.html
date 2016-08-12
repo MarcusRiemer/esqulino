@@ -4,20 +4,20 @@
   <span [class.block]="isBlock"
         (dragover)="onDragOver($event, 0)"
         (drop)="onDrop($event, 0)">
-    <span class="widget">{{ widget.type }}</span>
+    <span class="widget">{{ model.type }}</span>
   </span>
-  <span *ngIf="widget.text"
+  <span *ngIf="model.text"
         class="text"
-        [class.block]="isBlock">{{ widget.text }}</span>
-  <esqulino-widget-node *ngFor="let widget of children"
-                        [widget]="widget">
+        [class.block]="isBlock">{{ model.text }}</span>
+  <esqulino-widget-node *ngFor="let child of children"
+                        [model]="child">
   </esqulino-widget-node>
 
   <span [class.block]="isBlock"
         (dragover)="onDragOver($event, afterLastChildIndex)"
         (drop)="onDrop($event, afterLastChildIndex)">
     <span *ngIf="needsClosingNode"
-          class="widget-close">{{ widget.type }}</span>
+          class="widget-close">{{ model.type }}</span>
   </span>
 
 </div>

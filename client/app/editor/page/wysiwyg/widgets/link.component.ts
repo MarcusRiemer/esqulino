@@ -5,10 +5,10 @@ import {Link}                         from '../../../../shared/page/widgets/inde
 import {SidebarService}               from '../../../sidebar.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
-import {WidgetComponent}              from './widget.component'
+import {WidgetComponent}              from '../../widget.component'
 import {
     LINK_SIDEBAR_IDENTIFIER, LinkSidebarComponent
-} from './link.sidebar.component'
+} from '../../sidebar/link.sidebar.component'
 
 export {Link}
 

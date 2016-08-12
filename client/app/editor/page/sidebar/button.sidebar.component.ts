@@ -1,25 +1,26 @@
 import {Component, Inject, Optional}   from '@angular/core'
 
-import {SIDEBAR_MODEL_TOKEN}           from '../../../editor.token'
+import {Button, QueryAction}           from '../../../shared/page/widgets/index'
 
-import {SidebarItemHost}               from '../../../sidebar-item-host.component'
+import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
+import {SidebarItemHost}               from '../../sidebar-item-host.component'
 
-import {
-    ButtonComponent, Button, QueryAction
-} from './button.component'
+import {WidgetComponent}               from '../widget.component'
+
+type Component = WidgetComponent<Button>
 
 /**
  * Displays the sidebar editing component for a heading.
  */
 @Component({
-    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/button-sidebar.html',
+    templateUrl: 'app/editor/page/sidebar/templates/button-sidebar.html',
     directives : [SidebarItemHost]
 })
 export class ButtonSidebarComponent {
 
-    private _component : ButtonComponent;
+    private _component : Component;
 
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : ButtonComponent) {
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : Component) {
         this._component = com;
     }
 

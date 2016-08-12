@@ -9,11 +9,10 @@ import {SidebarService}               from '../../../sidebar.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {DragService, PageDragEvent}   from '../../drag.service'
-
-import {WidgetComponent}              from './widget.component'
+import {WidgetComponent}              from '../../widget.component'
 import {
     BUTTON_SIDEBAR_IDENTIFIER, ButtonSidebarComponent
-} from './button.sidebar.component'
+} from '../../sidebar/button.sidebar.component'
 
 export {Button, QueryAction}
 

@@ -9,12 +9,25 @@ import {SidebarDataComponent}        from './page/sidebar-data.component'
 import {SidebarWidgetsComponent}     from './page/sidebar-widgets.component'
 
 /**
- * Manages the global state of the sidebar.
+ * Manages the global state of the sidebar. Components should *never*
+ * interact with the sidebar directly but always use this service 
+ * instead.
  */
 @Injectable()
 export class SidebarService {
-    
-    private _model : BehaviorSubject<SidebarModel[]>;
+
+    /**
+     * Used to hand out IDs that are guaranteed to be unique.
+     * These IDs are then later used to distinguish created
+     * sidebar components.
+     */
+    private static _idCounter : number = 0;
+
+    /**
+     * The model that is currently displayed (or at least will
+     * be displayed the next tick).
+     */
+    private _model : BehaviorSubject<InternalSidebarModel[]>;
 
     /**
      * Valid types for sidebars.
@@ -23,7 +36,7 @@ export class SidebarService {
     private _knownTypes : { [typeName:string] : Type} = { };
 
     constructor() {
-        this._model = new BehaviorSubject<SidebarModel[]>([]);
+        this._model = new BehaviorSubject<InternalSidebarModel[]>([]);
 
         const pageDataId = SidebarDataComponent.SIDEBAR_IDENTIFIER;
         const pageWidgetsId = SidebarWidgetsComponent.SIDEBAR_IDENTIFIER;
@@ -78,17 +91,24 @@ export class SidebarService {
      *    are using.
      * @param param The parameter to pass to the sidebar, this depends
      *    on the sidebar that is going to be displayed.
+     *
+     * @return The ID of the single sidebar.
      */
-    showSingleSidebar(newType : string, param? : any) {
-        this.showMultiple([
+    showSingleSidebar(newType : string, param? : any) : number {
+        const ids = this.showMultiple([
             { type : newType, param : param }
         ]);
+
+        // Return the single Id that we added
+        return (ids[0]);
     }
 
     /**
      * Triggers showing multiple different sidebars.
+     *
+     * @return The IDs of these sidebars.
      */
-    showMultiple(mult : SidebarModel[]) {
+    showMultiple(mult : SidebarModel[]) : number[] {
         // Ensure every type is known. This does not use `every`
         // but `forEach` with a side-effect because we wan't to
         // know the offending type.
@@ -98,15 +118,32 @@ export class SidebarService {
             }
         });
 
+        // Assign the Id to each model
+        const internal : InternalSidebarModel[] = mult.map(m => {
+            return ({
+                id : ++SidebarService._idCounter,
+                type : m.type,
+                param : m.param
+            });
+        });
+
         // Kick off the rendering by placing a new value in the observable
-        this._model.next(mult);
+        this._model.next(internal);
+
+        return (internal.map(m => m.id));
     }
 
     /**
      * Hides a single sidebar.
      */
-    hideByIndex(index : number) {
+    hideById(id : number) {
         const model = this._model.getValue();
+        const index = model.findIndex(v => v.id === id);
+
+        if (index < 0) {
+            throw new Error(`Could not remove sidebar, unknown id "${id}"`);
+        }
+
         model.splice(index, 1);
 
         this._model.next(model);
@@ -123,7 +160,7 @@ export class SidebarService {
     /**
      * @return An observable for the current type of the sidebar
      */
-    get sidebarModel() : Observable<SidebarModel[]> {
+    get sidebarModel() : Observable<InternalSidebarModel[]> {
         return (this._model);
     }
 }
@@ -136,3 +173,10 @@ export interface SidebarModel {
     param? : any
 }
 
+/**
+ * The internally stored representation is extended with
+ * an id.
+ */
+export interface InternalSidebarModel extends SidebarModel {
+    id : number
+}

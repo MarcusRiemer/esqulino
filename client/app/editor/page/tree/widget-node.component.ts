@@ -4,20 +4,27 @@ import {
     Widget, WidgetHost, isWidgetHost, isWidget
 } from '../../../shared/page/hierarchy'
 
-import {DragService, PageDragEvent}       from '../drag.service'
+import {SidebarService}                   from '../../sidebar.service'
 
+import {DragService, PageDragEvent}       from '../drag.service'
+import {WidgetComponent}                  from '../widget.component'
+
+/**
+ * Represents a widget as a node in a tree.
+ */
 @Component({
     templateUrl: 'app/editor/page/tree/templates/widget-node.html',
     selector: 'esqulino-widget-node',
-    directives : [WidgetNode]
+    directives : [WidgetNode],
+    inputs: ['model']
 })
-export class WidgetNode {
-    @Input() widget : Widget;
-
+export class WidgetNode extends WidgetComponent<Widget> {
     constructor(
-        private _dragService : DragService
-    ) {}
-
+        private _dragService : DragService,
+        _sidebarService : SidebarService
+    ) {
+        super(_sidebarService)
+    }
 
     /**
      * @return True, if this drag event should be accepted.
@@ -44,8 +51,8 @@ export class WidgetNode {
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
 
         // Is this a meaningful child for this node or its parent?
-        if (this.acceptsDrag(this.widget, pageEvt) ||
-            this.acceptsDrag(this.widget.parent, pageEvt)) {
+        if (this.acceptsDrag(this.model, pageEvt) ||
+            this.acceptsDrag(this.model.parent, pageEvt)) {
             evt.preventDefault();
         }
     }
@@ -57,12 +64,12 @@ export class WidgetNode {
         evt.preventDefault();
         
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        const host = this.acceptsDrag(this.widget, pageEvt);
+        const host = this.acceptsDrag(this.model, pageEvt);
         if (host) {
             // If we are adding at the parent, change the index to our
             // own index.
-            if (host == this.widget.parent) {
-                index = this.widget.parent.children.indexOf(this.widget) + 1;
+            if (host == this.model.parent) {
+                index = this.model.parent.children.indexOf(this.model) + 1;
             }
             
             host.addWidget(pageEvt.widget, index);
@@ -79,9 +86,9 @@ export class WidgetNode {
      * Something is going to be dragged.
      */
     onDragStart(evt : DragEvent) {
-        this._dragService.startWidgetDrag(evt, "page", this.widget.toModel(), {
-            onRemove : () => this.widget.parent.removeWidget(this.widget, false),
-            onWidget : (_) => this.widget.parent.removeWidget(this.widget, false),
+        this._dragService.startWidgetDrag(evt, "page", this.model.toModel(), {
+            onRemove : () => this.model.parent.removeWidget(this.model, false),
+            onWidget : (_) => this.model.parent.removeWidget(this.model, false),
         });
     }
     
@@ -89,8 +96,8 @@ export class WidgetNode {
      * Type-safe accessor for children.
      */
     get children() : Widget[] {
-        if (isWidgetHost(this.widget)) {
-            return (this.widget.children);
+        if (isWidgetHost(this.model)) {
+            return ((this.model as any).children);
         } else {
             return ([]);
         }
@@ -109,7 +116,7 @@ export class WidgetNode {
      *         be rendered.
      */
     get needsClosingNode() : boolean {
-        return (this.children.length > 0 || (!!(this.widget as any).text));
+        return (this.children.length > 0 || (!!(this.model as any).text));
     }
 
     /**
@@ -117,7 +124,7 @@ export class WidgetNode {
      *         the closing block.
      */
     get isInline() : boolean {
-        return (this.children.length == 0 && (!!(this.widget as any).text));
+        return (this.children.length == 0 && (!!(this.model as any).text));
     }
 
     /**
