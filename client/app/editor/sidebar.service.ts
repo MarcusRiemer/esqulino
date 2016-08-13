@@ -4,7 +4,7 @@ import {BehaviorSubject}             from 'rxjs/BehaviorSubject'
 import {Observable}                  from 'rxjs/Observable'
 
 import {SIDEBAR_MODEL_TOKEN}         from './editor.token'
-import {SidebarComponent}            from './query/sidebar.component'
+import {QuerySidebarComponent}       from './query/sidebar.component'
 import {SidebarDataComponent}        from './page/sidebar-data.component'
 import {SidebarWidgetsComponent}     from './page/sidebar-widgets.component'
 
@@ -40,11 +40,11 @@ export class SidebarService {
 
         const pageDataId = SidebarDataComponent.SIDEBAR_IDENTIFIER;
         const pageWidgetsId = SidebarWidgetsComponent.SIDEBAR_IDENTIFIER;
-        const queryId = SidebarComponent.SIDEBAR_IDENTIFIER;
+        const queryId = QuerySidebarComponent.SIDEBAR_IDENTIFIER;
 
         this.registerType(pageDataId, SidebarDataComponent);
         this.registerType(pageWidgetsId, SidebarWidgetsComponent);
-        this.registerType(queryId, SidebarComponent);
+        this.registerType(queryId, QuerySidebarComponent);
     }
 
     /**

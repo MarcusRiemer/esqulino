@@ -20,7 +20,8 @@ import {PageTreeComponent}              from './page-tree.component'
  */
 @Component({
     templateUrl: 'app/editor/page/tree/templates/editor.html',
-    directives: [PageDataComponent, ServerPreviewComponent, PageTreeComponent]
+    directives: [PageDataComponent, ServerPreviewComponent, PageTreeComponent],
+    inputs: ['page', 'project']
 })
 export class PageTreeEditorComponent extends PageEditor {
     constructor(

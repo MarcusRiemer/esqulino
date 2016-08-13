@@ -13,9 +13,6 @@ import {
     ProjectService, Project
 } from '../project.service'
 
-import {QueryIconComponent}             from '../query-icon.component'
-import {SidebarItemHost}                from '../sidebar-item-host.component'
-
 import {DragService, PageDragEvent}     from './drag.service'
 
 /**
@@ -25,8 +22,7 @@ import {DragService, PageDragEvent}     from './drag.service'
  */
 @Component({
     templateUrl: 'app/editor/page/templates/sidebar-data.html',
-    selector : "page-sidebar",
-    directives : [QueryIconComponent, SidebarItemHost]
+    selector : "page-sidebar"
 })
 export class SidebarDataComponent implements OnInit, OnDestroy {
     /**

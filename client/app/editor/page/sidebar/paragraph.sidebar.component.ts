@@ -5,7 +5,6 @@ import {Paragraph}                     from '../../../shared/page/widgets/index'
 import {
     SIDEBAR_MODEL_TOKEN, SIDEBAR_ID_TOKEN
 } from '../../editor.token'
-import {SidebarItemHost}               from '../../sidebar-item-host.component'
 
 import {WidgetComponent}               from '../widget.component'
 
@@ -13,7 +12,6 @@ type Component = WidgetComponent<Paragraph>
 
 @Component({
     templateUrl: 'app/editor/page/sidebar/templates/paragraph-sidebar.html',
-    directives : [SidebarItemHost]
 })
 export class ParagraphSidebarComponent {
 

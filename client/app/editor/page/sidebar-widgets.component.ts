@@ -9,7 +9,6 @@ import {
 import {
     ProjectService, Project
 } from '../project.service'
-import {SidebarItemHost}                from '../sidebar-item-host.component'
 
 import {DragService, PageDragEvent}     from './drag.service'
 
@@ -21,7 +20,6 @@ import {DragService, PageDragEvent}     from './drag.service'
 @Component({
     templateUrl: 'app/editor/page/templates/sidebar-widgets.html',
     selector : "page-sidebar-widgets",
-    directives : [SidebarItemHost]
 })
 export class SidebarWidgetsComponent implements OnInit, OnDestroy {
     /**

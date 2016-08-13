@@ -1,5 +1,4 @@
 import {Component}                        from '@angular/core'
-import {ROUTER_DIRECTIVES}                from '@angular/router'
 
 import {QuerySelect}                      from '../shared/query'
 
@@ -10,7 +9,6 @@ import {QueryService}                     from './query.service'
 import {PageService}                      from './page.service'
 
 @Component({
-    directives: [ROUTER_DIRECTIVES],
     templateUrl: 'app/editor/templates/settings.html'
 })
 export class SettingsComponent {

@@ -1,34 +1,16 @@
 import {
     Component, OnInit, OnDestroy, ChangeDetectorRef, ReflectiveInjector
 } from '@angular/core'
-import {CORE_DIRECTIVES}                from '@angular/common'
-import {HTTP_PROVIDERS}                 from '@angular/http'
-import {
-    Router, ActivatedRoute, ROUTER_DIRECTIVES
-} from '@angular/router'
+import {Router, ActivatedRoute}         from '@angular/router'
 
 import {TableDescription}               from '../shared/schema.description'
 
-import {PageService}                    from './page.service'
 import {ProjectService, Project}        from './project.service'
-import {ToolbarService}                 from './toolbar.service'
-import {ToolbarComponent}               from './toolbar.component'
-import {NavbarComponent}                from './navbar.component'
-import {SidebarLoaderComponent}         from './sidebar-loader.component'
 import {SidebarService}                 from './sidebar.service'
 import {PreferencesService}             from './preferences.service'
-import {QueryService}                   from './query.service'
-
-import * as Query                       from './query/drag.service'
-import * as Page                        from './page/drag.service'
 
 @Component({
     templateUrl: 'app/editor/templates/index.html',
-    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES,
-                 ToolbarComponent, NavbarComponent, SidebarLoaderComponent],
-    providers: [HTTP_PROVIDERS, SidebarService, PageService, PreferencesService,
-                ProjectService, QueryService, ToolbarService,
-                Query.DragService, Page.DragService]
 })
 export class EditorComponent implements OnInit, OnDestroy {
     /**

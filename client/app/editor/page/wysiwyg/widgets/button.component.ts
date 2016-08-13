@@ -4,7 +4,6 @@ import {
 
 import {Button, QueryAction}          from '../../../../shared/page/widgets/index'
 
-import {QueryIconComponent}           from '../../../query-icon.component'
 import {SidebarService}               from '../../../sidebar.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
@@ -18,8 +17,7 @@ export {Button, QueryAction}
 
 @Component({
     templateUrl: 'app/editor/page/wysiwyg/widgets/templates/button.html',
-    selector: "esqulino-paragraph",
-    directives: [QueryIconComponent]
+    selector: "esqulino-paragraph"
 })
 export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
     

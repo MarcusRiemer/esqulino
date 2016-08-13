@@ -2,7 +2,7 @@ import {Component, Input}  from '@angular/core'
 
 import {
     Query, QuerySelect, QueryDelete, QueryInsert, QueryUpdate
-} from '../shared/query'
+} from '../../shared/query'
 
 /**
  * Renders a matching icon for a query.
