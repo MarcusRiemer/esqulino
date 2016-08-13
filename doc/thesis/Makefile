@@ -14,7 +14,7 @@ publish-draft: msg-pre-pdf $(PDF_FILENAME)
 	touch publish-draft
 
 clean : msg-pre-clean
-	rm -f $(PDF_FILENAME) *.aux *.blg *.out *.bbl *.log
+	rm -f $(PDF_FILENAME) *.aux *.blg *.out *.bbl *.log *.bcf *.tdo *.toc *.run.xml
 
 ##################################
 # Message targets
