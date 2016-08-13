@@ -16,16 +16,10 @@ import {
     QueryService, QueryParamsDescription
 } from '../query.service'
 
-import {QueryComponent, SqlStringPipe}  from './sql.component'
-import {SidebarComponent}               from './sidebar.component'
-import {ResultComponent}                from './result.component'
-import {ValidatorComponent}             from './validator.component'
+import {QuerySidebarComponent}          from './sidebar.component'
 
 @Component({
     templateUrl: 'app/editor/query/templates/editor.html',
-    directives: [QueryComponent, SidebarComponent, ResultComponent, ValidatorComponent],
-    providers: [],
-    pipes: [SqlStringPipe],
 })
 export class QueryEditorComponent implements OnInit {
     /**
@@ -65,7 +59,7 @@ export class QueryEditorComponent implements OnInit {
         private _sidebarService : SidebarService,
         private _preferences : PreferencesService
     ) {
-        this._sidebarService.showSingleSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
+        this._sidebarService.showSingleSidebar(QuerySidebarComponent.SIDEBAR_IDENTIFIER);
         this._toolbarService.resetItems();
     }
 

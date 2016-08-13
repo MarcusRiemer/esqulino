@@ -17,7 +17,7 @@ import {WidgetLoaderComponent}           from './widget-loader.component'
 @Component({
     selector: 'esqulino-page-layout',
     templateUrl: 'app/editor/page/wysiwyg/templates/page-layout.html',
-    directives: [WidgetLoaderComponent]
+    directives: [WidgetLoaderComponent],
 })
 export class PageLayoutComponent implements OnInit {
     @Input() page : Page;

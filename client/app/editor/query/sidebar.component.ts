@@ -5,7 +5,6 @@ import {ActivatedRoute, Router}      from '@angular/router'
 
 import {Query, Model}                from '../../shared/query'
 
-import {SidebarItemHost}             from '../sidebar-item-host.component'
 import {ProjectService}              from '../project.service'
 
 import {DragService}                 from './drag.service'
@@ -20,9 +19,8 @@ import {OperatorPipe}                from './operator.pipe'
     templateUrl: 'app/editor/query/templates/sidebar.html',
     selector : "sql-sidebar",
     pipes : [OperatorPipe],
-    directives: [SidebarItemHost]
 })
-export class SidebarComponent implements OnInit, OnDestroy {
+export class QuerySidebarComponent implements OnInit, OnDestroy {
     /**
      * This ID is used to register this sidebar with the sidebar loader
      */

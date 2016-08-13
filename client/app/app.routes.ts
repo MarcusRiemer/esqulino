@@ -1,15 +1,11 @@
-import {
-    provideRouter, RouterConfig
-} from '@angular/router'
+import {Routes, RouterModule}           from '@angular/router'
 
-import {EditorRoutes}                   from './editor/editor.routes'
-import {FrontRoutes}                    from './front/front.routes'
+const routes : Routes = [
 
-const routes : RouterConfig = [
-    ...FrontRoutes,
-    ...EditorRoutes,
 ]
 
-export const APP_ROUTER_PROVIDERS = [
-    provideRouter(routes)
+export const appRoutingProviders : any[] = [
+
 ]
+
+export const routing = RouterModule.forRoot(routes);

@@ -1,5 +1,4 @@
 import {Component, Input}          from '@angular/core'
-import {ROUTER_DIRECTIVES}         from '@angular/router'
 
 import {ProjectDescription}        from '../shared/project.description'
 import {ProjectDescriptionService} from '../shared/project.description.service'
@@ -10,7 +9,6 @@ import {ProjectDescriptionService} from '../shared/project.description.service'
 @Component({
     selector: 'project-list-item',
     templateUrl: 'app/front/templates/project-list-item.html',
-    directives: [ROUTER_DIRECTIVES]
 })
 export class ProjectListItemComponent {
     @Input() project : ProjectDescription;

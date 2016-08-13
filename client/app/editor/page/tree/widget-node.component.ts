@@ -15,7 +15,6 @@ import {WidgetComponent}                  from '../widget.component'
 @Component({
     templateUrl: 'app/editor/page/tree/templates/widget-node.html',
     selector: 'esqulino-widget-node',
-    directives : [WidgetNode],
     inputs: ['model']
 })
 export class WidgetNode extends WidgetComponent<Widget> {

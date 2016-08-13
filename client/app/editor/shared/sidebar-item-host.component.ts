@@ -1,6 +1,6 @@
 import {Component, Input}                 from '@angular/core'
 
-import {SidebarService}                   from './sidebar.service'
+import {SidebarService}                   from '../sidebar.service'
 
 /**
  * Wrapper around something that is displayed in the sidebar.
