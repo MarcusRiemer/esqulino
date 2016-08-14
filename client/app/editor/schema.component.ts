@@ -4,11 +4,8 @@ import {ProjectService, Project}      from './project.service'
 import {SidebarService}               from './sidebar.service'
 import {ToolbarService}               from './toolbar.service'
 
-import {SchemaTableComponent}         from './schema-table.component'
-
 @Component({
-    templateUrl: 'app/editor/templates/schema.html',
-    directives: [SchemaTableComponent]
+    templateUrl: 'app/editor/templates/schema.html'
 })
 export class SchemaComponent implements OnInit {
     /**

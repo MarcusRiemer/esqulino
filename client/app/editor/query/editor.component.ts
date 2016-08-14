@@ -16,7 +16,7 @@ import {SidebarService}                 from '../sidebar.service'
 import {
     QueryService, QueryParamsDescription
 } from '../query.service'
-import {QuerySidebarComponent}          from './sidebar.component'
+import {QuerySidebarComponent}          from './query.sidebar'
 
 @Component({
     templateUrl: 'app/editor/query/templates/editor.html',

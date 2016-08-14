@@ -2,7 +2,9 @@ import {NgModule}                       from '@angular/core'
 import {CommonModule}                   from '@angular/common'
 import {FormsModule}                    from '@angular/forms'
 
-import {SharedEditorModule}             from './shared/shared.module'
+import SharedEditorModule               from './shared/shared.module'
+import PageEditorModule                 from './page/page-editor.module'
+import QueryEditorModule                from './query/editor.module'
 
 import {EditorComponent}                from './editor.component'
 import {editorRouting}                  from './editor.routes'
@@ -19,16 +21,16 @@ import {QueryService}                   from './query.service'
 import {RegistrationService}            from './registration.service'
 import {SettingsComponent}              from './settings.component'
 import {SchemaComponent}                from './schema.component'
-
-import * as Query                       from './query/drag.service'
-import * as Page                        from './page/drag.service'
+import {SchemaTableComponent}           from './schema-table.component'
 
 @NgModule({
     imports : [
         CommonModule,
         FormsModule,
-        editorRouting,
+        //editorRouting,
         SharedEditorModule,
+        PageEditorModule.forRoot(),
+        QueryEditorModule.forRoot(),
     ],
     declarations: [
         EditorComponent,
@@ -37,6 +39,7 @@ import * as Page                        from './page/drag.service'
         SidebarLoaderComponent,
         SettingsComponent,
         SchemaComponent,
+        SchemaTableComponent
     ],
     providers: [
         SidebarService,
@@ -46,12 +49,15 @@ import * as Page                        from './page/drag.service'
         ProjectService,
         QueryService,
         ToolbarService,
-        Query.DragService,
-        Page.DragService,
     ],
     exports: [
-        SharedEditorModule
+        SharedEditorModule,
+        QueryEditorModule,
+        PageEditorModule,
+        EditorComponent,
+        SettingsComponent,
+        SchemaComponent,
     ]
   
 })
-export class EditorModule { }
+export default class EditorModule { }

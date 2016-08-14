@@ -9,10 +9,6 @@ import {RegistrationService}            from '../../registration.service'
 import {ToolbarService}                 from '../../toolbar.service'
 
 import {PageEditor}                     from '../page-editor'
-import {ServerPreviewComponent}         from '../server-preview.component'
-import {SidebarDataComponent}           from '../sidebar-data.component'
-import {SidebarWidgetsComponent}        from '../sidebar-widgets.component'
-import {PageDataComponent}              from '../page-data.component'
 
 import {PageTreeComponent}              from './page-tree.component'
 
@@ -21,7 +17,6 @@ import {PageTreeComponent}              from './page-tree.component'
  */
 @Component({
     templateUrl: 'app/editor/page/tree/templates/editor.html',
-    directives: [PageDataComponent, ServerPreviewComponent, PageTreeComponent],
     inputs: ['page', 'project']
 })
 export class PageTreeEditorComponent extends PageEditor {

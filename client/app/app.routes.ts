@@ -1,5 +1,8 @@
 import {Routes, RouterModule}           from '@angular/router'
 
+import {editorRoutes}                   from './editor/editor.routes'
+import {frontRoutes}                    from './front/front.routes'
+
 const routes : Routes = [
     {
         path: '',
@@ -11,11 +14,13 @@ const routes : Routes = [
             },
             {
                 path: 'editor/:projectId',
-                loadChildren: '/app/editor/editor.module#EditorModule'
+                children: [...editorRoutes]
+                //loadChildren: '/app/editor/editor.module'
             },
             {
                 path: 'about',
-                loadChildren: '/app/front/front.module#FrontModule'
+                children: [...frontRoutes]
+                //loadChildren: '/app/front/front.module'
             }
         ]
     },

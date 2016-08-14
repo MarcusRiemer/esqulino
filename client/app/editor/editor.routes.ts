@@ -4,7 +4,10 @@ import {EditorComponent}                from './editor.component'
 import {SettingsComponent}              from './settings.component'
 import {SchemaComponent}                from './schema.component'
 
-const editorRoutes : Routes = [
+import {queryEditorRoutes}              from './query/editor.routes'
+import {pageEditorRoutes}               from './page/page-editor.routes'
+
+export const editorRoutes : Routes = [
     {
         path: "",
         component : EditorComponent,
@@ -24,11 +27,13 @@ const editorRoutes : Routes = [
             },
             {
                 path: 'query',
-                loadChildren: '/app/editor/query/editor.module#QueryEditorModule'
+                children: [...queryEditorRoutes]
+                //loadChildren: '/app/editor/query/editor.module'
             },
             {
                 path: 'page',
-                loadChildren: '/app/editor/page/page-editor.module#PageEditorModule'
+                children: [...pageEditorRoutes]
+                //loadChildren: '/app/editor/page/page-editor.module'
             }
         ]
     }

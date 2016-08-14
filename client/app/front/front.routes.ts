@@ -5,7 +5,7 @@ import {ImprintComponent}          from './imprint.component'
 import {ProjectListComponent}      from './project-list.component'
 import {AboutComponent}            from './about.component'
 
-const frontRoutes : Routes = [
+export const frontRoutes : Routes = [
     {
         path : '',
         component: FrontComponent,

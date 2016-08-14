@@ -1,14 +1,16 @@
-import {NgModule}                       from '@angular/core'
+import {NgModule, ModuleWithProviders}  from '@angular/core'
 
-import {SharedEditorModule}             from '../shared/shared.module'
+import SharedEditorModule               from '../shared/shared.module'
 
 import {queryEditorRouting}             from './editor.routes'
+
+import {DragService}                    from './drag.service'
 
 import {QueryEditorHostComponent}       from './host.component'
 import {QueryEditorComponent}           from './editor.component'
 import {QueryCreateComponent}           from './create.component'
 import {QueryComponent, SqlStringPipe}  from './sql.component'
-import {QuerySidebarComponent}          from './sidebar.component'
+import {QuerySidebarComponent}          from './query.sidebar'
 import {ResultComponent}                from './result.component'
 import {ValidatorComponent}             from './validator.component'
 
@@ -21,17 +23,15 @@ import {WhereComponent}                 from './sql-where.component'
 import {InsertComponent}                from './sql-insert.component'
 import {ExpressionComponent}            from './sql-expr.component'
 
-
 @NgModule({
     imports: [
         SharedEditorModule,
-        queryEditorRouting,
+        // queryEditorRouting,
     ],    
     declarations: [
         QueryEditorHostComponent,
         QueryEditorComponent,
         QueryCreateComponent,
-        QuerySidebarComponent,
         ResultComponent,
         ValidatorComponent,
         
@@ -39,12 +39,34 @@ import {ExpressionComponent}            from './sql-expr.component'
         OperatorPipe,
 
         QueryComponent,
+        ExpressionComponent,
         SelectComponent,
         DeleteComponent,
         FromComponent,
         WhereComponent,
-        InsertComponent
+        InsertComponent,
+
+        QuerySidebarComponent
     ],
+    providers: [
+        DragService
+    ],
+    entryComponents: [
+        QuerySidebarComponent
+    ],
+    exports: [
+        QuerySidebarComponent,
+        QueryEditorHostComponent,
+        QueryEditorComponent,
+        QueryCreateComponent,
+    ]
     
 })
-export class QueryEditorModule {}
+export default class QueryEditorModule {
+    static forRoot() : ModuleWithProviders {
+        return ({
+            ngModule : QueryEditorModule,
+            providers : [DragService]
+        });
+    }
+}

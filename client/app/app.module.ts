@@ -2,6 +2,9 @@ import {NgModule}                          from '@angular/core'
 import {BrowserModule}                     from '@angular/platform-browser'
 import {HttpModule}                        from '@angular/http'
 
+import FrontModule                         from './front/front.module'
+import EditorModule                        from './editor/editor.module'
+
 import {ServerApiService}                  from './shared/serverapi.service'
 
 import {SqlScratchComponent}               from './app.component'
@@ -11,7 +14,9 @@ import {routing}                           from './app.routes'
     imports: [
         HttpModule,
         BrowserModule,
-        routing
+        FrontModule,
+        EditorModule,
+        routing,
     ],
     declarations: [
         SqlScratchComponent,
@@ -23,4 +28,4 @@ import {routing}                           from './app.routes'
         SqlScratchComponent
     ],
 })
-export class AppModule {}
+export default class AppModule {}

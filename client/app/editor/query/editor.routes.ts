@@ -4,7 +4,7 @@ import {QueryCreateComponent}           from './create.component'
 import {QueryEditorComponent}           from './editor.component'
 import {QueryEditorHostComponent}       from './host.component'
 
-const editorRoutes : Routes = [
+export const queryEditorRoutes : Routes = [
     {
         path: "",
         component : QueryEditorHostComponent,
@@ -15,4 +15,4 @@ const editorRoutes : Routes = [
     }
 ]
 
-export const queryEditorRouting = RouterModule.forChild(editorRoutes);
+export const queryEditorRouting = RouterModule.forChild(queryEditorRoutes);

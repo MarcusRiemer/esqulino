@@ -1,7 +1,7 @@
 import {
     Component, Input, OnInit,
     Injector, DynamicComponentLoader,
-    ViewChild, ViewContainerRef, ComponentResolver,
+    ViewChild, ViewContainerRef, ComponentFactoryResolver,
     Type, provide, ReflectiveInjector
 } from '@angular/core'
 
@@ -49,14 +49,16 @@ export class WidgetLoaderComponent implements OnInit {
 
     @ViewChild('root', { read: ViewContainerRef}) viewRoot : ViewContainerRef;
 
-    private _typeMapping : { [typeName:string] : Type} = {}
+    // TODO: This should map to an instance of ConcreteType, but I can't
+    //       find out where what would come from.
+    private _typeMapping : { [typeName:string] : any} = {}
 
     private _isLoading = true;
 
     constructor(
         private _injector: Injector,
         private _selfRef : ViewContainerRef,
-        private _resolver : ComponentResolver,
+        private _resolver : ComponentFactoryResolver,
         private _dcl : DynamicComponentLoader
     ) {
         /**
@@ -84,7 +86,7 @@ export class WidgetLoaderComponent implements OnInit {
      * Resolves the string description of the widget to load
      * to the correct component type.
      */
-    private getComponentType(widgetType : string) : Type {
+    private getComponentType(widgetType : string) : any {
         if (!this._typeMapping[widgetType]) {
             throw new Error(`Unknown widget type requested from template: "${widgetType}"`);
         }
@@ -108,10 +110,8 @@ export class WidgetLoaderComponent implements OnInit {
             provide(Page, {useValue : this.page})
         ],this._injector);
         
-        this._resolver.resolveComponent(componentType)
-            .then( (fac) => {
-                this.viewRoot.createComponent(fac, 0, injector);
-                this._isLoading = false;
-            });
+        const fac = this._resolver.resolveComponentFactory(componentType)
+        this.viewRoot.createComponent(fac, 0, injector);
+        this._isLoading = false;
     }
 }

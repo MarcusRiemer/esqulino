@@ -9,15 +9,12 @@ import {SidebarService}                  from '../../sidebar.service'
 
 import {DragService, PageDragEvent}      from '../drag.service'
 
-import {WidgetLoaderComponent}           from './widget-loader.component'
-
 /**
  * Editing the layout of esqulino pages
  */
 @Component({
     selector: 'esqulino-page-layout',
     templateUrl: 'app/editor/page/wysiwyg/templates/page-layout.html',
-    directives: [WidgetLoaderComponent],
 })
 export class PageLayoutComponent implements OnInit {
     @Input() page : Page;
