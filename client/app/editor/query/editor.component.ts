@@ -10,12 +10,12 @@ import {
 
 import {ProjectService, Project}        from '../project.service'
 import {PreferencesService}             from '../preferences.service'
+import {RegistrationService}            from '../registration.service'
 import {ToolbarService}                 from '../toolbar.service'
 import {SidebarService}                 from '../sidebar.service'
 import {
     QueryService, QueryParamsDescription
 } from '../query.service'
-
 import {QuerySidebarComponent}          from './sidebar.component'
 
 @Component({
@@ -57,8 +57,15 @@ export class QueryEditorComponent implements OnInit {
         private _toolbarService : ToolbarService,
         private _routeParams : ActivatedRoute,
         private _sidebarService : SidebarService,
-        private _preferences : PreferencesService
+        private _preferences : PreferencesService,
+        registrationService : RegistrationService
     ) {
+        // Register the query sidebar
+        registrationService.registerSidebarType({
+            typeId : QuerySidebarComponent.SIDEBAR_IDENTIFIER,
+            componentType : QuerySidebarComponent
+        });
+        
         this._sidebarService.showSingleSidebar(QuerySidebarComponent.SIDEBAR_IDENTIFIER);
         this._toolbarService.resetItems();
     }

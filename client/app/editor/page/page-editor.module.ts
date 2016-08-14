@@ -1,6 +1,4 @@
 import {NgModule}                       from '@angular/core'
-import {CommonModule}                   from '@angular/common'
-import {FormsModule}                    from '@angular/forms'
 
 import {SharedEditorModule}             from '../shared/shared.module'
 
@@ -14,13 +12,18 @@ import {PageTreeEditorComponent}        from './tree/editor.component'
 import {WidgetNode}                     from './tree/widget-node.component'
 
 import {PageVisualEditorComponent}      from './wysiwyg/editor.component'
+import {ButtonComponent}                from './wysiwyg/widgets/button.component'
+import {EmbeddedHtmlComponent}          from './wysiwyg/widgets/embedded-html.component'
+import {HeadingComponent}               from './wysiwyg/widgets/heading.component'
+import {InputComponent}                 from './wysiwyg/widgets/input.component'
+import {LinkComponent}                  from './wysiwyg/widgets/link.component'
+import {ParagraphComponent}             from './wysiwyg/widgets/paragraph.component'
+import {QueryTableComponent}            from './wysiwyg/widgets/query-table.component'
 
 @NgModule({
     imports: [
-        CommonModule,
-        FormsModule,
+        SharedEditorModule,
         pageEditorRouting,
-        SharedEditorModule
     ],    
     declarations: [
         PageEditorHostComponent,
@@ -31,6 +34,14 @@ import {PageVisualEditorComponent}      from './wysiwyg/editor.component'
         
         PageVisualEditorComponent,
     ],
-    
+    entryComponents: [
+        ButtonComponent,
+        EmbeddedHtmlComponent,
+        HeadingComponent,
+        InputComponent,
+        LinkComponent,
+        ParagraphComponent,
+        QueryTableComponent,
+    ]
 })
 export class PageEditorModule {}

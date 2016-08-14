@@ -6,7 +6,7 @@ import {QueryEditorHostComponent}       from './host.component'
 
 const editorRoutes : Routes = [
     {
-        path: "query",
+        path: "",
         component : QueryEditorHostComponent,
         children : [
             { path: 'create', component : QueryCreateComponent },

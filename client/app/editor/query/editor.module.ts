@@ -1,6 +1,4 @@
 import {NgModule}                       from '@angular/core'
-import {CommonModule}                   from '@angular/common'
-import {FormsModule}                    from '@angular/forms'
 
 import {SharedEditorModule}             from '../shared/shared.module'
 
@@ -14,6 +12,8 @@ import {QuerySidebarComponent}          from './sidebar.component'
 import {ResultComponent}                from './result.component'
 import {ValidatorComponent}             from './validator.component'
 
+import {OperatorPipe}                   from './operator.pipe'
+
 import {SelectComponent}                from './sql-select.component'
 import {DeleteComponent}                from './sql-delete.component'
 import {FromComponent}                  from './sql-from.component'
@@ -24,21 +24,21 @@ import {ExpressionComponent}            from './sql-expr.component'
 
 @NgModule({
     imports: [
-        CommonModule,
-        FormsModule,
+        SharedEditorModule,
         queryEditorRouting,
-        SharedEditorModule
     ],    
     declarations: [
         QueryEditorHostComponent,
         QueryEditorComponent,
-        QueryComponent,
         QueryCreateComponent,
         QuerySidebarComponent,
         ResultComponent,
         ValidatorComponent,
+        
         SqlStringPipe,
+        OperatorPipe,
 
+        QueryComponent,
         SelectComponent,
         DeleteComponent,
         FromComponent,

@@ -6,13 +6,30 @@ import {SchemaComponent}                from './schema.component'
 
 const editorRoutes : Routes = [
     {
-        path: "editor/:projectId",
+        path: "",
         component : EditorComponent,
         children : [
-            { path: '', redirectTo: 'settings', pathMatch: 'full'},
-            { path: 'settings', component: SettingsComponent },
-            { path: 'schema', component: SchemaComponent },
-            { path: 'query', loadChildren: '/app/editor/query/editor.module#QueryEditorModule' }
+            {
+                path: '',
+                redirectTo: 'settings',
+                pathMatch: 'full'
+            },
+            {
+                path: 'settings',
+                component: SettingsComponent
+            },
+            {
+                path: 'schema',
+                component: SchemaComponent
+            },
+            {
+                path: 'query',
+                loadChildren: '/app/editor/query/editor.module#QueryEditorModule'
+            },
+            {
+                path: 'page',
+                loadChildren: '/app/editor/page/page-editor.module#PageEditorModule'
+            }
         ]
     }
 ]

@@ -2,8 +2,6 @@ import {NgModule}                       from '@angular/core'
 import {CommonModule}                   from '@angular/common'
 import {FormsModule}                    from '@angular/forms'
 
-import {QueryEditorModule}              from './query/editor.module'
-import {PageEditorModule}               from './page/page-editor.module'
 import {SharedEditorModule}             from './shared/shared.module'
 
 import {EditorComponent}                from './editor.component'
@@ -18,6 +16,7 @@ import {SidebarLoaderComponent}         from './sidebar-loader.component'
 import {SidebarService}                 from './sidebar.service'
 import {PreferencesService}             from './preferences.service'
 import {QueryService}                   from './query.service'
+import {RegistrationService}            from './registration.service'
 import {SettingsComponent}              from './settings.component'
 import {SchemaComponent}                from './schema.component'
 
@@ -30,8 +29,6 @@ import * as Page                        from './page/drag.service'
         FormsModule,
         editorRouting,
         SharedEditorModule,
-        QueryEditorModule,
-        PageEditorModule
     ],
     declarations: [
         EditorComponent,
@@ -43,6 +40,7 @@ import * as Page                        from './page/drag.service'
     ],
     providers: [
         SidebarService,
+        RegistrationService,
         PageService,
         PreferencesService,
         ProjectService,
@@ -52,6 +50,7 @@ import * as Page                        from './page/drag.service'
         Page.DragService,
     ],
     exports: [
+        SharedEditorModule
     ]
   
 })
