@@ -7,12 +7,7 @@ import {AboutComponent}            from './about.component'
 
 const frontRoutes : Routes = [
     {
-        path: '',
-        redirectTo: '/about',
-        terminal: true
-    },
-    {
-        path : 'about',
+        path : '',
         component: FrontComponent,
         children : [
             { path: 'projects', component: ProjectListComponent},

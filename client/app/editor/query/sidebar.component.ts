@@ -17,8 +17,7 @@ import {OperatorPipe}                from './operator.pipe'
  */
 @Component({
     templateUrl: 'app/editor/query/templates/sidebar.html',
-    selector : "sql-sidebar",
-    pipes : [OperatorPipe],
+    selector : "sql-sidebar"
 })
 export class QuerySidebarComponent implements OnInit, OnDestroy {
     /**
@@ -26,7 +25,6 @@ export class QuerySidebarComponent implements OnInit, OnDestroy {
      */
     public static get SIDEBAR_IDENTIFIER() { return "query" };
 
-    
     /**
      * View Variable:
      * The currently edited query
@@ -75,8 +73,6 @@ export class QuerySidebarComponent implements OnInit, OnDestroy {
         this._subscriptionRefs = [];
     }
 
-    
-
     /**
      * @return A list of currently allowed logic operators
      */
@@ -108,7 +104,6 @@ export class QuerySidebarComponent implements OnInit, OnDestroy {
     startStarDrag(evt : DragEvent) {
         this._dragService.startExpressionModelDrag({ star : { } }, "sidebar", evt);
     }
-
 
     /**
      * Starts a drag event involving a column

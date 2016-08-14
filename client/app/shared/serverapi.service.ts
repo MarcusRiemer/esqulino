@@ -1,7 +1,6 @@
 import {Injectable}     from '@angular/core';
 import {Http, Response} from '@angular/http';
 
-
 /**
  * The format of error messages the server might return.
  */

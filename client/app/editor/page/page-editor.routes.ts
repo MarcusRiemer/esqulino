@@ -7,7 +7,7 @@ import {PageVisualEditorComponent}      from './wysiwyg/editor.component'
 
 const editorRoutes : Routes = [
     {
-        path: "page",
+        path: "",
         component : PageEditorHostComponent,
         children : [
             { path: 'create', component : PageCreateComponent },

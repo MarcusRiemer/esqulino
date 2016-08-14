@@ -5,6 +5,7 @@ import {
 import {Button, QueryAction}          from '../../../../shared/page/widgets/index'
 
 import {SidebarService}               from '../../../sidebar.service'
+import {RegistrationService}          from '../../../registration.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {DragService, PageDragEvent}   from '../../drag.service'
@@ -23,10 +24,14 @@ export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
     
     constructor(@Inject(WIDGET_MODEL_TOKEN) model : Button,
                 sidebarService : SidebarService,
+                registrationService : RegistrationService,
                 private _cdRef : ChangeDetectorRef) {
         super(sidebarService, model, {
-            id: BUTTON_SIDEBAR_IDENTIFIER,
-            type : ButtonSidebarComponent
+            reg : {
+                typeId: BUTTON_SIDEBAR_IDENTIFIER,
+                componentType : ButtonSidebarComponent
+            },
+            registrationService : registrationService
         });
     }
 

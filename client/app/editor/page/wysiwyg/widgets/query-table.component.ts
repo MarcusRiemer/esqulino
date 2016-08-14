@@ -8,6 +8,7 @@ import {QueryTable}                 from '../../../../shared/page/widgets/index'
 
 import {ProjectService, Project}    from '../../../project.service'
 import {SidebarService}             from '../../../sidebar.service'
+import {RegistrationService}        from '../../../registration.service'
 import {
     WIDGET_MODEL_TOKEN
 } from '../../../editor.token'
@@ -33,10 +34,14 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
     constructor(@Inject(WIDGET_MODEL_TOKEN) model : QueryTable,
                 private _cdRef: ChangeDetectorRef,
                 private _dragService : DragService,
+                registrationService : RegistrationService,
                 sidebarService : SidebarService) {
         super(sidebarService, model, {
-            id : QUERY_TABLE_SIDEBAR_IDENTIFIER,
-            type : QueryTableSidebarComponent
+            reg : {
+                typeId: QUERY_TABLE_SIDEBAR_IDENTIFIER,
+                componentType : QueryTableSidebarComponent
+            },
+            registrationService : registrationService
         });
     }
 

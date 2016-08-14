@@ -58,7 +58,7 @@ export class SidebarLoaderComponent implements OnInit {
             newModel.length === this._prevModel.length &&
             newModel.every((m,i) => modelEqual(m,this._prevModel[i]));
 
-        console.log(`Rendering new Sidebars: identical = ${identical}, types = ${newModel.map(s => s.type).join(', ')}`);
+        console.log(`Rendering new Sidebars: identical = ${identical}, types = [${newModel.map(s => s.type).join(', ')}]`);
 
         // Is this really a new sidebar?
         if (!identical) {
