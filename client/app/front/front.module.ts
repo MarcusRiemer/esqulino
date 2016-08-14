@@ -25,6 +25,12 @@ import {ProjectListItemComponent}       from './project-list-item.component'
     ],
     providers : [
         ProjectDescriptionService,
+    ],
+    exports: [
+        AboutComponent,
+        FrontComponent,
+        ImprintComponent,
+        ProjectListComponent,
     ]
 })
-export class FrontModule { }
+export default class FrontModule { }

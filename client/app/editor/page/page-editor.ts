@@ -15,8 +15,8 @@ import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 
 import {ServerPreviewComponent}         from './server-preview.component'
-import {SidebarDataComponent}           from './sidebar-data.component'
-import {SidebarWidgetsComponent}        from './sidebar-widgets.component'
+import {SidebarDataComponent}           from './page-data.sidebar'
+import {SidebarWidgetsComponent}        from './page-widgets.sidebar'
 
 /**
  * Base class for components that edit esqulino pages.

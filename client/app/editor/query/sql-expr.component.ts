@@ -13,8 +13,6 @@ import {
 @Component({
     selector : 'sql-expr',
     templateUrl : 'app/editor/query/templates/query-expr.html',
-    directives: [ExpressionComponent],
-    pipes: [OperatorPipe]
 })
 export class ExpressionComponent {
     @Input() expr : SyntaxTree.Expression;

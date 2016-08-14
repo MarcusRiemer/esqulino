@@ -29,7 +29,6 @@ export class SidebarService {
 
     /**
      * Valid types for sidebars.
-     * TODO: Allow different sidebars to somehow register themself.
      */
     private _knownTypes : { [typeName:string] : Type} = { };
 
@@ -75,7 +74,7 @@ export class SidebarService {
     /**
      * @return The component type for the given identifier.
      */
-    getComponentType(newType : string) : Type {
+    getComponentType(newType : string) : any {
         return (this._knownTypes[newType]);
     }
 

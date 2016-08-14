@@ -5,7 +5,7 @@ import {PageCreateComponent}            from './create.component'
 import {PageTreeEditorComponent}        from './tree/editor.component'
 import {PageVisualEditorComponent}      from './wysiwyg/editor.component'
 
-const editorRoutes : Routes = [
+export const pageEditorRoutes : Routes = [
     {
         path: "",
         component : PageEditorHostComponent,
@@ -17,4 +17,4 @@ const editorRoutes : Routes = [
     }
 ]
 
-export const pageEditorRouting = RouterModule.forChild(editorRoutes);
+export const pageEditorRouting = RouterModule.forChild(pageEditorRoutes);

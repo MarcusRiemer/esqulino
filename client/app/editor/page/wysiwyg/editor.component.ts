@@ -9,19 +9,12 @@ import {RegistrationService}            from '../../registration.service'
 import {ToolbarService}                 from '../../toolbar.service'
 
 import {PageEditor}                     from '../page-editor'
-import {ServerPreviewComponent}         from '../server-preview.component'
-import {SidebarDataComponent}           from '../sidebar-data.component'
-import {SidebarWidgetsComponent}        from '../sidebar-widgets.component'
-import {PageDataComponent}              from '../page-data.component'
-
-import {PageLayoutComponent}            from './page-layout.component'
 
 /**
  * A WYSIWYG-editor for pages.
  */
 @Component({
     templateUrl: 'app/editor/page/wysiwyg/templates/editor.html',
-    directives: [PageLayoutComponent, PageDataComponent, ServerPreviewComponent]
 })
 export class PageVisualEditorComponent extends PageEditor {
     constructor(
