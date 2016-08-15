@@ -50,11 +50,11 @@
 
 nav.toolbar .navbar-brand {
     /* Hack: Account for margin and padding of Bootstraps stuff */
-    min-width: $sidebar-width - 16px;
+    min-width: $navbar-width - 16px;
 }
 
 .editor .navbar {
-    flex: 0 0 $sidebar-width;
+    flex: 0 0 $navbar-width;
 }
 
 .editor .sidebar {
