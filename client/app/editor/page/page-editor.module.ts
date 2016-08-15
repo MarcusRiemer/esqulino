@@ -68,6 +68,9 @@ import {QueryTableComponent}            from './wysiwyg/widgets/query-table.comp
         LinkComponent,
         ParagraphComponent,
         QueryTableComponent,
+
+        SidebarDataComponent,
+        SidebarWidgetsComponent,
     ],
     exports: [
         PageEditorHostComponent,
