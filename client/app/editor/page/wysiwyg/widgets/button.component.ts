@@ -4,8 +4,8 @@ import {
 
 import {Button, QueryAction}          from '../../../../shared/page/widgets/index'
 
-import {QueryIconComponent}           from '../../../query-icon.component'
 import {SidebarService}               from '../../../sidebar.service'
+import {RegistrationService}          from '../../../registration.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {DragService, PageDragEvent}   from '../../drag.service'
@@ -18,17 +18,20 @@ export {Button, QueryAction}
 
 @Component({
     templateUrl: 'app/editor/page/wysiwyg/widgets/templates/button.html',
-    selector: "esqulino-paragraph",
-    directives: [QueryIconComponent]
+    selector: "esqulino-paragraph"
 })
 export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
     
     constructor(@Inject(WIDGET_MODEL_TOKEN) model : Button,
                 sidebarService : SidebarService,
+                registrationService : RegistrationService,
                 private _cdRef : ChangeDetectorRef) {
         super(sidebarService, model, {
-            id: BUTTON_SIDEBAR_IDENTIFIER,
-            type : ButtonSidebarComponent
+            reg : {
+                typeId: BUTTON_SIDEBAR_IDENTIFIER,
+                componentType : ButtonSidebarComponent
+            },
+            registrationService : registrationService
         });
     }
 

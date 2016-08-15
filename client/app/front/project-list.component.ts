@@ -1,10 +1,7 @@
-import {Component, OnInit, Input}  from '@angular/core';
-import {ROUTER_DIRECTIVES}         from '@angular/router';
+import {Component, OnInit, Input}  from '@angular/core'
 
-import {ProjectDescription}        from '../shared/project.description';
-import {ProjectDescriptionService} from '../shared/project.description.service';
-
-import {ProjectListItemComponent}  from './project-list-item.component'
+import {ProjectDescription}        from '../shared/project.description'
+import {ProjectDescriptionService} from '../shared/project.description.service'
 
 /**
  * Lists all publicly available projects
@@ -12,7 +9,6 @@ import {ProjectListItemComponent}  from './project-list-item.component'
 @Component({
     selector: 'project-list',
     templateUrl: 'app/front/templates/project-list.html',
-    directives: [ROUTER_DIRECTIVES, ProjectListItemComponent]
 })
 export class ProjectListComponent implements OnInit {
     public projects : ProjectDescription[]

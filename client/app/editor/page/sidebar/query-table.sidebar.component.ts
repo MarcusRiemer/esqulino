@@ -6,7 +6,6 @@ import {QueryTable}                    from '../../../shared/page/widgets/index'
 
 import {ProjectService, Project}       from '../../project.service'
 import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
-import {SidebarItemHost}               from '../../sidebar-item-host.component'
 
 import {WidgetComponent}               from '../widget.component'
 
@@ -18,7 +17,6 @@ type Component = WidgetComponent<QueryTable>
  */
 @Component({
     templateUrl: 'app/editor/page/sidebar/templates/query-table-sidebar.html',
-    directives : [SidebarItemHost]
 })
 export class QueryTableSidebarComponent {
 

@@ -5,6 +5,7 @@ import {
 import {Input}                        from '../../../../shared/page/widgets/index'
 
 import {SidebarService}               from '../../../sidebar.service'
+import {RegistrationService}          from '../../../registration.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {WidgetComponent}              from '../../widget.component'
@@ -22,11 +23,15 @@ export {Input}
 export class InputComponent extends WidgetComponent<Input> {
     
     constructor(@Inject(WIDGET_MODEL_TOKEN) model : Input,
+                registrationService : RegistrationService,
                 sidebarService : SidebarService,
                 private _cdRef : ChangeDetectorRef) {
         super(sidebarService, model, {
-            id: INPUT_SIDEBAR_IDENTIFIER,
-            type : InputSidebarComponent
+            reg : {
+                typeId: INPUT_SIDEBAR_IDENTIFIER,
+                componentType : InputSidebarComponent
+            },
+            registrationService : registrationService
         });
     }
 

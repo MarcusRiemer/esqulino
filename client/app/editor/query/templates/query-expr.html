@@ -46,15 +46,13 @@
           class="expression"
           [ngClass]="{ 'current-drop-target' : isCurrentDropTarget }">
       <sql-expr [expr]="expr.lhs"
-                [query]="query"
-                [topLevel]="'false'">
+                [query]="query">
       </sql-expr>
       <span (click)="onOperatorClick()"
             [innerHtml]="expr.operator | operator"
             class="operator"></span>
       <sql-expr [expr]="expr.rhs"
-                [query]="query"
-                [topLevel]="'false'">
+                [query]="query">
       </sql-expr>
     </span>
   </template>

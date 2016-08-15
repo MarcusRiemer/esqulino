@@ -1,14 +1,12 @@
 import {Component, Input}               from '@angular/core'
 
 import {DragService, SqlDragEvent}      from './drag.service'
-import {ExpressionComponent}            from './sql-expr.component'
 
 import {QuerySelect, Model, SyntaxTree} from '../../shared/query'
 
 @Component({
     selector : 'sql-select',
-    templateUrl : 'app/editor/query/templates/query-select.html',
-    directives: [ExpressionComponent]
+    templateUrl : 'app/editor/query/templates/query-select.html'
 })
 export class SelectComponent {
     @Input() query : QuerySelect;

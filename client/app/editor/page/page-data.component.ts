@@ -5,7 +5,6 @@ import {
 } from '../../shared/page/index'
 
 import {Project}                        from '../project.service'
-import {QueryIconComponent}             from '../query-icon.component'
 
 /**
  * Specifying the data that is available to a certain page.
@@ -13,7 +12,6 @@ import {QueryIconComponent}             from '../query-icon.component'
 @Component({
     selector: 'esqulino-page-data',
     templateUrl: 'app/editor/page/templates/page-data.html',
-    directives : [QueryIconComponent]
 })
 export class PageDataComponent implements OnInit {
     /**

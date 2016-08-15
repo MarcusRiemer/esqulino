@@ -1,9 +1,10 @@
-import {OpaqueToken, Type, Input}       from '@angular/core'
+import {OpaqueToken, Type, Input}         from '@angular/core'
 
-import {SidebarService}                 from '../sidebar.service'
+import {SidebarService}                   from '../sidebar.service'
+import {RegistrationService, SidebarType} from '../registration.service'
 
-import {Page}                           from '../../shared/page/index'
-import {Widget}                         from '../../shared/page/widgets/index'
+import {Page}                             from '../../shared/page/index'
+import {Widget}                           from '../../shared/page/widgets/index'
 
 /**
  * Base class for all widget visualizations. Exposes the model itself and
@@ -18,8 +19,8 @@ export class WidgetComponent<TModel extends Widget> {
     constructor(protected _sidebarService : SidebarService,
                 model? : TModel,
                 sidebarDefinition? : {
-                    id : string,
-                    type : Type
+                    registrationService : RegistrationService,
+                    reg : SidebarType
                 }) {
         this._model = model;
 
@@ -28,11 +29,9 @@ export class WidgetComponent<TModel extends Widget> {
         //       component.
         // Possibly register a sidebar definition
         if (sidebarDefinition) {
-            this._sidebarTypeId = sidebarDefinition.id;
+            this._sidebarTypeId = sidebarDefinition.reg.typeId;
             
-            if (!_sidebarService.isKnownType(sidebarDefinition.id)) {
-                _sidebarService.registerType(sidebarDefinition.id, sidebarDefinition.type);
-            }
+            sidebarDefinition.registrationService.registerSidebarType(sidebarDefinition.reg);
         }
     }
     

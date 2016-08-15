@@ -1,6 +1,6 @@
 import{
     Component, Input, OnInit,
-    ViewContainerRef, ComponentResolver,
+    ViewContainerRef, ComponentFactoryResolver,
     Type, provide, Injector, ReflectiveInjector
 } from '@angular/core'
 
@@ -30,7 +30,7 @@ export class SidebarLoaderComponent implements OnInit {
         private _sidebarService : SidebarService,
         private _injector: Injector,
         private _selfRef : ViewContainerRef,
-        private _resolver : ComponentResolver
+        private _resolver : ComponentFactoryResolver
     ) {}
 
     /**
@@ -58,7 +58,7 @@ export class SidebarLoaderComponent implements OnInit {
             newModel.length === this._prevModel.length &&
             newModel.every((m,i) => modelEqual(m,this._prevModel[i]));
 
-        console.log(`Rendering new Sidebars: identical = ${identical}, types = ${newModel.map(s => s.type).join(', ')}`);
+        console.log(`Rendering new Sidebars: identical = ${identical}, types = [${newModel.map(s => s.type + " (param: " + s.param + ")" ).join(', ')}]`);
 
         // Is this really a new sidebar?
         if (!identical) {
@@ -85,10 +85,8 @@ export class SidebarLoaderComponent implements OnInit {
                 }
 
                 // And actually create the component
-                this._resolver.resolveComponent(componentType)
-                    .then( (fac) => {
-                        this._selfRef.createComponent(fac, undefined, injector);
-                    });
+                const fac = this._resolver.resolveComponentFactory(componentType);
+                this._selfRef.createComponent(fac, undefined, injector);
             });
         }
     }

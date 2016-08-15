@@ -4,8 +4,8 @@ describe('Editor', () => {
 
     const someNoSidebarLink = element(by.css("ul.nav:nth-child(1) > li:nth-child(1) > a:nth-child(1)"));
     
-    const someQueryLink = element(by.css(".nav-query")).all(by.css("a.nav-link")).first();
-    const somePageLink = element(by.css(".nav-page")).all(by.css("a.nav-link")).first();
+    const someQueryLink = element(by.css("li.nav-item:nth-child(4) > a:nth-child(1)"));
+    const somePageLink = element(by.css(".nav-page > li:nth-child(2) > a:nth-child(1)"));
 
     const sidebarContainer = element(by.css("div.sidebar"));
 

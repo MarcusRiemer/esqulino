@@ -3,6 +3,7 @@ import {Component, Inject, OnInit}    from '@angular/core'
 import {Paragraph}                    from '../../../../shared/page/widgets/index'
 
 import {SidebarService}               from '../../../sidebar.service'
+import {RegistrationService}          from '../../../registration.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {WidgetComponent}              from '../../widget.component'
@@ -18,11 +19,15 @@ export {Paragraph}
 })
 export class ParagraphComponent extends WidgetComponent<Paragraph> {
     
-    constructor(@Inject(SidebarService) sidebarService : SidebarService,
+    constructor(sidebarService : SidebarService,
+                registrationService : RegistrationService,
                 @Inject(WIDGET_MODEL_TOKEN) model : Paragraph) {
         super(sidebarService, model, {
-            id : PARAGRAPH_SIDEBAR_IDENTIFIER,
-            type : ParagraphSidebarComponent
+            reg : {
+                typeId: PARAGRAPH_SIDEBAR_IDENTIFIER,
+                componentType : ParagraphSidebarComponent
+            },
+            registrationService : registrationService
         });
     }
 }

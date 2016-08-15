@@ -1,15 +1,29 @@
-import {
-    provideRouter, RouterConfig
-} from '@angular/router'
+import {Routes, RouterModule}           from '@angular/router'
 
-import {EditorRoutes}                   from './editor/editor.routes'
-import {FrontRoutes}                    from './front/front.routes'
+import {editorRoutes}                   from './editor/editor.routes'
+import {frontRoutes}                    from './front/front.routes'
 
-const routes : RouterConfig = [
-    ...FrontRoutes,
-    ...EditorRoutes,
+const routes : Routes = [
+    {
+        path: '',
+        children: [
+            {
+                path: '',
+                redirectTo: '/about',
+                pathMatch: 'full',
+            },
+            {
+                path: 'editor/:projectId',
+                children: [...editorRoutes]
+                //loadChildren: '/app/editor/editor.module'
+            },
+            {
+                path: 'about',
+                children: [...frontRoutes]
+                //loadChildren: '/app/front/front.module'
+            }
+        ]
+    },
 ]
 
-export const APP_ROUTER_PROVIDERS = [
-    provideRouter(routes)
-]
+export const routing = RouterModule.forRoot(routes);

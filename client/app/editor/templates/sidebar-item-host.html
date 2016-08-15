@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card {{ cardClasses }}">
   <div class="card-block">
     <button *ngIf="showClose"
             type="button"
@@ -6,7 +6,8 @@
             aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 *ngIf="header">{{ header }}</h4>
+    <h4 *ngIf="header"
+        class="card-title">{{ header }}</h4>
     <ng-content></ng-content>
   </div>
 </div>

@@ -3,8 +3,6 @@ import {
     ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core'
 
-import {ExpressionComponent}            from './sql-expr.component'
-
 import {ColumnDescription}              from '../../shared/schema.description'
 import {QueryInsert, SyntaxTree}        from '../../shared/query'
 
@@ -23,8 +21,6 @@ interface InsertingColumn {
 @Component({
     selector : 'sql-insert',
     templateUrl : 'app/editor/query/templates/query-insert.html',
-    directives : [ExpressionComponent],
-    //changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class InsertComponent implements OnInit {
     @Input() query : QueryInsert;
