@@ -1,7 +1,7 @@
 import {Component, Input}                 from '@angular/core'
 
 import {
-    Widget, WidgetHost, isWidgetHost, isWidget
+    WidgetDescription, Widget, WidgetHost, isWidgetHost, isWidget
 } from '../../../shared/page/hierarchy'
 
 import {SidebarService}                   from '../../sidebar.service'
@@ -11,7 +11,12 @@ import {WidgetComponent}                  from '../widget.component'
 
 // Specifies whether an operation has happened on the opening or
 // closing part of the node
-type NodeLocation = "open" | "close";
+type NodeLocation = "open" | "close" | "child";
+
+interface DropLocation {
+    host : WidgetHost,
+    index : number
+}
 
 /**
  * Represents a widget as a node in a tree.
@@ -30,31 +35,110 @@ export class WidgetNode extends WidgetComponent<Widget> {
     }
 
     /**
+     * @return True, if the parent of the given node would accept the given
+     *         widget.
+     */
+    private parentAccepts(node : Widget | WidgetHost,
+                          widgetDesc : WidgetDescription) : boolean {
+        return (isWidget(node) &&
+                isWidgetHost(node.parent) &&
+                node.parent.acceptsWidget(widgetDesc));
+    }
+
+    /**
      * @return A widget host that would accept this widget, or `undefined` if there 
      *         is no accepting host available.
      */
-    private acceptsDrag(widget : Widget | WidgetHost, pageEvt : PageDragEvent) : WidgetHost {
+    private determineDropHost(node : Widget | WidgetHost,
+                              place : NodeLocation,
+                              widgetDesc : WidgetDescription)
+      : WidgetHost
+    {
         // Don't accept anything that isn't a widget
-        if (!pageEvt.widget) {
+        if (!widgetDesc) {
             return (undefined);
         }
-        // Is this an accepting widget host?
-        else if (isWidgetHost(widget) &&
-                 widget.acceptsWidget(pageEvt.widget)) {
-            // Then it can handle the drag itself
-            return (widget);
+                                  
+        // Is this an widget host?
+        else if (isWidgetHost(node)) {
+            // Is this on the opening node to insert something compatible
+            // at the very beginning?
+            if (node.acceptsWidget(widgetDesc) && place == "open") {
+                // Then it can handle the drag itself
+                return (node);
+            }
+            // Maybe the parent wants it?
+            else if (place == "close" && this.parentAccepts(node, widgetDesc)) {
+                // The parent can take it. 
+                return ((node as any).parent);
+            } else {
+                // Nobody wants it
+                return (undefined)
+            }
+                
         }
+
         // Is the parent of this thing an accepting widget host?
-        else if (isWidget(widget) &&
-                 isWidgetHost(widget.parent) &&
-                 widget.parent.acceptsWidget(pageEvt.widget)) {
+        else if (this.parentAccepts(node, widgetDesc) && place == "close") {
             // The parent can handle the drag
-            return (widget.parent);
+            return ((node as any).parent);
         }
         // No evidence found that we should accept this
         else {
             return (undefined);
         }
+    }
+
+    /**
+     * Computes the exact location something should be dropped.
+     */
+    private dropLocation(dropTarget : Widget | WidgetHost,
+                         place : NodeLocation,
+                         pageEvt : PageDragEvent)
+      : DropLocation
+    {
+        // No widget?
+        if (!pageEvt.widget) {
+            // No deal!
+            return (undefined)
+        }
+
+        // Check which component would act as a drop target?
+        const host = this.determineDropHost(this.model, place, pageEvt.widget);
+
+        // No host?
+        if (!host) {
+            // No deal!
+            return (undefined);
+        } else {
+            // Okay, components wants this thing, but where should it go?
+            
+            // True, if this node will be hosting the new node itself
+            const parentHost = host == this.model.parent;
+            const selfHost = !parentHost;
+            
+            let index : number = undefined;
+            
+            if (parentHost && place === "close") {
+                // Place after this element
+                return ({
+                    host : host,
+                    index : this.model.parent.children.indexOf(this.model) + 1
+                });
+            } else if (selfHost && place === "open") {
+                // Insert as new first element
+                return ({
+                    host : host,
+                    index : 0
+                });
+            } else {
+                // There currently shouldn't be any other possibility to drop
+                // something
+                // TODO: This will change with empty elements like `<img>`
+                throw new Error("Surprising drop location");
+            }
+        }
+
     }
 
     /**
@@ -64,7 +148,7 @@ export class WidgetNode extends WidgetComponent<Widget> {
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
 
         // Is this a meaningful child for this node or its parent?
-        if (this.acceptsDrag(this.model, pageEvt)) {
+        if (this.determineDropHost(this.model, place, pageEvt.widget)) {
             evt.preventDefault();
         }
     }
@@ -76,37 +160,15 @@ export class WidgetNode extends WidgetComponent<Widget> {
         evt.preventDefault();
 
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        let host = this.acceptsDrag(this.model, pageEvt);
+        let dropTarget = this.dropLocation(this.model, place, pageEvt);
         
-        if (host) {
-            // True, if this node will be hosting the new node itself
-            const parentHost = host == this.model.parent;
-            const selfHost = !parentHost;
-            
-            let index : number = undefined;
+        if (dropTarget) {
+            dropTarget.host.addWidget(pageEvt.widget, dropTarget.index);
 
-            if (parentHost && place === "open") {
-                // No placement, the opening node is meant for children
-                index = undefined;
-            } else if (parentHost && place === "close") {
-                // Place after this element
-                index = this.model.parent.children.indexOf(this.model) + 1;
-            } else if (selfHost && place === "open") {
-                // Insert as new first element
-                index = 0;
-            } else if (selfHost && place === "close" && this.model.parent.acceptsWidget(pageEvt.widget)) {
-                // Insert after self, going up to the parent
-                host = this.model.parent;
-                index =  this.model.parent.children.indexOf(this.model) + 1;
+            if (this._dragService.currentDrag.callbacks.onWidget) {
+                this._dragService.currentDrag.callbacks.onWidget(dropTarget.host);
             }
             
-            if (index != undefined) {
-                host.addWidget(pageEvt.widget, index);
-
-                if (this._dragService.currentDrag.callbacks.onWidget) {
-                    this._dragService.currentDrag.callbacks.onWidget(host);
-                }
-            }
         } else {
             throw new Error("No valid drop target");
         }
