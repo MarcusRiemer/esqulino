@@ -23,6 +23,14 @@ export class Column extends HostingWidget {
         this._widgets = desc.widgets.map( (wiDesc) => loadWidget(wiDesc, this) );
     }
 
+    static get emptyDescription() : ColumnDescription {
+        return ({
+            type : "column",
+            widgets : [],
+            width : 12
+        });
+    }
+
     /**
      * @return The width of this row
      */
@@ -37,6 +45,9 @@ export class Column extends HostingWidget {
         return (this._widgets);
     }
 
+    /**
+     * Accepts anything that isn't a column itself.
+     */
     acceptsWidget(desc : WidgetDescription) : boolean {
         return (desc.type != this.type);
     }

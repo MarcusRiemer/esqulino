@@ -3,7 +3,8 @@ import {ActivatedRoute, Router}         from '@angular/router'
 
 import {Page, ParameterMapping}         from '../../shared/page/index'
 import {
-    Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml, Link
+    Heading, Row, Paragraph, QueryTable,
+    Input, Button, EmbeddedHtml, Link, Column
 } from '../../shared/page/widgets/index'
 
 import {
@@ -150,6 +151,14 @@ export class SidebarWidgetsComponent implements OnInit, OnDestroy {
      */
     startRowDrag(evt : DragEvent) {
         this._dragService.startWidgetDrag(evt, "sidebar", Row.emptyDescription);
+    }
+
+    /**
+     * Informs the drag service about a started drag operation for an
+     * empty column.
+     */
+    startColumnDrag(evt : DragEvent) {
+        this._dragService.startWidgetDrag(evt, "sidebar", Column.emptyDescription);
     }
 
      /**

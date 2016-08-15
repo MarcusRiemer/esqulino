@@ -1,5 +1,5 @@
 import {
-    Page, RowDescription, ColumnDescription
+    Page, RowDescription, ColumnDescription, WidgetDescription
 } from '../page'
 
 import {Column}                    from './column'
@@ -19,7 +19,7 @@ export class Row extends HostingWidget {
         super("row", parent);
         
         // Create all referenced columns
-        this._columns = desc.columns.map(columnDesc => new Column(columnDesc, parent));
+        this._columns = desc.columns.map(columnDesc => new Column(columnDesc, this));
     }
 
     /**
@@ -35,6 +35,13 @@ export class Row extends HostingWidget {
                 width : 12
             }]
         });
+    }
+
+    /**
+     * Rows only accept columns as children.
+     */
+    acceptsWidget(desc : WidgetDescription) : boolean {
+        return (desc.type === "column");
     }
 
     /**
