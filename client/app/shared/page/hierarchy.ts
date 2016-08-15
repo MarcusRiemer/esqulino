@@ -1,6 +1,8 @@
 import {WidgetDescription}                    from './page.description'
 import {Page}                                 from './page'
 
+export {WidgetDescription}
+
 /**
  * Minimal description of a widget
  */
