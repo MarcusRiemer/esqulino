@@ -3,6 +3,7 @@ import {Component, Inject, OnInit}    from '@angular/core'
 import {Link}                         from '../../../../shared/page/widgets/index'
 
 import {SidebarService}               from '../../../sidebar.service'
+import {RegistrationService}          from '../../../registration.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {WidgetComponent}              from '../../widget.component'
@@ -21,11 +22,15 @@ declare var URL : any;
 })
 export class LinkComponent extends WidgetComponent<Link> {
     
-    constructor(@Inject(SidebarService) sidebarService : SidebarService,
+    constructor(sidebarService : SidebarService,
+                registrationService : RegistrationService,
                 @Inject(WIDGET_MODEL_TOKEN) model : Link) {
         super(sidebarService, model, {
-            id : LINK_SIDEBAR_IDENTIFIER,
-            type : LinkSidebarComponent
+            reg : {
+                typeId: LINK_SIDEBAR_IDENTIFIER,
+                componentType : LinkSidebarComponent
+            },
+            registrationService : registrationService
         });
     }
 

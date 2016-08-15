@@ -1,18 +1,13 @@
-import {RouterConfig}              from '@angular/router'
+import {Routes, RouterModule}      from '@angular/router'
 
 import {FrontComponent}            from './front.component'
 import {ImprintComponent}          from './imprint.component'
 import {ProjectListComponent}      from './project-list.component'
 import {AboutComponent}            from './about.component'
 
-export const FrontRoutes : RouterConfig = [
+export const frontRoutes : Routes = [
     {
-        path: '',
-        redirectTo: '/about',
-        terminal: true
-    },
-    {
-        path : 'about',
+        path : '',
         component: FrontComponent,
         children : [
             { path: 'projects', component: ProjectListComponent},
@@ -22,6 +17,4 @@ export const FrontRoutes : RouterConfig = [
     }
 ]
 
-export const FrontComponents = [
-    FrontComponent, ProjectListComponent, AboutComponent, ImprintComponent
-]
+export const frontRouting = RouterModule.forChild(frontRoutes);

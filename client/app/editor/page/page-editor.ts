@@ -10,12 +10,13 @@ import {Paragraph}                      from '../../shared/page/widgets/index'
 import {ProjectService, Project}        from '../project.service'
 import {PageService, Page}              from '../page.service'
 import {PreferencesService}             from '../preferences.service'
+import {RegistrationService}            from '../registration.service'
 import {SidebarService}                 from '../sidebar.service'
 import {ToolbarService}                 from '../toolbar.service'
 
 import {ServerPreviewComponent}         from './server-preview.component'
-import {SidebarDataComponent}           from './sidebar-data.component'
-import {SidebarWidgetsComponent}        from './sidebar-widgets.component'
+import {SidebarDataComponent}           from './page-data.sidebar'
+import {SidebarWidgetsComponent}        from './page-widgets.sidebar'
 
 /**
  * Base class for components that edit esqulino pages.
@@ -52,18 +53,27 @@ export class PageEditor implements OnInit, OnDestroy {
         private _toolbarService: ToolbarService,
         private _routeParams: ActivatedRoute,
         private _sidebarService : SidebarService,
-        private _preferences : PreferencesService
+        private _preferences : PreferencesService,
+        registrationService : RegistrationService
     ) {
-        this.showDefaultSidebars();
+        // Register the page sidebars
+        registrationService.registerSidebarType({
+            typeId: SidebarDataComponent.SIDEBAR_IDENTIFIER,
+            componentType: SidebarDataComponent
+        });
+        registrationService.registerSidebarType({
+            typeId: SidebarWidgetsComponent.SIDEBAR_IDENTIFIER,
+            componentType: SidebarWidgetsComponent
+        });
     }
 
     /**
      * Reverts sidebars back to normal.
      */
-    private showDefaultSidebars() : void {
+    private showDefaultSidebars() : void {        
         this._sidebarService.showMultiple([
-            { type : SidebarWidgetsComponent.SIDEBAR_IDENTIFIER },
-            { type : SidebarDataComponent.SIDEBAR_IDENTIFIER }
+            { type : SidebarWidgetsComponent.SIDEBAR_IDENTIFIER, param : this._page },
+            { type : SidebarDataComponent.SIDEBAR_IDENTIFIER, param : this._page }
         ]);
     }
 

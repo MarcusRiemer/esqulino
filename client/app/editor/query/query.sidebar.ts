@@ -1,11 +1,11 @@
 import {
-    Component, Input, OnInit, OnDestroy
+    Component, Input, OnInit, OnDestroy, Inject
 } from '@angular/core'
 import {ActivatedRoute, Router}      from '@angular/router'
 
 import {Query, Model}                from '../../shared/query'
 
-import {SidebarItemHost}             from '../sidebar-item-host.component'
+import {SIDEBAR_MODEL_TOKEN}         from '../editor.token'
 import {ProjectService}              from '../project.service'
 
 import {DragService}                 from './drag.service'
@@ -18,17 +18,14 @@ import {OperatorPipe}                from './operator.pipe'
  */
 @Component({
     templateUrl: 'app/editor/query/templates/sidebar.html',
-    selector : "sql-sidebar",
-    pipes : [OperatorPipe],
-    directives: [SidebarItemHost]
+    selector : "sql-sidebar"
 })
-export class SidebarComponent implements OnInit, OnDestroy {
+export class QuerySidebarComponent implements OnInit, OnDestroy {
     /**
      * This ID is used to register this sidebar with the sidebar loader
      */
     public static get SIDEBAR_IDENTIFIER() { return "query" };
 
-    
     /**
      * View Variable:
      * The currently edited query
@@ -50,34 +47,22 @@ export class SidebarComponent implements OnInit, OnDestroy {
      * @param _dragService The sidebar relies on the SQL Editors DragService
      */
     constructor(
+        @Inject(SIDEBAR_MODEL_TOKEN) query : Query,
         private _dragService : DragService,
         private _projectService : ProjectService,        
-        private _routeParams : ActivatedRoute,
+        private _activatedRoute : ActivatedRoute,
         private _router : Router) {
+        this.query = query;
     }
 
     ngOnInit() {
-        // Grab the current project
-        const subProj = this._projectService.activeProject
-            .subscribe(res => {
-                // New project, discard the current query
-                this.query = undefined;
-                
-                // Grab the correct query id
-                const childRoute = this._router.routerState.firstChild(this._routeParams);
-                const subQuery = childRoute.params.subscribe(param => {
-                    // Project is loaded, display the correct  query
-                    this.query = res.getQueryById(param['queryId']);
-                })
-            });
+        
     }
 
     ngOnDestroy() {
         this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
         this._subscriptionRefs = [];
     }
-
-    
 
     /**
      * @return A list of currently allowed logic operators
@@ -110,7 +95,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     startStarDrag(evt : DragEvent) {
         this._dragService.startExpressionModelDrag({ star : { } }, "sidebar", evt);
     }
-
 
     /**
      * Starts a drag event involving a column

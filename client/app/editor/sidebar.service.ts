@@ -4,9 +4,7 @@ import {BehaviorSubject}             from 'rxjs/BehaviorSubject'
 import {Observable}                  from 'rxjs/Observable'
 
 import {SIDEBAR_MODEL_TOKEN}         from './editor.token'
-import {SidebarComponent}            from './query/sidebar.component'
-import {SidebarDataComponent}        from './page/sidebar-data.component'
-import {SidebarWidgetsComponent}     from './page/sidebar-widgets.component'
+import {RegistrationService}         from './registration.service'
 
 /**
  * Manages the global state of the sidebar. Components should *never*
@@ -31,20 +29,15 @@ export class SidebarService {
 
     /**
      * Valid types for sidebars.
-     * TODO: Allow different sidebars to somehow register themself.
      */
     private _knownTypes : { [typeName:string] : Type} = { };
 
-    constructor() {
+    constructor(registrationService : RegistrationService) {
         this._model = new BehaviorSubject<InternalSidebarModel[]>([]);
 
-        const pageDataId = SidebarDataComponent.SIDEBAR_IDENTIFIER;
-        const pageWidgetsId = SidebarWidgetsComponent.SIDEBAR_IDENTIFIER;
-        const queryId = SidebarComponent.SIDEBAR_IDENTIFIER;
-
-        this.registerType(pageDataId, SidebarDataComponent);
-        this.registerType(pageWidgetsId, SidebarWidgetsComponent);
-        this.registerType(queryId, SidebarComponent);
+        registrationService.sidebarTypes.subscribe( reg => {
+            this.registerType(reg.typeId, reg.componentType);
+        });
     }
 
     /**
@@ -55,14 +48,17 @@ export class SidebarService {
     }
 
     /**
-     * Registers a new type of sidebar that is ready for use.
+     * Registers a new type of sidebar that is ready for use. Never do this
+     * on an instance of the service directly, instead use the RegistrationService.
+     *
+     * @see RegistrationService
      *
      * @param newType The string ID that is used to request this type.
      * @param component The component constructr that should be used.
      */
-    registerType(newType : string, componentType : Type) {
+    private registerType(newType : string, componentType : Type) {
         if (this.isKnownType(newType)) {
-            throw new Error(`Attempted to override sidebar type "${newType}"`);
+            console.log(`Overwriting sidebar type "${newType}"`);
         }
 
         this._knownTypes[newType] = componentType;        
@@ -78,7 +74,7 @@ export class SidebarService {
     /**
      * @return The component type for the given identifier.
      */
-    getComponentType(newType : string) : Type {
+    getComponentType(newType : string) : any {
         return (this._knownTypes[newType]);
     }
 
@@ -109,7 +105,7 @@ export class SidebarService {
      * @return The IDs of these sidebars.
      */
     showMultiple(mult : SidebarModel[]) : number[] {
-        console.log(`Requested new Sidebars: ${mult.map(s => s.type).join(', ')}`);
+        console.log(`Requested new Sidebars: [${mult.map(s => s.type).join(', ')}]`);
         
         // Ensure every type is known. This does not use `every`
         // but `forEach` with a side-effect because we wan't to

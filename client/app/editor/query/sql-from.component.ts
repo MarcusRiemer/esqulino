@@ -3,7 +3,6 @@ import {Component, Input}               from '@angular/core'
 import {QueryFrom, SyntaxTree}          from '../../shared/query'
 
 import {DragService, SqlDragEvent}      from './drag.service'
-import {ExpressionComponent}            from './sql-expr.component'
 
 @Component({
     selector : 'sql-from',

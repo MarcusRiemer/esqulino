@@ -10,22 +10,16 @@ import {
 
 import {ProjectService, Project}        from '../project.service'
 import {PreferencesService}             from '../preferences.service'
+import {RegistrationService}            from '../registration.service'
 import {ToolbarService}                 from '../toolbar.service'
 import {SidebarService}                 from '../sidebar.service'
 import {
     QueryService, QueryParamsDescription
 } from '../query.service'
-
-import {QueryComponent, SqlStringPipe}  from './sql.component'
-import {SidebarComponent}               from './sidebar.component'
-import {ResultComponent}                from './result.component'
-import {ValidatorComponent}             from './validator.component'
+import {QuerySidebarComponent}          from './query.sidebar'
 
 @Component({
     templateUrl: 'app/editor/query/templates/editor.html',
-    directives: [QueryComponent, SidebarComponent, ResultComponent, ValidatorComponent],
-    providers: [],
-    pipes: [SqlStringPipe],
 })
 export class QueryEditorComponent implements OnInit {
     /**
@@ -63,9 +57,15 @@ export class QueryEditorComponent implements OnInit {
         private _toolbarService : ToolbarService,
         private _routeParams : ActivatedRoute,
         private _sidebarService : SidebarService,
-        private _preferences : PreferencesService
+        private _preferences : PreferencesService,
+        registrationService : RegistrationService
     ) {
-        this._sidebarService.showSingleSidebar(SidebarComponent.SIDEBAR_IDENTIFIER);
+        // Register the query sidebar
+        registrationService.registerSidebarType({
+            typeId : QuerySidebarComponent.SIDEBAR_IDENTIFIER,
+            componentType : QuerySidebarComponent
+        });
+        
         this._toolbarService.resetItems();
     }
 
@@ -175,6 +175,10 @@ export class QueryEditorComponent implements OnInit {
                     // Project is loaded, display the correct  query
                     this.project = res;
                     this.query = this.project.getQueryById(queryId);
+
+                    // Show the sidebar
+                    const sidebarId = QuerySidebarComponent.SIDEBAR_IDENTIFIER;
+                    this._sidebarService.showSingleSidebar(sidebarId, this.query);
 
                     // Reset previous result
                     this._result = undefined;

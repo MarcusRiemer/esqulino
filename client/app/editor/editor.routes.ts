@@ -1,35 +1,42 @@
-import { RouterConfig }          from '@angular/router'
+import {Routes, RouterModule}           from '@angular/router'
 
 import {EditorComponent}                from './editor.component'
 import {SettingsComponent}              from './settings.component'
 import {SchemaComponent}                from './schema.component'
 
-import {PageCreateComponent}            from './page/create.component'
-import {PageTreeEditorComponent}        from './page/tree/editor.component'
-import {PageVisualEditorComponent}      from './page/wysiwyg/editor.component'
+import {queryEditorRoutes}              from './query/editor.routes'
+import {pageEditorRoutes}               from './page/page-editor.routes'
 
-import {QueryCreateComponent}           from './query/create.component'
-import {QueryEditorComponent}           from './query/editor.component'
-
-export const EditorRoutes : RouterConfig = [
+export const editorRoutes : Routes = [
     {
-        path: "editor/:projectId",
+        path: "",
         component : EditorComponent,
         children : [
-            { path: '', redirectTo: 'settings', terminal: true},
-            { path: 'settings', component : SettingsComponent },
-            { path: 'schema', component : SchemaComponent },
-            { path: 'query/create', component : QueryCreateComponent },
-            { path: 'query/:queryId', component : QueryEditorComponent },
-            { path: 'page/create', component : PageCreateComponent },
-            { path: 'page/visual/:pageId', component : PageVisualEditorComponent },
-            { path: 'page/:pageId', component : PageTreeEditorComponent },
+            {
+                path: '',
+                redirectTo: 'settings',
+                pathMatch: 'full'
+            },
+            {
+                path: 'settings',
+                component: SettingsComponent
+            },
+            {
+                path: 'schema',
+                component: SchemaComponent
+            },
+            {
+                path: 'query',
+                children: [...queryEditorRoutes]
+                //loadChildren: '/app/editor/query/editor.module'
+            },
+            {
+                path: 'page',
+                children: [...pageEditorRoutes]
+                //loadChildren: '/app/editor/page/page-editor.module'
+            }
         ]
     }
 ]
 
-export const EditorComponents = [
-    EditorComponent, SettingsComponent, SchemaComponent,
-    QueryCreateComponent, QueryEditorComponent,
-    PageCreateComponent, PageTreeEditorComponent, PageVisualEditorComponent
-]
+export const editorRouting = RouterModule.forChild(editorRoutes);

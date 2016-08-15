@@ -1,7 +1,7 @@
-import {Component, OnInit, OnDestroy}   from '@angular/core'
-import {ActivatedRoute, Router}         from '@angular/router'
+import {Component, OnInit, OnDestroy, Inject}   from '@angular/core'
+import {ActivatedRoute, Router}                 from '@angular/router'
 
-import {Query, ResultColumn}            from '../../shared/query'
+import {Query, ResultColumn}                    from '../../shared/query'
 import {
     Page, QueryReference, ParameterMapping
 } from '../../shared/page/index'
@@ -9,14 +9,10 @@ import {
     Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml, Link
 } from '../../shared/page/widgets/index'
 
-import {
-    ProjectService, Project
-} from '../project.service'
+import {SIDEBAR_MODEL_TOKEN}                    from '../editor.token'
+import {ProjectService, Project}                from '../project.service'
 
-import {QueryIconComponent}             from '../query-icon.component'
-import {SidebarItemHost}                from '../sidebar-item-host.component'
-
-import {DragService, PageDragEvent}     from './drag.service'
+import {DragService, PageDragEvent}             from './drag.service'
 
 /**
  * The sidebar hosts elements that can be dragged onto the currently active
@@ -25,8 +21,7 @@ import {DragService, PageDragEvent}     from './drag.service'
  */
 @Component({
     templateUrl: 'app/editor/page/templates/sidebar-data.html',
-    selector : "page-sidebar",
-    directives : [QueryIconComponent, SidebarItemHost]
+    selector : "page-sidebar"
 })
 export class SidebarDataComponent implements OnInit, OnDestroy {
     /**
@@ -35,21 +30,12 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
     public static get SIDEBAR_IDENTIFIER() { return "page-core-data" };
 
     /**
-     * The currently edited project
-     */
-    private _project : Project;
-
-    /**
-     * The currently edited page
-     */
-    private _page : Page;
-
-    /**
      * Subscriptions that need to be released
      */
     private _subscriptionRefs : any[] = [];
 
     constructor(
+        @Inject(SIDEBAR_MODEL_TOKEN) private _page : Page,
         private _dragService : DragService,
         private _projectService : ProjectService,
         private _routeParams : ActivatedRoute,
@@ -60,6 +46,7 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
      * Load the project to access the schema and its pages.
      */
     ngOnInit() {
+        /*
         // Grab the current project
         this._projectService.activeProject
             .first()
@@ -78,6 +65,7 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
 
                 this._subscriptionRefs.push(routeRef);
             });
+        */
     }
 
     /**
@@ -146,6 +134,32 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Columns are tracked by their full name
+     */
+    trackByColumnId(index : number, columnRef : ResultColumn) {
+        return (columnRef.fullName);
+    }
+
+    /**
+     * Is there any data available?
+     */
+    get hasAnyData() : boolean {
+        return (this.showPageRequestParameters || this.referencedQueries.length > 0);
+    }
+
+    /**
+     * Bootstrap Specific!
+     * Highlights the card if no data is present
+     */
+    get additionalCardClasses() : string {
+        if (!this.hasAnyData) {
+            return ("card-warning");
+        } else {
+            return ("");
+        }
+    }
+    
+    /**
      * @return All queries that are actually used on this page.
      */
     get referencedQueries() : QueryReference[] {
@@ -154,13 +168,6 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
         } else {
             return ([]);
         }
-    }
-
-    /**
-     * Columns are tracked by their full name
-     */
-    trackByColumnId(index : number, columnRef : ResultColumn) {
-        return (columnRef.fullName);
     }
 
     /**

@@ -3,7 +3,6 @@ import {Component, Inject, Optional}   from '@angular/core'
 import {Heading}                       from '../../../shared/page/widgets/index'
 
 import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
-import {SidebarItemHost}               from '../../sidebar-item-host.component'
 
 import {WidgetComponent}               from '../widget.component'
 
@@ -14,7 +13,6 @@ type Component = WidgetComponent<Heading>
  */
 @Component({
     templateUrl: 'app/editor/page/sidebar/templates/heading-sidebar.html',
-    directives : [SidebarItemHost]
 })
 export class HeadingSidebarComponent {
 
