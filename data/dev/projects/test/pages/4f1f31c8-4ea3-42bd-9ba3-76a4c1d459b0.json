@@ -3,8 +3,10 @@
   "apiVersion": "2",
   "widgets": [
     {
+      "type": "row",
       "columns": [
         {
+          "type": "column",
           "width": 12,
           "widgets": [
             {
@@ -12,70 +14,80 @@
               "level": 1,
               "text": "Überschrift"
             }
-          ],
-          "type": "column"
+          ]
+        },
+        {
+          "type": "column",
+          "width": 12,
+          "widgets": [
+            {
+              "type": "paragraph",
+              "text": "Absatz"
+            }
+          ]
         }
-      ],
-      "type": "row"
+      ]
     },
     {
+      "type": "row",
       "columns": [
         {
+          "type": "column",
           "width": 6,
           "widgets": [
             {
               "type": "paragraph",
               "text": "Dies ist ein Absatz auf der linken Seite."
             }
-          ],
-          "type": "column"
+          ]
         },
         {
+          "type": "column",
           "width": 6,
           "widgets": [
             {
               "type": "paragraph",
               "text": "Dies ist ein Absatz auf der rechten Seite."
             }
-          ],
-          "type": "column"
+          ]
         }
-      ],
-      "type": "row"
+      ]
     },
     {
+      "type": "row",
       "columns": [
         {
+          "type": "column",
           "width": 6,
-          "widgets": [],
-          "type": "column"
+          "widgets": []
         },
         {
+          "type": "column",
           "width": 3,
-          "widgets": [],
-          "type": "column"
+          "widgets": []
         },
         {
+          "type": "column",
           "width": 3,
           "widgets": [
             {
               "type": "paragraph",
               "text": "Und noch ein Absatz, an einer etwas merkwürdigen Stelle."
             }
-          ],
-          "type": "column"
+          ]
         }
-      ],
-      "type": "row"
+      ]
     },
     {
+      "type": "row",
       "columns": [
         {
+          "type": "column",
           "width": 4,
-          "widgets": [],
-          "type": "column"
+          "widgets": []
         },
         {
+          "type": "column",
           "width": 4,
           "widgets": [
             {
@@ -94,16 +106,14 @@
               "type": "paragraph",
               "text": "Absatz 4"
             }
-          ],
-          "type": "column"
+          ]
         },
         {
+          "type": "column",
           "width": 4,
-          "widgets": [],
-          "type": "column"
+          "widgets": []
         }
-      ],
-      "type": "row"
+      ]
     }
   ]
 }
