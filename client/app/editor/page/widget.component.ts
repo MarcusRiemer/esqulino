@@ -14,7 +14,6 @@ import {Widget}                           from '../../shared/page/widgets/index'
 export class WidgetComponent<TModel extends Widget> {
     private _model : TModel;
     private _isEditing : boolean;
-    private _sidebarTypeId : string;
 
     constructor(protected _sidebarService : SidebarService,
                 model? : TModel,
@@ -23,16 +22,6 @@ export class WidgetComponent<TModel extends Widget> {
                     reg : SidebarType
                 }) {
         this._model = model;
-
-        // TODO: Find a static place for this, there is no actual
-        //       need to check this again and again for every constructed
-        //       component.
-        // Possibly register a sidebar definition
-        if (sidebarDefinition) {
-            this._sidebarTypeId = sidebarDefinition.reg.typeId;
-            
-            sidebarDefinition.registrationService.registerSidebarType(sidebarDefinition.reg);
-        }
     }
     
     /**
@@ -51,6 +40,18 @@ export class WidgetComponent<TModel extends Widget> {
 
     get page() : Page {
         return (this._model.page);
+    }
+
+    /**
+     * @return The type-id of the sidebar this widget would use. If no such type-id is
+     *         available, `undefined` is returned.
+     */
+    get sidebarTypeId() {
+        if (this.model) {
+            return (`page-${this.model.type}`);
+        } else {
+            return (undefined);
+        }
     }
 
     /**
@@ -81,8 +82,10 @@ export class WidgetComponent<TModel extends Widget> {
      * attempts to show a sidebar with this widget as a parameter.
      */
     protected onBeginEditing() {
-        if (this._sidebarTypeId) {
-            this._sidebarService.showSingleSidebar(this._sidebarTypeId, this);
+        const typeId = this.sidebarTypeId;
+        if (this.sidebarTypeId && this._sidebarService.isKnownType(typeId)) {
+            this._sidebarService.hideNonSticky();
+            this._sidebarService.showAdditionalSidebar(typeId, this);
         }
     }
 

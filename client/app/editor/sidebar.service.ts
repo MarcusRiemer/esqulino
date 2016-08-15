@@ -90,10 +90,19 @@ export class SidebarService {
      *
      * @return The ID of the single sidebar.
      */
-    showSingleSidebar(newType : string, param? : any) : number {
+    showSingleSidebar(newType : string, sticky : boolean, param? : any) : number {
         const ids = this.showMultiple([
             { type : newType, param : param }
         ]);
+
+        // Return the single Id that we added
+        return (ids[0]);
+    }
+
+    showAdditionalSidebar(newType : string, param? : any) : number {
+        const ids = this.showMultiple([
+            { type : newType, param : param }
+        ], false);
 
         // Return the single Id that we added
         return (ids[0]);
@@ -104,7 +113,7 @@ export class SidebarService {
      *
      * @return The IDs of these sidebars.
      */
-    showMultiple(mult : SidebarModel[]) : number[] {
+    showMultiple(mult : SidebarModel[], replace = true) : number[] {        
         console.log(`Requested new Sidebars: [${mult.map(s => s.type).join(', ')}]`);
         
         // Ensure every type is known. This does not use `every`
@@ -117,13 +126,20 @@ export class SidebarService {
         });
 
         // Assign the Id to each model
-        const internal : InternalSidebarModel[] = mult.map(m => {
+        let internal : InternalSidebarModel[] = mult.map(m => {
             return ({
                 id : ++SidebarService._idCounter,
                 type : m.type,
-                param : m.param
+                param : m.param,
+                sticky : !!m.sticky
             });
         });
+
+        // If the existing model shouldn't be replaced, it needs to
+        // be appended to the new model.
+        if (!replace) {
+            internal = internal.concat(this._model.getValue());
+        }
 
         // Kick off the rendering by placing a new value in the observable
         this._model.next(internal);
@@ -142,9 +158,18 @@ export class SidebarService {
             throw new Error(`Could not remove sidebar, unknown id "${id}"`);
         }
 
-        model.splice(index, 1);
+        // Don't splice here, we need a fresh reference
+        this._model.next(model.filter((v,i) => i != index));
+    }
 
-        this._model.next(model);
+    /**
+     * Hides all sidebars that are not sticky.
+     */
+    hideNonSticky() {
+        const model = this._model.getValue();
+
+        // Put a changed array back into the observable
+        this._model.next(model.filter((v) => v.sticky));
     }
 
     /**
@@ -167,8 +192,12 @@ export class SidebarService {
  * Denotes a sidebar component that should be rendered.
  */
 export interface SidebarModel {
+    // The sidebar-type-id to show
     type : string
+    // The parameter to pass to the sidebar
     param? : any
+    // True, if the sidebar should usually be displayed.
+    sticky? : boolean
 }
 
 /**

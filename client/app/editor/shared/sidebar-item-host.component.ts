@@ -7,7 +7,7 @@ import {SidebarService}                   from '../sidebar.service'
  */
 @Component({
     selector: 'sidebar-item-host',
-    templateUrl: 'app/editor/templates/sidebar-item-host.html'
+    templateUrl: 'app/editor/shared/templates/sidebar-item-host.html'
 })
 export class SidebarItemHost {
     /**
@@ -18,7 +18,7 @@ export class SidebarItemHost {
     /**
      * The unique ID of this sidebar
      */
-    @Input() sidebarId : number
+    @Input() sidebarInstanceId : number
 
     /**
      * True, if a "close" button should be shown.
@@ -30,7 +30,7 @@ export class SidebarItemHost {
      */
     @Input() cardClasses : string = "";
 
-    constructor() {
+    constructor(private _sidebarService : SidebarService = undefined) {
 
     }
 
@@ -38,6 +38,8 @@ export class SidebarItemHost {
      * Closes this sidebar-item.
      */
     doClose() {
-        //this._sidebarService.hideById(this.sidebarId);
+        if (this._sidebarService) {
+            this._sidebarService.hideById(this.sidebarInstanceId);
+        }
     }
 }

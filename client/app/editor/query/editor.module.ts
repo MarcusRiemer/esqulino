@@ -1,6 +1,7 @@
 import {NgModule, ModuleWithProviders}  from '@angular/core'
 
 import SharedEditorModule               from '../shared/shared.module'
+import {RegistrationService}            from '../registration.service'
 
 import {queryEditorRouting}             from './editor.routes'
 
@@ -68,5 +69,17 @@ export default class QueryEditorModule {
             ngModule : QueryEditorModule,
             providers : [DragService]
         });
+    }
+
+    constructor(reg : RegistrationService) {
+        console.log("Registering QueryEditor ...");
+
+        // Register the query sidebar
+        reg.registerSidebarType({
+            typeId : QuerySidebarComponent.SIDEBAR_IDENTIFIER,
+            componentType : QuerySidebarComponent
+        });
+
+        console.log("Registered QueryEditor!");
     }
 }

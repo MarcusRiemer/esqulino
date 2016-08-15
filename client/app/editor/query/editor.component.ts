@@ -59,13 +59,7 @@ export class QueryEditorComponent implements OnInit {
         private _sidebarService : SidebarService,
         private _preferences : PreferencesService,
         registrationService : RegistrationService
-    ) {
-        // Register the query sidebar
-        registrationService.registerSidebarType({
-            typeId : QuerySidebarComponent.SIDEBAR_IDENTIFIER,
-            componentType : QuerySidebarComponent
-        });
-        
+    ) {       
         this._toolbarService.resetItems();
     }
 
@@ -178,7 +172,7 @@ export class QueryEditorComponent implements OnInit {
 
                     // Show the sidebar
                     const sidebarId = QuerySidebarComponent.SIDEBAR_IDENTIFIER;
-                    this._sidebarService.showSingleSidebar(sidebarId, this.query);
+                    this._sidebarService.showSingleSidebar(sidebarId, true, this.query);
 
                     // Reset previous result
                     this._result = undefined;

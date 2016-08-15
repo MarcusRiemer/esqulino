@@ -32,3 +32,7 @@ export class HeadingSidebarComponent {
 
 export const HEADING_SIDEBAR_IDENTIFIER = "page-heading";
 
+export const HEADING_REGISTRATION = {
+    typeId : HEADING_SIDEBAR_IDENTIFIER,
+    componentType : HeadingSidebarComponent
+}
