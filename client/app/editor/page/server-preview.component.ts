@@ -66,9 +66,34 @@ export class ServerPreviewComponent implements OnInit {
         
     }
 
-    refreshHeight() {
+    /**
+     * Refreshes the height of the preview immediatly or re-schedules a refresh
+     * because the preview isn't done yet.
+     *
+     * @param triesLeft The number of times the refresh should be retried in case
+     *                  of failure.
+     */
+    refreshHeight(triesLeft : number) {
         const iframe = this._elementRef.nativeElement.querySelector("iframe");
-        iframe.height = (iframe.contentWindow.document.body.scrollHeight + 10) + "px"
+
+        // Is something meaningful loaded in the iframe?
+        if (!iframe || !iframe.contentWindow.document.body) {
+            // No, are there retries lief?
+            if (triesLeft > 0) {
+                // Yes, retry
+                const newTimes = triesLeft - 1;
+                console.log(`Could not resize, trying again ${newTimes} more times`);
+                Observable.timer(100)
+                    .subscribe(t => this.refreshHeight(newTimes));
+            } else {
+                // No, give up
+                console.log(`Could not resize, ran out of retry attempts`);
+            }
+
+        } else {
+            // Yes, set a meaningful height
+            iframe.height = (iframe.contentWindow.document.body.scrollHeight + 10) + "px"
+        }
     }
 
     refresh() : Observable<boolean> {   
@@ -81,9 +106,7 @@ export class ServerPreviewComponent implements OnInit {
                 toReturn.next(true);
                 toReturn.complete();
 
-
-                Observable.timer(100)
-                    .subscribe(t => this.refreshHeight());
+                this.refreshHeight(5);
             });
 
         return (toReturn);
