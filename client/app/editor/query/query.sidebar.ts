@@ -1,10 +1,11 @@
 import {
-    Component, Input, OnInit, OnDestroy
+    Component, Input, OnInit, OnDestroy, Inject
 } from '@angular/core'
 import {ActivatedRoute, Router}      from '@angular/router'
 
 import {Query, Model}                from '../../shared/query'
 
+import {SIDEBAR_MODEL_TOKEN}         from '../editor.token'
 import {ProjectService}              from '../project.service'
 
 import {DragService}                 from './drag.service'
@@ -46,26 +47,16 @@ export class QuerySidebarComponent implements OnInit, OnDestroy {
      * @param _dragService The sidebar relies on the SQL Editors DragService
      */
     constructor(
+        @Inject(SIDEBAR_MODEL_TOKEN) query : Query,
         private _dragService : DragService,
         private _projectService : ProjectService,        
-        private _routeParams : ActivatedRoute,
+        private _activatedRoute : ActivatedRoute,
         private _router : Router) {
+        this.query = query;
     }
 
     ngOnInit() {
-        // Grab the current project
-        const subProj = this._projectService.activeProject
-            .subscribe(res => {
-                // New project, discard the current query
-                this.query = undefined;
-                
-                // Grab the correct query id
-                const childRoute = this._router.routerState.firstChild(this._routeParams);
-                const subQuery = childRoute.params.subscribe(param => {
-                    // Project is loaded, display the correct  query
-                    this.query = res.getQueryById(param['queryId']);
-                })
-            });
+        
     }
 
     ngOnDestroy() {

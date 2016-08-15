@@ -66,7 +66,6 @@ export class QueryEditorComponent implements OnInit {
             componentType : QuerySidebarComponent
         });
         
-        this._sidebarService.showSingleSidebar(QuerySidebarComponent.SIDEBAR_IDENTIFIER);
         this._toolbarService.resetItems();
     }
 
@@ -176,6 +175,10 @@ export class QueryEditorComponent implements OnInit {
                     // Project is loaded, display the correct  query
                     this.project = res;
                     this.query = this.project.getQueryById(queryId);
+
+                    // Show the sidebar
+                    const sidebarId = QuerySidebarComponent.SIDEBAR_IDENTIFIER;
+                    this._sidebarService.showSingleSidebar(sidebarId, this.query);
 
                     // Reset previous result
                     this._result = undefined;

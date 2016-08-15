@@ -65,8 +65,6 @@ export class PageEditor implements OnInit, OnDestroy {
             typeId: SidebarWidgetsComponent.SIDEBAR_IDENTIFIER,
             componentType: SidebarWidgetsComponent
         });
-        
-        this.showDefaultSidebars();
     }
 
     /**
@@ -74,8 +72,8 @@ export class PageEditor implements OnInit, OnDestroy {
      */
     private showDefaultSidebars() : void {        
         this._sidebarService.showMultiple([
-            { type : SidebarWidgetsComponent.SIDEBAR_IDENTIFIER },
-            { type : SidebarDataComponent.SIDEBAR_IDENTIFIER }
+            { type : SidebarWidgetsComponent.SIDEBAR_IDENTIFIER, param : this._page },
+            { type : SidebarDataComponent.SIDEBAR_IDENTIFIER, param : this._page }
         ]);
     }
 
