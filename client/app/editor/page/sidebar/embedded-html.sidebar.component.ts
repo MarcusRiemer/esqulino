@@ -24,5 +24,9 @@ export class EmbeddedHtmlSidebarComponent {
     }
 }
 
-export const EMBEDDED_HTML_SIDEBAR_COMPONENT = "embedded-html";
+export const EMBEDDED_HTML_SIDEBAR_COMPONENT = "page-embedded-html";
 
+export const EMBEDDED_HTML_REGISTRATION = {
+    typeId : EMBEDDED_HTML_SIDEBAR_COMPONENT,
+    componentType : EmbeddedHtmlSidebarComponent
+}

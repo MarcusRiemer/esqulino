@@ -27,6 +27,11 @@ import {SidebarWidgetsComponent}        from './page-widgets.sidebar'
  */
 export class PageEditor implements OnInit, OnDestroy {
     /**
+     * Sidebars may only be registered once
+     */
+    private static _sidebarsRegistered = false;
+    
+    /**
      * The currently edited project
      */
     private _project : Project;
@@ -56,15 +61,7 @@ export class PageEditor implements OnInit, OnDestroy {
         private _preferences : PreferencesService,
         registrationService : RegistrationService
     ) {
-        // Register the page sidebars
-        registrationService.registerSidebarType({
-            typeId: SidebarDataComponent.SIDEBAR_IDENTIFIER,
-            componentType: SidebarDataComponent
-        });
-        registrationService.registerSidebarType({
-            typeId: SidebarWidgetsComponent.SIDEBAR_IDENTIFIER,
-            componentType: SidebarWidgetsComponent
-        });
+        
     }
 
     /**
@@ -72,8 +69,16 @@ export class PageEditor implements OnInit, OnDestroy {
      */
     private showDefaultSidebars() : void {        
         this._sidebarService.showMultiple([
-            { type : SidebarWidgetsComponent.SIDEBAR_IDENTIFIER, param : this._page },
-            { type : SidebarDataComponent.SIDEBAR_IDENTIFIER, param : this._page }
+            {
+                type : SidebarWidgetsComponent.SIDEBAR_IDENTIFIER,
+                param : this._page,
+                sticky : true,
+            },
+            {
+                type : SidebarDataComponent.SIDEBAR_IDENTIFIER,
+                param : this._page,
+                sticky : true,
+            }
         ]);
     }
 

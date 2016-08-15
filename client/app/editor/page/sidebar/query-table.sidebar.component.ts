@@ -63,3 +63,8 @@ export class QueryTableSidebarComponent {
 
 export const QUERY_TABLE_SIDEBAR_IDENTIFIER = "page-query-table";
 
+export const QUERY_TABLE_REGISTRATION = {
+    typeId : QUERY_TABLE_SIDEBAR_IDENTIFIER,
+    componentType : QueryTableSidebarComponent
+}
+

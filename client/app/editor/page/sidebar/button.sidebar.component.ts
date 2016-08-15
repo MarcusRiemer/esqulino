@@ -47,3 +47,8 @@ export class ButtonSidebarComponent {
 
 export const BUTTON_SIDEBAR_IDENTIFIER = "page-button";
 
+export const BUTTON_REGISTRATION = {
+    typeId : BUTTON_SIDEBAR_IDENTIFIER,
+    componentType : ButtonSidebarComponent
+}
+

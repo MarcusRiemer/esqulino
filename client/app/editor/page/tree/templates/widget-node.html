@@ -2,6 +2,7 @@
      class="tree-level block-container"
      draggable="true">
   <span [class.block]="isBlock"
+        (click)="startEditing()"
         (dragover)="onDragOverNode($event, 'open')"
         (drop)="onDropNode($event, 'open')">
     <span class="widget">{{ model.type }}</span>
@@ -14,6 +15,7 @@
   </esqulino-widget-node>
 
   <span [class.block]="isBlock"
+        (click)="startEditing()"
         (dragover)="onDragOverNode($event, 'close')"
         (drop)="onDropNode($event, 'close')">
     <span *ngIf="needsClosingNode"

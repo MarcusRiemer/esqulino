@@ -32,3 +32,7 @@ export class InputSidebarComponent {
 
 export const INPUT_SIDEBAR_IDENTIFIER = "page-input";
 
+export const INPUT_REGISTRATION = {
+    typeId : INPUT_SIDEBAR_IDENTIFIER,
+    componentType : InputSidebarComponent
+}

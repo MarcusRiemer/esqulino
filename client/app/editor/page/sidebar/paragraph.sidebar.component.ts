@@ -18,7 +18,7 @@ export class ParagraphSidebarComponent {
     private _model : Paragraph;
     
     constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : Component,
-                @Inject(SIDEBAR_ID_TOKEN) public id : number) {
+                @Inject(SIDEBAR_ID_TOKEN) public sidebarInstanceId : number) {
         this._model = com.model;
     }
 
@@ -28,4 +28,9 @@ export class ParagraphSidebarComponent {
 }
 
 export const PARAGRAPH_SIDEBAR_IDENTIFIER = "page-paragraph";
+
+export const PARAGRAPH_REGISTRATION = {
+    typeId : PARAGRAPH_SIDEBAR_IDENTIFIER,
+    componentType : ParagraphSidebarComponent
+}
 

@@ -1,6 +1,7 @@
 import {NgModule, ModuleWithProviders}  from '@angular/core'
 
 import SharedEditorModule               from '../shared/shared.module'
+import {RegistrationService}            from '../registration.service'
 
 import {pageEditorRouting}              from './page-editor.routes'
 
@@ -10,6 +11,14 @@ import {PageEditorHostComponent}        from './host.component'
 import {PageCreateComponent}            from './create.component'
 import {PageDataComponent}              from './page-data.component'
 import {ServerPreviewComponent}         from './server-preview.component'
+
+import {BUTTON_REGISTRATION}            from './sidebar/button.sidebar.component'
+import {EMBEDDED_HTML_REGISTRATION}     from './sidebar/embedded-html.sidebar.component'
+import {HEADING_REGISTRATION}           from './sidebar/heading.sidebar.component'
+import {INPUT_REGISTRATION}             from './sidebar/input.sidebar.component'
+import {LINK_REGISTRATION}              from './sidebar/link.sidebar.component'
+import {PARAGRAPH_REGISTRATION}         from './sidebar/paragraph.sidebar.component'
+import {QUERY_TABLE_REGISTRATION}       from './sidebar/query-table.sidebar.component'
 
 import {SidebarDataComponent}           from './page-data.sidebar'
 import {SidebarWidgetsComponent}        from './page-widgets.sidebar'
@@ -29,6 +38,30 @@ import {LinkComponent}                  from './wysiwyg/widgets/link.component'
 import {ParagraphComponent}             from './wysiwyg/widgets/paragraph.component'
 import {QueryTableComponent}            from './wysiwyg/widgets/query-table.component'
 
+// Components as defined by the WYSIWYG-editor
+const visualComponents = [
+    ButtonComponent,
+    EmbeddedHtmlComponent,
+    HeadingComponent,
+    InputComponent,
+    LinkComponent,
+    ParagraphComponent,
+    QueryTableComponent,
+]
+
+// All sidebars known to the page editor
+const sidebarComponents = [
+    SidebarDataComponent,
+    SidebarWidgetsComponent,
+    BUTTON_REGISTRATION.componentType,
+    EMBEDDED_HTML_REGISTRATION.componentType,
+    HEADING_REGISTRATION.componentType,
+    INPUT_REGISTRATION.componentType,
+    LINK_REGISTRATION.componentType,
+    PARAGRAPH_REGISTRATION.componentType,
+    QUERY_TABLE_REGISTRATION.componentType,
+]
+
 @NgModule({
     imports: [
         SharedEditorModule,
@@ -40,9 +73,6 @@ import {QueryTableComponent}            from './wysiwyg/widgets/query-table.comp
 
         PageDataComponent,
         ServerPreviewComponent,
-
-        SidebarDataComponent,
-        SidebarWidgetsComponent,
         
         PageTreeEditorComponent,
         PageTreeComponent,
@@ -52,25 +82,12 @@ import {QueryTableComponent}            from './wysiwyg/widgets/query-table.comp
         PageLayoutComponent,
         WidgetLoaderComponent,
 
-        ButtonComponent,
-        EmbeddedHtmlComponent,
-        HeadingComponent,
-        InputComponent,
-        LinkComponent,
-        ParagraphComponent,
-        QueryTableComponent,
+        ...sidebarComponents,
+        ...visualComponents,
     ],
     entryComponents: [
-        ButtonComponent,
-        EmbeddedHtmlComponent,
-        HeadingComponent,
-        InputComponent,
-        LinkComponent,
-        ParagraphComponent,
-        QueryTableComponent,
-
-        SidebarDataComponent,
-        SidebarWidgetsComponent,
+        ...sidebarComponents,
+        ...visualComponents,
     ],
     exports: [
         PageEditorHostComponent,
@@ -81,13 +98,8 @@ import {QueryTableComponent}            from './wysiwyg/widgets/query-table.comp
         SidebarDataComponent,
         SidebarWidgetsComponent,
 
-        ButtonComponent,
-        EmbeddedHtmlComponent,
-        HeadingComponent,
-        InputComponent,
-        LinkComponent,
-        ParagraphComponent,
-        QueryTableComponent,
+        ...sidebarComponents,
+        ...visualComponents,
     ]
 })
 export default class PageEditorModule {
@@ -96,5 +108,28 @@ export default class PageEditorModule {
             ngModule : PageEditorModule,
             providers : [DragService]
         });
+    }
+
+    constructor(reg : RegistrationService) {
+        console.log("Registering PageEditor ...");
+        
+        reg.registerSidebarType({
+            typeId: SidebarDataComponent.SIDEBAR_IDENTIFIER,
+            componentType: SidebarDataComponent
+        });
+        reg.registerSidebarType({
+            typeId: SidebarWidgetsComponent.SIDEBAR_IDENTIFIER,
+            componentType: SidebarWidgetsComponent
+        });
+
+        reg.registerSidebarType(BUTTON_REGISTRATION);
+        reg.registerSidebarType(EMBEDDED_HTML_REGISTRATION);
+        reg.registerSidebarType(HEADING_REGISTRATION);
+        reg.registerSidebarType(INPUT_REGISTRATION);
+        reg.registerSidebarType(LINK_REGISTRATION);
+        reg.registerSidebarType(PARAGRAPH_REGISTRATION);
+        reg.registerSidebarType(QUERY_TABLE_REGISTRATION);
+
+        console.log("Registered PageEditor!");
     }
 }

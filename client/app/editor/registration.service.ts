@@ -26,10 +26,19 @@ export class RegistrationService {
         this._sidebarTypes = new ReplaySubject<SidebarType>();
     }
 
+    /**
+     * Registers a new sidebar.
+     */
     registerSidebarType(reg : SidebarType) {
+        console.log(`Registered sidebar with id "${reg.typeId}"`);
+        
         this._sidebarTypes.next(reg);
     }
 
+    /**
+     * @return All available sidebar types, no matter when they
+     *         were registered.
+     */
     get sidebarTypes() : Observable<SidebarType> {
         return (this._sidebarTypes);
     }

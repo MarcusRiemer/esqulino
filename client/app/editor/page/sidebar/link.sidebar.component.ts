@@ -51,3 +51,7 @@ export class LinkSidebarComponent {
 
 export const LINK_SIDEBAR_IDENTIFIER = "page-link";
 
+export const LINK_REGISTRATION = {
+    typeId : LINK_SIDEBAR_IDENTIFIER,
+    componentType : LinkSidebarComponent
+}
