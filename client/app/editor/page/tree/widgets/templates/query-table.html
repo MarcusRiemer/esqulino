@@ -1,0 +1,8 @@
+<esqulino-widget-node [model]="model">
+  <widget-header>
+    <div class="widget-header" *ngIf="model.queryReference">
+      Abfrage =
+      <span class="table">{{ model.queryReference.name }}</span>
+    </div>
+  </widget-header>
+</esqulino-widget-node>

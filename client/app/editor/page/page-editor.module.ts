@@ -25,28 +25,33 @@ import {SidebarWidgetsComponent}        from './page-widgets.sidebar'
 
 import {PageTreeEditorComponent}        from './tree/editor.component'
 import {PageTreeComponent}              from './tree/page-tree.component'
-import {WidgetNode}                     from './tree/widget-node.component'
+import {WidgetNodeComponent}            from './tree/widget-node.component'
+import {WidgetNodeLoaderComponent}      from './tree/widget-node-loader.component'
+
+import * as Tree                        from './tree/widgets/index'
 
 import {PageVisualEditorComponent}      from './wysiwyg/editor.component'
 import {PageLayoutComponent}            from './wysiwyg/page-layout.component'
 import {WidgetLoaderComponent}          from './wysiwyg/widget-loader.component'
-import {ButtonComponent}                from './wysiwyg/widgets/button.component'
-import {EmbeddedHtmlComponent}          from './wysiwyg/widgets/embedded-html.component'
-import {HeadingComponent}               from './wysiwyg/widgets/heading.component'
-import {InputComponent}                 from './wysiwyg/widgets/input.component'
-import {LinkComponent}                  from './wysiwyg/widgets/link.component'
-import {ParagraphComponent}             from './wysiwyg/widgets/paragraph.component'
-import {QueryTableComponent}            from './wysiwyg/widgets/query-table.component'
+
+import * as Visual                      from './wysiwyg/widgets/index'
 
 // Components as defined by the WYSIWYG-editor
 const visualComponents = [
-    ButtonComponent,
-    EmbeddedHtmlComponent,
-    HeadingComponent,
-    InputComponent,
-    LinkComponent,
-    ParagraphComponent,
-    QueryTableComponent,
+    Visual.ButtonComponent,
+    Visual.EmbeddedHtmlComponent,
+    Visual.HeadingComponent,
+    Visual.InputComponent,
+    Visual.LinkComponent,
+    Visual.ParagraphComponent,
+    Visual.QueryTableComponent,
+]
+
+const treeComponents = [
+    WidgetNodeComponent,
+    Tree.HeadingComponent,
+    Tree.QueryTableComponent,
+    Tree.InputComponent,
 ]
 
 // All sidebars known to the page editor
@@ -76,7 +81,8 @@ const sidebarComponents = [
         
         PageTreeEditorComponent,
         PageTreeComponent,
-        WidgetNode,
+        WidgetNodeComponent,
+        WidgetNodeLoaderComponent,
         
         PageVisualEditorComponent,
         PageLayoutComponent,
@@ -84,10 +90,12 @@ const sidebarComponents = [
 
         ...sidebarComponents,
         ...visualComponents,
+        ...treeComponents,
     ],
     entryComponents: [
         ...sidebarComponents,
         ...visualComponents,
+        ...treeComponents,
     ],
     exports: [
         PageEditorHostComponent,
@@ -100,6 +108,7 @@ const sidebarComponents = [
 
         ...sidebarComponents,
         ...visualComponents,
+        ...treeComponents,
     ]
 })
 export default class PageEditorModule {

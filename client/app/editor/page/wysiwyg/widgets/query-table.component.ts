@@ -15,10 +15,6 @@ import {
 
 import {DragService, PageDragEvent} from '../../drag.service'
 import {WidgetComponent}            from '../../widget.component'
-import {
-    QUERY_TABLE_SIDEBAR_IDENTIFIER, QueryTableSidebarComponent
-} from '../../sidebar/query-table.sidebar.component'
-
 
 export {QueryTable}
 
@@ -36,13 +32,7 @@ export class QueryTableComponent extends WidgetComponent<QueryTable> {
                 private _dragService : DragService,
                 registrationService : RegistrationService,
                 sidebarService : SidebarService) {
-        super(sidebarService, model, {
-            reg : {
-                typeId: QUERY_TABLE_SIDEBAR_IDENTIFIER,
-                componentType : QueryTableSidebarComponent
-            },
-            registrationService : registrationService
-        });
+        super(sidebarService, model);
     }
 
     /**

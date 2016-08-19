@@ -22,8 +22,7 @@
              [ngClass]="col.columnClasses">
           <esqulino-widget-loader
               *ngFor="let widget of col.children; let widgetIndex = index;"
-              [widget]="widget"
-              [page]="page">
+              [widget]="widget">
           </esqulino-widget-loader>
         </div>
         <!-- Blueprint columns for a empty dragged row -->
@@ -50,7 +49,6 @@
                 (drop)="onBlueprintColumnDrop($event, rowIndex + 1, colIndex + 1, widgetIndex + 1)"
                 (dragstart)="startWidgetDrag($event, widget, rowIndex, colIndex, widgetIndex)"
                 [widget]="widget"
-                [page]="page"
                 [hidden]="!showWidget(rowIndex, colIndex, widgetIndex)"
                 draggable="true">
             </esqulino-widget-loader>
@@ -64,8 +62,7 @@
                [ngClass]="col.columnClasses">
             <esqulino-widget-loader
                 *ngFor="let widget of col.children; let widgetIndex = index;"
-                [widget]="widget"
-                [page]="page">
+                [widget]="widget">
             </esqulino-widget-loader>
           </div>
           <div *ngIf="!draggedRow"

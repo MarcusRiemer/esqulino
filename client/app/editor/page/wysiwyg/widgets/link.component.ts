@@ -7,9 +7,6 @@ import {RegistrationService}          from '../../../registration.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {WidgetComponent}              from '../../widget.component'
-import {
-    LINK_SIDEBAR_IDENTIFIER, LinkSidebarComponent
-} from '../../sidebar/link.sidebar.component'
 
 export {Link}
 
@@ -25,13 +22,7 @@ export class LinkComponent extends WidgetComponent<Link> {
     constructor(sidebarService : SidebarService,
                 registrationService : RegistrationService,
                 @Inject(WIDGET_MODEL_TOKEN) model : Link) {
-        super(sidebarService, model, {
-            reg : {
-                typeId: LINK_SIDEBAR_IDENTIFIER,
-                componentType : LinkSidebarComponent
-            },
-            registrationService : registrationService
-        });
+        super(sidebarService, model);
     }
 
     /**

@@ -7,9 +7,9 @@
   </div>
   <div class="card-block">
     <div class="page-preview">
-      <esqulino-widget-node *ngFor="let child of page.children"
-                            [model]="child">
-      </esqulino-widget-node>
+      <esqulino-node-widget-loader *ngFor="let child of page.children"
+                                   [model]="child">
+      </esqulino-node-widget-loader>
     </div>
   </div>
 </div>

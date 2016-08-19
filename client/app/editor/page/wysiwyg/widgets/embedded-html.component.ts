@@ -7,9 +7,6 @@ import {RegistrationService}          from '../../../registration.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {WidgetComponent}              from '../../widget.component'
-import {
-    EMBEDDED_HTML_SIDEBAR_COMPONENT, EmbeddedHtmlSidebarComponent
-} from '../../sidebar/embedded-html.sidebar.component'
 
 export {EmbeddedHtml}
 
@@ -22,12 +19,6 @@ export class EmbeddedHtmlComponent extends WidgetComponent<EmbeddedHtml> {
     constructor(sidebarService : SidebarService,
                 registrationService : RegistrationService,
                 @Inject(WIDGET_MODEL_TOKEN) model : EmbeddedHtml) {
-        super(sidebarService, model, {
-            reg : {
-                typeId: EMBEDDED_HTML_SIDEBAR_COMPONENT,
-                componentType : EmbeddedHtmlSidebarComponent
-            },
-            registrationService : registrationService
-        });
+        super(sidebarService, model);
     }
 }
