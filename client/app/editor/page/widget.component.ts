@@ -16,11 +16,7 @@ export class WidgetComponent<TModel extends Widget> {
     private _isEditing : boolean;
 
     constructor(protected _sidebarService : SidebarService,
-                model? : TModel,
-                sidebarDefinition? : {
-                    registrationService : RegistrationService,
-                    reg : SidebarType
-                }) {
+                model? : TModel) {
         this._model = model;
     }
     

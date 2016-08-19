@@ -9,10 +9,6 @@ import {RegistrationService}          from '../../../registration.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {WidgetComponent}              from '../../widget.component'
-import {
-    INPUT_SIDEBAR_IDENTIFIER, InputSidebarComponent
-} from '../../sidebar/input.sidebar.component'
-
 
 export {Input}
 
@@ -26,13 +22,7 @@ export class InputComponent extends WidgetComponent<Input> {
                 registrationService : RegistrationService,
                 sidebarService : SidebarService,
                 private _cdRef : ChangeDetectorRef) {
-        super(sidebarService, model, {
-            reg : {
-                typeId: INPUT_SIDEBAR_IDENTIFIER,
-                componentType : InputSidebarComponent
-            },
-            registrationService : registrationService
-        });
+        super(sidebarService, model);
     }
 
     /**

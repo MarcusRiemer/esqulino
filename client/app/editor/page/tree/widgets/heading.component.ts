@@ -11,13 +11,10 @@ import {WidgetComponent}          from '../../widget.component'
 export {Heading}
 
 @Component({
-    templateUrl: 'app/editor/page/wysiwyg/widgets/templates/heading.html',
-    selector: "esqulino-heading"
+    templateUrl: 'app/editor/page/tree/widgets/templates/heading.html',
 })
-export class HeadingComponent extends WidgetComponent<Heading> {    
-    constructor(sidebarService : SidebarService,
-                registrationService : RegistrationService,
-                @Inject(WIDGET_MODEL_TOKEN) model : Heading) {
-        super(sidebarService, model);
+export class HeadingComponent {    
+    constructor(@Inject(WIDGET_MODEL_TOKEN) public model : Heading) {
+
     }
 }

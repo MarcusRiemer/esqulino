@@ -10,9 +10,6 @@ import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {DragService, PageDragEvent}   from '../../drag.service'
 import {WidgetComponent}              from '../../widget.component'
-import {
-    BUTTON_SIDEBAR_IDENTIFIER, ButtonSidebarComponent
-} from '../../sidebar/button.sidebar.component'
 
 export {Button, QueryAction}
 
@@ -26,13 +23,7 @@ export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
                 sidebarService : SidebarService,
                 registrationService : RegistrationService,
                 private _cdRef : ChangeDetectorRef) {
-        super(sidebarService, model, {
-            reg : {
-                typeId: BUTTON_SIDEBAR_IDENTIFIER,
-                componentType : ButtonSidebarComponent
-            },
-            registrationService : registrationService
-        });
+        super(sidebarService, model);
     }
 
     ngOnInit() {

@@ -5,21 +5,31 @@
         (click)="startEditing()"
         (dragover)="onDragOverNode($event, 'open')"
         (drop)="onDropNode($event, 'open')">
-    <span class="widget">{{ model.type }}</span>
+    <div class="widget">
+        &lt;{{ model.type }}
+        <!-- Display additional parameters as they could be provided
+             by more specialised implementations.-->
+        <ng-content select="widget-header"></ng-content>&gt;      
+    </div>
   </span>
   <span *ngIf="model.text"
         class="text"
-        [class.block]="isBlock">{{ model.text }}</span>
-  <esqulino-widget-node *ngFor="let child of children"
-                        [model]="child">
-  </esqulino-widget-node>
+        [class.block]="isLongText"
+        [class.tree-level]="isLongText">{{ model.text }}</span>
 
-  <span [class.block]="isBlock"
-        (click)="startEditing()"
-        (dragover)="onDragOverNode($event, 'close')"
-        (drop)="onDropNode($event, 'close')">
-    <span *ngIf="needsClosingNode"
-          class="widget-close">{{ model.type }}</span>
+  <ng-content></ng-content>
+
+  <esqulino-node-widget-loader *ngFor="let child of children"
+                               [model]="child">
+  </esqulino-node-widget-loader>
+
+
+  <span *ngIf="needsClosingNode"
+       [class.block]="isBlock"
+       (click)="startEditing()"
+       (dragover)="onDragOverNode($event, 'close')"
+       (drop)="onDropNode($event, 'close')">
+    <span class="widget-close">&lt;/{{ model.type }}&gt;</span>
   </span>
 
 </div>

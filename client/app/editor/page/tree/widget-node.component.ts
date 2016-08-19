@@ -1,10 +1,11 @@
-import {Component, Input}                 from '@angular/core'
+import {Component, Input, Inject}         from '@angular/core'
 
 import {
     WidgetDescription, Widget, WidgetHost, isWidgetHost, isWidget
 } from '../../../shared/page/hierarchy'
 
 import {SidebarService}                   from '../../sidebar.service'
+import {WIDGET_MODEL_TOKEN}               from '../../editor.token'
 
 import {DragService, PageDragEvent}       from '../drag.service'
 import {WidgetComponent}                  from '../widget.component'
@@ -19,19 +20,26 @@ interface DropLocation {
 }
 
 /**
- * Represents a widget as a node in a tree.
+ * Represents a widget as a node in a tree. This component is somewhat agnostic
+ * about the element it displays and does it's best to provide *some* representation
+ * for common properties.
+ *
+ * Most widgets however will want to provide their own tree-representation. In this case
+ * this component should be used as a "HTML-parent" (called "transcluding" in Angular 1)
+ * to provide a common look and feel for all tree components.
  */
 @Component({
     templateUrl: 'app/editor/page/tree/templates/widget-node.html',
     selector: 'esqulino-widget-node',
     inputs: ['model']
 })
-export class WidgetNode extends WidgetComponent<Widget> {
+export class WidgetNodeComponent extends WidgetComponent<Widget> {
     constructor(
+        @Inject(WIDGET_MODEL_TOKEN) model : Widget,
         private _dragService : DragService,
         _sidebarService : SidebarService
     ) {
-        super(_sidebarService)
+        super(_sidebarService, model)
     }
 
     /**
@@ -225,5 +233,12 @@ export class WidgetNode extends WidgetComponent<Widget> {
      */
     get isBlock() : boolean {
         return (!this.isInline);
+    }
+
+    /**
+     * @return True, if the text should be treated as a "full" child level.
+     */
+    get isLongText() : boolean {
+        return (this.model.type === "paragraph");
     }
 }

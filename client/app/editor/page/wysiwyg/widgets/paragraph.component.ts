@@ -7,9 +7,6 @@ import {RegistrationService}          from '../../../registration.service'
 import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 
 import {WidgetComponent}              from '../../widget.component'
-import {
-    PARAGRAPH_SIDEBAR_IDENTIFIER, ParagraphSidebarComponent
-} from '../../sidebar/paragraph.sidebar.component'
 
 export {Paragraph}
 
@@ -22,12 +19,6 @@ export class ParagraphComponent extends WidgetComponent<Paragraph> {
     constructor(sidebarService : SidebarService,
                 registrationService : RegistrationService,
                 @Inject(WIDGET_MODEL_TOKEN) model : Paragraph) {
-        super(sidebarService, model, {
-            reg : {
-                typeId: PARAGRAPH_SIDEBAR_IDENTIFIER,
-                componentType : ParagraphSidebarComponent
-            },
-            registrationService : registrationService
-        });
+        super(sidebarService, model);
     }
 }

@@ -89,18 +89,41 @@
 
 .block-container .widget {
     border-radius: 5px;
+    display: inline-block;
     white-space: nowrap;
+    
     padding-left: 1em;
     padding-right: 1em;
+    padding-top: 2px;
+    padding-bottom: 2px;
+
+    margin-bottom: 2px;
+    
     background-color: rgba(0, 0, 0, 0.2);
     border: 2px solid rgba(0, 0, 0, 0.9);
 }
 
+.block-container .widget widget-header {
+    display: inline-block;
+}
+
+.block-container .widget widget-header.block .widget-header {
+    margin-left: 1rem;
+    padding-left: 1rem;
+}
+
 .block-container .widget-close {
     border-radius: 5px;
+    display: inline-block;
     white-space: nowrap;
+
     padding-left: 1em;
     padding-right: 1em;
+    padding-top: 2px;
+    padding-bottom: 2px;
+
+    margin-bottom: 2px;
+    
     background-color: rgba(0, 0, 0, 0.1);
     border: 2px solid rgba(0, 0, 0, 0.4);
 }

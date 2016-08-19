@@ -7,9 +7,9 @@
           class="block-container block">
       <span [class.error]="!hasValidReference"
             class="table">
-        <i *ngIf="!hasValidReference"
-           class="fa fa-exclamation-triangle"
-           aria-hidden="true"></i>
+        <span *ngIf="!hasValidReference"
+              class="fa fa-exclamation-triangle"
+              aria-hidden="true"></span>
         <query-icon *ngIf="hasValidReference"
                     [query]="queryReference.query">
         </query-icon>

@@ -5,25 +5,17 @@ import {
     Type, provide, ReflectiveInjector
 } from '@angular/core'
 
-import {Page}                  from '../../../shared/page/index'
+import {WidgetBase}                      from '../../../shared/page/widgets/index'
 
-import {WidgetBase}                from '../../../shared/page/widgets/index'
+import {WIDGET_MODEL_TOKEN}              from '../../editor.token'
 
-import {SidebarService}        from '../../sidebar.service'
-
-import {
-    WIDGET_MODEL_TOKEN
-} from '../../editor.token'
-
-import {WidgetComponent}       from '../widget.component'
-
-import {ButtonComponent}       from './widgets/button.component'
-import {EmbeddedHtmlComponent} from './widgets/embedded-html.component'
-import {ParagraphComponent}    from './widgets/paragraph.component'
-import {HeadingComponent}      from './widgets/heading.component'
-import {LinkComponent}         from './widgets/link.component'
-import {QueryTableComponent}   from './widgets/query-table.component'
-import {InputComponent}        from './widgets/input.component'
+import {ButtonComponent}                 from './widgets/button.component'
+import {EmbeddedHtmlComponent}           from './widgets/embedded-html.component'
+import {ParagraphComponent}              from './widgets/paragraph.component'
+import {HeadingComponent}                from './widgets/heading.component'
+import {LinkComponent}                   from './widgets/link.component'
+import {QueryTableComponent}             from './widgets/query-table.component'
+import {InputComponent}                  from './widgets/input.component'
 
 /**
  * Loads the editor-representation of widgets.
@@ -41,11 +33,6 @@ export class WidgetLoaderComponent implements OnInit {
      * The widget that requires an editor representation.
      */
     @Input() widget : WidgetBase;
-
-    /**
-     * The page all these widgets are placed on.
-     */
-    @Input() page : Page;
 
     @ViewChild('root', { read: ViewContainerRef}) viewRoot : ViewContainerRef;
 
@@ -88,7 +75,7 @@ export class WidgetLoaderComponent implements OnInit {
      */
     private getComponentType(widgetType : string) : any {
         if (!this._typeMapping[widgetType]) {
-            throw new Error(`Unknown widget type requested from template: "${widgetType}"`);
+            throw new Error(`Unknown WYSIWYG widget type requested from template: "${widgetType}"`);
         }
         return (this._typeMapping[widgetType]);
     }
@@ -97,17 +84,12 @@ export class WidgetLoaderComponent implements OnInit {
      * Dynamically loads the required components.
      */
     ngOnInit() {        
-        console.log(`Resolving widget type "${this.widget.type}"`);
+        console.log(`Resolving WYSIWYG widget type "${this.widget.type}"`);
         const componentType = this.getComponentType(this.widget.type);
-
-        if (!this.page) {
-            throw new Error("WidgetLoaderComponent doesn't have a page");
-        }
         
         // Inject the widget model            
         let injector = ReflectiveInjector.resolveAndCreate([
             provide(WIDGET_MODEL_TOKEN, {useValue : this.widget}),
-            provide(Page, {useValue : this.page})
         ],this._injector);
         
         const fac = this._resolver.resolveComponentFactory(componentType)
