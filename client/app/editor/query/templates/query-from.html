@@ -1,19 +1,24 @@
 <div *ngIf="query.from"
      class="block from">
-  <div class="component">FROM</div>
-  <div>
-    <span class="table">
-      <span class="fa fa-table fa-fw"></span>
-      {{ query.from.first.tableName }} {{ query.from.first.alias }}
-    </span>
+  <div class="line">
+    <div class="component">FROM</div>
+    <div>
+      <span class="table">
+        <span class="fa fa-table fa-fw"></span>
+        {{ query.from.first.tableName }} {{ query.from.first.alias }}
+      </span>
+    </div>
   </div>
   <div *ngFor="let join of query.from.joins"
        (dragstart)="onJoinDragStart(join, $event)"
+       class="line"
        draggable="true">
-    <span class="component indent">{{ join.sqlJoinKeyword }}</span>
-    <span class="table"><span class="fa fa-table fa-fw"></span>
-      {{ join.tableName }} {{ join.alias }}
-    </span>
+    <div class="component indent">{{ join.sqlJoinKeyword }}</div>
+    <div class="columns">
+      <span class="table"><span class="fa fa-table fa-fw"></span>
+        {{ join.tableName }} {{ join.alias }}
+      </span>
+    </div>
   </div>
 
   <div *ngIf="showBlueprintJoinDropTarget">
