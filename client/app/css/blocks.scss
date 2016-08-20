@@ -1,3 +1,8 @@
+/**
+ * Used to host one or multiple blocks.
+ * TODO: Requiring an artificial parent element may not
+ *       be what I actually want. This should be revisited.
+ */
 .block-container {
     font-family: monospace;
     cursor: default;
@@ -5,88 +10,162 @@
     border: 2px solid transparent;
 }
 
-.block-container .keyword {
-    color: blue;
-}
-
-.block-container .component {
-    color: blue;
-    float: left;
-    width: $component-width;
-    flex: 0 0 $component-width;
-}
-
+/**
+ * Introduces a new line for an SQL-Query.
+ */
 .block-container .line {
     display: flex;
 }
 
+/**
+ * A component of an SQL-query (SELECT, FROM, WHERE, ...)
+ */
+.block-container .line .component {
+    color: blue;
+    width: $component-width;
+    flex: 0 0 $component-width;
+}
+
+/**
+ * Host for a possibly arbitratry number of expressions next to 
+ * a component. Most commonly used for the SELECT columns, but
+ * also as part of WHERE and FROM.
+ */
 .block-container .line .columns {
     flex: 1;
 }
 
-/* DELETE is supposed to be in it's own line */
-.block-container .component.delete {
-    float: none;
-}
-
-.block-container .component.indent {
+/**
+ * Used for components that visually benefit from indentation. Used
+ * for subsequent JOINs as well as the logical AND and OR in the 
+ * WHERE component.
+ */
+.block-container .line .component.indent {
     margin-left: $component-indent;
     width: $component-width - $component-indent;
     flex: 0 0 $component-width - $component-indent;
 }
 
-.block-container .expression {
+/**
+ * Common visual definition for all SQL-blocks.
+ */
+@mixin sql-block($color-inside, $color-outline, $padding) {
     border-radius: 500px;
     white-space: nowrap;
-    background-color: rgba(255, 165, 0, 0.3);
-    border: 2px solid rgba(255, 165, 0, 0.6);
-}
 
-.block-container .current-drop-target {
-    border-radius: 500px;
-    border: 2px solid black;
-}
+    background-color: $color-inside;
+    border: 2px solid $color-outline;
 
-.block-container .missing {
-    text-align: center;
-    border-radius: 500px;
-    padding-left: 1em;
-    padding-right: 1em;
-    background-color: rgba(255, 0, 0, 0.2);
-    border: 2px solid rgba(255, 0, 0, 0.5);
-}
-
-.block-container .constant {
-    text-align: center;
-    border-radius: 500px;
-    padding-left: 1em;
-    padding-right: 1em;
-    border: 2px solid RGBA(100, 149, 237, 1);
-    background-color: RGBA(100, 149, 237, 0.4);
-}
-
-.block-container .parameter {
-    text-align: center;
-    border-radius: 500px;
-    padding-left: 1em;
-    padding-right: 1em;
-    background-color: RGBA(129, 129, 247, 0.4);
-    border: 2px solid RGBA(129, 129, 247, 1);
+    padding-left: $padding;
+    padding-right: $padding;
 }
 
 .block-container .caption {
     white-space: nowrap;
 }
 
-.block-container .table {
-    border-radius: 500px;
-    white-space: nowrap;
-    padding-left: 1em;
-    padding-right: 1em;
-    background-color: rgba(255, 255, 0, 0.2);
-    border: 2px solid rgba(255, 255, 0, 0.9);
+/**
+ * An SQL expression that may be nested.
+ */
+.block-container .expression {
+    @include sql-block(
+        rgba(255, 165, 0, 0.3),
+        rgba(255, 165, 0, 0.6),
+        4px
+    )
 }
 
+/**
+ * A missing block in in SQL-expression
+ */
+.block-container .missing {
+    @include sql-block(
+        rgba(255, 0, 0, 0.2),
+        rgba(255, 0, 0, 0.5),
+        1em
+    )
+}
+
+/**
+ *  A constant in an SQL-expression.
+ */
+.block-container .constant {
+    @include sql-block(
+        rgba(100, 149, 237, 0.4),
+        rgba(100, 149, 237, 1),
+        1em
+    )
+}
+
+/**
+ * A user-provided parameter in an SQL-expression.
+ */
+.block-container .parameter {
+    @include sql-block(
+        rgba(129, 129, 247, 0.4),
+        rgba(129, 129, 247, 1),
+        1em
+    )
+}
+
+/**
+ * A table in an SQL-expression.
+ */
+.block-container .table {
+    @include sql-block(
+        rgba(255, 255, 0, 0.2),
+        rgba(255, 255, 0, 0.9),
+        1em
+    )
+}
+
+/**
+ * A column in an SQL-exprission
+ */
+.block-container .column {
+    @include sql-block(
+        rgba(0, 255, 0, 0.15),
+        rgba(0, 255, 0, 0.6),
+        1em
+    )
+}
+
+.block-container .table.error {
+    background-color: rgba(255,0,0,0.6);
+    border: 2px solid rgba(255,0,0,1);
+}
+
+.block-container .operator {
+    font-weight: bold;
+    border-radius: 500px;
+    border: 2px solid transparent;
+}
+
+.block-container .operator.selectable {
+    cursor: pointer;
+    border-color: transparent;
+}
+
+.block-container .operator.selectable:hover {
+    cursor: pointer;
+    border-color: black;
+}
+
+.block-container .column.blueprint {
+  border-radius: 500px;
+  border: 2px dashed blue;
+  background-color: white;
+}
+
+.block-container .table.blueprint {
+  border-radius: 500px;
+  border: 2px dashed blue;
+  background-color: white;
+}
+
+/**
+ * Base block for a tree-widget.
+ */
 .block-container .widget {
     border-radius: 5px;
     display: inline-block;
@@ -126,49 +205,4 @@
     
     background-color: rgba(0, 0, 0, 0.1);
     border: 2px solid rgba(0, 0, 0, 0.4);
-}
-
-.block-container .table.error {
-    background-color: rgba(255,0,0,0.6);
-    border: 2px solid rgba(255,0,0,1);
-}
-
-.block-container .operator {
-    font-weight: bold;
-    border-radius: 500px;
-    border: 2px solid transparent;
-}
-
-.block-container .operator.selectable {
-    cursor: pointer;
-    border-color: transparent;
-}
-
-.block-container .operator.selectable:hover {
-    cursor: pointer;
-    border-color: black;
-}
-
-.block-container .column {
-    border-radius: 500px;
-    padding-left: 1em;
-    padding-right: 1em;
-    background-color: rgba(0, 255, 0, 0.15);
-    border: 2px solid rgba(0, 255, 0, 0.6);
-}
-
-.block-container .column.blueprint {
-  border-radius: 500px;
-  border: 2px dashed blue;
-  background-color: white;
-}
-
-.block-container .table.blueprint {
-  border-radius: 500px;
-  border: 2px dashed blue;
-  background-color: white;
-}
-
-.block-container .table-name {
-  color: limegreen;
 }

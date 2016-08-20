@@ -1,6 +1,6 @@
+<!-- Rendering of the actual WHERE component -->
 <div *ngIf="query && query.where"
      class="line">
-  
   <div class="component">WHERE</div>
   <div class="columns">
     <sql-expr [query]="query"
@@ -9,8 +9,9 @@
   </div>
 </div>
 
-<div class="line"
-     *ngFor="let sub of query?.where?.subsequent">
+<!-- AND / OR components following the WHERE component -->
+<div *ngFor="let sub of query?.where?.subsequent"
+     class="line">
   <div class="component indent">{{ sub.operator }}</div>
   <div class="columns">
     <sql-expr [query]="query"
@@ -19,10 +20,11 @@
   </div>
 </div>
 
-<div class="block where"
+<!-- Blueprint for new WHERE component -->
+<div class="block line"
      *ngIf="query && showBlueprintWhere">
-  <div>
-    <div class="component">WHERE</div>
+  <div class="component">WHERE</div>
+  <div class="columns">
     <span (dragover)="onBlueprintDrag($event)"
           (drop)="onBlueprintWhereDrop($event)"
           class="column blueprint">
@@ -31,10 +33,11 @@
   </div>
 </div>
 
-<div class="block where"
+<!-- Blueprint for new AND component -->
+<div class="block line"
      *ngIf="query && showBlueprintSubsequent">
-  <div>
-    <div class="component indent">AND</div>
+  <div class="component indent">AND</div>
+  <div class="columns">
     <span (dragover)="onBlueprintDrag($event)"
           (drop)="onBlueprintSubsequentDrop($event, 'AND')"
           class="column blueprint">
@@ -43,10 +46,11 @@
   </div>
 </div>
 
-<div class="block where"
+<!-- Blueprint for new OR component -->
+<div class="block line"
      *ngIf="query && showBlueprintSubsequent">
-  <div>
-    <div class="component indent">OR</div>
+  <div class="component indent">OR</div>
+  <div class="columns">
     <span (dragover)="onBlueprintDrag($event)"
           (drop)="onBlueprintSubsequentDrop($event, 'OR')"
           class="column blueprint">
