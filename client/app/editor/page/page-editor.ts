@@ -108,13 +108,17 @@ export class PageEditor implements OnInit, OnDestroy {
         // Reacting to rendering
         let btnRender = this._toolbarService.addButton("render", "Vorschau", "search", "r");
         subRef = btnRender.onClick.subscribe( (res) => {
-            btnRender.isInProgress = true;
+            // Show the render preview
+            this.doRenderPreview = true;
 
-            this._serverPreview.refresh()
-                .subscribe(res => {
-                    this.doRenderPreview = true;
-                    btnRender.isInProgress = false;
-                });
+            // And do an actual rendering-request if everything is in order.
+            if (this._serverPreview.allParametersAvailable) {
+                btnRender.isInProgress = true;
+                this._serverPreview.refresh()
+                    .subscribe(res => {
+                        btnRender.isInProgress = false;
+                    });
+            }
         });
 
         this._subscriptionRefs.push(subRef);

@@ -13,7 +13,7 @@ import {
     ParameterMapping, ParameterMappingDescription
 } from './parameter-mapping'
 import {
-    Widget, WidgetHost, isWidgetHost
+    Widget, WidgetHost, isWidgetHost, isWidget
 } from './hierarchy'
 import {
     ValueReference, ColumnReference, QueryReference
@@ -376,13 +376,28 @@ export class Page extends ProjectResource implements WidgetHost {
     }
 
     /**
-     * @return All widgets are in use on this page.
+     * @return All widgets that are in use on this page.
      */
     get allWidgets() : Widget[] {
-        const subs = this._widgets
-            .filter(w => isWidgetHost(w))
-            .map(w => ((w as any) as WidgetHost).children);
-        return ([].concat(...subs));
+        // Flattens each sub-level individually
+        const impl = (items : any[]) => {
+            let widgets : Widget[] = [];
+            items.forEach(item => {
+                // If this itself is a host, grab its children;
+                if (isWidgetHost(item)) {
+                    widgets = widgets.concat(impl(item.children));
+                }
+                // Store it if it's a child
+                else if (isWidget(item)) {
+                    widgets.push(item);
+                }
+            });
+                        
+            return (widgets);
+        }
+
+        // Flattens the top level
+        return ([].concat(...impl(this.children)));
     }
 
     /**

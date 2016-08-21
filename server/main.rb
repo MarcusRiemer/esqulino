@@ -240,6 +240,7 @@ class ScratchSqlApp < Sinatra::Base
 
     # The known parameters for this request
     params = render_request['params']
+    params['get'] = request.GET
 
     # Queries are Hashes of the form { sql :: string, name :: string }
     queries = render_request['queries']
