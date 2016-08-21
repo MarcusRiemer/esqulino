@@ -14,64 +14,31 @@
       ]
     }
   ],
+  "widgets": [
+    {
+      "type": "heading",
+      "level": 1,
+      "text": "{{ query.pokemon.name }}"
+    },
+    {
+      "type": "paragraph",
+      "text": "#{{ get.nummer}} ist {{ query.pokemon.name }}"
+    },
+    {
+      "type": "link",
+      "text": "Zurück zur Hauptseite",
+      "action": {
+        "type": "navigate",
+        "internal": {
+          "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
+          "parameters": []
+        }
+      }
+    }
+  ],
   "parameters": [
     {
       "name": "nummer"
-    }
-  ],
-  "widgets": [
-    {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "heading",
-              "level": 1,
-              "text": "{{ query.pokemon.name }}"
-            }
-          ],
-          "type": "column"
-        }
-      ],
-      "type": "row"
-    },
-    {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "paragraph",
-              "text": "#{{ get.nummer}} ist {{ query.pokemon.name }}"
-            }
-          ],
-          "type": "column"
-        }
-      ],
-      "type": "row"
-    },
-    {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "link",
-              "text": "Zurück zur Hauptseite",
-              "action": {
-                "type": "navigate",
-                "internal": {
-                  "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
-                  "parameters": []
-                }
-              }
-            }
-          ],
-          "type": "column"
-        }
-      ],
-      "type": "row"
     }
   ]
 }
