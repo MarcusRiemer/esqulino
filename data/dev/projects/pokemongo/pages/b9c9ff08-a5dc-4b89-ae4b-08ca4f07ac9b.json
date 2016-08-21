@@ -17,102 +17,58 @@
   ],
   "widgets": [
     {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "heading",
-              "level": 1,
-              "text": "Hallo auf meinem Pokédex"
-            },
-            {
-              "type": "paragraph",
-              "text": "Hier zeige ich alle Pokémon, die ich gefangen habe."
-            }
-          ],
-          "type": "column"
-        }
-      ],
-      "type": "row"
+      "type": "heading",
+      "level": 1,
+      "text": "Hallo auf meinem Pokédex"
     },
     {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "query-table",
-              "queryRefName": "Meine_Pokemon",
-              "columns": [
-                "spitzname",
-                "staerke",
-                "nummer",
-                "typ"
-              ]
-            }
-          ],
-          "type": "column"
-        }
-      ],
-      "type": "row"
+      "type": "paragraph",
+      "text": "Hier zeige ich alle Pokémon, die ich gefangen habe."
     },
     {
+      "type": "query-table",
+      "queryRefName": "Meine_Pokemon",
       "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "link",
-              "text": "Pokémon freigelassen",
-              "action": {
-                "type": "navigate",
-                "internal": {
-                  "pageId": "7a9b9883-62c9-4604-a46c-4d254bce8e4a",
-                  "parameters": []
-                }
-              }
-            },
-            {
-              "type": "link",
-              "text": "Pokémon gefangen",
-              "action": {
-                "type": "navigate",
-                "internal": {
-                  "pageId": "3b9f8574-8e07-4f41-9090-2a51b8c2f9cf",
-                  "parameters": []
-                }
-              }
-            }
-          ],
-          "type": "column"
-        }
-      ],
-      "type": "row"
+        "spitzname",
+        "staerke",
+        "nummer",
+        "typ"
+      ]
     },
     {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "heading",
-              "level": 1,
-              "text": "Alle Pokemon"
-            },
-            {
-              "type": "paragraph",
-              "text": "Hier wird mit HTML geschummelt um alle Pokemon zu zeigen."
-            },
-            {
-              "type": "embedded-html",
-              "html": "<ul>\n  {% for pkmn in query.Pokedex_1G %}\n    <li><a href=\"/Pokemon_Detail?nummer={{pkmn.nummer}}\">{{ pkmn.name}}</a></li>\n  {% endfor %}\n</ul>"
-            }
-          ],
-          "type": "column"
+      "type": "link",
+      "text": "Pokémon freigelassen",
+      "action": {
+        "type": "navigate",
+        "internal": {
+          "pageId": "7a9b9883-62c9-4604-a46c-4d254bce8e4a",
+          "parameters": []
         }
-      ],
-      "type": "row"
+      }
+    },
+    {
+      "type": "link",
+      "text": "Pokémon gefangen",
+      "action": {
+        "type": "navigate",
+        "internal": {
+          "pageId": "3b9f8574-8e07-4f41-9090-2a51b8c2f9cf",
+          "parameters": []
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 1,
+      "text": "Alle Pokemon"
+    },
+    {
+      "type": "paragraph",
+      "text": "Hier wird mit HTML geschummelt um alle Pokemon zu zeigen."
+    },
+    {
+      "type": "embedded-html",
+      "html": "<ul>\n  {% for pkmn in query.Pokedex_1G %}\n    <li><a href=\"/Pokemon_Detail?nummer={{pkmn.nummer}}\">{{ pkmn.name}}</a></li>\n  {% endfor %}\n</ul>"
     }
   ]
 }

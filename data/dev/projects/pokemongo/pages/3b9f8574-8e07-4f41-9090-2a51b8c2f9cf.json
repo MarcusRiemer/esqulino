@@ -36,95 +36,84 @@
   ],
   "widgets": [
     {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "heading",
-              "level": 1,
-              "text": "Pokémon Gefangen"
-            },
-            {
-              "type": "paragraph",
-              "text": "Herzlichen Glückwunsch, du hast also ein neues Pokémon gefangen. Hier kannst du es eintragen."
-            },
-            {
-              "type": "link",
-              "text": "Zurück zur Hauptseite",
-              "action": {
-                "type": "navigate",
-                "internal": {
-                  "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
-                  "parameters": []
-                }
-              }
-            },
-            {
-              "type": "query-table",
-              "queryRefName": "Pokedex_1G",
-              "columns": [
-                "nummer",
-                "name",
-                "typ"
-              ]
-            },
-            {
-              "type": "heading",
-              "level": 2,
-              "text": "Fakten zu deinem Fang"
-            },
-            {
-              "type": "input",
-              "outParamName": "nummer",
-              "caption": "Nummer im Pokédex",
-              "description": "",
-              "inputType": "number"
-            },
-            {
-              "type": "input",
-              "outParamName": "name",
-              "caption": "Spitzname",
-              "description": "",
-              "inputType": "text"
-            },
-            {
-              "type": "input",
-              "outParamName": "staerke",
-              "caption": "Stärke des neuen Pokémon",
-              "description": "",
-              "inputType": "text"
-            },
-            {
-              "type": "button",
-              "text": "Hinzufügen",
-              "action": {
-                "type": "query",
-                "queryName": "Gefangen_Neu"
-              }
-            },
-            {
-              "type": "heading",
-              "level": 2,
-              "text": "Meine Pokémon"
-            },
-            {
-              "type": "query-table",
-              "queryRefName": "Meine_Pokemon",
-              "columns": [
-                "gefangen_id",
-                "nummer",
-                "name",
-                "typ",
-                "spitzname",
-                "staerke"
-              ]
-            }
-          ],
-          "type": "column"
+      "type": "heading",
+      "level": 1,
+      "text": "Pokémon Gefangen"
+    },
+    {
+      "type": "paragraph",
+      "text": "Herzlichen Glückwunsch, du hast also ein neues Pokémon gefangen. Hier kannst du es eintragen."
+    },
+    {
+      "type": "link",
+      "text": "Zurück zur Hauptseite",
+      "action": {
+        "type": "navigate",
+        "internal": {
+          "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
+          "parameters": []
         }
-      ],
-      "type": "row"
+      }
+    },
+    {
+      "type": "query-table",
+      "queryRefName": "Pokedex_1G",
+      "columns": [
+        "nummer",
+        "name",
+        "typ"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Fakten zu deinem Fang"
+    },
+    {
+      "type": "input",
+      "outParamName": "nummer",
+      "caption": "Nummer im Pokédex",
+      "description": "",
+      "inputType": "number"
+    },
+    {
+      "type": "input",
+      "outParamName": "name",
+      "caption": "Spitzname",
+      "description": "",
+      "inputType": "text"
+    },
+    {
+      "type": "input",
+      "outParamName": "staerke",
+      "caption": "Stärke des neuen Pokémon",
+      "description": "",
+      "inputType": "text"
+    },
+    {
+      "type": "button",
+      "text": "Hinzufügen",
+      "action": {
+        "type": "query",
+        "queryName": "Gefangen_Neu"
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Meine Pokémon"
+    },
+    {
+      "type": "query-table",
+      "queryRefName": "Meine_Pokemon",
+      "columns": [
+        "gefangen_id",
+        "nummer",
+        "name",
+        "typ",
+        "spitzname",
+        "staerke"
+      ]
     }
   ]
 }
