@@ -6,22 +6,43 @@
               class="btn btn-primary pull-right">
         <span class="fa fa-bug"></span> Höhe anpassen
       </button>
-      <a href="{{ viewUrl }}"
-         target="_blank"
-         style="margin-right: 5px;"
-         class="btn btn-primary pull-right">
-        <span class="fa fa-bug"></span> Neues Fenster
-      </a>
       Vorschau
+      <small *ngIf="parametersRequired">(Parameter erforderlich!)</small>
     </h4>
     <p class="card-text">
       So wird die Seite für einen Besucher <em>ungefähr</em> aussehen.
+      <span>
+        Da diese Seite ohne Eingaben vom Benutzer nicht funktioniert, musst du hier testweise Werte eingeben wenn du sie ausprobieren möchtest.
+      </span>
     </p>
-  </div>
-  <div *ngIf="renderPreview"
-       class="card-block">      
-    <iframe [srcdoc]="renderPreview"
-            width="100%">
-    </iframe>
+    
+    <!-- TODO: This code is more or less an exact duplicate of the same
+         functionality in the query preview.-->
+    <div *ngFor="let param of requestParameters"
+         [class.has-danger]="!isParameterAvailable(param.name)"
+         class="input-group form-group">
+      <span class="input-group-addon"
+            id="param-{{param.name}}">
+        {{ param.name }}
+      </span>
+      <input [(ngModel)]="cachedArguments[param.name]"
+             (change)="invalidateRefresh()"
+             type="text"
+             class="form-control"
+             name="parameter-{{param.name}}">
+    </div>
+
+    <!-- Showing the link that would result out of the current parameters -->
+    <a target="_blank"
+       href="{{ viewUrl }}">
+      <h5>
+        <span class="fa fa-globe fa-fw"></span>{{ viewUrl }}
+      </h5>
+    </a>
+
+    <div [hidden]="!hasRenderPreview">
+      <iframe width="100%">
+      </iframe>
+    </div>
   </div>
 </div>

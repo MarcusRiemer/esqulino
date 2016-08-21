@@ -6,8 +6,9 @@ import {AsyncSubject}                            from 'rxjs/AsyncSubject'
 import {Observable}                              from 'rxjs/Observable'
 
 import {ServerApiService}                        from '../shared/serverapi.service'
+import {KeyValuePairs, encodeUriParameters}      from '../shared/util'
 import {
-    Page,PageDescription, Row, CURRENT_API_VERSION
+    Page, PageDescription, Row, CURRENT_API_VERSION
 } from '../shared/page/index'
 
 import {QueryParamsDescription}                  from './query.service'
@@ -163,11 +164,19 @@ export class PageService {
     /**
      * Attempts to render the given page on the server
      */  
-    renderPage(project : Project, page : Page) : Observable<string> {
+    renderPage(project : Project,
+               page : Page,
+               pageParams? : KeyValuePairs)
+    : Observable<string> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
 
-        const url = this._server.getArbitraryRenderUrl(project.id);
+        let url = this._server.getArbitraryRenderUrl(project.id);
+
+        // Append GET parameters
+        if (pageParams) {
+            url += "?" + encodeUriParameters(pageParams);
+        }
 
         const fullQueries =
             // Retrieve the matching queries

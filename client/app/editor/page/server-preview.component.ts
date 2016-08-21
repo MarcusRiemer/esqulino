@@ -1,30 +1,41 @@
 import {
-    Component, Input, OnInit, ElementRef
+    Component, Input, ElementRef,
+    ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core'
-import {DomSanitizationService}         from '@angular/platform-browser';
+import {DomSanitizationService}               from '@angular/platform-browser';
 
-import {Observable}                     from 'rxjs/Observable'
-import {Subject}                        from 'rxjs/Subject'
+import {Observable}                           from 'rxjs/Observable'
+import {Subject}                              from 'rxjs/Subject'
 
-import {Page}                           from '../../shared/page/index'
+import {Page}                                 from '../../shared/page/index'
+import {KeyValuePairs, encodeUriParameters}   from '../../shared/util'
 
-import {SidebarService}                 from '../sidebar.service'
-import {PageService}                    from '../page.service'
-import {Project}                        from '../project.service'
+import {SidebarService}                       from '../sidebar.service'
+import {PageService}                          from '../page.service'
+import {Project}                              from '../project.service'
 
 /**
  * Previewing the rendered output from the server
  */
 @Component({
     selector: 'esqulino-server-preview',
-    templateUrl: 'app/editor/page/templates/server-preview.html'
+    templateUrl: 'app/editor/page/templates/server-preview.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ServerPreviewComponent implements OnInit {
+export class ServerPreviewComponent {
     @Input() page : Page;
     @Input() project : Project;
     @Input() isRendering : boolean = true;
 
-    private _renderPreview : string;
+    /**
+     * The different values the user has entered so far.
+     */
+    cachedArguments : KeyValuePairs = {};
+
+    /**
+     * Is there anything that could be rendered?
+     */
+    private _renderPreview : boolean = false;
 
     /**
      * TODO: Make this configurable
@@ -32,17 +43,26 @@ export class ServerPreviewComponent implements OnInit {
     useSobdomain = true;
     
     constructor(
-        private _elementRef: ElementRef,
         private _pageService : PageService,
-        private _sanitizer: DomSanitizationService
+        private _sanitizer: DomSanitizationService,
+        private _elementRef : ElementRef,
+        private _cd: ChangeDetectorRef
     ) {
     }
 
     /**
-     * Retrieves the "raw" HTML string that was computed by the server.
+     * @return The DOM <iframe> element or undefined, if no iframe is currently
+     *         present.
      */
-    get renderPreview() {
-        return (this._sanitizer.bypassSecurityTrustHtml(this._renderPreview));
+    get domIframe() : HTMLIFrameElement {
+        return (this._elementRef.nativeElement.querySelector("iframe"));
+    }
+
+    /**
+     * @return True, if a render preview is available.
+     */
+    get hasRenderPreview() : boolean {
+        return (this._renderPreview);
     }
 
     /**
@@ -52,64 +72,129 @@ export class ServerPreviewComponent implements OnInit {
         return (window.location.host);
     }
 
-    get viewUrl() : string {
-        if (this.useSobdomain) {
-            // TODO: Find out whether it would be more or less trivially
-            //       possible to support HTTPs
-            return (`http://${this.project.id}.${this.hostname}/${this.page.id}`);
-        } else {
-            return (`/view/${this.project.id}/${this.page.id}`)
-        }
-    }
-    
-    ngOnInit() {
+    /**
+     * All arguments that would be required to render the current page.
+     */
+    get relevantArguments() : KeyValuePairs {
+        const toReturn : KeyValuePairs = { };
+
+        this.page.requestParameters.forEach(param => {
+            toReturn[param.name] = this.cachedArguments[param.name];
+        });
         
+        return (toReturn);
     }
 
     /**
-     * Refreshes the height of the preview immediatly or re-schedules a refresh
-     * because the preview isn't done yet.
-     *
-     * @param triesLeft The number of times the refresh should be retried in case
-     *                  of failure.
+     * @return The URL that would be currently used to navigate to the page.
      */
-    refreshHeight(triesLeft : number) {
-        const iframe = this._elementRef.nativeElement.querySelector("iframe");
+    get viewUrl() : string {
+        // TODO: Find out whether it would be more or less trivially
+        //       possible to support HTTPs
+        let url = this.useSobdomain 
+            ? `http://${this.project.id}.${this.hostname}/${this.page.name}`
+            : `/view/${this.project.id}/${this.page.name}`;
 
-        // Is something meaningful loaded in the iframe?
-        if (!iframe || !iframe.contentWindow.document.body) {
-            // No, are there retries lief?
-            if (triesLeft > 0) {
-                // Yes, retry
-                const newTimes = triesLeft - 1;
-                console.log(`Could not resize, trying again ${newTimes} more times`);
-                Observable.timer(100)
-                    .subscribe(t => this.refreshHeight(newTimes));
-            } else {
-                // No, give up
-                console.log(`Could not resize, ran out of retry attempts`);
-            }
+        // Possibly append GET parameters
+        if (this.anyParametersAvailable) {
+            url += "?" + encodeUriParameters(this.cachedArguments);
+        }
+        
+        return (url);
+    }
 
-        } else {
-            // Yes, set a meaningful height
-            iframe.height = (iframe.contentWindow.document.body.scrollHeight + 10) + "px"
+    /**
+     * @return True, if the page to be previewed won't render properly without
+     *         parameters.
+     */
+    get parametersRequired() : boolean {
+        return (this.page && this.page.requestParameters.length > 0);
+    }
+
+    /**
+     * @return All parameters that are required to run this page.
+     */
+    get requestParameters() {
+        return (this.page.requestParameters);
+    }
+
+    /**
+     * @return True, if any required parameters has a user provided value.
+     */
+    get anyParametersAvailable() {
+        return (this.page.requestParameters.some(p => this.isParameterAvailable(p.name)));
+    }
+
+    /**
+     * @return True, if all required parameters have a user provided value.
+     */
+    get allParametersAvailable() {
+        return (this.page.requestParameters.every(p => this.isParameterAvailable(p.name)));
+    }
+
+    /**
+     * @return True, if the given parameter is available.
+     */
+    isParameterAvailable(name : string) {
+        return (name in this.cachedArguments);
+    }
+
+    /**
+     * Refreshes the height of the preview immediatly.
+     */
+    refreshHeight() {
+        const iframe = this.domIframe;
+        iframe.height = (iframe.contentWindow.document.body.scrollHeight + 10) + "px";
+    }
+
+    /**
+     * Refreshes if the preview can be rendered meaningfully.
+     */
+    invalidateRefresh() {
+        this._renderPreview = undefined;
+        this._cd.markForCheck();
+        
+        if (this.allParametersAvailable) {
+            this.refresh();
         }
     }
 
-    refresh() : Observable<boolean> {   
-        const toReturn = new Subject<boolean>();
+    /**
+     * Resends the request to the server and updates the preview afterwards.
+     */
+    refresh() : Observable<boolean> {
+        this._renderPreview = undefined;
+        this._cd.markForCheck();
         
-        this._pageService.renderPage(this.project, this.page)
+        const toReturn = new Subject<boolean>();
+        console.log("Refreshing Page-Preview!");
+
+        this._pageService.renderPage(this.project, this.page, this.cachedArguments)
             .subscribe(res => {
-                // Store the result and inform subscribers
-                this._renderPreview = res;
+                // Set the new document and listen for height changes.
+                this._renderPreview = true;
+                (this.domIframe as any).srcdoc = res;
+                this.domIframe.onload = (ev => {
+                    this.refreshHeight();
+                });
+
+                // Inform subscribers that something went well
                 toReturn.next(true);
                 toReturn.complete();
 
-                this.refreshHeight(5);
+                // Ensure the iframe is actually up 2 date
+                this._cd.markForCheck();
+            }, err => {
+                console.log("Couldn't render page");
+
+                // Inform subscribers that something went wrong
+                toReturn.next(false);
+                toReturn.complete();
+
+                // Ensure the iframe is actually up 2 date
+                this._cd.markForCheck();
             });
 
         return (toReturn);
-
     }
 }

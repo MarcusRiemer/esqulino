@@ -23,10 +23,10 @@ const singleRowPage : PageDescription = {
     widgets : [
         {
             type : "row",
-            widgets : [
+            columns : [
                 {
                     type : "column",
-                    width : 4,
+                    width : 1,
                     widgets : [
                             <ParagraphDescription>{
                                 type : "paragraph",
@@ -40,7 +40,7 @@ const singleRowPage : PageDescription = {
                 },
                 {
                     type : "column",
-                    width : 4,
+                    width : 2,
                     widgets : [
                             <ParagraphDescription>{
                                 type : "paragraph",
@@ -81,6 +81,7 @@ describe('Page', () => {
 
         // We know better then the type-system that this must be a row
         const firstRow = (m.widgets[0] as RowDescription);
+
         expect(allWidgets[0].toModel()).toEqual(firstRow.columns[0].widgets[0]);
         expect(allWidgets[1].toModel()).toEqual(firstRow.columns[0].widgets[1]);
         expect(allWidgets[2].toModel()).toEqual(firstRow.columns[1].widgets[0]);
