@@ -5,13 +5,14 @@
         (click)="startEditing()"
         (dragover)="onDragOverNode($event, 'open')"
         (drop)="onDropNode($event, 'open')">
-    <div class="widget">
-        &lt;{{ model.type }}
-        <!-- Display additional parameters as they could be provided
-             by more specialised implementations.-->
-        <ng-content select="widget-header"></ng-content>&gt;      
-    </div>
+    <!-- Display additional parameters as they could be provided
+         by more specialised implementations.
+         Whitespace is not allowed in this div because it fucks up the
+         spacing for the xml-node-brackets (<>) that are inserted via CSS.-->
+    <div class="widget"><span class="widget-type">{{ model.type }}</span><ng-content select="widget-header"></ng-content></div>
   </span>
+
+  <!-- If this is a model that provides text, the text is shown. -->
   <span *ngIf="model.text"
         class="text"
         [class.block]="isLongText"
@@ -29,7 +30,7 @@
        (click)="startEditing()"
        (dragover)="onDragOverNode($event, 'close')"
        (drop)="onDropNode($event, 'close')">
-    <span class="widget-close">&lt;/{{ model.type }}&gt;</span>
+    <span class="widget-close">{{ model.type }}</span>
   </span>
 
 </div>

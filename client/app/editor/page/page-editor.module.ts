@@ -26,6 +26,7 @@ import {SidebarWidgetsComponent}        from './page-widgets.sidebar'
 import {PageTreeEditorComponent}        from './tree/editor.component'
 import {PageTreeComponent}              from './tree/page-tree.component'
 import {WidgetNodeComponent}            from './tree/widget-node.component'
+import {WidgetNodeParameterComponent}   from './tree/widget-node-parameter.component'
 import {WidgetNodeLoaderComponent}      from './tree/widget-node-loader.component'
 
 import * as Tree                        from './tree/widgets/index'

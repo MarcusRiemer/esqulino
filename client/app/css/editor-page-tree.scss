@@ -21,3 +21,92 @@
     }
 }
 
+/**
+ * Base block for a tree-widget.
+ */
+.block-container .widget {
+    border-radius: 5px;
+    display: inline-block;
+    white-space: nowrap;
+    
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 2px;
+    padding-bottom: 2px;
+
+    margin-bottom: 2px;
+    
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(0, 0, 0, 0.9);
+}
+
+/**
+ * Insert an artificial space *only* if there is a <widget-header>
+ * that follows the widget-type text.
+ */
+.block-container .widget .widget-type + widget-header {
+    margin-left: 0.5rem;
+}
+
+.block-container .widget widget-header name::after {
+    content: "=";
+}
+
+/**
+ * TODO: This is a hack that accounts for some whitespace that
+ * gets inserted between the <name></name><value></value> node
+ * by the Angular 2 transclusion mechanism.
+ */
+.block-container .widget widget-header value {
+    margin-left: -0.5em;
+}
+
+.block-container .widget widget-header value::after {
+    content: "\"";
+}
+
+.block-container .widget widget-header value::before {
+    content: "\"";
+}
+
+.block-container .widget::before {
+    content: "<";
+}
+
+.block-container .widget::after {
+    content: ">";
+}
+
+.block-container .widget-close::before {
+    content: "</";
+}
+
+.block-container .widget-close::after {
+    content: ">";
+}
+
+.block-container .widget widget-header {
+    display: inline-block;
+}
+
+.block-container .widget widget-header.block .widget-header {
+    margin-left: 1rem;
+    padding-left: 1rem;
+}
+
+.block-container .widget-close {
+    border-radius: 5px;
+    display: inline-block;
+    white-space: nowrap;
+
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 2px;
+    padding-bottom: 2px;
+
+    margin-bottom: 2px;
+    
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(0, 0, 0, 0.4);
+}
+
