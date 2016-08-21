@@ -52,6 +52,7 @@ export class Button extends ParametrizedWidget {
      */
     set text(value : string) {
         this._text = value;
+        this.fireModelChange();
     }
 
     get hasAction() {
@@ -70,6 +71,7 @@ export class Button extends ParametrizedWidget {
      */
     set action(value) {
         this._action = value;
+        this.fireModelChange();
     }
 
     /**

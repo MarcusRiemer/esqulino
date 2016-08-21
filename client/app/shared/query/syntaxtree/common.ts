@@ -1,9 +1,13 @@
-import {TableDescription}               from '../../schema.description'
+import {Subject}                                     from 'rxjs/Subject'
+import {Observable}                                  from 'rxjs/Observable'
 
-import * as Model                       from '../description'
-import {Query}                          from '../base'
+import {TableDescription}                            from '../../schema.description'
+import {ModelObservable}                             from '../../interfaces'
 
-import { Expression, loadExpression }   from './expression'
+import * as Model                                    from '../description'
+import {Query}                                       from '../base'
+
+import { Expression, loadExpression }                from './expression'
 
 export { Expression, loadExpression }
 
@@ -71,12 +75,33 @@ export interface ExpressionParent extends RemovableHost, Locateable {
  * models top level AND and OR conjunctions as top level components,
  * because this eases development for beginners.
  */
-export abstract class Component {
+export abstract class Component implements ModelObservable<Component> {
     // The query this component is part of
     protected _query : Query;
 
+    // Fired when the internal model has changed
+    private _modelChanged = new Subject<Component>();
+
     constructor(query : Query) {
         this._query = query;
+
+        if (query) {
+            this.modelChanged.subscribe(_ => query.markSaveRequired())
+        }
+    }
+    
+    /**
+     * Fired when something about this model has changed.
+     */
+    get modelChanged() : Observable<Component> {
+        return (this._modelChanged);
+    }
+
+    /**
+     * Allows implementing classes to signal that their model has changed.
+     */
+    fireModelChange() {
+        this._modelChanged.next(this);
     }
 
     /**

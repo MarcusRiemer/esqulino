@@ -1,10 +1,16 @@
-import {Schema}                  from './schema'
-import {Query, Model, loadQuery} from './query'
+import {Subject}                              from 'rxjs/Subject'
+import {Observable}                           from 'rxjs/Observable'
+
+import {Schema}                               from './schema'
+import {
+    Invalidateable, Saveable, SaveStateEvent
+} from './interfaces'
+import {Query, Model, loadQuery}              from './query'
 import {
     ProjectDescription, ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from './project.description'
 
-import {Page}                    from './page/page'
+import {Page}                                 from './page/page'
 
 export {ProjectDescription}
 
@@ -28,7 +34,7 @@ const compareIgnoreCase = (lhs : { name : string }, rhs : { name : string }) => 
  * A loaded project with editing capatabilities. This is were all
  * information is lumped together.
  */
-export class Project implements ApiVersion {
+export class Project implements ApiVersion, Saveable {
     public id : string;
     public schema : Schema;
 
@@ -40,7 +46,10 @@ export class Project implements ApiVersion {
     private _indexPageId : string
     private _version : ApiVersionToken
 
-    private _isDirty = false;
+    private _saveRequired = false;
+
+    // Fired when the save-state has changed
+    private _saveStateChangedEvent : Subject<SaveStateEvent<Project>>;
     
     /**
      * Construct a new project and a whole slew of other
@@ -76,15 +85,29 @@ export class Project implements ApiVersion {
     /**
      * @return True, if this project should be saved
      */
-    get isDirty() {
-        return (this._isDirty);
+    get isSavingRequired() {
+        return (this._saveRequired);
+    }
+
+    /**
+     * Allows subscription to state-changes for the save event.
+     */
+    get saveStateChanged() : Observable<SaveStateEvent<Project>> {
+        return (this._saveStateChangedEvent);
     }
 
     /**
      * Signals that this project should be saved.
      */
-    markDirty() {
-        this._isDirty = true;
+    markSaveRequired() {
+        this._saveRequired = true;
+    }
+
+    /**
+     * Signals that this project has been saved.
+     */
+    markSaved() {
+        this._saveRequired = false;
     }
 
     /**
@@ -99,7 +122,7 @@ export class Project implements ApiVersion {
      */
     set name(value : string) {
         this._name = value;
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**
@@ -114,7 +137,7 @@ export class Project implements ApiVersion {
      */
     set description(value : string) {
         this._description = value;
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**
@@ -143,7 +166,7 @@ export class Project implements ApiVersion {
      */
     set indexPageId(newId : string) {
         this._indexPageId = newId;
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**
@@ -193,7 +216,7 @@ export class Project implements ApiVersion {
     addQuery(query : Query) {
         this._queries.push(query);
         this._queries.sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**
@@ -205,7 +228,7 @@ export class Project implements ApiVersion {
         // Remove at index
         if (index >= 0) {
             this.queries.splice(index, 1);
-            this.markDirty();
+            this.markSaveRequired();
         } else {
             throw new Error(`Could not remove query with unknown id "${id}"`);
         }
@@ -254,7 +277,7 @@ export class Project implements ApiVersion {
         }
 
         this._pages.sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**
@@ -274,7 +297,7 @@ export class Project implements ApiVersion {
             this._indexPageId = undefined;
         }
 
-        this.markDirty();
+        this.markSaveRequired();
     }
 
 

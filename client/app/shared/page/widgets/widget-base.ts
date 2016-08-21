@@ -1,3 +1,8 @@
+import {Subject}                                     from 'rxjs/Subject'
+import {Observable}                                  from 'rxjs/Observable'
+
+import {ModelObservable}                             from '../../interfaces'
+
 import {Page, WidgetDescription, ParameterMapping}   from '../page'
 import {Widget, WidgetHost, isWidgetHost}            from '../hierarchy'
 
@@ -14,11 +19,16 @@ export {
  * of this class is meant to be used in the PageEditors UI, **not** in the
  * user-facing page.
  */
-export abstract class WidgetBase implements Widget {
-
+export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
+    // The type-identifier of this widget
     private _type : string;
 
+    // The parent of this widget, will usually be another widget but can also
+    // be a Page which is at the root of the hierarchy.
     private _parent : WidgetHost;
+
+    // Fired when the internal model has changed
+    private _modelChanged = new Subject<Widget>();
 
     constructor(type : string, parent? : WidgetHost) {
         this._type = type;
@@ -26,11 +36,18 @@ export abstract class WidgetBase implements Widget {
     }
 
     /**
+     * Fired when something about this model has changed.
+     */
+    get modelChanged() : Observable<Widget> {
+        return (this._modelChanged);
+    }
+
+    /**
      * @return The page this widget is placed on.
      */
     get page() : Page {
         if (!this._parent) {
-            throw new Error(`Widget of type "${this._type}" has further parent that could be a page`);
+            throw new Error(`Widget of type "${this._type}" has no further parent that could be a page`);
         } else {
             return (this._parent.page)
         }
@@ -65,6 +82,13 @@ export abstract class WidgetBase implements Widget {
         }
 
         return (extendedInput);
+    }
+
+    /**
+     * Allows implementing classes to signal that their model has changed.
+     */
+    protected fireModelChange() {
+        this._modelChanged.next(this);
     }
 
     /**
@@ -110,7 +134,7 @@ export abstract class HostingWidget extends WidgetBase implements WidgetHost {
         }
         
         this.children.splice(index, 1);
-        this.page.markDirty();
+        this.fireModelChange();
     }
 
     /**
@@ -158,6 +182,8 @@ export abstract class HostingWidget extends WidgetBase implements WidgetHost {
 
         const widget = loadWidget(desc, this);
         this.children.splice(index, 0, widget);
+
+        this.fireModelChange();
 
         return (widget);
     }

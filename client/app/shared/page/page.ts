@@ -191,7 +191,7 @@ export class Page extends ProjectResource implements WidgetHost {
         const column = row.children[columnIndex];
         column.addWidget(widget, widgetIndex);
 
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**
@@ -217,7 +217,7 @@ export class Page extends ProjectResource implements WidgetHost {
         const column = row.children[columnIndex];
         column.removeChildByIndex(widgetIndex);
 
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**
@@ -250,7 +250,7 @@ export class Page extends ProjectResource implements WidgetHost {
         }
         
         this.children.splice(index, 1);
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**
@@ -265,7 +265,7 @@ export class Page extends ProjectResource implements WidgetHost {
         }
 
         this._referencedQueries.push(new QueryReference(this.project, this, ref));
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**

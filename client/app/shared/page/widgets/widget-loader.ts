@@ -14,9 +14,9 @@ import {QueryTable, QueryTableDescription}     from './query-table'
 import {Row, RowDescription}                   from './row'
 
 /**
- * @return A Widget instance that matches the description
+ * Factory function to instantiate the correct widget.
  */
-export function loadWidget(desc : WidgetDescription, parent : WidgetHost) : WidgetBase {
+function createWidget(desc : WidgetDescription, parent : WidgetHost) : WidgetBase {
     switch (desc.type) {
     case "button":
         return new Button(desc as ButtonDescription, parent);
@@ -39,4 +39,27 @@ export function loadWidget(desc : WidgetDescription, parent : WidgetHost) : Widg
     default:
         throw new Error(`Unknown widget type "${desc.type}"`);
     }
+}
+
+/**
+ * Loads a new widget in the context of an existing parent. In case there is not
+ * only a parent but also a page available the `modelChanged` event is wired up
+ * to mark the page for saving if the loaded widget changed.
+ *
+ * @return A Widget instance that matches the description.
+ */
+export function loadWidget(desc : WidgetDescription, parent : WidgetHost) : WidgetBase {
+    const widget = createWidget(desc, parent);
+
+    // If this widget has a page wire up changes that would require
+    // saving the page.
+    try {
+        if (widget.page) {
+            widget.modelChanged.subscribe(_ => widget.page.markSaveRequired());
+        }
+    } catch (e) {
+        console.log("Loaded widget without page", widget);
+    }
+    
+    return (widget);
 }

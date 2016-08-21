@@ -50,10 +50,15 @@ describe('WHERE', () => {
 
         const w = new SyntaxTree.Where(model, null);
 
+        let hasChanged = false;
+        w.modelChanged.subscribe(_ => hasChanged = true);
+
         w.removeChild(w.first);
 
         expect(w.subsequent.length).toEqual(0);
         expect(w.toSqlString()).toEqual("WHERE 2");
+
+        expect(hasChanged).toEqual(true, "Change not fired");
     });
 
     it('removing first subsequent', () => {
@@ -70,11 +75,15 @@ describe('WHERE', () => {
         }
 
         const w = new SyntaxTree.Where(model, null);
+        
+        let hasChanged = false;
+        w.modelChanged.subscribe(_ => hasChanged = true);
 
         w.subsequent[0].removeSelf();
 
         expect(w.subsequent.length).toEqual(0);
         expect(w.toSqlString()).toEqual("WHERE 1");
+        expect(hasChanged).toEqual(true, "Change not fired");
     });
 
     it('adding a third condition', () => {
@@ -91,9 +100,14 @@ describe('WHERE', () => {
         }
 
         let w = new SyntaxTree.Where(model, null);
+
+        let hasChanged = false;
+        w.modelChanged.subscribe(_ => hasChanged = true);
+        
         w.appendExpression({ constant : { type : "INTEGER", value : "3" } }, "OR");
 
         expect(w.subsequent.length).toEqual(2);
         expect(w.toSqlString()).toEqual("WHERE 1\n\tOR 2\n\tOR 3");
+        expect(hasChanged).toEqual(true, "Change not fired");
     });
 });

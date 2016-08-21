@@ -1,4 +1,10 @@
+import {Subject}                              from 'rxjs/Subject'
+import {Observable}                           from 'rxjs/Observable'
+
 import {Schema}                               from '../../schema'
+import {
+    ModelObservable, isSaveable, Saveable
+} from '../../interfaces'
 
 import * as Model                             from '../description'
 import {
@@ -34,6 +40,9 @@ export function determineType(constant : string) : Model.DataType {
  */
 export abstract class Expression implements ExpressionParent, Removable, Validateable {
 
+    // Fired when the internal model has changed
+    private _modelChanged = new Subject<Expression>();
+    
     /**
      * The host of this expression. May be another expression or a
      * a top level component like SELECT
@@ -48,6 +57,29 @@ export abstract class Expression implements ExpressionParent, Removable, Validat
     constructor(private _templateIdentifier : TemplateId,
                 parent : ExpressionParent) {
         this._parent = parent;
+
+        // Propagate changes up the chain ...
+        if (this._parent instanceof Expression) {
+            this._modelChanged.subscribe(_ => (this._parent as any).fireModelChange());
+        }
+        // ... or turn them directly into `markSaveRequired()`
+        if (isSaveable(this._parent)) {
+            this._modelChanged.subscribe(_ => (this._parent as any).markSaveRequired());
+        }
+    }
+
+    /**
+     * Fired when something about this model has changed.
+     */
+    get modelChanged() : Observable<Expression> {
+        return (this._modelChanged);
+    }
+
+    /**
+     * Allows implementing classes to signal that their model has changed.
+     */
+    fireModelChange() {
+        this._modelChanged.next(this);
     }
 
     /**
@@ -76,7 +108,6 @@ export abstract class Expression implements ExpressionParent, Removable, Validat
      * expression.
      */
     removeSelf() {
-        console.log(`Expression.removeSelf()`);
         this._parent.removeChild(this);
     }
 
@@ -90,7 +121,6 @@ export abstract class Expression implements ExpressionParent, Removable, Validat
      * expression.
      */
     removeChild(formerChild : Expression) {
-        console.log(`Expression.removeChild()`);
         const missing = new MissingExpression({}, this);
         this.replaceChild(formerChild, missing);
     }
@@ -625,12 +655,15 @@ export class BinaryExpression extends Expression {
     }
 
     replaceChild(formerChild : Expression, newChild : Expression) {
-        console.log(`BinaryExpression.replaceChild()`);
         if (this._lhs == formerChild) {
             this._lhs = newChild;
         } else if (this._rhs == formerChild) {
             this._rhs = newChild;
+        } else {
+            throw new Error("Replace child with unknown child");
         }
+
+        this.fireModelChange();
     }
 
     getLeaves() : Expression[] {

@@ -35,6 +35,7 @@ export class EmbeddedHtml extends WidgetBase {
 
     set html(newText : string) {
         this._html = newText;
+        this.fireModelChange();
     }
 
     protected toModelImpl() : WidgetDescription {

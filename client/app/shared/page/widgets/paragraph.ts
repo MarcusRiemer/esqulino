@@ -33,6 +33,7 @@ export class Paragraph extends WidgetBase {
 
     set text(newText : string) {
         this._text = newText;
+        this.fireModelChange();
     }
 
     protected toModelImpl() : WidgetDescription {

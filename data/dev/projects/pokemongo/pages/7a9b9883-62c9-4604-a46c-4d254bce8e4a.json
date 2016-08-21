@@ -70,10 +70,5 @@
         "queryName": "Gefangen_Loeschen"
       }
     }
-  ],
-  "parameters": [
-    {
-      "name": "gefangen_id"
-    }
   ]
 }

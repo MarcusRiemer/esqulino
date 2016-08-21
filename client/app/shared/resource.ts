@@ -1,6 +1,9 @@
 import {Subject}                              from 'rxjs/Subject'
 import {Observable}                           from 'rxjs/Observable'
 
+import {
+    Invalidateable, Saveable, SaveStateEvent
+} from './interfaces'
 import {Project}                              from './project'
 import {
     ApiVersion, ApiVersionToken, ProjectResourceDescription,
@@ -9,24 +12,8 @@ import {
 
 export {
     ProjectResourceDescription,
-    ApiVersion, ApiVersionToken, CURRENT_API_VERSION
-}
-
-/**
- * Some changes to resources require updates to the visual representation,
- * which may or may not have altered the serialized model state.
- * 
- * Invalidation *only* makes assumptions about the visual state, to find
- * out whether something should be saved by the user is a different matter
- * which is handled by the `isDirty` property.
- *
- * TODO: Streamline this.
- */
-export interface Invalidateable {
-    /**
-     * Signals that the visual representation of this resource should be updated.
-     */
-    invalidate() : void;
+    ApiVersion, ApiVersionToken, CURRENT_API_VERSION,
+    Invalidateable, Saveable
 }
 
 /**
@@ -34,17 +21,20 @@ export interface Invalidateable {
  * always belong to a project and are uniquely identified
  * by an ID.
  */
-export abstract class ProjectResource implements ApiVersion {
+export abstract class ProjectResource implements ApiVersion, Saveable {
     private _id : string;
     private _name : string;
     private _project : Project;
 
     // Fired when this resource experiences some kind of change
     // that requires the UI to be refreshed.
-    private _invalidateEvent : Subject<ProjectResource> = new Subject<ProjectResource>();
+    private _invalidateEvent = new Subject<ProjectResource>();
+
+    // Fired when the save-state has changed
+    private _saveStateChangedEvent = new Subject<SaveStateEvent<ProjectResource>>();
     
     // Does this resource require saving?
-    private _isDirty = false;
+    private _saveRequired = false;
 
     constructor(project : Project, desc : ProjectResourceDescription) {
         this._id = desc.id;
@@ -97,7 +87,7 @@ export abstract class ProjectResource implements ApiVersion {
      */
     set name(newName : string) {
         this._name = newName;
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**
@@ -108,14 +98,40 @@ export abstract class ProjectResource implements ApiVersion {
     }
 
     /**
-     * Called to signal that this resource requires saving. Per default this will
+     * Called to signal that this resource requires saving. This will
      * also trigger an invalidation.
      */
-    markDirty(invalidate = true) : void {
-        this._isDirty = true;
-        if (invalidate) {
-            this.invalidate();
-        }
+    markSaveRequired() : void {
+        this._saveRequired = true;
+        this.fireCurrentSaveState();
+        
+        this.invalidate();
+    }
+
+    /**
+     * Should be called after this resource was saved.
+     */
+    markSaved() : void {
+        this._saveRequired = false;
+        this.fireCurrentSaveState();
+    }
+
+    /**
+     * Fires the current save state as a new save state. Needs to be called manually
+     * after the save-state has actually been changed.
+     */
+    private fireCurrentSaveState() {
+        this._saveStateChangedEvent.next({
+            resource : this,
+            saveRequired : this._saveRequired
+        });
+    }
+
+    /**
+     * Allows subscription to state-changes for the save event.
+     */
+    get saveStateChanged() : Observable<SaveStateEvent<ProjectResource>> {
+        return (this._saveStateChangedEvent);
     }
 
     /**
@@ -134,10 +150,10 @@ export abstract class ProjectResource implements ApiVersion {
     }
 
     /**
-     * @return True, if this instance has changes that should be saved..
+     * @return True, if this instance has changes that should be saved.
      */
-    get isDirty() {
-        return (this._isDirty);
+    get isSavingRequired() {
+        return (this._saveRequired);
     }
 
 }

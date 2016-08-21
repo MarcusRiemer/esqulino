@@ -131,6 +131,7 @@ export class QueryService {
 
         const toReturn = this._http.post(url, body, options)
             .map( (res) => "" )
+            .do(_ => query.markSaved())
             .catch(this.handleError);
 
         return (toReturn);
