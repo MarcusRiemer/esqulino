@@ -37,6 +37,7 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
 
         // Build SQL components from model
         this._select = new SyntaxTree.Select(model.select, this);
+        
         this._from = new SyntaxTree.From(model.from, this);
 
         if (model.where) {
@@ -68,7 +69,7 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
     removeChild(formerChild : SyntaxTree.Removable) : void {
         if (this._where == formerChild) {
             this._where = null;
-            this.markDirty();
+            this.markSaveRequired();
         }
     }
 
@@ -105,7 +106,7 @@ export class QuerySelect extends Query implements QueryFrom, QueryWhere {
         }
 
         this._where = where;
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**

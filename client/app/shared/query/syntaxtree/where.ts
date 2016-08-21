@@ -69,6 +69,7 @@ export class WhereSubsequent extends Component implements ExpressionParent, Remo
     replaceChild(formerChild : Expression, newChild : Expression) {
         if (this._expr == formerChild) {
             this._expr = newChild;
+            this.fireModelChange();
         } else {
             throw new Error("Attempted to remove non-existant expr on subsequent where");
         }
@@ -143,14 +144,16 @@ export class Where extends Component implements ExpressionParent, Removable {
      * in a subsequent expression, no matter what the first expression
      * is currently set to.
      *
-     * @expr The model of the expression to add
-     * @op   The logical operator
+     * @param expr The model of the expression to add
+     * @param op   The logical operator
      */
     appendExpression(expr : Model.Expression, op : Model.LogicalOperator) {     
         this._subsequent.push(new WhereSubsequent(this, {
             expr : expr,
             logical : op
         }));
+
+        this.fireModelChange();
     }
 
     toSqlString() : string {
@@ -204,16 +207,19 @@ export class Where extends Component implements ExpressionParent, Removable {
             // Then remove this expression instead of leaving
             // a dangling MissingExpression
             this.removeSelf();
+            this.fireModelChange();
         } else {
             // Should we remove the first expression?
             if (this._first == formerChild) {
                 // Take the first subsequent expression as new first
                 this._first = this._subsequent.pop().expr;
+                this.fireModelChange();
             } else {
                 // Find out which subsequent expression to remove
                 const removalIndex = this._subsequent.findIndex(s => s.expr == formerChild);
                 if (removalIndex >= 0) {
                     this._subsequent.splice(removalIndex, 1);
+                    this.fireModelChange();
                 } else {
                     throw new Error("Could not find subsequent expression");
                 }

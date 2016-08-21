@@ -111,7 +111,8 @@ export class PageService {
                     // And return the new page
                     return (newPage);
                 } else {
-                    // No new page, the old page will do fine
+                    // No new page, the old page will do fine. But it has been saved!
+                    page.markSaved();
                     return (page);
                 }
             })

@@ -7,7 +7,7 @@
            routerLinkActive="router-link-active">
           <span class="fa fa-cog fa-fw"></span>Projekt
         </a>
-        <span *ngIf="project?.isDirty"
+        <span *ngIf="project?.isSavingRequired"
               class="dirty pull-right">
           <span class="fa fa-floppy-o"></span>
         </span>
@@ -36,7 +36,7 @@
                routerLinkActive="router-link-active">
               <query-icon [query]="query"></query-icon>
             </a>
-            <span [hidden]="!query.isDirty"
+            <span [hidden]="!query.isSavingRequired"
                   class="dirty pull-right">
               <span class="fa fa-floppy-o"></span>
             </span>
@@ -61,7 +61,7 @@
                routerLinkActive="router-link-active">
               <span class="fa {{ iconForPage(page) }} fa-fw"></span>{{ page.name }}
             </a>
-            <span [hidden]="!page.isDirty"
+            <span [hidden]="!page.isSavingRequired"
                   class="dirty pull-right">
               <span class="fa fa-floppy-o"></span>
             </span>

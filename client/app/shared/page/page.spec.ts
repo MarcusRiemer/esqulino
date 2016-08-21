@@ -1,9 +1,11 @@
 import './widgets/action.spec'
 import './widgets/button.spec'
 import './widgets/column.spec'
+import './widgets/embedded-html.spec'
 import './widgets/heading.spec'
 import './widgets/paragraph.spec'
 import './widgets/input.spec'
+
 
 import {
     Page, PageDescription, CURRENT_API_VERSION

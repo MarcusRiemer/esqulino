@@ -72,8 +72,13 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
             throw new Error("WHERE clause already present");
         }
 
+        if (where.query != this) {
+            throw new Error("Attempted to set non-child WHERE");
+        }
+
         this._where = where;
-        this.markDirty();
+        
+        this.markSaveRequired();
     }
     
     /**
@@ -84,7 +89,7 @@ export class QueryDelete extends Query implements QueryFrom, QueryWhere {
     removeChild(formerChild : SyntaxTree.Removable) : void {
         if (this._where == formerChild) {
             this._where = null;
-            this.markDirty();
+            this.markSaveRequired();
         }
     }
 

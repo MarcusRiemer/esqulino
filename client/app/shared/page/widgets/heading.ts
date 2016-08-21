@@ -45,12 +45,18 @@ export class Heading extends WidgetBase {
      * @param newLevel The new level to set.
      */
     set level(newLevel : number) {
+        const oldLevel = this._level;
+        
         // This is creepy ... The Angular 2 bindings may violate the
         // type system and then pass in a string to this method.
         // In order to ensure we *definetly* have a number in the end,
         // we convert the argument to something that must be a string
         // and read it back.
         this._level = parseInt("" + newLevel);
+
+        if (this._level != oldLevel) {
+            this.fireModelChange();
+        }
     }
 
     get text() {
@@ -59,6 +65,7 @@ export class Heading extends WidgetBase {
 
     set text(newText : string) {
         this._text = newText;
+        this.fireModelChange();
     }
 
     protected toModelImpl() : WidgetDescription {

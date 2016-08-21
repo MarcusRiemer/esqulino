@@ -32,6 +32,16 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
     }
 
     /**
+     * It doesn't seem very sensible to have this operation, but it allows
+     * implementers of the `ExpressionParent` interface (which quite a few
+     * descending classes need to implement) to stop recursion.
+     */
+    get query() : Query {
+        return (this);
+    }
+
+
+    /**
      * @return True, if this query always returns a single row
      */
     get singleRow() : boolean {
@@ -43,7 +53,7 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
      */
     set singleRow(value : boolean) {
         this._singleRow = value;
-        this.markDirty();
+        this.markSaveRequired();
     }
 
     /**
