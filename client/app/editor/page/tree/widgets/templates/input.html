@@ -1,8 +1,8 @@
 <esqulino-widget-node [model]="model">
   <widget-header>
-    <div class="widget-header" *ngIf="model.outParamName">
-      Parameter =
-      <span>{{ model.outParamName }}</span>
-    </div>
+    <widget-parameter>
+      <name>Parameter</name>
+      <value>{{ model.outParamName }}</value>
+    </widget-parameter>
   </widget-header>
 </esqulino-widget-node>
