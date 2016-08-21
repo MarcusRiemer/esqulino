@@ -5,18 +5,22 @@ require "json"
 
 # Tests all aspect of project creation and modification
 class ProjectTest < Test::Unit::TestCase
-  @@project_path = "../data/dev/test/"
+  @@project_path = "../data/dev/projects/test/"
 
-  # Checks whether a valid project is correctly loaded
-  def test_initialise
-    proj = Project.new @@project_path
+  # Checks whether existance checks work
+  def test_exists
+    proj = Project.new(@@project_path, false)
     assert_true(proj.exists?)
-  end
 
+    proj = Project.new("nonexistant", false)
+    assert_false(proj.exists?)
+  end
+  
   # Tests whether certain strings are IDs
   def test_is_string_id?
     assert_true(is_string_id?("00000000-1111-2222-3333-444444444444"))
     assert_true(is_string_id?("AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"))
+    assert_true(is_string_id?("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"))
 
     assert_false(is_string_id?("00000000111122223333444444444444"))
     assert_false(is_string_id?("AAAAAAAABBBBCCCCDDDDEEEEEEEEEEEE"))
