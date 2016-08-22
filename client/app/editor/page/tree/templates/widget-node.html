@@ -1,10 +1,10 @@
 <div (dragstart)="onDragStart($event)"
-     class="tree-level block-container"
-     draggable="true">
+     class="tree-level block-container">
   <span [class.block]="isBlock"
         (click)="startEditing()"
         (dragover)="onDragOverNode($event, 'open')"
-        (drop)="onDropNode($event, 'open')">
+        (drop)="onDropNode($event, 'open')"
+        draggable="true">
     <!-- Display additional parameters as they could be provided
          by more specialised implementations.
          Whitespace is not allowed in this div because it fucks up the
@@ -15,6 +15,8 @@
   <!-- If this is a model that provides text, the text is shown. -->
   <span *ngIf="model.text"
         class="text"
+        contenteditable
+        [(contenteditableModel)]="model.text"
         [class.block]="isLongText"
         [class.tree-level]="isLongText">{{ model.text }}</span>
 
@@ -26,10 +28,11 @@
 
 
   <span *ngIf="needsClosingNode"
-       [class.block]="isBlock"
-       (click)="startEditing()"
-       (dragover)="onDragOverNode($event, 'close')"
-       (drop)="onDropNode($event, 'close')">
+        [class.block]="isBlock"
+        (click)="startEditing()"
+        (dragover)="onDragOverNode($event, 'close')"
+        (drop)="onDropNode($event, 'close')"
+        draggable="true">
     <span class="widget-close"><span class="widget-type">{{ model.type }}</span></span>
   </span>
 

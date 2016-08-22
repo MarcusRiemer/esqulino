@@ -55,6 +55,7 @@ const treeComponents = [
     Tree.QueryTableComponent,
     Tree.InputComponent,
     Tree.LinkComponent,
+    Tree.EmbeddedHtmlComponent,
 ]
 
 // All sidebars known to the page editor
