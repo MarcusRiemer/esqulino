@@ -5,6 +5,7 @@ import {RouterModule}                   from '@angular/router'
 
 import {QueryIconComponent}             from './query-icon.component'
 import {SidebarItemHost}                from './sidebar-item-host.component'
+import {ContenteditableModel}           from './contenteditable-model.directive'
 
 @NgModule({
     imports : [
@@ -15,6 +16,7 @@ import {SidebarItemHost}                from './sidebar-item-host.component'
     declarations: [
         QueryIconComponent,
         SidebarItemHost,
+        ContenteditableModel,
     ],
     exports: [
         CommonModule,
@@ -23,6 +25,7 @@ import {SidebarItemHost}                from './sidebar-item-host.component'
         
         QueryIconComponent,
         SidebarItemHost,
+        ContenteditableModel,
     ]
 })
 export default class SharedEditorModule { }

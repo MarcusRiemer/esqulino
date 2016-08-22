@@ -20,20 +20,21 @@ interface DropLocation {
 }
 
 /**
- * Represents a widget as a node in a tree. This component is somewhat agnostic
- * about the element it displays and does it's best to provide *some* representation
- * for common properties.
+ * Represents a widget as a node in a tree. This component is somewhat
+ * agnostic about the element it displays and does it's best to provide 
+ * *some* representation for common properties.
  *
- * Most widgets however will want to provide their own tree-representation. In this case
- * this component should be used as a "HTML-parent" (called "transcluding" in Angular 1)
- * to provide a common look and feel for all tree components.
+ * Most widgets however will want to provide their own tree-representation.
+ * In this case this component should be used as a "HTML-parent" (called
+ * "transcluding" in Angular 1) to provide a common look and feel for all
+ * tree components.
  */
 @Component({
     templateUrl: 'app/editor/page/tree/templates/widget-node.html',
     selector: 'esqulino-widget-node',
     inputs: ['model']
 })
-export class WidgetNodeComponent extends WidgetComponent<Widget> {
+export class WidgetNodeComponent extends WidgetComponent<Widget> {    
     constructor(
         @Inject(WIDGET_MODEL_TOKEN) model : Widget,
         private _dragService : DragService,

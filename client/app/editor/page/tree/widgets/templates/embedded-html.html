@@ -1,0 +1,7 @@
+<esqulino-widget-node [model]="model">
+  <pre *ngIf="model.html"
+       contenteditable
+       [(contenteditableModel)]="model.html"
+       draggable="false"
+       class="text tree-level">{{ model.html }}</pre>
+</esqulino-widget-node>

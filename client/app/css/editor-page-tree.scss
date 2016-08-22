@@ -18,6 +18,7 @@
     .text {
         padding-top: 2px;
         padding-bottom: 2px;
+        margin-bottom: 2px;
     }
 }
 
@@ -69,6 +70,12 @@
  */
 .block-container .widget-type {
     color: #00009f;
+}
+
+.block-container pre.text {
+    font-size: 1.2rem;
+    font-family: monospace;
+    margin-bottom: 2px;
 }
 
 /**
