@@ -36,62 +36,8 @@
 
     margin-bottom: 2px;
     
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 2px solid rgba(0, 0, 0, 0.9);
-}
-
-/**
- * Insert an artificial space *only* if there is a <widget-header>
- * that follows the widget-type text.
- */
-.block-container .widget .widget-type + widget-header {
-    margin-left: 0.5rem;
-}
-
-.block-container .widget widget-header name::after {
-    content: "=";
-}
-
-/**
- * TODO: This is a hack that accounts for some whitespace that
- * gets inserted between the <name></name><value></value> node
- * by the Angular 2 transclusion mechanism.
- */
-.block-container .widget widget-header value {
-    margin-left: -0.5em;
-}
-
-.block-container .widget widget-header value::after {
-    content: "\"";
-}
-
-.block-container .widget widget-header value::before {
-    content: "\"";
-}
-
-.block-container .widget::before {
-    content: "<";
-}
-
-.block-container .widget::after {
-    content: ">";
-}
-
-.block-container .widget-close::before {
-    content: "</";
-}
-
-.block-container .widget-close::after {
-    content: ">";
-}
-
-.block-container .widget widget-header {
-    display: inline-block;
-}
-
-.block-container .widget widget-header.block .widget-header {
-    margin-left: 1rem;
-    padding-left: 1rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(0, 0, 0, 0.6);
 }
 
 .block-container .widget-close {
@@ -106,7 +52,83 @@
 
     margin-bottom: 2px;
     
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 2px solid rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+/**
+ * Insert an artificial space *only* if there is a <widget-header>
+ * that follows the widget-type text.
+ */
+.block-container .widget .widget-type + widget-header {
+    margin-left: 0.5rem;
+}
+
+/**
+ * 
+ */
+.block-container .widget-type {
+    color: #00009f;
+}
+
+/**
+ * The widget header is used for he key="value" argument pairs of
+ * xml-like nodes.
+ */
+.block-container .widget widget-header {
+    display: inline-block;
+
+    name {
+        text-transform: lowercase;
+        color: #4f6816;
+    }
+
+    /**
+     * The equals sign between keys and values.
+     */
+    name::after {
+        content: "=";
+    }
+    
+    /**
+     * TODO: This is a hack that accounts for some whitespace that
+     * gets inserted between the <name></name><value></value> node
+     * by the Angular 2 transclusion mechanism.
+     */
+    value {
+        margin-left: -0.5em;
+    }
+
+    /**
+     * Surround values with " "
+     */
+    value::after, value::before {
+        content: "\"";
+    }
+}
+
+/**
+ * Introduce xml brackets for widgets
+ */
+.block-container {
+    .widget::before {
+        content: "<";
+    }
+
+    .widget-close::before {
+        content: "</";
+    }
+
+    .widget::after, .widget-close::after {
+        content: ">";
+    }
+}
+
+/**
+ * Extra spacing for block level elements.
+ */
+.block-container .widget widget-header.block .widget-header {
+    margin-left: 1rem;
+    padding-left: 1rem;
 }
 
