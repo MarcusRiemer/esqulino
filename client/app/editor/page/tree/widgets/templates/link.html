@@ -1,0 +1,8 @@
+<esqulino-widget-node [model]="model">
+  <widget-header>
+    <widget-parameter *ngIf="hasTarget">
+      <name>Ziel</name>
+      <value><span class="fa {{ targetIcon }} fa-fw" aria-hidden="true"></span>{{ targetName }}</value>
+    </widget-parameter>
+  </widget-header>
+</esqulino-widget-node>

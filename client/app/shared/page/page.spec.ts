@@ -3,9 +3,9 @@ import './widgets/button.spec'
 import './widgets/column.spec'
 import './widgets/embedded-html.spec'
 import './widgets/heading.spec'
-import './widgets/paragraph.spec'
 import './widgets/input.spec'
-
+import './widgets/link.spec'
+import './widgets/paragraph.spec'
 
 import {
     Page, PageDescription, CURRENT_API_VERSION

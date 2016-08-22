@@ -48,11 +48,13 @@ const visualComponents = [
     Visual.QueryTableComponent,
 ]
 
+// Components as defined by the tree-editor
 const treeComponents = [
     WidgetNodeComponent,
     Tree.HeadingComponent,
     Tree.QueryTableComponent,
     Tree.InputComponent,
+    Tree.LinkComponent,
 ]
 
 // All sidebars known to the page editor

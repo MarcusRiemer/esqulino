@@ -12,6 +12,9 @@ export {
     QueryActionDescription, NavigateActionDescription
 }
 
+// Typescript doesn't seem to know about the URL type
+declare var URL : any;
+
 /**
  * Any kind of action that should be carried out on the server.
  */
@@ -93,6 +96,21 @@ export class NavigateAction extends Action {
 
     get method() {
         return ("GET");
+    }
+
+    get friendlyTargetName() {
+        if (this.isInternal && this.isInternalPageResolveable) {
+            return (this.internalTargetPage.name);
+        } else if (this.isExternal) {
+            try {
+                const url = new URL(this.externalUrl);
+                return (url.host);
+            } catch (e) {
+                return (this.externalUrl);
+            }
+        } else {
+            return "ERROR: No target";
+        }
     }
 
     /**

@@ -34,7 +34,7 @@ describe('Page NavigateAction', () => {
     it('Invalid: Action with internal and external reference', () => {
         const m : NavigateActionDescription = {
             type : "navigate",
-            external : "http://thedailywtf.com/articles/the-inner-json-effect",
+            external : "http://thedailywtf.com/articles/Directive-595",
             internal : {
                 pageId : "13",
                 parameters : []
@@ -47,7 +47,7 @@ describe('Page NavigateAction', () => {
     it('Changes type when switching between internal and external', () => {
         const m : NavigateActionDescription = {
             type : "navigate",
-            external : "http://thedailywtf.com/articles/the-inner-json-effect"
+            external : "http://thedailywtf.com/articles/Disgruntled-Bomb-Java-Edition"
         }
 
         // Start with an external action
