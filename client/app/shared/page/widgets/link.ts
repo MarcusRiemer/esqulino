@@ -42,6 +42,7 @@ export class Link extends WidgetBase {
      */
     set text(value : string) {
         this._text = value;
+        this.fireModelChange();
     }
 
     /**

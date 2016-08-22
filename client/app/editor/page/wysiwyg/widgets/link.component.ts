@@ -37,20 +37,7 @@ export class LinkComponent extends WidgetComponent<Link> {
      * @return A user friendly name of the target
      */
     get targetName() {
-        const action = this.model.action;
-
-        if (action.isInternal && action.isInternalPageResolveable) {
-            return (action.internalTargetPage.name);
-        } else if (action.isExternal) {
-            try {
-                const url = new URL(action.externalUrl);
-                return (url.host);
-            } catch (e) {
-                return (action.externalUrl);
-            }
-        } else {
-            return "ERROR: No target";
-        }
+        return (this.model.action.friendlyTargetName);
     }
 
     get targetIcon() {

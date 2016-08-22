@@ -51,6 +51,7 @@ export class WidgetNodeLoaderComponent implements OnInit {
             "heading": Tree.HeadingComponent,
             "query-table": Tree.QueryTableComponent,
             "input": Tree.InputComponent,
+            "link": Tree.LinkComponent,
         };
     }
 
