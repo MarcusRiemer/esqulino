@@ -13,7 +13,7 @@ export class Paragraph extends WidgetBase {
     private _text : string;
     
     constructor(desc : ParagraphDescription, parent? : WidgetHost) {
-        super("paragraph", parent);
+        super("paragraph", "widget", parent);
         this._text = desc.text;
     }
 

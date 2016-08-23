@@ -3,7 +3,7 @@ import {
     ParameterMappingDescription
 } from '../page.description'
 import {
-    isWidget, isWidgetHost, Widget, WidgetHost
+    isWidget, isWidgetHost, Widget, WidgetHost, WidgetCategory
 } from '../hierarchy'
 
 
@@ -27,7 +27,7 @@ import {Paragraph, ParagraphDescription}       from './paragraph'
 import {QueryTable, QueryTableDescription}     from './query-table'
 
 export {
-    WidgetBase, WidgetDescription,
+    WidgetBase, WidgetDescription, WidgetCategory,
     WidgetHost, Widget, isWidgetHost, isWidget,
     Row, RowDescription,
     Column, ColumnDescription,

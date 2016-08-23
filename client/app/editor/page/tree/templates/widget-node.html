@@ -9,7 +9,7 @@
          by more specialised implementations.
          Whitespace is not allowed in this div because it fucks up the
          spacing for the xml-node-brackets (<>) that are inserted via CSS.-->
-    <div class="widget"><span class="widget-type">{{ model.type }}</span><ng-content select="widget-header"></ng-content></div>
+    <div class="widget {{ borderCssClass }}"><span class="widget-type">{{ model.type }}</span><ng-content select="widget-header"></ng-content></div>
   </span>
 
   <!-- If this is a model that provides text, the text is shown. -->
@@ -33,7 +33,7 @@
         (dragover)="onDragOverNode($event, 'close')"
         (drop)="onDropNode($event, 'close')"
         draggable="true">
-    <span class="widget-close"><span class="widget-type">{{ model.type }}</span></span>
+    <span class="widget-close {{closingBorderCssClass}}"><span class="widget-type">{{ model.type }}</span></span>
   </span>
 
 </div>

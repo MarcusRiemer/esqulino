@@ -4,7 +4,10 @@ import {Observable}                                  from 'rxjs/Observable'
 import {ModelObservable}                             from '../../interfaces'
 
 import {Page, WidgetDescription, ParameterMapping}   from '../page'
-import {Widget, WidgetHost, isWidgetHost}            from '../hierarchy'
+import {
+    Widget, WidgetCategory,
+    WidgetHost, isWidgetHost
+} from '../hierarchy'
 
 import {loadWidget}                                  from './widget-loader'
 
@@ -30,8 +33,12 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
     // Fired when the internal model has changed
     private _modelChanged = new Subject<Widget>();
 
-    constructor(type : string, parent? : WidgetHost) {
+    // The category of this widget.
+    private _category : WidgetCategory;
+
+    constructor(type : string, category : WidgetCategory, parent? : WidgetHost) {
         this._type = type;
+        this._category = category;
         this._parent = parent;
     }
 
@@ -58,6 +65,13 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
      */
     get parent() {
         return (this._parent);
+    }
+
+    /**
+     * @return The user-oriented category of this widget.
+     */
+    get category() : WidgetCategory {
+        return (this._category);
     }
 
     /**

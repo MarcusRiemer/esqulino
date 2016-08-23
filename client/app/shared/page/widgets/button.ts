@@ -22,7 +22,7 @@ export class Button extends ParametrizedWidget {
     private _text : string;
 
     constructor(desc : ButtonDescription, parent? : WidgetHost) {
-        super("button", parent);
+        super("button", "widget", parent);
         this._text = desc.text;
 
         // If there is an action, hold on to it

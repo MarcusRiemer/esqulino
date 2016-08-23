@@ -1,20 +1,7 @@
 .page-preview {
-    .row, .border-row-preview {
-        border-left: 5px solid blue;
-    }
-
-    .widget-row-preview > div {
-	    padding-left: 5px;
-    }
-
     .blueprint {
         border-left: 5px doubleg blue;
         text-align: center;
-    }
-
-    .row > [class^="col-"], .column-preview {
-        background-color: rgba(86,61,124,.15);
-        border: 1px solid rgba(86,61,124,.2);
     }
 
     .row > [class^="col-"] {

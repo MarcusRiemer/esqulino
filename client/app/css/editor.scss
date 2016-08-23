@@ -47,7 +47,6 @@
     }
 }
 
-
 nav.toolbar .navbar-brand {
     /* Hack: Account for margin and padding of Bootstraps stuff */
     min-width: $navbar-width - 16px;
@@ -65,3 +64,38 @@ nav.toolbar .navbar-brand {
     resize: vertical;
 }
 
+.page-preview {
+
+    /**
+     * A border stripe that indicates the given element is in the
+     * "layout" category.
+     */
+    .row, .border-layout-preview {
+        border-left: 5px solid blue !important;
+    }
+
+    /**
+     * A border stripe that indicates the given element is in the
+     * "widget" category.
+     */
+    .row, .border-widget-preview {
+        border-left: 5px solid green !important;
+    }
+
+    /**
+     * A border stripe that indicates the given element is in the
+     * "structural" category.
+     */
+    .row, .border-structural-preview {
+        border-left: 5px solid orange !important;
+    }
+
+    .widget-row-preview > div {
+	    padding-left: 5px;
+    }
+
+    .row > [class^="col-"], .column-preview, .widget, .widget-close {
+        background-color: rgba(86,61,124,.15);
+        border: 1px solid rgba(86,61,124,.2);
+    }
+}

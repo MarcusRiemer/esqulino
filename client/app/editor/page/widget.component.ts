@@ -3,6 +3,8 @@ import {OpaqueToken, Type, Input}         from '@angular/core'
 import {SidebarService}                   from '../sidebar.service'
 import {RegistrationService, SidebarType} from '../registration.service'
 
+import {borderCssClass}                   from '../shared/page-preview.util'
+
 import {Page}                             from '../../shared/page/index'
 import {Widget}                           from '../../shared/page/widgets/index'
 
@@ -18,6 +20,14 @@ export class WidgetComponent<TModel extends Widget> {
     constructor(protected _sidebarService : SidebarService,
                 model? : TModel) {
         this._model = model;
+    }
+
+    /**
+     * @return A CSS-class that denots the border that should be
+     *         used for this widget.
+     */
+    get borderCssClass() : string {
+        return (borderCssClass(this.model));
     }
     
     /**

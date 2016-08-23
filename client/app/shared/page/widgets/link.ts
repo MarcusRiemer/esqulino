@@ -14,7 +14,7 @@ export class Link extends WidgetBase {
     private _action : NavigateAction
     
     constructor(desc : LinkDescription, parent? : WidgetHost) {
-        super("link", parent);
+        super("link", "widget", parent);
 
         this._text = desc.text;
         this._action = new NavigateAction(desc.action, this);

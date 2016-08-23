@@ -3,6 +3,8 @@ import {Page}                                 from './page'
 
 export {WidgetDescription}
 
+export type WidgetCategory = "layout" | "widget" | "structural"
+
 /**
  * Minimal description of a widget
  */
@@ -12,6 +14,12 @@ export interface Widget {
      * type of a widget.
      */
     type : string
+
+    /**
+     * A category that is primarily of interest to group things
+     * for end-users.
+     */
+    category : WidgetCategory;
 
     /**
      * @return The parent of this widget.
@@ -87,5 +95,5 @@ export function isWidgetHost(obj : any): obj is WidgetHost {
  * @return True if the given thing is an instance of WidgetHost
  */
 export function isWidget(obj : any): obj is Widget {
-    return ("parent" in obj && "type" in obj && "page" in obj);
+    return (obj instanceof Object && "parent" in obj && "type" in obj && "page" in obj);
 }
