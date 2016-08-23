@@ -9,7 +9,7 @@
   <div class="page-preview">
     <div (dragstart)="startRowDrag($event)"
          draggable="true"
-         class="border-row-preview">
+         [class]="borderCssClass('layout')">
       <div class="column-preview">
         <span class="fa fa-fw fa-align-justify" aria-hidden="true"></span>Zeile
       </div>
@@ -17,7 +17,7 @@
 
     <div (dragstart)="startColumnDrag($event)"
          draggable="true"
-         class="widget-row-preview">
+         [class]="borderCssClass('layout')">
       <div class="column-preview">
         <span class="fa fa-fw fa-columns" aria-hidden="true"></span>Spalte
       </div>
@@ -25,7 +25,7 @@
 
     <div (dragstart)="startHeadingDrag($event)"
          draggable="true"
-         class="widget-row-preview">
+         [class]="borderCssClass('widget')">
       <div class="column-preview">
         <span class="fa fa-fw fa-header" aria-hidden="true"></span>Überschrift
       </div>
@@ -33,7 +33,7 @@
 
     <div (dragstart)="startParagraphDrag($event)"
          draggable="true"
-         class="widget-row-preview">
+         [class]="borderCssClass('widget')">
       <div class="column-preview">
         <span class="fa fa-fw fa-paragraph" aria-hidden="true"></span>Absatz
       </div>
@@ -41,7 +41,7 @@
 
     <div (dragstart)="startQueryTableDrag($event)"
          draggable="true"
-         class="widget-row-preview">
+         [class]="borderCssClass('widget')">
       <div class="column-preview">
         <span class="fa fa-fw fa-table" aria-hidden="true"></span>Datentabelle
       </div>
@@ -49,7 +49,7 @@
 
     <div (dragstart)="startInputDrag($event)"
          draggable="true"
-         class="widget-row-preview">
+         [class]="borderCssClass('widget')">
       <div class="column-preview">
         <span class="fa fa-fw fa-keyboard-o" aria-hidden="true"></span>Eingabe
       </div>
@@ -57,7 +57,7 @@
 
     <div (dragstart)="startButtonDrag($event)"
          draggable="true"
-         class="widget-row-preview">
+         [class]="borderCssClass('widget')">
       <div class="column-preview">
         <span class="fa fa-fw fa-square-o" aria-hidden="true"></span>Knopf
       </div>
@@ -65,7 +65,7 @@
 
     <div (dragstart)="startLinkDrag($event)"
          draggable="true"
-         class="widget-row-preview">
+         [class]="borderCssClass('widget')">
       <div class="column-preview">
         <span class="fa fa-fw fa-arrow-right" aria-hidden="true"></span>Link
       </div>
@@ -73,7 +73,7 @@
 
     <div (dragstart)="startEmbeddedHtmlDrag($event)"
          draggable="true"
-         class="widget-row-preview">
+         [class]="borderCssClass('structural')">
       <div class="column-preview">
         <span class="fa fa-fw fa-code" aria-hidden="true"></span>HTML
       </div>

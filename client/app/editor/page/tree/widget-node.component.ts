@@ -205,6 +205,18 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
     }
 
     /**
+     * The closing node might not need a border because it's not aligned
+     * at the left.
+     */
+    get closingBorderCssClass() : string {
+        if (this.isBlock) {
+            return (this.borderCssClass);
+        } else {
+            return ("");
+        }
+    }
+
+    /**
      * The index that would be used to insert something at the very
      * end of these children.
      */
@@ -225,7 +237,7 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
      *         the closing block.
      */
     get isInline() : boolean {
-        return (this.children.length == 0 && (!!(this.model as any).text));
+        return (this.children.length == 0 && !this.isLongText);
     }
 
     /**
@@ -240,6 +252,6 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
      * @return True, if the text should be treated as a "full" child level.
      */
     get isLongText() : boolean {
-        return (this.model.type === "paragraph");
+        return (["paragraph","embedded-html"].includes(this.model.type));
     }
 }

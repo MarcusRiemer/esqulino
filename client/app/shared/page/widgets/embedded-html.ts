@@ -15,7 +15,7 @@ export class EmbeddedHtml extends WidgetBase {
     private _html : string;
     
     constructor(desc : EmbeddedHtmlDescription, parent? : WidgetHost) {
-        super("embedded-html", parent);
+        super("embedded-html", "structural", parent);
         this._html = desc.html;
     }
 

@@ -1,6 +1,8 @@
 import {Component, OnInit, OnDestroy}   from '@angular/core'
 import {ActivatedRoute, Router}         from '@angular/router'
 
+import {borderCssClass}                 from '../shared/page-preview.util'
+
 import {Page, ParameterMapping}         from '../../shared/page/index'
 import {
     Heading, Row, Paragraph, QueryTable,
@@ -80,6 +82,10 @@ export class SidebarWidgetsComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
         this._subscriptionRefs = [];
+    }
+
+    borderCssClass(category : any) : string {
+        return (borderCssClass(category));
     }
 
     /**
