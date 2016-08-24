@@ -27,7 +27,7 @@ import {SchemaTableComponent}           from './schema-table.component'
     imports : [
         CommonModule,
         FormsModule,
-        //editorRouting,
+
         SharedEditorModule,
         PageEditorModule.forRoot(),
         QueryEditorModule.forRoot(),

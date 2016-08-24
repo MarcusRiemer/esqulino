@@ -342,7 +342,7 @@ export class Page extends ProjectResource implements WidgetHost {
     /**
      * @return The referenced query with the given name.
      */
-    getQueryReferenceByName(name : string) {
+    getQueryReferenceByName(name : string) : QueryReference  {
         return (this._referencedQueries.find(q => q.name == name));
     }
 

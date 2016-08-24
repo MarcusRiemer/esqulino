@@ -188,7 +188,18 @@ export interface QueryFrom extends Query {
 export interface ResultColumn {
     // The query this column is part of
     query : Query
-    
+
+    // The fully qualified name of this column. For columns of
+    // tables this means there is a table prefix, for columns
+    // that are actually an expression this is the string
+    // representation of the expression.
     fullName : string
+
+    // The shorthand-name of this column. If the column has an
+    // alias this acts as the short name.
     shortName : string
+
+    // The expression that results in this column. Careful: This
+    // may be a StarExpression.
+    expr : SyntaxTree.Expression
 }

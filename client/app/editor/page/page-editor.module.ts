@@ -1,5 +1,6 @@
 import {NgModule, ModuleWithProviders}  from '@angular/core'
 
+import QueryEditorModule                from '../query/editor.module'
 import SharedEditorModule               from '../shared/shared.module'
 import {RegistrationService}            from '../registration.service'
 
@@ -74,6 +75,7 @@ const sidebarComponents = [
 @NgModule({
     imports: [
         SharedEditorModule,
+        QueryEditorModule,
         // pageEditorRouting,
     ],    
     declarations: [

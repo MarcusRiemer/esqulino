@@ -103,7 +103,9 @@ describe('Valid SELECT Queries', () => {
 
         };
 
-        let q = new QuerySelect(schema, model);
+        const q = new QuerySelect(schema, model);
+        const s = q.select;
+
         expect(q.name).toEqual("test-whole");
         expect(q.id).toEqual("id");
 
@@ -120,8 +122,14 @@ describe('Valid SELECT Queries', () => {
         expect(columns.length).toEqual(2);
         expect(columns[0].fullName).toEqual("person.personId");
         expect(columns[1].fullName).toEqual("person.name");
-        
-        
+
+        // Retrieval by name
+        expect(s.getActualColumnByName("personId")).toEqual(s.actualColums[0]);
+        expect(s.getActualColumnByName("name")).toEqual(s.actualColums[1]);
+
+        // Retrieval of something that does not exist
+        expect(() => s.getActualColumnByName("nonexistant")).toThrowError();
+
         // FROM
         expect(q.from.numberOfJoins).toEqual(1);
 
@@ -155,7 +163,8 @@ describe('Valid SELECT Queries', () => {
             }
         };
 
-        let q = new QuerySelect(schema, model);
+        const q = new QuerySelect(schema, model);
+        const s = q.select;
         expect(q.singleRow).toEqual(true);
 
         // Leaves
@@ -176,7 +185,12 @@ describe('Valid SELECT Queries', () => {
         expect(columns[0].fullName).toEqual("person.personId");
         expect(columns[1].fullName).toEqual("person.name");
         expect(columns[2].fullName).toEqual("person.gebDat");
-        
+
+        // Retrieval by name
+        expect(s.getActualColumnByName("personId")).toEqual(s.actualColums[0]);
+        expect(s.getActualColumnByName("name")).toEqual(s.actualColums[1]);
+        expect(s.getActualColumnByName("gebDat")).toEqual(s.actualColums[2]);
+
         // FROM
         expect(q.from.numberOfJoins).toEqual(0);
 
@@ -184,7 +198,7 @@ describe('Valid SELECT Queries', () => {
         expect(q.toModel()).toEqual(model);
     });
 
-    
+
     it ('SELECT * FROM person WHERE 1', () => {
         const model : Model.QueryDescription = {
             name : 'where-simple',
@@ -220,7 +234,7 @@ describe('Valid SELECT Queries', () => {
         expect(columns[0].fullName).toEqual("person.personId");
         expect(columns[1].fullName).toEqual("person.name");
         expect(columns[2].fullName).toEqual("person.gebDat");
-        
+
         // FROM
         expect(q.from.numberOfJoins).toEqual(0);
 

@@ -1,7 +1,7 @@
 import {Project}                       from './project'
 
-describe('Project', () => {
+/*describe('Project', () => {
     it('getQueriesById', () => {
 
     })
-});
+});*/

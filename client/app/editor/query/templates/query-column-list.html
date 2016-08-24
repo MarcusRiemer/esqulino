@@ -1,0 +1,11 @@
+<div class="columns">
+  <span *ngFor="let column of columns; let last = last">
+    <span class="column">{{ column.shortName }}</span>
+  </span>
+  <span *ngIf="showBlueprintDropTarget"
+        (dragover)="onBlueprintDrag($event)"
+        (drop)="onBlueprintDrop($event)"
+        class="column blueprint">
+    <span class="fa fa-plus"></span>
+  </span>
+</div>

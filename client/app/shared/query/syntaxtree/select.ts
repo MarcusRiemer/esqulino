@@ -237,7 +237,8 @@ export class Select extends Component implements ExpressionParent {
                         toReturn.push({
                             query : this._query,
                             fullName : `${t.name}.${c.name}`,
-                            shortName : c.name
+                            shortName : c.name,
+                            expr : val.expr
                         });
                     });
                 })
@@ -249,7 +250,8 @@ export class Select extends Component implements ExpressionParent {
                 toReturn.push({
                     query : this._query,
                     fullName : colExpr.toSqlString(),
-                    shortName : colExpr.columnName
+                    shortName : val.name ? val.name : colExpr.columnName,
+                    expr : val.expr
                 });
             } else {
                 throw new Error ("Unknown colum type in result description");
@@ -260,10 +262,50 @@ export class Select extends Component implements ExpressionParent {
     }
 
     /**
-     * @return The column with index i
+     * @param i The index of the column as it's part of the SELECT
+     *          statement. This means that StarExpressions are *not*
+     *          expanded when retrieving the expression.
+     *
+     * @return The expression of the column with index i.
      */
-    getColumn(i : number) {
+    getColumn(i : number) : Expression {
         return this._columns[i].expr;
+    }
+
+    /**
+     * @return The colum with the given name or alias.
+     */
+    getActualColumnByName(name : string) : ResultColumn {
+        // First attempt: Using only the alias name
+        let toReturn = this.actualColums.find(c => c.shortName == name);
+
+        // Is a second attempt required?
+        if (toReturn === undefined) {
+            // Yes :(
+
+            // Grab only columns that actually refer to a table-column
+            type CertainlyColumn = {
+                query : Query
+                shortName : string
+                fullName : string
+                expr : ColumnExpression
+            }
+            const tableColumns = this.actualColums
+                .filter(e => e.expr instanceof ColumnExpression) as CertainlyColumn[];
+
+            // And check wheter such a table-column has a matching name
+            toReturn = tableColumns.find(c => c.expr.columnName === name);
+        }
+
+        // Did the second attempt fail?
+        if (toReturn === undefined) {
+            const queryName = this.query ? this.query.name :  "--unknown--";
+            
+            // Yes :(
+            throw new Error(`Could not find column with name "${name}" on query "${queryName}"`);
+        }
+
+        return (toReturn);
     }
 
     /**

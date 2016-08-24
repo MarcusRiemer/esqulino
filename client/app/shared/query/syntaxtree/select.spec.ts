@@ -10,8 +10,9 @@ describe('SELECT', () => {
                 expr : { star : { } }
             }]
         };
-        
+
         const s = new SyntaxTree.Select(model, null);
+        
         expect(s.toSqlString()).toEqual("SELECT *");
         expect(s.toModel()).toEqual(model);
     });
@@ -47,6 +48,11 @@ describe('SELECT', () => {
         const col2 = <SyntaxTree.ColumnExpression> s.getColumn(2);
         expect(col2.tableQualifier).toEqual("person");
         expect(col2.columnName).toEqual("alter");
+
+        // Retrieval by name
+        expect(s.getActualColumnByName("id").expr).toEqual(col0);
+        expect(s.getActualColumnByName("name").expr).toEqual(col1);
+        expect(s.getActualColumnByName("dasAlter").expr).toEqual(col2);
 
         // Model and String serialization
         expect(s.toSqlString()).toBe('SELECT p.id, person.name, person.alter AS dasAlter');

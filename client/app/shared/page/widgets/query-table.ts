@@ -1,6 +1,6 @@
 import {QuerySelect, ResultColumn}       from '../../../shared/query'
 
-import {Page}                            from '../page'
+import {Page, QueryReference}            from '../page'
 import {QueryTableDescription}           from '../page.description'
 import {Widget, WidgetHost}              from '../hierarchy'
 
@@ -53,7 +53,7 @@ export class QueryTable extends WidgetBase {
     /**
      * @return A (hopefully) resolveable reference to a query.
      */
-    get queryReference() {
+    get queryReference() : QueryReference {
         return (this.page.getQueryReferenceByName(this.queryReferenceName));
     }
 
@@ -78,9 +78,9 @@ export class QueryTable extends WidgetBase {
     }
 
     /**
-     * Return used columns if they are currently known.
+     * @return 
      */
-    get columns() {
+    get columns() : ResultColumn[] {
         if (this.queryReferenceName) {            
             // 1) Get the reference itself
             const ref = this.queryReference
@@ -101,7 +101,7 @@ export class QueryTable extends WidgetBase {
     /**
      * @return The columns that are actually available to render.
      */
-    get availableColumns() {
+    get availableColumns() : ResultColumn[] {
         if (this.queryReference &&
             this.queryReference.isResolveable &&
             this.queryReference.query instanceof QuerySelect) {
