@@ -1,8 +1,15 @@
-<esqulino-widget-node [model]="model">
+<esqulino-widget-node [model]="model"
+                      [nodeDisplay]="'block'">
   <widget-header>
     <widget-parameter>
       <name>Abfrage</name>
       <value><span class="table">{{ model.queryReference.name }}</span></value>
     </widget-parameter>
   </widget-header>
+
+  <div class="text tree-level">
+    <query-column-list [select]="model.queryReference.query.select"
+                       [columnNames]="columnNames">
+    </query-column-list>
+  </div>
 </esqulino-widget-node>

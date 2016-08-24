@@ -10,9 +10,17 @@ import {WIDGET_MODEL_TOKEN}               from '../../editor.token'
 import {DragService, PageDragEvent}       from '../drag.service'
 import {WidgetComponent}                  from '../widget.component'
 
-// Specifies whether an operation has happened on the opening or
-// closing part of the node
+/**
+ * Specifies whether an operation has happened on the opening or
+ * closing part of the node
+ */
 type NodeLocation = "open" | "close" | "child";
+
+/**
+ * Allows to override the default heuristic that determines whether
+ * a widget should be displayed as block or inline.
+ */
+type TreeDisplayStyle = "block" | "inline";
 
 interface DropLocation {
     host : WidgetHost,
@@ -21,7 +29,7 @@ interface DropLocation {
 
 /**
  * Represents a widget as a node in a tree. This component is somewhat
- * agnostic about the element it displays and does it's best to provide 
+ * agnostic about the element it displays and does it's best to provide
  * *some* representation for common properties.
  *
  * Most widgets however will want to provide their own tree-representation.
@@ -34,7 +42,13 @@ interface DropLocation {
     selector: 'esqulino-widget-node',
     inputs: ['model']
 })
-export class WidgetNodeComponent extends WidgetComponent<Widget> {    
+export class WidgetNodeComponent extends WidgetComponent<Widget> {
+    /**
+     * Allows to override the default heuristic that determines whether
+     * a widget should be displayed as block or inline.
+     */
+    @Input() nodeDisplay : TreeDisplayStyle = undefined;
+
     constructor(
         @Inject(WIDGET_MODEL_TOKEN) model : Widget,
         private _dragService : DragService,
@@ -55,7 +69,7 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
     }
 
     /**
-     * @return A widget host that would accept this widget, or `undefined` if there 
+     * @return A widget host that would accept this widget, or `undefined` if there
      *         is no accepting host available.
      */
     private determineDropHost(node : Widget | WidgetHost,
@@ -67,7 +81,7 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
         if (!widgetDesc) {
             return (undefined);
         }
-                                  
+
         // Is this an widget host?
         else if (isWidgetHost(node)) {
             // Is this on the opening node to insert something compatible
@@ -78,13 +92,13 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
             }
             // Maybe the parent wants it?
             else if (place == "close" && this.parentAccepts(node, widgetDesc)) {
-                // The parent can take it. 
+                // The parent can take it.
                 return ((node as any).parent);
             } else {
                 // Nobody wants it
                 return (undefined)
             }
-                
+
         }
 
         // Is the parent of this thing an accepting widget host?
@@ -121,13 +135,13 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
             return (undefined);
         } else {
             // Okay, components wants this thing, but where should it go?
-            
+
             // True, if this node will be hosting the new node itself
             const parentHost = host == this.model.parent;
             const selfHost = !parentHost;
-            
+
             let index : number = undefined;
-            
+
             if (parentHost && place === "close") {
                 // Place after this element
                 return ({
@@ -170,14 +184,14 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
 
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
         let dropTarget = this.dropLocation(this.model, place, pageEvt);
-        
+
         if (dropTarget) {
             dropTarget.host.addWidget(pageEvt.widget, dropTarget.index);
 
             if (this._dragService.currentDrag.callbacks.onWidget) {
                 this._dragService.currentDrag.callbacks.onWidget(dropTarget.host);
             }
-            
+
         } else {
             throw new Error("No valid drop target");
         }
@@ -192,7 +206,7 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
             onWidget : (_) => this.model.parent.removeWidget(this.model, false),
         });
     }
-    
+
     /**
      * Type-safe accessor for children.
      */
@@ -237,7 +251,8 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
      *         the closing block.
      */
     get isInline() : boolean {
-        return (this.children.length == 0 && !this.isLongText);
+        return (this.nodeDisplay === "inline" ||
+                this.children.length == 0 && !this.isLongText);
     }
 
     /**
@@ -245,7 +260,8 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
      *         line.
      */
     get isBlock() : boolean {
-        return (!this.isInline);
+        return (this.nodeDisplay === "block" ||
+                !this.isInline);
     }
 
     /**

@@ -14,4 +14,8 @@ export class QueryTableComponent {
     constructor(@Inject(WIDGET_MODEL_TOKEN) public model : QueryTable) {
 
     }
+
+    get columnNames() : string[] {
+        return (this.model.columnNames);
+    }
 }

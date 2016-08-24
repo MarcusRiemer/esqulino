@@ -24,6 +24,8 @@ import {WhereComponent}                 from './sql-where.component'
 import {InsertComponent}                from './sql-insert.component'
 import {ExpressionComponent}            from './sql-expr.component'
 
+import {QueryColumnListComponent}       from './query-column-list.component'
+
 @NgModule({
     imports: [
         SharedEditorModule,
@@ -47,7 +49,8 @@ import {ExpressionComponent}            from './sql-expr.component'
         WhereComponent,
         InsertComponent,
 
-        QuerySidebarComponent
+        QuerySidebarComponent,
+        QueryColumnListComponent,
     ],
     providers: [
         DragService
@@ -60,6 +63,12 @@ import {ExpressionComponent}            from './sql-expr.component'
         QueryEditorHostComponent,
         QueryEditorComponent,
         QueryCreateComponent,
+
+        QueryColumnListComponent,
+        ExpressionComponent,
+
+        SqlStringPipe,
+        OperatorPipe,
     ]
     
 })
