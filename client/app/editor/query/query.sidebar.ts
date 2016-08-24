@@ -155,7 +155,10 @@ export class QuerySidebarComponent implements OnInit, OnDestroy {
         // Indicates we can drop here
         evt.preventDefault();
 
-        this._dragService.activeSource.removeSelf();
+        // Possibly remove an active source
+        if (this._dragService.activeSource) {
+            this._dragService.activeSource.removeSelf();
+        }
     }
 
     /**

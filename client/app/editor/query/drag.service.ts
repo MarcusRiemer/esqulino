@@ -3,7 +3,7 @@ import {Subject}                from 'rxjs/Subject'
 import {Injectable}             from '@angular/core'
 
 import {
-    Model, SyntaxTree
+    Model, SyntaxTree, ResultColumn
 } from '../../shared/query'
 
 /**

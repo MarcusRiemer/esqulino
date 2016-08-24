@@ -1,5 +1,7 @@
 import {Component, Input, OnInit}         from '@angular/core'
 
+import {DragService}                      from './drag.service'
+
 import {SyntaxTree, ResultColumn}         from '../../shared/query'
 
 /**
@@ -21,8 +23,47 @@ export class QueryColumnListComponent implements OnInit {
      */
     @Input() columnNames : string[] = [];
 
+    /**
+     * The drag operation that is currently taking place.
+     */
+    private _currentDrag : ResultColumn = undefined;
+
+    constructor(
+        private _dragService : DragService
+    ) {
+    }
+
     ngOnInit() {
 
+    }
+
+    /**
+     * The user has started a drag-operation to re-order columns.
+     */
+    onDragStart(evt : DragEvent, col : ResultColumn) {
+        // No further dragging must take place
+        evt.stopPropagation();
+
+        // Specifying the actual drag operation
+        const dragData = JSON.stringify({
+            reorder : col.fullName
+        });
+        evt.dataTransfer.setData('text/plain', dragData);
+        evt.dataTransfer.effectAllowed = 'move';
+
+        // Remember the current drag operation and make sure
+        // it is erased once the drag has ended.
+        this._currentDrag = col;
+        evt.target.addEventListener("dragend", () => {
+            console.log(`Stop: Reordering column: ${dragData}`);
+            this._currentDrag = undefined;
+        });
+
+        console.log(`Start: Reordering column: ${dragData}`);
+    }
+
+    trackByName(i : number, col : ResultColumn) {
+        return (col.fullName);
     }
 
     /**
@@ -43,6 +84,6 @@ export class QueryColumnListComponent implements OnInit {
      * @return True, if a "append new column here" marker should appear.
      */
     get showBlueprintDropDarget() {
-        return (false);
+        return (!!this._currentDrag);
     }
 }
