@@ -1,4 +1,6 @@
-import {Component, Input, OnInit}         from '@angular/core'
+import {
+    Component, Input, Output, OnInit, EventEmitter
+} from '@angular/core'
 
 import {DragService}                      from './drag.service'
 
@@ -24,9 +26,22 @@ export class QueryColumnListComponent implements OnInit {
     @Input() columnNames : string[] = [];
 
     /**
-     * The drag operation that is currently taking place.
+     * Fired when the column names change
      */
-    private _currentDrag : ResultColumn = undefined;
+    @Output() columnNamesChange = new EventEmitter();
+
+    /**
+     * The column that is currently being dragged.
+     */
+    private _currentDrag : {
+        col : ResultColumn
+        index : number
+    } = undefined;
+
+    /**
+     * 
+     */
+    private _currentHoverIndex : number = undefined;
 
     constructor(
         private _dragService : DragService
@@ -40,7 +55,7 @@ export class QueryColumnListComponent implements OnInit {
     /**
      * The user has started a drag-operation to re-order columns.
      */
-    onDragStart(evt : DragEvent, col : ResultColumn) {
+    onDragStart(evt : DragEvent, index : number, col : ResultColumn) {
         // No further dragging must take place
         evt.stopPropagation();
 
@@ -49,21 +64,68 @@ export class QueryColumnListComponent implements OnInit {
             reorder : col.fullName
         });
         evt.dataTransfer.setData('text/plain', dragData);
-        evt.dataTransfer.effectAllowed = 'move';
+        evt.dataTransfer.effectAllowed = 'none';
 
-        // Remember the current drag operation and make sure
-        // it is erased once the drag has ended.
-        this._currentDrag = col;
+        // Remember the current drag operation
+        this._currentDrag = {
+            col : col,
+            index : index
+        };
+        this._currentHoverIndex = index;
+
+        // And make sure it is forgotten once the drag has ended.
         evt.target.addEventListener("dragend", () => {
             console.log(`Stop: Reordering column: ${dragData}`);
             this._currentDrag = undefined;
+            this._currentHoverIndex = undefined;
         });
 
         console.log(`Start: Reordering column: ${dragData}`);
     }
 
+    /**
+     * @return The full name may be used to uniquely identify a column.
+     */
     trackByName(i : number, col : ResultColumn) {
         return (col.fullName);
+    }
+
+    /**
+     * Used to update the hovering index.
+     */
+    onColumnDragOver(evt : DragEvent, index : number) {
+        evt.preventDefault();
+        this._currentHoverIndex = index;
+    }
+
+    onColumnDrop(evt : DragEvent, new_index : number) {
+        // Prevent that the browser triggers any kind of navigation
+        evt.preventDefault();
+        
+        // Move the item in the names array
+        // http://stackoverflow.com/questions/5306680/#5306832
+        const old_index = this._currentDrag.index;
+        this.columnNames.splice(new_index + 1, 0, this.columnNames.splice(old_index, 1)[0]);
+
+        this.columnNamesChange.emit(this.columnNames);
+    }
+
+    /**
+     * @return True, if the column at the given index should be shown.
+     */
+    showColumn(index : number) : boolean {
+        return (!this._currentDrag || this._currentDrag.index != index);
+    }
+
+    /**
+     * @return True, if the column at the given index should be shown.
+     */
+    insertionColumn(index : number) : ResultColumn {
+        if (this._currentDrag && this._currentHoverIndex == index) {
+            return (this._currentDrag.col);
+        } else {
+            return (undefined);
+        }
     }
 
     /**
@@ -83,7 +145,8 @@ export class QueryColumnListComponent implements OnInit {
     /**
      * @return True, if a "append new column here" marker should appear.
      */
-    get showBlueprintDropDarget() {
-        return (!!this._currentDrag);
+    @Input()
+    get showBlueprintDropTarget() : boolean {
+        return (this._currentDrag != undefined);
     }
 }

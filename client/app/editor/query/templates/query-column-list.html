@@ -1,12 +1,16 @@
-<div class="columns">
-  <span *ngFor="let column of columns; trackBy : trackByName">
-    <span (dragstart)="onDragStart($event, column)"
+<div class="columns"> 
+  <span *ngFor="let column of columns; trackBy : trackByName; let i = index">   
+    <span [hidden]="!showColumn(i)"
+          (dragstart)="onDragStart($event, i, column)"
+          (dragover)="onColumnDragOver($event, i)"
+          (drop)="onColumnDrop($event, i)"
           draggable="true"
           [title]="column.fullName"
           class="column">{{ column.shortName }}</span>
-  </span>
-  <span *ngIf="showBlueprintDropTarget"
-        class="column blueprint">
-    <span class="fa fa-plus"></span>
+    <span *ngIf="insertionColumn(i)"
+          [title]="insertionColumn(i).fullName"
+          (dragover)="onColumnDragOver($event, i)"
+          (drop)="onColumnDrop($event, i)"
+          class="column">{{ insertionColumn(i).shortName }}</span>
   </span>
 </div>
