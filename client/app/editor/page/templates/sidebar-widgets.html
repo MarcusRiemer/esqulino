@@ -39,14 +39,6 @@
       </div>
     </div>
 
-    <div (dragstart)="startQueryTableDrag($event)"
-         draggable="true"
-         [class]="borderCssClass('widget')">
-      <div class="column-preview">
-        <span class="fa fa-fw fa-table" aria-hidden="true"></span>Datentabelle
-      </div>
-    </div>
-
     <div (dragstart)="startInputDrag($event)"
          draggable="true"
          [class]="borderCssClass('widget')">
@@ -68,6 +60,14 @@
          [class]="borderCssClass('widget')">
       <div class="column-preview">
         <span class="fa fa-fw fa-arrow-right" aria-hidden="true"></span>Link
+      </div>
+    </div>
+
+    <div (dragstart)="startQueryTableDrag($event)"
+         draggable="true"
+         [class]="borderCssClass('structural')">
+      <div class="column-preview">
+        <span class="fa fa-fw fa-table" aria-hidden="true"></span>Datentabelle
       </div>
     </div>
 
