@@ -64,8 +64,15 @@ nav.toolbar .navbar-brand {
     resize: vertical;
 }
 
-.page-preview {
+/**
+ * A list of theoretically arbitrary column-items.
+ */
+.column-list {
+    display: flex;
+    flex-wrap: wrap;
+}
 
+.page-preview {
     /**
      * A border stripe that indicates the given element is in the
      * "layout" category.

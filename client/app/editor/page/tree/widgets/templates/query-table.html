@@ -3,11 +3,12 @@
   <widget-header>
     <widget-parameter>
       <name>Abfrage</name>
-      <value><span class="table">{{ model.queryReference.name }}</span></value>
+      <value><span class="table">{{ model.hasValidReference ? model.queryReferenceName : "Fehlt" }}</span></value>
     </widget-parameter>
   </widget-header>
 
-  <div class="text tree-level">
+  <div *ngIf="model.hasValidReference"
+      class="text tree-level">
     <query-column-list [select]="model.queryReference.query.select"
                        [(columnNames)]="model.columnNames">
     </query-column-list>

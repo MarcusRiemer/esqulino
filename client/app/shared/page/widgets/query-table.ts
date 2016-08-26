@@ -128,16 +128,18 @@ export class QueryTable extends WidgetBase {
             const possibleColumns = query.select.actualColums;
 
             this.columnNames = possibleColumns.map(c => c.shortName);
+
+            this.fireModelChange();
         }
     }
 
     /**
-     * Sets a new referenced query, cleaning the current
+     * Sets a new referenced query, clearing the previously used
      * columns as a side effect.
      */
     set queryReferenceName(name : string) {
         this._queryRefName = name;
-        this._columns = [];
+        this.useAllColumns();
     }
 
     protected toModelImpl() : WidgetDescription {
