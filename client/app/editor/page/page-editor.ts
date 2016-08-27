@@ -58,8 +58,7 @@ export class PageEditor implements OnInit, OnDestroy {
         private _toolbarService: ToolbarService,
         private _routeParams: ActivatedRoute,
         private _sidebarService : SidebarService,
-        private _preferences : PreferencesService,
-        registrationService : RegistrationService
+        private _preferences : PreferencesService
     ) {
         
     }
@@ -91,7 +90,11 @@ export class PageEditor implements OnInit, OnDestroy {
         // Grab the correct project and page
         let subRef = this._routeParams.params.subscribe(params => {
             var pageId = params['pageId'];
+
+            console.log(`Page Editor: PageId changed to ${pageId}`);
+            
             this._projectService.activeProject
+                .first()
                 .subscribe(res => {
                     // Project is loaded, display the correct page to edit
                     this._project = res;
@@ -100,6 +103,8 @@ export class PageEditor implements OnInit, OnDestroy {
                     // The active page has changed: Reset render preview and sidebar
                     this.showDefaultSidebars();
                     this.doRenderPreview = false;
+
+                    console.log(`Page Editor: Showing "${this._page.name}" (${this._page.id})`);
                 });
         })
 
@@ -159,6 +164,7 @@ export class PageEditor implements OnInit, OnDestroy {
     /*
      * @return The currently edited project
      */
+    @Input()
     get project() {
         return (this._project);
     }
@@ -166,6 +172,7 @@ export class PageEditor implements OnInit, OnDestroy {
     /*
      * @return The currently edited page
      */
+    @Input()
     get page() {
         return (this._page);
     }

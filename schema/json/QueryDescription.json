@@ -32,11 +32,8 @@
             "type": "string"
         },
         "apiVersion": {
-            "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with.",
-            "type": "string",
-            "enum": [
-                "2"
-            ]
+            "$ref": "#/definitions/ApiVersionToken",
+            "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with."
         }
     },
     "additionalProperties": false,
@@ -335,6 +332,15 @@
             "enum": [
                 "AND",
                 "OR"
+            ]
+        },
+        "ApiVersionToken": {
+            "description": "It would be nicer if versions could be numbers, but Typescript has no\n\nconcept of union types for numbers.",
+            "type": "string",
+            "enum": [
+                "1",
+                "2",
+                "3"
             ]
         }
     },

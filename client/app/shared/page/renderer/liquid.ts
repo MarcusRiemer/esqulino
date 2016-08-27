@@ -4,8 +4,8 @@ import {Page}                  from '../page'
 
 import {Renderer}              from '../renderer'
 import {
-    WidgetBase, Row, Column,
-    Button, EmbeddedHtml, Heading, Input, Link, Paragraph, QueryTable
+    Widget, Row, Column,
+    Body, Button, EmbeddedHtml, Heading, Input, Link, Paragraph, QueryTable
 } from '../widgets/index'
 
 export {Renderer}
@@ -15,16 +15,33 @@ export {Renderer}
  * a string. As it might need to render additional children it is
  * passed a function that renders arbitrary widgets itself.
  */
-type WidgetRenderer = (w: WidgetBase, renderWidget : WidgetRenderer) => string;
+type WidgetRenderer = (w: Widget, renderWidget : WidgetRenderer) => string;
+
+function renderBody(w: Widget, renderWidget : WidgetRenderer) : string {
+    const body = w as Body;
+    const children : string = body.children
+        .map(child => renderWidget(child, renderWidget))
+        .join("\n");
+
+    return (`
+<body>
+  <div class="container-fluid">
+    <form>
+      ${children}
+    </form>
+  </div>
+</body>
+`);
+}
 
 /**
  * Render a single column with all children.
  */
-function renderColumn(w: WidgetBase, renderWidget : WidgetRenderer) : string {
+function renderColumn(w: Widget, renderWidget : WidgetRenderer) : string {
     const col = w as Column;
     const children : string = col.children
         .map(w => renderWidget(w, renderWidget))
-        .join("");
+        .join("\n");
 
     return (`<div class="${col.columnClasses}">${children}</div>`);
 }
@@ -32,7 +49,7 @@ function renderColumn(w: WidgetBase, renderWidget : WidgetRenderer) : string {
 /**
  * Render a single row with all children
  */
-function renderRow(w: WidgetBase, renderWidget : WidgetRenderer) : string {
+function renderRow(w: Widget, renderWidget : WidgetRenderer) : string {
     const row = w as Row;
     const children : string = row.children
         .map(c => renderWidget(c, renderWidget))
@@ -44,7 +61,7 @@ function renderRow(w: WidgetBase, renderWidget : WidgetRenderer) : string {
  * Directly renders a heading without rendering the form context. Action
  * and method are directly set via HTML5s `formaction` and `formmethod`.
  */
-function renderButton(w: WidgetBase) : string {
+function renderButton(w: Widget) : string {
     const button = w as Button;
     const text = button.text;
     const cssClass = "btn btn-secondary btn-block";
@@ -59,7 +76,7 @@ function renderButton(w: WidgetBase) : string {
  * Renders raw HTML content, but encloses it in a comment to ease debugging
  * in case something goes wrong.
  */
-function renderHtml(w: WidgetBase) : string {
+function renderHtml(w: Widget) : string {
     const embedded = w as EmbeddedHtml;
 
     return (`<!-- Raw HTML begin -->${embedded.html}<!-- Raw HTML end -->`);    
@@ -68,7 +85,7 @@ function renderHtml(w: WidgetBase) : string {
 /**
  * Directly renders a heading.
  */
-function renderHeading(w: WidgetBase) : string {
+function renderHeading(w: Widget) : string {
     const heading = <Heading> w;
     const tagname = `h${heading.level}`;
     return (`<${tagname}>${heading.text}</${tagname}>`);
@@ -79,7 +96,7 @@ function renderHeading(w: WidgetBase) : string {
  * passing the correct parameters to it. This rendering step therefore
  * relies on data on the server!
  */
-function renderInput(w: WidgetBase) : string {
+function renderInput(w: Widget) : string {
     const input = w as Input;
     const outParamName = `outParamName: "${input.outParamName}"`;
     const caption = `caption: "${input.caption}"`
@@ -89,7 +106,7 @@ function renderInput(w: WidgetBase) : string {
     return (`{% include "input" ${caption}, ${outParamName}, ${description}, ${inputType}  %}`);
 }
 
-function renderLink(w: WidgetBase) : string {
+function renderLink(w: Widget) : string {
     const link = w as Link;
     const action = link.action;
 
@@ -122,7 +139,7 @@ function renderLink(w: WidgetBase) : string {
 /**
  * Directly renders a paragraph.
  */
-function renderParagraph(w: WidgetBase) : string {
+function renderParagraph(w: Widget) : string {
     const paragraph = <Paragraph> w;
     return (`<p>${paragraph.text}</p>`);
 }
@@ -132,7 +149,7 @@ function renderParagraph(w: WidgetBase) : string {
  * passing the correct parameters to it. This rendering step therefore
  * relies on data on the server!
  */
-function renderQueryTable(w: WidgetBase) : string {
+function renderQueryTable(w: Widget) : string {
     const queryTable = <QueryTable> w;
     const queryName = queryTable.queryReferenceName;
     const columns = queryTable.columnNames.join(",");
@@ -145,8 +162,7 @@ function renderQueryTable(w: WidgetBase) : string {
  * context.
  */
 export class LiquidRenderer extends Renderer {
-    private static PAGE_HEADER = `
-<!DOCTYPE html>
+    private static PAGE_HEADER = `<!DOCTYPE html>
 <html>
   <head>
     <title>Test</title>
@@ -156,14 +172,8 @@ export class LiquidRenderer extends Renderer {
 
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
   </head>
-  <body>
-    <div class="container-fluid">
-      <form>
 `
     private static PAGE_FOOTER = `
-      </form>
-    </div>
-  </body>
 </html>
 `
     constructor() {
@@ -175,6 +185,7 @@ export class LiquidRenderer extends Renderer {
      * All known renderers for widgets
      */
     private _widgetRenderers : { [widgetType : string]: WidgetRenderer} = {
+        "body" : renderBody,
         "button" : renderButton,
         "column" : renderColumn,
         "embedded-html" : renderHtml,
@@ -189,7 +200,7 @@ export class LiquidRenderer extends Renderer {
     /**
      * Renders a single widget
      */
-    renderWidget(wid : WidgetBase) : string {
+    renderWidget(wid : Widget) : string {
         const renderer = this._widgetRenderers[wid.type];
         if (!renderer) {
             throw new Error(`No LiquidRenderer for ${wid.type}`);
@@ -197,19 +208,9 @@ export class LiquidRenderer extends Renderer {
             return (renderer(wid, (w) => this.renderWidget(w) ));
         }        
     }
-
-    /**
-     * Render the body of a whole page.
-     */
-    renderBody(rows : WidgetBase[]) : string {
-        return (rows
-                .map(r => this.renderWidget(r))
-                .join(""));
-    }
-    
     
     protected renderImpl(page : Page) : string {
-        const body = this.renderBody(page.children);
+        const body = this.renderWidget(page.body);
         return (`${LiquidRenderer.PAGE_HEADER}\n` +
                 `${body}\n` +
                 `${LiquidRenderer.PAGE_FOOTER}\n`);

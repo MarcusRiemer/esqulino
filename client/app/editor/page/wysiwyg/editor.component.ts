@@ -5,7 +5,6 @@ import {ProjectService, Project}        from '../../project.service'
 import {PageService, Page}              from '../../page.service'
 import {PreferencesService}             from '../../preferences.service'
 import {SidebarService}                 from '../../sidebar.service'
-import {RegistrationService}            from '../../registration.service'
 import {ToolbarService}                 from '../../toolbar.service'
 
 import {PageEditor}                     from '../page-editor'
@@ -23,12 +22,9 @@ export class PageVisualEditorComponent extends PageEditor {
         toolbarService: ToolbarService,
         routeParams: ActivatedRoute,
         sidebarService : SidebarService,
-        preferences : PreferencesService,
-        registrationService : RegistrationService
+        preferences : PreferencesService
     ) {
         super(projectService, pageService, toolbarService,
-              routeParams, sidebarService, preferences,
-              registrationService);
+              routeParams, sidebarService, preferences);
     }
 }
-

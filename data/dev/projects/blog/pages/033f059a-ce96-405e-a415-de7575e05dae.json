@@ -1,6 +1,6 @@
 {
   "name": "Hauptseite",
-  "apiVersion": "2",
+  "apiVersion": "3",
   "referencedQueries": [
     {
       "type": "query",
@@ -9,26 +9,29 @@
       "mapping": []
     }
   ],
-  "widgets": [
-    {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "heading",
-              "level": 1,
-              "text": "Mein Blog!"
-            },
-            {
-              "type": "embedded-html",
-              "html": "{% for artikel in query.artikel_alle %}\n<div>\n  <h2>\n    <a href=\"/Artikel?id={{artikel.article_id}}\">\n      {{ artikel.caption }}\n    </a>\n  </h2>\n  <p>{{ artikel.text }}</p>\n</div>\n{% endfor %}"
-            }
-          ],
-          "type": "column"
-        }
-      ],
-      "type": "row"
-    }
-  ]
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "columns": [
+          {
+            "width": 12,
+            "widgets": [
+              {
+                "type": "heading",
+                "level": 1,
+                "text": "Mein Blog!"
+              },
+              {
+                "type": "embedded-html",
+                "html": "{% for artikel in query.artikel_alle %}\n<div>\n  <h2>\n    <a href=\"/Artikel?id={{artikel.article_id}}\">\n      {{ artikel.caption }}\n    </a>\n  </h2>\n  <p>{{ artikel.text }}</p>\n</div>\n{% endfor %}"
+              }
+            ],
+            "type": "column"
+          }
+        ],
+        "type": "row"
+      }
+    ]
+  }
 }

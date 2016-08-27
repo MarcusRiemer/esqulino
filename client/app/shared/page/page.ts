@@ -20,6 +20,7 @@ import {
 } from './value-reference'
 
 import {Row}                                  from './widgets/row'
+import {Body, BodyDescription}                from './widgets/body'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
 import {
     WidgetBase, ParametrizedWidget, UserInputWidget
@@ -39,8 +40,8 @@ export {
 /**
  * The in-memory representation of a page.
  */
-export class Page extends ProjectResource implements WidgetHost {
-    private _widgets : WidgetBase[] = [];
+export class Page extends ProjectResource {
+    private _body : Body;
     private _referencedQueries : QueryReference[] = [];
     private _parameters : PageParameter[] = [];
     private _renderer : Renderer;
@@ -52,8 +53,10 @@ export class Page extends ProjectResource implements WidgetHost {
         this._renderer = new LiquidRenderer();
 
         // Map descriptions of widgets to actual representations
-        if (desc.widgets) {
-            this._widgets = desc.widgets.map((desc, i) => loadWidget(desc, this));
+        if (desc.body) {
+            this._body = new Body(desc.body, this);
+        } else {
+            this._body = new Body(Body.emptyDescription, this);
         }
 
         // Resolve referenced queries
@@ -68,13 +71,6 @@ export class Page extends ProjectResource implements WidgetHost {
     }
 
     /**
-     * @return This page, used to end recursion for `WidgetHost`s
-     */
-    get page() {
-        return (this);
-    }
-
-    /**
      * @return A renderer that can be used to render this page
      */
     get renderer() {
@@ -82,7 +78,16 @@ export class Page extends ProjectResource implements WidgetHost {
     }
 
     /**
+     * @return The representation HTML <body>
+     */
+    get body() {
+        return (this._body);
+    }
+
+    /**
      * Adds a new row with a default column that spans over the whole row.
+     *
+     * TODO: This assumes there are only rows, nothing else.
      * 
      * @index The index to insert the row at, 0 is the very beginning
      */
@@ -92,37 +97,42 @@ export class Page extends ProjectResource implements WidgetHost {
 
     /**
      * Adds a new row according to the given specification.
+     *
+     * TODO: This assumes there are only rows, nothing else.
      * 
      * @index The index to insert the row at, 0 is the very beginning
      */
     addRow(index : number, newRowDesc : RowDescription) {
-        const newRow = new Row(newRowDesc, this);
-        this._widgets.splice(index, 0, newRow);
+        const newRow = new Row(newRowDesc, this.body);
+        this.body.children.splice(index, 0, newRow);
+        this.markSaveRequired();
     }
 
     /**
      * Retrieves a row by the child index on this page. This method ensures
      * the thing returned is actually a row.
+     *
+     * TODO: This assumes there are only rows, nothing else.
      */
     getRow(rowIndex : number) : Row {
         // Ensure valid row index
-        if (rowIndex >= this._widgets.length) {
-            throw new Error(`Retrieving row exceeds row count (given: ${rowIndex}, length ${this._widgets.length}`);
+        if (rowIndex >= this.body.children.length) {
+            throw new Error(`Retrieving row exceeds row count (given: ${rowIndex}, length ${this.body.children.length}`);
         }
 
         // Ensure it is a row
-        if (!(this._widgets[rowIndex] instanceof Row)) {
-            throw new Error(`Parent widget #${rowIndex} is not a row, but a ${this._widgets[rowIndex].type}`);
+        if (!(this.body.children[rowIndex] instanceof Row)) {
+            throw new Error(`Parent widget #${rowIndex} is not a row, but a ${this.body.children[rowIndex].type}`);
         }
 
-        return (this._widgets[rowIndex] as Row);
+        return (this.body.children[rowIndex] as Row);
     }
 
     /**
      * Removes the given row.
      */
     removeRow(row : Row) {
-        const index = this._widgets.indexOf(row);
+        const index = this.body.children.indexOf(row);
         if (index >= 0) {
             this.removeRowByIndex(index);
         } else {
@@ -132,20 +142,14 @@ export class Page extends ProjectResource implements WidgetHost {
 
     /**
      * Removes the given row.
+     * TODO: This assumes there are only rows, nothing else.
      */
     removeRowByIndex(rowIndex : number) {
-        if (rowIndex >= 0 && rowIndex < this._widgets.length) {
-            this._widgets.splice(rowIndex, 1);
+        if (rowIndex >= 0 && rowIndex < this.body.children.length) {
+            this.body.children.splice(rowIndex, 1);
         } else {
             throw new Error(`Attempted to remove invalid row index ${rowIndex}`);
         }
-    }
-
-    /**
-     * Accepts everything per default.
-     */
-    acceptsWidget(desc : WidgetDescription) : boolean {
-        return (true);
     }
 
     /**
@@ -155,17 +159,19 @@ export class Page extends ProjectResource implements WidgetHost {
      * @return The instantiated widget
      */
     addWidget(desc : WidgetDescription, index : number) : Widget {
-        if (!this.acceptsWidget(desc)) {
+        if (!this.body.acceptsWidget(desc)) {
             throw new Error(`Cant place ${desc.type} on page`);
         }
 
         // Ensure widget index at least touches the current array
-        if (index != 0 && index > this.children.length) {
-            throw new Error(`Adding Widget ("${JSON.stringify(desc)}") exceeds widget count (given: ${index}, length ${this.children.length}`);
+        if (index != 0 && index > this.body.children.length) {
+            throw new Error(`Adding Widget ("${JSON.stringify(desc)}") exceeds widget count (given: ${index}, length ${this.body.children.length}`);
         }
 
-        const widget = loadWidget(desc, this);
-        this.children.splice(index, 0, widget);
+        const widget = loadWidget(desc, this.body);
+        this.body.children.splice(index, 0, widget);
+
+        this.markSaveRequired();
 
         return (widget);
     }
@@ -199,17 +205,17 @@ export class Page extends ProjectResource implements WidgetHost {
      */
     removeWidgetByIndex(rowIndex : number, columnIndex : number, widgetIndex : number) {
         // Ensure valid row index
-        if (rowIndex >= this._widgets.length) {
-            throw new Error(`Removing widget exceeds row count (given: ${rowIndex}, length ${this._widgets.length}`);
+        if (rowIndex >= this.body.widgets.length) {
+            throw new Error(`Removing widget exceeds row count (given: ${rowIndex}, length ${this.body.widgets.length}`);
         }
 
         // Ensure it is a row
-        if (!(this._widgets[rowIndex] instanceof Row)) {
-            throw new Error(`Parent widget #${rowIndex} is not a row, but a ${this._widgets[rowIndex].type}`);
+        if (!(this.body.widgets[rowIndex] instanceof Row)) {
+            throw new Error(`Parent widget #${rowIndex} is not a row, but a ${this.body.widgets[rowIndex].type}`);
         }
 
         // Ensure column index
-        const row = this._widgets[rowIndex] as Row;
+        const row = this.body.widgets[rowIndex] as Row;
         if (columnIndex >= row.children.length) {
             throw new Error(`Removing widget exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.children.length}`);
         }
@@ -224,7 +230,7 @@ export class Page extends ProjectResource implements WidgetHost {
      * Removes a specific widget.
      */
     removeWidget(widgetRef : Widget, recursive : boolean) {
-        const index = this.children.findIndex(rhs => widgetRef === rhs);
+        const index = this.body.children.findIndex(rhs => widgetRef === rhs);
         if (index >= 0) {
             // Immediatly found, what a success
             this.removeChildByIndex(index);
@@ -363,8 +369,8 @@ export class Page extends ProjectResource implements WidgetHost {
     /**
      * @return All immediate children of the page itself.
      */
-    get children() : WidgetBase[] {
-        return (this._widgets);
+    get children() : Widget[] {
+        return (this.body.children);
     }
 
     /**
@@ -397,7 +403,7 @@ export class Page extends ProjectResource implements WidgetHost {
         }
 
         // Flattens the top level
-        return ([].concat(...impl(this.children)));
+        return ([].concat(...impl(this.body.children)));
     }
 
     /**
@@ -435,8 +441,8 @@ export class Page extends ProjectResource implements WidgetHost {
             toReturn.referencedQueries = this._referencedQueries.map(r => r.toModel());
         }
 
-        if (this._widgets.length > 0) {
-            toReturn.widgets = this._widgets.map(r => r.toModel());
+        if (this.body.children.length > 0) {
+            toReturn.body = this.body.toModel() as BodyDescription;
         }
 
         if (this._parameters.length > 0) {

@@ -1,6 +1,6 @@
 {
   "name": "kapitel_optionen",
-  "apiVersion": "2",
+  "apiVersion": "3",
   "from": {
     "first": {
       "name": "next_chapter"

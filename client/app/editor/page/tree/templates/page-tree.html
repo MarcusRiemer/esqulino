@@ -5,10 +5,10 @@
       In diesem Editor kannst du den Seitenbaum inklusive aller unsichtbaren Elemente bearbeiten.
     </p>
   </div>
-  <div class="card-block">
+  <div *ngIf="page"
+       class="card-block">
     <div class="page-preview">
-      <esqulino-node-widget-loader *ngFor="let child of page.children"
-                                   [model]="child">
+      <esqulino-node-widget-loader [model]="page.body">
       </esqulino-node-widget-loader>
     </div>
   </div>

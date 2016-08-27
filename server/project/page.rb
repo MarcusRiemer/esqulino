@@ -72,7 +72,7 @@ class Page
     filtered_model = @model.dup.tap { |m| m.delete "id" }
 
     File.open(page_file_path, "w") do |f|
-      f.write(filtered_model.to_json)
+      f.write(JSON.pretty_generate filtered_model)
     end
 
     # Deleting everything that is not the model

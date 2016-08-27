@@ -1,6 +1,6 @@
 {
   "name": "kapitel_einzeln",
-  "apiVersion": "2",
+  "apiVersion": "3",
   "singleRow": true,
   "from": {
     "first": {

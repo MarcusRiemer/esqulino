@@ -4,6 +4,6 @@ description: Zeige deinen Freunden, welche Pokémon du gefangen hast!
 id: pokemongo
 indexPageId: b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b
 preview: pokemongo-logo.png
-apiVersion: '2'
+apiVersion: '3'
 users:
   user: 4000$8$1$26916c8e914dfe7c89b05dcabb4a8e426be8c2152bf503950c885d0de0f139d6$3069dfcacb9ceb1149cfeaae27ae5516f19d5058cdab82b396320286dce815f3

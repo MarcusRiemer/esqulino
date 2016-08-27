@@ -97,8 +97,43 @@ class Migrate1to2 < Migrator
   end
 end
 
+# Migrates from API version 1 to 2. This version changed to page model:
+# 
+# Pages now use an explicit `body` which hosts all visual children.
+class Migrate2to3 < Migrator
+  def initialize
+    super(2,3)
+  end
+
+  # No change
+  def migrate_project_impl(model)
+  end
+
+  # No change
+  def migrate_query_impl(model)
+  end
+
+  # Renaming: 'rows' => 'widgets'
+  def migrate_page_impl(model)
+    # Grab all widgets that currently exist and put them in a new
+    # body object.
+    widgets = model['widgets']
+    body = {
+      :type => "body",
+      :children => widgets
+    }
+    
+    # Rename the root element
+    model['body'] = body
+    model.delete('widgets')
+    
+    bump_version(model)
+  end
+end
+
 $migrators = {
-  1 => Migrate1to2.new
+  1 => Migrate1to2.new,
+  2 => Migrate2to3.new
 }
 
 # Migrates the given project

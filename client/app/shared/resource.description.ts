@@ -2,12 +2,12 @@
  * It would be nicer if versions could be numbers, but Typescript has no
  * concept of union types for numbers.
  */
-export type ApiVersionToken = "1" | "2";
+export type ApiVersionToken = "1" | "2" | "3";
 
 /**
  * The version this state of the client is currently using.
  */
-export const CURRENT_API_VERSION : ApiVersionToken = "2";
+export const CURRENT_API_VERSION : ApiVersionToken = "3";
 
 /**
  * esqulinos data format carries an explicit, global version instead

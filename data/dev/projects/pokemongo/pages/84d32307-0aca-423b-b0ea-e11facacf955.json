@@ -1,6 +1,6 @@
 {
   "name": "Gefangen_Einzeln",
-  "apiVersion": "2",
+  "apiVersion": "3",
   "referencedQueries": [
     {
       "type": "query",
@@ -14,26 +14,29 @@
       ]
     }
   ],
-  "widgets": [
-    {
-      "type": "paragraph",
-      "text": "Hier stelle ich mein Pokemon mit der ID {{ get.id }} vor: {{ query.pokemon.spitzname }}"
-    },
-    {
-      "type": "link",
-      "text": "Zurück zur Hauptseite",
-      "action": {
-        "type": "navigate",
-        "internal": {
-          "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
-          "parameters": []
-        }
-      }
-    }
-  ],
   "parameters": [
     {
       "name": "id"
     }
-  ]
+  ],
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "type": "paragraph",
+        "text": "Hier stelle ich mein Pokemon mit der ID {{ get.id }} vor: {{ query.pokemon.spitzname }}"
+      },
+      {
+        "type": "link",
+        "text": "Zurück zur Hauptseite",
+        "action": {
+          "type": "navigate",
+          "internal": {
+            "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
+            "parameters": []
+          }
+        }
+      }
+    ]
+  }
 }
