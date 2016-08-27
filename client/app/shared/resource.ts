@@ -1,4 +1,5 @@
 import {Subject}                              from 'rxjs/Subject'
+import {BehaviorSubject}                      from 'rxjs/BehaviorSubject'
 import {Observable}                           from 'rxjs/Observable'
 
 import {
@@ -26,15 +27,18 @@ export abstract class ProjectResource implements ApiVersion, Saveable {
     private _name : string;
     private _project : Project;
 
+    // Does this resource require saving?
+    private _saveRequired = false;
+
     // Fired when this resource experiences some kind of change
     // that requires the UI to be refreshed.
     private _invalidateEvent = new Subject<ProjectResource>();
-
-    // Fired when the save-state has changed
-    private _saveStateChangedEvent = new Subject<SaveStateEvent<ProjectResource>>();
     
-    // Does this resource require saving?
-    private _saveRequired = false;
+    // Fired when the save-state has changed
+    private _saveStateChangedEvent = new BehaviorSubject<SaveStateEvent<ProjectResource>>({
+        resource : this,
+        saveRequired : this._saveRequired
+    });
 
     constructor(project : Project, desc : ProjectResourceDescription) {
         this._id = desc.id;

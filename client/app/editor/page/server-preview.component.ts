@@ -25,7 +25,7 @@ import {Project}                              from '../project.service'
 export class ServerPreviewComponent {
     @Input() page : Page;
     @Input() project : Project;
-    @Input() isRendering : boolean = true;
+    @Input() showPreview : boolean;
 
     /**
      * The different values the user has entered so far.
@@ -48,6 +48,41 @@ export class ServerPreviewComponent {
         private _elementRef : ElementRef,
         private _cd: ChangeDetectorRef
     ) {
+    }
+
+    /**
+     * The user has decided to hide the preview
+     */
+    doClose() {
+        this.showPreview = false;
+    }
+
+    /**
+     * The user has decided to view the preview in a dedicated window.
+     */
+    onNavigateFullPreview(event : MouseEvent) {
+        // Is the client state different from the server state? If that is the case
+        // the user would be surprised by a very different page.
+        if (this.page.isSavingRequired) {
+            // Ask the user whether he wants to save?
+            if (confirm("Damit die Seite in einem neuen Tab korrekt angezeigt wird, muss sie gespeichert werden. Jetzt Speichern?")) {
+
+                // He wants to! Delay the navigation until the page has been saved.
+                event.preventDefault();
+                this._pageService.savePage(this.project, this.page)
+                    .first()
+                    .subscribe(_ => {
+                        const win = window.open(this.viewUrl, '_blank');
+                        win.focus();
+
+                        // Sync the inline preview
+                        this.refresh();
+                    });
+            }
+        } else {
+            // Sync the inline preview immediatly
+            this.refresh();
+        }
     }
 
     /**
@@ -90,7 +125,8 @@ export class ServerPreviewComponent {
      */
     get viewUrl() : string {
         // TODO: Find out whether it would be more or less trivially
-        //       possible to support HTTPs
+        //       possible to support HTTPs for all those user-generated
+        //       subdomains.
         let url = this.useSobdomain 
             ? `http://${this.project.id}.${this.hostname}/${this.page.name}`
             : `/view/${this.project.id}/${this.page.name}`;
@@ -164,6 +200,7 @@ export class ServerPreviewComponent {
      */
     refresh() : Observable<boolean> {
         this._renderPreview = undefined;
+        this.showPreview = true;
         this._cd.markForCheck();
         
         const toReturn = new Subject<boolean>();
