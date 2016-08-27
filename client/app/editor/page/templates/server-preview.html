@@ -1,8 +1,14 @@
-<div *ngIf="isRendering"
+<div *ngIf="showPreview"
      class="card">
   <div class="card-block">
     <h4 class="card-title">
-      <button (click)="refreshHeight(0)"
+      <button (click)="doClose()"
+              type="button"
+              class="close pull-right"
+              aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <button (click)="refreshHeight()"
               class="btn btn-primary pull-right">
         <span class="fa fa-bug"></span> Höhe anpassen
       </button>
@@ -10,8 +16,8 @@
       <small *ngIf="parametersRequired">(Parameter erforderlich)</small>
     </h4>
     <p class="card-text">
-      So wird die Seite für einen Besucher <em>ungefähr</em> aussehen.
-      <span>
+      So wird die Seite für einen Besucher <em>ungefähr</em> aussehen. Links und Knöpfe werden allerdings <em>nicht funktionieren</em>, benutze den angezeigten Link zu deiner Seite wenn du sie benutzen möchtest. 
+      <span *ngIf="parametersRequired">
         Da diese Seite ohne Eingaben vom Benutzer nicht funktioniert, musst du hier testweise Werte eingeben wenn du sie ausprobieren möchtest.
       </span>
     </p>
@@ -33,12 +39,14 @@
     </div>
 
     <!-- Showing the link that would result out of the current parameters -->
-    <a target="_blank"
-       href="{{ viewUrl }}">
-      <h5>
-        <span class="fa fa-globe fa-fw"></span>{{ viewUrl }}
-      </h5>
-    </a>
+    <h5>
+    <a (click)="onNavigateFullPreview($event)"
+       target="_blank"
+       href="{{ viewUrl }}"><span class="fa fa-globe fa-fw"></span>{{ viewUrl }}</a>
+    <small *ngIf="(page.saveStateChanged | async ).saveRequired">
+      (Speichern erforderlich!)
+    </small>
+    </h5>
 
     <div [hidden]="!hasRenderPreview">
       <iframe width="100%">
