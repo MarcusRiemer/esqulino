@@ -10,7 +10,7 @@ import {
 export {RowDescription}
 
 /**
- * Rows are the top-level element of most pages.
+ * Rows can host columns and nothing else.
  */
 export class Row extends HostingWidget {
     private _columns : Column[];

@@ -1,6 +1,6 @@
 {
   "name": "artikel_kommentare",
-  "apiVersion": "2",
+  "apiVersion": "3",
   "from": {
     "first": {
       "name": "article"

@@ -8,7 +8,7 @@ import {Observable}                              from 'rxjs/Observable'
 import {ServerApiService}                        from '../shared/serverapi.service'
 import {KeyValuePairs, encodeUriParameters}      from '../shared/util'
 import {
-    Page, PageDescription, Row, CURRENT_API_VERSION
+    Page, PageDescription, Body, CURRENT_API_VERSION
 } from '../shared/page/index'
 
 import {QueryParamsDescription}                  from './query.service'
@@ -139,7 +139,7 @@ export class PageService {
             name : name,
             apiVersion : CURRENT_API_VERSION,
             referencedQueries : [],
-            widgets : [Row.emptyDescription]
+            body : Body.emptyDescription
         }, project);
 
         return (this.savePage(project, page));

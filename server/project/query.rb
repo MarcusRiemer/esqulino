@@ -84,7 +84,7 @@ class Query
     # part of the model itself
     filtered_model = @model.dup.tap { |m| m.delete "id" }
     File.open(query_file_path, "w") do |f|
-      f.write(filtered_model.to_json)
+      f.write(JSON.pretty_generate filtered_model)
     end
   end
 

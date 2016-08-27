@@ -18,6 +18,7 @@ import {
     QueryActionDescription
 } from './action'
 
+import {Body, BodyDescription}                 from './body'
 import {Button, ButtonDescription}             from './button'
 import {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
 import {Heading, HeadingDescription}           from './heading'
@@ -33,6 +34,7 @@ export {
     Column, ColumnDescription,
     QueryAction,
     QueryActionDescription, ParameterMappingDescription,
+    Body, BodyDescription,
     Button, ButtonDescription,
     EmbeddedHtml, EmbeddedHtmlDescription,
     Paragraph, ParagraphDescription,

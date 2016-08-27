@@ -39,11 +39,8 @@
             "type": "string"
         },
         "apiVersion": {
-            "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with.",
-            "type": "string",
-            "enum": [
-                "2"
-            ]
+            "$ref": "#/definitions/ApiVersionToken",
+            "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with."
         }
     },
     "additionalProperties": false,
@@ -121,11 +118,8 @@
                     "type": "string"
                 },
                 "apiVersion": {
-                    "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with.",
-                    "type": "string",
-                    "enum": [
-                        "1"
-                    ]
+                    "$ref": "#/definitions/ApiVersionToken",
+                    "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with."
                 }
             },
             "additionalProperties": false
@@ -426,16 +420,21 @@
                 "OR"
             ]
         },
+        "ApiVersionToken": {
+            "description": "It would be nicer if versions could be numbers, but Typescript has no\n\nconcept of union types for numbers.",
+            "type": "string",
+            "enum": [
+                "1",
+                "2",
+                "3"
+            ]
+        },
         "PageDescription": {
             "type": "object",
             "properties": {
-                "rows": {
-                    "description": "Rows are the top-level element for the whole layout,\n\nfor the moment no other type of widget is expected.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/RowDescription",
-                        "description": "Describes a row that can host certain cells."
-                    }
+                "body": {
+                    "$ref": "#/definitions/BodyDescription",
+                    "description": "The host for all widgets that are part of this page."
                 },
                 "referencedQueries": {
                     "description": "IDs of queries that are referenced in this page. Only\n\nthese queries provide additional DB information that can\n\nbe used on this page.",
@@ -462,27 +461,41 @@
                     "type": "string"
                 },
                 "apiVersion": {
-                    "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with.",
-                    "type": "string",
-                    "enum": [
-                        "1"
-                    ]
+                    "$ref": "#/definitions/ApiVersionToken",
+                    "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with."
                 }
             },
             "additionalProperties": false
         },
-        "RowDescription": {
+        "BodyDescription": {
+            "description": "The body of an HTML page, will only appear once in a page.",
             "type": "object",
             "properties": {
-                "columns": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "body"
+                    ]
+                },
+                "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/ColumnDescription",
-                        "description": "Describes a column that can host certain widgets"
+                        "$ref": "#/definitions/WidgetDescription",
+                        "description": "A widget **requires** at least a type, all other fields are\n\nmandated by deriving descriptions. As we don't necesarily\n\nknow all deriving classes at compile time (they could be\n\nprovided by a plugin) we poke a hole in the type system\n\nhere.\n\n\n\nThe following annotion is required to allow additional\n\nproperties in the automatically generated JSON schema, see\n\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
+                        "additionalProperties": true
                     }
                 }
             },
             "additionalProperties": false
+        },
+        "WidgetDescription": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true
         },
         "QueryReferenceDescription": {
             "type": "object",

@@ -60,6 +60,6 @@ export function loadWidget(desc : WidgetDescription, parent : WidgetHost) : Widg
     } catch (e) {
         console.log("Loaded widget without page", widget);
     }
-    
+
     return (widget);
 }

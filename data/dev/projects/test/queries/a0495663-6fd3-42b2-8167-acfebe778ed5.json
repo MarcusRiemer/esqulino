@@ -1,6 +1,6 @@
 {
   "name": "kv_single",
-  "apiVersion": "2",
+  "apiVersion": "3",
   "singleRow": true,
   "from": {
     "first": {

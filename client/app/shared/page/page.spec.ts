@@ -22,41 +22,45 @@ const singleRowPage : PageDescription = {
     id : "testpage",
     name : "Serialization test",
     apiVersion : CURRENT_API_VERSION,
-    widgets : [
-        {
-            type : "row",
-            columns : [
-                {
-                    type : "column",
-                    width : 1,
-                    widgets : [
-                            <ParagraphDescription>{
-                                type : "paragraph",
-                                text : "1.1"
-                            },
-                            <ParagraphDescription>{
-                                type : "paragraph",
-                                text : "1.1"
-                            }
-                    ]
-                },
-                {
-                    type : "column",
-                    width : 2,
-                    widgets : [
-                            <ParagraphDescription>{
-                                type : "paragraph",
-                                text : "2.1"
-                            },
-                            <ParagraphDescription>{
-                                type : "paragraph",
-                                text : "2.1"
-                            }
-                    ]
-                }
-            ]
-        }
-    ]
+    body : {
+        type : "body",
+        children : 
+        [
+            {
+                type : "row",
+                columns : [
+                    {
+                        type : "column",
+                        width : 1,
+                        widgets : [
+                                <ParagraphDescription>{
+                                    type : "paragraph",
+                                    text : "1.1"
+                                },
+                                <ParagraphDescription>{
+                                    type : "paragraph",
+                                    text : "1.1"
+                                }
+                        ]
+                    },
+                    {
+                        type : "column",
+                        width : 2,
+                        widgets : [
+                                <ParagraphDescription>{
+                                    type : "paragraph",
+                                    text : "2.1"
+                                },
+                                <ParagraphDescription>{
+                                    type : "paragraph",
+                                    text : "2.1"
+                                }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
 };
 
 /**
@@ -82,7 +86,7 @@ describe('Page', () => {
         const allWidgets = p.allWidgets;
 
         // We know better then the type-system that this must be a row
-        const firstRow = (m.widgets[0] as RowDescription);
+        const firstRow = (m.body.children[0] as RowDescription);
 
         expect(allWidgets[0].toModel()).toEqual(firstRow.columns[0].widgets[0]);
         expect(allWidgets[1].toModel()).toEqual(firstRow.columns[0].widgets[1]);

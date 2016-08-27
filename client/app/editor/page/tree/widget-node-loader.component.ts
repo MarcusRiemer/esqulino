@@ -1,6 +1,6 @@
 import {
-    Component, Input, OnInit,
-    Injector, DynamicComponentLoader,
+    Component, Input, OnInit, OnChanges, SimpleChanges,
+    Injector, DynamicComponentLoader, ComponentRef,
     ViewChild, ViewContainerRef, ComponentFactoryResolver,
     Type, provide, ReflectiveInjector
 } from '@angular/core'
@@ -24,7 +24,7 @@ import * as Tree                          from './widgets/index'
                </div>`,
     selector : "esqulino-node-widget-loader"
 })
-export class WidgetNodeLoaderComponent implements OnInit {
+export class WidgetNodeLoaderComponent implements OnChanges {
     /**
      * The widget that requires an editor representation.
      */
@@ -37,6 +37,8 @@ export class WidgetNodeLoaderComponent implements OnInit {
     private _typeMapping : { [typeName:string] : any} = {}
 
     private _isLoading = true;
+
+    private _childRef : ComponentRef<{}> = undefined;
 
     constructor(
         private _injector: Injector,
@@ -69,12 +71,23 @@ export class WidgetNodeLoaderComponent implements OnInit {
         }
     }
 
-
+    /**
+     * Some binding has changed.
+     */
+    ngOnChanges(changes: SimpleChanges) {
+        if ("model" in changes) {
+            this.refreshChildComponent();
+        }
+    }
 
     /**
-     * Dynamically loads the required components.
+     * Dynamically loads the required component.
      */
-    ngOnInit() {        
+    refreshChildComponent() {
+        if (this._childRef) {
+            this._childRef.destroy();
+        }
+        
         console.log(`Resolving tree widget type "${this.model.type}"`);
         const componentType = this.getComponentType(this.model.type);
         
@@ -84,7 +97,7 @@ export class WidgetNodeLoaderComponent implements OnInit {
         ],this._injector);
         
         const fac = this._resolver.resolveComponentFactory(componentType)
-        this.viewRoot.createComponent(fac, 0, injector);
+        this._childRef = this.viewRoot.createComponent(fac, 0, injector);
         this._isLoading = false;
     }
 }

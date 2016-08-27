@@ -88,7 +88,7 @@ export interface WidgetHost {
  * @return True if the given thing is an instance of WidgetHost
  */
 export function isWidgetHost(obj : any): obj is WidgetHost {
-    return ("children" in obj);
+    return (obj instanceof Object && "children" in obj);
 }
 
 /**

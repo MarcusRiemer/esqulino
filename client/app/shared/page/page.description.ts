@@ -146,6 +146,14 @@ export interface RowDescription extends WidgetDescription {
 }
 
 /**
+ * The body of an HTML page, will only appear once in a page.
+ */
+export interface BodyDescription extends WidgetDescription {
+    type : "body"
+    children : WidgetDescription[]
+}
+
+/**
  * A widget **requires** at least a type, all other fields are
  * mandated by deriving descriptions. As we don't necesarily
  * know all deriving classes at compile time (they could be
@@ -219,9 +227,9 @@ export interface PageParameterDescription {
  */
 export interface PageDescription extends ProjectResourceDescription {
     /**
-     * All widgets that are part of this page
+     * The host for all widgets that are part of this page.
      */
-    widgets? : WidgetDescription[]
+    body? : BodyDescription
 
     /**
      * IDs of queries that are referenced in this page. Only

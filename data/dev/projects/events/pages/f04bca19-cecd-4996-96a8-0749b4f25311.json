@@ -17,108 +17,111 @@
       "queryId": "e657b03b-9525-41ff-b32d-dfeb528e98c8"
     }
   ],
-  "apiVersion": "2",
-  "widgets": [
-    {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "heading",
-              "level": 1,
-              "text": "Historische Personen und Ereignisse"
-            },
-            {
-              "type": "paragraph",
-              "text": "Auf dieser Seite lassen sich die zeitlichen Zusammenhänge von historischen Persönlichkeiten und Ereignissen darstellen."
-            }
-          ],
-          "type": "column"
-        }
-      ],
-      "type": "row"
-    },
-    {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "heading",
-              "level": 2,
-              "text": "Alle Personen"
-            },
-            {
-              "type": "paragraph",
-              "text": "Diese Personen sind in der Datenbank hinterlegt."
-            },
-            {
-              "type": "query-table",
-              "queryRefName": "p_alle",
-              "columns": [
-                "nachname",
-                "vorname",
-                "geb_jahr",
-                "tod_jahr"
-              ]
-            }
-          ],
-          "type": "column"
-        }
-      ],
-      "type": "row"
-    },
-    {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "heading",
-              "level": 2,
-              "text": "Alle Ereignisse"
-            },
-            {
-              "type": "query-table",
-              "queryRefName": "e_alle",
-              "columns": [
-                "bezeichnung",
-                "beginn_jahr",
-                "ende_jahr"
-              ]
-            }
-          ],
-          "type": "column"
-        }
-      ],
-      "type": "row"
-    },
-    {
-      "columns": [
-        {
-          "width": 12,
-          "widgets": [
-            {
-              "type": "heading",
-              "level": 2,
-              "text": "Erlebte Ereignisse"
-            },
-            {
-              "type": "query-table",
-              "queryRefName": "erlebt",
-              "columns": [
-                "nachname",
-                "bezeichnung",
-                "beginn_jahr",
-                "ende_jahr"
-              ]
-            }
-          ],
-          "type": "column"
-        }
-      ],
-      "type": "row"
-    }
-  ]
+  "apiVersion": "3",
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "columns": [
+          {
+            "width": 12,
+            "widgets": [
+              {
+                "type": "heading",
+                "level": 1,
+                "text": "Historische Personen und Ereignisse"
+              },
+              {
+                "type": "paragraph",
+                "text": "Auf dieser Seite lassen sich die zeitlichen Zusammenhänge von historischen Persönlichkeiten und Ereignissen darstellen."
+              }
+            ],
+            "type": "column"
+          }
+        ],
+        "type": "row"
+      },
+      {
+        "columns": [
+          {
+            "width": 12,
+            "widgets": [
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Alle Personen"
+              },
+              {
+                "type": "paragraph",
+                "text": "Diese Personen sind in der Datenbank hinterlegt."
+              },
+              {
+                "type": "query-table",
+                "queryRefName": "p_alle",
+                "columns": [
+                  "nachname",
+                  "vorname",
+                  "geb_jahr",
+                  "tod_jahr"
+                ]
+              }
+            ],
+            "type": "column"
+          }
+        ],
+        "type": "row"
+      },
+      {
+        "columns": [
+          {
+            "width": 12,
+            "widgets": [
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Alle Ereignisse"
+              },
+              {
+                "type": "query-table",
+                "queryRefName": "e_alle",
+                "columns": [
+                  "bezeichnung",
+                  "beginn_jahr",
+                  "ende_jahr"
+                ]
+              }
+            ],
+            "type": "column"
+          }
+        ],
+        "type": "row"
+      },
+      {
+        "columns": [
+          {
+            "width": 12,
+            "widgets": [
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Erlebte Ereignisse"
+              },
+              {
+                "type": "query-table",
+                "queryRefName": "erlebt",
+                "columns": [
+                  "nachname",
+                  "bezeichnung",
+                  "beginn_jahr",
+                  "ende_jahr"
+                ]
+              }
+            ],
+            "type": "column"
+          }
+        ],
+        "type": "row"
+      }
+    ]
+  }
 }

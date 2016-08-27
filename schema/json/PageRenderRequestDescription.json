@@ -38,14 +38,9 @@
         "PageDescription": {
             "type": "object",
             "properties": {
-                "widgets": {
-                    "description": "All widgets that are part of this page",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/WidgetDescription",
-                        "description": "A widget **requires** at least a type, all other fields are\n\nmandated by deriving descriptions. As we don't necesarily\n\nknow all deriving classes at compile time (they could be\n\nprovided by a plugin) we poke a hole in the type system\n\nhere.\n\n\n\nThe following annotion is required to allow additional\n\nproperties in the automatically generated JSON schema, see\n\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
-                        "additionalProperties": true
-                    }
+                "body": {
+                    "$ref": "#/definitions/BodyDescription",
+                    "description": "The host for all widgets that are part of this page."
                 },
                 "referencedQueries": {
                     "description": "IDs of queries that are referenced in this page. Only\n\nthese queries provide additional DB information that can\n\nbe used on this page.",
@@ -74,6 +69,27 @@
                 "apiVersion": {
                     "$ref": "#/definitions/ApiVersionToken",
                     "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with."
+                }
+            },
+            "additionalProperties": false
+        },
+        "BodyDescription": {
+            "description": "The body of an HTML page, will only appear once in a page.",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "body"
+                    ]
+                },
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/WidgetDescription",
+                        "description": "A widget **requires** at least a type, all other fields are\n\nmandated by deriving descriptions. As we don't necesarily\n\nknow all deriving classes at compile time (they could be\n\nprovided by a plugin) we poke a hole in the type system\n\nhere.\n\n\n\nThe following annotion is required to allow additional\n\nproperties in the automatically generated JSON schema, see\n\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
+                        "additionalProperties": true
+                    }
                 }
             },
             "additionalProperties": false
@@ -138,7 +154,8 @@
             "type": "string",
             "enum": [
                 "1",
-                "2"
+                "2",
+                "3"
             ]
         }
     },

@@ -1,6 +1,6 @@
 {
   "name": "kapitel_alle",
-  "apiVersion": "2",
+  "apiVersion": "3",
   "from": {
     "first": {
       "name": "chapter"
