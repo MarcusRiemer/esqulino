@@ -17,10 +17,11 @@ exports.config = {
   suites: {
     front : ['../dist/client/app/front/*.e2e.js'],
     editorGeneral : ['../dist/client/app/editor/editor.e2e.js'],
-    projectSettings : ['../dist/client/app/editor/settings.e2e.js'],
-    projectSchema : ['../dist/client/app/editor/schema.e2e.js'],
-    queryCreate : ['../dist/client/app/editor/query/create.e2e.js'],
-    pageCreate : ['../dist/client/app/editor/page/create.e2e.js']
+    editorProjectSettings : ['../dist/client/app/editor/settings.e2e.js'],
+    editorProjectSchema : ['../dist/client/app/editor/schema.e2e.js'],
+    editorQueryCreate : ['../dist/client/app/editor/query/create.e2e.js'],
+    editorPageCreate : ['../dist/client/app/editor/page/create.e2e.js'],
+    multiRouting : ['../dist/client/app/e2e/about-editor-flow.js'],
   },
   multiCapabilities: [{
     'browserName': 'chrome'
