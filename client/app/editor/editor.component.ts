@@ -41,7 +41,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     /**
      * Load the project for all sub-components.
      */
-    ngOnInit() {
+    ngOnInit() {       
         this._routeRef = this._routeParams.params.subscribe(params => {
             let projectId = params['projectId'];
             
@@ -54,7 +54,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         });
         
         this._sidebarService.isSidebarVisible.subscribe(v => {
-            // TODO: Causes change-detection-error on change
+            // Fixed?: Causes change-detection-error on change
             // This more or less globally changes the application state,
             // we need to tell the change detector we are aware of this
             // otherwise Angular freaks out:
@@ -69,6 +69,7 @@ export class EditorComponent implements OnInit, OnDestroy {
      */
     ngOnDestroy() {
         this._routeRef.unsubscribe();
+        this._projectService.forgetCurrentProject();
     }
 
     /**

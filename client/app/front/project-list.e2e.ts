@@ -15,7 +15,7 @@ describe('Project List Page', () => {
         
         // Ensure each link points to an editor
         projects.each(item => {
-            let editButton = item.element(by.css('a[name=btn-edit]'));
+            let editButton = item.element(by.css('a.btn-edit-project'));
             expect(editButton.getAttribute("href")).toContain("editor");
         });
     });

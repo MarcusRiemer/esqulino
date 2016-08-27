@@ -49,6 +49,15 @@ export class ProjectService {
     }
 
     /**
+     * Removes the reference to the current project, effectively
+     * requiring a new project to be loaded.
+     */
+    forgetCurrentProject() {
+        this._subject.next(undefined);
+        console.log("Project Service: Told to forget current project");
+    }
+
+    /**
      * @param id The id of the project to set for all subscribers
      */
     setActiveProject(id : string) {
@@ -56,8 +65,12 @@ export class ProjectService {
         if (this._httpRequest) {
             throw { "err" : "HTTP request in progress" };
         }
-        
-        this._httpRequest = this._http.get(this._server.getProjectUrl(id))
+
+        // Clear out the reference to the current project
+        this.forgetCurrentProject();
+
+        const url = this._server.getProjectUrl(id);
+        this._httpRequest = this._http.get(url)
             .catch(this.handleError)
             .map(res => new Project(res.json()));
 
@@ -67,7 +80,7 @@ export class ProjectService {
             // Inform subscribers
             this._subject.next(res)
 
-            console.log("Got project");
+            console.log(`Project Service: HTTP request for specific project ("${url}") finished `);
         });
     }
 
