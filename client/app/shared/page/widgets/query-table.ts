@@ -44,6 +44,15 @@ export class QueryTable extends WidgetBase {
     }
 
     /**
+     * Sets a new referenced query, clearing the previously used
+     * columns as a side effect.
+     */
+    set queryReferenceName(name : string) {
+        this._queryRefName = name;
+        this.useAllColumns();
+    }
+
+    /**
      * @return True, if this query table references any columns
      */
     get hasColumnReferences() {
@@ -131,15 +140,6 @@ export class QueryTable extends WidgetBase {
 
             this.fireModelChange();
         }
-    }
-
-    /**
-     * Sets a new referenced query, clearing the previously used
-     * columns as a side effect.
-     */
-    set queryReferenceName(name : string) {
-        this._queryRefName = name;
-        this.useAllColumns();
     }
 
     protected toModelImpl() : WidgetDescription {

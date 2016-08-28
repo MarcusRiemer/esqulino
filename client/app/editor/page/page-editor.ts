@@ -94,6 +94,7 @@ export class PageEditor implements OnInit, OnDestroy {
             console.log(`Page Editor: PageId changed to ${pageId}`);
             
             this._projectService.activeProject
+                .filter(p => !!p)
                 .first()
                 .subscribe(res => {
                     // Project is loaded, display the correct page to edit

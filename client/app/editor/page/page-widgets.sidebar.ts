@@ -1,6 +1,9 @@
-import {Component, OnInit, OnDestroy}   from '@angular/core'
+import {
+    Component, OnInit, OnDestroy, Inject
+} from '@angular/core'
 import {ActivatedRoute, Router}         from '@angular/router'
 
+import {SIDEBAR_MODEL_TOKEN}            from '../editor.token'
 import {borderCssClass}                 from '../shared/page-preview.util'
 
 import {Page, ParameterMapping}         from '../../shared/page/index'
@@ -24,7 +27,7 @@ import {DragService, PageDragEvent}     from './drag.service'
     templateUrl: 'app/editor/page/templates/sidebar-widgets.html',
     selector : "page-sidebar-widgets",
 })
-export class SidebarWidgetsComponent implements OnInit, OnDestroy {
+export class SidebarWidgetsComponent implements OnDestroy {
     /**
      * This ID is used to register this sidebar with the sidebar loader
      */
@@ -46,34 +49,13 @@ export class SidebarWidgetsComponent implements OnInit, OnDestroy {
     private _subscriptionRefs : any[] = [];
 
     constructor(
+        @Inject(SIDEBAR_MODEL_TOKEN) page : Page,
         private _dragService : DragService,
         private _projectService : ProjectService,
         private _routeParams : ActivatedRoute,
         private _router : Router) {
-    }
-
-    /**
-     * Load the project to access the schema and its pages.
-     */
-    ngOnInit() {
-        // Grab the current project
-        this._projectService.activeProject
-            .first()
-            .subscribe(p => {
-                this._project = p;
-
-                // Grab the correct query id
-                const childRoute = this._router.routerState.firstChild(this._routeParams);
-
-                const routeRef = childRoute.params.subscribe(param => {
-                    const pageId = param['pageId'];
-
-                    // Project is loaded, display the correct  query
-                    this._page = this._project.getPageById(pageId);
-                });
-
-                this._subscriptionRefs.push(routeRef);
-            });
+        this._page = page;
+        this._project = page.project;
     }
 
     /**
@@ -93,27 +75,6 @@ export class SidebarWidgetsComponent implements OnInit, OnDestroy {
      */
     get page() {
         return (this._page);
-    }
-
-    /**
-     * Something has been dragged over the trash
-     */
-    onTrashDrag(evt : DragEvent) {
-        // Indicates we can drop here
-        evt.preventDefault();
-    }
-
-    /**
-     * Something has been dropped in the trash
-     */
-    onTrashDrop(evt : DragEvent) {
-        // Indicates we can drop here
-        evt.preventDefault();
-
-        if (this._dragService.currentDrag.callbacks &&
-            this._dragService.currentDrag.callbacks.onRemove) {
-            this._dragService.currentDrag.callbacks.onRemove();
-        }
     }
 
     /**
@@ -140,15 +101,6 @@ export class SidebarWidgetsComponent implements OnInit, OnDestroy {
                 this._dragService.currentDrag.callbacks.onParameterMapping(param);
             }
         }
-    }
-
-    /**
-     * View Variabe: True, if the trash shouldn't be shown. This
-     *               inversion is useful to bind to the `hidden`
-     *               DOM property.
-     */
-    get hideTrash() {
-        return (!(this._dragService.activeOrigin == "page"));
     }
 
     /**

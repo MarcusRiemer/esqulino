@@ -2,6 +2,8 @@ import {Subject}                from 'rxjs/Subject'
 
 import {Injectable}             from '@angular/core'
 
+import {TrashService}           from '../shared/trash.service'
+
 import {
     Column, Row, RowDescription, WidgetDescription, WidgetBase, WidgetHost, 
     QueryReferenceDescription, ValueReferenceDescription, ColumnReferenceDescription
@@ -77,6 +79,10 @@ export class DragService {
 
     private _currentDrag : PageDragEvent;
 
+    constructor(private _trashService : TrashService) {
+
+    }
+    
     /**
      * Starts a drag operation for the given scope.
      *
@@ -97,6 +103,13 @@ export class DragService {
         // for undefined values.
         if (!this._currentDrag.callbacks) {
             this._currentDrag.callbacks = {}
+        }
+
+        // Need for removal?
+        if (this._currentDrag.callbacks.onRemove) {
+            this._trashService.showTrash(_ => {
+                this._currentDrag.callbacks.onRemove();
+            });
         }
         
         // Serialize the dragged "thing"

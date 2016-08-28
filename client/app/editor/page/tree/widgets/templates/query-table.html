@@ -3,7 +3,8 @@
   <widget-header>
     <widget-parameter>
       <name>Abfrage</name>
-      <value><span class="table">{{ model.hasValidReference ? model.queryReferenceName : "Fehlt" }}</span></value>
+      <value><query-reference [(queryReferenceName)]="model.queryReferenceName"
+                              [page]="model.page"></query-reference></value>
     </widget-parameter>
   </widget-header>
 

@@ -1,11 +1,4 @@
 <sidebar-item-host>
-  <div class="block-container center delete"
-       (dragover)="onTrashDrag($event)"
-       (drop)="onTrashDrop($event)"
-       [hidden]="hideTrash">
-    <span class="fa fa-trash fa-5x"></span>
-  </div>
-
   <div class="page-preview">
     <div (dragstart)="startRowDrag($event)"
          draggable="true"
