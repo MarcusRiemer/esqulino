@@ -42,7 +42,7 @@ export class QueryColumnListComponent {
     } = undefined;
 
     /**
-     * 
+     *
      */
     private _currentHoverIndex : number = undefined;
 
@@ -88,7 +88,7 @@ export class QueryColumnListComponent {
             this._currentHoverIndex = undefined;
 
             this._trashService.hideTrash();
-            
+
             this._cdRef.reattach();
         });
 
@@ -120,20 +120,20 @@ export class QueryColumnListComponent {
         //
         //       If that is the case, it's a hell of a
         //       race condition ...
-        
+
         const dragData = JSON.parse(evt.dataTransfer.getData('text/plain'));
         if (dragData.reorder || dragData.columnRef) {
             evt.preventDefault();
 
             const oldIndex = this._currentHoverIndex;
-            
+
             if (oldIndex != index) {
-                
+
                 //this._cdRef.detectChanges();
                 this._currentHoverIndex = index;
 
                 console.log(`${oldIndex} -> ${index}`);
-                
+
             }
         } else {
             console.log(`Invalid Drag: Reordering column: ${dragData}`);
@@ -149,7 +149,7 @@ export class QueryColumnListComponent {
         console.log(`Drop: Reordering column: ${dragData}`);
 
         if (dragData.reorder || dragData.columnRef) {
-            
+
             // Prevent that the browser triggers any kind of navigation
             evt.preventDefault();
 
@@ -165,8 +165,24 @@ export class QueryColumnListComponent {
 
                 this.columnNames.splice(newIndex + 1, 0, this.columnNames.splice(oldIndex, 1)[0]);
             }
+            else if (dragData.columnRef) {
+                console.log(`Column Ref Drop: ${JSON.stringify(dragData.columnRef)}`);
+                const columnName = dragData.columnRef.columnName;
+                const queryName = dragData.columnRef.queryName;
 
+                // Ensure the queries match
+                if (queryName === this.query.name) {
+                    // Remove any column that would introduce a duplicate
+                    this.columnNames = this.columnNames.filter(c => c != columnName);
+
+                    // And insert the new column
+                    this.columnNames.splice(newIndex + 1, 0, columnName);
+                }
+            }
+
+            // Tell the view about the change
             this.columnNamesChange.emit(this.columnNames);
+            this._cdRef.detectChanges();
         } else {
             throw new Error(`Invalid Drop: Reordering column: ${dragData}`);
         }
