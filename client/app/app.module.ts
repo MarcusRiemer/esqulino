@@ -1,19 +1,17 @@
 import {NgModule}                          from '@angular/core'
 import {BrowserModule}                     from '@angular/platform-browser'
-import {HttpModule}                        from '@angular/http'
 
+import SharedAppModule                     from './shared/shared.module'
 import FrontModule                         from './front/front.module'
 import EditorModule                        from './editor/editor.module'
-
-import {ServerApiService}                  from './shared/serverapi.service'
 
 import {SqlScratchComponent}               from './app.component'
 import {routing}                           from './app.routes'
 
 @NgModule({
     imports: [
-        HttpModule,
         BrowserModule,
+        SharedAppModule.forRoot(),
         FrontModule,
         EditorModule,
         routing,
@@ -21,11 +19,11 @@ import {routing}                           from './app.routes'
     declarations: [
         SqlScratchComponent,
     ],
-    providers: [
-        ServerApiService,
-    ],
     bootstrap: [
         SqlScratchComponent
     ],
+    exports : [
+        SharedAppModule,
+    ]
 })
 export default class AppModule {}

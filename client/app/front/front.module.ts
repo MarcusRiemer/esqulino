@@ -1,10 +1,10 @@
 import {NgModule}                       from '@angular/core'
 import {CommonModule}                   from '@angular/common'
 
-import {ProjectDescriptionService}      from '../shared/project.description.service'
+import AppSharedModule                  from '../shared/shared.module'
 
 import {FrontComponent}                 from './front.component'
-import {frontRouting}                    from './front.routes'
+import {frontRouting}                   from './front.routes'
 
 import {AboutComponent}                 from './about.component'
 import {ImprintComponent}               from './imprint.component'
@@ -14,6 +14,7 @@ import {ProjectListItemComponent}       from './project-list-item.component'
 @NgModule({
     imports : [
         CommonModule,
+        AppSharedModule,
         frontRouting
     ],
     declarations : [
@@ -22,9 +23,6 @@ import {ProjectListItemComponent}       from './project-list-item.component'
         ImprintComponent,
         ProjectListComponent,
         ProjectListItemComponent,
-    ],
-    providers : [
-        ProjectDescriptionService,
     ],
     exports: [
         AboutComponent,
