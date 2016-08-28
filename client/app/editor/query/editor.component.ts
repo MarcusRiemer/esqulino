@@ -165,6 +165,8 @@ export class QueryEditorComponent implements OnInit {
         subRef = this._routeParams.params.subscribe(param => {
             var queryId = param['queryId'];
             this._projectService.activeProject
+                .filter(p => !!p)
+                .first()
                 .subscribe(res => {
                     // Project is loaded, display the correct  query
                     this.project = res;

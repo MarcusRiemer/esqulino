@@ -42,11 +42,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     /**
      * Load the project for all sub-components.
      */
-    ngOnInit() {       
+    ngOnInit() {
+        // Subscribe to the current project
         let subRef = this._projectService.activeProject.subscribe(res => {
             this._project = res
         });
-
         this._subscriptions.push(subRef);
         
         subRef = this._sidebarService.isSidebarVisible.subscribe(v => {
@@ -70,6 +70,9 @@ export class EditorComponent implements OnInit, OnDestroy {
         this._subscriptions = [];
         
         this._projectService.forgetCurrentProject();
+
+        // Just in case another component previously had the sidebar shown.
+        this._sidebarService.hideSidebar();
     }
 
     /**
