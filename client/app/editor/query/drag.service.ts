@@ -2,6 +2,8 @@ import {Subject}                from 'rxjs/Subject'
 
 import {Injectable}             from '@angular/core'
 
+import {TrashService}           from '../shared/trash.service'
+
 import {
     Model, SyntaxTree, ResultColumn
 } from '../../shared/query'
@@ -42,7 +44,7 @@ export class DragService {
     // to a drag & drop operation.
     private _currentSource : SyntaxTree.Removable;
 
-    constructor() {
+    constructor(private _trashService : TrashService) {
         this._eventSource = new Subject<SqlDragEvent>();
     }
 
@@ -63,6 +65,12 @@ export class DragService {
         // Serialize the dragged "thing"
         const dragData = JSON.stringify(this._currentDrag);
         evt.dataTransfer.setData('text/plain', dragData);
+
+        if (source) {
+            this._trashService.showTrash( _ => {
+                source.removeSelf();
+            });
+        }
         
         // We are only interested in the top level drag element, if
         // we wouldn't stop the propagation, the parent of the current

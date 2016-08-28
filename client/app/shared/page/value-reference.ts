@@ -101,6 +101,7 @@ export class QueryReference extends ValueReference {
      */  
     set name(value : string) {
         this._name = value;
+        this._mapping = [];
     }
 
     /**

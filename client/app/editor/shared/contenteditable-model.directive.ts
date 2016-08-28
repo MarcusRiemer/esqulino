@@ -1,7 +1,7 @@
 import {
     Directive, ElementRef, Input, Output, EventEmitter,
     OnChanges, SimpleChanges, OnInit
-} from "@angular/core";
+} from "@angular/core"
 
 /**
  * Allows to meaningfully bind the `contenteditable` property. This also

@@ -6,14 +6,6 @@
     Keine Abfrage
   </div>
 
-  <div [hidden]="hideTrash"
-       (dragenter)="onDeleteDrag($event)"
-       (dragover)="onDeleteDrag($event)"
-       (drop)="onDeleteDrop($event)"
-       class="block-container center delete">
-    <span class="fa fa-trash fa-5x"></span>
-  </div>
-
   <div class="block-container center">
     <div (dragstart)="startConstantDrag($event)"
          class="constant"

@@ -147,33 +147,4 @@ export class QuerySidebarComponent implements OnInit, OnDestroy {
                 }
             }, "sidebar", evt);
     }
-
-    /**
-     * Something has been dropped on the delete indicator
-     */
-    onDeleteDrop(evt : DragEvent) {
-        // Indicates we can drop here
-        evt.preventDefault();
-
-        // Possibly remove an active source
-        if (this._dragService.activeSource) {
-            this._dragService.activeSource.removeSelf();
-        }
-    }
-
-    /**
-     * Something hovers over the delete indicator
-     */
-    onDeleteDrag(evt : DragEvent) {
-        // Indicates we can drop here
-        evt.preventDefault();
-    }
-    
-    /**
-     * @return True, if the trashcan should be shown.
-     */
-    get hideTrash() : boolean {
-        const source = this._dragService.activeSource;
-        return (!source);
-    }
 }

@@ -34,7 +34,7 @@ import {SchemaTableComponent}           from './schema-table.component'
 
         AppSharedModule,
         
-        SharedEditorModule,
+        SharedEditorModule.forRoot(),
         PageEditorModule.forRoot(),
         QueryEditorModule.forRoot(),
     ],

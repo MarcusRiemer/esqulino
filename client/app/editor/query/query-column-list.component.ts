@@ -5,6 +5,8 @@ import {
 
 import {DragService}                      from './drag.service'
 
+import {TrashService}                     from '../shared/trash.service'
+
 import {SyntaxTree, ResultColumn}         from '../../shared/query'
 
 /**
@@ -15,7 +17,7 @@ import {SyntaxTree, ResultColumn}         from '../../shared/query'
     selector: 'query-column-list',
     templateUrl: 'app/editor/query/templates/query-column-list.html'
 })
-export class QueryColumnListComponent implements OnInit {
+export class QueryColumnListComponent {
     /**
      * The SELECT that ultimately provides the columns.
      */
@@ -46,12 +48,9 @@ export class QueryColumnListComponent implements OnInit {
 
     constructor(
         private _dragService : DragService,
-        private _cdRef : ChangeDetectorRef
+        private _cdRef : ChangeDetectorRef,
+        private _trashService : TrashService
     ) {
-    }
-
-    ngOnInit() {
-
     }
 
     /**
@@ -76,11 +75,20 @@ export class QueryColumnListComponent implements OnInit {
         this._currentHoverIndex = index;
         this._cdRef.detach();
 
+        // React to trashing
+        this._trashService.showTrash((data) => {
+            this.columnNames.splice(index, 1);
+            this.columnNamesChange.emit(this.columnNames);
+        });
+
         // And make sure it is forgotten once the drag has ended.
         evt.target.addEventListener("dragend", () => {
             console.log(`Stop: Reordering column: ${dragData}`);
             this._currentDrag = undefined;
             this._currentHoverIndex = undefined;
+
+            this._trashService.hideTrash();
+            
             this._cdRef.reattach();
         });
 
