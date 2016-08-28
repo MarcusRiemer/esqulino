@@ -3,46 +3,42 @@ import {
     OnChanges, SimpleChanges, OnInit
 } from "@angular/core"
 
-import {
-    Page,
-    QueryReference, QueryReferenceDescription
-} from '../../../../../shared/page/index'
-import{
-    QuerySelect, ResultColumn
-} from '../../../../../shared/query'
+import {Page}                                 from '../../../../../shared/page/index'
+import {QueryAction, QueryActionDescription}  from '../../../../../shared/page/widgets/action'
 
 import {PageDragEvent}                        from '../../../drag.service'
 
 @Component({
-    selector: `query-reference`,
+    selector: `action-reference`,
     templateUrl: 'app/editor/page/tree/widgets/helper/templates/query-reference.html',
 })
-export class QueryReferenceComponent implements OnInit {
-    @Input() queryReferenceName : string;
+export class ActionReferenceComponent implements OnInit {
+    @Input() actionReferenceName : string;
 
-    @Output() queryReferenceNameChange = new EventEmitter();
+    @Output() actionReferenceNameChange = new EventEmitter();
 
     @Input() page : Page;
 
     /**
      * Ensures all inputs are wired.
      */
-    ngOnInit() {       
+    ngOnInit() {
         if (!this.page) {
-            throw new Error("QueryReferenceComponent without page");
+            throw new Error("ActionReferenceComponent without page");
         }
     }
 
-    get queryReference() : QueryReference {
-        return (this.page.getQueryReferenceByName(this.queryReferenceName));
+    get actionReference() : QueryAction {
+        return (undefined);
+        // this.page.getQueryReferenceByName(this.actionReferenceName);
     }
 
     /**
      * @return The text that should be displayed.
      */
     get text() {
-        if (this.queryReference) {
-            return (this.queryReference.name);
+        if (this.actionReference) {
+            return (this.actionReference.queryName);
         } else {
             return `<span class="fa fa-question-circle"></span>`;
         }
@@ -52,9 +48,9 @@ export class QueryReferenceComponent implements OnInit {
      * @return True, if this is a valid reference
      */
     get isValidReference() {
-        return (this.queryReference &&
-                this.page.usesQueryReferenceByName(this.queryReference.name) &&
-                this.queryReference.isResolveable);
+        return (this.actionReference &&
+                this.page.usesQueryReferenceByName(this.actionReference.queryName) &&
+                this.actionReference.queryReference.isResolveable);
     }
 
     /**
@@ -81,10 +77,10 @@ export class QueryReferenceComponent implements OnInit {
             event.preventDefault();
 
             const newName = dragEvent.queryRef.name;
-            this.queryReferenceName = newName;
-            this.queryReferenceNameChange.emit(newName);
+            this.actionReferenceName = newName;
+            this.actionReferenceNameChange.emit(newName);
 
-            console.log(`Query Reference: Dropped "${this.queryReferenceName}"`);
+            console.log(`Query Reference: Dropped "${this.actionReference.queryName}"`);
         }
     }
 }

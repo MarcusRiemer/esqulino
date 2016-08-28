@@ -23,6 +23,8 @@ export class Body extends HostingWidget {
         
         // Create all referenced columns
         this._children = desc.children.map(wiDesc => loadWidget(wiDesc, this));
+
+        
     }
 
     get page() : Page {

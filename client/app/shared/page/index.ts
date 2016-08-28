@@ -1,10 +1,11 @@
 import {
-    Page, PageParameter, PageDescription, QueryReference, ParameterMapping,
+    Page, PageParameter, PageDescription,
+    QueryReference, ParameterMapping,
     ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription,
     CURRENT_API_VERSION
 } from './page'
 import {Body, Row, WidgetBase}           from './widgets/index'
-import {Renderer}                  from './renderer'
+import {Renderer}                        from './renderer'
 
 export {
     Page, PageParameter, PageDescription, Renderer, Body, Row, WidgetBase,

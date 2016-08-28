@@ -50,6 +50,7 @@ export class WidgetNodeLoaderComponent implements OnChanges {
          * TODO: Allow widgets to somehow register themself.
          */
         this._typeMapping = {
+            "button": Tree.ButtonComponent,
             "heading": Tree.HeadingComponent,
             "query-table": Tree.QueryTableComponent,
             "input": Tree.InputComponent,
