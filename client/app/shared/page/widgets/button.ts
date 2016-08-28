@@ -55,6 +55,9 @@ export class Button extends ParametrizedWidget {
         this.fireModelChange();
     }
 
+    /**
+     * @return True, if there is an action.
+     */
     get hasAction() {
         return (!!this._action);
     }

@@ -54,6 +54,8 @@ const visualComponents = [
 const treeComponents = [
     WidgetNodeComponent,
     Tree.QueryReferenceComponent,
+    Tree.ActionReferenceComponent,
+    Tree.ButtonComponent,
     Tree.HeadingComponent,
     Tree.QueryTableComponent,
     Tree.InputComponent,
