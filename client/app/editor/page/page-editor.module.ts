@@ -7,6 +7,7 @@ import {RegistrationService}            from '../registration.service'
 import {pageEditorRouting}              from './page-editor.routes'
 
 import {DragService}                    from './drag.service'
+import {PageExistsGuard}                from './page-exists.guard'
 
 import {PageEditorHostComponent}        from './host.component'
 import {PageCreateComponent}            from './create.component'
@@ -81,7 +82,7 @@ const sidebarComponents = [
     declarations: [
         PageEditorHostComponent,
         PageCreateComponent,
-
+        
         PageDataComponent,
         ServerPreviewComponent,
         
@@ -103,6 +104,9 @@ const sidebarComponents = [
         ...visualComponents,
         ...treeComponents,
     ],
+    providers: [
+        PageExistsGuard,
+    ],
     exports: [
         PageEditorHostComponent,
         PageCreateComponent,
@@ -111,7 +115,7 @@ const sidebarComponents = [
 
         SidebarDataComponent,
         SidebarWidgetsComponent,
-
+        
         ...sidebarComponents,
         ...visualComponents,
         ...treeComponents,

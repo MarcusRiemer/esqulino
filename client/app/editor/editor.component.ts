@@ -24,7 +24,10 @@ export class EditorComponent implements OnInit, OnDestroy {
      */
     private _sidebarVisible = false;
 
-    private _routeRef : any;
+    /**
+     * All subscriptions of this editor component.
+     */
+    private _subscriptions : any[] = [];
 
     /**
      * Used for dependency injection.
@@ -32,8 +35,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     constructor(
         private _projectService: ProjectService,
         private _sidebarService: SidebarService,
-        private _routeParams: ActivatedRoute,
-        private _router : Router,
         private _changeDetectorRef : ChangeDetectorRef,
         private _preferences : PreferencesService
     ) { }
@@ -42,18 +43,13 @@ export class EditorComponent implements OnInit, OnDestroy {
      * Load the project for all sub-components.
      */
     ngOnInit() {       
-        this._routeRef = this._routeParams.params.subscribe(params => {
-            let projectId = params['projectId'];
-            
-            console.log(`Loading project with id "${projectId}"`);
-            
-            this._projectService.setActiveProject(projectId);
-            this._projectService.activeProject.subscribe(res => {
-                this._project = res
-            });
+        let subRef = this._projectService.activeProject.subscribe(res => {
+            this._project = res
         });
+
+        this._subscriptions.push(subRef);
         
-        this._sidebarService.isSidebarVisible.subscribe(v => {
+        subRef = this._sidebarService.isSidebarVisible.subscribe(v => {
             // Fixed?: Causes change-detection-error on change
             // This more or less globally changes the application state,
             // we need to tell the change detector we are aware of this
@@ -62,13 +58,17 @@ export class EditorComponent implements OnInit, OnDestroy {
             this._sidebarVisible = v;
             this._changeDetectorRef.markForCheck();
         });
+
+        this._subscriptions.push(subRef);
     }
 
     /**
      * Subscriptions need to be explicitly released
      */
     ngOnDestroy() {
-        this._routeRef.unsubscribe();
+        this._subscriptions.forEach(s => s.unsubscribe());
+        this._subscriptions = [];
+        
         this._projectService.forgetCurrentProject();
     }
 
