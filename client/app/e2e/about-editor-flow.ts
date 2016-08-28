@@ -6,16 +6,16 @@ describe('Navigation: Project List Page -> Editor', () => {
     let linkNavigateHome = element(by.id("navbar-navigate-home"));
     let linkNavigateProjects = element(by.id("navbar-navigate-projects"));
 
+    const flashMessage = element(by.css("flash-message-list .alert"));
 
-
-    it('Regression: Navigating to a different project does not reload it', () => {
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
-
+    /**
+     * Clicks all projects that are listed in the `projectNames` variable
+     * above.
+     */
+    function clickAllProjects() {
         let previousName : string = undefined;
         
-        // Initial navigation
-        browser.get('/')
-            .then( () => linkNavigateProjects.click())
+        linkNavigateProjects.click()
             .then( () => {
                 // Ensure each link points to the correct editor
                 projectNames.forEach(name => {
@@ -35,5 +35,24 @@ describe('Navigation: Project List Page -> Editor', () => {
                         .then( () => linkNavigateProjects.click());
                 });
             });
+    }
+
+    it('Regression: Navigating to a different project does not reload it', () => {        
+        // Initial navigation is clean
+        browser.get('/')
+            .then(clickAllProjects);
+    });
+
+    it('Error Handling: Navigating to a nonexistant project', () => {
+        const invalidProjectId = "undefined";
+
+        // Initial navigation is an error
+        browser.get(`/editor/${invalidProjectId}`)
+            .then( () => browser.waitForAngular() )
+            .then( () => {
+                expect(browser.getCurrentUrl()).toContain("/about/projects");
+                expect(flashMessage.getText()).toContain(invalidProjectId);
+            })
+            .then(clickAllProjects);
     });
 });

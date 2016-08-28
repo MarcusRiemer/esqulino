@@ -2,6 +2,8 @@ import {NgModule}                       from '@angular/core'
 import {CommonModule}                   from '@angular/common'
 import {FormsModule}                    from '@angular/forms'
 
+import AppSharedModule                  from '../shared/shared.module'
+
 import SharedEditorModule               from './shared/shared.module'
 import PageEditorModule                 from './page/page-editor.module'
 import QueryEditorModule                from './query/editor.module'
@@ -30,6 +32,8 @@ import {SchemaTableComponent}           from './schema-table.component'
         CommonModule,
         FormsModule,
 
+        AppSharedModule,
+        
         SharedEditorModule,
         PageEditorModule.forRoot(),
         QueryEditorModule.forRoot(),
