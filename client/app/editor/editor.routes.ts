@@ -4,6 +4,8 @@ import {EditorComponent}                from './editor.component'
 import {SettingsComponent}              from './settings.component'
 import {SchemaComponent}                from './schema.component'
 
+import {ProjectExistsGuard}             from './project-exists.guard'
+
 import {queryEditorRoutes}              from './query/editor.routes'
 import {pageEditorRoutes}               from './page/page-editor.routes'
 
@@ -11,6 +13,7 @@ export const editorRoutes : Routes = [
     {
         path: "",
         component : EditorComponent,
+        canActivate : [ProjectExistsGuard],
         children : [
             {
                 path: '',

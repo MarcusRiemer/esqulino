@@ -58,30 +58,49 @@ export class ProjectService {
     }
 
     /**
-     * @param id The id of the project to set for all subscribers
+     * @param id The id of the project to set for all subscribers.
+     * @param forceRefresh True, if the project should be reloaded if its already known.
      */
-    setActiveProject(id : string) {
+    setActiveProject(id : string, forceRefresh : boolean) {
         // Projects shouldn't change while other requests are in progress
         if (this._httpRequest) {
             throw { "err" : "HTTP request in progress" };
         }
 
-        // Clear out the reference to the current project
-        this.forgetCurrentProject();
+        // Clear out the reference to the current project if we are loading
+        // a new project or must reload by sheer force.
+        const currentProject = this._subject.getValue();
+        if (forceRefresh || (currentProject && currentProject.id != id)) {
+            this.forgetCurrentProject();
+        }
 
+        // Build the HTTP-request
         const url = this._server.getProjectUrl(id);
         this._httpRequest = this._http.get(url)
-            .catch(this.handleError)
             .map(res => new Project(res.json()));
 
-        this._httpRequest.subscribe(res => {
-            // Show that there are no more requests
-            this._httpRequest = null;
-            // Inform subscribers
-            this._subject.next(res)
+        // And execute it by subscribing to it.
+        const subscription = this._httpRequest
+            .first()
+            .subscribe(
+                res => {                
+                    // There is a new project, Inform subscribers
+                    console.log(`Project Service: HTTP request for specific project ("${url}") finished`);
+                    this._subject.next(res);
 
-            console.log(`Project Service: HTTP request for specific project ("${url}") finished `);
-        });
+                    this._httpRequest = undefined
+                },
+                (error : Response) => {
+                    // Something has gone wrong, pass the error on to the subscribers
+                    // of the project and hope they know what to do about it.
+                    console.log(`Project Service: HTTP error with request for specific project ("${url}") => "${error.status}: ${error.statusText}"`);
+                    this._subject.error(error);
+
+                    this._subject = new BehaviorSubject<Project>(undefined);
+
+                    this._httpRequest = undefined
+                }
+            )
     }
 
     /**
@@ -113,7 +132,7 @@ export class ProjectService {
         const url = this._server.getProjectUrl(proj.id);
 
         const toReturn = this._http.post(url, JSON.stringify(desc))
-            .catch(this.handleError);
+            .catch(this.passThroughError);
 
         return (toReturn);
     }
@@ -125,10 +144,10 @@ export class ProjectService {
         const url = this._server.getPageUrl(this.cachedProject.id);
     }
 
-    private handleError (error: Response) {
+    private passThroughError (error: Response) {
         // in a real world app, we may send the error to some remote logging infrastructure
         // instead of just logging it to the console
-        console.error(error);
+        console.log(error);
         return Observable.throw(error);
     }
 }

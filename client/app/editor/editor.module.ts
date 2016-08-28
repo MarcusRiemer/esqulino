@@ -9,6 +9,8 @@ import QueryEditorModule                from './query/editor.module'
 import {EditorComponent}                from './editor.component'
 import {editorRouting}                  from './editor.routes'
 
+import {ProjectExistsGuard}             from './project-exists.guard'
+
 import {PageService}                    from './page.service'
 import {ProjectService, Project}        from './project.service'
 import {ToolbarService}                 from './toolbar.service'
@@ -47,6 +49,7 @@ import {SchemaTableComponent}           from './schema-table.component'
         PageService,
         PreferencesService,
         ProjectService,
+        ProjectExistsGuard,
         QueryService,
         ToolbarService,
     ],
