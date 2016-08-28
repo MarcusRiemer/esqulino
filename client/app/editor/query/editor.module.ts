@@ -4,6 +4,7 @@ import SharedEditorModule               from '../shared/shared.module'
 import {RegistrationService}            from '../registration.service'
 
 import {queryEditorRouting}             from './editor.routes'
+import {QueryExistsGuard}               from './query-exists.guard'
 
 import {DragService}                    from './drag.service'
 
@@ -53,7 +54,8 @@ import {QueryColumnListComponent}       from './query-column-list.component'
         QueryColumnListComponent,
     ],
     providers: [
-        DragService
+        DragService,
+        QueryExistsGuard,
     ],
     entryComponents: [
         QuerySidebarComponent

@@ -44,6 +44,7 @@ export class SidebarService {
      * Hides the currently shown sidebar.
      */
     hideSidebar() {
+        console.log("SidebarService: Hidden!");
         this._model.next([]);
     }
 
