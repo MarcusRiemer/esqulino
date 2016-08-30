@@ -22,12 +22,21 @@ export class Button extends ParametrizedWidget {
     private _text : string;
 
     constructor(desc : ButtonDescription, parent? : WidgetHost) {
-        super("button", "widget", parent);
+        super("button", "widget", false, parent);
         this._text = desc.text;
 
         // If there is an action, hold on to it
         if (desc.action) {
             this._action = new QueryAction(this, desc.action);
+        } else {
+            // TODO: For the moment there must always be some action, even if it
+            //       is an empty action.
+            this._action = new QueryAction(this, {
+                type : "query",
+                queryReference : {
+                    type : "query"
+                }
+            });
         }
     }
 
@@ -35,8 +44,6 @@ export class Button extends ParametrizedWidget {
         return ({
             type : "button",
             text : "Knopf",
-            action : undefined,
-            value : undefined
         });
     }
     
@@ -81,17 +88,25 @@ export class Button extends ParametrizedWidget {
      * @return The parameters that are required to run the action
      *         behind this button.
      */
-    getParameters() {
+    get parameters() {
         if (this._action) {
             return (this._action.mappings);
         } else {
             return ([]);
         }
     }
+
+    /**
+     * @param newParams The parameters that are required to run the action
+     *                  behind this button.      
+     */
+    set parameters(newParams : ParameterMapping[]) {
+        this._action.mappings = newParams;
+    }
     
     protected toModelImpl() : WidgetDescription {
         let action : QueryActionDescription = undefined;
-        if (this._action) {
+        if (this._action && !this.action.isEmpty) {
             action = this._action.toModel();
         }
         

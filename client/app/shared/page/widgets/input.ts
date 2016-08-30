@@ -26,7 +26,7 @@ export class Input extends UserInputWidget {
     private _inputType : string;
     
     constructor(desc : InputDescription, parent? : WidgetHost) {
-        super("input", "widget", parent);
+        super("input", "widget", true, parent);
         this._outParamName = desc.outParamName;
         this._caption = desc.caption;
         this._description = desc.description;

@@ -66,10 +66,14 @@ function renderButton(w: Widget) : string {
     const text = button.text;
     const cssClass = "btn btn-secondary btn-block";
 
-    const actionUrl = button.action.url;
-    const method = button.action.method;
+    if (button.action && !button.action.isEmpty) {
+        const actionUrl = button.action.url;
+        const method = button.action.method;
 
-    return (`<button type="submit" formaction="${actionUrl}" formmethod="${method}" class="${cssClass}">${text}</button>`);    
+        return (`<button type="submit" formaction="${actionUrl}" formmethod="${method}" class="${cssClass}">${text}</button>`);
+    } else {
+        return (`<div class="alert alert-danger" role="alert">Dieser Knopf hat kein gültiges Ziel und wird daher nicht dargestellt!</div>`);
+    }
 }
 
 /**

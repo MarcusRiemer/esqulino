@@ -22,6 +22,11 @@ export interface Widget {
     category : WidgetCategory;
 
     /**
+     * @return True, if this is an empty element like <img> or <input>.
+     */
+    isEmptyElement : boolean;
+
+    /**
      * @return The parent of this widget.
      */
     parent : WidgetHost;

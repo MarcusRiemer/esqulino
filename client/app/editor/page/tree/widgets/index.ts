@@ -1,5 +1,5 @@
 import {QueryReferenceComponent}        from './helper/query-reference.component'
-import {ActionReferenceComponent}       from './helper/action-reference.component'
+import {RequiredParametersComponent}    from './helper/required-parameters.component'
 
 import {ButtonComponent}                from './button.component'
 import {EmbeddedHtmlComponent}          from './embedded-html.component'
@@ -10,7 +10,7 @@ import {QueryTableComponent}            from './query-table.component'
 
 export {
     QueryReferenceComponent,
-    ActionReferenceComponent,
+    RequiredParametersComponent,
     
     ButtonComponent,
     EmbeddedHtmlComponent,

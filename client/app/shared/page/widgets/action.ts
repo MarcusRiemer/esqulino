@@ -26,6 +26,13 @@ export abstract class Action {
     }
 
     /**
+     * @return The widget that is associated with this action.
+     */
+    get widget() {
+        return (this._widget);
+    }
+
+    /**
      * @return The page that sets the context for this action.
      */
     get page() {
@@ -226,18 +233,22 @@ export class NavigateAction extends Action {
  * for the server to look up.
  */
 export class QueryAction extends Action {
-    private _queryName : string;
+    private _queryRef : QueryReference;
 
     constructor(widget : WidgetBase, desc : QueryActionDescription) {
         super(widget);
-        this._queryName = desc.queryName;
+        this._queryRef = new QueryReference(widget.page.project, widget.page, desc.queryReference);
+    }
+
+    get isEmpty() {
+        return (!!(!this._queryRef || !this._queryRef.queryId));
     }
 
     /**
      * @return True, if the query reference could be retrieved.
      */
-    get hasValidQueryReference() {
-        return (this.page.usesQueryReferenceByName(this.queryName));
+    get hasValidQueryReference() : boolean {
+        return (!!this._queryRef);
     }
 
     /**
@@ -255,22 +266,27 @@ export class QueryAction extends Action {
         return (this.queryReference.mapping);
     }
 
+    set mappings(newMappings : ParameterMapping[]) {
+        this.queryReference.mapping = newMappings;
+        this.widget.fireModelChange();
+    }
+
     /**
      * @return The reference this action would kick off.
      */
     get queryReference() : QueryReference {
         if (!this.hasValidQueryReference) {
-            throw new Error(`Page does not have a query named "${this.queryName}"`);
+            throw new Error(`Action does not have a query reference at all"`);
         }
 
-        return (this.page.getQueryReferenceByName(this.queryName));
+        return (this._queryRef);
     }
 
     /**
      * @return The name of the query to run.
      */
-    get queryName() {
-        return (this._queryName);
+    get coreQueryName() {
+        return (this.queryReference.query.name);
     }
 
     /**
@@ -278,14 +294,15 @@ export class QueryAction extends Action {
      */
     get url() {
         const pageName = this.page.name;
-        return (`/${pageName}/query/${this.queryName}`);
+        return (`/${pageName}/query/${this.coreQueryName}`);
     }
 
     /**
      * @param value The name of the query to run.
      */
-    set queryName(value : string) {
-        this._queryName = value;
+    set coreQueryId(value : string) {
+        this._queryRef.queryId = value;
+        
         this.ensureDefaultMappings();
     }
 
@@ -316,7 +333,7 @@ export class QueryAction extends Action {
     toModel() : QueryActionDescription {
         return ({
             type : "query",
-            queryName : this._queryName
+            queryReference : this.queryReference.toModel()
         });
     }
 }

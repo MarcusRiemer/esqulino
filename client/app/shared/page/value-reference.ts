@@ -7,6 +7,10 @@ import {
 } from './page.description'
 import {Page, ParameterMapping}                from './page'
 
+export {
+    ValueReferenceDescription, ColumnReferenceDescription,
+    QueryReferenceDescription
+}
 
 /**
  * A reference that can be made inside a page to some kind
@@ -80,10 +84,18 @@ export class QueryReference extends ValueReference {
         } else if (this.isResolveable) {
             // There are no mappings yet, but there is a query that possibly
             // needs matching
-            this._mapping = this.query.parameters.map(qp => new ParameterMapping(page, {
-                parameterName : qp.key
-            }));
+            this.createDefaultMapping();
         }
+    }
+
+    /**
+     * Discards the current mapping and builds a new one based on the current page
+     * and the currently required parameters.
+     */
+    protected createDefaultMapping() {
+        this._mapping = this.query.parameters.map(qp => new ParameterMapping(this.page, {
+            parameterName : qp.key
+        }));
     }
 
     /**
@@ -101,7 +113,6 @@ export class QueryReference extends ValueReference {
      */  
     set name(value : string) {
         this._name = value;
-        this._mapping = [];
     }
 
     /**
@@ -115,10 +126,28 @@ export class QueryReference extends ValueReference {
     }
 
     /**
+     * Careful: This will erase the current mapping.
+     *
+     * @param newId The id of the newly referenced query.
+     */
+    set queryId(newId : string) {
+        this._queryId = newId;
+        this.createDefaultMapping();
+    }
+
+    /**
      * @return How the input parameters of this query should be mapped
      */
     get mapping() {
         return (this._mapping);
+    }
+
+    /**
+     * @param newMapping How the input parameters of this query should be mapped
+     */
+    set mapping(newMapping : ParameterMapping[]) {
+        this._mapping = newMapping;
+        this.page.markSaveRequired();
     }
 
     /**
@@ -137,14 +166,14 @@ export class QueryReference extends ValueReference {
      * @return True, if this reference can be resolved.
      */
     get isResolveable() {
-        return (!!this.project.hasQueryById(this.queryId));
+        return (!!(this.queryId && !!this.project.hasQueryById(this.queryId)));
     }
 
     /**
      * @return True, if the referenced query has output columns.
      */
     get hasColumns() {
-        return (this.isResolveable && this.query instanceof QuerySelect);
+        return (!!(this.isResolveable && this.query instanceof QuerySelect));
     }
 
     /**
@@ -165,12 +194,23 @@ export class QueryReference extends ValueReference {
      * @return Turns this reference into a storable representation
      */
     toModel() : QueryReferenceDescription {
-        return ({
-            type : "query",
-            name : this._name,
-            queryId : this._queryId,
-            mapping : this._mapping.map(m => m.toModel())
-        })
+        const toReturn : QueryReferenceDescription = {
+            type : "query"
+        }
+
+        if (this._name) {
+            toReturn.name = this._name;
+        }
+
+        if (this._queryId) {
+            toReturn.queryId = this._queryId;
+        }
+
+        if (this._mapping && this._mapping.length > 0) {
+            toReturn.mapping = this._mapping;
+        }
+        
+        return (toReturn);
     }
     
 }
