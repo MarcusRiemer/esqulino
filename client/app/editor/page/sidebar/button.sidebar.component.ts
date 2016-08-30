@@ -1,5 +1,6 @@
 import {Component, Inject, Optional}   from '@angular/core'
 
+import {QuerySelect}                   from '../../../shared/query'
 import {Button, QueryAction}           from '../../../shared/page/widgets/index'
 
 import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
@@ -22,19 +23,33 @@ export class ButtonSidebarComponent {
         this._component = com;
     }
 
-    get queryName() {
-        return (this.model.action && this.model.action.queryName);
+    get queryId() {
+        return (this.model.action && this.model.action.coreQueryId);
     }
 
-    set queryName(value : string) {
+    set queryId(value : string) {        
         this.model.action = new QueryAction(this.model, {
-            queryName : value,
-            type : "query"
+            type : "query",
+            queryReference : {
+                type : "query",
+                queryId : value,
+                mapping : []
+            }
         });
     }
 
+    /**
+     * @return All actionable queries, i.e. no SELECTs
+     */
     get availableQueries() {
-        return (this.model.page.referencedQueries)
+        return (this.project.queries.filter(q => !(q instanceof QuerySelect)))
+    }
+
+    /**
+     * @return The project that is associated with the page of this button.
+     */
+    get project() {
+        return (this.model.page.project);
     }
 
     /**

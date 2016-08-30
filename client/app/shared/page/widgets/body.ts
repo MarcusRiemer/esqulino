@@ -17,7 +17,7 @@ export class Body extends HostingWidget {
     private _page : Page;
     
     constructor(desc : BodyDescription, page : Page) {
-        super("body", "layout", undefined);
+        super("body", "layout", false, undefined);
 
         this._page = page;
         

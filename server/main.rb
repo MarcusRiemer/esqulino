@@ -65,8 +65,6 @@ class ScratchSqlApp < Sinatra::Base
   def request_prepare_project(project_id)
     @project = Project.new File.join(projects_dir, project_id), false
     @project.write_access = authorized?
-
-    puts "Project.write_access: #{@project.write_access}"
   end
 
   # Ensures the @query instance variable, should be called before

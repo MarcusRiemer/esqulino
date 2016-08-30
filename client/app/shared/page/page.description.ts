@@ -23,12 +23,12 @@ export interface ActionDescription {
 }
 
 /**
- * This action kicks of some mutation query
+ * This action kicks of some mutating query
  */
 export interface QueryActionDescription extends ActionDescription {
     type : "query"
     
-    queryName : string
+    queryReference : QueryReferenceDescription
 }
 
 /**
@@ -76,7 +76,7 @@ export interface ButtonDescription extends WidgetDescription {
     text : string
 
     // What happens if the user presses the button?
-    action : QueryActionDescription
+    action? : QueryActionDescription
 }
 
 /**
@@ -206,13 +206,14 @@ export interface QueryReferenceDescription extends ValueReferenceDescription {
     type : "query" 
 
     // The id of the query this reference points to
-    queryId : string
+    queryId? : string
 
-    // The user-defined name of the reference
-    name : string
+    // The user-defined name of the reference. If no name is given, the
+    // name should be the same as the name of the referenced query.
+    name? : string
 
     // Which values should serve as parameters for this query?
-    mapping : ParameterMappingDescription[]
+    mapping? : ParameterMappingDescription[]
 }
 
 /**

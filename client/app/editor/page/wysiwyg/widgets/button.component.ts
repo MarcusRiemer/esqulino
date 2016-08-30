@@ -69,7 +69,7 @@ export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
 
             this.model.action = new QueryAction(this.model, {
                 type : "query",
-                queryName : pageEvt.queryRef.name
+                queryReference : pageEvt.queryRef
             });
         }
     }

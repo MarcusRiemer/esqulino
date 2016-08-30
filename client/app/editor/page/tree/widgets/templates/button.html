@@ -2,8 +2,17 @@
   <widget-header>
     <widget-parameter>
       <name>Aktion</name>
-      <value><query-reference [(queryReferenceName)]="model.action.queryReference.name"
-                              [page]="model.page"></query-reference></value>
+      <value *ngIf="model.hasAction">
+        <query-reference [(queryReferenceName)]="model.action.queryReference.name"
+                         [page]="model.page"></query-reference>
+        <required-parameters *ngIf="!model.action.isEmpty"
+                             [(parameterMapping)]="model.action.queryParameters"
+                             [page]="mode.page"></required-parameters>
+      </value>
+      <value *ngIf="!model.hasAction">
+        <query-reference [(queryReferenceName)]="model.action.queryReference.name"
+                         [page]="model.page"></query-reference>
+      </value>
     </widget-parameter>
   </widget-header>
 </esqulino-widget-node>

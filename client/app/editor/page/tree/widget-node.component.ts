@@ -77,11 +77,12 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
                               widgetDesc : WidgetDescription)
       : WidgetHost
     {
+        
+        
         // Don't accept anything that isn't a widget
         if (!widgetDesc) {
             return (undefined);
         }
-
         // Is this an widget host?
         else if (isWidgetHost(node)) {
             // Is this on the opening node to insert something compatible
@@ -100,9 +101,9 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
             }
 
         }
-
         // Is the parent of this thing an accepting widget host?
-        else if (this.parentAccepts(node, widgetDesc) && place == "close") {
+        else if (this.parentAccepts(node, widgetDesc) && 
+                 (place == "close" || (place == "open" && !this.needsClosingNode))) {
             // The parent can handle the drag
             return ((node as any).parent);
         }
@@ -142,7 +143,7 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
 
             let index : number = undefined;
 
-            if (parentHost && place === "close") {
+            if (parentHost && (place === "close" || (place == "open" && !this.needsClosingNode))) {
                 // Place after this element
                 return ({
                     host : host,
@@ -243,7 +244,7 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
      *         be rendered.
      */
     get needsClosingNode() : boolean {
-        return (true);
+        return (!this.model.isEmptyElement);
     }
 
     /**

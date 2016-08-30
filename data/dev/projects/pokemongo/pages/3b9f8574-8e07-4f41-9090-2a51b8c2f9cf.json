@@ -5,33 +5,12 @@
     {
       "type": "query",
       "name": "Pokedex_1G",
-      "queryId": "0c396a9a-1947-4c2b-a5fb-195df2b91b84",
-      "mapping": []
-    },
-    {
-      "type": "query",
-      "name": "Gefangen_Neu",
-      "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44",
-      "mapping": [
-        {
-          "parameterName": "nummer",
-          "providingName": "input.nummer"
-        },
-        {
-          "parameterName": "name",
-          "providingName": "input.name"
-        },
-        {
-          "parameterName": "staerke",
-          "providingName": "input.staerke"
-        }
-      ]
+      "queryId": "0c396a9a-1947-4c2b-a5fb-195df2b91b84"
     },
     {
       "type": "query",
       "name": "Meine_Pokemon",
-      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35",
-      "mapping": []
+      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35"
     }
   ],
   "body": {
@@ -53,7 +32,9 @@
           "type": "navigate",
           "internal": {
             "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
-            "parameters": []
+            "parameters": [
+
+            ]
           }
         }
       },
@@ -94,11 +75,7 @@
       },
       {
         "type": "button",
-        "text": "Hinzufügen",
-        "action": {
-          "type": "query",
-          "queryName": "Gefangen_Neu"
-        }
+        "text": "Knopf"
       },
       {
         "type": "heading",

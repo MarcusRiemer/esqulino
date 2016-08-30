@@ -1,3 +1,5 @@
+import './value-reference.spec'
+
 import './widgets/action.spec'
 import './widgets/button.spec'
 import './widgets/column.spec'

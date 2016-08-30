@@ -36,10 +36,18 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
     // The category of this widget.
     private _category : WidgetCategory;
 
-    constructor(type : string, category : WidgetCategory, parent? : WidgetHost) {
+    // Is this an empty element?
+    private _isEmptyElement : boolean;
+
+    constructor(type : string,
+                category : WidgetCategory,
+                isEmpty : boolean,
+                parent? : WidgetHost)
+    {
         this._type = type;
         this._category = category;
         this._parent = parent;
+        this._isEmptyElement = isEmpty;
     }
 
     /**
@@ -75,6 +83,13 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
     }
 
     /**
+     * @return True, if this is an empty element like <img> or <input>.
+     */
+    get isEmptyElement() : boolean {
+        return (this._isEmptyElement);
+    }
+
+    /**
      * Used to pick a matching renderer.
      *
      * @return An internal typename for this widget.
@@ -101,7 +116,7 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
     /**
      * Allows implementing classes to signal that their model has changed.
      */
-    protected fireModelChange() {
+    fireModelChange() {
         this._modelChanged.next(this);
     }
 
@@ -115,6 +130,15 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
  * A widget that may host other widgets.
  */
 export abstract class HostingWidget extends WidgetBase implements WidgetHost {
+
+    constructor(type : string,
+                category : WidgetCategory,
+                isEmpty : boolean,
+                parent? : WidgetHost)
+    {
+        super(type, category, isEmpty, parent);
+    }
+    
     /**
      * @return All immediate children of this widget,
      */
@@ -208,16 +232,24 @@ export abstract class HostingWidget extends WidgetBase implements WidgetHost {
  */
 export abstract class ParametrizedWidget extends WidgetBase {
 
+    constructor(type : string,
+                category : WidgetCategory,
+                isEmpty : boolean,
+                parent? : WidgetHost)
+    {
+        super(type, category, isEmpty, parent);
+    }
+
     /**
      * @return All parameters required for this widget
      */
-    abstract getParameters() : ParameterMapping[];
+    abstract get parameters() : ParameterMapping[];
 
     /**
      * @return True, if the given name is required as an input parameter.
      */
     hasInputParameter(name : string) {
-        return (this.getParameters().some(p => p.parameterName == name));
+        return (this.parameters.some(p => p.parameterName == name));
     }
 }
 
@@ -225,6 +257,14 @@ export abstract class ParametrizedWidget extends WidgetBase {
  * A widget that provides external input
  */
 export abstract class UserInputWidget extends WidgetBase {
+
+    constructor(type : string,
+                category : WidgetCategory,
+                isEmpty : boolean,
+                parent? : WidgetHost)
+    {
+        super(type, category, isEmpty, parent);
+    }
 
     /**
      * @return True, if this widget provides the required output.

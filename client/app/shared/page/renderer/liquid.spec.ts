@@ -54,7 +54,7 @@ describe('Page Renderer: Liquid', () => {
         let c = new Column(m);
         let r = new LiquidRenderer();
 
-        expect(r.renderWidget(c)).toEqual(`<div class="col-md-6"><p>1</p><p>2</p></div>`);
+        expect(r.renderWidget(c)).toEqual(`<div class="col-md-6"><p>1</p>\n<p>2</p></div>`);
     });
 
     it('Row', () => {
