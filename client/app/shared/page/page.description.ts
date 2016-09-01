@@ -23,15 +23,6 @@ export interface ActionDescription {
 }
 
 /**
- * This action kicks of some mutating query
- */
-export interface QueryActionDescription extends ActionDescription {
-    type : "query"
-    
-    queryReference : QueryReferenceDescription
-}
-
-/**
  * This action takes the user to a different page. This different page may
  * be part of the same project (in this case we know which parameters are
  * required) or somewhere else.
@@ -76,7 +67,7 @@ export interface ButtonDescription extends WidgetDescription {
     text : string
 
     // What happens if the user presses the button?
-    action? : QueryActionDescription
+    query? : QueryReferenceDescription
 }
 
 /**
@@ -198,7 +189,7 @@ export interface ColumnReferenceDescription extends ValueReferenceDescription {
 }
 
 /**
- * Referenced queries are always accompanied by a human-readable
+ * Referenced queries are possibly accompanied by a human-readable
  * name. This is required if the same query is going to be used
  * multiple times on a single page.
  */

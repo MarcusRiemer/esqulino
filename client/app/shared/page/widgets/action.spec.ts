@@ -1,6 +1,5 @@
 import {
     NavigateAction, NavigateActionDescription,
-    QueryAction, QueryActionDescription
 } from './action'
 
 describe('Page NavigateAction', () => {

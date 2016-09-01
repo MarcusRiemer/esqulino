@@ -1,23 +1,23 @@
 import {Page, ParameterMapping}          from '../page'
 import {Widget, WidgetHost}              from '../hierarchy'
+import {QueryReference} from '../value-reference'
 import {
-    ButtonDescription, QueryActionDescription
+    ButtonDescription, QueryReferenceDescription
 } from '../page.description'
 
-import {QueryAction}                     from './action'
 import {
     WidgetBase, WidgetDescription, ParametrizedWidget
 } from './widget-base'
 
 export {
-    ButtonDescription, QueryAction, ParameterMapping
+    ButtonDescription, ParameterMapping
 }
 
 /**
  * A button the user can press.
  */
 export class Button extends ParametrizedWidget {
-    private _action : QueryAction;
+    private _ref : QueryReference;
 
     private _text : string;
 
@@ -26,16 +26,11 @@ export class Button extends ParametrizedWidget {
         this._text = desc.text;
 
         // If there is an action, hold on to it
-        if (desc.action) {
-            this._action = new QueryAction(this, desc.action);
+        if (desc.query) {
+            this._ref = new QueryReference(this.page.project, this.page, desc.query);
         } else {
-            // TODO: For the moment there must always be some action, even if it
-            //       is an empty action.
-            this._action = new QueryAction(this, {
-                type : "query",
-                queryReference : {
-                    type : "query"
-                }
+            this._ref = new QueryReference(this.page.project, this.page, {
+                type : "query"
             });
         }
     }
@@ -66,21 +61,26 @@ export class Button extends ParametrizedWidget {
      * @return True, if there is an action.
      */
     get hasAction() {
-        return (!!this._action);
+        return (!!this._ref);
     }
     
     /**
-     * @return The target URL
+     * @return A possibly targeted query.
      */
-    get action() {
-        return (this._action);
+    get queryReference() {
+        return (this._ref);
     }
 
     /**
      * @param value The target URL
      */
-    set action(value) {
-        this._action = value;
+    set queryReference(value) {
+        this._ref = value;
+        this.fireModelChange();
+    }
+
+    setNewQueryId(value : string) {
+        this._ref.queryId = value;
         this.fireModelChange();
     }
 
@@ -88,9 +88,9 @@ export class Button extends ParametrizedWidget {
      * @return The parameters that are required to run the action
      *         behind this button.
      */
-    get parameters() {
-        if (this._action) {
-            return (this._action.mappings);
+    get mapping() {
+        if (this._ref) {
+            return (this._ref.mapping);
         } else {
             return ([]);
         }
@@ -100,21 +100,19 @@ export class Button extends ParametrizedWidget {
      * @param newParams The parameters that are required to run the action
      *                  behind this button.      
      */
-    set parameters(newParams : ParameterMapping[]) {
-        this._action.mappings = newParams;
+    set mapping(newParams : ParameterMapping[]) {
+        this._ref.mapping = newParams;
+        this.fireModelChange();
     }
     
     protected toModelImpl() : WidgetDescription {
-        let action : QueryActionDescription = undefined;
-        if (this._action && !this.action.isEmpty) {
-            action = this._action.toModel();
-        }
-        
-        return ({
+        const toReturn : ButtonDescription = {
             type : "button",
             text : this._text,
-            action : action
-        } as ButtonDescription);
+            query : this._ref.toModel()
+        };
+
+        return (toReturn);
     }
     
 }
