@@ -243,13 +243,13 @@ export abstract class ParametrizedWidget extends WidgetBase {
     /**
      * @return All parameters required for this widget
      */
-    abstract get parameters() : ParameterMapping[];
+    abstract get mapping() : ParameterMapping[];
 
     /**
      * @return True, if the given name is required as an input parameter.
      */
     hasInputParameter(name : string) {
-        return (this.parameters.some(p => p.parameterName == name));
+        return (this.mapping.some(p => p.parameterName == name));
     }
 }
 

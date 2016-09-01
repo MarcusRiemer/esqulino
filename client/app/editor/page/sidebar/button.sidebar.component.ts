@@ -1,7 +1,8 @@
 import {Component, Inject, Optional}   from '@angular/core'
 
 import {QuerySelect}                   from '../../../shared/query'
-import {Button, QueryAction}           from '../../../shared/page/widgets/index'
+import {QueryReference}                from '../../../shared/page/index'
+import {Button}                        from '../../../shared/page/widgets/index'
 
 import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
 
@@ -24,18 +25,11 @@ export class ButtonSidebarComponent {
     }
 
     get queryId() {
-        return (this.model.action && this.model.action.coreQueryId);
+        return (this.model.queryReference && this.model.queryReference.queryId);
     }
 
     set queryId(value : string) {        
-        this.model.action = new QueryAction(this.model, {
-            type : "query",
-            queryReference : {
-                type : "query",
-                queryId : value,
-                mapping : []
-            }
-        });
+        this.model.setNewQueryId(value);
     }
 
     /**

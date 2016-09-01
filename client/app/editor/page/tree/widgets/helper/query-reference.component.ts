@@ -1,6 +1,6 @@
 import {
     Component, Input, Output, EventEmitter,
-    OnChanges, SimpleChanges, OnInit
+    OnChanges, SimpleChanges
 } from "@angular/core"
 
 import {
@@ -17,32 +17,25 @@ import {PageDragEvent}                        from '../../../drag.service'
     selector: `query-reference`,
     templateUrl: 'app/editor/page/tree/widgets/helper/templates/query-reference.html',
 })
-export class QueryReferenceComponent implements OnInit {
-    @Input() queryReferenceName : string;
-
-    @Output() queryReferenceNameChange = new EventEmitter();
-
-    @Input() page : Page;
+export class QueryReferenceComponent {
+    @Input() queryReference : QueryReference;
+    @Output() queryReferenceChange = new EventEmitter();
 
     /**
-     * Ensures all inputs are wired.
+     * Should this query reference be always bound to the references
+     * that are available on a certain page?
+     *
+     * If set to true, these references will never be actually edited
+     * but always replaced with entirely different references.
      */
-    ngOnInit() {       
-        if (!this.page) {
-            throw new Error("QueryReferenceComponent without page");
-        }
-    }
-
-    get queryReference() : QueryReference {
-        return (this.page.getQueryReferenceByName(this.queryReferenceName));
-    }
+    @Input() restrictToPage : Page;
 
     /**
      * @return The text that should be displayed.
      */
     get text() {
-        if (this.queryReference) {
-            return (this.queryReference.name);
+        if (this.queryReference.displayName) {
+            return (this.queryReference.displayName);
         } else {
             return `<span class="fa fa-question-circle"></span>`;
         }
@@ -53,7 +46,6 @@ export class QueryReferenceComponent implements OnInit {
      */
     get isValidReference() {
         return (this.queryReference &&
-                this.page.usesQueryReferenceByName(this.queryReference.name) &&
                 this.queryReference.isResolveable);
     }
 
@@ -80,11 +72,29 @@ export class QueryReferenceComponent implements OnInit {
         if (dragEvent.queryRef) {
             event.preventDefault();
 
-            const newName = dragEvent.queryRef.name;
-            this.queryReferenceName = newName;
-            this.queryReferenceNameChange.emit(newName);
+            const newRef = dragEvent.queryRef;
+            const page = this.restrictToPage;
 
-            console.log(`Query Reference: Dropped "${this.queryReferenceName}"`);
+            // Should the reference itself be left intact?
+            if (this.restrictToPage) {
+                // Yes, grab the correct page reference without actually modifying any
+                // existing reference. Its just the reference to the reference that is
+                // changed.
+                const pageRef = this.restrictToPage.getQueryReferenceByName(newRef.name);
+                if (pageRef) {
+                    this.queryReference = pageRef;
+                } else {
+                    throw new Error(`Attempted to set reference unknown to the page: ${newRef.name}`);
+                }
+            } else {
+                // No, update the whole reference with the drag data
+                this.queryReference = new QueryReference(page.project, page, newRef);
+            }
+            
+            this.queryReferenceChange.emit(this.queryReference);
+            const newDspName = this.queryReference.displayName;
+
+            console.log(`Query Reference: Dropped, now pointing to ${newDspName}"`);
         }
     }
 }

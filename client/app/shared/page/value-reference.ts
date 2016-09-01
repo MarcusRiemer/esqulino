@@ -48,6 +48,9 @@ export class ColumnReference extends ValueReference {
 
     private _columnName : string;
 
+    /**
+     * The name of the query-variable that provides the column.
+     */
     private _variableName : string;
     
     constructor(project : Project, page : Page, desc : ColumnReferenceDescription) {
@@ -58,7 +61,7 @@ export class ColumnReference extends ValueReference {
 }
 
 /**
- * A reference to a query as a whole.
+ * A reference to a query as a whole. These references may be
  */
 export class QueryReference extends ValueReference {
 
@@ -85,6 +88,9 @@ export class QueryReference extends ValueReference {
             // There are no mappings yet, but there is a query that possibly
             // needs matching
             this.createDefaultMapping();
+        } else {
+            // There is nothing to map.
+            this._mapping = [];
         }
     }
 
@@ -99,9 +105,30 @@ export class QueryReference extends ValueReference {
     }
 
     /**
-     * @return The "variable name" of this reference
+     * @return The "variable name" of this reference. If no explicit name is set, the
+     *         name of the referenced query is used.
      */  
-    get name() : string {
+    get displayName() : string {
+        if (this._name) {
+            // Name is overridden
+            return (this._name);
+        } else {
+            if (this._queryId) {
+                const query = this.project.getQueryById(this._queryId);
+                return (query.name);
+            } else {
+                return (undefined);
+            }
+        }
+    }
+
+    /**
+     * This accessor shouldn't be used for data facing the enduser. Consider
+     * using `displayName` instead.
+     *
+     * @return The "variable name" of this reference, if any explicit name ist set.
+     */
+    get name() {
         return (this._name);
     }
 

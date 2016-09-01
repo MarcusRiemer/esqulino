@@ -2,7 +2,7 @@ import {
     Component, Inject, OnInit, ChangeDetectorRef
 } from '@angular/core'
 
-import {Button, QueryAction}          from '../../../../shared/page/widgets/index'
+import {Button}                       from '../../../../shared/page/widgets/index'
 
 import {SidebarService}               from '../../../sidebar.service'
 import {RegistrationService}          from '../../../registration.service'
@@ -11,7 +11,7 @@ import {WIDGET_MODEL_TOKEN}           from '../../../editor.token'
 import {DragService, PageDragEvent}   from '../../drag.service'
 import {WidgetComponent}              from '../../widget.component'
 
-export {Button, QueryAction}
+export {Button}
 
 @Component({
     templateUrl: 'app/editor/page/wysiwyg/widgets/templates/button.html',
@@ -27,9 +27,7 @@ export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
     }
 
     ngOnInit() {
-        if (this.model.action) {
-            this.model.action.ensureDefaultMappings();
-        }
+
     }
 
     /**
@@ -37,7 +35,7 @@ export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
      */
     get parameters() {
         if (this.model.hasAction) {
-            return (this.model.action.mappings);
+            return (this.model.queryReference.mapping);
         } else {
             return ([]);
         }
@@ -67,10 +65,7 @@ export class ButtonComponent extends WidgetComponent<Button> implements OnInit {
             evt.preventDefault();
             evt.stopPropagation();
 
-            this.model.action = new QueryAction(this.model, {
-                type : "query",
-                queryReference : pageEvt.queryRef
-            });
+            this.model.setNewQueryId(pageEvt.queryRef.queryId);
         }
     }
 

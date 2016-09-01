@@ -2,16 +2,13 @@
   <widget-header>
     <widget-parameter>
       <name>Aktion</name>
-      <value *ngIf="model.hasAction">
-        <query-reference [(queryReferenceName)]="model.action.queryReference.name"
-                         [page]="model.page"></query-reference>
-        <required-parameters *ngIf="!model.action.isEmpty"
-                             [(parameterMapping)]="model.action.queryParameters"
-                             [page]="mode.page"></required-parameters>
-      </value>
-      <value *ngIf="!model.hasAction">
-        <query-reference [(queryReferenceName)]="model.action.queryReference.name"
-                         [page]="model.page"></query-reference>
+      <value>
+        <query-reference [(queryReference)]="model.queryReference">
+        </query-reference>
+        <required-parameters *ngIf="model.queryReference && model.queryReference.isResolveable"
+                             [(parameterMapping)]="model.queryReference.mapping"
+                             [page]="model.page">
+        </required-parameters>
       </value>
     </widget-parameter>
   </widget-header>

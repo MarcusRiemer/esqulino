@@ -13,11 +13,6 @@ import {loadWidget}                        from './widget-loader'
 import {Row, RowDescription}               from './row'
 import {Column, ColumnDescription}         from './column'
 
-import {
-    QueryAction, 
-    QueryActionDescription
-} from './action'
-
 import {Body, BodyDescription}                 from './body'
 import {Button, ButtonDescription}             from './button'
 import {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
@@ -32,8 +27,7 @@ export {
     WidgetHost, Widget, isWidgetHost, isWidget,
     Row, RowDescription,
     Column, ColumnDescription,
-    QueryAction,
-    QueryActionDescription, ParameterMappingDescription,
+    ParameterMappingDescription,
     Body, BodyDescription,
     Button, ButtonDescription,
     EmbeddedHtml, EmbeddedHtmlDescription,
