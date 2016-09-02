@@ -20,11 +20,7 @@ export abstract class ValueReference {
     // The page this reference occurs on
     private _page : Page;
 
-    // The project this reference is part of
-    private _project : Project;
-
-    constructor(project : Project, page : Page) {
-        this._project = project;
+    constructor(page : Page) {
         this._page = page;
     }
 
@@ -33,7 +29,7 @@ export abstract class ValueReference {
     }
 
     protected get project() {
-        return (this._project);
+        return (this.page.project);
     }
 }
 
@@ -53,8 +49,8 @@ export class ColumnReference extends ValueReference {
      */
     private _variableName : string;
     
-    constructor(project : Project, page : Page, desc : ColumnReferenceDescription) {
-        super(project, page);
+    constructor(page : Page, desc : ColumnReferenceDescription) {
+        super(page);
         this._columnName = desc.columnName;
         this._variableName = desc.variableName;
     }
@@ -74,8 +70,8 @@ export class QueryReference extends ValueReference {
     // How are these parameters fulfilled?
     private _mapping : ParameterMapping[] = [];
 
-    constructor(project : Project, page : Page, desc : QueryReferenceDescription) {
-        super(project, page);
+    constructor(page : Page, desc : QueryReferenceDescription) {
+        super(page);
 
         this._queryId = desc.queryId;
         this._name = desc.name;
@@ -234,7 +230,7 @@ export class QueryReference extends ValueReference {
         }
 
         if (this._mapping && this._mapping.length > 0) {
-            toReturn.mapping = this._mapping;
+            toReturn.mapping = this._mapping.map(m => m.toModel());
         }
         
         return (toReturn);

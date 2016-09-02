@@ -6,7 +6,7 @@
         <query-reference [(queryReference)]="model.queryReference">
         </query-reference>
         <required-parameters *ngIf="model.queryReference && model.queryReference.isResolveable"
-                             [(parameterMapping)]="model.queryReference.mapping"
+                             [(parameterMapping)]="model.mapping"
                              [page]="model.page">
         </required-parameters>
       </value>

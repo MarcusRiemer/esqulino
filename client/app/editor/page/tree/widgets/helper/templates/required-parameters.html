@@ -1,4 +1,9 @@
-<span (dragover)="onDragOver($event)"
-      (drop)="onDrop($event)"
-      [class.table]="isValidReference"
-      [class.missing]="!isValidReference"></span>
+<span *ngIf="hasParameters"
+      class="fa fa-arrow-left" aria-hidden="true">
+</span>
+<span *ngFor="let mapping of parameterMapping"
+      (dragover)="onDragOver($event, mapping)"
+      (drop)="onDrop($event, mapping)"
+      [title]="mapping.parameterName"
+      [class.parameter]="mapping.isSatisfied"
+      [class.missing]="!mapping.isSatisfied">{{ getDisplayText(mapping) }}</span>

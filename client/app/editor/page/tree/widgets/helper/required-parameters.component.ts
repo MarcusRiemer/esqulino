@@ -9,7 +9,7 @@ import {PageDragEvent}                        from '../../../drag.service'
 
 @Component({
     selector: `required-parameters`,
-    templateUrl: 'app/editor/page/tree/widgets/helper/templates/query-reference.html',
+    templateUrl: 'app/editor/page/tree/widgets/helper/templates/required-parameters.html',
 })
 export class RequiredParametersComponent implements OnInit {
     @Input() parameterMapping : ParameterMapping[];
@@ -22,39 +22,50 @@ export class RequiredParametersComponent implements OnInit {
      * Ensures all inputs are wired.
      */
     ngOnInit() {
-        if (!this.page) {
-            throw new Error("ActionReferenceComponent without page");
+        console.log(this.parameterMapping.map(p => p.toModel()));
+    }
+
+    get hasParameters() : boolean {
+        return (this.parameterMapping && this.parameterMapping.length > 0);
+    }
+
+    getDisplayText(mapping : ParameterMapping) {
+        if (mapping.isSatisfied) {
+            return (mapping.providingName);
+        } else {
+            return (mapping.parameterName);
         }
     }
 
     /**
      * Something is being dragged over this query reference.
      */
-    onDragOver(event : DragEvent) {
-        /*const dragEvent = JSON.parse(event.dataTransfer.getData("text/plain")) as PageDragEvent;
+    onDragOver(event : DragEvent, mapping : ParameterMapping) {
+        const dragEvent = JSON.parse(event.dataTransfer.getData("text/plain")) as PageDragEvent;
 
-        if (dragEvent.queryRef) {
+        if (dragEvent.parameterValueProvider) {
             event.preventDefault();
-        }*/
+        }
     }
 
     /**
      * Something has been dropped on this query reference.
      */
-    onDrop(event : DragEvent) {
-        /*event.stopPropagation();
+    onDrop(event : DragEvent, mapping : ParameterMapping) {
+        event.stopPropagation();
         
         const dragText = event.dataTransfer.getData("text/plain");
         const dragEvent = JSON.parse(dragText) as PageDragEvent;
 
-        if (dragEvent.queryRef) {
+        if (dragEvent.parameterValueProvider) {
             event.preventDefault();
 
-            const newName = dragEvent.queryRef.name;
-            this.actionReferenceName = newName;
-            this.actionReferenceNameChange.emit(newName);
+            const value = dragEvent.parameterValueProvider;
+            mapping.providingName = value;
 
-            console.log(`Query Reference: Dropped "${this.actionReference.queryName}"`);
-        }*/
+            this.parameterMappingChange.emit(this.parameterMapping);
+
+            console.log(`Parameter ${mapping.parameterName}: Dropped "${value}"`);
+        }
     }
 }

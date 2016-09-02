@@ -209,7 +209,7 @@ class Project
   # @param query_id The ID of the query
   def query_by_id(query_id)
     to_return = queries.find {|query| query.id == query_id}
-    raise UnknownQueryError.new(@id, query_id) if to_return.nil?
+    raise UnknownQueryError.new(self.id, query_id) if to_return.nil?
 
     return (to_return)
   end

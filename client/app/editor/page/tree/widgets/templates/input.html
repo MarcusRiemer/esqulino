@@ -2,7 +2,9 @@
   <widget-header>
     <widget-parameter>
       <name>Parameter</name>
-      <value>{{ model.outParamName }}</value>
+      <value><span class="column"
+                   (dragstart)="onParameterDragStart($event)"
+                   draggable="true">{{ model.outParamName }}</span></value>
     </widget-parameter>
   </widget-header>
 </esqulino-widget-node>
