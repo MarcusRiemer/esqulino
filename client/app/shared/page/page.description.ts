@@ -71,6 +71,15 @@ export interface ButtonDescription extends WidgetDescription {
 }
 
 /**
+ * Describes a HTML form
+ */
+export interface FormDescription extends WidgetDescription {
+    type : "form"
+
+    children : WidgetDescription[]
+}
+
+/**
  * Describes another page the user would possibly like to navigate to.
  */
 export interface LinkDescription extends WidgetDescription {

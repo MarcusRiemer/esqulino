@@ -56,6 +56,14 @@
       </div>
     </div>
 
+    <div (dragstart)="startFormDrag($event)"
+         draggable="true"
+         [class]="borderCssClass('structural')">
+      <div class="column-preview">
+        <span class="fa fa-fw fa-object-group" aria-hidden="true"></span>Formular
+      </div>
+    </div>
+    
     <div (dragstart)="startQueryTableDrag($event)"
          draggable="true"
          [class]="borderCssClass('structural')">

@@ -6,6 +6,7 @@ import {WidgetBase, WidgetDescription}         from './widget-base'
 import {Button, ButtonDescription}             from './button'
 import {Column, ColumnDescription}             from './column'
 import {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
+import {Form, FormDescription}                 from './form'
 import {Heading, HeadingDescription}           from './heading'
 import {Input, InputDescription}               from './input'
 import {Link, LinkDescription}                 from './link'
@@ -24,6 +25,8 @@ function createWidget(desc : WidgetDescription, parent : WidgetHost) : WidgetBas
         return new Column(desc as ColumnDescription, parent);
     case "embedded-html":
         return new EmbeddedHtml(desc as EmbeddedHtmlDescription, parent);
+    case "form":
+        return new Form(desc as FormDescription, parent);
     case "heading":
         return new Heading(desc as HeadingDescription, parent);
     case "input":

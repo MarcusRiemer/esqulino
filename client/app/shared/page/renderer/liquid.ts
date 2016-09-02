@@ -5,7 +5,7 @@ import {Page}                  from '../page'
 import {Renderer}              from '../renderer'
 import {
     Widget, Row, Column,
-    Body, Button, EmbeddedHtml, Heading, Input, Link, Paragraph, QueryTable
+    Body, Button, EmbeddedHtml, Form, Heading, Input, Link, Paragraph, QueryTable
 } from '../widgets/index'
 
 export {Renderer}
@@ -26,9 +26,7 @@ function renderBody(w: Widget, renderWidget : WidgetRenderer) : string {
     return (`
 <body>
   <div class="container-fluid">
-    <form>
-      ${children}
-    </form>
+    ${children}
   </div>
 </body>
 `);
@@ -53,8 +51,19 @@ function renderRow(w: Widget, renderWidget : WidgetRenderer) : string {
     const row = w as Row;
     const children : string = row.children
         .map(c => renderWidget(c, renderWidget))
-        .join("");
+        .join("\n");
     return `<div class="row">${children}</div>`
+}
+
+/**
+ * Render a form
+ */
+function renderForm(w: Widget, renderWidget : WidgetRenderer) : string {
+    const form = w as Form;
+    const children : string = form.children
+        .map(c => renderWidget(c, renderWidget))
+        .join("\n");
+    return `<form>\n${children}</form>`
 }
 
 /**
@@ -195,6 +204,7 @@ export class LiquidRenderer extends Renderer {
         "button" : renderButton,
         "column" : renderColumn,
         "embedded-html" : renderHtml,
+        "form": renderForm,
         "query-table" : renderQueryTable,
         "paragraph" : renderParagraph,
         "heading" : renderHeading,
