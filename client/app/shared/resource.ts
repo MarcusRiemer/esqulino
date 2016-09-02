@@ -73,7 +73,7 @@ export abstract class ProjectResource implements ApiVersion, Saveable {
     get project() {
         // Give a friendly error message if the project is missing
         if (!this._project) {
-            throw new Error(`Project Resource "${this._name}" (${this._id}) has no associated project.`);
+            throw new Error(`Project Resource "${this._name}" (id: ${this._id}) has no associated project.`);
         }
 
         return (this._project);

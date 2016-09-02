@@ -297,7 +297,8 @@ class ScratchSqlApp < Sinatra::Base
       return @page.render(query_params)
     end
 
-    post '/:page_name_or_id?/query/:query_ref_name' do |page_name_or_id, query_ref_name|
+    # Run a query
+    post '/:page_name_or_id?/query/:query_ref' do |page_name_or_id, query_ref_string|
       request_prepare_project subdomain
       request_prepare_page(page_name_or_id, true)
 
@@ -313,13 +314,11 @@ class ScratchSqlApp < Sinatra::Base
       }
 
       # Grab the query reference
-      query_ref = @page.get_query_reference_by_name query_ref_name
-
-      puts "POST action params: #{query_params}"
+      query = @project.query_by_id query_ref_string
+      
 
       # And actually execute it
-      @page.execute_referenced_query(query_ref, query_params)
-
+      # @page.execute_referenced_query(query_ref, query_params)
 
       # Go back
       redirect back

@@ -75,7 +75,25 @@
       },
       {
         "type": "button",
-        "text": "Knopf"
+        "text": "Pokémon anlegen",
+        "query": {
+          "type": "query",
+          "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44",
+          "mapping": [
+            {
+              "parameterName": "nummer",
+              "providingName": "input.nummer"
+            },
+            {
+              "parameterName": "name",
+              "providingName": "input.name"
+            },
+            {
+              "parameterName": "staerke",
+              "providingName": "input.staerke"
+            }
+          ]
+        }
       },
       {
         "type": "heading",

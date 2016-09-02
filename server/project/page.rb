@@ -196,7 +196,7 @@ class Page
     # Not-quite-so-wellformed models may omit the mapping, this
     # shouldn't crash anything immediatly.
     query_ref.fetch('mapping', {}).each do |mapping|
-      puts "Handling mapping #{mapping.inspect}"
+      # puts "Handling mapping #{mapping.inspect}"
 
       # Extract all relevant indizes
       providing_prefix, providing_name = mapping.fetch('providingName').split "."
@@ -209,7 +209,7 @@ class Page
       params[parameter_name] = mapped_value
     end
 
-    puts "#{query_ref['name']} params: #{params.inspect}"
+    # puts "#{query_ref['name']} params: #{params.inspect}"
 
     # Grab the actual query and execute it with the freshly constructed parameters
     query = @project.query_by_id(query_ref['queryId'])
@@ -233,7 +233,7 @@ class Page
       end
     end
 
-    puts "#{query_ref['name']} result: #{mapped}"
+    # puts "#{query_ref['name']} result: #{mapped}"
     
     return (mapped);
   end

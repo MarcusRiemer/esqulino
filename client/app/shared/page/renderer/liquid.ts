@@ -66,13 +66,13 @@ function renderButton(w: Widget) : string {
     const text = button.text;
     const cssClass = "btn btn-secondary btn-block";
 
-    if (button.queryReference && !button.queryReference.isResolveable) {
+    if (button.queryReference && button.queryReference.isResolveable) {
         const pageName = w.page.name;
         const queryId = button.queryReference.query.id;
         const actionUrl = `/${pageName}/query/${queryId}`;
         const method = "POST";
 
-        return (`<button type="submit" formaction="${actionUrl}" formmethod="${method}" class="${cssClass}">${text}</button>`);
+        return (`<button type="submit" formaction="${actionUrl}" formmethod="${method}" name="action" value="a" class="${cssClass}">${text}</button>`);
     } else {
         return (`<div class="alert alert-danger" role="alert">Dieser Knopf hat kein gültiges Ziel und wird daher nicht dargestellt!</div>`);
     }

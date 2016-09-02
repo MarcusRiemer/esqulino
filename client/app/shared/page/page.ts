@@ -65,7 +65,7 @@ export class Page extends ProjectResource {
 
         // Resolve referenced queries
         if (desc.referencedQueries) {
-            this._referencedQueries = desc.referencedQueries.map(refDesc => new QueryReference(project, this, refDesc));
+            this._referencedQueries = desc.referencedQueries.map(refDesc => new QueryReference(this, refDesc));
         }
 
         // Obtain parameters
@@ -274,7 +274,7 @@ export class Page extends ProjectResource {
             throw new Error(`Name "${ref.name}" is already in use`);
         }
 
-        this._referencedQueries.push(new QueryReference(this.project, this, ref));
+        this._referencedQueries.push(new QueryReference(this, ref));
         this.markSaveRequired();
     }
 
@@ -425,7 +425,8 @@ export class Page extends ProjectResource {
     }
 
     /**
-     * @return True, if the following input could be provided
+     * @return True, if the following input could be provided. This may either happen via
+     *         a input widget or a page GET parameter.
      */
     hasParameterProvider(name : string) {
         return (this._parameters.some(p => p.fullName == name) ||

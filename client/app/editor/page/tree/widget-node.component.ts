@@ -172,7 +172,8 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
 
         // Is this a meaningful child for this node or its parent?
-        if (this.determineDropHost(this.model, place, pageEvt.widget)) {
+        if ((pageEvt.row || pageEvt.widget) &&
+            this.determineDropHost(this.model, place, pageEvt.widget)) {
             evt.preventDefault();
         }
     }

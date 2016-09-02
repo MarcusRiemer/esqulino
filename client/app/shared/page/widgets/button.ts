@@ -27,9 +27,9 @@ export class Button extends ParametrizedWidget {
 
         // If there is an action, hold on to it
         if (desc.query) {
-            this._ref = new QueryReference(this.page.project, this.page, desc.query);
+            this._ref = new QueryReference(this.page, desc.query);
         } else {
-            this._ref = new QueryReference(this.page.project, this.page, {
+            this._ref = new QueryReference(this.page, {
                 type : "query"
             });
         }
@@ -108,9 +108,14 @@ export class Button extends ParametrizedWidget {
     protected toModelImpl() : WidgetDescription {
         const toReturn : ButtonDescription = {
             type : "button",
-            text : this._text,
-            query : this._ref.toModel()
+            text : this._text
         };
+
+        // Only add the query reference if it adds more then it's typename
+        const queryRefDesc = this._ref.toModel();
+        if (Object.keys(queryRefDesc).length > 1) {
+            toReturn.query = queryRefDesc;
+        }
 
         return (toReturn);
     }

@@ -88,7 +88,7 @@ export class QueryReferenceComponent {
                 }
             } else {
                 // No, update the whole reference with the drag data
-                this.queryReference = new QueryReference(page.project, page, newRef);
+                this.queryReference = new QueryReference(page, newRef);
             }
             
             this.queryReferenceChange.emit(this.queryReference);

@@ -21,7 +21,7 @@
 {% include "input" caption: "Nummer im Pokédex", outParamName: "input.nummer", description: "", inputType: "number"  %}
 {% include "input" caption: "Spitzname", outParamName: "input.name", description: "", inputType: "text"  %}
 {% include "input" caption: "Stärke des neuen Pokémon", outParamName: "input.staerke", description: "", inputType: "text"  %}
-<div class="alert alert-danger" role="alert">Dieser Knopf hat kein gültiges Ziel und wird daher nicht dargestellt!</div>
+<button type="submit" formaction="/Gefangen_Neu/query/79f9fd59-89cd-47d1-ab20-9a4388cd9d44" formmethod="POST" name="action" value="a" class="btn btn-secondary btn-block">Pokémon anlegen</button>
 <h2>Meine Pokémon</h2>
 {% include "query_table" table: query.Meine_Pokemon, columns: "gefangen_id,nummer,name,typ,spitzname,staerke" %}
     </form>
