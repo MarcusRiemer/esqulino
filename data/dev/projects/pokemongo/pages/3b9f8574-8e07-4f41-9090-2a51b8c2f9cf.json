@@ -32,9 +32,7 @@
           "type": "navigate",
           "internal": {
             "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
-            "parameters": [
-
-            ]
+            "parameters": []
           }
         }
       },
@@ -48,52 +46,57 @@
         ]
       },
       {
-        "type": "heading",
-        "level": 2,
-        "text": "Fakten zu deinem Fang"
-      },
-      {
-        "type": "input",
-        "outParamName": "nummer",
-        "caption": "Nummer im Pokédex",
-        "description": "",
-        "inputType": "number"
-      },
-      {
-        "type": "input",
-        "outParamName": "name",
-        "caption": "Spitzname",
-        "description": "",
-        "inputType": "text"
-      },
-      {
-        "type": "input",
-        "outParamName": "staerke",
-        "caption": "Stärke des neuen Pokémon",
-        "description": "",
-        "inputType": "text"
-      },
-      {
-        "type": "button",
-        "text": "Pokémon anlegen",
-        "query": {
-          "type": "query",
-          "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44",
-          "mapping": [
-            {
-              "parameterName": "nummer",
-              "providingName": "input.nummer"
-            },
-            {
-              "parameterName": "name",
-              "providingName": "input.name"
-            },
-            {
-              "parameterName": "staerke",
-              "providingName": "input.staerke"
+        "type": "form",
+        "children": [
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Fakten zu deinem Fang"
+          },
+          {
+            "type": "input",
+            "outParamName": "nummer",
+            "caption": "Nummer im Pokédex",
+            "description": "",
+            "inputType": "number"
+          },
+          {
+            "type": "input",
+            "outParamName": "name",
+            "caption": "Spitzname",
+            "description": "",
+            "inputType": "text"
+          },
+          {
+            "type": "input",
+            "outParamName": "staerke",
+            "caption": "Stärke des neuen Pokémon",
+            "description": "",
+            "inputType": "text"
+          },
+          {
+            "type": "button",
+            "text": "Pokémon anlegen",
+            "query": {
+              "type": "query",
+              "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44",
+              "mapping": [
+                {
+                  "parameterName": "nummer",
+                  "providingName": "input.nummer"
+                },
+                {
+                  "parameterName": "name",
+                  "providingName": "input.name"
+                },
+                {
+                  "parameterName": "staerke",
+                  "providingName": "input.staerke"
+                }
+              ]
             }
-          ]
-        }
+          }
+        ]
       },
       {
         "type": "heading",

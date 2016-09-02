@@ -9,7 +9,7 @@ import {borderCssClass}                 from '../shared/page-preview.util'
 import {Page, ParameterMapping}         from '../../shared/page/index'
 import {
     Heading, Row, Paragraph, QueryTable,
-    Input, Button, EmbeddedHtml, Link, Column
+    Input, Button, EmbeddedHtml, Form, Link, Column
 } from '../../shared/page/widgets/index'
 
 import {
@@ -152,6 +152,13 @@ export class SidebarWidgetsComponent implements OnDestroy {
      */
     startButtonDrag(evt : DragEvent) {
         this._dragService.startWidgetDrag(evt, "sidebar", Button.emptyDescription);
+    }
+
+    /**
+     * Starts a drag action for an empty HTML element
+     */
+    startFormDrag(evt : DragEvent) {
+        this._dragService.startWidgetDrag(evt, "sidebar", Form.emptyDescription);
     }
 
     /**

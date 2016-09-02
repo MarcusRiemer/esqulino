@@ -16,6 +16,7 @@ import {Column, ColumnDescription}         from './column'
 import {Body, BodyDescription}                 from './body'
 import {Button, ButtonDescription}             from './button'
 import {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
+import {Form, FormDescription}                 from './form'
 import {Heading, HeadingDescription}           from './heading'
 import {Input, InputDescription}               from './input'
 import {Link, LinkDescription}                 from './link'
@@ -31,6 +32,7 @@ export {
     Body, BodyDescription,
     Button, ButtonDescription,
     EmbeddedHtml, EmbeddedHtmlDescription,
+    Form, FormDescription,
     Paragraph, ParagraphDescription,
     Heading, HeadingDescription,
     QueryTable, QueryTableDescription,
