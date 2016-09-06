@@ -298,25 +298,25 @@ class ScratchSqlApp < Sinatra::Base
     end
 
     # Run a query
-    post '/:page_name_or_id?/query/:query_ref' do |page_name_or_id, query_ref_string|
+    post '/:page_name_or_id?/query/:query_ref' do |page_name_or_id, query_id|
       request_prepare_project subdomain
       request_prepare_page(page_name_or_id, true)
 
       # Grab all input values that are not empty and get rid of the "input." prefix
       input_params = {}
-
       request.POST
         .select {|key,value| key.start_with? "input" and not value.strip.empty?}
         .each {|key,value| input_params[key[6..-1]] = value }
 
+      # Put them in the "grand" request object
       query_params = {
-        "input" => input_params
+        "input" => input_params,
+        "get" => request.GET
       }
 
       # Grab the query reference
-      query = @project.query_by_id query_ref_string
+      query = @project.query_by_id query_id
       
-
       # And actually execute it
       # @page.execute_referenced_query(query_ref, query_params)
 
