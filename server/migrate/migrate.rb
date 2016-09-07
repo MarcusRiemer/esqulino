@@ -145,7 +145,13 @@ def migrate_project(cli, project, target_version)
   from = project.api_version.to_i
   to = target_version.to_i
 
-  migrator = $migrators.fetch(from)
+  if from == to then
+    cli.status_project(project, "Already at API version #{target_version}")
+    return
+  end
+
+  migrator = $migrators[from]
+  raise "No migrator to get from API version #{from} to #{to}" if migrator.nil?
   raise "Wrong target version #{migrator.to_version}" if migrator.to_version != target_version
   
 

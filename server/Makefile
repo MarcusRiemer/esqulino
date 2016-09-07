@@ -39,7 +39,15 @@ doc-clean : msg-pre-doc-clean
 dev-doc : has-yard
 	$(YARD_BIN) stats --list-undoc $(SOURCES)
 
-.PHONY : dev-doc doc install-deps run test
+##################################
+# Maintenance targets
+##################################
+
+# Uses the CLI to migrate projects.
+#
+# TODO: Use dynamic data directory
+migrate-projects:
+	./esqulino-cli.rb --data-dir ../data/dev/ --migrate 
 
 ##################################
 # Messaging targets
@@ -60,5 +68,6 @@ ifeq (, $(wildcard $(RERUN_BIN)))
 	$(error "Ruby script restarter (rerun) not in gems")
 endif
 
+.PHONY : dev-doc doc install-deps run test migrate-projects
 
 include ../Makefile.common
