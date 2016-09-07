@@ -1,4 +1,4 @@
-\documentclass[paper=a4,fontsize=11pt,parskip=half]{scrartcl}
+\documentclass[paper=a4,fontsize=12pt,parskip=half]{scrartcl}
 
 %% packages
 \usepackage[ngerman]{babel}
@@ -27,6 +27,17 @@
 \input{tex-definitions}
 
 \usetikzlibrary{calc,intersections,shapes}
+
+% neue Kopfzeilen mit fancypaket
+\usepackage{fancyhdr} %Paket laden
+\pagestyle{fancy} %eigener Seitenstil
+\fancyhf{} %alle Kopf- und Fußzeilenfelder bereinigen
+\fancyhead[L]{\nouppercase{\leftmark}} %Kopfzeile links
+\fancyhead[C]{} %zentrierte Kopfzeile
+\fancyhead[R]{\thepage} %Kopfzeile rechts
+\renewcommand{\headrulewidth}{0.4pt} %obere Trennlinie
+%\fancyfoot[C]{Confidential}
+%\renewcommand{\footrulewidth}{0.4pt} %untere Trennlinie
 
 %% meta informations
 \hypersetup{
