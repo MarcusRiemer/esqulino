@@ -309,16 +309,26 @@ class ScratchSqlApp < Sinatra::Base
         .each {|key,value| input_params[key[6..-1]] = value }
 
       # Put them in the "grand" request object
-      query_params = {
-        "input" => input_params,
-        "get" => request.GET
+      initial_params = {
+        "input" => input_params
       }
+
+      bind_params = {}
+
+      request.GET.each do |parameter_name, providing_name|
+        # Extract all relevant indizes
+        providing_prefix, providing_name = providing_name.split "."
+        
+        # And do the actual mapping
+        mapped_value = initial_params
+                       .fetch(providing_prefix)
+                       .fetch(providing_name)
+        bind_params[parameter_name] = mapped_value
+      end
 
       # Grab the query reference
       query = @project.query_by_id query_id
-      
-      # And actually execute it
-      # @page.execute_referenced_query(query_ref, query_params)
+      @project.execute_sql(query.sql, bind_params)
 
       # Go back
       redirect back
