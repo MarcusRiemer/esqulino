@@ -38,7 +38,7 @@ Once you have imported and started the `esqulino.ova` image with your favourite 
                ├─1734 /bin/sh -c RACK_ENV="production" /home/vagrant/.gem/ruby/2.3.0/bin/bundle exec rackup
                └─1735 ruby2.3 /usr/local/bin/rackup
     
-    Sep 07 08:04:24 vagrant systemd[1]: Started esqulino - A SQL IDE targeted at pupils.
+    Sep 07 08:04:24 vagrant systemd[1]: Started esqulino - A SQL and web IDE targeted at pupils.
     Sep 07 08:04:25 vagrant make[1633]: RACK_ENV="production" /home/vagrant/.gem/ruby/2.3.0/bin/bundle exec rackup
     Last login: Wed Sep  7 07:31:55 2016 from 10.0.2.2
 
@@ -48,7 +48,7 @@ As you can see the provided image is based on Ubuntu 16.04 and displays the curr
 
 The address [http://localhost.localdomain:9292](http://localhost.localdomain:9292) on the host machine should be mapped to the esqulino instance running inside the virtual machine. Simply open a browser on your host machine and you are good to go.
 
-* Projects are served under `http:<projectId>.localhost.localdomain`.
+* Projects are served under `http://projectId.localhost.localdomain`.
 * If you are experiencing strange bugs please point your browser to the [unit test page](http://localhost.localdomain:9292/test.html). This will run the client-side test-suite directly in your browser. Please report any errors in this test suite immediatly!
 
 ### Paths inside the VM

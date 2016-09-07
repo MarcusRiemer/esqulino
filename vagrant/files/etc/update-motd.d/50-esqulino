@@ -2,7 +2,7 @@
 
 printf "\nDefault Ports\n"
 printf " * Local HTTP server : 9292\n"
-printf " * Host  HTTP mapping:   80\n"
+printf " * Host  HTTP mapping: 9292\n"
 
 echo ""
 systemctl status esqulino
