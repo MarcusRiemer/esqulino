@@ -1,12 +1,12 @@
 <esqulino-widget-node [model]="model"
                       [nodeDisplay]="'block'">
-  <widget-header>
+  <span class="widget-header">
     <widget-parameter>
-      <name>Abfrage</name>
-      <value><query-reference [(queryReference)]="model.queryReference"
-                              [restrictToPage]="model.page"></query-reference></value>
+      <span class="name">Abfrage</span>
+      <span class="value"><query-reference [(queryReference)]="model.queryReference"
+                              [restrictToPage]="model.page"></query-reference></span>
     </widget-parameter>
-  </widget-header>
+  </span>
 
   <div *ngIf="model.hasValidReference"
       class="text tree-level">

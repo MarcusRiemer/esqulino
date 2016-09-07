@@ -1,10 +1,10 @@
 <esqulino-widget-node [model]="model">
-  <widget-header>
+  <span class="widget-header">
     <widget-parameter>
-      <name>Parameter</name>
-      <value><span class="column"
+      <span class="name">Parameter</span>
+      <span class="value"><span class="column"
                    (dragstart)="onParameterDragStart($event)"
-                   draggable="true">{{ model.outParamName }}</span></value>
+                   draggable="true">{{ model.outParamName }}</span></span>
     </widget-parameter>
-  </widget-header>
+  </span>
 </esqulino-widget-node>

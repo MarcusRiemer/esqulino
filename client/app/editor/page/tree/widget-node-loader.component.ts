@@ -1,8 +1,8 @@
 import {
     Component, Input, OnInit, OnChanges, SimpleChanges,
-    Injector, DynamicComponentLoader, ComponentRef,
+    Injector, ComponentRef,
     ViewChild, ViewContainerRef, ComponentFactoryResolver,
-    Type, provide, ReflectiveInjector
+    Type, ReflectiveInjector
 } from '@angular/core'
 
 import {WidgetBase}                       from '../../../shared/page/widgets/index'
@@ -44,7 +44,6 @@ export class WidgetNodeLoaderComponent implements OnChanges {
         private _injector: Injector,
         private _selfRef : ViewContainerRef,
         private _resolver : ComponentFactoryResolver,
-        private _dcl : DynamicComponentLoader
     ) {
         /**
          * TODO: Allow widgets to somehow register themself.
@@ -94,7 +93,7 @@ export class WidgetNodeLoaderComponent implements OnChanges {
         
         // Inject the widget model            
         let injector = ReflectiveInjector.resolveAndCreate([
-            provide(WIDGET_MODEL_TOKEN, {useValue : this.model})
+            {provide: WIDGET_MODEL_TOKEN, useValue : this.model}
         ],this._injector);
         
         const fac = this._resolver.resolveComponentFactory(componentType)

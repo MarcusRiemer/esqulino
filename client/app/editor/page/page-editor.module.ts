@@ -53,8 +53,11 @@ const visualComponents = [
 // Components as defined by the tree-editor
 const treeComponents = [
     WidgetNodeComponent,
+    WidgetNodeParameterComponent,
+    
     Tree.QueryReferenceComponent,
     Tree.RequiredParametersComponent,
+    
     Tree.ButtonComponent,
     Tree.HeadingComponent,
     Tree.QueryTableComponent,

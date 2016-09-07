@@ -1,15 +1,15 @@
 <esqulino-widget-node [model]="model">
-  <widget-header>
+  <span class="widget-header">
     <widget-parameter>
-      <name>Aktion</name>
-      <value>
+      <span class="name">Aktion</span>
+      <span class="value">
         <query-reference [(queryReference)]="model.queryReference">
         </query-reference>
         <required-parameters *ngIf="model.queryReference && model.queryReference.isResolveable"
                              [(parameterMapping)]="model.mapping"
                              [page]="model.page">
         </required-parameters>
-      </value>
+      </span>
     </widget-parameter>
-  </widget-header>
+  </span>
 </esqulino-widget-node>

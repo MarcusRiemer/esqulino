@@ -66,10 +66,10 @@
  * The widget header is used for he key="value" argument pairs of
  * xml-like nodes.
  */
-.block-container .widget widget-header {
+.block-container .widget .widget-header {
     display: inline-block;
 
-    name {
+    .name {
         text-transform: lowercase;
         color: #4f6816;
     }
@@ -77,23 +77,14 @@
     /**
      * The equals sign between keys and values.
      */
-    name::after {
+    .name::after {
         content: "=";
-    }
-
-    /**
-     * TODO: This is a hack that accounts for some whitespace that
-     * gets inserted between the <name></name><value></value> node
-     * by the Angular 2 transclusion mechanism.
-     */
-    value {
-        margin-left: -0.5em;
     }
 
     /**
      * Surround values with " "
      */
-    value::after, value::before {
+    .value::after, .value::before {
         content: "\"";
     }
 }

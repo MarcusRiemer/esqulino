@@ -30,7 +30,7 @@ export class SidebarService {
     /**
      * Valid types for sidebars.
      */
-    private _knownTypes : { [typeName:string] : Type} = { };
+    private _knownTypes : { [typeName:string] : Type<any>} = { };
 
     constructor(registrationService : RegistrationService) {
         this._model = new BehaviorSubject<InternalSidebarModel[]>([]);
@@ -57,7 +57,7 @@ export class SidebarService {
      * @param newType The string ID that is used to request this type.
      * @param component The component constructr that should be used.
      */
-    private registerType(newType : string, componentType : Type) {
+    private registerType(newType : string, componentType : Type<any>) {
         if (this.isKnownType(newType)) {
             console.log(`Overwriting sidebar type "${newType}"`);
         }
