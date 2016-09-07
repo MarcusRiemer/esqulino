@@ -39,14 +39,10 @@ clean-deps :
 dist :
 	$(SUBDIR_MAKE) client all
 	$(SUBDIR_MAKE) dist archive-use
-	$(SUBDIR_MAKE) schema/json all
-
 
 # Removing everything that is required to run esqulino
 clean-dist :
 	$(SUBDIR_MAKE) dist clean
-	$(SUBDIR_MAKE) schema/json clean
-
 
 # One-shot compilation of all things that are required to run esqulino
 dist-dev :
