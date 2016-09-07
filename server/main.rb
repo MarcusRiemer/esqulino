@@ -285,10 +285,17 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Rendering subdomains
-  subdomain do   
-    get '/:page_name_or_id?' do
+  subdomain do
+    # Browsers will automatically ask for the favicon at the root of the URL. Without this
+    # route the favicon would be interpreted as a page name or id.
+    get '/favicon.ico' do
+      status 404
+    end
+
+    # Render a page
+    get '/:page_name_or_id?' do |page_name_or_id|
       request_prepare_project subdomain
-      request_prepare_page(params['page_name_or_id'], true)
+      request_prepare_page(page_name_or_id, true)
 
       query_params = {
         "get" => request.GET
