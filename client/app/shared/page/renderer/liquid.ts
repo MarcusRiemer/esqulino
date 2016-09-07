@@ -63,6 +63,7 @@ function renderForm(w: Widget, renderWidget : WidgetRenderer) : string {
     const children : string = form.children
         .map(c => renderWidget(c, renderWidget))
         .join("\n");
+    
     return `<form>\n${children}</form>`
 }
 
@@ -79,9 +80,15 @@ function renderButton(w: Widget) : string {
         const pageName = w.page.name;
         const queryId = button.queryReference.query.id;
         const actionUrl = `/${pageName}/query/${queryId}`;
+
+        const mapping = button.mapping
+            .map(m => `${m.parameterName}=${m.providingName}`)
+            .join("&")
+
+        const encodedUrl = actionUrl + "?" + mapping
         const method = "POST";
 
-        return (`<button type="submit" formaction="${actionUrl}" formmethod="${method}" name="action" value="a" class="${cssClass}">${text}</button>`);
+        return (`<button type="submit" formaction="${encodedUrl}" formmethod="${method}" name="action" value="a" class="${cssClass}">${text}</button>`);
     } else {
         return (`<div class="alert alert-danger" role="alert">Dieser Knopf hat kein gültiges Ziel und wird daher nicht dargestellt!</div>`);
     }

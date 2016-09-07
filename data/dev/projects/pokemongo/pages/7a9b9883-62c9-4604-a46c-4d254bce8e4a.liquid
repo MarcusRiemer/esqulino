@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -10,16 +9,14 @@
   </head>
   <body>
     <div class="container-fluid">
+      <h1>Pokémon Freigelassen</h1>
+      <p>Die transferierten Pokémon kommen zu Prof. Willow auf eine "Farm" und leben dort "glücklich und zufrieden bis an ihr Lebensende". Du wirst sie aber nie wieder zu Gesicht bekommen und kannst sie auch nicht besuchen.</p>
+      <p>What happens when I transfer a Pokémon to the Professor? The transferred pokemon go to a "farm" where they "live happily ever after" and you can never, ever visit or see them again.</p>
+      <a href="/Hauptseite">Zurück zur Hauptseite</a>
+      {% include "query_table" table: query.Meine_Pokemon, columns: "gefangen_id,nummer,name,spitzname" %}
       <form>
-        <h1>Pokémon Freigelassen</h1>
-        <p>Die transferierten Pokémon kommen zu Prof. Willow auf eine "Farm" und leben dort "glücklich und zufrieden bis an ihr Lebensende". Du wirst sie aber nie wieder zu Gesicht bekommen und kannst sie auch nicht besuchen.</p>
-        <p>What happens when I transfer a Pokémon to the Professor? The transferred pokemon go to a "farm" where they "live happily ever after" and you can never, ever visit or see them again.</p>
-        <a href="/Hauptseite">Zurück zur Hauptseite</a>
-        {% include "query_table" table: query.Meine_Pokemon, columns: "gefangen_id,nummer,name,spitzname" %}
         {% include "input" caption: "Neue Eingabe", outParamName: "input.gefangen_id", description: "Beschreibung der neuen Eingabe", inputType: "text"  %}
-        <button type="submit" formaction="/Gefangen_Loeschen/query/Gefangen_Loeschen" formmethod="POST" class="btn btn-secondary btn-block">
-          <strong>Jetzt Freilassen</strong>
-        </button>
+        <button type="submit" formaction="/Gefangen_Loeschen/query/40bddeac-facc-4836-a27b-6a23222078d5?gefangen_id=input.gefangen_id" formmethod="POST" name="action" value="a" class="btn btn-secondary btn-block">Löschen!</button>
       </form>
     </div>
   </body>

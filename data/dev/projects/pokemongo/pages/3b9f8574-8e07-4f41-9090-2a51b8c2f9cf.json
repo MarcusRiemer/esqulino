@@ -32,7 +32,9 @@
           "type": "navigate",
           "internal": {
             "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
-            "parameters": []
+            "parameters": [
+
+            ]
           }
         }
       },
