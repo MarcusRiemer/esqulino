@@ -74,6 +74,10 @@ server-run :
 server-run-dev :
 	$(SUBDIR_MAKE) server run-dev
 
+# Attempts to migrate all projects to a newer API version
+server-migrate-projects:
+	$(SUBDIR_MAKE) server migrate-projects
+
 
 # Compile every part of the documentation, including the thesis.
 doc :
