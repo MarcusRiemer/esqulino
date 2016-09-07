@@ -1,11 +1,10 @@
-import {NgModule, ModuleWithProviders,
-        ExceptionHandler, provide}         from '@angular/core'
+import {NgModule, ModuleWithProviders}     from '@angular/core'
 import {CommonModule}                      from '@angular/common'
 import {FormsModule}                       from '@angular/forms'
 import {RouterModule}                      from '@angular/router'
 import {HttpModule}                        from '@angular/http'
 
-import {EsqulinoExceptionHandler}          from './exception-handler'
+// import {EsqulinoExceptionHandler}       from './exception-handler'
 import {FlashMessageListComponent}         from './flash.component'
 import {FlashService}                      from './flash.service'
 import {ServerApiService}                  from './serverapi.service'

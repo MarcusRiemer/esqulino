@@ -29,9 +29,9 @@ install-deps :
 # This will not touch any globally installed gems, but merely delete
 # folders that contain these dependencies.
 clean-deps :
-	$(SUBDIR_MAKE) client clean
-	$(SUBDIR_MAKE) dist clean
-	$(SUBDIR_MAKE) schema/json clean
+	$(SUBDIR_MAKE) client clean-deps
+	$(SUBDIR_MAKE) dist clean-deps
+	$(SUBDIR_MAKE) schema/json clean-deps
 
 # One-shot compilation of all things that are required to run esqulino.
 # Once these are in place, the client archives are packaged up,

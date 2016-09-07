@@ -1,7 +1,7 @@
 import{
     Component, Input, OnInit,
     ViewContainerRef, ComponentFactoryResolver,
-    Type, provide, Injector, ReflectiveInjector
+    Type,Injector, ReflectiveInjector
 } from '@angular/core'
 
 import {
@@ -79,8 +79,8 @@ export class SidebarLoaderComponent implements OnInit {
                 let injector = this._injector;
                 if (model.param) {
                     injector = ReflectiveInjector.resolveAndCreate([
-                        provide(SIDEBAR_MODEL_TOKEN, {useValue: model.param }),
-                        provide(SIDEBAR_ID_TOKEN, {useValue: model.id})
+                        { provide : SIDEBAR_MODEL_TOKEN, useValue: model.param },
+                        { provide : SIDEBAR_ID_TOKEN, useValue: model.id}
                     ], this._injector);
                 }
 

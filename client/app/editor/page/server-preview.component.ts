@@ -2,7 +2,7 @@ import {
     Component, Input, ElementRef,
     ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core'
-import {DomSanitizationService}               from '@angular/platform-browser';
+import {DomSanitizer}                         from '@angular/platform-browser';
 
 import {Observable}                           from 'rxjs/Observable'
 import {Subject}                              from 'rxjs/Subject'
@@ -44,7 +44,7 @@ export class ServerPreviewComponent {
     
     constructor(
         private _pageService : PageService,
-        private _sanitizer: DomSanitizationService,
+        private _sanitizer: DomSanitizer,
         private _elementRef : ElementRef,
         private _cd: ChangeDetectorRef
     ) {

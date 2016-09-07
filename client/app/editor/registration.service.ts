@@ -8,7 +8,7 @@ import {ReplaySubject}               from 'rxjs/ReplaySubject'
  */
 export interface SidebarType {
     typeId : string,
-    componentType : Type
+    componentType : Type<any>
 }
 
 /**

@@ -9,7 +9,8 @@
          by more specialised implementations.
          Whitespace is not allowed in this div because it fucks up the
          spacing for the xml-node-brackets (<>) that are inserted via CSS.-->
-    <div class="widget {{ borderCssClass }}"><span class="widget-type">{{ model.type }}</span><ng-content select="widget-header"></ng-content></div>
+    <div class="widget {{ borderCssClass }}"><span class="widget-type">{{ model.type }}</span>
+      <ng-content select=".widget-header"></ng-content></div>
   </span>
 
   <!-- If this is a model that provides text, the text is shown. -->
