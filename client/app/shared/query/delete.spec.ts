@@ -90,12 +90,12 @@ describe('Valid DELETE Queries', () => {
 
         let q = new QueryDelete(schema, model);
         expect(q.getLeaves().length).toEqual(0);
-        
-        expect(q.toModel()).toEqual(model);
         expect(q.toSqlString()).toEqual("DELETE\nFROM person");
+
+        expect(q.toModel()).toEqual(model);
     });
 
-    it('DELETE FROM person WHERE person.name = "Hans"', () => {
+    it(`DELETE FROM person WHERE person.name = 'Hans'`, () => {
         const model : Model.QueryDescription = {
             name : 'delete-everything',
             id : 'del-1',
@@ -118,7 +118,6 @@ describe('Valid DELETE Queries', () => {
                         operator : "=",
                         rhs : {
                             constant : {
-                                type : "TEXT",
                                 value : "Hans"
                             }
                         },
@@ -132,12 +131,11 @@ describe('Valid DELETE Queries', () => {
 
         const leaves = q.getLeaves();
         expect(leaves.length).toEqual(2);
-        expect(leaves[0].toModel()).toEqual(model.where.first.binary.lhs);
-        expect(leaves[1].toModel()).toEqual(model.where.first.binary.rhs);
         
-        expect(q.toModel()).toEqual(model);
         expect(q.validate).toBeTruthy();
-        expect(q.toSqlString()).toEqual("DELETE\nFROM person\nWHERE person.name = \"Hans\"");
+        expect(q.toSqlString()).toEqual(`DELETE\nFROM person\nWHERE person.name = 'Hans'`);
+
+        expect(q.toModel()).toEqual(model);
     });
 });
 

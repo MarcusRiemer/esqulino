@@ -214,7 +214,7 @@ describe('Valid SELECT Queries', () => {
             },
             where : {
                 first : {
-                    constant : { type : "INTEGER", value : "1" }
+                    constant : { value : "1" }
                 }
             }
         };
@@ -258,8 +258,8 @@ describe('Valid SELECT Queries', () => {
             where : {
                 first : {
                     binary : {
-                        lhs : { constant : { type : "INTEGER", value : "1" } },
-                        rhs : { constant : { type : "INTEGER", value : "2" } },
+                        lhs : { constant : { value : "1" } },
+                        rhs : { constant : { value : "2" } },
                         operator : "<=",
                         simple : true
                     }

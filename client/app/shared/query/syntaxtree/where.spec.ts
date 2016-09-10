@@ -4,7 +4,7 @@ describe('WHERE', () => {
     it('with a constant truthy value', () => {
         const model : Model.Where = {
             first : {
-                constant : { type : "INTEGER", value : "1" }
+                constant : { value : "1" }
             }
         }
 
@@ -18,11 +18,11 @@ describe('WHERE', () => {
     it('with two epxressions', () => {
         const model : Model.Where = {
             first : {
-                constant : { type : "INTEGER", value : "1" }
+                constant : { value : "1" }
             },
             following : [
                 {
-                    expr : { constant : { type: "INTEGER", value : "2" } },
+                    expr : { constant : { value : "2" } },
                     logical : "OR"
                 }
             ]
@@ -38,11 +38,11 @@ describe('WHERE', () => {
     it('removing first', () => {
         const model : Model.Where = {
             first : {
-                constant : { type : "INTEGER", value : "1" }
+                constant : { value : "1" }
             },
             following : [
                 {
-                    expr : { constant : { type: "INTEGER", value : "2" } },
+                    expr : { constant : { value : "2" } },
                     logical : "OR"
                 }
             ]
@@ -64,11 +64,11 @@ describe('WHERE', () => {
     it('removing first subsequent', () => {
         const model : Model.Where = {
             first : {
-                constant : { type : "INTEGER", value : "1" }
+                constant : { value : "1" }
             },
             following : [
                 {
-                    expr : { constant : { type: "INTEGER", value : "2" } },
+                    expr : { constant : { value : "2" } },
                     logical : "OR"
                 }
             ]
@@ -89,11 +89,11 @@ describe('WHERE', () => {
     it('adding a third condition', () => {
         const model : Model.Where = {
             first : {
-                constant : { type : "INTEGER", value : "1" }
+                constant : { value : "1" }
             },
             following : [
                 {
-                    expr : { constant : { type: "INTEGER", value : "2" } },
+                    expr : { constant : { value : "2" } },
                     logical : "OR"
                 }
             ]

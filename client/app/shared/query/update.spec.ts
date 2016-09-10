@@ -50,7 +50,6 @@ describe('UPDATE', () => {
                         column : "p1",
                         expr : {
                             constant : {
-                                type : "INTEGER",
                                 value : "2"
                             }
                         }
