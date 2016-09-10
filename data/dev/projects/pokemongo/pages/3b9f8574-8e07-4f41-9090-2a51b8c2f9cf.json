@@ -74,7 +74,7 @@
             "outParamName": "staerke",
             "caption": "Stärke des neuen Pokémon",
             "description": "",
-            "inputType": "text"
+            "inputType": "number"
           },
           {
             "type": "button",
