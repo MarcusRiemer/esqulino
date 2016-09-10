@@ -22,6 +22,7 @@ import {Input, InputDescription}               from './input'
 import {Link, LinkDescription}                 from './link'
 import {Paragraph, ParagraphDescription}       from './paragraph'
 import {QueryTable, QueryTableDescription}     from './query-table'
+import {Select, SelectDescription} from './select'
 
 export {
     WidgetBase, WidgetDescription, WidgetCategory,
@@ -36,6 +37,7 @@ export {
     Paragraph, ParagraphDescription,
     Heading, HeadingDescription,
     QueryTable, QueryTableDescription,
+    Select, SelectDescription,
     Input, InputDescription,
     Link, LinkDescription,
     ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription,

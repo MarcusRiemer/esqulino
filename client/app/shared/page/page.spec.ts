@@ -8,6 +8,7 @@ import './widgets/heading.spec'
 import './widgets/input.spec'
 import './widgets/link.spec'
 import './widgets/paragraph.spec'
+import './widgets/select.spec'
 
 import {
     Page, PageDescription, CURRENT_API_VERSION

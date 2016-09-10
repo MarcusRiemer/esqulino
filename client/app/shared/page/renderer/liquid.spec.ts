@@ -89,7 +89,7 @@ describe('Page Renderer: Liquid', () => {
         let row = new Row(m);
         let r = new LiquidRenderer();
 
-        expect(r.renderWidget(row)).toEqual(`<div class="row"><div class="col-md-3"></div><div class="col-md-7"></div></div>`);
+        expect(r.renderWidget(row)).toEqual(`<div class="row"><div class="col-md-3"></div>\n<div class="col-md-7"></div></div>`);
     });
 });
 

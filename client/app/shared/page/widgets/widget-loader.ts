@@ -13,6 +13,7 @@ import {Link, LinkDescription}                 from './link'
 import {Paragraph, ParagraphDescription}       from './paragraph'
 import {QueryTable, QueryTableDescription}     from './query-table'
 import {Row, RowDescription}                   from './row'
+import {Select, SelectDescription}             from './select'
 
 /**
  * Factory function to instantiate the correct widget.
@@ -39,6 +40,8 @@ function createWidget(desc : WidgetDescription, parent : WidgetHost) : WidgetBas
         return new QueryTable(desc as QueryTableDescription, parent);
     case "row":
         return new Row(desc as RowDescription, parent);
+    case "select":
+        return new Select(desc as SelectDescription, parent);
     default:
         throw new Error(`Unknown widget type "${desc.type}"`);
     }

@@ -49,6 +49,9 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
      */
     @Input() nodeDisplay : TreeDisplayStyle = undefined;
 
+    /**
+     * Used for DI, parameters are mostly passed on to base class.
+     */
     constructor(
         @Inject(WIDGET_MODEL_TOKEN) model : Widget,
         private _dragService : DragService,

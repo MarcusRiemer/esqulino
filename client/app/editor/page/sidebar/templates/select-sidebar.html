@@ -1,0 +1,45 @@
+<sidebar-item-host>
+  <fieldset class="form-group">
+    <label for="input-sidebar-outParamName">Eingabename</label>
+    <input [(ngModel)]="model.outParamName"
+           type="text"
+           class="form-control"
+           id="input-sidebar-outParamName">
+  </fieldset>
+
+  <fieldset class="form-group">
+    <label for="input-sidebar-caption">Titel</label>
+    <input [(ngModel)]="model.caption"
+           type="text"
+           class="form-control"
+           id="input-sidebar-caption">
+  </fieldset>
+
+  <fieldset class="form-group">
+    <label for="input-sidebar-option-text">Text</label>
+    <input [(ngModel)]="model.optionTextExpression"
+           type="text"
+           class="form-control"
+           id="input-sidebar-option-text">
+  </fieldset>
+
+  <fieldset class="form-group">
+    <label for="input-sidebar-option-value">Wert</label>
+    <input [(ngModel)]="model.optionValueExpression"
+           type="text"
+           class="form-control"
+           id="input-sidebar-option-value">
+  </fieldset>
+  
+  <!-- Query Selection -->
+  <h5>Benutzte Abfrage</h5>
+  <select [(ngModel)]="referencedQueryName"
+          id="table-selected-query"
+          class="form-control">
+    <option *ngFor="let avail of availableQueries;"
+            [value]="avail.name">
+      {{avail.name}}
+      <span *ngIf="avail.name != avail.query.name">({{ avail.query.name }})</span>
+    </option>
+  </select>
+</sidebar-item-host>

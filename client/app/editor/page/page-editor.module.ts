@@ -21,6 +21,7 @@ import {INPUT_REGISTRATION}             from './sidebar/input.sidebar.component'
 import {LINK_REGISTRATION}              from './sidebar/link.sidebar.component'
 import {PARAGRAPH_REGISTRATION}         from './sidebar/paragraph.sidebar.component'
 import {QUERY_TABLE_REGISTRATION}       from './sidebar/query-table.sidebar.component'
+import {SELECT_REGISTRATION}            from './sidebar/select.sidebar.component'
 
 import {SidebarDataComponent}           from './page-data.sidebar'
 import {SidebarWidgetsComponent}        from './page-widgets.sidebar'
@@ -64,6 +65,7 @@ const treeComponents = [
     Tree.InputComponent,
     Tree.LinkComponent,
     Tree.EmbeddedHtmlComponent,
+    Tree.SelectComponent,
 ]
 
 // All sidebars known to the page editor
@@ -77,6 +79,7 @@ const sidebarComponents = [
     LINK_REGISTRATION.componentType,
     PARAGRAPH_REGISTRATION.componentType,
     QUERY_TABLE_REGISTRATION.componentType,
+    SELECT_REGISTRATION.componentType,
 ]
 
 @NgModule({
@@ -154,6 +157,7 @@ export default class PageEditorModule {
         reg.registerSidebarType(LINK_REGISTRATION);
         reg.registerSidebarType(PARAGRAPH_REGISTRATION);
         reg.registerSidebarType(QUERY_TABLE_REGISTRATION);
+        reg.registerSidebarType(SELECT_REGISTRATION);
 
         console.log("Registered PageEditor!");
     }

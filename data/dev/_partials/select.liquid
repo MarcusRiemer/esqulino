@@ -1,0 +1,14 @@
+<fieldset class="form-group">
+  <label for="input-{{outParamName}}">
+    {{caption}}
+  </label>
+  <select class="form-control"
+          id="input-{{outParamName}}"
+          name="{{outParamName}}">
+    {% for option in options %}
+      <option value="{{ option[optionValue] }}">
+        {{ option[optionText] }}
+      </option>
+    {% endfor %}
+  </select>
+</fieldset>

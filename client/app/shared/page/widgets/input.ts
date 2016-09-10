@@ -77,6 +77,7 @@ export class Input extends UserInputWidget {
      */
     set caption(value : string) {
         this._caption = value;
+        this.fireModelChange();
     }
 
     /**
@@ -105,13 +106,6 @@ export class Input extends UserInputWidget {
      */
     set inputType(value : string) {
         this._inputType = value;
-    }
-
-    /**
-     * @return True, if this input provides the given name.
-     */ 
-    providesParameter(name : string) {
-        return (this.outParamName === name);
     }
 
     protected toModelImpl() : WidgetDescription {

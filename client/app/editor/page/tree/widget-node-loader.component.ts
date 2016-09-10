@@ -55,6 +55,7 @@ export class WidgetNodeLoaderComponent implements OnChanges {
             "input": Tree.InputComponent,
             "link": Tree.LinkComponent,
             "embedded-html": Tree.EmbeddedHtmlComponent,
+            "select": Tree.SelectComponent,
         };
     }
 
