@@ -40,32 +40,56 @@ describe('MissingExpression', () => {
 });
 
 describe('ConstantExpression', () => {
-    it('Valid Integer', () => {
+    it('INTEGER', () => {
         const model : Model.ConstantExpression = {
-            type : "INTEGER",
             value : "0"
         }
 
         const c = new SyntaxTree.ConstantExpression(model, null);
 
         // Model and String serialization
-        expect(c.toSqlString()).toEqual("0");
+        expect(c.toSqlString()).toEqual(model.value);
+        expect(c.type).toEqual("INTEGER");
         expect(c.toModel().constant).toEqual(model);
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"constant")
+
+        // Negative values
+        let newValue = "-2";
+        c.value = newValue;
+        expect(c.type).toEqual("INTEGER");
+        expect(c.value).toEqual(newValue);
+
+        // Explicitly positive values
+        newValue = "+3";
+        c.value = newValue;
+        expect(c.type).toEqual("INTEGER");
+        expect(c.value).toEqual(newValue)
     });
 
-    it('Valid String', () => {
+    it('TEXT', () => {
         const model : Model.ConstantExpression = {
-            type : "TEXT",
-            value : "0"
+            value : "abc"
         }
 
         const c = new SyntaxTree.ConstantExpression(model, null);
 
         // Model and String serialization
-        expect(c.toSqlString()).toEqual(`"0"`);
+        expect(c.toSqlString()).toEqual(`'abc'`);
+        expect(c.type).toEqual("TEXT");
         expect(c.toModel().constant).toEqual(model);
         expect(c.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"constant")
+
+        // Something that loosely resembles a floating point literal
+        let newValue = "-0.0.0";
+        c.value = newValue;
+        expect(c.type).toEqual("TEXT");
+        expect(c.value).toEqual(`'${newValue}'`);
+
+        // Something that needs to be escaped
+        newValue = "escape'me";
+        c.value = newValue;
+        expect(c.type).toEqual("TEXT");
+        expect(c.value).toEqual(`'escape''me'`);
     });
 });
 
@@ -298,8 +322,8 @@ describe('BinaryExpression', () => {
         const strTypeInt = <Model.DataType>"INTEGER";
         
         const model = {
-            lhs : { constant : { type : strTypeInt, value : "0" } },
-            rhs : { constant : { type : strTypeInt, value : "1" } },
+            lhs : { constant : { value : "0" } },
+            rhs : { constant : { value : "1" } },
             operator : <Model.Operator>"=",
             simple : true
         };
@@ -326,8 +350,8 @@ describe('BinaryExpression', () => {
         const strTypeStr = <Model.DataType>"TEXT";
         
         const model = {
-            lhs : { constant : { type : strTypeStr, value : "w a s d" } },
-            rhs : { constant : { type : strTypeStr, value : "%a%" } },
+            lhs : { constant : { value : "w a s d" } },
+            rhs : { constant : { value : "%a%" } },
             operator : <Model.Operator>"LIKE",
             simple : true
         };
@@ -339,14 +363,15 @@ describe('BinaryExpression', () => {
         let rhs = <SyntaxTree.ConstantExpression> e.rhs;
 
         expect(lhs.type).toEqual(<Model.DataType>"TEXT");
-        expect(lhs.value).toEqual("w a s d");
+        expect(lhs.value).toEqual("'w a s d'");
 
         expect(rhs.type).toEqual(<Model.DataType>"TEXT");
-        expect(rhs.value).toEqual("%a%");
+        expect(rhs.value).toEqual("'%a%'");
         
-        // Model and String serialization
-        expect(e.toSqlString()).toEqual(`"w a s d" LIKE "%a%"`);
-        expect(e.toModel().binary).toEqual(model);
+        // Model and String serialization, but not testing
+        // serialization as there is no easy way to test it
+        // against the original
+        expect(e.toSqlString()).toEqual(`'w a s d' LIKE '%a%'`);
         expect(e.templateIdentifier).toEqual(<SyntaxTree.TemplateId>"binary")
     });
 

@@ -145,15 +145,15 @@ describe('Valid INSERT Queries', () => {
                 table : "person",
                 assignments : [
                     {
-                        expr : { constant : { type: "INTEGER", value : "0" } },
+                        expr : { constant : { value : "0" } },
                         column : "p1"
                     },
                     {
-                        expr : { constant : { type: "TEXT", value : "1" } },
+                        expr : { constant : { value : "a" } },
                         column : "p2"
                     },
                     {
-                        expr : { constant : { type: "INTEGER", value : "2" } },
+                        expr : { constant : { value : "2" } },
                         column : "p3"
                     }
                 ]
@@ -170,7 +170,7 @@ describe('Valid INSERT Queries', () => {
         expect(leaves[2].toModel()).toEqual(m.insert.assignments[2].expr);
 
         expect(q.toModel()).toEqual(m, "Model mismatch");
-        expect(q.toSqlString()).toEqual(`INSERT INTO person (p1, p2, p3)\nVALUES (0, "1", 2)`);
+        expect(q.toSqlString()).toEqual(`INSERT INTO person (p1, p2, p3)\nVALUES (0, 'a', 2)`);
     });
 
     it('INSERT INTO person (p1,p3) VALUES (1, 3)', () => {
@@ -182,11 +182,11 @@ describe('Valid INSERT Queries', () => {
                 table : "person",
                 assignments : [
                     {
-                        expr : { constant : { type: "INTEGER", value : "1" } },
+                        expr : { constant : { value : "1" } },
                         column : "p1"
                     },
                     {
-                        expr : { constant : { type: "INTEGER", value : "3" } },
+                        expr : { constant : { value : "3" } },
                         column : "p3"
                     }
                 ]

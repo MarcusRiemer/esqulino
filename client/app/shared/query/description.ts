@@ -27,7 +27,8 @@ export interface SingleColumnExpression {
  * ends recursion.
  */
 export interface ConstantExpression {
-    type : DataType
+    // TODO: Remove this with an API bump
+    type? : DataType
     value : string
 }
 

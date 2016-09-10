@@ -233,14 +233,25 @@ export class MissingExpression extends Expression {
  */
 export class ConstantExpression extends Expression {
     private _type : Model.DataType;
-    private _value : string;
+
+    /**
+     * Escaped representation of the value, used for SQL-serialization
+     * and is displayed in the frontend.
+     */ 
+    private _escapedValue : string;
+
+    /**
+     * Original representation of the value, used in model-serialization.
+     * If we wouldn't store this raw representation, the escaped representation
+     * would require un-escaping prior to being serialized to the model.
+     */
+    private _rawValue : string;
 
     constructor(expr : Model.ConstantExpression,
                 parent : ExpressionParent) {
         super("constant", parent);
-
-        this._type = expr.type;
-        this._value = expr.value;
+        
+        this.value = expr.value;
     }
 
     /**
@@ -255,11 +266,24 @@ export class ConstantExpression extends Expression {
     }
 
     get value() : string {
-        return (this._value);
+        return (this._escapedValue);
     }
 
-    set value(val) {
-        this._value = val;
+    set value(val : string) {
+        this._type = this.determineDataType(val);
+        this._rawValue = val;
+        
+        switch (this._type) {
+        case "TEXT":
+            // Escape all ' characters in the given string
+            const escaped = val.replace(/\'/g, `''`);
+            this._escapedValue = `'${escaped}'`;
+            break;
+        case "INTEGER":
+        case "REAL":
+            this._escapedValue = val;
+            break;
+        }
     }
 
     replaceChild(formerChild : Expression, newChild : Expression) {
@@ -267,28 +291,32 @@ export class ConstantExpression extends Expression {
     }
 
     toSqlString() : string {
-        switch(this._type) {
-        case <Model.DataType>"INTEGER":
-        case <Model.DataType>"REAL":
-            return (this._value);
-        case <Model.DataType>"TEXT":
-            return (`"${this._value}"`);
-        }
-
-        throw new Error(`Unknown datatype "${this._type}"`);
+        return (this._escapedValue);
     }
 
     toModel() : Model.Expression {
         return ({
             constant : {
-                type : this._type,
-                value : this._value
+                value : this._rawValue
             }
         })
     }
 
     getLeaves() : Expression[] {
         return [this];
+    }
+
+    /**
+     * @return The SQL-datatype the given constant string corresponds to.
+     */ 
+    private determineDataType(val : string) : Model.DataType {
+        if(/^(\-|\+)?\d+$/.test(val)) {
+            return ("INTEGER");
+        } else if (/^$-?\d*(\.\d+)?/.test(val)) {
+            return ("REAL");
+        } else {
+            return ("TEXT");
+        }
     }
 }
 
