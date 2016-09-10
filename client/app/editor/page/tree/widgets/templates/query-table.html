@@ -3,8 +3,10 @@
   <span class="widget-header">
     <widget-parameter>
       <span class="name">Abfrage</span>
-      <span class="value"><query-reference [(queryReference)]="model.queryReference"
-                              [restrictToPage]="model.page"></query-reference></span>
+      <span class="value"><query-reference [queryReference]="model.queryReference"
+                                           (queryReferenceNameChange)="model.queryReferenceName= $event"
+                                           [restrictToPage]="model.page">
+      </query-reference></span>
     </widget-parameter>
   </span>
 
