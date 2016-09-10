@@ -21,6 +21,8 @@ export class QueryReferenceComponent {
     @Input() queryReference : QueryReference;
     @Output() queryReferenceChange = new EventEmitter();
 
+    @Output() queryReferenceNameChange = new EventEmitter();
+    
     /**
      * Should this query reference be always bound to the references
      * that are available on a certain page?
@@ -34,7 +36,7 @@ export class QueryReferenceComponent {
      * @return The text that should be displayed.
      */
     get text() {
-        if (this.queryReference.displayName) {
+        if (this.queryReference &&  this.queryReference.displayName) {
             return (this.queryReference.displayName);
         } else {
             return `<span class="fa fa-question-circle"></span>`;
@@ -92,6 +94,7 @@ export class QueryReferenceComponent {
             }
             
             this.queryReferenceChange.emit(this.queryReference);
+            this.queryReferenceNameChange.emit(this.queryReference.name);
             const newDspName = this.queryReference.displayName;
 
             console.log(`Query Reference: Dropped, now pointing to ${newDspName}"`);
