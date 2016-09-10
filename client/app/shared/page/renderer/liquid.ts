@@ -5,7 +5,8 @@ import {Page}                  from '../page'
 import {Renderer}              from '../renderer'
 import {
     Widget, Row, Column,
-    Body, Button, EmbeddedHtml, Form, Heading, Input, Link, Paragraph, QueryTable
+    Body, Button, EmbeddedHtml, Form, Heading,
+    Input, Link, Paragraph, QueryTable, Select
 } from '../widgets/index'
 
 export {Renderer}
@@ -108,7 +109,7 @@ function renderHtml(w: Widget) : string {
  * Directly renders a heading.
  */
 function renderHeading(w: Widget) : string {
-    const heading = <Heading> w;
+    const heading = w as Heading;
     const tagname = `h${heading.level}`;
     return (`<${tagname}>${heading.text}</${tagname}>`);
 }
@@ -162,7 +163,7 @@ function renderLink(w: Widget) : string {
  * Directly renders a paragraph.
  */
 function renderParagraph(w: Widget) : string {
-    const paragraph = <Paragraph> w;
+    const paragraph = w as Paragraph;
     return (`<p>${paragraph.text}</p>`);
 }
 
@@ -172,10 +173,22 @@ function renderParagraph(w: Widget) : string {
  * relies on data on the server!
  */
 function renderQueryTable(w: Widget) : string {
-    const queryTable = <QueryTable> w;
+    const queryTable = w as QueryTable;
     const queryName = queryTable.queryReferenceName;
     const columns = queryTable.columnNames.join(",");
     return (`{% include "query_table" table: query.${queryName}, columns: "${columns}" %}`);
+}
+
+function renderSelect(w: Widget) : string {
+    const select = w as Select;
+    const queryName = select.queryReferenceName;
+    const options = `options: query.${queryName}`;
+    const outParamName = `outParamName: "${select.outParamName}"`;
+    const caption = `caption: "${select.caption}"`;
+    const optionTextExpr = `optionText: "${select.optionTextExpression}"`;
+    const optionValueExpr = `optionValue: "${select.optionValueExpression}"`;
+
+    return (`{% include "select" ${options}, ${outParamName}, ${caption}, ${optionTextExpr}, ${optionValueExpr}  %}`);
 }
 
 /**
@@ -218,6 +231,7 @@ export class LiquidRenderer extends Renderer {
         "input" : renderInput,
         "link" : renderLink,
         "row" : renderRow,
+        "select": renderSelect,
     };
     
     /**

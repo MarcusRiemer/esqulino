@@ -51,11 +51,12 @@
         "type": "form",
         "children": [
           {
-            "type": "input",
+            "type": "select",
+            "caption": "Freigelassenes Pokémon",
             "outParamName": "gefangen_id",
-            "caption": "Neue Eingabe",
-            "description": "Beschreibung der neuen Eingabe",
-            "inputType": "text"
+            "queryRefName": "Meine_Pokemon",
+            "optionTextExpression": "spitzname",
+            "optionValueExpression": "gefangen_id"
           },
           {
             "type": "button",

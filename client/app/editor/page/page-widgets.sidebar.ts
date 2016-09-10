@@ -9,7 +9,7 @@ import {borderCssClass}                 from '../shared/page-preview.util'
 import {Page, ParameterMapping}         from '../../shared/page/index'
 import {
     Widget, WidgetDescription, WidgetCategory,
-    Heading, Row, Paragraph, QueryTable,
+    Heading, Row, Paragraph, QueryTable, Select,
     Input, Button, EmbeddedHtml, Form, Link, Column
 } from '../../shared/page/widgets/index'
 
@@ -125,6 +125,12 @@ export class SidebarWidgetsComponent implements OnDestroy {
                 icon: "fa-keyboard-o",
                 name: "Eingabe",
                 model: Input.emptyDescription,
+                category: "widget",
+            },
+            {
+                icon: "fa-caret-square-o-down ",
+                name: "Auswahl",
+                model: Select.emptyDescription,
                 category: "widget",
             },
             {

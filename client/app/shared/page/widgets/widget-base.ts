@@ -267,8 +267,15 @@ export abstract class UserInputWidget extends WidgetBase {
     }
 
     /**
+     * The name of the variable that is provided by this widget.
+     */
+    abstract get outParamName() : string;
+
+    /**
      * @return True, if this widget provides the required output.
      */
-    abstract providesParameter(name : string) : boolean;
+    providesParameter(name : string) : boolean {
+        return (name === this.outParamName);
+    }
 }
 

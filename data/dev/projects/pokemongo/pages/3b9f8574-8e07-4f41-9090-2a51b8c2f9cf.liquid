@@ -15,7 +15,7 @@
       {% include "query_table" table: query.Pokedex_1G, columns: "nummer,name,typ" %}
       <form>
         <h2>Fakten zu deinem Fang</h2>
-        {% include "input" caption: "Nummer im Pokédex", outParamName: "input.nummer", description: "", inputType: "number"  %}
+        {% include "select" options: query.Pokedex_1G, outParamName: "input.nummer", caption: "Pokemon", optionText: "name", optionValue: "nummer"  %}
         {% include "input" caption: "Spitzname", outParamName: "input.name", description: "", inputType: "text"  %}
         {% include "input" caption: "Stärke des neuen Pokémon", outParamName: "input.staerke", description: "", inputType: "number"  %}
         <button type="submit" formaction="/Gefangen_Neu/query/79f9fd59-89cd-47d1-ab20-9a4388cd9d44?nummer=input.nummer&name=input.name&staerke=input.staerke" formmethod="POST" name="action" value="a" class="btn btn-secondary btn-block">Pokémon anlegen</button>

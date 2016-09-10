@@ -50,10 +50,40 @@ export interface NavigateActionDescription extends ActionDescription {
  */
 export interface InputDescription extends WidgetDescription {
     type : "input"
+
+    // The <input> "type" attribute
     inputType : string
+
+    // The <label> for this input
     caption : string
+
+    // A description text for the end-user
     description : string
+
+    // The parameter this widget provides
     outParamName : string
+}
+
+/**
+ * Describes a <select> element with its <option>-nodes.
+ */
+export interface SelectDescription extends WidgetDescription {
+    type : "select"
+    
+    // The <label> for this input
+    caption : string
+
+    // The parameter this widget provides
+    outParamName : string
+
+    // The query that is used to generate the <options>
+    queryRefName? : string
+
+    // Called for every <option> to determine its value 
+    optionValueExpression? : string
+
+    // Called for every <option> to determine its text 
+    optionTextExpression? : string
 }
 
 /**

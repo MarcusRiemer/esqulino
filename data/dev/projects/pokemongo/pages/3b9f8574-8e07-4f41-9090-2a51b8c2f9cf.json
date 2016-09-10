@@ -56,11 +56,12 @@
             "text": "Fakten zu deinem Fang"
           },
           {
-            "type": "input",
+            "type": "select",
+            "caption": "Pokemon",
             "outParamName": "nummer",
-            "caption": "Nummer im Pokédex",
-            "description": "",
-            "inputType": "number"
+            "queryRefName": "Pokedex_1G",
+            "optionTextExpression": "name",
+            "optionValueExpression": "nummer"
           },
           {
             "type": "input",

@@ -7,6 +7,7 @@ import {HeadingComponent}               from './heading.component'
 import {InputComponent}                 from './input.component'
 import {LinkComponent}                  from './link.component'
 import {QueryTableComponent}            from './query-table.component'
+import {SelectComponent}                from './select.component'
 
 export {
     QueryReferenceComponent,
@@ -17,5 +18,6 @@ export {
     HeadingComponent,
     InputComponent,
     LinkComponent,
-    QueryTableComponent
+    QueryTableComponent,
+    SelectComponent
 }
