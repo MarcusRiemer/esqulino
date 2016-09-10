@@ -8,6 +8,7 @@ import {borderCssClass}                 from '../shared/page-preview.util'
 
 import {Page, ParameterMapping}         from '../../shared/page/index'
 import {
+    Widget, WidgetDescription, WidgetCategory,
     Heading, Row, Paragraph, QueryTable,
     Input, Button, EmbeddedHtml, Form, Link, Column
 } from '../../shared/page/widgets/index'
@@ -17,6 +18,13 @@ import {
 } from '../project.service'
 
 import {DragService, PageDragEvent}     from './drag.service'
+
+interface SidebarWidgetEntry {
+    icon : string
+    model : WidgetDescription
+    name : string
+    category : string
+}
 
 /**
  * The sidebar hosts elements that can be dragged onto the currently active
@@ -66,8 +74,18 @@ export class SidebarWidgetsComponent implements OnDestroy {
         this._subscriptionRefs = [];
     }
 
-    borderCssClass(category : any) : string {
+    /**
+     * @return The CSS-class for the given widget.
+     */
+    borderCssClass(category : WidgetCategory) : string {
         return (borderCssClass(category));
+    }
+
+    /**
+     * @return The name of the entry
+     */
+    trackWidgetByName(index : number, entry : SidebarWidgetEntry) {
+        return (entry.name);
     }
 
     /**
@@ -75,6 +93,79 @@ export class SidebarWidgetsComponent implements OnDestroy {
      */
     get page() {
         return (this._page);
+    }
+
+    get availableWidgets() : SidebarWidgetEntry[] {
+        return([
+            {
+                icon: "fa-align-justify",
+                name: "Zeile",
+                model: Row.emptyDescription,
+                category: "layout",
+            },
+            {
+                icon: "fa-columns",
+                name: "Spalte",
+                model: Column.emptyDescription,
+                category: "layout",
+            },
+            {
+                icon: "fa-header",
+                name: "Überschrift",
+                model: Heading.emptyDescription,
+                category: "widget",
+            },
+            {
+                icon: "fa-paragraph",
+                name: "Absatz",
+                model: Paragraph.emptyDescription,
+                category: "widget",
+            },
+            {
+                icon: "fa-keyboard-o",
+                name: "Eingabe",
+                model: Input.emptyDescription,
+                category: "widget",
+            },
+            {
+                icon: "fa-square-o",
+                name: "Knopf",
+                model: Button.emptyDescription,
+                category: "widget",
+            },
+            {
+                icon: "fa-arrow-right",
+                name: "Link",
+                model: Link.emptyDescription,
+                category: "widget",
+            },
+            {
+                icon: "fa-object-group",
+                name: "Formular",
+                model: Form.emptyDescription,
+                category: "structural",
+            },
+            {
+                icon: "fa-table",
+                name: "Datentabelle",
+                model: QueryTable.emptyDescription,
+                category: "structural",
+            },
+            {
+                icon: "fa-code",
+                name: "HTML",
+                model: EmbeddedHtml.emptyDescription,
+                category: "structural",
+            },
+        ]);
+    }
+
+    /**
+     * Registers the start of a drag operation for a widget with the
+     * drag service.
+     */
+    onStartWidgetDrag(evt : DragEvent, model : WidgetDescription) {
+        this._dragService.startWidgetDrag(evt, "sidebar", model);
     }
 
     /**
@@ -101,77 +192,5 @@ export class SidebarWidgetsComponent implements OnDestroy {
                 this._dragService.currentDrag.callbacks.onParameterMapping(param);
             }
         }
-    }
-
-    /**
-     * Informs the drag service about a started drag operation for an
-     * empty row.
-     */
-    startRowDrag(evt : DragEvent) {
-        this._dragService.startWidgetDrag(evt, "sidebar", Row.emptyDescription);
-    }
-
-    /**
-     * Informs the drag service about a started drag operation for an
-     * empty column.
-     */
-    startColumnDrag(evt : DragEvent) {
-        this._dragService.startWidgetDrag(evt, "sidebar", Column.emptyDescription);
-    }
-
-     /**
-      * Starts a drag action for a paragraph.
-      */
-    startParagraphDrag(evt : DragEvent) {
-        this._dragService.startWidgetDrag(evt, "sidebar", Paragraph.emptyDescription);
-    }
-
-    /**
-      * Starts a drag action for a Heading.
-      */
-    startHeadingDrag(evt : DragEvent) {
-        this._dragService.startWidgetDrag(evt, "sidebar", Heading.emptyDescription);
-    }
-
-    /**
-     * Starts a drag action for a query table.
-     */
-    startQueryTableDrag(evt : DragEvent) {
-        this._dragService.startWidgetDrag(evt, "sidebar", QueryTable.emptyDescription);
-    }
-
-    /**
-     * Starts a drag action for an input element
-     */
-    startInputDrag(evt : DragEvent) {
-        this._dragService.startWidgetDrag(evt, "sidebar", Input.emptyDescription);
-    }
-
-    /**
-     * Starts a drag action for a button element
-     */
-    startButtonDrag(evt : DragEvent) {
-        this._dragService.startWidgetDrag(evt, "sidebar", Button.emptyDescription);
-    }
-
-    /**
-     * Starts a drag action for an empty HTML element
-     */
-    startFormDrag(evt : DragEvent) {
-        this._dragService.startWidgetDrag(evt, "sidebar", Form.emptyDescription);
-    }
-
-    /**
-     * Starts a drag action for an empty HTML element
-     */
-    startEmbeddedHtmlDrag(evt : DragEvent) {
-        this._dragService.startWidgetDrag(evt, "sidebar", EmbeddedHtml.emptyDescription);
-    }
-
-    /**
-     * Starts a drag action for an link element
-     */
-    startLinkDrag(evt : DragEvent) {
-        this._dragService.startWidgetDrag(evt, "sidebar", Link.emptyDescription);
     }
 }
