@@ -93,7 +93,7 @@
  * Introduce xml brackets for widgets
  */
 .block-container {
-    .widget::before {
+    .widget .widget-type::before {
         content: "<";
     }
 
