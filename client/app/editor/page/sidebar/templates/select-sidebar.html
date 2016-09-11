@@ -15,31 +15,43 @@
            id="input-sidebar-caption">
   </fieldset>
 
+  <!-- Query Selection -->
   <fieldset class="form-group">
-    <label for="input-sidebar-option-text">Text</label>
-    <input [(ngModel)]="model.optionTextExpression"
-           type="text"
-           class="form-control"
-           id="input-sidebar-option-text">
-  </fieldset>
-
-  <fieldset class="form-group">
-    <label for="input-sidebar-option-value">Wert</label>
-    <input [(ngModel)]="model.optionValueExpression"
-           type="text"
-           class="form-control"
-           id="input-sidebar-option-value">
+    <label for="input-sidebar-select-query">Benutzte Abfrage</label>
+    <select [(ngModel)]="referencedQueryName"
+            id="input-sidebar-select-query"
+            class="form-control">
+      <option *ngFor="let avail of availableQueries;"
+              [value]="avail.name">
+        {{avail.name}}
+        <span *ngIf="avail.name != avail.query.name">({{ avail.query.name }})</span>
+      </option>
+    </select>
   </fieldset>
   
-  <!-- Query Selection -->
-  <h5>Benutzte Abfrage</h5>
-  <select [(ngModel)]="referencedQueryName"
-          id="table-selected-query"
-          class="form-control">
-    <option *ngFor="let avail of availableQueries;"
-            [value]="avail.name">
-      {{avail.name}}
-      <span *ngIf="avail.name != avail.query.name">({{ avail.query.name }})</span>
-    </option>
-  </select>
+  <!-- Selecting a column for the <option> text. -->
+  <fieldset class="form-group">
+    <label for="input-sidebar-select-text">Text für Option</label>
+    <select [(ngModel)]="model.optionTextExpression"
+            id="input-sidebar-select-text"
+            class="form-control">
+      <option *ngFor="let col of availableColumns;"
+              [value]="col.shortName">
+        {{ col.shortName }}
+      </option>
+    </select>
+  </fieldset>
+
+  <!-- Selecting a column for the <option value="xyz"> attribute. -->
+  <fieldset class="form-group">
+    <label for="input-sidebar-select-value">Wert für Option</label>
+    <select [(ngModel)]="model.optionValueExpression"
+            id="input-sidebar-select-value"
+            class="form-control">
+      <option *ngFor="let col of availableColumns;"
+              [value]="col.shortName">
+        {{ col.shortName }}
+      </option>
+    </select>
+  </fieldset>
 </sidebar-item-host>

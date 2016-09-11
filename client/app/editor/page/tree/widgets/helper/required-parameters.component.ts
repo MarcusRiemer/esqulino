@@ -7,6 +7,9 @@ import {Page, ParameterMapping}               from '../../../../../shared/page/i
 
 import {PageDragEvent}                        from '../../../drag.service'
 
+/**
+ * Wraps assignment of parameters that are required to do something.
+ */
 @Component({
     selector: `required-parameters`,
     templateUrl: 'app/editor/page/tree/widgets/helper/templates/required-parameters.html',
@@ -22,13 +25,16 @@ export class RequiredParametersComponent implements OnInit {
      * Ensures all inputs are wired.
      */
     ngOnInit() {
-        console.log(this.parameterMapping.map(p => p.toModel()));
+
     }
 
     get hasParameters() : boolean {
         return (this.parameterMapping && this.parameterMapping.length > 0);
     }
 
+    /**
+     * @return Either the required or the mapped name.
+     */
     getDisplayText(mapping : ParameterMapping) {
         if (mapping.isSatisfied) {
             return (mapping.providingName);

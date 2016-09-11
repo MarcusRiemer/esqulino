@@ -59,6 +59,7 @@ const treeComponents = [
     Tree.QueryReferenceComponent,
     Tree.RequiredParametersComponent,
     Tree.ProvidedParameterComponent,
+    Tree.ValueExpressionComponent,
     
     Tree.ButtonComponent,
     Tree.HeadingComponent,
