@@ -1,12 +1,32 @@
 <esqulino-widget-node [model]="model"
                       [nodeDisplay]="'block'">
+  <!-- Header data -->
   <span class="widget-header">
     <widget-parameter>
+      <span class="name">Name</span>
+      <span class="value"><provided-parameter [parameterName]="model.outParamName"></provided-parameter></span>
+    </widget-parameter>
+    <widget-parameter>
       <span class="name">Abfrage</span>
-      <span class="value"><query-reference [queryReference]="model.queryReference"
-                                           (queryReferenceNameChange)="model.queryReferenceName= $event"
-                                           [restrictToPage]="model.page">
-      </query-reference></span>
+      <span class="value"
+      ><query-reference [queryReference]="model.queryReference"
+                        (queryReferenceNameChange)="model.queryReferenceName= $event"
+                        [restrictToPage]="model.page"></query-reference></span>
     </widget-parameter>
   </span>
+
+  <!-- The template for the <option>-nodes. -->
+  <div class="tree-level block-container">
+    <span class="">
+      <span class="fa fa-fw fa-repeat" aria-hidden="true"></span>
+      <div class="widget border-structural-preview"><span class="widget-type">option</span>
+        <widget-parameter class="widget-header">
+          <span class="name">Wert</span>
+          <span class="value">{{ model.optionValueExpression }}</span>
+        </widget-parameter></div>
+    </span>
+    <span>
+      <span class="widget-close border-structural-preview"><span class="widget-type">option</span></span>
+    </span>
+  </div>
 </esqulino-widget-node>

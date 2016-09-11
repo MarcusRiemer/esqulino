@@ -39,6 +39,11 @@
         }
       },
       {
+        "type": "heading",
+        "level": 1,
+        "text": "Alle existierenden Pokémon"
+      },
+      {
         "type": "query-table",
         "queryRefName": "Pokedex_1G",
         "columns": [

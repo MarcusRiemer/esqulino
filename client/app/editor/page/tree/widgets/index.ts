@@ -1,5 +1,6 @@
 import {QueryReferenceComponent}        from './helper/query-reference.component'
 import {RequiredParametersComponent}    from './helper/required-parameters.component'
+import {ProvidedParameterComponent}     from './helper/provided-parameter.component'
 
 import {ButtonComponent}                from './button.component'
 import {EmbeddedHtmlComponent}          from './embedded-html.component'
@@ -12,6 +13,7 @@ import {SelectComponent}                from './select.component'
 export {
     QueryReferenceComponent,
     RequiredParametersComponent,
+    ProvidedParameterComponent,
     
     ButtonComponent,
     EmbeddedHtmlComponent,

@@ -18,12 +18,4 @@ export class InputComponent {
                 private _dragService : DragService) {
 
     }
-
-    /**
-     * Starts dragging the provided parameter.
-     */
-    onParameterDragStart(event : DragEvent) {
-        const value = this.model.outParamName;
-        this._dragService.startValueDrag(event, "sidebar", value);
-    }
 }
