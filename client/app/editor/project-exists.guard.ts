@@ -34,10 +34,18 @@ export class ProjectExistsGuard implements CanActivate {
         // And check whether it actually exists
         const toReturn = this._projectService.activeProject
             .first()
-            .catch( (response : Response) => {
+            .catch( (response : any) => {
+                let message = `Unknown Error: ${JSON.stringify(response)}`;
+
+                if (response instanceof Response) {
+                    message = `Server responded "${response.status}: ${response.statusText}"`;
+                } else if (response instanceof Error) {
+                    message = `Error: ${response.message}`;
+                }
+
                 this._flashService.addMessage({
                     caption: `Project with id "${projectId}" couldn't be loaded!`,
-                    text: `Server responded "${response.status}: ${response.statusText}"`,
+                    text: message,
                     type: "danger"
                 });
 

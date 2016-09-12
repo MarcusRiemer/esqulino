@@ -4,6 +4,6 @@
   "license": "AGPL",
   "private": true,
   "devDependencies": {
-    "systemjs-builder": "^0.15.23"
+    "systemjs-builder": "^0.15.31"
   }
 }
