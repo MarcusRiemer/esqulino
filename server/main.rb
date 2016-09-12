@@ -283,8 +283,6 @@ class ScratchSqlApp < Sinatra::Base
   get '/view/:project_id/?:page_name?' do
     return @page.render({})
   end
-
-  set :tld_size, 2
   
   # Rendering subdomains
   subdomain do
