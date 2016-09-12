@@ -23,7 +23,11 @@
         <span class="widget-type">option</span>
         <widget-parameter class="widget-header">
           <span class="name">Wert</span>
-          <span class="value">{{ model.optionValueExpression }}</span>
+          <span class="value">
+            <value-expression [repeatingQuery]="model.queryReference"
+                                                [columnName]="model.optionValueExpression">
+            </value-expression>
+          </span>
         </widget-parameter></div>
     </span>
     <value-expression [repeatingQuery]="model.queryReference"
