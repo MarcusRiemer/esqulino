@@ -284,6 +284,8 @@ class ScratchSqlApp < Sinatra::Base
     return @page.render({})
   end
 
+  set :tld_size, 2
+  
   # Rendering subdomains
   subdomain do
     # Browsers will automatically ask for the favicon at the root of the URL. Without this
