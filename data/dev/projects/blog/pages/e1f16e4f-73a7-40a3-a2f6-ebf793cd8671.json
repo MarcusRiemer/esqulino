@@ -25,54 +25,32 @@
       ]
     }
   ],
-  "parameters": [
-    {
-      "name": "id"
-    }
-  ],
   "body": {
     "type": "body",
     "children": [
       {
-        "columns": [
-          {
-            "width": 12,
-            "widgets": [
-              {
-                "type": "heading",
-                "level": 1,
-                "text": "{{ query.artikel_detail.caption }}"
-              },
-              {
-                "type": "paragraph",
-                "text": "{{ query.artikel_detail.text }}"
-              }
-            ],
-            "type": "column"
-          }
-        ],
-        "type": "row"
+        "type": "heading",
+        "level": 1,
+        "text": "{{ query.artikel_detail.caption }}"
       },
       {
-        "columns": [
-          {
-            "width": 12,
-            "widgets": [
-              {
-                "type": "heading",
-                "level": 2,
-                "text": "Kommentare"
-              },
-              {
-                "type": "embedded-html",
-                "html": "{% for kommentar in query.artikel_kommentare %}\n<div>\n  <h3>\n   {{ kommentar.commenter_name}} sagt:\n  </h3>\n  <p>{{ kommentar.text }}</p>\n</div>\n{% endfor %}"
-              }
-            ],
-            "type": "column"
-          }
-        ],
-        "type": "row"
+        "type": "paragraph",
+        "text": "{{ query.artikel_detail.text }}"
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Kommentare"
+      },
+      {
+        "type": "embedded-html",
+        "html": "{% for kommentar in query.artikel_kommentare %}\n<div>\n  <h3>\n   {{ kommentar.commenter_name}} sagt:\n  </h3>\n  <p>{{ kommentar.text }}</p>\n</div>\n{% endfor %}"
       }
     ]
-  }
+  },
+  "parameters": [
+    {
+      "name": "id"
+    }
+  ]
 }
