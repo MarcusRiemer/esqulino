@@ -20,6 +20,14 @@
         <p>{{ kommentar.text }}</p>
       </div>
       {% endfor %}<!-- Raw HTML end -->
+      <form>
+        {% include "get_data_hidden" %}
+        <h3>Neuer Kommentar</h3>
+        {% include "input" caption: "Dein Name", outParamName: "input.name", description: "Dieser Name wird unter dem Kommentar erscheinen", inputType: "text"  %}
+        {% include "input" caption: "Dein Kommentar", outParamName: "input.text", description: "Der Text den du gerne hinterlassen möchtest", inputType: "text"  %}
+        <button type="submit" formaction="/Artikel/query/11ec075e-e797-4223-b85d-e27a91e479cb?article=get.id&name=input.name&text=input.text" formmethod="POST" name="action" value="a" class="btn btn-secondary btn-block">Kommentieren</button>
+      </form>
+      <a href="/Hauptseite">Zurück zur Hauptseite</a>
     </div>
   </body>
 </html>

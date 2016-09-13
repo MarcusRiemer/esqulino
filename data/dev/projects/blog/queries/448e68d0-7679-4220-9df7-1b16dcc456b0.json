@@ -1,0 +1,30 @@
+{
+  "name": "kommentar_loeschen",
+  "apiVersion": "3",
+  "delete": {
+  },
+  "from": {
+    "first": {
+      "name": "comment"
+    }
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "comment_id",
+            "table": "comment"
+          }
+        },
+        "rhs": {
+          "parameter": {
+            "key": "kommentar_id"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}

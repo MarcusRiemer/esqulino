@@ -1,0 +1,19 @@
+{
+  "name": "kommentare_alle",
+  "apiVersion": "3",
+  "from": {
+    "first": {
+      "name": "comment"
+    }
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {
+          }
+        }
+      }
+    ]
+  }
+}

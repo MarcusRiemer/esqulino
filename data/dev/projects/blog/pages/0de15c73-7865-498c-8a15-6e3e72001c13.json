@@ -1,0 +1,68 @@
+{
+  "name": "Admin",
+  "apiVersion": "3",
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "kommentare_alle",
+      "queryId": "53a4b413-05bf-4f65-b4b4-ce885dc80ae9"
+    }
+  ],
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "type": "heading",
+        "level": 1,
+        "text": "Geheimer Admin-Bereich"
+      },
+      {
+        "type": "paragraph",
+        "text": "Hier darfst du nur hin, wenn du ein Admin bist!"
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Kommentare Löschen"
+      },
+      {
+        "type": "query-table",
+        "queryRefName": "kommentare_alle",
+        "columns": [
+          "comment_id",
+          "article_id",
+          "date",
+          "commenter_name",
+          "text"
+        ]
+      },
+      {
+        "type": "form",
+        "children": [
+          {
+            "type": "select",
+            "caption": "Auswahl",
+            "outParamName": "kommentar_id",
+            "queryRefName": "kommentare_alle",
+            "optionTextExpression": "text",
+            "optionValueExpression": "comment_id"
+          },
+          {
+            "type": "button",
+            "text": "Kommentar Löschen!",
+            "query": {
+              "type": "query",
+              "queryId": "448e68d0-7679-4220-9df7-1b16dcc456b0",
+              "mapping": [
+                {
+                  "parameterName": "kommentar_id",
+                  "providingName": "input.kommentar_id"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
