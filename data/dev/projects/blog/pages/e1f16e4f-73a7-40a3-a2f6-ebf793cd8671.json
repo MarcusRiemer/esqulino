@@ -45,6 +45,65 @@
       {
         "type": "embedded-html",
         "html": "{% for kommentar in query.artikel_kommentare %}\n<div>\n  <h3>\n   {{ kommentar.commenter_name}} sagt:\n  </h3>\n  <p>{{ kommentar.text }}</p>\n</div>\n{% endfor %}"
+      },
+      {
+        "type": "form",
+        "children": [
+          {
+            "type": "heading",
+            "level": 3,
+            "text": "Neuer Kommentar"
+          },
+          {
+            "type": "input",
+            "outParamName": "name",
+            "caption": "Dein Name",
+            "description": "Dieser Name wird unter dem Kommentar erscheinen",
+            "inputType": "text"
+          },
+          {
+            "type": "input",
+            "outParamName": "text",
+            "caption": "Dein Kommentar",
+            "description": "Der Text den du gerne hinterlassen möchtest",
+            "inputType": "text"
+          },
+          {
+            "type": "button",
+            "text": "Kommentieren",
+            "query": {
+              "type": "query",
+              "queryId": "11ec075e-e797-4223-b85d-e27a91e479cb",
+              "mapping": [
+                {
+                  "parameterName": "article",
+                  "providingName": "get.id"
+                },
+                {
+                  "parameterName": "name",
+                  "providingName": "input.name"
+                },
+                {
+                  "parameterName": "text",
+                  "providingName": "input.text"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "link",
+        "text": "Zurück zur Hauptseite",
+        "action": {
+          "type": "navigate",
+          "internal": {
+            "pageId": "033f059a-ce96-405e-a415-de7575e05dae",
+            "parameters": [
+
+            ]
+          }
+        }
       }
     ]
   },

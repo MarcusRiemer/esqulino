@@ -1,0 +1,3 @@
+{% for param in get %}
+   <input type="hidden" name="get.{{ param[0] }}" value="{{ param[1] }}">
+{% endfor %}

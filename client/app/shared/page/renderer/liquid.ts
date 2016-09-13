@@ -65,7 +65,7 @@ function renderForm(w: Widget, renderWidget : WidgetRenderer) : string {
         .map(c => renderWidget(c, renderWidget))
         .join("\n");
     
-    return `<form>\n${children}</form>`
+    return `<form>\n{% include "get_data_hidden" %}\n${children}</form>`
 }
 
 /**

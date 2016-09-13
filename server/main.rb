@@ -315,11 +315,20 @@ class ScratchSqlApp < Sinatra::Base
         .select {|key,value| key.start_with? "input" and not value.strip.empty?}
         .each {|key,value| input_params[key[6..-1]] = value }
 
+      # Doing the same for hidden "get" inputs
+      form_get_params = {}
+      request.POST
+        .select {|key,value| key.start_with? "get" and not value.strip.empty?}
+        .each {|key,value| form_get_params[key[4..-1]] = value }
+
       # Put them in the "grand" request object
       initial_params = {
-        "input" => input_params
+        "input" => input_params,
+        "get" => form_get_params
       }
 
+      puts initial_params.inspect
+      
       bind_params = {}
 
       request.GET.each do |parameter_name, providing_name|

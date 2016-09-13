@@ -1,0 +1,41 @@
+{
+  "name": "kommentar_neu",
+  "apiVersion": "3",
+  "insert": {
+    "assignments": [
+      {
+        "expr": {
+          "parameter": {
+            "key": "article"
+          }
+        },
+        "column": "article_id"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "name"
+          }
+        },
+        "column": "commenter_name"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "text"
+          }
+        },
+        "column": "text"
+      },
+      {
+        "expr": {
+          "constant": {
+            "value": "2016"
+          }
+        },
+        "column": "date"
+      }
+    ],
+    "table": "comment"
+  }
+}
