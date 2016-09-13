@@ -1,0 +1,19 @@
+{
+  "name": "erstbesteigung",
+  "apiVersion": "3",
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {
+          }
+        }
+      }
+    ]
+  },
+  "from": {
+    "first": {
+      "name": "erstbesteigung"
+    }
+  }
+}
