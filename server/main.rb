@@ -298,7 +298,7 @@ class ScratchSqlApp < Sinatra::Base
       request_prepare_page(page_name_or_id, true)
 
       query_params = {
-        "get" => request.GET
+        'get' => request.GET,
       }
 
       return @page.render(query_params)
@@ -323,8 +323,9 @@ class ScratchSqlApp < Sinatra::Base
 
       # Put them in the "grand" request object
       initial_params = {
-        "input" => input_params,
-        "get" => form_get_params
+        'input' => input_params,
+        'get' => form_get_params,
+        'project' => @project.render_params
       }
 
       puts initial_params.inspect

@@ -332,6 +332,16 @@ class Project
       raise AuthorizationError.new
     end
   end
+
+  # Retrieves the "site" hash that may be used during rendering.
+  #
+  # @return [Hash] Key-Value pairs that are globally available for this project.
+  def render_params
+    return {
+      'name' => self.whole_description['name'],
+      'description' => self.whole_description['description'],
+    }
+  end
 end
 
 # Enumerates all projects in the given directory

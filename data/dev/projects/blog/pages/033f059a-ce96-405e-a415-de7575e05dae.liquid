@@ -9,24 +9,18 @@
   </head>
   <body>
     <div class="container-fluid">
-      <form>
-        <div class="row">
-          <div class="col-md-12">
-            <h1>Mein Blog!</h1>
-            <!-- Raw HTML begin -->{% for artikel in query.artikel_alle %}
-            <div>
-              <h2>
-                <a href="/Artikel?id={{artikel.article_id}}">
-                  {{ artikel.caption }}
-                </a>
-              </h2>
-              <p>{{ artikel.text }}</p>
-            </div>
-            {% endfor %}
-            <!-- Raw HTML end -->
-          </div>
-        </div>
-      </form>
+      <h1>{{ project.name }}</h1>
+      <p>{{ project.description }}</p>
+      <!-- Raw HTML begin -->{% for artikel in query.artikel_alle %}
+      <div>
+        <h2>
+          <a href="/Artikel?id={{artikel.article_id}}">
+            {{ artikel.caption }}
+          </a>
+        </h2>
+        <p>{{ artikel.text }}</p>
+      </div>
+      {% endfor %}<!-- Raw HTML end -->
     </div>
   </body>
 </html>

@@ -43,8 +43,12 @@
         "text": "Kommentare"
       },
       {
-        "type": "embedded-html",
-        "html": "{% for kommentar in query.artikel_kommentare %}\n<div>\n  <h3>\n   {{ kommentar.commenter_name}} sagt:\n  </h3>\n  <p>{{ kommentar.text }}</p>\n</div>\n{% endfor %}"
+        "type": "query-table",
+        "queryRefName": "artikel_kommentare",
+        "columns": [
+          "commenter_name",
+          "text"
+        ]
       },
       {
         "type": "form",
