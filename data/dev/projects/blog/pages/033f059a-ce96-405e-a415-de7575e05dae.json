@@ -5,32 +5,24 @@
     {
       "type": "query",
       "name": "artikel_alle",
-      "queryId": "c5193f92-d467-4c6b-95fe-ccc5866cdd06",
-      "mapping": []
+      "queryId": "c5193f92-d467-4c6b-95fe-ccc5866cdd06"
     }
   ],
   "body": {
     "type": "body",
     "children": [
       {
-        "columns": [
-          {
-            "width": 12,
-            "widgets": [
-              {
-                "type": "heading",
-                "level": 1,
-                "text": "Mein Blog!"
-              },
-              {
-                "type": "embedded-html",
-                "html": "{% for artikel in query.artikel_alle %}\n<div>\n  <h2>\n    <a href=\"/Artikel?id={{artikel.article_id}}\">\n      {{ artikel.caption }}\n    </a>\n  </h2>\n  <p>{{ artikel.text }}</p>\n</div>\n{% endfor %}"
-              }
-            ],
-            "type": "column"
-          }
-        ],
-        "type": "row"
+        "type": "heading",
+        "level": 1,
+        "text": "{{ project.name }}"
+      },
+      {
+        "type": "paragraph",
+        "text": "{{ project.description }}"
+      },
+      {
+        "type": "embedded-html",
+        "html": "{% for artikel in query.artikel_alle %}\n<div>\n  <h2>\n    <a href=\"/Artikel?id={{artikel.article_id}}\">\n      {{ artikel.caption }}\n    </a>\n  </h2>\n  <p>{{ artikel.text }}</p>\n</div>\n{% endfor %}"
       }
     ]
   }

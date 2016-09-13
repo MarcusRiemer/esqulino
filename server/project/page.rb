@@ -172,6 +172,7 @@ class Page
     # previous parameters with the newly created query parameters
     render_params = params.dup
     render_params['query'] = result_queries
+    render_params['project'] = @project.render_params
 
     # Load the template string
     if template_string.nil? then

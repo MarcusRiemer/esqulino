@@ -12,14 +12,7 @@
       <h1>{{ query.artikel_detail.caption }}</h1>
       <p>{{ query.artikel_detail.text }}</p>
       <h2>Kommentare</h2>
-      <!-- Raw HTML begin -->{% for kommentar in query.artikel_kommentare %}
-      <div>
-        <h3>
-          {{ kommentar.commenter_name}} sagt:
-        </h3>
-        <p>{{ kommentar.text }}</p>
-      </div>
-      {% endfor %}<!-- Raw HTML end -->
+      {% include "query_table" table: query.artikel_kommentare, columns: "commenter_name,text" %}
       <form>
         {% include "get_data_hidden" %}
         <h3>Neuer Kommentar</h3>
