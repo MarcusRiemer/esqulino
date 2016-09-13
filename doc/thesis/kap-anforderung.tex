@@ -108,7 +108,7 @@ Um zumindest einen grundsätzlichen Schutz zu ermöglichen, sollten für ein Pro
 
 Die uneingeschränkte Umsetzung des SQL-Standards würden sowohl für den Verfasser dieser Arbeit als auch für die Anwender der Entwicklungsumgebung viele unpraktische Probleme aufwerfen. Der SQL-Sprachumfang ist mittlerweile gewaltig und die Anzahl der verschiedenen Dialekte unüberschaubar groß. Varianten wie Transact-SQL bieten die Möglichkeit zur Laufzeit mit Schleifen, Fallunterscheidungen und Variablen zu arbeiten und erfüllen damit alle Kriterien für Turing-Vollständigkeit. Darüber hinaus werden ``echte'' Entwicklungsumgebungen für SQL von großen Entwicklerteams konzipiert und programmiert, der Autor dieser Arbeit bildet hingegen ein (immerhin motiviertes) Ein-Mann-Team.
 
-Glücklicherweise wäre aber auch der Zielgruppe dieser Entwicklungsumgebung mit einer vollständigen Umsetzung des SQL-Standards überhaupt nicht gedient. Im Gegensatz zu allen anderen Entwicklungsumgebungen da draußen soll die Stärke dieser Entwicklungsumgebung in einer sinnvollen Reduktion liegen. Dieses Kapitel beschreibt daher, wie man zum ``normalen'' SQL kompatible Untermengen definieren kann, um einige spezifische Aufgaben zu erfüllen. Oder in Anlehnung an die "`80/20"'-Regel ausgedrückt: Es gilt jene 20\% des Sprachumfangs abzubilden, mit denen sich 80\% der typischen Aufgaben gut lösen lassen.
+Glücklicherweise wäre aber auch der Zielgruppe dieser Entwicklungsumgebung mit einer vollständigen Umsetzung des SQL-Standards überhaupt nicht gedient. Im Gegensatz zu allen anderen Entwicklungsumgebungen da draußen soll die Stärke dieser Entwicklungsumgebung in einer sinnvollen Reduktion liegen. Dieses Kapitel beschreibt daher, wie man zum ``normalen'' SQL kompatible Untermengen definieren kann, um einige spezifische Aufgaben zu erfüllen. Oder in Anlehnung an die "`80/20"'-Regel ausgedrückt: Es gilt jene 20\% des Sprachumfangs abzubilden, mit denen sich 80\% der typischen Aufgaben gut lösen lassen. Vor diesem Hintergrund dient dieses Kapitel also ebenfalls als Grundlage für die Entscheidung den SQL-Editor im Rahmen dieser Arbeit als "`abgeschlossen"' zu betrachten.
 
 Bei einer gängigen Programmiersprache wie z.B. Java bauen die einzelnen Sprachfeatures sehr viel stärker aufeinander auf, es ergeben sich deutlich weniger Reihenfolgen in denen man diese sinnvoll aktivieren könnte. Die wesentlich größere Standardbibliothek einer solchen Sprache trägt dann ebenfalls dazu bei, die Suche nach voneinander weitestgehend unabhängig funktionierenden Teilsprachen zu erschweren.
 
@@ -279,9 +279,16 @@ Das grundsätzliche Vorgehen um den Sprachumfang einzuschränken, ist dabei mehr
 
 Alternativ sollen sich auch wortwörtliche Einschränkungen im Sinne einer Blacklist angeben lassen. Für die in der Regel sehr übersichtlichen Teilsprachen die in dieser Arbeit konzipiert werden, ist diese Variante häufig schlechter lesbar: Man muss den größtmöglichen Umfang des hier beschriebenen Dialekts immer im Hinterkopf haben. Außerdem kommen im Falle einer Erweiterung des Sprachumfangs, z.B. durch ein späteres Update der Entwicklungsumgebung, möglicherweise unerwünschte Möglichkeiten hinzu.
 
-Danach können die Einschränkungen noch für einzelne Abfragen verfeinert werden. Im allgemeinen Fall wird diese Funktionalität wenig nachgefragt sein: Insbesondere bei der Entwicklung von Webanwendungen ist es nicht hilfreich sich für jede Abfrage in einen anderen Sprachumfang einarbeiten zu müssen. Sofern die Schüler aber bestimmte Aufgaben mit einem didaktisch motiviertem reduzierten (oder erweiterten) Sprachumfang lösen sollen, kommt diese Möglichkeit zum Einsatz.
+Danach können die Einschränkungen noch für einzelne Abfragen verfeinert werden. Im allgemeinen Fall wird diese Funktionalität wenig nachgefragt sein: Insbesondere bei der Entwicklung von Webanwendungen ist es nicht hilfreich sich für jede Abfrage in einen anderen Sprachumfang einarbeiten zu müssen. Sofern die Schüler aber bestimmte Aufgaben mit einem didaktisch motiviertem reduzierten (oder erweiterten) Sprachumfang lösen sollen, kommt diese Möglichkeit zum Einsatz. Die hier exemplarisch aufgeführten Feature-Levels orientieren sich an den im Rahmen der Master-Arbeit exemplarisch erstellten Datenbeständen und an den Aufgaben aus Informatik-Lehrbüchern\cite{hubwieser_inf_2}.
 
-\missing[inline]{Ich muss erst noch ein paar mehr Beispiele an der Hand haben, bis ich mich diesem Kapitel erneut widme.}
+\subsubsection*{Arbeiten mit JOINs}
+
+Dieses Feature-Level stellt die Verknüpfung vorhandener Datenbestände in den Vordergrund und blendet jegliche Projektion oder Gruppierung vollständig aus. Schüler sollen auf dieser Stufe lernen, sich in einem Datenmodell anhand der vorhanden Fremdschlüssel-Beziehungen zu orientieren.
+
+\subsubsection*{Arbeiten mit einfachen Projektionen}
+
+\subsubsection*{Arbeiten mit aggregierten Daten}
+
 \subsection{Drag \& Drop Editor für SQL}
 \label{sec:design-sql-editor}
 

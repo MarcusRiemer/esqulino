@@ -9,27 +9,17 @@
   </head>
   <body>
     <div class="container-fluid">
-      <form>
-        <div class="row">
-          <div class="col-md-12">
-            <h1>{{ query.artikel_detail.caption }}</h1>
-            <p>{{ query.artikel_detail.text }}</p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <h2>Kommentare</h2>
-            <!-- Raw HTML begin -->{% for kommentar in query.artikel_kommentare %}
-            <div>
-              <h3>
-                {{ kommentar.commenter_name}} sagt:
-              </h3>
-              <p>{{ kommentar.text }}</p>
-            </div>
-            {% endfor %}<!-- Raw HTML end -->
-          </div>
-        </div>
-      </form>
+      <h1>{{ query.artikel_detail.caption }}</h1>
+      <p>{{ query.artikel_detail.text }}</p>
+      <h2>Kommentare</h2>
+      <!-- Raw HTML begin -->{% for kommentar in query.artikel_kommentare %}
+      <div>
+        <h3>
+          {{ kommentar.commenter_name}} sagt:
+        </h3>
+        <p>{{ kommentar.text }}</p>
+      </div>
+      {% endfor %}<!-- Raw HTML end -->
     </div>
   </body>
 </html>
