@@ -84,11 +84,17 @@ Dementsprechend sollte normalerweise jeder Schritt beim Anlegen eines neuen Proj
 
 \subsubsection{Zugriffskontrollen}
 
-Schon um Vandalismus zu vermeiden, sind leider einfache Zugriffskontrollen auf Projektebene nötig. Um etwaige Missverständnisse von vornerein zu vermeiden: Ziel dieser Kontrollen ist es zu verhindern, dass z.B. die Quellen für die Abfragen oder Benutzeroberfläche eines Projektes entstellt oder gelöscht werden. \textbf{Nicht geschützt} werden damit die eigentlichen Daten, also die Zeilen, in der Datenbank. Sobald in der Benutzeroberfläche für Endanwender Funktionalität zum Löschen oder Editieren von Datensätzen vorgesehen ist, gibt es keine einfache Möglichkeit, legitime Veränderungen von unerwünschtem Vandalismus zu unterscheiden.
+Lesende Zugriffe können, zumindest in der Thesis-Version der Software, nicht endgültig eingeschränkt werden. Natürlich könnte man theoretisch typische Entwurfsmuster für Zugangsbeschränkungen auch in esqulino implementieren: Auf einfachster Ebene wäre zum Beispiel denkbar, dass eine Spalte "`geheim"' zu Tabellen mit privaten Daten hinzugefügt wird und auf dieser Basis die Oberfläche für Endanwender solcherart markierte Daten nicht anzeigt. Da Projekte aber auch einfach kopiert werden können, müsste ein versierter Benutzer nur eine Kopie des Projektes vornehmen und könnte dann über den Editor alle Daten einsehen oder auch den Zugriffschutz der Oberflächen einfach deaktivieren. Um also den lesenden Zugriff effektiv zu verhindern müsste die Einsicht in die Quellen fremder Projekte eingeschränkt werden. Selbstverständlich wäre es mit entsprechendem Zeitaufwand prinzipiell möglich ein hinreichend sicheres System für den speziellen Anwendungsfall von esqulino zu entwerfen, dieser Aufwand wäre jedoch im Vergleich zu anderen Features nicht zu rechtfertigen. Und abgesehen davon sollte kein Schüler einem esqulino-Server Daten anvertrauen, deren versehentliche Veröffentlichung er oder sie nicht verkraften würde. Das gilt selbstverständlich auch für den Fall, dass eine hypothetische künftige Version einen solchen Zugriffsschutz vorsehen sollte!
 
-Lesende Zugriffe sollen, zumindest in der Thesis-Version der Software, ebenfalls nicht punktuell endgültig eingeschränkt werden können. Natürlich könnte man im Schema eine Spalte "`geheim"' zu Tabellen mit privaten Daten hinzufügen und auf dieser Basis die Oberfläche für Endanwender limitieren. Da Projekte aber auch einfach kopiert werden können, müsste ein versierter Benutzer nur eine Kopie vornehmen und könnte dann alle Daten einsehen oder veröffentlichen. Zwar wäre es mit entsprechendem Zeitaufwand prinzipiell möglich ein hinreichend sicheres System für den speziellen Anwendungsfall von esqulino zu entwerfen, dieser Aufwand wäre jedoch im Vergleich zu anderen Features nicht zu rechtfertigen. Und abgesehen davon sollte kein Schüler einem esqulino-Server Daten anvertrauen, deren versehentliche Veröffentlichung er oder sie nicht verkraften würde. Das gilt auch für den Fall, dass eine hypothetische künftige Version einen solchen Zugriffsschutz vorsehen sollte.
+Schon um Vandalismus zu vermeiden, sind leider einfache Zugriffskontrollen auf Projektebene nötig. Um etwaige Missverständnisse von vornerein zu vermeiden: Ziel dieser Kontrollen ist es zu verhindern, dass z.B. die Quellen für die Abfragen oder Benutzeroberfläche eines Projektes entstellt oder gelöscht werden. \textbf{Nicht geschützt} werden damit einzelne Datensätze, also die Zeilen, in der Datenbank. Sobald in der Benutzeroberfläche für Endanwender Funktionalität zum Löschen oder Editieren von Datensätzen vorgesehen ist, gibt es keine einfache Möglichkeit, legitime Veränderungen von unerwünschtem Vandalismus zu unterscheiden. Daher soll zunächst nur eine sehr einfache, binäre Klassifikation in zwei Benutzergruppen vorgenommen werden: "`Darf jede mutierende Operation ausführen"' oder "`darf ausschließlich lesen"'. In einer späteren Version wäre es dann denkbar diese sehr grobe Methodik zu verfeinern.
 
-Um zumindest einen grundsätzlichen Schutz zu ermöglichen, sollten für ein Projekt aber zwischen drei schreibenden Zugriffsarten für angelegte Benutzer gewählt werden können:
+Sowohl für den lesenden als auch für den schreibenden Zugriff gilt daher: Eine komplexe, aber halbgare Lösung für eine so kritische Funktionalität würde im Extremfall mehr Schaden anrichten als nützen. Eine unsicher implementierte Sicherheitsfunktion suggeriert möglicherweise ein Schutzniveau welches praktisch nicht eingehalten wird. Also werden Ansätze wie "`Vergabe von Schreibrechten für einzelne Abfragen an bestimmte Benutzergruppen"' oder sogar ein zeilenweiser Schutz von Daten ("`Jeder Benutzer darf nur seine Daten bearbeiten"') aus Zeitgründen im Rahmen dieser Thesis nicht weiter betrachtet.
+
+Trotzdem ist es leider notwendig zumindest eine grundlegende Form von Authentifizierung vorzusehen. Diese Notwendigkeit ergibt sich auf zwei Ebenen: Es sollen sowohl der Code als auch die Datenbestände vor Veränderungen durch unbefugte Dritte geschützt. Dabei muss es sich nicht einmal um bösartigen Vandalismus handeln. Bei ungeschickt programmierten Webseiten kann es durchaus auch mal passieren, dass Webcrawler Datenbestände vernichten. Mehr als einen schlecht ausprogrammierten "`Diesen Datensatz Löschen"'-Link auf einer Übersichtsseite braucht es dazu nicht. Der Webcrawler folgt unter Umständen auch solchen Verweisen und löscht damit während der Indexierung unbeabsichtigt Datensätze.
+
+Um also zumindest einen grundsätzlichen Schutz zu ermöglichen, sollten für ein Projekt zwischen drei schreibenden Zugriffsarten für angelegte Benutzer gewählt werden können:
+
+\warning{Nur zur Sicherheit sei an dieser Stelle nochmals deutlich erwähnt, dass dieser Schutz nur für schreibende Zugriffe greift. Der lesende Zugriff auf den gesamten Datenbestand ist über die Entwicklungsumgebung auch für Gäste stets uneingeschränkt möglich.}
 
 \begin{description}
   \item[Entwickler] \hfill \\
@@ -98,8 +104,6 @@ Um zumindest einen grundsätzlichen Schutz zu ermöglichen, sollten für ein Pro
   \item[Gast] \hfill \\
     Gäste können keinerlei Schreibzugriffe vornehmen, weder über die Entwicklungsumgebung, noch über die Oberfläche für Endbenutzer.
 \end{description}
-
-\warning{Nur zur Sicherheit sei an dieser Stelle nochmals deutlich erwähnt, dass dieser Schutz nur für schreibende Zugriffe greift. Der lesende Zugriff auf den gesamten Datenbestand ist über die Entwicklungsumgebung auch für Gäste stets uneingeschränkt möglich.}
 
 \subsection{Didaktisch sinvolle Teilmengen von SQL}
 \label{sec:sql-subset}
@@ -249,24 +253,27 @@ Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisc
 
   Bei unterschiedlich überladene Varianten der gleichen Funktion wird in esqulino immer nur die vollständigste Variante implementiert. Die Schüler müssen daher nicht die implizit bekannten Werte der jeweiligen Funktion auswendig kennen.
   \begin{enumerate}
-  \item \label{feat:fun-abs} \texttt{ABS(X)}
-  \item \label{feat:fun-coalesce} \texttt{COALESCE(X,Y,...)}
-  \item \label{feat:fun-length} \texttt{LENGTH(X)}
-  \item \label{feat:fun-casing} \texttt{LOWER(X)} und \texttt{UPPER(X)}
-  \item \label{feat:fun-random} \texttt{RANDOM()}
-  \item \label{feat:fun-round} \texttt{ROUND(X,Y)}
-  \item \label{feat:fun-trim} \texttt{TRIM(X)} sowie \texttt{LTRIM(X)} und \texttt{RTRIM(X)}
+  \item \label{feat:fun-abs} \texttt{ABS(X)} um den Betrag eines Wertes zu erhalten.
+  \item \label{feat:fun-coalesce} \texttt{COALESCE(X,Y,...)} um den ersten gültigen Wert der Parameterliste zu erhalten.
+  \item \label{feat:fun-length} \texttt{LENGTH(X)} um die Länge einer Zeichenkette zu bestimmen.
+  \item \label{feat:fun-casing} \texttt{LOWER(X)} und \texttt{UPPER(X)} um die klein bzw. groß geschriebene Variante einer Zeichenkette zu erhalten.
+  \item \label{feat:fun-random} \texttt{RANDOM()} um einen zufälligen Wert zu erhalten.
+  \item \label{feat:fun-round} \texttt{ROUND(X,Y)} um kaufmännisch zu runden.
+  \item \label{feat:fun-trim} \texttt{TRIM(X)} sowie \texttt{LTRIM(X)} und \texttt{RTRIM(X)} um Leerzeichen am Anfang oder Ende eines Strings zu entfernen.
+  \item \label{feat:fun-substr} \texttt{SUBSTR(X,Y,Z)} um einen Ausschnitt der Zeichenketten zu extrahieren.
+  \item \label{feat:fun-replace} \texttt{REPLACE(X,Y,Z)} um Teilbereiche der Zeichenkette zu ersetzen.
+  \item \label{feat:fun-instr} \texttt{INSTR(X,Y,Z)} um das Vorkommen eines Suchwortes in einer Zeichenkette zu erhalten.
   \end{enumerate}
 
 \item \textbf{Aggregierende Funktionen (in alphabetischer Reihenfolge)} \\
   Die Verfügbarkeit dieser Funktionen hängt von der Verfügbarkeit der \texttt{GROUP BY}-Komponente ab (\ref{feat:group-allow}).
   \begin{enumerate}
-  \item \label{feat:fun-avg} \texttt{AVG(X)}
-  \item \label{feat:fun-count} \texttt{COUNT(X)}
-  \item \label{feat:fun-group-concat} \texttt{GROUP\_CONCAT(X,Y)}
-  \item \label{feat:fun-max-min} \texttt{MAX(X)} und \texttt{MIN(X)}
-  \item \label{feat:fun-sum} \texttt{SUM(X)}, gibt im Falle von komplett fehlenden Werten \texttt{NULL} zurück
-  \item \label{feat:fun-total} \texttt{TOTAL(X)}, gibt im Falle von komplett fehlenden Werten \texttt{0.0} zurück
+  \item \label{feat:fun-avg} \texttt{AVG(X)} bildet das arithmetische Mittel.
+  \item \label{feat:fun-count} \texttt{COUNT(X)} zählt alle Werte die nicht \lstinline{NULL} sind.
+  \item \label{feat:fun-group-concat} \texttt{GROUP\_CONCAT(X,Y)} konkateniert einzelne Zellen einer Gruppe.
+  \item \label{feat:fun-max-min} \texttt{MAX(X)} und \texttt{MIN(X)} selektieren minimalen oder maximalen Wert.
+  \item \label{feat:fun-sum} \texttt{SUM(X)} summiert und gibt im Falle von komplett fehlenden Werten \texttt{NULL} zurück
+  \item \label{feat:fun-total} \texttt{TOTAL(X)} summiert und gibt im Falle von komplett fehlenden Werten \texttt{0.0} zurück
   \end{enumerate}
 \end{enumerate}
 
@@ -279,15 +286,21 @@ Das grundsätzliche Vorgehen um den Sprachumfang einzuschränken, ist dabei mehr
 
 Alternativ sollen sich auch wortwörtliche Einschränkungen im Sinne einer Blacklist angeben lassen. Für die in der Regel sehr übersichtlichen Teilsprachen die in dieser Arbeit konzipiert werden, ist diese Variante häufig schlechter lesbar: Man muss den größtmöglichen Umfang des hier beschriebenen Dialekts immer im Hinterkopf haben. Außerdem kommen im Falle einer Erweiterung des Sprachumfangs, z.B. durch ein späteres Update der Entwicklungsumgebung, möglicherweise unerwünschte Möglichkeiten hinzu.
 
-Danach können die Einschränkungen noch für einzelne Abfragen verfeinert werden. Im allgemeinen Fall wird diese Funktionalität wenig nachgefragt sein: Insbesondere bei der Entwicklung von Webanwendungen ist es nicht hilfreich sich für jede Abfrage in einen anderen Sprachumfang einarbeiten zu müssen. Sofern die Schüler aber bestimmte Aufgaben mit einem didaktisch motiviertem reduzierten (oder erweiterten) Sprachumfang lösen sollen, kommt diese Möglichkeit zum Einsatz. Die hier exemplarisch aufgeführten Feature-Levels orientieren sich an den im Rahmen der Master-Arbeit exemplarisch erstellten Datenbeständen und an den Aufgaben aus Informatik-Lehrbüchern\cite{hubwieser_inf_2}.
+Danach können die Einschränkungen noch für einzelne Abfragen verfeinert werden. Im allgemeinen Fall wird diese Funktionalität wenig nachgefragt sein: Insbesondere bei der Entwicklung von Webanwendungen ist es nicht hilfreich sich für jede Abfrage in einen anderen Sprachumfang einarbeiten zu müssen. Sofern die Schüler aber bestimmte Aufgaben mit einem didaktisch motiviertem reduzierten (oder erweiterten) Sprachumfang lösen sollen, kommt diese Möglichkeit zum Einsatz. Die hier exemplarisch aufgeführten Feature-Levels orientieren sich an den im Rahmen der Master-Arbeit exemplarisch erstellten Datenbeständen und an den Aufgaben aus Informatik-Lehrbüchern \cite{hubwieser_inf_2, grimm_informatik_2015}.
+
+\subsubsection*{Arbeiten mit einfachen Einschränkungen}
+
+Die Selektion steht in allen betrachteten Schulbüchern am Beginn des Lernprozesses. Verwendet werden dabei durchgängig alle relationalen Operatoren ($<, \leq, =, \neq, \geq, >$) sowie das logische \lstinline{NICHT}, \lstinline{UND} sowie \lstinline{ODER}. Teilweise werden auch schon einfache unscharfe Textsuchen mit dem \lstinline{LIKE}-Operator behandelt. Syntaxzucker wie \lstinline{BETWEEN} kommt jedoch nicht vor.
+
+\subsubsection*{Arbeiten mit Projektionen}
+
+Der Funktionsumfang von diesem Feature-Level orientiert sich an gängigen Tabellenkalkulationsprogrammen wie Microsoft Excel oder Libre Office Calc. Im Vordergrund steht die Verwendung oder Schachtelung von Text-Funktionen wie \lstinline{substring} oder \lstinline{find}. Bei den Datensätzen handelt es sich häufig um stark denormalisierte Daten, welche nichtmal in erster Normalform vorliegen. So werden zum Beispiel Vor- und Zuname in eine einzige Zelle geschrieben und müssen dann in der Selektion wieder voneinander getrennt werden.
+
+\subsubsection*{Arbeiten mit aggregierten Daten}
 
 \subsubsection*{Arbeiten mit JOINs}
 
 Dieses Feature-Level stellt die Verknüpfung vorhandener Datenbestände in den Vordergrund und blendet jegliche Projektion oder Gruppierung vollständig aus. Schüler sollen auf dieser Stufe lernen, sich in einem Datenmodell anhand der vorhanden Fremdschlüssel-Beziehungen zu orientieren.
-
-\subsubsection*{Arbeiten mit einfachen Projektionen}
-
-\subsubsection*{Arbeiten mit aggregierten Daten}
 
 \subsection{Drag \& Drop Editor für SQL}
 \label{sec:design-sql-editor}
