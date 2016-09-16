@@ -3,7 +3,8 @@
 # ONLY install dependencies for the client, change to the `client` folder
 # first and call `install-deps` there.
 
-# All really does *everything* and will usually not be the target you want to
+# The "all" target assumes that a full initial build is required and really
+# builds *everything*. This will usually not be the target you want to
 # call. "Everything" especially includes the whole documentation which doesn't
 # need to be generated if you "only" intend to run esqulino.
 all : install-deps dist doc
