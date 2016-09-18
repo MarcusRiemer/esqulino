@@ -36,8 +36,7 @@
     map: map,
     packages: packages,
     bundles : {
-      'node_modules/rxjs/bundles/Rx' : ['rxjs'],
-      'node_modules/@angular/common/common.umd' : ['@angular/common']
+      'node_modules/rxjs/bundles/Rx' : ['rxjs']
     }
   }
 

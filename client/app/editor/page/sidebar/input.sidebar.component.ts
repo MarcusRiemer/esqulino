@@ -6,7 +6,7 @@ import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
 
 import {WidgetComponent}               from '../widget.component'
 
-type Component = WidgetComponent<Input>
+type EditedComponent = WidgetComponent<Input>
 
 /**
  * Displays the sidebar editing component for a heading.
@@ -16,9 +16,9 @@ type Component = WidgetComponent<Input>
 })
 export class InputSidebarComponent {
 
-    private _component : Component;
+    private _component : EditedComponent;
 
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : Component) {
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : EditedComponent) {
         this._component = com;
     }
     

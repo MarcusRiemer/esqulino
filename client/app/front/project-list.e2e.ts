@@ -7,7 +7,7 @@ describe('Project List Page', () => {
 
         // Expected projects should be present
         expect(by.id("available-projects")).toBeTruthy();
-        expect(projects.count()).toEqual(5, "Number of expected projects");
+        expect(projects.count()).toEqual(6, "Number of expected projects");
     });
 
     it('navigates to an editor', () => {

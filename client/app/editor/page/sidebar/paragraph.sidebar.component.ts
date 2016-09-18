@@ -8,7 +8,7 @@ import {
 
 import {WidgetComponent}               from '../widget.component'
 
-type Component = WidgetComponent<Paragraph>
+type EditedComponent = WidgetComponent<Paragraph>
 
 @Component({
     templateUrl: 'app/editor/page/sidebar/templates/paragraph-sidebar.html',
@@ -17,7 +17,7 @@ export class ParagraphSidebarComponent {
 
     private _model : Paragraph;
     
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : Component,
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : EditedComponent,
                 @Inject(SIDEBAR_ID_TOKEN) public sidebarInstanceId : number) {
         this._model = com.model;
     }
