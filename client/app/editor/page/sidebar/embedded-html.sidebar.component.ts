@@ -6,16 +6,16 @@ import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
 
 import {WidgetComponent}               from '../widget.component'
 
-type Component = WidgetComponent<EmbeddedHtml>
+type EditedComponent = WidgetComponent<EmbeddedHtml>
 
 @Component({
     templateUrl: 'app/editor/page/sidebar/templates/embedded-html-sidebar.html',
 })
 export class EmbeddedHtmlSidebarComponent {
 
-    private _com : Component;
+    private _com : EditedComponent;
     
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : Component) {
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : EditedComponent) {
         this._com = com;
     }
 

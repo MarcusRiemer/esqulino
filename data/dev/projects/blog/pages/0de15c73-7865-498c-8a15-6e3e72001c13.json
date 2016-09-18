@@ -41,7 +41,7 @@
         "children": [
           {
             "type": "select",
-            "caption": "Auswahl",
+            "caption": "Zu löschender Kommentar",
             "outParamName": "kommentar_id",
             "queryRefName": "kommentare_alle",
             "optionTextExpression": "text",
