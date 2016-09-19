@@ -150,7 +150,11 @@ class Page
   #
   # And finally all parameters, including the query result, will be handed off
   # to the template engine. The result of this render process is then returned.
-  def render(params, render_engine = "liquid", template_string = nil)    
+  def render(params, render_engine = "liquid", template_string = nil)
+
+    params['page'] = self.render_params
+    params['project'] = @project.render_params
+    
     # Stores the results of executed queries
     result_queries = {}
 
@@ -172,7 +176,6 @@ class Page
     # previous parameters with the newly created query parameters
     render_params = params.dup
     render_params['query'] = result_queries
-    render_params['project'] = @project.render_params
 
     # Load the template string
     if template_string.nil? then
@@ -181,6 +184,16 @@ class Page
 
     # And hand over to do some actual rendering
     project_render_page_template(@project, template_string, render_engine, render_params)
+  end
+
+  # The render parameters that are relevant to this page.
+  #
+  # @return [Hash] Key-Value pairs that are available specifically on this page.
+  def render_params()
+    return {
+      'name' => self.name,
+      'id' => self.id
+    }
   end
 
   # Execute a single query, translating the required parameters

@@ -61,12 +61,16 @@
           {
             "type": "column",
             "width": 6,
-            "widgets": []
+            "widgets": [
+
+            ]
           },
           {
             "type": "column",
             "width": 3,
-            "widgets": []
+            "widgets": [
+
+            ]
           },
           {
             "type": "column",
@@ -86,7 +90,9 @@
           {
             "type": "column",
             "width": 4,
-            "widgets": []
+            "widgets": [
+
+            ]
           },
           {
             "type": "column",
@@ -113,7 +119,9 @@
           {
             "type": "column",
             "width": 4,
-            "widgets": []
+            "widgets": [
+
+            ]
           }
         ]
       }

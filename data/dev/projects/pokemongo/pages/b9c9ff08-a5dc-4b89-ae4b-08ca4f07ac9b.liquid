@@ -6,33 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+    <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
   </head>
   <body>
     <div class="container-fluid">
-      <form>
-        <h1>Hallo auf meinem Pokédex</h1>
-        <p>Hier zeige ich alle Pokémon, die ich gefangen habe.</p>
-        {% include "query_table" table: query.Meine_Pokemon, columns: "spitzname,staerke,nummer,typ" %}<div class="row">
-          <div class="col-md-12">
-            <a href="/Gefangen_Loeschen">Pokémon freigelassen</a>
-          </div>
-          <div class="col-md-12">
-            <a href="/Gefangen_Neu">Pokémon gefangen</a>
-          </div>
+      <h1>Hallo auf meinem Pokédex</h1>
+      <p>Hier zeige ich alle Pokémon, die ich gefangen habe.</p>
+      {% include "query_table" table: query.Meine_Pokemon, columns: "spitzname,staerke,nummer,typ" %}
+      <div class="row">
+        <div class="col-md-12">
+          <a href="/Gefangen_Loeschen">Pokémon freigelassen</a>
         </div>
-        <h1>Alle Pokemon</h1>
-        <p>Hier wird mit HTML geschummelt um alle Pokemon zu zeigen.</p>
-        <!-- Raw HTML begin -->
-        <ul>
-          {% for pkmn in query.Pokedex_1G %}
-          <li>
-            <a href="/Pokemon_Detail?nummer={{pkmn.nummer}}">{{ pkmn.name}}</a>
-          </li>
-          {% endfor %}
-        </ul>
-        <!-- Raw HTML end -->
-      </form>
+        <div class="col-md-12">
+          <a href="/Gefangen_Neu">Pokémon gefangen</a>
+        </div>
+      </div>
+      <h1>Alle Pokemon</h1>
+      <p>Hier wird mit HTML geschummelt um alle Pokemon zu zeigen.</p>
+      <!-- Raw HTML begin -->
+      <ul>
+        {% for pkmn in query.Pokedex_1G %}
+        <li>
+          <a href="/Pokemon_Detail?nummer={{pkmn.nummer}}">{{ pkmn.name}}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      <!-- Raw HTML end -->
     </div>
+    {% include "edit-ribbon" %}
   </body>
 </html>
 

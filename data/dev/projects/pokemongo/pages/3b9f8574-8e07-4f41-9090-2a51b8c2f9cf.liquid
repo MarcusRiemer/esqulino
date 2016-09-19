@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+    <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
   </head>
   <body>
     <div class="container-fluid">
@@ -15,6 +16,7 @@
       <h1>Alle existierenden Pokémon</h1>
       {% include "query_table" table: query.Pokedex_1G, columns: "nummer,name,typ" %}
       <form>
+        {% include "get_data_hidden" %}
         <h2>Fakten zu deinem Fang</h2>
         {% include "select" options: query.Pokedex_1G, outParamName: "input.nummer", caption: "Pokemon", optionText: "name", optionValue: "nummer"  %}
         {% include "input" caption: "Spitzname", outParamName: "input.name", description: "", inputType: "text"  %}
@@ -24,6 +26,7 @@
       <h2>Meine Pokémon</h2>
       {% include "query_table" table: query.Meine_Pokemon, columns: "gefangen_id,nummer,name,typ,spitzname,staerke" %}
     </div>
+    {% include "edit-ribbon" %}
   </body>
 </html>
 

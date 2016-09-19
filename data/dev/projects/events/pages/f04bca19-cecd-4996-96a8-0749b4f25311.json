@@ -1,5 +1,6 @@
 {
   "name": "Hauptseite",
+  "apiVersion": "3",
   "referencedQueries": [
     {
       "type": "query",
@@ -17,13 +18,14 @@
       "queryId": "e657b03b-9525-41ff-b32d-dfeb528e98c8"
     }
   ],
-  "apiVersion": "3",
   "body": {
     "type": "body",
     "children": [
       {
+        "type": "row",
         "columns": [
           {
+            "type": "column",
             "width": 12,
             "widgets": [
               {
@@ -35,15 +37,15 @@
                 "type": "paragraph",
                 "text": "Auf dieser Seite lassen sich die zeitlichen Zusammenhänge von historischen Persönlichkeiten und Ereignissen darstellen."
               }
-            ],
-            "type": "column"
+            ]
           }
-        ],
-        "type": "row"
+        ]
       },
       {
+        "type": "row",
         "columns": [
           {
+            "type": "column",
             "width": 12,
             "widgets": [
               {
@@ -65,15 +67,15 @@
                   "tod_jahr"
                 ]
               }
-            ],
-            "type": "column"
+            ]
           }
-        ],
-        "type": "row"
+        ]
       },
       {
+        "type": "row",
         "columns": [
           {
+            "type": "column",
             "width": 12,
             "widgets": [
               {
@@ -90,15 +92,15 @@
                   "ende_jahr"
                 ]
               }
-            ],
-            "type": "column"
+            ]
           }
-        ],
-        "type": "row"
+        ]
       },
       {
+        "type": "row",
         "columns": [
           {
+            "type": "column",
             "width": 12,
             "widgets": [
               {
@@ -116,11 +118,9 @@
                   "ende_jahr"
                 ]
               }
-            ],
-            "type": "column"
+            ]
           }
-        ],
-        "type": "row"
+        ]
       }
     ]
   }

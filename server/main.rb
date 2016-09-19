@@ -50,12 +50,20 @@ class ScratchSqlApp < Sinatra::Base
 
   # The data directory for this esqulino instance.
   def given_data_dir
-    ARGV[1] || "../data/dev/"
+    ARGV[1] || ENV['ESQULINO_DATA_DIR'] || "../data/dev/"
   end
 
   # The directory all projects are served from.
   def projects_dir
     File.join(given_data_dir, "projects")
+  end
+
+  # Information about the server that needs to be available
+  # when rendering
+  def server_render_data
+    return {
+      'editor_host' => ENV['ESQULINO_EDITOR_HOST'] || 'localhost.localdomain:9292'
+    }
   end
 
   # Ensures the @project instance variable, should be called before
@@ -299,6 +307,7 @@ class ScratchSqlApp < Sinatra::Base
 
       query_params = {
         'get' => request.GET,
+        'server' => self.server_render_data
       }
 
       return @page.render(query_params)
@@ -325,10 +334,10 @@ class ScratchSqlApp < Sinatra::Base
       initial_params = {
         'input' => input_params,
         'get' => form_get_params,
-        'project' => @project.render_params
+        'project' => @project.render_params,
+        'page' => @page.render_params,
+        'server' => self.server_render_data
       }
-
-      puts initial_params.inspect
       
       bind_params = {}
 
