@@ -29,6 +29,7 @@ function renderBody(w: Widget, renderWidget : WidgetRenderer) : string {
   <div class="container-fluid">
     ${children}
   </div>
+  {% include "edit-ribbon" %}
 </body>
 `);
 }
@@ -206,8 +207,8 @@ export class LiquidRenderer extends Renderer {
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
-  </head>
-`
+    <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
+  </head>`
     private static PAGE_FOOTER = `
 </html>
 `

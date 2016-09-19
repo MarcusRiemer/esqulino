@@ -339,6 +339,7 @@ class Project
   def render_params
     return {
       'name' => self.whole_description['name'],
+      'id' => self.id,
       'description' => self.whole_description['description'],
     }
   end

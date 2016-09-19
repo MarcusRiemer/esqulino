@@ -5,14 +5,12 @@
     {
       "type": "query",
       "name": "Meine_Pokemon",
-      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35",
-      "mapping": []
+      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35"
     },
     {
       "type": "query",
       "name": "Pokedex_1G",
-      "queryId": "0c396a9a-1947-4c2b-a5fb-195df2b91b84",
-      "mapping": []
+      "queryId": "0c396a9a-1947-4c2b-a5fb-195df2b91b84"
     }
   ],
   "body": {
@@ -51,7 +49,9 @@
                   "type": "navigate",
                   "internal": {
                     "pageId": "7a9b9883-62c9-4604-a46c-4d254bce8e4a",
-                    "parameters": []
+                    "parameters": [
+
+                    ]
                   }
                 }
               }
@@ -68,7 +68,9 @@
                   "type": "navigate",
                   "internal": {
                     "pageId": "3b9f8574-8e07-4f41-9090-2a51b8c2f9cf",
-                    "parameters": []
+                    "parameters": [
+
+                    ]
                   }
                 }
               }

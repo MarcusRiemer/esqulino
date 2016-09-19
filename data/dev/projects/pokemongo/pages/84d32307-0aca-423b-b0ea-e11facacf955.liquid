@@ -6,15 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+    <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
   </head>
   <body>
     <div class="container-fluid">
       <p>Hier stelle ich mein Pokémon mit der ID {{ get.id }} vor: <strong>{{ query.pokemon.spitzname }}</strong>. Es ist ein {{ query.pokemon.name }} und {{ query.pokemon.staerke }} Punkte stark.</p>
       <form>
+        {% include "get_data_hidden" %}
         <button type="submit" formaction="/Gefangen_Einzeln/query/40bddeac-facc-4836-a27b-6a23222078d5?gefangen_id=get.id" formmethod="POST" name="action" value="a" class="btn btn-secondary btn-block">Freigelassen</button>
       </form>
       <a href="/Hauptseite">Zurück zur Hauptseite</a>
     </div>
+    {% include "edit-ribbon" %}
   </body>
 </html>
 
