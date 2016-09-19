@@ -2,21 +2,30 @@
 
 Dieses Kapitel beschreibt die generellen Anforderungen an die Entwicklungsumgebung und einiger Beispielprojekte. Dabei werden auch einige theoretische Hintergründe betrachtet, speziell didaktische Konzepte für die Vermittlung von SQL oder mögliche Vorgehensweisen um Schüler bei der Entwicklung von Oberflächen sinnvoll anzuleiten. Den Schwerpunkt bildet die Beschreibung der beiden wichtigsten Komponenten der Entwicklungsumgebung: Den spezialisierten Editoren für SQL und Oberflächen.
 
-Die hier ``erträumte'' Konzeption wird möglicherweise aufgrund der Endlichkeit der im Rahmen einer Master-Thesis zur Verfügung stehenden Zeitspanne nicht vollständig umgesetzt werden können. Trotzdem ist eine möglichst vollständige Erfassung von Anforderungen unerläßlich, um im Falle einer Fortführung der Entwicklung nicht aufgrund von unberücksichtigten Anforderungen große Umbauarbeiten vornehmen zu müssen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, so wurden diese in Anlehnung an den ``Minus 100 Points''-Artikel von Eric Gunnerson \cite{gunnerson-minus-100} geprüft.
+Die hier "`erträumte"' Konzeption wird möglicherweise aufgrund der Endlichkeit der im Rahmen einer Master-Thesis zur Verfügung stehenden Zeitspanne nicht vollständig umgesetzt werden können. Trotzdem ist eine möglichst vollständige Erfassung von Anforderungen unerläßlich, um im Falle einer Fortführung der Entwicklung nicht aufgrund von unberücksichtigten Anforderungen große Umbauarbeiten vornehmen zu müssen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, so wurden diese in Anlehnung an den "`Minus 100 Points"'-Artikel von Eric Gunnerson \cite{gunnerson-minus-100} geprüft.
 
-\warning{Der Verzicht auf die technischen Hintergründe der Implementierung soll dieses Kapitel auch für ``normale'' Informatiklehrer verständlich halten, ohne Sie gleich mit den ``unwichtigen'' Details der Realisierung zu erschlagen. Die Planung konkreter Umsetzungsstrategien, inklusive einer Erläuterung der notwendigen Schnittstellen, werden in Kapitel \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis} besprochen.}
+\warning[Hinweis]{Der Verzicht auf die technischen Hintergründe der Implementierung soll dieses Kapitel auch für Informatik-Interessierte ohne softwaretechnischen Hintergrund verständlich halten, anstatt Sie gleich mit den Details der Realisierung zu erschlagen. Die Planung konkreter Umsetzungsstrategien, inklusive einer Erläuterung der notwendigen Schnittstellen, werden in Kapitel \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis} besprochen.}
 
 \subsection{Zielgruppe}
 \label{sec:target-audience}
 
-\missing[inline]{Fehlt noch, halt Schüler ohne vertiefte Mathe- oder Englischkenntnisse.}
+Mit esqulino sollen Schülerinnen und Schüler ab der Mittelstufe angesprochen werden. Die im folgenden genannten Aspekte bilden ein sehr oberflächliches Profil hilfreicher Kenntnisse. Dieses Profil ist dabei allerdings nicht als striktes Anforderungsprofil zu verstehen: Grundsätzlich lassen sich dieser Kenntnisse auch am Beispiel von esqulino vermitteln, dezidiertes Lehrmaterial gibt es dafür zum jetzigen Zeitpunkt allerdings nicht. Es ist Aufgabe der Lehrkraft dieses Wissen im Rahmen eigener Unterrichtseinheiten zu vermitteln. Kenntnisse über Datenbanken oder HTML sind nicht Bestandteil dieses Profils, diese sollen schließlich im Umgang mit esqulino erworben werden.
+
+\begin{description}
+\item[Grundlegende Anwenderkenntnisse] \hfill\\
+  Die Schüler müssen in der Lage sein einen Browser zu bedienen und mit Begriffen wie "`Speichern"' vertraut sein. Kenntnisse des Dateisystems sind jedoch nicht notwendig, esqulino abstrahiert die konkreten Speicherorte weg.
+\item[Tabellenkalkulation] \hfill\\
+  Kenntnisse über den Umgang mit Tabellenkalkulationsprogrammen sind keine zwingende Voraussetzung, aber vermutlich eine sinnvolle Vorstufe um die Struktur von Daten zu verstehen. Sofern sich die Schüler innerhalb eines solchen Programms auch schon mit Funktionen wie \lstinline{SUMME} beschäftigt haben, kann auf diesem Wissen aufgebaut werden.
+\item[Bedienelemente] \hfill\\
+  Wenn die Schüler mit esqulino eigene Oberflächen entwickeln sollen, brauchen sie grundlegende Kenntnisse über die Funktionsweise und Parameter einiger Bedienelemente: Mit Links werden Inhalte verknüpft, Knöpfe lösen Aktionen aus, Textfelder stellen Werte zur Verfügung, eine Combobox erlaubt die Auswahl von einem Wert aus vielen Werten ... Ohne zu wissen wozu bestimmte Bedienelemte eingesetzt werden, erschließt sich deren Verwendung in HTML nur sehr umständlich.
+\item[Englische Vokabeln] \hfill\\
+  In der initialen Version wird esqulino die Syntax von SQL oder HTML zwar vereinfachen und augmentieren, aber nicht übersetzen. Den Schülern sollte die Bedeutung von Vokabeln wie \lstinline{WHERE} oder \lstinline{<input>} also geläufig sein.
+\end{description}
 
 \subsection{Grundprinzipien}
 \label{sec:principles}
 
-Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit bereits existierenden Alternativen, ist es zunächst sinnvoll ein paar allgemeine Grundprinzipien zu formulieren. Diese Prinzipien bilden die Philosophie hinter der Schülerentwicklungsumgebung ab und dienen als Leitfaden für Designentscheidungen.
-
-Praktisch erlaubt das vor allem eine relativ akkurate Abschätzung, ob sich die Implementierung einer bestimmten Idee lohnt und wie sie zu priorisieren ist. Diese Sortierung dieser Prinzipien ist entsprechend ihrer Bedeutung absteigend sortiert, das wichtigste Prinzip wird also zuerst genannt.
+Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit bereits existierenden Alternativen, ist es zunächst sinnvoll ein paar allgemeine Grundprinzipien zu formulieren. Diese Prinzipien bilden die Philosophie hinter der Schülerentwicklungsumgebung ab und dienen als Leitfaden für Designentscheidungen. Praktisch erlaubt das vor allem eine relativ akkurate Abschätzung, ob sich die Implementierung einer bestimmten Idee lohnt und wie sie zu priorisieren ist. Diese Sortierung dieser Prinzipien ist entsprechend ihrer Bedeutung absteigend sortiert, das wichtigste Prinzip wird also zuerst genannt.
 
 \begin{description}
 \item[Semantik vor Syntax] \hfill\\
@@ -26,7 +35,7 @@ Praktisch erlaubt das vor allem eine relativ akkurate Abschätzung, ob sich die 
 \item[Schrittweise komplexere Benutzeroberfläche der Entwicklungsumgebung] \hfill \\
   Konventionelle Entwicklungsumgebungen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. Gerade wenn man aber dabei ist etwas Neues zu lernen, kann es sinnvoll sein, die Menge der möglichen Optionen zu beschränken. In diesem Sinne sollte die Lehrkraft die Möglichkeit haben, den Funktionsumfang der Entwicklungsumgebung für Schüler gezielt zu reduzieren. Es sollten sich also Funktionen der Entwicklungsumgebung ausblenden lassen, wenn dies aus didaktischen Gründen sinnvoll erscheint. Zum Beispiel könnten bestimmte Bedienelemente oder Bestandteile von SQL ausgeblendet werden, wenn diese noch nicht behandelt worden sind.
 \item[Einfache Inbetriebnahme] \hfill \\
-  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten, fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS \cite{statista-os-verbreitung}, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, ist eine möglichst einfache Inbetriebnahme von entsprechender Bedeutung. Die Informatiklehrkräfte stehen bei dem Betrieb der jeweiligen Programme in der Schule vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren dieses Szenario zusätzlich. Damit der Lernprozess mit esqulino nicht schon mit einer fehlgeschlagenen Installation endet, soll die Inbetriebnahme so wenig Hürden wie möglich aufstellen.
+  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten, fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS \cite{statista-os-verbreitung}, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, ist eine möglichst einfache Inbetriebnahme von entsprechender Bedeutung. Die Informatiklehrkräfte stehen bei dem Betrieb der jeweiligen Programme in der Schule vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren dieses Szenario zusätzlich. Damit der Lernprozess mit esqulino nicht schon mit einer fehlgeschlagenen Installation endet, soll der initiale Kontakt so wenig Hürden wie möglich aufstellen.
 \item[Fortführung der entwickelten Projekte] \hfill \\
   Lernumgebungen wie Scratch oder der AppInventor sind in sich geschlossene Systeme, deren Arbeitsergebnisse nur schwer in anderen Programmen oder Kontexten von Nutzen sind. Sobald der Lernende dann die Grenzen der verwendeten Lernsoftware erreicht hat, steckt er in einem Dilemma: Es ist für ihn notwendig auf eine andere Software auszuweichen, in diese kann er sein bestehendes Projekt aber nicht einfach mitnehmen. Die Arbeitsergebnisse dieser zu entwickelnden Software sollen daher zumindest einfach einsehbar sein, optimalerweise nach einem Export sogar mit gängigen Entwicklungsumgebungen oder Texteditoren erweiterbar.
 \end{description}
@@ -46,13 +55,25 @@ Umgekehrt ist es auch wichtig, den Umfang des zu entwickelnden Programms auf ein
 \subsection{Allgemeines Konzept der Entwicklungsumgebung}
 \label{sec:design-general-concept}
 
-\missingfigure{UI-Konzept mit traditioneller "`Seitenleiste"' und "`Editorbereich"'}
+\begin{figure}
+  \centering \includegraphics[width=\textwidth]{sketches/kap-3-general-editor-ui.png}
+  \caption{Generelle Aufteilung, ähnlich einer traditionellen Entwicklungsumgebung}
+  \label{fig:ui-sketch-general}
+\end{figure}
 
 Dieses Kapitel beschreibt sehr allgemein Anforderungen an die Entwicklungsumgebung, die Details dazu werden in den spezifischeren Kapiteln besprochen, welche nach Möglichkeit verlinkt sind.
 
+\subsubsection{Grundsätzlicher Aufbau}
+
+Die Oberfläche orientiert sich dabei grundsätzlich an der typischen Dreiteilung einer Entwicklungsumgebung (Abbildung \ref{fig:ui-sketch-general}). Der Dateibaum bietet jederzeit Zugriff auf alle Inhalte des aktuellen Projekts und ist in der Darstellung unabhängig von dem aktuell zu bearbeitenden Element.
+
+Der größte Bereich steht den jeweiligen Editoren zur Verfügung, deren Gestaltung ist dabei Gegenstand eigener Kapitel (\ref{sec:design-sql-editor}~\nameref{sec:design-sql-editor} \& \ref{sec:design-ui-editor}~\nameref{sec:design-ui-editor}). Die so genannte "`Toolbox"' bietet zu dem aktuell geladenen Editor kontextuell passende Optionen an. Darüber hinaus existieren für jeden Editor spezielle Aktionen, welche über einen Knopfdruck oder auch Tastaturkürzel ausgelöst werden können.
+
 \subsubsection{Zwei Modi: Entwickeln und Anschauen}
 
-Grundsätzlich unterschieden werden muss bei der Schülerentwicklungsumgebung, ähnlich wie bei Scratch, zwischen zwei Betriebsmodi für ein Projekt: Zunächst wird ein Projekt im Entwicklermodus betrieben, in diesem Fall stehen dem Benutzer alle Entwicklungstools zur Verfügung. Wenn es dann später einmal fertig ist und an Endanwender, z.B. Bekannte oder Freunde, weitergegeben wird, erwarte diese natürlich eine normale Benutzeroberfläche zu sehen. Der Wechsel zwischen diesen beiden Modi sollte dabei, ebenfalls analog zu Scratch, zu jedem Zeitpunkt möglich sein. Der Weg von der Entwicklungsumgebung zum Programm ist dabei selbstverständlich, jedoch sollte nach Möglichkeit auch der "`Rückweg"' von der Endbenutzeroberfläche zur Entwicklungsumgebung jederzeit möglich sein. Das "`Verstecken"' von Vorgehensweisen in Projekten ist im Lehrbetrieb nicht vorgesehen, jedes fremde Projekt soll auch als Inspiration für die Umsetzung eigener Ideen dienen können.
+Grundsätzlich unterschieden werden muss bei der Schülerentwicklungsumgebung, ähnlich wie bei Scratch, zwischen zwei Blickwinkeln auf das jeweilige Projekt: Zunächst wird ein Projekt im Entwicklermodus editiert, in diesem Fall stehen dem Benutzer alle Entwicklungstools zur Verfügung. Wenn es dann später einmal fertig ist und an Endanwender, z.B. Bekannte oder Freunde, weitergegeben wird, erwarte diese natürlich eine normale Benutzeroberfläche zu sehen.
+
+Der Wechsel zwischen diesen beiden Modi sollte dabei, ebenfalls analog zu Scratch, zu jedem Zeitpunkt möglich sein. Der Weg von der Entwicklungsumgebung zum Programm ist dabei selbstverständlich, jedoch sollte nach Möglichkeit auch der "`Rückweg"' von der Endbenutzeroberfläche zur Entwicklungsumgebung jederzeit möglich sein. Das "`Verstecken"' von Vorgehensweisen in Projekten ist im Lehrbetrieb nicht vorgesehen, jedes fremde Projekt soll auch als Inspiration für die Umsetzung eigener Ideen dienen können.
 
 \subsubsection{Webanwendung}
 
@@ -74,7 +95,7 @@ Softwaretechnisch nachteilig ist die Tatsache, dass esqulino im Falle einer Entw
 
 \subsubsection{Projektbasiert}
 
-Nachdem der Begriff des ``Projekts'' nun schon einige Male gefallen ist, wird es Zeit diesen eindeutig zu definieren. Abstrakt betrachtet handelt es sich bei einem Projekt um eine Datenbasis in Form einer Datenbank. Zu dieser Datenbasis kann man als Entwickler SQL-Abfragen entwickeln (\ref{sec:design-sql-editor} \nameref{sec:design-sql-editor}) und einige dieser Abfragen mit einer Oberfläche für Endbenutzer versehen (\ref{sec:design-ui-editor} \nameref{sec:design-ui-editor}).
+Nachdem der Begriff des ``Projekts'' nun schon einige Male gefallen ist, wird es Zeit diesen eindeutig zu definieren. Abstrakt betrachtet handelt es sich bei einem Projekt um eine Datenbasis in Form einer Datenbank. Zu dieser Datenbasis kann man als Entwickler SQL-Abfragen entwickeln (\ref{sec:design-sql-editor}~\nameref{sec:design-sql-editor}) und einige dieser Abfragen mit einer Oberfläche für Endbenutzer versehen (\ref{sec:design-ui-editor}~\nameref{sec:design-ui-editor}).
 
 Als unmittelbare Ausgangspunkt eines Projektes sollen einigermaßen einfache, aber grundsätzlich beliebige SQLite-Datenbanken dienen\footnote{Kapitel \ref{sec:implementation-database-system} \nameref{sec:implementation-database-system} erläutert, warum ausgerechnet SQLite zum Einsatz kommt und nicht ein anderes DBMS.}. Diese Schemata werden vorher mit externen Programmen erzeugt, was sowohl im Dialog mit den Schülern als auch ``einfach so'' erfolgt sein kann.
 

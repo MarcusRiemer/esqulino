@@ -53,9 +53,9 @@
 \newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{\textbf{Info}: #2}}
 \newcommandx{\missing}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{\textbf{Missing}: #2}}
 
-\newcommand{\warning}[1]{
+\newcommand{\warning}[2][Achtung]{
   \begin{framed}
-    \textbf{Achtung}: #1
+    \textbf{#1}: #2
   \end{framed}
 }
 
