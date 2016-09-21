@@ -1,12 +1,86 @@
 \section{Umsetzungsanalyse}
 \label{sec:implementation-analysis}
 
-Dieses Kapitel erläutert auf welche Art und Weise die im vorigen Kapitel geplanten Funktionen umgesetzt worden sind.
+Dieses Kapitel erläutert auf welche Art und Weise die im vorigen Kapitel geplanten Funktionen umgesetzt worden sind. Der softwaretechnische Unterbau der Entwicklungsumgebung setzt auf aktuelle Webtechnologien auf (siehe \ref{sec:req-web-application}~\nameref{sec:req-web-application} für die Diskussion der Begründung) und teilt sich in zwei distinkte Codebasen für Server und Client.
+
+\begin{description}
+\item[Server: Ruby mit Sinatra] \hfill\\
+  Die Aufgaben des Servers sollen sich konzeptionell möglichst auf die Auslieferung und Speicherung von Daten beschränken. Die Interaktion findet dabei primär über eine REST-artige JSON Schnittstelle statt, serverseitig gerendert werden lediglich die Projekte der Schüler.
+\item[Client: Typescript mit Angular 2] \hfill\\
+  Aufgrund des hohen Grades an Interaktivität bietet sich eine rein clientseitige Visualisierung an, die weitestgehend auf Roundtrips zum Server verzichtet. Außer für den Zugriff auf serverseitige Resourcen (Datenbank, gespeicherte Ressourcen, gerenderte Seiten) werden alle Operationen im Browser ausgeführt.
+\end{description}
+
+Die grundsätzliche Struktur eines esqulino-Projektes wird in Diagramm \ref{uml:class-diagram-core-entities} ersichtlich. Diese Darstellung visualisert nicht die konkrete Implementierung des Servers oder des Clients, sondern illustriert die grundlegenden beteiligten Datenstrukturen. Jede dieser Entitäten, also sowohl Projekte als auch ihre Ressourcen, enthält eine eigene Versionsangabe. Dadurch kann auf jede Veränderung an dieser Struktur explizit eingegangen werden (\ref{sec:implementation-migration}~\nameref{sec:implementation-migration}), aktuell laden sowohl Server als auch Client nur Ressourcen deren Version exakt passt.
+
+Jede Ressource (\lstinline{ProjectResource}) verfügt über eine interne ID sowie einen sprechenden Namen. In der aktuellen Version von esqulino handelt es sich bei dieser ID um eine GUID, sollte also weltweit einzigartig sein. Theoretisch wäre es dadurch denkbar diese Ressourcen auch zwischen Projekten zu kopieren bzw. zu Teilen. Intern werden Referenzen auf Ressourcen immer anhand der ID referenziert. Eine Umbenennung von Ressourcen durch den Benutzer hat daher keine Auswirkungen auf etwaige Referenzen an anderer Stelle.
+
+\begin{diagram}[p]
+  \begin{tikzpicture}
+    \begin{interface}[text width=7cm]{ApiVersionable}{-4, 0}
+      \attribute{apiVersion : string}
+    \end{interface}
+    
+    \begin{class}[text width=7cm]{Project}{-8, -4}
+      \implement{ApiVersionable}
+      
+      \attribute{id : string}
+      \attribute{name : string}
+      \attribute{description : string}
+      \attribute{indexPageId : string}
+    \end{class}
+
+    \begin{abstractclass}[text width=7cm]{ProjectResource}{0, -4}
+      \implement{ApiVersionable}
+      
+      \attribute{id : string}
+      \attribute{name : string}
+    \end{abstractclass}
+
+    \begin{class}[text width=7cm]{Page}{0, -8}      
+      \attribute{body: BodyNode}
+      \attribute{referencedQueries: QueryReference[]}
+      \attribute{parameters: PageParameter[]}
+    \end{class}
+
+    \begin{class}[text width=7cm]{Query}{0, -12}
+      \attribute{select : Select}
+      \attribute{delete : Insert}
+      \attribute{insert : Insert}
+      \attribute{update : Update}
+      \attribute{from   : From}
+      \attribute{where  : Where}
+    \end{class}
+
+    %\association{Query}{parentProject}{1}{Project}{0..*}{queries}
+
+    \draw[] (Page.west)  -| (Project.south);
+    \draw[] (Query.west) -| (Project.south);
+
+    % Query and page implement ProjectResource
+    \draw[->] (Query.east) -- ++ (1,0) -- ($(ProjectResource.east)+(1,0)$) -- (ProjectResource.east);
+    \draw[-] (Page.east) -- ++ (1,0);
+
+    \node[xshift=0.3cm, yshift=-0.5cm] at (Project.south) {1};
+    \node[xshift=-0.5cm, yshift=0.3cm] at (Query.west) {0..n};
+    \node[xshift=-2.5cm, yshift=0.3cm] at (Query.west) {Pages};
+    
+    \node[xshift=-0.5cm, yshift=0.3cm] at (Page.west) {0..n};
+    \node[xshift=-2.5cm, yshift=0.3cm] at (Page.west) {Queries};
+  \end{tikzpicture}
+
+  \caption{Abstrakte Übersicht über die Ressourcen eines Projektes}
+  \label{uml:class-diagram-core-entities}
+\end{diagram}
+
+\subsection{Serverseitige Persistenz}
+\label{sec:implementation-persistence}
+
+Im einfachsten Fall ist die serverseitig persistierte Version einer Resource identisch mit dem Übertragungsformat. Dabei müssen möglicherweise sensible Informationen gefiltert werden, in der Datenstruktur der jeweiligen Implementierung sollte diese Felder daher als optional betrachtet werden. Sofern jedoch keine Filterung notwendig ist, können diese Dokumente unverändert bereitgestellt werden. Damit wäre der rein lesende Zugriff auf esqulino-Projekte mit
 
 \subsection{Datenbanksystem}
 \label{sec:implementation-database-system}
 
-Eine der naheliegendsten zu treffenden Entscheidungen hat zwar einen technischen Hintergrund, ist aber trotzdem unbedingt Bestandteil dieser Anforderungsanalyse: Es geht um die Wahl des zu verwendenden Datenbanksystems. Dieser Aspekt hat einen unmittelbaren Einfluss auf die exakte Variante der SQL Syntax, auf den Betrieb der Entwicklingsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
+Die Wahl des konkreten Datenbanksystems hat einen unmittelbaren Einfluss auf nahezu alle Bereiche von esqulino. Im einzelnen handelt es sich dabei um die exakte Variante der SQL Syntax, auf die Rahmenbedingungen für den Betrieb der Entwicklungsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
 
 Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbeständen sollten normalerweise im Bereich nur einiger Megabyte liegen und die in der Praxis möglicherweise einzige Unterscheidung von Zugriffsrechten wäre zwischen lesendem und schreibenden Zugriff. Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien gewählt und hinsichtlich ihrer Relevanz sortiert:
 
@@ -29,18 +103,6 @@ Um den Betrieb folglich so einfach wie möglich zu halten, wurden für esqulino 
 
 \unsure[inline]{Theoretisch ist die Menge an denkbaren Systemen fast unüberschaubar groß, praktisch sticht SQLite aus der Masse an Optionen heraus. Wie ausführlich muss ich das begründen?}
 
-
-\subsection{Verwendete Sprachen und Bibliotheken}
-
-Der softwaretechnische Unterbau der Entwicklungsumgebung wurde schon vor dem eigentlichen Beginn der Thesis in Gesprächen mit Dr. Huch und Dr. Hoffmann festgelegt.
-
-\begin{description}
-\item[Server: Ruby mit Sinatra] \hfill\\
-  Die Aufgaben des Servers sollen sich konzeptionell möglichst auf die Auslieferung und Speicherung von Daten beschränken. Die Interaktion findet dabei primär über eine REST-artige JSON Schnittstelle statt.
-\item[Client: Typescript mit Angular 2] \hfill\\
-  Aufgrund des hohen Grades an Interaktivität bietet sich eine rein clientseitige Visualisierung an, die weitestgehend auf Roundtrips zum Server verzichtet. Zu Beginn der Arbeit befand sich Angular 2 noch in der Betaphase.
-\end{description}
-
 \subsection{Hinweise zum Client}
 
 Der verwendete Typescript Compiler hat zum Zeitpunkt der Anfertigung dieser Arbeit einen bekannten Bug in der Codegenerierung \cite{ts-compiler-class-order-bug} um den wiederholt herumgearbeitet werden musste. Konkret äussert sich dieser Fehler, wenn die Definition der Oberklasse einer sich davon ableitenden Klasse erst im Nachhinein erfolgt (Listing \ref{lst:ts:class-order-bug}). In diesem Fall kommt es zu keiner Warnung durch den Compiler, sondern zu einem Laufzeitfehler im kompilierten Javascript-Code.
@@ -48,8 +110,12 @@ Der verwendete Typescript Compiler hat zum Zeitpunkt der Anfertigung dieser Arbe
 \lstinputlisting[language=JavaScript,caption=Falsche Reihenfolge der Klassendefinition, label=lst:ts:class-order-bug]{snippets/class-inheritance-order-bug.ts}
 
 \subsection{Administrationszugang}
+\label{sec:implementation-administration}
 
 Momentan aufgrund von Zeitmangel nur in Form der Kommandozeilenschnittstelle.
+
+\subsubsection{Schema-Migrationen}
+\label{sec:implementation-migration}
 
 %%% Local Variables:
 %%% mode: latex

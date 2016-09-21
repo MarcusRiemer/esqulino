@@ -59,19 +59,16 @@
   \end{framed}
 }
 
-\DeclareFloatingEnvironment[
-    fileext=lod,
-    listname=Liste von Ordnerstrukturen,
-    name=Ordnerstruktur,
-    placement=tbhp,
-    within=none,
-]{dirstruct}
+% Using \DeclareFloatingEnvironment leads to a strange extra dot in the
+% caption numbering, see http://tex.stackexchange.com/questions/330638/getting-rid-of-an-extra-dot-in-the-numbering-of-my-new-float-environment
+
+\newfloat{diagram}{thp}{lop}
+\floatname{diagram}{Diagramm}
+
 
 %% Citing stuff
 \usepackage[backend=biber,defernumbers=true]{biblatex}
 \addbibresource[datatype=bibtex]{library.bib}
-
-
 
 %%% Local Variables:
 %%% mode: latex
