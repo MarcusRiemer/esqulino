@@ -10,9 +10,39 @@ Dieses Kapitel erläutert auf welche Art und Weise die im vorigen Kapitel geplan
   Aufgrund des hohen Grades an Interaktivität bietet sich eine rein clientseitige Visualisierung an, die weitestgehend auf Roundtrips zum Server verzichtet. Außer für den Zugriff auf serverseitige Resourcen (Datenbank, gespeicherte Ressourcen, gerenderte Seiten) werden alle Operationen im Browser ausgeführt.
 \end{description}
 
+\begin{figure}[p]
+  \centering \includegraphics[width=\textwidth]{images/openapi-query-example.png}
+  \caption{Generiert aus der Spezfikation: API-Browser für esqulino}
+  \label{fig:openapi-query-example}
+\end{figure}
+
+Um die Schnittstelle zwischen diesen beiden Komponenten so transparent wie möglich zu halten, werden diese gemäß der OpenAPI Spezifikation \cite{open-api} dokumentiert. Dieses offene Format ermöglicht es auf eine hilfreiche Auswahl an standarisierten Tools aufzubauen. Zum Beispiel können aus der Spezifikation interaktive Testumgebungen für die Server-Schnittstellen erzeugt werden (\ref{fig:openapi-query-example}).
+
+Als primäres Interface für die Kompilierung wird ein \lstinline{Makefile} genutzt. Dieses prüft ob auf dem aktuellen System alle nötigen Abhängigkeiten verfügbar sind und stellt sicher, dass Übersetzungsschritte nur ausgeführt werden, wenn sie tatsächlich notwendig sind. Von den technischen Details der unterschiedlichen Programmierumgebungen aufgrund der unterschiedlichen Programmiersprachen kann so außerdem elegant abstrahiert werden: Ein Programmierer kann sich die exakten Aufrufe der unterschiedlichen Paketmanager zwar anschauen, wird im Normallfall aber nur \lstinline{make install-deps} aufrufen.
+
+\subsection{Tests}
+
+Die Funktionalität der, relativ isolierten und daher gut zu testenden, internen Datenmodelle samt den darauf definierten Operationen wird über Unit-Tests sichergestellt. Diese Tests können einfach in jedem Browser ausgeführt werden und eignen sich daher auch um im Zweifelsfall unterschiedliche Verhaltensweisen verschiedener Browser zu erfassen. Als technisches Fundament wird für diese Testfälle auf der Jasmine-Bibliothek aufgebaut.
+
+Listing \ref{lst:unit-test-example} illustriert, wie die meisten Testfälle in esqulino aufgebaut sein. Jeder Testfall beginnt mit der Definition eines Datenmodells und endet mit Testfällen für die korrekte Serialisierung. Ganz konkret existiert also in jedem Testfall eine Variable \lstinline{model}, welche im Konstruktor der zu testenden Klasse zum Einsatz kommt und in nicht-mutierenden Testfällen als Ergebnis der \lstinline{toModel()} Methode reproduziert werden muss. Formal ausgedrückt handelt es sich es sich bei der Verkettung des Konstruktors mit der \lstinline{toModel()}-Methode also um eine neutrale Operation.
+
+Die Dateien mit den Unit-Tests liegen im Dateisystem immer "`neben"' ihren Implementierungen, der Dateiname wird allerdings mit dem Suffix \lstinline{spec} wie "`Specification"' ergänzt.
+
+\lstinputlisting[
+  language=JavaScript,
+  caption=Unit-Test für eine korrekte SELECT-Abfrage,
+  label=lst:unit-test-example,
+  float,floatplacement=p,
+  numbers=left
+]{snippets/unit-test-example.ts}
+
+Die serverseitige Funktionalität wird aktuell ausschließlich über "`Ende-zu-Ende"'-Tests mit einem speziell instrumentierten Browser geprüft.
+
+\subsection{Struktur eines Projekts}
+
 Die grundsätzliche Struktur eines esqulino-Projektes wird in Diagramm \ref{uml:class-diagram-core-entities} ersichtlich. Diese Darstellung visualisert nicht die konkrete Implementierung des Servers oder des Clients, sondern illustriert die grundlegenden beteiligten Datenstrukturen. Jede dieser Entitäten, also sowohl Projekte als auch ihre Ressourcen, enthält eine eigene Versionsangabe. Dadurch kann auf jede Veränderung an dieser Struktur explizit eingegangen werden (\ref{sec:implementation-migration}~\nameref{sec:implementation-migration}), aktuell laden sowohl Server als auch Client nur Ressourcen deren Version exakt passt.
 
-Jede Ressource (\lstinline{ProjectResource}) verfügt über eine interne ID sowie einen sprechenden Namen. In der aktuellen Version von esqulino handelt es sich bei dieser ID um eine GUID, sollte also weltweit einzigartig sein. Theoretisch wäre es dadurch denkbar diese Ressourcen auch zwischen Projekten zu kopieren bzw. zu Teilen. Intern werden Referenzen auf Ressourcen immer anhand der ID referenziert. Eine Umbenennung von Ressourcen durch den Benutzer hat daher keine Auswirkungen auf etwaige Referenzen an anderer Stelle.
+Jede Ressource (\lstinline{ProjectResource}) verfügt über eine interne ID sowie einen sprechenden Namen. In der aktuellen Version von esqulino handelt es sich bei dieser ID um eine \lstinline{GUID}, sollte also weltweit einzigartig sein. Theoretisch wäre es dadurch denkbar diese Ressourcen auch zwischen Projekten zu kopieren bzw. zu Teilen. Intern werden Referenzen auf Ressourcen immer anhand der ID referenziert. Eine Umbenennung von Ressourcen durch den Benutzer hat daher keine Auswirkungen auf etwaige Referenzen an anderer Stelle.
 
 \begin{diagram}[p]
   \begin{tikzpicture}
@@ -29,20 +59,20 @@ Jede Ressource (\lstinline{ProjectResource}) verfügt über eine interne ID sowi
       \attribute{indexPageId : string}
     \end{class}
 
-    \begin{abstractclass}[text width=7cm]{ProjectResource}{0, -4}
+    \begin{abstractclass}[text width=7cm]{ProjectResource}{0, -6}
       \implement{ApiVersionable}
       
       \attribute{id : string}
       \attribute{name : string}
     \end{abstractclass}
 
-    \begin{class}[text width=7cm]{Page}{0, -8}      
+    \begin{class}[text width=7cm]{Page}{0, -10}      
       \attribute{body: BodyNode}
       \attribute{referencedQueries: QueryReference[]}
       \attribute{parameters: PageParameter[]}
     \end{class}
 
-    \begin{class}[text width=7cm]{Query}{0, -12}
+    \begin{class}[text width=7cm]{Query}{0, -14}
       \attribute{select : Select}
       \attribute{delete : Insert}
       \attribute{insert : Insert}
@@ -51,21 +81,25 @@ Jede Ressource (\lstinline{ProjectResource}) verfügt über eine interne ID sowi
       \attribute{where  : Where}
     \end{class}
 
-    %\association{Query}{parentProject}{1}{Project}{0..*}{queries}
-
-    \draw[] (Page.west)  -| (Project.south);
-    \draw[] (Query.west) -| (Project.south);
-
     % Query and page implement ProjectResource
     \draw[->] (Query.east) -- ++ (1,0) -- ($(ProjectResource.east)+(1,0)$) -- (ProjectResource.east);
     \draw[-] (Page.east) -- ++ (1,0);
 
+    % Each resource has a reference to the project
+    \draw[] (ProjectResource.north)  |- (Project.east);
+    \node[xshift=0.3cm, yshift=0.3cm] at (ProjectResource.north) {n};
+    \node[xshift=0.3cm, yshift=0.3cm] at (Project.east) {1};
+    
+    % A project has pages ...
+    \draw[] (Page.west)  -| (Project.south);
     \node[xshift=0.3cm, yshift=-0.5cm] at (Project.south) {1};
     \node[xshift=-0.5cm, yshift=0.3cm] at (Query.west) {0..n};
-    \node[xshift=-2.5cm, yshift=0.3cm] at (Query.west) {Pages};
-    
+    \node[xshift=-2.5cm, yshift=0.3cm] at (Query.west) {Queries};
+
+    % ... and queries.
+    \draw[] (Query.west) -| (Project.south);
     \node[xshift=-0.5cm, yshift=0.3cm] at (Page.west) {0..n};
-    \node[xshift=-2.5cm, yshift=0.3cm] at (Page.west) {Queries};
+    \node[xshift=-2.5cm, yshift=0.3cm] at (Page.west) {Pages};
   \end{tikzpicture}
 
   \caption{Abstrakte Übersicht über die Ressourcen eines Projektes}
