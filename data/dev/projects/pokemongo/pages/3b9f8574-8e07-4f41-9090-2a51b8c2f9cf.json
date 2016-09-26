@@ -73,14 +73,16 @@
             "outParamName": "name",
             "caption": "Spitzname",
             "description": "",
-            "inputType": "text"
+            "inputType": "text",
+            "required": true
           },
           {
             "type": "input",
             "outParamName": "staerke",
             "caption": "Stärke des neuen Pokémon",
             "description": "",
-            "inputType": "number"
+            "inputType": "number",
+            "required": true
           },
           {
             "type": "button",

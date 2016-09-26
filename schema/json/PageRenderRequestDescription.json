@@ -47,7 +47,7 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/QueryReferenceDescription",
-                        "description": "Referenced queries are always accompanied by a human-readable\n\nname. This is required if the same query is going to be used\n\nmultiple times on a single page."
+                        "description": "Referenced queries are possibly accompanied by a human-readable\n\nname. This is required if the same query is going to be used\n\nmultiple times on a single page."
                     }
                 },
                 "parameters": {

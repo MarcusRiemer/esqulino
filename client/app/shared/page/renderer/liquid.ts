@@ -123,11 +123,12 @@ function renderHeading(w: Widget) : string {
 function renderInput(w: Widget) : string {
     const input = w as Input;
     const outParamName = `outParamName: "${input.outParamName}"`;
-    const caption = `caption: "${input.caption}"`
-    const description = `description: "${input.description}"`
-    const inputType = `inputType: "${input.inputType}"`
+    const caption = `caption: "${input.caption}"`;
+    const description = `description: "${input.description}"`;
+    const inputType = `inputType: "${input.inputType}"`;
+    const required = `required: ${input.required}`;
     
-    return (`{% include "input" ${caption}, ${outParamName}, ${description}, ${inputType}  %}`);
+    return (`{% include "input" ${caption}, ${outParamName}, ${description}, ${inputType}, ${required}  %}`);
 }
 
 function renderLink(w: Widget) : string {
