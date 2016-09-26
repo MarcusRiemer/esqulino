@@ -302,62 +302,82 @@ class ScratchSqlApp < Sinatra::Base
 
     # Render a page
     get '/:page_name_or_id?' do |page_name_or_id|
-      request_prepare_project subdomain
-      request_prepare_page(page_name_or_id, true)
+      begin        
+        request_prepare_project subdomain
+        request_prepare_page(page_name_or_id, true)
 
-      query_params = {
-        'get' => request.GET,
-        'server' => self.server_render_data
-      }
+        query_params = {
+          'get' => request.GET,
+          'server' => self.server_render_data
+        }
 
-      return @page.render(query_params)
+        return @page.render(query_params)
+        
+      rescue EsqulinoError => e
+        status e.code
+        e.message
+      end
     end
 
     # Run a query
     post '/:page_name_or_id?/query/:query_ref' do |page_name_or_id, query_id|
-      request_prepare_project subdomain
-      request_prepare_page(page_name_or_id, true)
+      begin
+        request_prepare_project subdomain
+        request_prepare_page(page_name_or_id, true)
 
-      # Grab all input values that are not empty and get rid of the "input." prefix
-      input_params = {}
-      request.POST
-        .select {|key,value| key.start_with? "input" and not value.strip.empty?}
-        .each {|key,value| input_params[key[6..-1]] = value }
+        # Grab all input values that are not empty and get rid of the "input." prefix
+        input_params = {}
+        request.POST
+          .select {|key,value| key.start_with? "input" and not value.strip.empty?}
+          .each {|key,value| input_params[key[6..-1]] = value }
 
-      # Doing the same for hidden "get" inputs
-      form_get_params = {}
-      request.POST
-        .select {|key,value| key.start_with? "get" and not value.strip.empty?}
-        .each {|key,value| form_get_params[key[4..-1]] = value }
+        # Doing the same for hidden "get" inputs
+        form_get_params = {}
+        request.POST
+          .select {|key,value| key.start_with? "get" and not value.strip.empty?}
+          .each {|key,value| form_get_params[key[4..-1]] = value }
 
-      # Put them in the "grand" request object
-      initial_params = {
-        'input' => input_params,
-        'get' => form_get_params,
-        'project' => @project.render_params,
-        'page' => @page.render_params,
-        'server' => self.server_render_data
-      }
-      
-      bind_params = {}
-
-      request.GET.each do |parameter_name, providing_name|
-        # Extract all relevant indizes
-        providing_prefix, providing_name = providing_name.split "."
+        # Put them in the "grand" request object
+        initial_params = {
+          'input' => input_params,
+          'get' => form_get_params,
+          'project' => @project.render_params,
+          'page' => @page.render_params,
+          'server' => self.server_render_data
+        }
         
-        # And do the actual mapping
-        mapped_value = initial_params
-                       .fetch(providing_prefix)
-                       .fetch(providing_name)
-        bind_params[parameter_name] = mapped_value
+        bind_params = {}
+
+        request.GET.each do |parameter_name, providing_name|
+          # Extract all relevant indizes
+          providing_prefix, providing_name = providing_name.split "."
+          
+          # And do the actual mapping
+          begin
+            mapped_value = initial_params
+                             .fetch(providing_prefix)
+                             .fetch(providing_name)
+            bind_params[parameter_name] = mapped_value
+          rescue KeyError => e
+            # For the moment we simply let them be,
+            # query.executeable? does the real checking of required parameters.
+          end
+        end
+        
+        # Grab the query reference
+        query = @project.query_by_id query_id
+        query.execute(bind_params)
+        
+        # Go back
+        redirect back
+      rescue EsqulinoError => e
+        initial_params['exception'] = e.to_liquid
+
+        puts e.inspect
+        
+        status e.code
+        liquid_render_path(@project, "exception", initial_params)
       end
-
-      # Grab the query reference
-      query = @project.query_by_id query_id
-      @project.execute_sql(query.sql, bind_params)
-
-      # Go back
-      redirect back
     end
   end
 

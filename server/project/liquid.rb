@@ -60,6 +60,10 @@ class LiquidFilesystem
   end
 end
 
+def liquid_render_path(project, page_file, params)
+  liquid_render_page(project, "{% include \"#{page_file}\" %}", params)
+end
+
 # The rendering process currently assumes that everything has
 # been loaded into memory already.
 #
