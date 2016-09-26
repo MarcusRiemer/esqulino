@@ -96,8 +96,18 @@ class Query
   end
 
   # Executes this query in the context of the associated project.
-  def execeute(params)
+  def execute(params)
+    # Ensure parameters are supplied
+    if not self.executable?(params)
+      raise InvalidQueryRequest.new(self, params)
+    end
+    
     @project.execute_sql(sql, params)
+  end
+
+  # @return [Boolean] True, if these params would allow the query to be executed.
+  def executable?(params)    
+    self.required_parameters.all? {|p| params.include? p}
   end
 
   # @return The id of this query
@@ -158,5 +168,61 @@ class Query
   # @param value The new SQL representation of this query
   def sql=(value)
     @sql = value
+  end
+
+  # @return [List<string>] The names of the required parameters
+  def required_parameters
+    # Grab everything 
+    self.expression_leaves
+      .select {|c| c.key?('parameter') }
+      .map {|c| c['parameter']['key']}    
+  end
+
+  # @return [List<Hash>] Models of all expression leaves
+  def expression_leaves
+    expressions = []
+
+    # Expressions in WHERE
+    if self.model['where']
+      expressions << self.model['where']['first']
+    end
+
+    # Expressions in INSERT
+    if self.model['insert']
+      expressions.concat(self.model['insert']['assignments'].map{|a| a['expr']})
+    end
+
+    find_leaves = lambda do |expr|
+      # How or whether to recurse depends on the type
+      if expr['binary']
+        # Descend to both branches of a binary expression
+        return [
+          find_leaves.call(expr['binary']['lhs']),
+          find_leaves.call(expr['binary']['rhs'])
+        ]
+      end
+
+      # Find out whether this is a leaf
+
+      # These keys indicate that the current node is a leaf. Beware that these
+      # keys are not the template identifiers of the Typescript representation,
+      # but the keys of the data model.
+      leaves = ['missing', 'constant', 'parameter', 'singleColumn', 'star']
+
+      
+      leaf_type = expr.keys.select {|c| leaves.include? c}
+      if leaf_type.length == 1 
+        # Return those leaves wrapped in a list
+        return [expr[leaf_type[0]]]
+      else
+        return []
+      end
+    end
+
+    expr_leaves = expressions
+                    .map(&find_leaves)
+                    .flatten
+
+    return (expr_leaves)
   end
 end

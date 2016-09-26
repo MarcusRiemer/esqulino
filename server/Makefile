@@ -25,7 +25,7 @@ run-dev : has-dev-rerun has-bundle
 
 # Run unit tests
 test :
-	ruby project.test.rb
+	ruby ./all_tests.rb
 
 # Generate the latest documentation
 doc : has-yard msg-pre-doc

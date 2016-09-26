@@ -17,7 +17,7 @@ class EsqulinoError < StandardError
   # Used by Sinatra to serialize this error in a meaningful
   # representation for clients.
   def to_json(options)
-    { :message => self.to_s }.merge(json_data).to_json(options)
+    self.to_liquid.to_json(options)
   end
 
   # Can be used by specialised classes to provide additional
@@ -26,6 +26,15 @@ class EsqulinoError < StandardError
   # @return [Hash] Additional error information
   def json_data()
     {  }
+  end
+
+  # Liquid representation is identical to JSON 
+  def to_liquid
+    {
+      "code" => @code,
+      "message" => self.to_s,
+      "type" => self.class.name
+    }.merge(json_data)
   end
 end
 
@@ -80,9 +89,9 @@ class DatabaseQueryError < EsqulinoError
 
   def json_data
     {
-      :project => @project.id,
-      :sql => @sql,
-      :params => @params
+      "project" => @project.id,
+      "sql" => @sql,
+      "params" => @params
     }
   end
 end
@@ -103,7 +112,20 @@ class InvalidSchemaError < EsqulinoError
   # @return [Hash] The errors as reported by the JSON-schema-validator
   def json_data()
     {
-      :errors => @errors
+      "errors" => @errors
     }
   end
+end
+
+# Thrown when a query that is about to be executed doesn't have all
+# parameters that are required.
+class InvalidQueryRequest < EsqulinoError
+
+  # @param query [Query] The query that couldn't be run.
+  # @param query_params [Hash]
+  def initialize(query, query_params)
+    @query = query
+    @query_params = query_params
+  end
+  
 end
