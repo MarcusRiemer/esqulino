@@ -238,6 +238,7 @@ describe('Valid SELECT Queries', () => {
         // FROM
         expect(q.from.numberOfJoins).toEqual(0);
 
+        // SQL and model serialization
         expect(q.toSqlString()).toEqual("SELECT *\nFROM person\nWHERE 1");
         expect(q.toModel()).toEqual(model);
     });

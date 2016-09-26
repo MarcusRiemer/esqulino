@@ -62,6 +62,9 @@ export interface InputDescription extends WidgetDescription {
 
     // The parameter this widget provides
     outParamName : string
+
+    // Is it mandatory to fill in this field?
+    required? : boolean
 }
 
 /**

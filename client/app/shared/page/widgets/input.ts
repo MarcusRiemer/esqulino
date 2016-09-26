@@ -24,6 +24,9 @@ export class Input extends UserInputWidget {
 
     // The HTML `type` of this input
     private _inputType : string;
+
+    // Is it mandatory to fill out this field?
+    private _required : boolean;
     
     constructor(desc : InputDescription, parent? : WidgetHost) {
         super("input", "widget", true, parent);
@@ -31,6 +34,7 @@ export class Input extends UserInputWidget {
         this._caption = desc.caption;
         this._description = desc.description;
         this._inputType = desc.inputType;
+        this._required = !!desc.required;
     }
 
     /**
@@ -43,7 +47,7 @@ export class Input extends UserInputWidget {
             caption: "Neue Eingabe",
             description : "Beschreibung der neuen Eingabe",
             outParamName : "Neue_Eingabe"
-        })
+        });
     }
 
     /**
@@ -92,6 +96,7 @@ export class Input extends UserInputWidget {
      */
     set description(value : string) {
         this._description = value;
+        this.fireModelChange();
     }
 
     /**
@@ -106,6 +111,22 @@ export class Input extends UserInputWidget {
      */
     set inputType(value : string) {
         this._inputType = value;
+        this.fireModelChange();
+    }
+
+    /**
+     * @return True, if this input is mandatory.
+     */
+    get required() : boolean {
+        return (this._required);
+    }
+
+    /**
+     * @param value True, if this input is mandatory.
+     */
+    set required(value : boolean) {
+        this._required = value;
+        this.fireModelChange();
     }
 
     protected toModelImpl() : WidgetDescription {
@@ -115,6 +136,11 @@ export class Input extends UserInputWidget {
             caption : this._caption,
             description : this._description,
             inputType : this._inputType
+        }
+
+        // Omit the required field if it isn't set.
+        if (this._required) {
+            toReturn.required = true;
         }
 
         return (toReturn);
