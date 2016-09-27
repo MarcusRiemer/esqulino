@@ -16,27 +16,29 @@ Dieses Kapitel erläutert auf welche Art und Weise die im vorigen Kapitel geplan
   \label{fig:openapi-query-example}
 \end{figure}
 
-Um die Schnittstelle zwischen diesen beiden Komponenten so transparent wie möglich zu halten, werden diese gemäß der OpenAPI Spezifikation \cite{open-api} dokumentiert. Dieses offene Format ermöglicht es auf eine hilfreiche Auswahl an standarisierten Tools aufzubauen. Zum Beispiel können aus der Spezifikation interaktive Testumgebungen für die Server-Schnittstellen erzeugt werden (\ref{fig:openapi-query-example}).
+Um die Schnittstelle zwischen diesen beiden Komponenten so transparent wie möglich zu halten, werden diese gemäß der OpenAPI Spezifikation \cite{open-api} dokumentiert. Dieses offene Format ermöglicht es auf eine hilfreiche Auswahl an standarisierten Tools aufzubauen. Zum Beispiel können aus der Spezifikation interaktive Testumgebungen für die Server-Schnittstellen erzeugt werden, Abbildung \ref{fig:openapi-query-example} zeigt ein Beispiel dafür.
 
 Als primäres Interface für die Kompilierung wird ein \lstinline{Makefile} genutzt. Dieses prüft ob auf dem aktuellen System alle nötigen Abhängigkeiten verfügbar sind und stellt sicher, dass Übersetzungsschritte nur ausgeführt werden, wenn sie tatsächlich notwendig sind. Von den technischen Details der unterschiedlichen Programmierumgebungen aufgrund der unterschiedlichen Programmiersprachen kann so außerdem elegant abstrahiert werden: Ein Programmierer kann sich die exakten Aufrufe der unterschiedlichen Paketmanager zwar anschauen, wird im Normallfall aber nur \lstinline{make install-deps} aufrufen.
 
 \subsection{Tests}
 
-Die Funktionalität der, relativ isolierten und daher gut zu testenden, internen Datenmodelle samt den darauf definierten Operationen wird über Unit-Tests sichergestellt. Diese Tests können einfach in jedem Browser ausgeführt werden und eignen sich daher auch um im Zweifelsfall unterschiedliche Verhaltensweisen verschiedener Browser zu erfassen. Als technisches Fundament wird für diese Testfälle auf der Jasmine-Bibliothek aufgebaut.
+Die Funktionalität der, relativ isolierten und daher gut zu testenden, internen Datenmodelle samt den darauf definierten Operationen wird über Unit-Tests sichergestellt. Diese Tests können einfach in jedem Browser ausgeführt werden und eignen sich daher auch um im Zweifelsfall unterschiedliche Verhaltensweisen verschiedener Browser zu erfassen.
+
+Als technisches Fundament wird für diese Testfälle auf der Jasmine-Bibliothek aufgebaut. Zu prüfende Zusicherungen werden durch Verkettung zweier Funktionen ausgedrückt: \lstinline{expect().toEqual()}. Neben \lstinline{toEqual()} sind natürlich auch andere Vergleiche wie \lstinline{isUndefined()} möglich. Wenn innerhalb eines Testfalls auch nur eine einzige dieser Prüfungen nicht zu \lstinline{true} auswertet, wird der Testfall als ingesamt fehlgeschlagen markiert. Im Falle von mehreren gescheiterten Prüfungen sind werden dabei alle unerwarteten Ergebnisse aufgelistet.
 
 Listing \ref{lst:unit-test-example} illustriert, wie die meisten Testfälle in esqulino aufgebaut sein. Jeder Testfall beginnt mit der Definition eines Datenmodells und endet mit Testfällen für die korrekte Serialisierung. Ganz konkret existiert also in jedem Testfall eine Variable \lstinline{model}, welche im Konstruktor der zu testenden Klasse zum Einsatz kommt und in nicht-mutierenden Testfällen als Ergebnis der \lstinline{toModel()} Methode reproduziert werden muss. Formal ausgedrückt handelt es sich es sich bei der Verkettung des Konstruktors mit der \lstinline{toModel()}-Methode also um eine neutrale Operation.
 
-Die Dateien mit den Unit-Tests liegen im Dateisystem immer "`neben"' ihren Implementierungen, der Dateiname wird allerdings mit dem Suffix \lstinline{spec} wie "`Specification"' ergänzt.
+Die Dateien mit den Unit-Tests liegen im Dateisystem immer "`neben"' ihren Implementierungen, der Dateiname wird allerdings mit dem Suffix \lstinline{spec} wie "`Specification"' ergänzt. Das Beispiel in Listing  \ref{lst:unit-test-example} wurde der Datei \lstinline{select.spec.ts} entnommen, der Code für die zu testende Funktionalität findet sich folglich in \lstinline{select.ts}.
 
 \lstinputlisting[
   language=JavaScript,
-  caption=Unit-Test für eine korrekte SELECT-Abfrage,
+  caption=Unit-Test für eine korrekte \lstinline{SELECT}-Abfrage,
   label=lst:unit-test-example,
   float,floatplacement=p,
   numbers=left
 ]{snippets/unit-test-example.ts}
 
-Die serverseitige Funktionalität wird aktuell ausschließlich über "`Ende-zu-Ende"'-Tests mit einem speziell instrumentierten Browser geprüft.
+Die serverseitige Funktionalität wird aktuell ausschließlich über "`Ende-zu-Ende"'-Tests mit einem speziell instrumentierten Browser geprüft. Für diese Tests ist ein speziell vorbereitetes Testprojekt in einem exakt definierten Zustand sowie neben dem Browser auch ein esqulino-Server notwendig.
 
 \subsection{Struktur eines Projekts}
 
