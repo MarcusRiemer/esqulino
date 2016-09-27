@@ -108,7 +108,7 @@ Dementsprechend sollte normalerweise jeder Schritt beim Anlegen eines neuen Proj
 
 Lesende Zugriffe können, zumindest in der Thesis-Version der Software, nicht endgültig eingeschränkt werden. Natürlich könnte man theoretisch typische Entwurfsmuster für Zugangsbeschränkungen auch in esqulino implementieren: Auf einfachster Ebene wäre zum Beispiel denkbar, dass eine Spalte "`geheim"' zu Tabellen mit privaten Daten hinzugefügt wird und auf dieser Basis die Oberfläche für Endanwender solcherart markierte Daten nicht anzeigt. Da Projekte aber auch einfach kopiert werden können, müsste ein versierter Benutzer nur eine Kopie des Projektes vornehmen und könnte dann über den Editor alle Daten einsehen oder auch den Zugriffschutz der Oberflächen einfach deaktivieren. Um also den lesenden Zugriff effektiv zu verhindern müsste die Einsicht in die Quellen fremder Projekte eingeschränkt werden. Selbstverständlich wäre es mit entsprechendem Zeitaufwand prinzipiell möglich ein hinreichend sicheres System für den speziellen Anwendungsfall von esqulino zu entwerfen, dieser Aufwand wäre jedoch im Vergleich zu anderen Features nicht zu rechtfertigen. Und abgesehen davon sollte kein Schüler einem esqulino-Server Daten anvertrauen, deren versehentliche Veröffentlichung er oder sie nicht verkraften würde. Das gilt selbstverständlich auch für den Fall, dass eine hypothetische künftige Version einen solchen Zugriffsschutz vorsehen sollte!
 
-Schon um Vandalismus zu vermeiden, sind leider einfache Zugriffskontrollen auf Projektebene nötig. Um etwaige Missverständnisse von vornerein zu vermeiden: Ziel dieser Kontrollen ist es zu verhindern, dass z.B. die Quellen für die Abfragen oder Benutzeroberfläche eines Projektes entstellt oder gelöscht werden. \textbf{Nicht geschützt} werden damit einzelne Datensätze, also die Zeilen, in der Datenbank. Sobald in der Benutzeroberfläche für Endanwender Funktionalität zum Löschen oder Editieren von Datensätzen vorgesehen ist, gibt es keine einfache Möglichkeit, legitime Veränderungen von unerwünschtem Vandalismus zu unterscheiden. Daher soll zunächst nur eine sehr einfache, binäre Klassifikation in zwei Benutzergruppen vorgenommen werden: "`Darf jede mutierende Operation ausführen"' oder "`darf ausschließlich lesen"'. In einer späteren Version wäre es dann denkbar diese sehr grobe Methodik zu verfeinern.
+Schon um Vandalismus zu vermeiden, sind leider einfache Zugriffskontrollen auf Projektebene nötig. Um etwaige Missverständnisse von vornerein zu vermeiden: Ziel dieser Kontrollen ist es zu verhindern, dass z.B. die Quellen für die Abfragen oder Benutzeroberfläche eines Projektes entstellt oder gelöscht werden. \textbf{Nicht geschützt} werden damit einzelne Datensätze, also die Zeilen, in der Datenbank. Sobald in der Benutzeroberfläche für Endanwender Funktionalität zum Löschen oder Editieren von Datensätzen vorgesehen ist, gibt es keine einfache Möglichkeit, legitime Veränderungen von unerwünschtem Vandalismus zu unterscheiden. Daher soll zunächst nur eine sehr einfache, binäre Klassifikation in zwei Benutzergruppen vorgenommen werden: "`Darf jede mutierende Operation ausführen"' oder "`darf ausschließlich lesen"'. In einer späteren Version wäre es dann denkbar, diese sehr grobe Unterscheidung zu verfeinern.
 
 Sowohl für den lesenden als auch für den schreibenden Zugriff gilt daher: Eine komplexe, aber halbgare Lösung für eine so kritische Funktionalität würde im Extremfall mehr Schaden anrichten als nützen. Eine unsicher implementierte Sicherheitsfunktion suggeriert möglicherweise ein Schutzniveau welches praktisch nicht eingehalten wird. Also werden Ansätze wie "`Vergabe von Schreibrechten für einzelne Abfragen an bestimmte Benutzergruppen"' oder sogar ein zeilenweiser Schutz von Daten ("`Jeder Benutzer darf nur seine Daten bearbeiten"') aus Zeitgründen im Rahmen dieser Thesis nicht weiter betrachtet.
 
@@ -424,7 +424,7 @@ Neben den bisher ausführlich besprochenen \texttt{SELECT}-Anweisungen müssen s
 
 \todo[inline]{Vorschau für Manipulationen}
 
-Für die Name-Wert-Paare in \texttt{INSERT} oder \texttt{UDPATE} Operationen löst sich das Erscheinungsbild des Editors von dem Vorbild der SQL-Sprache (Abbildung  \ref{fig:screen-sql-editor-insert-key-value-pairs}).
+Für die Name-Wert-Paare in \texttt{INSERT}- oder \texttt{UDPATE}-Operationen löst sich das Erscheinungsbild des Editors von dem Vorbild der SQL-Sprache (Abbildung  \ref{fig:screen-sql-editor-insert-key-value-pairs}).
 
 \begin{figure}[h]
   \includegraphics[width=\textwidth]{images/sql-insert-key-value-pairs}
@@ -441,18 +441,72 @@ Es ist zu erwarten, dass die meisten von den Schülern verfassten Abfragen diese
 
 Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von normalen Endanwendern bedienen lassen können Bedarf es natürlich einer entsprechenden Benutzeroberfläche. Hier bietet sich aus Gründen der einfachen Weitergabe eine webbasierte Oberfläche an: So entfällt bei den Endanwendern jegliche Installation und gerade für datenzentrierte, verteilte Anwendungen ist eine einheitliche Sicht auf den Datenbestand von großer Bedeutung.
 
+\subsubsection{Wahl einer Templatingsprache}
+
+Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten, nicht alle dafür eignen sich aber um dynamisch zur Laufzeit Seiten zu erzeugen. Für esqulino müssen alle Kandidaten mindestens die folgenden harten Anforderungen erfüllen.
+
+\begin{description}
+\item[Datenanbindung] \hfill \\
+  An vordefinierten Stellen im Quelltext müssen zur Laufzeit dynamische Werte eingesetzt werden können.
+\item[Kontrollstrukturen] \hfill \\
+  Es muss möglich sein, unterschiedliche Ausgaben in Abhängigkeit von zur Laufzeit ausgewerteten Bedingungen zu erzeugen und Anweisungen wiederholt auszuwerten.
+\item[Freie Verfügbarkeit] \hfill \\
+  Die Verwendung von proprietären oder kostenpflichtigen Abhängigkeiten in esqulino ist zumindestens im Rahmen dieser Thesis ausgeschlossen.
+\item[Einbettung von reinem HTML] \hfill \\
+  Erfahrenen Entwicklern soll es grundsätzlich möglich sein ihre HTML-Kenntnisse in vollem Umfang anzuwenden. Sofern die Templatingsprache also HTML-Bestandteile bereinigt, muss es eine Möglichkeit geben diese Bereinung lokal zu deaktivieren.
+\end{description}
+
+Diese Kriterien filtern eine Menge verbreitete Textauszeichnungssprachen wie sie in Foren- oder Kommentarsystemen genutzt werden aus. Weder Markdown, BB-Code oder Textile erlauben irgendeine Form von Datenanbindung. Die innerhalb der Wikipedia genutzte "`Wikisyntax"' erlaubt zwar eine einfache Datenanbindung, kennt aber keine Kontrollstrukturen.
+
+Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig blieben, werden diese im Folgenden anhand der folgenden Kriterien in einem einfachen Scoringmodell verglichen:
+
+\begin{description}
+\item[Geringe Technische Komplexität, 5 Punkte] \hfill \\
+  Da esqulino-Seiten serverseitig gerendert werden sollen, ist es nicht notwendig auf eine komplexe Templatingsprache mit Funktionen wie einem virtuellen Document-Object-Model (\texttt{DOM}) zurückzugreifen. Es gilt die Prämisse: Je komplizierter das interne Verarbeitungsmodell der Sprache ist, desto mehr unverständliche Fehler können auftreten.
+\item[Geringe Syntaktische Komplexität, 5 Punkte] \hfill \\
+  Auch wenn die Lernenden im Idealfall von der konkreten Syntax der Templatingsprache abstrahieren sollen, wird es immer wieder zu Momenten kommen an denen diese Abstraktion löcherig ist \cite{spolsky_law_abstractions}. Die häufigte Ursache für einen solchen Leck werden dabei Fehlermeldungen sein: Sobald diese auftreten, sollte zur Unterstützung der generierte Quelltext angezeigt werden. Und je einfacher dieser Quelltext ist, desto näher kann er potenziell an der abstrakten Darstellung im Editor sein.
+\item[Verbreitung, 3 Punkte] \hfill \\
+  Einige Templatingsprachen haben Einzug in eine Vielzahl unterschiedlicher Softwareprojekte gefunden, andere sind im Hinblick auf spezielle Frameworks zugeschnitten. Je weiter die Templatingsprache verbreitet ist, desto höher die Chance, dass ein Lernender sie möglicherweise auch einmal außerhalb von esqulino einsetzen kann.
+\item[Einfache Erweiterbarkeit, 3 Punkte] \hfill \\
+  Perspektivisch sollen die Lernenden anhand von esqulino auch in die "`normale"' Programmierung eingeführt werden können. Vor diesem Hintergrund wäre es von Vorteil, wenn die Templatingsprache eine einfache Programmierschnittstelle bietet um eigene Funktionen einzubetten.  
+\item[Sprachübergreifende Implementierungen, 3 Punkte] \hfill \\
+  Ebenfalls perspektivisch interessant ist die Implementierung einer Templatingsprache mit mehreren Programmiersprachen. Dieser Aspekt ist nicht nur ein guter Indikator für die tatsächliche Verbreitung einer Templatingsprache, er könnte perspektivisch im Falle eines Exports von Projekten aus esqulino auch praktische Bedeutung haben.
+\end{description}
+
+Die folgenden Sprachen wurden dann evaluiert: Liquid, Handlebars, Angular 2.
+
+\begin{table}
+  \centering 
+  \begin{tabular}{ l|c c c }
+                 & Liquid                 & Handlebars                & Angular 2                       \\
+    \hline
+    Technik      & 5, Textersetzung       & 3, Kompiliert zu JS       & 2, Kompiliert zu JS, virtuelles \texttt{DOM}      \\
+    Syntax       & 5                      & 5                         & 3                               \\
+    Verbreitung  & 3                      & 3                         & 1                               \\
+    Erweiterbar  & 3                      & 3                         & 3                               \\
+    Übergreifend & 3                      & 2                         & 0                               \\                                                                 
+  \end{tabular}
+  \caption{Scoring-Modell für Templatingsprachen}
+\end{table}
+
 \subsubsection{Die Templatingsprache Liquid}
 
-Auch wenn die Schüler mit der Syntax der verwendeten Templatingsprache nur so wenig möglich in Berührung kommen sollten lohnt sich eine kurze Betrachtung der Syntax dieser Sprache. Grundsätzlich unterschieden wird in Liquid zwischen drei verschiedenen Anweisungen \cite{liquid-introduction}:
+Auch wenn die Schüler mit der Syntax der verwendeten Templatingsprache in der finalen Version von esqulino nur oberflächlich in Berührung kommen sollen, ist eine kurze Betrachtung der Syntax dieser Sprache unumgänglich: Die initiale Version wird von Liquid aus Zeitgründen nicht viel abstrahieren können.
+
+Theoretisch können mit Liquid beliebige Textdateien angereichert werden, die Struktur des umgebenden Dokuments wird vom Parser ignoriert. Dieser kümmert sich lediglich um die in eingebetteten Anweisungen und behandelt alle Teile dazwischen als einfachen \texttt{string}. Für esqulino bedeutet das vor allem, dass für andere Arten von Dokumenten nicht zwingend eine weitere Templatingsprache notwendig wäre. Zum Beispiel wäre ebenfalls die Bereitstellung einer dynamisch generierten \texttt{robots.txt}\footnote{Diese Datei wird von Suchmaschinen ausgewertet, um gewisse Teile der Seite von der Indexierung auszuschließen.} oder einer Sitemap\footnote{Typischerweise ein XML-Dokument, welches alle zu indexierenden Seiten mit einigen Metadaten, zum Beispiel die Frequenz von Veränderungen, auflistet.} möglich.
+
+Grundsätzlich wird in Liquid zwischen drei verschiedenen Arten von Anweisungen mit jeweils eigener Syntax unterschieden \cite{liquid-introduction}:
 
 \begin{description}
 \item[Objekte] \hfill \\
-  Objekte werden in doppelt geschweiften Klammern notiert (also \texttt{\{\{Objekt\}\}}) und erlauben Zugriff auf einen hinterlegten Datenbestand. 
+  In das Dokument eingebettete Werte werden in doppelt geschweiften Klammern notiert (also \texttt{\{\{Objekt\}\}}).
 \item[Tags] \hfill \\
-  Tags steuern den Programmfluss.
+  Tags steuern den Programmfluss mit Anweisungen wie \texttt{if} und \texttt{for}. Um sie von interpolierten Werten zu unterscheiden
 \item[Filter] \hfill \\
   Anwendung von Funktionen auf bestehende Daten.
 \end{description}
+
+Alle diese Anweisungen beziehen sich immer auf eine vordefinierte Datenquelle, welcher dem Renderer zusammen mit dem eigentlichen Template übergeben wird. Dieser Datenbestand gliedert sich in Name-Wert-Paare, Listen und atomare Werte, die Navigation erfolgt mittels des \texttt{.}-Operators für Zugriffe auf benannte Schlüssel oder mit dem \texttt{[]}-Operator für einzelne Werte eines Arrays.
 
 \subsubsection{Layout}
 
@@ -464,7 +518,7 @@ Eine immer wiederkehrende Frage bei der Entwicklung von Webseiten ist die nach d
   \label{fig:grid-example}
 \end{figure}
 
-Diese Layoutstruktur wird mittlerweile von einer Vielzahl von vorhandenen CSS-Bibliotheken unterstützt und soll auch das grundsätzliche Gedankenmodell für die hier beschriebenen Oberflächen sein. Es ergeben sich daraus die folgenden Layoutelemente:
+Diese Layoutstruktur wird mittlerweile von einer Vielzahl von vorhandenen CSS-Bibliotheken und den HTML5-Flexboxen unterstützt und soll auch das grundsätzliche Gedankenmodell für die hier beschriebenen Oberflächen sein. Es ergeben sich daraus die folgenden Layoutelemente:
 
 \begin{description}
 \item[Zeilen] \hfill \\
