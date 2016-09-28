@@ -376,11 +376,11 @@ Es stellt sich also die Frage, ob der Editor, wie Scratch, mit einer Drag \& Dro
 
 Da der Benutzer immer nur eine Abfrage zur Zeit bearbeiten können soll, ergibt sich der einzig mögliche Platz für viele Blöcke automatisch. Darüber hinaus ist die Reihenfolge eines Großteils der Komponenten einer Abfrage sehr strikt festgelegt, so kann eine \texttt{GROUP BY} Komponente nicht an beliebigen Stellen verwendet werden, sondern nur nach der \texttt{FROM} oder der \texttt{WHERE} Anweisung. Andere Komponenten wie z.B. \texttt{HAVING} oder logische Verknüpfungen mit \texttt{AND} oder \texttt{OR} sind nicht nur von der Reihenfolge, sondern auch von der Existenz anderer Bestandteile abhängig. Ein möglicher Ansatz wäre also, die möglichen Optionen visuell abgegrenzt Platzhalter innerhalb des Abfrageeditors anzubieten. Ein Klick auf den Platzhalter wandelt diesen dann in einen konkreten Block um und fordert ggfs. zur Angabe der benötigten Parameter auf.
 
-\begin{wrapfigure}{r}{0.46\textwidth}
-  \includegraphics[width=0.45\textwidth]{images/sql-sketch-all-editing}
+\begin{figure}[p]
+  \includegraphics[width=\textwidth]{images/sql-sketch-all-editing}
   \caption{So nicht! Simultane Anzeige (fast) aller Möglichkeiten}
   \label{fig:screen-sql-editor-all-editing}
-\end{wrapfigure}
+\end{figure}
 
 Im Rahmen der entwickelten Prototypen hat sich herausgestellt, dass eine permanente Anzeige aller Editierungsmöglichkeiten mit einem sehr überladen wirkenden Benutzerinterface einher geht, insbesondere was die Einblendung von Platzhaltern angeht. Abbildung \ref{fig:screen-sql-editor-all-editing} zeigt einen Screenshot des Prototypen, bei dem nahezu alle denkbaren Editierungsoptionen gleichzeitig für den Lernenden verfügbar sind und daher angezeigt werden müssen. Trotz der klaren visuellen Unterscheidung fällt es schwer mit nur einem Blick zu erkennen, was die Abfrage jetzt tatsächlich beinhaltet. Statt jederzeit alle Optionen anzuzeigen wurde dann noch die Position des Mauszeigers herangezogen um zu entscheiden, welche Platzhalter angezeigt werden sollen. Das Ergebnis war allerdings eine Benutzerschnittstelle, deren Bedienelemente häufig und für einen ungeübten Benutzer auch unerwartet ihre Position verändert haben. Dementsprechend wurde dieser Ansatz noch in der Konzeptionsphase verworfen.
 
@@ -443,7 +443,9 @@ Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von norm
 
 \subsubsection{Wahl einer Templatingsprache}
 
-Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten, nicht alle dafür eignen sich aber um dynamisch zur Laufzeit Seiten zu erzeugen. Für esqulino müssen alle Kandidaten mindestens die folgenden harten Anforderungen erfüllen.
+Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten, nicht alle dafür eignen sich aber um dynamisch zur Laufzeit Seiten zu erzeugen. Nicht in Betracht gezogen werden vollwertige Programmiersprachen wie PHP, Python oder Ruby. Die Mächtigkeit dieser Sprachen geht fast zwangsläufig mit einer vergleichsweise umständlichen Syntax einher. Zudem dient die Verwendung einer dezidierten Templatingsprache nicht nur der Bequemlichkeit, sondern auch einer klaren Trennung zwischen Programm- und Anzeigelogik. Diese Unterscheidung soll von esqulino gefördert werden.
+
+Für esqulino wurden darüber hinaus die folgenden harten Kriterien angelegt:
 
 \begin{description}
 \item[Datenanbindung] \hfill \\
@@ -456,7 +458,7 @@ Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten
   Erfahrenen Entwicklern soll es grundsätzlich möglich sein ihre HTML-Kenntnisse in vollem Umfang anzuwenden. Sofern die Templatingsprache also HTML-Bestandteile bereinigt, muss es eine Möglichkeit geben diese Bereinung lokal zu deaktivieren.
 \end{description}
 
-Diese Kriterien filtern eine Menge verbreitete Textauszeichnungssprachen wie sie in Foren- oder Kommentarsystemen genutzt werden aus. Weder Markdown, BB-Code oder Textile erlauben irgendeine Form von Datenanbindung. Die innerhalb der Wikipedia genutzte "`Wikisyntax"' erlaubt zwar eine einfache Datenanbindung, kennt aber keine Kontrollstrukturen.
+Diese Kriterien filtern eine Menge verbreitete Textauszeichnungssprachen wie sie in Foren- oder Kommentarsystemen genutzt werden aus. Weder Markdown, BB-Code oder Textile erlauben nativ die programmatische Einbindung von externen Daten. Die innerhalb der Wikipedia genutzte "`Wikisyntax"' erlaubt zwar eine einfache Datenanbindung, kennt aber keine Kontrollstrukturen.
 
 Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig blieben, werden diese im Folgenden anhand der folgenden Kriterien in einem einfachen Scoringmodell verglichen:
 
@@ -473,7 +475,7 @@ Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig bliebe
   Ebenfalls perspektivisch interessant ist die Implementierung einer Templatingsprache mit mehreren Programmiersprachen. Dieser Aspekt ist nicht nur ein guter Indikator für die tatsächliche Verbreitung einer Templatingsprache, er könnte perspektivisch im Falle eines Exports von Projekten aus esqulino auch praktische Bedeutung haben.
 \end{description}
 
-Die folgenden Sprachen wurden dann evaluiert: Liquid, Handlebars, Angular 2.
+Die folgenden Sprachen wurden dann evaluiert: Liquid, Angular 2 und Handlebars. Liquid wurde schon im Rahmen der vergleicharen Arbeiten (\ref{sec:software-jekyll}~\nameref{sec:software-jekyll}) kurz vorgestellt und bot sich dementsprechend als Kandidat an. Da für die Implementierung des esqulino-Frontend Angular 2 ohnehin zum Einsatz kommt stellt sich die Frage (siehe \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis}), ob die Nutzung eines weiteren Frameworks tatsächlich notwendig ist. Handlebars wird unter anderem in Meteor und Ember.js verwendet und wurde schlicht aufgrund seiner Popularität ausgewählt.
 
 \begin{table}
   \centering 
@@ -488,6 +490,10 @@ Die folgenden Sprachen wurden dann evaluiert: Liquid, Handlebars, Angular 2.
   \end{tabular}
   \caption{Scoring-Modell für Templatingsprachen}
 \end{table}
+
+Sowohl Handlebars als auch Angular 2 nehmen HTML Templates entgegen und generieren daraus zur Laufzeit Javascript, welches die sich ergebende HTML-Struktur unmittelbar in den DOM-Baum des Browsers injiziert. Angular 2 geht noch einen Schritt weiter und gibt die neue Struktur nicht ungefiltert an den Browser weiter, sondern erstellt mit Hilfe eines virtuellen DOM einen Satz an inkrementell nötigen Änderungen. Das Ergebnis eines Rendervorgangs mit Liquid ist hingegen ein einfacher String mit dem gerenderten Template.
+
+Die Syntax von Liquid und Handlebars ist bemerkenswert ähnlich und basiert auf geschweiften Klammern, welche sich optisch merklich vom normalen HTML-Inhalt abheben. Angular 2 erweitert hingegen
 
 \subsubsection{Die Templatingsprache Liquid}
 
