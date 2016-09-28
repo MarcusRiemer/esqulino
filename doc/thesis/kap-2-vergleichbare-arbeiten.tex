@@ -76,6 +76,7 @@ Auch aufgrund der schieren Masse an möglichen Bedienelementen und den teilweise
 \end{figure}
 
 \subsection{Software: Jekyll}
+\label{sec:software-jekyll}
 Bei Jekyll handelt es sich um ein Framework zur Erstellung statischer Webseiten. Der Begriff "`statisch"' bezeichnet in diesem Kontext das Ergebnis der Kompilierung: HTML Seiten, die von jedem Webserver unverändert ausgegeben werden können. Technisch gesehen setzt Jekyll auf die HTML-Templatingsprache Liquid auf und stellt während der Generierung einer Seite eine Vielzahl von hilfreichen Metadaten bereit. Diese Metadaten werden entweder implizit aus Dateinamen gewonnen oder in YAML-Notation im Kopf einer Datei definiert.
 
 In der Standardkonfiguration eignet sich Jekyll vor allem um ohne großen Aufwand eine Blog-artige Seite zu betreiben. Alle Dateien die sich in einem speziellen Ordner \lstinline{_posts} befinden werden als Datenquelle für Blogeinträge behandelt. Ein solcher Eintrag könnte dabei aussehen wie in Listing~\ref{lst:jekyll-post}, typischerweise würden natürlich mehrere solcher Dateien für Beiträge existieren. Bei dem Bereich zwischen den \lstinline{---} handelt es sich um das so genannte "`YAML-Frontmatter"'. Diese Metadaten stehen dem Entwickler im Kontext dieser Seite zur Verfügung. Um diese in die Seite einzubetten werden sie als Liquid-Ausdruck in geschweifte Klammern geschrieben.
