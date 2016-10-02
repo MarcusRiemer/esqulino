@@ -4,22 +4,14 @@ In Deutschland scheint man Informatik als eine Hochschulangelegenheit zu betrach
 
 Diese Arbeit ist ein Versuch, eine Lehrsoftware für zwei wichtige Teilgebiete der Informatik anzubieten: Datenmodellierung und (Web-)Oberflächenentwicklung. Ganz konkret geht es um die Konzeption und prototypische Implementierung einer einsteigerfreundlichen Entwicklungsumgebung für den anwendungsorientierten Umgang mit SQL-Datenbanken. Zielgruppen dieser Software sind Schülerinnen und Schüler an weiterführenden Schulen sowie natürlich deren Lehrkräfte. Die Anwender der Software sollen in die Lage versetzt werden, zu einem gegebenen Datenmodell sowohl inhaltliche Fragen mit Bezug zu einem konkreten Datenbestand zu beantworten als auch neue Daten in das Modell einzupflegen. Darüber hinaus soll es ihnen möglich sein, die Datenbank über eine eigens entwickelte Oberfläche einer begrenzten Öffentlichkeit zugänglich zu machen.
 
-Aus praktisch Gründen sollte an dieser Stelle die Lernsoftware "`Scratch"' nicht unerwähnt bleiben: Der Arbeitstitel für die Thesis lautete "`Scratch für SQL und Webanwendungen"' und weckt bei Leuten, die mit Scratch schon vertraut sind, damit auch eine positive Assoziation. Wie Scratch versucht auch esqulino viele typische und demotivierende Hürden wie Syntaxfehler, komplexe Entwicklungsumgebungen oder kryptische Fehlermeldungen konstruktiv auszuschließen.
+Aus praktisch Gründen sollte an dieser Stelle die Lernsoftware "`Scratch"' nicht unerwähnt bleiben: Der Arbeitstitel für die Thesis lautete "`Scratch für SQL und Webanwendungen"' und weckt bei Leuten, die mit Scratch schon vertraut sind, damit auch eine positive Assoziation. Wie Scratch versucht auch esqulino viele typische und demotivierende Hürden wie Syntaxfehler, komplexe Entwicklungsumgebungen oder kryptische Fehlermeldungen konstruktiv auszuschließen. Kapitel \ref{sec:related-work}~"`\nameref{sec:related-work}"' beschreibt neben Scratch noch weitere, einflußreiche Inspirationsquellen.
 
 Der wesentliche Anspruch an die im Rahmen dieser Arbeit zu erstellende Software ergibt sich also sowohl aus dem Titel der Arbeit als auch der Arbeitsweise von Scratch: Es geht vorrangig um die Vermittlung von praktischen Kenntnissen zur Abfrage, Manipulation und Visualisierung von komplexen Datenbeständen in Anlehnung an die Projektideen der Lehrpläne \cite{lehrplan-inf-sek-1} bzw. Fachanforderungen \cite{lehrplan-inf-sek-2} für Informatik des Landes Schleswig-Holstein\footnote{Die exakte Verortung im Curriculum oder auch die Konzeption von konkreten Schulstunden ist hingegen nicht Teil dieser Arbeit.}. Auch wenn sich aktuell eine zunehmende Pluralität von Paradigmen zur Datenspeicherung abzeichnet, welche das relationale Modell ergänzen oder in Frage stellen, behandelt diese Arbeit explizit die Vermittlung von SQL-Kenntnissen. Die Visualisierung erfolgt dabei über HTML-Seiten, welche sich von den unterschiedlichsten Endgeräten abrufen lassen.
 
-Da der Zweck dieser Arbeit die Konzeption und Umsetzung einer Software ist, deren Zweck wiederum die Entwicklung anderer Software ist, bedarf es zunächst eines einheitlichen Verständnisses für die Bezeichnungen der beteiligten Personen und Entitäten:
+Das Kapitel \ref{sec:requirements}~"`\nameref{sec:requirements}"' analysiert auf Basis der vergleichbaren Arbeiten und unter Berücksichtigung eigener Ideen, wie eine solche "`praktische"' Lernsoftware für datengetriebene Anwendungen aussehen könnte. Da sich die dort gesammelten Funktionen nicht alle in dem für die Thesis zur Verfügung stehenden Zeitrahmen umsetzen lassen, ist das softwaretechnische Ergebnis dieser Thesis als ein "`minimum viable product"' zu verstehen. Die Umsetzung dieses Prototypen wird in Kapitel \ref{sec:implementation-analysis}~"`\nameref{sec:implementation-analysis}"' beschrieben.
 
-\begin{description}
-\item[(Schüler-)Entwicklungsumgebung, esqulino] \hfill\\ 
-  Bezeichnet die von den Lernenden zu nutzende Software, die im Rahmen dieser Arbeit erstellt wird. Sofern Verwechslungen mit anderen Entwicklungsumgebungen (engl. ``integrated development environment'', IDE) auftreten könnten, wird explizit das Präfix ``Schüler'' genutzt. Diese Unterscheidung wird insbesondere bei Vergleichen mit gängiger Entwicklungssoftware Art relevant sein.
-\item[(Schüler-)Projekt] \hfill\\
-  Bezeichnet die von den Lernenden unter Nutzung der Schülerentwicklungsumgebung erstellte Software. Teil eines solchen Projektes sind unter anderem das Datenbankschema, die verschiedenen Abfragen und die gestaltete Benutzeroberfläche.
-\item[Entwickler] \hfill\\
-  Bezeichnet Personen, die mit der ``entwickelnden'' Benutzeroberfläche eines Schülerprojekts interagieren.
-\item[Endanwender] \hfill\\
-  Bezeichnet Personen, die mit der von den Entwicklern erstellten ``normalen'' Benutzeroberfläche eines Schülerprojekts interagieren, nicht jedoch mit der Schülerentwicklungsumgebung selbst.
-\end{description}
+
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "thesis"
