@@ -1,7 +1,13 @@
-\section{Umsetzungsanalyse}
+\section{Implementierung}
 \label{sec:implementation-analysis}
 
-Dieses Kapitel erläutert auf welche Art und Weise die im vorigen Kapitel geplanten Funktionen umgesetzt worden sind. Der softwaretechnische Unterbau der Entwicklungsumgebung setzt auf aktuelle Webtechnologien auf (siehe \ref{sec:req-web-application}~\nameref{sec:req-web-application} für die Diskussion der Begründung) und teilt sich in zwei distinkte Codebasen für Server und Client.
+Dieses Kapitel beschreibt den Implementierungsprozess von esqulino und erläutert einige technische Entscheidungen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, wurden diese in Anlehnung an den "`Minus 100 Points"'-Artikel von Eric Gunnerson \cite{gunnerson-minus-100} geprüft.
+
+\todo[inline]{Mehrere Datenbanken je Projekt}
+
+\subsection{Client-Server-Architektur}
+
+Der softwaretechnische Unterbau der Entwicklungsumgebung setzt auf aktuelle Webtechnologien auf (siehe \ref{sec:req-web-application}~\nameref{sec:req-web-application} für die Diskussion der Begründung) und teilt sich in zwei distinkte Codebasen für Server und Client.
 
 \begin{description}
 \item[Server: Ruby mit Sinatra] \hfill\\
@@ -19,6 +25,76 @@ Dieses Kapitel erläutert auf welche Art und Weise die im vorigen Kapitel geplan
 Um die Schnittstelle zwischen diesen beiden Komponenten so transparent wie möglich zu halten, werden diese gemäß der OpenAPI Spezifikation \cite{open-api} dokumentiert. Dieses offene Format ermöglicht es auf eine hilfreiche Auswahl an standarisierten Tools aufzubauen. Zum Beispiel können aus der Spezifikation interaktive Testumgebungen für die Server-Schnittstellen erzeugt werden, Abbildung \ref{fig:openapi-query-example} zeigt ein Beispiel dafür.
 
 Als primäres Interface für die Kompilierung wird ein \lstinline{Makefile} genutzt. Dieses prüft ob auf dem aktuellen System alle nötigen Abhängigkeiten verfügbar sind und stellt sicher, dass Übersetzungsschritte nur ausgeführt werden, wenn sie tatsächlich notwendig sind. Von den technischen Details der unterschiedlichen Programmierumgebungen aufgrund der unterschiedlichen Programmiersprachen kann so außerdem elegant abstrahiert werden: Ein Programmierer kann sich die exakten Aufrufe der unterschiedlichen Paketmanager zwar anschauen, wird im Normallfall aber nur \lstinline{make install-deps} aufrufen.
+
+\subsection{Meilensteine}
+
+Der Editor für Datenbankabfragen versprach im Vergleich zum Seiteneditor das einfachere Teilprojekt zu sein: Die Struktur einer Abfrage ist sehr strikt festgelegt, der Umfang lässt sich gut lokal eingrenzen. Im ersten Schritt wird allerdings nicht der komplette Editor implementiert, sondern zunächst nur das interne Datenmodell für die Abfragen in Form eines abstrakten Syntaxbaumes mitsamt den dazugehörigen Tests.
+
+Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhand der folgenden funktionalen Meilensteine geplant:
+
+\begin{description}
+\item[Bearbeitung von Projektdaten] \hfill \\
+  Schwerpunkt dieses Meileinsteins ist Implementierung grundlegender gemeinsamer Schnittstellen. Diese müssen auf vom Server als HTTP-Endpunkte angeboten und vom Client angesprochen werden können.
+  \begin{itemize}
+  \item Persistierung von Projekten mit Name und Beschreibung
+  \item Editor für Projekteigenschaften
+  \item Auflistung aller Projekte einer esqulino-Instanz
+  \end{itemize}
+\item [Anzeige eines Datenbankschemas] \hfill \\
+  Neben der funktionalen Anforderung umfasst dieser Meilenstein die Erweiterung des Clients um die typischen Bestandteile des Benutzerschnittstelle einer Entwicklungsumgebung. Serverseitig erfordert dieser Meilenstein zum ersten Mal eine Verbindung mit der Datenbank.
+  \begin{itemize}
+  \item Editor zur Anzeige eines Datenbankschemas
+  \item Seitenliste mit Übersicht über alle Bestandteile eines Projekts
+  \item Toolbar mit Knöpfen, deren Verfügbarkeit vom aktuellen Editor abhängt
+  \item Wechsel zwischen verschiedenen Editoren
+  \end{itemize}
+\item [Datenmodell für Abfragen] \hfill \\
+  Der abstrake Syntaxbaum für Datenbankabfragen in esqulino sowie die dazu passenden Testfälle.
+  \begin{itemize}
+  \item Einfache Projektion durch Auswahl von Spalten im \texttt{SELECT}
+  \item Kreuzprodukte unterschiedlicher Tabellen im \texttt{FROM}
+  \item Einschränkungen der Ergebnismenge mit Ausdrücken im \texttt{WHERE}
+  \item Ausdrücke mit binären Operationen zwischen Spalten, Konstanten und benutzerdefinierten Werten.
+  \end{itemize}
+\item [Editor für Abfragen] \hfill \\
+  Implementierung des Drag \& Drop Editors für SQL-Abfragen und Vorschau der Ergebnisse.
+  \begin{itemize}
+  \item Drag \& Drop Editor für Abfragen
+  \item Ausführung von SQL-Abfragen auf dem Server
+  \item Clientseitige Anzeige von serverseitigen Ergebnissen
+  \end{itemize}
+\item [Datenmodell für Webseiten] \hfill \\
+
+\item [Editor für Webseiten] \hfill \\
+
+\item [
+\end{description}
+
+\subsection{Datenbanksystem}
+\label{sec:implementation-database-system}
+
+Die Wahl des konkreten Datenbanksystems hat einen unmittelbaren Einfluss auf nahezu alle Bereiche von esqulino. Im einzelnen handelt es sich dabei um die exakte Variante der SQL Syntax, auf die Rahmenbedingungen für den Betrieb der Entwicklungsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
+
+Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbeständen sollten normalerweise im Bereich nur einiger Megabyte liegen und die in der Praxis möglicherweise einzige Unterscheidung von Zugriffsrechten wäre zwischen lesendem und schreibenden Zugriff. Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien gewählt und hinsichtlich ihrer Relevanz sortiert:
+
+\begin{description}  
+\item[Kostenlose Verfügbarkeit] \hfill \\
+  Der Betrieb des Datenbanksystems soll nicht mit Lizenzkosten für Schulen, Lehrkräft, Lernende oder auch freiwillige Entwickler verbunden sein.
+\item[Einfacher Betrieb] \hfill \\
+  Zwar ist für den Einsatz von esqulino aufgrund des Browsers als Client schon die Nutzung eines Servers nötig, das Datenbanksystem sollte den Betrieb dennoch nicht mehr als unbedingt notwendig weiter verkomplizieren. Eine wesentliche Rolle spielt dabei die Platformunabhängigkeit: Das Datenbanksystem sollte, wie auch der esqulino Server, auf jedem gängigen Betriebssystem lauffähig sein.
+\item[Einfache Backups] \hfill \\
+  Die gewünschte Exportfunktion für Projekte macht es nötig, den gesamten Datenbestand vergleichsweise einfach exportieren und importieren zu können. Darüber hinaus sollte es auch für Lehrkräfte möglichst einfach sein mit allen Projekten zu einem anderen esqulino-Server umzuziehen.
+\item[Tools zur Modellierung] \hfill \\
+  Da diese Arbeit sich nicht mit der Datenmodellierung befasst, muss das entsprechende Datenbankschema extern erzeugt werden. Von einer guten Unterstützung für Modellierungsvorhaben profitiert dementsprechend indirekt auch esqulino.
+\item[Tools zur Entwicklung von SQL-Abfragen] \hfill \\
+  Sobald ein Entwickler an die Grenzen des SQL-Editor von esqulino stößt, soll es so einfach wie möglich sein die Abfragen in einem externen Editor zu schreiben und danach in Textform wieder an esqulino zu übergeben.
+\end{description}
+
+Das Kriterium der ``kostenlosen Verfügbarkeit'' ist dankenswerterweise sehr einfach zu erfüllen: Es existiert eine Vielzahl von praktisch eingesetzten quelloffenen Datenbanksystemen. Die Kriterien ``einfacher Betrieb'' und ``einfache Backups'' teilen die denkbaren Systeme recht eindeutig in zwei Lager: Eingebette Datenbanken lassen sich sehr einfach betreiben und sichern. Das starten eines weiteren SQL-Server-Prozesses ist bei dieser Betriebsart nicht nötig, der Im- oder Export des gesamten Datenbestandes erfordert nur das kopieren einer einzigen Datei.
+
+Um den Betrieb folglich so einfach wie möglich zu halten, wurden für esqulino zunächst eingebettete Datenbanksysteme betrachtet. Aus der Masse an verfügbaren Systemen sticht das SQLite-System jedoch sehr weit hinaus: Der Quelltext ist gemeinfrei, der Betrieb sogar auf exotischen Systemen möglich und es existiert eine Fülle von verschiedensten Programmen für alle Betriebssysteme.
+
+\unsure[inline]{Theoretisch ist die Menge an denkbaren Systemen fast unüberschaubar groß, praktisch sticht SQLite aus der Masse an Optionen heraus. Wie ausführlich muss ich das begründen?}
 
 \subsection{Tests}
 
@@ -111,33 +187,28 @@ Jede Ressource (\lstinline{ProjectResource}) verfügt über eine interne ID sowi
 \subsection{Serverseitige Persistenz}
 \label{sec:implementation-persistence}
 
-Im einfachsten Fall ist die serverseitig persistierte Version einer Resource identisch mit dem Übertragungsformat. Dabei müssen möglicherweise sensible Informationen gefiltert werden, in der Datenstruktur der jeweiligen Implementierung sollte diese Felder daher als optional betrachtet werden. Sofern jedoch keine Filterung notwendig ist, können diese Dokumente unverändert bereitgestellt werden. Damit wäre der rein lesende Zugriff auf esqulino-Projekte mit
+Grundsätzlich sollte die serverseitig persistierte Version einer Resource möglichst identisch mit dem Übertragungsformat sein, konkret persistiert werden also JSON-Dokumente. Bei der Auslieferung müssen dann lediglich sensible Informationen gefiltert werden, in der Datenstruktur der jeweiligen Implementierung sollte diese Felder daher als optional betrachtet werden. Sofern jedoch keine Filterung notwendig ist, können diese Dokumente einfach unverändert bereitgestellt werden.
 
-\subsection{Datenbanksystem}
-\label{sec:implementation-database-system}
+Um JSON-Dokumente serverseitig zu persistieren kommen im wesentlichen zwei Speichermethoden in Frage: Entweder werden Datensätze direkt als Datei im Dateisystem abgelegt oder in einer dokumentenorientierten Datenbank gespeichert.
 
-Die Wahl des konkreten Datenbanksystems hat einen unmittelbaren Einfluss auf nahezu alle Bereiche von esqulino. Im einzelnen handelt es sich dabei um die exakte Variante der SQL Syntax, auf die Rahmenbedingungen für den Betrieb der Entwicklungsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
+Bei einer Speicherung im Dateisystem wäre der rein lesende Zugriff auf esqulino-Datensätze sogar mit einem einfachen Webserver für statische Dateien möglich. Um ein Projekt anzusehen oder zu editieren reicht ein normaler Texteditor, neue Projekte können einfach per Copy \& Paste im Dateisystem angelegt werden. Perspektivisch wäre es relativ einfach möglich ein Projekt mit gängigen Versionsverwaltungsprogrammen wie git oder Mercurial zu versionieren.
 
-Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbeständen sollten normalerweise im Bereich nur einiger Megabyte liegen und die in der Praxis möglicherweise einzige Unterscheidung von Zugriffsrechten wäre zwischen lesendem und schreibenden Zugriff. Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien gewählt und hinsichtlich ihrer Relevanz sortiert:
+Die Speicherung in dokumentenorientierten Datenbank wie MongoDB oder in einem Key/Value-Store wie Redis macht den Zugriff auf die persistierten Daten abhängig von einem externen Serverprozess. Der universelle Zugriff über das Dateisystem weicht einem speziellem Programm zur Navigation innerhalb der jeweiligen Datenbank. Mit dieser Komplexität gewinnt man eine wesentlich größere Flexibilät in Bezug auf horizontale Skalierung.
 
-\begin{description}  
-\item[Kostenlose Verfügbarkeit] \hfill \\
-  Der Betrieb des Datenbanksystems soll nicht mit Lizenzkosten für Schulen, Lehrkräft, Lernende oder auch freiwillige Entwickler verbunden sein.
-\item[Einfacher Betrieb] \hfill \\
-  Zwar ist für den Einsatz von esqulino aufgrund des Browsers als Client schon die Nutzung eines Servers nötig, das Datenbanksystem sollte den Betrieb dennoch nicht mehr als unbedingt notwendig weiter verkomplizieren. Eine wesentliche Rolle spielt dabei die Platformunabhängigkeit: Das Datenbanksystem sollte, wie auch der esqulino Server, auf jedem gängigen Betriebssystem lauffähig sein.
-\item[Einfache Backups] \hfill \\
-  Die gewünschte Exportfunktion für Projekte macht es nötig, den gesamten Datenbestand vergleichsweise einfach exportieren und importieren zu können. Darüber hinaus sollte es auch für Lehrkräfte möglichst einfach sein mit allen Projekten zu einem anderen esqulino-Server umzuziehen.
-\item[Tools zur Modellierung] \hfill \\
-  Da diese Arbeit sich nicht mit der Datenmodellierung befasst, muss das entsprechende Datenbankschema extern erzeugt werden. Von einer guten Unterstützung für Modellierungsvorhaben profitiert dementsprechend indirekt auch esqulino.
-\item[Tools zur Entwicklung von SQL-Abfragen] \hfill \\
-  Sobald ein Entwickler an die Grenzen des SQL-Editor von esqulino stößt, soll es so einfach wie möglich sein die Abfragen in einem externen Editor zu schreiben und danach in Textform wieder an esqulino zu übergeben.
-\end{description}
+Technisch gesehen ist ein Projekt also eine Sammlung von Dateien in einer festgelegten Ordnerstruktur.
 
-Das Kriterium der ``kostenlosen Verfügbarkeit'' ist dankenswerterweise sehr einfach zu erfüllen: Es existiert eine Vielzahl von praktisch eingesetzten quelloffenen Datenbanksystemen. Die Kriterien ``einfacher Betrieb'' und ``einfache Backups'' teilen die denkbaren Systeme recht eindeutig in zwei Lager: Eingebette Datenbanken lassen sich sehr einfach betreiben und sichern. Das starten eines weiteren SQL-Server-Prozesses ist bei dieser Betriebsart nicht nötig, der Im- oder Export des gesamten Datenbestandes erfordert nur das kopieren einer einzigen Datei.
+\begin{diagram}
+  \dirtree{%
+    .1 empty-project/.
+    .2 queries/.
+    .2 pages/.
+    .2 config.yaml.
+    .2 db.sqlite.
+  }
+  \caption{Leeres Projekt}
+\end{diagram}
 
-Um den Betrieb folglich so einfach wie möglich zu halten, wurden für esqulino zunächst eingebettete Datenbanksysteme betrachtet. Aus der Masse an verfügbaren Systemen sticht das SQLite-System jedoch sehr weit hinaus: Der Quelltext ist gemeinfrei, der Betrieb sogar auf exotischen Systemen möglich und es existiert eine Fülle von verschiedensten Programmen für alle Betriebssysteme.
-
-\unsure[inline]{Theoretisch ist die Menge an denkbaren Systemen fast unüberschaubar groß, praktisch sticht SQLite aus der Masse an Optionen heraus. Wie ausführlich muss ich das begründen?}
+Bei der \texttt{config.yaml} handelt es sich aus im Nachhinein unsinnigen Gründen um eine YAML-Datei.
 
 \subsection{Hinweise zum Client}
 
@@ -145,7 +216,7 @@ Der verwendete Typescript Compiler hat zum Zeitpunkt der Anfertigung dieser Arbe
 
 \lstinputlisting[language=JavaScript,caption=Falsche Reihenfolge der Klassendefinition, label=lst:ts:class-order-bug]{snippets/class-inheritance-order-bug.ts}
 
-\subsection{Administrationszugang}
+\subsection{Administration}
 \label{sec:implementation-administration}
 
 Momentan aufgrund von Zeitmangel nur in Form der Kommandozeilenschnittstelle.
