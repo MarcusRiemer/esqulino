@@ -41,6 +41,9 @@ export class Project implements ApiVersion, Saveable {
     private _name : string;
     private _description : string;
 
+    private _currentDatabase : string;
+    private _availableDatabases : string[];
+
     private _queries : Query[]
     private _pages : Page[]
     private _indexPageId : string
@@ -61,6 +64,8 @@ export class Project implements ApiVersion, Saveable {
         this._description = json.description;
         this._indexPageId = json.indexPageId;
         this.schema = new Schema(json.schema);
+        this._currentDatabase = json.database;
+        this._availableDatabases = json.availableDatabases;
 
         if (json.apiVersion as string != this.apiVersion) {
             throw new Error(`Attempted to load a project with version ${json.apiVersion}, current version is ${this.apiVersion}`);
@@ -138,6 +143,32 @@ export class Project implements ApiVersion, Saveable {
     set description(value : string) {
         this._description = value;
         this.markSaveRequired();
+    }
+
+    /**
+     * @return The name of the currently active database.
+     */
+    get currentDatabaseName() {
+        return (this._currentDatabase);
+    }
+
+    /**
+     * @param value The name of the currently active database.
+     */
+    set currentDatabaseName(value : string) {
+        this._currentDatabase = value;
+        this.markSaveRequired();
+    }
+
+    /**
+     * @return Names of all databases that are available to this project
+     */
+    get availableDatabaseNames() {
+        if (this._availableDatabases) {
+            return (this._availableDatabases);
+        } else {
+            return ([]);
+        }
     }
 
     /**
@@ -302,12 +333,18 @@ export class Project implements ApiVersion, Saveable {
 
 
     toModel() : ProjectDescription {
-        return ({
+        const toReturn : ProjectDescription = {
             id : this.id,
             name : this.name,
             apiVersion : this.apiVersion,
             description : this.description,
-            indexPageId : this.indexPageId
-        });
+            indexPageId : this.indexPageId,
+        };
+
+        if (this._currentDatabase) {
+            toReturn.database = this._currentDatabase;
+        }
+
+        return (toReturn);
     }
 }

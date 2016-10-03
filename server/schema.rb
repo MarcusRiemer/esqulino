@@ -56,12 +56,13 @@ end
 # Describes the schema of a whole database as a handy dictionary
 # of tables with their columns.
 #
-# @param project_folder [string] The projects root folder
+# @param sqlite_file_path [string] The path to the database
 # @return [Hash] A hash of SchemaTable instances
-def database_describe_schema(project_folder)
-  sqlite_file_path = File.join(project_folder, "db.sqlite")
+def database_describe_schema(sqlite_file_path)
   db = SQLite3::Database.new(sqlite_file_path)
 
+  puts "Describing schema at #{sqlite_file_path} => #{File.exists? sqlite_file_path}"
+  
   # Find out names of tables
   table_names = db.execute("SELECT name
                             FROM sqlite_master
@@ -72,6 +73,9 @@ def database_describe_schema(project_folder)
 
   # Fill in the column for each table
   table_names.each do |name|
+
+    puts "Table #{name}"
+    
     name = name[0]
     
     table_schema = SchemaTable.new name

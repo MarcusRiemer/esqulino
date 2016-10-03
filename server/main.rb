@@ -178,7 +178,7 @@ class ScratchSqlApp < Sinatra::Base
 
   # Updating a specific project
   post '/api/project/:project_id' do
-    updated_project = @@validator.ensure_request("ProjectListDescription", request.body.read)
+    updated_project = @@validator.ensure_request("ProjectDescription", request.body.read)
 
     @project.update_description! updated_project
     @project.save_description

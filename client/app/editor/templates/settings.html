@@ -54,6 +54,30 @@
         </div>
       </div>
 
+      <!-- Selecting the currently active database -->
+      <div *ngIf="project?.availableDatabaseNames.length > 1"
+           class="form-group row">
+        <label for="project-index-page"
+               class="col-sm-2 form-control-label">
+          Aktuelle Datenbank
+        </label>
+        <div class="col-sm-10">
+          <select [(ngModel)]="project.currentDatabaseName"
+                  id="project-index-page"
+                  class="form-control">
+            <option *ngFor="let db of project.availableDatabaseNames"
+                    [value]="db">
+              {{db}}
+            </option>
+          </select>
+          
+          <small class="text-muted">
+            Diese Datenbank wird von deinem Projekt gerade verwendet. Um sie zu ändern, musst du das Projekt speichern und die Seite neu laden.
+          </small>
+        </div>
+      </div>
+
+      <!-- Selecting a index page -->
       <div *ngIf="project?.pages.length > 0"
            class="form-group row">
         <label for="project-index-page"
