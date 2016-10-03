@@ -7,11 +7,11 @@ require "test/unit"
 # But for the moment this is what we will roll with, as this does
 # show how the SQLite API behaves.
 class Database < Test::Unit::TestCase
-  @@project_path = "../data/dev/projects/test/"
+  @@sqlite_test_path = "../data/dev/projects/test/databases/default.sqlite"
 
   # Ensures the database description is correct
   def test_database_describe_schema
-    schema = database_describe_schema @@project_path
+    schema = database_describe_schema @@sqlite_test_path
 
     assert_equal(1, schema.count)
 

@@ -34,6 +34,8 @@ export interface ProjectListDescription extends ApiVersion {
  */
 export interface ProjectDescription extends ProjectListDescription {
     schema? : TableDescription[]
+    availableDatabases? : string[]
+    database? : string    
     queries? : Model.QueryDescription[]
     pages? : PageDescription[]
 }

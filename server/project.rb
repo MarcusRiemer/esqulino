@@ -39,9 +39,18 @@ class Project
     File.join(@project_folder, "queries")
   end
 
-  # The path to the SQLite database
+  # The path to the folder where this project stores its databases
+  def folder_databases
+    File.join(@project_folder, "databases")
+  end
+
+  # The path to the currently active SQLite database
   def file_path_sqlite
-    File.join(@project_folder, "db.sqlite")
+    # Check whether the description of this project specifies an alternate
+    # database file to use.
+    database_file_name = whole_description.fetch('database', 'default.sqlite')
+    
+    File.join(self.folder_databases, database_file_name)
   end
 
   # @return The id of this project
@@ -74,11 +83,14 @@ class Project
     load!
 
     # Enrich the description itself with the more complex attributes
-    @whole_description.merge({
-      :schema => @schema,
-      :queries => @queries,
-      :pages => @pages
-    }).to_json(options)
+    @whole_description.merge(
+      {
+        :schema => @schema,
+        'availableDatabases' => self.available_databases,
+        :queries => @queries,
+        :pages => @pages
+      }
+    ).to_json(options)
   end
 
   # @return The path to the file that stores the project model
@@ -181,13 +193,18 @@ class Project
 
   # Queries the associated database for its schema
   def load_schema!
-    @schema = database_describe_schema(@project_folder)
+    @schema = database_describe_schema(self.file_path_sqlite)
   end
 
   # Information about the structure of the database
   def schema
     load_schema! if @schema.nil?
     return (@schema)
+  end
+
+  # @return A list of all databases that are available to this project
+  def available_databases
+    Dir.glob(File.join(self.folder_databases, "*.sqlite")).map(&File.method(:basename))
   end
 
   # Loads all queries that are associated with this project
@@ -223,7 +240,7 @@ class Project
   # @return [Hash] { columns :: List, rows :: List of List }
   #                
   def execute_sql(sql, params)
-    db = SQLite3::Database.new(file_path_sqlite, :read_only => @read_only)
+    db = SQLite3::Database.new(self.file_path_sqlite, :read_only => @read_only)
     db.execute("PRAGMA foreign_keys = ON")
 
     begin

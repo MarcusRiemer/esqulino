@@ -15,6 +15,7 @@ This project consists of two executable components: A Ruby-webserver and a Angul
 * Re-sync your local repository with the server using `git pull`.
 * Ensure all dependencies are up to date by running `make clean-deps install-deps`.
 * Rebuild the client using `make dist`
+* If the server was running during the update, it needs to be restarted.
 * You possibly need to upgrade your local projects using `make server-migrate-projects`. This is necesarry if the on-disk format for projects has changed.
 
 ## About Windows ...

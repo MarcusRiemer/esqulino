@@ -9,6 +9,15 @@
                 "description": "The \"over-the-wire\" description of a single table\n\nwith all of its columns."
             }
         },
+        "availableDatabases": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "database": {
+            "type": "string"
+        },
         "queries": {
             "type": "array",
             "items": {
