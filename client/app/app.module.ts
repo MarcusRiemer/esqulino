@@ -1,5 +1,5 @@
 import {NgModule}                          from '@angular/core'
-import {BrowserModule}                     from '@angular/platform-browser'
+import {BrowserModule, Title}              from '@angular/platform-browser'
 
 import SharedAppModule                     from './shared/shared.module'
 import FrontModule                         from './front/front.module'
@@ -18,6 +18,9 @@ import {routing}                           from './app.routes'
     ],
     declarations: [
         SqlScratchComponent,
+    ],
+    providers : [
+        Title
     ],
     bootstrap: [
         SqlScratchComponent

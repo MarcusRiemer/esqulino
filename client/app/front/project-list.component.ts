@@ -17,7 +17,7 @@ export class ProjectListComponent implements OnInit {
      * Used for dependency injection.
      */
     constructor(
-        private _projectService: ProjectDescriptionService
+        private _projectService : ProjectDescriptionService
     ) { }
 
     /**

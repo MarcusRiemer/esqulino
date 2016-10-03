@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Test</title>
+    <title>{{ page.name }} - {{ project.name }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -17,8 +17,8 @@
       <form>
         {% include "get_data_hidden" %}
         <h3>Neuer Kommentar</h3>
-        {% include "input" caption: "Dein Name", outParamName: "input.name", description: "Dieser Name wird unter dem Kommentar erscheinen", inputType: "text"  %}
-        {% include "input" caption: "Dein Kommentar", outParamName: "input.text", description: "Der Text den du gerne hinterlassen möchtest", inputType: "text"  %}
+        {% include "input" caption: "Dein Name", outParamName: "input.name", description: "Dieser Name wird unter dem Kommentar erscheinen", inputType: "text", required: true  %}
+        {% include "input" caption: "Dein Kommentar", outParamName: "input.text", description: "Der Text den du gerne hinterlassen möchtest", inputType: "text", required: true  %}
         <button type="submit" formaction="/Artikel/query/11ec075e-e797-4223-b85d-e27a91e479cb?article=get.id&name=input.name&text=input.text" formmethod="POST" name="action" value="a" class="btn btn-secondary btn-block">Kommentieren</button>
       </form>
       <a href="/Hauptseite">Zurück zur Hauptseite</a>

@@ -63,14 +63,16 @@
             "outParamName": "name",
             "caption": "Dein Name",
             "description": "Dieser Name wird unter dem Kommentar erscheinen",
-            "inputType": "text"
+            "inputType": "text",
+            "required": true
           },
           {
             "type": "input",
             "outParamName": "text",
             "caption": "Dein Kommentar",
             "description": "Der Text den du gerne hinterlassen möchtest",
-            "inputType": "text"
+            "inputType": "text",
+            "required": true
           },
           {
             "type": "button",
