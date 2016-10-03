@@ -2,6 +2,7 @@ import {
     Component, OnInit, OnDestroy, ChangeDetectorRef, ReflectiveInjector
 } from '@angular/core'
 import {Router, ActivatedRoute}         from '@angular/router'
+import {Title}                          from '@angular/platform-browser'
 
 import {TableDescription}               from '../shared/schema.description'
 
@@ -36,7 +37,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         private _projectService: ProjectService,
         private _sidebarService: SidebarService,
         private _changeDetectorRef : ChangeDetectorRef,
-        private _preferences : PreferencesService
+        private _preferences : PreferencesService,
+        private _title : Title
     ) { }
 
     /**
@@ -46,9 +48,10 @@ export class EditorComponent implements OnInit, OnDestroy {
         // Subscribe to the current project
         let subRef = this._projectService.activeProject.subscribe(res => {
             this._project = res
+            this._title.setTitle(`${res.name} - esqulino`)
         });
         this._subscriptions.push(subRef);
-        
+
         subRef = this._sidebarService.isSidebarVisible.subscribe(v => {
             // Fixed?: Causes change-detection-error on change
             // This more or less globally changes the application state,
@@ -68,7 +71,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this._subscriptions.forEach(s => s.unsubscribe());
         this._subscriptions = [];
-        
+
         this._projectService.forgetCurrentProject();
 
         // Just in case another component previously had the sidebar shown.

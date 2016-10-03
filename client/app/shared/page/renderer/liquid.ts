@@ -202,7 +202,7 @@ export class LiquidRenderer extends Renderer {
     private static PAGE_HEADER = `<!DOCTYPE html>
 <html>
   <head>
-    <title>Test</title>
+    <title>{{ page.name }} - {{ project.name }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">

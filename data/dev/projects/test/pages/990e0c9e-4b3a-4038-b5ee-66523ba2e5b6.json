@@ -1,5 +1,6 @@
 {
   "name": "Page 2",
+  "apiVersion": "3",
   "referencedQueries": [
     {
       "type": "query",
@@ -12,13 +13,14 @@
       "queryId": "a0495663-6fd3-42b2-8167-acfebe778ed5"
     }
   ],
-  "apiVersion": "3",
   "body": {
     "type": "body",
     "children": [
       {
+        "type": "row",
         "columns": [
           {
+            "type": "column",
             "width": 12,
             "widgets": [
               {
@@ -30,10 +32,10 @@
                 "type": "paragraph",
                 "text": "Hier ist ein Absatz, der was zur zweiten Seite erzählt. Unter diesem Absatz ist dann noch eine Tabelle zu sehen."
               }
-            ],
-            "type": "column"
+            ]
           },
           {
+            "type": "column",
             "width": 12,
             "widgets": [
               {
@@ -43,21 +45,19 @@
                   "value"
                 ]
               }
-            ],
-            "type": "column"
+            ]
           },
           {
+            "type": "column",
             "width": 12,
             "widgets": [
               {
                 "type": "paragraph",
                 "text": "In diesem Absatz werden am Ende die <a href=\"https://shopify.github.io/liquid/basics/introduction/\">Liquid Ausdrücke</a> {% raw %}{{ query.kv_single.key }} -> {{ query.kv_single.value }}{% endraw %} ausgewertet: {{ query.kv_single.key }} -> {{ query.kv_single.value }}"
               }
-            ],
-            "type": "column"
+            ]
           }
-        ],
-        "type": "row"
+        ]
       }
     ]
   }
