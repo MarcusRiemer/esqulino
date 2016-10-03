@@ -7,6 +7,8 @@ import {FrontComponent}                 from './front.component'
 import {frontRouting}                   from './front.routes'
 
 import {AboutComponent}                 from './about.component'
+import {AboutPupilComponent}            from './pupil.component'
+import {AboutTeacherComponent}          from './teacher.component'
 import {ImprintComponent}               from './imprint.component'
 import {ProjectListComponent}           from './project-list.component'
 import {ProjectListItemComponent}       from './project-list-item.component'
@@ -19,6 +21,8 @@ import {ProjectListItemComponent}       from './project-list-item.component'
     ],
     declarations : [
         AboutComponent,
+        AboutPupilComponent,
+        AboutTeacherComponent,
         FrontComponent,
         ImprintComponent,
         ProjectListComponent,
