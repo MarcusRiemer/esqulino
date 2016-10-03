@@ -20,9 +20,9 @@
       <p class="card-text about-text">
         Du wolltest schon immer mal deine eigene Blog&shy;software entwickeln? Oder deine stärksten Pokémon vorzeigen? Interaktive Abenteuer&shy;geschichten schreiben? (Fast) egal worum es geht, mit esqulino kannst du deine eigenen Webseiten programmieren und sie deinen Freunden zeigen.
       </p>
-      <a class="btn btn-secondary"
+      <a [routerLink]="['/about', 'pupil']"
+         class="btn btn-secondary"
          id="about-pupils"
-         href="#"
          role="button">
         <span class="fa fa-play" aria-hidden="true"></span>
         So legst du los
@@ -35,9 +35,9 @@
       <p class="card-text about-text">
         Konventionelle Entwicklungsumgebungen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. esqulino hingegen passt sich an den Lernfortschritt der Klassengemeinschaft an!
       </p>
-      <a class="btn btn-secondary"
+      <a [routerLink]="['/about', 'teacher']"
+         class="btn btn-secondary"
          id="about-teachers"
-         href="#"
          role="button">
         <span class="fa fa-cogs" aria-hidden="true"></span>
         Das esqulino Konzept

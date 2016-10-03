@@ -4,6 +4,8 @@ import {FrontComponent}            from './front.component'
 import {ImprintComponent}          from './imprint.component'
 import {ProjectListComponent}      from './project-list.component'
 import {AboutComponent}            from './about.component'
+import {AboutPupilComponent}       from './pupil.component'
+import {AboutTeacherComponent}     from './teacher.component'
 
 export const frontRoutes : Routes = [
     {
@@ -12,6 +14,8 @@ export const frontRoutes : Routes = [
         children : [
             { path: 'projects', component: ProjectListComponent},
             { path: 'imprint',  component: ImprintComponent},
+            { path: 'pupil',    component: AboutPupilComponent},
+            { path: 'teacher',  component: AboutTeacherComponent},
             { path: '',         component: AboutComponent},
         ]
     }
