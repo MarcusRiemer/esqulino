@@ -80,10 +80,9 @@ server-migrate-projects:
 	$(SUBDIR_MAKE) server migrate-projects
 
 
-# Compile every part of the documentation, including the thesis.
+# Compile every part of the documentation
 doc :
 	$(SUBDIR_MAKE) server doc
-	$(SUBDIR_MAKE) doc/thesis all
 	$(SUBDIR_MAKE) doc/swagger all
 
 # Remove every bit of generated documentation
