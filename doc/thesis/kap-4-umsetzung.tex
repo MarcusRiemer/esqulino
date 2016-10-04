@@ -3,7 +3,7 @@
 
 Dieses Kapitel beschreibt den Implementierungsprozess von esqulino und erläutert einige technische Entscheidungen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, wurden diese in Anlehnung an den "`Minus 100 Points"'-Artikel von Eric Gunnerson \cite{gunnerson-minus-100} geprüft.
 
-\todo[inline]{Mehrere Datenbanken je Projekt}
+\todo[inline]{Mehrere Datenbanken je Projekt, CSV-Import}
 
 \subsection{Client-Server-Architektur}
 
@@ -67,7 +67,8 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
 
 \item [Editor für Webseiten] \hfill \\
 
-\item [
+\item [Qualitätssicherung] \hfill \\
+  
 \end{description}
 
 \subsection{Datenbanksystem}
@@ -102,100 +103,100 @@ Die Funktionalität der, relativ isolierten und daher gut zu testenden, internen
 
 Als technisches Fundament wird für diese Testfälle auf der Jasmine-Bibliothek aufgebaut. Zu prüfende Zusicherungen werden durch Verkettung zweier Funktionen ausgedrückt: \lstinline{expect().toEqual()}. Neben \lstinline{toEqual()} sind natürlich auch andere Vergleiche wie \lstinline{isUndefined()} möglich. Wenn innerhalb eines Testfalls auch nur eine einzige dieser Prüfungen nicht zu \lstinline{true} auswertet, wird der Testfall als ingesamt fehlgeschlagen markiert. Im Falle von mehreren gescheiterten Prüfungen sind werden dabei alle unerwarteten Ergebnisse aufgelistet.
 
-Listing \ref{lst:unit-test-example} illustriert, wie die meisten Testfälle in esqulino aufgebaut sein. Jeder Testfall beginnt mit der Definition eines Datenmodells und endet mit Testfällen für die korrekte Serialisierung. Ganz konkret existiert also in jedem Testfall eine Variable \lstinline{model}, welche im Konstruktor der zu testenden Klasse zum Einsatz kommt und in nicht-mutierenden Testfällen als Ergebnis der \lstinline{toModel()} Methode reproduziert werden muss. Formal ausgedrückt handelt es sich es sich bei der Verkettung des Konstruktors mit der \lstinline{toModel()}-Methode also um eine neutrale Operation.
+listing \ref{lst:unit-test-example} illustriert, wie die meisten testfälle in esqulino aufgebaut sein. jeder testfall beginnt mit der definition eines datenmodells und endet mit testfällen für die korrekte serialisierung. ganz konkret existiert also in jedem testfall eine variable \lstinline{model}, welche im konstruktor der zu testenden klasse zum einsatz kommt und in nicht-mutierenden testfällen als ergebnis der \lstinline{tomodel()} methode reproduziert werden muss. formal ausgedrückt handelt es sich es sich bei der verkettung des konstruktors mit der \lstinline{tomodel()}-methode also um eine neutrale operation.
 
-Die Dateien mit den Unit-Tests liegen im Dateisystem immer "`neben"' ihren Implementierungen, der Dateiname wird allerdings mit dem Suffix \lstinline{spec} wie "`Specification"' ergänzt. Das Beispiel in Listing  \ref{lst:unit-test-example} wurde der Datei \lstinline{select.spec.ts} entnommen, der Code für die zu testende Funktionalität findet sich folglich in \lstinline{select.ts}.
+die dateien mit den unit-tests liegen im dateisystem immer "`neben"' ihren implementierungen, der dateiname wird allerdings mit dem suffix \lstinline{spec} wie "`specification"' ergänzt. das beispiel in listing  \ref{lst:unit-test-example} wurde der datei \lstinline{select.spec.ts} entnommen, der code für die zu testende funktionalität findet sich folglich in \lstinline{select.ts}.
 
 \lstinputlisting[
-  language=JavaScript,
-  caption=Unit-Test für eine korrekte \lstinline{SELECT}-Abfrage,
+  language=javascript,
+  caption=unit-test für eine korrekte \lstinline{select}-abfrage,
   label=lst:unit-test-example,
   float,floatplacement=p,
   numbers=left
 ]{snippets/unit-test-example.ts}
 
-Die serverseitige Funktionalität wird aktuell ausschließlich über "`Ende-zu-Ende"'-Tests mit einem speziell instrumentierten Browser geprüft. Für diese Tests ist ein speziell vorbereitetes Testprojekt in einem exakt definierten Zustand sowie neben dem Browser auch ein esqulino-Server notwendig.
+die serverseitige funktionalität wird aktuell ausschließlich über "`ende-zu-ende"'-tests mit einem speziell instrumentierten browser geprüft. für diese tests ist ein speziell vorbereitetes testprojekt in einem exakt definierten zustand sowie neben dem browser auch ein esqulino-server notwendig.
 
-\subsection{Struktur eines Projekts}
+\subsection{struktur eines projekts}
 
-Die grundsätzliche Struktur eines esqulino-Projektes wird in Diagramm \ref{uml:class-diagram-core-entities} ersichtlich. Diese Darstellung visualisert nicht die konkrete Implementierung des Servers oder des Clients, sondern illustriert die grundlegenden beteiligten Datenstrukturen. Jede dieser Entitäten, also sowohl Projekte als auch ihre Ressourcen, enthält eine eigene Versionsangabe. Dadurch kann auf jede Veränderung an dieser Struktur explizit eingegangen werden (\ref{sec:implementation-migration}~\nameref{sec:implementation-migration}), aktuell laden sowohl Server als auch Client nur Ressourcen deren Version exakt passt.
+die grundsätzliche struktur eines esqulino-projektes wird in diagramm \ref{uml:class-diagram-core-entities} ersichtlich. diese darstellung visualisert nicht die konkrete implementierung des servers oder des clients, sondern illustriert die grundlegenden beteiligten datenstrukturen. jede dieser entitäten, also sowohl projekte als auch ihre ressourcen, enthält eine eigene versionsangabe. dadurch kann auf jede veränderung an dieser struktur explizit eingegangen werden (\ref{sec:implementation-migration}~\nameref{sec:implementation-migration}), aktuell laden sowohl server als auch client nur ressourcen deren version exakt passt.
 
-Jede Ressource (\lstinline{ProjectResource}) verfügt über eine interne ID sowie einen sprechenden Namen. In der aktuellen Version von esqulino handelt es sich bei dieser ID um eine \lstinline{GUID}, sollte also weltweit einzigartig sein. Theoretisch wäre es dadurch denkbar diese Ressourcen auch zwischen Projekten zu kopieren bzw. zu Teilen. Intern werden Referenzen auf Ressourcen immer anhand der ID referenziert. Eine Umbenennung von Ressourcen durch den Benutzer hat daher keine Auswirkungen auf etwaige Referenzen an anderer Stelle.
+jede ressource (\lstinline{projectresource}) verfügt über eine interne id sowie einen sprechenden namen. in der aktuellen version von esqulino handelt es sich bei dieser id um eine \lstinline{guid}, sollte also weltweit einzigartig sein. theoretisch wäre es dadurch denkbar diese ressourcen auch zwischen projekten zu kopieren bzw. zu teilen. intern werden referenzen auf ressourcen immer anhand der id referenziert. eine umbenennung von ressourcen durch den benutzer hat daher keine auswirkungen auf etwaige referenzen an anderer stelle.
 
 \begin{diagram}[p]
   \begin{tikzpicture}
-    \begin{interface}[text width=7cm]{ApiVersionable}{-4, 0}
-      \attribute{apiVersion : string}
+    \begin{interface}[text width=7cm]{apiversionable}{-4, 0}
+      \attribute{apiversion : string}
     \end{interface}
     
-    \begin{class}[text width=7cm]{Project}{-8, -4}
-      \implement{ApiVersionable}
+    \begin{class}[text width=7cm]{project}{-8, -4}
+      \implement{apiversionable}
       
       \attribute{id : string}
       \attribute{name : string}
       \attribute{description : string}
-      \attribute{indexPageId : string}
+      \attribute{indexpageid : string}
     \end{class}
 
-    \begin{abstractclass}[text width=7cm]{ProjectResource}{0, -6}
-      \implement{ApiVersionable}
+    \begin{abstractclass}[text width=7cm]{projectresource}{0, -6}
+      \implement{apiversionable}
       
       \attribute{id : string}
       \attribute{name : string}
     \end{abstractclass}
 
-    \begin{class}[text width=7cm]{Page}{0, -10}      
-      \attribute{body: BodyNode}
-      \attribute{referencedQueries: QueryReference[]}
-      \attribute{parameters: PageParameter[]}
+    \begin{class}[text width=7cm]{page}{0, -10}      
+      \attribute{body: bodynode}
+      \attribute{referencedqueries: queryreference[]}
+      \attribute{parameters: pageparameter[]}
     \end{class}
 
-    \begin{class}[text width=7cm]{Query}{0, -14}
-      \attribute{select : Select}
-      \attribute{delete : Insert}
-      \attribute{insert : Insert}
-      \attribute{update : Update}
-      \attribute{from   : From}
-      \attribute{where  : Where}
+    \begin{class}[text width=7cm]{query}{0, -14}
+      \attribute{select : select}
+      \attribute{delete : insert}
+      \attribute{insert : insert}
+      \attribute{update : update}
+      \attribute{from   : from}
+      \attribute{where  : where}
     \end{class}
 
-    % Query and page implement ProjectResource
-    \draw[->] (Query.east) -- ++ (1,0) -- ($(ProjectResource.east)+(1,0)$) -- (ProjectResource.east);
-    \draw[-] (Page.east) -- ++ (1,0);
+    % query and page implement projectresource
+    \draw[->] (query.east) -- ++ (1,0) -- ($(projectresource.east)+(1,0)$) -- (projectresource.east);
+    \draw[-] (page.east) -- ++ (1,0);
 
-    % Each resource has a reference to the project
-    \draw[] (ProjectResource.north)  |- (Project.east);
-    \node[xshift=0.3cm, yshift=0.3cm] at (ProjectResource.north) {n};
-    \node[xshift=0.3cm, yshift=0.3cm] at (Project.east) {1};
+    % each resource has a reference to the project
+    \draw[] (projectresource.north)  |- (project.east);
+    \node[xshift=0.3cm, yshift=0.3cm] at (projectresource.north) {n};
+    \node[xshift=0.3cm, yshift=0.3cm] at (project.east) {1};
     
-    % A project has pages ...
-    \draw[] (Page.west)  -| (Project.south);
-    \node[xshift=0.3cm, yshift=-0.5cm] at (Project.south) {1};
-    \node[xshift=-0.5cm, yshift=0.3cm] at (Query.west) {0..n};
-    \node[xshift=-2.5cm, yshift=0.3cm] at (Query.west) {Queries};
+    % a project has pages ...
+    \draw[] (page.west)  -| (project.south);
+    \node[xshift=0.3cm, yshift=-0.5cm] at (project.south) {1};
+    \node[xshift=-0.5cm, yshift=0.3cm] at (query.west) {0..n};
+    \node[xshift=-2.5cm, yshift=0.3cm] at (query.west) {queries};
 
     % ... and queries.
-    \draw[] (Query.west) -| (Project.south);
-    \node[xshift=-0.5cm, yshift=0.3cm] at (Page.west) {0..n};
-    \node[xshift=-2.5cm, yshift=0.3cm] at (Page.west) {Pages};
+    \draw[] (query.west) -| (project.south);
+    \node[xshift=-0.5cm, yshift=0.3cm] at (page.west) {0..n};
+    \node[xshift=-2.5cm, yshift=0.3cm] at (page.west) {pages};
   \end{tikzpicture}
 
-  \caption{Abstrakte Übersicht über die Ressourcen eines Projektes}
+  \caption{abstrakte übersicht über die ressourcen eines projektes}
   \label{uml:class-diagram-core-entities}
 \end{diagram}
 
-\subsection{Serverseitige Persistenz}
+\subsection{serverseitige persistenz}
 \label{sec:implementation-persistence}
 
-Grundsätzlich sollte die serverseitig persistierte Version einer Resource möglichst identisch mit dem Übertragungsformat sein, konkret persistiert werden also JSON-Dokumente. Bei der Auslieferung müssen dann lediglich sensible Informationen gefiltert werden, in der Datenstruktur der jeweiligen Implementierung sollte diese Felder daher als optional betrachtet werden. Sofern jedoch keine Filterung notwendig ist, können diese Dokumente einfach unverändert bereitgestellt werden.
+grundsätzlich sollte die serverseitig persistierte version einer resource möglichst identisch mit dem übertragungsformat sein, konkret persistiert werden also json-dokumente. bei der auslieferung müssen dann lediglich sensible informationen gefiltert werden, in der datenstruktur der jeweiligen implementierung sollte diese felder daher als optional betrachtet werden. sofern jedoch keine filterung notwendig ist, können diese dokumente einfach unverändert bereitgestellt werden.
 
-Um JSON-Dokumente serverseitig zu persistieren kommen im wesentlichen zwei Speichermethoden in Frage: Entweder werden Datensätze direkt als Datei im Dateisystem abgelegt oder in einer dokumentenorientierten Datenbank gespeichert.
+um json-dokumente serverseitig zu persistieren kommen im wesentlichen zwei speichermethoden in frage: entweder werden datensätze direkt als datei im dateisystem abgelegt oder in einer dokumentenorientierten datenbank gespeichert.
 
-Bei einer Speicherung im Dateisystem wäre der rein lesende Zugriff auf esqulino-Datensätze sogar mit einem einfachen Webserver für statische Dateien möglich. Um ein Projekt anzusehen oder zu editieren reicht ein normaler Texteditor, neue Projekte können einfach per Copy \& Paste im Dateisystem angelegt werden. Perspektivisch wäre es relativ einfach möglich ein Projekt mit gängigen Versionsverwaltungsprogrammen wie git oder Mercurial zu versionieren.
+bei einer speicherung im dateisystem wäre der rein lesende zugriff auf esqulino-datensätze sogar mit einem einfachen webserver für statische dateien möglich. um ein projekt anzusehen oder zu editieren reicht ein normaler texteditor, neue projekte können einfach per copy \& paste im dateisystem angelegt werden. perspektivisch wäre es relativ einfach möglich ein projekt mit gängigen versionsverwaltungsprogrammen wie git oder mercurial zu versionieren.
 
-Die Speicherung in dokumentenorientierten Datenbank wie MongoDB oder in einem Key/Value-Store wie Redis macht den Zugriff auf die persistierten Daten abhängig von einem externen Serverprozess. Der universelle Zugriff über das Dateisystem weicht einem speziellem Programm zur Navigation innerhalb der jeweiligen Datenbank. Mit dieser Komplexität gewinnt man eine wesentlich größere Flexibilät in Bezug auf horizontale Skalierung.
+die speicherung in dokumentenorientierten datenbank wie mongodb oder in einem key/value-store wie redis macht den zugriff auf die persistierten daten abhängig von einem externen serverprozess. der universelle zugriff über das dateisystem weicht einem speziellem programm zur navigation innerhalb der jeweiligen datenbank. mit dieser komplexität gewinnt man eine wesentlich größere flexibilät in bezug auf horizontale skalierung.
 
-Technisch gesehen ist ein Projekt also eine Sammlung von Dateien in einer festgelegten Ordnerstruktur.
+technisch gesehen ist ein projekt also eine sammlung von dateien in einer festgelegten ordnerstruktur.
 
 \begin{diagram}
   \dirtree{%
@@ -205,10 +206,10 @@ Technisch gesehen ist ein Projekt also eine Sammlung von Dateien in einer festge
     .2 config.yaml.
     .2 db.sqlite.
   }
-  \caption{Leeres Projekt}
+  \caption{leeres projekt}
 \end{diagram}
 
-Bei der \texttt{config.yaml} handelt es sich aus im Nachhinein unsinnigen Gründen um eine YAML-Datei.
+bei der \texttt{config.yaml} handelt es sich aus im nachhinein unsinnigen gründen um eine yaml-datei.
 
 \subsection{Hinweise zum Client}
 
