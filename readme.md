@@ -119,6 +119,7 @@ Name                                                       | Used for           
 ---------------------------------------------------------- | -------------------------------------------------------- | ------------ | -------
 [Angular 2.0](https://angular.io/)                         | Frontend GUI                                             | Client       | MIT
 [Font Awesome](http://fontawesome.io)                      | Icons for the Frontend User Interface                    | Client       | SIL Open Font
+[Liquid](http://liquidmarkup.org/)                         | Server-side templating language                          | Server       | MIT
 [Ruby](https://www.ruby-lang.org/)                         | Server-side scripting language                           | Server       | Ruby
 [Sinatra](http://www.sinatrarb.com/)                       | HTTP Handling and routing for backend                    | Server       | MIT
 [Sinatra Contrib](http://www.sinatrarb.com/contrib/)       | Config-File, Code-Reloading and JSON serialization       | Server       | MIT
