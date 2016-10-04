@@ -465,7 +465,7 @@ Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von norm
 
 Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten, nicht alle dafür eignen sich aber um dynamisch zur Laufzeit Seiten zu erzeugen. Nicht in Betracht gezogen werden vollwertige Programmiersprachen wie PHP, Python oder Ruby. Die Mächtigkeit dieser Sprachen geht fast zwangsläufig mit einer vergleichsweise umständlichen Syntax einher. Zudem dient die Verwendung einer dezidierten Templatingsprache nicht nur der Bequemlichkeit, sondern auch einer klaren Trennung zwischen Programm- und Anzeigelogik. Diese Unterscheidung soll von esqulino gefördert werden.
 
-Für esqulino wurden darüber hinaus die folgenden harten Kriterien angelegt:
+Für esqulino wurden darüber hinaus die folgenden harten Kriterien angelegt, um die große Anzahl verfügbarer Kandidaten schnell zu reduzieren:
 
 \begin{description}
 \item[Datenanbindung] \hfill \\
@@ -478,9 +478,9 @@ Für esqulino wurden darüber hinaus die folgenden harten Kriterien angelegt:
   Erfahrenen Entwicklern soll es grundsätzlich möglich sein ihre HTML-Kenntnisse in vollem Umfang anzuwenden. Sofern die Templatingsprache also HTML-Bestandteile bereinigt, muss es eine Möglichkeit geben diese Bereinung lokal zu deaktivieren.
 \end{description}
 
-Diese Kriterien filtern eine Menge verbreitete Textauszeichnungssprachen wie sie in Foren- oder Kommentarsystemen genutzt werden aus. Weder Markdown, BB-Code oder Textile erlauben nativ die programmatische Einbindung von externen Daten. Die innerhalb der Wikipedia genutzte "`Wikisyntax"' erlaubt zwar eine einfache Datenanbindung, kennt aber keine Kontrollstrukturen.
+Diese Kriterien filtern eine Menge verbreitete Textauszeichnungssprachen wie sie in Foren- oder Kommentarsystemen genutzt werden aus. Weder Markdown, BB-Code noch Textile erlauben nativ die programmatische Einbindung von externen Daten. Die innerhalb der Wikipedia genutzte "`Wikisyntax"' erlaubt zwar eine einfache Datenanbindung, kennt aber keine Kontrollstrukturen.
 
-Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig blieben, werden diese im Folgenden anhand der folgenden Kriterien in einem einfachen Scoringmodell verglichen:
+Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig blieben, werden diese im Folgenden anhand der folgenden Kriterien oberflächlich im Rahmen eines einfachen Scoring-Modells verglichen. Die quantitative Auswertung findet sich am Ende dieses Kapitels in Tabelle~\ref{tab:scoring-templating-language}, die qualitative Auswertung findet sich im Anschluss an diese Kriterien.
 
 \begin{description}
 \item[Geringe Technische Komplexität, 5 Punkte] \hfill \\
@@ -492,44 +492,115 @@ Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig bliebe
 \item[Einfache Erweiterbarkeit, 3 Punkte] \hfill \\
   Perspektivisch sollen die Lernenden anhand von esqulino auch in die "`normale"' Programmierung eingeführt werden können. Vor diesem Hintergrund wäre es von Vorteil, wenn die Templatingsprache eine einfache Programmierschnittstelle bietet um eigene Funktionen einzubetten.  
 \item[Sprachübergreifende Implementierungen, 3 Punkte] \hfill \\
-  Ebenfalls perspektivisch interessant ist die Implementierung einer Templatingsprache mit mehreren Programmiersprachen. Dieser Aspekt ist nicht nur ein guter Indikator für die tatsächliche Verbreitung einer Templatingsprache, er könnte perspektivisch im Falle eines Exports von Projekten aus esqulino auch praktische Bedeutung haben.
+  Existiert lediglich die Referenzimplementierung einer Templatingsprache oder gibt es auch alternative Implementierungen? Dieser Aspekt ist nicht nur ein guter Indikator für die tatsächliche Verbreitung einer Templatingsprache, er könnte perspektivisch im Falle eines Exports von Projekten aus esqulino auch praktische Bedeutung haben.
 \end{description}
 
-Die folgenden Sprachen wurden dann evaluiert: Liquid, Angular 2 und Handlebars. Liquid wurde schon im Rahmen der vergleicharen Arbeiten (\ref{sec:software-jekyll}~\nameref{sec:software-jekyll}) kurz vorgestellt und bot sich dementsprechend als Kandidat an. Da für die Implementierung des esqulino-Frontend Angular 2 ohnehin zum Einsatz kommt stellt sich die Frage (siehe \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis}), ob die Nutzung eines weiteren Frameworks tatsächlich notwendig ist. Handlebars wird unter anderem in Meteor und Ember.js verwendet und wurde schlicht aufgrund seiner Popularität ausgewählt.
+Diesen Kriterien stellen sich die Templatingsprachen Liquid, Angular 2 und Handlebars. Liquid wurde schon im Rahmen der vergleicharen Arbeiten (\ref{sec:software-jekyll}~\nameref{sec:software-jekyll}) kurz vorgestellt und bot sich dementsprechend als Kandidat an. Da für die Implementierung des esqulino-Frontend Angular 2 ohnehin zum Einsatz kommt stellt sich die Frage (siehe \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis}), ob die Nutzung eines weiteren Frameworks tatsächlich notwendig ist. Möglicherweise könnte durch die Vermeidung einer weiteren Abhängigkeit ja auch Aufwand gespart werden? Handlebars wird unter anderem in den Bibliotheken Meteor und Ember.js verwendet und wurde schlicht aufgrund seiner Popularität ausgewählt.
 
-\begin{table}
+Um die Komplexität der Technik zu bewerten wird zunächst das Ergebnis des Rendervorgangs betrachtet: Sowohl die Referenzimplementierungen von Handlebars als auch Angular 2 generieren Javascript, welches die sich ergebende HTML-Struktur unmittelbar in den DOM-Baum des Browsers injiziert. Angular 2 geht noch einen Schritt weiter und gibt die neue Struktur nicht ungefiltert an den Browser weiter, sondern erstellt mit Hilfe eines virtuellen DOM einen Satz an inkrementell nötigen Änderungen. Das Ergebnis eines Rendervorgangs mit Liquid ist hingegen ein einfacher String mit dem gerenderten Template, für Handlebars gibt es abseits der Referenzimplementierung eine Portierung mit einem entsprechend einfachem Backend.
+
+Und natürlich spielt für die Technik auch die Parametriesierung eine Rolle: Bei Handlebars und Liquid ist es in der Referenzimplementierung möglich, zum Rendern einfach eine Funktion mit zwei Parametern aufzurufen: Einmal das Template als normale Zeichenkette und dann die Daten als "`normale"' Datenstruktur zu übergeben. Angular 2 stellt wesentlich mehr Anforderungen, dort muss ein spezielles Datenmodell für die Präsentationsschicht bereitgestellt werden.
+
+Um die Syntax zu vergleichen, soll der in Listing~\ref{lst:data-control-structures} angedeutete Datenbestand für einen Blog gerendert werden. Dabei sollen die Kategorien mit einer Schleife durchlaufen werden, der gesamte Beitrag nicht angezeigt werden sofern er privat ist und der Text mit seinen HTML-Bestandteilen gerendert werden.
+
+\begin{lstlisting}[float=p,caption={JSON-Darstellung eines exemplarischen Datenbestandes}, label={lst:data-control-structures}]
+{ "page" : {
+    "categories": ["Huch", "Hoff", "Riem"],
+    "author": "",
+    "text": "<p>Dies ist ein Text mit HTML-Bestandteilen</p>",
+    "private": false
+}}
+\end{lstlisting}
+
+Die Liquid-Syntax wird an dieser Stelle ohne weitere Erläuterungen betrachtet (Listing \ref{lst:liquid-control-structures}), eine kurze Einführung ist schon Rahmen von Kapitel \ref{sec:software-jekyll}~\nameref{sec:software-jekyll} erfolgt.
+
+\begin{lstlisting}[float=p,caption={Kontrollstrukturen in Liquid}, label={lst:liquid-control-structures}]
+{% if !page.private %}
+  <h2>{{ page.title}} <small>von {{ page.author}}</small></h2>
+  <ul>
+    {% for page.categories %}
+      <li>{{ this }}</li>
+    {% endfor %}
+  </ul>
+  {{ page.text }}
+{% else %}
+  <h1>Dies ist eine private Seite</h1>
+{% endif %}
+\end{lstlisting}
+
+Die Syntax von Liquid und Handlebars ist bemerkenswert ähnlich und basiert auf geschweiften Klammern, welche sich optisch merklich vom normalen HTML-Inhalt abheben. Für Kontrollstrukturen kommt statt dem \texttt{\%}-Zeichen von Liquid eine Raute zum Einsatz. Eine praktische Syntaktische Eigenart ist die Tatsache, dass auch Schleifen mit einem \texttt{else}-Block für leere oder nicht vorhandene Listen ausgestattet werden können. Listing~\ref{lst:handlebars-control-structures} zeigt, wie das einfache Datenmodell gerendert werden könnte. Um einen Ausdruck unverändert übernommen werden soll, also inklusive aller HTML-Sonderzeichen, muss dieser von drei geschweiften Klammern umgeben werden.
+
+\begin{lstlisting}[float=p,caption={Kontrollstrukturen in Handlebars}, label={lst:handlebars-control-structures}]
+{{ #if !page.private }}
+  <h2>{{ page.title}} <small>von {{ page.author}}</small></h2>
+  <ul>
+    {{ #each page.categories }}
+      <li>{{ this }}</li>
+    {{ /each }}
+  </ul>
+  {{{ page.text }}}
+{{ else }}
+  <h1>Dies ist eine private Seite</h1>
+{{ /if }}
+\end{lstlisting}
+
+Angular 2 verzichtet hingegen auf nicht-XML-artige Erweiterungen und nutzt dafür eigene Knoten und Attribute. Darüber hinaus muss immer die Richtung der Datenbindung angegeben werden, dafür werden Attribute mit runden oder eckigen Klammern eingeschlossen. Im Beispiellisting \ref{lst:angular2-control-structures} kommen allerdings ausschließlich eckige Klammern zum Einsatz, da nicht auf Ereignisse reagiert werden muss. Kontrollstrukturen müssen entweder in speziellen \texttt{<template>}-Knoten notiert werden oder mit einem \texttt{*}-Präfix als Attribut notiert werden.
+
+\begin{lstlisting}[float=p,caption={Kontrollstrukturen in Angular 2}, label={lst:angular2-control-structures}]
+<template [ngIf]="!page.private">
+  <h2>{{ page.title}} <small>von {{ page.author}}</small></h2>
+  <ul>
+    <li *ngFor="let name in page.categories">{{ name }}</li>
+  </ul>
+  <div [innerHtml]="page.text"></div>
+</template>
+<template [ngIf]="page.private">
+  <h1>Dies ist eine private Seite</h1>
+</template>
+\end{lstlisting}
+
+Für Handlebars und Liquid existieren Implementierungen in unterschiedlichen Programmiersprachen, zumindest für Ruby, Javascript und PHP scheinen diese Portierungen auch sinnvoll zu funktionieren. Angular 2 hingegen wird zwar für mehrere Sprachen Angeboten, in der Praxis kompilieren diese aber alle zu Javascript.
+
+Keine der betrachteten Sprachen macht es unmöglich, die Funktionalität im Rahmen der jeweiligen Syntax zu erweitern. Für Handlebars und Liquid existieren in allen betrachteten Implementierungen einfache Möglichkeiten Funktionen für neue Schlüsselwörter zu registrieren. Angular sieht zur Erweiterung die Programmierung neuer Komponenten vor, welche sich dann als neue Attribute oder Knoten sehr organisch einbetten lassen. Das ist im Endergebnis zwar sehr ansehnlich, die Definition solcher Komponenten erfordert aber vertiefte Kenntnisse der internen Arbeitsweise von Angular 2.
+
+Für alle hier betrachteten Templatingsprachen gilt ebenfalls, dass sie jenseits von Entwicklerkreisen nicht besonders verbreitet sind. Typische Webseiten benötigen natürlich auch keine umfangreiche Logik um zum Beispiel einem Benutzer zu ermöglichen einen Kommentar zu schreiben. Im Alltag werden die Lernenden von diesen Kenntnissen also wohl nicht profitieren.
+
+Anders sieht das es, wenn sie selbstständig und jenseits von esqulino Zeit die Erstellung eigener Homepages investieren möchten. Programme zum generieren von statischen Webseiten verwenden häufig Liquid als Templatingsprache, das gilt insbesondere für das schon vorgestellte Jekyll, welches unter anderem auch auf Github-Pages zum Einsatz kommt. Darüber hinaus wird es in den Software-as-a-Service Angeboten von kommerziellen Anbietern wie Salesforce oder Shopify genutzt. Angular und Handlebars werden hingegen faktisch ausschließlich in den jeweiligen Javascript-Bibliotheken verwendet.
+
+Letzten Endes stellt sich faktisch nur die Frage, ob Handlebars oder Liquid zum Einsatz kommen sollte: Angular 2 ist sowohl technisch als auch syntaktisch sehr kompliziert und eignet sich nicht besonders gut als "`erste Templatingsprache"'. Diese qualitative Entscheidung zugunsten von Liquid berücksichtigt vor allem die geringe technische Komplexität, wird von der quantitativen Auswertung in Tabelle~\ref{tab:scoring-templating-language} aber eindeutig bestätigt. Die Tatsache, dass die Referenzimplementierung von Liquid wie der esqulino-Server in Ruby entwickelt wird ist ein netter zusätzlicher Faktor. Dieser wird zwar von der quantitativen Auswertung nicht berücksichtigt, erleichtert aber die Implementierung.
+
+\begin{table}[h]
   \centering 
-  \begin{tabular}{ l|c c c }
+  \begin{tabular}{ l c c c }
                  & Liquid                 & Handlebars                & Angular 2                       \\
     \hline
-    Technik      & 5, Textersetzung       & 3, Kompiliert zu JS       & 2, Kompiliert zu JS, virtuelles \texttt{DOM}      \\
+    Technik      & 5                      & 3                         & 2                               \\
     Syntax       & 5                      & 5                         & 3                               \\
     Verbreitung  & 3                      & 3                         & 1                               \\
-    Erweiterbar  & 3                      & 3                         & 3                               \\
-    Übergreifend & 3                      & 2                         & 0                               \\                                                                 
+    Erweiterbar  & 3                      & 3                         & 2                               \\
+    Übergreifend & 3                      & 2                         & 0                               \\
+    \hline \hline
+                 & 19                     & 15                        & 8
   \end{tabular}
   \caption{Scoring-Modell für Templatingsprachen}
+  \label{tab:scoring-templating-language}
 \end{table}
 
-Sowohl Handlebars als auch Angular 2 nehmen HTML Templates entgegen und generieren daraus zur Laufzeit Javascript, welches die sich ergebende HTML-Struktur unmittelbar in den DOM-Baum des Browsers injiziert. Angular 2 geht noch einen Schritt weiter und gibt die neue Struktur nicht ungefiltert an den Browser weiter, sondern erstellt mit Hilfe eines virtuellen DOM einen Satz an inkrementell nötigen Änderungen. Das Ergebnis eines Rendervorgangs mit Liquid ist hingegen ein einfacher String mit dem gerenderten Template.
-
-Die Syntax von Liquid und Handlebars ist bemerkenswert ähnlich und basiert auf geschweiften Klammern, welche sich optisch merklich vom normalen HTML-Inhalt abheben. Angular 2 erweitert hingegen
+Ebenfalls nicht entscheidend, aber erfreulich, ist der Umstand, dass mit Liquid beliebige Textdateien angereichert werden können, da die Struktur des umgebenden Dokuments wird vom Liquid-Renderer ignoriert wird. Dieser kümmert sich lediglich um die in eingebetteten Anweisungen und behandelt alle Teile dazwischen als einfachen \texttt{string}. Für esqulino bedeutet das vor allem, dass für andere Arten von Dokumenten nicht zwingend eine weitere Templatingsprache notwendig wäre. Zum Beispiel wäre ebenfalls die Bereitstellung einer dynamisch generierten \texttt{robots.txt}\footnote{Diese Datei wird von Suchmaschinen ausgewertet, um gewisse Teile der Seite von der Indexierung auszuschließen.} oder einer Sitemap\footnote{Typischerweise ein XML-Dokument, welches alle zu indexierenden Seiten mit einigen Metadaten, zum Beispiel die Frequenz von Veränderungen, auflistet.} möglich. Mit rein auf die Generierung von HTML ausgelegten Sprachen wäre das nicht möglich.
 
 \subsubsection{Die Templatingsprache Liquid}
 
-Auch wenn die Schüler mit der Syntax der verwendeten Templatingsprache in der finalen Version von esqulino nur oberflächlich in Berührung kommen sollen, ist eine kurze Betrachtung der Syntax dieser Sprache unumgänglich: Die initiale Version wird von Liquid aus Zeitgründen nicht viel abstrahieren können.
-
-Theoretisch können mit Liquid beliebige Textdateien angereichert werden, die Struktur des umgebenden Dokuments wird vom Parser ignoriert. Dieser kümmert sich lediglich um die in eingebetteten Anweisungen und behandelt alle Teile dazwischen als einfachen \texttt{string}. Für esqulino bedeutet das vor allem, dass für andere Arten von Dokumenten nicht zwingend eine weitere Templatingsprache notwendig wäre. Zum Beispiel wäre ebenfalls die Bereitstellung einer dynamisch generierten \texttt{robots.txt}\footnote{Diese Datei wird von Suchmaschinen ausgewertet, um gewisse Teile der Seite von der Indexierung auszuschließen.} oder einer Sitemap\footnote{Typischerweise ein XML-Dokument, welches alle zu indexierenden Seiten mit einigen Metadaten, zum Beispiel die Frequenz von Veränderungen, auflistet.} möglich.
+Auch wenn die Schüler mit der Syntax der verwendeten Templatingsprache in der finalen Version von esqulino nur oberflächlich in Berührung kommen sollen, wird Liquid an dieser Stelle noch formal vorgestellt. Aufbauend auf dieser Vorstellung wird dann untersucht, wie die entsprechenden Funktionalitäten den Lernenden gezielt vermittelt werden können. Und abgesehen davon sollen Schüler den gesamten Umfang der Sprache bei Bedarf (oder Interesse) ja auch textuell Nutzen können.
 
 Grundsätzlich wird in Liquid zwischen drei verschiedenen Arten von Anweisungen mit jeweils eigener Syntax unterschieden \cite{liquid-introduction}:
 
 \begin{description}
 \item[Objekte] \hfill \\
-  In das Dokument eingebettete Werte werden in doppelt geschweiften Klammern notiert (also \texttt{\{\{Objekt\}\}}).
+  In das Dokument eingebettete Werte werden in doppelt geschweiften Klammern notiert (also \texttt{\{\{Objekt\}\}}). Der Zugriff auf Eigenschaften von Kind-Objekten ist mit dem \texttt{.}-Operator möglich.
 \item[Tags] \hfill \\
-  Tags steuern den Programmfluss mit Anweisungen wie \texttt{if} und \texttt{for}. Um sie von interpolierten Werten zu unterscheiden
+  Tags steuern den Programmfluss mit Anweisungen wie \texttt{if} und \texttt{for}. Um sie von interpolierten Werten zu unterscheiden werden diese Anweisungen in \texttt{\{\% \%\}}-Klammerpaaren notiert.
 \item[Filter] \hfill \\
-  Anwendung von Funktionen auf bestehende Daten.
+  Mit Filtern können in Ausdrücken genutzte Daten manipuliert werden. Sie funktionieren nach dem gleichen Prinzip wie Pipes auf der Kommandozeile und ermöglichen es die Repräsentation von Daten zu verändern.
 \end{description}
 
 Alle diese Anweisungen beziehen sich immer auf eine vordefinierte Datenquelle, welcher dem Renderer zusammen mit dem eigentlichen Template übergeben wird. Dieser Datenbestand gliedert sich in Name-Wert-Paare, Listen und atomare Werte, die Navigation erfolgt mittels des \texttt{.}-Operators für Zugriffe auf benannte Schlüssel oder mit dem \texttt{[]}-Operator für einzelne Werte eines Arrays.
