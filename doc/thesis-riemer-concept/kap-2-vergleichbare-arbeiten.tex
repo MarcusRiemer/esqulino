@@ -19,25 +19,37 @@ Andere Entwicklungsumgebungen für Datenbanken und auch Generatoren für Abfrage
 
 Diese Masterarbeit zieht eine Menge Inspiration aus dem Scratch-Project des Massachusetts Institute of Technology (MIT)\footnote{\url{https://scratch.mit.edu/}}. Bei Scratch handelt es sich um eine Entwicklungsumgebung speziell für Kinder und Jugendliche deren bestimmendes Bedienkonzept eine visuelle Programmiersprahe ist. Scratch lehrt den Umgang mit imperativen und ereignisorientierten Programmierkonzepten und ist damit in Bezug auf die zu vermittelnden Inhalte von dieser Thesis doch deutlich entfernt. Abbildung \ref{fig:scratch-editor-full} zeigt wie die Oberfläche von Scratch für einen Entwickler aussieht, Abbildung \ref{fig:scratch-enduser-full} demonstriert wie sich ein Projekt initial einem Endanwender präsentiert.
 
-Im weiteren Verlauf der Arbeit wird jedoch noch deutlich werden, dass sich esqulino an vielen Stellen sehr stark an Scratch orientiert. So nutzt auch esqulino einen Drag \& Drop Editor um Syntaxfehler von vornerein auszuschließen und kontextsensitiv mögliche Operationen hervorzuheben. Die Verwendung eines, zu diesem Zeitpunkt allerdings nicht vollständig ausgearbeiteten, Farbkonzeptes nimmt sich ebenfalls Scratch zum Vorbild. Und schließlich ist auch die Zweiteilung eines Projekts in eine Besucheransicht sowie eine Entwickleransicht und der Wechsel zwischen diesen Modi eine direkte Inspiration.
+Im weiteren Verlauf der Arbeit wird noch deutlich werden, dass sich esqulino an vielen Stellen sehr stark an Scratch orientiert. So nutzt auch esqulino einen Drag \& Drop Editor um Syntaxfehler von vornerein auszuschließen und kontextsensitiv mögliche Operationen hervorzuheben. Die Verwendung eines, zu diesem Zeitpunkt allerdings nicht vollständig ausgearbeiteten, Farbkonzeptes nimmt sich ebenfalls Scratch zum Vorbild. Und schließlich ist auch die Zweiteilung eines Projekts in eine Besucheransicht sowie eine Entwickleransicht und der Wechsel zwischen diesen Modi eine direkte Inspiration.
 
 Scratch baut dabei nicht auf einer bestehenden Programmiersprache auf, sondern nutzt eine Eigenentwicklung. Die Schlüsselwörter dieser Sprache, wie auch die Oberfläche des Editors, sind dabei in viele verschiedene natürliche Sprachen (Englisch, Deutsch, Spanisch, ...) übersetzt worden. Esqulino geht an dieser Stelle einen anderen Weg und lehrt unmittelbar den Umgang mit SQL und HTML, allerdings in gegebenenfalls redizierten Umfängen (siehe \ref{sec:sql-subset} \nameref{sec:sql-subset} und \ref{sec:design-ui-concept} \nameref{sec:design-ui-concept}).
 
 Mit Scratch entwickelte Programme basieren in der Regel darauf Figuren über eine Zeichenfläche zu verschieben. Dementsprechend gut eignet sich Scratch zur Entwicklung kleinerer Spiele, die Werte von Variablen (Position, Orientierung, Größe, ... von Objekten) können im Regelfall sehr intuitiv erfasst werden.
 
+\subsection{Software: App Inventor}
+
+Bei dem AppInventor handelt es sich um eine Kollaboration des MIT mit Google und gewissermaßen um eine logische Fortführung von Scratch. Erstellt werden mit dem AppInventor nicht mehr in Webseiten einbettbare Flash-Anwendungen, sondern Apps für das Android Betriebssystem. Wie schon Scratch läuft auch diese Anwendung in einem Webbrowser. Grundsätzlich ist auch diese Webseite in verschiedenen Sprachen verfügbar, Deutsch zählt zum gegenwärtigen Zeitpunkt allerdings nicht dazu.
+
+Im Vergleich zu Scratch ist der AppInventor wesentlich anspruchsvoller, die Struktur der relativ komplizierten Android-Oberflächen wird vor dem Benutzer nicht versteckt, dafür aber in einen WYSIWYG-Editor verpackt\footnote{"`What You See Is What You Get"' bezeichnet die visuelle Vorschau in einem Editor ohne den Umweg über einen Kompilierungsschritt.}. Der zu schreibende Programmcode wird, wie schon bei Scratch, in einer abstrakten Sprache mit Drag \& Drop Elementen formuliert. Daraus wird dann Java-Code erzeugt, diesen bekommt der Entwickler im Normalfall aber nicht zu Gesicht.
+
+Um die Anwendungen zu testen müssen diese auf das Handy der Entwickler geladen oder in einem Emulator ausgeführt werden. Es ist dafür nötig, ein (reales oder emuliertes) Gerät über die "`App Inventor Companion App"' direkt mit der Webseite zu verbinden. Sobald diese Verbindung steht werden die im Browser vorgenommenen Änderungen mit einer kurzen Verzögerung auf dem Smartphone widergespiegelt.
+
+Wie Scratch befördert auch der App Inventor den Austausch von Entwicklern untereinander. Es ist möglich die eigenen Apps in einer Gallerie auszustellen und dort zu den Entwicklungen von anderen Menschen Rückmeldung zu geben. Die Arbeitsergebnisse sind dabei häufig sehr datenorientiert: Die Vorauswahl an verfügbaren Bedienelementen umfasst zwar neben typischen Bedienelementen wie Textfeldern oder Auswahllisten auch grafische Komponenten wie Bälle oder Zeichenflächen. Der Umgang mit diesen Elementen ist im Vergleich zu Scratch alleine durch den im direkten Vergleich wesentlich langsameren Rückmeldezyklus wesentlich anspruchsvoller. Um korrekte Ergebnisse zu erhalten ist es notwendig sich schon im Voraus recht viele Gedanken zu machen.
+
+Auch aufgrund der schieren Masse an möglichen Bedienelementen und den teilweise sehr unterschiedlichen darauf definierten Operationen wird der Komplexitätsgrad merklich gesteigert. Anders als bei Scratch kann man sich nicht mehr ohne weiteres durch eine sehr begrenzte Anzahl von Möglichkeiten durchklicken und sich am Ende halbwegs sicher sein nun auch alles gesehen zu haben. Dieser erhöhte Komplexitätsgrad ist dabei selbstverständlich nicht nur als Nachteil zu verstehen: Man richtet sich mit dem App Inventor an eine fortgeschrittenere Zielgruppe als jene von Scratch.
+
+\begin{figure}[p]
+  \centering \includegraphics[width=\textwidth]{images/related-work-app-inventor-designer.png}
+  \caption{Oberflächeneditor des App Inventor}
+  \label{fig:app-inventor-ui-designer}
+\end{figure}
+
+\begin{figure}[p]
+  \centering \includegraphics[width=\textwidth]{images/related-work-app-inventor-blocks.png}
+  \caption{Codeeditor des App Inventor.}
+  \label{fig:app-inventor-block-designer}
+\end{figure}
+
 \subsection{Kurs: SqlZoo}
-
-\begin{figure}[p]
-  \centering \includegraphics[width=\textwidth]{images/related-work-sql-zoo.png}
-  \caption{Ergebnisansicht mit aktiviertem Hinweis für eine einzelne Aufgabe des SqlZoo.}
-  \label{fig:sqlzoo-check-result}
-\end{figure}
-
-\begin{figure}[p]
-  \centering \includegraphics[width=\textwidth]{images/related-work-sql-zoo-error.png}
-  \caption{Technische Fehlermeldung einer Datenbank aufgrund eines Syntaxfehlers in der Eingabemaske von SqlZoo.}
-  \label{fig:sqlzoo-check-result}
-\end{figure}
 
 Bei der Webseite "`SqlZoo"' handelt es sich sowohl um einen Kurs in Form einer Sammlung von aufeinander aufbauenden Aufgaben inklusive begleitendem Lehrmaterial, als auch eine webbasierte Software in welcher die Lernenden ihre ersten Schritte mit SQL machen. Anders als in Scratch erfolgt die Programmierung der nötigen Abfragen in einem normalen Textfeld und "`echtem"' SQL. Syntax-Hervorhebung oder andere unterstützende Hilfsmittel wie automatische Code-Formatierung sind nicht vorhanden.
 
@@ -51,28 +63,16 @@ Es ist mit dem SqlZoo prinzipiell auch möglich mutierende Abfragen auszuführen
 
 Auch wenn es durch den Wiki-Unterbau von SqlZoo den Lernenden theoretisch möglich wäre eigene Projektideen innerhalb der Webseite umzusetzen, ist das eindeutig nicht das Ziel des Angebotes. Anders als bei Scratch oder dem App Inventor steht am Ende dieses Angebotes also keine eigene Software, sondern Erkenntnisgewinn.
 
-\subsection{Software: App Inventor}
-
-Bei dem AppInventor handelt es sich um eine Kollaboration des MIT mit Google und gewissermaßen um eine logische Fortführung von Scratch. Erstellt werden mit dem AppInventor nicht mehr in Webseiten einbettbare Flash-Anwendungen, sondern Apps für das Android Betriebssystem. Wie schon Scratch läuft auch diese Anwendung in einem Webbrowser. Grundsätzlich ist auch diese Webseite in verschiedenen Sprachen verfügbar, Deutsch zählt zum gegenwärtigen Zeitpunkt allerdings nicht dazu.
-
-Im Vergleich zu Scratch ist der AppInventor wesentlich anspruchsvoller, die Struktur der relativ komplizierten Android-Oberflächen wird vor dem Benutzer nicht versteckt, dafür aber in einen WYSIWYG-Editor verpackt\footnote{"`What You See Is What You Get"' bezeichnet die visuelle Vorschau in einem Editor ohne den Umweg über einen Kompilierungsschritt.}. Der zu schreibende Programmcode wird, wie schon bei Scratch, in einer abstrakten Sprache mit Drag \& Drop Elementen formuliert. Daraus wird dann Java-Code erzeugt, diesen bekommt der Entwickler im Normalfall aber nicht zu Gesicht.
-
-Um die Anwendungen zu testen müssen diese auf das Handy der Entwickler geladen oder in einem Emulator ausgeführt werden. Es ist dafür nötig, ein (reales oder emuliertes) Gerät über die "`App Inventor Companion App"' direkt mit der Webseite zu verbinden. Sobald diese Verbindung steht werden die im Browser vorgenommenen Änderungen fast sofort auf dem Smartphone widergespiegelt.
-
-Wie Scratch befördert auch der App Inventor den Austausch von Entwicklern untereinander. Es ist möglich die eigenen Apps in einer Gallerie auszustellen und dort zu den Entwicklungen von anderen Menschen Rückmeldung zu geben. Die Arbeitsergebnisse sind dabei häufig sehr datenorientiert: Die Vorauswahl an verfügbaren Bedienelementen umfasst zwar neben typischen Bedienelementen wie Textfeldern oder Auswahllisten auch grafische Komponenten wie Bälle oder Zeichenflächen. Der Umgang mit diesen Elementen ist im Vergleich zu Scratch alleine durch den im direkten Vergleich sehr langsamen Rückmeldezyklus wesentlich anspruchsvoller. Um korrekte Ergebnisse zu erhalten ist es notwendig sich schon im Voraus recht viele Gedanken zu machen.
-
-Auch aufgrund der schieren Masse an möglichen Bedienelementen und den teilweise sehr unterschiedlichen darauf definierten Operationen wird der Komplexitätsgrad merklich gesteigert. Anders als bei Scratch kann man sich nicht mehr ohne weiteres durch eine sehr begrenzte Anzahl von Möglichkeiten durchklicken und sich am Ende halbwegs sicher sein nun auch alles gesehen zu haben. Dieser erhöhte Komplexitätsgrad ist dabei selbstverständlich nicht nur als Nachteil zu verstehen: Er richtet sich lediglich an eine andere Zielgruppe als Scratch.
-
 \begin{figure}[p]
-  \centering \includegraphics[width=\textwidth]{images/related-work-app-inventor-designer.png}
-  \caption{Oberflächeneditor des App Inventor}
-  \label{fig:app-inventor-ui-designer}
+  \centering \includegraphics[width=\textwidth]{images/related-work-sql-zoo.png}
+  \caption{Ergebnisansicht mit aktiviertem Hinweis für eine einzelne Aufgabe des SqlZoo.}
+  \label{fig:sqlzoo-check-result}
 \end{figure}
 
 \begin{figure}[p]
-  \centering \includegraphics[width=\textwidth]{images/related-work-app-inventor-blocks.png}
-  \caption{Codeeditor des App Inventor.}
-  \label{fig:app-inventor-block-designer}
+  \centering \includegraphics[width=\textwidth]{images/related-work-sql-zoo-error.png}
+  \caption{Technische Fehlermeldung einer Datenbank aufgrund eines Syntaxfehlers in der Eingabemaske von SqlZoo.}
+  \label{fig:sqlzoo-check-result}
 \end{figure}
 
 \subsection{Software: Jekyll}
