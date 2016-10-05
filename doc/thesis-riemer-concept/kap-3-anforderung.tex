@@ -390,11 +390,11 @@ Letztendlich existiert aber auch noch ein sehr viel profanerer Faktor: Der Autor
 
 \subsubsection{Grundsätzlicher Aufbau des Editors}
 
-Es stellt sich zunächst die Frage, ob der Editor, wie Scratch, mit einer Drag \& Drop Seitenleiste ausgestattet werden sollte, oder ob auch ein anderes Bedienkonzept denkbar wäre. Ein grundsätzlicher Nachteil Drag \& Drop Bedienkonzeptes ist der nötige Platz für die Unterbringung aller verwendbaren Komponenten. Spätestens wenn für die Anzeige aller verfügbaren Optionen nicht ausreichend Platz auf dem Bildschirm vorhanden ist, muss sorgfältig geplant werden, wie die Bedienelemente anzuordnen sind.
+Es stellt sich zunächst die Frage, ob der Editor, wie Scratch, mit einer Drag \& Drop Seitenleiste ausgestattet werden sollte, oder ob auch ein anderes Bedienkonzept denkbar wäre. Ein grundsätzlicher Nachteil Drag \& Drop Bedienkonzeptes ist der nötige Platz für die Unterbringung aller verwendbaren Komponenten. Spätestens wenn für die Anzeige aller verfügbaren Optionen nicht ausreichend Platz auf dem Bildschirm vorhanden ist, muss sorgfältig geplant werden, wie die entsprechenden Bedienelemente anzuordnen sind.
 
-Scratch nutzt dafür eine Einordnung der Blöcke in zehn Kategorien. Es sind daher nie alle existierenden Blöcke auf einmal sichtbar, sondern immer die thematisch verwandten Blöcke der aktuell gewählten Kategorie. Eine solche Kategorisierung muss sehr sorgfältig entwickelt und vor allem erprobt werden: Sollten die Zuordnung eines Blocks mehrdeutig oder mißverständlich sein besteht die Gefahr, dass er nicht gefunden wird. Im Rahmen dieser Arbeit wird diese Problematik der Kategorisierung erst einmal verschoben: Es gibt keine Kategorisierung, solange die zur Verfügung stehenden Bedienelemente noch bequem Platz in einem Full-HD-Browserfenster haben.
+Scratch nutzt eine Einordnung der Blöcke in zehn Kategorien. Es sind daher nie alle existierenden Blöcke auf einmal sichtbar, sondern immer die thematisch verwandten Blöcke der aktuell gewählten Kategorie. Eine solche Kategorisierung muss sehr sorgfältig entwickelt und vor allem erprobt werden: Sollten die Zuordnung eines Blocks mehrdeutig oder mißverständlich sein besteht die Gefahr, dass er nicht gefunden wird. Im Rahmen dieser Arbeit wird diese Problematik der Kategorisierung daher erst einmal verschoben: Es wird darauf verzichtet, solange die zur Verfügung stehenden Bedienelemente noch bequem Platz in einem Full-HD-Browserfenster haben.
 
-Da der Benutzer immer nur eine Abfrage zur Zeit bearbeiten können soll, ergibt sich der einzig mögliche Platz für viele Blöcke automatisch. Darüber hinaus ist die Reihenfolge eines Großteils der Komponenten einer Abfrage sehr strikt festgelegt, so kann eine \texttt{GROUP BY} Komponente nicht an beliebigen Stellen verwendet werden, sondern nur nach der \texttt{FROM} oder der \texttt{WHERE} Anweisung. Andere Komponenten wie z.B. \texttt{HAVING} oder logische Verknüpfungen mit \texttt{AND} oder \texttt{OR} sind nicht nur von der Reihenfolge, sondern auch von der Existenz anderer Bestandteile abhängig. Ein möglicher Ansatz zur Reduktion der verfügbaren Komponenten wäre also, die möglichen Optionen visuell abgegrenzt Platzhalter innerhalb des Abfrageeditors anzubieten. Ein Klick auf den Platzhalter wandelt diesen dann in einen konkreten Block um und fordert ggfs. zur Angabe der benötigten Parameter auf.
+Da der Benutzer immer nur eine Abfrage zur Zeit bearbeiten können soll, ergibt sich der einzig mögliche Platz für viele Blöcke automatisch. Darüber hinaus ist die Reihenfolge eines Großteils der Komponenten einer Abfrage sehr strikt festgelegt, so kann eine \texttt{GROUP BY} Komponente nicht an beliebigen Stellen verwendet werden, sondern nur nach der \texttt{FROM} oder der \texttt{WHERE} Anweisung. Andere Komponenten wie z.B. \texttt{HAVING} oder logische Verknüpfungen mit \texttt{AND} oder \texttt{OR} sind nicht nur von der Reihenfolge, sondern auch von der Existenz anderer Bestandteile abhängig. Ein möglicher Ansatz zur Reduktion der verfügbaren Komponenten wäre also, die möglichen Optionen visuell abgegrenzt Platzhalter innerhalb des Abfrageeditors anzubieten. Ein Klick auf den Platzhalter könnte diesen dann in einen konkreten Block umwandeln und gegebenenfalls zur Angabe der benötigten Parameter auffordern.
 
 \begin{figure}[p]
   \includegraphics[width=\textwidth]{images/sql-sketch-all-editing}
@@ -402,7 +402,9 @@ Da der Benutzer immer nur eine Abfrage zur Zeit bearbeiten können soll, ergibt 
   \label{fig:screen-sql-editor-all-editing}
 \end{figure}
 
-Im Rahmen der entwickelten Prototypen hat sich herausgestellt, dass eine permanente Anzeige aller Editierungsmöglichkeiten mit einem sehr überladen wirkenden Benutzerinterface einher geht, insbesondere was die Einblendung von Platzhaltern angeht. Abbildung \ref{fig:screen-sql-editor-all-editing} zeigt einen Screenshot des Prototypen, bei dem nahezu alle denkbaren Editierungsoptionen gleichzeitig für den Lernenden verfügbar sind und daher angezeigt werden müssen. Trotz der klaren visuellen Unterscheidung fällt es schwer mit nur einem Blick zu erkennen, was die Abfrage jetzt tatsächlich beinhaltet. Statt jederzeit alle Optionen anzuzeigen wurde dann noch die Position des Mauszeigers herangezogen um zu entscheiden, welche Platzhalter angezeigt werden sollen. Das Ergebnis war allerdings eine Benutzerschnittstelle, deren Bedienelemente häufig und für einen ungeübten Benutzer auch unerwartet ihre Position verändert haben. Dementsprechend wurde dieser Ansatz noch in der Konzeptionsphase verworfen.
+Im Rahmen der vorab entwickelten, rein visuellen Prototypen hat sich herausgestellt, dass eine permanente Anzeige aller Editierungsmöglichkeiten mit einem sehr überladen wirkenden Benutzerinterface einher geht, insbesondere was die Einblendung von Platzhaltern angeht. Abbildung \ref{fig:screen-sql-editor-all-editing} zeigt einen Screenshot eines Prototypen, bei dem nahezu alle denkbaren Editierungsoptionen gleichzeitig für den Lernenden verfügbar sind und daher angezeigt werden müssen. Trotz der klaren visuellen Unterscheidung fällt es schwer mit nur einem Blick zu erkennen, was die Abfrage jetzt tatsächlich beinhaltet.
+
+Statt jederzeit alle Optionen anzuzeigen, könnte dann noch die Position des Mauszeigers herangezogen um zu entscheiden, welche Platzhalter angezeigt werden sollen. So wurden alle Editierfunktionen ausgeblendet, wenn sich die Maus außerhalb der Abfrage befand, die \texttt{JOIN}-Optionen nur gezeigt, wenn der Cursor sich gerade in der Nähe befand, ... Das Ergebnis war allerdings eine Benutzerschnittstelle, deren Bedienelemente häufig und für einen ungeübten Benutzer auch unerwartet ihre Position verändert haben. Dementsprechend wurde dieser Ansatz noch in der Konzeptionsphase verworfen. Darüber hinaus hätte man mit diesem Ansatz nur hierarchisch verwandte Bereiche ausblenden können: Für die \texttt{GROUP BY}-, \texttt{ORDER BY}- oder \texttt{UNION}-Platzhalter ergibt sich keine intuitive Position des Mauszeigers, bei der diese kontextsensitiv eingeblendet werden könnten.
 
 Das endgültig implementierte Design (Abbildung \ref{fig:screen-sql-editor-drag-drop}) lehnt sich nun doch an Scratch an, versucht allerdings mit Platzhaltern den Benutzer kontextsensitiv zu unterstützen. Wenn dieser zum Beispiel einen Vergleichsoperator für Ausdrücke in der Seitenleiste anwählt, werden im Hauptfenster die validen Drop-Ziele hervorgehoben. Unter dem eigentlichen Editor befinden sich dann zwei weitere Bereiche (Abbildung \ref{fig:screen-sql-editor-parameters-preview}): Zum einen die Ergebnisanzeige, welche die zur aktuellen Gestalt der Abfrage passenden Zeilen zeigt. Und zum anderen eine Möglichkeit, bei Abfragen mit Parametern die nötigen Werte zu definieren. Und an dieser Abbildung wird ein weiteres Detail deutlich: Abfragen lassen sich nur als "`einzeilig"' deklarieren, wenn eine \texttt{WHERE}-Komponente vorhanden ist.
 
@@ -418,29 +420,32 @@ Das endgültig implementierte Design (Abbildung \ref{fig:screen-sql-editor-drag-
   \label{fig:screen-sql-editor-parameters-preview}
 \end{figure}
 
+\subsubsection{Umgang mit Ausdrücken}
 
-\todo[inline]{Perspektivisch interessant wäre an dieser Stelle noch die Hervorhebung in die andere Richtung: Wenn man mit der Maus über eine SQL-Komponente im Editorfenster verweilt, werden die möglichen Optionen in der Seitenleiste hervorgehoben.}
-
-\subsubsection{\texttt{SELECT}}
-
-\todo[inline]{Hier fehlt Text}
-
-\subsubsection{\texttt{JOIN}}
-
-Wenn der Benutzer eine Drag-Operation mit einer Tabelle beginnt, kann er die Tabelle wahlweise auf einer bestehenden Tabelle "`fallen lassen"', einen $\bigoplus$-Indikator nach der letzten Tabelle oder den \texttt{FROM}-Text selbst fallen lassen. Eingefügt wird dabei im Falle von schon existierenden Elementen immer nach dem Ziel, Indikatoren werden einfach durch das neue Element ersetzt.
-
-\subsubsection{\texttt{WHERE}}
-
-\todo[inline]{Hier fehlt Text}
-
-\subsubsection{\texttt{GROUP BY}}
-
-Sobald in einer Abfrage eine \texttt{GROUP BY} Komponente auftaucht, hat dies Auswirkungen auf die Möglichkeiten innerhalb der \texttt{SELECT} Anweisung. Da keine Auswahl von ungruppierten und nicht-aggregierten Spalten möglich sein darf, müssen diese entfernt werden. Insbesondere wenn der Benutzer vorher schon mit komplizierten Ausdrücken im \texttt{SELECT} gearbeitet haben sollte, ist also zumindest eine Warnung nötig.
+Innerhalb der \texttt{SELECT}- und \texttt{WHERE}-Komponenten können theoretisch beliebige Ausdrücke auftreten. Diese unterscheiden sich ganz wesentlich anhand ihrer benötigten Parameter. Konstanten, Spalten und "`Benutzerwerte"' stehen für sich, können also unmittelbar verwendet werden. Sofern Ausdrücke andere Ausdrücke zur Auswertung benötigen, zum Beispiel das logische \texttt{UND}, werden diese zunächst durch einen speziellen Platzhalter gefüllt. Auf diesen Platzhalter lassen sich dann wie gewohnt per Drag \& Drop andere Ausdrücke der Abfrage oder Elemente aus der Seitenleiste ziehen.
 
 \subsubsection{Abfragen mit Parametern}
 \label{sec:design-query-params}
 
-Um eine Interaktion mit Endbenutzern zu ermöglichen können in Abfragen auch benannte Parameter anstelle von konstanten Werten verwendet werden. Diese müssen dann zur Laufzeit vom Benutzer angegeben werden. Aus Sicht der SQL-Abfrage ist diese Ergänzung relativ trivial, schließlich sind benannte Parameter Teil faktisch jeder SQL-Implementierung. Die eigentliche Problematik liegt im Binden dieser Parameter zur Laufzeit. Das Kapitel \ref{sec:design-ui-editor} beschreibt den Editor für Benutzeroberflächen, durch welchen die Verknüpfung mit den Bedienelementen der Oberfläche vorgenommen wird.
+Um eine Interaktion mit Endbenutzern zu ermöglichen können in Ausdrücken auch benannte Parameter ("`Benutzerwerte"') anstelle von konstanten Werten verwendet werden. Im Gegensatz zu Konstanten werden diese zur Laufzeit vom Benutzer angegeben. Aus Sicht der SQL-Abfrage ist diese Ergänzung relativ trivial, schließlich sind benannte Parameter Teil faktisch jeder SQL-Implementierung. Die eigentliche Problematik liegt im Binden dieser Parameter zur Laufzeit. Das Kapitel \ref{sec:design-ui-editor} beschreibt den Editor für Benutzeroberflächen, durch welchen die Verknüpfung mit den Bedienelementen der Oberfläche vorgenommen wird.
+
+Innerhalb des Abfrageeditors können solche parametrisierten Abfragen dann natürlich nicht mehr direkt ausgeführt werden. Auf diesen Umstand wird der Entwickler, wie in Abbildung~\ref{fig:screen-sql-editor-parameters-preview} zu sehen ist, direkt innerhalb des Editors hingewiesen.
+
+\subsubsection{\texttt{FROM}}
+
+Wenn der Benutzer eine Drag-Operation mit einer Tabelle beginnt, kann er die Tabelle wahlweise auf einer bestehenden Tabelle "`fallen lassen"', einen $\bigoplus$-Indikator nach der letzten Tabelle oder den \texttt{FROM}-Text selbst fallen lassen. Eingefügt wird dabei im Falle von schon existierenden Elementen immer nach dem Ziel, die $\bigoplus$-Indikatoren werden hingegen einfach durch das neue Element ersetzt.
+
+Diese Komponente beinflusst unmittelbar die in der Seitenleiste zur Verfügung stehenden Daten. Für Tabellen, die bisher nicht als Teil der \texttt{FROM}-Komponente sind, stehen die Spalten nämlich nicht zur Verfügung. Erst wenn man diese Tabelle mit einem \texttt{JOIN} in die Abfrage einbindet, erscheinen auch die dazugehörigen Spalten in der Seitenleiste.
+
+\subsubsection{\texttt{WHERE}}
+
+Sobald eine Drag-Operation mit einem Ausdruck beginnt, wird entweder die \texttt{WHERE}-Komponente mit einem $\bigoplus$-Indikator eingeblendet oder, im Falle von schon existierenden Einschränkungen, die \texttt{AND}- und \texttt{OR}-Operatoren, ebenfalls mit einem $\bigoplus$-Indikator. Der letztere Fall wird in Abbildung~\ref{fig:screen-sql-editor-drag-drop} illustriert.
+
+Syntaktisch gesehen wären die logischen Verknüpfungen natürlich auch als Teil der "`normalen"' binären Ausdrücke möglich. In der Praxis wird der Quelltext von SQL-Abfragen allerdings häufig anhand dieser Verknüpfungen umgebrochen. An dieser Stelle folgt esqulino also einer bewährten Konvention, auch wenn das syntaktisch nicht unbedingt notwendig wäre.
+
+\subsubsection{\texttt{GROUP BY}}
+
+Sobald in einer Abfrage eine \texttt{GROUP BY} Komponente auftaucht, hat dies Auswirkungen auf die Möglichkeiten innerhalb der \texttt{SELECT} Anweisung. Da keine Auswahl von ungruppierten und nicht-aggregierten Spalten möglich sein darf, müssen diese entfernt werden. Insbesondere wenn der Benutzer vorher schon mit komplizierten Ausdrücken im \texttt{SELECT} gearbeitet haben sollte, ist also zumindest eine Warnung nötig.
 
 \subsubsection{Manipulation von Daten}
 
