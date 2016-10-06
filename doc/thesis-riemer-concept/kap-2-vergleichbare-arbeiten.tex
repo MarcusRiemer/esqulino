@@ -6,13 +6,13 @@ Andere Entwicklungsumgebungen für Datenbanken und auch Generatoren für Abfrage
 \subsection{Software: Scratch}
 
 \begin{figure}[p]
-  \centering \includegraphics[width=0.7\textwidth]{images/related-work-scratch-editor-full.png}
+  \centering \includegraphics[width=\textwidth]{images/related-work-scratch-editor-full.png}
   \caption{Der Scratch-Editor mit einem Beispielprojekt aus Sicht eines Entwicklers}
   \label{fig:scratch-editor-full}
 \end{figure}
 
 \begin{figure}[p]
-  \centering \includegraphics[width=0.7\textwidth]{images/related-work-scratch-project-full.png}
+  \centering \includegraphics[width=0.8\textwidth]{images/related-work-scratch-project-full.png}
   \caption{Ein Scratch Projekt mit kurzen Handlungsanweisungen und einem Kommentarbereich in der Sicht für Endanwender.}
   \label{fig:scratch-enduser-full}
 \end{figure}
@@ -165,15 +165,29 @@ Ein Lightswitch-Projekt gliedert sich in zwei wesentliche Unterstrukturen: Daten
   \label{fig:lightswitch-ui-designer}
 \end{figure}
 
+\subsection{Buch: Die Macht der Abstraktion}
+
+Bei diesem Buch von Herbert Klaeren und Michael Spaerber wird ein sehr von Datenstrukturen geprägter Ansatz zur Einführung in die Programmierung gewählt. Die Autoren beschreiben die gängigen Programmiersprachen aufgrund ihrer umfangreichen Syntax als ungeeignet für die Einführung in die Programmierung \cite[2]{macht-der-abstraktion}. 
+
+Folglich unterrichtet das Buch auch nicht Java, C\#, Python, Ruby oder Pascal. Stattdessen kommt der Scheme-Dialekt ``Racket'' zum Einsatz. Bei Scheme handelt es sich wiederrum um einen der wesentlichen Dialekte von Lisp, einer Programmiersprache deren Syntax fast exklusiv auf der Verwendung von runden Klammern zur Beschreibung von Tupeln aufbaut. Durch diese sehr reduzierte Syntax versprechen sich die Autoren die Vermeidung von typischen syntaktischen Stolperfallen, mit denen Lernende zu Beginn oft Schwierigkeiten haben.
+
+Die Anpassung an eine für Lernende gut geeignete Umgebung geht allerdings über diese vergleichsweise simple Syntax hinaus: Der Sprachumfang von Racket selbst wird im Laufe des Buches mehrfach erweitert.
+
+\begin{figure}[p]
+  \centering \includegraphics[width=0.7\textwidth]{images/related-work-drracket.png}
+  \caption{Die Entwicklungsumgebung ``Dr Racket''}
+  \label{fig:drracket-ui}
+\end{figure}
+
+\begin{figure}[p]
+  \centering \includegraphics[width=0.7\textwidth]{images/related-work-drracket-language-levels.png}
+  \caption{Verfügbare Sprachniveaus in ``Dr Racket''}
+  \label{fig:drracket-language-levels}
+\end{figure}
+
 \subsection{Software \& Kurs: AppCamps}
 
 \info[inline]{Hamburger Start-Up, dass sich mit einer ebenfalls an Scratch orienterten Entwicklungsumgebung Apps für Smartphones entwickeln können.}
-
-\subsection{Buch: Die Macht der Abstraktion}
-
-\info[inline]{Buch zum Einstieg in die Programmierung mit einem interessanten, sehr Datentypgetriebenen Ansatz.}
-
-\info[inline]{Die Dr. Scheme Umgebung und auch die verwendete Sprache heißt jetzt ``Racket'' und wird immer noch weiter entwickelt.}
 
 \subsection{Software: MySQL Workbench}
 
