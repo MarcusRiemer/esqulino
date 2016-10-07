@@ -1,7 +1,9 @@
 \section{Vergleichbare Arbeiten und Produkte}
 \label{sec:related-work}
 
-Andere Entwicklungsumgebungen für Datenbanken und auch Generatoren für Abfragemasken gibt es in schier unüberblickbarer Zahl. Dieses Kapitel stellt einige der vefügbaren Programme oder Bücher und hebt dabei insbesondere den Einfluss hervor, den sie auf esqulino direkt oder indirekt genommen haben. Sinn dieses Kapitels ist damit der "`Blick über den Tellerrand"' um aus der Vielzahl an verfügbaren Ideen jene herauszustellen die für diese Arbeit von Bedeutung sind. Es handelt sich nicht um eine strukturierte Bewertung oder Einordnung dieser Inspirationsquellen.
+Andere Entwicklungsumgebungen für Datenbanken, Konzepte zur Einführung in die Programmierung und auch Generatoren für Abfragemasken gibt es in schier unüberblickbarer Zahl. Dieses Kapitel stellt einige der vefügbaren Programme oder Bücher und hebt dabei insbesondere den Einfluss hervor, den sie auf esqulino direkt oder indirekt genommen haben. Sinn dieses Kapitels ist damit der "`Blick über den Tellerrand"' um aus der Vielzahl an verfügbaren Ideen jene herauszustellen die für diese Arbeit von Bedeutung sind. Es handelt sich nicht um eine strukturierte Bewertung oder Einordnung dieser Inspirationsquellen.
+
+\newpage
 
 \subsection{Software: Scratch}
 
@@ -17,7 +19,7 @@ Andere Entwicklungsumgebungen für Datenbanken und auch Generatoren für Abfrage
   \label{fig:scratch-enduser-full}
 \end{figure}
 
-Diese Masterarbeit zieht eine Menge Inspiration aus dem Scratch-Project des Massachusetts Institute of Technology (MIT)\footnote{\url{https://scratch.mit.edu/}}. Bei Scratch handelt es sich um eine Entwicklungsumgebung speziell für Kinder und Jugendliche deren bestimmendes Bedienkonzept eine visuelle Programmiersprahe ist. Scratch lehrt den Umgang mit imperativen und ereignisorientierten Programmierkonzepten und ist damit in Bezug auf die zu vermittelnden Inhalte von dieser Thesis doch deutlich entfernt. Abbildung \ref{fig:scratch-editor-full} zeigt wie die Oberfläche von Scratch für einen Entwickler aussieht, Abbildung \ref{fig:scratch-enduser-full} demonstriert wie sich ein Projekt initial einem Endanwender präsentiert.
+Diese Masterarbeit zieht eine Menge Inspiration aus dem Scratch-Project des Massachusetts Institute of Technology (MIT)\footnote{Verfügbar als Download- und Webversion unter \url{https://scratch.mit.edu/}}. Bei Scratch handelt es sich um eine Entwicklungsumgebung speziell für Kinder und Jugendliche deren bestimmendes Bedienkonzept eine visuelle Programmiersprahe ist. Scratch lehrt den Umgang mit imperativen und ereignisorientierten Programmierkonzepten und ist damit in Bezug auf die zu vermittelnden Inhalte von dieser Thesis doch deutlich entfernt. Abbildung \ref{fig:scratch-editor-full} zeigt wie die Oberfläche von Scratch für einen Entwickler aussieht, Abbildung \ref{fig:scratch-enduser-full} demonstriert wie sich ein Projekt initial einem Endanwender präsentiert.
 
 Im weiteren Verlauf der Arbeit wird noch deutlich werden, dass sich esqulino an vielen Stellen sehr stark an Scratch orientiert. So nutzt auch esqulino einen Drag \& Drop Editor um Syntaxfehler von vornerein auszuschließen und kontextsensitiv mögliche Operationen hervorzuheben. Die Verwendung eines, zu diesem Zeitpunkt allerdings nicht vollständig ausgearbeiteten, Farbkonzeptes nimmt sich ebenfalls Scratch zum Vorbild. Und schließlich ist auch die Zweiteilung eines Projekts in eine Besucheransicht sowie eine Entwickleransicht und der Wechsel zwischen diesen Modi eine direkte Inspiration.
 
@@ -25,9 +27,11 @@ Scratch baut dabei nicht auf einer bestehenden Programmiersprache auf, sondern n
 
 Mit Scratch entwickelte Programme basieren in der Regel darauf Figuren über eine Zeichenfläche zu verschieben. Dementsprechend gut eignet sich Scratch zur Entwicklung kleinerer Spiele, die Werte von Variablen (Position, Orientierung, Größe, ... von Objekten) können im Regelfall sehr intuitiv erfasst werden.
 
+\newpage
+
 \subsection{Software: App Inventor}
 
-Bei dem AppInventor handelt es sich um eine Kollaboration des MIT mit Google und gewissermaßen um eine logische Fortführung von Scratch. Erstellt werden mit dem AppInventor nicht mehr in Webseiten einbettbare Flash-Anwendungen, sondern Apps für das Android Betriebssystem. Wie schon Scratch läuft auch diese Anwendung in einem Webbrowser. Grundsätzlich ist auch diese Webseite in verschiedenen Sprachen verfügbar, Deutsch zählt zum gegenwärtigen Zeitpunkt allerdings nicht dazu.
+Bei dem AppInventor\footnote{Verfügbar unter \url{http://appinventor.mit.edu/}} handelt es sich um eine Kollaboration des MIT mit Google und gewissermaßen um eine logische Fortführung von Scratch. Erstellt werden mit dem AppInventor nicht mehr in Webseiten einbettbare Flash-Anwendungen, sondern Apps für das Android Betriebssystem. Wie schon Scratch läuft auch diese Anwendung in einem Webbrowser. Grundsätzlich ist auch diese Webseite in verschiedenen Sprachen verfügbar, Deutsch zählt zum gegenwärtigen Zeitpunkt allerdings nicht dazu.
 
 Im Vergleich zu Scratch ist der AppInventor wesentlich anspruchsvoller, die Struktur der relativ komplizierten Android-Oberflächen wird vor dem Benutzer nicht versteckt, dafür aber in einen WYSIWYG-Editor verpackt\footnote{"`What You See Is What You Get"' bezeichnet die visuelle Vorschau in einem Editor ohne den Umweg über einen Kompilierungsschritt.}. Der zu schreibende Programmcode wird, wie schon bei Scratch, in einer abstrakten Sprache mit Drag \& Drop Elementen formuliert. Daraus wird dann Java-Code erzeugt, diesen bekommt der Entwickler im Normalfall aber nicht zu Gesicht.
 
@@ -51,11 +55,11 @@ Auch aufgrund der schieren Masse an möglichen Bedienelementen und den teilweise
 
 \subsection{Kurs: SqlZoo}
 
-Bei der Webseite "`SqlZoo"' handelt es sich sowohl um einen Kurs in Form einer Sammlung von aufeinander aufbauenden Aufgaben inklusive begleitendem Lehrmaterial, als auch eine webbasierte Software in welcher die Lernenden ihre ersten Schritte mit SQL machen. Anders als in Scratch erfolgt die Programmierung der nötigen Abfragen in einem normalen Textfeld und "`echtem"' SQL. Syntax-Hervorhebung oder andere unterstützende Hilfsmittel wie automatische Code-Formatierung sind nicht vorhanden.
+Bei der Webseite "`SqlZoo"'\footnote{Verfügbar unter \url{http://sqlzoo.net/}} handelt es sich sowohl um einen Kurs in Form einer Sammlung von aufeinander aufbauenden Aufgaben inklusive begleitendem Lehrmaterial, als auch eine webbasierte Software in welcher die Lernenden ihre ersten Schritte mit SQL machen. Anders als in Scratch erfolgt die Programmierung der nötigen Abfragen in einem normalen Textfeld und "`echtem"' SQL. Syntax-Hervorhebung oder andere unterstützende Hilfsmittel wie automatische Code-Formatierung sind nicht vorhanden.
 
 Dem Lernenden präsentiert sich das Projekt ähnlich wie ein Lehrbuch mit Übungsaufgaben. Diese sind thematisch in Kapitel untergliedert und nutzen in der Regel einen sehr überschaubaren Datenbestand. Die Ergebnisse werden neben dem Textfeld angezeigt und können mit dem korrekten Ergebnis verglichen werden (Abbildung \ref{fig:sqlzoo-check-result}). So können Lernende ihre Ergebnisse selbständig kontrollieren.
 
-Nach den Lerneinheiten folgt dann eine Serie von Quizfragen. Dabei handelt es sich um multiple choice Aufgaben, es müssen keine SQL-Abfragen geschrieben werden. Primär wird bei diesen Fragen eine Zuordnung verlangt: Dem Lernenden wird wahlweise eine Ergebnismenge oder eine Abfrage gezeigt und es muss die jeweils passende Abfrage oder Ergebnismenge dazu identifiziert werden. Weitere Aufgabentypen beschäftigen sich zum Beispiel mit der Wahl der korrekten SQL-Formalisierung zu einer natürlichsprachlich formulierten Anfrage.
+Nach den Lerneinheiten folgt dann eine Serie von Quizfragen (Abbildung \ref{fig:sqlzoo-quiz-sql-formalization}). Dabei handelt es sich um multiple choice Aufgaben, es müssen keine SQL-Abfragen geschrieben werden. Primär wird bei diesen Fragen eine Zuordnung verlangt: Dem Lernenden wird wahlweise eine Ergebnismenge oder eine Abfrage gezeigt und es muss die jeweils passende Abfrage oder Ergebnismenge dazu identifiziert werden. Weitere Aufgabentypen beschäftigen sich zum Beispiel mit der Wahl der korrekten SQL-Formalisierung zu einer natürlichsprachlich formulierten Anfrage.
 
 Ein Alleinstellungsmerkmal dieses Angebots ist die sehr breite Unterstützung verschiedener Datenbanksysteme. Als Lernender kann man die Aufgaben wahlweise mit dem Microsoft SQL Server, Oracle, MySQL, DB2, Ingres oder PostgreSQL lösen. SqlZoo wir ebenfalls in mehreren Sprachen angeboten, die deutsche Übersetzung ist allerdings nicht durchgehend verfügbar.
 
@@ -64,22 +68,23 @@ Es ist mit dem SqlZoo prinzipiell auch möglich mutierende Abfragen auszuführen
 Auch wenn es durch den Wiki-Unterbau von SqlZoo den Lernenden theoretisch möglich wäre eigene Projektideen innerhalb der Webseite umzusetzen, ist das eindeutig nicht das Ziel des Angebotes. Anders als bei Scratch oder dem App Inventor steht am Ende dieses Angebotes also keine eigene Software, sondern Erkenntnisgewinn.
 
 \begin{figure}[p]
-  \centering \includegraphics[width=\textwidth]{images/related-work-sql-zoo.png}
-  \caption{Ergebnisansicht mit aktiviertem Hinweis für eine einzelne Aufgabe des SqlZoo.}
-  \label{fig:sqlzoo-check-result}
-\end{figure}
-
-\begin{figure}[p]
   \centering \includegraphics[width=\textwidth]{images/related-work-sql-zoo-error.png}
   \caption{Technische Fehlermeldung einer Datenbank aufgrund eines Syntaxfehlers in der Eingabemaske von SqlZoo.}
   \label{fig:sqlzoo-check-result}
 \end{figure}
 
+\begin{figure}[p]
+  \centering \includegraphics[width=\textwidth]{images/related-work-sql-zoo-quiz-select-sql.png}
+  \caption{Quizfrage: Zu einer natürlichsprachigen Aussage muss die korrekte SQL-Formalisierung gewählt werden.}
+  \label{fig:sqlzoo-quiz-sql-formalization}
+\end{figure}
+
 \subsection{Software: Jekyll}
 \label{sec:software-jekyll}
-Bei Jekyll handelt es sich um ein Framework zur Erstellung statischer Webseiten. Der Begriff "`statisch"' bezeichnet in diesem Kontext das Ergebnis der Kompilierung: HTML Seiten, die von jedem Webserver unverändert ausgegeben werden können. Technisch gesehen setzt Jekyll auf die HTML-Templatingsprache Liquid auf und stellt während der Generierung einer Seite eine Vielzahl von hilfreichen Metadaten bereit. Diese Metadaten werden entweder implizit aus Dateinamen gewonnen oder in YAML-Notation im Kopf einer Datei definiert.
+Bei Jekyll\footnote{Dokumentation verfügbar unter \url{http://jekyllrb.com/}} handelt es sich um ein quelloffenes Framework zur Erstellung statischer Webseiten. Der Begriff "`statisch"' bezeichnet in diesem Kontext das Ergebnis der Kompilierung: HTML Seiten, die von jedem Webserver unverändert ausgegeben werden können. Technisch gesehen setzt Jekyll auf die HTML-Templatingsprache Liquid auf und stellt während der Generierung einer Seite eine Vielzahl von hilfreichen Metadaten bereit. Diese Metadaten werden entweder implizit aus Dateinamen gewonnen oder in YAML-Notation im Kopf einer Datei definiert.
 
-In der Standardkonfiguration eignet sich Jekyll vor allem um ohne großen Aufwand eine Blog-artige Seite zu betreiben. Alle Dateien die sich in einem speziellen Ordner \lstinline{_posts} befinden werden als Datenquelle für Blogeinträge behandelt. Ein solcher Eintrag könnte dabei aussehen wie in Listing~\ref{lst:jekyll-post}, typischerweise würden natürlich mehrere solcher Dateien für Beiträge existieren. Bei dem Bereich zwischen den \lstinline{---} handelt es sich um das so genannte "`YAML-Frontmatter"'. Diese Metadaten stehen dem Entwickler im Kontext dieser Seite zur Verfügung. Um diese in die Seite einzubetten werden sie als Liquid-Ausdruck in geschweifte Klammern geschrieben.
+In der Standardkonfiguration eignet sich Jekyll vor allem um ohne großen Aufwand eine Blog-artige Seite zu betreiben. Alle Dateien die sich in einem speziellen Ordner \lstinline{_posts} befinden werden als Datenquelle für Blogeinträge behandelt. Ein solcher Eintrag könnte dabei aussehen wie in Listing~\ref{lst:jekyll-post}, typischerweise würden natürlich mehrere solcher Dateien für Beiträge existieren. Bei dem Bereich zwischen den \lstinline{---} handelt es sich um das so genannte "`YAML-Frontmatter"'. Diese Metadaten stehen dem Entwickler im Kontext dieser Seite zur Verfügung. Um diese in die Seite einzubetten werden sie als Liquid-Ausdruck in geschweifte Klammer
+n geschrieben.
 
 Einige der Metadaten werden von Jekyll ausgewertet, zum Beispiel \lstinline{layout}. Dabei handelt es sich um das Liquid-Template, welches einen solchen Beitrag darstellen soll. Wie ein solches Template aussieht zeigt Listing~\ref{lst:jekyll-post-template}. Auch dieses Layout wird seinerseits wieder in ein anderes Layout eingebettet, der Ausdruck \lstinline|{{ content }}| bezeichnet dabei den Ort an dem diese Einbettung stattfindet. Listing~\ref{lst:jekyll-master-template} zeigt wie Kette von Einbettungen in einer letzten Vorlage endet. Ziel dieser Einbettung ist die Vermeidung von Redundanzen: Um zum Beispiel auf allen Seiten eine neue CSS-Datei zu referenzieren muss in diesem Beispiel nur Listing~\ref{lst:jekyll-master-template} angepasst werden.
 
@@ -126,7 +131,7 @@ layout: default
 </html>
 \end{lstlisting}
 
-\begin{lstlisting}[float=p,caption={Hauptseite mit Auszügen alle Beiträge für Jekyll}, label={lst:jekyll-main-page}]
+\begin{lstlisting}[float=p,caption={Hauptseite mit Auszügen aller Beiträge für Jekyll}, label={lst:jekyll-main-page}]
 ---
 layout: default
 ---
@@ -169,29 +174,39 @@ Ein Lightswitch-Projekt gliedert sich in zwei wesentliche Unterstrukturen: Daten
 
 Bei diesem Buch von Herbert Klaeren und Michael Spaerber wird ein sehr von Datenstrukturen geprägter Ansatz zur Einführung in die Programmierung gewählt. Die Autoren beschreiben die gängigen Programmiersprachen aufgrund ihrer umfangreichen Syntax als ungeeignet für die Einführung in die Programmierung \cite[2]{macht-der-abstraktion}. 
 
-Folglich unterrichtet das Buch auch nicht Java, C\#, Python, Ruby oder Pascal. Stattdessen kommt der Scheme-Dialekt ``Racket'' zum Einsatz. Bei Scheme handelt es sich wiederrum um einen der wesentlichen Dialekte von Lisp, einer Programmiersprache deren Syntax fast exklusiv auf der Verwendung von runden Klammern zur Beschreibung von Tupeln aufbaut. Durch diese sehr reduzierte Syntax versprechen sich die Autoren die Vermeidung von typischen syntaktischen Stolperfallen, mit denen Lernende zu Beginn oft Schwierigkeiten haben.
+Folglich unterrichtet das Buch auch nicht Java, C\#, Python, Ruby oder Pascal. Stattdessen kommt der Scheme-Dialekt ``Racket'' zum Einsatz. Bei Scheme handelt es sich wiederrum um einen der wesentlichen Varianten von Lisp, einer Programmiersprache deren Syntax fast exklusiv auf der Verwendung von runden Klammern zur Beschreibung von Tupeln aufbaut. Durch diese sehr reduzierte Syntax versprechen sich die Autoren die Vermeidung von typischen syntaktischen Stolperfallen, mit denen Lernende zu Beginn oft Schwierigkeiten haben.
 
-Die Anpassung an eine für Lernende gut geeignete Umgebung geht allerdings über diese vergleichsweise simple Syntax hinaus: Der Sprachumfang von Racket selbst wird im Laufe des Buches mehrfach erweitert.
+Die Anpassung an eine für Lernende gut geeignete Umgebung geht allerdings über diese vergleichsweise simple Syntax hinaus: Der Sprachumfang von Racket selbst wird im Laufe des Buches mehrfach erweitert. Abbildung~\ref{fig:drracket-language-levels} zeigt den Auswahldialog der ``Dr Racket''-Umgebung, in welchem auch die zum Buch passenden Sprachumfänge verfügbar sind.
 
-\begin{figure}[p]
-  \centering \includegraphics[width=0.7\textwidth]{images/related-work-drracket.png}
-  \caption{Die Entwicklungsumgebung ``Dr Racket''}
-  \label{fig:drracket-ui}
-\end{figure}
-
-\begin{figure}[p]
-  \centering \includegraphics[width=0.7\textwidth]{images/related-work-drracket-language-levels.png}
+\begin{figure}[h]
+  \centering \includegraphics[width=\textwidth]{images/related-work-drracket-language-levels.pdf}
   \caption{Verfügbare Sprachniveaus in ``Dr Racket''}
   \label{fig:drracket-language-levels}
 \end{figure}
 
-\subsection{Software \& Kurs: AppCamps}
-
-\info[inline]{Hamburger Start-Up, dass sich mit einer ebenfalls an Scratch orienterten Entwicklungsumgebung Apps für Smartphones entwickeln können.}
-
 \subsection{Software: MySQL Workbench}
 
-\info[inline]{Wirklich ein Datenbanktool, keinerlei Benutzerschnittstelle für ``normale'' Benutzer.}
+Die MySQL Workbench ist das hauseigene Management- und Verwaltungsprogramm des gleichnamigen Datenbanksystems. Es unterstützt Programmierer mit speziellen Funktionen zur Modellierung von Datenbanken oder beim Entwickeln von Abfragen zu existierenden Datenbeständen. Systemadministratoren haben mit der Workbench Zugriff auf Performance-Indikatoren wie Caching-Fehlerraten, Datendurchsatz oder sonstige Auslastungsmerkmale.
+
+Anders als das Visual Studio Lightswitch unternimmt die MySQL Workbench keinerlei Versuche technische Details vor dem Anwender zu verstecken. Es handelt sich im wesentlichen um eine grafische Benutzerschnittstelle für Daten, die ebenso von der Programmierschnittstelle bereitgestellt werden.
+
+Da es sich um ein spezialisiertes Programmes eines Datenbanksystems handelt, bietet der Schema-Designer (Abbildung~\ref{fig:mysql-workbench-schema-diagram}) keinerlei Unterstützung für konzeptuelle (z.B. mit Entity-Relationship-Modellen) Modellierung. Er beschäftigt sich ausschließlich mit der Darstellung oder Modifikation von physikalischen Modellen. Im Editor stehen zwar Komfortfunktionen für die Modellierung von Beziehungen aller typischen Kardinalitäten zur Verfügung, diese werden aber unmittelbar auf Fremdschlüssel und gegebenenfalls Kreuztabellen abgebildet. Von $m:n$-Beziehungen wird folglich nicht abstrahiert, sondern stattdessen die gängige Abbildung in Form einer Kreuztabelle automatisch vorgenommen.
+
+Der Editor für Abfragen bietet alle typischen Funktionen einer Entwicklungsumgebung (Abbildung~\ref{fig:mysql-workbench-query}): Dem Entwickler werden kontextsensitiv Vervollständigungsvorschläge angeboten, die Struktur der involvierten Tabellen ist in einer Seitenleiste sichtbar. Das Ergebnis der Abfrage wird in einem variabel großen Bereich unter dem Texteditor angezeigt. Und unter diesem Bereich wiederrum ist eine Historie der zuletzt ausgeführten Abfragen verfügbar.
+
+Die Workbench versucht sowohl syntaktische (zum Beispiel fehlende Klammern) als auch logische (zum Beispiel nicht vorhandene Spalten) Fehler optisch hervorzuheben. Dafür werden die Abfragen anscheinend aber nicht gegen den Server validiert. Dadurch entstehen gelegentlich Inkonsistenzen in beide Richtungen: Es werden sowohl Fehler im Editor angezeigt, welche auf dem Server nicht auftreten, als auch tatsächlich aufgetrene Fehler auf dem Server nicht mit einer entsprechenden Markierung im Editor versehen.
+
+\begin{figure}[p]
+  \centering \includegraphics[width=\textwidth]{images/related-work-mysql-workbench-db-diagram.png}
+  \caption{Visueller Schema-Editor der MySQL Workbench}
+  \label{fig:mysql-workbench-schema-diagram}
+\end{figure}
+
+\begin{figure}[p]
+  \centering \includegraphics[width=\textwidth]{images/related-work-mysql-workbench-query.png}
+  \caption{Abfrageeditor der MySQL Workbench}
+  \label{fig:mysql-workbench-query}
+\end{figure}
 
 %%% Local Variables:
 %%% mode: latex
