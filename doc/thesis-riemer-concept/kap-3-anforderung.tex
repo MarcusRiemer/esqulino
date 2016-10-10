@@ -328,21 +328,19 @@ Alternativ sollen sich auch wortwörtliche Einschränkungen im Sinne einer Black
 
 Danach können die Einschränkungen noch für einzelne Abfragen verfeinert werden. Im allgemeinen Fall wird diese Funktionalität wenig nachgefragt sein: Insbesondere bei der Entwicklung von Webanwendungen ist es nicht hilfreich sich für jede Abfrage in einen anderen Sprachumfang einarbeiten zu müssen. Sofern die Schüler aber bestimmte Aufgaben mit einem didaktisch motiviertem reduzierten (oder erweiterten) Sprachumfang lösen sollen, kommt diese Möglichkeit zum Einsatz. Die hier exemplarisch aufgeführten Feature-Levels orientieren sich an den im Rahmen der Master-Arbeit exemplarisch erstellten Datenbeständen und an den Aufgaben aus Informatik-Lehrbüchern \cite{hubwieser_inf_2, grimm_informatik_2015}.
 
-\subsubsection*{Arbeiten mit einfachen Einschränkungen}
+\begin{description}
+\item[Arbeiten mit einfachen Einschränkungen] \hfill \\
+  Die Selektion steht in allen betrachteten Schulbüchern am Beginn des Lernprozesses. Verwendet werden dabei durchgängig alle relationalen Operatoren ($<, \leq, =, \neq, \geq, >$) sowie das logische \lstinline{NICHT}, \lstinline{UND} sowie \lstinline{ODER}. Teilweise werden auch schon einfache unscharfe Textsuchen mit dem \lstinline{LIKE}-Operator behandelt. Syntaxzucker wie \lstinline{BETWEEN} kommt jedoch nicht vor.
 
-Die Selektion steht in allen betrachteten Schulbüchern am Beginn des Lernprozesses. Verwendet werden dabei durchgängig alle relationalen Operatoren ($<, \leq, =, \neq, \geq, >$) sowie das logische \lstinline{NICHT}, \lstinline{UND} sowie \lstinline{ODER}. Teilweise werden auch schon einfache unscharfe Textsuchen mit dem \lstinline{LIKE}-Operator behandelt. Syntaxzucker wie \lstinline{BETWEEN} kommt jedoch nicht vor.
+\item[Arbeiten mit Projektionen] \hfill \\
+  Der Funktionsumfang von diesem Feature-Level orientiert sich an gängigen Tabellenkalkulationsprogrammen wie Microsoft Excel oder Libre Office Calc. Im Vordergrund steht die Verwendung oder Schachtelung von Text-Funktionen wie \lstinline{substring} oder \lstinline{find}. Bei den Datensätzen handelt es sich häufig um stark denormalisierte Daten, welche nichtmal in erster Normalform vorliegen. So werden zum Beispiel Vor- und Zuname in eine einzige Zelle geschrieben und müssen dann in der Projektion wieder voneinander getrennt werden.
 
-\subsubsection*{Arbeiten mit Projektionen}
+\item[Arbeiten mit aggregierten Daten] \hfill \\
+  Dieser Schritt ist gewissermaßen die logische Fortführung der Projektion.
 
-Der Funktionsumfang von diesem Feature-Level orientiert sich an gängigen Tabellenkalkulationsprogrammen wie Microsoft Excel oder Libre Office Calc. Im Vordergrund steht die Verwendung oder Schachtelung von Text-Funktionen wie \lstinline{substring} oder \lstinline{find}. Bei den Datensätzen handelt es sich häufig um stark denormalisierte Daten, welche nichtmal in erster Normalform vorliegen. So werden zum Beispiel Vor- und Zuname in eine einzige Zelle geschrieben und müssen dann in der Projektion wieder voneinander getrennt werden.
-
-\subsubsection*{Arbeiten mit aggregierten Daten}
-
-Dieser Schritt ist gewissermaßen die logische Fortführung der Projektion.
-
-\subsubsection*{Arbeiten mit JOINs}
-
-Dieses Feature-Level stellt die Verknüpfung vorhandener Datenbestände in den Vordergrund und blendet jegliche Projektion oder Gruppierung vollständig aus. Schüler sollen auf dieser Stufe lernen, sich in einem Datenmodell anhand der vorhanden Fremdschlüssel-Beziehungen zu orientieren.
+\item[Arbeiten mit JOINs] \hfill \\
+  Dieses Feature-Level stellt die Verknüpfung vorhandener Datenbestände in den Vordergrund und blendet jegliche Projektion oder Gruppierung vollständig aus. Schüler sollen auf dieser Stufe lernen, sich in einem Datenmodell anhand der vorhanden Fremdschlüssel-Beziehungen zu orientieren.
+\end{description}
 
 \subsection{Drag \& Drop Editor für SQL}
 \label{sec:design-sql-editor}
@@ -359,8 +357,8 @@ Für technische Details irrelevant, aber unbedingt ebenfalls im Voraus zu kläre
 
 \todo[inline]{\textbf{Todo}: Quelle mit Beleg für ``Kinderfreundliches'' buntes Design suchen. Das wird man bei Scratch schon aus gutem Grund gemacht haben. Relevante Frage: Zielgruppe (in Jahren) von Scratch vs. Zielgruppe dieses Projektes?}
 
-\begin{wrapfigure}{r}{0.36\textwidth}
-  \includegraphics[width=0.35\textwidth]{images/scratch-control-flow}
+\begin{wrapfigure}{r}{0.46\textwidth}
+  \includegraphics[width=0.45\textwidth]{images/scratch-control-flow}
   \caption{Kontrollfluss in Scratch}
   \label{fig:screen-scratch-control-flow}
 \end{wrapfigure}
@@ -392,13 +390,13 @@ Letztendlich existiert aber auch noch ein sehr viel profanerer Faktor: Der Autor
 
 Es stellt sich zunächst die Frage, ob der Editor, wie Scratch, mit einer Drag \& Drop Seitenleiste ausgestattet werden sollte, oder ob auch ein anderes Bedienkonzept denkbar wäre. Ein grundsätzlicher Nachteil Drag \& Drop Bedienkonzeptes ist der nötige Platz für die Unterbringung aller verwendbaren Komponenten. Spätestens wenn für die Anzeige aller verfügbaren Optionen nicht ausreichend Platz auf dem Bildschirm vorhanden ist, muss sorgfältig geplant werden, wie die entsprechenden Bedienelemente anzuordnen sind.
 
-Scratch nutzt eine Einordnung der Blöcke in zehn Kategorien. Es sind daher nie alle existierenden Blöcke auf einmal sichtbar, sondern immer die thematisch verwandten Blöcke der aktuell gewählten Kategorie. Eine solche Kategorisierung muss sehr sorgfältig entwickelt und vor allem erprobt werden: Sollten die Zuordnung eines Blocks mehrdeutig oder mißverständlich sein besteht die Gefahr, dass er nicht gefunden wird. Im Rahmen dieser Arbeit wird diese Problematik der Kategorisierung daher erst einmal verschoben: Es wird darauf verzichtet, solange die zur Verfügung stehenden Bedienelemente noch bequem Platz in einem Full-HD-Browserfenster haben.
+Scratch nutzt eine Einordnung der Blöcke in zehn Kategorien. Es sind daher nie alle existierenden Blöcke auf einmal sichtbar, sondern immer die thematisch verwandten Blöcke der aktuell gewählten Kategorie. Eine solche Kategorisierung muss sehr sorgfältig entwickelt und vor allem erprobt werden: Sollten die Zuordnung eines Blocks mehrdeutig oder mißverständlich sein besteht die Gefahr, dass er nicht gefunden wird. Im Rahmen dieser Arbeit würde diese Problematik der Kategorisierung daher erst einmal verschoben: Es wird darauf verzichtet, solange die zur Verfügung stehenden Bedienelemente noch bequem Platz in einem Full-HD-Browserfenster haben.
 
 Da der Benutzer immer nur eine Abfrage zur Zeit bearbeiten können soll, ergibt sich der einzig mögliche Platz für viele Blöcke automatisch. Darüber hinaus ist die Reihenfolge eines Großteils der Komponenten einer Abfrage sehr strikt festgelegt, so kann eine \texttt{GROUP BY} Komponente nicht an beliebigen Stellen verwendet werden, sondern nur nach der \texttt{FROM} oder der \texttt{WHERE} Anweisung. Andere Komponenten wie z.B. \texttt{HAVING} oder logische Verknüpfungen mit \texttt{AND} oder \texttt{OR} sind nicht nur von der Reihenfolge, sondern auch von der Existenz anderer Bestandteile abhängig. Ein möglicher Ansatz zur Reduktion der verfügbaren Komponenten wäre also, die möglichen Optionen visuell abgegrenzt Platzhalter innerhalb des Abfrageeditors anzubieten. Ein Klick auf den Platzhalter könnte diesen dann in einen konkreten Block umwandeln und gegebenenfalls zur Angabe der benötigten Parameter auffordern.
 
 \begin{figure}[p]
   \includegraphics[width=\textwidth]{images/sql-sketch-all-editing}
-  \caption{So nicht! Keine Nutzung von Drag \& Drop und daher simultane Anzeige (fast) aller Möglichkeiten, zudem ausgiebige Nutzung von "`normalen"' Bedienelementen.}
+  \caption{So nicht! Ohne Nutzung von Drag \& Drop und daher simultane Anzeige (fast) aller Möglichkeiten, zudem ausgiebige Nutzung von "`normalen"' Bedienelementen.}
   \label{fig:screen-sql-editor-all-editing}
 \end{figure}
 
@@ -472,7 +470,7 @@ Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von norm
 
 Abstrakt betrachtet besteht eine \idename-Seite aus zwei wesentlichen Informationen: Eine Auflistung aller zum Darstellen benötigten Datenquellen, typischerweise werden das SQL-Abfragen sein, und eine Vorschrift wie genau dieser Datenbestand darzustellen ist.
 
-Um das folgende Kapitel anschaulicher zu gestalten, werden alle Beispiele anhand eines sehr reduzierten Datenbestandes zu einem einfach Blog illustriert. Dieser Blog soll dem Endbenutzer über zwei Seiten näher gebracht werden. Eine Hauptseite dient der Auflistung aller Blogbeiträge welche im Einzelnen auf einer Detailseite in Gänze betrachtet und kommentiert werden können.
+Um das folgende Kapitel anschaulicher zu gestalten, werden alle Beispiele anhand eines sehr reduzierten Datenbestandes zu einem einfach Blog illustriert. Dieser Blog soll dem Endbenutzer über zwei Seiten näher gebracht werden: Eine \textit{Hauptseite} dient der Auflistung aller Blogbeiträge welche im Einzelnen auf einer \textit{Detailseite} in Gänze betrachtet und kommentiert werden können.
 
 Abstrakt betrachtet handelt es sich dabei um eine typische "`Master-Detail"'-Struktur: Ausgehend von einer sehr komprimierten Darstellung aller Werte können Details zu einem konkreten Datensatz nach einem Navigationsvorgang eingesehen werden. Dieses Navigationskonzept wird von fast allen geschäftlichen Applikationen genutzt und ist eine der Standardvorlagen des Visual Studio Lightswitch.
 
@@ -484,11 +482,11 @@ Um die einer Webseite zur Verfügung stehenden Daten zu strukturieren, wird dies
 
 \begin{description}
 \item[\texttt{query} für \texttt{SELECT}-Abfragen] \hfill \\
-  Nicht jede Webseite referenziert notwendigerweise alle verfügbaren Abfragen.
+  Nicht jede Webseite benötigt notwendigerweise die Ergebnisse aller verfügbaren Abfragen. Daher werden die tatsächlich benötigten Abfragen in diesem Namensraum gesammelt.
 \item[\texttt{get} für \texttt{URL}-Parameter] \hfill \\
-  Häufig sollen auf einer
+  Wenn zu bestimmten Datensätzen navigiert werden soll ist im Normalfall die Angabe eines \texttt{URL}-Parameters notwendig. Dieser beschreibt eines oder mehrere Merkmale, anhand dessen relevante Datensätze ausgewählt werden können.
 \item[\texttt{input} für Benutzereingaben] \hfill \\
-  Nicht jede Webseite referenziert notwendigerweise alle verfügbaren Abfragen.
+  Dieser Namensraum hängt eng mit dem HTML-\texttt{form}-Element zusammen und stellt die Werte aller Benutzereingaben zur Verfügung.
 \end{description}
 
 \subsubsection{Wahl einer Templatingsprache}
@@ -533,23 +531,28 @@ Und natürlich spielt für die Technik auch die Parametriesierung eine Rolle: Be
 
 Um die Syntax zu vergleichen, soll der in Listing~\ref{lst:data-control-structures} angedeutete Datenbestand für einen Blog gerendert werden. Dabei sollen die Kategorien mit einer Schleife durchlaufen werden, der gesamte Beitrag nicht angezeigt werden sofern er privat ist und der Text mit seinen HTML-Bestandteilen gerendert werden.
 
-\begin{lstlisting}[float=p,caption={JSON-Darstellung eines exemplarischen Datenbestandes}, label={lst:data-control-structures}]
-{ "page" : {
+\begin{lstlisting}[float=h!,caption={JSON-Darstellung eines exemplarischen Datenbestandes}, label={lst:data-control-structures}]
+{ 
+  "page" : {
     "categories": ["Huch", "Hoff", "Riem"],
     "author": "",
     "text": "<p>Dies ist ein Text mit HTML-Bestandteilen</p>",
     "private": false
-}}
+  }
+}
 \end{lstlisting}
 
+
 Die Liquid-Syntax wird an dieser Stelle ohne weitere Erläuterungen betrachtet (Listing \ref{lst:liquid-control-structures}), eine kurze Einführung ist schon Rahmen von Kapitel \ref{sec:software-jekyll}~\nameref{sec:software-jekyll} erfolgt.
+
+Die Syntax von Liquid und Handlebars ist bemerkenswert ähnlich und basiert auf geschweiften Klammern, welche sich optisch merklich vom normalen HTML-Inhalt abheben. Für Kontrollstrukturen kommt statt dem \texttt{\%}-Zeichen von Liquid eine Raute zum Einsatz. Eine praktische Syntaktische Eigenart ist die Tatsache, dass auch Schleifen mit einem \texttt{else}-Block für leere oder nicht vorhandene Listen ausgestattet werden können. Listing~\ref{lst:handlebars-control-structures} zeigt, wie das einfache Datenmodell gerendert werden könnte. Um einen Ausdruck unverändert übernommen werden soll, also inklusive aller HTML-Sonderzeichen, muss dieser von drei geschweiften Klammern umgeben werden.
 
 \begin{lstlisting}[float=p,caption={Kontrollstrukturen in Liquid}, label={lst:liquid-control-structures}]
 {% if !page.private %}
   <h2>{{ page.title}} <small>von {{ page.author}}</small></h2>
   <ul>
-    {% for page.categories %}
-      <li>{{ this }}</li>
+    {% for page.categories %} 
+      <li>{{ this }}</li> 
     {% endfor %}
   </ul>
   {{ page.text }}
@@ -558,23 +561,19 @@ Die Liquid-Syntax wird an dieser Stelle ohne weitere Erläuterungen betrachtet (
 {% endif %}
 \end{lstlisting}
 
-Die Syntax von Liquid und Handlebars ist bemerkenswert ähnlich und basiert auf geschweiften Klammern, welche sich optisch merklich vom normalen HTML-Inhalt abheben. Für Kontrollstrukturen kommt statt dem \texttt{\%}-Zeichen von Liquid eine Raute zum Einsatz. Eine praktische Syntaktische Eigenart ist die Tatsache, dass auch Schleifen mit einem \texttt{else}-Block für leere oder nicht vorhandene Listen ausgestattet werden können. Listing~\ref{lst:handlebars-control-structures} zeigt, wie das einfache Datenmodell gerendert werden könnte. Um einen Ausdruck unverändert übernommen werden soll, also inklusive aller HTML-Sonderzeichen, muss dieser von drei geschweiften Klammern umgeben werden.
-
 \begin{lstlisting}[float=p,caption={Kontrollstrukturen in Handlebars}, label={lst:handlebars-control-structures}]
 {{ #if !page.private }}
   <h2>{{ page.title}} <small>von {{ page.author}}</small></h2>
   <ul>
     {{ #each page.categories }}
       <li>{{ this }}</li>
-    {{ /each }}
+    {{/each}}
   </ul>
   {{{ page.text }}}
 {{ else }}
   <h1>Dies ist eine private Seite</h1>
 {{ /if }}
 \end{lstlisting}
-
-Angular 2 verzichtet hingegen auf nicht-XML-artige Erweiterungen und nutzt dafür eigene Knoten und Attribute. Darüber hinaus muss immer die Richtung der Datenbindung angegeben werden, dafür werden Attribute mit runden oder eckigen Klammern eingeschlossen. Im Beispiellisting \ref{lst:angular2-control-structures} kommen allerdings ausschließlich eckige Klammern zum Einsatz, da nicht auf Ereignisse reagiert werden muss. Kontrollstrukturen müssen entweder in speziellen \texttt{<template>}-Knoten notiert werden oder mit einem \texttt{*}-Präfix als Attribut notiert werden.
 
 \begin{lstlisting}[float=p,caption={Kontrollstrukturen in Angular 2}, label={lst:angular2-control-structures}]
 <template [ngIf]="!page.private">
@@ -589,9 +588,11 @@ Angular 2 verzichtet hingegen auf nicht-XML-artige Erweiterungen und nutzt dafü
 </template>
 \end{lstlisting}
 
+Angular 2 verzichtet hingegen auf nicht-XML-artige Erweiterungen und nutzt dafür eigene Knoten und Attribute. Darüber hinaus muss immer die Richtung der Datenbindung angegeben werden, dafür werden Attribute mit runden oder eckigen Klammern eingeschlossen. Im Beispiellisting \ref{lst:angular2-control-structures} kommen allerdings ausschließlich eckige Klammern zum Einsatz, da nicht auf Ereignisse reagiert werden muss. Kontrollstrukturen müssen entweder in speziellen \texttt{<template>}-Knoten notiert werden oder mit einem \texttt{*}-Präfix als Attribut notiert werden.
+
 Für Handlebars und Liquid existieren Implementierungen in unterschiedlichen Programmiersprachen, zumindest für Ruby, Javascript und PHP scheinen diese Portierungen auch sinnvoll zu funktionieren. Angular 2 hingegen wird zwar für mehrere Sprachen Angeboten, in der Praxis kompilieren diese aber alle zu Javascript.
 
-Keine der betrachteten Sprachen macht es unmöglich, die Funktionalität im Rahmen der jeweiligen Syntax zu erweitern. Für Handlebars und Liquid existieren in allen betrachteten Implementierungen einfache Möglichkeiten Funktionen für neue Schlüsselwörter zu registrieren. Angular sieht zur Erweiterung die Programmierung neuer Komponenten vor, welche sich dann als neue Attribute oder Knoten sehr organisch einbetten lassen. Das ist im Endergebnis zwar sehr ansehnlich, die Definition solcher Komponenten erfordert aber vertiefte Kenntnisse der internen Arbeitsweise von Angular 2.
+Keine der betrachteten Sprachen macht es unmöglich, die Funktionalität im Rahmen der jeweiligen Syntax zu erweitern. Für Handlebars und Liquid existieren in allen betrachteten Implementierungen einfache Möglichkeiten Funktionen um neue Schlüsselwörter zu registrieren. Angular sieht zur Erweiterung die Programmierung neuer Komponenten vor, welche sich dann als neue Attribute oder Knoten sehr organisch einbetten lassen. Das ist im Endergebnis zwar sehr ansehnlich, die Definition solcher Komponenten erfordert aber vertiefte Kenntnisse der internen Arbeitsweise von Angular 2.
 
 Für alle hier betrachteten Templatingsprachen gilt ebenfalls, dass sie jenseits von Entwicklerkreisen nicht besonders verbreitet sind. Typische Webseiten benötigen natürlich auch keine umfangreiche Logik um zum Beispiel einem Benutzer zu ermöglichen einen Kommentar zu schreiben. Im Alltag werden die Lernenden von diesen Kenntnissen also wohl nicht profitieren.
 
