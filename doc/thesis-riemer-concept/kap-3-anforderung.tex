@@ -470,6 +470,27 @@ Es ist zu erwarten, dass die meisten von den Schülern verfassten Abfragen diese
 
 Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von normalen Endanwendern bedienen lassen können Bedarf es natürlich einer entsprechenden Benutzeroberfläche. Hier bietet sich aus Gründen der einfachen Weitergabe eine webbasierte Oberfläche an: So entfällt bei den Endanwendern jegliche Installation und gerade für datenzentrierte, verteilte Anwendungen ist eine einheitliche Sicht auf den Datenbestand von großer Bedeutung.
 
+Abstrakt betrachtet besteht eine \idename-Seite aus zwei wesentlichen Informationen: Eine Auflistung aller zum Darstellen benötigten Datenquellen, typischerweise werden das SQL-Abfragen sein, und eine Vorschrift wie genau dieser Datenbestand darzustellen ist.
+
+Um das folgende Kapitel anschaulicher zu gestalten, werden alle Beispiele anhand eines sehr reduzierten Datenbestandes zu einem einfach Blog illustriert. Dieser Blog soll dem Endbenutzer über zwei Seiten näher gebracht werden. Eine Hauptseite dient der Auflistung aller Blogbeiträge welche im Einzelnen auf einer Detailseite in Gänze betrachtet und kommentiert werden können.
+
+Abstrakt betrachtet handelt es sich dabei um eine typische "`Master-Detail"'-Struktur: Ausgehend von einer sehr komprimierten Darstellung aller Werte können Details zu einem konkreten Datensatz nach einem Navigationsvorgang eingesehen werden. Dieses Navigationskonzept wird von fast allen geschäftlichen Applikationen genutzt und ist eine der Standardvorlagen des Visual Studio Lightswitch.
+
+\missing[inline]{Beispielhafter Datenbestand}
+
+\subsubsection{Datenanbindung für Webseiten}
+
+Um die einer Webseite zur Verfügung stehenden Daten zu strukturieren, wird dieser verfügbare Datenbestand in unterschiedliche Namensräume eingeteilt. Dadurch werden Kollisionen von Bezeichnern vermieden und es ist schon anhand der Bezeichnung eindeutig, von welchem Kontext der Wert zur Verfügung gestellt wird.
+
+\begin{description}
+\item[\texttt{query} für \texttt{SELECT}-Abfragen] \hfill \\
+  Nicht jede Webseite referenziert notwendigerweise alle verfügbaren Abfragen.
+\item[\texttt{get} für \texttt{URL}-Parameter] \hfill \\
+  Häufig sollen auf einer
+\item[\texttt{input} für Benutzereingaben] \hfill \\
+  Nicht jede Webseite referenziert notwendigerweise alle verfügbaren Abfragen.
+\end{description}
+
 \subsubsection{Wahl einer Templatingsprache}
 
 Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten, nicht alle dafür eignen sich aber um dynamisch zur Laufzeit Seiten zu erzeugen. Nicht in Betracht gezogen werden vollwertige Programmiersprachen wie PHP, Python oder Ruby. Die Mächtigkeit dieser Sprachen geht fast zwangsläufig mit einer vergleichsweise umständlichen Syntax einher. Zudem dient die Verwendung einer dezidierten Templatingsprache nicht nur der Bequemlichkeit, sondern auch einer klaren Trennung zwischen Programm- und Anzeigelogik. Diese Unterscheidung soll von \idename gefördert werden.
@@ -595,7 +616,7 @@ Letzten Endes stellt sich faktisch nur die Frage, ob Handlebars oder Liquid zum 
   \label{tab:scoring-templating-language}
 \end{table}
 
-Ebenfalls nicht entscheidend, aber erfreulich, ist der Umstand, dass mit Liquid beliebige Textdateien angereichert werden können, da die Struktur des umgebenden Dokuments wird vom Liquid-Renderer ignoriert wird. Dieser kümmert sich lediglich um die in eingebetteten Anweisungen und behandelt alle Teile dazwischen als einfachen \texttt{string}. Für \idename bedeutet das vor allem, dass für andere Arten von Dokumenten nicht zwingend eine weitere Templatingsprache notwendig wäre. Zum Beispiel wäre ebenfalls die Bereitstellung einer dynamisch generierten \texttt{robots.txt}\footnote{Diese Datei wird von Suchmaschinen ausgewertet, um gewisse Teile der Seite von der Indexierung auszuschließen.} oder einer Sitemap\footnote{Typischerweise ein XML-Dokument, welches alle zu indexierenden Seiten mit einigen Metadaten, zum Beispiel die Frequenz von Veränderungen, auflistet.} möglich. Mit rein auf die Generierung von HTML ausgelegten Sprachen wäre das nicht möglich.
+Ebenfalls nicht entscheidend, aber erfreulich, ist der Umstand, dass mit Liquid beliebige Textdateien angereichert werden können, da die Struktur des umgebenden Dokuments vom Liquid-Renderer ignoriert wird. Dieser kümmert sich lediglich um die in eingebetteten Anweisungen und behandelt alle Teile dazwischen als einfachen \texttt{string}. Für \idename bedeutet das vor allem, dass für andere Arten von Dokumenten nicht zwingend eine weitere Templatingsprache notwendig wäre. Zum Beispiel wäre ebenfalls die Bereitstellung einer dynamisch generierten \texttt{robots.txt}\footnote{Diese Datei wird von Suchmaschinen ausgewertet, um gewisse Teile der Seite von der Indexierung auszuschließen.} oder einer Sitemap\footnote{Typischerweise ein XML-Dokument, welches alle zu indexierenden Seiten mit einigen Metadaten, zum Beispiel die Frequenz von Veränderungen, auflistet.} möglich. Mit rein auf die Generierung von HTML ausgelegten Sprachen wäre das nicht möglich.
 
 \subsubsection{Die Templatingsprache Liquid}
 
@@ -605,14 +626,14 @@ Grundsätzlich wird in Liquid zwischen drei verschiedenen Arten von Anweisungen 
 
 \begin{description}
 \item[Objekte] \hfill \\
-  In das Dokument eingebettete Werte werden in doppelt geschweiften Klammern notiert (also \texttt{\{\{Objekt\}\}}). Der Zugriff auf Eigenschaften von Kind-Objekten ist mit dem \texttt{.}-Operator möglich.
+  In das Dokument eingebettete Bezeichner werden in doppelt geschweiften Klammern notiert (\texttt{\{\{Objekt\}\}}) und dann zur Laufzeit durch den hinterlegten Wert ersetzt. Konstante Strings werden in Anführungszeichen notiert, Zahlen und boolesche Werte stehen für sich selbst.
 \item[Tags] \hfill \\
   Tags steuern den Programmfluss mit Anweisungen wie \texttt{if} und \texttt{for}. Um sie von interpolierten Werten zu unterscheiden werden diese Anweisungen in \texttt{\{\% \%\}}-Klam\-mer\-paaren notiert.
 \item[Filter] \hfill \\
-  Mit Filtern können in Ausdrücken genutzte Daten manipuliert werden. Sie funktionieren nach dem gleichen Prinzip wie Pipes auf der Kommandozeile und ermöglichen es die Repräsentation von Daten zu verändern.
+  Mit Filtern können in Ausdrücken genutzte Daten manipuliert werden. Sie funktionieren nach dem gleichen Prinzip wie Pipes auf der Kommandozeile und ermöglichen es die Repräsentation von Daten zu verändern. Jeder beliebige Wert kann über einen Filter modifiziert werden, der Ausdruck \texttt{\{\{~"miXeD cAse"~|~downcase~\}\}} würde also zu \texttt{mixed case} ausgewertet werden.
 \end{description}
 
-Alle diese Anweisungen beziehen sich immer auf eine vordefinierte Datenquelle, welcher dem Renderer zusammen mit dem eigentlichen Template übergeben wird. Dieser Datenbestand gliedert sich in Name-Wert-Paare, Listen und atomare Werte, die Navigation erfolgt mittels des \texttt{.}-Operators für Zugriffe auf benannte Schlüssel oder mit dem \texttt{[]}-Operator für einzelne Werte eines Arrays.
+Alle diese Anweisungen beziehen sich immer auf einen vordefinierten Datenbestand, welcher dem Renderer zusammen mit dem eigentlichen Template übergeben wird. Dieser Datenbestand gliedert sich in Name-Wert-Paare, Listen und atomare Werte, die Navigation erfolgt mittels des \texttt{.}-Operators für Zugriffe auf benannte Schlüssel oder mit dem \texttt{[]}-Operator für einzelne Werte eines Arrays.
 
 \subsubsection{Layout}
 
