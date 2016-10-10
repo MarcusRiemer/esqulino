@@ -1,7 +1,7 @@
 \section{Implementierung}
 \label{sec:implementation-analysis}
 
-Dieses Kapitel beschreibt den Implementierungsprozess von esqulino und erläutert einige technische Entscheidungen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, wurden diese in Anlehnung an den "`Minus 100 Points"'-Artikel von Eric Gunnerson \cite{gunnerson-minus-100} geprüft.
+Dieses Kapitel beschreibt den Implementierungsprozess von \idename und erläutert einige technische Entscheidungen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, wurden diese in Anlehnung an den "`Minus 100 Points"'-Artikel von Eric Gunnerson \cite{gunnerson-minus-100} geprüft.
 
 \todo[inline]{Mehrere Datenbanken je Projekt, ``Veränderungsanzeige'' für Abfragen, Breite von Spalten}
 
@@ -18,7 +18,7 @@ Der softwaretechnische Unterbau der Entwicklungsumgebung setzt auf aktuelle Webt
 
 \begin{figure}[p]
   \centering \includegraphics[width=\textwidth]{images/openapi-query-example.png}
-  \caption{Generiert aus der Spezfikation: API-Browser für esqulino}
+  \caption{Generiert aus der Spezfikation: API-Browser für \idename}
   \label{fig:openapi-query-example}
 \end{figure}
 
@@ -38,7 +38,7 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
   \begin{itemize}
   \item Persistierung von Projekten mit Name und Beschreibung
   \item Editor für Projekteigenschaften
-  \item Auflistung aller Projekte einer esqulino-Instanz
+  \item Auflistung aller Projekte einer \idename-Instanz
   \end{itemize}
 \item [Anzeige eines Datenbankschemas] \hfill \\
   Neben der funktionalen Anforderung umfasst dieser Meilenstein die Erweiterung des Clients um die typischen Bestandteile des Benutzerschnittstelle einer Entwicklungsumgebung. Serverseitig erfordert dieser Meilenstein zum ersten Mal eine Verbindung mit der Datenbank.
@@ -49,7 +49,7 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
   \item Wechsel zwischen verschiedenen Editoren
   \end{itemize}
 \item [Datenmodell \& Code-Generator für Abfragen] \hfill \\
-  Der abstrake Syntaxbaum für Datenbankabfragen in esqulino sowie dessen Validierung gegen ein Datenbankschema. Dieses Datenmodell soll soweit wie möglich von der Visualisierung entkoppelt werden, damit es sich möglichst einfach testen lässt.
+  Der abstrake Syntaxbaum für Datenbankabfragen in \idename sowie dessen Validierung gegen ein Datenbankschema. Dieses Datenmodell soll soweit wie möglich von der Visualisierung entkoppelt werden, damit es sich möglichst einfach testen lässt.
   \begin{itemize}
   \item Einfache Projektion durch Auswahl von Spalten im \texttt{SELECT}
   \item Kreuzprodukte unterschiedlicher Tabellen im \texttt{FROM}
@@ -98,7 +98,7 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
   \end{itemize}
   
 \item [Qualitätssicherung] \hfill \\
-  Zu diesem Zeitpunkt sollte ein voll funktionsfähiger Prototyp existieren, der jedoch noch einer rigorosen Qualitätskontrolle unterzogen muss. Bisher wude der Prototyp ausschließlich durch Entwickler bedient, es stellt sich insbesondere die Frage wie esqulino auf Bedienfehler oder Inkonsistenzen reagiert.
+  Zu diesem Zeitpunkt sollte ein voll funktionsfähiger Prototyp existieren, der jedoch noch einer rigorosen Qualitätskontrolle unterzogen muss. Bisher wude der Prototyp ausschließlich durch Entwickler bedient, es stellt sich insbesondere die Frage wie \idename auf Bedienfehler oder Inkonsistenzen reagiert.
   \begin{itemize}
   \item Was passiert mit bestehenden Abfragen, wenn sich das Schema radikal verändert?
   \item Wie sollten Seiten für Endanwender gerendert werden, wenn diese fehlerhaft sind?
@@ -108,7 +108,7 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
 \subsection{Datenbanksystem}
 \label{sec:implementation-database-system}
 
-Die Wahl des konkreten Datenbanksystems hat einen unmittelbaren Einfluss auf nahezu alle Bereiche von esqulino. Im einzelnen handelt es sich dabei um die exakte Variante der SQL Syntax, auf die Rahmenbedingungen für den Betrieb der Entwicklungsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
+Die Wahl des konkreten Datenbanksystems hat einen unmittelbaren Einfluss auf nahezu alle Bereiche von \idename. Im einzelnen handelt es sich dabei um die exakte Variante der SQL Syntax, auf die Rahmenbedingungen für den Betrieb der Entwicklungsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
 
 Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbeständen sollten normalerweise im Bereich nur einiger Megabyte liegen und die in der Praxis möglicherweise einzige Unterscheidung von Zugriffsrechten wäre zwischen lesendem und schreibenden Zugriff. Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien gewählt und hinsichtlich ihrer Relevanz sortiert:
 
@@ -116,18 +116,18 @@ Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkei
 \item[Kostenlose Verfügbarkeit] \hfill \\
   Der Betrieb des Datenbanksystems soll nicht mit Lizenzkosten für Schulen, Lehrkräft, Lernende oder auch freiwillige Entwickler verbunden sein.
 \item[Einfacher Betrieb] \hfill \\
-  Zwar ist für den Einsatz von esqulino aufgrund des Browsers als Client schon die Nutzung eines Servers nötig, das Datenbanksystem sollte den Betrieb dennoch nicht mehr als unbedingt notwendig weiter verkomplizieren. Eine wesentliche Rolle spielt dabei die Platformunabhängigkeit: Das Datenbanksystem sollte, wie auch der esqulino Server, auf jedem gängigen Betriebssystem lauffähig sein.
+  Zwar ist für den Einsatz von \idename aufgrund des Browsers als Client schon die Nutzung eines Servers nötig, das Datenbanksystem sollte den Betrieb dennoch nicht mehr als unbedingt notwendig weiter verkomplizieren. Eine wesentliche Rolle spielt dabei die Platformunabhängigkeit: Das Datenbanksystem sollte, wie auch der \idename Server, auf jedem gängigen Betriebssystem lauffähig sein.
 \item[Einfache Backups] \hfill \\
-  Die gewünschte Exportfunktion für Projekte macht es nötig, den gesamten Datenbestand vergleichsweise einfach exportieren und importieren zu können. Darüber hinaus sollte es auch für Lehrkräfte möglichst einfach sein mit allen Projekten zu einem anderen esqulino-Server umzuziehen.
+  Die gewünschte Exportfunktion für Projekte macht es nötig, den gesamten Datenbestand vergleichsweise einfach exportieren und importieren zu können. Darüber hinaus sollte es auch für Lehrkräfte möglichst einfach sein mit allen Projekten zu einem anderen \idename-Server umzuziehen.
 \item[Tools zur Modellierung] \hfill \\
-  Da diese Arbeit sich nicht mit der Datenmodellierung befasst, muss das entsprechende Datenbankschema extern erzeugt werden. Von einer guten Unterstützung für Modellierungsvorhaben profitiert dementsprechend indirekt auch esqulino.
+  Da diese Arbeit sich nicht mit der Datenmodellierung befasst, muss das entsprechende Datenbankschema extern erzeugt werden. Von einer guten Unterstützung für Modellierungsvorhaben profitiert dementsprechend indirekt auch \idename.
 \item[Tools zur Entwicklung von SQL-Abfragen] \hfill \\
-  Sobald ein Entwickler an die Grenzen des SQL-Editor von esqulino stößt, soll es so einfach wie möglich sein die Abfragen in einem externen Editor zu schreiben und danach in Textform wieder an esqulino zu übergeben.
+  Sobald ein Entwickler an die Grenzen des SQL-Editor von \idename stößt, soll es so einfach wie möglich sein die Abfragen in einem externen Editor zu schreiben und danach in Textform wieder an \idename zu übergeben.
 \end{description}
 
 Das Kriterium der ``kostenlosen Verfügbarkeit'' ist dankenswerterweise sehr einfach zu erfüllen: Es existiert eine Vielzahl von praktisch eingesetzten quelloffenen Datenbanksystemen. Die Kriterien ``einfacher Betrieb'' und ``einfache Backups'' teilen die denkbaren Systeme recht eindeutig in zwei Lager: Eingebette Datenbanken lassen sich sehr einfach betreiben und sichern. Das starten eines weiteren SQL-Server-Prozesses ist bei dieser Betriebsart nicht nötig, der Im- oder Export des gesamten Datenbestandes erfordert nur das kopieren einer einzigen Datei.
 
-Um den Betrieb folglich so einfach wie möglich zu halten, wurden für esqulino zunächst eingebettete Datenbanksysteme betrachtet. Aus der Masse an verfügbaren Systemen sticht das SQLite-System jedoch sehr weit hinaus: Der Quelltext ist gemeinfrei, der Betrieb sogar auf exotischen Systemen möglich und es existiert eine Fülle von verschiedensten Programmen für alle Betriebssysteme.
+Um den Betrieb folglich so einfach wie möglich zu halten, wurden für \idename zunächst eingebettete Datenbanksysteme betrachtet. Aus der Masse an verfügbaren Systemen sticht das SQLite-System jedoch sehr weit hinaus: Der Quelltext ist gemeinfrei, der Betrieb sogar auf exotischen Systemen möglich und es existiert eine Fülle von verschiedensten Programmen für alle Betriebssysteme.
 
 \unsure[inline]{Theoretisch ist die Menge an denkbaren Systemen fast unüberschaubar groß, praktisch sticht SQLite aus der Masse an Optionen heraus. Wie ausführlich muss ich das begründen?}
 
@@ -137,7 +137,7 @@ Die Funktionalität der, relativ isolierten und daher gut zu testenden, internen
 
 Als technisches Fundament wird für diese Testfälle auf der Jasmine-Bibliothek aufgebaut. Zu prüfende Zusicherungen werden durch Verkettung zweier Funktionen ausgedrückt: \lstinline{expect().toEqual()}. Neben \lstinline{toEqual()} sind natürlich auch andere Vergleiche wie \lstinline{isUndefined()} möglich. Wenn innerhalb eines Testfalls auch nur eine einzige dieser Prüfungen nicht zu \lstinline{true} auswertet, wird der Testfall als ingesamt fehlgeschlagen markiert. Im Falle von mehreren gescheiterten Prüfungen sind werden dabei alle unerwarteten Ergebnisse aufgelistet.
 
-listing \ref{lst:unit-test-example} illustriert, wie die meisten testfälle in esqulino aufgebaut sein. jeder testfall beginnt mit der definition eines datenmodells und endet mit testfällen für die korrekte serialisierung. ganz konkret existiert also in jedem testfall eine variable \lstinline{model}, welche im konstruktor der zu testenden klasse zum einsatz kommt und in nicht-mutierenden testfällen als ergebnis der \lstinline{tomodel()} methode reproduziert werden muss. formal ausgedrückt handelt es sich es sich bei der verkettung des konstruktors mit der \lstinline{tomodel()}-methode also um eine neutrale operation.
+listing \ref{lst:unit-test-example} illustriert, wie die meisten testfälle in \idename aufgebaut sein. jeder testfall beginnt mit der definition eines datenmodells und endet mit testfällen für die korrekte serialisierung. ganz konkret existiert also in jedem testfall eine variable \lstinline{model}, welche im konstruktor der zu testenden klasse zum einsatz kommt und in nicht-mutierenden testfällen als ergebnis der \lstinline{tomodel()} methode reproduziert werden muss. formal ausgedrückt handelt es sich es sich bei der verkettung des konstruktors mit der \lstinline{tomodel()}-methode also um eine neutrale operation.
 
 die dateien mit den unit-tests liegen im dateisystem immer "`neben"' ihren implementierungen, der dateiname wird allerdings mit dem suffix \lstinline{spec} wie "`specification"' ergänzt. das beispiel in listing  \ref{lst:unit-test-example} wurde der datei \lstinline{select.spec.ts} entnommen, der code für die zu testende funktionalität findet sich folglich in \lstinline{select.ts}.
 
@@ -149,13 +149,13 @@ die dateien mit den unit-tests liegen im dateisystem immer "`neben"' ihren imple
   numbers=left
 ]{snippets/unit-test-example.ts}
 
-die serverseitige funktionalität wird aktuell ausschließlich über "`ende-zu-ende"'-tests mit einem speziell instrumentierten browser geprüft. für diese tests ist ein speziell vorbereitetes testprojekt in einem exakt definierten zustand sowie neben dem browser auch ein esqulino-server notwendig.
+die serverseitige funktionalität wird aktuell ausschließlich über "`ende-zu-ende"'-tests mit einem speziell instrumentierten browser geprüft. für diese tests ist ein speziell vorbereitetes testprojekt in einem exakt definierten zustand sowie neben dem browser auch ein \idename-server notwendig.
 
 \subsection{struktur eines projekts}
 
-die grundsätzliche struktur eines esqulino-projektes wird in diagramm \ref{uml:class-diagram-core-entities} ersichtlich. diese darstellung visualisert nicht die konkrete implementierung des servers oder des clients, sondern illustriert die grundlegenden beteiligten datenstrukturen. jede dieser entitäten, also sowohl projekte als auch ihre ressourcen, enthält eine eigene versionsangabe. dadurch kann auf jede veränderung an dieser struktur explizit eingegangen werden (\ref{sec:implementation-migration}~\nameref{sec:implementation-migration}), aktuell laden sowohl server als auch client nur ressourcen deren version exakt passt.
+die grundsätzliche struktur eines \idename-projektes wird in diagramm \ref{uml:class-diagram-core-entities} ersichtlich. diese darstellung visualisert nicht die konkrete implementierung des servers oder des clients, sondern illustriert die grundlegenden beteiligten datenstrukturen. jede dieser entitäten, also sowohl projekte als auch ihre ressourcen, enthält eine eigene versionsangabe. dadurch kann auf jede veränderung an dieser struktur explizit eingegangen werden (\ref{sec:implementation-migration}~\nameref{sec:implementation-migration}), aktuell laden sowohl server als auch client nur ressourcen deren version exakt passt.
 
-jede ressource (\lstinline{projectresource}) verfügt über eine interne id sowie einen sprechenden namen. in der aktuellen version von esqulino handelt es sich bei dieser id um eine \lstinline{guid}, sollte also weltweit einzigartig sein. theoretisch wäre es dadurch denkbar diese ressourcen auch zwischen projekten zu kopieren bzw. zu teilen. intern werden referenzen auf ressourcen immer anhand der id referenziert. eine umbenennung von ressourcen durch den benutzer hat daher keine auswirkungen auf etwaige referenzen an anderer stelle.
+jede ressource (\lstinline{projectresource}) verfügt über eine interne id sowie einen sprechenden namen. in der aktuellen version von \idename handelt es sich bei dieser id um eine \lstinline{guid}, sollte also weltweit einzigartig sein. theoretisch wäre es dadurch denkbar diese ressourcen auch zwischen projekten zu kopieren bzw. zu teilen. intern werden referenzen auf ressourcen immer anhand der id referenziert. eine umbenennung von ressourcen durch den benutzer hat daher keine auswirkungen auf etwaige referenzen an anderer stelle.
 
 \begin{diagram}[p]
   \begin{tikzpicture}
@@ -226,7 +226,7 @@ grundsätzlich sollte die serverseitig persistierte version einer resource mögl
 
 um json-dokumente serverseitig zu persistieren kommen im wesentlichen zwei speichermethoden in frage: entweder werden datensätze direkt als datei im dateisystem abgelegt oder in einer dokumentenorientierten datenbank gespeichert.
 
-bei einer speicherung im dateisystem wäre der rein lesende zugriff auf esqulino-datensätze sogar mit einem einfachen webserver für statische dateien möglich. um ein projekt anzusehen oder zu editieren reicht ein normaler texteditor, neue projekte können einfach per copy \& paste im dateisystem angelegt werden. perspektivisch wäre es relativ einfach möglich ein projekt mit gängigen versionsverwaltungsprogrammen wie git oder mercurial zu versionieren.
+bei einer speicherung im dateisystem wäre der rein lesende zugriff auf \idename-datensätze sogar mit einem einfachen webserver für statische dateien möglich. um ein projekt anzusehen oder zu editieren reicht ein normaler texteditor, neue projekte können einfach per copy \& paste im dateisystem angelegt werden. perspektivisch wäre es relativ einfach möglich ein projekt mit gängigen versionsverwaltungsprogrammen wie git oder mercurial zu versionieren.
 
 die speicherung in dokumentenorientierten datenbank wie mongodb oder in einem key/value-store wie redis macht den zugriff auf die persistierten daten abhängig von einem externen serverprozess. der universelle zugriff über das dateisystem weicht einem speziellem programm zur navigation innerhalb der jeweiligen datenbank. mit dieser komplexität gewinnt man eine wesentlich größere flexibilät in bezug auf horizontale skalierung.
 
