@@ -1,7 +1,7 @@
 \section{Implementierung}
 \label{sec:implementation-analysis}
 
-Dieses Kapitel beschreibt den Implementierungsprozess von \idename und erläutert einige technische Entscheidungen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, wurden diese in Anlehnung an den "`Minus 100 Points"'-Artikel von Eric Gunnerson \cite{gunnerson-minus-100} geprüft.
+Dieses Kapitel beschreibt den Implementierungsprozess von \idename{} und erläutert einige technische Entscheidungen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, wurden diese in Anlehnung an den "`Minus 100 Points"'-Artikel von Eric Gunnerson \cite{gunnerson-minus-100} geprüft.
 
 \todo[inline]{Mehrere Datenbanken je Projekt, ``Veränderungsanzeige'' für Abfragen, Breite von Spalten}
 
@@ -49,7 +49,7 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
   \item Wechsel zwischen verschiedenen Editoren
   \end{itemize}
 \item [Datenmodell \& Code-Generator für Abfragen] \hfill \\
-  Der abstrake Syntaxbaum für Datenbankabfragen in \idename sowie dessen Validierung gegen ein Datenbankschema. Dieses Datenmodell soll soweit wie möglich von der Visualisierung entkoppelt werden, damit es sich möglichst einfach testen lässt.
+  Der abstrake Syntaxbaum für Datenbankabfragen in \idename{} sowie dessen Validierung gegen ein Datenbankschema. Dieses Datenmodell soll soweit wie möglich von der Visualisierung entkoppelt werden, damit es sich möglichst einfach testen lässt.
   \begin{itemize}
   \item Einfache Projektion durch Auswahl von Spalten im \texttt{SELECT}
   \item Kreuzprodukte unterschiedlicher Tabellen im \texttt{FROM}
@@ -98,7 +98,7 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
   \end{itemize}
   
 \item [Qualitätssicherung] \hfill \\
-  Zu diesem Zeitpunkt sollte ein voll funktionsfähiger Prototyp existieren, der jedoch noch einer rigorosen Qualitätskontrolle unterzogen muss. Bisher wude der Prototyp ausschließlich durch Entwickler bedient, es stellt sich insbesondere die Frage wie \idename auf Bedienfehler oder Inkonsistenzen reagiert.
+  Zu diesem Zeitpunkt sollte ein voll funktionsfähiger Prototyp existieren, der jedoch noch einer rigorosen Qualitätskontrolle unterzogen muss. Bisher wude der Prototyp ausschließlich durch Entwickler bedient, es stellt sich insbesondere die Frage wie \idename{} auf Bedienfehler oder Inkonsistenzen reagiert.
   \begin{itemize}
   \item Was passiert mit bestehenden Abfragen, wenn sich das Schema radikal verändert?
   \item Wie sollten Seiten für Endanwender gerendert werden, wenn diese fehlerhaft sind?
@@ -116,20 +116,18 @@ Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkei
 \item[Kostenlose Verfügbarkeit] \hfill \\
   Der Betrieb des Datenbanksystems soll nicht mit Lizenzkosten für Schulen, Lehrkräft, Lernende oder auch freiwillige Entwickler verbunden sein.
 \item[Einfacher Betrieb] \hfill \\
-  Zwar ist für den Einsatz von \idename aufgrund des Browsers als Client schon die Nutzung eines Servers nötig, das Datenbanksystem sollte den Betrieb dennoch nicht mehr als unbedingt notwendig weiter verkomplizieren. Eine wesentliche Rolle spielt dabei die Platformunabhängigkeit: Das Datenbanksystem sollte, wie auch der \idename Server, auf jedem gängigen Betriebssystem lauffähig sein.
+  Zwar ist für den Einsatz von \idename{} aufgrund des Browsers als Client schon die Nutzung eines Servers nötig, das Datenbanksystem sollte den Betrieb dennoch nicht mehr als unbedingt notwendig weiter verkomplizieren. Eine wesentliche Rolle spielt dabei die Platformunabhängigkeit: Das Datenbanksystem sollte, wie auch der \idename{} Server, auf jedem gängigen Betriebssystem lauffähig sein.
 \item[Einfache Backups] \hfill \\
   Die gewünschte Exportfunktion für Projekte macht es nötig, den gesamten Datenbestand vergleichsweise einfach exportieren und importieren zu können. Darüber hinaus sollte es auch für Lehrkräfte möglichst einfach sein mit allen Projekten zu einem anderen \idename-Server umzuziehen.
 \item[Tools zur Modellierung] \hfill \\
   Da diese Arbeit sich nicht mit der Datenmodellierung befasst, muss das entsprechende Datenbankschema extern erzeugt werden. Von einer guten Unterstützung für Modellierungsvorhaben profitiert dementsprechend indirekt auch \idename.
 \item[Tools zur Entwicklung von SQL-Abfragen] \hfill \\
-  Sobald ein Entwickler an die Grenzen des SQL-Editor von \idename stößt, soll es so einfach wie möglich sein die Abfragen in einem externen Editor zu schreiben und danach in Textform wieder an \idename zu übergeben.
+  Sobald ein Entwickler an die Grenzen des SQL-Editor von \idename{} stößt, soll es so einfach wie möglich sein die Abfragen in einem externen Editor zu schreiben und danach in Textform wieder an \idename{} zu übergeben.
 \end{description}
 
 Das Kriterium der ``kostenlosen Verfügbarkeit'' ist dankenswerterweise sehr einfach zu erfüllen: Es existiert eine Vielzahl von praktisch eingesetzten quelloffenen Datenbanksystemen. Die Kriterien ``einfacher Betrieb'' und ``einfache Backups'' teilen die denkbaren Systeme recht eindeutig in zwei Lager: Eingebette Datenbanken lassen sich sehr einfach betreiben und sichern. Das starten eines weiteren SQL-Server-Prozesses ist bei dieser Betriebsart nicht nötig, der Im- oder Export des gesamten Datenbestandes erfordert nur das kopieren einer einzigen Datei.
 
-Um den Betrieb folglich so einfach wie möglich zu halten, wurden für \idename zunächst eingebettete Datenbanksysteme betrachtet. Aus der Masse an verfügbaren Systemen sticht das SQLite-System jedoch sehr weit hinaus: Der Quelltext ist gemeinfrei, der Betrieb sogar auf exotischen Systemen möglich und es existiert eine Fülle von verschiedensten Programmen für alle Betriebssysteme.
-
-\unsure[inline]{Theoretisch ist die Menge an denkbaren Systemen fast unüberschaubar groß, praktisch sticht SQLite aus der Masse an Optionen heraus. Wie ausführlich muss ich das begründen?}
+Um den Betrieb folglich so einfach wie möglich zu halten, wurden für \idename{} zunächst eingebettete Datenbanksysteme betrachtet. Aus der Masse an verfügbaren Systemen sticht das SQLite-System jedoch sehr weit hinaus: Der Quelltext ist gemeinfrei, die Anbindung an so ziemlich jede Programmiersprache ist bequem möglich und es existiert eine Fülle von verschiedensten Modellierungsprogrammen für alle Betriebssysteme. Auf eine genauere Analyse der zur Verfügung stehenden Alternativen wurde daher verzichtet.
 
 \subsection{Tests}
 
@@ -137,13 +135,13 @@ Die Funktionalität der, relativ isolierten und daher gut zu testenden, internen
 
 Als technisches Fundament wird für diese Testfälle auf der Jasmine-Bibliothek aufgebaut. Zu prüfende Zusicherungen werden durch Verkettung zweier Funktionen ausgedrückt: \lstinline{expect().toEqual()}. Neben \lstinline{toEqual()} sind natürlich auch andere Vergleiche wie \lstinline{isUndefined()} möglich. Wenn innerhalb eines Testfalls auch nur eine einzige dieser Prüfungen nicht zu \lstinline{true} auswertet, wird der Testfall als ingesamt fehlgeschlagen markiert. Im Falle von mehreren gescheiterten Prüfungen sind werden dabei alle unerwarteten Ergebnisse aufgelistet.
 
-listing \ref{lst:unit-test-example} illustriert, wie die meisten testfälle in \idename aufgebaut sein. jeder testfall beginnt mit der definition eines datenmodells und endet mit testfällen für die korrekte serialisierung. ganz konkret existiert also in jedem testfall eine variable \lstinline{model}, welche im konstruktor der zu testenden klasse zum einsatz kommt und in nicht-mutierenden testfällen als ergebnis der \lstinline{tomodel()} methode reproduziert werden muss. formal ausgedrückt handelt es sich es sich bei der verkettung des konstruktors mit der \lstinline{tomodel()}-methode also um eine neutrale operation.
+Listing \ref{lst:unit-test-example} illustriert, wie die meisten Testfälle in \idename{} aufgebaut sind. Jeder Testfall beginnt mit der Definition eines Datenmodells und endet mit Zusicherungen um die korrekte Serialisierung sicherzustellen. Ganz konkret existiert also in jedem Testfall eine Variable \lstinline{model}, welche im Konstruktor der zu testenden Klasse zum Einsatz kommt und in nicht-mutierenden Testfällen als ergebnis der \lstinline{toModel()} methode reproduziert werden muss. formal ausgedrückt handelt es sich es sich bei der verkettung des konstruktors mit der \lstinline{tomodel()}-methode also um eine neutrale operation.
 
 die dateien mit den unit-tests liegen im dateisystem immer "`neben"' ihren implementierungen, der dateiname wird allerdings mit dem suffix \lstinline{spec} wie "`specification"' ergänzt. das beispiel in listing  \ref{lst:unit-test-example} wurde der datei \lstinline{select.spec.ts} entnommen, der code für die zu testende funktionalität findet sich folglich in \lstinline{select.ts}.
 
 \lstinputlisting[
   language=javascript,
-  caption=unit-test für eine korrekte \lstinline{select}-abfrage,
+  caption=Unit-Test für eine korrekte \texttt{SELECT}-Abfrage,
   label=lst:unit-test-example,
   float,floatplacement=p,
   numbers=left
@@ -151,84 +149,88 @@ die dateien mit den unit-tests liegen im dateisystem immer "`neben"' ihren imple
 
 die serverseitige funktionalität wird aktuell ausschließlich über "`ende-zu-ende"'-tests mit einem speziell instrumentierten browser geprüft. für diese tests ist ein speziell vorbereitetes testprojekt in einem exakt definierten zustand sowie neben dem browser auch ein \idename-server notwendig.
 
-\subsection{struktur eines projekts}
+\subsection{Struktur eines Projekts}
 
-die grundsätzliche struktur eines \idename-projektes wird in diagramm \ref{uml:class-diagram-core-entities} ersichtlich. diese darstellung visualisert nicht die konkrete implementierung des servers oder des clients, sondern illustriert die grundlegenden beteiligten datenstrukturen. jede dieser entitäten, also sowohl projekte als auch ihre ressourcen, enthält eine eigene versionsangabe. dadurch kann auf jede veränderung an dieser struktur explizit eingegangen werden (\ref{sec:implementation-migration}~\nameref{sec:implementation-migration}), aktuell laden sowohl server als auch client nur ressourcen deren version exakt passt.
+Die grundsätzliche Struktur eines \idename-Projektes wird in Diagramm \ref{uml:class-diagram-core-entities} ersichtlich. Diese Darstellung visualisert nicht die konkrete Implementierung des Servers oder des Clients, sondern illustriert die grundlegenden beteiligten Datenstrukturen. Jede dieser Entitäten, also sowohl Projekte als auch ihre Ressourcen, enthält eine eigene Versionsangabe. Dadurch kann auf jede Veränderung an dieser Struktur explizit eingegangen werden (\ref{sec:implementation-migration}~\nameref{sec:implementation-migration}). Aktuell laden sowohl Server als auch Client nur Ressourcen, deren Version exakt passt.
 
-jede ressource (\lstinline{projectresource}) verfügt über eine interne id sowie einen sprechenden namen. in der aktuellen version von \idename handelt es sich bei dieser id um eine \lstinline{guid}, sollte also weltweit einzigartig sein. theoretisch wäre es dadurch denkbar diese ressourcen auch zwischen projekten zu kopieren bzw. zu teilen. intern werden referenzen auf ressourcen immer anhand der id referenziert. eine umbenennung von ressourcen durch den benutzer hat daher keine auswirkungen auf etwaige referenzen an anderer stelle.
+Jede Ressource (\lstinline{ProjectResource}) verfügt über eine interne ID sowie einen sprechenden Namen. In der aktuellen Version von \idename{} handelt es sich bei dieser ID um eine \lstinline{GUID}, sollte also weltweit einzigartig sein. Theoretisch wäre es dadurch denkbar, diese Ressourcen auch zwischen Projekten zu kopieren oder zu teilen. Intern werden Referenzen auf Ressourcen immer anhand der ID vorgenommen. Eine Umbenennung von Ressourcen durch den Benutzer hat daher keine Auswirkungen auf etwaige Referenzen an anderer Stelle.
+
+Die Methode \texttt{ProjectResource.toModel()} wird genutzt um aus dem spezifischen Ressourcen-Objekt eine rein beschreibende Datenstruktur zu erzeugen. Diese Beschreibung ist selbstverständlich abhängig vom Typ der jeweiligen Ressource und kommt auch in dessem Konstruktor zum Einsatz. Tiefe Kopien von Ressourcen können daher über diese Serialisierungs- und Deserialisierungsschritte vorgenommen werden.
 
 \begin{diagram}[p]
   \begin{tikzpicture}
-    \begin{interface}[text width=7cm]{apiversionable}{-4, 0}
-      \attribute{apiversion : string}
+    \begin{interface}[text width=7cm]{ApiVersionable}{-4, 0}
+      \attribute{apiVersion : string}
     \end{interface}
     
-    \begin{class}[text width=7cm]{project}{-8, -4}
-      \implement{apiversionable}
+    \begin{class}[text width=7cm]{Project}{-8, -4}
+      \implement{ApiVersionable}
       
       \attribute{id : string}
       \attribute{name : string}
       \attribute{description : string}
-      \attribute{indexpageid : string}
+      \attribute{indexPageId : string}
     \end{class}
 
-    \begin{abstractclass}[text width=7cm]{projectresource}{0, -6}
-      \implement{apiversionable}
+    \begin{abstractclass}[text width=7cm]{ProjectResource}{0, -6}
+      \implement{ApiVersionable}
+
+      \operation[0]{toModel() : ProjectResource}
       
       \attribute{id : string}
       \attribute{name : string}
     \end{abstractclass}
 
-    \begin{class}[text width=7cm]{page}{0, -10}      
-      \attribute{body: bodynode}
-      \attribute{referencedqueries: queryreference[]}
-      \attribute{parameters: pageparameter[]}
+    \begin{class}[text width=7cm]{Page}{0, -10}      
+      \attribute{body: BodyNode}
+      \attribute{referencedQueries: QueryReference[]}
+      \attribute{parameters: PageParameter[]}
     \end{class}
 
-    \begin{class}[text width=7cm]{query}{0, -14}
-      \attribute{select : select}
-      \attribute{delete : insert}
-      \attribute{insert : insert}
-      \attribute{update : update}
-      \attribute{from   : from}
-      \attribute{where  : where}
+    \begin{class}[text width=7cm]{Query}{0, -14}
+      \attribute{select : Select}
+      \attribute{delete : Delete}
+      \attribute{insert : Insert}
+      \attribute{update : Update}
+      \attribute{from   : From}
+      \attribute{where  : Where}
     \end{class}
 
     % query and page implement projectresource
-    \draw[->] (query.east) -- ++ (1,0) -- ($(projectresource.east)+(1,0)$) -- (projectresource.east);
-    \draw[-] (page.east) -- ++ (1,0);
+    \draw[->] (Query.east) -- ++ (1,0) -- ($(ProjectResource.east)+(1,0)$) -- (ProjectResource.east);
+    \draw[-] (Page.east) -- ++ (1,0);
 
     % each resource has a reference to the project
-    \draw[] (projectresource.north)  |- (project.east);
-    \node[xshift=0.3cm, yshift=0.3cm] at (projectresource.north) {n};
-    \node[xshift=0.3cm, yshift=0.3cm] at (project.east) {1};
+    \draw[] (ProjectResource.north)  |- (Project.east);
+    \node[xshift=0.3cm, yshift=0.3cm] at (ProjectResource.north) {n};
+    \node[xshift=0.3cm, yshift=0.3cm] at (Project.east) {1};
     
     % a project has pages ...
-    \draw[] (page.west)  -| (project.south);
-    \node[xshift=0.3cm, yshift=-0.5cm] at (project.south) {1};
-    \node[xshift=-0.5cm, yshift=0.3cm] at (query.west) {0..n};
-    \node[xshift=-2.5cm, yshift=0.3cm] at (query.west) {queries};
+    \draw[] (Page.west)  -| (Project.south);
+    \node[xshift=0.3cm, yshift=-0.5cm] at (Project.south) {1};
+    \node[xshift=-0.5cm, yshift=0.3cm] at (Query.west) {0..n};
+    \node[xshift=-2.5cm, yshift=0.3cm] at (Query.west) {Queries};
 
     % ... and queries.
-    \draw[] (query.west) -| (project.south);
-    \node[xshift=-0.5cm, yshift=0.3cm] at (page.west) {0..n};
-    \node[xshift=-2.5cm, yshift=0.3cm] at (page.west) {pages};
+    \draw[] (Query.west) -| (Project.south);
+    \node[xshift=-0.5cm, yshift=0.3cm] at (Page.west) {0..n};
+    \node[xshift=-2.5cm, yshift=0.3cm] at (Page.west) {Pages};
   \end{tikzpicture}
 
-  \caption{abstrakte übersicht über die ressourcen eines projektes}
+  \caption{Abstrakte Übersicht über die Ressourcen eines Projektes}
   \label{uml:class-diagram-core-entities}
 \end{diagram}
 
-\subsection{serverseitige persistenz}
+\subsection{Serverseitige Persistenz}
 \label{sec:implementation-persistence}
 
-grundsätzlich sollte die serverseitig persistierte version einer resource möglichst identisch mit dem übertragungsformat sein, konkret persistiert werden also json-dokumente. bei der auslieferung müssen dann lediglich sensible informationen gefiltert werden, in der datenstruktur der jeweiligen implementierung sollte diese felder daher als optional betrachtet werden. sofern jedoch keine filterung notwendig ist, können diese dokumente einfach unverändert bereitgestellt werden.
+Grundsätzlich sollte die serverseitig persistierte Repräsentation einer Ressource identisch mit dem Übertragungsformat sein. Dieses Vorgehen spart Zeit, in dem ein Transoformationsvorgang eingespart werden kann. Bei der folgenden Betrachtung von möglichen Optionen zur Speicherung der Daten, wird also grundsätzlich von \texttt{JSON}-Dokumenten ausgegangen. Um diese serverseitig zu persistieren, kommen im Wesentlichen zwei Speichermethoden in Frage: Entweder werden Datensätze direkt als Datei im Dateisystem abgelegt oder in einer dokumentenorientierten Datenbank gespeichert.
 
-um json-dokumente serverseitig zu persistieren kommen im wesentlichen zwei speichermethoden in frage: entweder werden datensätze direkt als datei im dateisystem abgelegt oder in einer dokumentenorientierten datenbank gespeichert.
+Bei der Auslieferung durch den Server müssen dann lediglich sensible Informationen gefiltert werden, in der Datenstruktur der jeweiligen Implementierung sollte diese Felder daher als optional betrachtet werden. Sofern jedoch keine Filterung notwendig ist, können diese Dokumente einfach unverändert bereitgestellt werden.
 
-bei einer speicherung im dateisystem wäre der rein lesende zugriff auf \idename-datensätze sogar mit einem einfachen webserver für statische dateien möglich. um ein projekt anzusehen oder zu editieren reicht ein normaler texteditor, neue projekte können einfach per copy \& paste im dateisystem angelegt werden. perspektivisch wäre es relativ einfach möglich ein projekt mit gängigen versionsverwaltungsprogrammen wie git oder mercurial zu versionieren.
+Bei einer Speicherung im Dateisystem wäre der rein lesende Zugriff auf \idename-datensätze sogar mit einem einfachen Webserver für statische Dateien möglich. Um ein Projekt zu Testzwecken anzusehen oder zu editieren reicht ein normaler Texteditor, neue Projekte können einfach per Copy \& Paste im Dateisystem angelegt werden. Perspektivisch wäre es relativ einfach möglich, ein Projekt mit gängigen Versionsverwaltungsprogrammen wie git oder mercurial zu versionieren.
 
-die speicherung in dokumentenorientierten datenbank wie mongodb oder in einem key/value-store wie redis macht den zugriff auf die persistierten daten abhängig von einem externen serverprozess. der universelle zugriff über das dateisystem weicht einem speziellem programm zur navigation innerhalb der jeweiligen datenbank. mit dieser komplexität gewinnt man eine wesentlich größere flexibilät in bezug auf horizontale skalierung.
+Die Speicherung in dokumentenorientierten Datenbanken wie MongoDB oder in einem Key/Value-Store wie redis macht den Zugriff auf die persistierten Daten abhängig von einem externen Serverprozess. der universelle zugriff über das dateisystem weicht einem speziellem programm zur navigation innerhalb der jeweiligen datenbank. mit dieser komplexität gewinnt man eine wesentlich größere flexibilät in bezug auf horizontale skalierung.
 
 technisch gesehen ist ein projekt also eine sammlung von dateien in einer festgelegten ordnerstruktur.
 

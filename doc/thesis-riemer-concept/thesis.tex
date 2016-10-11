@@ -25,6 +25,7 @@
 \usepackage[simplified]{pgf-umlcd}
 \usepackage[pass]{geometry} %% showframe um auf übervolle Boxen zu testen
 \usepackage[onehalfspacing]{setspace}
+\usepackage{multicol}
 
 %% additional ressources
 \input{tex-definitions}
@@ -58,7 +59,7 @@
 \date{\today{}}
 
 
-%% document
+ %% document
 \begin{document}
 \pagenumbering{Roman}
 \input{titlepage}
@@ -84,10 +85,7 @@
 \include{kap-4-umsetzung}
 
 \cleardoublepage
-\include{kap-5-schnittstellen}
-
-\cleardoublepage
-\include{kap-6-evaluierung}
+\include{kap-5-fazit}
 
 \appendix{}
 
@@ -95,10 +93,10 @@
 \include{anh-projektideen}
 
 \cleardoublepage
-\include{anh-implementierte-features}
+\include{anh-dokumentation-oberflaeche}
 
 \cleardoublepage
-\include{anh-dokumentation-oberflaeche}
+\include{anh-eidesstattliche-erklaerung}
 
 \listoftodos[Notes]
 

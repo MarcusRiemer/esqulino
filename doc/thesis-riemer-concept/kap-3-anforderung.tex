@@ -1,14 +1,14 @@
 \section{Anforderungsanalyse}
 \label{sec:requirements}
 
-Dieses Kapitel beschreibt die generellen Anforderungen an die Entwicklungsumgebung und einiger Beispielprojekte. Dabei werden auch einige theoretische Hintergründe betrachtet, speziell didaktische Konzepte für die Vermittlung von SQL oder mögliche Vorgehensweisen um Schüler bei der Entwicklung von Oberflächen sinnvoll anzuleiten. Den Schwerpunkt bildet die Beschreibung der beiden wichtigsten Komponenten der Entwicklungsumgebung: Die spezialisierten Editoren für SQL und Oberflächen.
+Dieses Kapitel beschreibt die generellen Anforderungen an die Entwicklungsumgebung. Dabei werden auch einige theoretische Hintergründe betrachtet, speziell mögliche Reduktionen des SQL-Sprachumfangs für die Vermittlung von Datenbankkenntnissen. Ebenfalls thematisiert werden unterschiedliche Vorgehensweisen um Schüler bei der Entwicklung von Oberflächen sinnvoll anzuleiten. Den Schwerpunkt bildet die Beschreibung der beiden wichtigsten Komponenten der Entwicklungsumgebung: Die spezialisierten Editoren für SQL und Oberflächen.
 
 Die hier "`erträumte"' Konzeption wird aufgrund der Endlichkeit der im Rahmen einer Master-Thesis zur Verfügung stehenden Zeitspanne nicht vollständig umgesetzt werden können. Trotzdem ist eine möglichst vollständige Erfassung von Anforderungen unerläßlich, um im Falle einer Fortführung der Entwicklung nicht aufgrund von unberücksichtigten Anforderungen große Umbauarbeiten vornehmen zu müssen.
 
 Da der Zweck dieser Arbeit die Konzeption und Umsetzung einer Software ist, deren Zweck wiederum die Entwicklung anderer Software ist, bedarf es zunächst eines einheitlichen Verständnisses für die Bezeichnungen der beteiligten Personen und Entitäten:
 
 \begin{description}
-\item[(Schüler-)Entwicklungsumgebung, \idename] \hfill\\ 
+\item[(Schüler-)Entwicklungsumgebung, \idename{}] \hfill\\ 
   Bezeichnet die von den Lernenden zu nutzende Software, die im Rahmen dieser Arbeit erstellt wird. Sofern Verwechslungen mit anderen Entwicklungsumgebungen (engl. ``integrated development environment'', IDE) auftreten könnten, wird explizit das Präfix ``Schüler'' genutzt. Diese Unterscheidung wird insbesondere bei Vergleichen mit gängiger Entwicklungssoftware Art relevant sein.
 \item[(Schüler-)Projekt] \hfill\\
   Bezeichnet die von den Lernenden unter Nutzung der Schülerentwicklungsumgebung erstellte Software. Teil eines solchen Projektes sind unter anderem das Datenbankschema, die verschiedenen Abfragen und die gestaltete Benutzeroberfläche.
@@ -23,17 +23,17 @@ Da der Zweck dieser Arbeit die Konzeption und Umsetzung einer Software ist, dere
 \subsection{Zielgruppe}
 \label{sec:target-audience}
 
-Mit \idename sollen Schülerinnen und Schüler ab der Mittelstufe angesprochen werden. Die im folgenden genannten Aspekte bilden ein sehr oberflächliches Profil hilfreicher Kenntnisse. Dieses Profil ist dabei allerdings nicht als striktes Anforderungsprofil zu verstehen: Grundsätzlich lassen sich dieser Kenntnisse auch am Beispiel von \idename vermitteln, dezidiertes Lehrmaterial gibt es dafür zum jetzigen Zeitpunkt allerdings nicht. Es ist Aufgabe der Lehrkraft dieses Wissen im Rahmen eigener Unterrichtseinheiten zu vermitteln. Kenntnisse über Datenbanken oder HTML sind nicht Bestandteil dieses Profils, schließlich versteht sich \idename als eine Lernumgebung für genau diese Technologien.
+Mit \idename{} sollen Schülerinnen und Schüler ab der Mittelstufe angesprochen werden. Die im folgenden genannten Aspekte bilden ein sehr oberflächliches Profil hilfreicher Kenntnisse. Dieses Profil ist dabei allerdings nicht als striktes Anforderungsprofil zu verstehen: Grundsätzlich lassen sich dieser Kenntnisse auch am Beispiel von \idename{} vermitteln, dezidiertes Lehrmaterial gibt es dafür zum jetzigen Zeitpunkt allerdings nicht. Es ist Aufgabe der Lehrkraft dieses Wissen im Rahmen eigener Unterrichtseinheiten zu vermitteln. Kenntnisse über Datenbanken oder HTML sind nicht Bestandteil dieses Profils, schließlich versteht sich \idename{} als eine Lernumgebung für genau diese Technologien.
 
 \begin{description}
 \item[Grundlegende Anwenderkenntnisse] \hfill\\
-  Die Schüler müssen in der Lage sein einen Browser zu bedienen und mit Begriffen wie "`Speichern"' vertraut sein. Kenntnisse des Dateisystems sind jedoch nicht notwendig, \idename abstrahiert die konkreten Speicherorte weg.
+  Die Schüler müssen in der Lage sein einen Browser zu bedienen und mit Begriffen wie "`Speichern"' vertraut sein. Kenntnisse des Dateisystems sind jedoch nicht notwendig, \idename{} abstrahiert die konkreten Speicherorte weg.
 \item[Tabellenkalkulation] \hfill\\
   Kenntnisse über den Umgang mit Tabellenkalkulationsprogrammen sind keine zwingende Voraussetzung, aber vermutlich eine sinnvolle Vorstufe um die Struktur von Daten zu verstehen. Sofern sich die Schüler innerhalb eines solchen Programms auch schon mit Funktionen wie \lstinline{SUMME} beschäftigt haben, kann auf diesem Wissen aufgebaut werden.
 \item[Bedienelemente] \hfill\\
-  Wenn die Schüler mit \idename eigene Oberflächen entwickeln sollen, brauchen sie grundlegende Vorstellungen über die Funktionsweise und Parameter einiger Bedienelemente: Mit Links werden Inhalte verknüpft, Knöpfe lösen Aktionen aus, Textfelder stellen Werte zur Verfügung, eine Combobox erlaubt die Auswahl von einem Wert aus vielen Werten ... Ohne zu wissen wozu bestimmte Bedienelemte eingesetzt werden, erschließt sich deren Verwendung in HTML nur sehr umständlich.
+  Wenn die Schüler mit \idename{} eigene Oberflächen entwickeln sollen, brauchen sie grundlegende Vorstellungen über die Funktionsweise und Parameter einiger Bedienelemente: Mit Links werden Inhalte verknüpft, Knöpfe lösen Aktionen aus, Textfelder stellen Werte zur Verfügung, eine Combobox erlaubt die Auswahl von einem Wert aus vielen Werten ... Ohne zu wissen wozu bestimmte Bedienelemte eingesetzt werden, erschließt sich deren Verwendung in HTML nur sehr umständlich.
 \item[Englische Vokabeln] \hfill\\
-  In der initialen Version wird \idename die Syntax von SQL oder HTML zwar vereinfachen und augmentieren, aber nicht übersetzen. Den Schülern sollte die Bedeutung von Vokabeln wie \lstinline{WHERE} oder \lstinline{<input>} also geläufig sein.
+  In der initialen Version wird \idename{} die Syntax von SQL oder HTML zwar vereinfachen und augmentieren, aber nicht übersetzen. Den Schülern sollte die Bedeutung von Vokabeln wie \lstinline{WHERE} oder \lstinline{<input>} also geläufig sein.
 \end{description}
 
 \subsection{Grundprinzipien}
@@ -49,7 +49,7 @@ Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit be
 \item[Schrittweise komplexere Benutzeroberfläche der Entwicklungsumgebung] \hfill \\
   Konventionelle Entwicklungsumgebungen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. Gerade wenn man aber dabei ist etwas Neues zu lernen, kann es sinnvoll sein, die Menge der möglichen Optionen zu beschränken. In diesem Sinne sollte die Lehrkraft die Möglichkeit haben, den Funktionsumfang der Entwicklungsumgebung für Schüler gezielt zu reduzieren. Es sollten sich also Funktionen der Entwicklungsumgebung ausblenden lassen, wenn dies aus didaktischen Gründen sinnvoll erscheint. Zum Beispiel könnten bestimmte Bedienelemente oder Bestandteile von SQL ausgeblendet werden, wenn diese noch nicht behandelt worden sind.
 \item[Einfache Inbetriebnahme] \hfill \\
-  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten, fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS \cite{statista-os-verbreitung}, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, ist eine möglichst einfache Inbetriebnahme von entsprechender Bedeutung. Die Informatiklehrkräfte stehen bei dem Betrieb der jeweiligen Programme in der Schule vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren dieses Szenario zusätzlich. Damit der Lernprozess mit \idename nicht schon mit einer fehlgeschlagenen Installation endet, soll der initiale Kontakt so wenig Hürden wie möglich aufstellen.
+  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten, fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS \cite{statista-os-verbreitung}, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, ist eine möglichst einfache Inbetriebnahme von entsprechender Bedeutung. Die Informatiklehrkräfte stehen bei dem Betrieb der jeweiligen Programme in der Schule vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren dieses Szenario zusätzlich. Damit der Lernprozess mit \idename{} nicht schon mit einer fehlgeschlagenen Installation endet, soll der initiale Kontakt so wenig Hürden wie möglich aufstellen.
 \item[Fortführung der entwickelten Projekte] \hfill \\
   Lernumgebungen wie Scratch oder der AppInventor sind in sich geschlossene Systeme, deren Arbeitsergebnisse nur schwer in anderen Programmen oder Kontexten von Nutzen sind. Sobald der Lernende dann die Grenzen der verwendeten Lernsoftware erreicht hat, steckt er in einem Dilemma: Es ist für ihn notwendig auf eine andere Software auszuweichen, in diese kann er sein bestehendes Projekt aber nicht einfach mitnehmen. Die Arbeitsergebnisse dieser zu entwickelnden Software sollen daher zumindest einfach einsehbar sein, optimalerweise nach einem Export sogar mit gängigen Entwicklungsumgebungen oder Texteditoren erweiterbar.
 \end{description}
@@ -57,13 +57,13 @@ Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit be
 \subsection{Künftigen Erweiterungen vorbehalten}
 \label{sec:out-of-scope}
 
-Umgekehrt ist es auch wichtig, den Umfang des zu entwickelnden Programms auf einem im Rahmen der Thesis machbaren Umfang zu begrenzen. Die folgenden Ideen wären mehr oder minder naheliegende Ergänzungen, welche aufgrund der zur Verfügung stehenden Zeit aber zunächst nicht implementiert werden sollen\footnote{Die griffigere, englische Bezeichnung dafür wäre "`out of scope"', \href{http://german.stackexchange.com/questions/31085/german-equivalent-to-out-of-scope/}{dazu kennt allerdings auch das Internet keine direkte Übersetzung}}. Der Zweck dieser Master-Thesis ist die Implementierung eines Prototypen. Die Fertigstellung von \idename wird im Rahmen weiterer Arbeiten erfolgen und die im folgenden geäußerten Ideen dann erneut evaluieren.
+Umgekehrt ist es auch wichtig, den Umfang des zu entwickelnden Programms auf einem im Rahmen der Thesis machbaren Umfang zu begrenzen. Die folgenden Ideen wären mehr oder minder naheliegende Ergänzungen, welche aufgrund der zur Verfügung stehenden Zeit aber zunächst nicht implementiert werden sollen\footnote{Die griffigere, englische Bezeichnung dafür wäre "`out of scope"', \href{http://german.stackexchange.com/questions/31085/german-equivalent-to-out-of-scope/}{dazu kennt allerdings auch das Internet keine direkte Übersetzung}}. Der Zweck dieser Master-Thesis ist die Implementierung eines Prototypen. Die Fertigstellung von \idename{} wird im Rahmen weiterer Arbeiten erfolgen und die im folgenden geäußerten Ideen dann erneut evaluieren.
 
 \begin{description}
 \item[Datenmodellierung] \hfill \\
   Der Schwerpunkt dieser Arbeit liegt zunächst auf der Vermittlung von Kenntnissen zur Abfrage und Manipulation von Daten in einem bestehenden Schema. Änderungen an diesem Schema sind nicht vorgesehen, demzufolge ist auch der Neuentwurf eines Schemas mit externen Mitteln zu bewerkstelligen. Völlig außerhalb des Umfangs dieser Arbeit ist die Überführung von konzeptionellen Modellen (z.B. ER-Schemata) in physikalische Modelle.
 \item[Aufwändiges Design von Benutzerschnittstellen] \hfill \\
-  Auch wenn die Konzeption der Benutzerschnittstelle für die verschiedenen Masken in den eben aufgezählten Prinzipien auftaucht, ist es wichtig den engen Rahmen dieses Aspektes zu verstehen. Es geht um die Schaffung von einfachen, datenzentrierten Eingabemöglichkeiten, nicht um die Umsetzung besonders kreativer Bedienkonzepte. Dementsprechend ist z.B. die Erweiterung der zur Verfügung stehenden Eingabeelemente durch die Lernenden außerhalb des Rahmens dieser Arbeit. Technisch gesehen schließt dieses Kriterium die Unterstützung von CSS oder Javascript innerhalb von \idename aus.
+  Auch wenn die Konzeption der Benutzerschnittstelle für die verschiedenen Masken in den eben aufgezählten Prinzipien auftaucht, ist es wichtig den engen Rahmen dieses Aspektes zu verstehen. Es geht um die Schaffung von einfachen, datenzentrierten Eingabemöglichkeiten, nicht um die Umsetzung besonders kreativer Bedienkonzepte. Dementsprechend ist z.B. die Erweiterung der zur Verfügung stehenden Eingabeelemente durch die Lernenden außerhalb des Rahmens dieser Arbeit. Technisch gesehen schließt dieses Kriterium die Unterstützung von CSS oder Javascript innerhalb von \idename{} aus.
 \end{description}
 
 \subsection{Allgemeines Konzept der Entwicklungsumgebung}
@@ -92,11 +92,11 @@ Der Wechsel zwischen diesen beiden Modi sollte dabei, ebenfalls analog zu Scratc
 \subsubsection{Webanwendung}
 \label{sec:req-web-application}
 
-Um die einfachste Verwendung der Software für Lernende zu gewährleisten, wird \idename als Webanwendung entwickelt. Für die ersten Schritte der Softwareentwicklung mit SQL reicht auf Seite der Lernenden dann ein beliebiger, aktueller Browser. Wie aus Kapitel \ref{sec:related-work} \nameref{sec:related-work} ersichtlich, befindet sich \idename mit diesem Ansatz in guter Gesellschaft: Das ``große Vorbild'' Scratch ist über den Browser erreichbar, genau so wie auch die anderen explizit als Lernsoftware beschriebenen Anwendungen.
+Um die einfachste Verwendung der Software für Lernende zu gewährleisten, wird \idename{} als Webanwendung entwickelt. Für die ersten Schritte der Softwareentwicklung mit SQL reicht auf Seite der Lernenden dann ein beliebiger, aktueller Browser. Wie aus Kapitel \ref{sec:related-work} \nameref{sec:related-work} ersichtlich, befindet sich \idename{} mit diesem Ansatz in guter Gesellschaft: Das ``große Vorbild'' Scratch ist über den Browser erreichbar, genau so wie auch die anderen explizit als Lernsoftware beschriebenen Anwendungen.
 
 Selbstverständlich muss eine Entscheidung mit einer solchen Tragweite dennoch gut abgewogen werden. Das vergleichbare Arbeiten sich ebenfalls für diesen Ansatz entschieden haben ist zwar ein starkes Indiz, isoliert betrachtet aber natürlich keine stichhaltige Begründung. Immerhin existiert von Scratch auch eine lokal installierbare Fassung, welche der Entwicklung der Webversion allerdings leicht hinterherhinkt\footnote{\href{https://scratch.mit.edu/scratch2download/}{Scratch Download-Seite: "The backpack is not yet available."}}.
 
-Praktisch bedeutet dieser Ansatz vor allem eine Verschiebung der Probleme mit der Inbetriebnahme auf die Lehrperson. Bei der Konzeption von \idename wird davon ausgegangen, dass die Bereitstellung eines Serverdienstes in Zeiten von Virtualisierungs- und Containerumgebungen für Informatik-affine Lehrkräfte keine nennenswerte Hürde mehr darstellt.
+Praktisch bedeutet dieser Ansatz vor allem eine Verschiebung der Probleme mit der Inbetriebnahme auf die Lehrperson. Bei der Konzeption von \idename{} wird davon ausgegangen, dass die Bereitstellung eines Serverdienstes in Zeiten von Virtualisierungs- und Containerumgebungen für Informatik-affine Lehrkräfte keine nennenswerte Hürde mehr darstellt.
 
 Ebenfalls aus Gründen der einfacheren Zugänglichkeit sollte eine einzelne Serverinstanz in der Lage sein, mehrere Projekte simultan zu bedienen. Die Lehrperson kann also mit einem einzigen Serverprozess eine ganze Klasse versorgen. Eine Begleiterscheinung dieses zentralen Angebots ist allerdings die notwendige Implementierung von zumindest rudimentären Zugriffsbeschränkungen: im Normalfall sollen Schüler die Projekte ihrer Klassenkameraden zwar jederzeit begutachten, aber nicht modifizieren können. Würde die Entwicklungsumgebung von den Schülern lokal betrieben, entfiele die unmittelbare Notwendigkeit einer Zugriffsbeschränkung.
 
@@ -104,9 +104,9 @@ Durch den Betrieb eines zentralen Servers für die Projekte der Schüler entfäl
 
 Ein weiterer Vorteil eines zentralen Servers ergibt sich in der praktischen Vorzeigbarkeit der eigenen Ergebnisse: Durch einfache Weitergabe der URL für Endbenutzer können die Lernenden ihre entwickelten Applikationen mit Eltern, Freunden und anderen Personen teilen.
 
-Nicht verschwiegen werden sollen allerdings auch die negativen Nebeneffekt dieser grundsätzlichen Entscheidung: Zunächst einmal wird dadurch ein eigenständiger Betrieb der Entwicklungsumgebung durch Schüler deutlich erschwert. Diese müssten auf ihrem eigenen Rechner plötzlich doch eine Server-Instanz betreiben, anstatt einfach ein Programm zu starten. Faktisch wird die Bereitstellung einer dezidierten Umgebung für den Server also zur Pflichtaufgabe der jeweiligen Lehrperson. Vom Betrieb eines dedizierten Servers in der Schule, über die Verwendung eines ``privat greifbaren'' Servers der Lehrperson bis hin zur Verwendung einer Cloud-Computing-Instanz im Internet sind unterschiedlichste Szenarien denkbar. Der erfolgreiche Einsatz von \idename hängt in der Praxis dann aber auch maßgeblich von der Verfügbarkeit dieses Serverdienstes ab.
+Nicht verschwiegen werden sollen allerdings auch die negativen Nebeneffekt dieser grundsätzlichen Entscheidung: Zunächst einmal wird dadurch ein eigenständiger Betrieb der Entwicklungsumgebung durch Schüler deutlich erschwert. Diese müssten auf ihrem eigenen Rechner plötzlich doch eine Server-Instanz betreiben, anstatt einfach ein Programm zu starten. Faktisch wird die Bereitstellung einer dezidierten Umgebung für den Server also zur Pflichtaufgabe der jeweiligen Lehrperson. Vom Betrieb eines dedizierten Servers in der Schule, über die Verwendung eines ``privat greifbaren'' Servers der Lehrperson bis hin zur Verwendung einer Cloud-Computing-Instanz im Internet sind unterschiedlichste Szenarien denkbar. Der erfolgreiche Einsatz von \idename{} hängt in der Praxis dann aber auch maßgeblich von der Verfügbarkeit dieses Serverdienstes ab.
 
-Softwaretechnisch nachteilig ist die Tatsache, dass \idename im Falle einer Entwicklung als ``traditionelle Desktopawendung'' auf ein großes Ökosystem aus bestehenden Entwicklungsumgebungen zurückgreifen könnte. Jede größere Entwicklungsumbegung (Eclipse, Visual Studio, ...) bietet eine Plugin-Schnittstelle, auf die man mit \idename hätte aufsetzen können. Ähnlich gut erprobte Umgebungen für Browser gibt es hingegen leider nicht, es müssen daher relativ viele technisch Kleinigkeiten (Toolbars, Projektbrowser, ...) extra für \idename entwickelt werden.
+Softwaretechnisch nachteilig ist die Tatsache, dass \idename{} im Falle einer Entwicklung als ``traditionelle Desktopawendung'' auf ein großes Ökosystem aus bestehenden Entwicklungsumgebungen zurückgreifen könnte. Jede größere Entwicklungsumbegung (Eclipse, Visual Studio, ...) bietet eine Plugin-Schnittstelle, auf die man mit \idename{} hätte aufsetzen können. Ähnlich gut erprobte Umgebungen für Browser gibt es hingegen leider nicht, es müssen daher relativ viele technisch Kleinigkeiten (Toolbars, Projektbrowser, ...) extra für \idename{} entwickelt werden.
 
 \subsubsection{Projektbasiert}
 
@@ -118,13 +118,13 @@ Im Sinne einer möglichst niedrigen Einstiegshürde soll es den Anwendern leicht
 
 Dementsprechend sollte normalerweise jeder Schritt beim Anlegen eines neuen Projektes für die Schüler nachvollziehbar sein. Wenn dann aber doch einmal eine Serie von ``mechanisch auszuführenden'' Anweisungen erforderlich sein sollte, wäre es aber dennoch praktisch, diesen Vorgang durch eine Kopie eines schon bestehenden Projektes abzukürzen. Die Lehrkraft würde in diesem Fall ein Projekt für ihre Schüler vorbereiten, welches diese dann mit einem Klick in ein anders benanntes Projekt kopieren können. Es werden dann im Normafall alle Bestandteile, möglicherweise mit einer einfachen Anpassung der Zugriffsrechte, unter dem neuen Namen verfügbar gemacht.
 
-Alternativ sollte eine Lehrkraft den Umfang eines solchen Klons auch einschränken können: Möglicherweise enthält das Beispielprojekt Inhalte, die nur zu Illustrationszwecken angelegt worden sind? Eventuell sollen sich die Schüler auch verstärkt eigene Gedanken machen und nicht zu sehr von vorgefertigen Inhalten abgelenkt werden? \idename bietet keine Hilfestellung \missing{Hier fehlt was}
+Alternativ sollte eine Lehrkraft den Umfang eines solchen Klons auch einschränken können: Möglicherweise enthält das Beispielprojekt Inhalte, die nur zu Illustrationszwecken angelegt worden sind? Eventuell sollen sich die Schüler auch verstärkt eigene Gedanken machen und nicht zu sehr von vorgefertigen Inhalten abgelenkt werden? \idename{} bietet keine Hilfestellung \missing{Hier fehlt was}
 
 \subsubsection{Zugriffskontrollen}
 
-Lesende Zugriffe können, zumindest in der Thesis-Version der Software, nicht endgültig eingeschränkt werden. Ursächlich dafür ist jedoch, anders als bei vielen anderen nicht implementierten Funktionen, nicht der technische Aufwand: Natürlich könnte man theoretisch typische Entwurfsmuster für Zugangsbeschränkungen auch in \idename implementieren! Auf einfachster Ebene wäre zum Beispiel denkbar, dass eine Spalte "`geheim"' zu Tabellen mit privaten Daten hinzugefügt wird und auf dieser Basis die Oberfläche für Endanwender solcherart markierte Daten nicht anzeigt. Da Projekte aber auch einfach kopiert werden können, müsste ein versierter Benutzer nur eine Kopie des Projektes vornehmen und könnte dann über den Editor alle Daten einsehen oder auch den Zugriffschutz der Oberflächen einfach deaktivieren. Um also den lesenden Zugriff effektiv zu verhindern müsste die Einsicht in die Quellen fremder Projekte eingeschränkt werden.
+Lesende Zugriffe können, zumindest in der Thesis-Version der Software, nicht endgültig eingeschränkt werden. Ursächlich dafür ist jedoch, anders als bei vielen anderen nicht implementierten Funktionen, nicht der technische Aufwand: Natürlich könnte man theoretisch typische Entwurfsmuster für Zugangsbeschränkungen auch in \idename{} implementieren! Auf einfachster Ebene wäre zum Beispiel denkbar, dass eine Spalte "`geheim"' zu Tabellen mit privaten Daten hinzugefügt wird und auf dieser Basis die Oberfläche für Endanwender solcherart markierte Daten nicht anzeigt. Da Projekte aber auch einfach kopiert werden können, müsste ein versierter Benutzer nur eine Kopie des Projektes vornehmen und könnte dann über den Editor alle Daten einsehen oder auch den Zugriffschutz der Oberflächen einfach deaktivieren. Um also den lesenden Zugriff effektiv zu verhindern müsste die Einsicht in die Quellen fremder Projekte eingeschränkt werden.
 
-Prinzipiell wäre es mit entsprechendem Zeitaufwand möglich, ein hinreichend sicheres System für den speziellen Anwendungsfall von \idename zu entwerfen. Dieser Aufwand wäre jedoch im Vergleich zu anderen Features nicht zu rechtfertigen, steht der Zielstellung "`Jedes Projekt soll als Grundlage für neue Projekte dienen können"' obendrein diametral gegenüber. Und abgesehen davon sollte kein Schüler einem \idename-Server Daten anvertrauen, deren versehentliche Veröffentlichung er oder sie nicht verkraften würde. Das gilt selbstverständlich auch für den Fall, dass eine hypothetische künftige Version einen solchen Zugriffsschutz vorsehen sollte!
+Prinzipiell wäre es mit entsprechendem Zeitaufwand möglich, ein hinreichend sicheres System für den speziellen Anwendungsfall von \idename{} zu entwerfen. Dieser Aufwand wäre jedoch im Vergleich zu anderen Features nicht zu rechtfertigen, steht der Zielstellung "`Jedes Projekt soll als Grundlage für neue Projekte dienen können"' obendrein diametral gegenüber. Und abgesehen davon sollte kein Schüler einem \idename{}-Server Daten anvertrauen, deren versehentliche Veröffentlichung er oder sie nicht verkraften würde. Das gilt selbstverständlich auch für den Fall, dass eine hypothetische künftige Version einen solchen Zugriffsschutz vorsehen sollte!
 
 Schon um Vandalismus zu vermeiden, sind leider dennoch einfache Zugriffskontrollen für \textbf{schreibende Zugriffe} auf Projektebene nötig. Um etwaige Missverständnisse von vornerein zu vermeiden: Ziel dieser Kontrollen ist es zu verhindern, dass z.B. die Quellen für die Abfragen oder Benutzeroberfläche eines Projektes entstellt oder gelöscht werden. Dabei muss es sich nicht einmal um bösartigen Vandalismus handeln. Bei ungeschickt programmierten Webseiten kann es durchaus auch mal passieren, dass Webcrawler Datenbestände vernichten. Mehr als einen schlecht ausprogrammierten "`Diesen Datensatz Löschen"'-Link auf einer Übersichtsseite braucht es dazu nicht. Der Webcrawler folgt unter Umständen auch solchen Verweisen und löscht damit während der Indexierung unbeabsichtigt Datensätze.
 
@@ -148,7 +148,7 @@ Um also zumindest einen grundsätzlichen Schutz zu ermöglichen, sollten für ei
 \subsection{Didaktisch sinvolle Teilmengen von SQL}
 \label{sec:sql-subset}
 
-\warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in der Entwicklungsumbegung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von SQL. Um zu sehen, welche Funktionalität tatsächlich implemtiert worden ist lohnt sich ein Blick in Anhang \ref{app:implemented-features}:~\nameref{app:implemented-features}.}
+\warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in der Entwicklungsumbegung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von SQL. Um zu sehen, welcher Funktionsumfang im Prototypen tatsächlich verfügbar ist, lohnt sich ein Blick in Kapitel \ref{sec:example-projects}:~\nameref{sec:example-projects}.}
 
 Die uneingeschränkte Umsetzung des SQL-Standards würden sowohl für den Verfasser dieser Arbeit als auch für die Anwender der Entwicklungsumgebung viele unpraktische Probleme aufwerfen. Der SQL-Sprachumfang ist mittlerweile gewaltig und die Anzahl der verschiedenen Dialekte unüberschaubar groß. Varianten wie Transact-SQL bieten die Möglichkeit zur Laufzeit mit Schleifen, Fallunterscheidungen und Variablen zu arbeiten und erfüllen damit alle Kriterien für Turing-Vollständigkeit. Darüber hinaus werden ``echte'' Entwicklungsumgebungen für SQL von großen Entwicklerteams konzipiert und programmiert, der Autor dieser Arbeit bildet hingegen ein (immerhin motiviertes) Ein-Mann-Team.
 
@@ -165,7 +165,7 @@ Glücklicherweise erlaubt die Struktur von SQL die Verwendung von sehr lokalen E
   \item Projektion von Daten mit Ausdrücken und Funktionen innerhalb der \texttt{SELECT}-Komponente.
 \end{itemize}
 
-Es soll nicht Aufgabe von \idename sein, diese unterschiedlichen Reihenfolgen implizit zu bewerten, in dem eine "`beste"' Variante fest eingebaut wird. Viel mehr sollen die Lehrkräfte in die Lage versetzt werden, je nach verwendetem Lehrmaterial zu entscheiden, welcher Umfang dafür angemessen ist. Wir klären in diesem Kapitel daher zunächst, welche Features von SQL überhaupt für die Entwicklungsumgebung von Belang sind und wie diese voneinander abhängen.
+Es soll nicht Aufgabe von \idename{} sein, diese unterschiedlichen Reihenfolgen implizit zu bewerten, in dem eine "`beste"' Variante fest eingebaut wird. Viel mehr sollen die Lehrkräfte in die Lage versetzt werden, je nach verwendetem Lehrmaterial zu entscheiden, welcher Umfang dafür angemessen ist. Wir klären in diesem Kapitel daher zunächst, welche Features von SQL überhaupt für die Entwicklungsumgebung von Belang sind und wie diese voneinander abhängen.
 
 \subsubsection{Mögliche Einschränkungen der Komponenten}
 \label{sec:sql-subset-local}
@@ -195,7 +195,7 @@ Einige der im folgenden beschriebenen Optionen sind redundant. Das liegt zum ein
   \item \label{feat:select-limit} Beschränkung der Datenmenge mit \texttt{LIMIT}
   \end{enumerate}
 \item \textbf{Angabe von Datenquellen mit \texttt{FROM}} \\
-  Auch die Auslassung dieser Komponente ist nicht zulässig, obwohl einige SQL Dialekte dies durchaus erlauben. Im Rahmen von \idename wird dies aber nicht unterstützt: Die Schüler sollen SQL Abfragen grundsätzlich auf Tabellen beziehen und keine Daten ``aus der Luft greifen''\footnote{Für Oberflächen werden manchmal noch so etwas wie globale Konstanten benötigt, diese kommen dann aber nicht aus der SQL-Schicht.}.
+  Auch die Auslassung dieser Komponente ist nicht zulässig, obwohl einige SQL Dialekte dies durchaus erlauben. Im Rahmen von \idename{} wird dies aber nicht unterstützt: Die Schüler sollen SQL Abfragen grundsätzlich auf Tabellen beziehen und keine Daten ``aus der Luft greifen''\footnote{Für Oberflächen werden manchmal noch so etwas wie globale Konstanten benötigt, diese kommen dann aber nicht aus der SQL-Schicht.}.
   \begin{enumerate}
   \item \label{feat:from-cross-join} Kreuzprodukt (\texttt{JOIN}) zulassen
   \item \label{feat:from-cross-comma} Kreuzprodukt (komma-separierte Schreibweise) zulassen
@@ -250,7 +250,7 @@ Nach dieser Betrachtung der mit der unmittelbaren SQL-Struktur zusammenhängende
 \item[Beliebige Ausdrücke] \hfill\\
   Beliebige Ausdrücke werden textuell notierte und vom SQL-Editor nicht weiter geprüft, sondern ungefiltert in die Abfrage eingesetzt werden. Sofern diese Art von Ausdrücken zugelassen wird erfolgt also auch keinerlei inhaltliche Einschränkung der zur Verfügung stehenden Möglichkeiten oder eine Syntaxüberprüfung.
 
-  Diese Option soll es besonders fortgeschrittenen Lernenden erlauben, auch in nicht von \idename unterstützte Szenarien noch weiterarbeiten zu können. Damit wird verhindert, dass zu große Fortschritte der Lernenden \idename sofort obsolet machen.
+  Diese Option soll es besonders fortgeschrittenen Lernenden erlauben, auch in nicht von \idename{} unterstützte Szenarien noch weiterarbeiten zu können. Damit wird verhindert, dass zu große Fortschritte der Lernenden \idename{} sofort obsolet machen.
 \end{description}
 
 Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisch sinvollen Einschränkungen definieren. Die Schüler sollen dabei durchaus auch Lernen, dass es sich bei Ausdrücken (nicht nur in SQL) um ein allgemeines Konzept handelt, welches Prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Oder plastisch ausgedrückt: Wenn sich die Schüler aus didaktischen Gründen erstmal nur mit Ausdrücke im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt.
@@ -291,7 +291,7 @@ Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisc
 \item \textbf{Allgemeine Funktionen (in alphabetischer Reihenfolge)} \\
   In einem Umfeld für Anfänger ist zu erwarten, dass fast jede Funktion (bzw. jede logische Gruppe an Funktionen) einer eigenen Einführung bedarf. Die Lehrkräfte sollen diese daher isoliert zur Verfügung stellen können, ohne Ablenkung durch nicht benötigte Funktionen.
 
-  Bei unterschiedlich überladene Varianten der gleichen Funktion wird in \idename immer nur die vollständigste Variante implementiert. Die Schüler müssen daher nicht die implizit bekannten Werte der jeweiligen Funktion auswendig kennen.
+  Bei unterschiedlich überladene Varianten der gleichen Funktion wird in \idename{} immer nur die vollständigste Variante implementiert. Die Schüler müssen daher nicht die implizit bekannten Werte der jeweiligen Funktion auswendig kennen.
   \begin{enumerate}
   \item \label{feat:fun-abs} \texttt{ABS(X)} um den Betrag eines Wertes zu erhalten.
   \item \label{feat:fun-coalesce} \texttt{COALESCE(X,Y,...)} um den ersten gültigen Wert der Parameterliste zu erhalten.
@@ -347,13 +347,13 @@ Danach können die Einschränkungen noch für einzelne Abfragen verfeinert werde
 
 Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren können. Es kommen also distinkte Bedienelemente für die verschiedenen Komponenten einer SQL Abfrage zum Einsatz, kein reiner Texteditor. Der komponentenorientierte Editor soll dabei nicht die Konzeption von beliebigen Abfragen ermöglichen, wohl aber die in Kapitel \ref{sec:example-queries} \nameref{sec:example-queries} beschriebenen exemplarischen Anforderungen unterstützen. 
 
-Wenn ein Anwender der Entwicklungsumgebung an die Grenzen des unterstützenden Editors stößt, sollte er die Möglichkeit haben einmalig und für diese konkrete Abfrage eine Umwandlung in eine textbasierte Darstellung vornehmen zu können. Der umgekehrte Weg, also der Import von beliebigen SQL-Abfragen in den grafischen Editor, ist dann jedoch nicht mehr möglich. Die Implementierung eines Parsers für die Umwandlung der textuellen SQL-Repräsentation in die interne Darstellung von \idename würde im Verhältnis zum marginalen Nutzen einen unverhältnismäßigen Aufwand bedeuten.
+Wenn ein Anwender der Entwicklungsumgebung an die Grenzen des unterstützenden Editors stößt, sollte er die Möglichkeit haben einmalig und für diese konkrete Abfrage eine Umwandlung in eine textbasierte Darstellung vornehmen zu können. Der umgekehrte Weg, also der Import von beliebigen SQL-Abfragen in den grafischen Editor, ist dann jedoch nicht mehr möglich. Die Implementierung eines Parsers für die Umwandlung der textuellen SQL-Repräsentation in die interne Darstellung von \idename{} würde im Verhältnis zum marginalen Nutzen einen unverhältnismäßigen Aufwand bedeuten.
 
 Grundsätzlich bedürfen einige Komponenten der Abfrage besonderer Aufmerksamkeit, weil sie große Auswirkungen auf das Verhalten der anderer Komponenten haben. Vorrangig ist hier die \texttt{GROUP-BY} Komponente zu nennen. Sobald die Query mit einer \texttt{GROUP BY} Komponente ausgestattet wird ist der Zugriff auf die konkreten Spalten einzelner Zeilen z.B. im allgemeinen Fall nicht mehr möglich. Das hinzufügen (oder entfernen) dieser Komponente hat also große Auswirkungen auf die Korrektheit der gesamten Abfrage. Ähnliches gilt für den Umgang mit \texttt{JOIN}s: Aus diesen leitet sich ab welche Daten von der Entwicklungsumgebung überhaupt angeboten werden sollten.
 
 \subsubsection{Visuelle Gestaltung}
 
-Für technische Details irrelevant, aber unbedingt ebenfalls im Voraus zu klären ist die Frage inwiefern es sinnvoll wäre, das sehr bunte, blockige Design von Scratch zu imitieren. Abbildung \ref{fig:compare-colourful} zeigt einen Vergleich zweier Prototypen aus der Konzeptionsphase von \idename: Einmal sehr bunt und ``blockig'' und einmal angelehnt an konventionelles Syntax-Highlighting.
+Für technische Details irrelevant, aber unbedingt ebenfalls im Voraus zu klären ist die Frage inwiefern es sinnvoll wäre, das sehr bunte, blockige Design von Scratch zu imitieren. Abbildung \ref{fig:compare-colourful} zeigt einen Vergleich zweier Prototypen aus der Konzeptionsphase von \idename{}: Einmal sehr bunt und ``blockig'' und einmal angelehnt an konventionelles Syntax-Highlighting.
 
 \todo[inline]{\textbf{Todo}: Quelle mit Beleg für ``Kinderfreundliches'' buntes Design suchen. Das wird man bei Scratch schon aus gutem Grund gemacht haben. Relevante Frage: Zielgruppe (in Jahren) von Scratch vs. Zielgruppe dieses Projektes?}
 
@@ -367,7 +367,7 @@ Das blockige Design orientiert sich an Scratch und macht visuell sehr deutlich w
 
 Die in den Prototypen noch zu sehende Nutzung von ``normalen'' Bedienelementen wie Text- oder Listboxen (Abbildung \ref{fig:compare-colourful} \& \ref{fig:screen-sql-editor-all-editing}) wurde schon früh in der Entwicklung zugunsten eines auf Drag \& Drop aufbauenden Konzeptes aufgegeben. Die Bedienelemente haben sich zum einen schon rein visuell die Lesbarkeit merklich gestört und hätten häufig ausgeblendet werden müssen. Zudem ist bei der Bearbeitung von Ausdrücken eine distinkte visuelle Hierarchie sehr von Vorteil. Diese Hierarchie lässt sich am einfachsten durch die konsequente Verwendung von klar kodierten Formen und Farben erreichen, was sich für vom Browser bereitgestellte Bedienelemente aber nur in engen Grenzen umsetzen lässt.
 
-Darüber hinaus existiert noch ein weiterer Faktor, der zwar keinen Einfluss auf die technischen Details von \idename hat, aber trotzdem eine etwas ausführlichere Betrachung rechtfertigt: Die größere Nähe des etwas nüchterneren, IDE-ähnlichen Designs zu ``normalen'' Entwicklerprogrammen. Diese wirken möglicherweise weniger einschüchternd, wenn man sich schon an den Anblick von recht viel Text mit Syntax-Highlighting gewöhnt hat. Es ändert sich dann bei der Verwendung von ``echten'' Entwicklerprogrammen dann ``nur noch'' das Bedienparadigma sehr stark (Text schreiben statt Drag \& Drop), aber nicht mehr der visuelle Ersteindruck.
+Darüber hinaus existiert noch ein weiterer Faktor, der zwar keinen Einfluss auf die technischen Details von \idename{} hat, aber trotzdem eine etwas ausführlichere Betrachung rechtfertigt: Die größere Nähe des etwas nüchterneren, IDE-ähnlichen Designs zu ``normalen'' Entwicklerprogrammen. Diese wirken möglicherweise weniger einschüchternd, wenn man sich schon an den Anblick von recht viel Text mit Syntax-Highlighting gewöhnt hat. Es ändert sich dann bei der Verwendung von ``echten'' Entwicklerprogrammen dann ``nur noch'' das Bedienparadigma sehr stark (Text schreiben statt Drag \& Drop), aber nicht mehr der visuelle Ersteindruck.
 
 Letztendlich existiert aber auch noch ein sehr viel profanerer Faktor: Der Autor dieser Arbeit ist kein Grafikdesigner und würde ohne Hilfe vermutlich kein ansprechendes, durchgehend ``blockiges'' Gesamtkonzept auf die Beine stellen können. Das endgültige Design lehnt sich bei dem Editor für Ausdrücke durch die Verwendung von Blöcken also visuell an Scratch an, nutzt zur Visualisierung der Komponenten jedoch eine an Syntax-Highlighting orienierte Darstellung.
 
@@ -439,7 +439,7 @@ Diese Komponente beinflusst unmittelbar die in der Seitenleiste zur Verfügung s
 
 Sobald eine Drag-Operation mit einem Ausdruck beginnt, wird entweder die \texttt{WHERE}-Komponente mit einem $\bigoplus$-Indikator eingeblendet oder, im Falle von schon existierenden Einschränkungen, die \texttt{AND}- und \texttt{OR}-Operatoren, ebenfalls mit einem $\bigoplus$-Indikator. Der letztere Fall wird in Abbildung~\ref{fig:screen-sql-editor-drag-drop} illustriert.
 
-Syntaktisch gesehen wären die logischen Verknüpfungen natürlich auch als Teil der "`normalen"' binären Ausdrücke möglich. In der Praxis wird der Quelltext von SQL-Abfragen allerdings häufig anhand dieser Verknüpfungen umgebrochen. An dieser Stelle folgt \idename also einer bewährten Konvention, auch wenn das syntaktisch nicht unbedingt notwendig wäre.
+Syntaktisch gesehen wären die logischen Verknüpfungen natürlich auch als Teil der "`normalen"' binären Ausdrücke möglich. In der Praxis wird der Quelltext von SQL-Abfragen allerdings häufig anhand dieser Verknüpfungen umgebrochen. An dieser Stelle folgt \idename{} also einer bewährten Konvention, auch wenn das syntaktisch nicht unbedingt notwendig wäre.
 
 \subsubsection{\texttt{GROUP BY}}
 
@@ -468,7 +468,7 @@ Es ist zu erwarten, dass die meisten von den Schülern verfassten Abfragen diese
 
 Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von normalen Endanwendern bedienen lassen können Bedarf es natürlich einer entsprechenden Benutzeroberfläche. Hier bietet sich aus Gründen der einfachen Weitergabe eine webbasierte Oberfläche an: So entfällt bei den Endanwendern jegliche Installation und gerade für datenzentrierte, verteilte Anwendungen ist eine einheitliche Sicht auf den Datenbestand von großer Bedeutung.
 
-Abstrakt betrachtet besteht eine \idename-Seite aus zwei wesentlichen Informationen: Eine Auflistung aller zum Darstellen benötigten Datenquellen, typischerweise werden das SQL-Abfragen sein, und eine Vorschrift wie genau dieser Datenbestand darzustellen ist.
+Abstrakt betrachtet besteht eine \idename{}-Seite aus zwei wesentlichen Informationen: Eine Auflistung aller zum Darstellen benötigten Datenquellen, typischerweise werden das SQL-Abfragen sein, und eine Vorschrift wie genau dieser Datenbestand darzustellen ist.
 
 Um das folgende Kapitel anschaulicher zu gestalten, werden alle Beispiele anhand eines sehr reduzierten Datenbestandes zu einem einfach Blog illustriert. Dieser Blog soll dem Endbenutzer über zwei Seiten näher gebracht werden: Eine \textit{Hauptseite} dient der Auflistung aller Blogbeiträge welche im Einzelnen auf einer \textit{Detailseite} in Gänze betrachtet und kommentiert werden können.
 
@@ -491,9 +491,9 @@ Um die einer Webseite zur Verfügung stehenden Daten zu strukturieren, wird dies
 
 \subsubsection{Wahl einer Templatingsprache}
 
-Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten, nicht alle dafür eignen sich aber um dynamisch zur Laufzeit Seiten zu erzeugen. Nicht in Betracht gezogen werden vollwertige Programmiersprachen wie PHP, Python oder Ruby. Die Mächtigkeit dieser Sprachen geht fast zwangsläufig mit einer vergleichsweise umständlichen Syntax einher. Zudem dient die Verwendung einer dezidierten Templatingsprache nicht nur der Bequemlichkeit, sondern auch einer klaren Trennung zwischen Programm- und Anzeigelogik. Diese Unterscheidung soll von \idename gefördert werden.
+Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten, nicht alle dafür eignen sich aber um dynamisch zur Laufzeit Seiten zu erzeugen. Nicht in Betracht gezogen werden vollwertige Programmiersprachen wie PHP, Python oder Ruby. Die Mächtigkeit dieser Sprachen geht fast zwangsläufig mit einer vergleichsweise umständlichen Syntax einher. Zudem dient die Verwendung einer dezidierten Templatingsprache nicht nur der Bequemlichkeit, sondern auch einer klaren Trennung zwischen Programm- und Anzeigelogik. Diese Unterscheidung soll von \idename{} gefördert werden.
 
-Für \idename wurden darüber hinaus die folgenden harten Kriterien angelegt, um die große Anzahl verfügbarer Kandidaten schnell zu reduzieren:
+Für \idename{} wurden darüber hinaus die folgenden harten Kriterien angelegt, um die große Anzahl verfügbarer Kandidaten schnell zu reduzieren:
 
 \begin{description}
 \item[Datenanbindung] \hfill \\
@@ -501,7 +501,7 @@ Für \idename wurden darüber hinaus die folgenden harten Kriterien angelegt, um
 \item[Kontrollstrukturen] \hfill \\
   Es muss möglich sein, unterschiedliche Ausgaben in Abhängigkeit von zur Laufzeit ausgewerteten Bedingungen zu erzeugen und Anweisungen wiederholt auszuwerten.
 \item[Freie Verfügbarkeit] \hfill \\
-  Die Verwendung von proprietären oder kostenpflichtigen Abhängigkeiten in \idename ist zumindestens im Rahmen dieser Thesis ausgeschlossen.
+  Die Verwendung von proprietären oder kostenpflichtigen Abhängigkeiten in \idename{} ist zumindestens im Rahmen dieser Thesis ausgeschlossen.
 \item[Einbettung von reinem HTML] \hfill \\
   Erfahrenen Entwicklern soll es grundsätzlich möglich sein ihre HTML-Kennt\-nisse in vollem Umfang anzuwenden. Sofern die Templatingsprache also HTML-Be\-stand\-teile bereinigt, muss es eine Möglichkeit geben diese Bereinung lokal zu deaktivieren.
 \end{description}
@@ -512,18 +512,18 @@ Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig bliebe
 
 \begin{description}
 \item[Geringe Technische Komplexität, 5 Punkte] \hfill \\
-  Da \idename-Seiten serverseitig gerendert werden sollen, ist es nicht notwendig auf eine komplexe Templatingsprache mit Funktionen wie einem virtuellen Document-Object-Model (\texttt{DOM}) zurückzugreifen. Es gilt die Prämisse: Je komplizierter das interne Verarbeitungsmodell der Sprache ist, desto mehr unverständliche Fehler können auftreten.
+  Da \idename{}-Seiten serverseitig gerendert werden sollen, ist es nicht notwendig auf eine komplexe Templatingsprache mit Funktionen wie einem virtuellen Document-Object-Model (\texttt{DOM}) zurückzugreifen. Es gilt die Prämisse: Je komplizierter das interne Verarbeitungsmodell der Sprache ist, desto mehr unverständliche Fehler können auftreten.
 \item[Geringe Syntaktische Komplexität, 5 Punkte] \hfill \\
   Auch wenn die Lernenden im Idealfall von der konkreten Syntax der Templatingsprache abstrahieren sollen, wird es immer wieder zu Momenten kommen an denen diese Abstraktion löcherig ist \cite{spolsky_law_abstractions}. Die häufigte Ursache für einen solchen Leck werden dabei Fehlermeldungen sein: Sobald diese auftreten, sollte zur Unterstützung der generierte Quelltext angezeigt werden. Und je einfacher dieser Quelltext ist, desto näher kann er potenziell an der abstrakten Darstellung im Editor sein.
 \item[Verbreitung, 3 Punkte] \hfill \\
-  Einige Templatingsprachen haben Einzug in eine Vielzahl unterschiedlicher Softwareprojekte gefunden, andere sind im Hinblick auf spezielle Frameworks zugeschnitten. Je weiter die Templatingsprache verbreitet ist, desto höher die Chance, dass ein Lernender sie möglicherweise auch einmal außerhalb von \idename einsetzen kann.
+  Einige Templatingsprachen haben Einzug in eine Vielzahl unterschiedlicher Softwareprojekte gefunden, andere sind im Hinblick auf spezielle Frameworks zugeschnitten. Je weiter die Templatingsprache verbreitet ist, desto höher die Chance, dass ein Lernender sie möglicherweise auch einmal außerhalb von \idename{} einsetzen kann.
 \item[Einfache Erweiterbarkeit, 3 Punkte] \hfill \\
-  Perspektivisch sollen die Lernenden anhand von \idename auch in die "`normale"' Programmierung eingeführt werden können. Vor diesem Hintergrund wäre es von Vorteil, wenn die Templatingsprache eine einfache Programmierschnittstelle bietet um eigene Funktionen einzubetten.  
+  Perspektivisch sollen die Lernenden anhand von \idename{} auch in die "`normale"' Programmierung eingeführt werden können. Vor diesem Hintergrund wäre es von Vorteil, wenn die Templatingsprache eine einfache Programmierschnittstelle bietet um eigene Funktionen einzubetten.  
 \item[Sprachübergreifende Implementierungen, 3 Punkte] \hfill \\
-  Existiert lediglich die Referenzimplementierung einer Templatingsprache oder gibt es auch alternative Implementierungen? Dieser Aspekt ist nicht nur ein guter Indikator für die tatsächliche Verbreitung einer Templatingsprache, er könnte perspektivisch im Falle eines Exports von Projekten aus \idename auch praktische Bedeutung haben.
+  Existiert lediglich die Referenzimplementierung einer Templatingsprache oder gibt es auch alternative Implementierungen? Dieser Aspekt ist nicht nur ein guter Indikator für die tatsächliche Verbreitung einer Templatingsprache, er könnte perspektivisch im Falle eines Exports von Projekten aus \idename{} auch praktische Bedeutung haben.
 \end{description}
 
-Diesen Kriterien stellen sich die Templatingsprachen Liquid, Angular 2 und Handlebars. Liquid wurde schon im Rahmen der vergleicharen Arbeiten (\ref{sec:software-jekyll}~\nameref{sec:software-jekyll}) kurz vorgestellt und bot sich dementsprechend als Kandidat an. Da für die Implementierung des \idename-Frontend Angular 2 ohnehin zum Einsatz kommt stellt sich die Frage (siehe \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis}), ob die Nutzung eines weiteren Frameworks tatsächlich notwendig ist. Möglicherweise könnte durch die Vermeidung einer weiteren Abhängigkeit ja auch Aufwand gespart werden? Handlebars wird unter anderem in den Bibliotheken Meteor und Ember.js verwendet und wurde schlicht aufgrund seiner Popularität ausgewählt.
+Diesen Kriterien stellen sich die Templatingsprachen Liquid, Angular 2 und Handlebars. Liquid wurde schon im Rahmen der vergleicharen Arbeiten (\ref{sec:software-jekyll}~\nameref{sec:software-jekyll}) kurz vorgestellt und bot sich dementsprechend als Kandidat an. Da für die Implementierung des \idename{}-Frontend Angular 2 ohnehin zum Einsatz kommt stellt sich die Frage (siehe \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis}), ob die Nutzung eines weiteren Frameworks tatsächlich notwendig ist. Möglicherweise könnte durch die Vermeidung einer weiteren Abhängigkeit ja auch Aufwand gespart werden? Handlebars wird unter anderem in den Bibliotheken Meteor und Ember.js verwendet und wurde schlicht aufgrund seiner Popularität ausgewählt.
 
 Um die Komplexität der Technik zu bewerten wird zunächst das Ergebnis des Rendervorgangs betrachtet: Sowohl die Referenzimplementierungen von Handlebars als auch Angular 2 generieren Javascript, welches die sich ergebende HTML-Struktur unmittelbar in den DOM-Baum des Browsers injiziert. Angular 2 geht noch einen Schritt weiter und gibt die neue Struktur nicht ungefiltert an den Browser weiter, sondern erstellt mit Hilfe eines virtuellen DOM einen Satz an inkrementell nötigen Änderungen. Das Ergebnis eines Rendervorgangs mit Liquid ist hingegen ein einfacher String mit dem gerenderten Template, für Handlebars gibt es abseits der Referenzimplementierung eine Portierung mit einem entsprechend einfachem Backend.
 
@@ -596,32 +596,34 @@ Keine der betrachteten Sprachen macht es unmöglich, die Funktionalität im Rahm
 
 Für alle hier betrachteten Templatingsprachen gilt ebenfalls, dass sie jenseits von Entwicklerkreisen nicht besonders verbreitet sind. Typische Webseiten benötigen natürlich auch keine umfangreiche Logik um zum Beispiel einem Benutzer zu ermöglichen einen Kommentar zu schreiben. Im Alltag werden die Lernenden von diesen Kenntnissen also wohl nicht profitieren.
 
-Anders sieht das es, wenn sie selbstständig und jenseits von \idename Zeit die Erstellung eigener Homepages investieren möchten. Programme zum generieren von statischen Webseiten verwenden häufig Liquid als Templatingsprache, das gilt insbesondere für das schon vorgestellte Jekyll, welches unter anderem auch auf Github-Pages zum Einsatz kommt. Darüber hinaus wird es in den Software-as-a-Service Angeboten von kommerziellen Anbietern wie Salesforce oder Shopify genutzt. Angular und Handlebars werden hingegen faktisch ausschließlich in den jeweiligen Javascript-Bibliotheken verwendet.
+Sollten Lernende hingegen selbstständig (und jenseits von \idename{}) Zeit die Erstellung eigener Webseiten investieren wollen, werden sie dabei häufiger mit Liquid in Berührung kommen. Programme zum generieren von statischen Webseiten verwenden häufig Liquid als Templatingsprache, das gilt insbesondere für das schon vorgestellte Jekyll, welches wiederrum (unter anderem) auch auf Github-Pages\footnote{Dokumentation zum Hosting verfügbar unter \url{https://pages.github.com/}} zum Einsatz kommt. Dieser konkrete Dienst, also Github-Pages, ist interessant, weil er vollkommen kostenfrei genutzt werden kann. Darüber hinaus wird Liquid in den Software-as-a-Service Angeboten von kommerziellen Anbietern wie Salesforce oder Shopify genutzt. Angular und Handlebars werden hingegen faktisch ausschließlich in den jeweiligen Javascript-Bibliotheken verwendet.
 
-Letzten Endes stellt sich faktisch nur die Frage, ob Handlebars oder Liquid zum Einsatz kommen sollte: Angular 2 ist sowohl technisch als auch syntaktisch sehr kompliziert und eignet sich nicht besonders gut als "`erste Templatingsprache"'. Diese qualitative Entscheidung zugunsten von Liquid berücksichtigt vor allem die geringe technische Komplexität, wird von der quantitativen Auswertung in Tabelle~\ref{tab:scoring-templating-language} aber eindeutig bestätigt. Die Tatsache, dass die Referenzimplementierung von Liquid wie der \idename-Server in Ruby entwickelt wird ist ein netter zusätzlicher Faktor. Dieser wird zwar von der quantitativen Auswertung nicht berücksichtigt, erleichtert aber die Implementierung.
+Letzten Endes stellt sich faktisch nur die Frage, ob Handlebars oder Liquid zum Einsatz kommen sollte: Angular 2 ist sowohl technisch als auch syntaktisch sehr kompliziert und eignet sich daher nicht besonders gut als "`erste Templatingsprache"'. Letzten Endes fiel die Wahl auf Liquid.
+
+Die Entscheidung zugunsten von Liquid berücksichtigt vor allem die geringe technische Komplexität, wird von der quantitativen Auswertung in Tabelle~\ref{tab:scoring-templating-language} aber auch in jeder Einzeldisziplin bestätigt. Die Tatsache, dass die Referenzimplementierung von Liquid wie der \idename-Server in Ruby entwickelt wird ist ein netter zusätzlicher Faktor. Er wird zwar von der quantitativen Auswertung nicht berücksichtigt, erleichtert aber die Implementierung.
 
 \begin{table}[h]
   \centering 
   \begin{tabular}{ l c c c }
-                 & Liquid                 & Handlebars                & Angular 2                       \\
+                      & Liquid   & Handlebars      & Angular 2   \\
     \hline
-    Technik      & 5                      & 3                         & 2                               \\
-    Syntax       & 5                      & 5                         & 3                               \\
-    Verbreitung  & 3                      & 3                         & 1                               \\
-    Erweiterbar  & 3                      & 3                         & 2                               \\
-    Übergreifend & 3                      & 2                         & 0                               \\
+    Einfache Technik  & 5        & 3               & 2           \\
+    Einfache Syntax   & 5        & 5               & 3           \\
+    Verbreitung       & 3        & 3               & 1           \\
+    Erweiterbar       & 3        & 3               & 2           \\
+    Übergreifend      & 3        & 2               & 0           \\
     \hline \hline
-                 & 19                     & 15                        & 8
+                      & 19       & 15              & 8
   \end{tabular}
-  \caption{Scoring-Modell für Templatingsprachen}
+  \caption{Scoring-Modell für evaluierte Templatingsprachen}
   \label{tab:scoring-templating-language}
 \end{table}
 
-Ebenfalls nicht entscheidend, aber erfreulich, ist der Umstand, dass mit Liquid beliebige Textdateien angereichert werden können, da die Struktur des umgebenden Dokuments vom Liquid-Renderer ignoriert wird. Dieser kümmert sich lediglich um die in eingebetteten Anweisungen und behandelt alle Teile dazwischen als einfachen \texttt{string}. Für \idename bedeutet das vor allem, dass für andere Arten von Dokumenten nicht zwingend eine weitere Templatingsprache notwendig wäre. Zum Beispiel wäre ebenfalls die Bereitstellung einer dynamisch generierten \texttt{robots.txt}\footnote{Diese Datei wird von Suchmaschinen ausgewertet, um gewisse Teile der Seite von der Indexierung auszuschließen.} oder einer Sitemap\footnote{Typischerweise ein XML-Dokument, welches alle zu indexierenden Seiten mit einigen Metadaten, zum Beispiel die Frequenz von Veränderungen, auflistet.} möglich. Mit rein auf die Generierung von HTML ausgelegten Sprachen wäre das nicht möglich.
+Ebenfalls nicht entscheidend, aber erfreulich, ist der Umstand, dass mit Liquid beliebige Textdateien angereichert werden können, da die Struktur des umgebenden Dokuments vom Liquid-Renderer ignoriert wird. Dieser kümmert sich lediglich um die in eingebetteten Anweisungen und behandelt alle Teile dazwischen als einfachen \texttt{string}. Für \idename{} bedeutet hat dieser Umstand vor allem zur Folge, dass für andere Arten von Dokumenten nicht zwingend eine weitere Templatingsprache notwendig wäre. Zum Beispiel wäre ebenfalls die Bereitstellung einer dynamisch generierten \texttt{robots.txt}\footnote{Diese Datei wird von Suchmaschinen ausgewertet, um gewisse Teile der Seite von der Indexierung auszuschließen.} oder einer Sitemap\footnote{Typischerweise ein XML-Dokument, welches alle zu indexierenden Seiten mit einigen Metadaten, zum Beispiel die Frequenz von Veränderungen, auflistet.} möglich. Mit rein auf die Generierung von HTML ausgelegten Sprachen wäre das nicht möglich.
 
 \subsubsection{Die Templatingsprache Liquid}
 
-Auch wenn die Schüler mit der Syntax der verwendeten Templatingsprache in der finalen Version von \idename nur oberflächlich in Berührung kommen sollen, wird Liquid an dieser Stelle noch formal vorgestellt. Aufbauend auf dieser Vorstellung wird dann untersucht, wie die entsprechenden Funktionalitäten den Lernenden gezielt vermittelt werden können. Und abgesehen davon sollen Schüler den gesamten Umfang der Sprache bei Bedarf (oder Interesse) ja auch textuell Nutzen können.
+Auch wenn die Schüler mit der Syntax der verwendeten Templatingsprache in der finalen Version von \idename{} nur oberflächlich in Berührung kommen sollen, wird Liquid an dieser Stelle noch formal vorgestellt. Aufbauend auf dieser Vorstellung wird dann untersucht, wie die entsprechenden Funktionalitäten den Lernenden gezielt vermittelt werden können. Und abgesehen davon sollen Schüler den gesamten Umfang der Sprache bei Bedarf (oder Interesse) ja auch textuell Nutzen können.
 
 Grundsätzlich wird in Liquid zwischen drei verschiedenen Arten von Anweisungen mit jeweils eigener Syntax unterschieden \cite{liquid-introduction}:
 
@@ -751,31 +753,25 @@ In einem solchen Fall soll es also möglich sein auch Bedienelememente wie Combo
 </select>
 \end{lstlisting}
 
-\subsubsection{Seitenstruktur und Navigation}
+\subsubsection{Navigation}
 
-Zunächst ist festzuhalten, dass die serverseitige Erzeugung von Seiten zur Laufzeit nicht vorgesehen ist. Stattdessen definiert der Entwickler eine Reihe von serverseitig statischen HTML-Seiten samt einiger Datenquellen, die dann vom Client des Anwenders ausgeführt werden. Der Client analysiert dann zunächst die in der Seite hinterlegten Datenquellen und führt ggfs. weitere HTTP-Anfragen aus, um alle Daten einzusammenln.
+Die Navigation auf Webseiten teilt sich zwei unterschiedliche Problemstellungen: Noch vor dem Rendervorgang stellt sich die Frage, zu welcher konkreten Seite eine beliebige \texttt{URL} aufgelöst werden soll. Und während der Generierung einer Seite müssen sich Verweise auf andere Seiten erzeugen lassen können.
 
-Die Seiten können beliebig in einer Ordnerstruktur organisiert werden, die Dateipfade bilden nicht die Grundlage für das Routing. Diese Entkoppelung der Pfade im Dateisystem von den URLs erlaubt es den Schülern die Übergabe von Parametern und auch die sonstige Navigationsstruktur frei zu gestalten.
+Damit für jede relevante URL eindeutig\todo{Auf Liste zur Eindeutigkeit rumreiten} ist zu welcher Seite sie aufgelöst werden soll, könnte man in \idename{} eine zentrale Routing-Konfiguration hinterlegen. In dieser wird einer Menge von Pfaden, welche möglicherweise auch Platzhaltern für Parameter vorsehen, mit den entsprechenden Zielseiten verknüpft. Solche Pfadangaben könnten für das Blogbeispiel wie in Listing~\ref{lst:central-routing-example} angedeutet intern repräsentiert werden.
 
-Zu jeder dieser Seiten können eigene Datenquellen hinterlegt werden. Dabei sind bisher die folgenden Möglichkeiten vorgesehen:
+Dabei bedürfen zwei Details besonderer Beachtung: Parameter in der URL werden mit der  \texttt{:parametername}-Notation eingeführt\footnote{Es handelt sich dabei um die gleiche Notation wie sie den Bibliotheken Sinatra oder Angular 2 verwendet wird.}. Außerdem handelt es sich um eine Liste von Regeln, die Reihenfolge der Einträge ist folglich von Bedeutung. Wenn ein hypothetischer Eintrag mit dem Selektor \texttt{/beitrag/test} eingeführt werden sollte, muss das auf jeden Fall vor dem Selektor \texttt{/beitrag/:id} geschehen. Andererseits passt der Parameter \texttt{:id} auf das \texttt{URL}-Segment \texttt{test} und maskiert diese Route.
 
-\begin{description}
-  \item[Parameter aus URLs] \hfill \\
-    Zur Übergabe von Informationen zwischen Seiten können Teile der URL als Parameter für die Seite markiert werden.
-  \item[Abfragen] \hfill \\
-    Die ``typische'' Datenquelle für Seiten.
-  \item[Variablen \& Konstanten] \hfill \\
-    Manchmal kann es nötig sein, verschiedene Konstrukte ohne eine Datenbank im Hintergrund zu erproben. In diesem Fall bietet sich die Verwendung von vordefinierten Werten an.
-\end{description}
-
-Damit für jede Seite eindeutig ist, über welche kanonischen URLs sie angesprochen werden kann muss der Entwickler eine Routing-Konfiguration hinterlegen. In dieser wird einem einfachen Pfad, ggfs. auch mit Platzhaltern für Parameter, ein eindeutiger Name sowie eine anzuzeigende HTML-Seite zugewiesen. Der Name ist nötig um, unabhängig von einer sich möglicherweise ändernden Pfadangabe, ein eindeutiges Ziel für Links angeben zu können. Nur wenn diese Eindeutigkeit hergestellt ist, kann der Entwickler auf z.B. nicht existierende Linkziele oder fehlende Parameter hingewiesen werden.
-
-Für einen einfachen Blog wäre z.B. die folgende interne Repräsentation der Konfiguration denkbar:
-
-\begin{lstlisting}[language=JavaScript, caption=Einfache Routen für einen Blog, label=lst:json:simple-routing-blog]
-{ path : "/",            name : "Hauptseite", page : "index.html",
-  path : "/beitrag/:id", name : "Beitrag",    page : "beitrag.html" }
+\begin{lstlisting}[float=h!,caption={Zentrales Routing für das Blog-Beispiel}, label={lst:central-routing-example}]
+[
+  { "selector": "/",             "page": "Hauptseite" },
+  { "selector": "/beitrag/:id",  "page": "Artikel" },
+]
 \end{lstlisting}
+
+In diesem Datenmodell können darüber hinaus Inkonsistenzen entstehen, wenn sich die Anzahl oder Benennung der für eine Seite erforderlichen Parameter verändert. Die Behandlung solcher Fehler erfordert allerdings grundsätzlich die Unterstützung des Entwicklers: Nur er kann entscheiden, ob eine umbenannte Variable auch unter neuem Namen semantisch gleichwertig ist. Es handelt sich also um ein Problem, dem am ehesten durch eine passende Benutzeroberfläche beizukommen ist.
+
+Nach dieser Betrachtung zur Auflösung einer gegebenen Route zu einer konkreten \texttt{URL}
+
 
 \subsection{Editor für Oberflächen}
 \label{sec:design-ui-editor}
