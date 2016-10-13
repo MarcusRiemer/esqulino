@@ -470,11 +470,37 @@ Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von norm
 
 Abstrakt betrachtet besteht eine \idename{}-Seite aus zwei wesentlichen Informationen: Eine Auflistung aller zum Darstellen benötigten Datenquellen, typischerweise werden das SQL-Abfragen sein, und eine Vorschrift wie genau dieser Datenbestand darzustellen ist.
 
-Um das folgende Kapitel anschaulicher zu gestalten, werden alle Beispiele anhand eines sehr reduzierten Datenbestandes zu einem einfach Blog illustriert. Dieser Blog soll dem Endbenutzer über zwei Seiten näher gebracht werden: Eine \textit{Hauptseite} dient der Auflistung aller Blogbeiträge welche im Einzelnen auf einer \textit{Detailseite} in Gänze betrachtet und kommentiert werden können.
+Um das folgende Kapitel anschaulicher zu gestalten, werden alle Beispiele anhand eines sehr reduzierten Datenbestandes (siehe Tabelle \ref{tab:ui-concept-data-article} \& \ref{tab:ui-concept-data-comment}) zu einem einfach Blog illustriert. Dieser besteht aus zwei Tabellen für Artikel und Kommentare, ein Artikel wurde dabei möglicherweise mehrfach kommentiert. Bei den Zeitangaben handelt es sich um \texttt{UNIX}-Zeitstempel.
+
+Dieser Blog soll dem Endbenutzer über zwei Seiten näher gebracht werden: Eine \textit{Hauptseite} dient der Auflistung aller Blogbeiträge welche im Einzelnen auf einer \textit{Detailseite} in Gänze betrachtet und kommentiert werden können. Dabei können auf der Hauptseite natürlich nicht die gleichen Informationen angezeigt werden, diese werden daher teilweise aggregiert: Statt alle Kommentare zu einem Beitrag anzuzeigen, wird nur auf die Anzahl der getätigten Kommentare verwiesen.
 
 Abstrakt betrachtet handelt es sich dabei um eine typische "`Master-Detail"'-Struktur: Ausgehend von einer sehr komprimierten Darstellung aller Werte können Details zu einem konkreten Datensatz nach einem Navigationsvorgang eingesehen werden. Dieses Navigationskonzept wird von fast allen geschäftlichen Applikationen genutzt und ist eine der Standardvorlagen des Visual Studio Lightswitch.
 
-\missing[inline]{Beispielhafter Datenbestand}
+\begin{table}[h]
+  \centering 
+  \begin{tabularx}{\linewidth}{ l l X l }
+    article\_id&caption&text&date\\
+    \hline
+    1&Erster Artikel&In dem noch nicht besonders viel Text steht.&1393423200\\
+    2&Nächster Artikel&Hier steht schon ein bisschen mehr.&1456498800\\
+    3&Dritter Artikel&<abbr title="'Hypertext Markup Language"'>HTML</abbr>&1477872000\\
+  \end{tabularx}
+  \caption{\texttt{article}-Daten des Blog-Beispiels}
+  \label{tab:ui-concept-data-article}
+\end{table}
+
+\begin{table}[h]
+  \centering 
+  \begin{tabularx}{\linewidth}{ l l l X l }
+    comment\_id&article\_id&commenter\_name&text&date\\
+    \hline
+    1&1&Ash Ketchum&Hast du schon meine Pokemon-Seite gesehen?&1393423241\\
+    2&1&Betreiber&Natürlich, gute Arbeit!&1393435123\\
+    3&3&Kommentator&Auch <strong>dieser Kommentar</strong> enthält HTML.&0\\
+  \end{tabularx}
+  \caption{\texttt{comment}-Daten des Blog-Beispiels}
+  \label{tab:ui-concept-data-comment}
+\end{table}
 
 \subsubsection{Datenanbindung für Webseiten}
 
@@ -482,11 +508,15 @@ Um die einer Webseite zur Verfügung stehenden Daten zu strukturieren, wird dies
 
 \begin{description}
 \item[\texttt{query} für \texttt{SELECT}-Abfragen] \hfill \\
-  Nicht jede Webseite benötigt notwendigerweise die Ergebnisse aller verfügbaren Abfragen. Daher werden die tatsächlich benötigten Abfragen in diesem Namensraum gesammelt.
+  Nicht jede Webseite benötigt notwendigerweise die Ergebnisse aller verfügbaren Abfragen. Daher werden die tatsächlich benötigten referenzierten Abfragen in diesem Namensraum gesammelt.
 \item[\texttt{get} für \texttt{URL}-Parameter] \hfill \\
   Wenn zu bestimmten Datensätzen navigiert werden soll ist im Normalfall die Angabe eines \texttt{URL}-Parameters notwendig. Dieser beschreibt eines oder mehrere Merkmale, anhand dessen relevante Datensätze ausgewählt werden können.
 \item[\texttt{input} für Benutzereingaben] \hfill \\
-  Dieser Namensraum hängt eng mit dem HTML-\texttt{form}-Element zusammen und stellt die Werte aller Benutzereingaben zur Verfügung.
+  Dieser Namensraum hängt eng mit dem HTML-\texttt{form}-Element zusammen und stellt die Werte aller Benutzereingaben zur Verfügung. 
+\item[\texttt{page} für Eigenschaften der Seite] \hfill \\
+  Zumindest der Name der aktuellen Seite ist für die Darstellung möglicherweise relevant und sollte daher während des Rendervorgangs zur Verfügung stehen.
+\item[\texttt{project} für Eigenschaften des Projektes] \hfill \\
+  Wenn man als Entwickler globale Konstanten ablegen möchte, könnte man dies natürlich auch in der Datenbank tun. Bequemer ist aber ein separater Speicherort, der tatsächlich keine Modifikationen durch Endbenutzer vorsieht. Das typische Beispiel für einen solchen global verfügbaren Wert wäre der Name des Projekts an sich.
 \end{description}
 
 \subsubsection{Wahl einer Templatingsprache}
@@ -757,9 +787,7 @@ In einem solchen Fall soll es also möglich sein auch Bedienelememente wie Combo
 
 Die Navigation auf Webseiten teilt sich zwei unterschiedliche Problemstellungen: Noch vor dem Rendervorgang stellt sich die Frage, zu welcher konkreten Seite eine beliebige \texttt{URL} aufgelöst werden soll. Und während der Generierung einer Seite müssen sich Verweise auf andere Seiten erzeugen lassen können.
 
-Damit für jede relevante URL eindeutig\todo{Auf Liste zur Eindeutigkeit rumreiten} ist zu welcher Seite sie aufgelöst werden soll, könnte man in \idename{} eine zentrale Routing-Konfiguration hinterlegen. In dieser wird einer Menge von Pfaden, welche möglicherweise auch Platzhaltern für Parameter vorsehen, mit den entsprechenden Zielseiten verknüpft. Solche Pfadangaben könnten für das Blogbeispiel wie in Listing~\ref{lst:central-routing-example} angedeutet intern repräsentiert werden.
-
-Dabei bedürfen zwei Details besonderer Beachtung: Parameter in der URL werden mit der  \texttt{:parametername}-Notation eingeführt\footnote{Es handelt sich dabei um die gleiche Notation wie sie den Bibliotheken Sinatra oder Angular 2 verwendet wird.}. Außerdem handelt es sich um eine Liste von Regeln, die Reihenfolge der Einträge ist folglich von Bedeutung. Wenn ein hypothetischer Eintrag mit dem Selektor \texttt{/beitrag/test} eingeführt werden sollte, muss das auf jeden Fall vor dem Selektor \texttt{/beitrag/:id} geschehen. Andererseits passt der Parameter \texttt{:id} auf das \texttt{URL}-Segment \texttt{test} und maskiert diese Route.
+Damit für jede relevante URL eindeutig ist, zu welcher Seite sie aufgelöst werden soll, könnte man in \idename{} eine zentrale Routing-Konfiguration hinterlegen. In dieser wird einer Menge von Pfaden, welche möglicherweise auch Platzhaltern für Parameter vorsehen, mit den entsprechenden Zielseiten verknüpft. Solche Pfadangaben könnten für das Blogbeispiel wie in Listing~\ref{lst:central-routing-example} angedeutet repräsentiert werden. Bei dem \texttt{selector} handelt es sich um ein Prädikat, welches im Falle einer positiven Auswertung darauf hinweist, dass die entsprechende \texttt{page} dargestellt werden soll.
 
 \begin{lstlisting}[float=h!,caption={Zentrales Routing für das Blog-Beispiel}, label={lst:central-routing-example}]
 [
@@ -768,10 +796,13 @@ Dabei bedürfen zwei Details besonderer Beachtung: Parameter in der URL werden m
 ]
 \end{lstlisting}
 
-In diesem Datenmodell können darüber hinaus Inkonsistenzen entstehen, wenn sich die Anzahl oder Benennung der für eine Seite erforderlichen Parameter verändert. Die Behandlung solcher Fehler erfordert allerdings grundsätzlich die Unterstützung des Entwicklers: Nur er kann entscheiden, ob eine umbenannte Variable auch unter neuem Namen semantisch gleichwertig ist. Es handelt sich also um ein Problem, dem am ehesten durch eine passende Benutzeroberfläche beizukommen ist.
+Dabei bedürfen zwei Details besonderer Beachtung: Parameter in der URL werden mit der  \texttt{:parametername}-Notation eingeführt\footnote{Es handelt sich dabei um die gleiche Notation wie sie von den Bibliotheken Sinatra oder Angular 2 verwendet wird.}. Außerdem handelt es sich um eine Liste von Regeln, die Reihenfolge der Einträge ist folglich von Bedeutung. Wenn ein hypothetischer Eintrag mit dem Selektor \texttt{/beitrag/test} eingeführt werden sollte, muss das auf jeden Fall vor dem Selektor \texttt{/beitrag/:id} geschehen. Andererseits passt der Parameter \texttt{:id} auf das \texttt{URL}-Segment \texttt{test} und maskiert diese Route. Unter dieser Randbedingung lässt sich dann aber die Abbildung $\mathtt{URL} \rightarrow \mathtt{Seite}$ eindeutig berechnen.
 
-Nach dieser Betrachtung zur Auflösung einer gegebenen Route zu einer konkreten \texttt{URL}
+In diesem Datenmodell können allerdings Inkonsistenzen entstehen, wenn sich die Anzahl oder Benennung der für eine Seite erforderlichen Parameter verändert. Die Behandlung solcher Fehler erfordert allerdings grundsätzlich die Unterstützung des Entwicklers: Nur er kann entscheiden, ob eine umbenannte Variable auch unter neuem Namen semantisch gleichwertig ist. Es handelt sich also um ein Problem, dem am ehesten durch eine passende Benutzeroberfläche beizukommen ist.
 
+Nachdem nun die zu rendernde Seite bekannt ist, stellt sich folglich die inverse Frage: Wie kann die \texttt{URL} zu einer bestimmten Seite generiert werden? Dabei stellt man zunächst fest, dass der \texttt{HTML}-Standard zwei unterschiedliche Mechanismen zur Navigation vorsieht. Die naheliegendste Variante ist die direkte Generierung eines \texttt{<a>}-Knotens mit dem passenden \texttt{href}-Attribut: Mit der Liquid-Syntax lassen sich beliebige Strings generieren, also auch gültige URLs. Allerdings funktioniert dieser Ansatz nur mit Daten, die auf dem Server während des Rendervorgangs bekannt sind. Benutzereingaben in Formularelementen wie \texttt{<input>} können in diesem Kontext nicht verwendet werden.
+
+Es ist folglich schon aufgrund der Vorgaben des \texttt{HTML}-Standards sinnvoll, die Unterstützung von zwei separaten Mechanismen zur Navigation zu unterstützen: Sofern der Endanwender eigene Eingaben vornehmen soll, kommt ein \texttt{<form>}-Element zum Einsatz. Durch die Nutzung von versteckten Eingabelementen (\texttt{<input type="hidden">} können aber auch serverseitig vorhandene Daten, zum Beispiel aus Abfragen oder \texttt{GET}-Parametern innerhalb von Formularen verwendet werden.
 
 \subsection{Editor für Oberflächen}
 \label{sec:design-ui-editor}
