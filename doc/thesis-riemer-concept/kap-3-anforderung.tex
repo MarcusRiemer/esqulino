@@ -60,10 +60,12 @@ Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit be
 Umgekehrt ist es auch wichtig, den Umfang des zu entwickelnden Programms auf einem im Rahmen der Thesis machbaren Umfang zu begrenzen. Die folgenden Ideen wären mehr oder minder naheliegende Ergänzungen, welche aufgrund der zur Verfügung stehenden Zeit aber zunächst nicht implementiert werden sollen\footnote{Die griffigere, englische Bezeichnung dafür wäre "`out of scope"', \href{http://german.stackexchange.com/questions/31085/german-equivalent-to-out-of-scope/}{dazu kennt allerdings auch das Internet keine direkte Übersetzung}}. Der Zweck dieser Master-Thesis ist die Implementierung eines Prototypen. Die Fertigstellung von \idename{} wird im Rahmen weiterer Arbeiten erfolgen und die im folgenden geäußerten Ideen dann erneut evaluieren.
 
 \begin{description}
-\item[Datenmodellierung] \hfill \\
-  Der Schwerpunkt dieser Arbeit liegt zunächst auf der Vermittlung von Kenntnissen zur Abfrage und Manipulation von Daten in einem bestehenden Schema. Änderungen an diesem Schema sind nicht vorgesehen, demzufolge ist auch der Neuentwurf eines Schemas mit externen Mitteln zu bewerkstelligen. Völlig außerhalb des Umfangs dieser Arbeit ist die Überführung von konzeptionellen Modellen (z.B. ER-Schemata) in physikalische Modelle.
-\item[Aufwändiges Design von Benutzerschnittstellen] \hfill \\
+\item[Datenmodellierung] \label{scope:no-data-modelling} \hfill \\
+  Der Schwerpunkt dieser Arbeit liegt zunächst auf der Vermittlung von Kenntnissen zur Abfrage und Manipulation von Daten in einem bestehenden Schema. Änderungen an diesem Schema sind nicht vorgesehen, demzufolge ist auch der Neuentwurf eines Schemas mit externen Mitteln zu bewerkstelligen.
+\item[Aufwändiges Design von Benutzerschnittstellen] \label{scope:no-design} \hfill \\
   Auch wenn die Konzeption der Benutzerschnittstelle für die verschiedenen Masken in den eben aufgezählten Prinzipien auftaucht, ist es wichtig den engen Rahmen dieses Aspektes zu verstehen. Es geht um die Schaffung von einfachen, datenzentrierten Eingabemöglichkeiten, nicht um die Umsetzung besonders kreativer Bedienkonzepte. Dementsprechend ist z.B. die Erweiterung der zur Verfügung stehenden Eingabeelemente durch die Lernenden außerhalb des Rahmens dieser Arbeit. Technisch gesehen schließt dieses Kriterium die Unterstützung von CSS oder Javascript innerhalb von \idename{} aus.
+\item["`Echte"' Programmierung mit typischen Programmiersprachen] \label{scope:no-programming} \hfill \\
+  Auch wenn \idename{}-Anwendungen grundsätzlich interaktiv sein sollen, ist diese Interaktivität in einem sehr engen Rahmen zu sehen. Für die Darstellung der Oberfläche könnten zwar Kontrollstrukturen wie Schleifen oder Verzweigungen zum Einsatz kommen, diese operieren aber stets auf einem während des Rendervorgangs unveränderlichen Datenbestand. Die einzige Möglichkeit zur Veränderung von Daten zur Laufzeit ist die Verwendung von mutierenden \texttt{SQL}-Anweisungen, klassische Zuweisungen finden nicht statt.
 \end{description}
 
 \subsection{Allgemeines Konzept der Entwicklungsumgebung}
@@ -502,28 +504,32 @@ Abstrakt betrachtet handelt es sich dabei um eine typische "`Master-Detail"'-Str
   \label{tab:ui-concept-data-comment}
 \end{table}
 
-\subsubsection{Datenanbindung für Webseiten}
+\subsubsection{Datenquellen für Webseiten}
 
 Um die einer Webseite zur Verfügung stehenden Daten zu strukturieren, wird dieser verfügbare Datenbestand in unterschiedliche Namensräume eingeteilt. Dadurch werden Kollisionen von Bezeichnern vermieden und es ist schon anhand der Bezeichnung eindeutig, von welchem Kontext der Wert zur Verfügung gestellt wird.
 
 \begin{description}
-\item[\texttt{query} für \texttt{SELECT}-Abfragen] \hfill \\
-  Nicht jede Webseite benötigt notwendigerweise die Ergebnisse aller verfügbaren Abfragen. Daher werden die tatsächlich benötigten referenzierten Abfragen in diesem Namensraum gesammelt.
-\item[\texttt{get} für \texttt{URL}-Parameter] \hfill \\
-  Wenn zu bestimmten Datensätzen navigiert werden soll ist im Normalfall die Angabe eines \texttt{URL}-Parameters notwendig. Dieser beschreibt eines oder mehrere Merkmale, anhand dessen relevante Datensätze ausgewählt werden können.
-\item[\texttt{input} für Benutzereingaben] \hfill \\
-  Dieser Namensraum hängt eng mit dem HTML-\texttt{form}-Element zusammen und stellt die Werte aller Benutzereingaben zur Verfügung. 
 \item[\texttt{page} für Eigenschaften der Seite] \hfill \\
   Zumindest der Name der aktuellen Seite ist für die Darstellung möglicherweise relevant und sollte daher während des Rendervorgangs zur Verfügung stehen.
 \item[\texttt{project} für Eigenschaften des Projektes] \hfill \\
   Wenn man als Entwickler globale Konstanten ablegen möchte, könnte man dies natürlich auch in der Datenbank tun. Bequemer ist aber ein separater Speicherort, der tatsächlich keine Modifikationen durch Endbenutzer vorsieht. Das typische Beispiel für einen solchen global verfügbaren Wert wäre der Name des Projekts an sich.
+\item[\texttt{get} für \texttt{URL}-Parameter] \hfill \\
+  Wenn aus einer Vielzahl von verfügbaren Daten zu einem bestimmten Datensatz navigiert werden soll, sieht der \texttt{HTML}-Standard die Verwendung von \texttt{URL}-Parametern vor. Mit diesen lassen sich applikationsspezifische Merkmale der anzuzeigenden Datensätze angeben. Im Falle des Blog-Beispiels wäre das zum Beispiel die \texttt{article\_id} zur Anzeige eines bestimmten Beitrages oder die Angabe eines Startzeitpunkts um die Hauptseite in mehrere Seiten zu unterteilen. 
+\item[\texttt{query} für \texttt{SELECT}-Abfragen] \hfill \\
+  Nicht jede Webseite benötigt notwendigerweise die Ergebnisse aller verfügbaren Abfragen. Daher werden die tatsächlich benötigten referenzierten Abfragen in diesem Namensraum gesammelt. Kapitel \ref{sec:design-ui-bind-output}~\nameref{sec:design-ui-bind-output} beschreibt im Detail wie diese Anbindung funktioniert.
+\item[\texttt{input} für Benutzereingaben] \hfill \\
+  Dieser Namensraum hängt eng mit dem HTML-\texttt{form}-Element zusammen und stellt die Werte aller Benutzereingaben zur Verfügung. 
 \end{description}
+
+Die Verwendung von Namensräume ist von Jekyll inspiriert, \texttt{page} und \texttt{project} findet man auch dort. Durch die Kombination der in diesen Namensräumen verfügbaren Namen für Projekt und Seite kann \idename{} automatisch eine sinnvolle Implementierung für den \texttt{HTML}-Titel jeder Seite generieren: \texttt{\{\{page.name\}\} - \{\{project.name\}\}}. Zur Laufzeit würde dann für eine denkbare "`Impressum"'-Seite des "`Beispielblog"' also "`Impressum - Beispielblog"' als Titel angezeigt werden.
+
+Perspektivisch interessant wäre noch die Einbindung von Namensräumen für Cookies und Sessions, um während eines Besuchs (oder auch darüber hinaus) Informationen ablegen zu können. Diese beiden Datenspeicher entfalten ihr volles Potenzial allerdings erst, wenn Ihnen dynamisch Werte zugewiesen werden können. Natürlich wäre es nicht undenkbar, dass \idename{} auch hier eine spezielle Lösung zur Verfügung stellt. Sinnvoller erscheint aber die Verwendung einer "`normalen"' Programmiersprache, was außerhalb des abgesteckten Umfangs dieser Arbeit liegt und daher nicht weiter betrachtet wird (vergleiche \ref{scope:no-programming}~\nameref{scope:no-programming}) .
 
 \subsubsection{Wahl einer Templatingsprache}
 
-Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten, nicht alle dafür eignen sich aber um dynamisch zur Laufzeit Seiten zu erzeugen. Nicht in Betracht gezogen werden vollwertige Programmiersprachen wie PHP, Python oder Ruby. Die Mächtigkeit dieser Sprachen geht fast zwangsläufig mit einer vergleichsweise umständlichen Syntax einher. Zudem dient die Verwendung einer dezidierten Templatingsprache nicht nur der Bequemlichkeit, sondern auch einer klaren Trennung zwischen Programm- und Anzeigelogik. Diese Unterscheidung soll von \idename{} gefördert werden.
+Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten, nicht alle dafür eignen sich aber um dynamisch zur Laufzeit Seiten zu erzeugen. Nicht in Betracht gezogen werden vollwertige Programmiersprachen wie PHP, Python oder Ruby. Einerseits liegen diese außerhalb des abgesteckten Umfangs dieser Arbeit (vergleiche \ref{scope:no-programming}~\nameref{scope:no-programming}), aber auch abgesehen davon erscheint ihr Einsatz nicht sinnvoll: Die Mächtigkeit dieser Sprachen geht fast zwangsläufig mit einer vergleichsweise umständlichen Syntax einher. Zudem dient die Verwendung einer dezidierten Templatingsprache nicht nur der einfacheren Implementierung, sondern auch einer klaren Trennung zwischen Programm- und Anzeigelogik. Diese Unterscheidung soll von \idename{} gefördert werden.
 
-Für \idename{} wurden darüber hinaus die folgenden harten Kriterien angelegt, um die große Anzahl verfügbarer Kandidaten schnell zu reduzieren:
+Für \idename{} wurden darüber hinaus zunächst die folgenden Kriterien angelegt, um die Anzahl verfügbarer Sprachen schnell zu reduzieren:
 
 \begin{description}
 \item[Datenanbindung] \hfill \\
@@ -536,7 +542,7 @@ Für \idename{} wurden darüber hinaus die folgenden harten Kriterien angelegt, 
   Erfahrenen Entwicklern soll es grundsätzlich möglich sein ihre HTML-Kennt\-nisse in vollem Umfang anzuwenden. Sofern die Templatingsprache also HTML-Be\-stand\-teile bereinigt, muss es eine Möglichkeit geben diese Bereinung lokal zu deaktivieren.
 \end{description}
 
-Diese Kriterien filtern eine Menge verbreitete Textauszeichnungssprachen wie sie in Foren- oder Kommentarsystemen genutzt werden aus. Weder Markdown, BB-Code noch Textile erlauben nativ die programmatische Einbindung von externen Daten. Die innerhalb der Wikipedia genutzte "`Wikisyntax"' erlaubt zwar eine einfache Datenanbindung, kennt aber keine Kontrollstrukturen.
+Diese Kriterien filtern reine Textauszeichnungssprachen wie sie in Foren- oder Kommentarsystemen genutzt werden aus. Weder Markdown, BB-Code noch Textile erlauben nativ die programmatische Einbindung von externen Daten. Die innerhalb der Wikipedia genutzte "`Wikisyntax"' erlaubt zwar eine einfache Datenanbindung, kennt aber keine Kontrollstrukturen.
 
 Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig blieben, werden diese im Folgenden anhand der folgenden Kriterien oberflächlich im Rahmen eines einfachen Scoring-Modells verglichen. Die quantitative Auswertung findet sich am Ende dieses Kapitels in Tabelle~\ref{tab:scoring-templating-language}, die qualitative Auswertung findet sich im Anschluss an diese Kriterien.
 
@@ -544,7 +550,7 @@ Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig bliebe
 \item[Geringe Technische Komplexität, 5 Punkte] \hfill \\
   Da \idename{}-Seiten serverseitig gerendert werden sollen, ist es nicht notwendig auf eine komplexe Templatingsprache mit Funktionen wie einem virtuellen Document-Object-Model (\texttt{DOM}) zurückzugreifen. Es gilt die Prämisse: Je komplizierter das interne Verarbeitungsmodell der Sprache ist, desto mehr unverständliche Fehler können auftreten.
 \item[Geringe Syntaktische Komplexität, 5 Punkte] \hfill \\
-  Auch wenn die Lernenden im Idealfall von der konkreten Syntax der Templatingsprache abstrahieren sollen, wird es immer wieder zu Momenten kommen an denen diese Abstraktion löcherig ist \cite{spolsky_law_abstractions}. Die häufigte Ursache für einen solchen Leck werden dabei Fehlermeldungen sein: Sobald diese auftreten, sollte zur Unterstützung der generierte Quelltext angezeigt werden. Und je einfacher dieser Quelltext ist, desto näher kann er potenziell an der abstrakten Darstellung im Editor sein.
+  Die Syntax sollte konsistent sein und optimalerweise nur sehr wenige Syntaxelemente einführen. Je einfacher die Syntax der Sprache ist, desto näher kann die abstrakten Darstellung im Editor den tatsächlich erzeugten Dokumenten sein.
 \item[Verbreitung, 3 Punkte] \hfill \\
   Einige Templatingsprachen haben Einzug in eine Vielzahl unterschiedlicher Softwareprojekte gefunden, andere sind im Hinblick auf spezielle Frameworks zugeschnitten. Je weiter die Templatingsprache verbreitet ist, desto höher die Chance, dass ein Lernender sie möglicherweise auch einmal außerhalb von \idename{} einsetzen kann.
 \item[Einfache Erweiterbarkeit, 3 Punkte] \hfill \\
@@ -553,72 +559,105 @@ Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig bliebe
   Existiert lediglich die Referenzimplementierung einer Templatingsprache oder gibt es auch alternative Implementierungen? Dieser Aspekt ist nicht nur ein guter Indikator für die tatsächliche Verbreitung einer Templatingsprache, er könnte perspektivisch im Falle eines Exports von Projekten aus \idename{} auch praktische Bedeutung haben.
 \end{description}
 
-Diesen Kriterien stellen sich die Templatingsprachen Liquid, Angular 2 und Handlebars. Liquid wurde schon im Rahmen der vergleicharen Arbeiten (\ref{sec:software-jekyll}~\nameref{sec:software-jekyll}) kurz vorgestellt und bot sich dementsprechend als Kandidat an. Da für die Implementierung des \idename{}-Frontend Angular 2 ohnehin zum Einsatz kommt stellt sich die Frage (siehe \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis}), ob die Nutzung eines weiteren Frameworks tatsächlich notwendig ist. Möglicherweise könnte durch die Vermeidung einer weiteren Abhängigkeit ja auch Aufwand gespart werden? Handlebars wird unter anderem in den Bibliotheken Meteor und Ember.js verwendet und wurde schlicht aufgrund seiner Popularität ausgewählt.
+Diesen Kriterien stellen sich die Templatingsprachen Liquid\footnote{\url{http://liquidmarkup.org/}}, Angular 2\footnote{\url{https://angular.io/docs/ts/latest/guide/template-syntax.html}} und Handlebars\footnote{\url{http://handlebarsjs.com/}}. Liquid wurde schon im Rahmen der vergleicharen Arbeiten (\ref{sec:software-jekyll}~\nameref{sec:software-jekyll}) kurz vorgestellt und bot sich dementsprechend als Kandidat an. Da für die Implementierung des \idename{}-Frontend Angular 2 ohnehin zum Einsatz kommt (siehe \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis}) stellt sich die Frage, ob die Nutzung eines weiteren Frameworks tatsächlich notwendig ist. Möglicherweise könnte durch die Vermeidung einer weiteren Abhängigkeit ja auch Aufwand gespart werden? Handlebars wird unter anderem in den Bibliotheken Meteor und Ember.js verwendet und wurde schlicht aufgrund seiner Popularität ausgewählt.
 
-Um die Komplexität der Technik zu bewerten wird zunächst das Ergebnis des Rendervorgangs betrachtet: Sowohl die Referenzimplementierungen von Handlebars als auch Angular 2 generieren Javascript, welches die sich ergebende HTML-Struktur unmittelbar in den DOM-Baum des Browsers injiziert. Angular 2 geht noch einen Schritt weiter und gibt die neue Struktur nicht ungefiltert an den Browser weiter, sondern erstellt mit Hilfe eines virtuellen DOM einen Satz an inkrementell nötigen Änderungen. Das Ergebnis eines Rendervorgangs mit Liquid ist hingegen ein einfacher String mit dem gerenderten Template, für Handlebars gibt es abseits der Referenzimplementierung eine Portierung mit einem entsprechend einfachem Backend.
+Um die Komplexität der Technik zu bewerten wird zunächst das Ergebnis des Rendervorgangs betrachtet: Sowohl die Referenzimplementierungen von Handlebars als auch Angular 2 generieren Javascript, welches die sich ergebende HTML-Struktur unmittelbar in den DOM-Baum des Browsers injiziert. Angular 2 geht noch einen Schritt weiter und gibt die neue Struktur nicht ungefiltert an den Browser weiter, sondern erstellt mit Hilfe eines speziellen Baumes zur Isolation von Veränderungen einen Satz an inkrementell nötigen Änderungen. Das Ergebnis eines Rendervorgangs mit Liquid ist hingegen ein einfacher String mit dem gerenderten Template.
 
-Und natürlich spielt für die Technik auch die Parametriesierung eine Rolle: Bei Handlebars und Liquid ist es in der Referenzimplementierung möglich, zum Rendern einfach eine Funktion mit zwei Parametern aufzurufen: Einmal das Template als normale Zeichenkette und dann die Daten als "`normale"' Datenstruktur zu übergeben. Angular 2 stellt wesentlich mehr Anforderungen, dort muss ein spezielles Datenmodell für die Präsentationsschicht bereitgestellt werden.
+Und natürlich spielt für die Technik auch die Parametriesierung eine Rolle: Bei Handlebars und Liquid ist es in der Referenzimplementierung möglich, zum Rendern einfach eine Funktion mit zwei Parametern aufzurufen: Einmal das Template als normale Zeichenkette und dann die Daten als "`normale"' Datenstruktur zu übergeben. Angular 2 stellt wesentlich komplexere Anforderungen, dort muss ein spezielles Datenmodell für die Präsentationsschicht bereitgestellt werden.
 
-Um die Syntax zu vergleichen, soll der in Listing~\ref{lst:data-control-structures} angedeutete Datenbestand für einen Blog gerendert werden. Dabei sollen die Kategorien mit einer Schleife durchlaufen werden, der gesamte Beitrag nicht angezeigt werden sofern er privat ist und der Text mit seinen HTML-Bestandteilen gerendert werden.
+Um die Syntax zu vergleichen, soll der in Listing~\ref{lst:data-control-structures} angedeutete Datenbestand für einen Blogeintrag gerendert werden. Dieses Beispiel ergänzt die exemplarische \texttt{article}-Tabelle um die Spalten \texttt{private} und eine Aufzählung von Kategorien.
 
 \begin{lstlisting}[float=h!,caption={JSON-Darstellung eines exemplarischen Datenbestandes}, label={lst:data-control-structures}]
 { 
-  "page" : {
-    "categories": ["Huch", "Hoff", "Riem"],
-    "author": "",
-    "text": "<p>Dies ist ein Text mit HTML-Bestandteilen</p>",
-    "private": false
+  "query" : {
+    "article" : {
+      "article_id": 4,
+      "author": "Alfred E. Neumann",
+      "text": "<p>Dies ist ein Text mit HTML-Bestandteilen</p>",
+      "private": false,
+      "date": -549676800
+    },
+    "categories" : [
+      { "name": "Huch" },
+      { "name": "Hoff" },
+      { "name": "Riem" },
+    ],
+  },
+  "project" : {
+    "name": "Beispielblog"
   }
 }
 \end{lstlisting}
 
+Dieser Beispielartikel in den jeweiligen Sprachen wie folgt visualisiert werden:
+\begin{itemize}[noitemsep]
+\item Das Datum soll benutzerfreundlich formatiert werden.
+\item Die Kategorien eines Beitrages sollen mit einer Schleife durchlaufen werden.
+\item Der gesamte Beitrag soll nicht angezeigt werden, sofern er privat ist.
+\item Die \texttt{HTML}-Bestandteile im Text sollen erhalten bleiben.
+\end{itemize}
 
-Die Liquid-Syntax wird an dieser Stelle ohne weitere Erläuterungen betrachtet (Listing \ref{lst:liquid-control-structures}), eine kurze Einführung ist schon Rahmen von Kapitel \ref{sec:software-jekyll}~\nameref{sec:software-jekyll} erfolgt.
+Die Liquid-Syntax (Beispiel-Listing~\ref{lst:liquid-control-structures}) wurde grundsätzlich schon Rahmen im von Kapitel \ref{sec:software-jekyll}~\nameref{sec:software-jekyll} betrachtet. An dieser Stelle sei daher nur noch ergänzt, dass Liquid von Haus aus \texttt{HTML} in \texttt{\{\{\}\}}-Ersetzungen maskiert. Es ist daher nötig den Artikeltext in drei geschweiften Klammern zu notieren, diese Syntax deaktiviert diese Sicherheitsfunktion. Die Formatierung der Datumsangabe funktioniert mit einer Syntax wie so von \texttt{UNIX}-Pipes bekannt ist, Argumente werden als unbenannte Parameter übergeben.
 
-Die Syntax von Liquid und Handlebars ist bemerkenswert ähnlich und basiert auf geschweiften Klammern, welche sich optisch merklich vom normalen HTML-Inhalt abheben. Für Kontrollstrukturen kommt statt dem \texttt{\%}-Zeichen von Liquid eine Raute zum Einsatz. Eine praktische Syntaktische Eigenart ist die Tatsache, dass auch Schleifen mit einem \texttt{else}-Block für leere oder nicht vorhandene Listen ausgestattet werden können. Listing~\ref{lst:handlebars-control-structures} zeigt, wie das einfache Datenmodell gerendert werden könnte. Um einen Ausdruck unverändert übernommen werden soll, also inklusive aller HTML-Sonderzeichen, muss dieser von drei geschweiften Klammern umgeben werden.
-
-\begin{lstlisting}[float=p,caption={Kontrollstrukturen in Liquid}, label={lst:liquid-control-structures}]
-{% if !page.private %}
-  <h2>{{ page.title}} <small>von {{ page.author}}</small></h2>
+\begin{lstlisting}[float=h,caption={Blogartikel mit Liquid}, label={lst:liquid-control-structures}]
+<h1>{{ project.name }}</h1>
+{% if !query.article.private %}
+  <h2>{{ query.article.title}}</h2>
+  <div>Autor ist {{ query.article.author}}</div>
+  <div>Beitrag vom {{ query.article.date | date: "%d.%b.%Y" }}</div>
   <ul>
-    {% for page.categories %} 
-      <li>{{ this }}</li> 
+    {% for query.categories %} 
+      <li>{{ name }}</li> 
     {% endfor %}
   </ul>
-  {{ page.text }}
+  {{{ query.article.text }}}
 {% else %}
-  <h1>Dies ist eine private Seite</h1>
+  <h2>Dies ist eine private Seite</h2>
 {% endif %}
 \end{lstlisting}
 
-\begin{lstlisting}[float=p,caption={Kontrollstrukturen in Handlebars}, label={lst:handlebars-control-structures}]
-{{ #if !page.private }}
-  <h2>{{ page.title}} <small>von {{ page.author}}</small></h2>
+Die Syntax von Handlebars ist der von Liquid bemerkenswert ähnlich und basiert ebenfalls auf geschweiften Klammern, welche sich optisch merklich vom normalen HTML-Inhalt abheben. Für Kontrollstrukturen kommt statt dem \texttt{\%}-Zeichen von Liquid eine Raute zum Einsatz. Listing~\ref{lst:handlebars-control-structures} zeigt, wie das einfache Datenmodell gerendert werden könnte.
+
+Eine praktische syntaktische Eigenart von Handlebars ist die Tatsache, dass auch Schleifen mit einem \texttt{else}-Block für leere oder nicht vorhandene Listen ausgestattet werden könnten. In diesem Beispiel bringt diese Alternative allerdings keinen Mehrwert, weil der \texttt{<ul>}-Knoten außerhalb der Schleife notiert werden muss.
+
+Um einen Ausdruck unverändert zu übernehmen, also inklusive aller HTML-Sonderzeichen, muss dieser wie in Liquid von drei geschweiften Klammern umgeben werden. Statt der Pipe-Notation verwendet Handlebars eine an konventionelle Funktionsaufrufe angelehnte Syntax. Zu Beginn wird der Name genannt, in diesem Beispiel die nicht standarisierte Funktion \texttt{formatTime}, danach folgen durch Leerzeichen getrennte Parameter.
+
+\begin{lstlisting}[float=h,caption={Blogartikel mit Handlebars}, label={lst:handlebars-control-structures}]
+<h1>{{ project.name }}</h1>
+{{ #if !query.article.private }}
+  <h2>{{ query.article.title}}</h2>
+  <div>Autor ist {{ query.article.author}}</div>
+  <div>Beitrag vom {{ formatTime query.article.date "%d.%b.%Y" }}</div>
   <ul>
-    {{ #each page.categories }}
+    {{ #each query.article.categories }}
       <li>{{ this }}</li>
     {{/each}}
   </ul>
-  {{{ page.text }}}
+  {{{ query.article.text }}}
 {{ else }}
-  <h1>Dies ist eine private Seite</h1>
+  <h2>Dies ist eine private Seite</h2>
 {{ /if }}
 \end{lstlisting}
 
-\begin{lstlisting}[float=p,caption={Kontrollstrukturen in Angular 2}, label={lst:angular2-control-structures}]
-<template [ngIf]="!page.private">
-  <h2>{{ page.title}} <small>von {{ page.author}}</small></h2>
-  <ul>
-    <li *ngFor="let name in page.categories">{{ name }}</li>
-  </ul>
-  <div [innerHtml]="page.text"></div>
-</template>
-<template [ngIf]="page.private">
-  <h1>Dies ist eine private Seite</h1>
-</template>
-\end{lstlisting}
+Angular 2 verzichtet auf nicht-XML-artige Erweiterungen und nutzt dafür eigene Knoten und Attribute. Darüber hinaus muss immer die Richtung der Datenbindung angegeben werden, dafür werden Attribute mit runden oder eckigen Klammern eingeschlossen. Im Beispiellisting \ref{lst:angular2-control-structures} kommen allerdings ausschließlich eckige Klammern zum Einsatz, da nicht auf Ereignisse reagiert werden muss.
 
-Angular 2 verzichtet hingegen auf nicht-XML-artige Erweiterungen und nutzt dafür eigene Knoten und Attribute. Darüber hinaus muss immer die Richtung der Datenbindung angegeben werden, dafür werden Attribute mit runden oder eckigen Klammern eingeschlossen. Im Beispiellisting \ref{lst:angular2-control-structures} kommen allerdings ausschließlich eckige Klammern zum Einsatz, da nicht auf Ereignisse reagiert werden muss. Kontrollstrukturen müssen entweder in speziellen \texttt{<template>}-Knoten notiert werden oder mit einem \texttt{*}-Präfix als Attribut notiert werden.
+Kontrollstrukturen müssen entweder in speziellen \texttt{<template>}-Knoten notiert werden oder mit einem \texttt{*}-Präfix als Attribut notiert werden. In diesem Fall ist die Verwendung der \texttt{<template>}-Schreibweise für die oberste Unterscheidung notwendig, weil für den Blogbeitrag kein "`zusammenfassender"' Elternknoten eingefügt werden soll. In der unteren Unterscheidung kann der optionale Knoten hingegen als ganzes angezeigt oder entfernt werden, daher ist hier die kompaktere \texttt{*}-Notation möglich. Eine Notation für \texttt{else}-Blöcke existiert nicht, komplexere Ausdrücke werden daher typischerweise nicht im Template-Code notiert sondern bereits vorher in den Daten hinterlegt.
+
+\begin{lstlisting}[float=h,caption={Blogartikel mit Angular 2}, label={lst:angular2-control-structures}]
+<h1>{{ project.name }}</h1>
+<template [ngIf]="!query.article.private">
+  <h2>{{ query.article.title}}</h2>
+  <div>Autor ist {{ query.article.author}}</div>
+  <div>Beitrag vom {{ query.article.date | date: "%d.%b.%Y" }}</div>
+  <ul>
+    <li *ngFor="let cat in query.categories">{{ cat.name }}</li>
+  </ul>
+  <div [innerHtml]="query.article.text"></div>
+</template>
+<h2 *ngIf="query.article.private">
+  Dies ist eine private Seite
+</h2>
+\end{lstlisting}
 
 Für Handlebars und Liquid existieren Implementierungen in unterschiedlichen Programmiersprachen, zumindest für Ruby, Javascript und PHP scheinen diese Portierungen auch sinnvoll zu funktionieren. Angular 2 hingegen wird zwar für mehrere Sprachen Angeboten, in der Praxis kompilieren diese aber alle zu Javascript.
 
@@ -628,9 +667,11 @@ Für alle hier betrachteten Templatingsprachen gilt ebenfalls, dass sie jenseits
 
 Sollten Lernende hingegen selbstständig (und jenseits von \idename{}) Zeit die Erstellung eigener Webseiten investieren wollen, werden sie dabei häufiger mit Liquid in Berührung kommen. Programme zum generieren von statischen Webseiten verwenden häufig Liquid als Templatingsprache, das gilt insbesondere für das schon vorgestellte Jekyll, welches wiederrum (unter anderem) auch auf Github-Pages\footnote{Dokumentation zum Hosting verfügbar unter \url{https://pages.github.com/}} zum Einsatz kommt. Dieser konkrete Dienst, also Github-Pages, ist interessant, weil er vollkommen kostenfrei genutzt werden kann. Darüber hinaus wird Liquid in den Software-as-a-Service Angeboten von kommerziellen Anbietern wie Salesforce oder Shopify genutzt. Angular und Handlebars werden hingegen faktisch ausschließlich in den jeweiligen Javascript-Bibliotheken verwendet.
 
-Letzten Endes stellt sich faktisch nur die Frage, ob Handlebars oder Liquid zum Einsatz kommen sollte: Angular 2 ist sowohl technisch als auch syntaktisch sehr kompliziert und eignet sich daher nicht besonders gut als "`erste Templatingsprache"'. Letzten Endes fiel die Wahl auf Liquid.
+Auch wenn die Lernenden im Idealfall von der konkreten Syntax der Templatingsprache abstrahieren sollen, wird es immer wieder zu Momenten kommen, in denen diese Abstraktion löcherig ist \cite{spolsky_law_abstractions}. Die häufigste Ursache für einen solchen Leck werden dabei Fehlermeldungen sein: Sobald diese auftreten, sollte zur Unterstützung der Fehler im generierten Quelltext angezeigt und möglichst hervorgehoben werden. Im Falle von Angular 2 wären die angezeigten Quellen für die Zielgruppe absolut unverständlich.
 
-Die Entscheidung zugunsten von Liquid berücksichtigt vor allem die geringe technische Komplexität, wird von der quantitativen Auswertung in Tabelle~\ref{tab:scoring-templating-language} aber auch in jeder Einzeldisziplin bestätigt. Die Tatsache, dass die Referenzimplementierung von Liquid wie der \idename-Server in Ruby entwickelt wird ist ein netter zusätzlicher Faktor. Er wird zwar von der quantitativen Auswertung nicht berücksichtigt, erleichtert aber die Implementierung.
+Letzten Endes stellt sich daher nur die Frage, ob Handlebars oder Liquid zum Einsatz kommen sollte: Angular 2 ist sowohl technisch als auch syntaktisch sehr kompliziert und eignet sich daher nicht besonders gut als "`erste Templatingsprache"'. Letzten Endes fiel die Wahl auf Liquid.
+
+Die Entscheidung zugunsten von Liquid berücksichtigt vor allem die geringe technische Komplexität, wird von der quantitativen Auswertung in Tabelle~\ref{tab:scoring-templating-language} aber auch in jeder Einzeldisziplin bestätigt. Die Tatsache, dass die Referenzimplementierung von Liquid wie der \idename{}-Server in Ruby entwickelt wird, ist ein netter zusätzlicher Faktor. Er wird zwar von der quantitativen Auswertung nicht berücksichtigt, erleichtert aber die Implementierung.
 
 \begin{table}[h]
   \centering 
@@ -653,9 +694,9 @@ Ebenfalls nicht entscheidend, aber erfreulich, ist der Umstand, dass mit Liquid 
 
 \subsubsection{Die Templatingsprache Liquid}
 
-Auch wenn die Schüler mit der Syntax der verwendeten Templatingsprache in der finalen Version von \idename{} nur oberflächlich in Berührung kommen sollen, wird Liquid an dieser Stelle noch formal vorgestellt. Aufbauend auf dieser Vorstellung wird dann untersucht, wie die entsprechenden Funktionalitäten den Lernenden gezielt vermittelt werden können. Und abgesehen davon sollen Schüler den gesamten Umfang der Sprache bei Bedarf (oder Interesse) ja auch textuell Nutzen können.
+Auch wenn die Schüler mit der Syntax der verwendeten Templatingsprache in der finalen Version von \idename{} nur oberflächlich in Berührung kommen sollen, wird Liquid an dieser Stelle noch formal vorgestellt. Aufbauend auf dieser Vorstellung wird dann untersucht, wie die entsprechenden Funktionalitäten den Lernenden gezielt vermittelt werden können. Und abgesehen davon sollen Schüler den gesamten Umfang der Sprache bei Bedarf (oder Interesse) perspektivisch auch textuell Nutzen können.
 
-Grundsätzlich wird in Liquid zwischen drei verschiedenen Arten von Anweisungen mit jeweils eigener Syntax unterschieden \cite{liquid-introduction}:
+Grundsätzlich wird in Liquid zwischen genau drei verschiedenen Arten von Anweisungen mit jeweils eigener Syntax unterschieden \cite{liquid-introduction}:
 
 \begin{description}
 \item[Objekte] \hfill \\
@@ -663,22 +704,16 @@ Grundsätzlich wird in Liquid zwischen drei verschiedenen Arten von Anweisungen 
 \item[Tags] \hfill \\
   Tags steuern den Programmfluss mit Anweisungen wie \texttt{if} und \texttt{for}. Um sie von interpolierten Werten zu unterscheiden werden diese Anweisungen in \texttt{\{\% \%\}}-Klam\-mer\-paaren notiert.
 \item[Filter] \hfill \\
-  Mit Filtern können in Ausdrücken genutzte Daten manipuliert werden. Sie funktionieren nach dem gleichen Prinzip wie Pipes auf der Kommandozeile und ermöglichen es die Repräsentation von Daten zu verändern. Jeder beliebige Wert kann über einen Filter modifiziert werden, der Ausdruck \texttt{\{\{~"miXeD cAse"~|~downcase~\}\}} würde also zu \texttt{mixed case} ausgewertet werden.
+  Mit Filtern können in Ausdrücken genutzte Daten manipuliert werden. Sie funktionieren nach dem gleichen Prinzip wie Pipes auf der Kommandozeile und ermöglichen es die Repräsentation von Daten zu verändern. Jeder beliebige Wert kann über einen Filter modifiziert werden, der Ausdruck \texttt{\{\{~'miXeD cAse'~|~downcase~\}\}} würde also zu \texttt{'mixed case'} ausgewertet werden.
 \end{description}
 
 Alle diese Anweisungen beziehen sich immer auf einen vordefinierten Datenbestand, welcher dem Renderer zusammen mit dem eigentlichen Template übergeben wird. Dieser Datenbestand gliedert sich in Name-Wert-Paare, Listen und atomare Werte, die Navigation erfolgt mittels des \texttt{.}-Operators für Zugriffe auf benannte Schlüssel oder mit dem \texttt{[]}-Operator für einzelne Werte eines Arrays.
 
 \subsubsection{Layout}
 
-Eine immer wiederkehrende Frage bei der Entwicklung von Webseiten ist die nach dem Layout der gesamten Seite. Technisch gesehen erfolgt die Umsetzung des Layouts heutzutage über eine Vielzahl unterschiedlicher CSS-Direktiven, deren Erstellung keinesfalls ein Kernbereich der Entwicklungsumgebung ist. Allerdings lassen sich auf den meisten Seiten immer wiederkehrende Strukturen feststellen: Die Unterteilung der Seite in ein Raster aus Zeilen und Spalten, Abbildung \ref{fig:grid-example} zeigt ein solches Layout. Dort werden die beiden obersten Zeilen für den Header und die Pfadangabe nicht weiter in Spalten unterteilt, bestehen technisch gesehen also aus einer einzigen, sehr breiten Spalte. Die dritte Zeile enthält drei Spalten (Navigation, Inhalt und eine Leiste für Module), wobei diese letzte Modulspalte wiederum mehrere Zeilen enthält.
+Eine immer wiederkehrende Frage bei der Entwicklung von Webseiten ist die nach dem Layout der gesamten Seite. \idename{} unterstützt explizit das "`Responsive Design"'-Paradigma, anstatt die Seiten für eine bestimmte Bildschirmgröße zu optimieren.
 
-\begin{figure}[p]
-  \includegraphics[width=\textwidth]{sketches/grid-example}
-  \caption{Seite mit einem Raster aus Zeilen und Spalten}
-  \label{fig:grid-example}
-\end{figure}
-
-Diese Layoutstruktur wird mittlerweile von einer Vielzahl von vorhandenen CSS-Bib\-lio\-the\-ken und den HTML5-Flexboxen unterstützt und soll auch das grundsätzliche Gedankenmodell für die hier beschriebenen Oberflächen sein. Es ergeben sich daraus die folgenden Layoutelemente:
+Technisch gesehen erfolgt die Umsetzung des Layouts heutzutage über eine Vielzahl unterschiedlicher \texttt{CSS}-Direktiven, deren Erstellung keinesfalls ein Kernbereich der Entwicklungsumgebung ist. Allerdings lassen sich auf den meisten Seiten immer wiederkehrende Strukturen feststellen: Die Unterteilung der Seite in ein Raster aus Zeilen und Spalten. Diese Layoutstruktur wird mittlerweile von einer Vielzahl von vorhandenen \texttt{CSS}-Bib\-lio\-the\-ken und den \texttt{HTML5}-Flexboxen unterstützt und soll auch das grundsätzliche Gedankenmodell für die hier beschriebenen Oberflächen sein. Es ergeben sich daraus die folgenden Layoutelemente:
 
 \begin{description}
 \item[Zeilen] \hfill \\
@@ -687,7 +722,21 @@ Diese Layoutstruktur wird mittlerweile von einer Vielzahl von vorhandenen CSS-Bi
   Die Breite einer Spalte wird in einem relativen Maß mit Bezug zu einer bestimmten Bildschirmgröße angegeben. So können für breite Bildschirme z.B. drei Spalten vorgesehen werden, für sehr schmale Geräte wie Smartphones hingegen nur eine Spalte. Sollte die Summe dieser Breitenangaben der Spalten die maximale Breite einer Zeile überschreiten, werden diese auf mehrere Zeilen umgebrochen.
 \end{description}
 
-\missing[inline]{Visuelles Beispiel für den Umbruch}
+\begin{figure}[p]
+  \begin{center}
+    \resizebox{\textwidth}{!}{%
+      \includegraphics[height=6.5cm]{sketches/grid-example-desktop}%
+      \quad
+      \includegraphics[height=6.5cm]{sketches/grid-example-mobile}%
+    }
+  \end{center}
+  \caption{Identisches Layout auf großen und kleinen Bildschirmen}
+  \label{fig:grid-example}
+\end{figure}
+
+Abbildung \ref{fig:grid-example} zeigt das identische Layout aus Zeilen und Spalten in der Darstellung auf unterschiedlich großen Anzeigegeräten. Auf keinem der Geräte werden die beiden obersten Zeilen für den Header und die Pfadangabe weiter in Spalten unterteilt. Diese bestehen technisch gesehen also aus einer einzigen, sehr breiten Spalte.
+
+Die dritte Zeile enthält drei Spalten (Navigation, Inhalt und eine Leiste für Module), wobei diese letzte Modulspalte wiederum mehrere Zeilen enthält. In der mobilen Ansicht wird die Navigationsleiste möglicherweise dynamisch verborgen und kann mit dem Dreieck im Header angezeigt werden. Die Module wandern in dieser Ansicht unter den Inhalt.
 
 \subsubsection{Bedienelemente}
 
@@ -699,7 +748,7 @@ Grundsätzlich lassen sich alle Bedienelemente anhand der Struktur von Ein- und 
   \label{fig:ui-element-concept}
 \end{figure}
 
-Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trotzdem muss es natürlich eine Möglichkeit geben statische Texte ohne Bindung an irgendwelche Abfragen zur Anzeige zu bringen. Die hier vorgestellten Bedienelemente funktionieren auch ohne jede Datenquelle, die folgenden Kapitel stellen aber noch Erweiterungen zur Datenanbindung vor.
+Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trotzdem muss es natürlich eine Möglichkeit geben statische Texte ohne Bindung an irgendwelche Abfragen zur Anzeige zu bringen. Die hier vorgestellten Bedienelemente funktionieren auch ohne jede Datenquelle, erlauben aber auch die Einbettung von Liquid-Objekten in den Text.
 
 \begin{description}
 \item[Überschriften] \hfill \\
@@ -714,7 +763,7 @@ Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trot
 
 Spätestens durch die Aufnahme von Bildern ist auch für statische Webseiten eindeutig, dass es möglich sein muss diese Bedienelemente über die Angabe von Parametern zu beinflussen. In den meisten Fällen werden diese Parameter zur Laufzeit durch die Ausführung einer Abfrage mit konkreten Werten bestückt, die Angabe von konstanten Werten ist aber ebenfalls möglich.
 
-\subsubsection{Bindung von Daten an die Oberfläche}
+\subsubsection{Bindung von Abfragen an die Oberfläche}
 \label{sec:design-ui-bind-output}
 
 Ein Großteil der Oberflächenelemente wird also einige Eigenschaften aufweisen, deren Inhalte erst zur Laufzeit dynamisch gebunden werden. Dabei stellt sich die Frage, wie die Struktur der zur Verfügung stehenden Daten eigentlich definiert wird bzw. aussehen soll?
