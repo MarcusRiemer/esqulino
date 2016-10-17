@@ -833,7 +833,7 @@ Immer wenn eine Abfrage mit Platzhaltern an eine Seite gebunden wird, ist es not
 
 In einem solchen Fall soll es also möglich sein auch Bedienelememente wie Comboboxen zu verwenden, die ihrerseits wieder eine Abfrage zur Anzeige der zur Verfügung stehenden Daten benötigen. Dabei muss klar zwischen zwei benötigten Informationen unterschieden werden. Auf der einen Seite muss das Resultat eines solchen Bedienelements vermutlich einen Primärschlüssel zurückliefern. Auf der anderen Seite erwarten die Benutzer aber die Anzeige von ``intuitiven'' Informationen, anhand derer Sie ihre Auswahl treffen können. Der Primärschlüssel ist typischerweise eine künstliche Spalte, die für den Endanwender keinerlei Informationsgehalt hat. Praktischerweise ist auch diese Unterscheidung in \texttt{HTML} vorgesehen
 
-\begin{lstlisting}[language=HTML, caption=Containerelemente mit Kindern, label=lst:html:select-example]
+\begin{lstlisting}[float,language=HTML, caption=Containerelemente mit Kindern, label=lst:html:select-example]
 <!-- alleBenutzer = Listing (*@\ref{lst:sql:people-days}: \nameref{lst:sql:people-days}@*) -->
 <select>
   {% for benutzer in alle_benutzer %}
@@ -866,9 +866,28 @@ Nachdem nun die zu rendernde Seite bekannt ist, stellt sich folglich die inverse
 Es ist folglich schon aufgrund der Vorgaben des \texttt{HTML}-Standards sinnvoll, die Unterstützung von zwei separaten Mechanismen zur Navigation zu unterstützen: Sofern der Endanwender eigene Eingaben vornehmen soll, kommt ein \texttt{<form>}-Element zum Einsatz. Durch die Nutzung von versteckten Eingabelementen (\texttt{<input type="hidden">} können aber auch serverseitig vorhandene Daten, zum Beispiel aus Abfragen oder \texttt{GET}-Parametern innerhalb von Formularen verwendet werden.
 
 \subsection{Editor für Oberflächen}
+Die Suche nach dem richtigen Abstraktionsniveau für den den Seiten-Editor lässt sich aller Vorraussicht nach nicht mit einer definitiven Antwort abschließen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen.
+
+Programmiersprachen wie Delphi oder Visual Basic verdanken einen Großteil ihrer initialen Popularität auch ihren Entwicklungsumgebungen mit integrierten WYSIWYG-Editoren. Diese ermöglichten es schon zur Entwicklungszeit eine sehr gute Vorschau auf das endgültige Aussehen zu bekommen. Der vormals typische Kreislauf aus "`Wert im Quelltext verändern"', dann kompilieren, dann ausführen wird also deutlich verkürzt. Dieser Ansatz hat aber natürlich auch Grenzen: Ohne Kenntniss der genauen Datenbestände bleibt die Vorschau oftmals unvollständig. Und insbesondere bei sehr dynamische Oberflächen mit vielen optionalen Bestandteilen die dann zur Laufzeit ein- oder ausgeblendet werden gleicht die Vorschau innerhalb des WYSIWYG-Editors der Endbenutzeransicht dann doch nur noch sehr beschränkt.
+
+Bei der Entwicklung von Desktopanwendungen auch heute noch die Verwendung eines WYSIWYG-Editors sehr verbreitet, allerdings werden die Beschreibungen der Oberflächen häufig in spezielle Textdateien ausgelagert. Diese lassen sich dann auch mit einem normalen Texteditor bearbeiten.
+
+\missing[inline]{Windows.Forms hat Oberflächenbeschreibungen noch in den Quelltext gepackt, JavaFX, Android und WPF sehen dafür eigene Dateien vor.}
+
+Auch zur Pflege und Generierung von Webseiten existieren und existierten eine Vielzahl unterschiedlicher WYSIWYG-Editoren wie Microsoft Frontpage, Adobe Dreamweaver,~... Diese spielen als Lösungen für hobbymäßige Webseitenbetreiber mittlerweile eine eher untergeordnete Rolle. Heute gängige Lösungen für den Betrieb eigener Webseiten bieten dem Endanwender als primäre Schnittstelle eine im Web verfügbare administrative Oberfläche. Die meisten quelloffenen Content-Management-Systeme wie Wordpress, Joomla oder Typo3 fallen in diese Kategorie.
+
+Diese Oberfläche erlaubt es dabei aber vornehmlich den eigentlichen Inhalt der Seiten zu verändern, weniger das Rahmenwerk außen herum. Professionelle Webentwickler halten sich daher von den WYSIWYG-Web-Editoren und editieren lieber unmittelbar die in HTML notierten Templates.
+
+Alles in allem können die meisten Ansätze zur Bearbeitung von Oberflächen also recht gut anhand eines einzigen Merkmals kategorisiert werden: Wie weit ist die im Editor zu sehende Darstellung von der Darstellung im Browser des Endanwenders entfernt? Und damit einher geht eine weitere Frage: Welche Abstraktionsebene kann der \idename{}-Zielgruppe zugemutet werden?
+
+Bei WYSIWYG-Webseiten-Editoren handelt es sich im Normalfall um sehr spezielle Anwendungen. Hat man eine von Ihnen verstanden, kann der Umgang mit einem konkurierenden Produkt immer noch in vielen Belangen unterschiedlich ausfallen. \texttt{HTML}-Code schaut hingegen in allen Editoren gleich aus und leidet daher weniger unter einem "`Lock-in-Effekt"'.
+
+\subsubsection{Grundsätzlicher Aufbau}
 \label{sec:design-ui-editor}
 
-Der Editor für Oberflächen nimmt die Konzepte aus dem vorigen Kapitel und macht sie den Entwicklern auf eine intuitive Art zugänglich. Abbildung \ref{fig:ui-editor-sketch-first} zeigt den grundsätzlichen Aufbau der Oberfläche aus einem zentralen Designbereich und einer Seitenleiste. Die Verbindungen zwischen den Bedienelementen und den Daten aus der Seitenleiste verdeutlichen zu Illustrationszwecken deren Zusammenhang. In der endgültigen Fassung des Editors soll der Zusammenhang nicht durch Linien dargestellt werden, sondern durch einen Hervorhebungseffekt wenn einer der beiden Seiten aktuell ausgewählt ist.
+\unsure[inline]{Ich bin noch absolut unentschlossen, wie bzw. wo ich die weiteren Eigenschaften von komplexen Eigenschaften unterbringen soll. Die ``klassische'' Variante aller aktuellen Entwicklungsumgebungen ist eine weitere Seitenleiste, die hätte dann in diesem Fall dann allerdings drei Tabs. Daher überlege ich alternativ möglichst viele Informationen unmittelbar im Designbereich unterzubringen. Wenn man dann ein Bedienelement anklickt klappt sich darunter (oder sonstwo) ein Bereich auf, in dem die weiteren Einstellungen vorgenommen werden können.}
+
+Abbildung \ref{fig:ui-editor-sketch-first} zeigt einen möglichen grundsätzlichen Aufbau der Oberfläche aus einem zentralen Designbereich und einer Seitenleiste. Die Verbindungen zwischen den Bedienelementen und den Daten aus der Seitenleiste verdeutlichen zu Illustrationszwecken deren Zusammenhang. In der endgültigen Fassung des Editors soll der Zusammenhang nicht durch Linien dargestellt werden, sondern durch einen Hervorhebungseffekt wenn einer der beiden Seiten aktuell ausgewählt ist.
 
 \unsure[inline]{Eigentlich würde ich gerne auf Tabs in der Seitenleiste verzichten, die Daten könnte man ja auch innerhalb des Designbereiches darstellen. Diesen Weg der Platzierung von nicht sichtbaren Elementen hat auch schon die Delphi IDE betreten und so dramatisch schlimm fand ich das nicht.}
 
@@ -879,11 +898,6 @@ Der Editor für Oberflächen nimmt die Konzepte aus dem vorigen Kapitel und mach
 \end{figure}
 
 Wenn der Benutzer auf den Tab für die Bedienelemente wechselt, bekommt er eine Übersicht aller verfügbaren Bedienelemente. Diese können dann per Drag \& Drop auf dem Designbereich platziert werden. Einige Bedienelemente verfügen über komplexere Eigenschaften, diese werden dann separat dargestellt.
-
-\unsure[inline]{Ich bin noch absolut unentschlossen, wie bzw. wo ich die weiteren Eigenschaften von komplexen Eigenschaften unterbringen soll. Die ``klassische'' Variante aller aktuellen Entwicklungsumgebungen ist eine weitere Seitenleiste, die hätte dann in diesem Fall dann allerdings drei Tabs. Daher überlege ich alternativ möglichst viele Informationen unmittelbar im Designbereich unterzubringen. Wenn man dann ein Bedienelement anklickt klappt sich darunter (oder sonstwo) ein Bereich auf, in dem die weiteren Einstellungen vorgenommen werden können.}
-
-\subsection{Beispielhafte Datenbasen}
-\label{sec:example-queries}
 
 %%% Local Variables:
 %%% mode: latex
