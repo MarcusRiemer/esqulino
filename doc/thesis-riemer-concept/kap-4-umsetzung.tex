@@ -35,14 +35,14 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
 \begin{description}
 \item[Bearbeitung von Projektdaten] \hfill \\
   Schwerpunkt dieses Meileinsteins ist die Implementierung grundlegender gemeinsamer Schnittstellen. Diese müssen auf vom Server als HTTP-Endpunkte angeboten und vom Client angesprochen werden können.
-  \begin{itemize}
+  \begin{itemize}[noitemsep]
   \item Persistierung von Projekten mit Name und Beschreibung
   \item Editor für Projekteigenschaften
   \item Auflistung aller Projekte einer \idename-Instanz
   \end{itemize}
 \item [Anzeige eines Datenbankschemas] \hfill \\
   Neben der funktionalen Anforderung umfasst dieser Meilenstein die Erweiterung des Clients um die typischen Bestandteile des Benutzerschnittstelle einer Entwicklungsumgebung. Serverseitig erfordert dieser Meilenstein zum ersten Mal eine Verbindung mit der Datenbank.
-  \begin{itemize}
+  \begin{itemize}[noitemsep]
   \item Editor zur Anzeige eines Datenbankschemas
   \item Seitenliste mit Übersicht über alle Bestandteile eines Projekts
   \item Toolbar mit Knöpfen, deren Verfügbarkeit vom aktuellen Editor abhängt
@@ -50,7 +50,7 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
   \end{itemize}
 \item [Datenmodell \& Code-Generator für Abfragen] \hfill \\
   Der abstrake Syntaxbaum für Datenbankabfragen in \idename{} sowie dessen Validierung gegen ein Datenbankschema. Dieses Datenmodell soll soweit wie möglich von der Visualisierung entkoppelt werden, damit es sich möglichst einfach testen lässt.
-  \begin{itemize}
+  \begin{itemize}[noitemsep]
   \item Einfache Projektion durch Auswahl von Spalten im \texttt{SELECT}
   \item Kreuzprodukte unterschiedlicher Tabellen im \texttt{FROM}
   \item Einschränkungen der Ergebnismenge mit Ausdrücken im \texttt{WHERE}
@@ -59,14 +59,14 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
   \end{itemize}
 \item [Editor für Abfragen] \hfill \\
   Implementierung des Drag \& Drop Editors für SQL-Abfragen. Wesentliche Herausforderung in diesem Schritt wird die Implementierung eines möglichst allgemeingültigen Ansatzes zur Behandlung der Drag \& Drop Vorgänge.
-  \begin{itemize}
+  \begin{itemize}[noitemsep]
   \item Drag \& Drop Editor für Abfragen
   \item Ausführung von SQL-Abfragen auf dem Server
   \item Clientseitige Anzeige von serverseitigen Ergebnissen
   \end{itemize}
 \item [Datenmodell \& Code-Generator für darstellende Webseiten] \hfill \\
   Das Datenmodell für Webseiten zur Anzeige der Ergebnisse von \texttt{SELECT}-Abfragen sowie die dazu passenden Testfälle. Auch hier gilt, dass dieses Datenmodell soweit wie möglich von der Darstellungsebene (Angular 2) losgelöst sein soll.
-  \begin{itemize}
+  \begin{itemize}[noitemsep]
   \item Layout mit Zeilen und Spalten
   \item Einfache, textbasierte Elemente wie Absätze und Überschriften
   \item Ausgabe von Abfrageergebnissen in einer Tabelle
@@ -76,14 +76,14 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
 
 \item [Rendern von darstellenden Webseiten] \hfill \\
   Um auszuschließen, dass sich dem Modell aus dem vorigen Meilstein noch grobe Schnitzer befinden sollen diese nun den Endanwendern zugänglich gemacht werden.
-  \begin{itemize}
+  \begin{itemize}[noitemsep]
   \item Manuelle Erstellung einiger einfach Testprojekte mit Testdaten
   \item Serverseitiges Rendern der verfügbaren Testprojekte
   \end{itemize}
   
 \item [Editor für darstellende Webseiten] \hfill \\
   Dieser Schritt profitiert hoffentlich von den Erfahrungen mit dem Drag \& Drop Editor für SQL. Anders als für den recht offensichtlich "`richtigen"' Ansatz des SQL-Editors hat sich im Rahmen der Analyse für diesen Meilenstein noch keine endgültig favorisierte Darstellung gefunden. Daher ist in diesem Schritt mit mehreren Iterationen bis zur "`richtigen"' Implementierung zu rechnen.
-  \begin{itemize}
+  \begin{itemize}[noitemsep]
   \item Zuordnung von \texttt{SELECT}-Abfragen zu einer Seite
   \item Drag \& Drop Editor für Seitenelemente
   \item Integrierte Rendervorschau
@@ -91,7 +91,7 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
   
 \item[Erweiterung der Seiten um Benutzereingaben]
   Bisher können mit Webseiten nur Informationen präsentiert, aber nicht verändert werden.
-  \begin{itemize}
+  \begin{itemize}[noitemsep]
   \item Einführung des \texttt{<form>}-Elementes in das Datenmodell.
   \item Eingabe von Texten mit dem \texttt{<input>}-Element.
   \item \textit{1 aus n}-Auswahl mit dem \texttt{<select>}-Element.
@@ -99,7 +99,7 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
   
 \item [Qualitätssicherung] \hfill \\
   Zu diesem Zeitpunkt sollte ein voll funktionsfähiger Prototyp existieren, der jedoch noch einer rigorosen Qualitätskontrolle unterzogen muss. Bisher wude der Prototyp ausschließlich durch Entwickler bedient, es stellt sich insbesondere die Frage wie \idename{} auf Bedienfehler oder Inkonsistenzen reagiert.
-  \begin{itemize}
+  \begin{itemize}[noitemsep]
   \item Was passiert mit bestehenden Abfragen, wenn sich das Schema radikal verändert?
   \item Wie sollten Seiten für Endanwender gerendert werden, wenn diese fehlerhaft sind?
   \end{itemize}
