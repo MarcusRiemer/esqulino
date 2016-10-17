@@ -18,11 +18,11 @@ Der softwaretechnische Unterbau der Entwicklungsumgebung setzt auf aktuelle Webt
 
 \begin{figure}[p]
   \centering \includegraphics[width=\textwidth]{images/openapi-query-example.png}
-  \caption{Generiert aus der Spezfikation: API-Browser für \idename}
+  \caption{Generiert aus der Spezfikation: API-Browser für \idename{}}
   \label{fig:openapi-query-example}
 \end{figure}
 
-Um die Schnittstelle zwischen diesen beiden Komponenten so transparent wie möglich zu halten, werden diese gemäß der OpenAPI Spezifikation \cite{open-api} dokumentiert. Dieses offene Format ermöglicht es auf eine hilfreiche Auswahl an standarisierten Tools aufzubauen. Zum Beispiel können aus der Spezifikation interaktive Testumgebungen für die Server-Schnittstellen erzeugt werden, Abbildung \ref{fig:openapi-query-example} zeigt ein Beispiel dafür.
+Um die Schnittstelle zwischen diesen beiden Komponenten so transparent wie möglich zu halten, werden diese gemäß der OpenAPI Spezifikation \cite{open-api} dokumentiert. Dieses offene Format ermöglicht es auf eine hilfreiche Auswahl an standarisierten Tools aufzubauen. Zum Beispiel können aus der Spezifikation interaktive Testumgebungen für die Server-Schnittstellen erzeugt werden, Abbildung \ref{fig:openapi-query-example} zeigt ein Beispiel dafür\todo{Screenshot zeigt alten Namen}.
 
 Als primäres Interface für die Kompilierung wird ein \lstinline{Makefile} genutzt. Dieses prüft ob auf dem aktuellen System alle nötigen Abhängigkeiten verfügbar sind und stellt sicher, dass Übersetzungsschritte nur ausgeführt werden, wenn sie tatsächlich notwendig sind. Von den technischen Details der unterschiedlichen Programmierumgebungen aufgrund der unterschiedlichen Programmiersprachen kann so außerdem elegant abstrahiert werden: Ein Programmierer kann sich die exakten Aufrufe der unterschiedlichen Paketmanager zwar anschauen, wird im Normallfall aber nur \lstinline{make install-deps} aufrufen.
 
@@ -133,29 +133,37 @@ Um den Betrieb folglich so einfach wie möglich zu halten, wurden für \idename{
 
 Die Funktionalität der, relativ isolierten und daher gut zu testenden, internen Datenmodelle samt den darauf definierten Operationen wird über Unit-Tests sichergestellt. Diese Tests können einfach in jedem Browser ausgeführt werden und eignen sich daher auch um im Zweifelsfall unterschiedliche Verhaltensweisen verschiedener Browser zu erfassen.
 
-Als technisches Fundament wird für diese Testfälle auf der Jasmine-Bibliothek aufgebaut. Zu prüfende Zusicherungen werden durch Verkettung zweier Funktionen ausgedrückt: \lstinline{expect().toEqual()}. Neben \lstinline{toEqual()} sind natürlich auch andere Vergleiche wie \lstinline{isUndefined()} möglich. Wenn innerhalb eines Testfalls auch nur eine einzige dieser Prüfungen nicht zu \lstinline{true} auswertet, wird der Testfall als ingesamt fehlgeschlagen markiert. Im Falle von mehreren gescheiterten Prüfungen sind werden dabei alle unerwarteten Ergebnisse aufgelistet.
+Als technisches Fundament wird für diese Testfälle auf der Jasmine-Bibliothek aufgebaut. Zu prüfende Zusicherungen werden durch Verkettung zweier Funktionen ausgedrückt: \texttt{expect().toEqual()}. Neben \texttt{toEqual()} sind natürlich auch andere Vergleiche wie \texttt{isUndefined()} möglich. Wenn innerhalb eines Testfalls auch nur eine einzige dieser Prüfungen nicht zu \texttt{true} auswertet, wird der Testfall als ingesamt fehlgeschlagen markiert. Im Falle von mehreren gescheiterten Prüfungen sind werden dabei alle unerwarteten Ergebnisse aufgelistet.
 
-Listing \ref{lst:unit-test-example} illustriert, wie die meisten Testfälle in \idename{} aufgebaut sind. Jeder Testfall beginnt mit der Definition eines Datenmodells und endet mit Zusicherungen um die korrekte Serialisierung sicherzustellen. Ganz konkret existiert also in jedem Testfall eine Variable \lstinline{model}, welche im Konstruktor der zu testenden Klasse zum Einsatz kommt und in nicht-mutierenden Testfällen als ergebnis der \lstinline{toModel()} methode reproduziert werden muss. formal ausgedrückt handelt es sich es sich bei der verkettung des konstruktors mit der \lstinline{tomodel()}-methode also um eine neutrale operation.
-
-die dateien mit den unit-tests liegen im dateisystem immer "`neben"' ihren implementierungen, der dateiname wird allerdings mit dem suffix \lstinline{spec} wie "`specification"' ergänzt. das beispiel in listing  \ref{lst:unit-test-example} wurde der datei \lstinline{select.spec.ts} entnommen, der code für die zu testende funktionalität findet sich folglich in \lstinline{select.ts}.
+Listing \ref{lst:unit-test-example} illustriert, wie die meisten Unit-Testfälle in \idename{} aufgebaut sind. Jeder Testfall beginnt mit der Definition eines Datenmodells (Zeile 6 bis 23) und endet mit Zusicherungen um die korrekte Serialisierung sicherzustellen (Zeile 43). Ganz konkret existiert also in jedem Testfall eine Variable \texttt{model}, welche im Konstruktor der zu testenden Klasse zum Einsatz kommt und in nicht-mutierenden Testfällen als Ergebnis der \texttt{toModel()}-Methode reproduziert werden muss. Für Abfragen muss noch die Generierung der korrekten \texttt{SQL}-Anweisungen geprüft werden, im Beispiel geschieht dies in Zeile 42.
 
 \lstinputlisting[
   language=javascript,
   caption=Unit-Test für eine korrekte \texttt{SELECT}-Abfrage,
   label=lst:unit-test-example,
-  float,floatplacement=p,
+  float,floatplacement=h,
   numbers=left
 ]{snippets/unit-test-example.ts}
 
-die serverseitige funktionalität wird aktuell ausschließlich über "`ende-zu-ende"'-tests mit einem speziell instrumentierten browser geprüft. für diese tests ist ein speziell vorbereitetes testprojekt in einem exakt definierten zustand sowie neben dem browser auch ein \idename-server notwendig.
+Die serverseitige Funktionalität wird aktuell ausschließlich über "`end-to-end"'-Tests mit einem speziell instrumentierten Browser geprüft. Für diese Tests ist ein speziell vorbereitetes Testprojekt in einem exakt definierten Zustand Teil des Repositories. Auch diese Testfälle nutzen die von Jasmine bereitgestellten Zusicherungen mit den \texttt{expect()}- und \texttt{toEqual()}-Verkettungen. Listing~\ref{lst:e2e-test-example} zeigt wie mit einem solchen Test die Funktionaliät des Editors für Projekteinstellungen sichergestellt wird. Mittels der \texttt{browser.get()}-Funktion kann zu einer bestimmten Seite navigiert werden. Um mit den einzelnen Bedienelementen dieser Seite interagieren zu können, müssen diese Anhand ihrer \texttt{ID} oder anderen eindeutigen Merkmalen zugreifbar sein (Zeile 9 und 11 des Listing~\ref{lst:e2e-test-example}). Dann können für solche Elemente Tastatureingaben simuliert oder der Inhalt verglichen werden. Bestimmendes Merkmal dieser Tests zum Speichern ist, dass sie die initial geladene Seite nach dem Speichervorgang erneut aufrufen. Nur wenn die zuvor gesetzten Werte auch nach diesem Ladevorgang noch vorhanden sind, kann von der korrekten Funktionsweise des Servers ausgegangen werden.
+
+\lstinputlisting[
+  language=javascript,
+  caption=End-to-end Test für den Speichervorgang eines Projektes,
+  label=lst:e2e-test-example,
+  float,floatplacement=h,
+  numbers=left
+  ]{snippets/e2e-test-example.ts}
+
+Die Dateien mit den Tests liegen im Dateisystem immer "`neben"' ihren Implementierungen, der Dateiname wird allerdings um das Suffix \texttt{spec} wie "`specification"' oder \texttt{e2e} wie "`end-to-end"' ergänzt. Das Beispiel in Listing  \ref{lst:unit-test-example} wurde der Datei \texttt{select.spec.ts} entnommen, der Code für die zu testende Funktionalität findet sich folglich in \texttt{select.ts}.
 
 \subsection{Struktur eines Projekts}
 
 Die grundsätzliche Struktur eines \idename-Projektes wird in Diagramm \ref{uml:class-diagram-core-entities} ersichtlich. Diese Darstellung visualisert nicht die konkrete Implementierung des Servers oder des Clients, sondern illustriert die grundlegenden beteiligten Datenstrukturen. Jede dieser Entitäten, also sowohl Projekte als auch ihre Ressourcen, enthält eine eigene Versionsangabe. Dadurch kann auf jede Veränderung an dieser Struktur explizit eingegangen werden (\ref{sec:implementation-migration}~\nameref{sec:implementation-migration}). Aktuell laden sowohl Server als auch Client nur Ressourcen, deren Version exakt passt.
 
-Jede Ressource (\lstinline{ProjectResource}) verfügt über eine interne ID sowie einen sprechenden Namen. In der aktuellen Version von \idename{} handelt es sich bei dieser ID um eine \lstinline{GUID}, sollte also weltweit einzigartig sein. Theoretisch wäre es dadurch denkbar, diese Ressourcen auch zwischen Projekten zu kopieren oder zu teilen. Intern werden Referenzen auf Ressourcen immer anhand der ID vorgenommen. Eine Umbenennung von Ressourcen durch den Benutzer hat daher keine Auswirkungen auf etwaige Referenzen an anderer Stelle.
+Jede Ressource (\texttt{ProjectResource}) verfügt über eine interne ID sowie einen sprechenden Namen. In der aktuellen Version von \idename{} handelt es sich bei dieser ID um eine \lstinline{GUID}, sollte also weltweit einzigartig sein. Theoretisch wäre es dadurch denkbar, diese Ressourcen auch zwischen Projekten zu kopieren oder zu teilen. Intern werden Referenzen auf Ressourcen immer anhand der ID vorgenommen. Eine Umbenennung von Ressourcen durch den Benutzer hat daher keine Auswirkungen auf etwaige Referenzen an anderer Stelle.
 
-Die Methode \texttt{ProjectResource.toModel()} wird genutzt um aus dem spezifischen Ressourcen-Objekt eine rein beschreibende Datenstruktur zu erzeugen. Diese Beschreibung ist selbstverständlich abhängig vom Typ der jeweiligen Ressource und kommt auch in dessem Konstruktor zum Einsatz. Tiefe Kopien von Ressourcen können daher über diese Serialisierungs- und Deserialisierungsschritte vorgenommen werden.
+Die Methode \texttt{ProjectResource.toModel()} wird genutzt um aus dem spezifischen Res\-sour\-cen-Objekt eine rein beschreibende Datenstruktur zu erzeugen. Diese Beschreibung ist selbstverständlich abhängig vom Typ der jeweiligen Ressource und kommt auch in dessem Konstruktor zum Einsatz. Tiefe Kopien von Ressourcen können daher über diese Se\-ria\-lisierungs- und Deserialisierungsschritte vorgenommen werden.
 
 \begin{diagram}[p]
   \begin{tikzpicture}
@@ -228,24 +236,23 @@ Grundsätzlich sollte die serverseitig persistierte Repräsentation einer Ressou
 
 Bei der Auslieferung durch den Server müssen dann lediglich sensible Informationen gefiltert werden, in der Datenstruktur der jeweiligen Implementierung sollte diese Felder daher als optional betrachtet werden. Sofern jedoch keine Filterung notwendig ist, können diese Dokumente einfach unverändert bereitgestellt werden.
 
-Bei einer Speicherung im Dateisystem wäre der rein lesende Zugriff auf \idename-datensätze sogar mit einem einfachen Webserver für statische Dateien möglich. Um ein Projekt zu Testzwecken anzusehen oder zu editieren reicht ein normaler Texteditor, neue Projekte können einfach per Copy \& Paste im Dateisystem angelegt werden. Perspektivisch wäre es relativ einfach möglich, ein Projekt mit gängigen Versionsverwaltungsprogrammen wie git oder mercurial zu versionieren.
+Bei einer Speicherung im Dateisystem wäre der rein lesende Zugriff auf \idename-Datensätze sogar mit einem einfachen Webserver für statische Dateien möglich. Um ein Projekt zu Testzwecken anzusehen oder zu editieren reicht ein normaler Texteditor, neue Projekte können einfach per Copy \& Paste im Dateisystem angelegt werden. Perspektivisch wäre es relativ einfach möglich, ein Projekt mit gängigen Versionsverwaltungsprogrammen wie git oder mercurial zu versionieren.
 
-Die Speicherung in dokumentenorientierten Datenbanken wie MongoDB oder in einem Key/Value-Store wie redis macht den Zugriff auf die persistierten Daten abhängig von einem externen Serverprozess. der universelle zugriff über das dateisystem weicht einem speziellem programm zur navigation innerhalb der jeweiligen datenbank. mit dieser komplexität gewinnt man eine wesentlich größere flexibilät in bezug auf horizontale skalierung.
+Die Speicherung in dokumentenorientierten Datenbanken wie MongoDB oder in einem Key/Value-Store wie redis macht den Zugriff auf die persistierten Daten abhängig von einem externen Serverprozess. Der universelle Zugriff über das Dateisystem weicht einem speziellem Programm zur Navigation innerhalb der jeweiligen Datenbank. Mit dieser Komplexität erkauft man auf der anderen Seite eine wesentlich größere Flexibilät in Bezug auf horizontale Skalierung.
 
-technisch gesehen ist ein projekt also eine sammlung von dateien in einer festgelegten ordnerstruktur.
+Technisch gesehen ist ein Projekt also eine Sammlung von Dateien in einer festgelegten Ordnerstruktur.
 
 \begin{diagram}
   \dirtree{%
     .1 empty-project/.
+    .2 databases/.
+    .3 default.sqlite.
     .2 queries/.
     .2 pages/.
     .2 config.yaml.
-    .2 db.sqlite.
   }
-  \caption{leeres projekt}
+  \caption{Leeres Projekt}
 \end{diagram}
-
-bei der \texttt{config.yaml} handelt es sich aus im nachhinein unsinnigen gründen um eine yaml-datei.
 
 \subsection{Hinweise zum Client}
 

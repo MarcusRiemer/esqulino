@@ -8,7 +8,7 @@ Die hier "`erträumte"' Konzeption wird aufgrund der Endlichkeit der im Rahmen e
 Da der Zweck dieser Arbeit die Konzeption und Umsetzung einer Software ist, deren Zweck wiederum die Entwicklung anderer Software ist, bedarf es zunächst eines einheitlichen Verständnisses für die Bezeichnungen der beteiligten Personen und Entitäten:
 
 \begin{description}
-\item[(Schüler-)Entwicklungsumgebung, \idename{}] \hfill\\ 
+\item[(Schüler-)Entwicklungsumgebung, \idename{}] \hfill\\
   Bezeichnet die von den Lernenden zu nutzende Software, die im Rahmen dieser Arbeit erstellt wird. Sofern Verwechslungen mit anderen Entwicklungsumgebungen (engl. ``integrated development environment'', IDE) auftreten könnten, wird explizit das Präfix ``Schüler'' genutzt. Diese Unterscheidung wird insbesondere bei Vergleichen mit gängiger Entwicklungssoftware Art relevant sein.
 \item[(Schüler-)Projekt] \hfill\\
   Bezeichnet die von den Lernenden unter Nutzung der Schülerentwicklungsumgebung erstellte Software. Teil eines solchen Projektes sind unter anderem das Datenbankschema, die verschiedenen Abfragen und die gestaltete Benutzeroberfläche.
@@ -240,7 +240,7 @@ Nach dieser Betrachtung der mit der unmittelbaren \texttt{SQL}-Struktur zusammen
 \begin{description}
 \item[Einfache Ausdrücke] \hfill\\
   Einfache Ausdrücke unterliegen einer ganz festen Struktur, die nur sehr begrenzt die Schachtelung oder Verkettung von zusammengesetzten Ausdrücken zulässt. Ziel dieser Reduktion ist, dass die Auswertungsreihenfolge dieser Ausdrücke auch ohne die Verwendung von Klammern ``intuitiv'' eindeutig ist.
-  
+
   Die Bearbeitung dieser Ausdrücke ist nicht notwendigerweise völlig frei, sondern könnte auch hinsichtlich der möglichen Operatoren oder der Struktur eingeschränkt werden.
 \item[Komplexe Ausdrücke] \hfill\\
   Komplexe Ausdrücke lassen sich schachteln bzw. verketten und können mit einem Scratch-ähnlichen Editor für Ausdrücke frei bearbeitet werden. Die korrekte Beachtung von Auswertungsreihenfolgen ist Aufgabe der Lernenden, weswegen diese ggfs. die Ausdrücke auch selber Klammern müssen.
@@ -342,7 +342,7 @@ Danach können die Einschränkungen noch für einzelne Abfragen verfeinert werde
 \subsection{Drag \& Drop Editor für SQL}
 \label{sec:design-sql-editor}
 
-Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren können. Es kommen also distinkte Bedienelemente für die verschiedenen Komponenten einer \texttt{SQL} Abfrage zum Einsatz, kein reiner Texteditor. Der komponentenorientierte Editor soll dabei nicht die Konzeption von beliebigen Abfragen ermöglichen, wohl aber die in Kapitel \ref{sec:example-queries} \nameref{sec:example-queries} beschriebenen exemplarischen Anforderungen unterstützen. 
+Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren können. Es kommen also distinkte Bedienelemente für die verschiedenen Komponenten einer \texttt{SQL} Abfrage zum Einsatz, kein reiner Texteditor. Der komponentenorientierte Editor soll dabei nicht die Konzeption von beliebigen Abfragen ermöglichen, wohl aber die in Kapitel \ref{sec:example-queries} \nameref{sec:example-queries} beschriebenen exemplarischen Anforderungen unterstützen.
 
 Wenn ein Anwender der Entwicklungsumgebung an die Grenzen des unterstützenden Editors stößt, sollte er die Möglichkeit haben einmalig und für diese konkrete Abfrage eine Umwandlung in eine textbasierte Darstellung vornehmen zu können. Der umgekehrte Weg, also der Import von beliebigen \texttt{SQL}-Abfragen in den grafischen Editor, ist dann jedoch nicht mehr möglich. Die Implementierung eines Parsers für die Umwandlung der textuellen \texttt{SQL}-Repräsentation in die interne Darstellung von \idename{} würde im Verhältnis zum marginalen Nutzen einen unverhältnismäßigen Aufwand bedeuten.
 
@@ -408,7 +408,7 @@ Das endgültig implementierte Design (Abbildung \ref{fig:screen-sql-editor-drag-
   \caption{Stattdessen: Drag \& Drop Interface mit Hervorhebung von möglichen Zielen beim Ziehen aus der Seitenleiste, keine Nutzung von "`normalen"' Bedienelementen.}
   \label{fig:screen-sql-editor-drag-drop}
 \end{figure}
-  
+
 \begin{figure}[p]
   \includegraphics[width=\textwidth]{images/sql-parameters-preview}
   \caption{Abfrageeditor: Parameter für eine parametriesierte Abfrage und Ergebnisvorschau}
@@ -483,7 +483,7 @@ Abstrakt betrachtet besteht eine \idename{}-Seite aus zwei wesentlichen Informat
 Um das folgende Kapitel anschaulicher zu gestalten, werden alle Beispiele anhand eines sehr reduzierten Datenbestandes (siehe Tabelle \ref{tab:ui-concept-data-article} \& \ref{tab:ui-concept-data-comment}) zu einem einfach Blog illustriert. Dieser besteht aus zwei Tabellen für Artikel und Kommentare, ein Artikel wurde dabei möglicherweise mehrfach kommentiert. Bei den Zeitangaben handelt es sich um \texttt{UNIX}-Zeitstempel.
 
 \begin{table}[h]
-  \centering 
+  \centering
   \begin{tabularx}{\linewidth}{ l l X l }
     article\_id&caption&text&date\\
     \hline
@@ -496,7 +496,7 @@ Um das folgende Kapitel anschaulicher zu gestalten, werden alle Beispiele anhand
 \end{table}
 
 \begin{table}[h]
-  \centering 
+  \centering
   \begin{tabularx}{\linewidth}{ l l l X l }
     comment\_id&article\_id&commenter\_name&text&date\\
     \hline
@@ -522,11 +522,11 @@ Um die einer Webseite zur Verfügung stehenden Daten zu strukturieren, wird der 
 \item[\texttt{project} für Eigenschaften des Projektes] \hfill \\
   Wenn man als Entwickler globale Konstanten ablegen möchte, könnte man dies natürlich auch in der Datenbank tun. Bequemer ist aber ein separater Speicherort, der tatsächlich keine Modifikationen durch Endbenutzer vorsieht. Das typische Beispiel für einen solchen global verfügbaren Wert wäre der Name des Projekts an sich.
 \item[\texttt{get} für \texttt{URL}-Parameter] \hfill \\
-  Wenn aus einer Vielzahl von verfügbaren Daten zu einem bestimmten Datensatz navigiert werden soll, sieht der \texttt{HTML}-Standard die Verwendung von \texttt{URL}-Parametern vor. Mit diesen lassen sich applikationsspezifische Merkmale der anzuzeigenden Datensätze angeben. Im Falle des Blog-Beispiels wäre das zum Beispiel die \texttt{article\_id} zur Anzeige eines bestimmten Beitrages oder die Angabe eines Startzeitpunkts um die Hauptseite in mehrere Seiten zu unterteilen. 
+  Wenn aus einer Vielzahl von verfügbaren Daten zu einem bestimmten Datensatz navigiert werden soll, sieht der \texttt{HTML}-Standard die Verwendung von \texttt{URL}-Parametern vor. Mit diesen lassen sich applikationsspezifische Merkmale der anzuzeigenden Datensätze angeben. Im Falle des Blog-Beispiels wäre das zum Beispiel die \texttt{article\_id} zur Anzeige eines bestimmten Beitrages oder die Angabe eines Startzeitpunkts um die Hauptseite in mehrere Seiten zu unterteilen.
 \item[\texttt{query} für \texttt{SELECT}-Abfragen] \hfill \\
   Nicht jede Webseite benötigt notwendigerweise die Ergebnisse aller verfügbaren Abfragen. Daher werden die tatsächlich benötigten referenzierten Abfragen in diesem Namensraum gesammelt. Kapitel \ref{sec:design-ui-bind-output}~\nameref{sec:design-ui-bind-output} beschreibt im Detail wie diese Anbindung funktioniert.
 \item[\texttt{input} für Benutzereingaben] \hfill \\
-  Dieser Namensraum hängt eng mit dem HTML-\texttt{form}-Element zusammen und stellt die Werte aller Benutzereingaben zur Verfügung. 
+  Dieser Namensraum hängt eng mit dem HTML-\texttt{form}-Element zusammen und stellt die Werte aller Benutzereingaben zur Verfügung.
 \end{description}
 
 Die Verwendung von Namensräume ist von Jekyll inspiriert, \texttt{page} und \texttt{project} findet man auch dort. Durch die Kombination der in diesen Namensräumen verfügbaren Namen für Projekt und Seite kann \idename{} automatisch eine sinnvolle Implementierung für den \texttt{HTML}-Titel jeder Seite generieren: \texttt{\{\{page.name\}\} - \{\{project.name\}\}}. Zur Laufzeit würde dann für eine denkbare "`Impressum"'-Seite des "`Beispielblog"' also "`Impressum - Beispielblog"' als Titel angezeigt werden.
@@ -562,7 +562,7 @@ Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig bliebe
 \item[Verbreitung, 3 Punkte] \hfill \\
   Einige Templatingsprachen haben Einzug in eine Vielzahl unterschiedlicher Softwareprojekte gefunden, andere sind im Hinblick auf spezielle Frameworks zugeschnitten. Je weiter die Templatingsprache verbreitet ist, desto höher die Chance, dass ein Lernender sie möglicherweise auch einmal außerhalb von \idename{} einsetzen kann.
 \item[Einfache Erweiterbarkeit, 3 Punkte] \hfill \\
-  Perspektivisch sollen die Lernenden anhand von \idename{} auch in die "`normale"' Programmierung eingeführt werden können. Vor diesem Hintergrund wäre es von Vorteil, wenn die Templatingsprache eine einfache Programmierschnittstelle bietet um eigene Funktionen einzubetten.  
+  Perspektivisch sollen die Lernenden anhand von \idename{} auch in die "`normale"' Programmierung eingeführt werden können. Vor diesem Hintergrund wäre es von Vorteil, wenn die Templatingsprache eine einfache Programmierschnittstelle bietet um eigene Funktionen einzubetten.
 \item[Sprachübergreifende Implementierungen, 3 Punkte] \hfill \\
   Existiert lediglich die Referenzimplementierung einer Templatingsprache oder gibt es auch alternative Implementierungen? Dieser Aspekt ist nicht nur ein guter Indikator für die tatsächliche Verbreitung einer Templatingsprache, er könnte perspektivisch im Falle eines Exports von Projekten aus \idename{} auch praktische Bedeutung haben.
 \end{description}
@@ -576,7 +576,7 @@ Und natürlich spielt für die Technik auch die Parametriesierung eine Rolle: Be
 Um die Syntax zu vergleichen, soll der in Listing~\ref{lst:data-control-structures} angedeutete Datenbestand für einen Blogeintrag gerendert werden. Dieses Beispiel ergänzt die exemplarische \texttt{article}-Tabelle um die Spalten \texttt{private} und eine Aufzählung von Kategorien.
 
 \begin{lstlisting}[float=h!,caption={JSON-Darstellung eines exemplarischen Datenbestandes}, label={lst:data-control-structures}]
-{ 
+{
   "query" : {
     "article" : {
       "article_id": 4,
@@ -614,8 +614,8 @@ Die \textbf{Liquid}-Syntax (Beispiel-Listing~\ref{lst:liquid-control-structures}
   <div>Autor ist {{ query.article.author}}</div>
   <div>Beitrag vom {{ query.article.date | date: "%d.%b.%Y" }}</div>
   <ul>
-    {% for query.categories %} 
-      <li>{{ name }}</li> 
+    {% for query.categories %}
+      <li>{{ name }}</li>
     {% endfor %}
   </ul>
   {{{ query.article.text }}}
@@ -682,7 +682,7 @@ Letzten Endes stellt sich daher nur die Frage, ob Handlebars oder Liquid zum Ein
 Die Entscheidung zugunsten von Liquid berücksichtigt vor allem die geringe technische Komplexität, wird von der quantitativen Auswertung in Tabelle~\ref{tab:scoring-templating-language} aber auch in jeder Einzeldisziplin bestätigt. Die Tatsache, dass die Referenzimplementierung von Liquid wie der \idename{}-Server in Ruby entwickelt wird, ist ein netter zusätzlicher Faktor. Er wird zwar von der quantitativen Auswertung nicht berücksichtigt, erleichtert aber die Implementierung.
 
 \begin{table}[h]
-  \centering 
+  \centering
   \begin{tabular}{ l c c c }
                       & Liquid   & Handlebars      & Angular 2   \\
     \hline
@@ -768,7 +768,7 @@ Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trot
 \item[Absätze] \hfill \\
   Blöcke von zusammenhängendem Text werden als Absatz ausgezeichnet, das entsprechende \texttt{HTML}-Äquivalent ist das \texttt{<p>}-Element.
 \item[Listen] \hfill \\
-  Strukturiert zusammenhängende Daten werden als sortierte oder unsortierte Liste (\texttt{<ol>} bzw. \texttt{<ul>} in \texttt{HTML}) gruppiert. Wie schon bei den Überschriften soll an dieser Stelle nur ein logisches Listenelement zum Einsatz kommen, dass dafür über eine Eigenschaft ``Nummerierung'' verfügt.      
+  Strukturiert zusammenhängende Daten werden als sortierte oder unsortierte Liste (\texttt{<ol>} bzw. \texttt{<ul>} in \texttt{HTML}) gruppiert. Wie schon bei den Überschriften soll an dieser Stelle nur ein logisches Listenelement zum Einsatz kommen, dass dafür über eine Eigenschaft ``Nummerierung'' verfügt.
 \item[Bilder] \hfill \\
   Zwar technisch betrachtet ein eher simples Unterfangen, für Schüler erfahrungsgemäß aber motivierend, ist die Einbindung von Bildern. Diese entsprechen einem \texttt{HTML} \texttt{<img>}-Element, für welches das \texttt{src}-Attribut gesetzt werden muss.
 \end{description}
@@ -866,21 +866,37 @@ Nachdem nun die zu rendernde Seite bekannt ist, stellt sich folglich die inverse
 Es ist folglich schon aufgrund der Vorgaben des \texttt{HTML}-Standards sinnvoll, die Unterstützung von zwei separaten Mechanismen zur Navigation zu unterstützen: Sofern der Endanwender eigene Eingaben vornehmen soll, kommt ein \texttt{<form>}-Element zum Einsatz. Durch die Nutzung von versteckten Eingabelementen (\texttt{<input type="hidden">} können aber auch serverseitig vorhandene Daten, zum Beispiel aus Abfragen oder \texttt{GET}-Parametern innerhalb von Formularen verwendet werden.
 
 \subsection{Editor für Oberflächen}
-Die Suche nach dem richtigen Abstraktionsniveau für den den Seiten-Editor lässt sich aller Vorraussicht nach nicht mit einer definitiven Antwort abschließen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen.
+Die Suche nach dem richtigen Abstraktionsniveau für den den Seiten-Editor wird sich nicht mit einer definitiven Antwort abschließen lassen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen.
 
-Programmiersprachen wie Delphi oder Visual Basic verdanken einen Großteil ihrer initialen Popularität auch ihren Entwicklungsumgebungen mit integrierten WYSIWYG-Editoren. Diese ermöglichten es schon zur Entwicklungszeit eine sehr gute Vorschau auf das endgültige Aussehen zu bekommen. Der vormals typische Kreislauf aus "`Wert im Quelltext verändern"', dann kompilieren, dann ausführen wird also deutlich verkürzt. Dieser Ansatz hat aber natürlich auch Grenzen: Ohne Kenntniss der genauen Datenbestände bleibt die Vorschau oftmals unvollständig. Und insbesondere bei sehr dynamische Oberflächen mit vielen optionalen Bestandteilen die dann zur Laufzeit ein- oder ausgeblendet werden gleicht die Vorschau innerhalb des WYSIWYG-Editors der Endbenutzeransicht dann doch nur noch sehr beschränkt.
+Programmiersprachen wie Delphi oder Visual Basic verdanken einen Großteil ihrer initialen Popularität auch ihren Entwicklungsumgebungen mit integrierten WYSIWYG-Editoren. Diese ermöglichten es schon zur Entwicklungszeit eine sehr gute Vorschau auf das endgültige Aussehen. Der zeitaufwändige Kreislauf aus "`Wert im Quelltext verändern"' $\rightarrow$  kompilieren $\rightarrow$ ausführen wird umgangen. Dieser Ansatz hat aber auch Grenzen: Ohne Kenntniss der genauen Datenbestände bleibt die Vorschau oftmals unvollständig. Und insbesondere bei sehr dynamische Oberflächen mit vielen optionalen Bestandteilen, welche dann häufig zur Laufzeit ein- oder ausgeblendet werden, im Editor aber stehts sichtbar sind, gleicht die Vorschau innerhalb des WYSIWYG-Editors der Endbenutzeransicht dann doch nur noch sehr beschränkt.
 
-Bei der Entwicklung von Desktopanwendungen auch heute noch die Verwendung eines WYSIWYG-Editors sehr verbreitet, allerdings werden die Beschreibungen der Oberflächen häufig in spezielle Textdateien ausgelagert. Diese lassen sich dann auch mit einem normalen Texteditor bearbeiten.
+Bei der Entwicklung von Desktopanwendungen ist auch heute noch die Verwendung eines WYSIWYG-Editors sehr verbreitet, allerdings werden die Beschreibungen der Oberflächen häufig in spezielle Textdateien ausgelagert. Diese lassen sich dann sowohl mit einem normalen Texteditor bearbeiten als auch mit spezialisierten Editoren bearbeiten. Moderne Bibliotheken für Benutzerschnittstellen wie JavaFX, Android oder die \textit{Windows Presentation Foundation} (WPF) erlauben mit diesem Ansatz die größtmögliche Flexibilät: Jeder Programmierer kann entscheiden, ob er mit der Beschreibungssprache, dem grafischen Werkzeug oder beiden Herangehensweisen arbeiten möchte.
 
-\missing[inline]{Windows.Forms hat Oberflächenbeschreibungen noch in den Quelltext gepackt, JavaFX, Android und WPF sehen dafür eigene Dateien vor.}
+Auch zur Pflege und Generierung von Webseiten existieren und existierten eine Vielzahl unterschiedlicher WYSIWYG-Editoren wie Microsoft Frontpage, Adobe Dreamweaver,~... Diese spielen als Lösungen für hobbymäßige Webseitenbetreiber mittlerweile eine eher untergeordnete Rolle. Heute gängige Lösungen für den Betrieb eigener Webseiten bieten dem Endanwender als primäre Schnittstelle eine im Web verfügbare administrative Oberfläche. Die meisten quelloffenen Content-Management-Systeme wie Wordpress, Joomla oder Typo3 fallen in diese Kategorie. Diese Oberfläche erlaubt es dabei aber vornehmlich den eigentlichen Inhalt der Seiten zu verändern, weniger das Rahmenwerk außen herum. Professionelle Webentwickler halten sich daher von den WYSIWYG-Web-Editoren und editieren lieber unmittelbar die in \texttt{HTML} (oder Skriptsprachen) notierten Templates.
 
-Auch zur Pflege und Generierung von Webseiten existieren und existierten eine Vielzahl unterschiedlicher WYSIWYG-Editoren wie Microsoft Frontpage, Adobe Dreamweaver,~... Diese spielen als Lösungen für hobbymäßige Webseitenbetreiber mittlerweile eine eher untergeordnete Rolle. Heute gängige Lösungen für den Betrieb eigener Webseiten bieten dem Endanwender als primäre Schnittstelle eine im Web verfügbare administrative Oberfläche. Die meisten quelloffenen Content-Management-Systeme wie Wordpress, Joomla oder Typo3 fallen in diese Kategorie.
+Ein allgemein "`bester"' Ansatz hat sich bis heute also nicht herausgebildet. Dennoch können die gängigen Ansätze zur Bearbeitung von Oberflächen recht gut anhand eines einzigen Merkmals kategorisiert werden: Wie weit ist die im Editor zu sehende Darstellung von der Darstellung im Browser des Endanwenders entfernt? Diese Frage ist natürlich sehr eng verknüpft mit dem fachlichen Hintergrund der Zielgruppe. Ein als "`Webseitenbaukasten für Jedermann"' beworbenes Produkt wird um eine möglichst originalgetreue Darstellung im Editor bemüht sein, fortgeschrittene Entwickler nutzen dann lieber einen Texteditor mit speziellen Hilfsfunktionen wie Syntaxvervollständigung.
 
-Diese Oberfläche erlaubt es dabei aber vornehmlich den eigentlichen Inhalt der Seiten zu verändern, weniger das Rahmenwerk außen herum. Professionelle Webentwickler halten sich daher von den WYSIWYG-Web-Editoren und editieren lieber unmittelbar die in HTML notierten Templates.
+Für \idename{} stellt sich bei der Gestaltung des Editors für Oberflächen also eine zentrale Frage: Welches Abstraktionsniveau kann der \idename{}-Zielgruppe zugemutet werden? Und wie soll zwischen den Zielen "`Motivation durch praktisch vorzeigbare Ergebnisse"' und der Tatsache, dass \idename{} sich als Lehranwendung für HTML versteht, umgegangen werden?
 
-Alles in allem können die meisten Ansätze zur Bearbeitung von Oberflächen also recht gut anhand eines einzigen Merkmals kategorisiert werden: Wie weit ist die im Editor zu sehende Darstellung von der Darstellung im Browser des Endanwenders entfernt? Und damit einher geht eine weitere Frage: Welche Abstraktionsebene kann der \idename{}-Zielgruppe zugemutet werden?
+Bei WYSIWYG-Webseiten-Editoren handelt es sich im Normalfall um sehr spezielle Anwendungen, mit denen man allerdings sehr schnell Ergebnisse erzielen kann. Hat man eine von Ihnen verstanden, kann der Umgang mit einem konkurierenden Produkt immer noch in vielen Belangen unterschiedlich ausfallen. \texttt{HTML}-Code schaut hingegen in allen Editoren gleich aus und leidet daher weniger unter einem "`Lock-in-Effekt"'.
 
-Bei WYSIWYG-Webseiten-Editoren handelt es sich im Normalfall um sehr spezielle Anwendungen. Hat man eine von Ihnen verstanden, kann der Umgang mit einem konkurierenden Produkt immer noch in vielen Belangen unterschiedlich ausfallen. \texttt{HTML}-Code schaut hingegen in allen Editoren gleich aus und leidet daher weniger unter einem "`Lock-in-Effekt"'.
+Für \idename{} werden daher die folgenden möglichen Ansätze in unterschiedlicher Tiefe diskutiert. Dabei ist Drag \& Drop als vornehmliches Bedienparadigma gesetzt, sofern die Beschreibung dies nicht explizit abspricht.
+
+\begin{description}
+\item[Vordefinierte Seiten für standarisierte Einsatzzwecke] \hfill \\
+  Gedacht für Entwickler, die mit \idename{} einfach nur eine generische Oberfläche für einen Datenbestand erzeugen möchten.
+  
+\item[Vollständig WYSIWYG] \hfill \\
+  Sollte dieser Ansatz zum Einsatz kommen, wird es dazu definitiv Alternativen geben müssen.
+  
+\item[WYSIWYG Layout, Code-Blöcke innerhalb der Zellen] \hfill \\
+  Dieser Ansatz kommt dem Entwickler ein Stück weit entgegen, wenn es um die Gestaltung des Layouts geht.
+  
+\item[Ausschließlich Code-Blöcke] \hfill \\
+  
+\item[Ausschließlich Quelltext] \hfill \\
+  
+\end{description}
 
 \subsubsection{Grundsätzlicher Aufbau}
 \label{sec:design-ui-editor}
