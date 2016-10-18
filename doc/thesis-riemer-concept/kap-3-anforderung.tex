@@ -3,7 +3,11 @@
 
 Dieses Kapitel beschreibt die generellen Anforderungen an die Entwicklungsumgebung. Dabei werden auch einige theoretische Hintergründe betrachtet, speziell mögliche Reduktionen des SQL-Sprachumfangs für die Vermittlung von Datenbankkenntnissen. Ebenfalls thematisiert werden unterschiedliche Vorgehensweisen um Schüler bei der Entwicklung von Oberflächen sinnvoll anzuleiten. Den Schwerpunkt bildet die Beschreibung der beiden wichtigsten Komponenten der Entwicklungsumgebung: Die spezialisierten Editoren für SQL und Oberflächen.
 
-Die hier "`erträumte"' Konzeption wird aufgrund der Endlichkeit der im Rahmen einer Master-Thesis zur Verfügung stehenden Zeitspanne nicht vollständig umgesetzt werden können. Trotzdem ist eine möglichst vollständige Erfassung von Anforderungen unerläßlich, um im Falle einer Fortführung der Entwicklung nicht aufgrund von unberücksichtigten Anforderungen große Umbauarbeiten vornehmen zu müssen.
+\warning[Hinweis]{Der Verzicht auf die technischen Hintergründe der Implementierung soll dieses Kapitel auch für Informatik-Interessierte ohne softwaretechnischen Hintergrund verständlich halten, anstatt Sie gleich mit den Details der Realisierung zu erschlagen. Die Planung konkreter Umsetzungsstrategien, inklusive einer Erläuterung von softwaretechnischen Details und verfügbaren Schnittstellen, werden in Kapitel \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis} besprochen.}
+
+\idename{} geht im Vergleich zu Scratch und dem App Inventor in Bezug auf die gelehrten Programmiersprachen einen anderen Weg: Es lehrt unmittelbar den Umgang mit \texttt{SQL} und \texttt{HTML}, allerdings in gegebenenfalls reduzierten Umfängen (siehe \ref{sec:sql-subset} \nameref{sec:sql-subset} und \ref{sec:design-ui-concept} \nameref{sec:design-ui-concept}). Die Entwicklung eigener Programmier- oder Auszeichnungssprachen für die Lehre mag zwar aus didaktischer Sicht einige Vorteile bieten, geht im Rahmen dieser Arbeit aber auch mit zwei gravierenden Nachteilen einher: Zum Einen ist die Entwicklung einer konsistenten Programmiersprache alles andere als trivial (von Zweien ganz zu schweigen). Zum Anderen erschwert eine solche Insellösung den Übergang zu "`richtiger"' Programmierung in der "`echten"' Welt außerhalb dieser Lehrumgebung. Abgesehen davon handelt es sich bei \texttt{SQL} und \texttt{HTML} um vergleichsweise einfache Sprachen, die sich darüber hinaus gut im Umfang reduzieren lassen. Aus diesen Gründen setzt \idename{} auf bestehende und etablierte Standards auf.
+
+Die in diesem Kapitel "`erträumte"' Konzeption wird aufgrund der Endlichkeit der im Rahmen einer Master-Thesis zur Verfügung stehenden Zeitspanne nicht vollständig umgesetzt werden können. Trotzdem ist eine möglichst vollständige Erfassung von Anforderungen unerläßlich, um im Falle einer Fortführung der Entwicklung nicht aufgrund von unberücksichtigten Anforderungen große Umbauarbeiten vornehmen zu müssen.
 
 Da der Zweck dieser Arbeit die Konzeption und Umsetzung einer Software ist, deren Zweck wiederum die Entwicklung anderer Software ist, bedarf es zunächst eines einheitlichen Verständnisses für die Bezeichnungen der beteiligten Personen und Entitäten:
 
@@ -18,22 +22,20 @@ Da der Zweck dieser Arbeit die Konzeption und Umsetzung einer Software ist, dere
   Bezeichnet Personen, die mit der von den Entwicklern erstellten ``normalen'' Benutzeroberfläche eines Schülerprojekts interagieren, nicht jedoch mit der Schülerentwicklungsumgebung selbst.
 \end{description}
 
-\warning[Hinweis]{Der Verzicht auf die technischen Hintergründe der Implementierung soll dieses Kapitel auch für Informatik-Interessierte ohne softwaretechnischen Hintergrund verständlich halten, anstatt Sie gleich mit den Details der Realisierung zu erschlagen. Die Planung konkreter Umsetzungsstrategien, inklusive einer Erläuterung der notwendigen Schnittstellen, werden in Kapitel \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis} besprochen.}
-
 \subsection{Zielgruppe}
 \label{sec:target-audience}
 
-Mit \idename{} sollen Schülerinnen und Schüler ab der Mittelstufe angesprochen werden. Die im folgenden genannten Aspekte bilden ein sehr oberflächliches Profil hilfreicher Kenntnisse. Dieses Profil ist dabei allerdings nicht als striktes Anforderungsprofil zu verstehen: Grundsätzlich lassen sich dieser Kenntnisse auch am Beispiel von \idename{} vermitteln, dezidiertes Lehrmaterial gibt es dafür zum jetzigen Zeitpunkt allerdings nicht. Es ist Aufgabe der Lehrkraft dieses Wissen im Rahmen eigener Unterrichtseinheiten zu vermitteln. Kenntnisse über Datenbanken oder \texttt{HTML} sind nicht Bestandteil dieses Profils, schließlich versteht sich \idename{} als eine Lernumgebung für genau diese Technologien.
+Mit \idename{} sollen Schülerinnen und Schüler ab der Mittelstufe angesprochen werden. Die im folgenden genannten Aspekte bilden ein sehr oberflächliches Profil hilfreicher Kenntnisse, an denen man sich als Lehrkraft für die Fragestellung "`Sind meine Schüler bereit für \idename{}?"' orientieren könnte. Dieses Profil ist dabei allerdings nicht als striktes Anforderungsprofil zu verstehen: Grundsätzlich lassen sich diese Kenntnisse auch am Beispiel von \idename{} vermitteln. Kenntnisse über Datenbanken oder Webentwicklung sind hingegen nicht Bestandteil dieses Profils, schließlich versteht sich \idename{} als eine Lernumgebung für genau diese Technologien.
 
 \begin{description}
-\item[Grundlegende Anwenderkenntnisse] \hfill\\
+\item[Grundlegende PC-Anwenderkenntnisse] \hfill\\
   Die Schüler müssen in der Lage sein einen Browser zu bedienen und mit Begriffen wie "`Speichern"' und "`Klicken und Ziehen"' vertraut sein. Kenntnisse des Dateisystems sind jedoch nicht notwendig, \idename{} abstrahiert die konkreten Speicherorte weg.
 \item[Tabellenkalkulation] \hfill\\
-  Kenntnisse über den Umgang mit Tabellenkalkulationsprogrammen sind keine zwingende Voraussetzung, aber vermutlich eine sinnvolle Vorstufe um die Struktur von Daten zu verstehen. Sofern sich die Schüler innerhalb eines solchen Programms auch schon mit Funktionen wie \lstinline{SUMME} beschäftigt haben, kann auf diesem Wissen aufgebaut werden.
+  Kenntnisse über den Umgang mit Tabellenkalkulationsprogrammen sind keine zwingende Voraussetzung, aber eine sinnvolle Vorstufe um die Strukturierungsmöglichkeiten von Datenbeständen zu verstehen. Sofern sich die Schüler innerhalb eines solchen Programms auch schon mit Funktionen wie \texttt{SUMME} beschäftigt haben, kann auf diesem Wissen aufgebaut werden.
 \item[Bedienelemente] \hfill\\
-  Wenn die Schüler mit \idename{} eigene Oberflächen entwickeln sollen, brauchen sie grundlegende Vorstellungen über die Funktionsweise und Parameter einiger Bedienelemente: Mit Links werden Inhalte verknüpft, Knöpfe lösen Aktionen aus, Textfelder stellen Werte zur Verfügung, eine Combobox erlaubt die Auswahl von einem Wert aus vielen Werten ... Ohne zu wissen wozu bestimmte Bedienelemte eingesetzt werden, erschließt sich deren Verwendung in HTML nur sehr umständlich.
+  Wenn die Schüler mit \idename{} eigene Oberflächen entwickeln sollen, brauchen sie grundlegende Vorstellungen über die Funktionsweise und Parameter einiger Bedienelemente: Mit Links werden Inhalte verknüpft, Knöpfe lösen Aktionen aus, Textfelder stellen Werte zur Verfügung, eine Combobox erlaubt die Auswahl von einem Wert aus vielen Werten ... Ohne zu wissen wozu bestimmte Bedienelemte eingesetzt werden, erschließt sich deren Verwendung in \texttt{HTML} nur sehr umständlich.
 \item[Englische Vokabeln] \hfill\\
-  In der initialen Version wird \idename{} die Syntax von \texttt{SQL} oder \texttt{HTML} zwar vereinfachen und augmentieren, aber nicht übersetzen. Den Schülern sollte die Bedeutung von Fragmenten wie \lstinline{WHERE} oder \lstinline{<input>} also geläufig sein.
+  In der initialen Version wird \idename{} die Syntax von \texttt{SQL} oder \texttt{HTML} zwar vereinfachen und augmentieren, aber nicht übersetzen. Den Schülern sollte die Bedeutung von Fragmenten wie \texttt{WHERE} oder \texttt{<input>} also geläufig sein.
 \end{description}
 
 \subsection{Grundprinzipien}
@@ -119,6 +121,7 @@ Im Sinne einer möglichst niedrigen Einstiegshürde soll es den Anwendern leicht
 Die Lehrkraft würde in diesem Fall ein Projekt für ihre Schüler vorbereiten, welches diese dann mit einem Klick in ein anders benanntes Projekt kopieren können. Es werden dann im Normafall alle Bestandteile, möglicherweise mit einer einfachen Anpassung der Zugriffsrechte, unter dem neuen Namen verfügbar gemacht. Alternativ sollte eine Lehrkraft den Umfang eines solchen Klons auch einschränken können: Sofern das Beispielprojekt Inhalte enthält, die nur zu Illustrationszwecken angelegt worden sind, können diese ausgeschlossen werden. Eventuell sollen sich die Schüler auch verstärkt eigene Gedanken machen und nicht zu sehr von vorgefertigen Inhalten abgelenkt werden? Letzten Endes existieren zu viele Varianten um den korrekten Umfang für diese Kopien ohne manuelle Unterstützung festzulegen.
 
 \subsubsection{Zugriffskontrollen}
+\label{sec:concept-access-control}
 
 Lesende Zugriffe können, zumindest in der Thesis-Version der Software, nicht endgültig eingeschränkt werden. Ursächlich dafür ist jedoch, anders als bei vielen anderen nicht implementierten Funktionen, nicht vornehmlich der technische Aufwand: Natürlich könnte man theoretisch typische Entwurfsmuster für Zugangsbeschränkungen auch in \idename{} implementieren! Auf einfachster Ebene wäre zum Beispiel denkbar, dass eine Spalte "`geheim"' zu Tabellen mit privaten Daten hinzugefügt wird und auf dieser Basis die Oberfläche für Endanwender solcherart markierte Daten nicht anzeigt. Da Projekte aber auch einfach kopiert werden können, müsste ein versierter Benutzer nur eine Kopie des Projektes vornehmen und könnte dann über den Editor alle Daten einsehen oder auch den Zugriffschutz der Oberflächen einfach deaktivieren. Um also den lesenden Zugriff effektiv zu verhindern müsste die Einsicht in die Quellen fremder Projekte eingeschränkt werden.
 
@@ -143,7 +146,7 @@ Um also zumindest einen grundsätzlichen Schutz zu ermöglichen, sollten für ei
     Gäste können keinerlei Schreibzugriffe vornehmen, weder über die Entwicklungsumgebung, noch über die Oberfläche für Endbenutzer.
 \end{description}
 
-\subsection{Didaktisch sinvolle Teilmengen von SQL}
+\subsection{Konzept für sinvolle Teilmengen von SQL}
 \label{sec:sql-subset}
 
 \warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in der Entwicklungsumbegung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von \texttt{SQL}. Um zu sehen, welcher Funktionsumfang im Prototypen tatsächlich verfügbar ist, lohnt sich ein Blick in Kapitel \ref{sec:example-projects}:~\nameref{sec:example-projects}.}
@@ -533,9 +536,9 @@ Die Verwendung von Namensräume ist von Jekyll inspiriert, \texttt{page} und \te
 
 Perspektivisch interessant wäre noch die Einbindung von Namensräumen für Cookies und Sessions, um während eines Besuchs (oder auch darüber hinaus) Informationen ablegen zu können. Diese beiden Datenspeicher entfalten ihr volles Potenzial allerdings erst, wenn Ihnen dynamisch Werte zugewiesen werden können. Natürlich wäre es nicht undenkbar, dass \idename{} auch hier eine spezielle Lösung zur Verfügung stellt. Sinnvoller erscheint aber die Verwendung einer "`normalen"' Programmiersprache, was außerhalb des abgesteckten Umfangs dieser Arbeit liegt und daher nicht weiter betrachtet wird (vergleiche \ref{scope:no-programming}~\nameref{scope:no-programming}).
 
-\subsubsection{Wahl einer Templatingsprache}
+\subsubsection{Evaluation existierender Templatingsprachen}
 
-Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten, nicht alle dafür eignen sich aber um dynamisch zur Laufzeit Seiten zu erzeugen. Nicht in Betracht gezogen werden vollwertige Programmiersprachen wie PHP, Python oder Ruby. Einerseits liegen diese außerhalb des abgesteckten Umfangs dieser Arbeit (vergleiche \ref{scope:no-programming}~\nameref{scope:no-programming}), aber auch abgesehen davon erscheint ihr Einsatz nicht sinnvoll: Die Mächtigkeit dieser Sprachen geht fast zwangsläufig mit einer vergleichsweise umständlichen Syntax einher. Zudem dient die Verwendung einer dezidierten Templatingsprache nicht nur der einfacheren Implementierung, sondern auch einer klaren Trennung zwischen Programm- und Anzeigelogik. Diese Unterscheidung soll von \idename{} gefördert werden.
+Es gibt eine Vielzahl unterschiedlicher Textauszeichnungssprachen für Webseiten, nicht alle dafür eignen sich aber um dynamisch zur Laufzeit Seiten zu erzeugen. Nicht in Betracht gezogen werden vollwertige Programmiersprachen wie \texttt{PHP}, Python oder Ruby. Einerseits liegen diese außerhalb des abgesteckten Umfangs dieser Arbeit (vergleiche \ref{scope:no-programming}~\nameref{scope:no-programming}), aber auch abgesehen davon erscheint ihr Einsatz nicht sinnvoll: Die Mächtigkeit dieser Sprachen geht fast zwangsläufig mit einer vergleichsweise umständlichen Syntax einher. Zudem dient die Verwendung einer dezidierten Templatingsprache nicht nur der einfacheren Implementierung, sondern auch einer klaren Trennung zwischen Programm- und Anzeigelogik. Diese Unterscheidung soll von \idename{} gefördert werden.
 
 Für \idename{} wurden darüber hinaus zunächst die folgenden Kriterien angelegt, um die Anzahl verfügbarer Sprachen schnell zu reduzieren:
 
@@ -667,7 +670,7 @@ Kontrollstrukturen müssen entweder in speziellen \texttt{<template>}-Knoten not
 </h2>
 \end{lstlisting}
 
-Für Handlebars und Liquid existieren Implementierungen in unterschiedlichen Programmiersprachen, zumindest für Ruby, Javascript und PHP scheinen diese Portierungen auch sinnvoll zu funktionieren. Angular 2 hingegen wird zwar für mehrere Sprachen Angeboten, in der Praxis kompilieren diese aber alle zu Javascript.
+Für Handlebars und Liquid existieren Implementierungen in unterschiedlichen Programmiersprachen, zumindest für Ruby, Javascript und \texttt{PHP} scheinen diese Portierungen auch sinnvoll zu funktionieren. Angular 2 hingegen wird zwar für mehrere Sprachen Angeboten, in der Praxis kompilieren diese aber alle zu Javascript.
 
 Keine der betrachteten Sprachen macht es unmöglich, die Funktionalität im Rahmen der jeweiligen Syntax zu erweitern. Für Handlebars und Liquid existieren in allen betrachteten Implementierungen einfache Möglichkeiten Funktionen um neue Schlüsselwörter zu registrieren. Angular sieht zur Erweiterung die Programmierung neuer Komponenten vor, welche sich dann als neue Attribute oder Knoten sehr organisch einbetten lassen. Das ist im Endergebnis zwar sehr ansehnlich, die Definition solcher Komponenten erfordert aber vertiefte Kenntnisse der internen Arbeitsweise von Angular 2.
 
@@ -764,11 +767,11 @@ Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trot
 
 \begin{description}
 \item[Überschriften] \hfill \\
-  \texttt{HTML} sieht die Verwendung von Überschriften in sechs Hierarchiebenen vor und stellt dafür distinkte Elemente zur Verfügung (\texttt{<h1>} bis \texttt{<h6>}). Dieser Umstand soll nicht unmittelbar abgebildet werden. Stattdessen gibt es ein allgemeines Bedienelement ``Überschrift'', zu dem sich dann eine Ebene auswählen lässt.
+  \texttt{HTML} sieht die Verwendung von Überschriften in sechs Hierarchiebenen vor und stellt dafür distinkte Elemente zur Verfügung (\texttt{<h1>} bis \texttt{<h6>}). Dieser Umstand soll nicht unmittelbar abgebildet werden. Stattdessen gibt es ein allgemeines Bedienelement ``Überschrift'', zu dem sich dann eine Ebene angeben lässt.
 \item[Absätze] \hfill \\
   Blöcke von zusammenhängendem Text werden als Absatz ausgezeichnet, das entsprechende \texttt{HTML}-Äquivalent ist das \texttt{<p>}-Element.
 \item[Listen] \hfill \\
-  Strukturiert zusammenhängende Daten werden als sortierte oder unsortierte Liste (\texttt{<ol>} bzw. \texttt{<ul>} in \texttt{HTML}) gruppiert. Wie schon bei den Überschriften soll an dieser Stelle nur ein logisches Listenelement zum Einsatz kommen, dass dafür über eine Eigenschaft ``Nummerierung'' verfügt.
+  Strukturiert zusammenhängende Daten werden als sortierte oder unsortierte Liste (\texttt{<ol>} bzw. \texttt{<ul>} in \texttt{HTML}) gruppiert. Wie schon bei den Überschriften soll an dieser Stelle nur ein Bedienelement "`Liste"' zur Verfügung gestellt werden, dass dafür über eine Eigenschaft ``Nummerierung'' verfügt.
 \item[Bilder] \hfill \\
   Zwar technisch betrachtet ein eher simples Unterfangen, für Schüler erfahrungsgemäß aber motivierend, ist die Einbindung von Bildern. Diese entsprechen einem \texttt{HTML} \texttt{<img>}-Element, für welches das \texttt{src}-Attribut gesetzt werden muss.
 \end{description}
@@ -865,7 +868,8 @@ Nachdem nun die zu rendernde Seite bekannt ist, stellt sich folglich die inverse
 
 Es ist folglich schon aufgrund der Vorgaben des \texttt{HTML}-Standards sinnvoll, die Unterstützung von zwei separaten Mechanismen zur Navigation zu unterstützen: Sofern der Endanwender eigene Eingaben vornehmen soll, kommt ein \texttt{<form>}-Element zum Einsatz. Durch die Nutzung von versteckten Eingabelementen (\texttt{<input type="hidden">} können aber auch serverseitig vorhandene Daten, zum Beispiel aus Abfragen oder \texttt{GET}-Parametern innerhalb von Formularen verwendet werden.
 
-\subsection{Editor für Oberflächen}
+\subsection{Drag \& Drop Editor für Oberflächen}
+\label{sec:drag-drop-ui-editor}
 Die Suche nach dem richtigen Abstraktionsniveau für den den Seiten-Editor wird sich nicht mit einer definitiven Antwort abschließen lassen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen.
 
 Programmiersprachen wie Delphi oder Visual Basic verdanken einen Großteil ihrer initialen Popularität auch ihren Entwicklungsumgebungen mit integrierten WYSIWYG-Editoren. Diese ermöglichten es schon zur Entwicklungszeit eine sehr gute Vorschau auf das endgültige Aussehen. Der zeitaufwändige Kreislauf aus "`Wert im Quelltext verändern"' $\rightarrow$  kompilieren $\rightarrow$ ausführen wird umgangen. Dieser Ansatz hat aber auch Grenzen: Ohne Kenntniss der genauen Datenbestände bleibt die Vorschau oftmals unvollständig. Und insbesondere bei sehr dynamische Oberflächen mit vielen optionalen Bestandteilen, welche dann häufig zur Laufzeit ein- oder ausgeblendet werden, im Editor aber stehts sichtbar sind, gleicht die Vorschau innerhalb des WYSIWYG-Editors der Endbenutzeransicht dann doch nur noch sehr beschränkt.
