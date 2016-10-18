@@ -23,10 +23,12 @@
 \usepackage{framed}
 \usepackage{tikz}
 \usepackage[simplified]{pgf-umlcd}
-\usepackage[pass]{geometry} %% showframe um auf übervolle Boxen zu testen
+\usepackage[pass]{geometry} % Use `showframe` to test for overly full boxes
 \usepackage[onehalfspacing]{setspace}
 \usepackage{multicol}
-\usepackage{enumitem}
+\usepackage{enumitem}       % Narrower enumerations
+\usepackage[normalem]{ulem} % Striking out stuff
+\usepackage{datetime}       % \currenttime
 
 %% additional ressources
 \input{tex-definitions}
@@ -66,6 +68,21 @@
 \input{titlepage}
 
 \newpage
+
+\section*{Unfertige Arbeit!}
+
+An dieser Arbeit ist \sout{noch nichts fertig} das Ende unfertig! Ich habe sie online gestellt, um einigen hilfreichen Personen ein einfaches mitlesen zu ermöglichen. Du, lieber Helfer, darfst diese Arbeit in dem wohligem Bewusstsein lesen, dass du mir damit bestimmt weiterhilfst\footnote{... and then, there will be cake.}. Vielen Dank für deine Unterstützung!
+
+Momentan lassen sich die unten aufgeführten Kapitel einigermaßen sinnvoll lesen. Sie sind inhaltlich weitestgehend vollständig (sofern ich das nicht einschränke), können allerdings Spuren von Rechtschreib-, Grammatik- oder Layoutfehlern enthalten.
+
+Dieser Stand der Arbeit ist vom \today{} \currenttime{}, das Kürzel der dazugehörigen \texttt{git}-Revision lautet \texttt{\input{GIT_REV}}. Solltet ihr mir euer Feedback nicht in Form eines annotierten \texttt{PDF}-Dokumentes zukommen lassen, helfen mir diese beiden Informationen eure Seitenzahlen nachzuvollziehen.
+
+\begin{itemize}[noitemsep]
+  \item \ref{sec:introduction}~\nameref{sec:introduction} fehlen noch Vorwärtsreferenzen und wird möglicherweise noch erweitert. Mir fehlt bloß noch eine zündende Idee was da noch fehlt.
+  \item \ref{sec:related-work}~\nameref{sec:related-work} ist vollständig.
+  \item \ref{sec:requirements}~\nameref{sec:requirements} fasert bei \ref{sec:drag-drop-ui-editor}~\nameref{sec:drag-drop-ui-editor} sehr abrupt aus, genau da ist noch Baustelle.
+  \item \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis} kann bis \ref{sec:data-model-query}~\nameref{sec:data-model-query} gelesen werden, dort ist aktuell einfach Schluss.
+\end{itemize}
 
 \tableofcontents{}
 

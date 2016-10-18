@@ -157,7 +157,7 @@ Die serverseitige Funktionalität wird aktuell ausschließlich über "`end-to-en
 
 Die Dateien mit den Tests liegen im Dateisystem immer "`neben"' ihren Implementierungen, der Dateiname wird allerdings um das Suffix \texttt{spec} wie "`specification"' oder \texttt{e2e} wie "`end-to-end"' ergänzt. Das Beispiel in Listing  \ref{lst:unit-test-example} wurde der Datei \texttt{select.spec.ts} entnommen, der Code für die zu testende Funktionalität findet sich folglich in \texttt{select.ts}.
 
-\subsection{Struktur eines Projekts}
+\subsection{Datenmodell}
 
 Die grundsätzliche Struktur eines \idename-Projektes wird in Diagramm \ref{uml:class-diagram-core-entities} ersichtlich. Diese Darstellung visualisert nicht die konkrete Implementierung des Servers oder des Clients, sondern illustriert die grundlegenden beteiligten Datenstrukturen. Jede dieser Entitäten, also sowohl Projekte als auch ihre Ressourcen, enthält eine eigene Versionsangabe. Dadurch kann auf jede Veränderung an dieser Struktur explizit eingegangen werden (\ref{sec:implementation-migration}~\nameref{sec:implementation-migration}). Aktuell laden sowohl Server als auch Client nur Ressourcen, deren Version exakt passt.
 
@@ -229,34 +229,66 @@ Die Methode \texttt{ProjectResource.toModel()} wird genutzt um aus dem spezifisc
   \label{uml:class-diagram-core-entities}
 \end{diagram}
 
-\subsection{Serverseitige Persistenz}
+\subsubsection{Serverseitige Persistenz}
 \label{sec:implementation-persistence}
 
-Grundsätzlich sollte die serverseitig persistierte Repräsentation einer Ressource identisch mit dem Übertragungsformat sein. Dieses Vorgehen spart Zeit, in dem ein Transoformationsvorgang eingespart werden kann. Bei der folgenden Betrachtung von möglichen Optionen zur Speicherung der Daten, wird also grundsätzlich von \texttt{JSON}-Dokumenten ausgegangen. Um diese serverseitig zu persistieren, kommen im Wesentlichen zwei Speichermethoden in Frage: Entweder werden Datensätze direkt als Datei im Dateisystem abgelegt oder in einer dokumentenorientierten Datenbank gespeichert.
+Grundsätzlich sollte die serverseitig persistierte Repräsentation einer Ressource identisch mit dem Übertragungsformat sein. Dieses Vorgehen spart durch die Einsparung eines Transformationsvorganges potenziell Zeit, vor allem erleichtert es aber die serverseitige Implementierung. Bei der folgenden Betrachtung von möglichen Optionen zur Speicherung der Daten, wird also grundsätzlich von \texttt{JSON}-Dokumenten ausgegangen. Bei der Auslieferung durch den Server können diese dann möglicherweise sogar unverändert weitergereicht werden. Um die Persistierung vorzunehmen, kommen im Wesentlichen zwei Speichermethoden in Frage: Entweder werden Datensätze direkt als Datei im Dateisystem abgelegt oder in einer dokumentenorientierten Datenbank gespeichert.
 
-Bei der Auslieferung durch den Server müssen dann lediglich sensible Informationen gefiltert werden, in der Datenstruktur der jeweiligen Implementierung sollte diese Felder daher als optional betrachtet werden. Sofern jedoch keine Filterung notwendig ist, können diese Dokumente einfach unverändert bereitgestellt werden.
+Bei einer Speicherung im Dateisystem wäre der rein lesende Zugriff auf \idename-Datensätze sogar mit einem einfachen Webserver für statische Dateien möglich. Um ein Projekt zu Testzwecken anzusehen oder zu editieren reicht ein normaler Texteditor, neue Projekte können einfach per Copy \& Paste im Dateisystem angelegt werden. Perspektivisch wäre es relativ einfach möglich, ein Projekt mit gängigen Versionsverwaltungsprogrammen wie git oder mercurial zu versionieren. Diese Implementierung besticht also vor allem durch ihre Einfachheit in Bezug auf die zum Zugriff notwendigen Programme.
 
-Bei einer Speicherung im Dateisystem wäre der rein lesende Zugriff auf \idename-Datensätze sogar mit einem einfachen Webserver für statische Dateien möglich. Um ein Projekt zu Testzwecken anzusehen oder zu editieren reicht ein normaler Texteditor, neue Projekte können einfach per Copy \& Paste im Dateisystem angelegt werden. Perspektivisch wäre es relativ einfach möglich, ein Projekt mit gängigen Versionsverwaltungsprogrammen wie git oder mercurial zu versionieren.
+Die Speicherung in dokumentenorientierten Datenbanken wie MongoDB oder in einem Key/Value-Store wie redis macht den Zugriff auf die persistierten Daten abhängig von einem externen Serverprozess. Der universelle Zugriff über das Dateisystem weicht einem speziellem Programm zur Navigation innerhalb der jeweiligen Datenbank. Mit dieser Komplexität erkauft man auf der anderen Seite eine wesentlich größere Flexibilät in Bezug auf horizontale Skalierung: Sollte es jemals notwendig werden den Server auf mehr als einem Rechner zu betreiben, existiert dafür dann schon eine hilfreiche Basis.
 
-Die Speicherung in dokumentenorientierten Datenbanken wie MongoDB oder in einem Key/Value-Store wie redis macht den Zugriff auf die persistierten Daten abhängig von einem externen Serverprozess. Der universelle Zugriff über das Dateisystem weicht einem speziellem Programm zur Navigation innerhalb der jeweiligen Datenbank. Mit dieser Komplexität erkauft man auf der anderen Seite eine wesentlich größere Flexibilät in Bezug auf horizontale Skalierung.
+Letzten Endes fiel die Entscheidung auf das Dateisystem. Die Gründe ähneln jenen, wie sie schon bei der Wahl von \texttt{SQLite} aufgezählt wurden (\ref{sec:implementation-database-system}~\nameref{sec:implementation-database-system}): Backups des Dateisystems sind trivial, der Betrieb außerordentlich eine, externe Programme sind zahlreich vertreten. Sollte eine komplizierte Lösung notwendig werden, kann man diese immer noch implementieren, sobald sie tatsächlich notwendig wird.
 
-Technisch gesehen ist ein Projekt also eine Sammlung von Dateien in einer festgelegten Ordnerstruktur.
+Technisch gesehen ist ein Projekt folglich eine Sammlung von Dateien in einer festgelegten Ordnerstruktur. Abbildung~\ref{fig:project-disk-structure} zeigt ein beispielhaftes Projekt mit jeweils einer Datenbank, Abfrage und Webseite.
 
-\begin{diagram}
+\begin{figure}[h!]
   \dirtree{%
-    .1 empty-project/.
+    .1 example-project/.
     .2 databases/.
     .3 default.sqlite.
     .2 queries/.
+    .3 0c396a9a-1947-4c2b-a5fb-195df2b91b84.json.
+    .3 0c396a9a-1947-4c2b-a5fb-195df2b91b84.sql.
     .2 pages/.
+    .3 0a436465-b074-46a4-ac12-b091a77c9d6b.json.
+    .3 0a436465-b074-46a4-ac12-b091a77c9d6b.liquid.
     .2 config.yaml.
   }
-  \caption{Leeres Projekt}
-\end{diagram}
+  \caption{Dateistruktur eines Projekts}
+  \label{fig:project-disk-structure}
+\end{figure}
 
-\subsection{Hinweise zum Client}
+Dabei werden Seiten und Abfragen in zwei Versionen gespeichert: Einmal das \texttt{JSON}-serialisierte Datenmodell und eine jeweils "`kompilierte"' Version in Form von \texttt{SQL}- oder Liquid-Code.
 
-Der verwendete Typescript Compiler hat zum Zeitpunkt der Anfertigung dieser Arbeit einen bekannten Bug in der Codegenerierung \cite{ts-compiler-class-order-bug} um den wiederholt herumgearbeitet werden musste. Konkret äussert sich dieser Fehler, wenn die Definition der Oberklasse einer sich davon ableitenden Klasse erst im Nachhinein erfolgt (Listing \ref{lst:ts:class-order-bug}). In diesem Fall kommt es zu keiner Warnung durch den Compiler, sondern zu einem Laufzeitfehler im kompilierten Javascript-Code.
+\subsubsection{Projekt}
+\label{sec:data-model-project}
+
+Die vornehmlichen Eigenschaften eines Projektes sind die darin enthaltenen Abfragen und Webseiten, darüber hinaus werden in den Projekteinstellungen aber noch einige andere Einstellungen festgehalten:
+
+\begin{description}[noitemsep]
+\item[Name, Beschreibung \& Bild] \hfill \\
+  Von Entwicklern frei wählbare Elemente, mit denen das Projekt einem Endanwender kurz \& knapp beschrieben wird. Der Prototyp erlaubt zum aktuellen Zeitpunkt noch nicht den Upload von Bildern, Endanwendern werden die Bilder aber dennoch angezeigt.
+\item[Aktivierte Datenbank] \hfill \\
+  Ein Entwickler kann in einem Projekt zwischen mehreren "`Evolutionsstufen"' oder Sicherheitskopien einer Datenbank auswählen. Für einen Endanwender ist diese Unterscheidung allerdings nicht von Relevanz: Er erwartet nicht beim erstmaligen Besuch einer Seite zunächst eine Datenbank auswählen zu müssen. Daher legt der Entwickler in dieser Einstellung fest, welche Datenbank zum Rendern verwendet werden soll.
+\item[Startseite] \hfill \\
+  Sobald in einem Projekt mehr als eine Webseite verfügbar ist, muss eine dieser Seiten als Startseite festgelegt werden.
+\item[Benutzerdatenbank] \hfill \\
+  Die in Kapitel \ref{sec:concept-access-control}~\nameref{sec:concept-access-control} beschriebenen Zugriffskontrollen bedürfen einer rudimentären Benutzerdatenbank. Aktuell wird diese als Teil des Projekts gespeichert, die Passwörter werden dabei selbstverständlich verschlüsselt.
+\end{description}
+
+\subsubsection{Abfrage}
+\label{sec:data-model-query}
+
+\subsubsection{Seite}
+
+\subsection{Unerwartete Hindernisse}
+
+\subsubsection{Instabile API von Angular 2}
+
+\subsubsection{Fehlerhafte Codegenerierung des Typescript-Compilers}
+
+Der verwendete Typescript-Compiler hat zum Zeitpunkt der Anfertigung dieser Arbeit einen bekannten Bug in der Codegenerierung \cite{ts-compiler-class-order-bug} um den wiederholt herumgearbeitet werden musste. Konkret äussert sich dieser Fehler, wenn die Definition der Oberklasse einer sich davon ableitenden Klasse erst im Nachhinein erfolgt (Listing \ref{lst:ts:class-order-bug}). In diesem Fall kommt es zu keiner Warnung durch den Compiler, sondern zu einem Laufzeitfehler im kompilierten Javascript-Code.
 
 \lstinputlisting[language=JavaScript,caption=Falsche Reihenfolge der Klassendefinition, label=lst:ts:class-order-bug]{snippets/class-inheritance-order-bug.ts}
 
