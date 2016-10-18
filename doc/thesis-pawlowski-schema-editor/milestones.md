@@ -1,6 +1,6 @@
-# Bachelor-Thesis Marco Pawlowski: Ein Schema-Editor für esqulino
+# Bachelor-Thesis Marco Pawlowski: Ein Schema-Editor für Blattwerkzeug
 
-Für die Schüler-Entwicklungsumgebung "esqulino" soll ein Schema-Editor für relationale Datenbanken entwickelt werden. Dabei müssen insbesondere die speziellen Erfordernisse der Zielgruppe berücksichtigt werden.
+Für die Schüler-Entwicklungsumgebung "Blattwerkzeug" soll ein Schema-Editor für relationale Datenbanken entwickelt werden. Dabei müssen insbesondere die speziellen Erfordernisse der Zielgruppe berücksichtigt werden.
 
 # Meilensteine
 
@@ -10,12 +10,17 @@ Die Entwicklung erfolgt in etwa anhand dieser Meilensteine.
 
 * Client: Typische vertikale Darstellung der Spalten einer Tabelle, ähnlich UML oder MySQL Workbench
 
+## Anzeige von Daten
+
+* Server: Endpunkt zum anzeigen aller Datensätze einer Tabelle, ggfs. mit Offset und Limit
+* Client: Anzeige der Datensätze einer Tabelle
+
 ## Erste mutierende Operationen
 
-Dieser Meilenstein nimmt CSV-Dateien als Grundlage für das Anlegen neuer Tabellen. Dadurch entfällt der unmittelbare Bedarf nach einem möglicherweise komplizierten Schema-Editor für neue Tabellen.
+Dieser Meilenstein nimmt CSV-Dateien als Grundlage für das Anlegen neuer Tabellen. Dadurch entfällt der unmittelbare Bedarf nach einem möglicherweise komplizierten Schema-Editor für neue Tabellen. 
 
 * Server: Löschen von existierenden Tabellen
-* Server: Anlegen neuer Tabellen auf Basis einer CSV Datei
+* Server: Anlegen neuer Tabellen auf Basis einer CSV Datei, mit Testfällen
 * Client: Entsprechende Funktionalität über die Oberfläche verfügbar machen
     * Vorschau des Schemas, das sich aus der CSV-Datei ergibt
     * Optional: Auswahl von PK-Spalten
@@ -23,10 +28,6 @@ Dieser Meilenstein nimmt CSV-Dateien als Grundlage für das Anlegen neuer Tabell
 
 Optional denkbar wäre in diesem Schritt die Unterstützung bei der Angabe von Spalten die sich als Schlüssel eignen. Für eine erste Version kann jedoch einfach stumpf die erste Spalte als Schlüssel angenommen werden.
 
-## Anzeige von Daten
-
-* Server: Endpunkt zum anzeigen aller Datensätze einer Tabelle, ggfs. mit Offset und Limit
-* Client: Anzeige der Datensätze einer Tabelle
 
 ## Komplexe Darstellung
 
@@ -39,7 +40,7 @@ Dieser Schritt ist technisch herausfordernd: Es stellt sich die Frage mit welche
 
 Vorab: Untersuchen welche Refaktoring-Operationen von SQLite überhaupt unterstützt werden. Möglicherweise müssen alle diese Operationen durch Löschen und Neu-Anlegen der Tabellen implementiert werden?
 
-* Server: Refactoring existierender Tabellen
+* Server: Refactoring existierender Tabellen und Testfälle dazu
     * Spalten umbenennen
     * Spalten hinzufügen
     * Spalten löschen
