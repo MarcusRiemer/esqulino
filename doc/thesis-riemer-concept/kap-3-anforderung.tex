@@ -146,10 +146,17 @@ Um also zumindest einen grundsätzlichen Schutz zu ermöglichen, sollten für ei
     Gäste können keinerlei Schreibzugriffe vornehmen, weder über die Entwicklungsumgebung, noch über die Oberfläche für Endbenutzer.
 \end{description}
 
+\subsubsection{Unterschiedliche Versionen eines Editors}
+\label{sec:editor-different-versions}
+
+Wenn ein Anwender der Entwicklungsumgebung an die Grenzen des unterstützenden Editors stößt, sollte er die Möglichkeit haben einmalig und auch für nur eine konkrete Abfrage oder Seite eine Umwandlung in eine textbasierte Darstellung vornehmen zu können. Der umgekehrte Weg, also zum Beispiel der Import von beliebigen \texttt{SQL}-Abfragen in den grafischen Editor, ist dann jedoch nicht mehr möglich. Die Implementierung eines Parsers für die Umwandlung der textuellen Repräsentation in die interne Darstellung von \idename{} würde im Verhältnis zum marginalen Nutzen einen unverhältnismäßigen Aufwand bedeuten.
+
+Diese unterschiedlich fortgeschrittene Sichtweisen und Bearbeitungsmöglichkeiten auf jede Ressource erlauben es, den Zeitpunkt an dem ein Entwickler der Entwicklungsumgebung endgültig entwachsen ist recht weit hinauszuzögern. Dieser Umstand wird vor allem durch Entscheidung zugunsten von Standardtechnologien anstatt eigens entwickelten Sprachen möglich gemacht. Für Scratch existiert schlichtweg keine rein textuelle Darstellung mit möglicherweise erweitertem Funktionsumfang. Durch den \texttt{SQL}- bzw. \texttt{HTML}-Unterbau von \idename{} stehen fortgeschrittenen Anwendern hingegen sehr mächtige Standardtechnologien bereit.
+
 \subsection{Konzept für sinvolle Teilmengen von SQL}
 \label{sec:sql-subset}
 
-\warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in der Entwicklungsumbegung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von \texttt{SQL}. Um zu sehen, welcher Funktionsumfang im Prototypen tatsächlich verfügbar ist, lohnt sich ein Blick in Kapitel \ref{sec:example-projects}:~\nameref{sec:example-projects}.}
+\warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in der Entwicklungsumbegung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von \texttt{SQL}. Um zu sehen, welcher Funktionsumfang im Prototypen tatsächlich verfügbar ist, lohnt sich ein Blick in \ref{sec:conclusion}~\nameref{sec:conclusion} und den Anhang \ref{sec:project-examples}~\nameref{sec:project-examples}.}
 
 Die uneingeschränkte Umsetzung des \texttt{SQL}-Standards würden sowohl für den Verfasser dieser Arbeit als auch für die Anwender der Entwicklungsumgebung viele unpraktische Probleme aufwerfen. Der \texttt{SQL}-Sprachumfang ist mittlerweile gewaltig und die Anzahl der verschiedenen Dialekte unüberschaubar groß. Varianten wie Transact-\texttt{SQL} bieten die Möglichkeit zur Laufzeit mit Schleifen, Fallunterscheidungen und Variablen zu arbeiten und erfüllen damit alle Kriterien für Turing-Vollständigkeit. Darüber hinaus werden ``echte'' Entwicklungsumgebungen für \texttt{SQL} von großen Entwicklerteams konzipiert und programmiert, der Autor dieser Arbeit bildet hingegen ein (immerhin motiviertes) Ein-Mann-Team.
 
@@ -345,9 +352,7 @@ Danach können die Einschränkungen noch für einzelne Abfragen verfeinert werde
 \subsection{Drag \& Drop Editor für SQL}
 \label{sec:design-sql-editor}
 
-Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren können. Es kommen also distinkte Bedienelemente für die verschiedenen Komponenten einer \texttt{SQL} Abfrage zum Einsatz, kein reiner Texteditor. Der komponentenorientierte Editor soll dabei nicht die Konzeption von beliebigen Abfragen ermöglichen, wohl aber die in Kapitel \ref{sec:example-queries} \nameref{sec:example-queries} beschriebenen exemplarischen Anforderungen unterstützen.
-
-Wenn ein Anwender der Entwicklungsumgebung an die Grenzen des unterstützenden Editors stößt, sollte er die Möglichkeit haben einmalig und für diese konkrete Abfrage eine Umwandlung in eine textbasierte Darstellung vornehmen zu können. Der umgekehrte Weg, also der Import von beliebigen \texttt{SQL}-Abfragen in den grafischen Editor, ist dann jedoch nicht mehr möglich. Die Implementierung eines Parsers für die Umwandlung der textuellen \texttt{SQL}-Repräsentation in die interne Darstellung von \idename{} würde im Verhältnis zum marginalen Nutzen einen unverhältnismäßigen Aufwand bedeuten.
+Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren können. Es kommen also distinkte Bedienelemente für die verschiedenen Komponenten einer \texttt{SQL} Abfrage zum Einsatz, kein reiner Texteditor. Der komponentenorientierte Editor soll dabei nicht die Konzeption von beliebigen Abfragen ermöglichen, wohl aber zumindest den Anforderungen aus Schulbüchern wie \cite{grimm_informatik_2015, hubwieser_inf_2} gerecht werden.
 
 Grundsätzlich bedürfen einige Komponenten der Abfrage besonderer Aufmerksamkeit, weil sie große Auswirkungen auf das Verhalten der anderer Komponenten haben. Vorrangig ist hier die \texttt{GROUP-BY} Komponente zu nennen. Sobald die Query mit einer \texttt{GROUP BY} Komponente ausgestattet wird ist der Zugriff auf die konkreten Spalten einzelner Zeilen z.B. im allgemeinen Fall nicht mehr möglich. Das hinzufügen (oder entfernen) dieser Komponente hat also große Auswirkungen auf die Korrektheit der gesamten Abfrage. Ähnliches gilt für den Umgang mit \texttt{JOIN}s: Aus diesen leitet sich ab welche Daten von der Entwicklungsumgebung überhaupt angeboten werden sollten.
 
@@ -811,7 +816,7 @@ Diese Annotation muss jedoch vom Entwickler manuell im \texttt{SQL}-Editor geset
 
 Diese gesonderte Behandlung von bestimmten Tabellendimensionen ist übrigens keine Erfindung dieser Thesis: Auch \texttt{SQL} selbst hebt einige Abfragen mit speziellen Strukturen hervor. Tabellen mit nur einer Zelle können als skalarer Wert eingesetzt werden, bei nur einer Spalte können Abfragen z.B. für \texttt{IN}-Ausdrücke verwendet werden.
 
-Der Umgang mit den Zeilen einer Abfrage ist im Rahmen der Oberfläche ein bisschen komplizierter, da hier technisch gesehen häufig zwei verschiedene Elemente zum Einsatz kommen müssen: Ein Containerelement und ein sich wiederholendes Element. Auch an dieser Stelle tätigen wir daher mit Listing \ref{lst:sql:people-days} und \ref{lst:html:people-days} einen kurzen Vorgriff, um den grundsätzlichen Unterbau zu demonstrieren.
+Der Umgang mit den Zeilen einer Abfrage ist im Rahmen der Oberfläche ein bisschen komplizierter, da hier technisch gesehen häufig zwei verschiedene Elemente zum Einsatz kommen müssen: Ein Containerelement und ein sich wiederholendes Element. Listing \ref{lst:sql:people-days} und \ref{lst:html:people-days} demonstrieren kurz die zu generierende Liquid-Quelle, von der im Drag \& Drop Editor abstrahiert werden müsste.
 
 \begin{lstlisting}[language=SQL, caption=Abfrage mit beliebig vielen Ergebniszeilen,label=lst:sql:people-days]
 SELECT name, geburtstag
