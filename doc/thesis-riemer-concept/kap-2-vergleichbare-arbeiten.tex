@@ -83,8 +83,7 @@ Auch wenn es durch den Wiki-Unterbau von SqlZoo den Lernenden theoretisch mögli
 \label{sec:software-jekyll}
 Bei Jekyll\footnote{Dokumentation verfügbar unter \url{http://jekyllrb.com/}} handelt es sich um ein quelloffenes Framework zur Erstellung statischer Webseiten. Der Begriff "`statisch"' bezeichnet in diesem Kontext das Ergebnis der Kompilierung: HTML Seiten, die von jedem Webserver unverändert ausgegeben werden können. Technisch gesehen setzt Jekyll auf die HTML-Templatingsprache Liquid auf und stellt während der Generierung einer Seite eine Vielzahl von hilfreichen Metadaten bereit. Diese Metadaten werden entweder implizit aus Dateinamen gewonnen oder in YAML-Notation im Kopf einer Datei definiert.
 
-In der Standardkonfiguration eignet sich Jekyll vor allem um ohne großen Aufwand eine Blog-artige Seite zu betreiben. Alle Dateien die sich in einem speziellen Ordner \lstinline{_posts} befinden werden als Datenquelle für Blogeinträge behandelt. Ein solcher Eintrag könnte dabei aussehen wie in Listing~\ref{lst:jekyll-post}, typischerweise würden natürlich mehrere solcher Dateien für Beiträge existieren. Bei dem Bereich zwischen den \lstinline{---} handelt es sich um das so genannte "`YAML-Frontmatter"'. Diese Metadaten stehen dem Entwickler im Kontext dieser Seite zur Verfügung. Um diese in die Seite einzubetten werden sie als Liquid-Ausdruck in geschweifte Klammer
-n geschrieben.
+In der Standardkonfiguration eignet sich Jekyll vor allem um ohne großen Aufwand eine Blog-artige Seite zu betreiben. Alle Dateien die sich in einem speziellen Ordner \lstinline{_posts} befinden werden als Datenquelle für Blogeinträge behandelt. Ein solcher Eintrag könnte dabei aussehen wie in Listing~\ref{lst:jekyll-post}, typischerweise würden natürlich mehrere solcher Dateien für Beiträge existieren. Bei dem Bereich zwischen den \lstinline{---} handelt es sich um das so genannte "`YAML-Frontmatter"'. Diese Metadaten stehen dem Entwickler im Kontext dieser Seite zur Verfügung. Um diese in die Seite einzubetten werden sie als Liquid-Ausdruck in geschweifte Klammern geschrieben.
 
 Einige der Metadaten werden von Jekyll ausgewertet, zum Beispiel \lstinline{layout}. Dabei handelt es sich um das Liquid-Template, welches einen solchen Beitrag darstellen soll. Wie ein solches Template aussieht zeigt Listing~\ref{lst:jekyll-post-template}. Auch dieses Layout wird seinerseits wieder in ein anderes Layout eingebettet, der Ausdruck \lstinline|{{ content }}| bezeichnet dabei den Ort an dem diese Einbettung stattfindet. Listing~\ref{lst:jekyll-master-template} zeigt wie Kette von Einbettungen in einer letzten Vorlage endet. Ziel dieser Einbettung ist die Vermeidung von Redundanzen: Um zum Beispiel auf allen Seiten eine neue CSS-Datei zu referenzieren muss in diesem Beispiel nur Listing~\ref{lst:jekyll-master-template} angepasst werden.
 
@@ -174,13 +173,13 @@ Ein Lightswitch-Projekt gliedert sich in zwei wesentliche Unterstrukturen: Daten
 
 Bei diesem Buch von Herbert Klaeren und Michael Spaerber wird ein sehr von Datenstrukturen geprägter Ansatz zur Einführung in die Programmierung gewählt. Die Autoren beschreiben die gängigen Programmiersprachen aufgrund ihrer umfangreichen Syntax als ungeeignet für die Einführung in die Programmierung \cite[2]{macht-der-abstraktion}. 
 
-Folglich unterrichtet das Buch auch nicht Java, C\#, Python, Ruby oder Pascal. Stattdessen kommt der Scheme-Dialekt ``Racket'' zum Einsatz. Bei Scheme handelt es sich wiederrum um einen der wesentlichen Varianten von Lisp, einer Programmiersprache deren Syntax fast exklusiv auf der Verwendung von runden Klammern zur Beschreibung von Tupeln aufbaut. Durch diese sehr reduzierte Syntax versprechen sich die Autoren die Vermeidung von typischen syntaktischen Stolperfallen, mit denen Lernende zu Beginn oft Schwierigkeiten haben.
+Folglich unterrichtet das Buch auch nicht Java, C\#, Python, Ruby oder Pascal. Stattdessen kommt der Scheme-Dialekt "`Racket"' zum Einsatz. Bei Scheme handelt es sich wiederrum um einen der wesentlichen Varianten von Lisp, einer Programmiersprache deren Syntax fast exklusiv auf der Verwendung von runden Klammern zur Beschreibung von Tupeln aufbaut. Durch diese sehr reduzierte Syntax versprechen sich die Autoren die Vermeidung von typischen syntaktischen Stolperfallen, mit denen Lernende zu Beginn oft Schwierigkeiten haben.
 
-Die Anpassung an eine für Lernende gut geeignete Umgebung geht allerdings über diese vergleichsweise simple Syntax hinaus: Der Sprachumfang von Racket selbst wird im Laufe des Buches mehrfach erweitert. Abbildung~\ref{fig:drracket-language-levels} zeigt den Auswahldialog der ``Dr Racket''-Umgebung, in welchem auch die zum Buch passenden Sprachumfänge verfügbar sind.
+Die Anpassung an eine für Lernende gut geeignete Umgebung geht allerdings über diese vergleichsweise simple Syntax hinaus: Der Sprachumfang von Racket selbst wird im Laufe des Buches mehrfach erweitert. Abbildung~\ref{fig:drracket-language-levels} zeigt den Auswahldialog der "`Dr Racket"'-Umgebung, in welchem auch die zum Buch passenden Sprachumfänge verfügbar sind.
 
 \begin{figure}[h]
-  \centering \includegraphics[width=\textwidth]{images/related-work-drracket-language-levels.pdf}
-  \caption{Verfügbare Sprachniveaus in ``Dr Racket''}
+  \centering \frame{\includegraphics[width=\textwidth]{images/related-work-drracket-language-levels.pdf}}
+  \caption{Verfügbare Sprachniveaus in "`Dr Racket"'}
   \label{fig:drracket-language-levels}
 \end{figure}
 

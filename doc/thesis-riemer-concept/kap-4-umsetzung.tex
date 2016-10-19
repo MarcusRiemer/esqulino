@@ -24,7 +24,7 @@ Der softwaretechnische Unterbau der Entwicklungsumgebung setzt auf aktuelle Webt
 
 Um die Schnittstelle zwischen diesen beiden Komponenten so transparent wie möglich zu halten, werden diese gemäß der OpenAPI Spezifikation \cite{open-api} dokumentiert. Dieses offene Format ermöglicht es auf eine hilfreiche Auswahl an standarisierten Tools aufzubauen. Zum Beispiel können aus der Spezifikation interaktive Testumgebungen für die Server-Schnittstellen erzeugt werden, Abbildung \ref{fig:openapi-query-example} zeigt ein Beispiel dafür\todo{Screenshot zeigt alten Namen}.
 
-Als primäres Interface für die Kompilierung wird ein \lstinline{Makefile} genutzt. Dieses prüft ob auf dem aktuellen System alle nötigen Abhängigkeiten verfügbar sind und stellt sicher, dass Übersetzungsschritte nur ausgeführt werden, wenn sie tatsächlich notwendig sind. Von den technischen Details der unterschiedlichen Programmierumgebungen aufgrund der unterschiedlichen Programmiersprachen kann so außerdem elegant abstrahiert werden: Ein Programmierer kann sich die exakten Aufrufe der unterschiedlichen Paketmanager zwar anschauen, wird im Normallfall aber nur \lstinline{make install-deps} aufrufen.
+Als primäres Interface für die Kompilierung wird ein \lstinline{Makefile} genutzt. Dieses prüft ob auf dem aktuellen System alle nötigen Abhängigkeiten verfügbar sind und stellt sicher, dass Übersetzungsschritte nur ausgeführt werden, wenn sie tatsächlich notwendig sind. Von den technischen Details der unterschiedlichen Programmierumgebungen aufgrund der unterschiedlichen Programmiersprachen kann so außerdem elegant abstrahiert werden: Ein Programmierer kann sich die exakten Aufrufe der unterschiedlichen Paketmanager zwar anschauen, wird im Normallfall aber nur \texttt{make install-deps} aufrufen.
 
 \subsection{Meilensteine}
 
@@ -34,7 +34,7 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
 
 \begin{description}
 \item[Bearbeitung von Projektdaten] \hfill \\
-  Schwerpunkt dieses Meileinsteins ist die Implementierung grundlegender gemeinsamer Schnittstellen. Diese müssen auf vom Server als HTTP-Endpunkte angeboten und vom Client angesprochen werden können.
+  Schwerpunkt dieses Meileinsteins ist die Implementierung grundlegender gemeinsamer Schnittstellen. Diese müssen auf vom Server als \texttt{HTTP}-Endpunkte angeboten und vom Client angesprochen werden können.
   \begin{itemize}[noitemsep]
   \item Persistierung von Projekten mit Name und Beschreibung
   \item Editor für Projekteigenschaften
@@ -100,7 +100,7 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
 \item [Qualitätssicherung] \hfill \\
   Zu diesem Zeitpunkt sollte ein voll funktionsfähiger Prototyp existieren, der jedoch noch einer rigorosen Qualitätskontrolle unterzogen muss. Bisher wude der Prototyp ausschließlich durch Entwickler bedient, es stellt sich insbesondere die Frage wie \idename{} auf Bedienfehler oder Inkonsistenzen reagiert.
   \begin{itemize}[noitemsep]
-  \item Was passiert mit bestehenden Abfragen, wenn sich das Schema radikal verändert?
+  \item Was passiert mit bestehenden Inhalten, wenn sich das Schema deutlich verändert?
   \item Wie sollten Seiten für Endanwender gerendert werden, wenn diese fehlerhaft sind?
   \end{itemize}
 \end{description}
