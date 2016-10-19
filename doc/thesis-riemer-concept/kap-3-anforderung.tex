@@ -758,7 +758,7 @@ Abbildung \ref{fig:grid-example} zeigt das identische Layout aus Zeilen und Spal
 
 Die dritte Zeile enthält drei Spalten (Navigation, Inhalt und eine Leiste für Module), wobei diese letzte Modulspalte wiederum mehrere Zeilen enthält. In der mobilen Ansicht wird die Navigationsleiste möglicherweise dynamisch verborgen und kann mit dem Dreieck im Header angezeigt werden. Die Module wandern in dieser Ansicht unter den Inhalt.
 
-\subsubsection{Bedienelemente}
+\subsubsection{\texttt{HTML}-Bedienelemente}
 
 Grundsätzlich lassen sich alle Bedienelemente anhand der Struktur von Ein- und Ausgaben unterscheiden (Abbildung \ref{fig:ui-element-concept}). Die Unterscheidung, ob eine Ein- bzw. Ausgabe exakt einen Wert oder alternativ mehrere (oder keinen) Wert erwartet bzw. liefert ist für die Oberfläche von zentraler Bedeutung. Die Kapitel \ref{sec:design-ui-bind-output} \nameref{sec:design-ui-bind-output} und \ref{sec:design-ui-bind-input} \nameref{sec:design-ui-bind-input} erläutern diese Unterscheidung noch einmal ausführlich.
 
@@ -781,7 +781,47 @@ Zwar sollen im Regelfall keine komplett statischen Seiten angezeigt werden, trot
   Zwar technisch betrachtet ein eher simples Unterfangen, für Schüler erfahrungsgemäß aber motivierend, ist die Einbindung von Bildern. Diese entsprechen einem \texttt{HTML} \texttt{<img>}-Element, für welches das \texttt{src}-Attribut gesetzt werden muss.
 \end{description}
 
-Spätestens durch die Aufnahme von Bildern ist auch für statische Webseiten eindeutig, dass es möglich sein muss diese Bedienelemente über die Angabe von Parametern zu beinflussen. In den meisten Fällen werden diese Parameter zur Laufzeit durch die Ausführung einer Abfrage mit konkreten Werten bestückt, die Angabe von konstanten Werten ist aber ebenfalls möglich.
+\subsubsection{Komplexe Bedienelemente}
+\label{sec:complex-ui-elements}
+
+Viele im Desktopbereiche "`typische"' Bedienelemente haben in reinem \texttt{HTML} keine Entsprechung. So gibt es zum Beispiel jenseits der \texttt{alert()} und \texttt{input()} Funktionen keine standarisierte Möglichkeit modale Dialoge anzuzeigen. Stattdessen existieren je nach Einsatzzweck eine Vielzahl von Bibliotheken. So genannte "`Lightboxen"' kommen zum Einsatz um Bilder nach einem Klick großformatig anzuzeigen, ohne dafür die aktuelle Seite zu verlassen. Und so ziemlich jedes größere \texttt{HTML}-Framework bietet Möglichkeiten, faktisch beliebige \texttt{HTML}-Strukturen im Vordergrund anzuzeigen.
+
+Trotzdem haben sich viele Endanwender an komplexe Webanwendungen gewöhnt, deren Umsetzung um die Jahrtausendwende im Browser vollkommen undenkbar gewesen wäre. Diese Erwartungshaltung bringt \idename{} in ein Dilemma: Gibt man dieser Erwartungshaltung nach und bietet zahlreiche "`künstliche"' Bedienelemente für Spezialfunktionen an, hat das mit der Vermittlung von \texttt{HTML}-Kenntnissen nur noch am Rande etwas zu tun. Andererseits sollen die Lernenden mit "`praktisch vorzeigbaren Ergebnissen"' motiviert werden.
+
+Dieses Spannungsfeld lässt sich gut anhand eines für \idename{} eigentlich zentralen Bedienelements diskutieren: Der Tabelle. Aus didaktischer Sicht scheint es sinnvoll, den Lernenden dieses Element möglichst frühzeitig vorzustellen. Immerhin wird bei den Abfragen mit tabellarischen Daten gearbeitet, da liegt es nahe diese Daten zunächst auf genau diese Art und Weise zu präsentieren.
+
+Allerdings handelt es sich bei Tabellen um eine der deutlich komplizierteren \texttt{HTML}-Konstrukte. Es besteht typischerweise aus zwei unmittelbaren Kindelementen, nämlich \texttt{<thead>} für die Spaltenüberschriften und \texttt{<tbody>} für die eigentlichen Daten. Für neue Zeilen kommen dann die "`Table Row"'-Elemente \texttt{<tr>} zum Einsatz, Zellen werden in den Überschriften dann in \texttt{<th>}-Knoten ("`Table Head"') und im Rumpf mit \texttt{<td>}-Knoten ("`Table Data"') notiert. Und natürlich muss die Anzahl dieser durch Zellenknoten definierten Spalten über alle \texttt{<tr>}-Elemente hinweg identisch sein. Erfahrungsgemäß bereitet es Anfänger auch immer wieder Probleme, dass die in der Tabelle nebeneinander angezeigten Zellen im \texttt{HTML}-Quelltext typischerweise untereinander notiert werden. Und damit nicht genug: Um wirklich alle Zeilen einer Abfrage anzuzeigen, ist die Verwendung von geschachtelten für Zeilen und Spalten Schleifen notwendig. Listing~\ref{lst:html-table-pure} zeigt exemplarisch, wie der nötige Quelltext ausschauen könnte.
+
+\begin{lstlisting}[language=html,float=h,caption={Code für eine \texttt{HTML}-Tabelle mit Datenanbindung}, label={lst:html-table-pure}]
+<table>
+  <thead>
+    <tr>
+      {% for name in table.columnNames %}
+        <th>{{ name }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in table.rows %}
+      <tr>
+        {% for name in columnNames %}
+          <td>{{ row[name] }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+\end{lstlisting}
+
+Mit Liquid bietet sich allerdings auch die Möglichkeit, diesen Code weitestgehend vor den Lernenden zu verstecken. Listing~\ref{lst:html-table-liquid} illustriert wie mit der Verwendung des \texttt{include}-Tags die Einbindung der Tabelle auf die Angabe der darzustellenden Zeilen und Spalten reduziert wird. Dabei handelt es sich natürlich nicht um die exakte Darstellung, wie sie innerhalb eines Drag \& Drop Editors dargestellt werden sollte.
+
+\begin{lstlisting}[language=html,float=h,caption={Code für eine Liquid-Tabelle mit Datenanbindung}, label={lst:html-table-liquid}]
+{% include "query_table" 
+     table: meine_tabelle,
+     columns: ["spalte_a","spalte_b"] %}
+\end{lstlisting}
+
+\todo[inline]{HTML-Webcomponents gehen auch in diese Richtung, lösen aber nicht die Datenanbindung}
 
 \subsubsection{Bindung von Abfragen an die Oberfläche}
 \label{sec:design-ui-bind-output}
@@ -875,7 +915,12 @@ Es ist folglich schon aufgrund der Vorgaben des \texttt{HTML}-Standards sinnvoll
 
 \subsection{Drag \& Drop Editor für Oberflächen}
 \label{sec:drag-drop-ui-editor}
-Die Suche nach dem richtigen Abstraktionsniveau für den den Seiten-Editor wird sich nicht mit einer definitiven Antwort abschließen lassen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen.
+
+Für \idename{} stellt sich bei der Gestaltung des Editors für Oberflächen also eine zentrale Frage: Welches Abstraktionsniveau passt zu der avisierten Zielgruppe? Und wie soll zwischen den Zielen "`Motivation durch praktisch vorzeigbare Ergebnisse"' und der Tatsache, dass \idename{} sich als Lehranwendung für HTML versteht, umgegangen werden? Das Abstraktionsniveau kann dabei im wesentlichen auf zwei voneinander weitestgehend unabhängigen Achsen variiert werden: Die erste Achse "`Vorschau"' erstreckt sich sinngemäß von "`Texteditor"' zu "`WYSIWYG-Editor"'. Je näher der Editor an der textuellen Darstellung ist, desto mehr müssen die Schüler gedanklich ergänzen. Die andere Achse ist die Komplexität der zur Verfügung gestellten Bedienelemente, sie geht von "`Reines \texttt{HTML}"' bis hin zu "`Komplexe Bedienelemente"' und wurde schon in Kapitel \ref{sec:complex-ui-elements}~\nameref{sec:complex-ui-elements} diskutiert.
+
+Diese Suche nach dem richtigen Abstraktionsniveau für den den Seiten-Editor wird sich nicht mit einer definitiven Antwort abschließen lassen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen.
+
+\subsubsection{Wieviel Vorschau ist notwendig?}
 
 Programmiersprachen wie Delphi oder Visual Basic verdanken einen Großteil ihrer initialen Popularität auch ihren Entwicklungsumgebungen mit integrierten WYSIWYG-Editoren. Diese ermöglichten es schon zur Entwicklungszeit eine sehr gute Vorschau auf das endgültige Aussehen. Der zeitaufwändige Kreislauf aus "`Wert im Quelltext verändern"' $\rightarrow$  kompilieren $\rightarrow$ ausführen wird umgangen. Dieser Ansatz hat aber auch Grenzen: Ohne Kenntniss der genauen Datenbestände bleibt die Vorschau oftmals unvollständig. Und insbesondere bei sehr dynamische Oberflächen mit vielen optionalen Bestandteilen, welche dann häufig zur Laufzeit ein- oder ausgeblendet werden, im Editor aber stehts sichtbar sind, gleicht die Vorschau innerhalb des WYSIWYG-Editors der Endbenutzeransicht dann doch nur noch sehr beschränkt.
 
@@ -885,18 +930,20 @@ Auch zur Pflege und Generierung von Webseiten existieren und existierten eine Vi
 
 Ein allgemein "`bester"' Ansatz hat sich bis heute also nicht herausgebildet. Dennoch können die gängigen Ansätze zur Bearbeitung von Oberflächen recht gut anhand eines einzigen Merkmals kategorisiert werden: Wie weit ist die im Editor zu sehende Darstellung von der Darstellung im Browser des Endanwenders entfernt? Diese Frage ist natürlich sehr eng verknüpft mit dem fachlichen Hintergrund der Zielgruppe. Ein als "`Webseitenbaukasten für Jedermann"' beworbenes Produkt wird um eine möglichst originalgetreue Darstellung im Editor bemüht sein, fortgeschrittene Entwickler nutzen dann lieber einen Texteditor mit speziellen Hilfsfunktionen wie Syntaxvervollständigung.
 
-Für \idename{} stellt sich bei der Gestaltung des Editors für Oberflächen also eine zentrale Frage: Welches Abstraktionsniveau kann der \idename{}-Zielgruppe zugemutet werden? Und wie soll zwischen den Zielen "`Motivation durch praktisch vorzeigbare Ergebnisse"' und der Tatsache, dass \idename{} sich als Lehranwendung für HTML versteht, umgegangen werden?
-
 Bei WYSIWYG-Webseiten-Editoren handelt es sich im Normalfall um sehr spezielle Anwendungen, mit denen man allerdings sehr schnell Ergebnisse erzielen kann. Hat man eine von Ihnen verstanden, kann der Umgang mit einem konkurierenden Produkt immer noch in vielen Belangen unterschiedlich ausfallen. \texttt{HTML}-Code schaut hingegen in allen Editoren gleich aus und leidet daher weniger unter einem "`Lock-in-Effekt"'.
 
-Für \idename{} werden daher die folgenden möglichen Ansätze in unterschiedlicher Tiefe diskutiert. Dabei ist Drag \& Drop als vornehmliches Bedienparadigma gesetzt, sofern die Beschreibung dies nicht explizit abspricht.
+\subsubsection{Mögliche Ansätze}
+
+Für \idename{} werden daher die folgenden möglichen Ansätze zunächst auf dem beschriebenen Koordinatensystem eingeordnet und dann diskutiert. Dabei ist Drag \& Drop als vornehmliches Bedienparadigma gesetzt, sofern die Beschreibung dies nicht explizit abspricht.
 
 \begin{description}
 \item[Vordefinierte Seiten für standarisierte Einsatzzwecke] \hfill \\
-  Gedacht für Entwickler, die mit \idename{} einfach nur eine generische Oberfläche für einen Datenbestand erzeugen möchten.
+  Gedacht für Entwickler, die mit \idename{} einfach nur eine generische Oberfläche für einen Datenbestand erzeugen möchten. Layout und verfügbare Elemente sind dabei vordefiniert, es können lediglich an vorgesehenen Stellen Abfragen eingebunden oder konstante Texte hinterlegt werden.
+
+  Die wesentliche Herausforderung bei diesem Ansatz ist die Bereitstellung von Vorlagen, welche weder zuviele noch zu wenige an Konfigurationsmöglichkeiten bieten. Ist die Vorlage zu flexibel besteht die Gefahr, dass sie für den Entwickler undurchschaubar wird. Auf der anderen Seite sind zu eingeschränkte Vorlagen aber Gift für kreative Experimente: Wenn die Antwort auf fast jede Idee der Lernenden "`das geht damit nicht"' wäre, kommt vermutlich schnell Frust auf.
   
 \item[Vollständig WYSIWYG] \hfill \\
-  Sollte dieser Ansatz zum Einsatz kommen, wird es dazu definitiv Alternativen geben müssen.
+  
   
 \item[WYSIWYG Layout, Code-Blöcke innerhalb der Zellen] \hfill \\
   Dieser Ansatz kommt dem Entwickler ein Stück weit entgegen, wenn es um die Gestaltung des Layouts geht.
