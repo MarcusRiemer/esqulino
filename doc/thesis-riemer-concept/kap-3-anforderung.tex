@@ -25,7 +25,7 @@ Da der Zweck dieser Arbeit die Konzeption und Umsetzung einer Software ist, dere
 \subsection{Zielgruppe}
 \label{sec:target-audience}
 
-Mit \idename{} sollen Schülerinnen und Schüler ab der Mittelstufe angesprochen werden. Die im folgenden genannten Aspekte bilden ein sehr oberflächliches Profil hilfreicher Kenntnisse, an denen man sich als Lehrkraft für die Fragestellung "`Sind meine Schüler bereit für \idename{}?"' orientieren könnte. Dieses Profil ist dabei allerdings nicht als striktes Anforderungsprofil zu verstehen: Grundsätzlich lassen sich diese Kenntnisse auch am Beispiel von \idename{} vermitteln. Kenntnisse über Datenbanken oder Webentwicklung sind hingegen nicht Bestandteil dieses Profils, schließlich versteht sich \idename{} als eine Lernumgebung für genau diese Technologien.
+Mit \idename{} sollen Schülerinnen und Schüler ab der Mittelstufe angesprochen werden. Die im folgenden genannten Aspekte bilden ein sehr oberflächliches Profil hilfreicher Vorkenntnisse, an denen man sich als Lehrkraft für die Fragestellung "`Sind meine Schüler bereit für \idename{}?"' orientieren könnte. Dieses Profil ist dabei allerdings nicht als striktes Anforderungsprofil zu verstehen: Grundsätzlich lassen sich diese Kenntnisse auch am Beispiel von \idename{} vermitteln. Erfahrungen mit Datenbanken oder Webentwicklung sind hingegen nicht Bestandteil dieses Profils, schließlich versteht sich \idename{} als eine Lernumgebung für genau diese Technologien.
 
 \begin{description}
 \item[Grundlegende PC-Anwenderkenntnisse] \hfill\\
@@ -51,7 +51,7 @@ Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit be
 \item[Schrittweise komplexere Benutzeroberfläche der Entwicklungsumgebung] \hfill \\
   Konventionelle Entwicklungsumgebungen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. Gerade wenn man aber dabei ist etwas Neues zu lernen, kann es sinnvoll sein, die Menge der möglichen Optionen zu beschränken. In diesem Sinne sollte die Lehrkraft die Möglichkeit haben, den Funktionsumfang der Entwicklungsumgebung für Schüler gezielt zu reduzieren. Es sollten sich also Funktionen der Entwicklungsumgebung ausblenden lassen, wenn dies aus didaktischen Gründen sinnvoll erscheint. Zum Beispiel könnten bestimmte Bedienelemente oder Bestandteile von \texttt{SQL} ausgeblendet werden, wenn diese noch nicht behandelt worden sind.
 \item[Einfache Inbetriebnahme] \hfill \\
-  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von nicht aufgelösten Abhängigkeiten, fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS \cite{statista-os-verbreitung}, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, ist eine möglichst einfache Inbetriebnahme von entsprechender Bedeutung. Die Informatiklehrkräfte stehen bei dem Betrieb der jeweiligen Programme in der Schule vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren dieses Szenario zusätzlich. Damit der Lernprozess mit \idename{} nicht schon mit einer fehlgeschlagenen Installation endet, soll der initiale Kontakt so wenig Hürden wie möglich aufstellen.
+  Eine initiale Hürde jeder (Lern-)Software ist deren Installation, insbesondere bei Programmen aus dem Datenbankumfeld. Die Inbetriebnahme der für Server konzipierten Programme auf privaten, ``normalen'' Rechnern führt immer wieder zu Problemen aufgrund von unerfüllten Abhängigkeiten, fehlenden Rechten beim Starten von Systemdiensten oder bei Dateizugriffen. Die zunehmende Heterogenität an Betriebssystemen, insbesondere die zunehmende Verwendung MacOS \cite{statista-os-verbreitung}, tut ein Übriges um die Verteilung von Software zu erschweren. Damit der eigentliche Lernprozess nicht schon vor dem Start der Entwicklungsumgebung behindert wird, ist eine möglichst einfache Inbetriebnahme von entsprechender Bedeutung. Die Informatiklehrkräfte stehen bei dem Betrieb der jeweiligen Programme in der Schule vor ähnlichen Problemen wie ihre Schüler, nur dass Sie auf die Konfiguration des Rechnerpools ihrer Schule oftmals nur einen eingeschränkten Einfluss haben. Die im Vergleich zu privaten Rechnern wesentlich restriktiver gehandhabte Rechte eines Schul-PCs verkomplizieren dieses Szenario zusätzlich. Damit der Lernprozess mit \idename{} nicht schon mit einer fehlgeschlagenen Installation endet, soll der initiale Kontakt so wenig Hürden wie möglich aufstellen.
 \item[Fortführung der entwickelten Projekte] \hfill \\
   Lernumgebungen wie Scratch oder der AppInventor sind in sich geschlossene Systeme, deren Arbeitsergebnisse nur schwer in anderen Programmen oder Kontexten von Nutzen sind. Sobald der Lernende dann die Grenzen der verwendeten Lernsoftware erreicht hat, steckt er in einem Dilemma: Es ist für ihn notwendig auf eine andere Software auszuweichen, in diese kann er sein bestehendes Projekt aber nicht einfach mitnehmen. Die Arbeitsergebnisse dieser zu entwickelnden Software sollen daher zumindest einfach einsehbar sein, optimalerweise nach einem Export sogar mit gängigen Entwicklungsumgebungen oder Texteditoren erweiterbar.
 \end{description}
@@ -65,8 +65,8 @@ Umgekehrt ist es auch wichtig, den Umfang des zu entwickelnden Programms auf ein
 \item[Datenmodellierung] \label{scope:no-data-modelling} \hfill \\
   Der Schwerpunkt dieser Arbeit liegt zunächst auf der Vermittlung von Kenntnissen zur Abfrage und Manipulation von Daten in einem bestehenden Schema. Änderungen an diesem Schema sind nicht vorgesehen, demzufolge ist auch der Neuentwurf eines Schemas mit externen Mitteln zu bewerkstelligen.
 \item[Aufwändiges Design von Benutzerschnittstellen] \label{scope:no-design} \hfill \\
-  Auch wenn die Konzeption der Benutzerschnittstelle für die verschiedenen Masken in den eben aufgezählten Prinzipien auftaucht, ist es wichtig den engen Rahmen dieses Aspektes zu verstehen. Es geht um die Schaffung von einfachen, datenzentrierten Eingabemöglichkeiten, nicht um die Umsetzung besonders kreativer Bedienkonzepte. Dementsprechend ist z.B. die Erweiterung der zur Verfügung stehenden Eingabeelemente durch die Lernenden außerhalb des Rahmens dieser Arbeit. Technisch gesehen schließt dieses Kriterium die Unterstützung von CSS oder Javascript innerhalb von \idename{} aus.
-\item["`Echte"' Programmierung mit typischen Programmiersprachen] \label{scope:no-programming} \hfill \\
+  Auch wenn die Konzeption der Benutzerschnittstelle für die verschiedenen Masken in den eben aufgezählten Prinzipien auftaucht, ist es wichtig den engen Rahmen dieses Aspektes zu verstehen. Es geht um die Schaffung von einfachen, datenzentrierten Eingabemöglichkeiten, nicht um die Umsetzung besonders kreativer optischer Feuerwerke. Dementsprechend ist z.B. die Erweiterung der zur Verfügung stehenden Eingabeelemente durch die Lernenden außerhalb des Rahmens dieser Arbeit. Technisch gesehen schließt dieses Kriterium die Unterstützung von CSS oder JavaScript innerhalb von \idename{} im Rahmen dieser Arbeit aus.
+\item[Serverseitige Programmierung mit typischen Programmiersprachen] \label{scope:no-programming} \hfill \\
   Auch wenn \idename{}-Anwendungen grundsätzlich interaktiv sein sollen, ist diese Interaktivität in einem sehr engen Rahmen zu sehen. Für die Darstellung der Oberfläche könnten zwar Kontrollstrukturen wie Schleifen oder Verzweigungen zum Einsatz kommen, diese operieren aber stets auf einem während des Rendervorgangs unveränderlichen Datenbestand. Die einzige Möglichkeit zur Veränderung von Daten zur Laufzeit ist die Verwendung von mutierenden \texttt{SQL}-Anweisungen, klassische Zuweisungen finden nicht statt.
 \end{description}
 
@@ -83,9 +83,9 @@ Die Oberfläche orientiert sich dabei grundsätzlich an der typischen Dreiteilun
   \label{fig:ui-sketch-general}
 \end{figure}
 
-Der größte Bereich steht den jeweiligen Editoren zur Verfügung, deren Gestaltung ist dabei Gegenstand eigener Kapitel (\ref{sec:design-sql-editor}~\nameref{sec:design-sql-editor} \& \ref{sec:design-ui-editor}~\nameref{sec:design-ui-editor}). Die so genannte "`Toolbox"' bietet zu dem aktuell geladenen Editor kontextuell passende Optionen an. Dabei soll es möglich sein, diese Angebote in der Toolbox per Drag \& Drop in dem Editorbereich zu verwenden.
+Der größte Bereich steht den jeweiligen Editoren zur Verfügung, deren Gestaltung ist dabei Gegenstand eigener Kapitel (\ref{sec:design-sql-editor}~\nameref{sec:design-sql-editor} \& \ref{sec:design-ui-editor}~\nameref{sec:design-ui-editor}). Die so genannte "`Toolbox"' bietet zu dem aktuell geladenen Editor kontextuell passende Optionen an. Dabei soll es grundsätzlich möglich sein, die in der Toolbox angebotenen Optionen per Drag \& Drop im Editorbereich zu verwenden.
 
-Darüber hinaus existieren für jeden Editor spezielle Aktionen, welche über einen Knopfdruck oder auch Tastaturkürzel ausgelöst werden können. Diese Aktionen werden oberhalb der Editorfläche in einer typischen "`Toolbar"' angezeigt.
+Darüber hinaus existieren für jeden Editor spezielle Aktionen, welche über einen Knopfdruck oder auch Tastaturkürzel ausgelöst werden können. Diese Aktionen werden oberhalb der Editorfläche in einer typischen "`Toolbar"' angezeigt. Einige Aktionen, zum Beispiel "`Speichern"' mit dem Kürzel \texttt{STRG} + \texttt{S}, stehen dabei in allen editierbaren Kontexten zur Verfügung. Eine Sonderrolle nimmt dabei die Löschfunktion ein: Immer wenn in einem beliebigen Editor eine Drag-Operation beginnt, kann diese auf einem in der Toolbar angezeigten Mülleimer beendet werden.
 
 Grundsätzlich unterschieden werden muss bei der Schülerentwicklungsumgebung, ähnlich wie bei Scratch, zwischen zwei Blickwinkeln auf das jeweilige Projekt: Zunächst wird ein Projekt im Entwicklermodus editiert, in diesem Fall stehen dem Benutzer alle Entwicklungstools zur Verfügung. Wenn es dann später einmal fertig ist und an Endanwender, z.B. Bekannte oder Freunde, weitergegeben wird, erwarte diese natürlich eine normale Benutzeroberfläche.
 
@@ -391,7 +391,7 @@ Letztendlich existiert aber auch noch ein sehr viel profanerer Faktor: Der Autor
   \label{fig:compare-colourful}
 \end{figure}
 
-\subsubsection{Grundsätzlicher Aufbau des Editors}
+\subsubsection{Grundsätzlicher Aufbau}
 
 Es stellt sich zunächst die Frage, ob der Editor, wie Scratch, mit einer Drag \& Drop Seitenleiste ausgestattet werden sollte, oder ob auch ein anderes Bedienkonzept denkbar wäre. Ein grundsätzlicher Nachteil Drag \& Drop Bedienkonzeptes ist der nötige Platz für die Unterbringung aller verwendbaren Komponenten. Spätestens wenn für die Anzeige aller verfügbaren Optionen nicht ausreichend Platz auf dem Bildschirm vorhanden ist, muss sorgfältig geplant werden, wie die entsprechenden Bedienelemente anzuordnen sind.
 
@@ -458,6 +458,12 @@ Neben den bisher ausführlich besprochenen \texttt{SELECT}-Anweisungen müssen s
 
 Die Ausführung dieser Operation sollte daher immer in zwei Schritten erfolgen, die von einer Vorschau auf das Ergebnis begleitet werden. Erst wenn diese Ergebnisvorschau vom Entwickler bestätigt wird, werden die Änderungen tatsächlich übernommen. Für \texttt{DELETE}- und \texttt{INSERT}-Operationen kann diese Vorschau einfach den kompletten neuen bzw. zu löschenden Datensatz anzeigen. Im Falle von \texttt{UPDATE}-Anweisungen sollten alle veränderten Datensätze einander gegenübergestellt werden.
 
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{images/sql-insert-key-value-pairs}
+  \caption{Abfrageeditor: Anderes Erscheinungsbild für Spalte-Wert-Paare, wie sie bei \texttt{INSRT} oder \texttt{UPDATE} Operationen nötig sind}
+  \label{fig:screen-sql-editor-insert-key-value-pairs}
+\end{figure}
+
 Für die Name-Wert-Paare in \texttt{INSERT}- oder \texttt{UDPATE}-Operationen löst sich das Erscheinungsbild des Editors von dem Vorbild der \texttt{SQL}-Syntax (Abbildung  \ref{fig:screen-sql-editor-insert-key-value-pairs}). Zur Erinnerung werden an dieser Stelle noch einmal die SQLite-Syntax für \texttt{UPDATE}- und \texttt{INSERT}-Anweisungen illustriert (Listing \ref{lst:sql-syntax-insert} \& \ref{lst:sql-syntax-update}). Leider haben diese beiden verwandten Anweisungen offensichtlich eine unterschiedliche Syntax für die Notation der Schlüssel-Wert-Paare.\footnote{Dieser Umstand wurde mit SQLite Version 3.15.0 für die \texttt{UPDATE}-Anweisung verbessert. Es ist nun auch möglich auf beiden Seiten der Zuweisung identisch lange Listen von Spalten und Werten anzugeben. Allerdings ist Version 3.15.0 am 14. Oktober 2016 erschienen, etwa eine Woche vor dem Druck dieser Thesis.}. Dieses syntaktische Detail der wird vor dem Entwickler durch die Oberfläche versteckt: Sichtbar ist dort nur die abstrakte Zuweisung von Werten an eine Auswahl von Spalten.
 
 \begin{lstlisting}[language=SQL,float=h!,caption={Syntax einer \texttt{INSERT}-Anweisung}, label={lst:sql-syntax-insert}]
@@ -471,13 +477,7 @@ SET spitzname = :neuer_name, staerke = :neue_staerke
 WHERE gefangen_id = :geaendertes_pkmn;
 \end{lstlisting}
 
-\begin{figure}[h]
-  \includegraphics[width=\textwidth]{images/sql-insert-key-value-pairs}
-  \caption{Abfrageeditor: Anderes Erscheinungsbild für Spalte-Wert-Paare, wie sie bei \texttt{INSRT} oder \texttt{UPDATE} Operationen nötig sind}
-  \label{fig:screen-sql-editor-insert-key-value-pairs}
-\end{figure}
-
-Um zwischen bewusst und versehentlich nicht vom Entwickler gesetzten Werten zu unterscheiden ist in der aktuellen Fassung leider die Nutzung einer Checkbox vorgesehen. Das ist ein Bruch mit dem üblicherweise verwendeten Drag \& Drop Paradigma und sollte in einer künftigen Version durch aus der Seitenleiste ziehbare Spalten abgelöst werden.
+Um zwischen bewusst und versehentlich nicht vom Entwickler gesetzten Werten zu unterscheiden ist in der aktuellen Fassung leider noch die Nutzung einer Checkbox vorgesehen. Das ist ein Bruch mit dem üblicherweise verwendeten Drag \& Drop-Paradigma und sollte in einer künftigen Version durch aus der Seitenleiste ziehbare Spalten abgelöst werden.
 
 \subsection{Konzept für Oberflächen}
 \label{sec:design-ui-concept}
@@ -577,7 +577,7 @@ Da aber dennoch nach Anwendung dieser Kriterien mehrere Kandidaten übrig bliebe
 
 Diesen Kriterien stellen sich die Templatingsprachen Liquid\footnote{\url{http://liquidmarkup.org/}}, Angular 2\footnote{\url{https://angular.io/docs/ts/latest/guide/template-syntax.html}} und Handlebars\footnote{\url{http://handlebarsjs.com/}}. Liquid wurde schon im Rahmen der vergleicharen Arbeiten (\ref{sec:software-jekyll}~\nameref{sec:software-jekyll}) kurz vorgestellt und bot sich dementsprechend als Kandidat an. Da für die Implementierung des \idename{}-Frontend Angular 2 ohnehin zum Einsatz kommt (siehe \ref{sec:implementation-analysis}~\nameref{sec:implementation-analysis}) stellt sich die Frage, ob die Nutzung eines weiteren Frameworks tatsächlich notwendig ist. Möglicherweise könnte durch die Vermeidung einer weiteren Abhängigkeit ja auch Aufwand gespart werden? Handlebars wird unter anderem in den Bibliotheken Meteor und Ember.js verwendet und wurde schlicht aufgrund seiner Popularität ausgewählt.
 
-Um die Komplexität der Technik zu bewerten wird zunächst das Ergebnis des Rendervorgangs betrachtet: Sowohl die Referenzimplementierungen von Handlebars als auch Angular 2 generieren Javascript, welches die sich ergebende HTML-Struktur unmittelbar in den DOM-Baum des Browsers injiziert. Angular 2 geht noch einen Schritt weiter und gibt die neue Struktur nicht ungefiltert an den Browser weiter, sondern erstellt mit Hilfe eines speziellen Baumes zur Isolation von Veränderungen einen Satz an inkrementell nötigen Änderungen. Das Ergebnis eines Rendervorgangs mit Liquid ist hingegen ein einfacher String mit dem gerenderten Template.
+Um die Komplexität der Technik zu bewerten wird zunächst das Ergebnis des Rendervorgangs betrachtet: Sowohl die Referenzimplementierungen von Handlebars als auch Angular 2 generieren JavaScript, welches die sich ergebende HTML-Struktur unmittelbar in den DOM-Baum des Browsers injiziert. Angular 2 geht noch einen Schritt weiter und gibt die neue Struktur nicht ungefiltert an den Browser weiter, sondern erstellt mit Hilfe eines speziellen Baumes zur Isolation von Veränderungen einen Satz an inkrementell nötigen Änderungen. Das Ergebnis eines Rendervorgangs mit Liquid ist hingegen ein einfacher String mit dem gerenderten Template.
 
 Und natürlich spielt für die Technik auch die Parametriesierung eine Rolle: Bei Handlebars und Liquid ist es in der Referenzimplementierung möglich, zum Rendern einfach eine Funktion mit zwei Parametern aufzurufen: Einmal das Template als normale Zeichenkette und dann die Daten als "`normale"' Datenstruktur zu übergeben. Angular 2 stellt wesentlich komplexere Anforderungen, dort muss ein spezielles Datenmodell für die Präsentationsschicht bereitgestellt werden.
 
@@ -657,7 +657,7 @@ Um einen Ausdruck unverändert zu übernehmen, also inklusive aller HTML-Sonderz
 
 \textbf{Angular 2} verzichtet auf nicht-XML-artige Erweiterungen und nutzt dafür eigene Knoten und Attribute. Darüber hinaus muss immer die Richtung der Datenbindung angegeben werden, dafür werden Attribute mit runden oder eckigen Klammern eingeschlossen. Im Beispiellisting \ref{lst:angular2-control-structures} kommen allerdings ausschließlich eckige Klammern zum Einsatz, da nicht auf Ereignisse reagiert werden muss.
 
-Kontrollstrukturen müssen entweder in speziellen \texttt{<template>}-Knoten notiert werden oder mit einem \texttt{*}-Präfix als Attribut notiert werden. In diesem Fall ist die Verwendung der \texttt{<template>}-Schreibweise für die oberste Unterscheidung notwendig, weil für den Blogbeitrag kein "`zusammenfassender"' Elternknoten eingefügt werden soll. In der unteren Unterscheidung kann der optionale Knoten hingegen als ganzes angezeigt oder entfernt werden, daher ist hier die kompaktere \texttt{*}-Notation möglich. Eine Notation für \texttt{else}-Blöcke existiert nicht, komplexere Ausdrücke werden daher typischerweise nicht im Template-Code notiert sondern bereits vorher in den Daten hinterlegt.
+Kontrollstrukturen müssen entweder in speziellen \texttt{<template>}-Knoten notiert werden oder mit einem \texttt{*}-Präfix als Attribut notiert werden. In diesem Fall ist die Verwendung der \texttt{<template>}-Schreibweise für die oberste Unterscheidung notwendig, weil für den Blogbeitrag kein "`zusammenfassender"' Elternknoten eingefügt werden soll. In der unteren Unterscheidung kann der optionale Knoten hingegen als Ganzes angezeigt oder entfernt werden, daher ist hier die kompaktere \texttt{*}-Notation möglich. Eine Notation für \texttt{else}-Blöcke existiert nicht, komplexere Ausdrücke werden daher typischerweise nicht im Template-Code notiert sondern bereits vorher in den Daten hinterlegt und dann in einem zweiten \texttt{ngIf} negiert.
 
 \begin{lstlisting}[float=h,caption={Blogartikel mit Angular 2}, label={lst:angular2-control-structures}]
 <h1>{{ project.name }}</h1>
@@ -675,13 +675,13 @@ Kontrollstrukturen müssen entweder in speziellen \texttt{<template>}-Knoten not
 </h2>
 \end{lstlisting}
 
-Für Handlebars und Liquid existieren Implementierungen in unterschiedlichen Programmiersprachen, zumindest für Ruby, Javascript und \texttt{PHP} scheinen diese Portierungen auch sinnvoll zu funktionieren. Angular 2 hingegen wird zwar für mehrere Sprachen Angeboten, in der Praxis kompilieren diese aber alle zu Javascript.
+Für Handlebars und Liquid existieren Implementierungen in unterschiedlichen Programmiersprachen, zumindest für Ruby, JavaScript und \texttt{PHP} scheinen diese Portierungen auch sinnvoll zu funktionieren. Angular 2 hingegen wird zwar für mehrere Sprachen Angeboten, in der Praxis kompilieren diese aber alle zu JavaScript.
 
 Keine der betrachteten Sprachen macht es unmöglich, die Funktionalität im Rahmen der jeweiligen Syntax zu erweitern. Für Handlebars und Liquid existieren in allen betrachteten Implementierungen einfache Möglichkeiten Funktionen um neue Schlüsselwörter zu registrieren. Angular sieht zur Erweiterung die Programmierung neuer Komponenten vor, welche sich dann als neue Attribute oder Knoten sehr organisch einbetten lassen. Das ist im Endergebnis zwar sehr ansehnlich, die Definition solcher Komponenten erfordert aber vertiefte Kenntnisse der internen Arbeitsweise von Angular 2.
 
 Für alle hier betrachteten Templatingsprachen gilt ebenfalls, dass sie jenseits von Entwicklerkreisen nicht besonders verbreitet sind. Typische Webseiten benötigen natürlich auch keine umfangreiche Logik um zum Beispiel einem Benutzer zu ermöglichen einen Kommentar zu schreiben. Im Alltag werden die Lernenden von diesen Kenntnissen also wohl nicht profitieren.
 
-Sollten Lernende hingegen selbstständig (und jenseits von \idename{}) Zeit die Erstellung eigener Webseiten investieren wollen, werden sie dabei häufiger mit Liquid in Berührung kommen. Programme zum generieren von statischen Webseiten verwenden häufig Liquid als Templatingsprache, das gilt insbesondere für das schon vorgestellte Jekyll, welches wiederrum (unter anderem) auch auf Github-Pages\footnote{Dokumentation zum Hosting verfügbar unter \url{https://pages.github.com/}} zum Einsatz kommt. Dieser konkrete Dienst, also Github-Pages, ist interessant, weil er vollkommen kostenfrei genutzt werden kann. Darüber hinaus wird Liquid in den Software-as-a-Service Angeboten von kommerziellen Anbietern wie Salesforce oder Shopify genutzt. Angular und Handlebars werden hingegen faktisch ausschließlich in den jeweiligen Javascript-Bibliotheken verwendet.
+Sollten Lernende hingegen selbstständig (und jenseits von \idename{}) Zeit die Erstellung eigener Webseiten investieren wollen, werden sie dabei häufiger mit Liquid in Berührung kommen. Programme zum generieren von statischen Webseiten verwenden häufig Liquid als Templatingsprache, das gilt insbesondere für das schon vorgestellte Jekyll, welches wiederrum (unter anderem) auch auf Github-Pages\footnote{Dokumentation zum Hosting verfügbar unter \url{https://pages.github.com/}} zum Einsatz kommt. Dieser konkrete Dienst, also Github-Pages, ist interessant, weil er vollkommen kostenfrei genutzt werden kann. Darüber hinaus wird Liquid in den Software-as-a-Service Angeboten von kommerziellen Anbietern wie Salesforce oder Shopify genutzt. Angular und Handlebars werden hingegen faktisch ausschließlich in den jeweiligen JavaScript-Bibliotheken verwendet.
 
 Auch wenn die Lernenden im Idealfall von der konkreten Syntax der Templatingsprache abstrahieren sollen, wird es immer wieder zu Momenten kommen, in denen diese Abstraktion löcherig ist \cite{spolsky_law_abstractions}. Die häufigste Ursache für einen solchen Leck werden dabei Fehlermeldungen sein: Sobald diese auftreten, sollte zur Unterstützung der Fehler im generierten Quelltext angezeigt und möglichst hervorgehoben werden. Im Falle von Angular 2 wären die angezeigten Quellen für die Zielgruppe absolut unverständlich.
 
@@ -920,9 +920,10 @@ Für \idename{} stellt sich bei der Gestaltung des Editors für Oberflächen als
 
 Diese Suche nach dem richtigen Abstraktionsniveau für den den Seiten-Editor wird sich nicht mit einer definitiven Antwort abschließen lassen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen.
 
-\subsubsection{Wieviel Vorschau ist notwendig?}
+\subsubsection{Vor- und Nachteile von WYSIWYG-Editoren}
+\label{sec:pro-con-wysiwyg-editor}
 
-Programmiersprachen wie Delphi oder Visual Basic verdanken einen Großteil ihrer initialen Popularität auch ihren Entwicklungsumgebungen mit integrierten WYSIWYG-Editoren. Diese ermöglichten es schon zur Entwicklungszeit eine sehr gute Vorschau auf das endgültige Aussehen. Der zeitaufwändige Kreislauf aus "`Wert im Quelltext verändern"' $\rightarrow$  kompilieren $\rightarrow$ ausführen wird umgangen. Dieser Ansatz hat aber auch Grenzen: Ohne Kenntniss der genauen Datenbestände bleibt die Vorschau oftmals unvollständig. Und insbesondere bei sehr dynamische Oberflächen mit vielen optionalen Bestandteilen, welche dann häufig zur Laufzeit ein- oder ausgeblendet werden, im Editor aber stehts sichtbar sind, gleicht die Vorschau innerhalb des WYSIWYG-Editors der Endbenutzeransicht dann doch nur noch sehr beschränkt.
+Programmiersprachen wie Delphi oder Visual Basic verdanken einen Großteil ihrer initialen Popularität auch ihren Entwicklungsumgebungen mit integrierten WYSIWYG-Editoren. Diese ermöglichten es schon zur Entwicklungszeit eine sehr gute Vorschau auf das endgültige Aussehen. Der zeitaufwändige Kreislauf aus "`Wert im Quelltext verändern $\rightarrow$  kompilieren $\rightarrow$ ausführen $\rightarrow$ zu korrekter Maske navigieren $\rightarrow$ Darstellung überprüfen $\rightarrow$ Wert erneut anpassen"' wird drastisch verkürzt. Dieser Ansatz hat aber auch Grenzen: Ohne Kenntnis der genauen Datenbestände bleibt die Vorschau oftmals unvollständig. Und insbesondere bei sehr dynamische Oberflächen mit vielen optionalen Bestandteilen, welche dann häufig zur Laufzeit ein- oder ausgeblendet werden, im Editor aber stehts sichtbar sind, gleicht die Vorschau innerhalb des WYSIWYG-Editors der Endbenutzeransicht dann doch nur noch sehr beschränkt.
 
 Bei der Entwicklung von Desktopanwendungen ist auch heute noch die Verwendung eines WYSIWYG-Editors sehr verbreitet, allerdings werden die Beschreibungen der Oberflächen häufig in spezielle Textdateien ausgelagert. Diese lassen sich dann sowohl mit einem normalen Texteditor bearbeiten als auch mit spezialisierten Editoren bearbeiten. Moderne Bibliotheken für Benutzerschnittstellen wie JavaFX, Android oder die \textit{Windows Presentation Foundation} (WPF) erlauben mit diesem Ansatz die größtmögliche Flexibilät: Jeder Programmierer kann entscheiden, ob er mit der Beschreibungssprache, dem grafischen Werkzeug oder beiden Herangehensweisen arbeiten möchte.
 
@@ -932,23 +933,33 @@ Ein allgemein "`bester"' Ansatz hat sich bis heute also nicht herausgebildet. De
 
 Bei WYSIWYG-Webseiten-Editoren handelt es sich im Normalfall um sehr spezielle Anwendungen, mit denen man allerdings sehr schnell Ergebnisse erzielen kann. Hat man eine von Ihnen verstanden, kann der Umgang mit einem konkurierenden Produkt immer noch in vielen Belangen unterschiedlich ausfallen. \texttt{HTML}-Code schaut hingegen in allen Editoren gleich aus und leidet daher weniger unter einem "`Lock-in-Effekt"'.
 
+Insbesondere bei der Visualisierung von Schleifen und bedingten Ausgaben kommt es beim WYSIWYG-Ansatz systemimmanent zu Problemen. Der darzustellende Datenbestand ist im Falle von \idename{} zwar bekannt, es müssen also immerhin keine künstlichen Daten für die Vorschau fingiert werden. Dennoch muss an irgendeiner Stelle der Vorschau auch ein aktuell inaktiver Zweig einer Bedingung oder der abstrakte Schleifenrumpf mit Variablen dargestellt werden können. Endbenutzer werden hingegen niemals beide Seiten einer \texttt{if/else}-Kombination oder die "`Vorlage"' für alle Schritte eines Schleifendurchlaufes zu Gesicht bekommen. Darüber hinaus gibt es in \texttt{HTML} auch noch einige unsichtbare Knoten wie zum Beispiel \texttt{<form>}, \texttt{<audio>} oder \texttt{<menu>}. Diese bedürfen einer "`künstlichen"' visuellen Repräsentation, damit sie bearbeitet werden können. Die WYSIWYG-Darstellung kann also prinzipiell nicht exakt wie beim Endanwender aussehen, sondern muss noch modifiziert werden.
+
+Darüber hinaus bereitet auch das responsive Design der Vorschau Probleme: Es gibt schließlich nicht nur eine Art und Weise die Seite darzustellen, sondern mehrere. Zwischen diesen muss dabei zumindest umgeschaltet werden können.
+
+Ein praktisches Problem bei der Implementierung von WYSIWYG-Editoren ist deren technische Komplexität. Grundsätzlich kann der Code zur Erzeugung der Darstellung für Endanwender nicht 1 zu 1 für die editierbare Darstellung im Editor übernommen werden. Jedes Bedienelement muss im Endeffekt also doppelt implementiert werden\footnote{Im Falle von \idename{} ist das schon aufgrund der unterschiedlichen technischen Grundlagen für Server und Client notwendig (siehe Kapitel \ref{sec:implementation-client-server}~\nameref{sec:implementation-client-server}). Allerdings wird auch in Frameworks mit nur einer Codebasis, zum Beispiel in der .net-Bibliothek WPF, im Code von Bedienelementen explizit zwischen "`Designtime"' und "`Runtime"' unterschieden.}. Bei einer textuellen Repräsentation von \texttt{HTML}-Dokumenten im Editor kann die Darstellung allerdings ausgesprochen gut generalisiert werden. Schließlich handelt es sich im Kern um eine Baum-Darstellung mit einer sehr festen Struktur aus \texttt{XML}-Knoten mit Attributen.
+
+Für einen WYSIWYG-Editor sind hingegen vielfältige Bearbeitungsmöglichkeiten erforderlich. Bilder bedürfen anderer Handgriffe als zum Beispiel Tabellen, Knöpfe oder Links. Um das System für die Entwickler der Entwicklungsumgebung wartbar und für die Lernenden verständlich zu halten, darf an dieser Stelle allerdings auch nicht blind eine spezielle Editorkomponente für jedes Bedienelement entwickelt werden. Es gilt vielmehr die möglichen Gemeinsamkeiten herauszuarbeiten und soweit wie möglich zu generalisieren. Ein dafür zu erstellendes Konzept wäre dabei sowohl technisch als auch fachlich kompliziert..
+
 \subsubsection{Mögliche Ansätze}
 
-Für \idename{} werden daher die folgenden möglichen Ansätze zunächst auf dem beschriebenen Koordinatensystem eingeordnet und dann diskutiert. Dabei ist Drag \& Drop als vornehmliches Bedienparadigma gesetzt, sofern die Beschreibung dies nicht explizit abspricht.
+Für \idename{} werden daher die folgenden Ansätze auf dem beschriebenen Koordinatensystem eingeordnet und deren individuelle Vor- und Nachteile diskutiert. Drag \& Drop als vornehmliches Bedienparadigma ist dabei für alle Varianten gesetzt, sofern die Beschreibung dies nicht explizit abspricht.
 
 \begin{description}
 \item[Vordefinierte Seiten für standarisierte Einsatzzwecke] \hfill \\
-  Gedacht für Entwickler, die mit \idename{} einfach nur eine generische Oberfläche für einen Datenbestand erzeugen möchten. Layout und verfügbare Elemente sind dabei vordefiniert, es können lediglich an vorgesehenen Stellen Abfragen eingebunden oder konstante Texte hinterlegt werden.
+  Gedacht für Entwickler, die mit \idename{} einfach nur eine generische Oberfläche für einen Datenbestand erzeugen möchten. Das Layout und die verfügbaren Bedienelemente sind dabei vordefiniert, es können lediglich an vorgesehenen Stellen Abfragen eingebunden, konstante Texte hinterlegt oder ähnliche Parametrisierungen erfolgen. Prinzipiell wäre es auch denkbar, diese Angaben in einer sehr nüchternen, tabellarischen Darstellung vorzunehmen, sinnvoller erscheint im Hinblick auf den Einsatzzweck jedoch eine umfangreiche Vorschau.
 
   Die wesentliche Herausforderung bei diesem Ansatz ist die Bereitstellung von Vorlagen, welche weder zuviele noch zu wenige an Konfigurationsmöglichkeiten bieten. Ist die Vorlage zu flexibel besteht die Gefahr, dass sie für den Entwickler undurchschaubar wird. Auf der anderen Seite sind zu eingeschränkte Vorlagen aber Gift für kreative Experimente: Wenn die Antwort auf fast jede Idee der Lernenden "`das geht damit nicht"' wäre, kommt vermutlich schnell Frust auf.
+
+  Technisch gesehen ließe sich dieser Ansatz als eine Seite mit einem einzigen, sehr komplexen Bedienelement abbilden.
+
+\item[WYSIWYG Editor für \texttt{HTML}- und Liquid-Blöcke] \hfill \\
+  Dieses Vorgehen ähnelt dem Vorgehen von Programmen wie Frontpage oder Dreamweaver. Dem Entwickler wird kein Quelltext präsentiert, sondern eine annotierte Fassung der Vorschau mit all den im vorigen Kapitel beschriebenen Problemen bezüglich der Visualisierung von Schleifen, Verzweigungen und unsichtbaren Elementen.
   
-\item[Vollständig WYSIWYG] \hfill \\
+\item[WYSIWYG Layout, \texttt{HTML}- und Liquid-Blöcke] \hfill \\
+  Dieser Ansatz kommt dem Entwickler ein Stück weit entgegen, wenn es um die Gestaltung des grundlegenden Layouts, also die Aufteilung in Zeilen und Spalten, geht. 
   
-  
-\item[WYSIWYG Layout, Code-Blöcke innerhalb der Zellen] \hfill \\
-  Dieser Ansatz kommt dem Entwickler ein Stück weit entgegen, wenn es um die Gestaltung des Layouts geht.
-  
-\item[Ausschließlich Code-Blöcke] \hfill \\
+\item[Ausschließlich \texttt{HTML}- und Liquid-Blöcke] \hfill \\
   
 \item[Ausschließlich Quelltext] \hfill \\
   
@@ -970,6 +981,10 @@ Abbildung \ref{fig:ui-editor-sketch-first} zeigt einen möglichen grundsätzlich
 \end{figure}
 
 Wenn der Benutzer auf den Tab für die Bedienelemente wechselt, bekommt er eine Übersicht aller verfügbaren Bedienelemente. Diese können dann per Drag \& Drop auf dem Designbereich platziert werden. Einige Bedienelemente verfügen über komplexere Eigenschaften, diese werden dann separat dargestellt.
+
+Um Eigenschaften von Bedienelementen auch ohne spezielle Komponenten editieren zu können, wird in der Seitenleiste ein Editor für Eigenschaften bereitgestellt. Diese Vorgehensweise orientiert sich an den Oberflächen praktisch aller Entwicklungsumgebungen und ermöglicht eine universelle Bearbeitungsmöglichkeit unabhängig von der Repräsentation im eigentlichen Editorbereich. Sowohl ein WYSIWYG- als auch ein "`Block"'-Editor können also, bewusst oder als "`Fallback"', auf identische generische Bearbeitungsmethoden für Bedienelemente zurückgreifen.
+
+\subsubsection{Umgang mit Parametern}
 
 %%% Local Variables:
 %%% mode: latex
