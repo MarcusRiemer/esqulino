@@ -158,54 +158,50 @@ Diese unterschiedlich fortgeschrittene Sichtweisen und Bearbeitungsmöglichkeite
 \subsection{Konzept für sinnvolle Teilmengen von SQL}
 \label{sec:sql-subset}
 
-\warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in der Entwicklungsumgebung implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von \texttt{SQL}. Um zu sehen, welcher Funktionsumfang im Prototypen tatsächlich verfügbar ist, lohnt sich ein Blick in \ref{sec:conclusion}~\nameref{sec:conclusion} und den Anhang \ref{sec:project-examples}~\nameref{sec:project-examples}.}
+\warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in dem Prototypen implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von \texttt{SQL}. Um zu sehen, welcher Funktionsumfang im Prototypen tatsächlich verfügbar ist, lohnt sich ein Blick in \fullref{sec:conclusion} und den Anhang \fullref{sec:project-examples}.}
 
 Die uneingeschränkte Umsetzung des \texttt{SQL}-Standards würden sowohl für den Verfasser dieser Arbeit als auch für die Anwender der Entwicklungsumgebung viele unpraktische Probleme aufwerfen. Der \texttt{SQL}-Sprachumfang ist mittlerweile gewaltig und die Anzahl der verschiedenen Dialekte unüberschaubar groß. Varianten wie Transact-\texttt{SQL} bieten die Möglichkeit, zur Laufzeit mit Schleifen, Fallunterscheidungen und Variablen zu arbeiten und erfüllen damit alle Kriterien für \textsc{Turing}-Vollständigkeit. Darüber hinaus werden ``echte'' Entwicklungsumgebungen für \texttt{SQL} von großen Entwicklerteams konzipiert und programmiert, der Autor dieser Arbeit bildet hingegen ein (immerhin motiviertes) Ein-Mann-Team.
 
-Zusätzlich wäre aber auch der Zielgruppe dieser Entwicklungsumgebung mit einer vollständigen Umsetzung des \texttt{SQL}-Standards überhaupt nicht gedient. Im Gegensatz zu anderen vorhandenen Entwicklungsumgebungen soll die Stärke dieser Entwicklungsumgebung in einer sinnvollen Reduktion liegen. Dieses Kapitel beschreibt daher, wie man zum "`normalen"' \texttt{SQL} kompatible Untermengen definieren kann, um einige spezifische Aufgaben zu erfüllen. Oder in Anlehnung an die "`80/20"'-Regel ausgedrückt: Es gilt, jene 20\% des Sprachumfangs abzubilden, mit denen sich 80\% der typischen Aufgaben gut lösen lassen. Vor diesem Hintergrund dient dieses Kapitel also ebenfalls als Grundlage für die Entscheidung bezüglich des Umfangs, mit dem der \texttt{SQL}-Editor im Rahmen dieser Arbeit als "`abgeschlossen"' betrachtet wird.
+Zusätzlich wäre aber auch der Zielgruppe dieser Entwicklungsumgebung mit einer vollständigen Umsetzung des \texttt{SQL}-Standards überhaupt nicht gedient. Im Gegensatz zu anderen vorhandenen Entwicklungsumgebungen soll die Stärke dieser Entwicklungsumgebung in einer sinnvollen Reduktion liegen. Dieses Kapitel beschreibt daher, wie man zum "`normalen"' \texttt{SQL} kompatible Untermengen definieren kann, um einige spezifische Aufgaben zu erfüllen. Oder in Anlehnung an die "`80/20"'-Regel ausgedrückt: Es gilt, jene 20\% des Sprachumfangs abzubilden, mit denen sich 80\% der typischen Aufgaben gut lösen lassen. Vor diesem Hintergrund dient dieses Kapitel also ebenfalls als Grundlage für die Entscheidung bezüglich des Umfangs, mit dem der \texttt{SQL}-Editor im Rahmen dieser Arbeit als "`abgeschlossen"' betrachtet wird (siehe \fullref{sec:sql-subset-ranks}).
 
-Bei einer gängigen Programmiersprache wie z.B. Java bauen die einzelnen Sprachfeatures sehr viel stärker aufeinander auf, es ergeben sich deutlich weniger Reihenfolgen in denen man diese sinnvoll aktivieren könnte. Die wesentlich größere Standardbibliothek einer solchen Sprache trägt dann ebenfalls dazu bei, die Suche nach voneinander weitestgehend unabhängig funktionierenden Teilsprachen zu erschweren.
+Bei einer gängigen Programmiersprache wie z.B. Java bauen die einzelnen Sprachfeatures sehr viel stärker aufeinander auf, es ergeben sich deutlich weniger Reihenfolgen, in denen man diese sinnvoll aktivieren könnte. Die wesentlich größere Standardbibliothek einer solchen Sprache trägt dann ebenfalls dazu bei, die Suche nach voneinander weitestgehend unabhängig funktionierenden Teilsprachen zu erschweren.
 
-Glücklicherweise erlaubt die Struktur von \texttt{SQL} die Verwendung von sehr lokalen Einschränkungen, deren Auswirkungen sich gut abschätzen lassen. Einzig der Umgang mit Ausdrücken überspannt fast alle Bereiche von \texttt{SQL}: Diese können an sehr vielen Stellen auftreten und müssen dementsprechend sorgfältig analysiert werden. Durch diese vergleichsweise überschaubaren Abhängigkeiten ergeben sich viele mögliche Reihenfolgen in denen man Sprachfeatures aktivieren kann. Ohne zu diesem Zeitpunkt weiter auf die Vor- und Nachteile der jeweiligen Reihenfolgen einzugehen, wären die folgenden Varianten zumindest denkbar:
+Glücklicherweise erlaubt die Struktur von \texttt{SQL} die Verwendung von sehr lokalen Einschränkungen, deren Auswirkungen sich gut abschätzen lassen. Einzig der Umgang mit Ausdrücken überspannt fast alle Bereiche von \texttt{SQL}: Diese können an sehr vielen Stellen auftreten und müssen dementsprechend sorgfältig analysiert werden. Durch diese vergleichsweise überschaubaren Abhängigkeiten ergeben sich viele mögliche Reihenfolgen in denen man Sprachfeatures aktivieren kann. 
 
-\begin{itemize}[noitemsep]
-  \item Filterung von Daten mit komplexen logischen Ausdrücken, zum Beispiel unter Verwendung des \texttt{LIKE}-Operators, Kombinationen mit \texttt{AND} oder \texttt{OR}, geschachtelte Ausdrücke mit mathematischen Anweisungen, ...
-  \item Kombination von Daten in unterschiedlichen Tabellen mittels \texttt{JOIN}-Operationen.
-  \item Aggretation von Daten mit dem \texttt{GROUP BY}-Operator und den aggregierenden Funktionen.
-  \item Projektion von Daten mit Ausdrücken und Funktionen innerhalb der \texttt{SELECT}-Komponente.
-\end{itemize}
-
-Es soll nicht Aufgabe von \idename{} sein, diese unterschiedlichen Reihenfolgen implizit zu bewerten, in dem eine "`beste"' Variante fest eingebaut wird. Viel mehr sollen die Lehrkräfte in die Lage versetzt werden, je nach verwendetem Lehrmaterial zu entscheiden, welcher Umfang dafür angemessen ist. Wir klären in diesem Kapitel daher zunächst, welche Features von \texttt{SQL} überhaupt für die Entwicklungsumgebung von Belang sind und wie diese voneinander abhängen.
+Es ist nicht im Sinne von \idename{}, diese unterschiedlichen Reihenfolgen implizit zu bewerten, in dem eine "`beste"' Variante fest eingebaut wird. Viel mehr sollen die Lehrkräfte in die Lage versetzt werden, je nach verwendetem Lehrmaterial zu entscheiden, welcher Umfang zum Umgang mit diesem angemessen ist. Dieses Kapitel klärt daher zunächst, welche Features von \texttt{SQL} überhaupt für die Entwicklungsumgebung von Belang sind und wie diese voneinander abhängen.
 
 \subsubsection{Mögliche Einschränkungen der Komponenten}
 \label{sec:sql-subset-local}
 
-Die folgende Beschreibung untersucht zunächst nur die Komponenten einer \texttt{SELECT}-Suchanfrage. Diese sind, im Gegensatz zu \texttt{DELETE}, \texttt{UPDATE} und \texttt{INSERT} nicht auf eine Tabelle beschränkt und auch von der schieren Anzahl der verfügbaren Optionen her deutlich mächtiger.
+Die folgende Beschreibung untersucht zunächst nur die Komponenten einer \texttt{SELECT}-Suchanfrage. Diese sind im Gegensatz zu \texttt{DELETE}, \texttt{UPDATE} und \texttt{INSERT} nicht auf eine Tabelle beschränkt und auch von der schieren Anzahl der verfügbaren Optionen her deutlich mächtiger.
 
-Zunächst definieren wir einige mögliche Einschränkungen anhand der grundlegenden Struktur jeder suchenden \texttt{SQL}-Abfrage. Da die Reihenfolge der Komponenten nicht beliebig ist, ergibt sich eine sehr klare Struktur in der einige Komponenten auch allerdings übersprungen werden können. Abbildung \ref{fig:sql-steps} wurde aus den Vorlesungsunterlagen von Prof. Dr. Hoffmann entnommen und demonstriert den logischen Ablauf bei der Verarbeitung einer \texttt{SQL}-Abfrage inklusive aller Zwischenschritte und optionaler Komponenten. Daraus ist folglich gut ersichtlich, dass alle Komponenten einer Suchanfrage bis auf die logisch Erste (\texttt{FROM}) und Letzte (\texttt{SELECT}) optional sind.
+Zunächst definieren wir einige mögliche Einschränkungen anhand der grundlegenden Struktur jeder suchenden \texttt{SQL}-Abfrage. Da die Reihenfolge der Komponenten nicht beliebig ist, ergibt sich eine sehr klare Struktur in der einige Komponenten allerdings auch übersprungen werden können. Abbildung \ref{fig:sql-steps} wurde aus den Vorlesungsunterlagen von Prof. Dr. Hoffmann entnommen und demonstriert den logischen Ablauf bei der Verarbeitung einer \texttt{SQL}-Abfrage inklusive aller Zwischenschritte und optionaler Komponenten. Daraus ist gut ersichtlich, dass alle Komponenten einer Suchanfrage bis auf die logisch erste (\texttt{FROM}) und letzte (\texttt{SELECT}) optional sind.
 
 \begin{figure}
   \centering \includegraphics{images/sql-steps.png}
-  \caption{Komponenten und sich ergebende Zwischenschritte bei der Verarbeitung einer \texttt{SQL}-Abfrage von Prof. Dr. Ulrich Hoffmann.}
+  \caption{%
+    Komponenten und sich ergebende Zwischenschritte bei der Verarbeitung einer \texttt{SQL}-Abfrage%
+    \\\hspace{\linewidth}%
+    \textbf{Quelle:} Vorlesung \href{http://www.fh-wedel.de/fileadmin/mitarbeiter/uh/WS201516/Datenbanken_04.pdf}{"`Einführung in Datenbanken"'} von Prof. Dr. Ulrich Hoffmann, Folie 19}
   \label{fig:sql-steps}
 \end{figure}
 
-Einige der im folgenden beschriebenen Optionen sind redundant. Das liegt zum einen an \texttt{SQL} selbst, die Sprache sieht schlichtweg mehrere syntaktische Varianten für semantisch äquivalente Sachverhalte vor. Zum anderen könnte es aber auch aus didaktischen Gründen sinnvoll sein, die Wissensvermittlung mit einer Reihe von Spezialfällen zu beginnen.
+Einige der im Folgenden beschriebenen Optionen sind redundant. Das liegt zum Einen an \texttt{SQL} selbst, die Sprache sieht schlichtweg mehrere syntaktische Varianten für semantisch äquivalente Sachverhalte vor. Zum Anderen könnte es aber auch aus didaktischen Gründen sinnvoll sein, die Wissensvermittlung mit einer Reihe von Spezialfällen zu beginnen. Die folgenden Aufzählungen gruppieren die möglichen Optionen für die jeweiligen Komponenten.
 
 \begin{enumerate}
 \item \textbf{Projektionen mit \texttt{SELECT}} \\
   Diese Komponente als solche kann für Suchabfragen nicht ausgeschlossen werden. Außerdem muss mindestens \ref{feat:select-all} $\lor$ \ref{feat:select-column} erlaubt sein, sonst können keine gültigen \texttt{SQL}-Abfragen erstellt werden.
   \begin{enumerate}[noitemsep]
-  \item \label{feat:select-all} Auswahl aller Spalten (``Sternchen-Operator'' \texttt{SELECT *})
+  \item \label{feat:select-all} Auswahl aller Spalten ("`Sternchen-Operator"' \texttt{SELECT *})
   \item \label{feat:select-column} Auswahl von Spalten
   \item \label{feat:select-single-function} Ausdrücke aus einfachen Funktionsaufrufen zulassen
-  \item \label{feat:select-simple-expression} Einfache Ausdrücke zulassen.
-  \item \label{feat:select-expression} Beliebige Ausdrücke zulassen.
+  \item \label{feat:select-simple-expression} Einfache Ausdrücke zulassen
+  \item \label{feat:select-expression} Beliebige Ausdrücke zulassen
   \item \label{feat:select-distinct} Filterung des Ergebnisses auf unterscheidbare Daten (\texttt{DISTINCT}).
   \item \label{feat:select-limit} Beschränkung der Datenmenge mit \texttt{LIMIT}
   \end{enumerate}
-\item \textbf{Angabe von Datenquellen mit \texttt{FROM}} \\
-  Auch die Auslassung dieser Komponente ist nicht zulässig, obwohl einige \texttt{SQL} Dialekte dies durchaus erlauben. Im Rahmen von \idename{} wird dies aber nicht unterstützt: Die Schüler sollen \texttt{SQL} Abfragen grundsätzlich auf Tabellen beziehen und keine Daten ``aus der Luft greifen''\footnote{Für Oberflächen werden manchmal noch so etwas wie globale Konstanten benötigt, diese kommen dann aber nicht aus der \texttt{SQL}-Schicht.}.
+\item \textbf{Angabe von Tabellen mit \texttt{FROM}} \\
+  Auch die Auslassung dieser Komponente ist nicht zulässig, obwohl einige \texttt{SQL} Dialekte dies durchaus erlauben. Im Rahmen von \idename{} wird dies aber nicht unterstützt: Die Schüler sollen \texttt{SQL} Abfragen grundsätzlich auf Tabellen beziehen und keine Daten "`aus der Luft greifen"'\footnote{Für Oberflächen werden manchmal noch globale Konstanten benötigt, zum Beispiel der Name des Projektes selbst. Diese Werten kommen dann aber nicht aus der \texttt{SQL}-Schicht (siehe \fullref{sec:page-data-sources}).}.
   \begin{enumerate}[noitemsep]
   \item \label{feat:from-cross-join} Kreuzprodukt (\texttt{JOIN}) zulassen
   \item \label{feat:from-cross-comma} Kreuzprodukt (komma-separierte Schreibweise) zulassen
@@ -220,24 +216,24 @@ Einige der im folgenden beschriebenen Optionen sind redundant. Das liegt zum ein
   \item \label{feat:from-sub} Unterabfragen zulassen
   \end{enumerate}
 \item \textbf{Filterung mit \texttt{WHERE} und \texttt{HAVING}} \\
-  Da an dieser Stelle Ausdrücke zum Einsatz kommen, sind prinzipiell zwei unterschiedliche Ansätze denkbar. Zum einen die Verwendung einer vordefinierten Menge an Vergleichen mit einer einfachen Struktur, diese werden in \ref{sec:sql-subset-expression} beschrieben. Dem gegenüber steht der Ansatz fast beliebige Ausdrücke zu erlauben, was auf der einen Seite einen Ausbruch aus einem zu simplen Schema gleichkommen kann, auf der anderen Seite möglicher aber auch den Lernenden mit einem zu großen Freiheitsgrad überfordert.
+  Da an dieser Stelle Ausdrücke zum Einsatz kommen, sind prinzipiell zwei unterschiedliche Ansätze denkbar. Zum einen die Verwendung einer vordefinierten Menge an Vergleichen mit einer einfachen Struktur, diese werden in \fullref{sec:sql-subset-expression} beschrieben. Dem gegenüber steht der Ansatz, fast beliebige Ausdrücke zu erlauben. Diese sehr mächtige Variante hat zwar die größte Ausdruckskraft, könnte Lernende aber auch mit einem zu großen Freiheitsgrad überfordern.
   \begin{enumerate}[noitemsep]
   \item \label{feat:where-allow} \texttt{WHERE} zulassen
   \item \label{feat:having-allow} \texttt{HAVING} zulassen
   \item \label{feat:where-and} Verknüpfungen mit \texttt{AND}
   \item \label{feat:where-or} Verknüpfungen mit \texttt{OR}
-  \item \label{feat:where-simple-expression} Einfachen Ausdrücke zulassen
+  \item \label{feat:where-simple-expression} Einfache Ausdrücke zulassen
   \item \label{feat:where-expression} Beliebige Ausdrücke zulassen
   \end{enumerate}
 \item \textbf{Bildung von Gruppen mit \texttt{GROUP BY}}
   \begin{enumerate}[noitemsep]
   \item \label{feat:group-allow} \texttt{GROUP BY} zulassen
-  \item \label{feat:group-multiple} Grupperierung mehrerer Spalten zulassen
+  \item \label{feat:group-multiple} Gruppierung mehrerer Spalten zulassen
   \end{enumerate}
 \item \textbf{Sortierung mit \texttt{ORDER BY}} \\
   Bei dieser Komponente fehlt bewusst die Möglichkeit anhand eines Spaltenindexes aus dem \texttt{SELECT} zu sortieren. Da die gute Lesbarkeit der Abfragen ein erklärtes Ziel der Entwicklungsumgebung ist, wurde auf diese redundante Möglichkeit der Spaltenauswahl verzichtet.
   \begin{enumerate}[noitemsep]
-  \item \label{feat:order-allow} \texttt{ORDER BY} zulassen, die Auswahl der Richtung (\texttt{ASC} und \text{DESC}) ist dann grundsätzlich möglich
+  \item \label{feat:order-allow} \texttt{ORDER BY} zulassen, die Auswahl der Richtung (\texttt{ASC} und \texttt{DESC}) ist dann grundsätzlich möglich
   \item \label{feat:order-select} Sortierung nach im \texttt{SELECT} erwähnten Spalten oder Ausdrücken zulassen
   \item \label{feat:order-any-column} Sortierung nach beliebigen Spalten zulassen
   \item \label{feat:order-expression} Sortierung anhand eines beliebigen Ausdrucks zulassen
@@ -247,33 +243,33 @@ Einige der im folgenden beschriebenen Optionen sind redundant. Das liegt zum ein
 \subsubsection{Mögliche Einschränkungen der Ausdrücke}
 \label{sec:sql-subset-expression}
 
-Nach dieser Betrachtung der mit der unmittelbaren \texttt{SQL}-Struktur zusammenhängenden Funktionalität ist es nun an der Zeit, sich den Ausdrücken ausführlicher zu widmen. Um eine graduelle Lernkurve sowie eine sinnvolle Unterstützung durch den Editor zu gewährleisten, werden diese in drei Klassen eingeteilt:
+Nach dieser Betrachtung der mit der unmittelbaren \texttt{SQL}-Struktur zusammenhängenden Funktionalität widmet sich dieses Kapitel nun den dort verwendeten Ausdrücken. Um eine graduelle Lernkurve sowie eine sinnvolle Unterstützung durch den Editor zu gewährleisten, werden diese in drei Klassen eingeteilt:
 
 \begin{description}
 \item[Einfache Ausdrücke] \hfill\\
-  Einfache Ausdrücke unterliegen einer ganz festen Struktur, die nur sehr begrenzt die Schachtelung oder Verkettung von zusammengesetzten Ausdrücken zulässt. Ziel dieser Reduktion ist, dass die Auswertungsreihenfolge dieser Ausdrücke auch ohne die Verwendung von Klammern ``intuitiv'' eindeutig ist.
+  Einfache Ausdrücke unterliegen einer festen Struktur, die nur sehr begrenzt die Schachtelung oder Verkettung von zusammengesetzten Ausdrücken zulässt. Ziel dieser Reduktion ist, dass die Auswertungsreihenfolge dieser Ausdrücke auch ohne die Verwendung von Klammern intuitiv eindeutig ist.
 
   Die Bearbeitung dieser Ausdrücke ist nicht notwendigerweise völlig frei, sondern könnte auch hinsichtlich der möglichen Operatoren oder der Struktur eingeschränkt werden.
 \item[Komplexe Ausdrücke] \hfill\\
-  Komplexe Ausdrücke lassen sich schachteln bzw. verketten und können mit einem Scratch-ähnlichen Editor für Ausdrücke frei bearbeitet werden. Die korrekte Beachtung von Auswertungsreihenfolgen ist Aufgabe der Lernenden, weswegen diese ggfs. die Ausdrücke auch selber Klammern müssen.
+  Komplexe Ausdrücke lassen sich schachteln bzw. verketten und können mit einem Scratch-ähnlichen Editor für Ausdrücke frei bearbeitet werden. Die korrekte Beachtung von Auswertungsreihenfolgen ist Aufgabe der Lernenden, weswegen diese ggfs. die Ausdrücke auch selber klammern müssen.
 
 \item[Beliebige Ausdrücke] \hfill\\
-  Beliebige Ausdrücke werden textuell notierte und vom \texttt{SQL}-Editor nicht weiter geprüft, sondern ungefiltert in die Abfrage eingesetzt werden. Sofern diese Art von Ausdrücken zugelassen wird erfolgt also auch keinerlei inhaltliche Einschränkung der zur Verfügung stehenden Möglichkeiten oder eine Syntaxüberprüfung.
+  Beliebige Ausdrücke werden textuell notiert und vom \texttt{SQL}-Editor nicht weiter geprüft, sondern ungefiltert in die Abfrage eingesetzt werden. Sofern diese Art von Ausdrücken zugelassen wird, erfolgt also auch keinerlei inhaltliche Einschränkung der zur Verfügung stehenden Möglichkeiten oder eine Syntaxüberprüfung.
 
-  Diese Option soll es besonders fortgeschrittenen Lernenden erlauben, auch in nicht von \idename{} unterstützte Szenarien noch weiterarbeiten zu können. Damit wird verhindert, dass zu große Fortschritte der Lernenden \idename{} sofort obsolet machen.
+  Diese Option soll es besonders fortgeschrittenen Lernenden erlauben, auch in nicht von \idename{} unterstützten Szenarien noch weiterarbeiten zu können. Damit wird verhindert, dass zu große Fortschritte der Lernenden \idename{} sofort obsolet machen.
 \end{description}
 
-Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisch sinvollen Einschränkungen definieren. Die Schüler sollen dabei durchaus auch Lernen, dass es sich bei Ausdrücken (nicht nur in \texttt{SQL}) um ein allgemeines Konzept handelt, welches Prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Oder plastisch ausgedrückt: Wenn sich die Schüler aus didaktischen Gründen erstmal nur mit Ausdrücke im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt.
+Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisch sinvollen Einschränkungen definieren. Die Schüler sollen dabei durchaus auch lernen, dass es sich bei Ausdrücken (nicht nur in \texttt{SQL}) um ein allgemeines Konzept handelt, welches prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Oder anders ausgedrückt: Wenn sich die Schüler aus didaktischen Gründen erstmal nur mit Ausdrücken im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen, ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es, die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt.
 
 \begin{enumerate}[resume]
 \item \textbf{Allgemeine Optionen} \\
   Diese Optionen betreffen prinzipiell alle Stellen, an denen die entsprechenden Arten von Ausdrücken zugelassen werden.
   \begin{enumerate}[noitemsep]
-  \item \label{feat:expr-allow-any-text} Ausdrücke als beliebigen Text zulassen, diese Option erlaubt die Umgehung aller Einschränkungen für einfache Ausdrücke!
+  \item \label{feat:expr-allow-any-text} Ausdrücke als beliebigen Text zulassen. Diese Option erlaubt die Umgehung aller Einschränkungen für einfache Ausdrücke!
   \item \label{feat:expr-allow-placeholder} An Stelle von Konstanten auch die Verwendung von Platzhaltern zur Bindung von Daten aus der Oberfläche zulassen.
   \end{enumerate}
 
-\item \label{feat:expr-compute}  \textbf{Einfache Berechnende Ausdrücke} \\
+\item \label{feat:expr-compute}  \textbf{Einfache berechnende Ausdrücke} \\
   Diese Ausdrücke tauchen normalerweise in \texttt{SELECT}- oder \texttt{ORDER BY}-Komponenten auf, möglicherweise aber auch als Bestandteil eines einfachen Vergleichs.
   \begin{enumerate}[noitemsep]
       \item \label{feat:expr-compute-simple-func} Einfacher Funktionsaufruf mit Spalten oder Konstanten als Argument
@@ -282,7 +278,7 @@ Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisc
   \end{enumerate}
 
 \item \textbf{Einfache Vergleichende Ausdrücke} \\
-  Diese ``typischen'' Vergleichsausdrücke sollten ausreichen um einen Großteil der nötigen Vergleiche in \texttt{WHERE}, \texttt{HAVING} und \texttt{ON} Komponenten abzudecken. Die linke Seite dieser Ausdrücke ist stets eine zur Verfügung stehende Spalte, der Vergleichsoperator und die rechte Seite eine der hier aufgezählten Möglichkeiten.
+  Diese "`typischen"' Vergleichsausdrücke sollten ausreichen, um einen Großteil der nötigen Vergleiche in \texttt{WHERE}, \texttt{HAVING} und \texttt{ON} Komponenten abzudecken. Die linke Seite dieser Ausdrücke ist stets eine zur Verfügung stehende Spalte, der Vergleichsoperator und die rechte Seite eine der hier aufgezählten Möglichkeiten.
 
   Mit Vergleich ist dabei nicht nur der $=$-Operator gemeint, sondern auch die relationen Operatoren $\ne, <,\ge,\le$ und $>$. Die komplexeren Operatoren \texttt{LIKE} und \texttt{IN} sowie der ternäre Operator \texttt{BETWEEN} werden aber gesondert aufgeführt.
 
@@ -290,7 +286,7 @@ Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisc
   \item \label{feat:expr-compare-const} Vergleich einer Spalte mit einem konstanten Wert
   \item \label{feat:expr-compare-null} Vergleich einer Spalte gegen \texttt{NULL}
   \item \label{feat:expr-compare-other-col} Vergleich einer Spalte mit einer anderen Spalte
-  \item \label{feat:expr-compare-simple-func} Vergleich einer Spalte mit einem einfachem berechnenden Ausdruck (siehe \ref{feat:expr-compute})
+  \item \label{feat:expr-compare-simple-func} Vergleich einer Spalte mit einem einfachen berechnenden Ausdruck (siehe \ref{feat:expr-compute})
   \item \label{feat:expr-compare-between} Test einer Spalte mit dem \texttt{BETWEEN}-Operator und zwei Konstanten
   \item \label{feat:expr-compare-like} Nutzung des \texttt{LIKE}-Operators mit einer Konstanten
   \item \label{feat:expr-compare-in} Nutzung des \texttt{IN}-Operators mit einer Liste von Konstanten
@@ -300,27 +296,27 @@ Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisc
 \item \textbf{Allgemeine Funktionen (in alphabetischer Reihenfolge)} \\
   In einem Umfeld für Anfänger ist zu erwarten, dass fast jede Funktion (bzw. jede logische Gruppe an Funktionen) einer eigenen Einführung bedarf. Die Lehrkräfte sollen diese daher isoliert zur Verfügung stellen können, ohne Ablenkung durch nicht benötigte Funktionen.
 
-  Bei unterschiedlich überladene Varianten der gleichen Funktion wird in \idename{} immer nur die vollständigste Variante implementiert. Die Schüler müssen daher nicht die implizit bekannten Werte der jeweiligen Funktion auswendig kennen.
+  Bei unterschiedlich überladenen Varianten der gleichen Funktion wird in \idename{} immer nur die vollständigste Variante implementiert. Die Schüler müssen daher nicht die implizit bekannten Werte der jeweiligen Funktion auswendig kennen.
   \begin{enumerate}[noitemsep]
-  \item \label{feat:fun-abs} \texttt{ABS(X)} um den Betrag eines Wertes zu erhalten.
-  \item \label{feat:fun-coalesce} \texttt{COALESCE(X,Y,...)} um den ersten gültigen Wert der Parameterliste zu erhalten.
-  \item \label{feat:fun-length} \texttt{LENGTH(X)} um die Länge einer Zeichenkette zu bestimmen.
-  \item \label{feat:fun-casing} \texttt{LOWER(X)} und \texttt{UPPER(X)} um die klein bzw. groß geschriebene Variante einer Zeichenkette zu erhalten.
-  \item \label{feat:fun-random} \texttt{RANDOM()} um einen zufälligen Wert zu erhalten.
-  \item \label{feat:fun-round} \texttt{ROUND(X,Y)} um kaufmännisch zu runden.
-  \item \label{feat:fun-trim} \texttt{TRIM(X)} sowie \texttt{LTRIM(X)} und \texttt{RTRIM(X)} um Leerzeichen am Anfang oder Ende eines Strings zu entfernen.
-  \item \label{feat:fun-substr} \texttt{SUBSTR(X,Y,Z)} um einen Ausschnitt der Zeichenketten zu extrahieren.
-  \item \label{feat:fun-replace} \texttt{REPLACE(X,Y,Z)} um Teilbereiche der Zeichenkette zu ersetzen.
-  \item \label{feat:fun-instr} \texttt{INSTR(X,Y,Z)} um das Vorkommen eines Suchwortes in einer Zeichenkette zu erhalten.
+  \item \label{feat:fun-abs} \texttt{ABS(X)}, um den Betrag eines Wertes zu erhalten
+  \item \label{feat:fun-coalesce} \texttt{COALESCE(X,Y,...)}, um den ersten gültigen Wert der Parameterliste zu erhalten
+  \item \label{feat:fun-length} \texttt{LENGTH(X)}, um die Länge einer Zeichenkette zu bestimmen
+  \item \label{feat:fun-casing} \texttt{LOWER(X)}, und \texttt{UPPER(X)} um die klein bzw. groß geschriebene Variante einer Zeichenkette zu erhalten
+  \item \label{feat:fun-random} \texttt{RANDOM()}, um einen zufälligen Wert zu erhalten
+  \item \label{feat:fun-round} \texttt{ROUND(X,Y)}, um kaufmännisch zu runden
+  \item \label{feat:fun-trim} \texttt{TRIM(X)} sowie \texttt{LTRIM(X)} und \texttt{RTRIM(X)}, um Leerzeichen am Anfang oder Ende eines Strings zu entfernen
+  \item \label{feat:fun-substr} \texttt{SUBSTR(X,Y,Z)}, um einen Ausschnitt der Zeichenketten zu extrahieren
+  \item \label{feat:fun-replace} \texttt{REPLACE(X,Y,Z)}, um Teilbereiche der Zeichenkette zu ersetzen
+  \item \label{feat:fun-instr} \texttt{INSTR(X,Y,Z)}, um das Vorkommen eines Suchwortes in einer Zeichenkette zu erhalten
   \end{enumerate}
 
 \item \textbf{Aggregierende Funktionen (in alphabetischer Reihenfolge)} \\
   Die Verfügbarkeit dieser Funktionen hängt von der Verfügbarkeit der \texttt{GROUP BY}-Komponente ab (\ref{feat:group-allow}).
   \begin{enumerate}[noitemsep]
-  \item \label{feat:fun-avg} \texttt{AVG(X)} bildet das arithmetische Mittel.
-  \item \label{feat:fun-count} \texttt{COUNT(X)} zählt alle Werte die nicht \lstinline{NULL} sind.
-  \item \label{feat:fun-group-concat} \texttt{GROUP\_CONCAT(X,Y)} konkateniert einzelne Zellen einer Gruppe.
-  \item \label{feat:fun-max-min} \texttt{MAX(X)} und \texttt{MIN(X)} selektieren minimalen oder maximalen Wert.
+  \item \label{feat:fun-avg} \texttt{AVG(X)} bildet das arithmetische Mittel
+  \item \label{feat:fun-count} \texttt{COUNT(X)} zählt alle Werte, die nicht \texttt{NULL} sind
+  \item \label{feat:fun-group-concat} \texttt{GROUP\_CONCAT(X,Y)} konkateniert einzelne Zellen einer Gruppe
+  \item \label{feat:fun-max-min} \texttt{MIX(X)} und \texttt{MAX(X)} selektieren einen minimalen oder maximalen Wert
   \item \label{feat:fun-sum} \texttt{SUM(X)} summiert und gibt im Falle von komplett fehlenden Werten \texttt{NULL} zurück
   \item \label{feat:fun-total} \texttt{TOTAL(X)} summiert und gibt im Falle von komplett fehlenden Werten \texttt{0.0} zurück
   \end{enumerate}
@@ -331,7 +327,7 @@ Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisc
 
 Angelehnt an die bei Dr. Schemee bzw. Racket umgesetzte Idee der Feature-Levels \cite{macht-der-abstraktion} beschreibt dieses Kapitel konzeptionell, wie Lehrkräfte, aufbauend auf den im vorigen Kapitel beschriebenen Features, sinnvolle Untermengen von \texttt{SQL} definieren könnten, auf denen die mitgelieferten Beispielprojekte aufbauen. Bei den hier aufgeführten Beispielen handelt es sich keineswegs um die "`einzig korrekten"' Varianten. Vielmehr soll es für Lehrkräfte möglich sein, fast beliebige Teilmengen von \texttt{SQL} für ihre Schüler vorzugeben, nicht nur die im Rahmen dieser Arbeit als sinnvoll erachteten Kombinationen.
 
-Das grundsätzliche Vorgehen um den Sprachumfang einzuschränken, ist dabei mehrstufig. Initial wird auf Projektebene mit einer Whitelist gearbeitet: Jede explizit erlaubte Funktionalität steht im \texttt{SQL}-Editor (siehe Kapitel \ref{sec:design-sql-editor} \nameref{sec:design-sql-editor}) zur Verfügung. Und sofern eine Funktionalität nicht erlaubt sein sollte, ist sie auch nicht verfügbar. Der Begriff ``Einschränkung'' ist aus der Sicht einer Whitelist also zwar nicht ganz optimal gewählt, beschreibt die stattfindende Reduktion des Umfangs von \texttt{SQL} aber akkurat.
+Das grundsätzliche Vorgehen um den Sprachumfang einzuschränken, ist dabei mehrstufig. Initial wird auf Projektebene mit einer Whitelist geaoptrbeitet: Jede explizit erlaubte Funktionalität steht im \texttt{SQL}-Editor (siehe Kapitel \ref{sec:design-sql-editor} \nameref{sec:design-sql-editor}) zur Verfügung. Und sofern eine Funktionalität nicht erlaubt sein sollte, ist sie auch nicht verfügbar. Der Begriff ``Einschränkung'' ist aus der Sicht einer Whitelist also zwar nicht ganz optimal gewählt, beschreibt die stattfindende Reduktion des Umfangs von \texttt{SQL} aber akkurat.
 
 Alternativ sollen sich auch wortwörtliche Einschränkungen im Sinne einer Blacklist angeben lassen. Für die in der Regel sehr übersichtlichen Teilsprachen die in dieser Arbeit konzipiert werden, ist diese Variante häufig schlechter lesbar: Man muss den größtmöglichen Umfang des hier beschriebenen Dialekts immer im Hinterkopf haben. Außerdem kommen im Falle einer Erweiterung des Sprachumfangs, z.B. durch ein späteres Update der Entwicklungsumgebung, möglicherweise unerwünschte Möglichkeiten hinzu.
 
@@ -490,9 +486,11 @@ Um zwischen bewusst und versehentlich nicht vom Entwickler gesetzten Werten zu u
 \subsection{Konzept für Oberflächen}
 \label{sec:design-ui-concept}
 
-\warning{Diese Oberflächen werden nicht ausschließlich in normalem HTML verfasst, es kommen noch einige Erweiterungen in Form einer Templatingengine zum Einsatz. Ähnlich wie für die \texttt{SQL}-Abfragen wird also auch für die Oberflächen ein dezidierter Editor (Kapitel \ref{sec:design-ui-editor}) implementiert. Die Schüler sollten zu keinem Zeitpunkt selber Quelltexte tippen müssen, optional aber durchaus die Möglichkeit dazu haben.}
+\warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in dem Prototypen implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung eines didaktisch sinnvollen Konzeptes zur Beschreibung von Oberflächen. Um zu sehen, welcher Funktionsumfang im Prototypen tatsächlich verfügbar ist, lohnt sich ein Blick in \fullref{sec:conclusion} und den Anhang \fullref{sec:project-examples}.}
 
 Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von normalen Endanwendern bedienen lassen, bedarf es natürlich noch der entsprechenden Benutzeroberfläche. Hier bietet sich, aus Gründen der einfachen Weitergabe, eine webbasierte Oberfläche an: Dadurch entfällt bei den Endanwendern jegliche Installation und gerade für datenzentrierte, verteilte Anwendungen ist eine einheitliche Sicht auf den Datenbestand von großer Bedeutung. Ein weiterer positiver Aspekt ist die einfache Weitergabe der eigenen Arbeitsergebnisse: Diese können über eine beliebige soziale Plattform durch Weitergabe einer \texttt{URL} mitgeteilt werden.
+
+Auch wenn im bisherigen Verlauf der Arbeit immer von \texttt{HTML} als Technologie zur Beschreibung von Oberflächen erwähnt wurde, ist das nur die halbe Wahrheit. Um die interaktive Anbindung von Datenquellen zu ermöglichen, kommen noch einige Erweiterungen in Form einer Templatingengine zum Einsatz. Ähnlich wie für die \texttt{SQL}-Abfragen wird also auch für die Oberflächen ein dezidierter Editor (Kapitel \ref{sec:design-ui-editor}) implementiert. Die Schüler sollten zu keinem Zeitpunkt selber Quelltexte tippen müssen, optional aber durchaus die Möglichkeit dazu haben.
 
 Abstrakt betrachtet besteht eine \idename{}-Seite aus zwei wesentlichen Informationen: Eine Auflistung aller zum Darstellen benötigten Datenquellen, im Rahmen dieser Thesis werden das ausschließlich \texttt{SQL}-Abfragen sein, und eine Vorschrift wie genau dieser Datenbestand darzustellen ist.
 
@@ -529,6 +527,7 @@ Dieser Blog soll dem Endbenutzer über zwei Seiten näher gebracht werden: Eine 
 Bei dieser Aufteilung handelt es sich um eine typische "`Master-Detail"'-Struktur: Ausgehend von einer sehr komprimierten Darstellung aller Werte können Details zu einem konkreten Datensatz nach einem Navigationsvorgang eingesehen werden. Dieses Navigationskonzept wird von fast allen geschäftlichen Applikationen genutzt und ist eine der Standardvorlagen des Visual Studio Lightswitch.
 
 \subsubsection{Datenquellen für Webseiten}
+\label{sec:page-data-sources}
 
 Um die einer Webseite zur Verfügung stehenden Daten zu strukturieren, wird der verfügbare Datenbestand in unterschiedliche Namensräume eingeteilt. Dadurch werden Kollisionen von Bezeichnern vermieden und es ist schon anhand der Bezeichnung eindeutig, von welchem Kontext der Wert zur Verfügung gestellt wird.
 
