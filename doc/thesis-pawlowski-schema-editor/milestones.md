@@ -9,6 +9,12 @@ Die Entwicklung erfolgt in etwa anhand dieser Meilensteine.
 ## Neue Darstellung
 
 * Client: Typische vertikale Darstellung der Spalten einer Tabelle, ähnlich UML oder MySQL Workbench
+* Client: Ulli würde eine tatsächliche tabellarische Darstellung bevorzugen, das könnte auch spannend sein. Vielleicht mit einer reduzierten Anzahl von Spalten?
+
+## Anzeige von Daten
+
+* Server: Endpunkt zum anzeigen aller Datensätze einer Tabelle, ggfs. mit Offset und Limit
+* Client: Anzeige der Datensätze einer Tabelle
 
 ## Erste mutierende Operationen
 
@@ -23,14 +29,9 @@ Dieser Meilenstein nimmt CSV-Dateien als Grundlage für das Anlegen neuer Tabell
 
 Optional denkbar wäre in diesem Schritt die Unterstützung bei der Angabe von Spalten die sich als Schlüssel eignen. Für eine erste Version kann jedoch einfach stumpf die erste Spalte als Schlüssel angenommen werden.
 
-## Anzeige von Daten
-
-* Server: Endpunkt zum anzeigen aller Datensätze einer Tabelle, ggfs. mit Offset und Limit
-* Client: Anzeige der Datensätze einer Tabelle
-
 ## Komplexe Darstellung
 
-Dieser Schritt ist technisch herausfordernd: Es stellt sich die Frage mit welcher Technik die 2D-Zeichenfläche im Zusammenspiel mit Angular 2 am effektivsten umgesetzt werden kann. Hier kommen von reinem HTML über SVG oder auch Ergänzungen mit dem HTML5-canvas-Element sehr viele Technologien mit individuelle Vor- und Nachteilen in Frage.
+Dieser Schritt ist technisch herausfordernd: Es stellt sich die Frage mit welcher Technik die 2D-Zeichenfläche im Zusammenspiel mit Angular 2 am effektivsten umgesetzt werden kann. Hier kommen von reinem HTML über SVG oder auch Ergänzungen mit dem HTML5-canvas-Element sehr viele Technologien mit individuelle Vor- und Nachteilen in Frage. Möglicherweise kann man zur Positionierung gut auf graphviz zurückgreifen?
 
 * Client: Anordnung von Tabellen auf einer 2D Zeichenfläche
 * Client: Visualisierung von FK-Beziehungen
