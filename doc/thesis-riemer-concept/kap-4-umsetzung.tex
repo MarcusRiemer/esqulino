@@ -293,6 +293,16 @@ Die vornehmlichen Eigenschaften eines Projektes sind die darin enthaltenen Abfra
 
 \subsection{Server}
 
+\subsubsection{Nutzung von Subdomains}
+
+\idename{}-Seiten werden unter eigenen Subdomains gerendert. Das erhöht die Anforderungen an die technische Infrastruktur, geht jedoch mit einer Reihe von Vorteilen einher.
+
+Zunächst einmal gilt im Internet auch heute noch die Annahme, dass auf jeder Domain nur ein logischer Internetauftritt hinterlegt ist. Das sich hinter einer \texttt{URL} wie \texttt{blatt\-werk\-zeug.de\-/project\-/pokemongo} eine völlig andere Seite als hinter \texttt{blatt\-werk\-zeug.de\-/project\-/cyoa} verbirgt ist zwar in keinster Weise verboten, aber zumindest ungewöhnlich.
+
+Praktisch Subdomains von vielen Suchmaschinen, sonstigen Angeboten im Internet und auch innerhalb der technischen Standards anders behandelt, als wenn die gleichen Inhalte als untergeordnete \texttt{URL} einer anderen Seite existierten. Das beginnt schon bei entscheidenden technischen Details: So können zum Beispiel Zertifikate für \texttt{SSL}-Verbindungen nur für Domains, nicht aber Teile einer \texttt{URL} ausgestellt werden. Und Webseiten werden im Falle von unerwünschten Inhalten, zum Beispiel Phishing-Angriffen, üblicherweise für Subdomains gesperrt.
+
+Darüber hinaus kann jede Webseite davon ausgehen, dass die gesamte Routing-Hierarchie nur ihr gehört, was die Nutzung von absoluten Pfadangaben erlaubt. Insbesondere um Bilder, \texttt{CSS}-Dateien oder JavaScript-Bibliotheken zu verlinken ist das eine hilfreiche Garantie, welches viele praktische Probleme vermeidet.
+
 \subsection{Unerwartete Hindernisse}
 
 \subsubsection{Instabile API von Angular 2}
