@@ -790,7 +790,7 @@ Technisch gesehen erfolgt die Umsetzung eines responsiven Layouts über eine Vie
       \includegraphics[height=6.5cm]{sketches/grid-example-mobile}%
     }
   \end{center}
-  \caption{Identisches Layout auf großen und kleinen Bildschirmen. Der Navigationsbereich wird für den kleinen Bildschirm nur auf Aufforderung eingeblendet.}
+  \caption{Identische Layoutstruktur auf großen und kleinen Bildschirmen. Der Navigationsbereich wird für den kleinen Bildschirm nur auf Aufforderung eingeblendet.}
   \label{fig:grid-example}
 \end{figure}
 
@@ -831,7 +831,9 @@ Viele im Desktopbereiche "`typische"' Bedienelemente haben in reinem \texttt{HTM
 
 Trotzdem haben sich viele Endanwender an komplexe Webanwendungen gewöhnt, deren Umsetzung um die Jahrtausendwende im Browser vollkommen undenkbar gewesen wäre. Diese Erwartungshaltung bringt \idename{} in ein Dilemma: Gibt man dieser Erwartungshaltung nach und bietet zahlreiche "`künstliche"' Bedienelemente für Spezialfunktionen an, hat das mit der Vermittlung von \texttt{HTML}-Kenntnissen nur noch am Rande etwas zu tun. Andererseits sollen die Lernenden mit "`praktisch vorzeigbaren Ergebnissen"' motiviert werden.
 
-Dieses Spannungsfeld lässt sich gut anhand eines für \idename{} eigentlich zentralen Bedienelements diskutieren: Der Tabelle. Aus didaktischer Sicht scheint es sinnvoll, den Lernenden dieses Element möglichst frühzeitig vorzustellen. Immerhin wird bei den Abfragen mit tabellarischen Daten gearbeitet, da liegt es nahe diese Daten zunächst auf genau diese Art und Weise zu präsentieren.
+Um solche Arten von Bedienelementen umzusetzen werden komplexe \texttt{CSS}-Eigenschaften für \texttt{HTML} Block- oder Inline-Elemente (also \texttt{<div>} und \texttt{<span>}) verwendet. Diese beiden Elemente haben keine unmittelbare inhaltliche Bedeutung, sondern ziehen diese aus den gesetzten Klassen oder IDs (also den Attributen \texttt{class} und \texttt{id}). Im Rahmen dieser Thesis wird die Unterstützung von diesen \texttt{CSS}-orientierten Elementen aber nicht weiter betrachtet (siehe \fullref{scope:no-design}).
+
+Auch die semantisch bedeutungsvollen \texttt{HTML}-Elemente können aber durchaus kompliziert ausfallen. Dieses Spannungsfeld lässt sich gut anhand eines für \idename{} zentralen Bedienelements diskutieren: Der Tabelle. Aus didaktischer Sicht scheint es sinnvoll, den Lernenden dieses Element möglichst frühzeitig vorzustellen. Immerhin wird bei den Abfragen mit tabellarischen Daten gearbeitet, da liegt es nahe diese Daten in der Oberfläche zunächst auch auf genau diese Art und Weise zu präsentieren.
 
 Allerdings handelt es sich bei Tabellen um eine der deutlich komplizierteren \texttt{HTML}-Konstrukte. Es besteht typischerweise aus zwei unmittelbaren Kindelementen, nämlich \texttt{<thead>} für die Spaltenüberschriften und \texttt{<tbody>} für die eigentlichen Daten. Für neue Zeilen kommen dann die "`Table Row"'-Elemente \texttt{<tr>} zum Einsatz, Zellen werden in den Überschriften dann in \texttt{<th>}-Knoten ("`Table Head"') und im Rumpf mit \texttt{<td>}-Knoten ("`Table Data"') notiert. Und natürlich muss die Anzahl dieser durch Zellenknoten definierten Spalten über alle \texttt{<tr>}-Elemente hinweg identisch sein. Erfahrungsgemäß bereitet es Anfänger auch immer wieder Probleme, dass die in der Tabelle nebeneinander angezeigten Zellen im \texttt{HTML}-Quelltext typischerweise untereinander notiert werden. Und damit nicht genug: Um wirklich alle Zeilen einer Abfrage anzuzeigen, ist die Verwendung von geschachtelten für Zeilen und Spalten Schleifen notwendig. Listing~\ref{lst:html-table-pure} zeigt exemplarisch, wie der nötige Quelltext ausschauen könnte.
 
@@ -869,29 +871,29 @@ Mit Liquid bietet sich allerdings auch die Möglichkeit, diesen Code weitestgehe
 
 Die vergangenen Kapitel haben nun demonstriert, wie mit Liquid auf prinzipiell beliebige Datenstrukturen zugegriffen werden kann. Aber wie sollten die Ergebnisse der verfügbaren Abfragen bereitgestellt werden? Auf abstrakter Ebene ist die Beantwortung dieser Frage eindeutig: Da das Ergebnis einer \texttt{SQL}-Abfrage grundsätzlich eine Tabellenstruktur mit Zeilen, Spalten und Zellen ist, wird dieses Datenmodell auch für die Oberfläche zugrunde gelegt. Die an die Bedienelemente zu bindenden Daten sind also grundsätzlich tabellarischer Natur. Dabei bedürfen einige Details bezüglich der Benennung und der Indizierung jedoch besonderer Beachtung.
 
-Um im Falle von mehreren in Frage kommenden Abfragen eine eindeutige Zuordnung vornehmen zu können, müssen Abfragen, deren Ergebnis an die Oberfläche gebunden werden soll, mit einem eindeutigen Namen bezeichnet werden. Dieser Name kann von den Entwicklern frei gewählt werden, sollte aber, analog zu einem Funktionsbezeichner, sinnvoll darüber Auskunft geben was eine Abfrage bewirkt. Diese Trennung zwischen dem internen Namen der Abfrage und dem Namen innerhalb des \texttt{query}-Namensraums erlaubt die mehrfache Verwendung einer (vermutlich unterschiedlich parametrisierten) Abfrage auf einer einzelnen Seite.
+Um im Falle von mehreren in Frage kommenden Abfragen eine eindeutige Zuordnung vornehmen zu können, müssen Abfragen, deren Ergebnis an die Oberfläche gebunden werden soll, mit einem eindeutigen Namen bezeichnet werden. Dieser Name kann von den Entwicklern frei gewählt werden, sollte aber, analog zu einem Funktionsbezeichner, sinnvoll darüber Auskunft geben was eine Abfrage bewirkt. Diese Trennung zwischen dem Namen der Abfrage innerhalb des Projekts und dem Namen innerhalb des \texttt{query}-Namensraums erlaubt die mehrfache Verwendung von ein und derselben (vermutlich unterschiedlich parametrisierten) Abfrage auf der gleichen Seite.
 
-Der Umgang mit den Zeilen erfordert keine Sonderbehandlung, hier genügt die Angabe eines Zeilenindex. Für die Spalten entfällt glücklicherweise eine ``künstliche'' Benennung, diese werden trivialerweise über ihren Namen entsprechend der \texttt{SELECT}-Komponente angesprochen. Mit diesen drei Werten (Name der Abfrage, Zeilenindex, Spaltenname) lässt sich jede Zelle einer Menge von Abfragen eindeutig identifizieren.
+Der Umgang mit den Zeilen erfordert keine Sonderbehandlung, hier genügt die Angabe eines Zeilenindex. Im Normalfall wird die Iteration sowieso nicht explizit über den Index, sondern implizit über die Elemente stattfinden. Für die Spalten entfällt glücklicherweise eine "`künstliche"' Benennung, diese werden trivialerweise über ihren Namen entsprechend der \texttt{SELECT}-Komponente angesprochen. Mit diesen drei Werten (Name der Abfrage, Zeilenindex, Spaltenname) lässt sich jede Zelle einer Menge von Abfragen eindeutig identifizieren.
 
-Aus praktischen Gründen sollten Abfragen allerdings bezüglich der Anzahl der erwarteten Zeilen annotiert werden können, konkret unterschieden werden muss dabei zwischen ``exakt eine Zeile'' und ``beliebig viele (auch keine) Zeilen''. Im Falle einer Abfrage mit nur einer Zeile entfällt dann Notwendigkeit einen Zeilenindex anzugeben, dieser bezieht sich trivalerweise immer auf die einzige, zur Verfügung stehende Zeile. Wenn Daten an die Oberflächen gebunden werden entfällt durch diese Abkürzung die permanente Angabe einer redundanten Information. Listing~\ref{lst:sql:person-days} zeigt eine Abfrage die in Listing~\ref{lst:html:person-days-index} und \ref{lst:html:person-days} einmal mit und einmal ohne Index gebunden wird. Die Schreibweise ohne Index kommt der Lesbarkeit eindeutig zu gute.
+Aus praktischen Gründen sollten Abfragen allerdings bezüglich der Anzahl der erwarteten Zeilen annotiert werden, konkret unterschieden werden muss dabei zwischen "`exakt eine Zeile"' und "`beliebig viele (auch keine) Zeilen"'. Im Falle einer Abfrage mit nur einer Zeile entfällt dann Notwendigkeit einen Zeilenindex anzugeben, dieser bezieht sich dann implizit immer auf die einzige, zur Verfügung stehende Zeile. Wenn Daten an die Oberflächen gebunden werden, entfällt durch diese Abkürzung die permanente Angabe einer redundanten Information. Listing~\ref{lst:sql:person-days} zeigt eine Abfrage die in Listing~\ref{lst:html:person-days-index} und \ref{lst:html:person-days} einmal mit und einmal ohne Index gebunden wird. Die Schreibweise ohne Index kommt der Lesbarkeit eindeutig zu gute.
 
-\begin{lstlisting}[float=h, language=SQL, caption=Abfrage mit genau einer Ergebniszeile,label=lst:sql:person-days]
-SELECT name, geburtstag
-FROM   person
+\begin{lstlisting}[float=h, language=SQL, caption=Abfrage mit maximal einer Ergebniszeile,label=lst:sql:multi-row]
+SELECT caption, text
+FROM   article
 LIMIT  1;
 \end{lstlisting}
 
 \begin{lstlisting}[float=h, language=HTML, caption=String-Interpolation mit Indexzugriff, label=lst:html:person-days-index]
-<!-- query.benutzer = Listing (*@\ref{lst:sql:person-days}: \nameref{lst:sql:person-days}@*) -->
-<p>Hallo {{ benutzer[0].name }}, du bist am {{ benutzer[0].geburtstag }} geboren.</p>
+<!-- query.article = Listing (*@\ref{lst:sql:multi-row}: \nameref{lst:sql:multi-row}@*) -->
+<p>{{ query.article[0].name }}, beginnt mit den folgenden Worten {{ query.article[0].text | truncatewords: 4 }}.</p>
 \end{lstlisting}
 
-\begin{lstlisting}[float=h, language=HTML, caption=String-Interpolation mit implizitem Index, label=lst:html:person-days]
-<!-- query.benutzer = Listing (*@\ref{lst:sql:person-days}: \nameref{lst:sql:person-days}@*) -->
-<p>Hallo {{ benutzer.name }}, du bist am {{ benutzer.geburtstag }} geboren.</p>
+\begin{lstlisting}[float=h, language=HTML, caption=String-Interpolation mit implizitem Index, label=lst:html:person-days-index]
+<!-- query.article = Listing (*@\ref{lst:sql:multi-row}: \nameref{lst:sql:multi-row}@*) -->
+<p>{{ query.article.name }}, beginnt mit den folgenden Worten {{ query.article.text | truncatewords: 4 }}.</p>
 \end{lstlisting}
 
-Die Annotation "`Abfrage betrifft genau eine Zeile"' muss jedoch vom Entwickler manuell im \texttt{SQL}-Editor gesetzt werden, eine automatische Berechnung wäre für beliebige Abfragen unmöglich\footnote{Viele \texttt{SQL}-Dialekte sind Turing-Vollständig und schon das Halteproblem ist nicht entscheidbar.} und auch für speziell strukturierte Abfragen ist diese Unterscheidung zumindest nicht trivial. Oder um es anders auszudrücken: Die Erweiterung der Entwicklungsumgebung um diese automatische Vorhersage wäre Stoff für eine weitere wissenschaftliche Arbeit, keinesfalls aber Gegenstand dieser Arbeit. Praktischerweise lässt sich eine auftretende Verletzung dieser Annotation aber sehr gut erkennen und daher auch sinnvoll an den Entwickler kommunizieren. Und letzten Endes könnte ein Entwickler die Garantie durch die Einführung einer \texttt{LIMIT 1}-Komponente selber geben, was möglicherweise aber zu überraschendem Verhalten zur Laufzeit führt.
+Die Annotation "`Abfrage betrifft genau eine Zeile"' muss jedoch vom Entwickler manuell im \texttt{SQL}-Editor gesetzt werden, eine automatische Berechnung wäre für beliebige Abfragen unmöglich\footnote{Viele \texttt{SQL}-Dialekte sind Turing-Vollständig und schon das Halteproblem ist nicht entscheidbar.} und auch für speziell strukturierte Abfragen ist diese Unterscheidung zumindest nicht trivial. Oder um es anders auszudrücken: Die Erweiterung der Entwicklungsumgebung um diese automatische Vorhersage wäre Stoff für eine weitere wissenschaftliche Arbeit, keinesfalls aber Gegenstand dieser Arbeit. Praktischerweise lässt sich eine auftretende Verletzung dieser Annotation zur Laufzeit aber sehr gut erkennen und daher auch unmittelbar an den Entwickler oder Endanwender kommunizieren. 
 
 Abfragen mit beliebig vielen Ergebniszeilen bedürfen zur Darstellung einer Schleife oder eines dezidierten komplexen Bedienelements. Auch hier könnte im Einzelfall die Behandlung eines leeren Ergebnisses sinnvoll sein, dann aber "`nur"' aus ästhetischen Gründen: Eine Schleife, die nicht ein einziges mal durchlaufen wird ist auch in Liquid kein Fehler.
 
@@ -941,23 +943,37 @@ In diesem Datenmodell können allerdings Inkonsistenzen entstehen, wenn sich die
 
 Nachdem nun die zu rendernde Seite bekannt ist, stellt sich folglich die inverse Frage: Wie kann die \texttt{URL} zu einer bestimmten Seite generiert werden? Dabei stellt man zunächst fest, dass der \texttt{HTML}-Standard zwei unterschiedliche Mechanismen zur Navigation vorsieht. Die naheliegendste Variante ist die direkte Generierung eines \texttt{<a>}-Knotens mit dem passenden \texttt{href}-Attribut: Mit der Liquid-Syntax lassen sich beliebige Strings generieren, also auch gültige URLs. Allerdings funktioniert dieser Ansatz nur mit Daten, die auf dem Server während des Rendervorgangs bekannt sind. Benutzereingaben in Formularelementen wie \texttt{<input>} können in diesem Kontext nicht verwendet werden.
 
-Es ist folglich schon aufgrund der Vorgaben des \texttt{HTML}-Standards sinnvoll, die Unterstützung von zwei separaten Mechanismen zur Navigation zu unterstützen: Sofern der Endanwender eigene Eingaben vornehmen soll, kommt ein \texttt{<form>}-Element zum Einsatz. Durch die Nutzung von versteckten Eingabelementen (\texttt{<input type="hidden">} können aber auch serverseitig vorhandene Daten, zum Beispiel aus Abfragen oder \texttt{GET}-Parametern innerhalb von Formularen verwendet werden.
+Es ist folglich schon aufgrund der Vorgaben des \texttt{HTML}-Standards sinnvoll, die Unterstützung von zwei separaten Mechanismen zur Navigation zu unterstützen: Sofern der Endanwender eigene Eingaben vornehmen soll, kommt ein \texttt{<form>}-Element zum Einsatz. Durch die Nutzung von versteckten Eingabelementen (\texttt{<input type=''hidden''>} können aber auch serverseitig vorhandene Daten, zum Beispiel aus Abfragen oder \texttt{GET}-Parametern innerhalb von Formularen verwendet werden.
+
+Um den Zugriff auf mutierende Abfragen zu ermöglichen, existiert für jede Seite noch ein spezieller \texttt{query/:queryName} Unterpfad. Wenn eine unter \texttt{/beitrag/:artikel\_id} erreichbare Seite die Abfrage zum Hinzufügen eines neuen Kommentars (Listing~\ref{lst:sql-add-comment}) unter dem Namen \texttt{add\_comment} verfügbar machen möchte, sähe die vollständige Routendefinition aus wie folgt: \texttt{/beitrag/:artikel\_id/query/add\_comment}. Die Parameter der Abfrage (\texttt{article\_id}, \texttt{name} und \texttt{text}, das aktuelle Datum wird automatisch berechnet) müssen von der Seite, oder genauer: von dem Formular, bereitgestellt werden.
+
+\begin{lstlisting}[float=h!,caption={Abfrage zum Hinzufügen eines neuen Kommentars}, label={lst:sql-add-comment}]
+INSERT INTO comment (article_id, commenter_name, text, date)
+VALUES (:article_id, :name, :text, strftime('%s','now'))
+\end{lstlisting}
+
+Abfragen werden immer mittels der \texttt{POST}-Methode ausgeführt und haben keine eigene Darstellung. Stattdessen leitet eine ausgeführte Abfrage normalerweise zur aufrufenden Seite zurück, auch eine Umleitung zu einer anderen Seite wäre aber denkbar. Diese Umleitung und die Übertragung via \texttt{POST} stellt sicher, dass ein Endanwender durch einfaches Neuladen der Seite eine Abfrage mehrfach ausführt.
 
 \subsection{Drag \& Drop Editor für Oberflächen}
 \label{sec:drag-drop-ui-editor}
 
-Für \idename{} stellt sich bei der Gestaltung des Editors für Oberflächen also eine zentrale Frage: Welches Abstraktionsniveau passt zu der avisierten Zielgruppe? Und wie soll zwischen den Zielen "`Motivation durch praktisch vorzeigbare Ergebnisse"' und der Tatsache, dass \idename{} sich als Lehranwendung für HTML versteht, umgegangen werden? Das Abstraktionsniveau kann dabei im wesentlichen auf zwei voneinander weitestgehend unabhängigen Achsen variiert werden: Die erste Achse "`Vorschau"' erstreckt sich sinngemäß von "`Texteditor"' zu "`WYSIWYG-Editor"'. Je näher der Editor an der textuellen Darstellung ist, desto mehr müssen die Schüler gedanklich ergänzen. Die andere Achse ist die Komplexität der zur Verfügung gestellten Bedienelemente, sie geht von "`Reines \texttt{HTML}"' bis hin zu "`Komplexe Bedienelemente"' und wurde schon in Kapitel \fullref{sec:complex-ui-elements} diskutiert.
+Nachdem das vorige Kapitel nun den technischen Unterbau für die mit \idename{} erstellten Seiten beschrieben hat, stellt sich die Frage wie man diese in eine angemessene Oberfläche verpacken kann. Diese Suche nach dem richtigen Editor für einen sowohl lehrreichen, als auch produktiven Seiten-Editor, wird sich wohl aller Voraussicht nach nicht mit einer definitiven Antwort abschließen lassen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen. Die wesentliche Leitfragen für dieses Kapitel sind daher die Folgenden:
 
-Diese Suche nach dem richtigen Abstraktionsniveau für den den Seiten-Editor wird sich nicht mit einer definitiven Antwort abschließen lassen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen.
+\begin{enumerate}[noitemsep]
+\item Wie funktionieren andere, verbreitete Seiteneditoren und was kann \idename{} von Ihnen lernen? Insbesonders kommerzielle Produkte für "`normale"' Anwender werden im Regelfall auf einen hohen Produktivitätsgrad ausgerichtet sein, nicht auf einen nachhaltigen Lerneffekt. Und trotzdem stellt sich die Frage, nach welchen Mustern diese Werkzeuge funktionieren.
+\item Welches Abstraktionsniveau passt zur Zielgruppe von \idename{}? Es gilt eine geeignete Balance zwischen vorzeigbaren Ergebnissen und nachhaltigem Lerneffekt zu finden.
+\end{enumerate}
 
 \subsubsection{Vor- und Nachteile von WYSIWYG-Editoren}
 \label{sec:pro-con-wysiwyg-editor}
 
-Programmiersprachen wie Delphi oder Visual Basic verdanken einen Großteil ihrer initialen Popularität auch ihren Entwicklungsumgebungen mit integrierten WYSIWYG-Editoren. Diese ermöglichten es schon zur Entwicklungszeit eine sehr gute Vorschau auf das endgültige Aussehen. Der zeitaufwändige Kreislauf aus "`Wert im Quelltext verändern $\rightarrow$  kompilieren $\rightarrow$ ausführen $\rightarrow$ zu korrekter Maske navigieren $\rightarrow$ Darstellung überprüfen $\rightarrow$ Wert erneut anpassen"' wird drastisch verkürzt. Dieser Ansatz hat aber auch Grenzen: Ohne Kenntnis der genauen Datenbestände bleibt die Vorschau oftmals unvollständig. Und insbesondere bei sehr dynamische Oberflächen mit vielen optionalen Bestandteilen, welche dann häufig zur Laufzeit ein- oder ausgeblendet werden, im Editor aber stehts sichtbar sind, gleicht die Vorschau innerhalb des WYSIWYG-Editors der Endbenutzeransicht dann doch nur noch sehr beschränkt.
+Eine typische Methode um die Einstiegshürde für die Gestaltung von Oberflächen zu senken ist die Verwendung von WYSIWYG-Editoren. Programmiersprachen wie Delphi oder Visual Basic verdanken einen Großteil ihrer initialen Popularität auch ihren Entwicklungsumgebungen, in denen eben diese Funktionalität prominent unterstützt wird. Diese \texttt{IDE}s ermöglichten es schon zur Entwicklungszeit eine sehr gute Vorschau auf das endgültige Aussehen der aktuell bearbeiteten Oberfläche. Der zeitaufwändige Kreislauf aus "`Wert im Quelltext verändern $\rightarrow$  kompilieren $\rightarrow$ ausführen $\rightarrow$ zu korrekter Maske navigieren $\rightarrow$ Darstellung überprüfen $\rightarrow$ Wert erneut anpassen"' wird drastisch verkürzt.
+
+Dieser Ansatz hat aber auch Grenzen: Ohne Kenntnis der genauen Datenbestände bleibt die Vorschau oftmals unvollständig. Und insbesondere bei sehr dynamische Oberflächen mit vielen optionalen Bestandteilen, welche dann zur Laufzeit ein- oder ausgeblendet werden, im Editor aber stehts sichtbar sind, gleicht die Vorschau innerhalb des WYSIWYG-Editors der Endbenutzeransicht dann doch nur noch sehr beschränkt.
 
 Bei der Entwicklung von Desktopanwendungen ist auch heute noch die Verwendung eines WYSIWYG-Editors sehr verbreitet, allerdings werden die Beschreibungen der Oberflächen häufig in spezielle Textdateien ausgelagert. Diese lassen sich dann sowohl mit einem normalen Texteditor bearbeiten als auch mit spezialisierten Editoren bearbeiten. Moderne Bibliotheken für Benutzerschnittstellen wie JavaFX, Android oder die \textit{Windows Presentation Foundation} (WPF) erlauben mit diesem Ansatz die größtmögliche Flexibilät: Jeder Programmierer kann entscheiden, ob er mit der Beschreibungssprache, dem grafischen Werkzeug oder beiden Herangehensweisen arbeiten möchte.
 
-Auch zur Pflege und Generierung von Webseiten existieren und existierten eine Vielzahl unterschiedlicher WYSIWYG-Editoren wie Microsoft Frontpage, Adobe Dreamweaver,~... Diese spielen als Lösungen für hobbymäßige Webseitenbetreiber mittlerweile eine eher untergeordnete Rolle. Heute gängige Lösungen für den Betrieb eigener Webseiten bieten dem Endanwender als primäre Schnittstelle eine im Web verfügbare administrative Oberfläche. Die meisten quelloffenen Content-Management-Systeme wie Wordpress, Joomla oder Typo3 fallen in diese Kategorie. Diese Oberfläche erlaubt es dabei aber vornehmlich den eigentlichen Inhalt der Seiten zu verändern, weniger das Rahmenwerk außen herum. Professionelle Webentwickler halten sich daher von den WYSIWYG-Web-Editoren und editieren lieber unmittelbar die in \texttt{HTML} (oder Skriptsprachen) notierten Templates.
+Auch zur Pflege und Generierung von Webseiten existieren und existierten eine Vielzahl unterschiedlicher WYSIWYG-Editoren wie Microsoft Frontpage, Adobe Dreamweaver,~... Diese spielen als Lösungen für hobbymäßige Webseitenbetreiber mittlerweile eine eher untergeordnete Rolle. Heute gängige Lösungen für den Betrieb eigener Webseiten bieten dem Endanwender als primäre Schnittstelle eine im Web verfügbare administrative Oberfläche. Die meisten quelloffenen Content-Management-Systeme wie Wordpress, Joomla oder Typo3 fallen in diese Kategorie. Diese Oberfläche erlaubt es dabei aber vornehmlich den eigentlichen Inhalt der Seiten zu verändern, weniger das Rahmenwerk außen herum. Fortgeschrittene Webentwickler halten sich daher von den WYSIWYG-Web-Editoren fern und editieren lieber unmittelbar die in \texttt{HTML} (oder Skriptsprachen) notierten Templates.
 
 Ein allgemein "`bester"' Ansatz hat sich bis heute also nicht herausgebildet. Dennoch können die gängigen Ansätze zur Bearbeitung von Oberflächen recht gut anhand eines einzigen Merkmals kategorisiert werden: Wie weit ist die im Editor zu sehende Darstellung von der Darstellung im Browser des Endanwenders entfernt? Diese Frage ist natürlich sehr eng verknüpft mit dem fachlichen Hintergrund der Zielgruppe. Ein als "`Webseitenbaukasten für Jedermann"' beworbenes Produkt wird um eine möglichst originalgetreue Darstellung im Editor bemüht sein, fortgeschrittene Entwickler nutzen dann lieber einen Texteditor mit speziellen Hilfsfunktionen wie Syntaxvervollständigung.
 
@@ -967,31 +983,72 @@ Insbesondere bei der Visualisierung von Schleifen und bedingten Ausgaben kommt e
 
 Darüber hinaus bereitet auch das responsive Design der Vorschau Probleme: Es gibt schließlich nicht nur eine Art und Weise die Seite darzustellen, sondern mehrere. Zwischen diesen muss dabei zumindest umgeschaltet werden können.
 
-Ein praktisches Problem bei der Implementierung von WYSIWYG-Editoren ist deren technische Komplexität. Grundsätzlich kann der Code zur Erzeugung der Darstellung für Endanwender nicht 1 zu 1 für die editierbare Darstellung im Editor übernommen werden. Jedes Bedienelement muss im Endeffekt also doppelt implementiert werden\footnote{Im Falle von \idename{} ist das schon aufgrund der unterschiedlichen technischen Grundlagen für Server und Client notwendig (siehe Kapitel \fullref{sec:implementation-client-server}). Allerdings wird auch in Frameworks mit nur einer Codebasis, zum Beispiel in der .net-Bibliothek WPF, im Code von Bedienelementen explizit zwischen "`Designtime"' und "`Runtime"' unterschieden.}. Bei einer textuellen Repräsentation von \texttt{HTML}-Dokumenten im Editor kann die Darstellung allerdings ausgesprochen gut generalisiert werden. Schließlich handelt es sich im Kern um eine Baum-Darstellung mit einer sehr festen Struktur aus \texttt{XML}-Knoten mit Attributen.
+Kein unlösbares, aber dennoch praktisches Problem bei der Implementierung von WYSIWYG-Editoren ist deren technische Komplexität. Grundsätzlich kann der Code zur Erzeugung der Darstellung für Endanwender nicht 1 zu 1 für die editierbare Darstellung im Editor übernommen werden. Jedes Bedienelement muss im Endeffekt also doppelt implementiert werden\footnote{Im Falle von \idename{} ist das schon aufgrund der unterschiedlichen technischen Grundlagen für Server und Client notwendig (siehe Kapitel \fullref{sec:implementation-client-server}). Allerdings wird auch in Frameworks mit nur einer Codebasis, zum Beispiel in der .net-Bibliothek WPF, im Code von Bedienelementen explizit zwischen "`Designtime"' und "`Runtime"' unterschieden.}. Bei einer textuellen Repräsentation von \texttt{HTML}-Dokumenten im Editor kann die Darstellung allerdings ausgesprochen gut generalisiert werden. Schließlich handelt es sich im Kern um eine Baum-Darstellung mit einer sehr festen Struktur aus \texttt{XML}-Knoten mit Attributen.
 
 Für einen WYSIWYG-Editor sind hingegen vielfältige Bearbeitungsmöglichkeiten erforderlich. Bilder bedürfen anderer Handgriffe als zum Beispiel Tabellen, Knöpfe oder Links. Um das System für die Entwickler der Entwicklungsumgebung wartbar und für die Lernenden verständlich zu halten, darf an dieser Stelle allerdings auch nicht blind eine spezielle Editorkomponente für jedes Bedienelement entwickelt werden. Es gilt vielmehr die möglichen Gemeinsamkeiten herauszuarbeiten und soweit wie möglich zu generalisieren. Ein dafür zu erstellendes Konzept wäre dabei sowohl technisch als auch fachlich kompliziert..
 
 \subsubsection{Mögliche Ansätze}
 
-Für \idename{} werden daher die folgenden Ansätze auf dem beschriebenen Koordinatensystem eingeordnet und deren individuelle Vor- und Nachteile diskutiert. Drag \& Drop als vornehmliches Bedienparadigma ist dabei für alle Varianten gesetzt, sofern die Beschreibung dies nicht explizit abspricht.
+Für \idename{} stellt sich bei der Gestaltung des Editors für Oberflächen also eine zentrale Frage: Welches Abstraktionsniveau passt zu der avisierten Zielgruppe? Und wie soll zwischen den Zielen "`Motivation durch praktisch vorzeigbare Ergebnisse"' und der Tatsache, dass \idename{} sich als Lehranwendung für \texttt{HTML} versteht, umgegangen werden?
+
+Das Abstraktionsniveau kann dabei im wesentlichen auf zwei voneinander weitestgehend unabhängigen Achsen variiert werden (Abbildung~\ref{fig:two-axis-ui-description}): Die horizontale Achse erstreckt sich von "`Texteditor"' zu "`WYSIWYG-Editor"' und beschreibt die Komplexität der Vorschau. Je näher der Editor an der textuellen Darstellung ist, desto mehr müssen die Schüler gedanklich ergänzen. Der Mittelpunkt auf dieser Achse ist ein "`blockiger"' Drag \& Drop-Editor bei dem mehr oder minder abstrakte Blöcke miteinander kombiniert werden. Nur in dafür besonders geeigneten Fällen erfolgen Eingaben über die Tastatur, zum Beispiel wenn es um die Eingabe von Texten für Absätze oder Überschriften geht.
+
+Die vertikale Achse ist die Komplexität der zur Verfügung gestellten Bedienelemente, sie geht von "`Reines \texttt{HTML}"' bis hin zu "`Komplexe Bedienelemente"' und wurde schon in Kapitel \fullref{sec:complex-ui-elements} diskutiert. Der Mittelpunkt dieser Achse ist eine Mischung aus \texttt{HTML}-Elementen und Liquid-Kontrollstrukturen. Unterhalb Mitte entfällt die Nutzung des \texttt{include}-Tags für Bedienelemente, die nur mit den freigeschalteten \texttt{HTML}-Elementen nicht abgebildet werden könnten. Der Entwickler darf also keine Elemente mehr verwenden, deren Implementierung er nicht nachvollziehen könnte.
+
+Für \idename{} werden daher die folgenden Ansätze auf dem beschriebenen Koordinatensystem ungefähr verordnet und deren individuelle Vor- und Nachteile diskutiert. Drag \& Drop als vornehmliches Bedienparadigma ist dabei für alle Varianten gesetzt, sofern die Beschreibung dies nicht explizit abspricht.
+
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}[scale=3]
+    \coordinate (center)    at ( 0  , 0  ); 
+    \coordinate (horzLeft)  at (-1.1, 0  );
+    \coordinate (horzRight) at ( 1.1, 0  );
+    \coordinate (vertUp)    at ( 0  , 1.1);
+    \coordinate (vertDown)  at ( 0  ,-1.1);
+    
+    %\draw[step=0.5,black,thin] (-1,-1) grid (1,1);
+    \draw [thick,<->]          (horzLeft) -- (horzRight);
+    \draw [thick,<->]          (vertUp)   -- (vertDown);
+
+    \node [left=of  horzLeft]  {Text};
+    \node [right=of horzRight] {\enquote{WYSIWYG}};
+    \node [above=of vertUp]    {Komplexe Bedienelemente};
+    \node [below=of vertDown]  {Reines \texttt{HTML} mit Liquid};
+
+    \node [draw, fill=white, circle] at (   1, 1  ) {1};
+    \node [draw, fill=white, circle] at (   1, 0.5) {2};
+    \node [draw, fill=white, circle] at ( 0.5, 0.5) {3};
+    \node [draw, fill=white, circle] at (   0, 0.5) {4};
+
+    \draw [rounded corners=0.5cm, fill=white] (-1,1.1) rectangle (-0.7,-1.1);
+
+    \draw [rounded corners=0.5cm, fill=white] (-1,1.1) rectangle (-0.7,-1.1);
+    \node at (-0.85,0) {5};
+  \end{tikzpicture}
+  \caption{Die horizontale Achse beschreibt die Komplexität der Visualisierung, die vertikale Achse die Komplexität der Bedienelememente}
+  \label{fig:two-axis-ui-description}
+\end{figure}
 
 \begin{description}
-\item[Vordefinierte Seiten für standarisierte Einsatzzwecke] \hfill \\
+\item[\circled{1} Vordefinierte Seiten für standarisierte Einsatzzwecke] \hfill \\
   Gedacht für Entwickler, die mit \idename{} einfach nur eine generische Oberfläche für einen Datenbestand erzeugen möchten. Das Layout und die verfügbaren Bedienelemente sind dabei vordefiniert, es können lediglich an vorgesehenen Stellen Abfragen eingebunden, konstante Texte hinterlegt oder ähnliche Parametrisierungen erfolgen. Prinzipiell wäre es auch denkbar, diese Angaben in einer sehr nüchternen, tabellarischen Darstellung vorzunehmen, sinnvoller erscheint im Hinblick auf den Einsatzzweck jedoch eine umfangreiche Vorschau.
 
   Die wesentliche Herausforderung bei diesem Ansatz ist die Bereitstellung von Vorlagen, welche weder zuviele noch zu wenige an Konfigurationsmöglichkeiten bieten. Ist die Vorlage zu flexibel besteht die Gefahr, dass sie für den Entwickler undurchschaubar wird. Auf der anderen Seite sind zu eingeschränkte Vorlagen aber Gift für kreative Experimente: Wenn die Antwort auf fast jede Idee der Lernenden "`das geht damit nicht"' wäre, kommt vermutlich schnell Frust auf.
 
   Technisch gesehen ließe sich dieser Ansatz als eine Seite mit einem einzigen, sehr komplexen Bedienelement abbilden.
 
-\item[WYSIWYG Editor für \texttt{HTML}- und Liquid-Blöcke] \hfill \\
-  Dieses Vorgehen ähnelt dem Vorgehen von Programmen wie Frontpage oder Dreamweaver. Dem Entwickler wird kein Quelltext präsentiert, sondern eine annotierte Fassung der Vorschau mit all den im vorigen Kapitel beschriebenen Problemen bezüglich der Visualisierung von Schleifen, Verzweigungen und unsichtbaren Elementen.
+\item[\circled{2} WYSIWYG Editor mit komplexer Vorschau] \hfill \\
+  Dieses Vorgehen ähnelt dem Vorgehen von Programmen wie Frontpage oder Dreamweaver. Dem Entwickler wird kein Quelltext präsentiert, sondern eine annotierte Fassung der Vorschau mit all den im vorigen Kapitel beschriebenen Problemen bezüglich der Visualisierung von Wiederholungen, Alternativen und unsichtbaren Elementen.
+
+  Kontrollstrukturen werden bei diesem Ansatz allerdings nicht durch typische Begriffe wie \texttt{for} oder \texttt{if} dargestellt, sondern durch dem konkreten Bedienelement angepasste Blöcke. Im Falle der Tabelle könnte man zum Beispiel die Spaltenüberschriften auswählbar und sortierbar gestalten. Diese Auswahl und die Reihenfolge aus der Editoransicht werden dann für die Benutzeransicht übernommen.
+\item[\circled{3} WYSIWYG Layout mit Block-Editor für ausgewählte Elemente] \hfill \\
+  Dieser Ansatz kommt dem Entwickler noch ein Stück weit entgegen, wenn es um die Gestaltung des grundlegenden Layouts, also die Aufteilung in Zeilen und Spalten, geht. Innerhalb der Zellen kommt dann allerdings ein an Quelltext angelehnter Block-Editor zum Einsatz. Die komplexen Bedienelemente zwar weiterhin zur Verfügung, werden aber nicht mehr durch einen speziellen "`Untereditor"' repräsentiert. Stattdessen werden die Parameter per Drag \& Drop-Editor mit den verfügbaren Daten verbunden.
   
-\item[WYSIWYG Layout, \texttt{HTML}- und Liquid-Blöcke] \hfill \\
-  Dieser Ansatz kommt dem Entwickler ein Stück weit entgegen, wenn es um die Gestaltung des grundlegenden Layouts, also die Aufteilung in Zeilen und Spalten, geht. 
+\item[\circled{4} Block-Editor für beliebige \texttt{HTML}- und Liquid-Blöcke] \hfill \\
+  In diesem Schritt werden die Liquid-Kontrollstrukturen für Schleifen und Verzweigungen freigeschaltet. Als Entwickler könnte man nun eigene beliebig komplexe Strukturen bauen, auch unter Zuhilfenahme von \texttt{HTML}-Elementen wie \texttt{<div>} oder \texttt{<span>}.
   
-\item[Ausschließlich \texttt{HTML}- und Liquid-Blöcke] \hfill \\
-  
-\item[Ausschließlich Quelltext] \hfill \\
+\item[\circled{5} Ausschließlich Quelltext] \hfill \\
+  Da die einfachste Implementierung dieser Variante schon fast durch ein einfaches \texttt{HTML}-\texttt{<textarea>}-Element bereitgestellt werden kann, ist die technische Umsetzung grundsätzlich trivial. Die unterstützte Bandbreite an Bedienelementen ist grundsätzlich beliebig. Anders als bei Block- oder WYSIWYG-Editoren müssen nämlich keine speziellen Komponenten für einzelne Bedienelemente programmiert werden, es gibt nur Text.
   
 \end{description}
 
