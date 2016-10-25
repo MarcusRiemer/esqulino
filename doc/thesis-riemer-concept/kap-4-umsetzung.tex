@@ -9,7 +9,7 @@ Dieses Kapitel beschreibt den Implementierungsprozess von \idename{} und erläut
 \label{sec:implementation-client-server}
 
 
-Der softwaretechnische Unterbau der Entwicklungsumgebung setzt auf aktuelle Webtechnologien auf (siehe \ref{sec:req-web-application}~\nameref{sec:req-web-application} für die Diskussion der Begründung) und teilt sich in zwei distinkte Codebasen für Server und Client.
+Der softwaretechnische Unterbau der Entwicklungsumgebung setzt auf aktuelle Webtechnologien auf (siehe \fullref{sec:req-web-application} für die Diskussion der Begründung) und teilt sich in zwei distinkte Codebasen für Server und Client.
 
 \begin{description}
 \item[Server: Ruby mit Sinatra] \hfill\\
@@ -161,7 +161,7 @@ Die Dateien mit den Tests liegen im Dateisystem immer "`neben"' ihren Implementi
 
 \subsection{Datenmodell}
 
-Die grundsätzliche Struktur eines \idename-Projektes wird in Diagramm \ref{uml:class-diagram-core-entities} ersichtlich. Diese Darstellung visualisert nicht die konkrete Implementierung des Servers oder des Clients, sondern illustriert die grundlegenden beteiligten Datenstrukturen. Jede dieser Entitäten, also sowohl Projekte als auch ihre Ressourcen, enthält eine eigene Versionsangabe. Dadurch kann auf jede Veränderung an dieser Struktur explizit eingegangen werden (\ref{sec:implementation-migration}~\nameref{sec:implementation-migration}). Aktuell laden sowohl Server als auch Client nur Ressourcen, deren Version exakt passt.
+Die grundsätzliche Struktur eines \idename-Projektes wird in Diagramm \ref{uml:class-diagram-core-entities} ersichtlich. Diese Darstellung visualisert nicht die konkrete Implementierung des Servers oder des Clients, sondern illustriert die grundlegenden beteiligten Datenstrukturen. Jede dieser Entitäten, also sowohl Projekte als auch ihre Ressourcen, enthält eine eigene Versionsangabe. Dadurch kann auf jede Veränderung an dieser Struktur explizit eingegangen werden (\fullref{sec:implementation-migration}). Aktuell laden sowohl Server als auch Client nur Ressourcen, deren Version exakt passt.
 
 Jede Ressource (\texttt{ProjectResource}) verfügt über eine interne ID sowie einen sprechenden Namen. In der aktuellen Version von \idename{} handelt es sich bei dieser ID um eine \lstinline{GUID}, sollte also weltweit einzigartig sein. Theoretisch wäre es dadurch denkbar, diese Ressourcen auch zwischen Projekten zu kopieren oder zu teilen. Intern werden Referenzen auf Ressourcen immer anhand der ID vorgenommen. Eine Umbenennung von Ressourcen durch den Benutzer hat daher keine Auswirkungen auf etwaige Referenzen an anderer Stelle.
 
@@ -240,7 +240,7 @@ Bei einer Speicherung im Dateisystem wäre der rein lesende Zugriff auf \idename
 
 Die Speicherung in dokumentenorientierten Datenbanken wie MongoDB oder in einem Key/Value-Store wie redis macht den Zugriff auf die persistierten Daten abhängig von einem externen Serverprozess. Der universelle Zugriff über das Dateisystem weicht einem speziellem Programm zur Navigation innerhalb der jeweiligen Datenbank. Mit dieser Komplexität erkauft man auf der anderen Seite eine wesentlich größere Flexibilät in Bezug auf horizontale Skalierung: Sollte es jemals notwendig werden den Server auf mehr als einem Rechner zu betreiben, existiert dafür dann schon eine hilfreiche Basis.
 
-Letzten Endes fiel die Entscheidung auf das Dateisystem. Die Gründe ähneln jenen, wie sie schon bei der Wahl von \texttt{SQLite} aufgezählt wurden (\ref{sec:implementation-database-system}~\nameref{sec:implementation-database-system}): Backups des Dateisystems sind trivial, der Betrieb außerordentlich eine, externe Programme sind zahlreich vertreten. Sollte eine komplizierte Lösung notwendig werden, kann man diese immer noch implementieren, sobald sie tatsächlich notwendig wird.
+Letzten Endes fiel die Entscheidung auf das Dateisystem. Die Gründe ähneln jenen, wie sie schon bei der Wahl von \texttt{SQLite} aufgezählt wurden (\fullref{sec:implementation-database-system}): Backups des Dateisystems sind trivial, der Betrieb außerordentlich eine, externe Programme sind zahlreich vertreten. Sollte eine komplizierte Lösung notwendig werden, kann man diese immer noch implementieren, sobald sie tatsächlich notwendig wird.
 
 Technisch gesehen ist ein Projekt folglich eine Sammlung von Dateien in einer festgelegten Ordnerstruktur. Abbildung~\ref{fig:project-disk-structure} zeigt ein beispielhaftes Projekt mit jeweils einer Datenbank, Abfrage und Webseite.
 
@@ -276,7 +276,7 @@ Die vornehmlichen Eigenschaften eines Projektes sind die darin enthaltenen Abfra
 \item[Startseite] \hfill \\
   Sobald in einem Projekt mehr als eine Webseite verfügbar ist, muss eine dieser Seiten als Startseite festgelegt werden.
 \item[Benutzerdatenbank] \hfill \\
-  Die in Kapitel \ref{sec:concept-access-control}~\nameref{sec:concept-access-control} beschriebenen Zugriffskontrollen bedürfen einer rudimentären Benutzerdatenbank. Aktuell wird diese als Teil des Projekts gespeichert, die Passwörter werden dabei selbstverständlich verschlüsselt.
+  Die in Kapitel \fullref{sec:concept-access-control} beschriebenen Zugriffskontrollen bedürfen einer rudimentären Benutzerdatenbank. Aktuell wird diese als Teil des Projekts gespeichert, die Passwörter werden dabei selbstverständlich verschlüsselt.
 \item[Routendefinitionen (abgeleitet)] \hfill \\
   Der aktuelle Stand der Implementierung erstellt für jede existierende Seite implizit eine Route, die einfach dem Namen der Seite entspricht. Eine Seite mit dem Namen "`impressum"' ist folglich unter der \texttt{URL} \texttt{'http://projektname/impressum'} erreichbar. 
 \end{description}
