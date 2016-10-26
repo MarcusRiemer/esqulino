@@ -960,11 +960,11 @@ Abfragen werden immer mittels der \texttt{POST}-Methode ausgeführt und haben ke
 Nachdem das vorige Kapitel nun den technischen Unterbau für die mit \idename{} erstellten Seiten beschrieben hat, stellt sich die Frage wie man diese in eine angemessene Oberfläche verpacken kann. Diese Suche nach dem richtigen Editor für einen sowohl lehrreichen, als auch produktiven Seiten-Editor, wird sich wohl aller Voraussicht nach nicht mit einer definitiven Antwort abschließen lassen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen. Die wesentliche Leitfragen für dieses Kapitel sind daher die Folgenden:
 
 \begin{enumerate}[noitemsep]
-\item Wie funktionieren andere, verbreitete Seiteneditoren und was kann \idename{} von Ihnen lernen? Insbesonders kommerzielle Produkte für "`normale"' Anwender werden im Regelfall auf einen hohen Produktivitätsgrad ausgerichtet sein, nicht auf einen nachhaltigen Lerneffekt. Und trotzdem stellt sich die Frage, nach welchen Mustern diese Werkzeuge funktionieren.
-\item Welches Abstraktionsniveau passt zur Zielgruppe von \idename{}? Es gilt eine geeignete Balance zwischen vorzeigbaren Ergebnissen und nachhaltigem Lerneffekt zu finden.
+\item \textbf{Wie funktionieren andere, verbreitete Oberflächeneditoren und was kann \idename{} von Ihnen lernen?} Insbesonders kommerzielle Produkte für "`normale"' Anwender werden im Regelfall auf einen hohen Produktivitätsgrad ausgerichtet sein, nicht auf einen nachhaltigen Lerneffekt. Und trotzdem stellt sich die Frage, nach welchen Mustern diese Werkzeuge funktionieren.
+\item \textbf{Welches Abstraktionsniveau passt zur Zielgruppe von \idename{}?} Es gilt eine geeignete Balance zwischen vorzeigbaren Ergebnissen und nachhaltigem Lerneffekt zu finden. Diese Fragestellung hängt eng mit der gewählten Darstellung im Editor zusammen, daher die beiden wesentlichen Optionen zur Visualisierung in den kommenden Kapitel besprochen.
 \end{enumerate}
 
-\subsubsection{Vor- und Nachteile von WYSIWYG-Editoren}
+\subsubsection{Vor- und Nachteile von WYSIWYG-Darstellungen}
 \label{sec:pro-con-wysiwyg-editor}
 
 Eine typische Methode um die Einstiegshürde für die Gestaltung von Oberflächen zu senken ist die Verwendung von WYSIWYG-Editoren. Programmiersprachen wie Delphi oder Visual Basic verdanken einen Großteil ihrer initialen Popularität auch ihren Entwicklungsumgebungen, in denen eben diese Funktionalität prominent unterstützt wird. Diese \texttt{IDE}s ermöglichten es schon zur Entwicklungszeit eine sehr gute Vorschau auf das endgültige Aussehen der aktuell bearbeiteten Oberfläche. Der zeitaufwändige Kreislauf aus "`Wert im Quelltext verändern $\rightarrow$  kompilieren $\rightarrow$ ausführen $\rightarrow$ zu korrekter Maske navigieren $\rightarrow$ Darstellung überprüfen $\rightarrow$ Wert erneut anpassen"' wird drastisch verkürzt.
@@ -987,6 +987,28 @@ Kein unlösbares, aber dennoch praktisches Problem bei der Implementierung von W
 
 Für einen WYSIWYG-Editor sind hingegen vielfältige Bearbeitungsmöglichkeiten erforderlich. Bilder bedürfen anderer Handgriffe als zum Beispiel Tabellen, Knöpfe oder Links. Um das System für die Entwickler der Entwicklungsumgebung wartbar und für die Lernenden verständlich zu halten, darf an dieser Stelle allerdings auch nicht blind eine spezielle Editorkomponente für jedes Bedienelement entwickelt werden. Es gilt vielmehr die möglichen Gemeinsamkeiten herauszuarbeiten und soweit wie möglich zu generalisieren. Ein dafür zu erstellendes Konzept wäre dabei sowohl technisch als auch fachlich kompliziert..
 
+\subsubsection{Vor- und Nachteile einer Blockdarstellung}
+
+Die Blockdarstellung wie sie im Sinne dieses Kapitels verstanden wird, lehnt sich optisch an das Erscheinungsbild eines \texttt{HTML}-Text-Dokumentes an. Damit wird grundsätzlich ein ähnlichen Ziel wie bei dem \texttt{SQL}-Editor verfolgt: Der Schritt vom \idename{}-Editor zu einem Texteditor ist nicht besonders groß, trotzdem können Syntaxfehler durch die Drag \& Drop-Bedienung unterbunden werden. Und weil der Begriff "`Block"' durchaus ein wenig unspezifisch sein kann, illustriert Abbildung~\ref{fig:screen-ui-editor-block} die Darstellung der Blöcke im Prototypen.
+
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{images/screenshots/20161019/editor-page-blocks}
+  \caption{Blockdarstellung im Editor}
+  \label{fig:screen-ui-editor-block}
+\end{figure}
+
+Der wesentliche Vorteil der Blockdarstellung ist Konsistenz, das gilt gleichermaßen für die Implementierung wie für die Bedienung. Anders als beim WYSIWYG-Editor müssen für neue Bedienelemente nämlich keine spezifischen Visualisierungen programmiert werden: Alles ist ein Block. Zwar unterscheiden sich einige der Attribute, die Anzahl der hierfür nötigen Sonderfälle ist aber überschaubar, zumal praktisch jede Art von Attribut bei mehr als einem Bedienelement zum Einsatz kommen kann.
+
+Die Nähe zum Quelltext macht für Lernende den Übergang zu "`normalem"' \texttt{HTML} sehr einfach. Ein Blick in den Quelltext einer gerenderten Seiten, zum Beispiel mit den typischen Debuggingtools im Browser, sollte anhand von vielen bekannten Fragmenten genug Anhaltspunkte liefern, um zum Beispiel die Auswirkungen von konkreten Fallunterscheidungen oder Schleifendurchläufen nachvollziehen zu können.
+
+Umgekehrt ist diese Nähe zum Quelltext natürlich auch der wesentliche Nachteil. Ohne eine mehr oder minder formale Einführung in \texttt{HTML} kann man die Blöcke nur sehr mühevoll nutzen. Und anders als beim WYSIWYG-Editor kann man die Funktionsweise unbekannter Blöcke auch nur sehr eingeschränkt durch einfaches einsetzen in das Dokument abschätzen.
+
+Für Oberflächeneditoren jenseits von \idename{} ist das Verpacken der Quelltextfragmente in Blöcke kein sehr geläufiges Konzept. Die meisten Entwicklungsumgebungen verfolgen, wie im vorigen Kapitel angedeutet, einen hybriden Ansatz und erlauben sowohl die Bearbeitung im Quelltext als auch über einen WYSIWYG-Editor. Eine Sicht "`zwischen"' diesen beiden Extremen existiert in keinem Produkt, welches dem Autor dieser Thesis bekannt wäre. Einige Umgebungen sind in der Lage die Struktur des aktuell bearbeiteten Dokumentes als Baumdarstellung zu visualisieren, diese dient dann aber nur der schnelleren Navigation in komplexen Oberflächenbeschreibung.
+
+Bei genauerer Betrachtung ist das aber auch nicht sehr verwunderlich: Die wesentliche Zielgruppe dieser professionellen Entwicklungsumgebungen sind erfahrene Programmierer, die selbst am Besten entscheiden können, welche Visualisierung gerade sinnvoll ist. Eine Darstellung, die sich rein optisch nur sehr wenig vom Text unterscheidet bietet da keinen besonderen Mehrwert.
+
+Lernende sind hingegen in einer ganz anderen Situation: Sie sind mit der Gestaltung von Oberflächen wenig vertraut und wissen aller Regelfall noch nicht welche Möglichkeiten ihnen offenstehen. Optische Hervorhebungen von möglichen Optionen im Quelltext helfen dann dabei, über die nächsten Schritte zu entscheiden. Ein wesentliches Merkmal der blockigen Visualisierung ist, dass sie fehlende Parameter direkt an Ort und Stelle darstellen kann. Wenn man ein unbekanntes Bedienelement "`einfach mal so"' in die Seite zieht bekommt man also zumindestens einen Hinweis auf die konkret benötigten Parameter.
+
 \subsubsection{Mögliche Ansätze}
 
 Für \idename{} stellt sich bei der Gestaltung des Editors für Oberflächen also eine zentrale Frage: Welches Abstraktionsniveau passt zu der avisierten Zielgruppe? Und wie soll zwischen den Zielen "`Motivation durch praktisch vorzeigbare Ergebnisse"' und der Tatsache, dass \idename{} sich als Lehranwendung für \texttt{HTML} versteht, umgegangen werden?
@@ -995,7 +1017,7 @@ Das Abstraktionsniveau kann dabei im wesentlichen auf zwei voneinander weitestge
 
 Die vertikale Achse ist die Komplexität der zur Verfügung gestellten Bedienelemente, sie geht von "`Reines \texttt{HTML}"' bis hin zu "`Komplexe Bedienelemente"' und wurde schon in Kapitel \fullref{sec:complex-ui-elements} diskutiert. Der Mittelpunkt dieser Achse ist eine Mischung aus \texttt{HTML}-Elementen und Liquid-Kontrollstrukturen. Unterhalb Mitte entfällt die Nutzung des \texttt{include}-Tags für Bedienelemente, die nur mit den freigeschalteten \texttt{HTML}-Elementen nicht abgebildet werden könnten. Der Entwickler darf also keine Elemente mehr verwenden, deren Implementierung er nicht nachvollziehen könnte.
 
-Für \idename{} werden daher die folgenden Ansätze auf dem beschriebenen Koordinatensystem ungefähr verordnet und deren individuelle Vor- und Nachteile diskutiert. Drag \& Drop als vornehmliches Bedienparadigma ist dabei für alle Varianten gesetzt, sofern die Beschreibung dies nicht explizit abspricht.
+Für dieses Kapitel werden einige denkbare Ansätze auf dem beschriebenen Koordinatensystem ungefähr verordnet und deren individuelle Vor- und Nachteile diskutiert. Drag \& Drop als vornehmliches Bedienparadigma ist dabei für alle Varianten gesetzt, sofern die Beschreibung dies nicht explizit abspricht.
 
 \begin{figure}[h]
   \centering
@@ -1030,12 +1052,10 @@ Für \idename{} werden daher die folgenden Ansätze auf dem beschriebenen Koordi
 \end{figure}
 
 \begin{description}
-\item[\circled{1} Vordefinierte Seiten für standarisierte Einsatzzwecke] \hfill \\
+\item[\circled{1} WYSIWYG-Editor für vordefinierte Seiten mit festen Einsatzzwecken] \hfill \\
   Gedacht für Entwickler, die mit \idename{} einfach nur eine generische Oberfläche für einen Datenbestand erzeugen möchten. Das Layout und die verfügbaren Bedienelemente sind dabei vordefiniert, es können lediglich an vorgesehenen Stellen Abfragen eingebunden, konstante Texte hinterlegt oder ähnliche Parametrisierungen erfolgen. Prinzipiell wäre es auch denkbar, diese Angaben in einer sehr nüchternen, tabellarischen Darstellung vorzunehmen, sinnvoller erscheint im Hinblick auf den Einsatzzweck jedoch eine umfangreiche Vorschau.
 
   Die wesentliche Herausforderung bei diesem Ansatz ist die Bereitstellung von Vorlagen, welche weder zuviele noch zu wenige an Konfigurationsmöglichkeiten bieten. Ist die Vorlage zu flexibel besteht die Gefahr, dass sie für den Entwickler undurchschaubar wird. Auf der anderen Seite sind zu eingeschränkte Vorlagen aber Gift für kreative Experimente: Wenn die Antwort auf fast jede Idee der Lernenden "`das geht damit nicht"' wäre, kommt vermutlich schnell Frust auf.
-
-  Technisch gesehen ließe sich dieser Ansatz als eine Seite mit einem einzigen, sehr komplexen Bedienelement abbilden.
 
 \item[\circled{2} WYSIWYG Editor mit komplexer Vorschau] \hfill \\
   Dieses Vorgehen ähnelt dem Vorgehen von Programmen wie Frontpage oder Dreamweaver. Dem Entwickler wird kein Quelltext präsentiert, sondern eine annotierte Fassung der Vorschau mit all den im vorigen Kapitel beschriebenen Problemen bezüglich der Visualisierung von Wiederholungen, Alternativen und unsichtbaren Elementen.
@@ -1047,29 +1067,92 @@ Für \idename{} werden daher die folgenden Ansätze auf dem beschriebenen Koordi
 \item[\circled{4} Block-Editor für beliebige \texttt{HTML}- und Liquid-Blöcke] \hfill \\
   In diesem Schritt werden die Liquid-Kontrollstrukturen für Schleifen und Verzweigungen freigeschaltet. Als Entwickler könnte man nun eigene beliebig komplexe Strukturen bauen, auch unter Zuhilfenahme von \texttt{HTML}-Elementen wie \texttt{<div>} oder \texttt{<span>}.
   
-\item[\circled{5} Ausschließlich Quelltext] \hfill \\
-  Da die einfachste Implementierung dieser Variante schon fast durch ein einfaches \texttt{HTML}-\texttt{<textarea>}-Element bereitgestellt werden kann, ist die technische Umsetzung grundsätzlich trivial. Die unterstützte Bandbreite an Bedienelementen ist grundsätzlich beliebig. Anders als bei Block- oder WYSIWYG-Editoren müssen nämlich keine speziellen Komponenten für einzelne Bedienelemente programmiert werden, es gibt nur Text.
-  
+\item[\circled{5} Texteditor für Quelltext] \hfill \\
+  Da die einfachste Implementierung dieser Variante schon fast durch ein einfaches \texttt{HTML}-\texttt{<textarea>}-Element bereitgestellt werden kann, ist die technische Umsetzung grundsätzlich trivial. Die unterstützte Bandbreite an Bedienelementen ist grundsätzlich beliebig, Drag \& Drop kommt nicht vor. Anders als bei Block- oder WYSIWYG-Editoren müssen daher keine speziellen Komponenten für einzelne Bedienelemente programmiert werden. Die textuelle Darstellung von \texttt{HTML} und Liquid fungiert als die denkbar allgemeinste Schnittstelle.  
 \end{description}
+
+Eine detaillierte Betrachtung dieser unterschiedlichen Ansätze, also zum Beispiel die Diskussion der Erscheinungsbilder von individuellen Komponenten im Editor, wäre im Rahmen dieser Arbeit leider zu umfangreich. Außerdem ist fraglich, ob sich die Qualität von Bedienkonzepten in einer theoretischen Diskussion gut beurteilen lassen würde. Im Sinne der prototypischen Entwicklung wird im weiteren Verlauf also vor allem Wert auf die Implementierung der beiden wesentlichen Visualisierungen gelegt: WYSIWYG und eine Blockdarstellung.
 
 \subsubsection{Grundsätzlicher Aufbau}
 \label{sec:design-ui-editor}
 
-\unsure[inline]{Ich bin noch absolut unentschlossen, wie bzw. wo ich die weiteren Eigenschaften von komplexen Eigenschaften unterbringen soll. Die ``klassische'' Variante aller aktuellen Entwicklungsumgebungen ist eine weitere Seitenleiste, die hätte dann in diesem Fall dann allerdings drei Tabs. Daher überlege ich alternativ möglichst viele Informationen unmittelbar im Designbereich unterzubringen. Wenn man dann ein Bedienelement anklickt klappt sich darunter (oder sonstwo) ein Bereich auf, in dem die weiteren Einstellungen vorgenommen werden können.}
+Nach dieser Betrachtung unterschiedlichster Ansätze stellt sich nun die Frage, inwiefern diese miteinander vereinbar sind. Dieses Kapitel stellt daher zunächst Gemeinsamkeiten heraus, für die eine Ansatz-übergreifende Lösung möglich ist. Sofern bei dem konkreten Ansatz Drag \& Drop zum Einsatz kommt, mit Ausnahme des Texteditors sind das alle, muss eine fester Bereich zur Präsentation der ziehbaren Elemente vorgesehen werden. Ebenfalls übergreifend sinnvoll ist eine generische Möglichkeit zur Bearbeitung von Eigenschaften eines Bedienelements.
 
-Abbildung~\ref{fig:ui-editor-sketch-first} zeigt einen möglichen grundsätzlichen Aufbau der Oberfläche aus einem zentralen Designbereich und einer Seitenleiste. Die Verbindungen zwischen den Bedienelementen und den Daten aus der Seitenleiste verdeutlichen zu Illustrationszwecken deren Zusammenhang. In der endgültigen Fassung des Editors soll der Zusammenhang nicht durch Linien dargestellt werden, sondern durch einen Hervorhebungseffekt wenn einer der beiden Seiten aktuell ausgewählt ist.
-
-\unsure[inline]{Eigentlich würde ich gerne auf Tabs in der Seitenleiste verzichten, die Daten könnte man ja auch innerhalb des Designbereiches darstellen. Diesen Weg der Platzierung von nicht sichtbaren Elementen hat auch schon die Delphi IDE betreten und so dramatisch schlimm fand ich das nicht.}
+Diese beiden Funktionen werden üblicherweise in eigenen Unterfenstern bereitgestellt. In dieserm Form hat man dann ein sehr typisches Interface, das von so ziemlich jedem Oberflächeneditor genutzt wird. Egal ob Visual Studio, JavaFX Scenebuilder, Delphi oder QtCreator, die grundlegenden Bedienansätze unterscheiden sich an dieser Stelle nur marginal (Abbildung~\ref{fig:sidebar-example}).
 
 \begin{figure}[h]
-  \includegraphics[width=\textwidth]{sketches/ui-sketch-first}
-  \caption{Skizze des Oberflächeneditors mit Tabs}
-  \label{fig:ui-editor-sketch-first}
+  \begin{subfigure}[b]{0.45\textwidth}
+      \includegraphics[width=\textwidth]{images/sidebars-visual-studio.png}
+      \caption{Visual Studio 2015}
+      \label{fig:sidebar-example-visual-studio}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{images/sidebars-qt-creator.png}
+    \caption{Qt Creator 4.1}
+  \end{subfigure}
+  \caption{Auswahl von Bedienelementen und Eigenschaftseditor in unterschiedlichen Entwicklungsumgebungen}
+  \label{fig:sidebar-example}
 \end{figure}
 
-Wenn der Benutzer auf den Tab für die Bedienelemente wechselt, bekommt er eine Übersicht aller verfügbaren Bedienelemente. Diese können dann per Drag \& Drop auf dem Designbereich platziert werden. Einige Bedienelemente verfügen über komplexere Eigenschaften, diese werden dann separat dargestellt.
+Für \idename{} sollte allerdings noch ein weiterer Bereich zum Einsatz kommen: Eine Auflistung aller verfügbaren Datenquellen. Diese Funktion ist nicht Bestandteil von gängigen Entwicklungsumgebungen, weil die Datenbestände wahlweise zu groß oder zu unstrukturiert sind und manchmal sogar erst zur Laufzeit erzeugt werden. Bei \idename{} ist der Datenbestand hingegen sehr gut strukturiert und typischerweise auch übersichtlich (siehe \fullref{sec:page-data-sources}). Dementsprechend sollten beim editieren der Seite die zur Verfügung stehenden Datenquellen gezeigt werden.
 
-Um Eigenschaften von Bedienelementen auch ohne spezielle Komponenten editieren zu können, wird in der Seitenleiste ein Editor für Eigenschaften bereitgestellt. Diese Vorgehensweise orientiert sich an den Oberflächen praktisch aller Entwicklungsumgebungen und ermöglicht eine universelle Bearbeitungsmöglichkeit unabhängig von der Repräsentation im eigentlichen Editorbereich. Sowohl ein WYSIWYG- als auch ein "`Block"'-Editor können also, bewusst oder als "`Fallback"', auf identische generische Bearbeitungsmethoden für Bedienelemente zurückgreifen.
+Auch \idename{} wird den Seiteneditor also in zwei wesentliche Bereiche unterteilen: Einen Hauptbereich zum editieren und eine Seitenleiste mit verfügbaren Daten, Bedienelementen und den Eigenschaften eines ausgewählten Bedienelements. Die Inhalte der Seitenleiste sollen dabei zwischen wann immer möglich zwischen dem WYSIWYG- und dem Block-Editor geteilt werden können.
+
+Die unterschiedlichen Bestandteile der Seitenleiste können sich bei einer größeren Anzahl von Elementen in die Quere kommen. Andere Entwicklungsumgebungen lösen das durch die Nutzung von Tab- oder Akkordeon-Containern, so das sich aktuell störende Elemente ausblenden lassen. An dieser Stelle wird ein praktischer Test mit Anwendern am Besten zeigen können, welcher Ansatz zu bevorzugen ist.
+
+\subsubsection{Seitenleiste: Editieren von Eigenschaften}
+
+Um Eigenschaften von Bedienelementen auch ohne spezielle Komponenten editieren zu können, wird in der Seitenleiste ein Editor für Eigenschaften bereitgestellt. Diese Vorgehensweise ermöglicht eine universelle Bearbeitungsmöglichkeit unabhängig von der Repräsentation im eigentlichen Editorbereich. Sowohl ein WYSIWYG- als auch ein "`Block"'-Editor können also, bewusst oder als "`Fallback"', auf identische generische Bearbeitungsmethoden für Bedienelemente zurückgreifen. Abbildung~\ref{fig:sidebar-property-editor} zeigt Beispiele für die im Prototypen implementierten Editoren.
+
+Sofern möglich werden dabei identische Eigenschaften bei unterschiedlichen Bedienelementen identisch angeordnet. Eingabeelemente für Formulare (\fullref{fig:sidebar-property-editor-input} \& \fullref{fig:sidebar-property-editor-select}) fragen immer zuerst nach dem \texttt{name}-Attribut und dem logischen Titel des editierten Elements.
+
+\begin{figure}[p]
+  \begin{subfigure}[b]{0.45\textwidth}
+    \frame{\includegraphics[width=\textwidth]{images/screenshots/20161019/editor-page-sidebar-input}}
+    \caption{Eingabe}
+    \label{fig:sidebar-property-editor-input}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \frame{\includegraphics[width=\textwidth]{images/screenshots/20161019/editor-page-sidebar-select}}
+    \caption{Auswahl}
+    \label{fig:sidebar-property-editor-select}
+  \end{subfigure}
+
+  \begin{subfigure}[b]{0.45\textwidth}
+    \frame{\includegraphics[width=\textwidth]{images/screenshots/20161019/editor-page-sidebar-link}}
+    \caption{Link}
+    \label{fig:sidebar-property-editor-link}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \frame{\includegraphics[width=\textwidth]{images/screenshots/20161019/editor-page-sidebar-table}}
+    \caption{Tabelle}
+    \label{fig:sidebar-property-editor-table}
+  \end{subfigure}
+  
+  \caption{Beispiele für Eigenschaftseditoren}
+  \label{fig:sidebar-property-editor}
+\end{figure}
+
+\subsubsection{Seitenleiste: Angebot von Bedienelementen}
+
+Technisch gesehen ist dieses Element keine besondere Herausforderung: Es handelt sich um eine einfache Auflistung von verfügbaren Bedienelementen. Die wesentliche abzusehende Problematik die potenziell sehr große Anzahl anzuzeigender Elemente.
+
+\begin{figure}[h]
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{images/screenshots/20161019/editor-page-widgets}
+    \caption{Verfügbare Bedienelemente}
+    \label{fig:sidebar-editor-widgets}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{images/screenshots/20161019/editor-page-data}
+    \caption{Verfügbare Daten}
+    \label{fig:sidebar-editor-widgets}
+  \end{subfigure}
+  \caption{Weitere Elemente der Seitenleiste}
+  \label{fig:sidebar-widgets-data}
+\end{figure}
+
+\subsubsection{Seitenleiste: Angebot von verfügbaren Daten}
 
 \subsubsection{Umgang mit Parametern}
 
