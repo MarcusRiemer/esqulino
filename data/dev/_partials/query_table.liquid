@@ -1,11 +1,13 @@
 {% if table %}
   {% assign columnNames = columns | split: ',' %}
-  <table class="table">
-    <tr>
-      {% for name in columnNames %}
-        <th>{{ name }}</th>
-      {% endfor %}
-    </tr>
+  <table class="table table-striped">
+    <thead class="thead-inverse">
+      <tr>
+        {% for name in columnNames %}
+          <th>{{ name }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
     {% for row in table %}
       <tr>
         {% for name in columnNames %}
