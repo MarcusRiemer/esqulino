@@ -1,10 +1,23 @@
-<sidebar-item-host [cardClasses]="additionalCardClasses"
-                   [header]="'Daten'">
+<sidebar-item-host [cardClasses]="additionalCardClasses">
   <!-- Tell the user if the page has absolutly no data associated -->
-  <p *ngIf="!hasAnyData"
-     class="card-text">
-    <strong>Bisher sind für diese Seite keiner Daten verfügbar</strong>. Nutze die Datenbank, Seiten&shy;parametern oder Eingab&shy;elemente um mit deinen Benutzer zu interagieren.
-  </p>
+  <div *ngIf="!hasAnyData && !showQueryDropTarget"
+       class="alert alert-info"
+       role="alert">
+    <p class="card-text">
+      <strong>Bisher sind für diese Seite keine speziellen Daten ver&shy;füg&shy;bar</strong>. Nutze die Da&shy;ten&shy;bank, Seiten&shy;parametern oder Eingab&shy;elemente um mit deinen Benutzern zu interagieren.
+    </p>
+  </div>
+
+  
+  <div *ngIf="showQueryDropTarget"
+       class="block-container block">
+    <div (dragover)="onAddQueryReferenceDrag($event)"
+         (drop)="onAddQueryReferenceDrop($event)"
+         class="column blueprint text-xs-center">
+      <span class="fa fa-plus"></span>
+      Abfrage
+    </div>
+  </div>
   
   <!-- Page URL data -->
   <div *ngIf="showPageRequestParameters"
@@ -14,7 +27,7 @@
     </span>
     <ul class="fa-ul">
       <li *ngFor="let parameter of page.requestParameters;">
-        <span class="fa fa-li fa-sign-out" aria-hidden="true"></span>
+        <span class="fa fa-li fa-sign-in" aria-hidden="true"></span>
         <span (dragstart)="startParameterValueProviderDrag($event, parameter.fullName)"
               draggable="true"
               class="column indent">
@@ -25,6 +38,10 @@
   </div>
 
   <!-- Query data & parameters -->
+  <h5 *ngIf="referencedQueries.length > 0"
+      class="block-container caption">
+    Abfragen
+  </h5>
   
   <!-- The query itself -->
   <div *ngFor="let used of referencedQueries;"
@@ -55,7 +72,7 @@
     <ul *ngIf="used.hasColumns"
         class="fa-ul">
       <li *ngFor="let column of used.columns; trackBy: trackByColumnId;">
-        <span class="fa fa-li fa-sign-out" aria-hidden="true"></span>
+        <span class="fa fa-li fa-sign-in" aria-hidden="true"></span>
         <span (dragstart)="startColumnDrag($event, used, column)"
               [title]="column.fullName"
               class="column indent"
@@ -64,5 +81,18 @@
         </span>
       </li>
     </ul>
-  </div>  
+  </div>
+  
+  <!-- Globally available data -->
+  <div class="block-container block">
+    <span class="caption">
+      Konstanten
+    </span>
+    <ul class="fa-ul">
+      <li *ngFor="let constant of availableConstants;">
+        <span class="fa fa-li fa-sign-in" aria-hidden="true"></span>
+        <span class="column indent">{{ constant }}</span>
+      </li>
+    </ul>
+  </div>
 </sidebar-item-host>
