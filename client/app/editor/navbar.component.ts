@@ -3,9 +3,13 @@ import {Component, Input}    from '@angular/core'
 import {
     Query, QuerySelect, QueryDelete, QueryInsert, QueryUpdate
 } from '../shared/query'
-import {Page}                from '../shared/page/page'
+import {
+    Page, QueryReference, QueryReferenceDescription
+} from '../shared/page/page'
 
 import {Project}             from './project.service'
+
+import {DragService}         from './page/drag.service'
 
 @Component({
     templateUrl: 'app/editor/templates/navbar.html',
@@ -16,6 +20,22 @@ export class NavbarComponent {
      * The currently edited project
      */
     @Input() project : Project;
+
+    constructor(private _pageDragService : DragService) {
+
+    }
+
+    /**
+     * Starts dragging around a query.
+     */
+    startQueryDrag(evt : DragEvent, query : Query) {
+        this._pageDragService.startQueryRefDrag(evt, "sidebar", {
+            type : "query",
+            name : query.name,
+            queryId : query.id,
+            mapping : []
+        });
+    }
 
     /**
      * @param page The page that needs an icon.
