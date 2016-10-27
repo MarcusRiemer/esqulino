@@ -84,10 +84,30 @@
   </div>
 
   <!-- Forms and provided arguments -->
-  <h5 *ngIf="availableForms.length > 0"
-      class="block-container caption">
-    Formulare
-  </h5>
+  <div *ngIf="availableForms.length > 0">
+    <h5 class="block-container caption">
+      Formulare
+    </h5>
+
+    <div *ngIf="availableForms.length > 0"
+         class="alert alert-warning" role="alert">
+      <strong>Noch nicht fertig!</strong> Für den Augenblick müssen Daten aus Formularen direkt im Editor per Drag &amp; Drop verknüpft werden.
+    </div>
+
+    <div class="page-preview">
+      <div class="border-structural-preview">
+        <div class="column-preview">
+          <span aria-hidden="true" ng-reflect-class-name="fa fa-fw fa-object-group" class="fa fa-fw fa-object-group"></span>Formular
+        </div>
+      </div>
+    </div>
+    <ul class="fa-ul block-container">
+      <li *ngFor="let inputName of availableForms[0].providedNames;">
+        <span class="fa fa-li fa-sign-out" aria-hidden="true"></span>
+        <span class="column indent">{{ inputName }}</span>
+      </li>
+    </ul>
+  </div>
   
   <!-- Globally available data -->
   <div class="block-container block">
