@@ -3,7 +3,7 @@
 
 Dieses Kapitel beschreibt den Implementierungsprozess von \idename{} und erläutert einige technische Entscheidungen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, wurden diese in Anlehnung an den "`Minus 100 Points"'-Artikel von Eric Gunnerson \cite{gunnerson-minus-100} geprüft.
 
-\todo[inline]{Mehrere Datenbanken je Projekt, "`Veränderungsanzeige"' für Abfragen, Breite von Spalten}
+\todo[inline]{Noch nachträglich ergänzt: Mehrere Datenbanken je Projekt, "`Veränderungsanzeige"' für Abfragen, Breite von Layout-Spalten, Erweiterung der Datenanzeige in der Seitenleiste}
 
 \subsection{Client-Server-Architektur}
 \label{sec:implementation-client-server}
@@ -13,20 +13,20 @@ Der softwaretechnische Unterbau der Entwicklungsumgebung setzt auf aktuelle Webt
 
 \begin{description}
 \item[Server: Ruby mit Sinatra] \hfill\\
-  Die Aufgaben des Servers sollen sich konzeptionell möglichst auf die Auslieferung und Speicherung von Daten beschränken. Die Interaktion findet dabei primär über eine REST-artige JSON Schnittstelle statt, serverseitig gerendert werden lediglich die Projekte der Schüler.
+  Die Aufgaben des Servers sollen sich konzeptionell möglichst auf die Auslieferung und Speicherung von Daten beschränken. Die Interaktion findet dabei primär über eine \texttt{REST}-artige \texttt{JSON} Schnittstelle statt, serverseitig gerendert werden lediglich die Projekte der Schüler.
 \item[Client: Typescript mit Angular 2] \hfill\\
   Aufgrund des hohen Grades an Interaktivität bietet sich eine rein clientseitige Visualisierung an, die weitestgehend auf Roundtrips zum Server verzichtet. Außer für den Zugriff auf serverseitige Resourcen (Datenbank, gespeicherte Ressourcen, gerenderte Seiten) werden alle Operationen im Browser ausgeführt.
 \end{description}
 
 \begin{figure}[p]
   \centering \includegraphics[width=\textwidth]{images/openapi-query-example.png}
-  \caption{Generiert aus der Spezfikation: API-Browser für \idename{}}
+  \caption{Generiert aus der Spezfikation: \texttt{API}-Browser für \idename{}}
   \label{fig:openapi-query-example}
 \end{figure}
 
 Um die Schnittstelle zwischen diesen beiden Komponenten so transparent wie möglich zu halten, werden diese gemäß der OpenAPI Spezifikation \cite{open-api} dokumentiert. Dieses offene Format ermöglicht es auf eine hilfreiche Auswahl an standarisierten Tools aufzubauen. Zum Beispiel können aus der Spezifikation interaktive Testumgebungen für die Server-Schnittstellen erzeugt werden, Abbildung \ref{fig:openapi-query-example} zeigt ein Beispiel dafür\todo{Screenshot zeigt alten Namen}.
 
-Als primäres Interface für die Kompilierung wird ein \lstinline{Makefile} genutzt. Dieses prüft ob auf dem aktuellen System alle nötigen Abhängigkeiten verfügbar sind und stellt sicher, dass Übersetzungsschritte nur ausgeführt werden, wenn sie tatsächlich notwendig sind. Von den technischen Details der unterschiedlichen Programmierumgebungen aufgrund der unterschiedlichen Programmiersprachen kann so außerdem elegant abstrahiert werden: Ein Programmierer kann sich die exakten Aufrufe der unterschiedlichen Paketmanager zwar anschauen, wird im Normallfall aber nur \texttt{make install-deps} aufrufen.
+Als primäres Interface für die Kompilierung wird ein \texttt{Makefile} genutzt. Dieses prüft ob auf dem aktuellen System alle nötigen Abhängigkeiten verfügbar sind und stellt sicher, dass Übersetzungsschritte nur ausgeführt werden, wenn sie tatsächlich notwendig sind. Von den technischen Details der unterschiedlichen Programmierumgebungen aufgrund der unterschiedlichen Programmiersprachen kann so außerdem elegant abstrahiert werden: Ein Programmierer kann sich die exakten Aufrufe der unterschiedlichen Paketmanager zwar anschauen, wird im Normallfall aber nur \texttt{make install-deps} aufrufen.
 
 \subsection{Meilensteine}
 

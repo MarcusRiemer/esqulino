@@ -44,9 +44,9 @@ Mit \idename{} sollen Schülerinnen und Schüler ab der Mittelstufe angesprochen
 Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit bereits existierenden Alternativen ist es zunächst sinnvoll ein paar allgemeine Grundprinzipien zu formulieren. Diese Prinzipien bilden die Philosophie hinter der Schülerentwicklungsumgebung ab und dienen als Leitfaden für Designentscheidungen. Praktisch erlaubt das vor allem eine relativ akkurate Abschätzung, ob sich die Implementierung einer bestimmten Idee lohnt und wie sie gegebenenfalls zu priorisieren ist. Die Sortierung dieser Prinzipien ist entsprechend ihrer Bedeutung absteigend sortiert, das wichtigste Prinzip wird also zuerst genannt.
 
 \begin{description}
-\item[Semantik vor Syntax] \hfill\\
+\item[Semantik vor Syntax] \label{principle:semantics}\hfill\\
   Den Lernenden sollen kontextsensitiv sinnvolle Operationen angeboten werden, optimalerweise mit einer kurzen Erläuterung, warum gerade nur diese Teilmenge an Operationen möglich ist. Die eigentliche Programmierung erfolgt dann durch die Kombination von Bausteinen, ähnlich wie bei der Lernsoftware "`Scratch"'. Durch kontinuierliches Feedback der Entwicklungsumgebung sollen die Lernenden in die Lage versetzt werden, auch ohne ständige Rückversicherung bei der Lehrkraft eigene Ansätze zu erproben. Syntaxfehler, ein typisches Problem für viele Anfänger, werden durch dieses Vorgehen konstruktiv verhindert.
-\item[Motivation durch praktisch vorzeigbare Ergebnisse] \hfill\\
+\item[Motivation durch praktisch vorzeigbare Ergebnisse]\hfill\\
   Der Einstieg in die Programmierung ist oftmals von relativ langweiligen Programmen geprägt, häufig textbasierten Konsolenanwendungen, welche sich nicht gut im Freundes- oder Bekanntenkreis präsentieren lassen. Im Sonderfall der Vermittlung von \texttt{SQL}-Kenntnissen ist das Ergebnis der investierten Arbeit sogar überhaupt nicht sinnvoll zu demonstrieren. Die erstellten Abfragen stehen isoliert für sich und sind häufig auch nur in der Entwicklungsumgebung der jeweiligen Datenbank ausführbar. Mit der im Rahmen dieser Arbeit zu erstellenden Software sollen sich hingegen praktisch relevante, allerdings sehr datenorientierte Programme umsetzen lassen. Diese verfügen über von den Lernenden zusammengestellte Eingabemasken, um Daten einzufügen oder zu manipulieren und verschiedene Ausgabesichten, um den Datenbestand sinnvoll zu präsentieren.
 \item[Schrittweise komplexere Benutzeroberfläche der Entwicklungsumgebung] \hfill \\
   Konventionelle Entwicklungsumgebungen sind Programme von Profis für Profis und bieten einen dementsprechend ausgerichteten Funktionsumfang. Gerade wenn man aber dabei ist etwas Neues zu lernen, kann es sinnvoll sein, die Menge der möglichen Optionen zu beschränken. In diesem Sinne sollte die Lehrkraft die Möglichkeit haben, den Funktionsumfang der Entwicklungsumgebung für Schüler gezielt zu reduzieren. Es sollten sich also Funktionen der Entwicklungsumgebung ausblenden lassen, wenn dies aus didaktischen Gründen sinnvoll erscheint. Zum Beispiel könnten bestimmte Bedienelemente oder Bestandteile von \texttt{SQL} ausgeblendet werden, wenn diese noch nicht behandelt worden sind.
@@ -875,7 +875,7 @@ Um im Falle von mehreren in Frage kommenden Abfragen eine eindeutige Zuordnung v
 
 Der Umgang mit den Zeilen erfordert keine Sonderbehandlung, hier genügt die Angabe eines Zeilenindex. Im Normalfall wird die Iteration sowieso nicht explizit über den Index, sondern implizit über die Elemente stattfinden. Für die Spalten entfällt glücklicherweise eine "`künstliche"' Benennung, diese werden trivialerweise über ihren Namen entsprechend der \texttt{SELECT}-Komponente angesprochen. Mit diesen drei Werten (Name der Abfrage, Zeilenindex, Spaltenname) lässt sich jede Zelle einer Menge von Abfragen eindeutig identifizieren.
 
-Aus praktischen Gründen sollten Abfragen allerdings bezüglich der Anzahl der erwarteten Zeilen annotiert werden, konkret unterschieden werden muss dabei zwischen "`exakt eine Zeile"' und "`beliebig viele (auch keine) Zeilen"'. Im Falle einer Abfrage mit nur einer Zeile entfällt dann Notwendigkeit einen Zeilenindex anzugeben, dieser bezieht sich dann implizit immer auf die einzige, zur Verfügung stehende Zeile. Wenn Daten an die Oberflächen gebunden werden, entfällt durch diese Abkürzung die permanente Angabe einer redundanten Information. Listing~\ref{lst:sql:person-days} zeigt eine Abfrage die in Listing~\ref{lst:html:person-days-index} und \ref{lst:html:person-days} einmal mit und einmal ohne Index gebunden wird. Die Schreibweise ohne Index kommt der Lesbarkeit eindeutig zu gute.
+Aus praktischen Gründen sollten Abfragen allerdings bezüglich der Anzahl der erwarteten Zeilen annotiert werden, konkret unterschieden werden muss dabei zwischen "`exakt eine Zeile"' und "`beliebig viele (auch keine) Zeilen"'. Im Falle einer Abfrage mit nur einer Zeile entfällt dann Notwendigkeit einen Zeilenindex anzugeben, dieser bezieht sich dann implizit immer auf die einzige, zur Verfügung stehende Zeile. Wenn Daten an die Oberflächen gebunden werden, entfällt durch diese Abkürzung die permanente Angabe einer redundanten Information. Listing~\ref{lst:sql:multi-row} zeigt eine Abfrage die in Listing~\ref{lst:html:article-with-index} und \ref{lst:html:article-no-index} einmal mit und einmal ohne Index gebunden wird. Die Schreibweise ohne Index kommt der Lesbarkeit eindeutig zu gute.
 
 \begin{lstlisting}[float=h, language=SQL, caption=Abfrage mit maximal einer Ergebniszeile,label=lst:sql:multi-row]
 SELECT caption, text
@@ -883,12 +883,12 @@ FROM   article
 LIMIT  1;
 \end{lstlisting}
 
-\begin{lstlisting}[float=h, language=HTML, caption=String-Interpolation mit Indexzugriff, label=lst:html:person-days-index]
+\begin{lstlisting}[float=h, language=HTML, caption=String-Interpolation mit Indexzugriff, label=lst:html:article-with-index]
 <!-- query.article = Listing (*@\ref{lst:sql:multi-row}: \nameref{lst:sql:multi-row}@*) -->
 <p>{{ query.article[0].name }}, beginnt mit den folgenden Worten {{ query.article[0].text | truncatewords: 4 }}.</p>
 \end{lstlisting}
 
-\begin{lstlisting}[float=h, language=HTML, caption=String-Interpolation mit implizitem Index, label=lst:html:person-days-index]
+\begin{lstlisting}[float=h, language=HTML, caption=String-Interpolation mit implizitem Index, label=lst:html:article-no-index]
 <!-- query.article = Listing (*@\ref{lst:sql:multi-row}: \nameref{lst:sql:multi-row}@*) -->
 <p>{{ query.article.name }}, beginnt mit den folgenden Worten {{ query.article.text | truncatewords: 4 }}.</p>
 \end{lstlisting}
@@ -913,11 +913,11 @@ In einem solchen Fall soll es also möglich sein auch Bedienelememente wie Combo
 Praktischerweise ist auch diese Unterscheidung in \texttt{HTML} vorgesehen: Bei einem \texttt{<select>}-Element wird explizit zwischen dem internen Wert (das Attribut \texttt{value}) und der Repräsentation für den Benutzer (der Inhalt des Elements) unterschieden. Listing~\ref{lst:html:select-example} demonstriert, wie diese Informationen mit Liquid in \texttt{<option>}-Element als Kinder eines \texttt{<select>}-Elements beschrieben werden. Die Darstellung in Browsern erfolgt in der Regel über eine Combobox.
 
 \begin{lstlisting}[float,language=HTML, caption=Containerelemente mit Kindern, label=lst:html:select-example]
-<!-- query.nutzer = Listing (*@\ref{lst:sql:people-days}: \nameref{lst:sql:people-days}@*) -->
+<!-- query.alle_artikel = "SELECT * FROM article" -->
 <select>
-  {% for benutzer in query.nutzer %}
-    <option value="{{ benutzer.id }}">
-      {{ benutzer.name }}
+  {% for article in query.alle_artikel %}
+    <option value="{{ article.article_id }}">
+      {{ article.article_id }}
     </option>
   {% endfor %}
 </select>
@@ -1129,7 +1129,7 @@ Sofern möglich werden dabei identische Eigenschaften bei unterschiedlichen Bedi
     \label{fig:sidebar-property-editor-table}
   \end{subfigure}
   
-  \caption{Beispiele für Eigenschaftseditoren}
+  \caption{Beispiele für Eigenschaftseditoren in der Seitenleiste}
   \label{fig:sidebar-property-editor}
 \end{figure}
 
@@ -1165,6 +1165,7 @@ Die Kettenglieder stehen für korrekt gebundene Parameter einer Abfrage. Sofern 
 \end{figure}
 
 \subsubsection{Umgang mit Parametern}
+\label{sec:ui-editor-params}
 
 %%% Local Variables:
 %%% mode: latex
