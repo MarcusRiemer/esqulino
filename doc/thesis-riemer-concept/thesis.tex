@@ -10,6 +10,7 @@
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage[absolute]{textpos}
 \usepackage{hyperref}
+\usepackage{nameref}
 \usepackage[format=plain,labelfont=bf]{caption}
 \usepackage{subcaption}
 \usepackage{listings}
@@ -30,22 +31,14 @@
 \usepackage[normalem]{ulem} % Striking out stuff
 \usepackage{datetime}       % \currenttime
 \usepackage[autostyle=true,german=quotes]{csquotes}       % \enquote
+\usepackage[automark,headsepline=1pt]{scrlayer-scrpage}
+
+\renewcommand*{\headfont}{\normalfont}
 
 %% additional ressources
 \input{tex-definitions}
 
 \usetikzlibrary{calc,intersections,shapes,fit}
-
-% neue Kopfzeilen mit fancypaket
-\usepackage{fancyhdr} %Paket laden
-\pagestyle{fancy} %eigener Seitenstil
-\fancyhf{} %alle Kopf- und Fußzeilenfelder bereinigen
-\fancyhead[L]{\nouppercase{\leftmark}} %Kopfzeile links
-\fancyhead[C]{} %zentrierte Kopfzeile
-\fancyhead[R]{\thepage} %Kopfzeile rechts
-\renewcommand{\headrulewidth}{0.4pt} %obere Trennlinie
-%\fancyfoot[C]{Confidential}
-%\renewcommand{\footrulewidth}{0.4pt} %untere Trennlinie
 
 %% meta information
 \hypersetup{
@@ -81,8 +74,14 @@ Dieser Stand der Arbeit ist vom \today{} \currenttime{}, das Kürzel der dazugeh
 \begin{itemize}[noitemsep]
 \item \fullref{sec:introduction} fehlen noch Vorwärtsreferenzen und wird möglicherweise noch erweitert. Mir fehlt bloß noch eine zündende Idee was da noch fehlt.
 \item \fullref{sec:related-work} ist vollständig.
-\item \fullref{sec:requirements} fasert bei \fullref{sec:design-ui-editor} sehr abrupt mit Todos aus, genau da ist noch für etwa 5 Seiten Baustelle.
+\item \fullref{sec:requirements} fasert bei \fullref{sec:ui-editor-params} sehr abrupt aus.
 \item \fullref{sec:implementation-analysis} kann trotzdem bis \fullref{sec:data-model-query} gelesen werden, dort ist aktuell einfach Schluss.
+\end{itemize}
+
+\subsubsection*{Änderungen vom 27.10.2016}
+\begin{itemize}[noitemsep]
+\item \fullref{sec:drag-drop-ui-editor} ist fast fertig.
+\item \fullref{sec:introduction} und \fullref{sec:related-work} wurden erneut lektoriert.
 \end{itemize}
 
 \subsubsection*{Änderungen vom 25.10.2016}
@@ -91,7 +90,6 @@ Dieser Stand der Arbeit ist vom \today{} \currenttime{}, das Kürzel der dazugeh
 \item \fullref{sec:design-ui-concept} ist fertig.
 \item \fullref{sec:introduction} sagt nun am Ende auch was zum Fazit.
 \end{itemize}
-
 
 \subsubsection*{Änderungen vom 24.10.2016}
 \begin{itemize}[noitemsep]
