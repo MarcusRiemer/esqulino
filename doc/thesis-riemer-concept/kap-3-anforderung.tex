@@ -1094,17 +1094,17 @@ Diese beiden Funktionen werden üblicherweise in eigenen Unterfenstern bereitges
   \label{fig:sidebar-example}
 \end{figure}
 
-Für \idename{} sollte allerdings noch ein weiterer Bereich zum Einsatz kommen: Eine Auflistung aller verfügbaren Datenquellen. Diese Funktion ist nicht Bestandteil von gängigen Entwicklungsumgebungen, weil die Datenbestände wahlweise zu groß oder zu unstrukturiert sind und manchmal sogar erst zur Laufzeit erzeugt werden. Bei \idename{} ist der Datenbestand hingegen sehr gut strukturiert und typischerweise auch übersichtlich (siehe \fullref{sec:page-data-sources}). Dementsprechend sollten beim editieren der Seite die zur Verfügung stehenden Datenquellen gezeigt werden.
+Für \idename{} sollte allerdings noch ein weiterer Bereich zum Einsatz kommen: Eine Auflistung aller verfügbaren Datenquellen. Diese Funktion wird von Entwicklungsumgebungen, im Vergleich zu dem Editor für Eigenschaften und der Aufzählung verfügbarer Bedienelemente, nur sehr uneinheitlich angeboten. Häufig liegt das an sehr großen oder nur unstrukturiert vorliegenden Datenbestände, die manchmal sogar erst zur Laufzeit erzeugt werden. Insbesondere bei Skriptsprachen liegt der Entwicklungsumgebung in der Regel kein formales Datenmodell vor. An dieser Stelle behelfen sich die Editoren indem sie für jede zu bearbeitende Oberfläche explizite ein formales Datenmodell einfordern. Der \texttt{WPF}-Editor des Visual Studio erlaubt zum Beispiel die Angabe einer "`ViewModel"'-Klasse, die dann zur Designzeit vom Editor instanziiert wird. Dementsprechend muss diese Klasse auch losgelöst von ihren typischen Datenquellen (Datenbank, Webservice,~...) agieren können.
 
-Auch \idename{} wird den Seiteneditor also in zwei wesentliche Bereiche unterteilen: Einen Hauptbereich zum editieren und eine Seitenleiste mit verfügbaren Daten, Bedienelementen und den Eigenschaften eines ausgewählten Bedienelements. Die Inhalte der Seitenleiste sollen dabei zwischen wann immer möglich zwischen dem WYSIWYG- und dem Block-Editor geteilt werden können.
+Bei \idename{} ist der gesamte Datenbestand hingegen in Namensräumen vorstrukturiert und typischerweise in Bezug auf die Datenmenge auch übersichtlich (siehe \fullref{sec:page-data-sources}). Dementsprechend sollten beim Editieren der Seite die zur Verfügung stehenden Datenquellen einfach ausgewählt werden können, ohne dass dafür aus Sicht des Entwicklers besondere Vorkehrungen getroffen werden müssten.
 
-Die unterschiedlichen Bestandteile der Seitenleiste können sich bei einer größeren Anzahl von Elementen in die Quere kommen. Andere Entwicklungsumgebungen lösen das durch die Nutzung von Tab- oder Akkordeon-Containern, so das sich aktuell störende Elemente ausblenden lassen. An dieser Stelle wird ein praktischer Test mit Anwendern am Besten zeigen können, welcher Ansatz zu bevorzugen ist.
+\idename{} wird den Seiteneditor also in zwei wesentliche Bereiche unterteilen: Einen großen Hauptbereich zum Editieren und eine schmale Seitenleiste mit verfügbaren Daten, Bedienelementen und den Eigenschaften eines ausgewählten Bedienelements. Die Inhalte der Seitenleiste sollen dabei zwischen wann immer möglich zwischen dem WYSIWYG- und dem Block-Editor geteilt werden können. Die unterschiedlichen Bestandteile der Seitenleiste können bei einer größeren Anzahl von Elementen die Übersichtlichkeit negativ beeinträchtigen. Andere Entwicklungsumgebungen lösen das durch die Nutzung von Tab- oder Akkordeon-Containern, so das sich aktuell störende Elemente ausblenden lassen. An dieser Stelle wird ein praktischer Test mit Anwendern am Besten zeigen können, welcher Ansatz für \idename{} zu bevorzugen ist.
 
 \subsubsection{Seitenleiste: Editieren von Eigenschaften}
 
 Um Eigenschaften von Bedienelementen auch ohne spezielle Komponenten editieren zu können, wird in der Seitenleiste ein Editor für Eigenschaften bereitgestellt. Diese Vorgehensweise ermöglicht eine universelle Bearbeitungsmöglichkeit unabhängig von der Repräsentation im eigentlichen Editorbereich. Sowohl ein WYSIWYG- als auch ein "`Block"'-Editor können also, bewusst oder als "`Fallback"', auf identische generische Bearbeitungsmethoden für Bedienelemente zurückgreifen. Abbildung~\ref{fig:sidebar-property-editor} zeigt Beispiele für die im Prototypen implementierten Editoren.
 
-Sofern möglich werden dabei identische Eigenschaften bei unterschiedlichen Bedienelementen identisch angeordnet. Eingabeelemente für Formulare (\fullref{fig:sidebar-property-editor-input} \& \fullref{fig:sidebar-property-editor-select}) fragen immer zuerst nach dem \texttt{name}-Attribut und dem logischen Titel des editierten Elements.
+Sofern möglich werden dabei identische Eigenschaften bei unterschiedlichen Bedienelementen identisch angeordnet. Eingabeelemente für Formulare (\fullref{fig:sidebar-property-editor-input} \& \fullref{fig:sidebar-property-editor-select}) fragen immer zuerst nach dem \texttt{name}-Attribut ("`Eingabename"') und dem dargestellten Titel des editierten Elements.
 
 \begin{figure}[p]
   \begin{subfigure}[b]{0.45\textwidth}
@@ -1135,7 +1135,19 @@ Sofern möglich werden dabei identische Eigenschaften bei unterschiedlichen Bedi
 
 \subsubsection{Seitenleiste: Angebot von Bedienelementen}
 
-Technisch gesehen ist dieses Element keine besondere Herausforderung: Es handelt sich um eine einfache Auflistung von verfügbaren Bedienelementen. Die wesentliche abzusehende Problematik die potenziell sehr große Anzahl anzuzeigender Elemente.
+Technisch gesehen ist dieses Element keine besondere Herausforderung: Es handelt sich um eine einfache Auflistung von verfügbaren Bedienelementen. Um den Wiedererkennungswert von bestimmten Bedienelementen zu steigern, werden diese mit einem kleinen Symbol ausgestattet (Abbildung~\ref{fig:sidebar-editor-widgets}).
+
+Die wesentliche Herausforderung für diese Komponente liegt in der absehbar immer größer werdenden Anzahl von Bedienelementen. Der Prototyp nimmt schon den Versuch einer Kategorisierung vor (blau für Layoutelemente, grün für \texttt{HTML}-Elemente, orange für Elemente mit einer komplexen Darstellung), diese konkreten Einordnungen sind aber noch nicht endgültig.
+
+\subsubsection{Seitenleiste: Angebot von verfügbaren Daten}
+
+Die Anzeige der verfügbaren Daten ist grundsätzlich auch eine Aufzählung der Inhalte aller gefüllten Namensräume. Und ähnlich wie beim vorigen Punkt ist auch an dieser Stelle die wesentliche Herausforderung erneut die potenziell sehr große Anzahl von Bedienelementen.
+
+Zur besseren Visualisierung sind an dieser Stelle verschiedene Symbole für die korrekte Verbindung notwendiger Parameter vorgesehen. Der in das Rechteck eintretende Pfeil (zum Beispiel bei \texttt{GET}-Parametern und Abfragen) symbolisiert Werte die bereits vor dem Rendervorgang zur Verfügung stehen und daher in das Template eingesetzt werden können. Werte die aus einem Rechteck austreten, stehen erst auf der Folgeseite zur Verfügung, zum Beispiel Formulardaten.
+
+Problematisch bei dieser Visualisierung ist ein technisches Detail: Ein Formular kann in Abhängigkeit der verwendeten \texttt{<button>}-Elemente auf mehr als ein Ziel verweisen. Daher hat das \texttt{<form>}-Element intern bisher keine weitere Bedeutung außer "`Elternelemente für Eingabeelemente"' und damit auch keinen Namen oder eine ähnlich identifizierende Eigenschaft, die in der Seitenleiste angezeigt werden könnte. Daher kommt es in der Darstellung zu einer Doppelung des Begriffs "`Formular"'.
+
+Die Kettenglieder stehen für korrekt gebundene Parameter einer Abfrage. Sofern ein erforderlicher Parameter nicht an einen Wert gebunden wurde, verfärbt sich der Name des entsprechenden Parameters rot und das Symbol zeigt ein gerissenes Glied.
 
 \begin{figure}[h]
   \begin{subfigure}[b]{0.45\textwidth}
@@ -1146,13 +1158,11 @@ Technisch gesehen ist dieses Element keine besondere Herausforderung: Es handelt
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{images/screenshots/20161019/editor-page-data}
     \caption{Verfügbare Daten}
-    \label{fig:sidebar-editor-widgets}
+    \label{fig:sidebar-editor-data}    
   \end{subfigure}
   \caption{Weitere Elemente der Seitenleiste}
-  \label{fig:sidebar-widgets-data}
+  \label{fig:sidebar-widgets}
 \end{figure}
-
-\subsubsection{Seitenleiste: Angebot von verfügbaren Daten}
 
 \subsubsection{Umgang mit Parametern}
 
