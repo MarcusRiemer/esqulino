@@ -2,7 +2,7 @@ import {WidgetDescription, FormDescription}        from '../page.description'
 
 import {loadWidget}                                from './widget-loader'
 import {
-    Widget, HostingWidget, WidgetHost, WidgetBase
+    Widget, HostingWidget, WidgetHost, WidgetBase, UserInputWidget
 } from './widget-base'
 
 export {FormDescription}
@@ -38,6 +38,11 @@ export class Form extends HostingWidget {
      */
     get children() {
         return (this._widgets);
+    }
+
+    get providedNames() : string[] {
+        return (this.children.filter(c => c instanceof UserInputWidget)
+                .map((ui : UserInputWidget) => ui.outParamName));
     }
 
     /**

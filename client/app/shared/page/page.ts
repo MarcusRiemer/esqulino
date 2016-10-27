@@ -393,13 +393,14 @@ export class Page extends ProjectResource {
         const impl = (items : any[]) => {
             let widgets : Widget[] = [];
             items.forEach(item => {
+                // Store it if it's a child
+                if (isWidget(item)) {
+                    widgets.push(item);
+                }
+                
                 // If this itself is a host, grab its children;
                 if (isWidgetHost(item)) {
                     widgets = widgets.concat(impl(item.children));
-                }
-                // Store it if it's a child
-                else if (isWidget(item)) {
-                    widgets.push(item);
                 }
             });
                         
