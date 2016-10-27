@@ -6,7 +6,7 @@ import {
     Page, QueryReference, ParameterMapping
 } from '../../shared/page/index'
 import {
-    Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml, Link
+    Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml, Link, Form
 } from '../../shared/page/widgets/index'
 
 import {SIDEBAR_MODEL_TOKEN}                    from '../editor.token'
@@ -180,6 +180,13 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
 
     get availableConstants() : string[] {
         return (["project.name", "page.name"]);
+    }
+
+    /**
+     * @return All available forms that would provide data
+     */
+    get availableForms() {
+        return (this.page.allWidgets.filter((w) => w instanceof Form));
     }
 
     /**

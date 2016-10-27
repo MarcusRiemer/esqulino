@@ -1,5 +1,5 @@
 <sidebar-item-host [cardClasses]="additionalCardClasses">
-  <!-- Tell the user if the page has absolutly no data associated -->
+  <!-- Tell the user if the page has no specific data associated -->
   <div *ngIf="!hasAnyData && !showQueryDropTarget"
        class="alert alert-info"
        role="alert">
@@ -8,7 +8,7 @@
     </p>
   </div>
 
-  
+  <!-- Adding new query references to this page -->
   <div *ngIf="showQueryDropTarget"
        class="block-container block">
     <div (dragover)="onAddQueryReferenceDrag($event)"
@@ -82,6 +82,12 @@
       </li>
     </ul>
   </div>
+
+  <!-- Forms and provided arguments -->
+  <h5 *ngIf="availableForms.length > 0"
+      class="block-container caption">
+    Formulare
+  </h5>
   
   <!-- Globally available data -->
   <div class="block-container block">
