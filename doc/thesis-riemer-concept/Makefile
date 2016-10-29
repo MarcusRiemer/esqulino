@@ -4,7 +4,13 @@ REMOTE_DIR = /srv/htdocs/playground.marcusriemer.de
 
 PDF_FILENAME = thesis.pdf
 
+SCHEMA_IMAGE_FILES = $(addprefix images/db-schema/, cyoa.pdf pokemongo.pdf blog.pdf)
+
 all : $(PDF_FILENAME)
+
+#################################
+# Document generation
+#################################
 
 GIT_REV :
 	echo -n $(CURR_GIT_REV) > GIT_REV
@@ -23,6 +29,15 @@ publish-draft: msg-pre-pdf $(PDF_FILENAME)
 clean : msg-pre-clean
 	rm -f $(PDF_FILENAME)
 	rubber --clean thesis.tex
+
+#################################
+# Schema Image Generation
+#################################
+
+all-db-schema-images : $(SCHEMA_IMAGE_FILES)
+
+images/db-schema/%.pdf : ../../data/dev/projects/%/databases/default.sqlite
+	schemacrawler.sh -server sqlite -database $< -infolevel=standard -noinfo=true -portablenames -password=  -command graph -outputformat pdf -outputfile=$@
 
 ##################################
 # Message targets
