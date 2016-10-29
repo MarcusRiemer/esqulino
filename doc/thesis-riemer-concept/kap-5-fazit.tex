@@ -1,7 +1,7 @@
 \section{Fazit}
 \label{sec:conclusion}
 
-Ein Blick in den Anhang zeigt, dass der Prototyp dem eingangs erwähnten Ziel\footnote{"`Mit dem Blattwerkzeug lassen sich gestützt durch \textit{Drag \& Drop-Editoren} für beliebige \texttt{SQLite}-Datenbanken \textit{Abfragen formulieren} und \textit{Oberflächen entwickeln}"', siehe Kapitel \fullref{sec:introduction}} durchaus gerecht wird. Zu praktisch beliebigen SQLite-Datenbanken können Abfragen und Oberflächen entwickelt werden.
+Ein Blick in den Anhang zeigt, dass der Prototyp dem eingangs erwähnten Ziel\footnote{"`Mit dem Blattwerkzeug lassen sich gestützt durch \textit{Drag \& Drop-Editoren} für beliebige \texttt{SQLite}-Datenbanken \textit{Abfragen formulieren} und \textit{Oberflächen entwickeln}"', siehe Kapitel \fullref{sec:introduction}} durchaus gerecht wird: Zu praktisch beliebigen SQLite-Datenbanken können Abfragen und Oberflächen entwickelt werden.
 
 Etwas detallierter lässt sich der Grad des Erfolges einer prototypischen Implementierung vor allem am finalen Entwicklungsstand festmachen: Welcher prozentuale Anteil der angestrebten Funktionalität wurde erreicht? Daher muss sich der "`fertige Prototyp"' an den in Kapitel \fullref{sec:principles} formulierten Zielen messen lassen. Auch einige spätere Kapitel, insbesondere \fullref{sec:sql-subset}, lassen sich als ein recht detaillierter Anforderungskatalog verstehen.
 
@@ -11,13 +11,13 @@ Dieses vermeintlich objektive Kriterium berücksichtigt aber nur einen Teil der 
 
 Der aktuelle Stand der Implementierung ist vor allem als ein Durchstich zu verstehen: Auch wenn in fast jedem Teilbereich noch Funktionaliät fehlt, kann das Zusammenspiel dieser Systeme schon gut erprobt werden. Insbesondere bei der Verbindung der Datenbank mit der Oberfläche, sowohl lesend als auch schreibend, haben sich im Laufe der konkreten Implementierung noch einige unerwartete Stolpersteine aufgetan. Das zugrundeliegende Fundament, also die internen und textuellen Darstellungen von \texttt{SQL} und \texttt{HTML}, sind nun aber stabil und darüber hinaus auch mächtiger, als der mit dem Drag \& Drop-Editor editierbare Stand.
 
-Das Grundprinzip "`\textbf{Semantik vor Syntax}"' wurde erreicht. Der Drag \& Drop-Editor Syntaxfehler kategorisch aus, die Fehlermeldungen für erkannte Fehlersituationen haben aber noch Verbesserungspotenzial. Aktuell werden fehlerhafte Eingaben einfach zugelassen und dann erst im Nachhinein als Fehler markiert. An dieser Stelle wäre das im Prinzip angesprochene "`kontinuirliche Feedback"' vermutlich am besten mit einer eingebauten, kontextsensitiven Hilfe unterstützen.
+Das Grundprinzip "`\textbf{Semantik vor Syntax}"' wurde erreicht. Der Drag \& Drop-Editor schließt Syntaxfehler kategorisch aus, sofern diese im kompilierten Quelltext doch auftreten wäre das eindeutig ein Fehler in der Codegenerierung, nicht jedoch des Entwicklers. Bei Fehlermeldungen für erkannte Fehlersituationen gibt es aber noch Verbesserungspotenzial: Aktuell werden fehlerhafte Eingaben einfach zugelassen und dann erst im Nachhinein als Fehler markiert. An dieser Stelle wäre das im Prinzip angesprochene "`kontinuierliche Feedback"' vermutlich am besten mit einer eingebauten, kontextsensitiven Hilfe unterstützen. Diese könnte auf Fehler mit einer kurzen Erläuterung reagieren und dabei demonstrieren, wied die richtige Vorgehensweise wäre.
 
 Ob die erstellbaren Seiten durch "`\textbf{praktisch vorzeigbare Ergebnisse motivieren}"', kann nur ein praktischer Test mit der Zielgruppe zeigen. Ein Fortschritt gegenüber der nicht sonderlich hohen Hürde "`besser sein als Texteingaben in einer \texttt{SQL}-\texttt{IDE}"' ist aber durchaus zu erwarten.
 
-Die "`\textbf{einfache Inbetriebnahme}"' ist eine Frage der Perspektive. Aus Sicht eines Schülers ist der einfache Aufruf einer \texttt{URL} in der Tat einfach, bisher hat \idename{} auch gut unter allen ad-hoc probierten Kombinationen aus Betriebssystemen (Windows, Mac\-OS, Linux) und Browsern (Firefox, Chrome, Edge) gut funktioniert.
+Die "`\textbf{einfache Inbetriebnahme}"' ist eine Frage der Perspektive. Aus Sicht eines Schülers ist der einfache Aufruf einer \texttt{URL} in der Tat einfach, bisher hat \idename{} auch gut unter allen ad-hoc probierten Kombinationen aus Betriebssystemen (Windows, Mac\-OS, Linux) und Browsern (Firefox, Chrome, Edge) gut funktioniert. Für Lehrkräfte wird aktuell eine virtuelle Maschine bereitgestellt, der Umgang mit dieser ist aufgrund des fehlenden Webinterfaces noch relativ unbequem.
 
-Das technische Fundament aus Ruby mit Sinatra und Typescript mit Angular 2 hat sich ebenso bewährt, wie die Entscheidung den größten Teil der Logik im Client zu belassen. Der Betrieb von \idename{} fühlt sich nach der initialen Ladezeit sehr flüssig an. Die Möglichkeit der Entwicklung von Unit- und End-to-End-Tests fügt sich gut in den Entwicklungszyklus ein.
+Eine Notwendigkeit des Wechsels auf eine "`normale"' Desktopanwendung hat sich zu keinem Zeitpunkt ergeben. Das technische Fundament aus Ruby mit Sinatra und Typescript mit Angular 2 hat sich ebenso bewährt, wie die Entscheidung, den größten Teil der Logik im Client zu belassen. Der Betrieb von \idename{} fühlt sich nach der initialen Ladezeit sehr flüssig an. Die Möglichkeit der Entwicklung von Unit- und End-to-End-Tests fügt sich gut in den Entwicklungszyklus ein.
 
 \subsection{Nicht erreichte Ziele}
 
@@ -25,13 +25,15 @@ Das Ziel einer "`\textbf{schrittweise komplexeren Benutzeroberfläche}"' wurde z
 
 Auch das Ziel der "`\textbf{Fortführung der entwickelten Projekte}"' mit externen Programmen wurde für den Prototypen hinten angestellt. Und zumindest die Unterstützung der Quelltext-Editoren sollte noch implementiert werden, bevor der Bedarf für einen Export überhaupt abgeschätzt werden kann.
 
-Der Umfang der tatsächlich implementierten \texttt{SQL}-Funktionen ist noch nicht abgeschlossen. Zum jetzigen Zeitpunkt fehlen neben der Unterstützung der \texttt{AS}-Direktive im Editor (der Syntaxbaum unterstützt die Benennung schon) vor allem Funktionen und Gruppierungen.
+Der Umfang der tatsächlich implementierten \texttt{SQL}-Funktionen ist noch nicht abgeschlossen. Zum jetzigen Zeitpunkt fehlen neben der Unterstützung der \texttt{AS}-Direktive im Editor (der Syntaxbaum unterstützt die Benennung schon) vor allem Funktionen und Gruppierungen. Dieser Umstand schränkt die umsetzbaren Projekte empfindlich ein: Stünden diese Funktionen schon zur Verfügung könnten zum Beispiel auch Webseiten für Sportvereine, inklusive der dynamischen Erzeugung von Tabellen, mit \idename{} umgesetzt werden.
 
-\subsection{Einsatz im Unterricht}
+Der Einsatz des Prototypen im Unterricht ist aktuell vor allem aufgrund der rudimentären Benutzerverwaltung nur schwer vorstellbar. Noch ist noch keine Registrierung von Benutzern implementiert, Projekte können noch nicht über die Webseite kopiert werden. Die Implementierung einer Benutzerverwaltung ist allerdings eine vor allem handwerkliche Aufgabe und wurde daher im Rahmen dieser Thesis nicht vorangetrieben.
+
+Aber auch der Betrieb für Lehrkräfte gestaltet sich deutlich komplizierter als notwendig: Die Notwendigkeit einer eigenen (Sub-)Domain ist keine triviale Hürde. Die Annahme "`man wird doch wohl mal auf dem Nameserver der Schuldomain einen Eintrag für \idename{} anlegen können"' hat sich zwar nicht als haltlos erwiesen, behindert die initiale Inbetriebnahme aber merklich.
 
 \subsection{Weiterentwicklung}
 
-Eine wesentliche Frage bei der Weiterentwicklung von \idename{} ist die Frage nach dem Zeitpunkt, zu dem man die eigentliche Zielgruppe (sowie deren Lehrer) in die Entwicklung mit einbezieht. Oder anders ausgesdrückt: Es stellt sich die Frage nach dem minimalen Satz an Funktionen, mit denen man sinnvoll Feedback einholen kann.
+Eine wesentliche Frage bei der Weiterentwicklung von \idename{} ist die Frage nach dem Zeitpunkt, zu dem man die eigentliche Zielgruppe (sowie deren Lehrer) in die Entwicklung mit einbezieht. Oder anders ausgesdrückt: Es stellt sich die Frage nach dem minimalen Satz an implementierten Funktionen, mit denen man sinnvoll Feedback bei Lehrern und Schülern einholen kann.
 
 \begin{description}
 \item[SQL: Unterstützung von Funktionen] \hfill\\
@@ -41,7 +43,6 @@ Eine wesentliche Frage bei der Weiterentwicklung von \idename{} ist die Frage na
 \item[SQL: Schemaeditor] \hfill\\
   
 \end{description}
-
 
 
 
