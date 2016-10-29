@@ -55,7 +55,7 @@ Bei der Webseite "`SqlZoo"'\footnote{Verfügbar unter \url{http://sqlzoo.net/}} 
 
 Dem Lernenden präsentiert sich das Projekt ähnlich wie ein Lehrbuch mit Übungsaufgaben. Diese sind thematisch in Kapitel untergliedert und nutzen in der Regel einen sehr überschaubaren Datenbestand. Die Ergebnisse werden neben dem Textfeld angezeigt und können mit dem korrekten Ergebnis verglichen werden (Abbildung~\ref{fig:sqlzoo-check-result}). So können Lernende ihre Ergebnisse selbständig kontrollieren.
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering \includegraphics[width=\textwidth]{images/related-work-sql-zoo-error.png}
   \caption{Technische Fehlermeldung einer Datenbank aufgrund eines Syntaxfehlers in der Eingabemaske von SqlZoo.}
   \label{fig:sqlzoo-check-result}
@@ -63,7 +63,7 @@ Dem Lernenden präsentiert sich das Projekt ähnlich wie ein Lehrbuch mit Übung
 
 Nach den Lerneinheiten folgt dann eine Serie von Quizfragen (Abbildung~\ref{fig:sqlzoo-quiz-sql-formalization}). Dabei handelt es sich um Multiple-Choice-Aufgaben, es müssen also keine \texttt{SQL}-Abfragen geschrieben werden. Primär wird bei diesen Fragen eine Zuordnung verlangt: Dem Lernenden wird wahlweise eine Ergebnismenge oder eine Abfrage gezeigt und es muss die jeweils passende Abfrage oder Ergebnismenge dazu identifiziert werden. Weitere Aufgabentypen beschäftigen sich zum Beispiel mit der Wahl der korrekten \texttt{SQL}-Formalisierung zu einer natürlichsprachlich formulierten Anfrage.
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering \includegraphics[width=\textwidth]{images/related-work-sql-zoo-quiz-select-sql.png}
   \caption{Quizfrage: Zu einer natürlichsprachlichen Aussage muss die korrekte SQL-Formalisierung gewählt werden.}
   \label{fig:sqlzoo-quiz-sql-formalization}
@@ -147,7 +147,7 @@ Visual Studio Lightswitch richtet sich vornehmlich an Informatik-affine Mitarbei
 
 Es gibt unterschiedliche Arten und Weisen, um innerhalb einer Lightswitch-Anwendung auf Daten zuzugreifen. Im Rahmen dieser Arbeit ist aber lediglich der Umgang mit Datenbanken von Bedeutung. Für diese existiert ein eigener Editor (Abbildung~\ref{fig:lightswitch-data-designer}), welcher es erlaubt die Spalten einzelner Tabellen zu editieren und Beziehungen einzufügen. Die benötigten C\#-Klassen werden dann automatisch erzeugt und mittels eines Objekt-Relationalen-Mappers (ORM) auf die Struktur der Datenbank gemappt. Diese Vorgehensweise führt dabei zu einer Einschränkung, die im Lehrkontext zumindest ärgerlich ist: \lstinline{m:n}-Beziehungen zwischen Objekten können nicht erstellt werden, sondern müssen manuell durch zwei \lstinline{1:n}-Beziehungen mit einer "`künstlichen"' Entität in der Mitte abgebildet werden.
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering \includegraphics[width=\textwidth]{images/related-work-lightswitch-data-editor.png}
   \caption{Schemaeditor von Visual Studio Lightswitch}
   \label{fig:lightswitch-data-designer}
@@ -155,7 +155,7 @@ Es gibt unterschiedliche Arten und Weisen, um innerhalb einer Lightswitch-Anwend
 
 Die Oberflächen werden in einem Editor erstellt, welcher die Hierarchie der Bedienelemente in einem Baum visualisiert (Abbildung~\ref{fig:lightswitch-ui-designer}). Es stehen abhängig von der Zielplattform (Browser oder Desktop) im Detail unterschiedliche, aber in der Programmierung sehr ähnliche Bedienelemente bereit. Wichtigstes Element ist dabei die sehr mächtige Visualisierung von tabellarischen Daten.
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering \includegraphics[width=\textwidth]{images/related-work-lightswitch-ui-editor.png}
   \caption{Oberflächeneditor von Visual Studio Lightswitch}
   \label{fig:lightswitch-ui-designer}
@@ -185,7 +185,7 @@ Die MySQL Workbench ist das hauseigene Management- und Verwaltungsprogramm des g
 
 Anders als das Visual Studio Lightswitch unternimmt die MySQL Workbench keinerlei Versuche technische Details vor dem Anwender zu verstecken. Es handelt sich im wesentlichen um eine grafische Benutzerschnittstelle für jene Daten, die ebenso von der Programmierschnittstelle bereitgestellt werden.
 
-Da es sich um ein spezialisiertes Programm eines Datenbanksystems handelt, bietet der Schema-Designer (Abbildung~\ref{fig:mysql-workbench-schema-diagram}) keinerlei Unterstützung für konzeptuelle (z.B. mit Entity-Relationship-Modellen) Modellierung. Er beschäftigt sich ausschließlich mit der Darstellung oder Modifikation von physikalischen Modellen. Im Editor stehen zwar Komfortfunktionen für die Modellierung von Beziehungen aller typischen Kardinalitäten zur Verfügung, diese werden aber unmittelbar auf Fremdschlüssel und gegebenenfalls Kreuztabellen abgebildet. Von \texttt{m:n}-Beziehungen wird folglich nicht abstrahiert, sondern stattdessen die gängige Abbildung in Form einer Kreuztabelle automatisch vorgenommen.
+Da es sich um ein spezialisiertes Programm eines Datenbanksystems handelt, bietet der Schema-Designer (Abbildung~\ref{fig:mysql-workbench-schema-diagram}) keinerlei Unterstützung für konzeptuelle Modellierung (z.B. mit Entity-Relationship-Modellen). Er beschäftigt sich ausschließlich mit der Darstellung oder Modifikation von physikalischen Modellen. Im Editor stehen zwar Komfortfunktionen für die Modellierung von Beziehungen aller typischen Kardinalitäten zur Verfügung, diese werden aber unmittelbar auf Fremdschlüssel und gegebenenfalls Kreuztabellen abgebildet. Von \texttt{m:n}-Beziehungen wird folglich nicht abstrahiert, sondern stattdessen die gängige Abbildung in Form einer Kreuztabelle automatisch vorgenommen.
 
 Der Editor für Abfragen bietet alle typischen Funktionen einer Entwicklungsumgebung (Abbildung~\ref{fig:mysql-workbench-query}): Dem Entwickler werden kontextsensitiv Vervollständigungsvorschläge angeboten, die Struktur der involvierten Tabellen ist in einer Seitenleiste sichtbar. Das Ergebnis der Abfrage wird in einem variabel großen Bereich unter dem Texteditor angezeigt. Und unter diesem Bereich wiederum ist eine Historie der zuletzt ausgeführten Abfragen verfügbar.
 

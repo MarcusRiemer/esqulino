@@ -112,19 +112,21 @@ Um den Umfang des Prototypen zu Begrenzen, wurde die Implementierungsphase anhan
 
 Die Wahl des konkreten Datenbanksystems hat einen unmittelbaren Einfluss auf nahezu alle Bereiche von \idename. Im einzelnen handelt es sich dabei um die exakte Variante der SQL Syntax, auf die Rahmenbedingungen für den Betrieb der Entwicklungsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
 
-Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbeständen sollten normalerweise im Bereich nur einiger Megabyte liegen und die in der Praxis möglicherweise einzige Unterscheidung von Zugriffsrechten wäre zwischen lesendem und schreibenden Zugriff. Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien gewählt und hinsichtlich ihrer Relevanz sortiert:
+Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbeständen sollten normalerweise im Bereich nur einiger Megabyte liegen. Die in der Praxis vermutlich einzige relevante Unterscheidung von Zugriffsrechten wäre zwischen allgemeinem lesendem und schreibenden Zugriff, nicht jedoch auf Basis einzelner Datensätze oder komplexer Benutzergruppen.
+
+Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien gewählt und hinsichtlich ihrer Relevanz sortiert:
 
 \begin{description}  
 \item[Kostenlose Verfügbarkeit] \hfill \\
   Der Betrieb des Datenbanksystems soll nicht mit Lizenzkosten für Schulen, Lehrkräft, Lernende oder auch freiwillige Entwickler verbunden sein.
 \item[Einfacher Betrieb] \hfill \\
-  Zwar ist für den Einsatz von \idename{} aufgrund des Browsers als Client schon die Nutzung eines Servers nötig, das Datenbanksystem sollte den Betrieb dennoch nicht mehr als unbedingt notwendig weiter verkomplizieren. Eine wesentliche Rolle spielt dabei die Platformunabhängigkeit: Das Datenbanksystem sollte, wie auch der \idename{} Server, auf jedem gängigen Betriebssystem lauffähig sein.
+  Zwar ist für den Einsatz von \idename{} aufgrund des Browsers als Client schon die Nutzung eines Servers nötig, das Datenbanksystem sollte den Betrieb aus Sicht von Administratoren der Seite dennoch nicht mehr als unbedingt notwendig verkomplizieren. Eine wesentliche Rolle spielt dabei die Platformunabhängigkeit: Das Datenbanksystem sollte, wie auch der \idename{}-Server, auf jeder gängigen Betriebssystemfamilie (Windows, MacOS, Linux) lauffähig sein.
 \item[Einfache Backups] \hfill \\
-  Die gewünschte Exportfunktion für Projekte macht es nötig, den gesamten Datenbestand vergleichsweise einfach exportieren und importieren zu können. Darüber hinaus sollte es auch für Lehrkräfte möglichst einfach sein mit allen Projekten zu einem anderen \idename-Server umzuziehen.
+  Die gewünschte Exportfunktion für Projekte macht es nötig, den gesamten Datenbestand vergleichsweise einfach exportieren und importieren zu können. Darüber hinaus sollte es auch für Lehrkräfte möglichst einfach sein mit allen Projekten zu einem anderen \idename{}-Server umzuziehen.
 \item[Tools zur Modellierung] \hfill \\
   Da diese Arbeit sich nicht mit der Datenmodellierung befasst, muss das entsprechende Datenbankschema extern erzeugt werden. Von einer guten Unterstützung für Modellierungsvorhaben profitiert dementsprechend indirekt auch \idename.
-\item[Tools zur Entwicklung von SQL-Abfragen] \hfill \\
-  Sobald ein Entwickler an die Grenzen des SQL-Editor von \idename{} stößt, soll es so einfach wie möglich sein die Abfragen in einem externen Editor zu schreiben und danach in Textform wieder an \idename{} zu übergeben.
+\item[Externe Tools zur Entwicklung von SQL-Abfragen] \hfill \\
+  Sobald ein Entwickler an die Grenzen des SQL-Editor von \idename{} stößt, soll es bei Bedarf so einfach wie möglich sein, die entsprechend komplizierten Abfragen in einem externen Editor zu schreiben und danach in Textform wieder an \idename{} zu übergeben.
 \end{description}
 
 Das Kriterium der "`kostenlosen Verfügbarkeit"' ist dankenswerterweise sehr einfach zu erfüllen: Es existiert eine Vielzahl von praktisch eingesetzten quelloffenen Datenbanksystemen. Die Kriterien "`einfacher Betrieb"' und "`einfache Backups"' teilen die denkbaren Systeme recht eindeutig in zwei Lager: Eingebette Datenbanken lassen sich sehr einfach betreiben und sichern. Das starten eines weiteren SQL-Server-Prozesses ist bei dieser Betriebsart nicht nötig, der Im- oder Export des gesamten Datenbestandes erfordert nur das kopieren einer einzigen Datei.
@@ -295,15 +297,16 @@ Die vornehmlichen Eigenschaften eines Projektes sind die darin enthaltenen Abfra
 
 \subsubsection{Nutzung von Subdomains}
 
-\idename{}-Seiten werden unter eigenen Subdomains gerendert. Das erhöht die Anforderungen an die technische Infrastruktur, geht jedoch mit einer Reihe von Vorteilen einher.
+\idename{}-Projekte werden unter jeweils eigenen Subdomains zur Verfügung gestellt. Das erhöht zwar die Anforderungen an die technische Infrastruktur, geht jedoch mit einer Reihe von Vorteilen einher. Die online bereitgestellte Fassung des Protoypen geht in Bezug auf die zur Verfügung stehenden Subdomains noch einen Schritt weiter: Die Domain für die Entwicklungsumgebung (\href{http://blattwerkzeug.de}{\texttt{blattwerkzeug.de}}) unterscheidet sich von jener für die Projekte (zum Beispiel \href{http://cyoa.blattzeug.de}{\texttt{cyoa.blattzeug.de}}).
 
-Zunächst einmal gilt im Internet auch heute noch die Annahme, dass auf jeder Domain nur ein logischer Internetauftritt hinterlegt ist. Das sich hinter einer \texttt{URL} wie \texttt{blatt\-werk\-zeug.de\-/project\-/pokemongo} eine völlig andere Seite als hinter \texttt{blatt\-werk\-zeug.de\-/project\-/cyoa} verbirgt ist zwar in keinster Weise verboten, aber zumindest ungewöhnlich.
+Der hauptsächliche Grund für dieses Vorgehen ist die im Internet weitestgehend gültig Annahme, dass auf jeder (Sub-)Domain nur ein logischer Internetauftritt hinterlegt ist. Das sich hinter einer \texttt{URL} wie \texttt{blatt\-werk\-zeug.de\-/project\-/pokemongo} eine völlig andere Seite als hinter \texttt{blatt\-werk\-zeug.de\-/project\-/cyoa} verbirgt ist zwar in keinster Weise verboten, aber zumindest ungewöhnlich.
 
-Praktisch Subdomains von vielen Suchmaschinen, sonstigen Angeboten im Internet und auch innerhalb der technischen Standards anders behandelt, als wenn die gleichen Inhalte als untergeordnete \texttt{URL} einer anderen Seite existierten. Das beginnt schon bei entscheidenden technischen Details: So können zum Beispiel Zertifikate für \texttt{SSL}-Verbindungen nur für Domains, nicht aber Teile einer \texttt{URL} ausgestellt werden. Und Webseiten werden im Falle von unerwünschten Inhalten, zum Beispiel Phishing-Angriffen, üblicherweise für Subdomains gesperrt.
+Praktisch werden Subdomains von vielen Suchmaschinen, sonstigen Angeboten im Internet und auch innerhalb der technischen Standards, anders behandelt, als wenn die gleichen Inhalte als untergeordnete \texttt{URL} einer anderen Seite existierten. Das beginnt schon bei entscheidenden technischen Details: So können zum Beispiel Zertifikate für \texttt{SSL}-Verbindungen nur für Domains, nicht aber für Teile einer \texttt{URL} ausgestellt werden. Und Webseiten werden im Falle von unerwünschten Inhalten, zum Beispiel Phishing-Angriffen, üblicherweise auf Basis von Domainnamen gesperrt.
 
-Darüber hinaus kann jede Webseite davon ausgehen, dass die gesamte Routing-Hierarchie nur ihr gehört, was die Nutzung von absoluten Pfadangaben erlaubt. Insbesondere um Bilder, \texttt{CSS}-Dateien oder JavaScript-Bibliotheken zu verlinken ist das eine hilfreiche Garantie, welches viele praktische Probleme vermeidet.
+Darüber hinaus kann unter dieser Voraussetzung jede Webseite davon ausgehen, dass die gesamte Routing-Hierarchie nur ihr gehört. Die Subdomains erlauben also die Nutzung von absoluten Pfadangaben. Insbesondere um Bilder, \texttt{CSS}-Dateien oder JavaScript-Bibliotheken zu verlinken ist das eine hilfreiche Garantie, welche viele unpraktische Probleme vermeidet.
 
 \subsection{Unerwartete Hindernisse}
+\label{sec:unexpected-problems}
 
 \subsubsection{Instabile API von Angular 2}
 
