@@ -29,7 +29,7 @@ Mit \idename{} sollen Schülerinnen und Schüler ab der Mittelstufe angesprochen
 
 \begin{description}
 \item[Grundlegende PC-Anwenderkenntnisse] \hfill\\
-  Die Schüler müssen in der Lage sein, einen Browser zu bedienen und mit Begriffen wie "`Speichern"' und "`Klicken und Ziehen"' vertraut sein. Kenntnisse des Dateisystems sind jedoch nicht notwendig, \idename{} abstrahiert die konkreten Speicherorte.
+  Die Schüler müssen in der Lage sein, einen Browser zu bedienen und mit Begriffen wie "`Speichern"' und "`Klicken und Ziehen"' vertraut sein. Kenntnisse über Speicherorte im Dateisystem sind jedoch nicht notwendig, \idename{} abstrahiert die konkreten Speicherorte.
 \item[Tabellenkalkulation] \hfill\\
   Kenntnisse über den Umgang mit Tabellenkalkulationsprogrammen sind keine zwingende Voraussetzung, aber eine sinnvolle Vorstufe, um die Strukturierungsmöglichkeiten von Datenbeständen zu verstehen. Sofern sich die Schüler innerhalb eines solchen Programms auch schon mit Funktionen wie \texttt{SUMME} beschäftigt haben, kann auf diesem Wissen aufgebaut werden.
 \item[Bedienelemente] \hfill\\
@@ -59,7 +59,7 @@ Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit be
 \subsection{Künftigen Erweiterungen vorbehalten}
 \label{sec:out-of-scope}
 
-Neben der Formulierung von klaren Grundprinzipien als Richtline für relevante Funktionen ist es auch wichtig, den Umfang des zu entwickelnden Programms auf eine im Rahmen der Thesis machbare Teilmenge zu beschränken. Die folgenden Ideen wären naheliegende Ergänzungen, welche aufgrund der zur Verfügung stehenden Zeit aber zunächst nicht implementiert werden sollen\footnote{Die griffigere, englische Bezeichnung dafür wäre "`out of scope"', \href{http://german.stackexchange.com/questions/31085/german-equivalent-to-out-of-scope/}{dazu kennt allerdings auch das Internet keine direkte Übersetzung}}. Der Zweck dieser Master-Thesis ist die Implementierung eines Prototypen. Die Fertigstellung von \idename{} soll im Rahmen weiterer Arbeiten erfolgen und die im Folgenden geäußerten Ideen werden dann erneut evaluieren.
+Neben der Formulierung von klaren Grundprinzipien als Richtline für relevante Funktionen ist es auch wichtig, den Umfang des zu entwickelnden Programms auf eine im Rahmen der Thesis machbare Teilmenge zu beschränken. Die folgenden Ideen wären naheliegende Ergänzungen, welche aufgrund der zur Verfügung stehenden Zeit aber zunächst nicht implementiert werden sollen\footnote{Die griffigere, englische Bezeichnung dafür wäre "`out of scope"', \href{http://german.stackexchange.com/questions/31085/german-equivalent-to-out-of-scope/}{dazu kennt allerdings auch das Internet keine direkte Übersetzung}}. Der Zweck dieser Master-Thesis ist die Implementierung eines Prototypen. Die Fertigstellung von \idename{} soll im Rahmen weiterer Arbeiten erfolgen und die im Folgenden geäußerten Ideen werden dann erneut evaluieren werden.
 
 \begin{description}
 \item[Datenmodellierung] \label{scope:no-data-modelling} \hfill \\
@@ -143,7 +143,7 @@ Um also zumindest einen grundsätzlichen Schutz zu ermöglichen, sollte für ein
   \item[Entwickler] \hfill \\
     Mit diesem Zugangslevel hat ein legitimierter Benutzer das Recht, beliebige Änderungen an dem Projekt vorzunehmen. Dabei ist es egal, ob er mit der Entwicklungsumgebung oder der Oberfläche für Endbenutzer arbeitet.
   \item[Benutzer] \hfill \\
-    Diese Personengruppe hat keine Möglichkeit, den Quelltext eines Projektes zu editieren, kann aber uneingeschränkt auf die Funktionalität der Oberfläche für Endbenutzer zugreifen. Sofern z.B. das Löschen von bestimmten Datensätzen über die Oberfläche für Endbenutzer nicht möglich ist, können diese Daten von dieser Personengruppe auch nicht gelöscht werden.
+    Diese Personengruppe hat keine Möglichkeit, den Quelltext eines Projektes zu editieren, kann aber uneingeschränkt auf die Funktionalität der Oberfläche für Endbenutzer zugreifen. Sofern z.B. das Löschen von bestimmten Datensätzen über die Oberfläche für Endbenutzer möglich ist, können diese Daten von dieser Personengruppe im Rahmen der bereitgestellten Abfragen auch uneingeschränkt gelöscht werden. Wenn hingegen keine mutierenden Operationen über die Oberfläche für Endbenutzer bereitgestellt werden, können auch keine Daten bearbeitet werden.
   \item[Gast] \hfill \\
     Gäste können keinerlei Schreibzugriffe vornehmen, weder über die Entwicklungsumgebung, noch über die Oberfläche für Endbenutzer.
 \end{description}
@@ -300,6 +300,7 @@ Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisc
   \begin{enumerate}[noitemsep]
   \item \label{feat:fun-abs} \texttt{ABS(X)}, um den Betrag eines Wertes zu erhalten
   \item \label{feat:fun-coalesce} \texttt{COALESCE(X,Y,...)}, um den ersten gültigen Wert der Parameterliste zu erhalten
+  \item \label{feat:fun-instr} \texttt{INSTR(X,Y,Z)}, um das Vorkommen eines Suchwortes in einer Zeichenkette zu erhalten
   \item \label{feat:fun-length} \texttt{LENGTH(X)}, um die Länge einer Zeichenkette zu bestimmen
   \item \label{feat:fun-casing} \texttt{LOWER(X)}, und \texttt{UPPER(X)} um die klein bzw. groß geschriebene Variante einer Zeichenkette zu erhalten
   \item \label{feat:fun-printf} \texttt{PRINTF(FORMAT, ...)}, zur Formatierung von Zeichenketten wie in der gleichnamigen Funktion der \texttt{C}-Standardbibliothek.
@@ -309,7 +310,6 @@ Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisc
      \item \label{feat:fun-soundex} \texttt{SOUNDEX(X)} um einen phonetisch orientierten, unscharfen Vergleich von Zeichenketten durchzuführen.
   \item \label{feat:fun-substr} \texttt{SUBSTR(X,Y,Z)}, um einen Ausschnitt der Zeichenketten zu extrahieren
   \item \label{feat:fun-trim} \texttt{TRIM(X)} sowie \texttt{LTRIM(X)} und \texttt{RTRIM(X)}, um Leerzeichen am Anfang oder Ende eines Strings zu entfernen
-  \item \label{feat:fun-instr} \texttt{INSTR(X,Y,Z)}, um das Vorkommen eines Suchwortes in einer Zeichenkette zu erhalten
   \end{enumerate}
 
 \item \textbf{Aggregierende Funktionen (in alphabetischer Reihenfolge)} \\
@@ -349,7 +349,7 @@ Danach können die Einschränkungen noch für einzelne Abfragen verfeinert werde
   Dieses Feature-Level stellt die Verknüpfung vorhandener Datenbestände in den Vordergrund und blendet jegliche Projektion oder Gruppierung vollständig aus. Schüler sollen auf dieser Stufe lernen, sich in einem Datenmodell anhand der vorhandenen Fremdschlüssel-Beziehungen zu orientieren.
 \end{description}
 
-Für diese Arbeit wird der Umfang auf einfache Einschränkungen und \texttt{JOIN}s beschränkt. Diese beiden Stufen erlauben die Navigation in umfangreichen Datenbeständen, also in Schemata beliebig vielen Tabellen. Ohne diese Funktionalität wären die sinnvoll verwendbaren Schemata auf jene mit einer einzelnen Tabelle reduziert.
+Für diese Arbeit wird der Umfang auf einfache Einschränkungen und \texttt{JOIN}s beschränkt. Diese beiden Stufen erlauben die Navigation in umfangreichen Datenbeständen, also in Schemata mit beliebig vielen Tabellen. Ohne diese Funktionalität wären die sinnvoll verwendbaren Schemata auf jene mit einer einzelnen Tabelle reduziert.
 
 Die verwendete Templatingsprache (siehe \fullref{sec:liquid-language}) verfügt ebenfalls über Funktionen zur Projektion von Daten. Um im Rahmen der Thesis keine redundante Funktionalität zu implementieren, wird darauf verzichtet Projektionen in \texttt{SQL} zu unterstützen.
 
