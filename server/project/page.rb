@@ -201,9 +201,7 @@ class Page
   # @param queryRef [Hash] A query reference
   # @param initial_params [Hash] The initial set of parameters,
   #                              probably mainly input and get
-  def execute_referenced_query(query_ref, initial_params)
-    puts "#{query_ref['name']} initial_params: #{initial_params.inspect}"
-    
+  def execute_referenced_query(query_ref, initial_params)    
     # Each query gets its own fresh set of parameters
     params = {}
 
@@ -223,8 +221,6 @@ class Page
       params[parameter_name] = mapped_value
     end
 
-    # puts "#{query_ref['name']} params: #{params.inspect}"
-
     # Grab the actual query and execute it with the freshly constructed parameters
     query = @project.query_by_id(query_ref['queryId'])
     result = @project.execute_sql(query.sql, params)
@@ -243,11 +239,10 @@ class Page
       if mapped.length == 1
         mapped = mapped.first
       else
-        puts "INVALID ROW COUNT"
+        err_msg = "Got #{mapped.length} rows, expected exactly 1"
+        raise DatabaseQueryError.new(@project, query.sql, params, err_msg)
       end
     end
-
-    # puts "#{query_ref['name']} result: #{mapped}"
     
     return (mapped);
   end

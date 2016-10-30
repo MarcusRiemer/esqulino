@@ -30,16 +30,16 @@ export interface Removable {
  * non-functional like a comment.
  */
 export interface RemovableHost {
-     /**
-      * Removes a child of this expression. This is used by
-      * outside components, which need a way to change the structure
-      * of a query whilst leaving the "root pointer" intact.
-      *
-      * This method may replace the formerChild with a MissingExpression
-      * or recursively remove itself.
-      *
-      * @param formerChild The instance that previously was a child
-      */
+    /**
+     * Removes a child of this expression. This is used by
+     * outside components, which need a way to change the structure
+     * of a query whilst leaving the "root pointer" intact.
+     *
+     * This method may replace the formerChild with a MissingExpression
+     * or recursively remove itself.
+     *
+     * @param formerChild The instance that previously was a child
+     */
     removeChild(formerChild : Removable) : void;
 }
 

@@ -6,6 +6,5 @@ class B extends A {
 
 class A {
     constructor(public msg:string) {
-
     }
 }
