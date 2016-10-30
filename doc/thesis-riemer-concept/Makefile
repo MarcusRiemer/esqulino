@@ -17,7 +17,7 @@ GIT_REV :
 
 # Compiling the actual thesis document
 $(PDF_FILENAME) : msg-pre-pdf $(TEX_FILES) GIT_REV
-	@rubber --warn refs --pdf thesis.tex
+	@rubber --warn refs --warn misc --pdf thesis.tex
 
 # Uploads the current PDF version to a public HTTP server.
 publish-draft: msg-pre-pdf $(PDF_FILENAME)
