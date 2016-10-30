@@ -6,7 +6,7 @@ Dieses Kapitel umfasst einige Ideen für Projekte, die sich gut mit \idename{} u
 \subsection{Interaktive Geschichten}
 \label{sec:project-cyoa}
 
-Im englischsprachigen Raum hat sich für diese Art von Erzählung der Terminus "`Choose Your Own Adventure"' durchgesetzt. In Deutschland exisitiert kein feststehender Begriff, stattdessen werden häufig exemplarische Buchreihen wie "`Insel der tausend Gefahren"' stellvertretend für das Genre herangezogen. Für all jene, die auch mit diesen Begriffen nichts anfangen können, illustriert Abbildung~\ref{fig:enduser-cyoa-choice} wie eine solche Geschichte funktioniert. Alternativ kann die Geschichte auch interaktiv unter \href{http://cyoa.blattzeug.de/}{cyoa.blattzeug.de} ausprobiert werden oder in der deutschsprachigen Wikipedia nachgelesen werden\footnote{\url{https://de.wikipedia.org/wiki/Spielbuch\#Beispiel}}, von dort wurde sie entnommen.
+Im englischsprachigen Raum hat sich für diese Art von Erzählung der Terminus "`Choose Your Own Adventure"' durchgesetzt. In Deutschland existiert kein feststehender Begriff, stattdessen werden häufig exemplarische Buchreihen wie "`Insel der tausend Gefahren"' stellvertretend für das Genre herangezogen. Für all jene, die auch mit diesen Begriffen nichts anfangen können, illustriert Abbildung~\ref{fig:enduser-cyoa-choice}, wie eine solche Geschichte funktioniert. Alternativ kann die Geschichte auch interaktiv unter \href{http://cyoa.blattzeug.de/}{cyoa.blattzeug.de} ausprobiert oder in der deutschsprachigen Wikipedia nachgelesen werden\footnote{\url{https://de.wikipedia.org/wiki/Spielbuch\#Beispiel}}, von dort wurde sie entnommen.
 
 \begin{figure}[h]
   \centering \includegraphics[width=\textwidth-2pt,frame]{images/screenshots/20161019/enduser-cyoa-choice.png}
@@ -14,7 +14,7 @@ Im englischsprachigen Raum hat sich für diese Art von Erzählung der Terminus "
   \label{fig:enduser-cyoa-choice}
 \end{figure}
 
-Das Datenmodell (siehe Abbildung~\ref{fig:project-cyoa-schema}) für diese Geschichten besteht aus zwei Tabellen: \texttt{chapter} enthält die eigentliche Geschichte, also die Überschrift und den Rumpf aus Abbildung~\ref{fig:enduser-cyoa-choice}. Die Entscheidungsmöglichkeiten werden in \texttt{next\_chapter} hinterlegt. Diese Tabelle stellt eine \texttt{m:n}-Beziehungen zwischen Kapiteln her und reichert diese mit einem Entscheidungstext an.
+Das Datenmodell (siehe Abbildung~\ref{fig:project-cyoa-schema}) für diese Geschichten besteht aus zwei Tabellen: \texttt{chapter} enthält die eigentliche Geschichte, also die Überschrift und den Rumpf aus Abbildung~\ref{fig:enduser-cyoa-choice}. Die Entscheidungsmöglichkeiten werden in \texttt{next\_chapter} hinterlegt. Diese Tabelle stellt eine \texttt{m:n}-Beziehung zwischen Kapiteln her und reichert diese mit einem Entscheidungstext an.
 
 \begin{figure}[h]
   \centering \includegraphics[width=0.8\textwidth]{images/db-schema/cyoa}
@@ -32,7 +32,7 @@ Die in Abbildung~\ref{fig:enduser-cyoa-choice} zu sehende Kapitelseite benötigt
 
 \subsection{Einfacher Blog mit Kommentaren}
 
-Dieses Beispiel erlaubt die Veröffentlichung von Artikeln durch einen Autor und gibt jedem Leser die Möglichkeit einen Kommentar zu hinterlassen (Abbildung~\ref{fig:enduser-blog-article}), es lässt sich unter \href{http://blog.blattzeug.de/}{blog.blattzeug.de} interaktiv ausprobieren.
+Dieses Beispiel erlaubt die Veröffentlichung von Artikeln durch einen Autor und gibt jedem Leser die Möglichkeit, einen Kommentar zu hinterlassen (Abbildung~\ref{fig:enduser-blog-article}), es lässt sich unter \href{http://blog.blattzeug.de/}{blog.blattzeug.de} interaktiv ausprobieren.
 
 \begin{figure}[h]
   \centering \includegraphics[width=\textwidth-2pt,frame]{images/screenshots/20161019/enduser-blog-article.png}
@@ -40,7 +40,7 @@ Dieses Beispiel erlaubt die Veröffentlichung von Artikeln durch einen Autor und
   \label{fig:enduser-blog-article}
 \end{figure}
 
-Das Datenmodell speichert die eigentlichen Blogbeiträge in der Tabelle \texttt{article}, die dazugehörigen Kommentare in der Tabelle \texttt{comment}. Letztere Tabelle kann von einem normalen Endbenutzer mit weiteren Inhalten gefüllt werden.
+Das Datenmodell speichert die eigentlichen Blogbeiträge in der Tabelle \texttt{article}, die dazugehörigen Kommentare in der Tabelle \texttt{comment}. Letztere Tabelle kann von einem normalen Endbenutzer über die Oberfläche mit weiteren Inhalten gefüllt werden. Neue Artikel können hingegen nur von einem Entwickler angelegt werden.
 
 \begin{figure}[h]
   \centering \includegraphics[width=0.8\textwidth]{images/db-schema/blog}
@@ -48,17 +48,15 @@ Das Datenmodell speichert die eigentlichen Blogbeiträge in der Tabelle \texttt{
   \label{fig:project-blog-schema}
 \end{figure}
 
-Die Seite zur Darstellung eines Blog-Artikels kommt mit den von \idename{} zur Verfügung gestellten Bedienelementen aus. Der anzuzeigende Artikel wird über einen \texttt{GET}-Parameter bestimmt, welcher als Parameter für die Abfragen \texttt{artikel\_detail} und \texttt{artikel\_kommentare} verwendet wird.
-
-Um einen neuen Kommentar zu schreiben, muss der Endbenutzer in dem Formular seinen Namen und eine Nachricht hinterlassen. Der Knopf "`Kommentieren"' ist mit einer mutierenden Abfrage verknüpft, welche diese Daten dann in der Datenbank hinterlegt.
-
-Anders als die im vorigen Kapitel \fullref{sec:project-cyoa} vorgestellte Seite, ist für den Blog kein Einsatz von eingebettetem Quelltext notwendig. Für die Anzeige der Kommentare (siehe Abbildung~\ref{fig:project-blog-page-article}) wird die eingebaute Datentabelle herangezogen, allerdings nur mit einer Teilmenge der verfügbaren Spalten. Schließlich spielt die \texttt{ID} des Artikels oder Kommentars in der Darstellung für Endanwender keine Rolle.
-
 \begin{figure}[h]
   \centering \includegraphics[width=\textwidth]{images/screenshots/20161019/editor-project-blog-page-article.png}
   \caption{Quelltext für die Anzeige eines Blog-Artikels}
   \label{fig:project-blog-page-article}
 \end{figure}
+
+Die Seite zur Darstellung eines Blog-Artikels kommt mit den von \idename{} zur Verfügung gestellten Bedienelementen aus. Der anzuzeigende Artikel wird über einen \texttt{GET}-Parameter bestimmt, welcher als Parameter für die Abfragen \texttt{artikel\_detail} und \texttt{artikel\_kommentare} verwendet wird. Um einen neuen Kommentar zu schreiben, muss der Endbenutzer in dem Formular seinen Namen und eine Nachricht hinterlassen. Der Knopf "`Kommentieren"' ist mit einer mutierenden Abfrage verknüpft, welche diese Daten dann in der Datenbank hinterlegt.
+
+Anders als bei der im vorigen Kapitel \fullref{sec:project-cyoa} vorgestellten Seite, ist für den Blog kein Einsatz von eingebettetem Quelltext notwendig. Für die Anzeige der Kommentare (siehe Abbildung~\ref{fig:project-blog-page-article}) wird die eingebaute Datentabelle herangezogen, allerdings nur mit einer Teilmenge der verfügbaren Spalten. Schließlich spielt die \texttt{ID} des Artikels oder Kommentars in der Darstellung für Endanwender keine Rolle.
 
 \subsection{Pokémon Go}
 
@@ -82,7 +80,7 @@ Inhaltlich weist dieses Schema noch einige Verletzungen von gutem Datenbankdesig
   \label{fig:project-pokemongo-schema}
 \end{figure}
 
-Aus Sicht eines Entwicklers ist an dem "`Pokémon Freilassen"'-Bilschirm vor allem interessant, dass die Abfrage zur Auflistung aller eigenen (\texttt{Meine\_Pokemon}, Abbildung~\ref{fig:project-pokemongo-query-single-pokemon}) Pokémon von zwei Bedienelementen verwendet wird (Abbildung~\ref{fig:project-pokemongo-page-delete}). Sowohl die Datentabelle zur Anzeige der eigenen Fänge als auch die Auswahl des zu löschenden Datensatzes in dem Formular machen davon Gebrauch.
+Aus Sicht eines Entwicklers ist an dem "`Pokémon Freilassen"'-Bilschirm vor allem interessant, dass die Abfrage zur Auflistung aller eigenen Pokémon (\texttt{Meine\_Pokemon}, Abbildung~\ref{fig:project-pokemongo-query-single-pokemon}) von zwei Bedienelementen verwendet wird (Abbildung~\ref{fig:project-pokemongo-page-delete}). Sowohl die Datentabelle zur Anzeige der eigenen Fänge als auch die Auswahl des zu löschenden Datensatzes in dem Formular machen davon Gebrauch.
 
 \begin{figure}[p]
   \centering \includegraphics[width=0.95\textwidth]{images/screenshots/20161019/editor-project-pokemongo-query-single-pokemon}
