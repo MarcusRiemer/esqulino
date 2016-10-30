@@ -59,7 +59,7 @@ Nach der Betrachtung der zu bedienenden Zielgruppe und der Beschäftigung mit be
 \subsection{Künftigen Erweiterungen vorbehalten}
 \label{sec:out-of-scope}
 
-Neben der Formulierung von klaren Grundprinzipien als Richtline für relevante Funktionen ist es auch wichtig, den Umfang des zu entwickelnden Programms auf eine im Rahmen der Thesis machbare Teilmenge zu beschränken. Die folgenden Ideen wären naheliegende Ergänzungen, welche aufgrund der zur Verfügung stehenden Zeit aber zunächst nicht implementiert werden sollen\footnote{Die griffigere, englische Bezeichnung dafür wäre "`out of scope"', \href{http://german.stackexchange.com/questions/31085/german-equivalent-to-out-of-scope/}{dazu kennt allerdings auch das Internet keine direkte Übersetzung}}. Der Zweck dieser Master-Thesis ist die Implementierung eines Prototypen. Die Fertigstellung von \idename{} soll im Rahmen weiterer Arbeiten erfolgen und die im Folgenden geäußerten Ideen werden dann erneut evaluiert.
+Neben der Formulierung von klaren Grundprinzipien als Richtline für relevante Funktionen ist es auch wichtig, den Umfang des zu entwickelnden Programms auf eine im Rahmen der Thesis machbare Teilmenge zu beschränken. Die folgenden Ideen wären naheliegende Ergänzungen, welche aufgrund der zur Verfügung stehenden Zeit aber zunächst nicht implementiert werden sollen\footnote{Die griffigere, englische Bezeichnung dafür wäre "`out of scope"', dazu kennt allerdings auch das Internet keine direkte Übersetzung: \url{http://german.stackexchange.com/questions/31085/}}. Der Zweck dieser Master-Thesis ist "`lediglich"' die Implementierung eines Prototypen. Die Fertigstellung von \idename{} soll im Rahmen weiterer Arbeiten erfolgen und die im Folgenden geäußerten Ideen werden dann erneut evaluiert.
 
 \begin{description}
 \item[Datenmodellierung] \label{scope:no-data-modelling} \hfill \\
@@ -87,7 +87,7 @@ Der größte Bereich steht den jeweiligen Editoren zur Verfügung. Deren Gestalt
 
 Darüber hinaus existieren für jeden Editor spezielle Aktionen, welche über einen Knopfdruck oder auch ein Tastaturkürzel ausgelöst werden können. Diese Aktionen werden oberhalb der Editorfläche in einer typischen "`Toolbar"' angezeigt. Einige Aktionen, zum Beispiel "`Speichern"' mit dem Kürzel \texttt{STRG} + \texttt{S}, stehen dabei in allen editierbaren Kontexten zur Verfügung. Eine Sonderrolle nimmt dabei die Löschfunktion ein: Immer wenn in einem beliebigen Editor eine Drag-Operation beginnt, kann diese auf einem in der Toolbar angezeigten Mülleimer beendet werden.
 
-Grundsätzlich unterschieden werden muss bei der Schülerentwicklungsumgebung, ähnlich wie bei Scratch, zwischen zwei Blickwinkeln auf das jeweilige Projekt: Zunächst wird ein Projekt im Entwicklermodus editiert, in diesem Fall stehen dem Benutzer alle Entwicklungstools zur Verfügung. Wenn es dann später einmal fertig ist und an Endanwender, z.B. Bekannte oder Freunde, weitergegeben wird, erwarten diese natürlich eine normale Benutzeroberfläche.
+Grundsätzlich unterschieden wird bei der Schülerentwicklungsumgebung, ähnlich wie bei Scratch, zwischen zwei Blickwinkeln auf das jeweilige Projekt: Zunächst wird ein Projekt im Entwicklermodus editiert, in diesem Fall stehen dem Benutzer alle Entwicklungstools zur Verfügung. Wenn es dann später einmal fertig ist und an Endanwender, z.B. Bekannte oder Freunde, weitergegeben wird, erwarten diese natürlich eine normale Benutzeroberfläche.
 
 Der Wechsel zwischen diesen beiden Modi sollte dabei, ebenfalls analog zu Scratch, zu jedem Zeitpunkt möglich sein. Der Weg von der Entwicklungsumgebung zum Programm ist dabei selbsterklärend: Im Rahmen einer Vorschaufunktion müssen sich die erstellten Seiten jederzeit anzeigen lassen. Aber auch der "`Rückweg"' von einer speziellen Seite der Endbenutzeroberfläche zur Entwicklungsumgebung ist inhaltlich sinnvoll. So kann man sich als Lernender die Herangehensweise einer speziellen Seite in einem anderem Projekt anschauen. Das "`Verstecken"' von Quelltexten hingegen ist im Lehrbetrieb nicht sinnvoll und daher auch nicht vorgesehen. Jedes fremde Projekt soll auch als Inspiration für die Umsetzung eigener Ideen dienen können.
 
@@ -106,17 +106,17 @@ Durch den Betrieb eines zentralen Servers für die Projekte der Schüler entfäl
 
 Ein weiterer Vorteil eines zentralen Servers ergibt sich in der praktischen Vorzeigbarkeit der eigenen Ergebnisse: Durch einfache Weitergabe der \texttt{URL} für Endbenutzer können die Lernenden ihre entwickelten Applikationen mit Eltern, Freunden und anderen Personen teilen.
 
-Nicht verschwiegen werden sollen allerdings auch die negativen Nebeneffekte dieser grundsätzlichen Entscheidung: Zunächst einmal wird dadurch ein eigenständiger Betrieb der Entwicklungsumgebung durch Schüler deutlich erschwert. Diese müssten auf ihrem eigenen Rechner plötzlich doch eine Server-Instanz betreiben, anstatt einfach ein Programm zu starten. Faktisch wird die Bereitstellung einer dezidierten Umgebung für den Server also zur Pflichtaufgabe der jeweiligen Lehrperson. Vom Betrieb eines dedizierten Servers in der Schule über die Verwendung eines "`privat greifbaren"' Servers der Lehrperson bis hin zur Verwendung einer Cloud-Computing-Instanz im Internet sind unterschiedlichste Szenarien denkbar. Der erfolgreiche Einsatz von \idename{} hängt in der Praxis dann aber auch maßgeblich von der Verfügbarkeit dieses Serverdienstes ab.
+Nicht verschwiegen werden sollen allerdings auch die negativen Nebeneffekte dieser grundsätzlichen Entscheidung: Zunächst einmal wird dadurch ein eigenständiger Betrieb der Entwicklungsumgebung durch Schüler deutlich erschwert. Diese müssten auf ihrem eigenen Rechner plötzlich doch eine Server-Instanz betreiben, anstatt einfach ein Programm zu starten. Faktisch wird die Bereitstellung einer dedizierten Umgebung für den Server also zur Pflichtaufgabe der jeweiligen Lehrperson. Vom Betrieb eines dedizierten Servers in der Schule über die Verwendung eines "`privat greifbaren"' Servers der Lehrperson bis hin zur Verwendung einer Cloud-Computing-Instanz im Internet sind unterschiedlichste Szenarien denkbar. Der erfolgreiche Einsatz von \idename{} hängt in der Praxis dann aber auch maßgeblich von der Verfügbarkeit dieses Serverdienstes ab.
 
-Softwaretechnisch nachteilig ist die Tatsache, dass \idename{} im Falle einer Entwicklung als "`traditionellen Desktopawendung"' auf ein großes Ökosystem aus bestehenden Entwicklungsumgebungen zurückgreifen könnte. Jede größere Entwicklungsumgebung (Eclipse, Visual Studio, ...) bietet eine Plugin-Schnittstelle, auf die man mit \idename{} hätte aufsetzen können. Ähnlich gut erprobte Umgebungen für Browser gibt es hingegen leider nicht, es müssen daher relativ viele technische Kleinigkeiten (Toolbars, Projektbrowser, ...) extra für \idename{} entwickelt werden.
+Softwaretechnisch nachteilig ist die Tatsache, dass \idename{} im Falle einer Entwicklung als "`traditionelle Desktopawendung"' auf ein großes Ökosystem aus bestehenden Entwicklungsumgebungen zurückgreifen könnte. Jede größere Entwicklungsumgebung (Eclipse, Visual Studio, ...) bietet eine Plugin-Schnittstelle, auf die man mit \idename{} hätte aufsetzen können. Ähnlich gut erprobte Umgebungen für Browser gibt es hingegen leider nicht, es müssen daher relativ viele technische Kleinigkeiten (Toolbars, Projektbrowser, ...) extra für \idename{} entwickelt werden.
 
 \subsubsection{Projektbasiert}
 
-Der Begriff des "`Projekts"' ist nun schon einige Male ohne exakte Definition verwendet worden, diese wird nun nachgeholt. Abstrakt betrachtet handelt es sich bei einem Projekt um eine Datenbasis in Form einer Datenbank. Zu dieser Datenbasis kann man als Entwickler SQL-Abfragen entwickeln (\fullref{sec:design-sql-editor}) und einige dieser Abfragen mit einer Oberfläche für Endbenutzer versehen (\fullref{sec:drag-drop-ui-editor}).
+Der Begriff des "`Projekts"' ist schon einige Male ohne exakte Definition verwendet worden, diese wird daher an dieser Stelle nachgeholt. Abstrakt betrachtet handelt es sich bei einem Projekt um eine Datenbasis in Form einer Datenbank. Zu dieser Datenbasis kann man als Entwickler SQL-Abfragen entwickeln (\fullref{sec:design-sql-editor}) und einige dieser Abfragen mit einer Oberfläche für Endbenutzer versehen (\fullref{sec:drag-drop-ui-editor}).
 
-Als unmittelbarer Ausgangspunkt eines Projektes sollen einigermaßen einfache, aber grundsätzlich beliebige SQLite-Datenbanken dienen\footnote{Kapitel \fullref{sec:implementation-database-system} erläutert, warum ausgerechnet SQLite zum Einsatz kommt und nicht ein anderes Datenbanksystem.}. Diese Schemata werden vorher mit externen Programmen erzeugt, was sowohl im Dialog mit den Schülern als auch "`einfach so"' erfolgt sein kann.
+Als unmittelbarer Ausgangspunkt eines Projektes dienen einfache, beliebige SQLite-Datenbanken\footnote{Kapitel \fullref{sec:implementation-database-system} erläutert, warum ausgerechnet SQLite zum Einsatz kommt und nicht ein anderes Datenbanksystem.}. Deren Schemata werden vorher mit externen Programmen erzeugt, was sowohl im Dialog mit den Schülern als auch "`einfach so"' erfolgt sein kann.
 
-Im Sinne einer möglichst niedrigen Einstiegshürde soll es den Anwendern leicht gemacht werden, bestehende Projekte zu übernehmen. Im Informatikunterricht müssen häufiger zu Beginn bestimmte Schritte ausgeführt werden, "`weil das nun mal so ist"' (also eine ausführliche Erklärung zu diesem Zeitpunkt zu weit gehen würde). Im Falle des Sprach\-umfangs von SQL ist das zwar im Vergleich zu z.B. Java nicht ganz so drastisch\footnote{"`Herr Lehrer, was macht eigentlich dieses \texttt{public static void}?"'}, aber nach Möglichkeit zu vermeiden. Dementsprechend sollte normalerweise jeder Schritt beim Anlegen eines neuen Projektes für die Schüler nachvollziehbar sein. Wenn dann aber doch einmal eine Serie von mechanisch auszuführenden Anweisungen erforderlich sein sollte, wäre es dennoch praktisch, diesen Vorgang durch eine Kopie eines schon bestehenden Projektes abzukürzen.
+Im Sinne einer möglichst niedrigen Einstiegshürde soll es den Anwendern leicht gemacht werden, bestehende Projekte zu übernehmen. Zu Beginn müssen im Informatikunterricht häufig bestimmte Schritte ausgeführt werden, "`weil das nun mal so ist"' (also eine ausführliche Erklärung zu diesem Zeitpunkt zu weit gehen würde). Im Falle des Sprach\-umfangs von SQL ist das zwar im Vergleich zu z.B. Java nicht ganz so drastisch\footnote{"`Herr Lehrer, was macht eigentlich dieses \texttt{public static void}?"'}, aber nach Möglichkeit zu vermeiden. Dementsprechend sollte normalerweise jeder Schritt beim Anlegen eines neuen Projektes für die Schüler nachvollziehbar sein. Wenn dann aber doch einmal eine Serie von mechanisch auszuführenden Anweisungen erforderlich sein sollte, wäre es dennoch praktisch, diesen Vorgang durch eine Kopie eines schon bestehenden Projektes abzukürzen.
 
 Die Lehrkraft würde in diesem Fall ein Projekt für die Schüler vorbereiten, welches diese dann mit einem Klick in ein anders benanntes Projekt kopieren können. Es werden dann im Normafall alle Bestandteile, möglicherweise mit einer einfachen Anpassung der Zugriffsrechte, unter dem neuen Namen verfügbar gemacht. Alternativ sollte eine Lehrkraft den Umfang eines solchen Klons auch einschränken können: Sofern das Beispielprojekt Inhalte enthält, die nur zu Illustrationszwecken angelegt worden sind, können diese ausgeschlossen werden. Eventuell sollen sich die Schüler auch verstärkt eigene Gedanken machen und nicht zu sehr von vorgefertigen Inhalten abgelenkt werden? Letzten Endes existieren zu viele Varianten, um den korrekten Umfang für diese Kopien ohne manuelle Unterstützung festlegen zu können.
 
@@ -127,11 +127,11 @@ Lesende Zugriffe können, zumindest in der Thesis-Version der Software, nicht en
 
 Da Projekte aber auch einfach kopiert werden können, müsste ein versierter Benutzer nur eine Kopie des Projektes vornehmen und könnte dann über den Editor alle Daten einsehen oder auch den Zugriffschutz der Oberflächen einfach deaktivieren. Um also den lesenden Zugriff effektiv zu verhindern, müsste die Einsicht in die Quellen fremder Projekte eingeschränkt werden.
 
-Prinzipiell wäre es mit entsprechendem Zeitaufwand möglich, ein hinreichend sicheres System für den speziellen Anwendungsfall von \idename{} zu entwerfen. Dieser Aufwand wäre jedoch, im Vergleich zu anderen Features nicht zu rechtfertigen und stünde der Zielstellung "`Jedes Projekt soll als Grundlage für neue Projekte dienen können"' obendrein diametral gegenüber. Abgesehen davon sollte kein Schüler einem \idename{}-Server Daten anvertrauen, deren versehentliche Veröffentlichung er oder sie nicht verkraften\todo{ugs.} würde. Das gilt selbstverständlich auch für den Fall, dass eine hypothetische künftige Version einen solchen Zugriffsschutz vorsehen sollte!
+Prinzipiell wäre es mit entsprechendem Zeitaufwand möglich, ein hinreichend sicheres System für den speziellen Anwendungsfall von \idename{} zu entwerfen. Dieser Aufwand wäre jedoch, im Vergleich zu anderen Features nicht zu rechtfertigen und stünde der Zielstellung "`Jedes Projekt soll als Grundlage für neue Projekte dienen können"' obendrein diametral gegenüber. Abgesehen davon sollte kein Schüler einem \idename{}-Server Daten anvertrauen, deren versehentliche Veröffentlichung er oder sie nicht verkraften würde. Das gilt selbstverständlich auch für den Fall, dass eine hypothetische künftige Version einen solchen Zugriffsschutz vorsehen sollte!
 
-Schon um Vandalismus zu vermeiden, sind leider dennoch einfache Zugriffskontrollen für \textbf{schreibende Zugriffe} auf Projektebene nötig. Um etwaige Missverständnisse von vornherein zu vermeiden: Ziel dieser Kontrollen ist es zu verhindern, dass z.B. die Quellen für die Abfragen oder Benutzeroberfläche eines Projektes entstellt oder gelöscht werden. Dabei muss es sich nicht einmal um bösartigen Vandalismus handeln. Bei ungeschickt programmierten Webseiten kann es durchaus passieren, dass Webcrawler Datenbestände vernichten. Mehr als einen schlecht programmierten "`Diesen Datensatz Löschen"'-Link auf einer Übersichtsseite braucht es dazu nicht. Der Webcrawler folgt unter Umständen auch solchen Verweisen und löscht damit während der Indexierung unbeabsichtigt Datensätze.
+Schon um Vandalismus zu vorzubeugen, sind dennoch einfache Zugriffskontrollen für \textbf{schreibende Zugriffe} auf Projektebene nötig. Um etwaige Missverständnisse von vornherein zu vermeiden: Ziel dieser Kontrollen ist es zu verhindern, dass z.B. die Quellen für die Abfragen oder Benutzeroberfläche eines Projektes entstellt oder gelöscht werden. Dabei muss es sich nicht einmal um bösartigen Vandalismus handeln. Bei ungeschickt programmierten Webseiten kann es durchaus passieren, dass Webcrawler Datenbestände vernichten. Mehr als einen schlecht programmierten "`Diesen Datensatz Löschen"'-Link auf einer Übersichtsseite braucht es dazu nicht. Der Webcrawler folgt unter Umständen auch solchen Verweisen und löscht damit während der Indexierung unbeabsichtigt Datensätze.
 
-\textbf{Nicht geschützt} werden damit einzelne Datensätze, also die Zeilen, in der Datenbank. Sobald in der Benutzeroberfläche für Endanwender Funktionalität zum Löschen oder Editieren von Datensätzen vorgesehen ist, gibt es keine einfache Möglichkeit, legitime Veränderungen von unerwünschtem Vandalismus zu unterscheiden. Daher soll zunächst nur eine sehr einfache, binäre Klassifikation in zwei Benutzergruppen vorgenommen werden: "`Darf jede mutierende Operation ausführen"' oder "`darf ausschließlich lesen"'. In einer späteren Version wäre es dann denkbar, diese sehr grobe Unterscheidung zu verfeinern.
+\textbf{Nicht geschützt} werden damit einzelne Datensätze, also die Zeilen, in der Datenbank. Sobald in der Benutzeroberfläche für Endanwender Funktionalität zum Löschen oder Editieren von Datensätzen vorgesehen ist, gibt es keine einfache Möglichkeit, legitime Veränderungen von unerwünschtem Vandalismus zu unterscheiden. Daher wird zunächst nur eine sehr einfache, binäre Klassifikation in zwei Benutzergruppen vorgenommen: "`Darf jede mutierende Operation ausführen"' oder "`darf ausschließlich lesen"'. In einer späteren Version wäre es dann denkbar, diese sehr grobe Unterscheidung zu verfeinern.
 
 Sowohl für den lesenden als auch für den schreibenden Zugriff gilt darüber hinaus: Eine komplexe, aber unausgereifte Lösung für eine so kritische Funktionalität würde im Extremfall mehr Schaden anrichten als nützen. Eine unsicher implementierte Sicherheitsfunktion suggeriert möglicherweise ein Schutzniveau, welches praktisch nicht eingehalten wird. Also werden Ansätze wie "`Vergabe von Schreibrechten für einzelne Abfragen an bestimmte Benutzergruppen"' oder sogar ein zeilenweiser Schutz von Daten ("`Jeder Benutzer darf nur seine Daten bearbeiten"') aus Zeitgründen im Rahmen dieser Thesis nicht weiter betrachtet.
 
@@ -151,14 +151,14 @@ Um also zumindest einen grundsätzlichen Schutz zu ermöglichen, sollte für ein
 \subsubsection{Unterschiedliche Versionen eines Editors}
 \label{sec:editor-different-versions}
 
-Wenn ein Anwender der Entwicklungsumgebung an die Grenzen des unterstützenden Editors stößt, sollte er die Möglichkeit haben, einmalig und auch für nur eine konkrete Abfrage oder Seite eine Umwandlung in eine textbasierte Darstellung vornehmen zu können. Der umgekehrte Weg, also zum Beispiel der Import von beliebigen \texttt{SQL}-Abfragen in den grafischen Editor, ist dann jedoch nicht mehr möglich. Die Implementierung eines Parsers für die Umwandlung der textuellen Repräsentation in die interne Darstellung von \idename{} würde im Verhältnis zum marginalen Nutzen einen unverhältnismäßigen Aufwand bedeuten.
+Wenn ein Anwender der Entwicklungsumgebung an die Grenzen des unterstützenden Editors stößt, sollte er die Möglichkeit haben, einmalig für eine konkrete Abfrage oder Seite eine Umwandlung in eine textbasierte Darstellung vornehmen zu können. Der umgekehrte Weg, also zum Beispiel der Import von beliebigen \texttt{SQL}-Abfragen in den grafischen Editor, ist dann jedoch nicht mehr möglich. Die Implementierung eines Parsers für die Umwandlung der textuellen Repräsentation in die interne Darstellung von \idename{} würde im Verhältnis zum marginalen Nutzen einen unverhältnismäßigen Aufwand bedeuten.
 
-Diese unterschiedlich fortgeschrittene Sichtweisen und Bearbeitungsmöglichkeiten auf jede Ressource erlauben es, den Zeitpunkt an dem ein Entwickler der Entwicklungsumgebung endgültig entwachsen ist, recht weit hinauszuzögern. Dieser Umstand wird vor allem durch die Entscheidung zugunsten von Standardtechnologien anstatt eigens entwickelten Sprachen möglich gemacht. Für Scratch existiert schlichtweg keine rein textuelle Darstellung mit möglicherweise erweitertem Funktionsumfang. Durch den \texttt{SQL}- bzw. \texttt{HTML}-Unterbau von \idename{} stehen fortgeschrittenen Anwendern hingegen sehr mächtige Standardtechnologien zur Verfügung.
+Diese unterschiedlich fortgeschrittenen Sichtweisen und Bearbeitungsmöglichkeiten auf jede Ressource, erlauben es \idename{} auch mit weiter fortgeschrittenem Kenntnisstand effektiv zu nutzen. Dieser Umstand wird vor allem durch die Entscheidung zugunsten von Standardtechnologien anstatt eigens entwickelten Sprachen möglich gemacht. Für Scratch existiert zum Beispiel keine rein textuelle Darstellung mit erweitertem Funktionsumfang. Durch den \texttt{SQL}- bzw. \texttt{HTML}-Unterbau von \idename{} stehen fortgeschrittenen Anwendern hingegen sehr mächtige Standardtechnologien zur Verfügung.
 
 \subsection{Konzept für sinnvolle Teilmengen von \texttt{SQL}}
 \label{sec:sql-subset}
 
-Die uneingeschränkte Umsetzung des \texttt{SQL}-Standards würden sowohl für den Verfasser dieser Thesis als auch für die Anwender der Entwicklungsumgebung viele unpraktische Probleme aufwerfen. Der \texttt{SQL}-Sprachumfang ist mittlerweile gewaltig und die Anzahl der verschiedenen Dialekte unüberschaubar groß. Varianten wie Transact-\texttt{SQL} bieten die Möglichkeit, zur Laufzeit mit Schleifen, Fallunterscheidungen und Variablen zu arbeiten und erfüllen damit alle Kriterien für \textsc{Turing}-Vollständigkeit. Darüber hinaus werden ``echte'' Entwicklungsumgebungen für \texttt{SQL} von großen Entwicklerteams konzipiert und programmiert, der Autor dieser Arbeit bildet hingegen ein Ein-Mann-Team.
+Die uneingeschränkte Umsetzung des \texttt{SQL}-Standards würden sowohl für den Verfasser dieser Thesis als auch für die Anwender der Entwicklungsumgebung viele unpraktische Probleme aufwerfen. Der \texttt{SQL}-Sprachumfang ist mittlerweile gewaltig und die Anzahl der verschiedenen Dialekte unüberschaubar groß. Varianten wie Transact-\texttt{SQL} bieten die Möglichkeit, zur Laufzeit mit Schleifen, Fallunterscheidungen und Variablen zu arbeiten und erfüllen damit alle Kriterien für \textsc{Turing}-Vollständigkeit. Darüber hinaus werden "`echte"' Entwicklungsumgebungen für \texttt{SQL} von großen Entwicklerteams konzipiert und programmiert, der Autor dieser Arbeit bildet hingegen ein Ein-Mann-Team.
 
 \warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in dem Prototypen implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung von didaktisch sinnvollen Teilmengen von \texttt{SQL}. Um zu sehen, welcher Funktionsumfang im Prototypen tatsächlich verfügbar ist, lohnt sich ein Blick in \fullref{sec:conclusion} und den Anhang \fullref{sec:project-examples}.}
 
@@ -175,14 +175,14 @@ Es ist nicht im Sinne von \idename{}, diese unterschiedlichen Reihenfolgen impli
 
 Die folgende Beschreibung untersucht zunächst nur die Komponenten einer \texttt{SELECT}-Suchanfrage. Diese sind im Gegensatz zu \texttt{DELETE}, \texttt{UPDATE} und \texttt{INSERT} nicht auf eine Tabelle beschränkt und auch von der schieren Anzahl der verfügbaren Optionen her deutlich mächtiger.
 
-Zunächst definieren wir einige mögliche Einschränkungen anhand der grundlegenden Struktur jeder suchenden \texttt{SQL}-Abfrage. Da die Reihenfolge der Komponenten nicht beliebig ist, ergibt sich eine sehr klare Struktur in der einige Komponenten allerdings auch übersprungen werden können. Abbildung~\ref{fig:sql-steps} wurde aus den Vorlesungsunterlagen von Prof. Dr. Hoffmann entnommen und demonstriert den logischen Ablauf bei der Verarbeitung einer \texttt{SQL}-Abfrage inklusive aller Zwischenschritte und optionaler Komponenten. Daraus ist gut ersichtlich, dass alle Komponenten einer Suchanfrage bis auf die logisch erste (\texttt{FROM}) und letzte (\texttt{SELECT}) optional sind.
+Zunächst definieren wir einige mögliche Einschränkungen anhand der grundlegenden Struktur jeder suchenden \texttt{SQL}-Abfrage. Da die Reihenfolge der Komponenten nicht beliebig ist, ergibt sich eine sehr klare Struktur in der einige Komponenten allerdings auch übersprungen werden können. Abbildung~\ref{fig:sql-steps} wurde aus den Vorlesungsunterlagen von Prof. Hoffmann entnommen und demonstriert den logischen Ablauf bei der Verarbeitung einer \texttt{SQL}-Abfrage inklusive aller Zwischenschritte und optionaler Komponenten. Daraus ist gut ersichtlich, dass alle Komponenten einer Suchanfrage bis auf die logisch Erste (\texttt{FROM}) und Vorletzte (\texttt{SELECT}) optional sind.
 
 \begin{figure}
   \centering \includegraphics{images/sql-steps.png}
   \caption{%
-    Komponenten und sich ergebende Zwischenschritte bei der Verarbeitung einer \texttt{SQL}-Abfrage%
+    \texttt{SQL}-Komponenten und sich ergebende Zwischenschritte bei der Verarbeitung einer \texttt{SQL}-Abfrage%
     \\\hspace{\linewidth}%
-    \textbf{Quelle:} Vorlesung \href{http://www.fh-wedel.de/fileadmin/mitarbeiter/uh/WS201516/Datenbanken_04.pdf}{"`Einführung in Datenbanken"'} von Prof. Dr. Ulrich Hoffmann, Folie 19}
+    \textbf{Quelle:} Vorlesung \href{http://www.fh-wedel.de/fileadmin/mitarbeiter/uh/WS201516/Datenbanken_04.pdf}{"`Einführung in Datenbanken"'} von Prof. Ulrich Hoffmann, Folie 19}
   \label{fig:sql-steps}
 \end{figure}
 
@@ -190,7 +190,7 @@ Einige der im Folgenden beschriebenen Optionen sind redundant. Das liegt zum Ein
 
 \begin{enumerate}
 \item \textbf{Projektionen mit \texttt{SELECT}} \\
-  Diese Komponente als solche kann für Suchabfragen nicht ausgeschlossen werden. Außerdem muss mindestens \ref{feat:select-all} $\lor$ \ref{feat:select-column} erlaubt sein, sonst können keine gültigen \texttt{SQL}-Abfragen erstellt werden.
+  Diese Komponente kann für Suchabfragen nicht ausgeschlossen werden. Außerdem muss mindestens \ref{feat:select-all} $\lor$ \ref{feat:select-column} erlaubt sein, sonst können keine gültigen \texttt{SQL}-Abfragen erstellt werden.
   \begin{enumerate}[noitemsep]
   \item \label{feat:select-all} Auswahl aller Spalten ("`Sternchen-Operator"' \texttt{SELECT *})
   \item \label{feat:select-column} Auswahl von Spalten
@@ -201,7 +201,7 @@ Einige der im Folgenden beschriebenen Optionen sind redundant. Das liegt zum Ein
   \item \label{feat:select-limit} Beschränkung der Datenmenge mit \texttt{LIMIT}
   \end{enumerate}
 \item \textbf{Angabe von Tabellen mit \texttt{FROM}} \\
-  Auch die Auslassung dieser Komponente ist nicht zulässig, obwohl einige \texttt{SQL} Dialekte dies durchaus erlauben. Im Rahmen von \idename{} wird dies aber nicht unterstützt: Die Schüler sollen \texttt{SQL} Abfragen grundsätzlich auf Tabellen beziehen und keine Daten "`aus der Luft greifen"'\footnote{Für Oberflächen werden manchmal noch globale Konstanten benötigt, zum Beispiel der Name des Projektes selbst. Diese Werten kommen dann aber nicht aus der \texttt{SQL}-Schicht (siehe \fullref{sec:page-data-sources}).}.
+  Diese Komponente ist im Normalfall für alle Arten von Abfragen notwendig, obwohl einige \texttt{SQL}-Dialekte die Auslassung erlauben. Im Rahmen von \idename{} wird dies aber nicht unterstützt: Die Schüler sollen \texttt{SQL} Abfragen grundsätzlich auf Tabellen beziehen und keine Daten "`aus der Luft greifen"'\footnote{Für Oberflächen werden manchmal noch globale Konstanten benötigt, zum Beispiel der Name des Projektes selbst. Diese Werten kommen dann aber nicht aus der \texttt{SQL}-Schicht (siehe \fullref{sec:page-data-sources}).}.
   \begin{enumerate}[noitemsep]
   \item \label{feat:from-cross-join} Kreuzprodukt (\texttt{JOIN}) zulassen
   \item \label{feat:from-cross-comma} Kreuzprodukt (komma-separierte Schreibweise) zulassen
@@ -243,7 +243,7 @@ Einige der im Folgenden beschriebenen Optionen sind redundant. Das liegt zum Ein
 \subsubsection{Mögliche Einschränkungen der Ausdrücke}
 \label{sec:sql-subset-expression}
 
-Nach dieser Betrachtung der mit der unmittelbaren \texttt{SQL}-Struktur zusammenhängenden Funktionalität widmet sich dieses Kapitel nun den dort verwendeten Ausdrücken. Um eine graduelle Lernkurve sowie eine sinnvolle Unterstützung durch den Editor zu gewährleisten, werden diese in drei Klassen eingeteilt:
+Nach der Betrachtung der mit der unmittelbaren \texttt{SQL}-Struktur zusammenhängenden Funktionalität, widmet sich dieses Kapitel den dort verwendeten Ausdrücken. Um eine graduelle Lernkurve sowie eine sinnvolle Unterstützung durch den Editor zu gewährleisten, werden diese in drei Klassen eingeteilt:
 
 \begin{description}
 \item[Einfache Ausdrücke] \hfill\\
@@ -254,12 +254,12 @@ Nach dieser Betrachtung der mit der unmittelbaren \texttt{SQL}-Struktur zusammen
   Komplexe Ausdrücke lassen sich schachteln bzw. verketten und können mit einem Scratch-ähnlichen Editor für Ausdrücke frei bearbeitet werden. Die korrekte Beachtung von Auswertungsreihenfolgen ist Aufgabe der Lernenden, weswegen diese ggfs. die Ausdrücke auch selber klammern müssen.
 
 \item[Beliebige Ausdrücke] \hfill\\
-  Beliebige Ausdrücke werden textuell notiert und vom \texttt{SQL}-Editor nicht weiter geprüft, sondern ungefiltert in die Abfrage eingesetzt werden. Sofern diese Art von Ausdrücken zugelassen wird, erfolgt also auch keinerlei inhaltliche Einschränkung der zur Verfügung stehenden Möglichkeiten oder eine Syntaxüberprüfung.
+  Beliebige Ausdrücke werden textuell notiert und vom \texttt{SQL}-Editor nicht weiter geprüft, sondern ungefiltert in die Abfrage eingesetzt. Sofern diese Art von Ausdrücken zugelassen wird, erfolgt also auch keinerlei inhaltliche Einschränkung der zur Verfügung stehenden Möglichkeiten oder eine Syntaxüberprüfung.
 
-  Diese Option soll es besonders fortgeschrittenen Lernenden erlauben, auch in nicht von \idename{} unterstützten Szenarien noch weiterarbeiten zu können. Damit wird verhindert, dass zu große Fortschritte der Lernenden \idename{} sofort obsolet machen.
+  Diese Option soll fortgeschrittenen Lernenden erlauben, auch in nicht von \idename{} unterstützten Szenarien weiterarbeiten zu können. Damit wird verhindert, dass zu große Fortschritte der Lernenden \idename{} sofort obsolet machen.
 \end{description}
 
-Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisch sinnvollen Einschränkungen definieren. Die Schüler sollen dabei durchaus auch lernen, dass es sich bei Ausdrücken (nicht nur in \texttt{SQL}) um ein allgemeines Konzept handelt, welches prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Oder anders ausgedrückt: Wenn sich die Schüler aus didaktischen Gründen erstmal nur mit Ausdrücken im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen, ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es, die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt.
+Mit dieser Unterscheidung im Hinterkopf, können wir eine Menge an didaktisch sinnvollen Einschränkungen definieren. Ein wesentliches Lernziel ist dabei, dass es sich bei Ausdrücken (nicht nur in \texttt{SQL}) um ein allgemeines Konzept handelt, welches prinzipiell in der \texttt{SELECT}-Komponente genau so angewandt werden kann wie beim \texttt{ORDER BY}. Oder anders ausgedrückt: Wenn sich die Schüler aus didaktischen Gründen zunächst nur mit Ausdrücken im Rahmen der \texttt{SELECT}-Komponente beschäftigen sollen, ist das eine sinnvolle, und daher mögliche Einschränkung. Nicht sinnvoll hingegen wäre es, die Anwendung der \texttt{LENGTH(X)} Funktion nur in einer der beiden Komponenten zuzulassen. Letzteres wird daher auch nicht unterstützt.
 
 \begin{enumerate}[resume]
 \item \textbf{Allgemeine Optionen} \\
@@ -327,7 +327,7 @@ Mit dieser Unterscheidung im Hinterkopf, können wir nun eine Menge an didaktisc
 \subsubsection{Sprachstufen}
 \label{sec:sql-subset-ranks}
 
-Angelehnt an die bei "`Dr. Racket"' umgesetzte Idee der unterschiedlichen Sprachstufen \cite{macht-der-abstraktion} beschreibt dieses Kapitel konzeptionell, wie Lehrkräfte, aufbauend auf den im vorigen Kapitel beschriebenen Features, sinnvolle Untermengen von \texttt{SQL} definieren könnten, auf denen die mitgelieferten Beispielprojekte aufbauen. Bei den hier aufgeführten Beispielen handelt es sich keineswegs um die "`einzig korrekten"' Varianten. Vielmehr soll es für Lehrkräfte möglich sein, fast beliebige Teilmengen von \texttt{SQL} für ihre Schüler vorzugeben, nicht nur die im Rahmen dieser Arbeit als sinnvoll erachteten Kombinationen.
+Angelehnt an die bei "`Dr. Racket"' umgesetzte Idee der unterschiedlichen Sprachstufen~\cite{macht-der-abstraktion} beschreibt dieses Kapitel konzeptionell, wie Lehrkräfte, aufbauend auf den im vorigen Kapitel beschriebenen Funktionalitäten, sinnvolle Untermengen von \texttt{SQL} definieren könnten, auf denen die mitgelieferten Beispielprojekte aufbauen. Bei den hier aufgeführten Beispielen handelt es sich keineswegs um feste Vorgaben. Vielmehr soll es für Lehrkräfte möglich sein, fast beliebige Teilmengen von \texttt{SQL} für ihre Schüler vorzugeben, nicht nur die im Rahmen dieser Arbeit als sinnvoll erkannten Kombinationen.
 
 Das grundsätzliche Vorgehen um den Sprachumfang einzuschränken, ist dabei mehrstufig. Initial wird auf Projektebene mit einer Whitelist gearbeitet: Jede explizit erlaubte Funktionalität steht im \texttt{SQL}-Editor (siehe Kapitel \fullref{sec:design-sql-editor}) zur Verfügung. Und sofern eine Funktionalität nicht erlaubt sein sollte, ist sie auch nicht verfügbar. Der Begriff "`Einschränkung"' ist aus der Sicht einer Whitelist also zwar nicht ganz optimal gewählt, beschreibt die stattfindende Reduktion des Umfangs von \texttt{SQL} aber akkurat.
 
@@ -345,28 +345,29 @@ Danach können die Einschränkungen noch für einzelne Abfragen verfeinert werde
 \item[Arbeiten mit aggregierten Daten] \hfill \\
   Dieser Schritt ist gewissermaßen die logische Fortführung der Projektion. Die Lernenden müssen verstehen nach welchen Kriterien die Gruppierung erfolgen sollte und welche Spalten danach noch ohne Aggregation zur Verfügung stehen.
 
-\item[Arbeiten mit JOINs] \hfill \\
+\item[Arbeiten mit \texttt{INNER JOIN}s] \hfill \\
   Dieses Feature-Level stellt die Verknüpfung vorhandener Datenbestände in den Vordergrund und blendet jegliche Projektion oder Gruppierung vollständig aus. Schüler sollen auf dieser Stufe lernen, sich in einem Datenmodell anhand der vorhandenen Fremdschlüssel-Beziehungen zu orientieren.
+
+\item[Arbeiten mit \texttt{OUTER JOIN}s] \hfill \\
+  Auf dieser Stufe sollen die Schüler erkennen, dass durch einen \texttt{INNER JOIN} nicht nur neue Kombinationen von Datensätzen erschlossen werden, sondern auch Zeilen wegfallen können.
 \end{description}
 
 Für diese Arbeit wird der Umfang auf einfache Einschränkungen und \texttt{JOIN}s beschränkt. Diese beiden Stufen erlauben die Navigation in umfangreichen Datenbeständen, also in Schemata mit beliebig vielen Tabellen. Ohne diese Funktionalität wären die sinnvoll verwendbaren Schemata auf jene mit einer einzelnen Tabelle reduziert.
 
-Die verwendete Templatingsprache (siehe \fullref{sec:liquid-language}) verfügt ebenfalls über Funktionen zur Projektion von Daten. Um im Rahmen der Thesis keine redundante Funktionalität zu implementieren, wird darauf verzichtet Projektionen in \texttt{SQL} zu unterstützen.
+Die verwendete Templatingsprache (siehe \fullref{sec:liquid-language}) verfügt ebenfalls über Funktionen zur Projektion von Daten. Um im Rahmen der Thesis keine redundante Funktionalität zu implementieren, wird zunächst darauf verzichtet transformierende Projektionen (konkret also Funktionen) in \texttt{SQL} zu unterstützen.
 
-Aggregierte Daten sind aus Sicht der Oberfläche nicht besonders spannend: Es handelt sich weiterhin um eine Struktur aus Zeilen und Spalten. Die Unterstützung von \texttt{GROUP BY} stellt aus Sicht des Datenaustausches zwischen Abfragen und Seiten keine Veränderung dar. Aus Zeitgründen wird daher auch diese Funktionalität nicht implementiert um mehr Zeit für die Entwicklung des Oberflächeneditors zu haben.
+Aggregierte Daten sind aus Sicht der Oberfläche nicht besonders spannend: Es handelt sich weiterhin um eine Struktur aus Zeilen und Spalten. Die Unterstützung von \texttt{GROUP BY} stellt aus Sicht des Datenaustausches zwischen Abfragen und Seiten keine Veränderung dar. Aus Zeitgründen wird daher auch diese Funktionalität nicht implementiert um mehr Zeit für die Entwicklung des Oberflächeneditors zu haben. Der Umgang mit \texttt{OUTER JOIN}s schlägt sich hingegen möglicherweise auch in der Oberfläche wieder. Plötzlich müssen dort Platzhalter für nicht vorhandene Werte vorgesehen werden.
 
 \subsection{Drag \& Drop-Editor für \texttt{SQL}}
 \label{sec:design-sql-editor}
 
-Der grafische Editor soll grundsätzlich ähnlich zu den aus Scratch bekannten Bedienkonzepten funktionieren können. Es kommen also distinkte Bedienelemente für die verschiedenen Komponenten einer \texttt{SQL}-Abfrage zum Einsatz, kein reiner Texteditor. Der komponentenorientierte Editor soll dabei nicht die Konzeption von beliebigen Abfragen ermöglichen, wohl aber zumindest den Anforderungen aus Schulbüchern wie \cite{grimm_informatik_2015, hubwieser_inf_2} gerecht werden.
+Der grafische Editor soll weitestehend analog zu den aus Scratch bekannten Bedienkonzepten funktionieren können. Es kommen also distinkte Bedienelemente für die verschiedenen Komponenten einer \texttt{SQL}-Abfrage zum Einsatz, kein reiner Texteditor. Der komponentenorientierte Editor soll dabei nicht die Konzeption von beliebigen Abfragen ermöglichen, wohl aber umfassend den Anforderungen aus Schulbüchern wie \cite{grimm_informatik_2015, hubwieser_inf_2} gerecht werden.
 
-Grundsätzlich bedürfen einige Komponenten der Abfrage besonderer Aufmerksamkeit, weil sie große Auswirkungen auf das Verhalten der anderer Komponenten haben. Vorrangig ist hier die \texttt{GROUP-BY}-Komponente zu nennen. Sobald die Query mit einer \texttt{GROUP BY}-Komponente ausgestattet wird ist der Zugriff auf die konkreten Spalten einzelner Zeilen z.B. im allgemeinen Fall nicht mehr möglich. Das Hinzufügen (oder Entfernen) dieser Komponente hat also große Auswirkungen auf die Korrektheit der gesamten Abfrage. Ähnliches gilt für den Umgang mit \texttt{JOIN}s: Aus diesen leitet sich ab, welche Daten von der Entwicklungsumgebung überhaupt angeboten werden sollten.
+Grundsätzlich bedürfen einige Komponenten der Abfrage besonderer Aufmerksamkeit, weil sie große Auswirkungen auf das Verhalten der anderer Komponenten haben. Vorrangig ist hier die \texttt{GROUP-BY}-Komponente zu nennen. Sobald die Query mit einer \texttt{GROUP BY}-Komponente ausgestattet wird, ist der Zugriff auf die konkreten Spalten einzelner Zeilen z.B. im allgemeinen Fall nicht mehr möglich. Das Hinzufügen (oder Entfernen) dieser Komponente hat also große Auswirkungen auf die Korrektheit der gesamten Abfrage. Ähnliches gilt für den Umgang mit \texttt{JOIN}s: Aus diesen leitet sich ab, welche Daten von der Entwicklungsumgebung überhaupt angeboten werden sollten.
 
 \subsubsection{Visuelle Gestaltung}
 
 Für technische Details irrelevant, aber unbedingt ebenfalls im Voraus zu klären ist die Frage inwiefern es sinnvoll wäre, das sehr bunte, kontrastreiche Design von Scratch zu imitieren. Abbildung~\ref{fig:compare-colourful} zeigt einen Vergleich zweier Prototypen aus der Konzeptionsphase von \idename{}: Einmal sehr bunt und "`blockig"' und einmal angelehnt an konventionelles Syntax-Highlighting.
-
-\todo[inline]{\textbf{Todo}: Quelle mit Beleg für ``Kinderfreundliches'' buntes Design suchen. Das wird man bei Scratch schon aus gutem Grund gemacht haben. Relevante Frage: Zielgruppe (in Jahren) von Scratch vs. Zielgruppe dieses Projektes?}
 
 \begin{wrapfigure}{r}{0.46\textwidth}
   \includegraphics[width=0.45\textwidth]{images/scratch-control-flow}
@@ -374,9 +375,9 @@ Für technische Details irrelevant, aber unbedingt ebenfalls im Voraus zu kläre
   \label{fig:screen-scratch-control-flow}
 \end{wrapfigure}
 
-Das blockige Design orientiert sich an Scratch und macht visuell sehr deutlich, welche Komponenten logisch zusammenhängen. Im Laufe der Entwicklung des Prototypen wurde aber immer deutlicher, dass die Zusammenhänge der Komponenten hier eher überbetont werden. In Scratch ist dieser deutliche visuelle Zusammenhang notwendig. So zeigen z.B. die Konnektoren der Blöcke für Ereignisse oder Endlosschleifen sehr deutlich, wie sich der Kontrollfluss durch diese Elemente verändern wird: Der Kontrollfluss beginnt mit dem Ereignis, ein Anhängen von Blöcken nach der Schleife ist weder möglich noch sinnvoll (Abbildung~\ref{fig:screen-scratch-control-flow}).  Für eine vollständige Programmiersprache ist das mit Sicherheit eine gute Wahl, aber für den sehr linearen Ablauf einer \texttt{SQL}-Abfrage ist diese so ausgeprägte visuelle Hierarchie im Regelfall nicht nötig.
+Das blockige Design orientiert sich an Scratch und macht visuell sehr deutlich, welche Komponenten logisch zusammenhängen. Im Laufe der Entwicklung des Prototypen wurde aber immer deutlicher, dass die Zusammenhänge der Komponenten hier eher überbetont werden. In Scratch ist dieser deutliche visuelle Zusammenhang notwendig. So zeigen z.B. die Konnektoren der Blöcke für Ereignisse oder Endlosschleifen sehr deutlich, wie sich der Kontrollfluss durch diese Elemente verändern wird: Der Kontrollfluss beginnt mit dem Ereignis, ein Anhängen von Blöcken nach der Schleife ist weder möglich noch sinnvoll (Abbildung~\ref{fig:screen-scratch-control-flow}).  Für eine vollständige Programmiersprache ist das mit Sicherheit eine gute Wahl, für den sehr linearen Ablauf einer \texttt{SQL}-Abfrage ist diese so ausgeprägte visuelle Hierarchie im Regelfall nicht nötig.
 
-Die in den Prototypen noch zu sehende Nutzung von "`normalen"' Bedienelementen wie Text- oder Listboxen (Abbildung~\ref{fig:compare-colourful} \& \ref{fig:screen-sql-editor-all-editing}) wurde schon früh in der Entwicklung zugunsten eines auf Drag \& Drop aufbauenden Konzeptes aufgegeben. Die Bedienelemente haben zum einen schon rein visuell die Lesbarkeit merklich gestört und hätten häufig ausgeblendet werden müssen. Zudem ist bei der Bearbeitung von Ausdrücken eine distinkte visuelle Hierarchie sehr von Vorteil. Diese Hierarchie lässt sich am einfachsten durch die konsequente Verwendung von klar codierten Formen und Farben erreichen, was sich für vom Browser bereitgestellte Bedienelemente aber nur in engen Grenzen umsetzen lässt.
+Die in den Prototypen noch zu sehende Nutzung von "`normalen"' Bedienelementen wie Text- oder Listboxen (Abbildung~\ref{fig:compare-colourful} \& \ref{fig:screen-sql-editor-all-editing}) wurde schon früh in der Entwicklung zugunsten eines auf Drag \& Drop aufbauenden Konzeptes aufgegeben. Die Bedienelemente haben zum einen schon rein visuell die Lesbarkeit merklich gestört und hätten häufig ausgeblendet werden müssen. Zudem ist bei der Bearbeitung von Ausdrücken eine distinkte visuelle Hierarchie sehr von Vorteil. Diese Hierarchie lässt sich am einfachsten durch die konsequente Verwendung von klar codierten Formen und Farben erreichen, was sich für vom Browser bereitgestellte Bedienelemente aber nur in engen Grenzen umsetzen lässt\footnote{Historisch waren diese Bedienelemente überhaupt nicht mit \texttt{CSS} zu gestalten, diese Situation hat sich heutzutage deutlich verändert. Der nötige Aufwand dafür ist jedoch groß und erfordert zum Beispiel das deaktivieren der nativen Bedienelemente mit \texttt{display:none} und dann einen "`Nachbau"' mit anderen Elementen.}.
 
 Darüber hinaus existiert noch ein weiterer Faktor, der zwar keinen Einfluss auf die technischen Details von \idename{} hat, aber trotzdem eine etwas ausführlichere Betrachung rechtfertigt: die größere Nähe des etwas nüchterneren, IDE-ähnlichen Designs zu "`normalen"' Entwicklerprogrammen. Diese wirken möglicherweise weniger einschüchternd, wenn man sich schon an den Anblick von recht viel Text mit Syntax-Highlighting gewöhnt hat. Es ändert sich dann bei der Verwendung von typischen Entwicklerprogrammen dann "`lediglich"' das Bedienparadigma sehr stark (Text schreiben statt Drag \& Drop), aber nicht mehr der visuelle Ersteindruck.
 
@@ -417,7 +418,7 @@ Statt jederzeit alle Optionen anzuzeigen, könnte dann noch die Position des Mau
 
 Das endgültig implementierte Design (Abbildung~\ref{fig:screen-sql-editor-drag-drop}) lehnt sich nun doch an Scratch an, versucht allerdings mit Platzhaltern den Benutzer kontextsensitiv zu unterstützen. Wenn dieser zum Beispiel einen Vergleichsoperator für Ausdrücke in der Seitenleiste anwählt, werden im Hauptfenster die validen Drop-Ziele hervorgehoben. Unter dem eigentlichen Editor befinden sich dann zwei weitere Bereiche (Abbildung~\ref{fig:screen-sql-editor-parameters-preview}): Zum einen die Ergebnisanzeige, welche die zur aktuellen Gestalt der Abfrage passenden Zeilen zeigt, zum anderen eine Möglichkeit, bei Abfragen mit Parametern die nötigen Werte zu definieren. An dieser Abbildung wird zudem ein weiteres Detail deutlich: Abfragen lassen sich nur als "`einzeilig"' deklarieren, wenn eine \texttt{WHERE}-Komponente vorhanden ist.
 
-\begin{figure}[h]
+\begin{figure}[t]
   \includegraphics[width=\textwidth]{images/sql-drag-drop}
   \caption{Implementiert: Drag \& Drop-Interface mit Hervorhebung von möglichen Zielen beim Ziehen aus der Seitenleiste, keine Nutzung von "`normalen"' Bedienelementen.}
   \label{fig:screen-sql-editor-drag-drop}
@@ -431,20 +432,20 @@ Das endgültig implementierte Design (Abbildung~\ref{fig:screen-sql-editor-drag-
 
 \subsubsection{Umgang mit Ausdrücken}
 
-Innerhalb der \texttt{SELECT}- und \texttt{WHERE}-Komponenten können theoretisch beliebige Ausdrücke auftreten. Diese unterscheiden sich strukturell vor allem anhand ihrer benötigten Parameter. Konstanten, Spalten und "`Benutzerwerte"' stehen für sich, können also unmittelbar verwendet werden. Sofern Ausdrücke andere Ausdrücke zur Auswertung benötigen, zum Beispiel das logische \texttt{UND}, werden diese zunächst durch einen speziellen "`hier fehlt etwas"'-Platzhalter gefüllt. Auf diesen Platzhalter, symbolisiert durch ein Fragezeichen, lassen sich dann wie gewohnt per Drag \& Drop andere Ausdrücke der Abfrage oder Elemente aus der Seitenleiste ziehen. Damit funktioniert die Entwicklung von Ausdrücken sehr ähnlich, wie es Schülern möglicherweise schon aus Scratch bekannt ist.
+Innerhalb der \texttt{SELECT}- und \texttt{WHERE}-Komponenten können fast beliebige Ausdrücke auftreten. Diese unterscheiden sich strukturell vor allem anhand ihrer benötigten Parameter. Konstanten, Spalten und "`Benutzerwerte"' stehen für sich, können also unmittelbar verwendet werden. Sofern Ausdrücke andere Ausdrücke zur Auswertung benötigen, zum Beispiel das logische \texttt{UND}, werden diese zunächst durch einen speziellen Blanko-Platzhalter gefüllt. Auf diesen Platzhalter, symbolisiert durch ein Fragezeichen, lassen sich dann wie gewohnt per Drag \& Drop andere Ausdrücke der Abfrage oder Elemente aus der Seitenleiste ziehen. Damit funktioniert die Entwicklung von Ausdrücken sehr ähnlich, wie es Schülern möglicherweise schon aus Scratch bekannt ist.
 
-Die in Kapitel \fullref{sec:sql-subset-expression} vorgestellten "`einfachen Ausdrücke"' lassen sich schwerer als zunächst vermutet in die Oberfläche integrieren. Schon die Fragestellung, wo diese Vereinfachung platziert werden sollte, wirft Fragen auf: In der Seitenleiste, einem neuen Dialog oder "`irgendwie anders kontextabhängig"'? Sollen für komplexe Sachverhalte eigene "`Untereditoren"' entwickelt werden? Wenn es aus didaktischer Sicht hilfreich scheint mit einem "`Wizard"'-Dialog zu arbeiten, soll dafür das Drag \& Drop Paradigma durchbrochen werden? Da sich mit dem Drag \& Drop-Ansatz alle Ausdrücke entwerfen lassen, wurde die Diskussion über eine geeignete Benutzerschnittstelle für diese Funktionalität auf unbestimmte Zeit verschoben.
+Die in Kapitel \fullref{sec:sql-subset-expression} vorgestellten "`einfachen Ausdrücke"' lassen sich schwerer als zunächst vermutet in die Oberfläche integrieren. Schon die Platzierung dieser Vereinfachungen wirft Fragen auf: In der Seitenleiste, einem neuen Dialog oder "`irgendwie kontextabhängig"'? Sollen für komplexe Sachverhalte eigene "`Untereditoren"' entwickelt werden? Wenn es aus didaktischer Sicht hilfreich scheint mit einem "`Wizard"'-Dialog zu arbeiten, soll dafür das Drag \& Drop Paradigma durchbrochen werden? Da sich mit dem Drag \& Drop-Ansatz alle Ausdrücke entwerfen lassen, wurde die Diskussion über eine geeignete Benutzerschnittstelle für diese Funktionalität auf unbestimmte Zeit verschoben.
 
 \subsubsection{Abfragen mit Parametern}
 \label{sec:design-query-params}
 
-Um eine Interaktion mit Endbenutzern zu ermöglichen, können in Ausdrücken auch benannte Parameter ("`Benutzerwerte"') anstelle von konstanten Werten verwendet werden. Im Gegensatz zu Konstanten werden diese zur Laufzeit vom Benutzer angegeben. Aus Sicht der \texttt{SQL}-Abfrage ist diese Ergänzung relativ trivial, schließlich sind benannte Parameter Teil faktisch jeder \texttt{SQL}-Implementierung. Die eigentliche Problematik liegt im Binden dieser Parameter zur Laufzeit. Das Kapitel~\fullref{sec:design-ui-bind-output} beschreibt, wie die Verknüpfung mit den Bedienelementen der Oberfläche vorgenommen wird.
+Um eine Interaktion mit Endbenutzern zu ermöglichen, können in Ausdrücken auch benannte Parameter ("`Benutzerwerte"') anstelle von konstanten Werten verwendet werden. Im Gegensatz zu Konstanten werden diese zur Laufzeit vom Benutzer angegeben. Aus Sicht der \texttt{SQL}-Abfrage ist diese Ergänzung trivial, da benannte Parameter ein Bestandteil faktisch jeder \texttt{SQL}-Implementierung. Die eigentliche Problematik liegt im Binden dieser Parameter zur Laufzeit. Das Kapitel~\fullref{sec:design-ui-bind-output} beschreibt, wie die Verknüpfung mit den Bedienelementen der Oberfläche vorgenommen wird.
 
-Innerhalb des Abfrageeditors können solche parametrisierten Abfragen dann natürlich nicht mehr direkt ausgeführt werden. Auf diesen Umstand wird der Entwickler, wie in Abbildung~\ref{fig:screen-sql-editor-parameters-preview} zu sehen ist, direkt innerhalb des Editors hingewiesen.
+Innerhalb des Abfrageeditors können solche parametrisierten Abfragen dann folglich nicht mehr direkt ausgeführt werden. Auf diesen Umstand wird der Entwickler, wie in Abbildung~\ref{fig:screen-sql-editor-parameters-preview} zu sehen ist, direkt innerhalb des Editors hingewiesen. Sofern er die benötigten Parameter dann eingibt, kann die Abfrage auch wieder ausgeführt werden.
 
 \subsubsection{\texttt{FROM}}
 
-Wenn der Benutzer eine Drag-Operation mit einer Tabelle beginnt, kann er die Tabelle wahlweise auf einer bestehenden Tabelle "`fallen lassen"', einen $\bigoplus$-Indikator nach der letzten Tabelle oder den \texttt{FROM}-Text selbst fallen lassen. Eingefügt wird dabei im Falle von schon existierenden Elementen immer nach dem Ziel, die $\bigoplus$-Indikatoren werden hingegen einfach durch das neue Element ersetzt.
+Wenn der Benutzer eine Drag-Operation mit einer Tabelle beginnt, kann er die Tabelle wahlweise auf einer bestehenden Tabelle "`fallen lassen"', einen $\bigoplus$-Indikator nach der letzten Tabelle oder den \texttt{FROM}-Text selbst fallen lassen. Eingefügt wird dabei im Falle von schon existierenden Elementen immer nach dem Ziel. Die $\bigoplus$-Indikatoren werden hingegen einfach durch das neue Element ersetzt.
 
 Diese Komponente beinflusst unmittelbar die in der Seitenleiste zur Verfügung stehenden Daten. Für Tabellen, die bisher nicht Teil der \texttt{FROM}-Komponente sind, stehen die entsprechenden Spalten nicht zur Verfügung. Erst wenn man diese Tabelle mit einem \texttt{JOIN} in die Abfrage einbindet, erscheinen auch die dazugehörigen Spalten in der Seitenleiste.
 
@@ -458,7 +459,7 @@ Syntaktisch gesehen wären die logischen Verknüpfungen natürlich auch als Teil
 
 \subsubsection{\texttt{GROUP BY}}
 
-Sobald in einer Abfrage eine \texttt{GROUP BY} Komponente auftaucht, hat dies Auswirkungen auf die Möglichkeiten innerhalb der \texttt{SELECT} Anweisung. Da keine Auswahl von ungruppierten und nicht-aggregierten Spalten möglich sein darf, müssen diese entfernt werden. Insbesondere wenn der Benutzer vorher schon mit komplizierten Ausdrücken im \texttt{SELECT} gearbeitet haben sollte, ist also zumindest eine Warnung nötig.
+Sobald in einer Abfrage eine \texttt{GROUP BY} Komponente genutzt wird, hat dies Auswirkungen auf die Möglichkeiten innerhalb der \texttt{SELECT} Anweisung. Da keine Auswahl von ungruppierten und nicht-aggregierten Spalten möglich sein darf, müssen diese entfernt werden. Insbesondere wenn der Benutzer vorher schon mit komplizierten Ausdrücken im \texttt{SELECT} gearbeitet hat, ist eine Warnung nötig.
 
 \subsubsection{Manipulation von Daten}
 
@@ -472,7 +473,7 @@ Die Ausführung dieser Operation sollte daher immer in zwei Schritten erfolgen, 
   \label{fig:screen-sql-editor-insert-key-value-pairs}
 \end{figure}
 
-Für die Name-Wert-Paare in \texttt{INSERT}- oder \texttt{UDPATE}-Operationen löst sich das Erscheinungsbild des Editors von dem Vorbild der \texttt{SQL}-Syntax (Abbildung~\ref{fig:screen-sql-editor-insert-key-value-pairs}). Zur Erinnerung werden an dieser Stelle noch einmal die SQLite-Syntax für \texttt{UPDATE}- und \texttt{INSERT}-Anweisungen illustriert (Listing~\ref{lst:sql-syntax-insert} \& \ref{lst:sql-syntax-update}). Leider haben diese beiden verwandten Anweisungen offensichtlich eine unterschiedliche Syntax für die Notation der Schlüssel-Wert-Paare.\footnote{Dieser Umstand wurde mit SQLite Version 3.15.0 für die \texttt{UPDATE}-Anweisung verbessert, bisher hat sich diese Syntax substanziell von der \texttt{INSERT}-Schreibweise unterschieden. Nun ist es analog zum \texttt{INSERT} ebenfalls möglich, auf beiden Seiten der Zuweisung identisch lange Listen von Spalten und Werten anzugeben. Allerdings ist Version 3.15.0 am 14. Oktober 2016 erschienen, etwa zwei Wochen vor dem Druck dieser Thesis.}. Dieses syntaktische Detail wird aber vor dem Entwickler durch die Oberfläche versteckt. Sichtbar ist dort nur die abstrakte Zuweisung von Werten an eine Auswahl von Spalten.
+Für die Name-Wert-Paare in \texttt{INSERT}- oder \texttt{UDPATE}-Operationen löst sich das Erscheinungsbild des Editors von dem Vorbild der \texttt{SQL}-Syntax (Abbildung~\ref{fig:screen-sql-editor-insert-key-value-pairs}). Zur Erinnerung werden an dieser Stelle noch einmal die SQLite-Syntax für \texttt{UPDATE}- und \texttt{INSERT}-Anweisungen illustriert (Listing~\ref{lst:sql-syntax-insert} \& \ref{lst:sql-syntax-update}). Leider haben diese beiden verwandten Anweisungen offensichtlich eine unterschiedliche Syntax für die Notation der Schlüssel-Wert-Paare.\footnote{Dieser Umstand wurde mit SQLite Version 3.15.0 für die \texttt{UPDATE}-Anweisung verbessert, bisher hat sich diese Syntax substanziell von der \texttt{INSERT}-Schreibweise unterschieden. Jetzt ist es analog zum \texttt{INSERT} ebenfalls möglich, auf beiden Seiten der Zuweisung identisch lange Listen von Spalten und Werten anzugeben. Allerdings ist Version 3.15.0 am 14. Oktober 2016 erschienen, etwa zwei Wochen vor dem Druck dieser Thesis.}. Dieses syntaktische Detail wird allerdings vor dem Entwickler durch die Oberfläche versteckt. Sichtbar ist dort nur die abstrakte Zuweisung von Werten an eine Auswahl von Spalten.
 
 \begin{lstlisting}[language=SQL,float=h!,caption={Syntax einer \texttt{INSERT}-Anweisung}, label={lst:sql-syntax-insert}]
 INSERT INTO gefangen (pokedex_nummer, spitzname, staerke)
@@ -494,7 +495,7 @@ Damit sich mit der Schülerentwicklungsumgebung erstellte Projekte auch von norm
 
 \warning{Nicht alle hier beschriebenen Optionen sind notwendigerweise in dem Prototypen implementiert! Dieses Kapitel ist eine \textit{allgemeine} Betrachtung eines didaktisch sinnvollen Konzeptes zur Beschreibung von Oberflächen. Um zu sehen, welcher Funktionsumfang im Prototypen tatsächlich verfügbar ist, lohnt sich ein Blick in \fullref{sec:conclusion} und den Anhang \fullref{sec:project-examples}.}
 
-Auch wenn im bisherigen Verlauf der Arbeit stets ausschließlich \texttt{HTML} als Technologie zur Beschreibung von Oberflächen erwähnt wurde, handelt es sich dabei nur um den statischen Teil des technischen Fundaments. Um die interaktive Anbindung von Datenquellen zu ermöglichen, müssen noch einige Erweiterungen in Form einer Templatingengine zum Einsatz kommen. Ähnlich wie für die \texttt{SQL}-Abfragen wird auch für die Oberflächen ein dezidierter Editor (Kapitel~\ref{sec:design-ui-editor}) implementiert. Die Schüler sollten zu keinem Zeitpunkt selber Quelltexte tippen müssen, optional aber durchaus die Möglichkeit dazu haben.
+Auch wenn im bisherigen Verlauf der Arbeit stets ausschließlich \texttt{HTML} als Technologie zur Beschreibung von Oberflächen erwähnt wurde, handelt es sich dabei nur um den statischen Teil des technischen Fundaments. Um die interaktive Anbindung von Datenquellen zu ermöglichen, müssen noch einige Erweiterungen in Form einer Templatingengine zum Einsatz kommen. Ähnlich wie für die \texttt{SQL}-Abfragen wird auch für die Oberflächen ein dedizierter Editor (Kapitel~\ref{sec:design-ui-editor}) implementiert. Die Schüler sollten zu keinem Zeitpunkt selber Quelltexte tippen müssen, optional aber durchaus die Möglichkeit dazu haben.
 
 Um das folgende Kapitel anschaulicher zu gestalten, werden die aufgeführten Beispiele meist anhand eines sehr reduzierten Datenbestandes (siehe Tabelle~\ref{tab:ui-concept-data-article} \& \ref{tab:ui-concept-data-comment}) zu einem einfachen Blog illustriert. Dieser besteht aus zwei Tabellen für Artikel und Kommentare, ein Artikel kann dabei mehrfach oder auch überhaupt nicht über Kommentare verfügen. Bei den Zeitangaben handelt es sich um \texttt{UNIX}-Zeitstempel.
 
@@ -524,11 +525,11 @@ Um das folgende Kapitel anschaulicher zu gestalten, werden die aufgeführten Bei
   \label{tab:ui-concept-data-comment}
 \end{table}
 
-Dieser Blog soll dem Endbenutzer über zwei Seiten näher gebracht werden: Eine \textit{Hauptseite} dient der Auflistung aller Blogbeiträge, welche im Einzelnen auf einer \textit{Detailseite} in Gänze betrachtet und kommentiert werden können. Dabei können auf der Hauptseite aus Platzgründen natürlich nicht die gleichen Informationen angezeigt werden wie auf den Detailseiten. Daher werden die Daten auf der Hauptseite teilweise aggregiert: Statt alle Kommentare zu einem Beitrag anzuzeigen, wird nur auf die Anzahl der getätigten Kommentare verwiesen.
+Dieser Blog soll dem Endbenutzer über zwei Seiten näher gebracht werden: Eine \textit{Hauptseite} dient der Auflistung aller Blogbeiträge, welche im Einzelnen auf einer \textit{Detailseite} in Gänze betrachtet und kommentiert werden können. Dabei können auf der Hauptseite aus Platzgründen nicht die gleichen Informationen angezeigt werden, wie auf den Detailseiten. Daher werden die Daten auf der Hauptseite teilweise aggregiert: Statt alle Kommentare zu einem Beitrag anzuzeigen, wird nur auf die Anzahl der getätigten Kommentare verwiesen.
 
 Bei dieser Aufteilung handelt es sich um eine typische "`Master-Detail"'-Struktur: Ausgehend von einer sehr komprimierten Darstellung aller Werte können Details zu einem konkreten Datensatz nach einem Navigationsvorgang eingesehen werden. Dieses Navigationskonzept wird von fast allen geschäftlichen Applikationen genutzt und ist eine der Standardvorlagen des Visual Studio Lightswitch.
 
-Abstrakt betrachtet besteht eine \idename{}-Seite aus zwei wesentlichen Informationen: Einer Auflistung aller zum Darstellen benötigten Datenquellen, im Rahmen dieser Thesis werden das ausschließlich \texttt{SQL}-Abfragen sein, und einer Vorschrift, wie genau dieser Datenbestand darzustellen ist, also eine \texttt{HTML}-Vorlage mit speziellen Anweisungen zur Datenanbindung. Kapitel \fullref{sec:page-data-sources} erläuert, wie diese Anbindung allgemein organisiert wird, Kapitel \fullref{sec:design-ui-bind-output} beschreibt die konkreten Details der \texttt{SQL}-Anbindung.
+Abstrakt betrachtet besteht eine \idename{}-Seite aus zwei wesentlichen Informationen: Einer Auflistung aller zum Darstellen benötigten Datenquellen "= im Rahmen dieser Thesis werden das ausschließlich \texttt{SQL}-Abfragen sein "= und einer Vorschrift, wie genau dieser Datenbestand darzustellen ist, also eine \texttt{HTML}-Vorlage mit speziellen Anweisungen zur Datenanbindung. Kapitel \fullref{sec:page-data-sources} erläuert, wie diese Anbindung allgemein organisiert wird, Kapitel \fullref{sec:design-ui-bind-output} beschreibt die konkreten Details der \texttt{SQL}-Anbindung.
 
 \subsubsection{Datenquellen für Webseiten}
 \label{sec:page-data-sources}
@@ -537,13 +538,13 @@ Um die einer Webseite zur Verfügung stehenden Daten zu strukturieren, wird der 
 
 \begin{description}[noitemsep]
 \item[\texttt{page} für Eigenschaften der Seite] \hfill \\
-  Zumindest der Name der aktuellen Seite ist für die Darstellung möglicherweise relevant und sollte daher während des Rendervorgangs zur Verfügung stehen.
+  Der Name der aktuellen Seite ist für die Darstellung möglicherweise relevant und sollte daher während des Rendervorgangs zur Verfügung stehen.
 \item[\texttt{project} für Eigenschaften des Projektes] \hfill \\
-  Wenn man als Entwickler globale Konstanten ablegen möchte, könnte man dies natürlich auch in der Datenbank tun. Bequemer ist aber ein separater Speicherort, der tatsächlich keine Modifikationen durch Endbenutzer vorsieht. Das typische Beispiel für einen solchen global verfügbaren Wert wäre der Name des Projekts an sich oder die Routing-Tabelle mit allen verfügbaren Seiten.
+  Wenn man als Entwickler globale Konstanten ablegen möchte, könnte man dies auch in der Datenbank tun. Einfacher ist aber ein separater Speicherort, welcher tatsächlich keine Modifikationen durch Endbenutzer vorsieht. Das typische Beispiel für einen solchen global verfügbaren Wert wäre der Name des Projekts an sich oder die Routing-Tabelle mit allen verfügbaren Seiten.
 \item[\texttt{get} für \texttt{URL}-Parameter] \hfill \\
   Wenn aus einer Vielzahl von verfügbaren Daten zu einem bestimmten Datensatz navigiert werden soll, sieht der \texttt{HTML}-Standard die Verwendung von \texttt{URL}-Parametern vor. Mit diesen lassen sich applikationsspezifische Merkmale der anzuzeigenden Datensätze angeben. Im Falle des Blog-Beispiels wäre das zum Beispiel die \texttt{article\_id} zur Anzeige eines bestimmten Beitrages oder die Angabe eines Startzeitpunktes, um die Hauptseite in mehrere Seiten für unterschiedliche Zeiträume zu unterteilen.
 \item[\texttt{query} für \texttt{SELECT}-Abfragen] \hfill \\
-  Nicht jede Webseite benötigt notwendigerweise die Ergebnisse aller verfügbaren Abfragen. Daher werden die tatsächlich benötigten referenzierten Abfragen in diesem Namensraum gesammelt. Kapitel \fullref{sec:design-ui-bind-output} beschreibt im Detail, wie diese Anbindung funktioniert.
+  Nicht jede Webseite benötigt die Ergebnisse aller verfügbaren Abfragen. Daher werden die tatsächlich benötigten referenzierten Abfragen in diesem Namensraum gesammelt. Kapitel \fullref{sec:design-ui-bind-output} beschreibt im Detail, wie diese Anbindung funktioniert.
 \item[\texttt{form} für Benutzereingaben] \hfill \\
   Dieser Namensraum hat im Gegensatz zu allen anderen Namensräumen keinen globalen Gültigkeitsbereich, sondern hängt eng mit dem \texttt{HTML}-\texttt{form}-Element zusammen. Die zur Verfügung gestellten Daten hängen folglich von der Struktur des Templates ab.
 \end{description}
@@ -606,7 +607,7 @@ Und natürlich spielt für die Technik auch die Parametrisierung eine Rolle: Bei
 
 Um die Syntax zu vergleichen, soll der in Listing~\ref{lst:data-control-structures} angedeutete Datenbestand für einen Blogeintrag gerendert werden. Dieses Beispiel ergänzt die exemplarische \texttt{article}-Tabelle um die Spalten \texttt{private} und eine Aufzählung von Kategorien.
 
-\begin{lstlisting}[float=h!,caption={JSON-Darstellung eines exemplarischen Datenbestandes}, label={lst:data-control-structures}]
+\begin{lstlisting}[float=h!, language=JavaScript, caption={JSON-Darstellung eines exemplarischen Datenbestandes}, label={lst:data-control-structures}]
 {
   "query" : {
     "article" : {
@@ -637,7 +638,7 @@ Dieser Beispielartikel soll in den jeweiligen Sprachen wie folgt visualisiert we
 
 Die \textbf{Liquid}-Syntax (Beispiel-Listing~\ref{lst:liquid-control-structures}) wurde grundsätzlich schon im Rahmen von Kapitel \fullref{sec:software-jekyll} betrachtet. An dieser Stelle sei daher nur noch ergänzt, dass Liquid von Haus aus \texttt{HTML} in \texttt{\{\{\}\}}-Ersetzungen maskiert. Es ist daher nötig, den Artikeltext in drei geschweiften Klammern zu notieren (Zeile 11), diese Syntax deaktiviert diese Sicherheitsfunktion. Die Formatierung der Datumsangabe funktioniert mit einer Syntax wie sie von \texttt{UNIX}-Pipes bekannt ist (Zeile 5), Argumente werden als unbenannte Parameter übergeben.
 
-\begin{lstlisting}[float=h, numbers=left, caption={Blogartikel mit Liquid}, label={lst:liquid-control-structures}]
+\begin{lstlisting}[float=h, language=HTML, numbers=left, caption={Blogartikel mit Liquid}, label={lst:liquid-control-structures}]
 <h1>{{ project.name }}</h1>
 {% if !query.article.private %}
   <h2>{{ query.article.title }}</h2>
@@ -660,7 +661,7 @@ Eine praktische syntaktische Eigenart von Handlebars ist die Tatsache, dass auch
 
 Um einen Ausdruck unverändert zu übernehmen, also inklusive aller HTML-Sonderzeichen, muss dieser wie in Liquid von drei geschweiften Klammern umgeben werden (Zeile 5). Statt der Pipe-Notation verwendet Handlebars eine an konventionelle Funktionsaufrufe angelehnte Syntax. Zu Beginn wird der Name genannt, in diesem Beispiel die nicht standardisierte Funktion \texttt{formatTime}, danach folgen durch Leerzeichen getrennte Parameter (Zeile 5).
 
-\begin{lstlisting}[float=h, numbers=left, caption={Blogartikel mit Handlebars}, label={lst:handlebars-control-structures}]
+\begin{lstlisting}[float=h, language=HTML, numbers=left, caption={Blogartikel mit Handlebars}, label={lst:handlebars-control-structures}]
 <h1>{{ project.name }}</h1>
 {{ #if !query.article.private }}
   <h2>{{ query.article.title }}</h2>
@@ -683,7 +684,7 @@ Kontrollstrukturen müssen entweder in speziellen \texttt{<template>}-Knoten not
 
 Auch Angular 2 wird \texttt{HTML}-Inhalte im Normalfall maskieren. Um diese Beschränkung zu umgehen, können die entsprechenden Daten entweder in der Programmlogik als "`sicher"' markiert werden oder direkt an das \texttt{innerHtml}-Attribut gebunden werden (Zeile 9).
 
-\begin{lstlisting}[float=h, numbers=left, caption={Blogartikel mit Angular 2}, label={lst:angular2-control-structures}]
+\begin{lstlisting}[float=h, language=HTML, numbers=left, caption={Blogartikel mit Angular 2}, label={lst:angular2-control-structures}]
 <h1>{{ project.name }}</h1>
 <template [ngIf]="!query.article.private">
   <h2>{{ query.article.title }}</h2>
@@ -709,7 +710,7 @@ Sollten Lernende hingegen selbstständig (und jenseits von \idename{}) Zeit in d
 
 Auch wenn für die Lernenden von der konkreten Syntax der Templatingsprache abstrahiert werden soll, wird es immer wieder zu Momenten kommen, in denen diese Abstraktion löchrig ist\footnote{\url{http://www.joelonsoftware.com/articles/LeakyAbstractions.html}}. Die häufigste Ursache für ein solches Leck werden dabei Fehlermeldungen sein: Sobald diese auftreten, sollte zur Unterstützung der Fehler im generierten Quelltext angezeigt und möglichst hervorgehoben werden. Im Falle von Angular 2 wären die angezeigten Quellen für die Zielgruppe absolut unverständlich.
 
-Letzten Endes stellt sich daher nur die Frage, ob Handlebars oder Liquid zum Einsatz kommen sollte: Angular 2 ist sowohl technisch als auch syntaktisch sehr kompliziert und eignet sich daher nicht besonders gut als "`erste Templatingsprache"'. Die qualitative Entscheidung\footnote{Bauchgefühl} fiel dabei zugunsten von Liquid und berücksichtigt vor allem die geringe technische Komplexität. Diese Entscheidung wird von der quantitativen Auswertung in Tabelle~\ref{tab:scoring-templating-language} in jeder Einzeldisziplin bestätigt. Die Tatsache, dass die Referenzimplementierung von Liquid wie der \idename{}-Server in Ruby entwickelt wird, ist ein netter zusätzlicher Faktor. Er wird zwar von der quantitativen Auswertung nicht berücksichtigt, gesucht wurde schließlich die "`allgemein beste"' Lösung, erleichtert aber erfreulicherweise zusätzlich die Implementierung.
+Letzten Endes stellt sich daher nur die Frage, ob Handlebars oder Liquid zum Einsatz kommen sollte: Angular 2 ist sowohl technisch als auch syntaktisch sehr kompliziert und eignet sich daher nicht besonders gut als "`erste Templatingsprache"'. Die qualitative Entscheidung fiel dabei zugunsten von Liquid und berücksichtigt vor allem die geringe technische Komplexität. Diese Entscheidung wird von der quantitativen Auswertung in Tabelle~\ref{tab:scoring-templating-language} in jeder Einzeldisziplin bestätigt. Die Tatsache, dass die Referenzimplementierung von Liquid wie der \idename{}-Server in Ruby entwickelt wird, ist ein netter zusätzlicher Faktor. Er wird zwar von der quantitativen Auswertung nicht berücksichtigt, gesucht wurde schließlich die "`allgemein beste"' Lösung, erleichtert aber erfreulicherweise zusätzlich die Implementierung.
 
 \begin{table}[h]
   \centering
@@ -748,7 +749,7 @@ Grundsätzlich wird in Liquid zwischen drei verschiedenen Arten von Anweisungen 
 
 Alle diese Anweisungen beziehen sich immer auf einen vordefinierten Datenbestand, welcher dem Renderer zusammen mit dem eigentlichen Template übergeben wird. Dieser Datenbestand gliedert sich in Name-Wert-Paare, Listen und atomare Werte, die Navigation erfolgt mittels des \texttt{.}-Operators für Zugriffe auf benannte Schlüssel oder mit dem \texttt{[]}-Operator für einzelne Werte eines Arrays.
 
-Verschiedene Werte können mit den typischen Vergleichsoperatoren (\texttt{==}, \texttt{!=}, \texttt{>}, \texttt{<}, \texttt{>=}, \texttt{<=}) zu booleschen Ausdrücken kombiniert werden. Für Zeichenketten existiert noch der infix-notierte \texttt{contains}-Operator, um zu prüfen,\todo{Zuviel Komma?} ob eine Zeichenkette in einer anderen enthalten ist. Mehrere Ausdrücke können dann ihrerseits  mit \texttt{and} und \texttt{or} kombiniert werden. Dabei werden stets die mit \texttt{and} verknüpften Ausdrücke vor jenen, die mit einem \texttt{or} verknüpft sind, ausgewertet. Der Ausdruck (\texttt{true or false and false}) wird folglich nicht von links nach rechts ausgewertet, sondern ergibt insgesamt \texttt{true}. Diese Reihenfolge kann nicht beeinflusst werden, Klammern in Liquid-Ausdrücken sind ein Syntaxfehler.
+Verschiedene Werte können mit den typischen Vergleichsoperatoren (\texttt{==}, \texttt{!=}, \texttt{>}, \texttt{<}, \texttt{>=}, \texttt{<=}) zu booleschen Ausdrücken kombiniert werden. Für Zeichenketten existiert noch der infix-notierte \texttt{contains}-Operator, um zu prüfen, ob eine Zeichenkette in einer anderen enthalten ist. Mehrere Ausdrücke können dann ihrerseits  mit \texttt{and} und \texttt{or} kombiniert werden. Dabei werden stets die mit \texttt{and} verknüpften Ausdrücke vor jenen, die mit einem \texttt{or} verknüpft sind, ausgewertet. Der Ausdruck (\texttt{true or false and false}) wird folglich nicht von links nach rechts ausgewertet, sondern ergibt insgesamt \texttt{true}. Diese Reihenfolge kann nicht beeinflusst werden, Klammern in Liquid-Ausdrücken sind ein Syntaxfehler.
 
 Neben dem schon häufig erwähnten \texttt{if}-Tag stehen zur Beeinflussung des Kontrollflusses aber noch einige weitere Tags bereit: Verkettungen sind über \texttt{elsif}- und \texttt{else}-Tags möglich, bei \texttt{unless} handelt es sich schlichtweg um ein negiertes \texttt{if}. Und wie in anderen Programmiersprachen existiert auch in Liquid ein \texttt{case}- / \texttt{when}-Konstrukt, um auf verschiedene Ausprägungen eines einzelnen Wertes zu reagieren.
 
@@ -758,13 +759,13 @@ Anfang und Ende der Iteration kann über die Eigenschaften \texttt{offset} und \
 
 In Schleifen ist ein Objekt names \texttt{forloop} verfügbar. Dieser verfügt in Abhängigkeit vom aktuellen Stand der Iteration über Eigenschaften wie \texttt{first}, \texttt{last} und \texttt{index}, um während der Iteration auf "`spezielle Durchläufe"' reagieren zu können.
 
-Das wesentliche Tag zur Strukturierung der eigenen Webseite in logische Komponenten ist die \texttt{include}-Anweisung. Diese funktioniert ähnlich wie ein Funktionsaufruf mit Paremetern. Die konkrete Syntax für einen Aufruf wird in Listing~\ref{lst:liquid-include-caller} demonstriert, als aufgerufenes Template wird eine Liste von Kategorien gerendert (Listing~\ref{lst:liquid-include-template}). Mit dieser Anweisung können also in unterschiedlichen Kontexten identisch zu rendernde Bestandteile ausgelagert werden. Für den "`Beispielblog"' müsste die Aufzählung von Kategorien nun also nicht für Übersichts- und Detailseite dupliziert werden.
+Das wesentliche Tag zur Strukturierung der eigenen Webseite in logische Komponenten ist die \texttt{include}-Anweisung. Diese funktioniert ähnlich wie ein Funktionsaufruf mit Paremetern. Die konkrete Syntax für einen Aufruf wird in Listing~\ref{lst:liquid-include-caller} demonstriert, als aufgerufenes Template wird eine Liste von Kategorien gerendert (Listing~\ref{lst:liquid-include-template}). Mit dieser Anweisung können also in unterschiedlichen Kontexten identisch zu rendernde Bestandteile ausgelagert werden. Für den "`Beispielblog"' müsste die Aufzählung von Kategorien nicht mehr für Übersichts- und Detailseite dupliziert werden.
 
-\begin{lstlisting}[float=h, caption={Verwendung der Liquid-Anweisung \texttt{include}}, label={lst:liquid-include-caller}]
+\begin{lstlisting}[float=h, language=HTML, caption={Verwendung der Liquid-Anweisung \texttt{include}}, label={lst:liquid-include-caller}]
 {% include 'categories' categories: query.article_categories %}
 \end{lstlisting}
 
-\begin{lstlisting}[float=h, caption={\texttt{categories.liquid}, Template für die Liquid-Anweisung \texttt{include}}, label={lst:liquid-include-template}]
+\begin{lstlisting}[float=h, language=HTML, caption={\texttt{categories.liquid}, Template für die Liquid-Anweisung \texttt{include}}, label={lst:liquid-include-template}]
 {% if categories.length > 0 %}
   <ul>
     {% for category in categories %}
@@ -848,21 +849,21 @@ Um solche Arten von Bedienelementen umzusetzen, werden komplexe \texttt{CSS}-Eig
 
 Auch die semantisch bedeutungsvollen \texttt{HTML}-Elemente können aber durchaus kompliziert ausfallen. Dieses Spannungsfeld lässt sich gut anhand eines für \idename{} zentralen Bedienelements diskutieren: der Tabelle. Aus didaktischer Sicht scheint es sinnvoll, den Lernenden dieses Element möglichst frühzeitig vorzustellen. Immerhin wird bei den Abfragen mit tabellarischen Daten gearbeitet, da liegt es nahe, diese Daten in der Oberfläche zunächst auch auf genau diese Art und Weise zu präsentieren.
 
-Allerdings handelt es sich bei Tabellen um eine der deutlich komplizierteren \texttt{HTML}-Konstrukte. Es besteht typischerweise aus zwei unmittelbaren Kindelementen, nämlich \texttt{<thead>} für die Spaltenüberschriften und \texttt{<tbody>} für die eigentlichen Daten. Für neue Zeilen kommen dann die "`Table Row"'-Elemente \texttt{<tr>} zum Einsatz, Zellen werden in den Überschriften dann in \texttt{<th>}-Knoten ("`Table Head"') und im Rumpf mit \texttt{<td>}-Knoten ("`Table Data"') notiert. Und natürlich muss die Anzahl\todo{colspan} dieser durch Zellenknoten definierten Spalten über alle \texttt{<tr>}-Elemente hinweg identisch sein. Erfahrungsgemäß bereitet es Anfänger auch immer wieder Probleme, dass die in der Tabelle nebeneinander angezeigten Zellen im \texttt{HTML}-Quelltext typischerweise untereinander notiert werden. Und damit nicht genug: Um wirklich alle Zeilen einer Abfrage anzuzeigen, ist die Verwendung von geschachtelten Schleifen für Zeilen und Spalten notwendig. Listing~\ref{lst:html-table-pure} zeigt exemplarisch, wie der nötige Quelltext aussehen könnte.
+Allerdings handelt es sich bei Tabellen um eine der deutlich komplizierteren \texttt{HTML}-Konstrukte. Es besteht typischerweise aus zwei unmittelbaren Kindelementen, nämlich \texttt{<thead>} für die Spaltenüberschriften und \texttt{<tbody>} für die eigentlichen Daten. Für neue Zeilen kommen dann die "`Table Row"'-Elemente \texttt{<tr>} zum Einsatz, Zellen werden in den Überschriften dann in \texttt{<th>}-Knoten ("`Table Head"') und im Rumpf mit \texttt{<td>}-Knoten ("`Table Data"') notiert. Und natürlich muss die Anzahl dieser durch Zellenknoten definierten Spalten über alle \texttt{<tr>}-Elemente hinweg identisch sein\footnote{Eine mögliche Ausnahme hiervon wäre theoretisch das \texttt{colspan}-Attribut. Dadurch wird die Implementierung jedoch lediglich noch komplizierter.}. Erfahrungsgemäß bereitet es Anfänger auch immer wieder Probleme, dass die in der Tabelle nebeneinander angezeigten Zellen im \texttt{HTML}-Quelltext typischerweise untereinander notiert werden. Und damit nicht genug: Um wirklich alle Zeilen einer Abfrage anzuzeigen, ist die Verwendung von geschachtelten Schleifen für Zeilen und Spalten notwendig. Listing~\ref{lst:html-table-pure} zeigt exemplarisch, wie der nötige Quelltext aussehen könnte.
 
-\begin{lstlisting}[language=html,float=h,caption={Code für eine \texttt{HTML}-Tabelle mit Datenanbindung}, label={lst:html-table-pure}]
+\begin{lstlisting}[language=HTML, float=h, caption={Code für eine \texttt{HTML}-Tabelle mit Datenanbindung}, label={lst:html-table-pure}]
 <table>
   <thead>
     <tr>
-      {% for name in table.columnNames %}
+      {% for name in data.columnNames %}
         <th>{{ name }}</th>
       {% endfor %}
     </tr>
   </thead>
   <tbody>
-    {% for row in table.rows %}
+    {% for row in data.rows %}
       <tr>
-        {% for name in table.columnNames %}
+        {% for name in data.columnNames %}
           <td>{{ row[name] }}</td>
         {% endfor %}
       </tr>
@@ -875,14 +876,14 @@ Mit Liquid bietet sich allerdings auch die Möglichkeit, diesen Code weitestgehe
 
 \begin{lstlisting}[language=html,float=h,caption={Code für eine Liquid-Tabelle mit Datenanbindung}, label={lst:html-table-liquid}]
 {% include "query_table" 
-     table: query.alle_kommentare,
+     data: query.alle_kommentare,
      columns: ["spalte_a","spalte_b"] %}
 \end{lstlisting}
 
 \subsubsection{Bindung von Abfragen an die Oberfläche}
 \label{sec:design-ui-bind-output}
 
-Die vergangenen Kapitel haben nun demonstriert, wie mit Liquid auf prinzipiell beliebige Datenstrukturen zugegriffen werden kann. Aber wie sollten die Ergebnisse der verfügbaren Abfragen bereitgestellt werden? Auf abstrakter Ebene ist die Beantwortung dieser Frage eindeutig: Da das Ergebnis einer \texttt{SQL}-Abfrage grundsätzlich eine Tabellenstruktur mit Zeilen, Spalten und Zellen ist, wird dieses Datenmodell auch für die Oberfläche zugrunde gelegt. Die an die Bedienelemente zu bindenden Daten sind also grundsätzlich tabellarischer Natur. Dabei bedürfen einige Details bezüglich der Benennung und der Indizierung jedoch besonderer Beachtung.
+Die vergangenen Kapitel haben demonstriert, wie mit Liquid auf prinzipiell beliebige Datenstrukturen zugegriffen werden kann. Aber wie sollten die Ergebnisse der verfügbaren Abfragen bereitgestellt werden? Auf abstrakter Ebene ist die Beantwortung dieser Frage eindeutig: Da das Ergebnis einer \texttt{SQL}-Abfrage grundsätzlich eine Tabellenstruktur mit Zeilen, Spalten und Zellen ist, wird dieses Datenmodell auch für die Oberfläche zugrunde gelegt. Die an die Bedienelemente zu bindenden Daten sind also grundsätzlich tabellarischer Natur. Dabei bedürfen einige Details bezüglich der Benennung und der Indizierung jedoch besonderer Beachtung.
 
 Um im Falle von mehreren in Frage kommenden Abfragen eine eindeutige Zuordnung vornehmen zu können, müssen Abfragen, deren Ergebnis an die Oberfläche gebunden werden soll, mit einem eindeutigen Namen bezeichnet werden. Dieser Name kann von den Entwicklern frei gewählt werden, sollte aber analog zu einem Funktionsbezeichner sinnvoll darüber Auskunft geben, was eine Abfrage bewirkt. Diese Trennung zwischen dem Namen der Abfrage innerhalb des Projekts und dem Namen innerhalb des \texttt{query}-Namensraums erlaubt die mehrfache Verwendung von ein und derselben (vermutlich unterschiedlich parametrisierten) Abfrage auf der gleichen Seite.
 
@@ -898,12 +899,12 @@ LIMIT  1;
 
 \begin{lstlisting}[float=h, language=HTML, caption=String-Interpolation mit Indexzugriff, label=lst:html:article-with-index]
 <!-- query.article = Listing (*@\ref{lst:sql:multi-row}: \nameref{lst:sql:multi-row}@*) -->
-<p>{{ query.article[0].name }}, beginnt mit den folgenden Worten {{ query.article[0].text | truncatewords: 4 }}.</p>
+{{ query.article[0].name }}, beginnt mit den folgenden Worten {{ query.article[0].text | truncatewords: 4 }}.
 \end{lstlisting}
 
 \begin{lstlisting}[float=h, language=HTML, caption=String-Interpolation mit implizitem Index, label=lst:html:article-no-index]
 <!-- query.article = Listing (*@\ref{lst:sql:multi-row}: \nameref{lst:sql:multi-row}@*) -->
-<p>{{ query.article.name }}, beginnt mit den folgenden Worten {{ query.article.text | truncatewords: 4 }}.</p>
+{{ query.article.name }}, beginnt mit den folgenden Worten {{ query.article.text | truncatewords: 4 }}.
 \end{lstlisting}
 
 Die Annotation "`Abfrage betrifft genau eine Zeile"' muss jedoch vom Entwickler manuell im \texttt{SQL}-Editor gesetzt werden, eine automatische Berechnung wäre für beliebige Abfragen unmöglich\footnote{Viele \texttt{SQL}-Dialekte sind Turing-Vollständig und schon das Halteproblem ist nicht entscheidbar.} und auch für speziell strukturierte Abfragen ist diese Unterscheidung zumindest nicht trivial. Oder um es anders auszudrücken: Die Erweiterung der Entwicklungsumgebung um diese automatische Vorhersage wäre Stoff für eine weitere wissenschaftliche Arbeit, keinesfalls aber Gegenstand dieser Arbeit. Praktischerweise lässt sich eine auftretende Verletzung dieser Annotation zur Laufzeit aber sehr gut erkennen und daher auch unmittelbar an den Entwickler oder Endanwender kommunizieren. 
@@ -943,7 +944,7 @@ Die Navigation auf Webseiten teilt sich in zwei unterschiedliche Problemstellung
 
 Damit für jede relevante URL eindeutig ist, zu welcher Seite sie aufgelöst werden soll, könnte man in \idename{} eine zentrale Routing-Konfiguration hinterlegen. In dieser wird einer Menge von Pfaden, welche möglicherweise auch Platzhalter für Parameter vorsehen, mit den entsprechenden Zielseiten verknüpft. Solche Pfadangaben könnten für das Blogbeispiel wie in Listing~\ref{lst:central-routing-example} angedeutet repräsentiert werden. Bei dem \texttt{selector} handelt es sich um ein Prädikat, welches im Falle einer positiven Auswertung darauf hinweist, dass die entsprechende \texttt{page} dargestellt werden soll.
 
-\begin{lstlisting}[float=h!,caption={Zentrales Routing für das Blog-Beispiel}, label={lst:central-routing-example}]
+\begin{lstlisting}[float=h!, language=JavaScript, caption={Zentrales Routing für das Blog-Beispiel}, label={lst:central-routing-example}]
 [
   { "selector": "/",             "page": "Hauptseite" },
   { "selector": "/beitrag/:id",  "page": "Artikel" },
@@ -954,13 +955,13 @@ Dabei bedürfen zwei Details besonderer Beachtung: Parameter in der \texttt{URL}
 
 In diesem Datenmodell können allerdings Inkonsistenzen entstehen, wenn sich die Anzahl oder Benennung der für eine Seite erforderlichen Parameter verändert. Die Behandlung solcher Fehler erfordert allerdings grundsätzlich die Unterstützung des Entwicklers: Nur er kann entscheiden, ob eine umbenannte Variable auch unter neuem Namen semantisch gleichwertig ist. Es handelt sich also um ein Problem, dem am ehesten durch eine passende Benutzeroberfläche beizukommen ist.
 
-Nachdem nun die zu rendernde Seite bekannt ist, stellt sich folglich die inverse Frage: Wie kann die \texttt{URL} zu einer bestimmten Seite generiert werden? Dabei stellt man zunächst fest, dass der \texttt{HTML}-Standard zwei unterschiedliche Mechanismen zur Navigation vorsieht. Die naheliegendste Variante ist die direkte Generierung eines \texttt{<a>}-Knotens mit dem passenden \texttt{href}-Attribut. Mit der Liquid-Syntax lassen sich beliebige Strings generieren, also auch gültige URLs. Allerdings funktioniert dieser Ansatz nur mit Daten, die auf dem Server während des Rendervorgangs bekannt sind. Benutzereingaben in Formularelementen wie \texttt{<input>} können in diesem Kontext nicht verwendet werden.
+Nachdem die zu rendernde Seite bekannt ist, stellt sich folglich die inverse Frage: Wie kann die \texttt{URL} zu einer bestimmten Seite generiert werden? Dabei stellt man zunächst fest, dass der \texttt{HTML}-Standard zwei unterschiedliche Mechanismen zur Navigation vorsieht. Die naheliegendste Variante ist die direkte Generierung eines \texttt{<a>}-Knotens mit dem passenden \texttt{href}-Attribut. Mit der Liquid-Syntax lassen sich beliebige Strings generieren, also auch gültige URLs. Allerdings funktioniert dieser Ansatz nur mit Daten, die auf dem Server während des Rendervorgangs bekannt sind. Benutzereingaben in Formularelementen wie \texttt{<input>} können in diesem Kontext nicht verwendet werden.
 
 Es ist folglich schon aufgrund der Vorgaben des \texttt{HTML}-Standards sinnvoll, die Unterstützung von zwei separaten Mechanismen zur Navigation zu unterstützen: Sofern der Endanwender eigene Eingaben vornehmen soll, kommt ein \texttt{<form>}-Element zum Einsatz. Durch die Nutzung von versteckten Eingabelementen (\texttt{<input type=''hidden''>} können aber auch serverseitig vorhandene Daten, zum Beispiel aus Abfragen oder \texttt{GET}-Parametern innerhalb von Formularen, verwendet werden.
 
 Um den Zugriff auf mutierende Abfragen zu ermöglichen, existiert für jede Seite noch ein spezieller \texttt{query/:queryName}-Unterpfad. Wenn eine unter \texttt{/beitrag/:artikel\_id} erreichbare Seite die Abfrage zum Hinzufügen eines neuen Kommentars (Listing~\ref{lst:sql-add-comment}) unter dem Namen \texttt{add\_comment} verfügbar machen möchte, sähe die vollständige Routendefinition aus wie folgt: \texttt{/beitrag/:artikel\_id/query/add\_comment}. Die Parameter der Abfrage (\texttt{article\_id}, \texttt{name} und \texttt{text}, das aktuelle Datum wird automatisch berechnet) müssen von der Seite (oder genauer: von dem Formular) bereitgestellt werden.
 
-\begin{lstlisting}[float=h!,caption={Abfrage zum Hinzufügen eines neuen Kommentars}, label={lst:sql-add-comment}]
+\begin{lstlisting}[float=h!, language=SQL, caption={Abfrage zum Hinzufügen eines neuen Kommentars}, label={lst:sql-add-comment}]
 INSERT INTO comment (article_id, commenter_name, text, date)
 VALUES (:article_id, :name, :text, strftime('%s','now'))
 \end{lstlisting}
@@ -970,7 +971,7 @@ Abfragen werden immer mittels der \texttt{POST}-Methode ausgeführt und haben ke
 \subsection{Drag \& Drop-Editor für Oberflächen}
 \label{sec:drag-drop-ui-editor}
 
-Nachdem das vorige Kapitel nun den technischen Unterbau für die mit \idename{} erstellten Seiten beschrieben hat, stellt sich die Frage, wie man diesen in eine angemessene Oberfläche "`verpacken"' kann. Diese Suche nach dem richtigen Editor für einen sowohl lehrreichen, als auch produktiven Seiten-Editor, wird sich wohl aller Voraussicht nach nicht mit einer definitiven Antwort abschließen lassen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen. Die wesentlichen Leitfragen für dieses Kapitel sind daher die Folgenden:
+Nachdem das vorige Kapitel den technischen Unterbau für die mit \idename{} erstellten Seiten beschrieben hat, stellt sich die Frage, wie man diesen in eine angemessene Oberfläche "`verpacken"' kann. Diese Suche nach dem richtigen Editor für einen sowohl lehrreichen, als auch produktiven Seiten-Editor, wird sich wohl aller Voraussicht nach nicht mit einer definitiven Antwort abschließen lassen. Die Anzahl an möglichen Herangehensweisen ist immens, das zeigt schon die Vielfalt an existierenden und historischen Produkten zur Erstellung von Webseiten oder auch "`normalen"' Programmoberflächen. Die wesentlichen Leitfragen für dieses Kapitel sind daher die Folgenden:
 
 \begin{enumerate}[noitemsep]
 \item \textbf{Wie funktionieren andere, verbreitete Oberflächeneditoren und was kann \idename{} von ihnen lernen?} Insbesonders kommerzielle Produkte für "`normale"' Anwender werden im Regelfall auf einen hohen Produktivitätsgrad ausgerichtet sein, nicht auf einen nachhaltigen Lerneffekt. Und trotzdem stellt sich die Frage, nach welchen Mustern diese Werkzeuge funktionieren.
@@ -1078,7 +1079,7 @@ Für dieses Kapitel werden einige denkbare Ansätze auf dem beschriebenen Koordi
   Dieser Ansatz kommt dem Entwickler noch ein Stück weiter entgegen, wenn es um die Gestaltung des grundlegenden Layouts, also die Aufteilung in Zeilen und Spalten geht. Innerhalb der Zellen kommt dann allerdings ein an Quelltext angelehnter Block-Editor zum Einsatz. Die komplexen Bedienelemente stehen zwar weiterhin zur Verfügung, werden aber nicht mehr durch einen speziellen "`Untereditor"' repräsentiert. Stattdessen werden die Parameter per Drag \& Drop-Editor mit den verfügbaren Daten verbunden.
   
 \item[\circled{4} Block-Editor für beliebige \texttt{HTML}- und Liquid-Blöcke] \hfill \\
-  In diesem Schritt werden die Liquid-Kontrollstrukturen für Schleifen und Verzweigungen freigeschaltet. Als Entwickler könnte man nun eigene beliebig komplexe Strukturen bauen, auch unter Zuhilfenahme von \texttt{HTML}-Elementen wie \texttt{<div>} oder \texttt{<span>}.
+  In diesem Schritt werden die Liquid-Kontrollstrukturen für Schleifen und Verzweigungen freigeschaltet. Als Entwickler könnte man jetzt eigene beliebig komplexe Strukturen bauen, auch unter Zuhilfenahme von \texttt{HTML}-Elementen wie \texttt{<div>} oder \texttt{<span>}.
   
 \item[\circled{5} Texteditor für Quelltext] \hfill \\
   Da die einfachste Implementierung dieser Variante schon fast durch ein einfaches \texttt{HTML}-\texttt{<textarea>}-Element bereitgestellt werden kann, ist die technische Umsetzung vergleichsweise trivial. Die unterstützte Bandbreite an Bedienelementen ist grundsätzlich beliebig, Drag \& Drop kommt nicht vor. Anders als bei Block- oder WYSIWYG-Editoren müssen daher keine speziellen Komponenten für einzelne Bedienelemente programmiert werden. Die textuelle Darstellung von \texttt{HTML} und Liquid fungiert als die denkbar allgemeinste Schnittstelle.  
@@ -1089,7 +1090,7 @@ Eine detaillierte Betrachtung dieser unterschiedlichen Ansätze, also zum Beispi
 \subsubsection{Grundsätzlicher Aufbau}
 \label{sec:design-ui-editor}
 
-Nach dieser Betrachtung unterschiedlichster Ansätze stellt sich nun die Frage, inwiefern diese miteinander vereinbar sind. Dieses Kapitel stellt daher zunächst Gemeinsamkeiten heraus, für die eine Ansatz-übergreifende Lösung möglich ist. Sofern bei dem konkreten Ansatz Drag \& Drop zum Einsatz kommt (mit Ausnahme des Texteditors sind das alle) muss ein fester Bereich zur Präsentation der ziehbaren Elemente vorgesehen werden. Ebenfalls übergreifend sinnvoll ist eine generische Möglichkeit zur Bearbeitung von Eigenschaften eines Bedienelements.
+Nach dieser Betrachtung unterschiedlichster Ansätze stellt sich die Frage, inwiefern diese miteinander vereinbar sind. Dieses Kapitel stellt daher zunächst Gemeinsamkeiten heraus, für die eine Ansatz-übergreifende Lösung möglich ist. Sofern bei dem konkreten Ansatz Drag \& Drop zum Einsatz kommt (mit Ausnahme des Texteditors sind das alle) muss ein fester Bereich zur Präsentation der ziehbaren Elemente vorgesehen werden. Ebenfalls übergreifend sinnvoll ist eine generische Möglichkeit zur Bearbeitung von Eigenschaften eines Bedienelements.
 
 Diese beiden Funktionen werden üblicherweise in eigenen Unterfenstern bereitgestellt. In dieser Form hat man dann ein sehr typisches Interface, das von so ziemlich jedem Oberflächeneditor genutzt wird. Egal ob Visual Studio, JavaFX Scenebuilder, Delphi oder QtCreator, die grundlegenden Bedienansätze unterscheiden sich an dieser Stelle nur marginal (Abbildung~\ref{fig:sidebar-example}).
 
@@ -1153,6 +1154,7 @@ Technisch gesehen ist dieses Element keine besondere Herausforderung: Es handelt
 Die wesentliche Herausforderung für diese Komponente liegt in der absehbar immer größer werdenden Anzahl von Bedienelementen. Der Prototyp nimmt schon den Versuch einer Kategorisierung vor (blau für Layoutelemente, grün für \texttt{HTML}-Elemente, orange für Elemente mit einer komplexen Darstellung), diese konkreten Einordnungen sind aber noch nicht endgültig.
 
 \subsubsection{Seitenleiste: Angebot von verfügbaren Daten}
+\label{sec:ui-editor-sidebar-data}
 
 Die Anzeige der verfügbaren Daten ist grundsätzlich auch eine Aufzählung der Inhalte aller gefüllten Namensräume. Und ähnlich wie beim vorigen Punkt ist auch an dieser Stelle die wesentliche Herausforderung erneut die potenziell sehr große Anzahl von Bedienelementen.
 
@@ -1177,10 +1179,14 @@ Die Kettenglieder stehen für korrekt gebundene Parameter einer Abfrage. Sofern 
   \label{fig:sidebar-widgets}
 \end{figure}
 
-\subsubsection{Umgang mit Parametern}
+\subsubsection{Binden von Parametern}
 \label{sec:ui-editor-params}
 
-\todo[inline]{Fehlt}
+Die Bindung von Parametern erfolgt ebenfalls über Drag \& Drop. Als Entwickler kann man ein zur Verfügung stehendes Datum von der Seitenleiste oder aus dem Editorbereich direkt auf auf den zu bindenden Parameter ziehen.
+
+Problematisch ist dabei vor allem die in Kapitel \fullref{sec:ui-editor-sidebar-data} erwähnte Unterscheidung zwischen Daten die während des Rendervorgangs nicht oder eben doch zur Verfügung stehen. Um den Wert eines Formularfeldes an einen Liquid-Ausdruck oder eine serverseitig ausgeführte Abfrage zu binden, wäre der Einsatz von Javascript nötig. Dabei handelt es sich nicht um eine willkürliche Einschränkung von \idename{}, \texttt{HTTP} und \texttt{HTML} funktioneren schlicht auf diese Art und Weise.
+
+Den Lernenden muss daher verdeutlicht werden, zu welchem Zeitpunkt die Daten zur Verfügung stehen beziehungsweise wann diese benötigt werden. Es wäre zum Beispiel denkbar, für jedes eingesetzte Formularelement automatisch einen gleichnamigen \texttt{GET}-Parameter, gegebenenfalls mit einem Standardwert, vorzusehen. In diesem Fall stünden Formulardaten automatisch zur Verfügung, allerdings erst nach einem Klick auf den "`Absenden"'-Knopf.
 
 %%% Local Variables:
 %%% mode: latex

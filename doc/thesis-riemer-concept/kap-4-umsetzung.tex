@@ -1,11 +1,7 @@
 \section{Implementierung}
 \label{sec:implementation-analysis}
 
-Dieses Kapitel beschreibt den Implementierungsprozess von \idename{} und erläutert einige technische Entscheidungen. Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, wurden diese in Anlehnung an den "`Minus 100 Points"'-Artikel von Eric Gunnerson geprüft\footnote{https://blogs.msdn.microsoft.com/ericgu/2004/01/12/minus-100-points/}.
-
-Der gesamte entstandene Quelltext steht unter der \texttt{GNU} Affero General Public License~(\texttt{AGPL})\footnote{\url{https://www.gnu.org/licenses/agpl-3.0.de.html}} und ist in einem öffentlichen Git-Repository einsehbar\footnote{\url{http://blattwerkzeug.de/forward/git-repository}}. In diesem Repository befinden sich ebenfalls die Beispielprojekte aus Anhang \ref{sec:project-examples} und auch der \LaTeX-Quelltext zu dieser Thesis.
-
-\todo[inline]{Noch nachträglich ergänzt: Mehrere Datenbanken je Projekt, "`Veränderungsanzeige"' für Abfragen, Breite von Layout-Spalten, Erweiterung der Datenanzeige in der Seitenleiste}
+Dieses Kapitel beschreibt den Implementierungsprozess von \idename{} und erläutert einige technische Entscheidungen. Der gesamte entstandene Quelltext steht unter der \texttt{GNU} Affero General Public License~(\texttt{AGPL})\footnote{\url{https://www.gnu.org/licenses/agpl-3.0.de.html}} und ist in einem öffentlichen Git-Repository einsehbar\footnote{\url{http://blattwerkzeug.de/forward/git-repository}}. In diesem Repository befinden sich ebenfalls die Beispielprojekte aus Anhang \ref{sec:project-examples} und auch der \LaTeX-Quelltext zu dieser Thesis.
 
 \subsection{Client-Server-Architektur}
 \label{sec:implementation-client-server}
@@ -108,9 +104,18 @@ Um den Umfang des Prototypen zu begrenzen, wurde die Implementierungsphase anhan
 \item [Qualitätssicherung] \hfill \\
   Zu diesem Zeitpunkt sollte ein voll funktionsfähiger Prototyp existieren, der jedoch noch einer rigorosen Qualitätskontrolle unterzogen werden muss. Bisher wurde der Prototyp ausschließlich durch Entwickler bedient, es stellt sich insbesondere die Frage, wie \idename{} auf Bedienfehler oder Inkonsistenzen reagiert.
   \begin{itemize}[noitemsep]
-  \item Was passiert mit bestehenden Inhalten, wenn sich das Schema deutlich verändert?
-  \item Wie sollten Seiten für Endanwender gerendert werden, wenn diese fehlerhaft sind?
+  \item Was passiert mit bestehenden Inhalten, wenn sich das Schema verändert?
+  \item Wie sollten Seiten gerendert werden, wenn diese fehlerhaft sind?
   \end{itemize}
+\end{description}
+
+\subsection{Spontane Ergänzungen}
+
+Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktionalität ergaben, wurden diese in Anlehnung an den "`Minus 100 Points"'-Artikel von Eric Gunnerson geprüft\footnote{\url{https://blogs.msdn.microsoft.com/ericgu/2004/01/12/minus-100-points/}}. Die folgende Idee hat es als einzige über diese Hürde geschafft:
+
+\begin{description}
+\item[Verwendung mehrerer Datenbanken für ein einzelnes Projekt] \hfill\\
+  Zu Beginn der Entwicklung galt die Prämisse "`eine Datenbank je \idename{}-Projekt"'. Diese wurde geringfügig modifiziert: "`Eine \textit{aktive} Datenbank je \idename{}-Projekt"'. Dabei standen zwei primäre Anwendungsfälle im Vordergrund. Zum Einen können auf diese Art und Weise Entwickler unterschiedliche Datenbestände mit identischen Abfragen oder Webseiten erproben. Und zum Anderen lassen sich so vom Entwickler vorgenommene, serverseitig gespeicherte Backups einer Datenbank realisieren. Sofern bei einem Projekt mehrere Datenbanken zur Verfügung stehen, kann die aktive Datenbank über die Projekteinstellungen ausgewählt werden.
 \end{description}
 
 \subsection{Datenbanksystem}
@@ -118,9 +123,7 @@ Um den Umfang des Prototypen zu begrenzen, wurde die Implementierungsphase anhan
 
 Die Wahl des konkreten Datenbanksystems hat einen unmittelbaren Einfluss auf nahezu alle Bereiche von \idename. Im Einzelnen handelt es sich dabei um die exakte Variante der \texttt{SQL}-Syntax, auf die Rahmenbedingungen für den Betrieb der Entwicklungsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
 
-Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbeständen sollten normalerweise im Bereich nur einiger Megabyte liegen. Die in der Praxis vermutlich einzige relevante Unterscheidung von Zugriffsrechten wäre zwischen allgemeinem lesendem und schreibenden Zugriff, nicht jedoch auf Basis einzelner Datensätze oder komplexer Benutzergruppen.
-
-Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien gewählt und hinsichtlich ihrer Relevanz sortiert:
+Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbeständen sollten normalerweise im Bereich nur einiger Megabyte liegen. Die in der Praxis vermutlich einzige relevante Unterscheidung von Zugriffsrechten wäre zwischen allgemeinem lesendem und schreibenden Zugriff, nicht jedoch auf Basis einzelner Datensätze oder komplexer Benutzergruppen. Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien gewählt und hinsichtlich ihrer Relevanz sortiert:
 
 \begin{description}  
 \item[Kostenlose Verfügbarkeit] \hfill \\
@@ -137,7 +140,7 @@ Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien ge
 
 Das Kriterium der "`kostenlosen Verfügbarkeit"' ist dankenswerterweise sehr einfach zu erfüllen: Es existiert eine Vielzahl von praktisch eingesetzten quelloffenen Datenbanksystemen. Die Kriterien "`einfacher Betrieb"' und "`einfache Backups"' teilen die denkbaren Systeme recht eindeutig in zwei Lager: Eingebette Datenbanken lassen sich sehr einfach betreiben und sichern. Das starten eines weiteren SQL-Server-Prozesses ist bei dieser Betriebsart nicht nötig, der Im- oder Export des gesamten Datenbestandes erfordert nur das kopieren einer einzigen Datei.
 
-Um den Betrieb folglich so einfach wie möglich zu halten, wurden für \idename{} zunächst eingebettete Datenbanksysteme betrachtet. Aus der Masse an verfügbaren Systemen sticht das SQLite-System jedoch sehr weit hinaus: Der Quelltext ist gemeinfrei, die Anbindung an so ziemlich jede Programmiersprache ist bequem möglich und es existiert eine Fülle von verschiedensten Modellierungsprogrammen für alle Betriebssysteme. Auf eine genauere Analyse der zur Verfügung stehenden Alternativen wurde daher verzichtet.
+Um den Betrieb folglich so einfach wie möglich zu halten, wurden für \idename{} nur eingebettete Datenbanksysteme betrachtet. Aus der Masse an verfügbaren Systemen sticht das SQLite-System jedoch sehr weit hinaus: Der Quelltext ist gemeinfrei, die Anbindung an so ziemlich jede Programmiersprache ist bequem möglich und es existiert eine Fülle von verschiedensten Modellierungsprogrammen für alle Betriebssysteme. Auf eine genauere Analyse der zur Verfügung stehenden Alternativen wurde daher verzichtet.
 
 \subsection{Tests}
 \label{sec:implementation-tests}
@@ -162,7 +165,7 @@ Als technisches Fundament wird für diese Testfälle auf der Jasmine-Bibliothek 
   numbers=left
 ]{snippets/e2e-test-example.ts}
 
-Listing \ref{lst:unit-test-example} illustriert, wie die meisten Unit-Testfälle in \idename{} aufgebaut sind. Jeder Testfall beginnt mit der Definition eines Datenmodells (Zeilen 6 bis 23) und endet mit Zusicherungen, um die korrekte Serialisierung sicherzustellen (Zeile 43). Ganz konkret existiert also in jedem Testfall eine Variable \texttt{model}, welche im Konstruktor der zu testenden Klasse zum Einsatz kommt und in nicht-mutierenden Testfällen als Ergebnis der \texttt{toModel()}-Methode reproduziert werden muss. Für Abfragen muss noch die Generierung der korrekten \texttt{SQL}-Anweisungen geprüft werden, im Beispiel geschieht dies in Zeile 20.
+Listing \ref{lst:unit-test-example} illustriert, wie die meisten Unit-Testfälle in \idename{} aufgebaut sind. Jeder Testfall beginnt mit der Definition eines Datenmodells (Zeilen 6 bis 13) und endet mit Zusicherungen, um die korrekte Serialisierung sicherzustellen (Zeile 21 \& 22). Ganz konkret existiert also in jedem Testfall eine Variable \texttt{model}, welche im Konstruktor der zu testenden Klasse zum Einsatz kommt und in nicht-mutierenden Testfällen als Ergebnis der \texttt{toModel()}-Methode reproduziert werden muss. Für Abfragen muss noch die Generierung der korrekten \texttt{SQL}-Anweisungen geprüft werden, im Beispiel geschieht dies in Zeile 20.
 
 Die serverseitige Funktionalität wird aktuell ausschließlich über "`end-to-end"'-Tests mit einem speziell instrumentierten Browser geprüft. Für diese Tests ist ein speziell vorbereitetes Testprojekt in einem exakt definierten Zustand Teil des Repositories. Auch diese Testfälle nutzen die von Jasmine bereitgestellten Zusicherungen mit den \texttt{expect()}- und \texttt{toEqual()}-Verkettungen. Listing~\ref{lst:e2e-test-example} zeigt, wie mit einem solchen Test die Funktionaliät des Editors für Projekteinstellungen sichergestellt wird. Mittels der \texttt{browser.get()}-Funktion kann zu einer bestimmten Seite navigiert werden. Um mit den einzelnen Bedienelementen dieser Seite interagieren zu können, müssen diese anhand ihrer \texttt{ID} oder anderer eindeutiger Merkmalen zugreifbar sein (Zeilen 6, 8 und 14 des Listing~\ref{lst:e2e-test-example}). Dann können für solche Elemente Tastatureingaben simuliert oder der Inhalt verglichen werden. Bestimmendes Merkmal dieser Tests zum Speichern ist, dass sie die initial geladene Seite nach dem Speichervorgang erneut aufrufen. Nur wenn die zuvor gesetzten Werte auch nach diesem Ladevorgang noch vorhanden sind, kann von der korrekten Funktionsweise des Servers ausgegangen werden.
 
@@ -283,7 +286,7 @@ Die vornehmlichen Eigenschaften eines Projektes sind die darin enthaltenen Abfra
 
 \begin{description}[noitemsep]
 \item[Name, Beschreibung \& Bild] \hfill \\
-  Von Entwicklern frei wählbare Elemente, mit denen das Projekt einem Endanwender kurz und knapp beschrieben wird. Der Prototyp erlaubt zum aktuellen Zeitpunkt noch nicht den Upload von Bildern, Endanwendern werden die Bilder in der Projektübersicht aber dennoch angezeigt.\todo{Screenshot}
+  Von Entwicklern frei wählbare Elemente, mit denen das Projekt einem Endanwender kurz und knapp beschrieben wird. Der Prototyp erlaubt zum aktuellen Zeitpunkt noch nicht den Upload von Bildern, Endanwendern werden die Bilder in der Projektübersicht aber dennoch angezeigt.
 \item[Aktivierte Datenbank] \hfill \\
   Ein Entwickler kann in einem Projekt zwischen mehreren "`Evolutionsstufen"' oder Sicherheitskopien einer Datenbank auswählen. Für einen Endanwender ist diese Unterscheidung allerdings nicht von Relevanz: Er erwartet nicht beim erstmaligen Besuch einer Seite zunächst eine Datenbank auswählen zu müssen. Daher legt der Entwickler in dieser Einstellung fest, welche Datenbank zum Rendern verwendet werden soll.
 \item[Startseite] \hfill \\
@@ -493,7 +496,7 @@ Manchmal kann es auch notwendig sein, die eingehenden Werte zu transformieren. \
   \label{fig:reactivex-map}
 \end{figure}
 
-Die wesentliche Stärker dieser (und natürlich auch viele weitere) Operationen ist vor allem ihre exzellente Kombinierbarkeit. So ist es mit den beiden vorgestellten Operatoren ein leichtes, die Veränderungen einer Abfrage leicht zeitlich verzögert (\texttt{debounce}) in einer textuellen Repräsentation (\texttt{map} mit \texttt{toSqlString}) auf der Oberfläche anzuzeigen. Der \idename{}-Kern nutzt daher die ReactiveX-Erweiterungen in Form der Javascript-Bibliothek "`RxJS"'\footnote{\url{https://github.com/Reactive-Extensions/RxJS}}.
+Die wesentliche Stärker dieser (und natürlich auch vieler weiterer) Operationen liegt vor allem in ihrer Kombinierbarkeit. So ist es mit den beiden vorgestellten Operatoren ein leichtes, die Veränderungen einer Abfrage leicht zeitlich verzögert (\texttt{debounce}) in einer textuellen Repräsentation (\texttt{map} mit \texttt{toSqlString}) auf der Oberfläche anzuzeigen. Der \idename{}-Kern nutzt daher die ReactiveX-Erweiterungen in Form der Javascript-Bibliothek "`RxJS"'\footnote{\url{https://github.com/Reactive-Extensions/RxJS}}.
 
 \subsubsection{Existierende Implementierungen von Drag \& Drop-Editoren}
 
@@ -566,7 +569,7 @@ Um die Abfragen in das richtige Format zu bringen, ist hingegen ein wenig Aufwan
 
 Zunächst werden die verfügbaren Parameter auf die tatsächlich benötigten Parameter abgebildet. Zur Erinnerung sei daher an dieser Stelle noch einmal die grundsätzliche Problematik erwähnt: Die Daten für die Seiten liegen in Namensräumen vor, die Parameter einer Abfrage wissen hingegen nichts von diesen Namensräumen. Listing~\ref{lst:server-project-query-prepare-params} zeigt, wie die einzelnen Mapping-Einträge einer referenzierten Abfrage in Namensraum und Schlüssel aufgespalten werden und dann unter dem in der Abfrage definierten Parameternamen verfügbar gemacht werden.
 
-\begin{lstlisting}[float=h, language=Ruby, caption={Renderdaten einer Abfrage (1): Parameter binden}, label={lst:server-project-query-prepare-params}]
+\begin{lstlisting}[float=p, language=Ruby, caption={Renderdaten einer Abfrage (1): Parameter binden}, label={lst:server-project-query-prepare-params}]
 # Each query gets its own fresh set of parameters
 params = {}
 
@@ -587,7 +590,7 @@ end
 
 Nachdem die Parameter dann übersetzt worden sind, erfolgt die eigentliche Ausführung der Abfrage (Listing~\ref{lst:server-project-query-map-results}). Dabei werden die als \texttt{string[][]}-Array zurückgelieferten Rohdaten in ein Array von Hash-Maps übersetzt (\texttt{Dict<string, string>[]}). Nach dieser Präparation der Parameter und der Transformation der erhaltenen Zeilen kann das Ergebnis der Abfrage dann in die Renderdaten eingepflegt werden.
 
-\begin{lstlisting}[float=h, language=Ruby, caption={Renderdaten einer Abfrage (2): Ausführen und transformieren}, label={lst:server-project-query-map-results}]
+\begin{lstlisting}[float=p, language=Ruby, caption={Renderdaten einer Abfrage (2): Ausführen und transformieren}, label={lst:server-project-query-map-results}]
 # Grab the actual query and execute it with the constructed parameters
 query = @project.query_by_id(query_ref['queryId'])
 result = @project.execute_sql(query.sql, params)
@@ -624,7 +627,7 @@ Im Laufe der \idename{}-Entwicklung traten, vornehmlich bei der Entwicklung des 
 Zum Start der Entwicklung von \idename{} befand sich Angular 2 gerade in der Version \texttt{2.0.0-beta.0}. Auf diese initiale Version folgten 17 weitere Beta-Veröffentlichungen und 7 "`Release-Candidates"'. Alle in diesen Veröffentlichungen getätigten "`Breaking Changes"' mussten von \idename{} mitgemacht und nachvollzogen werden. Zu den besonderen schwerwiegenden Umbauten gehören dabei die folgenden Anlässe:
 
 \begin{itemize}[noitemsep]
-\item Das interne Routing-Modell wurde zweimal komplett umgeschrieben, dabei waren jedes Mal manuelle Änderungen an den Routendefinitionen nötig\footnote{Siehe \url{http://stackoverflow.com/questions/38039294/} und \\ \url{http://stackoverflow.com/questions/38879529/#38952908}}. Zum aktuellen Zeitpunkt liegt der Router daher schon in Version 3 vor, während Angular 2 noch auf Version 2 verweilt.
+\item Das interne Routing-Modell wurde zweimal komplett umgeschrieben, dabei waren jedes Mal manuelle Änderungen an den Routendefinitionen nötig\footnote{Siehe \url{http://stackoverflow.com/questions/38039294/} und \\ \url{http://stackoverflow.com/questions/38879529/\#38952908}}. Zum aktuellen Zeitpunkt liegt der Router daher schon in Version 3 vor, während Angular 2 noch auf Version 2 verweilt.
 \item Die interne Darstellung von Abhängigkeiten einzelner Komponenten wurde mit dem Release Kandidaten 5 komplett überarbeitet. Bisher hatten Komponenten Abhängigkeiten selber referenziert, nun sollen diese dafür in ein neu entwickeltes Modulsystem einsortiert werden.
 \item Die Syntax der Templatingsprache wurde in Bezug auf die Angabe von Referenzen verändert. Dabei wurden Schlüsselwörter verändert und gestrichen, was eine komplette Durchsicht aller Template-Dateien zur Folge hatte.
 \end{itemize}

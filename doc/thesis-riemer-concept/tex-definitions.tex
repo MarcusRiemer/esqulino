@@ -1,4 +1,4 @@
-\newcommand{\idename}{BlattWerkzeug}
+\newcommand{\idename}{Blatt\-Werkzeug}
 
 \newcommand{\doctitle}{\idename}
 \newcommand{\docsubtitle}{Eine datenzentrierte Entwicklungsumgebung \\ für den Schulunterricht}
@@ -26,6 +26,36 @@
   numberstyle=\tiny
 }
 
+\lstdefinelanguage{SQL}{
+  keywords={INSERT, UPDATE, DELETE, SELECT, FROM, WHERE, GROUP BY, SET, INTO, VALUES, LIMIT},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={strftime},
+  ndkeywordstyle=\color{OliveGreen}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{HTML}{
+  keywords={select, option, h1, template, h2, div, ul, li, table, thead, tr, th, td, tbody, tr, value, innerHtml, class, id},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={for, in, include, endfor, endif, else, if, ngIf, ngFor},
+  ndkeywordstyle=\color{OliveGreen}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
 \lstdefinelanguage{JavaScript}{
   keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, let, const, if, in, while, do, else, case, break},
   keywordstyle=\color{blue}\bfseries,
@@ -41,8 +71,22 @@
   morestring=[b]"
 }
 
+\lstdefinelanguage{Ruby}{
+  keywords={do, def, end, if, else, return},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={each, map, zip},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
 \lstset{
-   language=SQL,
    backgroundcolor=\color{lightgray},
    extendedchars=true,
    basicstyle=\footnotesize\ttfamily,
