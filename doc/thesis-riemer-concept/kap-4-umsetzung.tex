@@ -286,12 +286,38 @@ Die vornehmlichen Eigenschaften eines Projektes sind die darin enthaltenen Abfra
 \subsubsection{Abfrage}
 \label{sec:data-model-query}
 
-\subsubsection{Seite}
+Das Datenmodell für Abfragen teilt sich in zwei wesentliche Bereiche auf: Einerseits die Repräsentation der \texttt{SQL}-Komponenten wie \texttt{SELECT}, \texttt{FROM}, ... und andererseits die in fast allen Komponenten denkbaren Ausdrücke.
 
+\subsubsection{Seite}
 
 \subsection{Client}
 
-\subsubsection{Warum nicht Blockly?}
+\subsubsection{Existierende Implementierungen von Drag \& Drop-Editoren}
+
+Die Drag \& Drop-Editoren sind allesamt von Grund auf getätigte Eigenentwicklungen, welche direkt auf der \texttt{HTML5}-Spezifikation aufsetzen. Im Rahmen des schon vorgestellten App Inventor (\fullref{sec:related-app-inventor}) wurde von Google allerdings ebenfalls eine quelloffene Bibliothek für Drag \& Drop-Editoren namens "`Blockly"' entwickelt\footnote{\url{https://developers.google.com/blockly/}}. Warum wurde für \idename{} also eine Eigenentwicklung forciert?
+
+Um Blockly zu evaluieren ist ein sehr kleiner Prototyp zur Bearbeitung von \texttt{SQL}-Abfragen entwickelt worden (Abbildung~\ref{fig:blockly-eval-sql}). Dabei hat sich kein schlagender Grund gegen Blockly gefunden, stattdesen aber eine recht lange Liste von technischen und inhaltlichen Aspekten, die nicht so recht zu \idename{} passen.
+
+\begin{figure}[h]
+  \centering \includegraphics[width=0.6\textwidth]{images/blockly/first-steps}
+  \caption{Grundzüge eines \texttt{SQL}-Editors mit Blockly}
+  \label{fig:blockly-eval-sql}
+\end{figure}
+
+\begin{itemize}[noitemsep]
+\item Es handelt sich bei Blockly um eine Bibliothek für imperative Programmiersprachen, inklusive Code-Generatoren für zum Beispiel Python, Javascript, Lua, ... Eine Unterstützung von \texttt{HTML} oder \texttt{SQL} ist nicht vorgesehen und müsste selber implementiert werden.
+  
+\item Code-Elemente werden in Blockly standardmäßig frei auf einer zweidimensionalen Zeichenfläche platziert. Um innerhalb eines Kontextes auf Ereignisse zu reagieren ist dieser Ansatz sinnvoll. Für \idename{} gilt jedoch, dass jedes zu bearbeitende Element feste Einstiegspunkte hat: \texttt{SELECT} und \texttt{FROM} bei lesenden \texttt{SQL}-Abfragen, \texttt{<body>} und möglicherweise \texttt{<head>} für Webseiten. Die mehrfache Verwendung dieser Wurzelelemente ist inhaltlich nicht sinnvoll, eine freie Platzierung bietet keinen signifikanten Mehrwert.
+
+\item Das von Blockly verwendete Datenmodell enthält Details zur grafischen Darstellung und eignet sich nicht gut zur abstrakten Repräsentation von \texttt{HTML} oder \texttt{SQL}. Dieses Format kommt daher im Hinblick auf andere Arten von Editoren, zum Beispiel einem \texttt{WYSIWYG}-Editor für Oberflächen, nicht als exklusives Format in Frage. Dementsprechend müsste immer zwischen den eigentlichen \idename{}-Formaten und Blockly hin und zurück übersetzt werden.
+  
+\item Blockly versteht sich nicht nur als Oberflächenbibliothek, sondern auch als Code-Generator. Dieser Aspekt wird in \idename{} aber losgelöst von der grafischen Repräsentationen durch einzelne Editoren betrachtet. Diese Funktionalität von Blockly müsste daher aktiv ignoriert werden, da einzelne Schnittstellen das Vorhandensein entsprechender Funktionalität voraussetzen.
+  
+\item Blockly geht zunächst von einem statisch großen Zeichenbereich aus, um diesen in der Größe zu verändern muss auf globale \texttt{onResize}-Ereignisse reagiert werden. \idename{} kommt hingegen mit ausschließlich per \texttt{CSS} gehandhabten Größenangeben aus, was im Endeffekt permanent korrekte Größenverhältnisse garantiert. Die offizielle "`Resizeable Blockly"'-Demo\footnote{\url{https://blockly-demo.appspot.com/static/demos/resizable/overlay.html}} lässt sich hingegen durch Nutzung der Entwicklerfunktionen zur Bildschirmgrößen-Vorschau in Chrome und Firefox aus dem Tritt bringen.
+
+\end{itemize}
+
+Da \idename{} zumindest perspektivisch die Verwendung von unterschiedlichen Editoren für identische Inhalte vorsieht, ist Blockly damit keinesfalls endgültig aus der Welt. Spätestens bei einer hypothetischen Integration von "`echten"' Programmiersprachen in \idename{} wird eine Integration wieder zur Diskussion stehen.
 
 \subsection{Server}
 
