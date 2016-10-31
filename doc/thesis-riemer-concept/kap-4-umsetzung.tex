@@ -3,7 +3,7 @@
 
 Dieses Kapitel beschreibt den Implementierungsprozess von \idename{} und erläutert einige technische Entscheidungen. Der gesamte entstandene Quelltext steht unter der \texttt{GNU} Affero General Public License~(\texttt{AGPL})\footnote{\url{https://www.gnu.org/licenses/agpl-3.0.de.html}} und ist in einem öffentlichen Git-Repository einsehbar\footnote{\url{http://blattwerkzeug.de/forward/git-repository}}. In diesem Repository befinden sich ebenfalls die Beispielprojekte aus Anhang \ref{sec:project-examples} und auch der \LaTeX-Quelltext zu dieser Thesis.
 
-Nicht Zweck dieses Kapitels ist die Präsentation von Ergebnissen, daher
+Als primäres Interface für die Kompilierung wird ein \texttt{Makefile} genutzt. Dieses prüft, ob auf dem aktuellen System alle nötigen Abhängigkeiten verfügbar sind und stellt sicher, dass Übersetzungsschritte nur ausgeführt werden, wenn sie tatsächlich notwendig sind. Von den technischen Details der unterschiedlichen Programmierumgebungen aufgrund der unterschiedlichen Programmiersprachen kann so außerdem elegant abstrahiert werden: Ein Programmierer kann sich die exakten Aufrufe der unterschiedlichen Paketmanager zwar anschauen, wird im Normallfall aber nur \texttt{make install-deps} aufrufen. Die \texttt{readme.md}-Datei im Repository erläutert diese Details zur Kompilierung und Inbetriebnahme ausführlich, sie sind daher nicht Bestandteil dieser Thesis. 
 
 \subsection{Client-Server-Architektur}
 \label{sec:implementation-client-server}
@@ -24,8 +24,6 @@ Der softwaretechnische Unterbau der Entwicklungsumgebung setzt auf aktuelle Webt
 \end{figure}
 
 Um die Schnittstelle zwischen diesen beiden Komponenten so transparent wie möglich zu halten, werden diese gemäß der OpenAPI-Spezifikation\footnote{\url{https://openapis.org/}} dokumentiert. Dieses offene Format ermöglicht es, auf eine hilfreiche Auswahl an standardisierten Tools aufzubauen. Zum Beispiel können aus der Spezifikation interaktive Testumgebungen für die Server-Schnittstellen erzeugt werden, Abbildung \ref{fig:openapi-query-example} zeigt ein Beispiel dafür.
-
-Als primäres Interface für die Kompilierung wird ein \texttt{Makefile} genutzt. Dieses prüft, ob auf dem aktuellen System alle nötigen Abhängigkeiten verfügbar sind und stellt sicher, dass Übersetzungsschritte nur ausgeführt werden, wenn sie tatsächlich notwendig sind. Von den technischen Details der unterschiedlichen Programmierumgebungen aufgrund der unterschiedlichen Programmiersprachen kann so außerdem elegant abstrahiert werden: Ein Programmierer kann sich die exakten Aufrufe der unterschiedlichen Paketmanager zwar anschauen, wird im Normallfall aber nur \texttt{make install-deps} aufrufen.
 
 \subsection{Meilensteine}
 \label{sec:implementation-roadmap}
