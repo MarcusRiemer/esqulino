@@ -32,7 +32,7 @@ Als primäres Interface für die Kompilierung wird ein \texttt{Makefile} genutzt
 
 Der Editor für Datenbankabfragen versprach im Vergleich zum Seiteneditor das einfachere Teilprojekt zu sein: Die Struktur einer Abfrage ist sehr strikt festgelegt, der Umfang lässt sich gut lokal eingrenzen. Im ersten Schritt wird allerdings nicht der komplette Editor implementiert, sondern zunächst nur das interne Datenmodell für die Abfragen in Form eines abstrakten Syntaxbaumes mitsamt den zugehörigen Tests.
 
-Um den Umfang des Prototypen zu begrenzen, wurde die Implementierungsphase anhand der folgenden funktionalen Meilensteine geplant. Jeder Meileinstein beginnt mit einer kurzen Erläuterung und listet dann die sich daraus ergebenden funktionalen Anforderungen auf.
+Um den Umfang des Prototypen zu begrenzen, wurde die Implementierungsphase anhand der folgenden funktionalen Meilensteine geplant. Jeder Meileinstein beginnt mit einer kurzen Erläuterung und listet dann die sich daraus ergebenden funktionalen Anforderungen auf:
 
 \begin{description}
 \item[Bearbeitung von Projektdaten] \hfill \\
@@ -63,7 +63,7 @@ Um den Umfang des Prototypen zu begrenzen, wurde die Implementierungsphase anhan
   \end{itemize}
   
 \item [Editor für Abfragen] \hfill \\
-  Implementierung des Drag \& Drop-Editors für SQL-Abfragen. Wesentliche Herausforderung in diesem Schritt wird die Implementierung eines möglichst allgemeingültigen Ansatzes zur Behandlung der Drag \& Drop-Vorgänge sein.
+  Implementierung des Drag \& Drop-Editors für SQL-Abfragen. Wesentliche Heraus\-forderung in diesem Schritt wird die Implementierung eines möglichst allgemeingültigen Ansatzes zur Behandlung der Drag \& Drop-Vorgänge sein.
   \begin{itemize}[noitemsep]
   \item Drag \& Drop-Editor für Abfragen
   \item Ausführung von SQL-Abfragen auf dem Server
@@ -83,7 +83,7 @@ Um den Umfang des Prototypen zu begrenzen, wurde die Implementierungsphase anhan
 \item [Rendern von darstellenden Webseiten] \hfill \\
   Um sicherzustellen, dass sich in dem Datenmodell für Seiten aus dem vorigen Meilenstein keine groben Schnitzer befinden, sollen diese nun den Endanwendern zugänglich gemacht werden.
   \begin{itemize}[noitemsep]
-  \item Manuelle Erstellung einiger einfach Testprojekte mit Testdaten
+  \item Manuelle Erstellung einiger einfacher Testprojekte mit Testdaten
   \item Serverseitiges Rendern der verfügbaren Testprojekte
   \end{itemize}
   
@@ -117,15 +117,15 @@ Sofern sich während der Entwicklung Ideen für bisher nicht bedachte Funktional
 
 \begin{description}
 \item[Verwendung mehrerer Datenbanken für ein einzelnes Projekt] \hfill\\
-  Zu Beginn der Entwicklung galt die Prämisse "`eine Datenbank je \idename{}-Projekt"'. Diese wurde geringfügig modifiziert: "`Eine \textit{aktive} Datenbank je \idename{}-Projekt"'. Dabei standen zwei primäre Anwendungsfälle im Vordergrund. Zum Einen können auf diese Art und Weise Entwickler unterschiedliche Datenbestände mit identischen Abfragen oder Webseiten erproben. Und zum Anderen lassen sich so vom Entwickler vorgenommene, serverseitig gespeicherte Backups einer Datenbank realisieren. Sofern bei einem Projekt mehrere Datenbanken zur Verfügung stehen, kann die aktive Datenbank über die Projekteinstellungen ausgewählt werden.
+  Zu Beginn der Entwicklung galt die Prämisse "`eine Datenbank je \idename{}-Projekt"'. Diese wurde geringfügig modifiziert: "`Eine \textit{aktive} Datenbank je \idename{}-Projekt"'. Dabei standen zwei primäre Anwendungsfälle im Vordergrund: Zum Einen können auf diese Art und Weise Entwickler unterschiedliche Datenbestände mit identischen Abfragen oder Webseiten erproben. Zum Anderen lassen sich so vom Entwickler vorgenommene, serverseitig gespeicherte Backups einer Datenbank realisieren. Sofern bei einem Projekt mehrere Datenbanken zur Verfügung stehen, kann die aktive Datenbank über die Projekteinstellungen ausgewählt werden.
 \end{description}
 
 \subsection{Datenbanksystem}
 \label{sec:implementation-database-system}
 
-Die Wahl des konkreten Datenbanksystems hat einen unmittelbaren Einfluss auf nahezu alle Bereiche von \idename. Im Einzelnen handelt es sich dabei um die exakte Variante der \texttt{SQL}-Syntax, auf die Rahmenbedingungen für den Betrieb der Entwicklungsumgebung und auch auf die Fortführung der Projekte mit externen Programmen.
+Die Wahl des konkreten Datenbanksystems hat einen unmittelbaren Einfluss auf nahezu alle Bereiche von \idename. Im Einzelnen handelt es sich dabei um die exakte Variante der \texttt{SQL}-Syntax, die Rahmenbedingungen für den Betrieb der Entwicklungsumgebung und auch die Fortführung der Projekte mit externen Programmen.
 
-Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbeständen sollten normalerweise im Bereich nur einiger Megabyte liegen. Die in der Praxis vermutlich einzige relevante Unterscheidung von Zugriffsrechten wäre zwischen allgemeinem lesendem und schreibenden Zugriff, nicht jedoch auf Basis einzelner Datensätze oder komplexer Benutzergruppen. Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien gewählt und hinsichtlich ihrer Relevanz sortiert:
+Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkeit, die Unterstützung unterschiedlichster Zugriffsrechte und auch die allgemeine Performance spielen nur eine sehr untergeordnete Rolle. Die zu erwartenden Datenbestände sollten normalerweise im Bereich nur einiger Megabyte liegen. Die in der Praxis vermutlich einzige relevante Unterscheidung von Zugriffsrechten wäre zwischen allgemeinem lesendem und schreibendem Zugriff, nicht jedoch auf Basis einzelner Datensätze oder komplexer Benutzergruppen. Für die Wahl des Datenbanksystems werden stattdessen die folgenden Kriterien gewählt und hinsichtlich ihrer Relevanz sortiert:
 
 \begin{description}  
 \item[Kostenlose Verfügbarkeit] \hfill \\
@@ -140,9 +140,9 @@ Die in der Praxis häufig dominierenden Entscheidungskriterien der Skalierbarkei
   Sobald ein Entwickler an die Grenzen des \texttt{SQL}-Editors von \idename{} stößt, soll es bei Bedarf so einfach wie möglich sein, die entsprechend komplizierten Abfragen in einem externen Editor zu schreiben und danach in Textform wieder an \idename{} zu übergeben.
 \end{description}
 
-Das Kriterium der "`kostenlosen Verfügbarkeit"' ist dankenswerterweise sehr einfach zu erfüllen: Es existiert eine Vielzahl von praktisch eingesetzten quelloffenen Datenbanksystemen. Die Kriterien "`einfacher Betrieb"' und "`einfache Backups"' teilen die denkbaren Systeme recht eindeutig in zwei Lager: Eingebette Datenbanken lassen sich sehr einfach betreiben und sichern. Das starten eines weiteren SQL-Server-Prozesses ist bei dieser Betriebsart nicht nötig, der Im- oder Export des gesamten Datenbestandes erfordert nur das kopieren einer einzigen Datei.
+Das Kriterium der "`kostenlosen Verfügbarkeit"' ist dankenswerterweise sehr einfach zu erfüllen: Es existiert eine Vielzahl von praktisch eingesetzten quelloffenen Datenbanksystemen. Die Kriterien "`einfacher Betrieb"' und "`einfache Backups"' teilen die denkbaren Systeme recht eindeutig in zwei Lager: Eingebette Datenbanken lassen sich sehr einfach betreiben und sichern. Das Starten eines weiteren SQL-Server-Prozesses ist bei dieser Betriebsart nicht nötig, der Im- oder Export des gesamten Datenbestandes erfordert nur die Kopie einer einzigen Datei.
 
-Um den Betrieb folglich so einfach wie möglich zu halten, wurden für \idename{} nur eingebettete Datenbanksysteme betrachtet. Aus der Masse an verfügbaren Systemen sticht das SQLite-System jedoch sehr weit hinaus: Der Quelltext ist gemeinfrei, die Anbindung an so ziemlich jede Programmiersprache ist bequem möglich und es existiert eine Fülle von verschiedensten Modellierungsprogrammen für alle Betriebssysteme. Auf eine genauere Analyse der zur Verfügung stehenden Alternativen wurde daher verzichtet.
+Um den Betrieb folglich so einfach wie möglich zu halten, wurden für \idename{} nur eingebettete Datenbanksysteme betrachtet. Aus der Masse an verfügbaren Systemen sticht das SQLite-System jedoch sehr weit hervor: Der Quelltext ist gemeinfrei, die Anbindung an so ziemlich jede Programmiersprache ist bequem möglich und es existiert eine Fülle von verschiedensten Modellierungsprogrammen für alle Betriebssysteme. Auf eine genauere Analyse der zur Verfügung stehenden Alternativen wurde daher verzichtet.
 
 \subsection{Tests}
 \label{sec:implementation-tests}
@@ -167,7 +167,7 @@ Als technisches Fundament wird für diese Testfälle auf der Jasmine-Bibliothek 
   numbers=left
 ]{snippets/e2e-test-example.ts}
 
-Listing \ref{lst:unit-test-example} illustriert, wie die meisten Unit-Testfälle in \idename{} aufgebaut sind. Jeder Testfall beginnt mit der Definition eines Datenmodells (Zeilen 6 bis 13) und endet mit Zusicherungen, um die korrekte Serialisierung sicherzustellen (Zeile 21 \& 22). Ganz konkret existiert also in jedem Testfall eine Variable \texttt{model}, welche im Konstruktor der zu testenden Klasse zum Einsatz kommt und in nicht-mutierenden Testfällen als Ergebnis der \texttt{toModel()}-Methode reproduziert werden muss. Für Abfragen muss noch die Generierung der korrekten \texttt{SQL}-Anweisungen geprüft werden, im Beispiel geschieht dies in Zeile 20.
+Listing \ref{lst:unit-test-example} illustriert, wie die meisten Unit-Testfälle in \idename{} aufgebaut sind. Jeder Testfall beginnt mit der Definition eines Datenmodells (Zeilen 6 bis 13) und endet mit Zusicherungen, um die korrekte Serialisierung sicherzustellen (Zeilen 21 und 22). Ganz konkret existiert also in jedem Testfall eine Variable \texttt{model}, welche im Konstruktor der zu testenden Klasse zum Einsatz kommt und in nicht-mutierenden Testfällen als Ergebnis der \texttt{toModel()}-Methode reproduziert werden muss. Für Abfragen muss noch die Generierung der korrekten \texttt{SQL}-Anweisungen geprüft werden, im Beispiel geschieht dies in Zeile 20.
 
 Die serverseitige Funktionalität wird aktuell ausschließlich über "`end-to-end"'-Tests mit einem speziell instrumentierten Browser geprüft. Für diese Tests ist ein speziell vorbereitetes Testprojekt in einem exakt definierten Zustand Teil des Repositories. Auch diese Testfälle nutzen die von Jasmine bereitgestellten Zusicherungen mit den \texttt{expect()}- und \texttt{toEqual()}-Verkettungen. Listing~\ref{lst:e2e-test-example} zeigt, wie mit einem solchen Test die Funktionaliät des Editors für Projekteinstellungen sichergestellt wird. Mittels der \texttt{browser.get()}-Funktion kann zu einer bestimmten Seite navigiert werden. Um mit den einzelnen Bedienelementen dieser Seite interagieren zu können, müssen diese anhand ihrer \texttt{ID} oder anderer eindeutiger Merkmalen zugreifbar sein (Zeilen 6, 8 und 14 des Listing~\ref{lst:e2e-test-example}). Dann können für solche Elemente Tastatureingaben simuliert oder der Inhalt verglichen werden. Bestimmendes Merkmal dieser Tests zum Speichern ist, dass sie die initial geladene Seite nach dem Speichervorgang erneut aufrufen. Nur wenn die zuvor gesetzten Werte auch nach diesem Ladevorgang noch vorhanden sind, kann von der korrekten Funktionsweise des Servers ausgegangen werden.
 
@@ -175,11 +175,11 @@ Die Dateien mit den Tests liegen im Dateisystem immer "`neben"' ihren Implementi
 
 \subsection{Datenmodell}
 
-Dieses Kapitel erläutert knapp die Organisation der in \idename{} vorhandenen Entitäte. Dabei werden in den \texttt{UML}-Diagrammen auch vereinzelt Methoden aufgeführt, sofern diese die Datenstruktur verändern können, zur Serialisierung benötigt werden oder Details der Implementierung verdeutlichen. Zur Kommunikation mit der Oberfläche existieren in den meisten hier vorgestellten Strukturen noch weitere Eigenschaften, die jedoch nicht Gegenstand dieses Kapitels sind.
+Dieses Kapitel erläutert knapp die Organisation der in \idename{} vorhandenen Entitäten. Dabei werden in den \texttt{UML}-Diagrammen auch vereinzelt Methoden aufgeführt, sofern diese die Datenstruktur verändern können, zur Serialisierung benötigt werden oder Details der Implementierung verdeutlichen. Zur Kommunikation mit der Oberfläche existieren in den meisten hier vorgestellten Strukturen noch weitere Eigenschaften, die jedoch nicht Gegenstand dieses Kapitels sind.
 
 \subsubsection{Projektressourcen}
 
-Die grundsätzliche Struktur eines \idename-Projektes wird in Diagramm \ref{uml:class-diagram-core-entities} ersichtlich. Diese Darstellung visualisert nicht die konkrete Implementierung des Servers oder des Clients, sondern illustriert die grundlegenden beteiligten Datenstrukturen. Jede dieser Entitäten, also sowohl Projekte als auch ihre Ressourcen, enthält eine eigene Versionsangabe. Dadurch kann auf jede Veränderung an dieser Struktur explizit eingegangen werden. Aktuell laden sowohl Server als auch Client nur Ressourcen, deren Version exakt passt.
+Die grundsätzliche Struktur eines \idename-Projektes wird in Diagramm \ref{uml:class-diagram-core-entities} ersichtlich. Diese Darstellung visualisiert nicht die konkrete Implementierung des Servers oder des Clients, sondern illustriert die grundlegenden beteiligten Datenstrukturen. Jede dieser Entitäten "= also sowohl Projekte als auch ihre Ressourcen "= enthalten eine eigene Versionsangabe. Dadurch kann auf jede Veränderung an dieser Struktur explizit eingegangen werden. Aktuell laden sowohl Server als auch Client nur Ressourcen, deren Version exakt passt.
 
 Jede Ressource (\texttt{ProjectResource}) verfügt über eine interne ID sowie einen sprechenden Namen. In der aktuellen Version von \idename{} handelt es sich bei dieser ID um eine \texttt{GUID}, sie sollte also weltweit einzigartig sein. Theoretisch wäre es dadurch denkbar, diese Ressourcen auch zwischen Projekten zu kopieren oder zu teilen. Intern werden Referenzen auf Ressourcen immer anhand der ID vorgenommen. Eine Umbenennung von Ressourcen durch den Benutzer hat daher keine Auswirkungen auf etwaige Referenzen an anderer Stelle.
 
@@ -304,7 +304,7 @@ Die vornehmlichen Eigenschaften eines Projektes sind die darin enthaltenen Abfra
 
 Das Datenmodell für Abfragen teilt sich in drei wesentliche Bereiche auf: Zunächst die vier verschiedenen Typen von Abfragen, dann die eigentlichen \texttt{SQL}-Komponenten und zuletzt die in fast allen Komponenten denkbaren Ausdrücke. Dabei wird strikt zwischen den unterschiedlichen Typen von Abfragen (\texttt{SELECT}, \texttt{UPDATE}, \texttt{INSERT}, \texttt{DELETE}) und deren implementierenden Komponenten getrennt. Diese Trennung dient der einfachen Einbindung von mehrfach auftretenden Komponenten wie \texttt{WHERE} in unterschiedlichen Abfragetypen.
 
-Die einzelnen Komponenten der Abfragen erben von einer gemeinsamen Basisklasse \texttt{Component}. Jede konkrete Komponente wird dann als eigene Klasse implementiert, Diagramm \ref{uml:class-diagram-sql-components} zeigt einen Ausschnitt der für \texttt{SELECT}-Abfragen nötigen Beteiligten. Die Methoden \texttt{toModel()} und \texttt{toSqlString()} dienen der Überführung des Syntaxbaumes in die Repräsentation für die \texttt{.json}- beziehungsweise die \texttt{.sql}-Dateien.
+Die einzelnen Komponenten der Abfragen erben von einer gemeinsamen Basisklasse \texttt{Component}. Jede konkrete Komponente wird dann als eigene Klasse implementiert, Diagramm \ref{uml:class-diagram-sql-components} zeigt einen Ausschnitt der an \texttt{SELECT}-Abfragen beteiligten Datenstrukturen. Die Methoden \texttt{toModel()} und \texttt{toSqlString()} dienen der Überführung des Syntaxbaumes in die Repräsentation für die \texttt{.json}- beziehungsweise die \texttt{.sql}-Dateien.
 
 \begin{diagram}[h]
   \centering\begin{tikzpicture}
@@ -328,6 +328,8 @@ Die einzelnen Komponenten der Abfragen erben von einer gemeinsamen Basisklasse \
     \end{class}
 
     \begin{class}[text width=12cm]{ComponentFrom}{5, -7.5}
+      \operation{+ first() : InitialJoin}
+      \operation{+ subsequent() : Join[]}
       \operation{+ unusedTables() : TableDescription[]}
       \operation{+ isUsingTable(tableName : string)}
     \end{class}
@@ -343,7 +345,7 @@ Die einzelnen Komponenten der Abfragen erben von einer gemeinsamen Basisklasse \
 
 In der \texttt{SelectComponent} fällt bei den Methoden die Differenzierung in "`normale"' und "`tatsächliche"' Spalten auf, diese Unterscheidung ist dem \texttt{*}-Operator geschuldet. Wenn dieser beim Zugriff auf Spalten expandiert werden soll, werden die resultierenden Spalten als "`tatsächliche"' bezeichnet. Bei den "`normalen"' Spalten handelt es sich hingegen um die im \texttt{SELECT} vorkommenden Ausdrücke.
 
-Sowohl \texttt{WhereComponent} als auch \texttt{FromComponent} dürfen nicht leer sein, müssen also in jedem Fall einen Ausdruck oder einen \texttt{JOIN} bereitstellen. Ohne diese Einschränkung könnte zum Beispiel eine Abfrage ohne \texttt{WHERE}-Komponente auf zwei Arten dargestellt werden: Durch eine \texttt{null}-Referenz in der Abfrage selbst oder eine \texttt{null}-Referenz als Ergebnis der \texttt{first()}-Methode.
+Sowohl \texttt{WhereComponent} als auch \texttt{FromComponent} dürfen nicht leer sein, müssen also in jedem Fall einen Ausdruck oder einen \texttt{JOIN} bereitstellen. Ohne diese Einschränkung könnte zum Beispiel eine Abfrage ohne \texttt{WHERE}-Komponente auf zwei Arten dargestellt werden: durch eine \texttt{null}-Referenz in der Abfrage selbst oder eine \texttt{null}-Referenz als Ergebnis der \texttt{first()}-Methode. Die auf dieses initiale Element folgenden Tabellen oder Ausdrücke können mit der Methode \texttt{subsequent()} erfragt werden.
 
 An der Wurzel des Modells stehen die konkreten Klassen für die vier verschiedenen Typen von Abfragen insgesamt, diese erben alle von einer abstrakten Basisklasse \texttt{Query}. Diagramm \ref{uml:class-diagram-sql-query-select} illustriert die Hierarchie exemplarisch an dem Datenmodell für \texttt{SELECT}-Abfragen. Die Verbindung von den Abfragen zu den implementierenden Komponenten wird über eine einfache Aggregation bereitgestellt. Die konkrete Klasse \texttt{QuerySelect} stellt die Komponenten dann zur Verfügung.
 
@@ -379,7 +381,7 @@ An der Wurzel des Modells stehen die konkreten Klassen für die vier verschieden
   \label{uml:class-diagram-sql-query-select}
 \end{diagram}
 
-Die Ausdrücke werden ebenfalls über eine Klassenhierarchie definiert, an deren Wurzel allerdings unterschiedliche Klassen stehen können: Jede Implementierung des Interfaces \texttt{ExpressionParent}. Dieses wird einerseits von der Basisklasse \texttt{Expression} implementiert, andererseits aber auch von jeder mit Ausdrücken arbeitenden Komponenente. Für einen Syntaxbaum ungewöhnlich ist die Implementierung von mutierenden Operationen auf den Knoten selbst. Jede Instanz von \texttt{ExpressionParent} muss in der Lage sein, Kind-Ausdrücke zu entfernen oder zu ersetzen.
+Die Ausdrücke werden ebenfalls über eine Klassenhierarchie definiert, an deren Wurzel allerdings unterschiedliche Klassen stehen können: jede Implementierung des Interfaces \texttt{ExpressionParent}. Dieses wird einerseits von der Basisklasse \texttt{Expression} implementiert, andererseits aber auch von jeder mit Ausdrücken arbeitenden Komponenente. Für einen Syntaxbaum ungewöhnlich ist die Implementierung von mutierenden Operationen auf den Knoten selbst. Jede Instanz von \texttt{ExpressionParent} muss in der Lage sein, Kind-Ausdrücke zu entfernen oder zu ersetzen.
 
 Konkret existierende Ausdrücke erben dann unmittelbar von \texttt{Expression}. Diagramm \ref{uml:class-diagram-sql-expression} illustriert die vorhandenen Implementierungen samt der relevanten Daten. Leider erfordert diese gewählte Hierarchie die Implementierung von semantisch unsinnigen Operationen für logische Blätter des Syntaxbaumes: Auch eine Klasse wie \texttt{ConstantExpression} muss \texttt{replaceChild()} formal implementieren, praktisch erfolgt dies mittels einer zu werfenden Ausnahme.
 
@@ -390,7 +392,7 @@ Konkret existierende Ausdrücke erben dann unmittelbar von \texttt{Expression}. 
       \operation{replaceChild(formerChild : Expression, newChild : Expression)}
     \end{interface}
 
-    \begin{abstractclass}[text width=9cm]{Query}{0, -3.5}
+    \begin{abstractclass}[text width=9cm]{Expression}{0, -3.5}
       \operation{+ parent() : ExpressionParent}
       \operation[0]{+ toSqlString() : string}
       \operation[0]{+ toModel() : any}
@@ -423,11 +425,11 @@ Konkret existierende Ausdrücke erben dann unmittelbar von \texttt{Expression}. 
 
     \path[draw,dashed,-triangle 45] (Query.north) |- (ExpressionParent.south);
 
-    \path[draw,-triangle 45] (ConstantExpression.west) -| ($(Query.south)+(-3,0)$);
-    \path[draw] (ColumnExpression.west) -| ($(Query.south)+(-3,0)$);
-    \path[draw] (ParameterExpression.west) -| ($(Query.south)+(-3,0)$);
-    \path[draw] (StarExpression.west) -| ($(Query.south)+(-3,0)$);
-    \path[draw] (BinaryExpression.west) -| ($(Query.south)+(-3,0)$);
+    \path[draw,-triangle 45] (ConstantExpression.west) -| ($(Expression.south)+(-3,0)$);
+    \path[draw] (ColumnExpression.west) -| ($(Expression.south)+(-3,0)$);
+    \path[draw] (ParameterExpression.west) -| ($(Expression.south)+(-3,0)$);
+    \path[draw] (StarExpression.west) -| ($(Expression.south)+(-3,0)$);
+    \path[draw] (BinaryExpression.west) -| ($(Expression.south)+(-3,0)$);
  \end{tikzpicture}
 
   \caption{Syntaxbaum für Ausdrücke }
@@ -436,19 +438,19 @@ Konkret existierende Ausdrücke erben dann unmittelbar von \texttt{Expression}. 
 
 \subsubsection{Schwächen des Modells für Abfragen}
 
-Rückblickend könnte diese Hierarchie vereinfacht werden. Die vier konkreten \texttt{Query}-Klassen ließen sich relativ problemlos zu einer einzigen Klasse zusammenfassen. Die feine Unterteilung wurde von der Visualisierung getrieben: Eine Klasse zur Visualisierung der \texttt{WHERE}-Komponente sollte nicht irgendeine Abfrage entgegennehmen, sondern nur Instanzen die eine solche Komponente auch bereitstellen könnten. Da die meisten Komponenten aber optional sind oder über Abhängigkeiten verfügen (kein \texttt{HAVING} ohne \texttt{GROUP BY}) scheint das Typsystem von Typescript der falsche Ort um die Einhaltung dieser Restriktionen zu prüfen.
+Rückblickend könnte diese Hierarchie vereinfacht werden. Die vier konkreten \texttt{Query}-Klassen ließen sich relativ problemlos zu einer einzigen Klasse zusammenfassen. Die feine Unterteilung wurde von der Visualisierung getrieben: Eine Klasse zur Visualisierung der \texttt{WHERE}-Komponente sollte nicht irgendeine Abfrage entgegennehmen, sondern nur Instanzen die eine solche Komponente auch bereitstellen könnten. Da die meisten Komponenten aber optional sind oder über Abhängigkeiten verfügen (kein \texttt{HAVING} ohne \texttt{GROUP BY}) scheint das Typsystem von Typescript der falsche Ort, um die Einhaltung dieser Restriktionen zu prüfen.
 
-Diese Fehlentscheidung hat leider auch die Oberfläche beeinflusst: Um eine neue Abfrage anzulegen, muss der Entwickler schon bei der Erstellung den Typ mit angeben. Würde man die Definition der Natur einer Abfrage einfach umdrehen, also anstatt einer konkreten Klasse die zugeteilten Komponenten nutzen, und den abstrakten Typ dann einfach mit einer Methode ermitteln, könnte auf diese vorzeitige Angabe verzichtet werden.
+Diese Fehlentscheidung hat leider auch die Oberfläche beeinflusst: Um eine neue Abfrage anzulegen, muss der Entwickler schon bei der Erstellung den Typ mit angeben. Würde man die Definition der Natur einer Abfrage einfach umdrehen, also anstatt einer konkreten Klasse die zugeteilten Komponenten nutzen und den abstrakten Typ dann einfach mit einer Methode ermitteln, könnte auf diese vorzeitige Angabe verzichtet werden.
 
-Für die Klassenhierarchie der Ausdrücke wäre es auf lange Sicht sinnvoll, die Implementierung von \texttt{ExpressionParent} aus der Basisklasse \texttt{Expression} zu entfernen. Im Nachhinein ist auch dem Autor dieser Arbeit nicht mehr ganz klar wie es zu dieser semantisch unsinnigen Beziehung gekommen ist, eine Behebung war in der Kürze der Zeit aber leider nicht mehr möglich.
+Für die Klassenhierarchie der Ausdrücke wäre es auf lange Sicht sinnvoll, die Implementierung von \texttt{ExpressionParent} aus der Basisklasse \texttt{Expression} zu entfernen. Im Nachhinein ist auch dem Autor dieser Arbeit nicht mehr ganz klar, wie es zu dieser semantisch unsinnigen Beziehung gekommen ist, eine Behebung war in der Kürze der Zeit aber leider nicht mehr möglich.
 
 \subsubsection{Seite}
 
-Das Datenmodell der Seite ist dem Baum des Document-Object-Model (\texttt{DOM}) nachempfunden. Die sich ergebende Hierarchie geht folglich von einem einzigen Wurzelelement aus, was in der konkreten Implementierung die Klasse \texttt{Page} ist. Diese verfügt dann wiederrum über Instanzen der Klasse \texttt{Body} und \texttt{Head}.
+Das Datenmodell der Seite ist dem Baum des Document-Object-Model (\texttt{DOM}) nachempfunden. Die sich ergebende Hierarchie geht folglich von einem einzigen Wurzelelement aus, was in der konkreten Implementierung die Klasse \texttt{Page} ist. Diese verfügt dann wiederum über Instanzen der Klassen \texttt{Body} und \texttt{Head}.
 
 Alle Bedienelemente erben von der abstrakten Basisklasse \texttt{WidgetBase}, für Containerelemente kommt eine Klasse namens \texttt{WidgetHost} zum Einsatz. Eigenschaften wie eine Liste von angewendeten \texttt{CSS}-Klassen oder das \texttt{id}-Attribut könnten im Hinblick auf eine \texttt{CSS}-Integration noch in \texttt{WidgetBase} ergänzt werden.
 
-\begin{diagram}[h]
+\begin{diagram}[t]
   \centering\begin{tikzpicture}
     \begin{abstractclass}[text width=12cm]{WidgetBase}{0, 0}
       \attribute{- type : string}
@@ -472,15 +474,15 @@ Alle Bedienelemente erben von der abstrakten Basisklasse \texttt{WidgetBase}, f�
   \label{uml:class-diagram-page-widgets}
 \end{diagram}
 
-Die konkreten Bedienelemente müssen im Gegensatz zum Datenmodell für Abfragen keine \texttt{toHtml()} oder eine ähnlich benannte Serialisierungsmethode implementieren. Die Kompilierung des Datenmodells für Webseiten erfolgt mittels einer \texttt{Renderer}-Instanz. Dieser Indirektionsschritt wurde eingebaut, um im Falle eines Falles mehr als eine \texttt{HTML}-Templatingsprache zu unterstützen.
+Die konkreten Bedienelemente müssen im Gegensatz zum Datenmodell für Abfragen keine \texttt{toHtml()} oder eine ähnlich benannte Serialisierungsmethode implementieren. Die Kompilierung des Datenmodells für Webseiten erfolgt mittels einer \texttt{Renderer}-Instanz. Dieser Indirektschritt wurde eingebaut, um im Falle eines Falles mehr als eine \texttt{HTML}-Templatingsprache zu unterstützen.
 
 \subsection{Client}
 
-Der Code für den Client folgt den Angular 2-Konventionen und gliedert sich auf oberster Ebene in unterschiedliche Module, die jeweils für einen spezifischen Teil einer angefragten \texttt{URL} zuständig sind. Diese Module gliedern sich dann im wesentlichen in so genannte "`Komponenten"' und "`Services"'. Komponenten fügen sich wie normale \texttt{HTML}-Knoten in den Quelltext ein, die Parametriesierung erfolgt über Attribute. Services dienen hingegen dem Datenaustausch und haben keine visuelle Repräsentation.
+Der Code für den Client folgt den Angular 2-Konventionen und gliedert sich auf oberster Ebene in unterschiedliche Module, die jeweils für einen spezifischen Teil einer angefragten \texttt{URL} zuständig sind. Diese Module gliedern sich dann im Wesentlichen in so genannte "`Komponenten"' und "`Services"'. Komponenten fügen sich wie normale \texttt{HTML}-Knoten in den Quelltext ein, die Parametriesierung erfolgt über Attribute. Services dienen hingegen dem Datenaustausch und haben keine visuelle Repräsentation.
 
 \subsubsection{Kommunikation von Veränderungen}
 
-Angular 2 macht ausgiebigen Gebrauch von dem Gedankenmodell der ReactiveX-Bibliothek\footnote{\url{http://reactivex.io/}}. Der Kern dieses Modells besteht darin, eine Variable nicht als einen atomaren Wert aufzufassen. Stattdessen wird eine Variable als Serie von veränderlichen Werten mit einer festen Reihenfolge betrachtet. Die Tagline der Bibliothek lautet dementsprechend "`The Observer pattern done right"'. Werte, die innerhalb der \idename{}-Oberfläche verfügbar sein sollen, werden daher als ein so genanntes \texttt{Observable} zur Verfügung gestellt. Auf solcherart observierbaren Instanzen lassen sich dann eine Reihe von mutierenden oder filternden Operationen definieren. Das Verarbeitungsmodell ist dabei oberflächlich denen von \texttt{UNIX}-Pipes sehr ähnlich.
+Angular 2 macht ausgiebigen Gebrauch von dem Gedankenmodell der ReactiveX-Bib\-liothek\footnote{\url{http://reactivex.io/}}. Der Kern dieses Modells besteht darin, eine Variable nicht als einen atomaren Wert aufzufassen. Stattdessen wird eine Variable als Serie von veränderlichen Werten mit einer festen Reihenfolge betrachtet. Die Tagline der Bibliothek lautet dementsprechend "`The Observer pattern done right"'. Werte, die innerhalb der \idename{}-Oberfläche verfügbar sein sollen, werden daher als ein so genanntes \texttt{Observable} zur Verfügung gestellt. Auf solcherart observierbaren Instanzen lassen sich dann eine Reihe von mutierenden oder filternden Operationen definieren. Das Verarbeitungsmodell ist dabei oberflächlich dem von \texttt{UNIX}-Pipes sehr ähnlich.
 
 Um zum Beispiel zu verhindern, dass die Oberfläche sich bei sehr kleinteiligen Änderungen häufig ändern muss, kann der \texttt{debounce}-Filter eingesetzt werden. Dieser verzögert alle eingehenden Elemente um eine frei definierbare Zeitspanne und gibt sie nach dieser Wartezeit aus, sofern keine erneuten Werte eingetroffen sind (Abbildung~\ref{fig:reactivex-debounce}). 
 
@@ -502,20 +504,20 @@ Die wesentliche Stärker dieser (und natürlich auch vieler weiterer) Operatione
 
 \subsubsection{Existierende Implementierungen von Drag \& Drop-Editoren}
 
-Die Drag \& Drop-Editoren sind allesamt von Grund auf getätigte Eigenentwicklungen, welche direkt auf der \texttt{HTML5}-Spezifikation aufsetzen. Im Rahmen des schon vorgestellten App Inventor (\fullref{sec:related-app-inventor}) wurde von Google allerdings ebenfalls eine quelloffene Bibliothek für Drag \& Drop-Editoren namens "`Blockly"' entwickelt\footnote{\url{https://developers.google.com/blockly/}}. Warum wurde für \idename{} also eine Eigenentwicklung forciert?
+Die Drag \& Drop-Editoren sind allesamt von Grund auf vorgenommene Eigenentwicklungen, welche direkt auf der \texttt{HTML5}-Spezifikation aufsetzen. Im Rahmen des schon vorgestellten App Inventor (\fullref{sec:related-app-inventor}) wurde von Google allerdings ebenfalls eine quelloffene Bibliothek für Drag \& Drop-Editoren namens "`Blockly"' entwickelt\footnote{\url{https://developers.google.com/blockly/}}. Warum wurde für \idename{} also eine Eigenentwicklung forciert?
 
-Um Blockly zu evaluieren ist ein sehr kleiner Prototyp zur Bearbeitung von \texttt{SQL}-Abfragen entwickelt worden (Abbildung~\ref{fig:blockly-eval-sql}). Dabei hat sich kein schlagender Grund gegen Blockly gefunden, stattdesen aber eine recht lange Liste von technischen und inhaltlichen Aspekten, die nicht so recht zu \idename{} passen.
+Um Blockly zu evaluieren ist ein sehr kleiner Prototyp zur Bearbeitung von \texttt{SQL}-Abfragen entwickelt worden (Abbildung~\ref{fig:blockly-eval-sql}). Dabei hat sich kein schlagender Grund gegen Blockly gefunden, stattdesen aber eine recht lange Liste von technischen und inhaltlichen Aspekten, die nicht so recht zu \idename{} passen:
 
 \begin{itemize}[noitemsep]
 \item Es handelt sich bei Blockly um eine Bibliothek für imperative Programmiersprachen, inklusive Code-Generatoren für zum Beispiel Python, Javascript, Lua, ... Eine Unterstützung von \texttt{HTML} oder \texttt{SQL} ist nicht vorgesehen und müsste selber implementiert werden.
   
 \item Code-Elemente werden in Blockly standardmäßig frei auf einer zweidimensionalen Zeichenfläche platziert. Um innerhalb eines Kontextes auf Ereignisse zu reagieren ist dieser Ansatz sinnvoll. Für \idename{} gilt jedoch, dass jedes zu bearbeitende Element feste Einstiegspunkte hat: \texttt{SELECT} und \texttt{FROM} bei lesenden \texttt{SQL}-Abfragen, \texttt{<body>} und möglicherweise \texttt{<head>} für Webseiten. Die mehrfache Verwendung dieser Wurzelelemente ist inhaltlich nicht sinnvoll, eine freie Platzierung bietet keinen signifikanten Mehrwert.
 
-\item Das von Blockly verwendete Datenmodell enthält Details zur grafischen Darstellung und eignet sich nicht gut zur abstrakten Repräsentation von \texttt{HTML} oder \texttt{SQL}. Dieses Format kommt daher im Hinblick auf andere Arten von Editoren, zum Beispiel einem \texttt{WYSIWYG}-Editor für Oberflächen, nicht als exklusives Format in Frage. Dementsprechend müsste immer zwischen den eigentlichen \idename{}-Formaten und Blockly hin und zurück übersetzt werden.
+\item Das von Blockly verwendete Datenmodell enthält Details zur grafischen Darstellung und eignet sich nicht gut zur abstrakten Repräsentation von \texttt{HTML} oder \texttt{SQL}. Dieses Format kommt daher im Hinblick auf andere Arten von Editoren, zum Beispiel einem \texttt{WYSIWYG}-Editor für Oberflächen, nicht als exklusives Format in Frage. Dementsprechend müsste immer zwischen den eigentlichen \idename{}-Formaten und Blockly hin- und zurück-übersetzt werden.
   
 \item Blockly versteht sich nicht nur als Oberflächenbibliothek, sondern auch als Code-Generator. Dieser Aspekt wird in \idename{} aber losgelöst von der grafischen Repräsentationen durch einzelne Editoren betrachtet. Diese Funktionalität von Blockly müsste daher aktiv ignoriert werden, da einzelne Schnittstellen das Vorhandensein entsprechender Funktionalität voraussetzen.
   
-\item Blockly geht zunächst von einem statisch großen Zeichenbereich aus, um diesen in der Größe zu verändern muss auf globale \texttt{onResize}-Ereignisse reagiert werden. \idename{} kommt hingegen mit ausschließlich per \texttt{CSS} gehandhabten Größenangeben aus, was im Endeffekt permanent korrekte Größenverhältnisse garantiert. Die offizielle "`Resizeable Blockly"'-Demo\footnote{\url{https://blockly-demo.appspot.com/static/demos/resizable/overlay.html}} lässt sich hingegen durch Nutzung der Entwicklerfunktionen zur Bildschirmgrößen-Vorschau in Chrome und Firefox aus dem Tritt bringen.
+\item Blockly geht zunächst von einem statisch großen Zeichenbereich aus. Um diesen in der Größe zu verändern, muss auf globale \texttt{onResize}-Ereignisse reagiert werden. \idename{} kommt hingegen mit ausschließlich per \texttt{CSS} gehandhabten Größenangeben aus, was im Endeffekt permanent korrekte Größenverhältnisse garantiert. Die offizielle "`Resizeable Blockly"'-Demo\footnote{\url{https://blockly-demo.appspot.com/static/demos/resizable/overlay.html}} lässt sich hingegen durch Nutzung der Entwicklerfunktionen zur Bildschirmgrößen-Vorschau in Chrome und Firefox aus dem Tritt bringen.
 \end{itemize}
 
 \begin{figure}[t]
@@ -524,7 +526,7 @@ Um Blockly zu evaluieren ist ein sehr kleiner Prototyp zur Bearbeitung von \text
   \label{fig:blockly-eval-sql}
 \end{figure}
 
-Da \idename{} zumindest perspektivisch die Verwendung von unterschiedlichen Editoren für identische Inhalte vorsieht, ist Blockly damit keinesfalls endgültig aus der Welt. Spätestens bei einer hypothetischen Einbundung von "`echten"' Programmiersprachen in \idename{} wird eine Integration wieder zur Diskussion stehen.
+Da \idename{} zumindest perspektivisch die Verwendung von unterschiedlichen Editoren für identische Inhalte vorsieht, ist Blockly damit keinesfalls endgültig aus der Welt. Spätestens bei einer hypothetischen Einbindung von "`echten"' Programmiersprachen in \idename{} wird eine Integration wieder zur Diskussion stehen.
 
 \subsection{Server}
 
@@ -532,27 +534,25 @@ Der Server beschränkt sich auf drei wesentliche Aufgaben und ist dementsprechen
 
 \begin{enumerate}[noitemsep]
 \item Bereitstellung der statischen \texttt{HTML}- und (aus Typescript kompilierten) Javascript-Dateien, sofern kein "`normaler"' Webserver vorgeschaltet wird.
-\item Entgegennehmen von Speicheranfragen und Prüfung auf deren Plausibilät beziehungsweise Befugnis.
+\item Entgegennehmen von Speicheranfragen und Prüfung auf deren Plausibilität beziehungsweise Befugnis.
 \item Rendern der Webseiten für Endbenutzer.
 \end{enumerate}
 
-Die ersten beiden dieser Punkte lassen werden unmittelbar von Sinatra unterstützt. Die Bereitstellung von statischen Daten funktioniert über die \texttt{send\_file(path)}-Methode, Authentifizierungen können über einen entsprechenden \texttt{HTTP}-Auth-Header angefordert werden. Um die eingehenden Daten zu validieren, werden alle Anfragen gegen ein \texttt{JSON}-Schema validiert.
-
-Das Rendern der Seiten für Endbenutzer ist hingegen etwas komplizierter, die Rahmenbedingungen dafür werden daher in diesem Kapitel etwas ausführlicher betrachtet.
+Die ersten beiden dieser Punkte werden unmittelbar von Sinatra unterstützt. Die Bereitstellung von statischen Daten funktioniert über die \texttt{send\_file(path)}-Methode, Authentifizierungen können über einen entsprechenden \texttt{HTTP}-Auth-Header angefordert werden. Um die eingehenden Daten zu validieren, werden alle Anfragen gegen ein \texttt{JSON}-Schema validiert. Das Rendern der Seiten für Endbenutzer ist hingegen etwas komplizierter, die Rahmenbedingungen dafür werden daher in diesem Kapitel etwas ausführlicher betrachtet.
 
 \subsubsection{Nutzung von Subdomains}
 
 \idename{}-Projekte werden unter jeweils eigenen Subdomains zur Verfügung gestellt. Das erhöht zwar die Anforderungen an die technische Infrastruktur, geht jedoch mit einer Reihe von Vorteilen einher. Die online bereitgestellte Fassung des Protoypen geht in Bezug auf die zur Verfügung stehenden Subdomains noch einen Schritt weiter: Die Domain für die Entwicklungsumgebung (\href{http://blattwerkzeug.de}{\texttt{blattwerkzeug.de}}) unterscheidet sich von jener für die Projekte (zum Beispiel \href{http://cyoa.blattzeug.de}{\texttt{cyoa.blattzeug.de}}).
 
-Der hauptsächliche Grund für dieses Vorgehen ist die im Internet weitestgehend gültig Annahme, dass auf jeder (Sub-)Domain nur ein logischer Internetauftritt hinterlegt ist. Das sich hinter einer \texttt{URL} wie \texttt{blatt\-werk\-zeug.de\-/project\-/pokemongo} eine völlig andere Seite als hinter \texttt{blatt\-werk\-zeug.de\-/project\-/cyoa} verbirgt ist zwar in keinster Weise verboten, aber zumindest ungewöhnlich.
+Der hauptsächliche Grund für dieses Vorgehen ist die im Internet weitestgehend gültige Annahme, dass auf jeder (Sub-)Domain nur ein logischer Internetauftritt hinterlegt ist. Dass sich hinter einer \texttt{URL} wie \texttt{blatt\-werk\-zeug.de\-/project\-/pokemongo} eine völlig andere Seite als hinter \texttt{blatt\-werk\-zeug.de\-/project\-/cyoa} verbirgt, ist zwar in keinster Weise verboten, aber zumindest ungewöhnlich.
 
-Praktisch werden Subdomains von vielen Suchmaschinen, sonstigen Angeboten im Internet und auch innerhalb der technischen Standards, anders behandelt, als wenn die gleichen Inhalte als untergeordnete \texttt{URL} einer anderen Seite existierten. Das beginnt schon bei entscheidenden technischen Details: So können zum Beispiel Zertifikate für \texttt{SSL}-Verbindungen nur für Domains, nicht aber für Teile einer \texttt{URL} ausgestellt werden. Und Webseiten werden im Falle von unerwünschten Inhalten, zum Beispiel Phishing-Angriffen, üblicherweise auf Basis von Domainnamen gesperrt.
+Praktisch werden Subdomains von vielen Suchmaschinen, sonstigen Angeboten im Internet und auch innerhalb der technischen Standards anders behandelt, als wenn die gleichen Inhalte als untergeordnete \texttt{URL} einer anderen Seite existierten. Das beginnt schon bei entscheidenden technischen Details: So können zum Beispiel Zertifikate für \texttt{SSL}-Verbindungen nur für Domains, nicht aber für Teile einer \texttt{URL} ausgestellt werden. Und Webseiten werden im Falle von unerwünschten Inhalten, zum Beispiel Phishing-Angriffen, üblicherweise auf Basis von Domainnamen gesperrt.
 
 Darüber hinaus kann unter dieser Voraussetzung jede Webseite davon ausgehen, dass die gesamte Routing-Hierarchie nur ihr gehört. Die Subdomains erlauben also die Nutzung von absoluten Pfadangaben. Insbesondere um Bilder, \texttt{CSS}-Dateien oder JavaScript-Bibliotheken zu verlinken, ist das eine hilfreiche Garantie, welche viele unpraktische Probleme vermeidet.
 
 \subsubsection{Rendervorgang}
 
-Der wesentliche Inhalt des Rendervorgangs besteht im Sammeln der für die Anzeige notwendigen Daten, wie sie in Kapitel \fullref{sec:page-data-sources} beschrieben worden sind. Ein Großteil dieser Daten kann unmittelbar aus dem Datenmodell herausgelesen werden: Die Ruby-Klassen für Projekte und Seiten verfügen über dezidierte Methoden zur Bereitstellung der Daten ihres Namensraumes (Listing~\ref{lst:server-project-render-data}). Die \texttt{GET}-Daten werden unmittelbar von dem serverseitigen Framework zur Verfügung gestellt.
+Der wesentliche Inhalt des Rendervorgangs besteht im Sammeln der für die Anzeige notwendigen Daten, wie sie in Kapitel \fullref{sec:page-data-sources} beschrieben worden sind. Ein Großteil dieser Daten kann unmittelbar aus dem Datenmodell heraus\-gelesen werden: Die Ruby-Klassen für Projekte und Seiten verfügen über dezidierte Methoden zur Bereitstellung der Daten ihres Namensraumes (Listing~\ref{lst:server-project-render-data}). Die \texttt{GET}-Daten werden unmittelbar von dem serverseitigen Framework zur Verfügung gestellt.
 
 \begin{lstlisting}[float=h, language=Ruby, caption={Bereitstellung der Renderdaten in der Projektklasse}, label={lst:server-project-render-data}]
 # Retrieves the "site" hash that may be used during rendering.
@@ -569,7 +569,7 @@ end
 
 Um die Abfragen in das richtige Format zu bringen, ist hingegen ein wenig Aufwand erforderlich: Jede in einer Seite referenzierte Abfrage muss ausgeführt werden. Dieser Prozess erfolgt in zwei Schritten.
 
-Zunächst werden die verfügbaren Parameter auf die tatsächlich benötigten Parameter abgebildet. Zur Erinnerung sei daher an dieser Stelle noch einmal die grundsätzliche Problematik erwähnt: Die Daten für die Seiten liegen in Namensräumen vor, die Parameter einer Abfrage wissen hingegen nichts von diesen Namensräumen. Listing~\ref{lst:server-project-query-prepare-params} zeigt, wie die einzelnen Mapping-Einträge einer referenzierten Abfrage in Namensraum und Schlüssel aufgespalten werden und dann unter dem in der Abfrage definierten Parameternamen verfügbar gemacht werden.
+Zunächst werden die verfügbaren Parameter auf die tatsächlich benötigten Parameter abgebildet. Zur Erinnerung sei daher an dieser Stelle noch einmal die grundsätzliche Problematik erwähnt: Die Daten für die Seiten liegen in Namensräumen vor, die Parameter einer Abfrage wissen hingegen nichts von diesen Namensräumen. Listing~\ref{lst:server-project-query-prepare-params} zeigt, wie die einzelnen Mapping-Einträge einer referenzierten Abfrage in Namensraum und Schlüssel aufgespalten und dann unter dem in der Abfrage definierten Parameternamen verfügbar gemacht werden.
 
 \begin{lstlisting}[float=p, language=Ruby, caption={Renderdaten einer Abfrage (1): Parameter binden}, label={lst:server-project-query-prepare-params}]
 # Each query gets its own fresh set of parameters
@@ -617,32 +617,32 @@ end
 return (mapped);
 \end{lstlisting}
 
-Der eigentliche Rendervorgang wird dann von der Liquid-Bibliothek durchgeführt. Deren Interface ist aber wie in Kapitel \fullref{sec:eval-templating-language} beschrieben denkbar einfach: Übergeben wird ein String mit dem zu rendernden Template und eine HashMap mit den zur Verfügung stehenden Daten.
+Der eigentliche Rendervorgang wird von der Liquid-Bibliothek durchgeführt. Deren Interface ist aber wie in Kapitel \fullref{sec:eval-templating-language} beschrieben denkbar einfach: Übergeben wird ein String mit dem zu rendernden Template und die in diesem Kapitel beschriebene \texttt{HashMap} mit den zur Verfügung stehenden Daten.
 
 \subsection{Unerwartete Hindernisse}
 \label{sec:unexpected-problems}
 
-Im Laufe der \idename{}-Entwicklung traten, vornehmlich bei der Entwicklung des Webclients, einige unerwartete Hindernisse auf. Jene Probleme, die subjektiv betrachtet wesentlich mehr Zeit gekostet haben als eingeplant war werden an dieser Stelle kurz erwähnt.
+Im Laufe der \idename{}-Entwicklung traten, vornehmlich bei der Entwicklung des Webclients, einige unerwartete Hindernisse auf. Jene Probleme, die subjektiv betrachtet wesentlich mehr Zeit gekostet haben als eingeplant war, werden an dieser Stelle kurz erwähnt.
 
 \subsubsection{Instabile API von Angular 2}
 
-Zum Start der Entwicklung von \idename{} befand sich Angular 2 gerade in der Version \texttt{2.0.0-beta.0}. Auf diese initiale Version folgten 17 weitere Beta-Veröffentlichungen und 7 "`Release-Candidates"'. Alle in diesen Veröffentlichungen getätigten "`Breaking Changes"' mussten von \idename{} mitgemacht und nachvollzogen werden. Zu den besonderen schwerwiegenden Umbauten gehören dabei die folgenden Anlässe:
+Zum Start der Entwicklung von \idename{} befand sich Angular 2 gerade in der Version \texttt{2.0.0-beta.0}. Auf diese initiale Version folgten 17 weitere Beta-Veröffentlichungen und 7 "`Release-Candidates"'. Alle in diesen Veröffentlichungen getätigten "`Breaking Changes"' mussten von \idename{} mitgemacht und nachvollzogen werden. Zu den besonders schwerwiegenden Umbauten gehören dabei die folgenden Anlässe:
 
 \begin{itemize}[noitemsep]
 \item Das interne Routing-Modell wurde zweimal komplett umgeschrieben, dabei waren jedes Mal manuelle Änderungen an den Routendefinitionen nötig\footnote{Siehe \url{http://stackoverflow.com/questions/38039294/} und \\ \url{http://stackoverflow.com/questions/38879529/\#38952908}}. Zum aktuellen Zeitpunkt liegt der Router daher schon in Version 3 vor, während Angular 2 noch auf Version 2 verweilt.
-\item Die interne Darstellung von Abhängigkeiten einzelner Komponenten wurde mit dem Release Kandidaten 5 komplett überarbeitet. Bisher hatten Komponenten Abhängigkeiten selber referenziert, nun sollen diese dafür in ein neu entwickeltes Modulsystem einsortiert werden.
-\item Die Syntax der Templatingsprache wurde in Bezug auf die Angabe von Referenzen verändert. Dabei wurden Schlüsselwörter verändert und gestrichen, was eine komplette Durchsicht aller Template-Dateien zur Folge hatte.
+\item Die interne Darstellung von Abhängigkeiten einzelner Komponenten wurde mit dem Release-Kandidaten 5 komplett überarbeitet. Bisher hatten Komponenten Abhängigkeiten selber referenziert, nun sollen diese dafür in ein neu entwickeltes Modulsystem einsortiert werden.
+\item Die Syntax der Templatingsprache wurde in Bezug auf die Angabe von Referenzen verändert. Dabei wurden Schlüsselwörter verändert und gestrichen, was eine komplette Durchsicht aller Template-Dateien erforderte.
 \end{itemize}
 
 \subsubsection{Fehlerhafte Codegenerierung des Typescript-Compilers}
 
-Der verwendete Typescript-Compiler hat zum Zeitpunkt der Anfertigung dieser Arbeit einen bekannten Bug in der Codegenerierung\footnote{\url{https://github.com/Microsoft/TypeScript/issues/4341}}, um den wiederholt herumgearbeitet werden musste. Konkret äussert sich dieser Fehler, wenn die Definition der Oberklasse einer sich davon ableitenden Klasse erst im Nachhinein erfolgt (Listing \ref{lst:ts:class-order-bug}). In diesem Fall kommt es zu keiner Warnung durch den Compiler, sondern zu einem Laufzeitfehler im kompilierten Javascript-Code. Das Beispiel ist an dieser Stelle natürlich besonders plakativ, der Fehler tritt aber in identischer Art und Weise bei komplexen Hierarchien aus \texttt{import}-Anweisungen auf.
+Der verwendete Typescript-Compiler hat zum Zeitpunkt der Anfertigung dieser Arbeit einen bekannten Bug in der Codegenerierung\footnote{\url{https://github.com/Microsoft/TypeScript/issues/4341}}, um den wiederholt herumgearbeitet werden musste. Konkret äußert sich dieser Fehler, wenn die Definition der Oberklasse einer sich davon ableitenden Klasse erst im Nachhinein erfolgt (Listing \ref{lst:ts:class-order-bug}). In diesem Fall kommt es zu keiner Warnung durch den Compiler, sondern zu einem Laufzeitfehler im kompilierten Javascript-Code. Das Beispiel ist an dieser Stelle natürlich besonders plakativ, der Fehler tritt aber in identischer Art und Weise bei komplexen Hierarchien aus \texttt{import}-Anweisungen auf.
 
 \lstinputlisting[float=p, language=JavaScript, caption=Falsche Reihenfolge der Klassendefinition, label=lst:ts:class-order-bug]{snippets/class-inheritance-order-bug.ts}
 
 \subsubsection{Verworfene Implementierung eines reinen WYSIWYG-Seiten-Editors}
 
-Vor dem im aktuellen Prototypen verwendeten Block-Editor (zu sehen auf zum Beispiel Abbildung~\ref{fig:screen-ui-editor-block} oder im Anhang \fullref{sec:project-examples}) wurde noch ein reiner WYSIWYG-Editor entwickelt. Dieser ist in der Lage beliebige Layouts aus Zeilen und Spalten mit einer akkuraten Vorschau zu versehen. Der nächste Schritt in der Implementierung wäre neben der Vorschau von Knöpfen und Eingabefeldern die Darstellung der Datentabellen gewesen (Abbildung~\ref{fig:discarded-wysiwyg-page-editor}).
+Vor dem im aktuellen Prototypen verwendeten Block-Editor (zu sehen auf zum Beispiel Abbildung~\ref{fig:screen-ui-editor-block} oder im Anhang \fullref{sec:project-examples}) wurde noch ein reiner WYSIWYG-Editor entwickelt. Dieser ist in der Lage, beliebige Layouts aus Zeilen und Spalten mit einer akkuraten Vorschau zu versehen. Der nächste Schritt in der Implementierung wäre neben der Vorschau von Knöpfen und Eingabefeldern die Darstellung der Datentabellen gewesen (Abbildung~\ref{fig:discarded-wysiwyg-page-editor}).
 
 Die Weiterentwicklung wurde dann jedoch nach einem Gespräch mit Dr. Frank Huch in einer gemeinsamen Entscheidung gestoppt: Dieser Editor wäre eine weitere Insellösung gewesen, mit der die Lernenden zwar hätten schnell erste Erfolge vorweisen können, dabei die technischen Hintergründe jedoch nicht verstanden hätten. So weit sollte die "`Motivation durch praktisch vorzeigbare Ergebnisse"' dann doch nicht auf die Spitze getrieben werden, schließlich handelt es sich bei \idename{} in erster Linie immer noch um ein Lehrprogramm. Vollständig Vergebens waren die investierte Zeit dennoch nicht: Das entwickelte Datenmodell für die Seiten konnte beibehalten werden, der serverseitige Code zum Rendern ebenfalls.
 
