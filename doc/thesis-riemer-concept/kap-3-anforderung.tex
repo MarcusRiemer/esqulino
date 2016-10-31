@@ -1085,7 +1085,7 @@ Für dieses Kapitel werden einige denkbare Ansätze auf dem beschriebenen Koordi
   Da die einfachste Implementierung dieser Variante schon fast durch ein einfaches \texttt{HTML}-\texttt{<textarea>}-Element bereitgestellt werden kann, ist die technische Umsetzung vergleichsweise trivial. Die unterstützte Bandbreite an Bedienelementen ist grundsätzlich beliebig, Drag \& Drop kommt nicht vor. Anders als bei Block- oder WYSIWYG-Editoren müssen daher keine speziellen Komponenten für einzelne Bedienelemente programmiert werden. Die textuelle Darstellung von \texttt{HTML} und Liquid fungiert als die denkbar allgemeinste Schnittstelle.  
 \end{description}
 
-Eine detaillierte Betrachtung dieser unterschiedlichen Ansätze, also zum Beispiel die Diskussion der Erscheinungsbilder von individuellen Komponenten im Editor, wäre im Rahmen dieser Arbeit leider zu umfangreich. Außerdem ist fraglich, ob sich die Qualität von Bedienkonzepten in einer theoretischen Diskussion gut beurteilen lassen würde. Im Sinne der prototypischen Entwicklung wird im weiteren Verlauf also vor allem Wert auf die Implementierung der beiden wesentlichen Visualisierungen gelegt: WYSIWYG und eine Blockdarstellung\todo{Klar warum das die wesentlichen sind?}.
+Eine detaillierte Betrachtung dieser unterschiedlichen Ansätze, also zum Beispiel die Diskussion der Erscheinungsbilder von individuellen Komponenten im Editor, wäre im Rahmen dieser Arbeit leider zu umfangreich. Außerdem ist fraglich, ob sich die Qualität von Bedienkonzepten in einer theoretischen Diskussion gut beurteilen lassen würde. Im Sinne der prototypischen Entwicklung wird im weiteren Verlauf also vor allem Wert auf die Implementierung der beiden weiter verfolgten Visualisierungskonzepte gelegt: WYSIWYG und eine Blockdarstellung.
 
 \subsubsection{Grundsätzlicher Aufbau}
 \label{sec:design-ui-editor}
@@ -1121,23 +1121,23 @@ Um Eigenschaften von Bedienelementen auch ohne spezielle Komponenten editieren z
 Sofern möglich werden dabei identische Eigenschaften bei unterschiedlichen Bedienelementen auch identisch angeordnet. Eingabeelemente für Formulare (\fullref{fig:sidebar-property-editor-input} \& \fullref{fig:sidebar-property-editor-select}) fragen immer zuerst nach dem \texttt{name}-Attribut ("`Eingabename"') und dem dargestellten Titel des editierten Elements.
 
 \begin{figure}[p]
-  \begin{subfigure}[b]{0.45\textwidth}
+  \begin{subfigure}[b]{0.4\textwidth}
     \includegraphics[width=\textwidth-2pt, frame]{images/screenshots/20161019/editor-page-sidebar-input}
     \caption{Eingabe}
     \label{fig:sidebar-property-editor-input}
   \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.45\textwidth}
+  \begin{subfigure}[b]{0.4\textwidth}
     \includegraphics[width=\textwidth-2pt, frame]{images/screenshots/20161019/editor-page-sidebar-select}
     \caption{Auswahl}
     \label{fig:sidebar-property-editor-select}
   \end{subfigure}
 
-  \begin{subfigure}[b]{0.45\textwidth}
+  \begin{subfigure}[b]{0.4\textwidth}
     \includegraphics[width=\textwidth-2pt, frame]{images/screenshots/20161019/editor-page-sidebar-link}
     \caption{Link}
     \label{fig:sidebar-property-editor-link}
   \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.45\textwidth}
+  \begin{subfigure}[b]{0.4\textwidth}
     \includegraphics[width=\textwidth-2pt, frame]{images/screenshots/20161019/editor-page-sidebar-table}
     \caption{Tabelle}
     \label{fig:sidebar-property-editor-table}
