@@ -4,7 +4,7 @@ REMOTE_DIR = /srv/htdocs/playground.marcusriemer.de
 
 PDF_FILENAME = thesis.pdf
 
-SCHEMA_IMAGE_FILES = $(addprefix images/db-schema/, cyoa.pdf pokemongo.pdf blog.pdf)
+SCHEMA_IMAGE_FILES = $(addprefix images/db-schema/, cyoa.pdf pokemongo.pdf blog.pdf events.pdf klett_informatik_2.pdf)
 
 all : $(PDF_FILENAME)
 
