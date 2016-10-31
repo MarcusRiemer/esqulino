@@ -1,6 +1,8 @@
 GIT_REV
 auto
 thesis.pdf
+marcus-riemer-thesis-blattwerkzeug.pdf
+marcus-riemer-thesis-blattwerkzeug-twoside.pdf
 *.aux
 *.log
 *.out

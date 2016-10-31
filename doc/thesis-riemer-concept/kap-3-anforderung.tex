@@ -1,7 +1,7 @@
 \section{Anforderungsanalyse}
 \label{sec:requirements}
 
-Dieses Kapitel beschreibt die generellen Anforderungen an die Entwicklungsumgebung. Dabei werden auch einige theoretische Hintergründe betrachtet, speziell mögliche Reduktionen des SQL-Sprachumfangs für die Vermittlung von Datenbankkenntnissen. Ebenfalls thematisiert werden unterschiedliche Vorgehensweisen, um Schüler bei der Entwicklung von Oberflächen sinnvoll anzuleiten. Den Schwerpunkt bildet die Beschreibung der beiden wichtigsten Komponenten der Entwicklungsumgebung: die spezialisierten Editoren für SQL und Oberflächen.
+Dieses Kapitel beschreibt die generellen Anforderungen an die Entwicklungsumgebung. Dabei werden auch einige theoretische Hintergründe betrachtet, speziell mögliche Reduktionen des \texttt{SQL}-Sprachumfangs für die Vermittlung von Datenbankkenntnissen. Ebenfalls thematisiert werden unterschiedliche Vorgehensweisen, um Schüler bei der Entwicklung von Oberflächen sinnvoll anzuleiten. Den Schwerpunkt bildet die Beschreibung der beiden wichtigsten Komponenten der Entwicklungsumgebung: die spezialisierten Editoren für \texttt{SQL} und Oberflächen.
 
 \warning[Hinweis]{Der Verzicht auf die technischen Hintergründe der Implementierung soll dieses Kapitel auch für Informatik-Interessierte ohne softwaretechnischen Hintergrund verständlich halten, anstatt die konzeptionellen Überlegungen mit den Details der Realisierung zu überlagern. Die Planung konkreter Umsetzungsstrategien und die Diskussion von softwaretechnischen Details, werden in Kapitel \fullref{sec:implementation-analysis} besprochen.}
 
@@ -425,7 +425,7 @@ Das endgültig implementierte Design (Abbildung~\ref{fig:screen-sql-editor-drag-
 \end{figure}
 
 \begin{figure}[p]
-  \includegraphics[width=\textwidth]{images/sql-parameters-preview}
+  \centering\includegraphics[width=0.95\textwidth]{images/sql-parameters-preview}
   \caption{Abfrageeditor: Parameter für eine parametriesierte Abfrage und Ergebnisvorschau}
   \label{fig:screen-sql-editor-parameters-preview}
 \end{figure}
@@ -670,7 +670,7 @@ Um einen Ausdruck unverändert zu übernehmen, also inklusive aller HTML-Sonderz
   <ul>
     {{ #each query.article.categories }}
       <li>{{ this }}</li>
-    {{/each}}
+    {{ /each}}
   </ul>
   {{{ query.article.text }}}
 {{ else }}
@@ -744,7 +744,7 @@ Grundsätzlich wird in Liquid zwischen drei verschiedenen Arten von Anweisungen 
 \item[Tags] \hfill \\
   Tags steuern den Programmfluss mit Anweisungen wie \texttt{if} und \texttt{for}. Um sie von interpolierten Werten zu unterscheiden, werden diese Anweisungen in \texttt{\{\% \%\}}-Klam\-mer\-paaren notiert.
 \item[Filter] \hfill \\
-  Mit Filtern können in Ausdrücken genutzte Daten manipuliert werden. Sie funktionieren nach dem gleichen Prinzip wie Pipes auf der Kommandozeile und ermöglichen es, die Repräsentation von Daten zu verändern. Jeder beliebige Wert kann über einen Filter modifiziert werden, der Ausdruck \texttt{\{\{~'miXeD cAse'~|~downcase~\}\}} würde also zu \texttt{'mixed case'} ausgewertet werden.
+  Mit Filtern können in Ausdrücken genutzte Daten manipuliert werden. Sie funktionieren nach dem gleichen Prinzip wie Pipes auf der Kommandozeile und ermöglichen es, die Repräsentation von Daten zu verändern. Jeder Wert kann über einen Filter modifiziert werden, der Ausdruck \texttt{\{\{~'miXeD cAse'~|~downcase~\}\}} würde also zu \texttt{'mixed case'} ausgewertet werden.
 \end{description}
 
 Alle diese Anweisungen beziehen sich immer auf einen vordefinierten Datenbestand, welcher dem Renderer zusammen mit dem eigentlichen Template übergeben wird. Dieser Datenbestand gliedert sich in Name-Wert-Paare, Listen und atomare Werte, die Navigation erfolgt mittels des \texttt{.}-Operators für Zugriffe auf benannte Schlüssel oder mit dem \texttt{[]}-Operator für einzelne Werte eines Arrays.
@@ -796,7 +796,7 @@ Technisch gesehen erfolgt die Umsetzung eines responsiven Layouts über eine Vie
   Die Breite einer Spalte wird in einem relativen Maß mit Bezug zu einer bestimmten Bildschirmgröße angegeben. So können für breite Bildschirme z.B. drei Spalten vorgesehen werden, für sehr schmale Geräte wie Smartphones hingegen nur eine Spalte. Sollte die Summe dieser Breitenangaben der Spalten die maximale Breite einer Zeile überschreiten, werden diese auf mehrere Zeilen umgebrochen.
 \end{description}
 
-\begin{figure}[h]
+\begin{figure}[t]
   \begin{center}
     \resizebox{\textwidth}{!}{%
       \includegraphics[height=6.5cm]{sketches/grid-example-desktop}%
@@ -816,7 +816,7 @@ Die dritte Zeile enthält drei Spalten (Navigation, Inhalt und eine Leiste für 
 
 Grundsätzlich lassen sich alle Bedienelemente anhand der Struktur von Ein- und Ausgaben unterscheiden (Abbildung~\ref{fig:ui-element-concept}). Die Unterscheidung, ob eine Ein- bzw. Ausgabe exakt einen Wert oder alternativ mehrere (oder keinen) Wert(e) erwartet bzw. liefert, ist für die Oberfläche von zentraler Bedeutung. Die Kapitel \fullref{sec:design-ui-bind-output} und \fullref{sec:design-ui-bind-input} erläutern diese Unterscheidung noch einmal ausführlich.
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering \input{images/ui-element-concept}
   \caption{Einordnung von Bedienelementen}
   \label{fig:ui-element-concept}
@@ -1005,7 +1005,7 @@ Für einen WYSIWYG-Editor sind hingegen vielfältige Bearbeitungsmöglichkeiten 
 
 Die Blockdarstellung, wie sie im Sinne dieses Kapitels verstanden wird, lehnt sich optisch an das Erscheinungsbild eines \texttt{HTML}-Text-Dokumentes an. Damit wird grundsätzlich ein ähnliches Ziel wie beim \texttt{SQL}-Editor verfolgt: Der Schritt vom \idename{}-Editor zu einem Texteditor ist nicht besonders groß, trotzdem können Syntaxfehler durch die Drag \& Drop-Bedienung unterbunden werden. Und weil der Begriff "`Block"' durchaus ein wenig unspezifisch sein kann, illustriert Abbildung~\ref{fig:screen-ui-editor-block} die Darstellung der Blöcke im Prototypen.
 
-\begin{figure}[h]
+\begin{figure}[t]
   \includegraphics[width=\textwidth]{images/screenshots/20161019/editor-page-blocks}
   \caption{Blockdarstellung im Editor}
   \label{fig:screen-ui-editor-block}
