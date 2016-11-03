@@ -2,9 +2,9 @@ swagger: '2.0'
 
 info:
   version: "0.1.0"
-  title: "esqulino"
+  title: "BlattWerkzeug"
 
-  description: esqulino is a data orientated IDE for lerners in schools and elsewhere.
+  description: BlattWerkzeug is a data orientated IDE for learners in schools and elsewhere.
 
   contact:
     name: Marcus Riemer

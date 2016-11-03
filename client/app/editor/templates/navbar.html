@@ -31,8 +31,9 @@
           </li>
           <li class="nav-item"
               *ngFor="let query of project?.queries">
-            <a class="nav-link"
-               [routerLink]="['query', query.id]"
+            <a [routerLink]="['query', query.id]"
+               (dragstart)="startQueryDrag($event, query)"
+               class="nav-link"
                routerLinkActive="router-link-active">
               <query-icon [query]="query"></query-icon>
             </a>
