@@ -1,5 +1,4 @@
 import {Component, OnInit}                 from '@angular/core'
-import {Title}                             from '@angular/platform-browser'
 
 @Component({
     selector: 'about',
@@ -7,9 +6,5 @@ import {Title}                             from '@angular/platform-browser'
 })
 export class AboutComponent {
 
-    constructor(private _title : Title) {}
-    
-    ngOnInit() {
-        this._title.setTitle("esqulino");
-    }
+    constructor() {}
 }
