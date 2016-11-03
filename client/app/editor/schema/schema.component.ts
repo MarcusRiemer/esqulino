@@ -1,11 +1,11 @@
 import {Component, Input, OnInit}     from '@angular/core';
 
-import {ProjectService, Project}      from './project.service'
-import {SidebarService}               from './sidebar.service'
-import {ToolbarService}               from './toolbar.service'
+import {ProjectService, Project}      from '../project.service'
+import {SidebarService}               from '../sidebar.service'
+import {ToolbarService}               from '../toolbar.service'
 
 @Component({
-    templateUrl: 'app/editor/templates/schema.html'
+    templateUrl: 'app/editor/schema/templates/schema.html'
 })
 export class SchemaComponent implements OnInit {
     /**

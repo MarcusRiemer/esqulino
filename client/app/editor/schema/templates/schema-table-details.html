@@ -1,0 +1,6 @@
+<h3>{{table.name}}</h3>
+<table>
+    <th *ngFor="let column of table.columns; let i = index">
+        {{ column.name }}
+    </th>
+</table>

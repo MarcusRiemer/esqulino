@@ -1,0 +1,43 @@
+<div class="card card-block">
+	<h3 class="card-title">
+        <input [(ngModel)]="table.name" placeholder="Primary"/>
+	</h3>
+	<p class="card-text"></p>
+
+	<div class="card-group">
+		<div class="card">
+			<div class="card-block">
+				<h4 class="card-title"># Name</h4>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">PK</li>
+				<li class="list-group-item">Type</li>
+				<li class="list-group-item">Not Null</li>
+				<li class="list-group-item">Standardwert</li>
+			</ul>
+		</div>
+
+		<div *ngFor="let column of table.columns; let i = index" class="card">
+			<div class="card-block">
+				<h4 class="card-title">{{ column.index }} <input [(ngModel)]="column.name" placeholder="Name"/> <a (click)="removeColumn(i)" class="btn btn-primary">
+						<span class="fa fa-minus" aria-hidden="true"></span>
+					</a></h4>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item"><input type="checkbox" [(ngModel)]="column.primary" placeholder="Primary"/></li>
+				<li class="list-group-item"><input [(ngModel)]="column.type" placeholder="Type"/></li>
+				<li class="list-group-item"><input type="checkbox" [(ngModel)]="column.not_null" placeholder="Not Null"/></li>
+				<li class="list-group-item"><input [(ngModel)]="column.dflt_value" placeholder="Standardwert"/></li>
+			</ul>
+		</div>
+		<div class="card">
+			<div class="card-block">
+				<h4 class="card-title">
+					<a (click)="addColumn(i)" class="btn btn-primary">
+						<span class="fa fa-plus" aria-hidden="true"></span>
+					</a>
+				</h4>
+			</div>
+		</div>
+	</div>
+</div>

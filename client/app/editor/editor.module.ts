@@ -24,8 +24,10 @@ import {PreferencesService}             from './preferences.service'
 import {QueryService}                   from './query.service'
 import {RegistrationService}            from './registration.service'
 import {SettingsComponent}              from './settings.component'
-import {SchemaComponent}                from './schema.component'
-import {SchemaTableComponent}           from './schema-table.component'
+import {SchemaComponent}                from './schema/schema.component'
+import {SchemaTableComponent}           from './schema/schema-table.component'
+import {SchemaTableEditorComponent}     from './schema/schema-table-editor.component'
+import {SchemaTableDetailsComponent}     from './schema/schema-table-details.component'
 
 @NgModule({
     imports : [
@@ -45,7 +47,9 @@ import {SchemaTableComponent}           from './schema-table.component'
         SidebarLoaderComponent,
         SettingsComponent,
         SchemaComponent,
-        SchemaTableComponent
+        SchemaTableComponent,
+        SchemaTableEditorComponent,
+        SchemaTableDetailsComponent
     ],
     providers: [
         SidebarService,
