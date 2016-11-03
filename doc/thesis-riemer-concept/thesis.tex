@@ -9,7 +9,7 @@
 \usepackage{amsmath}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage[absolute]{textpos}
-\usepackage{hyperref}
+\usepackage[hidelinks=true,colorlinks=false]{hyperref}
 \usepackage{nameref}
 \usepackage[format=plain,labelfont=bf]{caption}
 \usepackage{subcaption}
@@ -46,7 +46,6 @@
   pdftitle={\doctitle},
   pdfsubject={\docsubtitle},
   pdfauthor={\docpdfauthors},
-  colorlinks=true,
   linkcolor=blue,
   urlcolor=blue,
 }
@@ -104,6 +103,11 @@
 
 \section{Literaturverzeichnis}
 \printbibliography[heading=none]
+
+\cleardoublepage
+\section{CD-ROM}
+
+Alle auf der beigefügten CD-ROM enthaltenen Daten sind auch im \idename{}-Git-Repository unter \url{http://blattwerkzeug.de/forward/git-repository} verfügbar.
 
 \end{document}
 
