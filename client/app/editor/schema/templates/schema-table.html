@@ -1,0 +1,78 @@
+<a (click)="toggleTableEditing()" class="btn btn-primary">
+	<div *ngIf="getEditingEnabled()">
+		<span class="fa fa-unlock" aria-hidden="true"></span>
+	</div>
+	<div *ngIf="!getEditingEnabled()">
+		<span class="fa fa-lock" aria-hidden="true"></span>
+	</div>
+</a>
+<table *ngIf="tables" class="table">
+	<tbody *ngFor="let table of tables; let i = index">
+		<tr>
+			<div class="card card-block">
+				<h3 class="card-title">
+					{{ table.name }}
+					<a (click)="clickToggleDetails(i)" class="btn btn-primary">
+						<span class="fa fa-plus" aria-hidden="true"></span>
+					</a>
+					<a (click)="clickToggleDetails(i)" class="btn btn-primary">
+						<span class="fa fa-search" aria-hidden="true"></span>
+					</a>
+					<span *ngIf="getEditingEnabled()">
+						<a (click)="clickToggleDetails(i)" class="btn btn-primary">
+							<span class="fa fa-cogs" aria-hidden="true"></span>
+					</a>
+					<a (click)="clickToggleDetails(i)" class="btn btn-primary">
+						<span class="fa fa-trash" aria-hidden="true"></span>
+					</a>
+					</span>
+				</h3>
+				<p class="card-text"></p>
+
+				<div class="card-group">
+					<div class="card">
+						<div class="card-block">
+							<h4 class="card-title"># Name</h4>
+						</div>
+						<div *ngIf="getShowDetails(i)">
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item">PK</li>
+								<li class="list-group-item">Type</li>
+								<li class="list-group-item">Not Null</li>
+								<li class="list-group-item">Standardwert</li>
+							</ul>
+						</div>
+					</div>
+
+					<div *ngFor="let column of table.columns" class="card">
+						<div class="card-block">
+							<h4 class="card-title">{{ column.index }} {{ column.name }}</h4>
+						</div>
+						<div *ngIf="getShowDetails(i)">
+							<ul class="list-group list-group-flush">
+
+								<li class="list-group-item">
+									<div *ngIf=column.primary>
+										<span class="fa fa-key" aria-hidden="true"></span>
+									</div>
+								</li>
+								<li class="list-group-item">{{ column.type }}</li>
+								<li class="list-group-item">{{ column.not_null }}</li>
+								<div *ngIf="column.dflt_value != null">
+									<li class="list-group-item">{{ column.dflt_value }}</li>
+								</div>
+								<div *ngIf="column.dflt_value == null">
+									<li class="list-group-item">
+										<span class="fa fa-minus" aria-hidden="true"></span>
+									</li>
+								</div>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<a class="btn btn-primary">1</a>
+				<a class="btn btn-primary">N</a>
+			</div>
+		</tr>
+	</tbody>
+</table>
