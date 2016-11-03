@@ -6,7 +6,7 @@ import {
     Page, QueryReference, ParameterMapping
 } from '../../shared/page/index'
 import {
-    Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml, Link
+    Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml, Link, Form
 } from '../../shared/page/widgets/index'
 
 import {SIDEBAR_MODEL_TOKEN}                    from '../editor.token'
@@ -103,8 +103,34 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
 
             param.providingName = pageEvt.parameterValueProvider;
 
+            // Do we need to fire the callback?
             if (this._dragService.currentDrag.callbacks.onParameterMapping) {
                 this._dragService.currentDrag.callbacks.onParameterMapping(param);
+            }
+        }
+    }
+
+    /**
+     * Something is being dragged over the "add query reference" drop-zone.
+     */
+    onAddQueryReferenceDrag(evt : DragEvent) {
+        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
+        if (pageEvt.queryRef) {
+            evt.preventDefault();
+        }
+    }
+
+    /**
+     * Something is being dropped over the "add query reference" drop-zone.
+     */
+    onAddQueryReferenceDrop(evt : DragEvent) {
+        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
+        if (pageEvt.queryRef) {
+            evt.preventDefault();
+            try {
+                this.page.addQueryReference(pageEvt.queryRef);
+            } catch (ex) {
+                alert(ex);
             }
         }
     }
@@ -122,11 +148,23 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Starts a drag action for a interpolated value.
+     */
+    startConstantDrag(evt : DragEvent,
+                      constant : string) {
+        this._dragService.startValueDrag(evt, "sidebar", constant);
+    }
+
+    /**
      * Informs the drag service about a started drag operation for a
      * query reference
      */
     startReferencedQueryDrag(evt : DragEvent, ref : QueryReference) {
-        this._dragService.startQueryRefDrag(evt, "sidebar", ref.toModel());
+        this._dragService.startQueryRefDrag(evt, "sidebar", ref.toModel(), {
+            onRemove: () => {
+                this.page.removeQueryReference(ref);
+            }
+        });
     }
 
     startParameterValueProviderDrag(evt : DragEvent, valueProviderName : string) {
@@ -140,6 +178,17 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
         return (columnRef.fullName);
     }
 
+    get availableConstants() : string[] {
+        return (["project.name", "page.name"]);
+    }
+
+    /**
+     * @return All available forms that would provide data
+     */
+    get availableForms() {
+        return (this.page.allWidgets.filter((w) => w instanceof Form));
+    }
+
     /**
      * Is there any data available?
      */
@@ -149,14 +198,10 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
 
     /**
      * Bootstrap Specific!
-     * Highlights the card if no data is present
+     * May be used to highlight the whole card, in case something is terribly wrong.
      */
     get additionalCardClasses() : string {
-        if (!this.hasAnyData) {
-            return ("card-warning");
-        } else {
-            return ("");
-        }
+        return ("");
     }
     
     /**
@@ -175,6 +220,15 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
      */
     get showPageRequestParameters() {
         return (this.page && this._page.requestParameters.length > 0);
+    }
+
+    /**
+     * @return True, if a new query could be dropped onto this page.
+     */
+    get showQueryDropTarget() : boolean {
+        return !!(this._dragService.currentDrag
+                  && this._dragService.activeOrigin == "sidebar"
+                  && this._dragService.currentDrag.queryRef);
     }
 }
 

@@ -35,8 +35,13 @@ export class ProjectListItemComponent {
     /**
      * @return The currently visited hostname
      */
-    get hostname() : string {
-        return (window.location.host);
+    get projectServerHostname() : string {
+        const currentHost = window.location.host;
+        if (currentHost.startsWith("localhost")) {
+            return (currentHost);
+        } else {
+            return "blattzeug.de";
+        }
     }
 
     /**
@@ -46,7 +51,7 @@ export class ProjectListItemComponent {
         if (this.useSobdomain) {
             // TODO: Find out whether it would be more or less trivially
             //       possible to support HTTPs
-            return (`http://${this.project.id}.${this.hostname}`);
+            return (`http://${this.project.id}.${this.projectServerHostname}`);
         } else {
             return (`/view/${this.project.id}/`)
         }
