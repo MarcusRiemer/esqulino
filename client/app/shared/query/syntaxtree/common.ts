@@ -1,7 +1,7 @@
 import {Subject}                                     from 'rxjs/Subject'
 import {Observable}                                  from 'rxjs/Observable'
 
-import {TableDescription}                            from '../../schema.description'
+import {TableDescription}                            from '../../schema'
 import {ModelObservable}                             from '../../interfaces'
 
 import * as Model                                    from '../description'

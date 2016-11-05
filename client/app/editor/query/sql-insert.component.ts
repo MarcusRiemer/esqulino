@@ -3,7 +3,7 @@ import {
     ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core'
 
-import {ColumnDescription}              from '../../shared/schema.description'
+import {ColumnDescription}              from '../../shared/schema'
 import {QueryInsert, SyntaxTree}        from '../../shared/query'
 
 /**
