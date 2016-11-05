@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, OnDestroy}       from '@angular/core';
 
-import {TableDescription}               from '../../shared/schema.description'
+import {TableDescription}               from '../../shared/schema'
 
 import {ProjectService, Project}        from '../project.service'
 import {QueryService}                   from '../query.service'

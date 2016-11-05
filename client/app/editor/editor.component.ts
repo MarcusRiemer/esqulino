@@ -4,7 +4,7 @@ import {
 import {Router, ActivatedRoute}         from '@angular/router'
 import {Title}                          from '@angular/platform-browser'
 
-import {TableDescription}               from '../shared/schema.description'
+import {TableDescription}               from '../shared/schema'
 
 import {ProjectService, Project}        from './project.service'
 import {SidebarService}                 from './sidebar.service'
