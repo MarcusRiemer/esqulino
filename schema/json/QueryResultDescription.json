@@ -1,5 +1,21 @@
 {
-    "type": "array",
-    "items": {},
-    "$schema": "http://json-schema.org/draft-04/schema#"
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "items": {
+        "additionalItems": {
+            "anyOf": [
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "items": [
+            {
+                "type": "string"
+            }
+        ],
+        "minItems": 1,
+        "type": "array"
+    },
+    "type": "array"
 }
+
