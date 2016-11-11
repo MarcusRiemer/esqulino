@@ -6,7 +6,7 @@ import {Join}                            from './syntaxtree/from'
 
 /**
  * Represents something that can be validated.
- */ 
+ */
 export interface Validateable {
     /**
      * Validates this instance.
@@ -54,11 +54,11 @@ export module ValidationErrors {
 
         /**
          * @return A human readable description of the error location
-         */     
+         */
         get location() : string {
             return (this._loc.getLocationDescription());
         }
-        
+
         /**
          * @remark As Typescript 1.8 does not allow abstract
          *         properties, this is an ugly indirection step.
@@ -76,17 +76,17 @@ export module ValidationErrors {
          */
         abstract errorMessageImpl() : string;
     }
-    
+
     /**
-     * Represents a column that is unknown.
+     * Represents a column that is unknown for a known table.
      */
-    export class UnknownColumn extends LocateableError<ColumnExpression> {        
+    export class SchemaUnknownColumn extends LocateableError<ColumnExpression> {
         constructor(expr : ColumnExpression) {
             super(expr);
         }
 
         errorMessageImpl() {
-            return (`Unknown column "${this._loc.columnName}" in table "${this._loc.tableName}"`);
+            return (`Unknown column "${this._loc.columnName}" in table "${this._loc.tableName} for current schema"`);
         }
     }
 
@@ -95,15 +95,29 @@ export module ValidationErrors {
     }
 
     /**
-     * Represents a table that is unknown.
+     * Represents a table that is unknown in the schema.
      */
-    export class UnknownTable extends LocateableError<TableEntity> {  
+    export class SchemaUnknownTable extends LocateableError<TableEntity> {
         constructor(entity : TableEntity) {
             super(entity);
         }
 
         errorMessageImpl() {
-            return (`Unknown table "${this._loc.tableName}"`);
+            return (`Table "${this._loc.tableName} does not exist in current schema"`);
+        }
+    }
+
+    /**
+     * Represents an unsatisfied reference to the table, e.g. because of
+     * a missing JOIN in the FROM component.
+     */
+    export class ReferenceUnknownTable extends LocateableError<ColumnExpression> {
+        constructor(expr : ColumnExpression) {
+            super(expr);
+        }
+
+        errorMessageImpl() {
+            return (`"${this._loc.tableName} is not mentioned in FROM"`);
         }
     }
 
@@ -115,7 +129,7 @@ export module ValidationErrors {
         constructor(public hasNoWhere : boolean) {
 
         }
-        
+
         get errorMessage() {
             return (`This query should only touch a single row, but does not impose any restrictions.`);
         }
@@ -177,7 +191,7 @@ export module ValidationErrors {
     export class AmbiguousColumnName implements ValidationError {
         constructor(public columnName : string) {
         }
-        
+
         get errorMessage() {
             return (`Multiple columns use the alias "${this.columnName}" `);
         }
@@ -194,7 +208,7 @@ export module ValidationErrors {
     export class AmbiguousTableAlias implements ValidationError {
         constructor(public tablealias : string) {
         }
-        
+
         get errorMessage() {
             return (`Multiple JOINs use the alias "${this.tablealias}" `);
         }
@@ -210,7 +224,7 @@ export module ValidationErrors {
     export class MissingTableAlias implements ValidationError {
         constructor(public tableName : string, public location : string) {
         }
-        
+
         get errorMessage() {
             return (`Missing table alias for table "${this.tableName}" `);
         }
