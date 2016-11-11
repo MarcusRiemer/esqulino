@@ -266,6 +266,13 @@ export class From extends Component {
     }
 
     /**
+     * @return True, if the given alias is provided
+     */
+    isProvidingAlias(alias : string) {
+        return (this.joinsAndInitial.find(j => j.alias == alias || j.tableName == alias));
+    }
+
+    /**
      * Reacts to missing tables and wrong expressions in JOINs.
      */
     validate(schema : Schema) : ValidationResult {
