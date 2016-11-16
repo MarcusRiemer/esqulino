@@ -88,7 +88,8 @@ class Project
         :schema => @schema,
         'availableDatabases' => self.available_databases,
         :queries => @queries,
-        :pages => @pages
+        :pages => @pages,
+        :id => self.id
       }
     ).to_json(options)
   end
@@ -155,7 +156,8 @@ class Project
     raise EsqulinoError, "Attempted to save unloaded project" if @whole_description.nil?
     
     File.open(description_filename, "w") do |f|
-      f.write(@whole_description.to_yaml)
+      # Save everything but the ID
+      f.write(@whole_description.tap{|d| d.delete('id') }.to_yaml)
     end
   end
 
@@ -171,7 +173,7 @@ class Project
 
     to_return['name'] = whole_info['name']
     to_return['description'] = whole_info['description']
-    to_return['id'] = whole_info['id']
+    to_return['id'] = self.id
     to_return['preview'] = whole_info['preview']
     to_return['indexPageId'] = whole_info['indexPageId']
     to_return['apiVersion'] = whole_info['apiVersion']
