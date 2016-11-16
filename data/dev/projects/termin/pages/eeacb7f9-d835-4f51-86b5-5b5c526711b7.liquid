@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ page.name }} - {{ project.name }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+    <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
+  </head>
+
+<body>
+  <div class="container-fluid">
+    <h1>Termin "{{ query.termin_einzel.termin_titel }}"</h1>
+<p>{{ query.termin_einzel.termin_beschreibung }}</p>
+{% include "query_table" table: query.termin_optionen, columns: "option_id,termin_id,zeitpunkt" %}
+<h2>Wie kann ich teilnehmen?</h2>
+<p>Der Organisator hat die Möglichkeit neue Teilnehmer einzuladen. Du bekommst dann einen Link zugeschickt, den du zur Einschreibung benutzen kannst.</p>
+  </div>
+  {% include "edit-ribbon" %}
+</body>
+
+
+</html>
+

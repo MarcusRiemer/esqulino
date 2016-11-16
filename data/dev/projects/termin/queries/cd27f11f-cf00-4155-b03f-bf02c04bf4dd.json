@@ -1,0 +1,33 @@
+{
+  "name": "neue_einladung",
+  "apiVersion": "3",
+  "insert": {
+    "assignments": [
+      {
+        "expr": {
+          "parameter": {
+            "key": "termin_id"
+          }
+        },
+        "column": "termin_id"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "person"
+          }
+        },
+        "column": "person"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "passwort"
+          }
+        },
+        "column": "passwort"
+      }
+    ],
+    "table": "einladung"
+  }
+}

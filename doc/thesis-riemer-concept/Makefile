@@ -5,7 +5,7 @@ REMOTE_DIR = /srv/htdocs/playground.marcusriemer.de
 PDF_FILENAME = marcus-riemer-thesis-blattwerkzeug.pdf
 PDF_FILENAME_TWOSIDE = marcus-riemer-thesis-blattwerkzeug-twoside.pdf
 
-SCHEMA_IMAGE_FILES = $(addprefix images/db-schema/, cyoa.pdf pokemongo.pdf blog.pdf events.pdf klett_informatik_2.pdf)
+SCHEMA_IMAGE_FILES = $(addprefix images/db-schema/, cyoa.pdf pokemongo.pdf blog.pdf events.pdf klett_informatik_2.pdf termin.pdf)
 
 all : $(PDF_FILENAME) $(PDF_FILENAME_TWOSIDE)
 
