@@ -60,7 +60,7 @@ class Project
 
   # @return True, if at least the project folder and a model file exist
   def exists?
-    File.directory? @project_folder and File.exists? description_filename
+    File.directory? @project_folder and File.exists? self.description_filename
   end
 
   # Throws if the project was openend without write_access
