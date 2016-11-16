@@ -14,8 +14,8 @@
   <div class="container-fluid">
     <h1>Wer kann wann?</h1>
 <p>Mit diesem Projekt kann man Termine zwischen verschiedenen Personen koordinieren.</p>
-<div class="row"><div class="col-md-12"></div>
-<div class="col-md-12"><h2>Alle Termine</h2>
+<div class="row"><div class="col-md-6"><h2>Neuer Termin</h2></div>
+<div class="col-md-6"><h2>Alle Termine</h2>
 {% include "query_table" table: query.alle_termine, columns: "termin_id,termin_titel,termin_beschreibung" %}</div></div>
   </div>
   {% include "edit-ribbon" %}

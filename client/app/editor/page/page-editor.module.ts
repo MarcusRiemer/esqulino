@@ -15,6 +15,7 @@ import {PageDataComponent}              from './page-data.component'
 import {ServerPreviewComponent}         from './server-preview.component'
 
 import {BUTTON_REGISTRATION}            from './sidebar/button.sidebar.component'
+import {COLUMN_REGISTRATION}            from './sidebar/column.sidebar.component'
 import {EMBEDDED_HTML_REGISTRATION}     from './sidebar/embedded-html.sidebar.component'
 import {HEADING_REGISTRATION}           from './sidebar/heading.sidebar.component'
 import {INPUT_REGISTRATION}             from './sidebar/input.sidebar.component'
@@ -75,6 +76,7 @@ const sidebarComponents = [
     SidebarDataComponent,
     SidebarWidgetsComponent,
     BUTTON_REGISTRATION.componentType,
+    COLUMN_REGISTRATION.componentType,
     EMBEDDED_HTML_REGISTRATION.componentType,
     HEADING_REGISTRATION.componentType,
     INPUT_REGISTRATION.componentType,
@@ -153,6 +155,7 @@ export default class PageEditorModule {
         });
 
         reg.registerSidebarType(BUTTON_REGISTRATION);
+        reg.registerSidebarType(COLUMN_REGISTRATION);
         reg.registerSidebarType(EMBEDDED_HTML_REGISTRATION);
         reg.registerSidebarType(HEADING_REGISTRATION);
         reg.registerSidebarType(INPUT_REGISTRATION);
