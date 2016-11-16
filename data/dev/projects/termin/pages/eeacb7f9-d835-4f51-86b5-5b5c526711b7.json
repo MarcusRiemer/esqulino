@@ -1,0 +1,65 @@
+{
+  "name": "Termin",
+  "apiVersion": "3",
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "termin_einzel",
+      "queryId": "99af0b29-9d7b-4f92-8d03-d6190b7dd129",
+      "mapping": [
+        {
+          "parameterName": "termin_id",
+          "providingName": "get.termin_id"
+        }
+      ]
+    },
+    {
+      "type": "query",
+      "name": "termin_optionen",
+      "queryId": "0d7d75a0-2d6c-46db-9c5d-40e710e02796",
+      "mapping": [
+        {
+          "parameterName": "termin_id",
+          "providingName": "get.termin_id"
+        }
+      ]
+    }
+  ],
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "type": "heading",
+        "level": 1,
+        "text": "Termin \"{{ query.termin_einzel.termin_titel }}\""
+      },
+      {
+        "type": "paragraph",
+        "text": "{{ query.termin_einzel.termin_beschreibung }}"
+      },
+      {
+        "type": "query-table",
+        "queryRefName": "termin_optionen",
+        "columns": [
+          "option_id",
+          "termin_id",
+          "zeitpunkt"
+        ]
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Wie kann ich teilnehmen?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Der Organisator hat die Möglichkeit neue Teilnehmer einzuladen. Du bekommst dann einen Link zugeschickt, den du zur Einschreibung benutzen kannst."
+      }
+    ]
+  },
+  "parameters": [
+    {
+      "name": "termin_id"
+    }
+  ]
+}

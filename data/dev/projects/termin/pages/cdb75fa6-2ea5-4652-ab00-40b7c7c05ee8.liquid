@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ page.name }} - {{ project.name }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+    <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
+  </head>
+
+<body>
+  <div class="container-fluid">
+    <h1>Wer kann wann?</h1>
+<p>Mit diesem Projekt kann man Termine zwischen verschiedenen Personen koordinieren.</p>
+<div class="row"><div class="col-md-12"></div>
+<div class="col-md-12"><h2>Alle Termine</h2>
+{% include "query_table" table: query.alle_termine, columns: "termin_id,termin_titel,termin_beschreibung" %}</div></div>
+  </div>
+  {% include "edit-ribbon" %}
+</body>
+
+
+</html>
+
