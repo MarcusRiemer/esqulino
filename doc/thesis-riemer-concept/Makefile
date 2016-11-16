@@ -31,7 +31,7 @@ publish-draft: msg-pre-pdf $(PDF_FILENAME) $(PDF_FILENAME_TWOSIDE)
 	touch publish-draft
 
 clean : msg-pre-clean
-	rm -f $(PDF_FILENAME)
+	rm -f $(PDF_FILENAME) $(PDF_FILENAME_TWOSIDE)
 	rubber --clean thesis.tex
 
 #################################

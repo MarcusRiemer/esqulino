@@ -88,7 +88,7 @@ doc :
 # Remove every bit of generated documentation
 clean-doc:
 	$(SUBDIR_MAKE) server doc-clean
-	$(SUBDIR_MAKE) doc/thesis clean
+	$(SUBDIR_MAKE) doc/thesis-riemer-concept clean
 	$(SUBDIR_MAKE) doc/swagger clean
 
 ##################################
