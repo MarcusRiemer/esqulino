@@ -2,7 +2,6 @@
 name: Abenteuer
 description: Schreibe eine Abenteuergeschichte und stelle deine Freunde vor spannende
   Herausforderungen.
-id: cyoa
 apiVersion: '3'
 preview: book-pages.jpg
 users:
