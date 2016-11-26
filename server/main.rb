@@ -306,16 +306,19 @@ class ScratchSqlApp < Sinatra::Base
         request_prepare_project subdomain
         request_prepare_page(page_name_or_id, true)
 
-        query_params = {
+        initial_params = {
           'get' => request.GET,
-          'server' => self.server_render_data
+          'server' => self.server_render_data,
+          'project' => @project.render_params,
+          'page' => @page.render_params,
         }
 
-        return @page.render(query_params)
+        return @page.render(initial_params)
         
       rescue EsqulinoError => e
+        initial_params['exception'] = e.to_liquid
         status e.code
-        e.message
+        liquid_render_path(@project, "exception", initial_params)
       end
     end
 
@@ -372,9 +375,6 @@ class ScratchSqlApp < Sinatra::Base
         redirect back
       rescue EsqulinoError => e
         initial_params['exception'] = e.to_liquid
-
-        puts e.inspect
-        
         status e.code
         liquid_render_path(@project, "exception", initial_params)
       end
