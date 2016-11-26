@@ -1,6 +1,14 @@
-# The esqulino-Project
+# The BlattWerkzeug-Project
 
-For a lack of a better name, this is all I have got at the moment. It's meant to be a phonetic play on the `SQL`-abbreviation ending in "lino", which is used by many popular programs on the german KIKA ("KinderKanal", german for "childrens channel").
+Conventional development environments are programs that are tailored to suit the needs of professionals. Due to their complexity they do not lend themselves well to introduce pupils to programming. This project is the prototypical implementation of an educational software for database- and web-development.
+
+To eliminate the possibility of syntactical errors while programming, the elements of the programming- or markup-languages are represented by graphical blocks, similar to the approach taken by the software [Scratch](https://scratch.mit.edu/). These blocks can be combined by using drag & drop operations. The syntactical structures of `SQL` and `HTML` are not hidden from the user, but it is not mandatory to internalize them. This approach allows pupils to program and share their own websites, without the need to type lines of code.
+
+Not (yet?) a developer? Then you probably want to check out [BlattWerkzeug.de](http://blattwerkzeug.de) for the hosted version of this project. But beware: The current implementation of this software is **not yet ready** to be used in a classroom. It’s main purpose is to demonstrate and field test the various concepts.
+
+## About the name ...
+
+For a lack of a better name, this is all I have got at the moment. I simply took the very generic term "page tool" and losely translated it into german. The project used to be called "esqulino", a phonetic play on the `SQL`-abbreviation ending in "lino", which is used by many popular programs on the german KIKA ("KinderKanal", german for "childrens channel").
 
 # Running on a development machine
 
@@ -71,13 +79,25 @@ Server, client and documentation are part of a single repository.
 
 ## Server
 
-Developed on a system running `ruby 2.3.0p0 (2015-12-25 revision 53290) [x86_64-linux]` and (for the moment) not tested elsewhere. That said, it uses Sinatra which should run virtually anywhere and does not make use of any too fancy Ruby features. So it will probably run on different configurations.
+Developed on a system running `ruby 2.3.0p0 (2015-12-25 revision 53290) [x86_64-linux]` and (for the moment) not tested elsewhere.
 
-Requires `gem` and `bundle` to be available, dependencies are provided as a `Gemfile`.
+Currently BlattWerkzeug uses Sinatra which should run virtually anywhere and does not make use of any too fancy Ruby features. So it will probably run on different configurations. But there are ongoing efforts to port the whole server over to a less "freestyle" Rails 5 application.
+
+The `Makefile` requires the `gem` and `bundle` programs to be available, dependencies are described via the `Gemfile`.
 
 ## Client
 
-An Angular 2.0 app, even though Angular 2.0 is still not released yet. I hope this changes once the thesis is complete ... It uses Typescript, because I really like my compiler to catch dumb errors.
+An Angular 2.0 app that uses Typescript, because it is really nice to have a compiler that catches dumb errors. The app is broken up into several logical modules:
+
+    AppModule                  Holds together the whole client
+    ├─ SharedModule            Globally required functionality like icons
+    ├─ FrontModule             Mainly text-pages that describe BlattWerkzeug
+    └─ EditorModule            Bundles the actual editing capatabilities
+       ├─ SharedEditorModule   Shared functionality like the sidebar
+       ├─ PageEditorModule     Both page editors (WYSIWYG and tree)
+       └─ QueryEditorModule    The query editor
+       
+The `Makefile` requires the `npm` program to be available, dependencies are provided via the `package.json`. The `Makefile` will install required programs like the Typescript compiler `tsc` or the Angular 2 ahead-of-time compiler `ngc` as part of the `install-deps` step.
 
 ## Schema
 
