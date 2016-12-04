@@ -28,6 +28,7 @@ import {SchemaComponent}                from './schema/schema.component'
 import {SchemaTableComponent}           from './schema/schema-table.component'
 import {SchemaTableEditorComponent}     from './schema/schema-table-editor.component'
 import {SchemaTableDetailsComponent}     from './schema/schema-table-details.component'
+import SchemaEditorModule             from './schema/editor.module'
 
 @NgModule({
     imports : [
@@ -39,6 +40,7 @@ import {SchemaTableDetailsComponent}     from './schema/schema-table-details.com
         SharedEditorModule.forRoot(),
         PageEditorModule.forRoot(),
         QueryEditorModule.forRoot(),
+        SchemaEditorModule.forRoot(),
     ],
     declarations: [
         EditorComponent,
@@ -68,6 +70,7 @@ import {SchemaTableDetailsComponent}     from './schema/schema-table-details.com
         EditorComponent,
         SettingsComponent,
         SchemaComponent,
+        SchemaEditorModule,
     ]
   
 })
