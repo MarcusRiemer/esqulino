@@ -28,7 +28,7 @@ import {SchemaComponent}                from './schema/schema.component'
 import {SchemaTableComponent}           from './schema/schema-table.component'
 import {SchemaTableEditorComponent}     from './schema/schema-table-editor.component'
 import {SchemaTableDetailsComponent}     from './schema/schema-table-details.component'
-import SchemaEditorModule             from './schema/editor.module'
+import SchemaEditorModule             from './schema/schema.module'
 
 @NgModule({
     imports : [
