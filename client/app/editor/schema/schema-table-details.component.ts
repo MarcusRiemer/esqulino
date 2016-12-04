@@ -15,7 +15,7 @@ import {ToolbarService}                 from '../toolbar.service'
     selector: "sql-table-details"
 })
 export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
-
+    
     /**
      * The table to edit.
      */
