@@ -19,10 +19,12 @@ export class Schema {
     private _tableObjects : Table[]; 
     
     constructor(tables : TableDescription[]) {
-        this._tables = tables;
+        //this._tables = tables;
 
         this._tableObjects = tables
             .map(val => new Table(val, val.columns))
+
+        this._tables[0].name = this._tableObjects[0].name;
     }
 
     /**

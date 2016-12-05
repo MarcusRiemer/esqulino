@@ -3,7 +3,7 @@ import {Component, Input, OnInit, OnDestroy}       from '@angular/core';
 import {TableDescription}               from '../../shared/schema'
 
 import {ProjectService, Project}        from '../project.service'
-import {QueryService}                   from '../query.service'
+//import {QueryService}                   from '../query.service'
 import {ToolbarService}                 from '../toolbar.service'
 
 
@@ -42,7 +42,7 @@ export class SchemaTableComponent implements OnInit, OnDestroy {
 
     constructor(
         private _projectService: ProjectService,
-        private _queryService: QueryService,
+        //private _queryService: QueryService,
         private _toolbarService: ToolbarService) {
     }
 
