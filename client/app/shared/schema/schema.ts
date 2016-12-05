@@ -1,6 +1,7 @@
 import {TableDescription, ColumnDescription}          from './schema.description'
+import {Table}                                        from './table'
 
-export {TableDescription, ColumnDescription}
+export {TableDescription, ColumnDescription, Table}
 
 /**
  * A database schema against which a query could be tested. All get methods
@@ -14,9 +15,14 @@ export {TableDescription, ColumnDescription}
  */
 export class Schema {
     private _tables : TableDescription[];
+
+    private _tableObjects : Table[]; 
     
     constructor(tables : TableDescription[]) {
         this._tables = tables;
+
+        this._tableObjects = tables
+            .map(val => new Table(val, val.columns))
     }
 
     /**
@@ -95,5 +101,9 @@ export class Schema {
      */
     get tables() {
         return (this._tables);
+    }
+
+    get tableObjects() {
+        return (this._tableObjects);
     }
 }
