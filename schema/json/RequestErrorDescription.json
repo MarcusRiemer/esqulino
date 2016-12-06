@@ -1,11 +1,12 @@
 {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
     "description": "The format of error messages the server might return.",
-    "type": "object",
     "properties": {
         "message": {
             "type": "string"
         }
     },
-    "additionalProperties": false,
-    "$schema": "http://json-schema.org/draft-04/schema#"
+    "type": "object"
 }
+

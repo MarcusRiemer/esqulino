@@ -87,6 +87,20 @@ class UnknownReferenceNameError < EsqulinoError
   end
 end
 
+# Thrown when a query-mapping is invalid.
+class InvalidMappingError < EsqulinoError
+  def initialize(project, page, query_ref)
+    super "Invalid mapping for query \"#{query_ref['name']}\" on page \"#{page.name}\" in project \"#{project.id}\""
+    @query_ref = query_ref
+  end
+
+  def json_data
+    {
+      "queryRef" => @query_ref
+    }
+  end
+end
+
 # Something went wrong while executing a query
 class DatabaseQueryError < EsqulinoError
   def initialize(project, sql, params, exception)

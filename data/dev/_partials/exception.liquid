@@ -13,9 +13,19 @@
     <div class="container-fluid">
       <h1>Fehler {{ exception.code }}: <code>{{ exception.type }}</code></h1>
 
-      <p>Leider ist bei der Abfrage etwas schiefgelaufen! Der Server hat die folgende Fehlernachricht übermittelt:</p>
+      <p>Leider ist bei der Verarbeitung etwas schiefgelaufen! Der Server hat die folgende Fehlernachricht übermittelt:</p>
       
       <pre>{{ exception.message }}</pre>
+
+      {% if exception.queryRef %}
+        <h2>Fehlerhafte Abfrage-Einbindung</h2>
+        <p>Die Abfrage <code>{{ exception.queryRef.name }}</code> hat nicht alle notwendigen Parameterangaben erhalten:</p>
+        <ul>
+          {% for query_param in exception.queryRef.mapping %}
+            <li><code>{{ query_param.parameterName }}</code> &#8594; <code>{{ query_param.providingName | default: "FEHLT" }}</code></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
 
       {% if exception.sql %}
         <h2>SQL-Code der Abfrage</h2>

@@ -1,17 +1,18 @@
 {
-    "type": "object",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
     "properties": {
         "params": {
-            "description": "Parameters are simply a key-value dictionary. Whenever a query\n\nmakes use of user-bound parameters, these are transferred via\n\nthis kind of object.",
-            "type": "object",
             "additionalProperties": {
                 "type": "string"
-            }
+            },
+            "description": "Parameters are simply a key-value dictionary. Whenever a query\n\nmakes use of user-bound parameters, these are transferred via\n\nthis kind of object.",
+            "type": "object"
         },
         "sql": {
             "type": "string"
         }
     },
-    "additionalProperties": false,
-    "$schema": "http://json-schema.org/draft-04/schema#"
+    "type": "object"
 }
+

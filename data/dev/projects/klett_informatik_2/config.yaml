@@ -1,6 +1,5 @@
 ---
 name: Klett - Informatik 2
-id: klett_informatik_2
 description: Datensammlung zum Lehrbuch von Klett
 apiVersion: '3'
 preview: cover.jpg

@@ -1,0 +1,61 @@
+{
+  "name": "Hauptseite",
+  "apiVersion": "3",
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "alle_termine",
+      "queryId": "db6136b5-793c-4e16-96d1-066e999b1305"
+    }
+  ],
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "type": "heading",
+        "level": 1,
+        "text": "Wer kann wann?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Mit diesem Projekt kann man Termine zwischen verschiedenen Personen koordinieren."
+      },
+      {
+        "type": "row",
+        "columns": [
+          {
+            "type": "column",
+            "width": "6",
+            "widgets": [
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Neuer Termin"
+              }
+            ]
+          },
+          {
+            "type": "column",
+            "width": "6",
+            "widgets": [
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Alle Termine"
+              },
+              {
+                "type": "query-table",
+                "queryRefName": "alle_termine",
+                "columns": [
+                  "termin_id",
+                  "termin_titel",
+                  "termin_beschreibung"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,4 +1,8 @@
 .front {
+    .navbar-brand img {
+        float: left;
+    }
+    
     nav {
         /* Put some space below the navigation */
         margin-bottom: 15px;
@@ -31,6 +35,10 @@
 
     .about-text {
         hyphens: auto;
+    }
+
+    .jumbotron h1 img {
+        height: 1.2em;
     }
 }
 

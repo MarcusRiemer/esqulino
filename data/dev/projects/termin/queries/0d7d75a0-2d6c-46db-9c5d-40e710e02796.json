@@ -1,0 +1,38 @@
+{
+  "name": "termin_optionen",
+  "apiVersion": "3",
+  "from": {
+    "first": {
+      "name": "option"
+    }
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {
+          }
+        }
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "termin_id",
+            "table": "option"
+          }
+        },
+        "rhs": {
+          "parameter": {
+            "key": "termin_id"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}
