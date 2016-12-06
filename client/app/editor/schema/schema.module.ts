@@ -12,7 +12,7 @@ import {SchemaHostComponent}            from './host.component'
         SharedEditorModule,
     ],    
     declarations: [
-
+        SchemaHostComponent
     ],
     providers: [
 
@@ -33,8 +33,8 @@ export default class SchemaEditorModule {
     }
 
     constructor(reg : RegistrationService) {
-        console.log("Registering QueryEditor ...");
+        console.log("Registering SchemaEditor ...");
 
-        console.log("Registered QueryEditor!");
+        console.log("Registered SchemaEditor!");
     }
 }

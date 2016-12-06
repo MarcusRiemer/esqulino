@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, OnDestroy}       from '@angular/core';
 
-import {TableDescription}               from '../../shared/schema'
+import {TableDescription, Table}               from '../../shared/schema'
 
 import {ProjectService, Project}        from '../project.service'
 //import {QueryService}                   from '../query.service'
@@ -18,7 +18,7 @@ export class SchemaTableComponent implements OnInit, OnDestroy {
     /**
      * The tables to display.
      */
-    @Input() tables : TableDescription[];
+    @Input() tables : Table[];
 
     /**
      * True, if creation should be allowed from this component.
@@ -51,7 +51,9 @@ export class SchemaTableComponent implements OnInit, OnDestroy {
      */
     ngOnInit() {
         this._projectService.activeProject
-            .subscribe(res => this._project = res);
+            .subscribe(res =>{ 
+                this._project = res;
+            });
         this.initShowDetails();
 
 

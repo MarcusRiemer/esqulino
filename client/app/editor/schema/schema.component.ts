@@ -32,6 +32,8 @@ export class SchemaComponent implements OnInit {
         this._toolbarService.savingEnabled = false;
         
         this._projectService.activeProject
-            .subscribe(res => this.project = res);
+            .subscribe(res =>{
+                 this.project = res
+            });
     }
 }
