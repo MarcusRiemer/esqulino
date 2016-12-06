@@ -1,3 +1,8 @@
+doc/thesis-riemer-concept/kolloq-2016-12-01.pptx filter=lfs diff=lfs merge=lfs -text
+doc/thesis-riemer-concept/videos/20161126-PageEditor.mp4 filter=lfs diff=lfs merge=lfs -text
+doc/thesis-riemer-concept/videos/20161126-QueryEditor.mp4 filter=lfs diff=lfs merge=lfs -text
+*.pptx filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text
 *.mp4	filter=lfs diff=lfs merge=lfs -text
 *.pptx	filter=lfs diff=lfs merge=lfs -text
 doc/**/*.png filter=lfs diff=lfs merge=lfs -text

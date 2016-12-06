@@ -21,12 +21,15 @@
     </div>
   </div>
 
-  <div *ngIf="showBlueprintJoinDropTarget">
-    <span class="component indent">JOIN</span>
-    <span (dragover)="onBlueprintDrag($event)"
-          (drop)="onBlueprintJoinDrop($event)"
-          class="table blueprint">
-      <span class="fa fa-plus"></span>
-    </span>
+  <div *ngIf="showBlueprintJoinDropTarget"
+       class="line">
+    <div class="component indent">JOIN</div>
+    <div (dragover)="onBlueprintDrag($event)"
+         (drop)="onBlueprintJoinDrop($event)"
+         class="columns">
+      <span class="table blueprint">
+        <span class="fa fa-plus"></span>
+      </span>
+    </div>
   </div>
 </div>

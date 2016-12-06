@@ -1,0 +1,39 @@
+{
+  "name": "termin_einzel",
+  "apiVersion": "3",
+  "singleRow": true,
+  "from": {
+    "first": {
+      "name": "termin"
+    }
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {
+          }
+        }
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "termin_id",
+            "table": "termin"
+          }
+        },
+        "rhs": {
+          "parameter": {
+            "key": "termin_id"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}

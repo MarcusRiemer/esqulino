@@ -1,9 +1,22 @@
 {
-    "description": "The properties of a project that can be queried from the\n\nserver when asking for all available projecs.\n\n\n\nThis is a stripped down version of all possibly\n\nexisting project properties that is used to list available\n\nprojects.",
-    "type": "object",
-    "properties": {
-        "name": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "definitions": {
+        "ApiVersionToken": {
+            "description": "It would be nicer if versions could be numbers, but Typescript has no\n\nconcept of union types for numbers.",
+            "enum": [
+                "1",
+                "2",
+                "3"
+            ],
             "type": "string"
+        }
+    },
+    "description": "The properties of a project that can be queried from the\n\nserver when asking for all available projecs.\n\n\n\nThis is a stripped down version of all possibly\n\nexisting project properties that is used to list available\n\nprojects.",
+    "properties": {
+        "apiVersion": {
+            "$ref": "#/definitions/ApiVersionToken",
+            "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with."
         },
         "description": {
             "type": "string"
@@ -11,28 +24,16 @@
         "id": {
             "type": "string"
         },
-        "preview": {
-            "type": "string"
-        },
         "indexPageId": {
             "type": "string"
         },
-        "apiVersion": {
-            "$ref": "#/definitions/ApiVersionToken",
-            "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with."
+        "name": {
+            "type": "string"
+        },
+        "preview": {
+            "type": "string"
         }
     },
-    "additionalProperties": false,
-    "definitions": {
-        "ApiVersionToken": {
-            "description": "It would be nicer if versions could be numbers, but Typescript has no\n\nconcept of union types for numbers.",
-            "type": "string",
-            "enum": [
-                "1",
-                "2",
-                "3"
-            ]
-        }
-    },
-    "$schema": "http://json-schema.org/draft-04/schema#"
+    "type": "object"
 }
+

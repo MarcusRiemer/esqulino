@@ -2,7 +2,6 @@
 name: Blog
 description: Dein Blog, deine Regeln! Schreibe über Themen die dir am Herzen liegen
   und tausche dich in den Kommentaren mit deinen Lesern aus.
-id: blog
 apiVersion: '3'
 users:
   user: 4000$8$1$935bb91920cc5280f26d75498dbde2dc80f4f25024e5b5572a607d394e9cf975$0804f6cb2de497f8555db8ac2f396d4e246f289cdfa20285f805a1fbdd20a1c2

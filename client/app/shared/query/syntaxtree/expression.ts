@@ -11,7 +11,11 @@ import {
     ValidationErrors, ValidationResult, Validateable
 } from '../validation'
 
-import {ExpressionParent, Removable}          from './common'
+import {QueryFrom}                            from '../base'
+
+import {
+    Component, ExpressionParent, Removable
+} from './common'
 
 /**
  * Valid template identifiers. Sadly a leaky abstraction that needs
@@ -88,6 +92,23 @@ export abstract class Expression implements ExpressionParent, Removable, Validat
      */
     get parent() : ExpressionParent {
         return (this._parent);
+    }
+
+    /**
+     * @return The FROM-component that determines the data that is going to
+     *         be available for expressions.
+     */
+    get fromComponent() {
+        let com = this.parent;
+        while (com != null && com instanceof Expression) {
+            com = com.parent;
+        }
+
+        if (!(com instanceof Component)) {
+            throw new Error("Expression has no access to FROM-component");
+        }
+
+        return (com.query as QueryFrom).from;
     }
 
     /**
@@ -415,14 +436,21 @@ export class ColumnExpression extends Expression {
         // Does the table exist?
         if (!schema.hasTable(this._tableName)) {
             return (new ValidationResult([
-                new ValidationErrors.UnknownTable(this)
+                new ValidationErrors.SchemaUnknownTable(this)
             ]));
         }
 
         // Does the column exist?
         if (!schema.hasColumn(this._tableName, this._columnName)) {
             return (new ValidationResult([
-                new ValidationErrors.UnknownColumn(this)
+                new ValidationErrors.SchemaUnknownColumn(this)
+            ]));
+        }
+
+        // Is the table for this column actually part of the queried data?
+        if (!this.fromComponent.isProvidingAlias(this.tableQualifier)) {
+            return (new ValidationResult([
+                new ValidationErrors.ReferenceUnknownTable(this)
             ]));
         }
 
@@ -591,7 +619,7 @@ export class StarExpression extends Expression {
     validate(schema : Schema) : ValidationResult {
         if (this.isLimited && !schema.hasTable(this.tableName)) {
             return (new ValidationResult([
-                new ValidationErrors.UnknownTable(this)
+                new ValidationErrors.SchemaUnknownTable(this)
             ]));
         } else {
             return (ValidationResult.VALID);

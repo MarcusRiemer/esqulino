@@ -28,7 +28,7 @@ function matchingTables(model : Model.From) {
 };
 
 describe('INNER JOIN', () => {
-    it('Invalid: Both ON and USING', () => {
+    it('Error: Both ON and USING', () => {
         // Model should be valid as far as the isolated syntax of both
         // parts is concerned
         const model : Model.Join = {
@@ -65,6 +65,9 @@ describe('FROM', () => {
         expect(f.first.alias).toEqual("pe");
         expect(f.first.nameWithAlias).toEqual("person pe");
 
+        expect(f.isProvidingAlias("pe")).toBeTruthy();
+        expect(f.isUsingTable("person")).toBeTruthy();
+
         expect(f.toSqlString()).toEqual("FROM person pe");
         expect(f.toModel()).toEqual(model);
 
@@ -93,6 +96,11 @@ describe('FROM', () => {
         expect(f.getJoin(0).tableName).toEqual(model.joins[0].table.name);
         expect(f.getJoin(0).nameWithAlias).toEqual("ort");
         expect(f.getJoin(0).sqlJoinKeyword).toEqual(",");
+
+        expect(f.isProvidingAlias("pe")).toBeTruthy();
+        expect(f.isProvidingAlias("ort")).toBeTruthy();
+        expect(f.isUsingTable("person")).toBeTruthy();
+        expect(f.isUsingTable("ort")).toBeTruthy();
         
         expect(f.toSqlString()).toEqual("FROM person pe\n\t, ort");
         expect(f.toModel()).toEqual(model);

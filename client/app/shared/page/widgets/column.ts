@@ -38,6 +38,11 @@ export class Column extends HostingWidget {
         return (this._width);
     }
 
+    set width(value : number) {
+        this._width = value;
+        this.fireModelChange();
+    }
+
     /**
      * @return The widgets for this cell
      */

@@ -61,7 +61,7 @@ archive-use : archive-client msg-pre-archive-use
 # Maintenance targets
 ##################################
 clean : msg-pre-app-clean clean-archives
-	rm -rf $(realpath client)/*
+	rm -rf client/*
 
 clean-archives:
 	rm -f $(ALL_ARCHIVE_FILES)

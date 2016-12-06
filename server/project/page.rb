@@ -208,7 +208,11 @@ class Page
     # Not-quite-so-wellformed models may omit the mapping, this
     # shouldn't crash anything immediatly.
     query_ref.fetch('mapping', {}).each do |mapping|
-      # puts "Handling mapping #{mapping.inspect}"
+      # But if there is a mapping defined, it must be well formed
+      if not mapping.key?('providingName') or not mapping.key('parameterName')
+        raise InvalidMappingError.new(@project, self, query_ref)
+      end
+      
 
       # Extract all relevant indizes
       providing_prefix, providing_name = mapping.fetch('providingName').split "."

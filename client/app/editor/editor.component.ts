@@ -48,7 +48,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         // Subscribe to the current project
         let subRef = this._projectService.activeProject.subscribe(res => {
             this._project = res
-            this._title.setTitle(`${res.name} - esqulino`)
+            this._title.setTitle(`${res.name} - BlattWerkzeug`)
         });
         this._subscriptions.push(subRef);
 

@@ -4,6 +4,7 @@ import {
     Model, SyntaxTree, CURRENT_API_VERSION
 } from './base'
 import {QuerySelect}             from './select'
+import {ValidationErrors}        from './validation'
 
 let schema  = new Schema([
     {
@@ -364,6 +365,39 @@ describe('Invalid SELECT Queries', () => {
         expect(leaves.length).toEqual(2);
         expect(leaves[0].toModel()).toEqual(model.select.columns[0].expr);
         expect(leaves[1].toModel()).toEqual(model.select.columns[1].expr);
+
+        expect(q.toModel()).toEqual(model);
+        expect(q.validate().isValid).toBeFalsy();
+    });
+
+    it ('Invalid column references: SELECT nonexistant.test, person.nonexistant, ereignis.ende FROM person', () => {
+        const model : Model.QueryDescription = {
+            name : 'select-invalid-column',
+            id : 'invalid-select-4',
+            apiVersion : CURRENT_API_VERSION,
+            select : {
+                columns : [
+                    { expr : { singleColumn : {column : "test", table : "nonexistant" } } },
+                    { expr : { singleColumn : {column : "nonexistant", table : "person" } } },
+                    { expr : { singleColumn : {column : "ende", table : "ereignis" } } },
+                ]
+            },
+            from : {
+                first : {
+                    name : "person"
+                }
+            }
+        };
+
+        let q = new QuerySelect(schema, model);
+
+        expect(q.isValid).toBeFalsy();
+
+        let err = q.validate();
+        expect(err.numErrors).toEqual(3);
+        expect(err.errors[0] instanceof ValidationErrors.SchemaUnknownTable).toBeTruthy("#1 Unknown Table");
+        expect(err.errors[1] instanceof ValidationErrors.SchemaUnknownColumn).toBeTruthy("#2 Unknown column");
+        expect(err.errors[2] instanceof ValidationErrors.ReferenceUnknownTable).toBeTruthy("#3 Unreferenced table");
 
         expect(q.toModel()).toEqual(model);
         expect(q.validate().isValid).toBeFalsy();

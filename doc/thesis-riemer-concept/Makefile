@@ -5,7 +5,7 @@ REMOTE_DIR = /srv/htdocs/playground.marcusriemer.de
 PDF_FILENAME = marcus-riemer-thesis-blattwerkzeug.pdf
 PDF_FILENAME_TWOSIDE = marcus-riemer-thesis-blattwerkzeug-twoside.pdf
 
-SCHEMA_IMAGE_FILES = $(addprefix images/db-schema/, cyoa.pdf pokemongo.pdf blog.pdf events.pdf klett_informatik_2.pdf)
+SCHEMA_IMAGE_FILES = $(addprefix images/db-schema/, cyoa.pdf pokemongo.pdf blog.pdf events.pdf klett_informatik_2.pdf termin.pdf)
 
 all : $(PDF_FILENAME) $(PDF_FILENAME_TWOSIDE)
 
@@ -31,7 +31,7 @@ publish-draft: msg-pre-pdf $(PDF_FILENAME) $(PDF_FILENAME_TWOSIDE)
 	touch publish-draft
 
 clean : msg-pre-clean
-	rm -f $(PDF_FILENAME)
+	rm -f $(PDF_FILENAME) $(PDF_FILENAME_TWOSIDE)
 	rubber --clean thesis.tex
 
 #################################
