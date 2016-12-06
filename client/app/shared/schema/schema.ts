@@ -14,17 +14,11 @@ export {TableDescription, ColumnDescription, Table}
  * list of table descriptions.
  */
 export class Schema {
-    private _tables : TableDescription[];
-
-    private _tableObjects : Table[]; 
+    private _tables : Table[];
     
     constructor(tables : TableDescription[]) {
-        //this._tables = tables;
-
-        this._tableObjects = tables
+        this._tables = tables
             .map(val => new Table(val, val.columns))
-
-        this._tables[0].name = this._tableObjects[0].name;
     }
 
     /**
@@ -103,9 +97,5 @@ export class Schema {
      */
     get tables() {
         return (this._tables);
-    }
-
-    get tableObjects() {
-        return (this._tableObjects);
     }
 }
