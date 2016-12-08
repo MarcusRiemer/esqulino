@@ -1,3 +1,5 @@
+import { browser, element, by } from 'protractor'
+
 describe('Navigation: Project List Page -> Editor', () => {
     const projectNames = ['events', 'cyoa', 'pokemongo', 'test', 'blog'];
     

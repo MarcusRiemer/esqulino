@@ -1,3 +1,5 @@
+import { browser, element, by } from 'protractor'
+
 describe('Editor', () => {
     const testProjectId = "test";
     const editorUrl = `/editor/${testProjectId}/`;
