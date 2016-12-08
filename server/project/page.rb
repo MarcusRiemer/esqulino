@@ -209,7 +209,7 @@ class Page
     # shouldn't crash anything immediatly.
     query_ref.fetch('mapping', {}).each do |mapping|
       # But if there is a mapping defined, it must be well formed
-      if not mapping.key?('providingName') or not mapping.key('parameterName')
+      if not mapping.key?('providingName') or not mapping.key?('parameterName')
         raise InvalidMappingError.new(@project, self, query_ref)
       end
       
