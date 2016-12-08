@@ -3,7 +3,7 @@
     "additionalProperties": false,
     "definitions": {
         "ApiVersionToken": {
-            "description": "It would be nicer if versions could be numbers, but Typescript has no\n\nconcept of union types for numbers.",
+            "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
             "enum": [
                 "1",
                 "2",
@@ -12,11 +12,11 @@
             "type": "string"
         }
     },
-    "description": "The properties of a project that can be queried from the\n\nserver when asking for all available projecs.\n\n\n\nThis is a stripped down version of all possibly\n\nexisting project properties that is used to list available\n\nprojects.",
+    "description": "The properties of a project that can be queried from the\nserver when asking for all available projecs.\n\nThis is a stripped down version of all possibly\nexisting project properties that is used to list available\nprojects.",
     "properties": {
         "apiVersion": {
             "$ref": "#/definitions/ApiVersionToken",
-            "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with."
+            "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
         },
         "description": {
             "type": "string"
