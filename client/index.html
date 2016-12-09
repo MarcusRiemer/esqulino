@@ -33,7 +33,19 @@
 
   <!-- 4. Displaying esqulino -->
   <body>
-    <sql-scratch>
+    <div id="error-container"
+         class="container"
+         hidden>
+      <div class="alert alert-danger">
+        <p>
+          <strong>Fehler beim laden!</strong>
+          Leider konnte BlattWerkzeug nicht geladen werden ... Bitte wende dich mit der unten genannten Fehlermeldung an den Betreiber.
+        </p>
+        <pre id="error-message">Unbekannter Fehler!</pre>
+      </div>
+    </div>
+    
+    <sql-scratch id="app-root">
       <div class="loading">
         <span class="rainbow">BlattWerkzeug</span>
       </div>
@@ -53,7 +65,13 @@
     <script src="/lib-bundle.js"></script>
     <script src="/app-bundle.js"></script>
     <script>
-     System.import('app').catch(console.log.bind(console));
+     System.import('app').catch(err => {
+         console.log(err);
+
+         document.getElementById("error-container").removeAttribute("hidden");
+         document.getElementById("error-message").textContent = err;
+         document.getElementById("app-root").remove();
+     });
     </script>
   </body>
 
