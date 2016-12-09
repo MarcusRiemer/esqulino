@@ -13,7 +13,7 @@ export {
 } from './syntaxtree/select'
 
 export {
-    From, Join, CrossJoin, InnerJoin
+    From, Join, InitialJoin, CrossJoin, InnerJoin
 } from './syntaxtree/from'
 
 export {
