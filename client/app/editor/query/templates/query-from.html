@@ -4,8 +4,8 @@
     <div class="component">FROM</div>
     <div>
       <span (dragstart)="onJoinDragStart(query.from.first, $event)"
-            (dragover)="onBlueprintDrag($event)"
-            (drop)="onFromDrop($event)"
+            (dragover)="onAllowedDrag($event)"
+            (drop)="onTableDrop($event, 0)"
             class="table"
             draggable="true">
         <span class="fa fa-table fa-fw"></span>
@@ -13,13 +13,15 @@
       </span>
     </div>
   </div>
-  <div *ngFor="let join of query.from.joins"
+  <div *ngFor="let join of query.from.joins; let joinIndex = index;"
        (dragstart)="onJoinDragStart(join, $event)"
        class="line"
        draggable="true">
     <div class="component indent">{{ join.sqlJoinKeyword }}</div>
     <div class="columns">
-      <span class="table"><span class="fa fa-table fa-fw"></span>
+      <span class="table"
+            (dragover)="onAllowedDrag($event)"
+            (drop)="onTableDrop($event, joinIndex + 1)"><span class="fa fa-table fa-fw"></span>
         {{ join.tableName }} {{ join.alias }}
       </span>
     </div>
@@ -28,7 +30,7 @@
   <div *ngIf="showBlueprintJoinDropTarget"
        class="line">
     <div class="component indent">JOIN</div>
-    <div (dragover)="onBlueprintDrag($event)"
+    <div (dragover)="onAllowedDrag($event)"
          (drop)="onBlueprintJoinDrop($event)"
          class="columns">
       <span class="table blueprint">

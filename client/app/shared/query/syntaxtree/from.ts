@@ -422,8 +422,16 @@ export class From extends Component {
         let newOrder = this.joinsAndInitial;
         const fromIndex = newOrder.indexOf(toMove);
         newOrder.splice(newIndex, 0, newOrder.splice(fromIndex, 1)[0]);
-        this._first = newOrder.shift();
-        this._joins = newOrder;
+
+        // This possibly requires changed types
+        this._first = new InitialJoin(this, newOrder.shift().toModel().table);;
+        this._joins = newOrder.map(j => {
+            if (j instanceof InitialJoin) {
+                return (new CrossJoin(this, { cross : "cross", table : j.toModel().table }));
+            } else {
+                return j;
+            }
+        });
     }
 
     /**
