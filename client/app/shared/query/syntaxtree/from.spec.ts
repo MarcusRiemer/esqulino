@@ -227,6 +227,33 @@ describe('FROM', () => {
         expect(v.numErrors).toEqual(0);
     });
 
+    it('changing the order of JOINs', () => {
+        const model : Model.From = {
+            first : { name : "first" },
+            joins : [
+                {
+                    cross: "cross",
+                    table: { "name" : "second" }
+                },
+                {
+                    cross: "cross",
+                    table: { "name" : "third" }
+                }
+            ]
+        };
+
+        let f = new SyntaxTree.From(model, null);
+
+        const first = f.first;
+        const second = f.getJoin(0);
+        const third = f.getJoin(1);
+        
+        f.moveJoin(second, 2);
+
+        expect(f.joinsAndInitial.map(j => j.tableName)).toEqual(["first", "third", "second"]);
+        
+    });
+
     it('removal of subsequent join', () => {
         const model : Model.From = {
             first : { name : "first" },
