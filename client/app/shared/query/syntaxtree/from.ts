@@ -380,7 +380,7 @@ export class From extends Component {
 
         // Persist the new instance
         this._joins.push(toReturn);
-
+        
         return (toReturn);
     }
 
@@ -411,6 +411,19 @@ export class From extends Component {
                 throw new Error("Attempted to remove not existing JOIN");
             }
         }
+    }
+
+    /**
+     * Re-arranges the JOIN instances of a FROM component.
+     * @param toMove The Join that should be moved
+     * @param newIndex The new index
+     */
+    moveJoin(toMove : Join, newIndex : number) {
+        let newOrder = this.joinsAndInitial;
+        const fromIndex = newOrder.indexOf(toMove);
+        newOrder.splice(newIndex, 0, newOrder.splice(fromIndex, 1)[0]);
+        this._first = newOrder.shift();
+        this._joins = newOrder;
     }
 
     /**

@@ -15,6 +15,11 @@ export class FromComponent {
 
     }
 
+    /**
+     * The user has decided to drag the first table.
+     *
+     * @param join The exact JOIN the user started to drag.
+     */
     onJoinDragStart(join : SyntaxTree.Join, evt : DragEvent) {
         this.dragService.startTableDrag(join.toModel(), "from", evt, join);
     }
@@ -28,7 +33,7 @@ export class FromComponent {
     }
 
     /**
-     * Fired when something is dropped onto this target.
+     * Fired when something is dropped onto a blueprint marker
      */
     onBlueprintJoinDrop(evt : DragEvent) {
         // Make sure that no redirection to the data associated with
@@ -38,6 +43,19 @@ export class FromComponent {
         // Grab the actual sql drag event
         const sqlEvt = <SqlDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
         this.query.from.addJoin(sqlEvt.join);
+    }
+
+    /**
+     * Fired when something is dropped onto this target.
+     */
+    onFromDrop(evt : DragEvent) {
+        // Make sure that no redirection to the data associated with
+        // the drop target occurs
+        evt.preventDefault();
+
+        // Grab the actual sql drag event
+        const join = this.dragService.activeSource as SyntaxTree.Join;
+        this.query.from.moveJoin(join, 0);
     }
 
     /**

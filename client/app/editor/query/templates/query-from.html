@@ -3,7 +3,11 @@
   <div class="line">
     <div class="component">FROM</div>
     <div>
-      <span class="table">
+      <span (dragstart)="onJoinDragStart(query.from.first, $event)"
+            (dragover)="onBlueprintDrag($event)"
+            (drop)="onFromDrop($event)"
+            class="table"
+            draggable="true">
         <span class="fa fa-table fa-fw"></span>
         {{ query.from.first.tableName }} {{ query.from.first.alias }}
       </span>
