@@ -1,7 +1,7 @@
 import {Project}                              from '../project'
 import {ProjectResource}                      from '../resource'
 import {ColumnDescription, TableDescription}  from './schema.description'
-import {Column, ColumnStatus}                               from './column'
+import {Column, ColumnStatus}                 from './column'
 
 /**
  * A Class to represent a Table with all containing Columns. 
@@ -17,7 +17,7 @@ export class Table {
          //super(project, desc);
          this._name = desc.name;
          this._columns = col
-            .map(val => new Column(val, ColumnStatus.unchanged, project))
+            .map(val => new Column(val, ColumnStatus.unchanged))
     }
 
     /**
@@ -38,6 +38,14 @@ export class Table {
      */
     removeColumn(index : number) {
         this._columns[index].setState(ColumnStatus.deleted);
+    }
+
+    /**
+     * Removes a column from the table.
+     * @param: index - the index of the column to remove
+     */
+    setColumnAsChanged(index : number) {
+        this._columns[index].setState(ColumnStatus.changed);
     }
 
     toModel() : TableDescription { 

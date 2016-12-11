@@ -3,8 +3,9 @@ import {Router, ActivatedRoute}                     from '@angular/router'
 
 import {Table}                                      from '../../shared/schema'
 
-import {ProjectService, Project}        from '../project.service'
-import {ToolbarService}                 from '../toolbar.service'
+import {SchemaService}                              from '../schema.service'
+import {ProjectService, Project}                    from '../project.service'
+import {ToolbarService}                             from '../toolbar.service'
 
 
 /**
@@ -17,6 +18,7 @@ import {ToolbarService}                 from '../toolbar.service'
 export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
 
     constructor(
+        private _schemaService: SchemaService,
         private _projectService: ProjectService,
         private _routeParams : ActivatedRoute,
         private _toolbarService: ToolbarService) {

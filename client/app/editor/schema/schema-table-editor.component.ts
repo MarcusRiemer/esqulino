@@ -88,7 +88,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     }
 
     removeColumn(index : number) {
-        this.table.columns.splice(index, 1);
+        this.table.removeColumn(index);
     }
 
     addColumn() {
