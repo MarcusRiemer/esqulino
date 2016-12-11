@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, OnDestroy}       from '@angular/core';
+import {Router, ActivatedRoute}                     from '@angular/router'
 
-import {TableDescription, ColumnDescription}       from '../../shared/schema'
+import {Table}                                      from '../../shared/schema'
 
 import {ProjectService, Project}        from '../project.service'
-import {QueryService}                   from '../query.service'
 import {ToolbarService}                 from '../toolbar.service'
 
 
@@ -15,19 +15,22 @@ import {ToolbarService}                 from '../toolbar.service'
     selector: "sql-table-details"
 })
 export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
-    
-    /**
-     * The table to edit.
-     */
-    @Input() tables : TableDescription[];
 
     constructor(
         private _projectService: ProjectService,
-        private _queryService: QueryService,
+        private _routeParams : ActivatedRoute,
         private _toolbarService: ToolbarService) {
     }
 
-    table : TableDescription;
+    /**
+     * The currently shown table
+     */
+     table : Table;
+
+     /**
+     * The currently edited project
+     */
+    private _project : Project;
 
     /**
      * Subscriptions that need to be released
@@ -45,13 +48,21 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
      */
     ngOnInit() {
         console.log("Details loading!");
-        this.table = this.tables[0];
+        let subRef = this._routeParams.params.subscribe(params => {
+            var tableName = params['tableName'];
+            this._projectService.activeProject
+            .subscribe(res => {
+                this._project = res;
+                this.table = res.schema.getTable(tableName);
+            })    
+        });
+        this._subscriptionRefs.push(subRef);
 
         //this._toolbarService.resetItems();
         this._toolbarService.savingEnabled = false;
         let btnCreate = this._toolbarService.addButton("back", "Zurück", "arrow-left", "b");
-        let subRef = btnCreate.onClick.subscribe((res) => {
-            console.log("Zurück!");
+        subRef = btnCreate.onClick.subscribe((res) => {
+            this.backBtn();
         })
         this._subscriptionRefs.push(subRef);
     }
@@ -59,5 +70,9 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
         this._subscriptionRefs = [];
+    }
+
+    backBtn() {
+        console.log("Zurück!");
     }
 }
