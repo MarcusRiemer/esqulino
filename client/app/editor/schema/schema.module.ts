@@ -3,6 +3,7 @@ import {NgModule, ModuleWithProviders}  from '@angular/core'
 import SharedEditorModule               from '../shared/shared.module'
 import {RegistrationService}            from '../registration.service'
 import {SchemaHostComponent}            from './host.component'
+import {SchemaService}                  from '../schema.service'
 
 
 
@@ -15,7 +16,7 @@ import {SchemaHostComponent}            from './host.component'
         SchemaHostComponent
     ],
     providers: [
-
+        SchemaService
     ],
     entryComponents: [
 

@@ -18,7 +18,7 @@ export class Column {
     primary : boolean
     state : ColumnStatus
 
-    constructor(desc : ColumnDescription, state : ColumnStatus, project? : Project) {
+    constructor(desc : ColumnDescription, state : ColumnStatus) {
          //super(project, desc);
          this.index = desc.index;
          this.name = desc.name;
