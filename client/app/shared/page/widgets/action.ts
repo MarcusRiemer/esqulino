@@ -6,7 +6,7 @@ import {
     Page, QueryReference, ParameterMapping}
 from '../page'
 
-import {WidgetBase}                           from './widget-base'
+import {Widget}                           from '../hierarchy'
 
 export {
     NavigateActionDescription
@@ -16,12 +16,12 @@ export {
 declare var URL : any;
 
 /**
- * Any kind of action that should be carried out on the server.
+ * Any kind of action that could be associated with a form.
  */
 export abstract class Action {
-    private _widget : WidgetBase;
+    private _widget : Widget;
 
-    constructor(widget : WidgetBase) {
+    constructor(widget : Widget) {
         this._widget = widget;
     }
 
@@ -42,16 +42,12 @@ export abstract class Action {
     /**
      * @return The HTTP method that should be used with this action.
      */
-    get method() {
-        return ("POST");
-    }
+    abstract get method() : string;
 
     /**
      * @return The server-side URL to call.
      */
-    get url() : string {
-        throw new Error("This should be abstract, waiting for TS2 which allows abstract properties");
-    }
+    abstract get targetUrl() : string;
 }
 
 /**
@@ -65,7 +61,7 @@ export class NavigateAction extends Action {
 
     private _external : string;
 
-    constructor(desc : NavigateActionDescription, widget : WidgetBase) {
+    constructor(desc : NavigateActionDescription, widget : Widget) {
         super(widget);
 
         // Making sure the model is valid
@@ -103,6 +99,33 @@ export class NavigateAction extends Action {
 
     get method() {
         return ("GET");
+    }
+
+    /**
+     * Provides the URL of the currently specified target. If no target
+     * is specified, the returned value defaults to a no-op URL.
+     */
+    get targetUrl() {
+        if (this.isExternal) {
+            return (this.externalUrl);
+        } else if (this.isInternal) {
+            // Encode parameters as "key=value" pairs and join them with a "&"
+            let queryString = this.internalParameters
+                .map(p => `${p.parameterName}={{${p.providingName}}}`)
+                .join("&");
+
+            // If there were any parameters prepend the `?` to mark the beginning
+            // of the query part of the URL
+            if (queryString.length > 0) {
+                queryString = "?" + queryString;
+            }
+
+            // We currently link to pages, not internal IDs
+            const pageName = this.internalTargetPage.name;
+            return (`/${pageName}${queryString}`);
+        } else {
+            return ("#");
+        }
     }
 
     get friendlyTargetName() {
@@ -219,6 +242,6 @@ export class NavigateAction extends Action {
             toReturn.external = this._external;
         }
         
-        return (toReturn);
+         return (toReturn);
     }
 }
