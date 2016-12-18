@@ -1,6 +1,58 @@
-<h3>{{table.name}}</h3>
-<table>
-    <th *ngFor="let column of table.columns; let i = index">
-        {{ column.name }}
-    </th>
+<style>
+	tr:nth-child(even) {
+		background-color: #dddddd;
+	}
+	
+	div.deleted {
+		background-color: rgba(255, 0, 0, 0.5);
+	}
+	
+	div.new {
+		background-color: rgba(0, 255, 0, 0.5);
+	}
+	
+	div.changed {
+		background-color: rgba(0, 0, 255, 0.5);
+	}
+</style>
+
+<h3>{{table.name}}
+	<!--Button to show previous amount table entrys-->
+	<a (click)="prevRowSite()" class="btn btn-primary">
+		<span class="fa fa-arrow-left" aria-hidden="true"></span>
+	</a>
+	<!--Select to chose the amount of entrys to show-->
+	<select class="btn btn-primary">
+		<option (click)="setShowAmount(10)" value=10>10</option>
+		<option (click)="setShowAmount(25)" value=25>25</option>
+		<option (click)="setShowAmount(50)" value=50>50</option>
+	</select>
+	<!--Button to show next amount table entrys-->
+	<a (click)="nextRowSite()" class="btn btn-primary">
+		<span class="fa fa-arrow-right" aria-hidden="true"></span>
+	</a>
+</h3>
+<!--Table of table entrys-->
+<table class="header-fixed" style="width:100%">
+	<!--Header with every column name in the table-->
+	<thead>
+		<tr>
+			<th *ngFor="let column of table.columns; let i = index">
+				<div class="{{column.state}}">
+					{{ column.name }}
+				</div>
+			</th>
+		</tr>
+	</thead>
+	<!--Table body, with every entry-->
+	<tbody>
+		<!--expected 2d array with array[column][entry]-->
+		<tr *ngFor="let row of _tableData[0]; let i = index">
+			<td *ngFor="let cell of _tableData; let j = index">
+				<div class="{{table.columns[j].state}}">
+					{{ _tableData[j][i] }}
+				</div>
+			</td>
+		</tr>
+	</tbody>
 </table>

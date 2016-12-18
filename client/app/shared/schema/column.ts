@@ -16,32 +16,32 @@ export class Column {
     not_null : boolean
     dflt_value? : string
     primary : boolean
-    state : ColumnStatus
+    _state : ColumnStatus
 
     constructor(desc : ColumnDescription, state : ColumnStatus) {
-         //super(project, desc);
          this.index = desc.index;
          this.name = desc.name;
          this.type = desc.type;
          this.not_null = desc.not_null;
          this.dflt_value = desc.dflt_value;
          this.primary = desc.primary;
-         this.state = state;
+         this._state = state;
     }
 
     setState(state : ColumnStatus) {
-        this.state = state;
+        this._state = state;
     }
 
-    toModel() : ColumnDescription { 
-        const toReturn : ColumnDescription = {
-            name : this.name,
-            index : this.index,
-            type : this.type,
-            not_null : this.not_null,
-            dflt_value : this.dflt_value,
-            primary : this.primary
-        };
-        return toReturn;
+    get state() {
+        if(this._state == ColumnStatus.changed) {
+            return("changed");
+        } else if(this._state == ColumnStatus.unchanged) {
+            return("unchanged");
+        } else if(this._state == ColumnStatus.new) {
+            return("new");
+        } else if(this._state == ColumnStatus.deleted) {
+            return("deleted");
+        }
+        return("undefined");
     }
 }

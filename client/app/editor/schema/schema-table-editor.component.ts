@@ -34,6 +34,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     private _project : Project;
 
     /**
+     * Should the preview of the Table be shown
+     */
+    private _showPreview : boolean = false;
+
+    /**
      * Subscriptions that need to be released
      */
     private _subscriptionRefs : any[] = [];
@@ -67,6 +72,12 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         })
         this._subscriptionRefs.push(subRef);
 
+        btnCreate = this._toolbarService.addButton("preview", "Vorschau", "search", "p");
+        subRef = btnCreate.onClick.subscribe((res) => {
+            this.previewBtn();
+        })
+        this._subscriptionRefs.push(subRef);
+
         btnCreate = this._toolbarService.addButton("cancel", "Cancel", "times", "x");
         subRef = btnCreate.onClick.subscribe((res) => {
             this.cancelBtn();
@@ -77,6 +88,10 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
         this._subscriptionRefs = [];
+    }
+
+    previewBtn() {
+        this._showPreview = !this._showPreview;
     }
 
     saveBtn() {

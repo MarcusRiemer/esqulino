@@ -15,8 +15,6 @@ import {Table, Column}                           from '../shared/schema'
 
 
 
-
-
 /**
  * Provides means to communicate with a server that can store or run
  * pages.
@@ -34,19 +32,23 @@ export class SchemaService {
     }
 
     getTableData(table: Table, from : number, amount : number) {
-        let data: number[] = []
-        let dataCol: number[][];
+        let data: string[] = []
+        let dataCol: string[][];
         dataCol = [];
-        let anz = 0;
+        let anz = from;
         for(var i = 0; i < table.columns.length; i++){
             for(var j = anz; j < (anz + amount); j++) {
-                data.push(j);
+                data.push(j.toString());
             }
             anz = anz + amount;
             dataCol.push(data);
             data = [];
         }
         return(dataCol);
+    }
+
+    getTableRowAmount(table: Table) : number {
+        return (100);
     }
 
 
@@ -56,5 +58,5 @@ export class SchemaService {
         console.error(error);
         return Observable.throw(error);
     }
-
+    
 }
