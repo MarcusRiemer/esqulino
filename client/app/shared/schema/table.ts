@@ -14,7 +14,6 @@ export class Table {
     private _columns : Column[];
 
     constructor(desc : TableDescription, col : ColumnDescription[], project? : Project) {
-         //super(project, desc);
          this._name = desc.name;
          this._columns = col
             .map(val => new Column(val, ColumnStatus.unchanged))
@@ -46,14 +45,6 @@ export class Table {
      */
     setColumnAsChanged(index : number) {
         this._columns[index].setState(ColumnStatus.changed);
-    }
-
-    toModel() : TableDescription { 
-        const toReturn : TableDescription = {
-            name : this._name,
-            columns : this._columns
-        };
-        return toReturn;
     }
 
     /**
