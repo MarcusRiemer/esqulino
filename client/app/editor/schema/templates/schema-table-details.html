@@ -22,10 +22,11 @@
 		<span class="fa fa-arrow-left" aria-hidden="true"></span>
 	</a>
 	<!--Select to chose the amount of entrys to show-->
-	<select class="btn btn-primary">
-		<option (click)="setShowAmount(10)" value=10>10</option>
-		<option (click)="setShowAmount(25)" value=25>25</option>
-		<option (click)="setShowAmount(50)" value=50>50</option>
+	<select [(ngModel)]="showAmount"
+            class="btn btn-primary">
+		<option value="10">10</option>
+		<option value="25">25</option>
+		<option value="50">50</option>
 	</select>
 	<!--Button to show next amount table entrys-->
 	<a (click)="nextRowSite()" class="btn btn-primary">
