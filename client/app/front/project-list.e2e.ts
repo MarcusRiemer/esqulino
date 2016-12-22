@@ -1,3 +1,5 @@
+import { browser, element, by } from 'protractor'
+
 describe('Project List Page', () => {
     let projectList = element(by.id("available-projects"));
     let projects = projectList.all(by.tagName('project-list-item'));

@@ -683,6 +683,7 @@ export class BinaryExpression extends Expression {
 
     set operator(operator : Model.Operator) {
         this._operator = operator;
+        this.fireModelChange();
     }
 
     /**

@@ -1,3 +1,5 @@
+import { browser, element, by } from 'protractor'
+
 describe('About Page', () => {
     it('shows all relevant links', () => {
         browser.get('/');

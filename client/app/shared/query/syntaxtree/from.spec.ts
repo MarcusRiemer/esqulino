@@ -227,6 +227,40 @@ describe('FROM', () => {
         expect(v.numErrors).toEqual(0);
     });
 
+    it('changing the order of JOINs', () => {
+        // To all future readers: Sorry, this test is confusing ... But it
+        // does catch nasty errors.
+        const model : Model.From = {
+            first : { name : "first" },
+            joins : [
+                {
+                    cross: "cross",
+                    table: { "name" : "second" }
+                },
+                {
+                    cross: "cross",
+                    table: { "name" : "third" }
+                }
+            ]
+        };
+
+        let f = new SyntaxTree.From(model, null);
+        
+        f.moveJoin(f.getJoin(0), 2);
+
+        expect(f.joinsAndInitial.map(j => j.tableName)).toEqual(["first", "third", "second"], "First move error");
+        expect(f.first instanceof SyntaxTree.InitialJoin).toBeTruthy();
+        expect(f.joins.every(j => j instanceof SyntaxTree.InitialJoin)).toBeFalsy();
+
+        // Expected [ 'second', 'first', 'third' ] to equal [ 'third', 'first', 'second' ], 'Second move error'.
+        
+        f.moveJoin(f.getJoin(0), 0);
+        expect(f.joinsAndInitial.map(j => j.tableName)).toEqual(["third", "first", "second"], "Second move error");
+        expect(f.first instanceof SyntaxTree.InitialJoin).toBeTruthy();
+        expect(f.joins.every(j => j instanceof SyntaxTree.InitialJoin)).toBeFalsy();
+        
+    });
+
     it('removal of subsequent join', () => {
         const model : Model.From = {
             first : { name : "first" },

@@ -1,3 +1,5 @@
+import { browser, element, by } from 'protractor'
+
 describe('Test Project: Settings', () => {
   const settingsUrl = `/editor/test/settings`;
   it('can be edited & saved', () => {

@@ -91,9 +91,14 @@ describe('Page', () => {
         // We know better then the type-system that this must be a row
         const firstRow = (m.body.children[0] as RowDescription);
 
-        expect(allWidgets[0].toModel()).toEqual(firstRow.columns[0].widgets[0]);
-        expect(allWidgets[1].toModel()).toEqual(firstRow.columns[0].widgets[1]);
-        expect(allWidgets[2].toModel()).toEqual(firstRow.columns[1].widgets[0]);
-        expect(allWidgets[3].toModel()).toEqual(firstRow.columns[1].widgets[1]);
+        expect(allWidgets.length).toEqual(7, "7 Widgets in test page");
+
+        expect(allWidgets[0].toModel()).toEqual(firstRow);
+        expect(allWidgets[1].toModel()).toEqual(firstRow.columns[0]);
+        expect(allWidgets[2].toModel()).toEqual(firstRow.columns[0].widgets[0]);
+        expect(allWidgets[3].toModel()).toEqual(firstRow.columns[0].widgets[1]);
+        expect(allWidgets[4].toModel()).toEqual(firstRow.columns[1]);
+        expect(allWidgets[5].toModel()).toEqual(firstRow.columns[1].widgets[0]);
+        expect(allWidgets[6].toModel()).toEqual(firstRow.columns[1].widgets[1]);
     });
 })
