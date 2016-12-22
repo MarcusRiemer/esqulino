@@ -3,13 +3,17 @@ import {
     ParameterMappingDescription
 } from '../page.description'
 import {
-    Page, QueryReference, ParameterMapping}
-from '../page'
+    Page, ParameterMapping,
+    QueryReference, QueryReferenceDescription,
+} from '../page'
+import {
+    encodeUriParameters, KeyValuePairs
+} from '../../../shared/util'
 
 import {Widget}                           from '../hierarchy'
 
 export {
-    NavigateActionDescription
+    NavigateActionDescription, QueryReference
 }
 
 // Typescript doesn't seem to know about the URL type
@@ -45,13 +49,86 @@ export abstract class Action {
     abstract get method() : string;
 
     /**
+     * @return True, if this action has a valid target associated.
+     */
+    abstract get hasValidTarget() : boolean;
+
+    /**
      * @return The server-side URL to call.
      */
     abstract get targetUrl() : string;
 }
 
 /**
- * Takes the user to a different page.
+ * Executes a (probably mutating) query on the server.
+ */
+export class QueryAction extends Action {
+
+    private _queryRef : QueryReference;
+    
+    constructor(widget : Widget, queryRefDesc : QueryReferenceDescription) {
+        super(widget);
+
+        if (queryRefDesc) {
+            this._queryRef = new QueryReference(this.page, queryRefDesc);
+        } else {
+            this._queryRef = new QueryReference(this.page, {
+                type : "query"
+            });
+        }
+    }
+
+    /**
+     * Mutating actions are currently always POST-requests.
+     *
+     * @todo Make use of better fitting HTTP-verbs
+     */
+    get method() {
+        return ("POST");
+    }
+
+    /**
+     * @return The query that would be executed by this action.
+     */
+    get queryReference() : QueryReference {
+        return (this.queryReference);
+    }
+
+    /**
+     * @param value The query that would be executed by this action.
+     */
+    set queryReference(value : QueryReference) {
+        this.queryReference = value;
+    }
+
+    /**
+     * @return True, if the current target is a resolveable query.
+     */
+    get hasValidTarget() {
+        return (this._queryRef.isResolveable);
+    }
+
+    /**
+     * Generates a fully mapped URL for this action. Simply calling this
+     * URL in a <form>-environment that provides matching inputs is
+     * enough to actually run the query on the server.
+     */
+    get targetUrl() {
+        if (this._queryRef && this._queryRef.isResolveable) {
+            const pageName = this.page.name;
+            const queryId = this._queryRef.query.id;
+            const mappingParams = encodeUriParameters(this._queryRef.keyValueMapping);
+
+            return (`/${pageName}/query/${queryId}?${mappingParams}`);
+        } else {
+            return (undefined);
+        }
+    }
+}
+
+/**
+ * Takes the user to a different page. Ensures that all parameters
+ * for that page are satisfied.
  */
 export class NavigateAction extends Action {
     private _internal : {
@@ -97,8 +174,19 @@ export class NavigateAction extends Action {
         }
     }
 
+    /**
+     * @return Navigation always happens via GET-requests.
+     */
     get method() {
         return ("GET");
+    }
+
+    /**
+     * @return True, if the current target is either an external page
+     *         or a resolveable internal page.
+     */
+    get hasValidTarget() {
+        return (this.isExternal || (this.isInternal && this.isInternalPageResolveable));
     }
 
     /**
