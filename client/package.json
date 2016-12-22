@@ -21,11 +21,11 @@
   },
   "devDependencies": {
     "jasmine-core": "2.4.1",
-    "protractor": "4.0.9",
+    "protractor": "4.0.14",
     "typescript": "~2.1.4",
 
     "@types/node": "^6.0.46",
     "@types/jasmine": "^2.5.36",
-    "@types/selenium-webdriver": "^2.53.33"
+    "@types/selenium-webdriver": "^2.53.36"
   }
 }
