@@ -1,4 +1,6 @@
-import { browser, element, by, protractor } from 'protractor'
+import { browser, element, by } from 'protractor'
+
+declare var protractor : any;
 
 describe('Test Project: Settings', () => {
     const testProjectId = "test";
