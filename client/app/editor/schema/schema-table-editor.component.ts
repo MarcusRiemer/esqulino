@@ -1,10 +1,11 @@
-import {Component, Input, OnInit, OnDestroy}       from '@angular/core';
+import {Component, Input, OnInit, OnDestroy}        from '@angular/core';
+import {Router, ActivatedRoute}                     from '@angular/router'
 
-import {TableDescription, ColumnDescription}       from '../../shared/schema'
+import {Table}                                      from '../../shared/schema'
 
-import {ProjectService, Project}        from '../project.service'
-import {QueryService}                   from '../query.service'
-import {ToolbarService}                 from '../toolbar.service'
+import {ProjectService, Project}                    from '../project.service'
+import {ToolbarService}                             from '../toolbar.service'
+
 
 
 /**
@@ -16,18 +17,26 @@ import {ToolbarService}                 from '../toolbar.service'
 })
 export class SchemaTableEditorComponent implements OnInit, OnDestroy {
 
-    /**
-     * The table to edit.
-     */
-    @Input() tables : TableDescription[];
-
     constructor(
         private _projectService: ProjectService,
-        private _queryService: QueryService,
+        private _routeParams : ActivatedRoute,
         private _toolbarService: ToolbarService) {
     }
 
-    table : TableDescription;
+    /**
+     * The currently edited table
+     */
+    table : Table;
+
+     /**
+     * The currently edited project
+     */
+    private _project : Project;
+
+    /**
+     * Should the preview of the Table be shown
+     */
+    private _showPreview : boolean = false;
 
     /**
      * Subscriptions that need to be released
@@ -45,19 +54,33 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     ngOnInit() {
         console.log("Editor loading!");
-        this.table = this.tables[0];
+        let subRef = this._routeParams.params.subscribe(params => {
+            var tableName = params['tableName'];
+            this._projectService.activeProject
+            .subscribe(res => {
+                this._project = res;
+                this.table = res.schema.getTable(tableName);
+            })    
+        });
+        this._subscriptionRefs.push(subRef);
 
-        //this._toolbarService.resetItems();
+        this._toolbarService.resetItems();
         this._toolbarService.savingEnabled = false;
         let btnCreate = this._toolbarService.addButton("save", "Save", "floppy-o", "s");
-        let subRef = btnCreate.onClick.subscribe((res) => {
-            console.log("Save!");
+        subRef = btnCreate.onClick.subscribe((res) => {
+            this.saveBtn();
+        })
+        this._subscriptionRefs.push(subRef);
+
+        btnCreate = this._toolbarService.addButton("preview", "Vorschau", "search", "p");
+        subRef = btnCreate.onClick.subscribe((res) => {
+            this.previewBtn();
         })
         this._subscriptionRefs.push(subRef);
 
         btnCreate = this._toolbarService.addButton("cancel", "Cancel", "times", "x");
         subRef = btnCreate.onClick.subscribe((res) => {
-            console.log("Save!");
+            this.cancelBtn();
         })
         this._subscriptionRefs.push(subRef);
     }
@@ -67,17 +90,24 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         this._subscriptionRefs = [];
     }
 
+    previewBtn() {
+        this._showPreview = !this._showPreview;
+    }
+
+    saveBtn() {
+        console.log("Save!");
+    }
+
+    cancelBtn() {
+        console.log("Cancel!");
+    }
+
     removeColumn(index : number) {
-        this.table.columns.splice(index, 1);
+        this.table.removeColumn(index);
     }
 
     addColumn() {
-        var newColumn : ColumnDescription = {name : "New Column",
-                                             index : this.table.columns.length,
-                                             not_null : false,
-                                             primary : false,
-                                             type : "STRING"};
-        this.table.columns.push(newColumn);
+        this.table.addColumn();
     }
 
 }
