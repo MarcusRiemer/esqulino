@@ -1,3 +1,8 @@
+import {
+    encodeUriParameters, KeyValuePairs
+} from '../../shared/util'
+
+
 import {Project}                               from '../project'
 import {QuerySelect, ResultColumn}             from '../query'
 
@@ -163,6 +168,12 @@ export class QueryReference extends ValueReference {
      */
     get mapping() {
         return (this._mapping);
+    }
+
+    get keyValueMapping() : KeyValuePairs {
+        let toReturn : KeyValuePairs = {};
+        this._mapping.forEach(v => toReturn[v.parameterName] = v.providingName);
+        return (toReturn);
     }
 
     /**

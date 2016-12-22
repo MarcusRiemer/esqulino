@@ -1,3 +1,5 @@
+import { browser, element, by, protractor } from 'protractor'
+
 describe('Test Project: Settings', () => {
     const testProjectId = "test";
     const settingsUrl = `/editor/${testProjectId}/settings`;
@@ -42,8 +44,8 @@ describe('Test Project: Settings', () => {
                 // Make sure the sidebar is updated correctly
                 const navQueries = element(by.css(".nav-query")).all(by.css("a.nav-link"));
                 navQueries
-                    .filter(n => n.getText().then(t => t.includes(nameVal)))
-                    .then(res => expect(res.length).toEqual(1, "Exactly 1 item should have the new name"));
+                    .filter((n : any) => n.getText().then((t : any) => t.includes(nameVal)))
+                    .then((res : any) => expect(res.length).toEqual(1, "Exactly 1 item should have the new name"));
             })
     });
 
@@ -60,8 +62,8 @@ describe('Test Project: Settings', () => {
                 // Make sure the sidebar is updated correctly
                 const navQueries = element(by.css(".nav-page")).all(by.css("a.nav-link"));
                 navQueries
-                    .filter(n => n.getText().then(t => t.includes(nameVal)))
-                    .then(res => expect(res.length).toEqual(1, "Exactly 1 item should have the new name"));
+                    .filter((n : any) => n.getText().then((t : any) => t.includes(nameVal)))
+                    .then((res : any) => expect(res.length).toEqual(1, "Exactly 1 item should have the new name"));
             })
     });
     

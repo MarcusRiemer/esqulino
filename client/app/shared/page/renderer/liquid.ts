@@ -133,30 +133,7 @@ function renderInput(w: Widget) : string {
 
 function renderLink(w: Widget) : string {
     const link = w as Link;
-    const action = link.action;
-
-    // Default URL does nothing
-    let url = "#";
-    
-    if (action.isExternal) {
-        // External URLs are simple to come by
-        url = action.externalUrl;
-    } else if (action.isInternal) {
-        // Encode parameters as "key=value" pairs and join them with a "&"
-        let queryString = action.internalParameters
-            .map(p => `${p.parameterName}={{${p.providingName}}}`)
-            .join("&");
-
-        // If there were any parameters prepend the `?` to mark the beginning
-        // of the query part of the URL
-        if (queryString.length > 0) {
-            queryString = "?" + queryString;
-        }
-
-        // We currently link to pages, not internal IDs
-        const pageName = action.internalTargetPage.name;
-        url = `/${pageName}${queryString}`
-    }
+    const url = link.action.targetUrl;
 
     return (`<a href="${url}">${link.text}</a>`);
 }

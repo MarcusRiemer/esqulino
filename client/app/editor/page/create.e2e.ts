@@ -1,3 +1,5 @@
+import { browser, element, by, protractor } from 'protractor'
+
 describe('Test Project: Creating Pages', () => {
     const testProjectId = "test";
     const editorUrl = `/editor/${testProjectId}/page/create`;

@@ -273,6 +273,6 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
      * @return True, if the text should be treated as a "full" child level.
      */
     get isLongText() : boolean {
-        return (["paragraph","embedded-html"].includes(this.model.type));
+        return (["paragraph","embedded-html"].indexOf(this.model.type) >= 0);
     }
 }

@@ -51,6 +51,10 @@
     font-family: monospace;
 }
 
+#error-container {
+    margin-top: 50px;
+}
+
 .rainbow {
     animation: colorRotate 3s linear 0s infinite;
     animation-play-state: running;

@@ -3,25 +3,29 @@ import {
     ParameterMappingDescription
 } from '../page.description'
 import {
-    Page, QueryReference, ParameterMapping}
-from '../page'
+    Page, ParameterMapping,
+    QueryReference, QueryReferenceDescription,
+} from '../page'
+import {
+    encodeUriParameters, KeyValuePairs
+} from '../../../shared/util'
 
-import {WidgetBase}                           from './widget-base'
+import {Widget}                           from '../hierarchy'
 
 export {
-    NavigateActionDescription
+    NavigateActionDescription, QueryReference
 }
 
 // Typescript doesn't seem to know about the URL type
 declare var URL : any;
 
 /**
- * Any kind of action that should be carried out on the server.
+ * Any kind of action that could be associated with a form.
  */
 export abstract class Action {
-    private _widget : WidgetBase;
+    private _widget : Widget;
 
-    constructor(widget : WidgetBase) {
+    constructor(widget : Widget) {
         this._widget = widget;
     }
 
@@ -42,20 +46,89 @@ export abstract class Action {
     /**
      * @return The HTTP method that should be used with this action.
      */
+    abstract get method() : string;
+
+    /**
+     * @return True, if this action has a valid target associated.
+     */
+    abstract get hasValidTarget() : boolean;
+
+    /**
+     * @return The server-side URL to call.
+     */
+    abstract get targetUrl() : string;
+}
+
+/**
+ * Executes a (probably mutating) query on the server.
+ */
+export class QueryAction extends Action {
+
+    private _queryRef : QueryReference;
+    
+    constructor(widget : Widget, queryRefDesc : QueryReferenceDescription) {
+        super(widget);
+
+        if (queryRefDesc) {
+            this._queryRef = new QueryReference(this.page, queryRefDesc);
+        } else {
+            this._queryRef = new QueryReference(this.page, {
+                type : "query"
+            });
+        }
+    }
+
+    /**
+     * Mutating actions are currently always POST-requests.
+     *
+     * @todo Make use of better fitting HTTP-verbs
+     */
     get method() {
         return ("POST");
     }
 
     /**
-     * @return The server-side URL to call.
+     * @return The query that would be executed by this action.
      */
-    get url() : string {
-        throw new Error("This should be abstract, waiting for TS2 which allows abstract properties");
+    get queryReference() : QueryReference {
+        return (this.queryReference);
+    }
+
+    /**
+     * @param value The query that would be executed by this action.
+     */
+    set queryReference(value : QueryReference) {
+        this.queryReference = value;
+    }
+
+    /**
+     * @return True, if the current target is a resolveable query.
+     */
+    get hasValidTarget() {
+        return (this._queryRef.isResolveable);
+    }
+
+    /**
+     * Generates a fully mapped URL for this action. Simply calling this
+     * URL in a <form>-environment that provides matching inputs is
+     * enough to actually run the query on the server.
+     */
+    get targetUrl() {
+        if (this._queryRef && this._queryRef.isResolveable) {
+            const pageName = this.page.name;
+            const queryId = this._queryRef.query.id;
+            const mappingParams = encodeUriParameters(this._queryRef.keyValueMapping);
+
+            return (`/${pageName}/query/${queryId}?${mappingParams}`);
+        } else {
+            return (undefined);
+        }
     }
 }
 
 /**
- * Takes the user to a different page.
+ * Takes the user to a different page. Ensures that all parameters
+ * for that page are satisfied.
  */
 export class NavigateAction extends Action {
     private _internal : {
@@ -65,7 +138,7 @@ export class NavigateAction extends Action {
 
     private _external : string;
 
-    constructor(desc : NavigateActionDescription, widget : WidgetBase) {
+    constructor(desc : NavigateActionDescription, widget : Widget) {
         super(widget);
 
         // Making sure the model is valid
@@ -101,8 +174,46 @@ export class NavigateAction extends Action {
         }
     }
 
+    /**
+     * @return Navigation always happens via GET-requests.
+     */
     get method() {
         return ("GET");
+    }
+
+    /**
+     * @return True, if the current target is either an external page
+     *         or a resolveable internal page.
+     */
+    get hasValidTarget() {
+        return (this.isExternal || (this.isInternal && this.isInternalPageResolveable));
+    }
+
+    /**
+     * Provides the URL of the currently specified target. If no target
+     * is specified, the returned value defaults to a no-op URL.
+     */
+    get targetUrl() {
+        if (this.isExternal) {
+            return (this.externalUrl);
+        } else if (this.isInternal) {
+            // Encode parameters as "key=value" pairs and join them with a "&"
+            let queryString = this.internalParameters
+                .map(p => `${p.parameterName}={{${p.providingName}}}`)
+                .join("&");
+
+            // If there were any parameters prepend the `?` to mark the beginning
+            // of the query part of the URL
+            if (queryString.length > 0) {
+                queryString = "?" + queryString;
+            }
+
+            // We currently link to pages, not internal IDs
+            const pageName = this.internalTargetPage.name;
+            return (`/${pageName}${queryString}`);
+        } else {
+            return ("#");
+        }
     }
 
     get friendlyTargetName() {
@@ -219,6 +330,6 @@ export class NavigateAction extends Action {
             toReturn.external = this._external;
         }
         
-        return (toReturn);
+         return (toReturn);
     }
 }

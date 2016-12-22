@@ -2,17 +2,35 @@ import {
     NavigateAction, NavigateActionDescription,
 } from './action'
 
+import {
+    Widget
+} from '../hierarchy'
+
+import {
+    Page
+} from '../page'
+
 describe('Page NavigateAction', () => {
     it ('Serialization with internal reference', () => {
+
+        let w : Widget = {
+            type : "Mock",
+            category : "structural",
+            isEmptyElement : true,
+            parent : undefined,
+            page : undefined,
+            toModel : () => this 
+        }
+        
         const m : NavigateActionDescription = {
             type : "navigate",
             internal : {
                 pageId : "12",
-                parameters : []
+                parameters : [{ parameterName : "foo", providingName : "bar" }]
             }
         }
 
-        let a = new NavigateAction(m, undefined);
+        let a = new NavigateAction(m, w);
         expect(a.isInternal).toEqual(true);
         expect(a.isExternal).toEqual(false);
         expect(a.toModel()).toEqual(m);
@@ -28,6 +46,30 @@ describe('Page NavigateAction', () => {
         expect(a.isInternal).toEqual(false);
         expect(a.isExternal).toEqual(true);
         expect(a.toModel()).toEqual(m);
+    });
+
+    it ('URL generation for internal URLs', () => {
+        // Sadly this can't quite be tested yet, a full project
+        // would be required.
+        let w : Widget = {
+            type : "Mock",
+            category : "structural",
+            isEmptyElement : true,
+            parent : undefined,
+            page : undefined,
+            toModel : () => this 
+        }
+        
+        const m : NavigateActionDescription = {
+            type : "navigate",
+            internal : {
+                pageId : "12",
+                parameters : [{ parameterName : "foo", providingName : "bar" }]
+            }
+        }
+
+        let a = new NavigateAction(m, w);
+        expect(() => a.targetUrl).toThrowError(); // .toEqual("/12?foo=bar");
     });
 
     it('Invalid: Action with internal and external reference', () => {
