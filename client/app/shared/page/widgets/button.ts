@@ -1,6 +1,5 @@
 import {Page, ParameterMapping}          from '../page'
 import {Widget, WidgetHost}              from '../hierarchy'
-import {QueryReference} from '../value-reference'
 import {
     ButtonDescription, QueryReferenceDescription
 } from '../page.description'
@@ -8,6 +7,8 @@ import {
 import {
     WidgetBase, WidgetDescription, ParametrizedWidget
 } from './widget-base'
+
+import {QueryReference, QueryAction}     from './action'
 
 export {
     ButtonDescription, ParameterMapping
@@ -17,22 +18,14 @@ export {
  * A button the user can press.
  */
 export class Button extends ParametrizedWidget {
-    private _ref : QueryReference;
+    private _queryAction : QueryAction;
 
     private _text : string;
 
     constructor(desc : ButtonDescription, parent? : WidgetHost) {
         super("button", "widget", false, parent);
         this._text = desc.text;
-
-        // If there is an action, hold on to it
-        if (desc.query) {
-            this._ref = new QueryReference(this.page, desc.query);
-        } else {
-            this._ref = new QueryReference(this.page, {
-                type : "query"
-            });
-        }
+        this._queryAction = new QueryAction(this, desc.query);
     }
 
     static get emptyDescription() : ButtonDescription {
@@ -61,26 +54,26 @@ export class Button extends ParametrizedWidget {
      * @return True, if there is an action.
      */
     get hasAction() {
-        return (!!this._ref);
+        return (this._queryAction.hasValidTarget);
     }
     
     /**
      * @return A possibly targeted query.
      */
-    get queryReference() {
-        return (this._ref);
+    get queryReference() : QueryReference {
+        return (this._queryAction.queryReference );
     }
 
     /**
      * @param value The target URL
      */
     set queryReference(value) {
-        this._ref = value;
+        this._queryAction.queryReference = value;
         this.fireModelChange();
     }
 
     setNewQueryId(value : string) {
-        this._ref.queryId = value;
+        this._queryAction.queryReference.queryId = value;
         this.fireModelChange();
     }
 
@@ -89,8 +82,8 @@ export class Button extends ParametrizedWidget {
      *         behind this button.
      */
     get mapping() {
-        if (this._ref) {
-            return (this._ref.mapping);
+        if (this._queryAction.hasValidTarget) {
+            return (this.queryReference.mapping);
         } else {
             return ([]);
         }
@@ -101,7 +94,7 @@ export class Button extends ParametrizedWidget {
      *                  behind this button.      
      */
     set mapping(newParams : ParameterMapping[]) {
-        this._ref.mapping = newParams;
+        this._queryAction.queryReference.mapping = newParams;
         this.fireModelChange();
     }
     
@@ -112,7 +105,7 @@ export class Button extends ParametrizedWidget {
         };
 
         // Only add the query reference if it adds more then it's typename
-        const queryRefDesc = this._ref.toModel();
+        const queryRefDesc = this.queryReference.toModel();
         if (Object.keys(queryRefDesc).length > 1) {
             toReturn.query = queryRefDesc;
         }
