@@ -1,12 +1,5 @@
-<a (click)="toggleTableEditing()" class="btn btn-primary">
-	<div *ngIf="getEditingEnabled()">
-		<span class="fa fa-unlock" aria-hidden="true"></span>
-	</div>
-	<div *ngIf="!getEditingEnabled()">
-		<span class="fa fa-lock" aria-hidden="true"></span>
-	</div>
-</a>
 <table *ngIf="tables" class="table">
+	<!--Alle Tabelle(Namen + Buttons)-->
 	<tbody *ngFor="let table of tables; let i = index">
 		<tr>
 			<div class="card card-block">
@@ -24,46 +17,63 @@
 						<span class="fa fa-plus" aria-hidden="true"></span>
 					</a>
 				</h3>
-				<p class="card-text"></p>
 
-				<div class="card-group">
-					<div class="card">
-						<div class="card-block">
-							<h4 class="card-title"># Name</h4>
-						</div>
-						<div *ngIf="getShowDetails(i)">
-							<ul class="list-group list-group-flush">
-								<li class="list-group-item">PK</li>
-								<li class="list-group-item">Type</li>
-								<li class="list-group-item">Not Null</li>
-								<li class="list-group-item">Standardwert</li>
-							</ul>
-						</div>
-					</div>
+				<!--Card-Deck für alle Spalten(hier dargestellt als Zeilen)-->
+				<div class="card-deck-wrapper">
+					<div class="card-deck">
 
-					<div *ngFor="let column of table.columns" class="card">
-						<div class="card-block">
-							<h4 class="card-title">{{ column.index }} {{ column.name }}</h4>
+						<!--Card-Group für die header spalten(hier als Zeilen dargestellt)-->
+						<div class="card-group">
+							<div class="card">
+								<h4 class="card-title"># Name</h4>
+							</div>
+								<div *ngIf="getShowDetails(i)">
+									<div class="card">
+										<h4 class="card-title">PK</h4>
+									</div>
+									<div class="card">
+										<h4 class="card-title">Type</h4>
+									</div>
+									<div class="card">
+										<h4 class="card-title">Not Null</h4>
+									</div>
+									<div class="card">
+										<h4 class="card-title">Standardwert</h4>
+									</div>
+								</div>
 						</div>
-						<div *ngIf="getShowDetails(i)">
-							<ul class="list-group list-group-flush">
 
-								<li class="list-group-item">
+						<!--Card-Group für die einzelnen Spalten der Tabelle(hier als Zeilen dargestellt)-->
+						<div *ngFor="let column of table.columns" class="card-group">
+							<div class="card">
+								<h4 class="card-title">{{ column.index }} {{ column.name }}</h4>
+							</div>
+							<div *ngIf="getShowDetails(i)">
+								<div class="card">
 									<div *ngIf=column.primary>
 										<span class="fa fa-key" aria-hidden="true"></span>
 									</div>
-								</li>
-								<li class="list-group-item">{{ column.type }}</li>
-								<li class="list-group-item">{{ column.not_null }}</li>
-								<div *ngIf="column.dflt_value != null">
-									<li class="list-group-item">{{ column.dflt_value }}</li>
+									<div *ngIf=!column.primary>
+										<span></span>
+									</div>
 								</div>
-								<div *ngIf="column.dflt_value == null">
-									<li class="list-group-item">
+								<div class="card">
+									<p class="card-text">{{ column.type }}</p>
+								</div>
+								<div class="card">
+									<p class="card-text">{{ column.not_null }}</p>
+								</div>
+								<div class="card">
+									<div *ngIf="column.dflt_value != null">
+										<p class="card-text">{{ column.dflt_value }}</p>
+									</div>
+								</div>
+								<div class="card">
+									<div *ngIf="column.dflt_value == null">
 										<span class="fa fa-minus" aria-hidden="true"></span>
-									</li>
+									</div>
 								</div>
-							</ul>
+							</div>
 						</div>
 					</div>
 				</div>

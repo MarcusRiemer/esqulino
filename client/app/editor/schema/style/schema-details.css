@@ -1,0 +1,12 @@
+	tr:nth-child(even) {
+		background-color: #dddddd;
+	}
+    td div.deleted {
+        background-color: rgba(255, 0, 0, 0.5);;
+    }
+    td div.new {
+        background-color: rgba(0, 255, 0, 0.5);;
+    }
+    td div.changed {
+        background-color: rgba(0, 0, 255, 0.5);;
+    }

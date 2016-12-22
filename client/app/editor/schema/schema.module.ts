@@ -3,6 +3,7 @@ import {NgModule, ModuleWithProviders}  from '@angular/core'
 import SharedEditorModule               from '../shared/shared.module'
 import {RegistrationService}            from '../registration.service'
 import {SchemaHostComponent}            from './host.component'
+import {SchemaService}                  from '../schema.service'
 
 
 
@@ -12,10 +13,10 @@ import {SchemaHostComponent}            from './host.component'
         SharedEditorModule,
     ],    
     declarations: [
-
+        SchemaHostComponent
     ],
     providers: [
-
+        SchemaService
     ],
     entryComponents: [
 
@@ -33,8 +34,8 @@ export default class SchemaEditorModule {
     }
 
     constructor(reg : RegistrationService) {
-        console.log("Registering QueryEditor ...");
+        console.log("Registering SchemaEditor ...");
 
-        console.log("Registered QueryEditor!");
+        console.log("Registered SchemaEditor!");
     }
 }
