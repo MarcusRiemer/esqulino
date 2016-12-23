@@ -112,7 +112,9 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
-    set showAmount(amount: number) {
+    set showAmount(amount: number | string) {
+        amount = +amount;
+        console.log(amount);
         this._showRowFrom = 0;
         this._showRowAmount = amount;
         this._tableData = this._schemaService.getTableData(this.table, this._showRowFrom, this._showRowAmount);
