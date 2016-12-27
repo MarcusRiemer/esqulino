@@ -1,4 +1,4 @@
-import {TableDescription}     from './schema'
+import {TableDescription}     from './schema.description'
 import {Schema}               from './schema'
 
 let schemaModel : TableDescription[] = [
