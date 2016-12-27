@@ -203,6 +203,15 @@ class ScratchSqlApp < Sinatra::Base
     end
   end
 
+  # Getting entries inside a table
+  get '/api/project/:project_id/:tableName/getEntries/:from/:amount' do    
+    # request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
+
+    #result = @project.execute_sql("Select * from ? limit ? offset ? ", params['captures'])
+    result = @project.execute_sql("Select * from #{params['tableName']} limit #{params['amount']} offset #{params['from']}", [])
+    json(result['rows'])
+  end
+
   # Running an arbitrary query (Dangerous!)
   post '/api/project/:project_id/query/run' do    
     request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)

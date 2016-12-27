@@ -1,8 +1,6 @@
 import {TableDescription, ColumnDescription}          from './schema.description'
 import {Table}                                        from './table'
 
-export {TableDescription, ColumnDescription, Table}
-
 /**
  * A database schema against which a query could be tested. All get methods
  * of this class throw an exception if the specified instance can't be found,

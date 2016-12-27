@@ -114,4 +114,17 @@ export class ServerApiService {
     getArbitraryRenderUrl(projectId : string) : string {
         return (this.getProjectUrl(projectId) + "/render");
     }
+
+    /**
+     * Retrieves an URL that can be used to get all Entries
+     * of a table.
+     *
+     * @projectId The ID of the project
+     * @tableName The name of the table
+     * @from The first entry to get
+     * @amount The amount of entries to get
+     */
+    getTableEntriesUrl(projectId : string, tableName: string, from : number, amount: number) : string {
+        return (this.getProjectUrl(projectId) + `/${tableName}/getEntries/${from}/${amount}`);
+    }
 }
