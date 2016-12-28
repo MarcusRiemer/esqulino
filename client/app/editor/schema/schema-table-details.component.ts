@@ -65,7 +65,7 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
      * True, if creation should be allowed from this component.
      */
     @Input() isChild: boolean = false;
-
+    private dummyData: any;
 
     /**
      * Load the project to access the schema
@@ -82,15 +82,14 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         });
         this._subscriptionRefs.push(subRef);
 
-        //Getting the data of the Table
-        this.tableData = this._schemaService.getTableData(this.table, this._showRowFrom, this._showRowAmount);
-
-        // var dummyData : string[][];
-        // this._schemaService.getTableDataDummy(this._project, this.table, this._showRowFrom, this._showRowAmount).subscribe(
-            // res => dummyData = res);
+        //Getting the entries from a table with limit and count
+        this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount)
+            .subscribe(res => { this.tableData = res; });
 
         //Calculating the amount of rows inside the table
-        this._tableRowAmount = this._schemaService.getTableRowAmount(this.table);
+        this._schemaService.getTableRowAmountDummy(this._project, this.table).subscribe(
+            res =>{ this._tableRowAmount = res[0];}
+        )
 
         if (!this.isChild) {
             this._toolbarService.resetItems();
@@ -113,7 +112,7 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         amount = +amount;
         this._showRowFrom = 0;
         this._showRowAmount = amount;
-        this.tableData = this._schemaService.getTableData(this.table, this._showRowFrom, this._showRowAmount);
+        this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
     }
 
     get showAmount() {
@@ -123,7 +122,7 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
     nextRowSite() {
         if ((this._showRowFrom + this._showRowAmount) < this._tableRowAmount) {
             this._showRowFrom += this._showRowAmount;
-            this.tableData = this._schemaService.getTableData(this.table, this._showRowFrom, this._showRowAmount);
+            this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
         }
     }
 
@@ -134,7 +133,7 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
             } else {
                 this._showRowFrom = 0;
             }
-            this.tableData = this._schemaService.getTableData(this.table, this._showRowFrom, this._showRowAmount);
+            this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
         }
     }
 

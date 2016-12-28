@@ -212,6 +212,12 @@ class ScratchSqlApp < Sinatra::Base
     json(result['rows'])
   end
 
+  # Getting count of entries inside a table
+  get '/api/project/:project_id/:tableName/getEntriesCount' do    
+    result = @project.execute_sql("Select Count(*) from #{params['tableName']}", [])
+    json(result['rows'].first)
+  end
+
   # Running an arbitrary query (Dangerous!)
   post '/api/project/:project_id/query/run' do    
     request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)

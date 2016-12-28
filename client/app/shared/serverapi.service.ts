@@ -116,7 +116,7 @@ export class ServerApiService {
     }
 
     /**
-     * Retrieves an URL that can be used to get all Entries
+     * Retrieves an URL that can be used to get entries
      * of a table.
      *
      * @projectId The ID of the project
@@ -126,5 +126,16 @@ export class ServerApiService {
      */
     getTableEntriesUrl(projectId : string, tableName: string, from : number, amount: number) : string {
         return (this.getProjectUrl(projectId) + `/${tableName}/getEntries/${from}/${amount}`);
+    }
+
+    /**
+     * Retrieves an URL that can be used to get the amount of 
+     * entries inside a table.
+     *
+     * @projectId The ID of the project
+     * @tableName The name of the table
+     */
+    getTableEntriesCountUrl(projectId : string, tableName: string) : string {
+        return (this.getProjectUrl(projectId) + `/${tableName}/getEntriesCount`);
     }
 }
