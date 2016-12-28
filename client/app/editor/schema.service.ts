@@ -9,7 +9,7 @@ import { ServerApiService } from '../shared/serverapi.service'
 import { KeyValuePairs, encodeUriParameters } from '../shared/util'
 
 import { Project } from './project.service'
-import { Table, Column} from '../shared/schema'
+import { Table, Column } from '../shared/schema'
 
 
 
@@ -31,27 +31,11 @@ export class SchemaService {
     ) {
     }
 
-    getTableData(table: Table, from: number, amount: number) {
-        let data: string[] = []
-        let dataCol: string[][];
-        dataCol = [];
-        let anz = from;
-        for (var i = 0; i < table.columns.length; i++) {
-            for (var j = anz; j < (anz + amount); j++) {
-                data.push(j.toString());
-            }
-            anz = anz + amount;
-            dataCol.push(data);
-            data = [];
-        }
-        return (dataCol);
-    }
-
     /**
      * Function to get table entries from a table with limit and offset 
      * (Currently not working!! body has the 2d-array)
      */
-    getTableDataDummy(project: Project, table: Table, from: number, amount: number) {
+    getTableData(project: Project, table: Table, from: number, amount: number) {
         const url = this._server.getTableEntriesUrl(project.id, table.name, from, amount);
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -59,14 +43,28 @@ export class SchemaService {
 
         const toReturn = this._http.get(url, options)
             .map((res) => {
-                let body = res.json();
-                return body;
+                return res.json();
             });
+        console.log(toReturn);
         return (toReturn);
     }
 
     getTableRowAmount(table: Table): number {
         return (100);
+    }
+
+    getTableRowAmountDummy(project: Project,table: Table) {
+        const url = this._server.getTableEntriesCountUrl(project.id, table.name,);
+
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        const toReturn = this._http.get(url, options)
+            .map((res) => {
+                return res.json();
+            });
+        console.log(toReturn);
+        return (toReturn);
     }
 
 
@@ -76,5 +74,25 @@ export class SchemaService {
         console.error(error);
         return Observable.throw(error);
     }
+
+
+
+
+    // FOR DEBUG
+    // getTableDataDummy(table: Table, from: number, amount: number) {
+    //     let data: string[] = []
+    //     let dataCol: string[][];
+    //     dataCol = [];
+    //     let anz = from;
+    //     for (var i = 0; i < table.columns.length; i++) {
+    //         for (var j = anz; j < (anz + amount); j++) {
+    //             data.push(j.toString());
+    //         }
+    //         anz = anz + amount;
+    //         dataCol.push(data);
+    //         data = [];
+    //     }
+    //     return (dataCol);
+    // }
 
 }
