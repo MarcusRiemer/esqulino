@@ -83,13 +83,14 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         this._subscriptionRefs.push(subRef);
 
         //Getting the entries from a table with limit and count
-        this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount)
+        subRef = this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount)
             .subscribe(res => { this.tableData = res; });
+        this._subscriptionRefs.push(subRef);
 
         //Calculating the amount of rows inside the table
-        this._schemaService.getTableRowAmountDummy(this._project, this.table).subscribe(
-            res =>{ this._tableRowAmount = res[0];}
-        )
+        subRef = this._schemaService.getTableRowAmount(this._project, this.table)
+            .subscribe(res =>{ this._tableRowAmount = res[0];})
+        this._subscriptionRefs.push(subRef);
 
         if (!this.isChild) {
             this._toolbarService.resetItems();

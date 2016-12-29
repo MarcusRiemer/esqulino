@@ -33,7 +33,6 @@ export class SchemaService {
 
     /**
      * Function to get table entries from a table with limit and offset 
-     * (Currently not working!! body has the 2d-array)
      */
     getTableData(project: Project, table: Table, from: number, amount: number) {
         const url = this._server.getTableEntriesUrl(project.id, table.name, from, amount);
@@ -44,17 +43,14 @@ export class SchemaService {
         const toReturn = this._http.get(url, options)
             .map((res) => {
                 return res.json();
-            });
-        console.log(toReturn);
+            })
+            .catch((res) => this.handleError(res));
+
         return (toReturn);
     }
 
-    getTableRowAmount(table: Table): number {
-        return (100);
-    }
-
-    getTableRowAmountDummy(project: Project,table: Table) {
-        const url = this._server.getTableEntriesCountUrl(project.id, table.name,);
+    getTableRowAmount(project: Project, table: Table) {
+        const url = this._server.getTableEntriesCountUrl(project.id, table.name, );
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
@@ -62,8 +58,9 @@ export class SchemaService {
         const toReturn = this._http.get(url, options)
             .map((res) => {
                 return res.json();
-            });
-        console.log(toReturn);
+            })
+            .catch((res) => this.handleError(res));
+            
         return (toReturn);
     }
 
@@ -93,6 +90,11 @@ export class SchemaService {
     //         data = [];
     //     }
     //     return (dataCol);
+    // }
+
+
+    // getTableRowAmountDummy(table: Table): number {
+    //     return (100);
     // }
 
 }
