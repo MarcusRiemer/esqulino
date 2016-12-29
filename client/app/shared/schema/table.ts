@@ -55,6 +55,13 @@ export class Table {
     }
 
     /**
+     * Setter for table name.
+     */
+    set name(name : string) {
+        this._name = name;
+    }
+
+    /**
      * @return: Gives all columns of this table.
      */
     get columns() {
