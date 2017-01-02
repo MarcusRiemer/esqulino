@@ -1,11 +1,17 @@
-import {Component, Input, OnInit, OnDestroy}        from '@angular/core';
-import {Router, ActivatedRoute}                     from '@angular/router'
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router'
 
-import {Table}                                      from '../../shared/schema'
+import { Table } from '../../shared/schema'
 
-import {ProjectService, Project}                    from '../project.service'
-import {ToolbarService}                             from '../toolbar.service'
-
+import { ProjectService, Project } from '../project.service'
+import { ToolbarService } from '../toolbar.service'
+import {
+    AddNewColumn, DeleteColumn,
+    SwitchColumnOrder, RenameColumn,
+    ChangeColumnType, ChangeColumnPK,
+    ChangeColumnNN, ChangeColumnStandartValue,
+    ChangeTableName, TableCommandHolder
+} from '../../shared/schema/table-commands'
 
 
 /**
@@ -19,34 +25,40 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
 
     constructor(
         private _projectService: ProjectService,
-        private _routeParams : ActivatedRoute,
+        private _routeParams: ActivatedRoute,
         private _toolbarService: ToolbarService) {
+
     }
 
     /**
      * The currently edited table
      */
-    table : Table;
+    table: Table;
 
-     /**
-     * The currently edited project
-     */
-    private _project : Project;
+    /**
+    * The currently edited project
+    */
+    private _project: Project;
 
     /**
      * Should the preview of the Table be shown
      */
-    private _showPreview : boolean = false;
+    private _showPreview: boolean = false;
 
     /**
      * Subscriptions that need to be released
      */
-    private _subscriptionRefs : any[] = [];
+    private _subscriptionRefs: any[] = [];
 
     /**
      * True, if creation should be allowed from this component.
      */
-    @Input() allowCreate : boolean = false;
+    @Input() allowCreate: boolean = false;
+
+    private _commandsHolder: TableCommandHolder;
+
+    private _oldValue: string;
+
 
 
     /**
@@ -57,10 +69,10 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         let subRef = this._routeParams.params.subscribe(params => {
             var tableName = params['tableName'];
             this._projectService.activeProject
-            .subscribe(res => {
-                this._project = res;
-                this.table = res.schema.getTable(tableName);
-            })    
+                .subscribe(res => {
+                    this._project = res;
+                    this.table = res.schema.getTable(tableName);
+                })
         });
         this._subscriptionRefs.push(subRef);
 
@@ -83,11 +95,33 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
             this.cancelBtn();
         })
         this._subscriptionRefs.push(subRef);
+
+        btnCreate = this._toolbarService.addButton("undo", "Undo", "undo", "z");
+        subRef = btnCreate.onClick.subscribe((res) => {
+            this.undoBtn();
+        })
+        this._subscriptionRefs.push(subRef);
+
+        btnCreate = this._toolbarService.addButton("redo", "Redo", "repeat", "y");
+        subRef = btnCreate.onClick.subscribe((res) => {
+            this.redoBtn();
+        })
+        this._subscriptionRefs.push(subRef);
+
+        this._commandsHolder = new TableCommandHolder(this.table);
     }
 
     ngOnDestroy() {
-        this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
+        this._subscriptionRefs.forEach(ref => ref.unsubscribe());
         this._subscriptionRefs = [];
+    }
+
+    undoBtn() {
+        this._commandsHolder.undo();
+    }
+
+    redoBtn() {
+        this._commandsHolder.redo();
     }
 
     previewBtn() {
@@ -102,12 +136,50 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         console.log("Cancel!");
     }
 
-    removeColumn(index : number) {
-        this.table.removeColumn(index);
+    removeColumn(index: number) {
+        this._commandsHolder.do(new DeleteColumn(index, this.table.columns[index].state));
     }
 
     addColumn() {
-        this.table.addColumn();
+        this._commandsHolder.do(new AddNewColumn());
     }
 
+    clearOldValue() {
+        this._oldValue = "";
+    }
+
+    /**
+     * Function to save the current value in Input Fields
+     */
+    saveTempValue(oldValue: string) {
+        this._oldValue = oldValue;
+    }
+
+    changedColumnName(index: number, newValue: string) {
+        if (this._oldValue != newValue) {
+            this._commandsHolder.do(new RenameColumn(index, this._oldValue, newValue));
+            this.clearOldValue();
+        }
+    }
+
+    changedColumnType(index: number, newValue: string) {
+        if (this._oldValue != newValue) {
+            this._commandsHolder.do(new ChangeColumnType(index, this._oldValue, newValue));
+            this.clearOldValue();
+        }
+    }
+
+    changedColumnStandartValue(index: number, newValue: string) {
+        if (this._oldValue != newValue) {
+            this._commandsHolder.do(new ChangeColumnStandartValue(index, this._oldValue, newValue));
+            this.clearOldValue();
+        }
+    }
+
+    changedTableName(newValue: string) {
+        if (this._oldValue != newValue) {
+            this._commandsHolder.do(new ChangeTableName(this._oldValue, newValue));
+            this.clearOldValue();
+        }
+    }
 }

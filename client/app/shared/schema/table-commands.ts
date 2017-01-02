@@ -1,6 +1,6 @@
-import { TableDescription, ColumnDescription }    from './schema.description'
-import { Table }                                  from './table'
-import { Column, ColumnStatus }                   from './column'
+import { TableDescription, ColumnDescription } from './schema.description'
+import { Table } from './table'
+import { Column, ColumnStatus } from './column'
 
 /**
  * abstract class for all table commands
@@ -27,9 +27,9 @@ export class AddNewColumn extends TableCommand {
  * Class for deleting a column of a table
  */
 export class DeleteColumn extends TableCommand {
-  private _columnIndex : number;
-  private _lastColumnState : ColumnStatus;
-  constructor(columnIndex : number, lastColumnState : ColumnStatus) {
+  private _columnIndex: number;
+  private _lastColumnState: ColumnStatus;
+  constructor(columnIndex: number, lastColumnState: ColumnStatus) {
     super();
     this._columnIndex = columnIndex;
     this._lastColumnState = lastColumnState;
@@ -48,9 +48,9 @@ export class DeleteColumn extends TableCommand {
  * Class for switching the place of a column
  */
 export class SwitchColumnOrder extends TableCommand {
-  private _from : number;
-  private _to : number;
-  constructor(from : number, to : number) {
+  private _from: number;
+  private _to: number;
+  constructor(from: number, to: number) {
     super();
     this._from = from;
     this._to = to;
@@ -64,7 +64,7 @@ export class SwitchColumnOrder extends TableCommand {
     this.moveColumn(table.columns, this._to, this._from);
   }
 
-  private moveColumn(columns : Column[], from : number, to : number) {
+  private moveColumn(columns: Column[], from: number, to: number) {
     columns.splice(to, 0, columns.splice(from, 1)[0]);
   }
 }
@@ -73,10 +73,10 @@ export class SwitchColumnOrder extends TableCommand {
  * Class to rename a column
  */
 export class RenameColumn extends TableCommand {
-  private _columnIndex : number;
-  private _oldName : string;
-  private _newName : string;
-  constructor(columnIndex : number, oldName : string, newName : string) {
+  private _columnIndex: number;
+  private _oldName: string;
+  private _newName: string;
+  constructor(columnIndex: number, oldName: string, newName: string) {
     super();
     this._columnIndex = columnIndex;
     this._newName = newName;
@@ -96,10 +96,10 @@ export class RenameColumn extends TableCommand {
  * Class to change the type of a column
  */
 export class ChangeColumnType extends TableCommand {
-  private _columnIndex : number;
-  private _oldType : string;
-  private _newType : string;
-  constructor(columnIndex : number, oldType : string, newType : string) {
+  private _columnIndex: number;
+  private _oldType: string;
+  private _newType: string;
+  constructor(columnIndex: number, oldType: string, newType: string) {
     super();
     this._columnIndex = columnIndex;
     this._newType = newType;
@@ -119,8 +119,8 @@ export class ChangeColumnType extends TableCommand {
  * Class to change the primary key state of a column
  */
 export class ChangeColumnPK extends TableCommand {
-  private _columnIndex : number;
-  constructor(columnIndex : number) {
+  private _columnIndex: number;
+  constructor(columnIndex: number) {
     super();
     this._columnIndex = columnIndex;
   }
@@ -138,8 +138,8 @@ export class ChangeColumnPK extends TableCommand {
  * Class to change the not null state of a column
  */
 export class ChangeColumnNN extends TableCommand {
-  private _columnIndex : number;
-  constructor(columnIndex : number) {
+  private _columnIndex: number;
+  constructor(columnIndex: number) {
     super();
     this._columnIndex = columnIndex;
   }
@@ -157,10 +157,10 @@ export class ChangeColumnNN extends TableCommand {
  * Class to change the standart value of the column
  */
 export class ChangeColumnStandartValue extends TableCommand {
-  private _columnIndex : number;
-  private _oldValue : string;
-  private _newValue : string;
-  constructor(columnIndex : number, oldValue : string, newValue : string) {
+  private _columnIndex: number;
+  private _oldValue: string;
+  private _newValue: string;
+  constructor(columnIndex: number, oldValue: string, newValue: string) {
     super();
     this._columnIndex = columnIndex;
     this._newValue = newValue;
@@ -180,9 +180,9 @@ export class ChangeColumnStandartValue extends TableCommand {
  * Class to change the name of the table
  */
 export class ChangeTableName extends TableCommand {
-  private _oldName : string;
+  private _oldName: string;
   private _newName: string;
-  constructor(oldName : string, newName : string) {
+  constructor(oldName: string, newName: string) {
     super();
     this._newName = newName;
     this._oldName = oldName;
@@ -200,6 +200,45 @@ export class ChangeTableName extends TableCommand {
 /**
  * Class to hold all table commands
  */
-export class TableCommandHolder{
-  commands : TableCommand[];
+export class TableCommandHolder {
+  private _activeIndex: number;
+  private _commands: TableCommand[];
+  private _table: Table;
+
+  constructor(table: Table) {
+    this._activeIndex = -1;
+    this._commands = [];
+    this._table = table;
+  }
+
+  get commands() {
+    return this._commands;
+  }
+
+  undo() {
+    if (this._activeIndex >= 0) {
+      this._commands[this._activeIndex].undo(this._table);
+      this._activeIndex--;
+    }
+  }
+
+  do(newCommand: TableCommand) {
+    newCommand.do(this._table);
+    this.addCommand(newCommand);
+  }
+
+  redo() {
+    if (this._activeIndex != (this._commands.length - 1)) {
+      this._activeIndex++;
+      this._commands[this._activeIndex].do(this._table);
+    }
+  }
+
+  private addCommand(newCommand: TableCommand) {
+    if (this._activeIndex < this._commands.length - 1) {
+      this._commands.splice(this._activeIndex, this._commands.length);
+    }
+    this._commands.push(newCommand);
+    this._activeIndex = this._commands.length - 1;
+  }
 }
