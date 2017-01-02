@@ -36,7 +36,7 @@ export class Table {
      * @param: index - the index of the column to remove
      */
     removeColumn(index : number) {
-        this._columns[index].setState(ColumnStatus.deleted);
+        this._columns[index].state = ColumnStatus.deleted;
     }
 
     /**
@@ -44,7 +44,7 @@ export class Table {
      * @param: index - the index of the column to remove
      */
     setColumnAsChanged(index : number) {
-        this._columns[index].setState(ColumnStatus.changed);
+        this._columns[index].state = ColumnStatus.changed;
     }
 
     /**

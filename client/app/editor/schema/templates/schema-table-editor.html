@@ -1,9 +1,11 @@
 <div class="card card-block">
+	<!--Input with the name of the table-->
 	<h3 class="card-title">
 		<input (focus)="saveTempValue($event.target.value)" (blur)="changedTableName($event.target.value)" [(ngModel)]="table.name" placeholder="Primary" />
 	</h3>
 	<p class="card-text"></p>
 
+	<!--Header for the table-->
 	<div class="card-deck-wrapper">
 		<div class="card-deck">
 			<div class="card-group">
@@ -24,29 +26,37 @@
 				</div>
 			</div>
 
+			<!--Every column as a card-->
 			<div *ngFor="let column of table.columns; let i = index" class="card-group">
 				<div class="card">
+					<!--Column index, name and button to delete the column-->
 					<h4 class="card-title">
 						{{ column.index }} 
 						<input (focus)="saveTempValue($event.target.value)" (blur)="changedColumnName(i, $event.target.value)" [(ngModel)]="column.name" placeholder="Name" />
+						<!--Button to remove column-->
 						<a (click)="removeColumn(i)" class="btn btn-primary">
 							<span class="fa fa-minus" aria-hidden="true"></span>
 						</a>
 					</h4>
 				</div>
+				<!--Primray key checkbox-->
 				<div class="card">
 					<input type="checkbox" [(ngModel)]="column.primary" placeholder="Primary" />
 				</div>
+				<!--Column type input-->
 				<div class="card">
 					<input (focus)="saveTempValue($event.target.value)" (blur)="changedColumnType(i, $event.target.value)" [(ngModel)]="column.type" placeholder="Type" />
 				</div>
+				<!--Column not null checkbox-->
 				<div class="card">
 					<input type="checkbox" [(ngModel)]="column.not_null" placeholder="Not Null" />
 				</div>
+				<!--Column default value input-->
 				<div class="card">
 					<input (focus)="saveTempValue($event.target.value)" (blur)="changedColumnStandartValue(i, $event.target.value)" [(ngModel)]="column.dflt_value" placeholder="Standardwert" />
 				</div>
 			</div>
+			<!--Add column button-->
 			<div class="card-group">
 				<div class="card">
 					<h4 class="card-title">

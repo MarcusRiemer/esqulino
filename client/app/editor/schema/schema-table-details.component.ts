@@ -1,15 +1,15 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router'
+import { Component, Input, OnInit, OnDestroy }      from '@angular/core';
+import { Router, ActivatedRoute }                   from '@angular/router'
 
-import { Table } from '../../shared/schema'
+import { Table }                                    from '../../shared/schema'
 
-import { SchemaService } from '../schema.service'
-import { ProjectService, Project } from '../project.service'
-import { ToolbarService } from '../toolbar.service'
+import { SchemaService }                            from '../schema.service'
+import { ProjectService, Project }                  from '../project.service'
+import { ToolbarService }                           from '../toolbar.service'
 
 
 /**
- * Displays the schema for a list of tables.
+ * Displays the schema as a list of tables.
  */
 @Component({
     templateUrl: 'app/editor/schema/templates/schema-table-details.html',
@@ -65,7 +65,6 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
      * True, if creation should be allowed from this component.
      */
     @Input() isChild: boolean = false;
-    private dummyData: any;
 
     /**
      * Load the project to access the schema
@@ -83,6 +82,7 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         this._subscriptionRefs.push(subRef);
 
         //Getting the entries from a table with limit and count
+        //TODO: Right use of Observable to update the data properly
         subRef = this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount)
             .subscribe(res => { this.tableData = res; });
         this._subscriptionRefs.push(subRef);
@@ -92,6 +92,7 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
             .subscribe(res =>{ this._tableRowAmount = res[0];})
         this._subscriptionRefs.push(subRef);
 
+        //Buttons only to show if this component is not invoked as a child
         if (!this.isChild) {
             this._toolbarService.resetItems();
             this._toolbarService.savingEnabled = false;
@@ -109,6 +110,9 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         this._subscriptionRefs = [];
     }
 
+    /**
+     * Setter for showAmount to use for an ngModel
+     */
     set showAmount(amount: number | string) {
         amount = +amount;
         this._showRowFrom = 0;
@@ -116,10 +120,16 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
     }
 
+    /**
+     * Getter for showAmount to use for an ngModel
+     */
     get showAmount() {
         return (this._showRowAmount);
     }
 
+    /**
+     * Function to get the next rows of the table
+     */
     nextRowSite() {
         if ((this._showRowFrom + this._showRowAmount) < this._tableRowAmount) {
             this._showRowFrom += this._showRowAmount;
@@ -127,6 +137,9 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Function to get the previous rows of the table
+     */
     prevRowSite() {
         if (this._showRowFrom > 0) {
             if (this._showRowFrom > this._showRowAmount) {
@@ -138,6 +151,9 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Function for the back button, to navigate a level up
+     */
     backBtn() {
         console.log("Zurück!");
         //ToDo: Navigates to the Home Screen, instead of one site up.

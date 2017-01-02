@@ -14,6 +14,7 @@ import {ToolbarService}                             from '../toolbar.service'
     selector: "sql-table"
 })
 export class SchemaTableComponent implements OnInit, OnDestroy {
+
     /**
      * The tables to display.
      */
@@ -48,21 +49,25 @@ export class SchemaTableComponent implements OnInit, OnDestroy {
      * Load the project to access the schema
      */
     ngOnInit() {
+        // Get the currently active project
         this._projectService.activeProject
             .subscribe(res =>{ 
                 this._project = res;
             });
+            
         this.initShowDetails();
 
-
         this._toolbarService.resetItems();
+
+        // Button to create a new Table
         this._toolbarService.savingEnabled = false;
-        let btnCreate = this._toolbarService.addButton("import", "Import", "file", "i");
+        let btnCreate = this._toolbarService.addButton("new", "New", "file", "i");
         let subRef = btnCreate.onClick.subscribe((res) => {
-            console.log("File Import!");
+            console.log("Create new Table!");
         })
         this._subscriptionRefs.push(subRef);
 
+        // Button to enable/disable the editing-mode
         btnCreate = this._toolbarService.addButton("lock", "Lock", "lock", "l");
         subRef = btnCreate.onClick.subscribe((res) => {
             console.log("Lock!");
