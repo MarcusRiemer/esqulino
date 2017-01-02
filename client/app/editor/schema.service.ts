@@ -1,23 +1,19 @@
-import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { Injectable }                               from '@angular/core'
+import { Http, Response, Headers, RequestOptions }  from '@angular/http'
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
-import { AsyncSubject } from 'rxjs/AsyncSubject'
-import { Observable } from 'rxjs/Observable'
+import { BehaviorSubject }                          from 'rxjs/BehaviorSubject'
+import { AsyncSubject }                             from 'rxjs/AsyncSubject'
+import { Observable }                               from 'rxjs/Observable'
 
-import { ServerApiService } from '../shared/serverapi.service'
-import { KeyValuePairs, encodeUriParameters } from '../shared/util'
+import { ServerApiService }                         from '../shared/serverapi.service'
+import { KeyValuePairs, encodeUriParameters }       from '../shared/util'
 
-import { Project } from './project.service'
-import { Table, Column } from '../shared/schema'
-
-
-
+import { Project }                                  from './project.service'
+import { Table, Column }                            from '../shared/schema'
 
 
 /**
- * Provides means to communicate with a server that can store or run
- * pages.
+ * Service to hold, get und send data from a schema.
  */
 @Injectable()
 export class SchemaService {
@@ -32,7 +28,11 @@ export class SchemaService {
     }
 
     /**
-     * Function to get table entries from a table with limit and offset 
+     * Function to get table entries from a table with limit and offset
+     * @param project - the current project
+     * @param table - the table to get the entries from
+     * @param from - the index to start getting the entries from
+     * @param amount - the amount of entries to get  
      */
     getTableData(project: Project, table: Table, from: number, amount: number) {
         const url = this._server.getTableEntriesUrl(project.id, table.name, from, amount);
@@ -49,6 +49,11 @@ export class SchemaService {
         return (toReturn);
     }
 
+    /**
+     * Function to get the amount of entries inside a table 
+     * @param project - the current project
+     * @param table - the table to get the entries from
+     */
     getTableRowAmount(project: Project, table: Table) {
         const url = this._server.getTableEntriesCountUrl(project.id, table.name, );
 
@@ -71,30 +76,5 @@ export class SchemaService {
         console.error(error);
         return Observable.throw(error);
     }
-
-
-
-
-    // FOR DEBUG
-    // getTableDataDummy(table: Table, from: number, amount: number) {
-    //     let data: string[] = []
-    //     let dataCol: string[][];
-    //     dataCol = [];
-    //     let anz = from;
-    //     for (var i = 0; i < table.columns.length; i++) {
-    //         for (var j = anz; j < (anz + amount); j++) {
-    //             data.push(j.toString());
-    //         }
-    //         anz = anz + amount;
-    //         dataCol.push(data);
-    //         data = [];
-    //     }
-    //     return (dataCol);
-    // }
-
-
-    // getTableRowAmountDummy(table: Table): number {
-    //     return (100);
-    // }
 
 }

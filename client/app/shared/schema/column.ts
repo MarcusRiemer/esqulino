@@ -2,6 +2,9 @@ import {Project}                              from '../project'
 import {ProjectResource}                      from '../resource'
 import {ColumnDescription, TableDescription}  from './schema.description'
 
+/**
+ * Enum to set the status of a column 
+ */
 export enum ColumnStatus {
     new = 1,
     changed = 2,
@@ -9,6 +12,9 @@ export enum ColumnStatus {
     unchanged = 4
 }
 
+/**
+ * Class to implement a column of a table
+ */
 export class Column {
     index : number
     name : string
@@ -28,10 +34,9 @@ export class Column {
          this.state = state;
     }
 
-    setState(state : ColumnStatus) {
-        this.state = state;
-    }
-
+    /**
+     * Getter to get the status of the column as a string
+     */
     get stateName() {
         if(this.state == ColumnStatus.changed) {
             return("changed");

@@ -7,6 +7,10 @@ import {ToolbarService}               from '../toolbar.service'
 @Component({
     templateUrl: 'app/editor/schema/templates/schema.html'
 })
+
+/**
+ * A class as entry-point for the representation of a schema
+ */
 export class SchemaComponent implements OnInit {
     /**
      * The currently edited project
