@@ -1,6 +1,6 @@
 <div class="card card-block">
 	<h3 class="card-title">
-		<input [(ngModel)]="table.name" placeholder="Primary" />
+		<input (focus)="saveTempValue($event.target.value)" (blur)="changedTableName($event.target.value)" [(ngModel)]="table.name" placeholder="Primary" />
 	</h3>
 	<p class="card-text"></p>
 
@@ -26,7 +26,9 @@
 
 			<div *ngFor="let column of table.columns; let i = index" class="card-group">
 				<div class="card">
-					<h4 class="card-title">{{ column.index }} <input [(ngModel)]="column.name" placeholder="Name" />
+					<h4 class="card-title">
+						{{ column.index }} 
+						<input (focus)="saveTempValue($event.target.value)" (blur)="changedColumnName(i, $event.target.value)" [(ngModel)]="column.name" placeholder="Name" />
 						<a (click)="removeColumn(i)" class="btn btn-primary">
 							<span class="fa fa-minus" aria-hidden="true"></span>
 						</a>
@@ -36,13 +38,13 @@
 					<input type="checkbox" [(ngModel)]="column.primary" placeholder="Primary" />
 				</div>
 				<div class="card">
-					<input [(ngModel)]="column.type" placeholder="Type" />
+					<input (focus)="saveTempValue($event.target.value)" (blur)="changedColumnType(i, $event.target.value)" [(ngModel)]="column.type" placeholder="Type" />
 				</div>
 				<div class="card">
 					<input type="checkbox" [(ngModel)]="column.not_null" placeholder="Not Null" />
 				</div>
 				<div class="card">
-					<input [(ngModel)]="column.dflt_value" placeholder="Standardwert" />
+					<input (focus)="saveTempValue($event.target.value)" (blur)="changedColumnStandartValue(i, $event.target.value)" [(ngModel)]="column.dflt_value" placeholder="Standardwert" />
 				</div>
 			</div>
 			<div class="card-group">

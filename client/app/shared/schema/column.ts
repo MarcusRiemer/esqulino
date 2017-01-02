@@ -16,7 +16,7 @@ export class Column {
     not_null : boolean
     dflt_value? : string
     primary : boolean
-    _state : ColumnStatus
+    state : ColumnStatus
 
     constructor(desc : ColumnDescription, state : ColumnStatus) {
          this.index = desc.index;
@@ -25,21 +25,21 @@ export class Column {
          this.not_null = desc.not_null;
          this.dflt_value = desc.dflt_value;
          this.primary = desc.primary;
-         this._state = state;
+         this.state = state;
     }
 
     setState(state : ColumnStatus) {
-        this._state = state;
+        this.state = state;
     }
 
-    get state() {
-        if(this._state == ColumnStatus.changed) {
+    get stateName() {
+        if(this.state == ColumnStatus.changed) {
             return("changed");
-        } else if(this._state == ColumnStatus.unchanged) {
+        } else if(this.state == ColumnStatus.unchanged) {
             return("unchanged");
-        } else if(this._state == ColumnStatus.new) {
+        } else if(this.state == ColumnStatus.new) {
             return("new");
-        } else if(this._state == ColumnStatus.deleted) {
+        } else if(this.state == ColumnStatus.deleted) {
             return("deleted");
         }
         return("undefined");
