@@ -1,4 +1,5 @@
 import { browser, element, by, protractor } from 'protractor'
+import { Key } from 'selenium-webdriver'
 
 describe('Test Project: Creating Pages', () => {
     const testProjectId = "test";
@@ -15,7 +16,7 @@ describe('Test Project: Creating Pages', () => {
         const nameVal = "A" + Math.random().toString(36).substr(2);
         
         browser.get(editorUrl);
-        nameEle.sendKeys(protractor.Key.chord(protractor.Key.CONTROL, "a"), nameVal)
+        nameEle.sendKeys(Key.chord(protractor.Key.CONTROL, "a"), nameVal)
             .then( () => browser.waitForAngular() )
             .then( () => createBtn.click() )
             .then( () => browser.waitForAngular() )

@@ -1,4 +1,5 @@
 import { browser, element, by, protractor } from 'protractor'
+import { Key } from 'selenium-webdriver'
 
 describe('Test Project: Settings', () => {
     const testProjectId = "test";
@@ -17,8 +18,8 @@ describe('Test Project: Settings', () => {
 
         // Setting it
         nameEle.clear()
-            .then( () => nameEle.sendKeys(protractor.Key.chord(protractor.Key.CONTROL, "a"), nameVal))
-            .then( () => descEle.sendKeys(protractor.Key.chord(protractor.Key.CONTROL, "a"), descVal))
+            .then( () => nameEle.sendKeys(Key.chord(Key.CONTROL, "a"), nameVal))
+            .then( () => descEle.sendKeys(Key.chord(Key.CONTROL, "a"), descVal))
             .then( () => saveBtn.click())
             .then( () => browser.waitForAngular())
             .then( () => {
