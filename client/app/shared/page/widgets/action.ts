@@ -4,8 +4,10 @@ import {
 } from '../page.description'
 import {
     Page, ParameterMapping,
-    QueryReference, QueryReferenceDescription,
 } from '../page'
+import {
+    QueryReference, QueryReferenceDescription,
+} from '../value-reference'
 import {
     encodeUriParameters, KeyValuePairs
 } from '../../../shared/util'
@@ -16,11 +18,11 @@ export {
     NavigateActionDescription, QueryReference
 }
 
-// Typescript doesn't seem to know about the URL type
-declare var URL : any;
-
 /**
- * Any kind of action that could be associated with a form.
+ * Any kind of action that could be associated with a form. Deriving actions should be
+ * instanciable with undefined descriptions, in that case they should fall back
+ * to sensible default. This allows the UI layer to rely on the existance of actions
+ * whereever they appear.
  */
 export abstract class Action {
     private _widget : Widget;
@@ -91,7 +93,7 @@ export class QueryAction extends Action {
      * @return The query that would be executed by this action.
      */
     get queryReference() : QueryReference {
-        return (this.queryReference);
+        return (this._queryRef);
     }
 
     /**
@@ -138,20 +140,24 @@ export class NavigateAction extends Action {
 
     private _external : string;
 
-    constructor(desc : NavigateActionDescription, widget : Widget) {
+    constructor(widget : Widget, desc : NavigateActionDescription) {
         super(widget);
 
-        // Making sure the model is valid
-        if (desc.external && desc.internal) {
-            throw new Error("internal and external are set!");
-        }
+        // Was there any model passed in?
+        if (desc) {
+            // Making sure the model is valid as a whole
+            if (desc.external && desc.internal) {
+                throw new Error("internal and external are set!");
+            }
 
-        if (desc.external) {
-            this._external = desc.external;
-        } else if (desc.internal) {
-            this._internal = {
-                pageId : desc.internal.pageId,
-                pageParams : desc.internal.parameters.map(p => new ParameterMapping(widget.page, p))
+            // And load the description of the respective target
+            if (desc.external) {
+                this._external = desc.external;
+            } else if (desc.internal) {
+                this._internal = {
+                    pageId : desc.internal.pageId,
+                    pageParams : desc.internal.parameters.map(p => new ParameterMapping(widget.page, p))
+                }
             }
         }
     }
@@ -179,6 +185,13 @@ export class NavigateAction extends Action {
      */
     get method() {
         return ("GET");
+    }
+
+    /**
+     * @return True, if this actions has any custom targets assigned.
+     */
+    get hasAnyTarget() {
+        return (this.isExternal || this.isInternal);
     }
 
     /**

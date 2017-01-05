@@ -3,7 +3,7 @@
     "additionalProperties": false,
     "definitions": {
         "ApiVersionToken": {
-            "description": "It would be nicer if versions could be numbers, but Typescript has no\n\nconcept of union types for numbers.",
+            "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
             "enum": [
                 "1",
                 "2",
@@ -42,7 +42,7 @@
         },
         "ParameterMappingDescription": {
             "additionalProperties": false,
-            "description": "Inputs and outputs *may* use identical names but are not required\n\nto do so.",
+            "description": "Inputs and outputs *may* use identical names but are not required\nto do so.",
             "properties": {
                 "parameterName": {
                     "type": "string"
@@ -55,7 +55,7 @@
         },
         "QueryReferenceDescription": {
             "additionalProperties": false,
-            "description": "Referenced queries are possibly accompanied by a human-readable\n\nname. This is required if the same query is going to be used\n\nmultiple times on a single page.",
+            "description": "Referenced queries are possibly accompanied by a human-readable\nname. This is required if the same query is going to be used\nmultiple times on a single page.",
             "properties": {
                 "mapping": {
                     "items": {
@@ -80,7 +80,7 @@
         },
         "WidgetDescription": {
             "additionalProperties": true,
-            "description": "A widget **requires** at least a type, all other fields are\n\nmandated by deriving descriptions. As we don't necesarily\n\nknow all deriving classes at compile time (they could be\n\nprovided by a plugin) we poke a hole in the type system\n\nhere.\n\n\n\nThe following annotion is required to allow additional\n\nproperties in the automatically generated JSON schema, see\n\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
+            "description": "A widget **requires** at least a type, all other fields are\nmandated by deriving descriptions. As we don't necesarily\nknow all deriving classes at compile time (they could be\nprovided by a plugin) we poke a hole in the type system\nhere.\n\nThe following annotion is required to allow additional\nproperties in the automatically generated JSON schema, see\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
             "properties": {
                 "type": {
                     "type": "string"
@@ -93,14 +93,14 @@
     "properties": {
         "apiVersion": {
             "$ref": "#/definitions/ApiVersionToken",
-            "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with."
+            "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
         },
         "body": {
             "$ref": "#/definitions/BodyDescription",
             "description": "The host for all widgets that are part of this page."
         },
         "id": {
-            "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\n\nThese IDs must *never* change and should be UUIDs, so that they are\n\nglobally unique.",
+            "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
             "type": "string"
         },
         "name": {
@@ -108,14 +108,14 @@
             "type": "string"
         },
         "parameters": {
-            "description": "All parameters that are required to render this page. These\n\nare usually satisfied via GET parameters",
+            "description": "All parameters that are required to render this page. These\nare usually satisfied via GET parameters",
             "items": {
                 "$ref": "#/definitions/PageParameterDescription"
             },
             "type": "array"
         },
         "referencedQueries": {
-            "description": "IDs of queries that are referenced in this page. Only\n\nthese queries provide additional DB information that can\n\nbe used on this page.",
+            "description": "IDs of queries that are referenced in this page. Only\nthese queries provide additional DB information that can\nbe used on this page.",
             "items": {
                 "$ref": "#/definitions/QueryReferenceDescription"
             },
