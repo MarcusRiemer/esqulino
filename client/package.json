@@ -4,28 +4,27 @@
   "license": "AGPL",
   "private": true,
   "dependencies": {
-    "@angular/common": "~2.3.0",
-    "@angular/compiler": "~2.3.0",
-    "@angular/core": "~2.3.0",
-    "@angular/forms": "~2.3.0",
-    "@angular/http": "~2.3.0",
-    "@angular/platform-browser": "~2.3.0",
-    "@angular/platform-browser-dynamic": "~2.3.0",
-    "@angular/router": "~3.3.0",
+    "@angular/common": "~2.4.0",
+    "@angular/compiler": "~2.4.0",
+    "@angular/core": "~2.4.0",
+    "@angular/forms": "~2.4.0",
+    "@angular/http": "~2.4.0",
+    "@angular/platform-browser": "~2.4.0",
+    "@angular/platform-browser-dynamic": "~2.4.0",
+    "@angular/router": "~3.4.0",
 
     "core-js": "^2.4.1",
-    "reflect-metadata": "^0.1.8",
-    "rxjs": "5.0.0-rc.4",
+    "rxjs": "5.0.1",
     "systemjs": "0.19.40",
-    "zone.js": "^0.7.2"
+    "zone.js": "^0.7.4"
   },
   "devDependencies": {
-    "jasmine-core": "2.4.1",
-    "protractor": "4.0.9",
+    "jasmine-core": "~2.4.1",
+    "protractor": "4.0.14",
     "typescript": "~2.1.4",
 
     "@types/node": "^6.0.46",
     "@types/jasmine": "^2.5.36",
-    "@types/selenium-webdriver": "^2.53.33"
+    "@types/selenium-webdriver": "^2.53.38"
   }
 }
