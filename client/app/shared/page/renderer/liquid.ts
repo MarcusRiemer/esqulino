@@ -78,7 +78,9 @@ function renderButton(w: Widget) : string {
     const text = button.text;
     const cssClass = "btn btn-secondary btn-block";
 
+    // What type of button should be rendered?
     if (button.queryReference && button.queryReference.isResolveable) {
+        // A button that refers to a query
         const pageName = w.page.name;
         const queryId = button.queryReference.query.id;
         const actionUrl = `/${pageName}/query/${queryId}`;
@@ -91,7 +93,14 @@ function renderButton(w: Widget) : string {
         const method = "POST";
 
         return (`<button type="submit" formaction="${encodedUrl}" formmethod="${method}" name="action" value="a" class="${cssClass}">${text}</button>`);
+    } else if (button.navigateAction.hasAnyTarget) {
+        // A button that refers to a different page
+        const encodedUrl = button.navigateAction.targetUrl;
+        const method = button.navigateAction.method;
+        
+        return (`<button type="submit" formaction="${encodedUrl}" formmethod="${method}"class="${cssClass}">${text}</button>`);
     } else {
+        // An error, because the button has no valid target
         return (`<div class="alert alert-danger" role="alert">Dieser Knopf hat kein gültiges Ziel und wird daher nicht dargestellt!</div>`);
     }
 }

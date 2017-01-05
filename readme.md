@@ -18,9 +18,7 @@ This project consists of two executable components: A Ruby-webserver and a Angul
 * After that, the client needs to be compiled and packaged once: `make dist`.
 * You may now run the server, to do this locally simply use `make server-run` and it will spin up a local server instance listening on port `9292`.
 
-BlattWerkzeug makes use of subdomains to render the public representation of a project. The development environment assumes, that any subdomains of `localhost.localdomain` will be routed to the localhost. The URL `http://cyoa.localhost.localdomain` should for example resolve to your `localhost` and would display the rendered index-page of the project `cyoa`.
-
-This works out of the box on various GNU/Linux-distributions but this behaviour is not standardised and therefore not quite reliable. To reliably resolve those subdomains you should either write custom entries for each project in `/etc/hosts` or by using a lightweight local DNS-server like [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html).
+BlattWerkzeug makes use of subdomains to render the public representation of a project. The development environment assumes, that any subdomains of `localhost.localdomain` will be routed to the `localhost`. The URL `http://cyoa.localhost.localdomain` should for example resolve to your `localhost` and would display the rendered index-page of the project `cyoa`. This works out of the box on various GNU/Linux-distributions, but as this behaviour is not standardised it should not be relied upon. To reliably resolve project-subdomains you should either write custom entries for each project in `/etc/hosts` or use a lightweight local DNS-server like [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html).
 
 ## Updating
 
