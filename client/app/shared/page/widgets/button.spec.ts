@@ -27,6 +27,22 @@ describe('Page Buttons', () => {
         expect(b.toModel()).toEqual(m);
     });
 
+    it('Serialization with NavigationAction', () => {
+        const p = new Page(pageModel);
+        
+        const m : ButtonDescription = {
+            type : "button",
+            text : "Nochmal",
+            navigate : {
+                external : "http://google.de",
+                type : "navigate"
+            }
+        }
+
+        let b = new Button(m, p.body);
+        expect(b.toModel()).toEqual(m);
+    });
+
     it('Text changes', () => {
         const p = new Page(pageModel);
         

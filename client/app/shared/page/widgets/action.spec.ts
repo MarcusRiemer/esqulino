@@ -11,8 +11,19 @@ import {
 } from '../page'
 
 describe('Page NavigateAction', () => {
-    it ('Serialization with internal reference', () => {
+    it ('Serialization without any references', () => {
+        const m : NavigateActionDescription = {
+            type : "navigate"
+        }
 
+        let a = new NavigateAction(undefined, m);
+        expect(a.isInternal).toEqual(false);
+        expect(a.isExternal).toEqual(false);
+        expect(a.toModel()).toEqual(m);
+    });
+
+    
+    it ('Serialization with internal reference', () => {
         let w : Widget = {
             type : "Mock",
             category : "structural",
@@ -30,7 +41,7 @@ describe('Page NavigateAction', () => {
             }
         }
 
-        let a = new NavigateAction(m, w);
+        let a = new NavigateAction(w, m);
         expect(a.isInternal).toEqual(true);
         expect(a.isExternal).toEqual(false);
         expect(a.toModel()).toEqual(m);
@@ -42,7 +53,7 @@ describe('Page NavigateAction', () => {
             external : "http://thedailywtf.com/articles/the-inner-json-effect"
         }
 
-        let a = new NavigateAction(m, undefined);
+        let a = new NavigateAction(undefined, m);
         expect(a.isInternal).toEqual(false);
         expect(a.isExternal).toEqual(true);
         expect(a.toModel()).toEqual(m);
@@ -68,7 +79,7 @@ describe('Page NavigateAction', () => {
             }
         }
 
-        let a = new NavigateAction(m, w);
+        let a = new NavigateAction(w, m);
         expect(() => a.targetUrl).toThrowError(); // .toEqual("/12?foo=bar");
     });
 
@@ -82,7 +93,7 @@ describe('Page NavigateAction', () => {
             }
         }
 
-        expect( () => new NavigateAction(m, undefined)).toThrowError();
+        expect( () => new NavigateAction(undefined, m)).toThrowError();
     });
 
     it('Changes type when switching between internal and external', () => {
@@ -92,7 +103,7 @@ describe('Page NavigateAction', () => {
         }
 
         // Start with an external action
-        let a = new NavigateAction(m, undefined);
+        let a = new NavigateAction(undefined, m);
         expect(a.isExternal).toEqual(true);
         expect(a.isInternal).toEqual(false);
 
