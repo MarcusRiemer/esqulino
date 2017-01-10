@@ -8,7 +8,9 @@ import {
     WidgetBase, WidgetDescription, ParametrizedWidget
 } from './widget-base'
 
-import {QueryReference, QueryAction}     from './action'
+import {
+    QueryReference, QueryAction, NavigateAction
+} from './action'
 
 export {
     ButtonDescription, ParameterMapping
@@ -20,12 +22,15 @@ export {
 export class Button extends ParametrizedWidget {
     private _queryAction : QueryAction;
 
+    private _navigateAction : NavigateAction;
+
     private _text : string;
 
     constructor(desc : ButtonDescription, parent? : WidgetHost) {
         super("button", "widget", false, parent);
         this._text = desc.text;
         this._queryAction = new QueryAction(this, desc.query);
+        this._navigateAction = new NavigateAction(this, desc.navigate);
     }
 
     static get emptyDescription() : ButtonDescription {
@@ -62,6 +67,10 @@ export class Button extends ParametrizedWidget {
      */
     get queryReference() : QueryReference {
         return (this._queryAction.queryReference );
+    }
+
+    get navigateAction() : NavigateAction {
+        return (this._navigateAction);
     }
 
     /**
@@ -108,6 +117,11 @@ export class Button extends ParametrizedWidget {
         const queryRefDesc = this.queryReference.toModel();
         if (Object.keys(queryRefDesc).length > 1) {
             toReturn.query = queryRefDesc;
+        }
+
+        // Only add navigation actions if they have been added by the user
+        if (this._navigateAction.hasValidTarget) {
+            toReturn.navigate = this._navigateAction.toModel();
         }
 
         return (toReturn);
