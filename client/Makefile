@@ -19,8 +19,8 @@ install-deps : msg-pre-deps-install has-npm
 	npm install
 
 # Remove everything that has been downloaded by `install-deps`
-clean-deps:
-	rm -rf node_modules typings
+clean-deps: msg-pre-deps-clean
+	rm -rf node_modules
 
 # Meta target: Compiles all SASS files
 dist-sass : msg-pre-sass $(DIST_CSS_FILES)
@@ -79,6 +79,9 @@ test-e2e: msg-pre-test-e2e
 ##################################
 # Messaging targets
 ##################################
+
+msg-pre-deps-clean :
+	@tput setaf 2; echo "## Client : Cleaning dependencies"; tput sgr0
 
 msg-pre-deps-install :
 	@tput setaf 2; echo "## Client : Installing dependencies"; tput sgr0
