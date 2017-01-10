@@ -99,8 +99,11 @@ export interface ButtonDescription extends WidgetDescription {
     // The text on the button
     text : string
 
-    // What happens if the user presses the button?
+    // What query should be executed if the user presses the button?
     query? : QueryReferenceDescription
+
+    // What page should be navigated to if the user presses the button?
+    navigate? : NavigateActionDescription
 }
 
 /**

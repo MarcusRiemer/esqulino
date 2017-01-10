@@ -21,7 +21,7 @@ run : has-bundle
 
 # Run a built-in server that refreshes itself if relevant files chage
 run-dev : has-dev-rerun has-bundle
-	$(RERUN_BIN) --dir ".,./../schema/" --pattern "**/*.{rb,json}" -- $(BUNDLE_BIN) exec rackup
+	$(RERUN_BIN) --dir ".,./../schema/" --pattern "**/*.{rb,json}" -- $(BUNDLE_BIN) exec rackup -o 127.0.0.1
 
 # Run unit tests
 test :

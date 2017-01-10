@@ -17,7 +17,7 @@ export class Link extends WidgetBase {
         super("link", "widget", false, parent);
 
         this._text = desc.text;
-        this._action = new NavigateAction(desc.action, this);
+        this._action = new NavigateAction(this, desc.action);
     }
 
     static get emptyDescription() : LinkDescription {

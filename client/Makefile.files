@@ -3,13 +3,13 @@
 
 APP_DIR = $(addprefix $(CLIENT_DIR), app)
 
-SASS_FILES      = $(shell find $(APP_DIR) -not -path '*/\.*' -iname "*.scss")
+SASS_FILES      = $(shell test -d "$(APP_DIR)" && find "$(APP_DIR)" -not -path '*/\.*' -iname "*.scss")
 DIST_CSS_FILES  = $(addprefix $(BUILD_DIR), app/css/style.css)
 
-HTML_FILES = $(shell find $(APP_DIR) -not -path '*/\.*' -iname "*.html") index.html test.html
+HTML_FILES = $(shell test -d "$(APP_DIR)" && find $(APP_DIR) -not -path '*/\.*' -iname "*.html") index.html test.html
 DIST_HTML_FILES = $(addprefix $(BUILD_DIR), $(HTML_FILES))
 
-TS_FILES = $(shell find $(APP_DIR) -not -path '*/\.*' -iname "*.ts")
+TS_FILES = $(shell test -d "$(APP_DIR)" && find $(APP_DIR) -not -path '*/\.*' -iname "*.ts")
 DIST_JS_FILES = $(addprefix $(BUILD_DIR), $(TS_FILES:.ts=.js))
 
 VENDOR_FILES = $(shell find $(addprefix $(CLIENT_DIR), vendor) -type f)
@@ -21,16 +21,18 @@ PUBLISHED_NODE_FILES = $(addprefix $(CLIENT_DIR),\
                        systemjs.config.js \
                        node_modules/core-js/client/shim.min.js \
                        node_modules/zone.js/dist/zone.js\
-                       node_modules/reflect-metadata/Reflect.js \
                        node_modules/systemjs/dist/system.src.js \
                        node_modules/jasmine-core/lib/jasmine-core/jasmine.js \
                        node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js \
                        node_modules/jasmine-core/lib/jasmine-core/boot.js \
                        node_modules/jasmine-core/lib/jasmine-core/jasmine.css)
 
+NODE_FILES_RXJS_DIR = $(addprefix $(CLIENT_DIR), node_modules/rxjs)
+NODE_FILES_ANGULAR_DIR = $(addprefix $(CLIENT_DIR), node_modules/@angular)
+
 NODE_FILES = $(PUBLISHED_NODE_FILES) \
-             $(shell find $(addprefix $(CLIENT_DIR), node_modules/rxjs) -iname "*.js*") \
-             $(shell find $(addprefix $(CLIENT_DIR), node_modules/@angular) -iname "*.js*") \
+             $(shell test -d "$(NODE_FILES_RXJS_DIR)" &&  find "$(NODE_FILES_RXJS_DIR)" -iname "*.js*") \
+             $(shell test -d "$(NODE_FILES_ANGULAR_DIR)" && find "$(NODE_FILES_ANGULAR_DIR)" -iname "*.js*") \
 
 DIST_NODE_FILES = $(addprefix $(BUILD_DIR), $(NODE_FILES))
 
