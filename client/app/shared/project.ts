@@ -1,4 +1,5 @@
 import {Subject}                              from 'rxjs/Subject'
+import {BehaviorSubject}                      from 'rxjs/BehaviorSubject'
 import {Observable}                           from 'rxjs/Observable'
 
 import {Schema}                               from './schema'
@@ -52,7 +53,10 @@ export class Project implements ApiVersion, Saveable {
     private _saveRequired = false;
 
     // Fired when the save-state has changed
-    private _saveStateChangedEvent : Subject<SaveStateEvent<Project>>;
+    private _saveStateChangedEvent = new BehaviorSubject<SaveStateEvent<Project>>({
+        resource : this,
+        saveRequired : this._saveRequired
+    });
     
     /**
      * Construct a new project and a whole slew of other
@@ -63,9 +67,10 @@ export class Project implements ApiVersion, Saveable {
         this._name = json.name;
         this._description = json.description;
         this._indexPageId = json.indexPageId;
-        this.schema = new Schema(json.schema);
         this._currentDatabase = json.database;
         this._availableDatabases = json.availableDatabases;
+        
+        this.schema = new Schema(json.schema);
 
         if (json.apiVersion as string != this.apiVersion) {
             throw new Error(`Attempted to load a project with version ${json.apiVersion}, current version is ${this.apiVersion}`);
@@ -106,6 +111,7 @@ export class Project implements ApiVersion, Saveable {
      */
     markSaveRequired() {
         this._saveRequired = true;
+        this.fireCurrentSaveState();
     }
 
     /**
@@ -113,6 +119,18 @@ export class Project implements ApiVersion, Saveable {
      */
     markSaved() {
         this._saveRequired = false;
+        this.fireCurrentSaveState();
+    }
+
+        /**
+     * Fires the current save state as a new save state. Needs to be called manually
+     * after the save-state has actually been changed.
+     */
+    private fireCurrentSaveState() {
+        this._saveStateChangedEvent.next({
+            resource : this,
+            saveRequired : this._saveRequired
+        });
     }
 
     /**
@@ -247,7 +265,6 @@ export class Project implements ApiVersion, Saveable {
     addQuery(query : Query) {
         this._queries.push(query);
         this._queries.sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
-        this.markSaveRequired();
     }
 
     /**
@@ -259,7 +276,6 @@ export class Project implements ApiVersion, Saveable {
         // Remove at index
         if (index >= 0) {
             this.queries.splice(index, 1);
-            this.markSaveRequired();
         } else {
             throw new Error(`Could not remove query with unknown id "${id}"`);
         }
@@ -308,7 +324,6 @@ export class Project implements ApiVersion, Saveable {
         }
 
         this._pages.sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
-        this.markSaveRequired();
     }
 
     /**
@@ -327,8 +342,6 @@ export class Project implements ApiVersion, Saveable {
             // Then there is no start page anymore
             this._indexPageId = undefined;
         }
-
-        this.markSaveRequired();
     }
 
 

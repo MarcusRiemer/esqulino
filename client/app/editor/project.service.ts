@@ -132,6 +132,7 @@ export class ProjectService {
         const url = this._server.getProjectUrl(proj.id);
 
         const toReturn = this._http.post(url, JSON.stringify(desc))
+            .do(_ => proj.markSaved())
             .catch(this.passThroughError);
 
         return (toReturn);
