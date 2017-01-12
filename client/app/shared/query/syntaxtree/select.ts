@@ -226,7 +226,7 @@ export class Select extends Component implements ExpressionParent {
                     let from = (<QueryFrom> this._query).from;
 
                     // Don't forget the first table
-                    from.joins.concat(from.first).forEach( j => {
+                    [from.first].concat(from.joins).forEach( j => {
                         tables.push(this._query.schema.getTable(j.tableName))
                     });
                 }
