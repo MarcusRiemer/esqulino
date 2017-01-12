@@ -14,12 +14,13 @@
   </span>
 
   <!-- If this is a model that provides text, the text is shown. -->
-  <span *ngIf="model.text"
-        class="text"
-        contenteditable
-        [(contenteditableModel)]="model.text"
-        [class.block]="isLongText"
-        [class.tree-level]="isLongText">{{ model.text }}</span>
+  <p *ngIf="model.text"
+     class="text"
+     contenteditable
+     [(contenteditableModel)]="model.text"
+     [class.display-inline]="!isLongText"
+     [class.block]="isLongText"
+     [class.tree-level]="isLongText">{{ model.text }}</p>
 
   <ng-content></ng-content>
 

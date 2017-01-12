@@ -18,6 +18,14 @@
 }
 
 /**
+ * Used for block level elements that should be displayed inline,
+ * eg Paragraphs that are used for double-click boundaries.
+ */
+.block-container .display-inline {
+    display: inline-block;
+}
+
+/**
  * A component of an SQL-query (SELECT, FROM, WHERE, ...)
  */
 .block-container .line .component {
