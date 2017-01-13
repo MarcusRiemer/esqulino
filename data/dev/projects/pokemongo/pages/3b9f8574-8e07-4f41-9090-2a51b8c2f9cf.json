@@ -72,21 +72,21 @@
             "type": "input",
             "outParamName": "name",
             "caption": "Spitzname",
-            "description": "",
+            "description": "Der von dir vergebene Name für das gefangene Pokémon",
             "inputType": "text",
             "required": true
           },
           {
             "type": "input",
             "outParamName": "staerke",
-            "caption": "Stärke des neuen Pokémon",
-            "description": "",
+            "caption": "Stärke",
+            "description": "Die Stärke des gefangenen Pokémon",
             "inputType": "number",
             "required": true
           },
           {
             "type": "button",
-            "text": "Pokémon anlegen",
+            "text": "Pokémon speichern",
             "query": {
               "type": "query",
               "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44",
