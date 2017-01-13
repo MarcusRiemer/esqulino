@@ -14,19 +14,12 @@ import {PageDragEvent}                        from '../../../drag.service'
     selector: `required-parameters`,
     templateUrl: 'app/editor/page/tree/widgets/helper/templates/required-parameters.html',
 })
-export class RequiredParametersComponent implements OnInit {
+export class RequiredParametersComponent {
     @Input() parameterMapping : ParameterMapping[];
 
     @Output() parameterMappingChange = new EventEmitter();
 
     @Input() page : Page;
-
-    /**
-     * Ensures all inputs are wired.
-     */
-    ngOnInit() {
-
-    }
 
     get hasParameters() : boolean {
         return (this.parameterMapping && this.parameterMapping.length > 0);

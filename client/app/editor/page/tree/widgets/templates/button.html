@@ -11,5 +11,12 @@
         </required-parameters>
       </span>
     </widget-parameter>
+    <widget-parameter *ngIf="model.navigateAction.hasAnyTarget">
+      <span class="name">Ziel</span>
+      <span class="value">
+        <nav-reference [navigateAction]="model.navigateAction"
+                       [page]="model.page"></nav-reference>
+      </span>
+    </widget-parameter>
   </span>
 </esqulino-widget-node>
