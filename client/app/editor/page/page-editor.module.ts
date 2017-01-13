@@ -56,12 +56,13 @@ const visualComponents = [
 const treeComponents = [
     WidgetNodeComponent,
     WidgetNodeParameterComponent,
-    
+
+    Tree.NavigateActionComponent,
     Tree.QueryReferenceComponent,
     Tree.RequiredParametersComponent,
     Tree.ProvidedParameterComponent,
     Tree.ValueExpressionComponent,
-    
+
     Tree.ButtonComponent,
     Tree.HeadingComponent,
     Tree.QueryTableComponent,
@@ -90,20 +91,19 @@ const sidebarComponents = [
     imports: [
         SharedEditorModule,
         QueryEditorModule,
-        // pageEditorRouting,
-    ],    
+    ],
     declarations: [
         PageEditorHostComponent,
         PageCreateComponent,
-        
+
         PageDataComponent,
         ServerPreviewComponent,
-        
+
         PageTreeEditorComponent,
         PageTreeComponent,
         WidgetNodeComponent,
         WidgetNodeLoaderComponent,
-        
+
         PageVisualEditorComponent,
         PageLayoutComponent,
         WidgetLoaderComponent,
@@ -128,7 +128,7 @@ const sidebarComponents = [
 
         SidebarDataComponent,
         SidebarWidgetsComponent,
-        
+
         ...sidebarComponents,
         ...visualComponents,
         ...treeComponents,
@@ -144,7 +144,7 @@ export default class PageEditorModule {
 
     constructor(reg : RegistrationService) {
         console.log("Registering PageEditor ...");
-        
+
         reg.registerSidebarType({
             typeId: SidebarDataComponent.SIDEBAR_IDENTIFIER,
             componentType: SidebarDataComponent

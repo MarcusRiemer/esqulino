@@ -1,0 +1,6 @@
+<a *ngIf="navigateAction.isExternal"
+   [title]="targetHref"
+   [href]="targetHref"><span class="fa fa-external-link fa-fw" aria-hidden="true"></span>{{ targetName }}</a>
+<a *ngIf="navigateAction.isInternal"
+   [title]="targetName"
+   [routerLink]="['../..', 'page', navigateAction.internalPageId]"><span class="fa fa-file-text-o fa-fw" aria-hidden="true"></span>{{ targetName }}</a>

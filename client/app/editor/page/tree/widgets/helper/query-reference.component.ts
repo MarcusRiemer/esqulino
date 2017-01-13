@@ -13,6 +13,9 @@ import{
 
 import {PageDragEvent}                        from '../../../drag.service'
 
+/**
+ * Allows editing of query references.
+ */
 @Component({
     selector: `query-reference`,
     templateUrl: 'app/editor/page/tree/widgets/helper/templates/query-reference.html',
