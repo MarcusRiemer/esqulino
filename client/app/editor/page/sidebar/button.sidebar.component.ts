@@ -18,6 +18,9 @@ type EditedComponent = WidgetComponent<Button>
 })
 export class ButtonSidebarComponent {
 
+    // This should be const, but it can't be in Typescript 2
+    public SAME_PAGE_ID = "current";
+    
     private _component : EditedComponent;
 
     constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : EditedComponent) {
@@ -30,6 +33,34 @@ export class ButtonSidebarComponent {
 
     set queryId(value : string) {        
         this.model.setNewQueryId(value);
+    }
+
+    /**
+     * @return The id of the currently targeted Page, or SAME_PAGE_ID
+     *         if no page is targeted.
+     */
+    get targetPageId() {
+        if (this.model.navigateAction.isInternal) {
+            return (this.model.navigateAction.internalPageId);
+        } else {
+            return (this.SAME_PAGE_ID);
+        }
+    }
+    
+    /**
+     * @param value The id of the targeted Page, or SAME_PAGE_ID
+     *              if no page should be targeted.
+     */
+    set targetPageId(id : string) {
+        if (id === this.SAME_PAGE_ID) {
+            this.model.navigateAction.clear();
+        } else {
+            this.model.navigateAction.internalPageId = id;
+        }
+    }
+
+    get availablePages() {
+        return (this.project.pages.filter(q => q.id != this.model.page.id));
     }
 
     /**
