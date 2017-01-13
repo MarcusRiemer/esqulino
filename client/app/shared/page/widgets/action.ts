@@ -203,6 +203,14 @@ export class NavigateAction extends Action {
     }
 
     /**
+     * Clears all targets that were part of this action.
+     */
+    clear() {
+        this._external = undefined;
+        this._internal = undefined;
+    }
+
+    /**
      * Provides the URL of the currently specified target. If no target
      * is specified, the returned value defaults to a no-op URL.
      */
@@ -273,6 +281,8 @@ export class NavigateAction extends Action {
     set externalUrl(value : string) {
         this._external = value;
         this._internal = undefined;
+
+        this.widget.page.markSaveRequired();
     }
 
     /**
@@ -305,6 +315,7 @@ export class NavigateAction extends Action {
             pageParams : []
         }
 
+        this.widget.page.markSaveRequired();
         this._external = undefined;
     }
 
