@@ -199,15 +199,22 @@ export class QueryReference extends ValueReference {
     /**
      * @return True, if this reference can be resolved.
      */
-    get isResolveable() {
-        return (!!(this.queryId && !!this.project.hasQueryById(this.queryId)));
+    get isResolveable() : boolean {
+        return (this.isSet && this.project.hasQueryById(this.queryId));
+    }
+
+    /**
+     * @return True, if the query was set manually any time.
+     */
+    get isSet() : boolean {
+        return (!!(this.queryId));
     }
 
     /**
      * @return True, if the referenced query has output columns.
      */
-    get hasColumns() {
-        return (!!(this.isResolveable && this.query instanceof QuerySelect));
+    get hasColumns() : boolean {
+        return (this.isResolveable && this.query instanceof QuerySelect);
     }
 
     /**
@@ -222,6 +229,16 @@ export class QueryReference extends ValueReference {
         } else {
             return ([]);
         }
+    }
+
+    /**
+     * Resets the whole state of this reference, making it point
+     * to no query at all.
+     */
+    clear() : void {
+        this._mapping = [];
+        this._queryId = undefined;
+        this._name = undefined;
     }
 
     /**

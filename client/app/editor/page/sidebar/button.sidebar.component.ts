@@ -20,6 +20,9 @@ export class ButtonSidebarComponent {
 
     // This should be const, but it can't be in Typescript 2
     public SAME_PAGE_ID = "current";
+
+    // This should be const, but it can't be in Typescript 2
+    public NO_ACTION_ID = "no-action";
     
     private _component : EditedComponent;
 
@@ -27,12 +30,24 @@ export class ButtonSidebarComponent {
         this._component = com;
     }
 
+    /**
+     * @return The id of the currently targeted action, or NO_ACTION_ID
+     *         if no action is targeted.
+     */
     get queryId() {
-        return (this.model.queryReference && this.model.queryReference.queryId);
+        if (this.model.queryReference.isSet) {
+            return (this.model.queryReference.queryId);
+        } else {
+            return (this.NO_ACTION_ID);
+        }
     }
 
-    set queryId(value : string) {        
-        this.model.setNewQueryId(value);
+    set queryId(value : string) {
+        if (this.NO_ACTION_ID != value) {
+            this.model.setNewQueryId(value);
+        } else {
+            this.model.queryReference.clear();
+        }
     }
 
     /**

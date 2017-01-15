@@ -43,10 +43,6 @@ export class ParameterMapping {
      * @param value The name of the thing that provides the value to the required value.
      */
     set providingName(value : string) {
-        if (value.indexOf('.') < 0) {
-            throw new Error(`Attempted to set provider name without domain: ${value}`);
-        }
-        
         this._providingName = value;
     }
 
