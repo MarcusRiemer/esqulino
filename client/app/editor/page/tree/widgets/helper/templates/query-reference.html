@@ -1,5 +1,7 @@
-<span (dragover)="onDragOver($event)"
+<span (dragstart)="onDragStart($event)"
+      (dragover)="onDragOver($event)"
       (drop)="onDrop($event)"
       [class.table]="isValidReference"
       [class.missing]="!isValidReference"
-      [innerHtml]="text"></span>
+      [innerHtml]="text"
+      draggable="true"></span>

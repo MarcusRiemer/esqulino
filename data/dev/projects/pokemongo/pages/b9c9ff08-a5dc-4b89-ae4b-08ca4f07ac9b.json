@@ -90,6 +90,32 @@
       {
         "type": "embedded-html",
         "html": "<ul>\n  {% for pkmn in query.Pokedex_1G %}\n    <li><a href=\"/Pokemon_Detail?nummer={{pkmn.nummer}}\">{{ pkmn.name}}</a></li>\n  {% endfor %}\n</ul>"
+      },
+      {
+        "type": "form",
+        "children": [
+          {
+            "type": "select",
+            "caption": "Auswahl",
+            "outParamName": "nummer",
+            "queryRefName": "Meine_Pokemon",
+            "optionTextExpression": "spitzname",
+            "optionValueExpression": "gefangen_id"
+          },
+          {
+            "type": "button",
+            "text": "Knopf",
+            "navigate": {
+              "type": "navigate",
+              "internal": {
+                "pageId": "0a436465-b074-46a4-ac12-b091a77c9d6b",
+                "parameters": [
+
+                ]
+              }
+            }
+          }
+        ]
       }
     ]
   }

@@ -1,11 +1,11 @@
 <esqulino-widget-node [model]="model">
   <span class="widget-header">
-    <widget-parameter>
+    <widget-parameter *ngIf="model.queryReference.isSet">
       <span class="name">Aktion</span>
       <span class="value">
         <query-reference [(queryReference)]="model.queryReference">
         </query-reference>
-        <required-parameters *ngIf="model.queryReference && model.queryReference.isResolveable"
+        <required-parameters *ngIf="model.queryReference.isResolveable"
                              [(parameterMapping)]="model.mapping"
                              [page]="model.page">
         </required-parameters>

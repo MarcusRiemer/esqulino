@@ -11,7 +11,9 @@ import{
     QuerySelect, ResultColumn
 } from '../../../../../shared/query'
 
-import {PageDragEvent}                        from '../../../drag.service'
+import {
+    PageDragEvent, DragService
+} from '../../../drag.service'
 
 /**
  * Allows editing of query references.
@@ -35,6 +37,9 @@ export class QueryReferenceComponent {
      */
     @Input() restrictToPage : Page;
 
+    constructor(private _dragService : DragService) {
+    }
+
     /**
      * @return The text that should be displayed.
      */
@@ -52,6 +57,16 @@ export class QueryReferenceComponent {
     get isValidReference() {
         return (this.queryReference &&
                 this.queryReference.isResolveable);
+    }
+
+    /**
+     * The query reference is about to be dragged, possibly on the
+     * trash.
+     */
+    onDragStart(event : DragEvent) {
+        this._dragService.startQueryRefDrag(event, "page", this.queryReference.toModel(), {
+            onRemove : () => this.queryReference.clear()
+        });
     }
 
     /**

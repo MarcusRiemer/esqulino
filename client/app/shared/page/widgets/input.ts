@@ -54,7 +54,7 @@ export class Input extends UserInputWidget {
      * @return The name of the parameter this input provides
      */
     get outParamName() {
-        return ("input." + this._outParamName);
+        return (this._outParamName);
     }
 
     /**
@@ -63,10 +63,6 @@ export class Input extends UserInputWidget {
      */
     set outParamName(value : string) {
         this._outParamName = value;
-
-        if (this._outParamName.startsWith("input.")) {
-            this._outParamName = this._outParamName.substr(6);
-        }
     }
 
     /**

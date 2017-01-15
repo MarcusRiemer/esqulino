@@ -12,6 +12,7 @@
     <select [(ngModel)]="queryId"
             id="button-sidebar-action"
             class="form-control">
+      <option [value]="NO_ACTION_ID">&mdash; Keine Aktion &mdash;</option>
       <option *ngFor="let avail of availableQueries;"
               [value]="avail.id">
         {{avail.name}}

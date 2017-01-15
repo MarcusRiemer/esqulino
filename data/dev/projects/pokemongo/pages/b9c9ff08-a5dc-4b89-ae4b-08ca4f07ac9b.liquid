@@ -5,35 +5,33 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
     <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
   </head>
+
   <body>
     <div class="container-fluid">
       <h1>Hallo auf meinem Pokédex</h1>
       <p>Hier zeige ich alle Pokémon, die ich gefangen habe.</p>
       {% include "query_table" table: query.Meine_Pokemon, columns: "spitzname,staerke,nummer,typ" %}
-      <div class="row">
-        <div class="col-md-12">
-          <a href="/Gefangen_Loeschen">Pokémon freigelassen</a>
-        </div>
-        <div class="col-md-12">
-          <a href="/Gefangen_Neu">Pokémon gefangen</a>
-        </div>
-      </div>
+      <div class="row"><div class="col-md-12"><a href="/Gefangen_Loeschen">Pokémon freigelassen</a></div>
+        <div class="col-md-12"><a href="/Gefangen_Neu">Pokémon gefangen</a></div></div>
       <h1>Alle Pokemon</h1>
       <p>Hier wird mit HTML geschummelt um alle Pokemon zu zeigen.</p>
-      <!-- Raw HTML begin -->
-      <ul>
+      <!-- Raw HTML begin --><ul>
         {% for pkmn in query.Pokedex_1G %}
-        <li>
-          <a href="/Pokemon_Detail?nummer={{pkmn.nummer}}">{{ pkmn.name}}</a>
-        </li>
+        <li><a href="/Pokemon_Detail?nummer={{pkmn.nummer}}">{{ pkmn.name}}</a></li>
         {% endfor %}
-      </ul>
-      <!-- Raw HTML end -->
+      </ul><!-- Raw HTML end -->
+      <form>
+        {% include "get_data_hidden" %}
+        {% include "select" options: query.Meine_Pokemon, outParamName: "nummer", caption: "Auswahl", optionText: "spitzname", optionValue: "gefangen_id"  %}
+        <button type="submit" formaction="/Pokemon_Detail" formmethod="GET"class="btn btn-secondary btn-block">Knopf</button></form>
     </div>
     {% include "edit-ribbon" %}
   </body>
+
+
 </html>
 
