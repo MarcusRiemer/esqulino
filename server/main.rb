@@ -28,7 +28,7 @@ class ScratchSqlApp < Sinatra::Base
   register Sinatra::Subdomain
 
   # Static HTML files are served from here
-  set :public_folder, File.dirname(__FILE__) + "/../dist/client/"
+  set :public_folder, File.dirname(__FILE__) + "/../client/dist"
 
   # There is a single validator for the whole esqulino instance.
   # All schemas are currently loaded when the server is started and are
