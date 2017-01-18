@@ -74,8 +74,9 @@ describe('Test Project: Creating Queries', () => {
         expect(page.typesEle.get(2).getAttribute('value')).toEqual("update");
         expect(page.typesEle.get(3).getAttribute('value')).toEqual("delete");
         
-        expect(page.tablesEle.count()).toEqual(1, "One table in the schema");
-        expect(page.tablesEle.get(0).getAttribute('value')).toEqual("key_value");
+        expect(page.tablesEle.count()).toEqual(2, "Two tables in the schema");
+        expect(page.tablesEle.get(0).getAttribute('value')).toEqual("english_numbers");
+        expect(page.tablesEle.get(1).getAttribute('value')).toEqual("key_value");
     });
 
     it("SELECT", () => page.createQuery("select", "A" + Math.random().toString(36).substr(2)));

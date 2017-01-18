@@ -282,7 +282,9 @@ export class NavigateAction extends Action {
         this._external = value;
         this._internal = undefined;
 
-        this.widget.page.markSaveRequired();
+        if (this.widget) {
+            this.widget.page.markSaveRequired();
+        }
     }
 
     /**
@@ -315,7 +317,9 @@ export class NavigateAction extends Action {
             pageParams : []
         }
 
-        this.widget.page.markSaveRequired();
+        if (this.widget) {
+            this.widget.page.markSaveRequired();
+        }
         this._external = undefined;
     }
 
