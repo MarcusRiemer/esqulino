@@ -75,7 +75,7 @@ describe('Test Project: Settings', () => {
             .all(by.css("button"));
 
         querBtnDelete
-            .map( e => e.click())
+            .map( e => {e.click(), browser.waitForAngular() })
             .then( () => browser.waitForAngular() )
             .then( () => {
                 // Reload page and assure there are no queries left

@@ -4,10 +4,12 @@ describe('Editor', () => {
     const testProjectId = "test";
     const editorUrl = `/editor/${testProjectId}/`;
 
+    // Some link to a page without a sidebar
     const someNoSidebarLink = element(by.css("ul.nav:nth-child(1) > li:nth-child(1) > a:nth-child(1)"));
-    
-    const someQueryLink = element(by.css("li.nav-item:nth-child(4) > a:nth-child(1)"));
-    const somePageLink = element(by.css(".nav-page > li:nth-child(2) > a:nth-child(1)"));
+
+    // Some editable query or page (has a sidebar)
+    const someQueryLink = element(by.css(".nav-query > li:nth-child(3) > a:nth-child(1)"));
+    const somePageLink = element(by.css(".nav-page > li:nth-child(1) > a:nth-child(1)"));
 
     const sidebarContainer = element(by.css("div.sidebar"));
 

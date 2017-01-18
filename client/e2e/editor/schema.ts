@@ -8,6 +8,6 @@ describe('Test Project: Schema', () => {
         browser.get(schemaUrl);
 
         const tablesEle = element.all(by.css("#schema-tables table tbody"));
-        expect(tablesEle.count()).toEqual(1, "Not exactly one table");
+        expect(tablesEle.count()).toEqual(2, "Not exactly two tables");
     });
 });
