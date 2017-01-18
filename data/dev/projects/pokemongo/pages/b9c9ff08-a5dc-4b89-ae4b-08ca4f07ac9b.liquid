@@ -15,19 +15,19 @@
       <h1>Hallo auf meinem Pokédex</h1>
       <p>Hier zeige ich alle Pokémon, die ich gefangen habe.</p>
       {% include "query_table" table: query.Meine_Pokemon, columns: "spitzname,staerke,nummer,typ" %}
-      <div class="row"><div class="col-md-12"><a href="/Gefangen_Loeschen">Pokémon freigelassen</a></div>
-        <div class="col-md-12"><a href="/Gefangen_Neu">Pokémon gefangen</a></div></div>
-      <h1>Alle Pokemon</h1>
-      <p>Hier wird mit HTML geschummelt um alle Pokemon zu zeigen.</p>
-      <!-- Raw HTML begin --><ul>
-        {% for pkmn in query.Pokedex_1G %}
-        <li><a href="/Pokemon_Detail?nummer={{pkmn.nummer}}">{{ pkmn.name}}</a></li>
-        {% endfor %}
-      </ul><!-- Raw HTML end -->
+      <div class="row"><div class="col-md-6"><form>
+            {% include "get_data_hidden" %}
+            <button type="submit" formaction="/Gefangen_Loeschen" formmethod="GET"class="btn btn-secondary btn-block">Pokémon freigelassen</button></form></div>
+        <div class="col-md-6"><form>
+            {% include "get_data_hidden" %}
+            <button type="submit" formaction="/Gefangen_Neu" formmethod="GET"class="btn btn-secondary btn-block">Pokémon gefangen
+      </button></form></div></div>
+      <h1>Pokémon ansehen
+      </h1>
       <form>
         {% include "get_data_hidden" %}
-        {% include "select" options: query.Meine_Pokemon, outParamName: "nummer", caption: "Auswahl", optionText: "spitzname", optionValue: "gefangen_id"  %}
-        <button type="submit" formaction="/Pokemon_Detail" formmethod="GET"class="btn btn-secondary btn-block">Knopf</button></form>
+        {% include "select" options: query.Meine_Pokemon, outParamName: "id", caption: "Auswahl", optionText: "spitzname", optionValue: "gefangen_id"  %}
+        <button type="submit" formaction="/Gefangen_Einzeln?id={{id}}" formmethod="GET"class="btn btn-secondary btn-block">Ansehen</button></form>
     </div>
     {% include "edit-ribbon" %}
   </body>

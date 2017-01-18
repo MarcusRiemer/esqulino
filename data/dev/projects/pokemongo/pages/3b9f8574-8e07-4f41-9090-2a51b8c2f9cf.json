@@ -93,15 +93,15 @@
               "mapping": [
                 {
                   "parameterName": "nummer",
-                  "providingName": "input.nummer"
+                  "providingName": "nummer"
                 },
                 {
                   "parameterName": "name",
-                  "providingName": "input.name"
+                  "providingName": "name"
                 },
                 {
                   "parameterName": "staerke",
-                  "providingName": "input.staerke"
+                  "providingName": "staerke"
                 }
               ]
             }

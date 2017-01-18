@@ -314,13 +314,21 @@ export class NavigateAction extends Action {
     set internalPageId(value : string) {
         this._internal = {
             pageId : value,
-            pageParams : []
+            pageParams : this.createDefaultMapping(value)
         }
 
         if (this.widget) {
             this.widget.page.markSaveRequired();
         }
         this._external = undefined;
+    }
+
+    /**
+     * Creates the default mapping for the given page.
+     */
+    protected createDefaultMapping(pageId : string) {
+        const p = this.page.project.getPageById(pageId);
+        return p.requestParameters.map(v => new ParameterMapping(this.page, { parameterName : v.name }));
     }
 
     /**
@@ -338,6 +346,11 @@ export class NavigateAction extends Action {
         this.assertInternalTarget();
 
         return (this._internal.pageParams);
+    }
+
+    set internalParameters(value : ParameterMapping[]) {
+        this.assertInternalTarget();
+        this._internal.pageParams = value;
     }
 
     toModel() : NavigateActionDescription {

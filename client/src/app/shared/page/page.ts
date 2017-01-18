@@ -57,7 +57,6 @@ export class Page extends ProjectResource {
             this._body = new Body(desc.body, this);
         } else {
             this._body = new Body(Body.emptyDescription, this);
-            
         }
 
         // Listen to changes
