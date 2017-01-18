@@ -16,6 +16,9 @@
       <span class="value">
         <nav-reference [navigateAction]="model.navigateAction"
                        [page]="model.page"></nav-reference>
+        <required-parameters [(parameterMapping)]="model.navigateAction.internalParameters"
+                             [page]="model.page">
+        </required-parameters>
       </span>
     </widget-parameter>
   </span>
