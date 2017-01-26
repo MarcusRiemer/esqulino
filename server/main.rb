@@ -328,42 +328,51 @@ class ScratchSqlApp < Sinatra::Base
         request_prepare_project subdomain
         request_prepare_page(page_name_or_id, true)
 
-        # Grab all input values that are not empty and get rid of the "input." prefix
+        # Grab all "naked" POST-parameters
         input_params = {}
         request.POST
-          .select {|key,value| key.start_with? "input" and not value.strip.empty?}
-          .each {|key,value| input_params[key[6..-1]] = value }
+          .select {|key,value| not key.include? '.' }
+          .each {|key,value| input_params[key] = value }
 
+        # Put them in the "grand" request object
         # Doing the same for hidden "get" inputs
         form_get_params = {}
         request.POST
           .select {|key,value| key.start_with? "get" and not value.strip.empty?}
           .each {|key,value| form_get_params[key[4..-1]] = value }
 
-        # Put them in the "grand" request object
+        bind_params = form_get_params.merge(input_params)
+
+        puts "Bind params: #{bind_params}"
+        
         initial_params = {
-          'input' => input_params,
+          'request' => input_params,
           'get' => form_get_params,
           'project' => @project.render_params,
           'page' => @page.render_params,
           'server' => self.server_render_data
         }
-        
-        bind_params = {}
 
+        # GET-parameters denote a mapping
         request.GET.each do |parameter_name, providing_name|
-          # Extract all relevant indizes
-          providing_prefix, providing_name = providing_name.split "."
-          
-          # And do the actual mapping
-          begin
-            mapped_value = initial_params
-                             .fetch(providing_prefix)
-                             .fetch(providing_name)
-            bind_params[parameter_name] = mapped_value
-          rescue KeyError => e
-            # For the moment we simply let them be,
-            # query.executeable? does the real checking of required parameters.
+          # Does the providing name have a prefix?
+          if providing_name.include? '.'
+            # Yes, properly split it up to map something
+            providing_prefix, providing_name = providing_name.split "."
+            
+            # And do the actual mapping
+            begin
+              mapped_value = initial_params
+                               .fetch(providing_prefix)
+                               .fetch(providing_name)
+              bind_params[parameter_name] = mapped_value
+            rescue KeyError => e
+              # For the moment we simply let them be,
+              # query.executeable? does the real checking of required parameters.
+            end
+          else
+            bind_params[parameter_name] = bind_params[providing_name]
+            bind_params.delete providing_name
           end
         end
         

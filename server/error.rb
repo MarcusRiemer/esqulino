@@ -9,8 +9,11 @@ class EsqulinoError < StandardError
   #
   # @param msg [string] The user-facing error message
   # @param code [integer] The HTTP status code
-  def initialize(msg="Internal Esqulino Error", code=500)
+  # @param impl_error [bool] True, if this error shouldn't have been
+  #                          shown to the user.
+  def initialize(msg="Internal Esqulino Error", code=500, impl_error = false)
     @code = code
+    @impl_error = impl_error
     super msg
   end
 
@@ -33,7 +36,8 @@ class EsqulinoError < StandardError
     {
       "code" => @code,
       "message" => self.to_s,
-      "type" => self.class.name
+      "type" => self.class.name,
+      "implError" => @impl_error
     }.merge(json_data)
   end
 end
@@ -103,8 +107,13 @@ end
 
 # Something went wrong while executing a query
 class DatabaseQueryError < EsqulinoError
-  def initialize(project, sql, params, exception)
-    super(exception.to_s, 400)
+  # @param project [Project] The project the error occured in
+  # @param sql [string] The faulty (?) query
+  # @param params [Hash] The parameters that were used to run the query
+  # @param impl_error [bool] True, if this is probably an error that
+  #                          the developer is not responsible for.
+  def initialize(project, sql, params, exception, impl_error)
+    super("#{exception.class.name}: #{exception}", 400, impl_error)
     @project = project
     @sql = sql
     @params = params
