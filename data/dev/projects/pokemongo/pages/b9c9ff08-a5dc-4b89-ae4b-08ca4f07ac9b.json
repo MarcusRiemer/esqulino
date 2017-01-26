@@ -40,39 +40,49 @@
         "columns": [
           {
             "type": "column",
-            "width": 12,
+            "width": "6",
             "widgets": [
               {
-                "type": "link",
-                "text": "Pokémon freigelassen",
-                "action": {
-                  "type": "navigate",
-                  "internal": {
-                    "pageId": "7a9b9883-62c9-4604-a46c-4d254bce8e4a",
-                    "parameters": [
+                "type": "form",
+                "children": [
+                  {
+                    "type": "button",
+                    "text": "Pokémon freigelassen",
+                    "navigate": {
+                      "type": "navigate",
+                      "internal": {
+                        "pageId": "7a9b9883-62c9-4604-a46c-4d254bce8e4a",
+                        "parameters": [
 
-                    ]
+                        ]
+                      }
+                    }
                   }
-                }
+                ]
               }
             ]
           },
           {
             "type": "column",
-            "width": 12,
+            "width": "6",
             "widgets": [
               {
-                "type": "link",
-                "text": "Pokémon gefangen",
-                "action": {
-                  "type": "navigate",
-                  "internal": {
-                    "pageId": "3b9f8574-8e07-4f41-9090-2a51b8c2f9cf",
-                    "parameters": [
+                "type": "form",
+                "children": [
+                  {
+                    "type": "button",
+                    "text": "Pokémon gefangen\n",
+                    "navigate": {
+                      "type": "navigate",
+                      "internal": {
+                        "pageId": "3b9f8574-8e07-4f41-9090-2a51b8c2f9cf",
+                        "parameters": [
 
-                    ]
+                        ]
+                      }
+                    }
                   }
-                }
+                ]
               }
             ]
           }
@@ -81,15 +91,50 @@
       {
         "type": "heading",
         "level": 1,
-        "text": "Alle Pokemon"
+        "text": "Pokémon ansehen\n"
       },
       {
-        "type": "paragraph",
-        "text": "Hier wird mit HTML geschummelt um alle Pokemon zu zeigen."
-      },
-      {
-        "type": "embedded-html",
-        "html": "<ul>\n  {% for pkmn in query.Pokedex_1G %}\n    <li><a href=\"/Pokemon_Detail?nummer={{pkmn.nummer}}\">{{ pkmn.name}}</a></li>\n  {% endfor %}\n</ul>"
+        "type": "form",
+        "children": [
+          {
+            "type": "select",
+            "caption": "Auswahl",
+            "outParamName": "id",
+            "queryRefName": "Meine_Pokemon",
+            "optionTextExpression": "spitzname",
+            "optionValueExpression": "gefangen_id"
+          },
+          {
+            "type": "button",
+            "text": "Ansehen",
+            "navigate": {
+              "type": "navigate",
+              "internal": {
+                "pageId": "84d32307-0aca-423b-b0ea-e11facacf955",
+                "parameters": [
+                  {
+                    "parameterName": "id",
+                    "providingName": "id"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "button",
+            "text": "Löschen",
+            "query": {
+              "type": "query",
+              "queryId": "40bddeac-facc-4836-a27b-6a23222078d5",
+              "mapping": [
+                {
+                  "parameterName": "gefangen_id",
+                  "providingName": "id"
+                }
+              ]
+            }
+          }
+        ]
       }
     ]
   }

@@ -5,13 +5,17 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
-    <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
 
     <title>Fehler</title>
   </head>
   <body>
     <div class="container-fluid">
       <h1>Fehler {{ exception.code }}: <code>{{ exception.type }}</code></h1>
+      {% if exception.implError %}
+        <div class="alert alert-danger" role="alert">
+          <strong>Mist, du hast vielleicht einen Bug gefunden!</strong> Dieser Fehler sollte nicht auftreten und ist möglicherweise ein Problem in Blattwerkzeug selbst!
+        </div>
+      {% endif %}
 
       <p>Leider ist bei der Verarbeitung etwas schiefgelaufen! Der Server hat die folgende Fehlernachricht übermittelt:</p>
       

@@ -5,9 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
     <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
   </head>
+
   <body>
     <div class="container-fluid">
       <h1>Pokémon Gefangen</h1>
@@ -18,15 +20,16 @@
       <form>
         {% include "get_data_hidden" %}
         <h2>Fakten zu deinem Fang</h2>
-        {% include "select" options: query.Pokedex_1G, outParamName: "input.nummer", caption: "Pokemon", optionText: "name", optionValue: "nummer"  %}
-        {% include "input" caption: "Spitzname", outParamName: "input.name", description: "", inputType: "text", required: true  %}
-        {% include "input" caption: "Stärke des neuen Pokémon", outParamName: "input.staerke", description: "", inputType: "number", required: true  %}
-        <button type="submit" formaction="/Gefangen_Neu/query/79f9fd59-89cd-47d1-ab20-9a4388cd9d44?nummer=input.nummer&name=input.name&staerke=input.staerke" formmethod="POST" name="action" value="a" class="btn btn-secondary btn-block">Pokémon anlegen</button>
-      </form>
+        {% include "select" options: query.Pokedex_1G, outParamName: "nummer", caption: "Pokemon", optionText: "name", optionValue: "nummer"  %}
+        {% include "input" caption: "Spitzname", outParamName: "name", description: "Der von dir vergebene Name für das gefangene Pokémon", inputType: "text", required: true  %}
+        {% include "input" caption: "Stärke", outParamName: "staerke", description: "Die Stärke des gefangenen Pokémon", inputType: "number", required: true  %}
+        <button type="submit" formaction="/Gefangen_Neu/query/79f9fd59-89cd-47d1-ab20-9a4388cd9d44?" formmethod="POST" class="btn btn-secondary btn-block">Pokémon speichern</button></form>
       <h2>Meine Pokémon</h2>
       {% include "query_table" table: query.Meine_Pokemon, columns: "gefangen_id,nummer,name,typ,spitzname,staerke" %}
     </div>
     {% include "edit-ribbon" %}
   </body>
+
+
 </html>
 

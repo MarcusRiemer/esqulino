@@ -1,0 +1,36 @@
+<sidebar-item-host header="Knopf">
+  <fieldset class="form-group">
+    <label for="button-sidebar-text">Text</label>
+    <input [(ngModel)]="model.text"
+           type="text"
+           class="form-control"
+           id="button-sidebar-text">
+  </fieldset>
+
+  <fieldset class="form-group">
+    <label for="button-sidebar-action">Benutzte Abfrage</label>
+    <select [(ngModel)]="queryId"
+            id="button-sidebar-action"
+            class="form-control">
+      <option [value]="NO_ACTION_ID">&mdash; Keine Aktion &mdash;</option>
+      <option *ngFor="let avail of availableQueries;"
+              [value]="avail.id">
+        {{avail.name}}
+      </option>
+    </select>
+  </fieldset>
+
+  <fieldset class="form-group">
+    <label for="button-sidebar-internal-target">Zielseite</label>
+    <select [(ngModel)]="targetPageId"
+            id="button-sidebar-internal-target"
+            class="form-control">
+      <option [value]="SAME_PAGE_ID">&mdash; Diese Seite &mdash;</option>
+      <option *ngFor="let page of availablePages;"
+              [value]="page.id">
+        {{page.name}}
+      </option>
+    </select>
+  </fieldset>
+
+</sidebar-item-host>

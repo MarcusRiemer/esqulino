@@ -254,7 +254,9 @@ class Project
         'rows' => result.drop(1)
       }
     rescue SQLite3::ConstraintException, SQLite3::SQLException => e
-      raise DatabaseQueryError.new(self, sql, params, e)
+      raise DatabaseQueryError.new(self, sql, params, e, false)
+    rescue SQLite3::Exception => e
+      raise DatabaseQueryError.new(self, sql, params, e, true)
     end
   end
 
