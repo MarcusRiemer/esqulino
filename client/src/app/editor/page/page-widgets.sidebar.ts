@@ -9,7 +9,7 @@ import {borderCssClass}                 from '../shared/page-preview.util'
 import {Page, ParameterMapping}         from '../../shared/page/index'
 import {
     Widget, WidgetDescription, WidgetCategory,
-    Heading, Row, Paragraph, QueryTable, Select,
+    Heading, HiddenInput, Row, Paragraph, QueryTable, Select,
     Input, Button, EmbeddedHtml, Form, Link, Column
 } from '../../shared/page/widgets/index'
 
@@ -19,6 +19,9 @@ import {
 
 import {DragService, PageDragEvent}     from './drag.service'
 
+/**
+ * A single entry in the sidebar.
+ */
 interface SidebarWidgetEntry {
     icon : string
     model : WidgetDescription
@@ -128,6 +131,12 @@ export class SidebarWidgetsComponent implements OnDestroy {
                 category: "widget",
             },
             {
+                icon: "fa-keyboard-o",
+                name: "Versteckt",
+                model: HiddenInput.emptyDescription,
+                category: "widget",
+            },
+            {
                 icon: "fa-caret-square-o-down ",
                 name: "Auswahl",
                 model: Select.emptyDescription,
@@ -172,31 +181,5 @@ export class SidebarWidgetsComponent implements OnDestroy {
      */
     onStartWidgetDrag(evt : DragEvent, model : WidgetDescription) {
         this._dragService.startWidgetDrag(evt, "sidebar", model);
-    }
-
-    /**
-     * Something is beeing dragged over a parameter
-     */
-    onParameterDrag(evt : DragEvent) {
-        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        if (pageEvt.parameterValueProvider) {
-            evt.preventDefault();
-        }
-    }
-
-    /**
-     * Something is beeing dragged over a parameter
-     */
-    onParameterDrop(evt : DragEvent, param : ParameterMapping) {
-        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        if (pageEvt.parameterValueProvider) {
-            evt.preventDefault();
-
-            param.providingName = pageEvt.parameterValueProvider;
-
-            if (this._dragService.currentDrag.callbacks.onParameterMapping) {
-                this._dragService.currentDrag.callbacks.onParameterMapping(param);
-            }
-        }
     }
 }

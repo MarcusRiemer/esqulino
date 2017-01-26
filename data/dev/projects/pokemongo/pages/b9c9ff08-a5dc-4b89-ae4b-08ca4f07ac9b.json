@@ -97,6 +97,10 @@
         "type": "form",
         "children": [
           {
+            "type": "hidden",
+            "outParamName": ""
+          },
+          {
             "type": "select",
             "caption": "Auswahl",
             "outParamName": "id",
