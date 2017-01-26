@@ -27,10 +27,10 @@ clean : msg-pre-clean
 ##################################
 
 msg-pre-clean :
-	@tput setaf 2; echo "## Schema : Cleaning"; tput sgr0
+	@tput setaf 2; echo "## Schema : Cleaning ..."; tput sgr0
 
 msg-pre-schema :
-	@tput setaf 2; echo "## Schema : Re-Generating out-of-date schemas"; tput sgr0
+	@tput setaf 2; echo "## Schema : Re-Generating out-of-date schemas ..."; tput sgr0
 
 .PHONY : all clean install-deps msg-pre-schema
 

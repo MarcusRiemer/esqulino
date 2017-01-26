@@ -5,9 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
     <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
   </head>
+
   <body>
     <div class="container-fluid">
       <h1>Pokémon Freigelassen</h1>
@@ -17,11 +19,12 @@
       {% include "query_table" table: query.Meine_Pokemon, columns: "gefangen_id,nummer,name,spitzname" %}
       <form>
         {% include "get_data_hidden" %}
-        {% include "select" options: query.Meine_Pokemon, outParamName: "input.gefangen_id", caption: "Freigelassenes Pokémon", optionText: "spitzname", optionValue: "gefangen_id"  %}
-        <button type="submit" formaction="/Gefangen_Loeschen/query/40bddeac-facc-4836-a27b-6a23222078d5?gefangen_id=input.gefangen_id" formmethod="POST" name="action" value="a" class="btn btn-secondary btn-block">Löschen!</button>
-      </form>
+        {% include "select" options: query.Meine_Pokemon, outParamName: "gefangen_id", caption: "Freigelassenes Pokémon", optionText: "spitzname", optionValue: "gefangen_id"  %}
+        <button type="submit" formaction="/Gefangen_Loeschen/query/40bddeac-facc-4836-a27b-6a23222078d5?gefangen_id=input.gefangen_id" formmethod="POST" class="btn btn-secondary btn-block">Löschen!</button></form>
     </div>
     {% include "edit-ribbon" %}
   </body>
+
+
 </html>
 

@@ -1,6 +1,14 @@
-node_modules
-typings
-.tscache
-.sass-cache
-*.log
-**/.baseDir.ts
+# compiled output
+/dist
+/tmp
+
+# dependencies
+/node_modules
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+#System Files
+.DS_Store
+Thumbs.db

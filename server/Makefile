@@ -1,6 +1,6 @@
 BUNDLE_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "bundle")')
-YARD_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "yard")')
 RERUN_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "rerun")')
+YARD_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "yard")')
 
 SOURCES = $(shell find . -not -path '*/\.*' -iname "*.rb")
 

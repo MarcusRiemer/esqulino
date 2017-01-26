@@ -1,0 +1,25 @@
+<esqulino-widget-node [model]="model">
+  <span class="widget-header">
+    <widget-parameter *ngIf="model.queryReference.isSet">
+      <span class="name">Aktion</span>
+      <span class="value">
+        <query-reference [(queryReference)]="model.queryReference">
+        </query-reference>
+        <required-parameters *ngIf="model.queryReference.isResolveable"
+                             [(parameterMapping)]="model.mapping"
+                             [page]="model.page">
+        </required-parameters>
+      </span>
+    </widget-parameter>
+    <widget-parameter *ngIf="model.navigateAction.hasAnyTarget">
+      <span class="name">Ziel</span>
+      <span class="value">
+        <nav-reference [navigateAction]="model.navigateAction"
+                       [page]="model.page"></nav-reference>
+        <required-parameters [(parameterMapping)]="model.navigateAction.internalParameters"
+                             [page]="model.page">
+        </required-parameters>
+      </span>
+    </widget-parameter>
+  </span>
+</esqulino-widget-node>
