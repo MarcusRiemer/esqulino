@@ -21,6 +21,9 @@ export class RequiredParametersComponent {
 
     @Input() page : Page;
 
+    /**
+     * @return True, if there is any parameter that is actually used.
+     */
     get hasParameters() : boolean {
         return (this.parameterMapping && this.parameterMapping.length > 0);
     }

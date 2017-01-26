@@ -86,13 +86,14 @@ function renderButton(w: Widget) : string {
         const actionUrl = `/${pageName}/query/${queryId}`;
 
         const mapping = button.mapping
+            .filter(m => m.providingName && m.parameterName != m.providingName)
             .map(m => `${m.parameterName}=${m.providingName}`)
             .join("&")
 
         const encodedUrl = actionUrl + "?" + mapping
         const method = "POST";
 
-        return (`<button type="submit" formaction="${encodedUrl}" formmethod="${method}" name="action" value="a" class="${cssClass}">${text}</button>`);
+        return (`<button type="submit" formaction="${encodedUrl}" formmethod="${method}" class="${cssClass}">${text}</button>`);
     } else if (button.navigateAction.hasAnyTarget) {
         // A button that refers to a different page
         const encodedUrl = button.navigateAction.targetUrl;

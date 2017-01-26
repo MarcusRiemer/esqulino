@@ -27,7 +27,8 @@
       <form>
         {% include "get_data_hidden" %}
         {% include "select" options: query.Meine_Pokemon, outParamName: "id", caption: "Auswahl", optionText: "spitzname", optionValue: "gefangen_id"  %}
-        <button type="submit" formaction="/Gefangen_Einzeln?id={{id}}" formmethod="GET"class="btn btn-secondary btn-block">Ansehen</button></form>
+        <button type="submit" formaction="/Gefangen_Einzeln?id={{id}}" formmethod="GET"class="btn btn-secondary btn-block">Ansehen</button>
+        <button type="submit" formaction="/Hauptseite/query/40bddeac-facc-4836-a27b-6a23222078d5?gefangen_id=id" formmethod="POST" class="btn btn-secondary btn-block">Löschen</button></form>
     </div>
     {% include "edit-ribbon" %}
   </body>
