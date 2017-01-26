@@ -6,7 +6,8 @@ import {Renderer}              from '../renderer'
 import {
     Widget, Row, Column,
     Body, Button, EmbeddedHtml, Form, Heading,
-    Input, Link, Paragraph, QueryTable, Select
+    HiddenInput, Input, Link, Paragraph,
+    QueryTable, Select
 } from '../widgets/index'
 
 export {Renderer}
@@ -125,6 +126,11 @@ function renderHeading(w: Widget) : string {
     return (`<${tagname}>${heading.text}</${tagname}>`);
 }
 
+function renderHidden(w: Widget) : string {
+    const heading = w as HiddenInput;
+    return (`<input type="hidden" name="">`);
+}
+
 /**
  * Renders a <input> element by including the releveant template and
  * passing the correct parameters to it. This rendering step therefore
@@ -217,6 +223,7 @@ export class LiquidRenderer extends Renderer {
         "query-table" : renderQueryTable,
         "paragraph" : renderParagraph,
         "heading" : renderHeading,
+        "hidden" : renderHidden,
         "input" : renderInput,
         "link" : renderLink,
         "row" : renderRow,

@@ -51,7 +51,9 @@ export interface NavigateActionDescription extends ActionDescription {
 export interface InputDescription extends WidgetDescription {
     type : "input"
 
-    // The <input> "type" attribute
+    // The <input> "type" attribute. Do note that <input type="hidden">
+    // is modelled with a distinct type, because it does not share many
+    // properties with the kind of input we are talking about here.
     inputType : string
 
     // The <label> for this input
@@ -65,6 +67,17 @@ export interface InputDescription extends WidgetDescription {
 
     // Is it mandatory to fill in this field?
     required? : boolean
+}
+
+/**
+ * Describes a hidden <input> element, that can be used to pass
+ * on some kind of serverside state.
+ */
+export interface HiddenInputDescription extends WidgetDescription {
+    type : "hidden"
+
+    // The parameter this widget provides
+    outParamName : string
 }
 
 /**

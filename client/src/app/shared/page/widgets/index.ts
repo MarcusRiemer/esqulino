@@ -20,6 +20,7 @@ import {Button, ButtonDescription}             from './button'
 import {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
 import {Form, FormDescription}                 from './form'
 import {Heading, HeadingDescription}           from './heading'
+import {HiddenInput, HiddenInputDescription}   from './hidden-input'
 import {Input, InputDescription}               from './input'
 import {Link, LinkDescription}                 from './link'
 import {Paragraph, ParagraphDescription}       from './paragraph'
@@ -38,6 +39,7 @@ export {
     Form, FormDescription,
     Paragraph, ParagraphDescription,
     Heading, HeadingDescription,
+    HiddenInput, HiddenInputDescription,
     QueryTable, QueryTableDescription,
     Select, SelectDescription,
     Input, InputDescription,

@@ -8,6 +8,7 @@ import {Column, ColumnDescription}             from './column'
 import {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
 import {Form, FormDescription}                 from './form'
 import {Heading, HeadingDescription}           from './heading'
+import {HiddenInput, HiddenInputDescription}   from './hidden-input'
 import {Input, InputDescription}               from './input'
 import {Link, LinkDescription}                 from './link'
 import {Paragraph, ParagraphDescription}       from './paragraph'
@@ -30,6 +31,8 @@ function createWidget(desc : WidgetDescription, parent : WidgetHost) : WidgetBas
         return new Form(desc as FormDescription, parent);
     case "heading":
         return new Heading(desc as HeadingDescription, parent);
+    case "hidden":
+        return new HiddenInput(desc as HiddenInputDescription, parent);
     case "input":
         return new Input(desc as InputDescription, parent);
     case "link":
