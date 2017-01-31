@@ -16,7 +16,7 @@ export class HiddenInput extends WidgetBase {
     private _outParamName : string;
 
     constructor(desc : HiddenInputDescription, parent? : WidgetHost) {
-        super("hidden", "widget", true, parent);
+        super({type: "hidden", category: "widget", isEmpty: true}, parent);
         this._outParamName = desc.outParamName;
     }
 

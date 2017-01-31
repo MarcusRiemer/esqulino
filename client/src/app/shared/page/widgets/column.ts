@@ -17,7 +17,7 @@ export class Column extends HostingWidget {
     private _widgets : WidgetBase[];
 
     constructor(desc : ColumnDescription, parent? : WidgetHost) {
-        super("column", "layout", false, parent);
+        super({ type: "column", category: "layout", isEmpty: false }, parent);
         
         this._width = desc.width;
         this._widgets = desc.widgets.map( (wiDesc) => loadWidget(wiDesc, this) );
