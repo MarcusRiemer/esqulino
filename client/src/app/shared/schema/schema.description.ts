@@ -26,6 +26,7 @@ export interface ForeignKeyDescription {
 export interface TableDescription {
     name : string
     columns : ColumnDescription[]
-    foreign_keys : ForeignKeyDescription[]
+    // TODO: Implement in Table-class
+    // foreign_keys : ForeignKeyDescription[]
 }
 
