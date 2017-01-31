@@ -11,6 +11,14 @@ export interface ColumnDescription {
     primary : boolean
 }
 
+export interface ForeignKeyDescription {
+    refs : {
+        to_table : string
+        from_column : string
+        to_column : string        
+    }[];
+}
+
 /**
  * The "over-the-wire" description of a single table 
  * with all of its columns.
@@ -18,4 +26,6 @@ export interface ColumnDescription {
 export interface TableDescription {
     name : string
     columns : ColumnDescription[]
+    foreign_keys : ForeignKeyDescription[]
 }
+

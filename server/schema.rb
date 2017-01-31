@@ -24,6 +24,17 @@ class SchemaColumn
   end
 end
 
+# Describes how a single column of a certain table references
+# another column in (possibly) another table.
+class SchemaForeignKeyRef
+  attr_reader: from_column, to_table, to_column
+end
+
+class SchemaForeignKey
+  def initialize(table, references)
+  end
+end
+
 # Describes a SQLite table with its columns
 class SchemaTable
   attr_reader :name, :columns
@@ -49,7 +60,7 @@ class SchemaTable
   # Serialises this table to JSON, according to the over-the-wire format
   # described in Typescript.
   def to_json(options)
-    { :name => @name, :columns => @columns }.to_json(options)
+    { :name => @name, :columns => @columns, :foreign_keys => @foreign_keys }.to_json(options)
   end
 end
 
