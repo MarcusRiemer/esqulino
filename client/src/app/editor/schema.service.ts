@@ -9,8 +9,7 @@ import { ServerApiService }                         from '../shared/serverapi.se
 import { KeyValuePairs, encodeUriParameters }       from '../shared/util'
 
 import { Project }                                  from './project.service'
-import { Table, Column }                            from '../shared/schema'
-
+import { Table, Column }                            from '../shared/schema/'
 
 /**
  * Service to hold, get und send data from a schema.
@@ -27,12 +26,13 @@ export class SchemaService {
     ) {
     }
 
+
     /**
      * Function to get table entries from a table with limit and offset
      * @param project - the current project
      * @param table - the table to get the entries from
      * @param from - the index to start getting the entries from
-     * @param amount - the amount of entries to get  
+     * @param amount - the amount of entries to get
      */
     getTableData(project: Project, table: Table, from: number, amount: number) {
         const url = this._server.getTableEntriesUrl(project.id, table.name, from, amount);
@@ -50,7 +50,7 @@ export class SchemaService {
     }
 
     /**
-     * Function to get the amount of entries inside a table 
+     * Function to get the amount of entries inside a table
      * @param project - the current project
      * @param table - the table to get the entries from
      */
@@ -65,7 +65,7 @@ export class SchemaService {
                 return res.json();
             })
             .catch((res) => this.handleError(res));
-            
+
         return (toReturn);
     }
 
