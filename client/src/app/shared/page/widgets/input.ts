@@ -29,7 +29,7 @@ export class Input extends UserInputWidget {
     private _required : boolean;
     
     constructor(desc : InputDescription, parent? : WidgetHost) {
-        super("input", "widget", true, parent);
+        super({type: "input", category: "widget", isEmpty: true}, parent);
         this._outParamName = desc.outParamName;
         this._caption = desc.caption;
         this._description = desc.description;

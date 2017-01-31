@@ -1,3 +1,5 @@
+import {Parameter}                            from './widgets/parameters/'
+
 import {WidgetDescription}                    from './page.description'
 import {Page}                                 from './page'
 
@@ -35,6 +37,11 @@ export interface Widget {
      * @return The page this widget is placed on,
      */
     page : Page;
+
+    /**
+     * @return Metadata about parameters for this widget
+     */
+    parameters : Parameter[];
 
     /**
      * @return The description of this widget.

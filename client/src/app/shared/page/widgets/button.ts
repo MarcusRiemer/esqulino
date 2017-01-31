@@ -27,7 +27,7 @@ export class Button extends ParametrizedWidget {
     private _text : string;
 
     constructor(desc : ButtonDescription, parent? : WidgetHost) {
-        super("button", "widget", false, parent);
+        super({ type : "button", category: "widget", isEmpty: false}, parent);
         this._text = desc.text;
         this._queryAction = new QueryAction(this, desc.query);
         this._navigateAction = new NavigateAction(this, desc.navigate);

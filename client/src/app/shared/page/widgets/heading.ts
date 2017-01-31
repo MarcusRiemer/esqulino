@@ -14,7 +14,7 @@ export class Heading extends WidgetBase {
     private _level : number;
     
     constructor(desc : HeadingDescription, parent? : WidgetHost) {
-        super("heading", "widget", false, parent);
+        super({ type : "heading", category : "widget", isEmpty :false}, parent);
         this._text = desc.text;
         this._level = desc.level;
     }
