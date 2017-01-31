@@ -2,7 +2,7 @@ import {Subject}                              from 'rxjs/Subject'
 import {BehaviorSubject}                      from 'rxjs/BehaviorSubject'
 import {Observable}                           from 'rxjs/Observable'
 
-import {Schema}                               from './schema'
+import {Schema}                               from './schema/schema'
 import {
     Invalidateable, Saveable, SaveStateEvent
 } from './interfaces'
