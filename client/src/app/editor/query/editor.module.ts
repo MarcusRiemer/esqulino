@@ -22,7 +22,7 @@ import {SelectComponent}                from './sql-select.component'
 import {DeleteComponent}                from './sql-delete.component'
 import {FromComponent}                  from './sql-from.component'
 import {WhereComponent}                 from './sql-where.component'
-import {InsertComponent}                from './sql-insert.component'
+import {AssignComponent}                from './sql-assign.component'
 import {ExpressionComponent}            from './sql-expr.component'
 
 import {QueryColumnListComponent}       from './query-column-list.component'
@@ -48,7 +48,7 @@ import {QueryColumnListComponent}       from './query-column-list.component'
         DeleteComponent,
         FromComponent,
         WhereComponent,
-        InsertComponent,
+        AssignComponent,
 
         QuerySidebarComponent,
         QueryColumnListComponent,

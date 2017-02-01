@@ -32,6 +32,17 @@ export class QueryUpdate extends QueryAssign implements QueryWhere {
         this.markSaveRequired();
     }
 
+    getLeaves() : SyntaxTree.Expression[] {
+        let toReturn = [];
+        if (!!this._where) {
+            toReturn = this._where.getLeaves();
+        }
+
+        toReturn = this.values.concat(toReturn);
+        return (toReturn);
+    }
+
+
     /**
      * Calculates the SQL String representation of this query.
      */
@@ -40,9 +51,22 @@ export class QueryUpdate extends QueryAssign implements QueryWhere {
             .map(a => `${a.columnName} = ${a.expr.toSqlString()}`)
             .join(", ");
         
-        let toReturn = `UPDATE ${this.tableName}\nSET ${values}`;        
+        let toReturn = `UPDATE ${this.tableName}\nSET ${values}`;
+
+        if (this._where) {
+            toReturn += `\n` + this._where.toSqlString();
+        }
         
         return (toReturn);
+    }
+
+    removeChild(formerChild : SyntaxTree.Removable) : void {
+        if (this._where == formerChild) {
+            this._where = undefined;
+            this.markSaveRequired();
+        } else {
+            throw new Error("Unknown child");
+        }
     }
 
     /**

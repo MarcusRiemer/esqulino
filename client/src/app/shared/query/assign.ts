@@ -27,7 +27,7 @@ export abstract class QueryAssign extends Query {
     private _values : ColumnAssignment[] = [];
 
     /**
-     * Constructs a new INSERT Query from a model and matching
+     * Constructs a new INSERT or UPDATE Query from a model and matching
      * to a schema.
      */
     constructor(schema : Schema, model : Model.QueryDescription) {
@@ -49,7 +49,7 @@ export abstract class QueryAssign extends Query {
     }
 
     /**
-     * @return All columns this insert would use.
+     * @return All columns these assignments would use.
      */
     get activeColumns() : ColumnDescription[] {
         return (this._values.map(assign => this.schema.getColumn(this._tableName, assign.columnName)));
@@ -157,11 +157,4 @@ export abstract class QueryAssign extends Query {
     
         return (`INSERT INTO ${this._tableName} (${columnNames})\nVALUES (${expressions})`);
     }
-
-    public getLeaves() : SyntaxTree.Expression[] {
-        const nested = this._values.map(v => v.expr.getLeaves());
-
-        return ([].concat.apply([], nested));
-    }
-
 }

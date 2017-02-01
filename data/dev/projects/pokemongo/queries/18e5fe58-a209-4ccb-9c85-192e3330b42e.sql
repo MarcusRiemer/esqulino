@@ -1,2 +1,3 @@
 UPDATE gefangen
-SET staerke = :staerke, gefangen_id = :gefangen_id
+SET staerke = :staerke
+WHERE gefangen.gefangen_id = :gefangen_id

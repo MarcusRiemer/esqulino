@@ -1,6 +1,7 @@
 import {Schema, ColumnDescription}        from '../schema'
 
 import * as Model                         from './description'
+import * as SyntaxTree                    from './syntaxtree'
 import {QueryAssign}                      from './assign'
 
 /**
@@ -14,6 +15,11 @@ export class QueryInsert extends QueryAssign {
     constructor(schema : Schema, model : Model.QueryDescription) {
         super (schema, model);
     }
+
+    public getLeaves() : SyntaxTree.Expression[] {
+        return (this.values);
+    }
+
 
     /**
      * Calculates the SQL String representation of this query.

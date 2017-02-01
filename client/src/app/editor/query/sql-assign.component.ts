@@ -3,6 +3,8 @@ import {
     ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core'
 
+import {DragService, SqlDragEvent}      from './drag.service'
+
 import {ColumnDescription}              from '../../shared/schema'
 import {
     QueryInsert, QueryUpdate, SyntaxTree
@@ -24,8 +26,12 @@ interface Assignment {
     selector: 'sql-assign',
     templateUrl: 'templates/query-assign.html',
 })
-export class InsertComponent {
+export class AssignComponent {
     @Input() query : QueryInsert | QueryUpdate;
+
+    constructor(private _dragService : DragService) {
+        
+    }
     
     /**
      * @return True, if the given query is an INSERT query.
@@ -33,6 +39,10 @@ export class InsertComponent {
     get isAssignQuery() {
         return (this.query instanceof QueryInsert ||
                 this.query instanceof QueryUpdate);
+    }
+
+    onDragStartColumn(evt : DragEvent, col : Assignment) {
+        this._dragService.startColumnDrag(this.query.tableName, col.column.name, "select", evt);
     }
 
     /**
