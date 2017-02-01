@@ -27,7 +27,7 @@ end
 # Describes how a single column of a certain table references
 # another column in (possibly) another table.
 class SchemaForeignKeyRef
-  attr_reader: from_column, to_table, to_column
+  attr_reader :from_column, :to_table, :to_column
 end
 
 class SchemaForeignKey
