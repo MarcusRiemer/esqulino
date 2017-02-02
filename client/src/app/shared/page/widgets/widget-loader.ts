@@ -60,7 +60,7 @@ function createWidget(desc : WidgetDescription, parent : WidgetHost) : WidgetBas
 export function loadWidget(desc : WidgetDescription, parent : WidgetHost) : WidgetBase {
     const widget = createWidget(desc, parent);
 
-    // If this widget has a page wire up changes that would require
+    // If this widget has a page: wire up changes that would require
     // saving the page.
     try {
         if (widget.page) {

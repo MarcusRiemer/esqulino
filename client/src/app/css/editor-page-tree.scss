@@ -24,6 +24,11 @@
         padding-bottom: 2px;
         margin-bottom: 2px;
     }
+
+    widget-parameter .value input {
+        background-color: transparent;
+        border: 0;
+    }
 }
 
 /**
