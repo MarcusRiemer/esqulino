@@ -98,7 +98,8 @@
         "children": [
           {
             "type": "hidden",
-            "outParamName": ""
+            "outParamName": "",
+            "value": ""
           },
           {
             "type": "select",

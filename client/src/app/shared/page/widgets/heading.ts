@@ -2,19 +2,33 @@ import {Page}                            from '../page'
 import {HeadingDescription}              from '../page.description'
 import {Widget, WidgetHost}              from '../hierarchy'
 
+import {NumericalParameter}              from './parameters'
+
 import {WidgetBase, WidgetDescription}   from './widget-base'
 
 export {HeadingDescription}
 
 /**
- * A heading.
+ * A heading. This widget directly maps the the HTML <h1> to <h6>
+ * elements.
  */
 export class Heading extends WidgetBase {
     private _text : string;
     private _level : number;
     
     constructor(desc : HeadingDescription, parent? : WidgetHost) {
-        super({ type : "heading", category : "widget", isEmpty :false}, parent);
+        super({
+            type : "heading",
+            category : "widget",
+            isEmpty : false,
+            parameters : [
+                new NumericalParameter({
+                    name: "level",
+                    getter: () => this.level,
+                    setter: (v) => this.level = v
+                }, 1, 6)
+            ]
+        }, parent);
         this._text = desc.text;
         this._level = desc.level;
     }
@@ -40,8 +54,6 @@ export class Heading extends WidgetBase {
     }
 
     /**
-     * 
-     *
      * @param newLevel The new level to set.
      */
     set level(newLevel : number) {
@@ -59,13 +71,21 @@ export class Heading extends WidgetBase {
         }
     }
 
+    /**
+     * @return The text displayed by this heading
+     */
     get text() {
         return (this._text);
     }
-
+    
+    /**
+     * @param newText The text displayed by this heading
+     */
     set text(newText : string) {
-        this._text = newText;
-        this.fireModelChange();
+        if (this._text == newText) {
+            this._text = newText;
+            this.fireModelChange();
+        }
     }
 
     protected toModelImpl() : WidgetDescription {

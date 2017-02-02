@@ -26,6 +26,7 @@ interface WidgetEditorDescription {
     type : string
     category : WidgetCategory
     isEmpty : boolean
+    parameters? : Parameter[]
 }
 
 /**
@@ -51,6 +52,9 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
     // Is this an empty element?
     private _isEmptyElement : boolean;
 
+    // All user-editable parameters of this widget
+    private _parameters : Parameter[];
+
     constructor(desc : WidgetEditorDescription,
                 parent? : WidgetHost)
     {
@@ -58,6 +62,7 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
         this._category = desc.category;
         this._isEmptyElement = desc.isEmpty;
         this._parent = parent;
+        this._parameters = desc.parameters || [];
     }
 
     /**
@@ -100,7 +105,7 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
     }
 
     get parameters() : Parameter[] {
-        return ([]);
+        return (this._parameters);
     }
 
     /**
