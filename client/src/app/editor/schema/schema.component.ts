@@ -40,4 +40,5 @@ export class SchemaComponent implements OnInit {
                  this.project = res
             });
     }
+
 }

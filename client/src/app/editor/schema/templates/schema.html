@@ -1,11 +1,10 @@
 <!--Entry point for schema representation (maybe obsolete)-->
 <div class="container-fluid">
-	<div class="card">
+	<div *ngFor="let table of project?.schema.tables" class="card">
 		<div class="card-body">
-			<sql-table id="schema-tables" 
-                 [tables]="project?.schema.tables"  
-                 [allowCreate]="true">
-			</sql-table>
+			<sql-table-composition id="schema-tables-comp" 
+                 [table]="table">
+			</sql-table-composition>
 		</div>
 	</div>
 </div>
