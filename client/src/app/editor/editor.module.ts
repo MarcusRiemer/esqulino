@@ -26,6 +26,7 @@ import {RegistrationService}            from './registration.service'
 import {SettingsComponent}              from './settings.component'
 import {SchemaComponent}                from './schema/schema.component'
 import {SchemaTableComponent}           from './schema/schema-table.component'
+import {SchemaTableCompositionComponent}from './schema/schema-table-composition.component'
 import {SchemaTableEditorComponent}     from './schema/schema-table-editor.component'
 import {SchemaTableDetailsComponent}    from './schema/schema-table-details.component'
 import SchemaEditorModule               from './schema/schema.module'
@@ -50,6 +51,7 @@ import SchemaEditorModule               from './schema/schema.module'
         SettingsComponent,
         SchemaComponent,
         SchemaTableComponent,
+        SchemaTableCompositionComponent,
         SchemaTableEditorComponent,
         SchemaTableDetailsComponent
     ],

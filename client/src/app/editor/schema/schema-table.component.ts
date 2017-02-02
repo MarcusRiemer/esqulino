@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, OnDestroy}        from '@angular/core';
+import {Component, Input, Output, OnInit, OnDestroy, EventEmitter}        from '@angular/core';
 
 import {Table}                                      from '../../shared/schema'
 
@@ -13,98 +13,53 @@ import {ToolbarService}                             from '../toolbar.service'
     templateUrl: 'templates/schema-table.html',
     selector: "sql-table"
 })
-export class SchemaTableComponent implements OnInit, OnDestroy {
+export class SchemaTableComponent {
 
     /**
      * The tables to display.
      */
-    @Input() tables : Table[];
+    @Input() table : Table;
 
-    /**
-     * True, if creation should be allowed from this component.
-     */
-    @Input() allowCreate : boolean = false;
+    @Input() readOnly : boolean;
 
-    /**
-     * The currently edited project
-     */
-    private _project : Project;
+    @Input() columnToHighlight : any;
 
-    /**
-     * Subscriptions that need to be released
-     */
-    private _subscriptionRefs : any[] = [];
+    @Output('columnToHighlightChange') selectedColumnName = new EventEmitter();
+
+
+    onColumnMouseEnter(columnName : any) {
+        if(!this.readOnly) {
+            this.columnToHighlight = columnName;
+            this.selectedColumnName.emit(columnName);
+        }
+    }
+
+    onColumnMouseOut() {
+        if(!this.readOnly) {
+            this.columnToHighlight = undefined;
+            this.selectedColumnName.emit(undefined);
+        }
+    }
 
     /**
      * Should the details of every column in the table be shown 
      */
-    showDetails: boolean[] = [];
-
-    constructor(
-        private _projectService: ProjectService,
-        private _toolbarService: ToolbarService) {
-    }
-
-    /**
-     * Load the project to access the schema
-     */
-    ngOnInit() {
-        // Get the currently active project
-        this._projectService.activeProject
-            .subscribe(res =>{ 
-                this._project = res;
-            });
-            
-        this.initShowDetails();
-
-        this._toolbarService.resetItems();
-
-        // Button to create a new Table
-        this._toolbarService.savingEnabled = false;
-        let btnCreate = this._toolbarService.addButton("new", "New", "file", "i");
-        let subRef = btnCreate.onClick.subscribe((res) => {
-            console.log("Create new Table!");
-        })
-        this._subscriptionRefs.push(subRef);
-
-        // Button to enable/disable the editing-mode
-        btnCreate = this._toolbarService.addButton("lock", "Lock", "lock", "l");
-        subRef = btnCreate.onClick.subscribe((res) => {
-            console.log("Lock!");
-            this.toggleTableEditing();
-        })
-        this._subscriptionRefs.push(subRef);
-    }
-
-
-    ngOnDestroy() {
-        this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
-        this._subscriptionRefs = [];
-    }
-
-    /**
-     * Function to initialize the array showDetails
-     */
-    initShowDetails() {
-        for(let table in this.tables) {
-                this.showDetails[table] = false;
-            }
-    }
+    showDetails: boolean = false;
 
     /**
      * Function to get the value if table with index index shows details
      * IN: index - the index of the table to get the details visibility value
      */
-    getShowDetails(index : number) {
-        return this.showDetails[index];
+    getShowDetails() {
+        return this.showDetails;
     }
 
     /**
      * Function to toggle the visibility of the table details
      * IN: index - the index of the table to toggle the details visibility
      */
-    clickToggleDetails(index : number) {
-        this.showDetails[index] = !this.showDetails[index];
+    clickToggleDetails() {
+        this.showDetails = !this.showDetails;
     }
 
 
