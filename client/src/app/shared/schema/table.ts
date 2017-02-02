@@ -1,6 +1,6 @@
 import {Project}                              from '../project'
 import {ProjectResource}                      from '../resource'
-import {ColumnDescription, TableDescription}  from './schema.description'
+import {ColumnDescription, TableDescription, ForeignKeyDescription}  from './schema.description'
 import {Column, ColumnStatus}                 from './column'
 
 /**
@@ -12,11 +12,13 @@ import {Column, ColumnStatus}                 from './column'
 export class Table {
     private _name : string;
     private _columns : Column[];
+    private _foreign_keys : ForeignKeyDescription[];
 
-    constructor(desc : TableDescription, col : ColumnDescription[], project? : Project) {
-         this._name = desc.name;
-         this._columns = col
-            .map(val => new Column(val, ColumnStatus.unchanged))
+    constructor(desc : TableDescription, col : ColumnDescription[], foreign_keys : ForeignKeyDescription[]) {
+        this._name = desc.name;
+        this._columns = col
+            .map(val => new Column(val, ColumnStatus.unchanged));
+        this._foreign_keys = foreign_keys;
     }
 
     /**
@@ -29,6 +31,30 @@ export class Table {
                                              primary : false,
                                              type : "STRING"};
         this._columns.push(new Column(newColumn, ColumnStatus.new));
+    }
+
+    columnIsForeignKeyOfTable(columnName : string) : string {
+        let table = undefined;
+        for(let fk of this._foreign_keys) {
+            for(let ref of fk.refs) {
+                if(ref.from_column == columnName) {
+                    table = ref.to_table;
+                }
+            }
+        }
+        return table;
+    }
+
+    columnIsForeignKeyOfColumn(columnName : string) : string {
+        let column = undefined;
+        for(let fk of this._foreign_keys) {
+            for(let ref of fk.refs) {
+                if(ref.from_column == columnName) {
+                    column = ref.to_column;
+                }
+            }
+        }
+        return column;
     }
 
     /**
@@ -66,5 +92,12 @@ export class Table {
      */
     get columns() {
         return this._columns;
+    }
+
+    /**
+     * @return: Gives all foreign keys of this table.
+     */
+    get foreign_keys() {
+        return this._foreign_keys;
     }
 }
