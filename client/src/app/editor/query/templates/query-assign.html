@@ -1,4 +1,4 @@
-<div *ngIf="isInsertQuery">
+<div *ngIf="isAssignQuery">
   <table class="table">
     <thead>
       <tr>
@@ -19,7 +19,9 @@
       </td>
       <td>
         <span class="block-container">
-          <span class="column">
+          <span class="column"
+                draggable="true"
+                (dragstart)="onDragStartColumn($event, curr)">
             {{ curr.column.name }}
           </span>
         </span>

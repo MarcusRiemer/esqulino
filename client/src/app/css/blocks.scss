@@ -119,7 +119,7 @@
 /**
  * A table in an SQL-expression.
  */
-.block-container .table {
+.block-container span.table, .block-container div.table {
     @include sql-block(
         rgba(255, 255, 0, 0.2),
         rgba(255, 255, 0, 0.9),

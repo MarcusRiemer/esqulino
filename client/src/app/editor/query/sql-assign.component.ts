@@ -3,49 +3,52 @@ import {
     ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core'
 
+import {DragService, SqlDragEvent}      from './drag.service'
+
 import {ColumnDescription}              from '../../shared/schema'
-import {QueryInsert, SyntaxTree}        from '../../shared/query'
+import {
+    QueryInsert, QueryUpdate, SyntaxTree
+} from '../../shared/query'
 
 /**
  * A column that is actively attempting to insert something
  */
-interface InsertingColumn {
+interface Assignment {
     expr? : SyntaxTree.Expression
     column : ColumnDescription
     index : number
 }
 
 /**
- * Editing INSERT components
+ * Editing SQL assignment components (UPDATE, INSERT)
  */
 @Component({
-    selector: 'sql-insert',
-    templateUrl: 'templates/query-insert.html',
+    selector: 'sql-assign',
+    templateUrl: 'templates/query-assign.html',
 })
-export class InsertComponent implements OnInit {
-    @Input() query : QueryInsert;
-    
-    constructor(private _cdRef : ChangeDetectorRef) {
+export class AssignComponent {
+    @Input() query : QueryInsert | QueryUpdate;
+
+    constructor(private _dragService : DragService) {
         
     }
-
-    ngOnInit() {
-        /*this.query.invalidateEvent.subscribe(v => {
-            this._cdRef.markForCheck();
-        });*/
-    }
-
+    
     /**
      * @return True, if the given query is an INSERT query.
      */
-    get isInsertQuery() {
-        return (this.query instanceof QueryInsert);
+    get isAssignQuery() {
+        return (this.query instanceof QueryInsert ||
+                this.query instanceof QueryUpdate);
+    }
+
+    onDragStartColumn(evt : DragEvent, col : Assignment) {
+        this._dragService.startColumnDrag(this.query.tableName, col.column.name, "select", evt);
     }
 
     /**
      * @return All columns that have values set.
      */  
-    get allColumns() : InsertingColumn[] {        
+    get allColumns() : Assignment[] {        
         const allColumns = this.query.getTableSchema(this.query.tableName).columns;
 
         return (allColumns.map( v => { return ({
@@ -55,7 +58,7 @@ export class InsertComponent implements OnInit {
         })}));
     }
 
-    trackByColumnName(index : number, value : InsertingColumn) {
+    trackByColumnName(index : number, value : Assignment) {
         return (value.column.name);
     }
 
