@@ -26,7 +26,7 @@
         "children": [
           {
             "type": "button",
-            "text": "Knopf",
+            "text": "Freilassen",
             "query": {
               "type": "query",
               "queryId": "40bddeac-facc-4836-a27b-6a23222078d5",

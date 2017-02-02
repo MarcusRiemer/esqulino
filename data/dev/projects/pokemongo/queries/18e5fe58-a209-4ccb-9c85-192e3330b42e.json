@@ -1,0 +1,37 @@
+{
+  "name": "Gefangen_Staerker",
+  "apiVersion": "3",
+  "singleRow": true,
+  "update": {
+    "assignments": [
+      {
+        "expr": {
+          "parameter": {
+            "key": "staerke"
+          }
+        },
+        "column": "staerke"
+      }
+    ],
+    "table": "gefangen"
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "gefangen_id",
+            "table": "gefangen"
+          }
+        },
+        "rhs": {
+          "parameter": {
+            "key": "gefangen_id"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}
