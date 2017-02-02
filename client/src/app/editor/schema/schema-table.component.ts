@@ -28,13 +28,17 @@ export class SchemaTableComponent {
 
 
     onColumnMouseEnter(columnName : any) {
-        this.columnToHighlight = columnName;
-        this.selectedColumnName.emit(columnName);
+        if(!this.readOnly) {
+            this.columnToHighlight = columnName;
+            this.selectedColumnName.emit(columnName);
+        }
     }
 
     onColumnMouseOut() {
-        this.columnToHighlight = undefined;
-        this.selectedColumnName.emit(undefined);
+        if(!this.readOnly) {
+            this.columnToHighlight = undefined;
+            this.selectedColumnName.emit(undefined);
+        }
     }
 
     /**

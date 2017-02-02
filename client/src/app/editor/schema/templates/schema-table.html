@@ -1,15 +1,16 @@
 <div class="card card-block">
 	<h3 class="card-title">
 		<!--Table name as link to the detail view-->
-		<a class="nav-link" [routerLink]="['details', table.name]" routerLinkActive="router-link-active">
+		<a *ngIf="!readOnly" class="nav-link" [routerLink]="['details', table.name]" routerLinkActive="router-link-active">
 						{{ table.name }}
           </a>
+		<a *ngIf="readOnly" >	{{ table.name }} </a>
 		<!--Button to the table-editing view-->
-		<a [routerLink]="['edit', table.name]" routerLinkActive="router-link-active" class="btn btn-primary">
+		<a *ngIf="!readOnly" [routerLink]="['edit', table.name]" routerLinkActive="router-link-active" class="btn btn-primary">
 			<span class="fa fa-cogs" aria-hidden="true"></span>
 		</a>
 		<!--Button to show the all column details-->
-		<a (click)="clickToggleDetails(i)" class="btn btn-primary">
+		<a *ngIf="!readOnly" (click)="clickToggleDetails(i)" class="btn btn-primary">
 			<span class="fa fa-plus" aria-hidden="true"></span>
 		</a>
 	</h3>
@@ -44,7 +45,7 @@
 			<div *ngFor="let column of table.columns" (mouseenter)="onColumnMouseEnter(column.name)" (mouseout)="onColumnMouseOut()" class="card-group">
 				<!--Column index and name-->
 				<div class="card" [ngClass]="{'card-info': column.name == columnToHighlight}">
-					<h4 class="card-title">{{ column.index }} {{ column.name }}</h4>
+					<h4 class="card-title" (mouseenter)="onColumnMouseEnter(column.name)" (mouseout)="onColumnMouseOut()">{{ column.index }} {{ column.name }}</h4>
 				</div>
 				<!--Details only to shown ijf detail-view is enabled-->
 				<div *ngIf="getShowDetails()">
@@ -58,14 +59,14 @@
 						</div>
 					</div>
 					<div class="card" [ngClass]="{'card-info': column.name == columnToHighlight}">
-						<p class="card-text">{{ column.type }}</p>
+						<p class="card-text" (mouseenter)="onColumnMouseEnter(column.name)" (mouseout)="onColumnMouseOut()">{{ column.type }}</p>
 					</div>
 					<div class="card" [ngClass]="{'card-info': column.name == columnToHighlight}">
-						<p class="card-text">{{ column.not_null }}</p>
+						<p class="card-text" (mouseenter)="onColumnMouseEnter(column.name)" (mouseout)="onColumnMouseOut()">{{ column.not_null }}</p>
 					</div>
 					<div class="card" [ngClass]="{'card-info': column.name == columnToHighlight}">
 						<div *ngIf="column.dflt_value != null">
-							<p class="card-text">{{ column.dflt_value }}</p>
+							<p class="card-text" (mouseenter)="onColumnMouseEnter(column.name)" (mouseout)="onColumnMouseOut()">{{ column.dflt_value }}</p>
 						</div>
 					</div>
 					<div class="card" [ngClass]="{'card-info': column.name == columnToHighlight}">
