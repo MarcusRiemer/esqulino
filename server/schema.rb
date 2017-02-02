@@ -28,20 +28,52 @@ end
 # another column in (possibly) another table.
 class SchemaForeignKeyRef
   attr_reader :from_column, :to_table, :to_column
+
+  def initialize(from_column, to_table, to_column)
+    @from_column = from_column
+    @to_table = to_table
+    @to_column = to_column
+  end
+
+  # Serialises this foreign key to JSON, according to the over-the-wire format
+  # described in Typescript.
+  def to_json(options)
+    {
+      :from_column => @from_column,
+      :to_table => @to_table,
+      :to_column => @to_column
+    }.to_json(options)
+  end
 end
 
 class SchemaForeignKey
-  def initialize(table, references)
+  def initialize()
+    @references = []
+  end
+
+  # Adds a foreign key to the list
+  # @param foreign_key The foreign keys to add
+  def add_foreign_key(foreign_key)
+    @references.push(foreign_key)
+  end
+
+  # Serialises the foreign key list to JSON, according to the over-the-wire format
+  # described in Typescript.
+  def to_json(options)
+    {
+      :refs => @references
+    }.to_json(options)
   end
 end
 
 # Describes a SQLite table with its columns
 class SchemaTable
-  attr_reader :name, :columns
+  attr_reader :name, :columns, :foreign_keys
   
   def initialize(name)
     @name = name
     @columns = []
+    @foreign_keys = []
   end
 
   # Adds a new column based on its index
@@ -55,6 +87,12 @@ class SchemaTable
   # @return [SchemaColumn]
   def [](idx)
     return @columns[idx]
+  end
+
+  # Adds the information about the foreign keys of this table
+  # @param foreign_keys The foreign keys to add
+  def add_foreign_keys(foreign_keys)
+    @foreign_keys.push(foreign_keys)
   end
   
   # Serialises this table to JSON, according to the over-the-wire format
@@ -94,6 +132,18 @@ def database_describe_schema(sqlite_file_path)
 
       column_schema = SchemaColumn.new(ci[0],ci[1],ci[2],ci[3],ci[4],ci[5])
       table_schema.add_column(column_schema)
+    end
+
+    # Get all foreign keys in a list and append them to the table
+    foreign_keys_table = db.execute("PRAGMA foreign_key_list(#{name})")
+    grouped_foreign_keys = foreign_keys_table.group_by{ |fk| fk[0]}
+    grouped_foreign_keys.each do |key, value|
+      foreign_key_comp = SchemaForeignKey.new()
+      value.each do |fk|
+        foreign_key_ref = SchemaForeignKeyRef.new(fk[3], fk[2], fk[4])
+        foreign_key_comp.add_foreign_key(foreign_key_ref)
+      end
+      table_schema.add_foreign_keys(foreign_key_comp)         
     end
 
     tables << table_schema
