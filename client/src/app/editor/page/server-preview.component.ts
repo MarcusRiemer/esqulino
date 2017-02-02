@@ -1,5 +1,5 @@
 import {
-    Component, Input, ElementRef,
+    Component, Input, Output, ElementRef, EventEmitter,
     ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core'
 import {DomSanitizer}                         from '@angular/platform-browser';
@@ -25,7 +25,8 @@ import {Project}                              from '../project.service'
 export class ServerPreviewComponent {
     @Input() page : Page;
     @Input() project : Project;
-    @Input() showPreview : boolean;
+
+    @Output() closed = new EventEmitter();
 
     /**
      * The different values the user has entered so far.
@@ -35,7 +36,7 @@ export class ServerPreviewComponent {
     /**
      * Is there anything that could be rendered?
      */
-    private _renderPreview : boolean = false;
+    private _hasRenderPreview : boolean = false;
 
     /**
      * TODO: Make this configurable
@@ -54,7 +55,8 @@ export class ServerPreviewComponent {
      * The user has decided to hide the preview
      */
     doClose() {
-        this.showPreview = false;
+        console.log("doClose()");
+        this.closed.emit();
     }
 
     /**
@@ -97,7 +99,7 @@ export class ServerPreviewComponent {
      * @return True, if a render preview is available.
      */
     get hasRenderPreview() : boolean {
-        return (this._renderPreview);
+        return (this._hasRenderPreview);
     }
 
     /**
@@ -187,7 +189,7 @@ export class ServerPreviewComponent {
      * Refreshes if the preview can be rendered meaningfully.
      */
     invalidateRefresh() {
-        this._renderPreview = undefined;
+        this._hasRenderPreview = undefined;
         this._cd.markForCheck();
         
         if (this.allParametersAvailable) {
@@ -199,8 +201,7 @@ export class ServerPreviewComponent {
      * Resends the request to the server and updates the preview afterwards.
      */
     refresh() : Observable<boolean> {
-        this._renderPreview = undefined;
-        this.showPreview = true;
+        this._hasRenderPreview = undefined;
         this._cd.markForCheck();
         
         const toReturn = new Subject<boolean>();
@@ -209,7 +210,7 @@ export class ServerPreviewComponent {
         this._pageService.renderPage(this.project, this.page, this.cachedArguments)
             .subscribe(res => {
                 // Set the new document and listen for height changes.
-                this._renderPreview = true;
+                this._hasRenderPreview = true;
                 (this.domIframe as any).srcdoc = res;
                 this.domIframe.onload = (ev => {
                     this.refreshHeight();

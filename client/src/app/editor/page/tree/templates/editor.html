@@ -6,16 +6,19 @@
   </datalist>
   
   <esqulino-server-preview *ngIf="page"
+                           [hidden]="!doRenderPreview"
                            [project]="project"
                            [page]="page"
-                           [showPreview]="doRenderPreview">
+                           (closed)="doRenderPreview = false">
   </esqulino-server-preview>
 
   <esqulino-page-tree *ngIf="page"
+                      [hidden]="doRenderPreview"
                       [page]="page">
   </esqulino-page-tree>
 
   <esqulino-page-data *ngIf="page"
+                      [hidden]="doRenderPreview"
                       [project]="project"
                       [page]="page">
   </esqulino-page-data>
