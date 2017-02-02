@@ -8,14 +8,14 @@
   <esqulino-server-preview *ngIf="page"
                            [project]="project"
                            [page]="page"
-                           [showPreview]="doRenderPreview">
+                           (doClose)="doRenderPreview = false">
   </esqulino-server-preview>
   
-  <esqulino-page-layout *ngIf="page"
+  <esqulino-page-layout *ngIf="page && !doRenderPreview"
                         [page]="page">
   </esqulino-page-layout>
 
-  <esqulino-page-data *ngIf="page"
+  <esqulino-page-data *ngIf="page && !doRenderPreview"
                         [project]="project"
                         [page]="page">
   </esqulino-page-data>
