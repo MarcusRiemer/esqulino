@@ -1,7 +1,7 @@
 import {TableDescription}     from './schema.description'
 import {Schema}               from './schema'
 
-let schemaModel : TableDescription[] = [
+const schemaModel : TableDescription[] = [
     {
         "name": "ereignis",
         "columns": [
@@ -73,7 +73,7 @@ describe('Schema', () => {
     it ('Accessing an existing table', () => {
         let s = new Schema(schemaModel);
 
-        expect(s.getTable("person")).toBeTruthy();
+        expect(s.getTable("person")).toBeFalsy();
         expect(s.getTable("ereignis")).toBeTruthy();
     });
 
