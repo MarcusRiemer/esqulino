@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'sinatra/base'
 require 'sinatra/config_file'
 require 'sinatra/json'
@@ -203,21 +204,6 @@ class ScratchSqlApp < Sinatra::Base
     end
   end
 
-  # Getting entries inside a table
-  get '/api/project/:project_id/:tableName/getEntries/:from/:amount' do    
-    # request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
-
-    #result = @project.execute_sql("Select * from ? limit ? offset ? ", params['captures'])
-    result = @project.execute_sql("Select * from #{params['tableName']} limit #{params['amount']} offset #{params['from']}", [])
-    json(result['rows'])
-  end
-
-  # Getting count of entries inside a table
-  get '/api/project/:project_id/:tableName/getEntriesCount' do    
-    result = @project.execute_sql("Select Count(*) from #{params['tableName']}", [])
-    json(result['rows'].first)
-  end
-
   # Running an arbitrary query (Dangerous!)
   post '/api/project/:project_id/query/run' do    
     request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
@@ -305,6 +291,36 @@ class ScratchSqlApp < Sinatra::Base
   # Viewing a specific page
   get '/view/:project_id/?:page_name?' do
     return @page.render({})
+  end
+
+  # Getting entries inside a table
+  # TODO: db / DatabaseID dazu
+  # TODO: getEntries -> rows
+  # TODO: Operation "getEntries" und ":tableName" tauschen
+  get '/api/project/:project_id/:tableName/getEntries/:from/:amount' do    
+    # request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
+
+    # TODO: Sicherheitscheck -> Existiert tableName überhaupt?
+    # TODO: Für LIMIT und OFFSET parameter benutzen
+    #result = @project.execute_sql("Select * from ? limit ? offset ? ", params['captures'])
+    result = @project.execute_sql("Select * from #{params['tableName']} limit #{params['amount']} offset #{params['from']}", [])
+    json(result['rows'])
+  end
+
+  # Getting count of entries inside a table
+  # TODO: getEntriesCount -> count
+  get '/api/project/:project_id/:tableName/getEntriesCount' do
+    # TODO: Sicherheitscheck -> Existiert tableName überhaupt?
+    result = @project.execute_sql("Select Count(*) from #{params['tableName']}", [])
+    json(result['rows'].first)
+  end
+
+  post '/api/project/:project_id/db/:database_id/create' do |_p, database_id|
+
+  end
+  
+  post '/api/project/:project_id/db/:database_id/alter' do
+
   end
   
   # Rendering subdomains
