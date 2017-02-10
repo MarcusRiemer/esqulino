@@ -30,7 +30,8 @@ describe('Page NavigateAction', () => {
             isEmptyElement : true,
             parent : undefined,
             page : undefined,
-            toModel : () => this 
+            toModel : () => this,
+            parameters : []
         }
         
         const m : NavigateActionDescription = {
@@ -68,7 +69,8 @@ describe('Page NavigateAction', () => {
             isEmptyElement : true,
             parent : undefined,
             page : undefined,
-            toModel : () => this 
+            toModel : () => this,
+            parameters : []
         }
         
         const m : NavigateActionDescription = {

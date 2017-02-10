@@ -224,6 +224,7 @@ describe('ColumnExpression', () => {
         // Validity
         const v = c.validate(new Schema([{
             name : "person",
+            "foreign_keys": [],
             columns : []
         }]));
         expect(v.isValid).toBeFalsy();

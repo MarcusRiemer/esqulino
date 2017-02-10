@@ -4,6 +4,7 @@ import {Schema}               from './schema'
 const schemaModel : TableDescription[] = [
     {
         "name": "ereignis",
+        "foreign_keys": [],
         "columns": [
             {
                 "index": 0,
@@ -40,6 +41,7 @@ const schemaModel : TableDescription[] = [
     },
     {
         "name": "person",
+        "foreign_keys": [],
         "columns": [
             {
                 "index": 0,

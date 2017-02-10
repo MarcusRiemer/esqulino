@@ -3,7 +3,7 @@
     "additionalProperties": false,
     "definitions": {
         "ApiVersionToken": {
-            "description": "It would be nicer if versions could be numbers, but Typescript has no\n\nconcept of union types for numbers.",
+            "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
             "enum": [
                 "1",
                 "2",
@@ -45,7 +45,7 @@
         },
         "ConstantExpression": {
             "additionalProperties": false,
-            "description": "The other \"typical\" leaf, a compile time expression that also\n\nends recursion.",
+            "description": "The other \"typical\" leaf, a compile time expression that also\nends recursion.",
             "properties": {
                 "type": {
                     "$ref": "#/definitions/DataType"
@@ -67,14 +67,14 @@
         },
         "Delete": {
             "additionalProperties": false,
-            "description": "There doesn't seem to be any data associated with the\n\nSQLite DELETE keyword itself. But it didn't seem practical\n\nto go with a \"simple\" type that breaks the \"normal\"\n\nstructure of the model.",
+            "description": "There doesn't seem to be any data associated with the\nSQLite DELETE keyword itself. But it didn't seem practical\nto go with a \"simple\" type that breaks the \"normal\" \nstructure of the model.",
             "properties": {
             },
             "type": "object"
         },
         "Expression": {
             "additionalProperties": false,
-            "description": "We use a single base type for all kinds of expression, as\n\nthis vastly simplifies the storage process. Each kind of\n\nconcrete expression is stored under a key. Only one of these\n\nkeys may be set at runtime.",
+            "description": "We use a single base type for all kinds of expression, as\nthis vastly simplifies the storage process. Each kind of\nconcrete expression is stored under a key. Only one of these\nkeys may be set at runtime.",
             "properties": {
                 "binary": {
                     "$ref": "#/definitions/BinaryExpression"
@@ -122,7 +122,7 @@
         },
         "Insert": {
             "additionalProperties": false,
-            "description": "A complete INSERT statement. Technically this does not\n\nrequire any other component, although the use of\n\nexpressions is common.",
+            "description": "A complete INSERT statement. Technically this does not \nrequire any other component, although the use of\nexpressions is common.",
             "properties": {
                 "assignments": {
                     "items": {
@@ -202,11 +202,11 @@
         },
         "QueryDescription": {
             "additionalProperties": false,
-            "description": "Outermost description of a query. This contains\n\nthe whole structure and some identifying properties.",
+            "description": "Outermost description of a query. This contains\nthe whole structure and some identifying properties.",
             "properties": {
                 "apiVersion": {
                     "$ref": "#/definitions/ApiVersionToken",
-                    "description": "These API versions are merely a number, no need to overcomplicate things.\n\nIf versions differ, any implementing the API is free to specify\n\nversion ranges it works with."
+                    "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
                 },
                 "delete": {
                     "$ref": "#/definitions/Delete"
@@ -215,7 +215,7 @@
                     "$ref": "#/definitions/From"
                 },
                 "id": {
-                    "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\n\nThese IDs must *never* change and should be UUIDs, so that they are\n\nglobally unique.",
+                    "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
                     "type": "string"
                 },
                 "insert": {
@@ -266,7 +266,7 @@
         },
         "SingleColumnExpression": {
             "additionalProperties": false,
-            "description": "One \"typical\" logical leaf of an expression tree, postpones\n\nthe actual value lookup to execution time and ends recursion.",
+            "description": "One \"typical\" logical leaf of an expression tree, postpones\nthe actual value lookup to execution time and ends recursion.",
             "properties": {
                 "alias": {
                     "type": "string"
@@ -282,7 +282,7 @@
         },
         "StarExpression": {
             "additionalProperties": false,
-            "description": "Denotes a *-Expression, that may be limited to a subset of\n\nexisting tables.",
+            "description": "Denotes a *-Expression, that may be limited to a subset of\nexisting tables.",
             "properties": {
                 "limitedTo": {
                     "$ref": "#/definitions/TableNameDefinition"
@@ -305,7 +305,7 @@
         },
         "Update": {
             "additionalProperties": false,
-            "description": "The column-expression pairs and the table that define the\n\nUPDATE component.",
+            "description": "The column-expression pairs and the table that define the\nUPDATE component.",
             "properties": {
                 "assignments": {
                     "items": {
@@ -337,7 +337,7 @@
         },
         "WhereSubsequent": {
             "additionalProperties": false,
-            "description": "All Expressions after the first in a WHERE clause need the\n\nlogical operation defined. This is redundant, as the\n\nBinaryExpression would be perfectly capable of expressing\n\narbitrarily deep nested logical expressions, but in that\n\ncase the UI would be less then thrilling.",
+            "description": "All Expressions after the first in a WHERE clause need the\nlogical operation defined. This is redundant, as the \nBinaryExpression would be perfectly capable of expressing\narbitrarily deep nested logical expressions, but in that\ncase the UI would be less then thrilling.",
             "properties": {
                 "expr": {
                     "$ref": "#/definitions/Expression"
