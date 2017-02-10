@@ -16,7 +16,7 @@ export class Row extends HostingWidget {
     private _columns : Column[];
 
     constructor(desc : RowDescription, parent? : WidgetHost) {
-        super("row", "layout", false, parent);
+        super({type: "row", category: "layout", isEmpty: false}, parent);
         
         // Create all referenced columns
         this._columns = desc.columns.map(columnDesc => new Column(columnDesc, this));

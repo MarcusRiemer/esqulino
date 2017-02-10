@@ -131,7 +131,7 @@ export class SidebarWidgetsComponent implements OnDestroy {
                 category: "widget",
             },
             {
-                icon: "fa-keyboard-o",
+                icon: "fa-puzzle-piece",
                 name: "Versteckt",
                 model: HiddenInput.emptyDescription,
                 category: "widget",

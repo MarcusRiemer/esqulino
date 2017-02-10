@@ -18,7 +18,7 @@ export class Form extends HostingWidget {
     private _widgets : WidgetBase[];
 
     constructor(desc : FormDescription, parent? : WidgetHost) {
-        super("form", "structural", false, parent);
+        super({ type: "form", category: "structural", isEmpty: false}, parent);
 
         this._widgets = desc.children.map( (wiDesc) => loadWidget(wiDesc, this) );
     }

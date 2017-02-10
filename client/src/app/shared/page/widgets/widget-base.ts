@@ -9,11 +9,24 @@ import {
     WidgetHost, isWidgetHost
 } from '../hierarchy'
 
+import {Parameter}                                   from './parameters'
+
 import {loadWidget}                                  from './widget-loader'
 
 export {
     WidgetDescription, ParameterMapping,
     Widget, WidgetHost
+}
+
+/**
+ * This information is required for every kind of widget.
+ */ 
+interface WidgetEditorDescription {
+    // The registered type to instanciate
+    type : string
+    category : WidgetCategory
+    isEmpty : boolean
+    parameters? : Parameter[]
 }
 
 /**
@@ -39,15 +52,17 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
     // Is this an empty element?
     private _isEmptyElement : boolean;
 
-    constructor(type : string,
-                category : WidgetCategory,
-                isEmpty : boolean,
+    // All user-editable parameters of this widget
+    private _parameters : Parameter[];
+
+    constructor(desc : WidgetEditorDescription,
                 parent? : WidgetHost)
     {
-        this._type = type;
-        this._category = category;
+        this._type = desc.type;
+        this._category = desc.category;
+        this._isEmptyElement = desc.isEmpty;
         this._parent = parent;
-        this._isEmptyElement = isEmpty;
+        this._parameters = desc.parameters || [];
     }
 
     /**
@@ -87,6 +102,10 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
      */
     get isEmptyElement() : boolean {
         return (this._isEmptyElement);
+    }
+
+    get parameters() : Parameter[] {
+        return (this._parameters);
     }
 
     /**
@@ -131,12 +150,10 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
  */
 export abstract class HostingWidget extends WidgetBase implements WidgetHost {
 
-    constructor(type : string,
-                category : WidgetCategory,
-                isEmpty : boolean,
+    constructor(desc : WidgetEditorDescription,
                 parent? : WidgetHost)
     {
-        super(type, category, isEmpty, parent);
+        super(desc, parent);
     }
     
     /**
@@ -232,12 +249,10 @@ export abstract class HostingWidget extends WidgetBase implements WidgetHost {
  */
 export abstract class ParametrizedWidget extends WidgetBase {
 
-    constructor(type : string,
-                category : WidgetCategory,
-                isEmpty : boolean,
+    constructor(desc : WidgetEditorDescription,
                 parent? : WidgetHost)
     {
-        super(type, category, isEmpty, parent);
+        super(desc, parent);
     }
 
     /**
@@ -258,12 +273,10 @@ export abstract class ParametrizedWidget extends WidgetBase {
  */
 export abstract class UserInputWidget extends WidgetBase {
 
-    constructor(type : string,
-                category : WidgetCategory,
-                isEmpty : boolean,
+    constructor(desc : WidgetEditorDescription,
                 parent? : WidgetHost)
     {
-        super(type, category, isEmpty, parent);
+        super(desc, parent);
     }
 
     /**

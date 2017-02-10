@@ -2,6 +2,8 @@ import {Page}                            from '../page'
 import {InputDescription}                from '../page.description'
 import {Widget, WidgetHost}              from '../hierarchy'
 
+import {StringParameter}                 from './parameters'
+
 import {
     WidgetBase, WidgetDescription, UserInputWidget
 } from './widget-base'
@@ -16,6 +18,9 @@ export class Input extends UserInputWidget {
     // The name of the parameter this input provides
     private _outParamName : string
 
+    // The initial value of this input
+    private _initialValue : string
+
     // Usually shown above or next to the input
     private _caption : string;
 
@@ -29,12 +34,29 @@ export class Input extends UserInputWidget {
     private _required : boolean;
     
     constructor(desc : InputDescription, parent? : WidgetHost) {
-        super("input", "widget", true, parent);
+        super({
+            type: "input",
+            category: "widget",
+            isEmpty: true,
+            parameters: [
+                new StringParameter({
+                    name: "name",
+                    getter: () => this._outParamName,
+                    setter: (v) => this._outParamName = v
+                }),
+                new StringParameter({
+                    name: "value",
+                    getter: () => this._initialValue,
+                    setter: (v) => this._initialValue = v
+                })
+            ]
+        }, parent);
         this._outParamName = desc.outParamName;
         this._caption = desc.caption;
         this._description = desc.description;
         this._inputType = desc.inputType;
         this._required = !!desc.required;
+        this._initialValue = "";
     }
 
     /**
@@ -63,6 +85,15 @@ export class Input extends UserInputWidget {
      */
     set outParamName(value : string) {
         this._outParamName = value;
+    }
+
+    get initialValue() {
+        return (this._initialValue);
+    }
+
+    set initialValue(val : string) {
+        this._initialValue = val;
+        this.fireModelChange();
     }
 
     /**
