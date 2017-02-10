@@ -13,6 +13,7 @@ function matchingTables(model : Model.From) {
     let tables : TableDescription[] = [
         {
             columns : [],
+            foreign_keys: [],
             name : model.first.name
         }
     ];
@@ -20,6 +21,7 @@ function matchingTables(model : Model.From) {
     if (model.joins) {
         model.joins.forEach(j => tables.push({
             columns : [],
+            foreign_keys: [],
             name : j.table.name
         }));
     }

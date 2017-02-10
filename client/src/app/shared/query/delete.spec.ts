@@ -8,6 +8,7 @@ import {QueryDelete}             from './delete'
 let schema  = new Schema([
     {
         "name": "ereignis",
+        "foreign_keys": [],
         "columns": [
             {
                 "index": 0,
@@ -45,6 +46,7 @@ let schema  = new Schema([
     },
     {
         "name": "person",
+        "foreign_keys": [],
         "columns": [
             {
                 "index": 0,

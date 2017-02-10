@@ -67,7 +67,7 @@
         },
         "Delete": {
             "additionalProperties": false,
-            "description": "There doesn't seem to be any data associated with the\nSQLite DELETE keyword itself. But it didn't seem practical\nto go with a \"simple\" type that breaks the \"normal\"\nstructure of the model.",
+            "description": "There doesn't seem to be any data associated with the\nSQLite DELETE keyword itself. But it didn't seem practical\nto go with a \"simple\" type that breaks the \"normal\" \nstructure of the model.",
             "properties": {
             },
             "type": "object"
@@ -122,7 +122,7 @@
         },
         "Insert": {
             "additionalProperties": false,
-            "description": "A complete INSERT statement. Technically this does not\nrequire any other component, although the use of\nexpressions is common.",
+            "description": "A complete INSERT statement. Technically this does not \nrequire any other component, although the use of\nexpressions is common.",
             "properties": {
                 "assignments": {
                     "items": {
@@ -297,7 +297,7 @@
         },
         "WhereSubsequent": {
             "additionalProperties": false,
-            "description": "All Expressions after the first in a WHERE clause need the\nlogical operation defined. This is redundant, as the\nBinaryExpression would be perfectly capable of expressing\narbitrarily deep nested logical expressions, but in that\ncase the UI would be less then thrilling.",
+            "description": "All Expressions after the first in a WHERE clause need the\nlogical operation defined. This is redundant, as the \nBinaryExpression would be perfectly capable of expressing\narbitrarily deep nested logical expressions, but in that\ncase the UI would be less then thrilling.",
             "properties": {
                 "expr": {
                     "$ref": "#/definitions/Expression"

@@ -8,6 +8,7 @@ import {QueryInsert}             from './insert'
 let schema  = new Schema([
     {
         "name": "person",
+        "foreign_keys": [],
         "columns": [
             {
                 "index": 0,
