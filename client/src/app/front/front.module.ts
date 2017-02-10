@@ -1,7 +1,7 @@
 import {NgModule}                       from '@angular/core'
 import {CommonModule}                   from '@angular/common'
 
-import AppSharedModule                  from '../shared/shared.module'
+import {SharedAppModule}                from '../shared/shared.module'
 
 import {FrontComponent}                 from './front.component'
 import {frontRouting}                   from './front.routes'
@@ -16,7 +16,7 @@ import {ProjectListItemComponent}       from './project-list-item.component'
 @NgModule({
     imports : [
         CommonModule,
-        AppSharedModule,
+        SharedAppModule,
         frontRouting
     ],
     declarations : [
@@ -35,4 +35,4 @@ import {ProjectListItemComponent}       from './project-list-item.component'
         ProjectListComponent,
     ]
 })
-export default class FrontModule { }
+export class FrontModule { }

@@ -1,6 +1,6 @@
 import {NgModule, ModuleWithProviders}  from '@angular/core'
 
-import SharedEditorModule               from '../shared/shared.module'
+import {SharedEditorModule}             from '../shared/shared.module'
 import {RegistrationService}            from '../registration.service'
 
 import {queryEditorRouting}             from './editor.routes'
@@ -29,7 +29,7 @@ import {QueryColumnListComponent}       from './query-column-list.component'
 
 @NgModule({
     imports: [
-        SharedEditorModule,
+        SharedEditorModule
         // queryEditorRouting,
     ],    
     declarations: [
@@ -74,7 +74,7 @@ import {QueryColumnListComponent}       from './query-column-list.component'
     ]
     
 })
-export default class QueryEditorModule {
+export class QueryEditorModule {
     static forRoot() : ModuleWithProviders {
         return ({
             ngModule : QueryEditorModule,

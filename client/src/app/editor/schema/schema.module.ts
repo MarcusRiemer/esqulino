@@ -1,6 +1,6 @@
 import {NgModule, ModuleWithProviders}  from '@angular/core'
 
-import SharedEditorModule               from '../shared/shared.module'
+import {SharedEditorModule}             from '../shared/shared.module'
 import {RegistrationService}            from '../registration.service'
 import {SchemaHostComponent}            from './host.component'
 import {SchemaService}                  from '../schema.service'
@@ -25,7 +25,7 @@ import {SchemaService}                  from '../schema.service'
         SchemaHostComponent
     ]
 })
-export default class SchemaEditorModule {
+export class SchemaEditorModule {
     static forRoot() : ModuleWithProviders {
         return ({
             ngModule : SchemaEditorModule,
