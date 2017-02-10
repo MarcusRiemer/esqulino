@@ -50,9 +50,7 @@ export class WidgetNodeLoaderComponent implements OnChanges {
          */
         this._typeMapping = {
             "button": Tree.ButtonComponent,
-            "heading": Tree.HeadingComponent,
             "query-table": Tree.QueryTableComponent,
-            "input": Tree.InputComponent,
             "link": Tree.LinkComponent,
             "embedded-html": Tree.EmbeddedHtmlComponent,
             "select": Tree.SelectComponent,

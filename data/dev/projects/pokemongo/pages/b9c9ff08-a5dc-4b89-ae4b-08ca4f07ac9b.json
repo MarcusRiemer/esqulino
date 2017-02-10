@@ -30,9 +30,9 @@
         "queryRefName": "Meine_Pokemon",
         "columns": [
           "spitzname",
+          "name",
           "staerke",
-          "nummer",
-          "typ"
+          "typ_name"
         ]
       },
       {
@@ -98,7 +98,8 @@
         "children": [
           {
             "type": "hidden",
-            "outParamName": ""
+            "outParamName": "",
+            "value": ""
           },
           {
             "type": "select",

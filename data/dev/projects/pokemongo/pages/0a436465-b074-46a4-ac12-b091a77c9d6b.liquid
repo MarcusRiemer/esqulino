@@ -5,16 +5,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
     <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
   </head>
+
   <body>
     <div class="container-fluid">
-      <h1>{{ query.pokemon.name }}</h1>
-      <p>#{{ get.nummer}} ist {{ query.pokemon.name }}</p>
+      <h2>{{ query.pokemon.name }}</h2>
+      <p>#{{ get.nummer }} ist {{ query.pokemon.name }}</p>
       <a href="/Hauptseite">Zurück zur Hauptseite</a>
     </div>
     {% include "edit-ribbon" %}
   </body>
+
+
 </html>
 

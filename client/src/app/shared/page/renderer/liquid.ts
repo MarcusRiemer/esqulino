@@ -67,7 +67,7 @@ function renderForm(w: Widget, renderWidget : WidgetRenderer) : string {
         .map(c => renderWidget(c, renderWidget))
         .join("\n");
     
-    return `<form>\n{% include "get_data_hidden" %}\n${children}</form>`
+    return `<form>${children}</form>`
 }
 
 /**
@@ -127,8 +127,8 @@ function renderHeading(w: Widget) : string {
 }
 
 function renderHidden(w: Widget) : string {
-    const heading = w as HiddenInput;
-    return (`<input type="hidden" name="">`);
+    const h = w as HiddenInput;
+    return (`<input type="hidden" name="${h.outParamName}" value="${h.value}">`);
 }
 
 /**
@@ -143,8 +143,9 @@ function renderInput(w: Widget) : string {
     const description = `description: "${input.description}"`;
     const inputType = `inputType: "${input.inputType}"`;
     const required = `required: ${input.required}`;
+    const initialValue = `initialValue: ${input.initialValue}`;
     
-    return (`{% include "input" ${caption}, ${outParamName}, ${description}, ${inputType}, ${required}  %}`);
+    return (`{% include "input" ${caption}, ${outParamName}, ${description}, ${inputType}, ${required}  , ${initialValue} %}`);
 }
 
 function renderLink(w: Widget) : string {

@@ -6,8 +6,6 @@ import {ValueExpressionComponent}       from './helper/value-expression.componen
 
 import {ButtonComponent}                from './button.component'
 import {EmbeddedHtmlComponent}          from './embedded-html.component'
-import {HeadingComponent}               from './heading.component'
-import {InputComponent}                 from './input.component'
 import {LinkComponent}                  from './link.component'
 import {QueryTableComponent}            from './query-table.component'
 import {SelectComponent}                from './select.component'
@@ -21,8 +19,6 @@ export {
     
     ButtonComponent,
     EmbeddedHtmlComponent,
-    HeadingComponent,
-    InputComponent,
     LinkComponent,
     QueryTableComponent,
     SelectComponent

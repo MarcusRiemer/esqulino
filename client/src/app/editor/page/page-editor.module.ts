@@ -64,9 +64,7 @@ const treeComponents = [
     Tree.ValueExpressionComponent,
 
     Tree.ButtonComponent,
-    Tree.HeadingComponent,
     Tree.QueryTableComponent,
-    Tree.InputComponent,
     Tree.LinkComponent,
     Tree.EmbeddedHtmlComponent,
     Tree.SelectComponent,

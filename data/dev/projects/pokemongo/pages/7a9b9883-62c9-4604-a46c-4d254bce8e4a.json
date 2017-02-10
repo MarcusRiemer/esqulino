@@ -67,7 +67,7 @@
               "mapping": [
                 {
                   "parameterName": "gefangen_id",
-                  "providingName": "input.gefangen_id"
+                  "providingName": "gefangen_id"
                 }
               ]
             }

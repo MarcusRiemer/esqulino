@@ -19,12 +19,12 @@
     "children": [
       {
         "type": "heading",
-        "level": 1,
+        "level": 2,
         "text": "{{ query.pokemon.name }}"
       },
       {
         "type": "paragraph",
-        "text": "#{{ get.nummer}} ist {{ query.pokemon.name }}"
+        "text": "#{{ get.nummer }} ist {{ query.pokemon.name }}"
       },
       {
         "type": "link",

@@ -29,7 +29,7 @@ export class Select extends UserInputWidget {
     private _optionTextExpression : string;
 
     constructor(desc : SelectDescription, parent? : WidgetHost) {
-        super("select", "widget", false, parent);
+        super({ type: "select", category: "widget", isEmpty: false }, parent);
         this._outParamName = desc.outParamName;
         this._caption = desc.caption;
         this._queryRefName = desc.queryRefName;

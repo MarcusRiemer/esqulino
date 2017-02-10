@@ -21,7 +21,7 @@ export class QueryTable extends WidgetBase {
     private _columns: string[];
 
     constructor(desc : QueryTableDescription, parent? : WidgetHost) {
-        super("query-table", "structural", false, parent);
+        super({ type: "query-table", category: "structural", isEmpty: false}, parent);
         this._queryRefName = desc.queryRefName;
         this._columns = desc.columns;
     }

@@ -1,5 +1,6 @@
 import {Page, ColumnDescription}        from '../page'
 
+import {NumericalParameter}             from './parameters'
 import {loadWidget}                     from './widget-loader'
 import {
     WidgetBase, WidgetDescription, HostingWidget, WidgetHost
@@ -17,7 +18,18 @@ export class Column extends HostingWidget {
     private _widgets : WidgetBase[];
 
     constructor(desc : ColumnDescription, parent? : WidgetHost) {
-        super("column", "layout", false, parent);
+        super({
+            type: "column",
+            category: "layout",
+            isEmpty: false,
+            parameters : [
+                new NumericalParameter({
+                    name: "width",
+                    getter: () => this._width,
+                    setter: (v) => this._width = v
+                }, 1, 12)
+            ]
+        }, parent);
         
         this._width = desc.width;
         this._widgets = desc.widgets.map( (wiDesc) => loadWidget(wiDesc, this) );

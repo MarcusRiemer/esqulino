@@ -78,6 +78,9 @@ export interface HiddenInputDescription extends WidgetDescription {
 
     // The parameter this widget provides
     outParamName : string
+
+    // The value this field provides
+    value : string;
 }
 
 /**
