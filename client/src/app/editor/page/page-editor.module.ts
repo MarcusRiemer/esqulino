@@ -1,7 +1,7 @@
 import {NgModule, ModuleWithProviders}  from '@angular/core'
 
-import QueryEditorModule                from '../query/editor.module'
-import SharedEditorModule               from '../shared/shared.module'
+import {QueryEditorModule}              from '../query/editor.module'
+import {SharedEditorModule}             from '../shared/shared.module'
 import {RegistrationService}            from '../registration.service'
 
 import {pageEditorRouting}              from './page-editor.routes'
@@ -134,7 +134,7 @@ const sidebarComponents = [
         ...treeComponents,
     ]
 })
-export default class PageEditorModule {
+export class PageEditorModule {
     static forRoot() : ModuleWithProviders {
         return ({
             ngModule : PageEditorModule,

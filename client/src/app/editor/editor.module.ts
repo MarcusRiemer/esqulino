@@ -2,11 +2,11 @@ import {NgModule}                       from '@angular/core'
 import {CommonModule}                   from '@angular/common'
 import {FormsModule}                    from '@angular/forms'
 
-import AppSharedModule                  from '../shared/shared.module'
+import {SharedAppModule}                from '../shared/shared.module'
 
-import SharedEditorModule               from './shared/shared.module'
-import PageEditorModule                 from './page/page-editor.module'
-import QueryEditorModule                from './query/editor.module'
+import {SharedEditorModule}             from './shared/shared.module'
+import {PageEditorModule}               from './page/page-editor.module'
+import {QueryEditorModule}              from './query/editor.module'
 
 import {EditorComponent}                from './editor.component'
 import {editorRouting}                  from './editor.routes'
@@ -28,15 +28,15 @@ import {SchemaComponent}                from './schema/schema.component'
 import {SchemaTableComponent}           from './schema/schema-table.component'
 import {SchemaTableCompositionComponent}from './schema/schema-table-composition.component'
 import {SchemaTableEditorComponent}     from './schema/schema-table-editor.component'
-import {SchemaTableDetailsComponent}     from './schema/schema-table-details.component'
-import SchemaEditorModule             from './schema/schema.module'
+import {SchemaTableDetailsComponent}    from './schema/schema-table-details.component'
+import {SchemaEditorModule}             from './schema/schema.module'
 
 @NgModule({
     imports : [
         CommonModule,
         FormsModule,
 
-        AppSharedModule,
+        SharedAppModule,
         
         SharedEditorModule.forRoot(),
         PageEditorModule.forRoot(),
@@ -76,4 +76,4 @@ import SchemaEditorModule             from './schema/schema.module'
     ]
   
 })
-export default class EditorModule { }
+export class EditorModule { }

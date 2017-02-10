@@ -1,9 +1,9 @@
 import {NgModule}                          from '@angular/core'
 import {BrowserModule, Title}              from '@angular/platform-browser'
 
-import SharedAppModule                     from './shared/shared.module'
-import FrontModule                         from './front/front.module'
-import EditorModule                        from './editor/editor.module'
+import {SharedAppModule}                   from './shared/shared.module'
+import {FrontModule}                       from './front/front.module'
+import {EditorModule}                      from './editor/editor.module'
 
 import {SqlScratchComponent}               from './app.component'
 import {routing}                           from './app.routes'

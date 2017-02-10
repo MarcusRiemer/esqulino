@@ -32,7 +32,7 @@ import {ContenteditableModel}           from './contenteditable-model.directive'
         ContenteditableModel,
     ]
 })
-export default class SharedEditorModule {
+export class SharedEditorModule {
     static forRoot() : ModuleWithProviders  {
         return ({
             ngModule : SharedEditorModule,

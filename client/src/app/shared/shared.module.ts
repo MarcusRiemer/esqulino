@@ -4,7 +4,6 @@ import {FormsModule}                       from '@angular/forms'
 import {RouterModule}                      from '@angular/router'
 import {HttpModule}                        from '@angular/http'
 
-// import {EsqulinoExceptionHandler}       from './exception-handler'
 import {FlashMessageListComponent}         from './flash.component'
 import {FlashService}                      from './flash.service'
 import {ServerApiService}                  from './serverapi.service'
@@ -36,7 +35,7 @@ import {ProjectDescriptionService}         from './project.description.service'
         FlashMessageListComponent,
     ]
 })
-export default class SharedAppModule {
+export class SharedAppModule {
     static forRoot() : ModuleWithProviders  {
         return ({
             ngModule : SharedAppModule,

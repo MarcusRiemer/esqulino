@@ -3,7 +3,7 @@
 
 include ../Makefile.common
 
-NG_BIN = node_modules/angular-cli/bin/ng
+NG_BIN = node_modules/@angular/cli/bin/ng
 
 all : dist
 

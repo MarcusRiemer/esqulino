@@ -13,7 +13,7 @@ import { Column, ColumnStatus }                 from './column'
 /**
  * abstract class for all table commands
  */
-abstract class TableCommand {
+export abstract class TableCommand {
   protected _lastStatus: ColumnStatus;
   protected _columnIndex: number;
 

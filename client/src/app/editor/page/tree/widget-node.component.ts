@@ -2,7 +2,7 @@ import {Component, Input, Inject}         from '@angular/core'
 
 import {
     WidgetDescription, Widget, WidgetHost, isWidgetHost, isWidget
-} from '../../../shared/page/hierarchy'
+} from '../../../shared/page/widgets/'
 
 import {SidebarService}                   from '../../sidebar.service'
 import {WIDGET_MODEL_TOKEN}               from '../../editor.token'
