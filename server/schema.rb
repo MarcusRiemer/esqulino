@@ -47,6 +47,8 @@ class SchemaForeignKeyRef
 end
 
 class SchemaForeignKey
+  attr_reader :references
+  
   def initialize()
     @references = []
   end
@@ -55,6 +57,12 @@ class SchemaForeignKey
   # @param foreign_key The foreign keys to add
   def add_foreign_key(foreign_key)
     @references.push(foreign_key)
+  end
+
+  # Checks whether the given column is used as a foreign key
+  # @param column [SchemaColumn] The column to test
+  def is_column_fk?(column)
+    @references.any? { |ref| ref.from_column == column.name }
   end
 
   # Serialises the foreign key list to JSON, according to the over-the-wire format
@@ -89,6 +97,12 @@ class SchemaTable
     return @columns[idx]
   end
 
+  # Checks whether the given column is used as a foreign key
+  # @param column [SchemaColumn] The column to test
+  def is_column_fk?(column)
+    @foreign_keys.any? { |ref| ref.is_column_fk? column }
+  end
+
   # Adds the information about the foreign keys of this table
   # @param foreign_keys The foreign keys to add
   def add_foreign_keys(foreign_keys)
@@ -109,8 +123,6 @@ end
 # @return [Hash] A hash of SchemaTable instances
 def database_describe_schema(sqlite_file_path)
   db = SQLite3::Database.new(sqlite_file_path)
-
-  puts "Describing schema at #{sqlite_file_path} => #{File.exists? sqlite_file_path}"
   
   # Find out names of tables
   table_names = db.execute("SELECT name
@@ -122,23 +134,23 @@ def database_describe_schema(sqlite_file_path)
 
   # Fill in the column for each table
   table_names.each do |name|
-
-    puts "Table #{name}"
-    
+    # Find out everything about the table itself
     name = name[0]
-    
     table_schema = SchemaTable.new name
     db.execute("PRAGMA table_info(#{name})") do |ci|
-
       column_schema = SchemaColumn.new(ci[0],ci[1],ci[2],ci[3],ci[4],ci[5])
       table_schema.add_column(column_schema)
     end
 
     # Get all foreign keys in a list and append them to the table
     foreign_keys_table = db.execute("PRAGMA foreign_key_list(#{name})")
+
+    # A foreign key may consist of multiple columns, so we group all
+    # columns that belong to the same foreign key
     grouped_foreign_keys = foreign_keys_table.group_by{ |fk| fk[0]}
     grouped_foreign_keys.each do |key, value|
       foreign_key_comp = SchemaForeignKey.new()
+      # Add all columns that are part of this particular foreign key
       value.each do |fk|
         foreign_key_ref = SchemaForeignKeyRef.new(fk[3], fk[2], fk[4])
         foreign_key_comp.add_foreign_key(foreign_key_ref)
