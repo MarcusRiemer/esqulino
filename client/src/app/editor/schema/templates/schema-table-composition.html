@@ -1,17 +1,20 @@
 <div class="card-group">
-	<div class="card">
-		<sql-table id="schema-table" 
-              [(columnToHighlight)]="highlightedColumn"
-              [table]="table"
-              [readOnly] ="false">
-		</sql-table>
+	<div class="col-sm-6">
+		<div class="card">
+			<sql-table id="schema-table" 
+								[(columnToHighlight)]="highlightedColumn" 
+								[table]="table" 
+								[readOnly]="false">
+			</sql-table>
+		</div>
 	</div>
-	<div *ngIf="highlightedColumn && getTargetTable(highlightedColumn)" class="card">
-		<sql-table id="schema-table-foreign-key" 
-              [table]="getTargetTable(highlightedColumn)"
-              [columnToHighlight]="getTargetColumn(highlightedColumn)"
-              [readOnly] ="true">
-		</sql-table>
+	<div class="col-sm-6">
+		<div *ngIf="highlightedColumn && getTargetTable(highlightedColumn)" class="card">
+			<sql-table id="schema-table-foreign-key" 
+								[table]="getTargetTable(highlightedColumn)" 
+								[columnToHighlight]="getTargetColumn(highlightedColumn)"
+								[readOnly]="true">
+			</sql-table>
+		</div>
 	</div>
-  <!--<p>{{ highlightedColumn }}</p>-->
 </div>
