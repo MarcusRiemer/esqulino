@@ -48,7 +48,7 @@
 				<!--expected 2d array with tabledata[row][column]-->
 				<tr *ngFor="let row of tableData; let i = index">
 					<td *ngFor="let column of table.columns; let j = index" [ngClass]="{'success': column.stateName == 'new', 'danger': column.stateName == 'deleted', 'warning': column.stateName == 'changed'}">
-						{{ row[j] }}
+						{{ row[column.index] }}
 					</td>
 				</tr>
 			</tbody>
