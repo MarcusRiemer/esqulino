@@ -42,28 +42,6 @@ export class SchemaTableComponent {
     }
 
     /**
-     * Should the details of every column in the table be shown 
-     */
-    showDetails: boolean = false;
-
-    /**
-     * Function to get the value if table with index index shows details
-     * IN: index - the index of the table to get the details visibility value
-     */
-    getShowDetails() {
-        return this.showDetails;
-    }
-
-    /**
-     * Function to toggle the visibility of the table details
-     * IN: index - the index of the table to toggle the details visibility
-     */
-    clickToggleDetails() {
-        this.showDetails = !this.showDetails;
-    }
-
-
-    /**
      * True when table editing is enabled
      */
     editingEnabled : boolean = false;
