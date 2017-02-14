@@ -5,22 +5,36 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
     <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
   </head>
+
   <body>
     <div class="container-fluid">
       <h1>Geheimer Admin-Bereich</h1>
       <p>Hier darfst du nur hin, wenn du ein Admin bist!</p>
       <h2>Kommentare Löschen</h2>
       {% include "query_table" table: query.kommentare_alle, columns: "comment_id,article_id,date,commenter_name,text" %}
-      <form>
-        {% include "get_data_hidden" %}
-        {% include "select" options: query.kommentare_alle, outParamName: "input.kommentar_id", caption: "Zu löschender Kommentar", optionText: "text", optionValue: "comment_id"  %}
-        <button type="submit" formaction="/Admin/query/448e68d0-7679-4220-9df7-1b16dcc456b0?kommentar_id=input.kommentar_id" formmethod="POST" name="action" value="a" class="btn btn-secondary btn-block">Kommentar Löschen!</button>
-      </form>
+      <form><fieldset class="form-group">
+          <label for="input-kommentar_id">
+            Zu löschender Kommentar
+          </label>
+          <select class="form-control"
+                  id="input-kommentar_id$"
+                  name="kommentar_id">
+            {% for option in query.kommentare_alle %}
+            <option value="{{ option['comment_id'] }}">
+              {{ option['text'] }}
+            </option>
+            {% endfor %}
+          </select>
+        </fieldset>
+        <button type="submit" formaction="/Admin/query/448e68d0-7679-4220-9df7-1b16dcc456b0?kommentar_id=input.kommentar_id" formmethod="POST" class="btn btn-secondary btn-block">Kommentar Löschen!</button></form>
     </div>
     {% include "edit-ribbon" %}
   </body>
+
+
 </html>
 

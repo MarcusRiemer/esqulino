@@ -17,7 +17,20 @@
       <p>What happens when I transfer a Pokémon to the Professor? The transferred pokemon go to a "farm" where they "live happily ever after" and you can never, ever visit or see them again.</p>
       <a href="/Hauptseite">Zurück zur Hauptseite</a>
       {% include "query_table" table: query.Meine_Pokemon, columns: "gefangen_id,nummer,name,spitzname" %}
-      <form>{% include "select" options: query.Meine_Pokemon, outParamName: "gefangen_id", caption: "Freigelassenes Pokémon", optionText: "spitzname", optionValue: "gefangen_id"  %}
+      <form><fieldset class="form-group">
+          <label for="input-gefangen_id">
+            Freigelassenes Pokémon
+          </label>
+          <select class="form-control"
+                  id="input-gefangen_id$"
+                  name="gefangen_id">
+            {% for option in query.Meine_Pokemon %}
+            <option value="{{ option['gefangen_id'] }}">
+              {{ option['spitzname'] }}
+            </option>
+            {% endfor %}
+          </select>
+        </fieldset>
         <button type="submit" formaction="/Gefangen_Loeschen/query/40bddeac-facc-4836-a27b-6a23222078d5?" formmethod="POST" class="btn btn-secondary btn-block">Löschen!</button></form>
     </div>
     {% include "edit-ribbon" %}
