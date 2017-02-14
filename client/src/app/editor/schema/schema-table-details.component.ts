@@ -22,6 +22,7 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         private _projectService: ProjectService,
         private _routeParams: ActivatedRoute,
         private _router: Router,
+        private _route: ActivatedRoute,
         private _toolbarService: ToolbarService) {
     }
 
@@ -156,6 +157,6 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
     backBtn() {
         console.log("Zurück!");
         //ToDo: Navigates to the Home Screen, instead of one site up.
-        this._router.navigate([".."]);
+        this._router.navigate(["../../"], { relativeTo: this._route });
     }
 }

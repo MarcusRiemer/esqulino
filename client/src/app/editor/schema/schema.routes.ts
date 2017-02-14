@@ -3,6 +3,7 @@ import {SchemaHostComponent}            from './host.component'
 import {SchemaComponent}                from './schema.component'
 import {SchemaTableEditorComponent}     from './schema-table-editor.component'
 import {SchemaTableDetailsComponent}    from './schema-table-details.component'
+import {SchemaRedirectComponent}        from './schema-redirect.component'
 
 export const schemaEditorRoutes : Routes = [
     {
@@ -12,15 +13,13 @@ export const schemaEditorRoutes : Routes = [
             // TODO: Redirect für die "Standard"-URL auf das gerade aktuelle Schema
             // Offene Frage: Aktuelles Schema als Service (eher nicht?) oder bei
             // jedem Seitenaufruf aus der URL neu laden?
-            /*
-            { path: '', redirect : "" },
+            { path: '', component :  SchemaRedirectComponent},
             { path: ':schemaName', component : SchemaComponent },
             { path: ':schemaName/edit/:tableName', component : SchemaTableEditorComponent },
             { path : ':schemaName/details/:tableName', component : SchemaTableDetailsComponent},
-            */
-            { path: '', component : SchemaComponent },
-            { path: 'edit/:tableName', component : SchemaTableEditorComponent },
-            { path : 'details/:tableName', component : SchemaTableDetailsComponent},
+            // { path: '', component : SchemaComponent },
+            // { path: 'edit/:tableName', component : SchemaTableEditorComponent },
+            // { path : 'details/:tableName', component : SchemaTableDetailsComponent},
 
         ]
     }
