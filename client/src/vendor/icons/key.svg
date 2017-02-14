@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 200.18843 390.40027"
+   version="1.1"
+   id="svg159"
+   sodipodi:docname="key.svg"
+   inkscape:export-filename="/home/marcus/projects/scratch-sql/client/src/vendor/icons/key.png"
+   inkscape:export-xdpi="30.959999"
+   inkscape:export-ydpi="30.959999"
+   width="200.18843"
+   height="390.40027"
+   inkscape:version="0.92.0 r">
+  <metadata
+     id="metadata165">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs163" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1916"
+     inkscape:window-height="1161"
+     id="namedview161"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="0.94921875"
+     inkscape:cx="-18.306425"
+     inkscape:cy="2.098727"
+     inkscape:window-x="3840"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg159" />
+  <path
+     d="m 76.797666,3.2 v 194.6192 a 96.0184,96.0184 0 0 0 24.000004,189.368 95.9968,95.9968 0 0 0 23.9984,-188.9936 V 123.196 h 47.9984 V 87.1976 h -47.9984 v -36 h 71.9976 V 3.2 Z m 20.2496,239.992 a 48.008,48.008 0 0 1 1.8744,0 47.9984,47.9984 0 0 1 1.874404,0 47.9984,47.9984 0 0 1 0,95.9968 48.0352,48.0352 0 0 1 -3.750404,-95.9968 z"
+     id="path157"
+     inkscape:connector-curvature="0"
+     style="fill:#000000;stroke:#000000;stroke-width:6.4000001;fill-opacity:1"
+     inkscape:export-xdpi="30.959999"
+     inkscape:export-ydpi="30.959999" />
+</svg>
