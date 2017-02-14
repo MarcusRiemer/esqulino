@@ -14,7 +14,19 @@
     <div class="container-fluid">
       <p>Hier stelle ich mein Pokémon mit der ID {{ get.id }} vor: <strong>{{ query.pokemon.spitzname }}</strong>. Es ist ein {{ query.pokemon.name }} und {{ query.pokemon.staerke }} Punkte stark.</p>
       <form><input type="hidden" name="gefangen_id" value="{{ get.id }}">
-        {% include "input" caption: "Neue Stärke", outParamName: "staerke", description: "", inputType: "number", required: true  , initialValue: query.pokemon.staerke %}
+        <fieldset class="form-group">
+          <label for="input-staerke">
+            Neue Stärke
+          </label>
+          <input type="number"
+                 class="form-control"
+                 id="input-staerke"
+                 name="staerke"
+                 {% if input.required %}required{% endif %}
+                 value=""
+                 placeholder="">
+          <small class="text-muted"></small>
+        </fieldset>
         <button type="submit" formaction="/Gefangen_Einzeln/query/18e5fe58-a209-4ccb-9c85-192e3330b42e?" formmethod="POST" class="btn btn-secondary btn-block">Stärke setzen</button></form>
       <a href="/Hauptseite">Zurück zur Hauptseite</a>
     </div>

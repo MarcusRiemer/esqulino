@@ -5,25 +5,51 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+
     <link rel="stylesheet" href="/vendor/css/bootstrap.css">
     <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
   </head>
+
   <body>
     <div class="container-fluid">
       <h1>{{ query.artikel_detail.caption }}</h1>
       <p>{{ query.artikel_detail.text }}</p>
       <h2>Kommentare</h2>
       {% include "query_table" table: query.artikel_kommentare, columns: "commenter_name,text" %}
-      <form>
-        {% include "get_data_hidden" %}
-        <h3>Neuer Kommentar</h3>
-        {% include "input" caption: "Dein Name", outParamName: "input.name", description: "Dieser Name wird unter dem Kommentar erscheinen", inputType: "text", required: true  %}
-        {% include "input" caption: "Dein Kommentar", outParamName: "input.text", description: "Der Text den du gerne hinterlassen möchtest", inputType: "text", required: true  %}
-        <button type="submit" formaction="/Artikel/query/11ec075e-e797-4223-b85d-e27a91e479cb?article=get.id&name=input.name&text=input.text" formmethod="POST" name="action" value="a" class="btn btn-secondary btn-block">Kommentieren</button>
-      </form>
+      <form><h3>Neuer Kommentar</h3>
+        <input type="hidden" name="article" value="{{ get.id }}">
+        <fieldset class="form-group">
+          <label for="input-name">
+            Dein Name
+          </label>
+          <input type="text"
+                 class="form-control"
+                 id="input-name"
+                 name="name"
+                 {% if input.required %}required{% endif %}
+                 value=""
+                 placeholder="">
+          <small class="text-muted">Dieser Name wird unter dem Kommentar erscheinen</small>
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="input-text">
+            Dein Kommentar
+          </label>
+          <input type="text"
+                 class="form-control"
+                 id="input-text"
+                 name="text"
+                 {% if input.required %}required{% endif %}
+                 value=""
+                 placeholder="">
+          <small class="text-muted">Der Text den du gerne hinterlassen möchtest</small>
+        </fieldset>
+        <button type="submit" formaction="/Artikel/query/11ec075e-e797-4223-b85d-e27a91e479cb?" formmethod="POST" class="btn btn-secondary btn-block">Kommentieren</button></form>
       <a href="/Hauptseite">Zurück zur Hauptseite</a>
     </div>
     {% include "edit-ribbon" %}
   </body>
+
+
 </html>
 
