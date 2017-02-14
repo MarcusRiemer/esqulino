@@ -184,7 +184,20 @@ function renderSelect(w: Widget) : string {
     const optionTextExpr = `optionText: "${select.optionTextExpression}"`;
     const optionValueExpr = `optionValue: "${select.optionValueExpression}"`;
 
-    return (`{% include "select" ${options}, ${outParamName}, ${caption}, ${optionTextExpr}, ${optionValueExpr}  %}`);
+    return (`<fieldset class="form-group">
+  <label for="input-${select.outParamName}">
+    ${select.caption}
+  </label>
+  <select class="form-control"
+          id="input-${select.outParamName}$"
+          name="${select.outParamName}">
+    {% for option in query.${queryName} %}
+      <option value="{{ option['${select.optionValueExpression}'] }}">
+        {{ option['${select.optionTextExpression}'] }}
+      </option>
+    {% endfor %}
+  </select>
+</fieldset>`);
 }
 
 /**
