@@ -34,7 +34,7 @@ export class Table {
     }
 
     columnIsForeignKeyOfTable(columnName : string) : string {
-        let table = undefined;
+        let table : string = undefined;
         for(let fk of this._foreign_keys) {
             for(let ref of fk.refs) {
                 if(ref.from_column == columnName) {
@@ -46,7 +46,7 @@ export class Table {
     }
 
     columnIsForeignKeyOfColumn(columnName : string) : string {
-        let column = undefined;
+        let column : string = undefined;
         for(let fk of this._foreign_keys) {
             for(let ref of fk.refs) {
                 if(ref.from_column == columnName) {

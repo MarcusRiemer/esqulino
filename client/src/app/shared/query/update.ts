@@ -33,7 +33,7 @@ export class QueryUpdate extends QueryAssign implements QueryWhere {
     }
 
     getLeaves() : SyntaxTree.Expression[] {
-        let toReturn = [];
+        let toReturn : SyntaxTree.Expression[] = [];
         if (!!this._where) {
             toReturn = this._where.getLeaves();
         }
