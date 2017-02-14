@@ -59,6 +59,11 @@
             "text": "Neuer Kommentar"
           },
           {
+            "type": "hidden",
+            "outParamName": "article",
+            "value": "{{ get.id }}"
+          },
+          {
             "type": "input",
             "outParamName": "name",
             "caption": "Dein Name",
@@ -82,16 +87,13 @@
               "queryId": "11ec075e-e797-4223-b85d-e27a91e479cb",
               "mapping": [
                 {
-                  "parameterName": "article",
-                  "providingName": "get.id"
+                  "parameterName": "article"
                 },
                 {
-                  "parameterName": "name",
-                  "providingName": "input.name"
+                  "parameterName": "name"
                 },
                 {
-                  "parameterName": "text",
-                  "providingName": "input.text"
+                  "parameterName": "text"
                 }
               ]
             }

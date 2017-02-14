@@ -18,9 +18,46 @@
       <h1>Alle existierenden Pokémon</h1>
       {% include "query_table" table: query.Pokedex_1G, columns: "nummer,name,typ1,typ2" %}
       <form><h2>Fakten zu deinem Fang</h2>
-        {% include "select" options: query.Pokedex_1G, outParamName: "nummer", caption: "Pokemon", optionText: "name", optionValue: "nummer"  %}
-        {% include "input" caption: "Spitzname", outParamName: "name", description: "Der von dir vergebene Name für das gefangene Pokémon", inputType: "text", required: true  , initialValue:  %}
-        {% include "input" caption: "Stärke", outParamName: "staerke", description: "Die Stärke des gefangenen Pokémon", inputType: "number", required: true  , initialValue:  %}
+        <fieldset class="form-group">
+          <label for="input-nummer">
+            Pokemon
+          </label>
+          <select class="form-control"
+                  id="input-nummer$"
+                  name="nummer">
+            {% for option in query.Pokedex_1G %}
+            <option value="{{ option['nummer'] }}">
+              {{ option['name'] }}
+            </option>
+            {% endfor %}
+          </select>
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="input-name">
+            Spitzname
+          </label>
+          <input type="text"
+                 class="form-control"
+                 id="input-name"
+                 name="name"
+                 {% if input.required %}required{% endif %}
+                 value=""
+                 placeholder="">
+          <small class="text-muted">Der von dir vergebene Name für das gefangene Pokémon</small>
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="input-staerke">
+            Stärke
+          </label>
+          <input type="number"
+                 class="form-control"
+                 id="input-staerke"
+                 name="staerke"
+                 {% if input.required %}required{% endif %}
+                 value=""
+                 placeholder="">
+          <small class="text-muted">Die Stärke des gefangenen Pokémon</small>
+        </fieldset>
         <button type="submit" formaction="/Gefangen_Neu/query/79f9fd59-89cd-47d1-ab20-9a4388cd9d44?" formmethod="POST" class="btn btn-secondary btn-block">Pokémon speichern</button></form>
       <h2>Meine Pokémon</h2>
       {% include "query_table" table: query.Meine_Pokemon, columns: "gefangen_id,nummer,name,typ_name,spitzname,staerke" %}
