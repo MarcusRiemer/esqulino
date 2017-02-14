@@ -327,26 +327,47 @@ class ScratchSqlApp < Sinatra::Base
 
   end
 
-  get '/api/project/:project_id/db/:database_id/visual_schema' do |_p, database_id|
+  # Delivers visual representations of database schemas
+  get '/api/project/:project_id/db/:database_id/visual_schema' do |project_id, database_id|
+    # Build the GraphViz description of the database
     db_path = @project.file_path_sqlite_from_id(database_id)
     db_graphviz = database_graphviz_schema(db_path)
 
-    if params['format'] == 'graphviz'
+    # The default renderer currently is svg:cairo, but
+    # the user may override it.
+    format = params.fetch('format', 'svg')
+    
+    # Does the user want to download the file?
+    if params.has_key? 'download'
+      file_extension = format.split(':').first
+      filename = "#{project_id}-db-schema-#{database_id}.#{file_extension}"
+      response.headers['Content-Disposition'] = "attachment; filename=\"#{filename}\""
+    end
+
+    # Did the user request the internal graphviz format?
+    # This is probably only useful to debug stuff, but there
+    # seems no harm in handing out the sources.
+    if format == 'graphviz'
       content_type :text
       return db_graphviz
     else
-      format = params.fetch('format', 'svg:cairo')
+      # Invoke graphviz to actually render something
       db_img, err, status = Open3.capture3('dot',"-T#{format}", :stdin_data => db_graphviz)
 
+      # Was the rendering successful?
       if status.exitstatus != 0
         halt 500, {'Content-Type' => 'text/plain'}, err
       else
+        # We need some special work for SVG images
         if format.start_with? 'svg'
+          # Set matching MIME-type and replace relative paths
           content_type "image/svg+xml"
           db_img.gsub! 'vendor/icons/', '/vendor/icons/'
         else
+          # Other images only require a matching MIME-type
           content_type "image/#{format}"
         end
+        # Deliver the image itself
         return db_img
       end
     end
