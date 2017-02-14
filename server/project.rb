@@ -53,6 +53,11 @@ class Project
     File.join(self.folder_databases, database_file_name)
   end
 
+  # Maps the ID of a database to a physical path
+  def file_path_sqlite_from_id(db_id)
+    File.join(self.folder_databases, db_id + '.sqlite')
+  end
+
   # @return The id of this project
   def id
     File.basename @project_folder

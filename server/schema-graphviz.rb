@@ -9,10 +9,18 @@ def database_graphviz_schema(sqlite_file_path)
   tables = schema.map do |table|
     columns = table.columns.map do |c|
       c_type = (table.is_column_fk? c) ? "FK" : c.type
-      "<TR><TD ALIGN=\"LEFT\" PORT=\"#{c.name}_name\">#{c.name}</TD><TD PORT=\"#{c.name}_type\">#{c_type}</TD></TR>"
+      c_name = c.name
+      c_pk = ""
+
+      if c.primary
+        c_name = "<B>#{c_name}</B>"
+        c_pk = '<IMG SRC="vendor/icons/key.png" SCALE="TRUE"/>'
+      end
+      
+      "<TR><TD WIDTH=\"16\" HEIGHT=\"16\" FIXEDSIZE=\"TRUE\" PORT=\"#{c.name}_name\">#{c_pk}</TD><TD ALIGN=\"LEFT\">#{c_name}</TD><TD ALIGN=\"LEFT\" PORT=\"#{c.name}_type\">#{c_type}</TD></TR>"
     end
     columns = columns.join "\n"
-    record_string = "<TABLE BORDER=\"1\" CELLBORDER=\"0\"><TR><TD COLSPAN=\"2\">#{table.name}</TD></TR><HR/>\n#{columns}</TABLE>"
+    record_string = "<TABLE BORDER=\"1\" CELLBORDER=\"0\"><TR><TD COLSPAN=\"3\">#{table.name}</TD></TR><HR/>\n#{columns}</TABLE>"
 
     "#{table.name} [label=<#{record_string}>];"
   end
@@ -39,11 +47,12 @@ def database_graphviz_schema(sqlite_file_path)
 
   refs = refs.join("\n")
 
+  # TODO: Remove dirty hack to set the path!
   to_return = <<-delim
 digraph db {
-  graph[rankdir=LR, splines=polyline];
+  graph[rankdir=LR, nodesep=0, splines=polyline, imagepath="../client/src", overlap=false];
   edge[dir=both, arrowhead=dot, arrowtail=dot];
-  node[shape=plaintext];
+  node[shape=plaintext, fontname = "Monospace"];
   #{tables}
   #{refs}
 }

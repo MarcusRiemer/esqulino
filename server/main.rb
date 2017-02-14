@@ -1,4 +1,7 @@
 # coding: utf-8
+
+require 'open3'
+
 require 'sinatra/base'
 require 'sinatra/config_file'
 require 'sinatra/json'
@@ -9,6 +12,7 @@ require 'uri' # To unescape URIs
 
 require './project.rb'
 require './schema.rb'
+require './schema-graphviz.rb'
 require './validator.rb'
 require './error.rb'
 
@@ -205,7 +209,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Running an arbitrary query (Dangerous!)
-  post '/api/project/:project_id/query/run' do    
+  post '/api/project/:project_id/query/run' do
     request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
     result = @project.execute_sql(request_data['sql'], request_data['params'])
@@ -241,7 +245,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Rendering an arbitrary page
-  post '/api/project/:project_id/render' do   
+  post '/api/project/:project_id/render' do
     # Ensure this request is shaped as we would expect it
     render_request = @@validator.ensure_request("PageRenderRequestDescription", request.body.read)
 
@@ -255,7 +259,7 @@ class ScratchSqlApp < Sinatra::Base
     page_template = render_request['source']
     render_engine = render_request['sourceType']
 
-    
+
     # This page is not stored on the server, we construct it in memory
     page = Page.new(@project, nil, render_request['page'])
 
@@ -297,7 +301,7 @@ class ScratchSqlApp < Sinatra::Base
   # TODO: db / DatabaseID dazu
   # TODO: getEntries -> rows
   # TODO: Operation "getEntries" und ":tableName" tauschen
-  get '/api/project/:project_id/:tableName/getEntries/:from/:amount' do    
+  get '/api/project/:project_id/:tableName/getEntries/:from/:amount' do
     # request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
     # TODO: Sicherheitscheck -> Existiert tableName überhaupt?
@@ -318,11 +322,36 @@ class ScratchSqlApp < Sinatra::Base
   post '/api/project/:project_id/db/:database_id/create' do |_p, database_id|
 
   end
-  
+
   post '/api/project/:project_id/db/:database_id/alter' do
 
   end
-  
+
+  get '/api/project/:project_id/db/:database_id/visual_schema' do |_p, database_id|
+    db_path = @project.file_path_sqlite_from_id(database_id)
+    db_graphviz = database_graphviz_schema(db_path)
+
+    if params['format'] == 'graphviz'
+      content_type :text
+      return db_graphviz
+    else
+      format = params.fetch('format', 'svg:cairo')
+      db_img, err, status = Open3.capture3('dot',"-T#{format}", :stdin_data => db_graphviz)
+
+      if status.exitstatus != 0
+        halt 500, {'Content-Type' => 'text/plain'}, err
+      else
+        if format.start_with? 'svg'
+          content_type "image/svg+xml"
+          db_img.gsub! 'vendor/icons/', '/vendor/icons/'
+        else
+          content_type "image/#{format}"
+        end
+        return db_img
+      end
+    end
+  end
+
   # Rendering subdomains
   subdomain do
     # Browsers will automatically ask for the favicon at the root of the URL. Without this
@@ -333,7 +362,7 @@ class ScratchSqlApp < Sinatra::Base
 
     # Render a page
     get '/:page_name_or_id?' do |page_name_or_id|
-      begin        
+      begin
         request_prepare_project subdomain
         request_prepare_page(page_name_or_id, true)
 
@@ -345,7 +374,7 @@ class ScratchSqlApp < Sinatra::Base
         }
 
         return @page.render(initial_params)
-        
+
       rescue EsqulinoError => e
         initial_params['exception'] = e.to_liquid
         status e.code
@@ -375,7 +404,7 @@ class ScratchSqlApp < Sinatra::Base
         bind_params = form_get_params.merge(input_params)
 
         puts "Bind params: #{bind_params}"
-        
+
         initial_params = {
           'request' => input_params,
           'get' => form_get_params,
@@ -390,7 +419,7 @@ class ScratchSqlApp < Sinatra::Base
           if providing_name.include? '.'
             # Yes, properly split it up to map something
             providing_prefix, providing_name = providing_name.split "."
-            
+
             # And do the actual mapping
             begin
               mapped_value = initial_params
@@ -406,11 +435,11 @@ class ScratchSqlApp < Sinatra::Base
             bind_params.delete providing_name
           end
         end
-        
+
         # Grab the query reference
         query = @project.query_by_id query_id
         query.execute(bind_params)
-        
+
         # Go back
         redirect back
       rescue EsqulinoError => e
