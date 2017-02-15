@@ -55,7 +55,6 @@ export class SchemaTableCompositionComponent {
         const forenKeyTableName = this.table.columnIsForeignKeyOfTable(highlightedColumn);
         if(forenKeyTableName){
             const table = this.project.schema.getTable(forenKeyTableName);
-            console.log(table);
             return table;
         } else {
             return undefined;
@@ -65,7 +64,6 @@ export class SchemaTableCompositionComponent {
 
     getTargetColumn(highlightedColumn : string) : string {
         let forenKeyColumnName = this.table.columnIsForeignKeyOfColumn(highlightedColumn);
-        console.log(forenKeyColumnName);
         return forenKeyColumnName;
     }
 
