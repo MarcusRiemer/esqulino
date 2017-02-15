@@ -300,7 +300,7 @@ class ScratchSqlApp < Sinatra::Base
   # Getting entries inside a table
   # TODO: db / DatabaseID dazu
   # TODO: row -> rows
-  get '/api/project/:project_id/row/:tableName/:from/:amount' do    
+  get '/api/project/:project_id/rows/:tableName/:from/:amount' do    
     # request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
     # TODO: Sicherheitscheck -> Existiert tableName überhaupt?
