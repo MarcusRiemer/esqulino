@@ -52,12 +52,6 @@ export class Project implements ApiVersion, Saveable {
 
     private _saveRequired = false;
 
-    // Fired when the save-state has changed
-    private _saveStateChangedEvent = new BehaviorSubject<SaveStateEvent<Project>>({
-        resource : this,
-        saveRequired : this._saveRequired
-    });
-    
     /**
      * Construct a new project and a whole slew of other
      * objects based on the JSON wire format.
@@ -69,7 +63,17 @@ export class Project implements ApiVersion, Saveable {
         this._indexPageId = json.indexPageId;
         this._currentDatabase = json.database;
         this._availableDatabases = json.availableDatabases;
-        
+
+        // If no current database was explicitly mentioned grab
+        // the first default database.
+        if (!this._currentDatabase) {
+            if (this._availableDatabases && this._availableDatabases.length > 0) {
+                this._currentDatabase = json.availableDatabases[0];
+            } else {
+                throw new Error(`No default database available!`);
+            }
+        }
+
         this.schema = new Schema(json.schema);
 
         if (json.apiVersion as string != this.apiVersion) {
@@ -84,6 +88,13 @@ export class Project implements ApiVersion, Saveable {
             .map( val => new Page(val, this) )
             .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
     }
+
+    // Fired when the save-state has changed
+    private _saveStateChangedEvent = new BehaviorSubject<SaveStateEvent<Project>>({
+        resource : this,
+        saveRequired : this._saveRequired
+    });
+
 
     /**
      * @return The version of this project
@@ -233,7 +244,7 @@ export class Project implements ApiVersion, Saveable {
             throw new Error(`Found ${toReturn.length} elements, expected ${ids.length}`);
         }
 
-        return (toReturn);        
+        return (toReturn);
     }
 
     /**
@@ -249,7 +260,7 @@ export class Project implements ApiVersion, Saveable {
     hasQueryByName(name : string) : boolean {
         return (this._queries.some(query => query.name == name));
     }
-    
+
     /**
      * @return True, if a query with the given id is part of this project.
      */
@@ -311,7 +322,7 @@ export class Project implements ApiVersion, Saveable {
 
     /**
      * Adds a new page to this project.
-     * 
+     *
      * @param page The page to add.
      */
     addPage(page : Page) {
