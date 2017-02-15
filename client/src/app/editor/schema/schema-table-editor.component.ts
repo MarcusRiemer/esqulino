@@ -8,8 +8,8 @@ import { ToolbarService } from '../toolbar.service'
 import {
     AddNewColumn, DeleteColumn,
     SwitchColumnOrder, RenameColumn,
-    ChangeColumnType, ChangeColumnPK,
-    ChangeColumnNN, ChangeColumnStandartValue,
+    ChangeColumnType, ChangeColumnPrimaryKey,
+    ChangeColumnNotNull, ChangeColumnStandardValue,
     ChangeTableName, TableCommandHolder
 } from '../../shared/schema/table-commands'
 
@@ -223,7 +223,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     changedColumnStandartValue(index: number, newValue: string) {
         if (this._oldValue != newValue) {
-            this._commandsHolder.do(new ChangeColumnStandartValue(this.table, index, this._oldValue, newValue));
+            this._commandsHolder.do(new ChangeColumnStandardValue(this.table, index, this._oldValue, newValue));
             this.clearOldValue();
         }
     }

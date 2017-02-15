@@ -39,16 +39,16 @@ export interface ChangeColumnTypeDescription extends CommandDescription {
   newType : string;
 }
 
-export interface ChangeColumnPKDescription extends CommandDescription {
-  type : "changeColumnPK";
+export interface ChangeColumnPrimaryKeyDescription extends CommandDescription {
+  type : "changeColumnPrimaryKey";
 }
 
-export interface ChangeColumnNNDescription extends CommandDescription {
-  type : "changeColumnNN";
+export interface ChangeColumnNotNullDescription extends CommandDescription {
+  type : "changeColumnNotNull";
 }
 
-export interface ChangeColumnStandartValueDescription extends CommandDescription {
-  type : "changeColumnStandartValue";
+export interface ChangeColumnStandardValueDescription extends CommandDescription {
+  type : "changeColumnStandardValue";
   oldValue : string;
   newValue : string;
 }
@@ -242,7 +242,7 @@ export class ChangeColumnType extends TableCommand {
 /**
  * Class to change the primary key state of a column
  */
-export class ChangeColumnPK extends TableCommand {
+export class ChangeColumnPrimaryKey extends TableCommand {
 
   constructor(table : Table, columnIndex: number) {
     super(table.columns[columnIndex].state, columnIndex);
@@ -258,10 +258,10 @@ export class ChangeColumnPK extends TableCommand {
     super.undo(table);
   }
 
-  toModel() : ChangeColumnPKDescription {
+  toModel() : ChangeColumnPrimaryKeyDescription {
 
     return{
-      type : "changeColumnPK",
+      type : "changeColumnPrimaryKey",
       columnIndex : this._columnIndex
     };
   }
@@ -270,7 +270,7 @@ export class ChangeColumnPK extends TableCommand {
 /**
  * Class to change the not null state of a column
  */
-export class ChangeColumnNN extends TableCommand {
+export class ChangeColumnNotNull extends TableCommand {
 
   constructor(table : Table, columnIndex: number) {
     super(table.columns[columnIndex].state, columnIndex);
@@ -286,9 +286,9 @@ export class ChangeColumnNN extends TableCommand {
     super.undo(table);
   }
 
-  toModel() : ChangeColumnNNDescription {
+  toModel() : ChangeColumnNotNullDescription {
     return {
-      type : "changeColumnNN",
+      type : "changeColumnNotNull",
       columnIndex : this._columnIndex
     }
   }
@@ -297,7 +297,7 @@ export class ChangeColumnNN extends TableCommand {
 /**
  * Class to change the standart value of the column
  */
-export class ChangeColumnStandartValue extends TableCommand {
+export class ChangeColumnStandardValue extends TableCommand {
   private _oldValue: string;
   private _newValue: string;
 
@@ -317,10 +317,10 @@ export class ChangeColumnStandartValue extends TableCommand {
     super.undo(table);
   }
 
-  toModel() : ChangeColumnStandartValueDescription {
+  toModel() : ChangeColumnStandardValueDescription {
 
     return{
-      type : "changeColumnStandartValue",
+      type : "changeColumnStandardValue",
       columnIndex : this._columnIndex,
       newValue : this._newValue,
       oldValue : this._oldValue
