@@ -21,7 +21,7 @@ export {
 /**
  * This information is required for every kind of widget.
  */ 
-interface WidgetEditorDescription {
+export interface WidgetEditorDescription {
     // The registered type to instanciate
     type : string
     category : WidgetCategory
@@ -35,7 +35,7 @@ interface WidgetEditorDescription {
  * of this class is meant to be used in the PageEditors UI, **not** in the
  * user-facing page.
  */
-export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
+export abstract class WidgetBase implements Widget, WidgetHost,  ModelObservable<Widget> {
     // The type-identifier of this widget
     private _type : string;
 
@@ -117,49 +117,13 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
         return (this._type);
     }
 
+        
     /**
-     * @return A storeable object of this widget.
+     * @return All immediate children of this widget.
      */
-    toModel() : WidgetDescription {
-        // Let the derived classes do its thing
-        const extendedInput = this.toModelImpl();
-
-        // Ensure the relevant type-information is available
-        if (!extendedInput.type) {
-            extendedInput.type = this._type;
-        }
-
-        return (extendedInput);
-    }
-
-    /**
-     * Allows implementing classes to signal that their model has changed.
-     */
-    fireModelChange() {
-        this._modelChanged.next(this);
-    }
-
-    /**
-     * Allows deriving classes to specify serialization.
-     */
-    protected abstract toModelImpl() : WidgetDescription;
-}
-
-/**
- * A widget that may host other widgets.
- */
-export abstract class HostingWidget extends WidgetBase implements WidgetHost {
-
-    constructor(desc : WidgetEditorDescription,
-                parent? : WidgetHost)
-    {
-        super(desc, parent);
-    }
-    
-    /**
-     * @return All immediate children of this widget,
-     */
-    abstract get children() : Widget[];
+    get children() : Widget[] {
+        return ([]);
+    };
 
     /**
      * @return All widgets where this widgets is some kind of parent.
@@ -242,53 +206,34 @@ export abstract class HostingWidget extends WidgetBase implements WidgetHost {
 
         return (widget);
     }
+
+
+    /**
+     * @return A storeable object of this widget.
+     */
+    toModel() : WidgetDescription {
+        // Let the derived classes do its thing
+        const extendedInput = this.toModelImpl();
+
+        // Ensure the relevant type-information is available
+        if (!extendedInput.type) {
+            extendedInput.type = this._type;
+        }
+
+        return (extendedInput);
+    }
+
+    /**
+     * Allows implementing classes to signal that their model has changed.
+     */
+    fireModelChange() {
+        this._modelChanged.next(this);
+    }
+
+    /**
+     * Allows deriving classes to specify serialization.
+     */
+    protected abstract toModelImpl() : WidgetDescription;
 }
 
-/**
- * A widget that needs specific external input to work.
- */
-export abstract class ParametrizedWidget extends WidgetBase {
-
-    constructor(desc : WidgetEditorDescription,
-                parent? : WidgetHost)
-    {
-        super(desc, parent);
-    }
-
-    /**
-     * @return All parameters required for this widget
-     */
-    abstract get mapping() : ParameterMapping[];
-
-    /**
-     * @return True, if the given name is required as an input parameter.
-     */
-    hasInputParameter(name : string) {
-        return (this.mapping.some(p => p.parameterName == name));
-    }
-}
-
-/**
- * A widget that provides external input
- */
-export abstract class UserInputWidget extends WidgetBase {
-
-    constructor(desc : WidgetEditorDescription,
-                parent? : WidgetHost)
-    {
-        super(desc, parent);
-    }
-
-    /**
-     * The name of the variable that is provided by this widget.
-     */
-    abstract get outParamName() : string;
-
-    /**
-     * @return True, if this widget provides the required output.
-     */
-    providesParameter(name : string) : boolean {
-        return (name === this.outParamName);
-    }
-}
 

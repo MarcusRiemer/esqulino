@@ -22,9 +22,8 @@ import {
 import {Row}                                  from './widgets/row'
 import {Body, BodyDescription}                from './widgets/body'
 import {Renderer, LiquidRenderer}             from './renderer/liquid'
-import {
-    WidgetBase, ParametrizedWidget, UserInputWidget
-} from './widgets/widget-base'
+import {WidgetBase}                           from './widgets/widget-base'
+import {ParametrizedWidget, UserInputWidget}  from './widgets/widget-parametrized'
 import {loadWidget}                           from './widgets/widget-loader'
 
 export {

@@ -6,7 +6,7 @@ import {StringParameter}                 from './parameters'
 
 import {
     WidgetBase, WidgetDescription, UserInputWidget
-} from './widget-base'
+} from './widget-parametrized'
 
 export {HiddenInputDescription}
 

@@ -5,5 +5,5 @@
       (dragover)="onDragOver($event, mapping)"
       (drop)="onDrop($event, mapping)"
       [title]="mapping.parameterName"
-      [class.parameter]="mapping.isSatisfied"
-      [class.missing]="!mapping.isSatisfied">{{ getDisplayText(mapping) }}</span>
+      [class.parameter]="isMappingSatisfied(mapping)"
+      [class.missing]="!isMappingSatisfied(mapping)">{{ getDisplayText(mapping) }}</span>

@@ -7,7 +7,8 @@
         </query-reference>
         <required-parameters *ngIf="model.queryReference.isResolveable"
                              [(parameterMapping)]="model.mapping"
-                             [page]="model.page">
+                             [page]="model.page"
+                             [form]="model.parentForm">
         </required-parameters>
       </span>
     </widget-parameter>
@@ -17,7 +18,8 @@
         <nav-reference [navigateAction]="model.navigateAction"
                        [page]="model.page"></nav-reference>
         <required-parameters [(parameterMapping)]="model.navigateAction.internalParameters"
-                             [page]="model.page">
+                             [page]="model.page"
+                             [form]="model.parentForm">
         </required-parameters>
       </span>
     </widget-parameter>

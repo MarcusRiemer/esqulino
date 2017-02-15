@@ -7,7 +7,7 @@ import {
 
 import {
     WidgetBase, WidgetDescription, UserInputWidget
-} from './widget-base'
+} from './widget-parametrized'
 
 export {
     SelectDescription, ParameterMapping

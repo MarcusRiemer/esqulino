@@ -2,7 +2,8 @@ import {WidgetDescription, FormDescription}        from '../page.description'
 
 import {loadWidget}                                from './widget-loader'
 import {
-    Widget, HostingWidget, WidgetHost, WidgetBase, UserInputWidget
+    Widget, WidgetHost, WidgetBase, WidgetEditorDescription,
+    ParameterMapping
 } from './widget-base'
 
 export {FormDescription}
@@ -10,7 +11,7 @@ export {FormDescription}
 /**
  * Describes a HTML form.
  */
-export class Form extends HostingWidget {
+export class Form extends WidgetBase {
     private _action : string;
 
     private _method : string;
@@ -60,5 +61,65 @@ export class Form extends HostingWidget {
 
         return (toReturn);
     }
+}
 
+/**
+ * A widget that provides external input and must be placed on
+ * a form.
+ */
+export abstract class UserInputWidget extends WidgetBase {
+
+    constructor(desc : WidgetEditorDescription,
+                parent? : WidgetHost)
+    {
+        super(desc, parent);
+    }
+
+    /**
+     * The name of the variable that is provided by this widget.
+     */
+    abstract get outParamName() : string;
+
+    /**
+     * @return True, if this widget provides the required output.
+     */
+    providesParameter(name : string) : boolean {
+        return (name === this.outParamName);
+    }
+}
+
+/**
+ * A widget that needs specific external input to work.
+ */
+export abstract class ParametrizedWidget extends WidgetBase {
+
+    constructor(desc : WidgetEditorDescription,
+                parent? : WidgetHost)
+    {
+        super(desc, parent);
+    }
+
+    /**
+     * @return The form that this widget is part of.
+     */
+    get parentForm() : Form {
+        let host = this.parent;
+        while(host && host instanceof WidgetBase && !(host instanceof Form)) {
+            host = host.parent;
+        }
+
+        return (host as Form);
+    }
+
+    /**
+     * @return All parameters required for this widget
+     */
+    abstract get mapping() : ParameterMapping[];
+
+    /**
+     * @return True, if the given name is required as an input parameter.
+     */
+    hasInputParameter(name : string) {
+        return (this.mapping.some(p => p.parameterName == name));
+    }
 }

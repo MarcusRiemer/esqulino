@@ -3,7 +3,7 @@ import {Page, ColumnDescription}        from '../page'
 import {NumericalParameter}             from './parameters'
 import {loadWidget}                     from './widget-loader'
 import {
-    WidgetBase, WidgetDescription, HostingWidget, WidgetHost
+    WidgetBase, WidgetDescription, WidgetHost
 }  from './widget-base'
 
 export {ColumnDescription}
@@ -12,7 +12,7 @@ export {ColumnDescription}
  * Columns live "inside" a row and act as "table-cells" for content. They
  * usually have no appearance of their and provide nothing but the layout.
  */
-export class Column extends HostingWidget {
+export class Column extends WidgetBase {
     private _width : number;
 
     private _widgets : WidgetBase[];

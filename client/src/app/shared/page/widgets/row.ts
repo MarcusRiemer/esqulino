@@ -4,7 +4,7 @@ import {
 
 import {Column}                    from './column'
 import {
-    HostingWidget, WidgetHost, WidgetBase,
+    WidgetHost, WidgetBase,
 } from './widget-base'
 
 export {RowDescription}
@@ -12,7 +12,7 @@ export {RowDescription}
 /**
  * Rows can host columns and nothing else.
  */
-export class Row extends HostingWidget {
+export class Row extends WidgetBase {
     private _columns : Column[];
 
     constructor(desc : RowDescription, parent? : WidgetHost) {

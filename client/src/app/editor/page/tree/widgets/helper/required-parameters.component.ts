@@ -4,6 +4,7 @@ import {
 } from "@angular/core"
 
 import {Page, ParameterMapping}               from '../../../../../shared/page/index'
+import {Form}                                 from '../../../../../shared/page/widgets/'
 
 import {PageDragEvent}                        from '../../../drag.service'
 
@@ -21,11 +22,17 @@ export class RequiredParametersComponent {
 
     @Input() page : Page;
 
+    @Input() form : Form;
+
     /**
      * @return True, if there is any parameter that is actually used.
      */
     get hasParameters() : boolean {
         return (this.parameterMapping && this.parameterMapping.length > 0);
+    }
+
+    isMappingSatisfied(mapping : ParameterMapping) : boolean {
+        return (mapping.isSatisfied);
     }
 
     /**

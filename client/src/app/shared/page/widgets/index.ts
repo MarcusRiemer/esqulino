@@ -1,52 +1,29 @@
-import {
+export {
     ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription,
     ParameterMappingDescription
 } from '../page.description'
-import {
+export {
     isWidget, isWidgetHost, Widget, WidgetHost, WidgetCategory
 } from '../hierarchy'
 
 
-import {Action, NavigateAction, QueryAction}   from './action'
+export {Action, NavigateAction, QueryAction}   from './action'
 
-import {WidgetBase, WidgetDescription}         from './widget-base'
-import {loadWidget}                            from './widget-loader'
+export {WidgetBase, WidgetDescription}         from './widget-base'
+export {loadWidget}                            from './widget-loader'
+export {ParametrizedWidget, UserInputWidget}   from './widget-parametrized'
 
-import {Row, RowDescription}                   from './row'
-import {Column, ColumnDescription}             from './column'
+export {Row, RowDescription}                   from './row'
+export {Column, ColumnDescription}             from './column'
 
-import {Body, BodyDescription}                 from './body'
-import {Button, ButtonDescription}             from './button'
-import {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
-import {Form, FormDescription}                 from './form'
-import {Heading, HeadingDescription}           from './heading'
-import {HiddenInput, HiddenInputDescription}   from './hidden-input'
-import {Input, InputDescription}               from './input'
-import {Link, LinkDescription}                 from './link'
-import {Paragraph, ParagraphDescription}       from './paragraph'
-import {QueryTable, QueryTableDescription}     from './query-table'
-import {Select, SelectDescription}             from './select'
-
-export {
-    WidgetBase, WidgetDescription, WidgetCategory,
-    WidgetHost, Widget, isWidgetHost, isWidget,
-    Row, RowDescription,
-    Column, ColumnDescription,
-    ParameterMappingDescription,
-    Body, BodyDescription,
-    Button, ButtonDescription,
-    EmbeddedHtml, EmbeddedHtmlDescription,
-    Form, FormDescription,
-    Paragraph, ParagraphDescription,
-    Heading, HeadingDescription,
-    HiddenInput, HiddenInputDescription,
-    QueryTable, QueryTableDescription,
-    Select, SelectDescription,
-    Input, InputDescription,
-    Link, LinkDescription,
-
-    ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription,
-    Action, NavigateAction, QueryAction,
-    
-    loadWidget
-}
+export {Body, BodyDescription}                 from './body'
+export {Button, ButtonDescription}             from './button'
+export {EmbeddedHtml, EmbeddedHtmlDescription} from './embedded-html'
+export {Form, FormDescription}                 from './form'
+export {Heading, HeadingDescription}           from './heading'
+export {HiddenInput, HiddenInputDescription}   from './hidden-input'
+export {Input, InputDescription}               from './input'
+export {Link, LinkDescription}                 from './link'
+export {Paragraph, ParagraphDescription}       from './paragraph'
+export {QueryTable, QueryTableDescription}     from './query-table'
+export {Select, SelectDescription}             from './select'

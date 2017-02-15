@@ -3,7 +3,7 @@ import {BodyDescription}                 from '../page.description'
 
 import {loadWidget}                      from './widget-loader'
 import {
-    Widget, HostingWidget, WidgetHost, WidgetBase
+    Widget, WidgetHost, WidgetBase
 } from './widget-base'
 
 export {BodyDescription}
@@ -11,7 +11,7 @@ export {BodyDescription}
 /**
  * Rows are the top-level element of most pages.
  */
-export class Body extends HostingWidget {
+export class Body extends WidgetBase {
     private _children : Widget[]  = [];
 
     private _page : Page;

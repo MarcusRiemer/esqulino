@@ -6,7 +6,7 @@ import {
 
 import {
     WidgetBase, WidgetDescription, ParametrizedWidget
-} from './widget-base'
+} from './widget-parametrized'
 
 import {
     QueryReference, QueryAction, NavigateAction
