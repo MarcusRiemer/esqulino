@@ -125,7 +125,7 @@ export class ServerApiService {
      * @amount The amount of entries to get
      */
     getTableEntriesUrl(projectId : string, tableName: string, from : number, amount: number) : string {
-        return (this.getProjectUrl(projectId) + `/row/${tableName}/${from}/${amount}`);
+        return (this.getProjectUrl(projectId) + `/rows/${tableName}/${from}/${amount}`);
     }
 
     /**
