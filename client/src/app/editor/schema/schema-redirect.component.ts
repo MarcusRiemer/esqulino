@@ -8,6 +8,9 @@ import {ToolbarService}               from '../toolbar.service'
 /**
  * A class as entry-point for the representation of a schema
  */
+@Component({
+    template: ``
+})
 export class SchemaRedirectComponent implements OnInit {
     /**
      * The currently edited project
@@ -28,9 +31,10 @@ export class SchemaRedirectComponent implements OnInit {
      */
     ngOnInit() {
         this._projectService.activeProject
-            .subscribe(res =>{
-                 this.project = res
-                 this._router.navigate([this.project.currentDatabaseName], { relativeTo: this._route })
+            .first()
+            .subscribe (res =>{
+                this.project = res
+                this._router.navigate([this.project.currentDatabaseName], { relativeTo: this._route })
             });
     }
 }
