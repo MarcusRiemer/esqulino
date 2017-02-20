@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@angular/compiler-cli": "^2.4.4",
-    "@angular/cli": "1.0.0-beta.31",
+    "@angular/cli": "1.0.0-beta.32",
     "@types/jasmine": "2.5.38",
     "@types/node": "^6.0.42",
     "@types/selenium-webdriver": "^2.53.38",
