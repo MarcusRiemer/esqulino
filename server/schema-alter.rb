@@ -109,7 +109,7 @@ def column_to_create_statement(schema_column)
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
   end
-  if schema_column.not_null
+  if schema_column.not_null || schema_column.primary
     createStatement.concat("NOT NULL ")
   end
   unless schema_column.dflt_value.nil?
