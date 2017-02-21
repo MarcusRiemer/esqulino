@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
-import { Table } from '../../shared/schema'
+import { Table, ColumnStatus } from '../../shared/schema'
 
 import { ProjectService, Project } from '../project.service'
 import { ToolbarService } from '../toolbar.service'
@@ -64,6 +64,12 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      * Temp value for string values, setting during the focus
      */
     private _oldValue: string;
+
+    /**
+     * Values to simulate the switch function, later through drag
+     */
+    switch_from : number;
+    switch_to : number;
 
 
 
@@ -168,7 +174,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      * @param - index the index of the column to remove
      */
     removeColumn(index: number) {
-        this._commandsHolder.do(new DeleteColumn(this.table, index));
+        if(this.table.columns[index].state != ColumnStatus.deleted) {
+            this._commandsHolder.do(new DeleteColumn(this.table, index));
+        }
     }
 
     /**
@@ -237,5 +245,30 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
             this._commandsHolder.do(new ChangeTableName(this.table, this._oldValue, newValue));
             this.clearOldValue();
         }
+    }
+
+    /**
+     * Function to change the Column order [later changed to drag]
+     */
+    changeColumnOrder() {
+        if(this.switch_from != undefined && this.switch_to != undefined) {
+            this._commandsHolder.do(new SwitchColumnOrder(this.table, this.switch_from, this.switch_to));
+        }
+    }
+
+    /**
+     * Function to change the status of the primary key constraint
+     * @param index - index of the column
+     */
+    ChangeColumnPrimaryKeyStatus(index : number) {
+        this._commandsHolder.do(new ChangeColumnPrimaryKey(this.table, index));
+    }
+
+    /**
+     * Function to change the status of the not null constraint
+     * @param index - index of the column
+     */
+    ChangeColumnNotNullStatus(index: number) {
+        this._commandsHolder.do(new ChangeColumnNotNull(this.table, index));
     }
 }

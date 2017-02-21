@@ -32,7 +32,7 @@
 					<!--Column index, name and button to delete the column-->
 					<h4 class="card-title">
 						{{ column.index }} 
-						<input (focus)="saveTempValue($event.target.value)" (blur)="changedColumnName(i, $event.target.value)" [(ngModel)]="column.name" placeholder="Name" />
+						<input (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnName(i, $event.target.value)" [(ngModel)]="column.name" placeholder="Name" />
 						<!--Button to remove column-->
 						<a (click)="removeColumn(i)" class="btn btn-primary">
 							<span class="fa fa-minus" aria-hidden="true"></span>
@@ -41,19 +41,19 @@
 				</div>
 				<!--Primray key checkbox-->
 				<div class="card">
-					<input type="checkbox" [(ngModel)]="column.primary" placeholder="Primary" />
+					<input type="checkbox" (click)="ChangeColumnPrimaryKeyStatus(i)" [(ngModel)]="column.primary" [disabled]="column.stateName == 'deleted'" placeholder="Primary" />
 				</div>
 				<!--Column type input-->
 				<div class="card">
-					<input (focus)="saveTempValue($event.target.value)" (blur)="changedColumnType(i, $event.target.value)" [(ngModel)]="column.type" placeholder="Type" />
+					<input (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnType(i, $event.target.value)" [(ngModel)]="column.type" placeholder="Type" />
 				</div>
 				<!--Column not null checkbox-->
 				<div class="card">
-					<input type="checkbox" [(ngModel)]="column.not_null" placeholder="Not Null" />
+					<input type="checkbox" (click)="ChangeColumnNotNullStatus(i)" [(ngModel)]="column.not_null" [disabled]="column.stateName == 'deleted'" [(hidden)]="column.primary" placeholder="Not Null" />
 				</div>
 				<!--Column default value input-->
 				<div class="card">
-					<input (focus)="saveTempValue($event.target.value)" (blur)="changedColumnStandartValue(i, $event.target.value)" [(ngModel)]="column.dflt_value" placeholder="Standardwert" />
+					<input (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnStandartValue(i, $event.target.value)" [(ngModel)]="column.dflt_value" placeholder="Standardwert" />
 				</div>
 			</div>
 			<!--Add column button-->
@@ -63,6 +63,13 @@
 						<a (click)="addColumn(i)" class="btn btn-primary">
 							<span class="fa fa-plus" aria-hidden="true"></span>
 						</a>
+						<br>
+						<a (click)="changeColumnOrder()" class="btn btn-primary">
+							switch
+						</a>
+						Switch: 
+						<input [(ngModel)]="switch_from" type="text" id="from" placeholder="from">
+						<input [(ngModel)]="switch_to" type="text" id="to" placeholder="to">
 					</h4>
 				</div>
 			</div>
