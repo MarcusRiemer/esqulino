@@ -298,9 +298,9 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Getting entries inside a table
-  # TODO: db / DatabaseID dazu
+  # TODO: db / DatabaseID dazu ist name
   # TODO: row -> rows
-  get '/api/project/:project_id/rows/:tableName/:from/:amount' do    
+  get '/api/project/:project_id/db/:database_id/rows/:tableName/:from/:amount' do    
     # request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
     # TODO: Sicherheitscheck -> Existiert tableName überhaupt?
@@ -311,7 +311,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Getting count of entries inside a table
-  get '/api/project/:project_id/count/:tableName' do
+  get '/api/project/:project_id/db/:database_id/count/:tableName' do
     # TODO: Sicherheitscheck -> Existiert tableName überhaupt?
     result = @project.execute_sql("Select Count(*) from #{params['tableName']}", [])
     json(result['rows'].first)
