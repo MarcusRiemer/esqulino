@@ -41,6 +41,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     private _project: Project;
 
     /**
+     * Boolean to check if a new Table is created or edited
+     */
+    isNewTable : boolean = false;
+
+    /**
      * Should the preview of the Table be shown
      */
     private _showPreview: boolean = false;
@@ -80,25 +85,32 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         console.log("Editor loading!");
         let subRef = this._routeParams.params.subscribe(params => {
             var tableName = params['tableName'];
-            this._projectService.activeProject
-                .subscribe(res => {
-                    this._project = res;
-                    this.table = res.schema.getTable(tableName);
-                })
+            if (tableName) {
+                this._projectService.activeProject
+                    .subscribe(res => {
+                        this._project = res;
+                        this.table = res.schema.getTable(tableName);
+                    })
+            } else {
+                this.isNewTable = true;
+                this.table = new Table({name : "", columns : [], foreign_keys : []}, [], []);
+            }
         });
         this._subscriptionRefs.push(subRef);
 
         this._toolbarService.resetItems();
 
         // Button to show the preview of the currently editing table
-        let btnCreate = this._toolbarService.addButton("preview", "Vorschau", "search", "p");
-        subRef = btnCreate.onClick.subscribe((res) => {
-            this.previewBtn();
-        })
-        this._subscriptionRefs.push(subRef);
+        if(!this.isNewTable) {
+            let btnCreate = this._toolbarService.addButton("preview", "Vorschau", "search", "p");
+            subRef = btnCreate.onClick.subscribe((res) => {
+                this.previewBtn();
+            })
+            this._subscriptionRefs.push(subRef);
+        }
 
         // Button to undo the last change
-        btnCreate = this._toolbarService.addButton("undo", "Undo", "undo", "z");
+        let btnCreate = this._toolbarService.addButton("undo", "Undo", "undo", "z");
         subRef = btnCreate.onClick.subscribe((res) => {
             this.undoBtn();
         })
@@ -174,8 +186,12 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      * @param - index the index of the column to remove
      */
     removeColumn(index: number) {
-        if(this.table.columns[index].state != ColumnStatus.deleted) {
-            this._commandsHolder.do(new DeleteColumn(this.table, index));
+        if(!this.isNewTable) {
+            if(this.table.columns[index].state != ColumnStatus.deleted) {
+                this._commandsHolder.do(new DeleteColumn(this.table, index));
+            }
+        } else {
+            this.table.columns.splice(index, 1);
         }
     }
 
