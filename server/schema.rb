@@ -2,7 +2,7 @@ require 'sqlite3'
 
 # Describes a single column of a SQLite Table
 class SchemaColumn
-  attr_reader :index, :name, :type, :not_null, :dflt_value, :primary
+  attr_accessor :index, :name, :type, :not_null, :dflt_value, :primary
   
   def initialize(index, name, type, not_null, dflt_value, pk)
     @index = index
@@ -27,7 +27,7 @@ end
 # Describes how a single column of a certain table references
 # another column in (possibly) another table.
 class SchemaForeignKeyRef
-  attr_reader :from_column, :to_table, :to_column
+  attr_accessor :from_column, :to_table, :to_column
 
   def initialize(from_column, to_table, to_column)
     @from_column = from_column
@@ -47,7 +47,7 @@ class SchemaForeignKeyRef
 end
 
 class SchemaForeignKey
-  attr_reader :references
+  attr_accessor :references
   
   def initialize()
     @references = []
@@ -76,7 +76,7 @@ end
 
 # Describes a SQLite table with its columns
 class SchemaTable
-  attr_reader :name, :columns, :foreign_keys
+  attr_accessor :name, :columns, :foreign_keys
   
   def initialize(name)
     @name = name

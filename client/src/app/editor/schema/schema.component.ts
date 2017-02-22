@@ -1,4 +1,5 @@
 import {Component, Input, OnInit}     from '@angular/core';
+import { Router, ActivatedRoute }     from '@angular/router'
 
 import {ProjectService, Project}      from '../project.service'
 import {SidebarService}               from '../sidebar.service'
@@ -18,11 +19,18 @@ export class SchemaComponent implements OnInit {
     public project : Project;
 
     /**
+     * Subscriptions that need to be released
+     */
+    private _subscriptionRefs: any[] = [];
+
+    /**
      * Used for dependency injection.
      */
     constructor(
         private _projectService: ProjectService,
         private _toolbarService: ToolbarService,
+        private _router: Router,
+        private _route: ActivatedRoute,
         private _sidebarService: SidebarService
     ) {
         this._sidebarService.hideSidebar();
@@ -34,11 +42,23 @@ export class SchemaComponent implements OnInit {
     ngOnInit() {
         this._toolbarService.resetItems();
         this._toolbarService.savingEnabled = false;
+
+        // Button to show the preview of the currently editing table
+        let btnCreate = this._toolbarService.addButton("createTable", "Neue Tabelle", "table", "n");
+        let subRef = btnCreate.onClick.subscribe((res) => {
+            this._router.navigate(["./create"], { relativeTo: this._route });
+        })
+        this._subscriptionRefs.push(subRef);
         
         this._projectService.activeProject
             .subscribe(res =>{
                  this.project = res
             });
+    }
+
+    ngOnDestroy() {
+        this._subscriptionRefs.forEach(ref => ref.unsubscribe());
+        this._subscriptionRefs = [];
     }
 
 }

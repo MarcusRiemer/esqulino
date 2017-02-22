@@ -156,7 +156,6 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
      */
     backBtn() {
         console.log("Zurück!");
-        //ToDo: Navigates to the Home Screen, instead of one site up.
         this._router.navigate(["../../"], { relativeTo: this._route });
     }
 }

@@ -35,7 +35,7 @@ export class SchemaService {
      * @param amount - the amount of entries to get
      */
     getTableData(project: Project, table: Table, from: number, amount: number) {
-        const url = this._server.getTableEntriesUrl(project.id, table.name, from, amount);
+        const url = this._server.getTableEntriesUrl(project.id, project.currentDatabaseName, table.name, from, amount);
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
@@ -55,7 +55,7 @@ export class SchemaService {
      * @param table - the table to get the entries from
      */
     getTableRowAmount(project: Project, table: Table) {
-        const url = this._server.getTableEntriesCountUrl(project.id, table.name, );
+        const url = this._server.getTableEntriesCountUrl(project.id,project.currentDatabaseName, table.name, );
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
