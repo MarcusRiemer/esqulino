@@ -172,6 +172,8 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     saveBtn() {
         console.log("Save!");
+        console.log(this.table.getColumnwithIndex(2));
+        console.log(this.table.columns.indexOf(this.table.getColumnwithIndex(2)));
     }
 
     /**
