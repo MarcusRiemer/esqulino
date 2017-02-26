@@ -9,6 +9,10 @@
 		<a *ngIf="!readOnly" [routerLink]="['edit', table.name]" routerLinkActive="router-link-active" class="btn btn-primary">
 			<span class="fa fa-cogs" aria-hidden="true"></span>
 		</a>
+		<!--Button to drop table-->
+		<a *ngIf="!readOnly" (click)="deleteTable()" class="btn btn-primary">
+			<span class="fa fa-trash" aria-hidden="true"></span>
+		</a>
 	</h3>
 
 	<!--Card-Deck for all columns(shown as rows)-->

@@ -138,4 +138,39 @@ export class ServerApiService {
     getTableEntriesCountUrl(projectId : string, database_id : string, tableName: string) : string {
         return (this.getProjectUrl(projectId) + `/db/${database_id}/count/${tableName}`);
     }
+
+    /**
+     * Retrieves an URL that can be used to post a TableDescription
+     * to create a corresponding table.
+     *
+     * @projectId The ID of the project
+     * @database_id The name of the database
+     */
+    getCreateTableUrl(projectId : string, database_id : string) : string {
+        return (this.getProjectUrl(projectId) + `/db/${database_id}/create`);
+    }
+
+    /**
+     * Retrieves an URL that can be used to drop a Table
+     * inside the database.
+     *
+     * @projectId The ID of the project
+     * @tableName The name of the table
+     * @database_id The name of the database
+     */
+    getDropTableUrl(projectId : string, database_id : string, tableName: string) : string {
+        return (this.getProjectUrl(projectId) + `/db/${database_id}/drop/${tableName}`);
+    }
+
+    /**
+     * Retrieves an URL that can be used to alter a Table
+     * inside the database, by sending an array of TableCommands.
+     *
+     * @projectId The ID of the project
+     * @tableName The name of the table to alter
+     * @database_id The name of the database
+     */
+    getTableAlterUrl(projectId : string, database_id : string, tableName: string) : string {
+        return (this.getProjectUrl(projectId) + `/db/${database_id}/alter/${tableName}`);
+    }
 }
