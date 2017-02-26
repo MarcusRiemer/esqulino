@@ -429,4 +429,10 @@ export class TableCommandHolder {
     this._commands.push(newCommand);
     this._activeIndex = this._commands.length - 1;
   }
+
+  toModel() : CommandDescription[] {
+    let toReturn : CommandDescription[];
+    toReturn = this.commands.map(val => val.toModel());
+    return toReturn;
+  }
 }

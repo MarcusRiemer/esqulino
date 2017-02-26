@@ -95,9 +95,32 @@ export class Table {
     }
 
     /**
+     * Function to get a column by it index value
+     * @param index - the index of the searched column
+     * @return: The column with the index
+     */
+    getColumnwithIndex(index : number) : Column {
+        let column : Column = undefined;
+        for(let col of this._columns) {
+            if(col.index == index) {
+                column = col;
+            }
+        }
+        return column;
+    }
+
+    /**
      * @return: Gives all foreign keys of this table.
      */
     get foreign_keys() {
         return this._foreign_keys;
+    }
+
+    toModel() : TableDescription {
+        return {
+            name : this._name,
+            columns : this._columns.map(val => val.toModel()),
+            foreign_keys : this._foreign_keys
+        }
     }
 }
