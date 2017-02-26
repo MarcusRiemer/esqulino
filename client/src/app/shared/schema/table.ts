@@ -25,11 +25,15 @@ export class Table {
      * Adds an empty column to the table.
      */
     addColumn() {
+        let newIndex = 0;
+        while(this.getColumnwithIndex(newIndex)) {
+            newIndex++;
+        }
         var newColumn : ColumnDescription = {name : "New Column",
-                                             index : this._columns.length,
+                                             index : newIndex,
                                              not_null : false,
                                              primary : false,
-                                             type : "STRING"};
+                                             type : "TEXT"};
         this._columns.push(new Column(newColumn, ColumnStatus.new));
     }
 

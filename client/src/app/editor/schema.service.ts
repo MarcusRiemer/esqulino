@@ -9,7 +9,7 @@ import { ServerApiService }                         from '../shared/serverapi.se
 import { KeyValuePairs, encodeUriParameters }       from '../shared/util'
 
 import { Project }                                  from './project.service'
-import { Table, Column }                            from '../shared/schema/'
+import { Table, Column}          from '../shared/schema/'
 
 /**
  * Service to hold, get und send data from a schema.
@@ -67,6 +67,38 @@ export class SchemaService {
             .catch((res) => this.handleError(res));
 
         return (toReturn);
+    }
+
+    saveNewTable(project : Project, table : Table) : Observable<Table>{
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        const url = this._server.getCreateTableUrl(project.id, project.currentDatabaseName);
+
+        const body = JSON.stringify(table.toModel());
+        console.log(body);
+
+        const toReturn = this._http.post(url, body, options) 
+            .map( (res) => {
+                project.schema.tables.push(table);
+                return table;
+            })
+            .catch(this.handleError);
+        return(toReturn);
+    }
+
+    deleteTable(project : Project, table : Table) : Observable<Table>{
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        const url = this._server.getDropTableUrl(project.id, project.currentDatabaseName, table.name);
+
+        const toReturn = this._http.delete(url, options) 
+            .map( (res) => {
+                return table;
+            })
+            .catch(this.handleError);
+        return(toReturn);
     }
 
 

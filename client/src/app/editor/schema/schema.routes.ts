@@ -18,10 +18,6 @@ export const schemaEditorRoutes : Routes = [
             { path: ':schemaName/edit/:tableName', component : SchemaTableEditorComponent },
             { path: ':schemaName/create', component : SchemaTableEditorComponent },            
             { path : ':schemaName/details/:tableName', component : SchemaTableDetailsComponent},
-            // { path: '', component : SchemaComponent },
-            // { path: 'edit/:tableName', component : SchemaTableEditorComponent },
-            // { path : 'details/:tableName', component : SchemaTableDetailsComponent},
-
         ]
     }
 ]

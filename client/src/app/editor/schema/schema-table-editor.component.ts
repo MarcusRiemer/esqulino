@@ -1,17 +1,18 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router'
+import { Component, Input, OnInit, OnDestroy }      from '@angular/core';
+import { Router, ActivatedRoute }                   from '@angular/router'
 
-import { Table, ColumnStatus } from '../../shared/schema'
+import { Table, ColumnStatus }                      from '../../shared/schema'
+import { SchemaService }                            from '../schema.service'
 
-import { ProjectService, Project } from '../project.service'
-import { ToolbarService } from '../toolbar.service'
+import { ProjectService, Project }                  from '../project.service'
+import { ToolbarService }                           from '../toolbar.service'
 import {
     AddNewColumn, DeleteColumn,
     SwitchColumnOrder, RenameColumn,
     ChangeColumnType, ChangeColumnPrimaryKey,
     ChangeColumnNotNull, ChangeColumnStandardValue,
     ChangeTableName, TableCommandHolder
-} from '../../shared/schema/table-commands'
+}                                                   from '../../shared/schema/table-commands'
 
 
 /**
@@ -24,6 +25,7 @@ import {
 export class SchemaTableEditorComponent implements OnInit, OnDestroy {
 
     constructor(
+        private _schemaService: SchemaService,
         private _projectService: ProjectService,
         private _routeParams: ActivatedRoute,
         private _toolbarService: ToolbarService) {
@@ -92,6 +94,10 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                         this.table = res.schema.getTable(tableName);
                     })
             } else {
+                this._projectService.activeProject
+                    .subscribe(res => {
+                        this._project = res;
+                    })
                 this.isNewTable = true;
                 this.table = new Table({name : "", columns : [], foreign_keys : []}, [], []);
             }
@@ -172,8 +178,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     saveBtn() {
         console.log("Save!");
-        console.log(this.table.getColumnwithIndex(2));
-        console.log(this.table.columns.indexOf(this.table.getColumnwithIndex(2)));
+        if(this.isNewTable) {
+            this._schemaService.saveNewTable(this._project, this.table).subscribe();
+        } else {
+            // TODO: Send Table Commands
+        }
     }
 
     /**

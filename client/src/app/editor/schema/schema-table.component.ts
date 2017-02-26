@@ -1,7 +1,9 @@
 import {Component, Input, Output, OnInit, OnDestroy, EventEmitter}        from '@angular/core';
+import { Router, ActivatedRoute }                   from '@angular/router'
 
 import {Table}                                      from '../../shared/schema'
 
+import { SchemaService }                            from '../schema.service'
 import {ProjectService, Project}                    from '../project.service'
 import {ToolbarService}                             from '../toolbar.service'
 
@@ -20,12 +22,40 @@ export class SchemaTableComponent {
      */
     @Input() table : Table;
 
+    /**
+    * The currently edited project
+    */
+    private _project: Project;
+
+    /**
+     * Subscriptions that need to be released
+     */
+    private _subscriptionRefs: any[] = [];
+
     @Input() readOnly : boolean;
 
     @Input() columnToHighlight : any;
 
     @Output('columnToHighlightChange') selectedColumnName = new EventEmitter();
 
+
+    constructor(
+        private _schemaService: SchemaService,
+        private _projectService: ProjectService,
+        private _routeParams: ActivatedRoute,
+        private _toolbarService: ToolbarService) {
+
+    }
+
+    ngOnInit() {
+        console.log("Editor loading!");
+        let subRef = this._projectService.activeProject
+                    .subscribe(res => {
+                        this._project = res;
+                    });
+
+        this._subscriptionRefs.push(subRef);
+    }
 
     onColumnMouseEnter(columnName : any) {
         if(!this.readOnly) {
@@ -58,5 +88,9 @@ export class SchemaTableComponent {
      */
     getEditingEnabled() {
         return this.editingEnabled;
+    }
+
+    deleteTable() {
+        this._schemaService.deleteTable(this._project, this.table).subscribe();
     }
 }
