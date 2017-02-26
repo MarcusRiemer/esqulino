@@ -124,6 +124,46 @@ def createObject(tableDescribtion)
   return JSON.parse(tableDescribtion, object_class: OpenStruct)
 end
 
+### Table Commands ###
+
+def addColumn(table)
+  column_schema = SchemaColumn.new(table.columns.length,'NewColumn','TEXT', 0,'', 0)
+  table.add_column(column_schema)
+end
+
+def deleteColumn(table, columnIndex)
+  table.columns.delete(table[columnIndex])
+end
+
+def switchColumn(table, columnIndex, to_pos)
+  table.columns.insert(to_pos, table.columns.delete(table[columnIndex]))
+end
+
+def renameColumn(table, columnIndex, newName)
+  table.columns[columnIndex].name = newName
+end
+
+def changeColumnType(table, columnIndex, newType)
+  table.columns[columnIndex].type = newType
+end
+
+def changeColumnPrimaryKey(table, columnIndex)
+  table.columns[columnIndex].primary = !table.columns[columnIndex].primary
+end
+
+def changeColumnNotNull(table, columnIndex)
+  table.columns[columnIndex].not_null = !table.columns[columnIndex].not_null
+end
+
+def changeColumnStandartValue(table, columnIndex, newValue)
+  table.columns[columnIndex].dflt_value = newValue
+end
+
+def changeTableName(table, newName)
+  table.name = newName
+end
+
+
 if __FILE__ == $0
   puts (database_alter_schema ARGV[0])
 end

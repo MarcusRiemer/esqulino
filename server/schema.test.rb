@@ -246,4 +246,72 @@ class Database < Test::Unit::TestCase
     db.close
   end
 
+  def test_table_commands
+    temp_db_file = Tempfile.new('test.sqlite')
+    db = SQLite3::Database.new(temp_db_file.path)
+    #puts "Test #{temp_db_file.path}"
+    
+    db.execute <<-delim
+      create table students (
+        name TEXT,
+        email TEXT,  
+        grade INTEGER,
+        blog URL
+      );
+    delim
+    
+    db.close
+
+    schema = database_describe_schema(temp_db_file.path)
+
+    addColumn(schema[0])
+    
+    assert_equal schema[0].name, "students"
+    assert_column schema, 0, 0, 'name', 'TEXT'
+    assert_column schema, 0, 1, 'email', 'TEXT'
+    assert_column schema, 0, 2, 'grade', 'INTEGER'
+    assert_column schema, 0, 3, 'blog', 'URL'
+    assert_column schema, 0, 4, 'NewColumn', 'TEXT'
+
+    deleteColumn(schema[0], 4)
+    assert_equal(4, schema[0].columns.length)
+
+    assert_equal schema[0].name, "students"
+    assert_column schema, 0, 0, 'name', 'TEXT'
+    assert_column schema, 0, 1, 'email', 'TEXT'
+    assert_column schema, 0, 2, 'grade', 'INTEGER'
+    assert_column schema, 0, 3, 'blog', 'URL'
+
+    switchColumn(schema[0], 0, 1)
+
+    assert_equal schema[0].name, "students"
+    assert_column schema, 0, 1, 'name', 'TEXT'
+    assert_column schema, 0, 0, 'email', 'TEXT'
+    assert_column schema, 0, 2, 'grade', 'INTEGER'
+    assert_column schema, 0, 3, 'blog', 'URL'
+
+    renameColumn(schema[0], 0, 'E-Mail')
+    assert_column schema, 0, 0, 'E-Mail', 'TEXT'
+    
+    changeColumnType(schema[0], 0, 'MAIL')
+    assert_column schema, 0, 0, 'E-Mail', 'MAIL'
+
+    assert_equal(schema[0].columns[0].primary, false)
+    changeColumnPrimaryKey(schema[0], 0)
+    assert_equal(schema[0].columns[0].primary, true)
+    
+    assert_equal(schema[0].columns[0].not_null, false)
+    changeColumnNotNull(schema[0], 0)
+    assert_equal(schema[0].columns[0].not_null, true)
+
+    assert_equal(schema[0].columns[0].dflt_value, nil)
+    changeColumnStandartValue(schema[0], 0, 'testValue')
+    assert_equal(schema[0].columns[0].dflt_value, 'testValue')
+
+    assert_equal schema[0].name, "students"
+    changeTableName(schema[0], "students_updated")
+    assert_equal schema[0].name, "students_updated"
+    
+  end
+
 end
