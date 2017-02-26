@@ -1,4 +1,6 @@
 require_relative './schema'
+require 'ostruct'
+require 'json'
 
 def database_alter_schema(sqlite_file_path, schema_table, isSpecialCase)
   tempTableName = String.new(schema_table.name)
@@ -116,6 +118,10 @@ def column_to_create_statement(schema_column)
     createStatement.concat("DEFAULT '#{schema_column.dflt_value}'")
   end
   return createStatement
+end
+
+def createObject(tableDescribtion)
+  return JSON.parse(tableDescribtion, object_class: OpenStruct)
 end
 
 if __FILE__ == $0
