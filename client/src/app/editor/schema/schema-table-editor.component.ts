@@ -73,7 +73,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     /**
      * Values to simulate the switch function, later through drag
      */
-    switch_from : number;
+    colToSwitch : number;
     switch_to : number;
 
 
@@ -189,11 +189,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     removeColumn(index: number) {
         if(!this.isNewTable) {
-            if(this.table.columns[index].state != ColumnStatus.deleted) {
+            if(this.table.getColumnwithIndex(index).state != ColumnStatus.deleted) {
                 this._commandsHolder.do(new DeleteColumn(this.table, index));
             }
         } else {
-            this.table.columns.splice(index, 1);
+            this.table.columns.splice(this.table.columns.indexOf(this.table.getColumnwithIndex(index)), 1);
         }
     }
 
@@ -269,8 +269,8 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      * Function to change the Column order [later changed to drag]
      */
     changeColumnOrder() {
-        if(this.switch_from != undefined && this.switch_to != undefined) {
-            this._commandsHolder.do(new SwitchColumnOrder(this.table, this.switch_from, this.switch_to));
+        if(this.colToSwitch != undefined && this.switch_to != undefined) {
+            this._commandsHolder.do(new SwitchColumnOrder(this.table, this.colToSwitch, this.switch_to));
         }
     }
 
