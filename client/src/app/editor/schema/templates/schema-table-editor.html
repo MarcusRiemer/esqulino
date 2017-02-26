@@ -34,14 +34,14 @@
 						{{ column.index }} 
 						<input (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnName(i, $event.target.value)" [(ngModel)]="column.name" placeholder="Name" />
 						<!--Button to remove column-->
-						<a (click)="removeColumn(i)" class="btn btn-primary">
+						<a (click)="removeColumn(column.index)" class="btn btn-primary">
 							<span class="fa fa-minus" aria-hidden="true"></span>
 						</a>
 					</h4>
 				</div>
 				<!--Primray key checkbox-->
 				<div class="card">
-					<input type="checkbox" (click)="ChangeColumnPrimaryKeyStatus(i)" [(ngModel)]="column.primary" [disabled]="column.stateName == 'deleted'" placeholder="Primary" />
+					<input type="checkbox" (click)="ChangeColumnPrimaryKeyStatus(column.index)" [(ngModel)]="column.primary" [disabled]="column.stateName == 'deleted'" placeholder="Primary" />
 				</div>
 				<!--Column type input-->
 				<div class="card">
@@ -49,7 +49,7 @@
 				</div>
 				<!--Column not null checkbox-->
 				<div class="card">
-					<input type="checkbox" (click)="ChangeColumnNotNullStatus(i)" [(ngModel)]="column.not_null" [disabled]="column.stateName == 'deleted'" [(hidden)]="column.primary" placeholder="Not Null" />
+					<input type="checkbox" (click)="ChangeColumnNotNullStatus(column.index)" [(ngModel)]="column.not_null" [disabled]="column.stateName == 'deleted'" [(hidden)]="column.primary" placeholder="Not Null" />
 				</div>
 				<!--Column default value input-->
 				<div class="card">
@@ -60,7 +60,7 @@
 			<div class="card-group">
 				<div class="card">
 					<h4 class="card-title">
-						<a (click)="addColumn(i)" class="btn btn-primary">
+						<a (click)="addColumn()" class="btn btn-primary">
 							<span class="fa fa-plus" aria-hidden="true"></span>
 						</a>
 						<br>
@@ -68,7 +68,7 @@
 							switch
 						</a>
 						Switch: 
-						<input [(ngModel)]="switch_from" type="text" id="from" placeholder="from">
+						<input [(ngModel)]="colToSwitch" type="text" id="colToSwitch" placeholder="Column to switch">
 						<input [(ngModel)]="switch_to" type="text" id="to" placeholder="to">
 					</h4>
 				</div>
