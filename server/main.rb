@@ -13,6 +13,7 @@ require 'uri' # To unescape URIs
 require './project.rb'
 require './schema.rb'
 require './schema-graphviz.rb'
+require './schema-alter.rb'
 require './validator.rb'
 require './error.rb'
 
@@ -301,7 +302,6 @@ class ScratchSqlApp < Sinatra::Base
   # TODO: db / DatabaseID dazu ist name
   # TODO: row -> rows
   get '/api/project/:project_id/db/:database_id/rows/:tableName/:from/:amount' do    
-    # request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
     # TODO: Sicherheitscheck -> Existiert tableName überhaupt?
     # TODO: Für LIMIT und OFFSET parameter benutzen
@@ -318,11 +318,16 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   post '/api/project/:project_id/db/:database_id/create' do |_p, database_id|
-
+    newTable = createObject(request.body.read)
+    @project.execute_sql(table_to_create_statement(newTable), [])
   end
 
-  post '/api/project/:project_id/db/:database_id/alter' do
+  delete '/api/project/:project_id/db/:database_id/drop/:tableName' do |_p, database_id, tableName|
+      @project.execute_sql("DROP TABLE IF EXISTS #{params['tableName']}", [])
+  end
 
+  post '/api/project/:project_id/db/:database_id/alter/:tableName' do
+    json("alter #{params['tableName']} statement received")
   end
 
   # Delivers visual representations of database schemas

@@ -248,6 +248,18 @@ class Project
   #                
   def execute_sql(sql, params)
     db = SQLite3::Database.new(self.file_path_sqlite, :read_only => @read_only)
+
+    #TODO: REMOVE THIS!!
+    db.create_function('regexp', 2) do |func, pattern, expression|
+        unless expression.nil? #expression.to_s.empty?
+          func.result = expression.to_s.match(
+            Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
+        else
+          # Return true if the value is null, let the DB handle this
+          func.result = 1
+        end   
+      end
+
     db.execute("PRAGMA foreign_keys = ON")
 
     begin
