@@ -29,7 +29,7 @@ export class Table {
         while(this.getColumnwithIndex(newIndex)) {
             newIndex++;
         }
-        var newColumn : ColumnDescription = {name : "New Column",
+        var newColumn : ColumnDescription = {name : "New_Column",
                                              index : newIndex,
                                              not_null : false,
                                              primary : false,
