@@ -37,7 +37,9 @@ def database_alter_schema(sqlite_file_path, schema_table, isSpecialCase)
   db.close()
 end
 
-
+# Function to create a CREATE TABLE statement out of a schemaTable object.
+# @param schema_table - Table object to create a CREATE TABLE statement
+# return - The CREATE TABLE statement
 def table_to_create_statement(schema_table)
   createStatement = String.new("CREATE TABLE IF NOT EXISTS #{schema_table.name} ( ")
   schema_table.columns.each do |col|
@@ -58,6 +60,10 @@ def table_to_create_statement(schema_table)
   return createStatement
 end
 
+# Function to create a the primary key constraint part of a CREATE TABLE statement 
+# out of a schemaTable object.
+# @param schema_table - Table object to create a CREATE TABLE statement
+# return - The CREATE TABLE statement primary key constraint part
 def tables_primaryKeys_to_create_statement(schema_columns)
   all_primaryKeys = schema_columns.select { |column| column.primary}
   unless all_primaryKeys.empty?
@@ -74,6 +80,10 @@ def tables_primaryKeys_to_create_statement(schema_columns)
   end
 end
 
+# Function to create a the foreign key constraint part of a CREATE TABLE statement 
+# out of a schemaTable object.
+# @param schema_table - Table object to create a CREATE TABLE statement
+# return - The CREATE TABLE statement foreign key constraint part
 def tables_foreignKey_to_create_statement(fk)
   fk_columns = String.new("")
   fk_ref_columns = String.new("")
@@ -89,6 +99,10 @@ def tables_foreignKey_to_create_statement(fk)
   return createStatement
 end
 
+# Function to create a CREATE TABLE statement part of a column 
+# out of a schemaTable object.
+# @param schema_table - Table object to create a CREATE TABLE statement
+# return - The CREATE TABLE statement column part
 def column_to_create_statement(schema_column)
   createStatement = String.new(schema_column.name)
   createStatement.concat(" ")
@@ -120,6 +134,7 @@ def column_to_create_statement(schema_column)
   return createStatement
 end
 
+# Function to create a SchemaTable class object, out of a json
 def createObject(tableDescribtion)
   return JSON.parse(tableDescribtion, object_class: OpenStruct)
 end

@@ -434,6 +434,10 @@ export class TableCommandHolder {
     this._activeIndex = this._commands.length - 1;
   }
 
+  /**
+   * Function to create a json representation to send it 
+   * to the server.
+   */
   toModel() : CommandDescription[] {
     let toReturn : CommandDescription[];
     toReturn = this.commands.map(val => val.toModel());

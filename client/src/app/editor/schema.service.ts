@@ -69,6 +69,11 @@ export class SchemaService {
         return (toReturn);
     }
 
+    /**
+     * Function to save a newly created table inside the database
+     * @param project - the current project
+     * @param table - the table to create inside the database
+     */
     saveNewTable(project : Project, table : Table) : Observable<Table>{
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
@@ -87,6 +92,11 @@ export class SchemaService {
         return(toReturn);
     }
 
+    /**
+     * Function to delete a table inside the database
+     * @param project - the current project
+     * @param table - the table to delete
+     */
     deleteTable(project : Project, table : Table) : Observable<Table>{
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
