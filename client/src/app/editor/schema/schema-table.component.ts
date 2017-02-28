@@ -90,6 +90,9 @@ export class SchemaTableComponent {
         return this.editingEnabled;
     }
 
+    /**
+     * Function to drop a Table;
+     */
     deleteTable() {
         this._schemaService.deleteTable(this._project, this.table).subscribe();
     }

@@ -120,6 +120,10 @@ export class Table {
         return this._foreign_keys;
     }
 
+    /**
+     * Function to create a json representation to send it 
+     * to the server.
+     */
     toModel() : TableDescription {
         return {
             name : this._name,
