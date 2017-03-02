@@ -9,7 +9,8 @@ import { ServerApiService }                         from '../shared/serverapi.se
 import { KeyValuePairs, encodeUriParameters }       from '../shared/util'
 
 import { Project }                                  from './project.service'
-import { Table, Column}          from '../shared/schema/'
+import { Table, Column}                             from '../shared/schema/'
+import {TableCommandHolder}                         from '../shared/schema/table-commands'
 
 /**
  * Service to hold, get und send data from a schema.
@@ -81,13 +82,30 @@ export class SchemaService {
         const url = this._server.getCreateTableUrl(project.id, project.currentDatabaseName);
 
         const body = JSON.stringify(table.toModel());
-        console.log(body);
 
         const toReturn = this._http.post(url, body, options) 
             .map( (res) => {
                 project.schema.tables.push(table);
                 return table;
             })
+            .catch(this.handleError);
+        return(toReturn);
+    }
+
+    /**
+     * Function send table commands to alter a table
+     * @param project - the current project
+     * @param table - the table alter
+     */
+    sendAlterTableCommands(project : Project, tableName : string, commandHolder : TableCommandHolder) : Observable<Table>{
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        const url = this._server.getTableAlterUrl(project.id, project.currentDatabaseName, tableName);
+
+        const body = JSON.stringify(commandHolder.toModel());
+
+        const toReturn = this._http.post(url, body, options)
             .catch(this.handleError);
         return(toReturn);
     }

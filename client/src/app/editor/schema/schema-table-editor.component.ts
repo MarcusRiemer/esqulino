@@ -33,6 +33,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * The original table name
+     */
+    private _tableName : string;
+
+    /**
      * The currently edited table
      */
     table: Table;
@@ -86,12 +91,12 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     ngOnInit() {
         console.log("Editor loading!");
         let subRef = this._routeParams.params.subscribe(params => {
-            var tableName = params['tableName'];
-            if (tableName) {
+            this._tableName = params['tableName'];
+            if (this._tableName) {
                 this._projectService.activeProject
                     .subscribe(res => {
                         this._project = res;
-                        this.table = res.schema.getTable(tableName);
+                        this.table = res.schema.getTable(this._tableName);
                     })
             } else {
                 this._projectService.activeProject
@@ -181,7 +186,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         if(this.isNewTable) {
             this._schemaService.saveNewTable(this._project, this.table).subscribe();
         } else {
-            // TODO: Send Table Commands
+            this._schemaService.sendAlterTableCommands(this._project, this._tableName, this._commandsHolder).subscribe();
         }
     }
 
