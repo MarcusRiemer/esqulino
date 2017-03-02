@@ -248,6 +248,7 @@ class Project
   #                
   def execute_sql(sql, params)
     db = SQLite3::Database.new(self.file_path_sqlite, :read_only => @read_only)
+    db.execute("PRAGMA foreign_keys = ON")
 
     #TODO: REMOVE THIS!!
     db.create_function('regexp', 2) do |func, pattern, expression|
@@ -260,7 +261,6 @@ class Project
         end   
       end
 
-    db.execute("PRAGMA foreign_keys = ON")
 
     begin
       # execute2 returns the names of the columns in the first row. But we want

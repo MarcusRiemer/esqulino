@@ -329,6 +329,7 @@ class ScratchSqlApp < Sinatra::Base
   post '/api/project/:project_id/db/:database_id/alter/:tableName' do
     commandHolder = JSON.parse(request.body.read)
     database_alter_schema(@project.file_path_sqlite, params['tableName'], commandHolder)
+    200
   end
 
   # Delivers visual representations of database schemas
