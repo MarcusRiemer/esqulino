@@ -104,13 +104,7 @@ export class Table {
      * @return: The column with the index
      */
     getColumnwithIndex(index : number) : Column {
-        let column : Column = undefined;
-        for(let col of this._columns) {
-            if(col.index == index) {
-                column = col;
-            }
-        }
-        return column;
+        return this._columns.find(col => col.index == index);
     }
 
     /**
