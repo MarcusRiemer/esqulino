@@ -11,36 +11,33 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
 
   commandHolder.each do |cmd|
     colHash = createColumnHash(table)
-    case cmd['type']
-    when "addColumn"
-      table = addColumn(table)
+    if cmd['type'] != "renameTable"
+      case cmd['type']
+      when "addColumn"
+        addColumn(table)
+      when "deleteColumn"
+        deleteColumn(table, colHash, cmd['columnIndex'])
+      when "switchColumn"
+        switchColumn(table, cmd['from'], cmd['to'].to_i)
+      when "renameColumn"
+        renameColumn(table, colHash, cmd['columnIndex'], cmd['newName'])
+      when "changeColumnType"
+        changeColumnType(table, cmd['columnIndex'], cmd['newType'])
+      when "changeColumnPrimaryKey"
+        changeColumnPrimaryKey(table, cmd['columnIndex'])
+      when "changeColumnNotNull"
+        changeColumnNotNull(table, cmd['columnIndex'])
+      when "changeColumnStandardValue"
+        changeColumnStandardValue(table, cmd['columnIndex'], cmd['newValue'])
+      end
       database_alter_table(sqlite_file_path, table, colHash)
-    when "deleteColumn"
-      table, colHash = deleteColumn(table, colHash, cmd['columnIndex'])
-      database_alter_table(sqlite_file_path, table, colHash)
-    when "switchColumn"
-      table = switchColumn(table, cmd['from'], cmd['to'])
-      database_alter_table(sqlite_file_path, table, colHash)
-    when "renameColumn"
-      table, colHash = renameColumn(table, colHash, cmd['columnIndex'], cmd['newName'])
-      database_alter_table(sqlite_file_path, table, colHash)
-    when "changeColumnType"
-      table = changeColumnType(table, cmd['columnIndex'], cmd['newType'])
-      database_alter_table(sqlite_file_path, table, colHash)
-    when "changeColumnPrimaryKey"
-      table = changeColumnPrimaryKey(table, cmd['columnIndex'])
-      database_alter_table(sqlite_file_path, table, colHash)
-    when "changeColumnNotNull"
-      table = changeColumnNotNull(table, cmd['columnIndex'])
-      database_alter_table(sqlite_file_path, table, colHash)
-    when "changeColumnStandardValue"
-      table = changeColumnStandardValue(table, cmd['columnIndex'], cmd['newValue'])
-      database_alter_table(sqlite_file_path, table, colHash)
-    when "renameTable"
-      #TODO: special function
+    else
+      rename_table(sqlite_file_path, table.name, cmd['newName'])
+      changeTableName(table, cmd['newName'])
     end
   end
 end
+
 
 def database_alter_table(sqlite_file_path, schema_table, colHash)
   tempTableName = String.new(schema_table.name)
@@ -73,6 +70,27 @@ def database_alter_table(sqlite_file_path, schema_table, colHash)
   db.execute("PRAGMA foreign_key_check;")
   db.commit()
   db.execute("PRAGMA foreign_keys = ON;")
+  db.close()
+end
+
+def rename_table(sqlite_file_path, from_tableName, to_tableName) 
+  db = SQLite3::Database.open(sqlite_file_path)
+  db.execute("PRAGMA foreign_keys = ON")
+
+  #Muss in der Datei stehen wo es auch ausgelöst werden kann?????
+  db.create_function('regexp', 2) do |func, pattern, expression|
+      unless expression.nil? #expression.to_s.empty?
+        func.result = expression.to_s.match(
+          Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
+      else
+        # Return true if the value is null, let the DB handle this
+        func.result = 1
+      end   
+    end
+
+  db.transaction
+  db.execute("ALTER TABLE #{from_tableName} RENAME TO #{to_tableName};")
+  db.commit()
   db.close()
 end
 
@@ -187,7 +205,8 @@ def column_to_create_statement(schema_column)
     createStatement.concat("NOT NULL ")
   end
   unless schema_column.dflt_value.nil?
-    createStatement.concat("DEFAULT '#{schema_column.dflt_value}'")
+    createStatement.concat("DEFAULT #{schema_column.dflt_value}")
+    puts schema_column.dflt_value
   end
   return createStatement
 end
@@ -200,49 +219,46 @@ end
 ### Table Commands ###
 
 def addColumn(table)
-  column_schema = SchemaColumn.new(table.columns.length,'NewColumn','TEXT', 0,'', 0)
-  return table.add_column(column_schema)
+  column_schema = SchemaColumn.new(table.columns.length,'NewColumn','TEXT', 0, nil, 0)
+  table.add_column(column_schema)
 end
 
 def deleteColumn(table, colHash, columnIndex)
   colHash.delete(table.columns[columnIndex].name)
+  table.foreign_keys.each do |fk|
+    fk.references.select!{ |ref| ref.from_column != table.columns[columnIndex].name }
+  end
+  table.foreign_keys.select!{ |fk| fk.references.size != 0 }
   table.columns.delete(table.columns[columnIndex])
-  return table, colHash
 end
 
 def switchColumn(table, columnIndex, to_pos)
-  return table.columns.insert(to_pos, table.columns.delete(table[columnIndex]))
+  table.columns.insert(to_pos, table.columns.delete(table[columnIndex]))
 end
 
 def renameColumn(table, colHash, columnIndex, newName)
   colHash[table.columns[columnIndex].name] = newName
   table.columns[columnIndex].name = newName
-  return table, colHash
 end
 
 def changeColumnType(table, columnIndex, newType)
   table.columns[columnIndex].type = newType
-  return table
 end
 
 def changeColumnPrimaryKey(table, columnIndex)
   table.columns[columnIndex].primary = !table.columns[columnIndex].primary
-  return table
 end
 
 def changeColumnNotNull(table, columnIndex)
   table.columns[columnIndex].not_null = !table.columns[columnIndex].not_null
-  return table
 end
 
 def changeColumnStandardValue(table, columnIndex, newValue)
   table.columns[columnIndex].dflt_value = newValue
-  return table
 end
 
 def changeTableName(table, newName)
   table.name = newName
-  return table
 end
 
 def createColumnHash(table)
