@@ -70,7 +70,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     /**
      * Holder for all Commands with do and redo function
      */
-    private _commandsHolder: TableCommandHolder;
+    private commandsHolder: TableCommandHolder;
 
     /**
      * Temp value for string values, setting during the focus
@@ -82,6 +82,8 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     colToSwitch : number;
     switch_to : number;
+    // Debug Value to simulate database error
+    dbErrorCode : number = 3;
 
 
 
@@ -149,7 +151,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         })
         this._subscriptionRefs.push(subRef);
 
-        this._commandsHolder = new TableCommandHolder(this.table);
+        this.commandsHolder = new TableCommandHolder(this.table);
     }
 
     ngOnDestroy() {
@@ -161,14 +163,14 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      * Function for the undo button
      */
     undoBtn() {
-        this._commandsHolder.undo();
+        this.commandsHolder.undo();
     }
 
     /**
      * Function for the redo button
      */
     redoBtn() {
-        this._commandsHolder.redo();
+        this.commandsHolder.redo();
     }
 
     /**
@@ -186,7 +188,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         if(this.isNewTable) {
             this._schemaService.saveNewTable(this._project, this.table).subscribe();
         } else {
-            this._schemaService.sendAlterTableCommands(this._project, this._tableName, this._commandsHolder).subscribe();
+            this._schemaService.sendAlterTableCommands(this._project, this._tableName, this.commandsHolder).subscribe();
         }
     }
 
@@ -204,7 +206,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     removeColumn(index: number) {
         if(!this.isNewTable) {
             if(this.table.getColumnwithIndex(index).state != ColumnStatus.deleted) {
-                this._commandsHolder.do(new DeleteColumn(this.table, index));
+                this.commandsHolder.do(new DeleteColumn(this.table, index));
             }
         } else {
             this.table.columns.splice(this.table.columns.indexOf(this.table.getColumnwithIndex(index)), 1);
@@ -215,7 +217,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      * Function to add a new column to the table
      */
     addColumn() {
-        this._commandsHolder.do(new AddNewColumn());
+        this.commandsHolder.do(new AddNewColumn());
     }
 
     /**
@@ -239,7 +241,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     changedColumnName(index: number, newValue: string) {
         if (this._oldValue != newValue) {
-            this._commandsHolder.do(new RenameColumn(this.table, index, this._oldValue, newValue));
+            this.commandsHolder.do(new RenameColumn(this.table, index, this._oldValue, newValue));
             this.clearOldValue();
         }
     }
@@ -251,7 +253,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     changedColumnType(index: number, newValue: string) {
         if (this._oldValue != newValue) {
-            this._commandsHolder.do(new ChangeColumnType(this.table, index, this._oldValue, newValue));
+            this.commandsHolder.do(new ChangeColumnType(this.table, index, this._oldValue, newValue));
             this.clearOldValue();
         }
     }
@@ -263,7 +265,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     changedColumnStandartValue(index: number, newValue: string) {
         if (this._oldValue != newValue) {
-            this._commandsHolder.do(new ChangeColumnStandardValue(this.table, index, this._oldValue, newValue));
+            this.commandsHolder.do(new ChangeColumnStandardValue(this.table, index, this._oldValue, newValue));
             this.clearOldValue();
         }
     }
@@ -274,7 +276,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     changedTableName(newValue: string) {
         if (this._oldValue != newValue) {
-            this._commandsHolder.do(new ChangeTableName(this.table, this._oldValue, newValue));
+            this.commandsHolder.do(new ChangeTableName(this.table, this._oldValue, newValue));
             this.clearOldValue();
         }
     }
@@ -284,7 +286,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     changeColumnOrder() {
         if(this.colToSwitch != undefined && this.switch_to != undefined) {
-            this._commandsHolder.do(new SwitchColumnOrder(this.table, this.colToSwitch, this.switch_to));
+            this.commandsHolder.do(new SwitchColumnOrder(this.table, this.colToSwitch, this.switch_to));
         }
     }
 
@@ -293,7 +295,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      * @param index - index of the column
      */
     ChangeColumnPrimaryKeyStatus(index : number) {
-        this._commandsHolder.do(new ChangeColumnPrimaryKey(this.table, index));
+        this.commandsHolder.do(new ChangeColumnPrimaryKey(this.table, index));
     }
 
     /**
@@ -301,6 +303,6 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      * @param index - index of the column
      */
     ChangeColumnNotNullStatus(index: number) {
-        this._commandsHolder.do(new ChangeColumnNotNull(this.table, index));
+        this.commandsHolder.do(new ChangeColumnNotNull(this.table, index));
     }
 }
