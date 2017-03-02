@@ -77,5 +77,26 @@
 	</div>
 </div>
 
+<div>
+	<!--Table of stack entrys-->
+	<table class="table table-sm" style="width:100%">
+	<!---->
+	<!--Header with Size of stack-->
+		<thead>
+			<tr>
+				<th>
+					Stackgröße: {{ commandsHolder.commands.length }}
+				</th>
+			</tr>
+		</thead>
+		<!--Table body, with every stack entry-->
+		<tbody>
+			<tr *ngFor="let cmd of commandsHolder.commands" [ngClass]="{'table-success': cmd.getIndex() == commandsHolder.activeIndex, 'table-danger': cmd.getIndex() == dbErrorCode}">
+				{{ cmd.toString() }}
+			</tr>
+		</tbody>
+	</table>
+</div>
+
 <!--Table-Deatils as preview for changes to the table-->
 <sql-table-details *ngIf="_showPreview" [isChild]="true"></sql-table-details>
