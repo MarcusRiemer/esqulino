@@ -11,6 +11,7 @@ import { Column, ColumnStatus }                 from './column'
 
 export interface CommandDescription {
   type : string;
+  index: number,
   columnIndex : number;
 }
 
@@ -67,6 +68,9 @@ export abstract class TableCommand {
   protected _lastStatus: ColumnStatus;
   protected _columnIndex: number;
 
+  /** */
+  protected _index: number;
+
   constructor(lastStatus? : ColumnStatus, columIndex? : number) {
     this._columnIndex = columIndex;
     this._lastStatus = lastStatus;
@@ -81,6 +85,13 @@ export abstract class TableCommand {
       table.getColumnwithIndex(this._columnIndex).state = ColumnStatus.changed;
     }
   };
+
+  /**
+   * Setter for the index value
+   */
+  setIndex(index: number) {
+    this._index = index;
+  }
 
   /**
    * Function with the command what to do by doing it
@@ -121,6 +132,7 @@ export class AddNewColumn extends TableCommand {
   toModel() : AddColumnDescription {
     return {
       type : "addColumn",
+      index : this._index,
       columnIndex : this._columnIndex // is undefinde
     };
   }
@@ -147,6 +159,7 @@ export class DeleteColumn extends TableCommand {
   toModel() : DeleteColumnDescription {
     return {
       type : "deleteColumn",
+      index : this._index,
       columnIndex : this._columnIndex
     };
   }
@@ -182,6 +195,7 @@ export class SwitchColumnOrder extends TableCommand {
   toModel() : SwitchColumnDescription {
     return {
       type : "switchColumn",
+      index : this._index,
       columnIndex : this._columnIndex,
       from : this._from,
       to : this._to
@@ -215,6 +229,7 @@ export class RenameColumn extends TableCommand {
   toModel() : RenameColumnDescription {
     return{
       type : "renameColumn",
+      index : this._index,
       columnIndex : this._columnIndex,
       newName : this._newName,
       oldName : this._oldName
@@ -248,6 +263,7 @@ export class ChangeColumnType extends TableCommand {
   toModel() : ChangeColumnTypeDescription {
     return {
       type : "changeColumnType",
+      index : this._index,
       columnIndex : this._columnIndex,
       newType : this._newType,
       oldType : this._oldType
@@ -278,6 +294,7 @@ export class ChangeColumnPrimaryKey extends TableCommand {
 
     return{
       type : "changeColumnPrimaryKey",
+      index : this._index,
       columnIndex : this._columnIndex
     };
   }
@@ -305,6 +322,7 @@ export class ChangeColumnNotNull extends TableCommand {
   toModel() : ChangeColumnNotNullDescription {
     return {
       type : "changeColumnNotNull",
+      index : this._index,
       columnIndex : this._columnIndex
     }
   }
@@ -337,6 +355,7 @@ export class ChangeColumnStandardValue extends TableCommand {
 
     return{
       type : "changeColumnStandardValue",
+      index : this._index,
       columnIndex : this._columnIndex,
       newValue : this._newValue,
       oldValue : this._oldValue
@@ -368,6 +387,7 @@ export class ChangeTableName extends TableCommand {
   toModel() : ChangeTableNameDescription {
     return {
       type : "renameTable",
+      index : this._index,
       columnIndex : this._columnIndex, //is undefinde
       newName : this._newName,
       oldName : this._oldName
@@ -432,6 +452,7 @@ export class TableCommandHolder {
     }
     this._commands.push(newCommand);
     this._activeIndex = this._commands.length - 1;
+    newCommand.setIndex(this._activeIndex);
   }
 
   /**
