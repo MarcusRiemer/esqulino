@@ -174,6 +174,22 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Function to click on the stack list to go to a position
+     * @param index - Index of stack to jump to
+     */
+    loadStackPosition(index : number) {
+        if (index > this.commandsHolder.activeIndex) {
+            while(index != this.commandsHolder.activeIndex) {
+                this.commandsHolder.redo();
+            }
+        } else {
+            while(index != this.commandsHolder.activeIndex) {
+                this.commandsHolder.undo();
+            }
+        }
+    }
+
+    /**
      * Function for the preview button
      */
     previewBtn() {

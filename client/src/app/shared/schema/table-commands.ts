@@ -89,14 +89,14 @@ export abstract class TableCommand {
   /**
    * Setter for the index value
    */
-  setIndex(index: number) {
+  set index(index: number) {
     this._index = index;
   }
 
   /**
    * Getter for index value
    */
-  getIndex() {
+  get index() : number {
     return this._index;
   }
 
@@ -500,9 +500,7 @@ export class TableCommandHolder {
     }
     this._commands.push(newCommand);
     this._activeIndex = this._commands.length - 1;
-    newCommand.setIndex(this._activeIndex);
-    console.log("activeindex: " + this._activeIndex);
-    console.log("cmd Index: " + newCommand.getIndex());
+    newCommand.index = this._activeIndex;
   }
 
   /**
