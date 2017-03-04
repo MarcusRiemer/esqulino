@@ -77,25 +77,17 @@
 	</div>
 </div>
 
-<div>
-	<!--Table of stack entrys-->
-	<table class="table table-sm" style="width:100%">
-	<!---->
-	<!--Header with Size of stack-->
-		<thead>
-			<tr>
-				<th>
-					Stackgröße: {{ commandsHolder.commands.length }}
-				</th>
-			</tr>
-		</thead>
-		<!--Table body, with every stack entry-->
-		<tbody>
-			<tr *ngFor="let cmd of commandsHolder.commands" [ngClass]="{'table-success': cmd.getIndex() == commandsHolder.activeIndex, 'table-danger': cmd.getIndex() == dbErrorCode}">
+<div class="list-group">
+	<!--List of stack entrys-->
+	<button type="button" class="list-group-item list-group-item-action active">
+		Stackgröße: <span class="badge badge-default badge-pill">{{ commandsHolder.commands.length }}</span> 
+	</button>
+		<!--List body, with every stack entry-->
+	<button type="button" class="list-group-item list-group-item-action" *ngFor="let cmd of commandsHolder.commands" (click)="loadStackPosition(cmd.index)" 
+			[ngClass]="{'list-group-item-success': cmd.index == commandsHolder.activeIndex, 
+									'list-group-item-danger': cmd.index == dbErrorCode}">
 				{{ cmd.toString() }}
-			</tr>
-		</tbody>
-	</table>
+	</button>
 </div>
 
 <!--Table-Deatils as preview for changes to the table-->
