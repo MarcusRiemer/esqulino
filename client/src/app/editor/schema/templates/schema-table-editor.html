@@ -84,9 +84,9 @@
 	</button>
 		<!--List body, with every stack entry-->
 	<button type="button" class="list-group-item list-group-item-action" *ngFor="let cmd of commandsHolder.commands" (click)="loadStackPosition(cmd.index)" 
-			[ngClass]="{'list-group-item-success': cmd.index == commandsHolder.activeIndex, 
-									'list-group-item-danger': cmd.index == dbErrorCode}">
-				{{ cmd.toString() }}
+			[ngClass]="{'list-group-item-danger': cmd.index == dbErrorCode}">
+				<span *ngIf="cmd.index == commandsHolder.activeIndex" class="fa fa-play" aria-hidden="true"></span>
+				{{ cmd.commandText }}
 	</button>
 </div>
 

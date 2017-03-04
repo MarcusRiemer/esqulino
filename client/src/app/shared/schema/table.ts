@@ -26,7 +26,7 @@ export class Table {
      */
     addColumn() {
         let newIndex = 0;
-        while(this.getColumnwithIndex(newIndex)) {
+        while(this.getColumnByIndex(newIndex)) {
             newIndex++;
         }
         var newColumn : ColumnDescription = {name : "New_Column",
@@ -103,7 +103,7 @@ export class Table {
      * @param index - the index of the searched column
      * @return: The column with the index
      */
-    getColumnwithIndex(index : number) : Column {
+    getColumnByIndex(index : number) : Column {
         return this._columns.find(col => col.index == index);
     }
 
