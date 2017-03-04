@@ -35,7 +35,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     /**
      * The original table name
      */
-    private _tableName : string;
+    private _originalTableName : string;
 
     /**
      * The currently edited table
@@ -93,12 +93,12 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     ngOnInit() {
         console.log("Editor loading!");
         let subRef = this._routeParams.params.subscribe(params => {
-            this._tableName = params['tableName'];
-            if (this._tableName) {
+            this._originalTableName = params['tableName'];
+            if (this._originalTableName) {
                 this._projectService.activeProject
                     .subscribe(res => {
                         this._project = res;
-                        this.table = res.schema.getTable(this._tableName);
+                        this.table = res.schema.getTable(this._originalTableName);
                     })
             } else {
                 this._projectService.activeProject
@@ -204,7 +204,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         if(this.isNewTable) {
             this._schemaService.saveNewTable(this._project, this.table).subscribe();
         } else {
-            this._schemaService.sendAlterTableCommands(this._project, this._tableName, this.commandsHolder).subscribe();
+            this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder).subscribe();
         }
     }
 
@@ -221,11 +221,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     removeColumn(index: number) {
         if(!this.isNewTable) {
-            if(this.table.getColumnwithIndex(index).state != ColumnStatus.deleted) {
+            if(this.table.getColumnByIndex(index).state != ColumnStatus.deleted) {
                 this.commandsHolder.do(new DeleteColumn(this.table, index));
             }
         } else {
-            this.table.columns.splice(this.table.columns.indexOf(this.table.getColumnwithIndex(index)), 1);
+            this.table.columns.splice(this.table.columns.indexOf(this.table.getColumnByIndex(index)), 1);
         }
     }
 
