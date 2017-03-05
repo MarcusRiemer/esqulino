@@ -13,8 +13,8 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
   #get Table object out of Database
   table = database_describe_schema(sqlite_file_path).select{ |table| table.name == tableName}.first
   begin
-    commandHolder.each_with_index do |cmd, i|
-      index = i
+    commandHolder.each do |cmd|
+      index = cmd['index']
       colHash = createColumnHash(table)
       if cmd['type'] != "renameTable"
         case cmd['type']
@@ -35,16 +35,17 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
         when "changeColumnStandardValue"
           changeColumnStandardValue(table, cmd['columnIndex'], cmd['newValue'])
         end
-        database_alter_table(sqlite_file_path, table, colHash)
+        errorCode, errorBody = database_alter_table(sqlite_file_path, table, colHash)
       else
         rename_table(sqlite_file_path, table.name, cmd['newName'])
-        changeTableName(table, cmd['newName'])
+        errorCode, errorBody = changeTableName(table, cmd['newName'])
       end
+      if(errorCode != 0)
+        FileUtils.remove_file(sqlite_file_path)
+        File.rename(sqlite_file_path + '.bak', sqlite_file_path)
+        return true, index, errorCode, errorBody 
+      end 
     end
-  rescue 
-    FileUtils.remove_file(sqlite_file_path)
-    File.rename(sqlite_file_path + '.bak', sqlite_file_path)
-    return true, index
   end
   FileUtils.remove_file(sqlite_file_path + '.bak')
   return false
@@ -80,35 +81,46 @@ def database_alter_table(sqlite_file_path, schema_table, colHash)
 
     db.execute("DROP TABLE #{tempTableName};")
     #TODO: Use to check for errors
-    db.execute("PRAGMA foreign_key_check;")
-    db.commit()
+    consistencyErrors = db.execute("PRAGMA foreign_key_check;")
+    if(consistencyErrors.length != 0)
+      db.close()
+      return 2, consistencyErrors
+    end
     db.execute("PRAGMA foreign_keys = ON;")
+    db.commit()
     db.close()
-  rescue 
+    return 0
+  rescue Exception => e
     db.close()
-    raise 'error'
+    return 1, e.message
   end
 end
 
 def rename_table(sqlite_file_path, from_tableName, to_tableName) 
-  db = SQLite3::Database.open(sqlite_file_path)
-  db.execute("PRAGMA foreign_keys = ON")
+  begin
+    db = SQLite3::Database.open(sqlite_file_path)
+    db.execute("PRAGMA foreign_keys = ON")
 
-  #Muss in der Datei stehen wo es auch ausgelöst werden kann?????
-  db.create_function('regexp', 2) do |func, pattern, expression|
-      unless expression.nil? #expression.to_s.empty?
-        func.result = expression.to_s.match(
-          Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
-      else
-        # Return true if the value is null, let the DB handle this
-        func.result = 1
-      end   
-    end
+    #Muss in der Datei stehen wo es auch ausgelöst werden kann?????
+    db.create_function('regexp', 2) do |func, pattern, expression|
+        unless expression.nil? #expression.to_s.empty?
+          func.result = expression.to_s.match(
+            Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
+        else
+          # Return true if the value is null, let the DB handle this
+          func.result = 1
+        end   
+      end
 
-  db.transaction
-  db.execute("ALTER TABLE #{from_tableName} RENAME TO #{to_tableName};")
-  db.commit()
-  db.close()
+    db.transaction
+    db.execute("ALTER TABLE #{from_tableName} RENAME TO #{to_tableName};")
+    db.commit()
+    db.close()
+    return 0
+  rescue Exception => e
+    db.close()
+    return 1, e.message
+  end
 end
 
 # Function to convert the column hash to two strings 

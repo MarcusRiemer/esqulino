@@ -328,9 +328,9 @@ class ScratchSqlApp < Sinatra::Base
 
   post '/api/project/:project_id/db/:database_id/alter/:tableName' do
     commandHolder = JSON.parse(request.body.read)
-    error, index = database_alter_schema(@project.file_path_sqlite, params['tableName'], commandHolder)
+    error, index, errorCode, errorBody = database_alter_schema(@project.file_path_sqlite, params['tableName'], commandHolder)
     if(error) 
-      return 500, {'Content-Type' => 'text/plain'}, index.to_s
+      return 500, {'Content-Type' => 'application/json'}, { :index => index.to_s, :errorCode => errorCode.to_s, :errorBody => json(errorBody)}.to_json
     else 
       return 200
     end
