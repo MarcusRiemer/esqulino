@@ -34,6 +34,8 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
           changeColumnNotNull(table, cmd['columnIndex'])
         when "changeColumnStandardValue"
           changeColumnStandardValue(table, cmd['columnIndex'], cmd['newValue'])
+        when "addForeignKey"
+          addForeignKey(table, cmd['newForeignKey'])
         end
         errorCode, errorBody = database_alter_table(sqlite_file_path, table, colHash)
       else
@@ -288,6 +290,15 @@ end
 
 def changeTableName(table, newName)
   table.name = newName
+end
+
+def addForeignKey(table, foreignKey)
+  foreign_key_comp = SchemaForeignKey.new()
+  foreignKey['refs'].each do |fk|
+    foreign_key_ref = SchemaForeignKeyRef.new(fk['from_column'], fk['to_table'], fk['to_column'])
+    foreign_key_comp.add_foreign_key(foreign_key_ref)
+  end
+  table.add_foreign_keys(foreign_key_comp)  
 end
 
 def createColumnHash(table)

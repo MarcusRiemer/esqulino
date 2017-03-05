@@ -11,9 +11,8 @@ import {
     SwitchColumnOrder, RenameColumn,
     ChangeColumnType, ChangeColumnPrimaryKey,
     ChangeColumnNotNull, ChangeColumnStandardValue,
-    ChangeTableName, TableCommandHolder
+    ChangeTableName, TableCommandHolder, AddForeignKey
 }                                                   from '../../shared/schema/table-commands'
-
 
 /**
  * Displays the schema for a list of tables.
@@ -222,7 +221,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         if(error.json().errorCode == 1) {
             window.alert(`Ein Fehler ist aufgetretten in Stacknummer: ${error.json().index} \n mit Nachricht: ${error.json().errorBody}`);
         } else if(error.json().errorCode == 1) {
-            window.alert(`Nach der Änderung im Stack Nummer: ${error.json().index} \n ist die Datenbank nicht mehr konsistent an folgenden Stellen: ${error.json().errorBody.toString()}`);
+            window.alert(`Nach der Änderung im Stack Nummer: ${error.json().index} \n ist die Datenbank nicht mehr konsistent an folgenden Stellen: ${error.json().errorBody.toString().replace("\\\"", "\"")}`);
         }
     }
 

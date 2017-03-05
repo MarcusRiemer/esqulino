@@ -1,4 +1,5 @@
-import { TableDescription, ColumnDescription }  from './schema.description'
+import { TableDescription, ColumnDescription, 
+  ForeignKeyDescription}                        from './schema.description'
 import { Table }                                from './table'
 import { Column, ColumnStatus }                 from './column'
 
@@ -59,6 +60,11 @@ export interface ChangeTableNameDescription extends CommandDescription {
   type : "renameTable";
   oldName : string;
   newName : string;
+}
+
+export interface AddForeignKeyDescription extends CommandDescription {
+  type : "addForeignKey";
+  newForeignKey : ForeignKeyDescription;
 }
 
 /**
@@ -401,6 +407,39 @@ export class ChangeColumnStandardValue extends TableCommand {
   get commandText() : String {
     return `Spalte ${this._columnIndex} Default Value zu ${this._newValue} geaendert`
   }
+}
+
+export class AddForeignKey extends TableCommand {
+  private _newForeignKey : ForeignKeyDescription;
+
+  constructor(table : Table, columnIndex: number, foreignKey : ForeignKeyDescription) {
+    super(table.getColumnByIndex(columnIndex).state, columnIndex);
+    this._newForeignKey = foreignKey;
+  }
+
+  do(table: Table): void {
+    table.foreign_keys.push(this._newForeignKey);
+    this.markColumnChanged(table);
+  }
+
+  undo(table: Table): void {
+    table.foreign_keys.splice(table.foreign_keys.indexOf(this._newForeignKey), 1);
+    this.restoreLastStatus(table);
+  }
+
+  toModel(): AddForeignKeyDescription {
+    return {
+      type : "addForeignKey",
+      index : this._index,
+      columnIndex : this._columnIndex,
+      newForeignKey : this._newForeignKey
+    };
+  }
+
+  get commandText() : String {
+    return `Fremdschluessel für Spalte ${this._columnIndex} zur Tabelle ${this._newForeignKey.refs[0].to_table} mit Spalte ${this._newForeignKey.refs[0].to_column} erzeugt`
+  }
+
 }
 
 /**}'
