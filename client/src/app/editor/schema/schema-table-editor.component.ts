@@ -82,8 +82,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     colToSwitch : number;
     switch_to : number;
-    // Debug Value to simulate database error
-    dbErrorCode : number = 3;
+
+    // Value to store the accured error
+    dbErrorCode : number = -1;
 
 
 
@@ -204,7 +205,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         if(this.isNewTable) {
             this._schemaService.saveNewTable(this._project, this.table).subscribe();
         } else {
-            this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder).subscribe();
+            this.commandsHolder.prepareToSend();
+            this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder)
+                .subscribe( 
+                    table => table,
+                    error => this.dbErrorCode = error.text());
         }
     }
 
