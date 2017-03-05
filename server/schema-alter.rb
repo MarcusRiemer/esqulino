@@ -1,76 +1,93 @@
 require_relative './schema'
+require 'fileutils'
 require 'ostruct'
 require 'json'
 
 
 def database_alter_schema(sqlite_file_path, tableName, commandHolder)
   #copy Database
+  FileUtils.cp(sqlite_file_path, sqlite_file_path + '.bak')
+
+  index = 0
 
   #get Table object out of Database
   table = database_describe_schema(sqlite_file_path).select{ |table| table.name == tableName}.first
-
-  commandHolder.each do |cmd|
-    colHash = createColumnHash(table)
-    if cmd['type'] != "renameTable"
-      case cmd['type']
-      when "addColumn"
-        addColumn(table)
-      when "deleteColumn"
-        deleteColumn(table, colHash, cmd['columnIndex'])
-      when "switchColumn"
-        switchColumn(table, cmd['from'], cmd['to'].to_i)
-      when "renameColumn"
-        renameColumn(table, colHash, cmd['columnIndex'], cmd['newName'])
-      when "changeColumnType"
-        changeColumnType(table, cmd['columnIndex'], cmd['newType'])
-      when "changeColumnPrimaryKey"
-        changeColumnPrimaryKey(table, cmd['columnIndex'])
-      when "changeColumnNotNull"
-        changeColumnNotNull(table, cmd['columnIndex'])
-      when "changeColumnStandardValue"
-        changeColumnStandardValue(table, cmd['columnIndex'], cmd['newValue'])
+  begin
+    commandHolder.each_with_index do |cmd, i|
+      index = i
+      colHash = createColumnHash(table)
+      if cmd['type'] != "renameTable"
+        case cmd['type']
+        when "addColumn"
+          addColumn(table)
+        when "deleteColumn"
+          deleteColumn(table, colHash, cmd['columnIndex'])
+        when "switchColumn"
+          switchColumn(table, cmd['from'], cmd['to'].to_i)
+        when "renameColumn"
+          renameColumn(table, colHash, cmd['columnIndex'], cmd['newName'])
+        when "changeColumnType"
+          changeColumnType(table, cmd['columnIndex'], cmd['newType'])
+        when "changeColumnPrimaryKey"
+          changeColumnPrimaryKey(table, cmd['columnIndex'])
+        when "changeColumnNotNull"
+          changeColumnNotNull(table, cmd['columnIndex'])
+        when "changeColumnStandardValue"
+          changeColumnStandardValue(table, cmd['columnIndex'], cmd['newValue'])
+        end
+        database_alter_table(sqlite_file_path, table, colHash)
+      else
+        rename_table(sqlite_file_path, table.name, cmd['newName'])
+        changeTableName(table, cmd['newName'])
       end
-      database_alter_table(sqlite_file_path, table, colHash)
-    else
-      rename_table(sqlite_file_path, table.name, cmd['newName'])
-      changeTableName(table, cmd['newName'])
     end
+  rescue 
+    FileUtils.rm(sqlite_file_path)
+    File.rename(sqlite_file_path + '.bak', sqlite_file_path)
+    return true, index
   end
+  FileUtils.rm(sqlite_file_path + '.bak')
+  return false
 end
 
 
 def database_alter_table(sqlite_file_path, schema_table, colHash)
   tempTableName = String.new(schema_table.name)
   tempTableName.concat('_oldTable')
-  db = SQLite3::Database.open(sqlite_file_path)
+  begin
+    db = SQLite3::Database.open(sqlite_file_path)
 
-  #Muss in der Datei stehen wo es auch ausgelöst werden kann?????
-  db.create_function('regexp', 2) do |func, pattern, expression|
-      unless expression.nil? #expression.to_s.empty?
-        func.result = expression.to_s.match(
-          Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
-      else
-        # Return true if the value is null, let the DB handle this
-        func.result = 1
-      end   
-    end
+    #Muss in der Datei stehen wo es auch ausgelöst werden kann?????
+    db.create_function('regexp', 2) do |func, pattern, expression|
+        unless expression.nil? #expression.to_s.empty?
+          func.result = expression.to_s.match(
+            Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
+        else
+          # Return true if the value is null, let the DB handle this
+          func.result = 1
+        end   
+      end
 
-  db.execute("PRAGMA foreign_keys = OFF;")
-  db.transaction
-  db.execute("ALTER TABLE #{schema_table.name} RENAME TO #{tempTableName};")
-  db.execute(table_to_create_statement(schema_table))
-  
+    db.execute("PRAGMA foreign_keys = OFF;")
+    db.transaction
+    db.execute("ALTER TABLE #{schema_table.name} RENAME TO #{tempTableName};")
+    db.execute(table_to_create_statement(schema_table))
+    
 
-  colFrom, colTo = create_column_strings(colHash)
-  db.execute("INSERT INTO #{schema_table.name}(#{colTo}) SELECT #{colFrom} FROM #{tempTableName};")
+    colFrom, colTo = create_column_strings(colHash)
+    db.execute("INSERT INTO #{schema_table.name}(#{colTo}) SELECT #{colFrom} FROM #{tempTableName};")
 
 
-  db.execute("DROP TABLE #{tempTableName};")
-  #TODO: Use to check for errors
-  db.execute("PRAGMA foreign_key_check;")
-  db.commit()
-  db.execute("PRAGMA foreign_keys = ON;")
-  db.close()
+    db.execute("DROP TABLE #{tempTableName};")
+    #TODO: Use to check for errors
+    db.execute("PRAGMA foreign_key_check;")
+    db.commit()
+    db.execute("PRAGMA foreign_keys = ON;")
+    db.close()
+  rescue 
+    db.close()
+    raise 'error'
+  end
 end
 
 def rename_table(sqlite_file_path, from_tableName, to_tableName) 
