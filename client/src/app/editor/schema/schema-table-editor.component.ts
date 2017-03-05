@@ -205,13 +205,27 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         if(this.isNewTable) {
             this._schemaService.saveNewTable(this._project, this.table).subscribe();
         } else {
+            this.dbErrorCode = -1;
             this.commandsHolder.prepareToSend();
             this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder)
                 .subscribe( 
                     table => table,
-                    error => this.dbErrorCode = error.text());
+                    error => this.showError(error));
         }
     }
+
+    /**
+     * Function to show an alert [TODO: Make it look good]
+     */
+    showError(error : any) {
+        this.dbErrorCode = error.json().index;
+        if(error.json().errorCode == 1) {
+            window.alert(`Ein Fehler ist aufgetretten in Stacknummer: ${error.json().index} \n mit Nachricht: ${error.json().errorBody}`);
+        } else if(error.json().errorCode == 1) {
+            window.alert(`Nach der Änderung im Stack Nummer: ${error.json().index} \n ist die Datenbank nicht mehr konsistent an folgenden Stellen: ${error.json().errorBody.toString()}`);
+        }
+    }
+
 
     /**
      * Function for the cancle button
