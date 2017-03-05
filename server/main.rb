@@ -330,7 +330,7 @@ class ScratchSqlApp < Sinatra::Base
     commandHolder = JSON.parse(request.body.read)
     error, index = database_alter_schema(@project.file_path_sqlite, params['tableName'], commandHolder)
     if(error) 
-      return 502, {'Content-Type' => 'text/plain'}, index.to_s
+      return 500, {'Content-Type' => 'text/plain'}, index.to_s
     else 
       return 200
     end
