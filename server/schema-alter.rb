@@ -42,11 +42,11 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
       end
     end
   rescue 
-    FileUtils.rm(sqlite_file_path)
+    FileUtils.remove_file(sqlite_file_path)
     File.rename(sqlite_file_path + '.bak', sqlite_file_path)
     return true, index
   end
-  FileUtils.rm(sqlite_file_path + '.bak')
+  FileUtils.remove_file(sqlite_file_path + '.bak')
   return false
 end
 
