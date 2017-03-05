@@ -504,6 +504,15 @@ export class TableCommandHolder {
   }
 
   /**
+   * Function to cut all commands that are ahead of the active index
+   */
+  prepareToSend() {
+    if (this._activeIndex < this._commands.length - 1) {
+      this._commands.splice(this._activeIndex + 1, this._commands.length);
+    }
+  }
+
+  /**
    * Function to create a json representation to send it 
    * to the server.
    */
