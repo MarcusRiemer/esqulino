@@ -59,6 +59,7 @@ def database_alter_table(sqlite_file_path, schema_table, colHash)
   tempTableName.concat('_oldTable')
   begin
     db = SQLite3::Database.open(sqlite_file_path)
+    db.execute("PRAGMA foreign_keys = OFF;")
 
     #Muss in der Datei stehen wo es auch ausgelöst werden kann?????
     db.create_function('regexp', 2) do |func, pattern, expression|
@@ -71,7 +72,6 @@ def database_alter_table(sqlite_file_path, schema_table, colHash)
         end   
       end
 
-    db.execute("PRAGMA foreign_keys = OFF;")
     db.transaction
     db.execute("ALTER TABLE #{schema_table.name} RENAME TO #{tempTableName};")
     db.execute(table_to_create_statement(schema_table))
@@ -80,19 +80,18 @@ def database_alter_table(sqlite_file_path, schema_table, colHash)
     colFrom, colTo = create_column_strings(colHash)
     db.execute("INSERT INTO #{schema_table.name}(#{colTo}) SELECT #{colFrom} FROM #{tempTableName};")
 
-
     db.execute("DROP TABLE #{tempTableName};")
     #TODO: Use to check for errors
-    consistencyErrors = db.execute("PRAGMA foreign_key_check;")
-    if(consistencyErrors.length != 0)
-      db.close()
-      return 2, consistencyErrors
-    end
+    db.foreign_key_check()
+  
     db.execute("PRAGMA foreign_keys = ON;")
     db.commit()
     db.close()
     return 0
-  rescue Exception => e
+  rescue SQLite3::SQLException => e
+    db.close()
+    return 2, e.message
+  rescue SQLite3::ConstraintException => e
     db.close()
     return 1, e.message
   end

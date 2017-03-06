@@ -219,9 +219,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     showError(error : any) {
         this.dbErrorCode = error.json().index;
         if(error.json().errorCode == 1) {
-            window.alert(`Ein Fehler ist aufgetretten in Stacknummer: ${error.json().index} \n mit Nachricht: ${error.json().errorBody}`);
-        } else if(error.json().errorCode == 1) {
-            window.alert(`Nach der Änderung im Stack Nummer: ${error.json().index} \n ist die Datenbank nicht mehr konsistent an folgenden Stellen: ${error.json().errorBody.toString().replace("\\\"", "\"")}`);
+            window.alert(`Ein Fehler ist aufgetretten in Stacknummer: ${error.json().index} \n mit Nachricht: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
+        } else if(error.json().errorCode == 2) {
+            window.alert(`Nach der Änderung im Stack Nummer: ${error.json().index} ist die Datenbank nicht mehr konsistent \n Datenbank meldet: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
         }
     }
 
