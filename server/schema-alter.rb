@@ -23,7 +23,7 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
         when "deleteColumn"
           deleteColumn(table, colHash, cmd['columnIndex'])
         when "switchColumn"
-          switchColumn(table, cmd['from'], cmd['to'].to_i)
+          switchColumn(table, cmd['indexOrder'])
         when "renameColumn"
           renameColumn(table, colHash, cmd['columnIndex'], cmd['newName'])
         when "changeColumnType"
@@ -254,37 +254,38 @@ def addColumn(table)
 end
 
 def deleteColumn(table, colHash, columnIndex)
-  colHash.delete(table.columns[columnIndex].name)
+  colHash.delete(table.columns.find{|col| col.index == columnIndex}.name)
   table.foreign_keys.each do |fk|
-    fk.references.select!{ |ref| ref.from_column != table.columns[columnIndex].name }
+    fk.references.select!{ |ref| ref.from_column != table.columns.find{|col| col.index == columnIndex}.name }
   end
   table.foreign_keys.select!{ |fk| fk.references.size != 0 }
-  table.columns.delete(table.columns[columnIndex])
+  table.columns.delete(table.columns.find{|col| col.index == columnIndex})
 end
 
-def switchColumn(table, columnIndex, to_pos)
-  table.columns.insert(to_pos, table.columns.delete(table[columnIndex]))
+def switchColumn(table, columnOrder)
+  table.columns = columnOrder.map{|col| table.columns.find{|tcol| tcol.index == col}}
+  #table.columns.insert(to_pos, table.columns.delete(table[columnIndex]))
 end
 
 def renameColumn(table, colHash, columnIndex, newName)
-  colHash[table.columns[columnIndex].name] = newName
-  table.columns[columnIndex].name = newName
+  colHash[table.columns.find{|col| col.index == columnIndex}.name] = newName
+  table.columns.find{|col| col.index == columnIndex}.name = newName
 end
 
 def changeColumnType(table, columnIndex, newType)
-  table.columns[columnIndex].type = newType
+  table.columns.find{|col| col.index == columnIndex}.type = newType
 end
 
 def changeColumnPrimaryKey(table, columnIndex)
-  table.columns[columnIndex].primary = !table.columns[columnIndex].primary
+  table.columns.find{|col| col.index == columnIndex}.primary = !table.columns.find{|col| col.index == columnIndex}.primary
 end
 
 def changeColumnNotNull(table, columnIndex)
-  table.columns[columnIndex].not_null = !table.columns[columnIndex].not_null
+  table.columns.find{|col| col.index == columnIndex}.not_null = !table.columns.find{|col| col.index == columnIndex}.not_null
 end
 
 def changeColumnStandardValue(table, columnIndex, newValue)
-  table.columns[columnIndex].dflt_value = newValue
+  table.columns.find{|col| col.index == columnIndex}.dflt_value = newValue
 end
 
 def changeTableName(table, newName)

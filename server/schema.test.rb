@@ -342,4 +342,33 @@ class Database < Test::Unit::TestCase
   end
 
 
+  def test_change_order2
+    temp_db_file = Tempfile.new('test.sqlite')
+    db = SQLite3::Database.new(temp_db_file.path)
+    #puts "Test #{temp_db_file.path}"
+    
+    db.execute <<-delim
+      create table students (
+        name TEXT,
+        email TEXT,  
+        grade INTEGER,
+        blog URL
+      );
+    delim
+    
+    db.close
+
+    schema = database_describe_schema(temp_db_file.path)
+    
+    table = schema[0]
+    order = [3,2,1,0]
+    table.columns = order.map{|x| table.columns[x]}
+    puts table.to_json(nil)
+    assert_equal schema[0].name, "students"
+    assert_column schema, 0, 3, 'name', 'TEXT'
+    assert_column schema, 0, 2, 'email', 'TEXT'
+    assert_column schema, 0, 1, 'grade', 'INTEGER'
+    assert_column schema, 0, 0, 'blog', 'URL'
+  end
+
 end
