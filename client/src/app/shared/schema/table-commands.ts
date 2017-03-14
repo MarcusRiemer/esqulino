@@ -204,7 +204,6 @@ export class SwitchColumnOrder extends TableCommand {
     this.markColumnChanged(table);
     this.moveColumn(table.columns, this._from, this._to);
     table.columns.map(col => {if (col.state != ColumnStatus.deleted) {this._indexOrder.push(col.index)} });
-    console.log(this._indexOrder);
   }
 
   undo(table: Table): void {
