@@ -26,8 +26,7 @@ export interface DeleteColumnDescription extends CommandDescription {
 
 export interface SwitchColumnDescription extends CommandDescription {
   type : "switchColumn";
-  from : number;
-  to : number;
+  indexOrder : number[];
 }
 
 export interface RenameColumnDescription extends CommandDescription {
@@ -193,21 +192,25 @@ export class DeleteColumn extends TableCommand {
 export class SwitchColumnOrder extends TableCommand {
   private _to: number;
   private _from: number;
+  private _indexOrder : number[] = [];
 
   constructor(table : Table, columnIndex: number, to: number) {
     super(table.getColumnByIndex(columnIndex).state, columnIndex);
     this._to = to;
-    this._from = table.columns.indexOf(table.getColumnByIndex(columnIndex)); 
+    this._from = table.columns.indexOf(table.getColumnByIndex(columnIndex));
   }
 
   do(table: Table): void {
     this.markColumnChanged(table);
     this.moveColumn(table.columns, this._from, this._to);
+    table.columns.map(col => {if (col.state != ColumnStatus.deleted) {this._indexOrder.push(col.index)} });
+    console.log(this._indexOrder);
   }
 
   undo(table: Table): void {
     this.moveColumn(table.columns, this._to, this._from);
     this.restoreLastStatus(table);
+    this._indexOrder.splice(0, this._indexOrder.length);
   }
 
   private moveColumn(columns: Column[], from: number, to: number) {
@@ -219,8 +222,7 @@ export class SwitchColumnOrder extends TableCommand {
       type : "switchColumn",
       index : this._index,
       columnIndex : this._columnIndex,
-      from : this._from,
-      to : this._to
+      indexOrder : this._indexOrder
     };
   }
 
