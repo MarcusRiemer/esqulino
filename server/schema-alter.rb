@@ -264,7 +264,6 @@ end
 
 def switchColumn(table, columnOrder)
   table.columns = columnOrder.map{|col| table.columns.find{|tcol| tcol.index == col}}
-  #table.columns.insert(to_pos, table.columns.delete(table[columnIndex]))
 end
 
 def renameColumn(table, colHash, columnIndex, newName)
