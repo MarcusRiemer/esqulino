@@ -75,7 +75,7 @@ describe('Schema', () => {
     it ('Accessing an existing table', () => {
         let s = new Schema(schemaModel);
 
-        expect(s.getTable("person")).toBeFalsy();
+        expect(s.getTable("person")).toBeTruthy();
         expect(s.getTable("ereignis")).toBeTruthy();
     });
 
