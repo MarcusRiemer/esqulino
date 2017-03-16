@@ -404,4 +404,28 @@ describe('Invalid SELECT Queries', () => {
         expect(q.toModel()).toEqual(model);
         expect(q.validate().isValid).toBeFalsy();
     });
+
+   it('validates against missing tables', () => {
+       const model : Model.QueryDescription = {
+            name : 'select-invalid-table',
+            id : 'invalid-select-5',
+            apiVersion : CURRENT_API_VERSION,
+            select : {
+                columns : [
+                    { expr : { singleColumn : {column : "test", table : "nonexistant" } } },
+                    { expr : { singleColumn : {column : "nonexistant", table : "person" } } },
+                    { expr : { singleColumn : {column : "ende", table : "ereignis" } } },
+                ]
+            },
+            from : {
+                first : {
+                    name : "nonexistant"
+                }
+            }
+       };
+
+       let q = new QuerySelect(schema, model);
+
+       expect(q.isValid).toBeFalsy();
+   });
 });

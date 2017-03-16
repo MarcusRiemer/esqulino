@@ -82,7 +82,7 @@ export class Heading extends WidgetBase {
      * @param newText The text displayed by this heading
      */
     set text(newText : string) {
-        if (this._text == newText) {
+        if (this._text != newText) {
             this._text = newText;
             this.fireModelChange();
         }
