@@ -20,7 +20,7 @@ install-deps : has-npm msg-pre-install-deps
 	npm install
 
 test :
-	npm test
+	$(NG_BIN) test
 
 clean-deps : msg-pre-clean-deps
 	rm -rf "node_modules"
