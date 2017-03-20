@@ -6,12 +6,11 @@ import {
     ModelObservable, isSaveable, Saveable
 } from '../../interfaces'
 
-import * as Model                             from '../description'
 import {
     ValidationErrors, ValidationResult, Validateable
 } from '../validation'
 
-import {QueryFrom}                            from '../base'
+import {QueryFrom, Model}                     from '../base'
 
 import {
     Component, ExpressionParent, Removable

@@ -1,16 +1,11 @@
 import {Schema, ColumnDescription}        from '../schema'
 
-import {Query}                            from './base'
-
-import {loadExpression, Expression}       from './syntaxtree'
+import {Query, SyntaxTree, Model}         from './base'
 import {ValidationResult, Validateable}   from './validation'
-
-import * as Model                         from './description'
-import * as SyntaxTree                    from './syntaxtree'
 
 interface ColumnAssignment {
     columnName : string
-    expr : Expression
+    expr : SyntaxTree.Expression
 }
 
 /**
@@ -42,7 +37,7 @@ export abstract class QueryAssign extends Query {
         assignments.forEach( (desc) => {
             this._values.push({
                 columnName : desc.column,
-                expr : loadExpression(desc.expr, this)
+                expr : SyntaxTree.loadExpression(desc.expr, this)
             });
         });  
 
@@ -58,7 +53,7 @@ export abstract class QueryAssign extends Query {
     /**
      * @return The values that would be inserted.
      */
-    get values() : Expression[] {
+    get values() : SyntaxTree.Expression[] {
         return (this._values.map(v => v.expr));
     }
 
@@ -79,7 +74,7 @@ export abstract class QueryAssign extends Query {
     /**
      * @return The expression that is associated with that column.
      */
-    getValueForColumn(columnName : string) : Expression {
+    getValueForColumn(columnName : string) : SyntaxTree.Expression {
         const col = this._values.find(v => v.columnName == columnName);
         if (col) {
             return (col.expr);
@@ -105,7 +100,7 @@ export abstract class QueryAssign extends Query {
                 // Activate it
                 this._values.push({
                     columnName : columnName,
-                    expr : loadExpression({ missing : {} }, this)
+                    expr : SyntaxTree.loadExpression({ missing : {} }, this)
                 });
             }
         } else {
@@ -129,7 +124,7 @@ export abstract class QueryAssign extends Query {
         return ("VALUES");
     }
 
-    replaceChild(formerChild : Expression, newChild : Expression) : void {
+    replaceChild(formerChild : SyntaxTree.Expression, newChild : SyntaxTree.Expression) : void {
         const replaceIndex = this._values.findIndex(v => v.expr == formerChild);
         
         if (replaceIndex >= 0) {

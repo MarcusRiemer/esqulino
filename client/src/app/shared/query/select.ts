@@ -1,16 +1,14 @@
-import {
-    Query, QueryFrom, QueryWhere, ResultColumn
-} from './base'
+import {Schema} from '../schema'
 
 import {
-    Schema
-} from '../schema'
+    Query, QueryFrom, QueryWhere, ResultColumn,
+    Model, SyntaxTree
+} from './base'
+
+
 import {
     ValidationResult, Validateable
 } from './validation'
-
-import * as Model                       from './description'
-import * as SyntaxTree                  from './syntaxtree'
 
 export {ResultColumn}
 

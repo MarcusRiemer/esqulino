@@ -72,6 +72,10 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
         return (this._modelChanged);
     }
 
+    get hasParent() : boolean {
+        return (!!this._parent);
+    }
+
     /**
      * @return The page this widget is placed on.
      */

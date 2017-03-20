@@ -97,36 +97,4 @@ describe('Page NavigateAction', () => {
 
         expect( () => new NavigateAction(undefined, m)).toThrowError();
     });
-
-    it('Changes type when switching between internal and external', () => {
-        const m : NavigateActionDescription = {
-            type : "navigate",
-            external : "http://thedailywtf.com/articles/Disgruntled-Bomb-Java-Edition"
-        }
-
-        // Start with an external action
-        let a = new NavigateAction(undefined, m);
-        expect(a.isExternal).toEqual(true);
-        expect(a.isInternal).toEqual(false);
-
-        // Stay external
-        a.externalUrl = "http://elsewhere";
-        expect(a.isExternal).toEqual(true);
-        expect(a.isInternal).toEqual(false);
-
-        // Go internal
-        a.internalPageId = "123";
-        expect(a.isExternal).toEqual(false);
-        expect(a.isInternal).toEqual(true);
-
-        // Stay internal
-        a.internalPageId = "1234";
-        expect(a.isExternal).toEqual(false);
-        expect(a.isInternal).toEqual(true);
-
-        // Go external
-        a.externalUrl = "http://elsewhere";
-        expect(a.isExternal).toEqual(true);
-        expect(a.isInternal).toEqual(false);
-    })
 });

@@ -62,6 +62,7 @@ export function loadWidget(desc : WidgetDescription, parent : WidgetHost) : Widg
 
     // If this widget has a page: wire up changes that would require
     // saving the page.
+    // TODO: This is horrible for testing, a fix is required!
     try {
         if (widget.page) {
             widget.modelChanged.subscribe(_ => widget.page.markSaveRequired());

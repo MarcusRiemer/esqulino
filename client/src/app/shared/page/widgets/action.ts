@@ -329,6 +329,7 @@ export class NavigateAction extends Action {
     protected createDefaultMapping(pageId : string) {
         const p = this.page.project.getPageById(pageId);
         return p.requestParameters.map(v => new ParameterMapping(this.page, { parameterName : v.name }));
+
     }
 
     /**
