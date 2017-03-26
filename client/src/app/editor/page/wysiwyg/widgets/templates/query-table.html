@@ -17,7 +17,7 @@
     </span>
   </h5>
   <!-- If the query reference itself is valid, display column selection -->
-  <template [ngIf]="hasValidReference">
+  <ng-template [ngIf]="hasValidReference">
     <!-- Are there columns to display? -->
     <table *ngIf="hasColumnReferences">
       <tr>
@@ -40,5 +40,5 @@
       <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
       <strong>Keine Tabellenspalten definiert!</strong> Damit diese Tabelle angezeigt wird, kannst du Spalten der genutzten Abfrage in der gewünschten Reihenfolge hierher ziehen.
     </div>
-  </template>
+  </ng-template>
 </div>
