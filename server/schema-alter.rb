@@ -1,4 +1,8 @@
+# coding: utf-8
 require_relative './schema'
+require_relative './schema-utils'
+
+require 'sqlite3'
 require 'fileutils'
 require 'ostruct'
 require 'json'
@@ -58,19 +62,8 @@ def database_alter_table(sqlite_file_path, schema_table, colHash)
   tempTableName = String.new(schema_table.name)
   tempTableName.concat('_oldTable')
   begin
-    db = SQLite3::Database.open(sqlite_file_path)
+    db = sqlite_open_augmented(sqlite_file_path)
     db.execute("PRAGMA foreign_keys = OFF;")
-
-    #Muss in der Datei stehen wo es auch ausgelöst werden kann?????
-    db.create_function('regexp', 2) do |func, pattern, expression|
-        unless expression.nil? #expression.to_s.empty?
-          func.result = expression.to_s.match(
-            Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
-        else
-          # Return true if the value is null, let the DB handle this
-          func.result = 1
-        end   
-      end
 
     db.transaction
     db.execute("ALTER TABLE #{schema_table.name} RENAME TO #{tempTableName};")
@@ -104,7 +97,7 @@ def rename_table(sqlite_file_path, from_tableName, to_tableName)
 
     #Muss in der Datei stehen wo es auch ausgelöst werden kann?????
     db.create_function('regexp', 2) do |func, pattern, expression|
-        unless expression.nil? #expression.to_s.empty?
+        unless expression.nil?
           func.result = expression.to_s.match(
             Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
         else
