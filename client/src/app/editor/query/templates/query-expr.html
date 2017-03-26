@@ -1,7 +1,7 @@
 <span (dragenter)="onAllowedDrag($event)"
       (dragover)="onAllowedDrag($event)"
       (dragleave)="onAllowedDragLeave($event)"
-      [ngSwitch]="expr.ng-templateIdentifier">
+      [ngSwitch]="expr.templateIdentifier">
   <ng-template ngSwitchCase="missing">
     <span (drop)="onMissingDrop($event)"
           class="missing"
@@ -57,6 +57,6 @@
     </span>
   </ng-template>
   <ng-template ngSwitchDefault>
-    Error: Unknown expression type identifier "{{expr.ng-templateIdentifier}}"
+    Error: Unknown expression type identifier "{{expr.templateIdentifier}}"
   </ng-template>
 </span>
