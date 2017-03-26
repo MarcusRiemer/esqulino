@@ -59,6 +59,10 @@ export class WhereSubsequent extends Component implements ExpressionParent, Remo
         return (`WHERE:${this.operator}`);
     }
 
+    getLeaves() : Expression[] {
+        return ([this._expr]);
+    }
+
     toModel() : Model.WhereSubsequent {
         return ({
             expr : this._expr.toModel(),

@@ -351,6 +351,10 @@ export class From extends Component {
         return ([this._first].concat(this._joins));
     }
 
+    getLeaves() : Expression[] {
+        return ([]);
+    }
+
     /**
      * @param n Starting at 0
      * @return The n-th join of this FROM clause

@@ -1,6 +1,6 @@
 import {Component, Input}               from '@angular/core'
 
-import {QueryFrom, SyntaxTree}          from '../../shared/query'
+import {Query, SyntaxTree}              from '../../shared/query'
 
 import {DragService, SqlDragEvent}      from './drag.service'
 
@@ -9,7 +9,7 @@ import {DragService, SqlDragEvent}      from './drag.service'
     templateUrl : 'templates/query-from.html',
 })
 export class FromComponent {
-    @Input() query : QueryFrom;
+    @Input() query : Query;
 
     constructor(public dragService : DragService) {
 

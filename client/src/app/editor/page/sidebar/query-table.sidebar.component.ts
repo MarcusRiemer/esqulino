@@ -1,6 +1,6 @@
 import {Component, Inject, Optional}   from '@angular/core'
 
-import {QuerySelect}                   from '../../../shared/query'
+import {Query}                         from '../../../shared/query'
 import {Page, QueryReference}          from '../../../shared/page/index'
 import {QueryTable}                    from '../../../shared/page/widgets/index'
 
@@ -54,7 +54,7 @@ export class QueryTableSidebarComponent {
      */
     get availableQueries() {
         if (this._component.page) {
-            return (this._component.page.referencedQueries.filter(q => q.isResolveable && q.query instanceof QuerySelect));
+            return (this._component.page.referencedQueries.filter(q => q.isResolveable && q.query.select));
         } else {
             return ([]);
         }

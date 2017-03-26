@@ -4,7 +4,7 @@ import {Router, ActivatedRoute}         from '@angular/router'
 import {Observable}                     from 'rxjs/Observable'
 
 import {
-    Query, Model, SyntaxTree, QuerySelect, QueryDelete, QueryUpdate,
+    Query, Model, SyntaxTree,
     SelectQueryResult, QueryRunErrorDescription
 } from '../../shared/query'
 
@@ -81,11 +81,11 @@ export class QueryEditorComponent implements OnInit {
      * @return True, if the "I promise this query only touches a single row"-checkbox
      *         should be shown.
      */
-    get showSingleRowCheckbox() {
+    get showSingleRowCheckbox() : boolean {
         const validQueryType =
-            this.query instanceof QuerySelect ||
-            this.query instanceof QueryUpdate ||
-            this.query instanceof QueryDelete;
+            this.query.select ||
+            this.query.update ||
+            this.query.delete;
 
         // Show if the single row property actually makes sense and any of the
         // following holds ...
@@ -183,7 +183,7 @@ export class QueryEditorComponent implements OnInit {
                     // * SELECT queries ...
                     // * that are valid ...
                     // * and have all parameters assigned
-                    if (this.query instanceof QuerySelect &&
+                    if (this.query.select &&
                         this.query.isValid &&
                         this.query.parameters.length === 0) {
                         btnQuery.fire();

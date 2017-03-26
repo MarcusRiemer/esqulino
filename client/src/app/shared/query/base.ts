@@ -13,7 +13,7 @@ export {Model, SyntaxTree, CURRENT_API_VERSION}
 /**
  * Facade for a query that allows meaningful mapping to the UI.
  */
-export abstract class Query extends ProjectResource implements SyntaxTree.RemovableHost, Validateable {
+export class Query extends ProjectResource implements SyntaxTree.RemovableHost, Validateable {
     
     public schema : Schema;
 
@@ -23,12 +23,48 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
     private _singleRow : boolean = false;
 
     /**
+     * All components that are part of this query.
+     */
+    private _components : {
+        insert? : SyntaxTree.Insert
+        select? : SyntaxTree.Select
+        update? : SyntaxTree.Update
+        delete? : SyntaxTree.Delete
+        from? : SyntaxTree.From
+        where? : SyntaxTree.Where
+    } = {};
+
+    /**
      * Stores all basic information about a string.
      */
     constructor(schema : Schema, model : Model.QueryDescription, project? : Project) {
         super(project, model);
         this.schema = schema;
         this._singleRow = !!model.singleRow;
+
+        if (model.insert) {
+            this._components.insert = new SyntaxTree.Insert(model.update, this);
+        }
+        
+        if (model.select) {
+            this._components.select = new SyntaxTree.Select(model.select, this);
+        }
+
+        if (model.update) {
+            this._components.update = new SyntaxTree.Update(model.update, this);
+        }
+        
+        if (model.delete) {
+            this._components.delete = new SyntaxTree.Delete(model.delete, this);
+        }       
+
+        if (model.from) {
+            this._components.from = new SyntaxTree.From(model.from, this);
+        }
+
+        if (model.where) {
+            this._components.where = new SyntaxTree.Where(model.where, this);
+        }
     }
 
     /**
@@ -40,6 +76,40 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
         return (this);
     }
 
+    get insert() : SyntaxTree.Insert {
+        return (this._components.insert);
+    }
+
+    get select() : SyntaxTree.Select {
+        return (this._components.select);
+    }
+
+    get update() : SyntaxTree.Update {
+        return (this._components.update);
+    }
+
+    get delete() : SyntaxTree.Delete {
+        return (this._components.delete);
+    }
+
+    get from() : SyntaxTree.From {
+        return (this._components.from);
+    }
+
+    get where() : SyntaxTree.Where {
+        return (this._components.where);
+    }
+
+    get allComponents() : SyntaxTree.Component[] {
+        return (Object.values(this._components));
+    }
+
+    set where(toAdd) {
+        if (toAdd != this._components.where) {
+            this._components.where = toAdd;
+            this.markSaveRequired();
+        }
+    }
 
     /**
      * @return True, if this query always returns a single row
@@ -64,19 +134,12 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
     }
 
     /**
-     * @return True, if this query could be serialized to SQL.
-     */
-    protected abstract validateImpl(schema : Schema) : ValidationResult;
-
-    /**
-     * @return The SQL representation of this query.
-     */
-    protected abstract toSqlStringImpl() : string;
-
-    /**
      * @return All expressions that are leaves of the expression tree.
      */
-    abstract getLeaves() : SyntaxTree.Expression[];
+    getLeaves() : SyntaxTree.Expression[] {
+        const nestedLeaves = this.allComponents.map(c => c.getLeaves());
+        return [].concat(...nestedLeaves);
+    }
 
     /**
      * @return All parameters of this query.
@@ -98,7 +161,9 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
      * @return An SQL string that represents this query.
      */
     toSqlString() : string {
-        return (this.toSqlStringImpl());
+        return (this.allComponents
+                .map(c => c.toSqlString())
+                .join('\n'));
     }
 
     /**
@@ -109,15 +174,11 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
 
         // Ensure there is a WHERE condition if this query promises to
         // deliver a single row.
-        if (this.singleRow) {
-            const where : QueryWhere = (this as any).where;
-
-            if (!where) {
-                ownErrors.push(new ValidationErrors.UnplausibleSingleRow(true));
-            }
+        if (this.singleRow && !this.where) {
+            ownErrors.push(new ValidationErrors.UnplausibleSingleRow(true));
         }
 
-        return (new ValidationResult(ownErrors, [this.validateImpl(this.schema)]));
+        return (new ValidationResult(ownErrors, this.allComponents.map(c => c.validate(this.schema))));
     }
     
     /**
@@ -143,43 +204,45 @@ export abstract class Query extends ProjectResource implements SyntaxTree.Remova
             toReturn.singleRow = this.singleRow;
         }
 
-        // And let the deriving classes do the hard work
-        toReturn = this.toModelImpl(toReturn);
+        if (this.delete) {
+            toReturn.delete = this.delete.toModel();
+        }
+
+        if (this.update) {
+            toReturn.update = this.update.toModel();
+        }
+
+        if (this.insert) {
+            toReturn.insert = this.insert.toModel();
+        }
+        
+        if (this.select) {
+            toReturn.select = this.select.toModel();
+        }
+
+        if (this.from) {
+            toReturn.from = this.from.toModel();
+        }
+
+        if (this.where) {
+            toReturn.where = this.where.toModel();
+        }
         
         return (toReturn);
     }
-
+    
     /**
-     * Called in deriving methods to actually construct the model.
-     * 
-     * @param toReturn The model that will be returned and needs to be enriched.
-     *
-     * @return The enriched model
+     * Removes a componenty from this query by reference.
      */
-    protected abstract toModelImpl(toReturn : Model.QueryDescription) : Model.QueryDescription;
-
-    /**
-     * Each query-type needs to see for his own how to remove 
-     * SQL-components. Sometimes this is possible (WHERE), sometimes
-     * it should be disallowed (FROM).
-     */
-    abstract removeChild(formerChild : SyntaxTree.Removable) : void;
-}
-
-/**
- * A query that provides a WHERE component
- */
-export interface QueryWhere extends Query {
-    where : SyntaxTree.Where
-}
-
-/**
- * A query that provides a FROM component. Practically this should be
- * the case for most of the queries that are written using esqulino,
- * but theoretically it could be missing.
- */
-export interface QueryFrom extends Query {
-    from : SyntaxTree.From
+    public removeChild(formerChild : SyntaxTree.Removable) : void {
+        Object.entries(this._components).forEach(e => {
+            if (e[1] == formerChild) {
+                (this._components as { [key : string] : SyntaxTree.Component })[e[0]] = undefined;
+                this.markSaveRequired();
+                return;
+            }
+        });
+    }
 }
 
 /**

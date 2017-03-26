@@ -8,7 +8,7 @@ import {
     QueryReference, QueryReferenceDescription
 } from '../../../../../shared/page/index'
 import{
-    QuerySelect, ResultColumn
+    Query, ResultColumn
 } from '../../../../../shared/query'
 
 import {

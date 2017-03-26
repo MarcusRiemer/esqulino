@@ -1,7 +1,5 @@
 import {Component}                        from '@angular/core'
 
-import {QuerySelect}                      from '../shared/query'
-
 import {ProjectService, Project}          from './project.service'
 import {SidebarService}                   from './sidebar.service'
 import {ToolbarService}                   from './toolbar.service'
