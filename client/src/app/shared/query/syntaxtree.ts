@@ -1,6 +1,6 @@
 export {
-    Expression, 
-    ExpressionParent, loadExpression, RemovableHost, Removable
+    Expression, ExpressionParent, loadExpression, RemovableHost, Removable,
+    Component
 } from './syntaxtree/common'
 
 export {
@@ -23,4 +23,8 @@ export {
 export {
     Delete
 } from './syntaxtree/delete'
+
+export {
+    Assign, Update, Insert
+} from './syntaxtree/assign'
 

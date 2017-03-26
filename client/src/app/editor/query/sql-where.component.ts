@@ -2,14 +2,14 @@ import {Component, Input}               from '@angular/core'
 
 import {DragService, SqlDragEvent}      from './drag.service'
 
-import {QueryWhere, Model, SyntaxTree}  from '../../shared/query'
+import {Query, Model, SyntaxTree}       from '../../shared/query'
 
 @Component({
     selector : 'sql-where',
     templateUrl : 'templates/query-where.html',
 })
 export class WhereComponent {
-    @Input() query : QueryWhere;
+    @Input() query : Query;
 
     constructor(public dragService : DragService) {
 

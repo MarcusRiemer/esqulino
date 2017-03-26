@@ -1,7 +1,6 @@
 import {RequestErrorDescription}              from '../serverapi.service'
 
-import {Model}                                from './base'
-import {QuerySelect}                          from './select'
+import {Model, Query}                         from './base'
 
 /**
  * Not much ado about type safety here, in the raw
@@ -29,7 +28,7 @@ class Cell {
     /**
      * The query this cell is a result of
      */
-    private _query : QuerySelect;
+    private _query : Query;
 
     /**
      * The column index of this cell
@@ -48,7 +47,7 @@ class Cell {
      * @param index The column index of this cell
      * @param value The value of this cell
      */
-    constructor(query : QuerySelect, index : number, value : string) {
+    constructor(query : Query, index : number, value : string) {
         this._query = query;
         this._index = index;
         this._value = value;
@@ -66,10 +65,10 @@ class Cell {
  * Allows to adress columns by name or index.
  */
 class Row {
-    private _query : QuerySelect;
+    private _query : Query;
     private _cells : Cell[];
     
-    constructor(query : QuerySelect, raw : RawRow) {
+    constructor(query : Query, raw : RawRow) {
         this._query = query;
         this._cells = raw.map( (v,k) => new Cell(query, k, v));
     }
@@ -91,7 +90,7 @@ function isQueryResultDescription(arg : any) : arg is QueryResultDescription {
  * Adds type information to a raw QueryResultDescription.
  */
 export class SelectQueryResult {
-    private _query : QuerySelect;
+    private _query : Query;
 
     private _rows : Row[] = [];
 
@@ -106,7 +105,7 @@ export class SelectQueryResult {
      * @param query The query that was running
      * @param res   The result of the run
      */
-    constructor(query : QuerySelect, res : QueryResultDescription | QueryRunErrorDescription) {
+    constructor(query : Query, res : QueryResultDescription | QueryRunErrorDescription) {
         this._query = query;
 
         if (isQueryRunErrorDescription(res)) {

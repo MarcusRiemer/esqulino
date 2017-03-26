@@ -1,8 +1,6 @@
 import {Component, Input}  from '@angular/core'
 
-import {
-    Query, QuerySelect, QueryDelete, QueryInsert, QueryUpdate
-} from '../../shared/query'
+import {Query}             from '../../shared/query'
 
 /**
  * Renders a matching icon for a query.
@@ -25,13 +23,13 @@ export class QueryIconComponent {
      * @return A Font Awesome CSS icon class
      */
     iconForQuery(query : Query) {
-        if (query instanceof QueryDelete) {
+        if (query.delete) {
             return ("fa-ban");
-        } else if (query instanceof QueryInsert) {
+        } else if (query.insert) {
             return ("fa-plus-circle");
-        } else if (query instanceof QueryUpdate) {
+        } else if (query.update) {
             return ("fa-pencil");
-        } else if (query instanceof QuerySelect) {
+        } else if (query.select) {
             if (!this.detailSelect) {
                 return ("fa-search");
             } else {

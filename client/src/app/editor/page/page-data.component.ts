@@ -1,6 +1,6 @@
 import {Component, Input, OnInit}       from '@angular/core'
 
-import {QuerySelect}                    from '../../shared/query'
+import {Query}                          from '../../shared/query'
 import {
     Page, PageParameter,  QueryReference, QueryReferenceDescription
 } from '../../shared/page/index'
@@ -56,7 +56,7 @@ export class PageDataComponent implements OnInit {
      * @return Queries that could be referenced by this page.
      */
     get possibleQueries() {
-        return (this.project.queries.filter(q => q instanceof QuerySelect));
+        return (this.project.queries.filter(q => q.select));
     }
 
     /**

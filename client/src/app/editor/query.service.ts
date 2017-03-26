@@ -8,8 +8,7 @@ import {Observable}                              from 'rxjs/Observable'
 import {ServerApiService}                        from '../shared/serverapi.service'
 import {
     Model, loadQuery,
-    Query, QuerySelect, QueryDelete, QueryInsert,
-    SelectQueryResult, QueryRunErrorDescription,
+    Query, SelectQueryResult, QueryRunErrorDescription,
     CURRENT_API_VERSION
 } from '../shared/query'
 
@@ -97,7 +96,7 @@ export class QueryService {
             .map( (res) =>  {
                 // The result changes dependending on the concrete type
                 // of the query.
-                if (query instanceof QuerySelect) {
+                if (query.select) {
                     return (new SelectQueryResult(query, <any> res.json()))
                 } else {
                     return (undefined);

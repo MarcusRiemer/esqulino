@@ -1,4 +1,4 @@
-import {QuerySelect, ResultColumn}       from '../../../shared/query'
+import {Query, ResultColumn}             from '../../../shared/query'
 
 import {Page, QueryReference}            from '../page'
 import {QueryTableDescription}           from '../page.description'
@@ -69,10 +69,10 @@ export class QueryTable extends WidgetBase {
     /**
      * @return True, if this reference can be resolved on the current page.
      */
-    get hasValidReference() {
+    get hasValidReference() : boolean {
         return (this.page.usesQueryReferenceByName(this.queryReferenceName) &&
                 this.queryReference.isResolveable &&
-                this.queryReference.query instanceof QuerySelect);
+                !!this.queryReference.query.select);
     }
 
     set columnNames(value : string[]) {
@@ -95,8 +95,7 @@ export class QueryTable extends WidgetBase {
             // 1) Get the reference itself
             const ref = this.queryReference
             // 2) Resolve the reference to the actual query
-            const query = ref.query as QuerySelect;
-            const possibleColumns = query.select.actualColums;
+            const possibleColumns = ref.query.select.actualColums;
             // 3) Pick the columns that are wished by the user
             const columns = this.columnNames
                 .map(name => possibleColumns.find(col => col.shortName == name))
@@ -114,11 +113,8 @@ export class QueryTable extends WidgetBase {
     get availableColumns() : ResultColumn[] {
         if (this.queryReference &&
             this.queryReference.isResolveable &&
-            this.queryReference.query instanceof QuerySelect) {
-
-            const query = this.queryReference.query as QuerySelect;
-            const columns = query.select.actualColums
-            return (columns);
+            this.queryReference.query.select) {
+            return (this.queryReference.query.select.actualColums);
             
         } else {
             return ([]);
@@ -133,8 +129,7 @@ export class QueryTable extends WidgetBase {
         if (this.hasValidReference) {
             // Compute all possible columns
             const ref = this.queryReference;
-            const query = ref.query as QuerySelect;
-            const possibleColumns = query.select.actualColums;
+            const possibleColumns = ref.query.select.actualColums;
 
             this.columnNames = possibleColumns.map(c => c.shortName);
 

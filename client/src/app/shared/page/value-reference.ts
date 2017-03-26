@@ -4,7 +4,7 @@ import {
 
 
 import {Project}                               from '../project'
-import {QuerySelect, ResultColumn}             from '../query'
+import {Query, ResultColumn}                   from '../query'
 
 import {
     ValueReferenceDescription, ColumnReferenceDescription,
@@ -214,7 +214,7 @@ export class QueryReference extends ValueReference {
      * @return True, if the referenced query has output columns.
      */
     get hasColumns() : boolean {
-        return (this.isResolveable && this.query instanceof QuerySelect);
+        return (this.isResolveable && !!this.query.select);
     }
 
     /**
@@ -222,8 +222,7 @@ export class QueryReference extends ValueReference {
      */
     get columns() {
         if (this.hasColumns) {
-            const selectQuery = this.query as QuerySelect;
-            const columns = selectQuery.select.actualColums;
+            const columns = this.query.select.actualColums;
 
             return (columns);
         } else {

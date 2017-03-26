@@ -11,7 +11,7 @@ import {
     ValidationErrors, ValidationResult, Validateable
 } from '../validation'
 
-import {QueryFrom}                            from '../base'
+import {Query}                                from '../base'
 
 import {
     Component, ExpressionParent, Removable
@@ -106,9 +106,9 @@ export abstract class Expression implements ExpressionParent, Removable, Validat
 
         if (!(com instanceof Component)) {
             throw new Error("Expression has no access to FROM-component");
+        } else {
+            return com.query.from;
         }
-
-        return (com.query as QueryFrom).from;
     }
 
     /**

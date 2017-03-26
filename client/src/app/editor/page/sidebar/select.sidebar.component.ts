@@ -1,6 +1,6 @@
 import {Component, Inject, Optional}   from '@angular/core'
 
-import {QuerySelect, ResultColumn}     from '../../../shared/query'
+import {Query, ResultColumn}           from '../../../shared/query'
 import {Select}                        from '../../../shared/page/widgets/index'
 
 import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
@@ -36,7 +36,7 @@ export class SelectSidebarComponent {
      */
     get availableQueries() {
         if (this._component.page) {
-            return (this._component.page.referencedQueries.filter(q => q.isResolveable && q.query instanceof QuerySelect));
+            return (this._component.page.referencedQueries.filter(q => q.isResolveable && q.query.select));
         } else {
             return ([]);
         }
@@ -54,9 +54,7 @@ export class SelectSidebarComponent {
      */
     get availableColumns() : ResultColumn[] {
         if (this.currentQueryReference && this.currentQueryReference.isResolveable) {
-            const query = this.currentQueryReference.query as QuerySelect;
-
-            return (query.select.actualColums);
+            return (this.currentQueryReference.query.select.actualColums);
         } else {
             return ([]);
         }

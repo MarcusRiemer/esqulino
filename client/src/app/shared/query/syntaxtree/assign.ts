@@ -1,24 +1,26 @@
-import {Schema, ColumnDescription}        from '../schema'
+import {Schema, ColumnDescription}            from '../../schema'
 
-import {Query}                            from './base'
+import * as Model                             from '../description'
+import {ValidationResult}                     from '../validation'
+import {Query}                                from '../base'
 
-import {loadExpression, Expression}       from './syntaxtree'
-import {ValidationResult, Validateable}   from './validation'
-
-import * as Model                         from './description'
-import * as SyntaxTree                    from './syntaxtree'
+import {
+    Component, Expression, Removable, loadExpression
+} from './common'
 
 interface ColumnAssignment {
     columnName : string
     expr : Expression
 }
 
+type AssignType = "UPDATE" | "INSERT";
+
 /**
- * An SQL-query that assigns key-value-pairs. This is the
+ * An SQL-component that assigns key-value-pairs. This is the
  * base class for INSERT and UPDATE, which have a *very* similar.
  * internal model.
  */
-export abstract class QueryAssign extends Query {
+export abstract class Assign extends Component {
 
     // The table this query inserts something into.
     private _tableName : string;
@@ -26,20 +28,23 @@ export abstract class QueryAssign extends Query {
     // The currently stored values
     private _values : ColumnAssignment[] = [];
 
+    private _type : AssignType;
+
     /**
      * Constructs a new INSERT or UPDATE Query from a model and matching
      * to a schema.
      */
-    constructor(schema : Schema, model : Model.QueryDescription) {
-        super (schema, model);
+    constructor(theType : AssignType,
+                model : Model.Insert | Model.Update,
+                query : Query) {
+        super (query);
 
         // Switch over the concrete type
-        const queryDesc = (!!model.insert) ? model.insert : model.update;
-        this._tableName = queryDesc.table;
+        this._tableName = model.table;
+        this._type = theType;
 
         // Grab the correct assignments
-        const assignments = (!!model.insert) ? model.insert.assignments : model.update.assignments;
-        assignments.forEach( (desc) => {
+        model.assignments.forEach( (desc) => {
             this._values.push({
                 columnName : desc.column,
                 expr : loadExpression(desc.expr, this)
@@ -48,6 +53,10 @@ export abstract class QueryAssign extends Query {
 
     }
 
+    get schema() : Schema {
+        return (this.query.schema);
+    }
+    
     /**
      * @return All columns these assignments would use.
      */
@@ -74,6 +83,15 @@ export abstract class QueryAssign extends Query {
      */
     get tableName() : string {
         return (this._tableName);
+    }
+
+    set tableName(newName : string) {
+        this._tableName = newName;
+        this.fireModelChange();
+    }
+
+    getLeaves() : Expression[] {
+        return (this.values);
     }
 
     /**
@@ -110,7 +128,7 @@ export abstract class QueryAssign extends Query {
             }
         } else {
             // Is it already deactivated?
-            if (alreadyActivated == false) {
+            if (!alreadyActivated) {
                 // It shouldn't be
                 const column = this.schema.getColumn(this.tableName, columnName);
                 throw new Error(`Deactivating: Column "${column.name}" is already deactivated`);
@@ -122,7 +140,7 @@ export abstract class QueryAssign extends Query {
         }
 
         // If the program flow reaches this point, a change has been made
-        this.markSaveRequired();
+        this.fireModelChange();
     }
 
     getLocationDescription() {
@@ -134,27 +152,67 @@ export abstract class QueryAssign extends Query {
         
         if (replaceIndex >= 0) {
             this._values[replaceIndex].expr = newChild;
-            this.markSaveRequired();
+            this.fireModelChange();
         } else {
             throw new Error("Could not find child");
         }
     }
 
-    removeChild(formerChild : SyntaxTree.Removable) : void {
+    removeChild(formerChild : Removable) : void {
         throw new Error("Not implemented");
     }
 
-    protected validateImpl(schema : Schema) : ValidationResult {
+    /**
+     * Serializes the whole query to the "over-the-wire" format.
+     * @return The "over-the-wire" JSON representation
+     */
+    toModel() : Model.Update | Model.Insert {
+        return ({
+            table : this.tableName,
+            assignments : this.assignments.map(v => {
+                return ({
+                    expr : v.expr.toModel(),
+                    column : v.columnName
+                });
+            })
+        });
+    }
+
+    validate(schema : Schema) : ValidationResult {
         return (new ValidationResult([], this._values.map(v => v.expr.validate(schema))));
+    }
+}
+
+export class Update extends Assign {
+    constructor(model : Model.Insert | Model.Update,
+                query : Query) {
+        super("UPDATE", model, query);
+    }
+
+    toSqlString() : string {
+        const values = this.assignments
+            .map(a => `${a.columnName} = ${a.expr.toSqlString()}`)
+            .join(", ");
+        
+        let toReturn = `UPDATE ${this.tableName}\nSET ${values}`;
+        
+        return (toReturn);
+    }
+}
+
+export class Insert extends Assign {
+    constructor(model : Model.Insert | Model.Update,
+                query : Query) {
+        super("INSERT", model, query);
     }
 
     /**
      * Calculates the SQL String representation of this query.
      */
-    protected toSqlStringImpl() : string {
+    toSqlString() : string {
         const columnNames = this.activeColumns.map(c => c.name).join(", ");
         const expressions = this.values.map(v => v.toSqlString()).join(", ");
     
-        return (`INSERT INTO ${this._tableName} (${columnNames})\nVALUES (${expressions})`);
+        return (`INSERT INTO ${this.tableName} (${columnNames})\nVALUES (${expressions})`);
     }
 }
