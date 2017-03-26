@@ -32,7 +32,7 @@
         </div>
       </div>
       <!-- Actual rows, structure identical to above -->
-      <template ngFor let-row [ngForOf]="page?.children" let-rowIndex="index">
+      <ng-template ngFor let-row [ngForOf]="page?.children" let-rowIndex="index">
         <div (dragover)="onBlueprintRowDrag($event, rowIndex + 1)"
              (drop)="onBlueprintRowDrop($event, rowIndex + 1)"
              (dragstart)="startRowDrag($event, row, rowIndex)"
@@ -70,7 +70,7 @@
             <h4><span class="fa fa-plus"></span></h4>
           </div>
         </div>
-      </template>
+      </ng-template>
     </div>
   </div>
 </div>
