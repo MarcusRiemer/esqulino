@@ -1,9 +1,7 @@
 import {Schema, ColumnDescription}        from '../schema'
 
-import * as Model                         from './description'
-import * as SyntaxTree                    from './syntaxtree'
+import {Model, SyntaxTree, QueryWhere}    from './base'
 import {QueryAssign}                      from './assign'
-import {QueryWhere}                       from './base'
 
 /**
  * An SQL UPDATE query.

@@ -9,10 +9,11 @@ import { ServerApiService }                         from '../shared/serverapi.se
 import { KeyValuePairs, encodeUriParameters }       from '../shared/util'
 
 import { Project }                                  from './project.service'
-import { Table, Column }                            from '../shared/schema/'
+import { Table, Column}                             from '../shared/schema/'
+import {TableCommandHolder}                         from '../shared/schema/table-commands'
 
 /**
- * Service to hold, get und send data from a schema.
+ * Service to hold, get and send data from a schema.
  */
 @Injectable()
 export class SchemaService {
@@ -69,11 +70,70 @@ export class SchemaService {
         return (toReturn);
     }
 
+    /**
+     * Function to save a newly created table inside the database
+     * @param project - the current project
+     * @param table - the table to create inside the database
+     */
+    saveNewTable(project : Project, table : Table) : Observable<Table>{
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        const url = this._server.getCreateTableUrl(project.id, project.currentDatabaseName);
+
+        const body = JSON.stringify(table.toModel());
+
+        const toReturn = this._http.post(url, body, options) 
+            .map( (res) => {
+                project.schema.tables.push(table);
+                return table;
+            })
+            .catch(this.handleError);
+        return(toReturn);
+    }
+
+    /**
+     * Function send table commands to alter a table
+     * @param project - the current project
+     * @param table - the table alter
+     */
+    sendAlterTableCommands(project : Project, tableName : string, commandHolder : TableCommandHolder) : Observable<Table>{
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        const url = this._server.getTableAlterUrl(project.id, project.currentDatabaseName, tableName);
+
+        const body = JSON.stringify(commandHolder.toModel());
+
+        const toReturn = this._http.post(url, body, options)
+            .catch(this.handleError);
+        return(toReturn);
+    }
+
+    /**
+     * Function to delete a table inside the database
+     * @param project - the current project
+     * @param table - the table to delete
+     */
+    deleteTable(project : Project, table : Table) : Observable<Table>{
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        const url = this._server.getDropTableUrl(project.id, project.currentDatabaseName, table.name);
+
+        const toReturn = this._http.delete(url, options) 
+            .map( (res) => {
+                return table;
+            })
+            .catch(this.handleError);
+        return(toReturn);
+    }
+
 
     private handleError(error: Response) {
         // in a real world app, we may send the error to some remote logging infrastructure
         // instead of just logging it to the console
-        console.error(error);
+        console.error(error.json());
         return Observable.throw(error);
     }
 

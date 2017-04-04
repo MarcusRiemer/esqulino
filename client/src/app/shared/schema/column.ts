@@ -49,4 +49,15 @@ export class Column {
         }
         return("undefined");
     }
+
+    toModel() : ColumnDescription {
+        return {
+            index : this.index,
+            name: this.name,
+            primary : this.primary,
+            type : this.type,
+            not_null : this.not_null,
+            dflt_value : this.dflt_value
+        }
+    }
 }

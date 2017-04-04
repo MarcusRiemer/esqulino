@@ -25,11 +25,15 @@ export class Table {
      * Adds an empty column to the table.
      */
     addColumn() {
-        var newColumn : ColumnDescription = {name : "New Column",
-                                             index : this._columns.length,
+        let newIndex = 0;
+        while(this.getColumnByIndex(newIndex)) {
+            newIndex++;
+        }
+        var newColumn : ColumnDescription = {name : "New_Column",
+                                             index : newIndex,
                                              not_null : false,
                                              primary : false,
-                                             type : "STRING"};
+                                             type : "TEXT"};
         this._columns.push(new Column(newColumn, ColumnStatus.new));
     }
 
@@ -95,9 +99,30 @@ export class Table {
     }
 
     /**
+     * Function to get a column by it index value
+     * @param index - the index of the searched column
+     * @return: The column with the index
+     */
+    getColumnByIndex(index : number) : Column {
+        return this._columns.find(col => col.index == index);
+    }
+
+    /**
      * @return: Gives all foreign keys of this table.
      */
     get foreign_keys() {
         return this._foreign_keys;
+    }
+
+    /**
+     * Function to create a json representation to send it 
+     * to the server.
+     */
+    toModel() : TableDescription {
+        return {
+            name : this._name,
+            columns : this._columns.map(val => val.toModel()),
+            foreign_keys : this._foreign_keys
+        }
     }
 }

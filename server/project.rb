@@ -4,8 +4,9 @@ require 'securerandom' # To generate UUIDs
 require 'fileutils'    # To create directory trees
 require 'scrypt'
 
-require './project/query.rb'
-require './project/page.rb'
+require_relative './schema-utils.rb'
+require_relative 'project/query.rb'
+require_relative 'project/page.rb'
 
 # Represents an esqulino project. Attributes of this
 # class are loaded lazily on demand, so there is no harm
@@ -247,8 +248,20 @@ class Project
   # @return [Hash] { columns :: List, rows :: List of List }
   #                
   def execute_sql(sql, params)
-    db = SQLite3::Database.new(self.file_path_sqlite, :read_only => @read_only)
+    db = sqlite_open_augmented(self.file_path_sqlite, :read_only => @read_only)
     db.execute("PRAGMA foreign_keys = ON")
+
+    #TODO: REMOVE THIS!!
+    db.create_function('regexp', 2) do |func, pattern, expression|
+        unless expression.nil? #expression.to_s.empty?
+          func.result = expression.to_s.match(
+            Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
+        else
+          # Return true if the value is null, let the DB handle this
+          func.result = 1
+        end   
+      end
+
 
     begin
       # execute2 returns the names of the columns in the first row. But we want

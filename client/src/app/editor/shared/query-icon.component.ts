@@ -8,7 +8,7 @@ import {
  * Renders a matching icon for a query.
  */
 @Component({
-    template: '<span class="fa {{ iconForQuery(query) }} fa-fw"></span><template [ngIf]="showName">{{ query?.name }}</template>',
+    template: '<span class="fa {{ iconForQuery(query) }} fa-fw"></span><ng-template [ngIf]="showName">{{ query?.name }}</ng-template>',
     selector: 'query-icon'
 })
 export class QueryIconComponent {
