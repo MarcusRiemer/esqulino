@@ -5,11 +5,10 @@ import {BehaviorSubject}                         from 'rxjs/BehaviorSubject'
 import {AsyncSubject}                            from 'rxjs/AsyncSubject'
 import {Observable}                              from 'rxjs/Observable'
 
-import {ServerApiService}                        from '../shared/serverapi.service'
+import {ServerApiService, CURRENT_API_VERSION}   from '../shared/'
 import {
     Model, loadQuery,
     Query, SelectQueryResult, QueryRunErrorDescription,
-    CURRENT_API_VERSION
 } from '../shared/query'
 
 import {Project, ProjectDescription}             from './project.service'

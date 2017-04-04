@@ -11,8 +11,6 @@ import {
     ValidationErrors, ValidationResult, Validateable
 } from '../validation'
 
-import {Query}                                from '../base'
-
 import {
     Component, ExpressionParent, Removable
 } from './common'

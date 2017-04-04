@@ -1,9 +1,10 @@
 import {Schema}                  from '../schema'
+import {CURRENT_API_VERSION}     from '../index'
 
-import {
-    Model, SyntaxTree, CURRENT_API_VERSION
-} from './base'
-import {QueryDelete}             from './delete'
+import * as Model                from './description'
+import * as SyntaxTree           from './syntaxtree'
+import {Query}                   from './base'
+import {ValidationErrors}        from './validation'
 
 let schema  = new Schema([
     {
@@ -90,7 +91,7 @@ describe('Valid DELETE Queries', () => {
             }
         }
 
-        let q = new QueryDelete(schema, model);
+        let q = new Query(schema, model);
         expect(q.getLeaves().length).toEqual(0);
         expect(q.toSqlString()).toEqual("DELETE\nFROM person");
 
@@ -129,7 +130,7 @@ describe('Valid DELETE Queries', () => {
             }
         }
 
-        let q = new QueryDelete(schema, model);
+        let q = new Query(schema, model);
 
         const leaves = q.getLeaves();
         expect(leaves.length).toEqual(2);

@@ -7,11 +7,12 @@ import {
 } from '../validation'
 
 import {
-    loadExpression, MissingExpression
-} from './expression'
-import {
     Component, Expression, ExpressionParent, Removable
 } from './common'
+
+import {
+    loadExpression, MissingExpression
+} from './expression'
 
 
 /**

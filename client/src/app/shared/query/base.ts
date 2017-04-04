@@ -1,14 +1,12 @@
 import {Project}                              from '../project'
 import {ProjectResource, CURRENT_API_VERSION} from '../resource'
-
 import {Schema}                               from '../schema'
+
 import {
     Validateable, ValidationResult, ValidationError, ValidationErrors
 } from './validation'
 import * as Model                             from './description'
 import * as SyntaxTree                        from './syntaxtree'
-
-export {Model, SyntaxTree, CURRENT_API_VERSION}
 
 /**
  * Facade for a query that allows meaningful mapping to the UI.
@@ -43,7 +41,7 @@ export class Query extends ProjectResource implements SyntaxTree.RemovableHost, 
         this._singleRow = !!model.singleRow;
 
         if (model.insert) {
-            this._components.insert = new SyntaxTree.Insert(model.update, this);
+            this._components.insert = new SyntaxTree.Insert(model.insert, this);
         }
         
         if (model.select) {
@@ -265,4 +263,15 @@ export interface ResultColumn {
     // The expression that results in this column. Careful: This
     // may be a StarExpression.
     expr : SyntaxTree.Expression
+}
+
+/**
+ * Maps the given model to the correct type of query.
+ *
+ * @param toLoad The model to load
+ *
+ * @return A correct instance of a Query
+ */
+export function loadQuery(toLoad : Model.QueryDescription, schema : Schema, project : Project) : Query {
+    return (new Query(schema, toLoad));
 }
