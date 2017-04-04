@@ -1,8 +1,8 @@
 import {Schema, ColumnDescription}            from '../../schema'
 
-import * as Model                             from '../description'
-import {ValidationResult}                     from '../validation'
+import {Update, Insert}                       from '../description'
 import {Query}                                from '../base'
+import {Validateable, ValidationResult}       from '../validation'
 
 import {
     Component, Expression, Removable, loadExpression
@@ -12,8 +12,6 @@ interface ColumnAssignment {
     columnName : string
     expr : Expression
 }
-
-type AssignType = "UPDATE" | "INSERT";
 
 /**
  * An SQL-component that assigns key-value-pairs. This is the
@@ -28,20 +26,16 @@ export abstract class Assign extends Component {
     // The currently stored values
     private _values : ColumnAssignment[] = [];
 
-    private _type : AssignType;
-
     /**
      * Constructs a new INSERT or UPDATE Query from a model and matching
      * to a schema.
      */
-    constructor(theType : AssignType,
-                model : Model.Insert | Model.Update,
+    constructor(model : Insert | Update,
                 query : Query) {
         super (query);
 
         // Switch over the concrete type
         this._tableName = model.table;
-        this._type = theType;
 
         // Grab the correct assignments
         model.assignments.forEach( (desc) => {
@@ -166,7 +160,7 @@ export abstract class Assign extends Component {
      * Serializes the whole query to the "over-the-wire" format.
      * @return The "over-the-wire" JSON representation
      */
-    toModel() : Model.Update | Model.Insert {
+    toModel() : Update | Insert {
         return ({
             table : this.tableName,
             assignments : this.assignments.map(v => {
@@ -183,36 +177,3 @@ export abstract class Assign extends Component {
     }
 }
 
-export class Update extends Assign {
-    constructor(model : Model.Insert | Model.Update,
-                query : Query) {
-        super("UPDATE", model, query);
-    }
-
-    toSqlString() : string {
-        const values = this.assignments
-            .map(a => `${a.columnName} = ${a.expr.toSqlString()}`)
-            .join(", ");
-        
-        let toReturn = `UPDATE ${this.tableName}\nSET ${values}`;
-        
-        return (toReturn);
-    }
-}
-
-export class Insert extends Assign {
-    constructor(model : Model.Insert | Model.Update,
-                query : Query) {
-        super("INSERT", model, query);
-    }
-
-    /**
-     * Calculates the SQL String representation of this query.
-     */
-    toSqlString() : string {
-        const columnNames = this.activeColumns.map(c => c.name).join(", ");
-        const expressions = this.values.map(v => v.toSqlString()).join(", ");
-    
-        return (`INSERT INTO ${this.tableName} (${columnNames})\nVALUES (${expressions})`);
-    }
-}

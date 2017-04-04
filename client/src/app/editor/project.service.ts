@@ -12,7 +12,7 @@ import {
 
 import {
     Model, Query, SelectQueryResult, QueryRunErrorDescription
-} from '../shared/query'
+} from '../shared/query/index'
 
 export {Project, ProjectDescription}
 
@@ -90,6 +90,11 @@ export class ProjectService {
                     this._httpRequest = undefined
                 },
                 (error : Response) => {
+                    if (error instanceof Error) {
+                        console.log(error);
+                    } 
+                    
+
                     // Something has gone wrong, pass the error on to the subscribers
                     // of the project and hope they know what to do about it.
                     console.log(`Project Service: HTTP error with request for specific project ("${url}") => "${error.status}: ${error.statusText}"`);
@@ -98,6 +103,7 @@ export class ProjectService {
                     this._subject = new BehaviorSubject<Project>(undefined);
 
                     this._httpRequest = undefined
+                    
                 }
             )
     }

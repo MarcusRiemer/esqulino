@@ -1,6 +1,7 @@
 import {RequestErrorDescription}              from '../serverapi.service'
 
-import {Model, Query}                         from './base'
+import * as Model                             from './description'
+import {Query}                                from './base'
 
 /**
  * Not much ado about type safety here, in the raw
