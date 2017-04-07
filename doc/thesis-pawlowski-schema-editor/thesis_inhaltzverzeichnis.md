@@ -5,7 +5,10 @@
 # Vergleichbare Arbeiten
 * SQLite Browser
 * MySQL Workbench
-* Scratch
+* FF SQLite Manager
+* Heidi SQL
+* PHP-MyAdmin
+* Scratch(Nur wenn eingebaut)
 
 # Anforderungsanalyse
 
@@ -27,7 +30,7 @@
   * Tabelleninhalte
   * FK-Beziehungen
     * Allgemein
-    * Graphiz
+    * Graphviz
 
 ### Editor (D&D Berücksichtigung)
 * Was soll veränderbar sein

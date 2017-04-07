@@ -236,7 +236,6 @@ def column_to_create_statement(schema_column)
   end
   unless schema_column.dflt_value.nil?
     createStatement.concat("DEFAULT #{schema_column.dflt_value}")
-    puts schema_column.dflt_value
   end
   return createStatement
 end
