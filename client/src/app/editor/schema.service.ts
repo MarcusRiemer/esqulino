@@ -12,11 +12,19 @@ import { Project }                                  from './project.service'
 import { Table, Column}                             from '../shared/schema/'
 import {TableCommandHolder}                         from '../shared/schema/table-commands'
 
+interface CurrentlyEdited {
+    table : Table
+    stack : any
+}
+
 /**
  * Service to hold, get and send data from a schema.
  */
 @Injectable()
 export class SchemaService {
+
+    private _currentlyEdited : CurrentlyEdited;
+
     /**
      * @param _http Used to do HTTP requests
      * @param _server Used to figure out paths for HTTP requests

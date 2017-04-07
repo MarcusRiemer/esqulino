@@ -1,0 +1,47 @@
+\begin{figure}[ht]
+    \frame{\includegraphics[width=\textwidth]{images/dummy.png}}
+        \centering
+        \caption{captiontext}
+        \label{pic:}
+\end{figure}
+
+
+\begin{figure}[h]
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{images/dummy.png}
+    \caption{Manuell Rückgängig}
+    \label{fig:stack_self}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{images/dummy.png}
+    \caption{Nutzung von Undo}
+    \label{fig:stack_undo}
+  \end{subfigure}
+  \caption{Vergleich manuell Rückgängig vs. Undo}
+  \label{fig:self_vs_undo}
+\end{figure}
+
+
+
+\lstinputlisting[
+  language=javascript,
+  caption=Unit-Test für eine korrekte \texttt{SELECT}-Abfrage,
+  label=lst:unit-test-example,
+  float=p,
+  numbers=left
+]{snippets/unit-test-example.ts}
+
+
+
+\subsubsection{Navigation}
+\label{subsubsec04:navigation}
+
+Nachdem für die Anzeige des Schemas~\ref{subsubsec04:anz_schema} die nötigsten Aspekte implemtiert waren, konnte man die anderen Komponenten implementieren.
+Dafür musste zuerst entschieden werden wie die genaue Navigation zu
+
+
+
+\begin{description}
+\item[] \hfill\\
+
+\end{description}

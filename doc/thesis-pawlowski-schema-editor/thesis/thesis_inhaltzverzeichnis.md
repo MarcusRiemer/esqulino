@@ -43,9 +43,9 @@
   * Schema
     * Anzeige
     * Graphiz
-  * Dabelleninhalte
+  * Tabelleninhalte
     * Anzeige
-    * Abfragen
+    * Abfragen [Server Teil?]
   * Editor
     * Generell
     * Command-Pattern
