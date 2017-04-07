@@ -1,4 +1,5 @@
-import {Model, SyntaxTree}                       from '../base'
+import * as Model                                from '../description'
+import * as SyntaxTree                           from '../syntaxtree'
 
 describe('WHERE', () => {
     it('with a constant truthy value', () => {

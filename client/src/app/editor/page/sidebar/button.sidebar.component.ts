@@ -1,6 +1,6 @@
 import {Component, Inject, Optional}   from '@angular/core'
 
-import {QuerySelect}                   from '../../../shared/query'
+import {Query}                         from '../../../shared/query'
 import {QueryReference}                from '../../../shared/page/index'
 import {Button}                        from '../../../shared/page/widgets/index'
 
@@ -82,7 +82,7 @@ export class ButtonSidebarComponent {
      * @return All actionable queries, i.e. no SELECTs
      */
     get availableQueries() {
-        return (this.project.queries.filter(q => !(q instanceof QuerySelect)))
+        return (this.project.queries.filter(q => !(q.select)))
     }
 
     /**

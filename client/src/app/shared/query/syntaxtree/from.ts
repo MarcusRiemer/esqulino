@@ -7,11 +7,12 @@ import {
 } from '../validation'
 
 import {
-    loadExpression, MissingExpression
-} from './expression'
-import {
     Component, Expression, ExpressionParent, Removable
 } from './common'
+
+import {
+    loadExpression, MissingExpression
+} from './expression'
 
 
 /**
@@ -349,6 +350,10 @@ export class From extends Component {
      */
     get joinsAndInitial() : Join[] {
         return ([this._first].concat(this._joins));
+    }
+
+    getLeaves() : Expression[] {
+        return ([]);
     }
 
     /**

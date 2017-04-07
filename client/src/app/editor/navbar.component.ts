@@ -1,7 +1,7 @@
 import {Component, Input}    from '@angular/core'
 
 import {
-    Query, QuerySelect, QueryDelete, QueryInsert, QueryUpdate
+    Query
 } from '../shared/query'
 import {
     Page, QueryReference, QueryReferenceDescription

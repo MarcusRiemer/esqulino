@@ -2,14 +2,14 @@ import {Component, Input}               from '@angular/core'
 
 import {DragService, SqlDragEvent}      from './drag.service'
 
-import {QuerySelect, Model, SyntaxTree} from '../../shared/query'
+import {Query, Model, SyntaxTree}       from '../../shared/query'
 
 @Component({
     selector : 'sql-select',
     templateUrl : 'templates/query-select.html'
 })
 export class SelectComponent {
-    @Input() query : QuerySelect;
+    @Input() query : Query;
 
     constructor(public dragService : DragService) {
 

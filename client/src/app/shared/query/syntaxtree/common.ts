@@ -6,6 +6,7 @@ import {ModelObservable}                             from '../../interfaces'
 
 import * as Model                                    from '../description'
 import {Query}                                       from '../base'
+import {Validateable, ValidationResult}              from '../validation'
 
 import { Expression, loadExpression }                from './expression'
 
@@ -75,7 +76,7 @@ export interface ExpressionParent extends RemovableHost, Locateable {
  * models top level AND and OR conjunctions as top level components,
  * because this eases development for beginners.
  */
-export abstract class Component implements ModelObservable<Component> {
+export abstract class Component implements ModelObservable<Component>, Removable, Validateable {
     // The query this component is part of
     protected _query : Query;
 
@@ -105,11 +106,28 @@ export abstract class Component implements ModelObservable<Component> {
     }
 
     /**
+     * @return A validation report
+     */
+    abstract validate(schema : any) : ValidationResult;
+
+    /**
      * @return The query this component belongs to.
      */
     get query() : Query {
         return (this._query);
     }
+
+    /**
+     * Removes this component from the parenting query.
+     */
+    removeSelf() : void {
+        this._query.removeChild(this);
+    }
+
+    /**
+     * Retrieve all expression-leaves of this component
+     */
+    abstract getLeaves() : Expression[];
     
     /**
      * @return SQL String representation
@@ -121,4 +139,5 @@ export abstract class Component implements ModelObservable<Component> {
      */
     abstract toModel() : any;
 }
+
 

@@ -3,7 +3,7 @@ import {
 } from '@angular/core'
 
 import {Page, QueryReference}       from '../../../../shared/page/index'
-import {QuerySelect, ResultColumn}  from '../../../../shared/query'
+import {Query, ResultColumn}        from '../../../../shared/query'
 import {QueryTable}                 from '../../../../shared/page/widgets/index'
 
 import {ProjectService, Project}    from '../../../project.service'

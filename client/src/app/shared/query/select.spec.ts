@@ -1,9 +1,9 @@
 import {Schema}                  from '../schema'
+import {CURRENT_API_VERSION}     from '../index'
 
-import {
-    CURRENT_API_VERSION, Model, SyntaxTree
-} from './base'
-import {QuerySelect}             from './select'
+import * as Model                from './description'
+import * as SyntaxTree           from './syntaxtree'
+import {Query}                   from './base'
 import {ValidationErrors}        from './validation'
 
 let schema  = new Schema([
@@ -106,7 +106,7 @@ describe('Valid SELECT Queries', () => {
 
         };
 
-        const q = new QuerySelect(schema, model);
+        const q = new Query(schema, model);
         const s = q.select;
 
         expect(q.name).toEqual("test-whole");
@@ -166,7 +166,7 @@ describe('Valid SELECT Queries', () => {
             }
         };
 
-        const q = new QuerySelect(schema, model);
+        const q = new Query(schema, model);
         const s = q.select;
         expect(q.singleRow).toEqual(true);
 
@@ -222,7 +222,7 @@ describe('Valid SELECT Queries', () => {
             }
         };
 
-        let q = new QuerySelect(schema, model);
+        let q = new Query(schema, model);
         expect(q.name).toEqual("where-simple");
         expect(q.id).toEqual("where-1");
 
@@ -271,7 +271,7 @@ describe('Valid SELECT Queries', () => {
             }
         };
 
-        let q = new QuerySelect(schema, model);
+        let q = new Query(schema, model);
         expect(q.name).toEqual("where-compare");
         expect(q.id).toEqual("where-2");
 
@@ -308,7 +308,7 @@ describe('Invalid SELECT Queries', () => {
             }
         };
 
-        let q = new QuerySelect(schema, model);
+        let q = new Query(schema, model);
 
         const leaves = q.getLeaves();
         expect(leaves.length).toEqual(1);
@@ -337,7 +337,7 @@ describe('Invalid SELECT Queries', () => {
             }
         };
 
-        let q = new QuerySelect(schema, model);
+        let q = new Query(schema, model);
 
         expect(q.validate().isValid).toBeFalsy();
 
@@ -361,7 +361,7 @@ describe('Invalid SELECT Queries', () => {
             }
         };
 
-        let q = new QuerySelect(schema, model);
+        let q = new Query(schema, model);
 
         const leaves = q.getLeaves();
         expect(leaves.length).toEqual(2);
@@ -391,7 +391,7 @@ describe('Invalid SELECT Queries', () => {
             }
         };
 
-        let q = new QuerySelect(schema, model);
+        let q = new Query(schema, model);
 
         expect(q.isValid).toBeFalsy();
 
@@ -424,7 +424,7 @@ describe('Invalid SELECT Queries', () => {
             }
        };
 
-       let q = new QuerySelect(schema, model);
+       let q = new Query(schema, model);
 
        expect(q.isValid).toBeFalsy();
    });

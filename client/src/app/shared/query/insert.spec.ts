@@ -1,9 +1,10 @@
 import {Schema}                  from '../schema'
+import {CURRENT_API_VERSION}     from '../resource'
 
-import {
-    Model, SyntaxTree, CURRENT_API_VERSION
-} from './base'
-import {QueryInsert}             from './insert'
+import * as Model                from './description'
+import * as SyntaxTree           from './syntaxtree'
+import {Query}                   from './base'
+import {ValidationErrors}        from './validation'
 
 let schema  = new Schema([
     {
@@ -55,16 +56,17 @@ describe('INSERT', () => {
             }
         }
 
-        const q = new QueryInsert(schema, m);
-        q.changeActivationState("p3", true);
+        const q = new Query(schema, m);
+        const i = q.insert;
+        i.changeActivationState("p3", true);
 
-        expect(q.activeColumns.length).toEqual(2);
-        expect(q.activeColumns[0]).toEqual(schema.getColumn("person", "p1"));
-        expect(q.activeColumns[1]).toEqual(schema.getColumn("person", "p3"));
+        expect(i.activeColumns.length).toEqual(2);
+        expect(i.activeColumns[0]).toEqual(schema.getColumn("person", "p1"));
+        expect(i.activeColumns[1]).toEqual(schema.getColumn("person", "p3"));
 
-        expect(q.values.length).toEqual(2);
-        expect(q.values[0].templateIdentifier).toEqual("constant");
-        expect(q.values[1].templateIdentifier).toEqual("missing");
+        expect(i.values.length).toEqual(2);
+        expect(i.values[0].templateIdentifier).toEqual("constant");
+        expect(i.values[1].templateIdentifier).toEqual("missing");
     });
 
     it('deactivating previously used columns', () => {
@@ -83,11 +85,12 @@ describe('INSERT', () => {
             }
         }
 
-        const q = new QueryInsert(schema, m);
-        q.changeActivationState("p1", false);
+        const q = new Query(schema, m);
+        const i = q.insert;
+        i.changeActivationState("p1", false);
 
-        expect(q.activeColumns.length).toEqual(0);
-        expect(q.values.length).toEqual(0);
+        expect(i.activeColumns.length).toEqual(0);
+        expect(i.values.length).toEqual(0);
     });
 
     it('Error: activating or deactivating in same state', () => {
@@ -106,11 +109,12 @@ describe('INSERT', () => {
             }
         }
 
-        const q = new QueryInsert(schema, m);
+        const q = new Query(schema, m);
+        const i = q.insert;
 
-        expect( () => q.changeActivationState("p1", true)).toThrowError();
-        expect( () => q.changeActivationState("p2", false)).toThrowError();
-        expect( () => q.changeActivationState("p3", false)).toThrowError();
+        expect( () => i.changeActivationState("p1", true)).toThrowError();
+        expect( () => i.changeActivationState("p2", false)).toThrowError();
+        expect( () => i.changeActivationState("p3", false)).toThrowError();
     });
 
     it('retrieving columns', () => {
@@ -129,9 +133,10 @@ describe('INSERT', () => {
             }
         }
 
-        const q = new QueryInsert(schema, m);
-        expect(q.getValueForColumn("p1")).toBeTruthy();
-        expect(q.getValueForColumn("p2")).toBeFalsy();
+        const q = new Query(schema, m);
+        const i = q.insert;
+        expect(i.getValueForColumn("p1")).toBeTruthy();
+        expect(i.getValueForColumn("p2")).toBeFalsy();
     });
 
 });
@@ -161,8 +166,8 @@ describe('Valid INSERT Queries', () => {
             }
         }
 
-        const q = new QueryInsert(schema, m);
-        expect(q.activeColumns).toEqual(schema.tables[0].columns);
+        const q = new Query(schema, m);
+        expect(q.insert.activeColumns).toEqual(schema.tables[0].columns);
 
         const leaves = q.getLeaves();
         expect(leaves.length).toEqual(3);
@@ -194,7 +199,7 @@ describe('Valid INSERT Queries', () => {
             }
         }
 
-        const q = new QueryInsert(schema, m);
+        const q = new Query(schema, m);
         expect(q.isValid).toBeTruthy("Not valid");
 
         const leaves = q.getLeaves();
