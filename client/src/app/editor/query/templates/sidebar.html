@@ -61,7 +61,7 @@
 
   <div class="block-container block">
     <!-- Tables that are already present in the query are shown with their columns -->
-    <template ngFor let-join [ngForOf]="query?.from?.joinsAndInitial" let-last="last">
+    <ng-template ngFor let-join [ngForOf]="query?.from?.joinsAndInitial" let-last="last">
       <div (dragstart)="startTableDrag(join.tableName, $event)"
            class="table"
            draggable="true">
@@ -77,7 +77,7 @@
           </span>
         </li>
       </ul>
-    </template>
+    </ng-template>
     <!-- All other tables are only shown as table -->
     <div *ngFor="let table of query?.from?.unusedTables; let isLast=last"
          (dragstart)="startTableDrag(table.name, $event)"

@@ -1,7 +1,7 @@
 import {Schema}                  from '../schema'
 
 import {
-    Model, SyntaxTree, CURRENT_API_VERSION
+    CURRENT_API_VERSION, Model, SyntaxTree
 } from './base'
 import {QueryUpdate}             from './update'
 
