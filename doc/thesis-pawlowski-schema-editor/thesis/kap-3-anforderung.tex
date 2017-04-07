@@ -1,0 +1,132 @@
+\section{Anforderungsanalyse}
+\label{sec03:anforderungen}
+
+In dieser Analyse wird betrachtet, was in dem bereits vorhandenen Projekt integriert und mit welchen Programmiersprachen und Frameworks gearbeitet wurde. Die Zielgruppe dieser Software wird betrachtet, um bei weiteren Entscheidungen diese mit einzubeziehen. \\
+Es wird zusätzlich entschieden, welche einzelnen Funktionen diese hier zu entwickelnde Erweiterung zur Verfügung stellen soll.
+
+\subsection{Vorhandenes Projekt}
+\label{subsec03:bereits_vorhanden_projekt}
+In diesem Abschnitt wird das bereits vorhandene Projekt mit den benutzten Programmiersprachen und Frameworks beschrieben.
+
+\subsubsection{Allgemein}
+\label{subsubsec03:allgemein}
+
+\begin{description}
+\item[BlattWerkzeug] \hfill\\
+Die Software namens ``BlattWerkzeug'' wurde von Marcus Riemer für seine Master-Thessis an der Fachhochschule Wedel entwickelt. ``BlattWerkzeug'' ist eine Lernsoftware die an Kinder und Jugendliche gerichtet ist, mit welcher die Themen der Datenmodellierung und Weboberflächen-Entwicklung gelehrt werden sollen.
+
+\item[Verwendete Frameworks] \hfill\\
+Die in dem Projekt verwendeten Framworks Angular 2 und Ruby mit Sinatra, werden für die Client- und Server Architektur verwendet.
+
+\item[Angular 2] \hfill\\
+Angular 2\footnote{\url{https://angular.io/}}  ist ein von Google enwickeltes Javascript basiertes Webframework. Angular 2 wurde für die Entwicklung des Front-Ends für ``BlattWerkzeug'' verwendet. Die ganze Visualisierung wird Clientseitig realisiert, die Abfragen zum Server werden damit auf das wichtigste eingeschrenkt. Der Entwickler schrieb in seiner Thesis: 
+\begin{quote}
+``[..]bietet sich eine rein clientseitige Visualisierung an, die weitestgehend auf Roundtrips zum Server verzichtet. Außer für den Zugriff auf serverseitige Resourcen (Datenbank, gespeicherte Ressourcen, gerenderte Seiten) werden alle Operationen im Browser ausgeführt.'' \footnote{TODO:URL Thesis Marcus}\todo{Thesis von Marcus verlinken}%
+\end{quote} 
+
+\item[Ruby mit Sinatra] \hfill\\
+Der Server wurde mit Ruby mit dem Zusatz der Sinatra Library\footnote{\url{http://www.sinatrarb.com/}} entwickelt. Sintra stützt sich dabei auf dem \texttt{REST}-Prinzip, und verwendet \texttt{JSON} als Schnittstelle zur Kommunikation zwischen dem Server und dem Client.
+
+\item[Datenbank] \hfill\\
+Das in der Software verwendete Datenbanksystem SQLite, ist eine SQL-Programmierbibliothek. SQLite enthält den großteil der SQL-Sprachbefehle, bietet aber nur eingeschrenkte Möglichkeiten der Migration einer vorhandene Datenbank.
+
+\end{description}
+
+
+\subsubsection{Zielgruppe}
+\label{subsubsec03:zielgruppe}
+
+Wie schon im im Abschnitt Allgemein~\ref{subsubsec03:allgemein} angesprochen, ist die Zielgruppe Kinder und Jugendliche, denen die Entwicklung von Weboberflächen und die Verwendung von Datenbanken gelehrt werden soll. Einige Grundkenntnisse sind laut Entwickler hilfreich für die Verwendung von BlattWerkzeug. Diese sind ber sehr minimal, ein größeres Verstädniss im Bereich Informatik ist nicht notwendig. Für die beiden Hauptthemen, ``Verwendung von Datenbanken'' und ``Entwicklung von Weboberflächen'', sind keinerlei Vorwissen von nöten. 
+
+\subsubsection{Drag \& Drop}
+\label{subsubsec03:dragAndDrop}
+
+Die Hauptbedienung der Software für den Endbenutzer ist durch Drag \& Drop möglich. Die Verwendung der Software soll einheitlich in allen Teilen der Software sein.
+
+\subsection{Anforderungen}
+\label{subsec03:was_benoetigt}
+
+\subsubsection{Barücksichtigung Zielgruppe}
+\label{subsubsec03:zielgruppe_beruecksichtigung}
+
+Die Zielgruppe~\ref{subsubsec03:zielgruppe} der Software mit der Berücksichtung, dass diese Software als Lernsoftware zu verwenden ist, ist der Hauptpunkt der zu berücksichtigen ist, bei der Entwicklung der weiteren Komponente.
+Dabei ist der Unterschied einer Lernsoftware und einer reinen Anwendungssoftware eine Frage die sich immer wieder Stellt und für jeden Fall einzeln entschieden werden. Diese Frage wird in den folgenden Auflistungen der Anforderungsanalyse der einzelnen Bereiche und der Implementierung~\ref{sec:implementierung} dieser, Diskutiert und einzeln beantwortet werden.
+
+\subsubsection{Zu entwickelnde Erweiterung}
+\label{subsubsec03:zu_entwickeln}
+
+Die Erweiterung soll es ermöglichen Datenbanken anzulegen und darzustellen. Dabei muss darauf geachtet werden, dass die Gestaltung equivalent zu dem bereits vorhandenen Projekt ist.
+Das generelle Layout der bereits vorhandenen Komponenten ist in der Grafik~\ref{pic:layout}\footnote{TODO: Marcus Thesis}\todo{Thesis von Marcus verlinken}%
+dargestellt.
+
+\begin{figure}[ht]
+    \frame{\includegraphics[width=\textwidth]{images/kap-3-general-editor-ui.png}}
+        \centering
+        \caption{Layout der Komponenten}
+        \label{pic:layout}
+\end{figure}
+
+An diesem Layout wird sich die Darstellung der Erweiterung orientieren, um ein einheitliches Aussehen der Software zu gewährleisten. 
+Die Bedienung der einzelnen Elemente sollte das schon vorhandene Prinzip des Drag \& Drops~\ref{subsubsec03:dragAndDrop} ermöglichen. 
+
+Die Implementierung des Drag \& Drops ist schon in der Software für die bereits vorhandenen Komponenten realisier worden. In dieser Thesis wird dieser Aspekt berücksichtigt, um ein Einbinden des Drag \& Drops zu ermöglichen, ist aber direkt nicht der Teil der Thesis.
+
+Die zu entwickelnde Komponente lässt sich in folgende zwei sehr grobe Abschnitte unterteilen:
+\begin{description}
+
+\item[Darstellung der Datenbank] \hfill\\
+Die Darstellung der Datenbank muss dem generellen Layout und Interface der schon vorhandenen Software übereinstimmen. Desweiteren muss die Zielgruppe in betracht gezogen werden. Die Darstellung muss einfach zu verstehen sein und gleichzeitig alle wichtigen Informationen besitzen, die für die Arbeit mit der Datenbank notwendig sind.
+Es sollte dabei darauf geachtet werden, dass die Anfängerfreundlichkeit den Konventionen der Darstellung etablierter Software ähnelt. Damit werden die Schüler, die mit BlattWerkzeug ihre ersten Schritte machen, an Darstellungen gewöhnt werden die sie später wiederfinden werden.
+
+Die erste Ansicht die darzustellen ist, sollte eine Übersicht des ganzen Schemas sein. Darin sollten alle vorhandenen Tabellen auf einen Blick zu sehen sein. Eine Visualisierung der Verbindung zwischen den Tabellen, oder genauer gesprochen deren Relationen zu einander, müssen leicht zu verstehen sein und alle nötigen Informationen aufweisen. 
+
+Die Informationen der Tabellen werden bereits vom Server zur Verfügung gestellt, dabei muss nur noch entschieden werden, welche davon notwendig sind für die Darstellung. Die Informationen die der Server über eine Tabelle zur Verfügung stellt sind folgende:
+\begin{itemize}
+\item Tabellenname
+\item Die vorhandenen Spalten, die folgende Eigenschaften besitzen
+    \begin{itemize}
+    \item Spaltenname
+    \item Ist diese Spalte Teil des Primärschlüssel
+    \item Typ der Spalte
+    \item Ob die Spalte Null Werte annimmt
+    \item Der Standartwert der Spalte
+    \end{itemize}
+\end{itemize}
+
+Dabei ist festzustellen, dass die Foreign Keys einer Tabelle nicht vom Server geliefert werden, diese sind für die Darstellung der Relationen notwendig.
+Wie schon erwähnt sind die Relationen wichtig für die Darstellung eines Schemas. Dabei sollten zwei Aspekte besonders deutlich hervorgehoben werden.
+Zu einem wie alle Tabellen zu einander stehen, um einen groben Überblick zu erhalten wie das Schema aufgebaut ist. Zum anderem, und das ist besonders wichtig in Hinsicht für eine Software die zu Lehrzwecken verwendet wird, ist die genaue Verknüpfung zwischen zwei Tabellen. Es soll klar dargestellt werden welche Spalte ein Foreign Key ist und auf welche Tabelle und welche Spalte dieser Tabelle diese verweist.
+
+Eine weitere Ansicht einer Tabelle, die auch häufig in vergleichbarer Software~\ref{sec02:vergleichbare_arbeiten} zu finden ist, ist eine Ansicht der vorhandenen Datensätze die schon in die Tabelle eingepflegt wurden. Dies sollte eine reine Ansicht sein und keine Möglichkeit bieten die vorhandenen Daten zu verändern. Dies würde einer Software zu Lernzwecken wiedersprechen. Die Anwender sollen SQL-Insertstatement verwenden um Tabellen zu befüllen und dabei die Anwendung einer Datenbank erlernen.
+
+\item[Editor] \hfill\\
+Der zweite wichtiger Abschnitt dieser Komponente soll neben der Darstellung der Datenbank die Möglichkeit bestehen, die vorhandene Datenbank zu Verändern.
+Die Veränderung einer Datenbank wird auch als Datenbankmigration bezeichnet, dabei werden die Eigenschaften einzelner Tabellen und deren Relationen hinzugefüht, korrigiert oder auf neue Gegebenheiten angepasst.
+
+Die allgemeinen Änderungen am Schema sollten das Erstellen und Löschen von Tabellen ermöglichen.
+Dies Funktion kann in der normalen Darstellung des Schemas zur Verfügung gestellt werden. Detailierte Änderungen einzelner Tabellen sollte eine weitere Möglichkeit der Datenbankmigration sein. Dazu sollten folgende Änderungen implementiert werden:
+\begin{itemize}
+\item Namen der Tabelle verändern
+\item Spalten hinzufügen/löschen
+\item Die Eigenschaften einzelner Spalten verändern:
+    \begin{itemize}
+    \item Typen verändern
+    \item Primärschlüssel setzen/entfernen
+    \item Not Null Constraint setzen/entfernen
+    \item Standartwert der Spalte setzen/entfernen
+    \end{itemize}
+\item Spaltenreihenfolge verändern
+\item Foreign Keys setzen/entfernen
+\end{itemize}
+
+Die Änderungen an einzelnen Tabellen sind durch die Komplexität in einer eigenen Ansicht unterzubringen. Dabei sollten Hilfsmittel zur Verfügung stehen, die das Verändern einer Tabelle unterstützen und vereinfachen.
+Unter Berücksichtung der Zielgruppe die mit dieser Software an Datenbanken und deren Migration erst vertraut gemacht werden, ist eine Vorschau der Tabelle mit den darin enthaltenen Daten, eine gute Hilfestellung zur Visualisierung welche Auswirkung die Migration auf die Daten hat.
+Eine Funktionalität häufig in verschiedener Software zu finden, ist die Möglichkeit eine Aktion rückgängig zu machen, oder die rückgängig gemacht Aktion wieder durchzuführen. Oft als ``undo'' und ``redo'' bezeichnet. Damit man nachvollziehen kann welche Änderungen vorgenommen wurden, sollten die einzelnen Aktionen in einer Listendarstellung angezeigt. Dadurch wird die das Undo/Redo leichter zu verstehen und anzuwenden sein.
+
+Bei jeder Migration können Fehler auftretten oder die Konsistenz der Datenbank verletzen. Deswegen muss jeder auftrette Fehler dem Benutzer mitgeteilt werden. Neben der Kommunikation zum Nutzer, muss auch in zu jedem Zeitpunkt sicher gestellt werden, dass die Datenbank in einem Zustand verbleibt, die zu keinen weiteren Fehlern in der Software führt.
+
+\item[Datentypen] \label{subsubsec03:zu_entwickeln-Datentypen} \hfill\\
+In SQLite, im Gegensatz zu meiste bekannten Datenbanken Engines, ist der Datentyp einzelner Spalten dynamisch. Dies bedeutet, dass die Angabe einer Spalte mehr als Hinweis dient. Der Datentyp selbst wird in SQLite in jedem einzelnen eingetragenen Werte assoziiert, an stelle der ganzen Spalte. \\
+Dies ist eher eine Anomalie in Datenbanken, da BlattWerkzeug ein Einstiegspunkt zum Thema darstellen soll, sollte diese Gegebenheit umganden werden. Es muss also dafür gesorgt werden, dass eine Typprüfung bei der Eingabe von Werten stattfindet. 
+
+\end{description}

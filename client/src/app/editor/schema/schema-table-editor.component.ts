@@ -202,11 +202,12 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     saveBtn() {
         console.log("Save!");
         if(this.isNewTable) {
-            this._schemaService.saveNewTable(this._project, this.table).subscribe();
+            this._schemaService.saveNewTable(this._project, this.table).first().subscribe();
         } else {
             this.dbErrorCode = -1;
             this.commandsHolder.prepareToSend();
             this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder)
+                .first()
                 .subscribe( 
                     table => table,
                     error => this.showError(error));
