@@ -7,7 +7,7 @@ import {
     ValidationResult, ValidationErrors, ValidationError
 } from '../validation'
 import {
-    Query, QueryFrom, ResultColumn
+    Query, ResultColumn
 } from '../base'
 
 import {
@@ -177,7 +177,7 @@ export class Select extends Component implements ExpressionParent {
                     tables.push(this._query.schema.getTable(starExpr.tableName));
                 } else {
                     // Otherwise count all used tables
-                    let from = (<QueryFrom> this._query).from;
+                    let from = this.query.from;
 
                     // Don't forget the first table
                     from.joins.concat(from.first).forEach( j => {
@@ -223,7 +223,7 @@ export class Select extends Component implements ExpressionParent {
                     tables.push(this._query.schema.getTable(starExpr.tableName));
                 } else {
                     // Otherwise count all used tables
-                    let from = (<QueryFrom> this._query).from;
+                    let from = this.query.from;
 
                     // Don't forget the first table
                     [from.first].concat(from.joins).forEach( j => {

@@ -7,7 +7,7 @@ import {DragService, SqlDragEvent}      from './drag.service'
 
 import {ColumnDescription}              from '../../shared/schema'
 import {
-    QueryInsert, QueryUpdate, SyntaxTree
+    Query, SyntaxTree
 } from '../../shared/query'
 
 /**
@@ -27,34 +27,37 @@ interface Assignment {
     templateUrl: 'templates/query-assign.html',
 })
 export class AssignComponent {
-    @Input() query : QueryInsert | QueryUpdate;
+    @Input() query : Query;
 
     constructor(private _dragService : DragService) {
         
+    }
+
+    get assignments() : SyntaxTree.Assign {
+        return (this.query.insert || this.query.update);
     }
     
     /**
      * @return True, if the given query is an INSERT query.
      */
-    get isAssignQuery() {
-        return (this.query instanceof QueryInsert ||
-                this.query instanceof QueryUpdate);
+    get isAssignQuery() : boolean {
+        return !!(this.assignments);
     }
 
     onDragStartColumn(evt : DragEvent, col : Assignment) {
-        this._dragService.startColumnDrag(this.query.tableName, col.column.name, "select", evt);
+        this._dragService.startColumnDrag(this.assignments.tableName, col.column.name, "select", evt);
     }
 
     /**
      * @return All columns that have values set.
      */  
     get allColumns() : Assignment[] {        
-        const allColumns = this.query.getTableSchema(this.query.tableName).columns;
+        const allColumns = this.query.getTableSchema(this.assignments.tableName).columns;
 
         return (allColumns.map( v => { return ({
             column : v,
             index : v.index,
-            expr : this.query.getValueForColumn(v.name)
+            expr : this.assignments.getValueForColumn(v.name)
         })}));
     }
 
@@ -63,7 +66,7 @@ export class AssignComponent {
     }
 
     onColumnUsageChanged(columnName : string) {
-        const isActive = this.query.activeColumns.some(c => c.name == columnName);        
-        this.query.changeActivationState(columnName, !isActive);
+        const isActive = this.assignments.activeColumns.some(c => c.name == columnName);        
+        this.assignments.changeActivationState(columnName, !isActive);
     }
 }

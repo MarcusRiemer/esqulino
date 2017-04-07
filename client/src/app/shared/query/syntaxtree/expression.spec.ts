@@ -1,7 +1,7 @@
 import {Schema}                                  from '../../schema'
 
-import {Model}                                   from '../base'
 import {ValidationErrors, ValidationResult}      from '../validation'
+import * as Model                                from '../description'
 
 import * as SyntaxTree from './expression'
 

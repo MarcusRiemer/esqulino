@@ -5,12 +5,10 @@ import {BehaviorSubject}                         from 'rxjs/BehaviorSubject'
 import {AsyncSubject}                            from 'rxjs/AsyncSubject'
 import {Observable}                              from 'rxjs/Observable'
 
-import {ServerApiService}                        from '../shared/serverapi.service'
+import {ServerApiService, CURRENT_API_VERSION}   from '../shared/'
 import {
     Model, loadQuery,
-    Query, QuerySelect, QueryDelete, QueryInsert,
-    SelectQueryResult, QueryRunErrorDescription,
-    CURRENT_API_VERSION
+    Query, SelectQueryResult, QueryRunErrorDescription,
 } from '../shared/query'
 
 import {Project, ProjectDescription}             from './project.service'
@@ -97,7 +95,7 @@ export class QueryService {
             .map( (res) =>  {
                 // The result changes dependending on the concrete type
                 // of the query.
-                if (query instanceof QuerySelect) {
+                if (query.select) {
                     return (new SelectQueryResult(query, <any> res.json()))
                 } else {
                     return (undefined);

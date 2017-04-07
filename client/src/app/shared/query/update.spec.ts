@@ -1,9 +1,10 @@
 import {Schema}                  from '../schema'
+import {CURRENT_API_VERSION}     from '../index'
 
-import {
-    CURRENT_API_VERSION, Model, SyntaxTree
-} from './base'
-import {QueryUpdate}             from './update'
+import * as Model                from './description'
+import * as SyntaxTree           from './syntaxtree'
+import {Query}                   from './base'
+import {ValidationErrors}        from './validation'
 
 let schema  = new Schema([
     {
@@ -59,7 +60,7 @@ describe('UPDATE', () => {
             }
         }
 
-        const q = new QueryUpdate(schema, m);
+        const q = new Query(schema, m);
         expect(q.toModel()).toEqual(m);
         expect(q.toSqlString()).toEqual("UPDATE person\nSET p1 = 2");
 
@@ -87,7 +88,7 @@ describe('UPDATE', () => {
             }
         }
 
-        const q = new QueryUpdate(schema, m);
+        const q = new Query(schema, m);
         expect(q.toModel()).toEqual(m);
         expect(() => q.toSqlString()).toThrowError();
     });

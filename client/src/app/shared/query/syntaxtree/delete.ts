@@ -2,9 +2,7 @@ import * as Model                             from '../description'
 import {ValidationResult}                     from '../validation'
 import {Query}                                from '../base'
 
-import {
-    Component
-} from './common'
+import {Component, Expression}                from './common'
 
 /**
  * The DELETE keyword is not assocatied with any data, at least in
@@ -43,5 +41,9 @@ export class Delete extends Component {
      */
     getLocationDescription() : string {
         return ("DELETE");
+    }
+
+    getLeaves() : Expression[] {
+        return ([]);
     }
 }
