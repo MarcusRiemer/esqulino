@@ -13,7 +13,7 @@
             class="missing">Keine Aktion</span>
     </span>
 
-    <template [ngIf]="model.hasAction">
+    <ng-template [ngIf]="model.hasAction">
       <span *ngFor="let param of parameters;"
             class="block-container">
         <span *ngIf="param.isSatisfied"
@@ -28,7 +28,7 @@
         </span>
 
       </span>
-    </template>
+    </ng-template>
   </h5>
 
   <button (click)="startEditing()"

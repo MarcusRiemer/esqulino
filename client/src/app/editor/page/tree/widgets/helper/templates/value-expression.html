@@ -1,10 +1,10 @@
-<template [ngIf]="repeatingQuery">
+<ng-template [ngIf]="repeatingQuery">
   <span [class.table]="repeatingQuery.isResolveable"
         [class.missing]="!repeatingQuery.isResolveable">
     {{ repeatingQuery.displayName }}
   </span>
-  <template [ngIf]="columnName">
+  <ng-template [ngIf]="columnName">
     <span class="fa fa-fw fa-arrow-right" aria-hidden="true"></span><span class="column">{{ columnName }}</span>
-  </template>
-</template>
+  </ng-template>
+</ng-template>
 
