@@ -1,1 +1,14 @@
 thesis-pawlowski.pdf
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.aux
+*.log
+*.out
+*.tdo
+*.toc
+*.bbl
+*.bcf
+*.blg
+*.run.xml
