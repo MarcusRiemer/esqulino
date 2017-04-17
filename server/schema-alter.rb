@@ -74,21 +74,33 @@ def database_alter_table(sqlite_file_path, schema_table, colHash)
     db.execute("INSERT INTO #{schema_table.name}(#{colTo}) SELECT #{colFrom} FROM #{tempTableName};")
 
     db.execute("DROP TABLE #{tempTableName};")
-    #TODO: Use to check for errors
-    db.foreign_key_check()
-  
+
+    error, consistencyBreaks = check_consistency(db)
+
     db.execute("PRAGMA foreign_keys = ON;")
-    db.commit()
-    db.close()
-    return 0
-  rescue SQLite3::SQLException => e
-    db.close()
-    return 2, e.message
+    if error == 0
+      db.commit()
+      db.close()
+      return 0
+    else
+      db.close()
+      return 2, consistencyBreaks
+    end
   rescue SQLite3::ConstraintException => e
     db.close()
     return 1, e.message
   end
 end
+
+def check_consistency(db)
+  begin
+    db.foreign_key_check()
+  rescue SQLite3::SQLException => e
+    return 1, e.message
+  end
+    return 0
+end
+
 
 def rename_table(sqlite_file_path, from_tableName, to_tableName) 
   begin

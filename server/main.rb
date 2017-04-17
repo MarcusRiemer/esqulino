@@ -299,8 +299,6 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Getting entries inside a table
-  # TODO: db / DatabaseID dazu ist name
-  # TODO: row -> rows
   get '/api/project/:project_id/db/:database_id/rows/:tableName/:from/:amount' do    
 
     # TODO: Sicherheitscheck -> Existiert tableName überhaupt?
@@ -332,7 +330,7 @@ class ScratchSqlApp < Sinatra::Base
     if(error) 
       return 500, {'Content-Type' => 'application/json'}, { :index => index.to_s, :errorCode => errorCode.to_s, :errorBody => json(errorBody)}.to_json
     else 
-      return 200
+      return 200, {'Content-Type' => 'application/json'}, {:schema => database_describe_schema(@project.file_path_sqlite)}.to_json
     end
   end
 
