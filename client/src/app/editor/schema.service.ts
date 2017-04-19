@@ -8,7 +8,7 @@ import { Observable }                               from 'rxjs/Observable'
 import { ServerApiService }                         from '../shared/serverapi.service'
 import { KeyValuePairs, encodeUriParameters }       from '../shared/util'
 
-import { Project }                                  from './project.service'
+import { Project, ProjectService }                  from './project.service'
 import { Table, Column}                             from '../shared/schema/'
 import {TableCommandHolder}                         from '../shared/schema/table-commands'
 
@@ -31,6 +31,7 @@ export class SchemaService {
      */
     constructor(
         private _http: Http,
+        private _projectService: ProjectService,
         private _server: ServerApiService
     ) {
     }
@@ -93,7 +94,7 @@ export class SchemaService {
 
         const toReturn = this._http.post(url, body, options) 
             .map( (res) => {
-                project.schema.tables.push(table);
+                this._projectService.setActiveProject(project.id, true);
                 return table;
             })
             .catch(this.handleError);
@@ -114,6 +115,7 @@ export class SchemaService {
         const body = JSON.stringify(commandHolder.toModel());
 
         const toReturn = this._http.post(url, body, options)
+            .map(res => this._projectService.setActiveProject(project.id, true))
             .catch(this.handleError);
         return(toReturn);
     }
@@ -131,6 +133,7 @@ export class SchemaService {
 
         const toReturn = this._http.delete(url, options) 
             .map( (res) => {
+                this._projectService.setActiveProject(project.id, true);
                 return table;
             })
             .catch(this.handleError);

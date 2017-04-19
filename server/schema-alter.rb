@@ -101,6 +101,30 @@ def check_consistency(db)
     return 0
 end
 
+def remove_table(sqlite_file_path, tableName)
+  db = sqlite_open_augmented(sqlite_file_path)
+  db.execute("PRAGMA foreign_keys = ON;")
+  begin
+    db.execute("DROP TABLE IF EXISTS #{tableName}")
+  rescue SQLite3::ConstraintException => e
+    db.close
+    return 1, e.message
+  end
+    return 0
+end
+
+def create_table(sqlite_file_path, newTable)
+  db = sqlite_open_augmented(sqlite_file_path)
+  db.execute("PRAGMA foreign_keys = ON;")
+  begin
+    db.execute(table_to_create_statement(newTable))
+  rescue Exception => e
+    puts e.class
+    db.close
+    return 1, e.message
+  end
+    return 0
+end
 
 def rename_table(sqlite_file_path, from_tableName, to_tableName) 
   begin
@@ -232,6 +256,10 @@ def column_to_create_statement(schema_column)
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
     createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type float' CHECK (#{schema_column.name} regexp '^[+-]?([0-9]*\.[0-9]+$|[0-9]+$)') ")
+  elsif schema_column.type == 'URL'
+    createStatement.concat(schema_column.type)
+    createStatement.concat(" ")
+    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type url' CHECK (#{schema_column.name} regexp '^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$') ")
   else
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")

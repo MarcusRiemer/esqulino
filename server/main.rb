@@ -300,28 +300,47 @@ class ScratchSqlApp < Sinatra::Base
 
   # Getting entries inside a table
   get '/api/project/:project_id/db/:database_id/rows/:tableName/:from/:amount' do    
-
-    # TODO: Sicherheitscheck -> Existiert tableName überhaupt?
-    # TODO: Für LIMIT und OFFSET parameter benutzen
-    #result = @project.execute_sql("Select * from ? limit ? offset ? ", params['captures'])
-    result = @project.execute_sql("Select * from #{params['tableName']} limit #{params['amount']} offset #{params['from']}", [])
-    json(result['rows'])
+    check = @project.execute_sql("SELECT Count(*) FROM sqlite_master WHERE type='table' AND name=\'#{params['tableName']}\'", [])
+    if(check['rows'].count === 1)
+      result = @project.execute_sql("Select * from #{params['tableName']} limit ? offset ?", [params['amount'], params['from']])
+      json(result['rows'])
+    end
   end
 
   # Getting count of entries inside a table
   get '/api/project/:project_id/db/:database_id/count/:tableName' do
-    # TODO: Sicherheitscheck -> Existiert tableName überhaupt?
-    result = @project.execute_sql("Select Count(*) from #{params['tableName']}", [])
-    json(result['rows'].first)
+    check = @project.execute_sql("SELECT Count(*) FROM sqlite_master WHERE type='table' AND name=\'#{params['tableName']}\'", [])
+    if(check['rows'].count === 1)
+      result = @project.execute_sql("Select Count(*) from #{params['tableName']}", [])
+      json(result['rows'].first)
+    end
   end
 
   post '/api/project/:project_id/db/:database_id/create' do |_p, database_id|
     newTable = createObject(request.body.read)
-    @project.execute_sql(table_to_create_statement(newTable), [])
+    check = @project.execute_sql("SELECT Count(*) FROM sqlite_master WHERE type='table' AND name=\'#{newTable.name}\'", [])
+    if(check['rows'].count === 0)
+      error, msg = create_table(@project.file_path_sqlite, newTable)  
+      if(error == 0)
+        return 200
+      else
+        return 500, {'Content-Type' => 'application/json'}, {:errorCode => '3', :errorBody => json(msg)}.to_json
+      end
+    else
+      return 500, {'Content-Type' => 'application/json'}, {:errorCode => '3', :errorBody => json("Error: table #{newTable.name} already exists")}.to_json
+    end
   end
 
   delete '/api/project/:project_id/db/:database_id/drop/:tableName' do |_p, database_id, tableName|
-      @project.execute_sql("DROP TABLE IF EXISTS #{params['tableName']}", [])
+    check = @project.execute_sql("SELECT Count(*) FROM sqlite_master WHERE type='table' AND name=\'#{params['tableName']}\'", [])
+    if(check['rows'].count === 1)
+      error, msg = remove_table(@project.file_path_sqlite, params['tableName'])  
+      if(error == 0)
+        return 200
+      else
+        return 500, {'Content-Type' => 'application/json'}, {:errorBody => json(msg)}.to_json
+      end
+    end
   end
 
   post '/api/project/:project_id/db/:database_id/alter/:tableName' do
