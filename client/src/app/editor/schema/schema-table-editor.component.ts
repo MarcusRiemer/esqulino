@@ -202,7 +202,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     saveBtn() {
         console.log("Save!");
         if(this.isNewTable) {
-            this._schemaService.saveNewTable(this._project, this.table).first().subscribe();
+            this._schemaService.saveNewTable(this._project, this.table).first().subscribe( 
+                    table => table,
+                    error => this.showError(error));
         } else {
             this.dbErrorCode = -1;
             this.commandsHolder.prepareToSend();
@@ -223,6 +225,8 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
             window.alert(`Ein Fehler ist aufgetretten in Stacknummer: ${error.json().index} \n mit Nachricht: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
         } else if(error.json().errorCode == 2) {
             window.alert(`Nach der Änderung im Stack Nummer: ${error.json().index} ist die Datenbank nicht mehr konsistent \n Datenbank meldet: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
+        } else if(error.json().errorCode == 3) {
+            window.alert(`Ein Fehler ist aufgetretten! \n mit Nachricht: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
         }
     }
 

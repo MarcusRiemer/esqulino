@@ -94,6 +94,13 @@ export class SchemaTableComponent {
      * Function to drop a Table;
      */
     deleteTable() {
-        this._schemaService.deleteTable(this._project, this.table).subscribe();
+        this._schemaService.deleteTable(this._project, this.table).subscribe(res => res,error => this.showError(error));
+    }
+
+    /**
+     * Function to show an alert [TODO: Make it look good]
+     */
+    showError(error : any) {
+        window.alert(`Ein Fehler ist aufgetretten! \n mit Nachricht: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
     }
 }
