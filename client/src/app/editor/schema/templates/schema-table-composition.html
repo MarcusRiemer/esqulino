@@ -1,5 +1,5 @@
 <div class="card-group">
-	<div class="col-sm-6">
+	<div class="col-sm-7">
 		<div class="card">
 			<sql-table id="schema-table" 
 								[(columnToHighlight)]="highlightedColumn" 
@@ -8,7 +8,7 @@
 			</sql-table>
 		</div>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-sm-5">
 		<div *ngIf="highlightedColumn && getTargetTable(highlightedColumn)" class="card">
 			<sql-table id="schema-table-foreign-key" 
 								[table]="getTargetTable(highlightedColumn)" 
