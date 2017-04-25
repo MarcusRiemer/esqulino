@@ -66,6 +66,11 @@ export interface AddForeignKeyDescription extends CommandDescription {
   newForeignKey : ForeignKeyDescription;
 }
 
+export interface RemoveForeignKeyDescription extends CommandDescription {
+  type : "removeForeignKey";
+  foreignKeyToRemove : ForeignKeyDescription;
+}
+
 /**
  * abstract class for all table commands
  */
@@ -424,7 +429,7 @@ export class AddForeignKey extends TableCommand {
   }
 
   undo(table: Table): void {
-    table.foreign_keys.splice(table.foreign_keys.indexOf(this._newForeignKey), 1);
+    this._newForeignKey = table.removeForeignKey(this._newForeignKey);
     this.restoreLastStatus(table);
   }
 
@@ -439,6 +444,41 @@ export class AddForeignKey extends TableCommand {
 
   get commandText() : String {
     return `Fremdschluessel für Spalte ${this._columnIndex} zur Tabelle ${this._newForeignKey.refs[0].to_table} mit Spalte ${this._newForeignKey.refs[0].to_column} erzeugt`
+  }
+
+}
+
+export class RemoveForeignKey extends TableCommand {
+  private _oldForeignKey : ForeignKeyDescription;
+
+  constructor(table : Table, columnIndex: number, foreignKey : ForeignKeyDescription) {
+    super(table.getColumnByIndex(columnIndex).state, columnIndex);
+    this._oldForeignKey = foreignKey;
+  }
+
+  do(table: Table): void {
+    this._oldForeignKey = table.removeForeignKey(this._oldForeignKey);
+    this.markColumnChanged(table);
+   
+  }
+
+  undo(table: Table): void {
+    table.foreign_keys.push(this._oldForeignKey);
+    this.restoreLastStatus(table);
+   
+  }
+
+  toModel(): RemoveForeignKeyDescription {
+    return {
+      type : "removeForeignKey",
+      index : this._index,
+      columnIndex : this._columnIndex,
+      foreignKeyToRemove : this._oldForeignKey
+    };
+  }
+
+  get commandText() : String {
+    return `Fremdschluessel für Spalte ${this._columnIndex} zur Tabelle ${this._oldForeignKey.refs[0].to_table} mit Spalte ${this._oldForeignKey.refs[0].to_column} entfernt`
   }
 
 }

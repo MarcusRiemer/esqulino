@@ -40,6 +40,8 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
           changeColumnStandardValue(table, cmd['columnIndex'], cmd['newValue'])
         when "addForeignKey"
           addForeignKey(table, cmd['newForeignKey'])
+        when "removeForeignKey"
+          removeForeignKey(table, cmd['foreignKeyToRemove'])
         end
         errorCode, errorBody = database_alter_table(sqlite_file_path, table, colHash)
       else
@@ -330,6 +332,21 @@ def addForeignKey(table, foreignKey)
     foreign_key_comp.add_foreign_key(foreign_key_ref)
   end
   table.add_foreign_keys(foreign_key_comp)  
+end
+
+def removeForeignKey(table, foreignKey)
+  refToDelete = nil;
+  foreign_key_comp = SchemaForeignKey.new()
+  foreignKey['refs'].each do |fk|
+    foreign_key_ref = SchemaForeignKeyRef.new(fk['from_column'], fk['to_table'], fk['to_column'])
+    foreign_key_comp.add_foreign_key(foreign_key_ref)
+  end
+  table.foreign_keys.each do |ref|
+    if ref.to_json(nil) == foreign_key_comp.to_json(nil)
+      refToDelete = ref
+    end
+  end
+  table.foreign_keys.delete(refToDelete)
 end
 
 def createColumnHash(table)
