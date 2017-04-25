@@ -83,7 +83,8 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
 
         //Getting the entries from a table with limit and count
         //TODO: Right use of Observable to update the data properly
-        subRef = this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount)
+        this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
+        this._schemaService.activeTableData
             .subscribe(res => { this.tableData = res; },
                 error => this.showError(error));
         this._subscriptionRefs.push(subRef);
