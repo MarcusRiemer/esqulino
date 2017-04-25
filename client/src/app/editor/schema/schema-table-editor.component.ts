@@ -11,7 +11,7 @@ import {
     SwitchColumnOrder, RenameColumn,
     ChangeColumnType, ChangeColumnPrimaryKey,
     ChangeColumnNotNull, ChangeColumnStandardValue,
-    ChangeTableName, TableCommandHolder, AddForeignKey
+    ChangeTableName, TableCommandHolder, AddForeignKey, RemoveForeignKey
 }                                                   from '../../shared/schema/table-commands'
 
 /**
@@ -27,6 +27,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         private _schemaService: SchemaService,
         private _projectService: ProjectService,
         private _routeParams: ActivatedRoute,
+        private _router: Router,
         private _toolbarService: ToolbarService) {
 
     }
@@ -45,6 +46,14 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     * The currently edited project
     */
     private _project: Project;
+
+    get projectTables() : Table[] {
+        return this._project.schema.tables;
+    }
+
+    getColumnsOfTable() : Table{ 
+        return this._project.schema.getTable(this.fk_addTable);
+    }
 
     /**
      * Boolean to check if a new Table is created or edited
@@ -81,6 +90,10 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     colToSwitch : number;
     switch_to : number;
+
+    fk_fromColumn : number;
+    fk_addTable : string;
+    fk_addColumn : string;
 
     // Value to store the accured error
     dbErrorCode : number = -1;
@@ -203,7 +216,10 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         console.log("Save!");
         if(this.isNewTable) {
             this._schemaService.saveNewTable(this._project, this.table).first().subscribe( 
-                    table => table,
+                    table => {table;
+                        window.alert("Änderungen gespeichert!");
+                        this._router.navigate(["../../"], { relativeTo: this._routeParams });
+                    },
                     error => this.showError(error));
         } else {
             this.dbErrorCode = -1;
@@ -211,7 +227,10 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
             this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder)
                 .first()
                 .subscribe( 
-                    table => table,
+                    table => {table;
+                        window.alert("Änderungen gespeichert!");
+                        this._router.navigate(["../../"], { relativeTo: this._routeParams });
+                    },
                     error => this.showError(error));
         }
     }
@@ -236,6 +255,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     cancelBtn() {
         console.log("Cancel!");
+        this._router.navigate(["../../"], { relativeTo: this._routeParams });
     }
 
     /**
@@ -327,6 +347,22 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         if(this.colToSwitch != undefined && this.switch_to != undefined) {
             this.commandsHolder.do(new SwitchColumnOrder(this.table, this.colToSwitch, this.switch_to));
         }
+    }
+
+    /**
+     * Function to add a Foreign Key [later changed to drag]
+     */
+    addForeignKey() {
+        if(this.fk_addColumn != undefined && this.fk_addTable != undefined && this.fk_fromColumn != undefined) {
+            this.commandsHolder.do(new AddForeignKey(this.table, this.fk_fromColumn, {refs:[{to_table : this.fk_addTable, from_column : this.table.getColumnByIndex(this.fk_fromColumn).name, to_column : this.fk_addColumn}]}))
+        }
+    }
+
+    /**
+     * Function to add a Foreign Key [later changed to drag]
+     */
+    removeForeignKey(fk_fromColumn : number, fk_addTable : string, fk_addColumn : string) {        
+        this.commandsHolder.do(new RemoveForeignKey(this.table, fk_fromColumn, {refs:[{to_table : fk_addTable, from_column : this.table.getColumnByIndex(fk_fromColumn).name, to_column : fk_addColumn}]}))
     }
 
     /**
