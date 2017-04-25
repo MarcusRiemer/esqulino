@@ -115,6 +115,26 @@ export class Table {
     }
 
     /**
+     * Function to remove a foreign key from the Table
+     */
+    removeForeignKey(toRemove : ForeignKeyDescription) : ForeignKeyDescription {
+        let toReturn : ForeignKeyDescription = {refs: []}; 
+        for(let fkRef of this.foreign_keys) {
+            for(let fk of fkRef.refs) {
+                if(fk.from_column == toRemove.refs[0].from_column 
+                    && fk.to_column == toRemove.refs[0].to_column
+                    &&  fk.to_table == toRemove.refs[0].to_table) {
+                        toReturn.refs = fkRef.refs.splice(fkRef.refs.indexOf(fk),1);
+                }
+            }
+            if(fkRef.refs.length == 0) {
+                this.foreign_keys.splice(this.foreign_keys.indexOf(fkRef), 1);
+            }
+        }
+        return toReturn;
+    }
+
+    /**
      * Function to create a json representation to send it 
      * to the server.
      */
