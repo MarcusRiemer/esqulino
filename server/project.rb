@@ -288,6 +288,11 @@ class Project
     end
   end
 
+  # Function to check if project has a table with name table_name
+  def has_table(table_name)
+    return !schema.detect{|table| table.name.eql? table_name}.nil?
+  end
+
   # All pages that are associated with this project
   def pages
     load_pages! if @pages.nil?
