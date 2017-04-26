@@ -1,0 +1,18 @@
+/**
+ * Used to host one or multiple blocks.
+ * TODO: Requiring an artificial parent element may not
+ *       be what I actually want. This should be revisited.
+ */
+ .card-group.columns {
+    border-radius: .25rem .25rem 0 0;
+    border: 1px solid #e5e5e5;
+    border-bottom: none;
+ }
+ .card.tableColumn {
+    border: 0px solid;
+    input.tableEditor {
+        width: 100px;
+    }
+ }
+
+

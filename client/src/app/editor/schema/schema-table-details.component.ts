@@ -83,13 +83,16 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
 
         //Getting the entries from a table with limit and count
         //TODO: Right use of Observable to update the data properly
-        subRef = this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount)
-            .subscribe(res => { this.tableData = res; });
+        this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
+        this._schemaService.activeTableData
+            .subscribe(res => { this.tableData = res; },
+                error => this.showError(error));
         this._subscriptionRefs.push(subRef);
 
         //Calculating the amount of rows inside the table
         subRef = this._schemaService.getTableRowAmount(this._project, this.table)
-            .subscribe(res =>{ this._tableRowAmount = res[0];})
+            .subscribe(res =>{ this._tableRowAmount = res[0];},
+                error => this.showError(error))
         this._subscriptionRefs.push(subRef);
 
         //Buttons only to show if this component is not invoked as a child
@@ -157,5 +160,12 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
     backBtn() {
         console.log("Zurück!");
         this._router.navigate(["../../"], { relativeTo: this._route });
+    }
+
+    /**
+     * Function to show an alert [TODO: Make it look good]
+     */
+    showError(error : any) {
+        window.alert(`Ein Fehler ist aufgetretten! \n mit Nachricht: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
     }
 }
