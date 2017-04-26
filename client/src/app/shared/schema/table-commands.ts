@@ -417,6 +417,7 @@ export class ChangeColumnStandardValue extends TableCommand {
 
 export class AddForeignKey extends TableCommand {
   private _newForeignKey : ForeignKeyDescription;
+  private _toInsert : ForeignKeyDescription;
 
   constructor(table : Table, columnIndex: number, foreignKey : ForeignKeyDescription) {
     super(table.getColumnByIndex(columnIndex).state, columnIndex);
@@ -424,12 +425,20 @@ export class AddForeignKey extends TableCommand {
   }
 
   do(table: Table): void {
-    table.foreign_keys.push(this._newForeignKey);
+    this._toInsert = {refs : []};
+    for (let ref of this._newForeignKey.refs.slice(0,this._newForeignKey.refs.length)) {
+      this._toInsert.refs.push({from_column: ref.from_column, to_column: ref.to_column, to_table :ref.to_table});
+    }
+    table.foreign_keys.push(this._toInsert);
     this.markColumnChanged(table);
   }
 
   undo(table: Table): void {
-    this._newForeignKey = table.removeForeignKey(this._newForeignKey);
+    this._toInsert = {refs : []};
+    for (let ref of this._newForeignKey.refs.slice(0,this._newForeignKey.refs.length)) {
+      this._toInsert.refs.push({from_column: ref.from_column, to_column: ref.to_column, to_table :ref.to_table});
+    }
+    this._toInsert = table.removeForeignKey(this._toInsert);
     this.restoreLastStatus(table);
   }
 
@@ -450,6 +459,7 @@ export class AddForeignKey extends TableCommand {
 
 export class RemoveForeignKey extends TableCommand {
   private _oldForeignKey : ForeignKeyDescription;
+  private _toRemove : ForeignKeyDescription;
 
   constructor(table : Table, columnIndex: number, foreignKey : ForeignKeyDescription) {
     super(table.getColumnByIndex(columnIndex).state, columnIndex);
@@ -457,13 +467,20 @@ export class RemoveForeignKey extends TableCommand {
   }
 
   do(table: Table): void {
-    this._oldForeignKey = table.removeForeignKey(this._oldForeignKey);
+    this._toRemove = {refs : []};
+    for (let ref of this._oldForeignKey.refs.slice(0,this._oldForeignKey.refs.length)) {
+      this._toRemove.refs.push({from_column: ref.from_column, to_column: ref.to_column, to_table :ref.to_table});
+    }
+    this._oldForeignKey = table.removeForeignKey(this._toRemove);
     this.markColumnChanged(table);
-   
   }
 
   undo(table: Table): void {
-    table.foreign_keys.push(this._oldForeignKey);
+    this._toRemove = {refs : []};
+    for (let ref of this._oldForeignKey.refs.slice(0,this._oldForeignKey.refs.length)) {
+      this._toRemove.refs.push({from_column: ref.from_column, to_column: ref.to_column, to_table :ref.to_table});
+    }
+    table.foreign_keys.push(this._toRemove);
     this.restoreLastStatus(table);
    
   }
