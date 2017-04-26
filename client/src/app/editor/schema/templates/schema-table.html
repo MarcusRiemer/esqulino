@@ -19,7 +19,7 @@
 
 		<!--<div class="card-deck">-->
 			<!--Card-Group for all columns of the table-->
-			<div *ngFor="let column of table.columns" (mouseenter)="onColumnMouseEnter(column.name)" (mouseout)="onColumnMouseOut()"
+			<div *ngFor="let column of table.columns" (mouseenter)="onColumnMouseEnter(column.name)" (mouseleave)="onColumnMouseOut()"
 				class="card-group row" [ngClass]="{'card-info': column.name == columnToHighlight}">
 				
 				<div class="card  col-md-1 tableColumn" [ngClass]="{'card-info': column.name == columnToHighlight}">
@@ -34,15 +34,15 @@
 
 				<!--Column index and name-->
 				<div class="card col-md-5 tableColumn" [ngClass]="{'card-info': column.name == columnToHighlight}" [hidden]="readOnly && !(column.name == columnToHighlight)">
-					<h6 class="card-title" (mouseenter)="onColumnMouseEnter(column.name)" (mouseout)="onColumnMouseOut()">{{ column.name }}</h6>
+					<h6 class="card-title" >{{ column.name }}</h6>
 				</div>
 				<!--Details only to shown if detail-view is enabled-->
 				
-				<div class="card  col-md-2 tableColumn" [ngClass]="{'card-info': column.name == columnToHighlight}" [hidden]="readOnly">
-					<p class="card-text" (mouseenter)="onColumnMouseEnter(column.name)" (mouseout)="onColumnMouseOut()"><span class="badge badge-default">{{ column.type }}</span></p>
+				<div class="card  col-md-2 tableColumn"  [ngClass]="{'card-info': column.name == columnToHighlight}" [hidden]="readOnly">
+					<p class="card-text"><span class="badge badge-default">{{ column.type }}</span></p>
 				</div>
 				<div class="card  col-md-3 tableColumn" [ngClass]="{'card-info': column.name == columnToHighlight}" [hidden]="readOnly">
-					<p class="card-text" (mouseenter)="onColumnMouseEnter(column.name)" (mouseout)="onColumnMouseOut()">
+					<p class="card-text" >
 						<!--{{ column.not_null }}-->
 						<span *ngIf=column.not_null>NOT NULL</span>
 						<span *ngIf=!column.not_null></span>
@@ -50,12 +50,7 @@
 				</div>
 				<div *ngIf="column.dflt_value != null">
 					<div class="card  col-md-1 tableColumn" [ngClass]="{'card-info': column.name == columnToHighlight}" [hidden]="readOnly">
-						<p class="card-text" (mouseenter)="onColumnMouseEnter(column.name)" (mouseout)="onColumnMouseOut()">{{ column.dflt_value }}</p>
-					</div>
-				</div>
-				<div *ngIf="column.dflt_value == null">
-					<div class="card  col-md-1 tableColumn" [ngClass]="{'card-info': column.name == columnToHighlight}" [hidden]="readOnly">
-						<span class="fa fa-minus" aria-hidden="true"></span>
+						<p class="card-text" >{{ column.dflt_value }}</p>
 					</div>
 				</div>
 			</div>
