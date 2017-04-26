@@ -121,10 +121,10 @@ export class Table {
         let toReturn : ForeignKeyDescription = {refs: []}; 
         for(let fkRef of this.foreign_keys) {
             for(let fk of fkRef.refs) {
-                if(fk.from_column == toRemove.refs[0].from_column 
-                    && fk.to_column == toRemove.refs[0].to_column
-                    &&  fk.to_table == toRemove.refs[0].to_table) {
-                        toReturn.refs = fkRef.refs.splice(fkRef.refs.indexOf(fk),1);
+                if(fk.from_column === toRemove.refs[0].from_column 
+                    && fk.to_column === toRemove.refs[0].to_column
+                    &&  fk.to_table === toRemove.refs[0].to_table) {
+                        toReturn.refs.push(fkRef.refs.splice(fkRef.refs.indexOf(fk),1)[0]);
                 }
             }
             if(fkRef.refs.length == 0) {
