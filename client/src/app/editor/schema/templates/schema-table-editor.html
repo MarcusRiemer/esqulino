@@ -1,3 +1,5 @@
+<div class="row">
+	<div class="col-sm-8">
 <div class="card card-block">
 	<!--Input with the name of the table-->
 	<h3 class="card-title">
@@ -9,90 +11,185 @@
 	<div class="card-deck-wrapper">
 		<div class="card-deck">
 			<div class="card-group">
-				<div class="card">
+				<div class="card  tableColumn">
 					<h4 class="card-title"># Name</h4>
 				</div>
-				<div class="card">
+				<div class="card  tableColumn">
 					<h4 class="card-title">PK</h4>
 				</div>
-				<div class="card">
+				<div class="card  tableColumn">
 					<h4 class="card-title">Type</h4>
 				</div>
-				<div class="card">
+				<div class="card  tableColumn">
 					<h4 class="card-title">Not Null</h4>
 				</div>
-				<div class="card">
+				<div class="card  tableColumn">
 					<h4 class="card-title">Standardwert</h4>
 				</div>
 			</div>
 
 			<!--Every column as a card-->
-			<div *ngFor="let column of table.columns; let i = index" class="card-group">
-				<div class="card">
+			<div *ngFor="let column of table.columns; let i = index" class="card-group columns">
+				<div class="card  tableColumn">
 					<!--Column index, name and button to delete the column-->
-					<h4 class="card-title">
+					<h6 class="card-title">
 						{{ column.index }} 
-						<input (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnName(i, $event.target.value)" [(ngModel)]="column.name" placeholder="Name" />
-						<!--Button to remove column-->
-						<a (click)="removeColumn(column.index)" class="btn btn-primary">
-							<span class="fa fa-minus" aria-hidden="true"></span>
-						</a>
-					</h4>
+						<input  class="tableEditor" (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnName(i, $event.target.value)" [(ngModel)]="column.name" placeholder="Name" />
+					
+					<span class="tag tag-danger" (click)="removeColumn(column.index)">
+						<span class="fa fa-minus" aria-hidden="true"></span>
+					</span>
+					</h6>
 				</div>
 				<!--Primray key checkbox-->
-				<div class="card">
+				<div class="card  tableColumn">
 					<input type="checkbox" (click)="ChangeColumnPrimaryKeyStatus(column.index)" [(ngModel)]="column.primary" [disabled]="column.stateName == 'deleted'" placeholder="Primary" />
+					<span *ngIf=column.primary>
+						<span class="tag tag-pill tag-primary">
+							<span class="fa fa-key" aria-hidden="true"></span>
+						</span>
+					</span>
 				</div>
 				<!--Column type input-->
-				<div class="card">
-					<input (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnType(i, $event.target.value)" [(ngModel)]="column.type" placeholder="Type" />
+				<div class="card  tableColumn">
+
+					<select [(ngModel)]="column.type" (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (change)="changedColumnType(i, $event.target.value)">
+					<option value="TEXT">TEXT</option>
+					<option value="INTEGER">INTEGER</option>
+					<option value="FLOAT">FLOAT</option>
+					<option value="BOOLEAN">BOOLEAN</option>
+					<option value="URL">URL</option>
+  				</select>
+					<span *ngIf="table.columnIsForeignKeyOfTable(column.name)">
+						<span class="tag tag-pill tag-success">
+							{{ table.columnIsForeignKeyOfTable(column.name) }} 
+							<span class="tag tag-pill tag-info">
+								{{ table.columnIsForeignKeyOfColumn(column.name) }} 
+							</span>
+							<span class="tag tag-danger" (click)="removeForeignKey(column.index,  table.columnIsForeignKeyOfTable(column.name) ,  table.columnIsForeignKeyOfColumn(column.name) )">
+								<span class="fa fa-minus" aria-hidden="true"></span>
+							</span>
+						</span>
+					</span>
 				</div>
 				<!--Column not null checkbox-->
-				<div class="card">
+				<div class="card  tableColumn">
 					<input type="checkbox" (click)="ChangeColumnNotNullStatus(column.index)" [(ngModel)]="column.not_null" [disabled]="column.stateName == 'deleted'" [(hidden)]="column.primary" placeholder="Not Null" />
+					<span *ngIf="column.not_null || column.primary">
+						<span class="tag tag-pill tag-default">
+							Not Null
+						</span>
+					</span>
 				</div>
 				<!--Column default value input-->
-				<div class="card">
-					<input (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnStandartValue(i, $event.target.value)" [(ngModel)]="column.dflt_value" placeholder="Standardwert" />
+				<div class="card  tableColumn">
+					<input class="tableEditor" (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnStandartValue(i, $event.target.value)" [(ngModel)]="column.dflt_value" placeholder="Standardwert" />
 				</div>
 			</div>
 			<!--Add column button-->
 			<div class="card-group">
-				<div class="card">
-					<h4 class="card-title">
-						<a (click)="addColumn()" class="btn btn-primary">
+				<div class="card  tableColumn">
+					<h6 class="card-title">
+						<span class="tag tag-primary" (click)="addColumn()">
 							<span class="fa fa-plus" aria-hidden="true"></span>
-						</a>
+						</span>
 						<br>
-						<a (click)="changeColumnOrder()" class="btn btn-primary">
-							switch
-						</a>
+
 						Switch: 
-						<input [(ngModel)]="colToSwitch" type="text" id="colToSwitch" placeholder="Column to switch">
-						<input [(ngModel)]="switch_to" type="text" id="to" placeholder="to">
-					</h4>
+						<select [(ngModel)]="colToSwitch">
+							<option *ngFor="let column of table.columns; let i = index" [value]="column.index">{{column.name}}</option>
+						</select>
+
+						<select [(ngModel)]="switch_to">
+							<option *ngFor="let column of table.columns; let i = index" [value]="column.index">Position : {{column.index}}</option>
+						</select>
+						<a (click)="changeColumnOrder()" class="btn btn-primary">
+							<span class="fa fa-exchange" aria-hidden="true"></span>
+						</a>
+
+
+						<br>
+						
+						Add FK: 
+						<select [(ngModel)]="fk_fromColumn">
+							<ng-container *ngFor="let column of table.columns; let i = index">
+								<option *ngIf="(table.columnIsForeignKeyOfTable(column.name) == undefined)" [value]="column.index">{{column.name}}</option>
+							</ng-container>
+						</select>
+
+						<select *ngIf=fk_fromColumn [(ngModel)]="fk_addTable">
+							<option *ngFor="let tab of projectTables; let i = index" [value]="tab.name">{{tab.name}}</option>
+						</select>
+
+						<select *ngIf=fk_addTable [(ngModel)]="fk_addColumn">
+							<option *ngFor="let column of getColumnsOfTable().columns; let i = index" [value]="column.name">{{column.name}}</option>
+						</select>
+
+						<a *ngIf=fk_addColumn (click)="addForeignKey()" class="btn btn-primary">
+							<span class="fa fa-arrows-h" aria-hidden="true"></span>
+						</a>
+
+
+
+					</h6>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="list-group">
-	<!--List of stack entrys-->
-	<button type="button" class="list-group-item list-group-item-action active">
-		Stackgröße: <span class="badge badge-default badge-pill">{{ commandsHolder.commands.length }}</span> 
-	</button>
-	<button type="button" class="list-group-item list-group-item-action" (click)="loadStackPosition(-1)">
-				<span *ngIf="-1 == commandsHolder.activeIndex" class="fa fa-play" aria-hidden="true"></span>
-				Ursprungstabelle
-	</button>
-		<!--List body, with every stack entry-->
-	<button type="button" class="list-group-item list-group-item-action" *ngFor="let cmd of commandsHolder.commands" (click)="loadStackPosition(cmd.index)" 
-			[ngClass]="{'list-group-item-danger': cmd.index == dbErrorCode}">
-				<span *ngIf="cmd.index == commandsHolder.activeIndex" class="fa fa-play" aria-hidden="true"></span>
-				{{cmd.index}} : {{ cmd.commandText }}
-	</button>
-</div>
+
 
 <!--Table-Deatils as preview for changes to the table-->
 <sql-table-details *ngIf="_showPreview" [isChild]="true"></sql-table-details>
+
+</div>
+<div class="col-sm-4">
+	<div class="card">
+		<div>
+			<h4>
+				<span class="tag tag-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">TEXT</span></span>
+				<span class="tag tag-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">INTEGER</span></span>
+				<span class="tag tag-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">FLOAT</span></span>
+				<span class="tag tag-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">BOOLEAN</span></span>
+				<span class="tag tag-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">URL</span></span>
+			</h4>
+		</div>
+		<div>
+			<h3>
+				<span class="tag tag-pill tag-primary"><div class="fa fa-key" aria-hidden="true"></div></span>
+				<span class="tag tag-pill tag-default">Not Null</span>
+			</h3>
+		</div>
+
+		<div *ngFor="let tab of projectTables; let i = index">
+			<h4>
+				<span class="tag tag-success"><span class="fa fa-table" aria-hidden="true"></span>{{tab.name}}</span>
+				<div>
+					<h5>
+						<span *ngFor="let column of tab.columns; let i = index" class="tag tag-pill tag-info">{{column.name}}</span>
+					</h5>
+				</div>
+			</h4>
+		</div>
+
+	</div>
+
+	<div class="list-group">
+		<!--List of stack entrys-->
+		<button type="button" class="list-group-item list-group-item-action active">
+			Stackgröße: <span class="badge badge-default badge-pill">{{ commandsHolder.commands.length }}</span> 
+		</button>
+		<button type="button" class="list-group-item list-group-item-action" (click)="loadStackPosition(-1)">
+					<span *ngIf="-1 == commandsHolder.activeIndex" class="fa fa-play" aria-hidden="true"></span>
+					Ursprungstabelle
+		</button>
+		<!--List body, with every stack entry-->
+		<button type="button" class="list-group-item list-group-item-action" *ngFor="let cmd of commandsHolder.commands" (click)="loadStackPosition(cmd.index)" 
+				[ngClass]="{'list-group-item-danger': cmd.index == dbErrorCode}">
+					<span *ngIf="cmd.index == commandsHolder.activeIndex" class="fa fa-play" aria-hidden="true"></span>
+					{{cmd.index}} : {{ cmd.commandText }}
+		</button>
+	</div>
+</div>
+</div>

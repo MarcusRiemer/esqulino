@@ -40,6 +40,8 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
           changeColumnStandardValue(table, cmd['columnIndex'], cmd['newValue'])
         when "addForeignKey"
           addForeignKey(table, cmd['newForeignKey'])
+        when "removeForeignKey"
+          removeForeignKey(table, cmd['foreignKeyToRemove'])
         end
         errorCode, errorBody = database_alter_table(sqlite_file_path, table, colHash)
       else
@@ -74,20 +76,56 @@ def database_alter_table(sqlite_file_path, schema_table, colHash)
     db.execute("INSERT INTO #{schema_table.name}(#{colTo}) SELECT #{colFrom} FROM #{tempTableName};")
 
     db.execute("DROP TABLE #{tempTableName};")
-    #TODO: Use to check for errors
-    db.foreign_key_check()
-  
+
+    error, consistencyBreaks = check_consistency(db)
+
     db.execute("PRAGMA foreign_keys = ON;")
-    db.commit()
-    db.close()
-    return 0
-  rescue SQLite3::SQLException => e
-    db.close()
-    return 2, e.message
+    if error == 0
+      db.commit()
+      db.close()
+      return 0
+    else
+      db.close()
+      return 2, consistencyBreaks
+    end
   rescue SQLite3::ConstraintException => e
     db.close()
     return 1, e.message
   end
+end
+
+def check_consistency(db)
+  begin
+    db.foreign_key_check()
+  rescue SQLite3::SQLException => e
+    return 1, e.message
+  end
+    return 0
+end
+
+def remove_table(sqlite_file_path, tableName)
+  db = sqlite_open_augmented(sqlite_file_path)
+  db.execute("PRAGMA foreign_keys = ON;")
+  begin
+    db.execute("DROP TABLE IF EXISTS #{tableName}")
+  rescue SQLite3::ConstraintException => e
+    db.close
+    return 1, e.message
+  end
+    return 0
+end
+
+def create_table(sqlite_file_path, newTable)
+  db = sqlite_open_augmented(sqlite_file_path)
+  db.execute("PRAGMA foreign_keys = ON;")
+  begin
+    db.execute(table_to_create_statement(newTable))
+  rescue Exception => e
+    puts e.class
+    db.close
+    return 1, e.message
+  end
+    return 0
 end
 
 def rename_table(sqlite_file_path, from_tableName, to_tableName) 
@@ -220,6 +258,10 @@ def column_to_create_statement(schema_column)
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
     createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type float' CHECK (#{schema_column.name} regexp '^[+-]?([0-9]*\.[0-9]+$|[0-9]+$)') ")
+  elsif schema_column.type == 'URL'
+    createStatement.concat(schema_column.type)
+    createStatement.concat(" ")
+    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type url' CHECK (#{schema_column.name} regexp '^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$') ")
   else
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
@@ -290,6 +332,21 @@ def addForeignKey(table, foreignKey)
     foreign_key_comp.add_foreign_key(foreign_key_ref)
   end
   table.add_foreign_keys(foreign_key_comp)  
+end
+
+def removeForeignKey(table, foreignKey)
+  refToDelete = nil;
+  foreign_key_comp = SchemaForeignKey.new()
+  foreignKey['refs'].each do |fk|
+    foreign_key_ref = SchemaForeignKeyRef.new(fk['from_column'], fk['to_table'], fk['to_column'])
+    foreign_key_comp.add_foreign_key(foreign_key_ref)
+  end
+  table.foreign_keys.each do |ref|
+    if ref.to_json(nil) == foreign_key_comp.to_json(nil)
+      refToDelete = ref
+    end
+  end
+  table.foreign_keys.delete(refToDelete)
 end
 
 def createColumnHash(table)
