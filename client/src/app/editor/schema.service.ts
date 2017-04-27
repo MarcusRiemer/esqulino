@@ -93,7 +93,6 @@ export class SchemaService {
                     // There is a new project, Inform subscribers
                     console.log(`Project Service: HTTP request for specific project ("${url}") finished`);
                     this._tableData.next(res);
-                    console.log(res);
                     this._httpRequest = undefined
                 },
                 (error : Response) => {

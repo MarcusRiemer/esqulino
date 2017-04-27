@@ -73,7 +73,7 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         console.log("Details loading!");
         let subRef = this._routeParams.params.subscribe(params => {
             var tableName = params['tableName'];
-            this._projectService.activeProject
+            let projref = this._projectService.activeProject
                 .subscribe(res => {
                     this._project = res;
                     if(this.isChild) {
@@ -82,16 +82,17 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
                         this.table = res.schema.getTable(tableName);
                     }
                 })
+                this._subscriptionRefs.push(projref);
         });
         this._subscriptionRefs.push(subRef);
 
         //Getting the entries from a table with limit and count
         //TODO: Right use of Observable to update the data properly
         this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
-        this._schemaService.activeTableData
+        let schemaref = this._schemaService.activeTableData
             .subscribe(res => { this.tableData = res; },
                 error => this.showError(error));
-        this._subscriptionRefs.push(subRef);
+        this._subscriptionRefs.push(schemaref);
 
         //Calculating the amount of rows inside the table
         subRef = this._schemaService.getTableRowAmount(this._project, this.table)
