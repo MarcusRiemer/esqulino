@@ -13,8 +13,8 @@ import { Table, Column}                             from '../shared/schema/'
 import {TableCommandHolder}                         from '../shared/schema/table-commands'
 
 interface CurrentlyEdited {
-    table : Table
-    stack : any
+    table? : Table
+    stack? : TableCommandHolder
 }
 
 /**
@@ -25,6 +25,29 @@ export class SchemaService {
 
     private _currentlyEdited : CurrentlyEdited;
 
+
+    initCurrentlyEdit(table: Table) {
+        let desc = table.toModel();
+        this._currentlyEdited = {};
+        this._currentlyEdited.table = new Table(desc, desc.columns, desc.foreign_keys);
+        this._currentlyEdited.stack = new TableCommandHolder(this._currentlyEdited.table);
+    }
+
+    getCurrentlyEditedTable() : Table {
+        return this._currentlyEdited.table
+    }
+
+    getCurrentlyEditedStack() : TableCommandHolder {
+        return this._currentlyEdited.stack
+    }
+
+    getCurrentlyEdited() : CurrentlyEdited {
+        return this._currentlyEdited;
+    }
+
+    clearCurrentlyEdited() {
+        this._currentlyEdited = undefined;
+    }
 
     /**
      * If a HTTP request is in progress, this is it.

@@ -76,7 +76,11 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
             this._projectService.activeProject
                 .subscribe(res => {
                     this._project = res;
-                    this.table = res.schema.getTable(tableName);
+                    if(this.isChild) {
+                        this.table = this._schemaService.getCurrentlyEditedTable();
+                    } else {
+                        this.table = res.schema.getTable(tableName);
+                    }
                 })
         });
         this._subscriptionRefs.push(subRef);
