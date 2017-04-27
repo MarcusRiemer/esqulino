@@ -249,7 +249,7 @@ def column_to_create_statement(schema_column)
   elsif schema_column.type == 'BOOLEAN'
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
-    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type boolean'' CHECK (#{schema_column.name} == 1 or #{schema_column.name} == 0) ")
+    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type boolean' CHECK (#{schema_column.name} == 1 or #{schema_column.name} == 0) ")
   elsif schema_column.type == 'INTEGER'
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
