@@ -261,7 +261,7 @@ def column_to_create_statement(schema_column)
   elsif schema_column.type == 'URL'
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
-    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type url' CHECK (#{schema_column.name} regexp '^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$') ")
+    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type url' CHECK (#{schema_column.name} regexp '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS') ")
   else
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
