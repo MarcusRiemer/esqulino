@@ -23,7 +23,7 @@ interface CurrentlyEdited {
 @Injectable()
 export class SchemaService {
 
-    private _currentlyEdited : CurrentlyEdited;
+    private _currentlyEdited : CurrentlyEdited = undefined;
 
 
     initCurrentlyEdit(table: Table) {

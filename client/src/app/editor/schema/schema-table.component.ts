@@ -90,6 +90,20 @@ export class SchemaTableComponent {
         return this.editingEnabled;
     }
 
+    tableIsCurrentlyEdited(tableName : string) {
+        if(this._schemaService.getCurrentlyEdited()) {
+            if(this._schemaService.getCurrentlyEditedTable()) {
+                return this._schemaService.getCurrentlyEditedTable().name == tableName;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        //return this._schemaService.getCurrentlyEdited != undefined ? this._schemaService.getCurrentlyEditedTable().name == tableName : false;
+    }
+
     /**
      * Function to drop a Table;
      */
