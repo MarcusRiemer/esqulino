@@ -151,14 +151,14 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
 
         // Button to save all changes on the Server
         this._toolbarService.savingEnabled = false;
-        btnCreate = this._toolbarService.addButton("save", "Save", "floppy-o", "s");
+        btnCreate = this._toolbarService.addButton("save", "Speichern", "floppy-o", "s");
         subRef = btnCreate.onClick.subscribe((res) => {
             this.saveBtn();
         })
         this._subscriptionRefs.push(subRef);
 
         // Button to cancle the editing without saving
-        btnCreate = this._toolbarService.addButton("cancel", "Cancel", "times", "x");
+        btnCreate = this._toolbarService.addButton("cancel", "Abbrechen", "times", "x");
         subRef = btnCreate.onClick.subscribe((res) => {
             this.cancelBtn();
         })
@@ -347,6 +347,8 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         if(this.colToSwitch != undefined && this.switch_to != undefined) {
             this.commandsHolder.do(new SwitchColumnOrder(this.table, this.colToSwitch, this.switch_to));
         }
+        this.switch_to = undefined;
+        this.colToSwitch = undefined;
     }
 
     /**
@@ -356,6 +358,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         if(this.fk_addColumn != undefined && this.fk_addTable != undefined && this.fk_fromColumn != undefined) {
             this.commandsHolder.do(new AddForeignKey(this.table, this.fk_fromColumn, {refs:[{to_table : this.fk_addTable, from_column : this.table.getColumnByIndex(this.fk_fromColumn).name, to_column : this.fk_addColumn}]}))
         }
+        this.fk_addColumn = undefined;
+        this.fk_addTable = undefined;
+        this.fk_fromColumn = undefined;
     }
 
     /**

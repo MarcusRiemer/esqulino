@@ -6,13 +6,28 @@
  .card-group.columns {
     border-radius: .25rem .25rem 0 0;
     border: 1px solid #e5e5e5;
-    border-bottom: none;
+    margin: 2px;
  }
  .card.tableColumn {
     border: 0px solid;
-    input.tableEditor {
+    input.tableEditorName {
         width: 100px;
     }
+    input.tableEditorDfltVal{
+        width: 122px;
+    }
  }
-
-
+ select.editordrop {
+     width: 150px;
+     height: 38px;
+    option:disabled {
+     background-color: #999999
+    }
+ } 
+ .tableNameBtn{
+     display: table;
+     border-spacing: 0px;
+     .tableNameBtnCell{
+         display: table-cell;
+     }
+ }
