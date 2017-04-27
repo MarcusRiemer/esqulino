@@ -136,6 +136,29 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Getter for amount of tows in Table
+     */
+    get rowCount() {
+        return this._tableRowAmount;
+    }
+
+    /**
+     * Return the Amount of Sites
+     */
+    get sitesOfRows() {
+        let sites = Math.floor(this._tableRowAmount / this._showRowAmount);
+        sites = (this._tableRowAmount % this._showRowAmount) > 0 ? sites+1 : sites;
+        return sites;
+    }
+
+    /**
+     * Get current shown site
+     */
+    get currentSite() {
+        return Math.floor(this._showRowFrom / this._showRowAmount) + 1;
+    }
+
+    /**
      * Function to get the next rows of the table
      */
     nextRowSite() {
