@@ -78,6 +78,7 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
                     this._project = res;
                     if(this.isChild) {
                         this.table = this._schemaService.getCurrentlyEditedTable();
+                        this.showAmount = 5;
                     } else {
                         this.table = res.schema.getTable(tableName);
                     }
@@ -87,7 +88,6 @@ export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
         this._subscriptionRefs.push(subRef);
 
         //Getting the entries from a table with limit and count
-        //TODO: Right use of Observable to update the data properly
         this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
         let schemaref = this._schemaService.activeTableData
             .subscribe(res => { this.tableData = res; },
