@@ -112,36 +112,40 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                 if(this._schemaService.getCurrentlyEdited()) {
                     if(this._originalTableName != this._schemaService.getCurrentlyEditedTable().name) {
                         alert("Eine andere Tabelle wurde zurzeit bearbeitet, dieser Vorgang wurde abgebrochen!");
-                            this._projectService.activeProject
+                            let projref = this._projectService.activeProject
                                 .subscribe(res => {
                                     this._project = res;
                                     this._schemaService.initCurrentlyEdit(res.schema.getTable(this._originalTableName));
                                     this.table = this._schemaService.getCurrentlyEditedTable();
                                     this.commandsHolder = this._schemaService.getCurrentlyEditedStack();
                                 })
+                            this._subscriptionRefs.push(projref);
                     } else {
-                        this._projectService.activeProject
+                        let projref = this._projectService.activeProject
                             .subscribe(res => {
                                 this._project = res;
                                 this.table = this._schemaService.getCurrentlyEditedTable();
                                 this.commandsHolder = this._schemaService.getCurrentlyEditedStack();
                         })
+                        this._subscriptionRefs.push(projref);
                     }
                 } else {
-                    this._projectService.activeProject
+                    let projref = this._projectService.activeProject
                         .subscribe(res => {
                             this._project = res;
                             this._schemaService.initCurrentlyEdit(res.schema.getTable(this._originalTableName));
                             this.table = this._schemaService.getCurrentlyEditedTable();
                             this.commandsHolder = this._schemaService.getCurrentlyEditedStack();
                         })
+                        this._subscriptionRefs.push(projref);
                 }
                 
             } else {
-                this._projectService.activeProject
+                let projref = this._projectService.activeProject
                     .subscribe(res => {
                         this._project = res;
                     })
+                this._subscriptionRefs.push(projref);
                 this.isNewTable = true;
                 this.table = new Table({name : "", columns : [], foreign_keys : []}, [], []);
                 this.commandsHolder = new TableCommandHolder(this.table);
@@ -238,16 +242,17 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     saveBtn() {
         console.log("Save!");
         if(this.isNewTable) {
-            this._schemaService.saveNewTable(this._project, this.table).first().subscribe( 
+            let schemaref = this._schemaService.saveNewTable(this._project, this.table).first().subscribe( 
                     table => {table;
                         window.alert("Änderungen gespeichert!");
                         this._router.navigate(["../../"], { relativeTo: this._routeParams });
                     },
                     error => this.showError(error));
+                    this._subscriptionRefs.push(schemaref);
         } else {
             this.dbErrorCode = -1;
             this.commandsHolder.prepareToSend();
-            this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder)
+            let schemaref = this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder)
                 .first()
                 .subscribe( 
                     table => {table;
@@ -255,6 +260,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                         this._router.navigate(["../../"], { relativeTo: this._routeParams });
                     },
                     error => this.showError(error));
+                    this._subscriptionRefs.push(schemaref);
         }
     }
 
