@@ -50,10 +50,11 @@ export class SchemaComponent implements OnInit {
         })
         this._subscriptionRefs.push(subRef);
         
-        this._projectService.activeProject
+        subRef = this._projectService.activeProject
             .subscribe(res =>{
                  this.project = res
             });
+        this._subscriptionRefs.push(subRef);
     }
 
     ngOnDestroy() {

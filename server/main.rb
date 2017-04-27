@@ -300,8 +300,7 @@ class ScratchSqlApp < Sinatra::Base
 
   # Getting entries inside a table
   get '/api/project/:project_id/db/:database_id/rows/:tableName/:from/:amount' do    
-    check = @project.execute_sql("SELECT Count(*) FROM sqlite_master WHERE type='table' AND name=\'#{params['tableName']}\'", [])
-    if(check['rows'].count === 1)
+    if(@project.has_table(params['tableName']))
       result = @project.execute_sql("Select * from #{params['tableName']} limit ? offset ?", [params['amount'], params['from']])
       json(result['rows'])
     end
@@ -309,8 +308,7 @@ class ScratchSqlApp < Sinatra::Base
 
   # Getting count of entries inside a table
   get '/api/project/:project_id/db/:database_id/count/:tableName' do
-    check = @project.execute_sql("SELECT Count(*) FROM sqlite_master WHERE type='table' AND name=\'#{params['tableName']}\'", [])
-    if(check['rows'].count === 1)
+    if(@project.has_table(params['tableName']))
       result = @project.execute_sql("Select Count(*) from #{params['tableName']}", [])
       json(result['rows'].first)
     end
@@ -319,7 +317,7 @@ class ScratchSqlApp < Sinatra::Base
   post '/api/project/:project_id/db/:database_id/create' do |_p, database_id|
     newTable = createObject(request.body.read)
     check = @project.execute_sql("SELECT Count(*) FROM sqlite_master WHERE type='table' AND name=\'#{newTable.name}\'", [])
-    if(check['rows'].count === 0)
+    if(!@project.has_table(params['tableName']))
       error, msg = create_table(@project.file_path_sqlite, newTable)  
       if(error == 0)
         return 200
@@ -333,7 +331,7 @@ class ScratchSqlApp < Sinatra::Base
 
   delete '/api/project/:project_id/db/:database_id/drop/:tableName' do |_p, database_id, tableName|
     check = @project.execute_sql("SELECT Count(*) FROM sqlite_master WHERE type='table' AND name=\'#{params['tableName']}\'", [])
-    if(check['rows'].count === 1)
+    if(@project.has_table(params['tableName']))
       error, msg = remove_table(@project.file_path_sqlite, params['tableName'])  
       if(error == 0)
         return 200
@@ -344,12 +342,14 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   post '/api/project/:project_id/db/:database_id/alter/:tableName' do
-    commandHolder = JSON.parse(request.body.read)
-    error, index, errorCode, errorBody = database_alter_schema(@project.file_path_sqlite, params['tableName'], commandHolder)
-    if(error) 
-      return 500, {'Content-Type' => 'application/json'}, { :index => index.to_s, :errorCode => errorCode.to_s, :errorBody => json(errorBody)}.to_json
-    else 
-      return 200, {'Content-Type' => 'application/json'}, {:schema => database_describe_schema(@project.file_path_sqlite)}.to_json
+    if(@project.has_table(params['tableName']))
+      commandHolder = JSON.parse(request.body.read)
+      error, index, errorCode, errorBody = database_alter_schema(@project.file_path_sqlite, params['tableName'], commandHolder)
+      if(error) 
+        return 500, {'Content-Type' => 'application/json'}, { :index => index.to_s, :errorCode => errorCode.to_s, :errorBody => json(errorBody)}.to_json
+      else 
+        return 200, {'Content-Type' => 'application/json'}, {:schema => database_describe_schema(@project.file_path_sqlite)}.to_json
+      end
     end
   end
 
