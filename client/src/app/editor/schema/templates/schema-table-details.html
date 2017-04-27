@@ -17,7 +17,7 @@
 				<span class="fa fa-arrow-right" aria-hidden="true"></span>
 			</a>
 			</div>
-			<h6>Seite: {{currentSite}}/{{sitesOfRows}}</h6>
+			<h6 *ngIf="!isChild">Seite: {{currentSite}}/{{sitesOfRows}}</h6>
 		</h3>
 		<!--Table of table entrys-->
 		<table class="table table-striped" [ngClass]="{'table-condensed' : isChild}" style="width:100%">
