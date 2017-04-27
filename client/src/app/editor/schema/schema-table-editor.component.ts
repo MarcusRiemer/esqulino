@@ -104,15 +104,39 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      * Load the project to access the schema
      */
     ngOnInit() {
+        let goBack = false;
         console.log("Editor loading!");
         let subRef = this._routeParams.params.subscribe(params => {
             this._originalTableName = params['tableName'];
             if (this._originalTableName) {
-                this._projectService.activeProject
-                    .subscribe(res => {
-                        this._project = res;
-                        this.table = res.schema.getTable(this._originalTableName);
-                    })
+                if(this._schemaService.getCurrentlyEdited()) {
+                    if(this._originalTableName != this._schemaService.getCurrentlyEditedTable().name) {
+                        alert("Eine andere Tabelle wurde zurzeit bearbeitet, dieser Vorgang wurde abgebrochen!");
+                            this._projectService.activeProject
+                                .subscribe(res => {
+                                    this._project = res;
+                                    this._schemaService.initCurrentlyEdit(res.schema.getTable(this._originalTableName));
+                                    this.table = this._schemaService.getCurrentlyEditedTable();
+                                    this.commandsHolder = this._schemaService.getCurrentlyEditedStack();
+                                })
+                    } else {
+                        this._projectService.activeProject
+                            .subscribe(res => {
+                                this._project = res;
+                                this.table = this._schemaService.getCurrentlyEditedTable();
+                                this.commandsHolder = this._schemaService.getCurrentlyEditedStack();
+                        })
+                    }
+                } else {
+                    this._projectService.activeProject
+                        .subscribe(res => {
+                            this._project = res;
+                            this._schemaService.initCurrentlyEdit(res.schema.getTable(this._originalTableName));
+                            this.table = this._schemaService.getCurrentlyEditedTable();
+                            this.commandsHolder = this._schemaService.getCurrentlyEditedStack();
+                        })
+                }
+                
             } else {
                 this._projectService.activeProject
                     .subscribe(res => {
@@ -120,6 +144,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                     })
                 this.isNewTable = true;
                 this.table = new Table({name : "", columns : [], foreign_keys : []}, [], []);
+                this.commandsHolder = new TableCommandHolder(this.table);
             }
         });
         this._subscriptionRefs.push(subRef);
@@ -163,8 +188,6 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
             this.cancelBtn();
         })
         this._subscriptionRefs.push(subRef);
-
-        this.commandsHolder = new TableCommandHolder(this.table);
     }
 
     ngOnDestroy() {
@@ -255,6 +278,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     cancelBtn() {
         console.log("Cancel!");
+        this._schemaService.clearCurrentlyEdited();
         this._router.navigate(["../../"], { relativeTo: this._routeParams });
     }
 
