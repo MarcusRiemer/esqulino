@@ -152,6 +152,7 @@ export class SchemaService {
         const toReturn = this._http.post(url, body, options) 
             .map( (res) => {
                 this._projectService.setActiveProject(project.id, true);
+                this.clearCurrentlyEdited();
                 return table;
             })
             .catch(this.handleError);
@@ -172,7 +173,9 @@ export class SchemaService {
         const body = JSON.stringify(commandHolder.toModel());
 
         const toReturn = this._http.post(url, body, options)
-            .map(res => this._projectService.setActiveProject(project.id, true))
+            .map(res => {this._projectService.setActiveProject(project.id, true);
+                    this.clearCurrentlyEdited();                
+                })
             .catch(this.handleError);
         return(toReturn);
     }

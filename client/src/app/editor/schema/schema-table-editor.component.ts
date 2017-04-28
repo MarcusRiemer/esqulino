@@ -147,8 +147,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                     })
                 this._subscriptionRefs.push(projref);
                 this.isNewTable = true;
-                this.table = new Table({name : "", columns : [], foreign_keys : []}, [], []);
-                this.commandsHolder = new TableCommandHolder(this.table);
+                this._schemaService.initCurrentlyEdit(new Table({name : "", columns : [], foreign_keys : []}, [], []));
+                this.table = this._schemaService.getCurrentlyEditedTable();
+                this.commandsHolder = this._schemaService.getCurrentlyEditedStack();
             }
         });
         this._subscriptionRefs.push(subRef);
@@ -246,6 +247,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
             let schemaref = this._schemaService.saveNewTable(this._project, this.table).first().subscribe( 
                     table => {table;
                         window.alert("Änderungen gespeichert!");
+                        this._schemaService.clearCurrentlyEdited();
                         this._router.navigate(["../../"], { relativeTo: this._routeParams });
                     },
                     error => this.showError(error));
@@ -261,6 +263,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                 .subscribe( 
                     table => {table;
                         window.alert("Änderungen gespeichert!");
+                        this._schemaService.clearCurrentlyEdited();
                         this._router.navigate(["../../"], { relativeTo: this._routeParams });
                     },
                     error => this.showError(error));
