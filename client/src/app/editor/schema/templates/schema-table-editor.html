@@ -165,7 +165,7 @@
 
 
 <!--Table-Deatils as preview for changes to the table-->
-<sql-table-details *ngIf="_showPreview" [isChild]="true"></sql-table-details>
+<sql-table-details *ngIf="_showPreview && !isNewTable" [isChild]="true"></sql-table-details>
 
 </div>
 <div class="col-sm-4">
