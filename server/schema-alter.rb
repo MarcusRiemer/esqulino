@@ -121,7 +121,7 @@ def create_table(sqlite_file_path, newTable)
   begin
     db.execute(table_to_create_statement(newTable))
   rescue Exception => e
-    puts e.class
+    puts e.backtrace
     db.close
     return 1, e.message
   end
@@ -278,6 +278,15 @@ end
 # Function to create a SchemaTable class object, out of a json
 def createObject(tableDescribtion)
   return JSON.parse(tableDescribtion, object_class: OpenStruct)
+end
+
+def replace_refs_in_new_table(tableDescribtion)
+  tableDescribtion = JSON.parse(tableDescribtion)
+  tableDescribtion['foreign_keys'].each do |ref|
+    ref['references'] = ref['refs']
+    ref.delete('refs')
+  end
+  return JSON.generate(tableDescribtion)
 end
 
 ### Table Commands ###

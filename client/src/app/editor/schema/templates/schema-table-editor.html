@@ -32,7 +32,7 @@
 			</div>
 
 			<!--Every column as a card-->
-			<div *ngFor="let column of table.columns; let i = index" class="card-group columns">
+			<div *ngFor="let column of table.columns" class="card-group columns">
 				<div class="card  tableColumn">
 					<!--Column index, name and button to delete the column-->
 					<div class="tableNameBtn">
@@ -42,7 +42,7 @@
 							<span class="fa fa-minus" aria-hidden="true"></span>
 						</span>
 						</div>
-						<input  class="form-control tableEditorName tableNameBtnCell" id="example-text-input" (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnName(i, $event.target.value)" [(ngModel)]="column.name" placeholder="Name" />
+						<input  class="form-control tableEditorName tableNameBtnCell" id="example-text-input" (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnName(column.index, $event.target.value)" [(ngModel)]="column.name" placeholder="Name" />
 					</div>
 				</div>
 				<!--Primray key checkbox-->
@@ -64,7 +64,7 @@
 				<!--Column type input-->
 				<div class="card  tableColumn">
 
-					<select class="custom-select" [(ngModel)]="column.type" (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (change)="changedColumnType(i, $event.target.value)">
+					<select class="custom-select" [(ngModel)]="column.type" (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (change)="changedColumnType(column.index, $event.target.value)">
 					<option disabled selected>Datentyp</option>
 					<option value="TEXT">TEXT</option>
 					<option value="INTEGER">INTEGER</option>
@@ -102,7 +102,7 @@
 				</div>
 				<!--Column default value input-->
 				<div class="card  tableColumn">
-					<input class="tableEditorDfltVal  form-control" (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnStandartValue(i, $event.target.value)" [(ngModel)]="column.dflt_value" placeholder="Standardwert" />
+					<input class="tableEditorDfltVal  form-control" (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnStandartValue(column.index, $event.target.value)" [(ngModel)]="column.dflt_value" placeholder="Standardwert" />
 				</div>
 			</div>
 			<!--Add column button-->
@@ -117,12 +117,12 @@
 						Switch:&nbsp; 
 						<select class="custom-select editordrop" [(ngModel)]="colToSwitch">
 							<option disabled selected value="undefined">Spalte</option>
-							<option *ngFor="let column of table.columns; let i = index" [value]="column.index">{{column.name}}</option>
+							<option *ngFor="let column of table.columns" [value]="column.index">{{column.name}}</option>
 						</select>
 
 						<select  class="custom-select"[(ngModel)]="switch_to">
 							<option disabled selected value="undefined">an Position</option>
-							<option *ngFor="let column of table.columns; let i = index" [value]="column.index">Position : {{column.index}}</option>
+							<option *ngFor="let column of table.columns" [value]="column.index">Position : {{column.index}}</option>
 						</select>
 						<a (click)="changeColumnOrder()" class="btn btn-primary">
 							<span class="fa fa-exchange" aria-hidden="true"></span>
@@ -134,19 +134,19 @@
 						Add FK: 
 						<select class="custom-select editordrop" [(ngModel)]="fk_fromColumn">
 							<option disabled selected value="undefined">Spalte</option>
-							<ng-container *ngFor="let column of table.columns; let i = index">
+							<ng-container *ngFor="let column of table.columns">
 								<option *ngIf="(table.columnIsForeignKeyOfTable(column.name) == undefined)" [value]="column.index">{{column.name}}</option>
 							</ng-container>
 						</select>
 
 						<select class="custom-select editordrop" *ngIf=fk_fromColumn [(ngModel)]="fk_addTable">
 							<option disabled selected value="undefined">zur Tabelle</option>
-							<option *ngFor="let tab of projectTables; let i = index" [value]="tab.name">{{tab.name}}</option>
+							<option *ngFor="let tab of projectTables" [value]="tab.name">{{tab.name}}</option>
 						</select>
 
 						<select class="custom-select editordrop" *ngIf=fk_addTable [(ngModel)]="fk_addColumn">
 							<option disabled selected value="undefined">zur Spalte</option>
-							<option *ngFor="let column of getColumnsOfTable().columns; let i = index" [value]="column.name">{{column.name}}</option>
+							<option *ngFor="let column of getColumnsOfTable().columns" [value]="column.name">{{column.name}}</option>
 						</select>
 
 						<a *ngIf=fk_addColumn (click)="addForeignKey()" class="btn btn-primary">
@@ -186,12 +186,12 @@
 			</h3>
 		</div>
 
-		<div *ngFor="let tab of projectTables; let i = index">
+		<div *ngFor="let tab of projectTables">
 			<h4>
 				<span class="tag tag-success"><span class="fa fa-table" aria-hidden="true"></span>{{tab.name}}</span>
 				<div>
 					<h5>
-						<span *ngFor="let column of tab.columns; let i = index" class="tag tag-pill tag-info">{{column.name}}</span>
+						<span *ngFor="let column of tab.columns" class="tag tag-pill tag-info">{{column.name}}</span>
 					</h5>
 				</div>
 			</h4>
