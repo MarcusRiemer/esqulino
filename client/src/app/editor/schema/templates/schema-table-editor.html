@@ -33,7 +33,8 @@
 
 			<!--Every column as a card-->
 			<div *ngFor="let column of table.columns" class="card-group columns">
-				<div class="card  tableColumn">
+				<ng-container *ngIf="!this.isNewTable || !(column.stateName == 'deleted')">
+				<div class="card tableColumn">
 					<!--Column index, name and button to delete the column-->
 					<div class="tableNameBtn">
 						<div class="tableNameBtnCell">
@@ -45,6 +46,7 @@
 						<input  class="form-control tableEditorName tableNameBtnCell" id="example-text-input" (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnName(column.index, $event.target.value)" [(ngModel)]="column.name" placeholder="Name" />
 					</div>
 				</div>
+
 				<!--Primray key checkbox-->
 				<div class="card  tableColumn">
 
@@ -104,6 +106,7 @@
 				<div class="card  tableColumn">
 					<input class="tableEditorDfltVal  form-control" (focus)="saveTempValue($event.target.value)" [disabled]="column.stateName == 'deleted'" (blur)="changedColumnStandartValue(column.index, $event.target.value)" [(ngModel)]="column.dflt_value" placeholder="Standardwert" />
 				</div>
+				</ng-container>
 			</div>
 			<!--Add column button-->
 			<div class="card-group">
@@ -120,7 +123,7 @@
 							<option *ngFor="let column of table.columns" [value]="column.index">{{column.name}}</option>
 						</select>
 
-						<select  class="custom-select"[(ngModel)]="switch_to">
+						<select  class="custom-select editordrop"[(ngModel)]="switch_to">
 							<option disabled selected value="undefined">an Position</option>
 							<option *ngFor="let column of table.columns" [value]="column.index">Position : {{column.index}}</option>
 						</select>
