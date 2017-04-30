@@ -88,6 +88,9 @@ def database_alter_table(sqlite_file_path, schema_table, colHash)
       db.close()
       return 2, consistencyBreaks
     end
+  rescue SQLite3::SQLException => e
+    db.close()
+    return 1, e.message
   rescue SQLite3::ConstraintException => e
     db.close()
     return 1, e.message
@@ -269,7 +272,7 @@ def column_to_create_statement(schema_column)
   if schema_column.not_null || schema_column.primary
     createStatement.concat("NOT NULL ")
   end
-  unless schema_column.dflt_value.nil?
+  unless schema_column.dflt_value.nil? or schema_column.dflt_value.empty?
     createStatement.concat("DEFAULT #{schema_column.dflt_value}")
   end
   return createStatement
