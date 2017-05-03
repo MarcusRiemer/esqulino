@@ -8,7 +8,7 @@ import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
 
 import {WidgetComponent}               from '../widget.component'
 
-type EditedComponent = WidgetComponent<Button>
+type EditedComponent = WidgetComponent<Button>;
 
 /**
  * Displays the sidebar editing component for a heading.
@@ -17,7 +17,6 @@ type EditedComponent = WidgetComponent<Button>
     templateUrl: 'templates/button-sidebar.html',
 })
 export class ButtonSidebarComponent {
-
     // This should be const, but it can't be in Typescript 2
     public SAME_PAGE_ID = "current";
 
