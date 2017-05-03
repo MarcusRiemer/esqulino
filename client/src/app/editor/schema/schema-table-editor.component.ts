@@ -244,7 +244,16 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         console.log("Save!");
         if(this.isNewTable) {
             if(this.table.name != "") {
-            let schemaref = this._schemaService.saveNewTable(this._project, this.table).first().subscribe( 
+                let desc = this.table.toModel();
+                let tableToSend = new Table(desc, desc.columns, desc.foreign_keys);
+                for (var i = tableToSend.columns.length - 1; i >= 0; i--) {
+                    console.log(tableToSend.columns[i].state);
+                    if(this.table.columns[i].state == ColumnStatus.deleted) {
+                        tableToSend.columns.splice(i, 1);
+                    }
+                }
+                console.log(tableToSend);
+            let schemaref = this._schemaService.saveNewTable(this._project, tableToSend).first().subscribe( 
                     table => {table;
                         window.alert("Änderungen gespeichert!");
                         this._schemaService.clearCurrentlyEdited();
@@ -302,12 +311,8 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      * @param - index the index of the column to remove
      */
     removeColumn(index: number) {
-        if(!this.isNewTable) {
-            if(this.table.getColumnByIndex(index).state != ColumnStatus.deleted) {
-                this.commandsHolder.do(new DeleteColumn(this.table, index));
-            }
-        } else {
-            this.table.columns.splice(this.table.columns.indexOf(this.table.getColumnByIndex(index)), 1);
+        if(this.table.getColumnByIndex(index).state != ColumnStatus.deleted) {
+            this.commandsHolder.do(new DeleteColumn(this.table, index));
         }
     }
 

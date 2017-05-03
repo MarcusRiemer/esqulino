@@ -315,8 +315,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   post '/api/project/:project_id/db/:database_id/create' do |_p, database_id|
-    newTable = createObject(request.body.read)
-    check = @project.execute_sql("SELECT Count(*) FROM sqlite_master WHERE type='table' AND name=\'#{newTable.name}\'", [])
+    newTable = createObject(replace_refs_in_new_table(request.body.read))
     if(!@project.has_table(params['tableName']))
       error, msg = create_table(@project.file_path_sqlite, newTable)  
       if(error == 0)
@@ -330,7 +329,6 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   delete '/api/project/:project_id/db/:database_id/drop/:tableName' do |_p, database_id, tableName|
-    check = @project.execute_sql("SELECT Count(*) FROM sqlite_master WHERE type='table' AND name=\'#{params['tableName']}\'", [])
     if(@project.has_table(params['tableName']))
       error, msg = remove_table(@project.file_path_sqlite, params['tableName'])  
       if(error == 0)

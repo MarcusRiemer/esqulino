@@ -1,3 +1,40 @@
 \section{Fazit}
-\label{sec:fazit}
+\label{sec05:fazit}
+In dem letzten Abschnitt wird noch einmal beschrieben, welche Ziele erreicht wurden und in welchem Ausmaß und was nicht erreicht wurde und welche weiteren Entwicklungen möglich sind und angestrebt werden sollten.
+
+\subsection{Erreichte Ziele}
+\label{subsec05:erreicht}
+Im Rückblick auf die Anforderungsanalyse~\ref{sec03:anforderungen} sollte eine Erweiterung zu der Software Blattwerkzeug erreicht werden, in der man die vorhandene Datenbank anzeigen, die Tabelleninhalte durchschauen und Tabellen erstellen, löschen oder verändern kann. Dies alles sollte unter Berücksichtigung geschehen, dass Blattwerkzeug eine Software sein soll, die einer jungen Zielgruppe den Umgang mit der Erstellung und Veränderung von Datenbanken zu lehren hat.
+
+Diese Ziele wurden erreicht. Eine Vorschau der Datenbank wurde auf mehrere Weisen realisiert und verschiedene Aspekte der Datenbank wurde genauer dargestellt. So ist eine Grafik vorhanden um die genauen Beziehungen zwischen den Tabellen zu visualisieren, und eine detaillierte Ansicht, der genauen Eigenschaften einer Tabelle, zu geben. Zusätzlich lassen sich die einzelnen Inhalte der Tabelle, auch ohne den Umweg einer Abfrage, anzeigen.
+
+Der Editor gibt die Möglichkeit, Tabellen zu löschen, neue zu erstellen oder bereits vorhandene zu verändern. Dabei ist der wichtige Aspekt der Kommunikation bei möglichen Fehlern realisiert. Fehler die automatisch korrigiert werden könnten sind weiterhin vorhanden, um so die Möglichkeit zu bieten, in einem Kurs solche herbeizuführen und zu besprechen. 
+Der Stack mit der Vorschau der Tabelle beim Editieren, lässt den Benutzer leicht verstehen was die Veränderungen bringen werden.
+
+Die strikte Typisierung konnte eingebaut werden, auch wenn es keine Eigenschaft von SQLite ist. Da SQLite in dieser Hinsicht aber die Ausnahme ist, wird dem Benutzer von Blattwerkzeug, der Standard von Datenbanken näher gebracht.
+
+Somit ist die Funktionalität die erreicht werden sollte eingebaut und konnte durch Tests bestätigt werden.
+
+\subsection{Nicht Erreichte Ziele}
+\label{subsec05:nicht_erreicht}
+Eines der wichtigen Aspekte von Blattwerkzeug ist die Bedienung durch Drag \& Drop. Die Funktionsweise dieser Funktion wurde bereits in der Masterarbeit von Marcus Riemer entwickelt und eingebaut. 
+Der Fokus dieser Arbeit bezog sich, auf die Entwicklung der Anzeige und Verarbeitung der Datenbank. Das Einbauen der bereits vorhandenen Implementierung von Drag \& Drop, wurde bereits am Anfang als ein Zusatz gewertet. Es wurde darauf geachtet, dass die Implementierung das Nachträgliche Einbauen des Drag \& Drops ermöglicht. Am Ende wurde diese Funktionalität nicht eingebaut, und die Zeit wurde für weitere Verbesserungen der Fehler-Kommunikation und Tests genutzt.
+
+In Datenbanken ist es möglich zusammengesetzte Fremdschlüssel zu erstellen. Nach viel Überlegung zusammen mit Marcus Riemer, wurde keine passende Darstellung gefunden um diese grafisch zu erstellen. Somit ist es zur Zeit in der Bedienung nur möglich, einfache Fremdschlüssel zu bilden.
+Das Backend unterstützt die Erstellung, Speicherung und Veränderung von zusammengesetzten Schlüsseln, welches auch durch Tests bestätigt werden konnte. Somit kann in weiterer Entwicklung, beim vorhanden sein einer grafischen Bedienung, diese Funktion unterstützt werden.
+
+\subsection{Weitere Entwicklung}
+\label{subsec05:future_dev}
+Die Entwicklung der Erweiterung für Blattwerkzeug führte zu Ideen weiterer Entwicklungen für die Zukunft.
+Die zwei bereits besprochenen Aspekte, des Drag \& Drop und der Möglichkeit der Erstellung zusammengesetzter Fremdschlüssel, währen die ersten Möglichkeiten einer Weiterentwicklung von Blattwerkzeug.
+
+Zusätzlich wäre die Darstellung des Schemas ein Aspekt zur weiteren Entwicklung. \\
+Eine Möglichkeit wäre die grafische Darstellung des Schemas an Stelle einer Grafik in einer interaktiven Benutzeroberfläche anzuzeigen. So könnten die Tabellen frei bewegt werden, wie es auch in einigen bereits vorhandenen Programmen möglich ist.
+
+Um den Entwicklungsprozess von Datenbanken neuen Benutzern beizubringen, könnte vor der Erstellung der physikalischen Datenbank die Möglichkeit bestehen, ein ER-Diagramm zu erstellen, welches mit der physikalischen Datenbank im Anschluss verglichen wird.
+
+Blattwerkzeug wurde als Software gedacht, die auch in Schulen im Informatikkurs benutzt werden könnte. Dabei könnte den Kursleitern eine Funktion zum leichten einpflegen von Inhalten in Tabellen, zum Beispiel im Form von einer \texttt{CSV}-Datei die Vorbereitung einer speziellen Aufgabe vereinfachen.
+
+Dies sind einige Ideen die während der Entwicklung der Erweiterung aufgekommen sind. Es werden weitere Ideen und mögliche Verbesserung der bereits vorhandenen Software aufkommen, wenn diese von Benutzern verwendet wird. 
+Eine solche Software erreicht selten einen Zustand, in dem keine weitere Entwicklung nötig ist. Vor allem in einer Software die für eine Zielgruppe entwickelt wurde, in der sich die Entwickler selbst nicht befinden, und Teil der Zielgruppe sich dadurch auszeichnet, kein direktes Wissen zum Thema zu besitzen, wodurch sie sich nicht ausdrücken können, welche Funktionalität erwünscht ist. Somit wird viel Weiterentwicklung zusammen mit der Zielgruppe, während der Verwendung der Software erforderlich sein.
 

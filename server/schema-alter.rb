@@ -88,6 +88,9 @@ def database_alter_table(sqlite_file_path, schema_table, colHash)
       db.close()
       return 2, consistencyBreaks
     end
+  rescue SQLite3::SQLException => e
+    db.close()
+    return 1, e.message
   rescue SQLite3::ConstraintException => e
     db.close()
     return 1, e.message
@@ -121,7 +124,7 @@ def create_table(sqlite_file_path, newTable)
   begin
     db.execute(table_to_create_statement(newTable))
   rescue Exception => e
-    puts e.class
+    puts e.backtrace
     db.close
     return 1, e.message
   end
@@ -269,7 +272,7 @@ def column_to_create_statement(schema_column)
   if schema_column.not_null || schema_column.primary
     createStatement.concat("NOT NULL ")
   end
-  unless schema_column.dflt_value.nil?
+  unless schema_column.dflt_value.nil? or schema_column.dflt_value.empty?
     createStatement.concat("DEFAULT #{schema_column.dflt_value}")
   end
   return createStatement
@@ -278,6 +281,15 @@ end
 # Function to create a SchemaTable class object, out of a json
 def createObject(tableDescribtion)
   return JSON.parse(tableDescribtion, object_class: OpenStruct)
+end
+
+def replace_refs_in_new_table(tableDescribtion)
+  tableDescribtion = JSON.parse(tableDescribtion)
+  tableDescribtion['foreign_keys'].each do |ref|
+    ref['references'] = ref['refs']
+    ref.delete('refs')
+  end
+  return JSON.generate(tableDescribtion)
 end
 
 ### Table Commands ###
