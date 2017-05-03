@@ -1,0 +1,1 @@
+INSERT INTO NewTable([ColumnNames]) SELECT OldTable FROM ColumnNames;
