@@ -1,25 +1,26 @@
-<nav class="toolbar navbar navbar-fixed-top navbar-light bg-faded">
-  <a [routerLink]="'/'"
-     id="navbar-navigate-home"
-     class="navbar-brand"><img src="/vendor/logos/blattwerkzeug-logo.svg"
-                               height="30px"
-                               title="BlattWerkzeug"></a>
-  <ul class="nav navbar-nav">
-    <li *ngFor="let item of toolbarService.items"
-        class="nav-item">
-      <button (click)="item.fire()"
-              id="toolbar-btn-{{item.id}}"
-              class="btn btn-primary">
-        <span class="fa fa-fw fa-spinner fa-pulse"
-              [hidden]="!item.isInProgress">
-        </span>
-        <span class="fa fa-fw fa-{{ item._icon }}"
-              [hidden]="item.isInProgress">
-        </span> {{ item._caption }}
-      </button>
-    </li>
-    <li class="pull-xs-right">
-      <trash></trash>
-    </li>
-  </ul>
+<nav class="toolbar navbar sticky-top navbar-light">
+  <form class="form-inline">
+    <a [routerLink]="'/'"
+       id="navbar-navigate-home"
+       class="navbar-brand"><img src="/vendor/logos/blattwerkzeug-logo.svg"
+                                 class="d-inline-block align-top"
+                                 height="30px"
+                                 title="BlattWerkzeug"></a>
+    <button *ngFor="let item of toolbarService.items"
+            (click)="item.fire()"
+            id="toolbar-btn-{{item.id}}"
+            class="btn btn-primary">
+      <span class="fa fa-fw fa-spinner fa-pulse"
+            [hidden]="!item.isInProgress">
+      </span>
+      <span class="fa fa-fw fa-{{ item._icon }}"
+            [hidden]="item.isInProgress">
+      </span> {{ item._caption }}
+    </button>
+  </form>
+  
+  <span class="pull-xs-right">
+    <trash></trash>
+  </span>
+
 </nav>

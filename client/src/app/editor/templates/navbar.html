@@ -1,74 +1,64 @@
-<div>
-  <nav>
-    <ul class="nav">
-      <li class="nav-item">
-        <a class="nav-link"
-           [routerLink]="['settings']"
-           routerLinkActive="router-link-active">
-          <span class="fa fa-cog fa-fw"></span>Projekt
-        </a>
-        <span *ngIf="project?.isSavingRequired"
-              class="dirty pull-right">
-          <span class="fa fa-floppy-o"></span>
-        </span>
-      </li>
-      <li class="nav-item">
-        <span class="fa fa-database fa-fw"></span>Datenbank
-        <ul class="nav nav-query">
-          <li class="nav-item">
-            <a class="nav-link"
-               [routerLink]="['schema']"
-               routerLinkActive="router-link-active">
-              <span class="fa fa-table fa-fw"></span>Schema
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link"
-               [routerLink]="['query', 'create']"
-               routerLinkActive="router-link-active">
-              <span class="fa fa-plus fa-fw"></span>Neue Operation
-            </a>
-          </li>
-          <li class="nav-item"
-              *ngFor="let query of project?.queries">
-            <a [routerLink]="['query', query.id]"
-               (dragstart)="startQueryDrag($event, query)"
-               class="nav-link"
-               routerLinkActive="router-link-active">
-              <query-icon [query]="query"></query-icon>
-            </a>
-            <span [hidden]="!query.isSavingRequired"
-                  class="dirty pull-right">
-              <span class="fa fa-floppy-o"></span>
-            </span>
-          </li>
-        </ul>
-      </li>
-      <li class="nav-item">
-        <span class="fa fa-globe fa-fw"></span>
-        Webseite
-        <ul class="nav nav-page">
-          <li class="nav-item">
-            <a class="nav-link"
-               [routerLink]="['page', 'create']"
-               routerLinkActive="router-link-active">
-              <span class="fa fa-plus fa-fw"></span>Neue Seite
-            </a>
-          </li>
-          <li class="nav-item"
-              *ngFor="let page of project?.pages">
-            <a class="nav-link"
-               [routerLink]="['page', page.id]"
-               routerLinkActive="router-link-active">
-              <span class="fa {{ iconForPage(page) }} fa-fw"></span>{{ page.name }}
-            </a>
-            <span [hidden]="!page.isSavingRequired"
-                  class="dirty pull-right">
-              <span class="fa fa-floppy-o"></span>
-            </span>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
-</div>
+<nav>
+  <ul>
+    <li>
+      <a [routerLink]="['settings']"
+         routerLinkActive="router-link-active">
+        <span class="fa fa-cog fa-fw"></span>Projekt
+      </a>
+      <span *ngIf="project?.isSavingRequired"
+            class="dirty pull-right">
+        <span class="fa fa-floppy-o"></span>
+      </span>
+    </li>
+    <li>
+      <span class="fa fa-database fa-fw"></span>Datenbank
+      <ul class="nav-query">
+        <li>
+          <a [routerLink]="['schema']"
+             routerLinkActive="router-link-active">
+            <span class="fa fa-table fa-fw"></span>Schema
+          </a>
+        </li>
+        <li>
+          <a [routerLink]="['query', 'create']"
+             routerLinkActive="router-link-active">
+            <span class="fa fa-plus fa-fw"></span>Neue Operation
+          </a>
+        </li>
+        <li *ngFor="let query of project?.queries">
+          <a [routerLink]="['query', query.id]"
+             (dragstart)="startQueryDrag($event, query)"
+             routerLinkActive="router-link-active">
+            <query-icon [query]="query"></query-icon>
+          </a>
+          <span [hidden]="!query.isSavingRequired"
+                class="dirty pull-right">
+            <span class="fa fa-floppy-o"></span>
+          </span>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <span class="fa fa-globe fa-fw"></span>
+      Webseite
+      <ul class="nav-page">
+        <li>
+          <a [routerLink]="['page', 'create']"
+             routerLinkActive="router-link-active">
+            <span class="fa fa-plus fa-fw"></span>Neue Seite
+          </a>
+        </li>
+        <li *ngFor="let page of project?.pages">
+          <a [routerLink]="['page', page.id]"
+             routerLinkActive="router-link-active">
+            <span class="fa {{ iconForPage(page) }} fa-fw"></span>{{ page.name }}
+          </a>
+          <span [hidden]="!page.isSavingRequired"
+                class="dirty pull-right">
+            <span class="fa fa-floppy-o"></span>
+          </span>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
