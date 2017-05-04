@@ -36,7 +36,6 @@ export class TrashService {
 
         // Kill all subscriptions, if there are any
         if (this._onDrop) {
-            this._onDrop.complete();
             this._onDrop = undefined;
         }
     }

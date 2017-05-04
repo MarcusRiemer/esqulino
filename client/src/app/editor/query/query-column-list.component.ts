@@ -87,8 +87,6 @@ export class QueryColumnListComponent {
             this._currentDrag = undefined;
             this._currentHoverIndex = undefined;
 
-            this._trashService.hideTrash();
-
             this._cdRef.reattach();
         });
 
