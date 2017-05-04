@@ -1,6 +1,6 @@
 # Path to the clients source and its project file
 SRC_PATH = $(realpath ../../client/src/app)
-SRC_PROJECT = $(realpath ../../client/src/tsconfig.json)
+SRC_PROJECT = $(realpath ../../client/tsconfig.json)
 
 # The absolute path of the directory the schemas reside in
 SCHEMA_PATH = $(realpath .)

@@ -7,7 +7,7 @@ TYPESCRIPT_JSON_SCHEMA_BIN = $(SCHEMA_PATH)/node_modules/typescript-json-schema/
 SCHEMA_OPTIONS = --noExtraProps true
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILE_NAMES = PageDescription.json PageUpdateRequestDescription.json PageRenderRequestDescription.json ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json
+JSON_SCHEMA_FILE_NAMES = PageDescription.json PageUpdateRequestDescription.json PageRenderRequestDescription.json ProjectDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json AlterSchemaRequestDescription.json TableDescription.json
 
 # Paths of the schema files to generate
 JSON_SCHEMA_FILES = $(addprefix $(SCHEMA_PATH)/, $(JSON_SCHEMA_FILE_NAMES))
@@ -67,6 +67,12 @@ $(SCHEMA_PATH)/ArbitraryQueryRequestDescription.json : $(SRC_PATH)/editor/query.
 	$(CONVERT_COMMAND)
 
 $(SCHEMA_PATH)/PageRenderRequestDescription.json : $(SRC_PATH)/editor/page.service.ts
+	$(CONVERT_COMMAND)
+
+$(SCHEMA_PATH)/AlterSchemaRequestDescription.json : $(SRC_PATH)/shared/schema/table-commands.ts
+	$(CONVERT_COMMAND)
+
+$(SCHEMA_PATH)/TableDescription.json : $(SRC_PATH)/shared/schema/schema.description.ts
 	$(CONVERT_COMMAND)
 
 # Ensure the typescript-json-schema "binary" is part of the node_modules folder

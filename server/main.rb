@@ -314,9 +314,16 @@ class ScratchSqlApp < Sinatra::Base
     end
   end
 
+  # Creates a new table in the given database
   post '/api/project/:project_id/db/:database_id/create' do |_p, database_id|
-    newTable = createObject(replace_refs_in_new_table(request.body.read))
-    if(!@project.has_table(params['tableName']))
+    # TODO: The schema code makes use of OpenStruct, which the validator does
+    #       not like. So currently two JSON objects are created, this
+    #       is obviously not perfect.
+    whole_body = request.body.read
+
+    @@validator.ensure_request("TableDescription", whole_body) # 1st JSON-object
+    newTable = createObject(whole_body)                        # 2nd JSON-object
+    if(!@project.has_table(newTable['name']))
       error, msg = create_table(@project.file_path_sqlite, newTable)  
       if(error == 0)
         return 200
@@ -324,10 +331,11 @@ class ScratchSqlApp < Sinatra::Base
         return 500, {'Content-Type' => 'application/json'}, {:errorCode => '3', :errorBody => json(msg)}.to_json
       end
     else
-      return 500, {'Content-Type' => 'application/json'}, {:errorCode => '3', :errorBody => json("Error: table #{newTable.name} already exists")}.to_json
+      return 400, {'Content-Type' => 'application/json'}, {:errorCode => '3', :errorBody => json("Error: table #{newTable.name} already exists")}.to_json
     end
   end
 
+  # Drops a single table of the given database.
   delete '/api/project/:project_id/db/:database_id/drop/:tableName' do |_p, database_id, tableName|
     if(@project.has_table(params['tableName']))
       error, msg = remove_table(@project.file_path_sqlite, params['tableName'])  
@@ -339,9 +347,12 @@ class ScratchSqlApp < Sinatra::Base
     end
   end
 
+  # Allows to alter tables of a certain database. This route primarily operates on the
+  # JSON-payload in the body of the request.
   post '/api/project/:project_id/db/:database_id/alter/:tableName' do
     if(@project.has_table(params['tableName']))
-      commandHolder = JSON.parse(request.body.read)
+      alter_schema_request = @@validator.ensure_request("AlterSchemaRequestDescription", request.body.read)
+      commandHolder = alter_schema_request['commands']
       error, index, errorCode, errorBody = database_alter_schema(@project.file_path_sqlite, params['tableName'], commandHolder)
       if(error) 
         return 500, {'Content-Type' => 'application/json'}, { :index => index.to_s, :errorCode => errorCode.to_s, :errorBody => json(errorBody)}.to_json

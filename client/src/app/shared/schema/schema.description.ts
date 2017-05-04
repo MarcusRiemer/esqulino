@@ -12,7 +12,7 @@ export interface ColumnDescription {
 }
 
 export interface ForeignKeyDescription {
-    refs : {
+    references : {
         to_table : string
         from_column : string
         to_column : string        
@@ -26,7 +26,6 @@ export interface ForeignKeyDescription {
 export interface TableDescription {
     name : string
     columns : ColumnDescription[]
-    // TODO: Implement in Table-class
     foreign_keys : ForeignKeyDescription[]
 }
 
