@@ -1,16 +1,16 @@
-<div class="container front">
-  <nav class="navbar navbar-light bg-faded">
-    <a class="navbar-brand"
-       [routerLink]="['/']">
+<div class="container front"> 
+  <nav class="navbar navbar-toggleable-md navbar-light bg-faded rounded">
+    <a [routerLink]="['/']"
+       id="navbar-navigate-home">
       <img src="/vendor/logos/blattwerkzeug-logo.svg"
            height="30px"
-           title="BlattWerkzeug">
-      <img src="/vendor/logos/blattwerkzeug-caption.svg"
-           class="hidden-sm-down"
-           height="30px"
-           title="BlattWerkzeug">
+           title="BlattWerkzeug"><!-- 
+                                    --><img src="/vendor/logos/blattwerkzeug-caption.svg"
+                                            class="hidden-sm-down"
+                                            height="30px"
+                                            title="BlattWerkzeug">
     </a>
-    <ul class="nav navbar-nav">
+    <ul class="navbar-nav">
       <li class="nav-item">
         <a [routerLink]="['/about','projects']"
            id="navbar-navigate-projects"

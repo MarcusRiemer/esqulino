@@ -25,6 +25,11 @@
     .label.dirty {
         cursor: pointer;
     }
+
+    ul {
+        padding-left: 0px;
+        list-style: none;
+    }
     
     .router-link-active {
         font-weight: bold;
@@ -47,9 +52,15 @@
     }
 }
 
-nav.toolbar .navbar-brand {
-    /* Hack: Account for margin and padding of Bootstraps stuff */
-    min-width: $navbar-width - 16px;
+nav.toolbar {
+    button {
+        margin-right: 10px;
+    }
+    
+    .navbar-brand {
+        /* Hack: Account for margin and padding of Bootstraps stuff */
+        min-width: $navbar-width - 16px;
+    }
 }
 
 .editor .navbar {

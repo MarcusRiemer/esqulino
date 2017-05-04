@@ -1,27 +1,25 @@
-<div style="padding-top: 4rem;">
-  <!-- Toolbar at the top -->
-  <editor-toolbar></editor-toolbar>
-  
-  <!-- Three column layout in any order -->
-  <div class="editor">
-    <div class="navbar card"
-         [style.order]="paneOrder.navbar">
-      <editor-navbar [project]="project"></editor-navbar>
-    </div>
+<!-- Toolbar at the top -->
+<editor-toolbar></editor-toolbar>
 
-    <div class="content"
-         [style.order]="paneOrder.content">
-      <!-- Show flash messages -->
-      <flash-message-list></flash-message-list>
-      <!-- And actual content -->
-      <router-outlet></router-outlet>
-    </div>
+<!-- Three column layout in any order -->
+<div class="editor">
+  <div class="navbar card"
+       [style.order]="paneOrder.navbar">
+    <editor-navbar [project]="project"></editor-navbar>
+  </div>
 
-    <div *ngIf="isSidebarVisible"
-         class="sidebar"
-         [style.order]="paneOrder.sidebar">
-      <sidebar-loader>
-      </sidebar-loader>
-    </div>
+  <div class="content"
+       [style.order]="paneOrder.content">
+    <!-- Show flash messages -->
+    <flash-message-list></flash-message-list>
+    <!-- And actual content -->
+    <router-outlet></router-outlet>
+  </div>
+
+  <div *ngIf="isSidebarVisible"
+       class="sidebar"
+       [style.order]="paneOrder.sidebar">
+    <sidebar-loader>
+    </sidebar-loader>
   </div>
 </div>
