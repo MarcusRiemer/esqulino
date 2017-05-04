@@ -413,7 +413,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     addForeignKey() {
         if(this.fk_addColumn != undefined && this.fk_addTable != undefined && this.fk_fromColumn != undefined) {
             this.removeErrorCode();
-            this.commandsHolder.do(new AddForeignKey(this.table, this.fk_fromColumn, {refs:[{to_table : this.fk_addTable, from_column : this.table.getColumnByIndex(this.fk_fromColumn).name, to_column : this.fk_addColumn}]}))
+            this.commandsHolder.do(new AddForeignKey(this.table, this.fk_fromColumn, {references:[{to_table : this.fk_addTable, from_column : this.table.getColumnByIndex(this.fk_fromColumn).name, to_column : this.fk_addColumn}]}))
         }
         this.fk_addColumn = undefined;
         this.fk_addTable = undefined;
@@ -425,7 +425,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     removeForeignKey(fk_fromColumn : number, fk_addTable : string, fk_addColumn : string) {
         this.removeErrorCode();        
-        this.commandsHolder.do(new RemoveForeignKey(this.table, fk_fromColumn, {refs:[{to_table : fk_addTable, from_column : this.table.getColumnByIndex(fk_fromColumn).name, to_column : fk_addColumn}]}))
+        this.commandsHolder.do(new RemoveForeignKey(this.table, fk_fromColumn, {references:[{to_table : fk_addTable, from_column : this.table.getColumnByIndex(fk_fromColumn).name, to_column : fk_addColumn}]}))
     }
 
     /**

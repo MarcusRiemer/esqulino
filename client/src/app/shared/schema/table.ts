@@ -40,7 +40,7 @@ export class Table {
     columnIsForeignKeyOfTable(columnName : string) : string {
         let table : string = undefined;
         for(let fk of this._foreign_keys) {
-            for(let ref of fk.refs) {
+            for(let ref of fk.references) {
                 if(ref.from_column == columnName) {
                     table = ref.to_table;
                 }
@@ -52,7 +52,7 @@ export class Table {
     columnIsForeignKeyOfColumn(columnName : string) : string {
         let column : string = undefined;
         for(let fk of this._foreign_keys) {
-            for(let ref of fk.refs) {
+            for(let ref of fk.references) {
                 if(ref.from_column == columnName) {
                     column = ref.to_column;
                 }
@@ -118,16 +118,16 @@ export class Table {
      * Function to remove a foreign key from the Table
      */
     removeForeignKey(toRemove : ForeignKeyDescription) : ForeignKeyDescription {
-        let toReturn : ForeignKeyDescription = {refs: []}; 
+        let toReturn : ForeignKeyDescription = {references: []}; 
         for(let fkRef of this.foreign_keys) {
-            for(let fk of fkRef.refs) {
-                if(fk.from_column === toRemove.refs[0].from_column 
-                    && fk.to_column === toRemove.refs[0].to_column
-                    &&  fk.to_table === toRemove.refs[0].to_table) {
-                        toReturn.refs.push(fkRef.refs.splice(fkRef.refs.indexOf(fk),1)[0]);
+            for(let fk of fkRef.references) {
+                if(fk.from_column === toRemove.references[0].from_column 
+                    && fk.to_column === toRemove.references[0].to_column
+                    &&  fk.to_table === toRemove.references[0].to_table) {
+                        toReturn.references.push(fkRef.references.splice(fkRef.references.indexOf(fk),1)[0]);
                 }
             }
-            if(fkRef.refs.length == 0) {
+            if(fkRef.references.length == 0) {
                 this.foreign_keys.splice(this.foreign_keys.indexOf(fkRef), 1);
             }
         }

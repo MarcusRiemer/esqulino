@@ -41,10 +41,11 @@ class Database < Test::Unit::TestCase
   end
 
 
+  # Tests whether the customly enforced database constraints
+  # actually work.
   def test_datatype_constraint
     temp_db_file = Tempfile.new('test.sqlite')
     db = SQLite3::Database.new(temp_db_file.path)
-    #puts "Test #{temp_db_file.path}"
     
     db.create_function('regexp', 2) do |func, pattern, expression|
       unless expression.nil? #expression.to_s.empty?

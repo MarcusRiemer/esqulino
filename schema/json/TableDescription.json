@@ -1,0 +1,75 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "definitions": {
+        "ColumnDescription": {
+            "additionalProperties": false,
+            "description": "The \"over-the-wire\" description of a single column\ninside a table.",
+            "properties": {
+                "dflt_value": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "not_null": {
+                    "type": "boolean"
+                },
+                "primary": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ForeignKeyDescription": {
+            "additionalProperties": false,
+            "properties": {
+                "references": {
+                    "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                            "from_column": {
+                                "type": "string"
+                            },
+                            "to_column": {
+                                "type": "string"
+                            },
+                            "to_table": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "description": "The \"over-the-wire\" description of a single table \nwith all of its columns.",
+    "properties": {
+        "columns": {
+            "items": {
+                "$ref": "#/definitions/ColumnDescription"
+            },
+            "type": "array"
+        },
+        "foreign_keys": {
+            "items": {
+                "$ref": "#/definitions/ForeignKeyDescription"
+            },
+            "type": "array"
+        },
+        "name": {
+            "type": "string"
+        }
+    },
+    "type": "object"
+}
+

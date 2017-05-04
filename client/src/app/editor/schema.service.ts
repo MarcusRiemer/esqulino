@@ -33,10 +33,17 @@ export class SchemaService {
         this._currentlyEdited.stack = new TableCommandHolder(this._currentlyEdited.table);
     }
 
+    /**
+     * @return The table that is currently being edited.
+     */
     getCurrentlyEditedTable() : Table {
         return this._currentlyEdited.table
     }
 
+    /**
+     * @return The change stack that describes changes to the 
+     *         currently edited table.
+     */
     getCurrentlyEditedStack() : TableCommandHolder {
         return this._currentlyEdited.stack
     }
