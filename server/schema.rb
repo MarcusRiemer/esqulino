@@ -69,7 +69,7 @@ class SchemaForeignKey
   # described in Typescript.
   def to_json(options)
     {
-      :refs => @references
+      :references => @references
     }.to_json(options)
   end
 end
