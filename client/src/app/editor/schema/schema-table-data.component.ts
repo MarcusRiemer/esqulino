@@ -12,10 +12,10 @@ import { ToolbarService }                           from '../toolbar.service'
  * Displays the schema as a list of tables.
  */
 @Component({
-    templateUrl: 'templates/schema-table-details.html',
-    selector: "sql-table-details",
+    templateUrl: 'templates/schema-table-data.html',
+    selector: "sql-table-data",
 })
-export class SchemaTableDetailsComponent implements OnInit, OnDestroy {
+export class SchemaTableDataComponent implements OnInit, OnDestroy {
 
     constructor(
         private _schemaService: SchemaService,
