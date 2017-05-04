@@ -446,7 +446,7 @@ export class ColumnExpression extends Expression {
         }
 
         // Is the table for this column actually part of the queried data?
-        if (!this.fromComponent.isProvidingAlias(this.tableQualifier)) {
+        if (this.fromComponent && !this.fromComponent.isProvidingAlias(this.tableQualifier)) {
             return (new ValidationResult([
                 new ValidationErrors.ReferenceUnknownTable(this)
             ]));
