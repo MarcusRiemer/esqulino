@@ -1,25 +1,31 @@
 <div *ngIf="tableData">
 	<div class="card">
-		<h3>{{table.name}} <h6>Zeilenanzahl: {{rowCount}}</h6>
-			<div *ngIf="!isChild">
-			<!--Button to show previous amount table entrys-->
-			<a (click)="prevRowSite()" class="btn btn-primary">
-				<span class="fa fa-arrow-left" aria-hidden="true"></span>
-			</a>
-			<!--Select to chose the amount of entrys to show-->
-			<select [(ngModel)]="showAmount" class="btn btn-primary">
-				<option value="10">10</option>
-				<option value="25">25</option>
-				<option value="50">50</option>
+	  <h3>
+        {{table.name}}
+        <span class="badge"
+              [class.badge-warning]="!(rowCount > 0)"
+              [class.badge-info]="rowCount > 0">
+          {{ rowCount }} Zeilen
+        </span>
+      </h3>
+	  <div *ngIf="!isChild">
+		<!--Button to show previous amount table entrys-->
+		<a (click)="prevRowSite()" class="btn btn-primary">
+		  <span class="fa fa-arrow-left" aria-hidden="true"></span>
+		</a>
+		<!--Select to chose the amount of entrys to show-->
+		<select [(ngModel)]="showAmount" class="btn btn-primary">
+		  <option value="10">10</option>
+		  <option value="25">25</option>
+		  <option value="50">50</option>
   		</select>
-			<!--Button to show next amount table entrys-->
-			<a (click)="nextRowSite()" class="btn btn-primary">
-				<span class="fa fa-arrow-right" aria-hidden="true"></span>
-			</a>
-			</div>
-			<h6 *ngIf="!isChild">Seite: {{currentSite}}/{{sitesOfRows}}</h6>
-		</h3>
-		<!--Table of table entrys-->
+		<!--Button to show next amount table entrys-->
+		<a (click)="nextRowSite()" class="btn btn-primary">
+		  <span class="fa fa-arrow-right" aria-hidden="true"></span>
+		</a>
+	  </div>
+	  <h6 *ngIf="!isChild">Seite: {{currentSite}}/{{sitesOfRows}}</h6>
+	  <!--Table of table entrys-->
 		<table class="table table-striped" [ngClass]="{'table-condensed' : isChild}" style="width:100%">
 			<!---->
 			<!--Header with every column name in the table-->

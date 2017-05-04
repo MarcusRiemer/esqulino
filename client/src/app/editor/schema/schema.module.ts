@@ -9,7 +9,7 @@ import {SchemaComponent}                from './schema.component'
 import {SchemaTableComponent}           from './schema-table.component'
 import {SchemaTableCompositionComponent}from './schema-table-composition.component'
 import {SchemaTableEditorComponent}     from './schema-table-editor.component'
-import {SchemaTableDetailsComponent}    from './schema-table-details.component'
+import {SchemaTableDataComponent}       from './schema-table-data.component'
 
 
 
@@ -25,7 +25,7 @@ import {SchemaTableDetailsComponent}    from './schema-table-details.component'
         SchemaTableComponent,
         SchemaTableCompositionComponent,
         SchemaTableEditorComponent,
-        SchemaTableDetailsComponent,
+        SchemaTableDataComponent,
     ],
     providers: [
         SchemaService
