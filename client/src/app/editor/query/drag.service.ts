@@ -66,6 +66,8 @@ export class DragService {
         const dragData = JSON.stringify(this._currentDrag);
         evt.dataTransfer.setData('text/plain', dragData);
 
+        // If we have a proper source: Wire it up to react to
+        // being put in the trash.
         if (source) {
             this._trashService.showTrash( _ => {
                 source.removeSelf();
@@ -89,6 +91,7 @@ export class DragService {
         evt.target.addEventListener("dragend", () => {
             this._currentDrag = null;
             this._currentSource = null;
+            this._trashService.hideTrash();
             console.log(`Query-Drag ended: ${dragData}`);
         });
 
