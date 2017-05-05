@@ -139,6 +139,7 @@ export class DragService {
 
             // And stop the drag
             this._currentDrag = undefined;
+            this._trashService.hideTrash();
             console.log(`Page-Drag ended: ${dragData}`);
         });
 
