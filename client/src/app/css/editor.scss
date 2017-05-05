@@ -1,65 +1,94 @@
 .editor {
     display: flex;
     overflow: hidden;
-    height: 100vh;
-    margin-top: -$navbar-height;
-    padding-top: $navbar-height;
+    height: calc(100vh - #{$toolbar-height} - 5px);
+    margin-top: calc(#{$toolbar-height} + 5px);
+    padding-top: calc(-(#{$toolbar-height} + 5px));
     position: relative;
     width: 100%;
     backface-visibility: hidden;
     will-change: overflow;
+
+    .navbar, .content, .sidebar {
+        overflow: auto;
+        height: auto;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .content {
+        flex: 1 1;
+    }
+
+    .navbar {    
+        .label.dirty {
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        ul {
+            padding-left: 0px;
+            list-style: none;
+        }
+        
+        .router-link-active {
+            font-weight: bold;
+            border-radius: 500px;
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+            color: black;
+            transition: background-color, padding, border-radius;
+            transition-duration: 200ms;
+            transition-timing-function: ease-in-out;
+            background-color: cornflowerblue;
+        }
+        
+        .nav-query {
+            margin-left: 15px;
+        }
+
+        .nav-page {
+            margin-left: 15px;
+        }
+    }
 }
 
-.editor .navbar, .editor .content, .editor .sidebar {
-    overflow: auto;
-    height: auto;
+#toolbar {
+    position: fixed;
+    top: 0px;
+    height: $toolbar-height;
+    width: calc(100% - 10px);
+    display: flex;
+    background-color: #f7f7f7;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0 0 .25rem .25rem;
     margin-left: 5px;
     margin-right: 5px;
-}
 
-.editor .content {
-    flex: 1 1;
-}
-
-.editor .navbar {    
-    .label.dirty {
-        cursor: pointer;
+    a {
+        text-decoration: none;
     }
 
-    ul {
-        padding-left: 0px;
-        list-style: none;
-    }
-    
-    .router-link-active {
-        font-weight: bold;
-        border-radius: 500px;
-        padding-left: 0.5em;
-        padding-right: 0.5em;
-        color: black;
-        transition: background-color, padding, border-radius;
-        transition-duration: 200ms;
-        transition-timing-function: ease-in-out;
-        background-color: cornflowerblue;
-    }
-    
-    .nav-query {
-        margin-left: 15px;
+    > * {
+        align-self: center;
     }
 
-    .nav-page {
-        margin-left: 15px;
+    /* Align last item to the right */
+    trash {
+        margin-left: auto;
+        margin-right: 10px;
     }
-}
-
-nav.toolbar {
+        
     button {
         margin-right: 10px;
     }
     
-    .navbar-brand {
-        /* Hack: Account for margin and padding of Bootstraps stuff */
-        min-width: $navbar-width - 16px;
+    .brand {
+        margin-left: 10px;
+        min-width: $navbar-width + 10px;
     }
 }
 
