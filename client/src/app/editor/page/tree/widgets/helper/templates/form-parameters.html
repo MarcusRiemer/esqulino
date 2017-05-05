@@ -1,0 +1,6 @@
+<span *ngIf="hasParameters"
+      class="fa fa-arrow-left" aria-hidden="true">
+</span>
+<span *ngFor="let param of parameters"
+      [class.parameter]="isParameterSatisfied(param)"
+      [class.missing]="!isParameterSatisfied(param)">{{ param }}</span>

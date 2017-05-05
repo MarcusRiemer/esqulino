@@ -3,12 +3,11 @@
     <widget-parameter *ngIf="model.queryReference.isSet">
       <span class="name">Aktion</span>
       <span class="value">
-        <query-reference [(queryReference)]="model.queryReference">
+        <query-reference [(queryReference)]="model.queryAction.queryReference">
         </query-reference>
-        <required-parameters *ngIf="model.queryReference.isResolveable"
-                             [(parameterMapping)]="model.mapping"
-                             [page]="model.page">
-        </required-parameters>
+        <form-parameters [action]="model.queryAction"
+                         [form]="model.parentForm">
+        </form-parameters>
       </span>
     </widget-parameter>
     <widget-parameter *ngIf="model.navigateAction.hasAnyTarget">
@@ -16,9 +15,9 @@
       <span class="value">
         <nav-reference [navigateAction]="model.navigateAction"
                        [page]="model.page"></nav-reference>
-        <required-parameters [(parameterMapping)]="model.navigateAction.internalParameters"
-                             [page]="model.page">
-        </required-parameters>
+        <form-parameters [action]="model.queryAction"
+                         [form]="model.parentForm">
+        </form-parameters>
       </span>
     </widget-parameter>
   </span>

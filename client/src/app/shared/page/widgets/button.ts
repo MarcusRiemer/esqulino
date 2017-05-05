@@ -12,6 +12,10 @@ import {
     QueryReference, QueryAction, NavigateAction
 } from './action'
 
+import {
+    Form
+} from './form'
+
 export {
     ButtonDescription, ParameterMapping
 }
@@ -73,6 +77,14 @@ export class Button extends ParametrizedWidget {
         return (this._navigateAction);
     }
 
+    get queryAction() : QueryAction {
+        return (this._queryAction);
+    }
+
+    isParameterProvided(paramName : string) : boolean {
+        return (true);
+    }
+
     /**
      * @param value The target URL
      */
@@ -105,6 +117,22 @@ export class Button extends ParametrizedWidget {
     set mapping(newParams : ParameterMapping[]) {
         this._queryAction.queryReference.mapping = newParams;
         this.fireModelChange();
+    }
+
+    /**
+     * @return The form that parents this button.
+     */
+    get parentForm() : Form {
+        let curr : any = this.parent;
+        while (curr && !(curr instanceof Form)) {
+            curr = curr.parent;
+        }
+
+        if (curr instanceof Form) {
+            return curr;
+        } else {
+            return undefined;
+        }
     }
     
     protected toModelImpl() : WidgetDescription {

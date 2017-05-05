@@ -59,6 +59,12 @@ export abstract class Action {
      * @return The server-side URL to call.
      */
     abstract get targetUrl() : string;
+
+    /**
+     * @return The names of the parameters that need to be fulfilled.
+     *         Returns an empty list of no parameters are known.
+     */
+    abstract get parameterNames() : string[];
 }
 
 /**
@@ -124,6 +130,14 @@ export class QueryAction extends Action {
             return (`/${pageName}/query/${queryId}?${mappingParams}`);
         } else {
             return (undefined);
+        }
+    }
+
+    get parameterNames() {
+        if (this._queryRef && this._queryRef.isResolveable) {
+            return (this._queryRef.mapping.map(p => p.parameterName));
+        } else {
+            return ([]);
         }
     }
 }
@@ -372,5 +386,13 @@ export class NavigateAction extends Action {
         }
         
          return (toReturn);
+    }
+
+    get parameterNames() {
+        if (this.isInternalPageResolveable) {
+            return (this._internal.pageParams.map(p => p.parameterName));
+        } else {
+            return ([]);
+        }
     }
 }

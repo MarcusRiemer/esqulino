@@ -40,9 +40,20 @@ export class Form extends HostingWidget {
         return (this._widgets);
     }
 
+    /**
+     * @return All names that are provided by this form
+     */
     get providedNames() : string[] {
         return (this.children.filter(c => c instanceof UserInputWidget)
                 .map((ui : UserInputWidget) => ui.outParamName));
+    }
+
+    /**
+     * @param paramName The name of the parameter in question
+     * @return True, if this form provides this name.
+     */
+    providesName(paramName : string) : boolean {
+        return (!!this.providedNames.find(v => v == paramName));
     }
 
     /**
