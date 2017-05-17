@@ -17,6 +17,24 @@
   </div>
 </div>
 
+<h2>Videoeindrücke</h2>
+<div class="card-group">
+  <div *ngFor="let video of videos"
+       class="card">
+    <div class="card-block">
+      <h4 class="card-title">{{ video.title }}</h4>
+      <p class="card-text">{{ video.description }}</p>
+    </div>
+    <video src="/vendor/videos/{{ video.mp4 }}"
+           poster="/vendor/videos/{{ video.stillImage }}"
+           class="card-img-top img-fluid"
+           controls>
+      Sorry, Video geht nicht :(
+    </video>
+  </div>
+</div>
+
+<h2>Zielgruppen</h2>
 <div class="card-group">
   <div class="card">
     <div class="card-block">
