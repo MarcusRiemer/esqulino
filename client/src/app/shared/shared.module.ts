@@ -6,8 +6,9 @@ import {HttpModule}                        from '@angular/http'
 
 import {FlashMessageListComponent}         from './flash.component'
 import {FlashService}                      from './flash.service'
-import {ServerApiService}                  from './serverapi.service'
 import {ProjectDescriptionService}         from './project.description.service'
+import {ServerApiService}                  from './serverapi.service'
+import {VideoService}                      from './video.service'
 
 /**
  * Bundles facilities that are used all over esqulino, no matter
@@ -43,6 +44,7 @@ export class SharedAppModule {
                 FlashService,
                 ServerApiService,
                 ProjectDescriptionService,
+                VideoService
                 // provide(ExceptionHandler, { useClass: EsqulinoExceptionHandler })
             ]
         });

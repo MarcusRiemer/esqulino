@@ -1,0 +1,19 @@
+<h2>Beispielvideos</h2>
+
+<div class="alert alert-danger" role="alert">
+  <strong>Diese Videos sind kein Lehrmaterial!</strong> Sie sollen interessierten Lehrkräften nur einen sehr kurzen "bewegten" Eindruck von dieser Software bieten und möglichst neugierig machen. Für Anfragen zur Bedienung wenden Sie sich für den Augenblick bitte <a href="/about/videos">per Mail direkt an Marcus Riemer</a>.
+</div>
+
+<div *ngFor="let video of videos | async"
+     class="card">
+  <div class="card-block">
+    <h4 class="card-title">{{ video.title }}</h4>
+    <p class="card-text">{{ video.description }}</p>
+  </div>
+  <video src="{{ video.mp4Url }}"
+         poster="{{ video.stillImageUrl }}"
+         class="card-img-top img-fluid"
+         controls>
+    Sorry, Video geht nicht :(
+  </video>
+</div>
