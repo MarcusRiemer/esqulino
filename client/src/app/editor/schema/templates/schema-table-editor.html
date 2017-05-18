@@ -167,7 +167,7 @@
 
 
 
-<!--Table-Deatils as preview for changes to the table-->
+<!--Table-Details as preview for changes to the table-->
 <sql-table-data *ngIf="_showPreview && !isNewTable" [isChild]="true"></sql-table-data>
 
 </div>
@@ -175,26 +175,26 @@
 	<div class="card">
 		<div>
 			<h4>
-				<span class="tag tag-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">TEXT</span></span>
-				<span class="tag tag-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">INTEGER</span></span>
-				<span class="tag tag-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">FLOAT</span></span>
-				<span class="tag tag-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">BOOLEAN</span></span>
-				<span class="tag tag-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">URL</span></span>
+				<span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">TEXT</span></span>
+				<span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">INTEGER</span></span>
+				<span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">FLOAT</span></span>
+				<span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="tag tag-pill tag-warning">BOOLEAN</span></span>
+				<span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="badge badge-pill badge-warning">URL</span></span>
 			</h4>
 		</div>
 		<div>
 			<h3>
-				<span class="tag tag-pill tag-primary"><div class="fa fa-key" aria-hidden="true"></div></span>
-				<span class="tag tag-pill tag-default">Not Null</span>
+				<span class="badge badge-pill badge-primary"><div class="fa fa-key" aria-hidden="true"></div></span>
+				<span class="badge badge-pill badge-default">Not Null</span>
 			</h3>
 		</div>
 
 		<div *ngFor="let tab of projectTables">
 			<h4>
-				<span class="tag tag-success"><span class="fa fa-table" aria-hidden="true"></span>{{tab.name}}</span>
+				<span class="badge badge-success"><span class="fa fa-table" aria-hidden="true"></span>{{tab.name}}</span>
 				<div>
 					<h5>
-						<span *ngFor="let column of tab.columns" class="tag tag-pill tag-info">{{column.name}}</span>
+						<span *ngFor="let column of tab.columns" class="badge badge-pill badge-info">{{column.name}}</span>
 					</h5>
 				</div>
 			</h4>
