@@ -17,6 +17,30 @@
     }
 }
 
+/**
+ * General toolbar options, later specialised for the editor
+ * or the frontpage.
+ */
+#toolbar {
+    height: $toolbar-height;
+    display: flex;
+    background-color: #f7f7f7;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0 0 .25rem .25rem;
+
+    a {
+        text-decoration: none;
+        color: rgba(0,0,0,.7)
+    }
+
+    > * {
+        align-self: center;
+    }
+        
+    button {
+        margin-right: 10px;
+    }
+}
 
 @import 'front';
 @import 'editor';
