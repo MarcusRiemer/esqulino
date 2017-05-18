@@ -4,7 +4,7 @@ VIDEO_FILES_MP4 = $(shell find videos/ -iname "*.mp4")
 VIDEO_STILLS =  $(VIDEO_FILES_MP4:%.mp4=%.jpg)
 
 publish-from-office:
-	rsync videos theses -rvz esqulino@kleopatra-tunnel:/srv/htdocs/files.blattwerkzeug.de
+	rsync videos theses presentations -rvz esqulino@kleopatra-tunnel:/srv/htdocs/files.blattwerkzeug.de
 
 ##################################
 # Video conversion for examples
