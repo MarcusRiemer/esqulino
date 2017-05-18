@@ -511,7 +511,7 @@ class ScratchSqlApp < Sinatra::Base
   # been absolute but weren't. This route attempts to catch all these
   # mistakes rather early, so that the show up as a nice 404 error in the
   # browsers debugging tools
-  get /^\/(about|editor)\/.*\.(css|js)/ do
+  get /\/(about|editor)\/.*\.(css|js)/ do
     halt 404, "There are no assets in `editor` or `about` routes"
   end
 
