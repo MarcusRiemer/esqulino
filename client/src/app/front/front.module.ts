@@ -7,6 +7,7 @@ import {FrontComponent}                 from './front.component'
 import {frontRouting}                   from './front.routes'
 
 import {AboutComponent}                 from './about.component'
+import {AboutAcademiaComponent}         from './academia.component'
 import {AboutPupilComponent}            from './pupil.component'
 import {AboutTeacherComponent}          from './teacher.component'
 import {ImprintComponent}               from './imprint.component'
@@ -22,6 +23,7 @@ import {VideoDisplayComponent}          from './video-display.component'
     ],
     declarations : [
         AboutComponent,
+        AboutAcademiaComponent,
         AboutPupilComponent,
         AboutTeacherComponent,
         FrontComponent,
@@ -32,6 +34,7 @@ import {VideoDisplayComponent}          from './video-display.component'
     ],
     exports: [
         AboutComponent,
+        AboutAcademiaComponent,
         FrontComponent,
         ImprintComponent,
         ProjectListComponent,
