@@ -177,7 +177,7 @@ class ScratchSqlApp < Sinatra::Base
 
   # Listing all projects that are available
   get '/api/project' do
-    projects = enumerate_projects(projects_dir, false)
+    projects = enumerate_projects(projects_dir, false, true)
                .map { |project| project.public_description }
     json projects
   end

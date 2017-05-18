@@ -69,6 +69,12 @@ class Project
     File.directory? @project_folder and File.exists? self.description_filename
   end
 
+  # @return True, if this project is public
+  def public?
+    load_description! if @whole_description.nil?
+    @whole_description['public']
+  end
+
   # Throws if the project was openend without write_access
   def assert_write_access!
     raise AuthorizationError.new "Project opened without write access!" unless @write_access
@@ -393,10 +399,18 @@ end
 #
 # @param projects_dir [string] The path to enumerate
 # @param write_access [Boolean] Should the projects be available for writing?
-def enumerate_projects(projects_dir, write_access)
-  Dir.entries(projects_dir)
-    .select { |entry| entry != '.' and entry != '..' and not entry.start_with? "_" }
-    .map { |entry| Project.new File.join(projects_dir, entry), write_access }
+# @param public_only [Boolean] Should only public projects be considered?
+def enumerate_projects(projects_dir, write_access, public_only)
+  to_return = Dir
+                .entries(projects_dir)
+                .select { |entry| entry != '.' and entry != '..' and not entry.start_with? "_" }
+                .map { |entry| Project.new File.join(projects_dir, entry), write_access }
+
+  if public_only then
+    to_return.select { |entry| entry.public? }
+  else
+    to_return
+  end
 end
 
 # Checks whether the given string is a valid Id.
