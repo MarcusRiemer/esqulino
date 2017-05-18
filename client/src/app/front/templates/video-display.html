@@ -1,7 +1,7 @@
 <h2>Beispielvideos</h2>
 
 <div class="alert alert-danger" role="alert">
-  <strong>Diese Videos sind kein Lehrmaterial!</strong> Sie sollen interessierten Lehrkräften nur einen sehr kurzen "bewegten" Eindruck von dieser Software bieten und möglichst neugierig machen. Für Anfragen zur Bedienung wenden Sie sich für den Augenblick bitte <a href="/about/videos">per Mail direkt an Marcus Riemer</a>.
+  <strong>Diese Videos sind kein Lehrmaterial!</strong> Sie sollen interessierten Lehrkräften nur einen sehr kurzen "bewegten" Eindruck von dieser Software bieten und möglichst neugierig machen. Für Anfragen zur Bedienung wenden Sie sich für den Augenblick bitte <a [routerLink]="['/about/imprint']">per Mail direkt an Marcus Riemer</a>.
 </div>
 
 <div *ngFor="let video of videos | async"

@@ -1,32 +1,35 @@
-<div class="container front"> 
-  <nav class="navbar navbar-toggleable-md navbar-light bg-faded rounded">
-    <a [routerLink]="['/']"
-       id="navbar-navigate-home">
+<div class="container front">
+  <nav id="toolbar">
+    <a [routerLink]="'/'"
+       id="navbar-navigate-home"
+       class="brand">
       <img src="/vendor/logos/blattwerkzeug-logo.svg"
+           class="d-inline-block align-top"
            height="30px"
-           title="BlattWerkzeug"><!-- 
-                                    --><img src="/vendor/logos/blattwerkzeug-caption.svg"
-                                            class="hidden-sm-down"
-                                            height="30px"
-                                            title="BlattWerkzeug">
+           title="BlattWerkzeug">
+      <img src="/vendor/logos/blattwerkzeug-caption.svg"
+           class="hidden-sm-down"
+           height="30px"
+           title="BlattWerkzeug">
     </a>
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a [routerLink]="['/about','projects']"
-           id="navbar-navigate-projects"
-           class="nav-link">
-          Verfügbare Projekte
-        </a>
-      </li>
+    
+    <a [routerLink]="['/about','projects']"
+       id="navbar-navigate-projects"
+       class="nav-link">
+      Verfügbare Projekte
+    </a>
 
-      <li class="nav-item">
-        <a class="nav-link"
-           [routerLink]="['/about','imprint']">
-          Impressum
-        </a>
-      </li>
-    </ul>
+    <a class="nav-link right"
+       [routerLink]="['/about','academia']">
+      Forschung
+    </a>
+    
+    <a class="nav-link"
+       [routerLink]="['/about','imprint']">
+      Impressum
+    </a>
   </nav>
+  
   <flash-message-list></flash-message-list>
   <router-outlet></router-outlet>
   <div class="footer">
