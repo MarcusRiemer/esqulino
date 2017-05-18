@@ -6,6 +6,7 @@ import {ProjectListComponent}      from './project-list.component'
 import {AboutComponent}            from './about.component'
 import {AboutPupilComponent}       from './pupil.component'
 import {AboutTeacherComponent}     from './teacher.component'
+import {VideoDisplayComponent}     from './video-display.component'
 
 export const frontRoutes : Routes = [
     {
@@ -16,6 +17,7 @@ export const frontRoutes : Routes = [
             { path: 'imprint',  component: ImprintComponent},
             { path: 'pupil',    component: AboutPupilComponent},
             { path: 'teacher',  component: AboutTeacherComponent},
+            { path: 'videos',   component: VideoDisplayComponent},
             { path: '',         component: AboutComponent},
         ]
     }

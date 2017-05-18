@@ -12,6 +12,7 @@ import {AboutTeacherComponent}          from './teacher.component'
 import {ImprintComponent}               from './imprint.component'
 import {ProjectListComponent}           from './project-list.component'
 import {ProjectListItemComponent}       from './project-list-item.component'
+import {VideoDisplayComponent}          from './video-display.component'
 
 @NgModule({
     imports : [
@@ -27,12 +28,14 @@ import {ProjectListItemComponent}       from './project-list-item.component'
         ImprintComponent,
         ProjectListComponent,
         ProjectListItemComponent,
+        VideoDisplayComponent
     ],
     exports: [
         AboutComponent,
         FrontComponent,
         ImprintComponent,
         ProjectListComponent,
+        VideoDisplayComponent
     ]
 })
 export class FrontModule { }
