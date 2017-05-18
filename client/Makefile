@@ -5,9 +5,6 @@ include ../Makefile.common
 
 NG_BIN = node_modules/@angular/cli/bin/ng
 
-VIDEO_FILES_MP4 = $(shell find src/vendor/videos/ -iname "*.mp4")
-VIDEO_STILLS =  $(VIDEO_FILES_MP4:%.mp4=%.jpg)
-
 all : dist
 
 clean : msg-pre-clean
@@ -27,18 +24,6 @@ test :
 
 clean-deps : msg-pre-clean-deps
 	rm -rf "node_modules"
-
-##################################
-# Video conversion for examples
-##################################
-
-debug :
-	@echo $(VIDEO_STILLS)
-
-video-stills : $(VIDEO_STILLS)
-
-%.jpg : %.mp4
-	ffmpeg -i $^ -vframes 1 $@
 
 ##################################
 # Messaging targets
