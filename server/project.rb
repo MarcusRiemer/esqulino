@@ -257,18 +257,6 @@ class Project
     db = sqlite_open_augmented(self.file_path_sqlite, :read_only => @read_only)
     db.execute("PRAGMA foreign_keys = ON")
 
-    #TODO: REMOVE THIS!!
-    db.create_function('regexp', 2) do |func, pattern, expression|
-        unless expression.nil? #expression.to_s.empty?
-          func.result = expression.to_s.match(
-            Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
-        else
-          # Return true if the value is null, let the DB handle this
-          func.result = 1
-        end   
-      end
-
-
     begin
       # execute2 returns the names of the columns in the first row. But we want
       # those to go in a hash with explicit names.
