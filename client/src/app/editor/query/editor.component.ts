@@ -174,7 +174,7 @@ export class QueryEditorComponent implements OnInit {
 
                     // Show the sidebar
                     const sidebarId = QuerySidebarComponent.SIDEBAR_IDENTIFIER;
-                    this._sidebarService.showSingleSidebar(sidebarId, true, this.query);
+                    this._sidebarService.showSingleSidebar(sidebarId, this.query);
 
                     // Reset previous result
                     this._result = undefined;

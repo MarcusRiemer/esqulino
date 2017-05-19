@@ -91,7 +91,7 @@ export class SidebarService {
      *
      * @return The ID of the single sidebar.
      */
-    showSingleSidebar(newType : string, sticky : boolean, param? : any) : number {
+    showSingleSidebar(newType : string, param? : any) : number {
         const ids = this.showMultiple([
             { type : newType, param : param }
         ]);

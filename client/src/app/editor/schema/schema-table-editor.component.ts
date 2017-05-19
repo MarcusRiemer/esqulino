@@ -2,12 +2,6 @@ import { Component, Input, OnInit, OnDestroy }      from '@angular/core';
 import { Router, ActivatedRoute }                   from '@angular/router'
 
 import { Table, ColumnStatus }                      from '../../shared/schema'
-import { SchemaService }                            from '../schema.service'
-
-import { ProjectService, Project }                  from '../project.service'
-import { ToolbarService }                           from '../toolbar.service'
-import { SidebarService }                           from '../sidebar.service'
-import { SchemaTableEditorSidebarComponent }        from './schema-table-editor.sidebar'
 import {
     AddNewColumn, DeleteColumn,
     SwitchColumnOrder, RenameColumn,
@@ -15,6 +9,15 @@ import {
     ChangeColumnNotNull, ChangeColumnStandardValue,
     ChangeTableName, TableCommandHolder, AddForeignKey, RemoveForeignKey
 }                                                   from '../../shared/schema/table-commands'
+
+import { SchemaService }                            from '../schema.service'
+
+import { ProjectService, Project }                  from '../project.service'
+import { ToolbarService }                           from '../toolbar.service'
+import { SidebarService }                           from '../sidebar.service'
+
+import { TableEditorSidebarStackComponent }         from './table-editor-stack.sidebar'
+import { TableEditorSidebarControlsComponent }      from './table-editor-controls.sidebar'
 
 /**
  * Displays the schema for a list of tables.
@@ -190,9 +193,12 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         })
         this._subscriptionRefs.push(subRef);
 
-        // Showing the sidebar
-        const sidebarId = SchemaTableEditorSidebarComponent.SIDEBAR_IDENTIFIER;
-        this._sidebarService.showSingleSidebar(sidebarId, true, null);
+        // Showing the sidebars
+        const stackSidebarId = TableEditorSidebarStackComponent.SIDEBAR_IDENTIFIER;
+        this._sidebarService.showSingleSidebar(stackSidebarId, null);
+
+        const controlsSidebarId = TableEditorSidebarControlsComponent.SIDEBAR_IDENTIFIER;
+        this._sidebarService.showAdditionalSidebar(controlsSidebarId, null);
 
     }
 
@@ -213,22 +219,6 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     redoBtn() {
         this.commandsHolder.redo();
-    }
-
-    /**
-     * Function to click on the stack list to go to a position
-     * @param index - Index of stack to jump to
-     */
-    loadStackPosition(index : number) {
-        if (index > this.commandsHolder.activeIndex) {
-            while(index != this.commandsHolder.activeIndex) {
-                this.commandsHolder.redo();
-            }
-        } else {
-            while(index != this.commandsHolder.activeIndex) {
-                this.commandsHolder.undo();
-            }
-        }
     }
 
     /**

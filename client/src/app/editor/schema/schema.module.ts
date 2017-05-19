@@ -1,17 +1,18 @@
-import {NgModule, ModuleWithProviders}     from '@angular/core'
-                                           
-import {SharedEditorModule}                from '../shared/shared.module'
-import {RegistrationService}               from '../registration.service'
-import {SchemaService}                     from '../schema.service'
-                                           
-import {SchemaHostComponent}               from './host.component'
-import {SchemaRedirectComponent}           from './schema-redirect.component'
-import {SchemaComponent}                   from './schema.component'
-import {SchemaTableComponent}              from './schema-table.component'
-import {SchemaTableCompositionComponent}   from './schema-table-composition.component'
-import {SchemaTableEditorComponent}        from './schema-table-editor.component'
-import {SchemaTableDataComponent}          from './schema-table-data.component'
-import {SchemaTableEditorSidebarComponent} from './schema-table-editor.sidebar'
+import {NgModule, ModuleWithProviders}       from '@angular/core'
+                                             
+import {SharedEditorModule}                  from '../shared/shared.module'
+import {RegistrationService}                 from '../registration.service'
+import {SchemaService}                       from '../schema.service'
+                                             
+import {SchemaHostComponent}                 from './host.component'
+import {SchemaRedirectComponent}             from './schema-redirect.component'
+import {SchemaComponent}                     from './schema.component'
+import {SchemaTableComponent}                from './schema-table.component'
+import {SchemaTableCompositionComponent}     from './schema-table-composition.component'
+import {SchemaTableEditorComponent}          from './schema-table-editor.component'
+import {SchemaTableDataComponent}            from './schema-table-data.component'
+import {TableEditorSidebarStackComponent}    from './table-editor-stack.sidebar'
+import {TableEditorSidebarControlsComponent} from './table-editor-controls.sidebar'
 
 @NgModule({
     imports: [
@@ -25,13 +26,15 @@ import {SchemaTableEditorSidebarComponent} from './schema-table-editor.sidebar'
         SchemaTableCompositionComponent,
         SchemaTableEditorComponent,
         SchemaTableDataComponent,
-        SchemaTableEditorSidebarComponent,
+        TableEditorSidebarStackComponent,
+        TableEditorSidebarControlsComponent
     ],
     providers: [
         SchemaService
     ],
     entryComponents: [
-        SchemaTableEditorSidebarComponent
+        TableEditorSidebarStackComponent,
+        TableEditorSidebarControlsComponent
     ],
     exports: [
         SchemaHostComponent
@@ -50,8 +53,13 @@ export class SchemaEditorModule {
 
         // Register the schema-editor-sidebar
         reg.registerSidebarType({
-            typeId : SchemaTableEditorSidebarComponent.SIDEBAR_IDENTIFIER,
-            componentType : SchemaTableEditorSidebarComponent
+            typeId : TableEditorSidebarStackComponent.SIDEBAR_IDENTIFIER,
+            componentType : TableEditorSidebarStackComponent
+        });
+
+        reg.registerSidebarType({
+            typeId : TableEditorSidebarControlsComponent.SIDEBAR_IDENTIFIER,
+            componentType : TableEditorSidebarControlsComponent
         });
 
         
