@@ -15,4 +15,10 @@ export class TableEditorSidebarControlsComponent {
     public constructor(private _projectService : ProjectService) {
 
     }
+
+    public get availableColumnTypes() {
+        return ([
+            "TEXT", "INTEGER", "FLOAT", "BOOLEAN", "URL"
+        ]);
+    }
 }
