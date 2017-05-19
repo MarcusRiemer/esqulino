@@ -301,7 +301,7 @@ class ScratchSqlApp < Sinatra::Base
   # Getting entries inside a table
   get '/api/project/:project_id/db/:database_id/rows/:tableName/:from/:amount' do    
     if(@project.has_table(params['tableName']))
-      result = @project.execute_sql("Select * from #{params['tableName']} limit ? offset ?", [params['amount'], params['from']])
+      result = @project.execute_sql("SELECT * FROM #{params['tableName']} LIMIT ? OFFSET ?", [params['amount'].to_i, params['from'].to_i])
       json(result['rows'])
     end
   end
