@@ -339,7 +339,7 @@ end
 
 def addForeignKey(table, foreignKey)
   foreign_key_comp = SchemaForeignKey.new()
-  foreignKey['refs'].each do |fk|
+  foreignKey['references'].each do |fk|
     foreign_key_ref = SchemaForeignKeyRef.new(fk['from_column'], fk['to_table'], fk['to_column'])
     foreign_key_comp.add_foreign_key(foreign_key_ref)
   end
@@ -349,7 +349,7 @@ end
 def removeForeignKey(table, foreignKey)
   refToDelete = nil;
   foreign_key_comp = SchemaForeignKey.new()
-  foreignKey['refs'].each do |fk|
+  foreignKey['references'].each do |fk|
     foreign_key_ref = SchemaForeignKeyRef.new(fk['from_column'], fk['to_table'], fk['to_column'])
     foreign_key_comp.add_foreign_key(foreign_key_ref)
   end
