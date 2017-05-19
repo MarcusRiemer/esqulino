@@ -249,7 +249,7 @@ export class SwitchColumnOrder extends TableCommand {
         return {
             type : "switchColumn",
             index : this._index,
-            columnIndex : this._columnIndex,
+            columnIndex : +this._columnIndex,
             indexOrder : this._indexOrder
         };
     }
@@ -286,7 +286,7 @@ export class RenameColumn extends TableCommand {
         return{
             type : "renameColumn",
             index : this._index,
-            columnIndex : this._columnIndex,
+            columnIndex : +this._columnIndex,
             newName : this._newName,
             oldName : this._oldName
         };
@@ -324,7 +324,7 @@ export class ChangeColumnType extends TableCommand {
         return {
             type : "changeColumnType",
             index : this._index,
-            columnIndex : this._columnIndex,
+            columnIndex : +this._columnIndex,
             newType : this._newType,
             oldType : this._oldType
         };
@@ -428,7 +428,7 @@ export class ChangeColumnStandardValue extends TableCommand {
         return{
             type : "changeColumnStandardValue",
             index : this._index,
-            columnIndex : this._columnIndex,
+            columnIndex : +this._columnIndex,
             newValue : this._newValue,
             oldValue : this._oldValue
         };
@@ -470,7 +470,7 @@ export class AddForeignKey extends TableCommand {
         return {
             type : "addForeignKey",
             index : this._index,
-            columnIndex : this._columnIndex,
+            columnIndex : +this._columnIndex,
             newForeignKey : this._newForeignKey
         };
     }
@@ -513,7 +513,7 @@ export class RemoveForeignKey extends TableCommand {
         return {
             type : "removeForeignKey",
             index : this._index,
-            columnIndex : this._columnIndex,
+            columnIndex : +this._columnIndex,
             foreignKeyToRemove : this._oldForeignKey
         };
     }
@@ -549,7 +549,7 @@ export class ChangeTableName extends TableCommand {
         return {
             type : "renameTable",
             index : this._index,
-            columnIndex : this._columnIndex, //is undefinde
+            columnIndex : +this._columnIndex, // Is undefined
             newName : this._newName,
             oldName : this._oldName
         };
