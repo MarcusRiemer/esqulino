@@ -2,12 +2,15 @@
 	<h3 class="card-title">
 		<!--Table name as link to the detail view-->
 		<a *ngIf="!readOnly" class="nav-link" [routerLink]="['details', table.name]" routerLinkActive="router-link-active">
-			<span *ngIf="tableIsCurrentlyEdited(table.name)" class="fa fa-pencil-square-o"aria-hidden="true"></span>
+		  <span *ngIf="tableIsCurrentlyEdited(table.name)"
+                class="fa fa-pencil-square-o"aria-hidden="true"></span>
 			{{ table.name }}
     </a>
 		<a *ngIf="readOnly">{{ table.name }} </a>
 		<!--Button to the table-editing view-->
-		<a *ngIf="!readOnly" [routerLink]="['edit', table.name]" routerLinkActive="router-link-active" class="btn btn-primary">
+		<a *ngIf="!readOnly" [routerLink]="['edit', table.name]"
+           routerLinkActive="router-link-active"
+           class="btn btn-primary">
 			<span class="fa fa-cogs" aria-hidden="true"></span>
 		</a>
 		<!--Button to drop table-->

@@ -1,0 +1,51 @@
+<div>
+  <h4>
+	<span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="badge badge-pill badge-warning">TEXT</span></span>
+	<span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="badge badge-pill badge-warning">INTEGER</span></span>
+	<span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="badge badge-pill badge-warning">FLOAT</span></span>
+	<span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="badge badge-pill badge-warning">BOOLEAN</span></span>
+	<span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="badge badge-pill badge-warning">URL</span></span>
+  </h4>
+</div>
+<div>
+  <h3>
+	<span class="badge badge-pill badge-primary"><div class="fa fa-key" aria-hidden="true"></div></span>
+	<span class="badge badge-pill badge-default">Not Null</span>
+  </h3>
+</div>
+
+<div *ngFor="let tab of projectTables">
+  <h4>
+	<span class="badge badge-success"><span class="fa fa-table" aria-hidden="true"></span>{{tab.name}}</span>
+	<div>
+	  <h5>
+		<span *ngFor="let column of tab.columns" class="badge badge-pill badge-info">{{column.name}}</span>
+	  </h5>
+	</div>
+  </h4>
+</div>
+
+<div class="list-group">
+  <!--List of stack entrys-->
+  <button type="button" class="list-group-item list-group-item-action active">
+	Stackgröße: <span class="badge badge-default badge-pill">{{ commandsHolder.commands.length }}</span>
+  </button>
+  <button type="button"
+          class="list-group-item list-group-item-action"
+          (click)="loadStackPosition(-1)">
+	<span *ngIf="-1 == commandsHolder.activeIndex"
+          class="fa fa-play"
+          aria-hidden="true"></span>
+	Ursprungstabelle
+  </button>
+  <!--List body, with every stack entry-->
+  <button type="button"
+          class="list-group-item list-group-item-action"
+          *ngFor="let cmd of commandsHolder.commands"
+          (click)="loadStackPosition(cmd.index)"
+          [ngClass]="{'list-group-item-danger': cmd.index == dbErrorCode}">
+	<span *ngIf="cmd.index == commandsHolder.activeIndex" class="fa fa-play" aria-hidden="true"></span>
+	{{cmd.index}} : {{ cmd.commandText }}
+  </button>
+</div>
+
