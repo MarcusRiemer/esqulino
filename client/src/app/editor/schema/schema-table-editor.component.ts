@@ -6,6 +6,8 @@ import { SchemaService }                            from '../schema.service'
 
 import { ProjectService, Project }                  from '../project.service'
 import { ToolbarService }                           from '../toolbar.service'
+import { SidebarService }                           from '../sidebar.service'
+import { SchemaTableEditorSidebarComponent }        from './schema-table-editor.sidebar'
 import {
     AddNewColumn, DeleteColumn,
     SwitchColumnOrder, RenameColumn,
@@ -28,7 +30,8 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         private _projectService: ProjectService,
         private _routeParams: ActivatedRoute,
         private _router: Router,
-        private _toolbarService: ToolbarService) {
+        private _toolbarService: ToolbarService,
+        private _sidebarService: SidebarService) {
 
     }
 
@@ -43,8 +46,8 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     table: Table;
 
     /**
-    * The currently edited project
-    */
+     * The currently edited project
+     */
     private _project: Project;
 
     get projectTables() : Table[] {
@@ -65,6 +68,10 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     private _showPreview: boolean = true;
 
+    private get commandsHolder() {
+        return (this._schemaService.getCurrentlyEditedStack());
+    }
+
     /**
      * Subscriptions that need to be released
      */
@@ -74,11 +81,6 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      * True, if creation should be allowed from this component.
      */
     @Input() allowCreate: boolean = false;
-
-    /**
-     * Holder for all Commands with do and redo function
-     */
-    private commandsHolder: TableCommandHolder;
 
     /**
      * Temp value for string values, setting during the focus
@@ -98,8 +100,6 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     // Value to store the accured error
     dbErrorCode : number = -1;
 
-
-
     /**
      * Load the project to access the schema
      */
@@ -112,21 +112,19 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                 if(this._schemaService.getCurrentlyEdited()) {
                     if(this._originalTableName != this._schemaService.getCurrentlyEditedTable().name) {
                         alert("Eine andere Tabelle wurde zurzeit bearbeitet, dieser Vorgang wurde abgebrochen!");
-                            let projref = this._projectService.activeProject
-                                .subscribe(res => {
-                                    this._project = res;
-                                    this._schemaService.initCurrentlyEdit(res.schema.getTable(this._originalTableName));
-                                    this.table = this._schemaService.getCurrentlyEditedTable();
-                                    this.commandsHolder = this._schemaService.getCurrentlyEditedStack();
-                                })
-                            this._subscriptionRefs.push(projref);
+                        let projref = this._projectService.activeProject
+                            .subscribe(res => {
+                                this._project = res;
+                                this._schemaService.initCurrentlyEdit(res.schema.getTable(this._originalTableName));
+                                this.table = this._schemaService.getCurrentlyEditedTable();
+                            })
+                        this._subscriptionRefs.push(projref);
                     } else {
                         let projref = this._projectService.activeProject
                             .subscribe(res => {
                                 this._project = res;
                                 this.table = this._schemaService.getCurrentlyEditedTable();
-                                this.commandsHolder = this._schemaService.getCurrentlyEditedStack();
-                        })
+                            })
                         this._subscriptionRefs.push(projref);
                     }
                 } else {
@@ -135,9 +133,8 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                             this._project = res;
                             this._schemaService.initCurrentlyEdit(res.schema.getTable(this._originalTableName));
                             this.table = this._schemaService.getCurrentlyEditedTable();
-                            this.commandsHolder = this._schemaService.getCurrentlyEditedStack();
                         })
-                        this._subscriptionRefs.push(projref);
+                    this._subscriptionRefs.push(projref);
                 }
                 
             } else {
@@ -149,7 +146,6 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                 this.isNewTable = true;
                 this._schemaService.initCurrentlyEdit(new Table({name : "", columns : [], foreign_keys : []}, [], []));
                 this.table = this._schemaService.getCurrentlyEditedTable();
-                this.commandsHolder = this._schemaService.getCurrentlyEditedStack();
             }
         });
         this._subscriptionRefs.push(subRef);
@@ -193,6 +189,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
             this.cancelBtn();
         })
         this._subscriptionRefs.push(subRef);
+
+        // Showing the sidebar
+        const sidebarId = SchemaTableEditorSidebarComponent.SIDEBAR_IDENTIFIER;
+        this._sidebarService.showSingleSidebar(sidebarId, true, null);
+
     }
 
     ngOnDestroy() {
@@ -253,14 +254,14 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                     }
                 }
                 console.log(tableToSend);
-            let schemaref = this._schemaService.saveNewTable(this._project, tableToSend).first().subscribe( 
+                let schemaref = this._schemaService.saveNewTable(this._project, tableToSend).first().subscribe( 
                     table => {table;
-                        window.alert("Änderungen gespeichert!");
-                        this._schemaService.clearCurrentlyEdited();
-                        this._router.navigate(["../../"], { relativeTo: this._routeParams });
-                    },
+                              window.alert("Änderungen gespeichert!");
+                              this._schemaService.clearCurrentlyEdited();
+                              this._router.navigate(["../../"], { relativeTo: this._routeParams });
+                             },
                     error => this.showError(error));
-                    this._subscriptionRefs.push(schemaref);
+                this._subscriptionRefs.push(schemaref);
             } else {
                 alert("Tabellenname ist leer!");
             }
@@ -271,12 +272,12 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                 .first()
                 .subscribe( 
                     table => {table;
-                        window.alert("Änderungen gespeichert!");
-                        this._schemaService.clearCurrentlyEdited();
-                        this._router.navigate(["../../"], { relativeTo: this._routeParams });
-                    },
+                              window.alert("Änderungen gespeichert!");
+                              this._schemaService.clearCurrentlyEdited();
+                              this._router.navigate(["../../"], { relativeTo: this._routeParams });
+                             },
                     error => this.showError(error));
-                    this._subscriptionRefs.push(schemaref);
+            this._subscriptionRefs.push(schemaref);
         }
     }
 
@@ -414,7 +415,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         if(this.fk_addColumn != undefined && this.fk_addTable != undefined && this.fk_fromColumn != undefined) {
             this.removeErrorCode();
             this.commandsHolder.do(new AddForeignKey(this.table, this.fk_fromColumn, {references:[{to_table : this.fk_addTable, from_column : this.table.getColumnByIndex(this.fk_fromColumn).name, to_column : this.fk_addColumn}]}))
-        }
+                }
         this.fk_addColumn = undefined;
         this.fk_addTable = undefined;
         this.fk_fromColumn = undefined;
@@ -426,7 +427,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     removeForeignKey(fk_fromColumn : number, fk_addTable : string, fk_addColumn : string) {
         this.removeErrorCode();        
         this.commandsHolder.do(new RemoveForeignKey(this.table, fk_fromColumn, {references:[{to_table : fk_addTable, from_column : this.table.getColumnByIndex(fk_fromColumn).name, to_column : fk_addColumn}]}))
-    }
+            }
 
     /**
      * Function to change the status of the primary key constraint
