@@ -1,18 +1,20 @@
-<div class="card">
+<div class="card schema-sidebar">
   <div class="card-block">
-    <h4>
-	  <span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="badge badge-pill badge-warning">TEXT</span></span>
-	  <span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="badge badge-pill badge-warning">INTEGER</span></span>
-	  <span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="badge badge-pill badge-warning">FLOAT</span></span>
-	  <span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="badge badge-pill badge-warning">BOOLEAN</span></span>
-	  <span class="badge badge-default"><span class="fa fa-columns" aria-hidden="true"></span> Neue Spalte <span class="badge badge-pill badge-warning">URL</span></span>
-    </h4>
+    <div class="stack">
+	  <span *ngFor="let type of availableColumnTypes"
+            class="badge badge-default item">
+        <span class="fa fa-columns" aria-hidden="true"></span>
+        {{ type }}
+      </span>
+    </div>
   </div>
   <div class="card-block">
-    <h3>
-	  <span class="badge badge-pill badge-primary"><div class="fa fa-key" aria-hidden="true"></div></span>
-	  <span class="badge badge-pill badge-default">Not Null</span>
-    </h3>
+	<span class="badge badge-pill badge-primary item">
+      <span class="fa fa-key" aria-hidden="true"></span>
+    </span>
+	<span class="badge badge-pill badge-default item">
+      Not Null
+    </span>
   </div>
 
   <div *ngFor="let tab of projectTables"
