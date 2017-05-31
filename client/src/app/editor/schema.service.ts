@@ -61,8 +61,6 @@ export class SchemaService {
      */
     private _httpRequest : Observable<string[][]>;
 
-    private _tableData : BehaviorSubject<string[][]>;
-
     /**
      * @param _http Used to do HTTP requests
      * @param _server Used to figure out paths for HTTP requests
@@ -72,7 +70,6 @@ export class SchemaService {
         private _projectService: ProjectService,
         private _server: ServerApiService
     ) {
-        this._tableData = new BehaviorSubject<string[][]>(undefined);
     }
 
 
@@ -92,35 +89,7 @@ export class SchemaService {
         this._httpRequest = this._http.get(url, options)
             .map((res) => res.json())
             
-        // And execute it by subscribing to it.
-        const subscription = this._httpRequest
-            .first()
-            .subscribe(
-                res => {                
-                    // There is a new project, Inform subscribers
-                    console.log(`Project Service: HTTP request for specific project ("${url}") finished`);
-                    this._tableData.next(res);
-                    this._httpRequest = undefined
-                },
-                (error : Response) => {
-                    // Something has gone wrong, pass the error on to the subscribers
-                    // of the project and hope they know what to do about it.
-                    console.log(`Project Service: HTTP error with request for specific project ("${url}") => "${error.status}: ${error.statusText}"`);
-                    this._tableData.error(error);
-
-                    this._tableData = new BehaviorSubject<string[][]>(undefined);
-
-                    this._httpRequest = undefined
-                }
-            )
-    }
-
-    /**
-     * Retrieves an observable that always points to the active
-     * project.
-     */
-    get activeTableData() : Observable<string[][]> {
-        return (this._tableData.filter(v => !!v));
+        return (this._httpRequest);
     }
 
     /**

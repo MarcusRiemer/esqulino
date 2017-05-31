@@ -3,22 +3,34 @@
     <li>
       <a [routerLink]="['settings']"
          routerLinkActive="router-link-active">
-        <span class="fa fa-cog fa-fw"></span>Projekt
+        <span class="fa fa-home fa-fw"></span>Projekt
       </a>
       <span *ngIf="project?.isSavingRequired"
             class="dirty pull-right">
         <span class="fa fa-floppy-o"></span>
       </span>
     </li>
+    <!-- Schema Editor and tables -->
     <li>
-      <span class="fa fa-database fa-fw"></span>Datenbank
-      <ul class="nav-query">
-        <li>
-          <a [routerLink]="['schema']"
+      <a [routerLink]="['schema', currentDatabaseName]"
+         [routerLinkActiveOptions]="{exact: true}"
+         routerLinkActive="router-link-active">
+        <span class="fa fa-database fa-fw"></span>Datenbank
+      </a>
+      <ul class="nav-database">
+        <li *ngFor="let table of project?.schema.tables">
+          <a [routerLink]="['schema', currentDatabaseName, 'details', table.name]"
              routerLinkActive="router-link-active">
-            <span class="fa fa-table fa-fw"></span>Schema
+            <span class="fa fa-table fa-fw"></span> {{ table.name }}
           </a>
         </li>
+      </ul>
+    </li>
+
+    <!-- Database Operations -->
+    <li>
+      <span class="fa fa-cogs fa-fw"></span>Operationen
+      <ul class="nav-query">
         <li>
           <a [routerLink]="['query', 'create']"
              routerLinkActive="router-link-active">
@@ -38,6 +50,8 @@
         </li>
       </ul>
     </li>
+
+    <!-- Pages of this project  -->
     <li>
       <span class="fa fa-globe fa-fw"></span>
       Webseite
