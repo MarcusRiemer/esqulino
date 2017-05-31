@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1020"
+   height="495"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="Olympic_rings_with_white_rims.svg">
+  <metadata
+     id="metadata52">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs50" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1733"
+     inkscape:window-height="1058"
+     id="namedview48"
+     showgrid="false"
+     inkscape:zoom="15.570773"
+     inkscape:cx="666.30399"
+     inkscape:cy="312.54877"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g4" />
+  <g
+     stroke-width="30"
+     stroke="#fff"
+     fill="none"
+     id="g4">
+    <g
+       stroke-width="45"
+       id="g6">
+      <circle
+         cx="345"
+         cy="315"
+         r="135"
+         id="circle8" />
+      <circle
+         cx="675"
+         cy="315"
+         r="135"
+         id="circle10" />
+    </g>
+    <circle
+       cx="345"
+       cy="315"
+       r="135"
+       stroke="#f4c300"
+       id="circle12" />
+    <circle
+       cx="675"
+       cy="315"
+       r="135"
+       stroke="#009f3d"
+       id="circle14" />
+    <g
+       stroke-width="45"
+       id="g16">
+      <circle
+         cx="180"
+         cy="180"
+         r="135"
+         id="circle18" />
+      <circle
+         cx="510"
+         cy="180"
+         r="135"
+         id="circle20" />
+      <circle
+         cx="840"
+         cy="180"
+         r="135"
+         id="circle22" />
+    </g>
+    <circle
+       cx="180"
+       cy="180"
+       r="135"
+       stroke="#0085c7"
+       id="circle24" />
+    <circle
+       cx="510"
+       cy="180"
+       r="135"
+       stroke="#000"
+       id="circle26" />
+    <circle
+       cx="840"
+       cy="180"
+       r="135"
+       stroke="#df0024"
+       id="circle28" />
+    <g
+       stroke-width="45"
+       id="g30">
+      <path
+         d="M345,180A135,135 0 0 1 426,207"
+         id="path32" />
+      <path
+         d="M237,396A135,135 0 0 1 237,234"
+         id="path34" />
+      <path
+         d="M675,180A135,135 0 0 1 756,207"
+         id="path36" />
+      <path
+         d="M567,396A135,135 0 0 1 567,234"
+         id="path38" />
+    </g>
+    <path
+       d="m 344.9,180 c 20.86414,0 41.81238,4.9216 60.47384,14.25233 C 424.03529,203.58306 440.48151,217.30869 453,234"
+       id="path40"
+       inkscape:connector-curvature="0"
+       style="stroke:#f4c300"
+       sodipodi:nodetypes="csc" />
+    <path
+       d="M264,423A135,135 0 0 1 264,207"
+       stroke="#f4c300"
+       id="path42" />
+    <path
+       d="m 674.9,180 c 20.86414,0 41.81238,4.9216 60.47384,14.25233 C 754.03529,203.58306 770.48151,217.30869 783,234"
+       id="path44"
+       inkscape:connector-curvature="0"
+       style="stroke:#009f3d"
+       sodipodi:nodetypes="csc" />
+    <path
+       d="M594,423A135,135 0 0 1 594,207"
+       stroke="#009f3d"
+       id="path46" />
+  </g>
+</svg>

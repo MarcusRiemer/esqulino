@@ -402,7 +402,9 @@ class ScratchSqlApp < Sinatra::Base
           # Other images only require a matching MIME-type
           content_type "image/#{format}"
         end
-        # Deliver the image itself
+        
+        # Deliver the image itself, but disallow caching
+        cache_control :no_cache
         return db_img
       end
     end
