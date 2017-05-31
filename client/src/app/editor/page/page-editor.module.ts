@@ -35,23 +35,6 @@ import {WidgetNodeLoaderComponent}      from './tree/widget-node-loader.componen
 
 import * as Tree                        from './tree/widgets/index'
 
-import {PageVisualEditorComponent}      from './wysiwyg/editor.component'
-import {PageLayoutComponent}            from './wysiwyg/page-layout.component'
-import {WidgetLoaderComponent}          from './wysiwyg/widget-loader.component'
-
-import * as Visual                      from './wysiwyg/widgets/index'
-
-// Components as defined by the WYSIWYG-editor
-const visualComponents = [
-    Visual.ButtonComponent,
-    Visual.EmbeddedHtmlComponent,
-    Visual.HeadingComponent,
-    Visual.InputComponent,
-    Visual.LinkComponent,
-    Visual.ParagraphComponent,
-    Visual.QueryTableComponent,
-]
-
 // Components as defined by the tree-editor
 const treeComponents = [
     WidgetNodeComponent,
@@ -103,17 +86,11 @@ const sidebarComponents = [
         WidgetNodeComponent,
         WidgetNodeLoaderComponent,
 
-        PageVisualEditorComponent,
-        PageLayoutComponent,
-        WidgetLoaderComponent,
-
         ...sidebarComponents,
-        ...visualComponents,
         ...treeComponents,
     ],
     entryComponents: [
         ...sidebarComponents,
-        ...visualComponents,
         ...treeComponents,
     ],
     providers: [
@@ -122,14 +99,12 @@ const sidebarComponents = [
     exports: [
         PageEditorHostComponent,
         PageCreateComponent,
-        PageVisualEditorComponent,
         PageTreeEditorComponent,
 
         SidebarDataComponent,
         SidebarWidgetsComponent,
 
         ...sidebarComponents,
-        ...visualComponents,
         ...treeComponents,
     ]
 })
