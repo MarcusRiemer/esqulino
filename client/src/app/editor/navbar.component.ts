@@ -33,7 +33,6 @@ export class NavbarComponent {
             type : "query",
             name : query.name,
             queryId : query.id,
-            mapping : []
         });
     }
 

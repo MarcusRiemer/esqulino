@@ -98,15 +98,18 @@ export class Query extends ProjectResource implements SyntaxTree.RemovableHost, 
         return (this._components.where);
     }
 
-    get allComponents() : SyntaxTree.Component[] {
-        return (Object.values(this._components));
-    }
-
     set where(toAdd) {
         if (toAdd != this._components.where) {
             this._components.where = toAdd;
             this.markSaveRequired();
         }
+    }
+
+    /**
+     * @return All components of this query.
+     */
+    get allComponents() : SyntaxTree.Component[] {
+        return (Object.values(this._components));
     }
 
     /**
@@ -144,6 +147,13 @@ export class Query extends ProjectResource implements SyntaxTree.RemovableHost, 
      */
     get parameters() : SyntaxTree.ParameterExpression[] {
         return (this.getLeaves().filter(e => e instanceof SyntaxTree.ParameterExpression) as SyntaxTree.ParameterExpression[] )
+    }
+
+    /**
+     * @return Names of all parameters if this query.
+     */
+    get parameterNames() : string[] {
+        return (this.parameters.map(p => p.key));
     }
 
     /**

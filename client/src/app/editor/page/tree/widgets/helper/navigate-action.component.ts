@@ -4,7 +4,7 @@ import {
 } from "@angular/core"
 
 import {
-    Page, ParameterMapping, NavigateAction
+    Page, NavigateAction
 } from '../../../../../shared/page/index'
 
 

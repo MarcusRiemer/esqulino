@@ -5,16 +5,6 @@ import {
 export {CURRENT_API_VERSION}
 
 /**
- * Inputs and outputs *may* use identical names but are not required
- * to do so.
- */
-export interface ParameterMappingDescription {
-    parameterName : string
-
-    providingName? : string
-}
-
-/**
  * Actions specify the intent, usually along with some parameters.
  */
 export interface ActionDescription {
@@ -37,7 +27,6 @@ export interface NavigateActionDescription extends ActionDescription {
     // we want to go to.
     internal? : {
         pageId : string
-        parameters : ParameterMappingDescription[];
     }
 
     // If this link targets an external page we don't make any
@@ -263,9 +252,6 @@ export interface QueryReferenceDescription extends ValueReferenceDescription {
     // The user-defined name of the reference. If no name is given, the
     // name should be the same as the name of the referenced query.
     name? : string
-
-    // Which values should serve as parameters for this query?
-    mapping? : ParameterMappingDescription[]
 }
 
 /**

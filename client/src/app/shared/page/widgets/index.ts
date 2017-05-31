@@ -1,6 +1,5 @@
 import {
-    ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription,
-    ParameterMappingDescription
+    ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription
 } from '../page.description'
 import {
     isWidget, isWidgetHost, Widget, WidgetHost, WidgetCategory
@@ -32,7 +31,6 @@ export {
     WidgetHost, Widget, isWidgetHost, isWidget,
     Row, RowDescription,
     Column, ColumnDescription,
-    ParameterMappingDescription,
     Body, BodyDescription,
     Button, ButtonDescription,
     EmbeddedHtml, EmbeddedHtmlDescription,

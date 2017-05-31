@@ -33,7 +33,6 @@ export class PageDataComponent implements OnInit {
         type : "query",
         name : undefined,
         queryId : undefined,
-        mapping : undefined
     };
 
     /**

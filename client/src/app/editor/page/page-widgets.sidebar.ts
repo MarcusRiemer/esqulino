@@ -6,7 +6,7 @@ import {ActivatedRoute, Router}         from '@angular/router'
 import {SIDEBAR_MODEL_TOKEN}            from '../editor.token'
 import {borderCssClass}                 from '../shared/page-preview.util'
 
-import {Page, ParameterMapping}         from '../../shared/page/index'
+import {Page}                           from '../../shared/page/index'
 import {
     Widget, WidgetDescription, WidgetCategory,
     Heading, HiddenInput, Row, Paragraph, QueryTable, Select,

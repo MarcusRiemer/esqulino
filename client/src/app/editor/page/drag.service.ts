@@ -9,10 +9,6 @@ import {
     QueryReferenceDescription, ValueReferenceDescription, ColumnReferenceDescription
 } from '../../shared/page/widgets/index'
 
-import {
-    Page, ParameterMapping, ParameterMappingDescription
-} from '../../shared/page/page'
-
 export interface DragColumnDescription {
     columnName : string,
 
@@ -37,11 +33,6 @@ export interface DropCallbacks {
      * Called when dropped on a widget
      */
     onWidget? : (w : WidgetHost) => void
-
-    /**
-     * Dropped on a parameter mapping
-     */
-    onParameterMapping? : (p : ParameterMapping) => void
 
     /**
      * Called when dragging has stopped
