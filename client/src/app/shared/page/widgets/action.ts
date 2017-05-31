@@ -1,9 +1,8 @@
 import {
-    ActionDescription, NavigateActionDescription,
-    ParameterMappingDescription
+    ActionDescription, NavigateActionDescription
 } from '../page.description'
 import {
-    Page, ParameterMapping,
+    Page
 } from '../page'
 import {
     QueryReference, QueryReferenceDescription,
@@ -125,17 +124,19 @@ export class QueryAction extends Action {
         if (this._queryRef && this._queryRef.isResolveable) {
             const pageName = this.page.name;
             const queryId = this._queryRef.query.id;
-            const mappingParams = encodeUriParameters(this._queryRef.keyValueMapping);
 
-            return (`/${pageName}/query/${queryId}?${mappingParams}`);
+            return (`/${pageName}/query/${queryId}`);
         } else {
             return (undefined);
         }
     }
 
+    /**
+     * @return Names of all parameters that are required to execute this action.
+     */
     get parameterNames() {
         if (this._queryRef && this._queryRef.isResolveable) {
-            return (this._queryRef.mapping.map(p => p.parameterName));
+            return (this._queryRef.query.parameterNames);
         } else {
             return ([]);
         }
@@ -149,7 +150,6 @@ export class QueryAction extends Action {
 export class NavigateAction extends Action {
     private _internal : {
         pageId : string
-        pageParams : ParameterMapping[]
     }
 
     private _external : string;
@@ -170,7 +170,6 @@ export class NavigateAction extends Action {
             } else if (desc.internal) {
                 this._internal = {
                     pageId : desc.internal.pageId,
-                    pageParams : desc.internal.parameters.map(p => new ParameterMapping(widget.page, p))
                 }
             }
         }
@@ -232,20 +231,9 @@ export class NavigateAction extends Action {
         if (this.isExternal) {
             return (this.externalUrl);
         } else if (this.isInternal) {
-            // Encode parameters as "key=value" pairs and join them with a "&"
-            let queryString = this.internalParameters
-                .map(p => `${p.parameterName}={{${p.providingName}}}`)
-                .join("&");
-
-            // If there were any parameters prepend the `?` to mark the beginning
-            // of the query part of the URL
-            if (queryString.length > 0) {
-                queryString = "?" + queryString;
-            }
-
             // We currently link to pages, not internal IDs
             const pageName = this.internalTargetPage.name;
-            return (`/${pageName}${queryString}`);
+            return (`/${pageName}`);
         } else {
             return ("#");
         }
@@ -328,21 +316,12 @@ export class NavigateAction extends Action {
     set internalPageId(value : string) {
         this._internal = {
             pageId : value,
-            pageParams : this.createDefaultMapping(value)
         }
 
         if (this.widget) {
             this.widget.page.markSaveRequired();
         }
         this._external = undefined;
-    }
-
-    /**
-     * Creates the default mapping for the given page.
-     */
-    protected createDefaultMapping(pageId : string) {
-        const p = this.page.project.getPageById(pageId);
-        return p.requestParameters.map(v => new ParameterMapping(this.page, { parameterName : v.name }));
     }
 
     /**
@@ -353,19 +332,6 @@ export class NavigateAction extends Action {
         return (this.page.project.getPageById(this._internal.pageId));
     }
 
-    /**
-     * @return The parameters that would be passed to the internal page.
-     */
-    get internalParameters() : ParameterMapping[] {
-        this.assertInternalTarget();
-
-        return (this._internal.pageParams);
-    }
-
-    set internalParameters(value : ParameterMapping[]) {
-        this.assertInternalTarget();
-        this._internal.pageParams = value;
-    }
 
     toModel() : NavigateActionDescription {
         this.assertSingleTarget();
@@ -377,7 +343,6 @@ export class NavigateAction extends Action {
         if (this.isInternal) {
             toReturn.internal = {
                 pageId : this._internal.pageId,
-                parameters : this._internal.pageParams.map(p => p.toModel())
             }
         }
 
@@ -390,7 +355,7 @@ export class NavigateAction extends Action {
 
     get parameterNames() {
         if (this.isInternalPageResolveable) {
-            return (this._internal.pageParams.map(p => p.parameterName));
+            return (this.page.requiredParameterNames);
         } else {
             return ([]);
         }

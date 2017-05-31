@@ -3,7 +3,7 @@ import {ActivatedRoute, Router}                 from '@angular/router'
 
 import {Query, ResultColumn}                    from '../../shared/query'
 import {
-    Page, QueryReference, ParameterMapping
+    Page, QueryReference
 } from '../../shared/page/index'
 import {
     Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml, Link, Form
@@ -90,23 +90,6 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
         const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
         if (pageEvt.parameterValueProvider) {
             evt.preventDefault();
-        }
-    }
-
-    /**
-     * Something is beeing dragged over a parameter
-     */
-    onParameterDrop(evt : DragEvent, param : ParameterMapping) {
-        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        if (pageEvt.parameterValueProvider) {
-            evt.preventDefault();
-
-            param.providingName = pageEvt.parameterValueProvider;
-
-            // Do we need to fire the callback?
-            if (this._dragService.currentDrag.callbacks.onParameterMapping) {
-                this._dragService.currentDrag.callbacks.onParameterMapping(param);
-            }
         }
     }
 

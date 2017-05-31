@@ -1,6 +1,6 @@
-import {Page, ParameterMapping}          from '../page'
+import {Page}                            from '../page'
 import {Widget, WidgetHost}              from '../hierarchy'
-import {QueryReference} from '../value-reference'
+import {QueryReference}                  from '../value-reference'
 import {
     SelectDescription, QueryReferenceDescription
 } from '../page.description'
@@ -10,7 +10,7 @@ import {
 } from './widget-base'
 
 export {
-    SelectDescription, ParameterMapping
+    SelectDescription
 }
 
 export class Select extends UserInputWidget {

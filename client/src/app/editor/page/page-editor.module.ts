@@ -42,7 +42,6 @@ const treeComponents = [
 
     Tree.NavigateActionComponent,
     Tree.QueryReferenceComponent,
-    Tree.RequiredParametersComponent,
     Tree.ProvidedParameterComponent,
     Tree.ValueExpressionComponent,
     Tree.FormParametersComponent,

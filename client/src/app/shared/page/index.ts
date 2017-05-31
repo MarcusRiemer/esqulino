@@ -1,6 +1,6 @@
 import {
     Page, PageParameter, PageDescription,
-    QueryReference, ParameterMapping,
+    QueryReference,
     ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription, 
     CURRENT_API_VERSION
 } from './page'
@@ -12,7 +12,7 @@ import {Renderer}                        from './renderer'
 
 export {
     Page, PageParameter, PageDescription, Renderer, Body, Row, WidgetBase,
-    QueryReference, ParameterMapping,
+    QueryReference,
     QueryReferenceDescription, ValueReferenceDescription, ColumnReferenceDescription,
     Action, NavigateAction, QueryAction,
     CURRENT_API_VERSION

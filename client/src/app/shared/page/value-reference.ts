@@ -10,7 +10,7 @@ import {
     ValueReferenceDescription, ColumnReferenceDescription,
     QueryReferenceDescription
 } from './page.description'
-import {Page, ParameterMapping}                from './page'
+import {Page}                                  from './page'
 
 export {
     ValueReferenceDescription, ColumnReferenceDescription,
@@ -72,37 +72,12 @@ export class QueryReference extends ValueReference {
     // The "variable name" of this reference
     private _name : string;
 
-    // How are these parameters fulfilled?
-    private _mapping : ParameterMapping[] = [];
 
     constructor(page : Page, desc : QueryReferenceDescription) {
         super(page);
 
         this._queryId = desc.queryId;
         this._name = desc.name;
-
-        // Can a previous mapping be loaded or is there need for a new mapping?
-        if (desc.mapping && desc.mapping.length > 0) {
-            // There is a specific mapping already provided, use that
-            this._mapping = desc.mapping.map(m => new ParameterMapping(page, m));
-        } else if (this.isResolveable) {
-            // There are no mappings yet, but there is a query that possibly
-            // needs matching
-            this.createDefaultMapping();
-        } else {
-            // There is nothing to map.
-            this._mapping = [];
-        }
-    }
-
-    /**
-     * Discards the current mapping and builds a new one based on the current page
-     * and the currently required parameters.
-     */
-    protected createDefaultMapping() {
-        this._mapping = this.query.parameters.map(qp => new ParameterMapping(this.page, {
-            parameterName : qp.key
-        }));
     }
 
     /**
@@ -160,27 +135,6 @@ export class QueryReference extends ValueReference {
      */
     set queryId(newId : string) {
         this._queryId = newId;
-        this.createDefaultMapping();
-    }
-
-    /**
-     * @return How the input parameters of this query should be mapped
-     */
-    get mapping() {
-        return (this._mapping);
-    }
-
-    get keyValueMapping() : KeyValuePairs {
-        let toReturn : KeyValuePairs = {};
-        this._mapping.forEach(v => toReturn[v.parameterName] = v.providingName);
-        return (toReturn);
-    }
-
-    /**
-     * @param newMapping How the input parameters of this query should be mapped
-     */
-    set mapping(newMapping : ParameterMapping[]) {
-        this._mapping = newMapping;
         this.page.markSaveRequired();
     }
 
@@ -235,7 +189,6 @@ export class QueryReference extends ValueReference {
      * to no query at all.
      */
     clear() : void {
-        this._mapping = [];
         this._queryId = undefined;
         this._name = undefined;
     }
@@ -254,10 +207,6 @@ export class QueryReference extends ValueReference {
 
         if (this._queryId) {
             toReturn.queryId = this._queryId;
-        }
-
-        if (this._mapping && this._mapping.length > 0) {
-            toReturn.mapping = this._mapping.map(m => m.toModel());
         }
         
         return (toReturn);

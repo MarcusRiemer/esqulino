@@ -1,13 +1,13 @@
 import {Page}                            from '../page'
 import {Widget, WidgetHost}              from '../hierarchy'
 import {
-    LinkDescription, ParameterMappingDescription
+    LinkDescription
 } from '../page.description'
 
 import {WidgetBase, WidgetDescription}       from './widget-base'
 import {NavigateAction}                      from './action'
 
-export {LinkDescription, ParameterMappingDescription, NavigateAction}
+export {LinkDescription, NavigateAction}
 
 export class Link extends WidgetBase {
     private _text : string

@@ -1,4 +1,4 @@
-import {Page, ParameterMapping}          from '../page'
+import {Page}                            from '../page'
 import {Widget, WidgetHost}              from '../hierarchy'
 import {
     ButtonDescription, QueryReferenceDescription
@@ -17,7 +17,7 @@ import {
 } from './form'
 
 export {
-    ButtonDescription, ParameterMapping
+    ButtonDescription
 }
 
 /**
@@ -93,29 +93,11 @@ export class Button extends ParametrizedWidget {
         this.fireModelChange();
     }
 
+    /**
+     * @param value The ID of the targeted query
+     */
     setNewQueryId(value : string) {
         this._queryAction.queryReference.queryId = value;
-        this.fireModelChange();
-    }
-
-    /**
-     * @return The parameters that are required to run the action
-     *         behind this button.
-     */
-    get mapping() {
-        if (this._queryAction.hasValidTarget) {
-            return (this.queryReference.mapping);
-        } else {
-            return ([]);
-        }
-    }
-
-    /**
-     * @param newParams The parameters that are required to run the action
-     *                  behind this button.      
-     */
-    set mapping(newParams : ParameterMapping[]) {
-        this._queryAction.queryReference.mapping = newParams;
         this.fireModelChange();
     }
 

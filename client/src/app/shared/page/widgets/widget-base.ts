@@ -3,7 +3,7 @@ import {Observable}                                  from 'rxjs/Observable'
 
 import {ModelObservable}                             from '../../interfaces'
 
-import {Page, WidgetDescription, ParameterMapping}   from '../page'
+import {Page, WidgetDescription}                     from '../page'
 import {
     Widget, WidgetCategory,
     WidgetHost, isWidgetHost
@@ -14,8 +14,7 @@ import {Parameter}                                   from './parameters'
 import {loadWidget}                                  from './widget-loader'
 
 export {
-    WidgetDescription, ParameterMapping,
-    Widget, WidgetHost
+    WidgetDescription, Widget, WidgetHost
 }
 
 /**
@@ -253,18 +252,6 @@ export abstract class ParametrizedWidget extends WidgetBase {
                 parent? : WidgetHost)
     {
         super(desc, parent);
-    }
-
-    /**
-     * @return All parameters required for this widget
-     */
-    abstract get mapping() : ParameterMapping[];
-
-    /**
-     * @return True, if the given name is required as an input parameter.
-     */
-    hasInputParameter(name : string) {
-        return (this.mapping.some(p => p.parameterName == name));
     }
 }
 

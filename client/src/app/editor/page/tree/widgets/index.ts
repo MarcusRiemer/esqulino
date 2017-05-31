@@ -1,6 +1,5 @@
 import {QueryReferenceComponent}        from './helper/query-reference.component'
 import {NavigateActionComponent}        from './helper/navigate-action.component'
-import {RequiredParametersComponent}    from './helper/required-parameters.component'
 import {ProvidedParameterComponent}     from './helper/provided-parameter.component'
 import {ValueExpressionComponent}       from './helper/value-expression.component'
 import {FormParametersComponent}        from './helper/form-parameters.component'
@@ -14,7 +13,6 @@ import {SelectComponent}                from './select.component'
 export {
     QueryReferenceComponent,
     NavigateActionComponent,
-    RequiredParametersComponent,
     ProvidedParameterComponent,
     ValueExpressionComponent,
     FormParametersComponent,

@@ -10,9 +10,6 @@ import {
     CURRENT_API_VERSION
 } from './page.description'
 import {
-    ParameterMapping, ParameterMappingDescription
-} from './parameter-mapping'
-import {
     Widget, WidgetHost, isWidgetHost, isWidget
 } from './hierarchy'
 import {
@@ -33,7 +30,6 @@ export {
     ValueReferenceDescription, ColumnReferenceDescription,
     QueryReferenceDescription,
     ValueReference, ColumnReference, QueryReference,
-    ParameterMapping, ParameterMappingDescription,
     CURRENT_API_VERSION
 }
 
@@ -156,80 +152,6 @@ export class Page extends ProjectResource {
     }
 
     /**
-     * @param desc The description of the widget to add.
-     * @param index The index the new widget will be added.
-     *
-     * @return The instantiated widget
-     */
-    addWidget(desc : WidgetDescription, index : number) : Widget {
-        if (!this.body.acceptsWidget(desc)) {
-            throw new Error(`Cant place ${desc.type} on page`);
-        }
-
-        // Ensure widget index at least touches the current array
-        if (index != 0 && index > this.body.children.length) {
-            throw new Error(`Adding Widget ("${JSON.stringify(desc)}") exceeds widget count (given: ${index}, length ${this.body.children.length}`);
-        }
-
-        const widget = loadWidget(desc, this.body);
-        this.body.children.splice(index, 0, widget);
-
-        this.markSaveRequired();
-
-        return (widget);
-    }
-
-    /**
-     * Adds a new widget to this page.
-     *
-     * @param widget The widget to add
-     * @param rowIndex The row this widget should be added
-     * @param columnIndex The column this widget should be added
-     * @param widgetIndex The position of the widget inside the column
-     */
-    addWidgetDeep(widget : WidgetDescription,
-                  rowIndex : number, columnIndex : number,
-                  widgetIndex : number) {
-        // Ensure column index
-        const row = this.getRow(rowIndex);
-        if (columnIndex >= row.children.length) {
-            throw new Error(`Adding widget ("${JSON.stringify(widget)}") exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.children.length}`);
-        }
-
-        // Attempt to add the widget
-        const column = row.children[columnIndex];
-        column.addWidget(widget, widgetIndex);
-
-        this.markSaveRequired();
-    }
-
-    /**
-     * Remove a widgets with a position that is exactly known.
-     */
-    removeWidgetByIndex(rowIndex : number, columnIndex : number, widgetIndex : number) {
-        // Ensure valid row index
-        if (rowIndex >= this.body.widgets.length) {
-            throw new Error(`Removing widget exceeds row count (given: ${rowIndex}, length ${this.body.widgets.length}`);
-        }
-
-        // Ensure it is a row
-        if (!(this.body.widgets[rowIndex] instanceof Row)) {
-            throw new Error(`Parent widget #${rowIndex} is not a row, but a ${this.body.widgets[rowIndex].type}`);
-        }
-
-        // Ensure column index
-        const row = this.body.widgets[rowIndex] as Row;
-        if (columnIndex >= row.children.length) {
-            throw new Error(`Removing widget exceeds column index at row ${rowIndex} (given: ${columnIndex}, length ${row.children.length}`);
-        }
-
-        const column = row.children[columnIndex];
-        column.removeChildByIndex(widgetIndex);
-
-        this.markSaveRequired();
-    }
-
-    /**
      * Removes a specific widget.
      */
     removeWidget(widgetRef : Widget, recursive : boolean) {
@@ -322,7 +244,7 @@ export class Page extends ProjectResource {
     }
 
     /**
-     * @return All parameter names that need to be given.
+     * @return All parameter names that need to be given to render this page.
      */
     get requiredParameterNames() : string[] {
         const queryParams = this._referencedQueries
