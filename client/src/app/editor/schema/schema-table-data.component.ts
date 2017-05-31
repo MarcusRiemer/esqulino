@@ -70,7 +70,6 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
      * Load the project to access the schema
      */
     ngOnInit() {
-        console.log("Details loading!");
         let subRef = this._routeParams.params.subscribe(params => {
             var tableName = params['tableName'];
             let projref = this._projectService.activeProject
@@ -87,19 +86,6 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
         });
         this._subscriptionRefs.push(subRef);
 
-        //Getting the entries from a table with limit and count
-        this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
-        let schemaref = this._schemaService.activeTableData
-            .subscribe(res => { this.tableData = res; },
-                error => this.showError(error));
-        this._subscriptionRefs.push(schemaref);
-
-        //Calculating the amount of rows inside the table
-        subRef = this._schemaService.getTableRowAmount(this._project, this.table)
-            .subscribe(res =>{ this._tableRowAmount = res[0];},
-                error => this.showError(error))
-        this._subscriptionRefs.push(subRef);
-
         //Buttons only to show if this component is not invoked as a child
         if (!this.isChild) {
             this._toolbarService.resetItems();
@@ -109,10 +95,48 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
                 this.backBtn();
             })
             this._subscriptionRefs.push(subRef);
+
+            let btnEdit = this._toolbarService.addButton("edit", "Struktur Editieren", "edit", "e");
+            subRef = btnEdit.onClick.subscribe(res => {
+                this._router.navigate(["../../edit", this.table.name], {
+                    relativeTo: this._route
+                });
+            });
+            this._subscriptionRefs.push(subRef);
         }
 
+        this.refresh();
     }
 
+    /**
+     * Asks the server to refresh its data.
+     */
+    private refresh() {
+        this.refreshData();
+        this.refreshRowCount();
+    }
+
+    private refreshData() {
+        this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount)
+            .first()
+            .subscribe(
+                res => this.tableData = res,
+                err => this.showError(err)
+            );
+    }
+
+    private refreshRowCount() {
+        this._schemaService.getTableRowAmount(this._project, this.table)
+            .first()
+            .subscribe(
+                res => this._tableRowAmount = res[0],
+                err => this.showError(err)
+            );
+    }
+
+    /**
+     * Frees now obsolete subscriptions
+     */
     ngOnDestroy() {
         this._subscriptionRefs.forEach(ref => ref.unsubscribe());
         this._subscriptionRefs = [];
@@ -125,7 +149,7 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
         amount = +amount;
         this._showRowFrom = 0;
         this._showRowAmount = amount;
-        this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
+        this.refreshData();
     }
 
     /**
@@ -164,7 +188,7 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
     nextRowSite() {
         if ((this._showRowFrom + this._showRowAmount) < this._tableRowAmount) {
             this._showRowFrom += this._showRowAmount;
-            this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
+            this.refreshData();
         }
     }
 
@@ -178,7 +202,7 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
             } else {
                 this._showRowFrom = 0;
             }
-            this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount);
+            this.refreshData();
         }
     }
 

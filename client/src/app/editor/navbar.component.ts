@@ -22,9 +22,15 @@ export class NavbarComponent {
     @Input() project : Project;
 
     constructor(private _pageDragService : DragService) {
-
+        
     }
 
+    get currentDatabaseName() {
+        if (this.project) {
+            return (this.project.currentDatabaseName);
+        }
+    }
+    
     /**
      * Starts dragging around a query.
      */
