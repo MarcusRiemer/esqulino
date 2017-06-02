@@ -51,7 +51,7 @@ export interface Widget {
     /*
      * TODO: Rework this into proper text nodes
      */
-    text : string;
+    text? : string;
 }
 
 /**

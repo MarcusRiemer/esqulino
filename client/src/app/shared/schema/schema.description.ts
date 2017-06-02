@@ -27,6 +27,6 @@ export interface TableDescription {
     name : string
     columns : ColumnDescription[]
     foreign_keys : ForeignKeyDescription[]
-    system_table: boolean
+    system_table?: boolean
 }
 
