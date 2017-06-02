@@ -389,11 +389,16 @@ end
 # @param write_access [Boolean] Should the projects be available for writing?
 # @param public_only [Boolean] Should only public projects be considered?
 def enumerate_projects(projects_dir, write_access, public_only)
+  # Not every entry in the projects folder is actually a project
   to_return = Dir
                 .entries(projects_dir)
-                .select { |entry| entry != '.' and entry != '..' and not entry.start_with? "_" }
-                .map { |entry| Project.new File.join(projects_dir, entry), write_access }
+                .select { |entry| entry != '.' and entry != '..' }
+                .select { |entry| not entry.start_with? "_"  }
+                .map { |entry| File.join projects_dir, entry }
+                .select { |entry| File.directory? entry }
+                .map { |entry| Project.new entry, write_access }
 
+  # Possibly filter out
   if public_only then
     to_return.select { |entry| entry.public? }
   else
