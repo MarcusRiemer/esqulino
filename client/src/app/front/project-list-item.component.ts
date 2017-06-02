@@ -1,4 +1,5 @@
-import {Component, Input}          from '@angular/core'
+import {Component, Input, PLATFORM_ID, Inject} from '@angular/core'
+import {isPlatformBrowser, isPlatformServer}   from '@angular/common'
 
 import {
     ProjectDescriptionService, ProjectDescription
@@ -19,6 +20,9 @@ export class ProjectListItemComponent {
      */
     useSobdomain = true;
 
+    public constructor(@Inject(PLATFORM_ID) private _platformId: Object) {
+    }
+
     /**
      * @return The image URL of this project
      */
@@ -37,12 +41,16 @@ export class ProjectListItemComponent {
      * @return The currently visited hostname
      */
     get projectServerHostname() : string {
-        const currentHost = window.location.host;
-        if (currentHost.startsWith("localhost")) {
-            return (currentHost);
-        } else {
-            return "blattzeug.de";
-        }
+    	if (isPlatformBrowser(this._platformId)) {
+            const currentHost = window.location.host;
+            if (currentHost.startsWith("localhost")) {
+		return (currentHost);
+            } else {
+		return "blattzeug.de";
+            }
+	} else {
+	    return "blattzeug.de";
+	}
     }
 
     /**
