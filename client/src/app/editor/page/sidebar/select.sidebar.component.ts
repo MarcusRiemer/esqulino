@@ -7,8 +7,6 @@ import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
 
 import {WidgetComponent}               from '../widget.component'
 
-type EditedComponent = WidgetComponent<Select>
-
 /**
  * Displays the sidebar editing component for a <select> element.
  */
@@ -17,9 +15,9 @@ type EditedComponent = WidgetComponent<Select>
 })
 export class SelectSidebarComponent {
 
-    private _component : EditedComponent;
+    private _component : WidgetComponent<Select>;
 
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : EditedComponent) {
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : WidgetComponent<Select>) {
         this._component = com;
     }
 

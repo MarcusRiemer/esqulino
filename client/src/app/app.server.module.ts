@@ -1,5 +1,6 @@
 import {NgModule}                          from '@angular/core'
-import {BrowserModule, Title}              from '@angular/platform-browser'
+import {Title}                             from '@angular/platform-browser'
+import {ServerModule}                      from '@angular/platform-server'
 
 import {SharedAppModule}                   from './shared/shared.module'
 import {FrontModule}                       from './front/front.module'
@@ -10,9 +11,7 @@ import {routing}                           from './app.routes'
 
 @NgModule({
     imports: [
-        BrowserModule.withServerTransition({
-            appId: 'scratch-sql'
-        }),
+        ServerModule,
         SharedAppModule.forRoot(),
         FrontModule,
         EditorModule,
