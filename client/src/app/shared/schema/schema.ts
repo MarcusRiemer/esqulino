@@ -94,6 +94,6 @@ export class Schema {
      * @return Schemas for all available tables.
      */
     get tables() {
-        return (this._tables);
+        return (this._tables.filter(t => !t.system_table));
     }
 }
