@@ -26,6 +26,11 @@ export class PageDataComponent implements OnInit {
     @Input() project : Project;
 
     /**
+     * 
+     */
+    @Input() newParamName : string;
+
+    /**
      * The "reference a new query" control uses this as
      * backing Data. Initially this is an empty reference.
      */

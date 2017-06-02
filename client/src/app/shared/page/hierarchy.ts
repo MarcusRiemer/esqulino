@@ -47,6 +47,11 @@ export interface Widget {
      * @return The description of this widget.
      */
     toModel() : WidgetDescription;
+
+    /*
+     * TODO: Rework this into proper text nodes
+     */
+    text : string;
 }
 
 /**

@@ -70,6 +70,10 @@ export class WidgetNodeLoaderComponent implements OnChanges {
         }
     }
 
+    get isLoading() {
+        return (this.isLoading);
+    }
+
     /**
      * Some binding has changed.
      */

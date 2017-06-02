@@ -18,7 +18,7 @@ export class EmbeddedHtmlSidebarComponent {
     }
 
     get model() {
-        return (this._com.model);
+        return (this._com.model as EmbeddedHtml);
     }
 }
 

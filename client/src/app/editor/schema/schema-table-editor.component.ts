@@ -228,6 +228,10 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         this._showPreview = !this._showPreview;
     }
 
+    get showPreview() {
+        return (this._showPreview);
+    }
+
     /**
      * Function for the save button
      */
