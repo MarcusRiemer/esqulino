@@ -7,6 +7,9 @@ NG_BIN = node_modules/.bin/ng
 NGC_BIN = node_modules/.bin/ngc
 TS_NODE_BIN = node_modules/.bin/ts-node
 
+BUNDLE_FILES = $(shell find dist/ -iname "*bundle*.js" 2> /dev/null)
+BUNDLE_FILES_GZIP = $(addsuffix .gz, $(BUNDLE_FILES))
+
 all : dist
 
 clean : msg-pre-clean
@@ -36,7 +39,15 @@ universal-compile:
 	$(NGC_BIN)
 
 universal-run:
-	$(TS_NODE_BIN) src/server.ts 
+	$(TS_NODE_BIN) src/server.ts
+
+%.gz : %
+	gzip --keep $^
+
+gzipped-bundles : $(BUNDLE_FILES_GZIP)
+
+gzipped-clean :
+	rm -f $(BUNDLE_FILES_GZIP)
 
 ##################################
 # Messaging targets
