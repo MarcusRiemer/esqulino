@@ -316,6 +316,10 @@ class ScratchSqlApp < Sinatra::Base
 
   # Creates a new table in the given database
   post '/api/project/:project_id/db/:database_id/create' do |_p, database_id|
+    # TODO: Route this alteration through the project, as
+    #       user management should be made from there
+    protected!
+
     # TODO: The schema code makes use of OpenStruct, which the validator does
     #       not like. So currently two JSON objects are created, this
     #       is obviously not perfect.
@@ -337,6 +341,10 @@ class ScratchSqlApp < Sinatra::Base
 
   # Drops a single table of the given database.
   delete '/api/project/:project_id/db/:database_id/drop/:tableName' do |_p, database_id, tableName|
+    # TODO: Route this alteration through the project, as
+    #       user management should be made from there
+    protected!
+
     if(@project.has_table(params['tableName']))
       error, msg = remove_table(@project.file_path_sqlite, params['tableName'])  
       if(error == 0)
@@ -350,6 +358,10 @@ class ScratchSqlApp < Sinatra::Base
   # Allows to alter tables of a certain database. This route primarily operates on the
   # JSON-payload in the body of the request.
   post '/api/project/:project_id/db/:database_id/alter/:tableName' do
+    # TODO: Route this alteration through the project, as
+    #       user management should be made from there
+    protected!
+    
     if(@project.has_table(params['tableName']))
       alter_schema_request = @@validator.ensure_request("AlterSchemaRequestDescription", request.body.read)
       commandHolder = alter_schema_request['commands']
