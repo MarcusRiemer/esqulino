@@ -68,6 +68,9 @@
         },
         "name": {
             "type": "string"
+        },
+        "system_table": {
+            "type": "boolean"
         }
     },
     "type": "object"

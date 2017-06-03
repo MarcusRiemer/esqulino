@@ -144,7 +144,7 @@
         "ForeignKeyDescription": {
             "additionalProperties": false,
             "properties": {
-                "refs": {
+                "references": {
                     "items": {
                         "additionalProperties": false,
                         "properties": {
@@ -315,19 +315,6 @@
             },
             "type": "object"
         },
-        "ParameterMappingDescription": {
-            "additionalProperties": false,
-            "description": "Inputs and outputs *may* use identical names but are not required\nto do so.",
-            "properties": {
-                "parameterName": {
-                    "type": "string"
-                },
-                "providingName": {
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
         "QueryDescription": {
             "additionalProperties": false,
             "description": "Outermost description of a query. This contains\nthe whole structure and some identifying properties.",
@@ -372,12 +359,6 @@
             "additionalProperties": false,
             "description": "Referenced queries are possibly accompanied by a human-readable\nname. This is required if the same query is going to be used\nmultiple times on a single page.",
             "properties": {
-                "mapping": {
-                    "items": {
-                        "$ref": "#/definitions/ParameterMappingDescription"
-                    },
-                    "type": "array"
-                },
                 "name": {
                     "type": "string"
                 },
@@ -461,6 +442,9 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "system_table": {
+                    "type": "boolean"
                 }
             },
             "type": "object"
