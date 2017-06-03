@@ -9,8 +9,6 @@ import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
 
 import {WidgetComponent}               from '../widget.component'
 
-type EditedComponent = WidgetComponent<QueryTable>
-
 /**
  * The sidebar-editor for a QueryTable. This is currently in a quite
  * convoluted state due to too many ad-hoc datastructures.
@@ -20,9 +18,9 @@ type EditedComponent = WidgetComponent<QueryTable>
 })
 export class QueryTableSidebarComponent {
 
-    private _component : EditedComponent;
+    private _component : WidgetComponent<QueryTable>;
     
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : EditedComponent) {
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : WidgetComponent<QueryTable>) {
         this._component = com;
         
         if (!this._component.page) {

@@ -147,7 +147,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                     })
                 this._subscriptionRefs.push(projref);
                 this.isNewTable = true;
-                this._schemaService.initCurrentlyEdit(new Table({name : "", columns : [], foreign_keys : []}, [], []));
+                this._schemaService.initCurrentlyEdit(new Table({name : "", columns : [], foreign_keys : [], system_table : false}, [], []));
                 this.table = this._schemaService.getCurrentlyEditedTable();
             }
         });
@@ -226,6 +226,10 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
      */
     previewBtn() {
         this._showPreview = !this._showPreview;
+    }
+
+    get showPreview() {
+        return (this._showPreview);
     }
 
     /**

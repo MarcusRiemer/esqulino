@@ -6,7 +6,9 @@ def database_graphviz_schema(sqlite_file_path)
   schema = database_describe_schema(sqlite_file_path)
 
   # Add nodes for all tables
-  tables = schema.map do |table|
+  tables = schema
+             .select {|table| not table.system?}
+             .map do |table|
     columns = table.columns.map do |c|
       c_type = (table.is_column_fk? c) ? "FK" : c.type
       c_name = c.name

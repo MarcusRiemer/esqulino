@@ -90,6 +90,13 @@ export abstract class WidgetBase implements Widget, ModelObservable<Widget> {
     }
 
     /**
+     * Per default there is no text.
+     */
+    get text() : string {
+        return (undefined);
+    }
+
+    /**
      * @return The user-oriented category of this widget.
      */
     get category() : WidgetCategory {
