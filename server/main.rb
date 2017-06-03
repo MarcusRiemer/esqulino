@@ -213,7 +213,10 @@ class ScratchSqlApp < Sinatra::Base
   post '/api/project/:project_id/query/run' do
     request_data = @@validator.ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
-    result = @project.execute_sql(request_data['sql'], request_data['params'])
+    # TODO: Remove this ugly hack to limit the maximum number of rows
+    sql_query = "#{request_data['sql']}\nLIMIT 100"
+    
+    result = @project.execute_sql(sql_query, request_data['params'])
     json(result['rows'])
   end
 
