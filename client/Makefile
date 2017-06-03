@@ -3,7 +3,12 @@
 
 include ../Makefile.common
 
-NG_BIN = node_modules/@angular/cli/bin/ng
+NG_BIN = node_modules/.bin/ng
+NGC_BIN = node_modules/.bin/ngc
+TS_NODE_BIN = node_modules/.bin/ts-node
+
+BUNDLE_FILES = $(shell find dist/ -iname "*bundle*.js" 2> /dev/null)
+BUNDLE_FILES_GZIP = $(addsuffix .gz, $(BUNDLE_FILES))
 
 all : dist
 
@@ -24,6 +29,25 @@ test :
 
 clean-deps : msg-pre-clean-deps
 	rm -rf "node_modules"
+
+##################################
+# Universal Rendering
+##################################
+
+universal-compile:
+	$(NG_BIN) build --prod
+	$(NGC_BIN)
+
+universal-run:
+	$(TS_NODE_BIN) src/server.ts
+
+%.gz : %
+	gzip --keep $^
+
+gzipped-bundles : $(BUNDLE_FILES_GZIP)
+
+gzipped-clean :
+	rm -f $(BUNDLE_FILES_GZIP)
 
 ##################################
 # Messaging targets

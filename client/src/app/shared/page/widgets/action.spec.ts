@@ -22,31 +22,6 @@ describe('Page NavigateAction', () => {
         expect(a.toModel()).toEqual(m);
     });
 
-    
-    it ('Serialization with internal reference', () => {
-        let w : Widget = {
-            type : "Mock",
-            category : "structural",
-            isEmptyElement : true,
-            parent : undefined,
-            page : undefined,
-            toModel : () => this,
-            parameters : []
-        }
-        
-        const m : NavigateActionDescription = {
-            type : "navigate",
-            internal : {
-                pageId : "12",
-                parameters : [{ parameterName : "foo", providingName : "bar" }]
-            }
-        }
-
-        let a = new NavigateAction(w, m);
-        expect(a.isInternal).toEqual(true);
-        expect(a.isExternal).toEqual(false);
-        expect(a.toModel()).toEqual(m);
-    });
 
     it ('Serialization with external reference', () => {
         const m : NavigateActionDescription = {
@@ -77,7 +52,6 @@ describe('Page NavigateAction', () => {
             type : "navigate",
             internal : {
                 pageId : "12",
-                parameters : [{ parameterName : "foo", providingName : "bar" }]
             }
         }
 
@@ -91,7 +65,6 @@ describe('Page NavigateAction', () => {
             external : "http://thedailywtf.com/articles/Directive-595",
             internal : {
                 pageId : "13",
-                parameters : []
             }
         }
 

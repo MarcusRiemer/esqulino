@@ -13,9 +13,11 @@ export class Table {
     private _name : string;
     private _columns : Column[];
     private _foreign_keys : ForeignKeyDescription[];
+    private _isSystemTable : boolean;
 
     constructor(desc : TableDescription, col : ColumnDescription[], foreign_keys : ForeignKeyDescription[]) {
         this._name = desc.name;
+        this._isSystemTable = desc.system_table;
         this._columns = col
             .map(val => new Column(val, ColumnStatus.unchanged));
         this._foreign_keys = foreign_keys;
@@ -92,6 +94,13 @@ export class Table {
     }
 
     /**
+     * @return True, if this table is an implementation detail.
+     */
+    get system_table() {
+        return (this._isSystemTable);
+    }
+
+    /**
      * @return: Gives all columns of this table.
      */
     get columns() {
@@ -142,7 +151,8 @@ export class Table {
         return {
             name : this._name,
             columns : this._columns.map(val => val.toModel()),
-            foreign_keys : this._foreign_keys
+            foreign_keys : this._foreign_keys,
+            system_table : this._isSystemTable
         }
     }
 }

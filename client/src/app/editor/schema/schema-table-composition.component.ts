@@ -20,6 +20,8 @@ export class SchemaTableCompositionComponent {
      */
     @Input() table : Table;
 
+    @Input() highlightedColumn : string;
+    
     tableForeignKey : Table;
 
     toHighLight : string;
