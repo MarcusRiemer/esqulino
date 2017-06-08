@@ -119,6 +119,13 @@ class EsqulinoCli
           migrate_project(self, p, ESQULINO_API_VERSION)
         end
       end
+
+      # Create a clone of a project
+      opts.on("--clone NEW_ID", "Clones the given project and makes it available under NEW_ID") do |id|
+        print_progress_line (fmt_project project, "Cloning to \"#{id}\"") do
+          project.clone id
+        end
+      end
     end
   end
 
@@ -132,6 +139,14 @@ class EsqulinoCli
     else
       [@project]
     end
+  end
+
+  # Allows access to a single single project
+  def project
+    raise StandardError.new("Single project requested, multiple available") unless @data_dir.nil?
+    raise StandardError.new("Single project requested, none available") if @project.nil?
+
+    @project
   end
 
   # Parses and executes the commandline
@@ -228,7 +243,7 @@ if __FILE__ == $0
   begin
     cli = EsqulinoCli.new
     cli.parse! ARGV
-  rescue EsqulinoError => e
+  rescue StandardError => e
     puts "#{e.class.name.red}: #{e}"
   end
 end

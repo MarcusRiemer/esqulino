@@ -11,6 +11,12 @@ ESQULINO_API_VERSION = 3
 
 # Checks the locally deployed version against the version that is available
 # at Bitbucket
+#
+# @return [Hash] Structure is
+#                {
+#                  :remote => { :hash => string, :date => date },
+#                  :local => { :hash => string, :date => date }
+#                }
 def check_against_master_repo()
   bitbucket_api_endpoint = "https://bitbucket.org/api/2.0/repositories/marcusriemer/esqulino/refs/branches/master"
   request_uri = URI(bitbucket_api_endpoint)
