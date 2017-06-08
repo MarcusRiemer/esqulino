@@ -1,6 +1,6 @@
 {
   "name": "neuer_termin",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "insert": {
     "assignments": [
       {

@@ -1,6 +1,6 @@
 {
   "name": "termin_einzel",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "singleRow": true,
   "from": {
     "first": {

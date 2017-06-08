@@ -1,11 +1,12 @@
 {
   "name": "artikel_alle",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "select": {
     "columns": [
       {
         "expr": {
-          "star": {}
+          "star": {
+          }
         }
       }
     ]

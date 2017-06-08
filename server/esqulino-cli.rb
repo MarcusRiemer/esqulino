@@ -15,11 +15,15 @@ class String
   def black;          "\033[30m#{self}\033[0m" end
   def red;            "\033[31m#{self}\033[0m" end
   def green;          "\033[32m#{self}\033[0m" end
-  def brown;          "\033[33m#{self}\033[0m" end
+  def yellow;         "\033[33m#{self}\033[0m" end
   def blue;           "\033[34m#{self}\033[0m" end
   def magenta;        "\033[35m#{self}\033[0m" end
   def cyan;           "\033[36m#{self}\033[0m" end
   def gray;           "\033[37m#{self}\033[0m" end
+end
+
+# Base class for errors that are specific for the CLI
+class CliError < StandardError
 end
 
 # Wraps all possible esqulino commandline operations
@@ -135,7 +139,7 @@ class EsqulinoCli
   # @return A Project enumerable
   def projects
     if @project.nil? then
-      enumerate_projects File.join(@data_dir, "projects"), true
+      enumerate_projects File.join(@data_dir, "projects"), true, false
     else
       [@project]
     end
@@ -143,8 +147,8 @@ class EsqulinoCli
 
   # Allows access to a single single project
   def project
-    raise StandardError.new("Single project requested, multiple available") unless @data_dir.nil?
-    raise StandardError.new("Single project requested, none available") if @project.nil?
+    raise CliError.new("Single project requested, multiple available") unless @data_dir.nil?
+    raise CliError.new("Single project requested, none available") if @project.nil?
 
     @project
   end
@@ -243,8 +247,10 @@ if __FILE__ == $0
   begin
     cli = EsqulinoCli.new
     cli.parse! ARGV
-  rescue StandardError => e
+  rescue EsqulinoError => e
     puts "#{e.class.name.red}: #{e}"
+  rescue CliError, OptionParser::MissingArgument => e
+    puts "#{e.class.name.yellow}: #{e}"
   end
 end
 

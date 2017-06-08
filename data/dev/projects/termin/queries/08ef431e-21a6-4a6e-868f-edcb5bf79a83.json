@@ -1,6 +1,6 @@
 {
   "name": "neue_option",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "insert": {
     "assignments": [
       {

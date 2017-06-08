@@ -1,6 +1,6 @@
 {
   "name": "gebrauchtwagen",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "select": {
     "columns": [
       {
