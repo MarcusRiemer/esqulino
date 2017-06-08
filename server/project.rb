@@ -381,6 +381,17 @@ class Project
       'description' => self.whole_description['description'],
     }
   end
+
+  # Clones the entire project and makes it available under a new
+  # name.
+  #
+  # @return [Project] The newly created instance
+  def clone(new_id)
+    new_path = File.realdirpath(File.join(folder, "..", new_id))
+    FileUtils.cp_r folder, new_path
+
+    cloned_project = Project.new new_path, true
+  end
 end
 
 # Enumerates all projects in the given directory
