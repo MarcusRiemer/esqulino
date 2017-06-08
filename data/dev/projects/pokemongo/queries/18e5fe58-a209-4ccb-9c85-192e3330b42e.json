@@ -1,6 +1,6 @@
 {
   "name": "Gefangen_Staerker",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "singleRow": true,
   "update": {
     "assignments": [

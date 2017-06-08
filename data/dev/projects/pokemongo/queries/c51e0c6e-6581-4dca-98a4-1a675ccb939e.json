@@ -4,7 +4,8 @@
     "columns": [
       {
         "expr": {
-          "star": {}
+          "star": {
+          }
         }
       }
     ]
@@ -14,5 +15,5 @@
       "name": "pokedex"
     }
   },
-  "apiVersion": "3"
+  "apiVersion": "4"
 }

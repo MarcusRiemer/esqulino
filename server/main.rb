@@ -331,7 +331,7 @@ class ScratchSqlApp < Sinatra::Base
     @@validator.ensure_request("TableDescription", whole_body) # 1st JSON-object
     newTable = createObject(whole_body)                        # 2nd JSON-object
     if(!@project.has_table(newTable['name']))
-      error, msg = create_table(@project.file_path_sqlite, newTable)  
+      error, msg = create_table(@project.file_path_sqlite_from_id(database_id), newTable)  
       if(error == 0)
         return 200
       else
@@ -349,7 +349,7 @@ class ScratchSqlApp < Sinatra::Base
     protected!
 
     if(@project.has_table(params['tableName']))
-      error, msg = remove_table(@project.file_path_sqlite, params['tableName'])  
+      error, msg = remove_table(@project.file_path_sqlite_from_id(database_id), params['tableName'])  
       if(error == 0)
         return 200
       else
@@ -368,11 +368,15 @@ class ScratchSqlApp < Sinatra::Base
     if(@project.has_table(params['tableName']))
       alter_schema_request = @@validator.ensure_request("AlterSchemaRequestDescription", request.body.read)
       commandHolder = alter_schema_request['commands']
-      error, index, errorCode, errorBody = database_alter_schema(@project.file_path_sqlite, params['tableName'], commandHolder)
+      error, index, errorCode, errorBody = database_alter_schema(
+                                 file_path_sqlite_from_id(database_id),
+                                 params['tableName'],
+                                 commandHolder
+                               )
       if(error) 
         return 500, {'Content-Type' => 'application/json'}, { :index => index.to_s, :errorCode => errorCode.to_s, :errorBody => json(errorBody)}.to_json
       else 
-        return 200, {'Content-Type' => 'application/json'}, {:schema => database_describe_schema(@project.file_path_sqlite)}.to_json
+        return 200, {'Content-Type' => 'application/json'}, {:schema => database_describe_schema(@project.file_path_sqlite_from_id(database_id))}.to_json
       end
     end
   end

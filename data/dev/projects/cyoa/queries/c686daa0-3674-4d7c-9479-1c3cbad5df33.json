@@ -1,6 +1,6 @@
 {
   "name": "kapitel_optionen",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "from": {
     "first": {
       "name": "next_chapter"
@@ -10,7 +10,8 @@
     "columns": [
       {
         "expr": {
-          "star": {}
+          "star": {
+          }
         }
       }
     ]

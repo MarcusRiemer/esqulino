@@ -1,6 +1,6 @@
 {
   "name": "Pokemon_Einzel",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "singleRow": true,
   "from": {
     "first": {
@@ -11,7 +11,8 @@
     "columns": [
       {
         "expr": {
-          "star": {}
+          "star": {
+          }
         }
       }
     ]

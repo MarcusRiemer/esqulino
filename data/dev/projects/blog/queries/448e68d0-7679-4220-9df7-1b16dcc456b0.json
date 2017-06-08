@@ -1,6 +1,6 @@
 {
   "name": "kommentar_loeschen",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "delete": {
   },
   "from": {

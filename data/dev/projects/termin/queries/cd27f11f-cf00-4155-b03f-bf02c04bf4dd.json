@@ -1,6 +1,6 @@
 {
   "name": "neue_einladung",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "insert": {
     "assignments": [
       {
