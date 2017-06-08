@@ -71,7 +71,7 @@ export class WidgetNodeLoaderComponent implements OnChanges {
     }
 
     get isLoading() {
-        return (this.isLoading);
+        return (this._isLoading);
     }
 
     /**
