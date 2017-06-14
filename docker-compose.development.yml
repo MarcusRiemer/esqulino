@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  client:
+    image: esqulino:development
+    build:
+      dockerfile: Dockerfile.development
+      context: .
+    environment:
+      - TYPE=CLIENT
+    volumes:
+      - .:/srv/esqulino
+
+  server:
+    image: esqulino:development
+    build:
+      dockerfile: Dockerfile.development
+      context: .
+    environment:
+      - TYPE=SERVER
+    ports:
+      - 9292
+    volumes:
+      - .:/srv/esqulino

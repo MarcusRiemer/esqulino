@@ -30,15 +30,15 @@ clean-deps : msg-pre-clean-deps
 ##################################
 
 msg-pre-build :
-	@tput setaf 2; echo "## Client : Compiling ..."; tput sgr0
+	@echo "## Client : Compiling ..."
 
 msg-pre-clean :
-	@tput setaf 2; echo "## Client : Cleaning ..."; tput sgr0
+	@echo "## Client : Cleaning ..."
 
 msg-pre-clean-deps :
-	@tput setaf 2; echo "## Client : Cleaning dependencies ..."; tput sgr0
+	@echo "## Client : Cleaning dependencies ..."
 
 msg-pre-install-deps :
-	@tput setaf 2; echo "## Client : Installing dependencies ..."; tput sgr0
+	@echo "## Client : Installing dependencies ..."
 
 .PHONY : all clean dist dist-dev msg-pre-build video-stills

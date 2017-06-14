@@ -1,0 +1,43 @@
+FROM alpine
+
+COPY client/ /srv/esqulino/client/
+COPY server/ /srv/esqulino/server/
+COPY Makefile /srv/esqulino/
+COPY Makefile.common /srv/esqulino/
+COPY data/ /srv/esqulino/data/
+COPY schema/ /srv/esqulino/schema/
+
+WORKDIR /srv/esqulino
+
+RUN apk update && \
+    apk upgrade && \
+    apk add \
+        nodejs=6.10.3-r0 \
+        nodejs-npm=6.10.3-r0 \
+        make=4.2.1-r0 \
+        sqlite=3.18.0-r0 \
+        sqlite-dev \
+        gcc \
+        g++ \
+        graphviz \
+        libffi \
+        libffi-dev \
+        ruby=2.4.1-r3 \
+        ruby-rdoc=2.4.1-r3 \
+        ruby-bundler=1.15.0-r0 \
+        ruby-dev && \
+    export TERM=xterm && \
+    make install-deps && \
+    make -C client dist-dev &&\
+    apk del \
+        gcc \
+        g++ \
+        ruby-dev \
+        libffi-dev \
+        libffi && \
+    rm -rf /srv/esqulino/client/node_modules
+
+CMD ["make", "server-run"]
+
+EXPOSE 9292
+
