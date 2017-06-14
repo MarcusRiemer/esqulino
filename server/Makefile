@@ -1,5 +1,5 @@
-BUNDLE_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "bundle")')
-RERUN_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "rerun")')
+BUNDLE_BIN = /usr/bin/bundler
+RERUN_BIN = /srv/esqulino/server/vendor/bundle/ruby/2.4.0/bin/rerun
 YARD_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "yard")')
 
 SOURCES = $(shell find . -not -path '*/\.*' -iname "*.rb")
@@ -54,13 +54,13 @@ migrate-projects:
 ##################################
 
 msg-pre-deps-install :
-	@tput setaf 2; echo "## Server : Installing dependencies"; tput sgr0
+	@echo "## Server : Installing dependencies"
 
 msg-pre-doc :
-	@tput setaf 2; echo "## Server : Generating documentation"; tput sgr0
+	@echo "## Server : Generating documentation"
 
 msg-pre-doc-clean :
-	@tput setaf 2; echo "## Server : Cleaning documentation"; tput sgr0
+	@echo "## Server : Cleaning documentation"
 
 # Ensures the rerurn "binary" is available
 has-dev-rerun :

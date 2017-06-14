@@ -1,0 +1,21 @@
+version: "3"
+
+#networks:
+#  backend:
+
+services:
+  application:
+    image: 6a7573742d6f6c65/esqulino:0.1
+    build:
+      dockerfile: Dockerfile.production
+      context: .
+    ports:
+      - 80:9292
+#    networks:
+#      - backend
+
+#  database:
+#    image: postgres
+#    networks:
+#      - backend
+
