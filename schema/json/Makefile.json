@@ -3,7 +3,7 @@
 ##################################
 
 # Full path of typescript-json-schema
-TYPESCRIPT_JSON_SCHEMA_BIN = $(SCHEMA_PATH)/node_modules/typescript-json-schema/bin/typescript-json-schema
+TYPESCRIPT_JSON_SCHEMA_BIN = $(SCHEMA_PATH)/node_modules/.bin/typescript-json-schema
 SCHEMA_OPTIONS = --noExtraProps true
 
 # Names of the schema files to generate

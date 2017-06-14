@@ -1,6 +1,6 @@
 {
   "name": "kv_all",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "from": {
     "first": {
       "name": "key_value"
@@ -10,7 +10,8 @@
     "columns": [
       {
         "expr": {
-          "star": {}
+          "star": {
+          }
         }
       }
     ]

@@ -1,6 +1,7 @@
 {
   "name": "Gefangen_Loeschen",
-  "delete": {},
+  "delete": {
+  },
   "from": {
     "first": {
       "name": "gefangen"
@@ -25,5 +26,5 @@
       }
     }
   },
-  "apiVersion": "3"
+  "apiVersion": "4"
 }

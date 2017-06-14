@@ -1,6 +1,6 @@
 {
   "name": "Hauptseite",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "referencedQueries": [
     {
       "type": "query",
