@@ -6,7 +6,9 @@ def database_graphviz_schema(sqlite_file_path)
   schema = database_describe_schema(sqlite_file_path)
 
   # Add nodes for all tables
-  tables = schema.map do |table|
+  tables = schema
+             .select {|table| not table.system?}
+             .map do |table|
     columns = table.columns.map do |c|
       c_type = (table.is_column_fk? c) ? "FK" : c.type
       c_name = c.name
@@ -22,7 +24,7 @@ def database_graphviz_schema(sqlite_file_path)
     columns = columns.join "\n"
     record_string = "<TABLE BORDER=\"1\" CELLBORDER=\"0\"><TR><TD COLSPAN=\"3\">#{table.name}</TD></TR><HR/>\n#{columns}</TABLE>"
 
-    "#{table.name} [label=<#{record_string}>];"
+    "#{table.name.downcase} [label=<#{record_string}>];"
   end
 
   tables = tables.join("\n")
@@ -36,8 +38,8 @@ def database_graphviz_schema(sqlite_file_path)
         to_port_suffix   = ref.to_table == table.name ? "name" : "name"
         from_port_suffix = ref.to_table == table.name ? "name" : "type"
         
-        node_from = "#{table.name}:#{ref.from_column}_#{from_port_suffix}"
-        node_to   = "#{ref.to_table}:#{ref.to_column}_#{to_port_suffix}"
+        node_from = "#{table.name.downcase}:#{ref.from_column}_#{from_port_suffix}"
+        node_to   = "#{ref.to_table.downcase}:#{ref.to_column}_#{to_port_suffix}"
         port_from = ref.to_table == table.name ? 'w' : 'e'
         port_to   = 'w'
         refs << "#{node_from}:#{port_from} -> #{node_to}:#{port_to} [concentrate=true];"

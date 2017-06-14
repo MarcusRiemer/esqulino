@@ -46,12 +46,13 @@ class Project
   end
 
   # The path to the currently active SQLite database
-  def file_path_sqlite
-    # Check whether the description of this project specifies an alternate
-    # database file to use.
-    database_file_name = whole_description.fetch('database', 'default.sqlite')
+  def file_path_sqlite()
+    # Go with the default first, then check whether we
+    # have something more specific
+    db_id = whole_description.fetch('activeDatabase', 'default')
+    used_database = available_databases.fetch(db_id)
     
-    File.join(self.folder_databases, database_file_name)
+    File.join(self.folder_databases, used_database['path'])
   end
 
   # Maps the ID of a database to a physical path
@@ -95,13 +96,13 @@ class Project
     load!
 
     # Enrich the description itself with the more complex attributes
-    @whole_description.merge(
+    public_description.merge(
       {
         :schema => @schema,
-        'availableDatabases' => self.available_databases,
         :queries => @queries,
         :pages => @pages,
-        :id => self.id
+        :id => self.id,
+        :availableDatabases => self.available_databases
       }
     ).to_json(options)
   end
@@ -189,6 +190,7 @@ class Project
     to_return['preview'] = whole_info['preview']
     to_return['indexPageId'] = whole_info['indexPageId']
     to_return['apiVersion'] = whole_info['apiVersion']
+    to_return['activeDatabase'] = whole_info['activeDatabase']
 
     return to_return;
   end
@@ -218,7 +220,7 @@ class Project
 
   # @return A list of all databases that are available to this project
   def available_databases
-    Dir.glob(File.join(self.folder_databases, "*.sqlite")).map(&File.method(:basename))
+    whole_description.fetch('databases')
   end
 
   # Loads all queries that are associated with this project
@@ -362,7 +364,8 @@ class Project
   def verify_password(username, plain_text_password)
     begin
       # Load the password
-      stored_hash = whole_description.fetch('users').fetch(username)
+      user = whole_description.fetch('users').fetch(username)
+      stored_hash = user.fetch('password')
       password = SCrypt::Password.new(stored_hash)
 
       password == plain_text_password
@@ -381,6 +384,17 @@ class Project
       'description' => self.whole_description['description'],
     }
   end
+
+  # Clones the entire project and makes it available under a new
+  # name.
+  #
+  # @return [Project] The newly created instance
+  def clone(new_id)
+    new_path = File.realdirpath(File.join(folder, "..", new_id))
+    FileUtils.cp_r folder, new_path
+
+    cloned_project = Project.new new_path, true
+  end
 end
 
 # Enumerates all projects in the given directory
@@ -389,11 +403,16 @@ end
 # @param write_access [Boolean] Should the projects be available for writing?
 # @param public_only [Boolean] Should only public projects be considered?
 def enumerate_projects(projects_dir, write_access, public_only)
+  # Not every entry in the projects folder is actually a project
   to_return = Dir
                 .entries(projects_dir)
-                .select { |entry| entry != '.' and entry != '..' and not entry.start_with? "_" }
-                .map { |entry| Project.new File.join(projects_dir, entry), write_access }
+                .select { |entry| entry != '.' and entry != '..' }
+                .select { |entry| not entry.start_with? "_"  }
+                .map { |entry| File.join projects_dir, entry }
+                .select { |entry| File.directory? entry }
+                .map { |entry| Project.new entry, write_access }
 
+  # Possibly filter out
   if public_only then
     to_return.select { |entry| entry.public? }
   else

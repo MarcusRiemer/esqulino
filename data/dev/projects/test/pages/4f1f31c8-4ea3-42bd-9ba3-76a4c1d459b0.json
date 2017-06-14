@@ -1,6 +1,6 @@
 {
   "name": "index",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "body": {
     "type": "body",
     "children": [

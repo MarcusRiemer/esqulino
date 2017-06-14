@@ -1,6 +1,6 @@
 {
   "name": "alle_termine",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "select": {
     "columns": [
       {

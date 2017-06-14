@@ -8,8 +8,6 @@ import {
 
 import {WidgetComponent}               from '../widget.component'
 
-type EditedComponent = WidgetComponent<Column>
-
 @Component({
     templateUrl: 'templates/column-sidebar.html',
 })
@@ -17,7 +15,7 @@ export class ColumnSidebarComponent {
 
     private _model : Column;
     
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : EditedComponent,
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : WidgetComponent<Column>,
                 @Inject(SIDEBAR_ID_TOKEN) public sidebarInstanceId : number) {
         this._model = com.model;
     }
