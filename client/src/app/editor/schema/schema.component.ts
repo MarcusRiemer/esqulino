@@ -44,6 +44,13 @@ export class SchemaComponent implements OnInit {
     }
 
     /**
+     * @return A timestamp to ensure the schema-image is reloaded
+     */
+    get schemaTimestamp() {
+        return (Math.floor(new Date().getTime() / 1000));
+    }
+
+    /**
      * Load the project to access the schema
      */
     ngOnInit() {
