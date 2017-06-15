@@ -198,6 +198,31 @@ class ScratchSqlApp < Sinatra::Base
     json @project
   end
 
+  # Creating a new project
+  post '/api/project/?' do
+    r = @@validator.ensure_request("ProjectCreationDescription", request.body.read)
+
+    # Todo: Meaningfully create a project id
+    # This simply sort of "slugifies" the name
+    project_id = r['name'].downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+
+    # Cobble together all options and actually create the project
+    params = ProjectCreationParams.new(
+      project_id, r['name'], r['description'], r['dbType'], r['public']
+    )
+    create_project self.projects_dir, params
+
+    # Return the project
+    request_prepare_project project_id
+    json @project
+  end
+
+  # Deleting a project
+  delete '/api/project/:project_id' do
+    @project.delete!
+    status 200
+  end
+
   # Preview image for a specific project
   get '/api/project/:project_id/preview' do
     # Return the preview image if it exists
