@@ -69,8 +69,6 @@
         "Delete": {
             "additionalProperties": false,
             "description": "There doesn't seem to be any data associated with the\nSQLite DELETE keyword itself. But it didn't seem practical\nto go with a \"simple\" type that breaks the \"normal\" \nstructure of the model.",
-            "properties": {
-            },
             "type": "object"
         },
         "Expression": {
@@ -171,8 +169,6 @@
         "MissingExpression": {
             "additionalProperties": false,
             "description": "Denotes an expression that is intentionally missing.",
-            "properties": {
-            },
             "type": "object"
         },
         "Operator": {
