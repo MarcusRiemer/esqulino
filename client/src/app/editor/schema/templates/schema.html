@@ -9,7 +9,7 @@
   <div *ngIf="!isEmpty">
     <img *ngIf="project"
          class="img-fluid img-thumbnail"
-         src="/api/project/{{project.id}}/db/default/visual_schema?format=png">
+         src="/api/project/{{project.id}}/db/default/visual_schema?format=png&timestamp={{ schemaTimestamp }}">
     <div *ngFor="let table of project?.schema.tables" class="card">
 	  <div class="card-body">
 	    <sql-table-composition id="schema-tables-comp" 
