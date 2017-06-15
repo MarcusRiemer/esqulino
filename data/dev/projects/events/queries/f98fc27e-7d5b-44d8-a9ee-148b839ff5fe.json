@@ -1,6 +1,7 @@
 {
   "name": "p_löschen",
-  "delete": {},
+  "delete": {
+  },
   "from": {
     "first": {
       "name": "person"
@@ -25,5 +26,5 @@
       }
     }
   },
-  "apiVersion": "3"
+  "apiVersion": "4"
 }

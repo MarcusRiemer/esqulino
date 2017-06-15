@@ -147,7 +147,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                     })
                 this._subscriptionRefs.push(projref);
                 this.isNewTable = true;
-                this._schemaService.initCurrentlyEdit(new Table({name : "", columns : [], foreign_keys : []}, [], []));
+                this._schemaService.initCurrentlyEdit(new Table({name : "", columns : [], foreign_keys : [], system_table : false}, [], []));
                 this.table = this._schemaService.getCurrentlyEditedTable();
             }
         });
@@ -228,6 +228,10 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         this._showPreview = !this._showPreview;
     }
 
+    get showPreview() {
+        return (this._showPreview);
+    }
+
     /**
      * Function for the save button
      */
@@ -245,11 +249,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
                 }
                 console.log(tableToSend);
                 let schemaref = this._schemaService.saveNewTable(this._project, tableToSend).first().subscribe( 
-                    table => {table;
-                              window.alert("Änderungen gespeichert!");
-                              this._schemaService.clearCurrentlyEdited();
-                              this._router.navigate(["../../"], { relativeTo: this._routeParams });
-                             },
+                    table => {
+                        window.alert("Änderungen gespeichert!");
+                        this._schemaService.clearCurrentlyEdited();
+                        this._router.navigate(["../../"], { relativeTo: this._routeParams });
+                    },
                     error => this.showError(error));
                 this._subscriptionRefs.push(schemaref);
             } else {
@@ -261,11 +265,11 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
             let schemaref = this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder)
                 .first()
                 .subscribe( 
-                    table => {table;
-                              window.alert("Änderungen gespeichert!");
-                              this._schemaService.clearCurrentlyEdited();
-                              this._router.navigate(["../../"], { relativeTo: this._routeParams });
-                             },
+                    table => {
+                        window.alert("Änderungen gespeichert!");
+                        this._schemaService.clearCurrentlyEdited();
+                        this._router.navigate(["../../"], { relativeTo: this._routeParams });
+                    },
                     error => this.showError(error));
             this._subscriptionRefs.push(schemaref);
         }

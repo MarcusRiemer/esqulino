@@ -8,8 +8,6 @@ import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
 
 import {WidgetComponent}               from '../widget.component'
 
-type EditedComponent = WidgetComponent<Button>;
-
 /**
  * Displays the sidebar editing component for a heading.
  */
@@ -23,9 +21,9 @@ export class ButtonSidebarComponent {
     // This should be const, but it can't be in Typescript 2
     public NO_ACTION_ID = "no-action";
     
-    private _component : EditedComponent;
+    private _component : WidgetComponent<Button>;
 
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : EditedComponent) {
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : WidgetComponent<Button>) {
         this._component = com;
     }
 

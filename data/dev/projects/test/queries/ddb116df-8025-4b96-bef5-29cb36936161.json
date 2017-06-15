@@ -1,6 +1,7 @@
 {
   "name": "kv_delete",
-  "delete": {},
+  "delete": {
+  },
   "from": {
     "first": {
       "name": "key_value"
@@ -26,5 +27,5 @@
       }
     }
   },
-  "apiVersion": "3"
+  "apiVersion": "4"
 }

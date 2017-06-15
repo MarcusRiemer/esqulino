@@ -1,6 +1,6 @@
 {
   "name": "kommentar_neu",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "insert": {
     "assignments": [
       {

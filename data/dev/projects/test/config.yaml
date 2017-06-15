@@ -4,7 +4,16 @@ name: Testprojekt
 description: Dieses Projekt wird für automatische Tests benutzt und hat keine inhaltliche
   Bedeutung.
 indexPageId: 4f1f31c8-4ea3-42bd-9ba3-76a4c1d459b0
-apiVersion: '3'
-database: with_english.sqlite
+apiVersion: '4'
 users:
-  user: 4000$8$1$82fdb4a2d8b06a1ab346ea0c119e6b30c397a93db544f322c8b16ef3a7d2cf29$a8d1187decc3a5f28d43ff0ca5371a7dedcb4c49a44fc34740a3bd30d6dcfa0a
+  user:
+    type: local
+    password: 4000$8$1$82fdb4a2d8b06a1ab346ea0c119e6b30c397a93db544f322c8b16ef3a7d2cf29$a8d1187decc3a5f28d43ff0ca5371a7dedcb4c49a44fc34740a3bd30d6dcfa0a
+activeDatabase: default
+databases:
+  with_english:
+    type: sqlite3
+    path: with_english.sqlite
+  default:
+    type: sqlite3
+    path: default.sqlite

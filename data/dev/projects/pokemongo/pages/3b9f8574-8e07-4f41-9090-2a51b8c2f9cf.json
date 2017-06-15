@@ -1,6 +1,6 @@
 {
   "name": "Gefangen_Neu",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "referencedQueries": [
     {
       "type": "query",

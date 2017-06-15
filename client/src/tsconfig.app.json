@@ -18,6 +18,11 @@
   },
   "exclude": [
     "test.ts",
+    "server.ts",
     "**/*.spec.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "genDir": "./dist/ngfactory",
+    "entryModule": "./app/app.module#AppModule"
+  }
 }

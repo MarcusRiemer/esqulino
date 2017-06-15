@@ -8,7 +8,8 @@ import {
 } from './interfaces'
 import {Query, Model, loadQuery}              from './query'
 import {
-    ProjectDescription, ApiVersion, ApiVersionToken, CURRENT_API_VERSION
+    ProjectDescription, AvailableDatabaseDescription,
+    ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from './project.description'
 
 import {Page}                                 from './page/page'
@@ -43,7 +44,7 @@ export class Project implements ApiVersion, Saveable {
     private _description : string;
 
     private _currentDatabase : string;
-    private _availableDatabases : string[];
+    private _availableDatabases :  { [id: string]: AvailableDatabaseDescription };
 
     private _queries : Query[]
     private _pages : Page[]
@@ -61,19 +62,8 @@ export class Project implements ApiVersion, Saveable {
         this._name = json.name;
         this._description = json.description;
         this._indexPageId = json.indexPageId;
-        this._currentDatabase = json.database;
+        this._currentDatabase = json.activeDatabase;
         this._availableDatabases = json.availableDatabases;
-
-        // If no current database was explicitly mentioned grab
-        // the first default database.
-        if (!this._currentDatabase) {
-            if (this._availableDatabases && this._availableDatabases.length > 0) {
-                this._currentDatabase = json.availableDatabases[0];
-            } else {
-                throw new Error(`No default database available!`);
-            }
-        }
-
         this.schema = new Schema(json.schema);
 
         if (json.apiVersion as string != this.apiVersion) {
@@ -194,7 +184,7 @@ export class Project implements ApiVersion, Saveable {
      */
     get availableDatabaseNames() {
         if (this._availableDatabases) {
-            return (this._availableDatabases);
+            return (Object.keys(this._availableDatabases));
         } else {
             return ([]);
         }
@@ -366,7 +356,7 @@ export class Project implements ApiVersion, Saveable {
         };
 
         if (this._currentDatabase) {
-            toReturn.database = this._currentDatabase;
+            toReturn.activeDatabase = this._currentDatabase;
         }
 
         return (toReturn);

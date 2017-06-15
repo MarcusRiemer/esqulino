@@ -1,6 +1,6 @@
 {
   "name": "termin_optionen",
-  "apiVersion": "3",
+  "apiVersion": "4",
   "from": {
     "first": {
       "name": "option"

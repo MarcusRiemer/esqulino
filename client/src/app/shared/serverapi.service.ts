@@ -1,5 +1,6 @@
-import {Injectable}     from '@angular/core';
-import {Http, Response} from '@angular/http';
+import {Injectable,PLATFORM_ID, Inject}        from '@angular/core'
+import {isPlatformBrowser, isPlatformServer}   from '@angular/common'
+import {Http, Response}                        from '@angular/http';
 
 /**
  * The format of error messages the server might return.
@@ -21,9 +22,11 @@ export interface RequestErrorDescription {
 export class ServerApiService {
     private _apiBaseUrl : string
 
-    
-    constructor() {
+    public constructor(@Inject(PLATFORM_ID) private _platformId: Object) {
         this._apiBaseUrl = "/api";
+       	if (isPlatformServer(this._platformId)) {
+           this._apiBaseUrl = "http://www.blattwerkzeug.de" + this._apiBaseUrl;
+	}
     }
 
     /**

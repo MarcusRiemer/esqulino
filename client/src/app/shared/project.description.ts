@@ -23,6 +23,12 @@ export interface ProjectListDescription extends ApiVersion {
     indexPageId? : string
 }
 
+/**
+ * Describes a database that could possibly be used.
+ */
+export interface AvailableDatabaseDescription {
+    type: string
+}
 
 /**
  * The properties of a project that can be queried from the
@@ -34,8 +40,18 @@ export interface ProjectListDescription extends ApiVersion {
  */
 export interface ProjectDescription extends ProjectListDescription {
     schema? : TableDescription[]
-    availableDatabases? : string[]
-    database? : string    
+    availableDatabases? : { [id: string]: AvailableDatabaseDescription }
+    activeDatabase? : string    
     queries? : Model.QueryDescription[]
     pages? : PageDescription[]
+}
+
+/**
+ * These parameters are required to create a new project.
+ */
+export interface ProjectCreationDescription {
+    name: string
+    description: string,
+    dbType : "sqlite3",
+    public : boolean
 }

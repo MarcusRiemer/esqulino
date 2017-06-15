@@ -94,6 +94,13 @@ export class Schema {
      * @return Schemas for all available tables.
      */
     get tables() {
-        return (this._tables);
+        return (this._tables.filter(t => !t.system_table));
+    }
+
+    /**
+     * @return True, if there are no tables in the schema.
+     */
+    get isEmpty() {
+        return (this._tables.length === 0);
     }
 }

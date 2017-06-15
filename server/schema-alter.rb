@@ -9,17 +9,19 @@ require 'json'
 
 
 def database_alter_schema(sqlite_file_path, tableName, commandHolder)
-  #copy Database
+  # Just in case: Making a copy of the whole database
   FileUtils.cp(sqlite_file_path, sqlite_file_path + '.bak')
 
   index = 0
 
-  #get Table object out of Database
+  # Get Table object out of Database
   table = database_describe_schema(sqlite_file_path).select{ |table| table.name == tableName}.first
   begin
     commandHolder.each do |cmd|
       index = cmd['index']
       colHash = createColumnHash(table)
+      # Rename table can not be expressed via a transformation
+      # that is based on the model and is therefore handled seperatly
       if cmd['type'] != "renameTable"
         case cmd['type']
         when "addColumn"
@@ -45,16 +47,19 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
         end
         errorCode, errorBody = database_alter_table(sqlite_file_path, table, colHash)
       else
-        rename_table(sqlite_file_path, table.name, cmd['newName'])
-        errorCode, errorBody = changeTableName(table, cmd['newName'])
+        errorCode, errorBody = rename_table(sqlite_file_path, table.name, cmd['newName'])
+        changeTableName(table, cmd['newName'])
       end
       if(errorCode != 0)
+        # Swap out the temporary database for the actual database
         FileUtils.remove_file(sqlite_file_path)
         File.rename(sqlite_file_path + '.bak', sqlite_file_path)
+        
         return true, index, errorCode, errorBody 
       end 
     end
   end
+  
   FileUtils.remove_file(sqlite_file_path + '.bak')
   return false
 end
@@ -132,25 +137,15 @@ def create_table(sqlite_file_path, newTable)
 end
 
 def rename_table(sqlite_file_path, from_tableName, to_tableName) 
-  begin
-    db = SQLite3::Database.open(sqlite_file_path)
+  begin  
+    db = sqlite_open_augmented(sqlite_file_path)
     db.execute("PRAGMA foreign_keys = ON")
-
-    #Muss in der Datei stehen wo es auch ausgelöst werden kann?????
-    db.create_function('regexp', 2) do |func, pattern, expression|
-        unless expression.nil?
-          func.result = expression.to_s.match(
-            Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
-        else
-          # Return true if the value is null, let the DB handle this
-          func.result = 1
-        end   
-      end
 
     db.transaction
     db.execute("ALTER TABLE #{from_tableName} RENAME TO #{to_tableName};")
     db.commit()
     db.close()
+
     return 0
   rescue Exception => e
     db.close()

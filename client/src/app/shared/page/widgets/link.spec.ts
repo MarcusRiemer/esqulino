@@ -9,7 +9,6 @@ describe('Page Links', () => {
                 type : "navigate",
                 internal : {
                     pageId : "12",
-                    parameters : []
                 }
             }
         }
@@ -40,7 +39,6 @@ describe('Page Links', () => {
                 type : "navigate",
                 internal : {
                     pageId : "12",
-                    parameters : []
                 }
             }
         }

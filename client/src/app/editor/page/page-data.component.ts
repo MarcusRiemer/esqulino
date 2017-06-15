@@ -26,6 +26,11 @@ export class PageDataComponent implements OnInit {
     @Input() project : Project;
 
     /**
+     * 
+     */
+    @Input() newParamName : string;
+
+    /**
      * The "reference a new query" control uses this as
      * backing Data. Initially this is an empty reference.
      */
@@ -48,7 +53,9 @@ export class PageDataComponent implements OnInit {
         }
 
         // Set an initial query to show
-        this.toReference.queryId = this.project.queries[0].id;
+        if (this.project.queries.length > 0) {
+            this.toReference.queryId = this.project.queries[0].id;
+        }
     }
 
     /**
