@@ -2,15 +2,20 @@
 <div class="container-fluid">
   <!-- A visual representation of the schema.
        TODO: Incorporate selected database
-       TODO: Find a meaningful place for this -->
-  <img *ngIf="project"
-       class="img-fluid img-thumbnail"
-       src="/api/project/{{project.id}}/db/default/visual_schema?format=png">
-  <div *ngFor="let table of project?.schema.tables" class="card">
-	<div class="card-body">
-	  <sql-table-composition id="schema-tables-comp" 
-                             [table]="table">
-	  </sql-table-composition>
-	</div>
+     -->
+  <database-empty [project]="project">
+  </database-empty>
+  
+  <div *ngIf="!isEmpty">
+    <img *ngIf="project"
+         class="img-fluid img-thumbnail"
+         src="/api/project/{{project.id}}/db/default/visual_schema?format=png">
+    <div *ngFor="let table of project?.schema.tables" class="card">
+	  <div class="card-body">
+	    <sql-table-composition id="schema-tables-comp" 
+                               [table]="table">
+	    </sql-table-composition>
+	  </div>
+    </div>
   </div>
 </div>
