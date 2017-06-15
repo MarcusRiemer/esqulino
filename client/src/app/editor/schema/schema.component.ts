@@ -37,6 +37,13 @@ export class SchemaComponent implements OnInit {
     }
 
     /**
+     * @return True, if this is an empty schema
+     */
+    get isEmpty() {
+        return (this.project && this.project.schema.isEmpty);
+    }
+
+    /**
      * Load the project to access the schema
      */
     ngOnInit() {
