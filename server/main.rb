@@ -385,7 +385,7 @@ class ScratchSqlApp < Sinatra::Base
 
   # Allows to alter tables of a certain database. This route primarily operates on the
   # JSON-payload in the body of the request.
-  post '/api/project/:project_id/db/:database_id/alter/:tableName' do
+  post '/api/project/:project_id/db/:database_id/alter/:tableName' do |_, database_id, _|
     # TODO: Route this alteration through the project, as
     #       user management should be made from there
     protected!
@@ -393,8 +393,9 @@ class ScratchSqlApp < Sinatra::Base
     if(@project.has_table(params['tableName']))
       alter_schema_request = @@validator.ensure_request("AlterSchemaRequestDescription", request.body.read)
       commandHolder = alter_schema_request['commands']
-      error, index, errorCode, errorBody = database_alter_schema(
-                                 file_path_sqlite_from_id(database_id),
+      error, index, errorCode, errorBody =
+                               database_alter_schema(
+                                 @project.file_path_sqlite_from_id(database_id),
                                  params['tableName'],
                                  commandHolder
                                )
