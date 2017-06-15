@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div class="card">
+  <div class="card mb-3">
     <div class="card-header">
       Projekteinstellungen
     </div>
@@ -32,7 +32,8 @@
                  name="project-name"
                  class="form-control"
                  id="project-name"
-                 placeholder="Name des Projekts">
+                 placeholder="Name des Projekts"
+                 required>
           <small class="text-muted">Dieser Name beschreibt, was sich hinter deinem Projekt verbirgt.</small>
         </div>
       </div>
@@ -47,7 +48,8 @@
                     class="form-control"
                     id="project-description"
                     placeholder="Beschreibung des Projekts"
-                    rows="3">
+                    rows="3"
+                    required>
           </textarea>
           
           <small class="text-muted">Beschreibe dein Projekt mit ein paar kurzen Sätzen. Erläutere dabei welche Probleme du damit löst oder welche Dinge du erklären möchtest.</small>
@@ -105,7 +107,6 @@
   <div class="row">
     <div class="col-md-12 col-lg-6">
       <div class="card"
-           [class.card-inverse]="project?.queries?.length == 0"
            [class.card-info]="project?.queries?.length == 0">
         <div *ngIf="project?.queries?.length > 0"
              class="card-header">
@@ -147,7 +148,6 @@
 
     <div class="col-md-12 col-lg-6">
       <div class="card"
-           [class.card-inverse]="project?.pages?.length == 0"
            [class.card-info]="project?.pages?.length == 0">
         <div *ngIf="project?.pages?.length > 0"
              class="card-header">

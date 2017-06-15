@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "description": "These parameters are required to create a new project.",
+    "properties": {
+        "dbType": {
+            "enum": [
+                "sqlite3"
+            ],
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "public": {
+            "type": "boolean"
+        }
+    },
+    "type": "object"
+}
+

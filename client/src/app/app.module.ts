@@ -10,7 +10,9 @@ import {routing}                           from './app.routes'
 
 @NgModule({
     imports: [
-        BrowserModule,
+        BrowserModule.withServerTransition({
+            appId: 'scratch-sql'
+        }),
         SharedAppModule.forRoot(),
         FrontModule,
         EditorModule,

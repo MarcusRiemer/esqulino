@@ -6,8 +6,6 @@ import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
 
 import {WidgetComponent}               from '../widget.component'
 
-type EditedComponent = WidgetComponent<Link>
-
 @Component({
     templateUrl: 'templates/link-sidebar.html',
 })
@@ -17,7 +15,7 @@ export class LinkSidebarComponent {
 
     private _currentPageId : string;
     
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : EditedComponent) {
+    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : WidgetComponent<Link>) {
         this._model = com.model;
     }
 

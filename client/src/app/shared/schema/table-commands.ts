@@ -549,7 +549,7 @@ export class ChangeTableName extends TableCommand {
         return {
             type : "renameTable",
             index : this._index,
-            columnIndex : +this._columnIndex, // Is undefined
+            columnIndex : undefined,
             newName : this._newName,
             oldName : this._oldName
         };

@@ -9,10 +9,11 @@
     "columns": [
       {
         "expr": {
-          "star": {}
+          "star": {
+          }
         }
       }
     ]
   },
-  "apiVersion": "3"
+  "apiVersion": "4"
 }

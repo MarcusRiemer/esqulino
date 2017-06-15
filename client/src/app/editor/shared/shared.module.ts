@@ -3,6 +3,7 @@ import {CommonModule}                   from '@angular/common'
 import {FormsModule}                    from '@angular/forms'
 import {RouterModule}                   from '@angular/router'
 
+import {DatabaseEmptyComponent}         from './database-empty.component'
 import {QueryIconComponent}             from './query-icon.component'
 import {SidebarItemHost}                from './sidebar-item-host.component'
 import {TrashComponent}                 from './trash.component'
@@ -20,6 +21,7 @@ import {ContenteditableModel}           from './contenteditable-model.directive'
         SidebarItemHost,
         ContenteditableModel,
         TrashComponent,
+        DatabaseEmptyComponent,
     ],
     exports: [
         CommonModule,
@@ -30,6 +32,7 @@ import {ContenteditableModel}           from './contenteditable-model.directive'
         SidebarItemHost,
         TrashComponent,
         ContenteditableModel,
+        DatabaseEmptyComponent,
     ]
 })
 export class SharedEditorModule {

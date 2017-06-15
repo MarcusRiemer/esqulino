@@ -7,9 +7,20 @@
             "enum": [
                 "1",
                 "2",
-                "3"
+                "3",
+                "4"
             ],
             "type": "string"
+        },
+        "AvailableDatabaseDescription": {
+            "additionalProperties": false,
+            "description": "Describes a database that could possibly be used.",
+            "properties": {
+                "type": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
         },
         "BinaryExpression": {
             "additionalProperties": false,
@@ -112,8 +123,6 @@
         "Delete": {
             "additionalProperties": false,
             "description": "There doesn't seem to be any data associated with the\nSQLite DELETE keyword itself. But it didn't seem practical\nto go with a \"simple\" type that breaks the \"normal\" \nstructure of the model.",
-            "properties": {
-            },
             "type": "object"
         },
         "Expression": {
@@ -144,7 +153,7 @@
         "ForeignKeyDescription": {
             "additionalProperties": false,
             "properties": {
-                "refs": {
+                "references": {
                     "items": {
                         "additionalProperties": false,
                         "properties": {
@@ -238,8 +247,6 @@
         "MissingExpression": {
             "additionalProperties": false,
             "description": "Denotes an expression that is intentionally missing.",
-            "properties": {
-            },
             "type": "object"
         },
         "Operator": {
@@ -315,19 +322,6 @@
             },
             "type": "object"
         },
-        "ParameterMappingDescription": {
-            "additionalProperties": false,
-            "description": "Inputs and outputs *may* use identical names but are not required\nto do so.",
-            "properties": {
-                "parameterName": {
-                    "type": "string"
-                },
-                "providingName": {
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        },
         "QueryDescription": {
             "additionalProperties": false,
             "description": "Outermost description of a query. This contains\nthe whole structure and some identifying properties.",
@@ -372,12 +366,6 @@
             "additionalProperties": false,
             "description": "Referenced queries are possibly accompanied by a human-readable\nname. This is required if the same query is going to be used\nmultiple times on a single page.",
             "properties": {
-                "mapping": {
-                    "items": {
-                        "$ref": "#/definitions/ParameterMappingDescription"
-                    },
-                    "type": "array"
-                },
                 "name": {
                     "type": "string"
                 },
@@ -461,6 +449,9 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "system_table": {
+                    "type": "boolean"
                 }
             },
             "type": "object"
@@ -524,7 +515,8 @@
             "type": "object"
         },
         "WidgetDescription": {
-            "additionalProperties": true,
+            "additionalProperties": {
+            },
             "description": "A widget **requires** at least a type, all other fields are\nmandated by deriving descriptions. As we don't necesarily\nknow all deriving classes at compile time (they could be\nprovided by a plugin) we poke a hole in the type system\nhere.\n\nThe following annotion is required to allow additional\nproperties in the automatically generated JSON schema, see\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
             "properties": {
                 "type": {
@@ -536,18 +528,18 @@
     },
     "description": "The properties of a project that can be queried from the\nserver when asking for a specific project.\n\nOnly contains publically visible data, not the\npassword or other private information.",
     "properties": {
+        "activeDatabase": {
+            "type": "string"
+        },
         "apiVersion": {
             "$ref": "#/definitions/ApiVersionToken",
             "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
         },
         "availableDatabases": {
-            "items": {
-                "type": "string"
+            "additionalProperties": {
+                "$ref": "#/definitions/AvailableDatabaseDescription"
             },
-            "type": "array"
-        },
-        "database": {
-            "type": "string"
+            "type": "object"
         },
         "description": {
             "type": "string"

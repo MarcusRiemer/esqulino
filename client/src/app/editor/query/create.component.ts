@@ -18,7 +18,7 @@ import {QueryService}                   from '../query.service'
     templateUrl: 'templates/create.html'
 })
 export class QueryCreateComponent implements OnInit, OnDestroy {
-    private _project : Project;
+    public project : Project;
     
     public queryType : string = "select";
 
@@ -51,28 +51,30 @@ export class QueryCreateComponent implements OnInit, OnDestroy {
         
         let subRef = this._projectService.activeProject
             .subscribe(res => {
-                this._project = res
-                // Assign the first table as an initial choice
-                this.queryTable = res.schema.tables[0].name;
+                this.project = res
+                if (!this.project.schema.isEmpty) {
+                    // Assign the first table as an initial choice
+                    this.queryTable = res.schema.tables[0].name;
+
+                    // Actually allow creation
+                    let btnCreate = this._toolbarService.addButton("create", "Erstellen", "plus", "n");
+                    let subRef = btnCreate.onClick.subscribe( (res) => {
+                        if (this.isValid) {
+                            const res = this._queryService.createQuery(this.project,
+                                                                       this.queryType,
+                                                                       this.queryName,
+                                                                       this.queryTable);
+
+                            res.subscribe( query => {
+                                console.log(`New query ${query.id}`);
+                                this._router.navigate(["/editor", this.project.id ,"query", query.id]);
+                            });
+                        }
+                    });
+
+                    this._subscriptionRefs.push(subRef);
+                }
             });
-
-        this._subscriptionRefs.push(subRef);
-
-        // Actually allow creation
-        let btnCreate = this._toolbarService.addButton("create", "Erstellen", "plus", "n");
-        subRef = btnCreate.onClick.subscribe( (res) => {
-            if (this.isValid) {
-                const res = this._queryService.createQuery(this._project,
-                                                           this.queryType,
-                                                           this.queryName,
-                                                           this.queryTable);
-
-                res.subscribe( query => {
-                    console.log(`New query ${query.id}`);
-                    this._router.navigate(["/editor", this._project.id ,"query", query.id]);
-                });
-            }
-        });
 
         this._subscriptionRefs.push(subRef);
     }
@@ -85,22 +87,35 @@ export class QueryCreateComponent implements OnInit, OnDestroy {
     public get isNameValid() {
         return (this.queryName
                 && isValidResourceName(this.queryName)
-                && !this._project.hasQueryByName(this.queryName));
+                && !this.project.hasQueryByName(this.queryName));
     }
 
     public get isTableValid() {
         return (!!this.queryTable);
     }
 
-    public get isValid() {
+    /**
+     * @return True, if the current configuration is valid overall
+     */
+    get isValid() {
         return (this.isNameValid && this.isTableValid);
     }
 
-    public get availableTables() : TableDescription[] {
-        if (this._project) {
-            return (this._project.schema.tables);
+    /**
+     * @return All tables that are available as initial tables
+     */
+    get availableTables() : TableDescription[] {
+        if (this.project) {
+            return (this.project.schema.tables);
         } else {
             return ([]);
         }
+    }
+
+    /**
+     * @return True, if the database is currently empty
+     */
+    get isDatabaseEmpty() {
+        return (this.project && this.project.schema.isEmpty);
     }
 }

@@ -97,6 +97,11 @@ class SchemaTable
     return @columns[idx]
   end
 
+  # @return [Boolean] True, if the table is a system table
+  def system?
+    @name.start_with? 'sqlite_'
+  end
+
   # Checks whether the given column is used as a foreign key
   # @param column [SchemaColumn] The column to test
   def is_column_fk?(column)
@@ -112,7 +117,12 @@ class SchemaTable
   # Serialises this table to JSON, according to the over-the-wire format
   # described in Typescript.
   def to_json(options)
-    { :name => @name, :columns => @columns, :foreign_keys => @foreign_keys }.to_json(options)
+    {
+      :name => @name,
+      :columns => @columns,
+      :foreign_keys => @foreign_keys,
+      :system_table => system?
+    }.to_json(options)
   end
 end
 
