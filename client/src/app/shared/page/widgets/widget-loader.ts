@@ -67,7 +67,7 @@ export function loadWidget(desc : WidgetDescription, parent : WidgetHost) : Widg
             widget.modelChanged.subscribe(_ => widget.page.markSaveRequired());
         }
     } catch (e) {
-        console.log("Loaded widget without page", widget);
+        // console.log("Loaded widget without page", widget);
     }
 
     return (widget);

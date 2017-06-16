@@ -80,6 +80,10 @@ export abstract class Join implements Removable {
         return (toReturn);
     }
 
+    getLocationDescription() : string {
+        return (this.sqlJoinKeyword);
+    }
+
     /**
      * Removes this JOIN from the parenting FROM component.
      */
@@ -278,6 +282,13 @@ export class From extends Component {
      */
     validate(schema : Schema) : ValidationResult {
         let errors : ValidationError[] = [];
+
+        // Check for tables with names that don't exist in the schema
+        this.joinsAndInitial.forEach(j => {
+            if (!schema.hasTable(j.tableName)) {
+                errors.push(new ValidationErrors.SchemaUnknownTable(j));
+            }
+        });
 
         // Group tables by name
         let grouped : { [tablename : string] : Join[] } = {};
