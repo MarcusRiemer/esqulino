@@ -45,14 +45,17 @@ export abstract class Join implements Removable {
     }
 
     /**
+     * @return True, if this table actually exists (according to the schema)
+     */
+    get tableExists() {
+        return (this._from.query.schema.hasTable(this.tableName));
+    }
+
+    /**
      * @return the alias name of the JOINed table
      */
     get alias() {
         return (this._table.alias);
-    }
-
-    get tableSchema() {
-        return (this._from.query.getTableSchema(this._table.name));
     }
 
     /**
@@ -361,6 +364,13 @@ export class From extends Component {
      */
     get joinsAndInitial() : Join[] {
         return ([this._first].concat(this._joins));
+    }
+
+    /**
+     * @return All joins, as long as they have a corresponding schema
+     */
+    get existingJoinsAndInitial() : Join[] {
+        return (this.joinsAndInitial.filter(j => j.tableExists));
     }
 
     getLeaves() : Expression[] {

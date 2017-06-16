@@ -6,7 +6,8 @@
       <span (dragstart)="onJoinDragStart(query.from.first, $event)"
             (dragover)="onAllowedDrag($event)"
             (drop)="onTableDrop($event, 0)"
-            class="table"
+            [class.table]="query.from.first.tableExists"
+            [class.missing]="!query.from.first.tableExists"
             draggable="true">
         <span class="fa fa-table fa-fw"></span>
         {{ query.from.first.tableName }} {{ query.from.first.alias }}
@@ -19,7 +20,8 @@
        draggable="true">
     <div class="component indent">{{ join.sqlJoinKeyword }}</div>
     <div class="columns">
-      <span class="table"
+      <span [class.table]="join.tableExists"
+            [class.missing]="!join.tableExists"
             (dragover)="onAllowedDrag($event)"
             (drop)="onTableDrop($event, joinIndex + 1)"><span class="fa fa-table fa-fw"></span>
         {{ join.tableName }} {{ join.alias }}
