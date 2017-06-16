@@ -112,6 +112,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         let subRef = this._routeParams.params.subscribe(params => {
             this._originalTableName = params['tableName'];
             if (this._originalTableName) {
+                // TODO: Rewrite this to use a guard
                 if(this._schemaService.getCurrentlyEdited()) {
                     if(this._originalTableName != this._schemaService.getCurrentlyEditedTable().name) {
                         alert("Eine andere Tabelle wurde zurzeit bearbeitet, dieser Vorgang wurde abgebrochen!");

@@ -39,13 +39,15 @@ export class QueryCreateComponent implements OnInit, OnDestroy {
         private _queryService: QueryService,
         private _router: Router
     ) {
-        this._sidebarService.hideSidebar();
+
     }
 
     /**
      * Load the project to access the schema
      */
     ngOnInit() {
+        this._sidebarService.hideSidebar();
+        
         this._toolbarService.resetItems();
         this._toolbarService.savingEnabled = false;
         

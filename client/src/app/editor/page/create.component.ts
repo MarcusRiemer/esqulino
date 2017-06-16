@@ -30,13 +30,14 @@ export class PageCreateComponent implements OnInit, OnDestroy {
         private _pageService: PageService,
         private _router: Router
     ) {
-        this._sidebarService.hideSidebar();
     }
 
     /**
      * Load the project to access the schema
      */
     ngOnInit() {
+        this._sidebarService.hideSidebar();
+        
         this._toolbarService.resetItems();
         this._toolbarService.savingEnabled = false;
         

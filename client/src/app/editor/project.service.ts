@@ -122,7 +122,7 @@ export class ProjectService {
      *
      * @return The project that is currently shared to all subscribers.
      */
-    private get cachedProject() : Project {
+    get cachedProject() : Project {
         return (this._subject.getValue())
     }
 

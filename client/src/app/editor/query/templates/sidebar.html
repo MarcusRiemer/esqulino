@@ -68,7 +68,7 @@
         <span class="fa fa-table fa-fw"></span>
         {{ join.tableName }}
       </div>
-      <ul *ngIf="join.tableExists">
+      <ul>
         <li *ngFor="let column of join.tableSchema.columns">
           <span (dragstart)="startColumnDrag($event, join.tableName, column.name)"
                 class="column indent"

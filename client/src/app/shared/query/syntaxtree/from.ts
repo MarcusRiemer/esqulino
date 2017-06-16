@@ -44,6 +44,10 @@ export abstract class Join implements Removable {
         return (this._table.name);
     }
 
+    get tableSchema() {
+        return (this._from.query.getTableSchema(this._table.name));
+    }
+
     /**
      * @return True, if this table actually exists (according to the schema)
      */
@@ -111,7 +115,7 @@ export class InitialJoin extends Join {
 
     constructor(from : From, table : Model.TableNameDefinition) {
         // No SQL Keyword for the first statement
-        super(from, null, table);
+        super(from, "FROM", table);
     }
 
     toSqlString() : string {
@@ -270,7 +274,7 @@ export class From extends Component {
      * @return True, if the given table is used in this query.
      */
     isUsingTable(tableName : string) {
-        return (this.joinsAndInitial.find(j => j.tableName == tableName) != null);
+        return (this.existingJoinsAndInitial.find(j => j.tableName == tableName) != null);
     }
 
     /**

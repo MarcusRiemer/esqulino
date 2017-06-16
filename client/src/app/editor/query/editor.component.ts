@@ -11,7 +11,7 @@ import {
 import {ProjectService, Project}        from '../project.service'
 import {PreferencesService}             from '../preferences.service'
 import {RegistrationService}            from '../registration.service'
-import {ToolbarService}                 from '../toolbar.service'
+import {ToolbarService, ToolbarItem}    from '../toolbar.service'
 import {SidebarService}                 from '../sidebar.service'
 import {
     QueryService, QueryParamsDescription
@@ -43,6 +43,11 @@ export class QueryEditorComponent implements OnInit {
     private _subscriptionRefs : any[] = [];
 
     /**
+     * The button that runs queries.
+     */
+    private _btnQuery : ToolbarItem;
+
+    /**
      * Cache for user input. This allows parameters to be preserved when the user
      * switches back and forth between queries.
      */
@@ -59,8 +64,7 @@ export class QueryEditorComponent implements OnInit {
         private _sidebarService : SidebarService,
         private _preferences : PreferencesService,
         registrationService : RegistrationService
-    ) {       
-        this._toolbarService.resetItems();
+    ) {
     }
 
     /**
@@ -136,6 +140,9 @@ export class QueryEditorComponent implements OnInit {
      * Load the project to access the schema and the queries.
      */
     ngOnInit() {
+        this.project = this._projectService.cachedProject;
+        this._toolbarService.resetItems();
+        
         // Reacting to saving
         this._toolbarService.savingEnabled = true;
         let btnSave = this._toolbarService.saveItem;
@@ -151,52 +158,53 @@ export class QueryEditorComponent implements OnInit {
         this._subscriptionRefs.push(subRef)
 
         // Reacting to querying
-        let btnQuery = this._toolbarService.addButton("run", "Ausführen", "play", "r");
-        subRef = btnQuery.onClick.subscribe( (res) => {
-            btnQuery.isInProgress = true;
+        this._btnQuery = this._toolbarService.addButton("run", "Ausführen", "play", "r");
+        subRef = this._btnQuery.onClick.subscribe( (res) => {
+            this._btnQuery.isInProgress = true;
             this._queryService.runQuery(this.project, this.query, this.relevantArguments)
                 .subscribe(res => {
-                    btnQuery.isInProgress = false;
+                    this._btnQuery.isInProgress = false;
                     this._result = res;
                 });
         });
 
         // Grab the correct project and query
-        subRef = this._routeParams.params.subscribe(param => {
-            var queryId = param['queryId'];
-            this._projectService.activeProject
-                .filter(p => !!p)
-                .first()
-                .subscribe(res => {
-                    // Project is loaded, display the correct  query
-                    this.project = res;
-                    this.query = this.project.getQueryById(queryId);
-
-                    // Show the sidebar
-                    const sidebarId = QuerySidebarComponent.SIDEBAR_IDENTIFIER;
-                    this._sidebarService.showSingleSidebar(sidebarId, this.query);
-
-                    // Reset previous result
-                    this._result = undefined;
-
-                    // But show new results for ...
-                    // * SELECT queries ...
-                    // * that are valid ...
-                    // * and have all parameters assigned
-                    if (this.query.select &&
-                        this.query.isValid &&
-                        this.query.parameters.length === 0) {
-                        btnQuery.fire();
-                    }
-                });
-        });
+        // this.updateQuery(this._routeParams.snapshot.params['queryId']);
+        subRef = this._routeParams.params
+            .subscribe(params => {
+                this.updateQuery(params['queryId']);
+            });
         this._subscriptionRefs.push(subRef);
-
-        this._subscriptionRefs.push(subRef)
     }
 
     ngOnDestroy() {
         this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
         this._subscriptionRefs = [];
+    }
+
+    private updateQuery(queryId : string) {
+        // Skip reloading anything if this is the same sidebar
+        if (queryId && this.query && this.query.id === queryId) {
+            return;
+        }
+        
+        this.query = this.project.getQueryById(queryId);
+
+        // Show the sidebar
+        const sidebarId = QuerySidebarComponent.SIDEBAR_IDENTIFIER;
+        this._sidebarService.showSingleSidebar(sidebarId, this.query);
+
+        // Reset previous result
+        this._result = undefined;
+
+        // But show new results for ...
+        // * SELECT queries ...
+        // * that are valid ...
+        // * and have all parameters assigned
+        if (this.query.select &&
+            this.query.isValid &&
+            this.query.parameters.length === 0) {
+            this._btnQuery.fire();
+        }
     }
 }
