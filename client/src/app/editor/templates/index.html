@@ -16,7 +16,7 @@
     <router-outlet></router-outlet>
   </div>
 
-  <div *ngIf="isSidebarVisible"
+  <div [style.display]="isSidebarVisible ? 'block' : 'none'"
        class="sidebar"
        [style.order]="paneOrder.sidebar">
     <sidebar-loader>
