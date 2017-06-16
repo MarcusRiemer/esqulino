@@ -20,12 +20,13 @@ export class Schema {
     }
 
     /**
-     * @return The schema definition of a table with the given name.
+     * @return The schema definition of a table with the given name. Returns
+     *         `undefined` if the table does not exist.
      */
-    getTable(name : string) {
+    getTable(name : string, throwOnError = false) {
         const toReturn = this._tables.find(t => t.name == name);
 
-        if (!toReturn) {
+        if (!toReturn && throwOnError) {
             throw new Error(`Can't find table ${name}`);
         }
 

@@ -161,7 +161,8 @@ export class Select extends Component implements ExpressionParent {
      *
      * @return The number of columns this SELECT statement retrieves
      *
-     * @pre Hosting query has a schema
+     * @pre Hosting query has a schema. If this is not the case, all unknown
+     *      tables will not be counted.
      */
     get actualNumberOfColumns() {
         // A star column may attribute to more then a single column
@@ -187,6 +188,7 @@ export class Select extends Component implements ExpressionParent {
 
                 // Combine number of all participating tables
                 return (tables
+                        .filter( t => !!t)
                         .map( t => t.columns.length )
                         .reduce( (l,r) => l + r, 0));
             } else {
@@ -205,7 +207,8 @@ export class Select extends Component implements ExpressionParent {
      *
      * @return Descriptions of columns in this SELECT component.
      *
-     * @pre Hosting query has a schema
+     * @pre Hosting query has a schema. If this is not the case the result
+     *      will not contain any columns that do not have known tables
      */
     get actualColums() : ResultColumn[] {
         let toReturn : ResultColumn[] = [];
@@ -232,15 +235,17 @@ export class Select extends Component implements ExpressionParent {
                 }
 
                 // Remember each of those columns we found
-                tables.forEach(t => {
-                    t.columns.forEach(c => {
-                        toReturn.push({
-                            query : this._query,
-                            fullName : `${t.name}.${c.name}`,
-                            shortName : c.name,
-                            expr : val.expr
+                tables
+                    .filter(t => !!t)
+                    .forEach(t => {
+                        t.columns.forEach(c => {
+                            toReturn.push({
+                                query : this._query,
+                                fullName : `${t.name}.${c.name}`,
+                                shortName : c.name,
+                                expr : val.expr
+                            });
                         });
-                    });
                 })
 
             } else if (val.expr instanceof ColumnExpression) {

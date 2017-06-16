@@ -103,7 +103,7 @@ export module ValidationErrors {
         }
 
         errorMessageImpl() {
-            return (`Table "${this._loc.tableName} does not exist in current schema"`);
+            return (`Table "${this._loc.tableName}" does not exist in current schema`);
         }
     }
 

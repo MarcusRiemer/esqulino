@@ -61,14 +61,14 @@
 
   <div class="block-container block">
     <!-- Tables that are already present in the query are shown with their columns -->
-    <ng-template ngFor let-join [ngForOf]="query?.from?.joinsAndInitial" let-last="last">
+    <ng-template ngFor let-join [ngForOf]="query?.from?.existingJoinsAndInitial" let-last="last">
       <div (dragstart)="startTableDrag(join.tableName, $event)"
            class="table"
            draggable="true">
         <span class="fa fa-table fa-fw"></span>
         {{ join.tableName }}
       </div>
-      <ul>
+      <ul *ngIf="join.tableExists">
         <li *ngFor="let column of join.tableSchema.columns">
           <span (dragstart)="startColumnDrag($event, join.tableName, column.name)"
                 class="column indent"
