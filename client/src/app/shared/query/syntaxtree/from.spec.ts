@@ -347,5 +347,40 @@ describe('FROM', () => {
         expect(v.numErrors).toEqual(1);
         expect(v.getError(0).errorMessage).toContain(model.first.alias);
     });
+
+    it('Invalid: Non existant table', () => {
+        const model : Model.From = {
+            first : {
+                name : "nothere"
+            }
+        };
+
+        let f = new SyntaxTree.From(model, null);
+
+        // Basic serialization
+        expect(f.toSqlString()).toEqual("FROM nothere");
+        expect(f.toModel()).toEqual(model);
+
+        // Validity
+        const schema = new Schema([
+            {
+                name : "here",
+                foreign_keys : [],
+                system_table : false,
+                columns : [
+                    {
+                        name: "here",
+                        dflt_value: null,
+                        index : 0,
+                        not_null : true,
+                        primary : true,
+                        type : "INTEGER"
+                    }
+                ]
+            }
+        ]);
+        let v = f.validate(schema);
+        expect(v.numErrors).toEqual(1);
+    });
 });
 
