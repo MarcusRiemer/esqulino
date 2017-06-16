@@ -1,11 +1,11 @@
-BUNDLE_BIN = /usr/bin/bundler
-RERUN_BIN = /srv/esqulino/server/vendor/bundle/ruby/2.4.0/bin/rerun
-YARD_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "yard")')
+BUNDLE_BIN ?= $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "bundle")')
+RERUN_BIN ?= $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "rerun")')
+YARD_BIN ?= $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "yard")')
 
 SOURCES = $(shell find . -not -path '*/\.*' -iname "*.rb")
 
 # Install ruby dependencies
-install-deps : msg-pre-deps-install has-bundle
+install-deps : msg-pre-deps-install
 	$(BUNDLE_BIN) install
 
 # Run using a built-in ruby server
@@ -16,11 +16,11 @@ install-deps : msg-pre-deps-install has-bundle
 #
 # [0] http://www.sinatrarb.com/intro.html#Environments
 # [1] https://github.com/sinatra/sinatra/pull/984
-run : has-bundle
+run :
 	RACK_ENV="production" $(BUNDLE_BIN) exec rackup
 
 # Run a built-in server that refreshes itself if relevant files chage
-run-dev : has-dev-rerun has-bundle
+run-dev :
 	$(RERUN_BIN) --dir ".,./../schema/" --pattern "**/*.{rb,json}" -- $(BUNDLE_BIN) exec rackup -o 127.0.0.1
 
 # Run unit tests
@@ -61,12 +61,6 @@ msg-pre-doc :
 
 msg-pre-doc-clean :
 	@echo "## Server : Cleaning documentation"
-
-# Ensures the rerurn "binary" is available
-has-dev-rerun :
-ifeq (, $(wildcard $(RERUN_BIN)))
-	$(error "Ruby script restarter (rerun) not in gems")
-endif
 
 .PHONY : dev-doc doc install-deps run test migrate-projects
 
