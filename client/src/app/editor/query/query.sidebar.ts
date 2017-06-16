@@ -49,7 +49,6 @@ export class QuerySidebarComponent implements OnInit, OnDestroy {
     constructor(
         @Inject(SIDEBAR_MODEL_TOKEN) query : Query,
         private _dragService : DragService,
-        private _projectService : ProjectService,        
         private _activatedRoute : ActivatedRoute,
         private _router : Router) {
         this.query = query;

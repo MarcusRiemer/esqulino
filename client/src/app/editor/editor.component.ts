@@ -58,8 +58,8 @@ export class EditorComponent implements OnInit, OnDestroy {
             // we need to tell the change detector we are aware of this
             // otherwise Angular freaks out:
             // http://stackoverflow.com/questions/38262707/
-            this._sidebarVisible = v;
             this._changeDetectorRef.markForCheck();
+            this._sidebarVisible = v;
         });
 
         this._subscriptions.push(subRef);
@@ -73,9 +73,6 @@ export class EditorComponent implements OnInit, OnDestroy {
         this._subscriptions = [];
 
         this._projectService.forgetCurrentProject();
-
-        // Just in case another component previously had the sidebar shown.
-        this._sidebarService.hideSidebar();
     }
 
     /**

@@ -6,6 +6,7 @@ import { Table }                                    from '../../shared/schema'
 import { SchemaService }                            from '../schema.service'
 import { ProjectService, Project }                  from '../project.service'
 import { ToolbarService }                           from '../toolbar.service'
+import { SidebarService }                           from '../sidebar.service'
 
 
 /**
@@ -23,7 +24,8 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
         private _routeParams: ActivatedRoute,
         private _router: Router,
         private _route: ActivatedRoute,
-        private _toolbarService: ToolbarService) {
+        private _toolbarService: ToolbarService,
+        private _sidebarService: SidebarService) {
     }
 
     /**
@@ -70,6 +72,8 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
      * Load the project to access the schema
      */
     ngOnInit() {
+        this._sidebarService.hideSidebar();
+        
         let subRef = this._routeParams.params.subscribe(params => {
             var tableName = params['tableName'];
             let projref = this._projectService.activeProject

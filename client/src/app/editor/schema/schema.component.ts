@@ -33,7 +33,6 @@ export class SchemaComponent implements OnInit {
         private _route: ActivatedRoute,
         private _sidebarService: SidebarService
     ) {
-        this._sidebarService.hideSidebar();
     }
 
     /**
@@ -54,6 +53,8 @@ export class SchemaComponent implements OnInit {
      * Load the project to access the schema
      */
     ngOnInit() {
+        this._sidebarService.hideSidebar();
+        
         this._toolbarService.resetItems();
         this._toolbarService.savingEnabled = false;
 

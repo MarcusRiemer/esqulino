@@ -25,16 +25,16 @@ export class SidebarService {
      * The model that is currently displayed (or at least will
      * be displayed the next tick).
      */
-    private _model : BehaviorSubject<InternalSidebarModel[]>;
+    private _model = new BehaviorSubject<InternalSidebarModel[]>([]);
 
+    private _visibilityObs = this._model.map(s => s.length > 0);
+    
     /**
      * Valid types for sidebars.
      */
     private _knownTypes : { [typeName:string] : Type<any>} = { };
 
     constructor(registrationService : RegistrationService) {
-        this._model = new BehaviorSubject<InternalSidebarModel[]>([]);
-
         registrationService.sidebarTypes.subscribe( reg => {
             this.registerType(reg.typeId, reg.componentType);
         });
@@ -94,7 +94,7 @@ export class SidebarService {
     showSingleSidebar(newType : string, param? : any) : number {
         const ids = this.showMultiple([
             { type : newType, param : param }
-        ]);
+        ], true);
 
         // Return the single Id that we added
         return (ids[0]);
@@ -177,8 +177,8 @@ export class SidebarService {
      * @return An observable that raises events when
      *         the visibility of the sidebar changes.
      */
-    get isSidebarVisible() : Observable<boolean> {
-        return (this._model.map(s => s.length > 0));
+    get isSidebarVisible() {
+        return (this._visibilityObs);
     }
 
     /**
