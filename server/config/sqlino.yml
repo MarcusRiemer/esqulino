@@ -1,0 +1,3 @@
+development:
+  data_dir: ../data/dev
+  client_dir: ../client/dist
