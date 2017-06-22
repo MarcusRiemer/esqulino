@@ -21,7 +21,7 @@ SUBDIR_MAKE = @make --no-print-directory -C
 # you will need to have npm (for the client) and bundle (for the server)
 # installed.
 install-deps :
-	$(SUBDIR_MAKE) server install-deps
+	$(SUBDIR_MAKE) server-sinatra install-deps
 	$(SUBDIR_MAKE) client install-deps
 	$(SUBDIR_MAKE) schema/json install-deps
 
@@ -62,17 +62,17 @@ test-e2e : dist
 # strongly encouraged to run a more sophisticated server for static files
 # as a reverse proxy.
 server-run :
-	$(SUBDIR_MAKE) server run
+	$(SUBDIR_MAKE) server-sinatra run
 
 # Runs a development version of the server. This server will restart itself if
 # relevant files change and emit additional debug output. NOT RECOMMENDED for
 # productive use.
 server-run-dev :
-	$(SUBDIR_MAKE) server run-dev
+	$(SUBDIR_MAKE) server-sinatra run-dev
 
 # Attempts to migrate all projects to a newer API version
 server-migrate-projects:
-	$(SUBDIR_MAKE) server migrate-projects
+	$(SUBDIR_MAKE) server-sinatra migrate-projects
 
 
 # Compile every part of the documentation
