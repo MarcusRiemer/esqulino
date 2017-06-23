@@ -1,6 +1,8 @@
 require_dependency 'project'
 
 class ProjectsController < ApplicationController
+  include ProjectsHelper
+  
   # Enumerating all available projects
   def index
     projects = enumerate_projects(Rails.application.config.sqlino[:projects_dir], false, true)
@@ -17,14 +19,5 @@ class ProjectsController < ApplicationController
   # The preview image for a specific project
   def preview_image
     send_file current_project.preview_image_path, disposition: 'inline'
-  end
-
-  private
-
-  # Loads the currently requested project
-  def current_project
-    projects_dir = Rails.application.config.sqlino[:projects_dir]
-    
-    project = Project.new File.join(projects_dir, params['project_id']), false
   end
 end

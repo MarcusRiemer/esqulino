@@ -1,3 +1,5 @@
+require_dependency 'schema'
+
 # Visualizes the table in form of a GraphViz description that
 # still requires rendering.
 def database_graphviz_schema(sqlite_file_path)
