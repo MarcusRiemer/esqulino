@@ -4,6 +4,10 @@ require 'securerandom' # To generate UUIDs
 require 'fileutils'    # To create directory trees
 require 'scrypt'
 
+require_dependency './schema'
+require_dependency './page'
+
+
 # Represents an esqulino project. Attributes of this
 # class are loaded lazily on demand, so there is no harm
 # in creating loads of instances.

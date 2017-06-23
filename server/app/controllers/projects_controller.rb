@@ -1,4 +1,4 @@
-require 'project'
+require_dependency 'project'
 
 class ProjectsController < ApplicationController
   # Enumerating all available projects
@@ -11,7 +11,7 @@ class ProjectsController < ApplicationController
 
   # Retrieving a single project
   def show
-    render json: current_project
+    render json: JSON.generate(current_project)
   end
 
   # The preview image for a specific project
