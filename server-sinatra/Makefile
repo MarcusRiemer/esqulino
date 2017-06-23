@@ -5,7 +5,7 @@ YARD_BIN = $(shell ruby -e 'puts File.join(Gem.user_dir, "bin", "yard")')
 SOURCES = $(shell find . -not -path '*/\.*' -iname "*.rb")
 
 # Install ruby dependencies
-install-deps : msg-pre-deps-install has-bundle
+install-deps : msg-pre-deps-install
 	$(BUNDLE_BIN) install
 
 # Run using a built-in ruby server

@@ -21,6 +21,10 @@ module Server
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
 
+    # Apparently helpers are unusual in Rails 5 API mode
+    # TODO: Find out where common code for multiple controllers should go instead
+    config.autoload_paths += %W(#{config.root}/app/helpers)
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
