@@ -553,6 +553,93 @@ class ScratchSqlApp < Sinatra::Base
     end
   end
 
+  #get the complete list of all images available globally
+  get '/api/images' do
+    @@images.getImages(null)
+  end
+
+  #actual image blob
+  get '/api/images/:uuid' do |uuid|
+    @@images.getImage(nil, uuid)
+  end
+
+  #overwrite the image blob stored
+  put '/api/images/:uuid' do |uuid|
+    #auth here
+
+    @@images.putImage(nil, uuid)
+  end
+
+  #delete the image and its metadata
+  delete '/api/images/:uuid' do |uuid|
+    #auth here
+
+    @@images.deleteImageAndMetadata(nil, uuid)
+  end
+
+  #get the metadata for a single image
+  get '/api/metadata/:uuid' do |uuid|
+    @@images.getImageMetadata(nil, uuid)
+  end
+
+  #overwrite the image metadata stored
+  put '/api/metadata/:uuid' do |uuid|
+    #auth here
+
+    @@images.putImageMetadata(nil, uuid)
+  end
+
+  #delete the image and its metadata
+  delete '/api/metadata/:uuid' do |uuid|
+    #auth here
+
+    @@images.deleteImageAndMetadata(nil, uuid)
+  end
+
+  #get the complete list of all images available to the project
+  get '/api/images/:project_id' do |project_id|
+    @@images.getImages(@project, uuid)
+  end
+
+  #actual image blob
+  get '/api/images/:project_id/:uuid' do |project_id, uuid|
+    @@images.getImage(@project, uuid)
+  end
+
+  #overwrite the image blob stored
+  put '/api/images/:project_id/:uuid' do |project_id, uuid|
+    #auth here
+
+    @@images.putImage(@project, uuid)
+  end
+
+  #delete the image and its metadata
+  delete '/api/images/:project_id/:uuid' do |project_id, uuid|
+    #auth here
+
+    @@images.deleteImageAndMetadata(@project, uuid)
+  end
+
+  #get the metadata for a single image
+  get '/api/metadata/:project_id/:uuid' do |project_id, uuid|
+    @@images.getImageMetadata(@project, uuid)
+  end
+
+  #overwrite the image metadata stored
+  put '/api/metadata/:project_id/:uuid' do |project_id, uuid|
+    #auth here
+
+    @@images.putImageMetadata(@project, uuid)
+  end
+
+  #delete the image and its metadata
+  delete '/api/metadata/:uuid' do |uuid|
+    #auth here
+
+    @@images.deleteImageAndMetadata(@project, uuid)
+  end
+
+
   # By now I have too often mistakenly attempted to load other assets than
   # HTML files from "user facing" URLs, mostly due to paths that should have
   # been absolute but weren't. This route attempts to catch all these
