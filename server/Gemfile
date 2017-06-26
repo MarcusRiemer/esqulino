@@ -10,3 +10,4 @@ gem 'liquid'
 gem 'scrypt'
 
 gem 'rerun', :group => :development
+gem 'test-unit', :group => :development

@@ -5,6 +5,9 @@ require 'fileutils'    # To create directory trees
 require 'scrypt'
 
 require_relative './schema-utils.rb'
+require_relative './error.rb'
+require_relative './version.rb'
+
 require_relative 'project/query.rb'
 require_relative 'project/page.rb'
 
@@ -88,6 +91,12 @@ class Project
     load_schema! if @schema.nil?
     load_pages! if @pages.nil?
     load_queries! if @queries.nil?
+  end
+
+  # Removes this project and all its traces from disk
+  def delete!
+    assert_write_access!
+    FileUtils.rm_rf @project_folder
   end
 
   # Turn a project into a JSON description
@@ -347,13 +356,10 @@ class Project
   # @param username [string] The name of the user
   # @param plain_text_password [string] The password to store
   def set_password(username, plain_text_password)
-    # Salt & hash the password
-    salt = SCrypt::Engine.generate_salt
-    password = SCrypt::Engine.hash_secret plain_text_password, salt
-
-    # Store it in the model
+    # Update the password for the specific user
     users = whole_description.fetch('users', {})
-    users[username] = password
+    users[username] = hash_password plain_text_password
+    
     whole_description['users'] = users
   end
 
@@ -417,6 +423,107 @@ def enumerate_projects(projects_dir, write_access, public_only)
     to_return.select { |entry| entry.public? }
   else
     to_return
+  end
+end
+
+# Generates a salted hash from the given plaintext
+# password
+#
+# @param plain_text_password [string] The password to hash
+def hash_password(plain_text_password)
+  salt = SCrypt::Engine.generate_salt
+  SCrypt::Engine.hash_secret plain_text_password, salt
+end
+
+# Available parameters during project creation.
+ProjectCreationParams = Struct.new(:id, :name, :description, :db_type, :public) do
+  def initialize(*)
+    super
+    
+    self.db_type ||= 'sqlite3'
+    self.public ||= false
+  end
+
+  def valid?
+    not self.name.nil? and not self.id.nil? and self.db_type == 'sqlite3'
+  end
+
+  def ensure_valid!
+    raise EsqulinoError.new("Missing project creation param: name") if self.name.nil?
+    raise EsqulinoError.new("Missing project creation param: id") if self.id.nil?
+    raise EsqulinoError.new("Invalid project creation param: db_type = \"#{self.db_type}\"") if self.db_type != 'sqlite3'
+  end
+
+  def to_description
+    {
+      "name" => self.name,
+      "description" => self.description,
+      "apiVersion" => '4',
+      "public" => self.public,
+      "databases" => {},
+      "users" => {}
+    }
+  end
+end
+
+
+# Creates an entirely new project
+#
+# @param projects_dir[string] Path to the project storage directory
+# @param paroject_params[ProjectCreationParams] Parameters to use for creation
+def create_project(projects_dir, project_params)
+  # Ensure overall validity and uniqueness
+  project_params.ensure_valid!
+  project_path = File.join projects_dir, project_params.id
+
+  if File.exists? project_path
+    raise EsqulinoError.new("Project \"#{project_params.id}\" can't be created, it already exists")
+  end
+
+  project_description = project_params.to_description
+
+  # From here on we will be touching the filesystem, but in the case
+  # of an error there shouldn't be half-baked projects left on the disk
+  begin
+    Dir.mkdir project_path
+    
+    # Create an empty sqlite3 database and incorporate it into
+    # the description
+    if project_params.db_type == 'sqlite3'
+      # Creating folders and files
+      project_database_folder = File.join project_path, 'databases'
+      project_database_default_path = File.join project_database_folder, 'default.sqlite'
+      Dir.mkdir project_database_folder
+      SQLite3::Database.new project_database_default_path
+
+      # Referencing the created database in the description
+      project_description['databases']['default'] = {
+        'type' => 'sqlite3',
+        'path' => 'default.sqlite'
+      }
+    else
+      raise EsqulinoError.new "Unknown database type: \"#{project_params.db_type}\" "
+    end
+
+    # Default database has now been created
+    project_description['activeDatabase'] = 'default'
+
+    # Create a default user
+    project_description['users']['user'] = {
+      'type' => 'local',
+      'password' => hash_password('user')
+    }
+
+    # Write down the actual project configuration
+    project_path_config = File.join project_path, 'config.yaml'
+    File.open project_path_config, 'w' do |f|
+      f.write project_description.to_yaml
+    end
+  rescue
+    # Something went wrong, so we clean up and leave somebody
+    # else to react to this
+    FileUtils.rm_rf project_path
+    raise
   end
 end
 

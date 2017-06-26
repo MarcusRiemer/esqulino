@@ -25,6 +25,9 @@ export class NavbarComponent {
         
     }
 
+    /**
+     * @return The name of the database that is currently in use
+     */
     get currentDatabaseName() {
         if (this.project) {
             return (this.project.currentDatabaseName);

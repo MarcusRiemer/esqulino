@@ -4,6 +4,6 @@
   "license": "AGPL",
   "private": true,
   "devDependencies": {
-    "typescript-json-schema": "^0.12.0"
+    "typescript-json-schema": "^0.13.0"
   }
 }
