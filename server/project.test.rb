@@ -31,5 +31,27 @@ class ProjectTest < Test::Unit::TestCase
     assert_true(is_string_id?("4f1f31c8-4ea3-42bd-9ba3-76a4c1d459b0"))
     assert_true(is_string_id?("4F1F31C8-4EA3-42BD-9BA3-76A4C1D459B0"))
   end
+
+  # Ensure parameters actually get through
+  def test_project_default_creation_params
+    p = ProjectCreationParams.new("id", "name", "description")
+
+    assert_equal p.id, "id"
+    assert_equal p.name, "name"
+    assert_equal p.description, "description"
+    assert_false p.public
+    assert_equal p.db_type, 'sqlite3'
+
+    assert_true p.valid?
+  end
+
+  # Ensure testing validity works fine
+  def test_project_missing_creation_params
+    assert_raise(EsqulinoError) { ProjectCreationParams.new.ensure_valid! }
+    assert_raise(EsqulinoError) { ProjectCreationParams.new("id").ensure_valid! }
+    assert_raise(EsqulinoError) {
+      ProjectCreationParams.new("id", "name", "description", 'sqlserver').ensure_valid!
+    }
+  end
 end
 

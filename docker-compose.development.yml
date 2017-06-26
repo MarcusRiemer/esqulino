@@ -18,6 +18,8 @@ services:
       context: .
     environment:
       - TYPE=SERVER
+      - BUNDLE_BIN=/usr/bin/bundler
+      - RERUN_BIN=/srv/esqulino/server/vendor/bundle/ruby/2.4.0/bin/rerun
     ports:
       - 9292
     volumes:

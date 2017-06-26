@@ -61,7 +61,8 @@
             "type": "object"
         },
         "WidgetDescription": {
-            "additionalProperties": true,
+            "additionalProperties": {
+            },
             "description": "A widget **requires** at least a type, all other fields are\nmandated by deriving descriptions. As we don't necesarily\nknow all deriving classes at compile time (they could be\nprovided by a plugin) we poke a hole in the type system\nhere.\n\nThe following annotion is required to allow additional\nproperties in the automatically generated JSON schema, see\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
             "properties": {
                 "type": {

@@ -198,6 +198,31 @@ class ScratchSqlApp < Sinatra::Base
     json @project
   end
 
+  # Creating a new project
+  post '/api/project/?' do
+    r = @@validator.ensure_request("ProjectCreationDescription", request.body.read)
+
+    # Todo: Meaningfully create a project id
+    # This simply sort of "slugifies" the name
+    project_id = r['name'].downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+
+    # Cobble together all options and actually create the project
+    params = ProjectCreationParams.new(
+      project_id, r['name'], r['description'], r['dbType'], r['public']
+    )
+    create_project self.projects_dir, params
+
+    # Return the project
+    request_prepare_project project_id
+    json @project
+  end
+
+  # Deleting a project
+  delete '/api/project/:project_id' do
+    @project.delete!
+    status 200
+  end
+
   # Preview image for a specific project
   get '/api/project/:project_id/preview' do
     # Return the preview image if it exists
@@ -360,7 +385,7 @@ class ScratchSqlApp < Sinatra::Base
 
   # Allows to alter tables of a certain database. This route primarily operates on the
   # JSON-payload in the body of the request.
-  post '/api/project/:project_id/db/:database_id/alter/:tableName' do
+  post '/api/project/:project_id/db/:database_id/alter/:tableName' do |_, database_id, _|
     # TODO: Route this alteration through the project, as
     #       user management should be made from there
     protected!
@@ -368,8 +393,9 @@ class ScratchSqlApp < Sinatra::Base
     if(@project.has_table(params['tableName']))
       alter_schema_request = @@validator.ensure_request("AlterSchemaRequestDescription", request.body.read)
       commandHolder = alter_schema_request['commands']
-      error, index, errorCode, errorBody = database_alter_schema(
-                                 file_path_sqlite_from_id(database_id),
+      error, index, errorCode, errorBody =
+                               database_alter_schema(
+                                 @project.file_path_sqlite_from_id(database_id),
                                  params['tableName'],
                                  commandHolder
                                )

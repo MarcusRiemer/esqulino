@@ -37,6 +37,20 @@ export class SchemaComponent implements OnInit {
     }
 
     /**
+     * @return True, if this is an empty schema
+     */
+    get isEmpty() {
+        return (this.project && this.project.schema.isEmpty);
+    }
+
+    /**
+     * @return A timestamp to ensure the schema-image is reloaded
+     */
+    get schemaTimestamp() {
+        return (Math.floor(new Date().getTime() / 1000));
+    }
+
+    /**
      * Load the project to access the schema
      */
     ngOnInit() {

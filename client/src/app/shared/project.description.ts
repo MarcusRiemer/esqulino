@@ -45,3 +45,13 @@ export interface ProjectDescription extends ProjectListDescription {
     queries? : Model.QueryDescription[]
     pages? : PageDescription[]
 }
+
+/**
+ * These parameters are required to create a new project.
+ */
+export interface ProjectCreationDescription {
+    name: string
+    description: string,
+    dbType : "sqlite3",
+    public : boolean
+}

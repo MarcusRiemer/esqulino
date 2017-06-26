@@ -53,7 +53,9 @@ export class PageDataComponent implements OnInit {
         }
 
         // Set an initial query to show
-        this.toReference.queryId = this.project.queries[0].id;
+        if (this.project.queries.length > 0) {
+            this.toReference.queryId = this.project.queries[0].id;
+        }
     }
 
     /**
