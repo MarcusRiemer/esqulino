@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   include ProjectsHelper
   
   # Enumerating all available projects
-  def index
+  def index   
     projects = enumerate_projects(Rails.application.config.sqlino[:projects_dir], false, true)
                  .map { |project| project.public_description }
     
@@ -18,6 +18,10 @@ class ProjectsController < ApplicationController
 
   # The preview image for a specific project
   def preview_image
-    send_file current_project.preview_image_path, disposition: 'inline'
+    if current_project.preview_image_exists? then
+      send_file current_project.preview_image_path, disposition: 'inline'
+    else
+      render plain: "Project has no preview image", status: :not_found
+    end
   end
 end

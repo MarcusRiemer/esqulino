@@ -1,11 +1,11 @@
-# Servers known static files or falls back to the index.html if the
+# Serves known static files or falls back to the index.html if the
 # file that is asked for is not known
 class StaticFilesController < ApplicationController
   def index
     requested_path = URI.parse(request.original_url).path[1..-1]
     if requested_path.start_with? 'api' then
     # API paths are never static pages
-      render :plain => 'Unknown API endpoint', :status => 404
+      render :plain => 'API endpoint triggered by fallback controller', :status => 503
     else
       # Assume that the URL immediatly denotes a file we know
       basepath = Rails.configuration.sqlino[:client_dir]
