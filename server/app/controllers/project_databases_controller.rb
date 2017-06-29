@@ -4,7 +4,8 @@ require_dependency 'schema-graphviz'
 
 class ProjectDatabasesController < ApplicationController
   include ProjectsHelper
-  
+
+  # Returns a visual representation of the schema, rendered with Graphviz
   def visual_schema
     project_id = params['project_id']
     database_id = params['database_id']
@@ -56,6 +57,30 @@ class ProjectDatabasesController < ApplicationController
         send_data db_img, type: content_type, disposition: data_disposition, filename: data_filename
       end
     end
+  end
 
+  # Retrieves the actual data for a number of rows in a certain table
+  def table_row_data
+    requested_table = params['tablename']
+    if(self.current_project.has_table requested_table)
+      result = self.current_project.execute_sql(
+        "SELECT * FROM #{requested_table} LIMIT ? OFFSET ?",
+        [params['amount'].to_i, params['from'].to_i]
+      )
+      render :json => result['rows']
+    else
+      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
+    end
+  end
+
+  # Retrieves the number of rows in a certain table
+  def table_row_count
+    requested_table = params['tablename']
+    if(self.current_project.has_table requested_table)
+      result = self.current_project.execute_sql("SELECT COUNT(*) FROM #{requested_table}", [])
+      render :json => result['rows'].first
+    else
+      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
+    end
   end
 end

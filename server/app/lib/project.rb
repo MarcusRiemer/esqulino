@@ -6,6 +6,7 @@ require 'scrypt'
 
 require_dependency './schema'
 require_dependency './page'
+require_dependency './schema-utils'
 
 
 # Represents an esqulino project. Attributes of this
