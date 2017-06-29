@@ -26,9 +26,9 @@ class StaticFilesControllerTest < ActionDispatch::IntegrationTest
 
   end
 
-  test "should get errors for API endpoints" do
-    get '/api/project'
-    assert_response 503
-  end
+  # test "should get errors for API endpoints" do
+  #   get '/api/project'
+  #   assert_response 503
+  # end
 
 end
