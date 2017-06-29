@@ -1,8 +1,8 @@
 require 'test_helper'
 
 class StaticFilesControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get static_files_index_url
+  test "should get index variations" do
+    get '/'
     assert_response :success
   end
 

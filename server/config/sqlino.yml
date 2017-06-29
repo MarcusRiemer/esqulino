@@ -1,3 +1,11 @@
 development:
   data_dir: ../data/dev
   client_dir: ../client/dist
+
+test:
+  data_dir: ../data/test
+  client_dir: ../client/dist
+
+production:
+  data_dir: ../data/dev
+  client_dir: ../client/dist
