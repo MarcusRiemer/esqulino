@@ -201,6 +201,12 @@ class Project
     return to_return;
   end
 
+  # @return True, if a preview image exists
+  def preview_image_exists?
+    path = self.preview_image_path
+    not path.nil? and File.exists? path
+  end
+  
   # @return Path to the preview image, may be nil of no image is set
   def preview_image_path
     load_description! if @whole_description.nil?
