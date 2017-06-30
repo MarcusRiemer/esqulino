@@ -294,7 +294,10 @@ class Project
   end
 
   # Function to check if project has a table with name table_name
-  def has_table(table_name)
+  #
+  # @param name[string] The name of the table in question
+  # @param database_id[string] The concrete database that should have the table
+  def has_table(table_name, database_id = 'default')
     return !schema.detect{|table| table.name.eql? table_name}.nil?
   end
 
