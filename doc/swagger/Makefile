@@ -43,7 +43,7 @@ clean : msg-pre-clean
 # Messaging targets
 ##################################
 msg-pre-clean :
-	@tput setaf 2; echo "## Swagger: Cleaning"; tput sgr0
+	-@tput setaf 2; echo "## Swagger: Cleaning"; tput sgr0
 
 msg-pre-html :
-	@tput setaf 2; echo "## Swagger: Generating HTML"; tput sgr0
+	-@tput setaf 2; echo "## Swagger: Generating HTML"; tput sgr0

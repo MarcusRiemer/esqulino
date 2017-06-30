@@ -24,7 +24,7 @@ package : $(VM_FILENAME)
 # Message targets
 ##################################
 msg-pre-export :
-	@tput setaf 2; echo "## VM     : Generating $(VM_FILENAME)"; tput sgr0
+	-@tput setaf 2; echo "## VM     : Generating $(VM_FILENAME)"; tput sgr0
 
 msg-pre-publish :
-	@tput setaf 2; echo "## VM     : Publishing $(VM_FILENAME)"; tput sgr0
+	-@tput setaf 2; echo "## VM     : Publishing $(VM_FILENAME)"; tput sgr0

@@ -47,13 +47,13 @@ images/db-schema/%.pdf : ../../data/dev/projects/%/databases/default.sqlite
 # Message targets
 ##################################
 msg-pre-clean :
-	@tput setaf 2; echo "## Thesis : Cleaning"; tput sgr0
+	-@tput setaf 2; echo "## Thesis : Cleaning"; tput sgr0
 
 msg-pre-pdf :
-	@tput setaf 2; echo "## Thesis : Generating PDF"; tput sgr0
+	-@tput setaf 2; echo "## Thesis : Generating PDF"; tput sgr0
 
 msg-pre-pdf-twosided :
-	@tput setaf 2; echo "## Thesis : Generating PDF (twosided)"; tput sgr0
+	-@tput setaf 2; echo "## Thesis : Generating PDF (twosided)"; tput sgr0
 
 .PHONY : all clean msg-pre-clean msg-pre-pdf GIT_REV
 
