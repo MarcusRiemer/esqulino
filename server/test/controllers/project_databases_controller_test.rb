@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
-  test 'db_sequence visual schema (various formats)' do
+  test 'db_sequence visual schema (running graphviz)' do
     get '/api/project/db_sequence/db/default/visual_schema'
     assert_response :success
     assert_equal "image/svg+xml", @response.content_type
@@ -9,6 +9,12 @@ class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
     get '/api/project/db_sequence/db/default/visual_schema?format=png'
     assert_response :success
     assert_equal "image/png", @response.content_type
+  end
+
+  test 'db_sequence visual schema (without running graphviz)' do
+    get '/api/project/db_sequence/db/default/visual_schema?format=graphviz'
+    assert_response :success
+    assert_equal "text", @response.content_type
   end
 
   test 'db_sequence rowcount' do
