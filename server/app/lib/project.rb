@@ -7,7 +7,7 @@ require 'scrypt'
 require_dependency './schema'
 require_dependency './page'
 require_dependency './schema-utils'
-
+require_dependency './error'
 
 # Represents an esqulino project. Attributes of this
 # class are loaded lazily on demand, so there is no harm
@@ -18,9 +18,9 @@ class Project
   def initialize(project_folder, write_access)
     @project_folder = project_folder
     @whole_description = nil
-    @schema = nil
     @pages = nil
     @queries = nil
+    @schema = { }
     @write_access = write_access
   end
 
@@ -46,12 +46,20 @@ class Project
     File.join(@project_folder, "databases")
   end
 
+  # Retrieves the id of the default database from the description
+  def default_database_id
+    whole_description.fetch('activeDatabase', 'default')
+  end
+
   # The path to the currently active SQLite database
-  def file_path_sqlite()
+  #
+  # @param database_id[string] The id of the database in question. If this is nil
+  #                            the current default database will be used.
+  def file_path_sqlite(database_id = nil)
     # Go with the default first, then check whether we
     # have something more specific
-    db_id = whole_description.fetch('activeDatabase', 'default')
-    used_database = available_databases.fetch(db_id)
+    database_id = default_database_id if database_id.nil?
+    used_database = available_databases.fetch(database_id)
     
     File.join(self.folder_databases, used_database['path'])
   end
@@ -86,7 +94,7 @@ class Project
   # does explicitly not reload parts that have been loaded already!
   def load!
     load_description! if @whole_description.nil?
-    load_schema! if @schema.nil?
+    load_schema! if not @schema.key? self.default_database_id
     load_pages! if @pages.nil?
     load_queries! if @queries.nil?
   end
@@ -105,7 +113,7 @@ class Project
     # Enrich the description itself with the more complex attributes
     public_description.merge(
       {
-        :schema => @schema,
+        :schema => schema,
         :queries => @queries,
         :pages => @pages,
         :id => self.id,
@@ -221,14 +229,23 @@ class Project
   end
 
   # Queries the associated database for its schema
-  def load_schema!
-    @schema = database_describe_schema(self.file_path_sqlite)
+  #
+  # @param database_id[string] The database to load, nil if the default database
+  #                            should be used.
+  def load_schema!(database_id = nil)
+    database_id = default_database_id if database_id.nil?
+    
+    @schema[database_id] = database_describe_schema(self.file_path_sqlite database_id)
   end
 
   # Information about the structure of the database
-  def schema
-    load_schema! if @schema.nil?
-    return (@schema)
+  # @param database_id[string] The database to load, nil if the default database
+  #                            should be used.
+  def schema(database_id = nil)
+    database_id = default_database_id if database_id.nil?
+    
+    load_schema! database_id if not @schema.key? self.default_database_id
+    return @schema.fetch database_id
   end
 
   # @return A list of all databases that are available to this project
@@ -268,8 +285,10 @@ class Project
   #
   # @return [Hash] { columns :: List, rows :: List of List }
   #                
-  def execute_sql(sql, params)
-    db = sqlite_open_augmented(self.file_path_sqlite, :read_only => @read_only)
+  def execute_sql(sql, params, database_id = nil)
+    database_id = default_database_id if database_id.nil?
+    
+    db = sqlite_open_augmented(self.file_path_sqlite(database_id), :read_only => @read_only)
     db.execute("PRAGMA foreign_keys = ON")
 
     begin
@@ -298,8 +317,10 @@ class Project
   end
 
   # Function to check if project has a table with name table_name
-  def has_table(table_name)
-    return !schema.detect{|table| table.name.eql? table_name}.nil?
+  def has_table(table_name, database_id = nil)
+    database_id = default_database_id if database_id.nil?
+    
+    return !schema(database_id).detect{|table| table.name.eql? table_name}.nil?
   end
 
   # All pages that are associated with this project

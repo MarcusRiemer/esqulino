@@ -12,6 +12,7 @@ Rails.application.routes.draw do
           get 'count', controller: 'project_databases', action: :table_row_count
           get 'count/:tablename', controller: 'project_databases', action: :table_row_count
           get 'rows/:tablename/:from/:amount', controller: 'project_databases', action: :table_row_data
+          post 'alter/:tablename', controller: 'project_databases', action: :table_alter
         end
       end
     end

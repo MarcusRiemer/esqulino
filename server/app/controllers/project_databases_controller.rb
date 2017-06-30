@@ -46,13 +46,13 @@ class ProjectDatabasesController < ApplicationController
       else
         # We need some special work for SVG images
         content_type = if format.start_with? 'svg'
-          # Set matching MIME-type and replace relative paths
-          db_img.gsub! 'vendor/icons/', '/vendor/icons/'
-          "image/svg+xml"
-        else
-          # Other images only require a matching MIME-type
-          "image/#{format}"
-        end
+                         # Set matching MIME-type and replace relative paths
+                         db_img.gsub! 'vendor/icons/', '/vendor/icons/'
+                         "image/svg+xml"
+                       else
+                         # Other images only require a matching MIME-type
+                         "image/#{format}"
+                       end
         
         send_data db_img, type: content_type, disposition: data_disposition, filename: data_filename
       end
@@ -62,10 +62,13 @@ class ProjectDatabasesController < ApplicationController
   # Retrieves the actual data for a number of rows in a certain table
   def table_row_data
     requested_table = params['tablename']
-    if(self.current_project.has_table requested_table)
+    database_id = params['database_id']
+    
+    if(self.current_project.has_table requested_table, database_id)
       result = self.current_project.execute_sql(
         "SELECT * FROM #{requested_table} LIMIT ? OFFSET ?",
-        [params['amount'].to_i, params['from'].to_i]
+        [params['amount'].to_i, params['from'].to_i],
+        database_id
       )
       render :json => result['rows']
     else
@@ -76,9 +79,40 @@ class ProjectDatabasesController < ApplicationController
   # Retrieves the number of rows in a certain table
   def table_row_count
     requested_table = params['tablename']
-    if(self.current_project.has_table requested_table)
-      result = self.current_project.execute_sql("SELECT COUNT(*) FROM #{requested_table}", [])
+    database_id = params['database_id']
+    
+    if(self.current_project.has_table requested_table, database_id)
+      result = self.current_project.execute_sql("SELECT COUNT(*) FROM #{requested_table}", [], database_id)
       render :json => result['rows'].first
+    else
+      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
+    end
+  end
+
+  def table_alter
+    requested_table = params['tablename']
+    database_id = params['database_id']
+    sqlite_file_path = self.current_project.file_path_sqlite_from_id(database_id)
+
+    if(self.current_project.has_table(requested_table)) then
+      # alter_schema_request = @@validator.ensure_request("AlterSchemaRequestDescription", request.body.read)
+      alter_schema_request = JSON.parse request.body.read
+      commandHolder = alter_schema_request['commands']
+      error, index, errorCode, errorBody = database_alter_schema(
+                                 sqlite_file_path,
+                                 requested_table,
+                                 commandHolder
+                               )
+      if(error)
+        render(:status => 500, :json => {
+                 :index => index.to_s,
+                 :errorCode => errorCode.to_s,
+                 :errorBody => errorBody
+               })
+      else
+        result_schema = database_describe_schema(sqlite_file_path)
+        render :json => { :schema => result_schema }
+      end
     else
       render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
     end
