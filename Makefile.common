@@ -8,29 +8,10 @@ ifeq (, $(shell which npm 2>/dev/null))
 	$(error "Node Paketmanager (npm) not in PATH")
 endif
 
-# Ensure the sass "binary" is available
-has-sass :
-ifeq (, $(wildcard $(SASS_BIN)))
-	$(error "SASS CSS preprocessor not available as gem")
-endif
-
 # Ensure the tsc "binary" is part of the node_modules folder
 has-tsc :
 ifeq (, $(wildcard $(TSC_BIN)))
 	$(error "Typescript Compiler (tsc) not in node_modules")
 endif
 
-# Ensures the bundle "binary" is available
-has-bundle :
-ifeq (, $(wildcard $(BUNDLE_BIN)))
-	$(error "Ruby Bundler (bundle) not in gems")
-endif
-
-# Ensures the yard "binary" is available
-has-yard :
-ifeq (, $(wildcard $(YARD_BIN)))
-	$(error "Ruby documentation generation (yard) not in gems")
-endif
-
-
-.PHONY : has-npm has-sass has-tsc has-bundle has-yard
+.PHONY : has-npm has-tsc
