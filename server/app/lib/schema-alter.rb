@@ -1,12 +1,11 @@
 # coding: utf-8
-require_relative './schema'
-require_relative './schema-utils'
-
 require 'sqlite3'
 require 'fileutils'
 require 'ostruct'
 require 'json'
 
+require_dependency './schema'
+require_dependency './schema-utils'
 
 def database_alter_schema(sqlite_file_path, tableName, commandHolder)
   # Just in case: Making a copy of the whole database
