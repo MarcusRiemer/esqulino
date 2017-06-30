@@ -1,3 +1,4 @@
+# Allows access to projects and its resources in controllers
 module ProjectsHelper
   include ActionController::HttpAuthentication::Basic 
   
@@ -23,6 +24,15 @@ module ProjectsHelper
     end
 
     @current_query
+  end
+
+  # Loads the currently requested page of the currently requested project
+  def current_page
+    if @current_page.nil? then
+      @current_page = Page.new(current_project, params['page_id'])
+    end
+
+    @current_page
   end
 
   # Calls the given block if the current project is available

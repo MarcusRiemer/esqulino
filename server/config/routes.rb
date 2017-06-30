@@ -9,17 +9,31 @@ Rails.application.routes.draw do
         root via: [:delete], controller: 'projects', action: :destroy
         
         get 'preview', controller: 'projects', action: :preview_image
+
+        # Everything that does something with the database content via a query
         scope 'query' do
-          post 'run', controller: 'project_queries', action: :run_arbitrary
           root via: [:post], controller: 'project_queries', action: :create
+          post 'run', controller: 'project_queries', action: :run_arbitrary
 
           scope ':query_id' do
-            root via: [:post], controller: 'project_queries', action: :edit
+            root via: [:post], controller: 'project_queries', action: :update
             root via: [:delete], controller: 'project_queries', action: :destroy
             post 'run', controller: 'project_queries', action: :run_stored
           end
         end
 
+        # Everything that does something with the pages
+        scope 'page' do
+          root via: [:post], controller: 'project_pages', action: :create
+          post 'render', controller: 'project_pages', action: :render_arbitrary
+          
+          scope ':page_id' do
+            root via: [:post], controller: 'project_pages', action: :update
+            root via: [:delete], controller: 'project_pages', action: :destroy
+          end
+        end
+
+        # Everything that does something with the database schema
         scope 'db/:database_id' do
           get 'visual_schema', controller: 'project_databases', action: :visual_schema
 
@@ -35,9 +49,12 @@ Rails.application.routes.draw do
       end
     end
 
+    # Fallback for unknown API endpoints
     match '*', via: [:get, :post], to: proc { [404, {}, ["Unknown API endpoint"]] }
   end
 
+  # Serving static files and the index.html on development machines
+  # These paths are not meant to be called when running in production
   get '*path', action: :index, controller: 'static_files'
   root action: :index, controller: 'static_files'
 end

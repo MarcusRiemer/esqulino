@@ -1,7 +1,6 @@
 {
   "name": "kv_single",
   "apiVersion": "4",
-  "singleRow": true,
   "select": {
     "columns": [
       {
@@ -21,8 +20,8 @@
     "first": {
       "binary": {
         "lhs": {
-          "parameter": {
-            "key": "wert"
+          "constant": {
+            "value": "zwei"
           }
         },
         "rhs": {

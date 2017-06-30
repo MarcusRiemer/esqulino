@@ -17,6 +17,7 @@ clean : msg-pre-clean
 
 dist : msg-pre-build
 	$(NG_BIN) build --prod $(NG_OPTS)
+	$(NGC_BIN)
 
 dist-dev : msg-pre-build
 	$(NG_BIN) build $(NG_OPTS)
