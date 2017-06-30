@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
       scope ':project_id' do
         root controller: 'projects', action: :show
+        root controller: 'projects', action: :update, via: [:post]
+        
         get 'preview', controller: 'projects', action: :preview_image
 
         scope 'db/:database_id' do

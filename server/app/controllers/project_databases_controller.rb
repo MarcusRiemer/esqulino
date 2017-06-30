@@ -92,81 +92,83 @@ class ProjectDatabasesController < ApplicationController
 
   # Alters a certain table of a database
   def table_alter
-    # TODO: User authentication!
-    
-    requested_table = params['tablename']
-    database_id = params['database_id']
-    sqlite_file_path = self.current_project.file_path_sqlite_from_id(database_id)
+    ensure_write_access do  
+      requested_table = params['tablename']
+      database_id = params['database_id']
+      sqlite_file_path = self.current_project.file_path_sqlite_from_id(database_id)
 
-    if(self.current_project.has_table(requested_table)) then
-      # alter_schema_request = @@validator.ensure_request("AlterSchemaRequestDescription", request.body.read)
-      alter_schema_request = JSON.parse request.body.read
-      commandHolder = alter_schema_request['commands']
-      error, index, errorCode, errorBody = database_alter_schema(
-                                 sqlite_file_path,
-                                 requested_table,
-                                 commandHolder
-                               )
-      if(error)
-        render(:status => 500, :json => {
-                 :index => index.to_s,
-                 :errorCode => errorCode.to_s,
-                 :errorBody => errorBody
-               })
+      if(self.current_project.has_table(requested_table)) then
+        # alter_schema_request = @@validator.ensure_request("AlterSchemaRequestDescription", request.body.read)
+        alter_schema_request = JSON.parse request.body.read
+        commandHolder = alter_schema_request['commands']
+        error, index, errorCode, errorBody = database_alter_schema(
+                                   sqlite_file_path,
+                                   requested_table,
+                                   commandHolder
+                                 )
+        if(error)
+          render(:status => 500, :json => {
+                   :index => index.to_s,
+                   :errorCode => errorCode.to_s,
+                   :errorBody => errorBody
+                 })
+        else
+          result_schema = database_describe_schema(sqlite_file_path)
+          render :json => { :schema => result_schema }
+        end
       else
-        result_schema = database_describe_schema(sqlite_file_path)
-        render :json => { :schema => result_schema }
+        render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
       end
-    else
-      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
     end
   end
 
   # Creates a new table in the given database
   def table_create
-    # TODO: User authentication!
-    
-    # TODO: The schema code makes use of OpenStruct, which the validator does
-    #       not like. So currently two JSON objects are created, this
-    #       is obviously not perfect.
-    whole_body = request.body.read
+    ensure_write_access do  
+      # TODO: The schema code makes use of OpenStruct, which the validator does
+      #       not like. So currently two JSON objects are created, this
+      #       is obviously not perfect.
+      whole_body = request.body.read
 
-    database_id = params['database_id']
+      database_id = params['database_id']
 
-    # @@validator.ensure_request("TableDescription", whole_body) # 1st JSON-object
-    newTable = createObject(whole_body)                          # 2nd JSON-object
-    if(!self.current_project.has_table(newTable['name'], database_id)) then
-      error, msg = create_table(self.current_project.file_path_sqlite_from_id(database_id), newTable)  
-      if(error == 0)
-        render :status => 200
+      # @@validator.ensure_request("TableDescription", whole_body) # 1st JSON-object
+      newTable = createObject(whole_body)                          # 2nd JSON-object
+      if(!self.current_project.has_table(newTable['name'], database_id)) then
+        error, msg = create_table(self.current_project.file_path_sqlite_from_id(database_id), newTable)  
+        if(error == 0)
+          render :status => 200
+        else
+          render :status => 500, :json => {
+                   :errorCode => '3',
+                   :errorBody => msg
+                 }
+        end
       else
-        render :status => 500, :json => {
+        render :status => 400, :json => {
                  :errorCode => '3',
-                 :errorBody => msg
+                 :errorBody => "Error: table #{newTable.name} already exists"
                }
       end
-    else
-      render :status => 400, :json => {
-               :errorCode => '3',
-               :errorBody => "Error: table #{newTable.name} already exists"
-             }
     end
   end
 
   # Drops a single table of the given database.
   def table_delete
-    table_name = params['tablename']
-    database_id = params['database_id']
-    
-    if(self.current_project.has_table table_name) then
+    ensure_write_access do  
+      table_name = params['tablename']
+      database_id = params['database_id']
+      
+      if(self.current_project.has_table table_name) then
         error, msg = remove_table(self.current_project.file_path_sqlite_from_id(database_id), table_name)  
         if(error == 0) then
           render :status => 200
         else
           render :status => 500, :json => {:errorBody => msg}
         end
-    else
-      render :plain => "Unknown table \"#{table_name}\"", :status => :not_found
+      else
+        render :plain => "Unknown table \"#{table_name}\"", :status => :not_found
+      end
     end
   end
 end
