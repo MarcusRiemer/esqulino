@@ -2,6 +2,7 @@ require_dependency 'project'
 
 class ProjectsController < ApplicationController
   include ProjectsHelper
+  include ActionController::HttpAuthentication::Basic 
   
   # Enumerating all available projects
   def index   
@@ -14,6 +15,19 @@ class ProjectsController < ApplicationController
   # Retrieving a single project
   def show
     render json: JSON.generate(current_project)
+  end
+
+  # Update an existing project
+  def update
+    ensure_write_access do  
+      # updated_project = @@validator.ensure_request("ProjectDescription", request.body.read)
+      updated_project = JSON.parse request.body.read
+      
+      current_project.update_description! updated_project
+      current_project.save_description
+
+      render :status => 200
+    end
   end
 
   # The preview image for a specific project

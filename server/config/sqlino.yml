@@ -1,11 +1,14 @@
 development:
+  name: "Blattwerkzeug (Dev)"
   data_dir: ../data/dev
   client_dir: ../client/dist
 
 test:
+  name: "Blattwerkzeug (Test)"
   data_dir: ../data/test
   client_dir: ../client/dist
 
 production:
+  name: "Blattwerkzeug"
   data_dir: ../data/dev
   client_dir: ../client/dist
