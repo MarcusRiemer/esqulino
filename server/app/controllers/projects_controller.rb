@@ -18,8 +18,8 @@ class ProjectsController < ApplicationController
   end
 
   # Update an existing project
-  def update
-    ensure_write_access do  
+  def edit
+    ensure_write_access do
       # updated_project = @@validator.ensure_request("ProjectDescription", request.body.read)
       updated_project = JSON.parse request.body.read
       
