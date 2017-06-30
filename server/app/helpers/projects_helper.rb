@@ -16,6 +16,15 @@ module ProjectsHelper
     @current_project
   end
 
+  # Loads the currently requested query of the currently requested project
+  def current_query
+    if @current_query.nil? then
+      @current_query = Query.new(current_project, params['query_id'])
+    end
+
+    @current_query
+  end
+
   # Calls the given block if the current project is available
   # with write acess. Asks for write access otherwise
   def ensure_write_access (&proc)

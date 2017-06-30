@@ -199,6 +199,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Creating a new project
+  # TODO: Port
   post '/api/project/?' do
     r = @@validator.ensure_request("ProjectCreationDescription", request.body.read)
 
@@ -274,6 +275,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Rendering an arbitrary page
+  # TODO: Port
   post '/api/project/:project_id/render' do
     # Ensure this request is shaped as we would expect it
     render_request = @@validator.ensure_request("PageRenderRequestDescription", request.body.read)
@@ -297,6 +299,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Storing a page
+  # TODO: Port
   post '/api/project/:project_id/page/?:page_id?' do
     new_page = @@validator.ensure_request("PageUpdateRequestDescription", request.body.read)
 
@@ -311,6 +314,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Deleting a page
+  # TODO: Port
   delete '/api/project/:project_id/page/:page_id' do
     @page.delete!
 
@@ -322,6 +326,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Viewing a specific page
+  # TODO: Port
   get '/view/:project_id/?:page_name?' do
     return @page.render({})
   end
@@ -456,6 +461,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Rendering subdomains
+  # TODO: Port
   subdomain do
     # Browsers will automatically ask for the favicon at the root of the URL. Without this
     # route the favicon would be interpreted as a page name or id.

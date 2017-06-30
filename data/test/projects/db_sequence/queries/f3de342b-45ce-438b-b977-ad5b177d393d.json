@@ -1,7 +1,11 @@
 {
-  "name": "kv_single",
+  "name": "kv_all",
   "apiVersion": "4",
-  "singleRow": true,
+  "from": {
+    "first": {
+      "name": "key_value"
+    }
+  },
   "select": {
     "columns": [
       {
@@ -12,22 +16,18 @@
       }
     ]
   },
-  "from": {
-    "first": {
-      "name": "key_value"
-    }
-  },
   "where": {
     "first": {
       "binary": {
         "lhs": {
-          "parameter": {
-            "key": "wert"
+          "singleColumn": {
+            "column": "key",
+            "table": "key_value"
           }
         },
         "rhs": {
           "singleColumn": {
-            "column": "value",
+            "column": "key",
             "table": "key_value"
           }
         },

@@ -5,9 +5,20 @@ Rails.application.routes.draw do
 
       scope ':project_id' do
         root controller: 'projects', action: :show
-        root controller: 'projects', action: :update, via: [:post]
+        root via: [:post], controller: 'projects', action: :edit
+        root via: [:delete], controller: 'projects', action: :destroy
         
         get 'preview', controller: 'projects', action: :preview_image
+        scope 'query' do
+          post 'run', controller: 'project_queries', action: :run_arbitrary
+          root via: [:post], controller: 'project_queries', action: :create
+
+          scope ':query_id' do
+            root via: [:post], controller: 'project_queries', action: :edit
+            root via: [:delete], controller: 'project_queries', action: :destroy
+            post 'run', controller: 'project_queries', action: :run_stored
+          end
+        end
 
         scope 'db/:database_id' do
           get 'visual_schema', controller: 'project_databases', action: :visual_schema
