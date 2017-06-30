@@ -54,15 +54,15 @@ gzipped-clean :
 ##################################
 
 msg-pre-build :
-	@tput setaf 2; echo "## Client : Compiling ..."; tput sgr0
+	-@tput setaf 2; echo "## Client : Compiling ..."; tput sgr0
 
 msg-pre-clean :
-	@tput setaf 2; echo "## Client : Cleaning ..."; tput sgr0
+	-@tput setaf 2; echo "## Client : Cleaning ..."; tput sgr0
 
 msg-pre-clean-deps :
-	@tput setaf 2; echo "## Client : Cleaning dependencies ..."; tput sgr0
+	-@tput setaf 2; echo "## Client : Cleaning dependencies ..."; tput sgr0
 
 msg-pre-install-deps :
-	@tput setaf 2; echo "## Client : Installing dependencies ..."; tput sgr0
+	-@tput setaf 2; echo "## Client : Installing dependencies ..."; tput sgr0
 
 .PHONY : all clean dist dist-dev msg-pre-build video-stills

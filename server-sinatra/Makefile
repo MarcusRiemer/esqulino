@@ -54,13 +54,13 @@ migrate-projects:
 ##################################
 
 msg-pre-deps-install :
-	@tput setaf 2; echo "## Server : Installing dependencies"; tput sgr0
+	-@tput setaf 2; echo "## Server : Installing dependencies"; tput sgr0
 
 msg-pre-doc :
-	@tput setaf 2; echo "## Server : Generating documentation"; tput sgr0
+	-@tput setaf 2; echo "## Server : Generating documentation"; tput sgr0
 
 msg-pre-doc-clean :
-	@tput setaf 2; echo "## Server : Cleaning documentation"; tput sgr0
+	-@tput setaf 2; echo "## Server : Cleaning documentation"; tput sgr0
 
 # Ensures the rerurn "binary" is available
 has-dev-rerun :

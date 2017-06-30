@@ -32,28 +32,14 @@ BlattWerkzeug makes use of subdomains to render the public representation of a p
 
 Currently it is assumed that this project will built on a UNIX-like environment. Although building it on Windows should be possible, all helper scripts (and Makefiles) make a lot of UNIX-centric assumptions. But don't worry if you are only interested in *running* a BlattWerkzeug instance. You will be better off using a pre-compiled distribution of the client, but running the server should work just fine. Alternatively take a look at the virtual machine that is provided.
 
-# Running using a virtual machine
+# Running using docker
 
-If you don't want to go through the hassle of setting up `ruby`, `bundle`, `node` and `npm` and their respective dependencies yourself you may want to take a look at the [pre-packaged virtual machine `esqulino.ova`](http://playground.marcusriemer.de/esqulino.ova). This VM is distributed in the [Open Virtualization Format](http://www.dmtf.org/standards/ovf) which can be imported by all popular VM hypervisors like [VirtualBox](https://www.virtualbox.org) or [vmware](http://www.vmware.com/).
+There is a pre-built docker image for production use on docker hub: 6a7573742d6f6c65/esqulino.
+It is build using the `Dockerfile` in this repository and can be used with the `docker-compose.yml` file which is also part of this repository.
 
-Once you have imported and started the `esqulino.ova` image with your favourite hypervisor, the BlattWerkzeug-server has automatically been started. The greeting message above the prompt should look something like this:
+The development image can be build using the `Dockerfile.development` which is also used by the `docker-compose.development.yml`. Once a container using the development image is started it expects the repos folder to be mounted as a volume at `/srv/esqulino` and the envoronment variable `TYPE` to be set to `CLIENT`, `SERVER` or `SLEEP`. The `docker-compose.development.yml` contains a service definition for client and server.
 
-    Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.4.0-31-generic x86_64)
-    
-    ● esqulino.service - esqulino - A SQL IDE targeted at pupils
-       Loaded: loaded (/etc/systemd/system/esqulino.service; enabled; vendor preset: enabled)
-       Active: active (running) since Wed 2016-09-07 08:04:24 UTC; 1min 9s ago
-     Main PID: 1633 (make)
-       CGroup: /system.slice/esqulino.service
-               ├─1633 /usr/bin/make run
-               ├─1734 /bin/sh -c RACK_ENV="production" /home/vagrant/.gem/ruby/2.3.0/bin/bundle exec rackup
-               └─1735 ruby2.3 /usr/local/bin/rackup
-    
-    Sep 07 08:04:24 vagrant systemd[1]: Started esqulino - A SQL and web IDE targeted at pupils.
-    Sep 07 08:04:25 vagrant make[1633]: RACK_ENV="production" /home/vagrant/.gem/ruby/2.3.0/bin/bundle exec rackup
-    Last login: Wed Sep  7 07:31:55 2016 from 10.0.2.2
-
-As you can see the provided image is based on Ubuntu 16.04 and displays the current state of the BlattWerkeug instance on every startup. You have been immediatly logged in as a user called `vagrant` and may use the commandline to interact with the server as described in the "normal" developer documentation.
+Start the development environment using `docker-compose -f docker-compose.development.yml up -d`. You can see the continuous log output using `docker logs -f <container>` where `<container>` is either the contianers id or the container name. The container id is different every time the container is created, the name is set by docker-compose using the following template: `<project name>_<service name>_<id>` where `<project name>`` is inferred from the folder name the project is in (esqulino unless you canged it), `<service name>` either `client` or `server` and `<id>` is `1` unless the scale option of docker-compose is used, which is not useful in this context.
     
 ## Useful locations and commands
 

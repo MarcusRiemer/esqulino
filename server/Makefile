@@ -25,16 +25,16 @@ test : msg-pre-run-test
 ##################################
 
 msg-pre-install-deps :
-	@tput setaf 2; echo "## Server : Installing dependencies ..."; tput sgr0
+	-@tput setaf 2; echo "## Server : Installing dependencies ..."; tput sgr0
 
 msg-pre-clean-deps :
-	@tput setaf 2; echo "## Server : Cleaning dependencies ..."; tput sgr0
+	-@tput setaf 2; echo "## Server : Cleaning dependencies ..."; tput sgr0
 
 msg-pre-run-dev :
-	@tput setaf 2; echo "## Server : Running Rails in development mode ..."; tput sgr0
+	-@tput setaf 2; echo "## Server : Running Rails in development mode ..."; tput sgr0
 
 msg-pre-run-prod :
-	@tput setaf 2; echo "## Server : Running Rails in production mode ..."; tput sgr0
+	-@tput setaf 2; echo "## Server : Running Rails in production mode ..."; tput sgr0
 
 msg-pre-run-test :
-	@tput setaf 2; echo "## Server : Running tests ..."; tput sgr0
+	-@tput setaf 2; echo "## Server : Running tests ..."; tput sgr0

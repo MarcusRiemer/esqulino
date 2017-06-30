@@ -114,6 +114,6 @@ dev-delete-trailing-whitespace :
 ##################################
 
 msg-pre-test-reset :
-	@tput setaf 2; echo "## Test   : Resetting test project"; tput sgr0
+	-@tput setaf 2; echo "## Test   : Resetting test project"; tput sgr0
 
 .PHONY : all clean dev-delete-trailing-whitespace dev-pretty-json-data doc install-deps server-run dist
