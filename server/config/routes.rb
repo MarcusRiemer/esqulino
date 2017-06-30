@@ -9,10 +9,15 @@ Rails.application.routes.draw do
 
         scope 'db/:database_id' do
           get 'visual_schema', controller: 'project_databases', action: :visual_schema
-          get 'count', controller: 'project_databases', action: :table_row_count
+
+          # Querying table data
           get 'count/:tablename', controller: 'project_databases', action: :table_row_count
           get 'rows/:tablename/:from/:amount', controller: 'project_databases', action: :table_row_data
+
+          # Altering the schema
           post 'alter/:tablename', controller: 'project_databases', action: :table_alter
+          delete 'drop/:tablename', controller: 'project_databases', action: :table_delete
+          post 'create', controller: 'project_databases', action: :table_create
         end
       end
     end

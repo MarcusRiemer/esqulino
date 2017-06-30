@@ -1,6 +1,7 @@
 require 'open3'
 
 require_dependency 'schema-graphviz'
+require_dependency 'schema-alter'
 
 class ProjectDatabasesController < ApplicationController
   include ProjectsHelper
@@ -89,7 +90,10 @@ class ProjectDatabasesController < ApplicationController
     end
   end
 
+  # Alters a certain table of a database
   def table_alter
+    # TODO: User authentication!
+    
     requested_table = params['tablename']
     database_id = params['database_id']
     sqlite_file_path = self.current_project.file_path_sqlite_from_id(database_id)
@@ -115,6 +119,54 @@ class ProjectDatabasesController < ApplicationController
       end
     else
       render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
+    end
+  end
+
+  # Creates a new table in the given database
+  def table_create
+    # TODO: User authentication!
+    
+    # TODO: The schema code makes use of OpenStruct, which the validator does
+    #       not like. So currently two JSON objects are created, this
+    #       is obviously not perfect.
+    whole_body = request.body.read
+
+    database_id = params['database_id']
+
+    # @@validator.ensure_request("TableDescription", whole_body) # 1st JSON-object
+    newTable = createObject(whole_body)                          # 2nd JSON-object
+    if(!self.current_project.has_table(newTable['name'], database_id)) then
+      error, msg = create_table(self.current_project.file_path_sqlite_from_id(database_id), newTable)  
+      if(error == 0)
+        render :status => 200
+      else
+        render :status => 500, :json => {
+                 :errorCode => '3',
+                 :errorBody => msg
+               }
+      end
+    else
+      render :status => 400, :json => {
+               :errorCode => '3',
+               :errorBody => "Error: table #{newTable.name} already exists"
+             }
+    end
+  end
+
+  # Drops a single table of the given database.
+  def table_delete
+    table_name = params['tablename']
+    database_id = params['database_id']
+    
+    if(self.current_project.has_table table_name) then
+        error, msg = remove_table(self.current_project.file_path_sqlite_from_id(database_id), table_name)  
+        if(error == 0) then
+          render :status => 200
+        else
+          render :status => 500, :json => {:errorBody => msg}
+        end
+    else
+      render :plain => "Unknown table \"#{table_name}\"", :status => :not_found
     end
   end
 end
