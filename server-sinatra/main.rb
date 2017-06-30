@@ -275,7 +275,6 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Rendering an arbitrary page
-  # TODO: Port
   post '/api/project/:project_id/render' do
     # Ensure this request is shaped as we would expect it
     render_request = @@validator.ensure_request("PageRenderRequestDescription", request.body.read)
@@ -299,7 +298,6 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Storing a page
-  # TODO: Port
   post '/api/project/:project_id/page/?:page_id?' do
     new_page = @@validator.ensure_request("PageUpdateRequestDescription", request.body.read)
 

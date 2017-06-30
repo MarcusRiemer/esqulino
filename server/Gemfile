@@ -5,13 +5,25 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.1'
-gem 'sqlite3'
+############################
+# Own dependencies
+###########################
 
 # Securing passwords with scrypt
 gem 'scrypt'
+
+# Currently using sqlite as a database
+gem 'sqlite3'
+
+# Rendering pages with liquid
+gem 'liquid'
+
+############################
+# Rails dependencies
+###########################
+
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '~> 5.1.1'
 
 # Use Puma as the app server
 gem 'puma', '~> 3.7'

@@ -1,3 +1,4 @@
+# All actions that concern queries that are part of a project
 class ProjectQueriesController < ApplicationController
   include ProjectsHelper
 
@@ -28,11 +29,11 @@ class ProjectQueriesController < ApplicationController
   # Creating a new query
   def create
     @current_query = Query.new current_project, nil
-    self.edit
+    self.update
   end
 
   # Storing a query
-  def edit
+  def update
     ensure_write_access do  
       # TODO: Validate
       # new_query = @@validator.ensure_request("QueryUpdateRequestDescription", request.body.read)

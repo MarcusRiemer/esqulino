@@ -1,5 +1,5 @@
 {
-  "name": "Page 2",
+  "name": "Page Zwo",
   "apiVersion": "4",
   "referencedQueries": [
     {
@@ -26,7 +26,7 @@
               {
                 "type": "heading",
                 "level": 1,
-                "text": "Seite 2"
+                "text": "Seite Zwo"
               },
               {
                 "type": "paragraph",

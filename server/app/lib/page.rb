@@ -244,7 +244,7 @@ class Page
         mapped = mapped.first
       else
         err_msg = "Got #{mapped.length} rows, expected exactly 1"
-        raise DatabaseQueryError.new(@project, query.sql, params, err_msg)
+        raise DatabaseQueryError.new(@project, query.sql, params, nil, err_msg)
       end
     end
     

@@ -1,3 +1,3 @@
 SELECT *
 FROM key_value
-WHERE :wert = key_value.value
+WHERE 'zwei' = key_value.value
