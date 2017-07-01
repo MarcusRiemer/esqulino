@@ -1,3 +1,5 @@
+require 'liquid'
+
 # It should be possible for users to define own partials that can be loaded.
 # But apart from that partials could also be provided by a server-side plugin
 # or simply provided unconditionally.
@@ -83,7 +85,7 @@ def liquid_render_page(project, page_template, params)
   # Load the basic liquid template
   template = Liquid::Template::parse(page_template)
 
-  puts "Rendering with params #{params.inspect}"
+  # puts "Rendering with params #{params.inspect}"
 
   # Render it alongside the known parameters
   return (template.render(params))

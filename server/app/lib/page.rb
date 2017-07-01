@@ -1,5 +1,5 @@
 require_relative './query'
-require_relative './liquid'
+require_relative './render-liquid'
 
 # Represents a esqulino page, which must be part of a project.
 # Attributes of this class are loaded lazily on demand, so there
@@ -170,7 +170,7 @@ class Page
       result_queries[ref['name']] = result
     end
 
-    puts "Rendering #{name}, query results: #{result_queries.inspect}"
+    # puts "Rendering #{name}, query results: #{result_queries.inspect}"
 
     # Prepare parameters for rendering, this is basically the union of all
     # previous parameters with the newly created query parameters
