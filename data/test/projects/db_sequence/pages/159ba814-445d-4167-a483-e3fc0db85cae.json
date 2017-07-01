@@ -1,0 +1,14 @@
+{
+  "name": "simple",
+  "apiVersion": "4",
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "type": "heading",
+        "level": 1,
+        "text": "Header 1\n"
+      }
+    ]
+  }
+}

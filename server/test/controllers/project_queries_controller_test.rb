@@ -1,4 +1,6 @@
 # coding: utf-8
+require 'nokogiri'
+
 require 'test_helper'
 
 class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
@@ -31,7 +33,7 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "application/json", @response.content_type
 
     result = JSON.parse(@response.body)
-    assert_equal [[3, "drei"], [4, "vier"]], result
+    assert_equal [[3, "drei"]], result
   end
 
   test "sequence_db: running a stored SELECT query with missing parameters" do

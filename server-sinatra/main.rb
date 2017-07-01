@@ -312,7 +312,6 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Deleting a page
-  # TODO: Port
   delete '/api/project/:project_id/page/:page_id' do
     @page.delete!
 
@@ -324,7 +323,6 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Viewing a specific page
-  # TODO: Port
   get '/view/:project_id/?:page_name?' do
     return @page.render({})
   end

@@ -30,6 +30,8 @@ Rails.application.routes.draw do
           scope ':page_id' do
             root via: [:post], controller: 'project_pages', action: :update
             root via: [:delete], controller: 'project_pages', action: :destroy
+
+            get 'render', controller: 'project_pages', action: :render_known
           end
         end
 

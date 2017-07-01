@@ -63,4 +63,8 @@ class ProjectPagesController < ApplicationController
     render :body => page.render(params, render_engine, page_template)
   end
 
+  # Rendering a known page
+  def render_known
+    render :body => self.current_page.render({'get' => request.GET})
+  end
 end

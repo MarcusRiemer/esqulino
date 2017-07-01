@@ -163,9 +163,9 @@ class Project
     if index_page_id then  
       index_page = Page.new(self, index_page_id)
       if not index_page.exists? then
-        puts "Removing reference to index page"
+        # puts "Removing reference to index page"
         @whole_description.delete 'indexPageId'
-        puts @whole_description.to_s
+        # puts @whole_description.to_s
       end
     end
   end
