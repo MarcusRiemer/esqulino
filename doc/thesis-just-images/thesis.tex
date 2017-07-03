@@ -1,0 +1,106 @@
+\documentclass[paper=a4,fontsize=12pt,parskip=half]{scrartcl}
+
+%% packages
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[draft]{optional}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage[absolute]{textpos}
+\usepackage[hidelinks=true,colorlinks=false]{hyperref}
+\usepackage{nameref}
+\usepackage[format=plain,labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{wrapfig}
+\usepackage{xargs}   % Use more than one optional parameter in a new commands
+\usepackage[colorinlistoftodos,prependcaption]{todonotes}
+\usepackage{dirtree}
+\usepackage{float}
+\usepackage{newfloat}
+\usepackage{framed}
+\usepackage{tikz}
+\usepackage[simplified]{pgf-umlcd}
+\usepackage[pass]{geometry} % Use `showframe` to test for overly full boxes
+\usepackage[onehalfspacing]{setspace}
+\usepackage{multicol}
+\usepackage{enumitem}       % Narrower enumerations
+\usepackage[normalem]{ulem} % Striking out stuff
+\usepackage{datetime}       % \currenttime
+\usepackage[autostyle=true,german=quotes]{csquotes}       % \enquote
+\usepackage[automark,headsepline=1pt]{scrlayer-scrpage}
+\usepackage[export]{adjustbox} % \includegraphis[frame]
+
+\renewcommand*{\headfont}{\normalfont}
+
+%% additional ressources
+\input{tex-definitions}
+
+\usetikzlibrary{calc,intersections,shapes,fit}
+
+%% meta information
+\hypersetup{
+  pdftitle={\doctitle},
+  pdfsubject={\docsubtitle},
+  pdfauthor={\docpdfauthors},
+  linkcolor=blue,
+  urlcolor=blue,
+}
+
+\title{\doctitle}
+\subtitle{\docsubtitle}
+\author{\docauthors}
+\date{\today{}}
+
+
+ %% document
+\begin{document}
+\pagenumbering{Roman}
+\input{titlepage}
+
+\cleardoublepage
+
+\input{abstract}
+
+\cleardoublepage
+
+\tableofcontents{}
+
+\cleardoublepage
+
+\pagenumbering{arabic}
+
+\cleardoublepage
+\include{kap-1-einleitung}
+
+\cleardoublepage
+\include{kap-2-vergleichbare-arbeiten}
+
+\cleardoublepage
+\include{kap-3-anforderung}
+
+\cleardoublepage
+\include{kap-4-umsetzung}
+
+\cleardoublepage
+\include{kap-5-fazit}
+
+\appendix{}
+
+\cleardoublepage
+\include{anh-eidesstattliche-erklaerung}
+
+\cleardoublepage
+
+\section{Literaturverzeichnis}
+\printbibliography[heading=none]
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
