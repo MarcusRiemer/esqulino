@@ -214,7 +214,6 @@ class Page
         raise InvalidMappingError.new(@project, self, query_ref)
       end
       
-
       # Extract all relevant indizes
       providing_prefix, providing_name = mapping.fetch('providingName').split "."
       parameter_name = mapping.fetch('parameterName')

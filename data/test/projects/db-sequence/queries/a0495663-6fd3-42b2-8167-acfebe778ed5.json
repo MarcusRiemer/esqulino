@@ -27,7 +27,7 @@
         },
         "rhs": {
           "singleColumn": {
-            "column": "value",
+            "column": "key",
             "table": "key_value"
           }
         },
