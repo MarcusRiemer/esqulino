@@ -60,11 +60,11 @@ class ProjectPagesController < ApplicationController
     page = Page.new(self.current_project, nil, render_request['page'])
 
     # Enrich parameters with query data
-    render :body => page.render(params, render_engine, page_template)
+    render :html => page.render(params, render_engine, page_template)
   end
 
   # Rendering a known page
   def render_known
-    render :body => self.current_page.render({'get' => request.GET})
+    render :html => self.current_page.render({'get' => request.GET})
   end
 end

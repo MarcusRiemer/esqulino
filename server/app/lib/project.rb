@@ -332,9 +332,9 @@ class Project
   # Retrieves a page by its name
   #
   # @param id The id of the searched page
-  def page_by_id(id)
-    to_return = pages.find {|page| page.id == id}
-    raise UnknownPageError.new(id, name) if to_return.nil?
+  def page_by_id(page_id)
+    to_return = pages.find {|page| page.id == page_id}
+    raise UnknownPageError.new(id, page_id) if to_return.nil?
 
     return (to_return)
   end

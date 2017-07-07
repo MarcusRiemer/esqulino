@@ -5,7 +5,7 @@ require 'test_helper'
 
 class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
   test "sequence_db: running a stored SELECT query" do
-    post '/api/project/db_sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
+    post '/api/project/db-sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
          params: { },
          as: :json
 
@@ -17,7 +17,7 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
   end
   
   test "sequence_db: running a stored SELECT query with too many parameters" do
-    post '/api/project/db_sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
+    post '/api/project/db-sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
          params: { 'foo' => 'bar' },
          as: :json
 
@@ -25,7 +25,7 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "sequence_db: running a stored SELECT query with required parameters" do
-    post '/api/project/db_sequence/query/a0495663-6fd3-42b2-8167-acfebe778ed5/run',
+    post '/api/project/db-sequence/query/a0495663-6fd3-42b2-8167-acfebe778ed5/run',
          params: { 'wert' => 'drei' },
          as: :json
 
@@ -37,7 +37,7 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "sequence_db: running a stored SELECT query with missing parameters" do
-    post '/api/project/db_sequence/query/a0495663-6fd3-42b2-8167-acfebe778ed5/run',
+    post '/api/project/db-sequence/query/a0495663-6fd3-42b2-8167-acfebe778ed5/run',
          params: { },
          as: :json
 

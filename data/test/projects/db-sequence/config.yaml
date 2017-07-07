@@ -1,9 +1,9 @@
 ---
 password: test
-name: db_sequence
+name: db-sequence
 description: Dieses Projekt wird für automatische Tests benutzt und hat keine inhaltliche
   Bedeutung.
-indexPageId: 4f1f31c8-4ea3-42bd-9ba3-76a4c1d459b0
+indexPageId: 159ba814-445d-4167-a483-e3fc0db85cae
 apiVersion: '4'
 users:
   user:
