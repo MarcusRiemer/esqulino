@@ -1,8 +1,28 @@
+# This constraint kicks in for every project subdomain that should
+# be rendered. 
+class RenderProjectConstraint
+  def project_domains
+    Rails.configuration.sqlino[:project_domains] || []
+  end
+  
+  def matches?(request)
+    (self.project_domains.include? request.domain) or (not ['', 'www'].include? request.subdomain)
+  end
+end
+
 Rails.application.routes.draw do
+  # First stop: We might need to render a project for an end user
+  constraints RenderProjectConstraint.new do
+    root via: [:get, :post], controller: 'render_projects', action: :index
+    match '*path', via: [:get, :post], controller: 'render_projects', action: :index
+  end
+
+  # Second stop: The API for the editor
   scope '/api' do
     scope 'project' do
       root controller: 'projects', action: :index
 
+      # Everything that does something in the context of a specific project
       scope ':project_id' do
         root controller: 'projects', action: :show
         root via: [:post], controller: 'projects', action: :edit
@@ -52,11 +72,11 @@ Rails.application.routes.draw do
     end
 
     # Fallback for unknown API endpoints
-    match '*', via: [:get, :post], to: proc { [404, {}, ["Unknown API endpoint"]] }
+    match '*path', via: :all, to: proc { [404, {}, ["Unknown API endpoint"]] }
   end
 
-  # Serving static files and the index.html on development machines
+  # Third stop:  Serving static files and the index.html on development machines
   # These paths are not meant to be called when running in production
-  get '*path', action: :index, controller: 'static_files'
   root action: :index, controller: 'static_files'
+  get '*path', action: :index, controller: 'static_files'
 end
