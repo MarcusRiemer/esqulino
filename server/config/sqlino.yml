@@ -12,3 +12,4 @@ production:
   name: "Blattwerkzeug"
   data_dir: ../data/dev
   client_dir: ../client/dist
+  project_domains: [blattzeug.de]
