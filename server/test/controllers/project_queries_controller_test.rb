@@ -26,7 +26,7 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
 
   test "sequence_db: running a stored SELECT query with required parameters" do
     post '/api/project/db-sequence/query/a0495663-6fd3-42b2-8167-acfebe778ed5/run',
-         params: { 'wert' => 'drei' },
+         params: { 'wert' => '3' },
          as: :json
 
     assert_response :success

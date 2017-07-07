@@ -88,16 +88,20 @@ class RenderProjectsController < ApplicationController
     end
   end
 
+  # This is data that is provided for the templates by the server.
+  # It does not depend on the project or the currently active page
   def server_render_data
     return {
       'editor_host' => ENV['ESQULINO_EDITOR_HOST'] || 'localhost.localdomain:3000'
     }
   end
 
+  # Extracts the project id from the request.
   def request_project_id
     request.subdomain
   end
-  
+
+  # Retrieves
   def current_project
     super(self.request_project_id)
   end
