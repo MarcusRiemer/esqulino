@@ -1,0 +1,38 @@
+* global image storagel image files are stored in the images folder next to the projects folder inside the data folder
+inside the images folder is a images.json file which is the index of all image files stored
+the images itself are stored in subfolders due to performance issues with large numbers of files inside a single directory
+all images have a uuid which is also their filename and is provided by /proc/sys/kernel/random/uuid
+** images.json
+this file contains a list of image metadata along with the image uuid and the file path relarive to the images.json file
+** subdirectory structure
+there are two layers of subdirectories, each subdirectory name consists of two characters taken from the name of the beginning of the names of the files within producing a prefix tree
+since uuids contain only hexadecimal characters and the subdirectory name is two characters in length the images folder will contain a maximum of 256 subdirectories each containing a maximum of 256 subdirectories resulting in the image files distributing the image files over 2^16 direct
+global images are saved in the `images` folder next to the `projects` folder
+inside the `images` folder there is an index file `images.json` containing the image metadata relevant for searching them and subdirectories containing the actual images
+** images.json
+the first iteration of the `images.json` contains a single root json object with `version: 1` and the actual images as a list of objects under `images: [...]`
+the version is incremented whenever there is any change to the structure of the `images.json`
+while the filepath in the index could be calculated at runtime, it is static and dynamic calculation is therefore unnecessary
+TODO: at which image count is this solution no longer viable? is there a good solution with less overhead than deploying elasticsearch?
+*** stucture of the metadata objects
+**** version: 1
+`{ uuid: string, author: string, authorurl: string, license: string, filepath: string }`
+uuid is set at creation time and can not be changed
+filepath is generated from uuid and therefore can not be changed
+author, authorurl an license are set by the user and can be changed along with the actual content of the file
+** subdirectory structure
+while filesystems like `ext4` don't have a limit on files per directory the libc implementation of `readdir()` returns the directory listing in chunks of 32KB per call which causes high latency depending on the harddrive when listing directories with a large number of files.
+some caching systes using hashes to store cached data in the filesystem employ a layered subdirectory structure using the full hash in hex as the filename and the nth byte of the hash in hex as the name of the folders of the nth level.
+assuming the hashes to be evenly distributed this divides the average number of files per direcory by 2^8 per layer.
+the folder structure itself uses 2^(8n) folders per layer and since ext4 and ntfs are limited to 2^32-1 files per filesystem four layers and above can not exist in a single filesystem since the 4th layer alone will use up the whole capatity for files on those filesystems with ext2, ext3, or FAT allowing even fewer files than 2^32-1.
+dynamic layer count would best reduce overhead on low image counts it would mean having to perform a blocking operation on image upload once a certain image count theshhold is reached having to touch all images currently stored while updating the filepaths in the index
+from the perspective of not having any live data yet 3 layers seem overboard and I suspect the single json file as an index to fail before the third layer is necessary while having just one might be not enough when importing an open image database into the global images collection
+* project image storage
+project image storage is planned to be similar to global image storage except inside the project folder
+the projects images are to be checked before the parent or global images, therefore enabling overriding of images inside the project
+project images are basically stored the same way global images are, except the images folder is at the root of the project folder instead
+when an image is searched, it is first searched within the project itself, if it is not found, the parent project chain is searched until at the very last the global images are searched
+while having a long parent project chain while using mostly global images might be a possible bottleneck, especially when having multiple index files to be searched one after another, this is to be addressed after the decision wether the images.json indexing method is viable in the first place
+
+
+

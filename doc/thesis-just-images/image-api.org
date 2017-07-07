@@ -1,0 +1,49 @@
+* image api
+the image api is used to retrieve the list of images with metadata on the images as well as retrieving or uploading single images
+TODO: concept for avoiding inconsistent image data (metadate without image, image without metadata)
+** global images
+*** image list
+the api endpoint is `/api/images`
+`GET` yields the complete list of all images available to the project (unauthorized)
+
+the response is a json object containing the version number and the list of json objects containing metadata
+`{ version: integer, images: list }`
+TODO: investigate at what image count a paged version of this api endpoint is necessary
+TODO: evaluate definition of a filtered version of this endpoint
+**** version 1
+`{ uuid: string, author: string, authorurl: string, license: string, fileurl: string }`
+uuid is the uuid the image is associated with, it can be used to retrieve or modify the image using the api
+author, authorurl and license associated with the image
+*** single image
+the api endpoint is `/api/images/{uuid}`
+
+`GET` yields the actual image file (unauthorized)
+`PUT` replaces the image file on the server with a new one (owner/admin only)
+`DELETE` removes the image and its metadata (owner/admin only)
+
+
+*** single image metadata
+the api endpoint is `/api/metadata/{uuid}`
+
+`GET` yields the metadata for the specified image (unauthorized)
+`PUT` overrides the existing image metadata (owner/admin only)
+`DELETE` removes the image and its metadata (owner/admin only)
+
+*** image upload
+TODO
+
+`/api/images/upload/author/url/license/` with author url and license in b64? probably not that good of an idea
+
+`/api/images/upload` returning a uuid to be used by `/api/images/upload/{uuid}` to add the metadata in a second request within a 5 minute timeout period? not that great either since it requires multiple requests and a timeout handler to delete images when metadata is not sent
+
+`/api/images/upload` with a json of the metadata and a blob field containing the b64 encoded image? don't like this one either because of the b64
+
+** project images
+same as global images except the project id is added in the url after `images`:
+`/api/images/{project_id}`
+`/api/images/{project_id}/{uuid}`
+`/api/metadata/{project_id}/{uuid}`
+
+
+
+

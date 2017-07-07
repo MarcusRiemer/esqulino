@@ -1,0 +1,14 @@
+GIT_REV
+auto
+thesis.pdf
+ole-just-thesis.pdf
+ole-just-thesis-twoside.pdf
+*.aux
+*.log
+*.out
+*.tdo
+*.toc
+*.bbl
+*.bcf
+*.blg
+*.run.xml
