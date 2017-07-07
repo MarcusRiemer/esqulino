@@ -1,5 +1,5 @@
-require_relative './query'
-require_relative './render-liquid'
+require_dependency 'query'
+require_dependency 'render-liquid'
 
 # Represents a esqulino page, which must be part of a project.
 # Attributes of this class are loaded lazily on demand, so there
@@ -183,7 +183,8 @@ class Page
     end
 
     # And hand over to do some actual rendering
-    project_render_page_template(@project, template_string, render_engine, render_params)
+    to_return = project_render_page_template(@project, template_string, render_engine, render_params)
+    to_return.html_safe
   end
 
   # The render parameters that are relevant to this page.

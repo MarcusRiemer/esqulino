@@ -3,10 +3,12 @@ module ProjectsHelper
   include ActionController::HttpAuthentication::Basic 
   
   # Loads the currently requested project
-  def current_project
+  def current_project(project_id = nil)
+    project_id = project_id || params['project_id']
+    
     if @current_project.nil? then
       projects_dir = Rails.application.config.sqlino[:projects_dir]
-      @current_project = Project.new File.join(projects_dir, params['project_id']), false
+      @current_project = Project.new File.join(projects_dir, project_id), false
 
       if self.has_basic_credentials? request
         user, pass = self.user_name_and_password request
@@ -27,9 +29,29 @@ module ProjectsHelper
   end
 
   # Loads the currently requested page of the currently requested project
-  def current_page
+  def current_page(page_name_or_id = nil, index_valid = false)
+    page_name_or_id = page_name_or_id || params['page_id']
+    
     if @current_page.nil? then
-      @current_page = Page.new(current_project, params['page_id'])
+      # Distinguish between index page, page names and ids
+      if page_name_or_id.nil? || page_name_or_id.empty? then
+        # Is there a matching index page and should we use it?
+        if index_valid and self.current_project.index_page? then
+          # Yes, we use that
+          @current_page = self.current_project.index_page
+        else
+          # No, we use an empty page
+          @current_page = Page.new(self.current_project);
+        end
+      elsif is_string_id? page_name_or_id then
+        # Specific ID, this could be a page that does not exist yet
+        @current_page = Page.new(self.current_project, page_name_or_id)
+      else
+        # User-facing name, this needs to be unescaped to turn
+        # things like %20 back into spaces
+        page_name = URI.unescape(page_name_or_id)
+        @current_page = self.current_project.page_by_name page_name_or_id
+      end
     end
 
     @current_page

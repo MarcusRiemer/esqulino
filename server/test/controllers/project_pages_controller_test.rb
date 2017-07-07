@@ -36,12 +36,12 @@ class ProjectPagesControllerTest < ActionDispatch::IntegrationTest
       "params" => {}
     }
     
-    post '/api/project/db_sequence/page/render',
+    post '/api/project/db-sequence/page/render',
          as: :json,
          params: body_in
     
     assert_response :success
-    assert_equal "text/plain", @response.content_type
+    assert_equal "text/html", @response.content_type
 
     # Ensure that the basic document structure is correct    
     html_doc = Nokogiri::HTML(@response.body)
@@ -84,36 +84,36 @@ class ProjectPagesControllerTest < ActionDispatch::IntegrationTest
       "params" => {}
     }
     
-    post '/api/project/db_sequence/page/render',
+    post '/api/project/db-sequence/page/render',
          as: :json,
          params: body_in
     
     assert_response :success
-    assert_equal "text/plain", @response.content_type
+    assert_equal "text/html", @response.content_type
 
     # Ensure that the basic document structure is correct    
     html_doc = Nokogiri::HTML(@response.body)
     assert_equal 'dynamic', html_doc.at_css('h1').text.strip
-    assert_equal 'dynamic - db_sequence', html_doc.at_css('title').text.strip
+    assert_equal 'dynamic - db-sequence', html_doc.at_css('title').text.strip
   end
 
   test 'render known - simple heading' do
-    get '/api/project/db_sequence/page/159ba814-445d-4167-a483-e3fc0db85cae/render'
+    get '/api/project/db-sequence/page/159ba814-445d-4167-a483-e3fc0db85cae/render'
 
     assert_response :success
-    assert_equal "text/plain", @response.content_type
+    assert_equal "text/html", @response.content_type
 
     # Ensure that the basic document structure is correct    
     html_doc = Nokogiri::HTML(@response.body)
     assert_equal 'Header 1', html_doc.at_css('h1').text.strip
-    assert_equal 'simple - db_sequence', html_doc.at_css('title').text.strip
+    assert_equal 'simple - db-sequence', html_doc.at_css('title').text.strip
   end
 
   test 'render known - with non-param query' do
-    get '/api/project/db_sequence/page/fcbedce2-870e-4372-b456-4a62afc23ba8/render'
+    get '/api/project/db-sequence/page/fcbedce2-870e-4372-b456-4a62afc23ba8/render'
 
     assert_response :success
-    assert_equal "text/plain", @response.content_type
+    assert_equal "text/html", @response.content_type
 
     # Ensure that the basic document structure is correct    
     html_doc = Nokogiri::HTML(@response.body)
