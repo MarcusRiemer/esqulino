@@ -42,6 +42,8 @@ class ScratchSqlApp < Sinatra::Base
   # is required.
   @@validator = Validator.new(File.dirname(__FILE__) + "/../schema/json")
 
+  @@images = new Images("data/images")
+
   # Activate reloading and disable any caching when developing
   configure :development do
     puts "esqulino is running in development mode"
@@ -241,7 +243,7 @@ class ScratchSqlApp < Sinatra::Base
 
     # TODO: Remove this ugly hack to limit the maximum number of rows
     sql_query = "#{request_data['sql']}\nLIMIT 100"
-    
+
     result = @project.execute_sql(sql_query, request_data['params'])
     json(result['rows'])
   end
@@ -328,7 +330,7 @@ class ScratchSqlApp < Sinatra::Base
   end
 
   # Getting entries inside a table
-  get '/api/project/:project_id/db/:database_id/rows/:tableName/:from/:amount' do    
+  get '/api/project/:project_id/db/:database_id/rows/:tableName/:from/:amount' do
     if(@project.has_table(params['tableName']))
       result = @project.execute_sql("SELECT * FROM #{params['tableName']} LIMIT ? OFFSET ?", [params['amount'].to_i, params['from'].to_i])
       json(result['rows'])
@@ -357,7 +359,7 @@ class ScratchSqlApp < Sinatra::Base
     @@validator.ensure_request("TableDescription", whole_body) # 1st JSON-object
     newTable = createObject(whole_body)                        # 2nd JSON-object
     if(!@project.has_table(newTable['name']))
-      error, msg = create_table(@project.file_path_sqlite_from_id(database_id), newTable)  
+      error, msg = create_table(@project.file_path_sqlite_from_id(database_id), newTable)
       if(error == 0)
         return 200
       else
@@ -375,7 +377,7 @@ class ScratchSqlApp < Sinatra::Base
     protected!
 
     if(@project.has_table(params['tableName']))
-      error, msg = remove_table(@project.file_path_sqlite_from_id(database_id), params['tableName'])  
+      error, msg = remove_table(@project.file_path_sqlite_from_id(database_id), params['tableName'])
       if(error == 0)
         return 200
       else
@@ -390,7 +392,7 @@ class ScratchSqlApp < Sinatra::Base
     # TODO: Route this alteration through the project, as
     #       user management should be made from there
     protected!
-    
+
     if(@project.has_table(params['tableName']))
       alter_schema_request = @@validator.ensure_request("AlterSchemaRequestDescription", request.body.read)
       commandHolder = alter_schema_request['commands']
@@ -400,9 +402,9 @@ class ScratchSqlApp < Sinatra::Base
                                  params['tableName'],
                                  commandHolder
                                )
-      if(error) 
+      if(error)
         return 500, {'Content-Type' => 'application/json'}, { :index => index.to_s, :errorCode => errorCode.to_s, :errorBody => json(errorBody)}.to_json
-      else 
+      else
         return 200, {'Content-Type' => 'application/json'}, {:schema => database_describe_schema(@project.file_path_sqlite_from_id(database_id))}.to_json
       end
     end
@@ -417,7 +419,7 @@ class ScratchSqlApp < Sinatra::Base
     # The default renderer currently is svg:cairo, but
     # the user may override it.
     format = params.fetch('format', 'svg')
-    
+
     # Does the user want to download the file?
     if params.has_key? 'download'
       file_extension = format.split(':').first
@@ -448,7 +450,7 @@ class ScratchSqlApp < Sinatra::Base
           # Other images only require a matching MIME-type
           content_type "image/#{format}"
         end
-        
+
         # Deliver the image itself, but disallow caching
         cache_control :no_cache
         return db_img
@@ -554,6 +556,93 @@ class ScratchSqlApp < Sinatra::Base
       end
     end
   end
+
+  #get the complete list of all images available globally
+  get '/api/images' do
+    @@images.get_images(nil)
+  end
+
+  #actual image blob
+  get '/api/images/:uuid' do |uuid|
+    @@images.get_image(nil, uuid)
+  end
+
+  #overwrite the image blob stored
+  put '/api/images/:uuid' do |uuid|
+    protected!
+
+    @@images.putImage(nil, uuid)
+  end
+
+  #delete the image and its metadata
+  delete '/api/images/:uuid' do |uuid|
+    protected!
+
+    @@images.deleteImageAndMetadata(nil, uuid)
+  end
+
+  #get the metadata for a single image
+  get '/api/metadata/:uuid' do |uuid|
+    @@images.getImageMetadata(nil, uuid)
+  end
+
+  #overwrite the image metadata stored
+  put '/api/metadata/:uuid' do |uuid|
+    protected!
+
+    @@images.putImageMetadata(nil, uuid)
+  end
+
+  #delete the image and its metadata
+  delete '/api/metadata/:uuid' do |uuid|
+    protected!
+
+    @@images.deleteImageAndMetadata(nil, uuid)
+  end
+
+  #get the complete list of all images available to the project
+  get '/api/images/:project_id' do |project_id|
+    @@images.getImages(@project, uuid)
+  end
+
+  #actual image blob
+  get '/api/images/:project_id/:uuid' do |project_id, uuid|
+    @@images.getImage(@project, uuid)
+  end
+
+  #overwrite the image blob stored
+  put '/api/images/:project_id/:uuid' do |project_id, uuid|
+    protected!
+
+    @@images.putImage(@project, uuid)
+  end
+
+  #delete the image and its metadata
+  delete '/api/images/:project_id/:uuid' do |project_id, uuid|
+    protected!
+
+    @@images.deleteImageAndMetadata(@project, uuid)
+  end
+
+  #get the metadata for a single image
+  get '/api/metadata/:project_id/:uuid' do |project_id, uuid|
+    @@images.getImageMetadata(@project, uuid)
+  end
+
+  #overwrite the image metadata stored
+  put '/api/metadata/:project_id/:uuid' do |project_id, uuid|
+    protected!
+
+    @@images.putImageMetadata(@project, uuid)
+  end
+
+  #delete the image and its metadata
+  delete '/api/metadata/:uuid' do |uuid|
+    protected!
+
+    @@images.deleteImageAndMetadata(@project, uuid)
+  end
+
 
   # By now I have too often mistakenly attempted to load other assets than
   # HTML files from "user facing" URLs, mostly due to paths that should have

@@ -33,6 +33,10 @@ class Project
     @project_folder
   end
 
+  def images
+    @project_folder + '/images'
+  end
+
   # The path to the folder this project stores its pages.
   def folder_pages
     File.join(@project_folder, "pages")
@@ -54,7 +58,7 @@ class Project
     # have something more specific
     db_id = whole_description.fetch('activeDatabase', 'default')
     used_database = available_databases.fetch(db_id)
-    
+
     File.join(self.folder_databases, used_database['path'])
   end
 
@@ -120,7 +124,7 @@ class Project
   def description_filename
     File.join(@project_folder, "config.yaml")
   end
-  
+
   # Loads the projects model from disk
   def load_description!
     # Ensure this is actually a loadable project
@@ -154,7 +158,7 @@ class Project
   # page-ID from the model if it doesn't exist
   def check_index_page!
     index_page_id = whole_description['indexPageId']
-    if index_page_id then  
+    if index_page_id then
       index_page = Page.new(self, index_page_id)
       if not index_page.exists? then
         puts "Removing reference to index page"
@@ -174,9 +178,9 @@ class Project
   # something that would never happen on purpose.
   def save_description
     assert_write_access!
-    
+
     raise EsqulinoError, "Attempted to save unloaded project" if @whole_description.nil?
-    
+
     File.open(description_filename, "w") do |f|
       # Save everything but the ID
       f.write(@whole_description.tap{|d| d.delete('id') }.to_yaml)
@@ -263,7 +267,7 @@ class Project
   # @param params [Hash] Query parameters
   #
   # @return [Hash] { columns :: List, rows :: List of List }
-  #                
+  #
   def execute_sql(sql, params)
     db = sqlite_open_augmented(self.file_path_sqlite, :read_only => @read_only)
     db.execute("PRAGMA foreign_keys = ON")
@@ -316,7 +320,7 @@ class Project
 
     return (to_return)
   end
-  
+
   # Retrieves a page by its name
   #
   # @param name The name of the searched page
@@ -338,7 +342,7 @@ class Project
   def index_page?
     whole_description.key?('indexPageId')
   end
-  
+
   # @return The page model for the index page
   def index_page
     # Read the ID of the index page
@@ -362,7 +366,7 @@ class Project
     # Update the password for the specific user
     users = whole_description.fetch('users', {})
     users[username] = hash_password plain_text_password
-    
+
     whole_description['users'] = users
   end
 
@@ -442,7 +446,7 @@ end
 ProjectCreationParams = Struct.new(:id, :name, :description, :db_type, :public) do
   def initialize(*)
     super
-    
+
     self.db_type ||= 'sqlite3'
     self.public ||= false
   end
@@ -489,7 +493,7 @@ def create_project(projects_dir, project_params)
   # of an error there shouldn't be half-baked projects left on the disk
   begin
     Dir.mkdir project_path
-    
+
     # Create an empty sqlite3 database and incorporate it into
     # the description
     if project_params.db_type == 'sqlite3'
