@@ -35,10 +35,6 @@ clean-deps : msg-pre-clean-deps
 # Universal Rendering
 ##################################
 
-universal-compile:
-	$(NG_BIN) build --prod
-	$(NGC_BIN)
-
 universal-run:
 	$(TS_NODE_BIN) src/server.ts
 
