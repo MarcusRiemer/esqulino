@@ -30,15 +30,54 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "invalid: updating db-sequence project without a name" do
+  test "updating db-sequence project with partial information" do
     project_json = {
       "apiVersion":"4",
-      "description":"test-description"
+      "name": "changed"
+    }
+
+    auth_headers = {"Authorization" => "Basic #{Base64.encode64('user:user')}"}
+
+    post '/api/project/db-sequence',
+         as: :json,
+         params: project_json,
+         headers: auth_headers
+
+    assert_response :success
+
+    get '/api/project/db-sequence'
+
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    project = JSON.parse(@response.body)
+    assert_equal 'changed', project['name']
+
+    rollback_test_filesystem
+  end
+
+  test "updating db-sequence project with unknown information" do
+    project_json = {
+      "apiVersion":"4",
+      "foo": "bar"
     }
 
     post '/api/project/db-sequence',
          as: :json,
+         params: project_json,
+         headers: auth_headers
+
+    assert_response :bad_request
+  end
+
+  test "auth required: updating db-sequence project" do
+    project_json = { }
+
+    post '/api/project/db-sequence',
+         as: :json,
          params: project_json
+
+    assert_response :unauthorized
   end
 
 end
