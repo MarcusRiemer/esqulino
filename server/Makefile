@@ -3,7 +3,7 @@ install-deps : msg-pre-install-deps
 	bundle install
 
 clean-deps : msg-pre-clean-deps
-	rm -rf ./vendor
+	rm -rf "./vendor"
 
 # Running in production mode
 run : msg-pre-run-prod
