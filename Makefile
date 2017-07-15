@@ -29,6 +29,7 @@ install-deps :
 # This will not touch any globally installed gems, but merely delete
 # folders that contain these dependencies.
 clean-deps :
+	$(SUBDIR_MAKE) server clean-deps
 	$(SUBDIR_MAKE) client clean-deps
 	$(SUBDIR_MAKE) schema/json clean-deps
 

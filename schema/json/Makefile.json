@@ -33,7 +33,7 @@ JSON_SCHEMA_FILES = $(addprefix $(SCHEMA_PATH)/, $(JSON_SCHEMA_FILE_NAMES))
 # beginning. I assume this is due to make AND bash stripping those
 define CONVERT_COMMAND
 	@echo "Creating $(notdir $(basename $@)).json"
-	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@ $(SCHEMA_OPTIONS) && sed -i "s/\\\\\"\/\(.*\)\"\.//g" $@
+	$(TYPESCRIPT_JSON_SCHEMA_BIN) $(SRC_PROJECT) $(notdir $(basename $@)) --out $@ $(SCHEMA_OPTIONS)
 endef
 
 $(SCHEMA_PATH)/PageUpdateRequestDescription.json : $(SRC_PATH)/editor/page.service.ts

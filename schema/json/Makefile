@@ -15,7 +15,7 @@ install-deps : has-npm
 	npm install
 
 # Remove everything that has been downloaded by `install-deps`
-clean-deps :
+clean-deps : msg-pre-clean-deps
 	rm -rf "node_modules"
 
 # Removes all generated schema files
@@ -25,6 +25,10 @@ clean : msg-pre-clean
 ##################################
 # Messaging targets
 ##################################
+
+msg-pre-clean-deps :
+	-@tput setaf 2; echo "## Schema : Cleaning Dependencies ..."; tput sgr0
+
 
 msg-pre-clean :
 	-@tput setaf 2; echo "## Schema : Cleaning ..."; tput sgr0
