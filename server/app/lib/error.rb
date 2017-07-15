@@ -142,7 +142,7 @@ class InvalidSchemaError < EsqulinoError
   end
 
   # @return [Hash] The errors as reported by the JSON-schema-validator
-  def json_data()
+  def json_data
     {
       "errors" => @errors
     }
@@ -155,9 +155,19 @@ class InvalidQueryRequest < EsqulinoError
 
   # @param query [Query] The query that couldn't be run.
   # @param query_params [Hash]
-  def initialize(query, query_params)
+  def initialize(query, available_params, required_params)
     @query = query
-    @query_params = query_params
+    @available_params = available_params
+    @required_params = required_params
+
+    super "Not enough parameters to execute \"#{query.name}\"", 400
+  end
+
+  def json_data
+    {
+      "availableParameters" => @available_params,
+      "requiredParameters" => @required_params
+    }
   end
   
 end

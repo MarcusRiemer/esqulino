@@ -30,4 +30,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "invalid: updating db-sequence project without a name" do
+    project_json = {
+      "apiVersion":"4",
+      "description":"test-description"
+    }
+
+    post '/api/project/db-sequence',
+         as: :json,
+         params: project_json
+  end
+
 end

@@ -35,8 +35,8 @@ class RenderProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'simple_query - db-sequence', html_doc.at_css('title').text.strip
   end
 
-  test 'db_sequence page "/param_query?key=1"' do
-    get 'http://db-sequence.sld.tld//param_query?key=1'
+  test 'db_sequence page "/param_query?wert=1"' do
+    get 'http://db-sequence.sld.tld/param_query?wert=1'
     assert_response :success
     assert_equal "text/html", @response.content_type
 

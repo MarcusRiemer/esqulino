@@ -40,14 +40,25 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
     post '/api/project/db-sequence/query/a0495663-6fd3-42b2-8167-acfebe778ed5/run',
          params: { },
          as: :json
-
-    # TODO: This should actually result in an error, but because
-    # the Sinatra-application did not treat this as an error, we leave
-    # the behaviour as it is for the moment.
-    assert_response :success
+    
+    assert_response :bad_request
     assert_equal "application/json", @response.content_type
 
     result = JSON.parse(@response.body)
-    assert_equal [], result
+    assert_equal ['wert'], result['requiredParameters'], "Required Parameters"
+    assert_equal Hash.new, result['availableParameters'], "Available Parameters"
+  end
+
+  test "sequence_db: running a stored SELECT query with missing and too many parameters" do
+    post '/api/project/db-sequence/query/a0495663-6fd3-42b2-8167-acfebe778ed5/run',
+         params: { 'foo' => 'bar' },
+         as: :json
+    
+    assert_response :bad_request
+    assert_equal "application/json", @response.content_type
+
+    result = JSON.parse(@response.body)
+    assert_equal(['wert'], result['requiredParameters'], "Required Parameters")
+    assert_equal({ 'foo' => 'bar' }, result['availableParameters'], "Available Parameters")
   end
 end

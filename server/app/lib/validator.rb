@@ -8,7 +8,7 @@ class Validator
   # Loads all schemas from the given directory
   #
   # @param schema_dir [string] A path containing JSON schema files
-  def initialize(schema_dir)
+  def initialize(schema_dir)    
     @schemas = { }
 
     Dir.glob(File.realdirpath(schema_dir) + "/*.json").each do |schema_file|
@@ -21,7 +21,7 @@ class Validator
       
       schema_content = File.read(schema_file)
 
-      puts "Loading #{schema_name} at #{schema_file}"
+      Rails.logger.info "Loading #{schema_name} at #{schema_file}"
       schema = JSON.load(schema_content, :quirks_mode => true)
 
       @schemas[schema_name] = schema

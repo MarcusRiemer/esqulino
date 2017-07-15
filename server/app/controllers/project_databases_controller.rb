@@ -5,6 +5,7 @@ require_dependency 'schema-alter'
 
 class ProjectDatabasesController < ApplicationController
   include ProjectsHelper
+  include ValidationHelper
 
   # Returns a visual representation of the schema, rendered with Graphviz
   def visual_schema
@@ -132,8 +133,8 @@ class ProjectDatabasesController < ApplicationController
 
       database_id = params['database_id']
 
-      # @@validator.ensure_request("TableDescription", whole_body) # 1st JSON-object
-      newTable = createObject(whole_body)                          # 2nd JSON-object
+      ensure_request("TableDescription", whole_body)    # 1st JSON-object
+      newTable = createObject(whole_body)               # 2nd JSON-object
       if(!self.current_project.has_table(newTable['name'], database_id)) then
         error, msg = create_table(self.current_project.file_path_sqlite_from_id(database_id), newTable)  
         if(error == 0)
