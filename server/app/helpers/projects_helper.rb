@@ -1,3 +1,5 @@
+require_dependency 'project'
+
 # Allows access to projects and its resources in controllers
 module ProjectsHelper
   include ActionController::HttpAuthentication::Basic 

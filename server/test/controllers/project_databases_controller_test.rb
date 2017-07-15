@@ -76,5 +76,40 @@ class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test 'db-sequence adding column to key_value' do
+    commands = {
+      "commands" => [
+        {
+          "type":"addColumn",
+          "index":0
+        },
+        {
+          "type":"renameColumn",
+          "index":1,
+          "columnIndex":2,
+          "newName":"test",
+          "oldName":"New_Column"
+        }
+      ]
+    }
+
+    post '/api/project/db-sequence/db/default/alter/key_value',
+         as: :json,
+         params: commands,
+         headers: auth_headers
+
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    
+    result = JSON.parse(@response.body)
+    result_table = result['schema'][0]
+    assert_equal 'key_value', result_table['name']
+    assert_equal 'key', result_table['columns'][0]['name']
+    assert_equal 'value', result_table['columns'][1]['name']
+    assert_equal 'test', result_table['columns'][2]['name']
+
+    rollback_test_filesystem
+  end
   
 end
