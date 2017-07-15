@@ -50,8 +50,11 @@ export interface ProjectDescription extends ProjectListDescription {
  * These parameters are required to create a new project.
  */
 export interface ProjectCreationDescription {
+    id : string
     name: string
-    description: string,
-    dbType : "sqlite3",
-    public : boolean
+    admin : {
+        name : string
+        password : string
+    }
+    dbType : "sqlite3"
 }

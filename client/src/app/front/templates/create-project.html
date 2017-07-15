@@ -1,0 +1,61 @@
+<div class="alert alert-danger" role="alert">
+  <strong>Dieses Projekt wird nicht von Dauer sein!</strong> Für den Augenblick kann hier einfach jeder Internetbewohner neue Projekte anlegen, daher wird wohl manchmal aufgeräumt werden müssen ...
+</div>
+<div class="card mb-3">
+  <form class="card-block">
+    <div class="form-group row">
+      <label for="project-id"
+             class="col-sm-2 form-control-label">
+        ID
+      </label>
+      <div class="col-sm-10">
+        <input [ngModel]="params.id"
+               name="project-id"
+               class="form-control"
+               id="project-id">
+        <small class="text-muted">Diese ID taucht später in der <code>URL</code> auf und ist einzigartig für dein Projekt. Sie kann im Nachhinein nicht mehr verändert werden, wähle Sie also mit Bedacht.</small>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="project-name"
+             class="col-sm-2 form-control-label">
+        Projektname
+      </label>
+      <div class="col-sm-10">
+        <input [ngModel]="params.name"
+               name="project-name"
+               class="form-control"
+               id="project-name">
+        <small class="text-muted">Dieser Name wird zum Beispiel auf Übersichtsseiten angezeigt und lässt sich jederzeit verändern.</small>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="project-admin-name"
+             class="col-sm-2 form-control-label">
+        Admin-Benutzer
+      </label>
+      <div class="col-sm-10">
+        <input [ngModel]="params.admin.name"
+               name="project-admin-name"
+               class="form-control"
+               id="project-admin-name">
+        <small class="text-muted">Dieses Benutzername wird zusammen mit dem Passwort bei Veränderungen abgefragt.</small>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="project-admin-pw"
+             class="col-sm-2 form-control-label">
+        Admin-Passwort
+      </label>
+      <div class="col-sm-10">
+        <input [ngModel]="params.admin.password"
+               type="password"
+               name="project-admin-pw"
+               class="form-control"
+               id="project-admin-pw">
+        <small class="text-muted">Dieses Passwort wird zusammen mit dem Benutzernamen bei Veränderungen abgefragt.</small>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary btn-lg btn-block">Projekt Anlegen!</button>
+  </form>
+</div>
