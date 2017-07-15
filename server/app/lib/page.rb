@@ -164,9 +164,9 @@ class Page
 
       # Skip queries that are not select queries
       next unless query.is_select?
-
+      
       # Execute the query and store the result in a hash under the query name
-      result = self.execute_referenced_query(ref, params)
+      result = self.execute_referenced_query(ref, params.fetch('get'))
       result_queries[ref['name']] = result
     end
 
@@ -197,37 +197,21 @@ class Page
     }
   end
 
-  # Execute a single query, translating the required parameters
+  # Execute a single query, filling in the required parameters
   #
   # @param queryRef [Hash] A query reference
   # @param initial_params [Hash] The initial set of parameters,
   #                              probably mainly input and get
-  def execute_referenced_query(query_ref, initial_params)    
-    # Each query gets its own fresh set of parameters
-    params = {}
-
-    # Not-quite-so-wellformed models may omit the mapping, this
-    # shouldn't crash anything immediatly.
-    query_ref.fetch('mapping', {}).each do |mapping|
-      # But if there is a mapping defined, it must be well formed
-      if not mapping.key?('providingName') or not mapping.key?('parameterName')
-        raise InvalidMappingError.new(@project, self, query_ref)
-      end
-      
-      # Extract all relevant indizes
-      providing_prefix, providing_name = mapping.fetch('providingName').split "."
-      parameter_name = mapping.fetch('parameterName')
-      
-      # And do the actual mapping
-      mapped_value = initial_params
-                     .fetch(providing_prefix)
-                     .fetch(providing_name)
-      params[parameter_name] = mapped_value
+  def execute_referenced_query(query_ref, initial_params)
+    # Grab the actual query to find out the required parameters.
+    params = { }
+    query = @project.query_by_id(query_ref['queryId'])
+    query.required_parameters.each do |param_name|
+      params[param_name] = initial_params.fetch(param_name)
     end
 
-    # Grab the actual query and execute it with the freshly constructed parameters
-    query = @project.query_by_id(query_ref['queryId'])
-    result = @project.execute_sql(query.sql, params)
+    # Execute it with the freshly constructed parameters
+    result = query.execute(params)
 
     # Prepare result for SELECT queries
     

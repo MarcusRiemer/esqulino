@@ -96,17 +96,17 @@ class Query
   end
 
   # Executes this query in the context of the associated project.
-  def execute(params)
+  def execute(params)    
     # Ensure parameters are supplied
     if not self.executable?(params)
-      raise InvalidQueryRequest.new(self, params)
+      raise InvalidQueryRequest.new(self, params, self.required_parameters)
     end
     
     @project.execute_sql(sql, params)
   end
 
   # @return [Boolean] True, if these params would allow the query to be executed.
-  def executable?(params)    
+  def executable?(params)
     self.required_parameters.all? {|p| params.include? p}
   end
 
@@ -213,7 +213,7 @@ class Query
       leaf_type = expr.keys.select {|c| leaves.include? c}
       if leaf_type.length == 1 
         # Return those leaves wrapped in a list
-        return [expr[leaf_type[0]]]
+        return [expr]
       else
         return []
       end
