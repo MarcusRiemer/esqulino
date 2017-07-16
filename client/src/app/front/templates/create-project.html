@@ -1,5 +1,5 @@
-<div class="alert alert-danger" role="alert">
-  <strong>Dieses Projekt wird nicht von Dauer sein!</strong> Für den Augenblick kann hier einfach jeder Internetbewohner neue Projekte anlegen, daher wird wohl manchmal aufgeräumt werden müssen ...
+<div class="alert alert-warning" role="alert">
+  <strong>Dieses Projekt wird vermutlich nicht von Dauer sein!</strong> Für den Augenblick kann hier einfach jeder Internetbewohner neue Projekte anlegen, daher wird wohl manchmal aufgeräumt werden müssen ...
 </div>
 <div class="card mb-3">
   <form class="card-block">
@@ -9,10 +9,11 @@
         ID
       </label>
       <div class="col-sm-10">
-        <input [ngModel]="params.id"
+        <input [(ngModel)]="params.id"
                name="project-id"
                class="form-control"
-               id="project-id">
+               id="project-id"
+               required>
         <small class="text-muted">Diese ID taucht später in der <code>URL</code> auf und ist einzigartig für dein Projekt. Sie kann im Nachhinein nicht mehr verändert werden, wähle Sie also mit Bedacht.</small>
       </div>
     </div>
@@ -22,10 +23,11 @@
         Projektname
       </label>
       <div class="col-sm-10">
-        <input [ngModel]="params.name"
+        <input [(ngModel)]="params.name"
                name="project-name"
                class="form-control"
-               id="project-name">
+               id="project-name"
+               required>
         <small class="text-muted">Dieser Name wird zum Beispiel auf Übersichtsseiten angezeigt und lässt sich jederzeit verändern.</small>
       </div>
     </div>
@@ -35,10 +37,11 @@
         Admin-Benutzer
       </label>
       <div class="col-sm-10">
-        <input [ngModel]="params.admin.name"
+        <input [(ngModel)]="params.admin.name"
                name="project-admin-name"
                class="form-control"
-               id="project-admin-name">
+               id="project-admin-name"
+               required>
         <small class="text-muted">Dieses Benutzername wird zusammen mit dem Passwort bei Veränderungen abgefragt.</small>
       </div>
     </div>
@@ -48,14 +51,26 @@
         Admin-Passwort
       </label>
       <div class="col-sm-10">
-        <input [ngModel]="params.admin.password"
+        <input [(ngModel)]="params.admin.password"
                type="password"
                name="project-admin-pw"
                class="form-control"
-               id="project-admin-pw">
+               id="project-admin-pw"
+               required>
         <small class="text-muted">Dieses Passwort wird zusammen mit dem Benutzernamen bei Veränderungen abgefragt.</small>
       </div>
     </div>
-    <button type="button" class="btn btn-primary btn-lg btn-block">Projekt Anlegen!</button>
+    <div *ngIf="currentError"
+         class="alert alert-danger"
+         role="alert">
+      <strong>Projekt konnte nicht angelegt werden!</strong> Der Server meldet das folgende Problem:
+      <pre [innerText]="currentError"></pre>
+    </div>
+    <button (click)="createProject()"
+            [disabled]="inProgress"
+            type="submit"
+            class="btn btn-primary btn-lg btn-block">
+      Projekt Anlegen!
+    </button>
   </form>
 </div>

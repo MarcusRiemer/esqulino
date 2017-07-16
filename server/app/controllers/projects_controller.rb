@@ -12,6 +12,7 @@ class ProjectsController < ApplicationController
     render json: projects
   end
 
+  # Creating a new project
   def create
     updated_project = ensure_request("ProjectCreationDescription", request.body.read)
 

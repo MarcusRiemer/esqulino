@@ -401,7 +401,7 @@ class Project
 
       password == plain_text_password
     rescue KeyError => e
-      raise AuthorizationError.new
+      false
     end
   end
 
