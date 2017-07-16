@@ -94,7 +94,6 @@ export class ProjectService {
                         console.log(error);
                     } 
                     
-
                     // Something has gone wrong, pass the error on to the subscribers
                     // of the project and hope they know what to do about it.
                     console.log(`Project Service: HTTP error with request for specific project ("${url}") => "${error.status}: ${error.statusText}"`);

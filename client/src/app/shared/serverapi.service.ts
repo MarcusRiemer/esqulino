@@ -44,6 +44,13 @@ export class ServerApiService {
     }
 
     /**
+     * Retrieves the url to create a new project
+     */
+    createProjectUrl() : string {
+        return (`${this._apiBaseUrl}/project`);
+    }
+
+    /**
      * Retrieves an URL that can be used to run requests
      * where the ID is transfered as part of the body.
      */

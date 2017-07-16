@@ -39,7 +39,7 @@
          height: 500px;
      }
 
-     .loading p {
+     .loading noscript {
          width: 400px;
      }
 
@@ -67,25 +67,11 @@
   </head>
 
   <body>
-    <div id="error-container"
-         class="container"
-         hidden>
-      <div class="alert alert-danger">
-        <p>
-          <strong>Fehler beim laden!</strong>
-          Leider konnte BlattWerkzeug nicht geladen werden ... Bitte wende dich mit der unten genannten Fehlermeldung an den Betreiber.
-        </p>
-        <pre id="error-message">Unbekannter Fehler!</pre>
-      </div>
-    </div>
-
     <sql-scratch id="app-root">
       <div class="loading">
         <div class="rainbow">BlattWerkzeug</div>
-        <noscript>
-          <p>
-            Leider ist für die Verwendung von BlattWerkzeug ohne aktivierte JavaScripte (noch?) nicht möglich. Auch bei aktiviertem JavaScript werden aber keine Skripte von den Googles, Facebooks und Microsofts dieser Welt angesaugt, versprochen!
-          </p>
+        <noscript class="alert alert-danger">
+          Leider ist für die Verwendung von BlattWerkzeug ohne <strong>aktivierte JavaScripte</strong> (noch?) nicht möglich. Auch bei aktiviertem JavaScript werden aber keine Skripte von den Googles, Facebooks und Microsofts dieser Welt angesaugt, versprochen!
         </noscript>
       </div>
     </sql-scratch>

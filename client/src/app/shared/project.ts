@@ -351,9 +351,12 @@ export class Project implements ApiVersion, Saveable {
             id : this.id,
             name : this.name,
             apiVersion : this.apiVersion,
-            description : this.description,
-            indexPageId : this.indexPageId,
+            description : this.description
         };
+
+        if (this._indexPageId) {
+            toReturn.indexPageId = this.indexPageId;
+        }
 
         if (this._currentDatabase) {
             toReturn.activeDatabase = this._currentDatabase;
