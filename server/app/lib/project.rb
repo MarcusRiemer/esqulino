@@ -461,30 +461,28 @@ def hash_password(plain_text_password)
 end
 
 # Available parameters during project creation.
-ProjectCreationParams = Struct.new(:id, :name, :description, :db_type, :public) do
-  def initialize(*)
-    super
-    
-    self.db_type ||= 'sqlite3'
-    self.public ||= false
+class ProjectCreationParams
+  attr_reader :id, :name, :db_type, :admin_name, :admin_password
+  
+  def initialize(params_hash)
+    @id = params_hash['id']
+    @name = params_hash['name']
+    @db_type = params_hash['dbType']
+
+    admin_hash = params_hash['admin']
+    if not admin_hash.nil? then
+      @admin_name = admin_hash['name']
+      @admin_password = admin_hash['password']
+    end
   end
 
-  def valid?
-    not self.name.nil? and not self.id.nil? and self.db_type == 'sqlite3'
-  end
-
-  def ensure_valid!
-    raise EsqulinoError.new("Missing project creation param: name") if self.name.nil?
-    raise EsqulinoError.new("Missing project creation param: id") if self.id.nil?
-    raise EsqulinoError.new("Invalid project creation param: db_type = \"#{self.db_type}\"") if self.db_type != 'sqlite3'
-  end
-
+  # Creates the basic projection description from these creation parameters
   def to_description
     {
       "name" => self.name,
-      "description" => self.description,
+      "description" => "",
       "apiVersion" => '4',
-      "public" => self.public,
+      "public" => false,
       "databases" => {},
       "users" => {}
     }
@@ -497,10 +495,8 @@ end
 # @param projects_dir[string] Path to the project storage directory
 # @param paroject_params[ProjectCreationParams] Parameters to use for creation
 def create_project(projects_dir, project_params)
-  # Ensure overall validity and uniqueness
-  project_params.ensure_valid!
+  # Ensure the project hasn't already been created
   project_path = File.join projects_dir, project_params.id
-
   if File.exists? project_path
     raise EsqulinoError.new("Project \"#{project_params.id}\" can't be created, it already exists")
   end
@@ -534,9 +530,9 @@ def create_project(projects_dir, project_params)
     project_description['activeDatabase'] = 'default'
 
     # Create a default user
-    project_description['users']['user'] = {
+    project_description['users'][project_params.admin_name] = {
       'type' => 'local',
-      'password' => hash_password('user')
+      'password' => hash_password(project_params.admin_password)
     }
 
     # Write down the actual project configuration

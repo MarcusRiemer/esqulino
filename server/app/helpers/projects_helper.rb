@@ -2,14 +2,18 @@ require_dependency 'project'
 
 # Allows access to projects and its resources in controllers
 module ProjectsHelper
-  include ActionController::HttpAuthentication::Basic 
+  include ActionController::HttpAuthentication::Basic
+
+  # The folder to load projects from
+  def projects_dir
+    Rails.application.config.sqlino[:projects_dir]
+  end
   
   # Loads the currently requested project
   def current_project(project_id = nil)
     project_id = project_id || params['project_id']
     
     if @current_project.nil? then
-      projects_dir = Rails.application.config.sqlino[:projects_dir]
       @current_project = Project.new File.join(projects_dir, project_id), false
 
       if self.has_basic_credentials? request

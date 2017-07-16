@@ -49,7 +49,7 @@ export interface ProjectDescription extends ProjectListDescription {
 /**
  * These parameters are required to create a new project.
  */
-export interface ProjectCreationDescription {
+export interface ProjectCreationDescription extends ApiVersion {
     id : string
     name: string
     admin : {
@@ -57,4 +57,5 @@ export interface ProjectCreationDescription {
         password : string
     }
     dbType : "sqlite3"
+    basedOn? : string
 }
