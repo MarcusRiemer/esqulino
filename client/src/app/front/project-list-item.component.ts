@@ -44,13 +44,13 @@ export class ProjectListItemComponent {
     	if (isPlatformBrowser(this._platformId)) {
             const currentHost = window.location.host;
             if (currentHost.startsWith("localhost")) {
-		return (currentHost);
+		        return (currentHost);
             } else {
-		return "blattzeug.de";
+		        return "blattzeug.de";
             }
-	} else {
-	    return "blattzeug.de";
-	}
+	    } else {
+	        return "blattzeug.de";
+	    }
     }
 
     /**
