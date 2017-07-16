@@ -13,7 +13,8 @@ class ActiveSupport::TestCase
     system "make -C #{git_root} test-reset", :out => File::NULL
   end
 
+  # Headers that are authenticating using the default "user:user" combination
   def auth_headers
     {"Authorization" => "Basic #{Base64.encode64('user:user')}"}
-  end
+  end  
 end

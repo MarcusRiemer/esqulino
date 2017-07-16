@@ -3,7 +3,7 @@ require 'test_helper'
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should get all public projects" do
     get '/api/project'
-    
+
     assert_response :success
     assert_equal "application/json", @response.content_type
 
@@ -21,13 +21,23 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     project = JSON.parse(@response.body)
     assert_equal 'db-sequence', project['name']
-    assert_equal 'db-sequence', project['id'] 
+    assert_equal 'db-sequence', project['id']
   end
 
   test "shouldn't have a preview image for db-sequence" do
     get '/api/project/db-sequence/preview'
 
     assert_response :not_found
+  end
+
+  test "auth required: updating db-sequence project" do
+    project_json = { }
+
+    post '/api/project/db-sequence',
+         as: :json,
+         params: project_json
+
+    assert_response :unauthorized
   end
 
   test "updating db-sequence project with partial information" do
@@ -70,14 +80,25 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :bad_request
   end
 
-  test "auth required: updating db-sequence project" do
-    project_json = { }
+  test "creating a new project" do
+    project_creation_json = {
+      "apiVersion" =>"4",
+      "id" => "test-id",
+      "name" => "test-name",
+      "admin" => {
+        "name" => "test-admin",
+        "password" => "test-pw",
+      },
+      "dbType" => "sqlite3"
+    }
 
-    post '/api/project/db-sequence',
+    post '/api/project',
          as: :json,
-         params: project_json
+         params: project_creation_json
 
-    assert_response :unauthorized
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    rollback_test_filesystem
   end
-
 end

@@ -1,22 +1,50 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "additionalProperties": false,
+    "definitions": {
+        "ApiVersionToken": {
+            "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
+            "enum": [
+                "1",
+                "2",
+                "3",
+                "4"
+            ],
+            "type": "string"
+        }
+    },
     "description": "These parameters are required to create a new project.",
     "properties": {
+        "admin": {
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "apiVersion": {
+            "$ref": "#/definitions/ApiVersionToken",
+            "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
+        },
+        "basedOn": {
+            "type": "string"
+        },
         "dbType": {
             "enum": [
                 "sqlite3"
             ],
             "type": "string"
         },
-        "description": {
+        "id": {
             "type": "string"
         },
         "name": {
             "type": "string"
-        },
-        "public": {
-            "type": "boolean"
         }
     },
     "type": "object"

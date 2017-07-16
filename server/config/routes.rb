@@ -32,7 +32,8 @@ Rails.application.routes.draw do
   # Second stop: The API for the editor
   scope '/api' do
     scope 'project' do
-      root controller: 'projects', action: :index
+      root via: [:get], controller: 'projects', action: :index
+      root via: [:post], controller: 'projects', action: :create
 
       # Everything that does something in the context of a specific project
       scope ':project_id' do
