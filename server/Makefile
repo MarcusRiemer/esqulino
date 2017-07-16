@@ -7,12 +7,12 @@ clean-deps : msg-pre-clean-deps
 
 # Running in production mode
 run : msg-pre-run-prod
-	RAILS_ENV=production ./bin/rails server
+	RAILS_ENV=production ./bin/rails server --port 9292
 
 # Running in development mode, this mode
 # attempts to reload changed code
 run-dev : msg-pre-run-dev 
-	./bin/rails server
+	./bin/rails server --port 9292
 
 # Running tests
 test : msg-pre-run-test
