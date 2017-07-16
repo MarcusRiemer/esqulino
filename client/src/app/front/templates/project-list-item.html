@@ -11,13 +11,11 @@
         class="card-title">{{ project.name }}</h2>
     <p class="card-text">{{ project.description }}</p>
     <a *ngIf="project.indexPageId"
-       [routerLink]="viewUrl"
-       [name]="project.name"
+       [href]="viewUrl"
        class="btn btn-primary btn-block btn-view-project">
       Ansehen
     </a>
     <a [routerLink]="['/editor/', project.id]"
-       [name]="project.id"
        class="btn btn-info btn-block btn-edit-project">
       Bearbeiten
     </a>
