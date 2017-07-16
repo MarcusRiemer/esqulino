@@ -3,16 +3,30 @@ development:
   data_dir: ../data/test
   client_dir: ../client/dist
   schema_dir: ../schema/json
+  project_domains: ["localhost.localdomain:9292"]
+  editor_domain: "localhost.localdomain:9292"
+  mail:
+    default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
+    admin: "Marcus@GurXite.de"
 
 test:
   name: "Blattwerkzeug (Test)"
   data_dir: ../data/test
   client_dir: ../client/dist
   schema_dir: ../schema/json
-
+  project_domains: ["localhost.localdomain:9292"]
+  editor_domain: "localhost.localdomain:9292"
+  mail:
+    default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
+    admin: "Marcus@GurXite.de"
+  
 production:
   name: "Blattwerkzeug"
   data_dir: ../data/dev
   client_dir: ../client/dist
   schema_dir: ../schema/json
   project_domains: [blattzeug.de]
+  editor_domain: "localhost.localdomain:9292"
+  mail:
+    default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
+    admin: "Marcus@GurXite.de"

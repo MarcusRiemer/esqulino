@@ -14,11 +14,17 @@ class ProjectsController < ApplicationController
 
   # Creating a new project
   def create
+    # Grab parameters to create the project
     updated_project = ensure_request("ProjectCreationDescription", request.body.read)
-
     creation_params = ProjectCreationParams.new updated_project
 
+    # Actually create the project
     create_project projects_dir, creation_params
+
+    # Tell people that are interested about this
+    email = ProjectMailer.created_admin(creation_params.id, creation_params.name)
+    email.deliver_later
+    
     render :json => { 'id' => creation_params.id }, :status => 200
   end
 
