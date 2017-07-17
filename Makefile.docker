@@ -1,0 +1,21 @@
+default:
+	@echo no default target
+
+run-dev: build-dev
+	docker-compose -f docker-compose.development.yml up -d
+
+stop-dev:
+	docker-compose -f docker-compose.development.yml down
+
+build-dev: build-server-dev build-client-dev
+	@echo built development images
+
+build-base:
+	docker-compose -f docker-compose.base.yml build base
+
+build-server-dev: build-base
+	docker-compose -f docker-compose.development.yml build server
+
+build-client-dev: build-base
+	docker-compose -f docker-compose.development.yml build client
+
