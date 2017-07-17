@@ -274,7 +274,7 @@ export class From extends Component {
      * @return True, if the given table is used in this query.
      */
     isUsingTable(tableName : string) {
-        return (this.existingJoinsAndInitial.find(j => j.tableName == tableName) != null);
+        return (this.joinsAndInitial.find(j => j.tableName == tableName) != null);
     }
 
     /**
