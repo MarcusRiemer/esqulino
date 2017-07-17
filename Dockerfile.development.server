@@ -1,0 +1,8 @@
+FROM esqulino-base
+LABEL name="esqulino development image"
+
+RUN pacman --noconfirm -Sy $SERVER_PACKAGES
+
+COPY entrypoint-development-server.sh /entrypoint.sh
+
+EXPOSE 9292

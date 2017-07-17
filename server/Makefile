@@ -11,8 +11,8 @@ run : msg-pre-run-prod
 
 # Running in development mode, this mode
 # attempts to reload changed code
-run-dev : msg-pre-run-dev 
-	./bin/rails server --port 9292
+run-dev : msg-pre-run-dev
+	./bin/rails server -b 0.0.0.0 --port 9292
 
 # Running tests
 test : msg-pre-run-test

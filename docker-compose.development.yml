@@ -2,25 +2,20 @@ version: "2"
 
 services:
   client:
-    image: esqulino:development
+    image: esqulino-client:development
     build:
-      dockerfile: Dockerfile.development
+      dockerfile: Dockerfile.development.client
       context: .
-    environment:
-      - TYPE=CLIENT
     volumes:
       - .:/srv/esqulino
 
   server:
-    image: esqulino:development
+    image: esqulino-server:development
     build:
-      dockerfile: Dockerfile.development
+      dockerfile: Dockerfile.development.server
       context: .
-    environment:
-      - TYPE=SERVER
-      - BUNDLE_BIN=/usr/bin/bundler
-      - RERUN_BIN=/srv/esqulino/server/vendor/bundle/ruby/2.4.0/bin/rerun
     ports:
-      - 9292
+      - 9292:9292
     volumes:
       - .:/srv/esqulino
+
