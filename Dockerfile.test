@@ -1,0 +1,18 @@
+FROM archimg/base-devel
+LABEL name="esqulino test image"
+
+ENV BUILD_PACKAGES="git" \
+    SERVER_PACKAGES="ruby ruby-ffi ruby-bundler graphviz" \
+    CLIENT_PACKAGES="nodejs npm" \
+    TEST_PACKAGES="chromium"
+
+WORKDIR /srv/esqulino
+
+RUN pacman --noconfirm -Sy $BUILD_PACKAGES $SERVER_PACKAGES $CLIENT_PACKAGES $TEST_PACKAGES
+RUN git clone https://bitbucket.org/marcusriemer/esqulino.git --depth 1 .
+RUN make install-deps dist
+
+ENV CHROME_BIN="chromium"
+
+RUN make -C server test
+RUN make -C client test
