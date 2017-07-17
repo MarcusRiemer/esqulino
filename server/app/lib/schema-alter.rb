@@ -15,6 +15,11 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
 
   # Get Table object out of Database
   table = database_describe_schema(sqlite_file_path).select{ |table| table.name == tableName}.first
+
+  if table.nil? then
+    raise EsqulinoError.new "Unknown table #{tableName}", 400, true
+  end
+  
   begin
     commandHolder.each do |cmd|
       index = cmd['index']
