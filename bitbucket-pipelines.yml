@@ -4,8 +4,14 @@ pipelines:
   default:
     - step:
         caches:
+          - node
+          - bundler-global
         script:
           - make install-deps
           - make dist
           - make -C server test
-          - TEST_SINGLE_RUN=true make test
+          - TEST_SINGLE_RUN=true make -C client test
+
+definitions:
+  caches:
+    bundler-global: /usr/lib/ruby/gems/
