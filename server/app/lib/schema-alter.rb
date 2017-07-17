@@ -112,7 +112,7 @@ def check_consistency(db)
   rescue SQLite3::SQLException => e
     return 1, e.message
   end
-    return 0
+  return 0
 end
 
 def remove_table(sqlite_file_path, tableName)
@@ -124,7 +124,7 @@ def remove_table(sqlite_file_path, tableName)
     db.close
     return 1, e.message
   end
-    return 0
+  return 0
 end
 
 def create_table(sqlite_file_path, newTable)
@@ -137,7 +137,7 @@ def create_table(sqlite_file_path, newTable)
     db.close
     return 1, e.message
   end
-    return 0
+  return 0
 end
 
 def rename_table(sqlite_file_path, from_tableName, to_tableName) 

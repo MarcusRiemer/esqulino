@@ -1,17 +1,17 @@
-import {Component}                      from '@angular/core';
+import { Component } from '@angular/core';
 
-import {ToolbarService}                 from './toolbar.service';
+import { ToolbarService } from './toolbar.service';
 
 @Component({
-    templateUrl: 'templates/toolbar.html',
-    selector : 'editor-toolbar',
+  templateUrl: 'templates/toolbar.html',
+  selector: 'editor-toolbar',
 })
 export class ToolbarComponent {
-    constructor (
-        private _toolbarService: ToolbarService
-    ) { }
+  constructor(
+    private _toolbarService: ToolbarService
+  ) { }
 
-    get toolbarService() {
-        return (this._toolbarService);
-    }
+  get toolbarService() {
+    return (this._toolbarService);
+  }
 }

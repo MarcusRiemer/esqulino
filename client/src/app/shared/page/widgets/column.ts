@@ -1,87 +1,87 @@
-import {Page, ColumnDescription}        from '../page'
+import { Page, ColumnDescription } from '../page'
 
-import {NumericalParameter}             from './parameters'
-import {loadWidget}                     from './widget-loader'
+import { NumericalParameter } from './parameters'
+import { loadWidget } from './widget-loader'
 import {
-    WidgetBase, WidgetDescription, HostingWidget, WidgetHost
-}  from './widget-base'
+  WidgetBase, WidgetDescription, HostingWidget, WidgetHost
+} from './widget-base'
 
-export {ColumnDescription}
+export { ColumnDescription }
 
 /**
  * Columns live "inside" a row and act as "table-cells" for content. They
  * usually have no appearance of their and provide nothing but the layout.
  */
 export class Column extends HostingWidget {
-    private _width : number;
+  private _width: number;
 
-    private _widgets : WidgetBase[];
+  private _widgets: WidgetBase[];
 
-    constructor(desc : ColumnDescription, parent? : WidgetHost) {
-        super({
-            type: "column",
-            category: "layout",
-            isEmpty: false,
-            parameters : [
-                new NumericalParameter({
-                    name: "width",
-                    getter: () => this._width,
-                    setter: (v) => this._width = v
-                }, 1, 12)
-            ]
-        }, parent);
-        
-        this._width = desc.width;
-        this._widgets = desc.widgets.map( (wiDesc) => loadWidget(wiDesc, this) );
-    }
+  constructor(desc: ColumnDescription, parent?: WidgetHost) {
+    super({
+      type: "column",
+      category: "layout",
+      isEmpty: false,
+      parameters: [
+        new NumericalParameter({
+          name: "width",
+          getter: () => this._width,
+          setter: (v) => this._width = v
+        }, 1, 12)
+      ]
+    }, parent);
 
-    static get emptyDescription() : ColumnDescription {
-        return ({
-            type : "column",
-            widgets : [],
-            width : 12
-        });
-    }
+    this._width = desc.width;
+    this._widgets = desc.widgets.map((wiDesc) => loadWidget(wiDesc, this));
+  }
 
-    /**
-     * @return The width of this row
-     */
-    get width() {
-        return (this._width);
-    }
+  static get emptyDescription(): ColumnDescription {
+    return ({
+      type: "column",
+      widgets: [],
+      width: 12
+    });
+  }
 
-    set width(value : number) {
-        this._width = value;
-        this.fireModelChange();
-    }
+  /**
+   * @return The width of this row
+   */
+  get width() {
+    return (this._width);
+  }
 
-    /**
-     * @return The widgets for this cell
-     */
-    get children() {
-        return (this._widgets);
-    }
+  set width(value: number) {
+    this._width = value;
+    this.fireModelChange();
+  }
 
-    /**
-     * Accepts anything that isn't a column itself.
-     */
-    acceptsWidget(desc : WidgetDescription) : boolean {
-        return (desc.type != this.type);
-    }
+  /**
+   * @return The widgets for this cell
+   */
+  get children() {
+    return (this._widgets);
+  }
 
-    /**
-     * @return The CSS classes that should be applied when
-     *         rendering this column for the editor preview.
-     */
-    get columnClasses() : [string] {
-        return ([`col-md-${this._width}`]);
-    }
+  /**
+   * Accepts anything that isn't a column itself.
+   */
+  acceptsWidget(desc: WidgetDescription): boolean {
+    return (desc.type != this.type);
+  }
 
-    protected toModelImpl() : ColumnDescription {
-        return ({
-            type : "column",
-            width : this._width,
-            widgets : this._widgets.map(w => w.toModel())
-        });
-    }
+  /**
+   * @return The CSS classes that should be applied when
+   *         rendering this column for the editor preview.
+   */
+  get columnClasses(): [string] {
+    return ([`col-md-${this._width}`]);
+  }
+
+  protected toModelImpl(): ColumnDescription {
+    return ({
+      type: "column",
+      width: this._width,
+      widgets: this._widgets.map(w => w.toModel())
+    });
+  }
 }

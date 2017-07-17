@@ -1,7 +1,7 @@
 <div class="card schema-sidebar">
   <div class="card-block">
     <div class="stack">
-	  <span *ngFor="let type of availableColumnTypes"
+	    <span *ngFor="let type of availableColumnTypes"
             class="badge badge-default item">
         <span class="fa fa-columns" aria-hidden="true"></span>
         {{ type }}
@@ -9,10 +9,10 @@
     </div>
   </div>
   <div class="card-block">
-	<span class="badge badge-pill badge-primary item">
+	  <span class="badge badge-pill badge-primary item">
       <span class="fa fa-key" aria-hidden="true"></span>
     </span>
-	<span class="badge badge-pill badge-default item">
+	  <span class="badge badge-pill badge-default item">
       Not Null
     </span>
   </div>
@@ -20,12 +20,12 @@
   <div *ngFor="let tab of projectTables"
        class="card-block">
     <h4>
-	  <span class="badge badge-success"><span class="fa fa-table" aria-hidden="true"></span>{{tab.name}}</span>
-	  <div>
-	    <h5>
-		  <span *ngFor="let column of tab.columns" class="badge badge-pill badge-info">{{column.name}}</span>
-	    </h5>
-	  </div>
+	    <span class="badge badge-success"><span class="fa fa-table" aria-hidden="true"></span>{{tab.name}}</span>
+	    <div>
+	      <h5>
+		      <span *ngFor="let column of tab.columns" class="badge badge-pill badge-info">{{column.name}}</span>
+	      </h5>
+	    </div>
     </h4>
   </div>
 </div>

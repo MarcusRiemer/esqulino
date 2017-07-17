@@ -1,15 +1,15 @@
 import {
-    ProjectResourceDescription, CURRENT_API_VERSION
+  ProjectResourceDescription, CURRENT_API_VERSION
 } from '../resource.description'
 
-export {CURRENT_API_VERSION}
+export { CURRENT_API_VERSION }
 
 /**
  * Actions specify the intent, usually along with some parameters.
  */
 export interface ActionDescription {
-    // Discriminator value for inheritance
-    type : string
+  // Discriminator value for inheritance
+  type: string
 }
 
 /**
@@ -21,41 +21,41 @@ export interface ActionDescription {
  * description.
  */
 export interface NavigateActionDescription extends ActionDescription {
-    type : "navigate"
+  type: "navigate"
 
-    // If this link targets an internal page, this describes the page
-    // we want to go to.
-    internal? : {
-        pageId : string
-    }
+  // If this link targets an internal page, this describes the page
+  // we want to go to.
+  internal?: {
+    pageId: string
+  }
 
-    // If this link targets an external page we don't make any
-    // addtional assumptions.
-    external? : string
+  // If this link targets an external page we don't make any
+  // addtional assumptions.
+  external?: string
 }
 
 /**
  * Describes a input widget. These are usually text-orientated.
  */
 export interface InputDescription extends WidgetDescription {
-    type : "input"
+  type: "input"
 
-    // The <input> "type" attribute. Do note that <input type="hidden">
-    // is modelled with a distinct type, because it does not share many
-    // properties with the kind of input we are talking about here.
-    inputType : string
+  // The <input> "type" attribute. Do note that <input type="hidden">
+  // is modelled with a distinct type, because it does not share many
+  // properties with the kind of input we are talking about here.
+  inputType: string
 
-    // The <label> for this input
-    caption : string
+  // The <label> for this input
+  caption: string
 
-    // A description text for the end-user
-    description : string
+  // A description text for the end-user
+  description: string
 
-    // The parameter this widget provides
-    outParamName : string
+  // The parameter this widget provides
+  outParamName: string
 
-    // Is it mandatory to fill in this field?
-    required? : boolean
+  // Is it mandatory to fill in this field?
+  required?: boolean
 }
 
 /**
@@ -63,35 +63,35 @@ export interface InputDescription extends WidgetDescription {
  * on some kind of serverside state.
  */
 export interface HiddenInputDescription extends WidgetDescription {
-    type : "hidden"
+  type: "hidden"
 
-    // The parameter this widget provides
-    outParamName : string
+  // The parameter this widget provides
+  outParamName: string
 
-    // The value this field provides
-    value : string;
+  // The value this field provides
+  value: string;
 }
 
 /**
  * Describes a <select> element with its <option>-nodes.
  */
 export interface SelectDescription extends WidgetDescription {
-    type : "select"
-    
-    // The <label> for this input
-    caption : string
+  type: "select"
 
-    // The parameter this widget provides
-    outParamName : string
+  // The <label> for this input
+  caption: string
 
-    // The query that is used to generate the <options>
-    queryRefName? : string
+  // The parameter this widget provides
+  outParamName: string
 
-    // Called for every <option> to determine its value 
-    optionValueExpression? : string
+  // The query that is used to generate the <options>
+  queryRefName?: string
 
-    // Called for every <option> to determine its text 
-    optionTextExpression? : string
+  // Called for every <option> to determine its value 
+  optionValueExpression?: string
+
+  // Called for every <option> to determine its text 
+  optionTextExpression?: string
 }
 
 /**
@@ -99,64 +99,64 @@ export interface SelectDescription extends WidgetDescription {
  * plugin action.
  */
 export interface ButtonDescription extends WidgetDescription {
-    type : "button"
+  type: "button"
 
-    // The text on the button
-    text : string
+  // The text on the button
+  text: string
 
-    // What query should be executed if the user presses the button?
-    query? : QueryReferenceDescription
+  // What query should be executed if the user presses the button?
+  query?: QueryReferenceDescription
 
-    // What page should be navigated to if the user presses the button?
-    navigate? : NavigateActionDescription
+  // What page should be navigated to if the user presses the button?
+  navigate?: NavigateActionDescription
 }
 
 /**
  * Describes a HTML form
  */
 export interface FormDescription extends WidgetDescription {
-    type : "form"
+  type: "form"
 
-    children : WidgetDescription[]
+  children: WidgetDescription[]
 }
 
 /**
  * Describes another page the user would possibly like to navigate to.
  */
 export interface LinkDescription extends WidgetDescription {
-    type : "link"
+  type: "link"
 
-    // The text on the link
-    text : string
+  // The text on the link
+  text: string
 
-    // The action to perform
-    action : NavigateActionDescription
+  // The action to perform
+  action: NavigateActionDescription
 }
 
 /**
  * Describes a table that shows the results of a query.
  */
 export interface QueryTableDescription {
-    type: "query-table"
-    queryRefName? : string
-    columns : string[]
+  type: "query-table"
+  queryRefName?: string
+  columns: string[]
 }
 
 /**
  * Describes a heading widget.
  */
 export interface HeadingDescription extends WidgetDescription {
-    type : "heading"
-    text : string
-    level : number
+  type: "heading"
+  text: string
+  level: number
 }
 
 /**
  * Describes a paragraph widget.
  */
 export interface ParagraphDescription extends WidgetDescription {
-    type : "paragraph"
-    text : string
+  type: "paragraph"
+  text: string
 }
 
 /*
@@ -165,33 +165,33 @@ export interface ParagraphDescription extends WidgetDescription {
  * html is valid or not.
  */
 export interface EmbeddedHtmlDescription extends WidgetDescription {
-    type : "embedded-html",
-    html : string
+  type: "embedded-html",
+  html: string
 }
 
 /**
  * Describes a column that can host certain widgets
  */
 export interface ColumnDescription extends WidgetDescription {
-    type : "column"
-    width : number
-    widgets : WidgetDescription[]
+  type: "column"
+  width: number
+  widgets: WidgetDescription[]
 }
 
 /**
  * Describes a row that can host certain cells.
  */
 export interface RowDescription extends WidgetDescription {
-    type : "row"
-    columns : ColumnDescription[]
+  type: "row"
+  columns: ColumnDescription[]
 }
 
 /**
  * The body of an HTML page, will only appear once in a page.
  */
 export interface BodyDescription extends WidgetDescription {
-    type : "body"
-    children : WidgetDescription[]
+  type: "body"
+  children: WidgetDescription[]
 }
 
 /**
@@ -208,9 +208,9 @@ export interface BodyDescription extends WidgetDescription {
  * @TJS-additionalProperties true
  */
 export interface WidgetDescription {
-    // Discriminator value
-    type : string
-    [additional: string]: any
+  // Discriminator value
+  type: string
+  [additional: string]: any
 }
 
 /**
@@ -220,8 +220,8 @@ export interface WidgetDescription {
  * @TJS-additionalProperties true
  */
 export interface ValueReferenceDescription {
-    // Discriminator value
-    type : "column" | "query"
+  // Discriminator value
+  type: "column" | "query"
 }
 
 /**
@@ -229,13 +229,13 @@ export interface ValueReferenceDescription {
  * agnostic of the query it references.
  */
 export interface ColumnReferenceDescription extends ValueReferenceDescription {
-    type : "column"
+  type: "column"
 
-    // The query variable this column references
-    variableName : string
+  // The query variable this column references
+  variableName: string
 
-    // The name of the column
-    columnName : string
+  // The name of the column
+  columnName: string
 }
 
 /**
@@ -244,42 +244,42 @@ export interface ColumnReferenceDescription extends ValueReferenceDescription {
  * multiple times on a single page.
  */
 export interface QueryReferenceDescription extends ValueReferenceDescription {
-    type : "query" 
+  type: "query"
 
-    // The id of the query this reference points to
-    queryId? : string
+  // The id of the query this reference points to
+  queryId?: string
 
-    // The user-defined name of the reference. If no name is given, the
-    // name should be the same as the name of the referenced query.
-    name? : string
+  // The user-defined name of the reference. If no name is given, the
+  // name should be the same as the name of the referenced query.
+  name?: string
 }
 
 /**
  * A parameter that is required to render a page.
  */
 export interface PageParameterDescription {
-    name : string
+  name: string
 }
 
 /**
  * Describes a page as a whole
  */
 export interface PageDescription extends ProjectResourceDescription {
-    /**
-     * The host for all widgets that are part of this page.
-     */
-    body? : BodyDescription
+  /**
+   * The host for all widgets that are part of this page.
+   */
+  body?: BodyDescription
 
-    /**
-     * IDs of queries that are referenced in this page. Only
-     * these queries provide additional DB information that can
-     * be used on this page.
-     */
-    referencedQueries? : QueryReferenceDescription[]
+  /**
+   * IDs of queries that are referenced in this page. Only
+   * these queries provide additional DB information that can
+   * be used on this page.
+   */
+  referencedQueries?: QueryReferenceDescription[]
 
-    /**
-     * All parameters that are required to render this page. These
-     * are usually satisfied via GET parameters
-     */
-    parameters? : PageParameterDescription[]
+  /**
+   * All parameters that are required to render this page. These
+   * are usually satisfied via GET parameters
+   */
+  parameters?: PageParameterDescription[]
 }

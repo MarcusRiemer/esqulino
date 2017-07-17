@@ -1,14 +1,14 @@
-import {Injectable, Type}            from '@angular/core'
+import { Injectable, Type } from '@angular/core'
 
-import {Observable}                  from 'rxjs/Observable'
-import {ReplaySubject}               from 'rxjs/ReplaySubject'
+import { Observable } from 'rxjs/Observable'
+import { ReplaySubject } from 'rxjs/ReplaySubject'
 
 /**
  * Allows to register a sidebar component
  */
 export interface SidebarType {
-    typeId : string,
-    componentType : Type<any>
+  typeId: string,
+  componentType: Type<any>
 }
 
 /**
@@ -19,28 +19,28 @@ export interface SidebarType {
 @Injectable()
 export class RegistrationService {
 
-    // These types are waiting to be registered
-    private _sidebarTypes : ReplaySubject<SidebarType>;
+  // These types are waiting to be registered
+  private _sidebarTypes: ReplaySubject<SidebarType>;
 
-    constructor() {
-        this._sidebarTypes = new ReplaySubject<SidebarType>();
-    }
+  constructor() {
+    this._sidebarTypes = new ReplaySubject<SidebarType>();
+  }
 
-    /**
-     * Registers a new sidebar.
-     */
-    registerSidebarType(reg : SidebarType) {
-        console.log(`Registered sidebar with id "${reg.typeId}"`);
-        
-        this._sidebarTypes.next(reg);
-    }
+  /**
+   * Registers a new sidebar.
+   */
+  registerSidebarType(reg: SidebarType) {
+    console.log(`Registered sidebar with id "${reg.typeId}"`);
 
-    /**
-     * @return All available sidebar types, no matter when they
-     *         were registered.
-     */
-    get sidebarTypes() : Observable<SidebarType> {
-        return (this._sidebarTypes);
-    }
+    this._sidebarTypes.next(reg);
+  }
+
+  /**
+   * @return All available sidebar types, no matter when they
+   *         were registered.
+   */
+  get sidebarTypes(): Observable<SidebarType> {
+    return (this._sidebarTypes);
+  }
 
 }

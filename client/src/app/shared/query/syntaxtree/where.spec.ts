@@ -1,114 +1,114 @@
-import * as Model                                from '../description'
-import * as SyntaxTree                           from '../syntaxtree'
+import * as Model from '../description'
+import * as SyntaxTree from '../syntaxtree'
 
 describe('WHERE', () => {
-    it('with a constant truthy value', () => {
-        const model : Model.Where = {
-            first : {
-                constant : { value : "1" }
-            }
+  it('with a constant truthy value', () => {
+    const model: Model.Where = {
+      first: {
+        constant: { value: "1" }
+      }
+    }
+
+    const w = new SyntaxTree.Where(model, null);
+
+    expect(w.subsequent.length).toEqual(0);
+    expect(w.toSqlString()).toEqual("WHERE 1");
+    expect(w.toModel()).toEqual(model);
+  });
+
+  it('with two epxressions', () => {
+    const model: Model.Where = {
+      first: {
+        constant: { value: "1" }
+      },
+      following: [
+        {
+          expr: { constant: { value: "2" } },
+          logical: "OR"
         }
+      ]
+    }
 
-        const w = new SyntaxTree.Where(model, null);
+    const w = new SyntaxTree.Where(model, null);
 
-        expect(w.subsequent.length).toEqual(0);
-        expect(w.toSqlString()).toEqual("WHERE 1");
-        expect(w.toModel()).toEqual(model);
-    });
+    expect(w.subsequent.length).toEqual(1);
+    expect(w.toSqlString()).toEqual("WHERE 1\n\tOR 2");
+    expect(w.toModel()).toEqual(model);
+  });
 
-    it('with two epxressions', () => {
-        const model : Model.Where = {
-            first : {
-                constant : { value : "1" }
-            },
-            following : [
-                {
-                    expr : { constant : { value : "2" } },
-                    logical : "OR"
-                }
-            ]
+  it('removing first', () => {
+    const model: Model.Where = {
+      first: {
+        constant: { value: "1" }
+      },
+      following: [
+        {
+          expr: { constant: { value: "2" } },
+          logical: "OR"
         }
+      ]
+    }
 
-        const w = new SyntaxTree.Where(model, null);
+    const w = new SyntaxTree.Where(model, null);
 
-        expect(w.subsequent.length).toEqual(1);
-        expect(w.toSqlString()).toEqual("WHERE 1\n\tOR 2");
-        expect(w.toModel()).toEqual(model);
-    });
+    let hasChanged = false;
+    w.modelChanged.subscribe(_ => hasChanged = true);
 
-    it('removing first', () => {
-        const model : Model.Where = {
-            first : {
-                constant : { value : "1" }
-            },
-            following : [
-                {
-                    expr : { constant : { value : "2" } },
-                    logical : "OR"
-                }
-            ]
+    w.removeChild(w.first);
+
+    expect(w.subsequent.length).toEqual(0);
+    expect(w.toSqlString()).toEqual("WHERE 2");
+
+    expect(hasChanged).toEqual(true, "Change not fired");
+  });
+
+  it('removing first subsequent', () => {
+    const model: Model.Where = {
+      first: {
+        constant: { value: "1" }
+      },
+      following: [
+        {
+          expr: { constant: { value: "2" } },
+          logical: "OR"
         }
+      ]
+    }
 
-        const w = new SyntaxTree.Where(model, null);
+    const w = new SyntaxTree.Where(model, null);
 
-        let hasChanged = false;
-        w.modelChanged.subscribe(_ => hasChanged = true);
+    let hasChanged = false;
+    w.modelChanged.subscribe(_ => hasChanged = true);
 
-        w.removeChild(w.first);
+    w.subsequent[0].removeSelf();
 
-        expect(w.subsequent.length).toEqual(0);
-        expect(w.toSqlString()).toEqual("WHERE 2");
+    expect(w.subsequent.length).toEqual(0);
+    expect(w.toSqlString()).toEqual("WHERE 1");
+    expect(hasChanged).toEqual(true, "Change not fired");
+  });
 
-        expect(hasChanged).toEqual(true, "Change not fired");
-    });
-
-    it('removing first subsequent', () => {
-        const model : Model.Where = {
-            first : {
-                constant : { value : "1" }
-            },
-            following : [
-                {
-                    expr : { constant : { value : "2" } },
-                    logical : "OR"
-                }
-            ]
+  it('adding a third condition', () => {
+    const model: Model.Where = {
+      first: {
+        constant: { value: "1" }
+      },
+      following: [
+        {
+          expr: { constant: { value: "2" } },
+          logical: "OR"
         }
+      ]
+    }
 
-        const w = new SyntaxTree.Where(model, null);
-        
-        let hasChanged = false;
-        w.modelChanged.subscribe(_ => hasChanged = true);
+    let w = new SyntaxTree.Where(model, null);
 
-        w.subsequent[0].removeSelf();
+    let hasChanged = false;
+    w.modelChanged.subscribe(_ => hasChanged = true);
 
-        expect(w.subsequent.length).toEqual(0);
-        expect(w.toSqlString()).toEqual("WHERE 1");
-        expect(hasChanged).toEqual(true, "Change not fired");
-    });
+    w.appendExpression({ constant: { type: "INTEGER", value: "3" } }, "OR");
 
-    it('adding a third condition', () => {
-        const model : Model.Where = {
-            first : {
-                constant : { value : "1" }
-            },
-            following : [
-                {
-                    expr : { constant : { value : "2" } },
-                    logical : "OR"
-                }
-            ]
-        }
-
-        let w = new SyntaxTree.Where(model, null);
-
-        let hasChanged = false;
-        w.modelChanged.subscribe(_ => hasChanged = true);
-        
-        w.appendExpression({ constant : { type : "INTEGER", value : "3" } }, "OR");
-
-        expect(w.subsequent.length).toEqual(2);
-        expect(w.toSqlString()).toEqual("WHERE 1\n\tOR 2\n\tOR 3");
-        expect(hasChanged).toEqual(true, "Change not fired");
-    });
+    expect(w.subsequent.length).toEqual(2);
+    expect(w.toSqlString()).toEqual("WHERE 1\n\tOR 2\n\tOR 3");
+    expect(hasChanged).toEqual(true, "Change not fired");
+  });
 });

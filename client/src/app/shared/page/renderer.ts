@@ -1,4 +1,4 @@
-import {Page}                  from './page'
+import { Page } from './page'
 
 /**
  * Renders the abstract page representation to something that could be processed
@@ -8,30 +8,30 @@ import {Page}                  from './page'
  */
 export abstract class Renderer {
 
-    private _type : string;
+  private _type: string;
 
-    constructor(typeId : string) {
-        this._type = typeId;
-    }
+  constructor(typeId: string) {
+    this._type = typeId;
+  }
 
-    /**
-     * @return A type identifier for this renderer
-     */
-    get type() {
-        return (this._type);
-    }
-    
-    /**
-     * Attempt to render the given page.
-     */
-    renderPage(page : Page) : string {
-        return (this.renderImpl(page));
-    }
-    
-    /**
-     * The actual rendering process that needs to be implemented by
-     * the deriving classes.
-     */
-    protected abstract renderImpl(page : Page) : string;
+  /**
+   * @return A type identifier for this renderer
+   */
+  get type() {
+    return (this._type);
+  }
+
+  /**
+   * Attempt to render the given page.
+   */
+  renderPage(page: Page): string {
+    return (this.renderImpl(page));
+  }
+
+  /**
+   * The actual rendering process that needs to be implemented by
+   * the deriving classes.
+   */
+  protected abstract renderImpl(page: Page): string;
 
 }

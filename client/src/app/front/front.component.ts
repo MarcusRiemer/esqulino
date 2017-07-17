@@ -1,7 +1,7 @@
-import {Component, OnInit}              from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 
 @Component({
-    templateUrl: 'templates/index.html',
+  templateUrl: 'templates/index.html',
 })
 export class FrontComponent {
 

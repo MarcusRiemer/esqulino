@@ -1,4 +1,4 @@
-import {OpaqueToken} from '@angular/core'
+import { OpaqueToken } from '@angular/core'
 
 /**
  * This token is used to give widget-editing components access to

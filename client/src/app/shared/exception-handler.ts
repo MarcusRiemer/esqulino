@@ -1,8 +1,8 @@
-import {Injectable, ErrorHandler}                     from '@angular/core'
+import { Injectable, ErrorHandler } from '@angular/core'
 
-import {FlashService}                                 from './flash.service'
+import { FlashService } from './flash.service'
 
-declare var Notification : any;
+declare var Notification: any;
 
 // This file is an attempt to somehow get hold of exceptions that
 // occur. But at the moment it doesn't seem that there is a
@@ -34,7 +34,7 @@ declare var Notification : any;
 //         super.call(exception, stackTrace, reason);
 
 //         const msg = "Internal Error, check the console!";
-        
+
 //         if (Notification.permission === "granted") {
 //             // If it's okay let's create a notification
 //             var notification = new Notification(msg);

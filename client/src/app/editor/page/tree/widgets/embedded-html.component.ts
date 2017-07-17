@@ -1,16 +1,16 @@
-import {Component, Inject, OnInit} from '@angular/core'
+import { Component, Inject, OnInit } from '@angular/core'
 
-import {EmbeddedHtml}              from '../../../../shared/page/widgets/index'
+import { EmbeddedHtml } from '../../../../shared/page/widgets/index'
 
-import {WIDGET_MODEL_TOKEN}        from '../../../editor.token'
+import { WIDGET_MODEL_TOKEN } from '../../../editor.token'
 
-export {EmbeddedHtml}
+export { EmbeddedHtml }
 
 @Component({
-    templateUrl: 'templates/embedded-html.html',
+  templateUrl: 'templates/embedded-html.html',
 })
-export class EmbeddedHtmlComponent {    
-    constructor(@Inject(WIDGET_MODEL_TOKEN) public model : EmbeddedHtml) {
+export class EmbeddedHtmlComponent {
+  constructor( @Inject(WIDGET_MODEL_TOKEN) public model: EmbeddedHtml) {
 
-    }
+  }
 }

@@ -1,14 +1,14 @@
-import {Subject}                                     from 'rxjs/Subject'
-import {Observable}                                  from 'rxjs/Observable'
+import { Subject } from 'rxjs/Subject'
+import { Observable } from 'rxjs/Observable'
 
-import {TableDescription}                            from '../../schema'
-import {ModelObservable}                             from '../../interfaces'
+import { TableDescription } from '../../schema'
+import { ModelObservable } from '../../interfaces'
 
-import * as Model                                    from '../description'
-import {Query}                                       from '../base'
-import {Validateable, ValidationResult}              from '../validation'
+import * as Model from '../description'
+import { Query } from '../base'
+import { Validateable, ValidationResult } from '../validation'
 
-import { Expression, loadExpression }                from './expression'
+import { Expression, loadExpression } from './expression'
 
 export { Expression, loadExpression }
 
@@ -18,11 +18,11 @@ export { Expression, loadExpression }
  */
 export interface Removable {
 
-    /**
-     * Remove this instance from its parent. It is the job of the parent
-     * to decide how to fill the void.
-     */
-    removeSelf() : void;
+  /**
+   * Remove this instance from its parent. It is the job of the parent
+   * to decide how to fill the void.
+   */
+  removeSelf(): void;
 }
 
 /**
@@ -31,43 +31,43 @@ export interface Removable {
  * non-functional like a comment.
  */
 export interface RemovableHost {
-    /**
-     * Removes a child of this expression. This is used by
-     * outside components, which need a way to change the structure
-     * of a query whilst leaving the "root pointer" intact.
-     *
-     * This method may replace the formerChild with a MissingExpression
-     * or recursively remove itself.
-     *
-     * @param formerChild The instance that previously was a child
-     */
-    removeChild(formerChild : Removable) : void;
+  /**
+   * Removes a child of this expression. This is used by
+   * outside components, which need a way to change the structure
+   * of a query whilst leaving the "root pointer" intact.
+   *
+   * This method may replace the formerChild with a MissingExpression
+   * or recursively remove itself.
+   *
+   * @param formerChild The instance that previously was a child
+   */
+  removeChild(formerChild: Removable): void;
 }
 
 /**
  * Something that can reason about it's place in the AST.
  */
 export interface Locateable {
-    /**
-     * Calculates a human-readable representation of the location
-     * where the expression can be found.
-     */
-    getLocationDescription() : string;
+  /**
+   * Calculates a human-readable representation of the location
+   * where the expression can be found.
+   */
+  getLocationDescription(): string;
 }
 
 /**
  * Something that is able to host an expression.
  */
 export interface ExpressionParent extends RemovableHost, Locateable {
-    /**
-     * Replaces a child of this expression. This is used by
-     * outside components, which need a way to change the structure
-     * of a query whilst leaving the "root pointer" intact.
-     *
-     * @param formerChild The instance that previously was a child
-     * @param newChild    The instance that should take the place
-     */
-    replaceChild(formerChild : ExpressionParent, newChild : ExpressionParent) : void;
+  /**
+   * Replaces a child of this expression. This is used by
+   * outside components, which need a way to change the structure
+   * of a query whilst leaving the "root pointer" intact.
+   *
+   * @param formerChild The instance that previously was a child
+   * @param newChild    The instance that should take the place
+   */
+  replaceChild(formerChild: ExpressionParent, newChild: ExpressionParent): void;
 }
 
 /**
@@ -77,67 +77,67 @@ export interface ExpressionParent extends RemovableHost, Locateable {
  * because this eases development for beginners.
  */
 export abstract class Component implements ModelObservable<Component>, Removable, Validateable {
-    // The query this component is part of
-    protected _query : Query;
+  // The query this component is part of
+  protected _query: Query;
 
-    // Fired when the internal model has changed
-    private _modelChanged = new Subject<Component>();
+  // Fired when the internal model has changed
+  private _modelChanged = new Subject<Component>();
 
-    constructor(query : Query) {
-        this._query = query;
+  constructor(query: Query) {
+    this._query = query;
 
-        if (query) {
-            this.modelChanged.subscribe(_ => query.markSaveRequired())
-        }
+    if (query) {
+      this.modelChanged.subscribe(_ => query.markSaveRequired())
     }
-    
-    /**
-     * Fired when something about this model has changed.
-     */
-    get modelChanged() : Observable<Component> {
-        return (this._modelChanged);
-    }
+  }
 
-    /**
-     * Allows implementing classes to signal that their model has changed.
-     */
-    fireModelChange() {
-        this._modelChanged.next(this);
-    }
+  /**
+   * Fired when something about this model has changed.
+   */
+  get modelChanged(): Observable<Component> {
+    return (this._modelChanged);
+  }
 
-    /**
-     * @return A validation report
-     */
-    abstract validate(schema : any) : ValidationResult;
+  /**
+   * Allows implementing classes to signal that their model has changed.
+   */
+  fireModelChange() {
+    this._modelChanged.next(this);
+  }
 
-    /**
-     * @return The query this component belongs to.
-     */
-    get query() : Query {
-        return (this._query);
-    }
+  /**
+   * @return A validation report
+   */
+  abstract validate(schema: any): ValidationResult;
 
-    /**
-     * Removes this component from the parenting query.
-     */
-    removeSelf() : void {
-        this._query.removeChild(this);
-    }
+  /**
+   * @return The query this component belongs to.
+   */
+  get query(): Query {
+    return (this._query);
+  }
 
-    /**
-     * Retrieve all expression-leaves of this component
-     */
-    abstract getLeaves() : Expression[];
-    
-    /**
-     * @return SQL String representation
-     */
-    abstract toSqlString() : string;
+  /**
+   * Removes this component from the parenting query.
+   */
+  removeSelf(): void {
+    this._query.removeChild(this);
+  }
 
-    /**
-     * @return JSON model representation
-     */
-    abstract toModel() : any;
+  /**
+   * Retrieve all expression-leaves of this component
+   */
+  abstract getLeaves(): Expression[];
+
+  /**
+   * @return SQL String representation
+   */
+  abstract toSqlString(): string;
+
+  /**
+   * @return JSON model representation
+   */
+  abstract toModel(): any;
 }
 
 

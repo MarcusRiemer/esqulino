@@ -1,4 +1,4 @@
-import {Observable}                           from 'rxjs/Observable'
+import { Observable } from 'rxjs/Observable'
 
 /**
  * Some changes to resources require updates to the visual representation,
@@ -11,10 +11,10 @@ import {Observable}                           from 'rxjs/Observable'
  * convey the change of an internal state.
  */
 export interface Invalidateable {
-    /**
-     * Signals that the visual representation of this resource should be updated.
-     */
-    invalidate() : void;
+  /**
+   * Signals that the visual representation of this resource should be updated.
+   */
+  invalidate(): void;
 }
 
 /**
@@ -22,21 +22,21 @@ export interface Invalidateable {
  * internal model, this is the interface to implement.
  */
 export interface ModelObservable<T> {
-    /**
-     * Fired when something about this model has changed.
-     */
-    modelChanged: Observable<T>;
+  /**
+   * Fired when something about this model has changed.
+   */
+  modelChanged: Observable<T>;
 }
 
 /**
  * The event that is fired if the save-state for something has changed.
  */
 export interface SaveStateEvent<T extends Saveable> {
-    // The new state
-    saveRequired : boolean
+  // The new state
+  saveRequired: boolean
 
-    // The affected resource
-    resource : T
+  // The affected resource
+  resource: T
 }
 
 /**
@@ -44,27 +44,27 @@ export interface SaveStateEvent<T extends Saveable> {
  * interface effectively wraps an observable boolean.
  */
 export interface Saveable {
-    /**
-     * Called to signal that this resource requires saving. Per default this should
-     * also trigger an invalidation, at least if the concept of "Invalidation" is
-     * known to the implementing class.
-     */
-    markSaveRequired() : void;
+  /**
+   * Called to signal that this resource requires saving. Per default this should
+   * also trigger an invalidation, at least if the concept of "Invalidation" is
+   * known to the implementing class.
+   */
+  markSaveRequired(): void;
 
-    /**
-     * Must be called after this resource was saved.
-     */
-    markSaved() : void;
+  /**
+   * Must be called after this resource was saved.
+   */
+  markSaved(): void;
 
-    /**
-     * Fired when the saving state has changed.
-     */
-    saveStateChanged : Observable<SaveStateEvent<Saveable>>
+  /**
+   * Fired when the saving state has changed.
+   */
+  saveStateChanged: Observable<SaveStateEvent<Saveable>>
 }
 
 /**
  * @return True, if the given object implements saveable.
  */
-export function isSaveable(obj : any) : obj is Saveable {
-    return (obj && !!obj.markSaveRequired);
+export function isSaveable(obj: any): obj is Saveable {
+  return (obj && !!obj.markSaveRequired);
 }

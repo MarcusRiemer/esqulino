@@ -1,11 +1,11 @@
-import {Model}               from "./query"
-import {TableDescription}    from "./schema"
-import {PageDescription}     from "./page/page.description"
+import { Model } from "./query"
+import { TableDescription } from "./schema"
+import { PageDescription } from "./page/page.description"
 import {
-    ApiVersion, ApiVersionToken, CURRENT_API_VERSION
+  ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from "./resource.description"
 
-export {ApiVersion, ApiVersionToken, CURRENT_API_VERSION}
+export { ApiVersion, ApiVersionToken, CURRENT_API_VERSION }
 
 /**
  * The properties of a project that can be queried from the
@@ -16,18 +16,18 @@ export {ApiVersion, ApiVersionToken, CURRENT_API_VERSION}
  * projects.
  */
 export interface ProjectListDescription extends ApiVersion {
-    name : string
-    description : string
-    id : string
-    preview? : string,
-    indexPageId? : string
+  name: string
+  description: string
+  id: string
+  preview?: string,
+  indexPageId?: string
 }
 
 /**
  * Describes a database that could possibly be used.
  */
 export interface AvailableDatabaseDescription {
-    type: string
+  type: string
 }
 
 /**
@@ -39,23 +39,23 @@ export interface AvailableDatabaseDescription {
  *
  */
 export interface ProjectDescription extends ProjectListDescription {
-    schema? : TableDescription[]
-    availableDatabases? : { [id: string]: AvailableDatabaseDescription }
-    activeDatabase? : string    
-    queries? : Model.QueryDescription[]
-    pages? : PageDescription[]
+  schema?: TableDescription[]
+  availableDatabases?: { [id: string]: AvailableDatabaseDescription }
+  activeDatabase?: string
+  queries?: Model.QueryDescription[]
+  pages?: PageDescription[]
 }
 
 /**
  * These parameters are required to create a new project.
  */
 export interface ProjectCreationDescription extends ApiVersion {
-    id : string
+  id: string
+  name: string
+  admin: {
     name: string
-    admin : {
-        name : string
-        password : string
-    }
-    dbType : "sqlite3"
-    basedOn? : string
+    password: string
+  }
+  dbType: "sqlite3"
+  basedOn?: string
 }

@@ -4,7 +4,7 @@ class StaticFilesController < ApplicationController
   def index
     requested_path = URI.parse(request.original_url).path[1..-1]
     if requested_path.start_with? 'api' then
-    # API paths are never static pages
+      # API paths are never static pages
       render :plain => 'API endpoint triggered by fallback controller', :status => 503
     else
       # Assume that the URL immediatly denotes a file we know
