@@ -10,6 +10,9 @@ TS_NODE_BIN = node_modules/.bin/ts-node
 BUNDLE_FILES = $(shell find dist/ -iname "*bundle*.js" 2> /dev/null)
 BUNDLE_FILES_GZIP = $(addsuffix .gz, $(BUNDLE_FILES))
 
+TEST_SINGLE_RUN ?= false
+TEST_BROWSERS   ?= ChromeHeadless
+
 all : dist
 
 clean : msg-pre-clean
@@ -26,7 +29,7 @@ install-deps : has-npm msg-pre-install-deps
 	npm install
 
 test :
-	$(NG_BIN) test
+	$(NG_BIN) test --single-run $(TEST_SINGLE_RUN) --browser $(TEST_BROWSERS)
 
 clean-deps : msg-pre-clean-deps
 	rm -rf "node_modules"

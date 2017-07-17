@@ -63,7 +63,7 @@ describe('FROM', () => {
                 alias : "pe"
             }
         };
-        
+
         let f = new SyntaxTree.From(model, null)
 
         expect(f.first.tableName).toEqual("person");
@@ -75,10 +75,6 @@ describe('FROM', () => {
 
         expect(f.toSqlString()).toEqual("FROM person pe");
         expect(f.toModel()).toEqual(model);
-
-        // Validity
-        let v = f.validate(new Schema(matchingTables(model)));
-        expect(v.numErrors).toEqual(0);
     });
 
     it('with a two table comma join', () => {
