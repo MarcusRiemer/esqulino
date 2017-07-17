@@ -1,0 +1,9 @@
+image: marcusriemer/sqlino:test
+
+pipelines:
+  default:
+    - step:
+        script:
+          - make install-deps
+          - make dist
+          - make -C server test
