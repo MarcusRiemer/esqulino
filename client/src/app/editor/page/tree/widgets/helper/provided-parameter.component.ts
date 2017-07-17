@@ -1,23 +1,25 @@
-import {Component,
-        Input, Output, EventEmitter}      from '@angular/core'
+import {
+  Component,
+  Input, Output, EventEmitter
+} from '@angular/core'
 
-import {DragService}                      from '../../../../page/drag.service'
+import { DragService } from '../../../../page/drag.service'
 
 @Component({
-    selector: `provided-parameter`,
-    templateUrl: 'templates/provided-parameter.html',
+  selector: `provided-parameter`,
+  templateUrl: 'templates/provided-parameter.html',
 })
 export class ProvidedParameterComponent {
-    @Input() parameterName : string;
+  @Input() parameterName: string;
 
-    constructor(private _dragService : DragService) {
+  constructor(private _dragService: DragService) {
 
-    }
-    
-    /**
-     * Starts dragging the provided parameter.
-     */
-    onParameterDragStart(event : DragEvent) {
-        this._dragService.startValueDrag(event, "sidebar", this.parameterName);
-    }
+  }
+
+  /**
+   * Starts dragging the provided parameter.
+   */
+  onParameterDragStart(event: DragEvent) {
+    this._dragService.startValueDrag(event, "sidebar", this.parameterName);
+  }
 }

@@ -1,8 +1,8 @@
-import * as Model                             from './description'
-import * as SyntaxTree                        from './syntaxtree/'
+import * as Model from './description'
+import * as SyntaxTree from './syntaxtree/'
 
-export {Model, SyntaxTree}
+export { Model, SyntaxTree }
 
-export *                                      from './base'
-export *                                      from './validation'
-export *                                      from './result'
+export * from './base'
+export * from './validation'
+export * from './result'

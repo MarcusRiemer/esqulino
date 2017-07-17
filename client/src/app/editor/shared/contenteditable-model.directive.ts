@@ -1,6 +1,6 @@
 import {
-    Directive, ElementRef, Input, Output, EventEmitter,
-    OnChanges, SimpleChanges, OnInit
+  Directive, ElementRef, Input, Output, EventEmitter,
+  OnChanges, SimpleChanges, OnInit
 } from "@angular/core"
 
 /**
@@ -9,52 +9,52 @@ import {
  * to cause havoc.
  */
 @Directive({
-	selector: '[contenteditableModel]',
-    // We need to know if the hosting component loses focus.
-	host: {
-		'(blur)': 'onChange()',
-        '(dragover)': 'onDragOperation($event)',
-        '(drop)': 'onDragOperation($event)',
-        //'(keyup)': 'onChange()'
-	}
+  selector: '[contenteditableModel]',
+  // We need to know if the hosting component loses focus.
+  host: {
+    '(blur)': 'onChange()',
+    '(dragover)': 'onDragOperation($event)',
+    '(drop)': 'onDragOperation($event)',
+    //'(keyup)': 'onChange()'
+  }
 })
 export class ContenteditableModel implements OnInit {
-	@Input('contenteditableModel') model: any;
+  @Input('contenteditableModel') model: any;
 
-    /**
-     * Required to tell angular what to change.
-     */
-	@Output('contenteditableModelChange') update = new EventEmitter();
+  /**
+   * Required to tell angular what to change.
+   */
+  @Output('contenteditableModelChange') update = new EventEmitter();
 
-	private lastViewModel: any;
+  private lastViewModel: any;
 
-	constructor(private elRef: ElementRef) {
-	}
+  constructor(private elRef: ElementRef) {
+  }
 
-    /**
-     * Picks up the initial value that was assigned to this model
-     */
-    ngOnInit() {
-        this.lastViewModel = this.elRef.nativeElement.innerText;
+  /**
+   * Picks up the initial value that was assigned to this model
+   */
+  ngOnInit() {
+    this.lastViewModel = this.elRef.nativeElement.innerText;
+  }
+
+  /**
+   * Propagates changes if they have happened.
+   */
+  onChange() {
+    const value = this.elRef.nativeElement.innerText;
+
+    if (this.lastViewModel != value) {
+      this.lastViewModel = value;
+      this.update.emit(value);
     }
+  }
 
-    /**
-     * Propagates changes if they have happened.
-     */
-	onChange() {
-        const value = this.elRef.nativeElement.innerText;
-        
-        if (this.lastViewModel != value) {
-            this.lastViewModel = value;
-		    this.update.emit(value);
-        }
-	}
-
-    /**
-     * Prevents drag operations on this element.
-     */
-    onDragOperation(evt : Event) : boolean {
-        evt.preventDefault();
-        return (false);
-    }
+  /**
+   * Prevents drag operations on this element.
+   */
+  onDragOperation(evt: Event): boolean {
+    evt.preventDefault();
+    return (false);
+  }
 }

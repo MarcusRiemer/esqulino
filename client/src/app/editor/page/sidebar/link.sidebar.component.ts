@@ -1,55 +1,55 @@
-import {Component, Inject, Optional}   from '@angular/core'
+import { Component, Inject, Optional } from '@angular/core'
 
-import {Link}                          from '../../../shared/page/widgets/index'
+import { Link } from '../../../shared/page/widgets/index'
 
-import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
+import { SIDEBAR_MODEL_TOKEN } from '../../editor.token'
 
-import {WidgetComponent}               from '../widget.component'
+import { WidgetComponent } from '../widget.component'
 
 @Component({
-    templateUrl: 'templates/link-sidebar.html',
+  templateUrl: 'templates/link-sidebar.html',
 })
 export class LinkSidebarComponent {
 
-    private _model : Link;
+  private _model: Link;
 
-    private _currentPageId : string;
-    
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : WidgetComponent<Link>) {
-        this._model = com.model;
-    }
+  private _currentPageId: string;
 
-    get model() {
-        return (this._model);
-    }
+  constructor( @Inject(SIDEBAR_MODEL_TOKEN) com: WidgetComponent<Link>) {
+    this._model = com.model;
+  }
 
-    /**
-     * All internal pages this link could refer to.
-     */
-    get possiblePages() {
-        return (this._model.page.project.pages);
-    }
+  get model() {
+    return (this._model);
+  }
 
-    get currentPageId() {
-        return (this._model.action.internalPageId);
-    }
+  /**
+   * All internal pages this link could refer to.
+   */
+  get possiblePages() {
+    return (this._model.page.project.pages);
+  }
 
-    set currentPageId(value : string) {
-        this._model.action.internalPageId = value;
-    }
+  get currentPageId() {
+    return (this._model.action.internalPageId);
+  }
 
-    get currentExternalUrl() {
-        return (this._model.action.externalUrl);
-    }
+  set currentPageId(value: string) {
+    this._model.action.internalPageId = value;
+  }
 
-    set currentExternalUrl(value : string) {
-        this._model.action.externalUrl = value;
-    }
+  get currentExternalUrl() {
+    return (this._model.action.externalUrl);
+  }
+
+  set currentExternalUrl(value: string) {
+    this._model.action.externalUrl = value;
+  }
 }
 
 export const LINK_SIDEBAR_IDENTIFIER = "page-link";
 
 export const LINK_REGISTRATION = {
-    typeId : LINK_SIDEBAR_IDENTIFIER,
-    componentType : LinkSidebarComponent
+  typeId: LINK_SIDEBAR_IDENTIFIER,
+  componentType: LinkSidebarComponent
 }

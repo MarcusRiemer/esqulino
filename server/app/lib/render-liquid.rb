@@ -43,8 +43,8 @@ class LiquidFilesystem
     # Check all possible paths in the following order
     # Project -> Plugin -> Global
     to_return = search_path
-                .map { |candidate| File.join(candidate, template_path) }
-                .find { |full_path| File.exists? full_path }
+                  .map { |candidate| File.join(candidate, template_path) }
+                  .find { |full_path| File.exists? full_path }
 
     # Missing templates are a serious matter
     raise EsqulinoError.new("Template \"#{template_path}\" not found in #{search_path.inspect}") if to_return.nil?
@@ -81,7 +81,7 @@ def liquid_render_page(project, page_template, params)
   # TODO: Is there really no way to do this without manipulating
   #       the global state of the Liquid::Template instance?
   Liquid::Template.file_system = LiquidFilesystem.new(project)
-    
+  
   # Load the basic liquid template
   template = Liquid::Template::parse(page_template)
 

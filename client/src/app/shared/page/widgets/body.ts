@@ -1,64 +1,64 @@
-import {Page, WidgetDescription}         from '../page'
-import {BodyDescription}                 from '../page.description'
+import { Page, WidgetDescription } from '../page'
+import { BodyDescription } from '../page.description'
 
-import {loadWidget}                      from './widget-loader'
+import { loadWidget } from './widget-loader'
 import {
-    Widget, HostingWidget, WidgetHost, WidgetBase
+  Widget, HostingWidget, WidgetHost, WidgetBase
 } from './widget-base'
 
-export {BodyDescription}
+export { BodyDescription }
 
 /**
  * Rows are the top-level element of most pages.
  */
 export class Body extends HostingWidget {
-    private _children : Widget[]  = [];
+  private _children: Widget[] = [];
 
-    private _page : Page;
-    
-    constructor(desc : BodyDescription, page : Page) {
-        super({type: "body", category: "layout", isEmpty: false }, undefined);
+  private _page: Page;
 
-        this._page = page;
-        
-        // Create all referenced columns
-        this._children = desc.children.map(wiDesc => loadWidget(wiDesc, this));
+  constructor(desc: BodyDescription, page: Page) {
+    super({ type: "body", category: "layout", isEmpty: false }, undefined);
 
-        
-    }
+    this._page = page;
 
-    get page() : Page {
-        return (this._page);
-    }
+    // Create all referenced columns
+    this._children = desc.children.map(wiDesc => loadWidget(wiDesc, this));
 
-    /**
-     * A description for an empty body.
-     */
-    static get emptyDescription() : BodyDescription {
-        return ({
-            type : "body",
-            children : []
-        });
-    }
 
-    /**
-     * The body accepts everything that isn't a column.
-     */
-    acceptsWidget(desc : WidgetDescription) : boolean {
-        return (desc.type !== "column");
-    }
+  }
 
-    /**
-     * @return All columns that are part of this row
-     */
-    get children() {
-        return (this._children);
-    }
+  get page(): Page {
+    return (this._page);
+  }
 
-    protected toModelImpl() : BodyDescription {
-        return ({
-            type : "body",
-            children : this.children.map(c => c.toModel())
-        });
-    }
+  /**
+   * A description for an empty body.
+   */
+  static get emptyDescription(): BodyDescription {
+    return ({
+      type: "body",
+      children: []
+    });
+  }
+
+  /**
+   * The body accepts everything that isn't a column.
+   */
+  acceptsWidget(desc: WidgetDescription): boolean {
+    return (desc.type !== "column");
+  }
+
+  /**
+   * @return All columns that are part of this row
+   */
+  get children() {
+    return (this._children);
+  }
+
+  protected toModelImpl(): BodyDescription {
+    return ({
+      type: "body",
+      children: this.children.map(c => c.toModel())
+    });
+  }
 }

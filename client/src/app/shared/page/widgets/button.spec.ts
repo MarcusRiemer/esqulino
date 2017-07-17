@@ -1,63 +1,63 @@
-import {Page, PageDescription}      from '../page'
+import { Page, PageDescription } from '../page'
 
-import {Button, ButtonDescription}  from './button'
+import { Button, ButtonDescription } from './button'
 
-const pageModel : PageDescription = {
-    id : "1",
-    name: "Button Page Model",
-    apiVersion : "4",
-    body : {
-        type : "body",
-        children : [
-            
-        ]
-    }
+const pageModel: PageDescription = {
+  id: "1",
+  name: "Button Page Model",
+  apiVersion: "4",
+  body: {
+    type: "body",
+    children: [
+
+    ]
+  }
 }
 
 describe('Page Buttons', () => {
-    it('Serialization without action', () => {
-        const p = new Page(pageModel);
-        
-        const m : ButtonDescription = {
-            type : "button",
-            text : "Nochmal"
-        }
+  it('Serialization without action', () => {
+    const p = new Page(pageModel);
 
-        let b = new Button(m, p.body);
-        expect(b.toModel()).toEqual(m);
-    });
+    const m: ButtonDescription = {
+      type: "button",
+      text: "Nochmal"
+    }
 
-    it('Serialization with NavigationAction', () => {
-        const p = new Page(pageModel);
-        
-        const m : ButtonDescription = {
-            type : "button",
-            text : "Nochmal",
-            navigate : {
-                external : "http://google.de",
-                type : "navigate"
-            }
-        }
+    let b = new Button(m, p.body);
+    expect(b.toModel()).toEqual(m);
+  });
 
-        let b = new Button(m, p.body);
-        expect(b.toModel()).toEqual(m);
-    });
+  it('Serialization with NavigationAction', () => {
+    const p = new Page(pageModel);
 
-    it('Text changes', () => {
-        const p = new Page(pageModel);
-        
-        const m : ButtonDescription = {
-            type : "button",
-            text : "Nochmal"
-        }
+    const m: ButtonDescription = {
+      type: "button",
+      text: "Nochmal",
+      navigate: {
+        external: "http://google.de",
+        type: "navigate"
+      }
+    }
 
-        let b = new Button(m, p.body);
+    let b = new Button(m, p.body);
+    expect(b.toModel()).toEqual(m);
+  });
 
-        let hasChanged = false;
-        b.modelChanged.subscribe(_ => hasChanged = true);
-        
-        b.text = "anders";
-        expect(b.text).toEqual("anders");
-        expect(hasChanged).toEqual(true, "Change not fired");
-    });
+  it('Text changes', () => {
+    const p = new Page(pageModel);
+
+    const m: ButtonDescription = {
+      type: "button",
+      text: "Nochmal"
+    }
+
+    let b = new Button(m, p.body);
+
+    let hasChanged = false;
+    b.modelChanged.subscribe(_ => hasChanged = true);
+
+    b.text = "anders";
+    expect(b.text).toEqual("anders");
+    expect(hasChanged).toEqual(true, "Change not fired");
+  });
 });

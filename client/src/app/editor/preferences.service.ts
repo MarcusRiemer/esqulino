@@ -1,9 +1,9 @@
-import {Injectable}                     from '@angular/core'
+import { Injectable } from '@angular/core'
 
 export interface PaneOrder {
-    navbar : number,
-    sidebar : number,
-    content : number
+  navbar: number,
+  sidebar: number,
+  content: number
 }
 
 /**
@@ -11,15 +11,15 @@ export interface PaneOrder {
  */
 @Injectable()
 export class PreferencesService {
-    get paneOrder() : PaneOrder {
-        return ({
-            navbar: 0,
-            sidebar: 2,
-            content: 1
-        })
-    }
+  get paneOrder(): PaneOrder {
+    return ({
+      navbar: 0,
+      sidebar: 2,
+      content: 1
+    })
+  }
 
-    get showJsonModel() : boolean {
-        return (false);
-    }
+  get showJsonModel(): boolean {
+    return (false);
+  }
 }

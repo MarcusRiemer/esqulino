@@ -11,94 +11,94 @@ import './widgets/paragraph.spec'
 import './widgets/select.spec'
 
 import {
-    Page, PageDescription, CURRENT_API_VERSION
+  Page, PageDescription, CURRENT_API_VERSION
 } from './page'
 
 import {
-    Paragraph, ParagraphDescription,
-    Column, ColumnDescription,
-    Row, RowDescription,
-    WidgetBase, WidgetDescription
+  Paragraph, ParagraphDescription,
+  Column, ColumnDescription,
+  Row, RowDescription,
+  WidgetBase, WidgetDescription
 } from './widgets/index'
 
-const singleRowPage : PageDescription = {
-    id : "testpage",
-    name : "Serialization test",
-    apiVersion : CURRENT_API_VERSION,
-    body : {
-        type : "body",
-        children : 
-        [
-            {
-                type : "row",
-                columns : [
-                    {
-                        type : "column",
-                        width : 1,
-                        widgets : [
-                                <ParagraphDescription>{
-                                    type : "paragraph",
-                                    text : "1.1"
-                                },
-                                <ParagraphDescription>{
-                                    type : "paragraph",
-                                    text : "1.1"
-                                }
-                        ]
-                    },
-                    {
-                        type : "column",
-                        width : 2,
-                        widgets : [
-                                <ParagraphDescription>{
-                                    type : "paragraph",
-                                    text : "2.1"
-                                },
-                                <ParagraphDescription>{
-                                    type : "paragraph",
-                                    text : "2.1"
-                                }
-                        ]
-                    }
-                ]
-            }
+const singleRowPage: PageDescription = {
+  id: "testpage",
+  name: "Serialization test",
+  apiVersion: CURRENT_API_VERSION,
+  body: {
+    type: "body",
+    children:
+    [
+      {
+        type: "row",
+        columns: [
+          {
+            type: "column",
+            width: 1,
+            widgets: [
+              <ParagraphDescription>{
+                type: "paragraph",
+                text: "1.1"
+              },
+              <ParagraphDescription>{
+                type: "paragraph",
+                text: "1.1"
+              }
+            ]
+          },
+          {
+            type: "column",
+            width: 2,
+            widgets: [
+              <ParagraphDescription>{
+                type: "paragraph",
+                text: "2.1"
+              },
+              <ParagraphDescription>{
+                type: "paragraph",
+                text: "2.1"
+              }
+            ]
+          }
         ]
-    }
+      }
+    ]
+  }
 };
 
 /**
  * Nasty casting function because we know better then the type
  * system that rows and columns always have children.
  */
-function getRowChild(row : RowDescription, colIndex : number, widgetIndex : number) {
-    return (row.columns[colIndex].widgets[widgetIndex])
+function getRowChild(row: RowDescription, colIndex: number, widgetIndex: number) {
+  return (row.columns[colIndex].widgets[widgetIndex])
 }
 
 describe('Page', () => {
-    it('Serialization', () => {
-        const m : PageDescription = singleRowPage;
+  it('Serialization', () => {
+    const m: PageDescription = singleRowPage;
 
-        let p = new Page(m);
-        expect(p.toModel()).toEqual(m);
-    });
+    let p = new Page(m);
+    expect(p.toModel()).toEqual(m);
+  });
 
-    it ('Allows access to widgets', () => {
-        const m : PageDescription = singleRowPage;
+  it('Allows access to widgets', () => {
+    const m: PageDescription = singleRowPage;
 
-        let p = new Page(m);
-        const allWidgets = p.allWidgets;
+    let p = new Page(m);
+    const allWidgets = p.allWidgets;
 
-        // We know better then the type-system that this must be a row
-        const firstRow = (m.body.children[0] as RowDescription);
+    // We know better then the type-system that this must be a row
+    const firstRow = (m.body.children[0] as RowDescription);
 
-        expect(allWidgets.length).toEqual(7, "7 Widgets in test page");
+    expect(allWidgets.length).toEqual(7, "7 Widgets in test page");
 
-        expect(allWidgets[0].toModel()).toEqual(firstRow);
-        expect(allWidgets[1].toModel()).toEqual(firstRow.columns[0]);
-        expect(allWidgets[2].toModel()).toEqual(firstRow.columns[0].widgets[0]);
-        expect(allWidgets[3].toModel()).toEqual(firstRow.columns[0].widgets[1]);
-        expect(allWidgets[4].toModel()).toEqual(firstRow.columns[1]);
-        expect(allWidgets[5].toModel()).toEqual(firstRow.columns[1].widgets[0]);
-        expect(allWidgets[6].toModel()).toEqual(firstRow.columns[1].widgets[1]);
-    });
+    expect(allWidgets[0].toModel()).toEqual(firstRow);
+    expect(allWidgets[1].toModel()).toEqual(firstRow.columns[0]);
+    expect(allWidgets[2].toModel()).toEqual(firstRow.columns[0].widgets[0]);
+    expect(allWidgets[3].toModel()).toEqual(firstRow.columns[0].widgets[1]);
+    expect(allWidgets[4].toModel()).toEqual(firstRow.columns[1]);
+    expect(allWidgets[5].toModel()).toEqual(firstRow.columns[1].widgets[0]);
+    expect(allWidgets[6].toModel()).toEqual(firstRow.columns[1].widgets[1]);
+  });
 })

@@ -1,18 +1,18 @@
-import {Component, OnInit, OnDestroy, Inject}   from '@angular/core'
-import {ActivatedRoute, Router}                 from '@angular/router'
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 
-import {Query, ResultColumn}                    from '../../shared/query'
+import { Query, ResultColumn } from '../../shared/query'
 import {
-    Page, QueryReference
+  Page, QueryReference
 } from '../../shared/page/index'
 import {
-    Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml, Link, Form
+  Heading, Row, Paragraph, QueryTable, Input, Button, EmbeddedHtml, Link, Form
 } from '../../shared/page/widgets/index'
 
-import {SIDEBAR_MODEL_TOKEN}                    from '../editor.token'
-import {ProjectService, Project}                from '../project.service'
+import { SIDEBAR_MODEL_TOKEN } from '../editor.token'
+import { ProjectService, Project } from '../project.service'
 
-import {DragService, PageDragEvent}             from './drag.service'
+import { DragService, PageDragEvent } from './drag.service'
 
 /**
  * The sidebar hosts elements that can be dragged onto the currently active
@@ -20,198 +20,198 @@ import {DragService, PageDragEvent}             from './drag.service'
  * dropped if they are meant to be deleted.
  */
 @Component({
-    templateUrl: 'templates/sidebar-data.html',
-    selector : "page-sidebar"
+  templateUrl: 'templates/sidebar-data.html',
+  selector: "page-sidebar"
 })
 export class SidebarDataComponent implements OnInit, OnDestroy {
-    /**
-     * This ID is used to register this sidebar with the sidebar loader
-     */
-    public static get SIDEBAR_IDENTIFIER() { return "page-core-data" };
+  /**
+   * This ID is used to register this sidebar with the sidebar loader
+   */
+  public static get SIDEBAR_IDENTIFIER() { return "page-core-data" };
 
-    /**
-     * Subscriptions that need to be released
-     */
-    private _subscriptionRefs : any[] = [];
+  /**
+   * Subscriptions that need to be released
+   */
+  private _subscriptionRefs: any[] = [];
 
-    constructor(
-        @Inject(SIDEBAR_MODEL_TOKEN) private _page : Page,
-        private _dragService : DragService,
-        private _projectService : ProjectService,
-        private _routeParams : ActivatedRoute,
-        private _router : Router) {
+  constructor(
+    @Inject(SIDEBAR_MODEL_TOKEN) private _page: Page,
+    private _dragService: DragService,
+    private _projectService: ProjectService,
+    private _routeParams: ActivatedRoute,
+    private _router: Router) {
+  }
+
+  /**
+   * Load the project to access the schema and its pages.
+   */
+  ngOnInit() {
+    /*
+    // Grab the current project
+    this._projectService.activeProject
+    .first()
+    .subscribe(p => {
+    this._project = p;
+
+    // Grab the correct query id
+    const childRoute = this._router.routerState.firstChild(this._routeParams);
+
+    const routeRef = childRoute.params.subscribe(param => {
+    const pageId = param['pageId'];
+
+    // Project is loaded, display the correct  query
+    this._page = this._project.getPageById(pageId);
+    });
+
+    this._subscriptionRefs.push(routeRef);
+    });
+    */
+  }
+
+  /**
+   * Freeing all subscriptions
+   */
+  ngOnDestroy() {
+    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
+    this._subscriptionRefs = [];
+  }
+
+  /**
+   * View Variable: The currently edited page
+   */
+  get page() {
+    return (this._page);
+  }
+
+  /**
+   * Something is beeing dragged over a parameter
+   */
+  onParameterDrag(evt: DragEvent) {
+    const pageEvt = <PageDragEvent>JSON.parse(evt.dataTransfer.getData('text/plain'));
+    if (pageEvt.parameterValueProvider) {
+      evt.preventDefault();
     }
+  }
 
-    /**
-     * Load the project to access the schema and its pages.
-     */
-    ngOnInit() {
-        /*
-        // Grab the current project
-        this._projectService.activeProject
-            .first()
-            .subscribe(p => {
-                this._project = p;
-
-                // Grab the correct query id
-                const childRoute = this._router.routerState.firstChild(this._routeParams);
-
-                const routeRef = childRoute.params.subscribe(param => {
-                    const pageId = param['pageId'];
-
-                    // Project is loaded, display the correct  query
-                    this._page = this._project.getPageById(pageId);
-                });
-
-                this._subscriptionRefs.push(routeRef);
-            });
-        */
+  /**
+   * Something is being dragged over the "add query reference" drop-zone.
+   */
+  onAddQueryReferenceDrag(evt: DragEvent) {
+    const pageEvt = <PageDragEvent>JSON.parse(evt.dataTransfer.getData('text/plain'));
+    if (pageEvt.queryRef) {
+      evt.preventDefault();
     }
+  }
 
-    /**
-     * Freeing all subscriptions
-     */
-    ngOnDestroy() {
-        this._subscriptionRefs.forEach( ref => ref.unsubscribe() );
-        this._subscriptionRefs = [];
+  /**
+   * Something is being dropped over the "add query reference" drop-zone.
+   */
+  onAddQueryReferenceDrop(evt: DragEvent) {
+    const pageEvt = <PageDragEvent>JSON.parse(evt.dataTransfer.getData('text/plain'));
+    if (pageEvt.queryRef) {
+      evt.preventDefault();
+      try {
+        this.page.addQueryReference(pageEvt.queryRef);
+      } catch (ex) {
+        alert(ex);
+      }
     }
+  }
 
-    /**
-     * View Variable: The currently edited page
-     */
-    get page() {
-        return (this._page);
-    }
+  /**
+   * Starts a drag action for a column reference.
+   */
+  startColumnDrag(evt: DragEvent,
+    queryRef: QueryReference,
+    column: ResultColumn) {
+    this._dragService.startColumnRefDrag(evt, "sidebar", {
+      columnName: column.shortName,
+      queryName: queryRef.name
+    });
+  }
 
-    /**
-     * Something is beeing dragged over a parameter
-     */
-    onParameterDrag(evt : DragEvent) {
-        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        if (pageEvt.parameterValueProvider) {
-            evt.preventDefault();
-        }
-    }
+  /**
+   * Starts a drag action for a interpolated value.
+   */
+  startConstantDrag(evt: DragEvent,
+    constant: string) {
+    this._dragService.startValueDrag(evt, "sidebar", constant);
+  }
 
-    /**
-     * Something is being dragged over the "add query reference" drop-zone.
-     */
-    onAddQueryReferenceDrag(evt : DragEvent) {
-        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        if (pageEvt.queryRef) {
-            evt.preventDefault();
-        }
-    }
+  /**
+   * Informs the drag service about a started drag operation for a
+   * query reference
+   */
+  startReferencedQueryDrag(evt: DragEvent, ref: QueryReference) {
+    this._dragService.startQueryRefDrag(evt, "sidebar", ref.toModel(), {
+      onRemove: () => {
+        this.page.removeQueryReference(ref);
+      }
+    });
+  }
 
-    /**
-     * Something is being dropped over the "add query reference" drop-zone.
-     */
-    onAddQueryReferenceDrop(evt : DragEvent) {
-        const pageEvt = <PageDragEvent> JSON.parse(evt.dataTransfer.getData('text/plain'));
-        if (pageEvt.queryRef) {
-            evt.preventDefault();
-            try {
-                this.page.addQueryReference(pageEvt.queryRef);
-            } catch (ex) {
-                alert(ex);
-            }
-        }
-    }
+  startParameterValueProviderDrag(evt: DragEvent, valueProviderName: string) {
+    this._dragService.startValueDrag(evt, "sidebar", valueProviderName);
+  }
 
-    /**
-     * Starts a drag action for a column reference.
-     */
-    startColumnDrag(evt : DragEvent,
-                    queryRef : QueryReference,
-                    column : ResultColumn) {
-        this._dragService.startColumnRefDrag(evt, "sidebar", {
-            columnName: column.shortName,
-            queryName : queryRef.name
-        });
-    }
+  /**
+   * Columns are tracked by their full name
+   */
+  trackByColumnId(index: number, columnRef: ResultColumn) {
+    return (columnRef.fullName);
+  }
 
-    /**
-     * Starts a drag action for a interpolated value.
-     */
-    startConstantDrag(evt : DragEvent,
-                      constant : string) {
-        this._dragService.startValueDrag(evt, "sidebar", constant);
-    }
+  get availableConstants(): string[] {
+    return (["project.name", "page.name"]);
+  }
 
-    /**
-     * Informs the drag service about a started drag operation for a
-     * query reference
-     */
-    startReferencedQueryDrag(evt : DragEvent, ref : QueryReference) {
-        this._dragService.startQueryRefDrag(evt, "sidebar", ref.toModel(), {
-            onRemove: () => {
-                this.page.removeQueryReference(ref);
-            }
-        });
-    }
+  /**
+   * @return All available forms that would provide data
+   */
+  get availableForms() {
+    return (this.page.allWidgets.filter((w) => w instanceof Form));
+  }
 
-    startParameterValueProviderDrag(evt : DragEvent, valueProviderName : string) {
-        this._dragService.startValueDrag(evt, "sidebar", valueProviderName);
-    }
+  /**
+   * Is there any data available?
+   */
+  get hasAnyData(): boolean {
+    return (this.showPageRequestParameters || this.referencedQueries.length > 0);
+  }
 
-    /**
-     * Columns are tracked by their full name
-     */
-    trackByColumnId(index : number, columnRef : ResultColumn) {
-        return (columnRef.fullName);
-    }
+  /**
+   * Bootstrap Specific!
+   * May be used to highlight the whole card, in case something is terribly wrong.
+   */
+  get additionalCardClasses(): string {
+    return ("");
+  }
 
-    get availableConstants() : string[] {
-        return (["project.name", "page.name"]);
+  /**
+   * @return All queries that are actually used on this page.
+   */
+  get referencedQueries(): QueryReference[] {
+    if (this._page) {
+      return (this._page.referencedQueries);
+    } else {
+      return ([]);
     }
+  }
 
-    /**
-     * @return All available forms that would provide data
-     */
-    get availableForms() {
-        return (this.page.allWidgets.filter((w) => w instanceof Form));
-    }
+  /**
+   * @return True, if page request parameters should be shown
+   */
+  get showPageRequestParameters() {
+    return (this.page && this._page.requestParameters.length > 0);
+  }
 
-    /**
-     * Is there any data available?
-     */
-    get hasAnyData() : boolean {
-        return (this.showPageRequestParameters || this.referencedQueries.length > 0);
-    }
-
-    /**
-     * Bootstrap Specific!
-     * May be used to highlight the whole card, in case something is terribly wrong.
-     */
-    get additionalCardClasses() : string {
-        return ("");
-    }
-    
-    /**
-     * @return All queries that are actually used on this page.
-     */
-    get referencedQueries() : QueryReference[] {
-        if (this._page) {
-            return (this._page.referencedQueries);
-        } else {
-            return ([]);
-        }
-    }
-
-    /**
-     * @return True, if page request parameters should be shown
-     */
-    get showPageRequestParameters() {
-        return (this.page && this._page.requestParameters.length > 0);
-    }
-
-    /**
-     * @return True, if a new query could be dropped onto this page.
-     */
-    get showQueryDropTarget() : boolean {
-        return !!(this._dragService.currentDrag
-                  && this._dragService.activeOrigin == "sidebar"
-                  && this._dragService.currentDrag.queryRef);
-    }
+  /**
+   * @return True, if a new query could be dropped onto this page.
+   */
+  get showQueryDropTarget(): boolean {
+    return !!(this._dragService.currentDrag
+      && this._dragService.activeOrigin == "sidebar"
+      && this._dragService.currentDrag.queryRef);
+  }
 }
 

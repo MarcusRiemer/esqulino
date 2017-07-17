@@ -7,7 +7,7 @@ export type ApiVersionToken = "1" | "2" | "3" | "4";
 /**
  * The version this state of the client is currently using.
  */
-export const CURRENT_API_VERSION : ApiVersionToken = "4";
+export const CURRENT_API_VERSION: ApiVersionToken = "4";
 
 /**
  * esqulinos data format carries an explicit, global version instead
@@ -18,27 +18,27 @@ export const CURRENT_API_VERSION : ApiVersionToken = "4";
  *
  */
 export interface ApiVersion {
-    /**
-     * These API versions are merely a number, no need to overcomplicate things.
-     * If versions differ, any implementing the API is free to specify
-     * version ranges it works with.
-     */
-    apiVersion : ApiVersionToken
+  /**
+   * These API versions are merely a number, no need to overcomplicate things.
+   * If versions differ, any implementing the API is free to specify
+   * version ranges it works with.
+   */
+  apiVersion: ApiVersionToken
 }
 
 /**
  * The minimum set of properties any esqulino resources needs.
  */
 export interface ProjectResourceDescription extends ApiVersion {
-    /**
-     * An internal ID, possibly a GUID, to uniquely identify a resource.
-     * These IDs must *never* change and should be UUIDs, so that they are
-     * globally unique.
-     */ 
-    id : string;
+  /**
+   * An internal ID, possibly a GUID, to uniquely identify a resource.
+   * These IDs must *never* change and should be UUIDs, so that they are
+   * globally unique.
+   */
+  id: string;
 
-    /**
-     * The user-chosen name of this resource. This property is free to change.
-     */
-    name : string;
+  /**
+   * The user-chosen name of this resource. This property is free to change.
+   */
+  name: string;
 }

@@ -3,20 +3,20 @@
  * inside a table.
  */
 export interface ColumnDescription {
-    index : number
-    name : string
-    type : string
-    not_null : boolean
-    dflt_value? : string
-    primary : boolean
+  index: number
+  name: string
+  type: string
+  not_null: boolean
+  dflt_value?: string
+  primary: boolean
 }
 
 export interface ForeignKeyDescription {
-    references : {
-        to_table : string
-        from_column : string
-        to_column : string        
-    }[];
+  references: {
+    to_table: string
+    from_column: string
+    to_column: string
+  }[];
 }
 
 /**
@@ -24,9 +24,9 @@ export interface ForeignKeyDescription {
  * with all of its columns.
  */
 export interface TableDescription {
-    name : string
-    columns : ColumnDescription[]
-    foreign_keys : ForeignKeyDescription[]
-    system_table?: boolean
+  name: string
+  columns: ColumnDescription[]
+  foreign_keys: ForeignKeyDescription[]
+  system_table?: boolean
 }
 

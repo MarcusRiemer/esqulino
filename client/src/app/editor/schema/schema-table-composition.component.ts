@@ -1,72 +1,72 @@
-import {Component, Input, OnInit, OnDestroy}        from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
-import {Table}                                      from '../../shared/schema'
+import { Table } from '../../shared/schema'
 
-import {ProjectService, Project}                    from '../project.service'
-import {ToolbarService}                             from '../toolbar.service'
+import { ProjectService, Project } from '../project.service'
+import { ToolbarService } from '../toolbar.service'
 
 
 /**
  * Displays the schema for a list of tables.
  */
 @Component({
-    templateUrl: 'templates/schema-table-composition.html',
-    selector: "sql-table-composition"
+  templateUrl: 'templates/schema-table-composition.html',
+  selector: "sql-table-composition"
 })
 export class SchemaTableCompositionComponent {
 
-    /**
-     * The tables to display.
-     */
-    @Input() table : Table;
+  /**
+   * The tables to display.
+   */
+  @Input() table: Table;
 
-    @Input() highlightedColumn : string;
-    
-    tableForeignKey : Table;
+  @Input() highlightedColumn: string;
 
-    toHighLight : string;
+  tableForeignKey: Table;
 
-    onHighlightedColumnChanged(columnName : string) {
-        console.log(columnName);
+  toHighLight: string;
+
+  onHighlightedColumnChanged(columnName: string) {
+    console.log(columnName);
+  }
+
+  /**
+   * The currently edited project
+   */
+  public project: Project;
+
+  /**
+   * Used for dependency injection.
+   */
+  constructor(
+    private _projectService: ProjectService,
+  ) {
+  }
+
+  /**
+   * Load the project to access the schema
+   */
+  ngOnInit() {
+    this._projectService.activeProject
+      .subscribe(res => {
+        this.project = res
+      });
+  }
+
+  getTargetTable(highlightedColumn: string): Table {
+    const forenKeyTableName = this.table.columnIsForeignKeyOfTable(highlightedColumn);
+    if (forenKeyTableName) {
+      const table = this.project.schema.getTable(forenKeyTableName);
+      return table;
+    } else {
+      return undefined;
     }
 
-    /**
-     * The currently edited project
-     */
-    public project : Project;
+  }
 
-    /**
-     * Used for dependency injection.
-     */
-    constructor(
-        private _projectService: ProjectService,
-    ) {
-    }
-
-    /**
-     * Load the project to access the schema
-     */
-    ngOnInit() {  
-        this._projectService.activeProject
-            .subscribe(res =>{
-                 this.project = res
-            });
-    }
-
-    getTargetTable(highlightedColumn : string) : Table {
-        const forenKeyTableName = this.table.columnIsForeignKeyOfTable(highlightedColumn);
-        if(forenKeyTableName){
-            const table = this.project.schema.getTable(forenKeyTableName);
-            return table;
-        } else {
-            return undefined;
-        }
-        
-    }
-
-    getTargetColumn(highlightedColumn : string) : string {
-        let forenKeyColumnName = this.table.columnIsForeignKeyOfColumn(highlightedColumn);
-        return forenKeyColumnName;
-    }
+  getTargetColumn(highlightedColumn: string): string {
+    let forenKeyColumnName = this.table.columnIsForeignKeyOfColumn(highlightedColumn);
+    return forenKeyColumnName;
+  }
 
 }

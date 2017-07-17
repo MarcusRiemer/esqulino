@@ -1,68 +1,68 @@
-import {Component, Inject, Optional}   from '@angular/core'
+import { Component, Inject, Optional } from '@angular/core'
 
-import {Query}                         from '../../../shared/query'
-import {Page, QueryReference}          from '../../../shared/page/index'
-import {QueryTable}                    from '../../../shared/page/widgets/index'
+import { Query } from '../../../shared/query'
+import { Page, QueryReference } from '../../../shared/page/index'
+import { QueryTable } from '../../../shared/page/widgets/index'
 
-import {ProjectService, Project}       from '../../project.service'
-import {SIDEBAR_MODEL_TOKEN}           from '../../editor.token'
+import { ProjectService, Project } from '../../project.service'
+import { SIDEBAR_MODEL_TOKEN } from '../../editor.token'
 
-import {WidgetComponent}               from '../widget.component'
+import { WidgetComponent } from '../widget.component'
 
 /**
  * The sidebar-editor for a QueryTable. This is currently in a quite
  * convoluted state due to too many ad-hoc datastructures.
  */
 @Component({
-    templateUrl: 'templates/query-table-sidebar.html',
+  templateUrl: 'templates/query-table-sidebar.html',
 })
 export class QueryTableSidebarComponent {
 
-    private _component : WidgetComponent<QueryTable>;
-    
-    constructor(@Inject(SIDEBAR_MODEL_TOKEN) com : WidgetComponent<QueryTable>) {
-        this._component = com;
-        
-        if (!this._component.page) {
-            throw new Error(`QueryTableSidebarComponent has no access to page`);
-        }
-    }
+  private _component: WidgetComponent<QueryTable>;
 
-    get referencedQueryName() {
-        return (this._component.model.queryReferenceName);
-    }
+  constructor( @Inject(SIDEBAR_MODEL_TOKEN) com: WidgetComponent<QueryTable>) {
+    this._component = com;
 
-    set referencedQueryName(name : string) {
-        this._component.model.queryReferenceName = name;
+    if (!this._component.page) {
+      throw new Error(`QueryTableSidebarComponent has no access to page`);
     }
+  }
 
-    get model() {
-        return (this._component.model);
-    }
+  get referencedQueryName() {
+    return (this._component.model.queryReferenceName);
+  }
 
-    /**
-     * @return The names of the columns that are currently available to render.
-     */
-    get availableColumns() {
-        return (this.model.availableColumns);
-    }
+  set referencedQueryName(name: string) {
+    this._component.model.queryReferenceName = name;
+  }
 
-    /**
-     * All queries that are actually in use on this page.
-     */
-    get availableQueries() {
-        if (this._component.page) {
-            return (this._component.page.referencedQueries.filter(q => q.isResolveable && q.query.select));
-        } else {
-            return ([]);
-        }
+  get model() {
+    return (this._component.model);
+  }
+
+  /**
+   * @return The names of the columns that are currently available to render.
+   */
+  get availableColumns() {
+    return (this.model.availableColumns);
+  }
+
+  /**
+   * All queries that are actually in use on this page.
+   */
+  get availableQueries() {
+    if (this._component.page) {
+      return (this._component.page.referencedQueries.filter(q => q.isResolveable && q.query.select));
+    } else {
+      return ([]);
     }
+  }
 }
 
 export const QUERY_TABLE_SIDEBAR_IDENTIFIER = "page-query-table";
 
 export const QUERY_TABLE_REGISTRATION = {
-    typeId : QUERY_TABLE_SIDEBAR_IDENTIFIER,
-    componentType : QueryTableSidebarComponent
+  typeId: QUERY_TABLE_SIDEBAR_IDENTIFIER,
+  componentType: QueryTableSidebarComponent
 }
 

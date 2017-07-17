@@ -11,7 +11,7 @@
   </span>
 
   <div *ngIf="model.hasValidReference"
-      class="text tree-level">
+       class="text tree-level">
     <query-column-list [select]="model.queryReference.query.select"
                        [(columnNames)]="model.columnNames">
     </query-column-list>

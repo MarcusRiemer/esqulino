@@ -196,7 +196,7 @@ class AlterSchemaTest < ActiveSupport::TestCase
   #       func.result = 1
   #     end   
   #   end
-    
+  
   #   create1 = String.new("create table students (name TEXT NOT NULL, email TEXT DEFAULT blah, grade INTEGER CONSTRAINT 'ERR: Value is not of type integer' CHECK (grade regexp '^[+-]?[0-9]+$'), blog URL, PRIMARY KEY(name, email));")
   #   db.execute(create1)
   #   db.execute("INSERT INTO students values('dataname', 'datamail', 5, 'blogurl');")
@@ -221,7 +221,7 @@ class AlterSchemaTest < ActiveSupport::TestCase
   #   schema = database_describe_schema(temp_db_file.path)
   #   assert_column schema, 0, 2, 'grade', 'TEXT'
   #   assert_equal([[1]], count)
-    
+  
   #   # changing type of blog to Integer so the values don't fit in
   #   # there should be an error
   #   assert_raise SQLite3::ConstraintException  do

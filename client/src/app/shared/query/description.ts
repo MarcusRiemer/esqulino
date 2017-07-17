@@ -1,5 +1,5 @@
-import {ProjectResourceDescription}           from '../resource.description'
-import {TableDescription}                     from '../schema'
+import { ProjectResourceDescription } from '../resource.description'
+import { TableDescription } from '../schema'
 
 /**
  * Basic data types as inspired by SQLite.
@@ -17,9 +17,9 @@ export type InnerJoinType = "cross" | "comma"
  * the actual value lookup to execution time and ends recursion.
  */
 export interface SingleColumnExpression {
-    column : string
-    table? : string
-    alias? : string
+  column: string
+  table?: string
+  alias?: string
 }
 
 /**
@@ -27,9 +27,9 @@ export interface SingleColumnExpression {
  * ends recursion.
  */
 export interface ConstantExpression {
-    // TODO: Remove this with an API bump
-    type? : DataType
-    value : string
+  // TODO: Remove this with an API bump
+  type?: DataType
+  value: string
 }
 
 export type Operator = "<" | "<=" | "=" | "<>" | ">=" | ">" | "LIKE" | "+" | "-" | "*" | "/"
@@ -38,17 +38,17 @@ export type Operator = "<" | "<=" | "=" | "<>" | ">=" | ">" | "LIKE" | "+" | "-"
  * Combines two expressions with a binary operator.
  */
 export interface BinaryExpression {
-    lhs : Expression
-    operator : Operator
-    rhs : Expression
-    simple : boolean
+  lhs: Expression
+  operator: Operator
+  rhs: Expression
+  simple: boolean
 }
 
 /**
  * Denotes a value that needs to be bound at the runtime of the query.
  */
 export interface ParameterExpression {
-    key : string
+  key: string
 }
 
 /**
@@ -63,7 +63,7 @@ export interface MissingExpression {
  * existing tables.
  */
 export interface StarExpression {
-    limitedTo? : TableNameDefinition
+  limitedTo?: TableNameDefinition
 }
 
 /**
@@ -73,21 +73,21 @@ export interface StarExpression {
  * keys may be set at runtime.
  */
 export interface Expression {
-    singleColumn? : SingleColumnExpression
-    binary? : BinaryExpression
-    constant? : ConstantExpression
-    missing? : MissingExpression
-    parameter? : ParameterExpression
-    star? : StarExpression
+  singleColumn?: SingleColumnExpression
+  binary?: BinaryExpression
+  constant?: ConstantExpression
+  missing?: MissingExpression
+  parameter?: ParameterExpression
+  star?: StarExpression
 }
 
 export interface SelectColumn {
-    expr : Expression
-    as? : string
+  expr: Expression
+  as?: string
 }
 
 export interface Select {
-    columns : SelectColumn[]
+  columns: SelectColumn[]
 }
 
 
@@ -95,13 +95,13 @@ export interface Select {
  * Named tables as described in the FROM
  */
 export interface TableNameDefinition {
-    name : string
-    alias? : string
+  name: string
+  alias?: string
 }
 
 export interface From {
-    first : TableNameDefinition
-    joins? : Join[]
+  first: TableNameDefinition
+  joins?: Join[]
 }
 
 /**
@@ -115,12 +115,12 @@ export interface Delete {
 }
 
 export interface Join {
-    table : TableNameDefinition
-    cross? : InnerJoinType
-    inner? : {
-        using? : string,
-        on? : Expression
-    }
+  table: TableNameDefinition
+  cross?: InnerJoinType
+  inner?: {
+    using?: string,
+    on?: Expression
+  }
 }
 
 export type LogicalOperator = "AND" | "OR";
@@ -133,24 +133,24 @@ export type LogicalOperator = "AND" | "OR";
  * case the UI would be less then thrilling.
  */
 export interface WhereSubsequent {
-    expr : Expression
-    logical : LogicalOperator
+  expr: Expression
+  logical: LogicalOperator
 }
 
 /**
  * A WHERE component with at least one expression.
  */
 export interface Where {
-    first : Expression
-    following? : WhereSubsequent[]
+  first: Expression
+  following?: WhereSubsequent[]
 }
 
 /**
  * An expression that will be assigned to a certain column.
  */
 export interface ColumnAssignment {
-    column : string
-    expr : Expression
+  column: string
+  expr: Expression
 }
 
 /**
@@ -159,8 +159,8 @@ export interface ColumnAssignment {
  * expressions is common.
  */
 export interface Insert {
-    table: string
-    assignments : ColumnAssignment[];
+  table: string
+  assignments: ColumnAssignment[];
 }
 
 /**
@@ -168,8 +168,8 @@ export interface Insert {
  * UPDATE component.
  */
 export interface Update {
-    table : string
-    assignments : ColumnAssignment[]
+  table: string
+  assignments: ColumnAssignment[]
 }
 
 /**
@@ -177,18 +177,18 @@ export interface Update {
  * the whole structure and some identifying properties.
  */
 export interface QueryDescription extends ProjectResourceDescription {
-    select? : Select
-    delete? : Delete
-    insert? : Insert
-    update? : Update
-    from? : From
-    where? : Where
+  select?: Select
+  delete?: Delete
+  insert?: Insert
+  update?: Update
+  from?: From
+  where?: Where
 
-    // Sometimes it is important to know in advance if a query will affect
-    // only a single row.
-    //
-    // * The SELECT query uses this to allow easier databinding to the UI
-    // * DELETE and UPDATE queries could use this as a safety net
-    singleRow? : boolean
+  // Sometimes it is important to know in advance if a query will affect
+  // only a single row.
+  //
+  // * The SELECT query uses this to allow easier databinding to the UI
+  // * DELETE and UPDATE queries could use this as a safety net
+  singleRow?: boolean
 }
 
