@@ -20,6 +20,7 @@ class Project
     @whole_description = nil
     @pages = nil
     @queries = nil
+    @images = nil   # TODO: Load on demand
     @schema = { }
     @write_access = write_access
   end

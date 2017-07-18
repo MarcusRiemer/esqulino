@@ -69,6 +69,13 @@ Rails.application.routes.draw do
           end
         end
 
+        scope 'image' do
+
+          scope ':image_id' do
+            get 'metadata', controller: 'project_images', action: :metadata
+          end
+        end
+
         # Everything that does something with the database schema
         scope 'db/:database_id' do
           get 'visual_schema', controller: 'project_databases', action: :visual_schema
