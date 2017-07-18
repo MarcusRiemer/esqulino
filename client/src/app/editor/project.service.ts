@@ -143,10 +143,11 @@ export class ProjectService {
   }
 
   /**
-   * Creates a new page with the given name.
+   * Asks the server to delete the project with the given id.
    */
-  createPage(name: string) {
-    const url = this._server.getPageUrl(this.cachedProject.id);
+  deleteProject(projectId: string) {
+    const url = this._server.getProjectUrl(projectId);
+    return this._http.delete(url);
   }
 
   private passThroughError(error: Response) {

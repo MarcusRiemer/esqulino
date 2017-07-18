@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     scope 'project' do
       root via: [:get], controller: 'projects', action: :index
       root via: [:post], controller: 'projects', action: :create
+      root via: [:delete], controller: 'projects', action: :destroy
 
       # Everything that does something in the context of a specific project
       scope ':project_id' do
