@@ -1,0 +1,7 @@
+FROM esqulino-base
+LABEL name="esqulino development image"
+
+RUN pacman --noconfirm -Sy $CLIENT_PACKAGES
+
+COPY entrypoint-development-client.sh /entrypoint.sh
+

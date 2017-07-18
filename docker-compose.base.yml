@@ -1,0 +1,11 @@
+#For easy building of the base image
+#Not for running
+
+version: "2"
+
+services:
+  base:
+    image: esqulino-base
+    build:
+      dockerfile: Dockerfile.base
+      context: .
