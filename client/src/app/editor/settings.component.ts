@@ -1,4 +1,5 @@
 import { Component } from '@angular/core'
+import { Router } from '@angular/router'
 
 import { ProjectService, Project } from './project.service'
 import { SidebarService } from './sidebar.service'
@@ -28,33 +29,49 @@ export class SettingsComponent {
     private _queryService: QueryService,
     private _pageService: PageService,
     private _toolbarService: ToolbarService,
-    private _sidebarService: SidebarService
+    private _sidebarService: SidebarService,
+    private _router: Router
   ) {
-    this._sidebarService.hideSidebar();
   }
 
   /**
    * Load the project to access the schema
    */
   ngOnInit() {
+    // Ensure sane default state
+    this._sidebarService.hideSidebar();
     this._toolbarService.resetItems();
+
+    // Ensure we are always subsribed to the active project
+    let subRef = this._projectService.activeProject
+      .subscribe(res => this.project = res);
+    this._subscriptionRefs.push(subRef);
+
+    // Wiring up the save button
     this._toolbarService.savingEnabled = true;
-
-
     let saveItem = this._toolbarService.saveItem;
-    let subRef = saveItem.onClick.subscribe((res) => {
+    subRef = saveItem.onClick.subscribe((res) => {
       saveItem.isInProgress = true;
       this._projectService.storeProjectDescription(this.project)
         .subscribe(res => saveItem.isInProgress = false);
     });
-
     this._subscriptionRefs.push(subRef);
 
-
-    subRef = this._projectService.activeProject
-      .subscribe(res => this.project = res);
-
-    this._subscriptionRefs.push(subRef); 2
+    // Wiring up the delete button
+    let btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "d");
+    subRef = btnDelete.onClick.subscribe(res => {
+      // Don't delete without asking the user
+      if (confirm("Dieses Projekt löschen?")) {
+        this._projectService.deleteProject(this.project.id)
+          .subscribe(res => {
+            // Go back to title after deleting
+            if (res.ok) {
+              this._router.navigateByUrl("/");
+            }
+          });
+      }
+    });
+    this._subscriptionRefs.push(subRef);
   }
 
   ngOnDestroy() {

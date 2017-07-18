@@ -80,14 +80,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :bad_request
   end
 
-  test "creating a new project" do
+  test "creating a new project and deleting it afterwards" do
     project_creation_json = {
       "apiVersion" =>"4",
       "id" => "test-id",
       "name" => "test-name",
       "admin" => {
-        "name" => "test-admin",
-        "password" => "test-pw",
+        "name" => "test",
+        "password" => "test",
       },
       "dbType" => "sqlite3"
     }
@@ -99,6 +99,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal "application/json", @response.content_type
 
+    delete '/api/project/db-sequence',
+           headers: auth_headers
+
     rollback_test_filesystem
+  end
+
+  test "deleting a project without authenticating" do
+    delete '/api/project/db-sequence'
+
+    assert_response :unauthorized
   end
 end

@@ -45,6 +45,12 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def destroy
+    ensure_write_access do
+      current_project.delete!
+    end
+  end
+
   # The preview image for a specific project
   def preview_image
     if current_project.preview_image_exists? then
