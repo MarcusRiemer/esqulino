@@ -1,6 +1,6 @@
 development:
   name: "Blattwerkzeug (Dev)"
-  data_dir: ../data/test
+  data_dir: ../data/dev
   client_dir: ../client/dist
   schema_dir: ../schema/json
   project_domains: ["localhost.localdomain:9292"]

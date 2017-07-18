@@ -74,6 +74,10 @@
 .block-container .widget .widget-header {
     display: inline-block;
 
+    .inline-editable-value {
+        display: inline-block;
+    }
+
     .name {
         text-transform: lowercase;
         color: #4f6816;
