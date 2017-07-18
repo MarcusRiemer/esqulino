@@ -69,8 +69,10 @@ Rails.application.routes.draw do
           end
         end
 
+        # Everything that has something to do with images
         scope 'image' do
-
+          root via: [:post], controller: 'project_images', action: :create
+          
           scope ':image_id' do
             get 'metadata', controller: 'project_images', action: :metadata
           end
