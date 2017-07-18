@@ -74,23 +74,33 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._sidebarService.hideSidebar();
 
+    // Extract the name of the table from the route and extract
+    // the data.
     let subRef = this._routeParams.params.subscribe(params => {
       var tableName = params['tableName'];
       let projref = this._projectService.activeProject
         .subscribe(res => {
           this._project = res;
+          // Is the component show as a sub-view of another component?
           if (this.isChild) {
+            // Yes, then grab the table that is currently being edited
             this.table = this._schemaService.getCurrentlyEditedTable();
             this.showAmount = 5;
           } else {
+            // No, rely on the name of the table from the URL
             this.table = res.schema.getTable(tableName);
           }
+
+          // In any case, the rowcount and the actual data need to
+          // be refreshed.
+          this.refresh();
         })
       this._subscriptionRefs.push(projref);
     });
     this._subscriptionRefs.push(subRef);
 
-    //Buttons only to show if this component is not invoked as a child
+    // Buttons should only be shown if this component is not invoked as a child
+    // of another component
     if (!this.isChild) {
       this._toolbarService.resetItems();
       this._toolbarService.savingEnabled = false;
@@ -108,8 +118,6 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
       });
       this._subscriptionRefs.push(subRef);
     }
-
-    this.refresh();
   }
 
   /**
