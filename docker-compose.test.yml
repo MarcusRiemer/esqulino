@@ -1,0 +1,11 @@
+version: "2"
+
+services:
+  client:
+    image: marcusriemer/sqlino:test
+    build:
+      dockerfile: Dockerfile.test
+      context: .
+    volumes:
+      - .:/srv/esqulino
+
