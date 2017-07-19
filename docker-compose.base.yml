@@ -5,7 +5,7 @@ version: "2"
 
 services:
   base:
-    image: esqulino-base
+    image: marcusriemer/sqlino:base
     build:
       dockerfile: Dockerfile.base
       context: .

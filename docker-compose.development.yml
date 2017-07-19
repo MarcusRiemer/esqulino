@@ -2,7 +2,7 @@ version: "2"
 
 services:
   client:
-    image: esqulino-client:development
+    image: marcusriemer/sqlino:client-dev
     build:
       dockerfile: Dockerfile.development.client
       context: .
@@ -10,7 +10,7 @@ services:
       - .:/srv/esqulino
 
   server:
-    image: esqulino-server:development
+    image: marcusriemer/sqlino:server-dev
     build:
       dockerfile: Dockerfile.development.server
       context: .

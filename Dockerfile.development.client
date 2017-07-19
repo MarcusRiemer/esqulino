@@ -1,4 +1,4 @@
-FROM esqulino-base
+FROM marcusriemer/sqlino:base
 LABEL name="esqulino development image"
 
 RUN pacman --noconfirm -Sy $CLIENT_PACKAGES

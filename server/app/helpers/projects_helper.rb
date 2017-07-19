@@ -8,11 +8,11 @@ module ProjectsHelper
   def projects_dir
     Rails.application.config.sqlino[:projects_dir]
   end
-  
+
   # Loads the currently requested project
   def current_project(project_id = nil)
     project_id = project_id || params['project_id']
-    
+
     if @current_project.nil? then
       @current_project = Project.new File.join(projects_dir, project_id), false
 
@@ -37,7 +37,7 @@ module ProjectsHelper
   # Loads the currently requested page of the currently requested project
   def current_page(page_name_or_id = nil, index_valid = false)
     page_name_or_id = page_name_or_id || params['page_id']
-    
+
     if @current_page.nil? then
       # Distinguish between index page, page names and ids
       if page_name_or_id.nil? || page_name_or_id.empty? then

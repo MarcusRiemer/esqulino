@@ -1,10 +1,10 @@
 # This constraint kicks in for every project subdomain that should
-# be rendered. 
+# be rendered.
 class RenderProjectConstraint
   def project_domains
     Rails.configuration.sqlino[:project_domains] || []
   end
-  
+
   def matches?(request)
     (self.project_domains.include? request.domain) or (not ['', 'www'].include? request.subdomain)
   end
@@ -41,7 +41,7 @@ Rails.application.routes.draw do
         root controller: 'projects', action: :show
         root via: [:post], controller: 'projects', action: :edit
         root via: [:delete], controller: 'projects', action: :destroy
-        
+
         get 'preview', controller: 'projects', action: :preview_image
 
         # Everything that does something with the database content via a query
@@ -60,7 +60,7 @@ Rails.application.routes.draw do
         scope 'page' do
           root via: [:post], controller: 'project_pages', action: :create
           post 'render', controller: 'project_pages', action: :render_arbitrary
-          
+
           scope ':page_id' do
             root via: [:post], controller: 'project_pages', action: :update
             root via: [:delete], controller: 'project_pages', action: :destroy
@@ -72,9 +72,13 @@ Rails.application.routes.draw do
         # Everything that has something to do with images
         scope 'image' do
           root via: [:post], controller: 'project_images', action: :create
-          
+
           scope ':image_id' do
-            get 'metadata', controller: 'project_images', action: :metadata
+            get  'file', controller: 'project_images', action: :file_show
+            post 'file', controller: 'project_images', action: :file_update
+
+            get  'metadata', controller: 'project_images', action: :metadata_show
+            post 'metadata', controller: 'project_images', action: :metadata_update
           end
         end
 
