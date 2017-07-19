@@ -4,6 +4,10 @@ default:
 run-dev:
 	docker-compose -f docker-compose.development.yml up -d
 
+run-test:
+	docker-compose -f docker-compose.test.yml up
+	docker-compose -f docker-compose.test.yml down
+
 stop-dev:
 	docker-compose -f docker-compose.development.yml down
 
@@ -19,6 +23,9 @@ build-server-dev: build-base
 build-client-dev: build-base
 	docker-compose -f docker-compose.development.yml build client
 
+build-test: build-base
+	docker-compose -f docker-compose.test.yml build
+
 pull-base:
 	docker pull marcusriemer/sqlino:base
 
@@ -28,7 +35,10 @@ pull-client-dev: pull-base
 	docker pull marcusriemer/sqlino:client-dev
 
 pull-server-dev: pull-base
-	docker pull marcusriemer/sqlino
+	docker pull marcusriemer/sqlino:server-dev
+
+pull-test: pull-base
+	docker pull marcusriemer/sqlino:test
 
 push-base:
 	docker push marcusriemer/sqlino:base
@@ -41,5 +51,7 @@ push-server-dev: push-base
 push-client-dev: push-base
 	docker push marcusriemer/sqlino:client-dev
 
+push-test : push-base
+	docker push marcusriemer/sqlino:test
 
 
