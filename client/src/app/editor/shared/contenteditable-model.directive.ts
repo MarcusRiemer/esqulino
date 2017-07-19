@@ -15,11 +15,16 @@ import {
     '(blur)': 'onChange()',
     '(dragover)': 'onDragOperation($event)',
     '(drop)': 'onDragOperation($event)',
-    //'(keyup)': 'onChange()'
+    '(keydown)': 'onKeyDown($event)'
   }
 })
 export class ContenteditableModel implements OnInit {
   @Input('contenteditableModel') model: any;
+
+  /**
+   *
+   */
+  @Input() allowBreak = true;
 
   /**
    * Required to tell angular what to change.
@@ -35,14 +40,14 @@ export class ContenteditableModel implements OnInit {
    * Picks up the initial value that was assigned to this model
    */
   ngOnInit() {
-    this.lastViewModel = this.elRef.nativeElement.innerText;
+    this.lastViewModel = this.elRef.nativeElement.textContent;
   }
 
   /**
    * Propagates changes if they have happened.
    */
   onChange() {
-    const value = this.elRef.nativeElement.innerText;
+    const value = this.elRef.nativeElement.textContent;
 
     if (this.lastViewModel != value) {
       this.lastViewModel = value;
@@ -56,5 +61,15 @@ export class ContenteditableModel implements OnInit {
   onDragOperation(evt: Event): boolean {
     evt.preventDefault();
     return (false);
+  }
+
+  /**
+   * Possibly prevent linebreaks
+   */
+  onKeyDown(evt: KeyboardEvent) {
+    // 13 seems to be ENTER
+    if (evt.keyCode === 13 && !this.allowBreak) {
+      evt.preventDefault();
+    }
   }
 }

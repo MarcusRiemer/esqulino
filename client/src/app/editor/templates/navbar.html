@@ -10,6 +10,24 @@
         <span class="fa fa-floppy-o"></span>
       </span>
     </li>
+
+    <!-- Image Editor -->
+    <li>
+      <a [routerLink]="['image']"
+         [routerLinkActiveOptions]="{exact: true}"
+         routerLinkActive="router-link-active">
+        <span class="fa fa-image fa-fw"></span>Bilder
+      </a>
+      <ul class="nav-image">
+        <li>
+          <a [routerLink]="['image', 'upload']"
+             routerLinkActive="router-link-active">
+            <span class="fa fa-plus fa-fw"></span>Neues Bild
+          </a>
+        </li>
+      </ul>
+    </li>
+    
     <!-- Schema Editor and tables -->
     <li>
       <a [routerLink]="['schema', currentDatabaseName]"
