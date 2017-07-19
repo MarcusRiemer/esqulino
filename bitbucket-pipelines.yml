@@ -4,7 +4,8 @@ pipelines:
   default:
     - step:
         caches:
-          - node
+          - node-client
+          - node-schema
           - bundler-global
         script:
           - make install-deps
@@ -15,3 +16,5 @@ pipelines:
 definitions:
   caches:
     bundler-global: /usr/lib/ruby/gems/
+    node-client: client/node_modules
+    node-schema: schema/json/node_modules
