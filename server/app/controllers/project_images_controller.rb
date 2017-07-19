@@ -2,12 +2,11 @@ class ProjectImagesController < ApplicationController
   include ProjectsHelper
   include ValidationHelper
 
-  def file
-    #TODO
-    render status => :success
+  def create
+    render plain: params.inspect
   end
-
-  def metadata_show
+  
+  def metadata
     render status => :success, json: { 'name' => 'foo' }
   end
 end

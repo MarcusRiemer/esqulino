@@ -69,8 +69,9 @@ Rails.application.routes.draw do
           end
         end
 
+        # Everything that has something to do with images
         scope 'image' do
-          post 'new', controller: 'project_images', action: :file_new
+          root via: [:post], controller: 'project_images', action: :create
 
           scope ':image_id' do
             get  'file', controller: 'project_images', action: :file_show

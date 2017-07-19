@@ -8,6 +8,7 @@ import { ProjectExistsGuard } from './project-exists.guard'
 import { queryEditorRoutes } from './query/editor.routes'
 import { pageEditorRoutes } from './page/page-editor.routes'
 import { schemaEditorRoutes } from './schema/schema.routes'
+import { imageEditorRoutes } from './image/image.routes'
 
 export const editorRoutes: Routes = [
   {
@@ -37,6 +38,10 @@ export const editorRoutes: Routes = [
         path: 'page',
         children: [...pageEditorRoutes]
         //loadChildren: '/app/editor/page/page-editor.module'
+      },
+      {
+        path: 'image',
+        children: [...imageEditorRoutes]
       }
     ]
   }

@@ -8,6 +8,7 @@ import { SharedEditorModule } from './shared/shared.module'
 import { PageEditorModule } from './page/page-editor.module'
 import { QueryEditorModule } from './query/editor.module'
 import { SchemaEditorModule } from './schema/schema.module'
+import { ImageEditorModule } from './image/image.module'
 
 import { EditorComponent } from './editor.component'
 import { editorRouting } from './editor.routes'
@@ -34,6 +35,7 @@ import { SettingsComponent } from './settings.component'
 
     SharedAppModule,
 
+    ImageEditorModule.forRoot(),
     SharedEditorModule.forRoot(),
     PageEditorModule.forRoot(),
     QueryEditorModule.forRoot(),

@@ -126,6 +126,15 @@ export class ServerApiService {
   }
 
   /**
+   * Retrieves the URL that can be used to upload new images.
+   *
+   * @projectId The ID of the project
+   */
+  getImageUploadUrl(projectId: string): string {
+    return (this.getProjectUrl(projectId) + "/image");
+  }
+
+  /**
    * Retrieves an URL that can be used to get entries
    * of a table.
    *
