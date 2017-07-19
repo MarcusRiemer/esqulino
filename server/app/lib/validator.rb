@@ -8,7 +8,7 @@ class Validator
   # Loads all schemas from the given directory
   #
   # @param schema_dir [string] A path containing JSON schema files
-  def initialize(schema_dir)    
+  def initialize(schema_dir)
     @schemas = { }
 
     Dir.glob(File.realdirpath(schema_dir) + "/*.json").each do |schema_file|
@@ -18,7 +18,7 @@ class Validator
       if ["Makefile", "package"].include? schema_name then
         next
       end
-      
+
       schema_content = File.read(schema_file)
 
       Rails.logger.info "Loading #{schema_name} at #{schema_file}"
@@ -43,7 +43,7 @@ class Validator
 
     # Loading the actual body
     body = JSON.parse(body_string)
-    
+
     # Making sure it fits against a schema
     result = JSON::Validator.fully_validate(schema, body,
                                             :strict => false,

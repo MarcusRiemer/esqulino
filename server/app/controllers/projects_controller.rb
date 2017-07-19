@@ -24,7 +24,7 @@ class ProjectsController < ApplicationController
     # Tell people that are interested about this
     email = ProjectMailer.created_admin(creation_params.id, creation_params.name)
     email.deliver_later
-    
+
     render :json => { 'id' => creation_params.id }, :status => 200
   end
 
