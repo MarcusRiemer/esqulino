@@ -347,7 +347,6 @@
             },
             "required": [
                 "apiVersion",
-                "id",
                 "name"
             ],
             "type": "object"
@@ -418,7 +417,6 @@
             },
             "required": [
                 "apiVersion",
-                "id",
                 "name"
             ],
             "type": "object"

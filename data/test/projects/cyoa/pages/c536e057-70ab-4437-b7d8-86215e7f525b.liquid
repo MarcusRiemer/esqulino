@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ page.name }} - {{ project.name }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+    <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <h1>{{ query.kapitel_einzeln.caption }}</h1>
+      <p>{{ query.kapitel_einzeln.text }}</p>
+      <!-- Raw HTML begin -->
+      <ul>
+        {% for naechstes in query.kapitel_optionen %}
+        <li>
+          <a href="/Kapitel?nummer={{naechstes.chapter_to}}">{{ naechstes.decision_text}}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      <!-- Raw HTML end -->
+    </div>
+    {% include "edit-ribbon" %}
+  </body>
+</html>
+

@@ -263,7 +263,6 @@
             },
             "required": [
                 "apiVersion",
-                "id",
                 "name"
             ],
             "type": "object"
