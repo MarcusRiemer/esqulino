@@ -1,0 +1,19 @@
+{
+  "name": "kapitel_alle",
+  "apiVersion": "4",
+  "from": {
+    "first": {
+      "name": "chapter"
+    }
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "option_neu",
+  "apiVersion": "4",
+  "insert": {
+    "assignments": [
+      {
+        "expr": {
+          "parameter": {
+            "key": "von"
+          }
+        },
+        "column": "chapter_from"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "nach"
+          }
+        },
+        "column": "chapter_to"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "text"
+          }
+        },
+        "column": "decision_text"
+      }
+    ],
+    "table": "next_chapter"
+  }
+}

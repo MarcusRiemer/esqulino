@@ -35,7 +35,7 @@ export interface ProjectResourceDescription extends ApiVersion {
    * These IDs must *never* change and should be UUIDs, so that they are
    * globally unique.
    */
-  id: string;
+  id?: string;
 
   /**
    * The user-chosen name of this resource. This property is free to change.

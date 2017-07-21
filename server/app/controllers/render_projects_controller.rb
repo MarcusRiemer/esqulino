@@ -21,7 +21,12 @@ class RenderProjectsController < ApplicationController
   def vendor_file
     basepath = Rails.configuration.sqlino[:client_dir]
     local_path = File.join basepath, 'vendor', params['path']
-    send_file local_path, disposition: 'inline'
+
+    if File.exists? local_path then
+      send_file local_path, disposition: 'inline'
+    else
+      render status: :not_found
+    end
   end
 
   def run_query
@@ -92,7 +97,7 @@ class RenderProjectsController < ApplicationController
   # It does not depend on the project or the currently active page
   def server_render_data
     return {
-      'editor_host' => ENV['ESQULINO_EDITOR_HOST'] || 'localhost.localdomain:3000'
+      'editor_host' => ENV['ESQULINO_EDITOR_HOST'] || 'localhost.localdomain:9292'
     }
   end
 
