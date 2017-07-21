@@ -20,6 +20,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "type"
+            ],
             "type": "object"
         },
         "BinaryExpression": {
@@ -39,6 +42,12 @@
                     "type": "boolean"
                 }
             },
+            "required": [
+                "lhs",
+                "operator",
+                "rhs",
+                "simple"
+            ],
             "type": "object"
         },
         "BodyDescription": {
@@ -58,6 +67,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "children",
+                "type"
+            ],
             "type": "object"
         },
         "ColumnAssignment": {
@@ -71,6 +84,10 @@
                     "$ref": "#/definitions/Expression"
                 }
             },
+            "required": [
+                "column",
+                "expr"
+            ],
             "type": "object"
         },
         "ColumnDescription": {
@@ -96,6 +113,13 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "index",
+                "name",
+                "not_null",
+                "primary",
+                "type"
+            ],
             "type": "object"
         },
         "ConstantExpression": {
@@ -109,6 +133,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "value"
+            ],
             "type": "object"
         },
         "DataType": {
@@ -167,11 +194,19 @@
                                 "type": "string"
                             }
                         },
+                        "required": [
+                            "from_column",
+                            "to_column",
+                            "to_table"
+                        ],
                         "type": "object"
                     },
                     "type": "array"
                 }
             },
+            "required": [
+                "references"
+            ],
             "type": "object"
         },
         "From": {
@@ -187,6 +222,9 @@
                     "type": "array"
                 }
             },
+            "required": [
+                "first"
+            ],
             "type": "object"
         },
         "InnerJoinType": {
@@ -211,6 +249,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "assignments",
+                "table"
+            ],
             "type": "object"
         },
         "Join": {
@@ -235,6 +277,9 @@
                     "$ref": "#/definitions/TableNameDefinition"
                 }
             },
+            "required": [
+                "table"
+            ],
             "type": "object"
         },
         "LogicalOperator": {
@@ -300,6 +345,11 @@
                     "type": "array"
                 }
             },
+            "required": [
+                "apiVersion",
+                "id",
+                "name"
+            ],
             "type": "object"
         },
         "PageParameterDescription": {
@@ -310,6 +360,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "name"
+            ],
             "type": "object"
         },
         "ParameterExpression": {
@@ -320,6 +373,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "key"
+            ],
             "type": "object"
         },
         "QueryDescription": {
@@ -360,6 +416,11 @@
                     "$ref": "#/definitions/Where"
                 }
             },
+            "required": [
+                "apiVersion",
+                "id",
+                "name"
+            ],
             "type": "object"
         },
         "QueryReferenceDescription": {
@@ -379,6 +440,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "type"
+            ],
             "type": "object"
         },
         "Select": {
@@ -391,6 +455,9 @@
                     "type": "array"
                 }
             },
+            "required": [
+                "columns"
+            ],
             "type": "object"
         },
         "SelectColumn": {
@@ -403,6 +470,9 @@
                     "$ref": "#/definitions/Expression"
                 }
             },
+            "required": [
+                "expr"
+            ],
             "type": "object"
         },
         "SingleColumnExpression": {
@@ -419,6 +489,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "column"
+            ],
             "type": "object"
         },
         "StarExpression": {
@@ -454,6 +527,11 @@
                     "type": "boolean"
                 }
             },
+            "required": [
+                "columns",
+                "foreign_keys",
+                "name"
+            ],
             "type": "object"
         },
         "TableNameDefinition": {
@@ -467,6 +545,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "name"
+            ],
             "type": "object"
         },
         "Update": {
@@ -483,6 +564,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "assignments",
+                "table"
+            ],
             "type": "object"
         },
         "Where": {
@@ -499,6 +584,9 @@
                     "type": "array"
                 }
             },
+            "required": [
+                "first"
+            ],
             "type": "object"
         },
         "WhereSubsequent": {
@@ -512,6 +600,10 @@
                     "$ref": "#/definitions/LogicalOperator"
                 }
             },
+            "required": [
+                "expr",
+                "logical"
+            ],
             "type": "object"
         },
         "WidgetDescription": {
@@ -523,6 +615,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "type"
+            ],
             "type": "object"
         }
     },
@@ -545,12 +640,16 @@
             "type": "string"
         },
         "id": {
+            "description": "The name of the project. May only contain characters that do not\nmean any trouble in URLs.",
+            "pattern": "^[a-z0-9\\-]{4,}$",
             "type": "string"
         },
         "indexPageId": {
             "type": "string"
         },
         "name": {
+            "description": "The name of the project. May only contain more or less friendly\ncharacters.",
+            "pattern": "^[a-z0-9 \\-_]{4,}$",
             "type": "string"
         },
         "pages": {
@@ -575,6 +674,12 @@
             "type": "array"
         }
     },
+    "required": [
+        "apiVersion",
+        "description",
+        "id",
+        "name"
+    ],
     "type": "object"
 }
 

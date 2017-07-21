@@ -13,6 +13,10 @@
             "type": "string"
         }
     },
+    "required": [
+        "params",
+        "sql"
+    ],
     "type": "object"
 }
 

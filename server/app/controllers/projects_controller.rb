@@ -36,7 +36,7 @@ class ProjectsController < ApplicationController
   # Update an existing project
   def edit
     ensure_write_access do
-      updated_project = ensure_request("ProjectDescription", request.body.read)
+      updated_project = ensure_request("ProjectUpdateDescription", request.body.read)
 
       current_project.update_description! updated_project
       current_project.save_description

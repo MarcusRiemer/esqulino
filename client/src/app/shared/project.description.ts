@@ -8,6 +8,44 @@ import {
 export { ApiVersion, ApiVersionToken, CURRENT_API_VERSION }
 
 /**
+ * The name of the project. May only contain characters that do not
+ * mean any trouble in URLs.
+ * @pattern ^[a-z0-9\-]{4,}$
+ */
+export type ProjectId = string;
+
+/**
+ * The name of the project. May only contain more or less friendly
+ * characters.
+ * @pattern ^[a-z0-9 \-_]{4,}$
+ */
+export type ProjectName = string;
+
+/**
+ * The name of a user for a specific project.
+ * @pattern ^[a-z0-9\-_]{4,}$
+ */
+export type ProjectUserName = string;
+
+/**
+ * The password of a user for a specific project.
+ * @minlength 4
+ */
+export type ProjectUserPassword = string;
+
+/**
+ * Regular expressions to test various project properties for validity.
+ * These must correspond to the regexes used in the type definitions
+ * above.
+ */
+export const StringValidator = {
+  ProjectId: /^[a-z0-9\-]{4,}$/,
+  ProjectName: /^[a-z0-9 \-_]{4,}$/,
+  ProjectUserName: /^[a-z0-9\-_]{4,}$/,
+  ProjectUserPassword: /^.{4,}$/
+};
+
+/**
  * The properties of a project that can be queried from the
  * server when asking for all available projecs.
  * 
@@ -16,9 +54,9 @@ export { ApiVersion, ApiVersionToken, CURRENT_API_VERSION }
  * projects.
  */
 export interface ProjectListDescription extends ApiVersion {
-  name: string
+  id: ProjectId
+  name: ProjectName
   description: string
-  id: string
   preview?: string,
   indexPageId?: string
 }
@@ -47,13 +85,31 @@ export interface ProjectDescription extends ProjectListDescription {
 }
 
 /**
+ * These things can be provided when updating the project itself.
+ */
+export interface ProjectUpdateDescription extends ApiVersion {
+  name: ProjectName
+  description: string
+  preview?: string
+  indexPageId?: string
+}
+
+/**
  * These parameters are required to create a new project.
  */
 export interface ProjectCreationDescription extends ApiVersion {
-  id: string
-  name: string
+  id: ProjectId
+  name: ProjectName
+
   admin: {
+    /**
+     * @minlength 4
+     */
     name: string
+
+    /**
+     * @minlength 4
+     */
     password: string
   }
   dbType: "sqlite3"
