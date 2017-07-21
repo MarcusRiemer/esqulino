@@ -4,7 +4,7 @@ import { Router } from '@angular/router'
 
 import { Observable } from 'rxjs/Observable'
 
-import { ProjectCreationDescription } from '../shared/project.description'
+import { ProjectCreationDescription, StringValidator } from '../shared/project.description'
 import { ServerApiService } from '../shared/serverapi.service'
 import { CURRENT_API_VERSION } from '../shared/resource.description'
 
@@ -17,15 +17,16 @@ export class CreateProjectComponent {
 
   private _currentError: any;
 
-  public myString: string = "Haha";
-
+  /**
+   * The definition that will be sent to the server.
+   */
   public params: ProjectCreationDescription = {
     apiVersion: CURRENT_API_VERSION,
     id: undefined,
     name: undefined,
     admin: {
       name: undefined,
-      password: ""
+      password: undefined,
     },
     dbType: "sqlite3",
     basedOn: undefined
@@ -36,6 +37,22 @@ export class CreateProjectComponent {
     private _serverApi: ServerApiService,
     private _router: Router
   ) {
+  }
+
+  get regExpId() {
+    return (StringValidator.ProjectId);
+  }
+
+  get regExpName() {
+    return (StringValidator.ProjectName);
+  }
+
+  get regExpUserName() {
+    return (StringValidator.ProjectUserName);
+  }
+
+  get regExpUserPassword() {
+    return (StringValidator.ProjectUserPassword);
   }
 
   get currentError() {

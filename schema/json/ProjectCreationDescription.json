@@ -25,6 +25,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "name",
+                "password"
+            ],
             "type": "object"
         },
         "apiVersion": {
@@ -41,12 +45,23 @@
             "type": "string"
         },
         "id": {
+            "description": "The name of the project. May only contain characters that do not\nmean any trouble in URLs.",
+            "pattern": "^[a-z0-9\\-]{4,}$",
             "type": "string"
         },
         "name": {
+            "description": "The name of the project. May only contain more or less friendly\ncharacters.",
+            "pattern": "^[a-z0-9 \\-_]{4,}$",
             "type": "string"
         }
     },
+    "required": [
+        "admin",
+        "apiVersion",
+        "dbType",
+        "id",
+        "name"
+    ],
     "type": "object"
 }
 

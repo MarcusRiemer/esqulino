@@ -13,18 +13,13 @@
             "type": "string"
         }
     },
-    "description": "The properties of a project that can be queried from the\nserver when asking for all available projecs.\n\nThis is a stripped down version of all possibly\nexisting project properties that is used to list available\nprojects.",
+    "description": "These things can be provided when updating the project itself.",
     "properties": {
         "apiVersion": {
             "$ref": "#/definitions/ApiVersionToken",
             "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
         },
         "description": {
-            "type": "string"
-        },
-        "id": {
-            "description": "The name of the project. May only contain characters that do not\nmean any trouble in URLs.",
-            "pattern": "^[a-z0-9\\-]{4,}$",
             "type": "string"
         },
         "indexPageId": {
@@ -42,7 +37,6 @@
     "required": [
         "apiVersion",
         "description",
-        "id",
         "name"
     ],
     "type": "object"

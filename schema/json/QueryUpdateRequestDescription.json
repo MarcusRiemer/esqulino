@@ -29,6 +29,12 @@
                     "type": "boolean"
                 }
             },
+            "required": [
+                "lhs",
+                "operator",
+                "rhs",
+                "simple"
+            ],
             "type": "object"
         },
         "ColumnAssignment": {
@@ -42,6 +48,10 @@
                     "$ref": "#/definitions/Expression"
                 }
             },
+            "required": [
+                "column",
+                "expr"
+            ],
             "type": "object"
         },
         "ConstantExpression": {
@@ -55,6 +65,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "value"
+            ],
             "type": "object"
         },
         "DataType": {
@@ -109,6 +122,9 @@
                     "type": "array"
                 }
             },
+            "required": [
+                "first"
+            ],
             "type": "object"
         },
         "InnerJoinType": {
@@ -133,6 +149,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "assignments",
+                "table"
+            ],
             "type": "object"
         },
         "Join": {
@@ -157,6 +177,9 @@
                     "$ref": "#/definitions/TableNameDefinition"
                 }
             },
+            "required": [
+                "table"
+            ],
             "type": "object"
         },
         "LogicalOperator": {
@@ -195,6 +218,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "key"
+            ],
             "type": "object"
         },
         "QueryDescription": {
@@ -235,6 +261,11 @@
                     "$ref": "#/definitions/Where"
                 }
             },
+            "required": [
+                "apiVersion",
+                "id",
+                "name"
+            ],
             "type": "object"
         },
         "Select": {
@@ -247,6 +278,9 @@
                     "type": "array"
                 }
             },
+            "required": [
+                "columns"
+            ],
             "type": "object"
         },
         "SelectColumn": {
@@ -259,6 +293,9 @@
                     "$ref": "#/definitions/Expression"
                 }
             },
+            "required": [
+                "expr"
+            ],
             "type": "object"
         },
         "SingleColumnExpression": {
@@ -275,6 +312,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "column"
+            ],
             "type": "object"
         },
         "StarExpression": {
@@ -298,6 +338,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "name"
+            ],
             "type": "object"
         },
         "Update": {
@@ -314,6 +357,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "assignments",
+                "table"
+            ],
             "type": "object"
         },
         "Where": {
@@ -330,6 +377,9 @@
                     "type": "array"
                 }
             },
+            "required": [
+                "first"
+            ],
             "type": "object"
         },
         "WhereSubsequent": {
@@ -343,6 +393,10 @@
                     "$ref": "#/definitions/LogicalOperator"
                 }
             },
+            "required": [
+                "expr",
+                "logical"
+            ],
             "type": "object"
         }
     },
@@ -355,6 +409,9 @@
             "type": "string"
         }
     },
+    "required": [
+        "model"
+    ],
     "type": "object"
 }
 

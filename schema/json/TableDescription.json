@@ -25,6 +25,13 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "index",
+                "name",
+                "not_null",
+                "primary",
+                "type"
+            ],
             "type": "object"
         },
         "ForeignKeyDescription": {
@@ -44,11 +51,19 @@
                                 "type": "string"
                             }
                         },
+                        "required": [
+                            "from_column",
+                            "to_column",
+                            "to_table"
+                        ],
                         "type": "object"
                     },
                     "type": "array"
                 }
             },
+            "required": [
+                "references"
+            ],
             "type": "object"
         }
     },
@@ -73,6 +88,11 @@
             "type": "boolean"
         }
     },
+    "required": [
+        "columns",
+        "foreign_keys",
+        "name"
+    ],
     "type": "object"
 }
 

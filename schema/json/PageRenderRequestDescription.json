@@ -29,6 +29,10 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "children",
+                "type"
+            ],
             "type": "object"
         },
         "PageDescription": {
@@ -66,6 +70,11 @@
                     "type": "array"
                 }
             },
+            "required": [
+                "apiVersion",
+                "id",
+                "name"
+            ],
             "type": "object"
         },
         "PageParameterDescription": {
@@ -76,6 +85,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "name"
+            ],
             "type": "object"
         },
         "QueryReferenceDescription": {
@@ -95,6 +107,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "type"
+            ],
             "type": "object"
         },
         "WidgetDescription": {
@@ -106,6 +121,9 @@
                     "type": "string"
                 }
             },
+            "required": [
+                "type"
+            ],
             "type": "object"
         }
     },
@@ -131,6 +149,10 @@
                         "type": "string"
                     }
                 },
+                "required": [
+                    "name",
+                    "sql"
+                ],
                 "type": "object"
             },
             "type": "array"
@@ -142,6 +164,13 @@
             "type": "string"
         }
     },
+    "required": [
+        "page",
+        "params",
+        "queries",
+        "source",
+        "sourceType"
+    ],
     "type": "object"
 }
 

@@ -53,15 +53,34 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
          params: project_json,
          headers: auth_headers
 
+    assert_response :bad_request
+
+   end
+
+  test "updating db-sequence project" do
+    project_json = {
+      "apiVersion" => "4",
+      "name" => "changed",
+      "description" => "changed-desc"
+    }
+
+    auth_headers = {"Authorization" => "Basic #{Base64.encode64('user:user')}"}
+
+    post '/api/project/db-sequence',
+         as: :json,
+         params: project_json,
+         headers: auth_headers
+
     assert_response :success
 
     get '/api/project/db-sequence'
-
+    
     assert_response :success
     assert_equal "application/json", @response.content_type
 
     project = JSON.parse(@response.body)
     assert_equal 'changed', project['name']
+    assert_equal 'changed-desc', project['description']
 
     rollback_test_filesystem
   end
@@ -104,6 +123,31 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     rollback_test_filesystem
   end
+
+  test "creating a new project with invalid parameters" do
+    project_creation_json = {
+      "apiVersion" =>"4",
+      "id" => "aa",
+      "name" => "bb",
+      "admin" => {
+        "name" => "cc",
+        "password" => "dd",
+      },
+      "dbType" => "ee"
+    }
+
+    post '/api/project',
+         as: :json,
+         params: project_creation_json
+
+    assert_response :bad_request
+    assert_equal "application/json", @response.content_type
+
+    errors = JSON.parse(@response.body)
+
+    assert_equal 5, errors.length
+  end
+
 
   test "deleting a project without authenticating" do
     delete '/api/project/db-sequence'
