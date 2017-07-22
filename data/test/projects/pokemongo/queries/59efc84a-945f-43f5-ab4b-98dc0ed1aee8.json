@@ -1,0 +1,70 @@
+{
+  "name": "Gefangen_Einzel",
+  "singleRow": true,
+  "from": {
+    "first": {
+      "name": "gefangen"
+    },
+    "joins": [
+      {
+        "table": {
+          "name": "pokedex"
+        },
+        "cross": "cross"
+      }
+    ]
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {
+          }
+        }
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "gefangen_id",
+            "table": "gefangen"
+          }
+        },
+        "rhs": {
+          "parameter": {
+            "key": "gefangen_id"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    },
+    "following": [
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "pokedex_nummer",
+                "table": "gefangen"
+              }
+            },
+            "rhs": {
+              "singleColumn": {
+                "column": "nummer",
+                "table": "pokedex"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
+      }
+    ]
+  },
+  "apiVersion": "4"
+}
