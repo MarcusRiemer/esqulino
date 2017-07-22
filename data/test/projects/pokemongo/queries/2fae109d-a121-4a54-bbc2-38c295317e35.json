@@ -1,0 +1,118 @@
+{
+  "name": "Meine_Pokemon",
+  "apiVersion": "4",
+  "from": {
+    "first": {
+      "name": "gefangen"
+    },
+    "joins": [
+      {
+        "table": {
+          "name": "pokedex"
+        },
+        "cross": "cross"
+      },
+      {
+        "table": {
+          "name": "typ"
+        },
+        "cross": "cross"
+      }
+    ]
+  },
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "gefangen_id",
+            "table": "gefangen"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "nummer",
+            "table": "pokedex"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "name",
+            "table": "pokedex"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "spitzname",
+            "table": "gefangen"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "staerke",
+            "table": "gefangen"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "typ_name",
+            "table": "typ"
+          }
+        }
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "pokedex_nummer",
+            "table": "gefangen"
+          }
+        },
+        "rhs": {
+          "singleColumn": {
+            "column": "nummer",
+            "table": "pokedex"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    },
+    "following": [
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "typ1",
+                "table": "pokedex"
+              }
+            },
+            "rhs": {
+              "singleColumn": {
+                "column": "typ_id",
+                "table": "typ"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
+      }
+    ]
+  }
+}

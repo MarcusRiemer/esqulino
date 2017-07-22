@@ -1,0 +1,131 @@
+{
+  "name": "Gefangen_Neu",
+  "apiVersion": "4",
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "Pokedex_1G",
+      "queryId": "0c396a9a-1947-4c2b-a5fb-195df2b91b84"
+    },
+    {
+      "type": "query",
+      "name": "Meine_Pokemon",
+      "queryId": "2fae109d-a121-4a54-bbc2-38c295317e35"
+    }
+  ],
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "type": "heading",
+        "level": 1,
+        "text": "Pokémon Gefangen"
+      },
+      {
+        "type": "paragraph",
+        "text": "Herzlichen Glückwunsch, du hast also ein neues Pokémon gefangen. Hier kannst du es eintragen."
+      },
+      {
+        "type": "link",
+        "text": "Zurück zur Hauptseite",
+        "action": {
+          "type": "navigate",
+          "internal": {
+            "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
+            "parameters": [
+
+            ]
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 1,
+        "text": "Alle existierenden Pokémon"
+      },
+      {
+        "type": "query-table",
+        "queryRefName": "Pokedex_1G",
+        "columns": [
+          "nummer",
+          "name",
+          "typ1",
+          "typ2"
+        ]
+      },
+      {
+        "type": "form",
+        "children": [
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Fakten zu deinem Fang"
+          },
+          {
+            "type": "select",
+            "caption": "Pokemon",
+            "outParamName": "nummer",
+            "queryRefName": "Pokedex_1G",
+            "optionTextExpression": "name",
+            "optionValueExpression": "nummer"
+          },
+          {
+            "type": "input",
+            "outParamName": "name",
+            "caption": "Spitzname",
+            "description": "Der von dir vergebene Name für das gefangene Pokémon",
+            "inputType": "text",
+            "required": true
+          },
+          {
+            "type": "input",
+            "outParamName": "staerke",
+            "caption": "Stärke",
+            "description": "Die Stärke des gefangenen Pokémon",
+            "inputType": "number",
+            "required": true
+          },
+          {
+            "type": "button",
+            "text": "Pokémon speichern",
+            "query": {
+              "type": "query",
+              "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44",
+              "mapping": [
+                {
+                  "parameterName": "nummer",
+                  "providingName": "nummer"
+                },
+                {
+                  "parameterName": "name",
+                  "providingName": "name"
+                },
+                {
+                  "parameterName": "staerke",
+                  "providingName": "staerke"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Meine Pokémon"
+      },
+      {
+        "type": "query-table",
+        "queryRefName": "Meine_Pokemon",
+        "columns": [
+          "gefangen_id",
+          "nummer",
+          "name",
+          "typ_name",
+          "spitzname",
+          "staerke"
+        ]
+      }
+    ]
+  }
+}

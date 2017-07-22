@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'test_helper'
 
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
@@ -9,9 +10,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     projects = JSON.parse(@response.body)
 
-    assert_equal 2, projects.length
+    assert_equal 3, projects.length
     assert_equal 'Abenteuer', projects[0]['name']
     assert_equal 'db-sequence', projects[1]['name']
+    assert_equal 'Pokémon Go', projects[2]['name']
   end
 
   test "should get the db-sequence test project" do
