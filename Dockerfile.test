@@ -3,7 +3,7 @@ LABEL name="esqulino test image"
 
 ENV CHROME_BIN="chromium"
 
-RUN pacman --noconfirm -Sy $SERVER_PACKAGES $CLIENT_PACKAGES $TEST_PACKAGES
+RUN pacman --noconfirm -Sy $BUILD_PACKAGES $SERVER_PACKAGES $CLIENT_PACKAGES $TEST_PACKAGES
 
 COPY entrypoint-test.sh /entrypoint.sh
 
