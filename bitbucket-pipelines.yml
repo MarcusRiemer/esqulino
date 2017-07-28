@@ -9,7 +9,7 @@ pipelines:
           - bundler-global
         script:
           - make install-deps
-          - make dist
+          - make dist-dev
           - make -C server test
           - TEST_SINGLE_RUN=true make -C client test
 
