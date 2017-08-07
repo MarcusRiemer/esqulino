@@ -74,8 +74,9 @@ Rails.application.routes.draw do
           root via: [:post], controller: 'project_images', action: :create
 
           scope ':image_id' do
-            get  'file', controller: 'project_images', action: :file_show
-            post 'file', controller: 'project_images', action: :file_update
+            root via: [:get], controller: 'project_images', action: :file_show
+            root via: [:post], controller: 'project_images', action: :file_update
+            root via: [:delete], controller: 'project_images', action: :file_delete
 
             get  'metadata', controller: 'project_images', action: :metadata_show
             post 'metadata', controller: 'project_images', action: :metadata_update
