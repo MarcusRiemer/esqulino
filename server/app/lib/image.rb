@@ -23,10 +23,15 @@ class Image
 
   def initialize(project_id, image_id)
     @folder = File.join(current_project(project_id).folder, IMAGE_FOLDER)
+    #@folder = IMAGE_FOLDER
     @path = File.join(@folder, image_id[0..1], image_id[2..3], image_id)
-    @image_id = image_id
-    @image_json = File.join(@folder, IMAGES_JSON)
-    @project_id = project_id
+    #@image_id = image_id
+    #@image_json = File.join(@folder, IMAGES_JSON)
+    #@project_id = project_id
+  end
+
+  def file_path
+    @path
   end
 
   def exists?
@@ -37,7 +42,7 @@ class Image
     if self.file? then
       File.read(@path)
     else
-      raise UnknownImageError @project_id @image_id
+      raise UnknownImageError(@project_id, @image_id)
     end
   end
 
@@ -45,7 +50,7 @@ class Image
     if self.exists? then
       FileUtils.mv(file, @path)
     else
-      raise UnknownImageError @project_id, @image_id
+      raise UnknownImageError(@project_id, @image_id)
     end
   end
 
@@ -61,7 +66,7 @@ class Image
 
       #self.freeze
     else
-      raise UnknownImageError @project_id @image_id
+      raise UnknownImageError(@project_id, @image_id)
     end
   end
 
@@ -69,7 +74,7 @@ class Image
     begin
       @metadata = File.file?(@image_json) ? JSON.parse(@image_json).fetch(@image_id) : Hash.new
     rescue KeyError
-      raise new UnknownImageError @project_id @image_id
+      raise new UnknownImageError(@project_id, @image_id)
     end
   end
 
@@ -99,7 +104,7 @@ class Image
     end
 
     img = Image.new(project_id, uuid)
-    FileUtil.mv(file, img.@path)
+#    FileUtil.mv(file, img.@path)
     img
   end
 
