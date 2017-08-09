@@ -71,6 +71,7 @@ Rails.application.routes.draw do
 
         # Everything that has something to do with images
         scope 'image' do
+          root via: [:get], controller: 'project_images', action: :list_show
           root via: [:post], controller: 'project_images', action: :create
 
           scope ':image_id' do

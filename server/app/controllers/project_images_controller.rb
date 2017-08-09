@@ -1,14 +1,16 @@
+require 'filemagic'
+
 class ProjectImagesController < ApplicationController
   include ProjectsHelper
   include ValidationHelper
 
   def create
     uuid = SecureRandom.uuid
-    project_id = current_project.id
-    img = Image.new(project_id, uuid)
+    metadata = Image.metadata_create(params['image-name'], "params['image-author-name']", "params['image-author-url']")
+    img = Image.file_new!(params['image-file'].tempfile, current_project, metadata)
 
     render plain: params.inspect + '
-' + project_id + '
+' + current_project.id + '
 ' + uuid + '
 '
   end
@@ -16,7 +18,9 @@ class ProjectImagesController < ApplicationController
   def file_show
     image_id = params['image_id']
 
-    (new Image(current_project.id, image_id)).file_show
+    path = Image.new(current_project, image_id).file_show
+
+    send_file path, :type => FileMagic.new(FileMagic::MAGIC_MIME).file(path), disposition: 'inline'
   end
 
   def file_update
@@ -39,5 +43,9 @@ class ProjectImagesController < ApplicationController
     ensure_write_access do
       #TODO
     end
+  end
+
+  def list_show
+    render status => :success, json: Image.metadata_get_from_file(current_project)
   end
 end

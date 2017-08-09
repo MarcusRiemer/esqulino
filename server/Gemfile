@@ -21,6 +21,8 @@ gem 'liquid'
 # Validating requests against a schema
 gem "json-schema", "~> 2.8"
 
+gem 'ruby-filemagic', '~> 0.7.2'
+
 ############################
 # Rails dependencies
 ###########################
