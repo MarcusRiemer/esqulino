@@ -1,0 +1,3 @@
+interface ValidationRule {
+  type: string
+}

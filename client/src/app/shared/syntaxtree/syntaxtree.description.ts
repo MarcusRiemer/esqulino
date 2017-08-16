@@ -15,9 +15,9 @@ export interface NodeDescription {
   nodeName: string
 
   /**
-   * This name is required to determine how to load this node.
+   * The syntax-tree is able to
    */
-  nodeLoader: string
+  nodeFamily: string
 
   /**
    * Nodes may have children in various categories. This base class
@@ -25,7 +25,7 @@ export interface NodeDescription {
    * children in multiple categories would be things like "attributes"
    * and generic "children" in a specialization for XML.
    */
-  nodeChildren: {
+  nodeChildren?: {
     [childrenCategory: string]: NodeDescription[];
   }
 
@@ -33,7 +33,7 @@ export interface NodeDescription {
    * Nodes may have all kinds of properties that are specific to their
    * concrete use.
    */
-  nodeProperties: {
+  nodeProperties?: {
     [propertyName: string]: any;
   }
 }
