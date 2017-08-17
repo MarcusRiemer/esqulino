@@ -10,12 +10,14 @@
  */
 export interface NodeDescription {
   /**
-   * The name of this not, this is equivalent to its type.
+   * The name of this not, this is used to lookup the name of a
+   * corresponding type.
    */
   nodeName: string
 
   /**
-   * The syntax-tree is able to
+   * The family is effectively a namespace, allowing identical
+   * names for nodes in different languages.
    */
   nodeFamily: string
 

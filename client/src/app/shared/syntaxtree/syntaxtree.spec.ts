@@ -67,9 +67,20 @@ describe('AST: Basic Operations', () => {
                   nodeFamily: "html",
                   nodeName: "attribute",
                   nodeProperties: {
-                    "name": "class",
-                    "value": "bg-black"
+                    "name": "class"
+                  },
+                  nodeChildren: {
+                    "children": [
+                      {
+                        nodeFamily: "html",
+                        nodeName: "text",
+                        nodeProperties: {
+                          "value": "bg-black"
+                        }
+                      }
+                    ]
                   }
+
                 }
               ]
             }
@@ -124,7 +135,11 @@ describe('AST: Basic Operations', () => {
     expect(bodyClass.nodeName).toEqual("attribute", "class='bg-black' attribute");
     expect(bodyClass.nodeFamily).toEqual("html", "class='bg-black' family");
     expect(bodyClass.nodeProperties["name"]).toEqual("class", "class='bg-black' name");
-    expect(bodyClass.nodeProperties["value"]).toEqual("bg-black", "class='bg-black' value");
+    expect(bodyClass.getChildren("children").length).toEqual(1, "class='bg-black' children");
+
+    const bodyClassText = bodyClass.getChildren("children")[0];
+    expect(bodyClass.nodeName).toEqual("attribute", "class='bg-black' attribute");
+    expect(bodyClass.nodeFamily).toEqual("html", "class='bg-black' family");
 
   });
 });
