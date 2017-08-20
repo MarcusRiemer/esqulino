@@ -6,6 +6,10 @@
  *
  * This schema language is modeled losely after XML-Schema,
  * but enhanced by various UI-related features.
+ * 
+ * Nodes can define two different sets of related data. But only
+ * complex nodes are allowed to have children that are nodes
+ * themselves.
  *
  * Notable Enhancements are:
  * - Types may define children in different categories. For
@@ -108,9 +112,18 @@ export interface MinInclusiveRestriction {
  */
 export interface NodeComplexTypeDescription extends NodeTypeDescription {
   type: "complex"
-  chidlrenCategories: NodeComplexTypeChildrenGroupDescription[];
+  chidlrenCategories?: NodeComplexTypeChildrenGroupDescription[]
+  propertyCategories?: NodeComplexTypePropertiesGroupDescription[]
 }
 
+export interface NodeComplexTypePropertiesGroupDescription {
+  categoryName: string
+  properties: (NodeStringTypeDescription | NodeIntegerTypeDescription)[]
+}
+
+/**
+ * Defines a group which allows different types of children.
+ */
 export interface NodeComplexTypeChildrenGroupDescription {
   categoryName: string
   children: NodeTypesAllowedDescription | NodeTypesSequenceDescription

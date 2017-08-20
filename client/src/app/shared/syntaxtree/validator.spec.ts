@@ -21,12 +21,10 @@ describe('Schema Validator', () => {
         {
           nodeName: "head",
           type: "complex",
-          chidlrenCategories: []
         } as Schema.NodeComplexTypeDescription,
         {
           nodeName: "body",
           type: "complex",
-          chidlrenCategories: []
         } as Schema.NodeComplexTypeDescription
       ],
       root: "html"
