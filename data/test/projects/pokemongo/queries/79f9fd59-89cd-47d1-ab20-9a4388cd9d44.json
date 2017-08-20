@@ -1,0 +1,33 @@
+{
+  "name": "Gefangen_Neu",
+  "insert": {
+    "assignments": [
+      {
+        "expr": {
+          "parameter": {
+            "key": "nummer"
+          }
+        },
+        "column": "pokedex_nummer"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "name"
+          }
+        },
+        "column": "spitzname"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "staerke"
+          }
+        },
+        "column": "staerke"
+      }
+    ],
+    "table": "gefangen"
+  },
+  "apiVersion": "4"
+}
