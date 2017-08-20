@@ -4,7 +4,7 @@ require 'nokogiri'
 require 'test_helper'
 
 class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
-  test "sequence_db: running a stored SELECT query" do
+  test "sequence_db: running a stored SELECT query (no params)" do
     post '/api/project/db-sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
          params: { },
          as: :json
@@ -15,6 +15,67 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
     result = JSON.parse(@response.body)
     assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"]], result
   end
+
+  test "sequence_db: running a dynamic SELECT query (no params)" do
+    post '/api/project/db-sequence/query/run',
+         params: {
+           sql: 'SELECT * FROM key_value WHERE key_value.key = key_value.key',
+           params: Hash.new
+         },
+         as: :json
+
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    result = JSON.parse(@response.body)
+    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"]], result
+  end
+
+  test "sequence_db: running a stored INSERT query (no params)" do
+    post '/api/project/db-sequence/query/e7273c53-bb78-44b0-95fd-8a716948a9b4/run',
+         params: { },
+         as: :json
+
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    post '/api/project/db-sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
+         params: { },
+         as: :json
+
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    result = JSON.parse(@response.body)
+    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"], [6, "test"]], result
+
+    rollback_test_filesystem
+  end
+  
+  test "sequence_db: running a dynamic INSERT query (no params)" do
+    post '/api/project/db-sequence/query/run',
+         params: {
+           sql: 'INSERT INTO key_value (value)VALUES (\'test\')',
+           params: Hash.new
+         },
+         as: :json
+
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    post '/api/project/db-sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
+         params: { },
+         as: :json
+
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    result = JSON.parse(@response.body)
+    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"], [6, "test"]], result
+
+    rollback_test_filesystem
+  end
+
   
   test "sequence_db: running a stored SELECT query with too many parameters" do
     post '/api/project/db-sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
