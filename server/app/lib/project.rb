@@ -8,6 +8,7 @@ require_dependency 'schema'
 require_dependency 'page'
 require_dependency 'schema-utils'
 require_dependency 'error'
+require_dependency 'sql_accessor'
 
 # Represents an esqulino project. Attributes of this
 # class are loaded lazily on demand, so there is no harm
@@ -278,6 +279,33 @@ class Project
     return (to_return)
   end
 
+  # Simulates the execution of a query in the context of this project.
+  #
+  # @param sql [string] The SQL query
+  # @param params [Hash] Query parameters
+  #
+  # @return [Hash] { columns :: List, rows :: List of List }
+  def simulate_insert_sql(sql, params, database_id = nil)
+    guessed_tablename = SqlAccessor::insert_tablename(sql)
+    
+    execute_sql_raw(sql, params, database_id, true) do |db|
+      # We wrap the whole execution in a transaction and then
+      # run the query to look at the newly added ID.
+      db.transaction
+      db.execute2 sql, params
+      rowid = db.last_insert_row_id
+
+      # We fetch exactly that row from the database and undo all changes
+      result = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid = #{rowid}"
+      db.rollback
+
+      return {
+        'columns' => result.first,
+        'rows' => result.drop(1)
+      }
+    end
+  end
+
   # Executes a query in the context of this project. This is of course
   # a major security concern and shouldn't be done lightly.
   #
@@ -285,24 +313,37 @@ class Project
   # @param params [Hash] Query parameters
   #
   # @return [Hash] { columns :: List, rows :: List of List }
-  #
   def execute_sql(sql, params, database_id = nil)
-    database_id = default_database_id if database_id.nil?
-
-    db = sqlite_open_augmented(self.file_path_sqlite(database_id), :read_only => @read_only)
-    db.execute("PRAGMA foreign_keys = ON")
-
-    begin
-      # execute2 returns the names of the columns in the first row. But we want
-      # those to go in a hash with explicit names.
+    # The SQLite driver returns the names of the columns in the first row. But we want
+    # those to go in a hash with explicit names.
+    execute_sql_raw(sql, params, database_id) do |db|
       result = db.execute2(sql, params)
       return {
         'columns' => result.first,
         'rows' => result.drop(1)
       }
+    end
+  end
+
+  # Prepares a properly constructed database object and deals with
+  # exceptions that occur during query execution.
+  private def execute_sql_raw(sql, params, database_id = nil, read_only = nil)
+    database_id = default_database_id if database_id.nil?
+    read_only = @read_only if read_only.nil?
+
+    db = sqlite_open_augmented(self.file_path_sqlite(database_id), :read_only => read_only)
+    db.execute("PRAGMA foreign_keys = ON")
+
+    # Exceptions that could occur fall in one of two categories
+    begin
+      yield db
     rescue SQLite3::ConstraintException, SQLite3::SQLException => e
+      # Something anticipated went wrong. This is probably the fault
+      # of the caller in some way.
       raise DatabaseQueryError.new(self, sql, params, e, false)
     rescue SQLite3::Exception => e
+      # Something unanticipated went wrong. We assume this is an error in our
+      # implementation (either server or client).
       raise DatabaseQueryError.new(self, sql, params, e, true)
     end
   end
