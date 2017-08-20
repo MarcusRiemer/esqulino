@@ -443,6 +443,7 @@ def enumerate_projects(projects_dir, write_access, public_only)
                 .map { |entry| File.join projects_dir, entry }
                 .select { |entry| File.directory? entry }
                 .map { |entry| Project.new entry, write_access }
+                .sort { |lhs,rhs| lhs.id <=> rhs.id }
 
   # Possibly filter out
   if public_only then

@@ -37,17 +37,32 @@ export class ContenteditableModel implements OnInit {
   }
 
   /**
+   * @return The text property of the native element
+   */
+  get nativeText() {
+    return (this.elRef.nativeElement.textContent);
+  }
+
+  /**
+   * @param value The text property of the native element
+   */
+  set nativeText(value: string) {
+    this.elRef.nativeElement.textContent = value;
+  }
+
+  /**
    * Picks up the initial value that was assigned to this model
    */
   ngOnInit() {
-    this.lastViewModel = this.elRef.nativeElement.textContent;
+    this.lastViewModel = this.model;
+    this.nativeText = this.model;
   }
 
   /**
    * Propagates changes if they have happened.
    */
   onChange() {
-    const value = this.elRef.nativeElement.textContent;
+    const value = this.nativeText;
 
     if (this.lastViewModel != value) {
       this.lastViewModel = value;

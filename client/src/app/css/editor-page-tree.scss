@@ -75,6 +75,9 @@
     display: inline-block;
 
     .inline-editable-value {
+        min-width: 1em;
+        min-height: 1ex;
+        cursor: text;
         display: inline-block;
     }
 
