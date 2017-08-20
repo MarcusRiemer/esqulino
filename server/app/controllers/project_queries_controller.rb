@@ -8,8 +8,12 @@ class ProjectQueriesController < ApplicationController
   def run_arbitrary   
     request_data = ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
+    sql_query = request_data['sql']
+    
     # TODO: Remove this ugly hack to limit the maximum number of rows
-    sql_query = "#{request_data['sql']}\nLIMIT 100"
+    if sql_query.start_with?('SELECT') then
+      sql_query = sql_query + "\nLIMIT 100"
+    end
     
     result = self.current_project.execute_sql(sql_query, request_data['params'])
     render json: result['rows']
