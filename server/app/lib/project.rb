@@ -8,6 +8,7 @@ require_dependency 'schema'
 require_dependency 'page'
 require_dependency 'schema-utils'
 require_dependency 'error'
+require_dependency 'sql_accessor'
 
 # Represents an esqulino project. Attributes of this
 # class are loaded lazily on demand, so there is no harm
@@ -61,7 +62,7 @@ class Project
     # have something more specific
     database_id = default_database_id if database_id.nil?
     used_database = available_databases.fetch(database_id)
-    
+
     File.join(self.folder_databases, used_database['path'])
   end
 
@@ -127,7 +128,7 @@ class Project
   def description_filename
     File.join(@project_folder, "config.yaml")
   end
-  
+
   # Loads the projects model from disk
   def load_description!
     # Ensure this is actually a loadable project
@@ -161,7 +162,7 @@ class Project
   # page-ID from the model if it doesn't exist
   def check_index_page!
     index_page_id = whole_description['indexPageId']
-    if index_page_id then  
+    if index_page_id then
       index_page = Page.new(self, index_page_id)
       if not index_page.exists? then
         # puts "Removing reference to index page"
@@ -181,9 +182,9 @@ class Project
   # something that would never happen on purpose.
   def save_description
     assert_write_access!
-    
+
     raise EsqulinoError, "Attempted to save unloaded project" if @whole_description.nil?
-    
+
     File.open(description_filename, "w") do |f|
       # Save everything but the ID
       f.write(@whole_description.tap{|d| d.delete('id') }.to_yaml)
@@ -216,7 +217,7 @@ class Project
     path = self.preview_image_path
     not path.nil? and File.exists? path
   end
-  
+
   # @return Path to the preview image, may be nil of no image is set
   def preview_image_path
     load_description! if @whole_description.nil?
@@ -235,7 +236,7 @@ class Project
   #                            should be used.
   def load_schema!(database_id = nil)
     database_id = default_database_id if database_id.nil?
-    
+
     @schema[database_id] = database_describe_schema(self.file_path_sqlite database_id)
   end
 
@@ -244,7 +245,7 @@ class Project
   #                            should be used.
   def schema(database_id = nil)
     database_id = default_database_id if database_id.nil?
-    
+
     load_schema! database_id if not @schema.key? self.default_database_id
     return @schema.fetch database_id
   end
@@ -278,6 +279,51 @@ class Project
     return (to_return)
   end
 
+  # Simulates the execution of a query in the context of this project.
+  #
+  # @param sql [string] The SQL query
+  # @param params [Hash] Query parameters
+  #
+  # @return [Hash] { columns :: List, rows :: List of List }
+  def simulate_insert_sql(sql, params, database_id = nil)
+    guessed_tablename = SqlAccessor::insert_tablename(sql)
+    
+    execute_sql_raw(sql, params, database_id, true) do |db|
+      begin
+        # We wrap the whole execution in a transaction and then
+        # run the query to look at the newly added ID.
+        db.transaction
+        db.execute2 sql, params
+        rowid = db.last_insert_row_id
+
+        # We fetch exactly that row from the database
+        inserted = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid = #{rowid}"
+        columns = inserted.first
+        inserted = inserted.drop(1)
+        
+        # And we fetch rows around that row
+        rows = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid BETWEEN #{rowid - 2} AND #{rowid + 2}"
+
+        # Highlight some rows
+        highlight = rows
+                      .drop(1)
+                      .map.with_index {|r,i| [r,i] }
+                      .reject {|r,i| not inserted.include? r }
+                      .map {|r,i| i }
+
+        return {
+          'columns' => columns,
+          'inserted' => inserted,
+          'rows' => rows.drop(1),
+          'highlight' => highlight
+        }
+      ensure
+        # We always undo all changes that have been made.
+        db.rollback
+      end
+    end
+  end
+
   # Executes a query in the context of this project. This is of course
   # a major security concern and shouldn't be done lightly.
   #
@@ -285,24 +331,37 @@ class Project
   # @param params [Hash] Query parameters
   #
   # @return [Hash] { columns :: List, rows :: List of List }
-  #                
   def execute_sql(sql, params, database_id = nil)
-    database_id = default_database_id if database_id.nil?
-    
-    db = sqlite_open_augmented(self.file_path_sqlite(database_id), :read_only => @read_only)
-    db.execute("PRAGMA foreign_keys = ON")
-
-    begin
-      # execute2 returns the names of the columns in the first row. But we want
-      # those to go in a hash with explicit names.
+    # The SQLite driver returns the names of the columns in the first row. But we want
+    # those to go in a hash with explicit names.
+    execute_sql_raw(sql, params, database_id) do |db|
       result = db.execute2(sql, params)
       return {
         'columns' => result.first,
         'rows' => result.drop(1)
       }
+    end
+  end
+
+  # Prepares a properly constructed database object and deals with
+  # exceptions that occur during query execution.
+  private def execute_sql_raw(sql, params, database_id = nil, read_only = nil)
+    database_id = default_database_id if database_id.nil?
+    read_only = @read_only if read_only.nil?
+
+    db = sqlite_open_augmented(self.file_path_sqlite(database_id), :read_only => read_only)
+    db.execute("PRAGMA foreign_keys = ON")
+
+    # Exceptions that could occur fall in one of two categories
+    begin
+      yield db
     rescue SQLite3::ConstraintException, SQLite3::SQLException => e
+      # Something anticipated went wrong. This is probably the fault
+      # of the caller in some way.
       raise DatabaseQueryError.new(self, sql, params, e, false)
     rescue SQLite3::Exception => e
+      # Something unanticipated went wrong. We assume this is an error in our
+      # implementation (either server or client).
       raise DatabaseQueryError.new(self, sql, params, e, true)
     end
   end
@@ -320,7 +379,7 @@ class Project
   # Function to check if project has a table with name table_name
   def has_table(table_name, database_id = nil)
     database_id = default_database_id if database_id.nil?
-    
+
     return !schema(database_id).detect{|table| table.name.eql? table_name}.nil?
   end
 
@@ -339,7 +398,7 @@ class Project
 
     return (to_return)
   end
-  
+
   # Retrieves a page by its name
   #
   # @param name The name of the searched page
@@ -361,7 +420,7 @@ class Project
   def index_page?
     whole_description.key?('indexPageId')
   end
-  
+
   # @return The page model for the index page
   def index_page
     # Read the ID of the index page
@@ -385,7 +444,7 @@ class Project
     # Update the password for the specific user
     users = whole_description.fetch('users', {})
     users[username] = hash_password plain_text_password
-    
+
     whole_description['users'] = users
   end
 
@@ -465,7 +524,7 @@ end
 # Available parameters during project creation.
 class ProjectCreationParams
   attr_reader :id, :name, :db_type, :admin_name, :admin_password
-  
+
   def initialize(params_hash)
     @id = params_hash['id']
     @name = params_hash['name']
@@ -509,7 +568,7 @@ def create_project(projects_dir, project_params)
   # of an error there shouldn't be half-baked projects left on the disk
   begin
     Dir.mkdir project_path
-    
+
     # Create an empty sqlite3 database and incorporate it into
     # the description
     if project_params.db_type == 'sqlite3'

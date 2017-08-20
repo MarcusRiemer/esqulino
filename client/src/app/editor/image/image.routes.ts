@@ -2,6 +2,7 @@ import { Routes, RouterModule } from '@angular/router'
 
 import { ImageListComponent } from './image-list.component'
 import { ImageUploadComponent } from './image-upload.component'
+import { ImageEditComponent } from './image-edit.component'
 
 export const imageEditorRoutes: Routes = [
   {
@@ -11,6 +12,10 @@ export const imageEditorRoutes: Routes = [
   {
     path: "upload",
     component: ImageUploadComponent,
+  },
+  {
+    path: ":imageId/edit",
+    component: ImageEditComponent,
   }
 ]
 
