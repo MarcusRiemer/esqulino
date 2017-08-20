@@ -1,15 +1,49 @@
-import { SchemaDescription } from './validator.description'
+import * as Desc from './validator.description'
 
 export interface ValidationItem {
   type: "error" | "warning"
   message: string
 }
 
+/**
+ * Represents the result of a completed validation.
+ */
 export class ValidationResult {
 
 }
 
-class RegisteredType {
+/**
+ * Used during validation to accumulate validation results.
+ */
+class ValidationContext {
+
+}
+
+/**
+ * Base class for types describing simple and complex nodes. Derived
+ * instances of this class are registered as part of a schema.
+ */
+abstract class NodeType {
+  private _familyName: string;
+  private _nodeName: string;
+
+  constructor(typeDesc: Desc.NodeTypeDescription, familyName: string) {
+    this._nodeName = typeDesc.nodeName;
+    this._familyName = familyName;
+  }
+}
+
+class NodeComplexType extends NodeType {
+  constructor(typeDesc: Desc.NodeTypeDescription, familyName: string) {
+    super(typeDesc, familyName)
+  }
+}
+
+class NodeComplexTypeChildren {
+
+}
+
+class NodeComplexTypeChildrenSequence {
 
 }
 
@@ -17,7 +51,7 @@ class RegisteredType {
  * A schema consists of type definitions and
  */
 class Schema {
-  constructor(desc: SchemaDescription) {
+  constructor(desc: Desc.SchemaDescription) {
 
   }
 }
@@ -29,7 +63,7 @@ class Schema {
 class Validator {
   private _registeredLanguages: { [langName: string]: Schema };
 
-  registerLanguage(desc: SchemaDescription) {
+  registerLanguage(desc: Desc.SchemaDescription) {
     this._registeredLanguages[desc.languageName] = new Schema(desc);
   }
 
