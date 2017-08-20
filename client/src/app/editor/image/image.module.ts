@@ -5,6 +5,7 @@ import { RegistrationService } from '../registration.service'
 
 import { ImageListComponent } from './image-list.component'
 import { ImageUploadComponent } from './image-upload.component'
+import { ImageEditComponent } from './image-edit.component'
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { ImageUploadComponent } from './image-upload.component'
   ],
   declarations: [
     ImageListComponent,
-    ImageUploadComponent
+    ImageUploadComponent,
+    ImageEditComponent
   ],
   providers: [
   ],

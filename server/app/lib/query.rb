@@ -28,7 +28,7 @@ class Query
   # Loads the page model from disk
   def load_model!
     raise UnknownQueryError.new(@project.id, @id) unless File.exists? query_file_path
-    
+
     self.model = YAML.load_file(query_file_path)
   end
 
@@ -45,9 +45,9 @@ class Query
   # string at all instead of working with an older state of the query.
   #
   # @see Query.save_description
-  def save!    
+  def save!
     self.save_description
-    
+
     # Is the SQL representation present?
     if not @sql.nil? then
       # Yes, simply store it
@@ -74,7 +74,7 @@ class Query
   def save_description
     @project.assert_write_access!
     raise EsqulinoError, "Attempted to save unloaded query" if @model.nil?
-    
+
     # Ensuring that the project folder has a "queries" subfolder
     if not File.directory?(@project.folder_queries)
       FileUtils.mkdir_p(@project.folder_queries)
@@ -96,12 +96,12 @@ class Query
   end
 
   # Executes this query in the context of the associated project.
-  def execute(params)    
+  def execute(params)
     # Ensure parameters are supplied
     if not self.executable?(params)
       raise InvalidQueryRequest.new(self, params, self.required_parameters)
     end
-    
+
     @project.execute_sql(sql, params)
   end
 
@@ -114,7 +114,7 @@ class Query
   def id
     @id
   end
-  
+
   # @return The user-facing name of this query
   def name
     model['name']
@@ -172,10 +172,10 @@ class Query
 
   # @return [List<string>] The names of the required parameters
   def required_parameters
-    # Grab everything 
+    # Grab everything
     self.expression_leaves
       .select {|c| c.key?('parameter') }
-      .map {|c| c['parameter']['key']}    
+      .map {|c| c['parameter']['key']}
   end
 
   # @return [List<Hash>] Models of all expression leaves
@@ -209,9 +209,9 @@ class Query
       # but the keys of the data model.
       leaves = ['missing', 'constant', 'parameter', 'singleColumn', 'star']
 
-      
+
       leaf_type = expr.keys.select {|c| leaves.include? c}
-      if leaf_type.length == 1 
+      if leaf_type.length == 1
         # Return those leaves wrapped in a list
         return [expr]
       else

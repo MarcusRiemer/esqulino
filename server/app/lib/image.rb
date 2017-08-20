@@ -7,6 +7,8 @@ class Image
 
   IMAGE_FOLDER = 'images'
   IMAGES_JSON = 'images.json'
+  IMAGE_PATH_PRE_PROJECT_ID = '/api/project/'
+  IMAGE_PATH_PRE_IMAGE_ID = '/image/'
 
   # the images metadata (lazy loaded)
   @metadata = nil
@@ -18,6 +20,10 @@ class Image
   def initialize(project, image_id)
     @image_id = image_id
     @project = project
+  end
+
+  def id
+    @image_id
   end
 
   def file_path
@@ -85,7 +91,18 @@ class Image
   end
 
   def self.metadata_get_from_file(project)
-    File.file?(self.image_json(project)) ? JSON.parse(File.read(self.image_json(project))) : Hash.new
+    JSON.parse(File.read(self.image_json(project)))
+
+    to_return = []
+    if File.file?(self.image_json(project))
+    then
+      JSON.parse(File.read(self.image_json(project))).each do |k, v|
+        v['id'] = k
+        v['image-url'] = IMAGE_PATH_PRE_PROJECT_ID + project.id + IMAGE_PATH_PRE_IMAGE_ID + k
+        to_return.append(v)
+      end
+    end
+    to_return
   end
 
   def metadata_load!
@@ -97,13 +114,18 @@ class Image
   end
 
   def metadata_show
-    load_metadata! if @metadata.nil?
+    metadata_load! if @metadata.nil?
+    res = @metadata
 
-    @metadata
+    res['id'] = @image_id
+    res['image-url'] = IMAGE_PATH_PRE_PROJECT_ID + @project.id + IMAGE_PATH_PRE_IMAGE_ID + @image_id
+
+    res
   end
 
   def metadata_update(metadata)
-    @metadata.merge(metadata)
+    metadata_load!
+    @metadata.merge!(metadata)
   end
 
   def metadata_save
@@ -112,10 +134,6 @@ class Image
       metadata_list[@image_id] = @metadata
       File.write(image_json, JSON.dump(metadata_list))
     end
-  end
-
-  def self.image_list
-    File.file?(image_json) ? JSON.parse(File.read(image_json)) : Hash.new
   end
 
   def self.uuid_to_filename(project, uuid)

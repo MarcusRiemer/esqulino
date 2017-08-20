@@ -27,7 +27,7 @@ export class ImageUploadComponent {
 
     this._http.post(this._serverApi.getImageUploadUrl(projectId), formData)
       .subscribe(res => {
-        console.log(res);
+          console.log(res);
       });
   }
 }
