@@ -16,7 +16,7 @@ class ProjectQueriesController < ApplicationController
     end
     
     result = self.current_project.execute_sql(sql_query, request_data['params'])
-    render json: result['rows']
+    render json: result
   end
 
   # Running a query that has already been stored on the server
@@ -24,7 +24,7 @@ class ProjectQueriesController < ApplicationController
     query_params = ensure_request("QueryParamsDescription", request.body.read)
     
     result = current_query.execute(query_params)
-    render json: result['rows']
+    render json: result
   end
 
   # Simulates the execution of an INSERT SQL query

@@ -289,20 +289,38 @@ class Project
     guessed_tablename = SqlAccessor::insert_tablename(sql)
     
     execute_sql_raw(sql, params, database_id, true) do |db|
-      # We wrap the whole execution in a transaction and then
-      # run the query to look at the newly added ID.
-      db.transaction
-      db.execute2 sql, params
-      rowid = db.last_insert_row_id
+      begin
+        # We wrap the whole execution in a transaction and then
+        # run the query to look at the newly added ID.
+        db.transaction
+        db.execute2 sql, params
+        rowid = db.last_insert_row_id
 
-      # We fetch exactly that row from the database and undo all changes
-      result = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid = #{rowid}"
-      db.rollback
+        # We fetch exactly that row from the database
+        inserted = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid = #{rowid}"
+        columns = inserted.first
+        inserted = inserted.drop(1)
+        
+        # And we fetch rows around that row
+        rows = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid BETWEEN #{rowid - 2} AND #{rowid + 2}"
 
-      return {
-        'columns' => result.first,
-        'rows' => result.drop(1)
-      }
+        # Highlight some rows
+        highlight = rows
+                      .drop(1)
+                      .map.with_index {|r,i| [r,i] }
+                      .reject {|r,i| not inserted.include? r }
+                      .map {|r,i| i }
+
+        return {
+          'columns' => columns,
+          'inserted' => inserted,
+          'rows' => rows.drop(1),
+          'highlight' => highlight
+        }
+      ensure
+        # We always undo all changes that have been made.
+        db.rollback
+      end
     end
   end
 

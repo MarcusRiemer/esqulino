@@ -43,9 +43,11 @@ export class QueryEditorComponent implements OnInit {
   private _subscriptionRefs: any[] = [];
 
   /**
-   * The button that runs queries.
+   * The buttons that run queries.
    */
-  private _btnQuery: ToolbarItem;
+  private _btnSimulate: ToolbarItem;
+
+  private _btnExecute: ToolbarItem;
 
   /**
    * Cache for user input. This allows parameters to be preserved when the user
@@ -158,10 +160,18 @@ export class QueryEditorComponent implements OnInit {
     this._subscriptionRefs.push(subRef)
 
     // Reacting to querying, by default this means running a simulation.
-    this._btnQuery = this._toolbarService.addButton("run", "Ausführen", "play", "r");
-    subRef = this._btnQuery.onClick.subscribe((res) => {
-      this.runQuery(true);
+    this._btnSimulate = this._toolbarService.addButton("simulate", "Vorschau", "play", "r");
+    subRef = this._btnSimulate.onClick.subscribe((res) => {
+      this.runQuery(this._btnSimulate, true);
     });
+    this._subscriptionRefs.push(subRef);
+
+    // Forcing actual evaluation
+    this._btnExecute = this._toolbarService.addButton("run", "Ausführen", "exclamation", "n");
+    subRef = this._btnExecute.onClick.subscribe((res) => {
+      this.runQuery(this._btnExecute, false);
+    });
+    this._subscriptionRefs.push(subRef);
 
     // Grab the correct project and query
     // this.updateQuery(this._routeParams.snapshot.params['queryId']);
@@ -184,8 +194,8 @@ export class QueryEditorComponent implements OnInit {
    * Sends the currently edited query to the server. There it might be actually
    * run or "merely" simulated.
    */
-  runQuery(simulated: boolean) {
-    this._btnQuery.isInProgress = true;
+  runQuery(button: ToolbarItem, simulated: boolean) {
+    button.isInProgress = true;
     let request: Observable<QueryResult> = undefined;
 
     // Only select queries should be run immediatly. But sadly we are not quite
@@ -196,12 +206,11 @@ export class QueryEditorComponent implements OnInit {
     } else {
       // Queries with mutating side effects are previewed first
       request = this._queryService.simulateInsertQuery(this.project, this.query, this.relevantArguments);
-      console.log("Simulation finished");
     }
 
     // Hook up to the end of a successful request.
     request.subscribe(res => {
-      this._btnQuery.isInProgress = false;
+      button.isInProgress = false;
       this._result = res;
     });
   }
@@ -228,7 +237,7 @@ export class QueryEditorComponent implements OnInit {
     if (this.query.select &&
       this.query.isValid &&
       this.query.parameters.length === 0) {
-      this._btnQuery.fire();
+      this._btnSimulate.fire();
     }
   }
 }

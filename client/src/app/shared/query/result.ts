@@ -10,9 +10,15 @@ import { Query } from './base'
 type RawRow = string[]
 
 /**
- * A result is simply a list of rows.
+ * The result usually contains a list of rows and a list of columns.
+ * If the result is a simulation there are additional properties.
  */
-type QueryResultDescription = RawRow[];
+type QueryResultDescription = {
+  rows?: RawRow[]
+  inserted?: RawRow[]
+  highlight?: number[]
+  columns: string[]
+};
 
 /**
  * Over the wire format to describe a query that could not
@@ -68,14 +74,20 @@ class Cell {
 class Row {
   private _query: Query;
   private _cells: Cell[];
+  private _highlight: boolean;
 
-  constructor(query: Query, raw: RawRow) {
+  constructor(query: Query, raw: RawRow, highlight?: boolean) {
     this._query = query;
+    this._highlight = !!highlight;
     this._cells = raw.map((v, k) => new Cell(query, k, v));
   }
 
   get cells() {
     return (this._cells);
+  }
+
+  get isHighlighted() {
+    return (this._highlight);
   }
 }
 
@@ -84,7 +96,7 @@ function isQueryRunErrorDescription(arg: any): arg is QueryRunErrorDescription {
 }
 
 function isQueryResultDescription(arg: any): arg is QueryResultDescription {
-  return (Array.isArray(arg));
+  return !!(arg.rows && arg.columns);
 }
 
 /**
@@ -94,6 +106,9 @@ export class QueryResult {
   private _query: Query;
 
   private _rows: Row[] = [];
+  private _inserted: Row[] = [];
+
+  private _columns: string[] = [];
 
   private _simulated: boolean;
 
@@ -116,7 +131,11 @@ export class QueryResult {
     if (isQueryRunErrorDescription(res)) {
       this._error = res;
     } else if (isQueryResultDescription(res)) {
-      this._rows = res.map(v => new Row(query, v));
+      const highlighted = res.highlight || [];
+
+      this._rows = res.rows.map((v, i) => new Row(query, v, highlighted.includes(i)));
+      this._inserted = (res.inserted || []).map(v => new Row(query, v));
+      this._columns = res.columns;
     }
   }
 
@@ -158,11 +177,16 @@ export class QueryResult {
   }
 
   /**
+   * Rows that have been inserted
+   */
+  get inserted() {
+    return (this._inserted);
+  }
+
+  /**
    * @return The names of the columns involved in this result.
    */
   get cols() {
-    if (this._query.select) {
-      return (this._query.select.actualColums);
-    }
+    return (this._columns);
   }
 }
