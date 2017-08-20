@@ -64,7 +64,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project_json = {
       "apiVersion" => "4",
       "name" => "changed",
-      "description" => "changed-desc"
+      "description" => "changed-desc",
+      "activeDatabase" => "default"
     }
 
     auth_headers = {"Authorization" => "Basic #{Base64.encode64('user:user')}"}
@@ -92,6 +93,20 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project_json = {
       "apiVersion":"4",
       "foo": "bar"
+    }
+
+    post '/api/project/db-sequence',
+         as: :json,
+         params: project_json,
+         headers: auth_headers
+
+    assert_response :bad_request
+  end
+
+  test "updating db-sequence project with a second (unwanted) ID" do
+    project_json = {
+      "apiVersion":"4",
+      "id": "db-sequence"
     }
 
     post '/api/project/db-sequence',

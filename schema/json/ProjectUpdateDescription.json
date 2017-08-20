@@ -15,6 +15,9 @@
     },
     "description": "These things can be provided when updating the project itself.",
     "properties": {
+        "activeDatabase": {
+            "type": "string"
+        },
         "apiVersion": {
             "$ref": "#/definitions/ApiVersionToken",
             "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
@@ -27,7 +30,7 @@
         },
         "name": {
             "description": "The name of the project. May only contain more or less friendly\ncharacters.",
-            "pattern": "^[a-z0-9 \\-_]{4,}$",
+            "pattern": "^[a-zA-Z0-9 \\-_]{4,}$",
             "type": "string"
         },
         "preview": {
@@ -35,6 +38,7 @@
         }
     },
     "required": [
+        "activeDatabase",
         "apiVersion",
         "description",
         "name"
