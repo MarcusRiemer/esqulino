@@ -7,12 +7,12 @@ import { Query } from './base'
  * Not much ado about type safety here, in the raw
  * format every cell is a string.
  */
-type RawRow = [string]
+type RawRow = string[]
 
 /**
  * A result is simply a list of rows.
  */
-type QueryResultDescription = RawRow[]
+type QueryResultDescription = RawRow[];
 
 /**
  * Over the wire format to describe a query that could not
@@ -90,10 +90,12 @@ function isQueryResultDescription(arg: any): arg is QueryResultDescription {
 /**
  * Adds type information to a raw QueryResultDescription.
  */
-export class SelectQueryResult {
+export class QueryResult {
   private _query: Query;
 
   private _rows: Row[] = [];
+
+  private _simulated: boolean;
 
   /**
    * If this field is set, the query was not succesfull
@@ -103,11 +105,13 @@ export class SelectQueryResult {
   /**
    * A result may be an error or a list of rows.
    *
-   * @param query The query that was running
-   * @param res   The result of the run
+   * @param query     The query that was running
+   * @param res       The result of the run
+   * @param simulated True if this is the result of a simulation.
    */
-  constructor(query: Query, res: QueryResultDescription | QueryRunErrorDescription) {
+  constructor(query: Query, res: QueryResultDescription | QueryRunErrorDescription, simulated: boolean) {
     this._query = query;
+    this._simulated = simulated;
 
     if (isQueryRunErrorDescription(res)) {
       this._error = res;
@@ -133,6 +137,13 @@ export class SelectQueryResult {
   }
 
   /**
+   * @return True if this is the result of a simulation.
+   */
+  get isSimulated(): boolean {
+    return (this._simulated);
+  }
+
+  /**
    * @return The servers error message.
    */
   get errorMessage() {
@@ -150,6 +161,8 @@ export class SelectQueryResult {
    * @return The names of the columns involved in this result.
    */
   get cols() {
-    return (this._query.select.actualColums);
+    if (this._query.select) {
+      return (this._query.select.actualColums);
+    }
   }
 }
