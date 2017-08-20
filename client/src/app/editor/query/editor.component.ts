@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable'
 
 import {
   Query, Model, SyntaxTree,
-  SelectQueryResult, QueryRunErrorDescription
+  QueryResult, QueryRunErrorDescription
 } from '../../shared/query'
 
 import { ProjectService, Project } from '../project.service'
@@ -35,7 +35,7 @@ export class QueryEditorComponent implements OnInit {
   /**
    * The result of the most recently run query
    */
-  private _result: SelectQueryResult;
+  private _result: QueryResult;
 
   /**
    * Subscriptions that need to be released
@@ -157,15 +157,10 @@ export class QueryEditorComponent implements OnInit {
 
     this._subscriptionRefs.push(subRef)
 
-    // Reacting to querying
+    // Reacting to querying, by default this means running a simulation.
     this._btnQuery = this._toolbarService.addButton("run", "Ausführen", "play", "r");
     subRef = this._btnQuery.onClick.subscribe((res) => {
-      this._btnQuery.isInProgress = true;
-      this._queryService.runQuery(this.project, this.query, this.relevantArguments)
-        .subscribe(res => {
-          this._btnQuery.isInProgress = false;
-          this._result = res;
-        });
+      this.runQuery(true);
     });
 
     // Grab the correct project and query
@@ -177,9 +172,38 @@ export class QueryEditorComponent implements OnInit {
     this._subscriptionRefs.push(subRef);
   }
 
+  /**
+   * Cleans up all acquired references
+   */
   ngOnDestroy() {
     this._subscriptionRefs.forEach(ref => ref.unsubscribe());
     this._subscriptionRefs = [];
+  }
+
+  /**
+   * Sends the currently edited query to the server. There it might be actually
+   * run or "merely" simulated.
+   */
+  runQuery(simulated: boolean) {
+    this._btnQuery.isInProgress = true;
+    let request: Observable<QueryResult> = undefined;
+
+    // Only select queries should be run immediatly. But sadly we are not quite
+    // that far (yet).
+    if (!simulated || this.query.select || this.query.delete || this.query.update) {
+      request = this._queryService.runQuery(this.project, this.query, this.relevantArguments);
+
+    } else {
+      // Queries with mutating side effects are previewed first
+      request = this._queryService.simulateInsertQuery(this.project, this.query, this.relevantArguments);
+      console.log("Simulation finished");
+    }
+
+    // Hook up to the end of a successful request.
+    request.subscribe(res => {
+      this._btnQuery.isInProgress = false;
+      this._result = res;
+    });
   }
 
   private updateQuery(queryId: string) {

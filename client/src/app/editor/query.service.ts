@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable'
 import { ServerApiService, CURRENT_API_VERSION } from '../shared/'
 import {
   Model, loadQuery,
-  Query, SelectQueryResult, QueryRunErrorDescription,
+  Query, QueryResult, QueryRunErrorDescription,
 } from '../shared/query'
 
 import { Project, ProjectDescription } from './project.service'
@@ -75,7 +75,18 @@ export class QueryService {
    */
   runQuery(project: Project, query: Query, params: QueryParamsDescription) {
     const url = this._server.getRunQueryUrl(project.id);
+    return (this.serverCallQueryEndpoint(url, query, params, false));
+  }
 
+  /**
+   * Simulates the effect of an INSERT query
+   */
+  simulateInsertQuery(project: Project, query: Query, params: QueryParamsDescription) {
+    const url = this._server.getSimulateInsertUrl(project.id);
+    return (this.serverCallQueryEndpoint(url, query, params, true));
+  }
+
+  private serverCallQueryEndpoint(url: string, query: Query, params: QueryParamsDescription, simulated: boolean) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
@@ -86,17 +97,13 @@ export class QueryService {
 
     const toReturn = this._http.post(url, JSON.stringify(body), options)
       .catch((error: any) => {
-        if (query instanceof Query) {
-          return (Observable.of(error));
-        } else {
-          return Observable.throw(error);
-        }
+        return (Observable.of(error));
       })
       .map((res) => {
         // The result changes dependending on the concrete type
         // of the query.
-        if (query.select) {
-          return (new SelectQueryResult(query, <any>res.json()))
+        if (query.select || query.insert) {
+          return (new QueryResult(query, <any>res.json(), simulated))
         } else {
           return (undefined);
         }
