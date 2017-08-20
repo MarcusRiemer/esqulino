@@ -1,8 +1,17 @@
 <div *ngIf="result"
-     class="result card">
+     class="result card mb-3">
   <div class="card-block">
-    <h4>Ergebnisse</h4>
-    <p>Hier kannst du das Ergebnis der Abfrage sehen.</p>
+    <!-- Distinguishing between real results and simulations in the header -->
+    <ng-template [ngIf]="!result.isSimulated">
+      <h4>Ergebnisse</h4>
+      <p>Hier kannst du das Ergebnis der Abfrage sehen.</p>
+    </ng-template>
+    <ng-template [ngIf]="result.isSimulated">
+      <h4>Ergebnisvorschau</h4>
+      <p>So würde das Ergebnis die Datenbank verändern.</p>
+    </ng-template>
+
+    <!-- Always show errors -->
     <div *ngIf="result.isError"
          class="alert alert-danger"
          role="alert">
@@ -15,6 +24,7 @@
       </p>
     </div>
 
+    <!-- Warn if an incorrect number of rows was affected -->
     <div *ngIf="!result.hasValidSingleRowCount"
          class="alert alert-danger"
          role="alert">
@@ -26,18 +36,20 @@
         Diese Abfrage sollte immer exakt eine Zeile liefern, tatsächlich enthält das Ergebnis aber {{ result.rows.length }} Zeilen.
       </p>
     </div>
-    
+
+    <!-- Displaying the actual data -->
     <table *ngIf="!result.isError"
            class="table table-sm table-hover">
       <thead>
         <tr>
           <th *ngFor="let col of result.cols">
-            {{ col.fullName }}
+            {{ col }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let row of result.rows">
+        <tr *ngFor="let row of result.rows"
+            [class.table-success]="row.isHighlighted">
           <td *ngFor="let cell of row.cells">
             {{ cell.value }}
           </td>

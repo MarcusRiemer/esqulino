@@ -84,6 +84,14 @@ export class ServerApiService {
   }
 
   /**
+   * Retrieves the URL that is used to run simulate the effects of an INSERT
+   * query against a certain project.
+   */
+  getSimulateInsertUrl(projectId: string): string {
+    return (`${this._apiBaseUrl}/project/${projectId}/query/simulate/insert`);
+  }
+
+  /**
    * Retrieves an URL that can be used to create pages.
    *
    * @projectId The ID of the project
@@ -132,6 +140,18 @@ export class ServerApiService {
    */
   getImageUploadUrl(projectId: string): string {
     return (this.getProjectUrl(projectId) + "/image");
+  }
+
+  getImageListUrl(projectId: string): string {
+    return (this.getProjectUrl(projectId)) + "/image";
+  }
+
+  getImageMetadataUrl(projectId: string, imageId: string): string {
+    return (this.getProjectUrl(projectId)) + "/image/" + imageId + "/metadata";
+  }
+
+  getImageUrl(projectId: string, imageId: string): string {
+    return (this.getProjectUrl(projectId)) + "/image/" + imageId
   }
 
   /**

@@ -17,13 +17,13 @@ export type ProjectId = string;
 /**
  * The name of the project. May only contain more or less friendly
  * characters.
- * @pattern ^[a-z0-9 \-_]{4,}$
+ * @pattern ^[a-zA-Z0-9 \-_]{4,}$
  */
 export type ProjectName = string;
 
 /**
  * The name of a user for a specific project.
- * @pattern ^[a-z0-9\-_]{4,}$
+ * @pattern ^[a-zA-Z0-9\-_]{4,}$
  */
 export type ProjectUserName = string;
 
@@ -40,8 +40,8 @@ export type ProjectUserPassword = string;
  */
 export const StringValidator = {
   ProjectId: /^[a-z0-9\-]{4,}$/,
-  ProjectName: /^[a-z0-9 \-_]{4,}$/,
-  ProjectUserName: /^[a-z0-9\-_]{4,}$/,
+  ProjectName: /^[a-zA-Z0-9 \-_]{4,}$/,
+  ProjectUserName: /^[a-zA-Z0-9\-_]{4,}$/,
   ProjectUserPassword: /^.{4,}$/
 };
 
@@ -90,6 +90,7 @@ export interface ProjectDescription extends ProjectListDescription {
 export interface ProjectUpdateDescription extends ApiVersion {
   name: ProjectName
   description: string
+  activeDatabase: string
   preview?: string
   indexPageId?: string
 }

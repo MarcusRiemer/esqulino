@@ -7,100 +7,163 @@ class Image
 
   IMAGE_FOLDER = 'images'
   IMAGES_JSON = 'images.json'
+  IMAGE_PATH_PRE_PROJECT_ID = '/api/project/'
+  IMAGE_PATH_PRE_IMAGE_ID = '/image/'
 
-  # path of the projects image folder
-  @folder = nil
-  # path of the image
-  @path = nil
   # the images metadata (lazy loaded)
   @metadata = nil
   # the projects id
-  @project_id = nil
+  @project = nil
   # the images uuid
   @image_id = nil
-  # path of the projects image.json
-  @image_json = nil
 
-  def initialize(project_id, image_id)
-    @folder = File.join(current_project(project_id).folder, IMAGE_FOLDER)
-    @path = File.join(@folder, image_id[0..1], image_id[2..3], image_id)
+  def initialize(project, image_id)
     @image_id = image_id
-    @image_json = File.join(@folder, IMAGES_JSON)
-    @project_id = project_id
+    @project = project
+  end
+
+  def id
+    @image_id
+  end
+
+  def file_path
+    @path
+  end
+
+  def project_id
+    @project.id
+  end
+
+  def folder
+    File.join(@project.folder, IMAGE_FOLDER, @image_id[0..1], @image_id[2..3])
+  end
+
+  def path
+    File.join(folder, @image_id)
+  end
+
+  def image_json
+    File.join(@project.folder, IMAGE_FOLDER, IMAGES_JSON)
+  end
+
+  def self.image_json(project)
+    File.join(project.folder, IMAGE_FOLDER, IMAGES_JSON)
   end
 
   def exists?
-    File.file?(@path)
+    File.file?(path)
   end
 
   def file_show
-    if self.file? then
-      File.read(@path)
+    if self.exists? then
+      path
     else
-      raise UnknownImageError @project_id @image_id
+      raise UnknownImageError(project.id, @image_id)
     end
   end
 
   def file_update!(file)
     if self.exists? then
-      FileUtils.mv(file, @path)
+      FileUtils.mv(file, path)
     else
-      raise UnknownImageError @project_id, @image_id
+      raise UnknownImageError(project_id, @image_id)
     end
   end
 
   def file_destroy!
     if self.exists? then
-      File.delete(@path)
+      File.delete(path)
 
-      metadata = JSON.parse(@image_json)
+      metadata = JSON.parse(image_json)
 
-      metadata.except!(@image_id)
+      metadata.except!(image_id)
 
-      JSON.dump(metadata, File.open(@image_json, mode="r"))
+      File.write(image_json(JSON.dump(metadata)))
 
       #self.freeze
     else
-      raise UnknownImageError @project_id @image_id
+      raise UnknownImageError(@project_id, @image_id)
     end
   end
 
-  def load_metadata!
+  def metadata_set!(metadata)
+    @metadata = metadata
+  end
+
+  def self.metadata_get_from_file(project)
+    JSON.parse(File.read(self.image_json(project)))
+
+    to_return = []
+    if File.file?(self.image_json(project))
+    then
+      JSON.parse(File.read(self.image_json(project))).each do |k, v|
+        v['id'] = k
+        v['image-url'] = IMAGE_PATH_PRE_PROJECT_ID + project.id + IMAGE_PATH_PRE_IMAGE_ID + k
+        to_return.append(v)
+      end
+    end
+    to_return
+  end
+
+  def metadata_load!
     begin
-      @metadata = File.file?(@image_json) ? JSON.parse(@image_json).fetch(@image_id) : Hash.new
+      @metadata = File.file?(image_json) ? JSON.parse(File.read(image_json)).fetch(@image_id) : Hash.new
     rescue KeyError
-      raise new UnknownImageError @project_id @image_id
+      raise new UnknownImageError(project.id, @image_id)
     end
   end
 
   def metadata_show
-    load_metadata! if @metadata.nil?
+    metadata_load! if @metadata.nil?
+    res = @metadata
 
-    @metadata
+    res['id'] = @image_id
+    res['image-url'] = IMAGE_PATH_PRE_PROJECT_ID + @project.id + IMAGE_PATH_PRE_IMAGE_ID + @image_id
+
+    res
   end
 
   def metadata_update(metadata)
-    @metadata.merge(metadata)
+    metadata_load!
+    @metadata.merge!(metadata)
   end
 
-  def self.image_list
-    File.file?(@image_json) ? JSON.parse(@image_json) : Hash.new
+  def metadata_save
+    if !@metadata.nil?
+      metadata_list = File.file?(image_json) ? JSON.parse(File.read(image_json)) : Hash.new
+      metadata_list[@image_id] = @metadata
+      File.write(image_json, JSON.dump(metadata_list))
+    end
   end
 
-  def self.uuid_to_filename(project_id, uuid)
-    folder = File.join(current_project(project_id).folder, IMAGE_FOLDER)
-    endFile.join(folder, uuid[0..1], uuid[2..3], uuid)
+  def self.uuid_to_filename(project, uuid)
+    folder = File.join(project.folder, IMAGE_FOLDER)
+    File.join(folder, uuid[0..1], uuid[2..3], uuid)
   end
 
-  def self.file_new!(file, project_id, metadata)
+  def self.file_new!(file, project, metadata)
     uuid = SecureRandom.uuid
-    while File.file?(self.uuid_to_filename(project_id, uuid))
+    while File.file?(self.uuid_to_filename(project, uuid))
       uuid = SecureRandom.uuid
     end
 
-    img = Image.new(project_id, uuid)
-    FileUtil.mv(file, img.@path)
+    img = Image.new(project, uuid)
+    img.metadata_set!(metadata)
+    img.metadata_save
+
+    FileUtils.mkdir_p(img.folder)
+    FileUtils.mv(file, img.path)
     img
+  end
+
+  def self.metadata_create(image_name, author_name, author_url)
+    metadata = Hash.new()
+
+    metadata["image-name"] = image_name
+    metadata["author-name"] = author_name
+    metadata["author-url"] = author_url
+
+    metadata
   end
 
 end

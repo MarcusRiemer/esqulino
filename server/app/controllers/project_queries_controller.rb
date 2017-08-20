@@ -12,11 +12,11 @@ class ProjectQueriesController < ApplicationController
     
     # TODO: Remove this ugly hack to limit the maximum number of rows
     if sql_query.start_with?('SELECT') then
-      sql_query = sql_query + "\nLIMIT 100"
+      sql_query = sql_query + "\nLIMIT 100" # Double quotes to interpret \n
     end
     
     result = self.current_project.execute_sql(sql_query, request_data['params'])
-    render json: result['rows']
+    render json: result
   end
 
   # Running a query that has already been stored on the server
@@ -24,7 +24,15 @@ class ProjectQueriesController < ApplicationController
     query_params = ensure_request("QueryParamsDescription", request.body.read)
     
     result = current_query.execute(query_params)
-    render json: result['rows']
+    render json: result
+  end
+
+  # Simulates the execution of an INSERT SQL query
+  def run_simulated_insert
+    request_data = ensure_request("ArbitraryQueryRequestDescription", request.body.read)
+
+    result = self.current_project.simulate_insert_sql(request_data['sql'], request_data['params'])
+    render json: result
   end
 
   # Creating a new query

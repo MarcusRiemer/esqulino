@@ -49,6 +49,10 @@ Rails.application.routes.draw do
           root via: [:post], controller: 'project_queries', action: :create
           post 'run', controller: 'project_queries', action: :run_arbitrary
 
+          scope 'simulate' do
+            post 'insert', controller: 'project_queries', action: :run_simulated_insert
+          end
+
           scope ':query_id' do
             root via: [:post], controller: 'project_queries', action: :update
             root via: [:delete], controller: 'project_queries', action: :destroy
@@ -71,11 +75,13 @@ Rails.application.routes.draw do
 
         # Everything that has something to do with images
         scope 'image' do
+          root via: [:get], controller: 'project_images', action: :list_show
           root via: [:post], controller: 'project_images', action: :create
 
           scope ':image_id' do
-            get  'file', controller: 'project_images', action: :file_show
-            post 'file', controller: 'project_images', action: :file_update
+            root via: [:get], controller: 'project_images', action: :file_show
+            root via: [:post], controller: 'project_images', action: :file_update
+            root via: [:delete], controller: 'project_images', action: :file_delete
 
             get  'metadata', controller: 'project_images', action: :metadata_show
             post 'metadata', controller: 'project_images', action: :metadata_update

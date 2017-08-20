@@ -62,6 +62,14 @@ export class ToolbarItem {
     return (this._id);
   }
 
+  get caption() {
+    return (this._caption);
+  }
+
+  set caption(value: string) {
+    this._caption = value;
+  }
+
   /**
    * @param inProgress True, if a reaction to this is in progress
    */

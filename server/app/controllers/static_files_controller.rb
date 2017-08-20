@@ -16,7 +16,7 @@ class StaticFilesController < ApplicationController
       if requested_path.empty? or not File.exists? local_path then
         local_path = basepath.join('index.html')
       end
-      
+
       send_file local_path, disposition: 'inline'
     end
   end
