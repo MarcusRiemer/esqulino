@@ -81,8 +81,7 @@ export class ProjectService {
     // And execute it by subscribing to it.
     const subscription = this._httpRequest
       .first()
-      .subscribe(
-      res => {
+      .subscribe(res => {
         // There is a new project, Inform subscribers
         console.log(`Project Service: HTTP request for specific project ("${url}") finished`);
         this._subject.next(res);
@@ -99,12 +98,11 @@ export class ProjectService {
         console.log(`Project Service: HTTP error with request for specific project ("${url}") => "${error.status}: ${error.statusText}"`);
         this._subject.error(error);
 
+        // Reset the internal to be as blank as possible
         this._subject = new BehaviorSubject<Project>(undefined);
+        this._httpRequest = undefined;
 
-        this._httpRequest = undefined
-
-      }
-      )
+      })
   }
 
   /**
@@ -134,6 +132,10 @@ export class ProjectService {
   storeProjectDescription(proj: Project) {
     const desc = proj.toModel();
     const url = this._server.getProjectUrl(proj.id);
+
+    // The project ID is part of the request, it must not be sent
+    // in the body again
+    delete desc.id;
 
     const toReturn = this._http.post(url, JSON.stringify(desc))
       .do(_ => proj.markSaved())
