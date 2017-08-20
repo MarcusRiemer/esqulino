@@ -134,6 +134,18 @@ export class ServerApiService {
     return (this.getProjectUrl(projectId) + "/image");
   }
 
+  getImageListUrl(projectId: string): string {
+    return (this.getProjectUrl(projectId)) + "/image";
+  }
+
+  getImageMetadataUrl(projectId: string, imageId: string): string {
+    return (this.getProjectUrl(projectId)) + "/image/" + imageId + "/metadata";
+  }
+
+    getImageUrl(projectId: string, imageId: string): string {
+        return (this.getProjectUrl(projectId)) + "/image/" + imageId
+    }
+
   /**
    * Retrieves an URL that can be used to get entries
    * of a table.

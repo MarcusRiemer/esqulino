@@ -5,13 +5,12 @@ class ProjectImagesController < ApplicationController
   include ValidationHelper
 
   def create
-    uuid = SecureRandom.uuid
-    metadata = Image.metadata_create(params['image-name'], "params['image-author-name']", "params['image-author-url']")
+    metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'])
     img = Image.file_new!(params['image-file'].tempfile, current_project, metadata)
 
     render plain: params.inspect + '
 ' + current_project.id + '
-' + uuid + '
+' + img.uuid + '
 '
   end
 
@@ -25,7 +24,8 @@ class ProjectImagesController < ApplicationController
 
   def file_update
     ensure_write_access do
-      #TODO
+      Image.new(current_project, params['image_id']).file_update!(params['image-file'].tempfile)
+      render status => :success
     end
   end
 
@@ -36,12 +36,18 @@ class ProjectImagesController < ApplicationController
   end
 
   def metadata_show
-    render status => :success, json: { 'name' => 'foo' }
+    image_id = params['image_id']
+    render status => :success, json: Image.new(current_project, image_id).metadata_show
   end
 
   def metadata_update
     ensure_write_access do
-      #TODO
+      image_id = params['image_id']
+      metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'])
+      img = Image.new(current_project, image_id)
+      img.metadata_update(metadata)
+      img.metadata_save
+      render status => :success, json: img.metadata_show
     end
   end
 
