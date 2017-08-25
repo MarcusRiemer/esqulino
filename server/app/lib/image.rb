@@ -150,9 +150,12 @@ class Image
 
     img = Image.new(project, uuid)
     img.metadata_set!(metadata)
+
+    #needs to be done before saving metadata
+    FileUtils.mkdir_p(img.folder)
+
     img.metadata_save
 
-    FileUtils.mkdir_p(img.folder)
     FileUtils.mv(file, img.path)
     img
   end
