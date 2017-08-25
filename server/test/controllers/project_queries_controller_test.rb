@@ -13,7 +13,7 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "application/json", @response.content_type
 
     result = JSON.parse(@response.body)
-    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"]], result
+    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"]], result['rows']
   end
 
   test "sequence_db: running a dynamic SELECT query (no params)" do
@@ -28,7 +28,7 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "application/json", @response.content_type
 
     result = JSON.parse(@response.body)
-    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"]], result
+    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"]], result['rows']
   end
 
   test "sequence_db: running a stored INSERT query (no params)" do
@@ -47,15 +47,41 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "application/json", @response.content_type
 
     result = JSON.parse(@response.body)
-    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"], [6, "test"]], result
+    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"], [6, "test"]], result['rows']
 
     rollback_test_filesystem
+  end
+
+  test "sequence_db: simulating a dynamic INSERT query (no params)" do
+    post '/api/project/db-sequence/query/simulate/insert',
+         params: {
+           sql: 'INSERT INTO key_value (value) VALUES (\'test\')',
+           params: Hash.new
+         },
+         as: :json
+
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    result = JSON.parse(@response.body)
+    assert_equal ["key", "value"], result['columns']
+    assert_equal [[6, "test"]], result['inserted']
+
+    post '/api/project/db-sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
+         params: { },
+         as: :json
+
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    result = JSON.parse(@response.body)
+    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"]], result['rows']
   end
   
   test "sequence_db: running a dynamic INSERT query (no params)" do
     post '/api/project/db-sequence/query/run',
          params: {
-           sql: 'INSERT INTO key_value (value)VALUES (\'test\')',
+           sql: 'INSERT INTO key_value (value) VALUES (\'test\')',
            params: Hash.new
          },
          as: :json
@@ -71,7 +97,7 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "application/json", @response.content_type
 
     result = JSON.parse(@response.body)
-    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"], [6, "test"]], result
+    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"], [6, "test"]], result['rows']
 
     rollback_test_filesystem
   end
@@ -94,7 +120,7 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "application/json", @response.content_type
 
     result = JSON.parse(@response.body)
-    assert_equal [[3, "drei"]], result
+    assert_equal [[3, "drei"]], result['rows']
   end
 
   test "sequence_db: running a stored SELECT query with missing parameters" do

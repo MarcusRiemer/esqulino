@@ -49,6 +49,10 @@ Rails.application.routes.draw do
           root via: [:post], controller: 'project_queries', action: :create
           post 'run', controller: 'project_queries', action: :run_arbitrary
 
+          scope 'simulate' do
+            post 'insert', controller: 'project_queries', action: :run_simulated_insert
+          end
+
           scope ':query_id' do
             root via: [:post], controller: 'project_queries', action: :update
             root via: [:delete], controller: 'project_queries', action: :destroy

@@ -7,12 +7,18 @@ import { Query } from './base'
  * Not much ado about type safety here, in the raw
  * format every cell is a string.
  */
-type RawRow = [string]
+type RawRow = string[]
 
 /**
- * A result is simply a list of rows.
+ * The result usually contains a list of rows and a list of columns.
+ * If the result is a simulation there are additional properties.
  */
-type QueryResultDescription = RawRow[]
+type QueryResultDescription = {
+  rows?: RawRow[]
+  inserted?: RawRow[]
+  highlight?: number[]
+  columns: string[]
+};
 
 /**
  * Over the wire format to describe a query that could not
@@ -68,14 +74,20 @@ class Cell {
 class Row {
   private _query: Query;
   private _cells: Cell[];
+  private _highlight: boolean;
 
-  constructor(query: Query, raw: RawRow) {
+  constructor(query: Query, raw: RawRow, highlight?: boolean) {
     this._query = query;
+    this._highlight = !!highlight;
     this._cells = raw.map((v, k) => new Cell(query, k, v));
   }
 
   get cells() {
     return (this._cells);
+  }
+
+  get isHighlighted() {
+    return (this._highlight);
   }
 }
 
@@ -84,16 +96,21 @@ function isQueryRunErrorDescription(arg: any): arg is QueryRunErrorDescription {
 }
 
 function isQueryResultDescription(arg: any): arg is QueryResultDescription {
-  return (Array.isArray(arg));
+  return !!(arg.rows && arg.columns);
 }
 
 /**
  * Adds type information to a raw QueryResultDescription.
  */
-export class SelectQueryResult {
+export class QueryResult {
   private _query: Query;
 
   private _rows: Row[] = [];
+  private _inserted: Row[] = [];
+
+  private _columns: string[] = [];
+
+  private _simulated: boolean;
 
   /**
    * If this field is set, the query was not succesfull
@@ -103,16 +120,22 @@ export class SelectQueryResult {
   /**
    * A result may be an error or a list of rows.
    *
-   * @param query The query that was running
-   * @param res   The result of the run
+   * @param query     The query that was running
+   * @param res       The result of the run
+   * @param simulated True if this is the result of a simulation.
    */
-  constructor(query: Query, res: QueryResultDescription | QueryRunErrorDescription) {
+  constructor(query: Query, res: QueryResultDescription | QueryRunErrorDescription, simulated: boolean) {
     this._query = query;
+    this._simulated = simulated;
 
     if (isQueryRunErrorDescription(res)) {
       this._error = res;
     } else if (isQueryResultDescription(res)) {
-      this._rows = res.map(v => new Row(query, v));
+      const highlighted = res.highlight || [];
+
+      this._rows = res.rows.map((v, i) => new Row(query, v, highlighted.includes(i)));
+      this._inserted = (res.inserted || []).map(v => new Row(query, v));
+      this._columns = res.columns;
     }
   }
 
@@ -133,6 +156,13 @@ export class SelectQueryResult {
   }
 
   /**
+   * @return True if this is the result of a simulation.
+   */
+  get isSimulated(): boolean {
+    return (this._simulated);
+  }
+
+  /**
    * @return The servers error message.
    */
   get errorMessage() {
@@ -147,9 +177,16 @@ export class SelectQueryResult {
   }
 
   /**
+   * Rows that have been inserted
+   */
+  get inserted() {
+    return (this._inserted);
+  }
+
+  /**
    * @return The names of the columns involved in this result.
    */
   get cols() {
-    return (this._query.select.actualColums);
+    return (this._columns);
   }
 }
