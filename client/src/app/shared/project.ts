@@ -49,6 +49,7 @@ export class Project implements ApiVersion, Saveable {
   private _queries: Query[]
   private _pages: Page[]
   private _indexPageId: string
+  private _projectImageId: string
   private _version: ApiVersionToken
 
   private _saveRequired = false;
@@ -218,6 +219,21 @@ export class Project implements ApiVersion, Saveable {
     this._indexPageId = newId;
     this.markSaveRequired();
   }
+
+    /**
+     * @return The id of the project image
+     */
+    get projectImageId() {
+        return (this._projectImageId);
+    }
+
+    /**
+     * @param newId The id of the project image
+     */
+    set projectImageId(newId: string) {
+        this._projectImageId = newId;
+        this.markSaveRequired();
+    }
 
   /**
    * Retrieves queries by ID. If any ID does not match exactly
