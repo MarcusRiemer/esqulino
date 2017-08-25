@@ -6,7 +6,7 @@ import { ServerApiService } from '../../shared/serverapi.service'
 import { ProjectService } from '../../editor/project.service'
 
 interface AvailableImage {
-    id: string;
+    "id": string;
     "image-name": string;
     "image-url": string;
     "author-name": string;
