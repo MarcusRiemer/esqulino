@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable'
 
 import {
   Query, Model, SyntaxTree,
-  SelectQueryResult, QueryRunErrorDescription
+  QueryResult, QueryRunErrorDescription
 } from '../../shared/query'
 
 import { ProjectService, Project } from '../project.service'
@@ -35,7 +35,7 @@ export class QueryEditorComponent implements OnInit {
   /**
    * The result of the most recently run query
    */
-  private _result: SelectQueryResult;
+  private _result: QueryResult;
 
   /**
    * Subscriptions that need to be released
@@ -43,9 +43,11 @@ export class QueryEditorComponent implements OnInit {
   private _subscriptionRefs: any[] = [];
 
   /**
-   * The button that runs queries.
+   * The buttons that run queries.
    */
-  private _btnQuery: ToolbarItem;
+  private _btnSimulate: ToolbarItem;
+
+  private _btnExecute: ToolbarItem;
 
   /**
    * Cache for user input. This allows parameters to be preserved when the user
@@ -157,16 +159,19 @@ export class QueryEditorComponent implements OnInit {
 
     this._subscriptionRefs.push(subRef)
 
-    // Reacting to querying
-    this._btnQuery = this._toolbarService.addButton("run", "Ausführen", "play", "r");
-    subRef = this._btnQuery.onClick.subscribe((res) => {
-      this._btnQuery.isInProgress = true;
-      this._queryService.runQuery(this.project, this.query, this.relevantArguments)
-        .subscribe(res => {
-          this._btnQuery.isInProgress = false;
-          this._result = res;
-        });
+    // Reacting to querying, by default this means running a simulation.
+    this._btnSimulate = this._toolbarService.addButton("simulate", "Vorschau", "play", "r");
+    subRef = this._btnSimulate.onClick.subscribe((res) => {
+      this.runQuery(this._btnSimulate, true);
     });
+    this._subscriptionRefs.push(subRef);
+
+    // Forcing actual evaluation
+    this._btnExecute = this._toolbarService.addButton("run", "Ausführen", "exclamation", "n");
+    subRef = this._btnExecute.onClick.subscribe((res) => {
+      this.runQuery(this._btnExecute, false);
+    });
+    this._subscriptionRefs.push(subRef);
 
     // Grab the correct project and query
     // this.updateQuery(this._routeParams.snapshot.params['queryId']);
@@ -177,9 +182,37 @@ export class QueryEditorComponent implements OnInit {
     this._subscriptionRefs.push(subRef);
   }
 
+  /**
+   * Cleans up all acquired references
+   */
   ngOnDestroy() {
     this._subscriptionRefs.forEach(ref => ref.unsubscribe());
     this._subscriptionRefs = [];
+  }
+
+  /**
+   * Sends the currently edited query to the server. There it might be actually
+   * run or "merely" simulated.
+   */
+  runQuery(button: ToolbarItem, simulated: boolean) {
+    button.isInProgress = true;
+    let request: Observable<QueryResult> = undefined;
+
+    // Only select queries should be run immediatly. But sadly we are not quite
+    // that far (yet).
+    if (!simulated || this.query.select || this.query.delete || this.query.update) {
+      request = this._queryService.runQuery(this.project, this.query, this.relevantArguments);
+
+    } else {
+      // Queries with mutating side effects are previewed first
+      request = this._queryService.simulateInsertQuery(this.project, this.query, this.relevantArguments);
+    }
+
+    // Hook up to the end of a successful request.
+    request.subscribe(res => {
+      button.isInProgress = false;
+      this._result = res;
+    });
   }
 
   private updateQuery(queryId: string) {
@@ -204,7 +237,7 @@ export class QueryEditorComponent implements OnInit {
     if (this.query.select &&
       this.query.isValid &&
       this.query.parameters.length === 0) {
-      this._btnQuery.fire();
+      this._btnSimulate.fire();
     }
   }
 }
