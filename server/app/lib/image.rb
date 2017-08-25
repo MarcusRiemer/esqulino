@@ -99,6 +99,7 @@ class Image
       JSON.parse(File.read(self.image_json(project))).each do |k, v|
         v['id'] = k
         v['image-url'] = IMAGE_PATH_PRE_PROJECT_ID + project.id + IMAGE_PATH_PRE_IMAGE_ID + k
+        v['project-id'] = project.id
         to_return.append(v)
       end
     end
