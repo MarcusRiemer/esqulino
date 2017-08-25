@@ -66,6 +66,7 @@ export class Project implements ApiVersion, Saveable {
     this._currentDatabase = json.activeDatabase;
     this._availableDatabases = json.availableDatabases;
     this.schema = new Schema(json.schema);
+    this.projectImageId = json.preview;
 
     if (json.apiVersion as string != this.apiVersion) {
       throw new Error(`Attempted to load a project with version ${json.apiVersion}, current version is ${this.apiVersion}`);
@@ -373,6 +374,10 @@ export class Project implements ApiVersion, Saveable {
     if (this._indexPageId) {
       toReturn.indexPageId = this.indexPageId;
     }
+
+      if (this._projectImageId) {
+          toReturn.preview = this._projectImageId;
+      }
 
     if (this._currentDatabase) {
       toReturn.activeDatabase = this._currentDatabase;
