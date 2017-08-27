@@ -35,6 +35,14 @@ class ProjectQueriesController < ApplicationController
     render json: result
   end
 
+  # Simulates the execution of a DELETE SQL query
+  def run_simulated_delete
+    request_data = ensure_request("ArbitraryQueryRequestDescription", request.body.read)
+
+    result = self.current_project.simulate_delete_sql(request_data['sql'], request_data['params'])
+    render json: result
+  end
+
   # Creating a new query
   def create
     @current_query = Query.new current_project, nil

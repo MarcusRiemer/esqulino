@@ -51,6 +51,7 @@ Rails.application.routes.draw do
 
           scope 'simulate' do
             post 'insert', controller: 'project_queries', action: :run_simulated_insert
+            post 'delete', controller: 'project_queries', action: :run_simulated_delete
           end
 
           scope ':query_id' do

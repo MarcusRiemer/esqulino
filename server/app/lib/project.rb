@@ -279,13 +279,12 @@ class Project
     return (to_return)
   end
 
-  # Simulates the execution of a query in the context of this project.
+  # Simulates the execution of a INSERT query in the context of this project.
   #
   # @param sql [string] The SQL query
   # @param params [Hash] Query parameters
-  #
-  # @return [Hash] { columns :: List, rows :: List of List }
   def simulate_insert_sql(sql, params, database_id = nil)
+    # Extracting the tablename of the SQL-query
     guessed_tablename = SqlAccessor::insert_tablename(sql)
     
     execute_sql_raw(sql, params, database_id, true) do |db|
@@ -306,16 +305,42 @@ class Project
 
         # Highlight some rows
         highlight = rows
-                      .drop(1)
-                      .map.with_index {|r,i| [r,i] }
-                      .reject {|r,i| not inserted.include? r }
-                      .map {|r,i| i }
+                      .drop(1) # First row are the names of the columns
+                      .map.with_index {|r,i| [r,i] } # We ultimately want to know which array indices to highlight
+                      .reject {|r,i| not inserted.include? r } # Ignore everything that is not in the result set
+                      .map {|r,i| i } # And grab only the index in the result array
 
         return {
           'columns' => columns,
           'inserted' => inserted,
           'rows' => rows.drop(1),
           'highlight' => highlight
+        }
+      ensure
+        # We always undo all changes that have been made.
+        db.rollback
+      end
+    end
+  end
+
+  # Simulates the execution of a DELETE query in the context of this project.
+  #
+  # @param sql [string] The SQL query
+  # @param params [Hash] Query parameters
+  def simulate_delete_sql(sql, params, database_id = nil)
+    execute_sql_raw(sql, params, database_id, true) do |db|
+      begin
+        db.transaction
+
+        # Extract everything from the query to turn it into a SELECT
+        # query that matches exactly the things that would be deleted
+        tablename = SqlAccessor::first_from_tablename sql
+        where_whole = SqlAccessor::where_whole sql
+        query_delete_set = db.execute2 "SELECT *\nFROM #{tablename}\nWHERE #{where_whole}", params
+
+        return {
+          'columns' => query_delete_set.first,
+          'rows' => query_delete_set.drop(1)
         }
       ensure
         # We always undo all changes that have been made.
