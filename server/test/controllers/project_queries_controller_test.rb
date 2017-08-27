@@ -148,4 +148,32 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal(['wert'], result['requiredParameters'], "Required Parameters")
     assert_equal({ 'foo' => 'bar' }, result['availableParameters'], "Available Parameters")
   end
+
+  test "sequence_db: simulating a dynamic DELETE query (no params)" do
+    # Simulate deletion of first row
+    post '/api/project/db-sequence/query/simulate/delete',
+         params: {
+           sql: 'DELETE FROM key_value WHERE key_value.key = 1',
+           params: Hash.new
+         },
+         as: :json
+
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    result = JSON.parse(@response.body)
+    assert_equal ["key", "value"], result['columns']
+    assert_equal [[1, "eins"]], result['rows']
+
+    # Ensure nothing has changed
+    post '/api/project/db-sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
+         params: { },
+         as: :json
+
+    assert_response :success
+    assert_equal "application/json", @response.content_type
+
+    result = JSON.parse(@response.body)
+    assert_equal [[1, "eins"], [2, "zwei"], [3, "drei"], [4, "vier"], [5, "fünf"]], result['rows']
+  end
 end
