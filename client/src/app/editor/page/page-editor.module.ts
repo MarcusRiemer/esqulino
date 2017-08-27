@@ -19,6 +19,7 @@ import { COLUMN_REGISTRATION } from './sidebar/column.sidebar.component'
 import { EMBEDDED_HTML_REGISTRATION } from './sidebar/embedded-html.sidebar.component'
 import { HEADING_REGISTRATION } from './sidebar/heading.sidebar.component'
 import { INPUT_REGISTRATION } from './sidebar/input.sidebar.component'
+import { IMAGE_REGISTRATION } from './sidebar/image.sidebar.component'
 import { LINK_REGISTRATION } from './sidebar/link.sidebar.component'
 import { PARAGRAPH_REGISTRATION } from './sidebar/paragraph.sidebar.component'
 import { QUERY_TABLE_REGISTRATION } from './sidebar/query-table.sidebar.component'
@@ -62,6 +63,7 @@ const sidebarComponents = [
   EMBEDDED_HTML_REGISTRATION.componentType,
   HEADING_REGISTRATION.componentType,
   INPUT_REGISTRATION.componentType,
+  IMAGE_REGISTRATION.componentType,
   LINK_REGISTRATION.componentType,
   PARAGRAPH_REGISTRATION.componentType,
   QUERY_TABLE_REGISTRATION.componentType,
@@ -132,6 +134,7 @@ export class PageEditorModule {
     reg.registerSidebarType(EMBEDDED_HTML_REGISTRATION);
     reg.registerSidebarType(HEADING_REGISTRATION);
     reg.registerSidebarType(INPUT_REGISTRATION);
+    reg.registerSidebarType(IMAGE_REGISTRATION);
     reg.registerSidebarType(LINK_REGISTRATION);
     reg.registerSidebarType(PARAGRAPH_REGISTRATION);
     reg.registerSidebarType(QUERY_TABLE_REGISTRATION);
