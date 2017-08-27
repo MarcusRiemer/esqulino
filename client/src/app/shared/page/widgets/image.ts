@@ -32,7 +32,7 @@ export class Image extends WidgetBase {
           setter: (v) => this.alt = v
         })
       ]
-    });
+    }, parent);
 
     this._src = desc.src;
     this._alt = desc.alt;
