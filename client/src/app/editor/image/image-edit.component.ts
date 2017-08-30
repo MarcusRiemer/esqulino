@@ -1,18 +1,13 @@
 import { Component } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Http, Response, Headers } from '@angular/http'
 
 import { ServerApiService } from '../../shared/serverapi.service'
 import { ProjectService } from '../../editor/project.service'
+import { ToolbarService } from '../toolbar.service'
+import { SidebarService } from '../sidebar.service'
 
 import { AvailableImage } from './available-image'
-/*interface AvailableImage {
-    "id": string;
-    "image-name": string;
-    "image-url": string;
-    "author-name": string;
-    "author-url": string;
-}*/
 
 @Component({
     templateUrl: 'templates/image-edit.html'
@@ -20,11 +15,15 @@ import { AvailableImage } from './available-image'
 export class ImageEditComponent {
     private _imageMetadata: AvailableImage;
 
+    private _subscriptionRefs: any[] = [];
+
     constructor(
         private _serverApi: ServerApiService,
         private _http: Http,
         private _projectService: ProjectService,
-        private _routeParams: ActivatedRoute
+        private _routeParams: ActivatedRoute,
+        private _toolbarService: ToolbarService,
+        private _sidebarService: SidebarService
     ) {
     }
 
@@ -43,11 +42,29 @@ export class ImageEditComponent {
         const projectId = this._projectService.cachedProject.id;
         this._http.post(this._serverApi.getImageUrl(projectId, this._imageMetadata['id']), formData)
             .subscribe(res => {
-            console.log(res)
+                console.log(res)
+                this.reloadImage();
         });
     }
 
-    ngOnInit() {
+    private reloadToolbar() {
+        this._toolbarService.resetItems();
+        this._toolbarService.savingEnabled = false;
+
+        let btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "d")
+        let subRef = btnDelete.onClick.subscribe(res => {
+            if (confirm("Dieses Bild  löschen?")) {
+                this._http.delete(this._serverApi.getImageDeleteUrl(this._projectService.cachedProject.id, this._imageMetadata.id))
+                    .subscribe(res => {
+                        console.log(res);
+                        this.reloadImage();
+                    })
+            }
+        });
+        this._subscriptionRefs.push(subRef);
+    }
+
+    reloadImage() {
         this._routeParams.params.subscribe(params => {
             const projectId = this._projectService.cachedProject.id;
             console.log("imageId: " + params['imageId']);
@@ -55,9 +72,22 @@ export class ImageEditComponent {
                 .map(res => res.json() as AvailableImage)
                 .subscribe(res => {
                     console.log("res: " + JSON.stringify(res));
+                    this.reloadToolbar();
                     this._imageMetadata = res;
+                    if (res != null && res['image-url'] != null) {
+                        this._imageMetadata['image-url'] += '?_ts=' + new Date().getTime();
+                    }
                 });
         });
+    }
+
+    ngOnInit() {
+        // Ensure sane default state
+        this._sidebarService.hideSidebar();
+        this._toolbarService.resetItems();
+        this._toolbarService.savingEnabled = false;
+
+        this.reloadImage();
     }
 
     get image() {
