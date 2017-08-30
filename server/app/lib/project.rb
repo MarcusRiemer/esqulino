@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'json'
 require 'yaml'
 require 'securerandom' # To generate UUIDs
@@ -5,10 +6,10 @@ require 'fileutils'    # To create directory trees
 require 'scrypt'
 
 require_dependency 'schema'
+require_dependency 'schema_utils'
 require_dependency 'page'
-require_dependency 'schema-utils'
 require_dependency 'error'
-require_dependency 'sql_accessor'
+require_dependency 'query_simulate'
 
 # Represents an esqulino project. Attributes of this
 # class are loaded lazily on demand, so there is no harm
@@ -279,48 +280,23 @@ class Project
     return (to_return)
   end
 
-  # Simulates the execution of a query in the context of this project.
+  # Simulates the execution of a INSERT query in the context of this project.
   #
   # @param sql [string] The SQL query
   # @param params [Hash] Query parameters
-  #
-  # @return [Hash] { columns :: List, rows :: List of List }
   def simulate_insert_sql(sql, params, database_id = nil)
-    guessed_tablename = SqlAccessor::insert_tablename(sql)
-    
     execute_sql_raw(sql, params, database_id, true) do |db|
-      begin
-        # We wrap the whole execution in a transaction and then
-        # run the query to look at the newly added ID.
-        db.transaction
-        db.execute2 sql, params
-        rowid = db.last_insert_row_id
+      SimulateSql.insert_sql(db, sql, params)
+    end
+  end
 
-        # We fetch exactly that row from the database
-        inserted = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid = #{rowid}"
-        columns = inserted.first
-        inserted = inserted.drop(1)
-        
-        # And we fetch rows around that row
-        rows = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid BETWEEN #{rowid - 2} AND #{rowid + 2}"
-
-        # Highlight some rows
-        highlight = rows
-                      .drop(1)
-                      .map.with_index {|r,i| [r,i] }
-                      .reject {|r,i| not inserted.include? r }
-                      .map {|r,i| i }
-
-        return {
-          'columns' => columns,
-          'inserted' => inserted,
-          'rows' => rows.drop(1),
-          'highlight' => highlight
-        }
-      ensure
-        # We always undo all changes that have been made.
-        db.rollback
-      end
+  # Simulates the execution of a DELETE query in the context of this project.
+  #
+  # @param sql [string] The SQL query
+  # @param params [Hash] Query parameters
+  def simulate_delete_sql(sql, params, database_id = nil)
+    execute_sql_raw(sql, params, database_id, true) do |db|
+      SimulateSql.delete_sql(db, sql, params)
     end
   end
 

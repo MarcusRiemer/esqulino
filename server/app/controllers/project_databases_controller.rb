@@ -1,7 +1,7 @@
 require 'open3'
 
-require_dependency 'schema-graphviz'
-require_dependency 'schema-alter'
+require_dependency 'schema_graphviz'
+require_dependency 'schema_alter'
 
 class ProjectDatabasesController < ApplicationController
   include ProjectsHelper

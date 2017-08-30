@@ -1,6 +1,7 @@
 {
   "name": "kommentar_loeschen",
   "apiVersion": "4",
+  "singleRow": true,
   "delete": {
   },
   "from": {

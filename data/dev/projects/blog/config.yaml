@@ -7,7 +7,7 @@ users:
   user:
     type: local
     password: 4000$8$1$935bb91920cc5280f26d75498dbde2dc80f4f25024e5b5572a607d394e9cf975$0804f6cb2de497f8555db8ac2f396d4e246f289cdfa20285f805a1fbdd20a1c2
-preview: blog.jpg
+preview: a1986d62-0aec-4be4-a4db-cacd48f06453
 indexPageId: 033f059a-ce96-405e-a415-de7575e05dae
 public: true
 activeDatabase: default

@@ -21,6 +21,7 @@ import { Form, FormDescription } from './form'
 import { Heading, HeadingDescription } from './heading'
 import { HiddenInput, HiddenInputDescription } from './hidden-input'
 import { Input, InputDescription } from './input'
+import { Image, ImageDescription } from './image'
 import { Link, LinkDescription } from './link'
 import { Paragraph, ParagraphDescription } from './paragraph'
 import { QueryTable, QueryTableDescription } from './query-table'
@@ -41,6 +42,7 @@ export {
   QueryTable, QueryTableDescription,
   Select, SelectDescription,
   Input, InputDescription,
+  Image, ImageDescription,
   Link, LinkDescription,
 
   ValueReferenceDescription, ColumnReferenceDescription, QueryReferenceDescription,

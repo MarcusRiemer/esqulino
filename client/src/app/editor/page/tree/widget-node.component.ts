@@ -75,18 +75,13 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
    * @return A widget host that would accept this widget, or `undefined` if there
    *         is no accepting host available.
    */
-  private determineDropHost(node: Widget | WidgetHost,
-    place: NodeLocation,
-    widgetDesc: WidgetDescription)
-    : WidgetHost {
-
-
+  private determineDropHost(node: Widget | WidgetHost, place: NodeLocation, widgetDesc: WidgetDescription): WidgetHost {
     // Don't accept anything that isn't a widget
     if (!widgetDesc) {
       return (undefined);
     }
     // Is this an widget host?
-    else if (isWidgetHost(node)) {
+    else if (isWidgetHost(node) && this.needsClosingNode) {
       // Is this on the opening node to insert something compatible
       // at the very beginning?
       if (node.acceptsWidget(widgetDesc) && place == "open") {
@@ -118,10 +113,7 @@ export class WidgetNodeComponent extends WidgetComponent<Widget> {
   /**
    * Computes the exact location something should be dropped.
    */
-  private dropLocation(dropTarget: Widget | WidgetHost,
-    place: NodeLocation,
-    pageEvt: PageDragEvent)
-    : DropLocation {
+  private dropLocation(dropTarget: Widget | WidgetHost, place: NodeLocation, pageEvt: PageDragEvent): DropLocation {
     // No widget?
     if (!pageEvt.widget) {
       // No deal!
