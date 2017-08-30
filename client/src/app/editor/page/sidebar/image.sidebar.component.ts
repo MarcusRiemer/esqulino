@@ -10,7 +10,7 @@ import { WidgetComponent } from '../widget.component'
  * Displays the sidebar editing component for a heading.
  */
 @Component({
-  templateUrl: 'templates/heading-sidebar.html',
+  templateUrl: 'templates/image-sidebar.html',
 })
 export class ImageSidebarComponent {
 
