@@ -162,6 +162,10 @@ export class ServerApiService {
     return (this.getProjectUrl(projectId)) + "/image/" + imageId
   }
 
+  getImageDeleteUrl(projectId: string, imageId: string): string {
+    return (this.getProjectUrl(projectId)) + "/image/" + imageId
+  }
+
   /**
    * Retrieves an URL that can be used to get entries
    * of a table.

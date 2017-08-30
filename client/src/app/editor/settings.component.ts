@@ -21,11 +21,6 @@ export class SettingsComponent {
   public project: Project;
 
   /**
-   * The project defined images
-   */
-  private _imageList: AvailableImage[]
-
-  /**
    * Subscriptions that need to be released
    */
   private _subscriptionRefs: any[] = [];
@@ -44,21 +39,6 @@ export class SettingsComponent {
     private _http: Http,
     private _imageService: ImageService
   ) {
-  }
-
-/*  refreshCache() {
-    const projectId = this._projectService.cachedProject.id;
-
-    this._http.get(this._serverApi.getImageListUrl(projectId))
-      .map(res => res.json() as AvailableImage[])
-      .subscribe(res => {
-        this._imageList = res;
-      });
-  }*/
-
-  get images() {
-    return (this._imageService.images);
-    //return (this._imageList);
   }
 
   /**
@@ -99,8 +79,6 @@ export class SettingsComponent {
       }
     });
     this._subscriptionRefs.push(subRef);
-    this._imageService.loadImageList(this._projectService.cachedProject.id);
-    //this.reloadCache();
   }
 
   ngOnDestroy() {

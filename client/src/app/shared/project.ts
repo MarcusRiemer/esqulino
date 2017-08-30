@@ -232,8 +232,10 @@ export class Project implements ApiVersion, Saveable {
    * @param newId The id of the project image
    */
   set projectImageId(newId: string) {
-    this._projectImageId = newId;
-    this.markSaveRequired();
+    if (this._projectImageId != newId) {
+      this._projectImageId = newId;
+      this.markSaveRequired();
+    }
   }
 
   /**

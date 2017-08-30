@@ -3,7 +3,7 @@ name: Abenteuer
 description: Schreibe eine Abenteuergeschichte und stelle deine Freunde vor spannende
   Herausforderungen.
 apiVersion: '4'
-preview: book-pages.jpg
+preview: 9a253ae0-8af1-4056-8984-50cb37b79c55
 users:
   user:
     type: local

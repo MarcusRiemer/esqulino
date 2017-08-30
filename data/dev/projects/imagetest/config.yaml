@@ -1,0 +1,16 @@
+---
+name: imagetest
+description: foobar
+apiVersion: '4'
+public: false
+databases:
+  default:
+    type: sqlite3
+    path: default.sqlite
+users:
+  admin:
+    type: local
+    password: 4000$8$3$f7480ea4189d38c6599444248bd64d5919881dd531017ff69b0c7afea88af7c2$7e9df4a09ebf8fe7f3615de2ad645f15626c727e725d1a6cd3f6e244fbe21eca
+activeDatabase: default
+preview: afca950f-2e55-4f5a-b676-3b5fed325fca
+indexPageId: 9f574b21-5341-42d4-bd21-99baa41e1fb2
