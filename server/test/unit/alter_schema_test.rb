@@ -1,7 +1,7 @@
 require 'tempfile'
 
 require_dependency 'schema'
-require_dependency 'schema-alter'
+require_dependency 'schema_alter'
 
 # Not strictly a unit test, as it requires the use of external files.
 # But for the moment this is what we will roll with, as this does

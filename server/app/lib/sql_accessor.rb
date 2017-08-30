@@ -12,4 +12,8 @@ module SqlAccessor
   def self.insert_tablename(sql)
     /INSERT\sINTO\s(\w+)/.match(sql)[1]
   end
+
+  def self.where_whole(sql)
+    /\sWHERE\s(.*)(GROUP BY|HAVING|ORDER BY)?/.match(sql)[1]
+  end
 end

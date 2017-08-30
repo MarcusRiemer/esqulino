@@ -8,10 +8,7 @@ class ProjectImagesController < ApplicationController
     metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'])
     img = Image.file_new!(params['image-file'].tempfile, current_project, metadata)
 
-    render plain: params.inspect + '
-' + current_project.id + '
-' + img.uuid + '
-'
+    render plain: img.id
   end
 
   def file_show

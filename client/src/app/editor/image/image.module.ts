@@ -7,6 +7,8 @@ import { ImageListComponent } from './image-list.component'
 import { ImageUploadComponent } from './image-upload.component'
 import { ImageEditComponent } from './image-edit.component'
 
+import { ImageService } from './image.service'
+
 @NgModule({
   imports: [
     SharedEditorModule,
@@ -17,6 +19,7 @@ import { ImageEditComponent } from './image-edit.component'
     ImageEditComponent
   ],
   providers: [
+    ImageService
   ],
   entryComponents: [
   ],

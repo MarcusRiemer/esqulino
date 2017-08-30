@@ -79,8 +79,7 @@ export class DragService {
    *
    * @param scope The scope that the dragged item matches.
    */
-  private dragStart(evt: DragEvent,
-    pageEvt: PageDragEvent) {
+  private dragStart(evt: DragEvent, pageEvt: PageDragEvent) {
     // There can only be a single drag event at once
     if (this._currentDrag) {
       throw new Error("Attempted to start a second drag");
@@ -121,10 +120,17 @@ export class DragService {
     }
 
     // Reset everything once the operation has ended
-    evt.target.addEventListener("dragend", () => {
+    const dragendHandler = () => {
+      // Remove the previously installed handler
+      evt.target.removeEventListener("dragend", dragendHandler);
+
+      // Cry bitterly if some kind of race condition has happened
+      if (!this._currentDrag) {
+        throw new Error("No currentDrag operation available in dragendHandler");
+      }
+
       // Possibly inform listeners
-      if (this.currentDrag.callbacks &&
-        this.currentDrag.callbacks.onDragEnd) {
+      if (this.currentDrag.callbacks && this.currentDrag.callbacks.onDragEnd) {
         this.currentDrag.callbacks.onDragEnd();
       }
 
@@ -132,7 +138,8 @@ export class DragService {
       this._currentDrag = undefined;
       this._trashService.hideTrash();
       console.log(`Page-Drag ended: ${dragData}`);
-    });
+    }
+    evt.target.addEventListener("dragend", dragendHandler);
 
     console.log(`Page-Drag started: ${dragData}`);
   }

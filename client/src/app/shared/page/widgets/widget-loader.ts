@@ -10,6 +10,7 @@ import { Form, FormDescription } from './form'
 import { Heading, HeadingDescription } from './heading'
 import { HiddenInput, HiddenInputDescription } from './hidden-input'
 import { Input, InputDescription } from './input'
+import { Image, ImageDescription } from './image'
 import { Link, LinkDescription } from './link'
 import { Paragraph, ParagraphDescription } from './paragraph'
 import { QueryTable, QueryTableDescription } from './query-table'
@@ -35,6 +36,8 @@ function createWidget(desc: WidgetDescription, parent: WidgetHost): WidgetBase {
       return new HiddenInput(desc as HiddenInputDescription, parent);
     case "input":
       return new Input(desc as InputDescription, parent);
+    case "image":
+      return new Image(desc as ImageDescription, parent);
     case "link":
       return new Link(desc as LinkDescription, parent);
     case "paragraph":
@@ -46,7 +49,7 @@ function createWidget(desc: WidgetDescription, parent: WidgetHost): WidgetBase {
     case "select":
       return new Select(desc as SelectDescription, parent);
     default:
-      throw new Error(`Unknown widget type "${desc.type}"`);
+      throw new Error(`Unknown widget type "${desc.type}" for internal representation`);
   }
 }
 
