@@ -1,5 +1,5 @@
 require_dependency 'query'
-require_dependency 'render-liquid'
+require_dependency 'render_liquid'
 
 # Represents a esqulino page, which must be part of a project.
 # Attributes of this class are loaded lazily on demand, so there
