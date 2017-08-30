@@ -5,31 +5,30 @@ import { ServerApiService } from '../../shared/serverapi.service'
 
 import { ProjectService } from '../../editor/project.service'
 
-interface AvailableImage {
-    id: string;
+import { AvailableImage, ImageService } from './image.service'
+/*interface AvailableImage {
+    "id": string;
     "image-name": string;
     "image-url": string;
     "author-name": string;
     "author-url": string;
-}
+}*/
 
 @Component({
   templateUrl: 'templates/image-list.html'
 })
 export class ImageListComponent {
-  private _imageList: AvailableImage[];
-
-  private _serverApi: ServerApiService
+//  private _imageList: AvailableImage[];
 
   constructor(
-    serverApi: ServerApiService,
+    private _serverApi: ServerApiService,
     private _http: Http,
-    private _projectService: ProjectService
+    private _projectService: ProjectService,
+    private _imageService: ImageService
   ) {
-      this._serverApi = serverApi;
   }
 
-    refreshCache() {
+/*    refreshCache() {
         const projectId = this._projectService.cachedProject.id;
 
         this._http.get(this._serverApi.getImageListUrl(projectId))
@@ -37,13 +36,15 @@ export class ImageListComponent {
             .subscribe(res => {
                 this._imageList = res;
             });
-    }
+    }*/
 
-    ngOnInit() {
-        this.refreshCache();
-    }
+  ngOnInit() {
+      this._imageService.loadImageList(this._projectService.cachedProject.id);
+    //this.refreshCache();
+  }
 
   get images() {
-    return (this._imageList);
+      return (this._imageService.images);
+    //return (this._imageList);
   }
 }

@@ -6,7 +6,7 @@ import { Renderer } from '../renderer'
 import {
   Widget, Row, Column,
   Body, Button, EmbeddedHtml, Form, Heading,
-  HiddenInput, Input, Link, Paragraph,
+  HiddenInput, Input, Image, Link, Paragraph,
   QueryTable, Select
 } from '../widgets/index'
 
@@ -147,6 +147,14 @@ placeholder="">
 </fieldset>`);
 }
 
+/**
+ * <img> with src and alt
+ */
+function renderImage(w: Widget): string {
+  const image = w as Image;
+  return (`<img src="${image.src}" alt="${image.alt}">`);
+}
+
 function renderLink(w: Widget): string {
   const link = w as Link;
   const url = link.action.targetUrl;
@@ -241,6 +249,7 @@ export class LiquidRenderer extends Renderer {
     "heading": renderHeading,
     "hidden": renderHidden,
     "input": renderInput,
+    "image": renderImage,
     "link": renderLink,
     "row": renderRow,
     "select": renderSelect,

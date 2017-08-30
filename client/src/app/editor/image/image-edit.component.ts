@@ -5,13 +5,14 @@ import { Http, Response, Headers } from '@angular/http'
 import { ServerApiService } from '../../shared/serverapi.service'
 import { ProjectService } from '../../editor/project.service'
 
-interface AvailableImage {
+import { AvailableImage } from './available-image'
+/*interface AvailableImage {
     "id": string;
     "image-name": string;
     "image-url": string;
     "author-name": string;
     "author-url": string;
-}
+}*/
 
 @Component({
     templateUrl: 'templates/image-edit.html'
@@ -38,10 +39,8 @@ export class ImageEditComponent {
     }
 
     onSubmitUpload(event: Event) {
-        console.log("penis");
         const formData = new FormData(event.target as HTMLFormElement);
         const projectId = this._projectService.cachedProject.id;
-        console.log("pfotze")
         this._http.post(this._serverApi.getImageUrl(projectId, this._imageMetadata['id']), formData)
             .subscribe(res => {
             console.log(res)

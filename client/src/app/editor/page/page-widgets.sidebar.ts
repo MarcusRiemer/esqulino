@@ -10,7 +10,7 @@ import { Page } from '../../shared/page/index'
 import {
   Widget, WidgetDescription, WidgetCategory,
   Heading, HiddenInput, Row, Paragraph, QueryTable, Select,
-  Input, Button, EmbeddedHtml, Form, Link, Column
+  Input, Image, Button, EmbeddedHtml, Form, Link, Column
 } from '../../shared/page/widgets/index'
 
 import {
@@ -152,6 +152,12 @@ export class SidebarWidgetsComponent implements OnDestroy {
         icon: "fa-arrow-right",
         name: "Link",
         model: Link.emptyDescription,
+        category: "widget",
+      },
+      {
+        icon: "fa-picture-o",
+        name: "Bild",
+        model: Image.emptyDescription,
         category: "widget",
       },
       {

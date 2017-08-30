@@ -99,6 +99,7 @@ class Image
       JSON.parse(File.read(self.image_json(project))).each do |k, v|
         v['id'] = k
         v['image-url'] = IMAGE_PATH_PRE_PROJECT_ID + project.id + IMAGE_PATH_PRE_IMAGE_ID + k
+        v['project-id'] = project.id
         to_return.append(v)
       end
     end
@@ -149,9 +150,12 @@ class Image
 
     img = Image.new(project, uuid)
     img.metadata_set!(metadata)
+
+    #needs to be done before saving metadata
+    FileUtils.mkdir_p(img.folder)
+
     img.metadata_save
 
-    FileUtils.mkdir_p(img.folder)
     FileUtils.mv(file, img.path)
     img
   end

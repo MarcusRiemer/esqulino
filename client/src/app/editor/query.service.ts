@@ -7,11 +7,12 @@ import { Observable } from 'rxjs/Observable'
 
 import { ServerApiService, CURRENT_API_VERSION } from '../shared/'
 import {
-  Model, loadQuery,
+  Model, loadQuery, QueryTypeSimulation,
   Query, QueryResult, QueryRunErrorDescription,
 } from '../shared/query'
 
 import { Project, ProjectDescription } from './project.service'
+import { Url } from "url";
 
 /**
  * Storing a query on the server
@@ -79,11 +80,23 @@ export class QueryService {
   }
 
   /**
-   * Simulates the effect of an INSERT query
+   * Simulates the effect of a query
    */
-  simulateInsertQuery(project: Project, query: Query, params: QueryParamsDescription) {
-    const url = this._server.getSimulateInsertUrl(project.id);
+  simulateQuery(project: Project, query: Query, params: QueryParamsDescription) {
+    const url = this.urlForSimulation(query.simulationType, project.id);
     return (this.serverCallQueryEndpoint(url, query, params, true));
+  }
+
+  /**
+   * Retrieves the URL that should be used to simulate a query.
+   */
+  private urlForSimulation(type: QueryTypeSimulation, projectId: string): string {
+    switch (type) {
+      case "insert": return (this._server.getSimulateInsertUrl(projectId));
+      case "delete": return (this._server.getSimulateDeleteUrl(projectId));
+      default:
+        throw new Error(`Can not determine simulation URL for query of type "${type}"`);
+    }
   }
 
   private serverCallQueryEndpoint(url: string, query: Query, params: QueryParamsDescription, simulated: boolean) {
@@ -102,7 +115,7 @@ export class QueryService {
       .map((res) => {
         // The result changes dependending on the concrete type
         // of the query.
-        if (query.select || query.insert) {
+        if (query.select || query.insert || query.delete) {
           return (new QueryResult(query, <any>res.json(), simulated))
         } else {
           return (undefined);
@@ -163,7 +176,6 @@ export class QueryService {
         return (this.createDelete(project, name, table));
       case "update":
         return (this.createUpdate(project, name, table));
-
       default:
         throw new Error(`createQuery: unknown queryType "${queryType}"`);
     }

@@ -92,6 +92,14 @@ export class ServerApiService {
   }
 
   /**
+   * Retrieves the URL that is used to run simulate the effects of an DELETE
+   * query against a certain project.
+   */
+  getSimulateDeleteUrl(projectId: string): string {
+    return (`${this._apiBaseUrl}/project/${projectId}/query/simulate/delete`);
+  }
+
+  /**
    * Retrieves an URL that can be used to create pages.
    *
    * @projectId The ID of the project

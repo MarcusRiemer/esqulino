@@ -1,4 +1,4 @@
-require_dependency 'render-liquid'
+require_dependency 'render_liquid'
 
 class RenderProjectsController < ApplicationController
   include ProjectsHelper
