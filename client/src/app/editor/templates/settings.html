@@ -109,14 +109,7 @@
               Projektbild
           </label>
           <div class="col-sm-10">
-              <select [(ngModel)]="project.projectImageId"
-                      id="project-image"
-                      class="form-control">
-                  <option *ngFor="let image of images"
-                          [value]="image.id">
-                      {{image["image-name"]}}
-                  </option>
-              </select>
+              <image-selector></image-selector>
           </div>
       </div>
     </div>

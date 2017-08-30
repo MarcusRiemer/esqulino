@@ -58,7 +58,7 @@ class Image
     if self.exists? then
       path
     else
-      raise UnknownImageError(project.id, @image_id)
+      raise UnknownImageError.new(@project.id, @image_id)
     end
   end
 
@@ -66,23 +66,23 @@ class Image
     if self.exists? then
       FileUtils.mv(file, path)
     else
-      raise UnknownImageError(project_id, @image_id)
+      raise UnknownImageError.new(project_id, @image_id)
     end
   end
 
   def file_destroy!
     if self.exists? then
+      metadata = JSON.parse(File.read(image_json))
+
+      metadata.except!(@image_id)
+
+      File.write(image_json, (JSON.dump(metadata)))
+
       File.delete(path)
-
-      metadata = JSON.parse(image_json)
-
-      metadata.except!(image_id)
-
-      File.write(image_json(JSON.dump(metadata)))
 
       #self.freeze
     else
-      raise UnknownImageError(@project_id, @image_id)
+      raise UnknownImageError.new(@project_id, @image_id)
     end
   end
 
@@ -91,8 +91,6 @@ class Image
   end
 
   def self.metadata_get_from_file(project)
-    JSON.parse(File.read(self.image_json(project)))
-
     to_return = []
     if File.file?(self.image_json(project))
     then
@@ -110,7 +108,7 @@ class Image
     begin
       @metadata = File.file?(image_json) ? JSON.parse(File.read(image_json)).fetch(@image_id) : Hash.new
     rescue KeyError
-      raise new UnknownImageError(project.id, @image_id)
+      raise UnknownImageError.new(project.id, @image_id)
     end
   end
 

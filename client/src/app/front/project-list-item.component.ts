@@ -4,6 +4,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 import {
   ProjectDescriptionService, ProjectDescription
 } from '../shared/project.description.service'
+import { ServerApiService } from '../shared/serverapi.service'
 
 /**
  * A single project list item entry.
@@ -20,14 +21,17 @@ export class ProjectListItemComponent {
    */
   useSobdomain = true;
 
-  public constructor( @Inject(PLATFORM_ID) private _platformId: Object) {
+  public constructor(
+    @Inject(PLATFORM_ID) private _platformId: Object,
+    private _serverApiService: ServerApiService
+  ) {
   }
 
   /**
    * @return The image URL of this project
    */
   get imageUrl(): string {
-    return (`/api/project/${this.project.id}/preview`);
+    return (this._serverApiService.getImageUrl(this.project.id, this.project.preview));
   }
 
   /**

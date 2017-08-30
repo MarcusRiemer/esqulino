@@ -16,7 +16,7 @@ import { ImageService } from './image.service'
   declarations: [
     ImageListComponent,
     ImageUploadComponent,
-    ImageEditComponent
+    ImageEditComponent,
   ],
   providers: [
     ImageService
