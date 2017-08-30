@@ -245,7 +245,7 @@ export class Query extends ProjectResource implements SyntaxTree.RemovableHost, 
   public removeChild(formerChild: SyntaxTree.Removable): void {
     Object.entries(this._components).forEach(e => {
       if (e[1] == formerChild) {
-        (this._components as { [key: string]: SyntaxTree.Component })[e[0]] = undefined;
+        delete (this._components as { [key: string]: SyntaxTree.Component })[e[0]];
         this.markSaveRequired();
         return;
       }
