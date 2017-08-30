@@ -9,7 +9,7 @@ require_dependency 'schema'
 require_dependency 'page'
 require_dependency 'schema-utils'
 require_dependency 'error'
-require_dependency 'sql_accessor'
+require_dependency 'query_simulate'
 
 # Represents an esqulino project. Attributes of this
 # class are loaded lazily on demand, so there is no harm
@@ -285,42 +285,8 @@ class Project
   # @param sql [string] The SQL query
   # @param params [Hash] Query parameters
   def simulate_insert_sql(sql, params, database_id = nil)
-    # Extracting the tablename of the SQL-query
-    guessed_tablename = SqlAccessor::insert_tablename(sql)
-    
     execute_sql_raw(sql, params, database_id, true) do |db|
-      begin
-        # We wrap the whole execution in a transaction and then
-        # run the query to look at the newly added ID.
-        db.transaction
-        db.execute2 sql, params
-        rowid = db.last_insert_row_id
-
-        # We fetch exactly that row from the database
-        inserted = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid = #{rowid}"
-        columns = inserted.first
-        inserted = inserted.drop(1)
-        
-        # And we fetch rows around that row
-        rows = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid BETWEEN #{rowid - 2} AND #{rowid + 2}"
-
-        # Highlight some rows
-        highlight = rows
-                      .drop(1) # First row are the names of the columns
-                      .map.with_index {|r,i| [r,i] } # We ultimately want to know which array indices to highlight
-                      .reject {|r,i| not inserted.include? r } # Ignore everything that is not in the result set
-                      .map {|r,i| i } # And grab only the index in the result array
-
-        return {
-          'columns' => columns,
-          'inserted' => inserted,
-          'rows' => rows.drop(1),
-          'highlight' => highlight
-        }
-      ensure
-        # We always undo all changes that have been made.
-        db.rollback
-      end
+      SimulateSql.insert_sql(db, sql, params)
     end
   end
 
@@ -330,46 +296,7 @@ class Project
   # @param params [Hash] Query parameters
   def simulate_delete_sql(sql, params, database_id = nil)
     execute_sql_raw(sql, params, database_id, true) do |db|
-      begin
-        db.transaction
-
-        # Extract everything from the query to turn it into a SELECT
-        # query that matches exactly the things that would be deleted
-        tablename = SqlAccessor::first_from_tablename sql
-        where_whole = SqlAccessor::where_whole sql
-
-        # Find out deleted IDs
-        query_deleted_ids = db
-                              .execute2("SELECT rowid\nFROM #{tablename}\nWHERE #{where_whole}", params)
-                              .drop(1)
-                              .flatten
-
-        # Grab some IDs around the deleted IDs
-        query_result_ids = query_deleted_ids
-                             .map {|v| Array(v-2..v+2)}
-                             .flatten
-
-        # Fetch deleted rows
-        rows_deleted = db.execute2 "SELECT *\nFROM #{tablename}\nWHERE rowid IN(#{query_deleted_ids.join ','})"
-        # Fetch adjacent rows
-        rows = db.execute2 "SELECT *\nFROM #{tablename}\nWHERE rowid IN(#{query_result_ids.join ','})"
-
-        # Highlight deleted rows
-        highlight = rows
-                      .drop(1) # First row are the names of the columns
-                      .map.with_index {|r,i| [r,i] } # We ultimately want to know which array indices to highlight
-                      .reject {|r,i| not rows_deleted.include? r } # Ignore everything that is not in the result set
-                      .map {|r,i| i } # And grab only the index in the result array
-
-        return {
-          'columns' => rows.first,
-          'rows' => rows.drop(1),
-          'highlight' => highlight
-        }
-      ensure
-        # We always undo all changes that have been made.
-        db.rollback
-      end
+      SimulateSql.delete_sql(db, sql, params)
     end
   end
 
