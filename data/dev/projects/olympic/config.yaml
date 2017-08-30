@@ -7,10 +7,10 @@ users:
   user:
     type: local
     password: 4000$8$1$935bb91920cc5280f26d75498dbde2dc80f4f25024e5b5572a607d394e9cf975$0804f6cb2de497f8555db8ac2f396d4e246f289cdfa20285f805a1fbdd20a1c2
-preview: rings.svg
 public: true
 activeDatabase: default
 databases:
   default:
     type: sqlite3
     path: default.sqlite
+preview: 60b1b3a3-63e5-41e3-b2a0-9943488081a7

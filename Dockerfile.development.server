@@ -6,3 +6,5 @@ RUN pacman --noconfirm -Sy $SERVER_PACKAGES
 COPY entrypoint-development-server.sh /entrypoint.sh
 
 EXPOSE 9292
+
+ENV USER_UID=1000 USER_GID=1000

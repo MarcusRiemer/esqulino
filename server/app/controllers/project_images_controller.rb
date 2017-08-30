@@ -21,14 +21,18 @@ class ProjectImagesController < ApplicationController
 
   def file_update
     ensure_write_access do
-      Image.new(current_project, params['image_id']).file_update!(params['image-file'].tempfile)
-      render status => :success
+      if params['image-file'].nil? or params['image-file'].tempfile.nil? then
+        render :status => 400
+      else
+        Image.new(current_project, params['image_id']).file_update!(params['image-file'].tempfile)
+        render status => :success
+      end
     end
   end
 
   def file_delete
-    ensurce_write_access do
-      #TODO
+    ensure_write_access do
+      Image.new(current_project, params['image_id']).file_destroy!
     end
   end
 
