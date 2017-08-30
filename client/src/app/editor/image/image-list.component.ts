@@ -30,6 +30,17 @@ export class ImageListComponent {
     this._imageService.loadImageList(this._projectService.cachedProject.id);
   }
 
+  deleteImage(image_id: string, image_name: string) {
+    if (confirm('"' + image_name + '"' + " löschen?")) {
+      this._http.delete(this._serverApi.getImageDeleteUrl(this._projectService.cachedProject.id, image_id))
+          .subscribe(res => {
+            console.log(res);
+            //TODO handle failure
+            this._imageService.loadImageList(this._projectService.cachedProject.id);
+          });
+    }
+  }
+
   get images() {
     return (this._imageService.images);
   }
