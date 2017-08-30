@@ -49,7 +49,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let row of result.rows"
-            [class.table-success]="row.isHighlighted">
+            [class.table-info]="row.isHighlighted">
           <td *ngFor="let cell of row.cells">
             {{ cell.value }}
           </td>

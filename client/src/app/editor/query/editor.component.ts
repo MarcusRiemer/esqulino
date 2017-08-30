@@ -200,12 +200,13 @@ export class QueryEditorComponent implements OnInit {
 
     // Only select queries should be run immediatly. But sadly we are not quite
     // that far (yet).
-    if (!simulated || this.query.select || this.query.delete || this.query.update) {
+    if (!simulated || this.query.select || this.query.update) {
       request = this._queryService.runQuery(this.project, this.query, this.relevantArguments);
-
-    } else {
+    } else if (this.query.delete || this.query.insert) {
       // Queries with mutating side effects are previewed first
-      request = this._queryService.simulateInsertQuery(this.project, this.query, this.relevantArguments);
+      request = this._queryService.simulateQuery(this.project, this.query, this.relevantArguments);
+    } else {
+      throw new Error("Unknown querytype to run");
     }
 
     // Hook up to the end of a successful request.
