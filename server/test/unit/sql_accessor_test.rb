@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SqlGuessworkTest < ActionDispatch::IntegrationTest
+class SqlAccessorTest < ActionDispatch::IntegrationTest
   test "first_from_tablename" do
     assert 'foo', SqlAccessor::first_from_tablename("SELECT * FROM foo")
     assert 'foo', SqlAccessor::first_from_tablename("SELECT *\nFROM foo WHERE 1 = 2")
