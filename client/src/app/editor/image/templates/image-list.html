@@ -11,8 +11,9 @@
                 <li>{{image["author-url"]}}</li>
             </ul>
             <a [routerLink]="[image.id,'edit']"><button>
-                Edit
+                Bearbeiten
             </button></a>
+            <button (click)="deleteImage(image.id, image['image-name'])">Löschen</button>
         </div>
       </div>
   </div>

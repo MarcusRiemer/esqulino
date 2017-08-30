@@ -23,7 +23,8 @@ export class ImageEditComponent {
         private _projectService: ProjectService,
         private _routeParams: ActivatedRoute,
         private _toolbarService: ToolbarService,
-        private _sidebarService: SidebarService
+        private _sidebarService: SidebarService,
+        private _router: Router
     ) {
     }
 
@@ -53,11 +54,12 @@ export class ImageEditComponent {
 
         let btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "d")
         let subRef = btnDelete.onClick.subscribe(res => {
-            if (confirm("Dieses Bild  löschen?")) {
+            if (confirm("Dieses Bild löschen?")) {
                 this._http.delete(this._serverApi.getImageDeleteUrl(this._projectService.cachedProject.id, this._imageMetadata.id))
                     .subscribe(res => {
                         console.log(res);
-                        this.reloadImage();
+                        //TODO handle failure
+                        this._router.navigate(["../../"], { relativeTo: this._routeParams });
                     })
             }
         });
@@ -88,6 +90,11 @@ export class ImageEditComponent {
         this._toolbarService.savingEnabled = false;
 
         this.reloadImage();
+    }
+
+    ngOnDestroy() {
+        this._subscriptionRefs.forEach(ref => ref.unsubscribe());
+        this._subscriptionRefs = [];
     }
 
     get image() {
