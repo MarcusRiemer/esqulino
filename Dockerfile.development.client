@@ -5,3 +5,4 @@ RUN pacman --noconfirm -Sy $CLIENT_PACKAGES
 
 COPY entrypoint-development-client.sh /entrypoint.sh
 
+ENV USER_UID=1000 USER_GID=1000
