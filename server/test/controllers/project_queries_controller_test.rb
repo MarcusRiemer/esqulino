@@ -65,7 +65,7 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
 
     result = JSON.parse(@response.body)
     assert_equal ["key", "value"], result['columns']
-    assert_equal [[6, "test"]], result['inserted']
+    assert_equal [[6, "test"]], result['affected']
 
     post '/api/project/db-sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
          params: { },
@@ -163,7 +163,7 @@ class ProjectQueriesControllerTest < ActionDispatch::IntegrationTest
 
     result = JSON.parse(@response.body)
     assert_equal ["key", "value"], result['columns']
-    assert_equal [[1, "eins"]], result['rows']
+    assert_equal [[1, "eins"]], result['affected']
 
     # Ensure nothing has changed
     post '/api/project/db-sequence/query/f3de342b-45ce-438b-b977-ad5b177d393d/run',
