@@ -112,6 +112,19 @@ export interface ButtonDescription extends WidgetDescription {
 }
 
 /**
+ * A more or less static image that should be displayed
+ */
+export interface ImageDescription extends WidgetDescription {
+  type: "image"
+
+  // Alternative text to display
+  alt: string
+
+  // The image to show
+  src: string
+}
+
+/**
  * Describes a HTML form
  */
 export interface FormDescription extends WidgetDescription {
