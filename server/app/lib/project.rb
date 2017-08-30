@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'json'
 require 'yaml'
 require 'securerandom' # To generate UUIDs
@@ -336,11 +337,34 @@ class Project
         # query that matches exactly the things that would be deleted
         tablename = SqlAccessor::first_from_tablename sql
         where_whole = SqlAccessor::where_whole sql
-        query_delete_set = db.execute2 "SELECT *\nFROM #{tablename}\nWHERE #{where_whole}", params
+
+        # Find out deleted IDs
+        query_deleted_ids = db
+                              .execute2("SELECT rowid\nFROM #{tablename}\nWHERE #{where_whole}", params)
+                              .drop(1)
+                              .flatten
+
+        # Grab some IDs around the deleted IDs
+        query_result_ids = query_deleted_ids
+                             .map {|v| Array(v-2..v+2)}
+                             .flatten
+
+        # Fetch deleted rows
+        rows_deleted = db.execute2 "SELECT *\nFROM #{tablename}\nWHERE rowid IN(#{query_deleted_ids.join ','})"
+        # Fetch adjacent rows
+        rows = db.execute2 "SELECT *\nFROM #{tablename}\nWHERE rowid IN(#{query_result_ids.join ','})"
+
+        # Highlight deleted rows
+        highlight = rows
+                      .drop(1) # First row are the names of the columns
+                      .map.with_index {|r,i| [r,i] } # We ultimately want to know which array indices to highlight
+                      .reject {|r,i| not rows_deleted.include? r } # Ignore everything that is not in the result set
+                      .map {|r,i| i } # And grab only the index in the result array
 
         return {
-          'columns' => query_delete_set.first,
-          'rows' => query_delete_set.drop(1)
+          'columns' => rows.first,
+          'rows' => rows.drop(1),
+          'highlight' => highlight
         }
       ensure
         # We always undo all changes that have been made.

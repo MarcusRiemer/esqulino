@@ -9,6 +9,11 @@ import * as Model from './description'
 import * as SyntaxTree from './syntaxtree'
 
 /**
+ * Identifier for a querytype that could be simulated.
+ */
+export type QueryTypeSimulation = "insert" | "delete";
+
+/**
  * Facade for a query that allows meaningful mapping to the UI.
  */
 export class Query extends ProjectResource implements SyntaxTree.RemovableHost, Validateable {
@@ -250,6 +255,19 @@ export class Query extends ProjectResource implements SyntaxTree.RemovableHost, 
         return;
       }
     });
+  }
+
+  /**
+   * The mode the simulation of this query should be executed in.
+   */
+  get simulationType(): QueryTypeSimulation {
+    if (this.insert) {
+      return ("insert");
+    } else if (this.delete) {
+      return ("delete");
+    } else {
+      throw new Error(`Query "#{this.name}" has no simulation type`);
+    }
   }
 }
 
