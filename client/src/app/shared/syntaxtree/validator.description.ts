@@ -112,7 +112,7 @@ export interface MinInclusiveRestriction {
  */
 export interface NodeComplexTypeDescription extends NodeTypeDescription {
   type: "complex"
-  chidlrenCategories?: NodeComplexTypeChildrenGroupDescription[]
+  childrenCategories?: NodeComplexTypeChildrenGroupDescription[]
   propertyCategories?: NodeComplexTypePropertiesGroupDescription[]
 }
 
@@ -171,4 +171,31 @@ export class LanguageDescription {
   root: TypeReference[]
 }
 
+/**
+ * @return True, if the given instance probably satisfies "NodeSimpleTypeDescription"
+ */
+export function isNodeSimpleTypeDescription(obj: any): obj is NodeSimpleTypeDescription {
+  return (obj.type === "simple");
+}
+
+/**
+ * @return True, if the given instance probably satisfies "NodeComplexTypeDescription"
+ */
+export function isNodeComplexTypeDescription(obj: any): obj is NodeComplexTypeDescription {
+  return (obj.type === "complex");
+}
+
+/**
+ * @return True, if the given instance probably satisfies "NodeTypesAllowedDescription"
+ */
+export function isNodeTypesAllowedDescription(obj: any): obj is NodeTypesAllowedDescription {
+  return (obj.type === "allowed");
+}
+
+/**
+ * @return True, if the given instance probably satisfies "NodeTypesSequenceDescription"
+ */
+export function isNodeTypesSequenceDescription(obj: any): obj is NodeTypesSequenceDescription {
+  return (obj.type === "sequence");
+}
 

@@ -14,7 +14,7 @@ const langMiniHtml: Schema.LanguageDescription = {
     {
       nodeName: "html",
       type: "complex",
-      chidlrenCategories: [
+      childrenCategories: [
         {
           categoryName: "children",
           children: {
@@ -58,7 +58,7 @@ const langMiniSql: Schema.LanguageDescription = {
     {
       nodeName: "query-select",
       type: "complex",
-      chidlrenCategories: [
+      childrenCategories: [
         {
           categoryName: "children",
           children: {
@@ -71,7 +71,7 @@ const langMiniSql: Schema.LanguageDescription = {
     {
       nodeName: "query-delete",
       type: "complex",
-      chidlrenCategories: [
+      childrenCategories: [
         {
           categoryName: "children",
           children: {
