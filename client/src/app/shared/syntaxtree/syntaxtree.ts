@@ -11,7 +11,7 @@ type NodeProperties = { [propertyName: string]: any }
 /**
  * Children of a node are always sorted.
  */
-type NodeChildren = { [childrenCategory: string]: Node[] }
+export type NodeChildren = { [childrenCategory: string]: Node[] }
 
 /**
  * The core building block of the AST is this class. It contains
@@ -64,13 +64,17 @@ export class Node {
     return (this._nodeFamily);
   }
 
-  getChildren(categoryName: string): Node[] {
+  getChildrenCategory(categoryName: string): Node[] {
     const result = this._nodeChildren[categoryName];
     if (result) {
       return (result);
     } else {
       return ([]);
     }
+  }
+
+  get children() {
+    return (this._nodeChildren);
   }
 
   get nodeProperties(): NodeProperties {

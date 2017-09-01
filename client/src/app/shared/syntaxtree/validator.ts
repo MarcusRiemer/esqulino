@@ -1,7 +1,7 @@
 import * as Desc from './validator.description'
 import * as AST from './syntaxtree'
 
-export type ErrorCodes = "UNKNOWN_ROOT"
+export type ErrorCodes = "UNKNOWN_ROOT" | "ILLEGAL_CHILD_TYPE"
 
 export interface ValidationItem {
   type: "error" | "warning"
@@ -73,14 +73,33 @@ abstract class NodeType {
  * Describes a complex node that may have any kind of children.
  */
 class NodeComplexType extends NodeType {
-  private _allowedChildren: NodeComplexTypeChildren[] = [];
+  private _allowedChildren: { [category: string]: NodeComplexTypeChildren } = {};
 
   constructor(typeDesc: Desc.NodeTypeDescription, familyName: string) {
     super(typeDesc, familyName)
+
+    if (Desc.isNodeComplexTypeDescription(typeDesc)) {
+      const childrenCategories = typeDesc.childrenCategories || [];
+
+      childrenCategories.forEach(groupDesc => {
+        this._allowedChildren[groupDesc.categoryName] = new NodeComplexTypeChildren(groupDesc);
+      });
+    }
   }
 
+  /**
+   * Validates this node itself and all existing children.
+   */
   validateImpl(ast: AST.Node, context: ValidationContext) {
-
+    // Iterate over all children the node has
+    Object.entries(ast.children).forEach(([category, nodes]) => {
+      // Ensure there is a validator for that category
+      if (this._allowedChildren[category]) {
+        this._allowedChildren[category].validate(nodes, context);
+      } else {
+        throw new Error("Not implemented");
+      }
+    });
   }
 }
 
@@ -90,19 +109,81 @@ class NodeComplexType extends NodeType {
 class NodeComplexTypeChildren {
   private _categoryName: string;
 
-  private _childValidator: NodeComplexTypeChildrenSequence;
+  private _childValidator: NodeComplexTypeChildrenValidator;
 
   constructor(desc: Desc.NodeComplexTypeChildrenGroupDescription) {
     this._categoryName = desc.categoryName;
-    this._childValidator = new NodeComplexTypeChildrenSequence(desc.children as Desc.NodeTypesSequenceDescription);
+
+    if (Desc.isNodeTypesSequenceDescription(desc)) {
+      this._childValidator = new NodeComplexTypeChildrenSequence(desc);
+    } else if (Desc.isNodeTypesAllowedDescription(desc)) {
+      this._childValidator = new NodeComplexTypeChildrenAllowed(desc);
+    } else {
+      throw new Error(`Unknown child validator: "${JSON.stringify(desc)}"`);
+    }
+  }
+
+  /**
+   * Checks the children of this group.
+   */
+  validate(ast: AST.Node[], context: ValidationContext) {
+    // Check the top-level structure of the children
+    this._childValidator.validateChildren(ast, context);
+
+    // Check the children themselves
+    throw new Error("Not implemented");
   }
 }
 
-class NodeComplexTypeChildrenSequence {
+
+/**
+ * Classes implementing this interface can check whether certain
+ * child nodes are structurally valid.
+ */
+interface NodeComplexTypeChildrenValidator {
+  /**
+   * Checks whether the given children are in a legal position in the given
+   * array. Adds errors to the context if children are in illegal positions.
+   *
+   * @return All children that are in valid positions and should be checked further.
+   */
+  validateChildren(ast: AST.Node[], context: ValidationContext): AST.Node[];
+}
+
+class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidator {
   private _nodeTypes: string[];
 
   constructor(desc: Desc.NodeTypesSequenceDescription) {
     this._nodeTypes = desc.nodeTypes;
+  }
+
+  validateChildren(ast: AST.Node[], context: ValidationContext): AST.Node[] {
+    throw new Error("Not implemented");
+  }
+}
+
+class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator {
+  private _nodeTypes: string[];
+
+  constructor(desc: Desc.NodeTypesAllowedDescription) {
+    this._nodeTypes = desc.nodeTypes;
+  }
+
+  /**
+   * Ensures that every child has at least a matching type.
+   */
+  validateChildren(children: AST.Node[], context: ValidationContext) {
+    const toReturn: AST.Node[] = [];
+
+    children.forEach(node => {
+      if (!this._nodeTypes.find(type => node.nodeName === type)) {
+        context.addError("ILLEGAL_CHILD_TYPE", node);
+      } else {
+        toReturn.push(node);
+      }
+    });
+
+    return (toReturn);
   }
 }
 
