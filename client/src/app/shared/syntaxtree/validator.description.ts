@@ -148,7 +148,11 @@ export interface NodeTypesAllowedDescription {
  */
 export interface QualifiedTypeReference {
   typeName: string
-  familyName: string
+  languageName: string
+}
+
+export function isQualifiedTypeReference(arg: any): arg is QualifiedTypeReference {
+  return (arg.typeName && arg.languageName);
 }
 
 /**
@@ -159,12 +163,12 @@ export type TypeReference = QualifiedTypeReference | string
 /**
  * Describes a whole schema that in turn may describe a whole language.
  */
-export class SchemaDescription {
+export class LanguageDescription {
   languageName: string
 
   types: NodeTypeDescription[]
 
-  root: TypeReference
+  root: TypeReference[]
 }
 
 
