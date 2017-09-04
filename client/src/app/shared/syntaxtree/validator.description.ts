@@ -112,7 +112,7 @@ export interface MinInclusiveRestriction {
  */
 export interface NodeComplexTypeDescription extends NodeTypeDescription {
   type: "complex"
-  chidlrenCategories?: NodeComplexTypeChildrenGroupDescription[]
+  childrenCategories?: NodeComplexTypeChildrenGroupDescription[]
   propertyCategories?: NodeComplexTypePropertiesGroupDescription[]
 }
 
@@ -148,7 +148,11 @@ export interface NodeTypesAllowedDescription {
  */
 export interface QualifiedTypeReference {
   typeName: string
-  familyName: string
+  languageName: string
+}
+
+export function isQualifiedTypeReference(arg: any): arg is QualifiedTypeReference {
+  return (arg.typeName && arg.languageName);
 }
 
 /**
@@ -159,12 +163,39 @@ export type TypeReference = QualifiedTypeReference | string
 /**
  * Describes a whole schema that in turn may describe a whole language.
  */
-export class SchemaDescription {
+export class LanguageDescription {
   languageName: string
 
   types: NodeTypeDescription[]
 
-  root: TypeReference
+  root: TypeReference[]
 }
 
+/**
+ * @return True, if the given instance probably satisfies "NodeSimpleTypeDescription"
+ */
+export function isNodeSimpleTypeDescription(obj: any): obj is NodeSimpleTypeDescription {
+  return (obj.type === "simple");
+}
+
+/**
+ * @return True, if the given instance probably satisfies "NodeComplexTypeDescription"
+ */
+export function isNodeComplexTypeDescription(obj: any): obj is NodeComplexTypeDescription {
+  return (obj.type === "complex");
+}
+
+/**
+ * @return True, if the given instance probably satisfies "NodeTypesAllowedDescription"
+ */
+export function isNodeTypesAllowedDescription(obj: any): obj is NodeTypesAllowedDescription {
+  return (obj.type === "allowed");
+}
+
+/**
+ * @return True, if the given instance probably satisfies "NodeTypesSequenceDescription"
+ */
+export function isNodeTypesSequenceDescription(obj: any): obj is NodeTypesSequenceDescription {
+  return (obj.type === "sequence");
+}
 
