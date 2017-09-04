@@ -38,6 +38,9 @@ class Query
 
   # Retrieves the JSON representation of this query
   def to_json(options)
+    # The JSON representation is always meant to be complete
+    load_model!
+    
     # Ensure that the ID is part of the JSON model
     {
       :id => @id
