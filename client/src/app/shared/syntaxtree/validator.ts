@@ -1,18 +1,10 @@
 import * as Desc from './validator.description'
 import * as AST from './syntaxtree'
 
-export type ErrorCodes = "UNKNOWN_ROOT" | "ILLEGAL_CHILD_TYPE"
-
-export interface ValidationItem {
-  type: "error" | "warning"
-  message: string
-}
-
-/**
- * Represents the result of a completed validation.
- */
-export class ValidationResult {
-
+export enum ErrorCodes {
+  UnknownRoot = "UNKNOWN_ROOT",
+  UnexpectedType = "UNEXPECTED_TYPE",
+  IllegalChildType = "ILLEGAL_CHILD_TYPE",
 }
 
 interface ValidationError {
@@ -29,7 +21,31 @@ class ValidationContext {
   addError(code: ErrorCodes | string, node: AST.Node) {
     this._errors.push({ code: code, node: node });
   }
+
+  get errors() {
+    return (this._errors);
+  }
 }
+
+/**
+ * Represents the result of a completed validation.
+ */
+export class ValidationResult {
+  private _errors: ValidationError[];
+
+  constructor(context: ValidationContext) {
+    this._errors = context.errors;
+  }
+
+  get isValid() {
+    return (this._errors.length === 0);
+  }
+
+  get errors() {
+    return (this._errors);
+  }
+}
+
 
 /**
  * Base class for types describing simple and complex nodes. Derived
@@ -58,10 +74,16 @@ abstract class NodeType {
     return (this._typeName);
   }
 
+  /**
+   * Validates this node and (if applicable) it's children
+   * and other properties.
+   */
   validate(ast: AST.Node, context: ValidationContext) {
+    // Does the type of the given node match the type we expect?
     if (this._familyName == ast.nodeFamily && this._typeName == ast.nodeName) {
-      context.addError("UNEXPECTED_NODE", ast);
+      context.addError(ErrorCodes.UnexpectedType, ast);
     } else {
+      // Further validation is done by specific implementations
       this.validateImpl(ast, context);
     }
   }
@@ -79,11 +101,13 @@ class NodeComplexType extends NodeType {
     super(typeDesc, familyName)
 
     if (Desc.isNodeComplexTypeDescription(typeDesc)) {
+      // Construct validators for all children
       const childrenCategories = typeDesc.childrenCategories || [];
-
       childrenCategories.forEach(groupDesc => {
         this._allowedChildren[groupDesc.categoryName] = new NodeComplexTypeChildren(groupDesc);
       });
+    } else {
+      throw new Error("Wrong type description: Not complex");
     }
   }
 
@@ -114,10 +138,11 @@ class NodeComplexTypeChildren {
   constructor(desc: Desc.NodeComplexTypeChildrenGroupDescription) {
     this._categoryName = desc.categoryName;
 
-    if (Desc.isNodeTypesSequenceDescription(desc)) {
-      this._childValidator = new NodeComplexTypeChildrenSequence(desc);
-    } else if (Desc.isNodeTypesAllowedDescription(desc)) {
-      this._childValidator = new NodeComplexTypeChildrenAllowed(desc);
+    const validatorDesc = desc.children;
+    if (Desc.isNodeTypesSequenceDescription(validatorDesc)) {
+      this._childValidator = new NodeComplexTypeChildrenSequence(validatorDesc);
+    } else if (Desc.isNodeTypesAllowedDescription(validatorDesc)) {
+      this._childValidator = new NodeComplexTypeChildrenAllowed(validatorDesc);
     } else {
       throw new Error(`Unknown child validator: "${JSON.stringify(desc)}"`);
     }
@@ -128,10 +153,9 @@ class NodeComplexTypeChildren {
    */
   validate(ast: AST.Node[], context: ValidationContext) {
     // Check the top-level structure of the children
-    this._childValidator.validateChildren(ast, context);
+    const validChildren = this._childValidator.validateChildren(ast, context);
 
     // Check the children themselves
-    throw new Error("Not implemented");
   }
 }
 
@@ -150,6 +174,9 @@ interface NodeComplexTypeChildrenValidator {
   validateChildren(ast: AST.Node[], context: ValidationContext): AST.Node[];
 }
 
+/**
+ * Enforces a specific sequence of child-nodes of a parent node.
+ */
 class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidator {
   private _nodeTypes: string[];
 
@@ -162,6 +189,10 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
   }
 }
 
+/**
+ * Ensures that every child-node is of a type that has been explicitly
+ * whitelisted.
+ */
 class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator {
   private _nodeTypes: string[];
 
@@ -177,7 +208,7 @@ class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator
 
     children.forEach(node => {
       if (!this._nodeTypes.find(type => node.nodeName === type)) {
-        context.addError("ILLEGAL_CHILD_TYPE", node);
+        context.addError(ErrorCodes.IllegalChildType, node);
       } else {
         toReturn.push(node);
       }
@@ -187,6 +218,11 @@ class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator
   }
 }
 
+/**
+ * Types are usually not embedded, but referenced. This class is able
+ * to resolve those references, even (or especially) if they cross
+ * language boundaries.
+ */
 class TypeReference {
   private _languageName: string;
   private _typeName: string;
@@ -233,17 +269,18 @@ class Language {
     this._validator = validator;
     this._languageName = desc.languageName;
 
-    desc.root.forEach(rootRef => desc.types.forEach(typeDesc => this.registerTypeValidator(typeDesc)));
+    desc.types.forEach(typeDesc => this.registerTypeValidator(typeDesc));
+    this._rootTypes = desc.root.map(rootDesc => new TypeReference(validator, rootDesc, this._languageName));
   }
 
   validateFromRoot(ast: AST.Node, context: ValidationContext) {
     const rootType = this._rootTypes.find(rootRef => rootRef.type.typeName == ast.nodeName);
 
     if (!rootType) {
-      context.addError("UNKNOWN_ROOT", ast);
+      context.addError(ErrorCodes.UnknownRoot, ast);
+    } else {
+      rootType.type.validate(ast, context);
     }
-
-    rootType.type.validate(ast, context);
   }
 
   /**
@@ -266,7 +303,7 @@ class Language {
    */
   private registerTypeValidator(desc: Desc.NodeTypeDescription) {
     if (this.isKnownType(desc.nodeName)) {
-      throw new Error(`Attempted to register node "${desc.nodeName}" twice for "${this._languageName}"`);
+      throw new Error(`Attempted to register node "${desc.nodeName}" twice for "${this._languageName}. Previous definition: ${JSON.stringify(this._registeredTypes[desc.nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
     }
 
     this._registeredTypes[desc.nodeName] = new NodeComplexType(desc, this._languageName);
@@ -301,11 +338,11 @@ export class Validator {
 
   validateFromRoot(ast: AST.Node) {
     const lang = this.getLanguage(ast.nodeFamily);
-    const result = new ValidationContext();
+    const context = new ValidationContext();
 
-    lang.validateFromRoot(ast, result);
+    lang.validateFromRoot(ast, context);
 
-    return (result);
+    return (new ValidationResult(context));
   }
 
   getLanguage(language: string) {

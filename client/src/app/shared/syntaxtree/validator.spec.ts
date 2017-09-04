@@ -1,5 +1,6 @@
 import * as Schema from './validator.description'
-import { Validator } from './validator'
+import * as AST from './syntaxtree'
+import { Validator, ErrorCodes } from './validator'
 
 /**
  * Basically describes a language where each document needs to be
@@ -42,19 +43,19 @@ const langMiniSql: Schema.LanguageDescription = {
     {
       nodeName: "select",
       type: "complex"
-    },
+    } as Schema.NodeComplexTypeDescription,
     {
       nodeName: "delete",
       type: "complex"
-    },
+    } as Schema.NodeComplexTypeDescription,
     {
       nodeName: "from",
       type: "complex"
-    },
+    } as Schema.NodeComplexTypeDescription,
     {
       nodeName: "where",
       type: "complex"
-    },
+    } as Schema.NodeComplexTypeDescription,
     {
       nodeName: "query-select",
       type: "complex",
@@ -86,12 +87,75 @@ const langMiniSql: Schema.LanguageDescription = {
 }
 
 describe('Schema Validator', () => {
-  it('registers types in a single language', () => {
+  it('Mini-HTML: registers types', () => {
     const v = new Validator([langMiniHtml]);
 
     expect(v.isKnownLanguage(langMiniHtml.languageName)).toBeTruthy();
-    expect(v.isKnownType(langMiniHtml.languageName, langMiniHtml.types[0].nodeName)).toBeTruthy();
-    expect(v.isKnownType(langMiniHtml.languageName, langMiniHtml.types[1].nodeName)).toBeTruthy();
-    expect(v.isKnownType(langMiniHtml.languageName, langMiniHtml.types[2].nodeName)).toBeTruthy();
+    for (let i = 0; i < langMiniHtml.types.length; ++i) {
+      expect(v.isKnownType(langMiniHtml.languageName, langMiniHtml.types[i].nodeName)).toBeTruthy();
+    }
   });
+
+  it('Mini-SQL: registers types', () => {
+    const v = new Validator([langMiniSql]);
+
+    expect(v.isKnownLanguage(langMiniSql.languageName)).toBeTruthy();
+    for (let i = 0; i < langMiniSql.types.length; ++i) {
+      expect(v.isKnownType(langMiniSql.languageName, langMiniSql.types[i].nodeName)).toBeTruthy();
+    }
+  });
+
+  it('Mini-SQL: Empty SELECT query', () => {
+    const v = new Validator([langMiniSql]);
+
+    const astDesc: AST.NodeDescription = {
+      nodeFamily: "mini-sql",
+      nodeName: "query-select"
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(3, res);
+  });
+
+  it('Mini-HTML: Empty document', () => {
+    const v = new Validator([langMiniHtml]);
+
+    const astDesc: AST.NodeDescription = {
+      nodeFamily: "mini-html",
+      nodeName: "html"
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+
+    const res = v.validateFromRoot(ast);
+    expect(res.errors.length).toEqual(2, res);
+  });
+
+
+  /*
+  it('Mini-HTML: Invalid child (SQL query)', () => {
+    const v = new Validator([langMiniHtml, langMiniSql]);
+
+    const astDesc: AST.NodeDescription = {
+      nodeFamily: "mini-html",
+      nodeName: "html",
+      nodeChildren: {
+        "children": [
+          {
+            nodeFamily: "mini-sql",
+            nodeName: "query-select"
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+
+    const res = v.validateFromRoot(ast);
+    expect(res.isValid).toBeFalsy();
+    expect(res.errors.length).toEqual(1);
+    expect(res.errors[0].code).toEqual(ErrorCodes.UnexpectedType);
+    });*/
 });
