@@ -11,7 +11,7 @@ export const CURRENT_API_VERSION: ApiVersionToken = "4";
 
 /**
  * esqulinos data format carries an explicit, global version instead
- * of going with an implicit schema declared version for each resource. This 
+ * of going with an implicit schema declared version for each resource. This
  * makes updates a little tedious (each saved resource needs to be touched,
  * at least to update the version flag) but should solve annoying implicit
  * incompatabilities.

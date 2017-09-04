@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 
-import { AvailableImage, ImageService } from './image.service'
+import { ImageService } from './image.service'
+import { AvailableImage } from './available-image.class'
 import { Project } from '../project.service'
 
 export { AvailableImage }
@@ -36,7 +37,7 @@ export class ImageSelectorComponent {
     }
 
     ngOnInit() {
-        this._imageService.loadImageList(this.project.id);
+        this._imageService.loadImageList();
     }
 
     ngOnDestroy() {
