@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     # Catch all requests for static files that are provided upstream
     get '/vendor/*path', format: false, controller: 'render_projects', action: :vendor_file
 
+    get 'image/:image_id', controller: 'render_projects', action: :file_show
+
     # Running a query
     post '/(:page_name_or_id/)query/:query_id', controller: 'render_projects', action: :run_query
 
