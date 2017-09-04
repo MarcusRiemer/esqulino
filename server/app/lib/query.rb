@@ -3,6 +3,8 @@ require 'yaml'
 require 'securerandom' # To generate UUIDs
 require 'fileutils'    # To create directory trees
 
+require_dependency 'version'
+
 # Represents a esqulino query, which must be part of a project.
 # Attributes of this class are loaded lazily on demand, so there
 # is no harm in creating loads of instances.
@@ -30,6 +32,8 @@ class Query
     raise UnknownQueryError.new(@project.id, @id) unless File.exists? query_file_path
 
     self.model = YAML.load_file(query_file_path)
+
+    assert_resource_version(@id, "query", @model['apiVersion'])
   end
 
   # Retrieves the JSON representation of this query

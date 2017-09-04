@@ -10,6 +10,7 @@ require_dependency 'schema_utils'
 require_dependency 'page'
 require_dependency 'error'
 require_dependency 'query_simulate'
+require_dependency 'version'
 
 # Represents an esqulino project. Attributes of this
 # class are loaded lazily on demand, so there is no harm
@@ -135,6 +136,8 @@ class Project
     # Ensure this is actually a loadable project
     raise UnknownProjectError.new(id) unless self.exists?
     @whole_description = YAML.load_file(description_filename);
+
+    assert_resource_version(@id, "project", @whole_description['apiVersion'])
   end
 
   # @return Every information about the core project itself.
