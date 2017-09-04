@@ -5,10 +5,12 @@ class ProjectImagesController < ApplicationController
   include ValidationHelper
 
   def create
-    metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'])
-    img = Image.file_new!(params['image-file'].tempfile, current_project, metadata)
+    ensure_write_access do
+      metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'])
+      img = Image.file_new!(params['image-file'].tempfile, current_project, metadata)
 
-    render plain: img.id
+      render plain: img.id
+    end
   end
 
   def file_show

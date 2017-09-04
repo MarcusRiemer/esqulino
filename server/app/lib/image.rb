@@ -2,6 +2,8 @@ require 'json'
 require 'securerandom'
 require 'fileutils'
 
+require_dependency 'version'
+
 class Image
   include ProjectsHelper
 
@@ -96,8 +98,9 @@ class Image
     then
       JSON.parse(File.read(self.image_json(project))).each do |k, v|
         v['id'] = k
-        v['image-url'] = IMAGE_PATH_PRE_PROJECT_ID + project.id + IMAGE_PATH_PRE_IMAGE_ID + k
-        v['project-id'] = project.id
+        v['apiVersion'] = 4;# version::ESQLINO_API_VERSION;
+        v['name'] = v['image-name'];
+        v.delete 'image-name';
         to_return.append(v)
       end
     end
@@ -117,7 +120,9 @@ class Image
     res = @metadata
 
     res['id'] = @image_id
-    res['image-url'] = IMAGE_PATH_PRE_PROJECT_ID + @project.id + IMAGE_PATH_PRE_IMAGE_ID + @image_id
+    res['apiVersion'] = 4;#ESQULINO_API_VERSION;
+    res['name'] = res['image-name'];
+    res['image-name'] = nil;
 
     res
   end

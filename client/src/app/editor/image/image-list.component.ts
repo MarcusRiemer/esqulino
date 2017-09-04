@@ -6,7 +6,7 @@ import { ProjectService } from '../project.service'
 import { SidebarService } from '../sidebar.service'
 import { ToolbarService } from '../toolbar.service'
 
-import { AvailableImage, ImageService } from './image.service'
+import { ImageService } from './image.service'
 
 @Component({
   templateUrl: 'templates/image-list.html'
@@ -27,7 +27,7 @@ export class ImageListComponent {
     this._toolbarService.resetItems();
     this._toolbarService.savingEnabled = false;
 
-    this._imageService.loadImageList(this._projectService.cachedProject.id);
+    this._imageService.loadImageList();
   }
 
   deleteImage(image_id: string, image_name: string) {
@@ -36,7 +36,7 @@ export class ImageListComponent {
           .subscribe(res => {
             console.log(res);
             //TODO handle failure
-            this._imageService.loadImageList(this._projectService.cachedProject.id);
+            this._imageService.loadImageList();
           });
     }
   }
