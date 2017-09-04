@@ -42,6 +42,27 @@ class EsqulinoError < StandardError
   end
 end
 
+# Some resource unexpectedly has an invalid version
+#
+# @param res_id [UUID] The id with an invalid version
+# @param res_typ [string] The type of the resource in question
+class InvalidVersionError < EsqulinoError
+  def initialize(res_id, res_type, res_version)
+    super "Invalid version", 500
+    @res_id = res_id
+    @res_type = res_type
+    @res_version = res_version
+  end
+
+  def json_data
+    {
+      "resId" => @res_id,
+      "resType" => @res_type,
+      "resVersion" => @res_version
+    }
+  end
+end
+
 # Some authentication went wrong
 class AuthorizationError < EsqulinoError
   def initialize(msg = "Unauthorized", code = 401)
