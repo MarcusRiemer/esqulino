@@ -152,7 +152,7 @@ placeholder="">
  */
 function renderImage(w: Widget): string {
   const image = w as Image;
-  return (`<img src="${image.src}" alt="${image.alt}">`);
+  return (`<img src="/image/${image.src}" alt="${image.alt}">`);
 }
 
 function renderLink(w: Widget): string {
