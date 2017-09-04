@@ -43,7 +43,10 @@ class Page
   def to_json(options)
     # The JSON representation is always meant to be complete
     load_model!
-    @model.to_json(options)
+    # Ensure that the ID is part of the JSON model
+    {
+      :id => @id
+    }.merge(model).to_json(options)
   end
 
   # Saves the abstract representation of this page but deletes every saved
