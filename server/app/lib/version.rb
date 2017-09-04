@@ -37,7 +37,7 @@ def check_against_master_repo()
 
   local_date = DateTime.parse (`git show -s --format=%ci HEAD`.strip)
   remote_date = DateTime.parse res_json["target"]["date"]
-  
+
   to_return = {
     :remote => {
       :hash => res_json["target"]["hash"],
