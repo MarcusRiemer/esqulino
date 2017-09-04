@@ -33,12 +33,12 @@ class Page
   # Loads the page model from disk
   def load_model!
     raise UnknownPageError.new(@project.id, @id) unless exists?
-    
+
     @model = YAML.load_file(page_file_path)
 
     assert_resource_version(@id, "page", @model['apiVersion'])
   end
-  
+
   # Retrieves the JSON representation of this page
   def to_json(options)
     # The JSON representation is always meant to be complete
@@ -64,7 +64,7 @@ class Page
   # something that would never happen on purpose.
   def save!
     @project.assert_write_access!
-    
+
     raise EsqulinoError, "Attempted to save unloaded page" if @model.nil?
 
     # Ensuring that the project folder has a "pages" subfolder
@@ -93,7 +93,7 @@ class Page
   # @param templates [Hash] Templates with associated rendering engine
   def save_templates(templates)
     @project.assert_write_access!
-    
+
     templates.each do |engine_type,template|
       File.open(page_file_path(engine_type), 'w') do |f|
         f.write(template)
@@ -105,9 +105,9 @@ class Page
   # (this object) is left intact.
   def delete!
     @project.assert_write_access!
-    
+
     page_files.each do |page_file|
-      File.delete page_file 
+      File.delete page_file
     end
   end
 
@@ -115,7 +115,7 @@ class Page
   def id
     @id
   end
-  
+
   # @return The user-facing name of this page
   def name
     model['name']
@@ -159,7 +159,7 @@ class Page
 
     params['page'] = self.render_params
     params['project'] = @project.render_params
-    
+
     # Stores the results of executed queries
     result_queries = {}
 
@@ -169,7 +169,7 @@ class Page
 
       # Skip queries that are not select queries
       next unless query.is_select?
-      
+
       # Execute the query and store the result in a hash under the query name
       result = self.execute_referenced_query(ref, params.fetch('get'))
       result_queries[ref['name']] = result
@@ -219,7 +219,7 @@ class Page
     result = query.execute(params)
 
     # Prepare result for SELECT queries
-    
+
     # Templating engines works much better with 'sensible' keys as names,
     # so we map the column names into each row. This basically transforms
     # rows like [1,2,3] to { "column-name-1" => 1, ... }
@@ -236,7 +236,7 @@ class Page
         raise DatabaseQueryError.new(@project, query.sql, params, nil, err_msg)
       end
     end
-    
+
     return (mapped);
   end
 
@@ -244,10 +244,10 @@ class Page
   def read_template(extension = ".liquid")
     # Model file must still exist, otherwise the state of this page is inconsistent
     raise UnknownPageError.new(@project.id, @id) unless File.exists? page_file_path
-    
+
     # Template file must exist
     raise UnknownPageError.new(@project.id, @id, extension) unless File.exists? page_file_path extension
-    
+
     File.read(page_file_path extension)
   end
 

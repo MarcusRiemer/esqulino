@@ -32,14 +32,14 @@ class LiquidFilesystem
   # @return [string] An absolute path that could be read.
   def full_path(template_path)
     raise EsqulinoError.new("Invalid nil template") if template_path.nil?
-    
+
     # If the path does not end in .liquid append it
     if File.extname(template_path) != ".liquid"
       template_path += ".liquid"
     end
 
     search_path = [project_partials_path, global_partials_path]
-    
+
     # Check all possible paths in the following order
     # Project -> Plugin -> Global
     to_return = search_path
@@ -48,7 +48,7 @@ class LiquidFilesystem
 
     # Missing templates are a serious matter
     raise EsqulinoError.new("Template \"#{template_path}\" not found in #{search_path.inspect}") if to_return.nil?
-    
+
     return (to_return)
   end
 
@@ -81,7 +81,7 @@ def liquid_render_page(project, page_template, params)
   # TODO: Is there really no way to do this without manipulating
   #       the global state of the Liquid::Template instance?
   Liquid::Template.file_system = LiquidFilesystem.new(project)
-  
+
   # Load the basic liquid template
   template = Liquid::Template::parse(page_template)
 

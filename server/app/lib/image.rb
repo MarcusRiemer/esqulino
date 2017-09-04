@@ -98,7 +98,7 @@ class Image
     then
       JSON.parse(File.read(self.image_json(project))).each do |k, v|
         v['id'] = k
-        v['apiVersion'] = 4;# version::ESQLINO_API_VERSION;
+        v['apiVersion'] = current_api_version;
         v['name'] = v['image-name'];
         v.delete 'image-name';
         to_return.append(v)
@@ -120,7 +120,7 @@ class Image
     res = @metadata
 
     res['id'] = @image_id
-    res['apiVersion'] = 4;#ESQULINO_API_VERSION;
+    res['apiVersion'] = current_api_version;
     res['name'] = res['image-name'];
     res['image-name'] = nil;
 

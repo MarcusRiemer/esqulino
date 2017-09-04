@@ -3,7 +3,7 @@ require 'sqlite3'
 # Describes a single column of a SQLite Table
 class SchemaColumn
   attr_accessor :index, :name, :type, :not_null, :dflt_value, :primary
-  
+
   def initialize(index, name, type, not_null, dflt_value, pk)
     @index = index
     @name = name
@@ -48,7 +48,7 @@ end
 
 class SchemaForeignKey
   attr_accessor :references
-  
+
   def initialize()
     @references = []
   end
@@ -77,7 +77,7 @@ end
 # Describes a SQLite table with its columns
 class SchemaTable
   attr_accessor :name, :columns, :foreign_keys
-  
+
   def initialize(name)
     @name = name
     @columns = []
@@ -113,7 +113,7 @@ class SchemaTable
   def add_foreign_keys(foreign_keys)
     @foreign_keys.push(foreign_keys)
   end
-  
+
   # Serialises this table to JSON, according to the over-the-wire format
   # described in Typescript.
   def to_json(options)
@@ -133,7 +133,7 @@ end
 # @return [Hash] A hash of SchemaTable instances
 def database_describe_schema(sqlite_file_path)
   db = SQLite3::Database.new(sqlite_file_path)
-  
+
   # Find out names of tables
   table_names = db.execute("SELECT name
                             FROM sqlite_master
@@ -165,7 +165,7 @@ def database_describe_schema(sqlite_file_path)
         foreign_key_ref = SchemaForeignKeyRef.new(fk[3], fk[2], fk[4])
         foreign_key_comp.add_foreign_key(foreign_key_ref)
       end
-      table_schema.add_foreign_keys(foreign_key_comp)         
+      table_schema.add_foreign_keys(foreign_key_comp)
     end
 
     tables << table_schema

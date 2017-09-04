@@ -11,12 +11,12 @@
       <small *ngIf="parametersRequired">(Parameter erforderlich)</small>
     </h4>
     <p class="card-text">
-      So wird die Seite für einen Besucher <em>ungefähr</em> aussehen. Links und Knöpfe werden allerdings <em>nicht funktionieren</em>, benutze den angezeigten Link zu deiner Seite wenn du mit ihr interagieren möchtest. 
+      So wird die Seite für einen Besucher <em>ungefähr</em> aussehen. Links und Knöpfe werden allerdings <em>nicht funktionieren</em>, benutze den angezeigten Link zu deiner Seite wenn du mit ihr interagieren möchtest.
       <span *ngIf="parametersRequired">
         Da diese Seite ohne Eingaben vom Benutzer nicht funktioniert, musst du hier testweise Werte eingeben wenn du sie ausprobieren möchtest.
       </span>
     </p>
-    
+
     <!-- TODO: This code is more or less an exact duplicate of the same
          functionality in the query preview.-->
     <div *ngFor="let param of requestParameters"

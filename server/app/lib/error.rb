@@ -31,7 +31,7 @@ class EsqulinoError < StandardError
     {  }
   end
 
-  # Liquid representation is identical to JSON 
+  # Liquid representation is identical to JSON
   def to_liquid
     {
       "code" => @code,
@@ -199,5 +199,5 @@ class InvalidQueryRequest < EsqulinoError
       "requiredParameters" => @required_params
     }
   end
-  
+
 end
