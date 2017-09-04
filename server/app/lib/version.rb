@@ -3,11 +3,22 @@ require 'uri'
 require 'json'
 require 'date'
 
+require_dependency 'error'
+
 # The API version of this server. Usually all projects that are served by this
 # instance should have exactly this version set.
 #
 # If you need to migrate your data, check out the esqulino CLI.
-ESQULINO_API_VERSION = 4
+ESQULINO_API_VERSION = "4"
+
+def assert_resource_version(res_id, res_type, res_version)
+  raise InvalidVersionError.new(res_id, res_type, res_version) unless res_version == ESQULINO_API_VERSION
+end
+
+# Retrieves the current API version
+def current_api_version()
+  ESQULINO_API_VERSION
+end
 
 # Checks the locally deployed version against the version that is available
 # at Bitbucket

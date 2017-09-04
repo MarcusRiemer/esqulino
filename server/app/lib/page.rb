@@ -1,5 +1,6 @@
 require_dependency 'query'
 require_dependency 'render_liquid'
+require_dependency 'version'
 
 # Represents a esqulino page, which must be part of a project.
 # Attributes of this class are loaded lazily on demand, so there
@@ -34,14 +35,18 @@ class Page
     raise UnknownPageError.new(@project.id, @id) unless exists?
     
     @model = YAML.load_file(page_file_path)
-    @model['id'] = @id
+
+    assert_resource_version(@id, "page", @model['apiVersion'])
   end
   
   # Retrieves the JSON representation of this page
   def to_json(options)
     # The JSON representation is always meant to be complete
     load_model!
-    @model.to_json(options)
+    # Ensure that the ID is part of the JSON model
+    {
+      :id => @id
+    }.merge(model).to_json(options)
   end
 
   # Saves the abstract representation of this page but deletes every saved
