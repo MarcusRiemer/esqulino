@@ -23,6 +23,24 @@ export interface NodeTypeDescription {
 }
 
 /**
+ * Used when refererring to types that are defined other languages.
+ */
+export interface QualifiedTypeName {
+  typeName: string
+  languageName: string
+}
+
+export function isQualifiedTypeName(arg: any): arg is QualifiedTypeName {
+  return (arg.typeName && arg.languageName);
+}
+
+/**
+ * Simple strings are used to refer to local types
+ */
+export type TypeReference = QualifiedTypeName | string
+
+
+/**
  * A simple type may only have a single property that could be
  * interpreted as a string. Depending on the base type certain
  * additional restrictions may be applied.
@@ -130,44 +148,33 @@ export interface NodeComplexTypeChildrenGroupDescription {
 }
 
 /**
- * In a sequence every child must occur in exact the order that is
- * specified by this description.
+ * In a sequence every child must occur in exact the order and cardinality
+ * that is specified by this description.
  */
 export interface NodeTypesSequenceDescription {
   type: "sequence"
-  nodeTypes: string[]
+  nodeTypes: TypeReference[]
 }
 
+/**
+ * Every immediate child must be part of this list of allowed types.
+ */
 export interface NodeTypesAllowedDescription {
   type: "allowed"
   nodeTypes: string[]
 }
 
 /**
- * Used when refererring to types that are defined other languages.
- */
-export interface QualifiedTypeName {
-  typeName: string
-  languageName: string
-}
-
-export function isQualifiedTypeName(arg: any): arg is QualifiedTypeName {
-  return (arg.typeName && arg.languageName);
-}
-
-/**
- * Simple strings are used to refer to local types
- */
-export type TypeReference = QualifiedTypeName | string
-
-/**
  * Describes a whole schema that in turn may describe a whole language.
  */
 export class LanguageDescription {
+  // The unique name of the language
   languageName: string
 
+  // All types that exist in this language
   types: NodeTypeDescription[]
 
+  // Types that, per default, can be used at the root of syntax trees
   root: TypeReference[]
 }
 
