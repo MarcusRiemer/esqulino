@@ -4,60 +4,115 @@
 In diesem Kapitel werden die Anforderungen beschrieben die an die
 Containerisierung und die Bildverwaltung gestellt wurden.
 
-Neben der Bildverwaltung stand auch die Verbesserung der Zug\"{a}nglichkeit der
-Hosting und Entwicklungsumgebung. Docker ist eine verbreitete L\"{o}sung um
+Neben der Bildverwaltung stand auch die Verbesserung der Zugänglichkeit der
+Hosting und Entwicklungsumgebung. Docker ist eine verbreitete Lösung um
 Anwendungen in sogenannten Containern zu isolieren, die weitgehend
-unabh\"{a}ngig von der verwendeten Hardware ist und auch auf den meisten
+unabhängig von der verwendeten Hardware ist und auch auf den meisten
 verbreiteten Betriebssystemen eingesetzt werden kann, ohne dass die auf dem
-Hostsystem installierte zus\"{a}tzlich installierte Software die Anwendung im
+Hostsystem installierte zusätzlich installierte Software die Anwendung im
 Container beeinflusst, sodass der Einfluss betriebssystemspeziefischer
 Eigenheiten auf die Anwendung weitgehend vermieden werden kann.
 
-Zur Bildverwaltung geh\"{o}hren ein API, die es erm\"{o}glicht, Bilder und
-essentielle Metadaten anzulegen, auszugeben, zu bearbeiten und zu l\"{o}schen,
+Zur Bildverwaltung gehöhren ein API, die es ermöglicht, Bilder und
+essentielle Metadaten anzulegen, auszugeben, zu bearbeiten und zu löschen,
 eine Bibliothek, die die durch die API bereitgestellten Funktionen Serverseitig
 umsetzt und eine Frontendintegration, die dem Verwalter eines Projekts das
-Anlegen, Betrachten, Modifizieren und L\"{o}schen der Bilder und Metadaten
-erm\"{o}glicht sowie die Verwendung der Bilder in Projektvorschau, dem
+Anlegen, Betrachten, Modifizieren und Löschen der Bilder und Metadaten
+ermöglicht sowie die Verwendung der Bilder in Projektvorschau, dem
 Seiteneditor und den Datenbanktabellen.
 
 \subsection{Containerisierung}
 
-
+Das Projekt verwendet drei Ausprägungen von Images, jeweils eins für
+Produktivumgebung, Entwicklungsumgebung und Testumgebung. 
 
 \subsubsection{Entwicklungsumgebung}
 
-
+Das Entwicklungsimage stellt die während der Softwareentwicklung
+benötigte Umgebung zur Verfügung und erwartet das Einbinden des
+Quellcodes via Volume, sodass eine Änderung am Quellcode auf dem Hostsystem
+sofort im Container sichtbar wird und zum neucompilieren des Codes durch den im
+Entwicklungsmodus laufenden Server führt. So ist es möglich auf einem
+Entwicklungsgerät zu arbeiten ohne die Abhängigkeiten im Betriebssystem
+zu installieren und somit inkompatible Versionen von Abhängigkeiten mit
+anderen Projekten zu vermeiden. Weiterhin ist es so möglich unter Windows
+und MacOS zu entwickeln, da hier seitens Docker Werkzeuge zum Ausführen von
+Containern mittels der Linux Distrubution boot2docker in einer sehr
+minimalistischen durch die Werkzeuge verwalteten virtuellen Maschiene.
 
 \subsubsection{Testumgebung}
 
-
+Das Testimage weist Ähnlichkeiten zum Entwicklungsimage auf, enthält
+aber noch den Chromium Browser, der im Headless Mode für Tests des Clients
+genutzt wird.
 
 \subsubsection{Produktivumgebung}
 
-
+Das Produktivimage enthält eine fertig gebaute Version der Software sowie die
+zum Betrieb nötigen Abhängigkeiten, die Versionierung des Images richtet sich
+nach der Version der Software, ein Update wird durch das herunterladen/bauen des
+Images mit der entsprechend höheren Version und austauschen des laufenden
+Containers mit einem Container der neueren Version realisiert.
 
 \subsection{Bildverwaltung}
 
+Der erste zu klärende Punkt der Bilddatenbank war, wie Bilder zur Datenbank
+hinzugefügt werden können. Zur Auswahl standen der Dateiupload im Projekteditor
+durch den Autoren des Projekts, Import aus einer öffentlichen Bilddatenbank,
+Import aus einer eigenen durch den Administrator gepflegten Bilddatenbank.
+Eine dieser Möglichkeiten soll mit der Implementierung der Bildverwaltung direkt
+umgesetzt werden, die anderen möglicherweise später folgen.
 
+Vorteile der öffentlichen Bilddatenbank ist der geringe Aufwand beim Import von
+Bildern, bei ausschließlicher Nutzung von Datenbanken die alle Bilder unter
+Creative Commons Zero (CC0) veröffentlichen, wie beispielsweise openclipart,
+entfällt zudem die Notwendigkeit Metadaten wie Urheber und Lizenz zu Speichern
+oder anzuzeigen, bei Datenbanken die auch andere Creative Commons Lizenzen
+(CC-BY, CC-BY-SA,CC-BY-NC, CC-BY-SA-NC, CC-BY-ND, CC-BY-ND-NC) oder
+vergleichbare zulassen sind Urheber und Lizenz zumindest Maschienenlesbar
+hinterlegt, sodass im einfachsten Fall die Auswahl der Bilddatenbank und die ID
+des Bildes für den Import ausreichen, im angenehmen Fall ist im Projekts Editor
+ein Suchinterface mit Anbindung an die API der Bilddatenbank sodass eine oder
+alle Bilddatenbanken aus dem Projekteditor heraus durchsucht werden können ohne
+dass dem Projektautoren die jeweilige Bilddatenbank bekannt sein muss.
+
+Die Nachteile der öffentlichen Bilddatenbanken als initial einziges Verfahren
+zum hinzugefügen von Bildern ist die Verwendung eigener Werke. Ein eigenes Werk
+müsste erst einer angebundenen Bilddatenbank hinzugefügt werden um es verwenden
+zu können. Dies erfordert zum einen die Bereitschaft des Urhebers das Werk unter
+einer der von der Bilddatenbank erlaubten Lizenz zu veröffentlichen, sowie die
+Eröffnung eines Accounts bei der jeweiligen Bilddatenbank. Da es sich bei der
+Zielgruppe von SQLino um Schüler handelt, die auch zum Teil zu jung sind um
+Verträge wie den zur Eröffnung eines Accounts einzugehen, wodurch sie von der
+Verwendung eigener Werke ausgeschlossen sind bis der Dateiupload implementiert
+ist, weshalb diese Importmethode als vorerst einzige ausscheidet.
+
+\todo{warum die admindatenbank nicht genommen wird: kann auch aus oeffentlichen datenbanken importieren,
+  freigabeprozess fuer eigene werke, vorauswahl, hoher aufwand}
+
+Die zusammen mit der Bildverwaltung zu implementierende Variante ist daher der
+Dateiupload im Projekteditor. Der Import von Bildern aus Bilddatenbanken ist so,
+zwar unter höherem Aufwand, möglich, und durch manuell anzugebenden Urheber und
+Lizenz können Schüler so für die Notwendigkeit der Auseinandersetzung mit
+Urheberrecht bei Veröffentlichung von Bildern sensibilisiert werden.
 
 \subsubsection{Lizenzen \& Metadaten}
 
-Da Bilder nicht alle unterst\"{u}tzenswerten Bildformate Metadaten \"{u}ber
-Urheber und Lizenz standatisiert haben, ist es nicht m\"{o}glich die aus
+Da Bilder nicht alle unterstützenswerten Bildformate Metadaten über
+Urheber und Lizenz standatisiert haben, ist es nicht möglich die aus
 rechtlicher Sicht Notwendigen Metadaten zum Urheber und zur Lizenz der Bilder
-in der Datei selbst zu speichern und aus rechlicher Sicht, reicht die blo\sze
+in der Datei selbst zu speichern und aus rechlicher Sicht, reicht die bloße
 Anwesenheit der Daten in der Datei nicht um Beispielsweise die Anforderung der
-Urhebernennung zu erf\"{u}llen, weshalb die aus rechlicher Sicht notwendigen
-Metadaten in einer zus\"{a}tzlichen Datenquelle gehalten werden m\"{u}ssen.
+Urhebernennung zu erfüllen, weshalb die aus rechlicher Sicht notwendigen
+Metadaten in einer zusätzlichen Datenquelle gehalten werden müssen.
 
 Die aus rechtlicher Sicht notwendigen Daten sind Name des Urhebers mit Link auf
-eine Webpr\"{a}senz und der Name der Lizenz unter der das Bild verwendet wird
+eine Webpräsenz und der Name der Lizenz unter der das Bild verwendet wird
 mit Link auf die Lizenz.
 
 \subsubsection{Darstellungsformen}
 
-F\"{u}r die Bilder sollen zwei Darreichungsformen existieren: Die Abbildung
+Für die Bilder sollen zwei Darreichungsformen existieren: Die Abbildung
 (Figure) und das gestalterische Element (Graphic), die sich durch ihre
 Einbettung und den Ort der Quellenangaben unterscheiden. Die Abbildung
 eingerahmt, die Metadaten am Bild dargestellt, das Gestalterische Element bettet
@@ -67,7 +122,7 @@ das Bild in einen Link ein, der auf die Quellenangabe am Ende der Seite verweist
 
 Bei Abbildungen werden Name des Bildes, Urheber des Bildes und Name der Lizenz
 direkt unter dem Bild innerhalb des eingerahmten Bereichs dargestellt, der Name
-des Urhebers ist ein Link auf die Webpr\"{a}senz, der Name der Lizenz ein Link
+des Urhebers ist ein Link auf die Webpräsenz, der Name der Lizenz ein Link
 auf den Volltext der Lizenz.
 
 Die Quellenangaben der gestalterischen Elemente findet tabellarisch im Footer der
@@ -76,9 +131,9 @@ Reihenfolge ihres Erscheinens im Quelltext der Seite aufgelistet. Die Tabelle
 besteht aus den Spalten Nummer des Quellverweises, Name des Bildes,
 Name des Urhebers und Name der Lizenz, wobei die Nummer des Quellverweises auf
 das gestalterische in der Seite verlinkt, der Name des Bildes auf eine neue
-Seite bestehend aus einer Abbildung des Bildes gem\"{a}\sz der obig genannten
+Seite bestehend aus einer Abbildung des Bildes gemäß der obig genannten
 Darstellungsform von Abbildungen, der Name des Autoren ein Link auf dessen
-Webpr\"{a}senz und der Name der Lizenz ein Link auf den Volltext der Lizenz.
+Webpräsenz und der Name der Lizenz ein Link auf den Volltext der Lizenz.
 
 \subsubsection{Notwendigkeit von Quellenangaben}
 
@@ -86,68 +141,15 @@ Sofern notwendig kann die obig genannte Darstellung der Quellenangaben nicht
 weiter beeinflusst werden als durch die Auswahl eines der genannten Typen. Liegt
 jedoch eine Grafik vor, deren Lizenz weder die Namensnennung noch die Nennung
 der Lizenz erfordert, wie beispielsweise CC0, oder der Autor der Seite selbst der
-Urheber ist, soll auf die Quellenangabe verzichtet werden k\"{o}nnen, im Falle
+Urheber ist, soll auf die Quellenangabe verzichtet werden können, im Falle
 einer Abbildung also nur der Name angezeigt werden und im Falle des
 gestalterischen Elements der Eintrag in der Liste komplett weggelassen werden.
 
-\subsubsection{Endger\"{a}toptimierung}
-
-
-
-\subsubsection{Caching}
+\subsubsection{Endgerätoptimierung}
 
 
 
 \subsubsection{Datenhaltung}
-
-
-
-\subsubsection{API}
-
-Die API stellt verschiedene Routen bereit, die sich in das existierende
-Strukturen einf\"{u}gen, daher sind alle Routen unterhalb von
-\begin{description}
-  \item ['/api/project/:project_id/image']
-\end{description}
-angesiedelt
-
-\begin{description}
-  \item [/api/project/:project_id/image]
-    \begin{description}
-    \item [GET]
-    \item [POST]
-    \end{description}
-  \item [/api/project/:project_id/image/:image_id]
-    \begin{description}
-    \item [GET]
-    \item[POST]
-    \item[DELETE]
-    \end{description}
-
-\end{description}
-
-\subsubsection{Library}
-
-
-
-\subsubsection{Frontendintegration}
-
-
-
-\subsubsection{Seiteneditorintegration}
-
-
-
-\subsubsection{Datenbankintegration}
-
-
-
-\subsubsection{Schemaeditorintegration}
-
-
-
-\subsubsection{Queryeditorintegration}
-
 
 
 %%% Local Variables:
