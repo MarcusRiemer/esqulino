@@ -2,14 +2,44 @@ import * as Desc from './validator.description'
 import * as AST from './syntaxtree'
 
 export enum ErrorCodes {
+  // A AST has a root node that does not match any allowed root node
   UnknownRoot = "UNKNOWN_ROOT",
+  // A different type was explicitly expected
   UnexpectedType = "UNEXPECTED_TYPE",
+  // A child was expected, but simply did not exist
+  MissingChild = "MISSING_CHILD",
+  // A child was present, but somehow it's type wasn't asked for
   IllegalChildType = "ILLEGAL_CHILD_TYPE",
+  // A type mentions a child category that is not present in a node
+  SuperflousChildCategory = "MISSING_CHILD_CATEGORY",
 }
+
+export interface ErrorUnexpectedType {
+  present: Desc.QualifiedTypeName
+  expected: Desc.QualifiedTypeName
+}
+
+export interface ErrorIllegalChildType {
+  present: Desc.QualifiedTypeName,
+  index: number
+}
+
+export interface ErrorMissingChild {
+  expected: Desc.QualifiedTypeName,
+  index: number
+}
+
+// Details about an unknown child category
+export interface ErrorUnknownChildCategory {
+  categoryName: string;
+}
+
+export type ErrorData = ErrorUnexpectedType | ErrorUnknownChildCategory | any;
 
 interface ValidationError {
   code: string;
   node: AST.Node;
+  data?: ErrorData;
 }
 
 /**
@@ -18,8 +48,8 @@ interface ValidationError {
 class ValidationContext {
   private _errors: ValidationError[] = [];
 
-  addError(code: ErrorCodes | string, node: AST.Node) {
-    this._errors.push({ code: code, node: node });
+  addError(code: ErrorCodes | string, node: AST.Node, data: ErrorData = undefined) {
+    this._errors.push({ code: code, node: node, data: data });
   }
 
   get errors() {
@@ -52,19 +82,19 @@ export class ValidationResult {
  * instances of this class are registered as part of a schema.
  */
 abstract class NodeType {
-  private _familyName: string;
+  private _languageName: string;
   private _typeName: string;
 
   constructor(typeDesc: Desc.NodeTypeDescription, language: string) {
     this._typeName = typeDesc.nodeName;
-    this._familyName = language;
+    this._languageName = language;
   }
 
   /**
    * @return The name of the language this type belongs to.
    */
   get languageName() {
-    return (this._familyName);
+    return (this._languageName);
   }
 
   /**
@@ -74,17 +104,28 @@ abstract class NodeType {
     return (this._typeName);
   }
 
+  get qualifiedName(): Desc.QualifiedTypeName {
+    return ({
+      languageName: this._languageName,
+      typeName: this._typeName
+    });
+  }
+
   /**
    * Validates this node and (if applicable) it's children
    * and other properties.
    */
   validate(ast: AST.Node, context: ValidationContext) {
     // Does the type of the given node match the type we expect?
-    if (this._familyName == ast.nodeFamily && this._typeName == ast.nodeName) {
-      context.addError(ErrorCodes.UnexpectedType, ast);
-    } else {
+    if (this._languageName == ast.nodeLanguage && this._typeName == ast.nodeName) {
       // Further validation is done by specific implementations
       this.validateImpl(ast, context);
+    } else {
+      // Skip any further validation, leave an error
+      context.addError(ErrorCodes.UnexpectedType, ast, {
+        expected: this.qualifiedName,
+        present: ast.qualifiedName
+      } as ErrorUnexpectedType);
     }
   }
 
@@ -115,15 +156,24 @@ class NodeComplexType extends NodeType {
    * Validates this node itself and all existing children.
    */
   validateImpl(ast: AST.Node, context: ValidationContext) {
-    // Iterate over all children the node has
-    Object.entries(ast.children).forEach(([category, nodes]) => {
-      // Ensure there is a validator for that category
-      if (this._allowedChildren[category]) {
-        this._allowedChildren[category].validate(nodes, context);
-      } else {
-        throw new Error("Not implemented");
-      }
+    // Check all required children
+    this.requiredChildren.forEach(categoryName => {
+      const catChildren = ast.getChildrenInCategory(categoryName);
+      this._allowedChildren[categoryName].validate(catChildren, context);
     });
+
+    // Check that there are now unwanted children
+    const requiredCategories = new Set(this.requiredChildren);
+    const superflousCategories = ast.childrenCategoryNames.filter(cat => requiredCategories.has(cat));
+    superflousCategories.forEach(categoryName => {
+      context.addError(ErrorCodes.SuperflousChildCategory, ast, {
+        categoryName: categoryName
+      });
+    });
+  }
+
+  get requiredChildren() {
+    return (Object.keys(this._allowedChildren));
   }
 }
 
@@ -184,8 +234,44 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
     this._nodeTypes = desc.nodeTypes;
   }
 
+  /**
+   * Ensures the sequence is correct
+   */
   validateChildren(ast: AST.Node[], context: ValidationContext): AST.Node[] {
-    throw new Error("Not implemented");
+    const toReturn = [];
+    let childIndex = 0;
+    // Ensure that all types we are expecting are actually present
+    this._nodeTypes.forEach(expected => {
+      // Is a child actually present?
+      const child = ast[childIndex];
+      if (child) {
+        // Yes, does it's type match?
+        if (child.nodeName == expected) {
+          // Sign up for further validation
+          toReturn.push(ast[childIndex]);
+        } else {
+          // Hand out a (more or less) detailed error message
+          context.addError(ErrorCodes.IllegalChildType, child, {
+            present: child.qualifiedName,
+            index: childIndex
+          });
+        }
+      } else {
+        // There is no child present, but the current type expects it
+        context.addError(ErrorCodes.MissingChild, child, {
+          expected: {
+            languageName: "todo",
+            typeName: expected
+          },
+          index: childIndex
+        } as ErrorMissingChild);
+      }
+
+      // Go for the next child
+      childIndex++;
+    });
+
+    return (toReturn);
   }
 }
 
@@ -231,7 +317,7 @@ class TypeReference {
   constructor(_validator: Validator, desc: Desc.TypeReference, currentLang: string) {
     this._validator = _validator;
 
-    if (Desc.isQualifiedTypeReference(desc)) {
+    if (Desc.isQualifiedTypeName(desc)) {
       this._languageName = desc.languageName;
       this._typeName = desc.typeName;
     } else {
@@ -337,7 +423,7 @@ export class Validator {
   }
 
   validateFromRoot(ast: AST.Node) {
-    const lang = this.getLanguage(ast.nodeFamily);
+    const lang = this.getLanguage(ast.nodeLanguage);
     const context = new ValidationContext();
 
     lang.validateFromRoot(ast, context);

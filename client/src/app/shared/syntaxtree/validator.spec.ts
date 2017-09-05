@@ -3,7 +3,8 @@ import * as AST from './syntaxtree'
 import { Validator, ErrorCodes } from './validator'
 
 /**
- * Basically describes a language where each document needs to be
+ * Describes a language where each document would be the equivalent
+ * to something like
  * <html>
  *   <head></head>
  *   <body></body>
@@ -37,6 +38,20 @@ const langMiniHtml: Schema.LanguageDescription = {
   root: ["html"]
 };
 
+/**
+ * Describes a language where each query would be the equivalent
+ * to something like
+ *
+ * SELECT
+ * FROM
+ * WHERE
+ *
+ * or
+ *
+ * DELETE
+ * FROM
+ * WHERE
+ */
 const langMiniSql: Schema.LanguageDescription = {
   languageName: "mini-sql",
   types: [
@@ -86,7 +101,7 @@ const langMiniSql: Schema.LanguageDescription = {
   root: ["query-select", "query-delete"]
 }
 
-describe('Schema Validator', () => {
+describe('Language Validator', () => {
   it('Mini-HTML: registers types', () => {
     const v = new Validator([langMiniHtml]);
 
@@ -105,11 +120,44 @@ describe('Schema Validator', () => {
     }
   });
 
+  it('Mini-HTML: superflous children', () => {
+    const v = new Validator([langMiniHtml]);
+
+    const astDesc: AST.NodeDescription = {
+      nodeLanguage: "mini-html",
+      nodeName: "html",
+      nodeChildren: {
+        children: [
+          {
+            nodeLanguage: "mini-html",
+            nodeName: "head"
+          },
+          {
+            nodeLanguage: "mini-html",
+            nodeName: "body"
+          }
+        ],
+        superflous: [
+          {
+            nodeLanguage: "mini-html",
+            nodeName: "mini-html"
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(1);
+    expect(res.errors[0].code).toEqual(ErrorCodes.SuperflousChildCategory)
+  });
+
   it('Mini-SQL: Empty SELECT query', () => {
     const v = new Validator([langMiniSql]);
 
     const astDesc: AST.NodeDescription = {
-      nodeFamily: "mini-sql",
+      nodeLanguage: "mini-sql",
       nodeName: "query-select"
     }
 
@@ -117,13 +165,16 @@ describe('Schema Validator', () => {
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(3, res);
+    expect(res.errors[0].code).toEqual(ErrorCodes.MissingChild)
+    expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild)
+    expect(res.errors[2].code).toEqual(ErrorCodes.MissingChild)
   });
 
   it('Mini-HTML: Empty document', () => {
     const v = new Validator([langMiniHtml]);
 
     const astDesc: AST.NodeDescription = {
-      nodeFamily: "mini-html",
+      nodeLanguage: "mini-html",
       nodeName: "html"
     }
 
@@ -131,6 +182,9 @@ describe('Schema Validator', () => {
 
     const res = v.validateFromRoot(ast);
     expect(res.errors.length).toEqual(2, res);
+
+    expect(res.errors[0].code).toEqual(ErrorCodes.MissingChild)
+    expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild)
   });
 
 
