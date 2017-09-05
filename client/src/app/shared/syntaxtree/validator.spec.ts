@@ -7,7 +7,10 @@ import { Validator, ErrorCodes } from './validator'
  * to something like
  * <html>
  *   <head></head>
- *   <body></body>
+ *   <body>
+ *     <h1>Heading</h1>
+ *     <p>Paragraph</p>
+ *   </body>
  * </html>
  */
 const langMiniHtml: Schema.LanguageDescription = {
@@ -32,6 +35,23 @@ const langMiniHtml: Schema.LanguageDescription = {
     } as Schema.NodeComplexTypeDescription,
     {
       nodeName: "body",
+      type: "complex",
+      childrenCategories: [
+        {
+          categoryName: "children",
+          children: {
+            type: "allowed",
+            nodeTypes: ["paragraph", "heading"]
+          }
+        }
+      ]
+    } as Schema.NodeComplexTypeDescription,
+    {
+      nodeName: "paragraph",
+      type: "complex",
+    } as Schema.NodeComplexTypeDescription,
+    {
+      nodeName: "heading",
       type: "complex",
     } as Schema.NodeComplexTypeDescription
   ],
@@ -196,6 +216,73 @@ describe('Language Validator', () => {
 
     const res = v.validateFromRoot(ast);
     expect(res.errors.length).toEqual(0, res);
+  });
+
+  it('Mini-HTML: Heading and paragraph', () => {
+    const v = new Validator([langMiniHtml]);
+
+    const astDesc: AST.NodeDescription = {
+      nodeLanguage: "mini-html",
+      nodeName: "html",
+      nodeChildren: {
+        children: [
+          { nodeLanguage: "mini-html", nodeName: "head" },
+          {
+            nodeLanguage: "mini-html",
+            nodeName: "body",
+            nodeChildren: {
+              children: [
+                {
+                  nodeLanguage: "mini-html",
+                  nodeName: "heading"
+                },
+                {
+                  nodeLanguage: "mini-html",
+                  nodeName: "paragraph"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+
+    const res = v.validateFromRoot(ast);
+    expect(res.errors.length).toEqual(0, res);
+  });
+
+  it('Mini-HTML: Invalid body (HTML again)', () => {
+    const v = new Validator([langMiniHtml]);
+
+    const astDesc: AST.NodeDescription = {
+      nodeLanguage: "mini-html",
+      nodeName: "html",
+      nodeChildren: {
+        children: [
+          { nodeLanguage: "mini-html", nodeName: "head" },
+          {
+            nodeLanguage: "mini-html",
+            nodeName: "body",
+            nodeChildren: {
+              children: [
+                {
+                  nodeLanguage: "mini-html",
+                  nodeName: "html"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+
+    const res = v.validateFromRoot(ast);
+    expect(res.errors.length).toEqual(1, res);
+    expect(res.errors[0].code).toEqual(ErrorCodes.IllegalChildType);
   });
 
 

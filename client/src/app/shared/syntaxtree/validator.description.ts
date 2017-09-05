@@ -161,7 +161,7 @@ export interface NodeTypesSequenceDescription {
  */
 export interface NodeTypesAllowedDescription {
   type: "allowed"
-  nodeTypes: string[]
+  nodeTypes: TypeReference[]
 }
 
 /**
