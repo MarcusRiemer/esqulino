@@ -142,6 +142,7 @@ class NodeComplexType extends NodeType {
 
   constructor(validator: Validator, typeDesc: Desc.NodeTypeDescription, familyName: string) {
     super(typeDesc, familyName)
+    this._validator = validator;
 
     if (Desc.isNodeComplexTypeDescription(typeDesc)) {
       // Construct validators for all children
@@ -188,11 +189,12 @@ class NodeComplexType extends NodeType {
  */
 class NodeComplexTypeChildren {
   private _categoryName: string;
-
   private _childValidator: NodeComplexTypeChildrenValidator;
+  private _parent: NodeComplexType;
 
   constructor(parent: NodeComplexType, desc: Desc.NodeComplexTypeChildrenGroupDescription) {
     this._categoryName = desc.categoryName;
+    this._parent = parent;
 
     const validatorDesc = desc.children;
     if (Desc.isNodeTypesSequenceDescription(validatorDesc)) {
@@ -212,6 +214,10 @@ class NodeComplexTypeChildren {
     const validChildren = this._childValidator.validateChildren(ast, context);
 
     // Check the children themselves
+    validChildren.forEach(child => {
+      const childType = this._parent.validator.getType(child.nodeLanguage, child.nodeName);
+      childType.validate(child, context);
+    });
   }
 }
 
@@ -283,10 +289,10 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
  * whitelisted.
  */
 class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator {
-  private _nodeTypes: string[];
+  private _nodeTypes: TypeReference[];
 
   constructor(parent: NodeComplexType, desc: Desc.NodeTypesAllowedDescription) {
-    this._nodeTypes = desc.nodeTypes;
+    this._nodeTypes = desc.nodeTypes.map(typeDesc => new TypeReference(parent.validator, typeDesc, parent.languageName));
   }
 
   /**
@@ -296,7 +302,7 @@ class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator
     const toReturn: AST.Node[] = [];
 
     children.forEach(node => {
-      if (!this._nodeTypes.find(type => node.nodeName === type)) {
+      if (!this._nodeTypes.find(type => type.nodeTypeMatches(node))) {
         context.addError(ErrorCodes.IllegalChildType, node);
       } else {
         toReturn.push(node);
