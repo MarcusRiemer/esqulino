@@ -1,6 +1,7 @@
 import * as Desc from './validator.description'
 import * as AST from './syntaxtree'
 
+// Groups together all error codes that exist in the core of the validator.
 export enum ErrorCodes {
   // A AST has a root node that does not match any allowed root node
   UnknownRoot = "UNKNOWN_ROOT",
@@ -11,7 +12,7 @@ export enum ErrorCodes {
   // A child was present, but somehow it's type wasn't asked for
   IllegalChildType = "ILLEGAL_CHILD_TYPE",
   // A type mentions a child category that is not present in a node
-  SuperflousChildCategory = "MISSING_CHILD_CATEGORY",
+  SuperflousChildCategory = "SUPERFLOUS_CHILD_CATEGORY",
 }
 
 export interface ErrorUnexpectedType {
@@ -34,7 +35,7 @@ export interface ErrorUnknownChildCategory {
   categoryName: string;
 }
 
-export type ErrorData = ErrorUnexpectedType | ErrorUnknownChildCategory | any;
+export type ErrorData = ErrorUnexpectedType | ErrorUnknownChildCategory | ErrorMissingChild | any;
 
 interface ValidationError {
   code: string;
@@ -137,15 +138,16 @@ abstract class NodeType {
  */
 class NodeComplexType extends NodeType {
   private _allowedChildren: { [category: string]: NodeComplexTypeChildren } = {};
+  private _validator: Validator;
 
-  constructor(typeDesc: Desc.NodeTypeDescription, familyName: string) {
+  constructor(validator: Validator, typeDesc: Desc.NodeTypeDescription, familyName: string) {
     super(typeDesc, familyName)
 
     if (Desc.isNodeComplexTypeDescription(typeDesc)) {
       // Construct validators for all children
       const childrenCategories = typeDesc.childrenCategories || [];
       childrenCategories.forEach(groupDesc => {
-        this._allowedChildren[groupDesc.categoryName] = new NodeComplexTypeChildren(groupDesc);
+        this._allowedChildren[groupDesc.categoryName] = new NodeComplexTypeChildren(this, groupDesc);
       });
     } else {
       throw new Error("Wrong type description: Not complex");
@@ -164,7 +166,7 @@ class NodeComplexType extends NodeType {
 
     // Check that there are now unwanted children
     const requiredCategories = new Set(this.requiredChildren);
-    const superflousCategories = ast.childrenCategoryNames.filter(cat => requiredCategories.has(cat));
+    const superflousCategories = ast.childrenCategoryNames.filter(cat => !requiredCategories.has(cat));
     superflousCategories.forEach(categoryName => {
       context.addError(ErrorCodes.SuperflousChildCategory, ast, {
         categoryName: categoryName
@@ -174,6 +176,10 @@ class NodeComplexType extends NodeType {
 
   get requiredChildren() {
     return (Object.keys(this._allowedChildren));
+  }
+
+  get validator() {
+    return (this._validator);
   }
 }
 
@@ -185,14 +191,14 @@ class NodeComplexTypeChildren {
 
   private _childValidator: NodeComplexTypeChildrenValidator;
 
-  constructor(desc: Desc.NodeComplexTypeChildrenGroupDescription) {
+  constructor(parent: NodeComplexType, desc: Desc.NodeComplexTypeChildrenGroupDescription) {
     this._categoryName = desc.categoryName;
 
     const validatorDesc = desc.children;
     if (Desc.isNodeTypesSequenceDescription(validatorDesc)) {
-      this._childValidator = new NodeComplexTypeChildrenSequence(validatorDesc);
+      this._childValidator = new NodeComplexTypeChildrenSequence(parent, validatorDesc);
     } else if (Desc.isNodeTypesAllowedDescription(validatorDesc)) {
-      this._childValidator = new NodeComplexTypeChildrenAllowed(validatorDesc);
+      this._childValidator = new NodeComplexTypeChildrenAllowed(parent, validatorDesc);
     } else {
       throw new Error(`Unknown child validator: "${JSON.stringify(desc)}"`);
     }
@@ -228,10 +234,10 @@ interface NodeComplexTypeChildrenValidator {
  * Enforces a specific sequence of child-nodes of a parent node.
  */
 class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidator {
-  private _nodeTypes: string[];
+  private _nodeTypes: TypeReference[];
 
-  constructor(desc: Desc.NodeTypesSequenceDescription) {
-    this._nodeTypes = desc.nodeTypes;
+  constructor(parent: NodeComplexType, desc: Desc.NodeTypesSequenceDescription) {
+    this._nodeTypes = desc.nodeTypes.map(typeDesc => new TypeReference(parent.validator, typeDesc, parent.languageName));
   }
 
   /**
@@ -246,7 +252,7 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
       const child = ast[childIndex];
       if (child) {
         // Yes, does it's type match?
-        if (child.nodeName == expected) {
+        if (expected.nodeTypeMatches(child)) {
           // Sign up for further validation
           toReturn.push(ast[childIndex]);
         } else {
@@ -259,10 +265,7 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
       } else {
         // There is no child present, but the current type expects it
         context.addError(ErrorCodes.MissingChild, child, {
-          expected: {
-            languageName: "todo",
-            typeName: expected
-          },
+          expected: expected.description,
           index: childIndex
         } as ErrorMissingChild);
       }
@@ -282,7 +285,7 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
 class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator {
   private _nodeTypes: string[];
 
-  constructor(desc: Desc.NodeTypesAllowedDescription) {
+  constructor(parent: NodeComplexType, desc: Desc.NodeTypesAllowedDescription) {
     this._nodeTypes = desc.nodeTypes;
   }
 
@@ -327,18 +330,39 @@ class TypeReference {
   }
 
   /**
+   * @return True, if the given node has the same language and the same typename.
+   */
+  nodeTypeMatches(node: AST.Node) {
+    return (this._languageName == node.nodeLanguage && this._typeName == node.nodeName);
+  }
+
+  /**
    * @return True if this reference can be resolved to a "proper" type.
    */
   get isResolveable() {
     return (this._validator.isKnownType(this._languageName, this._typeName));
   }
 
+  /**
+   * @return The actual underlying type this reference resolves to. Throws an exception
+   *         if the type is not known.
+   */
   get type() {
     if (!this.isResolveable) {
       throw new Error(`Could not resolve type "${this._languageName}.${this._typeName}"`);
     } else {
       return (this._validator.getType(this._languageName, this._typeName));
     }
+  }
+
+  /**
+   * @return The description that is equivalent to this reference.
+   */
+  get description(): Desc.QualifiedTypeName {
+    return ({
+      languageName: this._languageName,
+      typeName: this._typeName
+    });
   }
 }
 
@@ -385,6 +409,13 @@ class Language {
   }
 
   /**
+   * @return The validator this language has been registered to.
+   */
+  get validator() {
+    return (this._validator);
+  }
+
+  /**
    * Registers a new type validator with this language.
    */
   private registerTypeValidator(desc: Desc.NodeTypeDescription) {
@@ -392,7 +423,7 @@ class Language {
       throw new Error(`Attempted to register node "${desc.nodeName}" twice for "${this._languageName}. Previous definition: ${JSON.stringify(this._registeredTypes[desc.nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
     }
 
-    this._registeredTypes[desc.nodeName] = new NodeComplexType(desc, this._languageName);
+    this._registeredTypes[desc.nodeName] = new NodeComplexType(this._validator, desc, this._languageName);
   }
 
   /**

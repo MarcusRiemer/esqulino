@@ -128,20 +128,11 @@ describe('Language Validator', () => {
       nodeName: "html",
       nodeChildren: {
         children: [
-          {
-            nodeLanguage: "mini-html",
-            nodeName: "head"
-          },
-          {
-            nodeLanguage: "mini-html",
-            nodeName: "body"
-          }
+          { nodeLanguage: "mini-html", nodeName: "head" },
+          { nodeLanguage: "mini-html", nodeName: "body" }
         ],
         superflous: [
-          {
-            nodeLanguage: "mini-html",
-            nodeName: "mini-html"
-          }
+          { nodeLanguage: "mini-html", nodeName: "mini-html" }
         ]
       }
     }
@@ -187,18 +178,37 @@ describe('Language Validator', () => {
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild)
   });
 
+  it('Mini-HTML: Minimal document', () => {
+    const v = new Validator([langMiniHtml]);
 
-  /*
-  it('Mini-HTML: Invalid child (SQL query)', () => {
+    const astDesc: AST.NodeDescription = {
+      nodeLanguage: "mini-html",
+      nodeName: "html",
+      nodeChildren: {
+        children: [
+          { nodeLanguage: "mini-html", nodeName: "head" },
+          { nodeLanguage: "mini-html", nodeName: "body" }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+
+    const res = v.validateFromRoot(ast);
+    expect(res.errors.length).toEqual(0, res);
+  });
+
+
+  it('Mini-HTML: Invalid single child (SQL query)', () => {
     const v = new Validator([langMiniHtml, langMiniSql]);
 
     const astDesc: AST.NodeDescription = {
-      nodeFamily: "mini-html",
+      nodeLanguage: "mini-html",
       nodeName: "html",
       nodeChildren: {
-        "children": [
+        children: [
           {
-            nodeFamily: "mini-sql",
+            nodeLanguage: "mini-sql",
             nodeName: "query-select"
           }
         ]
@@ -209,7 +219,8 @@ describe('Language Validator', () => {
 
     const res = v.validateFromRoot(ast);
     expect(res.isValid).toBeFalsy();
-    expect(res.errors.length).toEqual(1);
-    expect(res.errors[0].code).toEqual(ErrorCodes.UnexpectedType);
-    });*/
+    expect(res.errors.length).toEqual(2);
+    expect(res.errors[0].code).toEqual(ErrorCodes.IllegalChildType);
+    expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
+  });
 });
