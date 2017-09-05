@@ -16,10 +16,10 @@ export interface NodeDescription {
   nodeName: string
 
   /**
-   * The family is effectively a namespace, allowing identical
+   * This is effectively a namespace, allowing identical
    * names for nodes in different languages.
    */
-  nodeFamily: string
+  nodeLanguage: string
 
   /**
    * Nodes may have children in various categories. This base class

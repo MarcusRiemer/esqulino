@@ -10,28 +10,28 @@ describe('AST: Basic Operations', () => {
     //   </body>
     // </html>
     const desc: NodeDescription = {
-      nodeFamily: "html",
+      nodeLanguage: "html",
       nodeName: "html",
       nodeChildren: {
         "children": [
           {
-            nodeFamily: "html",
+            nodeLanguage: "html",
             nodeName: "head",
             nodeChildren: {
               "children": [
                 {
 
-                  nodeFamily: "html",
+                  nodeLanguage: "html",
                   nodeName: "title",
                   nodeChildren: {
                     "children": [
                       {
-                        nodeFamily: "templating",
+                        nodeLanguage: "templating",
                         nodeName: "interpolate",
                         nodeChildren: {
                           "children": [
                             {
-                              nodeFamily: "templating",
+                              nodeLanguage: "templating",
                               nodeName: "varname",
                               nodeProperties: {
                                 "var": "page.title"
@@ -47,17 +47,17 @@ describe('AST: Basic Operations', () => {
             }
           },
           {
-            nodeFamily: "html",
+            nodeLanguage: "html",
             nodeName: "body",
             nodeChildren: {
               "attributes": [
                 {
-                  nodeFamily: "html",
+                  nodeLanguage: "html",
                   nodeName: "class",
                   nodeChildren: {
                     "children": [
                       {
-                        nodeFamily: "html",
+                        nodeLanguage: "html",
                         nodeName: "text",
                         nodeProperties: {
                           "value": "bg-black"
@@ -77,49 +77,49 @@ describe('AST: Basic Operations', () => {
 
     // <html>
     expect(root.nodeName).toEqual("html", "<html> element");
-    expect(root.nodeFamily).toEqual("html", "<html> family");
-    expect(root.getChildrenCategory("children").length).toEqual(2, "<html> children");
+    expect(root.nodeLanguage).toEqual("html", "<html> family");
+    expect(root.getChildrenInCategory("children").length).toEqual(2, "<html> children");
 
     // <head>
-    const head = root.getChildrenCategory("children")[0];
+    const head = root.getChildrenInCategory("children")[0];
     expect(head.nodeName).toEqual("head", "<head> element");
-    expect(head.nodeFamily).toEqual("html", "<head> family");
-    expect(head.getChildrenCategory("children").length).toEqual(1, "<head> children");
+    expect(head.nodeLanguage).toEqual("html", "<head> family");
+    expect(head.getChildrenInCategory("children").length).toEqual(1, "<head> children");
 
     // <title>{{ page.title }}</title>
-    const title = head.getChildrenCategory("children")[0];
+    const title = head.getChildrenInCategory("children")[0];
     expect(title.nodeName).toEqual("title", "<title> element");
-    expect(title.nodeFamily).toEqual("html", "<title> family");
-    expect(title.getChildrenCategory("children").length).toEqual(1, "<title> children");
+    expect(title.nodeLanguage).toEqual("html", "<title> family");
+    expect(title.getChildrenInCategory("children").length).toEqual(1, "<title> children");
 
     // {{ page.title }}
-    const titleInterpolate = title.getChildrenCategory("children")[0];
+    const titleInterpolate = title.getChildrenInCategory("children")[0];
     expect(titleInterpolate.nodeName).toEqual("interpolate", "{{ page.title }} name");
-    expect(titleInterpolate.nodeFamily).toEqual("templating", "{{ page.title }} family");
-    expect(titleInterpolate.getChildrenCategory("children").length).toEqual(1, "{{ page.title }} children");
+    expect(titleInterpolate.nodeLanguage).toEqual("templating", "{{ page.title }} family");
+    expect(titleInterpolate.getChildrenInCategory("children").length).toEqual(1, "{{ page.title }} children");
 
     // page.title
-    const titleInterpolateVar = titleInterpolate.getChildrenCategory("children")[0];
+    const titleInterpolateVar = titleInterpolate.getChildrenInCategory("children")[0];
     expect(titleInterpolateVar.nodeName).toEqual("varname", "{{ page.title }} var-name");
-    expect(titleInterpolateVar.nodeFamily).toEqual("templating", "{{ page.title }} var-family");
-    expect(titleInterpolateVar.getChildrenCategory("children").length).toEqual(0, "{{ page.title }} var-children");
+    expect(titleInterpolateVar.nodeLanguage).toEqual("templating", "{{ page.title }} var-family");
+    expect(titleInterpolateVar.getChildrenInCategory("children").length).toEqual(0, "{{ page.title }} var-children");
 
     // <body>
-    const body = root.getChildrenCategory("children")[1];
+    const body = root.getChildrenInCategory("children")[1];
     expect(body.nodeName).toEqual("body", "<body> element");
-    expect(body.nodeFamily).toEqual("html", "<body> family");
-    expect(body.getChildrenCategory("children").length).toEqual(0, "<body> children");
-    expect(body.getChildrenCategory("attributes").length).toEqual(1, "<body> attributes");
+    expect(body.nodeLanguage).toEqual("html", "<body> family");
+    expect(body.getChildrenInCategory("children").length).toEqual(0, "<body> children");
+    expect(body.getChildrenInCategory("attributes").length).toEqual(1, "<body> attributes");
 
     // class="bg-black"
-    const bodyClass = body.getChildrenCategory("attributes")[0];
+    const bodyClass = body.getChildrenInCategory("attributes")[0];
     expect(bodyClass.nodeName).toEqual("class", "class='bg-black' attribute");
-    expect(bodyClass.nodeFamily).toEqual("html", "class='bg-black' family");
-    expect(bodyClass.getChildrenCategory("children").length).toEqual(1, "class='bg-black' children");
+    expect(bodyClass.nodeLanguage).toEqual("html", "class='bg-black' family");
+    expect(bodyClass.getChildrenInCategory("children").length).toEqual(1, "class='bg-black' children");
 
-    const bodyClassText = bodyClass.getChildrenCategory("children")[0];
+    const bodyClassText = bodyClass.getChildrenInCategory("children")[0];
     expect(bodyClassText.nodeName).toEqual("text", "class='bg-black' attribute");
-    expect(bodyClass.nodeFamily).toEqual("html", "class='bg-black' family");
+    expect(bodyClass.nodeLanguage).toEqual("html", "class='bg-black' family");
 
   });
 });

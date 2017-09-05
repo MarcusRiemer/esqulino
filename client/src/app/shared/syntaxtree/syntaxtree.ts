@@ -1,4 +1,4 @@
-import { NodeDescription } from './syntaxtree.description'
+import { NodeDescription, } from './syntaxtree.description'
 
 export { NodeDescription };
 
@@ -21,7 +21,7 @@ export type NodeChildren = { [childrenCategory: string]: Node[] }
  */
 export class Node {
   private _nodeName: string
-  private _nodeFamily: string
+  private _nodeLanguage: string
   private _nodeProperties: NodeProperties
   private _nodeChildren: NodeChildren
 
@@ -33,7 +33,7 @@ export class Node {
    */
   constructor(desc: NodeDescription, parent: Node) {
     this._nodeName = desc.nodeName;
-    this._nodeFamily = desc.nodeFamily;
+    this._nodeLanguage = desc.nodeLanguage;
     this._nodeParent = parent;
 
     // We don't want any undefined fields during runtime
@@ -60,17 +60,28 @@ export class Node {
     return (this._nodeName);
   }
 
-  get nodeFamily(): string {
-    return (this._nodeFamily);
+  get nodeLanguage(): string {
+    return (this._nodeLanguage);
   }
 
-  getChildrenCategory(categoryName: string): Node[] {
+  get qualifiedName() {
+    return ({
+      typeName: this.nodeName,
+      languageName: this.nodeLanguage
+    });
+  }
+
+  getChildrenInCategory(categoryName: string): Node[] {
     const result = this._nodeChildren[categoryName];
     if (result) {
       return (result);
     } else {
       return ([]);
     }
+  }
+
+  get childrenCategoryNames() {
+    return (Object.keys(this._nodeChildren));
   }
 
   get children() {

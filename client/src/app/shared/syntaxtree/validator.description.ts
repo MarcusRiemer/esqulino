@@ -146,19 +146,19 @@ export interface NodeTypesAllowedDescription {
 /**
  * Used when refererring to types that are defined other languages.
  */
-export interface QualifiedTypeReference {
+export interface QualifiedTypeName {
   typeName: string
   languageName: string
 }
 
-export function isQualifiedTypeReference(arg: any): arg is QualifiedTypeReference {
+export function isQualifiedTypeName(arg: any): arg is QualifiedTypeName {
   return (arg.typeName && arg.languageName);
 }
 
 /**
  * Simple strings are used to refer to local types
  */
-export type TypeReference = QualifiedTypeReference | string
+export type TypeReference = QualifiedTypeName | string
 
 /**
  * Describes a whole schema that in turn may describe a whole language.
