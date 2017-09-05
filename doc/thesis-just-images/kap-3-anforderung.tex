@@ -1,9 +1,154 @@
 \section{Anforderungsanalyse}
 \label{sec:requirements}
 
-In diesem Kapitel werden die Anforderungen beschrieben die an die Containerisierung und die Bildverwaltung gestellt wurden.
+In diesem Kapitel werden die Anforderungen beschrieben die an die
+Containerisierung und die Bildverwaltung gestellt wurden.
 
-Neben der Bildverwaltung stand auch die Verbesserung der Zug\"{a}nglichkeit der Hosting und Entwicklungsumgebung. Docker ist eine verbreitete L\"{o}sung um Anwendungen in sogenannten Containern zu isolieren, die weitgehend unabh\"{a}ngig von der verwendeten Hardware ist und auch auf den meisten verbreiteten Betriebssystemen eingesetzt werden kann, ohne dass die auf dem Hostsystem installierte zus\"{a}tzlich installierte Software die Anwendung im Container beeinflusst, sodass der Einfluss betriebssystemspeziefischer Eigenheiten auf die Anwendung weitgehend vermieden werden kann.
+Neben der Bildverwaltung stand auch die Verbesserung der Zug\"{a}nglichkeit der
+Hosting und Entwicklungsumgebung. Docker ist eine verbreitete L\"{o}sung um
+Anwendungen in sogenannten Containern zu isolieren, die weitgehend
+unabh\"{a}ngig von der verwendeten Hardware ist und auch auf den meisten
+verbreiteten Betriebssystemen eingesetzt werden kann, ohne dass die auf dem
+Hostsystem installierte zus\"{a}tzlich installierte Software die Anwendung im
+Container beeinflusst, sodass der Einfluss betriebssystemspeziefischer
+Eigenheiten auf die Anwendung weitgehend vermieden werden kann.
+
+Zur Bildverwaltung geh\"{o}hren ein API, die es erm\"{o}glicht, Bilder und
+essentielle Metadaten anzulegen, auszugeben, zu bearbeiten und zu l\"{o}schen,
+eine Bibliothek, die die durch die API bereitgestellten Funktionen Serverseitig
+umsetzt und eine Frontendintegration, die dem Verwalter eines Projekts das
+Anlegen, Betrachten, Modifizieren und L\"{o}schen der Bilder und Metadaten
+erm\"{o}glicht sowie die Verwendung der Bilder in Projektvorschau, dem
+Seiteneditor und den Datenbanktabellen.
+
+\subsection{Containerisierung}
+
+
+
+\subsubsection{Entwicklungsumgebung}
+
+
+
+\subsubsection{Testumgebung}
+
+
+
+\subsubsection{Produktivumgebung}
+
+
+
+\subsection{Bildverwaltung}
+
+
+
+\subsubsection{Lizenzen \& Metadaten}
+
+Da Bilder nicht alle unterst\"{u}tzenswerten Bildformate Metadaten \"{u}ber
+Urheber und Lizenz standatisiert haben, ist es nicht m\"{o}glich die aus
+rechtlicher Sicht Notwendigen Metadaten zum Urheber und zur Lizenz der Bilder
+in der Datei selbst zu speichern und aus rechlicher Sicht, reicht die blo\sze
+Anwesenheit der Daten in der Datei nicht um Beispielsweise die Anforderung der
+Urhebernennung zu erf\"{u}llen, weshalb die aus rechlicher Sicht notwendigen
+Metadaten in einer zus\"{a}tzlichen Datenquelle gehalten werden m\"{u}ssen.
+
+Die aus rechtlicher Sicht notwendigen Daten sind Name des Urhebers mit Link auf
+eine Webpr\"{a}senz und der Name der Lizenz unter der das Bild verwendet wird
+mit Link auf die Lizenz.
+
+\subsubsection{Darstellungsformen}
+
+F\"{u}r die Bilder sollen zwei Darreichungsformen existieren: Die Abbildung
+(Figure) und das gestalterische Element (Graphic), die sich durch ihre
+Einbettung und den Ort der Quellenangaben unterscheiden. Die Abbildung
+eingerahmt, die Metadaten am Bild dargestellt, das Gestalterische Element bettet
+das Bild in einen Link ein, der auf die Quellenangabe am Ende der Seite verweist.
+
+\subsubsection{Darstellung von Quellenangaben}
+
+Bei Abbildungen werden Name des Bildes, Urheber des Bildes und Name der Lizenz
+direkt unter dem Bild innerhalb des eingerahmten Bereichs dargestellt, der Name
+des Urhebers ist ein Link auf die Webpr\"{a}senz, der Name der Lizenz ein Link
+auf den Volltext der Lizenz.
+
+Die Quellenangaben der gestalterischen Elemente findet tabellarisch im Footer der
+Webseite statt, Alle dargestellten gestalterischen Elemente werden dort in der
+Reihenfolge ihres Erscheinens im Quelltext der Seite aufgelistet. Die Tabelle
+besteht aus den Spalten Nummer des Quellverweises, Name des Bildes,
+Name des Urhebers und Name der Lizenz, wobei die Nummer des Quellverweises auf
+das gestalterische in der Seite verlinkt, der Name des Bildes auf eine neue
+Seite bestehend aus einer Abbildung des Bildes gem\"{a}\sz der obig genannten
+Darstellungsform von Abbildungen, der Name des Autoren ein Link auf dessen
+Webpr\"{a}senz und der Name der Lizenz ein Link auf den Volltext der Lizenz.
+
+\subsubsection{Notwendigkeit von Quellenangaben}
+
+Sofern notwendig kann die obig genannte Darstellung der Quellenangaben nicht
+weiter beeinflusst werden als durch die Auswahl eines der genannten Typen. Liegt
+jedoch eine Grafik vor, deren Lizenz weder die Namensnennung noch die Nennung
+der Lizenz erfordert, wie beispielsweise CC0, oder der Autor der Seite selbst der
+Urheber ist, soll auf die Quellenangabe verzichtet werden k\"{o}nnen, im Falle
+einer Abbildung also nur der Name angezeigt werden und im Falle des
+gestalterischen Elements der Eintrag in der Liste komplett weggelassen werden.
+
+\subsubsection{Endger\"{a}toptimierung}
+
+
+
+\subsubsection{Caching}
+
+
+
+\subsubsection{Datenhaltung}
+
+
+
+\subsubsection{API}
+
+Die API stellt verschiedene Routen bereit, die sich in das existierende
+Strukturen einf\"{u}gen, daher sind alle Routen unterhalb von
+\begin{description}
+  \item ['/api/project/:project_id/image']
+\end{description}
+angesiedelt
+
+\begin{description}
+  \item [/api/project/:project_id/image]
+    \begin{description}
+    \item [GET]
+    \item [POST]
+    \end{description}
+  \item [/api/project/:project_id/image/:image_id]
+    \begin{description}
+    \item [GET]
+    \item[POST]
+    \item[DELETE]
+    \end{description}
+
+\end{description}
+
+\subsubsection{Library}
+
+
+
+\subsubsection{Frontendintegration}
+
+
+
+\subsubsection{Seiteneditorintegration}
+
+
+
+\subsubsection{Datenbankintegration}
+
+
+
+\subsubsection{Schemaeditorintegration}
+
+
+
+\subsubsection{Queryeditorintegration}
+
+
 
 %%% Local Variables:
 %%% mode: latex
