@@ -33,8 +33,8 @@ export class Node {
    * properties and to construct any children.
    */
   constructor(desc: NodeDescription, parent: Node) {
-    this._nodeName = desc.nodeName;
-    this._nodeLanguage = desc.nodeLanguage;
+    this._nodeName = desc.name;
+    this._nodeLanguage = desc.language;
     this._nodeParent = parent;
 
     // We don't want any undefined fields during runtime
@@ -42,16 +42,16 @@ export class Node {
     this._nodeChildren = {}
 
     // Load properties (if there are any)
-    if (desc.nodeProperties) {
+    if (desc.properties) {
       // Make a deep copy of those properties, just in case ...
-      this._nodeProperties = JSON.parse(JSON.stringify(desc.nodeProperties));
+      this._nodeProperties = JSON.parse(JSON.stringify(desc.properties));
     }
 
     // Load children (if there are any)
-    if (desc.nodeChildren) {
+    if (desc.children) {
       // Load all children in all categories
-      for (let categoryName in desc.nodeChildren) {
-        const category = desc.nodeChildren[categoryName];
+      for (let categoryName in desc.children) {
+        const category = desc.children[categoryName];
         this._nodeChildren[categoryName] = category.map(childDesc => new Node(childDesc, this))
       }
     }

@@ -10,30 +10,30 @@ describe('AST: Basic Operations', () => {
     //   </body>
     // </html>
     const desc: NodeDescription = {
-      nodeLanguage: "html",
-      nodeName: "html",
-      nodeChildren: {
+      language: "html",
+      name: "html",
+      children: {
         "children": [
           {
-            nodeLanguage: "html",
-            nodeName: "head",
-            nodeChildren: {
+            language: "html",
+            name: "head",
+            children: {
               "children": [
                 {
 
-                  nodeLanguage: "html",
-                  nodeName: "title",
-                  nodeChildren: {
+                  language: "html",
+                  name: "title",
+                  children: {
                     "children": [
                       {
-                        nodeLanguage: "templating",
-                        nodeName: "interpolate",
-                        nodeChildren: {
+                        language: "templating",
+                        name: "interpolate",
+                        children: {
                           "children": [
                             {
-                              nodeLanguage: "templating",
-                              nodeName: "varname",
-                              nodeProperties: {
+                              language: "templating",
+                              name: "varname",
+                              properties: {
                                 "var": "page.title"
                               }
                             }
@@ -47,19 +47,19 @@ describe('AST: Basic Operations', () => {
             }
           },
           {
-            nodeLanguage: "html",
-            nodeName: "body",
-            nodeChildren: {
+            language: "html",
+            name: "body",
+            children: {
               "attributes": [
                 {
-                  nodeLanguage: "html",
-                  nodeName: "class",
-                  nodeChildren: {
+                  language: "html",
+                  name: "class",
+                  children: {
                     "children": [
                       {
-                        nodeLanguage: "html",
-                        nodeName: "text",
-                        nodeProperties: {
+                        language: "html",
+                        name: "text",
+                        properties: {
                           "value": "bg-black"
                         }
                       }

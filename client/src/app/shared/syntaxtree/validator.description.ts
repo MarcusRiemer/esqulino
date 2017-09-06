@@ -25,9 +25,11 @@
  *   display.
  */
 export interface NodeTypeDescription {
-  childrenCategories?: { [name: string]: NodeTypeChildrenGroupDescription }
-  propertyCategories?: { [name: string]: (NodePropertyStringDescription | NodeIntegerTypeDescription) }
+  children?: { [name: string]: NodeTypeChildrenGroupDescription }
+  properties?: { [name: string]: (NodePropertyStringDescription | NodeIntegerTypeDescription) }
 }
+
+export type NodeTypeChildrenGroupDescription = NodeTypesAllowedDescription | NodeTypesSequenceDescription;
 
 /**
  * Used when refererring to types that are defined other languages.
@@ -119,13 +121,6 @@ export interface MaxInclusiveRestriction {
 export interface MinInclusiveRestriction {
   type: "minInclusive"
   value: number
-}
-
-/**
- * Defines a group which allows different types of children.
- */
-export interface NodeTypeChildrenGroupDescription {
-  children: NodeTypesAllowedDescription | NodeTypesSequenceDescription
 }
 
 /**
