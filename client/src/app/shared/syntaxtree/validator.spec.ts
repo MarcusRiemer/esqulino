@@ -15,46 +15,31 @@ import { Validator, ErrorCodes } from './validator'
  */
 const langMiniHtml: Schema.LanguageDescription = {
   languageName: "mini-html",
-  types: [
-    {
-      nodeName: "html",
-      type: "complex",
-      childrenCategories: [
-        {
-          categoryName: "children",
+  types: {
+    "html": {
+      childrenCategories: {
+        "children": {
           children: {
             type: "sequence",
             nodeTypes: ["head", "body"]
           }
         }
-      ]
-    } as Schema.NodeComplexTypeDescription,
-    {
-      nodeName: "head",
-      type: "complex",
-    } as Schema.NodeComplexTypeDescription,
-    {
-      nodeName: "body",
-      type: "complex",
-      childrenCategories: [
-        {
-          categoryName: "children",
+      }
+    } as Schema.NodeTypeDescription,
+    "head": {},
+    "body": {
+      childrenCategories: {
+        "children": {
           children: {
             type: "allowed",
             nodeTypes: ["paragraph", "heading"]
           }
         }
-      ]
-    } as Schema.NodeComplexTypeDescription,
-    {
-      nodeName: "paragraph",
-      type: "complex",
-    } as Schema.NodeComplexTypeDescription,
-    {
-      nodeName: "heading",
-      type: "complex",
-    } as Schema.NodeComplexTypeDescription
-  ],
+      }
+    },
+    "paragraph": {},
+    "heading": {},
+  },
   root: ["html"]
 };
 
@@ -74,50 +59,32 @@ const langMiniHtml: Schema.LanguageDescription = {
  */
 const langMiniSql: Schema.LanguageDescription = {
   languageName: "mini-sql",
-  types: [
-    {
-      nodeName: "select",
-      type: "complex"
-    } as Schema.NodeComplexTypeDescription,
-    {
-      nodeName: "delete",
-      type: "complex"
-    } as Schema.NodeComplexTypeDescription,
-    {
-      nodeName: "from",
-      type: "complex"
-    } as Schema.NodeComplexTypeDescription,
-    {
-      nodeName: "where",
-      type: "complex"
-    } as Schema.NodeComplexTypeDescription,
-    {
-      nodeName: "query-select",
-      type: "complex",
-      childrenCategories: [
-        {
-          categoryName: "children",
+  types: {
+    "select": {},
+    "delete": {},
+    "from": {},
+    "where": {},
+    "query-select": {
+      childrenCategories: {
+        "children": {
           children: {
             type: "sequence",
             nodeTypes: ["select", "from", "where"]
           }
         }
-      ]
-    } as Schema.NodeComplexTypeDescription,
-    {
-      nodeName: "query-delete",
-      type: "complex",
-      childrenCategories: [
-        {
-          categoryName: "children",
+      }
+    },
+    "query-delete": {
+      childrenCategories: {
+        "children": {
           children: {
             type: "sequence",
             nodeTypes: ["delete", "from", "where"]
           }
         }
-      ]
-    } as Schema.NodeComplexTypeDescription,
-  ],
+      }
+    }
+  },
   root: ["query-select", "query-delete"]
 }
 
@@ -126,8 +93,8 @@ describe('Language Validator', () => {
     const v = new Validator([langMiniHtml]);
 
     expect(v.isKnownLanguage(langMiniHtml.languageName)).toBeTruthy();
-    for (let i = 0; i < langMiniHtml.types.length; ++i) {
-      expect(v.isKnownType(langMiniHtml.languageName, langMiniHtml.types[i].nodeName)).toBeTruthy();
+    for (let nodeName in langMiniHtml.types) {
+      expect(v.isKnownType(langMiniHtml.languageName, nodeName)).toBeTruthy();
     }
   });
 
@@ -135,8 +102,8 @@ describe('Language Validator', () => {
     const v = new Validator([langMiniSql]);
 
     expect(v.isKnownLanguage(langMiniSql.languageName)).toBeTruthy();
-    for (let i = 0; i < langMiniSql.types.length; ++i) {
-      expect(v.isKnownType(langMiniSql.languageName, langMiniSql.types[i].nodeName)).toBeTruthy();
+    for (let nodeName in langMiniSql.types) {
+      expect(v.isKnownType(langMiniSql.languageName, nodeName)).toBeTruthy();
     }
   });
 
@@ -159,6 +126,8 @@ describe('Language Validator', () => {
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
+
+    debugger;
 
     expect(res.errors.length).toEqual(1);
     expect(res.errors[0].code).toEqual(ErrorCodes.SuperflousChildCategory)
