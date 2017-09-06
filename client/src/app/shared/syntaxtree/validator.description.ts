@@ -11,6 +11,13 @@
  * complex nodes are allowed to have children that are nodes
  * themselves.
  *
+ * The restriction system for simple properites is modelled after
+ * facets in XML-Schema: https://www.w3.org/TR/xmlschema-2/#defn-coss
+ *
+ * Builtin types are:
+ * - String
+ * - Integer
+ *
  * Notable Enhancements are:
  * - Types may define children in different categories. For
  *   XML this may be "children" and "attributes", but these
@@ -18,8 +25,8 @@
  *   display.
  */
 export interface NodeTypeDescription {
-  type: "simple" | "complex"
-  nodeName: string
+  childrenCategories?: { [name: string]: NodeTypeChildrenGroupDescription }
+  propertyCategories?: NodeTypePropertiesGroupDescription[]
 }
 
 /**
@@ -39,27 +46,17 @@ export function isQualifiedTypeName(arg: any): arg is QualifiedTypeName {
  */
 export type TypeReference = QualifiedTypeName | string
 
-
 /**
- * A simple type may only have a single property that could be
- * interpreted as a string. Depending on the base type certain
- * additional restrictions may be applied.
- *
- * The restriction system is modelled after facets in XML-Schema:
- * https://www.w3.org/TR/xmlschema-2/#defn-coss
- *
- * Builtin types are:
- * - String
- * - Integer
+ * 
  */
-export interface NodeSimpleTypeDescription extends NodeTypeDescription {
-  type: "simple"
+export interface NodeSimplePropertyDescription {
+  base: string
 }
 
 /**
  * Denotes the "string" type and describes ways it can be further restricted.
  */
-export interface NodeStringTypeDescription extends NodeSimpleTypeDescription {
+export interface NodeStringTypeDescription extends NodeSimplePropertyDescription {
   base: "string"
   restrictions: NodeStringTypeRestrictions[]
 }
@@ -104,7 +101,7 @@ type NodeIntegerTypeRestrictions = MinInclusiveRestriction
 /**
  * Describes the "Integer" type and describes how it can be restricted.
  */
-export interface NodeIntegerTypeDescription extends NodeSimpleTypeDescription {
+export interface NodeIntegerTypeDescription extends NodeSimplePropertyDescription {
   base: "integer"
 }
 
@@ -124,17 +121,7 @@ export interface MinInclusiveRestriction {
   value: number
 }
 
-/**
- * A complex type may have all kinds of children. These children can 
- * occur in different groups.
- */
-export interface NodeComplexTypeDescription extends NodeTypeDescription {
-  type: "complex"
-  childrenCategories?: NodeComplexTypeChildrenGroupDescription[]
-  propertyCategories?: NodeComplexTypePropertiesGroupDescription[]
-}
-
-export interface NodeComplexTypePropertiesGroupDescription {
+export interface NodeTypePropertiesGroupDescription {
   categoryName: string
   properties: (NodeStringTypeDescription | NodeIntegerTypeDescription)[]
 }
@@ -142,8 +129,7 @@ export interface NodeComplexTypePropertiesGroupDescription {
 /**
  * Defines a group which allows different types of children.
  */
-export interface NodeComplexTypeChildrenGroupDescription {
-  categoryName: string
+export interface NodeTypeChildrenGroupDescription {
   children: NodeTypesAllowedDescription | NodeTypesSequenceDescription
 }
 
@@ -172,24 +158,10 @@ export class LanguageDescription {
   languageName: string
 
   // All types that exist in this language
-  types: NodeTypeDescription[]
+  types: { [nodeName: string]: NodeTypeDescription }
 
   // Types that, per default, can be used at the root of syntax trees
   root: TypeReference[]
-}
-
-/**
- * @return True, if the given instance probably satisfies "NodeSimpleTypeDescription"
- */
-export function isNodeSimpleTypeDescription(obj: any): obj is NodeSimpleTypeDescription {
-  return (obj.type === "simple");
-}
-
-/**
- * @return True, if the given instance probably satisfies "NodeComplexTypeDescription"
- */
-export function isNodeComplexTypeDescription(obj: any): obj is NodeComplexTypeDescription {
-  return (obj.type === "complex");
 }
 
 /**
