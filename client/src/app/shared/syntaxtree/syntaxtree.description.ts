@@ -13,13 +13,13 @@ export interface NodeDescription {
    * The name of this not, this is used to lookup the name of a
    * corresponding type.
    */
-  nodeName: string
+  name: string
 
   /**
    * This is effectively a namespace, allowing identical
    * names for nodes in different languages.
    */
-  nodeLanguage: string
+  language: string
 
   /**
    * Nodes may have children in various categories. This base class
@@ -27,7 +27,7 @@ export interface NodeDescription {
    * children in multiple categories would be things like "attributes"
    * and generic "children" in a specialization for XML.
    */
-  nodeChildren?: {
+  children?: {
     [childrenCategory: string]: NodeDescription[];
   }
 
@@ -35,7 +35,7 @@ export interface NodeDescription {
    * Nodes may have all kinds of properties that are specific to their
    * concrete use.
    */
-  nodeProperties?: {
+  properties?: {
     [propertyName: string]: any;
   }
 }

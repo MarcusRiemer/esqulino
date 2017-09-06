@@ -3,6 +3,8 @@ import * as AST from './syntaxtree'
 
 // Groups together all error codes that exist in the core of the validator.
 export enum ErrorCodes {
+  // The AST does simply not exist at all
+  Empty = "EMPTY",
   // A AST has a root node that does not match any allowed root node
   UnknownRoot = "UNKNOWN_ROOT",
   // A different type was explicitly expected
@@ -108,13 +110,13 @@ class NodeType {
     this._validator = validator;
 
     // Construct validators for all children
-    const childrenCategories = typeDesc.childrenCategories || {};
+    const childrenCategories = typeDesc.children || {};
     Object.entries(childrenCategories).forEach(([groupName, groupDesc]) => {
       this._allowedChildren[groupName] = new NodeTypeChildren(this, groupDesc, groupName);
     });
 
     // Construct validators for all properties
-    const properties = typeDesc.propertyCategories || {};
+    const properties = typeDesc.properties || {};
     Object.entries(properties).forEach(([propName, propDesc]) => {
       this._allowedProperties[propName] = this.instanciatePropertyValidator(propDesc)
     });
@@ -233,11 +235,10 @@ class NodeTypeChildren {
     this._categoryName = name;
     this._parent = parent;
 
-    const validatorDesc = desc.children;
-    if (Desc.isNodeTypesSequenceDescription(validatorDesc)) {
-      this._childValidator = new NodeComplexTypeChildrenSequence(parent, validatorDesc);
-    } else if (Desc.isNodeTypesAllowedDescription(validatorDesc)) {
-      this._childValidator = new NodeComplexTypeChildrenAllowed(parent, validatorDesc);
+    if (Desc.isNodeTypesSequenceDescription(desc)) {
+      this._childValidator = new NodeComplexTypeChildrenSequence(parent, desc);
+    } else if (Desc.isNodeTypesAllowedDescription(desc)) {
+      this._childValidator = new NodeComplexTypeChildrenAllowed(parent, desc);
     } else {
       throw new Error(`Unknown child validator: "${JSON.stringify(desc)}"`);
     }
@@ -417,6 +418,11 @@ class TypeReference {
   private _typeName: string;
   private _validator: Validator;
 
+  /**
+   * @param validator Used when attempting to resolve this type.
+   * @param desc The reference in qualified or unqualified form
+   * @param currentLang The language to use in case of an unqualified reference
+   */
   constructor(_validator: Validator, desc: Desc.TypeReference, currentLang: string) {
     this._validator = _validator;
 
@@ -564,10 +570,16 @@ export class Validator {
    * @return All errors that occured during evaluation
    */
   validateFromRoot(ast: AST.Node) {
-    const lang = this.getLanguage(ast.nodeLanguage);
     const context = new ValidationContext();
 
-    lang.validateFromRoot(ast, context);
+    if (ast) {
+      // Pass validation to the appropriate language
+      const lang = this.getLanguage(ast.nodeLanguage);
+      lang.validateFromRoot(ast, context);
+    } else {
+      // Not having a document is a single error
+      context.addError(ErrorCodes.Empty, undefined);
+    }
 
     return (new ValidationResult(context));
   }

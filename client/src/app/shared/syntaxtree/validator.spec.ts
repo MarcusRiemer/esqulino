@@ -18,86 +18,70 @@ const langMiniHtml: Schema.LanguageDescription = {
   languageName: "mini-html",
   types: {
     "text": {
-      propertyCategories: {
+      properties: {
         "text": {
           base: "string"
         }
       }
     },
     "html": {
-      childrenCategories: {
+      children: {
         "children": {
-          children: {
-            type: "sequence",
-            nodeTypes: ["head", "body"]
-          }
+          type: "sequence",
+          nodeTypes: ["head", "body"]
         }
       }
     },
     "head": {
-      childrenCategories: {
+      children: {
         "children": {
-          children: {
-            type: "allowed",
-            nodeTypes: ["text"]
-          }
+          type: "allowed",
+          nodeTypes: ["text"]
         }
       }
     },
     "body": {
-      childrenCategories: {
+      children: {
         "children": {
-          children: {
-            type: "allowed",
-            nodeTypes: ["paragraph", "heading"]
-          }
+          type: "allowed",
+          nodeTypes: ["paragraph", "heading"]
         }
       }
     },
     "paragraph": {
-      childrenCategories: {
+      children: {
         "attributes": {
-          children: {
-            type: "allowed",
-            nodeTypes: ["attr-class"]
-          }
+          type: "allowed",
+          nodeTypes: ["attr-class"]
         },
         "children": {
-          children: {
-            type: "allowed",
-            nodeTypes: ["text"]
-          }
+          type: "allowed",
+          nodeTypes: ["text"]
         }
       }
     },
     "heading": {
-      childrenCategories: {
+      children: {
         "attributes": {
-          children: {
-            type: "allowed",
-            nodeTypes: ["attr-id"]
-          }
+          type: "allowed",
+          nodeTypes: ["attr-id"]
         },
         "children": {
-          children: {
-            type: "allowed",
-            nodeTypes: ["text"]
-          }
+          type: "allowed",
+          nodeTypes: ["text"]
         }
       }
     },
     "attr-class": {
-      childrenCategories: {
+      children: {
         "classes": {
-          children: {
-            type: "allowed",
-            nodeTypes: ["text"]
-          }
+          type: "allowed",
+          nodeTypes: ["text"]
         }
       }
     },
     "attr-id": {
-      propertyCategories: {
+      properties: {
         "id": {
           base: "string"
         }
@@ -129,22 +113,18 @@ const langMiniSql: Schema.LanguageDescription = {
     "from": {},
     "where": {},
     "query-select": {
-      childrenCategories: {
+      children: {
         "components": {
-          children: {
-            type: "sequence",
-            nodeTypes: ["select", "from", "where"]
-          }
+          type: "sequence",
+          nodeTypes: ["select", "from", "where"]
         }
       }
     },
     "query-delete": {
-      childrenCategories: {
+      children: {
         "components": {
-          children: {
-            type: "sequence",
-            nodeTypes: ["delete", "from", "where"]
-          }
+          type: "sequence",
+          nodeTypes: ["delete", "from", "where"]
         }
       }
     }
@@ -159,7 +139,7 @@ const langStringConstraint: Schema.LanguageDescription = {
   languageName: "string-constraint",
   types: {
     root: {
-      propertyCategories: {
+      properties: {
         "len": {
           base: "string",
           restrictions: [
@@ -189,9 +169,9 @@ describe('Language Validator', () => {
     const v = new Validator([langStringConstraint]);
 
     const astDesc: AST.NodeDescription = {
-      nodeLanguage: "string-constraint",
-      nodeName: "root",
-      nodeProperties: {
+      language: "string-constraint",
+      name: "root",
+      properties: {
         "len": "1",
         "min": "12",
         "max": "12"
@@ -208,9 +188,9 @@ describe('Language Validator', () => {
     const v = new Validator([langStringConstraint]);
 
     const astDesc: AST.NodeDescription = {
-      nodeLanguage: "string-constraint",
-      nodeName: "root",
-      nodeProperties: {
+      language: "string-constraint",
+      name: "root",
+      properties: {
         "len": "12",
         "min": "1",
         "max": "123"
@@ -248,19 +228,26 @@ describe('Language Validator', () => {
     }
   });
 
+  it('Mini-HTML: empty', () => {
+    const v = new Validator([langMiniHtml]);
+    const res = v.validateFromRoot(undefined);
+
+    expect(res.errors.length).toEqual(1);
+  });
+
   it('Mini-HTML: superflous children', () => {
     const v = new Validator([langMiniHtml]);
 
     const astDesc: AST.NodeDescription = {
-      nodeLanguage: "mini-html",
-      nodeName: "html",
-      nodeChildren: {
+      language: "mini-html",
+      name: "html",
+      children: {
         children: [
-          { nodeLanguage: "mini-html", nodeName: "head" },
-          { nodeLanguage: "mini-html", nodeName: "body" }
+          { language: "mini-html", name: "head" },
+          { language: "mini-html", name: "body" }
         ],
         superflous: [
-          { nodeLanguage: "mini-html", nodeName: "mini-html" }
+          { language: "mini-html", name: "mini-html" }
         ]
       }
     }
@@ -276,8 +263,8 @@ describe('Language Validator', () => {
     const v = new Validator([langMiniSql]);
 
     const astDesc: AST.NodeDescription = {
-      nodeLanguage: "mini-sql",
-      nodeName: "query-select"
+      language: "mini-sql",
+      name: "query-select"
     }
 
     const ast = new AST.Node(astDesc, undefined);
@@ -293,8 +280,8 @@ describe('Language Validator', () => {
     const v = new Validator([langMiniHtml]);
 
     const astDesc: AST.NodeDescription = {
-      nodeLanguage: "mini-html",
-      nodeName: "html"
+      language: "mini-html",
+      name: "html"
     }
 
     const ast = new AST.Node(astDesc, undefined);
@@ -310,26 +297,26 @@ describe('Language Validator', () => {
     const v = new Validator([langMiniHtml]);
 
     const astDesc: AST.NodeDescription = {
-      nodeLanguage: "mini-html",
-      nodeName: "html",
-      nodeChildren: {
+      language: "mini-html",
+      name: "html",
+      children: {
         children: [
           {
-            nodeLanguage: "mini-html",
-            nodeName: "head",
-            nodeChildren: {
+            language: "mini-html",
+            name: "head",
+            children: {
               children: [
                 {
-                  nodeLanguage: "mini-html",
-                  nodeName: "text",
-                  nodeProperties: {
+                  language: "mini-html",
+                  name: "text",
+                  properties: {
                     "text": "Minimal"
                   }
                 }
               ]
             }
           },
-          { nodeLanguage: "mini-html", nodeName: "body" }
+          { language: "mini-html", name: "body" }
         ]
       }
     }
@@ -344,23 +331,23 @@ describe('Language Validator', () => {
     const v = new Validator([langMiniHtml]);
 
     const astDesc: AST.NodeDescription = {
-      nodeLanguage: "mini-html",
-      nodeName: "html",
-      nodeChildren: {
+      language: "mini-html",
+      name: "html",
+      children: {
         children: [
-          { nodeLanguage: "mini-html", nodeName: "head" },
+          { language: "mini-html", name: "head" },
           {
-            nodeLanguage: "mini-html",
-            nodeName: "body",
-            nodeChildren: {
+            language: "mini-html",
+            name: "body",
+            children: {
               children: [
                 {
-                  nodeLanguage: "mini-html",
-                  nodeName: "heading"
+                  language: "mini-html",
+                  name: "heading"
                 },
                 {
-                  nodeLanguage: "mini-html",
-                  nodeName: "paragraph"
+                  language: "mini-html",
+                  name: "paragraph"
                 }
               ]
             }
@@ -379,19 +366,19 @@ describe('Language Validator', () => {
     const v = new Validator([langMiniHtml]);
 
     const astDesc: AST.NodeDescription = {
-      nodeLanguage: "mini-html",
-      nodeName: "html",
-      nodeChildren: {
+      language: "mini-html",
+      name: "html",
+      children: {
         children: [
-          { nodeLanguage: "mini-html", nodeName: "head" },
+          { language: "mini-html", name: "head" },
           {
-            nodeLanguage: "mini-html",
-            nodeName: "body",
-            nodeChildren: {
+            language: "mini-html",
+            name: "body",
+            children: {
               children: [
                 {
-                  nodeLanguage: "mini-html",
-                  nodeName: "html"
+                  language: "mini-html",
+                  name: "html"
                 }
               ]
             }
@@ -412,13 +399,13 @@ describe('Language Validator', () => {
     const v = new Validator([langMiniHtml, langMiniSql]);
 
     const astDesc: AST.NodeDescription = {
-      nodeLanguage: "mini-html",
-      nodeName: "html",
-      nodeChildren: {
+      language: "mini-html",
+      name: "html",
+      children: {
         children: [
           {
-            nodeLanguage: "mini-sql",
-            nodeName: "query-select"
+            language: "mini-sql",
+            name: "query-select"
           }
         ]
       }
