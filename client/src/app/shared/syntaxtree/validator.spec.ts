@@ -25,7 +25,7 @@ const langMiniHtml: Schema.LanguageDescription = {
           }
         }
       }
-    } as Schema.NodeTypeDescription,
+    },
     "head": {},
     "body": {
       childrenCategories: {
@@ -66,7 +66,7 @@ const langMiniSql: Schema.LanguageDescription = {
     "where": {},
     "query-select": {
       childrenCategories: {
-        "children": {
+        "components": {
           children: {
             type: "sequence",
             nodeTypes: ["select", "from", "where"]
@@ -76,7 +76,7 @@ const langMiniSql: Schema.LanguageDescription = {
     },
     "query-delete": {
       childrenCategories: {
-        "children": {
+        "components": {
           children: {
             type: "sequence",
             nodeTypes: ["delete", "from", "where"]
