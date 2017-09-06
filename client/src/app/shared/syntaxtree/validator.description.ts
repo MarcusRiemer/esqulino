@@ -26,7 +26,7 @@
  */
 export interface NodeTypeDescription {
   childrenCategories?: { [name: string]: NodeTypeChildrenGroupDescription }
-  propertyCategories?: NodeTypePropertiesGroupDescription[]
+  propertyCategories?: { [name: string]: (NodePropertyStringDescription | NodeIntegerTypeDescription) }
 }
 
 /**
@@ -49,22 +49,22 @@ export type TypeReference = QualifiedTypeName | string
 /**
  * 
  */
-export interface NodeSimplePropertyDescription {
+export interface NodePropertyDescription {
   base: string
 }
 
 /**
  * Denotes the "string" type and describes ways it can be further restricted.
  */
-export interface NodeStringTypeDescription extends NodeSimplePropertyDescription {
+export interface NodePropertyStringDescription extends NodePropertyDescription {
   base: "string"
-  restrictions: NodeStringTypeRestrictions[]
+  restrictions?: NodeStringTypeRestrictions[]
 }
 
 /**
  * The restrictions that are applicable to strings
  */
-type NodeStringTypeRestrictions = LengthRestrictionDescription
+export type NodeStringTypeRestrictions = LengthRestrictionDescription
   | MinimumLengthRestrictionDescription
   | MaximumLengthRestrictionDescription
 
@@ -101,7 +101,7 @@ type NodeIntegerTypeRestrictions = MinInclusiveRestriction
 /**
  * Describes the "Integer" type and describes how it can be restricted.
  */
-export interface NodeIntegerTypeDescription extends NodeSimplePropertyDescription {
+export interface NodeIntegerTypeDescription extends NodePropertyDescription {
   base: "integer"
 }
 
@@ -119,11 +119,6 @@ export interface MaxInclusiveRestriction {
 export interface MinInclusiveRestriction {
   type: "minInclusive"
   value: number
-}
-
-export interface NodeTypePropertiesGroupDescription {
-  categoryName: string
-  properties: (NodeStringTypeDescription | NodeIntegerTypeDescription)[]
 }
 
 /**
@@ -178,3 +173,9 @@ export function isNodeTypesSequenceDescription(obj: any): obj is NodeTypesSequen
   return (obj.type === "sequence");
 }
 
+/**
+ * @return True, if the given instance probably satisfies "NodePropertyStringDescription"
+ */
+export function isNodePropertyStringDesciption(obj: any): obj is NodePropertyStringDescription {
+  return (obj.base === "string");
+}

@@ -9,7 +9,11 @@ export enum ErrorCodes {
   UnexpectedType = "UNEXPECTED_TYPE",
   // A child was expected, but simply did not exist
   MissingChild = "MISSING_CHILD",
+  // A property was expected, but simply did not exist
+  MissingProperty = "MISSING_PROPERTY",
   // A child was present, but somehow it's type wasn't asked for
+  IllegalPropertyType = "ILLEGAL_PROPERTY_TYPE",
+  // A property was present, but breached a restriction
   IllegalChildType = "ILLEGAL_CHILD_TYPE",
   // A type mentions a child category that is not present in a node
   SuperflousChildCategory = "SUPERFLOUS_CHILD_CATEGORY",
@@ -30,12 +34,22 @@ export interface ErrorMissingChild {
   index: number
 }
 
+export interface ErrorMissingProperty {
+  expected: string
+  name: string
+}
+
 // Details about an unknown child category
 export interface ErrorUnknownChildCategory {
   categoryName: string;
 }
 
-export type ErrorData = ErrorUnexpectedType | ErrorUnknownChildCategory | ErrorMissingChild | any;
+export type ErrorData =
+  ErrorUnexpectedType |
+  ErrorUnknownChildCategory |
+  ErrorMissingChild |
+  ErrorMissingProperty |
+  any;
 
 interface ValidationError {
   code: string;
@@ -85,6 +99,7 @@ class NodeType {
   private _typeName: string;
 
   private _allowedChildren: { [category: string]: NodeTypeChildren } = {};
+  private _allowedProperties: { [propName: string]: NodePropertyValidator } = {};
   private _validator: Validator;
 
   constructor(validator: Validator, typeDesc: Desc.NodeTypeDescription, language: string, name: string) {
@@ -97,8 +112,13 @@ class NodeType {
     Object.entries(childrenCategories).forEach(([groupName, groupDesc]) => {
       this._allowedChildren[groupName] = new NodeTypeChildren(this, groupDesc, groupName);
     });
-  }
 
+    // Construct validators for all properties
+    const properties = typeDesc.propertyCategories || {};
+    Object.entries(properties).forEach(([propName, propDesc]) => {
+      this._allowedProperties[propName] = this.instanciatePropertyValidator(propDesc)
+    });
+  }
 
   /**
    * Validates this node and (if applicable) it's children
@@ -128,7 +148,7 @@ class NodeType {
       this._allowedChildren[categoryName].validate(catChildren, context);
     });
 
-    // Check that there are now unwanted children
+    // Check that there are no unwanted children
     const requiredCategories = new Set(this.requiredChildrenCategories);
     const superflousCategories = ast.childrenCategoryNames.filter(cat => !requiredCategories.has(cat));
     superflousCategories.forEach(categoryName => {
@@ -136,6 +156,30 @@ class NodeType {
         categoryName: categoryName
       });
     });
+
+    // Check all required properties
+    Object.entries(this._allowedProperties).forEach(([name, validator]) => {
+      if (name in ast.nodeProperties) {
+        const value = ast.nodeProperties[name];
+        validator.validate(ast, value, context);
+      } else {
+        context.addError(ErrorCodes.MissingProperty, ast, {
+          expected: validator.base,
+          name: name
+        } as ErrorMissingProperty);
+      }
+    });
+  }
+
+  /**
+   * @return A NodePropertyValidator that validates the correct type.
+   */
+  private instanciatePropertyValidator(desc: Desc.NodePropertyDescription): NodePropertyValidator {
+    if (Desc.isNodePropertyStringDesciption(desc)) {
+      return (new NodePropertyStringValidator(desc));
+    } else {
+      throw new Error(`Unknown property validator for base "${desc.base}"`);
+    }
   }
 
   /**
@@ -303,6 +347,63 @@ class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator
     });
 
     return (toReturn);
+  }
+}
+
+/**
+ * Validates any property.
+ */
+interface NodePropertyValidator {
+  validate(node: AST.Node, value: string, context: ValidationContext): void;
+
+  // The basic type of this property
+  base: string;
+}
+
+/**
+ * Validates properties that are meant to be strings.
+ */
+class NodePropertyStringValidator implements NodePropertyValidator {
+  private _restrictions: Desc.NodeStringTypeRestrictions[] = [];
+
+  constructor(desc: Desc.NodePropertyStringDescription) {
+    if (desc.restrictions) {
+      this._restrictions = desc.restrictions;
+    }
+  }
+
+  get base() {
+    return "string";
+  }
+
+  validate(node: AST.Node, value: string, context: ValidationContext) {
+    this._restrictions.forEach(restriction => {
+      switch (restriction.type as string) {
+        case "length":
+          if (value.length != restriction.value) {
+            context.addError(ErrorCodes.IllegalPropertyType, node, {
+              condition: `${value.length} != ${restriction.value}`
+            })
+          }
+          break;
+        case "minLength":
+          if (value.length < restriction.value) {
+            context.addError(ErrorCodes.IllegalPropertyType, node, {
+              condition: `${value.length} < ${restriction.value}`
+            })
+          }
+          break;
+        case "maxLength":
+          if (value.length > restriction.value) {
+            context.addError(ErrorCodes.IllegalPropertyType, node, {
+              condition: `${value.length} > ${restriction.value}`
+            })
+          }
+          break;
+        default:
+          throw new Error(`Unknown string restriction: "${restriction.type}"`);
+      }
+    });
   }
 }
 
