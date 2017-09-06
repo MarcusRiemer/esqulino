@@ -3,10 +3,11 @@ import { NodeDescription, } from './syntaxtree.description'
 export { NodeDescription };
 
 /**
- * Properties of a node are simply stored without ever
- * looking inside them.
+ * Properties of a node are atomic and always stored as string.
+ * Certain validators may be used to check whether the string
+ * contains something useful.
  */
-type NodeProperties = { [propertyName: string]: any }
+type NodeProperties = { [propertyName: string]: string }
 
 /**
  * Children of a node are always sorted.

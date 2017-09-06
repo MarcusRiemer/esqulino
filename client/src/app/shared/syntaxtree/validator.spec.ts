@@ -8,14 +8,22 @@ import { Validator, ErrorCodes } from './validator'
  * <html>
  *   <head></head>
  *   <body>
- *     <h1>Heading</h1>
- *     <p>Paragraph</p>
+ *     <h1 id="the-only">Heading</h1>
+ *     <p class="foo bar">Paragraph 1</p>
+ *     <p class="hello world">Paragraph 2</p>
  *   </body>
  * </html>
  */
 const langMiniHtml: Schema.LanguageDescription = {
   languageName: "mini-html",
   types: {
+    "text": {
+      propertyCategories: {
+        "text": {
+          base: "string"
+        }
+      }
+    },
     "html": {
       childrenCategories: {
         "children": {
@@ -26,7 +34,16 @@ const langMiniHtml: Schema.LanguageDescription = {
         }
       }
     },
-    "head": {},
+    "head": {
+      childrenCategories: {
+        "children": {
+          children: {
+            type: "allowed",
+            nodeTypes: ["text"]
+          }
+        }
+      }
+    },
     "body": {
       childrenCategories: {
         "children": {
@@ -37,8 +54,55 @@ const langMiniHtml: Schema.LanguageDescription = {
         }
       }
     },
-    "paragraph": {},
-    "heading": {},
+    "paragraph": {
+      childrenCategories: {
+        "attributes": {
+          children: {
+            type: "allowed",
+            nodeTypes: ["attr-class"]
+          }
+        },
+        "children": {
+          children: {
+            type: "allowed",
+            nodeTypes: ["text"]
+          }
+        }
+      }
+    },
+    "heading": {
+      childrenCategories: {
+        "attributes": {
+          children: {
+            type: "allowed",
+            nodeTypes: ["attr-id"]
+          }
+        },
+        "children": {
+          children: {
+            type: "allowed",
+            nodeTypes: ["text"]
+          }
+        }
+      }
+    },
+    "attr-class": {
+      childrenCategories: {
+        "classes": {
+          children: {
+            type: "allowed",
+            nodeTypes: ["text"]
+          }
+        }
+      }
+    },
+    "attr-id": {
+      propertyCategories: {
+        "id": {
+          base: "string"
+        }
+      }
+    }
   },
   root: ["html"]
 };
@@ -88,7 +152,84 @@ const langMiniSql: Schema.LanguageDescription = {
   root: ["query-select", "query-delete"]
 }
 
+/**
+ * A single node that uses every possible string constraint.
+ */
+const langStringConstraint: Schema.LanguageDescription = {
+  languageName: "string-constraint",
+  types: {
+    root: {
+      propertyCategories: {
+        "len": {
+          base: "string",
+          restrictions: [
+            { type: "length", value: 1 }
+          ]
+        },
+        "min": {
+          base: "string",
+          restrictions: [
+            { type: "minLength", value: 2 }
+          ]
+        },
+        "max": {
+          base: "string",
+          restrictions: [
+            { type: "maxLength", value: 2 }
+          ]
+        }
+      }
+    }
+  },
+  root: ["root"]
+}
+
 describe('Language Validator', () => {
+  it('String Constraints: Valid', () => {
+    const v = new Validator([langStringConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      nodeLanguage: "string-constraint",
+      nodeName: "root",
+      nodeProperties: {
+        "len": "1",
+        "min": "12",
+        "max": "12"
+      }
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(0);
+  });
+
+  it('String Constraints: Invalid', () => {
+    const v = new Validator([langStringConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      nodeLanguage: "string-constraint",
+      nodeName: "root",
+      nodeProperties: {
+        "len": "12",
+        "min": "1",
+        "max": "123"
+      }
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(3);
+    expect(res.errors[0].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[0].data.condition).toEqual("2 != 1");
+    expect(res.errors[1].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[1].data.condition).toEqual("1 < 2");
+    expect(res.errors[2].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[2].data.condition).toEqual("3 > 2");
+  });
+
+
   it('Mini-HTML: registers types', () => {
     const v = new Validator([langMiniHtml]);
 
@@ -126,8 +267,6 @@ describe('Language Validator', () => {
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
-
-    debugger;
 
     expect(res.errors.length).toEqual(1);
     expect(res.errors[0].code).toEqual(ErrorCodes.SuperflousChildCategory)
@@ -175,7 +314,21 @@ describe('Language Validator', () => {
       nodeName: "html",
       nodeChildren: {
         children: [
-          { nodeLanguage: "mini-html", nodeName: "head" },
+          {
+            nodeLanguage: "mini-html",
+            nodeName: "head",
+            nodeChildren: {
+              children: [
+                {
+                  nodeLanguage: "mini-html",
+                  nodeName: "text",
+                  nodeProperties: {
+                    "text": "Minimal"
+                  }
+                }
+              ]
+            }
+          },
           { nodeLanguage: "mini-html", nodeName: "body" }
         ]
       }
