@@ -22,17 +22,17 @@ export enum ErrorCodes {
 }
 
 export interface ErrorUnexpectedType {
-  present: Desc.QualifiedTypeName
-  expected: Desc.QualifiedTypeName
+  present: AST.QualifiedTypeName
+  expected: AST.QualifiedTypeName
 }
 
 export interface ErrorIllegalChildType {
-  present: Desc.QualifiedTypeName,
+  present: AST.QualifiedTypeName,
   index: number
 }
 
 export interface ErrorMissingChild {
-  expected: Desc.QualifiedTypeName,
+  expected: AST.QualifiedTypeName,
   index: number
 }
 
@@ -201,7 +201,7 @@ class NodeType {
   /**
    * @return The fully qualified typename this validator expects.
    */
-  get qualifiedName(): Desc.QualifiedTypeName {
+  get qualifiedName(): AST.QualifiedTypeName {
     return ({
       languageName: this._languageName,
       typeName: this._typeName
@@ -464,7 +464,7 @@ class TypeReference {
   /**
    * @return The description that is equivalent to this reference.
    */
-  get description(): Desc.QualifiedTypeName {
+  get description(): AST.QualifiedTypeName {
     return ({
       languageName: this._languageName,
       typeName: this._typeName

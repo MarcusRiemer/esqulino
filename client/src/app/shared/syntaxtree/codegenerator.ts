@@ -1,32 +1,85 @@
-import { Node } from './syntaxtree'
+import { Node, QualifiedTypeName } from './syntaxtree'
 
-interface RenderedChildren {
-  categories: { [categoryName: string]: string[] };
+/**
+ * Represents a node that has been compiled into its string
+ * representation.
+ */
+interface GeneratedNode {
+  depth: number;
+  compilation: string;
+  node: Node;
 }
 
 /**
- * Controls how a node is converted to text. Because the children
- * may be more or less complexly involved in the process there are
- * quite a few callbacks available.
+ * Bundles data that is collected during code generation.
+ */
+export class CodeGeneratorProcess {
+  private _generated: GeneratedNode[] = [];
+  private _generator: CodeGenerator;
+
+  constructor(generator: CodeGenerator) {
+    this._generator = generator;
+  }
+
+  /**
+   * Adds some compiled node to the current result.
+   */
+  addConvertedNode(depth: number, compilation: string, node: Node) {
+    this._generated.push({
+      depth: depth,
+      compilation: compilation,
+      node: node
+    });
+  }
+
+  generateNode(node: Node, depthChange = 0) {
+    const converter = this._generator.getConverter(node.qualifiedName);
+    const bodyCategories = converter.init(node, this) || node.childrenCategoryNames;
+
+    // Iterate over all children that should be emitted
+    bodyCategories.forEach(categoryName => {
+      node.getChildrenInCategory(categoryName).forEach(child => {
+        this.generateNode(child, 0)
+      });
+    });
+
+    // Possibly finish generation
+    if (converter.finish) {
+      converter.finish(node, this);
+    }
+  }
+
+  emit(): string {
+    return ("");
+  }
+}
+
+/**
+ * Controls how a node is converted to text and what the children
+ * have to do with it. 
  */
 interface NodeConverter {
   /*
    * This function is called when the node is entered. Because
    * languages like XML need to render some special children,
    * namingly their attributes, before the actual children, some
-   * pre-rendered children may be passed to this function.
+   * children may be rendered as part of this step. To ensure
+   * that these children are not re-rendered as part of the body,
+   * this function should explicitly return the children to render
+   * as part of the body.
+   *
+   * @return A list of categories. The categories in this list
+   *         will be processed as part of the body of this node.
+   *         If the return value is `undefined` all children
+   *         will be processed as part of the body.
    */
-  init: (node: Node) => string;
+  init(node: Node, process: CodeGeneratorProcess): string[] | undefined;
 
   /**
-   * The names of the categories that need to be passed into the
-   * init callback.
+   * A possibility to close any unfinished business from the
+   * init-function.
    */
-  initRecurse?: string[]
-
-  childrenRecurse?: string[]
-
-  finish?: (node: Node) => string;
+  finish?: (node: Node, process: CodeGeneratorProcess) => string;
 
 }
 
@@ -42,23 +95,30 @@ export class CodeGenerator {
 
   private _callbacks: RegisteredCallbacks = {};
 
+
+  /**
+   * @param ast The tree to emit.
+   */
   emit(ast: Node): string {
-    return (this.emitImpl(ast, 0));
+    const process = new CodeGeneratorProcess(this);
+    process.generateNode(ast, 0);
+
+    return (process.emit());
   }
 
-  private emitImpl(ast: Node, depth: number) {
-    const converter = this._callbacks[ast.nodeLanguage][ast.nodeName];
+  /**
+   * @return A converter for the type in question.
+   */
+  getConverter(t: QualifiedTypeName) {
+    if (!this._callbacks[t.languageName]) {
+      throw new Error(`Language "${t.languageName}" is unknown to CodeGenerator`);
+    }
 
-    let toReturn = converter.init(ast);
+    if (!this._callbacks[t.languageName][t.typeName]) {
+      throw new Error(`Type "${t.languageName}.${t.typeName}" is unknown to CodeGenerator`);
+    }
 
-    // Iterate over all groups
-    Object.entries(ast.children).forEach(([groupName, group]) => {
-      // And over all actual children
-    });
-
-    toReturn += converter.finish(ast);
-
-    return (toReturn);
+    return (this._callbacks[t.languageName][t.typeName]);
   }
 
 }

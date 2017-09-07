@@ -3,6 +3,15 @@ import { NodeDescription, } from './syntaxtree.description'
 export { NodeDescription };
 
 /**
+ * Used when refererring to types that are defined other languages.
+ */
+export interface QualifiedTypeName {
+  typeName: string
+  languageName: string
+}
+
+
+/**
  * Properties of a node are atomic and always stored as string.
  * Certain validators may be used to check whether the string
  * contains something useful.
@@ -65,7 +74,7 @@ export class Node {
     return (this._nodeLanguage);
   }
 
-  get qualifiedName() {
+  get qualifiedName(): QualifiedTypeName {
     return ({
       typeName: this.nodeName,
       languageName: this.nodeLanguage

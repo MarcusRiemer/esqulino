@@ -1,3 +1,5 @@
+import { QualifiedTypeName } from './syntaxtree'
+
 /**
  * This is the basic description to introduce a new type for
  * any kind of node. If you are familiar with schema languages
@@ -30,14 +32,6 @@ export interface NodeTypeDescription {
 }
 
 export type NodeTypeChildrenGroupDescription = NodeTypesAllowedDescription | NodeTypesSequenceDescription;
-
-/**
- * Used when refererring to types that are defined other languages.
- */
-export interface QualifiedTypeName {
-  typeName: string
-  languageName: string
-}
 
 export function isQualifiedTypeName(arg: any): arg is QualifiedTypeName {
   return (arg.typeName && arg.languageName);
