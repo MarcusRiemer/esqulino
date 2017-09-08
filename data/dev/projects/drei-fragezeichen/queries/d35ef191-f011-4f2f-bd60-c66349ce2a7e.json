@@ -1,0 +1,19 @@
+{
+  "name": "Charakter_Alle",
+  "apiVersion": "4",
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "star": {
+          }
+        }
+      }
+    ]
+  },
+  "from": {
+    "first": {
+      "name": "Charakter"
+    }
+  }
+}

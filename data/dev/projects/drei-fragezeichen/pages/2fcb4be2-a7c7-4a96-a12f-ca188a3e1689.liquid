@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{ page.name }} - {{ project.name }}</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+<link rel="stylesheet" href="/vendor/css/bootstrap.css">
+<link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
+</head>
+
+<body>
+<div class="container-fluid">
+<h1>Auftritt Hinzufügen</h1>
+<a href="/Hauptseite">Zurück Zur Hauptseite</a>
+<p>Auf dieser Seite können Charaktere mit Geschichten assoziiert werden.</p>
+<form><fieldset class="form-group">
+<label for="input-charakter_id">
+Auswahl
+</label>
+<select class="form-control"
+id="input-charakter_id$"
+name="charakter_id">
+{% for option in query.Charakter_Alle %}
+<option value="{{ option['charakter_id'] }}">
+{{ option['charakter_nachname'] }}
+</option>
+{% endfor %}
+</select>
+</fieldset>
+<fieldset class="form-group">
+<label for="input-geschichte_id">
+Auswahl
+</label>
+<select class="form-control"
+id="input-geschichte_id$"
+name="geschichte_id">
+{% for option in query.Geschichte_Alle %}
+<option value="{{ option['geschichte_id'] }}">
+{{ option['geschichte_name'] }}
+</option>
+{% endfor %}
+</select>
+</fieldset>
+<button type="submit" formaction="/Auftritt_Neu/query/8e871e22-b51d-4574-8c15-d3fc08fb71e7" formmethod="POST" class="btn btn-secondary btn-block">Hinzufügen</button></form>
+{% include "query_table" table: query.Auftritt_Alle_Charaktere, columns: "geschichte_name,charakter_vorname,charakter_nachname" %}
+</div>
+{% include "edit-ribbon" %}
+</body>
+
+
+</html>
+
