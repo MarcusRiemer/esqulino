@@ -1,5 +1,5 @@
 {
-  "name": "Charakter_Sprecher_Alle",
+  "name": "Wer_Spricht",
   "apiVersion": "4",
   "select": {
     "columns": [
@@ -18,17 +18,25 @@
             "table": "Sprecher"
           }
         }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "Sprecher_Id",
+            "table": "Charakter_Sprecher"
+          }
+        }
       }
     ]
   },
   "from": {
     "first": {
-      "name": "Charakter_Sprecher"
+      "name": "Charakter"
     },
     "joins": [
       {
         "table": {
-          "name": "Charakter"
+          "name": "Charakter_Sprecher"
         },
         "cross": "cross"
       },
@@ -45,14 +53,14 @@
       "binary": {
         "lhs": {
           "singleColumn": {
-            "column": "Charakter_ID",
-            "table": "Charakter_Sprecher"
+            "column": "charakter_id",
+            "table": "Charakter"
           }
         },
         "rhs": {
           "singleColumn": {
-            "column": "charakter_id",
-            "table": "Charakter"
+            "column": "Charakter_ID",
+            "table": "Charakter_Sprecher"
           }
         },
         "operator": "=",
@@ -73,6 +81,26 @@
               "singleColumn": {
                 "column": "Sprecher_ID",
                 "table": "Sprecher"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
+      },
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "charakter_id",
+                "table": "Charakter"
+              }
+            },
+            "rhs": {
+              "parameter": {
+                "key": "charakter_id"
               }
             },
             "operator": "=",

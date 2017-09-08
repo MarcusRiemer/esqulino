@@ -14,15 +14,7 @@
       {
         "expr": {
           "singleColumn": {
-            "column": "charakter_vorname",
-            "table": "Charakter"
-          }
-        }
-      },
-      {
-        "expr": {
-          "singleColumn": {
-            "column": "charakter_nachname",
+            "column": "charakter_name",
             "table": "Charakter"
           }
         }
