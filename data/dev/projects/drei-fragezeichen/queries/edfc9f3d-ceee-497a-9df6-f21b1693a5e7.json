@@ -1,0 +1,25 @@
+{
+  "name": "Chakter_Sprecher_Neu",
+  "apiVersion": "4",
+  "insert": {
+    "table": "Charakter_Sprecher",
+    "assignments": [
+      {
+        "expr": {
+          "parameter": {
+            "key": "charakter_id"
+          }
+        },
+        "column": "Charakter_ID"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "sprecher_id"
+          }
+        },
+        "column": "Sprecher_Id"
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Sprecher_Neu",
+  "apiVersion": "4",
+  "insert": {
+    "table": "Sprecher",
+    "assignments": [
+      {
+        "expr": {
+          "parameter": {
+            "key": "vorname"
+          }
+        },
+        "column": "Sprecher_Vorname"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "nachname"
+          }
+        },
+        "column": "Sprecher_Nachname"
+      }
+    ]
+  }
+}
