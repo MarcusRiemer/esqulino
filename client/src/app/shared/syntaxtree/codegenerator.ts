@@ -50,7 +50,7 @@ export class CodeGeneratorProcess {
   }
 
   emit(): string {
-    return ("");
+    return (this._generated.map(g => g.compilation).join("\n"));
   }
 }
 
@@ -58,7 +58,7 @@ export class CodeGeneratorProcess {
  * Controls how a node is converted to text and what the children
  * have to do with it. 
  */
-interface NodeConverter {
+export interface NodeConverter {
   /*
    * This function is called when the node is entered. Because
    * languages like XML need to render some special children,
@@ -73,14 +73,22 @@ interface NodeConverter {
    *         If the return value is `undefined` all children
    *         will be processed as part of the body.
    */
-  init(node: Node, process: CodeGeneratorProcess): string[] | undefined;
+  init(node: Node, process: CodeGeneratorProcess): (string[] | void);
 
   /**
    * A possibility to close any unfinished business from the
    * init-function.
    */
-  finish?: (node: Node, process: CodeGeneratorProcess) => string;
+  finish?: (node: Node, process: CodeGeneratorProcess) => void;
 
+}
+
+/**
+ * Used to register a NodeConverter for a certain type.
+ */
+export interface NodeConverterRegistration {
+  converter: NodeConverter,
+  type: QualifiedTypeName
 }
 
 /**
@@ -95,6 +103,20 @@ export class CodeGenerator {
 
   private _callbacks: RegisteredCallbacks = {};
 
+  constructor(converters: NodeConverterRegistration[]) {
+    converters.forEach(c => this.registerConverter(c.type, c.converter));
+  }
+
+  registerConverter(t: QualifiedTypeName, converter: NodeConverter) {
+    if (this.hasConverter(t)) {
+      throw new Error(`There is already a converter for ${"${t.languageName}.${t.typeName}"}`);
+    } else {
+      if (!this._callbacks[t.languageName]) {
+        this._callbacks[t.languageName] = {};
+      }
+      this._callbacks[t.languageName][t.typeName] = converter;
+    }
+  }
 
   /**
    * @param ast The tree to emit.
@@ -104,6 +126,13 @@ export class CodeGenerator {
     process.generateNode(ast, 0);
 
     return (process.emit());
+  }
+
+  /**
+   * @return True if there is a converter for the given type.
+   */
+  hasConverter(t: QualifiedTypeName) {
+    return !!(this._callbacks[t.languageName] && this._callbacks[t.languageName][t.typeName]);
   }
 
   /**
