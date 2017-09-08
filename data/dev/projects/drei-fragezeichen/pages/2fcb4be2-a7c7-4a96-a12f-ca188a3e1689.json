@@ -1,0 +1,83 @@
+{
+  "name": "Auftritt_Neu",
+  "apiVersion": "4",
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "Charakter_Alle",
+      "queryId": "d35ef191-f011-4f2f-bd60-c66349ce2a7e"
+    },
+    {
+      "type": "query",
+      "name": "Geschichte_Alle",
+      "queryId": "3fb6f0ef-7be3-4bff-915e-27ee545f1790"
+    },
+    {
+      "type": "query",
+      "name": "Auftritt_Alle_Charaktere",
+      "queryId": "95f1f3e1-f8fd-4c9c-a345-ec05fc87719e"
+    }
+  ],
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "type": "heading",
+        "level": 1,
+        "text": "Auftritt Hinzufügen"
+      },
+      {
+        "type": "link",
+        "text": "Zurück Zur Hauptseite",
+        "action": {
+          "type": "navigate",
+          "internal": {
+            "pageId": "da92d8ff-0296-486b-83dc-1f9c5ebdeaf4"
+          }
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": "Auf dieser Seite können Charaktere mit Geschichten assoziiert werden."
+      },
+      {
+        "type": "form",
+        "children": [
+          {
+            "type": "select",
+            "caption": "Auswahl",
+            "outParamName": "charakter_id",
+            "queryRefName": "Charakter_Alle",
+            "optionTextExpression": "charakter_nachname",
+            "optionValueExpression": "charakter_id"
+          },
+          {
+            "type": "select",
+            "caption": "Auswahl",
+            "outParamName": "geschichte_id",
+            "queryRefName": "Geschichte_Alle",
+            "optionTextExpression": "geschichte_name",
+            "optionValueExpression": "geschichte_id"
+          },
+          {
+            "type": "button",
+            "text": "Hinzufügen",
+            "query": {
+              "type": "query",
+              "queryId": "8e871e22-b51d-4574-8c15-d3fc08fb71e7"
+            }
+          }
+        ]
+      },
+      {
+        "type": "query-table",
+        "queryRefName": "Auftritt_Alle_Charaktere",
+        "columns": [
+          "geschichte_name",
+          "charakter_vorname",
+          "charakter_nachname"
+        ]
+      }
+    ]
+  }
+}

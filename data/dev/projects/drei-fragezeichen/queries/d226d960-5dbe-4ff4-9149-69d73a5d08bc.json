@@ -1,0 +1,49 @@
+{
+  "name": "Gleiche_Nummer",
+  "apiVersion": "4",
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "geschichte_name",
+            "table": "Geschichte"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "geschichte_nr_kosmos",
+            "table": "Geschichte"
+          }
+        }
+      }
+    ]
+  },
+  "from": {
+    "first": {
+      "name": "Geschichte"
+    }
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "geschichte_nr_kosmos",
+            "table": "Geschichte"
+          }
+        },
+        "rhs": {
+          "singleColumn": {
+            "column": "geschichte_nr_europa",
+            "table": "Geschichte"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    }
+  }
+}
