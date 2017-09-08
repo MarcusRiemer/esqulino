@@ -1,4 +1,4 @@
-SELECT Charakter.charakter_vorname, Charakter.charakter_nachname, Sprecher.Sprecher_Vorname, Sprecher.Sprecher_Nachname
+SELECT Charakter.charakter_name, Sprecher.Sprecher_Name
 FROM Charakter_Sprecher
 	JOIN Charakter
 	JOIN Sprecher

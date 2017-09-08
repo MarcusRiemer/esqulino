@@ -1,4 +1,4 @@
-SELECT Geschichte.geschichte_name, Charakter.charakter_vorname, Charakter.charakter_nachname
+SELECT Geschichte.geschichte_name, Charakter.charakter_name
 FROM Auftritt
 	JOIN Charakter
 	JOIN Geschichte
