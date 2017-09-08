@@ -1,0 +1,33 @@
+{
+  "name": "Geschichte_Neu",
+  "apiVersion": "4",
+  "insert": {
+    "table": "Geschichte",
+    "assignments": [
+      {
+        "expr": {
+          "parameter": {
+            "key": "name"
+          }
+        },
+        "column": "geschichte_name"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "nr_buch"
+          }
+        },
+        "column": "geschichte_nummer_buch"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "nr_hoerspiel"
+          }
+        },
+        "column": "geschichte_nummer_hoerspiel"
+      }
+    ]
+  }
+}

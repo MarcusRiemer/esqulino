@@ -1,0 +1,25 @@
+{
+  "name": "Charakter_Neu",
+  "apiVersion": "4",
+  "insert": {
+    "table": "Charakter",
+    "assignments": [
+      {
+        "expr": {
+          "parameter": {
+            "key": "vorname"
+          }
+        },
+        "column": "charakter_vorname"
+      },
+      {
+        "expr": {
+          "parameter": {
+            "key": "nachname"
+          }
+        },
+        "column": "charakter_nachname"
+      }
+    ]
+  }
+}
