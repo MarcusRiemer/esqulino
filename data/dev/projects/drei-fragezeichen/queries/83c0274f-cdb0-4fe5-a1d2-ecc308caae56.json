@@ -6,7 +6,7 @@
       {
         "expr": {
           "singleColumn": {
-            "column": "charakter_name",
+            "column": "Charakter_Name",
             "table": "Charakter"
           }
         }
@@ -53,7 +53,7 @@
       "binary": {
         "lhs": {
           "singleColumn": {
-            "column": "charakter_id",
+            "column": "Charakter_ID",
             "table": "Charakter"
           }
         },
@@ -94,7 +94,7 @@
           "binary": {
             "lhs": {
               "singleColumn": {
-                "column": "charakter_id",
+                "column": "Charakter_ID",
                 "table": "Charakter"
               }
             },

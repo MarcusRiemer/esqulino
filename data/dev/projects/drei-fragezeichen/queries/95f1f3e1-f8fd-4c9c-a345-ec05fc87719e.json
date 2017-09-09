@@ -6,7 +6,7 @@
       {
         "expr": {
           "singleColumn": {
-            "column": "geschichte_name",
+            "column": "Geschichte_Name",
             "table": "Geschichte"
           }
         }
@@ -14,7 +14,7 @@
       {
         "expr": {
           "singleColumn": {
-            "column": "charakter_name",
+            "column": "Charakter_Name",
             "table": "Charakter"
           }
         }
@@ -45,13 +45,13 @@
       "binary": {
         "lhs": {
           "singleColumn": {
-            "column": "geschichte_id",
+            "column": "Geschichte_ID",
             "table": "Auftritt"
           }
         },
         "rhs": {
           "singleColumn": {
-            "column": "geschichte_id",
+            "column": "Geschichte_ID",
             "table": "Geschichte"
           }
         },
@@ -65,13 +65,13 @@
           "binary": {
             "lhs": {
               "singleColumn": {
-                "column": "charakter_id",
+                "column": "Charakter_ID",
                 "table": "Auftritt"
               }
             },
             "rhs": {
               "singleColumn": {
-                "column": "charakter_id",
+                "column": "Charakter_ID",
                 "table": "Charakter"
               }
             },

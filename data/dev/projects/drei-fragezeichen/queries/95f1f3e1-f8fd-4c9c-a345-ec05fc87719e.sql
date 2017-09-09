@@ -1,6 +1,6 @@
-SELECT Geschichte.geschichte_name, Charakter.charakter_name
+SELECT Geschichte.Geschichte_Name, Charakter.Charakter_Name
 FROM Auftritt
 	JOIN Charakter
 	JOIN Geschichte
-WHERE Auftritt.geschichte_id = Geschichte.geschichte_id
-	AND Auftritt.charakter_id = Charakter.charakter_id
+WHERE Auftritt.Geschichte_ID = Geschichte.Geschichte_ID
+	AND Auftritt.Charakter_ID = Charakter.Charakter_ID

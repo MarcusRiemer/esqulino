@@ -6,7 +6,7 @@
       {
         "expr": {
           "singleColumn": {
-            "column": "geschichte_name",
+            "column": "Geschichte_Name",
             "table": "Geschichte"
           }
         }
@@ -14,7 +14,7 @@
       {
         "expr": {
           "singleColumn": {
-            "column": "geschichte_nr_kosmos",
+            "column": "Geschichte_Nr_Kosmos",
             "table": "Geschichte"
           }
         }
@@ -31,13 +31,13 @@
       "binary": {
         "lhs": {
           "singleColumn": {
-            "column": "geschichte_nr_kosmos",
+            "column": "Geschichte_Nr_Kosmos",
             "table": "Geschichte"
           }
         },
         "rhs": {
           "singleColumn": {
-            "column": "geschichte_nr_europa",
+            "column": "Geschichte_Nr_Europa",
             "table": "Geschichte"
           }
         },
