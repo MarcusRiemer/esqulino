@@ -33,8 +33,8 @@
         "type": "query-table",
         "queryRefName": "Gleiche_Nummer",
         "columns": [
-          "geschichte_name",
-          "geschichte_nr_kosmos"
+          "Geschichte_Name",
+          "Geschichte_Nr_Kosmos"
         ]
       }
     ]
