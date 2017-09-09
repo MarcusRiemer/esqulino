@@ -14,7 +14,7 @@
       {
         "expr": {
           "singleColumn": {
-            "column": "charakter_name",
+            "column": "Charakter_Name",
             "table": "Charakter"
           }
         }
@@ -71,8 +71,8 @@
             },
             "rhs": {
               "singleColumn": {
-                "column": "charakter_id",
-                "table": "Charakter"
+                "column": "Charakter_ID",
+                "table": "Charakter_Sprecher"
               }
             },
             "operator": "=",
