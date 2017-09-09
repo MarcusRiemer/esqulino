@@ -1,6 +1,10 @@
+# BlattWerkzeug Server
+
+Developed on a system running Ruby 2.4.1 and (for the moment) not tested elsewhere. Currently BlattWerkzeug uses Rails 5.1 in API-mode.
+
 # Rails Cheatsheet
 
-This document helps to remember some rails conventions that I had to look up a few times to often ...
+This document also helps to remember some rails conventions that I had to look up a few times to often ...
 
 ## Default CRUD controller verbs and actions
 
