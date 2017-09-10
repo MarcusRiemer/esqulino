@@ -8,7 +8,7 @@ import {
 } from './interfaces'
 import { Query, Model, loadQuery } from './query'
 import {
-  ProjectDescription, AvailableDatabaseDescription,
+  ProjectDescription, AvailableDatabaseDescription, SourceDescription,
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from './project.description'
 
@@ -52,6 +52,8 @@ export class Project implements ApiVersion, Saveable {
   private _projectImageId: string
   private _version: ApiVersionToken
 
+  private _sources: SourceDescription[];
+
   private _saveRequired = false;
 
   /**
@@ -66,6 +68,7 @@ export class Project implements ApiVersion, Saveable {
     this._currentDatabase = json.activeDatabase;
     this._availableDatabases = json.availableDatabases;
     this._projectImageId = json.preview;
+    this._sources = json.sources || [] // Sources may be undefined
     this.schema = new Schema(json.schema);
 
     if (json.apiVersion as string != this.apiVersion) {
@@ -93,6 +96,17 @@ export class Project implements ApiVersion, Saveable {
    */
   get apiVersion(): ApiVersionToken {
     return (CURRENT_API_VERSION);
+  }
+
+  /**
+   * @return True if this project utilizes content from third party sources.
+   */
+  get hasSources(): boolean {
+    return (this._sources.length > 0);
+  }
+
+  get sources() {
+    return (this._sources);
   }
 
   /**

@@ -492,6 +492,34 @@
             ],
             "type": "object"
         },
+        "SourceDescription": {
+            "additionalProperties": false,
+            "description": "Some projects are based on external sources, especially regarding\nthe data in the databases. These references may be used to\ncorrectly acknowledge such sources.",
+            "properties": {
+                "display": {
+                    "type": "string"
+                },
+                "readOnly": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "enum": [
+                        "data"
+                    ],
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "display",
+                "readOnly",
+                "type",
+                "url"
+            ],
+            "type": "object"
+        },
         "StarExpression": {
             "additionalProperties": false,
             "description": "Denotes a *-Expression, that may be limited to a subset of\nexisting tables.",
@@ -647,7 +675,7 @@
         },
         "name": {
             "description": "The name of the project. May only contain more or less friendly\ncharacters.",
-            "pattern": "^[a-zA-Z0-9 \\-_]{4,}$",
+            "pattern": "^^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß]{4,}$",
             "type": "string"
         },
         "pages": {
@@ -668,6 +696,12 @@
         "schema": {
             "items": {
                 "$ref": "#/definitions/TableDescription"
+            },
+            "type": "array"
+        },
+        "sources": {
+            "items": {
+                "$ref": "#/definitions/SourceDescription"
             },
             "type": "array"
         }

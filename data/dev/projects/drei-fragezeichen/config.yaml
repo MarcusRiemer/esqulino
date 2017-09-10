@@ -3,7 +3,7 @@ name: Die drei ???
 description: Datensammlung zu den Büchern und Hörspielen der drei Detektive aus Rocky
   Beach.
 apiVersion: '4'
-public: true
+public: false
 databases:
   default:
     type: sqlite3
@@ -15,3 +15,10 @@ users:
 activeDatabase: default
 indexPageId: da92d8ff-0296-486b-83dc-1f9c5ebdeaf4
 preview: 218706b6-e699-4663-945a-51fd30623af1
+sources:
+- type: data
+  url: http://www.rocky-beach.com/
+  title: rocky-beach.com
+  display: Die Daten wurden uns freundlicherweise von rocky-beach.com zur Verfügung
+    gestellt.
+  readOnly: true

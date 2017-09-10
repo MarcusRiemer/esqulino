@@ -14,3 +14,9 @@ databases:
     type: sqlite3
     path: default.sqlite
 preview: 60b1b3a3-63e5-41e3-b2a0-9943488081a7
+sources:
+  - type: data
+    url: https://www.kaggle.com/the-guardian/olympic-games
+    title: The Guardian
+    display: "Die Daten wurden vom \"IOC Research and Reference Service\" bereitgestellt und im \"The Guardian's Datablog\" veröffentlicht."
+    readOnly: true
