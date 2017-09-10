@@ -14,3 +14,9 @@ databases:
   default:
     type: sqlite3
     path: default.sqlite
+sources:
+- type: data
+  url: https://www.pokewiki.de/
+  title: PokéWiki
+  display: Die Daten für den Pokédex von den Mitarbeitern von pokewiki.de zusammengetragen und dann automatisiert in dieses Projekt importiert.
+  readOnly: true
