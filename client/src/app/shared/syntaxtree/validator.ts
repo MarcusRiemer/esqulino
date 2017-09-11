@@ -161,8 +161,8 @@ class NodeType {
 
     // Check all required properties
     Object.entries(this._allowedProperties).forEach(([name, validator]) => {
-      if (name in ast.nodeProperties) {
-        const value = ast.nodeProperties[name];
+      if (name in ast.properties) {
+        const value = ast.properties[name];
         validator.validate(ast, value, context);
       } else {
         context.addError(ErrorCodes.MissingProperty, ast, {

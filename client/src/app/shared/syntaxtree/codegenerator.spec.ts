@@ -20,41 +20,4 @@ describe('Codegeneration', () => {
     // Ensure this type can't be re-registered.
     expect(() => codeGen.registerConverter(fooBar, undefined)).toThrowError();
   });
-
-  it('XML: <foo></foo>', () => {
-    const astDesc: NodeDescription = {
-      language: "xml",
-      name: "node",
-      children: {
-
-      },
-      properties: {
-        "name": "foo"
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-
-    const nodeConverter: NodeConverterRegistration[] = [
-      {
-        type: { languageName: "xml", typeName: "node" },
-        converter: {
-          init: function(node: Node, process: CodeGeneratorProcess) {
-            const name = node.nodeProperties['name'];
-            process.addConvertedNode(0, `<${name}>`, node);
-            return (["nodes"]);
-          },
-          finish: function(node: Node, process: CodeGeneratorProcess) {
-            const name = node.nodeProperties['name'];
-            process.addConvertedNode(0, `</${name}>`, node);
-          }
-        }
-      }
-    ];
-
-    const codeGen = new CodeGenerator(nodeConverter);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("<foo>\n</foo>");
-  });
 });

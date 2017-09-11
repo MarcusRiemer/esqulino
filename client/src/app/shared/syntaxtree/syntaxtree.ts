@@ -98,7 +98,7 @@ export class Node {
     return (this._nodeChildren);
   }
 
-  get nodeProperties(): NodeProperties {
+  get properties(): NodeProperties {
     return (this._nodeProperties);
   }
 
