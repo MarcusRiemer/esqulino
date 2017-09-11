@@ -1,5 +1,13 @@
 import { Node, QualifiedTypeName } from './syntaxtree'
 
+export enum OutputSeparator {
+  NONE,
+  SPACE_BEFORE,
+  SPACE_AFTER,
+  NEW_LINE_BEFORE,
+  NEW_LINE_AFTER
+}
+
 /**
  * Represents a node that has been compiled into its string
  * representation.
@@ -8,6 +16,7 @@ interface GeneratedNode {
   depth: number;
   compilation: string;
   node: Node;
+  sep: OutputSeparator
 }
 
 /**
@@ -16,6 +25,7 @@ interface GeneratedNode {
 export class CodeGeneratorProcess {
   private _generated: GeneratedNode[] = [];
   private _generator: CodeGenerator;
+  private _currentDepth: number = 0;
 
   constructor(generator: CodeGenerator) {
     this._generator = generator;
@@ -24,22 +34,23 @@ export class CodeGeneratorProcess {
   /**
    * Adds some compiled node to the current result.
    */
-  addConvertedNode(depth: number, compilation: string, node: Node) {
+  addConvertedNode(compilation: string, node: Node, sep = OutputSeparator.NONE) {
     this._generated.push({
-      depth: depth,
+      depth: this._currentDepth,
       compilation: compilation,
-      node: node
+      node: node,
+      sep: sep
     });
   }
 
-  generateNode(node: Node, depthChange = 0) {
+  generateNode(node: Node) {
     const converter = this._generator.getConverter(node.qualifiedName);
     const bodyCategories = converter.init(node, this) || node.childrenCategoryNames;
 
     // Iterate over all children that should be emitted
     bodyCategories.forEach(categoryName => {
       node.getChildrenInCategory(categoryName).forEach(child => {
-        this.generateNode(child, 0)
+        this.generateNode(child)
       });
     });
 
@@ -50,7 +61,32 @@ export class CodeGeneratorProcess {
   }
 
   emit(): string {
-    return (this._generated.map(g => g.compilation).join("\n"));
+    // First and last separators are sometimes irrelevant, all
+    // other elements need the appropriate separation characters
+    const first = this._generated[0];
+    const last = this._generated[this._generated.length - 1];
+
+    // Picks the correct separation character and position
+    const sepChar = (gen: GeneratedNode) => {
+      // Are these first or last elements with irrelevant contributions?
+      const firstBefore = gen == first
+        && (gen.sep == OutputSeparator.NEW_LINE_BEFORE || gen.sep == OutputSeparator.SPACE_BEFORE);
+      const lastAfter = gen == last
+        && (gen.sep == OutputSeparator.NEW_LINE_AFTER || gen.sep == OutputSeparator.SPACE_AFTER)
+      if (firstBefore || lastAfter) {
+        return (gen.compilation);
+      }
+
+      switch (gen.sep) {
+        case OutputSeparator.NEW_LINE_BEFORE: return "\n" + gen.compilation;
+        case OutputSeparator.NEW_LINE_AFTER: return gen.compilation + "\n";
+        case OutputSeparator.SPACE_BEFORE: return " " + gen.compilation;
+        case OutputSeparator.SPACE_AFTER: return gen.compilation + " ";
+        case OutputSeparator.NONE: return gen.compilation;
+      }
+    }
+
+    return (this._generated.map(sepChar).join(""));
   }
 }
 
@@ -123,7 +159,7 @@ export class CodeGenerator {
    */
   emit(ast: Node): string {
     const process = new CodeGeneratorProcess(this);
-    process.generateNode(ast, 0);
+    process.generateNode(ast);
 
     return (process.emit());
   }

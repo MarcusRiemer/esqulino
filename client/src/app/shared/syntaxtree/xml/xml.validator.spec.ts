@@ -3,7 +3,7 @@ import { Validator, ErrorCodes } from '../validator'
 
 import { LANG_DESCRIPTION } from './xml.validator'
 
-describe("Language: XML", () => {
+describe("Language: XML (Validation)", () => {
   it("Invalid: Empty ", () => {
     const v = new Validator([LANG_DESCRIPTION]);
     const res = v.validateFromRoot(undefined);
