@@ -179,6 +179,8 @@ class NodeType {
   private instanciatePropertyValidator(desc: Desc.NodePropertyDescription): NodePropertyValidator {
     if (Desc.isNodePropertyStringDesciption(desc)) {
       return (new NodePropertyStringValidator(desc));
+    } else if (Desc.isNodePropertyBooleanDesciption(desc)) {
+      return (new NodePropertyBooleanValidator());
     } else {
       throw new Error(`Unknown property validator for base "${desc.base}"`);
     }
@@ -359,6 +361,23 @@ interface NodePropertyValidator {
 
   // The basic type of this property
   base: string;
+}
+
+/**
+ * Validates boolean properties
+ */
+class NodePropertyBooleanValidator implements NodePropertyValidator {
+  validate(node: AST.Node, value: string, context: ValidationContext): void {
+    if (value != "true" && value != "false") {
+      context.addError(ErrorCodes.IllegalPropertyType, node, {
+        condition: `"${value}" must be either "true" nor "false"`
+      });
+    }
+  }
+
+  get base() {
+    return ("boolean");
+  }
 }
 
 /**
