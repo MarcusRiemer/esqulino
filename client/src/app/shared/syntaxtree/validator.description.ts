@@ -28,8 +28,13 @@ import { QualifiedTypeName } from './syntaxtree'
  */
 export interface NodeTypeDescription {
   children?: { [name: string]: NodeTypeChildrenGroupDescription }
-  properties?: { [name: string]: (NodePropertyStringDescription | NodeIntegerTypeDescription) }
+  properties?: { [name: string]: NodePropertyTypeDescription }
 }
+
+export type NodePropertyTypeDescription =
+  NodePropertyStringDescription
+  | NodePropertyIntegerDescription
+  | NodePropertyBooleanDescription;
 
 export type NodeTypeChildrenGroupDescription = NodeTypesAllowedDescription | NodeTypesSequenceDescription;
 
@@ -47,6 +52,13 @@ export type TypeReference = QualifiedTypeName | string
  */
 export interface NodePropertyDescription {
   base: string
+}
+
+/**
+ * Denotes a "boolean" type.
+ */
+export interface NodePropertyBooleanDescription {
+  base: "boolean"
 }
 
 /**
@@ -97,7 +109,7 @@ type NodeIntegerTypeRestrictions = MinInclusiveRestriction
 /**
  * Describes the "Integer" type and describes how it can be restricted.
  */
-export interface NodeIntegerTypeDescription extends NodePropertyDescription {
+export interface NodePropertyIntegerDescription extends NodePropertyDescription {
   base: "integer"
 }
 
@@ -167,4 +179,11 @@ export function isNodeTypesSequenceDescription(obj: any): obj is NodeTypesSequen
  */
 export function isNodePropertyStringDesciption(obj: any): obj is NodePropertyStringDescription {
   return (obj.base === "string");
+}
+
+/**
+ * @return True, if the given instance probably satisfies "NodePropertyBooleanDescription"
+ */
+export function isNodePropertyBooleanDesciption(obj: any): obj is NodePropertyBooleanDescription {
+  return (obj.base === "boolean");
 }

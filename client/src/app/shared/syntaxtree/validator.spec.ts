@@ -164,6 +164,21 @@ const langStringConstraint: Schema.LanguageDescription = {
   root: ["root"]
 }
 
+/**
+ * A single node with only boolean properties.
+ */
+const langBooleanConstraint: Schema.LanguageDescription = {
+  languageName: "boolean-constraint",
+  types: {
+    "root": {
+      properties: {
+        "foo": { base: "boolean" }
+      }
+    }
+  },
+  root: ["root"]
+}
+
 describe('Language Validator', () => {
   it('String Constraints: Valid', () => {
     const v = new Validator([langStringConstraint]);
@@ -182,6 +197,47 @@ describe('Language Validator', () => {
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(0);
+  });
+
+  it('Boolean Constraint', () => {
+    const v = new Validator([langBooleanConstraint]);
+
+    const astDescTrue: AST.NodeDescription = {
+      language: "boolean-constraint",
+      name: "root",
+      properties: {
+        "foo": "true"
+      }
+    };
+
+    const astTrue = new AST.Node(astDescTrue, undefined);
+    const resTrue = v.validateFromRoot(astTrue);
+    expect(resTrue.isValid).toBeTruthy();
+
+    const astDescFalse: AST.NodeDescription = {
+      language: "boolean-constraint",
+      name: "root",
+      properties: {
+        "foo": "false"
+      }
+    };
+
+    const astFalse = new AST.Node(astDescFalse, undefined);
+    const resFalse = v.validateFromRoot(astFalse);
+    expect(resFalse.isValid).toBeTruthy();
+
+    const astDescInvalid: AST.NodeDescription = {
+      language: "boolean-constraint",
+      name: "root",
+      properties: {
+        "foo": "foo"
+      }
+    };
+
+    const astInvalid = new AST.Node(astDescInvalid, undefined);
+    const resInvalid = v.validateFromRoot(astInvalid);
+    expect(resInvalid.errors.length).toEqual(1)
+    expect(resInvalid.errors[0].code).toEqual(ErrorCodes.IllegalPropertyType);
   });
 
   it('String Constraints: Invalid', () => {
