@@ -1,0 +1,8 @@
+SELECT DISTINCT ?person ?name ?dateofbirth ?dateofdeath WHERE {
+  ?person wdt:P106 ?occupation.
+  ?person rdfs:label ?name.
+  ?person wdt:P569 ?dateofbirth.
+  OPTIONAL {?person wdt:P570 ?dateofdeath}.
+  FILTER (?occupation IN(wd:Q205375, wd:Q82594, wd:Q170790, wd:Q593644, wd:Q593644, wd:Q2114605)).
+  FILTER (lang(?name) = "de").
+}
