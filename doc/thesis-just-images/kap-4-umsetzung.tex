@@ -1,7 +1,7 @@
 \section{Implementierung}
 \label{sec:implementation-analysis}
 
-\subsection{"Kontext"}
+\subsection{Kontext}
 
 
 
@@ -19,31 +19,27 @@
 
 \subsubsection{Caching}
 
-\TODO caching von html requests
-
+\todo{caching von html requests}
 
 \subsubsection{API}
 
 Die API stellt verschiedene Routen bereit, die sich in das existierende
 Strukturen einfügen, daher sind alle Routen unterhalb von
 \begin{description}
-  \item ['/api/project/:project_id/image']
+\item [/api/project/:project\_id/image]
 \end{description}
 angesiedelt
 
 \begin{description}
-  \item [/api/project/:project_id/image]
-    \begin{description}
-    \item [GET]
-    \item [POST]
-    \end{description}
-  \item [/api/project/:project_id/image/:image_id]
-    \begin{description}
-    \item [GET]
-    \item[POST]
-    \item[DELETE]
-    \end{description}
-
+  \item [/api/project/:project\_id/image]
+  \item [GET]
+  \item [POST]
+\end{description}
+\begin{description}
+  \item [/api/project/:project\_id/image/:image\_id]
+  \item [GET]
+  \item [POST]
+  \item [DELETE]
 \end{description}
 
 \subsubsection{Library}

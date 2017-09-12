@@ -3,6 +3,7 @@ auto
 thesis.pdf
 ole-just-thesis.pdf
 ole-just-thesis-twoside.pdf
+library/zotero/files
 *.aux
 *.log
 *.out
