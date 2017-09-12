@@ -135,7 +135,16 @@ export interface MinInclusiveRestriction {
  */
 export interface NodeTypesSequenceDescription {
   type: "sequence"
-  nodeTypes: TypeReference[]
+  nodeTypes: (TypeReference | SequenceCardinalityDescription)[]
+}
+
+/**
+ * Describes how often a certain type may appear in a sequence.
+ */
+export interface SequenceCardinalityDescription {
+  nodeType: TypeReference
+  minOccurs: number
+  maxOccurs: number
 }
 
 /**
@@ -164,26 +173,33 @@ export class LanguageDescription {
  * @return True, if the given instance probably satisfies "NodeTypesAllowedDescription"
  */
 export function isNodeTypesAllowedDescription(obj: any): obj is NodeTypesAllowedDescription {
-  return (obj.type === "allowed");
+  return (obj instanceof Object && obj.type === "allowed");
 }
 
 /**
  * @return True, if the given instance probably satisfies "NodeTypesSequenceDescription"
  */
 export function isNodeTypesSequenceDescription(obj: any): obj is NodeTypesSequenceDescription {
-  return (obj.type === "sequence");
+  return (obj instanceof Object && obj.type === "sequence");
+}
+
+/**
+ * @return True, if the given instance probably satisfies "SequenceCardinalityDescription"
+ */
+export function isSequenceCardinalityDescription(obj: any): obj is SequenceCardinalityDescription {
+  return (obj instanceof Object && "minOccurs" in obj && "maxOccurs" in obj && "nodeType" in obj);
 }
 
 /**
  * @return True, if the given instance probably satisfies "NodePropertyStringDescription"
  */
 export function isNodePropertyStringDesciption(obj: any): obj is NodePropertyStringDescription {
-  return (obj.base === "string");
+  return (obj instanceof Object && obj.base === "string");
 }
 
 /**
  * @return True, if the given instance probably satisfies "NodePropertyBooleanDescription"
  */
 export function isNodePropertyBooleanDesciption(obj: any): obj is NodePropertyBooleanDescription {
-  return (obj.base === "boolean");
+  return (obj instanceof Object && obj.base === "boolean");
 }
