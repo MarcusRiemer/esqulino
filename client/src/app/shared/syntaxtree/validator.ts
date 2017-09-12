@@ -280,44 +280,96 @@ interface NodeComplexTypeChildrenValidator {
  * Enforces a specific sequence of child-nodes of a parent node.
  */
 class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidator {
-  private _nodeTypes: TypeReference[];
+  private _nodeTypes: {
+    nodeType: TypeReference,
+    minOccurs: number,
+    maxOccurs: number
+  }[];
 
   constructor(parent: NodeType, desc: Desc.NodeTypesSequenceDescription) {
-    this._nodeTypes = desc.nodeTypes.map(typeDesc => new TypeReference(parent.validator, typeDesc, parent.languageName));
+    this._nodeTypes = desc.nodeTypes.map(typeDesc => {
+      if (typeof (typeDesc) === "string") {
+        // Simple strings per default occur exactly once
+        return ({
+          nodeType: new TypeReference(parent.validator, typeDesc, parent.languageName),
+          minOccurs: 1,
+          maxOccurs: 1
+        });
+      } else if (Desc.isSequenceCardinalityDescription(typeDesc)) {
+        // Complex descriptions may provide different cardinalities
+        return ({
+          nodeType: new TypeReference(parent.validator, typeDesc.nodeType, parent.languageName),
+          minOccurs: typeDesc.minOccurs,
+          maxOccurs: typeDesc.maxOccurs
+        });
+      } else {
+        throw new Error(`Unknown sequence cardinality: "${JSON.stringify(typeDesc)}"`);
+      }
+    });
   }
 
   /**
    * Ensures the sequence is correct
    */
   validateChildren(ast: AST.Node[], context: ValidationContext): AST.Node[] {
+    // Valid children that should be checked more thorughly
     const toReturn = [];
+
+    // Used to step through all children of `ast`
     let childIndex = 0;
+
     // Ensure that all types we are expecting are actually present
     this._nodeTypes.forEach(expected => {
-      // Is a child actually present?
-      const child = ast[childIndex];
-      if (child) {
-        // Yes, does it's type match?
-        if (expected.nodeTypeMatches(child)) {
-          // Sign up for further validation
-          toReturn.push(ast[childIndex]);
-        } else {
-          // Hand out a (more or less) detailed error message
-          context.addError(ErrorCodes.IllegalChildType, child, {
-            present: child.qualifiedName,
-            index: childIndex
-          });
-        }
-      } else {
-        // There is no child present, but the current type expects it
-        context.addError(ErrorCodes.MissingChild, child, {
-          expected: expected.description,
-          index: childIndex
-        } as ErrorMissingChild);
-      }
+      // This index starts counting for every type. It is used
+      // to track whether minOccurences and maxOccurences are
+      // satisfied or not.
+      let subIndex = 0;
 
-      // Go for the next child
-      childIndex++;
+      // Try to "eat" as many children as possible
+      while (subIndex < expected.maxOccurs) {
+
+        // Is a child actually present?
+        let child = ast[childIndex];
+
+        if (child) {
+          // Yes, does it's type match?
+          if (expected.nodeType.nodeTypeMatches(child)) {
+            // Sign up for further validation
+            toReturn.push(ast[childIndex]);
+          }
+          // Is the minimum number of expected elements met? Then
+          // we are done checking this child and allow the
+          // next element in the sequence to take over.
+          else if (subIndex >= expected.minOccurs) {
+            return; // Effectively jumps to next `expected`
+          }
+          // We would expect more of this type, but haven't got any.
+          else {
+            // Hand out a (more or less) detailed error message
+            context.addError(ErrorCodes.IllegalChildType, child, {
+              present: child.qualifiedName,
+              index: childIndex
+            });
+          }
+        }
+        // There is no child, is that valid?
+        else {
+          if (subIndex < expected.minOccurs) {
+            // There is no child present, but the current type expects it
+            context.addError(ErrorCodes.MissingChild, child, {
+              expected: expected.nodeType.description,
+              index: childIndex
+            } as ErrorMissingChild);
+          } else {
+            // There is no child present, but thats OK
+            return; // Effectively jumps to next `expected`
+          }
+        }
+
+        // Go for the next child
+        childIndex++;
+        subIndex++;
+      }
     });
 
     return (toReturn);
