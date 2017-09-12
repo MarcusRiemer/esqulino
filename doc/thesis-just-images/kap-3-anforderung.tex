@@ -147,9 +147,66 @@ gestalterischen Elements der Eintrag in der Liste komplett weggelassen werden.
 
 \subsubsection{Endgerätoptimierung}
 
-
+\todo{}
 
 \subsubsection{Datenhaltung}
+
+Die Datenhaltung betrifft sowohl die Bilder selbst als auch die Metadaten. Die
+Bilder selbst können entweder in einem Key-Value Store oder im Dateisystem
+gespeichert werden. Im Fall der Bilder muss das verwendete verwendete System in
+der Lage sein mit großen Blöcken von Binärdaten effizient umzugehen. In
+beiden Fällen müssen die Operationen Einfügen, Löschen, Indizierter Zugriff und
+im Falle der Metadaten auch die Komplettzugriff auf alle Werte nach Möglichkeit
+in Abhängigkeit von der Anzahl der angefragten/bearbeiteten Elemente komplex
+sein und nicht in Abhängigkeit der insgesammt gespeicherten Elemente. Daher sind
+an dieser Stelle datenbankähnliche Systeme, die beim einfügen und löschen von
+Daten ihren Index neu berechnen müssen, der für die gute Suchperformance sorgt,
+wie beispielsweise Elasticsearch unbrauchbar, auch da eine Suche im
+Funktionsumfang der Bildverwaltung nicht vorgesehen ist. Der Key-Value Store
+muss weiterhin die für die unterscheidung der Bilder verwendeten UUIDs als Key
+unterstützten. Die bisher verwenden sqlite Datenbanken sind nicht für den
+Einsatz als Key-Value Store mit Values von der Größe Bildern konzipiert,
+vergrößern die Datei in der die Datenbank persistiert wird und erhöhen somit die
+benötigte Menge an Arbeitsspeicher um die Datenbank darin zu laden um
+Operationen darauf auszuführen. Es müsste also ein zusätzlicher Dienst in die
+Projektarchitektur eingefügt werden, um die Funktionalität des Key-Value Stores
+zu übernehmen. Da Ein Wechsel weg von Sqlite und hin zu PostgreSQL ist zunächst
+die Tauglichkeit von PostgreSQL als Key-Value Store zu betrachten und im Falle
+der Tauglichkeit anderen Dienstbasierten Lösungen vorzuziehen.
+
+PostgreSQL kennt eine Key-Value Store implementierung namens hstore
+\cite{PostgreSQL-hstore} bei der Key-Value Tupel gespeichert werden. Desweiteren
+unterstützt PostgreSQL von großen und sehr großen Blöcken von Binärdaten, es
+wird jedoch davon Abgeraten sehr große Dateien deren Zugriffszeit kritisch für
+die Anwendung ist, da der Zugriff aus der Datenbank weniger Performant als der
+direkte Zugriff auf das Dateisystem \cite{PostgreSQL-blob}. Außerdem erhöht Last
+auf der Datenbank die Zugriffszeiten auf die Bilder als auch das Anzeigen vieler
+Bilder die Last auf der Datenbank. Desweiteren ist eine Verteilung von Datenbank
+und Bildern auf verschiedene Systeme (Content Delivery Network) nicht ohne
+verteilte Datenbank realisierbar und weniger Performant. Ab welcher
+Größenordnung dies zu einem Problem wird müsste in einem Benchmark getestet
+werden bei dem Diverse Nutzer auf Diversen Projekten simuliert werden müssten,
+wofür erst die PostgreSQL Anbindung abgeschlossen werden müsste.
+
+Letztere Beeinträchtigungen wären bei einem dedizierten Key-Value Store nicht
+gegeben, führen aber zu mehr Komplexität in der Systemarchitektur und somit zu
+mehr Fehlerquellen. \todo{BerkeleyDB und memcacheDB anreissen}
+
+Das Speichern der Bilder im Dateisystem unter Verwendung der UUID zum Zugriff
+ist so perfomant, wie Speichermedium und Dateisystem es zulassen. Bei aktuellen
+Dateisystemen wie ext4 hat die Anzahl der Dateien in einem Verzeichnis keinen
+nennenswerten Einfluss auf die Zugriffszeiten auf einzelne bekannte Dateien,
+lediglich die des Auflisten aller Dateien ist von der Anzahl linear abhängig.
+Sollten die Zugriffe auf die Bilder je die Kapazität des Webservers
+überschreiten, so kann bei dieser Methode einfach ein Content Delivery Network
+eingebunden werden indem Bilder via NFS und Caching von anderen Servern
+ausgeliefert werden oder einem CDN-Dienstleister synchronisiert werden.
+Desweiteren kann der Administrator ein Bild einfacher anhand seiner UUID finden
+und durch einene Löschnotiz ersetzen, falls Urheberrecht oder Strafrecht dies
+erfordern, da die Datei weder gesucht werden muss, noch ein Client zum
+betrachten und bearbeiten der Datenbank sowie Kentnisse darüber notwendig sind;
+die zur Administration eines Servers notwendigen Kentnisse sind ausreichend.
+
 
 
 %%% Local Variables:
