@@ -1,7 +1,6 @@
 #!/bin/bash
 
 sqlite3 $1 <<EOF
-.load /usr/lib/sqlite3/pcre.so
 .mode csv
 DELETE FROM Auftritt;
 DELETE FROM Charakter_Sprecher;

@@ -29,7 +29,7 @@ Database schemas created with BlattWerkzeug make use of regular expressions whic
 * Ubuntu: sqlite3-pcre
 * Arch Linux: [sqlite-pcre-git (AUR)](https://aur.archlinux.org/packages/sqlite-pcre-git/)
 
-These packages should install a single library at `/usr/lib/sqlite3/pcre.so` which can be loaded with `.load /usr/lib/sqlite3/pcre.so` from the `sqlite3`-REPL. If you wish, you can write the same line into a file at `~/sqliterc` which will be executed by `sqlite3` on startup.
+These packages should install a single library at `/usr/lib/sqlite3/pcre.so` which can be loaded with `.load /usr/lib/sqlite3/pcre.so` from the `sqlite3`-REPL. If you wish, you can write the same line into a file at `~/.sqliterc` which will be executed by `sqlite3` on startup.
 
 ## Running on your local machine
 
