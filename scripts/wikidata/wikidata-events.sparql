@@ -1,7 +1,9 @@
-SELECT ?event ?label ?type
+SELECT ?event ?label ?type ?start_time ?end_time
 WHERE {
   ?event wdt:P31 ?type .
   ?event rdfs:label ?label .
+  ?event wdt:P580 ?start_time  . 
+  OPTIONAL { ?event wdt:P582 ?end_time }.
   FILTER (lang(?label) = "de") .
-  FILTER (?type IN (wd:Q495307, wd:Q198))
+  FILTER (?type IN (wd:Q495307, wd:Q103495, wd:Q198))
 }
