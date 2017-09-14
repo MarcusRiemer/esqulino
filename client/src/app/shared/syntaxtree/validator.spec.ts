@@ -164,6 +164,42 @@ const langStringConstraint: Schema.LanguageDescription = {
   root: ["root"]
 }
 
+/**
+ * A single root node that uses some children with the "allowed" constraint
+ */
+const langAllowedConstraint: Schema.LanguageDescription = {
+  languageName: "allowed-constraint",
+  types: {
+    "root": {
+      children: {
+        "nodes": {
+          type: "allowed",
+          nodeTypes: [
+            "a",
+            {
+              nodeType: "b",
+              minOccurs: 0,
+              maxOccurs: 2
+            },
+            {
+              nodeType: "c",
+              minOccurs: 1,
+              maxOccurs: 1
+            }
+          ]
+        }
+      }
+    },
+    "a": {},
+    "b": {},
+    "c": {}
+  },
+  root: ["root"]
+}
+
+/**
+ * A single root node that uses some children with the "sequence" constraint
+ */
 const langSequenceConstraint: Schema.LanguageDescription = {
   languageName: "sequence-constraint",
   types: {
@@ -483,6 +519,95 @@ describe('Language Validator', () => {
     expect(res.errors.length).toEqual(0);
   });
 
+
+  it('Valid Sequence: Three required nodes + All optional "b"- and "c"-nodes', () => {
+    const v = new Validator([langSequenceConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "sequence-constraint",
+      name: "root",
+      children: {
+        "nodes": [
+          {
+            language: "sequence-constraint",
+            name: "a"
+          },
+          {
+            language: "sequence-constraint",
+            name: "b"
+          },
+          {
+            language: "sequence-constraint",
+            name: "b"
+          },
+          {
+            language: "sequence-constraint",
+            name: "a"
+          },
+          {
+            language: "sequence-constraint",
+            name: "c"
+          },
+          {
+            language: "sequence-constraint",
+            name: "c"
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(0);
+  });
+
+  it('Invalid Sequence: Three required nodes + All optional "b"- and "c"-nodes + extra node', () => {
+    const v = new Validator([langSequenceConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "sequence-constraint",
+      name: "root",
+      children: {
+        "nodes": [
+          {
+            language: "sequence-constraint",
+            name: "a"
+          },
+          {
+            language: "sequence-constraint",
+            name: "b"
+          },
+          {
+            language: "sequence-constraint",
+            name: "b"
+          },
+          {
+            language: "sequence-constraint",
+            name: "a"
+          },
+          {
+            language: "sequence-constraint",
+            name: "c"
+          },
+          {
+            language: "sequence-constraint",
+            name: "c"
+          },
+          {
+            language: "sequence-constraint",
+            name: "a"
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(1);
+  });
+
   it('Invalid Sequence: Three required nodes + three optional "b"-nodes', () => {
     const v = new Validator([langSequenceConstraint]);
 
@@ -523,6 +648,107 @@ describe('Language Validator', () => {
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(2);
+  });
+
+  it('Invalid "allowed": Empty', () => {
+    const v = new Validator([langAllowedConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "allowed-constraint",
+      name: "root",
+      children: {
+        "nodes": []
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(1);
+  });
+
+  it('Valid "allowed": Required "c" node first', () => {
+    const v = new Validator([langAllowedConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "allowed-constraint",
+      name: "root",
+      children: {
+        "nodes": [
+          {
+            language: "allowed-constraint",
+            name: "c"
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(0);
+  });
+
+  it('Valid "allowed": All allowed nodes once', () => {
+    const v = new Validator([langAllowedConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "allowed-constraint",
+      name: "root",
+      children: {
+        "nodes": [
+          {
+            language: "allowed-constraint",
+            name: "c"
+          },
+          {
+            language: "allowed-constraint",
+            name: "b"
+          },
+          {
+            language: "allowed-constraint",
+            name: "a"
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(0);
+  });
+
+  it('Invalid "allowed": No "c" but too many "b"', () => {
+    const v = new Validator([langAllowedConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "allowed-constraint",
+      name: "root",
+      children: {
+        "nodes": [
+          {
+            language: "allowed-constraint",
+            name: "b"
+          },
+          {
+            language: "allowed-constraint",
+            name: "b"
+          },
+          {
+            language: "allowed-constraint",
+            name: "b"
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(2);
+    expect(res.errors[0].code).toEqual(ErrorCodes.InvalidMaxOccurences);
+    expect(res.errors[1].code).toEqual(ErrorCodes.InvalidMinOccurences);
   });
 
 

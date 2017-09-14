@@ -74,6 +74,9 @@ export class Node {
     return (this._nodeLanguage);
   }
 
+  /**
+   * @return The fully qualified of the type of this node.
+   */
   get qualifiedName(): QualifiedTypeName {
     return ({
       typeName: this.nodeName,
@@ -81,6 +84,9 @@ export class Node {
     });
   }
 
+  /**
+   * @return All children in that category or an empty list if the category does not exist.
+   */
   getChildrenInCategory(categoryName: string): Node[] {
     const result = this._nodeChildren[categoryName];
     if (result) {
@@ -90,14 +96,23 @@ export class Node {
     }
   }
 
+  /**
+   * @return The names of the available categories.
+   */
   get childrenCategoryNames() {
     return (Object.keys(this._nodeChildren));
   }
 
+  /**
+   * @return All children in all categories.
+   */
   get children() {
     return (this._nodeChildren);
   }
 
+  /**
+   * @return All properties with keys and values.
+   */
   get properties(): NodeProperties {
     return (this._nodeProperties);
   }

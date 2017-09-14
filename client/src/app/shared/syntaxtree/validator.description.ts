@@ -8,51 +8,51 @@ import { QualifiedTypeName } from './syntaxtree'
  *
  * This schema language is modeled losely after XML-Schema,
  * but enhanced by various UI-related features.
- * 
- * Nodes can define two different sets of related data. But only
- * complex nodes are allowed to have children that are nodes
- * themselves.
  *
- * The restriction system for simple properites is modelled after
+ * The restriction system for simple properties is modelled after
  * facets in XML-Schema: https://www.w3.org/TR/xmlschema-2/#defn-coss
  *
  * Builtin types are:
  * - String
  * - Integer
+ * - Boolean
  *
- * Notable Enhancements are:
- * - Types may define children in different categories. For
- *   XML this may be "children" and "attributes", but these
- *   are mainly used for layouting purposes in the editor
- *   display.
+ * The restriction system for child nodes is also modelled losely
+ * after XML schemas complex element types. An important deviation
+ * is that child nodes can appear in multiple groups. This means 
+ * that a single node can be parent to two unrelated sub-trees.
+ * XML schema in contrast allows exactly nodes and attributes as
+ * sub-trees.
  */
 export interface NodeTypeDescription {
   children?: { [name: string]: NodeTypeChildrenGroupDescription }
   properties?: { [name: string]: NodePropertyTypeDescription }
 }
 
+/**
+ * All property types that are available.
+ */
 export type NodePropertyTypeDescription =
   NodePropertyStringDescription
   | NodePropertyIntegerDescription
   | NodePropertyBooleanDescription;
 
-export type NodeTypeChildrenGroupDescription = NodeTypesAllowedDescription | NodeTypesSequenceDescription;
+/**
+ * All children group types that are available
+ */
+export type NodeTypeChildrenGroupDescription =
+  NodeTypesAllowedDescription
+  | NodeTypesSequenceDescription;
 
 export function isQualifiedTypeName(arg: any): arg is QualifiedTypeName {
   return (arg.typeName && arg.languageName);
 }
 
 /**
- * Simple strings are used to refer to local types
+ * Simple strings are used to refer to local types that share the
+ * same language name.
  */
 export type TypeReference = QualifiedTypeName | string
-
-/**
- * 
- */
-export interface NodePropertyDescription {
-  base: string
-}
 
 /**
  * Denotes a "boolean" type.
@@ -64,7 +64,7 @@ export interface NodePropertyBooleanDescription {
 /**
  * Denotes the "string" type and describes ways it can be further restricted.
  */
-export interface NodePropertyStringDescription extends NodePropertyDescription {
+export interface NodePropertyStringDescription {
   base: "string"
   restrictions?: NodeStringTypeRestrictions[]
 }
@@ -109,7 +109,7 @@ type NodeIntegerTypeRestrictions = MinInclusiveRestriction
 /**
  * Describes the "Integer" type and describes how it can be restricted.
  */
-export interface NodePropertyIntegerDescription extends NodePropertyDescription {
+export interface NodePropertyIntegerDescription {
   base: "integer"
 }
 
@@ -130,21 +130,35 @@ export interface MinInclusiveRestriction {
 }
 
 /**
+ * Describes how often a certain type may appear in a sequence.
+ */
+export interface ChildCardinalityDescription {
+  nodeType: TypeReference
+  minOccurs: number
+  maxOccurs: number
+}
+
+/**
+ * Describes limits for occurences.
+ */
+export interface OccursDescription {
+  minOccurs: number
+  maxOccurs: number
+}
+
+/**
+ * A simple type reference is a shortcut for an element with
+ * minOccurs = 1 and maxOccurs = 1;
+ */
+export type NodeTypesChildReference = (TypeReference | ChildCardinalityDescription);
+
+/**
  * In a sequence every child must occur in exact the order and cardinality
  * that is specified by this description.
  */
 export interface NodeTypesSequenceDescription {
   type: "sequence"
-  nodeTypes: (TypeReference | SequenceCardinalityDescription)[]
-}
-
-/**
- * Describes how often a certain type may appear in a sequence.
- */
-export interface SequenceCardinalityDescription {
-  nodeType: TypeReference
-  minOccurs: number
-  maxOccurs: number
+  nodeTypes: NodeTypesChildReference[]
 }
 
 /**
@@ -152,7 +166,7 @@ export interface SequenceCardinalityDescription {
  */
 export interface NodeTypesAllowedDescription {
   type: "allowed"
-  nodeTypes: TypeReference[]
+  nodeTypes: NodeTypesChildReference[]
 }
 
 /**
@@ -186,7 +200,7 @@ export function isNodeTypesSequenceDescription(obj: any): obj is NodeTypesSequen
 /**
  * @return True, if the given instance probably satisfies "SequenceCardinalityDescription"
  */
-export function isSequenceCardinalityDescription(obj: any): obj is SequenceCardinalityDescription {
+export function isChildCardinalityDescription(obj: any): obj is ChildCardinalityDescription {
   return (obj instanceof Object && "minOccurs" in obj && "maxOccurs" in obj && "nodeType" in obj);
 }
 
