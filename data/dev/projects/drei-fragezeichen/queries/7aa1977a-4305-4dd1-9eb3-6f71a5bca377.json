@@ -1,8 +1,16 @@
 {
-  "name": "Charakter_Sprecher_Alle",
+  "name": "Wer_Tritt_Auf",
   "apiVersion": "4",
   "select": {
     "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "Geschichte_Name",
+            "table": "Geschichte"
+          }
+        }
+      },
       {
         "expr": {
           "singleColumn": {
@@ -14,8 +22,8 @@
       {
         "expr": {
           "singleColumn": {
-            "column": "Sprecher_Name",
-            "table": "Sprecher"
+            "column": "Charakter_ID",
+            "table": "Charakter"
           }
         }
       }
@@ -23,18 +31,18 @@
   },
   "from": {
     "first": {
-      "name": "Charakter_Sprecher"
+      "name": "Geschichte"
     },
     "joins": [
       {
         "table": {
-          "name": "Charakter"
+          "name": "Auftritt"
         },
         "cross": "cross"
       },
       {
         "table": {
-          "name": "Sprecher"
+          "name": "Charakter"
         },
         "cross": "cross"
       }
@@ -45,14 +53,14 @@
       "binary": {
         "lhs": {
           "singleColumn": {
-            "column": "Charakter_ID",
-            "table": "Charakter_Sprecher"
+            "column": "Geschichte_ID",
+            "table": "Geschichte"
           }
         },
         "rhs": {
           "singleColumn": {
-            "column": "Charakter_ID",
-            "table": "Charakter"
+            "column": "Geschichte_ID",
+            "table": "Auftritt"
           }
         },
         "operator": "=",
@@ -65,14 +73,34 @@
           "binary": {
             "lhs": {
               "singleColumn": {
-                "column": "Sprecher_Id",
-                "table": "Charakter_Sprecher"
+                "column": "Charakter_ID",
+                "table": "Charakter"
               }
             },
             "rhs": {
               "singleColumn": {
-                "column": "Sprecher_ID",
-                "table": "Sprecher"
+                "column": "Charakter_ID",
+                "table": "Auftritt"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
+      },
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "Geschichte_ID",
+                "table": "Geschichte"
+              }
+            },
+            "rhs": {
+              "parameter": {
+                "key": "geschichte_id"
               }
             },
             "operator": "=",

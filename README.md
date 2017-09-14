@@ -10,13 +10,26 @@ Not (yet?) a developer? Then you probably want to check out [BlattWerkzeug.de](h
 
 For a lack of a better name, this is all I have got at the moment. I simply took the very generic term "page tool" and losely translated it into german. The project used to be called "esqulino", a phonetic play on the `SQL`-abbreviation ending in "lino", which is used by many popular programs on the german KIKA ("KinderKanal", german for "childrens channel").
 
-# Running on a development machine
+# Project Setup
 
-This project consists of two executable components: A Ruby-webserver and a Angular2-client. I know there are loads of fancy task-runners out there, but my "normal" interface to all programming-related tasks is still a `Makefile`. Most tasks you will need to do regulary are therefore available via `make`. Apart from that there are folders for schemas, documentation, example projects and helper scripts.
+This project consists of two main executable components: A Ruby-webserver and a Angular-client. Take a look at the `README.md` in the respective folders to find out how to work with these components in detail.
+
+I know there are loads of fancy task-runners out there, but my "normal" interface to all programming-related tasks is still a `Makefile`. Most tasks you will need to do regulary are therefore available via `make`. Apart from that there are folders for schemas, documentation, example projects and helper scripts.
+
+Most exchange and storage formats are documented using [JSON Schema](http://json-schema.org/). These can be regenerated from the Typescript sources, but as this is quite a fragile process the specification files are also checked in to the repository.
 
 ## A word about subdomains
 
 BlattWerkzeug makes use of subdomains to render the public representation of a project. The development environment assumes, that any subdomains of `localhost.localdomain` will be routed to the `localhost`. The URL `http://cyoa.localhost.localdomain` should for example resolve to your `localhost` and would display the rendered index-page of the project `cyoa`. This works out of the box on various GNU/Linux-distributions, but as this behaviour is not standardised it should not be relied upon. To reliably resolve project-subdomains you should either write custom entries for each project in `/etc/hosts` or use a lightweight local DNS-server like [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html).
+
+## A word about `REGEXP` and SQLite
+
+Database schemas created with BlattWerkzeug make use of regular expressions which are usually not compiled into the `sqlite3` binary. To work around this most distributions provide some kind of `sqlite3-pcre`-package which provides the regex implementation.
+
+* Ubuntu: sqlite3-pcre
+* Arch Linux: [sqlite-pcre-git (AUR)](https://aur.archlinux.org/packages/sqlite-pcre-git/)
+
+These packages should install a single library at `/usr/lib/sqlite3/pcre.so` which can be loaded with `.load /usr/lib/sqlite3/pcre.so` from the `sqlite3`-REPL. If you wish, you can write the same line into a file at `~/.sqliterc` which will be executed by `sqlite3` on startup.
 
 ## Running on your local machine
 
@@ -40,49 +53,18 @@ There are pre-built docker images for development use on docker hub: [marcusriem
 ## Updating
 
 * Re-sync your local repository with the server using `git pull`.
-* Ensure all dependencies are up to date by running `make install-deps`. If things smell awfully funny, you might want to get rid of dependencies first by calling `make clean-deps`.
+* Ensure all dependencies are up to date by running `make install-deps`. If things start to throw awfully funny error messages around you might want to get rid of dependencies first by calling `make clean-deps`.
 * Rebuild the client using `make dist`
 * If the server was running during the update, it needs to be restarted.
 * You possibly need to upgrade your local projects using `make server-migrate-projects`. This is necesarry if the on-disk format for projects has changed.
 
 ## About Windows ...
 
-Currently it is assumed that this project will built on a UNIX-like environment. Although building it on Windows should be possible, all helper scripts (and Makefiles) make a lot of UNIX-centric assumptions. But don't worry if you are only interested in *running* a BlattWerkzeug instance. You will be better off using a pre-compiled distribution of the client, but running the server should work just fine. Alternatively take a look at the docker images that are provided.
-
-# Project structure
-
-Server, client and documentation are part of a single repository.
-
-## Server
-
-Developed on a system running Ruby 2.4.1 and (for the moment) not tested elsewhere. Currently BlattWerkzeug uses Rails 5.1 in API-mode.
-
-## Client
-
-An Angular 4 app that uses Typescript, because it is really nice to have a compiler that catches dumb errors. The app is broken up into several logical modules:
-
-    AppModule                  Holds together the whole client
-    ├─ SharedModule            Globally required functionality like icons
-    ├─ FrontModule             Mainly text-pages that describe BlattWerkzeug
-    └─ EditorModule            Bundles the actual editing capatabilities
-       ├─ SharedEditorModule   Shared functionality like the sidebar
-       ├─ ImageEditorModule    Upload and edit images
-       ├─ PageEditorModule     The page editor
-       └─ QueryEditorModule    The query editor
-       
-The `Makefile` requires the `npm` program to be available, dependencies are provided via the `package.json`. The `Makefile` will install required programs like the Typescript compiler `tsc` or the Angular ahead-of-time compiler `ngc` as part of the `install-deps` step.
-
-## Schema
-
-Most exchange and storage formats are documented using [JSON Schema](http://json-schema.org/). These can be regenerated from the Typescript sources, but as this is quite a fragile process the specification files are also checked in to the repository.
-
-## Documentation
-
-Documentation for the API is provided following the OpenAPI-Specification, an [online version of the specification](http://petstore.swagger.io/?url=https://esqulino.marcusriemer.de/doc/swagger/swagger.yaml) is also available.
+Currently it is assumed that this project will built on a UNIX-like environment. Although building it on Windows should be possible, all helper scripts (and Makefiles) make a lot of `UNIX`-centric assumptions. But don't worry if you are only interested in *running* a BlattWerkzeug instance. You will be better off using a pre-compiled distribution of the client, but running the server should work just fine. Alternatively take a look at the docker images that are provided.
 
 # Testing
 
-BlattWerkzeug aims to be thoroughly tested and does this on more or less three levels. All tests can be invoked together by simply calling `make test` in the projects root directory. These tests are also executed on every built that is pushed to BitBucket (via `bitbucket-pipelines.yml) or GitHub (via `.travis.yml`).
+BlattWerkzeug aims to be thoroughly tested and does this on more or less three levels. All tests can be invoked together by simply calling `make test` in the `client` or `server` directory. These tests are also executed on every built that is pushed to BitBucket (via `bitbucket-pipelines.yml) or GitHub (via `.travis.yml`).
 
 ## Client-Side Unit Tests
 
@@ -98,7 +80,7 @@ Untested and not running for the moment :(
 
 # License
 
-This project itself is licensed under the terms of the [GNU Affero General Public License (AGPL)](https://www.gnu.org/licenses/agpl.html). For the documentation, including the masters thesis, is licensed under [CC-BY-SA](https://creativecommons.org/licenses/by-sa/4.0/).
+This project itself is licensed under the terms of the [GNU Affero General Public License (AGPL)](https://www.gnu.org/licenses/agpl.html). The documentation, including the masters thesis, is licensed under [CC-BY-SA](https://creativecommons.org/licenses/by-sa/4.0/).
 
 ## Dependencies and Licenses
 

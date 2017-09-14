@@ -1,6 +1,6 @@
-SELECT Charakter.charakter_vorname, Charakter.charakter_nachname, Sprecher.Sprecher_Vorname, Sprecher.Sprecher_Nachname
+SELECT Charakter.Charakter_Name, Sprecher.Sprecher_Name
 FROM Charakter_Sprecher
 	JOIN Charakter
 	JOIN Sprecher
-WHERE Charakter_Sprecher.Charakter_ID = Charakter.charakter_id
+WHERE Charakter_Sprecher.Charakter_ID = Charakter.Charakter_ID
 	AND Charakter_Sprecher.Sprecher_Id = Sprecher.Sprecher_ID
