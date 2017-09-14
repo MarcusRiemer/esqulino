@@ -17,7 +17,7 @@ export type ProjectId = string;
 /**
  * The name of the project. May only contain more or less friendly
  * characters.
- * @pattern ^[a-zA-Z0-9 \-_]{4,}$
+ * @pattern ^^[a-zA-Z0-9 \-_\?äöüÄÖÜß]{4,}$
  */
 export type ProjectName = string;
 
@@ -40,7 +40,7 @@ export type ProjectUserPassword = string;
  */
 export const StringValidator = {
   ProjectId: /^[a-z0-9\-]{4,}$/,
-  ProjectName: /^[a-zA-Z0-9 \-_]{4,}$/,
+  ProjectName: /^[a-zA-Z0-9 \-_\?äöüÄÖÜß]{4,}$/,
   ProjectUserName: /^[a-zA-Z0-9\-_]{4,}$/,
   ProjectUserPassword: /^.{4,}$/
 };
@@ -69,6 +69,18 @@ export interface AvailableDatabaseDescription {
 }
 
 /**
+ * Some projects are based on external sources, especially regarding
+ * the data in the databases. These references may be used to
+ * correctly acknowledge such sources.
+ */
+export interface SourceDescription {
+  type: "data",
+  url: string,
+  display: string
+  readOnly: boolean;
+}
+
+/**
  * The properties of a project that can be queried from the
  * server when asking for a specific project.
  *
@@ -81,7 +93,8 @@ export interface ProjectDescription extends ProjectListDescription {
   availableDatabases?: { [id: string]: AvailableDatabaseDescription }
   activeDatabase?: string
   queries?: Model.QueryDescription[]
-  pages?: PageDescription[]
+  pages?: PageDescription[],
+  sources?: SourceDescription[],
 }
 
 /**

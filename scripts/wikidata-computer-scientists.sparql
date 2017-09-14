@@ -1,9 +1,0 @@
-SELECT ?p ?pLabel ?dateofbirth ?dateofdeath WHERE {
-  VALUES ?occ { wd:Q82594 } .
-  ?p wdt:P106 ?occ .
-  ?p wdt:P569 ?dateofbirth .
-  ?p wdt:P570 ?dateofdeath
-     SERVICE wikibase:label {
-       bd:serviceParam wikibase:language "de" .
-     }
-} 

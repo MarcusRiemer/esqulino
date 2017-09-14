@@ -94,3 +94,13 @@
     </li>
   </ul>
 </nav>
+<div *ngIf="project.hasSources"
+     class="sources-host">
+  <h4>Quellen</h4>
+  <div *ngFor="let source of project.sources"
+       title="{{ source.display }}">
+    <source-icon [source]="source"></source-icon>
+    
+    <a [href]="source.url">{{ source.title }}</a>
+  </div>    
+</div>

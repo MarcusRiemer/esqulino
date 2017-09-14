@@ -1,0 +1,13 @@
+SELECT DISTINCT ?person ?name ?gender ?dateofbirth ?earliestdateofbirth ?latestdateofbirth ?dateofdeath ?earliestdateofdeath ?latestdateofdeath WHERE {
+  ?person wdt:P106 ?occupation.
+  ?person wdt:P21 ?gender .
+  ?person rdfs:label ?name.
+  ?person wdt:P569 ?dateofbirth.
+  OPTIONAL {?person wdt:P570 ?dateofdeath}.
+  OPTIONAL {?person p:P569/pq:P1319 ?earliestdateofbirth. }
+  OPTIONAL {?person p:P569/pq:P1326 ?latestdateofbirth. }
+  OPTIONAL {?person p:P570/pq:P1319 ?earliestdateofdeath. }
+  OPTIONAL {?person p:P570/pq:P1326 ?latestdateofdeath. }
+  FILTER (?occupation IN(wd:Q205375, wd:Q82594, wd:Q170790, wd:Q593644, wd:Q593644, wd:Q2114605)).
+  FILTER (lang(?name) = "de").
+}

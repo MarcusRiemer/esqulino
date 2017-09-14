@@ -1,24 +1,12 @@
 {
   "name": "erlebt",
-  "from": {
-    "first": {
-      "name": "person"
-    },
-    "joins": [
-      {
-        "table": {
-          "name": "ereignis"
-        },
-        "cross": "cross"
-      }
-    ]
-  },
+  "apiVersion": "4",
   "select": {
     "columns": [
       {
         "expr": {
           "singleColumn": {
-            "column": "nachname",
+            "column": "name",
             "table": "person"
           }
         }
@@ -46,6 +34,19 @@
             "table": "ereignis"
           }
         }
+      }
+    ]
+  },
+  "from": {
+    "first": {
+      "name": "person"
+    },
+    "joins": [
+      {
+        "table": {
+          "name": "ereignis"
+        },
+        "cross": "cross"
       }
     ]
   },
@@ -89,8 +90,27 @@
           }
         },
         "logical": "AND"
+      },
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "ereignis_id",
+                "table": "ereignis"
+              }
+            },
+            "rhs": {
+              "parameter": {
+                "key": "ereignis_id"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
       }
     ]
-  },
-  "apiVersion": "4"
+  }
 }

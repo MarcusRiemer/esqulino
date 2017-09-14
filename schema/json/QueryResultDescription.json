@@ -1,21 +1,41 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "items": {
-        "additionalItems": {
-            "anyOf": [
-                {
-                    "type": "string"
-                }
-            ]
-        },
-        "items": [
-            {
+    "additionalProperties": false,
+    "properties": {
+        "columns": {
+            "items": {
                 "type": "string"
-            }
-        ],
-        "minItems": 1,
-        "type": "array"
+            },
+            "type": "array"
+        },
+        "highlight": {
+            "items": {
+                "type": "number"
+            },
+            "type": "array"
+        },
+        "inserted": {
+            "items": {
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "type": "array"
+        },
+        "rows": {
+            "items": {
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "type": "array"
+        }
     },
-    "type": "array"
+    "required": [
+        "columns"
+    ],
+    "type": "object"
 }
 
