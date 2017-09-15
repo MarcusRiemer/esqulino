@@ -88,7 +88,7 @@ const langMiniHtml: Schema.LanguageDescription = {
       }
     }
   },
-  root: ["html"]
+  root: "html"
 };
 
 /**
@@ -108,6 +108,9 @@ const langMiniHtml: Schema.LanguageDescription = {
 const langMiniSql: Schema.LanguageDescription = {
   languageName: "mini-sql",
   types: {
+    "root": {
+      oneOf: ["query-select", "query-delete"]
+    },
     "select": {},
     "delete": {},
     "from": {},
@@ -129,7 +132,7 @@ const langMiniSql: Schema.LanguageDescription = {
       }
     }
   },
-  root: ["query-select", "query-delete"]
+  root: "root"
 }
 
 /**
@@ -161,7 +164,7 @@ const langStringConstraint: Schema.LanguageDescription = {
       }
     }
   },
-  root: ["root"]
+  root: "root"
 }
 
 /**
@@ -194,7 +197,7 @@ const langAllowedConstraint: Schema.LanguageDescription = {
     "b": {},
     "c": {}
   },
-  root: ["root"]
+  root: "root"
 }
 
 /**
@@ -228,7 +231,23 @@ const langSequenceConstraint: Schema.LanguageDescription = {
     "b": {},
     "c": {}
   },
-  root: ["root"]
+  root: "root"
+}
+
+/**
+ * A single root node that uses some children with the "sequence" constraint
+ */
+const langOneOfNodes: Schema.LanguageDescription = {
+  languageName: "oneof-nodes",
+  types: {
+    "root": {
+      oneOf: ["a", "b"]
+    },
+    "a": {},
+    "b": {},
+    "c": {}
+  },
+  root: "root"
 }
 
 /**
@@ -243,7 +262,7 @@ const langBooleanConstraint: Schema.LanguageDescription = {
       }
     }
   },
-  root: ["root"]
+  root: "root"
 }
 
 describe('Language Validator', () => {
@@ -307,7 +326,37 @@ describe('Language Validator', () => {
     expect(resInvalid.errors[0].code).toEqual(ErrorCodes.IllegalPropertyType);
   });
 
-  it('Invalid Sequence: Completly Empty', () => {
+  it('Invalid oneOf: oneOf node in AST', () => {
+    const v = new Validator([langOneOfNodes]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "oneof-nodes",
+      name: "root",
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(1);
+    expect(res.errors[0].code).toEqual(ErrorCodes.TransientNode);
+  });
+
+  it('Invalid oneOf: No match', () => {
+    const v = new Validator([langOneOfNodes]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "oneof-nodes",
+      name: "c",
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(1);
+    expect(res.errors[0].code).toEqual(ErrorCodes.UnexpectedType);
+  });
+
+  it('Invalid Sequence: Completely Empty', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
