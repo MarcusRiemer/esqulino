@@ -25,5 +25,5 @@ export const LANG_DESCRIPTION: Schema.LanguageDescription = {
       }
     }
   },
-  root: ["node"]
+  root: "node"
 }
