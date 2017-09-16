@@ -3,10 +3,13 @@ import * as Schema from '../validator.description'
 export const LANG_DESCRIPTION: Schema.LanguageDescription = {
   languageName: "sql",
   types: {
-    "tablename": {
+    "tableName": {
       properties: {
         "name": { base: "string" },
-        "alias": { base: "string" }
+        "alias": {
+          base: "string",
+          isOptional: true
+        }
       }
     },
     "expression": {
@@ -21,14 +24,19 @@ export const LANG_DESCRIPTION: Schema.LanguageDescription = {
       properties: {
         "columnName": { base: "string" },
         "refTableName": { base: "string" },
-        "as": { base: "string" }
       }
     },
     "starOperator": {},
-    "binaryOperator": {
+    "relationalOperator": {
       properties: {
-        "value": {
-          base: "string"
+        "operator": {
+          base: "string",
+          restrictions: [
+            {
+              type: "enum",
+              value: ["<", "<=", "=", ">=", ">"]
+            }
+          ]
         }
       }
     },
@@ -38,7 +46,7 @@ export const LANG_DESCRIPTION: Schema.LanguageDescription = {
           type: "sequence",
           nodeTypes: [
             "expression",
-            "binaryOperator",
+            "relationalOperator",
             "expression"
           ]
         }
@@ -73,14 +81,25 @@ export const LANG_DESCRIPTION: Schema.LanguageDescription = {
         }
       },
       properties: {
-        "distinct": { base: "boolean" }
+        "distinct": {
+          base: "boolean",
+          isOptional: true
+        }
       }
     },
     "from": {
       children: {
         "tables": {
-          type: "allowed",
-          nodeTypes: ["tablename"]
+          type: "sequence",
+          nodeTypes: [
+            "tableName",
+            {
+              languageName: "sql",
+              nodeType: "crossJoin",
+              minOccurs: 0,
+              maxOccurs: +Infinity,
+            }
+          ]
         }
       }
     },
@@ -89,6 +108,36 @@ export const LANG_DESCRIPTION: Schema.LanguageDescription = {
         "table": {
           type: "sequence",
           nodeTypes: ["tableName"]
+        }
+      }
+    },
+    "where": {
+      children: {
+        "expressions": {
+          type: "sequence",
+          nodeTypes: [
+            "expression",
+            {
+              languageName: "sql",
+              nodeType: "whereAdditional",
+              minOccurs: 0,
+              maxOccurs: +Infinity
+            }
+          ]
+        }
+      }
+    },
+    "whereAdditional": {
+      children: {
+        "expression": {
+          type: "sequence",
+          nodeTypes: ["expression"]
+        }
+      },
+      properties: {
+        "operation": {
+          base: "string",
+          value: ["and", "or"]
         }
       }
     },

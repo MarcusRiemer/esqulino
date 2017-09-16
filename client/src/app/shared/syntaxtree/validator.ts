@@ -134,6 +134,14 @@ abstract class NodeType {
   abstract validate(ast: AST.Node, context: ValidationContext): void;
 
   /**
+   * @return True if this instance could be used to validate something
+   *         of the given type.
+   */
+  matchesType(typeName: AST.QualifiedTypeName) {
+    return (this._languageName == typeName.languageName && this._typeName == typeName.typeName);
+  }
+
+  /**
    * @return The name of the language this type belongs to.
    */
   get languageName() {
@@ -401,7 +409,7 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
 
         if (child) {
           // Yes, does it's type match?
-          if (expected.nodeType.nodeTypeMatches(child)) {
+          if (expected.nodeType.matchesType(child.qualifiedName)) {
             // Sign up for further validation
             toReturn.push(children[childIndex]);
           }
@@ -416,6 +424,7 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
             // Hand out a (more or less) detailed error message
             context.addError(ErrorCodes.IllegalChildType, child, {
               present: child.qualifiedName,
+              expected: expected.nodeType.description,
               index: childIndex
             });
           }
@@ -481,7 +490,7 @@ class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator
     // directly, the types are resolved on demand.
     children.forEach((node, index) => {
       // Find a matching type
-      const cardinalityRef = this._nodeTypes.find(type => type.nodeType.nodeTypeMatches(node));
+      const cardinalityRef = this._nodeTypes.find(type => type.nodeType.matchesType(node.qualifiedName));
       if (!cardinalityRef) {
         // The node is entirely unexpected
         context.addError(ErrorCodes.IllegalChildType, node, { index: index });
@@ -640,9 +649,9 @@ class NodeOneOfType extends NodeType {
       } as ErrorUnexpectedType);
     } else {
       // Find a type that volunteers to do the actual further matching
-      const concrete = this._possibilities.find(v => v.nodeTypeMatches(ast));
+      const concrete = this._possibilities.find(v => v.matchesType(ast.qualifiedName));
       if (concrete) {
-        concrete.type.validate(ast, context);
+        concrete.validate(ast, context);
       } else {
         context.addError(ErrorCodes.UnexpectedType, ast, {
           present: ast.qualifiedName,
@@ -650,6 +659,14 @@ class NodeOneOfType extends NodeType {
         } as ErrorUnexpectedType);
       }
     }
+  }
+
+  /**
+   * @return True if any type referenced by this instance  could be used to validate something
+   *         of the given type.
+   */
+  matchesType(typeName: AST.QualifiedTypeName) {
+    return (this._possibilities.some(t => t.matchesType(typeName)));
   }
 }
 
@@ -681,10 +698,17 @@ class TypeReference {
   }
 
   /**
-   * @return True, if the given node has the same language and the same typename.
+   * @return True, if the given node could be matched by the underlying type.
    */
-  nodeTypeMatches(node: AST.Node) {
-    return (this._languageName == node.nodeLanguage && this._typeName == node.nodeName);
+  matchesType(qualifiedName: AST.QualifiedTypeName) {
+    return (this.type.matchesType(qualifiedName));
+  }
+
+  /**
+   * Validates using the underlying reference.
+   */
+  validate(ast: AST.Node, context: ValidationContext): void {
+    this.type.validate(ast, context);
   }
 
   /**
@@ -698,7 +722,7 @@ class TypeReference {
    * @return The actual underlying type this reference resolves to. Throws an exception
    *         if the type is not known.
    */
-  get type() {
+  private get type() {
     if (!this.isResolveable) {
       throw new Error(`Could not resolve type "${this._languageName}.${this._typeName}"`);
     } else {
@@ -741,7 +765,7 @@ class LanguageValidator {
     if (!this._rootType.isResolveable) {
       context.addError(ErrorCodes.UnknownRoot, ast);
     } else {
-      this._rootType.type.validate(ast, context);
+      this._rootType.validate(ast, context);
     }
   }
 
