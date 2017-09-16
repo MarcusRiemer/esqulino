@@ -3,15 +3,6 @@ import * as Schema from '../validator.description'
 export const LANG_DESCRIPTION: Schema.LanguageDescription = {
   languageName: "sql",
   types: {
-    "tableName": {
-      properties: {
-        "name": { base: "string" },
-        "alias": {
-          base: "string",
-          isOptional: true
-        }
-      }
-    },
     "expression": {
       oneOf: [
         "columnName",
@@ -24,6 +15,20 @@ export const LANG_DESCRIPTION: Schema.LanguageDescription = {
       properties: {
         "columnName": { base: "string" },
         "refTableName": { base: "string" },
+      }
+    },
+    "constant": {
+      properties: {
+        "value": {
+          base: "string"
+        }
+      }
+    },
+    "parameter": {
+      properties: {
+        "name": {
+          base: "string"
+        }
       }
     },
     "starOperator": {},
@@ -52,23 +57,9 @@ export const LANG_DESCRIPTION: Schema.LanguageDescription = {
         }
       }
     },
-    "constant": {
-      properties: {
-        "value": {
-          base: "string"
-        }
-      }
-    },
-    "parameter": {
-      properties: {
-        "name": {
-          base: "string"
-        }
-      }
-    },
     "select": {
       children: {
-        "expressions": {
+        "columns": {
           type: "allowed",
           nodeTypes: [
             "columnName",
@@ -87,12 +78,29 @@ export const LANG_DESCRIPTION: Schema.LanguageDescription = {
         }
       }
     },
+    "tableIntroduction": {
+      properties: {
+        "name": { base: "string" },
+        "alias": {
+          base: "string",
+          isOptional: true
+        }
+      }
+    },
+    "crossJoin": {
+      children: {
+        "table": {
+          type: "sequence",
+          nodeTypes: ["tableIntroduction"]
+        }
+      }
+    },
     "from": {
       children: {
         "tables": {
           type: "sequence",
           nodeTypes: [
-            "tableName",
+            "tableIntroduction",
             {
               languageName: "sql",
               nodeType: "crossJoin",
@@ -103,11 +111,17 @@ export const LANG_DESCRIPTION: Schema.LanguageDescription = {
         }
       }
     },
-    "crossJoin": {
+    "whereAdditional": {
       children: {
-        "table": {
+        "expression": {
           type: "sequence",
-          nodeTypes: ["tableName"]
+          nodeTypes: ["expression"]
+        }
+      },
+      properties: {
+        "operator": {
+          base: "string",
+          value: ["and", "or"]
         }
       }
     },
@@ -124,20 +138,6 @@ export const LANG_DESCRIPTION: Schema.LanguageDescription = {
               maxOccurs: +Infinity
             }
           ]
-        }
-      }
-    },
-    "whereAdditional": {
-      children: {
-        "expression": {
-          type: "sequence",
-          nodeTypes: ["expression"]
-        }
-      },
-      properties: {
-        "operation": {
-          base: "string",
-          value: ["and", "or"]
         }
       }
     },

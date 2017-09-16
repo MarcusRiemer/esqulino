@@ -32,7 +32,7 @@ describe("Language: SQL (Validation)", () => {
             language: "sql",
             name: "select",
             children: {
-              "expressions": [
+              "columns": [
                 {
                   language: "sql",
                   name: "starOperator"
@@ -47,7 +47,7 @@ describe("Language: SQL (Validation)", () => {
               "tables": [
                 {
                   language: "sql",
-                  name: "tableName",
+                  name: "tableIntroduction",
                   properties: {
                     "name": "foo"
                   }
@@ -77,7 +77,7 @@ describe("Language: SQL (Validation)", () => {
             language: "sql",
             name: "select",
             children: {
-              "expressions": [
+              "columns": [
                 {
                   language: "sql",
                   name: "starOperator"
@@ -92,7 +92,7 @@ describe("Language: SQL (Validation)", () => {
               "tables": [
                 {
                   language: "sql",
-                  name: "tableName",
+                  name: "tableIntroduction",
                   properties: {
                     "name": "foo"
                   }
@@ -104,7 +104,7 @@ describe("Language: SQL (Validation)", () => {
                     "table": [
                       {
                         "language": "sql",
-                        "name": "tableName",
+                        "name": "tableIntroduction",
                         properties: {
                           "name": "bar"
                         }
@@ -137,7 +137,7 @@ describe("Language: SQL (Validation)", () => {
             language: "sql",
             name: "select",
             children: {
-              "expressions": [
+              "columns": [
                 {
                   language: "sql",
                   name: "starOperator"
@@ -152,7 +152,7 @@ describe("Language: SQL (Validation)", () => {
               "tables": [
                 {
                   language: "sql",
-                  name: "tableName",
+                  name: "tableIntroduction",
                   properties: {
                     "name": "foo"
                   }
@@ -164,7 +164,7 @@ describe("Language: SQL (Validation)", () => {
                     "table": [
                       {
                         "language": "sql",
-                        "name": "tableName",
+                        "name": "tableIntroduction",
                         properties: {
                           "name": "bar"
                         }
@@ -221,7 +221,145 @@ describe("Language: SQL (Validation)", () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    debugger;
+    expect(res.errors.length).toEqual(0);
+  });
+
+  it("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id AND foo.id = 2", () => {
+    const v = new Validator([LANG_DESCRIPTION]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "sql",
+      name: "querySelect",
+      children: {
+        "components": [
+          {
+            language: "sql",
+            name: "select",
+            children: {
+              "columns": [
+                {
+                  language: "sql",
+                  name: "starOperator"
+                }
+              ]
+            }
+          },
+          {
+            language: "sql",
+            name: "from",
+            children: {
+              "tables": [
+                {
+                  language: "sql",
+                  name: "tableIntroduction",
+                  properties: {
+                    "name": "foo"
+                  }
+                },
+                {
+                  language: "sql",
+                  name: "crossJoin",
+                  children: {
+                    "table": [
+                      {
+                        "language": "sql",
+                        "name": "tableIntroduction",
+                        properties: {
+                          "name": "bar"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            language: "sql",
+            name: "where",
+            children: {
+              "expressions": [
+                {
+                  language: "sql",
+                  name: "binaryExpression",
+                  children: {
+                    "operands": [
+                      {
+                        language: "sql",
+                        name: "columnName",
+                        properties: {
+                          "columnName": "id",
+                          "refTableName": "foo"
+                        }
+                      },
+                      {
+                        language: "sql",
+                        name: "relationalOperator",
+                        properties: {
+                          "operator": "="
+                        }
+                      },
+                      {
+                        language: "sql",
+                        name: "columnName",
+                        properties: {
+                          "columnName": "id",
+                          "refTableName": "bar"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  language: "sql",
+                  name: "whereAdditional",
+                  children: {
+                    "expression": [
+                      {
+                        language: "sql",
+                        name: "binaryExpression",
+                        children: {
+                          "operands": [
+                            {
+                              language: "sql",
+                              name: "columnName",
+                              properties: {
+                                "columnName": "id",
+                                "refTableName": "foo"
+                              }
+                            },
+                            {
+                              language: "sql",
+                              name: "relationalOperator",
+                              properties: {
+                                "operator": "="
+                              }
+                            },
+                            {
+                              language: "sql",
+                              name: "constant",
+                              properties: {
+                                "value": "2"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  properties: {
+                    "operator": "and"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(0);
   });

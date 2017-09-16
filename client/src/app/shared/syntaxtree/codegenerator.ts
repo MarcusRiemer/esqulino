@@ -34,7 +34,7 @@ export class CodeGeneratorProcess {
   /**
    * Adds some compiled node to the current result.
    */
-  addConvertedNode(compilation: string, node: Node, sep = OutputSeparator.NONE) {
+  addConvertedFragment(compilation: string, node: Node, sep = OutputSeparator.NONE) {
     this._generated.push({
       depth: this._currentDepth,
       compilation: compilation,
@@ -145,7 +145,7 @@ export class CodeGenerator {
 
   registerConverter(t: QualifiedTypeName, converter: NodeConverter) {
     if (this.hasConverter(t)) {
-      throw new Error(`There is already a converter for ${"${t.languageName}.${t.typeName}"}`);
+      throw new Error(`There is already a converter for "${t.languageName}.${t.typeName}"`);
     } else {
       if (!this._callbacks[t.languageName]) {
         this._callbacks[t.languageName] = {};
