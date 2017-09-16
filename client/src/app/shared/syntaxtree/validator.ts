@@ -29,11 +29,18 @@ export enum ErrorCodes {
   SuperflousChildCategory = "SUPERFLOUS_CHILD_CATEGORY",
 }
 
+/**
+ * Detailed data about an unexpected type. Shows the type that is present
+ * and possibly the types that were originally expected.
+ */
 export interface ErrorUnexpectedType {
   present: AST.QualifiedTypeName
   expected: AST.QualifiedTypeName[]
 }
 
+/**
+ * A child is not allowed in a certain position.
+ */
 export interface ErrorIllegalChildType {
   present: AST.QualifiedTypeName,
   index: number
@@ -222,11 +229,14 @@ class NodeConcreteType extends NodeType {
     // Check all required properties
     Object.entries(this._allowedProperties).forEach(([name, validator]) => {
       if (name in ast.properties) {
+        // Property exists on the node, time to validate it
         const value = ast.properties[name];
         validator.validate(ast, value, context);
-      } else {
+      }
+      // Property does not exist, is that a error?
+      else if (!validator.isOptional) {
         context.addError(ErrorCodes.MissingProperty, ast, {
-          expected: validator.base,
+          expected: validator.baseName,
           name: name
         } as ErrorMissingProperty);
       }
@@ -240,7 +250,7 @@ class NodeConcreteType extends NodeType {
     if (Desc.isNodePropertyStringDesciption(desc)) {
       return (new NodePropertyStringValidator(desc));
     } else if (Desc.isNodePropertyBooleanDesciption(desc)) {
-      return (new NodePropertyBooleanValidator());
+      return (new NodePropertyBooleanValidator(desc));
     } else {
       throw new Error(`Unknown property validator for base "${desc.base}"`);
     }
@@ -510,17 +520,41 @@ class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator
 /**
  * Validates any property.
  */
-interface NodePropertyValidator {
-  validate(node: AST.Node, value: string, context: ValidationContext): void;
+abstract class NodePropertyValidator {
+  private _isOptional: boolean;
+  private _base: string;
 
-  // The basic type of this property
-  base: string;
+  constructor(desc: Desc.NodePropertyTypeDescription) {
+    this._isOptional = !!desc.isOptional;
+    this._base = desc.base;
+  }
+
+  abstract validate(node: AST.Node, value: string, context: ValidationContext): void;
+
+  /**
+   * @return This property may be omitted from a node.
+   */
+  get isOptional() {
+    return (this._isOptional);
+  }
+
+  /**
+   * @return The typename of the property
+   */
+  get baseName() {
+    return (this._base);
+  }
 }
 
 /**
  * Validates boolean properties
  */
-class NodePropertyBooleanValidator implements NodePropertyValidator {
+class NodePropertyBooleanValidator extends NodePropertyValidator {
+
+  constructor(desc: Desc.NodePropertyBooleanDescription) {
+    super(desc);
+  }
+
   validate(node: AST.Node, value: string, context: ValidationContext): void {
     if (value != "true" && value != "false") {
       context.addError(ErrorCodes.IllegalPropertyType, node, {
@@ -528,26 +562,19 @@ class NodePropertyBooleanValidator implements NodePropertyValidator {
       });
     }
   }
-
-  get base() {
-    return ("boolean");
-  }
 }
 
 /**
  * Validates properties that are meant to be strings.
  */
-class NodePropertyStringValidator implements NodePropertyValidator {
+class NodePropertyStringValidator extends NodePropertyValidator {
   private _restrictions: Desc.NodeStringTypeRestrictions[] = [];
 
   constructor(desc: Desc.NodePropertyStringDescription) {
+    super(desc);
     if (desc.restrictions) {
       this._restrictions = desc.restrictions;
     }
-  }
-
-  get base() {
-    return "string";
   }
 
   validate(node: AST.Node, value: string, context: ValidationContext) {
@@ -572,6 +599,13 @@ class NodePropertyStringValidator implements NodePropertyValidator {
             context.addError(ErrorCodes.IllegalPropertyType, node, {
               condition: `${value.length} > ${restriction.value}`
             })
+          }
+          break;
+        case "enum":
+          if (!(restriction.value as string[]).includes(value)) {
+            context.addError(ErrorCodes.IllegalPropertyType, node, {
+              condition: `"${value}" in ${JSON.stringify(restriction.value)}`
+            });
           }
           break;
         default:

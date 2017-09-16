@@ -36,12 +36,12 @@ export interface NodeConcreteTypeDescription {
 }
 
 /**
- * All property types that are available.
+ * Properties are used for atomic values and may be optional.
  */
-export type NodePropertyTypeDescription =
-  NodePropertyStringDescription
-  | NodePropertyIntegerDescription
-  | NodePropertyBooleanDescription;
+export interface NodePropertyTypeDescription {
+  base: "boolean" | "integer" | "string"
+  isOptional?: boolean
+}
 
 /**
  * All children group types that are available
@@ -83,9 +83,11 @@ export interface NodePropertyStringDescription {
 /**
  * The restrictions that are applicable to strings
  */
-export type NodeStringTypeRestrictions = LengthRestrictionDescription
+export type NodeStringTypeRestrictions =
+  LengthRestrictionDescription
   | MinimumLengthRestrictionDescription
   | MaximumLengthRestrictionDescription
+  | EnumRestrictionDescription
 
 /**
  * Restricts the minimum length of things.
@@ -109,6 +111,14 @@ export interface MaximumLengthRestrictionDescription {
 export interface LengthRestrictionDescription {
   type: "length"
   value: number
+}
+
+/**
+ * Restricts a string to be one of a given set of values
+ */
+export interface EnumRestrictionDescription {
+  type: "enum",
+  value: string[]
 }
 
 /**
