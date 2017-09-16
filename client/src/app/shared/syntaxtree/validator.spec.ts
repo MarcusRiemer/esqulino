@@ -160,6 +160,15 @@ const langStringConstraint: Schema.LanguageDescription = {
           restrictions: [
             { type: "maxLength", value: 2 }
           ]
+        },
+        "enum": {
+          base: "string",
+          restrictions: [
+            {
+              type: "enum",
+              value: ["a", "b", "c"]
+            }
+          ]
         }
       }
     }
@@ -265,8 +274,27 @@ const langBooleanConstraint: Schema.LanguageDescription = {
   root: "root"
 }
 
+/**
+ * A single node that may have optional properties.
+ */
+const langOptionalProperty: Schema.LanguageDescription = {
+  languageName: "optionalProperty",
+  types: {
+    "root": {
+      properties: {
+        "required": { base: "string" },
+        "optional": {
+          base: "string",
+          isOptional: true
+        }
+      }
+    }
+  },
+  root: "root"
+}
+
 describe('Language Validator', () => {
-  it('String Constraints: Valid', () => {
+  it('String Constraints (Valid)', () => {
     const v = new Validator([langStringConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -275,7 +303,8 @@ describe('Language Validator', () => {
       properties: {
         "len": "1",
         "min": "12",
-        "max": "12"
+        "max": "12",
+        "enum": "a",
       }
     };
 
@@ -283,6 +312,34 @@ describe('Language Validator', () => {
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(0);
+  });
+
+  it('String Constraints (Invalid)', () => {
+    const v = new Validator([langStringConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "string-constraint",
+      name: "root",
+      properties: {
+        "len": "12",
+        "min": "1",
+        "max": "123",
+        "enum": "d",
+      }
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(4);
+    expect(res.errors[0].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[0].data.condition).toEqual("2 != 1");
+    expect(res.errors[1].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[1].data.condition).toEqual("1 < 2");
+    expect(res.errors[2].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[2].data.condition).toEqual("3 > 2");
+    expect(res.errors[3].code).toEqual(ErrorCodes.IllegalPropertyType)
+    expect(res.errors[3].data.condition).toEqual(`"d" in ["a","b","c"]`);
   });
 
   it('Boolean Constraint', () => {
@@ -324,6 +381,38 @@ describe('Language Validator', () => {
     const resInvalid = v.validateFromRoot(astInvalid);
     expect(resInvalid.errors.length).toEqual(1)
     expect(resInvalid.errors[0].code).toEqual(ErrorCodes.IllegalPropertyType);
+  });
+
+  it('Optional property missing', () => {
+    const v = new Validator([langOptionalProperty]);
+
+    const astDesc: AST.NodeDescription = {
+      language: langOptionalProperty.languageName,
+      name: "root",
+      properties: {
+        "required": ""
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.isValid).toBeTruthy();
+  });
+
+  it('Required property missing', () => {
+    const v = new Validator([langOptionalProperty]);
+
+    const astDesc: AST.NodeDescription = {
+      language: langOptionalProperty.languageName,
+      name: "root",
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(1);
+    expect(res.errors[0].code).toEqual(ErrorCodes.MissingProperty);
   });
 
   it('Invalid oneOf: oneOf node in AST', () => {
@@ -800,40 +889,21 @@ describe('Language Validator', () => {
     expect(res.errors[1].code).toEqual(ErrorCodes.InvalidMinOccurences);
   });
 
-
-  it('String Constraints: Invalid', () => {
-    const v = new Validator([langStringConstraint]);
+  it('Mini-SQL: Empty SELECT query', () => {
+    const v = new Validator([langMiniSql]);
 
     const astDesc: AST.NodeDescription = {
-      language: "string-constraint",
-      name: "root",
-      properties: {
-        "len": "12",
-        "min": "1",
-        "max": "123"
-      }
-    };
+      language: "mini-sql",
+      name: "query-select"
+    }
 
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(3);
-    expect(res.errors[0].code).toEqual(ErrorCodes.IllegalPropertyType)
-    expect(res.errors[0].data.condition).toEqual("2 != 1");
-    expect(res.errors[1].code).toEqual(ErrorCodes.IllegalPropertyType)
-    expect(res.errors[1].data.condition).toEqual("1 < 2");
-    expect(res.errors[2].code).toEqual(ErrorCodes.IllegalPropertyType)
-    expect(res.errors[2].data.condition).toEqual("3 > 2");
-  });
-
-
-  it('Mini-HTML: registers types', () => {
-    const v = new Validator([langMiniHtml]);
-
-    expect(v.isKnownLanguage(langMiniHtml.languageName)).toBeTruthy();
-    for (let nodeName in langMiniHtml.types) {
-      expect(v.isKnownType(langMiniHtml.languageName, nodeName)).toBeTruthy();
-    }
+    expect(res.errors.length).toEqual(3, res);
+    expect(res.errors[0].code).toEqual(ErrorCodes.MissingChild)
+    expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild)
+    expect(res.errors[2].code).toEqual(ErrorCodes.MissingChild)
   });
 
   it('Mini-SQL: registers types', () => {
@@ -842,6 +912,15 @@ describe('Language Validator', () => {
     expect(v.isKnownLanguage(langMiniSql.languageName)).toBeTruthy();
     for (let nodeName in langMiniSql.types) {
       expect(v.isKnownType(langMiniSql.languageName, nodeName)).toBeTruthy();
+    }
+  });
+
+  it('Mini-HTML: registers types', () => {
+    const v = new Validator([langMiniHtml]);
+
+    expect(v.isKnownLanguage(langMiniHtml.languageName)).toBeTruthy();
+    for (let nodeName in langMiniHtml.types) {
+      expect(v.isKnownType(langMiniHtml.languageName, nodeName)).toBeTruthy();
     }
   });
 
@@ -874,23 +953,6 @@ describe('Language Validator', () => {
 
     expect(res.errors.length).toEqual(1);
     expect(res.errors[0].code).toEqual(ErrorCodes.SuperflousChildCategory)
-  });
-
-  it('Mini-SQL: Empty SELECT query', () => {
-    const v = new Validator([langMiniSql]);
-
-    const astDesc: AST.NodeDescription = {
-      language: "mini-sql",
-      name: "query-select"
-    }
-
-    const ast = new AST.Node(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
-
-    expect(res.errors.length).toEqual(3, res);
-    expect(res.errors[0].code).toEqual(ErrorCodes.MissingChild)
-    expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild)
-    expect(res.errors[2].code).toEqual(ErrorCodes.MissingChild)
   });
 
   it('Mini-HTML: Empty document', () => {
