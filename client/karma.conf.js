@@ -33,7 +33,7 @@ module.exports = function (config) {
       environment: 'dev'
     },
     reporters: config.angularCli && config.angularCli.codeCoverage
-      ? ['progress', 'coverage-istanbul']
+      ? ['progress', 'kjhtml', 'coverage-istanbul']
       : ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
@@ -49,9 +49,15 @@ module.exports = function (config) {
           '--remote-debugging-port=9222',
           '--no-sandbox'
         ],
+      },
+      FirefoxHeadless: {
+        base: 'Firefox',
+        flags: [
+          '--headless'
+        ]
       }
     },
-    browsers: ['ChromeHeadless'],
+    browsers: ['ChromeHeadless', 'FirefoxHeadless'],
     singleRun: true
   });
 };
