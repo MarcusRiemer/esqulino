@@ -1,7 +1,7 @@
 import { Node, NodeDescription } from './syntaxtree'
 
 describe('AST: Basic Operations', () => {
-  it('loads HTML trees with basic templating', () => {
+  it('All in one test', () => {
     // <html>
     //   <head>
     //     <title>{{ page.title }}</title>
@@ -65,7 +65,6 @@ describe('AST: Basic Operations', () => {
                       }
                     ]
                   }
-
                 }
               ]
             }
@@ -76,50 +75,60 @@ describe('AST: Basic Operations', () => {
     const root = new Node(desc, undefined);
 
     // <html>
-    expect(root.name).toEqual("html", "<html> element");
+    expect(root.typeName).toEqual("html", "<html> element");
     expect(root.languageName).toEqual("html", "<html> family");
     expect(root.getChildrenInCategory("children").length).toEqual(2, "<html> children");
+    expect(root.hasChildren).toBeTruthy();
 
     // <head>
     const head = root.getChildrenInCategory("children")[0];
-    expect(head.name).toEqual("head", "<head> element");
+    expect(head.typeName).toEqual("head", "<head> element");
     expect(head.languageName).toEqual("html", "<head> family");
     expect(head.getChildrenInCategory("children").length).toEqual(1, "<head> children");
+    expect(head.hasChildren).toBeTruthy();
 
     // <title>{{ page.title }}</title>
     const title = head.getChildrenInCategory("children")[0];
-    expect(title.name).toEqual("title", "<title> element");
+    expect(title.typeName).toEqual("title", "<title> element");
     expect(title.languageName).toEqual("html", "<title> family");
     expect(title.getChildrenInCategory("children").length).toEqual(1, "<title> children");
+    expect(title.hasChildren).toBeTruthy();
 
     // {{ page.title }}
     const titleInterpolate = title.getChildrenInCategory("children")[0];
-    expect(titleInterpolate.name).toEqual("interpolate", "{{ page.title }} name");
+    expect(titleInterpolate.typeName).toEqual("interpolate", "{{ page.title }} name");
     expect(titleInterpolate.languageName).toEqual("templating", "{{ page.title }} family");
     expect(titleInterpolate.getChildrenInCategory("children").length).toEqual(1, "{{ page.title }} children");
+    expect(titleInterpolate.hasChildren).toBeTruthy();
 
     // page.title
     const titleInterpolateVar = titleInterpolate.getChildrenInCategory("children")[0];
-    expect(titleInterpolateVar.name).toEqual("varname", "{{ page.title }} var-name");
+    expect(titleInterpolateVar.typeName).toEqual("varname", "{{ page.title }} var-name");
     expect(titleInterpolateVar.languageName).toEqual("templating", "{{ page.title }} var-family");
     expect(titleInterpolateVar.getChildrenInCategory("children").length).toEqual(0, "{{ page.title }} var-children");
+    expect(titleInterpolateVar.hasChildren).toBeFalsy();
 
     // <body>
     const body = root.getChildrenInCategory("children")[1];
-    expect(body.name).toEqual("body", "<body> element");
+    expect(body.typeName).toEqual("body", "<body> element");
     expect(body.languageName).toEqual("html", "<body> family");
     expect(body.getChildrenInCategory("children").length).toEqual(0, "<body> children");
     expect(body.getChildrenInCategory("attributes").length).toEqual(1, "<body> attributes");
+    expect(body.hasChildren).toBeTruthy();
 
     // class="bg-black"
     const bodyClass = body.getChildrenInCategory("attributes")[0];
-    expect(bodyClass.name).toEqual("class", "class='bg-black' attribute");
+    expect(bodyClass.typeName).toEqual("class", "class='bg-black' attribute");
     expect(bodyClass.languageName).toEqual("html", "class='bg-black' family");
     expect(bodyClass.getChildrenInCategory("children").length).toEqual(1, "class='bg-black' children");
+    expect(bodyClass.hasChildren).toBeTruthy();
 
     const bodyClassText = bodyClass.getChildrenInCategory("children")[0];
-    expect(bodyClassText.name).toEqual("text", "class='bg-black' attribute");
+    expect(bodyClassText.typeName).toEqual("text", "class='bg-black' attribute");
     expect(bodyClass.languageName).toEqual("html", "class='bg-black' family");
+    expect(bodyClassText.hasChildren).toBeFalsy();
 
+    // Reverting back to the model representation
+    expect(root.toModel()).toEqual(desc);
   });
 });
