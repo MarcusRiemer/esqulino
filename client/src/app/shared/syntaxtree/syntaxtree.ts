@@ -10,7 +10,6 @@ export interface QualifiedTypeName {
   languageName: string
 }
 
-
 /**
  * Properties of a node are atomic and always stored as string.
  * Certain validators may be used to check whether the string
@@ -66,10 +65,42 @@ export class Node {
     }
   }
 
-  get name(): string {
+  /**
+   * @return The description of this node and all of it's properties and children.
+   */
+  toModel(): NodeDescription {
+    // Primitive values and properties
+    const toReturn: NodeDescription = {
+      name: this.typeName,
+      language: this.languageName,
+    };
+
+    // Carry over properties (if there are any)
+    if (this.hasProperties) {
+      toReturn.properties = JSON.parse(JSON.stringify(this._nodeProperties))
+    }
+
+    // Carry over children (if there are any)
+    if (this.hasChildren) {
+      toReturn.children = {};
+      Object.entries(this._nodeChildren).forEach(([name, children]) => {
+        toReturn.children[name] = children.map(child => child.toModel());
+      });
+    }
+
+    return (toReturn);
+  }
+
+  /**
+   * @return The name of the type this node should be validated against.
+   */
+  get typeName(): string {
     return (this._nodeName);
   }
 
+  /**
+   * @return The name of the language containing the type this node should be validated against.
+   */
   get languageName(): string {
     return (this._nodeLanguage);
   }
@@ -79,7 +110,7 @@ export class Node {
    */
   get qualifiedName(): QualifiedTypeName {
     return ({
-      typeName: this.name,
+      typeName: this.typeName,
       languageName: this.languageName
     });
   }
@@ -104,10 +135,25 @@ export class Node {
   }
 
   /**
+   * @return True if this node has any children in any category
+   */
+  get hasChildren() {
+    const categories = Object.values(this._nodeChildren);
+    return (categories.some(c => c.length > 0));
+  }
+
+  /**
    * @return All children in all categories.
    */
   get children() {
     return (this._nodeChildren);
+  }
+
+  /**
+   * @return True if this node has any properties.
+   */
+  get hasProperties() {
+    return (Object.keys(this._nodeProperties).length > 0);
   }
 
   /**

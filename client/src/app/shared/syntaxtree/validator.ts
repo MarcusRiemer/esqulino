@@ -203,7 +203,7 @@ class NodeConcreteType extends NodeType {
    */
   validate(ast: AST.Node, context: ValidationContext) {
     // Does the type of the given node match the type we expect?
-    if (this.languageName == ast.languageName && this.typeName == ast.name) {
+    if (this.languageName == ast.languageName && this.typeName == ast.typeName) {
       // Further validation is done by specific implementations
       this.validateImpl(ast, context);
     } else {
@@ -302,7 +302,7 @@ class NodeTypeChildren {
 
     // Check the children themselves
     validChildren.forEach(child => {
-      const childType = this._parent.validator.getType(child.languageName, child.name);
+      const childType = this._parent.validator.getType(child.languageName, child.typeName);
       childType.validate(child, context);
     });
   }
@@ -643,7 +643,7 @@ class NodeOneOfType extends NodeType {
    */
   validate(ast: AST.Node, context: ValidationContext): void {
     // The "oneOf" node is not really a node that could be used anywhere
-    if (this.languageName === ast.languageName && this.typeName === ast.name) {
+    if (this.languageName === ast.languageName && this.typeName === ast.typeName) {
       context.addError(ErrorCodes.TransientNode, ast, {
         present: ast.qualifiedName,
       } as ErrorUnexpectedType);

@@ -1,6 +1,6 @@
 <div *ngIf="node"
      class="node">
-  <code>{{ node.languageName }}.{{ node.name }}</code> ({{ properties.length }} Properties)
+  <code>{{ node.languageName }}.{{ node.typeName }}</code> ({{ properties.length }} Properties)
   <div *ngFor="let property of properties">
     <label>
       {{ property.key }} = {{ property.value }}

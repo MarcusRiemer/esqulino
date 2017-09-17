@@ -8,6 +8,13 @@
         </p>
       </div>
       <div class="card-block">
+        <textarea [(ngModel)]="rawNodeData"
+                  [rows]="rawNodeDataLines"
+                  class="form-control">
+        </textarea>
+      </div>
+      
+      <div class="card-block">
         <ast-node [node]="ast"></ast-node>
       </div>
     </div>
