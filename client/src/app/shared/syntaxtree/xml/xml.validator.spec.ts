@@ -107,4 +107,41 @@ describe("Language: XML (Validation)", () => {
 
     expect(res.isValid).toBeTruthy();
   });
+
+  it(`Valid: <super cool="true"><duper></duper></super>`, () => {
+    const v = new Validator([LANG_DESCRIPTION]);
+    const astDesc: AST.NodeDescription = {
+      language: "xml",
+      name: "node",
+      children: {
+        "nodes": [
+          {
+            language: "xml",
+            name: "node",
+            properties: {
+              "name": "duper"
+            }
+          }
+        ],
+        "attributes": [
+          {
+            language: "xml",
+            name: "attribute",
+            properties: {
+              "key": "cool",
+              "value": "true",
+            }
+          }
+        ]
+      },
+      properties: {
+        "name": "super"
+      }
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.isValid).toBeTruthy();
+  });
 });

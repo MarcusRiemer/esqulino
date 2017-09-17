@@ -203,7 +203,7 @@ class NodeConcreteType extends NodeType {
    */
   validate(ast: AST.Node, context: ValidationContext) {
     // Does the type of the given node match the type we expect?
-    if (this.languageName == ast.nodeLanguage && this.typeName == ast.nodeName) {
+    if (this.languageName == ast.languageName && this.typeName == ast.name) {
       // Further validation is done by specific implementations
       this.validateImpl(ast, context);
     } else {
@@ -302,7 +302,7 @@ class NodeTypeChildren {
 
     // Check the children themselves
     validChildren.forEach(child => {
-      const childType = this._parent.validator.getType(child.nodeLanguage, child.nodeName);
+      const childType = this._parent.validator.getType(child.languageName, child.name);
       childType.validate(child, context);
     });
   }
@@ -643,7 +643,7 @@ class NodeOneOfType extends NodeType {
    */
   validate(ast: AST.Node, context: ValidationContext): void {
     // The "oneOf" node is not really a node that could be used anywhere
-    if (this.languageName === ast.nodeLanguage && this.typeName === ast.nodeName) {
+    if (this.languageName === ast.languageName && this.typeName === ast.name) {
       context.addError(ErrorCodes.TransientNode, ast, {
         present: ast.qualifiedName,
       } as ErrorUnexpectedType);
@@ -841,7 +841,7 @@ export class Validator {
 
     if (ast) {
       // Pass validation to the appropriate language
-      const lang = this.getLanguage(ast.nodeLanguage);
+      const lang = this.getLanguage(ast.languageName);
       lang.validateFromRoot(ast, context);
     } else {
       // Not having a document is a single error

@@ -5,13 +5,12 @@ import { ProjectService, Project } from '../project.service'
 import { SidebarService } from '../sidebar.service'
 import { ToolbarService } from '../toolbar.service'
 
-@Component({
-  templateUrl: 'templates/schema.html'
-})
-
 /**
  * A class as entry-point for the representation of a schema
  */
+@Component({
+  templateUrl: 'templates/schema.html'
+})
 export class SchemaComponent implements OnInit {
   /**
    * The currently edited project
