@@ -1,7 +1,10 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 
-import { Node, Language, AvailableLanguages, ValidationResult } from '../../shared/syntaxtree'
+import { Node, Language, ValidationResult } from '../../shared/syntaxtree'
 
+/**
+ * Informs the user about possible errors in his trees,
+ */
 @Component({
   templateUrl: 'templates/validation.html',
   selector: 'ast-validation'
@@ -10,8 +13,12 @@ export class ValidationComponent implements OnChanges {
   @Input() node: Node;
   @Input() language: Language;
 
+  // The result is cached
   private _validationResult: ValidationResult;
 
+  /**
+   * Any change will trigger a re-validation.
+   */
   ngOnChanges(changes: SimpleChanges): void {
     this.refreshResult();
   }
