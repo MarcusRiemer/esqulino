@@ -1,6 +1,6 @@
 import * as Schema from '../validator.description'
 
-export const LANG_DESCRIPTION: Schema.LanguageDescription = {
+export const LANG_DESCRIPTION: Schema.ValidatorDescription = {
   languageName: "sql",
   types: {
     "expression": {

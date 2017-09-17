@@ -11,5 +11,14 @@
         <ast-node [node]="ast"></ast-node>
       </div>
     </div>
+
+    <div class="card mb-3">
+      <div class="card-block">
+        <h4 class="card-title">Validierung</h4>
+        <ast-validation [node]="ast"
+                        [language]="currentLanguage">
+        </ast-validation>
+      </div>
+    </div>
   </div>
 </div>
