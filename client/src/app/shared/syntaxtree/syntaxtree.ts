@@ -66,11 +66,11 @@ export class Node {
     }
   }
 
-  get nodeName(): string {
+  get name(): string {
     return (this._nodeName);
   }
 
-  get nodeLanguage(): string {
+  get languageName(): string {
     return (this._nodeLanguage);
   }
 
@@ -79,8 +79,8 @@ export class Node {
    */
   get qualifiedName(): QualifiedTypeName {
     return ({
-      typeName: this.nodeName,
-      languageName: this.nodeLanguage
+      typeName: this.name,
+      languageName: this.languageName
     });
   }
 

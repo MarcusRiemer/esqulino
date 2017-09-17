@@ -1,0 +1,10 @@
+.ast {
+    .node {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    .node .node {
+        margin: 10px;
+    }
+}

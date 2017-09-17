@@ -1,0 +1,15 @@
+<div *ngIf="node"
+     class="node">
+  <code>{{ node.languageName }}.{{ node.name }}</code> ({{ properties.length }} Properties)
+  <div *ngFor="let property of properties">
+    <label>
+      {{ property.key }} = {{ property.value }}
+    </label>
+  </div>
+  
+  <div *ngFor="let category of childrenCategories">
+    children: <code>{{ category.categoryName }}</code>
+    <ast-node *ngFor="let childNode of category.nodes"
+              [node]="childNode"></ast-node>
+  </div>
+</div>
