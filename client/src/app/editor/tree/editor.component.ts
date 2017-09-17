@@ -20,13 +20,14 @@ const astDesc: NodeDescription = {
               language: "xml",
               name: "attribute",
               properties: {
+                "key": "leaf",
                 "value": "true",
               }
             }
           ]
         },
         properties: {
-          "name": "duper"
+          "name": "duper",
         }
       }
     ],
@@ -42,8 +43,7 @@ const astDesc: NodeDescription = {
     ]
   },
   properties: {
-    "name": "super",
-    "value": "true"
+    "name": "super"
   }
 };
 
