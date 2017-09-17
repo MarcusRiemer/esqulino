@@ -5,6 +5,7 @@ import { RegistrationService } from '../registration.service'
 
 import { NodeComponent } from './node.component'
 import { SyntaxTreeEditorComponent } from './editor.component'
+import { ValidationComponent } from './validation.component'
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { SyntaxTreeEditorComponent } from './editor.component'
   declarations: [
     NodeComponent,
     SyntaxTreeEditorComponent,
+    ValidationComponent
   ]
 })
 export class SyntaxTreeEditorModule {

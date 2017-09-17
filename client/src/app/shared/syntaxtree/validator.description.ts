@@ -193,7 +193,7 @@ export interface NodeTypesAllowedDescription {
 /**
  * Describes a whole schema that in turn may describe a whole language.
  */
-export class LanguageDescription {
+export class ValidatorDescription {
   // The unique name of the language
   languageName: string
 

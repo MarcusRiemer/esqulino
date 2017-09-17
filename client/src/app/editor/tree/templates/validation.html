@@ -1,0 +1,14 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Ort</th>
+      <th>Code</th>
+      <th>Daten</th>
+    </tr>
+  </thead>
+  <tr *ngFor="let error of result.errors">
+    <td>{{ error.node.name }}</td>
+    <td>{{ error.code }}</td>
+    <td>{{ error.data | json }}</td>
+  </tr>
+</table>

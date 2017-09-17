@@ -750,7 +750,7 @@ class LanguageValidator {
   private _registeredTypes: { [name: string]: NodeType } = {};
   private _rootType: TypeReference;
 
-  constructor(validator: Validator, desc: Desc.LanguageDescription) {
+  constructor(validator: Validator, desc: Desc.ValidatorDescription) {
     this._validator = validator;
     this._languageName = desc.languageName;
 
@@ -817,14 +817,14 @@ class LanguageValidator {
 export class Validator {
   private _registeredLanguages: { [langName: string]: LanguageValidator } = {};
 
-  constructor(langs: Desc.LanguageDescription[]) {
+  constructor(langs: Desc.ValidatorDescription[]) {
     langs.forEach(langDesc => this.registerLanguage(langDesc));
   }
 
   /**
    * Registers a new language with this validator
    */
-  private registerLanguage(desc: Desc.LanguageDescription) {
+  private registerLanguage(desc: Desc.ValidatorDescription) {
     if (this.isKnownLanguage(desc.languageName)) {
       throw new Error(`Attempted to register language "${desc.languageName}" twice`);
     }

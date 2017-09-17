@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
-import { Node, NodeDescription } from '../../shared/syntaxtree'
+import { Node, NodeDescription, AvailableLanguages } from '../../shared/syntaxtree'
 
 import { SidebarService } from '../sidebar.service'
 import { ToolbarService } from '../toolbar.service'
@@ -11,6 +11,8 @@ import { ToolbarService } from '../toolbar.service'
 })
 export class SyntaxTreeEditorComponent implements OnInit {
   private _ast: Node;
+
+  private _languages = AvailableLanguages;
 
   constructor(
     private _sidebarService: SidebarService,
@@ -37,7 +39,6 @@ export class SyntaxTreeEditorComponent implements OnInit {
                   language: "xml",
                   name: "attribute",
                   properties: {
-                    "key": "cool",
                     "value": "true",
                   }
                 }
@@ -54,7 +55,6 @@ export class SyntaxTreeEditorComponent implements OnInit {
             name: "attribute",
             properties: {
               "key": "cool",
-              "value": "true",
             }
           }
         ]
@@ -69,5 +69,9 @@ export class SyntaxTreeEditorComponent implements OnInit {
 
   get ast() {
     return (this._ast);
+  }
+
+  get currentLanguage() {
+    return (this._languages.Xml);
   }
 }

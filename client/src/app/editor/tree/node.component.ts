@@ -6,12 +6,8 @@ import { Node } from '../../shared/syntaxtree'
   templateUrl: 'templates/node.html',
   selector: 'ast-node'
 })
-export class NodeComponent implements OnInit {
+export class NodeComponent {
   @Input() node: Node;
-
-  ngOnInit(): void {
-    console.log(`new node: ${this.node.name}`);
-  }
 
   get properties() {
     return (Object.entries(this.node.properties).map(([key, value]) => {

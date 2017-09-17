@@ -14,7 +14,7 @@ import { Validator, ErrorCodes } from './validator'
  *   </body>
  * </html>
  */
-const langMiniHtml: Schema.LanguageDescription = {
+const langMiniHtml: Schema.ValidatorDescription = {
   languageName: "mini-html",
   types: {
     "text": {
@@ -105,7 +105,7 @@ const langMiniHtml: Schema.LanguageDescription = {
  * FROM
  * WHERE
  */
-const langMiniSql: Schema.LanguageDescription = {
+const langMiniSql: Schema.ValidatorDescription = {
   languageName: "mini-sql",
   types: {
     "root": {
@@ -138,7 +138,7 @@ const langMiniSql: Schema.LanguageDescription = {
 /**
  * A single node that uses every possible string constraint.
  */
-const langStringConstraint: Schema.LanguageDescription = {
+const langStringConstraint: Schema.ValidatorDescription = {
   languageName: "string-constraint",
   types: {
     root: {
@@ -179,7 +179,7 @@ const langStringConstraint: Schema.LanguageDescription = {
 /**
  * A single root node that uses some children with the "allowed" constraint
  */
-const langAllowedConstraint: Schema.LanguageDescription = {
+const langAllowedConstraint: Schema.ValidatorDescription = {
   languageName: "allowed-constraint",
   types: {
     "root": {
@@ -212,7 +212,7 @@ const langAllowedConstraint: Schema.LanguageDescription = {
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langSequenceConstraint: Schema.LanguageDescription = {
+const langSequenceConstraint: Schema.ValidatorDescription = {
   languageName: "sequence-constraint",
   types: {
     "root": {
@@ -246,7 +246,7 @@ const langSequenceConstraint: Schema.LanguageDescription = {
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langOneOfNodes: Schema.LanguageDescription = {
+const langOneOfNodes: Schema.ValidatorDescription = {
   languageName: "oneof-nodes",
   types: {
     "root": {
@@ -262,7 +262,7 @@ const langOneOfNodes: Schema.LanguageDescription = {
 /**
  * A single node with only boolean properties.
  */
-const langBooleanConstraint: Schema.LanguageDescription = {
+const langBooleanConstraint: Schema.ValidatorDescription = {
   languageName: "boolean-constraint",
   types: {
     "root": {
@@ -277,7 +277,7 @@ const langBooleanConstraint: Schema.LanguageDescription = {
 /**
  * A single node that may have optional properties.
  */
-const langOptionalProperty: Schema.LanguageDescription = {
+const langOptionalProperty: Schema.ValidatorDescription = {
   languageName: "optionalProperty",
   types: {
     "root": {
