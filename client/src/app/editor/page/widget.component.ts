@@ -1,4 +1,4 @@
-import { OpaqueToken, Type, Input } from '@angular/core'
+import { InjectionToken, Type, Input } from '@angular/core'
 
 import { SidebarService } from '../sidebar.service'
 import { RegistrationService, SidebarType } from '../registration.service'
