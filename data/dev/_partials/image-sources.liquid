@@ -1,0 +1,32 @@
+<div style="margin-top: 20px; padding:20px; border-top-width: 3px;border-top-style: solid;">
+{% displaySourceList %}
+<table class="table">
+  {% for author_sources_entry in sources_grouped %}
+  {% assign author_name = author_sources_entry[0]['author-name'] %}
+  {% assign author_url = author_sources_entry[0]['author-url'] %}
+    <tr>
+      <td><table class="table">
+        {% for box in author_sources_entry[1] %}
+          {% for image_entry in box %}
+          {% assign id = image_entry[0]['id'] %}
+          {% assign name = image_entry[0]['name'] %}
+          {% assign licence_name = "TODO" %}
+          {% assign licence_url = "TODO" %}
+          {% assign count = image_entry[1]['count'] %}
+          <tr>
+            <td>
+              {{ name }}
+              {% for i in (0..count) limit:count %}
+                [<a href="#{{id}}-{{i}}">{{i}}</a>]
+              {% endfor %}
+            </td>
+            <td><a href="{{ licence_url }}">{{ licence_name|json }}</a></td>
+          </tr>
+          {% endfor %}
+        {% endfor %}
+      </table></td>
+      <td><a href="{{author_url}}">{{author_name}}</a></td>
+    </tr>
+  {% endfor %}
+</table>
+</div>

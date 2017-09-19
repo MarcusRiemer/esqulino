@@ -1,0 +1,10 @@
+{% case type %}
+{% when "icon" %}
+    {% addToSourceList %}
+{% when "figure" %}
+    {% imageFigure %}
+{% else %}
+    <div class="alert alert-danger" role="alert">
+    Das Bild {{ src }} mit dem Tiel {{ alt }} ist vom unbekannten Typ {{ type }}.
+    </div>
+{% endcase %}

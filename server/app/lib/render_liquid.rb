@@ -1,4 +1,7 @@
 require 'liquid'
+require 'securerandom'
+
+require_dependency 'image'
 
 # It should be possible for users to define own partials that can be loaded.
 # But apart from that partials could also be provided by a server-side plugin
@@ -62,6 +65,91 @@ class LiquidFilesystem
   end
 end
 
+# The context passed to the render functions by liquid
+# does not pass a modified context to the next render call,
+# instead each render call gets its own context, therefore
+# the source list can not be passed through the rendering
+# chain inside the context. Therefore this global Hash is used.
+# To avoid concurrency issues with caused by multiple rendering
+# runs for different requests on different threads each request
+# generates a uuid and uses it as a key to store its source list
+# inside the hash.
+$sourceList = Hash.new
+
+class AddToSourceList < Liquid::Tag
+  def initialize(tag_name, param, tokens)
+    super
+  end
+
+  def render(context)
+    if context['sources'].nil?
+      context['sources'] = []
+    end
+
+    uuid = context['uuid']
+
+    id_suffix = $sourceList[uuid].count(context['src'])
+
+    $sourceList[uuid] << (context['src'])
+
+    "<img id='#{context['src']}-#{id_suffix}' src='/image/#{ context['src'] }' alt='#{ context['alt'] }'>"
+  end
+end
+
+Liquid::Template.register_tag('addToSourceList', AddToSourceList)
+
+class DisplaySourceList < Liquid::Tag
+  def initialize(tag_name, param, tokens)
+    super
+  end
+
+  def render(context)
+    sources = []
+
+    for image_id in $sourceList[context['uuid']] do
+      img = Image.new(context['project']['instance'], image_id)
+      metadata = img.metadata_show
+      sources << metadata
+    end
+
+    #group sources by author
+    grouped_by_author = sources.group_by { |entry| { 'author-name' => entry['author-name'], 'author-url' => entry['author-url']} }
+
+    #group content of the groups by image id
+    double_grouped = grouped_by_author.map { | k, v| { k => ((v.group_by { |entry| { 'id' => entry['id'], 'name' => entry['name'] } }) ).map { |key, val| { key => { 'data' => val[0], 'count' => val.count } } } } }
+
+    #merge into single hash
+    double_grouped = double_grouped.reduce({}) { |h1, h2| h1.merge(h2) }
+
+    context.merge({'sources_grouped' => double_grouped})
+    nil
+  end
+end
+
+Liquid::Template.register_tag('displaySourceList', DisplaySourceList)
+
+class DisplayImageFigure < Liquid::Tag
+  def initialize(tag_name, param, tokens)
+    super
+  end
+
+  def render(context)
+    img = Image.new(context['project']['instance'], context['src'])
+    metadata = img.metadata_show
+
+    <<-delim
+<figure class="figure">
+  <img id='#{context['src']}' class="figure-img" src='/image/#{ context['src'] }'>
+  <figcaption class="figure-caption text-right">
+    #{ metadata['name'] } von <a href='#{metadata['author-url']}'>#{ metadata['author-name'] }</a>, Lizenz: <a href='\#'>#{ "TODO" }</a>
+  </figcaption>
+</figure>
+    delim
+  end
+end
+
+Liquid::Template.register_tag('imageFigure', DisplayImageFigure)
+
 def liquid_render_path(project, page_file, params)
   liquid_render_page(project, "{% include \"#{page_file}\" %}", params)
 end
@@ -85,8 +173,18 @@ def liquid_render_page(project, page_template, params)
   # Load the basic liquid template
   template = Liquid::Template::parse(page_template)
 
-  # puts "Rendering with params #{params.inspect}"
+#  params["source"]
+
+#  # puts "Rendering with params #{params.inspect}"
+#  def imgidpipe(imgid)
+#    params["source"] << imgid
+#    imgid
+#  end
 
   # Render it alongside the known parameters
-  return (template.render(params))
+  params['uuid'] = SecureRandom.uuid
+  $sourceList[params['uuid']] = []
+  res = (template.render(params))
+  $sourceList.except!(params['uuid'])
+  return res
 end
