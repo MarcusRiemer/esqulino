@@ -11,7 +11,7 @@ class ProjectDatabasesController < ApplicationController
   def visual_schema
     project_id = params['project_id']
     database_id = params['database_id']
-    
+
     # Build the GraphViz description of the database
     db_path = current_project.file_path_sqlite_from_id(database_id)
     db_graphviz = database_graphviz_schema(db_path)

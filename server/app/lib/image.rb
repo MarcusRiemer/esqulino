@@ -5,8 +5,6 @@ require 'fileutils'
 require_dependency 'version'
 
 class Image
-  include ProjectsHelper
-
   IMAGE_FOLDER = 'images'
   IMAGES_JSON = 'images.json'
   IMAGE_PATH_PRE_PROJECT_ID = '/api/project/'
@@ -26,10 +24,6 @@ class Image
 
   def id
     @image_id
-  end
-
-  def file_path
-    @path
   end
 
   def project_id
@@ -122,7 +116,7 @@ class Image
     res['id'] = @image_id
     res['apiVersion'] = current_api_version;
     res['name'] = res['image-name'];
-    res['image-name'] = nil;
+    res.except!('image-name');
 
     res
   end

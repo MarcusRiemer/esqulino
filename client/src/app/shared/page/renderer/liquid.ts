@@ -30,6 +30,7 @@ function renderBody(w: Widget, renderWidget: WidgetRenderer): string {
 <div class="container-fluid">
 ${children}
 </div>
+{% include "image-sources" %}
 {% include "edit-ribbon" %}
 </body>
 `);
@@ -152,7 +153,7 @@ placeholder="">
  */
 function renderImage(w: Widget): string {
   const image = w as Image;
-  return (`<img src="/image/${image.src}" alt="${image.alt}">`);
+  return (`{% include "image" src: "${image.src}", alt: "${image.alt}", type: "icon" %}`);
 }
 
 function renderLink(w: Widget): string {
