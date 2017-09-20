@@ -836,7 +836,11 @@ export class Validator {
    * @param ast The root of the AST to validate
    * @return All errors that occured during evaluation
    */
-  validateFromRoot(ast: AST.Node) {
+  validateFromRoot(ast: AST.Node | AST.Tree) {
+    if (ast instanceof AST.Tree) {
+      ast = ast.rootNode;
+    }
+
     const context = new ValidationContext();
 
     if (ast) {
