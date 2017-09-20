@@ -4,6 +4,7 @@ import { SharedEditorModule } from '../shared/shared.module'
 import { RegistrationService } from '../registration.service'
 
 import { CodeGeneratorComponent } from './code-generator.component'
+import { DragService } from './drag.service'
 import { LanguageService } from './language.service'
 import { NodeComponent } from './node.component'
 import { SyntaxTreeEditorComponent } from './editor.component'
@@ -29,8 +30,8 @@ export class SyntaxTreeEditorModule {
   static forRoot(): ModuleWithProviders {
     return ({
       ngModule: SyntaxTreeEditorModule,
-      providers: [LanguageService]
-    });
+      providers: [DragService, LanguageService]
+    } as ModuleWithProviders);
   }
 
   constructor(reg: RegistrationService) {

@@ -112,8 +112,10 @@ export class ValidationResult {
  * Every type can be identified by its fully qualified name (language
  * & name) and has access to the validator instance this concrete
  * type was loaded into.
+ *
+ * TODO: Possibly this should be handled by a dedicated UI layer?
  */
-abstract class NodeType {
+export abstract class NodeType {
   private _languageName: string;
   private _typeName: string;
   private _validator: Validator;
