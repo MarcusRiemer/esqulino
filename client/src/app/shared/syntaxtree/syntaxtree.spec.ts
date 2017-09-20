@@ -73,6 +73,7 @@ describe('AST: Basic Operations', () => {
       }
     };
     const root = new Node(desc, undefined);
+    expect(root.tree).toBeUndefined();
 
     // <html>
     expect(root.typeName).toEqual("html", "<html> element");
@@ -181,6 +182,7 @@ describe('AST: Basic Operations', () => {
         ]
       }
     };
+
     const t = new Tree(treeDesc);
     expect(t.rootNode.location).toEqual([]);
     expect(t.rootNode.children["a"][0].location).toEqual([["a", 0]]);
@@ -219,6 +221,7 @@ describe('AST: Basic Operations', () => {
         ]
       }
     };
+
     const t = new Tree(treeDesc);
     expect(t.rootNode).toBe(t.locate([]));
     expect(t.rootNode.children["a"][0]).toBe(t.locate([["a", 0]]));
@@ -228,5 +231,65 @@ describe('AST: Basic Operations', () => {
     expect(t.rootNode.children["b"][0].children["c"][1]).toBe(t.locate([["b", 0], ["c", 1]]));
     expect(t.rootNode.children["b"][0].children["d"][0]).toBe(t.locate([["b", 0], ["d", 0]]));
     expect(t.rootNode.children["b"][0].children["d"][1]).toBe(t.locate([["b", 0], ["d", 1]]));
+  });
+
+  it('Throws on invalid locations', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          { language: "lang", name: "r_a_0" },
+          { language: "lang", name: "r_a_1" }
+        ],
+        "b": [
+          {
+            language: "lang",
+            name: "r_b_0",
+            children: {
+              "c": [
+                { language: "lang", name: "r_b_0_c_0" },
+                { language: "lang", name: "r_b_0_c_1" }
+              ],
+              "d": [
+                { language: "lang", name: "r_b_0_d_0" },
+                { language: "lang", name: "r_b_0_d_1" }
+              ]
+            },
+          },
+        ]
+      }
+    };
+
+    const t = new Tree(treeDesc);
+    expect(() => t.locate([["a", 2]])).toThrowError();
+    expect(() => t.locate([["a", -1]])).toThrowError();
+    expect(() => t.locate([["c", 0]])).toThrowError();
+    expect(() => t.locate([["b", 0], ["a", 0]])).toThrowError();
+  });
+
+  it('Throws on nodes that have been removed', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          { language: "lang", name: "r_a_0" },
+          { language: "lang", name: "r_a_1" }
+        ]
+      }
+    };
+
+    // Remove the whole category from the tree
+    const t1 = new Tree(treeDesc);
+    const node1 = t1.rootNode.children["a"][0];
+    delete t1.rootNode.children["a"];
+    expect(() => node1.location).toThrowError();
+
+    // Remove all children of the category from the tree
+    const t2 = new Tree(treeDesc);
+    const node2 = t2.rootNode.children["a"][0];
+    t2.rootNode.children["a"] = [];
+    expect(() => node2.location).toThrowError();
   });
 });

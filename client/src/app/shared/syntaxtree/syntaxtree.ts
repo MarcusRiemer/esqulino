@@ -246,6 +246,9 @@ export class Tree {
     this._root = new Node(rootDesc, this);
   }
 
+  /**
+   * The root for the tree.
+   */
   get rootNode(): Node {
     return (this._root);
   }
@@ -257,7 +260,7 @@ export class Tree {
     let current: Node = this._root;
     loc.forEach(([categoryName, childIndex], i) => {
       const children = current.children[categoryName];
-      if (children && childIndex < children.length) {
+      if ((children && childIndex < children.length) && childIndex >= 0) {
         current = children[childIndex];
       } else {
         throw new Error(`Could not locate step ${i} of ${JSON.stringify(loc)}`);
