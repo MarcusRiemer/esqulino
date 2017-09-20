@@ -1,0 +1,12 @@
+<sidebar-item-host>
+  <div *ngFor="let lang of availableLanguages"
+       class="ast">
+    <h5>{{ lang.name }}</h5>
+    <ul>
+      <li *ngFor="let type of lang.types"
+          class="rounded">
+        {{ type.typeName }}
+      </li>
+    </ul>
+  </div>
+</sidebar-item-host>

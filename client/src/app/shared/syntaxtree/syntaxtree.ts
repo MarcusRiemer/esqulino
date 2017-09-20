@@ -254,6 +254,13 @@ export class Tree {
   }
 
   /**
+   * @return The JSON description of this tree.
+   */
+  toModel() {
+    return (this._root.toModel());
+  }
+
+  /**
    * Retrieves the node at the specified location.
    */
   locate(loc: NodeLocation): Node {

@@ -1,6 +1,6 @@
 import { LanguageDescription } from './language.description'
 
-import { Node, NodeDescription } from './syntaxtree'
+import { Tree, NodeDescription } from './syntaxtree'
 import { Validator, ValidationResult } from './validator'
 import { CodeGenerator } from './codegenerator'
 
@@ -19,13 +19,27 @@ export class Language {
   }
 
   /**
+   * @return The schemas this language is composed of.
+   */
+  get availableSchemas() {
+    return (this._validator.availableSchemas)
+  }
+
+  /**
+   * @return All types that are available in this language.
+   */
+  get availableTypes() {
+    return (this._validator.availableTypes);
+  }
+
+  /**
    * Instanciate a tree from its description.
    *
    * @param desc The description of the tree
-   * @return The root node for the described tree
+   * @return The described tree
    */
-  createTree(desc: NodeDescription): Node {
-    return (new Node(desc, undefined));
+  createTree(desc: NodeDescription): Tree {
+    return (new Tree(desc));
   }
 
   /**
@@ -34,7 +48,7 @@ export class Language {
    * @param ast The root of the tree to validate
    * @return A result object containing all errors
    */
-  validateTree(ast: Node): ValidationResult {
+  validateTree(ast: Tree): ValidationResult {
     return (this._validator.validateFromRoot(ast));
   }
 
@@ -44,7 +58,7 @@ export class Language {
    * @param ast The root of the tree to generate
    * @return A string representation of the tree.
    */
-  emitTree(ast: Node): string {
+  emitTree(ast: Tree): string {
     return (this._codeGenerator.emit(ast));
   }
 

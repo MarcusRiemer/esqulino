@@ -1,5 +1,5 @@
 import {
-  Component, Input, OnInit, OnDestroy, Inject
+  Component, Input, Inject
 } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 
@@ -20,7 +20,7 @@ import { OperatorPipe } from './operator.pipe'
   templateUrl: 'templates/sidebar.html',
   selector: "sql-sidebar"
 })
-export class QuerySidebarComponent implements OnInit, OnDestroy {
+export class QuerySidebarComponent {
   /**
    * This ID is used to register this sidebar with the sidebar loader
    */
@@ -52,15 +52,6 @@ export class QuerySidebarComponent implements OnInit, OnDestroy {
     private _activatedRoute: ActivatedRoute,
     private _router: Router) {
     this.query = query;
-  }
-
-  ngOnInit() {
-
-  }
-
-  ngOnDestroy() {
-    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
-    this._subscriptionRefs = [];
   }
 
   /**

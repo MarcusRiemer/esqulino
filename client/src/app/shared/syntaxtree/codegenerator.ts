@@ -1,4 +1,4 @@
-import { Node, QualifiedTypeName } from './syntaxtree'
+import { Node, Tree, QualifiedTypeName } from './syntaxtree'
 
 export enum OutputSeparator {
   NONE,
@@ -157,7 +157,11 @@ export class CodeGenerator {
   /**
    * @param ast The tree to emit.
    */
-  emit(ast: Node): string {
+  emit(ast: Node | Tree): string {
+    if (ast instanceof Tree) {
+      ast = ast.rootNode;
+    }
+
     const process = new CodeGeneratorProcess(this);
     process.generateNode(ast);
 
