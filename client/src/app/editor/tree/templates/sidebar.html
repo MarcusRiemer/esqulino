@@ -4,6 +4,8 @@
     <h5>{{ lang.name }}</h5>
     <ul>
       <li *ngFor="let type of lang.types"
+          (dragstart)="startDrag($event, type.qualifiedName)"
+          draggable="true"
           class="rounded">
         {{ type.typeName }}
       </li>
