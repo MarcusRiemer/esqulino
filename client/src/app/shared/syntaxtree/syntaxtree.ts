@@ -23,24 +23,36 @@ type NodeProperties = { [propertyName: string]: string }
 export type NodeChildren = { [childrenCategory: string]: Node[] }
 
 /**
+ * Determines the category and the index in that category
+ * of a node.
+ */
+export type NodeLocationStep = [string, number];
+
+/**
+ * Contains the path to find a certain node in a syntax tree.
+ * These paths currently always start from the root node.
+ */
+export type NodeLocation = NodeLocationStep[];
+
+/**
  * The core building block of the AST is this class. It contains
  * enough information to build arbitrarily structured trees. There
  * are no compile-time checks to do any kind of validation, these
  * checks can only be made at runtime.
  */
 export class Node {
-  private _nodeName: string
-  private _nodeLanguage: string
-  private _nodeProperties: NodeProperties
-  private _nodeChildren: NodeChildren
+  private _nodeName: string;
+  private _nodeLanguage: string;
+  private _nodeProperties: NodeProperties;
+  private _nodeChildren: NodeChildren;
 
-  private _nodeParent: Node
+  private _nodeParent: Node | Tree;
 
   /**
    * The constructor is responsible to transfer relevant description
    * properties and to construct any children.
    */
-  constructor(desc: NodeDescription, parent: Node) {
+  constructor(desc: NodeDescription, parent: Node | Tree) {
     this._nodeName = desc.name;
     this._nodeLanguage = desc.language;
     this._nodeParent = parent;
@@ -167,7 +179,91 @@ export class Node {
    * @return The node parenting this one.
    */
   get nodeParent(): Node {
-    return (this._nodeParent);
+    if (this._nodeParent instanceof Node) {
+      return (this._nodeParent);
+    } else {
+      return (undefined);
+    }
+  }
+
+  /**
+   * @return The tree this node is a part of.
+   */
+  get tree(): Tree {
+    let p: any = this._nodeParent;
+    while (p && !(p instanceof Tree)) {
+      p = p._nodeParent;
+    }
+
+    if (p instanceof Tree) {
+      return (p);
+    } else {
+      return (undefined);
+    }
+  }
+
+  /**
+   * @return The location of this node in the tree.
+   */
+  get location(): NodeLocation {
+    return (this.treePathImpl([]));
+  }
+
+  private treePathImpl(prev: NodeLocation): NodeLocation {
+    if (this._nodeParent instanceof Tree) {
+      return (prev);
+    } else {
+      // Take all categories of the parent object
+      const found = Object.entries(this._nodeParent.children).some(([categoryName, children]) => {
+        // And look for ourself
+        const childIndex = children.indexOf(this);
+        if (childIndex >= 0) {
+          // Update the location parameter
+          prev = [[categoryName, childIndex], ...prev];
+          return (true);
+        } else {
+          return (false);
+        }
+      });
+
+      if (!found) {
+        throw new Error("Node must exist in parent!")
+      }
+
+      return (this._nodeParent.treePathImpl(prev));
+    }
   }
 }
 
+/**
+ * Acts as a "virtual" element above the root to ease manipulations
+ * of syntaxtrees.
+ */
+export class Tree {
+  private _root: Node;
+
+  constructor(rootDesc: NodeDescription) {
+    this._root = new Node(rootDesc, this);
+  }
+
+  get rootNode(): Node {
+    return (this._root);
+  }
+
+  /**
+   * Retrieves the node at the specified location.
+   */
+  locate(loc: NodeLocation): Node {
+    let current: Node = this._root;
+    loc.forEach(([categoryName, childIndex], i) => {
+      const children = current.children[categoryName];
+      if (children && childIndex < children.length) {
+        current = children[childIndex];
+      } else {
+        throw new Error(`Could not locate step ${i} of ${JSON.stringify(loc)}`);
+      }
+    })
+
+    return (current);
+  }
+}

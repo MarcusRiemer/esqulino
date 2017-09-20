@@ -1,7 +1,7 @@
-import { Node, NodeDescription } from './syntaxtree'
+import { Node, NodeDescription, Tree } from './syntaxtree'
 
 describe('AST: Basic Operations', () => {
-  it('All in one test', () => {
+  it('Node "all in one"-test', () => {
     // <html>
     //   <head>
     //     <title>{{ page.title }}</title>
@@ -130,5 +130,103 @@ describe('AST: Basic Operations', () => {
 
     // Reverting back to the model representation
     expect(root.toModel()).toEqual(desc);
+  });
+
+  it('Correctly finds parents', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "name",
+      children: {
+        "test": [
+          { language: "lang", name: "c1" },
+          { language: "lang", name: "c2" }
+        ]
+      }
+    };
+    const t = new Tree(treeDesc);
+
+    expect(t.rootNode.tree).toEqual(t);
+    expect(t.rootNode.children["test"][0].tree).toBe(t);
+    expect(t.rootNode.children["test"][0].tree).toBe(t);
+
+    expect(t.rootNode.nodeParent).toBeUndefined();
+    expect(t.rootNode.children["test"][0].nodeParent).toBe(t.rootNode);
+    expect(t.rootNode.children["test"][1].nodeParent).toBe(t.rootNode);
+  });
+
+  it('Correctly determines locations', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          { language: "lang", name: "r_a_0" },
+          { language: "lang", name: "r_a_1" }
+        ],
+        "b": [
+          {
+            language: "lang",
+            name: "r_b_0",
+            children: {
+              "c": [
+                { language: "lang", name: "r_b_0_c_0" },
+                { language: "lang", name: "r_b_0_c_1" }
+              ],
+              "d": [
+                { language: "lang", name: "r_b_0_d_0" },
+                { language: "lang", name: "r_b_0_d_1" }
+              ]
+            },
+          },
+        ]
+      }
+    };
+    const t = new Tree(treeDesc);
+    expect(t.rootNode.location).toEqual([]);
+    expect(t.rootNode.children["a"][0].location).toEqual([["a", 0]]);
+    expect(t.rootNode.children["a"][1].location).toEqual([["a", 1]]);
+    expect(t.rootNode.children["b"][0].location).toEqual([["b", 0]]);
+    expect(t.rootNode.children["b"][0].children["c"][0].location).toEqual([["b", 0], ["c", 0]]);
+    expect(t.rootNode.children["b"][0].children["c"][1].location).toEqual([["b", 0], ["c", 1]]);
+    expect(t.rootNode.children["b"][0].children["d"][0].location).toEqual([["b", 0], ["d", 0]]);
+    expect(t.rootNode.children["b"][0].children["d"][1].location).toEqual([["b", 0], ["d", 1]]);
+  });
+
+  it('Correctly does lookups for locations', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          { language: "lang", name: "r_a_0" },
+          { language: "lang", name: "r_a_1" }
+        ],
+        "b": [
+          {
+            language: "lang",
+            name: "r_b_0",
+            children: {
+              "c": [
+                { language: "lang", name: "r_b_0_c_0" },
+                { language: "lang", name: "r_b_0_c_1" }
+              ],
+              "d": [
+                { language: "lang", name: "r_b_0_d_0" },
+                { language: "lang", name: "r_b_0_d_1" }
+              ]
+            },
+          },
+        ]
+      }
+    };
+    const t = new Tree(treeDesc);
+    expect(t.rootNode).toBe(t.locate([]));
+    expect(t.rootNode.children["a"][0]).toBe(t.locate([["a", 0]]));
+    expect(t.rootNode.children["a"][1]).toBe(t.locate([["a", 1]]));
+    expect(t.rootNode.children["b"][0]).toBe(t.locate([["b", 0]]));
+    expect(t.rootNode.children["b"][0].children["c"][0]).toBe(t.locate([["b", 0], ["c", 0]]));
+    expect(t.rootNode.children["b"][0].children["c"][1]).toBe(t.locate([["b", 0], ["c", 1]]));
+    expect(t.rootNode.children["b"][0].children["d"][0]).toBe(t.locate([["b", 0], ["d", 0]]));
+    expect(t.rootNode.children["b"][0].children["d"][1]).toBe(t.locate([["b", 0], ["d", 1]]));
   });
 });
