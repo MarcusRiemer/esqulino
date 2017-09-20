@@ -1,10 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
-import { Node, NodeDescription, AvailableLanguages } from '../../shared/syntaxtree'
+import { Tree, Node, NodeDescription, AvailableLanguages } from '../../shared/syntaxtree'
 
 import { SidebarService } from '../sidebar.service'
 import { ToolbarService } from '../toolbar.service'
+
+import { TreeSidebarComponent } from './tree.sidebar'
 
 const astDesc: NodeDescription = {
   language: "xml",
@@ -53,7 +55,7 @@ const astDesc: NodeDescription = {
 export class SyntaxTreeEditorComponent implements OnInit {
   @Input() rawNodeData: string = "";
 
-  private _ast: Node;
+  private _ast: Tree;
 
   private _languages = AvailableLanguages;
 
@@ -71,14 +73,16 @@ export class SyntaxTreeEditorComponent implements OnInit {
     const constructItem = this._toolbarService.addButton('construct', 'Baum Erstellen', 'tree', 'r');
     constructItem.onClick.subscribe(() => this.loadRawNode());
 
-    this._ast = new Node(astDesc, undefined);
-    this.rawNodeData = JSON.stringify(this._ast.toModel(), null, 2);
+    this.rawNodeData = JSON.stringify(astDesc, null, 2);
+    this.loadRawNode();
+
+    this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this._ast);
   }
 
   private loadRawNode() {
     try {
       const desc = JSON.parse(this.rawNodeData);
-      this._ast = new Node(desc, undefined);
+      this._ast = new Tree(desc);
       this.rawNodeData = JSON.stringify(this._ast.toModel(), null, 2);
     }
     catch (err) {

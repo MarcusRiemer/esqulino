@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 
-import { Node, Language, ValidationResult } from '../../shared/syntaxtree';
+import { Tree, Language, ValidationResult } from '../../shared/syntaxtree';
 
 /**
  * Shows a compiled AST.
@@ -10,7 +10,7 @@ import { Node, Language, ValidationResult } from '../../shared/syntaxtree';
   selector: 'ast-code-generator'
 })
 export class CodeGeneratorComponent implements OnChanges {
-  @Input() node: Node;
+  @Input() tree: Tree;
   @Input() language: Language;
 
   private _generated: string;
@@ -24,7 +24,7 @@ export class CodeGeneratorComponent implements OnChanges {
 
   private refreshResult() {
     try {
-      this._generated = this.language.emitTree(this.node);
+      this._generated = this.language.emitTree(this.tree);
     } catch (err) {
       this._generated = "";
     }

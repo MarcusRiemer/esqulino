@@ -7,22 +7,16 @@
           Dieser Editor erlaubt die Bearbeitung der grundlegendsten Strukturen und sollte nur von erfahrenen Benutzern verwendet werden.
         </p>
       </div>
-      <div class="card-block">
-        <textarea [(ngModel)]="rawNodeData"
-                  [rows]="rawNodeDataLines"
-                  class="form-control">
-        </textarea>
-      </div>
       
       <div class="card-block">
-        <ast-node [node]="ast"></ast-node>
+        <ast-node [node]="ast.rootNode"></ast-node>
       </div>
     </div>
 
     <div class="card mb-3">
       <div class="card-block">
         <h4 class="card-title">Validierung</h4>
-        <ast-validation [node]="ast"
+        <ast-validation [tree]="ast"
                         [language]="currentLanguage">
         </ast-validation>
       </div>
@@ -31,10 +25,17 @@
     <div class="card mb-3">
       <div class="card-block">
         <h4 class="card-title">Kompilierung</h4>
-        <ast-code-generator [node]="ast"
+        <ast-code-generator [tree]="ast"
                             [language]="currentLanguage">
         </ast-code-generator>
       </div>
+    </div>
+
+    <div class="card-block">
+      <textarea [(ngModel)]="rawNodeData"
+                [rows]="rawNodeDataLines"
+                class="form-control">
+      </textarea>
     </div>
   </div>
 </div>
