@@ -77,10 +77,6 @@ end
 $sourceList = Hash.new
 
 class AddToSourceList < Liquid::Tag
-  def initialize(tag_name, param, tokens)
-    super
-  end
-
   def render(context)
     if context['sources'].nil?
       context['sources'] = []
@@ -99,29 +95,27 @@ end
 Liquid::Template.register_tag('addToSourceList', AddToSourceList)
 
 class DisplaySourceList < Liquid::Tag
-  def initialize(tag_name, param, tokens)
-    super
-  end
-
   def render(context)
-    sources = []
-
-    for image_id in $sourceList[context['uuid']] do
-      img = Image.new(context['project']['instance'], image_id)
-      metadata = img.metadata_show
-      sources << metadata
+    sources = $sourceList[context['uuid']].map do |image_id|
+      Image.new(context['project']['instance'], image_id).metadata_show
     end
 
-    #group sources by author
-    grouped_by_author = sources.group_by { |entry| { 'author-name' => entry['author-name'], 'author-url' => entry['author-url']} }
+    sources_grouped = sources.reduce(Hash.new { |hash, key| hash[key] = {} }) do |hash, source|
+      author_key = source.slice(*%w[author-name author-url])
+      author = hash[author_key]
+      image = source.slice(*%w[name licence-name licence-url])
 
-    #group content of the groups by image id
-    double_grouped = grouped_by_author.map { | k, v| { k => ((v.group_by { |entry| { 'id' => entry['id'], 'name' => entry['name'] } }) ).map { |key, val| { key => { 'data' => val[0], 'count' => val.count } } } } }
+      if existing_image = author[source['id']]
+        existing_image['count'] += 1
+      else
+        author[source['id']] = image
+        author[source['id']]['count'] = 1
+      end
 
-    #merge into single hash
-    double_grouped = double_grouped.reduce({}) { |h1, h2| h1.merge(h2) }
+      hash
+    end
 
-    context.merge({'sources_grouped' => double_grouped})
+    context.merge({'sources_grouped' => sources_grouped})
     nil
   end
 end
@@ -129,10 +123,6 @@ end
 Liquid::Template.register_tag('displaySourceList', DisplaySourceList)
 
 class DisplayImageFigure < Liquid::Tag
-  def initialize(tag_name, param, tokens)
-    super
-  end
-
   def render(context)
     img = Image.new(context['project']['instance'], context['src'])
     metadata = img.metadata_show
@@ -141,7 +131,7 @@ class DisplayImageFigure < Liquid::Tag
 <figure class="figure">
   <img id='#{context['src']}' class="figure-img" src='/image/#{ context['src'] }'>
   <figcaption class="figure-caption text-right">
-    #{ metadata['name'] } von <a href='#{metadata['author-url']}'>#{ metadata['author-name'] }</a>, Lizenz: <a href='\#'>#{ "TODO" }</a>
+    #{ metadata['name'] } von <a href='#{metadata['author-url']}'>#{ metadata['author-name'] }</a>, Lizenz: <a href='#{metadata['licence-url']}'>#{metadata['licence-name']}</a>
   </figcaption>
 </figure>
     delim

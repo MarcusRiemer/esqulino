@@ -87,7 +87,7 @@ export class Page extends ProjectResource {
    * Adds a new row with a default column that spans over the whole row.
    *
    * TODO: This assumes there are only rows, nothing else.
-   * 
+   *
    * @index The index to insert the row at, 0 is the very beginning
    */
   addEmptyRow(index: number) {
@@ -98,7 +98,7 @@ export class Page extends ProjectResource {
    * Adds a new row according to the given specification.
    *
    * TODO: This assumes there are only rows, nothing else.
-   * 
+   *
    * @index The index to insert the row at, 0 is the very beginning
    */
   addRow(index: number, newRowDesc: RowDescription) {

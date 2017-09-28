@@ -6,7 +6,7 @@ class ProjectImagesController < ApplicationController
 
   def create
     ensure_write_access do
-      metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'])
+      metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'], params['licence-name'], params['licence-url'])
       img = Image.file_new!(params['image-file'].tempfile, current_project, metadata)
 
       render plain: img.id
@@ -46,7 +46,7 @@ class ProjectImagesController < ApplicationController
   def metadata_update
     ensure_write_access do
       image_id = params['image_id']
-      metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'])
+      metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'], params['licence-name'], params['licence-url'])
       img = Image.new(current_project, image_id)
       img.metadata_update(metadata)
       img.metadata_save
