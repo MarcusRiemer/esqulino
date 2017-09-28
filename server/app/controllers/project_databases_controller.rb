@@ -25,7 +25,7 @@ class ProjectDatabasesController < ApplicationController
     # for any complex disposition data
     data_disposition = 'inline'
     data_filename = nil
-    
+
     # Does the user want to download the file?
     if params.has_key? 'download'
       file_extension = format.split(':').first
@@ -55,7 +55,7 @@ class ProjectDatabasesController < ApplicationController
                          # Other images only require a matching MIME-type
                          "image/#{format}"
                        end
-        
+
         send_data db_img, type: content_type, disposition: data_disposition, filename: data_filename
       end
     end
@@ -65,7 +65,7 @@ class ProjectDatabasesController < ApplicationController
   def table_row_data
     requested_table = params['tablename']
     database_id = params['database_id']
-    
+
     if(self.current_project.has_table requested_table, database_id)
       result = self.current_project.execute_sql(
         "SELECT * FROM #{requested_table} LIMIT ? OFFSET ?",
@@ -82,7 +82,7 @@ class ProjectDatabasesController < ApplicationController
   def table_row_count
     requested_table = params['tablename']
     database_id = params['database_id']
-    
+
     if(self.current_project.has_table requested_table, database_id)
       result = self.current_project.execute_sql("SELECT COUNT(*) FROM #{requested_table}", [], database_id)
       render :json => result['rows'].first
@@ -93,7 +93,7 @@ class ProjectDatabasesController < ApplicationController
 
   # Alters a certain table of a database
   def table_alter
-    ensure_write_access do  
+    ensure_write_access do
       requested_table = params['tablename']
       database_id = params['database_id']
       sqlite_file_path = self.current_project.file_path_sqlite_from_id(database_id)
@@ -125,7 +125,7 @@ class ProjectDatabasesController < ApplicationController
 
   # Creates a new table in the given database
   def table_create
-    ensure_write_access do  
+    ensure_write_access do
       # TODO: The schema code makes use of OpenStruct, which the validator does
       #       not like. So currently two JSON objects are created, this
       #       is obviously not perfect.
@@ -136,7 +136,7 @@ class ProjectDatabasesController < ApplicationController
       ensure_request("TableDescription", whole_body)    # 1st JSON-object
       newTable = createObject(whole_body)               # 2nd JSON-object
       if(!self.current_project.has_table(newTable['name'], database_id)) then
-        error, msg = create_table(self.current_project.file_path_sqlite_from_id(database_id), newTable)  
+        error, msg = create_table(self.current_project.file_path_sqlite_from_id(database_id), newTable)
         if(error == 0)
           render :status => 200
         else
@@ -156,12 +156,12 @@ class ProjectDatabasesController < ApplicationController
 
   # Drops a single table of the given database.
   def table_delete
-    ensure_write_access do  
+    ensure_write_access do
       table_name = params['tablename']
       database_id = params['database_id']
-      
+
       if(self.current_project.has_table table_name) then
-        error, msg = remove_table(self.current_project.file_path_sqlite_from_id(database_id), table_name)  
+        error, msg = remove_table(self.current_project.file_path_sqlite_from_id(database_id), table_name)
         if(error == 0) then
           render :status => 200
         else

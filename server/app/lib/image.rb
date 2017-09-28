@@ -157,12 +157,14 @@ class Image
     img
   end
 
-  def self.metadata_create(image_name, author_name, author_url)
+  def self.metadata_create(image_name, author_name, author_url, licence_name, licence_url)
     metadata = Hash.new()
 
     metadata["image-name"] = image_name
     metadata["author-name"] = author_name
     metadata["author-url"] = author_url
+    metadata["licence-name"] = licence_name
+    metadata["licence-url"] = licence_url
 
     metadata
   end
