@@ -109,8 +109,34 @@
               Projektbild
           </label>
           <div class="col-sm-10">
-              <image-selector [project]="project" [(projectImageId)]="project.projectImageId"></image-selector>
+            <image-selector [project]="project" [(projectImageId)]="project.projectImageId"></image-selector>
           </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="project.hasSources"
+       class="card mb-3"
+       id="sources">
+    <div class="card-header">
+      Quellen
+    </div>
+    <div class="card-block">
+      In diesem Abschnitt solltest du kenntlich machen, auf welchen Werken dein Projekt basiert und welche Personen daran mitgearbeitet haben.
+    </div>
+
+    <div *ngFor="let source of project.sources"
+         class="card-block">
+      <div class="row">
+        <div class="col-sm-2">
+          <source-icon [source]="source"></source-icon> Datenquelle
+        </div>
+        <div class="col-sm-2">
+          <a [href]="source.url">{{ source.title }}</a>
+        </div>
+        <div class="col-sm-8">
+          {{ source.display }}
+        </div>
       </div>
     </div>
   </div>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{ page.name }} - {{ project.name }}</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+<link rel="stylesheet" href="/vendor/css/bootstrap.css">
+<link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
+</head>
+
+<body>
+<div class="container-fluid">
+<h1>Fakten zu den ???</h1>
+<p>Diese Seite sammelt mehr oder minder sinnvolle Fakten zu den drei Detektiven aus Rocky Beach.</p>
+<h2>Geschichten mit identischen Nummern</h2>
+<p>Die Beziehung zwischen der Buchserie und der Hörspielserie ist eine sehr bewegte Geschichte. Das lässt sich unter anderem an den Nummern der einzelnen Geschichten ablesen. Die folgenden Geschichten haben in der Buch- sowie der Hörspielfassung die gleiche Nummer:</p>
+{% include "query_table" table: query.Gleiche_Nummer, columns: "Geschichte_Name,Geschichte_Nr_Kosmos" %}
+</div>
+{% include "edit-ribbon" %}
+</body>
+
+
+</html>
+

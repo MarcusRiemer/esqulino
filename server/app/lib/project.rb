@@ -212,6 +212,7 @@ class Project
     to_return['indexPageId'] = whole_info['indexPageId']
     to_return['apiVersion'] = whole_info['apiVersion']
     to_return['activeDatabase'] = whole_info['activeDatabase']
+    to_return['sources'] = whole_info['sources']
 
     return to_return;
   end

@@ -1,0 +1,42 @@
+{
+  "name": "Hauptseite",
+  "apiVersion": "4",
+  "referencedQueries": [
+    {
+      "type": "query",
+      "name": "Gleiche_Nummer",
+      "queryId": "d226d960-5dbe-4ff4-9149-69d73a5d08bc"
+    }
+  ],
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "type": "heading",
+        "level": 1,
+        "text": "Fakten zu den ???"
+      },
+      {
+        "type": "paragraph",
+        "text": "Diese Seite sammelt mehr oder minder sinnvolle Fakten zu den drei Detektiven aus Rocky Beach."
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Geschichten mit identischen Nummern"
+      },
+      {
+        "type": "paragraph",
+        "text": "Die Beziehung zwischen der Buchserie und der Hörspielserie ist eine sehr bewegte Geschichte. Das lässt sich unter anderem an den Nummern der einzelnen Geschichten ablesen. Die folgenden Geschichten haben in der Buch- sowie der Hörspielfassung die gleiche Nummer:"
+      },
+      {
+        "type": "query-table",
+        "queryRefName": "Gleiche_Nummer",
+        "columns": [
+          "Geschichte_Name",
+          "Geschichte_Nr_Kosmos"
+        ]
+      }
+    ]
+  }
+}

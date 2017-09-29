@@ -1,0 +1,3 @@
+SELECT Geschichte.Geschichte_Name, Geschichte.Geschichte_Nr_Kosmos
+FROM Geschichte
+WHERE Geschichte.Geschichte_Nr_Kosmos = Geschichte.Geschichte_Nr_Europa

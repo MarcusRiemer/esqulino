@@ -9,6 +9,7 @@ import { SidebarItemHost } from './sidebar-item-host.component'
 import { TrashComponent } from './trash.component'
 import { TrashService } from './trash.service'
 import { ContenteditableModel } from './contenteditable-model.directive'
+import { SourceIconComponent } from './source-icon.component'
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { ContenteditableModel } from './contenteditable-model.directive'
     ContenteditableModel,
     TrashComponent,
     DatabaseEmptyComponent,
+    SourceIconComponent,
   ],
   exports: [
     CommonModule,
@@ -33,6 +35,7 @@ import { ContenteditableModel } from './contenteditable-model.directive'
     TrashComponent,
     ContenteditableModel,
     DatabaseEmptyComponent,
+    SourceIconComponent,
   ]
 })
 export class SharedEditorModule {
