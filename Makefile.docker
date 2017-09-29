@@ -15,6 +15,7 @@ build-dev: build-server-dev build-client-dev
 	@echo built development images
 
 build-base:
+        docker pull archimg/base-devel
 	docker-compose -f docker-compose.base.yml build base
 
 build-server-dev: build-base

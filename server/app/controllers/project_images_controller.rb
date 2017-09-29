@@ -1,8 +1,7 @@
-require 'filemagic'
-
 class ProjectImagesController < ApplicationController
   include ProjectsHelper
   include ValidationHelper
+  include ImageHelper
 
   def create
     ensure_write_access do
@@ -11,14 +10,6 @@ class ProjectImagesController < ApplicationController
 
       render plain: img.id
     end
-  end
-
-  def file_show
-    image_id = params['image_id']
-
-    path = Image.new(current_project, image_id).file_show
-
-    send_file path, :type => FileMagic.new(FileMagic::MAGIC_MIME).file(path), disposition: 'inline'
   end
 
   def file_update

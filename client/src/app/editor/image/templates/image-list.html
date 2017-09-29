@@ -2,8 +2,12 @@
   <div class="card-block">
     <h4>Alle verfügbaren Bilder</h4>
     <p>Hier siehst du alle Bilder, die du für dein Projekt verwenden kannst.</p>
-      <div *ngFor="let image of images" class="card" style="width: 19rem; float:left">
-        <img class="card-img-top" src="{{image.url}}" alt="{{image.name}}" style="display: block; width:auto; height:auto; max-width: 19rem;">
+    <div class="card-columns">
+    <div *ngFor="let image of images"
+         class="card">
+        <img class="card-img-top img-fluid"
+             src="{{image.url}}&width=400"
+             alt="{{image.name}}">
         <div class="card-block">
             <ul>
                 <li>{{image.name}}</li>
@@ -18,5 +22,6 @@
             <button (click)="deleteImage(image.id, image.name)">Löschen</button>
         </div>
       </div>
+    </div>
   </div>
 </div>

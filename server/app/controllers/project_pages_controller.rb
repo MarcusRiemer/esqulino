@@ -7,7 +7,7 @@ class ProjectPagesController < ApplicationController
     @current_page = Page.new current_project, nil
     self.update
   end
-  
+
   # Update an existing page
   def update
     ensure_write_access do
