@@ -23,6 +23,8 @@ gem "json-schema", "~> 2.8"
 
 gem 'ruby-filemagic', '~> 0.7.2'
 
+gem 'rmagick', '~> 2.16'
+
 ############################
 # Rails dependencies
 ###########################

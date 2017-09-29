@@ -88,9 +88,19 @@ class AddToSourceList < Liquid::Tag
 
     $sourceList[uuid] << (context['src'])
 
-    "<img id='#{context['src']}-#{id_suffix}' src='/image/#{ context['src'] }' alt='#{ context['alt'] }'>"
+    <<-delim
+<picture>
+  <source media="(min-width: 2000px)" srcset="/image/#{ context['src'] }">
+  <source media="(min-width: 1600px)" srcset="/image/#{ context['src'] }?width=2000">
+  <source media="(min-width: 1200px)" srcset="/image/#{ context['src'] }?width=1600">
+  <source media="(min-width:  800px)" srcset="/image/#{ context['src'] }?width=1200">
+  <source media="(min-width:  400px)" srcset="/image/#{ context['src'] }?width=800">
+  <img id="#{context['src']}-#{id_suffix}" src="/image/#{ context['src'] }?width=400" alt="#{ context['alt'] }">
+</picture>
+    delim
   end
 end
+
 
 Liquid::Template.register_tag('addToSourceList', AddToSourceList)
 
@@ -129,7 +139,14 @@ class DisplayImageFigure < Liquid::Tag
 
     <<-delim
 <figure class="figure">
-  <img id='#{context['src']}' class="figure-img" src='/image/#{ context['src'] }'>
+  <picture>
+    <source media="(min-width: 2000px)" srcset="/image/#{ context['src'] }">
+    <source media="(min-width: 1600px)" srcset="/image/#{ context['src'] }?width=2000">
+    <source media="(min-width: 1200px)" srcset="/image/#{ context['src'] }?width=1600">
+    <source media="(min-width:  800px)" srcset="/image/#{ context['src'] }?width=1200">
+    <source media="(min-width:  400px)" srcset="/image/#{ context['src'] }?width=800">
+    <img id='#{context['src']}' class="figure-img" src='/image/#{ context['src'] }?width=400'>
+  </picture>
   <figcaption class="figure-caption text-right">
     #{ metadata['name'] } von <a href='#{metadata['author-url']}'>#{ metadata['author-name'] }</a>, Lizenz: <a href='#{metadata['licence-url']}'>#{metadata['licence-name']}</a>
   </figcaption>

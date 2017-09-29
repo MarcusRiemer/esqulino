@@ -3,6 +3,7 @@ require_dependency 'image'
 
 class RenderProjectsController < ApplicationController
   include ProjectsHelper
+  include ImageHelper
 
   def favicon
     render status: :not_found
@@ -58,14 +59,6 @@ class RenderProjectsController < ApplicationController
     return {
       'editor_host' => ENV['ESQULINO_EDITOR_HOST'] || 'localhost.localdomain:9292'
     }
-  end
-
-  def file_show
-    image_id = params['image_id']
-
-    path = Image.new(current_project, image_id).file_show
-
-    send_file path, :type => FileMagic.new(FileMagic::MAGIC_MIME).file(path), disposition: 'inline'
   end
 
   # Extracts the project id from the request.
