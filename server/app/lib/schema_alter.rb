@@ -251,11 +251,11 @@ def column_to_create_statement(schema_column)
   elsif schema_column.type == 'BOOLEAN'
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
-    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type boolean' CHECK (#{schema_column.name} == 1 or #{schema_column.name} == 0) ")
+    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type boolean' CHECK (#{schema_column.name} == 1 OR #{schema_column.name} == 0 OR #{schema_column.name} IS NULL) ")
   elsif schema_column.type == 'INTEGER'
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
-    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type integer' CHECK (#{schema_column.name} regexp '^[+-]?[0-9]+$') ")
+    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type integer' CHECK (#{schema_column.name} REGEXP '^([+-]?[0-9]+$|)') ")
   elsif schema_column.type == 'FLOAT'
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
@@ -263,7 +263,7 @@ def column_to_create_statement(schema_column)
   elsif schema_column.type == 'URL'
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")
-    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type url' CHECK (#{schema_column.name} regexp '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS') ")
+    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type url' CHECK (#{schema_column.name} REGEXP '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS') ")
   else
     createStatement.concat(schema_column.type)
     createStatement.concat(" ")

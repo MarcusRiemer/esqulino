@@ -1,39 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{ page.name }} - {{ project.name }}</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="stylesheet" href="/vendor/css/bootstrap.css">
-    <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
-  </head>
-  <body>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <h1>Historische Personen und Ereignisse</h1>
-          <p>Auf dieser Seite lassen sich die zeitlichen Zusammenhänge von historischen Persönlichkeiten und Ereignissen darstellen.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Alle Personen</h2>
-          <p>Diese Personen sind in der Datenbank hinterlegt.</p>
-          {% include "query_table" table: query.p_alle, columns: "nachname,vorname,geb_jahr,tod_jahr" %}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Alle Ereignisse</h2>
-          {% include "query_table" table: query.e_alle, columns: "bezeichnung,beginn_jahr,ende_jahr" %}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Erlebte Ereignisse</h2>
-          {% include "query_table" table: query.erlebt, columns: "nachname,bezeichnung,beginn_jahr,ende_jahr" %}</div>
-      </div>
-    </div>
-    {% include "edit-ribbon" %}
-  </body>
+<head>
+<title>{{ page.name }} - {{ project.name }}</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+<link rel="stylesheet" href="/vendor/css/bootstrap.css">
+<link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
+</head>
+
+<body>
+<div class="container-fluid">
+<div class="row"><div class="col-md-12"><h1>Historische Personen und Ereignisse</h1>
+<p>Auf dieser Seite lassen sich die zeitlichen Zusammenhänge von historischen Persönlichkeiten und Ereignissen darstellen.</p></div></div>
+<div class="row"><div class="col-md-12"><h2>Ereignisse</h2>
+{% include "query_table" table: query.e_alle, columns: "bezeichnung,beginn_jahr,ende_jahr" %}</div></div>
+</div>
+{% include "edit-ribbon" %}
+</body>
+
+
 </html>
 

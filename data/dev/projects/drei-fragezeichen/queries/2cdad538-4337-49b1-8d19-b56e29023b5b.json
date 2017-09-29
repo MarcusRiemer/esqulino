@@ -1,0 +1,86 @@
+{
+  "name": "Charakter_Sprecher_Alle",
+  "apiVersion": "4",
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "Charakter_Name",
+            "table": "Charakter"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "Sprecher_Name",
+            "table": "Sprecher"
+          }
+        }
+      }
+    ]
+  },
+  "from": {
+    "first": {
+      "name": "Charakter_Sprecher"
+    },
+    "joins": [
+      {
+        "table": {
+          "name": "Charakter"
+        },
+        "cross": "cross"
+      },
+      {
+        "table": {
+          "name": "Sprecher"
+        },
+        "cross": "cross"
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "Charakter_ID",
+            "table": "Charakter_Sprecher"
+          }
+        },
+        "rhs": {
+          "singleColumn": {
+            "column": "Charakter_ID",
+            "table": "Charakter"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    },
+    "following": [
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "Sprecher_Id",
+                "table": "Charakter_Sprecher"
+              }
+            },
+            "rhs": {
+              "singleColumn": {
+                "column": "Sprecher_ID",
+                "table": "Sprecher"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
+      }
+    ]
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "name": "Welche_Rollen",
+  "apiVersion": "4",
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "Sprecher_Name",
+            "table": "Sprecher"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "Charakter_Name",
+            "table": "Charakter"
+          }
+        }
+      }
+    ]
+  },
+  "from": {
+    "first": {
+      "name": "Sprecher"
+    },
+    "joins": [
+      {
+        "table": {
+          "name": "Charakter_Sprecher"
+        },
+        "cross": "cross"
+      },
+      {
+        "table": {
+          "name": "Charakter"
+        },
+        "cross": "cross"
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "Sprecher_ID",
+            "table": "Sprecher"
+          }
+        },
+        "rhs": {
+          "singleColumn": {
+            "column": "Sprecher_Id",
+            "table": "Charakter_Sprecher"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    },
+    "following": [
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "Charakter_ID",
+                "table": "Charakter"
+              }
+            },
+            "rhs": {
+              "singleColumn": {
+                "column": "Charakter_ID",
+                "table": "Charakter_Sprecher"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
+      },
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "Sprecher_ID",
+                "table": "Sprecher"
+              }
+            },
+            "rhs": {
+              "parameter": {
+                "key": "sprecher_id"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
+      }
+    ]
+  }
+}

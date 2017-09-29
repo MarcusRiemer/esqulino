@@ -1,0 +1,86 @@
+{
+  "name": "Auftritt_Alle_Charaktere",
+  "apiVersion": "4",
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "Geschichte_Name",
+            "table": "Geschichte"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "Charakter_Name",
+            "table": "Charakter"
+          }
+        }
+      }
+    ]
+  },
+  "from": {
+    "first": {
+      "name": "Auftritt"
+    },
+    "joins": [
+      {
+        "table": {
+          "name": "Charakter"
+        },
+        "cross": "cross"
+      },
+      {
+        "table": {
+          "name": "Geschichte"
+        },
+        "cross": "cross"
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "Geschichte_ID",
+            "table": "Auftritt"
+          }
+        },
+        "rhs": {
+          "singleColumn": {
+            "column": "Geschichte_ID",
+            "table": "Geschichte"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    },
+    "following": [
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "Charakter_ID",
+                "table": "Auftritt"
+              }
+            },
+            "rhs": {
+              "singleColumn": {
+                "column": "Charakter_ID",
+                "table": "Charakter"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
+      }
+    ]
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "name": "Wer_Tritt_Auf",
+  "apiVersion": "4",
+  "select": {
+    "columns": [
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "Geschichte_Name",
+            "table": "Geschichte"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "Charakter_Name",
+            "table": "Charakter"
+          }
+        }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "Charakter_ID",
+            "table": "Charakter"
+          }
+        }
+      }
+    ]
+  },
+  "from": {
+    "first": {
+      "name": "Geschichte"
+    },
+    "joins": [
+      {
+        "table": {
+          "name": "Auftritt"
+        },
+        "cross": "cross"
+      },
+      {
+        "table": {
+          "name": "Charakter"
+        },
+        "cross": "cross"
+      }
+    ]
+  },
+  "where": {
+    "first": {
+      "binary": {
+        "lhs": {
+          "singleColumn": {
+            "column": "Geschichte_ID",
+            "table": "Geschichte"
+          }
+        },
+        "rhs": {
+          "singleColumn": {
+            "column": "Geschichte_ID",
+            "table": "Auftritt"
+          }
+        },
+        "operator": "=",
+        "simple": true
+      }
+    },
+    "following": [
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "Charakter_ID",
+                "table": "Charakter"
+              }
+            },
+            "rhs": {
+              "singleColumn": {
+                "column": "Charakter_ID",
+                "table": "Auftritt"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
+      },
+      {
+        "expr": {
+          "binary": {
+            "lhs": {
+              "singleColumn": {
+                "column": "Geschichte_ID",
+                "table": "Geschichte"
+              }
+            },
+            "rhs": {
+              "parameter": {
+                "key": "geschichte_id"
+              }
+            },
+            "operator": "=",
+            "simple": true
+          }
+        },
+        "logical": "AND"
+      }
+    ]
+  }
+}
