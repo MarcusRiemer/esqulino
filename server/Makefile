@@ -1,3 +1,8 @@
+# This Makefile used to be a complex behemont, but now simply wraps
+# the Rails CLI
+
+include ../Makefile.common
+
 # Install ruby dependencies
 install-deps : msg-pre-install-deps
 	bundle install
@@ -25,16 +30,16 @@ test : msg-pre-run-test
 ##################################
 
 msg-pre-install-deps :
-	-@tput setaf 2; echo "## Server : Installing dependencies ..."; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Server : Installing dependencies ..."; $(TPUT_BIN) sgr0
 
 msg-pre-clean-deps :
-	-@tput setaf 2; echo "## Server : Cleaning dependencies ..."; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Server : Cleaning dependencies ..."; $(TPUT_BIN) sgr0
 
 msg-pre-run-dev :
-	-@tput setaf 2; echo "## Server : Running Rails in development mode ..."; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Server : Running Rails in development mode ..."; $(TPUT_BIN) sgr0
 
 msg-pre-run-prod :
-	-@tput setaf 2; echo "## Server : Running Rails in production mode ..."; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Server : Running Rails in production mode ..."; $(TPUT_BIN) sgr0
 
 msg-pre-run-test :
-	-@tput setaf 2; echo "## Server : Running tests ..."; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Server : Running tests ..."; $(TPUT_BIN) sgr0

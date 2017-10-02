@@ -25,7 +25,7 @@ dist : msg-pre-build
 dist-dev : msg-pre-build
 	$(NG_BIN) build $(NG_OPTS)
 
-install-deps : has-npm msg-pre-install-deps
+install-deps : msg-pre-install-deps
 	npm install
 
 test :
@@ -54,15 +54,15 @@ gzipped-clean :
 ##################################
 
 msg-pre-build :
-	-@tput setaf 2; echo "## Client : Compiling ..."; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling ..."; $(TPUT_BIN) sgr0
 
 msg-pre-clean :
-	-@tput setaf 2; echo "## Client : Cleaning ..."; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Client : Cleaning ..."; $(TPUT_BIN) sgr0
 
 msg-pre-clean-deps :
-	-@tput setaf 2; echo "## Client : Cleaning dependencies ..."; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Client : Cleaning dependencies ..."; $(TPUT_BIN) sgr0
 
 msg-pre-install-deps :
-	-@tput setaf 2; echo "## Client : Installing dependencies ..."; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Client : Installing dependencies ..."; $(TPUT_BIN) sgr0
 
 .PHONY : all clean dist dist-dev msg-pre-build video-stills
