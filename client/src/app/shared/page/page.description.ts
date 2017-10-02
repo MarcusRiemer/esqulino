@@ -117,11 +117,11 @@ export interface ButtonDescription extends WidgetDescription {
 export interface ImageDescription extends WidgetDescription {
   type: "image"
 
-  // Alternative text to display
-  alt: string
-
   // The image to show
   src: string
+
+  // The modus operandi to display the image
+  displayType: string
 }
 
 /**
