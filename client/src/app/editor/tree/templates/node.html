@@ -1,4 +1,5 @@
 <div *ngIf="node"
+     [astDropTarget]="node"
      class="node">
   <code>{{ node.languageName }}.{{ node.typeName }}</code> ({{ properties.length }} Properties)
   <div *ngFor="let property of properties">

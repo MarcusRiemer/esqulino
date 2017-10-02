@@ -4,6 +4,7 @@ import { SharedEditorModule } from '../shared/shared.module'
 import { RegistrationService } from '../registration.service'
 
 import { CodeGeneratorComponent } from './code-generator.component'
+import { DropTargetDirective } from './drop-target.directive'
 import { DragService } from './drag.service'
 import { LanguageService } from './language.service'
 import { NodeComponent } from './node.component'
@@ -17,6 +18,7 @@ import { ValidationComponent } from './validation.component'
   ],
   declarations: [
     CodeGeneratorComponent,
+    DropTargetDirective,
     NodeComponent,
     SyntaxTreeEditorComponent,
     ValidationComponent,
