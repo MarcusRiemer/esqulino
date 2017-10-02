@@ -153,7 +153,7 @@ placeholder="">
  */
 function renderImage(w: Widget): string {
   const image = w as Image;
-  return (`{% include "image" src: "${image.src}", alt: "${image.alt}", type: "icon" %}`);
+  return (`{% include "image" src: "${image.src}", type: "${image.displayType}" %}`);
 }
 
 function renderLink(w: Widget): string {

@@ -13,7 +13,7 @@ export { ImageDescription }
 export class Image extends WidgetBase {
 
   private _src: string;
-  private _alt: string;
+  private _displayType: string;
 
   constructor(desc: ImageDescription, parent?: WidgetHost) {
     super({
@@ -27,34 +27,24 @@ export class Image extends WidgetBase {
           setter: (v) => this.src = v
         }),
         new StringParameter({
-          name: "alt",
-          getter: () => this.alt,
-          setter: (v) => this.alt = v
+          name: "type",
+          getter: () => this.displayType,
+          setter: (v) => this.displayType = v
         })
       ]
     }, parent);
 
     this._src = desc.src;
-    this._alt = desc.alt;
+    this._displayType = desc.displayType;
   }
 
   static get emptyDescription(): ImageDescription {
     return ({
       type: "image",
       alt: "",
-      src: ""
+      src: "",
+      displayType: "figure"
     });
-  }
-
-  get alt() {
-    return (this._alt);
-  }
-
-  set alt(val: string) {
-    if (this._alt != val) {
-      this._alt = val;
-      this.fireModelChange();
-    }
   }
 
   get src() {
@@ -68,10 +58,21 @@ export class Image extends WidgetBase {
     }
   }
 
+  get displayType() {
+    return (this._displayType);
+  }
+
+  set displayType(val: string) {
+    if (this._displayType != val) {
+      this._displayType = val;
+      this.fireModelChange();
+    }
+  }
+
   protected toModelImpl(): WidgetDescription {
     return ({
       type: "image",
-      alt: this._alt,
+      displayType: this._displayType,
       src: this._src
     } as ImageDescription);
   }
