@@ -11,9 +11,13 @@ export interface CurrentDrag {
   node: NodeDescription
 }
 
+/**
+ * 
+ */
 @Injectable()
 export class DragService {
   private _currentDrag = new BehaviorSubject<CurrentDrag>(undefined);
+  private _currentDragInProgress = this._currentDrag.map(d => !!d);
 
   private _currentSource: Node;
 
@@ -24,8 +28,6 @@ export class DragService {
       throw new Error("Attempted to start a second drag");
     }
 
-    console.log(evt);
-
     // We are only interested in the top level drag element, if
     // we wouldn't stop the propagation, the parent of the current
     // drag element would fire another dragstart.
@@ -35,7 +37,7 @@ export class DragService {
     const dragData = JSON.stringify(drag);
     evt.dataTransfer.setData('text/plain', dragData);
 
-    //
+    // TODO: Choose when to move and when to copy
     evt.dataTransfer.effectAllowed = "move";
 
     // Reset everything once the operation has ended
@@ -62,5 +64,9 @@ export class DragService {
       });
     }
     console.log(`AST-Drag started:`, drag);
+  }
+
+  get isDragInProgress() {
+    return (this._currentDragInProgress);
   }
 }
