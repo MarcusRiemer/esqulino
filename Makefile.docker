@@ -1,3 +1,5 @@
+# Bundling all operations related to docker in a single file
+
 default:
 	@echo no default target
 

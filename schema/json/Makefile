@@ -5,13 +5,15 @@ SRC_PROJECT = $(realpath ../../client/src/tsconfig.app.json)
 # The absolute path of the directory the schemas reside in
 SCHEMA_PATH = $(realpath .)
 
+include ../../Makefile.common
+
 include Makefile.json
 
 # Generating all schemas
 all : msg-pre-schema $(JSON_SCHEMA_FILES)
 
 # Uses the `package.json` file to grab all dependencies
-install-deps : has-npm
+install-deps :
 	npm install
 
 # Remove everything that has been downloaded by `install-deps`
@@ -25,16 +27,14 @@ clean : msg-pre-clean
 ##################################
 # Messaging targets
 ##################################
-
 msg-pre-clean-deps :
-	-@tput setaf 2; echo "## Schema : Cleaning Dependencies ..."; tput sgr0
-
+	-@$(TPUT_BIN) setaf 2; echo "## Schema : Cleaning Dependencies ..."; $(TPUT_BIN) sgr0
 
 msg-pre-clean :
-	-@tput setaf 2; echo "## Schema : Cleaning ..."; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Schema : Cleaning ..."; $(TPUT_BIN) sgr0
 
 msg-pre-schema :
-	-@tput setaf 2; echo "## Schema : Re-Generating out-of-date schemas ..."; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Schema : Re-Generating out-of-date schemas ..."; $(TPUT_BIN) sgr0
 
 .PHONY : all clean install-deps msg-pre-schema
 
