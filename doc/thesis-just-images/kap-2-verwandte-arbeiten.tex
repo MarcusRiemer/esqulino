@@ -1,92 +1,104 @@
 \section{Verwandte Arbeiten und Produkte}
 \label{sec:related-work}
 
-\subsection{Docker}
-Docker verbindet das Isolationsprintip der BSD Jails mit einer Deployment
-Strategie und Aufeinander aufbauenden Environments unter Linux.
-Es kommt hier ein OverlayFS zusammen mit einem Chroot zum Einsatz, um das
-Isolierte Dateisytem zu generieren. Weiterhin werden Virtuelle Netzwerkadapter
-und ein Virtueller Prozess ID Raum erstellt. Der Kernel des Hostsystems wird mit
-dem Container geteilt, für Prozesse des Hostsystems sind alle in Containern
-laufenden Prozesse sowie alle virtuellen Netzwerkadapter und auch die via
-OverlayFS angelegten Verzeichnisstrukturen, für Prozesse des Containers
-sieht es aus, als handele es sich um den init Prozess auf einem eigenen
-Computer.
+\todo[author=mri,inline]{Kurz den Zweck des Kapitels umreißen, keine
+Überschriften ohne Text!}
 
-Ein Projekt wird in Services aufgeteilt, wie z.B. Reverse-Proxy, Webapp,
-API-Server, Datenbank und Static-File-Server, die dann in Containern isoliert
-laufen, wobei jeder Container ein Virtuelles Environment darstellt, in dem 
-jeweils nur ein Prozess mit eventuell geforkten Worker Prozessen läuft.
+\subsection{Docker} Docker verbindet das Isolationsprintip der BSD
+Jails mit einer Deployment Strategie und Aufeinander aufbauenden
+Environments unter Linux.  Es kommt hier ein OverlayFS zusammen mit
+einem Chroot zum Einsatz, um das Isolierte Dateisytem zu
+generieren. Weiterhin werden Virtuelle Netzwerkadapter und ein
+Virtueller Prozess ID Raum erstellt. Der Kernel des Hostsystems wird
+mit dem Container geteilt, für Prozesse des Hostsystems sind alle in
+Containern laufenden Prozesse sowie alle virtuellen Netzwerkadapter
+und auch die via OverlayFS angelegten Verzeichnisstrukturen, für
+Prozesse des Containers sieht es aus, als handele es sich um den init
+Prozess auf einem eigenen Computer.
 
-Da ein Container mit Ausnahme der Hardware und der Kernel Version überall
-das gleiche Environment erzeugt, beinhaltet Docker eine Deployment Strategie
-mittels Images. Ein Image verhält sich dabei zu einem Container in etwa so
-wie eine Klasse zu einer Instanz bei Objektorientierter Programmierung und
-ebenso, kann ein Image von einem anderen Image erben. Ein Image wird durch den
-Build Prozess aus einem Dockerfile erzeugt und ist unveraenderlich. Das
-Dockerfile ist eine Anleitung um aus einem Image ein anderes zu bauen und
-beginnt mit der Nennung des Basisimages. Das immer existierende Basisimage
-scratch stellt ein vollkommen leeres Dateisytem bereit und ist am Anfang jeder
-Vererbungskette zu finden. Jede weitere Anweisung im Dockerfile fügt dem
-Image einen weiteren Layer hinzu, der Änderungen vorheriger Layer mittels
-OverlayFS überlagert. Insbesondere bei Produktivumgebungen sollte versucht
-werden, die Anzahl der Layer durch zusammenlegen von Anweisungen im Dockerfile
-zu minimieren, und somit den Overhead durch das OverlayFS beim Dateizugriff zu
-minimieren.
+Ein Projekt wird in Services aufgeteilt, wie z.B. Reverse-Proxy,
+Webapp, API-Server, Datenbank und Static-File-Server, die dann in
+Containern isoliert laufen, wobei jeder Container ein Virtuelles
+Environment darstellt, in dem jeweils nur ein Prozess mit eventuell
+geforkten Worker Prozessen läuft.
 
-Die Einzelnen Layer werden in Form komprimierter Archive adressiert nach
-Hashwerten gespeichert, die beim Erzeugen eines Containers entpackt werden und
-so den Startzustand des Containers herstellen. Alle im Container gemachten
-Änderungen, die nicht zu einem Image Layer gepackt oder in einem Volume
-gespeichert werden gehen beim entfernen des Containers verloren. Volumes sind
-Verzeichnisse im Hostsystem, die an eine bestimmte Stelle des Containers gemappt
-werden und gleichzeitig in mehreren Containern eingebunden sein können.
+\todo[author=mri,inline]{Grafik zur Aufteilung in Services}
 
-Eingehende Kommunikation zu Containern wird per Default unterbunden und muss
-explizit aktiviert werden. Es ist möglich mehrere Container in ein
-gemeinsames Virtuelles Netzwerk zu legen, sodass eine Kommunikation
-untereinander stattfinden kann (Reverse-Proxy -> Webseite, Webseite ->
-Datenbank) als auch bestimmte Netzwerk Ports des Hosts auf bestimmte Netzwerk
-Ports eines Containers zu mappen (Internet -> Reverse-Proxy).
+Da ein Container mit Ausnahme der Hardware und der Kernel Version
+überall das gleiche Environment erzeugt, beinhaltet Docker eine
+Deployment Strategie mittels Images. Ein Image verhält sich dabei zu
+einem Container in etwa so wie eine Klasse zu einer Instanz bei
+Objektorientierter Programmierung und ebenso, kann ein Image von einem
+anderen Image erben. Ein Image wird durch den Build Prozess aus einem
+Dockerfile erzeugt und ist unveraenderlich\todo[author=mri]{Umlaute
+sind OK}. Das Dockerfile ist eine Anleitung um aus einem Image ein
+anderes zu bauen und beginnt mit der Nennung des Basisimages. Das
+immer existierende Basisimage scratch stellt ein vollkommen leeres
+Dateisytem bereit und ist am Anfang jeder Vererbungskette zu
+finden. Jede weitere Anweisung im Dockerfile fügt dem Image einen
+weiteren Layer hinzu, der Änderungen vorheriger Layer mittels
+OverlayFS überlagert. Insbesondere bei Produktivumgebungen sollte
+versucht werden, die Anzahl der Layer durch zusammenlegen von
+Anweisungen im Dockerfile zu minimieren, und somit den Overhead durch
+das OverlayFS beim Dateizugriff zu minimieren.
+
+Die Einzelnen Layer werden in Form komprimierter Archive adressiert
+nach Hashwerten gespeichert, die beim Erzeugen eines Containers
+entpackt werden und so den Startzustand des Containers
+herstellen. Alle im Container gemachten Änderungen, die nicht zu einem
+Image Layer gepackt oder in einem Volume gespeichert werden gehen beim
+entfernen des Containers verloren. Volumes sind Verzeichnisse im
+Hostsystem, die an eine bestimmte Stelle des Containers gemappt werden
+und gleichzeitig in mehreren Containern eingebunden sein können.
+
+Eingehende Kommunikation zu Containern wird per Default unterbunden
+und muss explizit aktiviert werden. Es ist möglich mehrere Container
+in ein gemeinsames Virtuelles Netzwerk zu legen, sodass eine
+Kommunikation untereinander stattfinden kann (Reverse-Proxy ->
+Webseite, Webseite -> Datenbank) als auch bestimmte Netzwerk Ports des
+Hosts auf bestimmte Netzwerk Ports eines Containers zu mappen
+(Internet -> Reverse-Proxy).
+
+\todo[author=mri,inline]{Weitere Grafik oder auf die bisherhige Grafik
+verweisen}
 
 \subsubsection{Docker vs VM}
 
-
+\todo[author=mri,inline]{TODO}
 
 \subsection{TODO: Short description of SQLino}
 
+\subsection{TODO:RESTFUL API} Eine RESTFUL API ist eine, die
+zustandsfreie HTTP Requests verwendet. Ein API
+Endpunkt\todo[author=mri]{Stichwort: \texttt{URI}} wie
+z.B. https://example.com/foo/23/bar/42 wird verwendet, indem ein
+Request mit einem der HTTP Verben GET, POST, PUT oder DELETE gesendet
+wird.  GET signalisiert die Abfrage von Daten, POST das Verändern von
+Daten, PUT das Anlegen neuer Daten und DELETE das Löschen von
+Daten. Ein GET Request könnte beispielsweise ein bestimmtes Bild
+abrufen, ein anderer eine Datenbank nach allen Einträgen, die einem
+mitgeschicktem Filterkriterium entsprechen, durchsuchen. Es ist auch
+vorstellbar ein RESTFUL API auf ein definiertes Subset von SQL zu
+mappen oder die Steuerung einer Waschmaschiene.
 
+Da die Requests zustandsfrei sind, kann in einem Request nicht auf
+einen vorausgegangenen Request zurückgegriffen werden. Zwar werden
+duch einen Request eingetretene Datenbankänderungen in der
+Datenbankabfrage des nächsten Requests sichtbar, allerdings, existiert
+keine Session in der beispielsweise ein Arbeitsverzeichnis festgelegt
+oder ein von allen Folgerequests verwendeter Namensraum ausgewählt
+werden kann. Jeder Request muss alle zu seiner Verarbeitung
+notwendigen Informationen selbst beinhalten.
 
-\subsection{TODO:RESTFUL API}
-Eine RESTFUL API ist eine, die zustandsfreie HTTP Requests verwendet. Ein API
-Endpunkt wie z.B. https://example.com/foo/23/bar/42 wird verwendet, indem ein
-Request mit einem der HTTP Verben GET, POST, PUT oder DELETE gesendet wird.
-GET signalisiert die Abfrage von Daten, POST das Verändern von Daten, PUT
-das Anlegen neuer Daten und DELETE das Löschen von Daten. Ein GET Request
-könnte beispielsweise ein bestimmtes Bild abrufen, ein anderer eine
-Datenbank nach allen Einträgen, die einem mitgeschicktem Filterkriterium
-entsprechen, durchsuchen. Es ist auch vorstellbar ein RESTFUL API auf ein
-definiertes Subset von SQL zu mappen oder die Steuerung einer Waschmaschiene.
-
-Da die Requests zustandsfrei sind, kann in einem Request nicht auf einen
-vorausgegangenen Request zurückgegriffen werden. Zwar werden duch einen
-Request eingetretene Datenbankänderungen in der Datenbankabfrage des
-nächsten Requests sichtbar, allerdings, existiert keine Session in der
-beispielsweise ein Arbeitsverzeichnis festgelegt oder ein von allen
-Folgerequests verwendeter Namensraum ausgewählt werden kann. Jeder Request
-muss alle zu seiner Verarbeitung notwendigen Informationen selbst beinhalten. 
-
-\subsection{TODO: MVC}
-Model View Controller ist ein zum bearbeiten von Webrequests geeignetes Konzept.
-Daten werden nach durch ein Model beschrieben und strukturiert und verwaltet, ihre Darstellung
-durch den View festgelegt und die Webrequests vom Controller behandelt. So
-werden Datenhaltung, Darstellung und Buisiness Logic von einander getrennt und
-können bis zu einem gewissen Grad unabhängig von einander
+\subsection{TODO: MVC} Model View Controller ist ein zum bearbeiten
+von Webrequests geeignetes Konzept.  Daten werden nach durch ein Model
+beschrieben und strukturiert und verwaltet, ihre Darstellung durch den
+View festgelegt und die Webrequests vom Controller behandelt. So
+werden Datenhaltung, Darstellung und Buisiness Logic von einander
+getrennt und können bis zu einem gewissen Grad unabhängig von einander
 überarbeitet werden.
 
 \subsection{TODO: Short description of Angular}
-
-
 
 %%% Local Variables:
 %%% mode: latex
