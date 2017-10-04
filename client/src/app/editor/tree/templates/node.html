@@ -1,7 +1,12 @@
 <div *ngIf="node"
      [astDropTarget]="node"
+     [@dropTarget]="dropAnimationState | async"
+     (@dropTarget.start)="logAnimation($event)"
+     (@dropTarget.done)="logAnimation($event)"
      class="node">
-  <code>{{ node.languageName }}.{{ node.typeName }}</code> ({{ properties.length }} Properties)
+  <code>{{ node.languageName }}.{{ node.typeName }}</code>
+  ({{ properties.length }} Properties)
+  
   <div *ngFor="let property of properties">
     <label>
       {{ property.key }} = {{ property.value }}

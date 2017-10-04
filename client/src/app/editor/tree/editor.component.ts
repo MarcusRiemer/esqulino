@@ -1,12 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { Tree, Node, NodeDescription, AvailableLanguages } from '../../shared/syntaxtree'
+import { Tree, Node, NodeDescription, AvailableLanguages } from '../../shared/syntaxtree';
 
-import { SidebarService } from '../sidebar.service'
-import { ToolbarService } from '../toolbar.service'
+import { SidebarService } from '../sidebar.service';
+import { ToolbarService } from '../toolbar.service';
 
-import { TreeSidebarComponent } from './tree.sidebar'
+import { TreeSidebarComponent } from './tree.sidebar';
+import { DragService } from './drag.service';
 
 const astDesc: NodeDescription = {
   language: "xml",
@@ -61,7 +62,8 @@ export class SyntaxTreeEditorComponent implements OnInit {
 
   constructor(
     private _sidebarService: SidebarService,
-    private _toolbarService: ToolbarService
+    private _toolbarService: ToolbarService,
+    private _dragService: DragService
   ) {
   }
 
@@ -79,6 +81,18 @@ export class SyntaxTreeEditorComponent implements OnInit {
     this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this._ast);
   }
 
+  /**
+   * When something draggable enters the editor area itself there is no
+   * possibility anything is currently dragged over a node. So we inform the
+   * drag service about that.
+   */
+  public onDragEnter(evt: DragEvent) {
+    this._dragService.informDraggedOverNode(undefined);
+  }
+
+  /**
+   * Constructs a new tree from immediate JSON input the user has given.
+   */
   private loadRawNode() {
     try {
       const desc = JSON.parse(this.rawNodeData);
@@ -90,14 +104,30 @@ export class SyntaxTreeEditorComponent implements OnInit {
     }
   }
 
-  get rawNodeDataLines() {
+  /**
+   * @return The drag service that is responsible for this editor.
+   */
+  get dragService() {
+    return (this._dragService);
+  }
+
+  /**
+   * @return The number of lines the raw input currently has.
+   */
+  get rawNodeDataLineNum() {
     return (this.rawNodeData.split("\n").length);
   }
 
+  /**
+   * @return The tree that is edited by this editor
+   */
   get ast() {
     return (this._ast);
   }
 
+  /**
+   * @return The main language to assume the node uses.
+   */
   get currentLanguage() {
     return (this._languages.Xml);
   }
