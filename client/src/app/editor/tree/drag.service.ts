@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core'
+import { Observable, BehaviorSubject } from 'rxjs'
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
+import { Injectable } from '@angular/core'
 
 import { TrashService } from '../shared/trash.service'
 
@@ -8,18 +8,22 @@ import { Node, NodeDescription } from '../../shared/syntaxtree'
 
 export interface CurrentDrag {
   origin: "sidebar" | "tree"
-  node: NodeDescription
+  draggedDescription: NodeDescription
 }
 
 /**
- * 
+ * Manages state for everything involved dragging.
  */
 @Injectable()
 export class DragService {
   private _currentDrag = new BehaviorSubject<CurrentDrag>(undefined);
   private _currentDragInProgress = this._currentDrag.map(d => !!d);
 
+  // The node the operation originated from
   private _currentSource: Node;
+
+  // The node the drag operation is currently dragged over.
+  private _currentDragOver = new BehaviorSubject<Node>(undefined);
 
   private constructor(private _trashService: TrashService) { }
 
@@ -45,12 +49,12 @@ export class DragService {
       evt.target.removeEventListener("dragend", dragEndHandler);
 
       this._currentDrag.next(undefined);
+      this._currentDragOver.next(undefined);
       this._currentSource = undefined;
       this._trashService.hideTrash();
       console.log(`AST-Drag ended:`, drag);
     }
     evt.target.addEventListener("dragend", dragEndHandler);
-
 
     // Store drag information as long as this drags on
     this._currentDrag.next(drag);
@@ -66,7 +70,31 @@ export class DragService {
     console.log(`AST-Drag started:`, drag);
   }
 
+  /**
+   * Needs to be called by nodes when the drag operation currently drags over any node.
+   */
+  public informDraggedOverNode(node: Node) {
+    if (this._currentDragOver.getValue() != node) {
+      this._currentDragOver.next(node);
+    }
+    console.log("Dragged Over:", node ? JSON.stringify(node.location) : "editor");
+  }
+
+  /**
+   * @return Observable to always know the current (very general)y state of drag affairs.
+   */
   get isDragInProgress() {
-    return (this._currentDragInProgress);
+    return (this._currentDragInProgress.distinctUntilChanged());
+  }
+
+  get peekIsDragInProgress() {
+    return (!!this._currentDrag.getValue());
+  }
+
+  /**
+   * @return Observable with the node that is currently dragged over.
+   */
+  get currentDragOverNode() {
+    return (this._currentDragOver.distinctUntilChanged());
   }
 }

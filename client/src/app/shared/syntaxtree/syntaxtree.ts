@@ -209,7 +209,12 @@ export class Node {
     return (this.treePathImpl([]));
   }
 
+  /**
+   * Calculates a path to this node by walking up the tree and finding out where exactly
+   * in the parent the current node is stored.
+   */
   private treePathImpl(prev: NodeLocation): NodeLocation {
+    // The root node uses the empty path
     if (this._nodeParent instanceof Tree) {
       return (prev);
     } else {

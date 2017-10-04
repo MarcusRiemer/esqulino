@@ -2,6 +2,8 @@ import { Directive, ElementRef, Input } from '@angular/core';
 
 import { Node } from '../../shared/syntaxtree';
 
+import { DragService } from './drag.service';
+
 /**
  * Can be used for any element to register it as a drop
  * target for a certain node.
@@ -11,9 +13,9 @@ import { Node } from '../../shared/syntaxtree';
 })
 export class DropTargetDirective {
 
-  @Input('astDropTarget') node: string;
+  @Input('astDropTarget') node: Node;
 
-  constructor(ref: ElementRef) {
+  constructor(ref: ElementRef, dragService: DragService) {
     console.log("constructor for astDropTarget");
 
     const el: HTMLElement = ref.nativeElement;
@@ -25,24 +27,11 @@ export class DropTargetDirective {
       evt.cancelBubble = true;
     };
 
-    el.addEventListener("dragover", preventAndCancel);
-    el.addEventListener("dragenter", (evt) => {
-      el.style.backgroundColor = 'yellow';
-      console.log("dragenter");
-    });
-
-    el.addEventListener("dragleave", (evt) => {
-      el.style.backgroundColor = prevColour;
-      console.log("dragleave");
-    });
-
-    el.addEventListener("dragend", (evt) => {
-      el.style.backgroundColor = prevColour;
-    });
-
-    el.addEventListener("drop", evt => {
+    el.addEventListener("dragenter", evt => {
       preventAndCancel(evt);
+      dragService.informDraggedOverNode(this.node);
     });
 
+    el.addEventListener("drop", preventAndCancel);
   }
 }

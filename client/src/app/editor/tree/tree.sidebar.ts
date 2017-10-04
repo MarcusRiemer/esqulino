@@ -35,7 +35,7 @@ export class TreeSidebarComponent implements OnInit {
 
   startDrag(evt: DragEvent, type: QualifiedTypeName) {
     this._dragService.dragStart(evt, {
-      node: {
+      draggedDescription: {
         language: type.languageName,
         name: type.typeName
       },

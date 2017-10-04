@@ -1,4 +1,5 @@
-<div class="ast">
+<div class="ast"
+     (dragenter)="onDragEnter($event)">
   <div class="content">    
     <div class="card mb-3">
       <div class="card-block">
@@ -11,6 +12,14 @@
       <div class="card-block">
         <ast-node [node]="ast.rootNode"></ast-node>
       </div>
+    </div>
+
+    <div class="alert alert-info">
+      <h6>
+        <span class="fa fa-bug"></span> Drag&Drop
+      </h6>
+      
+      {{ (dragService.currentDragOverNode | async)?.location | json }}
     </div>
 
     <div class="card mb-3">
@@ -31,11 +40,9 @@
       </div>
     </div>
 
-    <div class="card-block">
-      <textarea [(ngModel)]="rawNodeData"
-                [rows]="rawNodeDataLines"
-                class="form-control">
-      </textarea>
-    </div>
+    <textarea [(ngModel)]="rawNodeData"
+              [rows]="rawNodeDataLineNum"
+              class="form-control">
+    </textarea>
   </div>
 </div>
