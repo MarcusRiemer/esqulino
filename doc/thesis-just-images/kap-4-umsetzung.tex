@@ -11,15 +11,106 @@
 
 \subsubsection{Server: Ruby on Rails}
 
-
+Rails ist ein in Ruby geschriebenes serverseitiges Framework für
+Webanwendungen. Rails mach bestimmte Annahmen darüber was der ``richtige'' Weg
+ist, bestimmte Dinge zu tun und was Webanwendungen benötigen und stellt hierfür
+Werkzeuge bereit. Rails verfolgt das Model-View-Controller Konzept, aber da die
+Anwendung vor Rails Sinatra verwendet hat ist die Logik nicht in Models sondern
+in durch den Controller verwendeten Librabies untergebracht. Die Views werden
+ebenfalls nicht verwendet. Für den Editor stellen die Controller die vom Angular
+Client genutzten API Endpunkte bereit und das eigentliche Frontend wird in durch
+die Templating Engine Liquid gerendert.
 
 \subsubsection{Client: Angular 4}
+
+Angular ist eine Platform für Web- und Desktopanwendungen, wobei mit Angular
+erstellte Desktopanwendungen Frameworks wie Electron benötigen, die einen
+Server, einen kompatiblen Browser und die Daten ``zusammenkleben'' und als
+Anwendung ausliefern, im Fall von Electron handelt es sich um Node.js und
+Chromium, deren Sicherheitsrelevante Updates eines Updates der Anwendung durch
+den Entwickler bedürfen. Im Fall von Webanwendungen liegt es am Nutzer einen
+kompatiblen Browser zu verwenden allerdings ist der Nutzer nicht für das
+Einspielen von Sicherheitsupdates des Browsers vom Entwickler der Webapp
+abhängig und auf den Servern eingespielte Sicherheitsupdates sind sofort für
+alle Nutzer gültig.
+
+Angular verwendet Typscript, was zu JavaScript kompiliert wird. Bei
+abgeschaltetem JavaScript oder Browsern ohne JavaScript, wie sie unter anderem
+von Screenreadern für blinde Nutzer verwendet werden, ist ohne zutun des
+Entwicklers nicht mehr als eine leere Seite zu sehen, da alle in Angular
+entworfenen Inhalte erst nach dem Laden der Seite durch das Framework in
+JavaScript nachgeladen werden.
+
+Angular Anwendungen sind aufgeteilt in Module. In den Modulen befinden sich
+Components und Templates. Templates stellen ein Element in der Anwendung dar,
+während Components dem Template die dargestellten Daten liefert und auf im
+Kontext des Templates auftretende Ereignisse verarbeitet. Dabei kann in einem
+Template direkt der Wert einer Eigenschaft der Component referenziert werden,
+der dann dort dargestellt und bei Änderung aktualisiert wird und ein Ergeignis
+wie onClick direkt mit einer Funktion der Component verbunden werden. Angular
+kennt weiterhin Services, die dazu gedacht sind bestimmte Aufgaben auszuführen,
+wie Kommunikation mit dem Server oder Verwaltung von Konfigurationen.
+
+\subsection{TODO: find name}
 
 
 
 \subsubsection{Caching}
 
-\todo{caching von html requests}
+Die Bildverwaltung erlaubt es, jederzeit ein Bild zu verändern, ohne dass sich
+die URL ändert. Dadurch geht de Client davon aus, dass das in seinem Cache
+liegende Bild noch aktuell ist und die neue Version des Bildes nicht geladen
+wird, bis das Bild aus dem Cache des Clients gelöscht wurde.
+
+Dieses Verhalten kann umgangen werden, indem die URL für jeden Request um den
+aktuellen Zeitstempel als Parameter erweitert wird, führt jedoch dazu, dass der
+Cache komplett ausser Kraft gesetz wird. Eine weitere unwirksame Methode ist das
+setzen der maximalen Lebensdauer des Bildes im Cache durch den dafür
+vorgesehenen HTTP-Header, da hierfür der Zeitpunkt der nächsten Änderung des
+Bildes bekannt sein müsste. Ohne diese Information ist diese Methode lediglich
+eine Balance zwischen den beiden zuvor genannten, aber keine korrekte Lösung des
+Problems.
+
+Zur korrekten Lösung des Problems stellt HTTP zwei Header zur Verfügung: ETAG
+und Last-Modified. Bei beiden stellt der Client den Request an den Server,
+schickt aber den Last-Modified bzw ETAG Header mit dem vom Server zuletzt
+übermittelten Wert mit. Der Server prüft ob der vom Client im Header
+übermittelte Wert noch aktuell ist und antwortet mit dem aktuellem Inhalt oder
+dem Hinweis, dass der vom Client gecachete Inhalt sich auf Serverseite nicht
+verändert hat.
+
+ETAG verwendet hierbei eine Checksumme über den Inhalt, Last-Modified einen
+Zeitstempel. Im Kontext der Bildverwaltung sind beide gleich Wirkungsvoll, da
+jedes Bild im Dateisystem gespeichert wird und somit der Zeitstempel vom
+Dateisystem verwaltet und bei Änderungen an der Datei aktualisiert wird. Die
+Verwendung der Checksumme setzt voraus, dass für jeden Request zum Abrufen eines
+Bildes die Checksumme des Bildes neu berechnet werden muss. Im Gegensatz zu
+Last-Modified kann ETAG durch Bitflip entstandene Bildänderungen feststellen und
+sie dem Projektautoren schneller anzeigen und ist resistent gegenüber
+Manipulation des Zeitstempel im Dateisystem oder Unregelmäßigkeiteiten in der
+Systemzeit, allerdings kann ersteres durch Verwendung hostingtauglicher
+Festplatten- und Dateisystemkonfigurationen vermieden werden und letzteres
+deutet auf einen Hardwaredefekt hin dessen Mitigation nicht in den Anforderungen
+an die Bildverwaltung enthalten ist, während die Manipulation der Zeitstempel
+externen Eingriff auf durch den Systemadministrator oder einen Angreifer auf das
+System bedeutet ersteres widerspricht der Aufgabe des Systemadministrators und
+das Verhindern von letzterem ist sowohl Aufgabe aller am erstellen oder
+betreiben der Software beteiligter. ETAG und Last-Modified können auch zusammen
+verwendet werden, sodass im Fall einer Veränderung des Bildes das berechnen der
+Checksumme entfallen kann, da sich der Zeitstempel bereits unterscheidet. Im
+wesentlich häufiger auftretenden Fall des aktuellen Client Caches muss die
+Checksumme jedoch weiter berechnet werden.
+
+Die Bildverwaltung verwendet den Last-Modified Header mit dem Zeitzonenfreien
+Zeitstempel aus dem Dateisystem, da der zusätzliche Overhead durch das Berechnen
+der Checksumme jedes ausgliefertem Bildes keinen ausreichenden Mehrwert
+gegenüber der Verwendung des Zeitstempels bietet. Beim Skalieren der Anwendung
+auf mehrere nicht unhabhängige Instanzen kann der Last-Modified Header aus dem
+Filesystem nicht mehr zuverlässig verwendet werden ohne dass beim
+Synchronisieren der Daten die Zeitstempel mit synchronisiert werden, hier kann
+die Verwendung des ETAG Headers besser sein, allerdings ist der Wechsel von
+Last-Modified zu ETAG trivial und die Software derzeit nicht in der Lage in
+dieser Form betrieben zu werden.
 
 \subsubsection{API}
 
@@ -48,7 +139,43 @@ angesiedelt
 
 \subsubsection{Frontendintegration}
 
+Für das Frontend wird die Templating Engine Liquid verwendet. Der Seiteneditor
+erzeugt ein Template, in dem Zwei verschiedene Bild Tags enthalten sein können:
+einer für grafische Elemente, die in der Quellliste am Ende der Seite aufgeführt
+werden, und einer für Abbildungen, denen die Quelle direkt angehängt ist.
+Letztres verwendet einen dafür erzeugten Tag displayImageFigure, der den Tag in
+eine HTML Figure Umgebung mit dem Bild und der Quellenangabe rendert.
 
+Für die grafischen Elemente wird ebenfalls ein spezieller Tag verwendet,
+allerdings muss dieser nicht nur die HTML Darstellung des Bildes rendern,
+sondern auch dafür sorgen, dass das Bild in der Quellenliste aufgeführt wird.
+Der Tag muss also einen Seiteneffect auslösen, der das Bild der Quellenliste
+hinzufügt, weshalb er addToSourceList heißt. Die Quellenliste wird durch den Tag
+displaySourceList gerendert, der am Ende jeder Seite eingefügt wird.
+
+Es ist im Konzept von Liquid nicht vorgesehen, dass das Rendern eines Tags
+einfluss auf darauf folgende Tags hat, weshalb die Quellenliste in einer
+globalen Variable gespeichert werden muss. Da mehrere Rendervorgänge
+geleichzeitig stattfinden können, die sich allerdings nicht gegenseitig
+beeinflussen dürfen, wird für jeden Rendervorgang eine UUID erzeugt, unter der
+die Quelliste des Rendervorgangs abgelegt wird bis der Rendervorgang
+abgeschlossen ist.
+
+Jedes rendern eines addToSourceList Tags fügt die Metadaten des Bildes in
+die Quellliste unter der UUID des Rendervorgangs ein. Dabei wird gezählt wie oft
+dieses Bild bereits dargestellt wurde und diese Nummer an die UUID der Bildes
+angehängt als Id des HTML img Elements verwendet, damit die Quellliste auf das
+Bild verlinken kann.
+
+Wird die Quellliste gerendert, so werden alle In die Quellliste der UUID des
+Rendervorgangs eingetragenen Bildmetadaten nach Urheber und Bild UUID gruppiert,
+sodass die Quellliste einen Eintrag je Urheber mit all seinen Bildern und einen
+Eintrag je Bild mit allen vorkommen und Link auf diese enthält. Zum Gruppieren
+der Urheber wird die Kombination aus Name und URL des Urhebers verwendet um
+Urheber gleichen Namens oder Urheber mit gemeinsamer Webseite auseinanderhalten
+zu können. Für jedes Bild wird unter dem Eintrag des Autoren ein Eintrag mit
+namen und Lizenz des Bildes angelegt, wobei dem Namen nummerierte Links
+angehängt sind, die auf die Vorkommen der Bilder oben auf der Seite verlinken.
 
 \subsubsection{Seiteneditorintegration}
 
