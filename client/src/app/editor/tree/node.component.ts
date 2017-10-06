@@ -1,17 +1,24 @@
 import { Observable } from 'rxjs';
 
-import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, Input, OnInit, OnChanges, SimpleChanges,
+  ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { Node } from '../../shared/syntaxtree';
+import { Node, Tree } from '../../shared/syntaxtree';
 
 import { DragService } from './drag.service';
+import { TreeService } from './tree.service'
 
 // These states are available for animation
 type NodeAnimationStates = "available" | "none" | "self";
 
 const DEFAULT_ANIMATION = "400ms ease";
 
+/**
+ * Displays a node of a syntaxtree, currently in the most generic way possible.
+ */
 @Component({
   templateUrl: 'templates/node.html',
   selector: 'ast-node',
@@ -32,7 +39,7 @@ const DEFAULT_ANIMATION = "400ms ease";
       transition('none => self', animate(DEFAULT_ANIMATION)),
 
       // Transition
-      //transition('available => self', animate(DEFAULT_ANIMATION)),
+      transition('available => self', animate(DEFAULT_ANIMATION)),
       //transition('self => available', animate(DEFAULT_ANIMATION)),
 
       // Fade out
@@ -42,7 +49,7 @@ const DEFAULT_ANIMATION = "400ms ease";
     ])
   ]
 })
-export class NodeComponent implements OnInit {
+export class NodeComponent implements OnChanges {
   @Input() node: Node;
 
   // Immutable cache for properties
@@ -51,22 +58,20 @@ export class NodeComponent implements OnInit {
   // Immutable cache for children categories
   private _childrenCategories: { categoryName: string, nodes: Node[] }[];
 
-
+  // The observable that determines the current animation state. As this
+  // Observable will be subscribed to multiple
   private _cached_dropAnimationState: Observable<NodeAnimationStates>;
-
-  public _stateHistory: string[] = [];
 
   constructor(
     private _dragService: DragService,
-    private _cdRef: ChangeDetectorRef
+    private _cdRef: ChangeDetectorRef,
+    private _treeService: TreeService
   ) { }
 
   /**
    * Sets up display friendly caches of properties and children categories.
    */
-  ngOnInit() {
-    console.log("ngOnInit for node");
-
+  ngOnChanges(changes: SimpleChanges) {
     // Read and cache all properties
     this._properties = Object.entries(this.node.properties).map(([key, value]) => {
       return ({ key: key, value: value });
@@ -78,15 +83,27 @@ export class NodeComponent implements OnInit {
     });
   }
 
+  /**
+   * TODO: Something might be wrong with animation state transitions, this helps
+   * to debug them.
+   */
   logAnimation(evt: any) {
     console.log(evt);
+  }
+
+  /**
+   * Something has been dropped on this node.
+   */
+  onDrop(evt: DragEvent) {
+    console.log("droppednode", evt);
+    const desc = this._dragService.peekDragData.draggedDescription;
+    this._treeService.replaceNode(this.node.location, desc);
   }
 
   /**
    * @return The state of the drop animation 
    */
   get dropAnimationState(): Observable<NodeAnimationStates> {
-    // 
     if (!this._cached_dropAnimationState) {
       this._cached_dropAnimationState = this._dragService.currentDragOverNode
         .merge(this._dragService.isDragInProgress)
@@ -98,9 +115,6 @@ export class NodeComponent implements OnInit {
           }
         })
         .distinctUntilChanged()
-        .do(_ => this._cdRef.markForCheck())
-        .do(v => this._stateHistory.push(v))
-        .do(v => console.log(JSON.stringify(this.node.location), "=>", JSON.stringify(this._stateHistory)))
     }
 
     return (this._cached_dropAnimationState);

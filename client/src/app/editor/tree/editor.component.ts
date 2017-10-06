@@ -7,6 +7,7 @@ import { SidebarService } from '../sidebar.service';
 import { ToolbarService } from '../toolbar.service';
 
 import { TreeSidebarComponent } from './tree.sidebar';
+import { TreeService } from './tree.service';
 import { DragService } from './drag.service';
 
 const astDesc: NodeDescription = {
@@ -51,23 +52,25 @@ const astDesc: NodeDescription = {
 };
 
 @Component({
-  templateUrl: 'templates/tree-editor.html'
+  templateUrl: 'templates/tree-editor.html',
+  providers: [TreeService]
 })
 export class SyntaxTreeEditorComponent implements OnInit {
   @Input() rawNodeData: string = "";
-
-  private _ast: Tree;
 
   private _languages = AvailableLanguages;
 
   constructor(
     private _sidebarService: SidebarService,
     private _toolbarService: ToolbarService,
-    private _dragService: DragService
+    private _dragService: DragService,
+    private _treeService: TreeService
   ) {
   }
 
   ngOnInit(): void {
+    this._treeService.currentTree.subscribe(v => console.log("New Tree:", v));
+
     this._sidebarService.hideSidebar();
     this._toolbarService.resetItems();
     this._toolbarService.savingEnabled = false;
@@ -78,7 +81,7 @@ export class SyntaxTreeEditorComponent implements OnInit {
     this.rawNodeData = JSON.stringify(astDesc, null, 2);
     this.loadRawNode();
 
-    this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this._ast);
+    this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this.tree);
   }
 
   /**
@@ -96,8 +99,8 @@ export class SyntaxTreeEditorComponent implements OnInit {
   private loadRawNode() {
     try {
       const desc = JSON.parse(this.rawNodeData);
-      this._ast = new Tree(desc);
-      this.rawNodeData = JSON.stringify(this._ast.toModel(), null, 2);
+      this._treeService.replaceTree(desc);
+      this.rawNodeData = JSON.stringify(this.tree.toModel(), null, 2);
     }
     catch (err) {
       alert(err);
@@ -121,8 +124,12 @@ export class SyntaxTreeEditorComponent implements OnInit {
   /**
    * @return The tree that is edited by this editor
    */
-  get ast() {
-    return (this._ast);
+  get tree() {
+    return (this._treeService.tree);
+  }
+
+  get currentTree() {
+    return (this._treeService.currentTree);
   }
 
   /**
