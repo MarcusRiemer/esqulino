@@ -4,8 +4,6 @@
 \todo[author=mri,inline]{Kurz den Zweck des Kapitels umreißen, keine
 Überschriften ohne Text!}
 
-\todo[author=mri,inline]{Grafik zur Aufteilung in Services}
-
 \subsection{Docker}
 Docker verbindet das Isolationsprinzip der FreeBSD Jails mit einer Deployment
 Strategie und vererbbaren Systemumgebungen unter Linux.
@@ -43,12 +41,18 @@ beim entfernen des Containers gelöscht wird. Volumes sind Verzeichnisse im
 Hostsystem, die an eine bestimmte Stelle des Containers gemappt werden und
 gleichzeitig in mehreren Containern eingebunden sein können. Standardmäßig
 verwendet Docker OverlayFS als Storage Driver, in Produktivumgebungen werden
-aber auch Device Mapper und AUFS als Storage Driver verwendet \cite{docker-stroage-driver}.
+aber auch Device Mapper und AUFS als Storage Driver verwendet \cite{docker-storage-driver}.
 
 Ein Projekt wird in Services aufgeteilt, wie z.B. Reverse-Proxy, Webapp,
 API-Server, Datenbank und Static-File-Server, die dann in Containern isoliert
 laufen, wobei jeder Container ein Virtuelles Environment darstellt, in dem 
 jeweils nur ein Prozess mit eventuell geforkten Worker Prozessen läuft.
+
+\begin{figure}
+  \centering
+  \def\svgwidth{\columnwidth / 2}
+  \input{images/docker-services-example-2.pdf_tex}
+\end{figure}
 
 Eingehende Kommunikation zu Containern wird per Default unterbunden und muss
 explizit aktiviert werden. Es ist möglich mehrere Container in ein
@@ -57,8 +61,11 @@ untereinander stattfinden kann (Reverse-Proxy -> Webseite, Webseite ->
 Datenbank) als auch bestimmte Netzwerk Ports des Hosts auf bestimmte Netzwerk
 Ports eines Containers zu mappen (Internet -> Reverse-Proxy).
 
-\todo[author=mri,inline]{Weitere Grafik oder auf die bisherhige Grafik
-verweisen}
+\begin{figure}
+  \centering
+  \def\svgwidth{\columnwidth}
+  \input{images/docker-services-example.pdf_tex}
+\end{figure}
 
 \subsubsection{Docker vs VM}
 

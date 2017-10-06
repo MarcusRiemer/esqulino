@@ -116,22 +116,20 @@ dieser Form betrieben zu werden.
 
 Die API stellt verschiedene Routen bereit, die sich in das existierende
 Strukturen einfügen, daher sind alle Routen unterhalb von
-\begin{description}
-\item [/api/project/:project\_id/image]
-\end{description}
-angesiedelt
+\mint{ruby}|/api/project/:project_id/image| angesiedelt
 
-\begin{description}
-  \item [/api/project/:project\_id/image]
-  \item [GET]
-  \item [POST]
-\end{description}
-\begin{description}
-  \item [/api/project/:project\_id/image/:image\_id]
-  \item [GET]
-  \item [POST]
-  \item [DELETE]
-\end{description}
+\begin{minted}{ruby}
+/api/project/:project_id/image
+  GET     #gibt die Liste aller Bildmetadaten aus
+  POST    #legt ein neues Bild an
+/api/project/:project_id/image/:image_id
+  GET     #gibt ein Bild aus
+  POST    #ersetzt die Bilddatei
+  DELETE  #löscht ein Bild inklusive Metadaten
+/api/project/:project_id/image/:image_id/metadata
+  GET     #gibt die Metadaten eines Bildes aus
+  POST    #ersetzt die Metadaten eines Bildes
+\end{minted}
 
 \subsubsection{Library}
 
