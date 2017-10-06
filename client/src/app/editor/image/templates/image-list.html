@@ -4,9 +4,24 @@
     <p>Hier siehst du alle Bilder, die du für dein Projekt verwenden kannst.</p>
 
     <form class="form">
+      <input type="text"
+             name="imageNameFilter"
+             class="form-control filter-input mt-1 mb-1 mr-1"
+             placeholder="Namesfilter"
+             [(ngModel)]="imageNameFilter">
+      <input type="text"
+             name="authorNameFilter"
+             class="form-control filter-input mt-1 mb-1 mr-1"
+             placeholder="Autorenfilter"
+             [(ngModel)]="authorNameFilter">
+      <input type="text"
+             name="licenceNameFilter"
+             class="form-control filter-input mt-1 mb-1 mr-1"
+             placeholder="Lizenzfilter"
+             [(ngModel)]="licenceNameFilter">
       <div class="btn-group btn-toggle"
            data-toggle="buttons">
-        <label class="btn"
+        <label class="btn mt-1 mb-1"
                [class.btn-primary]="currentDisplayType == dt"
                [class.btn-info]="currentDisplayType != dt"
                *ngFor="let dt of availableDisplayTypes">
@@ -32,8 +47,8 @@
               <li class="list-group-item"><a href="{{image.authorUrl}}">{{image.authorName}}</a></li>
               <li class="list-group-item"><a href="{{image.licenceUrl}}">{{image.licenceName}}</a></li>
               <li class="list-group-item">
-                <a [routerLink]="[image.id,'edit']"><button class="btn btn-sm btn-warning mx-auto">Bearbeiten</button></a>
-                <button class="btn btn-sm btn-danger mx-auto" (click)="deleteImage(image.id, image.name)">Löschen</button>
+                <a [routerLink]="[image.id,'edit']"><button class="btn btn-sm btn-warning float-left">Bearbeiten</button></a>
+                <button class="btn btn-sm btn-danger float-right" (click)="deleteImage(image.id, image.name)">Löschen</button>
               </li>
             </ul>
           </div>
@@ -46,11 +61,11 @@
           <th>Titel</th>
           <th>Urheber</th>
           <th>Lizenz</th>
-          <th></th>
+          <th class="table-button-col"></th>
         </thead>
         <tbody>
           <tr *ngFor="let image of images">
-            <td>
+            <td class="table-icon-col">
               <img class="table-icon"
                    src="{{image.url}}?width=128"
                    alt="{{image.name}}">
