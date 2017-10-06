@@ -271,7 +271,11 @@ export class Tree {
   }
 
   /**
-   * Replaces the node at the given location
+   * Returns a new tree where the node at the given location is replaced.
+   *
+   * @param loc The location of the node to replace.
+   * @param desc The new node to insert at its place
+   * @return The modified tree.
    */
   replaceNode(loc: NodeLocation, desc: NodeDescription): Tree {
     // Replacing the needs to work different because there is no parent
@@ -291,5 +295,22 @@ export class Tree {
       parent.children[parentCat][parentIndex] = desc;
       return (new Tree(newDescription));
     }
+  }
+
+  /**
+   * Returns a new tree where the node at the given location has a different
+   * property value.
+   *
+   * @param loc The location of the node to edit.
+   * @param key The name of the property.
+   * @param value The new value of the property.
+   * @return The modified tree.
+   */
+  setProperty(loc: NodeLocation, key: string, value: string): Tree {
+    let newDescription = this.toModel();
+    let node = locateNode(newDescription, loc);
+    node.properties[key] = value;
+
+    return (new Tree(newDescription));
   }
 }

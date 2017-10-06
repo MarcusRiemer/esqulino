@@ -12,7 +12,9 @@ import { Tree, Node, NodeDescription, NodeLocation } from '../../shared/syntaxtr
  * While the tree instance itself is also available via the nodes 
  * of the tree, the immutable nature makes it difficult to 
  * communicate changes upwards. This service allows to replace
- * the whole tree and therefore enables mutating operations.
+ * the whole tree and therefore enables mutating operations. So
+ * this is basicly a facade that hides the immutability of the
+ * actual tree.
  */
 @Injectable()
 export class TreeService {
@@ -39,6 +41,19 @@ export class TreeService {
     console.log(`Replacing node at ${JSON.stringify(loc)} with`, desc);
 
     this.replaceTree(this.tree.replaceNode(loc, desc));
+  }
+
+  /**
+   * Sets a new value for a property.
+   *
+   * @param loc The location of the node to edit.
+   * @param key The name of the property.
+   * @param value The new value of the property.
+   */
+  setProperty(loc: NodeLocation, key: string, value: string) {
+    console.log(`Setting ${JSON.stringify(loc)} "${key}"="${value}"`);
+
+    this.replaceTree(this.tree.setProperty(loc, key, value));
   }
 
   /**

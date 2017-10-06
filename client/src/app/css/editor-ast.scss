@@ -2,6 +2,17 @@
     .node {
         border: 1px solid black;
         padding: 5px;
+
+        input[type=text] {
+            border: 0;
+            box-shadow: -6px 8px 0px -6px #ebebeb;
+            transition: box-shadow 0.3s;
+        }
+
+        input[type=text]:focus {
+            outline: none;
+            box-shadow: -6px 8px 0px -6px #4EA6EA;
+        }
     }
 
     .node .node {

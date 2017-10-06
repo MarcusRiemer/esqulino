@@ -43,9 +43,8 @@ const DEFAULT_ANIMATION = "400ms ease";
       //transition('self => available', animate(DEFAULT_ANIMATION)),
 
       // Fade out
-      //transition('available => none', animate(DEFAULT_ANIMATION)),
-      //transition('self => none', animate(DEFAULT_ANIMATION)),
-      transition('* => none', animate(DEFAULT_ANIMATION)),
+      transition('available => none', animate(DEFAULT_ANIMATION)),
+      transition('self => none', animate(DEFAULT_ANIMATION)),
     ])
   ]
 })
@@ -98,6 +97,16 @@ export class NodeComponent implements OnChanges {
     console.log("droppednode", evt);
     const desc = this._dragService.peekDragData.draggedDescription;
     this._treeService.replaceNode(this.node.location, desc);
+  }
+
+  /**
+   * The user has decided to edit a node.
+   */
+  onPropertyEdit(key: string, value: string) {
+    console.log("blur!", key, value);
+    if (this.node.properties[key] != value) {
+      this._treeService.setProperty(this.node.location, key, value);
+    }
   }
 
   /**
