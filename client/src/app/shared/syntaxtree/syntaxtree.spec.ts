@@ -292,4 +292,45 @@ describe('AST: Basic Operations', () => {
     t2.rootNode.children["a"] = [];
     expect(() => node2.location).toThrowError();
   });
+
+  it('Replaces the root', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          { language: "lang", name: "r_a_0" },
+          { language: "lang", name: "r_a_1" }
+        ]
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.replaceNode([], { language: "r2", name: "r_new" });
+
+    expect(prev).not.toBe(curr);
+    expect(curr.rootNode.languageName).toEqual("r2");
+    expect(curr.rootNode.typeName).toEqual("r_new");
+  });
+
+  it('Replaces child nodes', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          { language: "lang", name: "r_a_0" },
+          { language: "lang", name: "r_a_1" }
+        ]
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.replaceNode([["a", 0]], { language: "r2", name: "r_a_0_new" });
+
+    expect(prev).not.toBe(curr);
+    const changedNode = curr.locate([["a", 0]]);
+    expect(changedNode.languageName).toEqual("r2");
+    expect(changedNode.typeName).toEqual("r_a_0_new");
+  });
 });

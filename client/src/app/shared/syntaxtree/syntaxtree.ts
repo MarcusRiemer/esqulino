@@ -1,6 +1,6 @@
-import { NodeDescription, } from './syntaxtree.description'
+import { NodeDescription, NodeLocation, NodeLocationStep, locateNode } from './syntaxtree.description'
 
-export { NodeDescription };
+export { NodeDescription, NodeLocation, NodeLocationStep };
 
 /**
  * Used when refererring to types that are defined other languages.
@@ -21,18 +21,6 @@ type NodeProperties = { [propertyName: string]: string }
  * Children of a node are always sorted.
  */
 export type NodeChildren = { [childrenCategory: string]: Node[] }
-
-/**
- * Determines the category and the index in that category
- * of a node.
- */
-export type NodeLocationStep = [string, number];
-
-/**
- * Contains the path to find a certain node in a syntax tree.
- * These paths currently always start from the root node.
- */
-export type NodeLocation = NodeLocationStep[];
 
 /**
  * The core building block of the AST is this class. It contains
@@ -266,7 +254,7 @@ export class Tree {
   }
 
   /**
-   * Retrieves the node at the specified location.
+   * @return The node at the given location.
    */
   locate(loc: NodeLocation): Node {
     let current: Node = this._root;
@@ -275,10 +263,33 @@ export class Tree {
       if ((children && childIndex < children.length) && childIndex >= 0) {
         current = children[childIndex];
       } else {
-        throw new Error(`Could not locate step ${i} of ${JSON.stringify(loc)}`);
+        throw new Error(`SyntaxTree: Could not locate step ${i} of ${JSON.stringify(loc)}`);
       }
     })
 
     return (current);
+  }
+
+  /**
+   * Replaces the node at the given location
+   */
+  replaceNode(loc: NodeLocation, desc: NodeDescription): Tree {
+    // Replacing the needs to work different because there is no parent
+    // that needs a child replaced
+    if (loc.length === 0) {
+      return (new Tree(desc));
+    }
+    else {
+      // Build the description of the current tree and replace the new node in it
+      let newDescription = this.toModel();
+
+      // Walking up the tree to the parent of the node to replace
+      let parent = locateNode(newDescription, loc.slice(0, loc.length - 2));
+      let [parentCat, parentIndex] = loc[loc.length - 1];
+
+      // Actually replace the node and build the new tree
+      parent.children[parentCat][parentIndex] = desc;
+      return (new Tree(newDescription));
+    }
   }
 }
