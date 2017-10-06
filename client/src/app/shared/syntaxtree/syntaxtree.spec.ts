@@ -333,4 +333,39 @@ describe('AST: Basic Operations', () => {
     expect(changedNode.languageName).toEqual("r2");
     expect(changedNode.typeName).toEqual("r_a_0_new");
   });
+
+  it('Chained replacement of nested child nodes', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          {
+            language: "lang",
+            name: "r_a_0",
+            children: {
+              "b": [
+                { language: "lang", name: "r_a_0_b_0" },
+                { language: "lang", name: "r_a_0_b_1" }
+              ]
+            }
+          },
+        ]
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev
+      .replaceNode([["a", 0], ["b", 0]], { language: "r2", name: "r_a_0_b_0_new" })
+      .replaceNode([["a", 0], ["b", 1]], { language: "r2", name: "r_a_0_b_1_new" });
+
+    expect(prev).not.toBe(curr);
+    const changedNode1 = curr.locate([["a", 0], ["b", 0]]);
+    expect(changedNode1.languageName).toEqual("r2");
+    expect(changedNode1.typeName).toEqual("r_a_0_b_0_new");
+
+    const changedNode2 = curr.locate([["a", 0], ["b", 1]]);
+    expect(changedNode2.languageName).toEqual("r2");
+    expect(changedNode2.typeName).toEqual("r_a_0_b_1_new");
+  });
 });

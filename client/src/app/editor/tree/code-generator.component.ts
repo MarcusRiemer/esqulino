@@ -13,6 +13,7 @@ export class CodeGeneratorComponent implements OnChanges {
   @Input() tree: Tree;
   @Input() language: Language;
 
+  // The generated code is cached
   private _generated: string;
 
   /**
@@ -24,8 +25,11 @@ export class CodeGeneratorComponent implements OnChanges {
 
   private refreshResult() {
     try {
+      console.log("Refreshing compilation ...");
       this._generated = this.language.emitTree(this.tree);
+      console.log("Refreshed compilation!");
     } catch (err) {
+      console.log(`Error refreshing compilation: "${err}"`);
       this._generated = "";
     }
   }

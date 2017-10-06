@@ -87,8 +87,18 @@ export class DragService {
     return (this._currentDragInProgress.distinctUntilChanged());
   }
 
+  /**
+   * @return Takes a peek whether a drag is occuring *right now*.
+   */
   get peekIsDragInProgress() {
     return (!!this._currentDrag.getValue());
+  }
+
+  /**
+   * @return Takes a peek at the data of the drag that is occuring *right now*.
+   */
+  get peekDragData() {
+    return (this._currentDrag.getValue());
   }
 
   /**

@@ -284,7 +284,7 @@ export class Tree {
       let newDescription = this.toModel();
 
       // Walking up the tree to the parent of the node to replace
-      let parent = locateNode(newDescription, loc.slice(0, loc.length - 2));
+      let parent = locateNode(newDescription, loc.slice(0, loc.length - 1));
       let [parentCat, parentIndex] = loc[loc.length - 1];
 
       // Actually replace the node and build the new tree

@@ -10,7 +10,7 @@
       </div>
       
       <div class="card-block">
-        <ast-node [node]="ast.rootNode"></ast-node>
+        <ast-node [node]="(currentTree | async).rootNode"></ast-node>
       </div>
     </div>
 
@@ -25,7 +25,7 @@
     <div class="card mb-3">
       <div class="card-block">
         <h4 class="card-title">Validierung</h4>
-        <ast-validation [tree]="ast"
+        <ast-validation [tree]="currentTree | async"
                         [language]="currentLanguage">
         </ast-validation>
       </div>
@@ -33,8 +33,15 @@
 
     <div class="card mb-3">
       <div class="card-block">
+        <h4 class="card-title">Datenmodell</h4>
+        <pre>{{ (currentTree | async).toModel() | json }}</pre>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-block">
         <h4 class="card-title">Kompilierung</h4>
-        <ast-code-generator [tree]="ast"
+        <ast-code-generator [tree]="currentTree | async"
                             [language]="currentLanguage">
         </ast-code-generator>
       </div>
