@@ -16,7 +16,7 @@ export class DropTargetDirective {
   @Input('astDropTarget') node: Node;
 
   constructor(ref: ElementRef, dragService: DragService) {
-    const el: HTMLElement = ref.nativeElement;
+    const el = ref.nativeElement as HTMLElement;
 
     // Ensures that the event is properly cancelled.
     const preventAndCancel = (evt: DragEvent) => {

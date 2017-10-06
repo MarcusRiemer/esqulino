@@ -9,9 +9,11 @@
   
   <div *ngFor="let property of properties">
     <label>
-      {{ property.key }} = 
+      {{ property.key }} =
+      <input type="text"
+             value="{{ property.value }}"
+             (blur)="onPropertyEdit(property.key, $event.target.value)"> 
     </label>
-    {{ property.value }}
   </div>
   
   <div *ngFor="let category of childrenCategories">

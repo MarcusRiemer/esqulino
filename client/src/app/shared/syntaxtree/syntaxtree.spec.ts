@@ -368,4 +368,21 @@ describe('AST: Basic Operations', () => {
     expect(changedNode2.languageName).toEqual("r2");
     expect(changedNode2.typeName).toEqual("r_a_0_b_1_new");
   });
+
+  it('Replacing known properties', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      properties: {
+        "a": "1",
+        "b": "2"
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.setProperty([], "a", "2");
+
+    expect(prev).not.toBe(curr);
+    expect(curr.rootNode.properties["a"]).toEqual("2");
+  });
 });
