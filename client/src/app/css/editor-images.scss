@@ -1,0 +1,22 @@
+.editor-images {
+    .image-card {
+        min-height: 15.35rem;
+    }
+
+    .card:hover > .card-img-overlay {
+        display: block;
+    }
+
+    .card > .card-img-overlay {
+        display: none;
+    }
+
+    .table-icon {
+        max-width: 128px;
+        max-height: 128px;
+    }
+
+    .table-button {
+        max-width: 30rem;
+    }
+}
