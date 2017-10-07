@@ -61,12 +61,12 @@
       <pre>{{ query | sqlString }}</pre>
     </div>
 
-    <div *ngIf="query && showJsonModel"
+    <div *ngIf="query && (showJsonModel | async)"
          class="alert alert-info">
       <h6>
         <span class="fa fa-bug"></span> JSON-Darstellung
       </h6>
-      <pre>{{ query | json }}</pre>
+      <pre>{{ query.toModel() | json }}</pre>
     </div>
   </div>
 </div>
