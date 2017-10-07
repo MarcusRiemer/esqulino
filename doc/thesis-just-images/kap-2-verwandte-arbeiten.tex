@@ -1,46 +1,58 @@
 \section{Verwandte Arbeiten und Produkte}
 \label{sec:related-work}
 
+\todo[author=mri,inline]{Kurz den Zweck des Kapitels umreißen, keine
+Überschriften ohne Text!}
+
 \subsection{Docker}
-Docker verbindet das Isolationsprintip der BSD Jails mit einer Deployment
-Strategie und Aufeinander aufbauenden Environments unter Linux.
-Es kommt hier ein OverlayFS zusammen mit einem Chroot zum Einsatz, um das
-Isolierte Dateisytem zu generieren. Weiterhin werden Virtuelle Netzwerkadapter
-und ein Virtueller Prozess ID Raum erstellt. Der Kernel des Hostsystems wird mit
-dem Container geteilt, für Prozesse des Hostsystems sind alle in Containern
-laufenden Prozesse sowie alle virtuellen Netzwerkadapter und auch die via
-OverlayFS angelegten Verzeichnisstrukturen, für Prozesse des Containers
-sieht es aus, als handele es sich um den init Prozess auf einem eigenen
-Computer.
+Docker verbindet das Isolationsprinzip der FreeBSD Jails mit einer Deployment
+Strategie und vererbbaren Systemumgebungen unter Linux.
+Ein FreeBSD Jail kapselt einen Prozess in einem ''virtuellen'' Systemumgebung
+mit eigenem mittels chroot definiertem Dateisystem, enthält dem Prozess und
+seinen Unterprozessen die Existenz aller anderen auf dem System laufende
+Prozesse außer den eigenen Unterprozessen vor, schränkt für den Prozess und
+seine Unterprozesse die Rechte des Systembenutzers ein und stellt nur
+ausgewählte Geräte, wie beispielsweise ein eigenes Netzwerkinterface, zur
+Verfügung. \cite{FreeBSD-Jail-doc} \cite{FreeBSD-Jail-developer-comments} \cite{FreeBSD-Jail-paper}
+
+Bei Docker heißen die Jails Container und werden aus Vorlagen den Images
+erzeugt, man kann sich die Beziehung zwischen Containern und Images in etwa so
+vorstellen wie zwischen Instanzen und Klassen in der Objektorientierten
+Programmierung und wie bei der Objektorientierten Programmierung eine Klasse
+eine andere Klasse erweitern kann, kann ein Image ein anderes Image erweitern.
+Ein Image wird aus einem Dockerfile erzeugt und ist unveraenderlich. Wird das
+Dockerfile verändert, entsteht daraus ein neues Image. Das Dockerfile ist eine
+Anleitung um aus einem Image ein anderes zu bauen und beginnt mit der Nennung
+des Basisimages. Das immer existierende Basisimage scratch stellt ein vollkommen
+leeres Dateisytem bereit und ist am Anfang jeder Vererbungskette zu finden. Jede
+weitere Anweisung im Dockerfile fügt dem Image einen weiteren Layer hinzu, der
+Änderungen vorheriger Layer überlagert.
+
+Die Einzelnen Layer können in Form komprimierter Archive adressiert nach
+Checksumme in einer Imageverwaltung gespeichert werden, sodass Layer
+dedupliziert hier Layer dedupliziert werden können. Beim deployen eines Images
+auf einen Host werden dann die auf dem Host nicht vorhandenen Layer des Images
+heruntergeladen und entpackt. Wird dann ein Container aus einem Images erzeugt,
+werden die einzelnen Layer mittels eines der verfügbaren Storage Divers
+übereinander gelegt, sodass das schreibgeschützte Wurzelverzeichnis des
+Containers entsteht. Für alle im Container gemachten Änderungen, die nicht in
+einem Volume gespeichert werden, wird ein weiterer Runtime Layer erzeugt, der
+beim entfernen des Containers gelöscht wird. Volumes sind Verzeichnisse im
+Hostsystem, die an eine bestimmte Stelle des Containers gemappt werden und
+gleichzeitig in mehreren Containern eingebunden sein können. Standardmäßig
+verwendet Docker OverlayFS als Storage Driver, in Produktivumgebungen werden
+aber auch Device Mapper und AUFS als Storage Driver verwendet \cite{docker-storage-driver}.
 
 Ein Projekt wird in Services aufgeteilt, wie z.B. Reverse-Proxy, Webapp,
 API-Server, Datenbank und Static-File-Server, die dann in Containern isoliert
 laufen, wobei jeder Container ein Virtuelles Environment darstellt, in dem 
 jeweils nur ein Prozess mit eventuell geforkten Worker Prozessen läuft.
 
-Da ein Container mit Ausnahme der Hardware und der Kernel Version überall
-das gleiche Environment erzeugt, beinhaltet Docker eine Deployment Strategie
-mittels Images. Ein Image verhält sich dabei zu einem Container in etwa so
-wie eine Klasse zu einer Instanz bei Objektorientierter Programmierung und
-ebenso, kann ein Image von einem anderen Image erben. Ein Image wird durch den
-Build Prozess aus einem Dockerfile erzeugt und ist unveraenderlich. Das
-Dockerfile ist eine Anleitung um aus einem Image ein anderes zu bauen und
-beginnt mit der Nennung des Basisimages. Das immer existierende Basisimage
-scratch stellt ein vollkommen leeres Dateisytem bereit und ist am Anfang jeder
-Vererbungskette zu finden. Jede weitere Anweisung im Dockerfile fügt dem
-Image einen weiteren Layer hinzu, der Änderungen vorheriger Layer mittels
-OverlayFS überlagert. Insbesondere bei Produktivumgebungen sollte versucht
-werden, die Anzahl der Layer durch zusammenlegen von Anweisungen im Dockerfile
-zu minimieren, und somit den Overhead durch das OverlayFS beim Dateizugriff zu
-minimieren.
-
-Die Einzelnen Layer werden in Form komprimierter Archive adressiert nach
-Hashwerten gespeichert, die beim Erzeugen eines Containers entpackt werden und
-so den Startzustand des Containers herstellen. Alle im Container gemachten
-Änderungen, die nicht zu einem Image Layer gepackt oder in einem Volume
-gespeichert werden gehen beim entfernen des Containers verloren. Volumes sind
-Verzeichnisse im Hostsystem, die an eine bestimmte Stelle des Containers gemappt
-werden und gleichzeitig in mehreren Containern eingebunden sein können.
+\begin{figure}
+  \centering
+  \def\svgwidth{\columnwidth / 2}
+  \input{images/docker-services-example-2.pdf_tex}
+\end{figure}
 
 Eingehende Kommunikation zu Containern wird per Default unterbunden und muss
 explizit aktiviert werden. Es ist möglich mehrere Container in ein
@@ -49,44 +61,67 @@ untereinander stattfinden kann (Reverse-Proxy -> Webseite, Webseite ->
 Datenbank) als auch bestimmte Netzwerk Ports des Hosts auf bestimmte Netzwerk
 Ports eines Containers zu mappen (Internet -> Reverse-Proxy).
 
+\begin{figure}
+  \centering
+  \def\svgwidth{\columnwidth}
+  \input{images/docker-services-example.pdf_tex}
+\end{figure}
+
 \subsubsection{Docker vs VM}
 
+Im Gegensatz zu einer herkömmlichen virtuellen Maschine stellt Docker keine
+virtualisierte oder paravirtualisierte Hardware bereit, auf der ein eigenes
+Betriebssystem ausgeführt wird. Der Kernel des Hostsystems wird an den Container
+weitergereicht und Geräte des Hosts eingebunden was die Performance gegenüber
+einer VM verbessert. Dadurch bieten Docker Container allerdings eine größere
+Angriffsfläche als eine virtuelle Maschiene. Bei einer VM ist ein Exploit in der
+Virtualisierungssoftware nötig, der oft einen Exploit zum erlangen von
+Systemrechten innerhalb des virtualisierten Betriebssystem vorraussetzt, um die
+VM zu verlassen, gefolgt von einem mit hoher Wahrscheinlichkeit anderem Exploit
+um Systemrechte auf dem Hostsystem zu erlangen. Bei Docker Containern reicht
+hier ein Kernel Exploit oder ein Exploit im Docker Daemon um Kontrolle über den
+Host zu erlangen.
 
+Aufgrund der Deployment Infrastruktur in Form von Image Repositories, sowohl
+öffentliche wie Dockerhub als auch private, die selbst betrieben werden können,
+ermöglicht Docker sowohl Firmen ihre Services in Images auf privaten
+Repositories zu lagern und bei Bedarf auf beliebiger Intrastruktur mit
+installierem Docker deployen als auch Open Source Projekten eine lauffähige
+konfigurierte Version der Software inklusive aller benötigten Abhängigkeiten 
 
 \subsection{TODO: Short description of SQLino}
 
+\subsection{TODO:RESTFUL API} Eine RESTFUL API ist eine, die
+zustandsfreie HTTP Requests verwendet. Ein API
+Endpunkt\todo[author=mri]{Stichwort: \texttt{URI}} wie
+z.B. https://example.com/foo/23/bar/42 wird verwendet, indem ein
+Request mit einem der HTTP Verben GET, POST, PUT oder DELETE gesendet
+wird.  GET signalisiert die Abfrage von Daten, POST das Verändern von
+Daten, PUT das Anlegen neuer Daten und DELETE das Löschen von
+Daten. Ein GET Request könnte beispielsweise ein bestimmtes Bild
+abrufen, ein anderer eine Datenbank nach allen Einträgen, die einem
+mitgeschicktem Filterkriterium entsprechen, durchsuchen. Es ist auch
+vorstellbar ein RESTFUL API auf ein definiertes Subset von SQL zu
+mappen oder die Steuerung einer Waschmaschiene.
 
+Da die Requests zustandsfrei sind, kann in einem Request nicht auf
+einen vorausgegangenen Request zurückgegriffen werden. Zwar werden
+duch einen Request eingetretene Datenbankänderungen in der
+Datenbankabfrage des nächsten Requests sichtbar, allerdings, existiert
+keine Session in der beispielsweise ein Arbeitsverzeichnis festgelegt
+oder ein von allen Folgerequests verwendeter Namensraum ausgewählt
+werden kann. Jeder Request muss alle zu seiner Verarbeitung
+notwendigen Informationen selbst beinhalten.
 
-\subsection{TODO:RESTFUL API}
-Eine RESTFUL API ist eine, die zustandsfreie HTTP Requests verwendet. Ein API
-Endpunkt wie z.B. https://example.com/foo/23/bar/42 wird verwendet, indem ein
-Request mit einem der HTTP Verben GET, POST, PUT oder DELETE gesendet wird.
-GET signalisiert die Abfrage von Daten, POST das Verändern von Daten, PUT
-das Anlegen neuer Daten und DELETE das Löschen von Daten. Ein GET Request
-könnte beispielsweise ein bestimmtes Bild abrufen, ein anderer eine
-Datenbank nach allen Einträgen, die einem mitgeschicktem Filterkriterium
-entsprechen, durchsuchen. Es ist auch vorstellbar ein RESTFUL API auf ein
-definiertes Subset von SQL zu mappen oder die Steuerung einer Waschmaschiene.
-
-Da die Requests zustandsfrei sind, kann in einem Request nicht auf einen
-vorausgegangenen Request zurückgegriffen werden. Zwar werden duch einen
-Request eingetretene Datenbankänderungen in der Datenbankabfrage des
-nächsten Requests sichtbar, allerdings, existiert keine Session in der
-beispielsweise ein Arbeitsverzeichnis festgelegt oder ein von allen
-Folgerequests verwendeter Namensraum ausgewählt werden kann. Jeder Request
-muss alle zu seiner Verarbeitung notwendigen Informationen selbst beinhalten. 
-
-\subsection{TODO: MVC}
-Model View Controller ist ein zum bearbeiten von Webrequests geeignetes Konzept.
-Daten werden nach durch ein Model beschrieben und strukturiert und verwaltet, ihre Darstellung
-durch den View festgelegt und die Webrequests vom Controller behandelt. So
-werden Datenhaltung, Darstellung und Buisiness Logic von einander getrennt und
-können bis zu einem gewissen Grad unabhängig von einander
+\subsection{TODO: MVC} Model View Controller ist ein zum bearbeiten
+von Webrequests geeignetes Konzept.  Daten werden nach durch ein Model
+beschrieben und strukturiert und verwaltet, ihre Darstellung durch den
+View festgelegt und die Webrequests vom Controller behandelt. So
+werden Datenhaltung, Darstellung und Buisiness Logic von einander
+getrennt und können bis zu einem gewissen Grad unabhängig von einander
 überarbeitet werden.
 
 \subsection{TODO: Short description of Angular}
-
-
 
 %%% Local Variables:
 %%% mode: latex
