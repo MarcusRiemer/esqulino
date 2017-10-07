@@ -26,6 +26,10 @@ export class ImageSidebarComponent {
   get model() {
     return (this._model);
   }
+
+  get project() {
+    return (this._model.page.project);
+  }
 }
 
 export const IMAGE_SIDEBAR_IDENTIFIER = "page-image";

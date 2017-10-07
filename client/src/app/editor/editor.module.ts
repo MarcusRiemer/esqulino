@@ -26,7 +26,6 @@ import { PreferencesService } from './preferences.service'
 import { QueryService } from './query.service'
 import { RegistrationService } from './registration.service'
 import { SettingsComponent } from './settings.component'
-import { ImageSelectorComponent } from './image/image-selector.component'
 
 @NgModule({
   imports: [
@@ -47,7 +46,6 @@ import { ImageSelectorComponent } from './image/image-selector.component'
     NavbarComponent,
     SidebarLoaderComponent,
     SettingsComponent,
-    ImageSelectorComponent,
   ],
   providers: [
     SidebarService,

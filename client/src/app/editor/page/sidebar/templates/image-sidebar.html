@@ -1,3 +1,14 @@
 <sidebar-item-host header="Bild">
-  
+  <image-selector [project]="project"
+                  [(projectImageId)]="model.src">
+  </image-selector>
+
+  <fieldset class="form-group">
+    <label for="heading-sidebar-level">Anzeige als</label>
+    <select [(ngModel)]="model.displayType"
+            class="form-control">
+      <option value="figure">Grafik</option>
+      <option value="icon">Icon</option>
+    </select>
+  </fieldset>
 </sidebar-item-host>
