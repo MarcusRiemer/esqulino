@@ -1,0 +1,35 @@
+.editor-images {
+    .filter-input {
+        width: 25%;
+        min-width: 12rem;
+        display: inline-block;
+
+    }
+
+    .image-card {
+        min-height: 15.35rem;
+        min-width: 16rem;
+    }
+
+    .card:hover > .card-img-overlay {
+        display: block;
+    }
+
+    .card > .card-img-overlay {
+        display: none;
+    }
+
+    .table-icon-col {
+        width: 128px;
+    }
+
+    .table-icon {
+        max-width: 128px;
+        max-height: 128px;
+    }
+
+    .table-button {
+        width: 9rem;
+        display: block
+    }
+}

@@ -110,16 +110,19 @@ class DisplaySourceList < Liquid::Tag
       Image.new(context['project']['instance'], image_id).metadata_show
     end
 
-    sources_grouped = sources.reduce(Hash.new { |hash, key| hash[key] = {} }) do |hash, source|
+    sources_grouped = sources.reduce(Hash.new { |hash, key| hash[key] = Hash.new{ |h,k| h[k] = {} } }) do |hash, source|
       author_key = source.slice(*%w[author-name author-url])
       author = hash[author_key]
-      image = source.slice(*%w[name licence-name licence-url])
+      licence_key = source.slice(*%w[licence-name licence-url])
+      image = source.slice(*%w[name])
 
-      if existing_image = author[source['id']]
+      licence = author[licence_key]
+
+      if existing_image = licence[source['id']]
         existing_image['count'] += 1
       else
-        author[source['id']] = image
-        author[source['id']]['count'] = 1
+        licence[source['id']] = image
+        licence[source['id']]['count'] = 1
       end
 
       hash

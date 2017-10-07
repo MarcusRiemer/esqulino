@@ -7,8 +7,6 @@ module ImageHelper
     image_id = params['image_id']
     path = Image.new(current_project, image_id).file_show
 
-    fresh_when last_modified: File.ctime(path).utc
-
     type = FileMagic.new(FileMagic::MAGIC_MIME).file(path)
     p type
     #do not attempt to resize svg
@@ -24,6 +22,8 @@ module ImageHelper
         send_file path, type: type, disposition: 'inline'
       end
     end
+
+    fresh_when last_modified: File.ctime(path).utc
   end
 
   ##

@@ -34,6 +34,9 @@
 \usepackage[autostyle=true,german=quotes]{csquotes}       % \enquote
 \usepackage[automark,headsepline=1pt]{scrlayer-scrpage}
 \usepackage[export]{adjustbox} % \includegraphis[frame]
+\usepackage[backend=biber, defernumbers=true]{biblatex}
+
+\addbibresource[datatype=bibtex]{sources.bib}
 
 \renewcommand*{\headfont}{\normalfont}
 
@@ -107,6 +110,8 @@
 \end{document}
 
 %%% Local Variables:
+%%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: pdflatex
 %%% mode: latex
 %%% TeX-master: t
 %%% End:

@@ -3,7 +3,6 @@ auto
 thesis.pdf
 ole-just-thesis.pdf
 ole-just-thesis-twoside.pdf
-library/zotero/files
 *.aux
 *.log
 *.out
@@ -13,3 +12,4 @@ library/zotero/files
 *.bcf
 *.blg
 *.run.xml
+_minted*
