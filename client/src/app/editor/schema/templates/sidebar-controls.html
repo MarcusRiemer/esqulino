@@ -1,5 +1,5 @@
 <div class="card schema-sidebar">
-  <div class="card-block">
+  <div class="card-body">
     <div class="stack">
 	    <span *ngFor="let type of availableColumnTypes"
             class="badge badge-default item">
@@ -8,7 +8,7 @@
       </span>
     </div>
   </div>
-  <div class="card-block">
+  <div class="card-body">
 	  <span class="badge badge-pill badge-primary item">
       <span class="fa fa-key" aria-hidden="true"></span>
     </span>
@@ -18,7 +18,7 @@
   </div>
 
   <div *ngFor="let tab of projectTables"
-       class="card-block">
+       class="card-body">
     <h4>
 	    <span class="badge badge-success"><span class="fa fa-table" aria-hidden="true"></span>{{tab.name}}</span>
 	    <div>
