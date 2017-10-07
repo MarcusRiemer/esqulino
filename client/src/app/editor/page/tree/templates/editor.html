@@ -23,7 +23,7 @@
                       [page]="page">
   </esqulino-page-data>
 
-  <div *ngIf="page && showJsonModel"
+  <div *ngIf="page && (showJsonModel | async)"
        class="alert alert-info">
     <h6>
       <span class="fa fa-bug"></span> JSON-Darstellung
