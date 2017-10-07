@@ -4,12 +4,12 @@
 <!-- Three column layout in any order -->
 <div class="editor">
   <div [style.display]="(preferences.showSideNav | async) ? 'block' : 'none'"
-       [style.order]="preferences.paneOrder.navbar | async"
+       [style.order]="(preferences.paneOrder | async).navbar"
        class="navbar card">
     <editor-navbar [project]="project"></editor-navbar>
   </div>
 
-  <div [style.order]="preferences.paneOrder.content | async"
+  <div [style.order]="(preferences.paneOrder | async).content"
        class="content">
     <!-- Show flash messages -->
     <flash-message-list></flash-message-list>
@@ -18,7 +18,7 @@
   </div>
 
   <div [style.display]="isSidebarVisible ? 'block' : 'none'"
-       [style.order]="preferences.paneOrder.sidebar | async"
+       [style.order]="(preferences.paneOrder | async).sidebar"
        class="sidebar">
     <sidebar-loader>
     </sidebar-loader>
