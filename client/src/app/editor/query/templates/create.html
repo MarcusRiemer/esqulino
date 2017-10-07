@@ -4,11 +4,11 @@
   
   <div *ngIf="!isDatabaseEmpty"
        class="card">
-    <div class="card-block">
+    <div class="card-body">
       <h4>Neue Datenbank-Operation erstellen</h4>
       <p>Immer wenn Daten aus der Datenbank gelesen oder verändert werden sollen braucht man dazu eine Operation.</p>
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <form>
         <div class="form-group row"
              [class.has-danger]="!isValid"
