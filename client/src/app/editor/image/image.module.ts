@@ -6,7 +6,7 @@ import { RegistrationService } from '../registration.service'
 import { ImageListComponent } from './image-list.component'
 import { ImageUploadComponent } from './image-upload.component'
 import { ImageEditComponent } from './image-edit.component'
-
+import { ImageSelectorComponent } from './image-selector.component'
 import { ImageService } from './image.service'
 
 @NgModule({
@@ -17,6 +17,7 @@ import { ImageService } from './image.service'
     ImageListComponent,
     ImageUploadComponent,
     ImageEditComponent,
+    ImageSelectorComponent,
   ],
   providers: [
     ImageService
@@ -24,6 +25,7 @@ import { ImageService } from './image.service'
   entryComponents: [
   ],
   exports: [
+    ImageSelectorComponent
   ]
 })
 export class ImageEditorModule {

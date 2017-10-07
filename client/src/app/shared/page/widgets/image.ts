@@ -27,7 +27,7 @@ export class Image extends WidgetBase {
           setter: (v) => this.src = v
         }),
         new StringParameter({
-          name: "type",
+          name: "displayType",
           getter: () => this.displayType,
           setter: (v) => this.displayType = v
         })

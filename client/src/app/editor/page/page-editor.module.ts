@@ -1,6 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core'
 
 import { QueryEditorModule } from '../query/editor.module'
+import { ImageEditorModule } from '../image/image.module'
 import { SharedEditorModule } from '../shared/shared.module'
 import { RegistrationService } from '../registration.service'
 
@@ -74,6 +75,7 @@ const sidebarComponents = [
   imports: [
     SharedEditorModule,
     QueryEditorModule,
+    ImageEditorModule,
   ],
   declarations: [
     PageEditorHostComponent,
