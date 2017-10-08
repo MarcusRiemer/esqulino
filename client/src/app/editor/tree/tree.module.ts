@@ -5,6 +5,7 @@ import { RegistrationService } from '../registration.service'
 
 import { CodeGeneratorComponent } from './code-generator.component'
 import { DropTargetDirective } from './drop-target.directive'
+import { DropPlaceholderDirective } from './drop-placeholder.directive'
 import { DragService } from './drag.service'
 import { LanguageService } from './language.service'
 import { NodeComponent } from './node.component'
@@ -19,6 +20,7 @@ import { ValidationComponent } from './validation.component'
   declarations: [
     CodeGeneratorComponent,
     DropTargetDirective,
+    DropPlaceholderDirective,
     NodeComponent,
     SyntaxTreeEditorComponent,
     ValidationComponent,

@@ -1,7 +1,13 @@
+<div *ngIf="allowDropBefore"
+     [astDropPlaceholder]="node"
+     [@dropPlaceholder]="dropPlaceholderAnimationState | async"
+     (@dropPlaceholder.start)="logAnimation($event)"
+     (@dropPlaceholder.done)="logAnimation($event)"
+     class="node">
+  Drop Target
+</div>
 <div [astDropTarget]="node"
-     [@dropTarget]="dropAnimationState | async"
-     (@dropTarget.start)="logAnimation($event)"
-     (@dropTarget.done)="logAnimation($event)"
+     [@dropTarget]="dropTargetAnimationState | async"
      (drop)="onDrop($event)"
      class="node">
   <code>{{ node.languageName }}.{{ node.typeName }}</code>
@@ -18,7 +24,9 @@
   
   <div *ngFor="let category of childrenCategories">
     children: <code>{{ category.categoryName }}</code>
-    <ast-node *ngFor="let childNode of category.nodes"
-              [node]="childNode"></ast-node>
+    <ng-container *ngFor="let childNode of category.nodes">
+      <ast-node [node]="childNode"
+                [allowDropBefore]="true"></ast-node>
+    </ng-container>
   </div>
 </div>

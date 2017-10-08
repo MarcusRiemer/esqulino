@@ -6,13 +6,14 @@ import {
 } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { Node, Tree } from '../../shared/syntaxtree';
+import { arrayEqual } from '../../shared/util'
+import { Node, NodeLocation, Tree } from '../../shared/syntaxtree';
 
 import { DragService } from './drag.service';
 import { TreeService } from './tree.service'
 
 // These states are available for animation
-type NodeAnimationStates = "available" | "none" | "self";
+type DropTargetAnimationStates = "available" | "none" | "self";
 
 const DEFAULT_ANIMATION = "400ms ease";
 
@@ -26,30 +27,44 @@ const DEFAULT_ANIMATION = "400ms ease";
   animations: [
     trigger('dropTarget', [
       state('none', style({
-        backgroundColor: 'white'
+        backgroundColor: 'white',
       })),
       state('available', style({
-        backgroundColor: 'lime'
+        backgroundColor: 'lime',
       })),
       state('self', style({
-        backgroundColor: 'yellow'
+        backgroundColor: 'yellow',
       })),
-      // Fade in
-      transition('none => available', animate(DEFAULT_ANIMATION)),
-      transition('none => self', animate(DEFAULT_ANIMATION)),
+      // Fade in and out
+      transition('none <=> available', animate(DEFAULT_ANIMATION)),
+      transition('none <=> self', animate(DEFAULT_ANIMATION)),
 
-      // Transition
+      // Transition between shown states
       transition('available => self', animate(DEFAULT_ANIMATION)),
       //transition('self => available', animate(DEFAULT_ANIMATION)),
-
-      // Fade out
-      transition('available => none', animate(DEFAULT_ANIMATION)),
-      transition('self => none', animate(DEFAULT_ANIMATION)),
+    ]),
+    trigger('dropPlaceholder', [
+      state('available', style({
+        transform: 'scale(1.0)',
+        display: 'block',
+        backgroundColor: 'lime',
+      })),
+      state('self', style({
+        transform: 'scale(1.0)',
+        display: 'block',
+        backgroundColor: 'yellow',
+      })),
+      state('none', style({
+        transform: 'scale(0.5)',
+        display: 'none',
+      })),
     ])
   ]
 })
 export class NodeComponent implements OnChanges {
   @Input() node: Node;
+
+  @Input() allowDropBefore: boolean;
 
   // Immutable cache for properties
   private _properties: { key: string, value: string }[];
@@ -57,9 +72,10 @@ export class NodeComponent implements OnChanges {
   // Immutable cache for children categories
   private _childrenCategories: { categoryName: string, nodes: Node[] }[];
 
-  // The observable that determines the current animation state. As this
-  // Observable will be subscribed to multiple
-  private _cached_dropAnimationState: Observable<NodeAnimationStates>;
+  // The observables that determine the current animation state. As this
+  // Observables will be subscribed to multiple times, the need to be cached.
+  private _cached_dropTargetAnimationState: Observable<DropTargetAnimationStates>;
+  private _cached_dropPlaceholderAnimationState: Observable<DropTargetAnimationStates>;
 
   constructor(
     private _dragService: DragService,
@@ -94,7 +110,6 @@ export class NodeComponent implements OnChanges {
    * Something has been dropped on this node.
    */
   onDrop(evt: DragEvent) {
-    console.log("droppednode", evt);
     const desc = this._dragService.peekDragData.draggedDescription;
     this._treeService.replaceNode(this.node.location, desc);
   }
@@ -110,11 +125,11 @@ export class NodeComponent implements OnChanges {
   }
 
   /**
-   * @return The state of the drop animation 
+   * @return The state of the drop animation for targets
    */
-  get dropAnimationState(): Observable<NodeAnimationStates> {
-    if (!this._cached_dropAnimationState) {
-      this._cached_dropAnimationState = this._dragService.currentDragOverNode
+  get dropTargetAnimationState(): Observable<DropTargetAnimationStates> {
+    if (!this._cached_dropTargetAnimationState) {
+      this._cached_dropTargetAnimationState = this._dragService.currentDragOverNode
         .merge(this._dragService.isDragInProgress)
         .map(v => {
           if (v instanceof Node && v === this.node) {
@@ -126,7 +141,27 @@ export class NodeComponent implements OnChanges {
         .distinctUntilChanged()
     }
 
-    return (this._cached_dropAnimationState);
+    return (this._cached_dropTargetAnimationState);
+  }
+
+  /**
+   * @return The state of the drop animation for placeholders
+   */
+  get dropPlaceholderAnimationState(): Observable<DropTargetAnimationStates> {
+    if (!this._cached_dropPlaceholderAnimationState) {
+      this._cached_dropPlaceholderAnimationState = this._dragService.currentDragOverPlaceholder
+        .merge(this._dragService.isDragInProgress)
+        .map(v => {
+          if (arrayEqual(v as any, this.node.location)) {
+            return ("self");
+          } else {
+            return (this._dragService.peekIsDragInProgress ? "available" : "none");
+          }
+        })
+        .distinctUntilChanged()
+    }
+
+    return (this._cached_dropPlaceholderAnimationState);
   }
 
   /**

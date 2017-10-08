@@ -19,7 +19,8 @@
         <span class="fa fa-bug"></span> Drag&Drop
       </h6>
       
-      {{ (dragService.currentDragOverNode | async)?.location | json }}
+      <code>Node: {{ (dragService.currentDragOverNode | async)?.location | json }}</code>
+      <code>Placeholder: {{ (dragService.currentDragOverPlaceholder | async)?.location | json }}</code>
     </div>
 
     <div class="card mb-3">
