@@ -1,17 +1,2 @@
-##################################
-# Ensural targets
-##################################
-
-# Ensures the npm "binary" is available
-has-npm :
-ifeq (, $(shell which npm 2>/dev/null))
-	$(error "Node Paketmanager (npm) not in PATH")
-endif
-
-# Ensure the tsc "binary" is part of the node_modules folder
-has-tsc :
-ifeq (, $(wildcard $(TSC_BIN)))
-	$(error "Typescript Compiler (tsc) not in node_modules")
-endif
-
-.PHONY : has-npm has-tsc
+# Allow overriding the TPUT binary
+TPUT_BIN ?= tput

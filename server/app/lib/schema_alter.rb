@@ -19,7 +19,7 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
   if table.nil? then
     raise EsqulinoError.new "Unknown table #{tableName}", 400, true
   end
-  
+
   begin
     commandHolder.each do |cmd|
       index = cmd['index']
@@ -58,12 +58,12 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
         # Swap out the temporary database for the actual database
         FileUtils.remove_file(sqlite_file_path)
         File.rename(sqlite_file_path + '.bak', sqlite_file_path)
-        
-        return true, index, errorCode, errorBody 
-      end 
+
+        return true, index, errorCode, errorBody
+      end
     end
   end
-  
+
   FileUtils.remove_file(sqlite_file_path + '.bak')
   return false
 end
@@ -79,7 +79,7 @@ def database_alter_table(sqlite_file_path, schema_table, colHash)
     db.transaction
     db.execute("ALTER TABLE #{schema_table.name} RENAME TO #{tempTableName};")
     db.execute(table_to_create_statement(schema_table))
-    
+
 
     colFrom, colTo = create_column_strings(colHash)
     db.execute("INSERT INTO #{schema_table.name}(#{colTo}) SELECT #{colFrom} FROM #{tempTableName};")
@@ -140,8 +140,8 @@ def create_table(sqlite_file_path, newTable)
   return 0
 end
 
-def rename_table(sqlite_file_path, from_tableName, to_tableName) 
-  begin  
+def rename_table(sqlite_file_path, from_tableName, to_tableName)
+  begin
     db = sqlite_open_augmented(sqlite_file_path)
     db.execute("PRAGMA foreign_keys = ON")
 
@@ -157,7 +157,7 @@ def rename_table(sqlite_file_path, from_tableName, to_tableName)
   end
 end
 
-# Function to convert the column hash to two strings 
+# Function to convert the column hash to two strings
 def create_column_strings(colHash)
   colFrom = String.new()
   colTo = String.new()
@@ -199,7 +199,7 @@ def table_to_create_statement(schema_table)
   return createStatement
 end
 
-# Function to create a the primary key constraint part of a CREATE TABLE statement 
+# Function to create a the primary key constraint part of a CREATE TABLE statement
 # out of a schemaTable object.
 # @param schema_table - Table object to create a CREATE TABLE statement
 # return - The CREATE TABLE statement primary key constraint part
@@ -214,12 +214,12 @@ def tables_primaryKeys_to_create_statement(schema_columns)
       end
     end
     createStatement = String.new(", PRIMARY KEY(#{primKeys})")
-  else 
+  else
     return ""
   end
 end
 
-# Function to create a the foreign key constraint part of a CREATE TABLE statement 
+# Function to create a the foreign key constraint part of a CREATE TABLE statement
 # out of a schemaTable object.
 # @param schema_table - Table object to create a CREATE TABLE statement
 # return - The CREATE TABLE statement foreign key constraint part
@@ -238,7 +238,7 @@ def tables_foreignKey_to_create_statement(fk)
   return createStatement
 end
 
-# Function to create a CREATE TABLE statement part of a column 
+# Function to create a CREATE TABLE statement part of a column
 # out of a schemaTable object.
 # @param schema_table - Table object to create a CREATE TABLE statement
 # return - The CREATE TABLE statement column part
@@ -342,7 +342,7 @@ def addForeignKey(table, foreignKey)
     foreign_key_ref = SchemaForeignKeyRef.new(fk['from_column'], fk['to_table'], fk['to_column'])
     foreign_key_comp.add_foreign_key(foreign_key_ref)
   end
-  table.add_foreign_keys(foreign_key_comp)  
+  table.add_foreign_keys(foreign_key_comp)
 end
 
 def removeForeignKey(table, foreignKey)

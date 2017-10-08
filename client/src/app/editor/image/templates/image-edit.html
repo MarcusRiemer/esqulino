@@ -1,13 +1,13 @@
 <div class="card mb-3">
-  <div class="card-block">
+  <div class="card-body">
     <h4>Bilddaten bearbeiten</h4>
     <p>Hier kannst du die Metadaten bearbeiten und die Bilddatei ersetzen</p>
   </div>
   <form *ngIf="image != null" (submit)="onSubmit($event)"
-        class="card-block"
+        class="card-body"
         method="POST">
     <div class="form-group row">
-      <img src="{{image['image-url']}}" alt="{{image['image-name']}}">
+      <img src="{{image.url}}" alt="{{image.name}}">
     </div>
     <div class="form-group row">
       <label class="col-2 col-form-label"
@@ -19,7 +19,7 @@
               class="form-control"
               id="image-name"
               name="image-name"
-              value="{{image['image-name']}}"
+              value="{{image.name}}"
               aria-describedby="image-help">
         <small id="image-help"
                class="form-text text-muted">
@@ -29,23 +29,45 @@
     </div>
     <div class="form-group row">
         <label class="col-2 col-orm-label" for="author-name">
-            Name des Autors
+            Name des Urhebers
         </label>
         <div class="col-10">
-            <input type="text" class="form-control" id="author-name" name="author-name" value="{{image['author-name']}}" aria-describedby="author-name-help">
+            <input type="text" class="form-control" id="author-name" name="author-name" value="{{image.authorName}}" aria-describedby="author-name-help">
             <small id="author-name-help" class="form-text text-muted">
-                Wird als Autor beim Anzeigen des Bildes angezeigt
+                Wird als Urheber beim Anzeigen des Bildes angezeigt
             </small>
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-2 col-orm-label" for="author-name">
-            URL des Autors
+        <label class="col-2 col-orm-label" for="author-url">
+            URL des Urhebers
         </label>
         <div class="col-10">
-            <input type="text" class="form-control" id="author-url" name="author-url" value="{{image['author-url']}}" aria-describedby="author-url-help">
+            <input type="text" class="form-control" id="author-url" name="author-url" value="{{image.authorUrl}}" aria-describedby="author-url-help">
             <small id="author-url-help" class="form-text text-muted">
-                Wird als Link zur Webseite des Autoren beim Anzeigen des Bildes verwendet
+                Wird als Link zur Webseite des Urhebers beim Anzeigen der Bildquellen verwendet
+            </small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-2 col-orm-label" for="licence-name">
+            Name der Lizenz
+        </label>
+        <div class="col-10">
+            <input type="text" class="form-control" id="licence-name" name="licence-name" value="{{image.licenceName}}" aria-describedby="author-url-help">
+            <small id="licence-name-help" class="form-text text-muted">
+                Die Lizenz unter der das Bild steht
+            </small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-2 col-orm-label" for="licence-url">
+            URL der Lizenz
+        </label>
+        <div class="col-10">
+            <input type="text" class="form-control" id="licence-url" name="licence-url" value="{{image.licenceUrl}}" aria-describedby="licence-url-help">
+            <small id="licence-url-help" class="form-text text-muted">
+                Die URL zum Text der Lizenz
             </small>
         </div>
     </div>
@@ -55,7 +77,7 @@
     </button>
   </form>
   <form *ngIf="image != null" (submit)="onSubmitUpload($event)"
-        class="card-block"
+        class="card-body"
         method="POST">
     <div class="form-group row">
       <label class="col-2 col-form-label"

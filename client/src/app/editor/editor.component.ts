@@ -104,7 +104,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     return (this._project);
   }
 
-  get paneOrder() {
-    return (this._preferences.paneOrder);
+  /**
+   * @return The current preferences that apply to the current session.
+   */
+  get preferences() {
+    return (this._preferences);
   }
 }

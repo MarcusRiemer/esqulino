@@ -12,3 +12,4 @@ ole-just-thesis-twoside.pdf
 *.bcf
 *.blg
 *.run.xml
+_minted*

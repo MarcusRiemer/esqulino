@@ -453,6 +453,7 @@ class Project
       'name' => self.whole_description['name'],
       'id' => self.id,
       'description' => self.whole_description['description'],
+      'instance' => self,
     }
   end
 

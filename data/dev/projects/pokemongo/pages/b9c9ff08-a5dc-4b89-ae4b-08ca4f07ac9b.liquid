@@ -1,45 +1,47 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{ page.name }} - {{ project.name }}</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
+<head>
+<title>{{ page.name }} - {{ project.name }}</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <link rel="stylesheet" href="/vendor/css/bootstrap.css">
-    <link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
-  </head>
+<link rel="stylesheet" href="/vendor/css/bootstrap.css">
+<link rel="stylesheet" href="/vendor/css/esqulino-ribbon.css">
+</head>
 
-  <body>
-    <div class="container-fluid">
-      <h1>Hallo auf meinem Pokédex</h1>
-      <p>Hier zeige ich alle Pokémon, die ich gefangen habe.</p>
-      {% include "query_table" table: query.Meine_Pokemon, columns: "spitzname,name,staerke,typ_name" %}
-      <div class="row"><div class="col-md-6"><form><button type="submit" formaction="/Gefangen_Loeschen" formmethod="GET"class="btn btn-secondary btn-block">Pokémon freigelassen</button></form></div>
-        <div class="col-md-6"><form><button type="submit" formaction="/Gefangen_Neu" formmethod="GET"class="btn btn-secondary btn-block">Pokémon gefangen
-      </button></form></div></div>
-      <h1>Pokémon ansehen
-      </h1>
-      <form><input type="hidden" name="" value="">
-        <fieldset class="form-group">
-          <label for="input-gefangen_id">
-            Auswahl
-          </label>
-          <select class="form-control"
-                  id="input-gefangen_id$"
-                  name="gefangen_id">
-            {% for option in query.Meine_Pokemon %}
-            <option value="{{ option['gefangen_id'] }}">
-              {{ option['spitzname'] }}
-            </option>
-            {% endfor %}
-          </select>
-        </fieldset>
-        <button type="submit" formaction="/Gefangen_Einzeln" formmethod="GET"class="btn btn-secondary btn-block">Ansehen</button>
-        <button type="submit" formaction="/Hauptseite/query/40bddeac-facc-4836-a27b-6a23222078d5" formmethod="POST" class="btn btn-secondary btn-block">Löschen</button></form>
-    </div>
-    {% include "edit-ribbon" %}
-  </body>
+<body>
+<div class="container-fluid">
+<h1>Hallo auf meinem Pokédex</h1>
+{% include "image" src: "08cf4332-c143-4d75-8439-0dd012090472", type: "icon" %}
+<p>Hier zeige ich alle Pokémon, die ich gefangen habe.</p>
+{% include "query_table" table: query.Meine_Pokemon, columns: "spitzname,name,staerke,typ_name" %}
+<div class="row"><div class="col-md-6"><form><button type="submit" formaction="/Gefangen_Loeschen" formmethod="GET"class="btn btn-secondary btn-block">Pokémon freigelassen</button></form></div>
+<div class="col-md-6"><form><button type="submit" formaction="/Gefangen_Neu" formmethod="GET"class="btn btn-secondary btn-block">Pokémon gefangen
+</button></form></div></div>
+<h1>Pokémon ansehen
+</h1>
+<form><input type="hidden" name="" value="">
+<fieldset class="form-group">
+<label for="input-gefangen_id">
+Auswahl
+</label>
+<select class="form-control"
+id="input-gefangen_id$"
+name="gefangen_id">
+{% for option in query.Meine_Pokemon %}
+<option value="{{ option['gefangen_id'] }}">
+{{ option['spitzname'] }}
+</option>
+{% endfor %}
+</select>
+</fieldset>
+<button type="submit" formaction="/Gefangen_Einzeln" formmethod="GET"class="btn btn-secondary btn-block">Ansehen</button>
+<button type="submit" formaction="/Hauptseite/query/40bddeac-facc-4836-a27b-6a23222078d5" formmethod="POST" class="btn btn-secondary btn-block">Löschen</button></form>
+</div>
+{% include "image-sources" %}
+{% include "edit-ribbon" %}
+</body>
 
 
 </html>

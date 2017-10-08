@@ -1,9 +1,226 @@
 \section{Anforderungsanalyse}
 \label{sec:requirements}
 
-In diesem Kapitel werden die Anforderungen beschrieben die an die Containerisierung und die Bildverwaltung gestellt wurden.
+In diesem Kapitel werden die Anforderungen beschrieben die an die
+Containerisierung und die Bildverwaltung gestellt wurden.
 
-Neben der Bildverwaltung stand auch die Verbesserung der Zug\"{a}nglichkeit der Hosting und Entwicklungsumgebung. Docker ist eine verbreitete L\"{o}sung um Anwendungen in sogenannten Containern zu isolieren, die weitgehend unabh\"{a}ngig von der verwendeten Hardware ist und auch auf den meisten verbreiteten Betriebssystemen eingesetzt werden kann, ohne dass die auf dem Hostsystem installierte zus\"{a}tzlich installierte Software die Anwendung im Container beeinflusst, sodass der Einfluss betriebssystemspeziefischer Eigenheiten auf die Anwendung weitgehend vermieden werden kann.
+Neben der Bildverwaltung stand auch die Verbesserung der Zugänglichkeit der
+Hosting und Entwicklungsumgebung. Docker ist eine verbreitete Lösung um
+Anwendungen in sogenannten Containern zu isolieren, die weitgehend
+unabhängig von der verwendeten Hardware ist und auch auf den meisten
+verbreiteten Betriebssystemen eingesetzt werden kann, ohne dass die auf dem
+Hostsystem installierte zusätzlich installierte Software die Anwendung im
+Container beeinflusst, sodass der Einfluss betriebssystemspeziefischer
+Eigenheiten auf die Anwendung weitgehend vermieden werden kann.
+
+Zur Bildverwaltung gehöhren ein API\todo[author=mri]{Typo, Satzbau},
+die es ermöglicht, Bilder und essentielle Metadaten anzulegen,
+auszugeben, zu bearbeiten und zu löschen, eine Bibliothek, die die
+durch die API bereitgestellten Funktionen Serverseitig umsetzt und
+eine Frontendintegration, die dem Verwalter eines Projekts das
+Anlegen, Betrachten, Modifizieren und Löschen der Bilder und Metadaten
+ermöglicht sowie die Verwendung der Bilder in Projektvorschau, dem
+Seiteneditor und den Datenbanktabellen.
+
+\subsection{Containerisierung}
+
+Das Projekt verwendet drei Ausprägungen von Images, jeweils eins für
+Produktivumgebung, Entwicklungsumgebung und Testumgebung.
+
+\todo[author=mri,inline]{Begründung hier, Erläuterung in den
+  Sektionen. Verweis auf Buildservices wie Travis oder Bitbucket
+  Pipelines}
+
+\subsubsection{Entwicklungsumgebung}
+
+Das Entwicklungsimage stellt die während der Softwareentwicklung
+benötigte Umgebung zur Verfügung und erwartet das Einbinden des
+Quellcodes via Volume, sodass eine Änderung am Quellcode auf dem Hostsystem
+sofort im Container sichtbar wird und zum neucompilieren des Codes durch den im
+Entwicklungsmodus laufenden Server führt. So ist es möglich auf einem
+Entwicklungsgerät zu arbeiten ohne die Abhängigkeiten im Betriebssystem
+zu installieren und somit inkompatible Versionen von Abhängigkeiten mit
+anderen Projekten zu vermeiden. Weiterhin ist es so möglich unter Windows
+und MacOS zu entwickeln, da hier seitens Docker Werkzeuge zum Ausführen von
+Containern mittels der Linux Distrubution boot2docker in einer sehr
+minimalistischen durch die Werkzeuge verwalteten virtuellen Maschiene.
+
+\todo[author=mri,inline]{Nicht erwähnter Vorteil: Entwickler kann
+  seine gewohnte Umgebung weiternutzen}
+
+\subsubsection{Testumgebung}
+
+Das Testimage weist Ähnlichkeiten zum Entwicklungsimage auf, enthält
+aber noch den Chromium Browser, der im Headless Mode für Tests des Clients
+genutzt wird.
+
+\subsubsection{Produktivumgebung}
+
+Das Produktivimage enthält eine fertig gebaute Version der Software sowie die
+zum Betrieb nötigen Abhängigkeiten, die Versionierung des Images richtet sich
+nach der Version der Software, ein Update wird durch das herunterladen/bauen des
+Images mit der entsprechend höheren Version und austauschen des laufenden
+Containers mit einem Container der neueren Version realisiert.
+
+\subsection{Bildverwaltung}
+
+Der erste zu klärende Punkt der Bilddatenbank war, wie Bilder zur
+Datenbank hinzugefügt werden können. Zur
+Auswahl\todo[author=mri]{Auflistung} standen der Dateiupload im
+Projekteditor durch den Autoren des Projekts, Import aus einer
+öffentlichen Bilddatenbank, Import aus einer eigenen durch den
+Administrator gepflegten Bilddatenbank.  Eine dieser Möglichkeiten
+soll mit der Implementierung der Bildverwaltung direkt umgesetzt
+werden, die anderen möglicherweise später folgen.
+
+Vorteile\todo[author=mri]{Auch Tabellarisch} der öffentlichen
+Bilddatenbank ist der geringe Aufwand beim Import von Bildern, bei
+ausschließlicher Nutzung von Datenbanken die alle Bilder unter
+Creative Commons Zero (CC0) veröffentlichen, wie beispielsweise
+openclipart, entfällt zudem die Notwendigkeit Metadaten wie Urheber
+und Lizenz zu Speichern oder anzuzeigen, bei Datenbanken die auch
+andere Creative Commons Lizenzen (CC-BY, CC-BY-SA,CC-BY-NC,
+CC-BY-SA-NC, CC-BY-ND, CC-BY-ND-NC) oder vergleichbare zulassen sind
+Urheber und Lizenz zumindest Maschienenlesbar hinterlegt, sodass im
+einfachsten Fall die Auswahl der Bilddatenbank und die ID des Bildes
+für den Import ausreichen, im angenehmen Fall ist im Projekts Editor
+ein Suchinterface mit Anbindung an die API der Bilddatenbank sodass
+eine oder alle Bilddatenbanken aus dem Projekteditor heraus durchsucht
+werden können ohne dass dem Projektautoren die jeweilige Bilddatenbank
+bekannt sein muss.
+
+Die Nachteile der öffentlichen Bilddatenbanken als initial einziges Verfahren
+zum hinzugefügen von Bildern ist die Verwendung eigener Werke. Ein eigenes Werk
+müsste erst einer angebundenen Bilddatenbank hinzugefügt werden um es verwenden
+zu können. Dies erfordert zum einen die Bereitschaft des Urhebers das Werk unter
+einer der von der Bilddatenbank erlaubten Lizenz zu veröffentlichen, sowie die
+Eröffnung eines Accounts bei der jeweiligen Bilddatenbank. Da es sich bei der
+Zielgruppe von SQLino um Schüler handelt, die auch zum Teil zu jung sind um
+Verträge wie den zur Eröffnung eines Accounts einzugehen, wodurch sie von der
+Verwendung eigener Werke ausgeschlossen sind bis der Dateiupload implementiert
+ist, weshalb diese Importmethode als vorerst einzige ausscheidet.
+
+\todo{warum die admindatenbank nicht genommen wird: kann auch aus oeffentlichen datenbanken importieren,
+  freigabeprozess fuer eigene werke, vorauswahl, hoher aufwand}
+
+Die zusammen mit der Bildverwaltung zu implementierende Variante ist daher der
+Dateiupload im Projekteditor. Der Import von Bildern aus Bilddatenbanken ist so,
+zwar unter höherem Aufwand, möglich, und durch manuell anzugebenden Urheber und
+Lizenz können Schüler so für die Notwendigkeit der Auseinandersetzung mit
+Urheberrecht bei Veröffentlichung von Bildern sensibilisiert werden.
+
+\subsubsection{Lizenzen \& Metadaten}
+
+Da Bilder nicht alle unterstützenswerten Bildformate Metadaten über
+Urheber und Lizenz standatisiert haben, ist es nicht möglich die aus
+rechtlicher Sicht Notwendigen Metadaten zum Urheber und zur Lizenz der Bilder
+in der Datei selbst zu speichern und aus rechlicher Sicht, reicht die bloße
+Anwesenheit der Daten in der Datei nicht um Beispielsweise die Anforderung der
+Urhebernennung zu erfüllen, weshalb die aus rechlicher Sicht notwendigen
+Metadaten in einer zusätzlichen Datenquelle gehalten werden müssen.
+
+Die aus rechtlicher Sicht notwendigen Daten sind Name des Urhebers mit Link auf
+eine Webpräsenz und der Name der Lizenz unter der das Bild verwendet wird
+mit Link auf die Lizenz.
+
+\subsubsection{Darstellungsformen}
+
+Für die Bilder sollen zwei Darreichungsformen existieren: Die Abbildung
+(Figure) und das gestalterische Element (Graphic), die sich durch ihre
+Einbettung und den Ort der Quellenangaben unterscheiden. Die Abbildung
+eingerahmt, die Metadaten am Bild dargestellt, das Gestalterische Element bettet
+das Bild in einen Link ein, der auf die Quellenangabe am Ende der Seite verweist.
+
+\subsubsection{Darstellung von Quellenangaben}
+
+Bei Abbildungen werden Name des Bildes, Urheber des Bildes und Name der Lizenz
+direkt unter dem Bild innerhalb des eingerahmten Bereichs dargestellt, der Name
+des Urhebers ist ein Link auf die Webpräsenz, der Name der Lizenz ein Link
+auf den Volltext der Lizenz.
+
+Die Quellenangaben der gestalterischen Elemente findet tabellarisch im Footer der
+Webseite statt, Alle dargestellten gestalterischen Elemente werden dort in der
+Reihenfolge ihres Erscheinens im Quelltext der Seite aufgelistet. Die Tabelle
+besteht aus den Spalten Nummer des Quellverweises, Name des Bildes,
+Name des Urhebers und Name der Lizenz, wobei die Nummer des Quellverweises auf
+das gestalterische in der Seite verlinkt, der Name des Bildes auf eine neue
+Seite bestehend aus einer Abbildung des Bildes gemäß der obig genannten
+Darstellungsform von Abbildungen, der Name des Autoren ein Link auf dessen
+Webpräsenz und der Name der Lizenz ein Link auf den Volltext der Lizenz.
+
+\subsubsection{Notwendigkeit von Quellenangaben}
+
+Sofern notwendig kann die obig genannte Darstellung der Quellenangaben nicht
+weiter beeinflusst werden als durch die Auswahl eines der genannten Typen. Liegt
+jedoch eine Grafik vor, deren Lizenz weder die Namensnennung noch die Nennung
+der Lizenz erfordert, wie beispielsweise CC0, oder der Autor der Seite selbst der
+Urheber ist, soll auf die Quellenangabe verzichtet werden können, im Falle
+einer Abbildung also nur der Name angezeigt werden und im Falle des
+gestalterischen Elements der Eintrag in der Liste komplett weggelassen werden.
+
+\subsubsection{Endgerätoptimierung}
+
+\todo{}
+
+\subsubsection{Datenhaltung}
+
+Die Datenhaltung betrifft sowohl die Bilder selbst als auch die Metadaten. Die
+Bilder selbst können entweder in einem Key-Value Store oder im Dateisystem
+gespeichert werden. Im Fall der Bilder muss das verwendete verwendete System in
+der Lage sein mit großen Blöcken von Binärdaten effizient umzugehen. In
+beiden Fällen müssen die Operationen Einfügen, Löschen, Indizierter Zugriff und
+im Falle der Metadaten auch die Komplettzugriff auf alle Werte nach Möglichkeit
+in Abhängigkeit von der Anzahl der angefragten/bearbeiteten Elemente komplex
+sein und nicht in Abhängigkeit der insgesammt gespeicherten Elemente. Daher sind
+an dieser Stelle datenbankähnliche Systeme, die beim einfügen und löschen von
+Daten ihren Index neu berechnen müssen, der für die gute Suchperformance sorgt,
+wie beispielsweise Elasticsearch unbrauchbar, auch da eine Suche im
+Funktionsumfang der Bildverwaltung nicht vorgesehen ist. Der Key-Value Store
+muss weiterhin die für die unterscheidung der Bilder verwendeten UUIDs als Key
+unterstützten. Die bisher verwenden sqlite Datenbanken sind nicht für den
+Einsatz als Key-Value Store mit Values von der Größe Bildern konzipiert,
+vergrößern die Datei in der die Datenbank persistiert wird und erhöhen somit die
+benötigte Menge an Arbeitsspeicher um die Datenbank darin zu laden um
+Operationen darauf auszuführen. Es müsste also ein zusätzlicher Dienst in die
+Projektarchitektur eingefügt werden, um die Funktionalität des Key-Value Stores
+zu übernehmen. Da Ein Wechsel weg von Sqlite und hin zu PostgreSQL ist zunächst
+die Tauglichkeit von PostgreSQL als Key-Value Store zu betrachten und im Falle
+der Tauglichkeit anderen Dienstbasierten Lösungen vorzuziehen.
+
+PostgreSQL kennt eine Key-Value Store implementierung namens hstore
+\cite{PostgreSQL-hstore} bei der Key-Value Tupel gespeichert werden. Desweiteren
+unterstützt PostgreSQL von großen und sehr großen Blöcken von Binärdaten, es
+wird jedoch davon Abgeraten sehr große Dateien deren Zugriffszeit kritisch für
+die Anwendung ist, da der Zugriff aus der Datenbank weniger Performant als der
+direkte Zugriff auf das Dateisystem \cite{PostgreSQL-blob}. Außerdem erhöht Last
+auf der Datenbank die Zugriffszeiten auf die Bilder als auch das Anzeigen vieler
+Bilder die Last auf der Datenbank. Desweiteren ist eine Verteilung von Datenbank
+und Bildern auf verschiedene Systeme (Content Delivery Network) nicht ohne
+verteilte Datenbank realisierbar und weniger Performant. Ab welcher
+Größenordnung dies zu einem Problem wird müsste in einem Benchmark getestet
+werden bei dem Diverse Nutzer auf Diversen Projekten simuliert werden müssten,
+wofür erst die PostgreSQL Anbindung abgeschlossen werden müsste.
+
+Letztere Beeinträchtigungen wären bei einem dedizierten Key-Value Store nicht
+gegeben, führen aber zu mehr Komplexität in der Systemarchitektur und somit zu
+mehr Fehlerquellen. \todo{BerkeleyDB und memcacheDB anreissen}
+
+Das Speichern der Bilder im Dateisystem unter Verwendung der UUID zum Zugriff
+ist so perfomant, wie Speichermedium und Dateisystem es zulassen. Bei aktuellen
+Dateisystemen wie ext4 hat die Anzahl der Dateien in einem Verzeichnis keinen
+nennenswerten Einfluss auf die Zugriffszeiten auf einzelne bekannte Dateien,
+lediglich die des Auflisten aller Dateien ist von der Anzahl linear abhängig.
+Sollten die Zugriffe auf die Bilder je die Kapazität des Webservers
+überschreiten, so kann bei dieser Methode einfach ein Content Delivery Network
+eingebunden werden indem Bilder via NFS und Caching von anderen Servern
+ausgeliefert werden oder einem CDN-Dienstleister synchronisiert werden.
+Desweiteren kann der Administrator ein Bild einfacher anhand seiner UUID finden
+und durch einene Löschnotiz ersetzen, falls Urheberrecht oder Strafrecht dies
+erfordern, da die Datei weder gesucht werden muss, noch ein Client zum
+betrachten und bearbeiten der Datenbank sowie Kentnisse darüber notwendig sind;
+die zur Administration eines Servers notwendigen Kentnisse sind ausreichend.
+
+
 
 %%% Local Variables:
 %%% mode: latex

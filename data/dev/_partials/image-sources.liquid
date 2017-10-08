@@ -1,0 +1,34 @@
+<div style="margin-top: 20px; padding:20px; border-top-width: 3px;border-top-style: solid;">
+{% displaySourceList %}
+<ul class="">
+  {% for author_sources_entry in sources_grouped %}
+  {% assign author_name = author_sources_entry[0]['author-name'] %}
+  {% assign author_url = author_sources_entry[0]['author-url'] %}
+    <li>
+      <a href="{{author_url}}">{{author_name}}</a>
+      <ul class="">
+        {% for licence_entry in author_sources_entry[1] %}
+          {% assign licence_name = licence_entry[0]['licence-name'] %}
+          {% assign licence_url = licence_entry[0]['licence-url'] %}
+          <li>
+            <a href="{{ licence_url }}">{{ licence_name }}</a>
+            {% for image_entry in licence_entry[1] %}
+              {% assign id = image_entry[0] %}
+              {% assign name = image_entry[1]['name'] %}
+              {% assign count = image_entry[1]['count'] %}
+              <ul>
+                <li>
+                {{ name }}
+                {% for i in (0..count) limit:count %}
+                  [<a href="#{{id}}-{{i}}">{{i}}</a>]
+                {% endfor %}
+                </li>
+            </ul>
+            {% endfor %}
+          </li>
+        {% endfor %}
+      </ul>
+    </li>
+  {% endfor %}
+</ul>
+</div>

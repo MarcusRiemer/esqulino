@@ -44,8 +44,8 @@ module SimulateSql
   def self.insert_sql(db, sql, params)
     # Extracting the tablename of the SQL-query
     guessed_tablename = SqlAccessor::insert_tablename(sql)
-    
-    begin      
+
+    begin
       # We wrap the whole execution in a transaction and then
       # run the query to look at the newly added ID.
       db.transaction
@@ -56,7 +56,7 @@ module SimulateSql
       inserted = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid = #{rowid}"
       columns = inserted.first
       inserted = inserted.drop(1)
-      
+
       # And we fetch rows around that row
       rows = db.execute2 "SELECT * FROM #{guessed_tablename} WHERE rowid BETWEEN #{rowid - 2} AND #{rowid + 2}"
 

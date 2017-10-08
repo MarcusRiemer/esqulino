@@ -8,7 +8,7 @@ FROM archimg/base-devel
 LABEL name="esqulino base image"
 
 ENV BUILD_PACKAGES="git" \
-    SERVER_PACKAGES="ruby ruby-ffi ruby-bundler graphviz" \
+    SERVER_PACKAGES="ruby ruby-ffi ruby-bundler graphviz file imagemagick" \
     CLIENT_PACKAGES="nodejs npm" \
     TEST_PACKAGES="chromium"
 

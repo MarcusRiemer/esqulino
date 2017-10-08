@@ -2,9 +2,9 @@ require 'json'
 require 'securerandom'
 require 'fileutils'
 
-class Image
-  include ProjectsHelper
+require_dependency 'version'
 
+class Image
   IMAGE_FOLDER = 'images'
   IMAGES_JSON = 'images.json'
   IMAGE_PATH_PRE_PROJECT_ID = '/api/project/'
@@ -24,10 +24,6 @@ class Image
 
   def id
     @image_id
-  end
-
-  def file_path
-    @path
   end
 
   def project_id
@@ -96,8 +92,9 @@ class Image
     then
       JSON.parse(File.read(self.image_json(project))).each do |k, v|
         v['id'] = k
-        v['image-url'] = IMAGE_PATH_PRE_PROJECT_ID + project.id + IMAGE_PATH_PRE_IMAGE_ID + k
-        v['project-id'] = project.id
+        v['apiVersion'] = current_api_version;
+        v['name'] = v['image-name'];
+        v.delete 'image-name';
         to_return.append(v)
       end
     end
@@ -117,7 +114,9 @@ class Image
     res = @metadata
 
     res['id'] = @image_id
-    res['image-url'] = IMAGE_PATH_PRE_PROJECT_ID + @project.id + IMAGE_PATH_PRE_IMAGE_ID + @image_id
+    res['apiVersion'] = current_api_version;
+    res['name'] = res['image-name'];
+    res.except!('image-name');
 
     res
   end
@@ -158,12 +157,14 @@ class Image
     img
   end
 
-  def self.metadata_create(image_name, author_name, author_url)
+  def self.metadata_create(image_name, author_name, author_url, licence_name, licence_url)
     metadata = Hash.new()
 
     metadata["image-name"] = image_name
     metadata["author-name"] = author_name
     metadata["author-url"] = author_url
+    metadata["licence-name"] = licence_name
+    metadata["licence-url"] = licence_url
 
     metadata
   end
