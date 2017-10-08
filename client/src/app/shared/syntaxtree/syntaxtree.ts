@@ -284,7 +284,7 @@ export class Tree {
       return (new Tree(desc));
     }
     else {
-      // Build the description of the current tree and replace the new node in it
+      // Build the description of the current tree to replace the new node in it
       let newDescription = this.toModel();
 
       // Walking up the tree to the parent of the node to replace
@@ -293,6 +293,37 @@ export class Tree {
 
       // Actually replace the node and build the new tree
       parent.children[parentCat][parentIndex] = desc;
+      return (new Tree(newDescription));
+    }
+  }
+
+  /**
+   * Returns a new three where a new node is inserted at the given location.
+   *
+   * @param loc The location of the insertion.
+   * @param desc The node to insert
+   * @return The modified tree
+   */
+  insertNode(loc: NodeLocation, desc: NodeDescription): Tree {
+    // The root can only be replaced, not extended.
+    if (loc.length === 0) {
+      throw new Error(`Nothing can be appended after the root node.`);
+    } else {
+      // Build the description of the current tree to insert the new node in it
+      let newDescription = this.toModel();
+
+      // Walking up the tree to the parent that will contain the new node
+      let parent = locateNode(newDescription, loc.slice(0, loc.length - 1));
+      let [parentCat, parentIndex] = loc[loc.length - 1];
+
+      // Create the category if it doesn't exist so far.
+      if (!parent.children[parentCat]) {
+        parent.children[parentCat] = [];
+      }
+
+      // Append the node in the category and build the new tree
+      let cat = parent.children[parentCat];
+      cat.splice(parentIndex, 0, desc);
       return (new Tree(newDescription));
     }
   }

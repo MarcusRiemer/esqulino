@@ -385,4 +385,75 @@ describe('AST: Basic Operations', () => {
     expect(prev).not.toBe(curr);
     expect(curr.rootNode.properties["a"]).toEqual("2");
   });
+
+  it('Inserting nodes at the first index in existing categories', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          { language: "lang", name: "r_a_0" },
+        ]
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.insertNode([["a", 0]], { language: "lang", name: "new" });
+
+    expect(prev).not.toBe(curr);
+    expect(curr.rootNode.children["a"].length).toEqual(2);
+    expect(curr.rootNode.children["a"][0].typeName).toEqual("new");
+    expect(curr.rootNode.children["a"][1].typeName).toEqual("r_a_0");
+  });
+
+  it('Inserting nodes at the last index in existing categories', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          { language: "lang", name: "r_a_0" },
+        ]
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.insertNode([["a", 1]], { language: "lang", name: "new" });
+
+    expect(prev).not.toBe(curr);
+    expect(curr.rootNode.children["a"].length).toEqual(2);
+    expect(curr.rootNode.children["a"][0].typeName).toEqual("r_a_0");
+    expect(curr.rootNode.children["a"][1].typeName).toEqual("new");
+  });
+
+  it('Inserting nodes at the first index in new categories', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          { language: "lang", name: "r_a_0" },
+        ]
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.insertNode([["b", 0]], { language: "lang", name: "new" });
+
+    expect(prev).not.toBe(curr);
+    expect(curr.rootNode.children["a"].length).toEqual(1);
+    expect(curr.rootNode.children["a"][0].typeName).toEqual("r_a_0");
+    expect(curr.rootNode.children["b"].length).toEqual(1);
+    expect(curr.rootNode.children["b"][0].typeName).toEqual("new");
+  });
+
+  it('Error: Inserting something at the root node', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+    };
+
+    const prev = new Tree(treeDesc);
+    expect(() => prev.insertNode([], { language: "lang", name: "new" })).toThrowError();
+  });
 });
