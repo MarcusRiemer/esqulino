@@ -147,6 +147,17 @@ export class NodeComponent implements OnChanges {
   }
 
   /**
+   * The user has decided to add a property.
+   */
+  onPropertyAdd(key: string) {
+    try {
+      this._treeService.addProperty(this.node.location, key);
+    } catch (e) {
+      alert(e);
+    }
+  }
+
+  /**
    * @return The state of the drop animation for targets
    */
   get dropTargetAnimationState(): Observable<DropTargetAnimationStates> {

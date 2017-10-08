@@ -402,6 +402,35 @@ describe('AST: Basic Operations', () => {
     expect(curr.rootNode.properties["b"]).toEqual("2");
   });
 
+  it('Adding new properties', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev
+      .addProperty([], "a")
+      .addProperty([], "b");
+
+    expect(prev).not.toBe(curr);
+    expect(curr.rootNode.properties["a"]).toBeDefined();
+    expect(curr.rootNode.properties["b"]).toBeDefined();
+  });
+
+  it('Error: Adding new duplicate properties', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      properties: {
+        "a": "1"
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    expect(() => prev.addProperty([], "a")).toThrowError();
+  });
+
   it('Renaming properties', () => {
     const treeDesc: NodeDescription = {
       language: "lang",

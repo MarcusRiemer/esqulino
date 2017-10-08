@@ -69,6 +69,18 @@ export class TreeService {
   }
 
   /**
+   * Adds a new property without specifying a value.
+   *
+   * @param loc The location of the node to edit.
+   * @param key The name of the property.
+   */
+  addProperty(loc: NodeLocation, key: string) {
+    console.log(`Adding ${JSON.stringify(loc)} property "${key}"`);
+
+    this.replaceTree(this.tree.addProperty(loc, key));
+  }
+
+  /**
    * Renames the key of a property.
    *
    * @param loc The location of the node to edit.
