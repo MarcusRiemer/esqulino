@@ -2,9 +2,10 @@ import { Observable, BehaviorSubject } from 'rxjs'
 
 import { Injectable } from '@angular/core'
 
-import { TrashService } from '../shared/trash.service'
+import { arrayEqual } from '../../shared/util'
+import { Node, NodeDescription, NodeLocation } from '../../shared/syntaxtree'
 
-import { Node, NodeDescription } from '../../shared/syntaxtree'
+import { TrashService } from '../shared/trash.service'
 
 export interface CurrentDrag {
   origin: "sidebar" | "tree"
@@ -23,7 +24,10 @@ export class DragService {
   private _currentSource: Node;
 
   // The node the drag operation is currently dragged over.
-  private _currentDragOver = new BehaviorSubject<Node>(undefined);
+  private _currentDragOverNode = new BehaviorSubject<Node>(undefined);
+
+  // The placeholder the drag operation is currently dragged over
+  private _currentDragOverPlaceholder = new BehaviorSubject<NodeLocation>(undefined);
 
   private constructor(private _trashService: TrashService) { }
 
@@ -49,7 +53,7 @@ export class DragService {
       evt.target.removeEventListener("dragend", dragEndHandler);
 
       this._currentDrag.next(undefined);
-      this._currentDragOver.next(undefined);
+      this._currentDragOverNode.next(undefined);
       this._currentSource = undefined;
       this._trashService.hideTrash();
       console.log(`AST-Drag ended:`, drag);
@@ -74,10 +78,19 @@ export class DragService {
    * Needs to be called by nodes when the drag operation currently drags over any node.
    */
   public informDraggedOverNode(node: Node) {
-    if (this._currentDragOver.getValue() != node) {
-      this._currentDragOver.next(node);
+    if (this._currentDragOverNode.getValue() != node) {
+      this._currentDragOverPlaceholder.next(undefined);
+      this._currentDragOverNode.next(node);
     }
-    console.log("Dragged Over:", node ? JSON.stringify(node.location) : "editor");
+    console.log("Dragged over node:", node ? JSON.stringify(node.location) : "editor");
+  }
+
+  public informDraggedOverPlaceholder(loc: NodeLocation) {
+    if (!arrayEqual(this._currentDragOverPlaceholder.getValue(), loc)) {
+      this._currentDragOverPlaceholder.next(loc);
+      this._currentDragOverNode.next(undefined);
+    }
+    console.log("Dragged over placeholder:", JSON.stringify(this._currentDragOverPlaceholder.getValue()));
   }
 
   /**
@@ -105,6 +118,10 @@ export class DragService {
    * @return Observable with the node that is currently dragged over.
    */
   get currentDragOverNode() {
-    return (this._currentDragOver.distinctUntilChanged());
+    return (this._currentDragOverNode);
+  }
+
+  get currentDragOverPlaceholder() {
+    return (this._currentDragOverPlaceholder);
   }
 }
