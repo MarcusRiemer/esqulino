@@ -15,7 +15,7 @@ import { TreeService } from './tree.service'
 // These states are available for animation
 type DropTargetAnimationStates = "available" | "none" | "self";
 
-const DEFAULT_ANIMATION = "400ms ease";
+const DEFAULT_ANIMATION = "2000ms ease";
 
 /**
  * Displays a node of a syntaxtree, currently in the most generic way possible.
@@ -44,6 +44,11 @@ const DEFAULT_ANIMATION = "400ms ease";
       //transition('self => available', animate(DEFAULT_ANIMATION)),
     ]),
     trigger('dropPlaceholder', [
+      state('none', style({
+        transform: 'scale(0.5)',
+        display: 'none',
+        backgroundColor: 'white',
+      })),
       state('available', style({
         transform: 'scale(1.0)',
         display: 'block',
@@ -53,10 +58,6 @@ const DEFAULT_ANIMATION = "400ms ease";
         transform: 'scale(1.0)',
         display: 'block',
         backgroundColor: 'yellow',
-      })),
-      state('none', style({
-        transform: 'scale(0.5)',
-        display: 'none',
       })),
     ])
   ]
@@ -124,12 +125,24 @@ export class NodeComponent implements OnChanges {
   }
 
   /**
-   * The user has decided to edit a node.
+   * The user has decided to edit a property value.
    */
   onPropertyEdit(key: string, value: string) {
-    console.log("blur!", key, value);
     if (this.node.properties[key] != value) {
       this._treeService.setProperty(this.node.location, key, value);
+    }
+  }
+
+  /**
+   * The user has decided to rename a property.
+   */
+  onPropertyRename(key: string, newKey: string) {
+    if (key != newKey) {
+      try {
+        this._treeService.renameProperty(this.node.location, key, newKey);
+      } catch (e) {
+        alert(e);
+      }
     }
   }
 

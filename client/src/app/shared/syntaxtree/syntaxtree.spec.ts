@@ -386,6 +386,69 @@ describe('AST: Basic Operations', () => {
     expect(curr.rootNode.properties["a"]).toEqual("2");
   });
 
+  it('Setting new properties', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev
+      .setProperty([], "a", "1")
+      .setProperty([], "b", "2");
+
+    expect(prev).not.toBe(curr);
+    expect(curr.rootNode.properties["a"]).toEqual("1");
+    expect(curr.rootNode.properties["b"]).toEqual("2");
+  });
+
+  it('Renaming properties', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      properties: {
+        "a": "1",
+        "b": "2",
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.renameProperty([], "a", "c");
+
+    expect(prev).not.toBe(curr);
+    expect(curr.rootNode.properties["a"]).toBeUndefined();
+    expect(curr.rootNode.properties["b"]).toEqual("2");
+    expect(curr.rootNode.properties["c"]).toEqual("1");
+  });
+
+  it('Error: Renaming a non existant property', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      properties: {
+        "a": "1",
+        "b": "2",
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    expect(() => prev.renameProperty([], "c", "d")).toThrowError();
+  });
+
+  it('Error: Renaming to an existing property', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      properties: {
+        "a": "1",
+        "b": "2",
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    expect(() => prev.renameProperty([], "b", "a")).toThrowError();
+  });
+
   it('Inserting nodes at the first index in existing categories', () => {
     const treeDesc: NodeDescription = {
       language: "lang",
