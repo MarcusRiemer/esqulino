@@ -340,7 +340,39 @@ export class Tree {
   setProperty(loc: NodeLocation, key: string, value: string): Tree {
     let newDescription = this.toModel();
     let node = locateNode(newDescription, loc);
+
+    // The property object itself might not exist
+    if (!node.properties) {
+      node.properties = {};
+    }
+
     node.properties[key] = value;
+
+    return (new Tree(newDescription));
+  }
+
+  /**
+   * Returns a new tree where the given property has been renamed.
+   *
+   * @param loc The location of the node to edit.
+   * @param key The name of the property.
+   * @param newKey The new name of the property.
+   * @return The modified tree.
+   */
+  renameProperty(loc: NodeLocation, key: string, newKey: string): Tree {
+    let newDescription = this.toModel();
+    let node = locateNode(newDescription, loc);
+
+    if (!node.properties || !node.properties[key]) {
+      throw new Error(`Could not rename property "${key}" at ${JSON.stringify(loc)}: Doesn't exist`);
+    }
+
+    if (node.properties[newKey]) {
+      throw new Error(`Could not rename property "${key}" to "${newKey}" at ${JSON.stringify(loc)}: New name exists`);
+    }
+
+    node.properties[newKey] = node.properties[key];
+    delete node.properties[key];
 
     return (new Tree(newDescription));
   }

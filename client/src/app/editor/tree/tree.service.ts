@@ -69,6 +69,19 @@ export class TreeService {
   }
 
   /**
+   * Renames the key of a property.
+   *
+   * @param loc The location of the node to edit.
+   * @param key The name of the property.
+   * @param newKey The new name of the property.
+   */
+  renameProperty(loc: NodeLocation, key: string, newKey: string) {
+    console.log(`Renaming property at ${JSON.stringify(loc)} from "${key}" to "${newKey}"`);
+
+    this.replaceTree(this.tree.renameProperty(loc, key, newKey));
+  }
+
+  /**
    * @return The tree that is currently edited.
    */
   get tree() {
