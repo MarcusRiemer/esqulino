@@ -352,6 +352,24 @@ export class Tree {
   }
 
   /**
+   * Adds a new property without specifying a value.
+   *
+   * @param loc The location of the node to edit.
+   * @param key The name of the property.
+   * @return The modified tree.
+   */
+  addProperty(loc: NodeLocation, key: string): Tree {
+    let newDescription = this.toModel();
+    let node = locateNode(newDescription, loc);
+
+    if (node.properties && key in node.properties) {
+      throw new Error(`Can not add property "${key}" at ${JSON.stringify(loc)}: Name already exists`);
+    } else {
+      return (this.setProperty(loc, key, ""));
+    }
+  }
+
+  /**
    * Returns a new tree where the given property has been renamed.
    *
    * @param loc The location of the node to edit.

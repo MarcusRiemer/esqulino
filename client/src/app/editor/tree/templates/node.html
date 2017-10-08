@@ -13,15 +13,17 @@
   ({{ properties.length }} Properties)
   
   <div *ngFor="let property of properties">
-    <label>
-      <input type="text"
-             value="{{ property.key }}"
-             (blur)="onPropertyRename(property.key, $event.target.value)">
-      =
-      <input type="text"
-             value="{{ property.value }}"
-             (blur)="onPropertyEdit(property.key, $event.target.value)"> 
-    </label>
+    <input type="text"
+           value="{{ property.key }}"
+           (blur)="onPropertyRename(property.key, $event.target.value)">
+    =
+    <input type="text"
+           value="{{ property.value }}"
+           (blur)="onPropertyEdit(property.key, $event.target.value)"> 
+  </div>
+  <div class="add-property">
+    <input #newPropertyName type="text">
+    <button (click)="onPropertyAdd(newPropertyName.value)">Eigenschaft Hinzufügen</button>
   </div>
   
   <div *ngFor="let category of childrenCategories">
