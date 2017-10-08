@@ -3,12 +3,13 @@
      [@dropPlaceholder]="dropPlaceholderAnimationState | async"
      (@dropPlaceholder.start)="logAnimation($event)"
      (@dropPlaceholder.done)="logAnimation($event)"
+     (drop)="onDropInsert()"
      class="node">
   Drop Target
 </div>
 <div [astDropTarget]="node"
      [@dropTarget]="dropTargetAnimationState | async"
-     (drop)="onDrop($event)"
+     (drop)="onDropReplace()"
      class="node">
   <code>{{ node.languageName }}.{{ node.typeName }}</code>
   ({{ properties.length }} Properties)

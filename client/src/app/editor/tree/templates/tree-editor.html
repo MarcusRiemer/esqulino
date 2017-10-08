@@ -34,17 +34,17 @@
 
     <div class="card mb-3">
       <div class="card-body">
-        <h4 class="card-title">Datenmodell</h4>
-        <pre>{{ (currentTree | async).toModel() | json }}</pre>
+        <h4 class="card-title">Kompilierung</h4>
+        <ast-code-generator [tree]="currentTree | async"
+                            [language]="currentLanguage">
+        </ast-code-generator>
       </div>
     </div>
 
     <div class="card mb-3">
       <div class="card-body">
-        <h4 class="card-title">Kompilierung</h4>
-        <ast-code-generator [tree]="currentTree | async"
-                            [language]="currentLanguage">
-        </ast-code-generator>
+        <h4 class="card-title">Datenmodell</h4>
+        <pre>{{ (currentTree | async).toModel() | json }}</pre>
       </div>
     </div>
 

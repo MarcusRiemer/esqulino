@@ -44,6 +44,18 @@ export class TreeService {
   }
 
   /**
+   * Inserts the node at the given location.
+   *
+   * @param loc The location of the insertion.
+   * @param desc The node to insert
+   */
+  insertNode(loc: NodeLocation, desc: NodeDescription) {
+    console.log(`Inserting node at ${JSON.stringify(loc)}`, desc);
+
+    this.replaceTree(this.tree.insertNode(loc, desc));
+  }
+
+  /**
    * Sets a new value for a property.
    *
    * @param loc The location of the node to edit.
