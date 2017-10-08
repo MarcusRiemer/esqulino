@@ -1,22 +1,15 @@
-require 'filemagic'
-
 class ProjectImagesController < ApplicationController
   include ProjectsHelper
   include ValidationHelper
+  include ImageHelper
 
   def create
-    metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'])
-    img = Image.file_new!(params['image-file'].tempfile, current_project, metadata)
+    ensure_write_access do
+      metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'], params['licence-name'], params['licence-url'])
+      img = Image.file_new!(params['image-file'].tempfile, current_project, metadata)
 
-    render plain: img.id
-  end
-
-  def file_show
-    image_id = params['image_id']
-
-    path = Image.new(current_project, image_id).file_show
-
-    send_file path, :type => FileMagic.new(FileMagic::MAGIC_MIME).file(path), disposition: 'inline'
+      render plain: img.id
+    end
   end
 
   def file_update
@@ -44,7 +37,7 @@ class ProjectImagesController < ApplicationController
   def metadata_update
     ensure_write_access do
       image_id = params['image_id']
-      metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'])
+      metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'], params['licence-name'], params['licence-url'])
       img = Image.new(current_project, image_id)
       img.metadata_update(metadata)
       img.metadata_save

@@ -9,7 +9,8 @@ import { QueryService } from './query.service'
 import { PageService } from './page.service'
 import { ServerApiService } from '../shared/serverapi.service'
 
-import { AvailableImage, ImageService } from './image/image.service'
+import { ImageService } from './image/image.service'
+import { AvailableImage } from './image/available-image.class'
 
 @Component({
   templateUrl: 'templates/settings.html'

@@ -1,16 +1,16 @@
 ---
 name: imagetest
-description: foobar
+description: Fuer die Bildfunktionen
 apiVersion: '4'
-public: false
+public: true
 databases:
   default:
     type: sqlite3
     path: default.sqlite
 users:
-  admin:
+  user:
     type: local
-    password: 4000$8$3$f7480ea4189d38c6599444248bd64d5919881dd531017ff69b0c7afea88af7c2$7e9df4a09ebf8fe7f3615de2ad645f15626c727e725d1a6cd3f6e244fbe21eca
+    password: 4000$8$1$eb319ba5dc307bacea20fa46303de3483c014b3ffe82153930e48c1687d601d2$5bff18d1754d3f3c36863404532601d42293fa7b6de7e1b79da6ff4b9dfdf86a
 activeDatabase: default
-preview: afca950f-2e55-4f5a-b676-3b5fed325fca
-indexPageId: 9f574b21-5341-42d4-bd21-99baa41e1fb2
+preview: f93c605c-de88-4fa7-bfe5-d9a570646220
+indexPageId: 4c724484-017d-48a7-848f-3694ae3b4681

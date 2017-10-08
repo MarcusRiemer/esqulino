@@ -15,10 +15,10 @@ GIT_REV :
 
 # Compiling the actual thesis document
 $(PDF_FILENAME) : msg-pre-pdf $(TEX_FILES) GIT_REV
-	@rubber --warn refs --warn misc --pdf --jobname $(basename $@) thesis.tex
+	@rubber --unsafe --warn refs --warn misc --pdf --jobname $(basename $@) thesis.tex
 
 $(PDF_FILENAME_TWOSIDE) : msg-pre-pdf-twosided $(TEX_FILES) GIT_REV
-	@rubber --warn refs --warn misc --pdf --jobname $(basename $@) thesis-twosided.tex
+	@rubber --unsafe --warn refs --warn misc --pdf --jobname $(basename $@) thesis-twosided.tex
 
 clean : msg-pre-clean
 	rm -f $(PDF_FILENAME) $(PDF_FILENAME_TWOSIDE)

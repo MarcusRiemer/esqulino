@@ -17,7 +17,7 @@ def sqlite_open_augmented(sqlite_file_path, options = {})
     else
       # Return true if the value is null, let the DB handle this
       func.result = 1
-    end   
+    end
   end
 
   return db

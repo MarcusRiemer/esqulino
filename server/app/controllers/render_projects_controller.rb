@@ -1,8 +1,10 @@
 require_dependency 'render_liquid'
+require_dependency 'image'
 
 class RenderProjectsController < ApplicationController
   include ProjectsHelper
-  
+  include ImageHelper
+
   def favicon
     render status: :not_found
   end

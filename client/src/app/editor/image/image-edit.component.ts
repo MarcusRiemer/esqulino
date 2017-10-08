@@ -7,7 +7,7 @@ import { ProjectService } from '../../editor/project.service'
 import { ToolbarService } from '../toolbar.service'
 import { SidebarService } from '../sidebar.service'
 
-import { AvailableImage } from './available-image'
+import { AvailableImage, AvailableImageDescription } from './available-image.class'
 
 @Component({
     templateUrl: 'templates/image-edit.html'
@@ -71,14 +71,11 @@ export class ImageEditComponent {
             const projectId = this._projectService.cachedProject.id;
             console.log("imageId: " + params['imageId']);
             this._http.get(this._serverApi.getImageMetadataUrl(projectId, params['imageId']))
-                .map(res => res.json() as AvailableImage)
+                .map(res => res.json() as AvailableImageDescription)
                 .subscribe(res => {
                     console.log("res: " + JSON.stringify(res));
                     this.reloadToolbar();
-                    this._imageMetadata = res;
-                    if (res != null && res['image-url'] != null) {
-                        this._imageMetadata['image-url'] += '?_ts=' + new Date().getTime();
-                    }
+                    this._imageMetadata = new AvailableImage(this._serverApi, this._projectService.cachedProject, res);
                 });
         });
     }

@@ -3,9 +3,11 @@ import { Http, Response, Headers } from '@angular/http'
 
 import { ServerApiService } from '../../shared/serverapi.service'
 
-import { AvailableImage } from './available-image'
+import { ProjectService } from '../project.service'
 
-export { AvailableImage }
+import { AvailableImage, AvailableImageDescription } from './available-image.class'
+
+//export { AvailableImage }
 
 @Injectable()
 export class ImageService {
@@ -13,16 +15,18 @@ export class ImageService {
 
   constructor(
     private _serverApi: ServerApiService,
+    private _projectService : ProjectService,
     private _http: Http
   ){
   };
 
-  loadImageList(projectId: string) {
-    this._http.get(this._serverApi.getImageListUrl(projectId))
-      .map(res => res.json() as AvailableImage[])
-      .subscribe(res => {
-        this._imageList = res;
-      });
+  loadImageList() {
+    let project = this._projectService.cachedProject
+
+    this._http.get(this._serverApi.getImageListUrl(project.id))
+          .map(res => res.json() as AvailableImageDescription[])
+          .map(res => res.map(img => new AvailableImage(this._serverApi, project, img)))
+          .subscribe(res => this._imageList = res);
   }
 
   get images() {

@@ -1,0 +1,44 @@
+{
+  "name": "main",
+  "apiVersion": "4",
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "type": "image",
+        "displayType": "icon",
+        "src": "8562e3a5-5341-4762-bd67-95ad8d3c620b"
+      },
+      {
+        "type": "image",
+        "displayType": "icon",
+        "src": "31b5b849-7f14-4bfd-8d96-f348b6fa57f6"
+      },
+      {
+        "type": "image",
+        "displayType": "icon",
+        "src": "8562e3a5-5341-4762-bd67-95ad8d3c620b"
+      },
+      {
+        "type": "image",
+        "displayType": "figure",
+        "src": "8ced549e-ea0c-4d59-9169-58b0bda46537"
+      },
+      {
+        "type": "image",
+        "displayType": "icon",
+        "src": "873a6d06-0908-4949-af36-46d9b5f928aa"
+      },
+      {
+        "type": "image",
+        "displayType": "icon",
+        "src": "2b8b9b7e-7fc2-4864-8e2d-fba1c57e1449"
+      },
+      {
+        "type": "image",
+        "displayType": "icon",
+        "src": "a6e6d6d1-7d58-4543-aa20-7fa434f32a45"
+      }
+    ]
+  }
+}

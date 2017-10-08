@@ -1,18 +1,18 @@
 <div class="sql">
   <div class="content">    
     <div class="card mb-3">
-      <div class="card-block">
+      <div class="card-body">
         <h4 class="card-title">Abfrage-Editor</h4>
         <p class="card-text">
           Hier wird deine SQL-Anfrage bearbeitet. Ziehe einfach aus der Seitenleiste die passenden Blöcke auf deine Anfrage.
         </p>
       </div>
-      <div class="card-block">
+      <div class="card-body">
         <sql-query [query]="query"></sql-query>
       </div>
 
       <div *ngIf="showSingleRowCheckbox"
-           class="card-block">
+           class="card-body">
         <div class="checkbox">
           <label>
             <input [(ngModel)]="query.singleRow"
@@ -24,7 +24,7 @@
 
     <div *ngIf="requiredParameters.length > 0"
          class="card  mb-3">
-      <div class="card-block">
+      <div class="card-body">
         <h4 class="card-title">Parameter erforderlich!</h4>
         <p class="card-text">
           Deine Abfrage verwendet Parameter und funktioniert daher nicht ohne Eingaben vom Benutzer. Wenn du sie trotzdem gerne ausprobieren möchtest, musst du hier testweise Werte eingeben.
@@ -61,12 +61,12 @@
       <pre>{{ query | sqlString }}</pre>
     </div>
 
-    <div *ngIf="query && showJsonModel"
+    <div *ngIf="query && (showJsonModel | async)"
          class="alert alert-info">
       <h6>
         <span class="fa fa-bug"></span> JSON-Darstellung
       </h6>
-      <pre>{{ query | json }}</pre>
+      <pre>{{ query.toModel() | json }}</pre>
     </div>
   </div>
 </div>

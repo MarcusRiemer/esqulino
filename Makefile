@@ -3,6 +3,8 @@
 # ONLY install dependencies for the client, change to the `client` folder
 # first and call `install-deps` there.
 
+include Makefile.common
+
 # The "all" target assumes that a full initial build is required and really
 # builds *everything*. This will usually not be the target you want to
 # call. "Everything" especially includes the whole documentation which doesn't
@@ -115,6 +117,6 @@ dev-delete-trailing-whitespace :
 ##################################
 
 msg-pre-test-reset :
-	-@tput setaf 2; echo "## Test   : Resetting test data"; tput sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Test   : Resetting test data"; $(TPUT_BIN) sgr0
 
 .PHONY : all clean dev-delete-trailing-whitespace dev-pretty-json-data doc install-deps server-run dist
