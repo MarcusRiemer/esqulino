@@ -136,6 +136,6 @@ export class SyntaxTreeEditorComponent implements OnInit {
    * @return The main language to assume the node uses.
    */
   get currentLanguage() {
-    return (this._languages.Xml);
+    return (this._languages.All);
   }
 }

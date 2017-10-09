@@ -149,9 +149,22 @@ export class NodeComponent implements OnChanges {
   /**
    * The user has decided to add a property.
    */
-  onPropertyAdd(key: string) {
+  onPropertyAdd() {
     try {
-      this._treeService.addProperty(this.node.location, key);
+      const newKey = prompt(`Name des neuen Wertes?`);
+      this._treeService.addProperty(this.node.location, newKey);
+    } catch (e) {
+      alert(e);
+    }
+  }
+
+  /**
+   * The user has decided to add an empty childgroup.
+   */
+  onChildGroupAdd() {
+    try {
+      const newKey = prompt(`Name der neuen Gruppe?`);
+      this._treeService.addChildGroup(this.node.location, newKey);
     } catch (e) {
       alert(e);
     }

@@ -95,6 +95,8 @@ class ValidationContext {
 export class ValidationResult {
   private _errors: ValidationError[];
 
+  static EMPTY = new ValidationResult(new ValidationContext());
+
   constructor(context: ValidationContext) {
     this._errors = context.errors;
   }

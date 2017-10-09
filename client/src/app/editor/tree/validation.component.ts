@@ -23,8 +23,15 @@ export class ValidationComponent implements OnChanges {
     this.refreshResult();
   }
 
+  /**
+   * Attempts to re-validate the tree.
+   */
   private refreshResult() {
-    this._validationResult = this.language.validateTree(this.tree);
+    try {
+      this._validationResult = this.language.validateTree(this.tree);
+    } catch (e) {
+      this._validationResult = ValidationResult.EMPTY;
+    }
   }
 
   get result() {

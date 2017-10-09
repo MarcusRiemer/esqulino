@@ -210,4 +210,21 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       }
     }
   },
+  {
+    type: {
+      languageName: "sql",
+      typeName: "querySelect",
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        const components = node.children["components"] || [];
+        components.forEach(n => {
+          process.generateNode(n)
+          process.addConvertedFragment("", node, OutputSeparator.NEW_LINE_AFTER);
+        });
+
+        return ([]);
+      }
+    }
+  }
 ];
