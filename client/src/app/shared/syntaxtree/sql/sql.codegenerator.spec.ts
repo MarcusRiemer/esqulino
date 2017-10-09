@@ -544,4 +544,52 @@ describe('Language: SQL (Codegen)', () => {
 
     expect(result).toEqual("WHERE 1\n\tAND 1\n\tOR 1");
   });
+
+  it(`SELECT query: SELECT foo.id FROM foo`, () => {
+    const astDesc: NodeDescription = {
+      language: "sql",
+      name: "querySelect",
+      children: {
+        "components": [
+          {
+            language: "sql",
+            name: "select",
+            children: {
+              "columns": [
+                {
+                  language: "sql",
+                  name: "columnName",
+                  properties: {
+                    "columnName": "id",
+                    "refTableName": "foo"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            language: "sql",
+            name: "from",
+            children: {
+              "tables": [
+                {
+                  language: "sql",
+                  name: "tableIntroduction",
+                  properties: {
+                    "name": "foo"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    };
+
+    const ast = new Node(astDesc, undefined);
+    const codeGen = new CodeGenerator(NODE_CONVERTER);
+    const result = codeGen.emit(ast);
+
+    expect(result).toEqual("SELECT foo.id\nFROM foo");
+  });
 });

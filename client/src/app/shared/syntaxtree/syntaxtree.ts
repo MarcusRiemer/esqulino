@@ -385,12 +385,36 @@ export class Tree {
       throw new Error(`Could not rename property "${key}" at ${JSON.stringify(loc)}: Doesn't exist`);
     }
 
-    if (node.properties[newKey]) {
+    if (newKey in node.properties) {
       throw new Error(`Could not rename property "${key}" to "${newKey}" at ${JSON.stringify(loc)}: New name exists`);
     }
 
     node.properties[newKey] = node.properties[key];
     delete node.properties[key];
+
+    return (new Tree(newDescription));
+  }
+
+  /**
+   * Returns a new tree where an empty childgroup has been added.
+   *
+   * @param loc The location of the node to edit.
+   * @param key The name of the child group.
+   * @return The modified tree.
+   */
+  addChildGroup(loc: NodeLocation, key: string): Tree {
+    let newDescription = this.toModel();
+    let node = locateNode(newDescription, loc);
+
+    if (!node.children) {
+      node.children = {};
+    }
+
+    if (key in node.children) {
+      throw new Error(`Could not add child group "${key}" at ${JSON.stringify(loc)}: Name exists`);
+    }
+
+    node.children[key] = [];
 
     return (new Tree(newDescription));
   }

@@ -94,6 +94,18 @@ export class TreeService {
   }
 
   /**
+   * Adds an empty childgroup to the specified node.
+   *
+   * @param loc The location of the node to edit.
+   * @param key The name of the child group.
+   */
+  addChildGroup(loc: NodeLocation, key: string) {
+    console.log(`Adding empty childgroup "${key}" at ${JSON.stringify(loc)}`);
+
+    this.replaceTree(this.tree.addChildGroup(loc, key));
+  }
+
+  /**
    * @return The tree that is currently edited.
    */
   get tree() {

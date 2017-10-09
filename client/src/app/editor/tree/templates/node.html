@@ -11,6 +11,18 @@
      class="node">
   <code>{{ node.languageName }}.{{ node.typeName }}</code>
   ({{ properties.length }} Properties)
+
+  <div class="edit-buttons float-right">
+    <button (click)="onPropertyAdd()"
+            class="btn btn-light btn-sm ml-1">
+      <span class="fa fa-plus-circle" aria-hidden="true"></span> Eigenschaft
+    </button>
+
+    <button (click)="onChildGroupAdd()"
+            class="btn btn-light btn-sm">
+      <span class="fa fa-plus-circle" aria-hidden="true"></span> Kindgruppe
+    </button>
+  </div>
   
   <div *ngFor="let property of properties">
     <input type="text"
@@ -20,10 +32,6 @@
     <input type="text"
            value="{{ property.value }}"
            (blur)="onPropertyEdit(property.key, $event.target.value)"> 
-  </div>
-  <div class="add-property">
-    <input #newPropertyName type="text">
-    <button (click)="onPropertyAdd(newPropertyName.value)">Eigenschaft Hinzufügen</button>
   </div>
   
   <div *ngFor="let category of childrenCategories">
