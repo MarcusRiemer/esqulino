@@ -40,5 +40,11 @@
       <ast-node [node]="childNode"
                 [allowDropBefore]="true"></ast-node>
     </ng-container>
+    <div [astDropPlaceholder]="node"
+         [@dropPlaceholder]="dropPlaceholderAnimationState | async"
+         (drop)="onDropInsertCategory(category.categoryName)"
+         class="node">
+      Drop Target
+    </div>
   </div>
 </div>

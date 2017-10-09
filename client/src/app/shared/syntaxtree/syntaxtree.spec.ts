@@ -539,6 +539,20 @@ describe('AST: Basic Operations', () => {
     expect(curr.rootNode.children["b"][0].typeName).toEqual("new");
   });
 
+  it('Inserting nodes into a parent that had no children', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r"
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.insertNode([["a", 0]], { language: "lang", name: "new" });
+
+    expect(prev).not.toBe(curr);
+    expect(curr.rootNode.children["a"].length).toEqual(1);
+    expect(curr.rootNode.children["a"][0].typeName).toEqual("new");
+  });
+
   it('Error: Inserting something at the root node', () => {
     const treeDesc: NodeDescription = {
       language: "lang",
