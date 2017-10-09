@@ -316,6 +316,11 @@ export class Tree {
       let parent = locateNode(newDescription, loc.slice(0, loc.length - 1));
       let [parentCat, parentIndex] = loc[loc.length - 1];
 
+      // Create a place for children, if no children exist so far
+      if (!parent.children) {
+        parent.children = {};
+      }
+
       // Create the category if it doesn't exist so far.
       if (!parent.children[parentCat]) {
         parent.children[parentCat] = [];

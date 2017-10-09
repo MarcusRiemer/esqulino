@@ -125,6 +125,15 @@ export class NodeComponent implements OnChanges {
   }
 
   /**
+   * Something has been dropped on a placeholder in an empty category of this node.
+   */
+  onDropInsertCategory(key: string) {
+    const desc = this._dragService.peekDragData.draggedDescription;
+    const index = this.node.children[key].length;
+    this._treeService.insertNode([...this.node.location, [key, index]], desc);
+  }
+
+  /**
    * The user has decided to edit a property value.
    */
   onPropertyEdit(key: string, value: string) {
