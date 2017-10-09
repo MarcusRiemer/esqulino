@@ -48,7 +48,8 @@ export interface ErrorIllegalChildType {
 
 export interface ErrorMissingChild {
   expected: AST.QualifiedTypeName,
-  index: number
+  index: number,
+  childrenCategory: string
 }
 
 export interface ErrorMissingProperty {
@@ -68,6 +69,11 @@ export type ErrorData =
   ErrorMissingProperty |
   any;
 
+/**
+ * Core data about the error. In every case the user will be confronted with the
+ * error code and the node location. The attached data may be used to to display
+ * some helpful hints.
+ */
 interface ValidationError {
   code: string;
   node: AST.Node;
@@ -289,9 +295,9 @@ class NodeTypeChildren {
     this._parent = parent;
 
     if (Desc.isNodeTypesSequenceDescription(desc)) {
-      this._childValidator = new NodeComplexTypeChildrenSequence(parent, desc);
+      this._childValidator = new NodeComplexTypeChildrenSequence(this, desc);
     } else if (Desc.isNodeTypesAllowedDescription(desc)) {
-      this._childValidator = new NodeComplexTypeChildrenAllowed(parent, desc);
+      this._childValidator = new NodeComplexTypeChildrenAllowed(this, desc);
     } else {
       throw new Error(`Unknown child validator: "${JSON.stringify(desc)}"`);
     }
@@ -309,6 +315,20 @@ class NodeTypeChildren {
       const childType = this._parent.validator.getType(child.languageName, child.typeName);
       childType.validate(child, context);
     });
+  }
+
+  /**
+   * @return The node that is the parent to all of these node.
+   */
+  get parent() {
+    return (this._parent);
+  }
+
+  /**
+   * @return The name of the category these children are attached to.
+   */
+  get categoryName() {
+    return (this._categoryName);
   }
 }
 
@@ -335,7 +355,8 @@ class ChildCardinality {
   private _minOccurs: number;
   private _maxOccurs: number;
 
-  constructor(typeDesc: Desc.NodeTypesChildReference, parent: NodeConcreteType, defaultLimits: Desc.OccursDescription) {
+  constructor(typeDesc: Desc.NodeTypesChildReference, group: NodeTypeChildren, defaultLimits: Desc.OccursDescription) {
+    const parent = group.parent;
     if (typeof (typeDesc) === "string") {
       // Simple strings per default occur exactly once
       this._nodeType = new TypeReference(parent.validator, typeDesc, parent.languageName);
@@ -378,14 +399,16 @@ class ChildCardinality {
  */
 class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidator {
   private _nodeTypes: ChildCardinality[];
+  private _group: NodeTypeChildren;
 
-  constructor(parent: NodeConcreteType, desc: Desc.NodeTypesSequenceDescription) {
+  constructor(group: NodeTypeChildren, desc: Desc.NodeTypesSequenceDescription) {
     const defaultLimit: Desc.OccursDescription = {
       minOccurs: 1,
       maxOccurs: 1,
     }
 
-    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, parent, defaultLimit));
+    this._group = group;
+    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group, defaultLimit));
   }
 
   /**
@@ -437,7 +460,8 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
         else {
           if (subIndex < expected.minOccurs) {
             // There is no child present, but the current type expects it
-            context.addError(ErrorCodes.MissingChild, child, {
+            context.addError(ErrorCodes.MissingChild, parent, {
+              childrenCategory: this._group.categoryName,
               expected: expected.nodeType.description,
               index: childIndex
             } as ErrorMissingChild);
@@ -472,13 +496,13 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
 class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator {
   private _nodeTypes: ChildCardinality[];
 
-  constructor(parent: NodeConcreteType, desc: Desc.NodeTypesAllowedDescription) {
+  constructor(group: NodeTypeChildren, desc: Desc.NodeTypesAllowedDescription) {
     const defaultLimit: Desc.OccursDescription = {
       minOccurs: 0,
       maxOccurs: +Infinity
     }
 
-    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, parent, defaultLimit));
+    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group, defaultLimit));
   }
 
   /**

@@ -445,7 +445,7 @@ describe('Language Validator', () => {
     expect(res.errors[0].code).toEqual(ErrorCodes.UnexpectedType);
   });
 
-  it('Invalid Sequence: Completely Empty', () => {
+  it('Invalid Sequence: Completly Empty', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -461,25 +461,28 @@ describe('Language Validator', () => {
     expect(res.errors[0].data).toEqual({
       expected: {
         languageName: "sequence-constraint",
-        typeName: "a"
+        typeName: "a",
       },
-      index: 0
+      index: 0,
+      childrenCategory: "nodes"
     });
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[1].data).toEqual({
       expected: {
         languageName: "sequence-constraint",
-        typeName: "a"
+        typeName: "a",
       },
-      index: 1
+      index: 1,
+      childrenCategory: "nodes"
     });
     expect(res.errors[2].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[2].data).toEqual({
       expected: {
         languageName: "sequence-constraint",
-        typeName: "c"
+        typeName: "c",
       },
-      index: 2
+      index: 2,
+      childrenCategory: "nodes"
     });
   });
 
@@ -494,7 +497,7 @@ describe('Language Validator', () => {
           {
             language: "sequence-constraint",
             name: "a"
-          }
+          },
         ]
       }
     }
@@ -509,7 +512,8 @@ describe('Language Validator', () => {
         languageName: "sequence-constraint",
         typeName: "a"
       },
-      index: 1
+      index: 1,
+      childrenCategory: "nodes"
     });
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
     expect(res.errors[1].data).toEqual({
@@ -517,7 +521,8 @@ describe('Language Validator', () => {
         languageName: "sequence-constraint",
         typeName: "c"
       },
-      index: 2
+      index: 2,
+      childrenCategory: "nodes"
     });
   });
 
@@ -551,7 +556,8 @@ describe('Language Validator', () => {
         languageName: "sequence-constraint",
         typeName: "c"
       },
-      index: 2
+      index: 2,
+      childrenCategory: "nodes"
     });
   });
 
