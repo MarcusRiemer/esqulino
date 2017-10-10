@@ -1,0 +1,50 @@
+<div *ngIf="allowDropBefore"
+     [astDropPlaceholder]="node"
+     [@dropPlaceholder]="dropPlaceholderAnimationState | async"
+     (drop)="onDropInsert()"
+     class="node">
+  Drop Target
+</div>
+<div [astDropTarget]="node"
+     [@dropTarget]="dropTargetAnimationState | async"
+     (drop)="onDropReplace()"
+     class="node">
+  <code>{{ node.languageName }}.{{ node.typeName }}</code>
+  ({{ properties.length }} Properties)
+
+  <div class="edit-buttons float-right">
+    <button (click)="onPropertyAdd()"
+            class="btn btn-light btn-sm ml-1">
+      <span class="fa fa-plus-circle" aria-hidden="true"></span> Eigenschaft
+    </button>
+
+    <button (click)="onChildGroupAdd()"
+            class="btn btn-light btn-sm">
+      <span class="fa fa-plus-circle" aria-hidden="true"></span> Kindgruppe
+    </button>
+  </div>
+  
+  <div *ngFor="let property of properties">
+    <input type="text"
+           value="{{ property.key }}"
+           (blur)="onPropertyRename(property.key, $event.target.value)">
+    =
+    <input type="text"
+           value="{{ property.value }}"
+           (blur)="onPropertyEdit(property.key, $event.target.value)"> 
+  </div>
+  
+  <div *ngFor="let category of childrenCategories">
+    children: <code>{{ category.categoryName }}</code>
+    <ng-container *ngFor="let childNode of category.nodes">
+      <ast-node [node]="childNode"
+                [allowDropBefore]="true"></ast-node>
+    </ng-container>
+    <div [astDropPlaceholder]="node"
+         [@dropPlaceholder]="dropPlaceholderAnimationState | async"
+         (drop)="onDropInsertCategory(category.categoryName)"
+         class="node">
+      Drop Target
+    </div>
+  </div>
+</div>

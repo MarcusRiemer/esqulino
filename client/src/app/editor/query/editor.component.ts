@@ -64,8 +64,7 @@ export class QueryEditorComponent implements OnInit {
     private _toolbarService: ToolbarService,
     private _routeParams: ActivatedRoute,
     private _sidebarService: SidebarService,
-    private _preferences: PreferencesService,
-    registrationService: RegistrationService
+    private _preferences: PreferencesService
   ) {
   }
 

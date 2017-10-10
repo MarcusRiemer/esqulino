@@ -48,8 +48,7 @@ export class SidebarLoaderComponent implements OnInit {
 
     // Checks two individual sidebar models for equality deeper then
     // reference equality.
-    const modelEqual = (lhs: InternalSidebarModel,
-      rhs: InternalSidebarModel) => {
+    const modelEqual = (lhs: InternalSidebarModel, rhs: InternalSidebarModel) => {
       return (lhs.id == rhs.id);
     };
 
