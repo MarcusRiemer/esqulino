@@ -2,7 +2,10 @@ import { BehaviorSubject, Observable } from 'rxjs'
 
 import { Injectable } from '@angular/core';
 
-import { Tree, Node, NodeDescription, NodeLocation } from '../../shared/syntaxtree';
+import {
+  Tree, Node, NodeDescription, NodeLocation,
+  Validator, ValidationResult, Language
+} from '../../shared/syntaxtree';
 
 /**
  * This service represents a single tree that is currently beeing
@@ -19,6 +22,8 @@ import { Tree, Node, NodeDescription, NodeLocation } from '../../shared/syntaxtr
 @Injectable()
 export class TreeService {
   private _tree = new BehaviorSubject<Tree>(undefined);
+  private _language = new BehaviorSubject<Language>(undefined);
+  private _validationResult = new BehaviorSubject<ValidationResult>(ValidationResult.EMPTY);
 
   /**
    * @param desc The new tree that should be available in the editor.
@@ -28,6 +33,30 @@ export class TreeService {
       this._tree.next(tree);
     } else {
       this._tree.next(new Tree(tree));
+    }
+
+    this.resetValidation();
+  }
+
+  /**
+   * @param lang The new language to use
+   */
+  setValidationLanguage(lang: Language) {
+    this._language.next(lang);
+    this.resetValidation();
+  }
+
+  /**
+   * Should be called after the tree or the language has changed.
+   */
+  private resetValidation() {
+    const lang = this._language.getValue();
+    const tree = this._tree.getValue();
+    if (tree && lang) {
+      this._validationResult.next(lang.validateTree(this._tree.getValue()));
+      console.log("Revalidated Tree");
+    } else {
+      this._validationResult.next(ValidationResult.EMPTY);
     }
   }
 
@@ -117,5 +146,12 @@ export class TreeService {
    */
   get currentTree(): Observable<Tree> {
     return (this._tree);
+  }
+
+  /**
+   * @return The validation result for the tree that is currently beeing edited.
+   */
+  get currentValidationResult(): Observable<ValidationResult> {
+    return (this._validationResult);
   }
 }
