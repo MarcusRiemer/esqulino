@@ -24,6 +24,7 @@ export class TreeService {
   private _tree = new BehaviorSubject<Tree>(undefined);
   private _language = new BehaviorSubject<Language>(undefined);
   private _validationResult = new BehaviorSubject<ValidationResult>(ValidationResult.EMPTY);
+  private _generatedCode = new BehaviorSubject<string>("");
 
   /**
    * @param desc The new tree that should be available in the editor.
@@ -35,19 +36,28 @@ export class TreeService {
       this._tree.next(new Tree(tree));
     }
 
-    this.resetValidation();
+    this.resetCaches();
   }
 
   /**
    * @param lang The new language to use
    */
-  setValidationLanguage(lang: Language) {
+  setLanguage(lang: Language) {
     this._language.next(lang);
-    this.resetValidation();
+    this.resetCaches();
   }
 
   /**
-   * Should be called after the tree or the language has changed.
+   * Resets everything that depends on the current tree and language.
+   */
+  private resetCaches() {
+    this.resetValidation();
+    this.resetGeneratedCode();
+  }
+
+  /**
+   * Validates the current tree against the current language. Should be called after
+   * the tree or the language has changed.
    */
   private resetValidation() {
     const lang = this._language.getValue();
@@ -61,6 +71,21 @@ export class TreeService {
   }
 
   /**
+   * Emits the current tree against the current language. Should be called after
+   * the tree or the language has changed.
+   */
+  private resetGeneratedCode() {
+    const lang = this._language.getValue();
+    const tree = this._tree.getValue();
+    if (tree && lang) {
+      this._generatedCode.next(lang.emitTree(this._tree.getValue()));
+      console.log("Re-emitted Tree");
+    } else {
+      this._generatedCode.next("");
+    }
+  }
+
+  /**
    * Replaces the node at the given location.
    *
    * @param loc The location of the node that should be replaced
@@ -69,7 +94,7 @@ export class TreeService {
   replaceNode(loc: NodeLocation, desc: NodeDescription) {
     console.log(`Replacing node at ${JSON.stringify(loc)} with`, desc);
 
-    this.replaceTree(this.tree.replaceNode(loc, desc));
+    this.replaceTree(this.peekTree.replaceNode(loc, desc));
   }
 
   /**
@@ -81,7 +106,7 @@ export class TreeService {
   insertNode(loc: NodeLocation, desc: NodeDescription) {
     console.log(`Inserting node at ${JSON.stringify(loc)}`, desc);
 
-    this.replaceTree(this.tree.insertNode(loc, desc));
+    this.replaceTree(this.peekTree.insertNode(loc, desc));
   }
 
   /**
@@ -94,7 +119,7 @@ export class TreeService {
   setProperty(loc: NodeLocation, key: string, value: string) {
     console.log(`Setting ${JSON.stringify(loc)} "${key}"="${value}"`);
 
-    this.replaceTree(this.tree.setProperty(loc, key, value));
+    this.replaceTree(this.peekTree.setProperty(loc, key, value));
   }
 
   /**
@@ -106,7 +131,7 @@ export class TreeService {
   addProperty(loc: NodeLocation, key: string) {
     console.log(`Adding ${JSON.stringify(loc)} property "${key}"`);
 
-    this.replaceTree(this.tree.addProperty(loc, key));
+    this.replaceTree(this.peekTree.addProperty(loc, key));
   }
 
   /**
@@ -119,7 +144,7 @@ export class TreeService {
   renameProperty(loc: NodeLocation, key: string, newKey: string) {
     console.log(`Renaming property at ${JSON.stringify(loc)} from "${key}" to "${newKey}"`);
 
-    this.replaceTree(this.tree.renameProperty(loc, key, newKey));
+    this.replaceTree(this.peekTree.renameProperty(loc, key, newKey));
   }
 
   /**
@@ -131,13 +156,13 @@ export class TreeService {
   addChildGroup(loc: NodeLocation, key: string) {
     console.log(`Adding empty childgroup "${key}" at ${JSON.stringify(loc)}`);
 
-    this.replaceTree(this.tree.addChildGroup(loc, key));
+    this.replaceTree(this.peekTree.addChildGroup(loc, key));
   }
 
   /**
    * @return The tree that is currently edited.
    */
-  get tree() {
+  get peekTree() {
     return (this._tree.getValue());
   }
 
@@ -153,5 +178,12 @@ export class TreeService {
    */
   get currentValidationResult(): Observable<ValidationResult> {
     return (this._validationResult);
+  }
+
+  /**
+   * @return The code that is currently emitted.
+   */
+  get currentGeneratedCode(): Observable<string> {
+    return (this._generatedCode);
   }
 }
