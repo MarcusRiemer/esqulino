@@ -42,23 +42,6 @@ const DEFAULT_ANIMATION = "2000ms ease";
       // Transition between shown states
       transition('available => self', animate(DEFAULT_ANIMATION)),
       //transition('self => available', animate(DEFAULT_ANIMATION)),
-    ]),
-    trigger('dropPlaceholder', [
-      state('none', style({
-        transform: 'scale(0.5)',
-        display: 'none',
-        backgroundColor: 'white',
-      })),
-      state('available', style({
-        transform: 'scale(1.0)',
-        display: 'block',
-        backgroundColor: 'lime',
-      })),
-      state('self', style({
-        transform: 'scale(1.0)',
-        display: 'block',
-        backgroundColor: 'yellow',
-      })),
     ])
   ]
 })
@@ -122,15 +105,6 @@ export class NodeComponent implements OnChanges {
   onDropInsert() {
     const desc = this._dragService.peekDragData.draggedDescription;
     this._treeService.insertNode(this.node.location, desc);
-  }
-
-  /**
-   * Something has been dropped on a placeholder in an empty category of this node.
-   */
-  onDropInsertCategory(key: string) {
-    const desc = this._dragService.peekDragData.draggedDescription;
-    const index = this.node.children[key].length;
-    this._treeService.insertNode([...this.node.location, [key, index]], desc);
   }
 
   /**
