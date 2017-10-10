@@ -1,6 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-
-import { Tree, Language, ValidationResult } from '../../shared/syntaxtree'
+import { Component } from '@angular/core';
 
 import { TreeService } from './tree.service'
 
@@ -13,9 +11,7 @@ import { TreeService } from './tree.service'
 })
 export class ValidationComponent {
 
-  constructor(private _treeService: TreeService) {
-
-  }
+  constructor(private _treeService: TreeService) { }
 
   get result() {
     return (this._treeService.currentValidationResult);

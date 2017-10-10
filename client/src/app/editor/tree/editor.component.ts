@@ -81,7 +81,7 @@ export class SyntaxTreeEditorComponent implements OnInit {
 
     this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this.peekTree);
 
-    this._treeService.setValidationLanguage(this.currentLanguage);
+    this._treeService.setLanguage(this.currentLanguage);
   }
 
   /**
@@ -125,7 +125,7 @@ export class SyntaxTreeEditorComponent implements OnInit {
    * @return The tree that is edited by this editor
    */
   get peekTree(): Tree {
-    return (this._treeService.tree);
+    return (this._treeService.peekTree);
   }
 
   /**
