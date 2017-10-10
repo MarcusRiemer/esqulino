@@ -32,8 +32,6 @@ export interface SqlDragEvent {
  */
 @Injectable()
 export class DragService {
-  private _eventSource: Subject<SqlDragEvent>;
-
   private _currentDrag: SqlDragEvent;
 
   // This seems like an awful hack, but here we go:
@@ -45,7 +43,7 @@ export class DragService {
   private _currentSource: SyntaxTree.Removable;
 
   constructor(private _trashService: TrashService) {
-    this._eventSource = new Subject<SqlDragEvent>();
+
   }
 
   /**

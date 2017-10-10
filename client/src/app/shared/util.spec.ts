@@ -25,3 +25,42 @@ describe('Utility: isValidResourceId', () => {
     expect(Util.isValidResourceId("AAAAAAAABBBBCCCCDDDDEEEEEEEEEEEE")).toEqual(false);
   });
 });
+
+describe('Utility: arrayEqual', () => {
+  it('with empty arrays', () => {
+    expect(Util.arrayEqual([], [])).toBeTruthy();
+    expect(Util.arrayEqual([1], [])).toBeFalsy();
+    expect(Util.arrayEqual([], [1])).toBeFalsy();
+  });
+
+  it('with non arrays', () => {
+    expect(Util.arrayEqual([], undefined)).toBeFalsy();
+    expect(Util.arrayEqual([], null)).toBeFalsy();
+    expect(Util.arrayEqual([], "" as any)).toBeFalsy();
+    expect(Util.arrayEqual([], 1 as any)).toBeFalsy();
+
+    expect(Util.arrayEqual(undefined, [])).toBeFalsy();
+    expect(Util.arrayEqual(null, [])).toBeFalsy();
+    expect(Util.arrayEqual("" as any, [])).toBeFalsy();
+    expect(Util.arrayEqual(1 as any, [])).toBeFalsy();
+  });
+
+  it('Flat arrays', () => {
+    expect(Util.arrayEqual([1, 2], [1, 2])).toBeTruthy();
+    expect(Util.arrayEqual([2, 1], [2, 1])).toBeTruthy();
+
+    expect(Util.arrayEqual([2, 2], [2, 1])).toBeFalsy();
+    expect(Util.arrayEqual([2, 1], [2, 2])).toBeFalsy();
+
+    expect(Util.arrayEqual([2, 2, 2], [2, 2])).toBeFalsy();
+    expect(Util.arrayEqual([2, 2], [2, 2, 2])).toBeFalsy();
+  })
+
+  it('Nested arrays', () => {
+    expect(Util.arrayEqual([[1, 2]], [[1, 2]])).toBeTruthy();
+    expect(Util.arrayEqual([[2, 1]], [[2, 1]])).toBeTruthy();
+
+    expect(Util.arrayEqual([[2, 1]], [[]])).toBeFalsy();
+    expect(Util.arrayEqual([[2, 1]], [])).toBeFalsy();
+  })
+});

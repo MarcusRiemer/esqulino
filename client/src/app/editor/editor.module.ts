@@ -9,6 +9,7 @@ import { PageEditorModule } from './page/page-editor.module'
 import { QueryEditorModule } from './query/editor.module'
 import { SchemaEditorModule } from './schema/schema.module'
 import { ImageEditorModule } from './image/image.module'
+import { SyntaxTreeEditorModule } from './tree/tree.module'
 
 import { EditorComponent } from './editor.component'
 import { editorRouting } from './editor.routes'
@@ -39,6 +40,7 @@ import { SettingsComponent } from './settings.component'
     PageEditorModule.forRoot(),
     QueryEditorModule.forRoot(),
     SchemaEditorModule.forRoot(),
+    SyntaxTreeEditorModule.forRoot()
   ],
   declarations: [
     EditorComponent,

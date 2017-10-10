@@ -1,4 +1,5 @@
 import { Routes, RouterModule } from '@angular/router'
+
 import { SchemaHostComponent } from './host.component'
 import { SchemaComponent } from './schema.component'
 import { SchemaTableEditorComponent } from './schema-table-editor.component'

@@ -54,3 +54,31 @@ export function encodeUriParameters(params: KeyValuePairs) {
   return (toReturn);
 }
 
+/**
+ * Recursively compares arrays nested arrays. Code is adapted from
+ * Tomáš Zato on StackOverflow: https://stackoverflow.com/a/14853974/431715
+ */
+export function arrayEqual(lhs: any[], rhs: any[]) {
+  if (!(lhs instanceof Array) || !(rhs instanceof Array)) {
+    return (false);
+  }
+
+  // compare lengths - can save a lot of time 
+  if (lhs.length != rhs.length) {
+    return (false);
+  }
+
+  for (var i = 0, l = lhs.length; i < l; i++) {
+    // Check if we have nested arrays
+    if (lhs[i] instanceof Array && rhs[i] instanceof Array) {
+      // recurse into the nested arrays
+      if (!arrayEqual(lhs[i], rhs[i]))
+        return (false);
+    }
+    else if (lhs[i] != rhs[i]) {
+      // Warning - two different object instances will never be equal: {x:20} != {x:20}
+      return (false);
+    }
+  }
+  return (true);
+}
