@@ -69,8 +69,6 @@ export class SyntaxTreeEditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._treeService.currentTree.subscribe(v => console.log("New Tree:", v));
-
     this._sidebarService.hideSidebar();
     this._toolbarService.resetItems();
     this._toolbarService.savingEnabled = false;
