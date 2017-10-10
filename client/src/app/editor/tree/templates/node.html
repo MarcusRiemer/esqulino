@@ -1,10 +1,3 @@
-<div *ngIf="allowDropBefore"
-     [astDropPlaceholder]="node"
-     [@dropPlaceholder]="dropPlaceholderAnimationState | async"
-     (drop)="onDropInsert()"
-     class="node">
-  Drop Target
-</div>
 <div [astDropTarget]="node"
      [@dropTarget]="dropTargetAnimationState | async"
      (drop)="onDropReplace()"
@@ -35,16 +28,9 @@
   </div>
   
   <div *ngFor="let category of childrenCategories">
-    children: <code>{{ category.categoryName }}</code>
-    <ng-container *ngFor="let childNode of category.nodes">
-      <ast-node [node]="childNode"
-                [allowDropBefore]="true"></ast-node>
-    </ng-container>
-    <div [astDropPlaceholder]="node"
-         [@dropPlaceholder]="dropPlaceholderAnimationState | async"
-         (drop)="onDropInsertCategory(category.categoryName)"
-         class="node">
-      Drop Target
-    </div>
+    <ast-node-children [categoryName]="category.categoryName"
+                       [nodes]="category.nodes"
+                       [parent]="node">
+    </ast-node-children>
   </div>
 </div>
