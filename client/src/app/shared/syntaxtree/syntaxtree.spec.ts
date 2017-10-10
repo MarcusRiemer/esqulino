@@ -562,4 +562,58 @@ describe('AST: Basic Operations', () => {
     const prev = new Tree(treeDesc);
     expect(() => prev.insertNode([], { language: "lang", name: "new" })).toThrowError();
   });
+
+  it('Deleting the first node of a group', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          { language: "lang", name: "r_a_0" },
+          { language: "lang", name: "r_a_1" },
+          { language: "lang", name: "r_a_2" }
+        ]
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.deleteNode([["a", 0]]);
+
+    expect(prev).not.toBe(curr);
+    expect(curr.rootNode.children["a"].length).toEqual(2);
+    expect(curr.rootNode.children["a"][0].typeName).toEqual("r_a_1");
+    expect(curr.rootNode.children["a"][1].typeName).toEqual("r_a_2");
+  });
+
+  it('Deleting the middle node of a group', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "a": [
+          { language: "lang", name: "r_a_0" },
+          { language: "lang", name: "r_a_1" },
+          { language: "lang", name: "r_a_2" }
+        ]
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.deleteNode([["a", 1]]);
+
+    expect(prev).not.toBe(curr);
+    expect(curr.rootNode.children["a"].length).toEqual(2);
+    expect(curr.rootNode.children["a"][0].typeName).toEqual("r_a_0");
+    expect(curr.rootNode.children["a"][1].typeName).toEqual("r_a_2");
+  });
+
+  it('Error: Deleting the root', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+    };
+
+    const prev = new Tree(treeDesc);
+    expect(() => prev.deleteNode([])).toThrowError();
+  });
 });
