@@ -334,6 +334,29 @@ export class Tree {
   }
 
   /**
+   * Returns a new tree where the node at the given location is deleted.
+   */
+  deleteNode(loc: NodeLocation): Tree {
+    // The root can only be replaced, not deleted.
+    if (loc.length === 0) {
+      throw new Error(`Nothing can be appended after the root node.`);
+    } else {
+      // Build the description of the current tree to insert the new node in it
+      let newDescription = this.toModel();
+
+      // Walking up the tree to the parent that will contain the node that needs
+      // to be deleted.
+      let parent = locateNode(newDescription, loc.slice(0, loc.length - 1));
+      let [parentCat, parentIndex] = loc[loc.length - 1];
+
+      // Actually delete the node
+      parent.children[parentCat].splice(parentIndex, 1);
+
+      return (new Tree(newDescription));
+    }
+  }
+
+  /**
    * Returns a new tree where the node at the given location has a different
    * property value.
    *
