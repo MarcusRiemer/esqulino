@@ -33,12 +33,12 @@ export class TreeSidebarComponent implements OnInit {
   ) {
   }
 
+  /**
+   * @return The user has decided to start dragging something from the sidebar.
+   */
   startDrag(evt: DragEvent, type: QualifiedTypeName) {
     this._dragService.dragStart(evt, {
-      draggedDescription: {
-        language: type.languageName,
-        name: type.typeName
-      },
+      draggedDescription: this.constructDefaultNode(type),
       origin: "sidebar"
     });
   }
@@ -54,6 +54,9 @@ export class TreeSidebarComponent implements OnInit {
     return (this._availableLanguages);
   }
 
+  /**
+   * Rebuilds the cache with available languages and their types.
+   */
   private refreshAvailableLanguages() {
     this._availableLanguages = Object.entries(this._languageService.availableLanguages).map(([name, lang]) => {
       return ({
@@ -63,5 +66,32 @@ export class TreeSidebarComponent implements OnInit {
     });
   }
 
+  /**
+   * Adds properties and child groups to a child that are probably needed.
+   */
+  private constructDefaultNode(typeName: QualifiedTypeName) {
+    // Construct the barebones description
+    const toReturn: NodeDescription = {
+      language: typeName.languageName,
+      name: typeName.typeName
+    };
+
+    // Get hold of the type that is about to be instanciated.
+    const lang = this._languageService.getLanguageByName(typeName.languageName);
+    const t = lang.getType(typeName);
+
+    // Are there any children categories that could be added preemptively?
+    const reqCat = t.requiredChildrenCategoryNames;
+    if (reqCat.length > 0) {
+      toReturn.children = {};
+      reqCat.forEach(c => {
+        toReturn.children[c] = [];
+      });
+    }
+
+    // Are there any properties that could be added preemptively?
+
+    return (toReturn);
+  }
 }
 

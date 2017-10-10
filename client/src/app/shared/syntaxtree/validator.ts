@@ -181,6 +181,11 @@ export abstract class NodeType {
   get validator() {
     return (this._validator);
   }
+
+  /**
+   * @return The names of the categories that will be minimally required
+   */
+  abstract get requiredChildrenCategoryNames(): string[];
 }
 
 /**
@@ -208,6 +213,24 @@ class NodeConcreteType extends NodeType {
   }
 
   /**
+   * @return Names of all categories that could have children.
+   */
+  get allowedChildrenCategoryNames() {
+    return (Object.keys(this._allowedChildren));
+  }
+
+  /**
+   * @return The names of the categories that will be minimally required
+   */
+  get requiredChildrenCategoryNames() {
+    return (
+      Object.values(this._allowedChildren)
+        .filter(c => c.isRequired)
+        .map(c => c.categoryName)
+    );
+  }
+
+  /**
    * Validates this node and (if applicable) it's children
    * and other properties.
    */
@@ -230,13 +253,13 @@ class NodeConcreteType extends NodeType {
    */
   private validateImpl(ast: AST.Node, context: ValidationContext) {
     // Check all required children
-    this.requiredChildrenCategories.forEach(categoryName => {
+    this.allowedChildrenCategoryNames.forEach(categoryName => {
       const catChildren = ast.getChildrenInCategory(categoryName);
       this._allowedChildren[categoryName].validate(ast, catChildren, context);
     });
 
     // Check that there are no unwanted children
-    const requiredCategories = new Set(this.requiredChildrenCategories);
+    const requiredCategories = new Set(this.allowedChildrenCategoryNames);
     const superflousCategories = ast.childrenCategoryNames.filter(cat => !requiredCategories.has(cat));
     superflousCategories.forEach(categoryName => {
       context.addError(ErrorCodes.SuperflousChildCategory, ast, {
@@ -272,13 +295,6 @@ class NodeConcreteType extends NodeType {
     } else {
       throw new Error(`Unknown property validator for base "${desc.base}"`);
     }
-  }
-
-  /**
-   * @return Names of all categories that should have children.
-   */
-  get requiredChildrenCategories() {
-    return (Object.keys(this._allowedChildren));
   }
 }
 
@@ -318,6 +334,13 @@ class NodeTypeChildren {
   }
 
   /**
+   * @return True, if this child category is essential for the parent.
+   */
+  get isRequired() {
+    return (this._childValidator.isRequired);
+  }
+
+  /**
    * @return The node that is the parent to all of these node.
    */
   get parent() {
@@ -345,6 +368,11 @@ interface NodeComplexTypeChildrenValidator {
    * @return All children that are in valid positions and should be checked further.
    */
   validateChildren(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[];
+
+  /**
+   * @return True, if this category will be required to be present on the node.
+   */
+  readonly isRequired: boolean;
 }
 
 /**
@@ -409,6 +437,13 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
 
     this._group = group;
     this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group, defaultLimit));
+  }
+
+  /**
+   * @return True, if any of the children in this group need to occur at least once.
+   */
+  get isRequired() {
+    return (this._nodeTypes.some(c => c.minOccurs > 0));
   }
 
   /**
@@ -503,6 +538,13 @@ class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator
     }
 
     this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group, defaultLimit));
+  }
+
+  /**
+   * @return True, if any of the children in this group need to occur at least once.
+   */
+  get isRequired() {
+    return (this._nodeTypes.some(c => c.minOccurs > 0));
   }
 
   /**
@@ -664,6 +706,14 @@ class NodeOneOfType extends NodeType {
     super(validator, language, name);
 
     this._possibilities = typeDesc.oneOf.map(t => new TypeReference(validator, t, language));
+  }
+
+  /**
+   * As this node should never physically appear in a tree, asking
+   * it for child categories is meaningless.
+   */
+  get requiredChildrenCategoryNames() {
+    return ([]);
   }
 
   /**
