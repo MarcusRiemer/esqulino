@@ -79,7 +79,9 @@ export class SyntaxTreeEditorComponent implements OnInit {
     this.rawNodeData = JSON.stringify(astDesc, null, 2);
     this.loadRawNode();
 
-    this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this.tree);
+    this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this.peekTree);
+
+    this._treeService.setValidationLanguage(this.currentLanguage);
   }
 
   /**
@@ -98,7 +100,7 @@ export class SyntaxTreeEditorComponent implements OnInit {
     try {
       const desc = JSON.parse(this.rawNodeData);
       this._treeService.replaceTree(desc);
-      this.rawNodeData = JSON.stringify(this.tree.toModel(), null, 2);
+      this.rawNodeData = JSON.stringify(this.peekTree.toModel(), null, 2);
     }
     catch (err) {
       alert(err);
@@ -122,10 +124,13 @@ export class SyntaxTreeEditorComponent implements OnInit {
   /**
    * @return The tree that is edited by this editor
    */
-  get tree() {
+  get peekTree(): Tree {
     return (this._treeService.tree);
   }
 
+  /**
+   * @return The observable tree that is edited by this editor.
+   */
   get currentTree() {
     return (this._treeService.currentTree);
   }
