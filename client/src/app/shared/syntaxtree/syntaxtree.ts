@@ -335,11 +335,14 @@ export class Tree {
 
   /**
    * Returns a new tree where the node at the given location is deleted.
+   *
+   * @param loc The location of the deletion.
+   * @return The modified tree
    */
   deleteNode(loc: NodeLocation): Tree {
     // The root can only be replaced, not deleted.
     if (loc.length === 0) {
-      throw new Error(`Nothing can be appended after the root node.`);
+      throw new Error(`The root node can not be deleted.`);
     } else {
       // Build the description of the current tree to insert the new node in it
       let newDescription = this.toModel();

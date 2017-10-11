@@ -90,6 +90,22 @@ export class NodeComponent implements OnChanges {
   }
 
   /**
+   * The user has started to drag exactly this node around.
+   */
+  onStartDrag(evt: DragEvent) {
+    this._dragService.dragStart(evt,
+      {
+        draggedDescription: this.node.toModel(),
+        origin: "tree"
+      },
+      {
+        location: this.node.location,
+        treeService: this._treeService
+      }
+    );
+  }
+
+  /**
    * Something has been dropped on this node. We should replace the node entirely.
    */
   onDropReplace() {
