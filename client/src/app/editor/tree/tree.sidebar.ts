@@ -37,10 +37,14 @@ export class TreeSidebarComponent implements OnInit {
    * @return The user has decided to start dragging something from the sidebar.
    */
   startDrag(evt: DragEvent, type: QualifiedTypeName) {
-    this._dragService.dragStart(evt, {
-      draggedDescription: this.constructDefaultNode(type),
-      origin: "sidebar"
-    });
+    try {
+      this._dragService.dragStart(evt, {
+        draggedDescription: this.constructDefaultNode(type),
+        origin: "sidebar"
+      });
+    } catch (e) {
+      alert(e);
+    }
   }
 
   ngOnInit() {

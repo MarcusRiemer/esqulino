@@ -9,13 +9,12 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { arrayEqual } from '../../shared/util'
 import { Node, NodeLocation, Tree } from '../../shared/syntaxtree';
 
+import { DEFAULT_ANIMATION } from './node.animation'
 import { DragService } from './drag.service';
 import { TreeService } from './tree.service'
 
 // These states are available for animation
 type DropTargetAnimationStates = "available" | "none" | "self";
-
-const DEFAULT_ANIMATION = "2000ms ease";
 
 /**
  * Displays a node of a syntaxtree, currently in the most generic way possible.
@@ -171,26 +170,6 @@ export class NodeComponent implements OnChanges {
     }
 
     return (this._cached_dropTargetAnimationState);
-  }
-
-  /**
-   * @return The state of the drop animation for placeholders
-   */
-  get dropPlaceholderAnimationState(): Observable<DropTargetAnimationStates> {
-    if (!this._cached_dropPlaceholderAnimationState) {
-      this._cached_dropPlaceholderAnimationState = this._dragService.currentDragOverPlaceholder
-        .merge(this._dragService.isDragInProgress)
-        .map(v => {
-          if (arrayEqual(v as any, this.node.location)) {
-            return ("self");
-          } else {
-            return (this._dragService.peekIsDragInProgress ? "available" : "none");
-          }
-        })
-        .distinctUntilChanged()
-    }
-
-    return (this._cached_dropPlaceholderAnimationState);
   }
 
   /**
