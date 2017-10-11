@@ -110,6 +110,17 @@ export class TreeService {
   }
 
   /**
+   * Deletes the node at the given location.
+   *
+   * @param loc The location of the insertion.
+   */
+  deleteNode(loc: NodeLocation) {
+    console.log(`Deleting node at ${JSON.stringify(loc)}`);
+
+    this.replaceTree(this.peekTree.deleteNode(loc));
+  }
+
+  /**
    * Sets a new value for a property.
    *
    * @param loc The location of the node to edit.

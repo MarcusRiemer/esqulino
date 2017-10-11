@@ -1,1 +1,1 @@
-export const DEFAULT_ANIMATION = "400ms linear";
+export const DEFAULT_ANIMATION = "300ms linear";

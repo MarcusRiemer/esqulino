@@ -7,9 +7,23 @@ import { Node, NodeDescription, NodeLocation } from '../../shared/syntaxtree'
 
 import { TrashService } from '../shared/trash.service'
 
-export interface CurrentDrag {
+import { TreeService } from './tree.service'
+
+/**
+ * Serializable information that is attached to the drag
+ */
+export interface CurrentDragData {
   origin: "sidebar" | "tree"
   draggedDescription: NodeDescription
+}
+
+/**
+ * Encapsulates instances that know about the origin of the drag. This
+ * is important when moving or replacing nodes in the tree.
+ */
+export interface DragSource {
+  location: NodeLocation,
+  treeService: TreeService
 }
 
 /**
@@ -17,11 +31,11 @@ export interface CurrentDrag {
  */
 @Injectable()
 export class DragService {
-  private _currentDrag = new BehaviorSubject<CurrentDrag>(undefined);
+  private _currentDrag = new BehaviorSubject<CurrentDragData>(undefined);
   private _currentDragInProgress = this._currentDrag.map(d => !!d);
 
   // The node the operation originated from
-  private _currentSource: Node;
+  private _currentSource: DragSource;
 
   // The node the drag operation is currently dragged over.
   private _currentDragOverNode = new BehaviorSubject<Node>(undefined);
@@ -31,7 +45,14 @@ export class DragService {
 
   private constructor(private _trashService: TrashService) { }
 
-  public dragStart(evt: DragEvent, drag: CurrentDrag, source?: Node) {
+  /**
+   * Starts a new dragging operation.
+   * 
+   * @param evt The original drag event that was issued by the DOM
+   * @param drag The serializable drag information
+   * @param source The node with the corresponding tree that started the drag
+   */
+  public dragStart(evt: DragEvent, drag: CurrentDragData, source?: DragSource) {
     if (this._currentDrag.value || this._currentSource) {
       throw new Error("Attempted to start a second drag");
     }
@@ -73,7 +94,8 @@ export class DragService {
     // being put in the trash.
     if (source) {
       this._trashService.showTrash(_ => {
-        alert("remove");
+        console.log("Deleting");
+        this._currentSource.treeService.deleteNode(this._currentSource.location)
       });
     }
     console.log(`AST-Drag started:`, drag);
