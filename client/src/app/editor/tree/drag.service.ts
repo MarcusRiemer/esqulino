@@ -52,9 +52,14 @@ export class DragService {
     const dragEndHandler = () => {
       evt.target.removeEventListener("dragend", dragEndHandler);
 
-      this._currentDrag.next(undefined);
-      this._currentDragOverNode.next(undefined);
+      // The current source needs to be "undefined" first because
+      // the "peekIsDragInProgress" depends on it. And this property
+      // may be checked when subscriptions of the following observables
+      // are fired.
       this._currentSource = undefined;
+
+      this._currentDragOverNode.next(undefined);
+      this._currentDrag.next(undefined);
       this._trashService.hideTrash();
       console.log(`AST-Drag ended:`, drag);
     }
@@ -85,6 +90,9 @@ export class DragService {
     console.log("Dragged over node:", node ? JSON.stringify(node.location) : "editor");
   }
 
+  /**
+   * Needs to be called by nodes when the drag operation currently drags over any placeholder.
+   */
   public informDraggedOverPlaceholder(loc: NodeLocation) {
     if (!arrayEqual(this._currentDragOverPlaceholder.getValue(), loc)) {
       this._currentDragOverPlaceholder.next(loc);
@@ -103,7 +111,7 @@ export class DragService {
   /**
    * @return Takes a peek whether a drag is occuring *right now*.
    */
-  get peekIsDragInProgress() {
+  get peekIsDragInProgress(): boolean {
     return (!!this._currentDrag.getValue());
   }
 
@@ -117,11 +125,14 @@ export class DragService {
   /**
    * @return Observable with the node that is currently dragged over.
    */
-  get currentDragOverNode() {
+  get currentDragOverNode(): Observable<Node> {
     return (this._currentDragOverNode);
   }
 
-  get currentDragOverPlaceholder() {
+  /**
+   * @return Observable with the placeholder that is currently being dragged over.
+   */
+  get currentDragOverPlaceholder(): Observable<NodeLocation> {
     return (this._currentDragOverPlaceholder);
   }
 }
