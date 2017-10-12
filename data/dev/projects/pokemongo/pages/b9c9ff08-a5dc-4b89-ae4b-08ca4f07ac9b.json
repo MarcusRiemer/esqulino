@@ -29,6 +29,7 @@
         "type": "query-table",
         "queryRefName": "Meine_Pokemon",
         "columns": [
+          "bild",
           "spitzname",
           "name",
           "staerke",

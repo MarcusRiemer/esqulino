@@ -150,15 +150,62 @@ class DisplayImageFigure < Liquid::Tag
     <source media="(min-width:  400px)" srcset="/image/#{ context['src'] }?width=800">
     <img id='#{context['src']}' class="figure-img" src='/image/#{ context['src'] }?width=400'>
   </picture>
-  <figcaption class="figure-caption text-right">
-    #{ metadata['name'] } von <a href='#{metadata['author-url']}'>#{ metadata['author-name'] }</a>, Lizenz: <a href='#{metadata['licence-url']}'>#{metadata['licence-name']}</a>
-  </figcaption>
+  <footer><small>
+    <a href='#{metadata['author-url']}'>#{ metadata['author-name'] }</a>,
+    <a href='#{metadata['licence-url']}'>#{metadata['licence-name']}</a>
+  </small></footer>
+  <figcaption class="figure-caption">#{ metadata['name'] }</figcaption>
 </figure>
     delim
   end
 end
 
 Liquid::Template.register_tag('imageFigure', DisplayImageFigure)
+
+#4c724484-017d-48a7-848f-3694ae3b4681
+UUID_REGEX = /^[[:xdigit:]]{8}-[[:xdigit:]]{4}-4[[:xdigit:]]{3}-[[:xdigit:]]{4}-[[:xdigit:]]{12}$/
+
+class TableCell < Liquid::Tag
+  def initialize(tag_name, value, tokens)
+    super
+    @value = value
+  end
+
+  def render(context)
+    scopes = context.scopes
+    colLoopScope = scopes[0]
+    colName = colLoopScope['name']
+    rowLoopScope = scopes[1]
+    value = rowLoopScope['row'][colName]
+    if value =~ UUID_REGEX
+    #TODO get rid of code duplication
+      if context['sources'].nil?
+        context['sources'] = []
+      end
+
+      uuid = context['uuid']
+
+      id_suffix = $sourceList[uuid].count(value)
+
+      $sourceList[uuid] << (value)
+
+      <<-delim
+<picture>
+  <source media="(min-width: 2000px)" srcset="/image/#{value}">
+  <source media="(min-width: 1600px)" srcset="/image/#{value}?width=2000">
+  <source media="(min-width: 1200px)" srcset="/image/#{value}?width=1600">
+  <source media="(min-width:  800px)" srcset="/image/#{value}?width=1200">
+  <source media="(min-width:  400px)" srcset="/image/#{value}?width=800">
+  <img id="#{value}-#{id_suffix}" src="/image/#{value}?width=400">
+</picture>
+    delim
+    else
+      value
+    end
+  end
+end
+
+Liquid::Template.register_tag('tableCell', TableCell)
 
 def liquid_render_path(project, page_file, params)
   liquid_render_page(project, "{% include \"#{page_file}\" %}", params)

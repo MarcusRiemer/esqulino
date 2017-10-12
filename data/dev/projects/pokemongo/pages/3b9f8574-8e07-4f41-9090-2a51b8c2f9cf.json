@@ -31,10 +31,7 @@
         "action": {
           "type": "navigate",
           "internal": {
-            "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
-            "parameters": [
-
-            ]
+            "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b"
           }
         }
       },
@@ -47,8 +44,9 @@
         "type": "query-table",
         "queryRefName": "Pokedex_1G",
         "columns": [
-          "nummer",
           "name",
+          "nummer",
+          "bild",
           "typ1",
           "typ2"
         ]
@@ -90,21 +88,7 @@
             "text": "Pokémon speichern",
             "query": {
               "type": "query",
-              "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44",
-              "mapping": [
-                {
-                  "parameterName": "nummer",
-                  "providingName": "nummer"
-                },
-                {
-                  "parameterName": "name",
-                  "providingName": "name"
-                },
-                {
-                  "parameterName": "staerke",
-                  "providingName": "staerke"
-                }
-              ]
+              "queryId": "79f9fd59-89cd-47d1-ab20-9a4388cd9d44"
             }
           }
         ]
@@ -118,6 +102,7 @@
         "type": "query-table",
         "queryRefName": "Meine_Pokemon",
         "columns": [
+          "bild",
           "gefangen_id",
           "nummer",
           "name",
