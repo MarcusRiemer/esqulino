@@ -360,19 +360,54 @@ class NodeTypeChildren {
  * Classes implementing this interface can check whether certain
  * child nodes are structurally valid.
  */
-interface NodeComplexTypeChildrenValidator {
+abstract class NodeComplexTypeChildrenValidator {
+  // The number of children must be in these boundaries
+  private _childCount: Desc.OccursDescription;
+
+  constructor(desc: Desc.NodeTypesDescription) {
+    if (!desc.childCount) {
+      this._childCount = {
+        minOccurs: 0,
+        maxOccurs: +Infinity
+      }
+    } else {
+      this._childCount = desc.childCount;
+    }
+  }
+
+  /**
+   * Checks whether the count of children is legal and then delegates
+   * further checks to an implementation defined
+   */
+  validateChildren(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[] {
+    if (ast.length < this._childCount.minOccurs) {
+      context.addError(ErrorCodes.InvalidMinOccurences, parent);
+    } else if (ast.length > this._childCount.maxOccurs) {
+      context.addError(ErrorCodes.InvalidMaxOccurences, parent);
+    }
+
+    return (this.validateChildrenImpl(parent, ast, context));
+  }
+
   /**
    * Checks whether the given children are in a legal position in the given
    * array. Adds errors to the context if children are in illegal positions.
    *
    * @return All children that are in valid positions and should be checked further.
    */
-  validateChildren(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[];
+  protected abstract validateChildrenImpl(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[];
 
   /**
    * @return True, if this category will be required to be present on the node.
    */
-  readonly isRequired: boolean;
+  get isRequired() {
+    return (this._childCount.minOccurs > 0 || this.isRequiredImpl);
+  }
+
+  /**
+   * @return True, if the deriving implementation deems this category necessary.
+   */
+  protected abstract readonly isRequiredImpl: boolean;
 }
 
 /**
@@ -425,11 +460,12 @@ class ChildCardinality {
 /**
  * Enforces a specific sequence of child-nodes of a parent node.
  */
-class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidator {
+class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
   private _nodeTypes: ChildCardinality[];
   private _group: NodeTypeChildren;
 
   constructor(group: NodeTypeChildren, desc: Desc.NodeTypesSequenceDescription) {
+    super(desc);
     const defaultLimit: Desc.OccursDescription = {
       minOccurs: 1,
       maxOccurs: 1,
@@ -442,14 +478,14 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
   /**
    * @return True, if any of the children in this group need to occur at least once.
    */
-  get isRequired() {
+  get isRequiredImpl() {
     return (this._nodeTypes.some(c => c.minOccurs > 0));
   }
 
   /**
    * Ensures the sequence is correct
    */
-  validateChildren(parent: AST.Node, children: AST.Node[], context: ValidationContext): AST.Node[] {
+  validateChildrenImpl(parent: AST.Node, children: AST.Node[], context: ValidationContext): AST.Node[] {
     // Valid children that should be checked more thorughly
     const toReturn = [];
 
@@ -528,10 +564,12 @@ class NodeComplexTypeChildrenSequence implements NodeComplexTypeChildrenValidato
  * Ensures that every child-node is of a type that has been explicitly
  * whitelisted.
  */
-class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator {
+class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
   private _nodeTypes: ChildCardinality[];
 
   constructor(group: NodeTypeChildren, desc: Desc.NodeTypesAllowedDescription) {
+    super(desc);
+
     const defaultLimit: Desc.OccursDescription = {
       minOccurs: 0,
       maxOccurs: +Infinity
@@ -543,14 +581,14 @@ class NodeComplexTypeChildrenAllowed implements NodeComplexTypeChildrenValidator
   /**
    * @return True, if any of the children in this group need to occur at least once.
    */
-  get isRequired() {
+  get isRequiredImpl() {
     return (this._nodeTypes.some(c => c.minOccurs > 0));
   }
 
   /**
    * Ensures that every child has at least a matching type.
    */
-  validateChildren(parent: AST.Node, children: AST.Node[], context: ValidationContext) {
+  validateChildrenImpl(parent: AST.Node, children: AST.Node[], context: ValidationContext) {
     // These children are expected
     const toReturn: AST.Node[] = [];
     // Initially no node has occured so far
