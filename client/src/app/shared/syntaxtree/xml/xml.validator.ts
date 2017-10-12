@@ -1,6 +1,6 @@
 import * as Schema from '../validator.description'
 
-export const LANG_DESCRIPTION: Schema.ValidatorDescription = {
+export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
   languageName: "xml",
   types: {
     "node": {

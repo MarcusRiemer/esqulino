@@ -1,2 +1,10 @@
-export * from './xml.codegenerator'
-export * from './xml.validator'
+import { LanguageDescription } from '../language.description'
+
+import { NODE_CONVERTER } from './xml.codegenerator'
+import { VALIDATOR_DESCRIPTION } from './xml.validator'
+
+export const LANGUAGE_DESCRIPTION: LanguageDescription = {
+  name: "XML",
+  generators: NODE_CONVERTER,
+  validators: [VALIDATOR_DESCRIPTION]
+}
