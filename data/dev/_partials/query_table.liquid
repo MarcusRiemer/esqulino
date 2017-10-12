@@ -11,7 +11,7 @@
     {% for row in table %}
       <tr>
         {% for name in columnNames %}
-          <td>{{ row[name] }}</td>
+          <td>{% tableCell %}</td>
         {% endfor %}
       </tr>
     {% endfor %}
