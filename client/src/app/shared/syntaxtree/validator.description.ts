@@ -174,10 +174,18 @@ export interface OccursDescription {
 export type NodeTypesChildReference = (TypeReference | ChildCardinalityDescription);
 
 /**
+ * Describes a group of node types.
+ */
+export interface NodeTypesDescription {
+  type: string
+  childCount?: OccursDescription
+}
+
+/**
  * In a sequence every child must occur in exact the order and cardinality
  * that is specified by this description.
  */
-export interface NodeTypesSequenceDescription {
+export interface NodeTypesSequenceDescription extends NodeTypesDescription {
   type: "sequence"
   nodeTypes: NodeTypesChildReference[]
 }
@@ -185,7 +193,7 @@ export interface NodeTypesSequenceDescription {
 /**
  * Every immediate child must be part of this list of allowed types.
  */
-export interface NodeTypesAllowedDescription {
+export interface NodeTypesAllowedDescription extends NodeTypesDescription {
   type: "allowed"
   nodeTypes: NodeTypesChildReference[]
 }
