@@ -11,6 +11,13 @@ export interface QualifiedTypeName {
 }
 
 /**
+ * @return True, if both parameters denote the same type.
+ */
+export function typenameEquals(lhs: QualifiedTypeName, rhs: QualifiedTypeName) {
+  return (lhs.languageName === rhs.languageName && lhs.typeName === rhs.typeName);
+}
+
+/**
  * Properties of a node are atomic and always stored as string.
  * Certain validators may be used to check whether the string
  * contains something useful.

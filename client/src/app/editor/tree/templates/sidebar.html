@@ -1,13 +1,13 @@
 <sidebar-item-host>
   <div *ngFor="let lang of availableLanguages"
        class="ast">
-    <h5>{{ lang.name }}</h5>
+    <h5>{{ lang.languageName }}</h5>
     <ul>
-      <li *ngFor="let type of lang.types"
-          (dragstart)="startDrag($event, type.qualifiedName)"
+      <li *ngFor="let block of lang.availableBlocks"
+          (dragstart)="startDrag($event, lang,  block.qualifiedName)"
           draggable="true"
           class="rounded">
-        {{ type.typeName }}
+        {{ block.qualifiedName.typeName }}
       </li>
     </ul>
   </div>
