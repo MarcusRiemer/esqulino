@@ -1,17 +1,7 @@
 children: <code>{{ categoryName }}</code>
 <ng-container *ngFor="let childNode of nodes">
-  <div [astDropPlaceholder]="childNode.location"
-       [@dropPlaceholder]="getDisplayStateForPlaceholder(childNode.location) | async"
-       (drop)="onDropInsert(childNode.location)"
-       class="node">
-    Drop Target
-  </div>
+  <ast-node-placeholder [location]="childNode.location"></ast-node-placeholder>
   <ast-node [node]="childNode"
             [allowDropBefore]="true"></ast-node>
 </ng-container>
-<div [astDropPlaceholder]="lastLocation"
-     [@dropPlaceholder]="getDisplayStateForPlaceholder(lastLocation) | async"
-     (drop)="onDropInsert(lastLocation)"
-     class="node">
-  Drop Target
-</div>
+<ast-node-placeholder [location]="lastLocation"></ast-node-placeholder>
