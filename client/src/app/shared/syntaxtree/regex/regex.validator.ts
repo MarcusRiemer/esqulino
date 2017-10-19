@@ -10,24 +10,36 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
     },
     "alternative": {
       children: {
-        "options": {
+        "expressions": {
           type: "allowed",
-          nodeTypes: ["regex"]
+          nodeTypes: ["expr"]
         }
       }
     },
     "expr": {
       children: {
-        "node": {
+        "singleExpression": {
           type: "allowed",
           childCount: {
             maxOccurs: 1,
             minOccurs: 1,
           },
-          nodeTypes: ["constant", "options"]
+          nodeTypes: ["constant", "alternative"]
         }
       }
-    }
+    },
+    "root": {
+      children: {
+        "expressions": {
+          type: "allowed",
+          childCount: {
+            minOccurs: 1,
+            maxOccurs: +Infinity
+          },
+          nodeTypes: ["expr"]
+        }
+      }
+    },
   },
-  root: "expr"
+  root: "root"
 }
