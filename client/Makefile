@@ -5,7 +5,7 @@ include ../Makefile.common
 
 NG_BIN = node_modules/.bin/ng
 NGC_BIN = node_modules/.bin/ngc
-TS_NODE_BIN = node_modules/.bin/ts-node
+NODE_BIN = node
 
 BUNDLE_FILES = $(shell find dist/ -iname "*bundle*.js" 2> /dev/null)
 BUNDLE_FILES_GZIP = $(addsuffix .gz, $(BUNDLE_FILES))
@@ -39,7 +39,11 @@ clean-deps : msg-pre-clean-deps
 ##################################
 
 universal-run:
-	$(TS_NODE_BIN) src/server.ts
+	$(NODE_BIN) dist/server.js
+
+universal-compile:
+	node_modules/.bin/ng build --prod --app 1 --output-hashing=false
+	node_modules/.bin/webpack --config webpack.server.config.js --progress
 
 %.gz : %
 	gzip --keep $^
