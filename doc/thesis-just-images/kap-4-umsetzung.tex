@@ -3,11 +3,24 @@
 
 \subsection{Kontext}
 
-
+Die bereits existierende Anwendung besteht aus einem Serverseitigen Backend in
+Ruby on Rails, der auch die erstellten Webseiten aus Liquid Templates rendert,
+und dem in Angular geschriebenen Editor, mit dem die Webseiten erstellt werden.
 
 \subsubsection{Kommunikation via Description Interface}
 
+Server und Client übertragen Daten in der Form von JSON Objekten, die je Zweck
+einem Description Interface entsprechen müssen. Ein Description Interface legt
+die Felder und Typen der JSON Objekte fest, die diesem Interface unterliegen.
+Das Basis Description Interface schreibt folgende Felder vor:
 
+\begin{minted}{json}
+{
+  "id": "<UUID as string>",
+  "name": "<string>",
+  "apiVersion": "<unsigned integer>"
+}
+\end{minted}
 
 \subsubsection{Server: Ruby on Rails}
 
@@ -53,7 +66,7 @@ wie Kommunikation mit dem Server oder Verwaltung von Konfigurationen.
 
 \subsection{TODO: find name}
 
-
+\todo{describe this subsection}
 
 \subsubsection{Caching}
 
@@ -131,9 +144,126 @@ Strukturen einfügen, daher sind alle Routen unterhalb von
   POST    #ersetzt die Metadaten eines Bildes
 \end{minted}
 
+Es folgen Ausführungen zu den einzelnen Routen:
+
+\begin{minted}{ruby}
+GET /api/project/:project_id/image
+\end{minted}
+
+Diese Route liefert eine Liste der Metadaten aller Bilder, die dem Projekt zur
+Verfügung stehen. Zur Zeit sind das alle Bilder, die via Bildverwaltung im
+Projekt hochgeladen wurden. Geplant ist weiterhin eine Globale Bildverwaltung
+deren Bilder in allen Projekten verfügbar sind, sowie nach Implementierung der
+Projektvererbung die Bilder aller Projekte in der Vererbungskette. Aus Sicht der
+Bildverwaltung macht es daher Sinn alle Projekte die nicht explizit ein anderes
+Projekt beerben von einem Speziellen Urprojekt erben zu lassen, in deren
+Bildverwaltung die globale Bildersammlung hinterlegt werden, so kann eine
+sonderbehandlung in der Bildverwaltung vermieden werden.
+
+\begin{minted}{ruby}
+POST /api/project/:project_id/image
+\end{minted}
+
+Diese Route wird verwendet um neue Bilder in der Bildverwaltung anzulegen. Es
+wird ein Multipart Formular erwartet, bestehend aus dem Bild und den Metadaten.
+Da nur der Projektautor in der Lage sein soll das Projekt zu editieren, ist
+diese Route, wie der Rest der modifizierenden Editorfunktionen, durch HTTP Basic
+Auth abgesichert.
+
+\begin{minted}{ruby}
+GET /api/project/:project_id/image/:image_id
+\end{minted}
+
+Diese Route liefert das Bild aus, damit es von einem Webbrowser angezeigt werden kann.
+
+\begin{minted}{ruby}
+POST /api/project/:project_id/image/:image_id
+\end{minted}
+
+Diese Route akzeptiert ein Bild, welches die gespeicherte Bilddatei ersetzt.
+Sie ist ebenfalls via Basic Auth abgesichtert.
+
+\begin{minted}{ruby}
+DELETE /api/project/:project_id/image/:image_id
+\end{minted}
+
+Diese Route wird verwendet um ein Bild inklusive seiner Metadaten zu löschen und
+verwendet selbstverständlich Basic Auth.
+
+\begin{minted}{ruby}
+GET /api/project/:project_id/image/:image_id/metadata
+\end{minted}
+
+Diese Route liefert die Metadaten eines bestimmen Bildes aus.
+
+\begin{minted}{ruby}
+POST /api/project/:project_id/image/:image_id/metadata
+\end{minted}
+
+Diese abgesichterte Route aktzeptiert einen Satz Metadaten, um den zu dem Bild
+gehöhrigen zu ersetzen.
+
+Die versendeten Metadaten entsprechen dem Format des Description Interfaces:
+
+\begin{minted}{json}
+{
+  "id": "<UUID as string>",
+  "name": "<string>",
+  "apiVersion": "<unsigned integer>",
+  "author-name": "<string>",
+  "author-url": "<string>",
+  "licence-name": "<string>",
+  "licence-url": "<string>"
+}
+\end{minted}
+
 \subsubsection{Library}
 
+Ein Hauptaspekt der Bildverwaltung ist eine Übersicht aller dem Projekt
+verfügbaren Bilder und der Möglichkeit die Bilder nach Bildname, Urhebername und
+Lizenzname zu filtern. Die Daten stammen aus der API Route, der alle
+Bildmetadaten liefert und können sowohl zur besseren Betrachtbarkeit als
+Gallerie oder zur besseren Übersicht über die Metadaten als Liste angezeigt
+werden. \todo{Screenshot von der Gallerie} \todo{Screenshot von der Liste}
 
+Der Upload geschieht über ein der Bildverwaltung untergeordneten Dialog
+bestehend aus einem Formular mit Feldern für Name des Bildes, Name des Urhebers, Url zur
+Webseite des Urhebers, Name der Lizenz unter der das Bild verwendet wird, der
+Url zum Text der Lizenz, sowie dem Dateiupload.
+
+Aus der Übersicht kann jedes Bild einzelnd gelöscht oder bearbeitet werden. Beim
+bearbeiten wird ein Dialog ähnlich dem Upload Dialog angezeigt, mit dem
+Unterschied, dass uberhalb des Formulars das Bild angezeigt wird und das
+Formular aufgeteilt ist in einen Teil für die Metadaten, die mit den aktuellen
+Werten vorausgefüllt werden, und einen weiteren Teil um die Bilddatei zu
+ersetzen. Jeder Formularteil kann einzelnd abgesendet werden. So kann ein Fehler
+in den Metadaten korrigiert werden, ohne dass die Datei erneut hochgeladen
+werden muss bzw. die Bilddatei in einem anderen Dateiformat oder anderer
+Bildgröße hochzuladen ohne die Metadaten zu verändern.
+
+Die Verwendung von Namen und Url zu einer Lizenz ist auf den ersten Blick eher
+unelegant und eine Liste von Lizenzen von der Art Propriätär, Gemeinfrei, CC0,
+CC-BY, CC-BY-SA, CC-BY-ND, CC-BY-NC, CC-BY-NC-SA und CC-BY-NC-ND mit bereits
+hinterlegten Verweisen auf die Lizenzen und im Falle der CC Lizenzen den Badges
+zum Rendern bei der Quellenangabe. Allerdings ist allein die Auflistung der CC
+Lizenzen ein Problem. Die aktuelle Fassung der CC Lizenzen ist 4.0, es
+existieren aber noch ältere Versionen die immer noch in Verwendung sind. Bei
+Lizenzen zählt die Version, unter der das Bild vom Urheber veröffentlicht wurde.
+Wenn der Urheber das Bild nicht unter der aktuelleren Version der jeweiligen CC
+Lizenz neu veröffentlicht hat, gilt weiterhin die ursprüngliche Version. Die
+Angabe der falschen Version der Lizenz bedeutet, dass die Lizenzbedingungen
+nicht erfüllt sind. Weiterhin existieren beispielsweise von den 3.0 Versionen
+auf verschiedene Juristiktionen portierte Versionen, die wiederum korrekt
+auseinandergehalten werden müssen. Weiterhin kann jede der Lizenzen adaptiert
+werden um zusätzliche Bedingunen hinzuzufügen. Die Verwaltung der Lizenzliste
+bedeutet einen großen Wartungsaufwand, da ständig neue Lizenzen auftauchen
+können. Außerdem macht die nötige Anzahl der Lizenzen in der Liste die Auswahl
+zu umständlich und verwirrend wenn man die Zielgruppe bedenkt. Da die Zielgruppe
+außerdem für den Umgang mit Lizenzen sensibilisiert werden soll ist der Kontakt
+mit dem Text der Lizenzen bzw. im Falle der CC Lizenzen wenigstens der
+Verständliche Zusammenfassung durchaus zielführend und kann außerdem die
+Wahrscheinlichkeit erhöhen dass CC Lizenzen für eigene Werke verwendet werden,
+da dafür die Existenz dieser bekannt sein muss.
 
 \subsubsection{Frontendintegration}
 
@@ -177,11 +307,39 @@ angehängt sind, die auf die Vorkommen der Bilder oben auf der Seite verlinken.
 
 \subsubsection{Seiteneditorintegration}
 
-
+Der Seiteneditor verfügte bereits über ein Image Element, für das ``src'' und
+``alt'' wie in HTML üblich befüllt werden konnten. Dieses Element wurde ersetzt
+durch eines, bei dem ein Bild aus der Bildverwaltung und die Darstellungsform
+auswählbar sind. Dazu wurde eine Angular Komponente geschaffen, die sowohl an
+dieser Stelle als auch bei der auswahl des Projektbildes verwendet wird. Die
+erste Fassung dieser Komponente ist eine einfache Dropdownliste, in der die
+Namen der Bilder aus der Bildverwaltung aufgeführt sind, da derzeit keine
+modalen Dialoge zur Verfügung stehen. Sobald sich das ändert, kann stattdessen
+ein Auswahldialog wie die Bildübersicht mit den selben Filteroptionen verwendet
+werden.
 
 \subsubsection{Datenbankintegration}
 
+\todo{insert image}
 
+Mit einer Datenbank, die die Bilddateien in Datenbank in den Tabellen speichern
+kann ist der erste Ansatz davon gebrauch zu machen. Daraus resultiert das Schema
+bestehend aus der Tabellengruppe ``image'', ``author'' und ``licence'' wie in
+der Abbildung dargestellt. Dies bedarf jedoch einem Datenbankzugriff für jedes
+darzustellende Bild, so dass das Schema statt dem Blob den Pfad zum Bild im
+Dateisystem beinhalten sollte, wie in ``image\_O1'', ``author\_O1'' und
+``licence\_O1'' dargestellt. Da die Bilder durch ihre UUID bereits eindeutig
+identifiziert werden ist die Verwendung einer datenbankeigenen Id reduntant,
+außerdem kann die UUID verwendet werden um den Pfad der Bilddatei im Dateisystem
+zu berechnen, solange dieser systematisch in Abhängigkeit von der UUID erzeugt
+wird, sodass das Speichern des Dateipfads ebenfalls reduntant ist. Das Ergebnis
+ist in der Tabellengruppe ``image\_O2'', ``author\_O2'' und ``licence\_O2'' zu
+sehen. Da das Abrufen aller Metadaten die häufigste Operation ist, lohnt es sich
+die Tabellengruppe zu denormalisieren um diese Operation ohne das zusammenführen
+mehrer Tabellen auszuführen zu können. Das Schema der resultierenden Tabelle ist
+in der Abbildung unter ``image\_O3'' zu sehen. Da das Projekt zum aktuellen
+Zeitpunkt noch Sqlite verwendet, ist diese Tabelle ausgelagert in eine JSON
+Datei im Bilderordner ausgelagert um die Last auf der Datenbank zu verringern.
 
 \subsubsection{Schemaeditorintegration}
 
