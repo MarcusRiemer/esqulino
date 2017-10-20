@@ -329,7 +329,25 @@ gleichzeitig festgelegt werden und ein anderes Seitenverhältnis als das des
 Bildes gewählt wird, führt dies zu einer Streckung des Bildes.
 
 Desweiteren ist die Skalierungsmethode eine wichtige Option. Für reguläre Bilder
-sollte zum Schrumpfen der Bilder eine qualitativ 
+sollte zum Schrumpfen der Bilder eine qualitativ hochwertige Interpolation
+verwendet werden während das vergrößern von Pixelart via Nearest Neighbor
+geschehen sollte. Da nach dem Erzeugen des Templates durch den Editor das Bild
+in der Bildverwaltung verändert werden kann, kann die richtige
+Interpolationsmethode nicht automatisch berechnet und im Template abgelegt
+werden, daher muss wie Wahl der korrekten Interpolationsmethode dem
+Seitenautoren überlassen werden.
+
+Diese Eigenschaften sowie die Auswahl des Darstellungstyps müssen sowohl für das
+Image Element als auch für Tabellen in denen Bilder angezeigt werden auswählbar
+sein.
+
+Das Image Element soll weiterhin in der Lage sein sich in Fließtext zu
+integrieren, daher ist für das Image Element zusätzlich die Auswahl des Float
+Typs mit den Optionen ``left'', ``right'' and ``none'' notwendig. Wollte man
+kleine Bilder im Fließtext unterbringen so käme noch die Auswahl des Display
+Typs zwischen ``block'' und ``inline-block'' hinzu, allerdings kann das Image
+Element derzeit nicht innerhalb eines Paragraphen verwendet werden, daher
+entfällt diese Auswahl.
 
 \subsubsection{Datenbankintegration}
 
@@ -354,7 +372,16 @@ in der Abbildung unter ``image\_O3'' zu sehen. Da das Projekt zum aktuellen
 Zeitpunkt noch Sqlite verwendet, ist diese Tabelle ausgelagert in eine JSON
 Datei im Bilderordner ausgelagert um die Last auf der Datenbank zu verringern.
 
-\todo{bilder im typsystem}
+In der derzeitigen Implementierung werden Bild-UUIDs in der Datenbank in
+regulären Text Feldern gespeichert und immer wenn der Wert eines Feldes dem
+regulären Ausdruck einer UUID genügt wird ein Bild gerendert. Wenn Wechsel der
+Datenbanktechnologie auf PostgreSQL erfolgt ist, kann ein Datentyp ImageId
+angelegt werden, dessen Wertebereich auf UUIDs beschränkt ist, sodass die
+Prüfung beim Rendervorgang auf den Datentyp der Spalte beschränkt werden kann
+und die Prüfung auf korrekte Struktur der UUID auf den Zeitpunkt des Einfügens
+in die Datenbank verschoben werden und der Autor einer Datenbank kann UUIDS in
+Tabellen rendern lassen, ohne dass versucht wird ein Bild an dieser Stelle
+darzustellen.
 
 %%% Local Variables:
 %%% mode: latex
