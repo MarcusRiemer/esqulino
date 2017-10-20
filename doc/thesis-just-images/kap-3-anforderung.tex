@@ -13,23 +13,18 @@ Hostsystem installierte zusätzlich installierte Software die Anwendung im
 Container beeinflusst, sodass der Einfluss betriebssystemspeziefischer
 Eigenheiten auf die Anwendung weitgehend vermieden werden kann.
 
-Zur Bildverwaltung gehöhren ein API\todo[author=mri]{Typo, Satzbau},
-die es ermöglicht, Bilder und essentielle Metadaten anzulegen,
-auszugeben, zu bearbeiten und zu löschen, eine Bibliothek, die die
-durch die API bereitgestellten Funktionen Serverseitig umsetzt und
-eine Frontendintegration, die dem Verwalter eines Projekts das
+Die Bildverwaltung besteht aus eine API, die es ermöglicht, Bilder und
+essentielle Metadaten anzulegen, auszugeben, zu bearbeiten und zu löschen, eine
+Bibliothek, die die durch die API bereitgestellten Funktionen Serverseitig
+umsetzt und eine Frontendintegration, die dem Verwalter eines Projekts das
 Anlegen, Betrachten, Modifizieren und Löschen der Bilder und Metadaten
-ermöglicht sowie die Verwendung der Bilder in Projektvorschau, dem
-Seiteneditor und den Datenbanktabellen.
+ermöglicht sowie die Verwendung der Bilder in Projektvorschau, dem Seiteneditor
+und den Datenbanktabellen.
 
 \subsection{Containerisierung}
 
 Das Projekt verwendet drei Ausprägungen von Images, jeweils eins für
 Produktivumgebung, Entwicklungsumgebung und Testumgebung.
-
-\todo[author=mri,inline]{Begründung hier, Erläuterung in den
-  Sektionen. Verweis auf Buildservices wie Travis oder Bitbucket
-  Pipelines}
 
 \subsubsection{Entwicklungsumgebung}
 
@@ -40,19 +35,20 @@ sofort im Container sichtbar wird und zum neucompilieren des Codes durch den im
 Entwicklungsmodus laufenden Server führt. So ist es möglich auf einem
 Entwicklungsgerät zu arbeiten ohne die Abhängigkeiten im Betriebssystem
 zu installieren und somit inkompatible Versionen von Abhängigkeiten mit
-anderen Projekten zu vermeiden. Weiterhin ist es so möglich unter Windows
+anderen Projekten zu vermeiden, ohne dass auf die vertraute Umgebung des eigenen
+Betriebssystem verzichtet werden muss. Weiterhin ist es so möglich unter Windows
 und MacOS zu entwickeln, da hier seitens Docker Werkzeuge zum Ausführen von
 Containern mittels der Linux Distrubution boot2docker in einer sehr
 minimalistischen durch die Werkzeuge verwalteten virtuellen Maschiene.
-
-\todo[author=mri,inline]{Nicht erwähnter Vorteil: Entwickler kann
-  seine gewohnte Umgebung weiternutzen}
 
 \subsubsection{Testumgebung}
 
 Das Testimage weist Ähnlichkeiten zum Entwicklungsimage auf, enthält
 aber noch den Chromium Browser, der im Headless Mode für Tests des Clients
-genutzt wird.
+genutzt wird. Diese Testumgebung kann genutzt werden um Tests lokal in einer
+Kontrollierten umgebung auszuführen, sowie von einem Contious Integration System
+wie Github Travis CI, Jenkins oder Bitbucket Pipelines, die die Tests auf jede
+aktualisierte Version des Quelltextes automatisch anwenden.
 
 \subsubsection{Produktivumgebung}
 
@@ -100,8 +96,20 @@ Verträge wie den zur Eröffnung eines Accounts einzugehen, wodurch sie von der
 Verwendung eigener Werke ausgeschlossen sind bis der Dateiupload implementiert
 ist, weshalb diese Importmethode als vorerst einzige ausscheidet.
 
-\todo{warum die admindatenbank nicht genommen wird: kann auch aus oeffentlichen datenbanken importieren,
-  freigabeprozess fuer eigene werke, vorauswahl, hoher aufwand}
+Die durch einen Administrator verwaltete Datenbank kann die Nachteile der
+öffentlichen Bilddatenbanken ausgleichen, da eigene Werke integriert werden
+können, ohne sie zur allgemeinen Nutzung freizugeben und Bilder aus
+öffentlichen Bilddatenbanken können manuell importiert werden. Sie bietet
+weiterhin einen Freigabeprozess für eigene Werke, da die Interaktion des
+Administrators notwendig ist. Genau das ist aber der entscheidende Nachteil: Die
+Arbeitslast, die auf den Administrator zukommt ist zu hoch. Angenommen jeder
+Lehrer, der SQLino in seinem Unterricht einsetzt wäre selbst Administrator für
+die Bilddatenbank. Weiterhin angenommen die Klassengröße wäre 30 Schüler und
+jeder Schüler würde im Schnitt pro Unterrichtsstunde 3 Bilder verwenden wollen
+die nicht in der Bilddatenbank enthalten sind, müsste besagter Lehrer pro
+Unterrichtsstunde 90 Bilder prüfen und die Daten des Bildes eintragen was pro
+Bild nur 30 Sekunden Zeit ließe, wenn besagte Lehrkraft sonst nichts anderes in
+dieser Unterrichtsstunde tun würde.
 
 Die zusammen mit der Bildverwaltung zu implementierende Variante ist daher der
 Dateiupload im Projekteditor. Der Import von Bildern aus Bilddatenbanken ist so,

@@ -13,7 +13,8 @@ seinen Unterprozessen die Existenz aller anderen auf dem System laufende
 Prozesse außer den eigenen Unterprozessen vor, schränkt für den Prozess und
 seine Unterprozesse die Rechte des Systembenutzers ein und stellt nur
 ausgewählte Geräte, wie beispielsweise ein eigenes Netzwerkinterface, zur
-Verfügung. \cite{FreeBSD-Jail-doc} \cite{FreeBSD-Jail-developer-comments} \cite{FreeBSD-Jail-paper}
+Verfügung. \cite{FreeBSD-Jail-doc} \cite{FreeBSD-Jail-developer-comments}
+\cite{FreeBSD-Jail-paper}
 
 Bei Docker heißen die Jails Container und werden aus Vorlagen den Images
 erzeugt, man kann sich die Beziehung zwischen Containern und Images in etwa so
@@ -41,7 +42,8 @@ beim entfernen des Containers gelöscht wird. Volumes sind Verzeichnisse im
 Hostsystem, die an eine bestimmte Stelle des Containers gemappt werden und
 gleichzeitig in mehreren Containern eingebunden sein können. Standardmäßig
 verwendet Docker OverlayFS als Storage Driver, in Produktivumgebungen werden
-aber auch Device Mapper und AUFS als Storage Driver verwendet \cite{docker-storage-driver}.
+aber auch Device Mapper und AUFS als Storage Driver verwendet
+\cite{docker-storage-driver}.
 
 Ein Projekt wird in Services aufgeteilt, wie z.B. Reverse-Proxy, Webapp,
 API-Server, Datenbank und Static-File-Server, die dann in Containern isoliert
@@ -89,7 +91,15 @@ Repositories zu lagern und bei Bedarf auf beliebiger Intrastruktur mit
 installierem Docker deployen als auch Open Source Projekten eine lauffähige
 konfigurierte Version der Software inklusive aller benötigten Abhängigkeiten 
 
-\subsection{TODO: Short description of SQLino}
+\subsection{Short description of SQLino}
+
+SQLino ist der Prototyp einer Lehr-Entwicklungsumgebung für SQL und HTML, die
+sich statt an professionelle Anwender an Einsteiger richtet und verzichtet daher
+auf die Komplexität, die für Entwicklungsumgebungen im professionellen Umfeld
+sonst üblich ist. SQLino verwendet grafische per Drag \`n Drop kombinierbare
+Blockstrukturen als Repräsenation von Sprachelementen, um Syntaxfehler
+auszuschließen und nicht vorraussetzen, dass die jeweiligen Sprachelemente
+bereits auswendig gelernt sind.
 
 \subsection{TODO:RESTFUL API} Eine RESTFUL API ist eine, die
 zustandsfreie HTTP Requests verwendet. Ein API
@@ -113,15 +123,17 @@ oder ein von allen Folgerequests verwendeter Namensraum ausgewählt
 werden kann. Jeder Request muss alle zu seiner Verarbeitung
 notwendigen Informationen selbst beinhalten.
 
-\subsection{TODO: MVC} Model View Controller ist ein zum bearbeiten
-von Webrequests geeignetes Konzept.  Daten werden nach durch ein Model
-beschrieben und strukturiert und verwaltet, ihre Darstellung durch den
-View festgelegt und die Webrequests vom Controller behandelt. So
-werden Datenhaltung, Darstellung und Buisiness Logic von einander
+\subsection{MVC}
+Model View Controller ist ein zum bearbeiten von Webrequests geeignetes Konzept.
+Daten werden nach durch ein Model beschrieben und strukturiert und verwaltet,
+ihre Darstellung durch den View festgelegt und die Webrequests vom Controller
+behandelt. So werden Datenhaltung, Darstellung und Buisiness Logic von einander
 getrennt und können bis zu einem gewissen Grad unabhängig von einander
 überarbeitet werden.
 
 \subsection{TODO: Short description of Angular}
+
+\todo{}
 
 %%% Local Variables:
 %%% mode: latex
