@@ -25,6 +25,10 @@ export class ImageListComponent {
 
     currentDisplayType = this.availableDisplayTypes[0];
 
+    imageNameFilter = "";
+    authorNameFilter = "";
+    licenceNameFilter = "";
+
     constructor(
         private _serverApi: ServerApiService,
         private _http: Http,
@@ -55,7 +59,14 @@ export class ImageListComponent {
     }
 
     get images() {
-        return (this._imageService.images);
+        if (!this._imageService.images) return [];
+
+        return ((this._imageService.images).filter(
+            img =>
+                (this.imageNameFilter == "" || img.name.toLowerCase().indexOf(this.imageNameFilter.toLowerCase()) >= 0) &&
+                (this.authorNameFilter == "" || img.authorName.toLowerCase().indexOf(this.authorNameFilter.toLowerCase()) >= 0) &&
+                (this.licenceNameFilter == "" || img.licenceName.toLowerCase().indexOf(this.licenceNameFilter.toLowerCase()) >= 0)
+        ));
     }
 
 }

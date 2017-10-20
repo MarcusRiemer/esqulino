@@ -1,4 +1,4 @@
-SELECT gefangen.gefangen_id, pokedex.nummer, pokedex.name, gefangen.spitzname, gefangen.staerke, typ.typ_name
+SELECT gefangen.gefangen_id, pokedex.nummer, pokedex.name, gefangen.spitzname, gefangen.staerke, typ.typ_name, pokedex.bild
 FROM gefangen
 	JOIN pokedex
 	JOIN typ
