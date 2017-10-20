@@ -318,6 +318,19 @@ modalen Dialoge zur Verfügung stehen. Sobald sich das ändert, kann stattdessen
 ein Auswahldialog wie die Bildübersicht mit den selben Filteroptionen verwendet
 werden.
 
+Die Bilder in der Bildverwaltung sind nicht notwendigerweise in der Größe
+hintelegt, in der sie Dargestellt werden sollen. Bei Bildern im SVG Format
+wird außerdem die Boundingbox vom Browser nicht als Größe des Bildes verwendet
+und somit in voller Bildschirmbreite dargestellt. Deshalb benötigt der
+Seiteneditor die Möglichkeit Einfluss auf einige Darstellungsoptionen zu nehmen.
+
+Es sollte möglich sein, entweder die Höhe oder Breite festzulegen. Wenn beide
+gleichzeitig festgelegt werden und ein anderes Seitenverhältnis als das des
+Bildes gewählt wird, führt dies zu einer Streckung des Bildes.
+
+Desweiteren ist die Skalierungsmethode eine wichtige Option. Für reguläre Bilder
+sollte zum Schrumpfen der Bilder eine qualitativ 
+
 \subsubsection{Datenbankintegration}
 
 \todo{insert image}
@@ -341,13 +354,7 @@ in der Abbildung unter ``image\_O3'' zu sehen. Da das Projekt zum aktuellen
 Zeitpunkt noch Sqlite verwendet, ist diese Tabelle ausgelagert in eine JSON
 Datei im Bilderordner ausgelagert um die Last auf der Datenbank zu verringern.
 
-\subsubsection{Schemaeditorintegration}
-
-
-
-\subsubsection{Queryeditorintegration}
-
-
+\todo{bilder im typsystem}
 
 %%% Local Variables:
 %%% mode: latex
