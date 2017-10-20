@@ -16,6 +16,10 @@
         "text": "Hier stelle ich mein Pokémon mit der ID {{ get.id }} vor: <strong>{{ query.pokemon.spitzname }}</strong>. Es ist ein {{ query.pokemon.name }} und {{ query.pokemon.staerke }} Punkte stark."
       },
       {
+        "type": "paragraph",
+        "text": "{% include \"image\" src: query.pokemon.bild, type: \"figure\" %} "
+      },
+      {
         "type": "form",
         "children": [
           {
