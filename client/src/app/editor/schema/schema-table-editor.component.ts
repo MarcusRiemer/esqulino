@@ -238,7 +238,9 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
    */
   saveBtn() {
     console.log("Save!");
+    // Do we need to create a new table or alter an existing table?
     if (this.isNewTable) {
+      // Create new table
       if (this.table.name != "") {
         let desc = this.table.toModel();
         let tableToSend = new Table(desc, desc.columns, desc.foreign_keys);
@@ -261,6 +263,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         alert("Tabellenname ist leer!");
       }
     } else {
+      // Alter existing table
       this.dbErrorCode = -1;
       this.commandsHolder.prepareToSend();
       let schemaref = this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder)

@@ -20,6 +20,10 @@ export class TableEditorSidebarStackComponent {
     return (this._schemaService.getCurrentlyEditedStack());
   }
 
+  public get isStackAvailable() {
+    return (this._schemaService.getCurrentlyEdited());
+  }
+
   /**
    * Function to click on the stack list to go to a position
    * @param index - Index of stack to jump to
