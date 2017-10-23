@@ -3,6 +3,7 @@
 * Neu: Prototypische Bilderverwaltung
 * Neu: Quellenangaben für Daten (+ ggfs. Personen, ...)
 * Neu: Portierung auf Rails 5.1
+* Neu: Vorschau für Abfrageergebnisse
 * Neu: Verschiedene Projektvorschläge
   * Drei Fragezeichen
   * Wikidata Einträge für Personen, Ereignisse, ...
