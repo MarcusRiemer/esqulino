@@ -25,7 +25,26 @@ export class SchemaService {
 
   private _currentlyEdited: CurrentlyEdited = undefined;
 
+  /**
+   * If a HTTP request is in progress, this is it.
+   */
+  private _httpRequest: Observable<string[][]>;
 
+  /**
+   * @param _http Used to do HTTP requests
+   * @param _server Used to figure out paths for HTTP requests
+   */
+  constructor(
+    private _http: Http,
+    private _projectService: ProjectService,
+    private _server: ServerApiService
+  ) {
+  }
+
+
+  /**
+   * Set a new table as a currently edited table.
+   */
   initCurrentlyEdit(table: Table) {
     let desc = table.toModel();
     this._currentlyEdited = {};
@@ -48,6 +67,9 @@ export class SchemaService {
     return this._currentlyEdited.stack
   }
 
+  /**
+   * Retrieves the state of the currently edited table.
+   */
   getCurrentlyEdited(): CurrentlyEdited {
     return this._currentlyEdited;
   }
@@ -55,23 +77,6 @@ export class SchemaService {
   clearCurrentlyEdited() {
     this._currentlyEdited = undefined;
   }
-
-  /**
-   * If a HTTP request is in progress, this is it.
-   */
-  private _httpRequest: Observable<string[][]>;
-
-  /**
-   * @param _http Used to do HTTP requests
-   * @param _server Used to figure out paths for HTTP requests
-   */
-  constructor(
-    private _http: Http,
-    private _projectService: ProjectService,
-    private _server: ServerApiService
-  ) {
-  }
-
 
   /**
    * Function to get table entries from a table with limit and offset
