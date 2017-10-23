@@ -19,7 +19,8 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         }
       },
       sidebar: {
-        category: "Regulärer Ausdruck"
+        category: "Regulärer Ausdruck",
+        displayName: "Regulärer Ausdruck",
       }
     },
     {
@@ -43,7 +44,33 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         }
       },
       sidebar: {
-        category: "Regulärer Ausdruck"
+        category: "Regulärer Ausdruck",
+        displayName: "Konstante 'a'",
+      }
+    },
+    {
+      describedType: {
+        languageName: "regex",
+        typeName: "constant"
+      },
+      defaultNode: {
+        language: "regex",
+        name: "expr",
+        children: {
+          "singleExpression": [
+            {
+              language: "regex",
+              name: "constant",
+              properties: {
+                value: "b"
+              }
+            }
+          ]
+        }
+      },
+      sidebar: {
+        category: "Regulärer Ausdruck",
+        displayName: "Konstante 'b'",
       }
     },
     {
@@ -76,7 +103,8 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         }
       },
       sidebar: {
-        category: "Regulärer Ausdruck"
+        category: "Regulärer Ausdruck",
+        displayName: "Alternative"
       }
     }
   ]

@@ -27,4 +27,11 @@ export class Block {
   get qualifiedName() {
     return (this._description.describedType);
   }
+
+  /**
+   * @return A friendly name that should be displayed to the user.
+   */
+  get displayName() {
+    return (this._description.sidebar.displayName || this.qualifiedName.typeName);
+  }
 }
