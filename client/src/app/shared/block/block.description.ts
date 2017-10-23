@@ -15,6 +15,7 @@ export interface BlockDescription {
    */
   sidebar: {
     category: string;
+    displayName?: string;
   };
 
   /**

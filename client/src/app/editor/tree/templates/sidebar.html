@@ -4,10 +4,10 @@
     <h5>{{ lang.languageName }}</h5>
     <ul>
       <li *ngFor="let block of lang.availableBlocks"
-          (dragstart)="startDrag($event, lang,  block.qualifiedName)"
+          (dragstart)="startDrag($event, block.defaultNode)"
           draggable="true"
           class="rounded">
-        {{ block.qualifiedName.typeName }}
+        {{ block.displayName }}
       </li>
     </ul>
   </div>

@@ -28,12 +28,13 @@ export class TreeSidebarComponent {
   }
 
   /**
-   * @return The user has decided to start dragging something from the sidebar.
+   * The user has decided to start dragging something from the sidebar.
    */
-  startDrag(evt: DragEvent, language: LanguageModel, type: QualifiedTypeName) {
+  startDrag(evt: DragEvent, desc: NodeDescription) {
     try {
+      console.log("Dragging", desc);
       this._dragService.dragStart(evt, {
-        draggedDescription: language.getDefaultNode(type),
+        draggedDescription: desc,
         origin: "sidebar"
       });
     } catch (e) {
