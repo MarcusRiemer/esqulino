@@ -7,6 +7,16 @@ import { BlockDescription } from './block.description'
  */
 export interface LanguageModelDescription {
   /**
+   * The internal ID of this language model.
+   */
+  id: string;
+
+  /**
+   * The name that should be displayed to the user.
+   */
+  displayName: string;
+
+  /**
    * The actual language that is augmented.
    */
   language: LanguageDescription;

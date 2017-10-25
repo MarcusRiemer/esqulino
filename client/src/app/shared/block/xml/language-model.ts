@@ -4,6 +4,8 @@ import { LanguageModelDescription } from '../language-model.description'
 import { BlockDescription } from '../block.description'
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
+  id: "xml",
+  displayName: "XML",
   language: LANGUAGE_DESCRIPTION,
   blocks: [
     {

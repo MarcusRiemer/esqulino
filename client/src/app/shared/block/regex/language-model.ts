@@ -4,6 +4,8 @@ import { LanguageModelDescription } from '../language-model.description'
 import { BlockDescription } from '../block.description'
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
+  id: "regex",
+  displayName: "Reguläre Ausdrücke",
   language: LANGUAGE_DESCRIPTION,
   blocks: [
     {
