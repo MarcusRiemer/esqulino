@@ -243,14 +243,27 @@ export class Tree {
   private _root: Node;
 
   constructor(rootDesc: NodeDescription) {
-    this._root = new Node(rootDesc, this);
+    if (rootDesc) {
+      this._root = new Node(rootDesc, this);
+    }
   }
 
   /**
-   * The root for the tree.
+   * @return The root for the tree.
    */
   get rootNode(): Node {
+    if (this.isEmpty) {
+      throw new Error("No root node available, tree is empty");
+    }
+
     return (this._root);
+  }
+
+  /**
+   * @return True if this tree is actually empty.
+   */
+  get isEmpty(): boolean {
+    return (!this._root);
   }
 
   /**
@@ -349,7 +362,7 @@ export class Tree {
   deleteNode(loc: NodeLocation): Tree {
     // The root can only be replaced, not deleted.
     if (loc.length === 0) {
-      throw new Error(`The root node can not be deleted.`);
+      return (new Tree(undefined));
     } else {
       // Build the description of the current tree to insert the new node in it
       let newDescription = this.toModel();
