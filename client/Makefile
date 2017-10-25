@@ -4,11 +4,12 @@
 include ../Makefile.common
 
 NG_BIN = node_modules/.bin/ng
-NGC_BIN = node_modules/.bin/ngc
 NODE_BIN = node
 
-BUNDLE_FILES = $(shell find dist/ -iname "*bundle*.js" 2> /dev/null)
+BUNDLE_FILES = $(shell find dist/browser -iname "*bundle*.js" 2> /dev/null)
 BUNDLE_FILES_GZIP = $(addsuffix .gz, $(BUNDLE_FILES))
+
+CLIENT_ALL_SOURCES = $(shell find src 2> /dev/null) server.ts webpack.server.config.js package.json package-lock.json
 
 TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless
@@ -20,7 +21,6 @@ clean : msg-pre-clean
 
 dist : msg-pre-build
 	$(NG_BIN) build --prod $(NG_OPTS)
-	$(NGC_BIN)
 
 dist-dev : msg-pre-build
 	$(NG_BIN) build $(NG_OPTS)
@@ -38,12 +38,16 @@ clean-deps : msg-pre-clean-deps
 # Universal Rendering
 ##################################
 
-universal-run:
-	$(NODE_BIN) dist/server.js
-
-universal-compile:
+dist/server.js: $(CLIENT_ALL_SOURCES)
+	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Server Build) ..."; $(TPUT_BIN) sgr0
 	node_modules/.bin/ng build --prod --app 1 --output-hashing=false
 	node_modules/.bin/webpack --config webpack.server.config.js --progress
+
+universal-run: dist/server.js
+	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0
+	$(NODE_BIN) dist/server.js
+
+universal-compile: dist/server.js
 
 %.gz : %
 	gzip --keep $^
@@ -69,4 +73,4 @@ msg-pre-clean-deps :
 msg-pre-install-deps :
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Installing dependencies ..."; $(TPUT_BIN) sgr0
 
-.PHONY : all clean dist dist-dev msg-pre-build video-stills
+.PHONY : all clean dist dist-dev msg-pre-build msg-pre-build-universal video-stills
