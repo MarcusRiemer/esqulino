@@ -3,6 +3,8 @@ import { LanguageModel } from './language-model'
 import { BlockDescription } from './block.description'
 
 const langEmptyBlocks: LanguageModelDescription = {
+  id: "emptyblocks",
+  displayName: "Empty Blocks",
   language: {
     name: "emptyBlocks",
     generators: [],

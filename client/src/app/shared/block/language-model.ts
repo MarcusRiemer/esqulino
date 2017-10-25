@@ -10,8 +10,13 @@ import { LanguageModelDescription } from './language-model.description'
 export class LanguageModel {
   private _language: Language;
   private _blocks: Block[];
+  private _displayName: string;
+  private _id: string;
 
   constructor(desc: LanguageModelDescription) {
+    this._id = desc.id;
+    this._displayName = desc.displayName;
+
     this._language = new Language(desc.language);
     this._blocks = desc.blocks.map(blockDesc => new Block(blockDesc));
   }
