@@ -13,21 +13,21 @@ import { Table } from '../../shared/schema'
 export class TableEditorSidebarControlsComponent {
   public static get SIDEBAR_IDENTIFIER() { return "schema-table-editor-controls" };
 
-  private _projectTables: Table[];
+  public constructor(private _projectService: ProjectService) { }
 
-  public constructor(projectService: ProjectService) {
-    projectService.activeProject
-      .first()
-      .subscribe(p => this._projectTables = p.schema.tables);
-  }
-
+  /**
+   * @return A list of types that can be used by the user
+   */
   public get availableColumnTypes() {
     return ([
       "TEXT", "INTEGER", "FLOAT", "BOOLEAN", "URL"
     ]);
   }
 
-  public get projectTables() {
-    return (this._projectTables);
+  /**
+   * @return All tables that are available
+   */
+  public get project() {
+    return (this._projectService.activeProject);
   }
 }
