@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "skipLibCheck": true,
     "target": "es5",
     "lib": [
       "es2017.object",

@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router'
 import { editorRoutes } from './editor/editor.routes'
 import { frontRoutes } from './front/front.routes'
 
-const routes: Routes = [
+const AppRoutes: Routes = [
   {
     path: '',
     redirectTo: '/about',
@@ -21,4 +21,4 @@ const routes: Routes = [
   }
 ]
 
-export const routing = RouterModule.forRoot(routes);
+export const routing = RouterModule.forRoot(AppRoutes);
