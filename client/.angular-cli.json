@@ -30,6 +30,7 @@
       }
     },
     {
+      "platform": "server",
       "root": "src",
       "outDir": "dist/server",
       "assets": [
