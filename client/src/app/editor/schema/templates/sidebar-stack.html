@@ -1,6 +1,8 @@
-<div class="list-group">
+<div *ngIf="isStackAvailable"
+     class="list-group">
   <!--List of stack entrys-->
-  <button type="button" class="list-group-item list-group-item-action active">
+  <button type="button"
+          class="list-group-item list-group-item-action active">
 	  <span class="badge badge-default badge-pill">{{ commandsHolder.commands.length }}</span> Bearbeitungsschritte
   </button>
   <button type="button"
