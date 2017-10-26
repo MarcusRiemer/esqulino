@@ -6,13 +6,13 @@ import { AsyncSubject } from 'rxjs/AsyncSubject'
 import { Observable } from 'rxjs/Observable'
 
 import { ServerApiService } from '../shared/serverapi.service'
-import {
-  Project, ProjectDescription
-} from '../shared/project'
+import { Project, ProjectDescription } from '../shared/project'
 
 import {
   Model, Query, QueryResult, QueryRunErrorDescription
 } from '../shared/query/index'
+
+import { CODE_RESOURCES } from '../shared/syntaxtree/examples'
 
 export { Project, ProjectDescription }
 
@@ -76,7 +76,18 @@ export class ProjectService {
     // Build the HTTP-request
     const url = this._server.getProjectUrl(id);
     this._httpRequest = this._http.get(url)
-      .map(res => new Project(res.json()));
+      .map(res => {
+        const desc: ProjectDescription = res.json();
+
+        // TODO: This is a dirty hack to stuff the same resources
+        //       into every project. This of course needs to be
+        //       moved into the server.
+        if (desc.id.toLocaleLowerCase().indexOf("ast") >= 0) {
+          desc.codeResources = CODE_RESOURCES;
+        }
+
+        return (new Project(desc));
+      });
 
     // And execute it by subscribing to it.
     const subscription = this._httpRequest
@@ -101,7 +112,6 @@ export class ProjectService {
         // Reset the internal to be as blank as possible
         this._subject = new BehaviorSubject<Project>(undefined);
         this._httpRequest = undefined;
-
       })
   }
 

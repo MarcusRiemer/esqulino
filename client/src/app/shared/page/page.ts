@@ -43,7 +43,7 @@ export class Page extends ProjectResource {
   private _renderer: Renderer;
 
   constructor(desc: PageDescription, project?: Project) {
-    super(project, desc);
+    super(desc, project);
 
     // We only render stuff via liquid for the moment
     this._renderer = new LiquidRenderer();
@@ -356,6 +356,9 @@ export class Page extends ProjectResource {
     );
   }
 
+  /**
+   * @return Serialized description of this page.
+   */
   toModel(): PageDescription {
     // Some attributes are unconditional
     const toReturn: PageDescription = {

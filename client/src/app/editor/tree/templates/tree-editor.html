@@ -48,13 +48,9 @@
     <div class="card mb-3">
       <div class="card-body">
         <h4 class="card-title">Datenmodell</h4>
-        <pre *ngIf="!(currentTree | async).isEmpty">{{ (currentTree | async).toModel() | json }}</pre>
+        <pre *ngIf="!(currentTree | async).isEmpty"
+             [innerText]="(currentTree | async).toModel() | json"></pre>
       </div>
     </div>
-
-    <textarea [(ngModel)]="rawNodeData"
-              [rows]="rawNodeDataLineNum"
-              class="form-control">
-    </textarea>
   </div>
 </div>

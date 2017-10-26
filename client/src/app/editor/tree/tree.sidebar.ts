@@ -3,8 +3,11 @@ import { Component, Input, OnInit, OnDestroy, Inject } from '@angular/core'
 import { QualifiedTypeName, NodeDescription, NodeType } from '../../shared/syntaxtree'
 import { LanguageModel } from '../../shared/block'
 
+import { SIDEBAR_MODEL_TOKEN } from '../editor.token'
+
 import { DragService } from './drag.service'
 import { LanguageService } from './language.service'
+import { TreeEditorService } from './editor.service'
 
 /**
  * The sidebar hosts elements that can be dragged onto the currently active
@@ -22,6 +25,7 @@ export class TreeSidebarComponent {
   public static get SIDEBAR_IDENTIFIER() { return "tree" };
 
   constructor(
+    @Inject(SIDEBAR_MODEL_TOKEN) private _treeEditorService: TreeEditorService,
     private _languageService: LanguageService,
     private _dragService: DragService
   ) {

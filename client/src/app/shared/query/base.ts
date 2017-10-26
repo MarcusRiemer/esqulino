@@ -41,7 +41,7 @@ export class Query extends ProjectResource implements SyntaxTree.RemovableHost, 
    * Stores all basic information about a string.
    */
   constructor(schema: Schema, model: Model.QueryDescription, project?: Project) {
-    super(project, model);
+    super(model, project);
     this.schema = schema;
     this._singleRow = !!model.singleRow;
 
