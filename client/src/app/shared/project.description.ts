@@ -1,6 +1,7 @@
 import { Model } from "./query"
 import { TableDescription } from "./schema"
 import { PageDescription } from "./page/page.description"
+import { CodeResourceDescription } from './syntaxtree/coderesource.description'
 import {
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from "./resource.description"
@@ -92,9 +93,10 @@ export interface ProjectDescription extends ProjectListDescription {
   schema?: TableDescription[]
   availableDatabases?: { [id: string]: AvailableDatabaseDescription }
   activeDatabase?: string
+  sources?: SourceDescription[]
   queries?: Model.QueryDescription[]
-  pages?: PageDescription[],
-  sources?: SourceDescription[],
+  pages?: PageDescription[]
+  codeResources?: CodeResourceDescription[]
 }
 
 /**

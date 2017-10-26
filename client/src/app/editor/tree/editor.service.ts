@@ -195,4 +195,11 @@ export class TreeEditorService {
   get currentGeneratedCode(): Observable<string> {
     return (this._generatedCode);
   }
+
+  /**
+   * @return The language that is currently in use.
+   */
+  get currentLanguage(): Observable<Language> {
+    return (this._language);
+  }
 }

@@ -1,55 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Tree, Node, NodeDescription, AvailableLanguages } from '../../shared/syntaxtree';
 
 import { SidebarService } from '../sidebar.service';
 import { ToolbarService } from '../toolbar.service';
+import { ProjectService, Project } from '../project.service'
 
 import { TreeSidebarComponent } from './tree.sidebar';
 import { TreeEditorService } from './editor.service';
 import { DragService } from './drag.service';
-
-const astDesc: NodeDescription = {
-  language: "xml",
-  name: "node",
-  children: {
-    "nodes": [
-      {
-        language: "xml",
-        name: "node",
-        children: {
-          "attributes": [
-            {
-              language: "xml",
-              name: "attribute",
-              properties: {
-                "key": "leaf",
-                "value": "true",
-              }
-            }
-          ]
-        },
-        properties: {
-          "name": "duper",
-        }
-      }
-    ],
-    "attributes": [
-      {
-        language: "xml",
-        name: "attribute",
-        properties: {
-          "key": "cool",
-          "value": "very"
-        }
-      }
-    ]
-  },
-  properties: {
-    "name": "super"
-  }
-};
 
 @Component({
   templateUrl: 'templates/tree-editor.html',
@@ -60,11 +20,19 @@ export class SyntaxTreeEditorComponent implements OnInit {
 
   private _languages = AvailableLanguages;
 
+  /**
+   * Subscriptions that need to be released
+   */
+  private _subscriptionRefs: any[] = [];
+
+
   constructor(
     private _sidebarService: SidebarService,
     private _toolbarService: ToolbarService,
     private _dragService: DragService,
-    private _treeService: TreeEditorService
+    private _treeService: TreeEditorService,
+    private _routeParams: ActivatedRoute,
+    private _projectService: ProjectService
   ) {
   }
 
@@ -73,16 +41,28 @@ export class SyntaxTreeEditorComponent implements OnInit {
     this._toolbarService.resetItems();
     this._toolbarService.savingEnabled = false;
 
-    const constructItem = this._toolbarService.addButton('construct', 'Baum Erstellen', 'tree', 'r');
-    constructItem.onClick.subscribe(() => this.loadRawNode());
+    let subRef = this._routeParams.params.subscribe(params => {
+      const codeResourceId = params['resourceId'];
+      if (codeResourceId) {
+        const codeResource = this._projectService.cachedProject.getCodeResourceById(codeResourceId);
+        this._treeService.replaceTree(codeResource.syntaxTree);
+      } else {
+        this._treeService.replaceTree(new Tree(undefined));
+      }
 
-    this.rawNodeData = JSON.stringify(astDesc, null, 2);
-    this.loadRawNode();
-
-    this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this.peekTree);
-
-    this._treeService.setLanguage(this.currentLanguage);
+      this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this._treeService);
+      this._treeService.setLanguage(this.currentLanguage);
+    });
   }
+
+  /**
+   * Freeing all subscriptions
+   */
+  ngOnDestroy() {
+    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
+    this._subscriptionRefs = [];
+  }
+
 
   /**
    * When something draggable enters the editor area itself there is no
@@ -94,31 +74,10 @@ export class SyntaxTreeEditorComponent implements OnInit {
   }
 
   /**
-   * Constructs a new tree from immediate JSON input the user has given.
-   */
-  private loadRawNode() {
-    try {
-      const desc = JSON.parse(this.rawNodeData);
-      this._treeService.replaceTree(desc);
-      this.rawNodeData = JSON.stringify(this.peekTree.toModel(), null, 2);
-    }
-    catch (err) {
-      alert(err);
-    }
-  }
-
-  /**
    * @return The drag service that is responsible for this editor.
    */
   get dragService() {
     return (this._dragService);
-  }
-
-  /**
-   * @return The number of lines the raw input currently has.
-   */
-  get rawNodeDataLineNum() {
-    return (this.rawNodeData.split("\n").length);
   }
 
   /**

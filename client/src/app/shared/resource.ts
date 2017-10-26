@@ -40,7 +40,7 @@ export abstract class ProjectResource implements ApiVersion, Saveable {
     saveRequired: this._saveRequired
   });
 
-  constructor(project: Project, desc: ProjectResourceDescription) {
+  constructor(desc: ProjectResourceDescription, project: Project) {
     this._id = desc.id;
     this._name = desc.name;
     this._project = project;
