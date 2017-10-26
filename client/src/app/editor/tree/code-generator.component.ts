@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { TreeService } from './tree.service'
+import { TreeEditorService } from './editor.service'
 
 /**
  * Shows a compiled AST.
@@ -11,7 +11,7 @@ import { TreeService } from './tree.service'
 })
 export class CodeGeneratorComponent {
 
-  constructor(private _treeService: TreeService) { }
+  constructor(private _treeService: TreeEditorService) { }
 
   get generated() {
     return (this._treeService.currentGeneratedCode);

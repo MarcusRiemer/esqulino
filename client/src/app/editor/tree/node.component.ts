@@ -11,7 +11,7 @@ import { Node, NodeLocation, Tree } from '../../shared/syntaxtree';
 
 import { DEFAULT_ANIMATION } from './node.animation'
 import { DragService } from './drag.service';
-import { TreeService } from './tree.service'
+import { TreeEditorService } from './editor.service'
 
 // These states are available for animation
 type DropTargetAnimationStates = "available" | "none" | "self";
@@ -63,7 +63,7 @@ export class NodeComponent implements OnChanges {
   constructor(
     private _dragService: DragService,
     private _cdRef: ChangeDetectorRef,
-    private _treeService: TreeService
+    private _treeService: TreeEditorService
   ) { }
 
   /**
@@ -100,7 +100,7 @@ export class NodeComponent implements OnChanges {
       },
       {
         location: this.node.location,
-        treeService: this._treeService
+        treeEditorService: this._treeService
       }
     );
   }

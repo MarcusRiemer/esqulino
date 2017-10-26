@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
 import { Node } from '../../shared/syntaxtree';
 
 import { DragService } from './drag.service';
-import { TreeService } from './tree.service';
+import { TreeEditorService } from './editor.service';
 
 
 /**
@@ -28,7 +28,7 @@ export class NodeChildrenComponent {
 
   constructor(
     private _dragService: DragService,
-    private _treeService: TreeService
+    private _treeService: TreeEditorService
   ) { }
 
   /**

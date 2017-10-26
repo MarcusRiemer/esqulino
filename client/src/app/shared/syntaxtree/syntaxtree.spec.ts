@@ -156,7 +156,14 @@ describe('AST: Basic Operations', () => {
     expect(t.rootNode.children["test"][1].nodeParent).toBe(t.rootNode);
   });
 
-  it('Correctly determines locations', () => {
+  it('Locating: Throws on empty trees', () => {
+    const t = new Tree(undefined);
+    expect(t.isEmpty).toEqual(true);
+
+    expect(() => t.locate([])).toThrowError();
+  });
+
+  it('Locating: Correctly finds existing paths', () => {
     const treeDesc: NodeDescription = {
       language: "lang",
       name: "r",
@@ -197,7 +204,7 @@ describe('AST: Basic Operations', () => {
     expect(t.rootNode.children["b"][0].children["d"][1].location).toEqual([["b", 0], ["d", 1]]);
   });
 
-  it('Correctly does lookups for locations', () => {
+  it('Locating: Correctly does lookups', () => {
     const treeDesc: NodeDescription = {
       language: "lang",
       name: "r",
@@ -236,7 +243,7 @@ describe('AST: Basic Operations', () => {
     expect(t.rootNode.children["b"][0].children["d"][1]).toBe(t.locate([["b", 0], ["d", 1]]));
   });
 
-  it('Throws on invalid locations', () => {
+  it('Locating: Throws on invalid locations', () => {
     const treeDesc: NodeDescription = {
       language: "lang",
       name: "r",
@@ -271,7 +278,7 @@ describe('AST: Basic Operations', () => {
     expect(() => t.locate([["b", 0], ["a", 0]])).toThrowError();
   });
 
-  it('Throws on nodes that have been removed', () => {
+  it('Locating: Throws on nodes that have been removed', () => {
     const treeDesc: NodeDescription = {
       language: "lang",
       name: "r",
@@ -560,7 +567,18 @@ describe('AST: Basic Operations', () => {
     expect(curr.rootNode.children["a"][0].typeName).toEqual("new");
   });
 
-  it('Error: Inserting something at the root node', () => {
+  it('Inserting something at the root of an empty tree is a replacement', () => {
+    const prev = new Tree(undefined);
+    expect(prev.isEmpty).toBe(true);
+
+    const curr = prev.insertNode([], { language: "lang", name: "new" });
+
+    expect(curr.isEmpty).toBe(false);
+    expect(curr.rootNode.languageName).toEqual("lang");
+    expect(curr.rootNode.typeName).toEqual("new");
+  });
+
+  it('Error: Inserting something at an existing root node', () => {
     const treeDesc: NodeDescription = {
       language: "lang",
       name: "r",
@@ -636,6 +654,28 @@ describe('AST: Basic Operations', () => {
     const prev = new Tree(treeDesc);
     const curr = prev.deleteNode([]);
 
+    expect(prev).not.toBe(curr);
     expect(curr.isEmpty).toEqual(true);
+  });
+
+  it('Deleting the root and then placing a new root', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.deleteNode([]);
+
+    expect(prev).not.toBe(curr);
+    expect(curr.isEmpty).toBe(true);
+
+    const newRoot = curr.replaceNode([], {
+      language: "lang",
+      name: "r",
+    });
+
+    expect(newRoot).not.toBe(curr);
+    expect(newRoot.isEmpty).toBe(false);
   });
 });

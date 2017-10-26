@@ -16,6 +16,10 @@ const langEmptyBlocks: LanguageModelDescription = {
             children: {
               "cat_a": {
                 type: "allowed",
+                childCount: {
+                  minOccurs: 1,
+                  maxOccurs: Infinity
+                },
                 nodeTypes: ["a"]
               }
             }
@@ -66,5 +70,12 @@ describe("LanguageModel", () => {
 
     expect(l.missingBlocks.length).toEqual(1);
     expect(l.missingBlocks[0]).toEqual({ languageName: "emptyBlocks", typeName: "z" });
+  });
+
+  it("Empty Blocks: Constructing default root with children", () => {
+    const l = new LanguageModel(langEmptyBlocks);
+
+    const n = l.constructDefaultNode({ languageName: "emptyBlocks", typeName: "root" });
+    expect(Object.keys(n.children)).toEqual(["cat_a"]);
   });
 });

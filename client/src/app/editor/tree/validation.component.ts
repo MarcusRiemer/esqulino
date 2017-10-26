@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { TreeService } from './tree.service'
+import { TreeEditorService } from './editor.service'
 
 /**
  * Informs the user about possible errors in his trees,
@@ -11,7 +11,7 @@ import { TreeService } from './tree.service'
 })
 export class ValidationComponent {
 
-  constructor(private _treeService: TreeService) { }
+  constructor(private _treeService: TreeEditorService) { }
 
   get result() {
     return (this._treeService.currentValidationResult);

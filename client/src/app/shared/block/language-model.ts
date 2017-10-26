@@ -29,7 +29,7 @@ export class LanguageModel {
   }
 
   /**
-   * @return All blocks that are available
+   * @return All blocks that are available.
    */
   get availableBlocks(): Block[] {
     return (this._blocks);
@@ -51,32 +51,10 @@ export class LanguageModel {
   }
 
   /**
-   * @return The block that augments the given type.
-   */
-  getBlock(type: QualifiedTypeName) {
-    return (this._blocks.find(b => typenameEquals(b.qualifiedName, type)));
-  }
-
-  /**
-   * Hands out a description of a concrete node that should be used
-   * when instanciating a certain type. If a block is known for that
-   * type the described block is used, otherwise a "best effort" guess
-   * is made.
-   *
-   * @return The default node that would be created by this type.
-   */
-  getDefaultNode(type: QualifiedTypeName): NodeDescription {
-    const b = this.getBlock(type);
-    if (b) {
-      return (b.defaultNode);
-    }
-  }
-
-  /**
    * Implements the "best effort" guess to construct a node from nothing
    * but a type.
    */
-  private constructDefaultNode(typeName: QualifiedTypeName): NodeDescription {
+  constructDefaultNode(typeName: QualifiedTypeName): NodeDescription {
     // Construct the barebones description
     const toReturn: NodeDescription = {
       language: typeName.languageName,
@@ -96,7 +74,6 @@ export class LanguageModel {
     }
 
     // Are there any properties that could be added preemptively?
-
     return (toReturn);
   }
 }

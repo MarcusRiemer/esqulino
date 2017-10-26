@@ -320,6 +320,16 @@ const langOptionalProperty: Schema.ValidatorDescription = {
 }
 
 describe('Language Validator', () => {
+  it('Empty Tree', () => {
+    const v = new Validator([langStringConstraint]);
+
+    const ast = new AST.Tree(undefined);
+    const res = v.validateFromRoot(ast);
+    expect(res.errors.length).toEqual(1);
+    expect(res.errors[0].code).toEqual(ErrorCodes.Empty);
+  });
+
+
   it('String Constraints (Valid)', () => {
     const v = new Validator([langStringConstraint]);
 
@@ -1190,7 +1200,6 @@ describe('Language Validator', () => {
     expect(res.errors.length).toEqual(1, res);
     expect(res.errors[0].code).toEqual(ErrorCodes.IllegalChildType);
   });
-
 
   it('Mini-HTML: Invalid single child (SQL query)', () => {
     const v = new Validator([langMiniHtml, langMiniSql]);
