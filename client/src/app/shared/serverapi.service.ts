@@ -25,7 +25,7 @@ export class ServerApiService {
   public constructor( @Inject(PLATFORM_ID) private _platformId: Object) {
     this._apiBaseUrl = "/api";
     if (isPlatformServer(this._platformId)) {
-      this._apiBaseUrl = "http://www.blattwerkzeug.de" + this._apiBaseUrl;
+      this._apiBaseUrl = "//www.blattwerkzeug.de" + this._apiBaseUrl;
     }
   }
 
