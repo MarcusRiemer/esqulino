@@ -7,7 +7,7 @@ import { SidebarService } from '../sidebar.service';
 import { ToolbarService } from '../toolbar.service';
 
 import { TreeSidebarComponent } from './tree.sidebar';
-import { TreeService } from './tree.service';
+import { TreeEditorService } from './editor.service';
 import { DragService } from './drag.service';
 
 const astDesc: NodeDescription = {
@@ -53,7 +53,7 @@ const astDesc: NodeDescription = {
 
 @Component({
   templateUrl: 'templates/tree-editor.html',
-  providers: [TreeService]
+  providers: [TreeEditorService]
 })
 export class SyntaxTreeEditorComponent implements OnInit {
   @Input() rawNodeData: string = "";
@@ -64,7 +64,7 @@ export class SyntaxTreeEditorComponent implements OnInit {
     private _sidebarService: SidebarService,
     private _toolbarService: ToolbarService,
     private _dragService: DragService,
-    private _treeService: TreeService
+    private _treeService: TreeEditorService
   ) {
   }
 

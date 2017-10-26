@@ -7,7 +7,7 @@ import { Node, NodeDescription, NodeLocation } from '../../shared/syntaxtree'
 
 import { TrashService } from '../shared/trash.service'
 
-import { TreeService } from './tree.service'
+import { TreeEditorService } from './editor.service'
 
 /**
  * Serializable information that is attached to the drag
@@ -23,11 +23,12 @@ export interface CurrentDragData {
  */
 export interface DragSource {
   location: NodeLocation,
-  treeService: TreeService
+  treeEditorService: TreeEditorService
 }
 
 /**
- * Manages state for everything involved dragging.
+ * Manages state for everything involved dragging. This involves at least sidebars
+ * and actual editors, but may very well extend to other pieces of UI.
  */
 @Injectable()
 export class DragService {
@@ -43,6 +44,13 @@ export class DragService {
   // The placeholder the drag operation is currently dragged over
   private _currentDragOverPlaceholder = new BehaviorSubject<NodeLocation>(undefined);
 
+  /**
+   * This service is involved  with *every* part of the UI and must therefore
+   * be attached to the very root of the dependency injection hierarchy. All
+   * other services that may exist more then once may not be injected into
+   * this service. They need to be passed as "normal" arguments of the existing
+   * methods to ensure the correct instances get passed around.
+   */
   private constructor(private _trashService: TrashService) { }
 
   /**
@@ -95,7 +103,7 @@ export class DragService {
     if (source) {
       this._trashService.showTrash(_ => {
         console.log("Deleting");
-        this._currentSource.treeService.deleteNode(this._currentSource.location)
+        this._currentSource.treeEditorService.deleteNode(this._currentSource.location)
       });
     }
     console.log(`AST-Drag started:`, drag);

@@ -980,16 +980,19 @@ export class Validator {
    * @return All errors that occured during evaluation
    */
   validateFromRoot(ast: AST.Node | AST.Tree) {
-    if (ast instanceof AST.Tree) {
-      ast = ast.rootNode;
+    let rootNode: AST.Node = undefined;
+    if (ast instanceof AST.Tree && !ast.isEmpty) {
+      rootNode = ast.rootNode;
+    } else if (ast instanceof AST.Node) {
+      rootNode = ast;
     }
 
     const context = new ValidationContext();
 
-    if (ast) {
+    if (rootNode) {
       // Pass validation to the appropriate language
-      const lang = this.getLanguageValidator(ast.languageName);
-      lang.validateFromRoot(ast, context);
+      const lang = this.getLanguageValidator(rootNode.languageName);
+      lang.validateFromRoot(rootNode, context);
     } else {
       // Not having a document is a single error
       context.addError(ErrorCodes.Empty, undefined);

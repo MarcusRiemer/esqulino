@@ -143,6 +143,11 @@ export class CodeGenerator {
     converters.forEach(c => this.registerConverter(c.type, c.converter));
   }
 
+  /**
+   * Registers a new converter for a certain type. Currently
+   * duplicate converters are not allowed, so it is not possible
+   * to unintentionally overwrite already registered convertes.
+   */
   registerConverter(t: QualifiedTypeName, converter: NodeConverter) {
     if (this.hasConverter(t)) {
       throw new Error(`There is already a converter for "${t.languageName}.${t.typeName}"`);
@@ -158,14 +163,22 @@ export class CodeGenerator {
    * @param ast The tree to emit.
    */
   emit(ast: Node | Tree): string {
-    if (ast instanceof Tree) {
-      ast = ast.rootNode;
+    let rootNode: Node = undefined;
+
+    if (ast instanceof Tree && !ast.isEmpty) {
+      rootNode = ast.rootNode;
+    } else if (ast instanceof Node) {
+      rootNode = ast;
     }
 
-    const process = new CodeGeneratorProcess(this);
-    process.generateNode(ast);
+    if (rootNode) {
+      const process = new CodeGeneratorProcess(this);
+      process.generateNode(rootNode);
 
-    return (process.emit());
+      return (process.emit());
+    } else {
+      throw new Error("Attempted to generate code for empty tree");
+    }
   }
 
   /**

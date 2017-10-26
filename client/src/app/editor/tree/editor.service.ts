@@ -20,7 +20,7 @@ import {
  * actual tree.
  */
 @Injectable()
-export class TreeService {
+export class TreeEditorService {
   private _tree = new BehaviorSubject<Tree>(undefined);
   private _language = new BehaviorSubject<Language>(undefined);
   private _validationResult = new BehaviorSubject<ValidationResult>(ValidationResult.EMPTY);
@@ -64,7 +64,6 @@ export class TreeService {
     const tree = this._tree.getValue();
     if (tree && lang) {
       this._validationResult.next(lang.validateTree(this._tree.getValue()));
-      console.log("Revalidated Tree");
     } else {
       this._validationResult.next(ValidationResult.EMPTY);
     }
@@ -77,9 +76,8 @@ export class TreeService {
   private resetGeneratedCode() {
     const lang = this._language.getValue();
     const tree = this._tree.getValue();
-    if (tree && lang) {
+    if (tree && !tree.isEmpty && lang) {
       this._generatedCode.next(lang.emitTree(this._tree.getValue()));
-      console.log("Re-emitted Tree");
     } else {
       this._generatedCode.next("");
     }

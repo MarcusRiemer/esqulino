@@ -8,8 +8,7 @@ import { arrayEqual } from '../../shared/util'
 
 import { DEFAULT_ANIMATION } from './node.animation'
 import { DragService } from './drag.service';
-import { TreeService } from './tree.service';
-
+import { TreeEditorService } from './editor.service';
 
 /**
  * Displays a group of nodes with placeholders spread out between them.
@@ -56,7 +55,7 @@ export class NodePlaceholderComponent {
 
   constructor(
     private _dragService: DragService,
-    private _treeService: TreeService
+    private _treeService: TreeEditorService
   ) { }
 
   /**

@@ -267,23 +267,32 @@ export class Tree {
   }
 
   /**
-   * @return The JSON description of this tree.
+   * @return The JSON description of this tree. If the tree is empty
+   *         the description is undefined.
    */
   toModel() {
-    return (this._root.toModel());
+    if (this.isEmpty) {
+      return (undefined);
+    } else {
+      return (this.rootNode.toModel());
+    }
   }
 
   /**
    * @return The node at the given location.
    */
   locate(loc: NodeLocation): Node {
+    if (this.isEmpty) {
+      throw new Error(`SyntaxTree: Could not locate ${JSON.stringify(loc)} in an empty tree`);
+    }
+
     let current: Node = this._root;
     loc.forEach(([categoryName, childIndex], i) => {
       const children = current.children[categoryName];
       if ((children && childIndex < children.length) && childIndex >= 0) {
         current = children[childIndex];
       } else {
-        throw new Error(`SyntaxTree: Could not locate step ${i} of ${JSON.stringify(loc)}`);
+        throw new Error(`SyntaxTree: Could not locate step ${i} of ${JSON.stringify(loc)} `);
       }
     })
 
@@ -327,7 +336,12 @@ export class Tree {
   insertNode(loc: NodeLocation, desc: NodeDescription): Tree {
     // The root can only be replaced, not extended.
     if (loc.length === 0) {
-      throw new Error(`Nothing can be appended after the root node.`);
+      // Inserting is equivalent to replacing on an empty tree
+      if (this.isEmpty) {
+        return (this.replaceNode([], desc));
+      } else {
+        throw new Error(`Nothing can be appended after the root node.`);
+      }
     } else {
       // Build the description of the current tree to insert the new node in it
       let newDescription = this.toModel();
