@@ -22,10 +22,12 @@ export interface RequestErrorDescription {
 export class ServerApiService {
   private _apiBaseUrl: string
 
+  private static BASE_HOST = "http://www.blattwerkzeug.de";
+
   public constructor( @Inject(PLATFORM_ID) private _platformId: Object) {
     this._apiBaseUrl = "/api";
     if (isPlatformServer(this._platformId)) {
-      this._apiBaseUrl = "//www.blattwerkzeug.de" + this._apiBaseUrl;
+      this._apiBaseUrl = ServerApiService.BASE_HOST + this._apiBaseUrl;
     }
   }
 
