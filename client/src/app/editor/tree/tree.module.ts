@@ -9,6 +9,8 @@ import { DropPlaceholderDirective } from './drop-placeholder.directive'
 import { DragService } from './drag.service'
 import { LanguageService } from './language.service'
 import { NodeComponent } from './node.component'
+import { NodeChildrenComponent } from './node-children.component'
+import { NodePlaceholderComponent } from './node-placeholder.component'
 import { SyntaxTreeEditorComponent } from './editor.component'
 import { TreeSidebarComponent } from './tree.sidebar'
 import { ValidationComponent } from './validation.component'
@@ -22,6 +24,8 @@ import { ValidationComponent } from './validation.component'
     DropTargetDirective,
     DropPlaceholderDirective,
     NodeComponent,
+    NodeChildrenComponent,
+    NodePlaceholderComponent,
     SyntaxTreeEditorComponent,
     ValidationComponent,
     TreeSidebarComponent

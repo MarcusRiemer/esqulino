@@ -11,6 +11,13 @@ export interface QualifiedTypeName {
 }
 
 /**
+ * @return True, if both parameters denote the same type.
+ */
+export function typenameEquals(lhs: QualifiedTypeName, rhs: QualifiedTypeName) {
+  return (lhs.languageName === rhs.languageName && lhs.typeName === rhs.typeName);
+}
+
+/**
  * Properties of a node are atomic and always stored as string.
  * Certain validators may be used to check whether the string
  * contains something useful.
@@ -236,34 +243,56 @@ export class Tree {
   private _root: Node;
 
   constructor(rootDesc: NodeDescription) {
-    this._root = new Node(rootDesc, this);
+    if (rootDesc) {
+      this._root = new Node(rootDesc, this);
+    }
   }
 
   /**
-   * The root for the tree.
+   * @return The root for the tree.
    */
   get rootNode(): Node {
+    if (this.isEmpty) {
+      throw new Error("No root node available, tree is empty");
+    }
+
     return (this._root);
   }
 
   /**
-   * @return The JSON description of this tree.
+   * @return True if this tree is actually empty.
+   */
+  get isEmpty(): boolean {
+    return (!this._root);
+  }
+
+  /**
+   * @return The JSON description of this tree. If the tree is empty
+   *         the description is undefined.
    */
   toModel() {
-    return (this._root.toModel());
+    if (this.isEmpty) {
+      return (undefined);
+    } else {
+      return (this.rootNode.toModel());
+    }
   }
 
   /**
    * @return The node at the given location.
    */
   locate(loc: NodeLocation): Node {
+    if (this.isEmpty) {
+      throw new Error(`SyntaxTree: Could not locate ${JSON.stringify(loc)} in an empty tree`);
+    }
+
     let current: Node = this._root;
     loc.forEach(([categoryName, childIndex], i) => {
       const children = current.children[categoryName];
       if ((children && childIndex < children.length) && childIndex >= 0) {
         current = children[childIndex];
       } else {
-        throw new Error(`SyntaxTree: Could not locate step ${i} of ${JSON.stringify(loc)}`);
+        throw new Error(`SyntaxTree: Could not locate step ${i} of ${JSON.stringify(loc)} `);
       }
     })
 
@@ -307,7 +336,12 @@ export class Tree {
   insertNode(loc: NodeLocation, desc: NodeDescription): Tree {
     // The root can only be replaced, not extended.
     if (loc.length === 0) {
-      throw new Error(`Nothing can be appended after the root node.`);
+      // Inserting is equivalent to replacing on an empty tree
+      if (this.isEmpty) {
+        return (this.replaceNode([], desc));
+      } else {
+        throw new Error(`Nothing can be appended after the root node.`);
+      }
     } else {
       // Build the description of the current tree to insert the new node in it
       let newDescription = this.toModel();
@@ -329,6 +363,32 @@ export class Tree {
       // Append the node in the category and build the new tree
       let cat = parent.children[parentCat];
       cat.splice(parentIndex, 0, desc);
+      return (new Tree(newDescription));
+    }
+  }
+
+  /**
+   * Returns a new tree where the node at the given location is deleted.
+   *
+   * @param loc The location of the deletion.
+   * @return The modified tree
+   */
+  deleteNode(loc: NodeLocation): Tree {
+    // The root can only be replaced, not deleted.
+    if (loc.length === 0) {
+      return (new Tree(undefined));
+    } else {
+      // Build the description of the current tree to insert the new node in it
+      let newDescription = this.toModel();
+
+      // Walking up the tree to the parent that will contain the node that needs
+      // to be deleted.
+      let parent = locateNode(newDescription, loc.slice(0, loc.length - 1));
+      let [parentCat, parentIndex] = loc[loc.length - 1];
+
+      // Actually delete the node
+      parent.children[parentCat].splice(parentIndex, 1);
+
       return (new Tree(newDescription));
     }
   }

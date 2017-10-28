@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core'
+import { Component, OnDestroy, Inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import { Query, ResultColumn } from '../../shared/query'
@@ -23,7 +23,7 @@ import { DragService, PageDragEvent } from './drag.service'
   templateUrl: 'templates/sidebar-data.html',
   selector: "page-sidebar"
 })
-export class SidebarDataComponent implements OnInit, OnDestroy {
+export class SidebarDataComponent implements OnDestroy {
   /**
    * This ID is used to register this sidebar with the sidebar loader
    */
@@ -40,32 +40,6 @@ export class SidebarDataComponent implements OnInit, OnDestroy {
     private _projectService: ProjectService,
     private _routeParams: ActivatedRoute,
     private _router: Router) {
-  }
-
-  /**
-   * Load the project to access the schema and its pages.
-   */
-  ngOnInit() {
-    /*
-    // Grab the current project
-    this._projectService.activeProject
-    .first()
-    .subscribe(p => {
-    this._project = p;
-
-    // Grab the correct query id
-    const childRoute = this._router.routerState.firstChild(this._routeParams);
-
-    const routeRef = childRoute.params.subscribe(param => {
-    const pageId = param['pageId'];
-
-    // Project is loaded, display the correct  query
-    this._page = this._project.getPageById(pageId);
-    });
-
-    this._subscriptionRefs.push(routeRef);
-    });
-    */
   }
 
   /**

@@ -1,2 +1,10 @@
-export * from './sql.codegenerator'
-export * from './sql.validator'
+import { LanguageDescription } from '../language.description'
+
+import { NODE_CONVERTER } from './sql.codegenerator'
+import { VALIDATOR_DESCRIPTION } from './sql.validator'
+
+export const LANGUAGE_DESCRIPTION: LanguageDescription = {
+  name: "SQL",
+  generators: NODE_CONVERTER,
+  validators: [VALIDATOR_DESCRIPTION]
+}

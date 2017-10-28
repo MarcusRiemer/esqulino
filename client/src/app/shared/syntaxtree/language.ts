@@ -1,6 +1,6 @@
 import { LanguageDescription } from './language.description'
 
-import { Tree, NodeDescription } from './syntaxtree'
+import { Tree, NodeDescription, QualifiedTypeName } from './syntaxtree'
 import { Validator, ValidationResult } from './validator'
 import { CodeGenerator } from './codegenerator'
 
@@ -19,17 +19,10 @@ export class Language {
   }
 
   /**
-   * @return The schemas this language is composed of.
+   * @return The type with the given name.
    */
-  get availableSchemas() {
-    return (this._validator.availableSchemas)
-  }
-
-  /**
-   * @return All types that are available in this language.
-   */
-  get availableTypes() {
-    return (this._validator.availableTypes);
+  getType(typeName: QualifiedTypeName) {
+    return (this._validator.getType(typeName.languageName, typeName.typeName));
   }
 
   /**
@@ -62,4 +55,24 @@ export class Language {
     return (this._codeGenerator.emit(ast));
   }
 
+  /**
+   * @return The name of this language.
+   */
+  get name() {
+    return (this._name);
+  }
+
+  /**
+   * @return The schemas this language is composed of.
+   */
+  get availableSchemas() {
+    return (this._validator.availableSchemas)
+  }
+
+  /**
+   * @return All types that are available in this language.
+   */
+  get availableTypes() {
+    return (this._validator.availableTypes);
+  }
 }

@@ -1,14 +1,13 @@
 import { Component, Input, OnInit, OnDestroy, Inject } from '@angular/core'
 
+import { QualifiedTypeName, NodeDescription, NodeType } from '../../shared/syntaxtree'
+import { LanguageModel } from '../../shared/block'
+
+import { SIDEBAR_MODEL_TOKEN } from '../editor.token'
+
 import { DragService } from './drag.service'
 import { LanguageService } from './language.service'
-
-import { QualifiedTypeName, NodeDescription, NodeType } from '../../shared/syntaxtree'
-
-interface AvailableLanguage {
-  name: string,
-  types: NodeType[]
-}
+import { TreeEditorService } from './editor.service'
 
 /**
  * The sidebar hosts elements that can be dragged onto the currently active
@@ -19,49 +18,39 @@ interface AvailableLanguage {
   templateUrl: 'templates/sidebar.html',
   selector: "tree-sidebar"
 })
-export class TreeSidebarComponent implements OnInit {
+export class TreeSidebarComponent {
   /**
    * This ID is used to register this sidebar with the sidebar loader
    */
   public static get SIDEBAR_IDENTIFIER() { return "tree" };
 
-  private _availableLanguages: AvailableLanguage[] = [];
-
   constructor(
+    @Inject(SIDEBAR_MODEL_TOKEN) private _treeEditorService: TreeEditorService,
     private _languageService: LanguageService,
     private _dragService: DragService
   ) {
   }
 
-  startDrag(evt: DragEvent, type: QualifiedTypeName) {
-    this._dragService.dragStart(evt, {
-      draggedDescription: {
-        language: type.languageName,
-        name: type.typeName
-      },
-      origin: "sidebar"
-    });
-  }
-
-  ngOnInit() {
-    this.refreshAvailableLanguages();
+  /**
+   * The user has decided to start dragging something from the sidebar.
+   */
+  startDrag(evt: DragEvent, desc: NodeDescription) {
+    try {
+      console.log("Dragging", desc);
+      this._dragService.dragStart(evt, {
+        draggedDescription: desc,
+        origin: "sidebar"
+      });
+    } catch (e) {
+      alert(e);
+    }
   }
 
   /**
    * @return Relevant languages along with their available types
    */
   get availableLanguages() {
-    return (this._availableLanguages);
+    return (this._languageService.availableLanguageModels);
   }
-
-  private refreshAvailableLanguages() {
-    this._availableLanguages = Object.entries(this._languageService.availableLanguages).map(([name, lang]) => {
-      return ({
-        name: name,
-        types: lang.availableTypes
-      });
-    });
-  }
-
 }
 

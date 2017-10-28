@@ -1,4 +1,4 @@
-<table *ngIf="!result.isValid"
+<table *ngIf="!(result | async).isValid"
        class="table">
   <thead>
     <tr>
@@ -7,7 +7,7 @@
       <th>Daten</th>
     </tr>
   </thead>
-  <tr *ngFor="let error of result.errors">
+  <tr *ngFor="let error of (result | async).errors">
     <td>
       <ng-container *ngIf="error.node">
         {{ error.node.typeName }} <code>{{ error.node.location | json }}</code>

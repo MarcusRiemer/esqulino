@@ -1,6 +1,6 @@
 import { Directive, ElementRef, Input } from '@angular/core';
 
-import { Node } from '../../shared/syntaxtree';
+import { NodeLocation } from '../../shared/syntaxtree';
 
 import { DragService } from './drag.service';
 
@@ -13,7 +13,7 @@ import { DragService } from './drag.service';
 })
 export class DropPlaceholderDirective {
 
-  @Input('astDropPlaceholder') node: Node;
+  @Input('astDropPlaceholder') location: NodeLocation;
 
   constructor(ref: ElementRef, dragService: DragService) {
     const el = ref.nativeElement as HTMLElement;
@@ -27,7 +27,7 @@ export class DropPlaceholderDirective {
     // Inform the drag service about hover events
     el.addEventListener("dragenter", evt => {
       preventAndCancel(evt);
-      dragService.informDraggedOverPlaceholder(this.node.location);
+      dragService.informDraggedOverPlaceholder(this.location);
     });
 
     // Make this target
