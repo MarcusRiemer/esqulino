@@ -28,10 +28,14 @@ export class ProjectListItemComponent {
   }
 
   /**
-   * @return The image URL of this project
+   * The returned value will start of with '//' and thus be independent
+   * from the protocol.
+   *
+   * @return The image URL of this project.
    */
   get imageUrl(): string {
-    return (this._serverApiService.getImageUrl(this.project.id, this.project.preview));
+    const toReturn = this._serverApiService.getImageUrl(this.project.id, this.project.preview);
+    return (toReturn.replace(/https?:/, ''));
   }
 
   /**
