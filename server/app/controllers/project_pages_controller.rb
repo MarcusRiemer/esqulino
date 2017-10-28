@@ -68,7 +68,7 @@ class ProjectPagesController < ApplicationController
   def render_known
     initial_params = {
         'get' => request.GET,
-        'server' => self.render_server_data
+        'server' => self.server_render_data
     }
     puts "INITIAL_PARAMS"
     p initial_params
