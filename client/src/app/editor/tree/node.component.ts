@@ -9,13 +9,12 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { arrayEqual } from '../../shared/util'
 import { Node, NodeLocation, Tree } from '../../shared/syntaxtree';
 
+import { DEFAULT_ANIMATION } from './node.animation'
 import { DragService } from './drag.service';
-import { TreeService } from './tree.service'
+import { TreeEditorService } from './editor.service'
 
 // These states are available for animation
 type DropTargetAnimationStates = "available" | "none" | "self";
-
-const DEFAULT_ANIMATION = "2000ms ease";
 
 /**
  * Displays a node of a syntaxtree, currently in the most generic way possible.
@@ -42,23 +41,6 @@ const DEFAULT_ANIMATION = "2000ms ease";
       // Transition between shown states
       transition('available => self', animate(DEFAULT_ANIMATION)),
       //transition('self => available', animate(DEFAULT_ANIMATION)),
-    ]),
-    trigger('dropPlaceholder', [
-      state('none', style({
-        transform: 'scale(0.5)',
-        display: 'none',
-        backgroundColor: 'white',
-      })),
-      state('available', style({
-        transform: 'scale(1.0)',
-        display: 'block',
-        backgroundColor: 'lime',
-      })),
-      state('self', style({
-        transform: 'scale(1.0)',
-        display: 'block',
-        backgroundColor: 'yellow',
-      })),
     ])
   ]
 })
@@ -81,7 +63,7 @@ export class NodeComponent implements OnChanges {
   constructor(
     private _dragService: DragService,
     private _cdRef: ChangeDetectorRef,
-    private _treeService: TreeService
+    private _treeService: TreeEditorService
   ) { }
 
   /**
@@ -108,6 +90,22 @@ export class NodeComponent implements OnChanges {
   }
 
   /**
+   * The user has started to drag exactly this node around.
+   */
+  onStartDrag(evt: DragEvent) {
+    this._dragService.dragStart(evt,
+      {
+        draggedDescription: this.node.toModel(),
+        origin: "tree"
+      },
+      {
+        location: this.node.location,
+        treeEditorService: this._treeService
+      }
+    );
+  }
+
+  /**
    * Something has been dropped on this node. We should replace the node entirely.
    */
   onDropReplace() {
@@ -122,15 +120,6 @@ export class NodeComponent implements OnChanges {
   onDropInsert() {
     const desc = this._dragService.peekDragData.draggedDescription;
     this._treeService.insertNode(this.node.location, desc);
-  }
-
-  /**
-   * Something has been dropped on a placeholder in an empty category of this node.
-   */
-  onDropInsertCategory(key: string) {
-    const desc = this._dragService.peekDragData.draggedDescription;
-    const index = this.node.children[key].length;
-    this._treeService.insertNode([...this.node.location, [key, index]], desc);
   }
 
   /**
@@ -197,26 +186,6 @@ export class NodeComponent implements OnChanges {
     }
 
     return (this._cached_dropTargetAnimationState);
-  }
-
-  /**
-   * @return The state of the drop animation for placeholders
-   */
-  get dropPlaceholderAnimationState(): Observable<DropTargetAnimationStates> {
-    if (!this._cached_dropPlaceholderAnimationState) {
-      this._cached_dropPlaceholderAnimationState = this._dragService.currentDragOverPlaceholder
-        .merge(this._dragService.isDragInProgress)
-        .map(v => {
-          if (arrayEqual(v as any, this.node.location)) {
-            return ("self");
-          } else {
-            return (this._dragService.peekIsDragInProgress ? "available" : "none");
-          }
-        })
-        .distinctUntilChanged()
-    }
-
-    return (this._cached_dropPlaceholderAnimationState);
   }
 
   /**

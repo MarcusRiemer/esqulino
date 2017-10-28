@@ -1,5 +1,5 @@
 import { CodeGenerator, NodeConverterRegistration, CodeGeneratorProcess } from './codegenerator'
-import { Node, NodeDescription } from './syntaxtree'
+import { Node, NodeDescription, Tree } from './syntaxtree'
 
 describe('Codegeneration', () => {
   it('Converters are registered correctly', () => {
@@ -19,5 +19,12 @@ describe('Codegeneration', () => {
 
     // Ensure this type can't be re-registered.
     expect(() => codeGen.registerConverter(fooBar, undefined)).toThrowError();
+  });
+
+  it('Empty Tree', () => {
+    const codeGen = new CodeGenerator([]);
+    const tree = new Tree(undefined);
+
+    expect(() => codeGen.emit(tree)).toThrowError();
   });
 });

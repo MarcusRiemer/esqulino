@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { Tree, Language, ValidationResult } from '../../shared/syntaxtree'
+import { TreeEditorService } from './editor.service'
 
 /**
  * Informs the user about possible errors in his trees,
@@ -9,33 +9,12 @@ import { Tree, Language, ValidationResult } from '../../shared/syntaxtree'
   templateUrl: 'templates/validation.html',
   selector: 'ast-validation'
 })
-export class ValidationComponent implements OnChanges {
-  @Input() tree: Tree;
-  @Input() language: Language;
+export class ValidationComponent {
 
-  // The result is cached
-  private _validationResult: ValidationResult;
-
-  /**
-   * Any change will trigger a re-validation.
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-    this.refreshResult();
-  }
-
-  /**
-   * Attempts to re-validate the tree.
-   */
-  private refreshResult() {
-    try {
-      this._validationResult = this.language.validateTree(this.tree);
-    } catch (e) {
-      this._validationResult = ValidationResult.EMPTY;
-    }
-  }
+  constructor(private _treeService: TreeEditorService) { }
 
   get result() {
-    return (this._validationResult);
+    return (this._treeService.currentValidationResult);
   }
 }
 

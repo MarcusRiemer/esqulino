@@ -241,7 +241,33 @@ const langSequenceConstraint: Schema.ValidatorDescription = {
     "c": {}
   },
   root: "root"
-}
+};
+
+/**
+ * A single node that wants exactly one child out of a variety
+ * of possibilites.
+ */
+const langAllowedOneOfConstraint: Schema.ValidatorDescription = {
+  languageName: "allowed-oneOf-constraint",
+  types: {
+    "root": {
+      children: {
+        "nodes": {
+          type: "allowed",
+          childCount: {
+            minOccurs: 1,
+            maxOccurs: 1,
+          },
+          nodeTypes: ["a", "b", "c"]
+        }
+      }
+    },
+    "a": {},
+    "b": {},
+    "c": {}
+  },
+  root: "root"
+};
 
 /**
  * A single root node that uses some children with the "sequence" constraint
@@ -294,6 +320,16 @@ const langOptionalProperty: Schema.ValidatorDescription = {
 }
 
 describe('Language Validator', () => {
+  it('Empty Tree', () => {
+    const v = new Validator([langStringConstraint]);
+
+    const ast = new AST.Tree(undefined);
+    const res = v.validateFromRoot(ast);
+    expect(res.errors.length).toEqual(1);
+    expect(res.errors[0].code).toEqual(ErrorCodes.Empty);
+  });
+
+
   it('String Constraints (Valid)', () => {
     const v = new Validator([langStringConstraint]);
 
@@ -445,7 +481,17 @@ describe('Language Validator', () => {
     expect(res.errors[0].code).toEqual(ErrorCodes.UnexpectedType);
   });
 
-  it('Invalid Sequence: Completly Empty', () => {
+  it('"sequence": Required children categories', () => {
+    const v = new Validator([langSequenceConstraint]);
+
+    const root = v.getType(langSequenceConstraint.languageName, "root");
+    expect(root.requiredChildrenCategoryNames).toEqual(["nodes"]);
+
+    const a = v.getType(langSequenceConstraint.languageName, "a");
+    expect(a.requiredChildrenCategoryNames).toEqual([]);
+  });
+
+  it('Invalid "sequence": Completly Empty', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -486,7 +532,7 @@ describe('Language Validator', () => {
     });
   });
 
-  it('Invalid Sequence: Only first required node', () => {
+  it('Invalid "sequence": Only first required node', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -526,7 +572,7 @@ describe('Language Validator', () => {
     });
   });
 
-  it('Invalid Sequence: Only first two required nodes', () => {
+  it('Invalid "sequence": Only first two required nodes', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -561,7 +607,7 @@ describe('Language Validator', () => {
     });
   });
 
-  it('Valid Sequence: Exact three required nodes', () => {
+  it('Valid "sequence": Exact three required nodes', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -591,7 +637,7 @@ describe('Language Validator', () => {
     expect(res.errors.length).toEqual(0);
   });
 
-  it('Valid Sequence: Three required nodes + Optional "b"-node', () => {
+  it('Valid "sequence": Three required nodes + Optional "b"-node', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -625,7 +671,7 @@ describe('Language Validator', () => {
     expect(res.errors.length).toEqual(0);
   });
 
-  it('Valid Sequence: Three required nodes + two optional "b"-nodes', () => {
+  it('Valid "sequence": Three required nodes + two optional "b"-nodes', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -663,8 +709,7 @@ describe('Language Validator', () => {
     expect(res.errors.length).toEqual(0);
   });
 
-
-  it('Valid Sequence: Three required nodes + All optional "b"- and "c"-nodes', () => {
+  it('Valid "sequence": Three required nodes + All optional "b"- and "c"-nodes', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -706,7 +751,7 @@ describe('Language Validator', () => {
     expect(res.errors.length).toEqual(0);
   });
 
-  it('Invalid Sequence: Three required nodes + All optional "b"- and "c"-nodes + extra node', () => {
+  it('Invalid "sequence": Three required nodes + All optional "b"- and "c"-nodes + extra node', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -752,7 +797,7 @@ describe('Language Validator', () => {
     expect(res.errors.length).toEqual(1);
   });
 
-  it('Invalid Sequence: Three required nodes + three optional "b"-nodes', () => {
+  it('Invalid "sequence": Three required nodes + three optional "b"-nodes', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -792,6 +837,16 @@ describe('Language Validator', () => {
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(2);
+  });
+
+  it('"allowed": Required children categories', () => {
+    const v = new Validator([langAllowedConstraint]);
+
+    const root = v.getType(langAllowedConstraint.languageName, "root");
+    expect(root.requiredChildrenCategoryNames).toEqual(["nodes"]);
+
+    const a = v.getType(langAllowedConstraint.languageName, "a");
+    expect(a.requiredChildrenCategoryNames).toEqual([]);
   });
 
   it('Invalid "allowed": Empty', () => {
@@ -893,6 +948,73 @@ describe('Language Validator', () => {
     expect(res.errors.length).toEqual(2);
     expect(res.errors[0].code).toEqual(ErrorCodes.InvalidMaxOccurences);
     expect(res.errors[1].code).toEqual(ErrorCodes.InvalidMinOccurences);
+  });
+
+  it('Invalid "allowed oneOf": No child at all', () => {
+    const v = new Validator([langAllowedOneOfConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "allowed-oneOf-constraint",
+      name: "root",
+      children: {
+        "nodes": []
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(1);
+    expect(res.errors[0].code).toEqual(ErrorCodes.InvalidMinOccurences);
+  });
+
+  it('Valid "allowed oneOf": Exactly one child', () => {
+    const v = new Validator([langAllowedOneOfConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "allowed-oneOf-constraint",
+      name: "root",
+      children: {
+        "nodes": [
+          {
+            language: "allowed-oneOf-constraint",
+            name: "a"
+          },
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(0);
+  });
+
+  it('Invalid "allowed oneOf": Two children', () => {
+    const v = new Validator([langAllowedOneOfConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "allowed-oneOf-constraint",
+      name: "root",
+      children: {
+        "nodes": [
+          {
+            language: "allowed-oneOf-constraint",
+            name: "a"
+          },
+          {
+            language: "allowed-oneOf-constraint",
+            name: "a"
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(1);
+    expect(res.errors[0].code).toEqual(ErrorCodes.InvalidMaxOccurences);
   });
 
   it('Mini-SQL: Empty SELECT query', () => {
@@ -1078,7 +1200,6 @@ describe('Language Validator', () => {
     expect(res.errors.length).toEqual(1, res);
     expect(res.errors[0].code).toEqual(ErrorCodes.IllegalChildType);
   });
-
 
   it('Mini-HTML: Invalid single child (SQL query)', () => {
     const v = new Validator([langMiniHtml, langMiniSql]);

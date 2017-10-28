@@ -2,7 +2,10 @@ import { BehaviorSubject, Observable } from 'rxjs'
 
 import { Injectable } from '@angular/core';
 
-import { Tree, Node, NodeDescription, NodeLocation } from '../../shared/syntaxtree';
+import {
+  Tree, Node, NodeDescription, NodeLocation,
+  Validator, ValidationResult, Language
+} from '../../shared/syntaxtree';
 
 /**
  * This service represents a single tree that is currently beeing
@@ -17,8 +20,11 @@ import { Tree, Node, NodeDescription, NodeLocation } from '../../shared/syntaxtr
  * actual tree.
  */
 @Injectable()
-export class TreeService {
+export class TreeEditorService {
   private _tree = new BehaviorSubject<Tree>(undefined);
+  private _language = new BehaviorSubject<Language>(undefined);
+  private _validationResult = new BehaviorSubject<ValidationResult>(ValidationResult.EMPTY);
+  private _generatedCode = new BehaviorSubject<string>("");
 
   /**
    * @param desc The new tree that should be available in the editor.
@@ -28,6 +34,52 @@ export class TreeService {
       this._tree.next(tree);
     } else {
       this._tree.next(new Tree(tree));
+    }
+
+    this.resetCaches();
+  }
+
+  /**
+   * @param lang The new language to use
+   */
+  setLanguage(lang: Language) {
+    this._language.next(lang);
+    this.resetCaches();
+  }
+
+  /**
+   * Resets everything that depends on the current tree and language.
+   */
+  private resetCaches() {
+    this.resetValidation();
+    this.resetGeneratedCode();
+  }
+
+  /**
+   * Validates the current tree against the current language. Should be called after
+   * the tree or the language has changed.
+   */
+  private resetValidation() {
+    const lang = this._language.getValue();
+    const tree = this._tree.getValue();
+    if (tree && lang) {
+      this._validationResult.next(lang.validateTree(this._tree.getValue()));
+    } else {
+      this._validationResult.next(ValidationResult.EMPTY);
+    }
+  }
+
+  /**
+   * Emits the current tree against the current language. Should be called after
+   * the tree or the language has changed.
+   */
+  private resetGeneratedCode() {
+    const lang = this._language.getValue();
+    const tree = this._tree.getValue();
+    if (tree && !tree.isEmpty && lang) {
+      this._generatedCode.next(lang.emitTree(this._tree.getValue()));
+    } else {
+      this._generatedCode.next("");
     }
   }
 
@@ -40,7 +92,7 @@ export class TreeService {
   replaceNode(loc: NodeLocation, desc: NodeDescription) {
     console.log(`Replacing node at ${JSON.stringify(loc)} with`, desc);
 
-    this.replaceTree(this.tree.replaceNode(loc, desc));
+    this.replaceTree(this.peekTree.replaceNode(loc, desc));
   }
 
   /**
@@ -52,7 +104,18 @@ export class TreeService {
   insertNode(loc: NodeLocation, desc: NodeDescription) {
     console.log(`Inserting node at ${JSON.stringify(loc)}`, desc);
 
-    this.replaceTree(this.tree.insertNode(loc, desc));
+    this.replaceTree(this.peekTree.insertNode(loc, desc));
+  }
+
+  /**
+   * Deletes the node at the given location.
+   *
+   * @param loc The location of the insertion.
+   */
+  deleteNode(loc: NodeLocation) {
+    console.log(`Deleting node at ${JSON.stringify(loc)}`);
+
+    this.replaceTree(this.peekTree.deleteNode(loc));
   }
 
   /**
@@ -65,7 +128,7 @@ export class TreeService {
   setProperty(loc: NodeLocation, key: string, value: string) {
     console.log(`Setting ${JSON.stringify(loc)} "${key}"="${value}"`);
 
-    this.replaceTree(this.tree.setProperty(loc, key, value));
+    this.replaceTree(this.peekTree.setProperty(loc, key, value));
   }
 
   /**
@@ -77,7 +140,7 @@ export class TreeService {
   addProperty(loc: NodeLocation, key: string) {
     console.log(`Adding ${JSON.stringify(loc)} property "${key}"`);
 
-    this.replaceTree(this.tree.addProperty(loc, key));
+    this.replaceTree(this.peekTree.addProperty(loc, key));
   }
 
   /**
@@ -90,7 +153,7 @@ export class TreeService {
   renameProperty(loc: NodeLocation, key: string, newKey: string) {
     console.log(`Renaming property at ${JSON.stringify(loc)} from "${key}" to "${newKey}"`);
 
-    this.replaceTree(this.tree.renameProperty(loc, key, newKey));
+    this.replaceTree(this.peekTree.renameProperty(loc, key, newKey));
   }
 
   /**
@@ -102,13 +165,13 @@ export class TreeService {
   addChildGroup(loc: NodeLocation, key: string) {
     console.log(`Adding empty childgroup "${key}" at ${JSON.stringify(loc)}`);
 
-    this.replaceTree(this.tree.addChildGroup(loc, key));
+    this.replaceTree(this.peekTree.addChildGroup(loc, key));
   }
 
   /**
    * @return The tree that is currently edited.
    */
-  get tree() {
+  get peekTree() {
     return (this._tree.getValue());
   }
 
@@ -117,5 +180,26 @@ export class TreeService {
    */
   get currentTree(): Observable<Tree> {
     return (this._tree);
+  }
+
+  /**
+   * @return The validation result for the tree that is currently beeing edited.
+   */
+  get currentValidationResult(): Observable<ValidationResult> {
+    return (this._validationResult);
+  }
+
+  /**
+   * @return The code that is currently emitted.
+   */
+  get currentGeneratedCode(): Observable<string> {
+    return (this._generatedCode);
+  }
+
+  /**
+   * @return The language that is currently in use.
+   */
+  get currentLanguage(): Observable<Language> {
+    return (this._language);
   }
 }

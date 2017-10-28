@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { Tree, Language, ValidationResult } from '../../shared/syntaxtree';
+import { TreeEditorService } from './editor.service'
 
 /**
  * Shows a compiled AST.
@@ -9,32 +9,11 @@ import { Tree, Language, ValidationResult } from '../../shared/syntaxtree';
   templateUrl: 'templates/code-generator.html',
   selector: 'ast-code-generator'
 })
-export class CodeGeneratorComponent implements OnChanges {
-  @Input() tree: Tree;
-  @Input() language: Language;
+export class CodeGeneratorComponent {
 
-  // The generated code is cached
-  private _generated: string;
-
-  /**
-   * Any change will trigger a re-validation.
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-    this.refreshResult();
-  }
-
-  private refreshResult() {
-    try {
-      console.log("Refreshing compilation ...");
-      this._generated = this.language.emitTree(this.tree);
-      console.log("Refreshed compilation!");
-    } catch (err) {
-      console.log(`Error refreshing compilation: "${err}"`);
-      this._generated = "";
-    }
-  }
+  constructor(private _treeService: TreeEditorService) { }
 
   get generated() {
-    return (this._generated);
+    return (this._treeService.currentGeneratedCode);
   }
 }

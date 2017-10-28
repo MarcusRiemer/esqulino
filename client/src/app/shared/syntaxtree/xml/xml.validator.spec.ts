@@ -1,18 +1,18 @@
 import * as AST from '../syntaxtree'
 import { Validator, ErrorCodes } from '../validator'
 
-import { LANG_DESCRIPTION } from './xml.validator'
+import { VALIDATOR_DESCRIPTION } from './xml.validator'
 
 describe("Language: XML (Validation)", () => {
   it("Invalid: Empty ", () => {
-    const v = new Validator([LANG_DESCRIPTION]);
+    const v = new Validator([VALIDATOR_DESCRIPTION]);
     const res = v.validateFromRoot(undefined);
 
     expect(res.errors.length).toEqual(1);
   });
 
   it("Invalid: No name for a node ", () => {
-    const v = new Validator([LANG_DESCRIPTION]);
+    const v = new Validator([VALIDATOR_DESCRIPTION]);
     const astDesc: AST.NodeDescription = {
       language: "xml",
       name: "node",
@@ -26,7 +26,7 @@ describe("Language: XML (Validation)", () => {
   });
 
   it("Invalid: Attribute without key ", () => {
-    const v = new Validator([LANG_DESCRIPTION]);
+    const v = new Validator([VALIDATOR_DESCRIPTION]);
     const astDesc: AST.NodeDescription = {
       language: "xml",
       name: "node",
@@ -54,7 +54,7 @@ describe("Language: XML (Validation)", () => {
   });
 
   it(`Valid: <xml cool="true"></xml>`, () => {
-    const v = new Validator([LANG_DESCRIPTION]);
+    const v = new Validator([VALIDATOR_DESCRIPTION]);
     const astDesc: AST.NodeDescription = {
       language: "xml",
       name: "node",
@@ -82,7 +82,7 @@ describe("Language: XML (Validation)", () => {
   });
 
   it(`Valid: <super><duper></duper></super>`, () => {
-    const v = new Validator([LANG_DESCRIPTION]);
+    const v = new Validator([VALIDATOR_DESCRIPTION]);
     const astDesc: AST.NodeDescription = {
       language: "xml",
       name: "node",
@@ -109,7 +109,7 @@ describe("Language: XML (Validation)", () => {
   });
 
   it(`Valid: <super cool="true"><duper></duper></super>`, () => {
-    const v = new Validator([LANG_DESCRIPTION]);
+    const v = new Validator([VALIDATOR_DESCRIPTION]);
     const astDesc: AST.NodeDescription = {
       language: "xml",
       name: "node",

@@ -1,0 +1,7 @@
+children: <code>{{ categoryName }}</code>
+<ng-container *ngFor="let childNode of nodes">
+  <ast-node-placeholder [location]="childNode.location"></ast-node-placeholder>
+  <ast-node [node]="childNode"
+            [allowDropBefore]="true"></ast-node>
+</ng-container>
+<ast-node-placeholder [location]="lastLocation"></ast-node-placeholder>

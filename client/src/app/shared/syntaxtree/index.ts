@@ -1,33 +1,33 @@
 export * from './syntaxtree'
 export * from './language'
+export * from './language.description'
 export * from './validator'
+export * from './validator.description'
 
 import { Language } from './language'
-import * as LanguageSql from './sql'
-import * as LanguageXml from './xml'
-
-const LANG_SQL = new Language({
-  name: "sql",
-  generators: LanguageSql.NODE_CONVERTER,
-  validators: [LanguageSql.LANG_DESCRIPTION]
-});
-
-const LANG_XML = new Language({
-  name: "xml",
-  generators: LanguageXml.NODE_CONVERTER,
-  validators: [LanguageXml.LANG_DESCRIPTION]
-});
+import * as Sql from './sql'
+import * as Xml from './xml'
+import * as RegEx from './regex'
 
 /**
  * All languages that are statically known to the system.
  */
 export const AvailableLanguages = {
-  Sql: LANG_SQL,
-  Xml: LANG_XML,
+  Sql: new Language(Sql.LANGUAGE_DESCRIPTION),
+  Xml: new Language(Xml.LANGUAGE_DESCRIPTION),
+  RegEx: new Language(RegEx.LANGUAGE_DESCRIPTION),
   All: new Language({
     name: "all",
-    generators: [...LanguageXml.NODE_CONVERTER, ...LanguageSql.NODE_CONVERTER],
-    validators: [LanguageXml.LANG_DESCRIPTION, LanguageSql.LANG_DESCRIPTION]
+    generators: [
+      ...Xml.LANGUAGE_DESCRIPTION.generators,
+      ...Sql.LANGUAGE_DESCRIPTION.generators,
+      ...RegEx.LANGUAGE_DESCRIPTION.generators,
+    ],
+    validators: [
+      ...Xml.LANGUAGE_DESCRIPTION.validators,
+      ...Sql.LANGUAGE_DESCRIPTION.validators,
+      ...RegEx.LANGUAGE_DESCRIPTION.validators,
+    ]
   })
 };
 

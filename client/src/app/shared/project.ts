@@ -13,6 +13,7 @@ import {
 } from './project.description'
 
 import { Page } from './page/page'
+import { CodeResource } from './syntaxtree/coderesource'
 
 export { ProjectDescription }
 
@@ -46,11 +47,13 @@ export class Project implements ApiVersion, Saveable {
   private _currentDatabase: string;
   private _availableDatabases: { [id: string]: AvailableDatabaseDescription };
 
-  private _queries: Query[]
-  private _pages: Page[]
-  private _indexPageId: string
-  private _projectImageId: string
-  private _version: ApiVersionToken
+  private _queries: Query[];
+  private _pages: Page[];
+  private _codeResources: CodeResource[];
+
+  private _indexPageId: string;
+  private _projectImageId: string;
+  private _version: ApiVersionToken;
 
   private _sources: SourceDescription[];
 
@@ -75,12 +78,15 @@ export class Project implements ApiVersion, Saveable {
       throw new Error(`Attempted to load a project with version ${json.apiVersion}, current version is ${this.apiVersion}`);
     }
 
-    // Map all abstract queries to concrete query objects
+    // Map all descriptions to their concrete objects
     this._queries = json.queries
       .map(val => loadQuery(val, this.schema, this))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
     this._pages = json.pages
       .map(val => new Page(val, this))
+      .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
+    this._codeResources = (json.codeResources || [])
+      .map(val => new CodeResource(val, this))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
   }
 
@@ -218,6 +224,13 @@ export class Project implements ApiVersion, Saveable {
    */
   get pages() {
     return (this._pages);
+  }
+
+  /**
+   * @return All available code resources, no order guaranteed.
+   */
+  get codeResources() {
+    return (this._codeResources);
   }
 
   /**
@@ -376,6 +389,13 @@ export class Project implements ApiVersion, Saveable {
       // Then there is no start page anymore
       this._indexPageId = undefined;
     }
+  }
+
+  /**
+   * @param id A single code resource identified by it's ID
+   */
+  getCodeResourceById(id: string) {
+    return (this._codeResources.find(res => res.id === id));
   }
 
 
