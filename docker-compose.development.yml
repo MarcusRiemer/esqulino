@@ -11,6 +11,7 @@ services:
     environment:
       - USER_UID=1000
       - USER_GUI=1000
+      - TPUT_BIN=true
 
   server:
     image: marcusriemer/sqlino:server-dev
@@ -24,4 +25,4 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
-
+      - TPUT_BIN=true
