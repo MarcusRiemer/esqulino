@@ -9,10 +9,10 @@ und dem in Angular geschriebenen Editor, mit dem die Webseiten erstellt werden.
 
 \subsubsection{Kommunikation via Description Interface}
 
-Server und Client übertragen Daten in der Form von JSON Objekten, die je Zweck
-einem Description Interface entsprechen müssen. Ein Description Interface legt
-die Felder und Typen der JSON Objekte fest, die diesem Interface unterliegen.
-Das Basis Description Interface schreibt folgende Felder vor:
+Server und Client übertragen Daten in der Form von \texttt{JSON} Objekten, die
+je Zweck einem Description Interface entsprechen müssen. Ein Description
+Interface legt die Felder und Typen der \texttt{JSON} Objekte fest, die diesem Interface
+unterliegen. Das Basis Description Interface schreibt folgende Felder vor:
 
 \begin{minted}{json}
 {
@@ -31,8 +31,8 @@ Werkzeuge bereit. Rails verfolgt das Model-View-Controller Konzept, aber da die
 Anwendung vor Rails Sinatra verwendet hat ist die Logik nicht in Models sondern
 in durch den Controller verwendeten Librabies untergebracht. Die Views werden
 ebenfalls nicht verwendet. Für den Editor stellen die Controller die vom Angular
-Client genutzten API Endpunkte bereit und das eigentliche Frontend wird in durch
-die Templating Engine Liquid gerendert.
+Client genutzten \texttt{API} Endpunkte bereit und das eigentliche Frontend wird
+in durch die Templating Engine Liquid gerendert.
 
 \subsubsection{Client: Angular 4}
 
@@ -61,73 +61,71 @@ Kontext des Templates auftretende Ereignisse verarbeitet. Dabei kann in einem
 Template direkt der Wert einer Eigenschaft der Component referenziert werden,
 der dann dort dargestellt und bei Änderung aktualisiert wird und ein Ergeignis
 wie onClick direkt mit einer Funktion der Component verbunden werden. Angular
-kennt weiterhin Services, die dazu gedacht sind bestimmte Aufgaben auszuführen,
-wie Kommunikation mit dem Server oder Verwaltung von Konfigurationen.
+kennt weiterhin Services, die dazu gedacht sind die Kommunikation zwischen
+Komponenten zu ermöglichen.
 
-\todo[inline,author=mri]{Nein, Services sind dazu da zwischen Komponenten zu kommunizieren. Dabei können sowohl Daten als auch Funktionen geteilt werden.}
+\subsection{Implementationsdetails}
 
-\subsection{TODO: find name}
-
-\todo{describe this subsection}
+Diese Sektion geht auf die tatsächliche Implementation ein und beschriebt
+verschiedene wichtige Aspekte und Herausvorderungen, die dabei eine Rolle
+gespielt haben.
 
 \subsubsection{Caching}
 
 Die Bildverwaltung erlaubt es, jederzeit ein Bild zu verändern, ohne dass sich
-die URL ändert. Dadurch geht de Client davon aus, dass das in seinem Cache
-liegende Bild noch aktuell ist und die neue Version des Bildes nicht geladen
-wird, bis das Bild aus dem Cache des Clients gelöscht wurde.
+die \texttt{URL} ändert. Dadurch geht de Client davon aus, dass das in seinem
+Cache liegende Bild noch aktuell ist und die neue Version des Bildes nicht
+geladen wird, bis das Bild aus dem Cache des Clients gelöscht wurde.
 
-Dieses Verhalten kann umgangen werden, indem die URL für jeden Request um den
-aktuellen Zeitstempel als Parameter erweitert wird, führt jedoch dazu, dass der
-Cache komplett ausser Kraft gesetz wird. Eine weitere unwirksame Methode ist das
-setzen der maximalen Lebensdauer des Bildes im Cache durch den dafür
-vorgesehenen HTTP-Header, da hierfür der Zeitpunkt der nächsten Änderung des
-Bildes bekannt sein müsste. Ohne diese Information ist diese Methode lediglich
-eine Balance zwischen den beiden zuvor genannten, aber keine korrekte Lösung des
-Problems.
+Dieses Verhalten kann umgangen werden, indem die \texttt{URL} für jeden Request
+um den aktuellen Zeitstempel als Parameter erweitert wird, führt jedoch dazu,
+dass der Cache komplett ausser Kraft gesetz wird. Eine weitere unwirksame
+Methode ist das setzen der maximalen Lebensdauer des Bildes im Cache durch den
+dafür vorgesehenen \texttt{HTTP} Header, da hierfür der Zeitpunkt der nächsten
+Änderung des Bildes bekannt sein müsste. Ohne diese Information ist diese
+Methode lediglich eine Balance zwischen den beiden zuvor genannten, aber keine
+korrekte Lösung des Problems.
 
-Zur korrekten Lösung des Problems stellt HTTP zwei Header zur Verfügung: ETAG
-und Last-Modified. Bei beiden stellt der Client den Request an den Server,
-schickt aber den Last-Modified bzw ETAG Header mit dem vom Server zuletzt
-übermittelten Wert mit. Der Server prüft ob der vom Client im Header
-übermittelte Wert noch aktuell ist und antwortet mit dem aktuellem Inhalt oder
-dem Hinweis, dass der vom Client gecachete Inhalt sich auf Serverseite nicht
-verändert hat.
+Zur korrekten Lösung des Problems stellt \texttt{HTTP} zwei Header zur
+Verfügung: \texttt{ETAG} und \texttt{Last-Modified}. Bei beiden stellt der
+Client den Request an den Server, schickt aber den \texttt{Last-Modified} bzw
+\texttt{ETAG} Header mit dem vom Server zuletzt übermittelten Wert mit. Der
+Server prüft ob der vom Client im Header übermittelte Wert noch aktuell ist und
+antwortet mit dem aktuellem Inhalt oder dem Hinweis, dass der vom Client
+gecachete Inhalt sich auf Serverseite nicht verändert hat.
 
-ETAG verwendet hierbei eine Checksumme über den Inhalt, Last-Modified einen
-Zeitstempel. Im Kontext der Bildverwaltung sind beide gleich Wirkungsvoll, da
-jedes Bild im Dateisystem gespeichert wird und somit der Zeitstempel vom
-Dateisystem verwaltet und bei Änderungen an der Datei aktualisiert wird. Die
-Verwendung der Checksumme setzt voraus, dass für jeden Request zum Abrufen eines
-Bildes die Checksumme des Bildes neu berechnet werden muss. Im Gegensatz zu
-Last-Modified kann ETAG durch Bitflip entstandene Bildänderungen feststellen und
-sie dem Projektautoren schneller anzeigen und ist resistent gegenüber
-Manipulation des Zeitstempel im Dateisystem oder Unregelmäßigkeiteiten in der
-Systemzeit, allerdings kann ersteres durch Verwendung hostingtauglicher
-Festplatten- und Dateisystemkonfigurationen vermieden werden und letzteres
-deutet auf einen Hardwaredefekt hin dessen Mitigation nicht in den Anforderungen
-an die Bildverwaltung enthalten ist, während die Manipulation der Zeitstempel
-externen Eingriff auf durch den Systemadministrator oder einen Angreifer auf das
-System bedeutet ersteres widerspricht der Aufgabe des Systemadministrators und
-das Verhindern von letzterem ist sowohl Aufgabe aller am erstellen oder
-betreiben der Software beteiligter. ETAG und Last-Modified können auch zusammen
+\texttt{ETAG} verwendet hierbei eine Checksumme über den Inhalt,
+\texttt{Last-Modified} einen Zeitstempel. Im Kontext der Bildverwaltung sind
+beide gleich Wirkungsvoll, da jedes Bild im Dateisystem gespeichert wird und
+somit der Zeitstempel vom Dateisystem verwaltet und bei Änderungen an der Datei
+aktualisiert wird. Die Verwendung der Checksumme setzt voraus, dass für jeden
+Request zum Abrufen eines Bildes die Checksumme des Bildes neu berechnet werden
+muss. Im Gegensatz zu \texttt{Last-Modified} kann \texttt{ETAG} durch Bitflip
+entstandene Bildänderungen feststellen und sie dem Projektautoren schneller
+anzeigen und ist resistent gegenüber Manipulation des Zeitstempel im Dateisystem
+oder Unregelmäßigkeiteiten in der Systemzeit, allerdings kann ersteres durch
+Verwendung hostingtauglicher Festplatten- und Dateisystemkonfigurationen
+vermieden werden und letzteres deutet auf einen Hardwaredefekt hin dessen
+Mitigation nicht in den Anforderungen an die Bildverwaltung enthalten ist,
+während die Manipulation der Zeitstempel externen Eingriff auf durch den
+Systemadministrator oder einen Angreifer auf das System bedeutet ersteres
+widerspricht der Aufgabe des Systemadministrators und das Verhindern von
+letzterem ist sowohl Aufgabe aller am erstellen oder betreiben der Software
+beteiligter. \texttt{ETAG} und \texttt{Last-Modified} können auch zusammen
 verwendet werden, sodass im Fall einer Veränderung des Bildes das berechnen der
 Checksumme entfallen kann, da sich der Zeitstempel bereits unterscheidet. Im
 wesentlich häufiger auftretenden Fall des aktuellen Client Caches muss die
 Checksumme jedoch weiter berechnet werden.
 
-Die Bildverwaltung verwendet den Last-Modified Header mit dem Zeitzonenfreien
-Zeitstempel aus dem Dateisystem, da der zusätzliche Overhead durch das Berechnen
-der Checksumme jedes ausgliefertem Bildes keinen ausreichenden Mehrwert
-gegenüber der Verwendung des Zeitstempels bietet. Beim Skalieren der Anwendung
-auf mehrere nicht unhabhängige Instanzen kann der Last-Modified Header aus dem
-Filesystem nicht mehr zuverlässig verwendet werden ohne dass beim
-Synchronisieren der Daten die Zeitstempel mit synchronisiert werden, hier kann
-die Verwendung des ETAG Headers besser sein, allerdings ist der Wechsel von
-Last-Modified zu ETAG trivial und die Software derzeit nicht in der Lage in
-dieser Form betrieben zu werden.
-
-\todo[inline,author=mri]{Warum gehen ETAGs nicht, wenn das doch trivial ist?}
+Die Bildverwaltung verwendet den \texttt{Last-Modified} Header mit dem
+Zeitzonenfreien Zeitstempel aus dem Dateisystem, da der zusätzliche Overhead
+durch das Berechnen der Checksumme jedes ausgliefertem Bildes keinen
+ausreichenden Mehrwert gegenüber der Verwendung des Zeitstempels bietet. Beim
+Skalieren der Anwendung auf mehrere nicht unhabhängige Instanzen kann der
+\texttt{Last-Modified} Header aus dem Filesystem nicht mehr zuverlässig
+verwendet werden ohne dass beim Synchronisieren der Daten die Zeitstempel mit
+synchronisiert werden, hier kann die Verwendung des \texttt{ETAG} Headers besser
+sein, der Wechsel von \texttt{Last-Modified} zu ETAG ist allerdings trivial.
 
 \subsubsection{API}
 
@@ -171,8 +169,8 @@ POST /api/project/:project_id/image
 Diese Route wird verwendet um neue Bilder in der Bildverwaltung anzulegen. Es
 wird ein Multipart Formular erwartet, bestehend aus dem Bild und den Metadaten.
 Da nur der Projektautor in der Lage sein soll das Projekt zu editieren, ist
-diese Route, wie der Rest der modifizierenden Editorfunktionen, durch HTTP Basic
-Auth abgesichert.
+diese Route, wie der Rest der modifizierenden Editorfunktionen, durch
+\texttt{HTTP} Basic Auth abgesichert.
 
 \begin{minted}{ruby}
 GET /api/project/:project_id/image/:image_id
@@ -225,15 +223,25 @@ Die versendeten Metadaten entsprechen dem Format des Description Interfaces:
 
 Ein Hauptaspekt der Bildverwaltung ist eine Übersicht aller dem Projekt
 verfügbaren Bilder und der Möglichkeit die Bilder nach Bildname, Urhebername und
-Lizenzname zu filtern. Die Daten stammen aus der API Route, der alle
+Lizenzname zu filtern. Die Daten stammen aus der \texttt{API} Route, der alle
 Bildmetadaten liefert und können sowohl zur besseren Betrachtbarkeit als
 Gallerie oder zur besseren Übersicht über die Metadaten als Liste angezeigt
-werden. \todo{Screenshot von der Gallerie} \todo{Screenshot von der Liste}
+werden.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth/100*69]{images/screenshot-image-gallery.png}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth/100*77]{images/screenshot-image-list.png}
+\end{figure}
 
 Der Upload geschieht über ein der Bildverwaltung untergeordneten Dialog
-bestehend aus einem Formular mit Feldern für Name des Bildes, Name des Urhebers, Url zur
-Webseite des Urhebers, Name der Lizenz unter der das Bild verwendet wird, der
-Url zum Text der Lizenz, sowie dem Dateiupload.
+bestehend aus einem Formular mit Feldern für Name des Bildes, Name des Urhebers,
+\texttt{URL} zur Webseite des Urhebers, Name der Lizenz unter der das Bild
+verwendet wird, der \texttt{URL} zum Text der Lizenz, sowie dem Dateiupload.
 
 Aus der Übersicht kann jedes Bild einzelnd gelöscht oder bearbeitet werden. Beim
 bearbeiten wird ein Dialog ähnlich dem Upload Dialog angezeigt, mit dem
@@ -246,81 +254,87 @@ werden muss bzw. die Bilddatei in einem anderen Dateiformat oder anderer
 Bildgröße hochzuladen ohne die Metadaten zu verändern.
 
 Die Verwendung von Namen und Url zu einer Lizenz ist auf den ersten Blick eher
-unelegant und eine Liste von Lizenzen von der Art Propriätär, Gemeinfrei, CC0,
-CC-BY, CC-BY-SA, CC-BY-ND, CC-BY-NC, CC-BY-NC-SA und CC-BY-NC-ND mit bereits
-hinterlegten Verweisen auf die Lizenzen und im Falle der CC Lizenzen den Badges
-zum Rendern bei der Quellenangabe. Allerdings ist allein die Auflistung der CC
-Lizenzen ein Problem. Die aktuelle Fassung der CC Lizenzen ist 4.0, es
-existieren aber noch ältere Versionen die immer noch in Verwendung sind. Bei
-Lizenzen zählt die Version, unter der das Bild vom Urheber veröffentlicht wurde.
-Wenn der Urheber das Bild nicht unter der aktuelleren Version der jeweiligen CC
-Lizenz neu veröffentlicht hat, gilt weiterhin die ursprüngliche Version. Die
-Angabe der falschen Version der Lizenz bedeutet, dass die Lizenzbedingungen
-nicht erfüllt sind. Weiterhin existieren beispielsweise von den 3.0 Versionen
-auf verschiedene Juristiktionen portierte Versionen, die wiederum korrekt
-auseinandergehalten werden müssen. Weiterhin kann jede der Lizenzen adaptiert
-werden um zusätzliche Bedingunen hinzuzufügen. Die Verwaltung der Lizenzliste
-bedeutet einen großen Wartungsaufwand, da ständig neue Lizenzen auftauchen
-können. Außerdem macht die nötige Anzahl der Lizenzen in der Liste die Auswahl
-zu umständlich und verwirrend wenn man die Zielgruppe bedenkt. Da die Zielgruppe
-außerdem für den Umgang mit Lizenzen sensibilisiert werden soll ist der Kontakt
-mit dem Text der Lizenzen bzw. im Falle der CC Lizenzen wenigstens der
-Verständliche Zusammenfassung durchaus zielführend und kann außerdem die
-Wahrscheinlichkeit erhöhen dass CC Lizenzen für eigene Werke verwendet werden,
-da dafür die Existenz dieser bekannt sein muss.
+unelegant und eine Liste von Lizenzen von der Art Propriätär, Gemeinfrei,
+\texttt{CC0}, \texttt{CC-BY}, \texttt{CC-BY-SA}, \texttt{CC-BY-ND},
+\texttt{CC-BY-NC}, \texttt{CC-BY-NC-SA} und \texttt{CC-BY-NC-ND} mit bereits
+hinterlegten Verweisen auf die Lizenzen und im Falle der \texttt{CC} Lizenzen
+den Badges zum Rendern bei der Quellenangabe. Allerdings ist allein die
+Auflistung der \texttt{CC} Lizenzen ein Problem. Die aktuelle Fassung der
+\texttt{CC} Lizenzen ist \texttt{4.0}, es existieren aber noch ältere Versionen
+die immer noch in Verwendung sind. Bei Lizenzen zählt die Version, unter der das
+Bild vom Urheber veröffentlicht wurde. Wenn der Urheber das Bild nicht unter der
+aktuelleren Version der jeweiligen \texttt{CC} Lizenz neu veröffentlicht hat,
+gilt weiterhin die ursprüngliche Version. Die Angabe der falschen Version der
+Lizenz bedeutet, dass die Lizenzbedingungen nicht erfüllt sind. Weiterhin
+existieren beispielsweise von den \texttt{3.0} Versionen auf verschiedene
+Juristiktionen portierte Versionen, die wiederum korrekt auseinandergehalten
+werden müssen. Weiterhin kann jede der Lizenzen adaptiert werden um zusätzliche
+Bedingunen hinzuzufügen. Die Verwaltung der Lizenzliste bedeutet einen großen
+Wartungsaufwand, da ständig neue Lizenzen auftauchen können. Außerdem macht die
+nötige Anzahl der Lizenzen in der Liste die Auswahl zu umständlich und
+verwirrend wenn man die Zielgruppe bedenkt. Da die Zielgruppe außerdem für den
+Umgang mit Lizenzen sensibilisiert werden soll ist der Kontakt mit dem Text der
+Lizenzen bzw. im Falle der \texttt{CC} Lizenzen wenigstens der Verständliche
+Zusammenfassung durchaus zielführend und kann außerdem die Wahrscheinlichkeit
+erhöhen dass \texttt{CC} Lizenzen für eigene Werke verwendet werden, da dafür
+die Existenz dieser bekannt sein muss.
 
 \subsubsection{Frontendintegration}
 
-Für das Frontend wird die Templating Engine Liquid verwendet. Der Seiteneditor
-erzeugt ein Template, in dem Zwei verschiedene Bild Tags enthalten sein können:
-einer für grafische Elemente, die in der Quellliste am Ende der Seite aufgeführt
-werden, und einer für Abbildungen, denen die Quelle direkt angehängt ist.
-Letztres verwendet einen dafür erzeugten Tag displayImageFigure, der den Tag in
-eine HTML Figure Umgebung mit dem Bild und der Quellenangabe rendert.
+Für das Frontend wird die Templating Engine \texttt{Liquid} verwendet. Der
+Seiteneditor erzeugt ein Template, in dem Zwei verschiedene Bild Tags enthalten
+sein können: einer für grafische Elemente, die in der Quellliste am Ende der
+Seite aufgeführt werden, und einer für Abbildungen, denen die Quelle direkt
+angehängt ist. Letztres verwendet einen dafür erzeugten Tag displayImageFigure,
+der den Tag in eine \texttt{HTML} Figure Umgebung mit dem Bild und der
+Quellenangabe rendert.
 
 Für die grafischen Elemente wird ebenfalls ein spezieller Tag verwendet,
-allerdings muss dieser nicht nur die HTML Darstellung des Bildes rendern,
-sondern auch dafür sorgen, dass das Bild in der Quellenliste aufgeführt wird.
-Der Tag muss also einen Seiteneffect auslösen, der das Bild der Quellenliste
-hinzufügt, weshalb er addToSourceList heißt. Die Quellenliste wird durch den Tag
-displaySourceList gerendert, der am Ende jeder Seite eingefügt wird.
+allerdings muss dieser nicht nur die \texttt{HTML} Darstellung des Bildes
+rendern, sondern auch dafür sorgen, dass das Bild in der Quellenliste aufgeführt
+wird. Der Tag muss also einen Seiteneffect auslösen, der das Bild der
+Quellenliste hinzufügt, weshalb er \texttt{addToSourceList} heißt. Die
+Quellenliste wird durch den Tag \texttt{displaySourceList} gerendert, der am
+Ende jeder Seite eingefügt wird.
 
-Es ist im Konzept von Liquid nicht vorgesehen, dass das Rendern eines Tags
-einfluss auf darauf folgende Tags hat, weshalb die Quellenliste in einer
+Es ist im Konzept von \texttt{Liquid} nicht vorgesehen, dass das Rendern eines
+Tags einfluss auf darauf folgende Tags hat, weshalb die Quellenliste in einer
 globalen Variable gespeichert werden muss. Da mehrere Rendervorgänge
 geleichzeitig stattfinden können, die sich allerdings nicht gegenseitig
-beeinflussen dürfen, wird für jeden Rendervorgang eine UUID erzeugt, unter der
-die Quelliste des Rendervorgangs abgelegt wird bis der Rendervorgang
+beeinflussen dürfen, wird für jeden Rendervorgang eine \texttt{UUID} erzeugt,
+unter der die Quelliste des Rendervorgangs abgelegt wird bis der Rendervorgang
 abgeschlossen ist.
 
-Jedes rendern eines addToSourceList Tags fügt die Metadaten des Bildes in
-die Quellliste unter der UUID des Rendervorgangs ein. Dabei wird gezählt wie oft
-dieses Bild bereits dargestellt wurde und diese Nummer an die UUID der Bildes
-angehängt als Id des HTML img Elements verwendet, damit die Quellliste auf das
-Bild verlinken kann.
+Jedes rendern eines \texttt{addToSourceList} Tags fügt die Metadaten des Bildes
+in die Quellliste unter der \texttt{UUID} des Rendervorgangs ein. Dabei wird
+gezählt wie oft dieses Bild bereits dargestellt wurde und diese Nummer an die
+\texttt{UUID} der Bildes angehängt als \texttt{Id} des \texttt{HTML}
+\texttt{img} Elements verwendet, damit die Quellliste auf das Bild verlinken
+kann.
 
-Wird die Quellliste gerendert, so werden alle In die Quellliste der UUID des
-Rendervorgangs eingetragenen Bildmetadaten nach Urheber und Bild UUID gruppiert,
-sodass die Quellliste einen Eintrag je Urheber mit all seinen Bildern und einen
-Eintrag je Bild mit allen vorkommen und Link auf diese enthält. Zum Gruppieren
-der Urheber wird die Kombination aus Name und URL des Urhebers verwendet um
-Urheber gleichen Namens oder Urheber mit gemeinsamer Webseite auseinanderhalten
-zu können. Für jedes Bild wird unter dem Eintrag des Autoren ein Eintrag mit
-namen und Lizenz des Bildes angelegt, wobei dem Namen nummerierte Links
-angehängt sind, die auf die Vorkommen der Bilder oben auf der Seite verlinken.
+Wird die Quellliste gerendert, so werden alle In die Quellliste der
+\texttt{UUID} des Rendervorgangs eingetragenen Bildmetadaten nach Urheber und
+Bild \texttt{UUID} gruppiert, sodass die Quellliste einen Eintrag je Urheber mit
+all seinen Bildern und einen Eintrag je Bild mit allen vorkommen und Link auf
+diese enthält. Zum Gruppieren der Urheber wird die Kombination aus Name und
+\texttt{URL} des Urhebers verwendet um Urheber gleichen Namens oder Urheber mit
+gemeinsamer Webseite auseinanderhalten zu können. Für jedes Bild wird unter dem
+Eintrag des Autoren ein Eintrag mit Namen und Lizenz des Bildes angelegt, wobei
+dem Namen nummerierte Links angehängt sind, die auf die Vorkommen der Bilder
+oben auf der Seite verlinken.
 
 \subsubsection{Seiteneditorintegration}
 
-Der Seiteneditor verfügte bereits über ein Image Element, für das ``src'' und
-``alt'' wie in HTML üblich befüllt werden konnten. Dieses Element wurde ersetzt
-durch eines, bei dem ein Bild aus der Bildverwaltung und die Darstellungsform
-auswählbar sind. Dazu wurde eine Angular Komponente geschaffen, die sowohl an
-dieser Stelle als auch bei der auswahl des Projektbildes verwendet wird. Die
-erste Fassung dieser Komponente ist eine einfache Dropdownliste, in der die
-Namen der Bilder aus der Bildverwaltung aufgeführt sind, da derzeit keine
-modalen Dialoge zur Verfügung stehen. Sobald sich das ändert, kann stattdessen
-ein Auswahldialog wie die Bildübersicht mit den selben Filteroptionen verwendet
-werden.
+Der Seiteneditor verfügte bereits über ein Image Element, für das \texttt{src}
+und \texttt{alt} wie in HTML üblich befüllt werden konnten. Dieses Element wurde
+ersetzt durch eines, bei dem ein Bild aus der Bildverwaltung und die
+Darstellungsform auswählbar sind. Dazu wurde eine Angular Komponente geschaffen,
+die sowohl an dieser Stelle als auch bei der auswahl des Projektbildes verwendet
+wird. Die erste Fassung dieser Komponente ist eine einfache Dropdownliste, in
+der die Namen der Bilder aus der Bildverwaltung aufgeführt sind, da derzeit
+keine modalen Dialoge zur Verfügung stehen. Sobald sich das ändert, kann
+stattdessen ein Auswahldialog wie die Bildübersicht mit den selben
+Filteroptionen verwendet werden.
 
 Die Bilder in der Bildverwaltung sind nicht notwendigerweise in der Größe
 hintelegt, in der sie Dargestellt werden sollen. Bei Bildern im SVG Format
@@ -332,7 +346,20 @@ Es sollte möglich sein, entweder die Höhe oder Breite festzulegen. Wenn beide
 gleichzeitig festgelegt werden und ein anderes Seitenverhältnis als das des
 Bildes gewählt wird, führt dies zu einer Streckung des Bildes.
 
-\todo[inline,author=mri]{Beispielbild}
+\begin{figure}
+  \includegraphics[width=\columnwidth/100*66]{images/scale-image-orig.png}
+  \includegraphics[width=\columnwidth/100*33]{images/scale-image-bad1.png}
+  \includegraphics[width=\columnwidth/100*66]{images/scale-image-bad2.png}
+  \includegraphics[width=\columnwidth/100*33]{images/scale-image-good.png}
+
+  Links oben: Originalbild
+
+  Rechts oben: Halbierte Breite bei gleicher Höhe
+
+  Links unten: Halbierte Höhe bei gleicher Breite
+
+  Rechts unten: Korrekt auf 50\% runterskaliertes Bild
+\end{figure}
 
 Desweiteren ist die Skalierungsmethode eine wichtige Option. Für reguläre Bilder
 sollte zum Schrumpfen der Bilder eine qualitativ hochwertige Interpolation
@@ -343,7 +370,19 @@ Interpolationsmethode nicht automatisch berechnet und im Template abgelegt
 werden, daher muss wie Wahl der korrekten Interpolationsmethode dem
 Seitenautoren überlassen werden.
 
-\todo[inline,author=mri]{Beispielbild}
+\begin{figure}
+  \includegraphics[]{images/pixelart-original.png}
+  \includegraphics[width=\columnwidth/100*46]{images/pixelart-scaled-bad.png}
+  \includegraphics[width=\columnwidth/100*46]{images/pixelart-scaled-good.png}
+
+  Links: Pixelart in Originalgröße
+
+  Mitte: Mit hochwertiger Interpolationsmethode skaliertes Bild.
+
+  Rechts: Mit Nearest Neighbor skaliertes Bild.
+
+  \todo[inline]{change graphic with self created one}
+\end{figure}
 
 Diese Eigenschaften sowie die Auswahl des Darstellungstyps müssen sowohl für das
 Image Element als auch für Tabellen in denen Bilder angezeigt werden auswählbar
@@ -351,32 +390,37 @@ sein.
 
 Das Image Element soll weiterhin in der Lage sein sich in Fließtext zu
 integrieren, daher ist für das Image Element zusätzlich die Auswahl des Float
-Typs mit den Optionen ``left'', ``right'' and ``none'' notwendig. Wollte man
-kleine Bilder im Fließtext unterbringen so käme noch die Auswahl des Display
-Typs zwischen ``block'' und ``inline-block'' hinzu, allerdings kann das Image
-Element derzeit nicht innerhalb eines Paragraphen verwendet werden, daher
-entfällt diese Auswahl.
+Typs mit den Optionen \texttt{left}, \texttt{right} and \texttt{none} notwendig.
+Wollte man kleine Bilder im Fließtext unterbringen so käme noch die Auswahl des
+Display Typs zwischen \texttt{block} und \texttt{inline-block} hinzu, allerdings
+kann das Image Element derzeit nicht innerhalb eines Paragraphen verwendet
+werden, daher entfällt diese Auswahl.
 
+\cleardoublepage
 \subsubsection{Datenbankintegration}
 
-\todo{insert image}
+\begin{figure}
+  \centering
+  \includegraphics[height=21cm]{images/image_database_schemas.png}
+\end{figure}
 
 Mit einer Datenbank, die die Bilddateien in Datenbank in den Tabellen speichern
 kann ist der erste Ansatz davon gebrauch zu machen. Daraus resultiert das Schema
-bestehend aus der Tabellengruppe ``image'', ``author'' und ``licence'' wie in
-der Abbildung dargestellt. Dies bedarf jedoch einem Datenbankzugriff für jedes
-darzustellende Bild, so dass das Schema statt dem Blob den Pfad zum Bild im
-Dateisystem beinhalten sollte, wie in ``image\_O1'', ``author\_O1'' und
-``licence\_O1'' dargestellt. Da die Bilder durch ihre UUID bereits eindeutig
-identifiziert werden ist die Verwendung einer datenbankeigenen Id reduntant,
-außerdem kann die UUID verwendet werden um den Pfad der Bilddatei im Dateisystem
-zu berechnen, solange dieser systematisch in Abhängigkeit von der UUID erzeugt
-wird, sodass das Speichern des Dateipfads ebenfalls reduntant ist. Das Ergebnis
-ist in der Tabellengruppe ``image\_O2'', ``author\_O2'' und ``licence\_O2'' zu
-sehen. Da das Abrufen aller Metadaten die häufigste Operation ist, lohnt es sich
-die Tabellengruppe zu denormalisieren um diese Operation ohne das zusammenführen
+bestehend aus der Tabellengruppe \texttt{image}, \texttt{author} und
+\texttt{licence} wie in der Abbildung dargestellt. Dies bedarf jedoch einem
+Datenbankzugriff für jedes darzustellende Bild, so dass das Schema statt dem
+Blob den Pfad zum Bild im Dateisystem beinhalten sollte, wie in
+\texttt{image\_O1}, \texttt{author\_O1} und \texttt{licence\_O1} dargestellt. Da
+die Bilder durch ihre UUID bereits eindeutig identifiziert werden ist die
+Verwendung einer datenbankeigenen Id reduntant, außerdem kann die UUID verwendet
+werden um den Pfad der Bilddatei im Dateisystem zu berechnen, solange dieser
+systematisch in Abhängigkeit von der UUID erzeugt wird, sodass das Speichern des
+Dateipfads ebenfalls reduntant ist. Das Ergebnis ist in der Tabellengruppe
+\texttt{image\_O2}, \texttt{author\_O2} und \texttt{licence\_O2} zu sehen. Da
+das Abrufen aller Metadaten die häufigste Operation ist, lohnt es sich die
+Tabellengruppe zu denormalisieren um diese Operation ohne das zusammenführen
 mehrer Tabellen auszuführen zu können. Das Schema der resultierenden Tabelle ist
-in der Abbildung unter ``image\_O3'' zu sehen. Da das Projekt zum aktuellen
+in der Abbildung unter \texttt{image\_O3} zu sehen. Da das Projekt zum aktuellen
 Zeitpunkt noch Sqlite verwendet, ist diese Tabelle ausgelagert in eine JSON
 Datei im Bilderordner ausgelagert um die Last auf der Datenbank zu verringern.
 

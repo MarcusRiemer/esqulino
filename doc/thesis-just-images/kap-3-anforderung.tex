@@ -61,25 +61,37 @@ Containers mit einem Container der neueren Version realisiert.
 \subsection{Bildverwaltung}
 
 Der erste zu klärende Punkt der Bilddatenbank war, wie Bilder zur
-Datenbank hinzugefügt werden können. Zur
-Auswahl\todo[author=mri]{Auflistung} standen der Dateiupload im
-Projekteditor durch den Autoren des Projekts, Import aus einer
-öffentlichen Bilddatenbank, Import aus einer eigenen durch den
-Administrator gepflegten Bilddatenbank.  Eine dieser Möglichkeiten
+Datenbank hinzugefügt werden können. Zur Auswahl standen
+\begin{easylist}[itemize]
+& Dateiupload im Projekteditor durch den Autoren des Projekts
+& Import aus einer öffentlichen Bilddatenbank
+& Import aus einer eigenen durch den Administrator gepflegten Bilddatenbank.
+\end{easylist}
+Eine dieser Möglichkeiten
 soll mit der Implementierung der Bildverwaltung direkt umgesetzt
 werden, die anderen möglicherweise später folgen.
 
-Vorteile\todo[author=mri]{Auch Tabellarisch} der öffentlichen
+\begin{tabular}{ p{\columnwidth/60*23} | p{\columnwidth/7} | p{\columnwidth/6} | p{\columnwidth/6} c }
+  & \centering öffentliche Datenbank & \centering administrierte Datenbank & \centering Dateiupload im Editor &  \\ \hline \hline
+  Aufwand beim Import & \centering 5 & \centering -5 & \centering 0 &  \\ \hline
+  Verwendung eigener Werke & \centering -1 & \centering 3 & \centering 5 &   \\ \hline
+  Auseinandersetzung mit Lizenzen & \centering 0 & \centering 3 & \centering 3 &   \\ \hline
+  Kontrolle auf Lizenzverletzungen & \centering 4 & \centering 5 & \centering -3 &  \\ \hline
+  Implementierungsaufwand & \centering -3 & \centering -3 & \centering 2 &  \\ \hline \hline
+  Gesammt & \centering 5 & \centering 3 & \centering 7
+\end{tabular}
+
+Vorteile der öffentlichen
 Bilddatenbank ist der geringe Aufwand beim Import von Bildern, bei
 ausschließlicher Nutzung von Datenbanken die alle Bilder unter
-Creative Commons Zero (CC0) veröffentlichen, wie beispielsweise
+Creative Commons Zero (\texttt{CC0}) veröffentlichen, wie beispielsweise
 openclipart, entfällt zudem die Notwendigkeit Metadaten wie Urheber
 und Lizenz zu Speichern oder anzuzeigen, bei Datenbanken die auch
-andere Creative Commons Lizenzen (CC-BY, CC-BY-SA,CC-BY-NC,
-CC-BY-SA-NC, CC-BY-ND, CC-BY-ND-NC) oder vergleichbare zulassen sind
-Urheber und Lizenz zumindest Maschienenlesbar hinterlegt, sodass im
-einfachsten Fall die Auswahl der Bilddatenbank und die ID des Bildes
-für den Import ausreichen, im angenehmen Fall ist im Projekts Editor
+andere Creative Commons Lizenzen (\texttt{CC-BY}, \texttt{CC-BY-SA},\texttt{CC-BY-NC},
+\texttt{CC-BY-SA-NC}, \texttt{CC-BY-ND}, \texttt{CC-BY-ND-NC}) oder
+vergleichbare zulassen sind Urheber und Lizenz zumindest Maschienenlesbar
+hinterlegt, sodass im einfachsten Fall die Auswahl der Bilddatenbank und die ID
+des Bildes für den Import ausreichen, im angenehmen Fall ist im Projekts Editor
 ein Suchinterface mit Anbindung an die API der Bilddatenbank sodass
 eine oder alle Bilddatenbanken aus dem Projekteditor heraus durchsucht
 werden können ohne dass dem Projektautoren die jeweilige Bilddatenbank
@@ -139,7 +151,14 @@ Einbettung und den Ort der Quellenangaben unterscheiden. Die Abbildung
 eingerahmt, die Metadaten am Bild dargestellt, das Gestalterische Element bettet
 das Bild in einen Link ein, der auf die Quellenangabe am Ende der Seite verweist.
 
-\todo[inline,author=mri]{Beispielgrafik / Mockup}
+\begin{figure}
+  \includegraphics[width=\columnwidth/2]{images/figure-example.pdf}
+  \includegraphics[width=\columnwidth/2]{images/icon-example.pdf}
+
+  Links: Zwei Figure Umgebungen umgeben von Fließtext.
+
+  Rechts: Acht Graphic Elemente mit Fließtext und Quellenangabe darunter.
+\end{figure}
 
 \subsubsection{Darstellung von Quellenangaben}
 
@@ -157,8 +176,6 @@ das gestalterische in der Seite verlinkt, der Name des Bildes auf eine neue
 Seite bestehend aus einer Abbildung des Bildes gemäß der obig genannten
 Darstellungsform von Abbildungen, der Name des Autoren ein Link auf dessen
 Webpräsenz und der Name der Lizenz ein Link auf den Volltext der Lizenz.
-
-\todo[inline,author=mri]{Beispielgrafik / Mockup}
 
 \subsubsection{Notwendigkeit von Quellenangaben}
 
@@ -181,9 +198,8 @@ kleinen Auflösungen, insbesondere wenn sie eine Mobilfunkverbindung verwenden u
 die Bilder anzuzeigen. Daher werden für die Bilder varianten geringerer
 Auflösungen bereitgestellt, die vom Client abhängig von seiner
 Bildschirmauflösung anfordert. Dies verringert die Menge der zu übertragenden
-Daten und verkürzt die Ladezeiten auf das Nötige.
-
-\todo[inline,author=mri]{Raster / Vektorgrafik}
+Daten und verkürzt die Ladezeiten auf das Nötige. Da Vektorgrafiken unabhängig
+von der Auflösung sind, werden sie unverändert ausgegeben.
 
 \subsubsection{Datenhaltung}
 
@@ -224,9 +240,9 @@ Größenordnung dies zu einem Problem wird müsste in einem Benchmark getestet
 werden bei dem Diverse Nutzer auf Diversen Projekten simuliert werden müssten,
 wofür erst die PostgreSQL Anbindung abgeschlossen werden müsste.
 
-Letztere Beeinträchtigungen wären bei einem dedizierten Key-Value Store nicht
+Letztere Beeinträchtigungen wären bei einem dedizierten in-Memory Key-Value Store nicht
 gegeben, führen aber zu mehr Komplexität in der Systemarchitektur und somit zu
-mehr Fehlerquellen. \todo{BerkeleyDB und memcacheDB anreissen}
+mehr Fehlerquellen.
 
 Das Speichern der Bilder im Dateisystem unter Verwendung der UUID zum Zugriff
 ist so perfomant, wie Speichermedium und Dateisystem es zulassen. Bei aktuellen
@@ -243,8 +259,16 @@ erfordern, da die Datei weder gesucht werden muss, noch ein Client zum
 betrachten und bearbeiten der Datenbank sowie Kentnisse darüber notwendig sind;
 die zur Administration eines Servers notwendigen Kentnisse sind ausreichend.
 
-\todo[inline,author=mri]{Tabellarisches Fazit?}
-
+\begin{tabular}{ p{\columnwidth/3} | p{\columnwidth/6} | p{\columnwidth/6} | p{\columnwidth/6} c}
+   & \centering Dateisystem & \centering Datenbank & \centering in-Memory Key-Value Store &  \\ \hline \hline
+  Datenbanklast & \centering 0 & \centering -2 & \centering 0 &  \\ \hline
+  Kommplexität & \centering 2 & \centering 0 & \centering -3 &  \\ \hline
+  Zugriffszeit & \centering 4 & \centering 2 & \centering 5 &  \\ \hline
+  Auslagerbarkeit & \centering 4 & \centering -5 & \centering 4 &  \\ \hline
+  Skalierbarkeit & \centering 5  & \centering -5 & \centering 5 &  \\ \hline
+  Implementierungsaufwand & \centering 3 & \centering 0 & \centering -4 &  \\ \hline
+  Gesamt & \centering 18 & \centering -10 & \centering 7 &
+\end{tabular}
 
 %%% Local Variables:
 %%% mode: latex
