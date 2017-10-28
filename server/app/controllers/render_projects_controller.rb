@@ -57,7 +57,8 @@ class RenderProjectsController < ApplicationController
   # It does not depend on the project or the currently active page
   def server_render_data
     return {
-      'editor_host' => ENV['ESQULINO_EDITOR_HOST'] || 'localhost.localdomain:9292'
+      'editor_host' => Rails.configuration.sqlino['editor_domain'],
+      'project_host' => Rails.configuration.sqlino['project_domains'][0]
     }
   end
 

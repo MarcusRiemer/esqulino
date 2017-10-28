@@ -25,7 +25,7 @@ production:
   data_dir: ../data/dev
   client_dir: ../client/dist
   schema_dir: ../schema/json
-  project_domains: [blattzeug.de]
+  project_domains: ["blattzeug.de"]
   editor_domain: "blattwerkzeug.de"
   mail:
     default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
