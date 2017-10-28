@@ -87,15 +87,16 @@ class AddToSourceList < Liquid::Tag
     id_suffix = $sourceList[uuid].count(context['src'])
 
     $sourceList[uuid] << (context['src'])
-
+    authority = "#{context['project']['id']}.#{context['server']['project_host']}"
+    url = "//#{authority}/image/#{ context['src'] }"
     <<-delim
 <picture>
-  <source media="(min-width: 2000px)" srcset="/image/#{ context['src'] }">
-  <source media="(min-width: 1600px)" srcset="/image/#{ context['src'] }?width=2000">
-  <source media="(min-width: 1200px)" srcset="/image/#{ context['src'] }?width=1600">
-  <source media="(min-width:  800px)" srcset="/image/#{ context['src'] }?width=1200">
-  <source media="(min-width:  400px)" srcset="/image/#{ context['src'] }?width=800">
-  <img id="#{context['src']}-#{id_suffix}" src="/image/#{ context['src'] }?width=400" alt="#{ context['alt'] }">
+  <source media="(min-width: 2000px)" srcset="#{url}">
+  <source media="(min-width: 1600px)" srcset="#{url}?width=2000">
+  <source media="(min-width: 1200px)" srcset="#{url}?width=1600">
+  <source media="(min-width:  800px)" srcset="#{url}?width=1200">
+  <source media="(min-width:  400px)" srcset="#{url}?width=800">
+  <img id="#{context['src']}-#{id_suffix}" src="#{url}?width=400" alt="#{ context['alt'] }">
 </picture>
     delim
   end
@@ -139,16 +140,17 @@ class DisplayImageFigure < Liquid::Tag
   def render(context)
     img = Image.new(context['project']['instance'], context['src'])
     metadata = img.metadata_show
-
+    authority = "#{context['project']['id']}.#{context['server']['project_host']}"
+    url = "//#{authority}/image/#{ context['src'] }"
     <<-delim
 <figure class="figure">
   <picture>
-    <source media="(min-width: 2000px)" srcset="/image/#{ context['src'] }">
-    <source media="(min-width: 1600px)" srcset="/image/#{ context['src'] }?width=2000">
-    <source media="(min-width: 1200px)" srcset="/image/#{ context['src'] }?width=1600">
-    <source media="(min-width:  800px)" srcset="/image/#{ context['src'] }?width=1200">
-    <source media="(min-width:  400px)" srcset="/image/#{ context['src'] }?width=800">
-    <img id='#{context['src']}' class="figure-img" src='/image/#{ context['src'] }?width=400'>
+    <source media="(min-width: 2000px)" srcset="#{url}">
+    <source media="(min-width: 1600px)" srcset="#{url}?width=2000">
+    <source media="(min-width: 1200px)" srcset="#{url}?width=1600">
+    <source media="(min-width:  800px)" srcset="#{url}?width=1200">
+    <source media="(min-width:  400px)" srcset="#{url}?width=800">
+    <img id='#{context['src']}' class="figure-img" src='#{url}?width=400'>
   </picture>
   <footer><small>
     <a href='#{metadata['author-url']}'>#{ metadata['author-name'] }</a>,
@@ -188,15 +190,16 @@ class TableCell < Liquid::Tag
       id_suffix = $sourceList[uuid].count(value)
 
       $sourceList[uuid] << (value)
-
+      authority = "#{context['project']['id']}.#{context['server']['project_host']}"
+      url = "//#{authority}/image/#{value}"
       <<-delim
 <picture>
-  <source media="(min-width: 2000px)" srcset="/image/#{value}">
-  <source media="(min-width: 1600px)" srcset="/image/#{value}?width=2000">
-  <source media="(min-width: 1200px)" srcset="/image/#{value}?width=1600">
-  <source media="(min-width:  800px)" srcset="/image/#{value}?width=1200">
-  <source media="(min-width:  400px)" srcset="/image/#{value}?width=800">
-  <img id="#{value}-#{id_suffix}" src="/image/#{value}?width=400">
+  <source media="(min-width: 2000px)" srcset="#{url}">
+  <source media="(min-width: 1600px)" srcset="#{url}?width=2000">
+  <source media="(min-width: 1200px)" srcset="#{url}?width=1600">
+  <source media="(min-width:  800px)" srcset="#{url}?width=1200">
+  <source media="(min-width:  400px)" srcset="#{url}?width=800">
+  <img id="#{value}-#{id_suffix}" src="#{url}?width=400">
 </picture>
     delim
     else

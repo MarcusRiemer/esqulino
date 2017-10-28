@@ -49,6 +49,7 @@ class ProjectPagesController < ApplicationController
     # The known parameters for this request
     params = render_request['params']
     params['get'] = request.GET
+    params['server'] = self.server_render_data
 
     # Queries are Hashes of the form { sql :: string, name :: string }
     queries = render_request['queries']
@@ -65,6 +66,19 @@ class ProjectPagesController < ApplicationController
 
   # Rendering a known page
   def render_known
-    render :html => self.current_page.render({'get' => request.GET})
+    initial_params = {
+        'get' => request.GET,
+        'server' => self.render_server_params
+    }
+    puts "INITIAL_PARAMS"
+    p initial_params
+    render html: self.current_page.render(initial_params)
+  end
+
+  def server_render_data
+    return {
+      'editor_host' => Rails.configuration.sqlino['editor_domain'],
+      'project_host' => Rails.configuration.sqlino['project_domains'][0]
+    }
   end
 end

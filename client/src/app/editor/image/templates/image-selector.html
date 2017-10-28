@@ -1,8 +1,18 @@
-<select [(ngModel)]=projectImageId
-        id="project-image"
-        class="form-control">
-    <option *ngFor="let image of images"
-            [value]="image.id">
-        {{image.name}}
-    </option>
-</select>
+<!-- TODO: move styles to classes -->
+<div>
+    <div *ngFor="let image of images" style="float: left">
+        <div *ngIf="(projectImageId != null) && (projectImageId == image.id)" style="height: calc(2.25rem + 2px); width: calc(2.25rem + 2px);">
+            <img src="{{image.url}}" alt="{{image.name}}" style="max-width: 2.25rem; max-height: 2.25rem;">
+        </div>
+    </div>
+    <div style="width: calc(100% - 2.25rem - 2px); float: right;">
+        <select [(ngModel)]=projectImageId
+                id="project-image"
+                class="form-control">
+            <option *ngFor="let image of images"
+                    [value]="image.id">
+                {{image.name}}
+            </option>
+        </select>
+    </div>
+</div>
