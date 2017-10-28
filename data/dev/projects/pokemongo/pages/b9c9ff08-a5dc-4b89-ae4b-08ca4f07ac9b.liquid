@@ -13,9 +13,8 @@
 <body>
 <div class="container-fluid">
 <h1>Hallo auf meinem Pokédex</h1>
-{% include "image" src: "08cf4332-c143-4d75-8439-0dd012090472", type: "icon" %}
 <p>Hier zeige ich alle Pokémon, die ich gefangen habe.</p>
-{% include "query_table" table: query.Meine_Pokemon, columns: "spitzname,name,staerke,typ_name" %}
+{% include "query_table" table: query.Meine_Pokemon, columns: "bild,spitzname,name,staerke,typ_name" %}
 <div class="row"><div class="col-md-6"><form><button type="submit" formaction="/Gefangen_Loeschen" formmethod="GET"class="btn btn-secondary btn-block">Pokémon freigelassen</button></form></div>
 <div class="col-md-6"><form><button type="submit" formaction="/Gefangen_Neu" formmethod="GET"class="btn btn-secondary btn-block">Pokémon gefangen
 </button></form></div></div>

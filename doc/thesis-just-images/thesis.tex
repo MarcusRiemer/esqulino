@@ -35,6 +35,7 @@
 \usepackage[automark,headsepline=1pt]{scrlayer-scrpage}
 \usepackage[export]{adjustbox} % \includegraphis[frame]
 \usepackage[backend=biber, defernumbers=true]{biblatex}
+\usepackage[ampersand]{easylist}
 
 \addbibresource[datatype=bibtex]{sources.bib}
 
@@ -105,13 +106,13 @@
 \cleardoublepage
 
 \section{Literaturverzeichnis}
-%\printbibliography[heading=none] TODO
+\printbibliography[heading=none]
 
 \end{document}
 
 %%% Local Variables:
 %%% TeX-command-extra-options: "-shell-escape"
-%%% TeX-engine: pdflatex
+%%% TeX-engine: xetex
 %%% mode: latex
 %%% TeX-master: t
 %%% End:

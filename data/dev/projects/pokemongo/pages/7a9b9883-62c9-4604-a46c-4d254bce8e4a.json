@@ -30,10 +30,7 @@
         "action": {
           "type": "navigate",
           "internal": {
-            "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b",
-            "parameters": [
-
-            ]
+            "pageId": "b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b"
           }
         }
       },
@@ -41,6 +38,7 @@
         "type": "query-table",
         "queryRefName": "Meine_Pokemon",
         "columns": [
+          "bild",
           "gefangen_id",
           "nummer",
           "name",
@@ -63,13 +61,7 @@
             "text": "Löschen!",
             "query": {
               "type": "query",
-              "queryId": "40bddeac-facc-4836-a27b-6a23222078d5",
-              "mapping": [
-                {
-                  "parameterName": "gefangen_id",
-                  "providingName": "gefangen_id"
-                }
-              ]
+              "queryId": "40bddeac-facc-4836-a27b-6a23222078d5"
             }
           }
         ]

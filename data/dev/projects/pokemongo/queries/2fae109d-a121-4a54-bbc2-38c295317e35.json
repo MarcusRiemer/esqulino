@@ -1,25 +1,6 @@
 {
   "name": "Meine_Pokemon",
   "apiVersion": "4",
-  "from": {
-    "first": {
-      "name": "gefangen"
-    },
-    "joins": [
-      {
-        "table": {
-          "name": "pokedex"
-        },
-        "cross": "cross"
-      },
-      {
-        "table": {
-          "name": "typ"
-        },
-        "cross": "cross"
-      }
-    ]
-  },
   "select": {
     "columns": [
       {
@@ -69,6 +50,33 @@
             "table": "typ"
           }
         }
+      },
+      {
+        "expr": {
+          "singleColumn": {
+            "column": "bild",
+            "table": "pokedex"
+          }
+        }
+      }
+    ]
+  },
+  "from": {
+    "first": {
+      "name": "gefangen"
+    },
+    "joins": [
+      {
+        "table": {
+          "name": "pokedex"
+        },
+        "cross": "cross"
+      },
+      {
+        "table": {
+          "name": "typ"
+        },
+        "cross": "cross"
       }
     ]
   },

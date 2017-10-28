@@ -15,6 +15,8 @@ import { AvailableImage, AvailableImageDescription } from './available-image.cla
 export class ImageEditComponent {
     private _imageMetadata: AvailableImage;
 
+    private _lastModified: number;
+
     private _subscriptionRefs: any[] = [];
 
     constructor(
@@ -26,6 +28,7 @@ export class ImageEditComponent {
         private _sidebarService: SidebarService,
         private _router: Router
     ) {
+        this._lastModified = new Date().getTime();
     }
 
     onSubmit(event: Event) {
@@ -76,6 +79,7 @@ export class ImageEditComponent {
                     console.log("res: " + JSON.stringify(res));
                     this.reloadToolbar();
                     this._imageMetadata = new AvailableImage(this._serverApi, this._projectService.cachedProject, res);
+                    this._lastModified = new Date().getTime();
                 });
         });
     }
@@ -96,6 +100,10 @@ export class ImageEditComponent {
 
     get image() {
         return (this._imageMetadata);
+    }
+
+    get lastModified() {
+        return (this._lastModified);
     }
 }
 
