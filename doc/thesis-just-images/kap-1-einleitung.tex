@@ -1,7 +1,57 @@
 \section{Einleitung}
 \label{sec:introduction}
 
-\todo[inline]{TODO}
+SQLino verfügt bereits über die Möglichkeit Webseiten aus Text und Tabellen aus
+Datenbankabfragen zu erstellen. Nun lässt sich damit bereits eine ganze Menge an
+Dingen tun, allerdings lassen sich viele Dinge ansprechender und leichter
+verständlich darstellen, wenn Bilder verwendet werden können. Sei es ein Foto
+des im Text beschriebenen beim Sturm auf ein Auto gefallenen entwurzelten
+Baumes, der Schaltplan des vorgestellten Gadget Prototyps
+
+\footnote{Zugunsten der leichteren Lesbarkeit wird
+  in dieser Thesis auf die Ausdifferenzierung des Geschlechts von Personen
+  verzichtet, da es für den Sachverhalt irrelevant ist und den Lesefluss stört.
+  Wenn in dieser Thesis Personen genannt werden, steht das grammatikalische
+  Geschlecht in keinem Zusammenhang zum tatsächliche Geschlecht der jeweilig
+  genannten Personen und es sind immer alle Personen gemeint, auf die die
+  restliche Beeschreibung zutrifft, unabhängig des Geschlechts.}
+
+\todo[inline]{ein bis zwei absaetze warum man bilder haben will}
+
+Die Verwendung von Bildern auf Webseiten stellt immer wieder Probleme dar. Neben
+deutlich zu hohen Dateigrößen, die Ladezeiten in die Länge ziehen und bei
+Mobilgeräten das in Deutschland im Vergleich zu anderen Ländern um
+Größenordnungen geringere Datenvolumen unötig schnell aufbrauchen - von der
+Unbenutzbarkeit solcher Webseiten in der ``Edge-Wüste'' der ländlichen
+Mobilfunknetzte und Breitbandanschlüsse, die ihrem Namen nicht gerecht werden
+mal ganz abgesehen - ist ein weiteres Problem die mangelnde auseinandersetzung
+mit dem Urheberrecht und Nutzungslizenzen. Sogenannte Sozialze Netzwerke und
+Diskussionsplatformen verleiten den Nutzer Bilder einzustellen und dem Anbieter der
+Platform laut AGB diverse Rechte an diesen Bildern zu übertragen. Da der
+durchschnittliche Nutzer weder die AGB gelesen hat, noch sich dessen bewusst
+ist, dass die Befugnis die Rechte an den Bildern Dritter an den
+Platformbetreiber weiterzugeben bei besagten Dritten liegt und nicht bei der
+eigenen Person.
+
+Ein weiteres Problem ist die Verwaltung dieser Bilder. Ein Bild wird bei
+irgendeinem gerade angesagtem Imagehoster abgelegt, eingebunden und vergessen.
+Andere Bilder werden anderswo abgelegt, eingebunden und vergessen. Einige der
+Imagehoster liefern nach tausend Aufrufen im Monat das Bild nicht mehr aus ohne
+sich dafür bezahlen zu lassen, andere ändern nach einiger Zeit ihr Konzept und
+lassen einbetten ihrer Bilder auf fremden Seiten nicht mehr zu und zeigen die
+Bilder nur noch auf ihrer eigenen Werbefinanzierten Webseite an und wiederum
+andere haben in der zwischenzeit Insolvenz angemeldet und alle dort
+gespeicherten Bilder sind nicht mehr verfügbar.
+
+Diese Thesis beschreibt den Prototypen einer Bildverwaltung für SQLino, die auf
+diese Probleme eingeht, indem verwendete Bilder an einem Ort gesammelt und
+verwaltet werden, den Bildern Metadaten wie Urheber und Lizenz zugeordnet
+werden und dem Betrachter der Webseite dargestellt werden und Bilder beim
+ausliefern auf die für das Endgerät geeignete Größe herunterskaliert werden.
+
+Ein weiteres bearbeites Problem ist das Verwalten von Programmabhängigkeiten,
+die beim Hosten, Entwickeln und Testen der Software, insbesondere auf
+Verschiedenen Betriebssystemen.
 
 %%% Local Variables:
 %%% mode: latex
