@@ -1,5 +1,5 @@
 require 'filemagic'
-require 'RMagick'
+require 'rmagick'
 include Magick
 
 module ImageHelper
@@ -8,7 +8,7 @@ module ImageHelper
     path = Image.new(current_project, image_id).file_show
 
     type = FileMagic.new(FileMagic::MAGIC_MIME).file(path)
-    p type
+
     #do not attempt to resize svg
     if type == "image/svg+xml; charset=us-ascii"
       send_file path, type: type, disposition: 'inline'
