@@ -70,8 +70,7 @@ class ProjectPagesController < ApplicationController
         'get' => request.GET,
         'server' => self.server_render_data
     }
-    puts "INITIAL_PARAMS"
-    p initial_params
+
     render html: self.current_page.render(initial_params)
   end
 

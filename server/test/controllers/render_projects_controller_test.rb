@@ -71,8 +71,8 @@ class RenderProjectsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'pokemongo index page' do
-    get 'http://pokemongo.sld.tld/'
+  test 'pokemon index page' do
+    get 'http://pokemon.sld.tld/'
 
     assert_response :success
     assert_equal "text/html", @response.content_type
@@ -94,21 +94,21 @@ class RenderProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'typ_name', table_header.children[3].text
   end
 
-  test 'pokemongo individual pokemon pages' do
+  test 'pokemon individual pokemon pages' do
     (1..5).each do |i|
-      get "http://pokemongo.sld.tld/Gefangen_Einzeln?gefangen_id=#{i}"
+      get "http://pokemon.sld.tld/Gefangen_Einzeln?gefangen_id=#{i}"
       assert_response :success
       assert_equal "text/html", @response.content_type
     end
   end
 
-  test 'pokemongo crud pokemon' do
+  test 'pokemon crud pokemon' do
     # Check that Pokemon #6 does not currently exist
-    get "http://pokemongo.sld.tld/Gefangen_Einzeln?gefangen_id=6"
+    get "http://pokemon.sld.tld/Gefangen_Einzeln?gefangen_id=6"
     assert_response :bad_request
     
     # Create pokemon #6
-    post 'http://pokemongo.sld.tld/Gefangen_Neu/query/79f9fd59-89cd-47d1-ab20-9a4388cd9d44',
+    post 'http://pokemon.sld.tld/Gefangen_Neu/query/79f9fd59-89cd-47d1-ab20-9a4388cd9d44',
          params: {
            'nummer'	=> '1',
            'name'	=> 'test',
@@ -120,12 +120,12 @@ class RenderProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :found
 
     # Ensure it exists
-    get "http://pokemongo.sld.tld/Gefangen_Einzeln?gefangen_id=6"
+    get "http://pokemon.sld.tld/Gefangen_Einzeln?gefangen_id=6"
     assert_response :success
     assert_equal "text/html", @response.content_type
 
     # Delete it again
-    post 'http://pokemongo.sld.tld/Hauptseite/query/40bddeac-facc-4836-a27b-6a23222078d5',
+    post 'http://pokemon.sld.tld/Hauptseite/query/40bddeac-facc-4836-a27b-6a23222078d5',
          params: {
            'gefangen_id' => '6'
          },
@@ -133,14 +133,14 @@ class RenderProjectsControllerTest < ActionDispatch::IntegrationTest
          headers: auth_headers
 
     # Check that Pokemon #6 does not currently exist
-    get "http://pokemongo.sld.tld/Gefangen_Einzeln?gefangen_id=6"
+    get "http://pokemon.sld.tld/Gefangen_Einzeln?gefangen_id=6"
     assert_response :bad_request
     
     rollback_test_filesystem
   end
 
   test 'pokemengo create captured without number' do
-    post 'http://pokemongo.sld.tld/Gefangen_Neu/query/79f9fd59-89cd-47d1-ab20-9a4388cd9d44',
+    post 'http://pokemon.sld.tld/Gefangen_Neu/query/79f9fd59-89cd-47d1-ab20-9a4388cd9d44',
          params: {
            'name'	=> 'test',
            'staerke' =>	'100'

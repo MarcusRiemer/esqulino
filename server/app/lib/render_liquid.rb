@@ -233,14 +233,6 @@ def liquid_render_page(project, page_template, params)
   # Load the basic liquid template
   template = Liquid::Template::parse(page_template)
 
-#  params["source"]
-
-#  # puts "Rendering with params #{params.inspect}"
-#  def imgidpipe(imgid)
-#    params["source"] << imgid
-#    imgid
-#  end
-
   # Render it alongside the known parameters
   params['uuid'] = SecureRandom.uuid
   $sourceList[params['uuid']] = []
