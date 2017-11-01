@@ -1,0 +1,548 @@
+{
+  "name": "Wikiartikel",
+  "apiVersion": "4",
+  "body": {
+    "type": "body",
+    "children": [
+      {
+        "type": "paragraph",
+        "text": " "
+      },
+      {
+        "type": "row",
+        "columns": [
+          {
+            "type": "column",
+            "width": "9",
+            "widgets": [
+              {
+                "type": "row",
+                "columns": [
+                  {
+                    "type": "column",
+                    "width": "2",
+                    "widgets": [
+                      {
+                        "type": "image",
+                        "displayType": "icon",
+                        "src": "08826a81-d0bc-4518-87d0-ed62cfe338c6"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "8",
+                    "widgets": [
+                      {
+                        "type": "embedded-html",
+                        "html": "<p>Dies ist der Versuch den Wikipedia Artikel von <a href=\"https://de.wikipedia.org/wiki/Gro%C3%9F_Nordende\">Groß Nordende</a> nachzubauen.</><p>Da SQLino nicht alle von Wikipedia verwendeten HTML Features bereitstellt, mussten einige Dinge weggelassen werden.</p><p>Es wurden weiterhin alles ab den Quellen weggelassen.</p>"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "2",
+                    "widgets": [
+                      {
+                        "type": "image",
+                        "displayType": "icon",
+                        "src": "08826a81-d0bc-4518-87d0-ed62cfe338c6"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "text": " "
+              },
+              {
+                "type": "heading",
+                "level": 1,
+                "text": "Groß Nordende"
+              },
+              {
+                "type": "paragraph",
+                "text": "Groß Nordende (niederdeutsch: Groten Noordinn) ist eine Gemeinde im Kreis Pinneberg in Schleswig-Holstein. Die Gemeinde besteht aus den Ortsteilen Lander, Krull und Strohsack."
+              },
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Geografie und Verkehr"
+              },
+              {
+                "type": "paragraph",
+                "text": "Groß Nordende liegt am Rand der Seestermüher Marsch an der Bundesstraße 431 nördlich von Uetersen. Die Gemeinde ist durch Linienbusverkehr im Hamburger Verkehrsverbund\n mit Elmshorn, Uetersen und Wedel und damit mit dem Großraum Hamburg \nverbunden. Direkte Nachbarstädte und -gemeinden sind Uetersen, Neuendeich, Seester, Klein Nordende und Heidgraben."
+              },
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Geschichte"
+              },
+              {
+                "type": "paragraph",
+                "text": "Groß Nordende war früher eine Siedlung, die sich im Norden von Uetersen\n bildete. Erstmals wird Groß Nordende 1584 erwähnt. Ab 1787 gehörte Groß\n Nordende zur Amtsvogtei Uetersen, die sich 1835 in drei Distrikte \ngliederte. Darunter auch der Groß Nordender Distrikt, wodurch die \nGemeinde als Distriktverwaltung ein gehobenes Ansehen und eine gewisse \nSelbständigkeit genoss. Mehrere Kriege musste die Gemeinde mitmachen und\n im Jahr 1735 mussten die Leute des Geestlandes als Tagelöhner ihren \nUnterhalt verdienen. Zu jener Zeit war der Kuhhirte eine Art \n„Amtsperson“ und genoss ein gewisses Ansehen in den Dörfern, zumal er \nals Kundiger der Viehkrankheiten und der Heilkräuter den Tierarzt \nersetzte. Nach gleichen „Rezepten“ behandelte er vermutlich auch die \nEinwohner. Nach Aufteilung der „Almende“ und dem Aufstieg der \nLandwirtschaft ging das Amt des Gemeindehirten allmählich ein."
+              },
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Politik"
+              },
+              {
+                "type": "paragraph",
+                "text": "Seit der Kommunalwahl 2008 hat die Wählergemeinschaft GuB’82 fünf und die Wählergemeinschaft AKWG vier Sitze in der Gemeindevertretung."
+              },
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Wappen"
+              },
+              {
+                "type": "paragraph",
+                "text": "Blasonierung:\n „Von Gold und Grün durch einen rot-silbern geteilten Balken schräg \ngeteilt. Oben ein rotes Wagenrad, unten ein silbernes Bauernhaus mit \nrotem Giebel, Türen und Fenstern.“"
+              },
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Kultur und Sehenswürdigkeiten"
+              },
+              {
+                "type": "paragraph",
+                "text": "Das mit Schnitzereien verzierte ehemalige Schulgebäude wird jetzt als \nDorfgemeinschaftshaus genutzt und steht unter Denkmalschutz. Außerdem \nreihen sich an der B 431 mehrere historische Bauernhöfe aneinander. \nFrüher war die Straße Teil des Ochsenwegs. Das Gebäude des ehemaligen \nOchsenweg-Krugs „Strohsack“ ist noch erhalten. Die Straße und die \nBauernhäuser liegen auf der erhöhten Geest am Marschrand, die Ländereien\n liegen oft in der Marsch."
+              },
+              {
+                "type": "heading",
+                "level": 6,
+                "text": "Historische Gebäude am Marschrand (Dorfstraße)"
+              },
+              {
+                "type": "row",
+                "columns": [
+                  {
+                    "type": "column",
+                    "width": "4",
+                    "widgets": [
+                      {
+                        "type": "image",
+                        "displayType": "figure",
+                        "src": "ee94d05c-35dd-45f9-bfbd-900621d239be"
+                      },
+                      {
+                        "type": "image",
+                        "displayType": "figure",
+                        "src": "80f83d20-a3b1-460a-8444-070bb8964808"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "4",
+                    "widgets": [
+                      {
+                        "type": "image",
+                        "displayType": "figure",
+                        "src": "2e5d5833-7d36-4088-a43b-59ce3eb3eefb"
+                      },
+                      {
+                        "type": "image",
+                        "displayType": "figure",
+                        "src": "5b6bf59e-c156-4107-b5aa-825532187886"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "4",
+                    "widgets": [
+                      {
+                        "type": "image",
+                        "displayType": "figure",
+                        "src": "cc950784-d9d2-4ddb-b6f2-663ebba81cc3"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "text": "Der Ortsteil Lander liegt abseits des Straßendorfs in der angrenzenden \nMarsch. Hier steht eines der ältesten Bauernhäuser der Region, der Hof \nDöhren von 1663."
+              },
+              {
+                "type": "heading",
+                "level": 6,
+                "text": "Höfe im Ortsteil Lander"
+              },
+              {
+                "type": "row",
+                "columns": [
+                  {
+                    "type": "column",
+                    "width": "4",
+                    "widgets": [
+                      {
+                        "type": "image",
+                        "displayType": "figure",
+                        "src": "4bace680-6468-4e8c-96e6-2efc32133ff0"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "4",
+                    "widgets": [
+                      {
+                        "type": "image",
+                        "displayType": "figure",
+                        "src": "b804042b-4b52-4a5e-bc81-13544f8a67ae"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "4",
+                    "widgets": [
+                      {
+                        "type": "image",
+                        "displayType": "figure",
+                        "src": "343fd41d-5d80-4cd3-b7e9-351cf25beb92"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Wirtschaft"
+              },
+              {
+                "type": "paragraph",
+                "text": "Die landwirtschaftlichen Nutzflächen von 560 Hektar sind teilweise in \nder Geest, teilweise in der Marsch gelegen. Sie werden für \nLandwirtschaft und Erwerbsgartenbau genutzt. Während 1945 noch 30 \nGartenbaubetriebe ansässig waren, sind es heute noch fünf Höfe. An der B\n 431 entstanden mehrere Hofläden und ein Bauernhofcafé. Dazu ist der \nWikingerhof \"Norvik\", der überregional bekannt ist, in Groß Nordende \nbeheimatet."
+              }
+            ]
+          },
+          {
+            "type": "column",
+            "width": "3",
+            "widgets": [
+              {
+                "type": "heading",
+                "level": 6,
+                "text": "Wappen"
+              },
+              {
+                "type": "image",
+                "displayType": "figure",
+                "src": "06b850e9-4ada-4507-8c4a-f6e37b48bd1f"
+              },
+              {
+                "type": "heading",
+                "level": 6,
+                "text": "Basisdaten"
+              },
+              {
+                "type": "row",
+                "columns": [
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Bundesland:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Schleswig-Holstein"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Kreis:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Pinneberg"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Amt:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Geest und Marsch Südholstein"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Höhe:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "\n7 m ü. NHN"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Fläche:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "5,64 km2"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Einwohner:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "776 (31. Dez. 2015)"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Bevölkerungsdichte:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "138 Einwohner je km2"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Postleitzahl:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "25436"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Vorwahl:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "04122"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Kfz-Kennzeichen:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "\nPI"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Gemeindeschlüssel:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "01 0 56 016"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Adresse der Amtsverwaltung:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Amtsstraße 12\n25436 Moorrege"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Webpräsenz:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "link",
+                        "text": "http://www.gross-nordende.de/",
+                        "action": {
+                          "type": "navigate",
+                          "external": "http://www.gross-nordende.de/"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Bürgermeisterin:"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "width": "6",
+                    "widgets": [
+                      {
+                        "type": "paragraph",
+                        "text": "Ute Ehmke (GuB’82)"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "image",
+                "displayType": "figure",
+                "src": "48321853-4691-4602-9216-ac1cc7990ce0"
+              },
+              {
+                "type": "image",
+                "displayType": "figure",
+                "src": "17b68ead-4c2c-43c3-a3a4-c57028ba92a1"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
