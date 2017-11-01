@@ -1,16 +1,22 @@
 \section{Fazit}
 \label{sec:conclusion}
 
+Die in Kapitel \todo{Verweis} beschriebenen Ziele wurden grundsätzlich erreicht:
+Schüler können neue Bilder in Ihre Projekte einpflegen (und diese auch verwenden).
+Außerdem wurden die Kompilierungsschritte in einer weitestgehend
+platformunabhängigen Docker-Umgebung gekapselt. Dieses Kapitel fasst zusammen
+inwiefern die jeweiligen Implementierungen vollständig sind und gibt einen Ausblick
+auf mögliche Erweiterungen.
 
 \subsection{Erreichte Ziele}
 
 Es wurde eine einheitliche Umgebung geschaffen um die Rails und Angular
-Toolchain zu Betreiben. Wie in \nameref{subsec:4-containerization} erläutert,
+Toolchain zu Betreiben. Wie in Kapitel \nameref{subsec:4-containerization} erläutert,
 wurde eine Umgebung für die Verwendung durch Entwickler zum ausführen der
 Anwendung im Entwicklungsmodus sowie eine zum automatisierten Ausführen der
 Tests.
 
-Weiterhin wurde wie in \nameref{subsec:4-image-library} ff. ein Prototyp einer
+Weiterhin wurde wie in Kapitel \nameref{subsec:4-image-library} ff. ein Prototyp einer
 Bildverwaltung implementiert, der es Erlaubt dem Projektautoren Bilder für die
 Nutzung innerhalb des Projekts hochzuladen und sowohl als statische Inhalte im
 Seiteneditor zu verwenden, als Ergebnis von Datenbankabfragen zu rendern. Bilder
@@ -36,6 +42,8 @@ der Umsetzung nicht erreicht werden. Offen geblieben sind
   & Die vereinheitlichte Umgebung für den Produktivbetrieb von SQLino
 \end{easylist}
 
+\todo[inline]{Wie vorher: Description-Umgebung mit den gekürzten Listenelementen als Überschrift}
+
 \nameref{subsec:3-image-library} geht darauf ein, weshalb der Bildupload pro
 Projekt höher priorisiert wurde, als die nicht umgesetzen Varianten des Imports
 aus öffentlichen Bilddatenbanken und der Zentralen Bilddatenbank. Natürlich ist
@@ -46,7 +54,7 @@ Das Interface zum Bilder sperren ist zwar notwendig, bevor SQLino produktiv
 genutzt werden kann, setzt allerdings die vorherige Umsetzung der erreichten
 Ziele voraus, weshalb diese vorrangig behandelt wurden.
 
-Wie in \nameref{subsec:4-page-editor} dargelegt konnten nicht alle Features für
+Wie im Kapitel \nameref{subsec:4-page-editor} dargelegt konnten nicht alle Features für
 den Seiteneditor umgesetzt werden, weshalb dort nur ihr Sollzustand beschrieben
 ist. Die aktuelle Implementierung erlaubt es nicht, die Dimensionen der
 dargestellten Bilder im Seiteneditor festzulegen, daher werden alle Bilder immer
