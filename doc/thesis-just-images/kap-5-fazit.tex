@@ -4,35 +4,67 @@
 
 \subsection{Erreichte Ziele}
 
-\todo[inline]{TODO (mit Rückverweisen):
+Es wurde eine einheitliche Umgebung geschaffen um die Rails und Angular
+Toolchain zu Betreiben. Wie in \nameref{subsec:4-containerization} erläutert,
+wurde eine Umgebung für die Verwendung durch Entwickler zum ausführen der
+Anwendung im Entwicklungsmodus sowie eine zum automatisierten Ausführen der
+Tests.
 
-  Projektspezifische Bilddatenbank
+Weiterhin wurde wie in \nameref{subsec:4-image-library} ff. ein Prototyp einer
+Bildverwaltung implementiert, der es Erlaubt dem Projektautoren Bilder für die
+Nutzung innerhalb des Projekts hochzuladen und sowohl als statische Inhalte im
+Seiteneditor zu verwenden, als Ergebnis von Datenbankabfragen zu rendern. Bilder
+die als Ergebnis einer Datenbankabfrage gerendert werden, werden im Footer der
+Seite mit Urheber und Lizenz aufgeführt, sowie alle nicht als Figure Umgebung
+angezeigten statischen Bilder. Bei Figure Umgebungen werden die Angaben zu
+Urheber und Lizenz zusammen mit dem Bildtitel direkt unter dem Bild angezeigt.
 
-  Figure Umgebungen mit Attribution
-
-  Icons mit Attribution
-
-  Bilder in Datenbanktabellen
-
-  Docker Images für Dev und Test
-}
+\todo[inline]{bild von einer seite, die dies demonstriert}
 
 \subsection{Nicht erreichte Ziele}
 
-\todo[inline]{TODO (mit Rückverweisen):
+Die Urprünglichen Ziele konnten aufgrund einiger unerwarteter Untiefen im Umfang
+der Umsetzung nicht erreicht werden. Offen geblieben sind
+\begin{easylist}[itemize]
+  & Das Durchsuchen mit Import von öffentlichen Bilddatenbanken
+  & Die Projektübergreifende Bilddatenbank, die diverse generischen Bilder
+  bereitstellt
+  & Ein Interface für den Systemadministrator/Lehrer um Projektübergreifend nach
+  Bildern zu suchen und diese zu sperren.
+  & Die Definition von zuätzlichen Bildeigenschaften im Seiteneditor, um die
+  Seitengestaltung zu verbessern
+  & Die vereinheitlichte Umgebung für den Produktivbetrieb von SQLino
+\end{easylist}
 
-  Import aus oeffentlichen Bilddatenbanken
-  
-  Globale Bilddatenbank
+\nameref{subsec:3-image-library} geht darauf ein, weshalb der Bildupload pro
+Projekt höher priorisiert wurde, als die nicht umgesetzen Varianten des Imports
+aus öffentlichen Bilddatenbanken und der Zentralen Bilddatenbank. Natürlich ist
+die Umsetzung aller drei wünschenswert, muss aus zeitlichen Gründen aber später
+erfolgen.
 
-  Bilddatenbankvererbung
+Das Interface zum Bilder sperren ist zwar notwendig, bevor SQLino produktiv
+genutzt werden kann, setzt allerdings die vorherige Umsetzung der erreichten
+Ziele voraus, weshalb diese vorrangig behandelt wurden.
 
-  Administratoruebersicht zum Bild sperren
+Wie in \nameref{subsec:4-page-editor} dargelegt konnten nicht alle Features für
+den Seiteneditor umgesetzt werden, weshalb dort nur ihr Sollzustand beschrieben
+ist. Die aktuelle Implementierung erlaubt es nicht, die Dimensionen der
+dargestellten Bilder im Seiteneditor festzulegen, daher werden alle Bilder immer
+mit maximaler Größe dargestellt. Diese ergibt sich aus der Breite des umgebenden
+Elements der Seite sowie bei Rastergrafiken aus der Auflösung, in der das Bild
+vorliegt, daher ist die derzeit einzige Möglichkeit ein Bild kleiner als über
+die gesammte Breite der Seite darzustellen die Verwendung der \texttt{row} und
+\texttt{col} Elemente des Seiteneditors zur Beschränkung der Bildbreite. Derzeit
+ist es nicht möglich beispielsweise Pixelart groß darzustellen, ohne sie mit
+einem Grafikeditor zu skalieren und der Bildverwaltung in dieser Version
+hinzuzufügen. Weiterhin fehlt die Möglichkeit ein Bild von Text umfließen zu
+lassen.
 
-  Docker Produktivimage
-
-  Bildgröße Definieren
-}
+Da SQLino noch nicht den Stand des Produktivbetriebs erreicht hat, war die
+Priorität der einheitlichen Produktivumgebung, die eine direkt lauffähige
+Instanz von SQLino bereitstellt hinten angestellt und dementsprechend nicht
+vollendet. Allerdings sind diverse dafür notwendige Schritte analog zu der
+Entwicklungs und Testumgebung, allerdings mit anderer Konfiguration.
 
 \subsection{Weiterentwicklung}
 
