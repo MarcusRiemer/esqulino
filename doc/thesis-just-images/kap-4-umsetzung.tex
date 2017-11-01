@@ -220,6 +220,7 @@ Die versendeten Metadaten entsprechen dem Format des Description Interfaces:
 \end{minted}
 
 \subsubsection{Library}
+\label{subsec:4-image-library}
 
 Ein Hauptaspekt der Bildverwaltung ist eine Übersicht aller dem Projekt
 verfügbaren Bilder und der Möglichkeit die Bilder nach Bildname, Urhebername und
@@ -324,6 +325,7 @@ dem Namen nummerierte Links angehängt sind, die auf die Vorkommen der Bilder
 oben auf der Seite verlinken.
 
 \subsubsection{Seiteneditorintegration}
+\label{subsec:4-page-editor}
 
 Der Seiteneditor verfügte bereits über ein Image Element, für das \texttt{src}
 und \texttt{alt} wie in HTML üblich befüllt werden konnten. Dieses Element wurde
@@ -336,8 +338,11 @@ keine modalen Dialoge zur Verfügung stehen. Sobald sich das ändert, kann
 stattdessen ein Auswahldialog wie die Bildübersicht mit den selben
 Filteroptionen verwendet werden.
 
+Es folgen Überlegungen zu nicht wichten aber nicht mehr rechtzeitig
+implementierbaren Funktionen:
+
 Die Bilder in der Bildverwaltung sind nicht notwendigerweise in der Größe
-hintelegt, in der sie Dargestellt werden sollen. Bei Bildern im SVG Format
+hintelegt, in der sie dargestellt werden sollen. Bei Bildern im SVG Format
 wird außerdem die Boundingbox vom Browser nicht als Größe des Bildes verwendet
 und somit in voller Bildschirmbreite dargestellt. Deshalb benötigt der
 Seiteneditor die Möglichkeit Einfluss auf einige Darstellungsoptionen zu nehmen.
@@ -394,8 +399,13 @@ Display Typs zwischen \texttt{block} und \texttt{inline-block} hinzu, allerdings
 kann das Image Element derzeit nicht innerhalb eines Paragraphen verwendet
 werden, daher entfällt diese Auswahl.
 
+Diese Features konnten allerdings nicht mehr als Teil dieser Thesis
+implementiert werden, daher existiert hier nur die Beschreibung dessen was sein
+sollte.
+
 \cleardoublepage
 \subsubsection{Datenbankintegration}
+\label{subse:4-database-integration}
 
 \begin{figure}
   \centering
@@ -432,6 +442,43 @@ und die Prüfung auf korrekte Struktur der UUID auf den Zeitpunkt des Einfügens
 in die Datenbank verschoben werden und der Autor einer Datenbank kann UUIDS in
 Tabellen rendern lassen, ohne dass versucht wird ein Bild an dieser Stelle
 darzustellen.
+
+\subsection{Containerisierung}
+\label{subsec:4-containerization}
+
+Es wurde ein Entwicklungs und ein Test Docker Image geschaffen, die zur Nutzung
+durch die Entwickler bzw. das verwendete CI-System Bitbucket Pipelines gedacht
+sind. Beide Basieren auf einem gemeinsamen Basisimage, auf dem auch das
+Produktivimage basieren soll. Sämmtliche Arbeit an dem Projekt im Kontext dieser
+Thesis wurde unter Zuhilfenahme des Entwicklungs Docker Images auf einem Debian
+bzw. Archlinux Host durchgeführt und der aktuelle Stand hat sich als
+praxistauglich erwiesen und ermöglichte den Problemlosen Wechsel des
+Entwicklungsgeräts ohne Aufwand jenseits der eigentlichen
+Betriebssysteminstallation. Desweiteren wurde das Entwicklungs Image kurz vor
+Abgabe der Thesis unter MacOS zum Einsatz gebracht, allerdings zu kurz um die
+Stabilität auf dieser Platform bereits zu bestätigen. Das Test Image wird seit
+Fertigstellung von Bitbucket Pipelines benutz und führt alle vorhandenen Tests
+für jeden Commit aus.
+
+Die Images sollten ursprünglich auf Alpine Linux basieren, um besonders klein zu
+sein, allerdings ließ es die aktuelle Situation der Packete im
+Packetmanagementsystem nicht zu alle benötigten Abhängigkeiten in der Korrekten
+Version gleichzeitig zu installieren ohne größeren Aufwand zu treiben, weshalb
+vorerst das Archlinux Base Development Docker Image verwendet wird, was leider
+um den Faktor hundert größer ist, sich aber deutlich einfacher Einrichten ließ.
+Es ist geplant den Wechel auf Alpine Linux durchzuführen, sobald dies möglich ist.
+
+Es wurde ein Makefile geschaffen, um die Nutzung durch Entwickler die weder mit
+Docker noch Docker-Compose vertraut sind zu vereinfachen, und ihnen sowohl
+ermöglicht das Projekt schnell in Betrieb zu nehmen, als auch aus dem Makefile
+zu lernen. Das Makefile enthält Targets um die Entwicklungsumgebung zu starten
+und zu stoppen, die Tests auszuführen, die Images von Dockerhub herunterzuladen,
+die Images neu zu bauen, die gebauten Images auf Dockerhub hochzuladen.
+
+Das Produktivimage wurde bisher nicht fertiggestellt, da derzeit noch keine im
+Produktivbetrieb einsetzbare Version von SQLino existiert, die darin
+ausgeliefert werden könnte, daher wurde die Fertigstellung mit einer niedrigen
+Priorität versehen und konnte nicht in der gegebenen Zeit fertiggestellt werden.
 
 %%% Local Variables:
 %%% mode: latex
