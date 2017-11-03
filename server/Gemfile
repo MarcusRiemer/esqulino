@@ -12,7 +12,7 @@ end
 # Securing passwords with scrypt
 gem 'scrypt'
 
-# Currently using sqlite as a database
+# Currently using sqlite as a database for projects
 gem 'sqlite3'
 
 # Rendering pages with liquid
@@ -21,8 +21,10 @@ gem 'liquid'
 # Validating requests against a schema
 gem "json-schema", "~> 2.8"
 
+# Used to check the filetypes of uploaded files
 gem 'ruby-filemagic', '~> 0.7.2'
 
+# Used to resize images on the fly
 gem 'rmagick', '~> 2.16'
 
 ############################
@@ -31,6 +33,9 @@ gem 'rmagick', '~> 2.16'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.1'
+
+# Connecting to postgres databases
+gem 'pg'
 
 # Use Puma as the app server
 gem 'puma', '~> 3.7'

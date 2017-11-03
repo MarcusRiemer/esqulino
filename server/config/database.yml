@@ -1,0 +1,6 @@
+development:
+  adapter: postgresql
+  database: esqulino
+  host: localhost
+  username: esqulino
+  encoding: unicode
