@@ -81,23 +81,25 @@ eingebunden sein können. Standardmäßig verwendet Docker \texttt{OverlayFS} al
 Storage Driver, in Produktivumgebungen werden aber auch Device Mapper und
 \texttt{AUFS} als Storage Driver verwendet \cite{docker-storage-driver}.
 
-Ein Projekt wird in Services aufgeteilt, wie z.B. Reverse-Proxy, Webapp,
-\texttt{API} Server, Datenbank und Static File Server, die dann in Containern
-isoliert laufen, wobei jeder Container ein Virtuelles Environment darstellt, in
-dem  jeweils nur ein Prozess mit eventuell geforkten Worker Prozessen läuft. So
-wird die Komplexität des Environments minimiert und besser wartbar, da jeder
-Service mit Ausnahme der Kommunikationsschnittstelle zu den anderen Services
-unabhängig konfiguriert und geupdatet werden kann, ohne dass beispielsweise in
-Konflikt stehende Softwarepackete das Update eines Services verhindern, weil
-erst auf ein Update eines anderen Service gewartet werden muss um die gemeinsame
-Abhängigkeit updaten zu können, deren alte Version mit der aktuellen Version
-nicht mehr Kompatibel ist und nicht parallel installiert werden kann.
+Ein Projekt wird, wie in Abbildung \ref{fig:docker-example-simple} dargestellt,
+in Services aufgeteilt, wie z.B. Reverse-Proxy, Webapp, \texttt{API} Server,
+Datenbank und Static File Server, die dann in Containern  isoliert laufen, wobei
+jeder Container ein Virtuelles Environment darstellt, in dem  jeweils nur ein
+Prozess mit eventuell geforkten Worker Prozessen läuft. So wird die Komplexität
+des Environments minimiert und besser wartbar, da jeder Service mit Ausnahme der
+Kommunikationsschnittstelle zu den anderen Services unabhängig konfiguriert und
+geupdatet werden kann, ohne dass beispielsweise in Konflikt stehende
+Softwarepackete das Update eines Services verhindern, weil erst auf ein Update
+eines anderen Service gewartet werden muss um die gemeinsame Abhängigkeit
+updaten zu können, deren alte Version mit der aktuellen Version nicht mehr
+Kompatibel ist und nicht parallel installiert werden kann.
 
 \begin{figure}
   \includegraphics[width=\columnwidth/2]{images/docker-services-example-2.pdf}
 
-  Beispiel einer Aufteilung in die Services Webserver, Datenbank und
-  elasticsearch. Nur der Webserver hat eine externe Netzwerkverbindung.
+  \caption{Beispiel einer Aufteilung in die Services Webserver, Datenbank und
+    elasticsearch. Nur der Webserver hat eine externe Netzwerkverbindung.}
+  \label{fig:docker-example-simple}
 \end{figure}
 
 Eingehende Kommunikation zu Containern wird per Default unterbunden und muss
@@ -105,14 +107,16 @@ explizit aktiviert werden. Es ist möglich mehrere Container in ein
 gemeinsames Virtuelles Netzwerk zu legen, sodass eine Kommunikation
 untereinander stattfinden kann (Reverse-Proxy -> Webseite, Webseite ->
 Datenbank) als auch bestimmte Netzwerk Ports des Hosts auf bestimmte Netzwerk
-Ports eines Containers zu mappen (Internet -> Reverse-Proxy).
+Ports eines Containers zu mappen (Internet -> Reverse-Proxy), siehe Abbildung
+\ref{fig:docker-example-extended}.
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{images/docker-services-example.pdf}
 
-  Erweitertes Beispiel mit zwei getrennten Netzwerken. Loadbalancer und Asset
-  Server haben keinen Zugriff auf die Datenbank, der \texttt{API} Server ist auf
-  drei Instanzen skaliert.
+  \caption {Erweitertes Beispiel mit zwei getrennten Netzwerken. Loadbalancer
+    und Asset   Server haben keinen Zugriff auf die Datenbank, der \texttt{API}
+    Server ist auf drei Instanzen skaliert.}
+  \label{fig:docker-example-extended}
 \end{figure}
 
 \subsubsection{Docker vs VM}
@@ -193,11 +197,14 @@ Konzept. Daten werden nach durch ein Model beschrieben und strukturiert und
 verwaltet, ihre Darstellung durch den View festgelegt und die Webrequests vom
 Controller behandelt. So werden Datenhaltung, Darstellung und Buisiness Logic
 von einander getrennt und können bis zu einem gewissen Grad unabhängig von
-einander überarbeitet werden.
+einander überarbeitet werden. Abbildung \ref{fig:mvc} zeigt die Interaktion
+zwischen Model, View und Controller.
 
 \begin{figure}
   \centering
   \includegraphics[width=\columnwidth]{images/mvc.pdf}
+  \caption{MVC Übersicht}
+  \label{fig:mvc}
 \end{figure}
 
 \subsection{Short description of Angular}
