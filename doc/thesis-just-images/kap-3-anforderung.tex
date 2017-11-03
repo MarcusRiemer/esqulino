@@ -73,6 +73,7 @@ Eine dieser Möglichkeiten
 soll mit der Implementierung der Bildverwaltung direkt umgesetzt
 werden, die anderen möglicherweise später folgen.
 
+\begin{table}
 \begin{tabular}{ p{\columnwidth/60*23} | p{\columnwidth/7} | p{\columnwidth/6} | p{\columnwidth/6} c }
   & \centering öffentliche Datenbank & \centering administrierte Datenbank & \centering Dateiupload im Editor &  \\ \hline \hline
   Aufwand beim Import & \centering 5 & \centering -5 & \centering 0 &  \\ \hline
@@ -80,10 +81,28 @@ werden, die anderen möglicherweise später folgen.
   Auseinandersetzung mit Lizenzen & \centering 0 & \centering 3 & \centering 3 &   \\ \hline
   Kontrolle auf Lizenzverletzungen & \centering 4 & \centering 5 & \centering -3 &  \\ \hline
   Implementierungsaufwand & \centering -3 & \centering -3 & \centering 2 &  \\ \hline \hline
-  Gesammt & \centering 5 & \centering 3 & \centering 7
+  Gesamt & \centering 5 & \centering 3 & \centering 7
 \end{tabular}
+\caption{Bewertung der verschiedenen Importverfahren}
+\label{tab:evaluation-import-method}
+\end{table}
 
-\todo[inline]{Kriterien kurz erläutern}
+\begin{description}
+  \item[Aufwand beim Import] \mbox{} \\ Ein hoher Wert steht für wenig Aufwand
+    beim Import, ein niedriger Wert für einen hohen Aufwand. Es zählt der
+    Aufwand für den Projektautoren, der das Bild verwenden will.
+  \item[Verwendung eigener Werke] \mbox{} \\ Ein hoher Wert bedeutet eine
+    niedrige Hürde für den Projektautoren, ein eigenes Werk verwenden zu können,
+    ein niedriger Wert eine hohe Hürde.
+  \item[Auseinandersetzung mit Lizenzen] \mbox{} \\ Die Auseinandersetzung mit
+    Lizenzen ist eine gewünscht Lernerfahrung, daher wird ein um so höherer Wert
+    vergeben, je stärker die Notwendigkeit der Auseinandersetzung mit Lizenzen ist.
+  \item[Kontrolle auf Lizenzverletzungen] \mbox{} \\ Ein hoher Wert bedeutet,
+    dass es für Lehrkräfte einfach ist sicherzustellen, dass nur Bilder
+    verwendet werden können, deren Lizenzen dies zulassen.
+  \item[Implementierungsaufwand] \mbox{} \\ Je geringer der Aufwand, desto höher
+    der Wert.
+\end{description}
 
 Vorteile der öffentlichen
 Bilddatenbank ist der geringe Aufwand beim Import von Bildern, bei
@@ -150,18 +169,26 @@ mit Link auf die Lizenz.
 \subsubsection{Darstellungsformen}
 
 Für die Bilder sollen zwei Darreichungsformen existieren: Die Abbildung
-(Figure) und das gestalterische Element (Graphic), die sich durch ihre
+(Figure, Abbildung \ref{fig:image-rendering-figure}) und das gestalterische
+Element (Graphic, Abbildung \ref{fig:image-rendering-icon}), die sich durch ihre
 Einbettung und den Ort der Quellenangaben unterscheiden. Die Abbildung
 eingerahmt, die Metadaten am Bild dargestellt, das Gestalterische Element bettet
-das Bild in einen Link ein, der auf die Quellenangabe am Ende der Seite verweist.
+das Bild in einen Link ein, der auf die Quellenangabe am Ende der Seite
+verweist.
 
-\begin{figure}
-  \includegraphics[width=\columnwidth/2]{images/figure-example.pdf}
-  \includegraphics[width=\columnwidth/2]{images/icon-example.pdf}
-
-  Links: Zwei Figure Umgebungen umgeben von Fließtext.
-
-  Rechts: Acht Graphic Elemente mit Fließtext und Quellenangabe darunter.
+\begin{figure}[ht]
+  \begin{subfigure}[b]{\columnwidth/2}
+    \includegraphics[width=\columnwidth]{images/figure-example.pdf}
+    \caption{Zwei Figure Umgebungen umgeben von Fließtext.}
+    \label{fig:image-rendering-figure}
+  \end{subfigure}
+  \begin{subfigure}[b]{\columnwidth/2}
+    \includegraphics[width=\columnwidth]{images/icon-example.pdf}
+    \caption{Acht Graphic Elemente mit Fließtext und Quellenangabe darunter.}
+    \label{fig:image-rendering-icon}
+  \end{subfigure}
+  \caption{Darstellungsformen von Bildern}
+  \label{fig:image-rendering}
 \end{figure}
 
 \subsubsection{Darstellung von Quellenangaben}
@@ -191,7 +218,16 @@ Urheber ist, soll auf die Quellenangabe verzichtet werden können, im Falle
 einer Abbildung also nur der Name angezeigt werden und im Falle des
 gestalterischen Elements der Eintrag in der Liste komplett weggelassen werden.
 
-\todo[inline,author=mri]{Wo / wie wird gespeichert ob eine Quellenangabe notwendig ist?}
+Sollte nun aber bei den Bildern die Möglichkeit die Quellenangabe wegzulassen
+durch bloßes abhaken einer Checkbox beim Upload ohne weite Prüfung ermöglichen
+Quellenangaben wegzulassen, ist davon auszugehen, dass Quellenangaben häufiger
+aus Bequemlichkeit weggelassen werden, als dies zulässig ist. Da eine
+automatisierte Erkennung nicht umsetzbar ist, bleibt hier nur die Möglichkeit,
+beim Upload einen Antrag an den Administrator zu stellen, das Weglassen der
+Quellenangabe zu genehmigen, der dann im Administratorinterface zu bestätigen
+ist. Bis zur Freigabe wird das Bild dann mit Quellenangabe anezeigt. Da das
+Administratorinterface außerhalb des Umfangs dieser Thesis liegt, wurde auch
+dieses Feature nicht bearbeitet.
 
 \subsubsection{Endgerätoptimierung}
 
@@ -214,7 +250,7 @@ der Lage sein mit großen Blöcken von Binärdaten effizient umzugehen. In
 beiden Fällen müssen die Operationen Einfügen, Löschen, Indizierter Zugriff und
 im Falle der Metadaten auch die Komplettzugriff auf alle Werte nach Möglichkeit
 in Abhängigkeit von der Anzahl der angefragten/bearbeiteten Elemente komplex
-sein und nicht in Abhängigkeit der insgesammt gespeicherten Elemente. Daher sind
+sein und nicht in Abhängigkeit der insgesamt gespeicherten Elemente. Daher sind
 an dieser Stelle datenbankähnliche Systeme, die beim einfügen und löschen von
 Daten ihren Index neu berechnen müssen, der für die gute Suchperformance sorgt,
 wie beispielsweise Elasticsearch unbrauchbar, auch da eine Suche im
@@ -263,8 +299,9 @@ erfordern, da die Datei weder gesucht werden muss, noch ein Client zum
 betrachten und bearbeiten der Datenbank sowie Kentnisse darüber notwendig sind;
 die zur Administration eines Servers notwendigen Kentnisse sind ausreichend.
 
+\begin{table}
 \begin{tabular}{ p{\columnwidth/3} | p{\columnwidth/6} | p{\columnwidth/6} | p{\columnwidth/6} c}
-   & \centering Dateisystem & \centering Datenbank & \centering in-Memory Key-Value Store &  \\ \hline \hline
+   & \centering Dateisystem & \centering Relationale Datenbank & \centering Key-Value Store &  \\ \hline \hline
   Datenbanklast & \centering 0 & \centering -2 & \centering 0 &  \\ \hline
   Komplexität & \centering 2 & \centering 0 & \centering -3 &  \\ \hline
   Zugriffszeit & \centering 4 & \centering 2 & \centering 5 &  \\ \hline
@@ -273,8 +310,24 @@ die zur Administration eines Servers notwendigen Kentnisse sind ausreichend.
   Implementierungsaufwand & \centering 3 & \centering 0 & \centering -4 &  \\ \hline
   Gesamt & \centering 18 & \centering -10 & \centering 7 &
 \end{tabular}
+\caption{Bewertung der Bildspeicherverfahren}
+\label{tab:comparison-image-storage}
+\end{table}
 
-\todo[inline]{Kriterien kurz erläutern}
+\begin{description}
+  \item[Datenbanklast] \mbox{} \\ Beim Ausliefern der Bilder auf der Datenbank
+    zusätzlich entstehende Last gibt Abzüge.
+  \item[Komplexität] \mbox{} \\ Eine komplexes System ist fehleranfälliger und
+    wartunsintensiver und wird daher mit niedrigen Werten versehen.
+  \item[Zugriffszeit] \mbox{} \\ Kurze Zugriffszeiten sind erwünscht, erhalten
+    daher einen höheren Wert.
+  \item[Auslagerbarkeit] \mbox{} \\ Ein höherer Wert bedeutet, dass die Bilder
+    leichter in ein Content Delivery Network ausgelagert werden können.
+  \item[Skalierbarkeit] \mbox{} \\ Höhere Werte stehen für leichtere Aufteilung
+    der Aufgabe auf mehrere Instanzen.
+  \item[Implementierungsaufwand] \mbox{} \\ Je geringer der Aufwand, desto höher
+    der Wert.
+\end{description}
 
 %%% Local Variables:
 %%% mode: latex

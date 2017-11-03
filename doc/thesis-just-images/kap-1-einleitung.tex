@@ -19,13 +19,20 @@ Ergänzung um grafische Inhalte für SQLino sowohl praktisch relevant als auch
   gemeint, auf die die restliche Beeschreibung zutrifft, unabhängig des
   Geschlechts.} motivierend.
 
-\begin{figure}
-  \includegraphics[width=\columnwidth]{images/introduction-example-before.png}
-  \includegraphics[width=\columnwidth]{images/introduction-example-after.png}
-
-  Oben: Projektseite mit Tabelle ohne Bilder, Urheber: Marcus Riemer, Lizenz: CC-BY
-
-  Unten: Projektseite mit Tabelle mit Bildern aus der Bildverwaltung
+\begin{figure}[ht]
+  \begin{subfigure}[b]{\columnwidth}
+    \includegraphics[width=\columnwidth]{images/introduction-example-before.png}
+    \caption{Projektseite mit Tabelle ohne Bilder, Urheber: Marcus Riemer,
+      Lizenz: CC-BY}
+    \label{fig:comparison-before}
+  \end{subfigure}
+  \begin{subfigure}[b]{\columnwidth}
+    \includegraphics[width=\columnwidth]{images/introduction-example-after.png}
+    \caption{Projektseite mit Tabelle mit Bildern aus der Bildverwaltung}
+    \label{fig:comparison-after}
+  \end{subfigure}
+  \caption{Vorher-Nacher Vergleich}
+  \label{fig:comparison-before-after}
 \end{figure}
 
 Die Verwendung von Bildern auf Webseiten bereitet jedoch auch immer wieder
