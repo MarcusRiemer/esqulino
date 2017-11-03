@@ -1,0 +1,3 @@
+class LanguageModel < ApplicationRecord
+  
+end
