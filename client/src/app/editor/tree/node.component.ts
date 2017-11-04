@@ -110,7 +110,7 @@ export class NodeComponent implements OnChanges {
    */
   onDropReplace() {
     const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.replaceNode(this.node.location, desc);
+    this._treeService.peekTree.replaceNode(this.node.location, desc);
   }
 
   /**
@@ -119,7 +119,7 @@ export class NodeComponent implements OnChanges {
    */
   onDropInsert() {
     const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.insertNode(this.node.location, desc);
+    this._treeService.peekTree.insertNode(this.node.location, desc);
   }
 
   /**
@@ -127,7 +127,7 @@ export class NodeComponent implements OnChanges {
    */
   onPropertyEdit(key: string, value: string) {
     if (this.node.properties[key] != value) {
-      this._treeService.setProperty(this.node.location, key, value);
+      this._treeService.peekTree.setProperty(this.node.location, key, value);
     }
   }
 
@@ -137,7 +137,7 @@ export class NodeComponent implements OnChanges {
   onPropertyRename(key: string, newKey: string) {
     if (key != newKey) {
       try {
-        this._treeService.renameProperty(this.node.location, key, newKey);
+        this._treeService.peekTree.renameProperty(this.node.location, key, newKey);
       } catch (e) {
         alert(e);
       }
@@ -150,7 +150,7 @@ export class NodeComponent implements OnChanges {
   onPropertyAdd() {
     try {
       const newKey = prompt(`Name des neuen Wertes?`);
-      this._treeService.addProperty(this.node.location, newKey);
+      this._treeService.peekTree.addProperty(this.node.location, newKey);
     } catch (e) {
       alert(e);
     }
@@ -162,7 +162,7 @@ export class NodeComponent implements OnChanges {
   onChildGroupAdd() {
     try {
       const newKey = prompt(`Name der neuen Gruppe?`);
-      this._treeService.addChildGroup(this.node.location, newKey);
+      this._treeService.peekTree.addChildGroup(this.node.location, newKey);
     } catch (e) {
       alert(e);
     }

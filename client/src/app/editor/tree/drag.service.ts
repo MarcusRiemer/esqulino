@@ -103,7 +103,7 @@ export class DragService {
     if (source) {
       this._trashService.showTrash(_ => {
         console.log("Deleting");
-        this._currentSource.treeEditorService.deleteNode(this._currentSource.location)
+        this._currentSource.treeEditorService.peekTree.deleteNode(this._currentSource.location)
       });
     }
     console.log(`AST-Drag started:`, drag);
