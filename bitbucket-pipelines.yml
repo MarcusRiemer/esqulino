@@ -26,4 +26,3 @@ definitions:
       environment:
         POSTGRES_DB: 'esqulino'
         POSTGRES_USER: 'esqulino'
-        POSTGRES_PASSWORD: ''
