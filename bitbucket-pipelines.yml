@@ -6,7 +6,7 @@ pipelines:
         caches:
           - node-client
           - node-schema
-          - bundler-global
+          - bundler-local
         script:
           - make install-deps
           - make dist-dev
@@ -17,12 +17,12 @@ pipelines:
 
 definitions:
   caches:
-    bundler-global: /usr/lib/ruby/gems/
+    bundler-local: server/vendor
     node-client: client/node_modules
     node-schema: schema/json/node_modules
   services:
     db:
-      image: postgres
+      image: postgres:10.0
       environment:
-        POSTGRES_DB: 'esqulino'
+        POSTGRES_DB: 'esqulino_test' 
         POSTGRES_USER: 'esqulino'
