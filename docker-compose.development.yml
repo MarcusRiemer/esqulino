@@ -26,12 +26,14 @@ services:
       - USER_UID=1000
       - USER_GID=1000
       - TPUT_BIN=true
-      - DATABASE_URL=postgresql://db/esqulino
+      - DATABASE_URL=postgresql://db/esqulino_dev
+      
     depends_on:
       - db
 
   db:
     image: postgres:10.0
     environment:
+      - POSTGRES_USER=esqulino_dev
       - POSTGRES_USER=esqulino
 
