@@ -85,6 +85,6 @@ export class NodePlaceholderComponent {
    */
   onDropInsert() {
     const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.insertNode(this.location, desc);
+    this._treeService.peekTree.insertNode(this.location, desc);
   }
 }
