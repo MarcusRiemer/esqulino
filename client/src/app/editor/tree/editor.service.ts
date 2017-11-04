@@ -72,8 +72,8 @@ export class TreeEditorService {
   /**
    * @return The tree that is currently edited.
    */
-  get peekTree() {
-    return (this._codeResource.value.syntaxTree);
+  private get peekTree() {
+    return (this.peekResource.syntaxTree);
   }
 
   /**
@@ -87,7 +87,7 @@ export class TreeEditorService {
    * @return An observable of the tree that is currently edited.
    */
   get currentTree(): Observable<Tree> {
-    return (this._codeResource.value.obsSyntaxTree);
+    return (this.peekResource.obsSyntaxTree);
   }
 
   /**

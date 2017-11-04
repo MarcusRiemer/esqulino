@@ -18,7 +18,7 @@ import { Tree, NodeDescription, NodeLocation } from './syntaxtree'
  */
 export class CodeResource extends ProjectResource {
 
-  private _tree = new BehaviorSubject<Tree>(undefined);
+  private _tree = new BehaviorSubject<Tree>(new Tree(undefined));
 
   private _languageId = new BehaviorSubject<string>(undefined);
 

@@ -50,7 +50,6 @@ export class NodePlaceholderComponent {
   // The location this placeholder is shown in
   @Input() location: NodeLocation;
 
-  // TODO: Cache observables
   private _cached_animationState: Observable<string>;
 
   constructor(
@@ -73,9 +72,7 @@ export class NodePlaceholderComponent {
           } else {
             return ('none');
           }
-        })
-        .do(curr => console.log(`New state: ${JSON.stringify(this.location)} => ${curr}`));
-      console.log(`New observable: ${JSON.stringify(this.location)}`);
+        });
     }
     return (this._cached_animationState);
   }
@@ -85,6 +82,6 @@ export class NodePlaceholderComponent {
    */
   onDropInsert() {
     const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.peekTree.insertNode(this.location, desc);
+    this._treeService.peekResource.insertNode(this.location, desc);
   }
 }

@@ -80,13 +80,6 @@ export class SyntaxTreeEditorComponent implements OnInit {
   }
 
   /**
-   * @return The tree that is edited by this editor
-   */
-  get peekTree(): Tree {
-    return (this._treeService.peekTree);
-  }
-
-  /**
    * @return The observable tree that is edited by this editor.
    */
   get currentTree() {
