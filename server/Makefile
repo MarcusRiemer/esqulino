@@ -5,7 +5,7 @@ include ../Makefile.common
 
 # Install ruby dependencies
 install-deps : msg-pre-install-deps
-	bundle install
+	bundle install --path vendor/bundle
 
 clean-deps : msg-pre-clean-deps
 	rm -rf "./vendor"

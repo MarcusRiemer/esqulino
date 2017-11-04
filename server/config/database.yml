@@ -1,6 +1,18 @@
-development:
+default: &default
   adapter: postgresql
   database: esqulino
   host: localhost
   username: esqulino
   encoding: unicode
+
+development:
+  <<: *default
+  database: esqulino_dev
+
+test:
+  <<: *default
+  database: esqulino_test
+
+production:
+  <<: *default
+  database: esqulino_prod

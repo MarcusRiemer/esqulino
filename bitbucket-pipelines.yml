@@ -12,9 +12,18 @@ pipelines:
           - make dist-dev
           - make -C server test
           - TEST_SINGLE_RUN=true make -C client test
+        services:
+          - db
 
 definitions:
   caches:
     bundler-global: /usr/lib/ruby/gems/
     node-client: client/node_modules
     node-schema: schema/json/node_modules
+  services:
+    db:
+      image: postgres
+      environment:
+        POSTGRES_DB: 'esqulino'
+        POSTGRES_USER: 'esqulino'
+        POSTGRES_PASSWORD: ''
