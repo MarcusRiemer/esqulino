@@ -1,4 +1,5 @@
 export * from './syntaxtree'
+export * from './coderesource'
 export * from './language'
 export * from './language.description'
 export * from './validator'
@@ -17,7 +18,8 @@ export const AvailableLanguages = {
   Xml: new Language(Xml.LANGUAGE_DESCRIPTION),
   RegEx: new Language(RegEx.LANGUAGE_DESCRIPTION),
   All: new Language({
-    name: "all",
+    id: "all",
+    name: "All Languages",
     generators: [
       ...Xml.LANGUAGE_DESCRIPTION.generators,
       ...Sql.LANGUAGE_DESCRIPTION.generators,

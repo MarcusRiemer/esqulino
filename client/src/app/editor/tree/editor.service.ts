@@ -3,12 +3,13 @@ import { BehaviorSubject, Observable } from 'rxjs'
 import { Injectable } from '@angular/core';
 
 import {
+  CodeResource,
   Tree, Node, NodeDescription, NodeLocation,
   Validator, ValidationResult, Language
 } from '../../shared/syntaxtree';
 
 /**
- * This service represents a single tree that is currently beeing
+ * This service represents a single code resource that is currently beeing
  * edited. It is meant to be instanciated by every tree editor
  * to be available in all node components of that editor.
  *
@@ -21,29 +22,25 @@ import {
  */
 @Injectable()
 export class TreeEditorService {
-  private _tree = new BehaviorSubject<Tree>(undefined);
+  private _codeResource = new BehaviorSubject<CodeResource>(undefined);
   private _language = new BehaviorSubject<Language>(undefined);
+
   private _validationResult = new BehaviorSubject<ValidationResult>(ValidationResult.EMPTY);
   private _generatedCode = new BehaviorSubject<string>("");
+
+  /**
+   * @param res The code resource that is beeing edited.
+   */
+  set codeResource(res: CodeResource) {
+    this._codeResource.next(res);
+    this.resetCaches();
+  }
 
   /**
    * @param desc The new tree that should be available in the editor.
    */
   replaceTree(tree: NodeDescription | Tree) {
-    if (tree instanceof Tree) {
-      this._tree.next(tree);
-    } else {
-      this._tree.next(new Tree(tree));
-    }
-
-    this.resetCaches();
-  }
-
-  /**
-   * @param lang The new language to use
-   */
-  setLanguage(lang: Language) {
-    this._language.next(lang);
+    this.peekResource.replaceSyntaxTree(tree);
     this.resetCaches();
   }
 
@@ -60,10 +57,8 @@ export class TreeEditorService {
    * the tree or the language has changed.
    */
   private resetValidation() {
-    const lang = this._language.getValue();
-    const tree = this._tree.getValue();
-    if (tree && lang) {
-      this._validationResult.next(lang.validateTree(this._tree.getValue()));
+    if (this.peekResource && this.peekLanguage) {
+      this._validationResult.next(this.peekLanguage.validateTree(this.peekTree));
     } else {
       this._validationResult.next(ValidationResult.EMPTY);
     }
@@ -74,10 +69,8 @@ export class TreeEditorService {
    * the tree or the language has changed.
    */
   private resetGeneratedCode() {
-    const lang = this._language.getValue();
-    const tree = this._tree.getValue();
-    if (tree && !tree.isEmpty && lang) {
-      this._generatedCode.next(lang.emitTree(this._tree.getValue()));
+    if (this.peekResource && !this.peekTree.isEmpty && this.peekLanguage) {
+      this._generatedCode.next(this.peekLanguage.emitTree(this.peekTree));
     } else {
       this._generatedCode.next("");
     }
@@ -172,14 +165,21 @@ export class TreeEditorService {
    * @return The tree that is currently edited.
    */
   get peekTree() {
-    return (this._tree.getValue());
+    return (this._codeResource.value.peekSyntaxTree);
+  }
+
+  /**
+   * @return The resource that is currently beeing edited.
+   */
+  get peekResource() {
+    return (this._codeResource.value);
   }
 
   /**
    * @return An observable of the tree that is currently edited.
    */
   get currentTree(): Observable<Tree> {
-    return (this._tree);
+    return (this._codeResource.value.syntaxTree);
   }
 
   /**
@@ -197,9 +197,24 @@ export class TreeEditorService {
   }
 
   /**
+   * @param lang The new language to use
+   */
+  setLanguage(lang: Language) {
+    if (this.peekResource) {
+      this.peekResource.languageId = lang.id;
+    }
+    this._language.next(lang);
+    this.resetCaches();
+  }
+
+  /**
    * @return The language that is currently in use.
    */
   get currentLanguage(): Observable<Language> {
     return (this._language);
+  }
+
+  get peekLanguage(): Language {
+    return (this._language.value);
   }
 }

@@ -6,6 +6,7 @@ const langEmptyBlocks: LanguageModelDescription = {
   id: "emptyblocks",
   displayName: "Empty Blocks",
   language: {
+    id: "emptyBlocks",
     name: "emptyBlocks",
     generators: [],
     validators: [

@@ -6,6 +6,7 @@ import { NodeConverterRegistration } from './codegenerator'
  * with a language.
  */
 export interface LanguageDescription {
+  id: string,
   name: string,
   validators: ValidatorDescription[],
   generators: NodeConverterRegistration[],
