@@ -8,14 +8,31 @@ import { CodeGenerator } from './codegenerator'
  * A facade that ties together everything the editor needs to work with a language.
  */
 export class Language {
-  private _validator: Validator;
-  private _codeGenerator: CodeGenerator;
+  private _id: string;
   private _name: string;
 
+  private _validator: Validator;
+  private _codeGenerator: CodeGenerator;
+
   constructor(desc: LanguageDescription) {
+    this._id = desc.id;
     this._name = desc.name;
     this._codeGenerator = new CodeGenerator(desc.generators);
     this._validator = new Validator(desc.validators);
+  }
+
+  /**
+   * @return The unique ID of this language
+   */
+  get id() {
+    return (this._id);
+  }
+
+  /**
+   * @return The name of this language.
+   */
+  get name() {
+    return (this._name);
   }
 
   /**
@@ -53,13 +70,6 @@ export class Language {
    */
   emitTree(ast: Tree): string {
     return (this._codeGenerator.emit(ast));
-  }
-
-  /**
-   * @return The name of this language.
-   */
-  get name() {
-    return (this._name);
   }
 
   /**

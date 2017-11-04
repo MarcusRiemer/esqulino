@@ -18,8 +18,6 @@ import { DragService } from './drag.service';
 export class SyntaxTreeEditorComponent implements OnInit {
   @Input() rawNodeData: string = "";
 
-  private _languages = AvailableLanguages;
-
   /**
    * Subscriptions that need to be released
    */
@@ -42,16 +40,17 @@ export class SyntaxTreeEditorComponent implements OnInit {
     this._toolbarService.savingEnabled = false;
 
     let subRef = this._routeParams.params.subscribe(params => {
+      // Ensure the referenced resource exists
       const codeResourceId = params['resourceId'];
-      if (codeResourceId) {
-        const codeResource = this._projectService.cachedProject.getCodeResourceById(codeResourceId);
-        this._treeService.replaceTree(codeResource.syntaxTree);
-      } else {
-        this._treeService.replaceTree(new Tree(undefined));
+      if (!codeResourceId) {
+        throw new Error(`Invalid code resource: "${codeResourceId}"`);
       }
 
+      // Assign the resource
+      const codeResource = this._projectService.cachedProject.getCodeResourceById(codeResourceId);
+      this._treeService.setLanguage(AvailableLanguages.All);
+      this._treeService.codeResource = codeResource;
       this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this._treeService);
-      this._treeService.setLanguage(this.currentLanguage);
     });
   }
 
@@ -92,12 +91,5 @@ export class SyntaxTreeEditorComponent implements OnInit {
    */
   get currentTree() {
     return (this._treeService.currentTree);
-  }
-
-  /**
-   * @return The main language to assume the node uses.
-   */
-  get currentLanguage() {
-    return (this._languages.All);
   }
 }

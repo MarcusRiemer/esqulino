@@ -110,6 +110,7 @@ export abstract class ProjectResource implements ApiVersion, Saveable {
     this.fireCurrentSaveState();
 
     this.invalidate();
+    console.log(`Resource "${this.id}" now requires saving`);
   }
 
   /**
@@ -118,6 +119,8 @@ export abstract class ProjectResource implements ApiVersion, Saveable {
   markSaved(): void {
     this._saveRequired = false;
     this.fireCurrentSaveState();
+
+    console.log(`Resource "${this.id}" was saved!`);
   }
 
   /**
