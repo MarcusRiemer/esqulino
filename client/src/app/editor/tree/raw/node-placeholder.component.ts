@@ -3,12 +3,13 @@ import { Observable } from 'rxjs';
 import { Component, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { Node, NodeLocation } from '../../shared/syntaxtree';
-import { arrayEqual } from '../../shared/util'
+import { Node, NodeLocation } from '../../../shared/syntaxtree';
+import { arrayEqual } from '../../../shared/util';
 
-import { DEFAULT_ANIMATION } from './node.animation'
-import { DragService } from './drag.service';
-import { TreeEditorService } from './editor.service';
+import { DragService } from '../drag.service';
+import { TreeEditorService } from '../editor.service';
+
+import { DEFAULT_ANIMATION } from './node.animation';
 
 /**
  * Displays a group of nodes with placeholders spread out between them.

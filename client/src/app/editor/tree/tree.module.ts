@@ -8,25 +8,29 @@ import { DropTargetDirective } from './drop-target.directive'
 import { DropPlaceholderDirective } from './drop-placeholder.directive'
 import { DragService } from './drag.service'
 import { LanguageService } from './language.service'
-import { NodeComponent } from './node.component'
-import { NodeChildrenComponent } from './node-children.component'
-import { NodePlaceholderComponent } from './node-placeholder.component'
-import { SyntaxTreeEditorComponent } from './editor.component'
 import { TreeSidebarComponent } from './tree.sidebar'
 import { ValidationComponent } from './validation.component'
+
+import { NodeComponent } from './raw/node.component'
+import { NodeChildrenComponent } from './raw/node-children.component'
+import { NodePlaceholderComponent } from './raw/node-placeholder.component'
+import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'
+
+import { BlockEditorComponent } from './block/block-editor.component'
 
 @NgModule({
   imports: [
     SharedEditorModule,
   ],
   declarations: [
+    BlockEditorComponent,
     CodeGeneratorComponent,
     DropTargetDirective,
     DropPlaceholderDirective,
     NodeComponent,
     NodeChildrenComponent,
     NodePlaceholderComponent,
-    SyntaxTreeEditorComponent,
+    RawTreeEditorComponent,
     ValidationComponent,
     TreeSidebarComponent
   ],
