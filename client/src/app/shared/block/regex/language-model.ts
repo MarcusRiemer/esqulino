@@ -1,7 +1,10 @@
 import { LANGUAGE_DESCRIPTION } from '../../syntaxtree/regex'
 
 import { LanguageModelDescription } from '../language-model.description'
-import { BlockDescription } from '../block.description'
+import {
+  BlockDescription,
+  EditorBlock, EditorConstant, EditorIterator, EditorInterpolation
+} from '../block.description'
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "regex",
@@ -23,7 +26,20 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
       sidebar: {
         category: "Regulärer Ausdruck",
         displayName: "Regulärer Ausdruck",
-      }
+      },
+      visual: {
+        blockType: "line",
+        children: [
+          {
+            blockType: "constant",
+            text: "foo"
+          } as EditorConstant,
+          {
+            blockType: "constant",
+            text: "bar"
+          } as EditorConstant
+        ]
+      } as EditorBlock
     },
     {
       describedType: {

@@ -6,12 +6,13 @@ import {
 } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { arrayEqual } from '../../shared/util'
-import { Node, NodeLocation, Tree } from '../../shared/syntaxtree';
+import { arrayEqual } from '../../../shared/util'
+import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
 
-import { DEFAULT_ANIMATION } from './node.animation'
-import { DragService } from './drag.service';
-import { TreeEditorService } from './editor.service'
+import { DragService } from '../drag.service';
+import { TreeEditorService } from '../editor.service';
+
+import { DEFAULT_ANIMATION } from './node.animation';
 
 // These states are available for animation
 type DropTargetAnimationStates = "available" | "none" | "self";

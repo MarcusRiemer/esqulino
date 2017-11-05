@@ -13,8 +13,10 @@ import { Tree, NodeDescription, NodeLocation } from './syntaxtree'
  * of the tree, the immutable nature makes it difficult to 
  * communicate changes upwards. The resource allows to replace
  * the whole tree and therefore enables mutating operations. So
- * this is basicly a facade that hides the immutability of the
- * actual tree.
+ * this is additionaly a facade that hides the immutability of the
+ * actual tree. If you ever call the mutating operations of the
+ * raw Tree instance retrieved by syntaxTree() changes will not
+ * be reflected in the code resource.
  */
 export class CodeResource extends ProjectResource {
 

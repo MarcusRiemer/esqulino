@@ -1,8 +1,11 @@
 import { Routes, RouterModule } from '@angular/router'
 
-import { SyntaxTreeEditorComponent } from './editor.component'
+import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'
+import { BlockEditorComponent } from './block/block-editor.component'
 
 export const syntaxTreeEditorRoutes: Routes = [
-  { path: '', component: SyntaxTreeEditorComponent },
-  { path: ':resourceId', component: SyntaxTreeEditorComponent }
+  { path: '', component: RawTreeEditorComponent },
+  { path: 'raw/:resourceId', component: RawTreeEditorComponent },
+
+  { path: 'block/:resourceId', component: BlockEditorComponent },
 ]

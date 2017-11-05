@@ -5,7 +5,7 @@ import { BlockDescription } from '../block.description'
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "xml",
-  displayName: "XML",
+  displayName: "Allgemeines XML",
   language: LANGUAGE_DESCRIPTION,
   blocks: [
     {
@@ -25,7 +25,8 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         }
       },
       sidebar: {
-        category: "XML"
+        category: "Allgemeines XML",
+        displayName: "Knoten",
       }
     },
     {
@@ -42,7 +43,8 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         }
       },
       sidebar: {
-        category: "XML"
+        category: "Allgemeines XML",
+        displayName: "Attribut",
       }
     }
   ]

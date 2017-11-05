@@ -1,40 +1,99 @@
-import { BehaviorSubject, Observable } from 'rxjs'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import {
   CodeResource,
   Tree, Node, NodeDescription,
-  Validator, ValidationResult, Language
+  Validator, ValidationResult,
+  Language, AvailableLanguages
 } from '../../shared/syntaxtree';
+
+import { ProjectService, Project } from '../project.service';
+import { SidebarService } from '../sidebar.service';
+
+import { TreeSidebarComponent } from './tree.sidebar';
 
 /**
  * This service represents a single code resource that is currently beeing
  * edited. It is meant to be instanciated by every tree editor
  * to be available in all node components of that editor.
+ *
+ * It glues together the actual resource that is beeing edited and ensures
+ * that updates to that resource are validated and compiled.
  */
 @Injectable()
-export class TreeEditorService {
+export class TreeEditorService implements OnInit, OnDestroy {
+  /**
+   * Subscriptions that need to be released
+   */
+  private _subscriptionRefs: any[] = [];
+
   private _codeResource = new BehaviorSubject<CodeResource>(undefined);
+  private _codeResourceSub: Subscription;
+
   private _language = new BehaviorSubject<Language>(undefined);
 
   private _validationResult = new BehaviorSubject<ValidationResult>(ValidationResult.EMPTY);
   private _generatedCode = new BehaviorSubject<string>("");
 
-  /**
-   * @param res The code resource that is beeing edited.
-   */
-  set codeResource(res: CodeResource) {
-    this._codeResource.next(res);
-    this.resetCaches();
+  constructor(
+    private _sidebarService: SidebarService,
+    private _routeParams: ActivatedRoute,
+    private _projectService: ProjectService
+  ) {
+    this.ngOnInit();
   }
 
   /**
-   * @param desc The new tree that should be available in the editor.
+   * It appears that services don't actually follow lifecycle hooks, so this
+   * is called manually from the constructor.
    */
-  replaceTree(tree: NodeDescription | Tree) {
-    this.peekResource.replaceSyntaxTree(tree);
+  ngOnInit(): void {
+    // Listen for changes in the current route
+    let subRef = this._routeParams.params.subscribe(params => {
+      // Ensure the referenced resource exists
+      const codeResourceId = params['resourceId'];
+      if (!codeResourceId) {
+        throw new Error(`Invalid code resource: "${codeResourceId}"`);
+      }
+
+      // Assign the resource and a matching language
+      this.setCodeResource(this._projectService.cachedProject.getCodeResourceById(codeResourceId));
+      this.setLanguage(AvailableLanguages.All);
+
+      // Create the new sidebar
+      this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this);
+    });
+
+    this._subscriptionRefs.push(subRef);
+  }
+
+  /**
+   * Freeing all subscriptions
+   */
+  ngOnDestroy() {
+    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
+    this._subscriptionRefs = [];
+  }
+
+  /**
+   * @param res The code resource that is beeing edited.
+   */
+  private setCodeResource(res: CodeResource) {
+    // Do we have any previous subscription? If so, it needs to be cancelled
+    if (this._codeResourceSub) {
+      this._codeResourceSub.unsubscribe();
+    }
+
+    // Assign the new resource 
+    this._codeResource.next(res);
     this.resetCaches();
+
+    this._codeResourceSub = this.peekResource.obsSyntaxTree.subscribe(tree => {
+      this.resetCaches();
+    });
   }
 
   /**
@@ -107,7 +166,7 @@ export class TreeEditorService {
   /**
    * @param lang The new language to use
    */
-  setLanguage(lang: Language) {
+  private setLanguage(lang: Language) {
     if (this.peekResource) {
       this.peekResource.languageId = lang.id;
     }

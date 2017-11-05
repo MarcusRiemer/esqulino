@@ -22,6 +22,13 @@ export class LanguageModel {
   }
 
   /**
+   * @return The user friendly name of this language model
+   */
+  get displayName() {
+    return (this._displayName);
+  }
+
+  /**
    * @return The name of the language this model is augmenting
    */
   get languageName() {

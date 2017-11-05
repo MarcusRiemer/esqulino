@@ -10,7 +10,7 @@
       </div>
 
       <div class="card-body">
-        <ng-container *ngIf="(currentTree | async).isEmpty; else treeExists">
+        <ng-container *ngIf="(currentTree | async)?.isEmpty; else treeExists">
           Noch ist kein Code da ...
           <ast-node-placeholder [location]="[]"></ast-node-placeholder>
         </ng-container>
