@@ -4,7 +4,7 @@
 Dieses Kapitel beschreibt Technologien, die im Kontext dieser Arbeit relevant
 sind.
 
-\subsection{Short description of \texttt{SQLino}}
+\subsection{Kurze Beschreibung von \texttt{SQLino}}
 
 \texttt{SQLino} ist der Prototyp einer Lehr-Entwicklungsumgebung für
 \texttt{SQL} und \texttt{HTML}, die sich statt an professionelle Anwender an
@@ -119,7 +119,7 @@ Ports eines Containers zu mappen (Internet -> Reverse-Proxy), siehe Abbildung
   \label{fig:docker-example-extended}
 \end{figure}
 
-\subsubsection{Docker vs VM}
+\subsubsection{Unterschiede zwischen Docker und VM}
 
 Im Gegensatz zu einer herkömmlichen virtuellen Maschine stellt Docker keine
 virtualisierte oder paravirtualisierte Hardware bereit, auf der ein eigenes
@@ -142,6 +142,18 @@ installierem Docker deployen als auch Open Source Projekten eine lauffähige
 konfigurierte Version der Software inklusive aller benötigten Abhängigkeiten 
 
 \subsection{\texttt{RESTFUL API}}
+
+Eine \texttt{RESTFUL API} ist eine, die zustandsfreie \texttt{HTTP} Requests
+verwendet zum Zugriff auf Ressourcen via URIs ermöglicht. Ein Request mit
+einem der \texttt{HTTP} Verben \texttt{GET}, \texttt{POST}, \texttt{PUT} oder
+\texttt{DELETE} gesendet wird greift lesend oder schreibend auf eine Ressource
+zu. \texttt{GET} signalisiert die Abfrage von Daten, \texttt{POST} das Verändern
+von Daten, \texttt{PUT} das Anlegen neuer Daten und \texttt{DELETE} das Löschen
+von Daten. Ein \texttt{GET} Request könnte beispielsweise ein bestimmtes Bild
+abrufen, ein anderer eine Datenbank nach allen Einträgen, die einem
+mitgeschicktem Filterkriterium entsprechen, durchsuchen. Es ist auch vorstellbar
+ein \texttt{RESTFUL API} auf ein definiertes Subset von \texttt{SQL} zu mappen
+oder die Steuerung einer Waschmaschiene.
 
 \begin{description}
 \item[URI] \mbox{}\\ Ein \texttt{URI} ist ein Uniform Resource Identifier,
@@ -170,18 +182,6 @@ urn:ietf:rfc:2396
   Sensors oder einen Datenbankeintrag handeln.
 \end{description}
 
-Eine \texttt{RESTFUL API} ist eine, die zustandsfreie \texttt{HTTP} Requests
-verwendet zum Zugriff auf Ressourcen via URIs ermöglicht. Ein Request mit
-einem der \texttt{HTTP} Verben \texttt{GET}, \texttt{POST}, \texttt{PUT} oder
-\texttt{DELETE} gesendet wird greift lesend oder schreibend auf eine Ressource
-zu. \texttt{GET} signalisiert die Abfrage von Daten, \texttt{POST} das Verändern
-von Daten, \texttt{PUT} das Anlegen neuer Daten und \texttt{DELETE} das Löschen
-von Daten. Ein \texttt{GET} Request könnte beispielsweise ein bestimmtes Bild
-abrufen, ein anderer eine Datenbank nach allen Einträgen, die einem
-mitgeschicktem Filterkriterium entsprechen, durchsuchen. Es ist auch vorstellbar
-ein \texttt{RESTFUL API} auf ein definiertes Subset von \texttt{SQL} zu mappen
-oder die Steuerung einer Waschmaschiene.
-
 Da die Requests zustandsfrei sind, kann in einem Request nicht auf
 einen vorausgegangenen Request zurückgegriffen werden. Zwar werden
 duch einen Request eingetretene Datenbankänderungen in der
@@ -191,7 +191,7 @@ oder ein von allen Folgerequests verwendeter Namensraum ausgewählt
 werden kann. Jeder Request muss alle zu seiner Verarbeitung
 notwendigen Informationen selbst beinhalten.
 
-\subsection{\texttt{MVC}}
+\subsection{\texttt{Model-View-Controller}}
 Model View Controller ist ein zum bearbeiten von Inhaltsanfragen geeignetes
 Konzept. Daten werden nach durch ein Model beschrieben und strukturiert und
 verwaltet, ihre Darstellung durch den View festgelegt und die Webrequests vom
@@ -207,14 +207,14 @@ zwischen Model, View und Controller.
   \label{fig:mvc}
 \end{figure}
 
-\subsection{Short description of Angular}
+\subsection{Kurze Beschreibung von Angular}
 
 Angular ist eine App Platform für Webbrowser und macht vom MVC Modell gebrauch.
 Es gibt Components, Templates und Interfaces.
 \begin{description}
   \item[Template] \mbox{} \\ Templates beinhalten \texttt{HTML} und Angular
     Bindings, die Daten aus dem Model einfügen und Events an Funktionen binden.
-  \item[Interfase] \mbox{} \\ Auch wenn Interfaces nicht direkt die Rolle des
+  \item[Interface] \mbox{} \\ Auch wenn Interfaces nicht direkt die Rolle des
     Models einnehmen, sind sie die Clientseitige Repräsenation des Models, das
     Serverseitig, meist in einer Datenbank abgelegt ist.
   \item[Component] \mbox{} \\ Komponenten nehmen in Angular die Rolle des
@@ -229,9 +229,9 @@ Deutschland als Urheber alle Rechte an besagtem Werk. Um jemand anderem die
 Nutzung des Werkes zu ermöglichen muss der Urheber dem Nutzer eine
 Nutzungslizenz erteilen, die definiert in welcher Art und Weise der Nutzer das
 Werk nutzen darf und welche Bedingungen er dabei erfüllen muss, in anderen
-Juristiktion gelten ähnliche aber im Detail andere Regeln hierfür.
+Jurisdiktion gelten ähnliche aber im Detail andere Regeln hierfür.
 
-Der Inhalt der Lizenz ist beliebig, unterliegt je nach Juristiktion allerdings
+Der Inhalt der Lizenz ist beliebig, unterliegt je nach Jurisdiktion allerdings
 gewissen Einschränkungen. Desweiteren ist die Bedeutung des Wortlauts
 Interpretationssache des Richters, sollte es zu einem Rechtsstreit kommen,
 weshalb Unkundigen davon abgeraten wird eigene Lizenztexte zu verfassen und ohne
@@ -247,7 +247,7 @@ entworfen. Anfangs befassten sich diese Lizenzen nur mit US-amerikanischem
 Recht, und stellten sich außerdem als Überarbeitungsbedürftig heraus. Die
 aktuellen Fassungen in der Version 4.0 sind allerdings Internationalisiert mit
 offiziellen Übersetzungen, die auf die jeweiligen Besonderheiten der jeweiligen
-Juristiktionen eingehen. \cite{CC}
+Jurisdiktionen eingehen. \cite{CC}
 
 Die regulären Creative Commons Lizenzen sind
 
