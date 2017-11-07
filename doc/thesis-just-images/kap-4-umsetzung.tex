@@ -47,7 +47,7 @@ Einspielen von Sicherheitsupdates des Browsers vom Entwickler der Webapp
 abhängig und auf den Servern eingespielte Sicherheitsupdates sind sofort für
 alle Nutzer gültig.
 
-Angular verwendet Typscript, was zu JavaScript kompiliert wird. Bei
+Angular verwendet Typescript, was zu JavaScript kompiliert wird. Bei
 abgeschaltetem JavaScript oder Browsern ohne JavaScript, wie sie unter anderem
 von Screenreadern für blinde Nutzer verwendet werden, ist ohne zutun des
 Entwicklers nicht mehr als eine leere Seite zu sehen, da alle in Angular
@@ -220,22 +220,28 @@ Die versendeten Metadaten entsprechen dem Format des Description Interfaces:
 \end{minted}
 
 \subsubsection{Library}
+\label{subsec:4-image-library}
 
 Ein Hauptaspekt der Bildverwaltung ist eine Übersicht aller dem Projekt
 verfügbaren Bilder und der Möglichkeit die Bilder nach Bildname, Urhebername und
 Lizenzname zu filtern. Die Daten stammen aus der \texttt{API} Route, der alle
 Bildmetadaten liefert und können sowohl zur besseren Betrachtbarkeit als
-Gallerie oder zur besseren Übersicht über die Metadaten als Liste angezeigt
-werden.
+Gallerie (siehe Abbildung \ref{fig:impl-image-gallery}) oder zur besseren
+Übersicht über die Metadaten als Liste (siehe Abbildung
+\ref{fig:impl-image-list}) angezeigt werden.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\columnwidth/100*69]{images/screenshot-image-gallery.png}
+  \includegraphics[height=0.95\textheight]{images/screenshot-image-gallery.png}
+  \caption{Bildergallerie}
+  \label{fig:impl-image-gallery}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics[width=\columnwidth/100*77]{images/screenshot-image-list.png}
+  \includegraphics[height=0.95\textheight]{images/screenshot-image-list.png}
+  \caption{Bildliste}
+  \label{fig:impl-image-list}
 \end{figure}
 
 Der Upload geschieht über ein der Bildverwaltung untergeordneten Dialog
@@ -267,7 +273,7 @@ aktuelleren Version der jeweiligen \texttt{CC} Lizenz neu veröffentlicht hat,
 gilt weiterhin die ursprüngliche Version. Die Angabe der falschen Version der
 Lizenz bedeutet, dass die Lizenzbedingungen nicht erfüllt sind. Weiterhin
 existieren beispielsweise von den \texttt{3.0} Versionen auf verschiedene
-Juristiktionen portierte Versionen, die wiederum korrekt auseinandergehalten
+Jurisdiktionen portierte Versionen, die wiederum korrekt auseinandergehalten
 werden müssen. Weiterhin kann jede der Lizenzen adaptiert werden um zusätzliche
 Bedingunen hinzuzufügen. Die Verwaltung der Lizenzliste bedeutet einen großen
 Wartungsaufwand, da ständig neue Lizenzen auftauchen können. Außerdem macht die
@@ -324,6 +330,7 @@ dem Namen nummerierte Links angehängt sind, die auf die Vorkommen der Bilder
 oben auf der Seite verlinken.
 
 \subsubsection{Seiteneditorintegration}
+\label{subsec:4-page-editor}
 
 Der Seiteneditor verfügte bereits über ein Image Element, für das \texttt{src}
 und \texttt{alt} wie in HTML üblich befüllt werden konnten. Dieses Element wurde
@@ -336,52 +343,72 @@ keine modalen Dialoge zur Verfügung stehen. Sobald sich das ändert, kann
 stattdessen ein Auswahldialog wie die Bildübersicht mit den selben
 Filteroptionen verwendet werden.
 
+Die folgenden Optionen zur Optimierung der Anzeige sollten in eine eindgültige
+Version des Seiteneditors integriert werden. Da dieser Editor aktuell jedoch
+überarbeitet wird, war eine Implementierung im Rahmen dieser Thesis nicht mehr
+möglich.
+
 Die Bilder in der Bildverwaltung sind nicht notwendigerweise in der Größe
-hintelegt, in der sie Dargestellt werden sollen. Bei Bildern im SVG Format
+hintelegt, in der sie dargestellt werden sollen. Bei Bildern im SVG Format
 wird außerdem die Boundingbox vom Browser nicht als Größe des Bildes verwendet
 und somit in voller Bildschirmbreite dargestellt. Deshalb benötigt der
 Seiteneditor die Möglichkeit Einfluss auf einige Darstellungsoptionen zu nehmen.
 
 Es sollte möglich sein, entweder die Höhe oder Breite festzulegen. Wenn beide
 gleichzeitig festgelegt werden und ein anderes Seitenverhältnis als das des
-Bildes gewählt wird, führt dies zu einer Streckung des Bildes.
+Bildes gewählt wird, führt dies zu einer Streckung des Bildes wie in Abbildung
+\ref{fig:scaling-overview} verdeutlicht.
 
 \begin{figure}
-  \includegraphics[width=\columnwidth/100*66]{images/scale-image-orig.png}
-  \includegraphics[width=\columnwidth/100*33]{images/scale-image-bad1.png}
-  \includegraphics[width=\columnwidth/100*66]{images/scale-image-bad2.png}
-  \includegraphics[width=\columnwidth/100*33]{images/scale-image-good.png}
-
-  Links oben: Originalbild
-
-  Rechts oben: Halbierte Breite bei gleicher Höhe
-
-  Links unten: Halbierte Höhe bei gleicher Breite
-
-  Rechts unten: Korrekt auf 50\% runterskaliertes Bild
+  \begin{subfigure}[b]{0.66\columnwidth}
+    \includegraphics[width=\columnwidth]{images/scale-image-orig.png}
+    \caption{Originalbild}
+    \label{fig:scaling-original}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.33\columnwidth}
+    \includegraphics[width=\columnwidth]{images/scale-image-bad1.png}
+    \caption{Halbierte Breite}
+    \label{fig:scaling-bad1}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.66\columnwidth}
+    \includegraphics[width=\columnwidth]{images/scale-image-bad2.png}
+    \caption{Halbierte Höhe}
+    \label{fig:scaling-bad2}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.33\columnwidth}
+    \includegraphics[width=\columnwidth]{images/scale-image-good.png}
+    \caption{Korrekt auf 50\% skaliert}
+    \label{fig:scaling-good}
+  \end{subfigure}
+  \caption{Skalieren und Strecken von Bildern}
+  \label{fig:scaling-overview}
 \end{figure}
 
 Desweiteren ist die Skalierungsmethode eine wichtige Option. Für reguläre Bilder
 sollte zum Schrumpfen der Bilder eine qualitativ hochwertige Interpolation
 verwendet werden während das vergrößern von Pixelart via Nearest Neighbor
-geschehen sollte. Da nach dem Erzeugen des Templates durch den Editor das Bild
-in der Bildverwaltung verändert werden kann, kann die richtige
+geschehen sollte, da sonst die für Pixelart übliche harten Kanten (siehe
+Abbildung \ref{fig:pixelart-scaled-good}) in weiche Kanten umgewandelt werden
+und das Bild den Eindruck vermittelt unscharf zu sein (siehe Abbildung
+\ref{fig:pixelart-scaled-bad}). Da nach dem Erzeugen des Templates durch den
+Editor das Bild in der Bildverwaltung verändert werden kann, kann die richtige
 Interpolationsmethode nicht automatisch berechnet und im Template abgelegt
 werden, daher muss wie Wahl der korrekten Interpolationsmethode dem
 Seitenautoren überlassen werden.
 
 \begin{figure}
-  \includegraphics[]{images/pixelart-original.png}
-  \includegraphics[width=\columnwidth/100*46]{images/pixelart-scaled-bad.png}
-  \includegraphics[width=\columnwidth/100*46]{images/pixelart-scaled-good.png}
-
-  Links: Pixelart in Originalgröße
-
-  Mitte: Mit hochwertiger Interpolationsmethode skaliertes Bild.
-
-  Rechts: Mit Nearest Neighbor skaliertes Bild.
-
-  \todo[inline]{change graphic with self created one}
+  \begin{subfigure}[b]{\columnwidth/2}
+    \includegraphics[width=\columnwidth]{images/pixelart-scaled-bad.png}
+    \caption{Hochwertige Interpolationsmethode}
+    \label{fig:pixelart-scaled-bad}
+  \end{subfigure}
+  \begin{subfigure}[b]{\columnwidth/2}
+    \includegraphics[width=\columnwidth]{images/pixelart-scaled-good.png}
+    \caption{Nearest Neighbor}
+    \label{fig:pixelart-scaled-good}
+  \end{subfigure}
+  \caption{(Un)Tauglichkeit guter Skalierungsmethode für Pixelart}
+  \label{fig:pixelart-scaling-overview}
 \end{figure}
 
 Diese Eigenschaften sowie die Auswahl des Darstellungstyps müssen sowohl für das
@@ -396,16 +423,23 @@ Display Typs zwischen \texttt{block} und \texttt{inline-block} hinzu, allerdings
 kann das Image Element derzeit nicht innerhalb eines Paragraphen verwendet
 werden, daher entfällt diese Auswahl.
 
-\cleardoublepage
+Diese Features konnten allerdings nicht mehr als Teil dieser Thesis
+implementiert werden, daher existiert hier nur die Beschreibung dessen was sein
+sollte.
+
 \subsubsection{Datenbankintegration}
+\label{subsec:4-database-integration}
 
 \begin{figure}
   \centering
-  \includegraphics[height=21cm]{images/image_database_schemas.png}
+  \includegraphics[height=0.95\textheight]{images/image_database_schemas.png}
+  \caption{Datenbankschema mit Denormalisierungsschritten}
+  \label{fig:database-schema-optimization}
 \end{figure}
 
 Mit einer Datenbank, die die Bilddateien in Datenbank in den Tabellen speichern
-kann ist der erste Ansatz davon gebrauch zu machen. Daraus resultiert das Schema
+kann ist der erste Ansatz davon gebrauch zu machen. Daraus resultiert das in
+Abbildung \ref{fig:database-schema-optimization} Schema
 bestehend aus der Tabellengruppe \texttt{image}, \texttt{author} und
 \texttt{licence} wie in der Abbildung dargestellt. Dies bedarf jedoch einem
 Datenbankzugriff für jedes darzustellende Bild, so dass das Schema statt dem
@@ -421,8 +455,8 @@ das Abrufen aller Metadaten die häufigste Operation ist, lohnt es sich die
 Tabellengruppe zu denormalisieren um diese Operation ohne das zusammenführen
 mehrer Tabellen auszuführen zu können. Das Schema der resultierenden Tabelle ist
 in der Abbildung unter \texttt{image\_O3} zu sehen. Da das Projekt zum aktuellen
-Zeitpunkt noch Sqlite verwendet, ist diese Tabelle ausgelagert in eine JSON
-Datei im Bilderordner ausgelagert um die Last auf der Datenbank zu verringern.
+Zeitpunkt noch Sqlite verwendet, ist diese Tabelle in eine JSON Datei im
+Bilderordner ausgelagert um die Last auf der Datenbank zu verringern.
 
 In der derzeitigen Implementierung werden Bild-UUIDs in der Datenbank in
 regulären Text Feldern gespeichert und immer wenn der Wert eines Feldes dem
@@ -434,6 +468,43 @@ und die Prüfung auf korrekte Struktur der UUID auf den Zeitpunkt des Einfügens
 in die Datenbank verschoben werden und der Autor einer Datenbank kann UUIDS in
 Tabellen rendern lassen, ohne dass versucht wird ein Bild an dieser Stelle
 darzustellen.
+
+\subsection{Containerisierung}
+\label{subsec:4-containerization}
+
+Es wurde ein Entwicklungs und ein Test Docker Image geschaffen, die zur Nutzung
+durch die Entwickler bzw. das verwendete CI-System Bitbucket Pipelines gedacht
+sind. Beide Basieren auf einem gemeinsamen Basisimage, auf dem auch das
+Produktivimage basieren soll. Sämtliche Arbeit an dem Projekt im Kontext dieser
+Thesis wurde unter Zuhilfenahme des Entwicklungs Docker Images auf einem Debian
+bzw. Archlinux Host durchgeführt und der aktuelle Stand hat sich als
+praxistauglich erwiesen und ermöglichte den Problemlosen Wechsel des
+Entwicklungsgeräts ohne Aufwand jenseits der eigentlichen
+Betriebssysteminstallation. Desweiteren wurde das Entwicklungs Image kurz vor
+Abgabe der Thesis unter MacOS zum Einsatz gebracht, allerdings zu kurz um die
+Stabilität auf dieser Platform bereits zu bestätigen. Das Test Image wird seit
+Fertigstellung von Bitbucket Pipelines benutz und führt alle vorhandenen Tests
+für jeden Commit aus.
+
+Die Images sollten ursprünglich auf Alpine Linux basieren, um besonders klein zu
+sein, allerdings ließ es die aktuelle Situation der Packete im
+Packetmanagementsystem nicht zu alle benötigten Abhängigkeiten in der Korrekten
+Version gleichzeitig zu installieren ohne größeren Aufwand zu treiben, weshalb
+vorerst das Archlinux Base Development Docker Image verwendet wird, was leider
+um den Faktor hundert größer ist, sich aber deutlich einfacher Einrichten ließ.
+Es ist geplant den Wechel auf Alpine Linux durchzuführen, sobald dies möglich ist.
+
+Es wurde ein Makefile geschaffen, um die Nutzung durch Entwickler die weder mit
+Docker noch Docker-Compose vertraut sind zu vereinfachen, und ihnen sowohl
+ermöglicht das Projekt schnell in Betrieb zu nehmen, als auch aus dem Makefile
+zu lernen. Das Makefile enthält Targets um die Entwicklungsumgebung zu starten
+und zu stoppen, die Tests auszuführen, die Images von Dockerhub herunterzuladen,
+die Images neu zu bauen, die gebauten Images auf Dockerhub hochzuladen.
+
+Das Produktivimage wurde bisher nicht fertiggestellt, da derzeit noch keine im
+Produktivbetrieb einsetzbare Version von SQLino existiert, die darin
+ausgeliefert werden könnte, daher wurde die Fertigstellung mit einer niedrigen
+Priorität versehen und konnte nicht in der gegebenen Zeit fertiggestellt werden.
 
 %%% Local Variables:
 %%% mode: latex
