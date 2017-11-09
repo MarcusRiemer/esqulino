@@ -33,3 +33,14 @@
         display: block
     }
 }
+
+/* Not nested into any class because it is meant to be used anywhere */
+image-selector {
+    display: flex;
+
+    img {
+        max-width: calc(2.25rem + 2px);
+        max-height: calc(2.25rem + 2px);
+        margin: 2px;
+    }
+}

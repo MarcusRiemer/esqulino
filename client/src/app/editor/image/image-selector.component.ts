@@ -39,6 +39,10 @@ export class ImageSelectorComponent {
     this.projectImageIdChange.emit(value);
   }
 
+  get currentImage() {
+    return (this.images.find(c => c.id === this.projectImageId));
+  }
+
   ngOnInit() {
     this._imageService.loadImageList();
   }
@@ -49,6 +53,6 @@ export class ImageSelectorComponent {
   }
 
   get images() {
-    return (this._imageService.images);
+    return (this._imageService.images || []);
   }
 }

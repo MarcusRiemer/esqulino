@@ -4,7 +4,7 @@
 Dieses Kapitel beschreibt Technologien, die im Kontext dieser Arbeit relevant
 sind.
 
-\subsection{Short description of \texttt{SQLino}}
+\subsection{Kurze Beschreibung von \texttt{SQLino}}
 
 \texttt{SQLino} ist der Prototyp einer Lehr-Entwicklungsumgebung für
 \texttt{SQL} und \texttt{HTML}, die sich statt an professionelle Anwender an
@@ -13,7 +13,7 @@ Entwicklungsumgebungen im professionellen Umfeld sonst üblich ist.
 \texttt{SQLino} verwendet grafische per Drag `n Drop kombinierbare
 Blockstrukturen als Repräsenation von Sprachelementen, um Syntaxfehler
 auszuschließen und nicht vorraussetzen, dass die jeweiligen Sprachelemente
-bereits auswendig gelernt sind.
+bereits auswendig gelernt sind. \cite{blattwerkzeug-thesis}
 
 \subsection{Docker}
 Docker verbindet das Isolationsprinzip der \texttt{FreeBSD} Jails mit einer
@@ -81,23 +81,25 @@ eingebunden sein können. Standardmäßig verwendet Docker \texttt{OverlayFS} al
 Storage Driver, in Produktivumgebungen werden aber auch Device Mapper und
 \texttt{AUFS} als Storage Driver verwendet \cite{docker-storage-driver}.
 
-Ein Projekt wird in Services aufgeteilt, wie z.B. Reverse-Proxy, Webapp,
-\texttt{API} Server, Datenbank und Static File Server, die dann in Containern
-isoliert laufen, wobei jeder Container ein Virtuelles Environment darstellt, in
-dem  jeweils nur ein Prozess mit eventuell geforkten Worker Prozessen läuft. So
-wird die Komplexität des Environments minimiert und besser wartbar, da jeder
-Service mit Ausnahme der Kommunikationsschnittstelle zu den anderen Services
-unabhängig konfiguriert und geupdatet werden kann, ohne dass beispielsweise in
-Konflikt stehende Softwarepackete das Update eines Services verhindern, weil
-erst auf ein Update eines anderen Service gewartet werden muss um die gemeinsame
-Abhängigkeit updaten zu können, deren alte Version mit der aktuellen Version
-nicht mehr Kompatibel ist und nicht parallel installiert werden kann.
+Ein Projekt wird, wie in Abbildung \ref{fig:docker-example-simple} dargestellt,
+in Services aufgeteilt, wie z.B. Reverse-Proxy, Webapp, \texttt{API} Server,
+Datenbank und Static File Server, die dann in Containern  isoliert laufen, wobei
+jeder Container ein Virtuelles Environment darstellt, in dem  jeweils nur ein
+Prozess mit eventuell geforkten Worker Prozessen läuft. So wird die Komplexität
+des Environments minimiert und besser wartbar, da jeder Service mit Ausnahme der
+Kommunikationsschnittstelle zu den anderen Services unabhängig konfiguriert und
+geupdatet werden kann, ohne dass beispielsweise in Konflikt stehende
+Softwarepackete das Update eines Services verhindern, weil erst auf ein Update
+eines anderen Service gewartet werden muss um die gemeinsame Abhängigkeit
+updaten zu können, deren alte Version mit der aktuellen Version nicht mehr
+Kompatibel ist und nicht parallel installiert werden kann.
 
 \begin{figure}
   \includegraphics[width=\columnwidth/2]{images/docker-services-example-2.pdf}
 
-  Beispiel einer Aufteilung in die Services Webserver, Datenbank und
-  elasticsearch. Nur der Webserver hat eine externe Netzwerkverbindung.
+  \caption{Beispiel einer Aufteilung in die Services Webserver, Datenbank und
+    elasticsearch. Nur der Webserver hat eine externe Netzwerkverbindung.}
+  \label{fig:docker-example-simple}
 \end{figure}
 
 Eingehende Kommunikation zu Containern wird per Default unterbunden und muss
@@ -105,17 +107,19 @@ explizit aktiviert werden. Es ist möglich mehrere Container in ein
 gemeinsames Virtuelles Netzwerk zu legen, sodass eine Kommunikation
 untereinander stattfinden kann (Reverse-Proxy -> Webseite, Webseite ->
 Datenbank) als auch bestimmte Netzwerk Ports des Hosts auf bestimmte Netzwerk
-Ports eines Containers zu mappen (Internet -> Reverse-Proxy).
+Ports eines Containers zu mappen (Internet -> Reverse-Proxy), siehe Abbildung
+\ref{fig:docker-example-extended}.
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{images/docker-services-example.pdf}
 
-  Erweitertes Beispiel mit zwei getrennten Netzwerken. Loadbalancer und Asset
-  Server haben keinen Zugriff auf die Datenbank, der \texttt{API} Server ist auf
-  drei Instanzen skaliert.
+  \caption {Erweitertes Beispiel mit zwei getrennten Netzwerken. Loadbalancer
+    und Asset   Server haben keinen Zugriff auf die Datenbank, der \texttt{API}
+    Server ist auf drei Instanzen skaliert.}
+  \label{fig:docker-example-extended}
 \end{figure}
 
-\subsubsection{Docker vs VM}
+\subsubsection{Unterschiede zwischen Docker und VM}
 
 Im Gegensatz zu einer herkömmlichen virtuellen Maschine stellt Docker keine
 virtualisierte oder paravirtualisierte Hardware bereit, auf der ein eigenes
@@ -139,9 +143,21 @@ konfigurierte Version der Software inklusive aller benötigten Abhängigkeiten
 
 \subsection{\texttt{RESTFUL API}}
 
+Eine \texttt{RESTFUL API} ist eine, die zustandsfreie \texttt{HTTP} Requests
+verwendet zum Zugriff auf Ressourcen via URIs ermöglicht. Ein Request mit
+einem der \texttt{HTTP} Verben \texttt{GET}, \texttt{POST}, \texttt{PUT} oder
+\texttt{DELETE} gesendet wird greift lesend oder schreibend auf eine Ressource
+zu. \texttt{GET} signalisiert die Abfrage von Daten, \texttt{POST} das Verändern
+von Daten, \texttt{PUT} das Anlegen neuer Daten und \texttt{DELETE} das Löschen
+von Daten. Ein \texttt{GET} Request könnte beispielsweise ein bestimmtes Bild
+abrufen, ein anderer eine Datenbank nach allen Einträgen, die einem
+mitgeschicktem Filterkriterium entsprechen, durchsuchen. Es ist auch vorstellbar
+ein \texttt{RESTFUL API} auf ein definiertes Subset von \texttt{SQL} zu mappen
+oder die Steuerung einer Waschmaschiene.
+
 \begin{description}
 \item[URI] \mbox{}\\ Ein \texttt{URI} ist ein Uniform Resource Identifier,
-  beschrieben in RFC2396. Es handelt sich dabei um eine Zeichenfolge zur
+  beschrieben in RFC2396\cite{rfc2396}. Es handelt sich dabei um eine Zeichenfolge zur
   Idektifikation von physikalischen oder Abstrakten Ressourcen mit folgender
   Struktur:
 \begin{minted}{HTTP}
@@ -166,18 +182,6 @@ urn:ietf:rfc:2396
   Sensors oder einen Datenbankeintrag handeln.
 \end{description}
 
-Eine \texttt{RESTFUL API} ist eine, die zustandsfreie \texttt{HTTP} Requests
-verwendet zum Zugriff auf Ressourcen via URIs ermöglicht. Ein Request mit
-einem der \texttt{HTTP} Verben \texttt{GET}, \texttt{POST}, \texttt{PUT} oder
-\texttt{DELETE} gesendet wird greift lesend oder schreibend auf eine Ressource
-zu. \texttt{GET} signalisiert die Abfrage von Daten, \texttt{POST} das Verändern
-von Daten, \texttt{PUT} das Anlegen neuer Daten und \texttt{DELETE} das Löschen
-von Daten. Ein \texttt{GET} Request könnte beispielsweise ein bestimmtes Bild
-abrufen, ein anderer eine Datenbank nach allen Einträgen, die einem
-mitgeschicktem Filterkriterium entsprechen, durchsuchen. Es ist auch vorstellbar
-ein \texttt{RESTFUL API} auf ein definiertes Subset von \texttt{SQL} zu mappen
-oder die Steuerung einer Waschmaschiene.
-
 Da die Requests zustandsfrei sind, kann in einem Request nicht auf
 einen vorausgegangenen Request zurückgegriffen werden. Zwar werden
 duch einen Request eingetretene Datenbankänderungen in der
@@ -187,27 +191,30 @@ oder ein von allen Folgerequests verwendeter Namensraum ausgewählt
 werden kann. Jeder Request muss alle zu seiner Verarbeitung
 notwendigen Informationen selbst beinhalten.
 
-\subsection{\texttt{MVC}}
+\subsection{\texttt{Model-View-Controller}}
 Model View Controller ist ein zum bearbeiten von Inhaltsanfragen geeignetes
 Konzept. Daten werden nach durch ein Model beschrieben und strukturiert und
 verwaltet, ihre Darstellung durch den View festgelegt und die Webrequests vom
 Controller behandelt. So werden Datenhaltung, Darstellung und Buisiness Logic
 von einander getrennt und können bis zu einem gewissen Grad unabhängig von
-einander überarbeitet werden.
+einander überarbeitet werden. Abbildung \ref{fig:mvc} zeigt die Interaktion
+zwischen Model, View und Controller.
 
 \begin{figure}
   \centering
   \includegraphics[width=\columnwidth]{images/mvc.pdf}
+  \caption{MVC Übersicht}
+  \label{fig:mvc}
 \end{figure}
 
-\subsection{Short description of Angular}
+\subsection{Kurze Beschreibung von Angular}
 
 Angular ist eine App Platform für Webbrowser und macht vom MVC Modell gebrauch.
 Es gibt Components, Templates und Interfaces.
 \begin{description}
   \item[Template] \mbox{} \\ Templates beinhalten \texttt{HTML} und Angular
     Bindings, die Daten aus dem Model einfügen und Events an Funktionen binden.
-  \item[Interfase] \mbox{} \\ Auch wenn Interfaces nicht direkt die Rolle des
+  \item[Interface] \mbox{} \\ Auch wenn Interfaces nicht direkt die Rolle des
     Models einnehmen, sind sie die Clientseitige Repräsenation des Models, das
     Serverseitig, meist in einer Datenbank abgelegt ist.
   \item[Component] \mbox{} \\ Komponenten nehmen in Angular die Rolle des
@@ -222,9 +229,9 @@ Deutschland als Urheber alle Rechte an besagtem Werk. Um jemand anderem die
 Nutzung des Werkes zu ermöglichen muss der Urheber dem Nutzer eine
 Nutzungslizenz erteilen, die definiert in welcher Art und Weise der Nutzer das
 Werk nutzen darf und welche Bedingungen er dabei erfüllen muss, in anderen
-Juristiktion gelten ähnliche aber im Detail andere Regeln hierfür.
+Jurisdiktion gelten ähnliche aber im Detail andere Regeln hierfür.
 
-Der Inhalt der Lizenz ist beliebig, unterliegt je nach Juristiktion allerdings
+Der Inhalt der Lizenz ist beliebig, unterliegt je nach Jurisdiktion allerdings
 gewissen Einschränkungen. Desweiteren ist die Bedeutung des Wortlauts
 Interpretationssache des Richters, sollte es zu einem Rechtsstreit kommen,
 weshalb Unkundigen davon abgeraten wird eigene Lizenztexte zu verfassen und ohne
@@ -240,17 +247,17 @@ entworfen. Anfangs befassten sich diese Lizenzen nur mit US-amerikanischem
 Recht, und stellten sich außerdem als Überarbeitungsbedürftig heraus. Die
 aktuellen Fassungen in der Version 4.0 sind allerdings Internationalisiert mit
 offiziellen Übersetzungen, die auf die jeweiligen Besonderheiten der jeweiligen
-Juristiktionen eingehen.
+Jurisdiktionen eingehen. \cite{CC}
 
 Die regulären Creative Commons Lizenzen sind
 
 \begin{tabular}{ c l l }
-  & \texttt{CC BY} & Attribution \\
-  & \texttt{CC BY-SA} & Attribution + ShareAlike \\
-  & \texttt{CC BY-ND} & Attribution + NoDerivatives \\
-  & \texttt{CC BY-NC} & Attribution + Noncommercial \\
-  & \texttt{CC BY-NC-SA} & Attribution + Noncommercial + ShareAlike \\
-  & \texttt{CC BY-NC-ND} &  Attribution + Noncommercial + NoDerivatives
+  & \texttt{CC BY \cite{CC-BY}} & Attribution \\
+  & \texttt{CC BY-SA \cite{CC-BY-SA}} & Attribution + ShareAlike \\
+  & \texttt{CC BY-ND \cite{CC-BY-ND}} & Attribution + NoDerivatives \\
+  & \texttt{CC BY-NC \cite{CC-BY-NC}} & Attribution + Noncommercial \\
+  & \texttt{CC BY-NC-SA \cite{CC-BY-NC-SA}} & Attribution + Noncommercial + ShareAlike \\
+  & \texttt{CC BY-NC-ND \cite{CC-BY-NC-ND}} &  Attribution + Noncommercial + NoDerivatives
 \end{tabular}
 
 wobei die Begriffe folgende Bedeutung haben:
