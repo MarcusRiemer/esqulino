@@ -65,6 +65,40 @@ class LiquidFilesystem
   end
 end
 
+# Generates the URL for an image
+#
+# @param context liquid render context as passed to a liquid tags render function
+# @param id UUID of the image, if nil context['src'] is used instead
+def generate_image_url(context, id)
+  authority = "#{context['project']['id']}.#{context['server']['project_host']}"
+  "//#{authority}/image/#{ id || context['src'] }"
+end
+
+# Represets Pairs of mid-width selector values and requested image width
+# width may be nil
+Limit = Struct.new(:min_width, :width)
+
+# Generates the HTML Picture Element with a source for every limit in limits
+#
+# @param url base url for the full size image
+# @param limits list of Limit structs
+def generate_picture(url, limits, smallest_width, id, alt, cssclass)
+  <<-delim
+<picture>
+  #{limits.map{ |limit|
+"<source media='(min-width: #{limit.min_width}px)'
+srcset='#{url}#{
+  if limit.width.nil? then '' else "?width=#{limit.width}" end
+}'>"
+}.join("\n")}
+  <img id="#{id}"
+       class="#{cssclass}"
+       src="#{url}?width=#{smallest_width}"
+       alt="#{alt}">
+</picture>
+  delim
+end
+
 # The context passed to the render functions by liquid
 # does not pass a modified context to the next render call,
 # instead each render call gets its own context, therefore
@@ -76,6 +110,7 @@ end
 # inside the hash.
 $sourceList = Hash.new
 
+#Liquid tag for rendering an icon and adding it to the source list
 class AddToSourceList < Liquid::Tag
   def render(context)
     if context['sources'].nil?
@@ -87,24 +122,23 @@ class AddToSourceList < Liquid::Tag
     id_suffix = $sourceList[uuid].count(context['src'])
 
     $sourceList[uuid] << (context['src'])
-    authority = "#{context['project']['id']}.#{context['server']['project_host']}"
-    url = "//#{authority}/image/#{ context['src'] }"
-    <<-delim
-<picture>
-  <source media="(min-width: 2000px)" srcset="#{url}">
-  <source media="(min-width: 1600px)" srcset="#{url}?width=2000">
-  <source media="(min-width: 1200px)" srcset="#{url}?width=1600">
-  <source media="(min-width:  800px)" srcset="#{url}?width=1200">
-  <source media="(min-width:  400px)" srcset="#{url}?width=800">
-  <img id="#{context['src']}-#{id_suffix}" src="#{url}?width=400" alt="#{ context['alt'] }">
-</picture>
-    delim
+    url = generate_image_url(context, nil)
+
+    limits = [
+      Limit.new(2000,  nil),
+      Limit.new(1600, 2000),
+      Limit.new(1200, 1600),
+      Limit.new( 800, 1200),
+      Limit.new( 400,  800)
+    ]
+    generate_picture(url, limits, 400, "#{context['src']}-#{id_suffix}", context['alt'], "")
   end
 end
 
 
 Liquid::Template.register_tag('addToSourceList', AddToSourceList)
 
+#Liquid tag for rendering the source list
 class DisplaySourceList < Liquid::Tag
   def render(context)
     sources = $sourceList[context['uuid']].map do |image_id|
@@ -136,22 +170,24 @@ end
 
 Liquid::Template.register_tag('displaySourceList', DisplaySourceList)
 
+#Liquid tag for rendering image figures
 class DisplayImageFigure < Liquid::Tag
   def render(context)
     img = Image.new(context['project']['instance'], context['src'])
     metadata = img.metadata_show
-    authority = "#{context['project']['id']}.#{context['server']['project_host']}"
-    url = "//#{authority}/image/#{ context['src'] }"
+    url = generate_image_url(context, nil)
+
+    limits = [
+      Limit.new(2000,  nil),
+      Limit.new(1600, 2000),
+      Limit.new(1200, 1600),
+      Limit.new( 800, 1200),
+      Limit.new( 400,  800)
+    ]
+
     <<-delim
 <figure class="figure">
-  <picture>
-    <source media="(min-width: 2000px)" srcset="#{url}">
-    <source media="(min-width: 1600px)" srcset="#{url}?width=2000">
-    <source media="(min-width: 1200px)" srcset="#{url}?width=1600">
-    <source media="(min-width:  800px)" srcset="#{url}?width=1200">
-    <source media="(min-width:  400px)" srcset="#{url}?width=800">
-    <img id='#{context['src']}' class="figure-img" src='#{url}?width=400'>
-  </picture>
+  #{ generate_picture(url, limits, 400, context['src'], metadata['name'], "figure-img") }
   <footer><small>
     <a href='#{metadata['author-url']}'>#{ metadata['author-name'] }</a>,
     <a href='#{metadata['licence-url']}'>#{metadata['licence-name']}</a>
@@ -167,6 +203,7 @@ Liquid::Template.register_tag('imageFigure', DisplayImageFigure)
 #4c724484-017d-48a7-848f-3694ae3b4681
 UUID_REGEX = /^[[:xdigit:]]{8}-[[:xdigit:]]{4}-4[[:xdigit:]]{3}-[[:xdigit:]]{4}-[[:xdigit:]]{12}$/
 
+#Liquid tag for rendering UUIDs in table cells as icons
 class TableCell < Liquid::Tag
   def initialize(tag_name, value, tokens)
     super
@@ -190,18 +227,17 @@ class TableCell < Liquid::Tag
       id_suffix = $sourceList[uuid].count(value)
 
       $sourceList[uuid] << (value)
-      authority = "#{context['project']['id']}.#{context['server']['project_host']}"
-      url = "//#{authority}/image/#{value}"
-      <<-delim
-<picture>
-  <source media="(min-width: 2000px)" srcset="#{url}">
-  <source media="(min-width: 1600px)" srcset="#{url}?width=2000">
-  <source media="(min-width: 1200px)" srcset="#{url}?width=1600">
-  <source media="(min-width:  800px)" srcset="#{url}?width=1200">
-  <source media="(min-width:  400px)" srcset="#{url}?width=800">
-  <img id="#{value}-#{id_suffix}" src="#{url}?width=400">
-</picture>
-    delim
+      url = generate_image_url(context, value)
+
+      limits = [
+        Limit.new(2000,  nil),
+        Limit.new(1600, 1000),
+        Limit.new(1200, 800),
+        Limit.new( 800, 600),
+        Limit.new( 400,  400)
+      ]
+
+      generate_picture(url, limits, 200,"#{value}-#{id_suffix}", "", "")
     else
       value
     end
