@@ -18,23 +18,23 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         // If there are no children the closing tag goes onto the same line
         // as the opening tag
         const childElements = node.getChildrenInCategory("elements");
-        let openOutSep = OutputSeparator.NONE;
-        let closeOutSep = OutputSeparator.NONE;
+        let openEndSep = OutputSeparator.NONE;
+        let closeEndSep = OutputSeparator.NONE;
 
         if (childElements.length > 0) {
-          openOutSep = OutputSeparator.NEW_LINE_BEFORE;
-          closeOutSep = OutputSeparator.NEW_LINE_AFTER;
+          openEndSep = OutputSeparator.NEW_LINE_BEFORE;
+          closeEndSep = OutputSeparator.NEW_LINE_AFTER;
         }
 
         // Open tag, generate Attributes, add closing ">"
         process.addConvertedFragment(`<${name}`, node, OutputSeparator.NEW_LINE_BEFORE);
         attributes.forEach(attr => process.generateNode(attr));
-        process.addConvertedFragment(`>`, node, closeOutSep);
+        process.addConvertedFragment(`>`, node, closeEndSep);
 
         // Let the possible children render themselves. 
         childElements.forEach(c => process.generateNode(c));
 
-        process.addConvertedFragment(`</${name}>`, node, openOutSep);
+        process.addConvertedFragment(`</${name}>`, node, openEndSep);
         return ([]);
       },
     }
@@ -99,6 +99,63 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess) {
         process.addConvertedFragment(node.properties['name'], node, OutputSeparator.NONE);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "dxml",
+      typeName: "if"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+
+        const condition = node.children['condition'][0];
+        const body = node.getChildrenInCategory('body');
+
+        process.addConvertedFragment(`<% if`, node, OutputSeparator.SPACE_AFTER);
+        process.generateNode(condition);
+        process.addConvertedFragment(``, node, OutputSeparator.SPACE_BEFORE);
+        process.addConvertedFragment(`%>`, node, OutputSeparator.NEW_LINE_AFTER);
+
+        body.forEach(e => process.generateNode(e));
+
+        process.addConvertedFragment(`<% end %>`, node, OutputSeparator.NEW_LINE_BEFORE);
+
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "dxml",
+      typeName: "exprBinary"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        const children = node.children['exprBinary'];
+
+        // The binary expression needs spaces around all nodes
+        children.forEach(c => {
+          process.addConvertedFragment(``, node, OutputSeparator.SPACE_BEFORE);
+          process.generateNode(c);
+        });
+
+        process.addConvertedFragment(``, node, OutputSeparator.SPACE_AFTER);
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "dxml",
+      typeName: "binaryOperator"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        process.addConvertedFragment(node.properties['operator'], node, OutputSeparator.NONE);
       }
     }
   }
