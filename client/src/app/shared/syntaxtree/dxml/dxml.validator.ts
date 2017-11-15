@@ -7,7 +7,7 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
       children: {
         "elements": {
           type: "allowed",
-          nodeTypes: ["element", "text", "interpolate"]
+          nodeTypes: ["element", "text", "interpolate", "if"]
         },
         "attributes": {
           type: "allowed",
@@ -67,6 +67,10 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
 
             }
           ]
+        },
+        "body": {
+          type: "allowed",
+          nodeTypes: ["text", "element", "interpolate", "if"]
         }
       }
     },

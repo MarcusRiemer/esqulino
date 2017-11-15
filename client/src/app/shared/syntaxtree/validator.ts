@@ -523,7 +523,7 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
             context.addError(ErrorCodes.IllegalChildType, child, {
               present: child.qualifiedName,
               expected: expected.nodeType.description,
-              index: childIndex
+              index: childIndex,
             });
           }
         }
@@ -601,7 +601,11 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
       const cardinalityRef = this._nodeTypes.find(type => type.nodeType.matchesType(node.qualifiedName));
       if (!cardinalityRef) {
         // The node is entirely unexpected
-        context.addError(ErrorCodes.IllegalChildType, node, { index: index });
+        context.addError(ErrorCodes.IllegalChildType, node, {
+          index: index,
+          present: node.qualifiedName,
+          expected: this._nodeTypes.map(t => t.nodeType)
+        });
       } else {
         // The node is expected, but may occur too often. For the moment we simply count it.
         const cardinalityIndex = this._nodeTypes.indexOf(cardinalityRef);

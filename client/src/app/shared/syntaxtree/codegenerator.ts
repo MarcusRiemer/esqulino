@@ -67,17 +67,31 @@ export class CodeGeneratorProcess {
     const last = this._generated[this._generated.length - 1];
 
     // Picks the correct separation character and position
-    const sepChar = (gen: GeneratedNode) => {
-      // Are these first or last elements with irrelevant contributions?
+    const sepChar = (gen: GeneratedNode, i: number) => {
+      // The final separation character may change under various circumstances (read on)
+      let finalSep = gen.sep;
+
+      // Are these first or last elements with irrelevant separators?
       const firstBefore = gen == first
         && (gen.sep == OutputSeparator.NEW_LINE_BEFORE || gen.sep == OutputSeparator.SPACE_BEFORE);
       const lastAfter = gen == last
         && (gen.sep == OutputSeparator.NEW_LINE_AFTER || gen.sep == OutputSeparator.SPACE_AFTER)
       if (firstBefore || lastAfter) {
-        return (gen.compilation);
+        finalSep = OutputSeparator.NONE;
       }
 
-      switch (gen.sep) {
+      // Does the seperator match the previous separator?
+      if (i > 0 && finalSep != OutputSeparator.NONE) {
+        let prevSep = this._generated[i - 1].sep;
+        const doubleNewline = prevSep == OutputSeparator.NEW_LINE_AFTER && finalSep == OutputSeparator.NEW_LINE_BEFORE;
+        const doubleSpace = prevSep == OutputSeparator.SPACE_AFTER && finalSep == OutputSeparator.SPACE_BEFORE;
+
+        if (doubleNewline || doubleSpace) {
+          finalSep = OutputSeparator.NONE;
+        }
+      }
+
+      switch (finalSep) {
         case OutputSeparator.NEW_LINE_BEFORE: return "\n" + gen.compilation;
         case OutputSeparator.NEW_LINE_AFTER: return gen.compilation + "\n";
         case OutputSeparator.SPACE_BEFORE: return " " + gen.compilation;
