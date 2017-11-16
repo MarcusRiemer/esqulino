@@ -33,7 +33,7 @@ export class RawTreeEditorComponent implements OnInit {
     // Swapping between editors
     const btnChange = this._toolbarService.addButton("goblock", "Block Editor", "puzzle-piece", "b");
     btnChange.onClick.subscribe(_ => {
-      this._router.navigate(["../..", "block", this._treeService.peekResource.id], { relativeTo: this._route });
+      this._router.navigate(["..", "block"], { relativeTo: this._route });
     });
   }
 

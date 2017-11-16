@@ -32,7 +32,7 @@ export class BlockEditorComponent implements OnInit {
     // Swapping between editors
     const btnChange = this._toolbarService.addButton("goblock", "Raw Editor", "tree", "b");
     btnChange.onClick.subscribe(_ => {
-      this._router.navigate(["../..", "raw", this._treeService.peekResource.id], { relativeTo: this._route });
+      this._router.navigate(["..", "raw"], { relativeTo: this._route });
     });
   }
 }
