@@ -137,7 +137,18 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
       defaultNode: {
         language: "dxml",
         name: "if",
-
+        children: {
+          "condition": [
+            {
+              language: "dxml",
+              name: "expr",
+              children: {
+                "concreteExpr": []
+              }
+            }
+          ],
+          "body": []
+        },
       },
       sidebar: {
         category: "Dynamisches XML",
