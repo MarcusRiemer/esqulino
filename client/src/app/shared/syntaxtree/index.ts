@@ -8,6 +8,7 @@ export * from './validator.description'
 import { Language } from './language'
 import * as Sql from './sql'
 import * as Xml from './xml'
+import * as DynamicXml from './dxml'
 import * as RegEx from './regex'
 
 /**
@@ -22,11 +23,13 @@ export const AvailableLanguages = {
     name: "All Languages",
     generators: [
       ...Xml.LANGUAGE_DESCRIPTION.generators,
+      ...DynamicXml.LANGUAGE_DESCRIPTION.generators,
       ...Sql.LANGUAGE_DESCRIPTION.generators,
       ...RegEx.LANGUAGE_DESCRIPTION.generators,
     ],
     validators: [
       ...Xml.LANGUAGE_DESCRIPTION.validators,
+      ...DynamicXml.LANGUAGE_DESCRIPTION.validators,
       ...Sql.LANGUAGE_DESCRIPTION.validators,
       ...RegEx.LANGUAGE_DESCRIPTION.validators,
     ]
