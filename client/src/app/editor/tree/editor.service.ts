@@ -121,8 +121,14 @@ export class TreeEditorService implements OnInit, OnDestroy {
    * the tree or the language has changed.
    */
   private resetGeneratedCode() {
+
+
     if (this.peekResource && !this.peekTree.isEmpty && this.peekLanguage) {
-      this._generatedCode.next(this.peekLanguage.emitTree(this.peekTree));
+      try {
+        this._generatedCode.next(this.peekLanguage.emitTree(this.peekTree));
+      } catch (e) {
+        this._generatedCode.next("Error: " + JSON.stringify(e));
+      }
     } else {
       this._generatedCode.next("");
     }

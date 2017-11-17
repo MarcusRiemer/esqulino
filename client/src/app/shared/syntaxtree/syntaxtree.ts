@@ -88,7 +88,7 @@ export class Node {
     }
 
     // Carry over children (if there are any)
-    if (this.hasChildren) {
+    if (Object.keys(this._nodeChildren).length > 0) {
       toReturn.children = {};
       Object.entries(this._nodeChildren).forEach(([name, children]) => {
         toReturn.children[name] = children.map(child => child.toModel());

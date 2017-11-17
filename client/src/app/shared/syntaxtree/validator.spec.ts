@@ -1199,6 +1199,7 @@ describe('Language Validator', () => {
     const res = v.validateFromRoot(ast);
     expect(res.errors.length).toEqual(1, res);
     expect(res.errors[0].code).toEqual(ErrorCodes.IllegalChildType);
+    expect(JSON.stringify(res.errors[0].data)).toBeTruthy("Should be pure data");
   });
 
   it('Mini-HTML: Invalid single child (SQL query)', () => {
@@ -1223,6 +1224,8 @@ describe('Language Validator', () => {
     expect(res.isValid).toBeFalsy();
     expect(res.errors.length).toEqual(2);
     expect(res.errors[0].code).toEqual(ErrorCodes.IllegalChildType);
+    expect(JSON.stringify(res.errors[0].data)).toBeTruthy("Should be pure data");
     expect(res.errors[1].code).toEqual(ErrorCodes.MissingChild);
+    expect(JSON.stringify(res.errors[1].data)).toBeTruthy("Should be pure data");
   });
 });

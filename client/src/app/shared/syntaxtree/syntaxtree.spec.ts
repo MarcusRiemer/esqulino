@@ -599,6 +599,28 @@ describe('AST: Basic Operations', () => {
 
     const curr = prev.addChildGroup([], "foo");
     expect(curr.rootNode.childrenCategoryNames).toEqual(["foo"]);
+
+    // Do these child groups appear in the model afterwards?
+    expect(Object.keys(curr.toModel().children)).toEqual(["foo"]);
+  });
+
+  it('Inserting an additional empty child group', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "c1": []
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    expect(prev.rootNode.childrenCategoryNames).toEqual(["c1"]);
+
+    const curr = prev.addChildGroup([], "c2");
+    expect(curr.rootNode.childrenCategoryNames).toEqual(["c1", "c2"]);
+
+    // Do these child groups appear in the model afterwards?
+    expect(Object.keys(curr.toModel().children)).toEqual(["c1", "c2"]);
   });
 
   it('Deleting the first node of a group', () => {
