@@ -604,7 +604,7 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
         context.addError(ErrorCodes.IllegalChildType, node, {
           index: index,
           present: node.qualifiedName,
-          expected: this._nodeTypes.map(t => t.nodeType)
+          expected: this._nodeTypes.map(t => t.nodeType.description)
         });
       } else {
         // The node is expected, but may occur too often. For the moment we simply count it.
