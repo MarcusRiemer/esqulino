@@ -2,15 +2,14 @@ import { LANGUAGE_DESCRIPTION } from '../../syntaxtree/regex'
 
 import { LanguageModelDescription } from '../language-model.description'
 import {
-  BlockDescription,
-  EditorBlock, EditorConstant, EditorIterator, EditorInterpolation
+  SidebarBlockDescription, EditorBlockDescription, EditorBlockDescriptions
 } from '../block.description'
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "regex",
   displayName: "Reguläre Ausdrücke",
   language: LANGUAGE_DESCRIPTION,
-  blocks: [
+  sidebarBlocks: [
     {
       describedType: {
         languageName: "regex",
@@ -27,19 +26,6 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         category: "Regulärer Ausdruck",
         displayName: "Regulärer Ausdruck",
       },
-      visual: {
-        blockType: "line",
-        children: [
-          {
-            blockType: "constant",
-            text: "foo"
-          } as EditorConstant,
-          {
-            blockType: "constant",
-            text: "bar"
-          } as EditorConstant
-        ]
-      } as EditorBlock
     },
     {
       describedType: {
@@ -124,6 +110,27 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         category: "Regulärer Ausdruck",
         displayName: "Alternative"
       }
+    }
+  ],
+  editorBlocks: [
+    {
+      describedType: {
+        languageName: "regex",
+        typeName: "root"
+      },
+      visual: {
+        blockType: "block",
+        children: [
+          {
+            blockType: "constant",
+            text: "foo"
+          } as EditorBlockDescriptions.EditorConstant,
+          {
+            blockType: "constant",
+            text: "bar"
+          } as EditorBlockDescriptions.EditorConstant
+        ]
+      } as EditorBlockDescriptions.EditorBlock
     }
   ]
 }

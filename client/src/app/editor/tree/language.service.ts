@@ -21,22 +21,22 @@ export class LanguageService {
   /**
    * @return Names of all available language models.
    */
-  get availableLanguageModelNames() {
-    return (this.availableLanguageModels.map(m => m.languageName));
+  get availableLanguageModelIds() {
+    return (this.availableLanguageModels.map(m => m.id));
   }
 
   /**
-   * @param name The name of the language
+   * @param name The id of the language
    * @return The specific LanguageModel that was asked for.
    */
-  getLanguageModel(name: string) {
-    const m = Object.values(this.availableLanguageModels).find(lang => lang.languageName === name);
-    if (m) {
-      return (m);
-    } else {
-      const available = this.availableLanguageModelNames.join(', ');
-      throw new Error(`Unknown language model "${name}", known models are: ${available}`)
+  getLanguageModel(id: string) {
+    const toReturn = Object.values(this.availableLanguageModels).find(lang => lang.id === id);
+    if (!toReturn) {
+      const available = this.availableLanguageModelIds.join(', ');
+      throw new Error(`Unknown language model "${id}", known models are: ${available}`);
     }
+
+    return (toReturn);
   }
 
 }

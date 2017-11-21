@@ -1,13 +1,13 @@
 import { LANGUAGE_DESCRIPTION } from '../../syntaxtree/xml'
 
 import { LanguageModelDescription } from '../language-model.description'
-import { BlockDescription } from '../block.description'
+import { SidebarBlockDescription } from '../block.description'
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "xml",
   displayName: "Allgemeines XML",
   language: LANGUAGE_DESCRIPTION,
-  blocks: [
+  sidebarBlocks: [
     {
       describedType: {
         languageName: "xml",
@@ -47,5 +47,6 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         displayName: "Attribut",
       }
     }
-  ]
+  ],
+  editorBlocks: []
 }

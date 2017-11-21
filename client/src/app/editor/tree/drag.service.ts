@@ -117,7 +117,7 @@ export class DragService {
       this._currentDragOverPlaceholder.next(undefined);
       this._currentDragOverNode.next(node);
     }
-    console.log("Dragged over node:", node ? JSON.stringify(node.location) : "editor");
+    console.log("Dragged over node:", JSON.stringify(node.location));
   }
 
   /**
@@ -129,6 +129,16 @@ export class DragService {
       this._currentDragOverNode.next(undefined);
     }
     console.log("Dragged over placeholder:", JSON.stringify(this._currentDragOverPlaceholder.getValue()));
+  }
+
+  /**
+   * Needs to be called when the drag operation currently drags over the editor.
+   */
+  public informDraggedOverEditor() {
+    this._currentDragOverPlaceholder.next(undefined);
+    this._currentDragOverNode.next(undefined);
+
+    console.log("Dragged over editor");
   }
 
   /**

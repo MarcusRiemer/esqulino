@@ -3,7 +3,7 @@
        class="ast">
     <h5>{{ lang.displayName }}</h5>
     <ul>
-      <li *ngFor="let block of lang.availableBlocks"
+      <li *ngFor="let block of lang.availableSidebarBlocks"
           (dragstart)="startDrag($event, block.defaultNode)"
           draggable="true"
           class="rounded">

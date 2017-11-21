@@ -1,10 +1,27 @@
-<div class="ast">
+<div class="ast"
+     (dragenter)="onDragEnter($event)">
   <div class="content">    
     <div class="card mb-3">
       <div class="card-body">
         <h4 class="card-title">Block-Editor</h4>
         <p>Gehen Sie weiter, hier gibt es nichts zu sehen …</p>
       </div>
+
+      <ng-container *ngIf="(currentTree | async); let currentTree;">
+        <div *ngIf="currentTree.isEmpty"
+             class="card-body">
+          Noch ist kein Code da! Ziehe einen Block aus der Seitenleiste auf den freien Platz um mit der Programmierung zu beginnen!
+          <ast-node-placeholder [alwaysVisible]="true"
+                                [location]="[]">
+            Freier Platz
+          </ast-node-placeholder>
+        </div>
+
+        <div *ngIf="!currentTree.isEmpty && (currentLanguageModel | async)"
+             class="card-body">
+          Hier ist ein Editor!?
+        </div>
+      </ng-container>
     </div>
 
     <div class="card mb-3">
