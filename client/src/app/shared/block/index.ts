@@ -1,6 +1,7 @@
 export * from './language-model'
 export * from './editor-block'
 export * from './sidebar-block'
+export * from './block.description'
 
 import { LanguageModel } from './language-model'
 

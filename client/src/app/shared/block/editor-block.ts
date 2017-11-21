@@ -20,10 +20,6 @@ export class EditorBlock {
     return (this._description.describedType);
   }
 
-  get blockType() {
-    return (this._description.visual.blockType);
-  }
-
   get visualDescription() {
     return (this._description.visual || { blockType: "error" });
   }

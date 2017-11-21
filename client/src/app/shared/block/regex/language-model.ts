@@ -118,19 +118,21 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         languageName: "regex",
         typeName: "root"
       },
-      visual: {
-        blockType: "block",
-        children: [
-          {
-            blockType: "constant",
-            text: "foo"
-          } as EditorBlockDescriptions.EditorConstant,
-          {
-            blockType: "constant",
-            text: "bar"
-          } as EditorBlockDescriptions.EditorConstant
-        ]
-      } as EditorBlockDescriptions.EditorBlock
+      visual: [
+        {
+          blockType: "block",
+          children: [
+            {
+              blockType: "constant",
+              text: "foo"
+            } as EditorBlockDescriptions.EditorConstant,
+            {
+              blockType: "constant",
+              text: "bar"
+            } as EditorBlockDescriptions.EditorConstant
+          ]
+        } as EditorBlockDescriptions.EditorBlock
+      ]
     }
   ]
 }

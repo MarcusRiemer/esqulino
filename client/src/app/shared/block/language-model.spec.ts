@@ -69,20 +69,24 @@ const langEmptyBlocks: LanguageModelDescription = {
         languageName: "emptyBlocks",
         typeName: "root",
       },
-      visual: {
-        blockType: "constant",
-        text: "root"
-      } as EditorBlockDescriptions.EditorConstant
+      visual: [
+        {
+          blockType: "constant",
+          text: "root"
+        } as EditorBlockDescriptions.EditorConstant
+      ]
     },
     {
       describedType: {
         languageName: "emptyBlocks",
         typeName: "a",
       },
-      visual: {
-        blockType: "constant",
-        text: "a"
-      } as EditorBlockDescriptions.EditorConstant
+      visual: [
+        {
+          blockType: "constant",
+          text: "a"
+        } as EditorBlockDescriptions.EditorConstant
+      ]
     }
   ]
 }

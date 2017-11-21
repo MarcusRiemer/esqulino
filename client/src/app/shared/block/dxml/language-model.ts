@@ -19,6 +19,61 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         language: "dxml",
         name: "element",
         children: {
+          "elements": [
+            {
+              language: "dxml",
+              name: "text",
+              properties: {
+                "value": "before ..."
+              }
+            },
+            {
+              language: "dxml",
+              name: "element",
+              children: {},
+              properties: {
+                "name": "child"
+              }
+            },
+            {
+              language: "dxml",
+              name: "text",
+              properties: {
+                "value": "after ..."
+              }
+            },
+          ],
+          "attributes": [
+            {
+              language: "dxml",
+              name: "attribute",
+              children: {
+                "value": []
+              },
+              properties: {
+                "name": "att1"
+              }
+            }
+          ],
+        },
+        properties: {
+          "name": "parent"
+        }
+      },
+      sidebar: {
+        category: "Dynamisches XML",
+        displayName: "Element: ~~Complex~~",
+      },
+    },
+    {
+      describedType: {
+        languageName: "dxml",
+        typeName: "element"
+      },
+      defaultNode: {
+        language: "dxml",
+        name: "element",
+        children: {
           "elements": [],
           "attributes": [],
         },
@@ -185,36 +240,89 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         languageName: "dxml",
         typeName: "element"
       },
-      visual: {
-        blockType: "block",
-        children: [
-          {
-            blockType: "constant",
-            text: "<"
-          } as EditorBlockDescriptions.EditorConstant,
-          {
-            blockType: "interpolated",
-            property: "name"
-          } as EditorBlockDescriptions.EditorInterpolation,
-          {
-            blockType: "constant",
-            text: ">"
-          } as EditorBlockDescriptions.EditorConstant,
-          {
-            blockType: "constant",
-            text: "</"
-          } as EditorBlockDescriptions.EditorConstant,
-          {
-            blockType: "interpolated",
-            property: "name"
-          } as EditorBlockDescriptions.EditorInterpolation,
-          {
-            blockType: "constant",
-            text: ">"
-          } as EditorBlockDescriptions.EditorConstant,
+      visual: [
+        {
+          blockType: "block",
+          children: [
+            {
+              blockType: "constant",
+              text: "<"
+            } as EditorBlockDescriptions.EditorConstant,
+            {
+              blockType: "interpolated",
+              property: "name"
+            } as EditorBlockDescriptions.EditorInterpolation,
+            {
+              blockType: "iterator",
+              childGroupName: "attributes",
+            } as EditorBlockDescriptions.EditorIterator,
+            {
+              blockType: "constant",
+              text: ">"
+            } as EditorBlockDescriptions.EditorConstant,
+          ]
+        } as EditorBlockDescriptions.EditorBlock,
+        {
+          blockType: "iterator",
+          childGroupName: "elements",
+        } as EditorBlockDescriptions.EditorIterator,
+        {
+          blockType: "block",
+          children: [
+            {
+              blockType: "constant",
+              text: "</"
+            } as EditorBlockDescriptions.EditorConstant,
+            {
+              blockType: "interpolated",
+              property: "name"
+            } as EditorBlockDescriptions.EditorInterpolation,
+            {
+              blockType: "constant",
+              text: ">"
+            } as EditorBlockDescriptions.EditorConstant,
 
-        ]
-      } as EditorBlockDescriptions.EditorBlock
+          ]
+        } as EditorBlockDescriptions.EditorBlock
+      ]
+    },
+    {
+      describedType: {
+        languageName: "dxml",
+        typeName: "attribute",
+      },
+      visual: [
+        {
+          blockType: "block",
+          children: [
+            {
+              blockType: "interpolated",
+              property: "name"
+            } as EditorBlockDescriptions.EditorInterpolation,
+            {
+              blockType: "constant",
+              text: "=\"--missing--\""
+            } as EditorBlockDescriptions.EditorConstant,
+          ]
+        } as EditorBlockDescriptions.EditorBlock
+      ]
+    },
+    {
+      describedType: {
+        languageName: "dxml",
+        typeName: "text",
+      },
+      visual: [
+        {
+          blockType: "block",
+          children: [
+            {
+              blockType: "interpolated",
+              property: "value"
+            } as EditorBlockDescriptions.EditorInterpolation,
+          ]
+        } as EditorBlockDescriptions.EditorBlock
+      ]
     }
   ]
 }
