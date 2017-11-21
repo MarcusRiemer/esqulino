@@ -1,6 +1,7 @@
 import { NodeDescription, Language, QualifiedTypeName, typenameEquals } from '../syntaxtree'
 
-import { Block } from './block'
+import { SidebarBlock } from './sidebar-block'
+import { EditorBlock } from './editor-block'
 import { LanguageModelDescription } from './language-model.description'
 
 /**
@@ -9,7 +10,8 @@ import { LanguageModelDescription } from './language-model.description'
  */
 export class LanguageModel {
   private _language: Language;
-  private _blocks: Block[];
+  private _sidebarBlocks: SidebarBlock[];
+  private _editorBlocks: EditorBlock[];
   private _displayName: string;
   private _id: string;
 
@@ -18,7 +20,15 @@ export class LanguageModel {
     this._displayName = desc.displayName;
 
     this._language = new Language(desc.language);
-    this._blocks = desc.blocks.map(blockDesc => new Block(blockDesc));
+    this._sidebarBlocks = desc.sidebarBlocks.map(blockDesc => new SidebarBlock(blockDesc));
+    this._editorBlocks = desc.editorBlocks.map(blockDesc => new EditorBlock(blockDesc));
+  }
+
+  /**
+   * @return The unique id of this language
+   */
+  get id() {
+    return (this._id);
   }
 
   /**
@@ -36,25 +46,37 @@ export class LanguageModel {
   }
 
   /**
-   * @return All blocks that are available.
+   * @return All blocks that are available for use in the sidebar.
    */
-  get availableBlocks(): Block[] {
-    return (this._blocks);
+  get availableSidebarBlocks(): SidebarBlock[] {
+    return (this._sidebarBlocks);
   }
 
   /**
    * @return Types that are present in the language but do not have a
    *         block to augment them.
    */
-  get missingBlocks(): QualifiedTypeName[] {
+  get missingEditorBlocks(): QualifiedTypeName[] {
     // This is at least O(n²), but sadly sets do not allow overriding the
     // equality check so for the moment we will hope that our n
     // stays small enough.
     const missing = this._language.availableTypes
-      .filter(t => !this._blocks.some(b => t.matchesType(b.qualifiedName)))
+      .filter(t => !this._editorBlocks.some(b => t.matchesType(b.qualifiedName)))
       .map(t => t.qualifiedName);
 
     return (missing);
+  }
+
+  /**
+   * @return The editor block that may be used to represent the given type.
+   */
+  getEditorBlock(t: QualifiedTypeName): EditorBlock {
+    const toReturn = this._editorBlocks.find(b => typenameEquals(b.qualifiedName, t));
+    if (!toReturn) {
+      throw new Error(`No known editor for ${JSON.stringify(t)}`);
+    }
+
+    return (toReturn);
   }
 
   /**

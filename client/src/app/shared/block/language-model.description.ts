@@ -1,6 +1,6 @@
 import { LanguageDescription } from '../syntaxtree'
 
-import { BlockDescription } from './block.description'
+import { SidebarBlockDescription, EditorBlockDescription } from './block.description'
 
 /**
  * Augments a language with information about the UI layer.
@@ -22,7 +22,12 @@ export interface LanguageModelDescription {
   language: LanguageDescription;
 
   /**
-   * All blocks that are known to this model.
+   * All blocks that should be shown in the sidebar.
    */
-  blocks: BlockDescription[];
+  sidebarBlocks: SidebarBlockDescription[];
+
+  /**
+   * How blocks should be represented in the drag & drop editor.
+   */
+  editorBlocks: EditorBlockDescription[];
 }

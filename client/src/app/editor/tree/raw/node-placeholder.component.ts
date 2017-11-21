@@ -51,6 +51,9 @@ export class NodePlaceholderComponent {
   // The location this placeholder is shown in
   @Input() location: NodeLocation;
 
+  // Sometimes it might be feasible to display placeholders all the time.
+  @Input() alwaysVisible = false;
+
   private _cached_animationState: Observable<string>;
 
   constructor(
@@ -68,7 +71,7 @@ export class NodePlaceholderComponent {
         .map(curr => {
           if (arrayEqual(curr as any, this.location)) {
             return ('self')
-          } else if (this._dragService.peekIsDragInProgress) {
+          } else if (this._dragService.peekIsDragInProgress || this.alwaysVisible) {
             return ('available')
           } else {
             return ('none');

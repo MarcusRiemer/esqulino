@@ -43,7 +43,7 @@ export class RawTreeEditorComponent implements OnInit {
    * drag service about that.
    */
   public onDragEnter(evt: DragEvent) {
-    this._dragService.informDraggedOverNode(undefined);
+    this._dragService.informDraggedOverEditor();
   }
 
   /**

@@ -30,7 +30,14 @@ export class TreeEditorService implements OnInit, OnDestroy {
    */
   private _subscriptionRefs: any[] = [];
 
+  /**
+   * The resource that is currently edited.
+   */
   private _codeResource = new BehaviorSubject<CodeResource>(undefined);
+  /**
+   * The subscription to the currently edited resource. This needs
+   * to be released if the resource changes.
+   */
   private _codeResourceSub: Subscription;
 
   private _language = new BehaviorSubject<Language>(undefined);
@@ -121,8 +128,6 @@ export class TreeEditorService implements OnInit, OnDestroy {
    * the tree or the language has changed.
    */
   private resetGeneratedCode() {
-
-
     if (this.peekResource && !this.peekTree.isEmpty && this.peekLanguage) {
       try {
         this._generatedCode.next(this.peekLanguage.emitTree(this.peekTree));

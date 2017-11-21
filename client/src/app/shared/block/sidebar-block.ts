@@ -1,15 +1,16 @@
 import { QualifiedTypeName, NodeDescription } from '../syntaxtree'
 
-import { BlockDescription } from './block.description'
+import { SidebarBlockDescription } from './block.description'
 
 /**
- * Controls how a certain type should be presented to the user.
+ * This is how a certain type will be made availabe for the user
+ * in the sidebar.
  */
-export class Block {
+export class SidebarBlock {
 
-  private _description: BlockDescription;
+  private _description: SidebarBlockDescription;
 
-  constructor(desc: BlockDescription) {
+  constructor(desc: SidebarBlockDescription) {
     this._description = desc;
   }
 

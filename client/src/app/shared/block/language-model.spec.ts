@@ -1,6 +1,6 @@
 import { LanguageModelDescription } from './language-model.description'
 import { LanguageModel } from './language-model'
-import { BlockDescription } from './block.description'
+import { SidebarBlockDescription, EditorBlockDescriptions } from './block.description'
 
 const langEmptyBlocks: LanguageModelDescription = {
   id: "emptyblocks",
@@ -32,7 +32,7 @@ const langEmptyBlocks: LanguageModelDescription = {
       }
     ]
   },
-  blocks: [
+  sidebarBlocks: [
     {
       describedType: {
         languageName: "emptyBlocks",
@@ -62,6 +62,28 @@ const langEmptyBlocks: LanguageModelDescription = {
         name: "a"
       }
     }
+  ],
+  editorBlocks: [
+    {
+      describedType: {
+        languageName: "emptyBlocks",
+        typeName: "root",
+      },
+      visual: {
+        blockType: "constant",
+        text: "root"
+      } as EditorBlockDescriptions.EditorConstant
+    },
+    {
+      describedType: {
+        languageName: "emptyBlocks",
+        typeName: "a",
+      },
+      visual: {
+        blockType: "constant",
+        text: "a"
+      } as EditorBlockDescriptions.EditorConstant
+    }
   ]
 }
 
@@ -69,8 +91,8 @@ describe("LanguageModel", () => {
   it("Empty Blocks: Loads correctly", () => {
     const l = new LanguageModel(langEmptyBlocks);
 
-    expect(l.missingBlocks.length).toEqual(1);
-    expect(l.missingBlocks[0]).toEqual({ languageName: "emptyBlocks", typeName: "z" });
+    expect(l.missingEditorBlocks.length).toEqual(1);
+    expect(l.missingEditorBlocks[0]).toEqual({ languageName: "emptyBlocks", typeName: "z" });
   });
 
   it("Empty Blocks: Constructing default root with children", () => {

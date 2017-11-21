@@ -1,13 +1,15 @@
 import { LANGUAGE_DESCRIPTION } from '../../syntaxtree/dxml'
 
 import { LanguageModelDescription } from '../language-model.description'
-import { BlockDescription } from '../block.description'
+import {
+  SidebarBlockDescription, EditorBlockDescription, EditorBlockDescriptions
+} from '../block.description'
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "dxml",
   displayName: "Dynamisches XML",
   language: LANGUAGE_DESCRIPTION,
-  blocks: [
+  sidebarBlocks: [
     {
       describedType: {
         languageName: "dxml",
@@ -27,7 +29,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
       sidebar: {
         category: "Dynamisches XML",
         displayName: "Element",
-      }
+      },
     },
     {
       describedType: {
@@ -155,6 +157,32 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         displayName: "<% if %>",
       }
     },
+  ],
+  editorBlocks: [
+    {
+      describedType: {
+        languageName: "dxml",
+        typeName: "element"
+      },
+      visual: {
+        blockType: "block",
+        children: [
+          {
+            blockType: "constant",
+            text: "<"
+          } as EditorBlockDescriptions.EditorConstant,
+          {
+            blockType: "interpolated",
+            property: "name"
+          } as EditorBlockDescriptions.EditorInterpolation,
+          {
+            blockType: "constant",
+            text: "<"
+          } as EditorBlockDescriptions.EditorConstant
+
+        ]
+      } as EditorBlockDescriptions.EditorBlock
+    }
   ]
 }
 

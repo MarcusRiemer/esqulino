@@ -960,6 +960,9 @@ export class Validator {
     }));
   }
 
+  /**
+   * @return All types that are known to this validator.
+   */
   get availableTypes() {
     return (
       Object.values(this._registeredSchemas)

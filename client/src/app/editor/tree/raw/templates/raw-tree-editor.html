@@ -12,7 +12,10 @@
       <div class="card-body">
         <ng-container *ngIf="(currentTree | async)?.isEmpty; else treeExists">
           Noch ist kein Code da ...
-          <ast-node-placeholder [location]="[]"></ast-node-placeholder>
+          <ast-node-placeholder [location]="[]"
+                                [alwaysVisible]="true">
+            Freier Platz
+          </ast-node-placeholder>
         </ng-container>
         <ng-template #treeExists>
           <ast-node [node]="(currentTree | async).rootNode"></ast-node>
