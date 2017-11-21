@@ -18,6 +18,7 @@ import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'
 
 import { BlockEditorComponent } from './block/block-editor.component'
 import { BlockComponent } from './block/block.component'
+import { BlockHostComponent } from './block/block-host.component'
 
 @NgModule({
   imports: [
@@ -25,6 +26,8 @@ import { BlockComponent } from './block/block.component'
   ],
   declarations: [
     BlockEditorComponent,
+    BlockComponent,
+    BlockHostComponent,
     CodeGeneratorComponent,
     DropTargetDirective,
     DropPlaceholderDirective,
@@ -34,7 +37,6 @@ import { BlockComponent } from './block/block.component'
     RawTreeEditorComponent,
     ValidationComponent,
     TreeSidebarComponent,
-    BlockComponent
   ],
   entryComponents: [
     TreeSidebarComponent

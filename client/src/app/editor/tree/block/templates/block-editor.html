@@ -19,8 +19,8 @@
 
         <div *ngIf="!currentTree.isEmpty && (currentLanguageModel | async)"
              class="card-body">
-          <editor-block [languageModel]="currentLanguageModel | async"
-                        [node]="currentTree.rootNode"></editor-block>
+          <editor-block-host [languageModel]="currentLanguageModel | async"
+                             [node]="currentTree.rootNode"></editor-block-host>
         </div>
       </ng-container>
     </div>

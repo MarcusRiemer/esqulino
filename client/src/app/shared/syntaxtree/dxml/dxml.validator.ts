@@ -22,7 +22,7 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
     },
     "attribute": {
       children: {
-        value: {
+        "value": {
           type: "allowed",
           nodeTypes: ["text", "interpolate"],
         }

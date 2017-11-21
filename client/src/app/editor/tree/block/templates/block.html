@@ -1,13 +1,25 @@
-<ng-container [ngSwitch]="blockType">
-  <span *ngSwitchCase="'constant'">{{ editorBlock.text }}</span>
-  <span *ngSwitchCase="'interpolated'">{{ node.properties[editorBlock.property] }}</span>
+<ng-container [ngSwitch]="visual.blockType">
+  <!-- Show a constant value directly specified in the block description -->
+  <span *ngSwitchCase="'constant'">{{ visual.text }}</span>
+  <!-- Show a value that is derived from the property of a node -->
+  <span *ngSwitchCase="'interpolated'">{{ node.properties[visual.property] }}</span>
+  <!-- Iterate over children of a node -->
+  <div *ngSwitchCase="'iterator'">
+    <ng-container *ngFor="let childNode of node.getChildrenInCategory(visual.childGroupName)">
+      <editor-block-host [languageModel]="languageModel"
+                         [node]="childNode"></editor-block-host>      
+    </ng-container>
+  </div>
+  <!-- Display a draggable block -->
   <div class="editor-block default"
        *ngSwitchCase="'block'">
-    <ng-container *ngFor="let childBlock of editorBlock.visualDescription.children">
+    <ng-container *ngFor="let childVisualBlock of visual.children">
       <editor-block [languageModel]="languageModel"
-                    [editorBlock]="childBlock"
+                    [visual]="childVisualBlock"
                     [node]="node"></editor-block>
     </ng-container>
   </div>
-  <div *ngSwitchDefault>Fehler: Kein passender Block "{{ blockType }}" verfügbar</div>
+  <!-- Something is broken, display a error message -->
+  <div *ngSwitchDefault>Fehler: Kein passender Block "{{ visual.blockType }}" verfügbar</div>
 </ng-container>
+

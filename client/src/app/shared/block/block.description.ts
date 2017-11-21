@@ -34,7 +34,6 @@ export namespace EditorBlockDescriptions {
   export interface EditorIterator extends EditorBlockBase {
     blockType: "iterator";
     childGroupName: string;
-    childTemplate: EditorBlockBase;
   }
 
   /**
@@ -95,5 +94,5 @@ export interface EditorBlockDescription {
   /**
    * The actual visual representation.
    */
-  visual: EditorBlockDescriptions.EditorBlockBase;
+  visual: EditorBlockDescriptions.EditorBlockBase[];
 }
