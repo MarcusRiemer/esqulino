@@ -23,12 +23,33 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
           "attributes": [],
         },
         properties: {
-          "name": ""
+          "name": "foo"
         }
       },
       sidebar: {
         category: "Dynamisches XML",
-        displayName: "Element",
+        displayName: "Element: foo",
+      },
+    },
+    {
+      describedType: {
+        languageName: "dxml",
+        typeName: "element"
+      },
+      defaultNode: {
+        language: "dxml",
+        name: "element",
+        children: {
+          "elements": [],
+          "attributes": [],
+        },
+        properties: {
+          "name": "bar"
+        }
+      },
+      sidebar: {
+        category: "Dynamisches XML",
+        displayName: "Element: bar",
       },
     },
     {
@@ -177,8 +198,20 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
           } as EditorBlockDescriptions.EditorInterpolation,
           {
             blockType: "constant",
-            text: "<"
-          } as EditorBlockDescriptions.EditorConstant
+            text: ">"
+          } as EditorBlockDescriptions.EditorConstant,
+          {
+            blockType: "constant",
+            text: "</"
+          } as EditorBlockDescriptions.EditorConstant,
+          {
+            blockType: "interpolated",
+            property: "name"
+          } as EditorBlockDescriptions.EditorInterpolation,
+          {
+            blockType: "constant",
+            text: ">"
+          } as EditorBlockDescriptions.EditorConstant,
 
         ]
       } as EditorBlockDescriptions.EditorBlock
