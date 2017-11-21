@@ -19,7 +19,8 @@
 
         <div *ngIf="!currentTree.isEmpty && (currentLanguageModel | async)"
              class="card-body">
-          Hier ist ein Editor!?
+          <editor-block [languageModel]="currentLanguageModel | async"
+                        [node]="currentTree.rootNode"></editor-block>
         </div>
       </ng-container>
     </div>

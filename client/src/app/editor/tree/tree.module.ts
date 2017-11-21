@@ -17,6 +17,7 @@ import { NodePlaceholderComponent } from './raw/node-placeholder.component'
 import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'
 
 import { BlockEditorComponent } from './block/block-editor.component'
+import { BlockComponent } from './block/block.component'
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { BlockEditorComponent } from './block/block-editor.component'
     NodePlaceholderComponent,
     RawTreeEditorComponent,
     ValidationComponent,
-    TreeSidebarComponent
+    TreeSidebarComponent,
+    BlockComponent
   ],
   entryComponents: [
     TreeSidebarComponent
