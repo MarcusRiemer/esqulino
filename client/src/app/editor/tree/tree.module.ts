@@ -4,6 +4,7 @@ import { SharedEditorModule } from '../shared/shared.module'
 import { RegistrationService } from '../registration.service'
 
 import { CodeGeneratorComponent } from './code-generator.component'
+import { DraggableDirective } from './draggable.directive'
 import { DropTargetDirective } from './drop-target.directive'
 import { DropPlaceholderDirective } from './drop-placeholder.directive'
 import { DragService } from './drag.service'
@@ -18,6 +19,7 @@ import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'
 
 import { BlockEditorComponent } from './block/block-editor.component'
 import { BlockComponent } from './block/block.component'
+import { BlockRenderBlockComponent } from './block/block-render-block.component'
 import { BlockHostComponent } from './block/block-host.component'
 
 @NgModule({
@@ -27,8 +29,10 @@ import { BlockHostComponent } from './block/block-host.component'
   declarations: [
     BlockEditorComponent,
     BlockComponent,
+    BlockRenderBlockComponent,
     BlockHostComponent,
     CodeGeneratorComponent,
+    DraggableDirective,
     DropTargetDirective,
     DropPlaceholderDirective,
     NodeComponent,

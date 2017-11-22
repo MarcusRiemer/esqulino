@@ -91,36 +91,11 @@ export class NodeComponent implements OnChanges {
   }
 
   /**
-   * The user has started to drag exactly this node around.
-   */
-  onStartDrag(evt: DragEvent) {
-    this._dragService.dragStart(evt,
-      {
-        draggedDescription: this.node.toModel(),
-        origin: "tree"
-      },
-      {
-        location: this.node.location,
-        treeEditorService: this._treeService
-      }
-    );
-  }
-
-  /**
    * Something has been dropped on this node. We should replace the node entirely.
    */
   onDropReplace() {
     const desc = this._dragService.peekDragData.draggedDescription;
     this._treeService.peekResource.replaceNode(this.node.location, desc);
-  }
-
-  /**
-   * Something has been dropped on a placeholder before or after this node. This
-   * "something" should be inserted to the tree.
-   */
-  onDropInsert() {
-    const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.peekResource.insertNode(this.node.location, desc);
   }
 
   /**
