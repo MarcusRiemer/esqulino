@@ -8,10 +8,20 @@ export namespace EditorBlockDescriptions {
   /**
    * Describes how certain nodes of the syntaxtree should be presented
    * inside the drag and drop editor. As the available blocks are very
-   * different, this "base" interface
+   * different, this "base" interface consists of nothing but the
+   * discriminator value.
    */
   export interface EditorBlockBase {
     blockType: string;
+  }
+
+  /**
+   * Allows very basic control over the layout of blocks. This is meant
+   * to be used for alignments in rows and columns, not for anything
+   * involving actual design.
+   */
+  export interface EditorLayout extends EditorBlockBase {
+    direction: "horizontal" | "vertical";
   }
 
   /**
@@ -20,10 +30,8 @@ export namespace EditorBlockDescriptions {
    *
    * Whether this block is displayed inline or as a whole block depends
    * on two things:
-   * 1) Blocks may have a preference how to be represented themself.
-   * 2) The parent of a block may know best how it should be represented.
    */
-  export interface EditorBlock extends EditorBlockBase {
+  export interface EditorBlock extends EditorLayout {
     blockType: "block";
     children: EditorBlockBase[];
   }
@@ -31,7 +39,7 @@ export namespace EditorBlockDescriptions {
   /**
    * Allows to iterate over all blocks in a certain category.
    */
-  export interface EditorIterator extends EditorBlockBase {
+  export interface EditorIterator extends EditorLayout {
     blockType: "iterator";
     childGroupName: string;
   }

@@ -121,6 +121,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
       visual: [
         {
           blockType: "block",
+          direction: "horizontal",
           children: [
             {
               blockType: "constant",
