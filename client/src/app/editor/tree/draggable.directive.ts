@@ -24,13 +24,9 @@ export class DraggableDirective {
     el.draggable = true;
 
     el.addEventListener("dragstart", (evt) => {
-      dragService.dragStart(evt,
+      dragService.dragStart(evt, this.node.toModel(), undefined,
         {
-          draggedDescription: this.node.toModel(),
-          origin: "tree"
-        },
-        {
-          location: this.node.location,
+          node: this.node,
           treeEditorService: treeService
         }
       );

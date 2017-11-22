@@ -4,7 +4,7 @@
     <h5>{{ lang.displayName }}</h5>
     <ul>
       <li *ngFor="let block of lang.availableSidebarBlocks"
-          (dragstart)="startDrag($event, block.defaultNode)"
+          (dragstart)="startDrag($event, block)"
           draggable="true"
           class="rounded">
         {{ block.displayName }}

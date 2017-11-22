@@ -4,26 +4,45 @@ import { Injectable } from '@angular/core'
 
 import { arrayEqual } from '../../shared/util'
 import { Node, NodeDescription, NodeLocation } from '../../shared/syntaxtree'
+import { SidebarBlock } from '../../shared/block'
 
 import { TrashService } from '../shared/trash.service'
 
 import { TreeEditorService } from './editor.service'
 
 /**
- * Serializable information that is attached to the drag
+ * All information about the origin of this drag if it came from
+ * the sidebar.
  */
-export interface CurrentDragData {
-  origin: "sidebar" | "tree"
-  draggedDescription: NodeDescription
+export interface DragSidebar {
+  sidebarBlockDescription: SidebarBlock
 }
 
 /**
- * Encapsulates instances that know about the origin of the drag. This
- * is important when moving or replacing nodes in the tree.
+ * All information about the origin of this drag if it came from
+ * the tree itself. This is important when moving or replacing
+ * nodes in the tree.
  */
-export interface DragSource {
-  location: NodeLocation,
+export interface DragTree {
+  node: Node,
   treeEditorService: TreeEditorService
+}
+
+/**
+ * Groups together everything that might be of interest for a hovering
+ * item.
+ */
+export interface CurrentDrag {
+  // The node that is currently hovered over.
+  hoverNode?: Node;
+  // The placeholder that is currently hovered over
+  hoverPlaceholder?: NodeLocation;
+  // The JSON representation of the thing that is currently beeing dragged
+  draggedDescription: NodeDescription;
+  // The node in the tree that is currently beeing dragged
+  treeSource?: DragTree;
+  // The node of the sidebar that is currently beeing dragged
+  sidebarSource?: DragSidebar;
 }
 
 /**
@@ -32,17 +51,12 @@ export interface DragSource {
  */
 @Injectable()
 export class DragService {
-  private _currentDrag = new BehaviorSubject<CurrentDragData>(undefined);
+  // The thing we are currently dragging, including the complete hovering
+  // state and everything that may be of concern.
+  private _currentDrag = new BehaviorSubject<CurrentDrag>(undefined);
+
+  // Shortcut to get the gist of the current drag process
   private _currentDragInProgress = this._currentDrag.map(d => !!d);
-
-  // The node the operation originated from
-  private _currentSource: DragSource;
-
-  // The node the drag operation is currently dragged over.
-  private _currentDragOverNode = new BehaviorSubject<Node>(undefined);
-
-  // The placeholder the drag operation is currently dragged over
-  private _currentDragOverPlaceholder = new BehaviorSubject<NodeLocation>(undefined);
 
   /**
    * This service is involved  with *every* part of the UI and must therefore
@@ -57,11 +71,11 @@ export class DragService {
    * Starts a new dragging operation.
    * 
    * @param evt The original drag event that was issued by the DOM
-   * @param drag The serializable drag information
-   * @param source The node with the corresponding tree that started the drag
+   * @param sourceSidebar The serializable drag information
+   * @param sourceTree The node with the corresponding tree that started the drag
    */
-  public dragStart(evt: DragEvent, drag: CurrentDragData, source?: DragSource) {
-    if (this._currentDrag.value || this._currentSource) {
+  public dragStart(evt: DragEvent, desc: NodeDescription, sourceSidebar?: DragSidebar, sourceTree?: DragTree) {
+    if (this._currentDrag.value) {
       throw new Error("Attempted to start a second drag");
     }
 
@@ -71,8 +85,8 @@ export class DragService {
     evt.stopPropagation();
 
     // Serialize the dragged "thing"
-    const dragData = JSON.stringify(drag);
-    evt.dataTransfer.setData('text/plain', dragData);
+    const domDragData = JSON.stringify(desc);
+    evt.dataTransfer.setData('text/plain', domDragData);
 
     // TODO: Choose when to move and when to copy
     evt.dataTransfer.effectAllowed = "move";
@@ -81,42 +95,53 @@ export class DragService {
     const dragEndHandler = () => {
       evt.target.removeEventListener("dragend", dragEndHandler);
 
-      // The current source needs to be "undefined" first because
-      // the "peekIsDragInProgress" depends on it. And this property
-      // may be checked when subscriptions of the following observables
-      // are fired.
-      this._currentSource = undefined;
-
-      this._currentDragOverNode.next(undefined);
       this._currentDrag.next(undefined);
       this._trashService.hideTrash();
-      console.log(`AST-Drag ended:`, drag);
+      console.log(`AST-Drag ended:`, sourceSidebar);
     }
     evt.target.addEventListener("dragend", dragEndHandler);
 
     // Store drag information as long as this drags on
-    this._currentDrag.next(drag);
-    this._currentSource = source;
+    const hoverData = {
+      draggedDescription: desc,
+    } as CurrentDrag;
+
+    if (sourceSidebar) {
+      hoverData.sidebarSource = sourceSidebar;
+    }
+
+    if (sourceTree) {
+      hoverData.treeSource = sourceTree;
+    }
+
+    this._currentDrag.next(hoverData);
 
     // If we have a proper source: Wire it up to react to
     // being put in the trash.
-    if (source) {
+    if (sourceTree) {
       this._trashService.showTrash(_ => {
         console.log("Deleting");
-        this._currentSource.treeEditorService.peekResource.deleteNode(this._currentSource.location)
+        sourceTree.treeEditorService.peekResource.deleteNode(sourceTree.node.location)
       });
     }
-    console.log(`AST-Drag started:`, drag);
+    console.log(`AST-Drag started:`, sourceSidebar);
   }
 
   /**
    * Needs to be called by nodes when the drag operation currently drags over any node.
    */
   public informDraggedOverNode(node: Node) {
-    if (this._currentDragOverNode.getValue() != node) {
-      this._currentDragOverPlaceholder.next(undefined);
-      this._currentDragOverNode.next(node);
+    const dragData = this._currentDrag.value;
+    if (!dragData) {
+      throw new Error("Can't drag over node: No drag in progress");
     }
+
+    // Just in case: Get rid of a possibly set placeholder    
+    delete dragData.hoverPlaceholder;
+    // Overwrite the current node
+    dragData.hoverNode = node;
+
+    this._currentDrag.next(dragData);
     console.log("Dragged over node:", JSON.stringify(node.location));
   }
 
@@ -124,25 +149,46 @@ export class DragService {
    * Needs to be called by nodes when the drag operation currently drags over any placeholder.
    */
   public informDraggedOverPlaceholder(loc: NodeLocation) {
-    if (!arrayEqual(this._currentDragOverPlaceholder.getValue(), loc)) {
-      this._currentDragOverPlaceholder.next(loc);
-      this._currentDragOverNode.next(undefined);
+    const dragData = this._currentDrag.value;
+    if (!dragData) {
+      throw new Error("Can't drag over placeholder: No drag in progress");
     }
-    console.log("Dragged over placeholder:", JSON.stringify(this._currentDragOverPlaceholder.getValue()));
+
+    // Just in case: Get rid of a possibly set node    
+    delete dragData.hoverNode;
+    // Overwrite the current placeholder
+    dragData.hoverPlaceholder = loc;
+
+    this._currentDrag.next(dragData);
+    console.log("Dragged over placeholder:", JSON.stringify(loc));
   }
 
   /**
    * Needs to be called when the drag operation currently drags over the editor.
    */
   public informDraggedOverEditor() {
-    this._currentDragOverPlaceholder.next(undefined);
-    this._currentDragOverNode.next(undefined);
+    const dragData = this._currentDrag.value;
+    if (!dragData) {
+      throw new Error("Can't drag over editor: No drag in progress");
+    }
 
+    // Get rid of everything that could be set
+    delete dragData.hoverNode;
+    delete dragData.hoverPlaceholder;
+
+    this._currentDrag.next(dragData);
     console.log("Dragged over editor");
   }
 
   /**
-   * @return Observable to always know the current (very general)y state of drag affairs.
+   * @return Observable that always knows all details about the ongoing drag operation.
+   */
+  get currentDrag(): Observable<CurrentDrag> {
+    return (this._currentDrag);
+  }
+
+  /**
+   * @return Observable to always know the current (very general) state of drag affairs.
    */
   get isDragInProgress() {
     return (this._currentDragInProgress.distinctUntilChanged());
@@ -152,27 +198,13 @@ export class DragService {
    * @return Takes a peek whether a drag is occuring *right now*.
    */
   get peekIsDragInProgress(): boolean {
-    return (!!this._currentDrag.getValue());
+    return (!!this._currentDrag.value);
   }
 
   /**
    * @return Takes a peek at the data of the drag that is occuring *right now*.
    */
   get peekDragData() {
-    return (this._currentDrag.getValue());
-  }
-
-  /**
-   * @return Observable with the node that is currently dragged over.
-   */
-  get currentDragOverNode(): Observable<Node> {
-    return (this._currentDragOverNode);
-  }
-
-  /**
-   * @return Observable with the placeholder that is currently being dragged over.
-   */
-  get currentDragOverPlaceholder(): Observable<NodeLocation> {
-    return (this._currentDragOverPlaceholder);
+    return (this._currentDrag.value);
   }
 }
