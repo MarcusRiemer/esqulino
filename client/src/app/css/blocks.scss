@@ -1,10 +1,9 @@
-.editor-block.blueprint {
-    border: 2px dashed blue;
-    background-color: white;
-}
+.block-editor {
+    .blueprint {
+        border: 2px dashed blue;
+    }
 
-.editor-block.default {
-    border: 2px solid black;
-    background-color: white;
-    padding: 10px;
+    .blueprint:hover {
+        border: 2px solid blue;
+    }
 }

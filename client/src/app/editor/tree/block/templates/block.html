@@ -11,14 +11,11 @@
     </ng-container>
   </div>
   <!-- Display a draggable block -->
-  <div class="editor-block default"
-       *ngSwitchCase="'block'">
-    <ng-container *ngFor="let childVisualBlock of visual.children">
-      <editor-block [languageModel]="languageModel"
-                    [visual]="childVisualBlock"
-                    [node]="node"></editor-block>
-    </ng-container>
-  </div>
+  <ng-container *ngSwitchCase="'block'">
+    <editor-block-render-block [languageModel]="languageModel"
+                               [node]="node"
+                               [visual]="visual"></editor-block-render-block>
+  </ng-container>
   <!-- Something is broken, display a error message -->
   <div *ngSwitchDefault>Fehler: Kein passender Block "{{ visual.blockType }}" verfügbar</div>
 </ng-container>
