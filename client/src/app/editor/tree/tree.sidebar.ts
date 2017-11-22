@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy, Inject } from '@angular/core'
 
 import { QualifiedTypeName, NodeDescription, NodeType } from '../../shared/syntaxtree'
-import { LanguageModel } from '../../shared/block'
+import { LanguageModel, SidebarBlock } from '../../shared/block'
 
 import { SIDEBAR_MODEL_TOKEN } from '../editor.token'
 
@@ -34,12 +34,11 @@ export class TreeSidebarComponent {
   /**
    * The user has decided to start dragging something from the sidebar.
    */
-  startDrag(evt: DragEvent, desc: NodeDescription) {
+  startDrag(evt: DragEvent, block: SidebarBlock) {
     try {
-      console.log("Dragging", desc);
-      this._dragService.dragStart(evt, {
-        draggedDescription: desc,
-        origin: "sidebar"
+      console.log("Dragging", block);
+      this._dragService.dragStart(evt, block.defaultNode, {
+        sidebarBlockDescription: block
       });
     } catch (e) {
       alert(e);
