@@ -7,10 +7,10 @@ import { LanguageModel, EditorBlockDescriptions } from '../../../shared/block';
  * Renders a single and well known visual element of a node.
  */
 @Component({
-  templateUrl: 'templates/block.html',
-  selector: `editor-block`
+  templateUrl: 'templates/block-render.html',
+  selector: `editor-block-render`
 })
-export class BlockComponent implements OnInit {
+export class BlockRenderComponent implements OnInit {
   @Input() public languageModel: LanguageModel;
   @Input() public node: Node;
   @Input() public visual: EditorBlockDescriptions.EditorBlockBase;

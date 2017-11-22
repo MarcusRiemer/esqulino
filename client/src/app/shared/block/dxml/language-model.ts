@@ -243,6 +243,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
       visual: [
         {
           blockType: "block",
+          direction: "horizontal",
           children: [
             {
               blockType: "constant",
@@ -268,6 +269,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         } as EditorBlockDescriptions.EditorIterator,
         {
           blockType: "block",
+          direction: "horizontal",
           children: [
             {
               blockType: "constant",
@@ -294,6 +296,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
       visual: [
         {
           blockType: "block",
+          direction: "horizontal",
           children: [
             {
               blockType: "interpolated",
@@ -315,6 +318,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
       visual: [
         {
           blockType: "block",
+          direction: "horizontal",
           children: [
             {
               blockType: "interpolated",

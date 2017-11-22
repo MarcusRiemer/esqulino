@@ -18,9 +18,10 @@ import { NodePlaceholderComponent } from './raw/node-placeholder.component'
 import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'
 
 import { BlockEditorComponent } from './block/block-editor.component'
-import { BlockComponent } from './block/block.component'
-import { BlockRenderBlockComponent } from './block/block-render-block.component'
+import { BlockLayoutDirective } from './block/block-layout.directive'
 import { BlockHostComponent } from './block/block-host.component'
+import { BlockRenderComponent } from './block/block-render.component'
+import { BlockRenderBlockComponent } from './block/block-render-block.component'
 
 @NgModule({
   imports: [
@@ -28,9 +29,10 @@ import { BlockHostComponent } from './block/block-host.component'
   ],
   declarations: [
     BlockEditorComponent,
-    BlockComponent,
+    BlockRenderComponent,
     BlockRenderBlockComponent,
     BlockHostComponent,
+    BlockLayoutDirective,
     CodeGeneratorComponent,
     DraggableDirective,
     DropTargetDirective,
