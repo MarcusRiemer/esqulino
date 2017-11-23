@@ -40,6 +40,13 @@ export class LanguageModel {
   }
 
   /**
+   * @return The language that is backing this model
+   */
+  get language() {
+    return (this._language);
+  }
+
+  /**
    * @return The name of the language this model is augmenting
    */
   get languageName() {

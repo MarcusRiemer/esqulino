@@ -6,19 +6,21 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
   CodeResource,
   Tree, Node, NodeDescription,
-  Validator, ValidationResult,
-  Language, AvailableLanguages
+  Validator, ValidationResult
 } from '../../shared/syntaxtree';
+
+import { LanguageModel, AvailableLanguageModels } from '../../shared/block'
 
 import { ProjectService, Project } from '../project.service';
 import { SidebarService } from '../sidebar.service';
 
+import { LanguageService } from './language.service';
 import { TreeSidebarComponent } from './tree.sidebar';
 
 /**
  * This service represents a single code resource that is currently beeing
  * edited. It is meant to be instanciated by every tree editor
- * to be available in all node components of that editor.
+ * to be available in all components of that editor.
  *
  * It glues together the actual resource that is beeing edited and ensures
  * that updates to that resource are validated and compiled.
@@ -40,7 +42,13 @@ export class TreeEditorService implements OnInit, OnDestroy {
    */
   private _codeResourceSub: Subscription;
 
-  private _language = new BehaviorSubject<Language>(undefined);
+  private _languageModelObs = this._codeResource.map(r => {
+    if (r) {
+      return (this._languageService.getLanguageModel(r.languageId));
+    } else {
+      return (undefined);
+    }
+  });
 
   private _validationResult = new BehaviorSubject<ValidationResult>(ValidationResult.EMPTY);
   private _generatedCode = new BehaviorSubject<string>("");
@@ -48,7 +56,8 @@ export class TreeEditorService implements OnInit, OnDestroy {
   constructor(
     private _sidebarService: SidebarService,
     private _routeParams: ActivatedRoute,
-    private _projectService: ProjectService
+    private _projectService: ProjectService,
+    private _languageService: LanguageService,
   ) {
     this.ngOnInit();
   }
@@ -58,7 +67,7 @@ export class TreeEditorService implements OnInit, OnDestroy {
    * is called manually from the constructor.
    */
   ngOnInit(): void {
-    // Listen for changes in the current route
+    // Listen for changes in the current route to extract the resource
     let subRef = this._routeParams.params.subscribe(params => {
       // Ensure the referenced resource exists
       const codeResourceId = params['resourceId'];
@@ -67,8 +76,10 @@ export class TreeEditorService implements OnInit, OnDestroy {
       }
 
       // Assign the resource and a matching language
-      this.setCodeResource(this._projectService.cachedProject.getCodeResourceById(codeResourceId));
-      this.setLanguage(AvailableLanguages.All);
+      const resource = this._projectService.cachedProject.getCodeResourceById(codeResourceId);
+
+      this.setCodeResource(resource);
+      this.setLanguageModel(this._languageService.getLanguageModel(resource.languageId));
 
       // Create the new sidebar
       this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this);
@@ -98,7 +109,9 @@ export class TreeEditorService implements OnInit, OnDestroy {
     this._codeResource.next(res);
     this.resetCaches();
 
+    // Also reset the cache every time that tree changes
     this._codeResourceSub = this.peekResource.obsSyntaxTree.subscribe(tree => {
+      console.log("Cache reset", tree)
       this.resetCaches();
     });
   }
@@ -117,7 +130,13 @@ export class TreeEditorService implements OnInit, OnDestroy {
    */
   private resetValidation() {
     if (this.peekResource && this.peekLanguage) {
-      this._validationResult.next(this.peekLanguage.validateTree(this.peekTree));
+      try {
+        const tree = this.peekTree;
+
+        this._validationResult.next(this.peekLanguage.validateTree(this.peekTree));
+      } catch (e) {
+        console.log(e);
+      }
     } else {
       this._validationResult.next(ValidationResult.EMPTY);
     }
@@ -175,24 +194,29 @@ export class TreeEditorService implements OnInit, OnDestroy {
   }
 
   /**
-   * @param lang The new language to use
+   * @param lang The new LanguageModel to use
    */
-  private setLanguage(lang: Language) {
-    if (this.peekResource) {
-      this.peekResource.languageId = lang.id;
-    }
-    this._language.next(lang);
+  setLanguageModel(lang: LanguageModel) {
+    this.peekResource.languageId = lang.id;
     this.resetCaches();
   }
 
   /**
-   * @return The language that is currently in use.
+   * @return The languagemodel that is currently in use.
    */
-  get currentLanguage(): Observable<Language> {
-    return (this._language);
+  get currentLanguageModel(): Observable<LanguageModel> {
+    return (this._languageModelObs);
   }
 
-  get peekLanguage(): Language {
-    return (this._language.value);
+  /**
+   * @return The language that is used by the current language model
+   */
+  private get peekLanguage() {
+    if (this.peekResource) {
+      const languageModel = this._languageService.getLanguageModel(this.peekResource.languageId);
+      return (languageModel.language);
+    } else {
+      return (undefined);
+    }
   }
 }

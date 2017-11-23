@@ -40,6 +40,19 @@ export class BlockEditorComponent implements OnInit {
     });
   }
 
+  get selectedLanguageId() {
+    const resource = this._treeService.peekResource;
+    if (resource) {
+      return (resource.languageId);
+    } else {
+      return (undefined);
+    }
+  }
+
+  set selectedLanguageId(id: string) {
+    this._treeService.setLanguageModel(this._languageService.getLanguageModel(id));
+  }
+
   /**
    * When something draggable enters the editor area itself there is no
    * possibility anything is currently dragged over a node. So we inform the
@@ -60,6 +73,13 @@ export class BlockEditorComponent implements OnInit {
    * @return The language model that is currently in use.
    */
   get currentLanguageModel() {
-    return (Observable.of(this._languageService.getLanguageModel("dxml")));
+    return (this._treeService.currentLanguageModel);
+  }
+
+  /**
+   * @return All available language models
+   */
+  get availableLanguageModels() {
+    return (this._languageService.availableLanguageModels);
   }
 }

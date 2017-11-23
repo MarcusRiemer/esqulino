@@ -9,6 +9,7 @@ import { DropTargetDirective } from './drop-target.directive'
 import { DropPlaceholderDirective } from './drop-placeholder.directive'
 import { DragService } from './drag.service'
 import { LanguageService } from './language.service'
+import { LanguageModelSelectorComponent } from './language-model-selector.component'
 import { TreeSidebarComponent } from './tree.sidebar'
 import { ValidationComponent } from './validation.component'
 
@@ -43,6 +44,7 @@ import { BlockRenderBlockComponent } from './block/block-render-block.component'
     RawTreeEditorComponent,
     ValidationComponent,
     TreeSidebarComponent,
+    LanguageModelSelectorComponent,
   ],
   entryComponents: [
     TreeSidebarComponent
