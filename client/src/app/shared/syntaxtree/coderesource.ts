@@ -39,10 +39,18 @@ export class CodeResource extends ProjectResource {
   }
 
   /**
+   * @return An observable value of the language this id uses.
+   */
+  get languageIdObs(): Observable<string> {
+    return (this._languageId);
+  }
+
+  /**
    * @param newId The ID of the new language this resource adheres to.
    */
   set languageId(newId: string) {
     this._languageId.next(newId);
+    this.markSaveRequired();
   }
 
   /**

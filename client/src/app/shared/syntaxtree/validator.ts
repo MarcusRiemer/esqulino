@@ -1013,7 +1013,8 @@ export class Validator {
    */
   getLanguageValidator(language: string) {
     if (!this.isKnownLanguage(language)) {
-      throw new Error(`Validator does not know language "${language}"`);
+      const available = Object.keys(this._registeredSchemas).join(', ');
+      throw new Error(`Validator does not know language "${language}", known are: ${available}`);
     } else {
       return (this._registeredSchemas[language]);
     }

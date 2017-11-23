@@ -8,7 +8,7 @@ export const CODE_RESOURCES: CodeResourceDescription[] = [
     id: "regex-empty",
     name: "RegEx: Leer",
     ast: undefined,
-    languageId: "xml"
+    languageId: "regex"
   },
   {
     apiVersion: CURRENT_API_VERSION,
@@ -87,9 +87,9 @@ export const CODE_RESOURCES: CodeResourceDescription[] = [
   },
   {
     apiVersion: CURRENT_API_VERSION,
-    id: "xml-empty",
+    id: "dxml-empty",
     name: "XML: Leer",
     ast: undefined,
-    languageId: "xml"
+    languageId: "dxml"
   }
 ];

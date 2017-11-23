@@ -19,6 +19,9 @@ export class BlockHostComponent implements OnInit {
 
   }
 
+  /**
+   * @return The visual editor block that should be used to represent the node.
+   */
   get editorBlock() {
     return (this.languageModel.getEditorBlock(this.node.qualifiedName));
   }
