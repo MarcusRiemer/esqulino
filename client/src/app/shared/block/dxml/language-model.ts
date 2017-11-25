@@ -78,12 +78,12 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
           "attributes": [],
         },
         properties: {
-          "name": "foo"
+          "name": "e1"
         }
       },
       sidebar: {
         category: "Dynamisches XML",
-        displayName: "Element: foo",
+        displayName: "Element: e1",
       },
     },
     {
@@ -99,12 +99,12 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
           "attributes": [],
         },
         properties: {
-          "name": "bar"
+          "name": "e2"
         }
       },
       sidebar: {
         category: "Dynamisches XML",
-        displayName: "Element: bar",
+        displayName: "Element: e2",
       },
     },
     {
@@ -121,12 +121,34 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
           ]
         },
         properties: {
-          "name": "",
+          "name": "a1",
         }
       },
       sidebar: {
         category: "Dynamisches XML",
-        displayName: "Attribut",
+        displayName: "Attribut: a1",
+      }
+    },
+    {
+      describedType: {
+        languageName: "dxml",
+        typeName: "attribute"
+      },
+      defaultNode: {
+        language: "dxml",
+        name: "attribute",
+        children: {
+          "value": [
+
+          ]
+        },
+        properties: {
+          "name": "a2",
+        }
+      },
+      sidebar: {
+        category: "Dynamisches XML",
+        displayName: "Attribut: a2",
       }
     },
     {
@@ -254,18 +276,50 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
               property: "name"
             } as EditorBlockDescriptions.EditorInterpolation,
             {
+              blockType: "dropTarget",
+              dropTarget: {
+                childGroupName: "attributes"
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "+Attribute"
+                } as EditorBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+              marginLeft: "10px",
+              visibility: ["ifEmpty", "ifLegalDrag"]
+            } as EditorBlockDescriptions.EditorDropTarget,
+            {
               blockType: "iterator",
               childGroupName: "attributes",
+              direction: "horizontal",
             } as EditorBlockDescriptions.EditorIterator,
             {
               blockType: "constant",
               text: ">"
             } as EditorBlockDescriptions.EditorConstant,
+            {
+              blockType: "dropTarget",
+              dropTarget: {
+                childGroupName: "elements"
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "+Element"
+                } as EditorBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+              marginLeft: "10px",
+              visibility: ["ifLegalDrag"]
+            } as EditorBlockDescriptions.EditorDropTarget,
           ]
         } as EditorBlockDescriptions.EditorBlock,
         {
           blockType: "iterator",
           childGroupName: "elements",
+          direction: "vertical",
           marginLeft: "10px",
         } as EditorBlockDescriptions.EditorIterator,
         {
@@ -284,7 +338,6 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
               blockType: "constant",
               text: ">"
             } as EditorBlockDescriptions.EditorConstant,
-
           ]
         } as EditorBlockDescriptions.EditorBlock
       ]
@@ -306,7 +359,20 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
             } as EditorBlockDescriptions.EditorInterpolation,
             {
               blockType: "constant",
-              text: "=\"--missing--\""
+              text: "="
+            } as EditorBlockDescriptions.EditorConstant,
+            {
+              blockType: "constant",
+              text: "\""
+            } as EditorBlockDescriptions.EditorConstant,
+            {
+              blockType: "iterator",
+              childGroupName: "value",
+              direction: "horizontal",
+            } as EditorBlockDescriptions.EditorIterator,
+            {
+              blockType: "constant",
+              text: "\""
             } as EditorBlockDescriptions.EditorConstant,
           ]
         } as EditorBlockDescriptions.EditorBlock

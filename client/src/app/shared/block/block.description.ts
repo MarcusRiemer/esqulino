@@ -17,6 +17,13 @@ export namespace EditorBlockDescriptions {
   }
 
   /**
+   * These properties are required to specify drop targets.
+   */
+  export interface DropTargetProperties {
+    childGroupName: string
+  }
+
+  /**
    * Allows very basic control over the layout of blocks. This is meant
    * to be used for alignments in rows and columns, not for anything
    * involving actual design.
@@ -28,13 +35,23 @@ export namespace EditorBlockDescriptions {
   /**
    * Describes how a certain block should be represented. Blocks are
    * always draggable and also possible drop targets.
-   *
-   * Whether this block is displayed inline or as a whole block depends
-   * on two things:
    */
   export interface EditorBlock extends EditorLayout {
     blockType: "block";
-    children: EditorBlockBase[];
+    children?: EditorBlockBase[];
+    dropTarget?: DropTargetProperties;
+    dropAction?: "append" | "replace";
+  }
+
+  /**
+   * Describes a "block" that only acts as a hole to drop things at.
+   * It is not necesarily visible in every state and it is not draggable.
+   */
+  export interface EditorDropTarget extends EditorLayout {
+    blockType: "dropTarget";
+    children?: EditorBlockBase[];
+    dropTarget?: DropTargetProperties;
+    visibility: ["ifAnyDrag" | "ifLegalDrag" | "ifEmpty" | "always"];
   }
 
   /**

@@ -307,8 +307,8 @@ export class Tree {
    * @return The modified tree.
    */
   replaceNode(loc: NodeLocation, desc: NodeDescription): Tree {
-    // Replacing the needs to work different because there is no parent
-    // that needs a child replaced
+    // Replacing the root needs to work different because there is no parent
+    // that needs a child replaced.
     if (loc.length === 0) {
       return (new Tree(desc));
     }

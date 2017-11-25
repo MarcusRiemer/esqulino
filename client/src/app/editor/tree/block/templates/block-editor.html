@@ -10,10 +10,6 @@
 
       <!-- Ensuring there is a selected language model -->
       <ng-container *ngIf="(currentLanguageModel | async); let currentLanguageModel;">
-
-        <div class="card-body">
-          {{ currentLanguageModel.language.id }}
-        </div>
         
         <!-- Ensuring there is a tree -->
         <ng-container *ngIf="(currentTree | async); let currentTree;">
