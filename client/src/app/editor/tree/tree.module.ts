@@ -20,6 +20,7 @@ import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'
 
 import { BlockEditorComponent } from './block/block-editor.component'
 import { BlockLayoutDirective } from './block/block-layout.directive'
+import { BlockBaseDirective } from './block/block-base.directive'
 import { BlockHostComponent } from './block/block-host.component'
 import { BlockRenderComponent } from './block/block-render.component'
 import { BlockRenderBlockComponent } from './block/block-render-block.component'
@@ -34,6 +35,7 @@ import { BlockRenderBlockComponent } from './block/block-render-block.component'
     BlockRenderBlockComponent,
     BlockHostComponent,
     BlockLayoutDirective,
+    BlockBaseDirective,
     CodeGeneratorComponent,
     DraggableDirective,
     DropTargetDirective,

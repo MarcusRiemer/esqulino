@@ -13,6 +13,7 @@ export namespace EditorBlockDescriptions {
    */
   export interface EditorBlockBase {
     blockType: string;
+    marginLeft?: string;
   }
 
   /**
