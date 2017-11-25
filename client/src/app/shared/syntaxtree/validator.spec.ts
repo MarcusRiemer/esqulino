@@ -1017,6 +1017,25 @@ describe('Language Validator', () => {
     expect(res.errors[0].code).toEqual(ErrorCodes.InvalidMaxOccurences);
   });
 
+  it('Validating tree of unknown language', () => {
+    const v = new Validator([langAllowedConstraint, langSequenceConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "nonexistant",
+      name: "irrelevant",
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(1);
+
+    const err = res.errors[0];
+    expect(err.code).toEqual(ErrorCodes.UnknownRootLanguage);
+    expect(err.data.requiredLanguage).toEqual(astDesc.language);
+    expect(err.data.availableLanguages).toEqual(["allowed-constraint", "sequence-constraint"]);
+  });
+
   it('Mini-SQL: Empty SELECT query', () => {
     const v = new Validator([langMiniSql]);
 

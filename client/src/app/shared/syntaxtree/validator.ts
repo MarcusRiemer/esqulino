@@ -7,6 +7,8 @@ export enum ErrorCodes {
   Empty = "EMPTY",
   // A AST has a root node that does not match any allowed root node
   UnknownRoot = "UNKNOWN_ROOT",
+  // A AST has a root node in an unknown language
+  UnknownRootLanguage = "UNKNOWN_ROOT_LANGUAGE",
   // A different type was explicitly expected
   UnexpectedType = "UNEXPECTED_TYPE",
   // A node with a transient type was detected
@@ -987,6 +989,7 @@ export class Validator {
    * @return All errors that occured during evaluation
    */
   validateFromRoot(ast: AST.Node | AST.Tree) {
+    // Grab the actual root
     let rootNode: AST.Node = undefined;
     if (ast instanceof AST.Tree && !ast.isEmpty) {
       rootNode = ast.rootNode;
@@ -997,9 +1000,18 @@ export class Validator {
     const context = new ValidationContext();
 
     if (rootNode) {
-      // Pass validation to the appropriate language
-      const lang = this.getLanguageValidator(rootNode.languageName);
-      lang.validateFromRoot(rootNode, context);
+      if (this.isKnownLanguage(rootNode.languageName)) {
+        // Pass validation to the appropriate language
+        const lang = this.getLanguageValidator(rootNode.languageName);
+        lang.validateFromRoot(rootNode, context);
+      } else {
+        // Not knowing the language is a single error
+        const available = Array.from(new Set(this.availableTypes.map(t => t.languageName)));
+        context.addError(ErrorCodes.UnknownRootLanguage, rootNode, {
+          requiredLanguage: rootNode.languageName,
+          availableLanguages: available
+        });
+      }
     } else {
       // Not having a document is a single error
       context.addError(ErrorCodes.Empty, undefined);

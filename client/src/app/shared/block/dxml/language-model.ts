@@ -297,6 +297,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         {
           blockType: "block",
           direction: "horizontal",
+          marginLeft: "10px",
           children: [
             {
               blockType: "interpolated",
