@@ -3,7 +3,7 @@ import { Directive, ElementRef, Input } from '@angular/core';
 import { EditorBlockDescriptions } from '../../../shared/block';
 
 /**
- * Controls layout aspects of the given host block.   
+ * Controls basic styling aspects of blocks.
  */
 @Directive({
   selector: '[blockBase]'

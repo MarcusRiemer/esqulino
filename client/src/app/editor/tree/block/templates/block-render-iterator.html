@@ -1,0 +1,5 @@
+<div [blockBase]="visual">
+  <editor-block-host *ngFor="let childNode of node.getChildrenInCategory(visual.childGroupName)"
+                     [languageModel]="languageModel"
+                     [node]="childNode"></editor-block-host>  
+</div>
