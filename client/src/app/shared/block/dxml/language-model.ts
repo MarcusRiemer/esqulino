@@ -266,6 +266,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         {
           blockType: "iterator",
           childGroupName: "elements",
+          marginLeft: "10px",
         } as EditorBlockDescriptions.EditorIterator,
         {
           blockType: "block",
