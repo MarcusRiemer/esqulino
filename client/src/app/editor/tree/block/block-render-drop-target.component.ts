@@ -43,31 +43,59 @@ export class BlockRenderDropTargetComponent {
   }
 
   /**
-   * @return The name of the referenced child group (if there is any)
+   * @return True, if this drop will be made into a strictly defined category.
    */
-  get childGroupName() {
-    return (this.visual && this.visual.dropTarget && this.visual.dropTarget.childGroupName);
+  get isParentDrop() {
+    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.actionParent;
+    return (!!action);
   }
 
   /**
-   * @return true, if the referenced child group has any children.
+   * @return The name of the referenced child group (if there is any)
    */
-  get hasChildren() {
-    const childGroupName = this.childGroupName;
-    if (this.node && childGroupName) {
-      return (this.node.getChildrenInCategory(childGroupName).length > 0);
+  get childGroupName() {
+    // Is the category specified explicitly?
+    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.actionParent;
+    if (action) {
+      // Then use that category
+      return (action);
     } else {
-      return (false);
+      // Else use the category of our own node.
+      const loc = this.node.location;
+      return (loc[loc.length - 1][0]);
     }
   }
 
   /**
-   * @return The location a drop should occur in if this iterator has no children.
+   * @return true, if the targeted child group has any children.
    */
-  get emptyDropLocation() {
+  get hasChildren() {
     const childGroupName = this.childGroupName;
-    if (this.node && childGroupName) {
-      return (this.node.location.concat([[childGroupName, 0]]));
+    if (this.isParentDrop) {
+      // Count children in that category
+      return (this.node.getChildrenInCategory(childGroupName).length > 0);
+    } else {
+      // At least the given node is in the category
+      return (true);
+    }
+  }
+
+  /**
+   * @return The location a drop should occur in. This depends on the configuration in the language model.
+   */
+  get dropLocation() {
+    if (this.node) {
+      if (this.isParentDrop) {
+        // If there is an explicit group name, this is always the first node
+        return (this.node.location.concat([[this.childGroupName, 0]]));
+      } else {
+        // Otherwise use (more or less) exact the location we are at. The description
+        // may specify some levels that are dropped.
+        const lastLevel = this.node.location.length - this.visual.dropTarget.actionSelf.skipParents;
+        return (this.node.location.slice(0, lastLevel));
+      }
+    } else {
+      return ([]);
     }
   }
 
@@ -82,7 +110,7 @@ export class BlockRenderDropTargetComponent {
       if (drag) {
         // Highlight in case something is dragging over us. This can only happen if
         // we have been visible before, so there is no need for any additional checking
-        const onThis = arrayEqual(drag.hoverPlaceholder, this.emptyDropLocation);
+        const onThis = arrayEqual(drag.hoverPlaceholder, this.dropLocation);
         if (onThis) {
           return ("self");
         } else {
@@ -92,7 +120,7 @@ export class BlockRenderDropTargetComponent {
           } else if (flags.some(f => f === "ifLegalDrag")) {
             const newNode = drag.draggedDescription;
             const oldTree = this._treeService.peekResource.syntaxTree;
-            const newTree = oldTree.insertNode(this.emptyDropLocation, newNode);
+            const newTree = oldTree.insertNode(this.dropLocation, newNode);
 
             const result = this._treeService.peekLanguage.validateTree(newTree);
             if (result.isValid) {
@@ -118,8 +146,9 @@ export class BlockRenderDropTargetComponent {
   /**
    * Handles the drop events on the empty drop
    */
-  onEmptyDrop(evt: DragEvent) {
+  onDrop(evt: DragEvent) {
     const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.peekResource.insertNode(this.emptyDropLocation, desc);
+    console.log(this.node, this.dropLocation);
+    this._treeService.peekResource.insertNode(this.dropLocation, desc);
   }
 }

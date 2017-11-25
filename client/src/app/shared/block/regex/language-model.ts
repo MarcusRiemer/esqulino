@@ -194,7 +194,10 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
               visibility: ["always"],
               direction: "horizontal",
               dropTarget: {
-                childGroupName: "expressions",
+                actionSelf: {
+                  order: "insertAfter",
+                  skipParents: 1
+                }
               },
               children: [
                 {
@@ -213,7 +216,10 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
                   visibility: ["always"],
                   direction: "horizontal",
                   dropTarget: {
-                    childGroupName: "expressions",
+                    actionSelf: {
+                      order: "insertAfter",
+                      skipParents: 1
+                    }
                   },
                   children: [
                     {
