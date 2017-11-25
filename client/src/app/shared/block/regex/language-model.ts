@@ -80,6 +80,31 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
     {
       describedType: {
         languageName: "regex",
+        typeName: "constant"
+      },
+      defaultNode: {
+        language: "regex",
+        name: "expr",
+        children: {
+          "singleExpression": [
+            {
+              language: "regex",
+              name: "constant",
+              properties: {
+                value: "c"
+              }
+            }
+          ]
+        }
+      },
+      sidebar: {
+        category: "Regulärer Ausdruck",
+        displayName: "Konstante 'c'",
+      }
+    },
+    {
+      describedType: {
+        languageName: "regex",
         typeName: "alternative"
       },
       defaultNode: {
@@ -125,14 +150,99 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
           children: [
             {
               blockType: "constant",
-              text: "foo"
+              text: "RegEx: "
             } as EditorBlockDescriptions.EditorConstant,
             {
-              blockType: "constant",
-              text: "bar"
-            } as EditorBlockDescriptions.EditorConstant
+              blockType: "iterator",
+              childGroupName: "expressions",
+              direction: "horizontal",
+            } as EditorBlockDescriptions.EditorIterator,
           ]
         } as EditorBlockDescriptions.EditorBlock
+      ]
+    },
+    {
+      describedType: {
+        languageName: "regex",
+        typeName: "constant"
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          children: [
+            {
+              blockType: "interpolated",
+              property: "value"
+            } as EditorBlockDescriptions.EditorInterpolation,
+          ]
+        } as EditorBlockDescriptions.EditorBlock
+      ]
+    },
+    {
+      describedType: {
+        languageName: "regex",
+        typeName: "alternative"
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          children: [
+            {
+              blockType: "dropTarget",
+              visibility: ["always"],
+              direction: "horizontal",
+              dropTarget: {
+                childGroupName: "expressions",
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "("
+                } as EditorBlockDescriptions.EditorConstant
+              ],
+            } as EditorBlockDescriptions.EditorDropTarget,
+            {
+              blockType: "iterator",
+              childGroupName: "expressions",
+              direction: "horizontal",
+              between: [
+                {
+                  blockType: "dropTarget",
+                  visibility: ["always"],
+                  direction: "horizontal",
+                  dropTarget: {
+                    childGroupName: "expressions",
+                  },
+                  children: [
+                    {
+                      blockType: "constant",
+                      text: "|"
+                    } as EditorBlockDescriptions.EditorConstant
+                  ],
+                } as EditorBlockDescriptions.EditorDropTarget,
+              ]
+            } as EditorBlockDescriptions.EditorIterator,
+            {
+              blockType: "constant",
+              text: ")"
+            } as EditorBlockDescriptions.EditorConstant,
+          ]
+        } as EditorBlockDescriptions.EditorBlock
+      ]
+    },
+    {
+      describedType: {
+        languageName: "regex",
+        typeName: "expr"
+      },
+      visual: [
+        {
+          blockType: "iterator",
+          childGroupName: "singleExpression",
+          direction: "horizontal",
+        } as EditorBlockDescriptions.EditorIterator,
       ]
     }
   ]

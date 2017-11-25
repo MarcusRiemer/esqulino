@@ -1,7 +1,15 @@
 <div [blockBase]="visual"
      [blockLayout]="visual">
-  <ng-container *ngFor="let childNode of node.getChildrenInCategory(visual.childGroupName)">
+  <ng-container *ngFor="let childNode of childNodes; let lastChild = last;">
+    <!-- Rendering the actual sub-block -->
     <editor-block-host [languageModel]="languageModel"
                        [node]="childNode"></editor-block-host>
+    <!-- Possibly render something in between -->
+    <ng-container *ngIf="!lastChild">
+      <editor-block-render *ngFor="let sepBlock of separatorBlocks"
+                           [languageModel]="languageModel"
+                           [visual]="sepBlock"
+                           [node]="node"></editor-block-render>
+    </ng-container>
   </ng-container>
 </div>
