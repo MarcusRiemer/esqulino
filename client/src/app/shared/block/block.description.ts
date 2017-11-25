@@ -60,6 +60,7 @@ export namespace EditorBlockDescriptions {
   export interface EditorIterator extends EditorLayout {
     blockType: "iterator";
     childGroupName: string;
+    between?: EditorBlockBase[]
   }
 
   /**
