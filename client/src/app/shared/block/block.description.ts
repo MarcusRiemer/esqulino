@@ -20,7 +20,11 @@ export namespace EditorBlockDescriptions {
    * These properties are required to specify drop targets.
    */
   export interface DropTargetProperties {
-    childGroupName: string
+    actionSelf?: {
+      order: "insertBefore" | "insertAfter";
+      skipParents: number;
+    };
+    actionParent?: string;
   }
 
   /**

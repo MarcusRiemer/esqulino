@@ -278,7 +278,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
             {
               blockType: "dropTarget",
               dropTarget: {
-                childGroupName: "attributes"
+                actionParent: "attributes"
               },
               children: [
                 {
@@ -302,7 +302,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
             {
               blockType: "dropTarget",
               dropTarget: {
-                childGroupName: "elements"
+                actionParent: "elements"
               },
               children: [
                 {
