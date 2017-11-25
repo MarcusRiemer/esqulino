@@ -22,7 +22,6 @@ export class BlockBaseDirective {
 
   ngOnInit() {
     this.hostElement.style.marginLeft = this.layout.marginLeft;
-    console.log("blockBase", this.hostElement, this.layout);
   }
 
 }

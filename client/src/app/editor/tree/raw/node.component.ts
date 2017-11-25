@@ -44,7 +44,7 @@ export class NodeComponent implements OnChanges {
   constructor(
     private _dragService: DragService,
     private _cdRef: ChangeDetectorRef,
-    private _treeService: TreeEditorService
+    private _treeService: TreeEditorService,
   ) { }
 
   /**

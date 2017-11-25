@@ -24,6 +24,7 @@ import { BlockBaseDirective } from './block/block-base.directive'
 import { BlockHostComponent } from './block/block-host.component'
 import { BlockRenderComponent } from './block/block-render.component'
 import { BlockRenderBlockComponent } from './block/block-render-block.component'
+import { BlockRenderDropTargetComponent } from './block/block-render-drop-target.component'
 import { BlockRenderIteratorComponent } from './block/block-render-iterator.component'
 
 @NgModule({
@@ -34,6 +35,7 @@ import { BlockRenderIteratorComponent } from './block/block-render-iterator.comp
     BlockEditorComponent,
     BlockRenderComponent,
     BlockRenderBlockComponent,
+    BlockRenderDropTargetComponent,
     BlockRenderIteratorComponent,
     BlockHostComponent,
     BlockLayoutDirective,

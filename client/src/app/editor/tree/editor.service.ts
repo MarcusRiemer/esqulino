@@ -211,7 +211,7 @@ export class TreeEditorService implements OnInit, OnDestroy {
   /**
    * @return The language that is used by the current language model
    */
-  private get peekLanguage() {
+  get peekLanguage() {
     if (this.peekResource) {
       const languageModel = this._languageService.getLanguageModel(this.peekResource.languageId);
       return (languageModel.language);

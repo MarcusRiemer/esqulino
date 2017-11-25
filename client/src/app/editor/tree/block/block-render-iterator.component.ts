@@ -7,6 +7,7 @@ import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
 import { LanguageModel, EditorBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../drag.service';
+import { TreeEditorService } from '../editor.service';
 
 // These states are available for animation
 type DropTargetAnimationStates = "available" | "none" | "self" | "taken";
@@ -35,5 +36,11 @@ type DropTargetAnimationStates = "available" | "none" | "self" | "taken";
 export class BlockRenderIteratorComponent {
   @Input() public languageModel: LanguageModel;
   @Input() public node: Node;
-  @Input() public visual: EditorBlockDescriptions.EditorBlockBase;
+  @Input() public visual: EditorBlockDescriptions.EditorIterator;
+
+  constructor(
+    private _dragService: DragService,
+    private _treeService: TreeEditorService,
+  ) {
+  }
 }

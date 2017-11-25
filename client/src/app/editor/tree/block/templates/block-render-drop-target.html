@@ -1,0 +1,14 @@
+<!-- Ensure correct visual behaviour -->
+<div [@availability]="currentAvailability | async"
+     [blockBase]="visual"
+     [blockLayout]="visual"
+     [astDropPlaceholder]="emptyDropLocation"
+     [title]="emptyDropLocation | json"
+     (drop)="onEmptyDrop($event)">
+  <!-- Render all components of this drop target -->
+  <ng-container *ngFor="let childVisualBlock of visual.children">
+    <editor-block-render [languageModel]="languageModel"
+                         [visual]="childVisualBlock"
+                         [node]="node"></editor-block-render>
+  </ng-container>
+</div>
