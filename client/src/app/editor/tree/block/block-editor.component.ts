@@ -3,8 +3,6 @@ import { Observable } from 'rxjs/Observable'
 import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
-import { LanguageService } from '../../../shared/language.service';
-
 import { ToolbarService } from '../../toolbar.service';
 
 import { TreeEditorService } from '../editor.service';
@@ -24,7 +22,6 @@ export class BlockEditorComponent implements OnInit {
     private _toolbarService: ToolbarService,
     private _dragService: DragService,
     private _treeService: TreeEditorService,
-    private _languageService: LanguageService,
     private _router: Router,
     private _route: ActivatedRoute,
   ) {

@@ -7,7 +7,7 @@
      (drop)="onDrop($event)">
   <!-- Render all components of this drop target -->
   <ng-container *ngFor="let childVisualBlock of visual.children">
-    <editor-block-render [languageModel]="languageModel"
+    <editor-block-render [codeResource]="codeResource"
                          [visual]="childVisualBlock"
                          [node]="node"></editor-block-render>
   </ng-container>

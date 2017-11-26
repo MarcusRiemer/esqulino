@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
+import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
 import { LanguageModel, EditorBlockDescription } from '../../../shared/block';
 
 /**
@@ -12,7 +12,7 @@ import { LanguageModel, EditorBlockDescription } from '../../../shared/block';
 })
 export class BlockHostComponent implements OnInit {
 
-  @Input() public languageModel: LanguageModel;
+  @Input() public codeResource: CodeResource;
   @Input() public node: Node;
 
   ngOnInit() {
@@ -23,6 +23,6 @@ export class BlockHostComponent implements OnInit {
    * @return The visual editor block that should be used to represent the node.
    */
   get editorBlock() {
-    return (this.languageModel.getEditorBlock(this.node.qualifiedName));
+    return (this.codeResource.languageModelPeek.getEditorBlock(this.node.qualifiedName));
   }
 }

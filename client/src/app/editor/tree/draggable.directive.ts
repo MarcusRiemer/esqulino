@@ -1,9 +1,8 @@
 import { Directive, ElementRef, Input } from '@angular/core';
 
-import { Node } from '../../shared/syntaxtree';
+import { Node, CodeResource } from '../../shared/syntaxtree';
 
 import { DragService } from '../drag.service';
-import { TreeEditorService } from './editor.service'
 
 /**
  * Can be used for any element to register it as something
@@ -14,11 +13,11 @@ import { TreeEditorService } from './editor.service'
 })
 export class DraggableDirective {
   @Input('astDraggable') node: Node;
+  @Input() codeResource: CodeResource;
 
   constructor(
     ref: ElementRef,
-    dragService: DragService,
-    treeService: TreeEditorService
+    dragService: DragService
   ) {
     const el = ref.nativeElement as HTMLElement;
     el.draggable = true;
@@ -27,7 +26,7 @@ export class DraggableDirective {
       dragService.dragStart(evt, this.node.toModel(), undefined,
         {
           node: this.node,
-          treeEditorService: treeService
+          codeResource: this.codeResource,
         }
       );
     });

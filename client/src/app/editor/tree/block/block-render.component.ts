@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
+import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
 import { LanguageModel, EditorBlockDescriptions } from '../../../shared/block';
 
 /**
@@ -11,7 +11,7 @@ import { LanguageModel, EditorBlockDescriptions } from '../../../shared/block';
   selector: `editor-block-render`
 })
 export class BlockRenderComponent implements OnInit {
-  @Input() public languageModel: LanguageModel;
+  @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: EditorBlockDescriptions.EditorBlockBase;
 
