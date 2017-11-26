@@ -1,5 +1,3 @@
-import { LANGUAGE_DESCRIPTION } from '../../syntaxtree/regex'
-
 import { LanguageModelDescription } from '../language-model.description'
 import {
   SidebarBlockDescription, EditorBlockDescription, EditorBlockDescriptions
@@ -8,7 +6,6 @@ import {
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "regex",
   name: "Reguläre Ausdrücke",
-  language: LANGUAGE_DESCRIPTION,
   sidebarBlocks: [
     {
       describedType: {

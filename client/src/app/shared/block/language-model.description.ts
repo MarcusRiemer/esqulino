@@ -1,5 +1,3 @@
-import { LanguageDescription } from '../syntaxtree'
-
 import { SidebarBlockDescription, EditorBlockDescription } from './block.description'
 
 /**
@@ -15,11 +13,6 @@ export interface LanguageModelDescription {
    * The name that should be displayed to the user.
    */
   name: string;
-
-  /**
-   * The actual language that is augmented.
-   */
-  language: LanguageDescription;
 
   /**
    * All blocks that should be shown in the sidebar.
