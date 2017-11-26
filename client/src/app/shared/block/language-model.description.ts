@@ -14,7 +14,7 @@ export interface LanguageModelDescription {
   /**
    * The name that should be displayed to the user.
    */
-  displayName: string;
+  name: string;
 
   /**
    * The actual language that is augmented.

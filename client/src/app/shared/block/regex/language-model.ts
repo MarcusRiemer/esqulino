@@ -7,7 +7,7 @@ import {
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "regex",
-  displayName: "Reguläre Ausdrücke",
+  name: "Reguläre Ausdrücke",
   language: LANGUAGE_DESCRIPTION,
   sidebarBlocks: [
     {

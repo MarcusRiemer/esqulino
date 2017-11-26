@@ -6,7 +6,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
 import { LanguageModel, EditorBlockDescriptions } from '../../../shared/block';
 
-import { DragService } from '../drag.service';
+import { DragService } from '../../drag.service';
+
 import { TreeEditorService } from '../editor.service';
 
 /**

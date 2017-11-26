@@ -8,7 +8,8 @@ export const CODE_RESOURCES: CodeResourceDescription[] = [
     id: "regex-empty",
     name: "RegEx: Leer",
     ast: undefined,
-    languageId: "regex"
+    languageId: "regex",
+    languageModelId: "regex",
   },
   {
     apiVersion: CURRENT_API_VERSION,
@@ -83,13 +84,15 @@ export const CODE_RESOURCES: CodeResourceDescription[] = [
         ]
       }
     },
-    languageId: "regex"
+    languageId: "regex",
+    languageModelId: "regex",
   },
   {
     apiVersion: CURRENT_API_VERSION,
     id: "dxml-empty",
     name: "XML: Leer",
     ast: undefined,
-    languageId: "dxml"
+    languageId: "dxml",
+    languageModelId: "dxml",
   }
 ];

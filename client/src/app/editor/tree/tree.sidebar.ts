@@ -1,12 +1,12 @@
 import { Component, Input, OnInit, OnDestroy, Inject } from '@angular/core'
 
+import { LanguageService } from '../../shared/language.service';
 import { QualifiedTypeName, NodeDescription, NodeType } from '../../shared/syntaxtree'
 import { LanguageModel, SidebarBlock } from '../../shared/block'
 
 import { SIDEBAR_MODEL_TOKEN } from '../editor.token'
 
-import { DragService } from './drag.service'
-import { LanguageService } from './language.service'
+import { DragService } from '../drag.service';
 import { TreeEditorService } from './editor.service'
 
 /**

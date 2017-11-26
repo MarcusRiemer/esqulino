@@ -13,12 +13,12 @@ export class LanguageModel {
   private _language: Language;
   private _sidebarBlocks: SidebarBlock[];
   private _editorBlocks: EditorBlockDescription[] = [];
-  private _displayName: string;
+  private _name: string;
   private _id: string;
 
   constructor(desc: LanguageModelDescription) {
     this._id = desc.id;
-    this._displayName = desc.displayName;
+    this._name = desc.name;
 
     this._language = new Language(desc.language);
     this._sidebarBlocks = desc.sidebarBlocks.map(blockDesc => new SidebarBlock(blockDesc));
@@ -35,8 +35,8 @@ export class LanguageModel {
   /**
    * @return The user friendly name of this language model
    */
-  get displayName() {
-    return (this._displayName);
+  get name() {
+    return (this._name);
   }
 
   /**

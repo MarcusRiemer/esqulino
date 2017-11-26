@@ -3,11 +3,12 @@ import { Observable } from 'rxjs/Observable'
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
+import { LanguageService } from '../../../shared/language.service';
+
 import { ToolbarService } from '../../toolbar.service';
 
 import { TreeEditorService } from '../editor.service';
-import { DragService } from '../drag.service';
-import { LanguageService } from '../language.service';
+import { DragService } from '../../drag.service';
 
 /**
  * The "usual" editor folks will interact with. Displays all sorts
@@ -40,17 +41,11 @@ export class BlockEditorComponent implements OnInit {
     });
   }
 
-  get selectedLanguageId() {
-    const resource = this._treeService.peekResource;
-    if (resource) {
-      return (resource.languageId);
-    } else {
-      return (undefined);
-    }
-  }
-
-  set selectedLanguageId(id: string) {
-    this._treeService.setLanguageModel(this._languageService.getLanguageModel(id));
+  /**
+   * @return The resource that is currently edited
+   */
+  get currentResource() {
+    return (this._treeService.currentResource);
   }
 
   /**
@@ -60,26 +55,5 @@ export class BlockEditorComponent implements OnInit {
    */
   public onDragEnter(evt: DragEvent) {
     this._dragService.informDraggedOverEditor();
-  }
-
-  /**
-   * @return The tree that is currently edited.
-   */
-  get currentTree() {
-    return (this._treeService.currentTree);
-  }
-
-  /**
-   * @return The language model that is currently in use.
-   */
-  get currentLanguageModel() {
-    return (this._treeService.currentLanguageModel);
-  }
-
-  /**
-   * @return All available language models
-   */
-  get availableLanguageModels() {
-    return (this._languageService.availableLanguageModels);
   }
 }

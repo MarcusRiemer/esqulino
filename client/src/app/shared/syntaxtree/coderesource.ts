@@ -24,46 +24,88 @@ export class CodeResource extends ProjectResource {
 
   private _languageId = new BehaviorSubject<string>(undefined);
 
-  constructor(desc: CodeResourceDescription, project?: Project) {
+  private _languageModelId = new BehaviorSubject<string>(undefined);
+
+  constructor(
+    desc: CodeResourceDescription,
+    project?: Project,
+  ) {
     super(desc, project);
 
-    this.replaceSyntaxTree(desc.ast);
-    this.languageId = desc.languageId;
+    this._tree.next(new Tree(desc.ast));
+    this._languageId.next(desc.languageId);
+    this._languageModelId.next(desc.languageModelId);
   }
 
   /**
    * @return The ID of the language this resource uses.
    */
-  get languageId() {
+  get languageIdPeek() {
     return (this._languageId.value);
   }
 
   /**
    * @return An observable value of the language this id uses.
    */
-  get languageIdObs(): Observable<string> {
+  get languageId(): Observable<string> {
     return (this._languageId);
+  }
+
+  /**
+   * @return The language that is currently in use
+   */
+  get language() {
+    return (this._languageId.map(l => this.project.getLanguageById(l)));
+  }
+
+  /**
+   * @return The language that is currently in use
+   */
+  get languageModel() {
+    return (this._languageModelId.map(l => this.project.getLanguageModelById(l)));
   }
 
   /**
    * @param newId The ID of the new language this resource adheres to.
    */
-  set languageId(newId: string) {
+  setLanguageId(newId: string) {
     this._languageId.next(newId);
+    this.markSaveRequired();
+  }
+
+  /**
+   * @return The ID of the language this resource uses.
+   */
+  get languageModelIdPeek() {
+    return (this._languageModelId.value);
+  }
+
+  /**
+   * @return An observable value of the language this id uses.
+   */
+  get languageModelId(): Observable<string> {
+    return (this._languageModelId);
+  }
+
+  /**
+   * @param newId The ID of the new language this resource adheres to.
+   */
+  setLanguageModelId(newId: string) {
+    this._languageModelId.next(newId);
     this.markSaveRequired();
   }
 
   /**
    * @return A peek at the tree that describes the code of this resource.
    */
-  get syntaxTree(): Tree {
+  get syntaxTreePeek(): Tree {
     return (this._tree.value);
   }
 
   /**
    * @return The tree that describes the code of this resource.
    */
-  get obsSyntaxTree(): Observable<Tree> {
+  get syntaxTree(): Observable<Tree> {
     return (this._tree);
   }
 
@@ -76,7 +118,7 @@ export class CodeResource extends ProjectResource {
   replaceNode(loc: NodeLocation, desc: NodeDescription) {
     console.log(`Replacing node at ${JSON.stringify(loc)} with`, desc);
 
-    this.replaceSyntaxTree(this.syntaxTree.replaceNode(loc, desc));
+    this.replaceSyntaxTree(this.syntaxTreePeek.replaceNode(loc, desc));
   }
 
   /**
@@ -88,7 +130,7 @@ export class CodeResource extends ProjectResource {
   insertNode(loc: NodeLocation, desc: NodeDescription) {
     console.log(`Inserting node at ${JSON.stringify(loc)}`, desc);
 
-    this.replaceSyntaxTree(this.syntaxTree.insertNode(loc, desc));
+    this.replaceSyntaxTree(this.syntaxTreePeek.insertNode(loc, desc));
   }
 
   /**
@@ -99,7 +141,7 @@ export class CodeResource extends ProjectResource {
   deleteNode(loc: NodeLocation) {
     console.log(`Deleting node at ${JSON.stringify(loc)}`);
 
-    this.replaceSyntaxTree(this.syntaxTree.deleteNode(loc));
+    this.replaceSyntaxTree(this.syntaxTreePeek.deleteNode(loc));
   }
 
   /**
@@ -112,7 +154,7 @@ export class CodeResource extends ProjectResource {
   setProperty(loc: NodeLocation, key: string, value: string) {
     console.log(`Setting ${JSON.stringify(loc)} "${key}"="${value}"`);
 
-    this.replaceSyntaxTree(this.syntaxTree.setProperty(loc, key, value));
+    this.replaceSyntaxTree(this.syntaxTreePeek.setProperty(loc, key, value));
   }
 
   /**
@@ -124,7 +166,7 @@ export class CodeResource extends ProjectResource {
   addProperty(loc: NodeLocation, key: string) {
     console.log(`Adding ${JSON.stringify(loc)} property "${key}"`);
 
-    this.replaceSyntaxTree(this.syntaxTree.addProperty(loc, key));
+    this.replaceSyntaxTree(this.syntaxTreePeek.addProperty(loc, key));
   }
 
   /**
@@ -137,7 +179,7 @@ export class CodeResource extends ProjectResource {
   renameProperty(loc: NodeLocation, key: string, newKey: string) {
     console.log(`Renaming property at ${JSON.stringify(loc)} from "${key}" to "${newKey}"`);
 
-    this.replaceSyntaxTree(this.syntaxTree.renameProperty(loc, key, newKey));
+    this.replaceSyntaxTree(this.syntaxTreePeek.renameProperty(loc, key, newKey));
   }
 
   /**
@@ -149,7 +191,7 @@ export class CodeResource extends ProjectResource {
   addChildGroup(loc: NodeLocation, key: string) {
     console.log(`Adding empty childgroup "${key}" at ${JSON.stringify(loc)}`);
 
-    this.replaceSyntaxTree(this.syntaxTree.addChildGroup(loc, key));
+    this.replaceSyntaxTree(this.syntaxTreePeek.addChildGroup(loc, key));
   }
 
 
@@ -173,8 +215,9 @@ export class CodeResource extends ProjectResource {
       id: this.id,
       name: this.name,
       apiVersion: this.apiVersion,
-      ast: this.syntaxTree.toModel(),
-      languageId: this.languageId
+      ast: this.syntaxTreePeek.toModel(),
+      languageId: this.languageIdPeek,
+      languageModelId: this.languageModelIdPeek,
     });
   }
 

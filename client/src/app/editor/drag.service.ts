@@ -2,13 +2,13 @@ import { Observable, BehaviorSubject } from 'rxjs'
 
 import { Injectable } from '@angular/core'
 
-import { arrayEqual } from '../../shared/util'
-import { Node, NodeDescription, NodeLocation } from '../../shared/syntaxtree'
-import { SidebarBlock } from '../../shared/block'
+import { arrayEqual } from '../shared/util'
+import { Node, NodeDescription, NodeLocation } from '../shared/syntaxtree'
+import { SidebarBlock } from '../shared/block'
 
-import { TrashService } from '../shared/trash.service'
+import { TrashService } from './shared/trash.service'
 
-import { TreeEditorService } from './editor.service'
+import { TreeEditorService } from './tree/editor.service'
 
 /**
  * All information about the origin of this drag if it came from
