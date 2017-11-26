@@ -1,4 +1,4 @@
-import { NodeDescription, Language, QualifiedTypeName, typenameEquals } from '../syntaxtree'
+import { Tree, NodeDescription, Language, QualifiedTypeName, typenameEquals } from '../syntaxtree'
 
 import { SidebarBlock } from './sidebar-block'
 import { EditorBlock } from './editor-block'
@@ -73,6 +73,23 @@ export class LanguageModel {
       .map(t => t.qualifiedName);
 
     return (missing);
+  }
+
+  /**
+   * @return True, if the given tree can be rendered
+   */
+  canRenderTree(tree: Tree): boolean {
+    const types = Array.from(tree.typesPresent)
+      .map(type => JSON.parse(type) as QualifiedTypeName);
+
+    return (types.every(type => this.hasEditorBlock(type)));
+  }
+
+  /**
+   * @return True, if a editor block is present for the given type
+   */
+  hasEditorBlock(t: QualifiedTypeName) {
+    return (!!this._editorBlocks.find(b => typenameEquals(b.describedType, t)));
   }
 
   /**

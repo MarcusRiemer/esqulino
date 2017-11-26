@@ -1,3 +1,5 @@
+import { Tree } from 'app/shared/syntaxtree';
+
 import { LanguageModelDescription } from './language-model.description'
 import { LanguageModel } from './language-model'
 import { SidebarBlockDescription, EditorBlockDescriptions } from './block.description'
@@ -92,17 +94,58 @@ const langEmptyBlocks: LanguageModelDescription = {
 }
 
 describe("LanguageModel", () => {
-  it("Empty Blocks: Loads correctly", () => {
+  it("Loads correctly", () => {
     const l = new LanguageModel(langEmptyBlocks);
 
     expect(l.missingEditorBlocks.length).toEqual(1);
     expect(l.missingEditorBlocks[0]).toEqual({ languageName: "emptyBlocks", typeName: "z" });
   });
 
-  it("Empty Blocks: Constructing default root with children", () => {
+  it("Constructing default root with children", () => {
     const l = new LanguageModel(langEmptyBlocks);
 
     const n = l.constructDefaultNode({ languageName: "emptyBlocks", typeName: "root" });
     expect(Object.keys(n.children)).toEqual(["cat_a"]);
+  });
+
+  it("Rejects to render a tree with only unknown types", () => {
+    const l = new LanguageModel(langEmptyBlocks);
+    const t = new Tree({
+      language: "l",
+      name: "n1"
+    });
+
+    expect(l.canRenderTree(t)).toBe(false);
+  });
+
+  it("Rejects to render a tree with only partially known types", () => {
+    const l = new LanguageModel(langEmptyBlocks);
+    const t = new Tree({
+      language: "emptyBlocks",
+      name: "root",
+      children: {
+        "bla": [
+          { language: "l", name: "n1" }
+        ]
+      }
+    });
+
+    expect(l.canRenderTree(t)).toBe(false);
+  });
+
+  it("Promises to render a tree with only known types", () => {
+    const l = new LanguageModel(langEmptyBlocks);
+    const t = new Tree({
+      language: "emptyBlocks",
+      name: "root",
+      children: {
+        "bla": [
+          { language: "emptyBlocks", name: "a" },
+          { language: "emptyBlocks", name: "a" },
+        ]
+      }
+    });
+
+    expect(l.canRenderTree(t)).toBe(true);
   });
 });

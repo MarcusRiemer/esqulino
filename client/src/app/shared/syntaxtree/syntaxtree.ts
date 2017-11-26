@@ -233,6 +233,20 @@ export class Node {
       return (this._nodeParent.treePathImpl(prev));
     }
   }
+
+  /**
+   * Collects all typenames that exist as part of this tree. Because JavaScript Sets
+   * compare things by reference we have to serialize all qualified names to JSON-strings
+   * and rework them later ...
+   */
+  collectTypes(collected: Set<string>) {
+    collected.add(JSON.stringify(this.qualifiedName));
+    Object.values(this.children).forEach(cat => {
+      cat.forEach(n => n.collectTypes(collected));
+    });
+
+    return (collected);
+  }
 }
 
 /**
@@ -275,6 +289,17 @@ export class Tree {
       return (undefined);
     } else {
       return (this.rootNode.toModel());
+    }
+  }
+
+  /**
+   * @return All types that are present in this tree, sadly as a Set of "JSON-strings".
+   */
+  get typesPresent(): Set<string> {
+    if (this.isEmpty) {
+      return (new Set());
+    } else {
+      return (this.rootNode.collectTypes(new Set()));
     }
   }
 
