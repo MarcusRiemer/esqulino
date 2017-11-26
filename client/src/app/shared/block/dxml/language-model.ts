@@ -7,7 +7,7 @@ import {
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "dxml",
-  displayName: "Dynamisches XML",
+  name: "Dynamisches XML",
   language: LANGUAGE_DESCRIPTION,
   sidebarBlocks: [
     {

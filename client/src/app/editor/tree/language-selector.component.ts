@@ -6,15 +6,18 @@ import { LanguageService } from '../../shared/language.service';
 import { TreeEditorService } from './editor.service';
 
 /**
- * Provides a convenient way to select language models.
+ * Provides a convenient way to select languages.
  */
 @Component({
-  templateUrl: 'templates/language-model-selector.html',
-  selector: 'language-model-selector'
+  templateUrl: 'templates/language-selector.html',
+  selector: 'language-selector'
 })
-export class LanguageModelSelectorComponent {
+export class LanguageSelectorComponent {
 
   @Input() codeResource: CodeResource;
+
+  // Backing field for the selected language
+  private _selectedLanguageId: string;
 
   constructor(
     private _treeService: TreeEditorService,
@@ -25,23 +28,22 @@ export class LanguageModelSelectorComponent {
   /**
    * @return All available language models
    */
-  get availableLanguageModels() {
-    return (this._languageService.availableLanguageModels);
+  get availableLanguages() {
+    return (this._languageService.availableLanguages);
   }
 
   /**
    * @return The ID of the currently selected language
    */
-  @Input()
-  get selectedLanguageModelId() {
-    return (this.codeResource.languageModelIdPeek);
+  get selectedLanguageId() {
+    return (this.codeResource.languageIdPeek);
   }
 
   /**
    * Sets the ID of the new language and broadcasts the change.
    */
-  set selectedLanguageModelId(id: string) {
-    this.codeResource.setLanguageModelId(id);
+  set selectedLanguageId(id: string) {
+    this.codeResource.setLanguageId(id);
   }
 
 }

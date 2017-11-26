@@ -17,6 +17,7 @@ import * as RegEx from './regex'
 export const AvailableLanguages = {
   Sql: new Language(Sql.LANGUAGE_DESCRIPTION),
   Xml: new Language(Xml.LANGUAGE_DESCRIPTION),
+  DXml: new Language(DynamicXml.LANGUAGE_DESCRIPTION),
   RegEx: new Language(RegEx.LANGUAGE_DESCRIPTION),
   All: new Language({
     id: "all",

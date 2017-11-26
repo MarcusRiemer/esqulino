@@ -7,6 +7,7 @@ import { HttpModule } from '@angular/http'
 import { FlashMessageListComponent } from './flash.component'
 import { FlashService } from './flash.service'
 import { ProjectDescriptionService } from './project.description.service'
+import { LanguageService } from './language.service'
 import { ServerApiService } from './serverapi.service'
 import { VideoService } from './video.service'
 
@@ -44,8 +45,8 @@ export class SharedAppModule {
         FlashService,
         ServerApiService,
         ProjectDescriptionService,
-        VideoService
-        // provide(ExceptionHandler, { useClass: EsqulinoExceptionHandler })
+        VideoService,
+        LanguageService,
       ]
     });
   }

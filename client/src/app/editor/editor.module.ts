@@ -17,6 +17,7 @@ import { editorRouting } from './editor.routes'
 import { ProjectExistsGuard } from './project-exists.guard'
 
 import { PageService } from './page.service'
+import { DragService } from './drag.service'
 import { ProjectService, Project } from './project.service'
 import { ToolbarService } from './toolbar.service'
 import { ToolbarComponent } from './toolbar.component'
@@ -40,7 +41,7 @@ import { SettingsComponent } from './settings.component'
     PageEditorModule.forRoot(),
     QueryEditorModule.forRoot(),
     SchemaEditorModule.forRoot(),
-    SyntaxTreeEditorModule.forRoot()
+    SyntaxTreeEditorModule
   ],
   declarations: [
     EditorComponent,
@@ -50,6 +51,7 @@ import { SettingsComponent } from './settings.component'
     SettingsComponent,
   ],
   providers: [
+    DragService as any,
     SidebarService,
     RegistrationService,
     PageService,

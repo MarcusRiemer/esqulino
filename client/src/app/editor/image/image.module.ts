@@ -19,9 +19,6 @@ import { ImageService } from './image.service'
     ImageEditComponent,
     ImageSelectorComponent,
   ],
-  providers: [
-    ImageService
-  ],
   entryComponents: [
   ],
   exports: [
@@ -32,7 +29,7 @@ export class ImageEditorModule {
   static forRoot(): ModuleWithProviders {
     return ({
       ngModule: ImageEditorModule,
-      providers: []
+      providers: [ImageService]
     });
   }
 

@@ -7,9 +7,8 @@ import { CodeGeneratorComponent } from './code-generator.component'
 import { DraggableDirective } from './draggable.directive'
 import { DropTargetDirective } from './drop-target.directive'
 import { DropPlaceholderDirective } from './drop-placeholder.directive'
-import { DragService } from './drag.service'
-import { LanguageService } from './language.service'
 import { LanguageModelSelectorComponent } from './language-model-selector.component'
+import { LanguageSelectorComponent } from './language-selector.component'
 import { TreeSidebarComponent } from './tree.sidebar'
 import { ValidationComponent } from './validation.component'
 
@@ -51,19 +50,13 @@ import { BlockRenderIteratorComponent } from './block/block-render-iterator.comp
     ValidationComponent,
     TreeSidebarComponent,
     LanguageModelSelectorComponent,
+    LanguageSelectorComponent,
   ],
   entryComponents: [
     TreeSidebarComponent
   ]
 })
 export class SyntaxTreeEditorModule {
-  static forRoot(): ModuleWithProviders {
-    return ({
-      ngModule: SyntaxTreeEditorModule,
-      providers: [DragService, LanguageService]
-    } as ModuleWithProviders);
-  }
-
   constructor(reg: RegistrationService) {
     console.log("Registering TreeEditor ...");
 

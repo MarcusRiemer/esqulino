@@ -10,11 +10,11 @@ import {
 } from '../../shared/syntaxtree';
 
 import { LanguageModel, AvailableLanguageModels } from '../../shared/block'
+import { LanguageService } from '../../shared/language.service';
 
 import { ProjectService, Project } from '../project.service';
 import { SidebarService } from '../sidebar.service';
 
-import { LanguageService } from './language.service';
 import { TreeSidebarComponent } from './tree.sidebar';
 
 /**
@@ -36,19 +36,8 @@ export class TreeEditorService implements OnInit, OnDestroy {
    * The resource that is currently edited.
    */
   private _codeResource = new BehaviorSubject<CodeResource>(undefined);
-  /**
-   * The subscription to the currently edited resource. This needs
-   * to be released if the resource changes.
-   */
-  private _codeResourceSub: Subscription;
 
-  private _languageModelObs = this._codeResource.map(r => {
-    if (r) {
-      return (this._languageService.getLanguageModel(r.languageId));
-    } else {
-      return (undefined);
-    }
-  });
+  private _currentTree: Observable<Tree> = Observable.of(undefined);
 
   private _validationResult = new BehaviorSubject<ValidationResult>(ValidationResult.EMPTY);
   private _generatedCode = new BehaviorSubject<string>("");
@@ -77,16 +66,31 @@ export class TreeEditorService implements OnInit, OnDestroy {
 
       // Assign the resource and a matching language
       const resource = this._projectService.cachedProject.getCodeResourceById(codeResourceId);
-
-      this.setCodeResource(resource);
-      this.setLanguageModel(this._languageService.getLanguageModel(resource.languageId));
-
-      // Create the new sidebar
-      this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this);
+      this._codeResource.next(resource);
     });
 
     this._subscriptionRefs.push(subRef);
   }
+
+  /**
+   * Things that need to happen every time the resource changes
+   */
+  private readonly onResourceChange = this._codeResource
+    .distinctUntilChanged()
+    .filter(r => !!r)
+    .do(r => {
+      console.log("New resource!", r);
+
+      // Show the new sidebar
+      this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this);
+
+      // Reset all caches
+      this.resetCaches();
+
+      // Assign specific caches
+      this._currentTree = this._codeResource.value.syntaxTree;
+    })
+    .subscribe();
 
   /**
    * Freeing all subscriptions
@@ -96,24 +100,8 @@ export class TreeEditorService implements OnInit, OnDestroy {
     this._subscriptionRefs = [];
   }
 
-  /**
-   * @param res The code resource that is beeing edited.
-   */
-  private setCodeResource(res: CodeResource) {
-    // Do we have any previous subscription? If so, it needs to be cancelled
-    if (this._codeResourceSub) {
-      this._codeResourceSub.unsubscribe();
-    }
-
-    // Assign the new resource 
-    this._codeResource.next(res);
-    this.resetCaches();
-
-    // Also reset the cache every time that tree changes
-    this._codeResourceSub = this.peekResource.obsSyntaxTree.subscribe(tree => {
-      console.log("Cache reset", tree)
-      this.resetCaches();
-    });
+  get currentResource(): Observable<CodeResource> {
+    return (this._codeResource);
   }
 
   /**
@@ -162,7 +150,7 @@ export class TreeEditorService implements OnInit, OnDestroy {
    * @return The tree that is currently edited.
    */
   private get peekTree() {
-    return (this.peekResource.syntaxTree);
+    return (this.peekResource.syntaxTreePeek);
   }
 
   /**
@@ -170,13 +158,6 @@ export class TreeEditorService implements OnInit, OnDestroy {
    */
   get peekResource() {
     return (this._codeResource.value);
-  }
-
-  /**
-   * @return An observable of the tree that is currently edited.
-   */
-  get currentTree(): Observable<Tree> {
-    return (this.peekResource.obsSyntaxTree);
   }
 
   /**
@@ -194,26 +175,11 @@ export class TreeEditorService implements OnInit, OnDestroy {
   }
 
   /**
-   * @param lang The new LanguageModel to use
-   */
-  setLanguageModel(lang: LanguageModel) {
-    this.peekResource.languageId = lang.id;
-    this.resetCaches();
-  }
-
-  /**
-   * @return The languagemodel that is currently in use.
-   */
-  get currentLanguageModel(): Observable<LanguageModel> {
-    return (this._languageModelObs);
-  }
-
-  /**
    * @return The language that is used by the current language model
    */
-  get peekLanguage() {
+  private get peekLanguage() {
     if (this.peekResource) {
-      const languageModel = this._languageService.getLanguageModel(this.peekResource.languageId);
+      const languageModel = this._languageService.getLanguageModel(this.peekResource.languageIdPeek);
       return (languageModel.language);
     } else {
       return (undefined);

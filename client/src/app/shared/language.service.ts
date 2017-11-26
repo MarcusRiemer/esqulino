@@ -3,8 +3,8 @@ import { Injectable, Type } from '@angular/core'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { Observable } from 'rxjs/Observable'
 
-import { AvailableLanguages, Language } from '../../shared/syntaxtree'
-import { AvailableLanguageModels, LanguageModel } from '../../shared/block'
+import { AvailableLanguages, Language } from './syntaxtree'
+import { AvailableLanguageModels, LanguageModel } from './block'
 
 /**
  * Groups together information about available languages.

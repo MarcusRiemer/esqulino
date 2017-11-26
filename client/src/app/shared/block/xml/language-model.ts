@@ -5,7 +5,7 @@ import { SidebarBlockDescription } from '../block.description'
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "xml",
-  displayName: "Allgemeines XML",
+  name: "Allgemeines XML",
   language: LANGUAGE_DESCRIPTION,
   sidebarBlocks: [
     {

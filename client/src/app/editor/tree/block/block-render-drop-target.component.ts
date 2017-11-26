@@ -5,7 +5,8 @@ import { arrayEqual } from '../../../shared/util';
 import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
 import { LanguageModel, EditorBlockDescriptions } from '../../../shared/block';
 
-import { DragService } from '../drag.service';
+import { DragService } from '../../drag.service';
+
 import { TreeEditorService } from '../editor.service';
 
 /**
@@ -119,7 +120,7 @@ export class BlockRenderDropTargetComponent {
             return ("available");
           } else if (flags.some(f => f === "ifLegalDrag")) {
             const newNode = drag.draggedDescription;
-            const oldTree = this._treeService.peekResource.syntaxTree;
+            const oldTree = this._treeService.peekResource.syntaxTreePeek;
             const newTree = oldTree.insertNode(this.dropLocation, newNode);
 
             const result = this._treeService.peekLanguage.validateTree(newTree);

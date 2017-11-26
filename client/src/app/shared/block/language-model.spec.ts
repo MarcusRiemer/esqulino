@@ -4,7 +4,7 @@ import { SidebarBlockDescription, EditorBlockDescriptions } from './block.descri
 
 const langEmptyBlocks: LanguageModelDescription = {
   id: "emptyblocks",
-  displayName: "Empty Blocks",
+  name: "Empty Blocks",
   language: {
     id: "emptyBlocks",
     name: "emptyBlocks",

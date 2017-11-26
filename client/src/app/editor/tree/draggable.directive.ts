@@ -2,7 +2,7 @@ import { Directive, ElementRef, Input } from '@angular/core';
 
 import { Node } from '../../shared/syntaxtree';
 
-import { DragService } from './drag.service';
+import { DragService } from '../drag.service';
 import { TreeEditorService } from './editor.service'
 
 /**

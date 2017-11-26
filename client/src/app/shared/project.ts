@@ -2,6 +2,8 @@ import { Subject } from 'rxjs/Subject'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { Observable } from 'rxjs/Observable'
 
+import { LanguageService } from './language.service'
+
 import { Schema } from './schema/schema'
 import {
   Invalidateable, Saveable, SaveStateEvent
@@ -13,7 +15,7 @@ import {
 } from './project.description'
 
 import { Page } from './page/page'
-import { CodeResource } from './syntaxtree/coderesource'
+import { CodeResource } from './syntaxtree'
 
 export { ProjectDescription }
 
@@ -63,7 +65,10 @@ export class Project implements ApiVersion, Saveable {
    * Construct a new project and a whole slew of other
    * objects based on the JSON wire format.
    */
-  constructor(json: ProjectDescription) {
+  constructor(
+    json: ProjectDescription,
+    private _languageService: LanguageService
+  ) {
     this.id = json.id;
     this._name = json.name;
     this._description = json.description;
@@ -396,6 +401,20 @@ export class Project implements ApiVersion, Saveable {
    */
   getCodeResourceById(id: string) {
     return (this._codeResources.find(res => res.id === id));
+  }
+
+  /**
+   * @param id The id for a certain language
+   */
+  getLanguageById(id: string) {
+    return (this._languageService.getLanguage(id));
+  }
+
+  /**
+   * @param id The id for a certain languageModel
+   */
+  getLanguageModelById(id: string) {
+    return (this._languageService.getLanguageModel(id));
   }
 
 

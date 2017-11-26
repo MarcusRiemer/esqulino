@@ -1,50 +1,67 @@
 <div class="ast"
      (dragenter)="onDragEnter($event)">
-  <div class="content">    
-    <div class="card mb-3">
-      <div class="card-body">
-        <h4 class="card-title">Block-Editor</h4>
-        <p>Gehen Sie weiter, hier gibt es nichts zu sehen …</p>
-        <language-model-selector [(selectedLanguageId)]="selectedLanguageId"></language-model-selector>
-      </div>
-
-      <!-- Ensuring there is a selected language model -->
-      <ng-container *ngIf="(currentLanguageModel | async); let currentLanguageModel;">
+  <!-- Ensuring there is a selected resource -->
+  <ng-container *ngIf="(currentResource | async); let currentResource"> 
+    <div class="content">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h4 class="card-title">Block-Editor</h4>
+          <div class="row">
+            <div class="col-sm-6">
+              Sprache:
+            </div>
+            <div class="col-sm-6">
+              <language-selector [codeResource]="currentResource">
+              </language-selector>
+            </div>
+            <div class="col-sm-6">
+              GUI-Modell:
+            </div>
+            <div class="col-sm-6">
+              <language-model-selector [codeResource]="currentResource">
+              </language-model-selector>
+            </div>
+          </div>
+        </div>
         
-        <!-- Ensuring there is a tree -->
-        <ng-container *ngIf="(currentTree | async); let currentTree;">
-          <div *ngIf="currentTree.isEmpty"
-               class="card-body">
-            Noch ist kein Code da! Ziehe einen Block aus der Seitenleiste auf den freien Platz um mit der Programmierung zu beginnen!
-            <ast-node-placeholder [alwaysVisible]="true"
-                                  [location]="[]">
-              Freier Platz
-            </ast-node-placeholder>
-          </div>
+        <!-- Ensuring there is a selected language model -->
+        <ng-container *ngIf="(currentResource.languageModel | async); let currentLanguageModel;">
 
-          <div *ngIf="!currentTree.isEmpty"
-               class="card-body block-editor">
-            <editor-block-host [languageModel]="currentLanguageModel"
-                               [node]="currentTree.rootNode"></editor-block-host>
-          </div>
+          <!-- Ensuring there is a tree -->
+          <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
+            <div *ngIf="currentTree.isEmpty"
+                 class="card-body">
+              Noch ist kein Code da! Ziehe einen Block aus der Seitenleiste auf den freien Platz um mit der Programmierung zu beginnen!
+              <ast-node-placeholder [alwaysVisible]="true"
+                                    [location]="[]">
+                Freier Platz
+              </ast-node-placeholder>
+            </div>
+
+            <div *ngIf="!currentTree.isEmpty"
+                 class="card-body block-editor">
+              <editor-block-host [languageModel]="currentLanguageModel"
+                                 [node]="currentTree.rootNode"></editor-block-host>
+            </div>
+          </ng-container>
         </ng-container>
-      </ng-container>
-    </div>
+      </div>
 
-    <div class="card mb-3">
-      <div class="card-body">
-        <h4 class="card-title">Validierung</h4>
-        <ast-validation>
-        </ast-validation>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h4 class="card-title">Validierung</h4>
+          <ast-validation>
+          </ast-validation>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <h4 class="card-title">Kompilierung</h4>
+          <ast-code-generator>
+          </ast-code-generator>
+        </div>
       </div>
     </div>
-
-    <div class="card mb-3">
-      <div class="card-body">
-        <h4 class="card-title">Kompilierung</h4>
-        <ast-code-generator>
-        </ast-code-generator>
-      </div>
-    </div>
-  </div>
+  </ng-container>
 </div>

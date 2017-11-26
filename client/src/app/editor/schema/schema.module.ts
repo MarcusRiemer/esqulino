@@ -29,9 +29,6 @@ import { TableEditorSidebarControlsComponent } from './table-editor-controls.sid
     TableEditorSidebarStackComponent,
     TableEditorSidebarControlsComponent
   ],
-  providers: [
-    SchemaService
-  ],
   entryComponents: [
     TableEditorSidebarStackComponent,
     TableEditorSidebarControlsComponent
@@ -44,7 +41,7 @@ export class SchemaEditorModule {
   static forRoot(): ModuleWithProviders {
     return ({
       ngModule: SchemaEditorModule,
-
+      providers: [SchemaService]
     });
   }
 

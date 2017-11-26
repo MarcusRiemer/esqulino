@@ -8,7 +8,8 @@ import {
 import { arrayEqual } from '../../../shared/util'
 import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
 
-import { DragService } from '../drag.service';
+import { DragService } from '../../drag.service';
+
 import { TreeEditorService } from '../editor.service';
 
 import { DROP_TARGET_ANIMATION } from './node.animation';
