@@ -219,14 +219,28 @@ export class CodeResource extends ProjectResource {
    */
   readonly validationResult = Observable
     .combineLatest(this.syntaxTree, this.language, (tree, lang) => {
-      console.log("Possibly new result", tree, lang);
       if (tree && lang) {
         return (lang.validateTree(tree));
       } else {
         return (ValidationResult.EMPTY);
       }
+    });
+
+  /**
+   * @return The latest generated code for this resource.
+   */
+  readonly generatedCode = Observable
+    .combineLatest(this.syntaxTree, this.language, (tree, lang) => {
+      if (tree && !tree.isEmpty && lang) {
+        try {
+          return (lang.emitTree(tree));
+        } catch (e) {
+          return (e.toString());
+        }
+      } else {
+        return ("");
+      }
     })
-    .do(res => console.log("New result", res));
 
   /**
    * @return Serialized description of this code resource.
