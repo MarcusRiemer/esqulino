@@ -1,19 +1,21 @@
-<table *ngIf="!(result | async).isValid"
-       class="table">
-  <thead>
-    <tr>
-      <th>Ort</th>
-      <th>Code</th>
-      <th>Daten</th>
+<ng-container *ngIf="codeResource?.validationResult | async; let result;">
+  <table *ngIf="!result.isValid"
+         class="table">
+    <thead>
+      <tr>
+        <th>Ort</th>
+        <th>Code</th>
+        <th>Daten</th>
+      </tr>
+    </thead>
+    <tr *ngFor="let error of result.errors">
+      <td>
+        <ng-container *ngIf="error.node">
+          {{ error.node.typeName }} <code>{{ error.node.location | json }}</code>
+        </ng-container>
+      </td>
+      <td>{{ error.code }}</td>
+      <td>{{ error.data | json }}</td>
     </tr>
-  </thead>
-  <tr *ngFor="let error of (result | async).errors">
-    <td>
-      <ng-container *ngIf="error.node">
-        {{ error.node.typeName }} <code>{{ error.node.location | json }}</code>
-      </ng-container>
-    </td>
-    <td>{{ error.code }}</td>
-    <td>{{ error.data | json }}</td>
-  </tr>
-</table>
+  </table>
+</ng-container>
