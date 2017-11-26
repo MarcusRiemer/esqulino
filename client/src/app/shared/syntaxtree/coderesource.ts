@@ -52,6 +52,13 @@ export class CodeResource extends ProjectResource {
   }
 
   /**
+   * @return A snapshot of the language that is currently in use.
+   */
+  get languagePeek() {
+    return (this.project.getLanguageById(this.languageIdPeek));
+  }
+
+  /**
    * @return The language that is currently in use
    */
   get language() {

@@ -82,7 +82,7 @@ export class TreeEditorService implements OnInit, OnDestroy {
       console.log("New resource!", r);
 
       // Show the new sidebar
-      this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, this);
+      this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, r);
 
       // Reset all caches
       this.resetCaches();

@@ -53,10 +53,7 @@ export class RawTreeEditorComponent implements OnInit {
     return (this._dragService);
   }
 
-  /**
-   * @return The observable tree that is edited by this editor.
-   */
-  get currentTree() {
-    return (this._treeService.currentTree);
+  get currentResource() {
+    return (this._treeService.currentResource);
   }
 }

@@ -123,7 +123,7 @@ export class BlockRenderDropTargetComponent {
             const oldTree = this._treeService.peekResource.syntaxTreePeek;
             const newTree = oldTree.insertNode(this.dropLocation, newNode);
 
-            const result = this._treeService.peekLanguage.validateTree(newTree);
+            const result = this._treeService.peekResource.languagePeek.validateTree(newTree);
             if (result.isValid) {
               return ("available");
             } else {
