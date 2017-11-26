@@ -10,7 +10,6 @@ import { EditorBlockDescription } from './block.description'
  * display elements of that languages using blocks.
  */
 export class LanguageModel {
-  private _language: Language;
   private _sidebarBlocks: SidebarBlock[];
   private _editorBlocks: EditorBlockDescription[] = [];
   private _name: string;
@@ -20,13 +19,12 @@ export class LanguageModel {
     this._id = desc.id;
     this._name = desc.name;
 
-    this._language = new Language(desc.language);
     this._sidebarBlocks = desc.sidebarBlocks.map(blockDesc => new SidebarBlock(blockDesc));
     this._editorBlocks = desc.editorBlocks;
   }
 
   /**
-   * @return The unique id of this language
+   * @return The unique id of this language model
    */
   get id() {
     return (this._id);
@@ -40,20 +38,6 @@ export class LanguageModel {
   }
 
   /**
-   * @return The language that is backing this model
-   */
-  get language() {
-    return (this._language);
-  }
-
-  /**
-   * @return The name of the language this model is augmenting
-   */
-  get languageName() {
-    return (this._language.name);
-  }
-
-  /**
    * @return All blocks that are available for use in the sidebar.
    */
   get availableSidebarBlocks(): SidebarBlock[] {
@@ -64,11 +48,11 @@ export class LanguageModel {
    * @return Types that are present in the language but do not have a
    *         block to augment them.
    */
-  get missingEditorBlocks(): QualifiedTypeName[] {
+  getMissingEditorBlocks(language: Language): QualifiedTypeName[] {
     // This is at least O(n²), but sadly sets do not allow overriding the
     // equality check so for the moment we will hope that our n
     // stays small enough.
-    const missing = this._language.availableTypes
+    const missing = language.availableTypes
       .filter(t => !this._editorBlocks.some(b => t.matchesType(b.describedType)))
       .map(t => t.qualifiedName);
 
@@ -108,7 +92,7 @@ export class LanguageModel {
    * Implements the "best effort" guess to construct a node from nothing
    * but a type.
    */
-  constructDefaultNode(typeName: QualifiedTypeName): NodeDescription {
+  constructDefaultNode(language: Language, typeName: QualifiedTypeName): NodeDescription {
     // Construct the barebones description
     const toReturn: NodeDescription = {
       language: typeName.languageName,
@@ -116,7 +100,7 @@ export class LanguageModel {
     };
 
     // Get hold of the type that is about to be instanciated.
-    const t = this._language.getType(typeName);
+    const t = language.getType(typeName);
 
     // Are there any children categories that could be added preemptively?
     const reqCat = t.requiredChildrenCategoryNames;

@@ -1,12 +1,9 @@
-import { LANGUAGE_DESCRIPTION } from '../../syntaxtree/xml'
-
 import { LanguageModelDescription } from '../language-model.description'
 import { SidebarBlockDescription } from '../block.description'
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "xml",
   name: "Allgemeines XML",
-  language: LANGUAGE_DESCRIPTION,
   sidebarBlocks: [
     {
       describedType: {

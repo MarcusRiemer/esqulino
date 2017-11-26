@@ -1,5 +1,3 @@
-import { LANGUAGE_DESCRIPTION } from '../../syntaxtree/dxml'
-
 import { LanguageModelDescription } from '../language-model.description'
 import {
   SidebarBlockDescription, EditorBlockDescription, EditorBlockDescriptions
@@ -8,7 +6,6 @@ import {
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "dxml",
   name: "Dynamisches XML",
-  language: LANGUAGE_DESCRIPTION,
   sidebarBlocks: [
     {
       describedType: {
