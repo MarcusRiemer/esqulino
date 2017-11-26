@@ -29,6 +29,7 @@
 
           <!-- Ensuring there is a tree -->
           <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
+            <!-- If the tree is empty, allow the user to populate it -->
             <div *ngIf="currentTree.isEmpty"
                  class="card-body">
               Noch ist kein Code da! Ziehe einen Block aus der Seitenleiste auf den freien Platz um mit der Programmierung zu beginnen!
@@ -38,10 +39,15 @@
               </ast-node-placeholder>
             </div>
 
+            <!-- If the tree is not empty, it wants to be rendered -->
             <div *ngIf="!currentTree.isEmpty"
                  class="card-body block-editor">
-              <editor-block-host [languageModel]="currentLanguageModel"
+              <editor-block-host *ngIf="currentLanguageModel.canRenderTree(currentTree); else noRender;"
+                                 [languageModel]="currentLanguageModel"
                                  [node]="currentTree.rootNode"></editor-block-host>
+              <ng-template #noRender>
+                Darstellung nicht möglich
+              </ng-template>
             </div>
           </ng-container>
         </ng-container>
