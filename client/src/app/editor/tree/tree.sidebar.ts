@@ -28,7 +28,6 @@ export class TreeSidebarComponent {
     private _languageService: LanguageService,
     private _dragService: DragService
   ) {
-    console.log("Sidebar Res", this._codeResource);
   }
 
   /**

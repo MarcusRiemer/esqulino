@@ -5,6 +5,7 @@ import { ProjectResource } from '../resource'
 
 import { CodeResourceDescription } from './coderesource.description'
 import { Tree, NodeDescription, NodeLocation } from './syntaxtree'
+import { ValidationResult } from './validator';
 
 /**
  * A resource that is described by a syntaxtree.
@@ -201,7 +202,6 @@ export class CodeResource extends ProjectResource {
     this.replaceSyntaxTree(this.syntaxTreePeek.addChildGroup(loc, key));
   }
 
-
   /**
    * @param tree The new tree that describes this resource.
    */
@@ -213,6 +213,20 @@ export class CodeResource extends ProjectResource {
     }
     this.markSaveRequired();
   }
+
+  /**
+   * @return The latest validation result for this resource.
+   */
+  readonly validationResult = Observable
+    .combineLatest(this.syntaxTree, this.language, (tree, lang) => {
+      console.log("Possibly new result", tree, lang);
+      if (tree && lang) {
+        return (lang.validateTree(tree));
+      } else {
+        return (ValidationResult.EMPTY);
+      }
+    })
+    .do(res => console.log("New result", res));
 
   /**
    * @return Serialized description of this code resource.

@@ -39,7 +39,6 @@ export class TreeEditorService implements OnInit, OnDestroy {
 
   private _currentTree: Observable<Tree> = Observable.of(undefined);
 
-  private _validationResult = new BehaviorSubject<ValidationResult>(ValidationResult.EMPTY);
   private _generatedCode = new BehaviorSubject<string>("");
 
   constructor(
@@ -108,28 +107,8 @@ export class TreeEditorService implements OnInit, OnDestroy {
    * Resets everything that depends on the current tree and language.
    */
   private resetCaches() {
-    this.resetValidation();
     this.resetGeneratedCode();
   }
-
-  /**
-   * Validates the current tree against the current language. Should be called after
-   * the tree or the language has changed.
-   */
-  private resetValidation() {
-    if (this.peekResource && this.peekLanguage) {
-      try {
-        const tree = this.peekTree;
-
-        this._validationResult.next(this.peekLanguage.validateTree(this.peekTree));
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      this._validationResult.next(ValidationResult.EMPTY);
-    }
-  }
-
   /**
    * Emits the current tree against the current language. Should be called after
    * the tree or the language has changed.
@@ -158,13 +137,6 @@ export class TreeEditorService implements OnInit, OnDestroy {
    */
   get peekResource() {
     return (this._codeResource.value);
-  }
-
-  /**
-   * @return The validation result for the tree that is currently beeing edited.
-   */
-  get currentValidationResult(): Observable<ValidationResult> {
-    return (this._validationResult);
   }
 
   /**
