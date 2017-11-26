@@ -43,7 +43,7 @@
             <div *ngIf="!currentTree.isEmpty"
                  class="card-body block-editor">
               <editor-block-host *ngIf="currentLanguageModel.canRenderTree(currentTree); else noRender;"
-                                 [languageModel]="currentLanguageModel"
+                                 [codeResource]="currentResource"
                                  [node]="currentTree.rootNode"></editor-block-host>
               <ng-template #noRender>
                 Darstellung nicht möglich

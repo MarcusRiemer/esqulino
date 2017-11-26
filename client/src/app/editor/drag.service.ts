@@ -3,12 +3,10 @@ import { Observable, BehaviorSubject } from 'rxjs'
 import { Injectable } from '@angular/core'
 
 import { arrayEqual } from '../shared/util'
-import { Node, NodeDescription, NodeLocation } from '../shared/syntaxtree'
+import { Node, NodeDescription, NodeLocation, CodeResource } from '../shared/syntaxtree'
 import { SidebarBlock } from '../shared/block'
 
 import { TrashService } from './shared/trash.service'
-
-import { TreeEditorService } from './tree/editor.service'
 
 /**
  * All information about the origin of this drag if it came from
@@ -25,7 +23,7 @@ export interface DragSidebar {
  */
 export interface DragTree {
   node: Node,
-  treeEditorService: TreeEditorService
+  codeResource: CodeResource
 }
 
 /**
@@ -120,8 +118,7 @@ export class DragService {
     // being put in the trash.
     if (sourceTree) {
       this._trashService.showTrash(_ => {
-        console.log("Deleting");
-        sourceTree.treeEditorService.peekResource.deleteNode(sourceTree.node.location)
+        sourceTree.codeResource.deleteNode(sourceTree.node.location)
       });
     }
     console.log(`AST-Drag started:`, sourceSidebar);

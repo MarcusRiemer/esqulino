@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { arrayEqual } from '../../../shared/util';
-import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
+import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
 import { LanguageModel, EditorBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
@@ -33,7 +33,7 @@ import { TreeEditorService } from '../editor.service';
   ]
 })
 export class BlockRenderDropTargetComponent {
-  @Input() public languageModel: LanguageModel;
+  @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: EditorBlockDescriptions.EditorDropTarget;
 

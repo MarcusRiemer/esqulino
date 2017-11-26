@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Component, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
+import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
 import { LanguageModel, EditorBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
@@ -19,7 +19,7 @@ import { TreeEditorService } from '../editor.service';
   selector: `editor-block-render-iterator`,
 })
 export class BlockRenderIteratorComponent {
-  @Input() public languageModel: LanguageModel;
+  @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: EditorBlockDescriptions.EditorIterator;
 

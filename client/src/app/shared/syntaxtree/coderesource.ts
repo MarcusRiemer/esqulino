@@ -95,6 +95,10 @@ export class CodeResource extends ProjectResource {
     return (this._languageModelId);
   }
 
+  get languageModelPeek() {
+    return (this.project.getLanguageModelById(this.languageModelIdPeek));
+  }
+
   /**
    * @param newId The ID of the new language this resource adheres to.
    */
