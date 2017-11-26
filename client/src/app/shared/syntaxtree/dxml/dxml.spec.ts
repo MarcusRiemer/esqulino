@@ -5,6 +5,23 @@ import { Validator, ErrorCodes } from '../validator'
 import { NODE_CONVERTER } from './dxml.codegenerator'
 import { VALIDATOR_DESCRIPTION } from './dxml.validator'
 
+function parseDom(input: string) {
+  const parser = new DOMParser();
+  const dom = parser.parseFromString(input, "text/xml");
+
+  // Find out whether the input was valid, sadly, this is horrible ...
+  // See:
+  //
+  // How do I detect XML parsing errors when using
+  // Javascript's DOMParser in a cross-browser way?
+  // https://stackoverflow.com/questions/11563554/
+  const errors = dom.getElementsByTagName("parsererror");
+  expect(errors.length).toEqual(0, "Number of errors in document");
+
+  return (dom);
+}
+
+
 describe("Language: Dynamic XML (Validation)", () => {
   it(`<root></root>`, () => {
     const v = new Validator([VALIDATOR_DESCRIPTION]);
@@ -25,6 +42,9 @@ describe("Language: Dynamic XML (Validation)", () => {
     const codeGen = new CodeGenerator(NODE_CONVERTER);
     const result = codeGen.emit(ast);
     expect(result).toEqual(`<root></root>`);
+
+    const dom = parseDom(result);
+    expect(dom.documentElement.localName).toEqual(astDesc.properties['name']);
   });
 
   it(`<root key="value"></root>`, () => {
@@ -68,6 +88,11 @@ describe("Language: Dynamic XML (Validation)", () => {
     const codeGen = new CodeGenerator(NODE_CONVERTER);
     const result = codeGen.emit(ast);
     expect(result).toEqual(`<root key="value"></root>`);
+
+    const dom = parseDom(result);
+    const root = dom.documentElement;
+    expect(root.localName).toEqual(astDesc.properties['name']);
+    expect(root.attributes[0].localName).toEqual(astDesc.children['attributes'][0].properties['name']);
   });
 
   it(`<root key="<%= varName %>"></root>`, () => {
@@ -225,6 +250,10 @@ describe("Language: Dynamic XML (Validation)", () => {
     const codeGen = new CodeGenerator(NODE_CONVERTER);
     const result = codeGen.emit(ast);
     expect(result).toEqual(`<root>\nRoot-Text\n</root>`);
+
+    const dom = parseDom(result);
+    expect(dom.documentElement.localName).toEqual(astDesc.properties['name']);
+    expect(dom.documentElement.textContent).toEqual("\nRoot-Text\n");
   });
 
   it(`<root><% if var_name %>Root-Text<% end %></root>`, () => {
