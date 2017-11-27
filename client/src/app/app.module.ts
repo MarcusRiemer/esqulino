@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core'
+import { NgModule, ErrorHandler } from '@angular/core'
 import { BrowserModule, Title } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
@@ -8,6 +8,8 @@ import { EditorModule } from './editor/editor.module'
 
 import { SqlScratchComponent } from './app.component'
 import { routing } from './app.routes'
+
+import { NotifyErrorHandler } from './error-handler'
 
 @NgModule({
   imports: [
@@ -24,7 +26,8 @@ import { routing } from './app.routes'
     SqlScratchComponent,
   ],
   providers: [
-    Title
+    Title,
+    { provide: ErrorHandler, useClass: NotifyErrorHandler }
   ],
   bootstrap: [
     SqlScratchComponent
