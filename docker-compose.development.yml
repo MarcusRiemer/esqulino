@@ -18,6 +18,7 @@ services:
     build:
       dockerfile: Dockerfile.development.server
       context: .
+    command: bin/rails server --port 9292 --binding 0.0.0.0
     ports:
       - 9292:9292
     volumes:
@@ -27,7 +28,7 @@ services:
       - USER_GID=1000
       - TPUT_BIN=true
       - DATABASE_URL=postgresql://db/esqulino_dev
-      
+
     depends_on:
       - db
 
@@ -36,4 +37,3 @@ services:
     environment:
       - POSTGRES_USER=esqulino_dev
       - POSTGRES_USER=esqulino
-
