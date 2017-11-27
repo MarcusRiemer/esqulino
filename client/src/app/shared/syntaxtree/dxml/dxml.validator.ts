@@ -64,7 +64,6 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
               },
               minOccurs: 1,
               maxOccurs: 1,
-
             }
           ]
         },

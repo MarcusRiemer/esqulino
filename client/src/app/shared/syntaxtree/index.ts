@@ -15,22 +15,9 @@ import * as RegEx from './regex'
  */
 export const AvailableLanguages = {
   Sql: new Language(Sql.LANGUAGE_DESCRIPTION),
-  DXml: new Language(DynamicXml.LANGUAGE_DESCRIPTION),
-  RegEx: new Language(RegEx.LANGUAGE_DESCRIPTION),
-  All: new Language({
-    id: "all",
-    name: "All Languages",
-    generators: [
-      ...DynamicXml.LANGUAGE_DESCRIPTION.generators,
-      ...Sql.LANGUAGE_DESCRIPTION.generators,
-      ...RegEx.LANGUAGE_DESCRIPTION.generators,
-    ],
-    validators: [
-      ...DynamicXml.LANGUAGE_DESCRIPTION.validators,
-      ...Sql.LANGUAGE_DESCRIPTION.validators,
-      ...RegEx.LANGUAGE_DESCRIPTION.validators,
-    ]
-  })
+  DXmlLiquid: new Language(DynamicXml.LANGUAGE_DESCRIPTION_LIQUID),
+  DXmlERuby: new Language(DynamicXml.LANGUAGE_DESCRIPTION_ERUBY),
+  RegEx: new Language(RegEx.LANGUAGE_DESCRIPTION)
 };
 
 

@@ -2,9 +2,9 @@ import { NodeConverterRegistration, CodeGeneratorProcess, OutputSeparator } from
 import { Node } from '../syntaxtree'
 
 /**
- * Converts a Dynamic XML-AST to a properly indented XML document with eruby tags.
+ * Emitting the basic HTML structures: Elements, Attributes and "normal" text
  */
-export const NODE_CONVERTER: NodeConverterRegistration[] = [
+const NODE_CONVERTER_BASE: NodeConverterRegistration[] = [
   {
     type: {
       languageName: "dxml",
@@ -66,7 +66,14 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         process.addConvertedFragment(node.properties['value'], node, OutputSeparator.NONE);
       }
     }
-  },
+  }
+];
+
+/**
+ * Converts a Dynamic XML-AST to a properly indented XML document with eruby tags.
+ */
+export const NODE_CONVERTER_ERUBY = [
+  ...NODE_CONVERTER_BASE,
   {
     type: {
       languageName: "dxml",
@@ -159,4 +166,103 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       }
     }
   }
-];
+]
+
+/**
+ * Converts a Dynamic XML-AST to a properly indented XML document with liquid tags.
+ */
+export const NODE_CONVERTER_LIQUID = [
+  ...NODE_CONVERTER_BASE,
+  {
+    type: {
+      languageName: "dxml",
+      typeName: "interpolate"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        process.addConvertedFragment(`{{`, node, OutputSeparator.SPACE_AFTER);
+        process.generateNode(node.children['expr'][0])
+        process.addConvertedFragment(`}}`, node, OutputSeparator.SPACE_BEFORE);
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "dxml",
+      typeName: "expr"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "dxml",
+      typeName: "exprVar"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        process.addConvertedFragment(node.properties['name'], node, OutputSeparator.NONE);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "dxml",
+      typeName: "if"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+
+        const condition = node.children['condition'][0];
+        const body = node.getChildrenInCategory('body');
+
+        process.addConvertedFragment(`{% if`, node, OutputSeparator.SPACE_AFTER);
+        process.generateNode(condition);
+        process.addConvertedFragment(``, node, OutputSeparator.SPACE_BEFORE);
+        process.addConvertedFragment(`%}`, node, OutputSeparator.NEW_LINE_AFTER);
+
+        body.forEach(e => process.generateNode(e));
+
+        process.addConvertedFragment(`{% end %}`, node, OutputSeparator.NEW_LINE_BEFORE);
+
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "dxml",
+      typeName: "exprBinary"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        const children = node.children['exprBinary'];
+
+        // The binary expression needs spaces around all nodes
+        children.forEach(c => {
+          process.addConvertedFragment(``, node, OutputSeparator.SPACE_BEFORE);
+          process.generateNode(c);
+        });
+
+        process.addConvertedFragment(``, node, OutputSeparator.SPACE_AFTER);
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "dxml",
+      typeName: "binaryOperator"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        process.addConvertedFragment(node.properties['operator'], node, OutputSeparator.NONE);
+      }
+    }
+  }
+]
