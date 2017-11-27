@@ -116,7 +116,7 @@ export class DragService {
 
     // If we have a proper source: Wire it up to react to
     // being put in the trash.
-    if (sourceTree) {
+    if (sourceTree && sourceTree.codeResource) {
       this._trashService.showTrash(_ => {
         sourceTree.codeResource.deleteNode(sourceTree.node.location)
       });
