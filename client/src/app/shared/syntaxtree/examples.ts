@@ -89,10 +89,10 @@ export const CODE_RESOURCES: CodeResourceDescription[] = [
   },
   {
     apiVersion: CURRENT_API_VERSION,
-    id: "dxml-empty",
+    id: "xml-empty",
     name: "XML: Leer",
     ast: undefined,
-    languageId: "dxml",
-    languageModelId: "dxml",
+    languageId: "dxml-eruby",
+    languageModelId: "xml",
   }
 ];
