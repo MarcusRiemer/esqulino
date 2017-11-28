@@ -27,7 +27,7 @@ services:
       - USER_UID=1000
       - USER_GID=1000
       - TPUT_BIN=true
-      - DATABASE_URL=postgresql://db/esqulino_dev
+      - DATABASE_HOST=db
 
     depends_on:
       - db
