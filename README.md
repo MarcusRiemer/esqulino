@@ -48,7 +48,13 @@ The setup above is helpful to get the whole project running once, but if you wan
 
 There are pre-built docker images for development use on docker hub: [marcusriemer/sqlino](https://hub.docker.com/r/marcusriemer/sqlino/). These are built using the various `Dockerfile`s in this repository and can also be used with the `docker-compose.yml` file which is also part of this repository. Under the hood these containers use the same `Makefile`s and commands that have been mentioned above.
 
-* `sudo make -f Makefile.docker run-dev` starts two docker containers that continously watch for changes to the `server` and `client` folders. It mounts the projects root ordner as volumes into the containers, which allows you to edit the files in `server` and `client` in your usual environment.
+Depending on your local configuration you might need to run the mentioned `Makefile` with `sudo`.
+
+* `make -f Makefile.docker pull-all` retrieves the most recent version of all images from the [docker hub](https://hub.docker.com/r/marcusriemer/sqlino/).
+
+* `make -f Makefile.docker run-dev` starts docker containers that continously watch for changes to the `server` and `client` folders. It mounts the projects root folder as volumes into the containers, which allows you to edit the files in `server` and `client` in your usual environment. A third container is started for PostgreSQL.
+
+* `make -f Makefile.docker shell-server-dev` opens a shell inside the docker container of the server. You might require this to do maintenance tasks with `bin/rails` for the server.
 
 ## Updating
 
