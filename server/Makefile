@@ -21,6 +21,7 @@ run-dev : msg-pre-run-dev
 
 # Running tests
 test : msg-pre-run-test
+	./bin/rails db:setup RAILS_ENV=test
 	./bin/rails test
 
 .PHONY : install-deps run run-dev test clean-deps

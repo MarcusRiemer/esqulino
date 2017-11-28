@@ -18,7 +18,6 @@ services:
     build:
       dockerfile: Dockerfile.development.server
       context: .
-    command: bin/rails server --port 9292 --binding 0.0.0.0
     ports:
       - 9292:9292
     volumes:
