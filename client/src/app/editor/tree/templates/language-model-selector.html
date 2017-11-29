@@ -1,0 +1,7 @@
+<select class="form-control"
+        [(ngModel)]="selectedLanguageModelId">
+  <option *ngFor="let lang of availableLanguageModels"
+          [value]="lang.id">
+    {{ lang.name }} ({{ lang.id }})
+  </option>
+</select>

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { TreeEditorService } from './editor.service'
+import { CodeResource } from '../../shared/syntaxtree'
 
 /**
  * Informs the user about possible errors in his trees,
@@ -10,11 +10,5 @@ import { TreeEditorService } from './editor.service'
   selector: 'ast-validation'
 })
 export class ValidationComponent {
-
-  constructor(private _treeService: TreeEditorService) { }
-
-  get result() {
-    return (this._treeService.currentValidationResult);
-  }
+  @Input() codeResource: CodeResource;
 }
-

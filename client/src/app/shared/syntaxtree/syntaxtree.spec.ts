@@ -599,6 +599,28 @@ describe('AST: Basic Operations', () => {
 
     const curr = prev.addChildGroup([], "foo");
     expect(curr.rootNode.childrenCategoryNames).toEqual(["foo"]);
+
+    // Do these child groups appear in the model afterwards?
+    expect(Object.keys(curr.toModel().children)).toEqual(["foo"]);
+  });
+
+  it('Inserting an additional empty child group', () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        "c1": []
+      }
+    };
+
+    const prev = new Tree(treeDesc);
+    expect(prev.rootNode.childrenCategoryNames).toEqual(["c1"]);
+
+    const curr = prev.addChildGroup([], "c2");
+    expect(curr.rootNode.childrenCategoryNames).toEqual(["c1", "c2"]);
+
+    // Do these child groups appear in the model afterwards?
+    expect(Object.keys(curr.toModel().children)).toEqual(["c1", "c2"]);
   });
 
   it('Deleting the first node of a group', () => {
@@ -677,5 +699,89 @@ describe('AST: Basic Operations', () => {
 
     expect(newRoot).not.toBe(curr);
     expect(newRoot.isEmpty).toBe(false);
+  });
+
+  it('Enumerates types of empty trees', () => {
+    const t = new Tree(undefined);
+    const collected = t.typesPresent;
+
+    expect(collected.size).toEqual(0);
+  });
+
+  it('Enumerates types of trees with a single node', () => {
+    const t = new Tree({
+      language: "l",
+      name: "n1"
+    });
+    const collected = t.typesPresent;
+
+    expect(collected.size).toEqual(1);
+    expect(collected.has(JSON.stringify(t.rootNode.qualifiedName))).toBeTruthy();
+  });
+
+  it('Enumerates types of trees with two nodes of identical type', () => {
+    const t = new Tree({
+      language: "l",
+      name: "n1",
+      children: {
+        "cat": [
+          {
+            language: "l",
+            name: "n1"
+          }
+        ]
+      }
+    });
+    const collected = t.typesPresent;
+
+    expect(collected.size).toEqual(1);
+    expect(collected.has(JSON.stringify(t.rootNode.qualifiedName))).toBeTruthy();
+  });
+
+  it('Enumerates types of trees with two nodes of different type', () => {
+    const t = new Tree({
+      language: "l1",
+      name: "n1",
+      children: {
+        "cat": [
+          {
+            language: "l2",
+            name: "n1"
+          }
+        ]
+      }
+    });
+    const collected = t.typesPresent;
+
+    expect(collected.size).toEqual(2);
+    expect(collected.has(JSON.stringify(t.rootNode.qualifiedName))).toBeTruthy();
+    expect(collected.has(JSON.stringify(t.rootNode.children["cat"][0].qualifiedName))).toBeTruthy();
+  });
+
+  it('Enumerates types of trees with three nodes of overlapping type', () => {
+    const t = new Tree({
+      language: "l1",
+      name: "n1",
+      children: {
+        "cat": [
+          {
+            language: "l2",
+            name: "n1"
+          }
+        ],
+        "cat2": [
+          {
+            language: "l2",
+            name: "n1"
+          }
+        ]
+      }
+    });
+    const collected = t.typesPresent;
+
+    expect(collected.size).toEqual(2);
+    expect(collected.has(JSON.stringify(t.rootNode.qualifiedName))).toBeTruthy();
+    expect(collected.has(JSON.stringify(t.rootNode.children["cat"][0].qualifiedName))).toBeTruthy();
+    expect(collected.has(JSON.stringify(t.rootNode.children["cat2"][0].qualifiedName))).toBeTruthy();
   });
 });

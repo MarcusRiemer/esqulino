@@ -1,0 +1,73 @@
+<div class="ast"
+     (dragenter)="onDragEnter($event)">
+  <!-- Ensuring there is a selected resource -->
+  <ng-container *ngIf="(currentResource | async); let currentResource"> 
+    <div class="content">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h4 class="card-title">Block-Editor</h4>
+          <div class="row">
+            <div class="col-sm-6">
+              Sprache:
+            </div>
+            <div class="col-sm-6">
+              <language-selector [codeResource]="currentResource">
+              </language-selector>
+            </div>
+            <div class="col-sm-6">
+              GUI-Modell:
+            </div>
+            <div class="col-sm-6">
+              <language-model-selector [codeResource]="currentResource">
+              </language-model-selector>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Ensuring there is a selected language model -->
+        <ng-container *ngIf="(currentResource.languageModel | async); let currentLanguageModel;">
+
+          <!-- Ensuring there is a tree -->
+          <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
+            <!-- If the tree is empty, allow the user to populate it -->
+            <div *ngIf="currentTree.isEmpty"
+                 class="card-body">
+              Noch ist kein Code da! Ziehe einen Block aus der Seitenleiste auf den freien Platz um mit der Programmierung zu beginnen!
+              <ast-node-placeholder [alwaysVisible]="true"
+                                    [location]="[]">
+                Freier Platz
+              </ast-node-placeholder>
+            </div>
+
+            <!-- If the tree is not empty, it wants to be rendered -->
+            <div *ngIf="!currentTree.isEmpty"
+                 class="card-body block-editor">
+              <editor-block-host *ngIf="currentLanguageModel.canRenderTree(currentTree); else noRender;"
+                                 [codeResource]="currentResource"
+                                 [node]="currentTree.rootNode"></editor-block-host>
+              <ng-template #noRender>
+                Darstellung nicht möglich
+              </ng-template>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <h4 class="card-title">Validierung</h4>
+          <ast-validation [codeResource]="currentResource">
+          </ast-validation>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <h4 class="card-title">Kompilierung</h4>
+          <ast-code-generator [codeResource]="currentResource">
+          </ast-code-generator>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -14,6 +14,8 @@ import {
 
 import { CODE_RESOURCES } from '../shared/syntaxtree/examples'
 
+import { LanguageService } from '../shared/language.service'
+
 export { Project, ProjectDescription }
 
 /**
@@ -38,7 +40,8 @@ export class ProjectService {
    */
   constructor(
     private _http: Http,
-    private _server: ServerApiService
+    private _server: ServerApiService,
+    private _languageService: LanguageService
   ) {
     // Create a single subject once and for all. This instanc is not
     // allowed to changed as it is passed on to every subscriber.
@@ -86,7 +89,7 @@ export class ProjectService {
           desc.codeResources = CODE_RESOURCES;
         }
 
-        return (new Project(desc));
+        return (new Project(desc, this._languageService));
       });
 
     // And execute it by subscribing to it.

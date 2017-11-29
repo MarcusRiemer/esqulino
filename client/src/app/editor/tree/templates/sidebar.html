@@ -1,10 +1,10 @@
 <sidebar-item-host>
-  <div *ngFor="let lang of availableLanguages"
+  <div *ngIf="(currentLanguage | async); let currentLanguage;"
        class="ast">
-    <h5>{{ lang.languageName }}</h5>
+    <h5>{{ currentLanguage.name }}</h5>
     <ul>
-      <li *ngFor="let block of lang.availableBlocks"
-          (dragstart)="startDrag($event, block.defaultNode)"
+      <li *ngFor="let block of currentLanguage.availableSidebarBlocks"
+          (dragstart)="startDrag($event, block)"
           draggable="true"
           class="rounded">
         {{ block.displayName }}

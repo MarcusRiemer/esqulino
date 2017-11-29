@@ -1,9 +1,8 @@
 <div [astDropTarget]="node"
+     [astDraggable]="node"
      [@dropTarget]="dropTargetAnimationState | async"
      (drop)="onDropReplace()"
-     (dragstart)="onStartDrag($event)"
-     class="node"
-     draggable="true">
+     class="node">
   <code>{{ node.languageName }}.{{ node.typeName }}</code>
   ({{ properties.length }} Properties)
 

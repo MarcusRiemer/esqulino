@@ -4,14 +4,15 @@ import {
   Component, Input, OnInit, OnChanges, SimpleChanges,
   ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { arrayEqual } from '../../shared/util'
-import { Node, NodeLocation, Tree } from '../../shared/syntaxtree';
+import { arrayEqual } from '../../../shared/util'
+import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
 
-import { DEFAULT_ANIMATION } from './node.animation'
-import { DragService } from './drag.service';
-import { TreeEditorService } from './editor.service'
+import { DragService } from '../../drag.service';
+
+import { TreeEditorService } from '../editor.service';
+
+import { DROP_TARGET_ANIMATION } from './node.animation';
 
 // These states are available for animation
 type DropTargetAnimationStates = "available" | "none" | "self";
@@ -23,26 +24,7 @@ type DropTargetAnimationStates = "available" | "none" | "self";
   templateUrl: 'templates/node.html',
   selector: 'ast-node',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('dropTarget', [
-      state('none', style({
-        backgroundColor: 'white',
-      })),
-      state('available', style({
-        backgroundColor: 'lime',
-      })),
-      state('self', style({
-        backgroundColor: 'yellow',
-      })),
-      // Fade in and out
-      transition('none <=> available', animate(DEFAULT_ANIMATION)),
-      transition('none <=> self', animate(DEFAULT_ANIMATION)),
-
-      // Transition between shown states
-      transition('available => self', animate(DEFAULT_ANIMATION)),
-      //transition('self => available', animate(DEFAULT_ANIMATION)),
-    ])
-  ]
+  animations: [DROP_TARGET_ANIMATION]
 })
 export class NodeComponent implements OnChanges {
   @Input() node: Node;
@@ -63,7 +45,7 @@ export class NodeComponent implements OnChanges {
   constructor(
     private _dragService: DragService,
     private _cdRef: ChangeDetectorRef,
-    private _treeService: TreeEditorService
+    private _treeService: TreeEditorService,
   ) { }
 
   /**
@@ -90,36 +72,11 @@ export class NodeComponent implements OnChanges {
   }
 
   /**
-   * The user has started to drag exactly this node around.
-   */
-  onStartDrag(evt: DragEvent) {
-    this._dragService.dragStart(evt,
-      {
-        draggedDescription: this.node.toModel(),
-        origin: "tree"
-      },
-      {
-        location: this.node.location,
-        treeEditorService: this._treeService
-      }
-    );
-  }
-
-  /**
    * Something has been dropped on this node. We should replace the node entirely.
    */
   onDropReplace() {
     const desc = this._dragService.peekDragData.draggedDescription;
     this._treeService.peekResource.replaceNode(this.node.location, desc);
-  }
-
-  /**
-   * Something has been dropped on a placeholder before or after this node. This
-   * "something" should be inserted to the tree.
-   */
-  onDropInsert() {
-    const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.peekResource.insertNode(this.node.location, desc);
   }
 
   /**
@@ -173,13 +130,18 @@ export class NodeComponent implements OnChanges {
    */
   get dropTargetAnimationState(): Observable<DropTargetAnimationStates> {
     if (!this._cached_dropTargetAnimationState) {
-      this._cached_dropTargetAnimationState = this._dragService.currentDragOverNode
-        .merge(this._dragService.isDragInProgress)
-        .map(v => {
-          if (v instanceof Node && v === this.node) {
+      this._cached_dropTargetAnimationState = this._dragService.currentDrag
+        .map(drag => {
+          if (!drag) {
+            // There is no drag operation
+            return ("none");
+          }
+          else if (drag.hoverNode && drag.hoverNode == this.node) {
+            // There is a drag operation and it targets us
             return ("self");
           } else {
-            return (this._dragService.peekIsDragInProgress ? "available" : "none");
+            // There is a drag operation and it targets something else
+            return ("available");
           }
         })
         .distinctUntilChanged()

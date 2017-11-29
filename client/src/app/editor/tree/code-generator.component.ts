@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { TreeEditorService } from './editor.service'
+import { CodeResource } from '../../shared/syntaxtree'
 
 /**
  * Shows a compiled AST.
@@ -10,10 +10,5 @@ import { TreeEditorService } from './editor.service'
   selector: 'ast-code-generator'
 })
 export class CodeGeneratorComponent {
-
-  constructor(private _treeService: TreeEditorService) { }
-
-  get generated() {
-    return (this._treeService.currentGeneratedCode);
-  }
+  @Input() codeResource: CodeResource;
 }

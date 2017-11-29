@@ -16,40 +16,39 @@ export { AvailableImage }
 export class ImageSelectorComponent {
   @Output() projectImageIdChange = new EventEmitter<string>();
 
-  private _projectImageId: string;
-
   @Input() public project: Project;
 
-  /**
-    * Subscriptions that need to be released
-    */
-  private _subscriptionRefs: any[] = [];
+  private _projectImageId: string;
 
   constructor(
     private _imageService: ImageService
   ) {
   }
 
+  /**
+   * @return The ID of the currently selected image.
+   */
   @Input() get projectImageId() {
     return (this._projectImageId)
   }
 
+  /**
+   * Sets the new image and broadcasts the change
+   */
   set projectImageId(value: string) {
     this._projectImageId = value;
     this.projectImageIdChange.emit(value);
   }
 
+  /**
+   * @return The data of the image that is currently selected.
+   */
   get currentImage() {
     return (this.images.find(c => c.id === this.projectImageId));
   }
 
   ngOnInit() {
     this._imageService.loadImageList();
-  }
-
-  ngOnDestroy() {
-    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
-    this._subscriptionRefs = [];
   }
 
   get images() {

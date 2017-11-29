@@ -1,0 +1,15 @@
+<div [blockBase]="visual"
+     [blockLayout]="visual">
+  <ng-container *ngFor="let childNode of childNodes; let lastChild = last;">
+    <!-- Rendering the actual sub-block -->
+    <editor-block-host [codeResource]="codeResource"
+                       [node]="childNode"></editor-block-host>
+    <!-- Possibly render something in between -->
+    <ng-container *ngIf="!lastChild">
+      <editor-block-render *ngFor="let sepBlock of separatorBlocks"
+                           [codeResource]="codeResource"
+                           [visual]="sepBlock"
+                           [node]="childNode"></editor-block-render>
+    </ng-container>
+  </ng-container>
+</div>

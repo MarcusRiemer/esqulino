@@ -1,0 +1,18 @@
+import { LanguageDescription } from '../language.description'
+
+import { NODE_CONVERTER_ERUBY, NODE_CONVERTER_LIQUID } from './dxml.codegenerator'
+import { VALIDATOR_DESCRIPTION } from './dxml.validator'
+
+export const LANGUAGE_DESCRIPTION_LIQUID: LanguageDescription = {
+  id: "dxml-liquid",
+  name: "Dynamic XML (Liquid)",
+  generators: NODE_CONVERTER_LIQUID,
+  validators: [VALIDATOR_DESCRIPTION]
+}
+
+export const LANGUAGE_DESCRIPTION_ERUBY: LanguageDescription = {
+  id: "dxml-eruby",
+  name: "Dynamic XML (eRuby)",
+  generators: NODE_CONVERTER_ERUBY,
+  validators: [VALIDATOR_DESCRIPTION]
+}

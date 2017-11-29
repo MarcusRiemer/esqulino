@@ -4,44 +4,59 @@ import { SharedEditorModule } from '../shared/shared.module'
 import { RegistrationService } from '../registration.service'
 
 import { CodeGeneratorComponent } from './code-generator.component'
+import { DraggableDirective } from './draggable.directive'
 import { DropTargetDirective } from './drop-target.directive'
 import { DropPlaceholderDirective } from './drop-placeholder.directive'
-import { DragService } from './drag.service'
-import { LanguageService } from './language.service'
-import { NodeComponent } from './node.component'
-import { NodeChildrenComponent } from './node-children.component'
-import { NodePlaceholderComponent } from './node-placeholder.component'
-import { SyntaxTreeEditorComponent } from './editor.component'
+import { LanguageModelSelectorComponent } from './language-model-selector.component'
+import { LanguageSelectorComponent } from './language-selector.component'
 import { TreeSidebarComponent } from './tree.sidebar'
 import { ValidationComponent } from './validation.component'
+
+import { NodeComponent } from './raw/node.component'
+import { NodeChildrenComponent } from './raw/node-children.component'
+import { NodePlaceholderComponent } from './raw/node-placeholder.component'
+import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'
+
+import { BlockEditorComponent } from './block/block-editor.component'
+import { BlockLayoutDirective } from './block/block-layout.directive'
+import { BlockBaseDirective } from './block/block-base.directive'
+import { BlockHostComponent } from './block/block-host.component'
+import { BlockRenderComponent } from './block/block-render.component'
+import { BlockRenderBlockComponent } from './block/block-render-block.component'
+import { BlockRenderDropTargetComponent } from './block/block-render-drop-target.component'
+import { BlockRenderIteratorComponent } from './block/block-render-iterator.component'
 
 @NgModule({
   imports: [
     SharedEditorModule,
   ],
   declarations: [
+    BlockEditorComponent,
+    BlockRenderComponent,
+    BlockRenderBlockComponent,
+    BlockRenderDropTargetComponent,
+    BlockRenderIteratorComponent,
+    BlockHostComponent,
+    BlockLayoutDirective,
+    BlockBaseDirective,
     CodeGeneratorComponent,
+    DraggableDirective,
     DropTargetDirective,
     DropPlaceholderDirective,
     NodeComponent,
     NodeChildrenComponent,
     NodePlaceholderComponent,
-    SyntaxTreeEditorComponent,
+    RawTreeEditorComponent,
     ValidationComponent,
-    TreeSidebarComponent
+    TreeSidebarComponent,
+    LanguageModelSelectorComponent,
+    LanguageSelectorComponent,
   ],
   entryComponents: [
     TreeSidebarComponent
   ]
 })
 export class SyntaxTreeEditorModule {
-  static forRoot(): ModuleWithProviders {
-    return ({
-      ngModule: SyntaxTreeEditorModule,
-      providers: [DragService, LanguageService]
-    } as ModuleWithProviders);
-  }
-
   constructor(reg: RegistrationService) {
     console.log("Registering TreeEditor ...");
 
