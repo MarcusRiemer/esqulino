@@ -34,6 +34,8 @@ services:
 
   db:
     image: postgres:10.0
+    ports:
+        - "5432:5432"
     environment:
       - POSTGRES_USER=esqulino_dev
       - POSTGRES_USER=esqulino
