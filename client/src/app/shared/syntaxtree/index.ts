@@ -7,7 +7,7 @@ export * from './validator.description'
 
 import { Language } from './language'
 import * as Sql from './sql'
-import * as Xml from './xml'
+import * as DynamicXml from './dxml'
 import * as RegEx from './regex'
 
 /**
@@ -15,22 +15,9 @@ import * as RegEx from './regex'
  */
 export const AvailableLanguages = {
   Sql: new Language(Sql.LANGUAGE_DESCRIPTION),
-  Xml: new Language(Xml.LANGUAGE_DESCRIPTION),
-  RegEx: new Language(RegEx.LANGUAGE_DESCRIPTION),
-  All: new Language({
-    id: "all",
-    name: "All Languages",
-    generators: [
-      ...Xml.LANGUAGE_DESCRIPTION.generators,
-      ...Sql.LANGUAGE_DESCRIPTION.generators,
-      ...RegEx.LANGUAGE_DESCRIPTION.generators,
-    ],
-    validators: [
-      ...Xml.LANGUAGE_DESCRIPTION.validators,
-      ...Sql.LANGUAGE_DESCRIPTION.validators,
-      ...RegEx.LANGUAGE_DESCRIPTION.validators,
-    ]
-  })
+  DXmlLiquid: new Language(DynamicXml.LANGUAGE_DESCRIPTION_LIQUID),
+  DXmlERuby: new Language(DynamicXml.LANGUAGE_DESCRIPTION_ERUBY),
+  RegEx: new Language(RegEx.LANGUAGE_DESCRIPTION)
 };
 
 

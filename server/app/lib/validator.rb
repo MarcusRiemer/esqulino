@@ -28,6 +28,26 @@ class Validator
     end
   end
 
+  # Retrieves a schema by its name
+  #
+  # @param schema_name [string] The name of the schema
+  def get_schema(schema_name)
+    # Ensuring the schema exists
+    schema = @schemas[schema_name]
+    if (schema == nil) then
+      raise ArgumentError, "Could not validate against unknown schema \"#{schema_name}\""
+    end
+
+    return schema
+  end
+
+  # Validates the given object against the schema with the given name
+  #
+  # @param object [Hash] Any JSON-compatible structure
+  # @param schema_name [string] The name of the schema
+  def fully_validate(object, schema_name)
+
+  end
 
   # Ensures that the given body of a request matches the given schema
   #
@@ -35,11 +55,7 @@ class Validator
   # @param body_string [string] The string representation of the object
   #                             that requires a check.
   def ensure_request(schema_name, body_string)
-    # Ensuring the schema exists
-    schema = @schemas[schema_name]
-    if (schema == nil) then
-      raise ArgumentError, "Could not validate against unknown schema \"#{schema_name}\""
-    end
+    schema = self.get_schema schema_name
 
     # Loading the actual body
     body = JSON.parse(body_string)

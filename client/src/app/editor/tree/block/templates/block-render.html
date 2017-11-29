@@ -1,0 +1,30 @@
+<ng-container [ngSwitch]="visual.blockType">
+  <!-- Show a constant value directly specified in the block description -->
+  <span *ngSwitchCase="'constant'">{{ visual.text }}</span>
+  <!-- Show a value that is derived from the property of a node -->
+  <span *ngSwitchCase="'interpolated'">{{ node.properties[visual.property] }}</span>
+  <!-- Iterate over children of a node -->
+  <div *ngSwitchCase="'dropTarget'">
+    <editor-block-render-drop-target [codeResource]="codeResource"
+                                     [node]="node"
+                                     [visual]="visual">
+    </editor-block-render-drop-target>
+  </div>
+  <!-- Iterate over children of a node -->
+  <div *ngSwitchCase="'iterator'">
+    <editor-block-render-iterator [codeResource]="codeResource"
+                                  [node]="node"
+                                  [visual]="visual">
+    </editor-block-render-iterator>
+  </div>
+  <!-- Display a draggable block -->
+  <ng-container *ngSwitchCase="'block'">
+    <editor-block-render-block [codeResource]="codeResource"
+                               [node]="node"
+                               [visual]="visual">
+    </editor-block-render-block>
+  </ng-container>
+  <!-- Something is broken, display a error message -->
+  <div *ngSwitchDefault>Fehler: Kein passender Block "{{ visual.blockType }}" verfügbar</div>
+</ng-container>
+

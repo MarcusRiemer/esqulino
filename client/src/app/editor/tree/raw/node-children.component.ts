@@ -2,11 +2,11 @@ import { Observable } from 'rxjs';
 
 import { Component, Input } from '@angular/core';
 
-import { Node } from '../../shared/syntaxtree';
+import { Node } from '../../../shared/syntaxtree';
 
-import { DragService } from './drag.service';
-import { TreeEditorService } from './editor.service';
+import { DragService } from '../../drag.service';
 
+import { TreeEditorService } from '../editor.service';
 
 /**
  * Displays a group of nodes with placeholders spread out between them.

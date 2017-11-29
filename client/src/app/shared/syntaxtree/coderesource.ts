@@ -5,6 +5,7 @@ import { ProjectResource } from '../resource'
 
 import { CodeResourceDescription } from './coderesource.description'
 import { Tree, NodeDescription, NodeLocation } from './syntaxtree'
+import { ValidationResult } from './validator';
 
 /**
  * A resource that is described by a syntaxtree.
@@ -13,8 +14,10 @@ import { Tree, NodeDescription, NodeLocation } from './syntaxtree'
  * of the tree, the immutable nature makes it difficult to 
  * communicate changes upwards. The resource allows to replace
  * the whole tree and therefore enables mutating operations. So
- * this is basicly a facade that hides the immutability of the
- * actual tree.
+ * this is additionaly a facade that hides the immutability of the
+ * actual tree. If you ever call the mutating operations of the
+ * raw Tree instance retrieved by syntaxTree() changes will not
+ * be reflected in the code resource.
  */
 export class CodeResource extends ProjectResource {
 
@@ -22,38 +25,99 @@ export class CodeResource extends ProjectResource {
 
   private _languageId = new BehaviorSubject<string>(undefined);
 
-  constructor(desc: CodeResourceDescription, project?: Project) {
+  private _languageModelId = new BehaviorSubject<string>(undefined);
+
+  constructor(
+    desc: CodeResourceDescription,
+    project?: Project,
+  ) {
     super(desc, project);
 
-    this.replaceSyntaxTree(desc.ast);
-    this.languageId = desc.languageId;
+    this._tree.next(new Tree(desc.ast));
+    this._languageId.next(desc.languageId);
+    this._languageModelId.next(desc.languageModelId);
   }
 
   /**
    * @return The ID of the language this resource uses.
    */
-  get languageId() {
+  get languageIdPeek() {
     return (this._languageId.value);
+  }
+
+  /**
+   * @return An observable value of the language this id uses.
+   */
+  get languageId(): Observable<string> {
+    return (this._languageId);
+  }
+
+  /**
+   * @return A snapshot of the language that is currently in use.
+   */
+  get languagePeek() {
+    return (this.project.getLanguageById(this.languageIdPeek));
+  }
+
+  /**
+   * @return The language that is currently in use
+   */
+  get language() {
+    return (this._languageId.map(l => this.project.getLanguageById(l)));
+  }
+
+  /**
+   * @return The language that is currently in use
+   */
+  get languageModel() {
+    return (this._languageModelId.map(l => this.project.getLanguageModelById(l)));
   }
 
   /**
    * @param newId The ID of the new language this resource adheres to.
    */
-  set languageId(newId: string) {
+  setLanguageId(newId: string) {
     this._languageId.next(newId);
+    this.markSaveRequired();
+  }
+
+  /**
+   * @return The ID of the language this resource uses.
+   */
+  get languageModelIdPeek() {
+    return (this._languageModelId.value);
+  }
+
+  /**
+   * @return An observable value of the language this id uses.
+   */
+  get languageModelId(): Observable<string> {
+    return (this._languageModelId);
+  }
+
+  get languageModelPeek() {
+    return (this.project.getLanguageModelById(this.languageModelIdPeek));
+  }
+
+  /**
+   * @param newId The ID of the new language this resource adheres to.
+   */
+  setLanguageModelId(newId: string) {
+    this._languageModelId.next(newId);
+    this.markSaveRequired();
   }
 
   /**
    * @return A peek at the tree that describes the code of this resource.
    */
-  get syntaxTree(): Tree {
+  get syntaxTreePeek(): Tree {
     return (this._tree.value);
   }
 
   /**
    * @return The tree that describes the code of this resource.
    */
-  get obsSyntaxTree(): Observable<Tree> {
+  get syntaxTree(): Observable<Tree> {
     return (this._tree);
   }
 
@@ -66,7 +130,7 @@ export class CodeResource extends ProjectResource {
   replaceNode(loc: NodeLocation, desc: NodeDescription) {
     console.log(`Replacing node at ${JSON.stringify(loc)} with`, desc);
 
-    this.replaceSyntaxTree(this.syntaxTree.replaceNode(loc, desc));
+    this.replaceSyntaxTree(this.syntaxTreePeek.replaceNode(loc, desc));
   }
 
   /**
@@ -78,7 +142,7 @@ export class CodeResource extends ProjectResource {
   insertNode(loc: NodeLocation, desc: NodeDescription) {
     console.log(`Inserting node at ${JSON.stringify(loc)}`, desc);
 
-    this.replaceSyntaxTree(this.syntaxTree.insertNode(loc, desc));
+    this.replaceSyntaxTree(this.syntaxTreePeek.insertNode(loc, desc));
   }
 
   /**
@@ -89,7 +153,7 @@ export class CodeResource extends ProjectResource {
   deleteNode(loc: NodeLocation) {
     console.log(`Deleting node at ${JSON.stringify(loc)}`);
 
-    this.replaceSyntaxTree(this.syntaxTree.deleteNode(loc));
+    this.replaceSyntaxTree(this.syntaxTreePeek.deleteNode(loc));
   }
 
   /**
@@ -102,7 +166,7 @@ export class CodeResource extends ProjectResource {
   setProperty(loc: NodeLocation, key: string, value: string) {
     console.log(`Setting ${JSON.stringify(loc)} "${key}"="${value}"`);
 
-    this.replaceSyntaxTree(this.syntaxTree.setProperty(loc, key, value));
+    this.replaceSyntaxTree(this.syntaxTreePeek.setProperty(loc, key, value));
   }
 
   /**
@@ -114,7 +178,7 @@ export class CodeResource extends ProjectResource {
   addProperty(loc: NodeLocation, key: string) {
     console.log(`Adding ${JSON.stringify(loc)} property "${key}"`);
 
-    this.replaceSyntaxTree(this.syntaxTree.addProperty(loc, key));
+    this.replaceSyntaxTree(this.syntaxTreePeek.addProperty(loc, key));
   }
 
   /**
@@ -127,7 +191,7 @@ export class CodeResource extends ProjectResource {
   renameProperty(loc: NodeLocation, key: string, newKey: string) {
     console.log(`Renaming property at ${JSON.stringify(loc)} from "${key}" to "${newKey}"`);
 
-    this.replaceSyntaxTree(this.syntaxTree.renameProperty(loc, key, newKey));
+    this.replaceSyntaxTree(this.syntaxTreePeek.renameProperty(loc, key, newKey));
   }
 
   /**
@@ -139,9 +203,8 @@ export class CodeResource extends ProjectResource {
   addChildGroup(loc: NodeLocation, key: string) {
     console.log(`Adding empty childgroup "${key}" at ${JSON.stringify(loc)}`);
 
-    this.replaceSyntaxTree(this.syntaxTree.addChildGroup(loc, key));
+    this.replaceSyntaxTree(this.syntaxTreePeek.addChildGroup(loc, key));
   }
-
 
   /**
    * @param tree The new tree that describes this resource.
@@ -156,6 +219,34 @@ export class CodeResource extends ProjectResource {
   }
 
   /**
+   * @return The latest validation result for this resource.
+   */
+  readonly validationResult = Observable
+    .combineLatest(this.syntaxTree, this.language, (tree, lang) => {
+      if (tree && lang) {
+        return (lang.validateTree(tree));
+      } else {
+        return (ValidationResult.EMPTY);
+      }
+    });
+
+  /**
+   * @return The latest generated code for this resource.
+   */
+  readonly generatedCode = Observable
+    .combineLatest(this.syntaxTree, this.language, (tree, lang) => {
+      if (tree && !tree.isEmpty && lang) {
+        try {
+          return (lang.emitTree(tree));
+        } catch (e) {
+          return (e.toString());
+        }
+      } else {
+        return ("");
+      }
+    })
+
+  /**
    * @return Serialized description of this code resource.
    */
   toModel(): CodeResourceDescription {
@@ -163,8 +254,9 @@ export class CodeResource extends ProjectResource {
       id: this.id,
       name: this.name,
       apiVersion: this.apiVersion,
-      ast: this.syntaxTree.toModel(),
-      languageId: this.languageId
+      ast: this.syntaxTreePeek.toModel(),
+      languageId: this.languageIdPeek,
+      languageModelId: this.languageModelIdPeek,
     });
   }
 

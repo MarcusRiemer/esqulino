@@ -7,6 +7,8 @@ export enum ErrorCodes {
   Empty = "EMPTY",
   // A AST has a root node that does not match any allowed root node
   UnknownRoot = "UNKNOWN_ROOT",
+  // A AST has a root node in an unknown language
+  UnknownRootLanguage = "UNKNOWN_ROOT_LANGUAGE",
   // A different type was explicitly expected
   UnexpectedType = "UNEXPECTED_TYPE",
   // A node with a transient type was detected
@@ -523,7 +525,7 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
             context.addError(ErrorCodes.IllegalChildType, child, {
               present: child.qualifiedName,
               expected: expected.nodeType.description,
-              index: childIndex
+              index: childIndex,
             });
           }
         }
@@ -601,7 +603,11 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
       const cardinalityRef = this._nodeTypes.find(type => type.nodeType.matchesType(node.qualifiedName));
       if (!cardinalityRef) {
         // The node is entirely unexpected
-        context.addError(ErrorCodes.IllegalChildType, node, { index: index });
+        context.addError(ErrorCodes.IllegalChildType, node, {
+          index: index,
+          present: node.qualifiedName,
+          expected: this._nodeTypes.map(t => t.nodeType.description)
+        });
       } else {
         // The node is expected, but may occur too often. For the moment we simply count it.
         const cardinalityIndex = this._nodeTypes.indexOf(cardinalityRef);
@@ -956,6 +962,9 @@ export class Validator {
     }));
   }
 
+  /**
+   * @return All types that are known to this validator.
+   */
   get availableTypes() {
     return (
       Object.values(this._registeredSchemas)
@@ -980,6 +989,7 @@ export class Validator {
    * @return All errors that occured during evaluation
    */
   validateFromRoot(ast: AST.Node | AST.Tree) {
+    // Grab the actual root
     let rootNode: AST.Node = undefined;
     if (ast instanceof AST.Tree && !ast.isEmpty) {
       rootNode = ast.rootNode;
@@ -990,9 +1000,18 @@ export class Validator {
     const context = new ValidationContext();
 
     if (rootNode) {
-      // Pass validation to the appropriate language
-      const lang = this.getLanguageValidator(rootNode.languageName);
-      lang.validateFromRoot(rootNode, context);
+      if (this.isKnownLanguage(rootNode.languageName)) {
+        // Pass validation to the appropriate language
+        const lang = this.getLanguageValidator(rootNode.languageName);
+        lang.validateFromRoot(rootNode, context);
+      } else {
+        // Not knowing the language is a single error
+        const available = Array.from(new Set(this.availableTypes.map(t => t.languageName)));
+        context.addError(ErrorCodes.UnknownRootLanguage, rootNode, {
+          requiredLanguage: rootNode.languageName,
+          availableLanguages: available
+        });
+      }
     } else {
       // Not having a document is a single error
       context.addError(ErrorCodes.Empty, undefined);
@@ -1006,7 +1025,8 @@ export class Validator {
    */
   getLanguageValidator(language: string) {
     if (!this.isKnownLanguage(language)) {
-      throw new Error(`Validator does not know language "${language}"`);
+      const available = Object.keys(this._registeredSchemas).join(', ');
+      throw new Error(`Validator does not know language "${language}", known are: ${available}`);
     } else {
       return (this._registeredSchemas[language]);
     }

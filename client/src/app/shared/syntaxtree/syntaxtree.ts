@@ -88,7 +88,7 @@ export class Node {
     }
 
     // Carry over children (if there are any)
-    if (this.hasChildren) {
+    if (Object.keys(this._nodeChildren).length > 0) {
       toReturn.children = {};
       Object.entries(this._nodeChildren).forEach(([name, children]) => {
         toReturn.children[name] = children.map(child => child.toModel());
@@ -233,6 +233,20 @@ export class Node {
       return (this._nodeParent.treePathImpl(prev));
     }
   }
+
+  /**
+   * Collects all typenames that exist as part of this tree. Because JavaScript Sets
+   * compare things by reference we have to serialize all qualified names to JSON-strings
+   * and rework them later ...
+   */
+  collectTypes(collected: Set<string>) {
+    collected.add(JSON.stringify(this.qualifiedName));
+    Object.values(this.children).forEach(cat => {
+      cat.forEach(n => n.collectTypes(collected));
+    });
+
+    return (collected);
+  }
 }
 
 /**
@@ -279,6 +293,17 @@ export class Tree {
   }
 
   /**
+   * @return All types that are present in this tree, sadly as a Set of "JSON-strings".
+   */
+  get typesPresent(): Set<string> {
+    if (this.isEmpty) {
+      return (new Set());
+    } else {
+      return (this.rootNode.collectTypes(new Set()));
+    }
+  }
+
+  /**
    * @return The node at the given location.
    */
   locate(loc: NodeLocation): Node {
@@ -307,8 +332,8 @@ export class Tree {
    * @return The modified tree.
    */
   replaceNode(loc: NodeLocation, desc: NodeDescription): Tree {
-    // Replacing the needs to work different because there is no parent
-    // that needs a child replaced
+    // Replacing the root needs to work different because there is no parent
+    // that needs a child replaced.
     if (loc.length === 0) {
       return (new Tree(desc));
     }

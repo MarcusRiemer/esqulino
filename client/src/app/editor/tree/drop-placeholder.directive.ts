@@ -2,7 +2,7 @@ import { Directive, ElementRef, Input } from '@angular/core';
 
 import { NodeLocation } from '../../shared/syntaxtree';
 
-import { DragService } from './drag.service';
+import { DragService } from '../drag.service';
 
 /**
  * Can be used for any element to register it as a drop
