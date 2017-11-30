@@ -7,7 +7,7 @@ TYPESCRIPT_JSON_SCHEMA_BIN = $(SCHEMA_PATH)/node_modules/.bin/typescript-json-sc
 SCHEMA_OPTIONS = --noExtraProps true --required true
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILE_NAMES = PageDescription.json PageUpdateRequestDescription.json PageRenderRequestDescription.json ProjectDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json AlterSchemaRequestDescription.json TableDescription.json
+JSON_SCHEMA_FILE_NAMES = PageDescription.json PageUpdateRequestDescription.json PageRenderRequestDescription.json ProjectDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json AlterSchemaRequestDescription.json TableDescription.json LanguageModelDocument.json
 
 # Paths of the schema files to generate
 JSON_SCHEMA_FILES = $(addprefix $(SCHEMA_PATH)/, $(JSON_SCHEMA_FILE_NAMES))
@@ -66,11 +66,8 @@ $(SCHEMA_PATH)/AlterSchemaRequestDescription.json : $(SRC_PATH)/shared/schema/ta
 $(SCHEMA_PATH)/TableDescription.json : $(SRC_PATH)/shared/schema/schema.description.ts
 	$(CONVERT_COMMAND)
 
-# Ensure the typescript-json-schema "binary" is part of the node_modules folder
-has-generator :
-ifeq (, $(wildcard $(TYPESCRIPT_JSON_SCHEMA_BIN)))
-	$(error "Typescript JSON schema generator not in node_modules")
-endif
+$(SCHEMA_PATH)/LanguageModelDocument.json : $(SRC_PATH)/shared/block/language-model.description.ts
+	$(CONVERT_COMMAND)
 
-.PHONY : has-generator
+
 
