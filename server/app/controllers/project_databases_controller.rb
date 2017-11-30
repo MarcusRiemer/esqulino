@@ -5,7 +5,7 @@ require_dependency 'schema_alter'
 
 class ProjectDatabasesController < ApplicationController
   include ProjectsHelper
-  include ValidationHelper
+  include JsonSchemaHelper
 
   # Returns a visual representation of the schema, rendered with Graphviz
   def visual_schema
