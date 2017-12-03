@@ -73,6 +73,40 @@
             ],
             "type": "object"
         },
+        "CodeResourceDescription": {
+            "additionalProperties": false,
+            "description": "A resource that is described by a syntaxtree.",
+            "properties": {
+                "apiVersion": {
+                    "$ref": "#/definitions/ApiVersionToken",
+                    "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
+                },
+                "ast": {
+                    "$ref": "#/definitions/NodeDescription"
+                },
+                "id": {
+                    "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
+                    "type": "string"
+                },
+                "languageId": {
+                    "type": "string"
+                },
+                "languageModelId": {
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The user-chosen name of this resource. This property is free to change.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "apiVersion",
+                "languageId",
+                "languageModelId",
+                "name"
+            ],
+            "type": "object"
+        },
         "ColumnAssignment": {
             "additionalProperties": false,
             "description": "An expression that will be assigned to a certain column.",
@@ -292,6 +326,41 @@
         "MissingExpression": {
             "additionalProperties": false,
             "description": "Denotes an expression that is intentionally missing.",
+            "type": "object"
+        },
+        "NodeDescription": {
+            "additionalProperties": false,
+            "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
+            "properties": {
+                "children": {
+                    "additionalProperties": {
+                        "items": {
+                            "$ref": "#/definitions/NodeDescription"
+                        },
+                        "type": "array"
+                    },
+                    "description": "Nodes may have children in various categories. This base class\nmakes no assumptions about the names of children. Examples for\nchildren in multiple categories would be things like \"attributes\"\nand generic \"children\" in a specialization for XML.",
+                    "type": "object"
+                },
+                "language": {
+                    "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+                    "type": "string"
+                },
+                "properties": {
+                    "additionalProperties": {
+                    },
+                    "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
+                    "type": "object"
+                }
+            },
+            "required": [
+                "language",
+                "name"
+            ],
             "type": "object"
         },
         "Operator": {
@@ -661,6 +730,12 @@
                 "$ref": "#/definitions/AvailableDatabaseDescription"
             },
             "type": "object"
+        },
+        "codeResources": {
+            "items": {
+                "$ref": "#/definitions/CodeResourceDescription"
+            },
+            "type": "array"
         },
         "description": {
             "type": "string"
