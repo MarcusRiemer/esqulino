@@ -1,0 +1,74 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "definitions": {
+        "NodeDescription": {
+            "additionalProperties": false,
+            "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
+            "properties": {
+                "children": {
+                    "additionalProperties": {
+                        "items": {
+                            "$ref": "#/definitions/NodeDescription"
+                        },
+                        "type": "array"
+                    },
+                    "description": "Nodes may have children in various categories. This base class\nmakes no assumptions about the names of children. Examples for\nchildren in multiple categories would be things like \"attributes\"\nand generic \"children\" in a specialization for XML.",
+                    "type": "object"
+                },
+                "language": {
+                    "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+                    "type": "string"
+                },
+                "properties": {
+                    "additionalProperties": {
+                    },
+                    "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
+                    "type": "object"
+                }
+            },
+            "required": [
+                "language",
+                "name"
+            ],
+            "type": "object"
+        }
+    },
+    "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
+    "properties": {
+        "children": {
+            "additionalProperties": {
+                "items": {
+                    "$ref": "#/definitions/NodeDescription"
+                },
+                "type": "array"
+            },
+            "description": "Nodes may have children in various categories. This base class\nmakes no assumptions about the names of children. Examples for\nchildren in multiple categories would be things like \"attributes\"\nand generic \"children\" in a specialization for XML.",
+            "type": "object"
+        },
+        "language": {
+            "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+            "type": "string"
+        },
+        "name": {
+            "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+            "type": "string"
+        },
+        "properties": {
+            "additionalProperties": {
+            },
+            "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
+            "type": "object"
+        }
+    },
+    "required": [
+        "language",
+        "name"
+    ],
+    "type": "object"
+}
+

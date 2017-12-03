@@ -17,8 +17,8 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
+import os
+import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
 
@@ -82,6 +82,7 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
+# -- Options specific to this project -------------------------------------
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -169,6 +170,4 @@ texinfo_documents = [
      author, 'BlattWerkzeug', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
 

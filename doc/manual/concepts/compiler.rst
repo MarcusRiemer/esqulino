@@ -1,10 +1,10 @@
-Compiler Overview
+Compilers & Programming Languages
 =========================================
 
-Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax trees. Every code resource (``SQL``, ``HTML``, a regular expression, ...) that exists within BlattWerkzeug is, at its core, simply a syntaxtree. All operations that are described in this manual work with the syntaxtrees of these code resources in one way or another.
+In order to allow the creation of easy to use block editors, BlattWerkzeug needs to define its own compilation primitives. The main reason for this re-invention the wheel is the focus of existing software: Usually compilers are focussed on speed and correctness, not necessarily a friendly representation for drag & drop mutations.
 
 The Abstract Syntax Tree
-=========================================
+-----------------------------------------
 
 The syntax tree itself is purely a datastructure and has no concept of beeing "valid" or "invalid" on its own. It also has no idea how to it should "look like" in its compiled form. All additional functionality is provided by specialed tools that take the tree as an input.
 
@@ -19,10 +19,10 @@ The children of nodes have to be organised in so called **child categories**. Ea
   
 Additionally nodes may define so called **properties** which hold atomic values in the form of texts or integers, but never in the form of child nodes. Each of these properties needs to have a name that is unique in the scope of the current node.
 
-Syntaxtrees may be stored as ``JSON``-documents.
+Syntaxtrees may be stored as ``JSON``-documents conforming to the following schema: :doc:`json-schema-syntaxtree`.
 
 Example AST: ``if``-Statement
-------------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Branches in programming languages (``if``) usually consist of three different children: Two different code paths that could be executed and a boolean expression that decides whether the positive or the negative branch should be taken. In BlattWerkzeug, an if statement would be represented by using three child groups that could be called ``predicate``, ``positive`` and ``negative``. Each of these child groups may then hast their own list of children.
 
@@ -37,12 +37,12 @@ Note how the names of the variables and and the values are stored in properties 
 
 .. graphviz:: ast-example-if.graphviz
 
+Validation & Grammars
+-----------------------------------------
 
-Definition of a programming language
-=========================================
+As syntaxtrees may define arbitrary tree structures, some kind of validation is necessary to ensure that certain trees conform to certain programming languages.
 
-Definition of a language model
-=========================================
+Emitting
+-----------------------------------------
 
-
-
+A valid syntax tree may be emitted in its "natural" representation.
