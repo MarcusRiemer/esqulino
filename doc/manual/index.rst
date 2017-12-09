@@ -13,9 +13,8 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
 
 
 .. toctree::
-   :maxdepth: 2
-
-   concepts/core
-   concepts/compiler
-   concepts/language-model
+   
+   concepts/index   
+   compiler_blocks/compiler
+   compiler_blocks/language-model
    glossary

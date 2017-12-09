@@ -40,7 +40,7 @@ Note how the names of the variables and and the values are stored in properties 
 Validation & Grammars
 -----------------------------------------
 
-As syntaxtrees may define arbitrary tree structures, some kind of validation is necessary to ensure that certain trees conform to certain programming languages.
+As syntaxtrees may define arbitrary tree structures, some kind of validation is necessary to ensure that certain trees conform to certain programming languages. The validation concept is losely based on ``XML Schema`` and ``RelaxNG``, the syntax of the latter is also used to describe the grammars in a user friendly textformat.
 
 Emitting
 -----------------------------------------
