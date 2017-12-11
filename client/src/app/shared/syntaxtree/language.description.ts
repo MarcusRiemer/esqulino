@@ -1,4 +1,4 @@
-import { ValidatorDescription } from './validator.description'
+import { GrammarDescription } from './validator.description'
 import { NodeConverterRegistration } from './codegenerator'
 
 /**
@@ -8,6 +8,6 @@ import { NodeConverterRegistration } from './codegenerator'
 export interface LanguageDescription {
   id: string,
   name: string,
-  validators: ValidatorDescription[],
+  validators: GrammarDescription[],
   generators: NodeConverterRegistration[],
 }

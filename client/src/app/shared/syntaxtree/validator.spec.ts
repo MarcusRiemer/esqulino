@@ -14,7 +14,7 @@ import { Validator, ErrorCodes } from './validator'
  *   </body>
  * </html>
  */
-const langMiniHtml: Schema.ValidatorDescription = {
+const langMiniHtml: Schema.GrammarDescription = {
   languageName: "mini-html",
   types: {
     "text": {
@@ -105,7 +105,7 @@ const langMiniHtml: Schema.ValidatorDescription = {
  * FROM
  * WHERE
  */
-const langMiniSql: Schema.ValidatorDescription = {
+const langMiniSql: Schema.GrammarDescription = {
   languageName: "mini-sql",
   types: {
     "root": {
@@ -138,7 +138,7 @@ const langMiniSql: Schema.ValidatorDescription = {
 /**
  * A single node that uses every possible string constraint.
  */
-const langStringConstraint: Schema.ValidatorDescription = {
+const langStringConstraint: Schema.GrammarDescription = {
   languageName: "string-constraint",
   types: {
     root: {
@@ -179,7 +179,7 @@ const langStringConstraint: Schema.ValidatorDescription = {
 /**
  * A single root node that uses some children with the "allowed" constraint
  */
-const langAllowedConstraint: Schema.ValidatorDescription = {
+const langAllowedConstraint: Schema.GrammarDescription = {
   languageName: "allowed-constraint",
   types: {
     "root": {
@@ -212,7 +212,7 @@ const langAllowedConstraint: Schema.ValidatorDescription = {
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langSequenceConstraint: Schema.ValidatorDescription = {
+const langSequenceConstraint: Schema.GrammarDescription = {
   languageName: "sequence-constraint",
   types: {
     "root": {
@@ -247,7 +247,7 @@ const langSequenceConstraint: Schema.ValidatorDescription = {
  * A single node that wants exactly one child out of a variety
  * of possibilites.
  */
-const langAllowedOneOfConstraint: Schema.ValidatorDescription = {
+const langAllowedOneOfConstraint: Schema.GrammarDescription = {
   languageName: "allowed-oneOf-constraint",
   types: {
     "root": {
@@ -272,7 +272,7 @@ const langAllowedOneOfConstraint: Schema.ValidatorDescription = {
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langOneOfNodes: Schema.ValidatorDescription = {
+const langOneOfNodes: Schema.GrammarDescription = {
   languageName: "oneof-nodes",
   types: {
     "root": {
@@ -288,7 +288,7 @@ const langOneOfNodes: Schema.ValidatorDescription = {
 /**
  * A single node with only boolean properties.
  */
-const langBooleanConstraint: Schema.ValidatorDescription = {
+const langBooleanConstraint: Schema.GrammarDescription = {
   languageName: "boolean-constraint",
   types: {
     "root": {
@@ -303,7 +303,7 @@ const langBooleanConstraint: Schema.ValidatorDescription = {
 /**
  * A single node that may have optional properties.
  */
-const langOptionalProperty: Schema.ValidatorDescription = {
+const langOptionalProperty: Schema.GrammarDescription = {
   languageName: "optionalProperty",
   types: {
     "root": {

@@ -866,13 +866,13 @@ class TypeReference {
 /**
  * A language consists of type definitions and a set of types that may occur at the root.
  */
-class SchemaValidator {
+export class GrammarValidator {
   private _validator: Validator;
   private _languageName: string;
   private _registeredTypes: { [name: string]: NodeType } = {};
   private _rootType: TypeReference;
 
-  constructor(validator: Validator, desc: Desc.ValidatorDescription) {
+  constructor(validator: Validator, desc: Desc.GrammarDescription) {
     this._validator = validator;
     this._languageName = desc.languageName;
 
@@ -881,6 +881,13 @@ class SchemaValidator {
     });
 
     this._rootType = new TypeReference(validator, desc.root, this._languageName);
+  }
+
+  /**
+   * @return The name of the language this grammar defines.
+   */
+  get languageName() {
+    return (this._languageName);
   }
 
   /**
@@ -944,9 +951,9 @@ class SchemaValidator {
  * check any AST against those languages.
  */
 export class Validator {
-  private _registeredSchemas: { [langName: string]: SchemaValidator } = {};
+  private _registeredGrammars: { [langName: string]: GrammarValidator } = {};
 
-  constructor(langs: Desc.ValidatorDescription[]) {
+  constructor(langs: Desc.GrammarDescription[]) {
     langs.forEach(langDesc => this.register(langDesc));
   }
 
@@ -954,7 +961,7 @@ export class Validator {
    * @return All individual schemas that are part of this validator.
    */
   get availableSchemas() {
-    return (Object.entries(this._registeredSchemas).map(([name, types]) => {
+    return (Object.entries(this._registeredGrammars).map(([name, types]) => {
       return ({
         name: name,
         types: types
@@ -967,7 +974,7 @@ export class Validator {
    */
   get availableTypes() {
     return (
-      Object.values(this._registeredSchemas)
+      Object.values(this._registeredGrammars)
         .map(v => v.availableTypes)
         .reduce((lhs, rhs) => lhs.concat(rhs), [])
     );
@@ -976,12 +983,12 @@ export class Validator {
   /**
    * Registers a new language with this validator
    */
-  private register(desc: Desc.ValidatorDescription) {
+  private register(desc: Desc.GrammarDescription) {
     if (this.isKnownLanguage(desc.languageName)) {
       throw new Error(`Attempted to register language "${desc.languageName}" twice`);
     }
 
-    this._registeredSchemas[desc.languageName] = new SchemaValidator(this, desc);
+    this._registeredGrammars[desc.languageName] = new GrammarValidator(this, desc);
   }
 
   /**
@@ -1002,7 +1009,7 @@ export class Validator {
     if (rootNode) {
       if (this.isKnownLanguage(rootNode.languageName)) {
         // Pass validation to the appropriate language
-        const lang = this.getLanguageValidator(rootNode.languageName);
+        const lang = this.getLanguageGrammar(rootNode.languageName);
         lang.validateFromRoot(rootNode, context);
       } else {
         // Not knowing the language is a single error
@@ -1023,12 +1030,12 @@ export class Validator {
   /**
    * @return The language that has been asked for. Throws if the language does not exist.
    */
-  getLanguageValidator(language: string) {
+  getLanguageGrammar(language: string) {
     if (!this.isKnownLanguage(language)) {
-      const available = Object.keys(this._registeredSchemas).join(', ');
+      const available = Object.keys(this._registeredGrammars).join(', ');
       throw new Error(`Validator does not know language "${language}", known are: ${available}`);
     } else {
-      return (this._registeredSchemas[language]);
+      return (this._registeredGrammars[language]);
     }
   }
 
@@ -1039,7 +1046,7 @@ export class Validator {
     if (!this.isKnownType(language, typename)) {
       throw new Error(`Validator does not know type "${language}.${typename}"`);
     } else {
-      return (this._registeredSchemas[language].getType(typename));
+      return (this._registeredGrammars[language].getType(typename));
     }
   }
 
@@ -1047,7 +1054,7 @@ export class Validator {
    * @return True if the given language is known to this validator.
    */
   isKnownLanguage(language: string) {
-    return (!!this._registeredSchemas[language]);
+    return (!!this._registeredGrammars[language]);
   }
 
   /**
@@ -1056,7 +1063,7 @@ export class Validator {
   isKnownType(language: string, typename: string) {
     return (
       this.isKnownLanguage(language) &&
-      this._registeredSchemas[language].isKnownType(typename)
+      this._registeredGrammars[language].isKnownType(typename)
     );
   }
 }

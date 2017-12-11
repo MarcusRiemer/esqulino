@@ -3,7 +3,7 @@ import { Node, NodeDescription } from '../syntaxtree'
 import { Validator, ErrorCodes } from '../validator'
 
 import { NODE_CONVERTER } from './regex.codegenerator'
-import { VALIDATOR_DESCRIPTION } from './regex.validator'
+import { GRAMMAR_DESCRIPTION } from './regex.validator'
 
 describe('Language: RegEx (Codegen)', () => {
   it("Invalid: Empty RegEx", () => {
@@ -14,7 +14,7 @@ describe('Language: RegEx (Codegen)', () => {
 
     const ast = new Node(astDesc, undefined);
 
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
@@ -48,7 +48,7 @@ describe('Language: RegEx (Codegen)', () => {
 
     const ast = new Node(astDesc, undefined);
 
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
     const res = v.validateFromRoot(ast);
     expect(res.isValid).toBeTruthy();
 
@@ -101,7 +101,7 @@ describe('Language: RegEx (Codegen)', () => {
 
     const ast = new Node(astDesc, undefined);
 
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
     const res = v.validateFromRoot(ast);
     expect(res.isValid).toBeTruthy();
 
@@ -200,7 +200,7 @@ describe('Language: RegEx (Codegen)', () => {
 
     const ast = new Node(astDesc, undefined);
 
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
     const res = v.validateFromRoot(ast);
     expect(res.isValid).toBeTruthy();
 
@@ -298,7 +298,7 @@ describe('Language: RegEx (Codegen)', () => {
 
     const ast = new Node(astDesc, undefined);
 
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
     const res = v.validateFromRoot(ast);
 
     expect(res.isValid).toBeTruthy();

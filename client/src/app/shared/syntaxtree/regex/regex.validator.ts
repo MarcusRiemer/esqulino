@@ -1,6 +1,6 @@
 import * as Schema from '../validator.description'
 
-export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
+export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   languageName: "regex",
   types: {
     "constant": {
