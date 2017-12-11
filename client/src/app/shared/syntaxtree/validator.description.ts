@@ -199,9 +199,9 @@ export interface NodeTypesAllowedDescription extends NodeTypesDescription {
 }
 
 /**
- * Describes a whole schema that in turn may describe a whole language.
+ * Describes a grammar that may describe the syntactic structure of a language.
  */
-export class ValidatorDescription {
+export class GrammarDescription {
   // The unique name of the language
   languageName: string
 

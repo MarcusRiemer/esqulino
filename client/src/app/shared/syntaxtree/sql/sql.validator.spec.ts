@@ -1,11 +1,11 @@
 import * as AST from '../syntaxtree'
 import { Validator, ErrorCodes } from '../validator'
 
-import { VALIDATOR_DESCRIPTION } from './sql.validator'
+import { GRAMMAR_DESCRIPTION } from './sql.validator'
 
 describe("Language: SQL (Validation)", () => {
   it("Invalid: Empty SELECT-query", () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: AST.NodeDescription = {
       language: "sql",
@@ -21,7 +21,7 @@ describe("Language: SQL (Validation)", () => {
   });
 
   it("Valid: SELECT * FROM foo", () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: AST.NodeDescription = {
       language: "sql",
@@ -66,7 +66,7 @@ describe("Language: SQL (Validation)", () => {
   });
 
   it("Valid: SELECT * FROM foo, bar", () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: AST.NodeDescription = {
       language: "sql",
@@ -126,7 +126,7 @@ describe("Language: SQL (Validation)", () => {
   });
 
   it("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id", () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: AST.NodeDescription = {
       language: "sql",
@@ -225,7 +225,7 @@ describe("Language: SQL (Validation)", () => {
   });
 
   it("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id AND foo.id = 2", () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: AST.NodeDescription = {
       language: "sql",
