@@ -251,7 +251,7 @@ export function isNodeTypesSequenceDescription(obj: any): obj is NodeTypesSequen
  * @return True, if the given instance probably satisfies "SequenceCardinalityDescription"
  */
 export function isChildCardinalityDescription(obj: any): obj is ChildCardinalityDescription {
-  return (obj instanceof Object && "minOccurs" in obj && "maxOccurs" in obj && "nodeType" in obj);
+  return (obj instanceof Object && ("minOccurs" in obj || "maxOccurs" in obj) && "nodeType" in obj);
 }
 
 /**

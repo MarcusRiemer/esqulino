@@ -82,7 +82,7 @@ export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTy
   if (t.children) {
     const children = Object.entries(t.children)
       .map(([groupName, group]) => prettyPrintChildren(groupName, group));
-    toReturn.push(...children);
+    toReturn.push(children);
   }
 
   return ([...toReturn, `}`]);
@@ -118,12 +118,56 @@ export function prettyPrintProperty(name: string, p: Desc.NodePropertyTypeDescri
 }
 
 /**
+ * Takes a node reference, possibly with its cardinality description,
+ * and returns a pretty string version of it. The cardinalities are
+ * mapped to the standard regex operators ?,+ and * or expressed using
+ * the {min,max}-bracket notation.
+ */
+export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
+  if (Desc.isQualifiedTypeName(t)) {
+    return (`${t.languageName}.${t.typeName}`);
+  } else if (Desc.isChildCardinalityDescription(t)) {
+    const printCardinality = (t: Desc.ChildCardinalityDescription) => {
+      if (t.minOccurs === 0 && t.maxOccurs === 1) {
+        return ("?");
+      } else if (t.minOccurs === 1 && (t.maxOccurs === undefined || t.maxOccurs === +Infinity)) {
+        return ("+");
+      } else if (t.minOccurs === 0 && (t.maxOccurs === undefined || t.maxOccurs === +Infinity)) {
+        return ("*");
+      } else {
+        if (t.minOccurs === undefined) {
+          return (`{,${t.maxOccurs}}`);
+        } else if (t.maxOccurs === undefined) {
+          return (`{${t.minOccurs},}`);
+        } else {
+          return (`{${t.minOccurs},${t.maxOccurs}}`);
+        }
+      }
+    };
+
+    const printedName = prettyPrintTypeReference(t.nodeType);
+    return (`${printedName}${printCardinality(t)}`);
+  } else {
+    return (t);
+  }
+}
+
+/**
  * Prints the grammar a single child.
  */
-export function prettyPrintChildren(name: string, p: Desc.NodeChildrenGroupDescription): string[] {
-  const head = `children "${name}" {`;
-  const tail = `}`;
+export function prettyPrintChildren(name: string, p: Desc.NodeChildrenGroupDescription): string {
+  let connector = (p) => {
+    if (Desc.isNodeTypesAllowedDescription(p)) {
+      return (' & ');
+    } else {
+      return (' ');
+    }
+  };
 
-  return ([head, tail]);
+  const childTypes = p.nodeTypes
+    .map(prettyPrintTypeReference)
+    .join(connector(p));
+
+  return (`children "${name}" ::= ${childTypes}`);
 }
 

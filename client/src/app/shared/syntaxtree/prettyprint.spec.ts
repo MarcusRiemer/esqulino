@@ -97,14 +97,52 @@ describe('Grammar PrettyPrinter', () => {
     expect(r).toEqual([`prop "i1" { integer }`]);
   });
 
+  it('Type References & Cardinalities', () => {
+    expect(p.prettyPrintTypeReference("foo")).toEqual("foo");
+    expect(p.prettyPrintTypeReference({ languageName: "bar", typeName: "foo" })).toEqual("bar.foo");
+    expect(p.prettyPrintTypeReference({
+      nodeType: { languageName: "bar", typeName: "foo" },
+      minOccurs: 0,
+      maxOccurs: 1,
+    })).toEqual("bar.foo?");
+    expect(p.prettyPrintTypeReference({
+      nodeType: { languageName: "bar", typeName: "foo" },
+      minOccurs: 1,
+      maxOccurs: undefined
+    })).toEqual("bar.foo+");
+    expect(p.prettyPrintTypeReference({
+      nodeType: { languageName: "bar", typeName: "foo" },
+      minOccurs: 0,
+      maxOccurs: undefined
+    })).toEqual("bar.foo*");
+    expect(p.prettyPrintTypeReference({
+      nodeType: { languageName: "bar", typeName: "foo" },
+      minOccurs: 0,
+      maxOccurs: 2,
+    })).toEqual("bar.foo{0,2}");
+    expect(p.prettyPrintTypeReference({
+      nodeType: { languageName: "bar", typeName: "foo" },
+      minOccurs: undefined,
+      maxOccurs: 2,
+    })).toEqual("bar.foo{,2}");
+    expect(p.prettyPrintTypeReference({
+      nodeType: { languageName: "bar", typeName: "foo" },
+      minOccurs: 3,
+      maxOccurs: undefined
+    })).toEqual("bar.foo{3,}");
+  });
+
+  it('foo ::= bar baz', () => {
+    const r = p.prettyPrintChildren('foo', {
+      nodeTypes: ["bar", "baz"],
+      type: "sequence"
+    });
+
+    expect(r).toEqual('children "foo" ::= bar baz');
+  });
 
   it('Empty Grammar', () => {
-    const r = p.prettyPrintGrammar({
-      languageName: "empty",
-      root: "empty",
-      types: {}
-    });
-    expect(r).toEqual(`grammar "empty" {\n}`);
+    verifyFiles('g0-empty');
   });
 
   it('Grammar with empty nodes', () => {
@@ -120,6 +158,18 @@ describe('Grammar PrettyPrinter', () => {
   });
 
   it('Grammar g4: string node with minimum and maximum length', () => {
-    verifyFiles('g4-string-node-length');
+    verifyFiles('g4-string-node-length-min-max');
+  });
+
+  it('Grammar g5: single node that is its own child', () => {
+    verifyFiles('g5-node-child-self');
+  });
+
+  it('Grammar g6: single node that is optionally its own child', () => {
+    verifyFiles('g6-node-child-self-optional');
+  });
+
+  it('Grammar g7: mixed cardinality for allowed children', () => {
+    verifyFiles('g7-node-child-allowed-mix');
   });
 });

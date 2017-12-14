@@ -1,0 +1,41 @@
+{
+  "languageName": "g7",
+  "root": "n1",
+  "types": {
+    "n1": {
+      "children": {
+        "c": {
+          "type": "allowed",
+          "nodeTypes": [
+            {
+              "nodeType": {
+                "languageName": "g7",
+                "typeName": "n1"
+              },
+              "minOccurs": 0,
+              "maxOccurs": 1
+            },
+            {
+              "nodeType": {
+                "languageName": "g7",
+                "typeName": "n2"
+              },              
+              "minOccurs": 1
+            },
+            {
+              "nodeType": {
+                "languageName": "g7",
+                "typeName": "n3"
+              },
+              "minOccurs": 0
+            }
+          ]
+        }
+      }
+    },
+    "n2": {
+    },
+    "n3": {
+    }
+  }
+}
