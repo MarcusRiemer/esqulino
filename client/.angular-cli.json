@@ -42,7 +42,6 @@
       "tsconfig": "tsconfig.server.json",
       "testTsconfig": "tsconfig.test.json",
       "prefix": "app",
-      "mobile": false,
       "styles": [
         "app/css/style.scss"
       ],

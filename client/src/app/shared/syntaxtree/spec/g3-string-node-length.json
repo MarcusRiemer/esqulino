@@ -1,0 +1,19 @@
+{
+  "languageName": "g3",
+  "root": "s1",
+  "types": {
+    "s1": {
+      "properties": {
+        "value": {
+          "base": "string",
+          "restrictions": [
+            {
+              "type": "length",
+              "value": 4
+            }
+          ]
+        }
+      }
+    }
+  }
+}

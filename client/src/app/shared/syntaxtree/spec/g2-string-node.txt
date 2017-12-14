@@ -1,0 +1,5 @@
+grammar "g2" {
+  node "s1" {
+    prop "value" { string }
+  }
+}
