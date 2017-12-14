@@ -1,0 +1,23 @@
+{
+  "languageName": "g6",
+  "root": "n1",
+  "types": {
+    "n1": {
+      "children": {
+        "c": {
+          "type": "sequence",
+          "nodeTypes": [
+            {
+              "nodeType": {
+                "languageName": "g6",
+                "typeName": "n1"
+              },
+              "minOccurs": 0,
+              "maxOccurs": 1
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+grammar "g5" {
+  node "n1" {
+    children "c" ::= n1
+  }
+}
