@@ -6,7 +6,7 @@
 export const environment = {
   production: false,
   piwik: {
-    host: "//piwik.blattwerkzeug.de",
+    host: "https://piwik.blattwerkzeug.de",
     id: 2
   }
 };

@@ -10,6 +10,7 @@ pipelines:
         script:
           - make install-deps
           - make dist-dev
+          - make -C client universal-compile
           - make -C server test
           - TEST_SINGLE_RUN=true make -C client test
         services:
