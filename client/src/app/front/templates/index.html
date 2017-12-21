@@ -12,34 +12,31 @@
            height="30px"
            title="BlattWerkzeug">
     </a>
-    
+
     <a [routerLink]="['/about','projects']"
        id="navbar-navigate-projects"
        class="nav-link">
       Verfügbare Projekte
     </a>
-
-    <a class="nav-link right"
-       [routerLink]="['/about','academia']">
-      Forschung
-    </a>
-    
-    <a class="nav-link"
-       [routerLink]="['/about','imprint']">
-      Impressum
-    </a>
   </nav>
-  
+
   <flash-message-list></flash-message-list>
   <router-outlet></router-outlet>
-  <div class="footer">
-    <div class="logos">
-      <a href="http://www.fh-wedel.de/mitarbeiter/mri/sql-web-ide"><img src="/vendor/logos/fhw.png"
-                                                                     title="Fachhochschule Wedel - Marcus Riemer"
-                                                                     height="35px" /></a>
-      <a href="http://www-ps.informatik.uni-kiel.de/~fhu/"><img src="/vendor/logos/cau.png"
-                                                                title="Christian-Albrechts-Universität Kiel- Frank Huch"
-                                                                height="35px" /></a>
+  <nav class="footer">
+    <div>
+      <a [routerLink]="['/about','imprint']">
+        Impressum
+      </a>
+      <a [routerLink]="['/about','privacy']">
+        Datenschutz
+      </a>
+      <a [routerLink]="['/about','academia']">
+        Forschung
+      </a>
     </div>
-  </div>
+    <div class="logos">
+      <a href="http://www.fh-wedel.de/mitarbeiter/mri/sql-web-ide"><img src="/vendor/logos/fhw.png" title="Fachhochschule Wedel - Marcus Riemer" height="35px" /></a>
+      <a href="http://www-ps.informatik.uni-kiel.de/~fhu/"><img src="/vendor/logos/cau.png" title="Christian-Albrechts-Universität Kiel- Frank Huch" height="35px" /></a>
+    </div>
+  </nav>
 </div>

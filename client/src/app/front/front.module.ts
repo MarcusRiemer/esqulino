@@ -14,6 +14,7 @@ import { AboutTeacherComponent } from './teacher.component'
 import { ImprintComponent } from './imprint.component'
 import { ProjectListComponent } from './project-list.component'
 import { ProjectListItemComponent } from './project-list-item.component'
+import { PrivacyComponent } from './privacy.component'
 import { VideoDisplayComponent } from './video-display.component'
 
 @NgModule({
@@ -32,7 +33,8 @@ import { VideoDisplayComponent } from './video-display.component'
     ImprintComponent,
     ProjectListComponent,
     ProjectListItemComponent,
-    VideoDisplayComponent
+    VideoDisplayComponent,
+    PrivacyComponent
   ],
   exports: [
     AboutComponent,
