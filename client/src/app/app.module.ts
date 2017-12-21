@@ -1,12 +1,12 @@
 import { NgModule, ErrorHandler, PLATFORM_ID, Inject } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common'
+import { isPlatformBrowser } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2Piwik } from 'angulartics2/piwik';
 
-import { environment } from 'environments/environment';
+import { environment } from '../environments/environment';
 
 import { SharedAppModule } from './shared/shared.module';
 import { FrontModule } from './front/front.module';
@@ -19,8 +19,11 @@ import { NotifyErrorHandler } from './error-handler';
 
 // Ensure the Piwik client object is globally available
 declare var _paq: any[];
-var _paq = typeof (window as any)._paq === "undefined" ? [] : _paq;
-(window as any)._paq = _paq;
+if (typeof window !== "undefined") {
+  var _paq = (typeof (window as any)._paq === "undefined") ? [] : _paq;
+  (window as any)._paq = _paq;
+}
+
 
 @NgModule({
   imports: [
