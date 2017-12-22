@@ -1,12 +1,13 @@
-import { Observable, BehaviorSubject } from 'rxjs'
+import { Observable, BehaviorSubject } from 'rxjs';
 
-import { Injectable } from '@angular/core'
+import { Injectable } from '@angular/core';
 
-import { arrayEqual } from '../shared/util'
-import { Node, NodeDescription, NodeLocation, CodeResource } from '../shared/syntaxtree'
-import { SidebarBlock } from '../shared/block'
+import { arrayEqual } from '../shared/util';
+import { AnalyticsService, TrackCategory } from '../shared/analytics.service';
+import { Node, NodeDescription, NodeLocation, CodeResource } from '../shared/syntaxtree';
+import { SidebarBlock } from '../shared/block';
 
-import { TrashService } from './shared/trash.service'
+import { TrashService } from './shared/trash.service';
 
 /**
  * All information about the origin of this drag if it came from
@@ -63,7 +64,10 @@ export class DragService {
    * this service. They need to be passed as "normal" arguments of the existing
    * methods to ensure the correct instances get passed around.
    */
-  private constructor(private _trashService: TrashService) { }
+  private constructor(
+    private _trashService: TrashService,
+    private _analytics: AnalyticsService
+  ) { }
 
   /**
    * Starts a new dragging operation.
@@ -96,6 +100,14 @@ export class DragService {
       this._currentDrag.next(undefined);
       this._trashService.hideTrash();
       console.log(`AST-Drag ended:`, sourceSidebar);
+
+      // Tell the analytics API about the ended event
+      this._analytics.trackEvent({
+        category: TrackCategory.BlockEditor,
+        action: "endDrag",
+        name: desc.language,
+        value: desc
+      });
     }
     evt.target.addEventListener("dragend", dragEndHandler);
 
@@ -122,6 +134,14 @@ export class DragService {
       });
     }
     console.log(`AST-Drag started:`, sourceSidebar);
+
+    // Tell the analytics API about the started event
+    this._analytics.trackEvent({
+      category: TrackCategory.BlockEditor,
+      action: "startDrag",
+      name: desc.language,
+      value: desc
+    });
   }
 
   /**

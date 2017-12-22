@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { HttpModule } from '@angular/http'
 
+import { AnalyticsService } from './analytics.service'
 import { FlashMessageListComponent } from './flash.component'
 import { FlashService } from './flash.service'
 import { ProjectDescriptionService } from './project.description.service'
@@ -42,6 +43,7 @@ export class SharedAppModule {
     return ({
       ngModule: SharedAppModule,
       providers: [
+        AnalyticsService,
         FlashService,
         ServerApiService,
         ProjectDescriptionService,
