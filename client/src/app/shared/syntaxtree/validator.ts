@@ -964,7 +964,7 @@ export class Validator {
     return (Object.entries(this._registeredGrammars).map(([name, types]) => {
       return ({
         name: name,
-        types: types
+        grammar: types
       });
     }));
   }

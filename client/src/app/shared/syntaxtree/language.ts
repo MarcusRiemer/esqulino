@@ -73,9 +73,9 @@ export class Language {
   }
 
   /**
-   * @return The schemas this language is composed of.
+   * @return The validators that are available for this language.
    */
-  get availableSchemas() {
+  get availableValidators() {
     return (this._validator.availableSchemas)
   }
 
