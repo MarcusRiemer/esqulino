@@ -11,7 +11,16 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         },
         "attributes": {
           type: "allowed",
-          nodeTypes: ["attribute"]
+          nodeTypes: [
+            {
+              nodeType: {
+                languageName: "dxml",
+                typeName: "attribute",
+              },
+              minOccurs: 0,
+              maxOccurs: undefined
+            }
+          ]
         }
       },
       properties: {
