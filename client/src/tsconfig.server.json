@@ -18,6 +18,7 @@
   },
   "exclude": [
     "test.ts",
+    "main.cli.ts",
     "**/*.spec.ts"
   ],
   "angularCompilerOptions": {
