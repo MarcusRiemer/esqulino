@@ -1,41 +1,47 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "additionalProperties": false,
-    "properties": {
+  "$ref": "#/definitions/QueryResultDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "QueryResultDescription": {
+      "additionalProperties": false,
+      "description": "The result usually contains a list of rows and a list of columns.\nIf the result is a simulation there are additional properties.",
+      "properties": {
         "columns": {
-            "items": {
-                "type": "string"
-            },
-            "type": "array"
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "highlight": {
-            "items": {
-                "type": "number"
-            },
-            "type": "array"
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
         },
         "inserted": {
-            "items": {
-                "items": {
-                    "type": "string"
-                },
-                "type": "array"
-            },
-            "type": "array"
+          "items": {
+            "$ref": "#/definitions/RawRow"
+          },
+          "type": "array"
         },
         "rows": {
-            "items": {
-                "items": {
-                    "type": "string"
-                },
-                "type": "array"
-            },
-            "type": "array"
+          "items": {
+            "$ref": "#/definitions/RawRow"
+          },
+          "type": "array"
         }
-    },
-    "required": [
+      },
+      "required": [
         "columns"
-    ],
-    "type": "object"
+      ],
+      "type": "object"
+    },
+    "RawRow": {
+      "description": "Not much ado about type safety here, in the raw\nformat every cell is a string.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  }
 }
-

@@ -1,155 +1,155 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "additionalProperties": false,
-    "definitions": {
-        "EditorBlockDescription": {
-            "additionalProperties": false,
-            "description": "Describes how certain nodes in the syntaxtree should be presented\nto an end user inside the drag & drop interface.",
-            "properties": {
-                "describedType": {
-                    "$ref": "#/definitions/QualifiedTypeName",
-                    "description": "Nodes of this type are presented using this block."
-                },
-                "visual": {
-                    "description": "The actual visual representation.",
-                    "items": {
-                        "$ref": "#/definitions/EditorBlockDescriptions.EditorBlockBase"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "describedType",
-                "visual"
-            ],
-            "type": "object"
+  "$ref": "#/definitions/LanguageModelDocument",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "EditorBlockDescription": {
+      "additionalProperties": false,
+      "description": "Describes how certain nodes in the syntaxtree should be presented\nto an end user inside the drag & drop interface.",
+      "properties": {
+        "describedType": {
+          "$ref": "#/definitions/QualifiedTypeName",
+          "description": "Nodes of this type are presented using this block."
         },
-        "EditorBlockDescriptions.EditorBlockBase": {
-            "additionalProperties": false,
-            "description": "Describes how certain nodes of the syntaxtree should be presented\ninside the drag and drop editor. As the available blocks are very\ndifferent, this \"base\" interface consists of nothing but the\ndiscriminator value.",
-            "properties": {
-                "blockType": {
-                    "type": "string"
-                },
-                "marginLeft": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "blockType"
-            ],
-            "type": "object"
-        },
-        "NodeDescription": {
-            "additionalProperties": false,
-            "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
-            "properties": {
-                "children": {
-                    "additionalProperties": {
-                        "items": {
-                            "$ref": "#/definitions/NodeDescription"
-                        },
-                        "type": "array"
-                    },
-                    "description": "Nodes may have children in various categories. This base class\nmakes no assumptions about the names of children. Examples for\nchildren in multiple categories would be things like \"attributes\"\nand generic \"children\" in a specialization for XML.",
-                    "type": "object"
-                },
-                "language": {
-                    "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
-                    "type": "string"
-                },
-                "properties": {
-                    "additionalProperties": {
-                    },
-                    "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
-                    "type": "object"
-                }
-            },
-            "required": [
-                "language",
-                "name"
-            ],
-            "type": "object"
-        },
-        "QualifiedTypeName": {
-            "additionalProperties": false,
-            "description": "Used when refererring to types that are defined other languages.",
-            "properties": {
-                "languageName": {
-                    "type": "string"
-                },
-                "typeName": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "languageName",
-                "typeName"
-            ],
-            "type": "object"
-        },
-        "SidebarBlockDescription": {
-            "additionalProperties": false,
-            "description": "Describes how the available types should be represented in the sidebar.\nIt is perfectly fine to have multiple sidebar descriptions for the\nsame underlying type.",
-            "properties": {
-                "defaultNode": {
-                    "$ref": "#/definitions/NodeDescription",
-                    "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
-                },
-                "describedType": {
-                    "$ref": "#/definitions/QualifiedTypeName",
-                    "description": "This type is made available via this description."
-                },
-                "sidebar": {
-                    "additionalProperties": false,
-                    "description": "How this type should be represented in the sidebar.",
-                    "properties": {
-                        "category": {
-                            "type": "string"
-                        },
-                        "displayName": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "category"
-                    ],
-                    "type": "object"
-                }
-            },
-            "required": [
-                "defaultNode",
-                "describedType",
-                "sidebar"
-            ],
-            "type": "object"
+        "visual": {
+          "description": "The actual visual representation.",
+          "items": {
+            "$ref": "#/definitions/EditorBlockDescriptions.EditorBlockBase"
+          },
+          "type": "array"
         }
+      },
+      "required": [
+        "describedType",
+        "visual"
+      ],
+      "type": "object"
     },
-    "description": "The data about a language model that is stored in the database",
-    "properties": {
+    "EditorBlockDescriptions.EditorBlockBase": {
+      "additionalProperties": false,
+      "description": "Describes how certain nodes of the syntaxtree should be presented\ninside the drag and drop editor. As the available blocks are very\ndifferent, this \"base\" interface consists of nothing but the\ndiscriminator value.",
+      "properties": {
+        "blockType": {
+          "type": "string"
+        },
+        "marginLeft": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "blockType"
+      ],
+      "type": "object"
+    },
+    "LanguageModelDocument": {
+      "additionalProperties": false,
+      "description": "The data about a language model that is stored in the database",
+      "properties": {
         "editorBlocks": {
-            "description": "How blocks should be represented in the drag & drop editor.",
-            "items": {
-                "$ref": "#/definitions/EditorBlockDescription"
-            },
-            "type": "array"
+          "description": "How blocks should be represented in the drag & drop editor.",
+          "items": {
+            "$ref": "#/definitions/EditorBlockDescription"
+          },
+          "type": "array"
         },
         "sidebarBlocks": {
-            "description": "All blocks that should be shown in the sidebar.",
+          "description": "All blocks that should be shown in the sidebar.",
+          "items": {
+            "$ref": "#/definitions/SidebarBlockDescription"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "sidebarBlocks",
+        "editorBlocks"
+      ],
+      "type": "object"
+    },
+    "NodeDescription": {
+      "additionalProperties": false,
+      "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
+      "properties": {
+        "children": {
+          "additionalProperties": {
             "items": {
-                "$ref": "#/definitions/SidebarBlockDescription"
+              "$ref": "#/definitions/NodeDescription"
             },
             "type": "array"
+          },
+          "description": "Nodes may have children in various categories. This base class\nmakes no assumptions about the names of children. Examples for\nchildren in multiple categories would be things like \"attributes\"\nand generic \"children\" in a specialization for XML.",
+          "type": "object"
+        },
+        "language": {
+          "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+          "type": "string"
+        },
+        "properties": {
+          "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
+          "type": "object"
         }
+      },
+      "required": [
+        "name",
+        "language"
+      ],
+      "type": "object"
     },
-    "required": [
-        "editorBlocks",
-        "sidebarBlocks"
-    ],
-    "type": "object"
+    "QualifiedTypeName": {
+      "additionalProperties": false,
+      "description": "Used when refererring to types that are defined other languages.",
+      "properties": {
+        "languageName": {
+          "type": "string"
+        },
+        "typeName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "typeName",
+        "languageName"
+      ],
+      "type": "object"
+    },
+    "SidebarBlockDescription": {
+      "additionalProperties": false,
+      "description": "Describes how the available types should be represented in the sidebar.\nIt is perfectly fine to have multiple sidebar descriptions for the\nsame underlying type.",
+      "properties": {
+        "defaultNode": {
+          "$ref": "#/definitions/NodeDescription",
+          "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
+        },
+        "describedType": {
+          "$ref": "#/definitions/QualifiedTypeName",
+          "description": "This type is made available via this description."
+        },
+        "sidebar": {
+          "additionalProperties": false,
+          "description": "How this type should be represented in the sidebar.",
+          "properties": {
+            "category": {
+              "type": "string"
+            },
+            "displayName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "category"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "describedType",
+        "sidebar",
+        "defaultNode"
+      ],
+      "type": "object"
+    }
+  }
 }
-

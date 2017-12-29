@@ -2,12 +2,7 @@ import { Injectable, PLATFORM_ID, Inject } from '@angular/core'
 import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 import { Http, Response } from '@angular/http';
 
-/**
- * The format of error messages the server might return.
- */
-export interface RequestErrorDescription {
-  message: string;
-}
+import { RequestErrorDescription } from './serverapi.service.description'
 
 /**
  * Instead of constructing URLs on the fly, they should be created using

@@ -1,386 +1,392 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "additionalProperties": false,
-    "definitions": {
-        "AddColumnDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "columnIndex": {
-                    "type": "number"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "type": {
-                    "enum": [
-                        "addColumn"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "columnIndex",
-                "index",
-                "type"
-            ],
-            "type": "object"
+  "$ref": "#/definitions/AlterSchemaRequestDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "AddColumnDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "columnIndex": {
+          "type": "number"
         },
-        "AddForeignKeyDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "columnIndex": {
-                    "type": "number"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "newForeignKey": {
-                    "$ref": "#/definitions/ForeignKeyDescription"
-                },
-                "type": {
-                    "enum": [
-                        "addForeignKey"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "columnIndex",
-                "index",
-                "newForeignKey",
-                "type"
-            ],
-            "type": "object"
+        "index": {
+          "type": "number"
         },
-        "ChangeColumnNotNullDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "columnIndex": {
-                    "type": "number"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "type": {
-                    "enum": [
-                        "changeColumnNotNull"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "columnIndex",
-                "index",
-                "type"
-            ],
-            "type": "object"
-        },
-        "ChangeColumnPrimaryKeyDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "columnIndex": {
-                    "type": "number"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "type": {
-                    "enum": [
-                        "changeColumnPrimaryKey"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "columnIndex",
-                "index",
-                "type"
-            ],
-            "type": "object"
-        },
-        "ChangeColumnStandardValueDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "columnIndex": {
-                    "type": "number"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "newValue": {
-                    "type": "string"
-                },
-                "oldValue": {
-                    "type": "string"
-                },
-                "type": {
-                    "enum": [
-                        "changeColumnStandardValue"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "columnIndex",
-                "index",
-                "newValue",
-                "oldValue",
-                "type"
-            ],
-            "type": "object"
-        },
-        "ChangeColumnTypeDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "columnIndex": {
-                    "type": "number"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "newType": {
-                    "type": "string"
-                },
-                "oldType": {
-                    "type": "string"
-                },
-                "type": {
-                    "enum": [
-                        "changeColumnType"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "columnIndex",
-                "index",
-                "newType",
-                "oldType",
-                "type"
-            ],
-            "type": "object"
-        },
-        "ChangeTableNameDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "columnIndex": {
-                    "type": "number"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "newName": {
-                    "type": "string"
-                },
-                "oldName": {
-                    "type": "string"
-                },
-                "type": {
-                    "enum": [
-                        "renameTable"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "columnIndex",
-                "index",
-                "newName",
-                "oldName",
-                "type"
-            ],
-            "type": "object"
-        },
-        "DeleteColumnDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "columnIndex": {
-                    "type": "number"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "type": {
-                    "enum": [
-                        "deleteColumn"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "columnIndex",
-                "index",
-                "type"
-            ],
-            "type": "object"
-        },
-        "ForeignKeyDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "references": {
-                    "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                            "from_column": {
-                                "type": "string"
-                            },
-                            "to_column": {
-                                "type": "string"
-                            },
-                            "to_table": {
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "from_column",
-                            "to_column",
-                            "to_table"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "references"
-            ],
-            "type": "object"
-        },
-        "RemoveForeignKeyDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "columnIndex": {
-                    "type": "number"
-                },
-                "foreignKeyToRemove": {
-                    "$ref": "#/definitions/ForeignKeyDescription"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "type": {
-                    "enum": [
-                        "removeForeignKey"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "columnIndex",
-                "foreignKeyToRemove",
-                "index",
-                "type"
-            ],
-            "type": "object"
-        },
-        "RenameColumnDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "columnIndex": {
-                    "type": "number"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "newName": {
-                    "type": "string"
-                },
-                "oldName": {
-                    "type": "string"
-                },
-                "type": {
-                    "enum": [
-                        "renameColumn"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "columnIndex",
-                "index",
-                "newName",
-                "oldName",
-                "type"
-            ],
-            "type": "object"
-        },
-        "SwitchColumnDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "columnIndex": {
-                    "type": "number"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "indexOrder": {
-                    "items": {
-                        "type": "number"
-                    },
-                    "type": "array"
-                },
-                "type": {
-                    "enum": [
-                        "switchColumn"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "columnIndex",
-                "index",
-                "indexOrder",
-                "type"
-            ],
-            "type": "object"
+        "type": {
+          "enum": [
+            "addColumn"
+          ],
+          "type": "string"
         }
+      },
+      "required": [
+        "columnIndex",
+        "index",
+        "type"
+      ],
+      "type": "object"
     },
-    "description": "A complete request to alter a schema.",
-    "properties": {
+    "AddForeignKeyDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "columnIndex": {
+          "type": "number"
+        },
+        "index": {
+          "type": "number"
+        },
+        "newForeignKey": {
+          "$ref": "#/definitions/ForeignKeyDescription"
+        },
+        "type": {
+          "enum": [
+            "addForeignKey"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "columnIndex",
+        "index",
+        "newForeignKey",
+        "type"
+      ],
+      "type": "object"
+    },
+    "AlterSchemaRequestDescription": {
+      "additionalProperties": false,
+      "description": "A complete request to alter a schema.",
+      "properties": {
         "commands": {
-            "items": {
-                "anyOf": [
-                    {
-                        "$ref": "#/definitions/AddColumnDescription"
-                    },
-                    {
-                        "$ref": "#/definitions/DeleteColumnDescription"
-                    },
-                    {
-                        "$ref": "#/definitions/SwitchColumnDescription"
-                    },
-                    {
-                        "$ref": "#/definitions/RenameColumnDescription"
-                    },
-                    {
-                        "$ref": "#/definitions/ChangeColumnNotNullDescription"
-                    },
-                    {
-                        "$ref": "#/definitions/ChangeColumnPrimaryKeyDescription"
-                    },
-                    {
-                        "$ref": "#/definitions/ChangeColumnStandardValueDescription"
-                    },
-                    {
-                        "$ref": "#/definitions/ChangeColumnTypeDescription"
-                    },
-                    {
-                        "$ref": "#/definitions/ChangeTableNameDescription"
-                    },
-                    {
-                        "$ref": "#/definitions/AddForeignKeyDescription"
-                    },
-                    {
-                        "$ref": "#/definitions/RemoveForeignKeyDescription"
-                    }
-                ]
-            },
-            "type": "array"
+          "items": {
+            "$ref": "#/definitions/ConcreteCommand"
+          },
+          "type": "array"
         }
-    },
-    "required": [
+      },
+      "required": [
         "commands"
-    ],
-    "type": "object"
+      ],
+      "type": "object"
+    },
+    "ChangeColumnNotNullDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "columnIndex": {
+          "type": "number"
+        },
+        "index": {
+          "type": "number"
+        },
+        "type": {
+          "enum": [
+            "changeColumnNotNull"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "columnIndex",
+        "index",
+        "type"
+      ],
+      "type": "object"
+    },
+    "ChangeColumnPrimaryKeyDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "columnIndex": {
+          "type": "number"
+        },
+        "index": {
+          "type": "number"
+        },
+        "type": {
+          "enum": [
+            "changeColumnPrimaryKey"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "columnIndex",
+        "index",
+        "type"
+      ],
+      "type": "object"
+    },
+    "ChangeColumnStandardValueDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "columnIndex": {
+          "type": "number"
+        },
+        "index": {
+          "type": "number"
+        },
+        "newValue": {
+          "type": "string"
+        },
+        "oldValue": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "changeColumnStandardValue"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "columnIndex",
+        "index",
+        "newValue",
+        "oldValue",
+        "type"
+      ],
+      "type": "object"
+    },
+    "ChangeColumnTypeDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "columnIndex": {
+          "type": "number"
+        },
+        "index": {
+          "type": "number"
+        },
+        "newType": {
+          "type": "string"
+        },
+        "oldType": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "changeColumnType"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "columnIndex",
+        "index",
+        "newType",
+        "oldType",
+        "type"
+      ],
+      "type": "object"
+    },
+    "ChangeTableNameDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "columnIndex": {
+          "type": "number"
+        },
+        "index": {
+          "type": "number"
+        },
+        "newName": {
+          "type": "string"
+        },
+        "oldName": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "renameTable"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "columnIndex",
+        "index",
+        "newName",
+        "oldName",
+        "type"
+      ],
+      "type": "object"
+    },
+    "ConcreteCommand": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/AddColumnDescription"
+        },
+        {
+          "$ref": "#/definitions/DeleteColumnDescription"
+        },
+        {
+          "$ref": "#/definitions/SwitchColumnDescription"
+        },
+        {
+          "$ref": "#/definitions/RenameColumnDescription"
+        },
+        {
+          "$ref": "#/definitions/ChangeColumnNotNullDescription"
+        },
+        {
+          "$ref": "#/definitions/ChangeColumnPrimaryKeyDescription"
+        },
+        {
+          "$ref": "#/definitions/ChangeColumnStandardValueDescription"
+        },
+        {
+          "$ref": "#/definitions/ChangeColumnTypeDescription"
+        },
+        {
+          "$ref": "#/definitions/ChangeTableNameDescription"
+        },
+        {
+          "$ref": "#/definitions/AddForeignKeyDescription"
+        },
+        {
+          "$ref": "#/definitions/RemoveForeignKeyDescription"
+        }
+      ],
+      "description": "This type is a nasty workaround for the JSON schema generation:\nWhen specifying a base-type the generator will create a schema\nthat does not include deriving types. So to make these deriving\ntypes part of the schema, this explicit mention of all sub-types\nis used."
+    },
+    "DeleteColumnDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "columnIndex": {
+          "type": "number"
+        },
+        "index": {
+          "type": "number"
+        },
+        "type": {
+          "enum": [
+            "deleteColumn"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "columnIndex",
+        "index",
+        "type"
+      ],
+      "type": "object"
+    },
+    "ForeignKeyDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "references": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "from_column": {
+                "type": "string"
+              },
+              "to_column": {
+                "type": "string"
+              },
+              "to_table": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "to_table",
+              "from_column",
+              "to_column"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "references"
+      ],
+      "type": "object"
+    },
+    "RemoveForeignKeyDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "columnIndex": {
+          "type": "number"
+        },
+        "foreignKeyToRemove": {
+          "$ref": "#/definitions/ForeignKeyDescription"
+        },
+        "index": {
+          "type": "number"
+        },
+        "type": {
+          "enum": [
+            "removeForeignKey"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "columnIndex",
+        "foreignKeyToRemove",
+        "index",
+        "type"
+      ],
+      "type": "object"
+    },
+    "RenameColumnDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "columnIndex": {
+          "type": "number"
+        },
+        "index": {
+          "type": "number"
+        },
+        "newName": {
+          "type": "string"
+        },
+        "oldName": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "renameColumn"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "columnIndex",
+        "index",
+        "newName",
+        "oldName",
+        "type"
+      ],
+      "type": "object"
+    },
+    "SwitchColumnDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "columnIndex": {
+          "type": "number"
+        },
+        "index": {
+          "type": "number"
+        },
+        "indexOrder": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "switchColumn"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "columnIndex",
+        "index",
+        "indexOrder",
+        "type"
+      ],
+      "type": "object"
+    }
+  }
 }
-

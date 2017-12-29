@@ -6,3 +6,4 @@ export { Model, SyntaxTree }
 export * from './base'
 export * from './validation'
 export * from './result'
+export * from './result.description'
