@@ -49,7 +49,7 @@ dist/cli/main.cli.js : $(CLIENT_ALL_SOURCES)
 cli-compile: dist/cli/main.cli.js
 
 cli-run: dist/cli/main.cli.js
-	$(NODE_BIN) $^
+	@$(NODE_BIN) $^
 
 
 ##################################

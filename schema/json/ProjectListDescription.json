@@ -1,50 +1,58 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "additionalProperties": false,
-    "definitions": {
-        "ApiVersionToken": {
-            "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
-            "enum": [
-                "1",
-                "2",
-                "3",
-                "4"
-            ],
-            "type": "string"
-        }
+  "$ref": "#/definitions/ProjectListDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "ApiVersionToken": {
+      "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
+      "enum": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "type": "string"
     },
-    "description": "The properties of a project that can be queried from the\nserver when asking for all available projecs.\n\nThis is a stripped down version of all possibly\nexisting project properties that is used to list available\nprojects.",
-    "properties": {
+    "ProjectId": {
+      "description": "The name of the project. May only contain characters that do not\nmean any trouble in URLs.",
+      "pattern": "^[a-z0-9\\-]{4,}$",
+      "type": "string"
+    },
+    "ProjectListDescription": {
+      "additionalProperties": false,
+      "description": "The properties of a project that can be queried from the\nserver when asking for all available projecs.\n\nThis is a stripped down version of all possibly\nexisting project properties that is used to list available\nprojects.",
+      "properties": {
         "apiVersion": {
-            "$ref": "#/definitions/ApiVersionToken",
-            "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
+          "$ref": "#/definitions/ApiVersionToken",
+          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
         },
         "description": {
-            "type": "string"
+          "type": "string"
         },
         "id": {
-            "description": "The name of the project. May only contain characters that do not\nmean any trouble in URLs.",
-            "pattern": "^[a-z0-9\\-]{4,}$",
-            "type": "string"
+          "$ref": "#/definitions/ProjectId"
         },
         "indexPageId": {
-            "type": "string"
+          "type": "string"
         },
         "name": {
-            "description": "The name of the project. May only contain more or less friendly\ncharacters.",
-            "pattern": "^^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß]{4,}$",
-            "type": "string"
+          "$ref": "#/definitions/ProjectName"
         },
         "preview": {
-            "type": "string"
+          "type": "string"
         }
-    },
-    "required": [
+      },
+      "required": [
         "apiVersion",
         "description",
         "id",
         "name"
-    ],
-    "type": "object"
+      ],
+      "type": "object"
+    },
+    "ProjectName": {
+      "description": "The name of the project. May only contain more or less friendly\ncharacters.",
+      "pattern": "^^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß]{4,}$",
+      "type": "string"
+    }
+  }
 }
-

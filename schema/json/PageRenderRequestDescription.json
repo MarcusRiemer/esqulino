@@ -1,175 +1,179 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "additionalProperties": false,
-    "definitions": {
-        "ApiVersionToken": {
-            "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
-            "enum": [
-                "1",
-                "2",
-                "3",
-                "4"
-            ],
-            "type": "string"
-        },
-        "BodyDescription": {
-            "additionalProperties": false,
-            "description": "The body of an HTML page, will only appear once in a page.",
-            "properties": {
-                "children": {
-                    "items": {
-                        "$ref": "#/definitions/WidgetDescription"
-                    },
-                    "type": "array"
-                },
-                "type": {
-                    "enum": [
-                        "body"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "children",
-                "type"
-            ],
-            "type": "object"
-        },
-        "PageDescription": {
-            "additionalProperties": false,
-            "description": "Describes a page as a whole",
-            "properties": {
-                "apiVersion": {
-                    "$ref": "#/definitions/ApiVersionToken",
-                    "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
-                },
-                "body": {
-                    "$ref": "#/definitions/BodyDescription",
-                    "description": "The host for all widgets that are part of this page."
-                },
-                "id": {
-                    "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "The user-chosen name of this resource. This property is free to change.",
-                    "type": "string"
-                },
-                "parameters": {
-                    "description": "All parameters that are required to render this page. These\nare usually satisfied via GET parameters",
-                    "items": {
-                        "$ref": "#/definitions/PageParameterDescription"
-                    },
-                    "type": "array"
-                },
-                "referencedQueries": {
-                    "description": "IDs of queries that are referenced in this page. Only\nthese queries provide additional DB information that can\nbe used on this page.",
-                    "items": {
-                        "$ref": "#/definitions/QueryReferenceDescription"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "apiVersion",
-                "name"
-            ],
-            "type": "object"
-        },
-        "PageParameterDescription": {
-            "additionalProperties": false,
-            "description": "A parameter that is required to render a page.",
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "name"
-            ],
-            "type": "object"
-        },
-        "QueryReferenceDescription": {
-            "additionalProperties": false,
-            "description": "Referenced queries are possibly accompanied by a human-readable\nname. This is required if the same query is going to be used\nmultiple times on a single page.",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "queryId": {
-                    "type": "string"
-                },
-                "type": {
-                    "enum": [
-                        "query"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "type": "object"
-        },
-        "WidgetDescription": {
-            "additionalProperties": {
-            },
-            "description": "A widget **requires** at least a type, all other fields are\nmandated by deriving descriptions. As we don't necesarily\nknow all deriving classes at compile time (they could be\nprovided by a plugin) we poke a hole in the type system\nhere.\n\nThe following annotion is required to allow additional\nproperties in the automatically generated JSON schema, see\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
-            "properties": {
-                "type": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "type": "object"
-        }
+  "$ref": "#/definitions/PageRenderRequestDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "ApiVersionToken": {
+      "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
+      "enum": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "type": "string"
     },
-    "description": "Fully self-contained request to render an arbitrary page. Because\nthe development state in the browser could differ significantly\nfrom the state stored on the server this description specifies all\nrelevant data at once.",
-    "properties": {
+    "BodyDescription": {
+      "additionalProperties": false,
+      "description": "The body of an HTML page, will only appear once in a page.",
+      "properties": {
+        "children": {
+          "items": {
+            "$ref": "#/definitions/WidgetDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "body"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "children",
+        "type"
+      ],
+      "type": "object"
+    },
+    "PageDescription": {
+      "additionalProperties": false,
+      "description": "Describes a page as a whole",
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersionToken",
+          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
+        },
+        "body": {
+          "$ref": "#/definitions/BodyDescription",
+          "description": "The host for all widgets that are part of this page."
+        },
+        "id": {
+          "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The user-chosen name of this resource. This property is free to change.",
+          "type": "string"
+        },
+        "parameters": {
+          "description": "All parameters that are required to render this page. These\nare usually satisfied via GET parameters",
+          "items": {
+            "$ref": "#/definitions/PageParameterDescription"
+          },
+          "type": "array"
+        },
+        "referencedQueries": {
+          "description": "IDs of queries that are referenced in this page. Only\nthese queries provide additional DB information that can\nbe used on this page.",
+          "items": {
+            "$ref": "#/definitions/QueryReferenceDescription"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "name"
+      ],
+      "type": "object"
+    },
+    "PageParameterDescription": {
+      "additionalProperties": false,
+      "description": "A parameter that is required to render a page.",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "PageRenderRequestDescription": {
+      "additionalProperties": false,
+      "description": "Fully self-contained request to render an arbitrary page. Because\nthe development state in the browser could differ significantly\nfrom the state stored on the server this description specifies all\nrelevant data at once.",
+      "properties": {
         "page": {
-            "$ref": "#/definitions/PageDescription"
+          "$ref": "#/definitions/PageDescription"
         },
         "params": {
-            "additionalProperties": {
-                "type": "string"
-            },
-            "type": "object"
+          "$ref": "#/definitions/QueryParamsDescription"
         },
         "queries": {
-            "items": {
-                "additionalProperties": false,
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "sql": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "name",
-                    "sql"
-                ],
-                "type": "object"
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "sql": {
+                "type": "string"
+              }
             },
-            "type": "array"
+            "required": [
+              "name",
+              "sql"
+            ],
+            "type": "object"
+          },
+          "type": "array"
         },
         "source": {
-            "type": "string"
+          "type": "string"
         },
         "sourceType": {
-            "type": "string"
+          "type": "string"
         }
-    },
-    "required": [
-        "page",
-        "params",
-        "queries",
+      },
+      "required": [
+        "sourceType",
         "source",
-        "sourceType"
-    ],
-    "type": "object"
+        "page",
+        "queries",
+        "params"
+      ],
+      "type": "object"
+    },
+    "QueryParamsDescription": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Parameters are simply a key-value dictionary. Whenever a query\nmakes use of user-bound parameters, these are transferred via\nthis kind of object.",
+      "type": "object"
+    },
+    "QueryReferenceDescription": {
+      "additionalProperties": false,
+      "description": "Referenced queries are possibly accompanied by a human-readable\nname. This is required if the same query is going to be used\nmultiple times on a single page.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "queryId": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "query"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "WidgetDescription": {
+      "description": "A widget **requires** at least a type, all other fields are\nmandated by deriving descriptions. As we don't necesarily\nknow all deriving classes at compile time (they could be\nprovided by a plugin) we poke a hole in the type system\nhere.\n\nThe following annotion is required to allow additional\nproperties in the automatically generated JSON schema, see\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    }
+  }
 }
-

@@ -1,22 +1,30 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "additionalProperties": false,
-    "properties": {
+  "$ref": "#/definitions/ArbitraryQueryRequestDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "ArbitraryQueryRequestDescription": {
+      "additionalProperties": false,
+      "description": "Some servers support execution of arbitrary queries. This is intended\nto be used during development and can be done via this request-type.",
+      "properties": {
         "params": {
-            "additionalProperties": {
-                "type": "string"
-            },
-            "description": "Parameters are simply a key-value dictionary. Whenever a query\nmakes use of user-bound parameters, these are transferred via\nthis kind of object.",
-            "type": "object"
+          "$ref": "#/definitions/QueryParamsDescription"
         },
         "sql": {
-            "type": "string"
+          "type": "string"
         }
-    },
-    "required": [
+      },
+      "required": [
         "params",
         "sql"
-    ],
-    "type": "object"
+      ],
+      "type": "object"
+    },
+    "QueryParamsDescription": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Parameters are simply a key-value dictionary. Whenever a query\nmakes use of user-bound parameters, these are transferred via\nthis kind of object.",
+      "type": "object"
+    }
+  }
 }
-

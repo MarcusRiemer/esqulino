@@ -1,14 +1,8 @@
-import { NodeDescription, NodeLocation, NodeLocationStep, locateNode } from './syntaxtree.description'
+import {
+  NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName, locateNode
+} from './syntaxtree.description'
 
-export { NodeDescription, NodeLocation, NodeLocationStep };
-
-/**
- * Used when refererring to types that are defined other languages.
- */
-export interface QualifiedTypeName {
-  typeName: string
-  languageName: string
-}
+export { NodeDescription, NodeLocation, NodeLocationStep, QualifiedTypeName };
 
 /**
  * @return True, if both parameters denote the same type.

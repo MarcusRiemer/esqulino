@@ -1,4 +1,4 @@
-import { QualifiedTypeName, NodeDescription } from '../syntaxtree'
+import { QualifiedTypeName, NodeDescription } from '../syntaxtree/syntaxtree.description'
 
 /**
  * Groups together all available options to describe a block in the

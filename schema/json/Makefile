@@ -2,11 +2,6 @@
 SRC_PATH = $(realpath ../../client/src/app)
 SRC_PROJECT = $(realpath ../../client/src/tsconfig.app.json)
 
-# The absolute path of the directory the schemas reside in
-SCHEMA_PATH = $(realpath .)
-
-include ../../Makefile.common
-
 include Makefile.json
 
 # Generating all schemas

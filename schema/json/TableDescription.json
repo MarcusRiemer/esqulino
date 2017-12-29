@@ -1,98 +1,100 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "additionalProperties": false,
-    "definitions": {
-        "ColumnDescription": {
-            "additionalProperties": false,
-            "description": "The \"over-the-wire\" description of a single column\ninside a table.",
-            "properties": {
-                "dflt_value": {
-                    "type": "string"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "not_null": {
-                    "type": "boolean"
-                },
-                "primary": {
-                    "type": "boolean"
-                },
-                "type": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "index",
-                "name",
-                "not_null",
-                "primary",
-                "type"
-            ],
-            "type": "object"
+  "$ref": "#/definitions/TableDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "ColumnDescription": {
+      "additionalProperties": false,
+      "description": "The \"over-the-wire\" description of a single column\ninside a table.",
+      "properties": {
+        "dflt_value": {
+          "type": "string"
         },
-        "ForeignKeyDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "references": {
-                    "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                            "from_column": {
-                                "type": "string"
-                            },
-                            "to_column": {
-                                "type": "string"
-                            },
-                            "to_table": {
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "from_column",
-                            "to_column",
-                            "to_table"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "references"
-            ],
-            "type": "object"
-        }
-    },
-    "description": "The \"over-the-wire\" description of a single table \nwith all of its columns.",
-    "properties": {
-        "columns": {
-            "items": {
-                "$ref": "#/definitions/ColumnDescription"
-            },
-            "type": "array"
-        },
-        "foreign_keys": {
-            "items": {
-                "$ref": "#/definitions/ForeignKeyDescription"
-            },
-            "type": "array"
+        "index": {
+          "type": "number"
         },
         "name": {
-            "type": "string"
+          "type": "string"
+        },
+        "not_null": {
+          "type": "boolean"
+        },
+        "primary": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "index",
+        "name",
+        "type",
+        "not_null",
+        "primary"
+      ],
+      "type": "object"
+    },
+    "ForeignKeyDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "references": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "from_column": {
+                "type": "string"
+              },
+              "to_column": {
+                "type": "string"
+              },
+              "to_table": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "to_table",
+              "from_column",
+              "to_column"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "references"
+      ],
+      "type": "object"
+    },
+    "TableDescription": {
+      "additionalProperties": false,
+      "description": "The \"over-the-wire\" description of a single table \nwith all of its columns.",
+      "properties": {
+        "columns": {
+          "items": {
+            "$ref": "#/definitions/ColumnDescription"
+          },
+          "type": "array"
+        },
+        "foreign_keys": {
+          "items": {
+            "$ref": "#/definitions/ForeignKeyDescription"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
         },
         "system_table": {
-            "type": "boolean"
+          "type": "boolean"
         }
-    },
-    "required": [
+      },
+      "required": [
+        "name",
         "columns",
-        "foreign_keys",
-        "name"
-    ],
-    "type": "object"
+        "foreign_keys"
+      ],
+      "type": "object"
+    }
+  }
 }
-
