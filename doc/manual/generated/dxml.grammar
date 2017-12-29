@@ -1,0 +1,36 @@
+grammar "dxml" {
+  node "element" {
+    prop "name" { string }
+    children "elements" ::= element & text & interpolate & if
+    children "attributes" ::= dxml.attribute*
+  }
+  node "attribute" {
+    prop "name" { string }
+    children "value" ::= text & interpolate
+  }
+  node "text" {
+    prop "value" { string }
+  }
+  node "interpolate" {
+    children "expr" ::= expr
+  }
+  node "if" {
+    children "condition" ::= dxml.expr{1,1}
+    children "body" ::= text & element & interpolate & if
+  }
+  node "expr" {
+    children "concreteExpr" ::= exprVar & exprConst & exprBinary
+  }
+  node "exprVar" {
+    prop "name" { string }
+  }
+  node "exprConst" {
+    prop "name" { string }
+  }
+  node "exprBinary" {
+    children "exprBinary" ::= expr binaryOperator expr
+  }
+  node "binaryOperator" {
+    prop "operator" { string }
+  }
+}
