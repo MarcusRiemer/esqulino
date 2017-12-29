@@ -18,3 +18,4 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
    compiler_blocks/compiler
    compiler_blocks/language-model
    glossary
+   schema/index

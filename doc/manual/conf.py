@@ -36,6 +36,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.graphviz',
+    'sphinx-jsonschema',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -101,6 +102,14 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# Fix for scrolling tables in the RTD-theme
+# https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
+html_context = {
+    'css_files': [
+        '_static/theme_overrides.css',  # override wide tables in RTD theme
+    ],
+}
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
