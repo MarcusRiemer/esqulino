@@ -6,17 +6,6 @@ Conventional development environments are programs that are tailored to suit the
 
 To eliminate the possibility of syntactical errors while programming, the elements of the programming- or markup-languages are represented by graphical blocks, similar to the approach taken by the software `Scratch <https://scratch.mit.edu/>`_. These blocks can be combined by using drag & drop operations.
 
-Block Languages
-===============
-
-BlattWerkzeug comes with a variety of different languages enabled, but currently focusses on web development and databases.
-
-SQL
----
-
-HTML
-----
-
 Projects
 ========
 
@@ -30,3 +19,14 @@ At the very core, there are three different structures involved when a code reso
 * The abstract syntax tree represents the structure of the code that is edited.
 * The selected programming language controls how the syntaxtree is validated and compiled.
 * The selected language model controls how blocks used in a syntaxtree are layouted and which blocks are available in the sidebar.
+
+Block Languages
+===============
+
+BlattWerkzeug allows advanced users to come up with their own block programming languages. Per default it comes with a variety of different languages enabled, that currently focus on web development and databases.
+
+SQL
+---
+
+HTML
+----

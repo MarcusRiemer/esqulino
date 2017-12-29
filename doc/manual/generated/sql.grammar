@@ -1,0 +1,14 @@
+grammar "regex" {
+  node "constant" {
+    prop "value" { string }
+  }
+  node "alternative" {
+    children "expressions" ::= expr
+  }
+  node "expr" {
+    children "singleExpression" ::= constant & alternative
+  }
+  node "root" {
+    children "expressions" ::= expr
+  }
+}

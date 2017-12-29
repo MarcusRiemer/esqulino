@@ -40,7 +40,7 @@ digraph ast_example_if {
     top -> pos1
 
     subgraph cluster_neg {
-        neg1 [label="{lang.call|{name|writeln}}"]
+        neg1 [label="{lang.call|{name|err}}"]
 
         subgraph cluster_neg_arguments {
             neg1_2 [label="{lang.expConst|{value|'bar'}}"]
