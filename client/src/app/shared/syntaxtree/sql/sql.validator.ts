@@ -62,7 +62,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "columns": {
           type: "allowed",
           nodeTypes: [
-            "columnName",
+            {
+              nodeType: "columnName",
+              minOccurs: 0,
+            },
             {
               nodeType: "starOperator",
               minOccurs: 0,

@@ -7,7 +7,36 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       children: {
         "elements": {
           type: "allowed",
-          nodeTypes: ["element", "text", "interpolate", "if"]
+          nodeTypes: [
+            {
+              nodeType: {
+                languageName: "dxml",
+                typeName: "element"
+              },
+              minOccurs: 0
+            },
+            {
+              nodeType: {
+                languageName: "dxml",
+                typeName: "text"
+              },
+              minOccurs: 0
+            },
+            {
+              nodeType: {
+                languageName: "dxml",
+                typeName: "interpolate"
+              },
+              minOccurs: 0
+            },
+            {
+              nodeType: {
+                languageName: "dxml",
+                typeName: "if"
+              },
+              minOccurs: 0
+            },
+          ]
         },
         "attributes": {
           type: "allowed",
@@ -18,7 +47,6 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
                 typeName: "attribute",
               },
               minOccurs: 0,
-              maxOccurs: undefined
             }
           ]
         }
@@ -33,7 +61,22 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       children: {
         "value": {
           type: "allowed",
-          nodeTypes: ["text", "interpolate"],
+          nodeTypes: [
+            {
+              nodeType: {
+                languageName: "dxml",
+                typeName: "text",
+              },
+              minOccurs: 0,
+            },
+            {
+              nodeType: {
+                languageName: "dxml",
+                typeName: "interpolate",
+              },
+              minOccurs: 0,
+            }
+          ],
         }
       },
       properties: {
@@ -52,12 +95,13 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
     "interpolate": {
       children: {
         "expr": {
-          type: "allowed",
-          childCount: {
-            minOccurs: 1,
-            maxOccurs: 1,
-          },
-          nodeTypes: ["expr"]
+          type: "choice",
+          choices: [
+            {
+              type: "sequence",
+              nodeTypes: ["expr"]
+            }
+          ]
         }
       }
     },
@@ -65,32 +109,61 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       children: {
         "condition": {
           type: "allowed",
+          nodeTypes: ["expr"]
+        },
+        "body": {
+          type: "allowed",
           nodeTypes: [
             {
               nodeType: {
                 languageName: "dxml",
-                typeName: "expr"
+                typeName: "element"
               },
-              minOccurs: 1,
-              maxOccurs: 1,
-            }
-          ]
-        },
-        "body": {
-          type: "allowed",
-          nodeTypes: ["text", "element", "interpolate", "if"]
+              minOccurs: 0
+            },
+            {
+              nodeType: {
+                languageName: "dxml",
+                typeName: "text"
+              },
+              minOccurs: 0
+            },
+            {
+              nodeType: {
+                languageName: "dxml",
+                typeName: "interpolate"
+              },
+              minOccurs: 0
+            },
+            {
+              nodeType: {
+                languageName: "dxml",
+                typeName: "if"
+              },
+              minOccurs: 0
+            },
+          ],
         }
       }
     },
     "expr": {
       children: {
         "concreteExpr": {
-          type: "allowed",
-          childCount: {
-            minOccurs: 1,
-            maxOccurs: 1
-          },
-          nodeTypes: ["exprVar", "exprConst", "exprBinary"]
+          type: "choice",
+          choices: [
+            {
+              type: "sequence",
+              nodeTypes: ["exprVar"]
+            },
+            {
+              type: "sequence",
+              nodeTypes: ["exprConst"]
+            },
+            {
+              type: "sequence",
+              nodeTypes: ["exprBinary"]
+            }
+          ]
         }
       }
     },

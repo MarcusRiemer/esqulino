@@ -148,8 +148,8 @@ export interface MinInclusiveRestriction {
  */
 export interface ChildCardinalityDescription {
   nodeType: TypeReference
-  minOccurs: number
-  maxOccurs: number
+  minOccurs?: number // TODO: Use OccursDescription
+  maxOccurs?: number // TODO: Use OccursDescription
 }
 
 /**
@@ -173,7 +173,6 @@ export type NodeTypesChildReference = (TypeReference | ChildCardinalityDescripti
 export interface NodeTypesSequenceDescription {
   type: "sequence"
   nodeTypes: NodeTypesChildReference[]
-  childCount?: OccursDescription // TODO: Remove this
 }
 
 /**
@@ -183,7 +182,6 @@ export interface NodeTypesSequenceDescription {
 export interface NodeTypesAllowedDescription {
   type: "allowed"
   nodeTypes: NodeTypesChildReference[]
-  childCount?: OccursDescription // TODO: Remove this
 }
 
 /**
@@ -193,7 +191,6 @@ export interface NodeTypesAllowedDescription {
 export interface NodeTypesChoiceDescription {
   type: "choice",
   choices: NodeChildrenGroupDescription[]
-  childCount?: OccursDescription // TODO: Remove this
 }
 
 /**
