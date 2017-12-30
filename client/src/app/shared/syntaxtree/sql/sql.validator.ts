@@ -64,12 +64,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: [
             {
               nodeType: "columnName",
-              minOccurs: 0,
+              occurs: "*"
             },
             {
               nodeType: "starOperator",
-              minOccurs: 0,
-              maxOccurs: 1
+              occurs: "?"
             }
           ]
         }
@@ -105,10 +104,8 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: [
             "tableIntroduction",
             {
-              languageName: "sql",
               nodeType: "crossJoin",
-              minOccurs: 0,
-              maxOccurs: +Infinity,
+              occurs: "*"
             }
           ]
         }
@@ -137,8 +134,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             {
               languageName: "sql",
               nodeType: "whereAdditional",
-              minOccurs: 0,
-              maxOccurs: +Infinity
+              occurs: "*"
             }
           ]
         }
@@ -153,13 +149,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             "from",
             {
               nodeType: "where",
-              minOccurs: 0,
-              maxOccurs: 1
+              occurs: "?"
             },
             {
               nodeType: "groupBy",
-              minOccurs: 0,
-              maxOccurs: 1
+              occurs: "?"
             }
           ]
         }

@@ -425,10 +425,26 @@ class ChildCardinality {
       // Complex descriptions may provide different cardinalities
       this._nodeType = new TypeReference(parent.validator, typeDesc.nodeType, parent.languageName);
 
-      this._minOccurs = "minOccurs" in typeDesc ? typeDesc.minOccurs : 0;
-      this._maxOccurs = "maxOccurs" in typeDesc ? typeDesc.maxOccurs : +Infinity;
+      const normalized = this.normalizeOccursDescription(typeDesc.occurs);
+
+      this._minOccurs = normalized.minOccurs;
+      this._maxOccurs = normalized.maxOccurs;
     } else {
-      throw new Error(`Unknown sequence cardinality: "${JSON.stringify(typeDesc)}"`);
+      throw new Error(`Unknown child cardinality: "${JSON.stringify(typeDesc)}"`);
+    }
+  }
+
+  private normalizeOccursDescription(desc: Desc.OccursDescription): Desc.OccursSpecificDescription {
+    if (Desc.isOccursSpecificDescription(desc)) {
+      return desc;
+    } else {
+      switch (desc) {
+        case "*": return ({ minOccurs: 0, maxOccurs: +Infinity });
+        case "?": return ({ minOccurs: 0, maxOccurs: 1 });
+        case "+": return ({ minOccurs: 1, maxOccurs: +Infinity });
+        case "1": return ({ minOccurs: 1, maxOccurs: 1 });
+        default: throw new Error(`Unknown occurences: "${JSON.stringify(desc)}"`);
+      }
     }
   }
 
@@ -837,9 +853,11 @@ class TypeReference {
     if (Desc.isQualifiedTypeName(desc)) {
       this._languageName = desc.languageName;
       this._typeName = desc.typeName;
-    } else {
+    } else if (typeof desc === "string") {
       this._languageName = currentLang;
       this._typeName = desc;
+    } else {
+      throw new Error("Impossible: Unknown type reference");
     }
   }
 

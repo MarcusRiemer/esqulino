@@ -39,7 +39,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           nodeTypes: [
             {
               nodeType: "text",
-              minOccurs: 0
+              occurs: "*"
             }
           ]
         }
@@ -52,12 +52,13 @@ const langMiniHtml: Schema.GrammarDescription = {
           nodeTypes: [
             {
               nodeType: "paragraph",
-              minOccurs: 0
+              occurs: "*"
             },
             {
               nodeType: "heading",
-              minOccurs: 0
-            }]
+              occurs: "*"
+            }
+          ]
         }
       }
     },
@@ -68,7 +69,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           nodeTypes: [
             {
               nodeType: "attr-class",
-              minOccurs: 0,
+              occurs: "?"
             }
           ]
         },
@@ -77,7 +78,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           nodeTypes: [
             {
               nodeType: "text",
-              minOccurs: 0,
+              occurs: "*"
             }
           ]
         }
@@ -90,7 +91,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           nodeTypes: [
             {
               nodeType: "attr-id",
-              minOccurs: 0,
+              occurs: "?"
             }
           ]
         },
@@ -99,7 +100,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           nodeTypes: [
             {
               nodeType: "text",
-              minOccurs: 0,
+              occurs: "*"
             }
           ]
         }
@@ -112,7 +113,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           nodeTypes: [
             {
               nodeType: "text",
-              minOccurs: 0,
+              occurs: "*"
             }
           ]
         }
@@ -227,17 +228,18 @@ const langAllowedConstraint: Schema.GrammarDescription = {
           nodeTypes: [
             {
               nodeType: "a",
-              minOccurs: 0
+              occurs: "*"
             },
             {
               nodeType: "b",
-              minOccurs: 0,
-              maxOccurs: 2
+              occurs: {
+                minOccurs: 0,
+                maxOccurs: 2
+              }
             },
             {
               nodeType: "c",
-              minOccurs: 1,
-              maxOccurs: 1
+              occurs: "1"
             }
           ]
         }
@@ -264,14 +266,18 @@ const langSequenceConstraint: Schema.GrammarDescription = {
             "a",
             {
               nodeType: "b",
-              minOccurs: 0,
-              maxOccurs: 2,
+              occurs: {
+                minOccurs: 0,
+                maxOccurs: 2,
+              }
             },
             "a",
             {
               nodeType: "c",
-              minOccurs: 1,
-              maxOccurs: 2
+              occurs: {
+                minOccurs: 1,
+                maxOccurs: 2
+              }
             }
           ]
         }
@@ -952,7 +958,7 @@ describe('Language Validator', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('Valid "allowed": All allowed nodes once', () => {

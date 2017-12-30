@@ -127,26 +127,31 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
   if (Desc.isQualifiedTypeName(t)) {
     return (`${t.languageName}.${t.typeName}`);
   } else if (Desc.isChildCardinalityDescription(t)) {
-    const printCardinality = (t: Desc.ChildCardinalityDescription) => {
-      if (t.minOccurs === 0 && t.maxOccurs === 1) {
-        return ("?");
-      } else if (t.minOccurs === 1 && (t.maxOccurs === undefined || t.maxOccurs === +Infinity)) {
-        return ("+");
-      } else if (t.minOccurs === 0 && (t.maxOccurs === undefined || t.maxOccurs === +Infinity)) {
-        return ("*");
+
+    const printCardinality = (t: Desc.OccursDescription) => {
+      if (typeof t === "string") {
+        return (t);
       } else {
-        if (t.minOccurs === undefined) {
-          return (`{,${t.maxOccurs}}`);
-        } else if (t.maxOccurs === undefined) {
-          return (`{${t.minOccurs},}`);
+        if (t.minOccurs === 0 && t.maxOccurs === 1) {
+          return ("?");
+        } else if (t.minOccurs === 1 && (t.maxOccurs === undefined || t.maxOccurs === +Infinity)) {
+          return ("+");
+        } else if (t.minOccurs === 0 && (t.maxOccurs === undefined || t.maxOccurs === +Infinity)) {
+          return ("*");
         } else {
-          return (`{${t.minOccurs},${t.maxOccurs}}`);
+          if (t.minOccurs === undefined) {
+            return (`{,${t.maxOccurs}}`);
+          } else if (t.maxOccurs === undefined) {
+            return (`{${t.minOccurs},}`);
+          } else {
+            return (`{${t.minOccurs},${t.maxOccurs}}`);
+          }
         }
       }
     };
 
     const printedName = prettyPrintTypeReference(t.nodeType);
-    return (`${printedName}${printCardinality(t)}`);
+    return (`${printedName}${printCardinality(t.occurs)}`);
   } else {
     return (t);
   }

@@ -12,8 +12,7 @@
                 "languageName": "g6",
                 "typeName": "n1"
               },
-              "minOccurs": 0,
-              "maxOccurs": 1
+              "occurs": "?"
             }
           ]
         }

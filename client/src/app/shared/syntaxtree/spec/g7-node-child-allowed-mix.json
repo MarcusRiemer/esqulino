@@ -12,22 +12,21 @@
                 "languageName": "g7",
                 "typeName": "n1"
               },
-              "minOccurs": 0,
-              "maxOccurs": 1
+              "occurs": "?"
             },
             {
               "nodeType": {
                 "languageName": "g7",
                 "typeName": "n2"
               },              
-              "minOccurs": 1
+              "occurs": "+"
             },
             {
               "nodeType": {
                 "languageName": "g7",
                 "typeName": "n3"
               },
-              "minOccurs": 0
+              "occurs": "*"
             }
           ]
         }

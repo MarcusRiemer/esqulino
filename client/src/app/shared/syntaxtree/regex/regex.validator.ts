@@ -13,13 +13,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "expressions": {
           type: "allowed",
           nodeTypes: [
-            {
-              nodeType: {
-                languageName: "regex",
-                typeName: "expr",
-              },
-              minOccurs: 1
-            }
+            { nodeType: "expr", occurs: "+" }
           ]
         }
       }
@@ -46,13 +40,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "expressions": {
           type: "allowed",
           nodeTypes: [
-            {
-              nodeType: {
-                languageName: "regex",
-                typeName: "expr",
-              },
-              minOccurs: 1
-            }
+            { nodeType: "expr", occurs: "+" }
           ]
         }
       }
