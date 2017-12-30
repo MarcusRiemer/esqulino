@@ -164,10 +164,14 @@ export function prettyPrintChildren(name: string, p: Desc.NodeChildrenGroupDescr
     }
   };
 
-  const childTypes = p.nodeTypes
-    .map(prettyPrintTypeReference)
-    .join(connector(p));
+  if (Desc.isNodeTypesAllowedDescription(p) || Desc.isNodeTypesSequenceDescription(p)) {
+    const childTypes = p.nodeTypes
+      .map(prettyPrintTypeReference)
+      .join(connector(p));
 
-  return (`children "${name}" ::= ${childTypes}`);
+    return (`children "${name}" ::= ${childTypes}`);
+  } else {
+    throw new Error(`Can only print sequences and allowed stuff`);
+  }
 }
 

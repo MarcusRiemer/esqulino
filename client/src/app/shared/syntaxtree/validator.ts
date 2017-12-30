@@ -29,6 +29,8 @@ export enum ErrorCodes {
   IllegalChildType = "ILLEGAL_CHILD_TYPE",
   // A type mentions a child category that is not present in a node
   SuperflousChildCategory = "SUPERFLOUS_CHILD_CATEGORY",
+  // No matching choice
+  NoMatchingChoice = "NO_MATCHING_CHOICE"
 }
 
 /**
@@ -301,6 +303,25 @@ class NodeConcreteType extends NodeType {
 }
 
 /**
+ * Creates a validator that matches the type of the given description.
+ *
+ * @param desc The description of the child group validator
+ * @return A matching child group validator
+ */
+function instanciateChildGroupValidator(group: NodeTypeChildren, desc: Desc.NodeChildrenGroupDescription) {
+  switch (desc.type) {
+    case "allowed":
+      return (new NodeComplexTypeChildrenAllowed(group, desc));
+    case "sequence":
+      return (new NodeComplexTypeChildrenSequence(group, desc));
+    case "choice":
+      return (new NodeComplexTypeChildrenChoice(group, desc));
+    default:
+      throw new Error(`Unknown child validator: "${JSON.stringify(desc)}"`);
+  }
+}
+
+/**
  * Validates children of a complex type.
  */
 class NodeTypeChildren {
@@ -311,14 +332,7 @@ class NodeTypeChildren {
   constructor(parent: NodeConcreteType, desc: Desc.NodeChildrenGroupDescription, name: string) {
     this._categoryName = name;
     this._parent = parent;
-
-    if (Desc.isNodeTypesSequenceDescription(desc)) {
-      this._childValidator = new NodeComplexTypeChildrenSequence(this, desc);
-    } else if (Desc.isNodeTypesAllowedDescription(desc)) {
-      this._childValidator = new NodeComplexTypeChildrenAllowed(this, desc);
-    } else {
-      throw new Error(`Unknown child validator: "${JSON.stringify(desc)}"`);
-    }
+    this._childValidator = instanciateChildGroupValidator(this, desc);
   }
 
   /**
@@ -366,7 +380,7 @@ abstract class NodeComplexTypeChildrenValidator {
   // The number of children must be in these boundaries
   private _childCount: Desc.OccursDescription;
 
-  constructor(desc: Desc.NodeTypesDescription) {
+  constructor(desc: Desc.NodeChildrenGroupDescription) {
     if (!desc.childCount) {
       this._childCount = {
         minOccurs: 0,
@@ -638,6 +652,44 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
 
     return (toReturn);
   }
+}
+
+/**
+ * Ensures that at least one of the given choices matches the child group.
+ */
+class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
+  private _desc: Desc.NodeTypesChoiceDescription;
+  private _group: NodeTypeChildren;
+
+  constructor(group: NodeTypeChildren, desc: Desc.NodeTypesChoiceDescription) {
+    super(desc);
+    this._desc = desc;
+    this._group = group;
+  }
+
+  protected validateChildrenImpl(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[] {
+    // Instanciate every mentioned validator and run it
+    for (var i = 0; i < this._desc.choices.length; ++i) {
+      // Each run needs its unique context
+      const newContext = new ValidationContext();
+
+      const val = instanciateChildGroupValidator(this._group, this._desc.choices[i]);
+      const res = val.validateChildren(parent, ast, newContext);
+      // First successfull validator wins
+      if (newContext.errors.length === 0 && res.length > 0) {
+        return (res);
+      }
+    }
+
+    ast.forEach(n => {
+      context.addError(ErrorCodes.NoMatchingChoice, parent);
+    });
+
+    return ([]);
+  }
+
+  protected isRequiredImpl: boolean;
+
 }
 
 /**
