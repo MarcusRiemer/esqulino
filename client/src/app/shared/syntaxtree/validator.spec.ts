@@ -36,7 +36,12 @@ const langMiniHtml: Schema.GrammarDescription = {
       children: {
         "children": {
           type: "allowed",
-          nodeTypes: ["text"]
+          nodeTypes: [
+            {
+              nodeType: "text",
+              minOccurs: 0
+            }
+          ]
         }
       }
     },
@@ -44,7 +49,15 @@ const langMiniHtml: Schema.GrammarDescription = {
       children: {
         "children": {
           type: "allowed",
-          nodeTypes: ["paragraph", "heading"]
+          nodeTypes: [
+            {
+              nodeType: "paragraph",
+              minOccurs: 0
+            },
+            {
+              nodeType: "heading",
+              minOccurs: 0
+            }]
         }
       }
     },
@@ -52,11 +65,21 @@ const langMiniHtml: Schema.GrammarDescription = {
       children: {
         "attributes": {
           type: "allowed",
-          nodeTypes: ["attr-class"]
+          nodeTypes: [
+            {
+              nodeType: "attr-class",
+              minOccurs: 0,
+            }
+          ]
         },
         "children": {
           type: "allowed",
-          nodeTypes: ["text"]
+          nodeTypes: [
+            {
+              nodeType: "text",
+              minOccurs: 0,
+            }
+          ]
         }
       }
     },
@@ -64,11 +87,21 @@ const langMiniHtml: Schema.GrammarDescription = {
       children: {
         "attributes": {
           type: "allowed",
-          nodeTypes: ["attr-id"]
+          nodeTypes: [
+            {
+              nodeType: "attr-id",
+              minOccurs: 0,
+            }
+          ]
         },
         "children": {
           type: "allowed",
-          nodeTypes: ["text"]
+          nodeTypes: [
+            {
+              nodeType: "text",
+              minOccurs: 0,
+            }
+          ]
         }
       }
     },
@@ -76,7 +109,12 @@ const langMiniHtml: Schema.GrammarDescription = {
       children: {
         "classes": {
           type: "allowed",
-          nodeTypes: ["text"]
+          nodeTypes: [
+            {
+              nodeType: "text",
+              minOccurs: 0,
+            }
+          ]
         }
       }
     },
@@ -187,7 +225,10 @@ const langAllowedConstraint: Schema.GrammarDescription = {
         "nodes": {
           type: "allowed",
           nodeTypes: [
-            "a",
+            {
+              nodeType: "a",
+              minOccurs: 0
+            },
             {
               nodeType: "b",
               minOccurs: 0,
@@ -233,32 +274,6 @@ const langSequenceConstraint: Schema.GrammarDescription = {
               maxOccurs: 2
             }
           ]
-        }
-      }
-    },
-    "a": {},
-    "b": {},
-    "c": {}
-  },
-  root: "root"
-};
-
-/**
- * A single node that wants exactly one child out of a variety
- * of possibilites.
- */
-const langAllowedOneOfConstraint: Schema.GrammarDescription = {
-  languageName: "allowed-oneOf-constraint",
-  types: {
-    "root": {
-      children: {
-        "nodes": {
-          type: "allowed",
-          childCount: {
-            minOccurs: 1,
-            maxOccurs: 1,
-          },
-          nodeTypes: ["a", "b", "c"]
         }
       }
     },
@@ -1000,73 +1015,6 @@ describe('Language Validator', () => {
     expect(res.errors.length).toEqual(2);
     expect(res.errors[0].code).toEqual(ErrorCodes.InvalidMaxOccurences);
     expect(res.errors[1].code).toEqual(ErrorCodes.InvalidMinOccurences);
-  });
-
-  it('Invalid "allowed oneOf": No child at all', () => {
-    const v = new Validator([langAllowedOneOfConstraint]);
-
-    const astDesc: AST.NodeDescription = {
-      language: "allowed-oneOf-constraint",
-      name: "root",
-      children: {
-        "nodes": []
-      }
-    }
-
-    const ast = new AST.Node(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
-
-    expect(res.errors.length).toEqual(1);
-    expect(res.errors[0].code).toEqual(ErrorCodes.InvalidMinOccurences);
-  });
-
-  it('Valid "allowed oneOf": Exactly one child', () => {
-    const v = new Validator([langAllowedOneOfConstraint]);
-
-    const astDesc: AST.NodeDescription = {
-      language: "allowed-oneOf-constraint",
-      name: "root",
-      children: {
-        "nodes": [
-          {
-            language: "allowed-oneOf-constraint",
-            name: "a"
-          },
-        ]
-      }
-    }
-
-    const ast = new AST.Node(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
-
-    expect(res.errors.length).toEqual(0);
-  });
-
-  it('Invalid "allowed oneOf": Two children', () => {
-    const v = new Validator([langAllowedOneOfConstraint]);
-
-    const astDesc: AST.NodeDescription = {
-      language: "allowed-oneOf-constraint",
-      name: "root",
-      children: {
-        "nodes": [
-          {
-            language: "allowed-oneOf-constraint",
-            name: "a"
-          },
-          {
-            language: "allowed-oneOf-constraint",
-            name: "a"
-          }
-        ]
-      }
-    }
-
-    const ast = new AST.Node(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
-
-    expect(res.errors.length).toEqual(1);
-    expect(res.errors[0].code).toEqual(ErrorCodes.InvalidMaxOccurences);
   });
 
   it('Valid Choice (simple): a', () => {

@@ -12,19 +12,32 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       children: {
         "expressions": {
           type: "allowed",
-          nodeTypes: ["expr"]
+          nodeTypes: [
+            {
+              nodeType: {
+                languageName: "regex",
+                typeName: "expr",
+              },
+              minOccurs: 1
+            }
+          ]
         }
       }
     },
     "expr": {
       children: {
         "singleExpression": {
-          type: "allowed",
-          childCount: {
-            maxOccurs: 1,
-            minOccurs: 1,
-          },
-          nodeTypes: ["constant", "alternative"]
+          type: "choice",
+          choices: [
+            {
+              type: "sequence",
+              nodeTypes: ["constant"]
+            },
+            {
+              type: "sequence",
+              nodeTypes: ["alternative"]
+            }
+          ]
         }
       }
     },
@@ -32,11 +45,15 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       children: {
         "expressions": {
           type: "allowed",
-          childCount: {
-            minOccurs: 1,
-            maxOccurs: +Infinity
-          },
-          nodeTypes: ["expr"]
+          nodeTypes: [
+            {
+              nodeType: {
+                languageName: "regex",
+                typeName: "expr",
+              },
+              minOccurs: 1
+            }
+          ]
         }
       }
     },

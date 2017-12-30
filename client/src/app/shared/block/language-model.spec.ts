@@ -17,11 +17,13 @@ const langEmptyBlocks: LanguageDescription = {
           children: {
             "cat_a": {
               type: "allowed",
-              childCount: {
-                minOccurs: 1,
-                maxOccurs: Infinity
-              },
-              nodeTypes: ["a"]
+              nodeTypes: [{
+                nodeType: {
+                  languageName: "emptyBlocks",
+                  typeName: "a",
+                },
+                minOccurs: 1
+              }]
             }
           }
         },

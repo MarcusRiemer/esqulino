@@ -377,31 +377,11 @@ class NodeTypeChildren {
  * child nodes are structurally valid.
  */
 abstract class NodeComplexTypeChildrenValidator {
-  // The number of children must be in these boundaries
-  private _childCount: Desc.OccursDescription;
-
-  constructor(desc: Desc.NodeChildrenGroupDescription) {
-    if (!desc.childCount) {
-      this._childCount = {
-        minOccurs: 0,
-        maxOccurs: +Infinity
-      }
-    } else {
-      this._childCount = desc.childCount;
-    }
-  }
 
   /**
-   * Checks whether the count of children is legal and then delegates
-   * further checks to an implementation defined
+   * Delegates further checks to an implementation defined variation
    */
   validateChildren(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[] {
-    if (ast.length < this._childCount.minOccurs) {
-      context.addError(ErrorCodes.InvalidMinOccurences, parent);
-    } else if (ast.length > this._childCount.maxOccurs) {
-      context.addError(ErrorCodes.InvalidMaxOccurences, parent);
-    }
-
     return (this.validateChildrenImpl(parent, ast, context));
   }
 
@@ -417,7 +397,7 @@ abstract class NodeComplexTypeChildrenValidator {
    * @return True, if this category will be required to be present on the node.
    */
   get isRequired() {
-    return (this._childCount.minOccurs > 0 || this.isRequiredImpl);
+    return (this.isRequiredImpl);
   }
 
   /**
@@ -434,18 +414,19 @@ class ChildCardinality {
   private _minOccurs: number;
   private _maxOccurs: number;
 
-  constructor(typeDesc: Desc.NodeTypesChildReference, group: NodeTypeChildren, defaultLimits: Desc.OccursDescription) {
+  constructor(typeDesc: Desc.NodeTypesChildReference, group: NodeTypeChildren) {
     const parent = group.parent;
     if (typeof (typeDesc) === "string") {
       // Simple strings per default occur exactly once
       this._nodeType = new TypeReference(parent.validator, typeDesc, parent.languageName);
-      this._minOccurs = defaultLimits.minOccurs;
-      this._maxOccurs = defaultLimits.maxOccurs;
+      this._minOccurs = 1;
+      this._maxOccurs = 1;
     } else if (Desc.isChildCardinalityDescription(typeDesc)) {
       // Complex descriptions may provide different cardinalities
       this._nodeType = new TypeReference(parent.validator, typeDesc.nodeType, parent.languageName);
-      this._minOccurs = typeDesc.minOccurs;
-      this._maxOccurs = typeDesc.maxOccurs;
+
+      this._minOccurs = "minOccurs" in typeDesc ? typeDesc.minOccurs : 0;
+      this._maxOccurs = "maxOccurs" in typeDesc ? typeDesc.maxOccurs : +Infinity;
     } else {
       throw new Error(`Unknown sequence cardinality: "${JSON.stringify(typeDesc)}"`);
     }
@@ -481,14 +462,10 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
   private _group: NodeTypeChildren;
 
   constructor(group: NodeTypeChildren, desc: Desc.NodeTypesSequenceDescription) {
-    super(desc);
-    const defaultLimit: Desc.OccursDescription = {
-      minOccurs: 1,
-      maxOccurs: 1,
-    }
+    super();
 
     this._group = group;
-    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group, defaultLimit));
+    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group));
   }
 
   /**
@@ -584,14 +561,9 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
   private _nodeTypes: ChildCardinality[];
 
   constructor(group: NodeTypeChildren, desc: Desc.NodeTypesAllowedDescription) {
-    super(desc);
+    super();
 
-    const defaultLimit: Desc.OccursDescription = {
-      minOccurs: 0,
-      maxOccurs: +Infinity
-    }
-
-    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group, defaultLimit));
+    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group));
   }
 
   /**
@@ -662,7 +634,7 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
   private _group: NodeTypeChildren;
 
   constructor(group: NodeTypeChildren, desc: Desc.NodeTypesChoiceDescription) {
-    super(desc);
+    super();
     this._desc = desc;
     this._group = group;
   }
