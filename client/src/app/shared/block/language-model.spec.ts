@@ -18,11 +18,8 @@ const langEmptyBlocks: LanguageDescription = {
             "cat_a": {
               type: "allowed",
               nodeTypes: [{
-                nodeType: {
-                  languageName: "emptyBlocks",
-                  typeName: "a",
-                },
-                minOccurs: 1
+                nodeType: "a",
+                occurs: "+"
               }]
             }
           }

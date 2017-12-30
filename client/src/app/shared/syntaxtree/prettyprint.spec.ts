@@ -102,33 +102,45 @@ describe('Grammar PrettyPrinter', () => {
     expect(p.prettyPrintTypeReference({ languageName: "bar", typeName: "foo" })).toEqual("bar.foo");
     expect(p.prettyPrintTypeReference({
       nodeType: { languageName: "bar", typeName: "foo" },
-      minOccurs: 0,
-      maxOccurs: 1,
+      occurs: {
+        minOccurs: 0,
+        maxOccurs: 1,
+      }
     })).toEqual("bar.foo?");
     expect(p.prettyPrintTypeReference({
       nodeType: { languageName: "bar", typeName: "foo" },
-      minOccurs: 1,
-      maxOccurs: undefined
+      occurs: {
+        minOccurs: 1,
+        maxOccurs: undefined
+      }
     })).toEqual("bar.foo+");
     expect(p.prettyPrintTypeReference({
       nodeType: { languageName: "bar", typeName: "foo" },
-      minOccurs: 0,
-      maxOccurs: undefined
+      occurs: {
+        minOccurs: 0,
+        maxOccurs: undefined
+      }
     })).toEqual("bar.foo*");
     expect(p.prettyPrintTypeReference({
       nodeType: { languageName: "bar", typeName: "foo" },
-      minOccurs: 0,
-      maxOccurs: 2,
+      occurs: {
+        minOccurs: 0,
+        maxOccurs: 2,
+      }
     })).toEqual("bar.foo{0,2}");
     expect(p.prettyPrintTypeReference({
       nodeType: { languageName: "bar", typeName: "foo" },
-      minOccurs: undefined,
-      maxOccurs: 2,
+      occurs: {
+        minOccurs: undefined,
+        maxOccurs: 2,
+      }
     })).toEqual("bar.foo{,2}");
     expect(p.prettyPrintTypeReference({
       nodeType: { languageName: "bar", typeName: "foo" },
-      minOccurs: 3,
-      maxOccurs: undefined
+      occurs: {
+        minOccurs: 3,
+        maxOccurs: undefined
+      }
     })).toEqual("bar.foo{3,}");
   });
 

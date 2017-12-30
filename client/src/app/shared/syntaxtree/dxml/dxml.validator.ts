@@ -8,46 +8,16 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "elements": {
           type: "allowed",
           nodeTypes: [
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "element"
-              },
-              minOccurs: 0
-            },
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "text"
-              },
-              minOccurs: 0
-            },
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "interpolate"
-              },
-              minOccurs: 0
-            },
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "if"
-              },
-              minOccurs: 0
-            },
+            { nodeType: "element", occurs: "*" },
+            { nodeType: "text", occurs: "*" },
+            { nodeType: "interpolate", occurs: "*" },
+            { nodeType: "if", occurs: "*" },
           ]
         },
         "attributes": {
           type: "allowed",
           nodeTypes: [
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "attribute",
-              },
-              minOccurs: 0,
-            }
+            { nodeType: "attribute", occurs: "*" },
           ]
         }
       },
@@ -62,20 +32,8 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "value": {
           type: "allowed",
           nodeTypes: [
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "text",
-              },
-              minOccurs: 0,
-            },
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "interpolate",
-              },
-              minOccurs: 0,
-            }
+            { nodeType: "text", occurs: "*" },
+            { nodeType: "interpolate", occurs: "*" },
           ],
         }
       },
@@ -114,34 +72,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "body": {
           type: "allowed",
           nodeTypes: [
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "element"
-              },
-              minOccurs: 0
-            },
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "text"
-              },
-              minOccurs: 0
-            },
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "interpolate"
-              },
-              minOccurs: 0
-            },
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "if"
-              },
-              minOccurs: 0
-            },
+            { nodeType: "element", occurs: "*" },
+            { nodeType: "text", occurs: "*" },
+            { nodeType: "interpolate", occurs: "*" },
+            { nodeType: "if", occurs: "*" },
           ],
         }
       }
