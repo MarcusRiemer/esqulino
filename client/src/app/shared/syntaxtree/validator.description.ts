@@ -44,13 +44,6 @@ export interface NodePropertyTypeDescription {
 }
 
 /**
- * All children group types that are available
- */
-export type NodeChildrenGroupDescription =
-  NodeTypesAllowedDescription
-  | NodeTypesSequenceDescription;
-
-/**
  * Creates a possibility to define multiple NodeTypes as alternatives
  * to each other *without* introducing an artificial node type. This
  * is helpful for e.g. the root node or when using recursive definitions.
@@ -174,29 +167,43 @@ export interface OccursDescription {
 export type NodeTypesChildReference = (TypeReference | ChildCardinalityDescription);
 
 /**
- * Describes a group of node types.
- */
-export interface NodeTypesDescription {
-  type: string
-  childCount?: OccursDescription
-}
-
-/**
  * In a sequence every child must occur in exact the order and cardinality
  * that is specified by this description.
  */
-export interface NodeTypesSequenceDescription extends NodeTypesDescription {
+export interface NodeTypesSequenceDescription {
   type: "sequence"
   nodeTypes: NodeTypesChildReference[]
+  childCount?: OccursDescription // TODO: Remove this
 }
 
 /**
- * Every immediate child must be part of this list of allowed types.
+ * Every immediate child must be part of this list of allowed types. The order
+ * in which these children appear in is not relevant.
  */
-export interface NodeTypesAllowedDescription extends NodeTypesDescription {
+export interface NodeTypesAllowedDescription {
   type: "allowed"
   nodeTypes: NodeTypesChildReference[]
+  childCount?: OccursDescription // TODO: Remove this
 }
+
+/**
+ * Tries the given operators in the order they appear in. If any of them is
+ * satisfied, the child group is considered valid.
+ */
+export interface NodeTypesChoiceDescription {
+  type: "choice",
+  choices: NodeChildrenGroupDescription[]
+  childCount?: OccursDescription // TODO: Remove this
+}
+
+/**
+ * All children group types that are available
+ */
+export type NodeChildrenGroupDescription =
+  NodeTypesSequenceDescription
+  | NodeTypesAllowedDescription
+  | NodeTypesChoiceDescription;
+
 
 /**
  * Describes a grammar that may describe the syntactic structure of a language.

@@ -12,7 +12,7 @@ As syntaxtrees may define arbitrary tree structures, some kind of validation is 
 The traditional approach
 ------------------------
 
-But lets take a look at the "traditional" approach first. A somewhat typical grammar to represent an ``if`` statement with an optional ``else``-statement in a nondescript language could look very similar to this:
+A somewhat typical grammar to represent an ``if`` statement with an optional ``else``-statement in a nondescript language could look very similar to this:
 
 .. productionlist::
    if        : 'if' <expr> 'then' <stmt> ['else' <stmt>]
