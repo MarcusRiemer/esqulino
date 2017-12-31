@@ -145,7 +145,7 @@ describe('Grammar PrettyPrinter', () => {
   });
 
   it('foo ::= bar baz', () => {
-    const r = p.prettyPrintChildren('foo', {
+    const r = p.prettyPrintChildGroup('foo', {
       nodeTypes: ["bar", "baz"],
       type: "sequence"
     });
@@ -183,5 +183,9 @@ describe('Grammar PrettyPrinter', () => {
 
   it('Grammar g7: mixed cardinality for allowed children', () => {
     verifyFiles('g7-node-child-allowed-mix');
+  });
+
+  it('Grammar g8: choice between two sequences', () => {
+    verifyFiles('g8-node-child-choice-sequence');
   });
 });

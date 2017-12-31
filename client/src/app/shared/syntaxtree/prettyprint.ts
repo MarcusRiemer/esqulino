@@ -81,7 +81,7 @@ export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTy
   // Add all children (if there are any)
   if (t.children) {
     const children = Object.entries(t.children)
-      .map(([groupName, group]) => prettyPrintChildren(groupName, group));
+      .map(([groupName, group]) => prettyPrintChildGroup(groupName, group));
     toReturn.push(children);
   }
 
@@ -127,7 +127,6 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
   if (Desc.isQualifiedTypeName(t)) {
     return (`${t.languageName}.${t.typeName}`);
   } else if (Desc.isChildCardinalityDescription(t)) {
-
     const printCardinality = (t: Desc.OccursDescription) => {
       if (typeof t === "string") {
         return (t);
@@ -158,25 +157,45 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
 }
 
 /**
- * Prints the grammar a single child.
+ * Prints the grammar of a single child group.
  */
-export function prettyPrintChildren(name: string, p: Desc.NodeChildrenGroupDescription): string {
-  let connector = (p) => {
-    if (Desc.isNodeTypesAllowedDescription(p)) {
-      return (' & ');
-    } else {
-      return (' ');
-    }
-  };
-
-  if (Desc.isNodeTypesAllowedDescription(p) || Desc.isNodeTypesSequenceDescription(p)) {
-    const childTypes = p.nodeTypes
-      .map(prettyPrintTypeReference)
-      .join(connector(p));
-
-    return (`children "${name}" ::= ${childTypes}`);
-  } else {
-    throw new Error(`Can only print sequences and allowed stuff`);
-  }
+export function prettyPrintChildGroup(name: string, p: Desc.NodeChildrenGroupDescription): string {
+  return (`children "${name}" ::= ` + prettyPrintChildGroupElements(p));
 }
 
+/**
+ * Prints the elements of a single child group. This may be a simple list of elements
+ * (for "sequence" and "allowed" groups) or recursive definitions of child groups ("choice").
+ */
+function prettyPrintChildGroupElements(p: Desc.NodeChildrenGroupDescription): string {
+  // Sequences and allowed groups can be printed by simply joining the elements
+  switch (p.type) {
+    case "sequence":
+    case "allowed":
+      // Figuring out the connector
+      let connector = (p) => {
+        if (Desc.isNodeTypesAllowedDescription(p)) {
+          return (' & ');
+        } else {
+          return (' ');
+        }
+      };
+
+      return (
+        p.nodeTypes
+          .map(prettyPrintTypeReference)
+          .join(connector(p))
+      );
+
+    case "choice":
+      return (
+        p.choices
+          // Recursive call
+          .map(prettyPrintChildGroupElements)
+          .map(e => `(${e})`)
+          .join(` | `)
+      )
+    default:
+      throw new Error(`Can't print child group of type "${(p as any).type}"`);
+  }
+}
