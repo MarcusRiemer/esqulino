@@ -1,0 +1,27 @@
+{
+  "languageName": "g8",
+  "root": "n1",
+  "types": {
+    "n1": {
+      "children": {
+        "c": {
+          "type": "choice",
+          "choices": [
+            {
+              "type": "sequence",
+              "nodeTypes": ["n2"]
+            },
+            {
+              "type": "sequence",
+              "nodeTypes": ["n3"]
+            }
+          ]
+        }
+      }
+    },
+    "n2": {
+    },
+    "n3": {
+    }
+  }
+}

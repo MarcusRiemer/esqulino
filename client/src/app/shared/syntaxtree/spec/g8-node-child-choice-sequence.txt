@@ -1,6 +1,6 @@
-grammar "g7" {
+grammar "g8" {
   node "n1" {
-    children "c" ::= n1? & n2+ & n3*
+    children "c" ::= (n2) | (n3)
   }
   node "n2" {
   }

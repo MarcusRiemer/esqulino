@@ -8,24 +8,15 @@
           "type": "allowed",
           "nodeTypes": [
             {
-              "nodeType": {
-                "languageName": "g7",
-                "typeName": "n1"
-              },
+              "nodeType": "n1",
               "occurs": "?"
             },
             {
-              "nodeType": {
-                "languageName": "g7",
-                "typeName": "n2"
-              },              
+              "nodeType": "n2",
               "occurs": "+"
             },
             {
-              "nodeType": {
-                "languageName": "g7",
-                "typeName": "n3"
-              },
+              "nodeType": "n3",
               "occurs": "*"
             }
           ]
