@@ -103,14 +103,6 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-# Fix for scrolling tables in the RTD-theme
-# https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
-html_context = {
-    'css_files': [
-        '_static/theme_overrides.css',  # override wide tables in RTD theme
-    ],
-}
-
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
 #
@@ -180,3 +172,7 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
+# Fix for scrolling tables in the RTD-theme
+# https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
+def setup(app):
+    app.add_stylesheet('theme_overrides.css')
