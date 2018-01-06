@@ -1,6 +1,6 @@
 import { LanguageModelDescription } from '../language-model.description'
 import {
-  SidebarBlockDescription, EditorBlockDescription, EditorBlockDescriptions
+  SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
 } from '../block.description'
 
 export const LANGUAGE_MODEL: LanguageModelDescription = {
@@ -148,14 +148,14 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
             {
               blockType: "constant",
               text: "RegEx: "
-            } as EditorBlockDescriptions.EditorConstant,
+            } as VisualBlockDescriptions.EditorConstant,
             {
               blockType: "iterator",
               childGroupName: "expressions",
               direction: "horizontal",
-            } as EditorBlockDescriptions.EditorIterator,
+            } as VisualBlockDescriptions.EditorIterator,
           ]
-        } as EditorBlockDescriptions.EditorBlock
+        } as VisualBlockDescriptions.EditorBlock
       ]
     },
     {
@@ -171,9 +171,9 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
             {
               blockType: "interpolated",
               property: "value"
-            } as EditorBlockDescriptions.EditorInterpolation,
+            } as VisualBlockDescriptions.EditorInterpolation,
           ]
-        } as EditorBlockDescriptions.EditorBlock
+        } as VisualBlockDescriptions.EditorBlock
       ]
     },
     {
@@ -200,9 +200,9 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
                 {
                   blockType: "constant",
                   text: "("
-                } as EditorBlockDescriptions.EditorConstant
+                } as VisualBlockDescriptions.EditorConstant
               ],
-            } as EditorBlockDescriptions.EditorDropTarget,
+            } as VisualBlockDescriptions.EditorDropTarget,
             {
               blockType: "iterator",
               childGroupName: "expressions",
@@ -222,17 +222,17 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
                     {
                       blockType: "constant",
                       text: "|"
-                    } as EditorBlockDescriptions.EditorConstant
+                    } as VisualBlockDescriptions.EditorConstant
                   ],
-                } as EditorBlockDescriptions.EditorDropTarget,
+                } as VisualBlockDescriptions.EditorDropTarget,
               ]
-            } as EditorBlockDescriptions.EditorIterator,
+            } as VisualBlockDescriptions.EditorIterator,
             {
               blockType: "constant",
               text: ")"
-            } as EditorBlockDescriptions.EditorConstant,
+            } as VisualBlockDescriptions.EditorConstant,
           ]
-        } as EditorBlockDescriptions.EditorBlock
+        } as VisualBlockDescriptions.EditorBlock
       ]
     },
     {
@@ -245,7 +245,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
           blockType: "iterator",
           childGroupName: "singleExpression",
           direction: "horizontal",
-        } as EditorBlockDescriptions.EditorIterator,
+        } as VisualBlockDescriptions.EditorIterator,
       ]
     }
   ]

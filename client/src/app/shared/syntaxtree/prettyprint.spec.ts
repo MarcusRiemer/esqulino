@@ -3,8 +3,12 @@ import * as p from './prettyprint'
 
 /**
  * Ensures that the given in and output files do match correctly.
+ *
+ * This function can not be exported from a different module because the calls
+ * to `require` are relative to the file the function is defined in.
+ * So for the moment this function is copy and pasted into some spec files :(
  */
-function verifyFiles(fileName: string) {
+export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) {
   const input = require(`json-loader!./spec/${fileName}.json`);
   let expected = require(`raw-loader!./spec/${fileName}.txt`) as string;
 
@@ -12,30 +16,10 @@ function verifyFiles(fileName: string) {
     expected = expected.substr(0, expected.length - 1);
   }
 
-  expect(p.prettyPrintGrammar(input)).toEqual(expected);
+  expect(transform(input)).toEqual(expected);
 }
 
 describe('Grammar PrettyPrinter', () => {
-  it('Helper "recursiveJoin": No nesting', () => {
-    const r = p.recursiveJoin("a", "x", ["1", "2", "3"]);
-    expect(r).toEqual("1a2a3");
-  });
-
-  it('Helper "recursiveJoin": First level', () => {
-    expect(p.recursiveJoin("a", "x", [["1", "2", "3"]])).toEqual("x1ax2ax3");
-    expect(p.recursiveJoin("b", "x", [["1"], "2", ["3"]])).toEqual("x1b2bx3");
-    expect(p.recursiveJoin("c", "x", [["1"], ["2"], ["3"]])).toEqual("x1cx2cx3");
-  });
-
-  it('Helper "recursiveJoin": Second level', () => {
-    expect(p.recursiveJoin("a", "x", [[["1"], "2", "3"]])).toEqual("xx1ax2ax3");
-  });
-
-  it('Helper "recursiveJoin": Practical examples', () => {
-    expect(p.recursiveJoin("\n", "  ", ["grammar g {", ["node"], "}"])).toEqual("grammar g {\n  node\n}");
-    expect(p.recursiveJoin("\n", "  ", ['grammar "g1" {', ['node "n1" {', '}'], ['node "n2" {', '}'], '}'])).toEqual(`grammar "g1" {\n  node "n1" {\n  }\n  node "n2" {\n  }\n}`);
-  });
-
   it('prop "s1" { string }', () => {
     const r = p.prettyPrintProperty("s1", { base: "string" });
 
@@ -154,38 +138,38 @@ describe('Grammar PrettyPrinter', () => {
   });
 
   it('Empty Grammar', () => {
-    verifyFiles('g0-empty');
+    verifyFiles('g0-empty', p.prettyPrintGrammar);
   });
 
   it('Grammar with empty nodes', () => {
-    verifyFiles('g1-empty-nodes');
+    verifyFiles('g1-empty-nodes', p.prettyPrintGrammar);
   });
 
   it('Grammar g2: string node', () => {
-    verifyFiles('g2-string-node');
+    verifyFiles('g2-string-node', p.prettyPrintGrammar);
   });
 
   it('Grammar g3: string node with length = 4', () => {
-    verifyFiles('g3-string-node-length');
+    verifyFiles('g3-string-node-length', p.prettyPrintGrammar);
   });
 
   it('Grammar g4: string node with minimum and maximum length', () => {
-    verifyFiles('g4-string-node-length-min-max');
+    verifyFiles('g4-string-node-length-min-max', p.prettyPrintGrammar);
   });
 
   it('Grammar g5: single node that is its own child', () => {
-    verifyFiles('g5-node-child-self');
+    verifyFiles('g5-node-child-self', p.prettyPrintGrammar);
   });
 
   it('Grammar g6: single node that is optionally its own child', () => {
-    verifyFiles('g6-node-child-self-optional');
+    verifyFiles('g6-node-child-self-optional', p.prettyPrintGrammar);
   });
 
   it('Grammar g7: mixed cardinality for allowed children', () => {
-    verifyFiles('g7-node-child-allowed-mix');
+    verifyFiles('g7-node-child-allowed-mix', p.prettyPrintGrammar);
   });
 
   it('Grammar g8: choice between two sequences', () => {
-    verifyFiles('g8-node-child-choice-sequence');
+    verifyFiles('g8-node-child-choice-sequence', p.prettyPrintGrammar);
   });
 });

@@ -1,0 +1,8 @@
+language "test" {
+  type "test.root" {
+    iterate {
+      childGroup "c1"
+      direction horizontal
+    }
+  }
+}

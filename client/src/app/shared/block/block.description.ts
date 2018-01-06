@@ -4,7 +4,7 @@ import { QualifiedTypeName, NodeDescription } from '../syntaxtree/syntaxtree.des
  * Groups together all available options to describe a block in the
  * drag & drop UI.
  */
-export namespace EditorBlockDescriptions {
+export namespace VisualBlockDescriptions {
   /**
    * Describes how certain nodes of the syntaxtree should be presented
    * inside the drag and drop editor. As the available blocks are very
@@ -42,7 +42,7 @@ export namespace EditorBlockDescriptions {
    */
   export interface EditorBlock extends EditorLayout {
     blockType: "block";
-    children?: EditorBlockBase[];
+    children?: ConcreteBlock[];
     dropTarget?: DropTargetProperties;
     dropAction?: "append" | "replace";
   }
@@ -53,7 +53,7 @@ export namespace EditorBlockDescriptions {
    */
   export interface EditorDropTarget extends EditorLayout {
     blockType: "dropTarget";
-    children?: EditorBlockBase[];
+    children?: ConcreteBlock[];
     dropTarget?: DropTargetProperties;
     visibility: ["ifAnyDrag" | "ifLegalDrag" | "ifEmpty" | "always"];
   }
@@ -64,7 +64,7 @@ export namespace EditorBlockDescriptions {
   export interface EditorIterator extends EditorLayout {
     blockType: "iterator";
     childGroupName: string;
-    between?: EditorBlockBase[]
+    between?: ConcreteBlock[]
   }
 
   /**
@@ -83,6 +83,8 @@ export namespace EditorBlockDescriptions {
     blockType: "interpolated";
     property: string;
   }
+
+  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolation;
 }
 
 /**
@@ -125,5 +127,5 @@ export interface EditorBlockDescription {
   /**
    * The actual visual representation.
    */
-  visual: EditorBlockDescriptions.EditorBlockBase[];
+  visual: VisualBlockDescriptions.ConcreteBlock[];
 }
