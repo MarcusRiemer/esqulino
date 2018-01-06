@@ -2,7 +2,7 @@ import { Tree, LanguageDescription, Language } from 'app/shared/syntaxtree';
 
 import { LanguageModelDescription } from './language-model.description'
 import { LanguageModel } from './language-model'
-import { SidebarBlockDescription, EditorBlockDescriptions } from './block.description'
+import { SidebarBlockDescription, VisualBlockDescriptions } from './block.description'
 
 
 const langEmptyBlocks: LanguageDescription = {
@@ -76,7 +76,7 @@ const langModelEmptyBlocks: LanguageModelDescription = {
         {
           blockType: "constant",
           text: "root"
-        } as EditorBlockDescriptions.EditorConstant
+        } as VisualBlockDescriptions.EditorConstant
       ]
     },
     {
@@ -88,7 +88,7 @@ const langModelEmptyBlocks: LanguageModelDescription = {
         {
           blockType: "constant",
           text: "a"
-        } as EditorBlockDescriptions.EditorConstant
+        } as VisualBlockDescriptions.EditorConstant
       ]
     }
   ]

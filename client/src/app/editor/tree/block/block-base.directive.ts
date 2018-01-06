@@ -1,6 +1,6 @@
 import { Directive, ElementRef, Input } from '@angular/core';
 
-import { EditorBlockDescriptions } from '../../../shared/block';
+import { VisualBlockDescriptions } from '../../../shared/block';
 
 /**
  * Controls basic styling aspects of blocks.
@@ -10,7 +10,7 @@ import { EditorBlockDescriptions } from '../../../shared/block';
 })
 export class BlockBaseDirective {
 
-  @Input('blockBase') layout: EditorBlockDescriptions.EditorBlockBase;
+  @Input('blockBase') layout: VisualBlockDescriptions.EditorBlockBase;
 
   private hostElement: HTMLElement;
 

@@ -1,0 +1,9 @@
+language "test" {
+  type "test.root" {
+    block {
+      direction horizontal
+      visual {
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+language "test" {
+  type "test.root" {
+    {{ foo }}
+  }
+}

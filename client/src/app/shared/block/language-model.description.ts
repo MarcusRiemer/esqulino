@@ -17,8 +17,6 @@ export interface LanguageModelDescription extends LanguageModelDocument {
 
 /**
  * The data about a language model that is stored in the database
- * 
- * @todo Move this into a better fitting place
  */
 export interface LanguageModelDocument {
   /**

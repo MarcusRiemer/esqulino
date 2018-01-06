@@ -1,0 +1,22 @@
+{
+  "id": "test",
+  "name": "test",
+  "editorBlocks": [
+    {
+      "describedType": {
+        "languageName": "test",
+        "typeName": "root"
+      },
+      "visual": [
+        {          
+          "blockType": "block",
+          "direction": "horizontal",
+          "children": [
+          ]
+        }
+      ]
+    }
+  ],
+  "sidebarBlocks": []
+}
+
