@@ -94,12 +94,7 @@ export namespace VisualBlockDescriptions {
  */
 export interface SidebarBlockDescription {
   /**
-   * This type is made available via this description.
-   */
-  describedType: QualifiedTypeName;
-
-  /**
-   * How this type should be represented in the sidebar.
+   * How this block should be represented in the sidebar.
    */
   sidebar: {
     category: string;

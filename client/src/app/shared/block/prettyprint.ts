@@ -11,14 +11,14 @@ export function prettyPrintLanguageModel(desc: LanguageModelDescription): string
   const head = `language "${desc.name}" {`;
   const tail = `}`;
 
-  const blocks = (desc.editorBlocks || []).map(prettyPrintBlock);
+  const blocks = (desc.editorBlocks || []).map(prettyPrintBlockTypeHeader);
 
   const toReturn = [head, ...blocks, tail] as NestedString
 
   return (recursiveJoin('\n', '  ', toReturn));
 }
 
-export function prettyPrintBlock(desc: EditorBlockDescription): NestedString {
+export function prettyPrintBlockTypeHeader(desc: EditorBlockDescription): NestedString {
   const t = desc.describedType;
   const head = `type "${t.languageName}.${t.typeName}" {`;
   const tail = `}`;
