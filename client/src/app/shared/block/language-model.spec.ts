@@ -37,10 +37,6 @@ const langModelEmptyBlocks: LanguageModelDescription = {
   name: "Empty Blocks",
   sidebarBlocks: [
     {
-      describedType: {
-        languageName: "emptyBlocks",
-        typeName: "root",
-      },
       sidebar: {
         category: "Standard",
       },
@@ -53,10 +49,6 @@ const langModelEmptyBlocks: LanguageModelDescription = {
       }
     },
     {
-      describedType: {
-        languageName: "emptyBlocks",
-        typeName: "a",
-      },
       sidebar: {
         category: "Standard",
       },

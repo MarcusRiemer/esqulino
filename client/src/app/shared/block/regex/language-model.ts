@@ -8,10 +8,6 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
   name: "Reguläre Ausdrücke",
   sidebarBlocks: [
     {
-      describedType: {
-        languageName: "regex",
-        typeName: "root"
-      },
       defaultNode: {
         language: "regex",
         name: "root",
@@ -25,10 +21,6 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
       },
     },
     {
-      describedType: {
-        languageName: "regex",
-        typeName: "constant"
-      },
       defaultNode: {
         language: "regex",
         name: "expr",
@@ -50,10 +42,6 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
       }
     },
     {
-      describedType: {
-        languageName: "regex",
-        typeName: "constant"
-      },
       defaultNode: {
         language: "regex",
         name: "expr",
@@ -75,10 +63,6 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
       }
     },
     {
-      describedType: {
-        languageName: "regex",
-        typeName: "constant"
-      },
       defaultNode: {
         language: "regex",
         name: "expr",
@@ -100,10 +84,6 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
       }
     },
     {
-      describedType: {
-        languageName: "regex",
-        typeName: "alternative"
-      },
       defaultNode: {
         language: "regex",
         name: "expr",
