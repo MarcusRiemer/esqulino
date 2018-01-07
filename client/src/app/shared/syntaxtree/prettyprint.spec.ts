@@ -137,11 +137,11 @@ describe('Grammar PrettyPrinter', () => {
     expect(r).toEqual('children "foo" ::= bar baz');
   });
 
-  it('Empty Grammar', () => {
+  it('Grammar g0: empty', () => {
     verifyFiles('g0-empty', p.prettyPrintGrammar);
   });
 
-  it('Grammar with empty nodes', () => {
+  it('Grammar g1: empty nodes', () => {
     verifyFiles('g1-empty-nodes', p.prettyPrintGrammar);
   });
 
@@ -171,5 +171,31 @@ describe('Grammar PrettyPrinter', () => {
 
   it('Grammar g8: choice between two sequences', () => {
     verifyFiles('g8-node-child-choice-sequence', p.prettyPrintGrammar);
+  });
+});
+
+describe('SyntaxTree PrettyPrinter', () => {
+  it('Tree t0: Empty root', () => {
+    verifyFiles('t0-empty-root', p.prettyPrintSyntaxTree);
+  });
+
+  it('Tree t1: Root with single prop', () => {
+    verifyFiles('t1-root-single-prop', p.prettyPrintSyntaxTree);
+  });
+
+  it('Tree t2: Root with single child', () => {
+    verifyFiles('t2-root-single-child', p.prettyPrintSyntaxTree);
+  });
+
+  it('Tree t3: Root with two childgroups', () => {
+    verifyFiles('t3-root-two-childgroups', p.prettyPrintSyntaxTree);
+  });
+
+  it('Tree t4: Root with three children', () => {
+    verifyFiles('t4-root-three-children', p.prettyPrintSyntaxTree);
+  });
+
+  it('Tree t5: Root with three complex children', () => {
+    verifyFiles('t5-root-complex-children', p.prettyPrintSyntaxTree);
   });
 });

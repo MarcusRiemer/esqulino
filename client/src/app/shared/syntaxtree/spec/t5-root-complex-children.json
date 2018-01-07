@@ -1,0 +1,32 @@
+{
+  "language": "t0",
+  "name": "root",
+  "children": {
+    "c1" : [
+      {
+        "language": "t0",
+        "name": "r_c1_1",
+        "properties": {
+          "p1": "v1",
+          "p2": "v2"
+        }
+      },
+      {
+        "language": "t0",
+        "name": "r_c1_2",
+        "properties": {
+          "p3": "v3",
+          "p4": "v4"
+        }
+      },
+      {
+        "language": "t0",
+        "name": "r_c1_3",
+        "properties": {
+          "p5": "v5",
+          "p6": "v6"
+        }
+      }      
+    ]
+  }
+}

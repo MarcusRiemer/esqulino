@@ -6,10 +6,6 @@ import {
 
 const SIDEBAR_BLOCKS_BASIC = [
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "element"
-    },
     defaultNode: {
       language: "dxml",
       name: "element",
@@ -61,10 +57,6 @@ const SIDEBAR_BLOCKS_BASIC = [
     },
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "element"
-    },
     defaultNode: {
       language: "dxml",
       name: "element",
@@ -82,10 +74,6 @@ const SIDEBAR_BLOCKS_BASIC = [
     },
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "element"
-    },
     defaultNode: {
       language: "dxml",
       name: "element",
@@ -103,10 +91,6 @@ const SIDEBAR_BLOCKS_BASIC = [
     },
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "attribute"
-    },
     defaultNode: {
       language: "dxml",
       name: "attribute",
@@ -125,10 +109,6 @@ const SIDEBAR_BLOCKS_BASIC = [
     }
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "attribute"
-    },
     defaultNode: {
       language: "dxml",
       name: "attribute",
@@ -147,10 +127,6 @@ const SIDEBAR_BLOCKS_BASIC = [
     }
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "text"
-    },
     defaultNode: {
       language: "dxml",
       name: "text",
@@ -167,10 +143,6 @@ const SIDEBAR_BLOCKS_BASIC = [
 
 const SIDEBAR_BLOCKS_DYNAMIC = [
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "interpolate"
-    },
     defaultNode: {
       language: "dxml",
       name: "interpolate",
@@ -200,10 +172,6 @@ const SIDEBAR_BLOCKS_DYNAMIC = [
     }
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "exprVar"
-    },
     defaultNode: {
       language: "dxml",
       name: "exprVar",
@@ -217,10 +185,6 @@ const SIDEBAR_BLOCKS_DYNAMIC = [
     }
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "exprVar"
-    },
     defaultNode: {
       language: "dxml",
       name: "exprVar",
@@ -234,10 +198,6 @@ const SIDEBAR_BLOCKS_DYNAMIC = [
     }
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "if"
-    },
     defaultNode: {
       language: "dxml",
       name: "if",

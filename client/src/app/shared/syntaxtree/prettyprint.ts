@@ -1,5 +1,6 @@
 import { recursiveJoin, NestedString } from '../nested-string'
 
+import { NodeDescription } from './syntaxtree.description'
 import * as Desc from './validator.description'
 
 /**
@@ -163,5 +164,32 @@ function prettyPrintChildGroupElements(p: Desc.NodeChildrenGroupDescription): st
       )
     default:
       throw new Error(`Can't print child group of type "${(p as any).type}"`);
+  }
+}
+
+export function prettyPrintSyntaxTree(desc: NodeDescription): string {
+  const toReturn = prettyPrintSyntaxTreeNode(desc);
+  return (recursiveJoin('\n', '  ', toReturn));
+}
+
+/**
+ * Pretty prints a node of a syntaxtree. This includes all children of the given node.
+ */
+export function prettyPrintSyntaxTreeNode(desc: NodeDescription): NestedString {
+  const head = `node "${desc.language}.${desc.name}"`;
+
+  const props = Object.entries(desc.properties || {}).map(([key, value]) => [`prop "${key}" ${value}`]);
+  const children = Object.entries(desc.children || {}).map(([key, value]) => {
+    return ([
+      `childGroup "${key}" {`,
+      ...value.map(prettyPrintSyntaxTreeNode),
+      `}`
+    ]);
+  });
+
+  if (props.length > 0 || children.length > 0) {
+    return ([head + ` {`, ...props, ...children, `}`]);
+  } else {
+    return ([head]);
   }
 }
