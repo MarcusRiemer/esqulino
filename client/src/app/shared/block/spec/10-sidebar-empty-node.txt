@@ -1,0 +1,8 @@
+language "test" {
+  sidebarBlock "Test Block" {
+    category "default"
+    node "test.bar" {
+      prop "p1" v1
+    }
+  }
+}

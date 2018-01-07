@@ -1,0 +1,3 @@
+node "t0.root" {
+  prop "name" value
+}

@@ -1,7 +1,11 @@
 import { recursiveJoin, NestedString } from '../nested-string'
 
+import { prettyPrintSyntaxTreeNode } from '../syntaxtree/prettyprint'
+
 import { LanguageModelDescription } from './language-model.description'
-import { VisualBlockDescriptions, EditorBlockDescription } from './block.description'
+import {
+  VisualBlockDescriptions, EditorBlockDescription, SidebarBlockDescription
+} from './block.description'
 
 /**
  * Converts the internal structure of a language model into a more readable
@@ -12,8 +16,9 @@ export function prettyPrintLanguageModel(desc: LanguageModelDescription): string
   const tail = `}`;
 
   const blocks = (desc.editorBlocks || []).map(prettyPrintBlockTypeHeader);
+  const sidebar = (desc.sidebarBlocks || []).map(prettyPrintSidebarBlock);
 
-  const toReturn = [head, ...blocks, tail] as NestedString
+  const toReturn = [head, ...blocks, ...sidebar, tail] as NestedString
 
   return (recursiveJoin('\n', '  ', toReturn));
 }
@@ -73,6 +78,9 @@ function prettyPrintVisualIterator(desc: VisualBlockDescriptions.EditorIterator)
   return ([head, [...props, ...between], tail]);
 }
 
+/**
+ * Prettyprints drop targets.
+ */
 function prettyPrintVisualDropTarget(desc: VisualBlockDescriptions.EditorDropTarget) {
   const head = `dropTarget {`;
 
@@ -92,6 +100,9 @@ function prettyPrintVisualDropTarget(desc: VisualBlockDescriptions.EditorDropTar
   return ([head, [...props, ...children], tail]);
 }
 
+/**
+ * Prettyprints actual blocks.
+ */
 function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
   const head = `block {`;
 
@@ -108,4 +119,20 @@ function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
   const tail = `}`;
 
   return ([head, [...props, ...children], tail]);
+}
+
+function prettyPrintSidebarBlock(desc: SidebarBlockDescription) {
+  const head = `sidebarBlock "${desc.sidebar.displayName}" {`
+
+  const props = [
+    `category "${desc.sidebar.category}"`
+  ]
+
+  const defaultNode = desc.defaultNode
+    ? prettyPrintSyntaxTreeNode(desc.defaultNode)
+    : [];
+
+  const tail = `}`;
+
+  return ([head, [...props, ...defaultNode], tail]);
 }
