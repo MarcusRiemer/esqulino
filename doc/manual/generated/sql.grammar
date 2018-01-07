@@ -1,14 +1,45 @@
-grammar "regex" {
+grammar "sql" {
+
+  node "columnName" {
+    prop "columnName" { string }
+    prop "refTableName" { string }
+  }
   node "constant" {
     prop "value" { string }
   }
-  node "alternative" {
-    children "expressions" ::= expr
+  node "parameter" {
+    prop "name" { string }
   }
-  node "expr" {
-    children "singleExpression" ::= constant & alternative
+  node "starOperator" {
   }
-  node "root" {
-    children "expressions" ::= expr
+  node "relationalOperator" {
+    prop "operator" { string { enum=<,<=,=,>=,> } }
+  }
+  node "binaryExpression" {
+    children "operands" ::= expression relationalOperator expression
+  }
+  node "select" {
+    prop? "distinct" { boolean }
+    children "columns" ::= columnName* & starOperator?
+  }
+  node "tableIntroduction" {
+    prop "name" { string }
+    prop? "alias" { string }
+  }
+  node "crossJoin" {
+    children "table" ::= tableIntroduction
+  }
+  node "from" {
+    children "tables" ::= tableIntroduction crossJoin*
+  }
+  node "whereAdditional" {
+    prop "operator" { string }
+    children "expression" ::= expression
+  }
+  node "where" {
+    children "expressions" ::= expression whereAdditional*
+  }
+  node "querySelect" {
+    children "components" ::= select from where? groupBy?
   }
 }
