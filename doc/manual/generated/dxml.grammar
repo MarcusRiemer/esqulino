@@ -1,25 +1,25 @@
 grammar "dxml" {
   node "element" {
     prop "name" { string }
-    children "elements" ::= element & text & interpolate & if
-    children "attributes" ::= dxml.attribute*
+    children "elements" ::= element* & text* & interpolate* & if*
+    children "attributes" ::= attribute*
   }
   node "attribute" {
     prop "name" { string }
-    children "value" ::= text & interpolate
+    children "value" ::= text* & interpolate*
   }
   node "text" {
     prop "value" { string }
   }
   node "interpolate" {
-    children "expr" ::= expr
+    children "expr" ::= (expr)
   }
   node "if" {
-    children "condition" ::= dxml.expr{1,1}
-    children "body" ::= text & element & interpolate & if
+    children "condition" ::= expr
+    children "body" ::= element* & text* & interpolate* & if*
   }
   node "expr" {
-    children "concreteExpr" ::= exprVar & exprConst & exprBinary
+    children "concreteExpr" ::= (exprVar) | (exprConst) | (exprBinary)
   }
   node "exprVar" {
     prop "name" { string }

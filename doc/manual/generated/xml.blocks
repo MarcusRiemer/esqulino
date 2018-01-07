@@ -1,0 +1,92 @@
+language "XML" {
+  type "dxml.element" {
+    block {
+      direction horizontal
+      visual {
+        "<"
+        {{ name }}
+        dropTarget {
+          visibility ifEmpty ifLegalDrag
+          direction horizontal
+          visual {
+            "+Attribute"
+          }
+        }
+        iterate {
+          childGroup "attributes"
+          direction horizontal
+        }
+        ">"
+        dropTarget {
+          visibility ifLegalDrag
+          direction horizontal
+          visual {
+            "+Element"
+          }
+        }
+      }
+    }
+    iterate {
+      childGroup "elements"
+      direction vertical
+    }
+    block {
+      direction horizontal
+      visual {
+        "</"
+        {{ name }}
+        ">"
+      }
+    }
+  }
+  type "dxml.attribute" {
+    block {
+      direction horizontal
+      visual {
+        {{ name }}
+        "="
+        "\""
+        iterate {
+          childGroup "value"
+          direction horizontal
+        }
+        "\""
+      }
+    }
+  }
+  type "dxml.text" {
+    block {
+      direction horizontal
+      visual {
+        {{ value }}
+      }
+    }
+  }
+  type "dxml.interpolate" {
+    block {
+      direction horizontal
+      visual {
+        "{{"
+        iterate {
+          childGroup "expr"
+          direction horizontal
+        }
+        "}}"
+      }
+    }
+  }
+  type "dxml.expr" {
+    iterate {
+      childGroup "concreteExpr"
+      direction horizontal
+    }
+  }
+  type "dxml.exprVar" {
+    block {
+      direction horizontal
+      visual {
+        {{ name }}
+      }
+    }
+  }
+}

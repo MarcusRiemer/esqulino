@@ -4,7 +4,7 @@ import { LanguageModelDescription } from './language-model.description'
 import { VisualBlockDescriptions, EditorBlockDescription } from './block.description'
 
 /**
- * Converts the internal structure of a grammar into a more readable
+ * Converts the internal structure of a language model into a more readable
  * version.
  */
 export function prettyPrintLanguageModel(desc: LanguageModelDescription): string {
@@ -18,6 +18,9 @@ export function prettyPrintLanguageModel(desc: LanguageModelDescription): string
   return (recursiveJoin('\n', '  ', toReturn));
 }
 
+/**
+ * The initial portion of a definition of a block.
+ */
 export function prettyPrintBlockTypeHeader(desc: EditorBlockDescription): NestedString {
   const t = desc.describedType;
   const head = `type "${t.languageName}.${t.typeName}" {`;
@@ -28,18 +31,21 @@ export function prettyPrintBlockTypeHeader(desc: EditorBlockDescription): Nested
   return ([head, ...visuals, tail]);
 }
 
+/**
+ * The text representation of the visual representation of a type.
+ */
 export function prettyPrintVisual(desc: VisualBlockDescriptions.ConcreteBlock): NestedString {
   switch (desc.blockType) {
     case "constant":
-      return [`"${desc.text}"`]
+      return [JSON.stringify(desc.text)]
     case "interpolated":
       return [`{{ ${desc.property} }}`]
     case "iterator":
       return prettyPrintVisualIterator(desc);
     case "dropTarget":
-      return prettyPrintDropTarget(desc);
+      return prettyPrintVisualDropTarget(desc);
     case "block":
-      return prettyPrintActualBlock(desc);
+      return prettyPrintVisualBlock(desc);
     default:
       throw new Error(`Unknow visual block "${(desc as any).blockType}"`);
   }
@@ -67,7 +73,7 @@ function prettyPrintVisualIterator(desc: VisualBlockDescriptions.EditorIterator)
   return ([head, [...props, ...between], tail]);
 }
 
-function prettyPrintDropTarget(desc: VisualBlockDescriptions.EditorDropTarget) {
+function prettyPrintVisualDropTarget(desc: VisualBlockDescriptions.EditorDropTarget) {
   const head = `dropTarget {`;
 
   // For the moment the mandatory properties have to be stated verbosely
@@ -86,7 +92,7 @@ function prettyPrintDropTarget(desc: VisualBlockDescriptions.EditorDropTarget) {
   return ([head, [...props, ...children], tail]);
 }
 
-function prettyPrintActualBlock(desc: VisualBlockDescriptions.EditorBlock) {
+function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
   const head = `block {`;
 
   // For the moment the mandatory properties have to be stated verbosely
