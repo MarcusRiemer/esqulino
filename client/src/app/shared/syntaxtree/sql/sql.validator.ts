@@ -8,7 +8,8 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "columnName",
         "binaryExpression",
         "constant",
-        "parameter"
+        "parameter",
+        "functionCall"
       ]
     },
     "columnName": {
@@ -28,6 +29,24 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       properties: {
         "name": {
           base: "string"
+        }
+      }
+    },
+    "functionCall": {
+      properties: {
+        "name": {
+          base: "string"
+        }
+      },
+      children: {
+        "arguments": {
+          type: "sequence",
+          nodeTypes: [
+            {
+              nodeType: "expression",
+              occurs: "*"
+            }
+          ]
         }
       }
     },
@@ -79,6 +98,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           isOptional: true
         }
       }
+    },
+    "delete": {
+
     },
     "tableIntroduction": {
       properties: {
@@ -158,6 +180,24 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       }
+    },
+    "queryDelete": {
+      children: {
+        "components": {
+          type: "sequence",
+          nodeTypes: [
+            "delete",
+            "from",
+            {
+              nodeType: "where",
+              occurs: "?"
+            }
+          ]
+        }
+      }
+    },
+    "query": {
+      oneOf: ["querySelect", "queryDelete"]
     }
   },
   root: "querySelect"
