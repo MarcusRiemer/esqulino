@@ -59,8 +59,8 @@ export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTy
 /**
  * Prints the grammar for a placeholder node.
  */
-export function prettyPrintOneOfType(name: string, t: Desc.NodeOneOfTypeDescription): string[] {
-  return ([]);
+export function prettyPrintOneOfType(name: string, t: Desc.NodeOneOfTypeDescription): NestedString {
+  return ([`typedef "${name}" {`, t.oneOf.map(t => `"${t}"`), `}`]);
 }
 
 /**
@@ -72,7 +72,16 @@ export function prettyPrintProperty(name: string, p: Desc.NodePropertyTypeDescri
 
   let restrictions: string[] = [];
   if (Desc.isNodePropertyStringDesciption(p) && p.restrictions) {
-    restrictions = p.restrictions.map(r => `${r.type}=${r.value}`);
+    restrictions = p.restrictions.map(r => {
+      switch (r.type) {
+        case "length":
+        case "maxLength":
+        case "minLength":
+          return (`${r.type} ${r.value}`);
+        case "enum":
+          return (`${r.type} ${r.value.map(v => JSON.stringify(v)).join(' ')}`);
+      }
+    });
   }
 
   if (restrictions.length === 0) {
@@ -108,9 +117,9 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
           if (t.minOccurs === undefined) {
             return (`{,${t.maxOccurs}}`);
           } else if (t.maxOccurs === undefined) {
-            return (`{${t.minOccurs},}`);
+            return (`{${t.minOccurs},} `);
           } else {
-            return (`{${t.minOccurs},${t.maxOccurs}}`);
+            return (`{${t.minOccurs},${t.maxOccurs} } `);
           }
         }
       }

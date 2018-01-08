@@ -18,7 +18,7 @@ help:
 # Generating pretty printed grammar files
 generated/%.grammar: $(CLI_PROG_CLIENT)
 	@mkdir -p generated
-	@echo '{ "type": "printGrammar", "id": "$*" }' | $(MAKE_CLIENT) cli-run | jq -r . | tee "generated/$*.grammar"
+	echo '{ "type": "printGrammar", "id": "$*" }' | $(MAKE_CLIENT) cli-run | jq -r . | tee "generated/$*.grammar"
 
 generated/%.blocks: $(CLI_PROG_CLIENT)
 	@mkdir -p generated
