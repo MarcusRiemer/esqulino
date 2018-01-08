@@ -18,17 +18,17 @@ help:
 # Generating pretty printed grammar files
 generated/%.grammar: $(CLI_PROG_CLIENT)
 	@mkdir -p generated
-	echo '{ "type": "printGrammar", "id": "$*" }' | $(MAKE_CLIENT) cli-run | jq -r . | tee "generated/$*.grammar"
+	@echo '{ "type": "printGrammar", "id": "$*" }' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.grammar"
 
 generated/%.blocks: $(CLI_PROG_CLIENT)
 	@mkdir -p generated
-	echo '{ "type": "printLanguageModel", "id": "$*" }' | $(MAKE_CLIENT) cli-run | jq -r . | tee "generated/$*.blocks"
+	@echo '{ "type": "printLanguageModel", "id": "$*" }' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.blocks"
 
 # Default set of pretty printed grammar files
 pretty-grammars: generated/sql.grammar generated/dxml.grammar generated/regex.grammar
 
 # Default set of pretty printed blocks
-pretty-blocks: generated/xml.blocks generated/dxml.blocks
+pretty-blocks: generated/xml.blocks generated/dxml.blocks generated/sql.blocks
 
 clean:
 	rm -rf generated _build
@@ -41,4 +41,4 @@ livehtml:
 html: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help Makefile livehtml pretty-grammars pretty-blocks
+.PHONY: help Makefile livehtml pretty-grammars pretty-blocks clean

@@ -12,6 +12,7 @@ import * as regex from './app/shared/syntaxtree/regex/regex.validator'
 import * as sql from './app/shared/syntaxtree/sql/sql.validator'
 
 import * as lang_dxml from './app/shared/block/dxml/language-model'
+import * as lang_sql from './app/shared/block/sql/language-model'
 
 interface PrintGrammarCommand {
   type: "printGrammar",
@@ -50,6 +51,7 @@ function availableLanguageModels(): LanguageModelDescription[] {
   return ([
     lang_dxml.LANGUAGE_MODEL,
     lang_dxml.DYNAMIC_LANGUAGE_MODEL,
+    lang_sql.LANGUAGE_MODEL
   ]);
 }
 
