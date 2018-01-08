@@ -43,10 +43,10 @@ describe('Grammar PrettyPrinter', () => {
       ]
     } as d.NodePropertyStringDescription);
 
-    expect(r).toEqual([`prop "s3" { string { length=4 } }`]);
+    expect(r).toEqual([`prop "s3" { string { length 4 } }`]);
   });
 
-  it('prop "s4" { string { minLength=2 maxLength=4 } }', () => {
+  it('prop "s4" { string { minLength 2 maxLength 4 } }', () => {
     const r = p.prettyPrintProperty("s4", {
       base: "string",
       restrictions: [
@@ -66,7 +66,7 @@ describe('Grammar PrettyPrinter', () => {
         `prop "s4" {`,
         [
           `string {`,
-          [`minLength=2`, `maxLength=4`],
+          [`minLength 2`, `maxLength 4`],
           `}`
         ],
         `}`
@@ -134,7 +134,7 @@ describe('Grammar PrettyPrinter', () => {
       type: "sequence"
     });
 
-    expect(r).toEqual('children "foo" ::= bar baz');
+    expect(r).toEqual(['children "foo" ::= bar baz']);
   });
 
   it('Grammar g0: empty', () => {

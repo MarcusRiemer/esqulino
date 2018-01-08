@@ -36,23 +36,23 @@ export function prettyPrintType(name: string, t: Desc.NodeTypeDescription): Nest
  * Prints the grammar for a concrete node.
  */
 export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTypeDescription): NestedString {
-  const toReturn: NestedString = [`node "${name}" {`];
+  const head = `node "${name}" {`;
 
   // Add all properties (if there are any)
-  if (t.properties) {
-    const attributes = Object.entries(t.properties)
-      .map(([propName, prop]) => prettyPrintProperty(propName, prop));
-    toReturn.push(...attributes);
-  }
+  const props = t.properties
+    ? Object.entries(t.properties).map(([propName, prop]) => prettyPrintProperty(propName, prop))
+    : [];
 
   // Add all children (if there are any)
-  if (t.children) {
-    const children = Object.entries(t.children)
-      .map(([groupName, group]) => prettyPrintChildGroup(groupName, group));
-    toReturn.push(children);
-  }
+  const children = t.children
+    ? Object.entries(t.children).map(([groupName, group]) => prettyPrintChildGroup(groupName, group))
+    : [];
 
-  return ([...toReturn, `}`]);
+  if (props.length > 0 || children.length > 0) {
+    return ([head, ...props, ...children, `}`]);
+  } else {
+    return ([head, `}`]);
+  }
 }
 
 
@@ -117,9 +117,9 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
           if (t.minOccurs === undefined) {
             return (`{,${t.maxOccurs}}`);
           } else if (t.maxOccurs === undefined) {
-            return (`{${t.minOccurs},} `);
+            return (`{${t.minOccurs},}`);
           } else {
-            return (`{${t.minOccurs},${t.maxOccurs} } `);
+            return (`{${t.minOccurs},${t.maxOccurs}}`);
           }
         }
       }
@@ -135,8 +135,8 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
 /**
  * Prints the grammar of a single child group.
  */
-export function prettyPrintChildGroup(name: string, p: Desc.NodeChildrenGroupDescription): string {
-  return (`children "${name}" ::= ` + prettyPrintChildGroupElements(p));
+export function prettyPrintChildGroup(name: string, p: Desc.NodeChildrenGroupDescription): NestedString {
+  return ([`children "${name}" ::= ` + prettyPrintChildGroupElements(p)]);
 }
 
 /**
