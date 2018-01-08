@@ -1,5 +1,10 @@
 grammar "sql" {
-
+  typedef "expression" {
+    "columnName"
+    "binaryExpression"
+    "constant"
+    "parameter"
+  }
   node "columnName" {
     prop "columnName" { string }
     prop "refTableName" { string }
@@ -13,7 +18,7 @@ grammar "sql" {
   node "starOperator" {
   }
   node "relationalOperator" {
-    prop "operator" { string { enum=<,<=,=,>=,> } }
+    prop "operator" { string { enum "<" "<=" "=" ">=" ">" } }
   }
   node "binaryExpression" {
     children "operands" ::= expression relationalOperator expression

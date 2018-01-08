@@ -89,4 +89,109 @@ language "XML (Dynamisch)" {
       }
     }
   }
+  sidebarBlock "Element: ~~Complex~~" {
+    category "Dynamisches XML"
+    node "dxml.element" {
+      prop "name" parent
+      childGroup "elements" {
+        node "dxml.text" {
+          prop "value" before ...
+        }
+        node "dxml.element" {
+          prop "name" child
+        }
+        node "dxml.text" {
+          prop "value" after ...
+        }
+      }
+      childGroup "attributes" {
+        node "dxml.attribute" {
+          prop "name" att1
+          childGroup "value" {
+          }
+        }
+      }
+    }
+  }
+  sidebarBlock "Element: e1" {
+    category "Dynamisches XML"
+    node "dxml.element" {
+      prop "name" e1
+      childGroup "elements" {
+      }
+      childGroup "attributes" {
+      }
+    }
+  }
+  sidebarBlock "Element: e2" {
+    category "Dynamisches XML"
+    node "dxml.element" {
+      prop "name" e2
+      childGroup "elements" {
+      }
+      childGroup "attributes" {
+      }
+    }
+  }
+  sidebarBlock "Attribut: a1" {
+    category "Dynamisches XML"
+    node "dxml.attribute" {
+      prop "name" a1
+      childGroup "value" {
+      }
+    }
+  }
+  sidebarBlock "Attribut: a2" {
+    category "Dynamisches XML"
+    node "dxml.attribute" {
+      prop "name" a2
+      childGroup "value" {
+      }
+    }
+  }
+  sidebarBlock "Text" {
+    category "Dynamisches XML"
+    node "dxml.text" {
+      prop "value" Neuer Text
+    }
+  }
+  sidebarBlock "<%= var_a %>" {
+    category "Dynamisches XML"
+    node "dxml.interpolate" {
+      childGroup "expr" {
+        node "dxml.expr" {
+          childGroup "concreteExpr" {
+            node "dxml.exprVar" {
+              prop "name" var_a
+            }
+          }
+        }
+      }
+    }
+  }
+  sidebarBlock "Variable a" {
+    category "Dynamisches XML"
+    node "dxml.exprVar" {
+      prop "name" var_a
+    }
+  }
+  sidebarBlock "Variable b" {
+    category "Dynamisches XML"
+    node "dxml.exprVar" {
+      prop "name" var_b
+    }
+  }
+  sidebarBlock "<% if %>" {
+    category "Dynamisches XML"
+    node "dxml.if" {
+      childGroup "condition" {
+        node "dxml.expr" {
+          childGroup "concreteExpr" {
+          }
+        }
+      }
+      childGroup "body" {
+      }
+    }
+  }
 }
