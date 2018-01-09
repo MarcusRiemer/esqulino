@@ -6,6 +6,8 @@ Conventional development environments are programs that are tailored to suit the
 
 To eliminate the possibility of syntactical errors while programming, the elements of the programming- or markup-languages are represented by graphical blocks, similar to the approach taken by the software `Scratch <https://scratch.mit.edu/>`_. These blocks can be combined by using drag & drop operations.
 
+The creation or adaption of existing block languages languages should be "easy", at least for the targeted audiences: Programmers with a background in compiler construction should "easily" be able to add new languages and teachers with a little bit of programming experience should "easily" be able to tweak existing languages to their liking.
+
 Projects
 ========
 
@@ -30,3 +32,10 @@ SQL
 
 HTML
 ----
+
+Definition of Programming Languages
+===================================
+
+In order to allow the creation of easy to use block editors, BlattWerkzeug needs to define its own compilation primitives. The main reason for this re-invention the wheel is the focus of existing software: Usually compilers are focused on speed and correctness, not necessarily a friendly representation for drag & drop mutations.
+
+BlattWerkzeug instead focuses exclusively on working with a syntaxtree that lends itself well to be (more or less) directly presented to the end user. Typical compiler tasks that have to do with lexical analysis or parsing are not relevant for BlattWerkzeug.
