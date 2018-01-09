@@ -48,7 +48,7 @@ This entirely shifts the way one has to reason about the validation rules inside
 An if statement can therefore be described in terms of its structure and the underlying semantics: An if statement uses a ``predicate`` to distinguish whether execution should continue on a ``positive`` branch or a ``negative`` branch.
 
 Example AST: ``if``-Statement
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This is a possible syntaxtree for an ``if`` statement in some nondescript language that could look like this::
 
@@ -61,6 +61,64 @@ In BlattWerkzeug, an if statement would be represented by using three child grou
 
 .. graphviz:: ast-example-if.graphviz
 
+Grammar Validation
+------------------
+
+BlattWerkzeug uses its own grammar language that is very losely inspired by the `RelaxNG compact notation http://relaxng.org/compact-tutorial-20030326.html`_. The mental model however is very similar to typical grammars, but is strictly concerned with the structure of the syntaxtree. A BlattWerkzeug grammar consists of a name and multiple node definitions::
+
+  grammar "ex1" {
+    node "element" {
+    }
+  }
+
+This grammer defines a language named ``ex1`` which allows a single node with the name ``element`` to be present in the syntax tree. Allowed properties of nodes are defined as follows::
+
+  grammar "ex2" {
+    node "element" {
+      prop "name" { string }
+    }
+  }
+
+The curly brackets for the property need to denote at least the type of the property, valid values are ``string`` and ``number``. Both of these properties may be limited further, see TODO for more details.
+
+Multiple node definitions can be simply stated on after another as part of the ``grammar`` section::
+
+  grammar "ex3" {
+    node "element" {
+      prop "name" { string }
+    }
+    node "attribute" {
+      prop "name" { string }
+      prop "value" { string }
+    }
+  }
+
+Valid children of a node are defined via the ``children`` directive, a name and the corresponding "production rule". The production rule allows to specify sequences (using a space), alternatives (using a pipe "|") and "interleaving" (using the ampersand "&"). The mentioned elements can be quantified using the standard ``*`` (0 to unlimited), ``+`` (1 to unlimited) and ``?`` (0 or 1) multiplicity operators. This example technically defines two sequences "elements" and "attributes" that allow zero or more occurences of the respective entity::
+
+  grammar "ex4" {
+    node "element" {
+      prop "name" { string }
+      children "elements" ::= element*
+      children "attributes" ::= attribute*
+    }
+    node "attribute" {
+      prop "name" { string }
+      prop "value" { string }
+    }
+  }
+
+Example Grammar: ``XML``
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../generated/dxml.grammar
+   :language: javascript
+
+Example Grammar: ``SQL``
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../generated/sql.grammar
+   :language: javascript
+                    
 The Abstract Syntax Tree in detail
 ==================================
 
