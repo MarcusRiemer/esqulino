@@ -12,14 +12,14 @@ grammar "dxml" {
     prop "value" { string }
   }
   node "interpolate" {
-    children "expr" ::= (expr)
+    children "expr" ::= expr
   }
   node "if" {
     children "condition" ::= expr
     children "body" ::= element* & text* & interpolate* & if*
   }
   node "expr" {
-    children "concreteExpr" ::= (exprVar) | (exprConst) | (exprBinary)
+    children "concreteExpr" ::= exprVar | exprConst | exprBinary
   }
   node "exprVar" {
     prop "name" { string }

@@ -29,8 +29,12 @@ export enum ErrorCodes {
   IllegalChildType = "ILLEGAL_CHILD_TYPE",
   // A type mentions a child category that is not present in a node
   SuperflousChildCategory = "SUPERFLOUS_CHILD_CATEGORY",
-  // No matching choice
-  NoMatchingChoice = "NO_MATCHING_CHOICE"
+  // The single node was tested against all choices but no match was found
+  NoChoiceMatching = "NO_CHOICE_MATCHING",
+  // There should have been a node but there wasn't
+  NoChoiceNodeAvailable = "NO_CHOICE_NODE_AVAILABLE",
+  // There should have been exactly one node but there where too many
+  SuperflousChoiceNodeAvailable = "TOO_MANY_CHOICE_NODES_AVAILABLE"
 }
 
 /**
@@ -655,25 +659,40 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
     this._group = group;
   }
 
+  /**
+   * Runs the choice validation against a certain node.
+   */
   protected validateChildrenImpl(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[] {
-    // Instanciate every mentioned validator and run it
-    for (var i = 0; i < this._desc.choices.length; ++i) {
-      // Each run needs its unique context
-      const newContext = new ValidationContext();
+    if (ast.length === 0) {
+      // TODO: Tell category
+      context.addError(ErrorCodes.NoChoiceNodeAvailable, parent, {});
+      return ([]);
+    } else {
+      // Check whether the first (and hopefully only) node is a match?
+      const hasMatch = this._desc.choices.some(possible => {
 
-      const val = instanciateChildGroupValidator(this._group, this._desc.choices[i]);
-      const res = val.validateChildren(parent, ast, newContext);
-      // First successfull validator wins
-      if (newContext.errors.length === 0 && res.length > 0) {
-        return (res);
+        // Build fully qualified type for this possibility.
+        const possibleName = typeof possible === "string" ? possible : possible.typeName;
+        const possibleLanguage = typeof possible === "string" ? parent.languageName : possible.languageName;
+
+        const possibleType = {
+          languageName: possibleLanguage,
+          typeName: possibleName
+        } as AST.QualifiedTypeName;
+
+        // Check whether the type matches or not
+        return (AST.typenameEquals(possibleType, ast[0].qualifiedName));
+      });
+
+      if (!hasMatch) {
+        context.addError(ErrorCodes.NoChoiceMatching, ast[0], {});
       }
+
+      // If there are any more nodes: They shouldn't be there
+      ast.slice(1).forEach(node => context.addError(ErrorCodes.SuperflousChoiceNodeAvailable, node, {}));
+
+      return (hasMatch ? [ast[0]] : []);
     }
-
-    ast.forEach(n => {
-      context.addError(ErrorCodes.NoMatchingChoice, parent);
-    });
-
-    return ([]);
   }
 
   protected isRequiredImpl: boolean;

@@ -6,7 +6,7 @@ grammar "regex" {
     children "expressions" ::= expr+
   }
   node "expr" {
-    children "singleExpression" ::= (constant) | (alternative)
+    children "singleExpression" ::= constant | alternative
   }
   node "root" {
     children "expressions" ::= expr+

@@ -5,7 +5,7 @@ import { Validator, ErrorCodes } from '../validator'
 import { NODE_CONVERTER } from './regex.codegenerator'
 import { GRAMMAR_DESCRIPTION } from './regex.validator'
 
-describe('Language: RegEx (Codegen)', () => {
+describe('Language: RegEx', () => {
   it("Invalid: Empty RegEx", () => {
     const astDesc: NodeDescription = {
       language: "regex",
@@ -103,7 +103,7 @@ describe('Language: RegEx (Codegen)', () => {
 
     const v = new Validator([GRAMMAR_DESCRIPTION]);
     const res = v.validateFromRoot(ast);
-    expect(res.isValid).toBeTruthy();
+    expect(res.errors).toEqual([]);
 
     const codeGen = new CodeGenerator(NODE_CONVERTER);
     const emitted = codeGen.emit(ast);

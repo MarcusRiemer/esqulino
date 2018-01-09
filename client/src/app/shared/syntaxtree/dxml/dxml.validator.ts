@@ -54,12 +54,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       children: {
         "expr": {
           type: "choice",
-          choices: [
-            {
-              type: "sequence",
-              nodeTypes: ["expr"]
-            }
-          ]
+          choices: ["expr"]
         }
       }
     },
@@ -84,20 +79,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       children: {
         "concreteExpr": {
           type: "choice",
-          choices: [
-            {
-              type: "sequence",
-              nodeTypes: ["exprVar"]
-            },
-            {
-              type: "sequence",
-              nodeTypes: ["exprConst"]
-            },
-            {
-              type: "sequence",
-              nodeTypes: ["exprBinary"]
-            }
-          ]
+          choices: ["exprVar", "exprConst", "exprBinary"]
         }
       }
     },
