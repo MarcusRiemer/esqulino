@@ -167,8 +167,13 @@ function prettyPrintChildGroupElements(p: Desc.NodeChildrenGroupDescription): st
       return (
         p.choices
           // Recursive call
-          .map(prettyPrintChildGroupElements)
-          .map(e => `(${e})`)
+          .map(c => {
+            if (typeof c === "string") {
+              return (c);
+            } else {
+              return (c.languageName + "." + c.typeName);
+            }
+          })
           .join(` | `)
       )
     default:

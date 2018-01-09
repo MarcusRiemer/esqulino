@@ -194,7 +194,7 @@ export interface NodeTypesAllowedDescription {
  */
 export interface NodeTypesChoiceDescription {
   type: "choice",
-  choices: NodeChildrenGroupDescription[]
+  choices: TypeReference[]
 }
 
 /**

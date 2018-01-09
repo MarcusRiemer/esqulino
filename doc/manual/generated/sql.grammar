@@ -1,10 +1,6 @@
 grammar "sql" {
-  typedef "expression" {
-    "columnName"
-    "binaryExpression"
-    "constant"
-    "parameter"
-    "functionCall"
+  node "expression" {
+    children "expression" ::= columnName | binaryExpression | constant | parameter | functionCall
   }
   node "columnName" {
     prop "columnName" { string }

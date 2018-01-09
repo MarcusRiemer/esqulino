@@ -4,13 +4,18 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   languageName: "sql",
   types: {
     "expression": {
-      oneOf: [
-        "columnName",
-        "binaryExpression",
-        "constant",
-        "parameter",
-        "functionCall"
-      ]
+      children: {
+        "expression": {
+          type: "choice",
+          choices: [
+            "columnName",
+            "binaryExpression",
+            "constant",
+            "parameter",
+            "functionCall"
+          ]
+        }
+      }
     },
     "columnName": {
       properties: {

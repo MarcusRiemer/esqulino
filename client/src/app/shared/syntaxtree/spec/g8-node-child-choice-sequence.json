@@ -6,16 +6,7 @@
       "children": {
         "c": {
           "type": "choice",
-          "choices": [
-            {
-              "type": "sequence",
-              "nodeTypes": ["n2"]
-            },
-            {
-              "type": "sequence",
-              "nodeTypes": ["n3"]
-            }
-          ]
+          "choices": ["n2", "n3"]
         }
       }
     },

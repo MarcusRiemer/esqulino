@@ -347,42 +347,7 @@ const langSimpleChoice: Schema.GrammarDescription = {
       children: {
         "nodes": {
           type: "choice",
-          choices: [
-            {
-              type: "sequence",
-              nodeTypes: ["a"],
-            },
-            {
-              type: "sequence",
-              nodeTypes: ["b"],
-            }
-          ]
-        }
-      }
-    },
-    "a": {},
-    "b": {}
-  },
-  root: "root"
-}
-
-const langSequenceChoice: Schema.GrammarDescription = {
-  languageName: "sequenceChoice",
-  types: {
-    "root": {
-      children: {
-        "nodes": {
-          type: "choice",
-          choices: [
-            {
-              type: "sequence",
-              nodeTypes: ["a", "a"],
-            },
-            {
-              type: "sequence",
-              nodeTypes: ["b"],
-            }
-          ]
+          choices: ["a", "b"]
         }
       }
     },
@@ -1087,24 +1052,25 @@ describe('Language Validator', () => {
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
-    expect(res.errors[0].code).toEqual(ErrorCodes.NoMatchingChoice);
+    expect(res.errors[0].code).toEqual(ErrorCodes.NoChoiceMatching);
   });
 
-  it('Valid Choice (sequence): aa', () => {
-    const v = new Validator([langSequenceChoice]);
+  it('Valid Choice: a, but a itself is not valid', () => {
+    const v = new Validator([langSimpleChoice]);
 
     const astDesc: AST.NodeDescription = {
-      language: "sequenceChoice",
+      language: "simpleChoice",
       name: "root",
       children: {
         "nodes": [
           {
-            language: "sequenceChoice",
-            name: "a"
-          },
-          {
-            language: "sequenceChoice",
-            name: "a"
+            language: "simpleChoice",
+            name: "a",
+            children: {
+              "tooMuch": [
+
+              ]
+            }
           }
         ]
       }
@@ -1113,57 +1079,8 @@ describe('Language Validator', () => {
     const ast = new AST.Tree(astDesc)
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors).toEqual([]);
-  });
-
-  it('Valid Choice (sequence): b', () => {
-    const v = new Validator([langSequenceChoice]);
-
-    const astDesc: AST.NodeDescription = {
-      language: "sequenceChoice",
-      name: "root",
-      children: {
-        "nodes": [
-          {
-            language: "sequenceChoice",
-            name: "b"
-          }
-        ]
-      }
-    }
-
-    const ast = new AST.Tree(astDesc)
-    const res = v.validateFromRoot(ast);
-
-    expect(res.errors).toEqual([]);
-  });
-
-  it('Invalid Choice (sequence): ab', () => {
-    const v = new Validator([langSequenceChoice]);
-
-    const astDesc: AST.NodeDescription = {
-      language: "sequenceChoice",
-      name: "root",
-      children: {
-        "nodes": [
-          {
-            language: "sequenceChoice",
-            name: "a"
-          },
-          {
-            language: "sequenceChoice",
-            name: "b"
-          }
-        ]
-      }
-    }
-
-    const ast = new AST.Tree(astDesc)
-    const res = v.validateFromRoot(ast);
-
-    expect(res.errors.length).toEqual(2);
-    expect(res.errors[0].code).toEqual(ErrorCodes.NoMatchingChoice);
-    expect(res.errors[1].code).toEqual(ErrorCodes.NoMatchingChoice);
+    expect(res.errors.length).toEqual(1);
+    expect(res.errors[0].code).toEqual(ErrorCodes.SuperflousChildCategory);
   });
 
   it('Validating tree of unknown language', () => {

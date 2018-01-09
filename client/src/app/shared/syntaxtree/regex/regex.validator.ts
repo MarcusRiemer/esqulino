@@ -22,16 +22,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       children: {
         "singleExpression": {
           type: "choice",
-          choices: [
-            {
-              type: "sequence",
-              nodeTypes: ["constant"]
-            },
-            {
-              type: "sequence",
-              nodeTypes: ["alternative"]
-            }
-          ]
+          choices: ["constant", "alternative"]
         }
       }
     },
