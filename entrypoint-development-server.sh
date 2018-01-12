@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# Run all operations using the uid and gid of the host user
 groupadd -g "$USER_GID" user
 useradd -m -u "$USER_UID" -g "$USER_GID" user
 
