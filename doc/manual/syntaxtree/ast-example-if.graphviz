@@ -1,59 +1,43 @@
-digraph ast_example_if {
-    graph [fontsize=10 fontname="Verdana" ];
-    node [fontsize=10 fontname="Verdana" shape=Mrecord];
-    edge [fontsize=10 fontname="Verdana"]
-
-    top [label="lang.if"]
-
-    subgraph cluster_pred {
-        pred [label="lang.expBin"]
-
-        subgraph cluster_pred_exp {
-            pred_rhs [label="{lang.expVar|{name|b}}"]
-            pred_op [label="{lang.binOp|{op|gt}}"]
-            pred_lhs [label="{lang.expVar|{name|a}}"]
-            label="exp"
-            rank=same
-        }
-
-        pred -> pred_lhs
-        pred -> pred_op
-        pred -> pred_rhs
-        label = "pred";
+digraph SyntaxTree {
+  graph [fontsize=10 fontname="Verdana"];
+  node [fontsize=10 fontname="Verdana" shape=Mrecord];
+  edge [fontsize=10 fontname="Verdana"];
+  r [label="{lang.if}"];
+  subgraph cluster_r_pred {
+    label="pred";
+    r_pred_0 [label="{{lang.expBin}|{op|gt}}"];
+    subgraph cluster_r_pred_0_lhs {
+      label="lhs";
+      r_pred_0_lhs_0 [label="{{lang.expVar}|{name|a}}"];
     }
-
-    top -> pred
-
-    subgraph cluster_pos {
-        pos1 [label="{lang.call|{name|writeln}}"]
-
-        subgraph cluster_pos_arguments {
-            pos1_1 [label="{lang.expConst|{value|'foo'}}"]
-            label =  "arguments"
-        }
-
-        pos1 -> pos1_1
-
-        label = "positive";
+    r_pred_0 -> r_pred_0_lhs_0;
+    subgraph cluster_r_pred_0_rhs {
+      label="rhs";
+      r_pred_0_rhs_0 [label="{{lang.expVar}|{name|b}}"];
     }
-
-    top -> pos1
-
-    subgraph cluster_neg {
-        neg1 [label="{lang.call|{name|err}}"]
-
-        subgraph cluster_neg_arguments {
-            neg1_2 [label="{lang.expConst|{value|'bar'}}"]
-            neg1_1 [label="{lang.expConst|{value|2}}"]
-            label =  "arguments"
-        }
-
-        neg1 -> neg1_1
-        neg1 -> neg1_2
-
-        label = "negative";
+    r_pred_0 -> r_pred_0_rhs_0;
+  }
+  r -> r_pred_0;
+  subgraph cluster_r_positive {
+    label="positive";
+    r_positive_0 [label="{{lang.call}|{name|writeln}}"];
+    subgraph cluster_r_positive_0_arguments {
+      label="arguments";
+      r_positive_0_arguments_0 [label="{{lang.expConst}|{value|'foo'}}"];
     }
-
-
-    top -> neg1
+    r_positive_0 -> r_positive_0_arguments_0;
+  }
+  r -> r_positive_0;
+  subgraph cluster_r_negative {
+    label="negative";
+    r_negative_0 [label="{{lang.call}|{name|err}}"];
+    subgraph cluster_r_negative_0_arguments {
+      label="arguments";
+      r_negative_0_arguments_1 [label="{{lang.expConst}|{value|'foo'}}"];
+      r_negative_0_arguments_0 [label="{{lang.expConst}|{value|2}}"];
+    }
+    r_negative_0 -> r_negative_0_arguments_0;
+    r_negative_0 -> r_negative_0_arguments_1;
+  }
+  r -> r_negative_0;
 }

@@ -1,8 +1,8 @@
 node "t0.root" {
-  childGroup "c1" {
-    node "t0.r_c1_1"
+  childGroup "c0" {
+    node "t0.r_c0_0"
   }
-  childGroup "c2" {
-    node "t0.r_c2_1"
+  childGroup "c1" {
+    node "t0.r_c1_0"
   }
 }

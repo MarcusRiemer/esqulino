@@ -7,6 +7,9 @@ import { GrammarDescription } from './app/shared/syntaxtree/validator.descriptio
 import { LanguageModelDescription } from './app/shared/block/language-model.description'
 import { prettyPrintLanguageModel } from './app/shared/block/prettyprint'
 
+import { graphvizSyntaxTree } from './app/shared/syntaxtree/prettyprint'
+import { NodeDescription } from './app/shared/syntaxtree/syntaxtree.description'
+
 import * as dxml from './app/shared/syntaxtree/dxml/dxml.validator'
 import * as regex from './app/shared/syntaxtree/regex/regex.validator'
 import * as sql from './app/shared/syntaxtree/sql/sql.validator'
@@ -24,11 +27,16 @@ interface PrintLanguageModelCommand {
   id: string;
 }
 
+interface GraphvizSyntaxTreeCommand {
+  type: "graphvizTree",
+  model: NodeDescription;
+}
+
 interface AvailableGrammarsCommand {
   type: "available"
 }
 
-type Command = PrintGrammarCommand | PrintLanguageModelCommand | AvailableGrammarsCommand;
+type Command = PrintGrammarCommand | PrintLanguageModelCommand | AvailableGrammarsCommand | GraphvizSyntaxTreeCommand;
 
 /**
  * Retrieves all grammars that are known to this instance.
