@@ -2,7 +2,7 @@ require_dependency 'project'
 
 class ProjectsController < ApplicationController
   include ProjectsHelper
-  include ValidationHelper
+  include JsonSchemaHelper
 
   # Enumerating all available projects
   def index

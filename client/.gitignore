@@ -2,6 +2,7 @@
 /dist
 /tmp
 /coverage
+/test-results
 
 # dependencies
 /node_modules

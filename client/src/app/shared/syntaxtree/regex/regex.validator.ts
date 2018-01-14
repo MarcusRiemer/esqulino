@@ -1,6 +1,6 @@
 import * as Schema from '../validator.description'
 
-export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
+export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   languageName: "regex",
   types: {
     "constant": {
@@ -12,19 +12,17 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
       children: {
         "expressions": {
           type: "allowed",
-          nodeTypes: ["expr"]
+          nodeTypes: [
+            { nodeType: "expr", occurs: "+" }
+          ]
         }
       }
     },
     "expr": {
       children: {
         "singleExpression": {
-          type: "allowed",
-          childCount: {
-            maxOccurs: 1,
-            minOccurs: 1,
-          },
-          nodeTypes: ["constant", "alternative"]
+          type: "choice",
+          choices: ["constant", "alternative"]
         }
       }
     },
@@ -32,11 +30,9 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
       children: {
         "expressions": {
           type: "allowed",
-          childCount: {
-            minOccurs: 1,
-            maxOccurs: +Infinity
-          },
-          nodeTypes: ["expr"]
+          nodeTypes: [
+            { nodeType: "expr", occurs: "+" }
+          ]
         }
       }
     },

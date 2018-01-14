@@ -2,7 +2,7 @@ import { Tree, LanguageDescription, Language } from 'app/shared/syntaxtree';
 
 import { LanguageModelDescription } from './language-model.description'
 import { LanguageModel } from './language-model'
-import { SidebarBlockDescription, EditorBlockDescriptions } from './block.description'
+import { SidebarBlockDescription, VisualBlockDescriptions } from './block.description'
 
 
 const langEmptyBlocks: LanguageDescription = {
@@ -17,11 +17,10 @@ const langEmptyBlocks: LanguageDescription = {
           children: {
             "cat_a": {
               type: "allowed",
-              childCount: {
-                minOccurs: 1,
-                maxOccurs: Infinity
-              },
-              nodeTypes: ["a"]
+              nodeTypes: [{
+                nodeType: "a",
+                occurs: "+"
+              }]
             }
           }
         },
@@ -38,10 +37,6 @@ const langModelEmptyBlocks: LanguageModelDescription = {
   name: "Empty Blocks",
   sidebarBlocks: [
     {
-      describedType: {
-        languageName: "emptyBlocks",
-        typeName: "root",
-      },
       sidebar: {
         category: "Standard",
       },
@@ -54,10 +49,6 @@ const langModelEmptyBlocks: LanguageModelDescription = {
       }
     },
     {
-      describedType: {
-        languageName: "emptyBlocks",
-        typeName: "a",
-      },
       sidebar: {
         category: "Standard",
       },
@@ -77,7 +68,7 @@ const langModelEmptyBlocks: LanguageModelDescription = {
         {
           blockType: "constant",
           text: "root"
-        } as EditorBlockDescriptions.EditorConstant
+        } as VisualBlockDescriptions.EditorConstant
       ]
     },
     {
@@ -89,7 +80,7 @@ const langModelEmptyBlocks: LanguageModelDescription = {
         {
           blockType: "constant",
           text: "a"
-        } as EditorBlockDescriptions.EditorConstant
+        } as VisualBlockDescriptions.EditorConstant
       ]
     }
   ]

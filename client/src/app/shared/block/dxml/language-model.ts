@@ -1,15 +1,11 @@
 import { LanguageModelDescription } from '../language-model.description'
 import {
-  SidebarBlockDescription, EditorBlockDescription, EditorBlockDescriptions
+  SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
 } from '../block.description'
 
 
 const SIDEBAR_BLOCKS_BASIC = [
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "element"
-    },
     defaultNode: {
       language: "dxml",
       name: "element",
@@ -61,10 +57,6 @@ const SIDEBAR_BLOCKS_BASIC = [
     },
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "element"
-    },
     defaultNode: {
       language: "dxml",
       name: "element",
@@ -82,10 +74,6 @@ const SIDEBAR_BLOCKS_BASIC = [
     },
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "element"
-    },
     defaultNode: {
       language: "dxml",
       name: "element",
@@ -103,10 +91,6 @@ const SIDEBAR_BLOCKS_BASIC = [
     },
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "attribute"
-    },
     defaultNode: {
       language: "dxml",
       name: "attribute",
@@ -125,10 +109,6 @@ const SIDEBAR_BLOCKS_BASIC = [
     }
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "attribute"
-    },
     defaultNode: {
       language: "dxml",
       name: "attribute",
@@ -147,10 +127,6 @@ const SIDEBAR_BLOCKS_BASIC = [
     }
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "text"
-    },
     defaultNode: {
       language: "dxml",
       name: "text",
@@ -167,10 +143,6 @@ const SIDEBAR_BLOCKS_BASIC = [
 
 const SIDEBAR_BLOCKS_DYNAMIC = [
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "interpolate"
-    },
     defaultNode: {
       language: "dxml",
       name: "interpolate",
@@ -200,10 +172,6 @@ const SIDEBAR_BLOCKS_DYNAMIC = [
     }
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "exprVar"
-    },
     defaultNode: {
       language: "dxml",
       name: "exprVar",
@@ -217,10 +185,6 @@ const SIDEBAR_BLOCKS_DYNAMIC = [
     }
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "exprVar"
-    },
     defaultNode: {
       language: "dxml",
       name: "exprVar",
@@ -234,10 +198,6 @@ const SIDEBAR_BLOCKS_DYNAMIC = [
     }
   },
   {
-    describedType: {
-      languageName: "dxml",
-      typeName: "if"
-    },
     defaultNode: {
       language: "dxml",
       name: "if",
@@ -275,11 +235,11 @@ const EDITOR_BLOCKS = [
           {
             blockType: "constant",
             text: "<"
-          } as EditorBlockDescriptions.EditorConstant,
+          } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "interpolated",
             property: "name"
-          } as EditorBlockDescriptions.EditorInterpolation,
+          } as VisualBlockDescriptions.EditorInterpolation,
           {
             blockType: "dropTarget",
             dropTarget: {
@@ -289,21 +249,21 @@ const EDITOR_BLOCKS = [
               {
                 blockType: "constant",
                 text: "+Attribute"
-              } as EditorBlockDescriptions.EditorConstant,
+              } as VisualBlockDescriptions.EditorConstant,
             ],
             direction: "horizontal",
             marginLeft: "10px",
             visibility: ["ifEmpty", "ifLegalDrag"]
-          } as EditorBlockDescriptions.EditorDropTarget,
+          } as VisualBlockDescriptions.EditorDropTarget,
           {
             blockType: "iterator",
             childGroupName: "attributes",
             direction: "horizontal",
-          } as EditorBlockDescriptions.EditorIterator,
+          } as VisualBlockDescriptions.EditorIterator,
           {
             blockType: "constant",
             text: ">"
-          } as EditorBlockDescriptions.EditorConstant,
+          } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "dropTarget",
             dropTarget: {
@@ -313,20 +273,20 @@ const EDITOR_BLOCKS = [
               {
                 blockType: "constant",
                 text: "+Element"
-              } as EditorBlockDescriptions.EditorConstant,
+              } as VisualBlockDescriptions.EditorConstant,
             ],
             direction: "horizontal",
             marginLeft: "10px",
             visibility: ["ifLegalDrag"]
-          } as EditorBlockDescriptions.EditorDropTarget,
+          } as VisualBlockDescriptions.EditorDropTarget,
         ]
-      } as EditorBlockDescriptions.EditorBlock,
+      } as VisualBlockDescriptions.EditorBlock,
       {
         blockType: "iterator",
         childGroupName: "elements",
         direction: "vertical",
         marginLeft: "10px",
-      } as EditorBlockDescriptions.EditorIterator,
+      } as VisualBlockDescriptions.EditorIterator,
       {
         blockType: "block",
         direction: "horizontal",
@@ -334,17 +294,17 @@ const EDITOR_BLOCKS = [
           {
             blockType: "constant",
             text: "</"
-          } as EditorBlockDescriptions.EditorConstant,
+          } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "interpolated",
             property: "name"
-          } as EditorBlockDescriptions.EditorInterpolation,
+          } as VisualBlockDescriptions.EditorInterpolation,
           {
             blockType: "constant",
             text: ">"
-          } as EditorBlockDescriptions.EditorConstant,
+          } as VisualBlockDescriptions.EditorConstant,
         ]
-      } as EditorBlockDescriptions.EditorBlock
+      } as VisualBlockDescriptions.EditorBlock
     ]
   },
   {
@@ -361,26 +321,26 @@ const EDITOR_BLOCKS = [
           {
             blockType: "interpolated",
             property: "name"
-          } as EditorBlockDescriptions.EditorInterpolation,
+          } as VisualBlockDescriptions.EditorInterpolation,
           {
             blockType: "constant",
             text: "="
-          } as EditorBlockDescriptions.EditorConstant,
+          } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "constant",
             text: "\""
-          } as EditorBlockDescriptions.EditorConstant,
+          } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "iterator",
             childGroupName: "value",
             direction: "horizontal",
-          } as EditorBlockDescriptions.EditorIterator,
+          } as VisualBlockDescriptions.EditorIterator,
           {
             blockType: "constant",
             text: "\""
-          } as EditorBlockDescriptions.EditorConstant,
+          } as VisualBlockDescriptions.EditorConstant,
         ]
-      } as EditorBlockDescriptions.EditorBlock
+      } as VisualBlockDescriptions.EditorBlock
     ]
   },
   {
@@ -396,9 +356,9 @@ const EDITOR_BLOCKS = [
           {
             blockType: "interpolated",
             property: "value"
-          } as EditorBlockDescriptions.EditorInterpolation,
+          } as VisualBlockDescriptions.EditorInterpolation,
         ]
-      } as EditorBlockDescriptions.EditorBlock
+      } as VisualBlockDescriptions.EditorBlock
     ]
   },
   {
@@ -414,18 +374,18 @@ const EDITOR_BLOCKS = [
           {
             blockType: "constant",
             text: "{{"
-          } as EditorBlockDescriptions.EditorConstant,
+          } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "iterator",
             childGroupName: "expr",
             direction: "horizontal",
-          } as EditorBlockDescriptions.EditorIterator,
+          } as VisualBlockDescriptions.EditorIterator,
           {
             blockType: "constant",
             text: "}}"
-          } as EditorBlockDescriptions.EditorConstant,
+          } as VisualBlockDescriptions.EditorConstant,
         ]
-      } as EditorBlockDescriptions.EditorBlock
+      } as VisualBlockDescriptions.EditorBlock
     ]
   },
   {
@@ -438,7 +398,7 @@ const EDITOR_BLOCKS = [
         blockType: "iterator",
         childGroupName: "concreteExpr",
         direction: "horizontal",
-      } as EditorBlockDescriptions.EditorIterator,
+      } as VisualBlockDescriptions.EditorIterator,
     ]
   },
   {
@@ -454,9 +414,9 @@ const EDITOR_BLOCKS = [
           {
             blockType: "interpolated",
             property: "name"
-          } as EditorBlockDescriptions.EditorInterpolation,
+          } as VisualBlockDescriptions.EditorInterpolation,
         ]
-      } as EditorBlockDescriptions.EditorBlock
+      } as VisualBlockDescriptions.EditorBlock
     ]
   },
 ]

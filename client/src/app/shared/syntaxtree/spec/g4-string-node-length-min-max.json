@@ -1,0 +1,23 @@
+{
+  "languageName": "g4",
+  "root": "s1",
+  "types": {
+    "s1": {
+      "properties": {
+        "value": {
+          "base": "string",
+          "restrictions": [
+            {
+              "type": "minLength",
+              "value": 2
+            },
+            {
+              "type": "maxLength",
+              "value": 4
+            }
+          ]
+        }
+      }
+    }
+  }
+}

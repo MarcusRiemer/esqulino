@@ -1,0 +1,11 @@
+language "test" {
+  type "test.root" {
+    dropTarget {
+      visibility ifEmpty
+      direction horizontal
+      visual {
+        "Drop"
+      }
+    }
+  }
+}

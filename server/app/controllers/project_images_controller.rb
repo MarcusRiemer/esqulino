@@ -1,6 +1,6 @@
 class ProjectImagesController < ApplicationController
   include ProjectsHelper
-  include ValidationHelper
+  include JsonSchemaHelper
   include ImageHelper
 
   def create

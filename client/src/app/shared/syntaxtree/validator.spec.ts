@@ -14,7 +14,7 @@ import { Validator, ErrorCodes } from './validator'
  *   </body>
  * </html>
  */
-const langMiniHtml: Schema.ValidatorDescription = {
+const langMiniHtml: Schema.GrammarDescription = {
   languageName: "mini-html",
   types: {
     "text": {
@@ -36,7 +36,12 @@ const langMiniHtml: Schema.ValidatorDescription = {
       children: {
         "children": {
           type: "allowed",
-          nodeTypes: ["text"]
+          nodeTypes: [
+            {
+              nodeType: "text",
+              occurs: "*"
+            }
+          ]
         }
       }
     },
@@ -44,7 +49,16 @@ const langMiniHtml: Schema.ValidatorDescription = {
       children: {
         "children": {
           type: "allowed",
-          nodeTypes: ["paragraph", "heading"]
+          nodeTypes: [
+            {
+              nodeType: "paragraph",
+              occurs: "*"
+            },
+            {
+              nodeType: "heading",
+              occurs: "*"
+            }
+          ]
         }
       }
     },
@@ -52,11 +66,21 @@ const langMiniHtml: Schema.ValidatorDescription = {
       children: {
         "attributes": {
           type: "allowed",
-          nodeTypes: ["attr-class"]
+          nodeTypes: [
+            {
+              nodeType: "attr-class",
+              occurs: "?"
+            }
+          ]
         },
         "children": {
           type: "allowed",
-          nodeTypes: ["text"]
+          nodeTypes: [
+            {
+              nodeType: "text",
+              occurs: "*"
+            }
+          ]
         }
       }
     },
@@ -64,11 +88,21 @@ const langMiniHtml: Schema.ValidatorDescription = {
       children: {
         "attributes": {
           type: "allowed",
-          nodeTypes: ["attr-id"]
+          nodeTypes: [
+            {
+              nodeType: "attr-id",
+              occurs: "?"
+            }
+          ]
         },
         "children": {
           type: "allowed",
-          nodeTypes: ["text"]
+          nodeTypes: [
+            {
+              nodeType: "text",
+              occurs: "*"
+            }
+          ]
         }
       }
     },
@@ -76,7 +110,12 @@ const langMiniHtml: Schema.ValidatorDescription = {
       children: {
         "classes": {
           type: "allowed",
-          nodeTypes: ["text"]
+          nodeTypes: [
+            {
+              nodeType: "text",
+              occurs: "*"
+            }
+          ]
         }
       }
     },
@@ -105,7 +144,7 @@ const langMiniHtml: Schema.ValidatorDescription = {
  * FROM
  * WHERE
  */
-const langMiniSql: Schema.ValidatorDescription = {
+const langMiniSql: Schema.GrammarDescription = {
   languageName: "mini-sql",
   types: {
     "root": {
@@ -138,7 +177,7 @@ const langMiniSql: Schema.ValidatorDescription = {
 /**
  * A single node that uses every possible string constraint.
  */
-const langStringConstraint: Schema.ValidatorDescription = {
+const langStringConstraint: Schema.GrammarDescription = {
   languageName: "string-constraint",
   types: {
     root: {
@@ -179,7 +218,7 @@ const langStringConstraint: Schema.ValidatorDescription = {
 /**
  * A single root node that uses some children with the "allowed" constraint
  */
-const langAllowedConstraint: Schema.ValidatorDescription = {
+const langAllowedConstraint: Schema.GrammarDescription = {
   languageName: "allowed-constraint",
   types: {
     "root": {
@@ -187,16 +226,20 @@ const langAllowedConstraint: Schema.ValidatorDescription = {
         "nodes": {
           type: "allowed",
           nodeTypes: [
-            "a",
+            {
+              nodeType: "a",
+              occurs: "*"
+            },
             {
               nodeType: "b",
-              minOccurs: 0,
-              maxOccurs: 2
+              occurs: {
+                minOccurs: 0,
+                maxOccurs: 2
+              }
             },
             {
               nodeType: "c",
-              minOccurs: 1,
-              maxOccurs: 1
+              occurs: "1"
             }
           ]
         }
@@ -212,7 +255,7 @@ const langAllowedConstraint: Schema.ValidatorDescription = {
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langSequenceConstraint: Schema.ValidatorDescription = {
+const langSequenceConstraint: Schema.GrammarDescription = {
   languageName: "sequence-constraint",
   types: {
     "root": {
@@ -223,14 +266,18 @@ const langSequenceConstraint: Schema.ValidatorDescription = {
             "a",
             {
               nodeType: "b",
-              minOccurs: 0,
-              maxOccurs: 2,
+              occurs: {
+                minOccurs: 0,
+                maxOccurs: 2,
+              }
             },
             "a",
             {
               nodeType: "c",
-              minOccurs: 1,
-              maxOccurs: 2
+              occurs: {
+                minOccurs: 1,
+                maxOccurs: 2
+              }
             }
           ]
         }
@@ -244,35 +291,9 @@ const langSequenceConstraint: Schema.ValidatorDescription = {
 };
 
 /**
- * A single node that wants exactly one child out of a variety
- * of possibilites.
- */
-const langAllowedOneOfConstraint: Schema.ValidatorDescription = {
-  languageName: "allowed-oneOf-constraint",
-  types: {
-    "root": {
-      children: {
-        "nodes": {
-          type: "allowed",
-          childCount: {
-            minOccurs: 1,
-            maxOccurs: 1,
-          },
-          nodeTypes: ["a", "b", "c"]
-        }
-      }
-    },
-    "a": {},
-    "b": {},
-    "c": {}
-  },
-  root: "root"
-};
-
-/**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langOneOfNodes: Schema.ValidatorDescription = {
+const langOneOfNodes: Schema.GrammarDescription = {
   languageName: "oneof-nodes",
   types: {
     "root": {
@@ -288,7 +309,7 @@ const langOneOfNodes: Schema.ValidatorDescription = {
 /**
  * A single node with only boolean properties.
  */
-const langBooleanConstraint: Schema.ValidatorDescription = {
+const langBooleanConstraint: Schema.GrammarDescription = {
   languageName: "boolean-constraint",
   types: {
     "root": {
@@ -303,7 +324,7 @@ const langBooleanConstraint: Schema.ValidatorDescription = {
 /**
  * A single node that may have optional properties.
  */
-const langOptionalProperty: Schema.ValidatorDescription = {
+const langOptionalProperty: Schema.GrammarDescription = {
   languageName: "optionalProperty",
   types: {
     "root": {
@@ -315,6 +336,23 @@ const langOptionalProperty: Schema.ValidatorDescription = {
         }
       }
     }
+  },
+  root: "root"
+}
+
+const langSimpleChoice: Schema.GrammarDescription = {
+  languageName: "simpleChoice",
+  types: {
+    "root": {
+      children: {
+        "nodes": {
+          type: "choice",
+          choices: ["a", "b"]
+        }
+      }
+    },
+    "a": {},
+    "b": {}
   },
   root: "root"
 }
@@ -885,7 +923,7 @@ describe('Language Validator', () => {
     const ast = new AST.Node(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
-    expect(res.errors.length).toEqual(0);
+    expect(res.errors).toEqual([]);
   });
 
   it('Valid "allowed": All allowed nodes once', () => {
@@ -950,71 +988,99 @@ describe('Language Validator', () => {
     expect(res.errors[1].code).toEqual(ErrorCodes.InvalidMinOccurences);
   });
 
-  it('Invalid "allowed oneOf": No child at all', () => {
-    const v = new Validator([langAllowedOneOfConstraint]);
+  it('Valid Choice (simple): a', () => {
+    const v = new Validator([langSimpleChoice]);
 
     const astDesc: AST.NodeDescription = {
-      language: "allowed-oneOf-constraint",
-      name: "root",
-      children: {
-        "nodes": []
-      }
-    }
-
-    const ast = new AST.Node(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
-
-    expect(res.errors.length).toEqual(1);
-    expect(res.errors[0].code).toEqual(ErrorCodes.InvalidMinOccurences);
-  });
-
-  it('Valid "allowed oneOf": Exactly one child', () => {
-    const v = new Validator([langAllowedOneOfConstraint]);
-
-    const astDesc: AST.NodeDescription = {
-      language: "allowed-oneOf-constraint",
+      language: "simpleChoice",
       name: "root",
       children: {
         "nodes": [
           {
-            language: "allowed-oneOf-constraint",
-            name: "a"
-          },
-        ]
-      }
-    }
-
-    const ast = new AST.Node(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
-
-    expect(res.errors.length).toEqual(0);
-  });
-
-  it('Invalid "allowed oneOf": Two children', () => {
-    const v = new Validator([langAllowedOneOfConstraint]);
-
-    const astDesc: AST.NodeDescription = {
-      language: "allowed-oneOf-constraint",
-      name: "root",
-      children: {
-        "nodes": [
-          {
-            language: "allowed-oneOf-constraint",
-            name: "a"
-          },
-          {
-            language: "allowed-oneOf-constraint",
+            language: "simpleChoice",
             name: "a"
           }
         ]
       }
     }
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.Tree(astDesc)
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors).toEqual([]);
+  });
+
+  it('Valid Choice (simple): b', () => {
+    const v = new Validator([langSimpleChoice]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "simpleChoice",
+      name: "root",
+      children: {
+        "nodes": [
+          {
+            language: "simpleChoice",
+            name: "b"
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Tree(astDesc)
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors).toEqual([]);
+  });
+
+  it('Invalid Choice (simple): c', () => {
+    const v = new Validator([langSimpleChoice]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "simpleChoice",
+      name: "root",
+      children: {
+        "nodes": [
+          {
+            language: "simpleChoice",
+            name: "c"
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Tree(astDesc)
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
-    expect(res.errors[0].code).toEqual(ErrorCodes.InvalidMaxOccurences);
+    expect(res.errors[0].code).toEqual(ErrorCodes.NoChoiceMatching);
+  });
+
+  it('Valid Choice: a, but a itself is not valid', () => {
+    const v = new Validator([langSimpleChoice]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "simpleChoice",
+      name: "root",
+      children: {
+        "nodes": [
+          {
+            language: "simpleChoice",
+            name: "a",
+            children: {
+              "tooMuch": [
+
+              ]
+            }
+          }
+        ]
+      }
+    }
+
+    const ast = new AST.Tree(astDesc)
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(1);
+    expect(res.errors[0].code).toEqual(ErrorCodes.SuperflousChildCategory);
   });
 
   it('Validating tree of unknown language', () => {

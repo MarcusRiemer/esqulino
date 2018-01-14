@@ -5,6 +5,10 @@ export * from './language.description'
 export * from './validator'
 export * from './validator.description'
 
+import { prettyPrintGrammar } from './prettyprint'
+
+export { prettyPrintGrammar }
+
 import { Language } from './language'
 import * as Sql from './sql'
 import * as DynamicXml from './dxml'

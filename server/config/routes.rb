@@ -5,8 +5,9 @@ class RenderProjectConstraint
     Rails.configuration.sqlino[:project_domains] || []
   end
 
+  # True, if the request in question probably is a project
   def matches?(request)
-    (self.project_domains.include? request.domain) or (not ['', 'www'].include? request.subdomain)
+    (self.project_domains.include? request.domain) or not(['', 'www', 'mri-tp'].include? request.subdomain)
   end
 end
 

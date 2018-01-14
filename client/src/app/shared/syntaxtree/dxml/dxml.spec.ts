@@ -3,7 +3,7 @@ import { Tree, Node, NodeDescription } from '../syntaxtree'
 import { Validator, ErrorCodes } from '../validator'
 
 import { NODE_CONVERTER_ERUBY, NODE_CONVERTER_LIQUID } from './dxml.codegenerator'
-import { VALIDATOR_DESCRIPTION } from './dxml.validator'
+import { GRAMMAR_DESCRIPTION } from './dxml.validator'
 
 function parseDom(input: string) {
   const parser = new DOMParser();
@@ -24,7 +24,7 @@ function parseDom(input: string) {
 
 describe("Language: Dynamic XML (eruby & liquid)", () => {
   it(`<root></root>`, () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: NodeDescription = {
       language: "dxml",
@@ -48,7 +48,7 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
   });
 
   it(`<root key="value"></root>`, () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: NodeDescription = {
       language: "dxml",
@@ -96,7 +96,7 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
   });
 
   it(`<root key="<%= varName %>"></root>`, () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: NodeDescription = {
       language: "dxml",
@@ -163,7 +163,7 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
   });
 
   it(`<root key="const-<%= varName %>"></root>`, () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: NodeDescription = {
       language: "dxml",
@@ -236,7 +236,7 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
   });
 
   it(`<root>Root-Text</root>`, () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: NodeDescription = {
       language: "dxml",
@@ -272,7 +272,7 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
   });
 
   it(`<root><%= var_name %></root>`, () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: NodeDescription = {
       language: "dxml",
@@ -328,7 +328,7 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
 
 
   it(`<root><% if var_name %>Root-Text<% end %></root>`, () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: NodeDescription = {
       language: "dxml",
@@ -392,7 +392,7 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
   });
 
   it(`<root><% if var_name %><c1></c1><c2></c2><% end %></root>`, () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: NodeDescription = {
       language: "dxml",
@@ -463,7 +463,7 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
   });
 
   it(`<root><% if var_name == var_name %><% end %></root>`, () => {
-    const v = new Validator([VALIDATOR_DESCRIPTION]);
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: NodeDescription = {
       language: "dxml",

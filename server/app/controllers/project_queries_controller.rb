@@ -1,7 +1,7 @@
 # All actions that concern queries that are part of a project
 class ProjectQueriesController < ApplicationController
   include ProjectsHelper
-  include ValidationHelper
+  include JsonSchemaHelper
 
   # Allows the execution of arbitrary SQL, which might be a little
   # dangerous ;) 

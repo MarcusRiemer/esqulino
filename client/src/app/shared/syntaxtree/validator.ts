@@ -29,6 +29,12 @@ export enum ErrorCodes {
   IllegalChildType = "ILLEGAL_CHILD_TYPE",
   // A type mentions a child category that is not present in a node
   SuperflousChildCategory = "SUPERFLOUS_CHILD_CATEGORY",
+  // The single node was tested against all choices but no match was found
+  NoChoiceMatching = "NO_CHOICE_MATCHING",
+  // There should have been a node but there wasn't
+  NoChoiceNodeAvailable = "NO_CHOICE_NODE_AVAILABLE",
+  // There should have been exactly one node but there where too many
+  SuperflousChoiceNodeAvailable = "TOO_MANY_CHOICE_NODES_AVAILABLE"
 }
 
 /**
@@ -301,6 +307,25 @@ class NodeConcreteType extends NodeType {
 }
 
 /**
+ * Creates a validator that matches the type of the given description.
+ *
+ * @param desc The description of the child group validator
+ * @return A matching child group validator
+ */
+function instanciateChildGroupValidator(group: NodeTypeChildren, desc: Desc.NodeChildrenGroupDescription) {
+  switch (desc.type) {
+    case "allowed":
+      return (new NodeComplexTypeChildrenAllowed(group, desc));
+    case "sequence":
+      return (new NodeComplexTypeChildrenSequence(group, desc));
+    case "choice":
+      return (new NodeComplexTypeChildrenChoice(group, desc));
+    default:
+      throw new Error(`Unknown child validator: "${JSON.stringify(desc)}"`);
+  }
+}
+
+/**
  * Validates children of a complex type.
  */
 class NodeTypeChildren {
@@ -311,14 +336,7 @@ class NodeTypeChildren {
   constructor(parent: NodeConcreteType, desc: Desc.NodeChildrenGroupDescription, name: string) {
     this._categoryName = name;
     this._parent = parent;
-
-    if (Desc.isNodeTypesSequenceDescription(desc)) {
-      this._childValidator = new NodeComplexTypeChildrenSequence(this, desc);
-    } else if (Desc.isNodeTypesAllowedDescription(desc)) {
-      this._childValidator = new NodeComplexTypeChildrenAllowed(this, desc);
-    } else {
-      throw new Error(`Unknown child validator: "${JSON.stringify(desc)}"`);
-    }
+    this._childValidator = instanciateChildGroupValidator(this, desc);
   }
 
   /**
@@ -363,31 +381,11 @@ class NodeTypeChildren {
  * child nodes are structurally valid.
  */
 abstract class NodeComplexTypeChildrenValidator {
-  // The number of children must be in these boundaries
-  private _childCount: Desc.OccursDescription;
-
-  constructor(desc: Desc.NodeTypesDescription) {
-    if (!desc.childCount) {
-      this._childCount = {
-        minOccurs: 0,
-        maxOccurs: +Infinity
-      }
-    } else {
-      this._childCount = desc.childCount;
-    }
-  }
 
   /**
-   * Checks whether the count of children is legal and then delegates
-   * further checks to an implementation defined
+   * Delegates further checks to an implementation defined variation
    */
   validateChildren(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[] {
-    if (ast.length < this._childCount.minOccurs) {
-      context.addError(ErrorCodes.InvalidMinOccurences, parent);
-    } else if (ast.length > this._childCount.maxOccurs) {
-      context.addError(ErrorCodes.InvalidMaxOccurences, parent);
-    }
-
     return (this.validateChildrenImpl(parent, ast, context));
   }
 
@@ -403,7 +401,7 @@ abstract class NodeComplexTypeChildrenValidator {
    * @return True, if this category will be required to be present on the node.
    */
   get isRequired() {
-    return (this._childCount.minOccurs > 0 || this.isRequiredImpl);
+    return (this.isRequiredImpl);
   }
 
   /**
@@ -420,20 +418,37 @@ class ChildCardinality {
   private _minOccurs: number;
   private _maxOccurs: number;
 
-  constructor(typeDesc: Desc.NodeTypesChildReference, group: NodeTypeChildren, defaultLimits: Desc.OccursDescription) {
+  constructor(typeDesc: Desc.NodeTypesChildReference, group: NodeTypeChildren) {
     const parent = group.parent;
     if (typeof (typeDesc) === "string") {
       // Simple strings per default occur exactly once
       this._nodeType = new TypeReference(parent.validator, typeDesc, parent.languageName);
-      this._minOccurs = defaultLimits.minOccurs;
-      this._maxOccurs = defaultLimits.maxOccurs;
+      this._minOccurs = 1;
+      this._maxOccurs = 1;
     } else if (Desc.isChildCardinalityDescription(typeDesc)) {
       // Complex descriptions may provide different cardinalities
       this._nodeType = new TypeReference(parent.validator, typeDesc.nodeType, parent.languageName);
-      this._minOccurs = typeDesc.minOccurs;
-      this._maxOccurs = typeDesc.maxOccurs;
+
+      const normalized = this.normalizeOccursDescription(typeDesc.occurs);
+
+      this._minOccurs = normalized.minOccurs;
+      this._maxOccurs = normalized.maxOccurs;
     } else {
-      throw new Error(`Unknown sequence cardinality: "${JSON.stringify(typeDesc)}"`);
+      throw new Error(`Unknown child cardinality: "${JSON.stringify(typeDesc)}"`);
+    }
+  }
+
+  private normalizeOccursDescription(desc: Desc.OccursDescription): Desc.OccursSpecificDescription {
+    if (Desc.isOccursSpecificDescription(desc)) {
+      return desc;
+    } else {
+      switch (desc) {
+        case "*": return ({ minOccurs: 0, maxOccurs: +Infinity });
+        case "?": return ({ minOccurs: 0, maxOccurs: 1 });
+        case "+": return ({ minOccurs: 1, maxOccurs: +Infinity });
+        case "1": return ({ minOccurs: 1, maxOccurs: 1 });
+        default: throw new Error(`Unknown occurences: "${JSON.stringify(desc)}"`);
+      }
     }
   }
 
@@ -467,14 +482,10 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
   private _group: NodeTypeChildren;
 
   constructor(group: NodeTypeChildren, desc: Desc.NodeTypesSequenceDescription) {
-    super(desc);
-    const defaultLimit: Desc.OccursDescription = {
-      minOccurs: 1,
-      maxOccurs: 1,
-    }
+    super();
 
     this._group = group;
-    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group, defaultLimit));
+    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group));
   }
 
   /**
@@ -570,14 +581,9 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
   private _nodeTypes: ChildCardinality[];
 
   constructor(group: NodeTypeChildren, desc: Desc.NodeTypesAllowedDescription) {
-    super(desc);
+    super();
 
-    const defaultLimit: Desc.OccursDescription = {
-      minOccurs: 0,
-      maxOccurs: +Infinity
-    }
-
-    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group, defaultLimit));
+    this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group));
   }
 
   /**
@@ -638,6 +644,59 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
 
     return (toReturn);
   }
+}
+
+/**
+ * Ensures that at least one of the given choices matches the child group.
+ */
+class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
+  private _desc: Desc.NodeTypesChoiceDescription;
+  private _group: NodeTypeChildren;
+
+  constructor(group: NodeTypeChildren, desc: Desc.NodeTypesChoiceDescription) {
+    super();
+    this._desc = desc;
+    this._group = group;
+  }
+
+  /**
+   * Runs the choice validation against a certain node.
+   */
+  protected validateChildrenImpl(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[] {
+    if (ast.length === 0) {
+      // TODO: Tell category
+      context.addError(ErrorCodes.NoChoiceNodeAvailable, parent, {});
+      return ([]);
+    } else {
+      // Check whether the first (and hopefully only) node is a match?
+      const hasMatch = this._desc.choices.some(possible => {
+
+        // Build fully qualified type for this possibility.
+        const possibleName = typeof possible === "string" ? possible : possible.typeName;
+        const possibleLanguage = typeof possible === "string" ? parent.languageName : possible.languageName;
+
+        const possibleType = {
+          languageName: possibleLanguage,
+          typeName: possibleName
+        } as AST.QualifiedTypeName;
+
+        // Check whether the type matches or not
+        return (AST.typenameEquals(possibleType, ast[0].qualifiedName));
+      });
+
+      if (!hasMatch) {
+        context.addError(ErrorCodes.NoChoiceMatching, ast[0], {});
+      }
+
+      // If there are any more nodes: They shouldn't be there
+      ast.slice(1).forEach(node => context.addError(ErrorCodes.SuperflousChoiceNodeAvailable, node, {}));
+
+      return (hasMatch ? [ast[0]] : []);
+    }
+  }
+
+  protected isRequiredImpl: boolean;
+
 }
 
 /**
@@ -813,9 +872,11 @@ class TypeReference {
     if (Desc.isQualifiedTypeName(desc)) {
       this._languageName = desc.languageName;
       this._typeName = desc.typeName;
-    } else {
+    } else if (typeof desc === "string") {
       this._languageName = currentLang;
       this._typeName = desc;
+    } else {
+      throw new Error("Impossible: Unknown type reference");
     }
   }
 
@@ -866,13 +927,13 @@ class TypeReference {
 /**
  * A language consists of type definitions and a set of types that may occur at the root.
  */
-class SchemaValidator {
+export class GrammarValidator {
   private _validator: Validator;
   private _languageName: string;
   private _registeredTypes: { [name: string]: NodeType } = {};
   private _rootType: TypeReference;
 
-  constructor(validator: Validator, desc: Desc.ValidatorDescription) {
+  constructor(validator: Validator, desc: Desc.GrammarDescription) {
     this._validator = validator;
     this._languageName = desc.languageName;
 
@@ -881,6 +942,13 @@ class SchemaValidator {
     });
 
     this._rootType = new TypeReference(validator, desc.root, this._languageName);
+  }
+
+  /**
+   * @return The name of the language this grammar defines.
+   */
+  get languageName() {
+    return (this._languageName);
   }
 
   /**
@@ -944,9 +1012,9 @@ class SchemaValidator {
  * check any AST against those languages.
  */
 export class Validator {
-  private _registeredSchemas: { [langName: string]: SchemaValidator } = {};
+  private _registeredGrammars: { [langName: string]: GrammarValidator } = {};
 
-  constructor(langs: Desc.ValidatorDescription[]) {
+  constructor(langs: Desc.GrammarDescription[]) {
     langs.forEach(langDesc => this.register(langDesc));
   }
 
@@ -954,10 +1022,10 @@ export class Validator {
    * @return All individual schemas that are part of this validator.
    */
   get availableSchemas() {
-    return (Object.entries(this._registeredSchemas).map(([name, types]) => {
+    return (Object.entries(this._registeredGrammars).map(([name, types]) => {
       return ({
         name: name,
-        types: types
+        grammar: types
       });
     }));
   }
@@ -967,7 +1035,7 @@ export class Validator {
    */
   get availableTypes() {
     return (
-      Object.values(this._registeredSchemas)
+      Object.values(this._registeredGrammars)
         .map(v => v.availableTypes)
         .reduce((lhs, rhs) => lhs.concat(rhs), [])
     );
@@ -976,12 +1044,12 @@ export class Validator {
   /**
    * Registers a new language with this validator
    */
-  private register(desc: Desc.ValidatorDescription) {
+  private register(desc: Desc.GrammarDescription) {
     if (this.isKnownLanguage(desc.languageName)) {
       throw new Error(`Attempted to register language "${desc.languageName}" twice`);
     }
 
-    this._registeredSchemas[desc.languageName] = new SchemaValidator(this, desc);
+    this._registeredGrammars[desc.languageName] = new GrammarValidator(this, desc);
   }
 
   /**
@@ -1002,7 +1070,7 @@ export class Validator {
     if (rootNode) {
       if (this.isKnownLanguage(rootNode.languageName)) {
         // Pass validation to the appropriate language
-        const lang = this.getLanguageValidator(rootNode.languageName);
+        const lang = this.getLanguageGrammar(rootNode.languageName);
         lang.validateFromRoot(rootNode, context);
       } else {
         // Not knowing the language is a single error
@@ -1023,12 +1091,12 @@ export class Validator {
   /**
    * @return The language that has been asked for. Throws if the language does not exist.
    */
-  getLanguageValidator(language: string) {
+  getLanguageGrammar(language: string) {
     if (!this.isKnownLanguage(language)) {
-      const available = Object.keys(this._registeredSchemas).join(', ');
+      const available = Object.keys(this._registeredGrammars).join(', ');
       throw new Error(`Validator does not know language "${language}", known are: ${available}`);
     } else {
-      return (this._registeredSchemas[language]);
+      return (this._registeredGrammars[language]);
     }
   }
 
@@ -1039,7 +1107,7 @@ export class Validator {
     if (!this.isKnownType(language, typename)) {
       throw new Error(`Validator does not know type "${language}.${typename}"`);
     } else {
-      return (this._registeredSchemas[language].getType(typename));
+      return (this._registeredGrammars[language].getType(typename));
     }
   }
 
@@ -1047,7 +1115,7 @@ export class Validator {
    * @return True if the given language is known to this validator.
    */
   isKnownLanguage(language: string) {
-    return (!!this._registeredSchemas[language]);
+    return (!!this._registeredGrammars[language]);
   }
 
   /**
@@ -1056,7 +1124,7 @@ export class Validator {
   isKnownType(language: string, typename: string) {
     return (
       this.isKnownLanguage(language) &&
-      this._registeredSchemas[language].isKnownType(typename)
+      this._registeredGrammars[language].isKnownType(typename)
     );
   }
 }

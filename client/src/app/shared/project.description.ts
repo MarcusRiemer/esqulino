@@ -1,5 +1,5 @@
-import { Model } from "./query"
-import { TableDescription } from "./schema"
+import * as Model from "./query/description"
+import { TableDescription } from "./schema/schema.description"
 import { PageDescription } from "./page/page.description"
 import { CodeResourceDescription } from './syntaxtree/coderesource.description'
 import {

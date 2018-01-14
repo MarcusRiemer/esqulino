@@ -1,32 +1,6 @@
-import { RequestErrorDescription } from '../serverapi.service'
-
 import * as Model from './description'
 import { Query } from './base'
-
-/**
- * Not much ado about type safety here, in the raw
- * format every cell is a string.
- */
-type RawRow = string[]
-
-/**
- * The result usually contains a list of rows and a list of columns.
- * If the result is a simulation there are additional properties.
- */
-type QueryResultDescription = {
-  rows?: RawRow[]
-  inserted?: RawRow[]
-  highlight?: number[]
-  columns: string[]
-};
-
-/**
- * Over the wire format to describe a query that could not
- * be run on the server.
- */
-export interface QueryRunErrorDescription extends RequestErrorDescription {
-
-}
+import { QueryRunErrorDescription, QueryResultDescription, RawRow } from './result.description'
 
 /**
  * Provides some extra type information for a certain cell.

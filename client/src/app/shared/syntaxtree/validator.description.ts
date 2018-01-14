@@ -44,13 +44,6 @@ export interface NodePropertyTypeDescription {
 }
 
 /**
- * All children group types that are available
- */
-export type NodeChildrenGroupDescription =
-  NodeTypesAllowedDescription
-  | NodeTypesSequenceDescription;
-
-/**
  * Creates a possibility to define multiple NodeTypes as alternatives
  * to each other *without* introducing an artificial node type. This
  * is helpful for e.g. the root node or when using recursive definitions.
@@ -155,17 +148,21 @@ export interface MinInclusiveRestriction {
  */
 export interface ChildCardinalityDescription {
   nodeType: TypeReference
-  minOccurs: number
+  occurs: OccursDescription
+}
+
+/**
+ * A verbos definition of minimum and maximum occurences.
+ */
+export interface OccursSpecificDescription {
+  minOccurs: number,
   maxOccurs: number
 }
 
 /**
  * Describes limits for occurences.
  */
-export interface OccursDescription {
-  minOccurs: number
-  maxOccurs: number
-}
+export type OccursDescription = "1" | "?" | "+" | "*" | OccursSpecificDescription;
 
 /**
  * A simple type reference is a shortcut for an element with
@@ -174,34 +171,45 @@ export interface OccursDescription {
 export type NodeTypesChildReference = (TypeReference | ChildCardinalityDescription);
 
 /**
- * Describes a group of node types.
- */
-export interface NodeTypesDescription {
-  type: string
-  childCount?: OccursDescription
-}
-
-/**
  * In a sequence every child must occur in exact the order and cardinality
  * that is specified by this description.
  */
-export interface NodeTypesSequenceDescription extends NodeTypesDescription {
+export interface NodeTypesSequenceDescription {
   type: "sequence"
   nodeTypes: NodeTypesChildReference[]
 }
 
 /**
- * Every immediate child must be part of this list of allowed types.
+ * Every immediate child must be part of this list of allowed types. The order
+ * in which these children appear in is not relevant.
  */
-export interface NodeTypesAllowedDescription extends NodeTypesDescription {
+export interface NodeTypesAllowedDescription {
   type: "allowed"
   nodeTypes: NodeTypesChildReference[]
 }
 
 /**
- * Describes a whole schema that in turn may describe a whole language.
+ * Tries the given operators in the order they appear in. If any of them is
+ * satisfied, the child group is considered valid.
  */
-export class ValidatorDescription {
+export interface NodeTypesChoiceDescription {
+  type: "choice",
+  choices: TypeReference[]
+}
+
+/**
+ * All children group types that are available
+ */
+export type NodeChildrenGroupDescription =
+  NodeTypesSequenceDescription
+  | NodeTypesAllowedDescription
+  | NodeTypesChoiceDescription;
+
+
+/**
+ * Describes a grammar that may describe the syntactic structure of a language.
+ */
+export class GrammarDescription {
   // The unique name of the language
   languageName: string
 
@@ -248,10 +256,17 @@ export function isNodeTypesSequenceDescription(obj: any): obj is NodeTypesSequen
 }
 
 /**
- * @return True, if the given instance probably satisfies "SequenceCardinalityDescription"
+ * @return True, if the given instance probably satisfies "ChildCardinalityDescription"
  */
 export function isChildCardinalityDescription(obj: any): obj is ChildCardinalityDescription {
-  return (obj instanceof Object && "minOccurs" in obj && "maxOccurs" in obj && "nodeType" in obj);
+  return (obj instanceof Object && "occurs" in obj && "nodeType" in obj);
+}
+
+/**
+ * @return True, if the given instance probably satisfies "ChildCardinalityDescription"
+ */
+export function isOccursSpecificDescription(obj: any): obj is OccursSpecificDescription {
+  return (obj instanceof Object && "minOccurs" in obj && "maxOccurs" in obj);
 }
 
 /**

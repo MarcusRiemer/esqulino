@@ -1,0 +1,21 @@
+{
+  "id": "test",
+  "name": "test",
+  "editorBlocks": [],
+  "sidebarBlocks": [
+    {
+      "sidebar": {
+        "category": "default",
+        "displayName": "Test Block"
+      },
+      "defaultNode": {
+        "language": "test",
+        "name": "bar",
+        "properties": {
+          "p1": "v1"
+        }
+      }
+    }
+  ]
+}
+
