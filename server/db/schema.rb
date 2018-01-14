@@ -24,14 +24,14 @@ ActiveRecord::Schema.define(version: 20180113221522) do
   end
 
   create_table "project_sources", force: :cascade do |t|
-    t.uuid "projects_id"
+    t.uuid "project_id"
     t.string "url"
     t.string "title"
     t.text "display"
     t.boolean "read_only", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["projects_id"], name: "index_project_sources_on_projects_id"
+    t.index ["project_id"], name: "index_project_sources_on_project_id"
   end
 
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
