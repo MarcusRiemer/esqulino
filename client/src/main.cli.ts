@@ -83,6 +83,8 @@ function executeCommand(command: Command) {
       return (prettyPrintLanguageModel(l));
     case "available":
       return (availableGrammars().map(g => g.languageName));
+    case "graphvizTree":
+      return (graphvizSyntaxTree(command.model));
   }
 }
 

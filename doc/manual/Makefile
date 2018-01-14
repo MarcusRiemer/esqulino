@@ -24,11 +24,18 @@ generated/%.blocks: $(CLI_PROG_CLIENT)
 	@mkdir -p generated
 	@echo '{ "type": "printLanguageModel", "id": "$*" }' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.blocks"
 
+generated/%.graphviz: syntaxtree/%.json $(CLI_PROG_CLIENT)
+	@mkdir -p generated
+	@echo '{ "type": "graphvizTree", "model": $(shell cat "$<" | jq -c .)}' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.graphviz"
+
 # Default set of pretty printed grammar files
 pretty-grammars: generated/sql.grammar generated/dxml.grammar generated/regex.grammar
 
 # Default set of pretty printed blocks
 pretty-blocks: generated/xml.blocks generated/dxml.blocks generated/sql.blocks
+
+# Default set of graphviz trees
+graphviz-trees: generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz
 
 clean:
 	rm -rf generated _build

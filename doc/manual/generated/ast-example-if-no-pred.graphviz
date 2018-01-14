@@ -8,7 +8,7 @@ digraph SyntaxTree {
     r_positive_0 [label="{{lang.call}|{name|writeln}}"];
     subgraph cluster_r_positive_0_arguments {
       label="arguments";
-      r_positive_0_arguments_0 [label="{{lang.expConst}|{value|'foo'}}"];
+      r_positive_0_arguments_0 [label="{{lang.expConst}|{value|bar}}"];
     }
     r_positive_0 -> r_positive_0_arguments_0;
   }
@@ -18,7 +18,7 @@ digraph SyntaxTree {
     r_negative_0 [label="{{lang.call}|{name|err}}"];
     subgraph cluster_r_negative_0_arguments {
       label="arguments";
-      r_negative_0_arguments_1 [label="{{lang.expConst}|{value|'bar'}}"];
+      r_negative_0_arguments_1 [label="{{lang.expConst}|{value|foo}}"];
       r_negative_0_arguments_0 [label="{{lang.expConst}|{value|2}}"];
     }
     r_negative_0 -> r_negative_0_arguments_0;
