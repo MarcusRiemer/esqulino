@@ -1,6 +1,16 @@
 import { NodeConverterRegistration, CodeGeneratorProcess, OutputSeparator } from '../codegenerator'
 import { Node } from '../syntaxtree'
 
+function generateComponents(node: Node, process: CodeGeneratorProcess) {
+  const components = node.children["components"] || [];
+  components.forEach(n => {
+    process.generateNode(n)
+    process.addConvertedFragment("", node, OutputSeparator.NEW_LINE_AFTER);
+  });
+
+  return ([]);
+}
+
 /**
  * Converts an SQL-AST to a properly indented SQL query.
  */
@@ -216,15 +226,16 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "querySelect",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
-        const components = node.children["components"] || [];
-        components.forEach(n => {
-          process.generateNode(n)
-          process.addConvertedFragment("", node, OutputSeparator.NEW_LINE_AFTER);
-        });
-
-        return ([]);
-      }
+      init: generateComponents
+    }
+  },
+  {
+    type: {
+      languageName: "sql",
+      typeName: "queryDelete"
+    },
+    converter: {
+      init: generateComponents
     }
   }
 ];

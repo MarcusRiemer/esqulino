@@ -1,0 +1,60 @@
+grammar "sql" {
+  node "expression" {
+    children "expression" ::= columnName | binaryExpression | constant | parameter | functionCall
+  }
+  node "columnName" {
+    prop "columnName" { string }
+    prop "refTableName" { string }
+  }
+  node "constant" {
+    prop "value" { string }
+  }
+  node "parameter" {
+    prop "name" { string }
+  }
+  node "functionCall" {
+    prop "name" { string }
+    children "arguments" ::= expression*
+  }
+  node "starOperator" {
+  }
+  node "relationalOperator" {
+    prop "operator" { string { enum "<" "<=" "=" ">=" ">" } }
+  }
+  node "binaryExpression" {
+    children "operands" ::= expression relationalOperator expression
+  }
+  node "select" {
+    prop? "distinct" { boolean }
+    children "columns" ::= columnName* & starOperator?
+  }
+  node "delete" {
+  }
+  node "tableIntroduction" {
+    prop "name" { string }
+    prop? "alias" { string }
+  }
+  node "crossJoin" {
+    children "table" ::= tableIntroduction
+  }
+  node "from" {
+    children "tables" ::= tableIntroduction crossJoin*
+  }
+  node "whereAdditional" {
+    prop "operator" { string }
+    children "expression" ::= expression
+  }
+  node "where" {
+    children "expressions" ::= expression whereAdditional*
+  }
+  node "querySelect" {
+    children "components" ::= select from where? groupBy?
+  }
+  node "queryDelete" {
+    children "components" ::= delete from where?
+  }
+  typedef "query" {
+    "querySelect"
+    "queryDelete"
+  }
+}

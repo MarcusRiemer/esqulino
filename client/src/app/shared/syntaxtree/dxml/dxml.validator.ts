@@ -1,17 +1,24 @@
 import * as Schema from '../validator.description'
 
-export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
+export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   languageName: "dxml",
   types: {
     "element": {
       children: {
         "elements": {
           type: "allowed",
-          nodeTypes: ["element", "text", "interpolate", "if"]
+          nodeTypes: [
+            { nodeType: "element", occurs: "*" },
+            { nodeType: "text", occurs: "*" },
+            { nodeType: "interpolate", occurs: "*" },
+            { nodeType: "if", occurs: "*" },
+          ]
         },
         "attributes": {
           type: "allowed",
-          nodeTypes: ["attribute"]
+          nodeTypes: [
+            { nodeType: "attribute", occurs: "*" },
+          ]
         }
       },
       properties: {
@@ -24,7 +31,10 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
       children: {
         "value": {
           type: "allowed",
-          nodeTypes: ["text", "interpolate"],
+          nodeTypes: [
+            { nodeType: "text", occurs: "*" },
+            { nodeType: "interpolate", occurs: "*" },
+          ],
         }
       },
       properties: {
@@ -43,12 +53,8 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
     "interpolate": {
       children: {
         "expr": {
-          type: "allowed",
-          childCount: {
-            minOccurs: 1,
-            maxOccurs: 1,
-          },
-          nodeTypes: ["expr"]
+          type: "choice",
+          choices: ["expr"]
         }
       }
     },
@@ -56,32 +62,24 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
       children: {
         "condition": {
           type: "allowed",
-          nodeTypes: [
-            {
-              nodeType: {
-                languageName: "dxml",
-                typeName: "expr"
-              },
-              minOccurs: 1,
-              maxOccurs: 1,
-            }
-          ]
+          nodeTypes: ["expr"]
         },
         "body": {
           type: "allowed",
-          nodeTypes: ["text", "element", "interpolate", "if"]
+          nodeTypes: [
+            { nodeType: "element", occurs: "*" },
+            { nodeType: "text", occurs: "*" },
+            { nodeType: "interpolate", occurs: "*" },
+            { nodeType: "if", occurs: "*" },
+          ],
         }
       }
     },
     "expr": {
       children: {
         "concreteExpr": {
-          type: "allowed",
-          childCount: {
-            minOccurs: 1,
-            maxOccurs: 1
-          },
-          nodeTypes: ["exprVar", "exprConst", "exprBinary"]
+          type: "choice",
+          choices: ["exprVar", "exprConst", "exprBinary"]
         }
       }
     },

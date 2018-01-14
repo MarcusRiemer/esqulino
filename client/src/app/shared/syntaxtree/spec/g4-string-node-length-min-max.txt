@@ -1,0 +1,10 @@
+grammar "g4" {
+  node "s1" {
+    prop "value" {
+      string {
+        minLength 2
+        maxLength 4
+      }
+    }
+  }
+}

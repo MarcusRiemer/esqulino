@@ -12,31 +12,9 @@ import {
 } from '../shared/query'
 
 import { Project, ProjectDescription } from './project.service'
-import { Url } from "url";
+import { ArbitraryQueryRequestDescription, QueryParamsDescription, QueryUpdateRequestDescription } from './query.service.description'
 
-/**
- * Storing a query on the server
- */
-export interface QueryUpdateRequestDescription {
-  model: Model.QueryDescription,
-  sql?: string
-}
-
-/**
- * Parameters are simply a key-value dictionary. Whenever a query
- * makes use of user-bound parameters, these are transferred via
- * this kind of object.
- */
-export type QueryParamsDescription = { [paramKey: string]: string }
-
-/**
- * Some servers support execution of arbitrary queries. This is intended
- * to be used during development and can be done via this request-type.
- */
-export type ArbitraryQueryRequestDescription = {
-  params: QueryParamsDescription
-  sql: string
-}
+export { QueryParamsDescription }
 
 /**
  * Provides means to communicate with a server that can store or run

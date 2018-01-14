@@ -4,6 +4,7 @@
 include ../Makefile.common
 
 NG_BIN = node_modules/.bin/ng
+TSC_BIN = node_modules/.bin/tsc
 NODE_BIN = node
 
 BUNDLE_FILES = $(shell find dist/browser -iname "*bundle*.js" 2> /dev/null)
@@ -19,20 +20,37 @@ all : dist
 clean : msg-pre-clean
 	rm -rf dist
 
+install-deps : msg-pre-install-deps
+	npm install
+
+##################################
+# Webclient
+##################################
+
 dist : msg-pre-build
 	$(NG_BIN) build --prod $(NG_OPTS)
 
 dist-dev : msg-pre-build
 	$(NG_BIN) build $(NG_OPTS)
 
-install-deps : msg-pre-install-deps
-	npm install
-
 test :
 	$(NG_BIN) test --single-run $(TEST_SINGLE_RUN) --browser $(TEST_BROWSERS) --code-coverage true
 
 clean-deps : msg-pre-clean-deps
 	rm -rf "node_modules"
+
+##################################
+# Commandline Client
+##################################
+
+dist/cli/main.cli.js : $(CLIENT_ALL_SOURCES)
+	$(TSC_BIN) --target ES5 --lib ES2017 --outDir dist/cli src/main.cli.ts		
+
+cli-compile: dist/cli/main.cli.js
+
+cli-run: dist/cli/main.cli.js
+	@$(NODE_BIN) $^
+
 
 ##################################
 # Universal Rendering

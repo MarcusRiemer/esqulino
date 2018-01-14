@@ -1,15 +1,21 @@
 import * as Schema from '../validator.description'
 
-export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
+export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   languageName: "sql",
   types: {
     "expression": {
-      oneOf: [
-        "columnName",
-        "binaryExpression",
-        "constant",
-        "parameter"
-      ]
+      children: {
+        "expression": {
+          type: "choice",
+          choices: [
+            "columnName",
+            "binaryExpression",
+            "constant",
+            "parameter",
+            "functionCall"
+          ]
+        }
+      }
     },
     "columnName": {
       properties: {
@@ -28,6 +34,24 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
       properties: {
         "name": {
           base: "string"
+        }
+      }
+    },
+    "functionCall": {
+      properties: {
+        "name": {
+          base: "string"
+        }
+      },
+      children: {
+        "arguments": {
+          type: "sequence",
+          nodeTypes: [
+            {
+              nodeType: "expression",
+              occurs: "*"
+            }
+          ]
         }
       }
     },
@@ -62,11 +86,13 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
         "columns": {
           type: "allowed",
           nodeTypes: [
-            "columnName",
+            {
+              nodeType: "columnName",
+              occurs: "*"
+            },
             {
               nodeType: "starOperator",
-              minOccurs: 0,
-              maxOccurs: 1
+              occurs: "?"
             }
           ]
         }
@@ -77,6 +103,9 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
           isOptional: true
         }
       }
+    },
+    "delete": {
+
     },
     "tableIntroduction": {
       properties: {
@@ -102,10 +131,8 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
           nodeTypes: [
             "tableIntroduction",
             {
-              languageName: "sql",
               nodeType: "crossJoin",
-              minOccurs: 0,
-              maxOccurs: +Infinity,
+              occurs: "*"
             }
           ]
         }
@@ -134,8 +161,7 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
             {
               languageName: "sql",
               nodeType: "whereAdditional",
-              minOccurs: 0,
-              maxOccurs: +Infinity
+              occurs: "*"
             }
           ]
         }
@@ -150,17 +176,33 @@ export const VALIDATOR_DESCRIPTION: Schema.ValidatorDescription = {
             "from",
             {
               nodeType: "where",
-              minOccurs: 0,
-              maxOccurs: 1
+              occurs: "?"
             },
             {
               nodeType: "groupBy",
-              minOccurs: 0,
-              maxOccurs: 1
+              occurs: "?"
             }
           ]
         }
       }
+    },
+    "queryDelete": {
+      children: {
+        "components": {
+          type: "sequence",
+          nodeTypes: [
+            "delete",
+            "from",
+            {
+              nodeType: "where",
+              occurs: "?"
+            }
+          ]
+        }
+      }
+    },
+    "query": {
+      oneOf: ["querySelect", "queryDelete"]
     }
   },
   root: "querySelect"

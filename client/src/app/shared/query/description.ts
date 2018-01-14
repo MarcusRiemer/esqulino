@@ -1,5 +1,5 @@
 import { ProjectResourceDescription } from '../resource.description'
-import { TableDescription } from '../schema'
+import { TableDescription } from '../schema/schema.description'
 
 /**
  * Basic data types as inspired by SQLite.

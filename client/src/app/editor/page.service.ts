@@ -11,42 +11,11 @@ import {
   Page, PageDescription, Body, CURRENT_API_VERSION
 } from '../shared/page/index'
 
-import { QueryParamsDescription } from './query.service'
 import { Project } from './project.service'
+import { QueryParamsDescription } from './query.service.description'
+import { PageRenderRequestDescription, PageUpdateRequestDescription } from './page.service.description'
 
 export { Page }
-
-/**
- * Storing a page on the server
- */
-export interface PageUpdateRequestDescription {
-  /**
-   * The backend model to store.
-   */
-  model: PageDescription
-
-  /**
-   * Serialized representations to store.
-   */
-  sources?: { [sourceType: string]: string }
-}
-
-/**
- * Fully self-contained request to render an arbitrary page. Because
- * the development state in the browser could differ significantly
- * from the state stored on the server this description specifies all
- * relevant data at once.
- */
-export interface PageRenderRequestDescription {
-  sourceType: string,
-  source: string,
-  page: PageDescription
-  queries: {
-    name: string,
-    sql: string
-  }[],
-  params: QueryParamsDescription
-}
 
 /**
  * Provides means to communicate with a server that can store or run

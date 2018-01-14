@@ -1,0 +1,28 @@
+{
+  "id": "test",
+  "name": "test",
+  "editorBlocks": [
+    {
+      "describedType": {
+        "languageName": "test",
+        "typeName": "root"
+      },
+      "visual": [
+        {
+          "blockType": "constant",
+          "text": "foo"
+        },
+        {
+          "blockType": "interpolated",
+          "property": "interp"
+        },
+        {
+          "blockType": "constant",
+          "text": "bar"
+        }
+      ]
+    }
+  ],
+  "sidebarBlocks": []
+}
+

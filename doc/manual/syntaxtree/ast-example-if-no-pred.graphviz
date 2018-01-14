@@ -1,0 +1,40 @@
+digraph ast_example_if {
+    graph [fontsize=10 fontname="Verdana" ];
+    node [fontsize=10 fontname="Verdana" shape=Mrecord];
+    edge [fontsize=10 fontname="Verdana"]
+
+    top [label="lang.if"]
+
+    subgraph cluster_pos {
+        pos1 [label="{lang.call|{name|writeln}}"]
+
+        subgraph cluster_pos_arguments {
+            pos1_1 [label="{lang.expConst|{value|'foo'}}"]
+            label =  "arguments"
+        }
+
+        pos1 -> pos1_1
+
+        label = "positive";
+    }
+
+    top -> pos1
+
+    subgraph cluster_neg {
+        neg1 [label="{lang.call|{name|err}}"]
+
+        subgraph cluster_neg_arguments {
+            neg1_2 [label="{lang.expConst|{value|'bar'}}"]
+            neg1_1 [label="{lang.expConst|{value|2}}"]
+            label =  "arguments"
+        }
+
+        neg1 -> neg1_1
+        neg1 -> neg1_2
+
+        label = "negative";
+    }
+
+
+    top -> neg1
+}

@@ -1,0 +1,12 @@
+{
+  "language": "t0",
+  "name": "root",
+  "children": {
+    "c1" : [
+      {
+        "language": "t0",
+        "name": "r_c1_1"
+      }
+    ]
+  }
+}

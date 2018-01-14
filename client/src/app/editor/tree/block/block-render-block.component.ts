@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
-import { LanguageModel, EditorBlockDescriptions } from '../../../shared/block';
+import { LanguageModel, VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
 
@@ -34,7 +34,7 @@ type DropTargetAnimationStates = "available" | "none" | "self" | "taken";
 export class BlockRenderBlockComponent {
   @Input() public codeResource: CodeResource;
   @Input() public node: Node;
-  @Input() public visual: EditorBlockDescriptions.EditorBlock;
+  @Input() public visual: VisualBlockDescriptions.EditorBlock;
 
   // The current state that should be used for the animation
   private _cached_dropTargetAnimationState: Observable<DropTargetAnimationStates>;

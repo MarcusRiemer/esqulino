@@ -1,4 +1,12 @@
 /**
+ * Used when refererring to types that are defined other languages.
+ */
+export interface QualifiedTypeName {
+  typeName: string
+  languageName: string
+}
+
+/**
  * Determines the category and the index in that category
  * of a node.
  */

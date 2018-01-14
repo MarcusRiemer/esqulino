@@ -1,0 +1,31 @@
+{
+  "languageName": "g7",
+  "root": "n1",
+  "types": {
+    "n1": {
+      "children": {
+        "c": {
+          "type": "allowed",
+          "nodeTypes": [
+            {
+              "nodeType": "n1",
+              "occurs": "?"
+            },
+            {
+              "nodeType": "n2",
+              "occurs": "+"
+            },
+            {
+              "nodeType": "n3",
+              "occurs": "*"
+            }
+          ]
+        }
+      }
+    },
+    "n2": {
+    },
+    "n3": {
+    }
+  }
+}

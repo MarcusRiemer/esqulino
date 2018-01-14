@@ -1,0 +1,24 @@
+language "SQL" {
+  sidebarBlock "SELECT" {
+    category "SQL"
+    node "sql.querySelect" {
+      childGroup "components" {
+        node "sql.select"
+      }
+    }
+  }
+  sidebarBlock "FROM" {
+    category "SQL"
+    node "sql.from" {
+      childGroup "tables" {
+      }
+    }
+  }
+  sidebarBlock "WHERE" {
+    category "SQL"
+    node "sql.where" {
+      childGroup "expressions" {
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "languageName": "g2",
+  "root": "s1",
+  "types": {
+    "s1": {
+      "properties": {
+        "value": {
+          "base": "string"
+        }
+      }
+    }
+  }
+}

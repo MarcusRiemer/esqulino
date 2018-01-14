@@ -1,717 +1,796 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "additionalProperties": false,
-    "definitions": {
-        "ApiVersionToken": {
-            "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
-            "enum": [
-                "1",
-                "2",
-                "3",
-                "4"
-            ],
-            "type": "string"
-        },
-        "AvailableDatabaseDescription": {
-            "additionalProperties": false,
-            "description": "Describes a database that could possibly be used.",
-            "properties": {
-                "type": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "type": "object"
-        },
-        "BinaryExpression": {
-            "additionalProperties": false,
-            "description": "Combines two expressions with a binary operator.",
-            "properties": {
-                "lhs": {
-                    "$ref": "#/definitions/Expression"
-                },
-                "operator": {
-                    "$ref": "#/definitions/Operator"
-                },
-                "rhs": {
-                    "$ref": "#/definitions/Expression"
-                },
-                "simple": {
-                    "type": "boolean"
-                }
-            },
-            "required": [
-                "lhs",
-                "operator",
-                "rhs",
-                "simple"
-            ],
-            "type": "object"
-        },
-        "BodyDescription": {
-            "additionalProperties": false,
-            "description": "The body of an HTML page, will only appear once in a page.",
-            "properties": {
-                "children": {
-                    "items": {
-                        "$ref": "#/definitions/WidgetDescription"
-                    },
-                    "type": "array"
-                },
-                "type": {
-                    "enum": [
-                        "body"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "children",
-                "type"
-            ],
-            "type": "object"
-        },
-        "ColumnAssignment": {
-            "additionalProperties": false,
-            "description": "An expression that will be assigned to a certain column.",
-            "properties": {
-                "column": {
-                    "type": "string"
-                },
-                "expr": {
-                    "$ref": "#/definitions/Expression"
-                }
-            },
-            "required": [
-                "column",
-                "expr"
-            ],
-            "type": "object"
-        },
-        "ColumnDescription": {
-            "additionalProperties": false,
-            "description": "The \"over-the-wire\" description of a single column\ninside a table.",
-            "properties": {
-                "dflt_value": {
-                    "type": "string"
-                },
-                "index": {
-                    "type": "number"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "not_null": {
-                    "type": "boolean"
-                },
-                "primary": {
-                    "type": "boolean"
-                },
-                "type": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "index",
-                "name",
-                "not_null",
-                "primary",
-                "type"
-            ],
-            "type": "object"
-        },
-        "ConstantExpression": {
-            "additionalProperties": false,
-            "description": "The other \"typical\" leaf, a compile time expression that also\nends recursion.",
-            "properties": {
-                "type": {
-                    "$ref": "#/definitions/DataType"
-                },
-                "value": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "value"
-            ],
-            "type": "object"
-        },
-        "DataType": {
-            "description": "Basic data types as inspired by SQLite.",
-            "enum": [
-                "INTEGER",
-                "REAL",
-                "TEXT"
-            ],
-            "type": "string"
-        },
-        "Delete": {
-            "additionalProperties": false,
-            "description": "There doesn't seem to be any data associated with the\nSQLite DELETE keyword itself. But it didn't seem practical\nto go with a \"simple\" type that breaks the \"normal\" \nstructure of the model.",
-            "type": "object"
-        },
-        "Expression": {
-            "additionalProperties": false,
-            "description": "We use a single base type for all kinds of expression, as\nthis vastly simplifies the storage process. Each kind of\nconcrete expression is stored under a key. Only one of these\nkeys may be set at runtime.",
-            "properties": {
-                "binary": {
-                    "$ref": "#/definitions/BinaryExpression"
-                },
-                "constant": {
-                    "$ref": "#/definitions/ConstantExpression"
-                },
-                "missing": {
-                    "$ref": "#/definitions/MissingExpression"
-                },
-                "parameter": {
-                    "$ref": "#/definitions/ParameterExpression"
-                },
-                "singleColumn": {
-                    "$ref": "#/definitions/SingleColumnExpression"
-                },
-                "star": {
-                    "$ref": "#/definitions/StarExpression"
-                }
-            },
-            "type": "object"
-        },
-        "ForeignKeyDescription": {
-            "additionalProperties": false,
-            "properties": {
-                "references": {
-                    "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                            "from_column": {
-                                "type": "string"
-                            },
-                            "to_column": {
-                                "type": "string"
-                            },
-                            "to_table": {
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "from_column",
-                            "to_column",
-                            "to_table"
-                        ],
-                        "type": "object"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "references"
-            ],
-            "type": "object"
-        },
-        "From": {
-            "additionalProperties": false,
-            "properties": {
-                "first": {
-                    "$ref": "#/definitions/TableNameDefinition"
-                },
-                "joins": {
-                    "items": {
-                        "$ref": "#/definitions/Join"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "first"
-            ],
-            "type": "object"
-        },
-        "InnerJoinType": {
-            "description": "Types of INNER JOINs",
-            "enum": [
-                "comma",
-                "cross"
-            ],
-            "type": "string"
-        },
-        "Insert": {
-            "additionalProperties": false,
-            "description": "A complete INSERT statement. Technically this does not \nrequire any other component, although the use of\nexpressions is common.",
-            "properties": {
-                "assignments": {
-                    "items": {
-                        "$ref": "#/definitions/ColumnAssignment"
-                    },
-                    "type": "array"
-                },
-                "table": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "assignments",
-                "table"
-            ],
-            "type": "object"
-        },
-        "Join": {
-            "additionalProperties": false,
-            "properties": {
-                "cross": {
-                    "$ref": "#/definitions/InnerJoinType"
-                },
-                "inner": {
-                    "additionalProperties": false,
-                    "properties": {
-                        "on": {
-                            "$ref": "#/definitions/Expression"
-                        },
-                        "using": {
-                            "type": "string"
-                        }
-                    },
-                    "type": "object"
-                },
-                "table": {
-                    "$ref": "#/definitions/TableNameDefinition"
-                }
-            },
-            "required": [
-                "table"
-            ],
-            "type": "object"
-        },
-        "LogicalOperator": {
-            "enum": [
-                "AND",
-                "OR"
-            ],
-            "type": "string"
-        },
-        "MissingExpression": {
-            "additionalProperties": false,
-            "description": "Denotes an expression that is intentionally missing.",
-            "type": "object"
-        },
-        "Operator": {
-            "enum": [
-                "*",
-                "+",
-                "-",
-                "/",
-                "<",
-                "<=",
-                "<>",
-                "=",
-                ">",
-                ">=",
-                "LIKE"
-            ],
-            "type": "string"
-        },
-        "PageDescription": {
-            "additionalProperties": false,
-            "description": "Describes a page as a whole",
-            "properties": {
-                "apiVersion": {
-                    "$ref": "#/definitions/ApiVersionToken",
-                    "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
-                },
-                "body": {
-                    "$ref": "#/definitions/BodyDescription",
-                    "description": "The host for all widgets that are part of this page."
-                },
-                "id": {
-                    "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "The user-chosen name of this resource. This property is free to change.",
-                    "type": "string"
-                },
-                "parameters": {
-                    "description": "All parameters that are required to render this page. These\nare usually satisfied via GET parameters",
-                    "items": {
-                        "$ref": "#/definitions/PageParameterDescription"
-                    },
-                    "type": "array"
-                },
-                "referencedQueries": {
-                    "description": "IDs of queries that are referenced in this page. Only\nthese queries provide additional DB information that can\nbe used on this page.",
-                    "items": {
-                        "$ref": "#/definitions/QueryReferenceDescription"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "apiVersion",
-                "name"
-            ],
-            "type": "object"
-        },
-        "PageParameterDescription": {
-            "additionalProperties": false,
-            "description": "A parameter that is required to render a page.",
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "name"
-            ],
-            "type": "object"
-        },
-        "ParameterExpression": {
-            "additionalProperties": false,
-            "description": "Denotes a value that needs to be bound at the runtime of the query.",
-            "properties": {
-                "key": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "key"
-            ],
-            "type": "object"
-        },
-        "QueryDescription": {
-            "additionalProperties": false,
-            "description": "Outermost description of a query. This contains\nthe whole structure and some identifying properties.",
-            "properties": {
-                "apiVersion": {
-                    "$ref": "#/definitions/ApiVersionToken",
-                    "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
-                },
-                "delete": {
-                    "$ref": "#/definitions/Delete"
-                },
-                "from": {
-                    "$ref": "#/definitions/From"
-                },
-                "id": {
-                    "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
-                    "type": "string"
-                },
-                "insert": {
-                    "$ref": "#/definitions/Insert"
-                },
-                "name": {
-                    "description": "The user-chosen name of this resource. This property is free to change.",
-                    "type": "string"
-                },
-                "select": {
-                    "$ref": "#/definitions/Select"
-                },
-                "singleRow": {
-                    "type": "boolean"
-                },
-                "update": {
-                    "$ref": "#/definitions/Update"
-                },
-                "where": {
-                    "$ref": "#/definitions/Where"
-                }
-            },
-            "required": [
-                "apiVersion",
-                "name"
-            ],
-            "type": "object"
-        },
-        "QueryReferenceDescription": {
-            "additionalProperties": false,
-            "description": "Referenced queries are possibly accompanied by a human-readable\nname. This is required if the same query is going to be used\nmultiple times on a single page.",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "queryId": {
-                    "type": "string"
-                },
-                "type": {
-                    "enum": [
-                        "query"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "type": "object"
-        },
-        "Select": {
-            "additionalProperties": false,
-            "properties": {
-                "columns": {
-                    "items": {
-                        "$ref": "#/definitions/SelectColumn"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "columns"
-            ],
-            "type": "object"
-        },
-        "SelectColumn": {
-            "additionalProperties": false,
-            "properties": {
-                "as": {
-                    "type": "string"
-                },
-                "expr": {
-                    "$ref": "#/definitions/Expression"
-                }
-            },
-            "required": [
-                "expr"
-            ],
-            "type": "object"
-        },
-        "SingleColumnExpression": {
-            "additionalProperties": false,
-            "description": "One \"typical\" logical leaf of an expression tree, postpones\nthe actual value lookup to execution time and ends recursion.",
-            "properties": {
-                "alias": {
-                    "type": "string"
-                },
-                "column": {
-                    "type": "string"
-                },
-                "table": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "column"
-            ],
-            "type": "object"
-        },
-        "SourceDescription": {
-            "additionalProperties": false,
-            "description": "Some projects are based on external sources, especially regarding\nthe data in the databases. These references may be used to\ncorrectly acknowledge such sources.",
-            "properties": {
-                "display": {
-                    "type": "string"
-                },
-                "readOnly": {
-                    "type": "boolean"
-                },
-                "type": {
-                    "enum": [
-                        "data"
-                    ],
-                    "type": "string"
-                },
-                "url": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "display",
-                "readOnly",
-                "type",
-                "url"
-            ],
-            "type": "object"
-        },
-        "StarExpression": {
-            "additionalProperties": false,
-            "description": "Denotes a *-Expression, that may be limited to a subset of\nexisting tables.",
-            "properties": {
-                "limitedTo": {
-                    "$ref": "#/definitions/TableNameDefinition"
-                }
-            },
-            "type": "object"
-        },
-        "TableDescription": {
-            "additionalProperties": false,
-            "description": "The \"over-the-wire\" description of a single table \nwith all of its columns.",
-            "properties": {
-                "columns": {
-                    "items": {
-                        "$ref": "#/definitions/ColumnDescription"
-                    },
-                    "type": "array"
-                },
-                "foreign_keys": {
-                    "items": {
-                        "$ref": "#/definitions/ForeignKeyDescription"
-                    },
-                    "type": "array"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "system_table": {
-                    "type": "boolean"
-                }
-            },
-            "required": [
-                "columns",
-                "foreign_keys",
-                "name"
-            ],
-            "type": "object"
-        },
-        "TableNameDefinition": {
-            "additionalProperties": false,
-            "description": "Named tables as described in the FROM",
-            "properties": {
-                "alias": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "name"
-            ],
-            "type": "object"
-        },
-        "Update": {
-            "additionalProperties": false,
-            "description": "The column-expression pairs and the table that define the\nUPDATE component.",
-            "properties": {
-                "assignments": {
-                    "items": {
-                        "$ref": "#/definitions/ColumnAssignment"
-                    },
-                    "type": "array"
-                },
-                "table": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "assignments",
-                "table"
-            ],
-            "type": "object"
-        },
-        "Where": {
-            "additionalProperties": false,
-            "description": "A WHERE component with at least one expression.",
-            "properties": {
-                "first": {
-                    "$ref": "#/definitions/Expression"
-                },
-                "following": {
-                    "items": {
-                        "$ref": "#/definitions/WhereSubsequent"
-                    },
-                    "type": "array"
-                }
-            },
-            "required": [
-                "first"
-            ],
-            "type": "object"
-        },
-        "WhereSubsequent": {
-            "additionalProperties": false,
-            "description": "All Expressions after the first in a WHERE clause need the\nlogical operation defined. This is redundant, as the \nBinaryExpression would be perfectly capable of expressing\narbitrarily deep nested logical expressions, but in that\ncase the UI would be less then thrilling.",
-            "properties": {
-                "expr": {
-                    "$ref": "#/definitions/Expression"
-                },
-                "logical": {
-                    "$ref": "#/definitions/LogicalOperator"
-                }
-            },
-            "required": [
-                "expr",
-                "logical"
-            ],
-            "type": "object"
-        },
-        "WidgetDescription": {
-            "additionalProperties": {
-            },
-            "description": "A widget **requires** at least a type, all other fields are\nmandated by deriving descriptions. As we don't necesarily\nknow all deriving classes at compile time (they could be\nprovided by a plugin) we poke a hole in the type system\nhere.\n\nThe following annotion is required to allow additional\nproperties in the automatically generated JSON schema, see\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
-            "properties": {
-                "type": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "type": "object"
-        }
+  "$ref": "#/definitions/ProjectDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "ApiVersionToken": {
+      "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
+      "enum": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "type": "string"
     },
-    "description": "The properties of a project that can be queried from the\nserver when asking for a specific project.\n\nOnly contains publically visible data, not the\npassword or other private information.",
-    "properties": {
-        "activeDatabase": {
-            "type": "string"
+    "AvailableDatabaseDescription": {
+      "additionalProperties": false,
+      "description": "Describes a database that could possibly be used.",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "BinaryExpression": {
+      "additionalProperties": false,
+      "description": "Combines two expressions with a binary operator.",
+      "properties": {
+        "lhs": {
+          "$ref": "#/definitions/Expression"
         },
+        "operator": {
+          "$ref": "#/definitions/Operator"
+        },
+        "rhs": {
+          "$ref": "#/definitions/Expression"
+        },
+        "simple": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "lhs",
+        "operator",
+        "rhs",
+        "simple"
+      ],
+      "type": "object"
+    },
+    "BodyDescription": {
+      "additionalProperties": false,
+      "description": "The body of an HTML page, will only appear once in a page.",
+      "properties": {
+        "children": {
+          "items": {
+            "$ref": "#/definitions/WidgetDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "body"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "children",
+        "type"
+      ],
+      "type": "object"
+    },
+    "CodeResourceDescription": {
+      "additionalProperties": false,
+      "description": "A resource that is described by a syntaxtree.",
+      "properties": {
         "apiVersion": {
-            "$ref": "#/definitions/ApiVersionToken",
-            "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
+          "$ref": "#/definitions/ApiVersionToken",
+          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
         },
-        "availableDatabases": {
-            "additionalProperties": {
-                "$ref": "#/definitions/AvailableDatabaseDescription"
-            },
-            "type": "object"
-        },
-        "description": {
-            "type": "string"
+        "ast": {
+          "$ref": "#/definitions/NodeDescription"
         },
         "id": {
-            "description": "The name of the project. May only contain characters that do not\nmean any trouble in URLs.",
-            "pattern": "^[a-z0-9\\-]{4,}$",
-            "type": "string"
+          "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
+          "type": "string"
         },
-        "indexPageId": {
-            "type": "string"
+        "languageId": {
+          "type": "string"
+        },
+        "languageModelId": {
+          "type": "string"
         },
         "name": {
-            "description": "The name of the project. May only contain more or less friendly\ncharacters.",
-            "pattern": "^^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß]{4,}$",
-            "type": "string"
+          "description": "The user-chosen name of this resource. This property is free to change.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "languageId",
+        "languageModelId",
+        "name"
+      ],
+      "type": "object"
+    },
+    "ColumnAssignment": {
+      "additionalProperties": false,
+      "description": "An expression that will be assigned to a certain column.",
+      "properties": {
+        "column": {
+          "type": "string"
+        },
+        "expr": {
+          "$ref": "#/definitions/Expression"
+        }
+      },
+      "required": [
+        "column",
+        "expr"
+      ],
+      "type": "object"
+    },
+    "ColumnDescription": {
+      "additionalProperties": false,
+      "description": "The \"over-the-wire\" description of a single column\ninside a table.",
+      "properties": {
+        "dflt_value": {
+          "type": "string"
+        },
+        "index": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "not_null": {
+          "type": "boolean"
+        },
+        "primary": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "index",
+        "name",
+        "type",
+        "not_null",
+        "primary"
+      ],
+      "type": "object"
+    },
+    "ConstantExpression": {
+      "additionalProperties": false,
+      "description": "The other \"typical\" leaf, a compile time expression that also\nends recursion.",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/DataType"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "type": "object"
+    },
+    "DataType": {
+      "description": "Basic data types as inspired by SQLite.",
+      "enum": [
+        "INTEGER",
+        "REAL",
+        "TEXT"
+      ],
+      "type": "string"
+    },
+    "Delete": {
+      "additionalProperties": false,
+      "description": "There doesn't seem to be any data associated with the\nSQLite DELETE keyword itself. But it didn't seem practical\nto go with a \"simple\" type that breaks the \"normal\" \nstructure of the model.",
+      "type": "object"
+    },
+    "Expression": {
+      "additionalProperties": false,
+      "description": "We use a single base type for all kinds of expression, as\nthis vastly simplifies the storage process. Each kind of\nconcrete expression is stored under a key. Only one of these\nkeys may be set at runtime.",
+      "properties": {
+        "binary": {
+          "$ref": "#/definitions/BinaryExpression"
+        },
+        "constant": {
+          "$ref": "#/definitions/ConstantExpression"
+        },
+        "missing": {
+          "$ref": "#/definitions/MissingExpression"
+        },
+        "parameter": {
+          "$ref": "#/definitions/ParameterExpression"
+        },
+        "singleColumn": {
+          "$ref": "#/definitions/SingleColumnExpression"
+        },
+        "star": {
+          "$ref": "#/definitions/StarExpression"
+        }
+      },
+      "type": "object"
+    },
+    "ForeignKeyDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "references": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "from_column": {
+                "type": "string"
+              },
+              "to_column": {
+                "type": "string"
+              },
+              "to_table": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "to_table",
+              "from_column",
+              "to_column"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "references"
+      ],
+      "type": "object"
+    },
+    "From": {
+      "additionalProperties": false,
+      "properties": {
+        "first": {
+          "$ref": "#/definitions/TableNameDefinition"
+        },
+        "joins": {
+          "items": {
+            "$ref": "#/definitions/Join"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "first"
+      ],
+      "type": "object"
+    },
+    "InnerJoinType": {
+      "description": "Types of INNER JOINs",
+      "enum": [
+        "cross",
+        "comma"
+      ],
+      "type": "string"
+    },
+    "Insert": {
+      "additionalProperties": false,
+      "description": "A complete INSERT statement. Technically this does not \nrequire any other component, although the use of\nexpressions is common.",
+      "properties": {
+        "assignments": {
+          "items": {
+            "$ref": "#/definitions/ColumnAssignment"
+          },
+          "type": "array"
+        },
+        "table": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "table",
+        "assignments"
+      ],
+      "type": "object"
+    },
+    "Join": {
+      "additionalProperties": false,
+      "properties": {
+        "cross": {
+          "$ref": "#/definitions/InnerJoinType"
+        },
+        "inner": {
+          "additionalProperties": false,
+          "properties": {
+            "on": {
+              "$ref": "#/definitions/Expression"
+            },
+            "using": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "table": {
+          "$ref": "#/definitions/TableNameDefinition"
+        }
+      },
+      "required": [
+        "table"
+      ],
+      "type": "object"
+    },
+    "LogicalOperator": {
+      "enum": [
+        "AND",
+        "OR"
+      ],
+      "type": "string"
+    },
+    "MissingExpression": {
+      "additionalProperties": false,
+      "description": "Denotes an expression that is intentionally missing.",
+      "type": "object"
+    },
+    "NodeDescription": {
+      "additionalProperties": false,
+      "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
+      "properties": {
+        "children": {
+          "additionalProperties": {
+            "items": {
+              "$ref": "#/definitions/NodeDescription"
+            },
+            "type": "array"
+          },
+          "description": "Nodes may have children in various categories. This base class\nmakes no assumptions about the names of children. Examples for\nchildren in multiple categories would be things like \"attributes\"\nand generic \"children\" in a specialization for XML.",
+          "type": "object"
+        },
+        "language": {
+          "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+          "type": "string"
+        },
+        "properties": {
+          "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "language"
+      ],
+      "type": "object"
+    },
+    "Operator": {
+      "enum": [
+        "<",
+        "<=",
+        "=",
+        "<>",
+        ">=",
+        ">",
+        "LIKE",
+        "+",
+        "-",
+        "*",
+        "/"
+      ],
+      "type": "string"
+    },
+    "PageDescription": {
+      "additionalProperties": false,
+      "description": "Describes a page as a whole",
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersionToken",
+          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
+        },
+        "body": {
+          "$ref": "#/definitions/BodyDescription",
+          "description": "The host for all widgets that are part of this page."
+        },
+        "id": {
+          "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The user-chosen name of this resource. This property is free to change.",
+          "type": "string"
+        },
+        "parameters": {
+          "description": "All parameters that are required to render this page. These\nare usually satisfied via GET parameters",
+          "items": {
+            "$ref": "#/definitions/PageParameterDescription"
+          },
+          "type": "array"
+        },
+        "referencedQueries": {
+          "description": "IDs of queries that are referenced in this page. Only\nthese queries provide additional DB information that can\nbe used on this page.",
+          "items": {
+            "$ref": "#/definitions/QueryReferenceDescription"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "name"
+      ],
+      "type": "object"
+    },
+    "PageParameterDescription": {
+      "additionalProperties": false,
+      "description": "A parameter that is required to render a page.",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "ParameterExpression": {
+      "additionalProperties": false,
+      "description": "Denotes a value that needs to be bound at the runtime of the query.",
+      "properties": {
+        "key": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "key"
+      ],
+      "type": "object"
+    },
+    "ProjectDescription": {
+      "additionalProperties": false,
+      "description": "The properties of a project that can be queried from the\nserver when asking for a specific project.\n\nOnly contains publically visible data, not the\npassword or other private information.",
+      "properties": {
+        "activeDatabase": {
+          "type": "string"
+        },
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersionToken",
+          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
+        },
+        "availableDatabases": {
+          "additionalProperties": {
+            "$ref": "#/definitions/AvailableDatabaseDescription"
+          },
+          "type": "object"
+        },
+        "codeResources": {
+          "items": {
+            "$ref": "#/definitions/CodeResourceDescription"
+          },
+          "type": "array"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "$ref": "#/definitions/ProjectId"
+        },
+        "indexPageId": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/definitions/ProjectName"
         },
         "pages": {
-            "items": {
-                "$ref": "#/definitions/PageDescription"
-            },
-            "type": "array"
+          "items": {
+            "$ref": "#/definitions/PageDescription"
+          },
+          "type": "array"
         },
         "preview": {
-            "type": "string"
+          "type": "string"
         },
         "queries": {
-            "items": {
-                "$ref": "#/definitions/QueryDescription"
-            },
-            "type": "array"
+          "items": {
+            "$ref": "#/definitions/QueryDescription"
+          },
+          "type": "array"
         },
         "schema": {
-            "items": {
-                "$ref": "#/definitions/TableDescription"
-            },
-            "type": "array"
+          "items": {
+            "$ref": "#/definitions/TableDescription"
+          },
+          "type": "array"
         },
         "sources": {
-            "items": {
-                "$ref": "#/definitions/SourceDescription"
-            },
-            "type": "array"
+          "items": {
+            "$ref": "#/definitions/SourceDescription"
+          },
+          "type": "array"
         }
-    },
-    "required": [
+      },
+      "required": [
         "apiVersion",
         "description",
         "id",
         "name"
-    ],
-    "type": "object"
+      ],
+      "type": "object"
+    },
+    "ProjectId": {
+      "description": "The name of the project. May only contain characters that do not\nmean any trouble in URLs.",
+      "pattern": "^[a-z0-9\\-]{4,}$",
+      "type": "string"
+    },
+    "ProjectName": {
+      "description": "The name of the project. May only contain more or less friendly\ncharacters.",
+      "pattern": "^^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß]{4,}$",
+      "type": "string"
+    },
+    "QueryDescription": {
+      "additionalProperties": false,
+      "description": "Outermost description of a query. This contains\nthe whole structure and some identifying properties.",
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersionToken",
+          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
+        },
+        "delete": {
+          "$ref": "#/definitions/Delete"
+        },
+        "from": {
+          "$ref": "#/definitions/From"
+        },
+        "id": {
+          "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
+          "type": "string"
+        },
+        "insert": {
+          "$ref": "#/definitions/Insert"
+        },
+        "name": {
+          "description": "The user-chosen name of this resource. This property is free to change.",
+          "type": "string"
+        },
+        "select": {
+          "$ref": "#/definitions/Select"
+        },
+        "singleRow": {
+          "type": "boolean"
+        },
+        "update": {
+          "$ref": "#/definitions/Update"
+        },
+        "where": {
+          "$ref": "#/definitions/Where"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "name"
+      ],
+      "type": "object"
+    },
+    "QueryReferenceDescription": {
+      "additionalProperties": false,
+      "description": "Referenced queries are possibly accompanied by a human-readable\nname. This is required if the same query is going to be used\nmultiple times on a single page.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "queryId": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "query"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "Select": {
+      "additionalProperties": false,
+      "properties": {
+        "columns": {
+          "items": {
+            "$ref": "#/definitions/SelectColumn"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "columns"
+      ],
+      "type": "object"
+    },
+    "SelectColumn": {
+      "additionalProperties": false,
+      "properties": {
+        "as": {
+          "type": "string"
+        },
+        "expr": {
+          "$ref": "#/definitions/Expression"
+        }
+      },
+      "required": [
+        "expr"
+      ],
+      "type": "object"
+    },
+    "SingleColumnExpression": {
+      "additionalProperties": false,
+      "description": "One \"typical\" logical leaf of an expression tree, postpones\nthe actual value lookup to execution time and ends recursion.",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "column": {
+          "type": "string"
+        },
+        "table": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "column"
+      ],
+      "type": "object"
+    },
+    "SourceDescription": {
+      "additionalProperties": false,
+      "description": "Some projects are based on external sources, especially regarding\nthe data in the databases. These references may be used to\ncorrectly acknowledge such sources.",
+      "properties": {
+        "display": {
+          "type": "string"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "type": {
+          "enum": [
+            "data"
+          ],
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "display",
+        "readOnly"
+      ],
+      "type": "object"
+    },
+    "StarExpression": {
+      "additionalProperties": false,
+      "description": "Denotes a *-Expression, that may be limited to a subset of\nexisting tables.",
+      "properties": {
+        "limitedTo": {
+          "$ref": "#/definitions/TableNameDefinition"
+        }
+      },
+      "type": "object"
+    },
+    "TableDescription": {
+      "additionalProperties": false,
+      "description": "The \"over-the-wire\" description of a single table \nwith all of its columns.",
+      "properties": {
+        "columns": {
+          "items": {
+            "$ref": "#/definitions/ColumnDescription"
+          },
+          "type": "array"
+        },
+        "foreign_keys": {
+          "items": {
+            "$ref": "#/definitions/ForeignKeyDescription"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "system_table": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "columns",
+        "foreign_keys"
+      ],
+      "type": "object"
+    },
+    "TableNameDefinition": {
+      "additionalProperties": false,
+      "description": "Named tables as described in the FROM",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "Update": {
+      "additionalProperties": false,
+      "description": "The column-expression pairs and the table that define the\nUPDATE component.",
+      "properties": {
+        "assignments": {
+          "items": {
+            "$ref": "#/definitions/ColumnAssignment"
+          },
+          "type": "array"
+        },
+        "table": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "table",
+        "assignments"
+      ],
+      "type": "object"
+    },
+    "Where": {
+      "additionalProperties": false,
+      "description": "A WHERE component with at least one expression.",
+      "properties": {
+        "first": {
+          "$ref": "#/definitions/Expression"
+        },
+        "following": {
+          "items": {
+            "$ref": "#/definitions/WhereSubsequent"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "first"
+      ],
+      "type": "object"
+    },
+    "WhereSubsequent": {
+      "additionalProperties": false,
+      "description": "All Expressions after the first in a WHERE clause need the\nlogical operation defined. This is redundant, as the \nBinaryExpression would be perfectly capable of expressing\narbitrarily deep nested logical expressions, but in that\ncase the UI would be less then thrilling.",
+      "properties": {
+        "expr": {
+          "$ref": "#/definitions/Expression"
+        },
+        "logical": {
+          "$ref": "#/definitions/LogicalOperator"
+        }
+      },
+      "required": [
+        "expr",
+        "logical"
+      ],
+      "type": "object"
+    },
+    "WidgetDescription": {
+      "description": "A widget **requires** at least a type, all other fields are\nmandated by deriving descriptions. As we don't necesarily\nknow all deriving classes at compile time (they could be\nprovided by a plugin) we poke a hole in the type system\nhere.\n\nThe following annotion is required to allow additional\nproperties in the automatically generated JSON schema, see\nhttps://github.com/YousefED/typescript-json-schema/issues/44",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    }
+  }
 }
-
