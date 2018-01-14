@@ -1,0 +1,53 @@
+{
+  "language": "lang",
+  "name": "if",
+  "children": {
+    "positive": [
+      {
+        "language": "lang",
+        "name": "call",
+        "properties": {
+          "name": "writeln"
+        },
+        "children": {
+          "arguments": [
+            {
+              "language": "lang",
+              "name": "expConst",
+              "properties": {
+                "value": "'bar'"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "negative": [
+      {
+        "language": "lang",
+        "name": "call",
+        "properties": {
+          "name": "err"
+        },
+        "children": {
+          "arguments": [
+            {
+              "language": "lang",
+              "name": "expConst",
+              "properties": {
+                "value": "2"
+              }
+            },
+            {
+              "language": "lang",
+              "name": "expConst",
+              "properties": {
+                "value": "'foo'"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
