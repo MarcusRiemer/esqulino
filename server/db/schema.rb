@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180113221522) do
+ActiveRecord::Schema.define(version: 20180125190631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
 
-  create_table "language_models", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "language_models", id: false, force: :cascade do |t|
+    t.uuid "id"
     t.string "name"
-    t.json "model"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -43,6 +43,8 @@ ActiveRecord::Schema.define(version: 20180113221522) do
     t.string "active_database"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
+    t.index ["slug"], name: "index_projects_on_slug"
   end
 
 end

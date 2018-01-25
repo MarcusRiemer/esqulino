@@ -6,10 +6,12 @@ class ProjectsController < ApplicationController
 
   # Enumerating all available projects
   def index
-    projects = enumerate_projects(projects_dir, false, true)
-                 .map { |project| project.public_description }
+    @projects = ProjectStructure.all
+    # projects = enumerate_projects(projects_dir, false, true)
+    #              .map { |project| project.public_description }
 
-    render json: projects
+    puts @projects
+    render json: @projects
   end
 
   # Creating a new project
