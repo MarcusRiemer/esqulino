@@ -3,7 +3,6 @@
      [blockBase]="visual"
      [blockLayout]="visual"
      [astDropPlaceholder]="dropLocation"
-     [title]="dropLocation | json"
      (drop)="onDrop($event)">
   <!-- Render all components of this drop target -->
   <ng-container *ngFor="let childVisualBlock of visual.children">

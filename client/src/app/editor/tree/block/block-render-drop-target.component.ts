@@ -149,7 +149,6 @@ export class BlockRenderDropTargetComponent {
    */
   onDrop(evt: DragEvent) {
     const desc = this._dragService.peekDragData.draggedDescription;
-    console.log(this.node, this.dropLocation);
     this._treeService.peekResource.insertNode(this.dropLocation, desc);
   }
 }

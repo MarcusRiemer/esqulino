@@ -94,5 +94,13 @@ export const CODE_RESOURCES: CodeResourceDescription[] = [
     ast: undefined,
     languageId: "dxml-eruby",
     languageModelId: "xml",
+  },
+  {
+    apiVersion: CURRENT_API_VERSION,
+    id: "sql-empty",
+    name: "SQL: Leer",
+    ast: undefined,
+    languageId: "sql",
+    languageModelId: "sql",
   }
 ];
