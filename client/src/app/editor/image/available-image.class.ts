@@ -35,7 +35,7 @@ export class AvailableImage extends ProjectResource {
   }
 
   get url() {
-    return (this._serverApi.getImageUrl(this.project.id, this.id));
+    return (this._serverApi.getImageUrl(this.project.slug, this.id));
   }
 
   get authorUrl() {

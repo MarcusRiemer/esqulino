@@ -1,5 +1,6 @@
 ---
 name: Blog
+slug: blog
 description: Dein Blog, deine Regeln! Schreibe über Themen die dir am Herzen liegen
   und tausche dich in den Kommentaren mit deinen Lesern aus.
 apiVersion: '4'

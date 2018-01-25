@@ -1,5 +1,6 @@
 ---
 name: Die drei ???
+slug: drei-fragezeichen
 description: Datensammlung zu den Büchern und Hörspielen der drei Detektive aus Rocky
   Beach.
 apiVersion: '4'

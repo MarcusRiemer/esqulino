@@ -40,9 +40,10 @@ const compareIgnoreCase = (lhs: { name: string }, rhs: { name: string }) => {
  * information is lumped together.
  */
 export class Project implements ApiVersion, Saveable {
-  public id: string;
+  public slug: string;
   public schema: Schema;
 
+  private _id: string;
   private _name: string;
   private _description: string;
 
@@ -69,7 +70,8 @@ export class Project implements ApiVersion, Saveable {
     json: ProjectDescription,
     private _languageService: LanguageService
   ) {
-    this.id = json.id;
+    this.slug = json.slug;
+    this._id = json.id;
     this._name = json.name;
     this._description = json.description;
     this._indexPageId = json.indexPageId;
@@ -420,7 +422,8 @@ export class Project implements ApiVersion, Saveable {
 
   toModel(): ProjectDescription {
     const toReturn: ProjectDescription = {
-      id: this.id,
+      id: this._id,
+      slug: this.slug,
       name: this.name,
       apiVersion: this.apiVersion,
       description: this.description

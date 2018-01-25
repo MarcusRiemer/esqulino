@@ -41,7 +41,7 @@ export class QueryService {
    */
   storeProjectDescription(proj: Project) {
     const desc = proj.toModel();
-    const url = this._server.getProjectUrl(proj.id);
+    const url = this._server.getProjectUrl(proj.slug);
 
     const toReturn = this._http.post(url, JSON.stringify(desc))
       .catch(this.handleError);
@@ -53,7 +53,7 @@ export class QueryService {
    * Sends a certain query to the server to be executed.
    */
   runQuery(project: Project, query: Query, params: QueryParamsDescription) {
-    const url = this._server.getRunQueryUrl(project.id);
+    const url = this._server.getRunQueryUrl(project.slug);
     return (this.serverCallQueryEndpoint(url, query, params, false));
   }
 
@@ -61,7 +61,7 @@ export class QueryService {
    * Simulates the effect of a query
    */
   simulateQuery(project: Project, query: Query, params: QueryParamsDescription) {
-    const url = this.urlForSimulation(query.simulationType, project.id);
+    const url = this.urlForSimulation(query.simulationType, project.slug);
     return (this.serverCallQueryEndpoint(url, query, params, true));
   }
 
@@ -109,7 +109,7 @@ export class QueryService {
   saveQuery(project: Project, query: Query) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    const url = this._server.getQuerySpecificUrl(project.id, query.id);
+    const url = this._server.getQuerySpecificUrl(project.slug, query.id);
 
     let bodyJson: QueryUpdateRequestDescription = {
       model: query.toModel()
@@ -170,7 +170,7 @@ export class QueryService {
    */
   private handleCreationResponse(model: Model.QueryDescription,
     project: Project) {
-    const url = this._server.getQueryUrl(project.id);
+    const url = this._server.getQueryUrl(project.slug);
 
     const query = loadQuery(model, project.schema, project);
     let bodyJson: QueryUpdateRequestDescription = {
@@ -303,7 +303,7 @@ export class QueryService {
    * @param queryId The id of the query to delete
    */
   deleteQuery(project: Project, queryId: string) {
-    const url = this._server.getQuerySpecificUrl(project.id, queryId);
+    const url = this._server.getQuerySpecificUrl(project.slug, queryId);
 
     const toReturn = this._http.delete(url)
       .catch(this.handleError);

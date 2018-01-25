@@ -40,7 +40,7 @@ export class CreateProjectComponent {
   }
 
   get regExpId() {
-    return (StringValidator.ProjectId);
+    return (StringValidator.ProjectSlug);
   }
 
   get regExpName() {

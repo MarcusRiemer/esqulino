@@ -471,7 +471,7 @@
           "type": "string"
         },
         "id": {
-          "$ref": "#/definitions/ProjectId"
+          "type": "string"
         },
         "indexPageId": {
           "type": "string"
@@ -500,6 +500,9 @@
           },
           "type": "array"
         },
+        "slug": {
+          "$ref": "#/definitions/ProjectSlug"
+        },
         "sources": {
           "items": {
             "$ref": "#/definitions/SourceDescription"
@@ -511,18 +514,19 @@
         "apiVersion",
         "description",
         "id",
-        "name"
+        "name",
+        "slug"
       ],
       "type": "object"
     },
-    "ProjectId": {
-      "description": "The name of the project. May only contain characters that do not\nmean any trouble in URLs.",
-      "pattern": "^[a-z0-9\\-]{4,}$",
-      "type": "string"
-    },
     "ProjectName": {
       "description": "The name of the project. May only contain more or less friendly\ncharacters.",
-      "pattern": "^^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß]{4,}$",
+      "pattern": "^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß]{4,}$",
+      "type": "string"
+    },
+    "ProjectSlug": {
+      "description": "The url-friendly name of the project. May only contain characters that do not\nmean any trouble in URLs.",
+      "pattern": "^[a-z0-9\\-]{4,}$",
       "type": "string"
     },
     "QueryDescription": {

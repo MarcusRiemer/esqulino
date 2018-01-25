@@ -1,5 +1,6 @@
 ---
 name: Einkaufsliste
+slug: einkaufsliste
 description: Du vergisst schon auf dem Weg zum Kühlschrank was du eigentlich mitbringen
   wolltest? Dann brauchst du dringend eine Einkaufsliste!
 apiVersion: '4'

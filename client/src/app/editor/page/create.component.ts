@@ -54,7 +54,7 @@ export class PageCreateComponent implements OnInit, OnDestroy {
 
         res.subscribe(page => {
           console.log(`New page ${page.id}`);
-          this._router.navigate(["/editor", this._project.id, "page", page.id]);
+          this._router.navigate(["/editor", this._project.slug, "page", page.id]);
         });
       }
     });

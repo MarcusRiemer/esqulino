@@ -209,6 +209,7 @@ class Project
     to_return['name'] = whole_info['name']
     to_return['description'] = whole_info['description']
     to_return['id'] = self.id
+    to_return['slug'] = whole_info['slug']
     to_return['preview'] = whole_info['preview']
     to_return['indexPageId'] = whole_info['indexPageId']
     to_return['apiVersion'] = whole_info['apiVersion']

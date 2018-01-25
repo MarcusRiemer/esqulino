@@ -1,5 +1,6 @@
 ---
 name: imagetest
+slug: imagetest
 description: Fuer die Bildfunktionen
 apiVersion: '4'
 public: true

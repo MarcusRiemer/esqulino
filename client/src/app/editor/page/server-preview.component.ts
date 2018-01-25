@@ -130,8 +130,8 @@ export class ServerPreviewComponent {
     //       possible to support HTTPs for all those user-generated
     //       subdomains.
     let url = this.useSobdomain
-      ? `http://${this.project.id}.${this.hostname}/${this.page.name}`
-      : `/view/${this.project.id}/${this.page.name}`;
+      ? `http://${this.project.slug}.${this.hostname}/${this.page.name}`
+      : `/view/${this.project.slug}/${this.page.name}`;
 
     // Possibly append GET parameters
     if (this.anyParametersAvailable) {

@@ -1,5 +1,6 @@
 ---
 name: Pokemon Go
+slug: pokemongo
 description: Zeige deinen Freunden, welche Pokémon du gefangen hast!
 indexPageId: b9c9ff08-a5dc-4b89-ae4b-08ca4f07ac9b
 preview: '08cf4332-c143-4d75-8439-0dd012090472'
