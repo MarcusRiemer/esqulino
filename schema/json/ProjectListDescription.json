@@ -12,11 +12,6 @@
       ],
       "type": "string"
     },
-    "ProjectId": {
-      "description": "The name of the project. May only contain characters that do not\nmean any trouble in URLs.",
-      "pattern": "^[a-z0-9\\-]{4,}$",
-      "type": "string"
-    },
     "ProjectListDescription": {
       "additionalProperties": false,
       "description": "The properties of a project that can be queried from the\nserver when asking for all available projecs.\n\nThis is a stripped down version of all possibly\nexisting project properties that is used to list available\nprojects.",
@@ -29,7 +24,7 @@
           "type": "string"
         },
         "id": {
-          "$ref": "#/definitions/ProjectId"
+          "type": "string"
         },
         "indexPageId": {
           "type": "string"
@@ -39,19 +34,28 @@
         },
         "preview": {
           "type": "string"
+        },
+        "slug": {
+          "$ref": "#/definitions/ProjectSlug"
         }
       },
       "required": [
         "apiVersion",
         "description",
         "id",
-        "name"
+        "name",
+        "slug"
       ],
       "type": "object"
     },
     "ProjectName": {
       "description": "The name of the project. May only contain more or less friendly\ncharacters.",
-      "pattern": "^^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß]{4,}$",
+      "pattern": "^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß]{4,}$",
+      "type": "string"
+    },
+    "ProjectSlug": {
+      "description": "The url-friendly name of the project. May only contain characters that do not\nmean any trouble in URLs.",
+      "pattern": "^[a-z0-9\\-]{4,}$",
       "type": "string"
     }
   }

@@ -1,5 +1,6 @@
 ---
 name: Olympia Medaillenspiegel
+slug: olympic
 description: Wieviele Medaillen wurden eigentlich im Fechten vergeben? Wie oft war
   Architektur olympische Disziplin? Hier kannst du es herausfinden!
 apiVersion: '4'

@@ -72,7 +72,7 @@ export class ProjectService {
     // Clear out the reference to the current project if we are loading
     // a new project or must reload by sheer force.
     const currentProject = this._subject.getValue();
-    if (forceRefresh || (currentProject && currentProject.id != id)) {
+    if (forceRefresh || (currentProject && currentProject.slug != id)) {
       this.forgetCurrentProject();
     }
 
@@ -85,7 +85,7 @@ export class ProjectService {
         // TODO: This is a dirty hack to stuff the same resources
         //       into every project. This of course needs to be
         //       moved into the server.
-        if (desc.id.toLocaleLowerCase().indexOf("ast") >= 0) {
+        if (desc.slug.toLocaleLowerCase().indexOf("ast") >= 0) {
           desc.codeResources = CODE_RESOURCES;
         }
 
@@ -144,11 +144,11 @@ export class ProjectService {
    */
   storeProjectDescription(proj: Project) {
     const desc = proj.toModel();
-    const url = this._server.getProjectUrl(proj.id);
+    const url = this._server.getProjectUrl(proj.slug);
 
     // The project ID is part of the request, it must not be sent
     // in the body again
-    delete desc.id;
+    delete desc.slug;
 
     const toReturn = this._http.post(url, JSON.stringify(desc))
       .do(_ => proj.markSaved())

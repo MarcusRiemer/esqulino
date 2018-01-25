@@ -1,5 +1,6 @@
 ---
 name: Syntaxbaum Demo
+slug: demo-ast
 description: Dieses Projekt zeigt die Möglichkeiten des kommenden Syntaxbaum-Editors.
 apiVersion: '4'
 public: true

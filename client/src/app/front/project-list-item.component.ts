@@ -34,7 +34,7 @@ export class ProjectListItemComponent {
    * @return The image URL of this project.
    */
   get imageUrl(): string {
-    const toReturn = this._serverApiService.getImageUrl(this.project.id, this.project.preview);
+    const toReturn = this._serverApiService.getImageUrl(this.project.slug, this.project.preview);
     return (toReturn.replace(/https?:/, ''));
   }
 
@@ -68,9 +68,9 @@ export class ProjectListItemComponent {
     if (this.useSobdomain) {
       // TODO: Find out whether it would be more or less trivially
       //       possible to support HTTPs
-      return (`http://${this.project.id}.${this.projectServerHostname}`);
+      return (`http://${this.project.slug}.${this.projectServerHostname}`);
     } else {
-      return (`/view/${this.project.id}/`)
+      return (`/view/${this.project.slug}/`)
     }
   }
 }

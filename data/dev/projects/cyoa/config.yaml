@@ -1,5 +1,6 @@
 ---
 name: Abenteuer
+slug: cyoa
 description: Schreibe eine Abenteuergeschichte und stelle deine Freunde vor spannende
   Herausforderungen.
 apiVersion: '4'

@@ -26,13 +26,13 @@ export class ImageUploadComponent {
 
     // TODO: Wrap server interaction in an ImageService
     const formData = new FormData(event.target as HTMLFormElement);
-    const projectId = this._projectService.cachedProject.id;
+    const projectId = this._projectService.cachedProject.slug;
 
     this._http.post(this._serverApi.getImageUploadUrl(projectId), formData)
       .subscribe(res => {
-          console.log(res);
-          //TODO handle failure
-          this._router.navigate(["../"], { relativeTo: this._routeParams });
+        console.log(res);
+        //TODO handle failure
+        this._router.navigate(["../"], { relativeTo: this._routeParams });
       });
   }
 }
