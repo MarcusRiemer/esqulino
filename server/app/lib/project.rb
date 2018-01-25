@@ -133,10 +133,11 @@ class Project
 
   # Loads the projects model from disk
   def load_description!
+    #TODO swap the project description to DB with yaml
     # Ensure this is actually a loadable project
     raise UnknownProjectError.new(id) unless self.exists?
     @whole_description = YAML.load_file(description_filename);
-
+  
     assert_resource_version(@id, "project", @whole_description['apiVersion'])
   end
 
@@ -590,4 +591,3 @@ end
 def is_string_id?(maybe_id)
   /^\h{8}-\h{4}-\h{4}-\h{4}-\h{12}$/ === maybe_id
 end
-
