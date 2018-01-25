@@ -169,36 +169,61 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
     },
     "querySelect": {
       children: {
-        "components": {
+        "select": {
           type: "sequence",
           nodeTypes: [
             "select",
+          ]
+        },
+        "from": {
+          type: "sequence",
+          nodeTypes: [
             "from",
+          ]
+        },
+        "where": {
+          type: "sequence",
+          nodeTypes: [
             {
               nodeType: "where",
               occurs: "?"
             },
+          ]
+        },
+        "groupBy": {
+          type: "sequence",
+          nodeTypes: [
             {
               nodeType: "groupBy",
               occurs: "?"
             }
           ]
-        }
+        },
       }
     },
     "queryDelete": {
       children: {
-        "components": {
+        "delete": {
           type: "sequence",
           nodeTypes: [
             "delete",
+          ]
+        },
+        "from": {
+          type: "sequence",
+          nodeTypes: [
             "from",
+          ]
+        },
+        "where": {
+          type: "sequence",
+          nodeTypes: [
             {
               nodeType: "where",
               occurs: "?"
-            }
+            },
           ]
-        }
+        },
       }
     },
     "query": {

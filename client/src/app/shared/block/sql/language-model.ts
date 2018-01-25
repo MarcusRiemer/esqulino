@@ -6,7 +6,145 @@ import {
 export const LANGUAGE_MODEL: LanguageModelDescription = {
   id: "sql",
   name: "SQL",
-  editorBlocks: [],
+  editorBlocks: [
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "querySelect",
+      },
+      visual: [
+        {
+          blockType: "iterator",
+          childGroupName: "select",
+          direction: "horizontal",
+        } as VisualBlockDescriptions.EditorIterator,
+        {
+          blockType: "iterator",
+          childGroupName: "from",
+          direction: "horizontal",
+        } as VisualBlockDescriptions.EditorIterator,
+        {
+          blockType: "iterator",
+          childGroupName: "where",
+          direction: "horizontal",
+        } as VisualBlockDescriptions.EditorIterator,
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "select",
+      },
+      visual: [
+        {
+          blockType: "dropTarget",
+          dropTarget: {
+            actionParent: "columns"
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "SELECT"
+            } as VisualBlockDescriptions.EditorConstant,
+          ],
+          direction: "horizontal",
+          visibility: ["always"]
+        } as VisualBlockDescriptions.EditorDropTarget,
+        {
+          blockType: "iterator",
+          childGroupName: "columns",
+          direction: "horizontal",
+          between: [
+            {
+              blockType: "constant",
+              text: ", "
+            } as VisualBlockDescriptions.EditorConstant,
+          ]
+        } as VisualBlockDescriptions.EditorIterator,
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "columnName",
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          children: [
+            {
+              blockType: "interpolated",
+              property: "columnName",
+            } as VisualBlockDescriptions.EditorInterpolation,
+          ]
+        } as VisualBlockDescriptions.EditorBlock,
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "starOperator",
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          children: [
+            {
+              blockType: "constant",
+              text: "*",
+            } as VisualBlockDescriptions.EditorConstant,
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "from",
+      },
+      visual: [
+        {
+          blockType: "dropTarget",
+          dropTarget: {
+            actionParent: "tables"
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "FROM"
+            } as VisualBlockDescriptions.EditorConstant,
+          ],
+          direction: "horizontal",
+          visibility: ["always"]
+        } as VisualBlockDescriptions.EditorDropTarget,
+        {
+          blockType: "iterator",
+          childGroupName: "tables",
+          direction: "horizontal",
+          between: [
+            {
+              blockType: "constant",
+              text: ", "
+            } as VisualBlockDescriptions.EditorConstant,
+          ]
+        } as VisualBlockDescriptions.EditorIterator,
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "tableIntroduction",
+      },
+      visual: [
+        {
+          blockType: "interpolated",
+          property: "name",
+        } as VisualBlockDescriptions.EditorInterpolation,
+      ]
+    },
+  ],
   sidebarBlocks: [
     {
       sidebar: {
@@ -17,13 +155,33 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         language: "sql",
         name: "querySelect",
         children: {
-          "components": [
+          "select": [
             {
               language: "sql",
               name: "select",
             }
+          ],
+          "from": [
+            {
+              language: "sql",
+              name: "from",
+            }
+          ],
+          "where": [
+          ],
+          "groupBy": [
           ]
         }
+      }
+    },
+    {
+      sidebar: {
+        category: "SQL",
+        displayName: "*"
+      },
+      defaultNode: {
+        language: "sql",
+        name: "starOperator",
       }
     },
     {
@@ -49,6 +207,74 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         name: "where",
         children: {
           "expressions": []
+        }
+      }
+    },
+    {
+      sidebar: {
+        category: "SQL",
+        displayName: "Tabelle Person"
+      },
+      defaultNode: {
+        language: "sql",
+        name: "tableIntroduction",
+        properties: {
+          "name": "Person",
+        }
+      }
+    },
+    {
+      sidebar: {
+        category: "SQL",
+        displayName: "Spalte Person.Id"
+      },
+      defaultNode: {
+        language: "sql",
+        name: "columnName",
+        properties: {
+          "columnName": "Id",
+          "refTableName": "Person"
+        }
+      }
+    },
+    {
+      sidebar: {
+        category: "SQL",
+        displayName: "Spalte Person.Vorname"
+      },
+      defaultNode: {
+        language: "sql",
+        name: "columnName",
+        properties: {
+          "columnName": "Vorname",
+          "refTableName": "Person"
+        }
+      }
+    },
+    {
+      sidebar: {
+        category: "SQL",
+        displayName: "Spalte Person.Nachname"
+      },
+      defaultNode: {
+        language: "sql",
+        name: "columnName",
+        properties: {
+          "columnName": "Nachname",
+          "refTableName": "Person"
+        }
+      }
+    },
+    {
+      sidebar: {
+        category: "SQL",
+        displayName: "Tabelle Adresse"
+      },
+      defaultNode: {
+        language: "sql",
+        name: "tableIntroduction",
+        properties: {
+          "name": "Adresse",
         }
       }
     }

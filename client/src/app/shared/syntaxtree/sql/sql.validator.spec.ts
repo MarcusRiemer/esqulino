@@ -27,7 +27,7 @@ describe("Language: SQL (Validation)", () => {
       language: "sql",
       name: "querySelect",
       children: {
-        "components": [
+        "select": [
           {
             language: "sql",
             name: "select",
@@ -39,7 +39,9 @@ describe("Language: SQL (Validation)", () => {
                 }
               ]
             }
-          },
+          }
+        ],
+        "from": [
           {
             language: "sql",
             name: "from",
@@ -72,7 +74,7 @@ describe("Language: SQL (Validation)", () => {
       language: "sql",
       name: "querySelect",
       children: {
-        "components": [
+        "select": [
           {
             language: "sql",
             name: "select",
@@ -85,6 +87,8 @@ describe("Language: SQL (Validation)", () => {
               ]
             }
           },
+        ],
+        "from": [
           {
             language: "sql",
             name: "from",
@@ -132,7 +136,7 @@ describe("Language: SQL (Validation)", () => {
       language: "sql",
       name: "querySelect",
       children: {
-        "components": [
+        "select": [
           {
             language: "sql",
             name: "select",
@@ -145,6 +149,8 @@ describe("Language: SQL (Validation)", () => {
               ]
             }
           },
+        ],
+        "from": [
           {
             language: "sql",
             name: "from",
@@ -175,6 +181,8 @@ describe("Language: SQL (Validation)", () => {
               ]
             }
           },
+        ],
+        "where": [
           {
             language: "sql",
             name: "where",
@@ -255,7 +263,7 @@ describe("Language: SQL (Validation)", () => {
       language: "sql",
       name: "querySelect",
       children: {
-        "components": [
+        "select": [
           {
             language: "sql",
             name: "select",
@@ -268,6 +276,8 @@ describe("Language: SQL (Validation)", () => {
               ]
             }
           },
+        ],
+        "from": [
           {
             language: "sql",
             name: "from",
@@ -297,7 +307,9 @@ describe("Language: SQL (Validation)", () => {
                 }
               ]
             }
-          },
+          }
+        ],
+        "where": [
           {
             language: "sql",
             name: "where",
