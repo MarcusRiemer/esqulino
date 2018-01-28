@@ -34,7 +34,9 @@ class ProjectsController < ApplicationController
   #TODO construct sqlite path with proejct slug and pass it to here: database_describe_schema(sqlite_file_path)
   # TODO Load current proejct and merger schema there.
   def show
-    render json: JSON.generate(current_project)
+    project = ProjectStructure.find(params[:proejct_id])
+    # render json: JSON.generate(current_project)
+    render json: project
   end
 
   # Update an existing project
