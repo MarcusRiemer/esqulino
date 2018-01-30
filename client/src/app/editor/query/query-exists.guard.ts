@@ -31,7 +31,7 @@ export class QueryExistsGuard implements CanActivate {
 
     const toReturn = this._projectService.activeProject
       .first()
-      .do((project) => projectId = project.id)
+      .do((project) => projectId = project.slug)
       .map(project => project.hasQueryById(queryId))
       .do(res => {
         console.log(`QueryExistsGuard: "${queryId}" => ${res}`)

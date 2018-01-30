@@ -70,7 +70,7 @@ export class SettingsComponent {
     subRef = btnDelete.onClick.subscribe(res => {
       // Don't delete without asking the user
       if (confirm("Dieses Projekt löschen?")) {
-        this._projectService.deleteProject(this.project.id)
+        this._projectService.deleteProject(this.project.slug)
           .subscribe(res => {
             // Go back to title after deleting
             if (res.ok) {

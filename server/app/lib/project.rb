@@ -133,10 +133,11 @@ class Project
 
   # Loads the projects model from disk
   def load_description!
+    #TODO swap the project description to DB with yaml
     # Ensure this is actually a loadable project
     raise UnknownProjectError.new(id) unless self.exists?
     @whole_description = YAML.load_file(description_filename);
-
+  
     assert_resource_version(@id, "project", @whole_description['apiVersion'])
   end
 
@@ -208,6 +209,7 @@ class Project
     to_return['name'] = whole_info['name']
     to_return['description'] = whole_info['description']
     to_return['id'] = self.id
+    to_return['slug'] = whole_info['slug']
     to_return['preview'] = whole_info['preview']
     to_return['indexPageId'] = whole_info['indexPageId']
     to_return['apiVersion'] = whole_info['apiVersion']
@@ -433,16 +435,8 @@ class Project
   # @param username [string] The name of the user
   # @param plain_text_password [string] The password to verify
   def verify_password(username, plain_text_password)
-    begin
-      # Load the password
-      user = whole_description.fetch('users').fetch(username)
-      stored_hash = user.fetch('password')
-      password = SCrypt::Password.new(stored_hash)
-
-      password == plain_text_password
-    rescue KeyError => e
-      false
-    end
+    # TODO: Bring back actual authentication
+    username == "user" and plain_text_password
   end
 
   # Retrieves the "site" hash that may be used during rendering.
@@ -598,4 +592,3 @@ end
 def is_string_id?(maybe_id)
   /^\h{8}-\h{4}-\h{4}-\h{4}-\h{12}$/ === maybe_id
 end
-

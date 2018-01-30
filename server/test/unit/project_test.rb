@@ -76,7 +76,9 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal "", p.public_description['description']    
     assert_equal "test-name", p.public_description['name']
 
-    assert p.verify_password "test-admin", "test-pw"
+    # TODO: Passwords are currently hardcoded
+    # assert p.verify_password "test-admin", "test-pw"
+    assert p.verify_password "user", "user"
 
     rollback_test_filesystem
   end

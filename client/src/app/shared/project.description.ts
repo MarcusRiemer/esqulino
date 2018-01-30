@@ -9,16 +9,16 @@ import {
 export { ApiVersion, ApiVersionToken, CURRENT_API_VERSION }
 
 /**
- * The name of the project. May only contain characters that do not
+ * The url-friendly name of the project. May only contain characters that do not
  * mean any trouble in URLs.
  * @pattern ^[a-z0-9\-]{4,}$
  */
-export type ProjectId = string;
+export type ProjectSlug = string;
 
 /**
  * The name of the project. May only contain more or less friendly
  * characters.
- * @pattern ^^[a-zA-Z0-9 \-_\?äöüÄÖÜß]{4,}$
+ * @pattern ^[a-zA-Z0-9 \-_\?äöüÄÖÜß]{4,}$
  */
 export type ProjectName = string;
 
@@ -40,7 +40,7 @@ export type ProjectUserPassword = string;
  * above.
  */
 export const StringValidator = {
-  ProjectId: /^[a-z0-9\-]{4,}$/,
+  ProjectSlug: /^[a-z0-9\-]{4,}$/,
   ProjectName: /^[a-zA-Z0-9 \-_\?äöüÄÖÜß]{4,}$/,
   ProjectUserName: /^[a-zA-Z0-9\-_]{4,}$/,
   ProjectUserPassword: /^.{4,}$/
@@ -55,7 +55,8 @@ export const StringValidator = {
  * projects.
  */
 export interface ProjectListDescription extends ApiVersion {
-  id: ProjectId
+  id: string
+  slug: ProjectSlug
   name: ProjectName
   description: string
   preview?: string,
@@ -114,7 +115,7 @@ export interface ProjectUpdateDescription extends ApiVersion {
  * These parameters are required to create a new project.
  */
 export interface ProjectCreationDescription extends ApiVersion {
-  id: ProjectId
+  id: ProjectSlug
   name: ProjectName
 
   admin: {

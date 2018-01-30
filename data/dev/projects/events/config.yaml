@@ -1,5 +1,6 @@
 ---
 password: test
+slug: events
 name: Ereignisse
 description: Historische Ereignisse & Personen mit ihren jeweiligen zeitlichen Daten.
   Welcher Wissenschaftler hat eigentlich zu Zeiten der ersten olympischen Spiele gelebt?
