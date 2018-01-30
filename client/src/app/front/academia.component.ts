@@ -74,10 +74,23 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
       },
       institutionLogo: LOGO_FHW_URL,
       degree: "Bachlor",
-      url: `${THESIS_BASE_URL}/thesis-pawlowski-schema-editor.pdf`,
+      url: `${THESIS_BASE_URL}/marco-pawlowski-thesis-schema-editor.pdf`,
       abstract: `
 <p>Mit dieser Arbeit wird eine Lernsoftware entwickelt, die an Anfänger gerichtet ist. Es werden die elementaren Funktionen zur Erstellung von Datenbanken zur Verfügung gestellt werden. Dabei sollen Fehler nicht von der Software automatisch gelöst werden, sondern an den Benutzer kommuniziert werden. Dadurch soll der Benutzer ein Verständnis dafür entwickeln, welche Bedingungen vorher erfüllt sein müssen, um bestimmte Aktionen durchzuführen zu können.</p>`,
       date: new Date('May 2, 2016')
+    },
+    {
+      id: "just-images",
+      title: "Verwaltung und Integration von Bildern",
+      subtitle: "",
+      author: {
+        name: "Ole Just"
+      },
+      institutionLogo: LOGO_FHW_URL,
+      degree: "Bachlor",
+      url: `${THESIS_BASE_URL}/ole-just-thesis-images.pdf`,
+      abstract: `<p>SQLino ist eine webbasierte IDE für HTML und SQL auf Einsteigerniveau. Diese Arbeit beschreibt die Entwicklung einer prototypischen Bildverwaltung für SQLino, die neben der bloßen Speicherung und Einbettung der Bilder in die erstellen Webseiten auch rechtliche Aspekte im Umgang mit der Veröffentlichung von Bildern beachtet.</p>`,
+      date: new Date('October 31, 2017')
     }
   ]
 

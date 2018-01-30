@@ -239,7 +239,7 @@ const EDITOR_BLOCKS = [
           {
             blockType: "interpolated",
             property: "name"
-          } as VisualBlockDescriptions.EditorInterpolation,
+          } as VisualBlockDescriptions.EditorInterpolated,
           {
             blockType: "dropTarget",
             dropTarget: {
@@ -298,7 +298,7 @@ const EDITOR_BLOCKS = [
           {
             blockType: "interpolated",
             property: "name"
-          } as VisualBlockDescriptions.EditorInterpolation,
+          } as VisualBlockDescriptions.EditorInterpolated,
           {
             blockType: "constant",
             text: ">"
@@ -321,7 +321,7 @@ const EDITOR_BLOCKS = [
           {
             blockType: "interpolated",
             property: "name"
-          } as VisualBlockDescriptions.EditorInterpolation,
+          } as VisualBlockDescriptions.EditorInterpolated,
           {
             blockType: "constant",
             text: "="
@@ -356,7 +356,7 @@ const EDITOR_BLOCKS = [
           {
             blockType: "interpolated",
             property: "value"
-          } as VisualBlockDescriptions.EditorInterpolation,
+          } as VisualBlockDescriptions.EditorInterpolated,
         ]
       } as VisualBlockDescriptions.EditorBlock
     ]
@@ -414,7 +414,7 @@ const EDITOR_BLOCKS = [
           {
             blockType: "interpolated",
             property: "name"
-          } as VisualBlockDescriptions.EditorInterpolation,
+          } as VisualBlockDescriptions.EditorInterpolated,
         ]
       } as VisualBlockDescriptions.EditorBlock
     ]

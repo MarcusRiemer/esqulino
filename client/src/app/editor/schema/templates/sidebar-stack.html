@@ -17,8 +17,7 @@
   <button type="button"
           class="list-group-item list-group-item-action"
           *ngFor="let cmd of commandsHolder.commands"
-          (click)="loadStackPosition(cmd.index)"
-          [ngClass]="{'list-group-item-danger': cmd.index == dbErrorCode}">
+          (click)="loadStackPosition(cmd.index)">
 	  <span *ngIf="cmd.index == commandsHolder.activeIndex" class="fa fa-play" aria-hidden="true"></span>
 	  {{cmd.index}} : {{ cmd.commandText }}
   </button>
