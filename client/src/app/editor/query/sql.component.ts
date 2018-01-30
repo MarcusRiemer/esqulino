@@ -8,7 +8,7 @@ import { Query } from '../../shared/query'
  */
 @Pipe({ name: 'sqlString', pure: false })
 export class SqlStringPipe implements PipeTransform {
-  public transform(value: Query, args: string[]): any {
+  public transform(value: Query): any {
     try {
       return (value.toSqlString());
     } catch (e) {

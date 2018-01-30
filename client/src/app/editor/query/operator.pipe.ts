@@ -7,7 +7,7 @@ import { Model } from '../../shared/query'
   pure: true
 })
 export class OperatorPipe implements PipeTransform {
-  public transform(value: Model.Operator, args: string[]): any {
+  public transform(value: Model.Operator): any {
     switch (value) {
       case "<": return ("&lt;");
       case "<=": return ("&le;");
