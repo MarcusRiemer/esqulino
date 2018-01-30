@@ -23,6 +23,7 @@
   ],
   "angularCompilerOptions": {
     "genDir": "./dist/ngfactory",
-    "entryModule": "./app/app.module#AppModule"
+    "entryModule": "./app/app.module#AppModule",
+    "fullTemplateTypeCheck": true
   }
 }

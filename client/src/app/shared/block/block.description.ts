@@ -79,12 +79,12 @@ export namespace VisualBlockDescriptions {
    * Displays a dynamic value that depends on some property of the node but
    * does not allow to edit the property.
    */
-  export interface EditorInterpolation extends EditorBlockBase {
+  export interface EditorInterpolated extends EditorBlockBase {
     blockType: "interpolated";
     property: string;
   }
 
-  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolation;
+  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated;
 }
 
 /**
