@@ -45,7 +45,7 @@ export class PageService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    const url = this._server.getPageSpecificUrl(project.id, page.id);
+    const url = this._server.getPageSpecificUrl(project.slug, page.id);
 
     const bodyJson: PageUpdateRequestDescription = {
       model: page.toModel(),
@@ -100,7 +100,7 @@ export class PageService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    const url = this._server.getPageUrl(project.id);
+    const url = this._server.getPageUrl(project.slug);
 
     // A new named page with a single row
     const page = new Page({
@@ -121,7 +121,7 @@ export class PageService {
    * @param queryId The id of the page to delete
    */
   deletePage(project: Project, pageId: string) {
-    const url = this._server.getPageSpecificUrl(project.id, pageId);
+    const url = this._server.getPageSpecificUrl(project.slug, pageId);
 
     const toReturn = this._http.delete(url)
       .catch(this.handleError);
@@ -141,7 +141,7 @@ export class PageService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    let url = this._server.getArbitraryRenderUrl(project.id);
+    let url = this._server.getArbitraryRenderUrl(project.slug);
 
     // Append GET parameters
     if (pageParams) {

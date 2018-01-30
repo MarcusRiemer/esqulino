@@ -1,5 +1,6 @@
 ---
 name: Wer kann wann?
+slug: termin
 description: Du willst dich mit einer Gruppe von Freunden auf einen Termin einigen?
   Dieses Projekt zeigt, wie das geht!
 apiVersion: '4'

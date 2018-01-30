@@ -1,5 +1,6 @@
 ---
 password: test
+slug: test
 name: Testprojekt
 description: Dieses Projekt wird für automatische Tests benutzt und hat keine inhaltliche
   Bedeutung.

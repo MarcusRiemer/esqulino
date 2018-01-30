@@ -76,7 +76,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
             {
               blockType: "interpolated",
               property: "columnName",
-            } as VisualBlockDescriptions.EditorInterpolation,
+            } as VisualBlockDescriptions.EditorInterpolated,
           ]
         } as VisualBlockDescriptions.EditorBlock,
       ]
@@ -141,7 +141,7 @@ export const LANGUAGE_MODEL: LanguageModelDescription = {
         {
           blockType: "interpolated",
           property: "name",
-        } as VisualBlockDescriptions.EditorInterpolation,
+        } as VisualBlockDescriptions.EditorInterpolated,
       ]
     },
   ],

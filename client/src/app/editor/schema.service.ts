@@ -86,7 +86,7 @@ export class SchemaService {
    * @param amount - the amount of entries to get
    */
   getTableData(project: Project, table: Table, from: number, amount: number) {
-    const url = this._server.getTableEntriesUrl(project.id, project.currentDatabaseName, table.name, from, amount);
+    const url = this._server.getTableEntriesUrl(project.slug, project.currentDatabaseName, table.name, from, amount);
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
@@ -103,7 +103,7 @@ export class SchemaService {
    * @param table - the table to get the entries from
    */
   getTableRowAmount(project: Project, table: Table) {
-    const url = this._server.getTableEntriesCountUrl(project.id, project.currentDatabaseName, table.name, );
+    const url = this._server.getTableEntriesCountUrl(project.slug, project.currentDatabaseName, table.name, );
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
@@ -126,13 +126,13 @@ export class SchemaService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    const url = this._server.getCreateTableUrl(project.id, project.currentDatabaseName);
+    const url = this._server.getCreateTableUrl(project.slug, project.currentDatabaseName);
 
     const body = JSON.stringify(table.toModel());
 
     const toReturn = this._http.post(url, body, options)
       .map((res) => {
-        this._projectService.setActiveProject(project.id, true);
+        this._projectService.setActiveProject(project.slug, true);
         this.clearCurrentlyEdited();
         return table;
       })
@@ -149,13 +149,13 @@ export class SchemaService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    const url = this._server.getTableAlterUrl(project.id, project.currentDatabaseName, tableName);
+    const url = this._server.getTableAlterUrl(project.slug, project.currentDatabaseName, tableName);
 
     const body = JSON.stringify(commandHolder.toModel());
 
     const toReturn = this._http.post(url, body, options)
       .map(res => {
-        this._projectService.setActiveProject(project.id, true);
+        this._projectService.setActiveProject(project.slug, true);
         this.clearCurrentlyEdited();
       })
       .catch(this.handleError);
@@ -171,11 +171,11 @@ export class SchemaService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    const url = this._server.getDropTableUrl(project.id, project.currentDatabaseName, table.name);
+    const url = this._server.getDropTableUrl(project.slug, project.currentDatabaseName, table.name);
 
     const toReturn = this._http.delete(url, options)
       .map((res) => {
-        this._projectService.setActiveProject(project.id, true);
+        this._projectService.setActiveProject(project.slug, true);
         return table;
       })
       .catch(this.handleError);

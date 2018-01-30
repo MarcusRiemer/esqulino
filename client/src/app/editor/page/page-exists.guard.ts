@@ -31,7 +31,7 @@ export class PageExistsGuard implements CanActivate {
 
     const toReturn = this._projectService.activeProject
       .first()
-      .do((project) => projectId = project.id)
+      .do((project) => projectId = project.slug)
       .map(project => project.hasPageById(pageId))
       .do(res => {
         console.log(`PageExistsGuard: "${pageId}" => ${res}`)
