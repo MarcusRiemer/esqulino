@@ -18,4 +18,18 @@ export class BlockRenderComponent implements OnInit {
   ngOnInit() {
 
   }
+
+  /**
+   * Dirty Hack: Template "Typecast"
+   */
+  asBlockConstant(block: VisualBlockDescriptions.EditorBlockBase) {
+    return (block as VisualBlockDescriptions.EditorConstant);
+  }
+
+  /**
+   * Dirty Hack: Template "Typecast"
+   */
+  asBlockInterpolated(block: VisualBlockDescriptions.EditorBlockBase) {
+    return (block as VisualBlockDescriptions.EditorInterpolated);
+  }
 }
