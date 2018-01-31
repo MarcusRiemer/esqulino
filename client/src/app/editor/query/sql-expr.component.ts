@@ -245,5 +245,26 @@ export class ExpressionComponent {
   get isCurrentDropTarget(): boolean {
     return (this._currentDragOver);
   }
+
+  /**
+   * Dirty Hack: Template "Typecast"
+   */
+  asParameterExpression(expr: SyntaxTree.Expression) {
+    return (expr as SyntaxTree.ParameterExpression);
+  }
+
+  /**
+   * Dirty Hack: Template "Typecast"
+   */
+  asBinaryExpression(expr: SyntaxTree.Expression) {
+    return (expr as SyntaxTree.BinaryExpression);
+  }
+
+  /**
+   * Dirty Hack: Template "Typecast"
+   */
+  asColumnExpression(expr: SyntaxTree.Expression) {
+    return (expr as SyntaxTree.ColumnExpression);
+  }
 }
 

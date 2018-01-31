@@ -60,9 +60,7 @@
         class="fa-ul">
       <li *ngFor="let parameter of used.mapping;">
         <span class="fa fa-li {{parameter.providingIconClass}}" aria-hidden="true"></span>
-        <span (dragover)="onParameterDrag($event)"
-              (drop)="onParameterDrop($event, parameter)"
-              class="parameter indent">
+        <span class="parameter indent">
           {{ parameter.parameterName }}
         </span>
       </li>

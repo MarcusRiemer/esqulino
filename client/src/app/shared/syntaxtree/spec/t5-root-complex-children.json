@@ -2,29 +2,29 @@
   "language": "t0",
   "name": "root",
   "children": {
-    "c1" : [
+    "c0" : [
       {
         "language": "t0",
-        "name": "r_c1_1",
+        "name": "r_c0_0",
         "properties": {
-          "p1": "v1",
-          "p2": "v2"
+          "p0": "v0",
+          "p1": "v1"
         }
       },
       {
         "language": "t0",
-        "name": "r_c1_2",
+        "name": "r_c0_1",
         "properties": {
-          "p3": "v3",
-          "p4": "v4"
+          "p2": "v2",
+          "p3": "v3"
         }
       },
       {
         "language": "t0",
-        "name": "r_c1_3",
+        "name": "r_c0_2",
         "properties": {
-          "p5": "v5",
-          "p6": "v6"
+          "p4": "v4",
+          "p5": "v5"
         }
       }      
     ]

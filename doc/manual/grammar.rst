@@ -52,7 +52,7 @@ This is a possible syntaxtree for an ``if`` statement in some nondescript langua
 
 In BlattWerkzeug, an if statement would be represented by using three child groups that could be called ``predicate``, ``positive`` and ``negative``. Each of these child groups may then hast their own list of children. Note how the names of the variables and and the values are stored in properties alongside the node.
 
-.. graphviz:: syntaxtree/ast-example-if.graphviz
+.. graphviz:: generated/ast-example-if.graphviz
 
 Now lets see what happens if the source is invalidated by omitting the ``predicate`` and the ``then``::
 
@@ -65,7 +65,7 @@ In a typical language (tm) the most probable error would be something like "Inva
 
 In BlattWerkzeug the predicate may be omitted without touching the ``positive`` or ``negative`` branch. It is therefore trivial to tell the user that he has forgotten to supply a predicate.
 
-.. graphviz:: syntaxtree/ast-example-if-no-pred.graphviz
+.. graphviz:: generated/ast-example-if-no-pred.graphviz
 
 Grammar Validation
 ==================

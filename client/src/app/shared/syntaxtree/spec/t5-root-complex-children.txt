@@ -1,16 +1,16 @@
 node "t0.root" {
-  childGroup "c1" {
-    node "t0.r_c1_1" {
+  childGroup "c0" {
+    node "t0.r_c0_0" {
+      prop "p0" v0
       prop "p1" v1
+    }
+    node "t0.r_c0_1" {
       prop "p2" v2
-    }
-    node "t0.r_c1_2" {
       prop "p3" v3
-      prop "p4" v4
     }
-    node "t0.r_c1_3" {
+    node "t0.r_c0_2" {
+      prop "p4" v4
       prop "p5" v5
-      prop "p6" v6
     }
   }
 }

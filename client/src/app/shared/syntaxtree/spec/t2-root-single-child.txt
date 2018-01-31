@@ -1,5 +1,5 @@
 node "t0.root" {
   childGroup "c1" {
-    node "t0.r_c1_1"
+    node "t0.r_c1_0"
   }
 }

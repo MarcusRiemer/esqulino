@@ -2,18 +2,18 @@
   "language": "t0",
   "name": "root",
   "children": {
-    "c1" : [
+    "c0" : [
       {
         "language": "t0",
-        "name": "r_c1_1"
+        "name": "r_c0_0"
       },
       {
         "language": "t0",
-        "name": "r_c1_2"
+        "name": "r_c0_1"
       },
       {
         "language": "t0",
-        "name": "r_c1_3"
+        "name": "r_c0_2"
       }      
     ]
   }

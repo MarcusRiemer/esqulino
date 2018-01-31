@@ -207,3 +207,59 @@ export function prettyPrintSyntaxTreeNode(desc: NodeDescription): NestedString {
     return ([head]);
   }
 }
+
+/**
+ * Calculates the graphviz-representation of the given syntaxtree.
+ */
+export function graphvizSyntaxTree(desc: NodeDescription): string {
+  const tree = [
+    `digraph SyntaxTree {`,
+    [
+      `graph [fontsize=10 fontname="Verdana"];`,
+      `node [fontsize=10 fontname="Verdana" shape=Mrecord];`,
+      `edge [fontsize=10 fontname="Verdana"];`,
+    ],
+    graphvizSyntaxTreeNode(desc, "r"),
+    `}`
+  ];
+  return (recursiveJoin('\n', '  ', tree));
+}
+
+/**
+ * Calculates the graphviz-representation of a single node.
+ */
+export function graphvizSyntaxTreeNode(desc: NodeDescription, path: string): NestedString {
+  const props = Object.entries(desc.properties || {})
+    .map(([k, v]) => `{${k}|${v}}`)
+    .join("|");
+  const typename = desc.language + "." + desc.name;
+
+  // The label of the node might or might note incorporate properties
+  const nodeLabel = (props != "") ? `{{${typename}}|${props}}` : `{${typename}}`;
+
+  // Render all children in all named child groups
+  const childGroups = Object.entries(desc.children || {})
+    .map(([k, v]) => {
+      return ([
+        // Beware: GraphViz requires subgraphs to be prefixed with `cluster_` in order
+        // to render a box around it.
+        `subgraph cluster_${path}_${k} {`,
+        [
+          `label="${k}";`
+        ],
+        // Append the name of the child group and the index of the node to
+        // form a unique path
+        // This needs to be reversed because otherwise graphviz will show
+        // these childre in ... well ... reverse order. The node that is mentioned
+        // last seems to be rendered first.
+        ...v.map((v, i) => graphvizSyntaxTreeNode(v, `${path}_${k}_${i}`)).reverse(),
+        `}`,
+        // Create the connectio from the parent
+        ...v.map((v, i) => `${path} -> ${path}_${k}_${i};`),
+      ]);
+    });
+
+  // We need to shave of the outer list of the child groups
+  let toReturn = [`${path} [label="${nodeLabel}"];`];
+  return (toReturn.concat(...(childGroups as any)));
+}
