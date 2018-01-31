@@ -10,7 +10,6 @@ class ProjectsController < ApplicationController
     # projects = enumerate_projects(projects_dir, false, true)
     #              .map { |project| project.public_description }
 
-    puts @projects
     render json: @projects
   end
 
@@ -31,11 +30,10 @@ class ProjectsController < ApplicationController
   end
 
   # Retrieving a single project
-  #TODO construct sqlite path with proejct slug and pass it to here: database_describe_schema(sqlite_file_path)
+  # TODO construct sqlite path with project slug and pass it to here: database_describe_schema(sqlite_file_path)
   # TODO Load current proejct and merger schema there.
   def show
-    project = ProjectStructure.find(params[:proejct_id])
-    # render json: JSON.generate(current_project)
+    project = ProjectStructure.find(params[:project_id])
     render json: project
   end
 
