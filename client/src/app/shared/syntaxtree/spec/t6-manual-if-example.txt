@@ -1,0 +1,40 @@
+node "lang.if" {
+  childGroup "pred" {
+    node "lang.expBin" {
+      prop "op" gt
+      childGroup "lhs" {
+        node "lang.expVar" {
+          prop "name" a
+        }
+      }
+      childGroup "rhs" {
+        node "lang.expVar" {
+          prop "name" b
+        }
+      }
+    }
+  }
+  childGroup "positive" {
+    node "lang.call" {
+      prop "name" writeln
+      childGroup "arguments" {
+        node "lang.expConst" {
+          prop "value" 'bar'
+        }
+      }
+    }
+  }
+  childGroup "negative" {
+    node "lang.call" {
+      prop "name" err
+      childGroup "arguments" {
+        node "lang.expConst" {
+          prop "value" 2
+        }
+        node "lang.expConst" {
+          prop "value" 'foo'
+        }
+      }
+    }
+  }
+}

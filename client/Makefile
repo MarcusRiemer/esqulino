@@ -15,6 +15,8 @@ CLIENT_ALL_SOURCES = $(shell find src 2> /dev/null) server.ts webpack.server.con
 TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless
 
+NG_LANG = --locale de
+
 all : dist
 
 clean : msg-pre-clean
@@ -28,10 +30,10 @@ install-deps : msg-pre-install-deps
 ##################################
 
 dist : msg-pre-build
-	$(NG_BIN) build --prod $(NG_OPTS)
+	$(NG_BIN) build --prod $(NG_LANG) $(NG_OPTS)
 
 dist-dev : msg-pre-build
-	$(NG_BIN) build $(NG_OPTS)
+	$(NG_BIN) build $(NG_LANG) $(NG_OPTS)
 
 test :
 	$(NG_BIN) test --single-run $(TEST_SINGLE_RUN) --browser $(TEST_BROWSERS) --code-coverage true

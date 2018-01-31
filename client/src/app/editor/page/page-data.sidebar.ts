@@ -58,16 +58,6 @@ export class SidebarDataComponent implements OnDestroy {
   }
 
   /**
-   * Something is beeing dragged over a parameter
-   */
-  onParameterDrag(evt: DragEvent) {
-    const pageEvt = <PageDragEvent>JSON.parse(evt.dataTransfer.getData('text/plain'));
-    if (pageEvt.parameterValueProvider) {
-      evt.preventDefault();
-    }
-  }
-
-  /**
    * Something is being dragged over the "add query reference" drop-zone.
    */
   onAddQueryReferenceDrag(evt: DragEvent) {
@@ -143,7 +133,7 @@ export class SidebarDataComponent implements OnDestroy {
    * @return All available forms that would provide data
    */
   get availableForms() {
-    return (this.page.allWidgets.filter((w) => w instanceof Form));
+    return (this.page.allWidgets.filter((w) => w instanceof Form) as Form[]);
   }
 
   /**
