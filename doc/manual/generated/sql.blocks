@@ -1,11 +1,87 @@
 language "SQL" {
+  type "sql.querySelect" {
+    iterate {
+      childGroup "select"
+      direction horizontal
+    }
+    iterate {
+      childGroup "from"
+      direction horizontal
+    }
+    iterate {
+      childGroup "where"
+      direction horizontal
+    }
+  }
+  type "sql.select" {
+    dropTarget {
+      visibility always
+      direction horizontal
+      visual {
+        "SELECT"
+      }
+    }
+    iterate {
+      childGroup "columns"
+      direction horizontal
+      between {
+        ", "
+      }
+    }
+  }
+  type "sql.columnName" {
+    block {
+      direction horizontal
+      visual {
+        {{ columnName }}
+      }
+    }
+  }
+  type "sql.starOperator" {
+    block {
+      direction horizontal
+      visual {
+        "*"
+      }
+    }
+  }
+  type "sql.from" {
+    dropTarget {
+      visibility always
+      direction horizontal
+      visual {
+        "FROM"
+      }
+    }
+    iterate {
+      childGroup "tables"
+      direction horizontal
+      between {
+        ", "
+      }
+    }
+  }
+  type "sql.tableIntroduction" {
+    {{ name }}
+  }
   sidebarBlock "SELECT" {
     category "SQL"
     node "sql.querySelect" {
-      childGroup "components" {
+      childGroup "select" {
         node "sql.select"
       }
+      childGroup "from" {
+        node "sql.from"
+      }
+      childGroup "where" {
+      }
+      childGroup "groupBy" {
+      }
     }
+  }
+  sidebarBlock "*" {
+    category "SQL"
+    node "sql.starOperator"
   }
   sidebarBlock "FROM" {
     category "SQL"
@@ -19,6 +95,39 @@ language "SQL" {
     node "sql.where" {
       childGroup "expressions" {
       }
+    }
+  }
+  sidebarBlock "Tabelle Person" {
+    category "SQL"
+    node "sql.tableIntroduction" {
+      prop "name" Person
+    }
+  }
+  sidebarBlock "Spalte Person.Id" {
+    category "SQL"
+    node "sql.columnName" {
+      prop "columnName" Id
+      prop "refTableName" Person
+    }
+  }
+  sidebarBlock "Spalte Person.Vorname" {
+    category "SQL"
+    node "sql.columnName" {
+      prop "columnName" Vorname
+      prop "refTableName" Person
+    }
+  }
+  sidebarBlock "Spalte Person.Nachname" {
+    category "SQL"
+    node "sql.columnName" {
+      prop "columnName" Nachname
+      prop "refTableName" Person
+    }
+  }
+  sidebarBlock "Tabelle Adresse" {
+    category "SQL"
+    node "sql.tableIntroduction" {
+      prop "name" Adresse
     }
   }
 }
