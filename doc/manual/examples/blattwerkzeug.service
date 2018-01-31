@@ -1,0 +1,18 @@
+[Unit]
+Description=BlattWerkzeug - Backend Server
+After=network.target
+
+# CUSTOMIZE: Optionally add `blattwerkzeug-universal` as a dependency
+Wants=postgresql nginx
+
+[Service]
+# CUSTOMIZE: Generate a secret using `rake secret`
+Environment="SECRET_KEY_BASE=<CUSTOMIZE ME>"
+# CUSTOMIZE: Use a dedicated user
+User=blattwerkzeug
+# CUSTOMIZE: Set the correct path
+WorkingDirectory=/srv/htdocs/blattwerkzeug/
+ExecStart=/usr/bin/make -C server run
+
+[Install]
+WantedBy=multi-user.target

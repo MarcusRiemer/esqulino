@@ -1,0 +1,13 @@
+[Unit]
+Description=BlattWerkzeug - Universal Rendering Server
+After=network.target
+
+[Service]
+# CUSTOMIZE: Use a dedicated user
+User=blattwerkzeug
+# CUSTOMIZE: Set the correct path
+WorkingDirectory=/srv/htdocs/blattwerkzeug/
+ExecStart=/usr/bin/make -C client universal-run
+
+[Install]
+WantedBy=multi-user.target
