@@ -97,6 +97,13 @@ export class Project implements ApiVersion, Saveable {
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
   }
 
+  /**
+   * @return The unique ID of this project.
+   */
+  get id() {
+    return (this._id);
+  }
+
   // Fired when the save-state has changed
   private _saveStateChangedEvent = new BehaviorSubject<SaveStateEvent<Project>>({
     resource: this,
