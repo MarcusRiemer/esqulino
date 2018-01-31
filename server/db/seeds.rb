@@ -33,6 +33,15 @@ project = ProjectStructure.create!(
   active_database: "default"
 )
 
+ProjectStructure.create!(
+  name: "Test: Sequence DB",
+  description: "Dieses Projekt wird für automatische Tests benutzt und hat keine inhaltliche  Bedeutung.",
+  public: true,
+  slug: "db-sequence",
+  index_page_id: "159ba814-445d-4167-a483-e3fc0db85cae",
+  active_database: "default"
+)
+
 # This causes the following error for me:
 # ActiveModel::UnknownAttributeError: unknown attribute 'project_structure_id' for ProjectSource.
 # ~~~~ Marcus
