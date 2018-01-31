@@ -6,7 +6,7 @@
     <p class="card-text">
       Tabellen sind notwendig um zu Wissen wie genau die zu speichernden Datensätze aussehen müssen. Ohne Tabellen in der Datenbank kannst du keine Datenbank-Operationen anlegen. Und ohne Datenbank-Operationen kannst du keine Daten lesen oder schreiben.
     </p>
-    <a [routerLink]="['/', 'editor', project.id, 'schema', 'default' , 'create']"
+    <a [routerLink]="['/', 'editor', project.slug, 'schema', 'default' , 'create']"
        class="btn btn-primary">
       <span class="fa fa-fw fa-table"></span> Erste Tabelle anlegen
     </a>
