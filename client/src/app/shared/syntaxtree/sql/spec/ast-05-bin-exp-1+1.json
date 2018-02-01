@@ -1,0 +1,30 @@
+{
+   "language": "sql",
+   "name": "binaryExpression",
+   "children": {
+      "operands": [
+         {
+            "language": "sql",
+            "name": "constant",
+            "properties": {
+               "value": "1"
+            }
+         },
+         {
+            "language": "sql",
+            "name": "relationalOperator",
+            "properties": {
+               "operator": "+"
+            }
+         },
+         {
+            "language": "sql",
+            "name": "constant",
+            "properties": {
+               "value": "1"
+            }
+         }
+      ]
+   }
+}
+

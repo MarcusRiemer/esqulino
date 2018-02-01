@@ -1,0 +1,51 @@
+{
+  "language": "sql",
+  "name": "where",
+  "children": {
+    "expressions": [
+      {
+        "language": "sql",
+        "name": "constant",
+        "properties": {
+          "value": 1
+        }
+      },
+      {
+        "language": "sql",
+        "name": "whereAdditional",
+        "children": {
+          "expression": [
+            {
+              "language": "sql",
+              "name": "constant",
+              "properties": {
+                "value": 1
+              }
+            }
+          ]
+        },
+        "properties": {
+          "operator": "and"
+        }
+      },
+      {
+        "language": "sql",
+        "name": "whereAdditional",
+        "children": {
+          "expression": [
+            {
+              "language": "sql",
+              "name": "constant",
+              "properties": {
+                "value": 1
+              }
+            }
+          ]
+        },
+        "properties": {
+          "operator": "or"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "language": "sql",
+  "name": "from",
+  "children": {
+    "tables": [
+      {
+        "language": "sql",
+        "name": "tableIntroduction",
+        "properties": {
+          "name": "foo"
+        }
+      }, {
+        "language": "sql",
+        "name": "crossJoin",
+        "children": {
+          "table": [
+            {
+              "language": "sql",
+              "name": "tableIntroduction",
+              "properties": {
+                "name": "bar"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
