@@ -1,0 +1,15 @@
+{
+  "language": "sql",
+  "name": "where",
+  "children": {
+    "expressions": [
+      {
+        "language": "sql",
+        "name": "constant",
+        "properties": {
+          "value": 1
+        }
+      }
+    ]
+  }
+}

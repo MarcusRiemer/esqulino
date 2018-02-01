@@ -1,0 +1,18 @@
+{
+  "language": "sql",
+  "name": "whereAdditional",
+  "children": {
+    "expression": [
+      {
+        "language": "sql",
+        "name": "constant",
+        "properties": {
+          "value": 1
+        }
+      }
+    ]
+  },
+  "properties": {
+    "operator": "or"
+  }
+}

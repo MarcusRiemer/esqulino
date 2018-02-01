@@ -1,0 +1,7 @@
+{
+  "language": "sql",
+  "name": "constant",
+  "properties": {
+    "value": "asdf"
+  }
+}

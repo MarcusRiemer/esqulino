@@ -1,0 +1,3 @@
+WHERE 1
+	AND 1
+	OR 1

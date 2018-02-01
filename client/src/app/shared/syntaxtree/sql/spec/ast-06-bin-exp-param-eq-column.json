@@ -1,0 +1,32 @@
+
+
+{
+   "language": "sql",
+   "name": "binaryExpression",
+   "children": {
+      "operands": [
+         {
+            "language": "sql",
+            "name": "parameter",
+            "properties": {
+               "name": "id"
+            }
+         },
+         {
+            "language": "sql",
+            "name": "relationalOperator",
+            "properties": {
+               "operator": "="
+            }
+         },
+         {
+            "language": "sql",
+            "name": "columnName",
+            "properties": {
+               "columnName": "id",
+               "refTableName": "foo"
+            }
+         }
+      ]
+   }
+}
