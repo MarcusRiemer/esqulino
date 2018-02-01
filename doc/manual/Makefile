@@ -24,7 +24,11 @@ generated/%.blocks: $(CLI_PROG_CLIENT)
 	@mkdir -p generated
 	@echo '{ "type": "printLanguageModel", "id": "$*" }' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.blocks"
 
-generated/%.graphviz: syntaxtree/%.json $(CLI_PROG_CLIENT)
+generated/%.sql: examples/syntaxtree/%.json $(CLI_PROG_CLIENT)
+	@mkdir -p generated
+	@echo '{ "type": "emitTree", "model": $(shell cat "$<" | jq -c .), "languageId": "sql"}' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.sql"
+
+generated/%.graphviz: examples/syntaxtree/%.json $(CLI_PROG_CLIENT)
 	@mkdir -p generated
 	@echo '{ "type": "graphvizTree", "model": $(shell cat "$<" | jq -c .)}' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.graphviz"
 
