@@ -1,0 +1,7 @@
+{
+  "language": "sql",
+  "name": "parameter",
+  "properties": {
+    "name": "foo"
+  }
+}

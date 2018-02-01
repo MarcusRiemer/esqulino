@@ -1,0 +1,41 @@
+{
+  "language": "sql",
+  "name": "querySelect",
+  "children": {
+    "select": [
+      {
+        "language": "sql",
+        "name": "select",
+        "children": {
+          "columns": [
+            {
+              "language": "sql",
+              "name": "columnName",
+              "properties": {
+                "columnName": "id",
+                "refTableName": "foo"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "from": [
+      {
+        "language": "sql",
+        "name": "from",
+        "children": {
+          "tables": [
+            {
+              "language": "sql",
+              "name": "tableIntroduction",
+              "properties": {
+                "name": "foo"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

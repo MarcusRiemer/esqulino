@@ -1,8 +1,13 @@
 import * as readline from 'readline'
 import * as process from 'process'
 
+import { Tree } from './app/shared/syntaxtree/syntaxtree'
+
 import { prettyPrintGrammar } from './app/shared/syntaxtree/prettyprint'
 import { GrammarDescription } from './app/shared/syntaxtree/validator.description'
+
+import { LanguageDescription } from './app/shared/syntaxtree/language.description'
+import { Language } from './app/shared/syntaxtree/language'
 
 import { LanguageModelDescription } from './app/shared/block/language-model.description'
 import { prettyPrintLanguageModel } from './app/shared/block/prettyprint'
@@ -10,12 +15,12 @@ import { prettyPrintLanguageModel } from './app/shared/block/prettyprint'
 import { graphvizSyntaxTree } from './app/shared/syntaxtree/prettyprint'
 import { NodeDescription } from './app/shared/syntaxtree/syntaxtree.description'
 
-import * as dxml from './app/shared/syntaxtree/dxml/dxml.validator'
-import * as regex from './app/shared/syntaxtree/regex/regex.validator'
-import * as sql from './app/shared/syntaxtree/sql/sql.validator'
+import * as dxml from './app/shared/syntaxtree/dxml/'
+import * as regex from './app/shared/syntaxtree/regex/'
+import * as sql from './app/shared/syntaxtree/sql/'
 
-import * as lang_dxml from './app/shared/block/dxml/language-model'
-import * as lang_sql from './app/shared/block/sql/language-model'
+import * as blocks_dxml from './app/shared/block/dxml/language-model'
+import * as blocks_sql from './app/shared/block/sql/language-model'
 
 interface PrintGrammarCommand {
   type: "printGrammar",
@@ -32,17 +37,32 @@ interface GraphvizSyntaxTreeCommand {
   model: NodeDescription;
 }
 
+interface EmitSyntaxTreeCommand {
+  type: "emitTree",
+  model: NodeDescription;
+  languageId: string;
+}
+
 interface AvailableGrammarsCommand {
   type: "available"
 }
 
-type Command = PrintGrammarCommand | PrintLanguageModelCommand | AvailableGrammarsCommand | GraphvizSyntaxTreeCommand;
+type Command = PrintGrammarCommand | PrintLanguageModelCommand | AvailableGrammarsCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand;
+
+function availableLanguages(): LanguageDescription[] {
+  return ([
+    dxml.LANGUAGE_DESCRIPTION_ERUBY,
+    dxml.LANGUAGE_DESCRIPTION_LIQUID,
+    regex.LANGUAGE_DESCRIPTION,
+    sql.LANGUAGE_DESCRIPTION
+  ]);
+}
 
 /**
  * Retrieves all grammars that are known to this instance.
  */
 function availableGrammars(): GrammarDescription[] {
-  return ([dxml.GRAMMAR_DESCRIPTION, regex.GRAMMAR_DESCRIPTION, sql.GRAMMAR_DESCRIPTION]);
+  return (availableLanguages().map(l => l.validators[0]));
 }
 
 /**
@@ -52,14 +72,22 @@ function findGrammar(name: string) {
   return (availableGrammars().find(d => d.languageName === name));
 }
 
+function findLanguage(id: string) {
+  const desc = availableLanguages().find(l => l.id == id);
+  if (desc)
+    return (new Language(desc));
+  else
+    throw new Error(`Unknown language ${id}`);
+}
+
 /**
  * All available language models
  */
 function availableLanguageModels(): LanguageModelDescription[] {
   return ([
-    lang_dxml.LANGUAGE_MODEL,
-    lang_dxml.DYNAMIC_LANGUAGE_MODEL,
-    lang_sql.LANGUAGE_MODEL
+    blocks_dxml.LANGUAGE_MODEL,
+    blocks_dxml.DYNAMIC_LANGUAGE_MODEL,
+    blocks_sql.LANGUAGE_MODEL
   ]);
 }
 
@@ -78,13 +106,19 @@ function executeCommand(command: Command) {
     case "printGrammar":
       const g = findGrammar(command.id);
       return (prettyPrintGrammar(g));
-    case "printLanguageModel":
+    case "printLanguageModel": {
       const l = findLanguageModel(command.id);
       return (prettyPrintLanguageModel(l));
+    }
     case "available":
       return (availableGrammars().map(g => g.languageName));
     case "graphvizTree":
       return (graphvizSyntaxTree(command.model));
+    case "emitTree": {
+      const l = findLanguage(command.languageId);
+      const t = new Tree(command.model);
+      return (l.emitTree(t));
+    }
   }
 }
 
