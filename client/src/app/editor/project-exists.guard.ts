@@ -27,11 +27,11 @@ export class ProjectExistsGuard implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const projectId = route.params['projectId'];
-    console.log(`ProjectExistsGuard: "${projectId}" => ???`);
+    const projectSlug = route.params['projectId'];
+    console.log(`ProjectExistsGuard: "${projectSlug}" => ???`);
 
     // Possibly trigger loading the project
-    this._projectService.setActiveProject(projectId, false);
+    this._projectService.setActiveProject(projectSlug, false);
 
     // And check whether it actually exists
     const toReturn = this._projectService.activeProject
@@ -46,7 +46,7 @@ export class ProjectExistsGuard implements CanActivate {
         }
 
         this._flashService.addMessage({
-          caption: `Project with id "${projectId}" couldn't be loaded!`,
+          caption: `Project with slug "${projectSlug}" couldn't be loaded!`,
           text: message,
           type: "danger"
         });
@@ -56,7 +56,7 @@ export class ProjectExistsGuard implements CanActivate {
         return (Observable.of(undefined));
       })
       .map(project => !!project)
-      .do(res => console.log(`ProjectExistsGuard: "${projectId}" => ${res}`));
+      .do(res => console.log(`ProjectExistsGuard: "${projectSlug}" => ${res}`));
 
     return (toReturn);
   }
