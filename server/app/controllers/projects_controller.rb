@@ -37,6 +37,9 @@ class ProjectsController < ApplicationController
 
     to_return = project.serializable_hash
     to_return['schema'] = []
+    to_return['apiVersion'] = 4
+    to_return['queries'] = []
+    to_return['pages'] = []
 
     render json: to_return
   end
