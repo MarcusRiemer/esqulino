@@ -1,0 +1,8 @@
+{
+  "language": "sql",
+  "name": "tableIntroduction",
+  "properties": {
+    "name": "foo",
+    "alias": "f"
+  }
+}

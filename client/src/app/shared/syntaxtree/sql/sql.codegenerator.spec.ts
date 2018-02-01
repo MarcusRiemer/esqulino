@@ -3,593 +3,114 @@ import { Node, NodeDescription } from '../syntaxtree'
 
 import { NODE_CONVERTER } from './sql.codegenerator'
 
+/**
+ * Ensures that the given in and output files do match correctly.
+ *
+ * This function can not be exported from a different module because the calls
+ * to `require` are relative to the file the function is defined in.
+ * So for the moment this function is copy and pasted into some spec files :(
+ */
+export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) {
+  const input = require(`json-loader!./spec/${fileName}.json`);
+  let expected = require(`raw-loader!./spec/${fileName}.txt`) as string;
+
+  if (expected.endsWith("\n")) {
+    expected = expected.substr(0, expected.length - 1);
+  }
+
+  expect(transform(input)).toEqual(expected);
+}
+
+function emitTree(astDesc: NodeDescription) {
+  const ast = new Node(astDesc, undefined);
+  const codeGen = new CodeGenerator(NODE_CONVERTER);
+
+  return (codeGen.emit(ast));
+}
+
+
 describe('Language: SQL (Codegen)', () => {
   it('Constant Number: 1', () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "constant",
-      properties: {
-        "value": "1"
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("1");
+    verifyFiles("ast-01-constant-num", emitTree);
   });
 
   it(`Constant string: 'asdf'`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "constant",
-      properties: {
-        "value": "asdf"
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("'asdf'");
+    verifyFiles("ast-02-constant-string", emitTree);
   });
 
   it(`Parameter: :foo`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "parameter",
-      properties: {
-        "name": "foo"
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual(":foo");
+    verifyFiles("ast-03-parameter", emitTree);
   });
 
   it(`Star Operator: *`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "starOperator",
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("*");
+    verifyFiles("ast-04-star-operator", emitTree);
   });
 
   it(`Binary Expression: 1 + 1`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "binaryExpression",
-      children: {
-        "operands": [
-          {
-            language: "sql",
-            name: "constant",
-            properties: {
-              "value": "1",
-            }
-          },
-          {
-            language: "sql",
-            name: "relationalOperator",
-            properties: {
-              "operator": "+",
-            }
-          },
-          {
-            language: "sql",
-            name: "constant",
-            properties: {
-              "value": "1",
-            }
-          }
-        ]
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("1 + 1");
+    verifyFiles("ast-05-bin-exp-1+1", emitTree);
   });
 
   it(`Binary Expression: :id = foo.id`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "binaryExpression",
-      children: {
-        "operands": [
-          {
-            language: "sql",
-            name: "parameter",
-            properties: {
-              "name": "id",
-            }
-          },
-          {
-            language: "sql",
-            name: "relationalOperator",
-            properties: {
-              "operator": "=",
-            }
-          },
-          {
-            language: "sql",
-            name: "columnName",
-            properties: {
-              "columnName": "id",
-              "refTableName": "foo"
-            }
-          }
-        ]
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual(":id = foo.id");
+    verifyFiles("ast-06-bin-exp-param-eq-column", emitTree);
   });
 
   it(`SELECT component: SELECT *`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "select",
-      children: {
-        "columns": [
-          {
-            language: "sql",
-            name: "starOperator"
-          }
-        ]
-      }
-    }
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("SELECT *");
+    verifyFiles("ast-07-select-star", emitTree);
   });
 
   it(`SELECT component: SELECT foo.id`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "select",
-      children: {
-        "columns": [
-          {
-            language: "sql",
-            name: "columnName",
-            properties: {
-              "columnName": "id",
-              "refTableName": "foo"
-            }
-          }
-        ]
-      }
-    }
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("SELECT foo.id");
+    verifyFiles("ast-08-select-column", emitTree);
   });
 
   it(`SELECT component: SELECT DISTINCT foo.id`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "select",
-      children: {
-        "columns": [
-          {
-            language: "sql",
-            name: "columnName",
-            properties: {
-              "columnName": "id",
-              "refTableName": "foo"
-            }
-          }
-        ]
-      },
-      properties: {
-        "distinct": "true"
-      }
-    }
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("SELECT DISTINCT foo.id");
+    verifyFiles("ast-09-select-distinct-column", emitTree);
   });
 
   it(`SELECT component: SELECT *, foo.id`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "select",
-      children: {
-        "columns": [
-          {
-            language: "sql",
-            name: "starOperator"
-          },
-          {
-            language: "sql",
-            name: "columnName",
-            properties: {
-              "columnName": "id",
-              "refTableName": "foo"
-            }
-          }
-        ]
-      }
-    }
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("SELECT *, foo.id");
+    verifyFiles("ast-10-select-star-column", emitTree);
   });
 
   it(`Table Introduction: foo`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "tableIntroduction",
-      properties: {
-        "name": "foo"
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("foo");
+    verifyFiles("ast-11-table-foo", emitTree);
   });
 
   it(`Table Introduction: foo f`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "tableIntroduction",
-      properties: {
-        "name": "foo",
-        "alias": "f"
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("foo f");
+    verifyFiles("ast-12-table-foo-f", emitTree);
   });
 
   it(`Cross JOIN: JOIN foo`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "crossJoin",
-      children: {
-        "table": [
-          {
-            language: "sql",
-            name: "tableIntroduction",
-            properties: {
-              "name": "foo",
-              "alias": "f"
-            }
-          }
-        ]
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("JOIN foo f");
+    verifyFiles("ast-13-join-foo", emitTree);
   });
 
   it(`FROM component: FROM foo`, () => {
-    const astDesc = {
-      language: "sql",
-      name: "from",
-      children: {
-        "tables": [
-          {
-            language: "sql",
-            name: "tableIntroduction",
-            properties: {
-              "name": "foo"
-            }
-          }
-        ]
-      }
-    }
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("FROM foo");
+    verifyFiles("ast-14-from-foo", emitTree);
   });
 
   it(`FROM component: FROM foo JOIN bar`, () => {
-    const astDesc = {
-      language: "sql",
-      name: "from",
-      children: {
-        "tables": [
-          {
-            language: "sql",
-            name: "tableIntroduction",
-            properties: {
-              "name": "foo"
-            }
-          }, {
-            language: "sql",
-            name: "crossJoin",
-            children: {
-              "table": [
-                {
-                  language: "sql",
-                  name: "tableIntroduction",
-                  properties: {
-                    "name": "bar"
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    }
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("FROM foo\n\tJOIN bar");
+    verifyFiles("ast-15-from-foo-join-bar", emitTree);
   });
 
   it(`WHERE additional: AND 1`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "whereAdditional",
-      children: {
-        "expression": [
-          {
-            language: "sql",
-            name: "constant",
-            properties: {
-              "value": 1
-            }
-          }
-        ]
-      },
-      properties: {
-        "operator": "and"
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("AND 1");
+    verifyFiles("ast-16-where-add-and-1", emitTree);
   });
 
   it(`WHERE additional: OR 1`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "whereAdditional",
-      children: {
-        "expression": [
-          {
-            language: "sql",
-            name: "constant",
-            properties: {
-              "value": 1
-            }
-          }
-        ]
-      },
-      properties: {
-        "operator": "or"
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("OR 1");
+    verifyFiles("ast-17-where-add-or-1", emitTree);
   });
 
   it(`WHERE component: WHERE 1`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "where",
-      children: {
-        "expressions": [
-          {
-            language: "sql",
-            name: "constant",
-            properties: {
-              "value": 1
-            }
-          }
-        ]
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("WHERE 1");
+    verifyFiles("ast-18-where-1", emitTree);
   });
 
   it(`WHERE component: WHERE 1 AND 1`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "where",
-      children: {
-        "expressions": [
-          {
-            language: "sql",
-            name: "constant",
-            properties: {
-              "value": 1
-            }
-          },
-          {
-            language: "sql",
-            name: "whereAdditional",
-            children: {
-              "expression": [
-                {
-                  language: "sql",
-                  name: "constant",
-                  properties: {
-                    "value": 1
-                  }
-                }
-              ]
-            },
-            properties: {
-              "operator": "and"
-            }
-          }
-        ]
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("WHERE 1\n\tAND 1");
+    verifyFiles("ast-19-where-1-and-1", emitTree);
   });
 
   it(`WHERE component: WHERE 1 AND 1 OR 1`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "where",
-      children: {
-        "expressions": [
-          {
-            language: "sql",
-            name: "constant",
-            properties: {
-              "value": 1
-            }
-          },
-          {
-            language: "sql",
-            name: "whereAdditional",
-            children: {
-              "expression": [
-                {
-                  language: "sql",
-                  name: "constant",
-                  properties: {
-                    "value": 1
-                  }
-                }
-              ]
-            },
-            properties: {
-              "operator": "and"
-            }
-          },
-          {
-            language: "sql",
-            name: "whereAdditional",
-            children: {
-              "expression": [
-                {
-                  language: "sql",
-                  name: "constant",
-                  properties: {
-                    "value": 1
-                  }
-                }
-              ]
-            },
-            properties: {
-              "operator": "or"
-            }
-          }
-        ]
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("WHERE 1\n\tAND 1\n\tOR 1");
+    verifyFiles("ast-20-where-1-and-1-or-1", emitTree);
   });
 
   it(`SELECT query: SELECT foo.id FROM foo`, () => {
-    const astDesc: NodeDescription = {
-      language: "sql",
-      name: "querySelect",
-      children: {
-        "components": [
-          {
-            language: "sql",
-            name: "select",
-            children: {
-              "columns": [
-                {
-                  language: "sql",
-                  name: "columnName",
-                  properties: {
-                    "columnName": "id",
-                    "refTableName": "foo"
-                  }
-                }
-              ]
-            }
-          },
-          {
-            language: "sql",
-            name: "from",
-            children: {
-              "tables": [
-                {
-                  language: "sql",
-                  name: "tableIntroduction",
-                  properties: {
-                    "name": "foo"
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    };
-
-    const ast = new Node(astDesc, undefined);
-    const codeGen = new CodeGenerator(NODE_CONVERTER);
-    const result = codeGen.emit(ast);
-
-    expect(result).toEqual("SELECT foo.id\nFROM foo");
+    verifyFiles("ast-21-select-foo-id-from-foo", emitTree);
   });
 });

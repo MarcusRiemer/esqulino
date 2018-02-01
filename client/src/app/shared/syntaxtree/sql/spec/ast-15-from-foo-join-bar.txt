@@ -1,0 +1,2 @@
+FROM foo
+	JOIN bar

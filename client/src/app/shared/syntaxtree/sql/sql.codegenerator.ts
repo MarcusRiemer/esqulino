@@ -2,7 +2,12 @@ import { NodeConverterRegistration, CodeGeneratorProcess, OutputSeparator } from
 import { Node } from '../syntaxtree'
 
 function generateComponents(node: Node, process: CodeGeneratorProcess) {
-  const components = node.children["components"] || [];
+  const componentNames = ["insert", "select", "update", "delete", "from", "where"];
+  const components = componentNames
+    .map(n => node.children[n])
+    .filter(c => !!c)
+    .map(c => c[0]);
+
   components.forEach(n => {
     process.generateNode(n)
     process.addConvertedFragment("", node, OutputSeparator.NEW_LINE_AFTER);

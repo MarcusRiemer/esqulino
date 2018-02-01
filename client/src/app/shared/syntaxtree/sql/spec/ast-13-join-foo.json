@@ -1,0 +1,15 @@
+{
+  "language": "sql",
+  "name": "crossJoin",
+  "children": {
+    "table": [
+      {
+        "language": "sql",
+        "name": "tableIntroduction",
+        "properties": {
+          "name": "foo"
+        }
+      }
+    ]
+  }
+}

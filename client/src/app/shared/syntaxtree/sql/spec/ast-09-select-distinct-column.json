@@ -1,0 +1,19 @@
+{
+  "language": "sql",
+  "name": "select",
+  "children": {
+    "columns": [
+      {
+        "language": "sql",
+        "name": "columnName",
+        "properties": {
+          "columnName": "id",
+          "refTableName": "foo"
+        }
+      }
+    ]
+  },
+  "properties": {
+    "distinct" : "true"
+  }
+}

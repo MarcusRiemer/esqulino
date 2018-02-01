@@ -1,0 +1,12 @@
+{
+  "language": "sql",
+  "name": "select",
+  "children": {
+    "columns": [
+      {
+        "language": "sql",
+        "name": "starOperator"
+      }
+    ]
+  }
+}
