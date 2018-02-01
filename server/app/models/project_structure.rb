@@ -2,8 +2,8 @@ class ProjectStructure < ApplicationRecord
   self.table_name = "projects"
   has_many :project_sources, class_name: "ProjectSource"
 
-  validates :slug, uniqueness: true, on: :create
-
+  validates :slug, uniqueness: true
+  
   def to_param
     "#{slug}"
   end
