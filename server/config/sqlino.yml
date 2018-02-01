@@ -8,6 +8,11 @@ development:
   mail:
     default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
     admin: "Marcus@GurXite.de"
+  ide_service:
+    exec:
+      node_binary: /usr/bin/node
+      program: ../client/dist/cli/main.cli.js
+      mode: one-shot
 
 test:
   name: "Blattwerkzeug (Test)"
@@ -19,6 +24,11 @@ test:
   mail:
     default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
     admin: "Marcus@GurXite.de"
+  ide_service:
+    exec:
+      node_binary: /usr/bin/node
+      program: ../client/dist/cli/main.cli.js
+      mode: daemon
   
 production:
   name: "Blattwerkzeug"
@@ -30,3 +40,8 @@ production:
   mail:
     default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
     admin: "Marcus@GurXite.de"
+  ide_service:
+    exec:
+      node_binary: /usr/bin/node
+      program: ../client/dist/cli/main.cli.js
+      mode: daemon
