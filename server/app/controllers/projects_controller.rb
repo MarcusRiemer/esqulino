@@ -34,7 +34,11 @@ class ProjectsController < ApplicationController
   # TODO Load current proejct and merger schema there.
   def show
     project = ProjectStructure.find(params[:project_id])
-    render json: project
+
+    to_return = project.serializable_hash
+    to_return['schema'] = []
+
+    render json: to_return
   end
 
   # Update an existing project
