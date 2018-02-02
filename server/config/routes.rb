@@ -47,6 +47,8 @@ Rails.application.routes.draw do
 
         get 'preview', controller: 'projects', action: :preview_image
 
+        resources :code_resources, only: [:create, :update, :destroy]
+
         # Everything that does something with the database content via a query
         scope 'query' do
           root via: [:post], controller: 'project_queries', action: :create

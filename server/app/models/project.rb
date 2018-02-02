@@ -1,6 +1,6 @@
-class ProjectStructure < ApplicationRecord
-  self.table_name = "projects"
-  has_many :project_sources, class_name: "ProjectSource"
+class Project < ApplicationRecord
+  has_many :project_sources
+  has_many :code_resources
 
   validates :slug, uniqueness: true
   

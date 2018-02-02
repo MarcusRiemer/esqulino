@@ -7,7 +7,6 @@ require 'scrypt'
 
 require_dependency 'schema'
 require_dependency 'schema_utils'
-require_dependency 'page'
 require_dependency 'error'
 require_dependency 'query_simulate'
 require_dependency 'version'
@@ -15,7 +14,7 @@ require_dependency 'version'
 # Represents an esqulino project. Attributes of this
 # class are loaded lazily on demand, so there is no harm
 # in creating loads of instances.
-class Project
+class LegacyProject
   # @param project_folder [string] The projects root folder
   # @param write_access [Boolean] True, if this project should be openend in read-only mode
   def initialize(project_folder, write_access)
@@ -168,7 +167,7 @@ class Project
   def check_index_page!
     index_page_id = whole_description['indexPageId']
     if index_page_id then
-      index_page = Page.new(self, index_page_id)
+      index_page = LegacyPage.new(self, index_page_id)
       if not index_page.exists? then
         # puts "Removing reference to index page"
         @whole_description.delete 'indexPageId'
@@ -268,7 +267,7 @@ class Project
     @queries = Dir.glob(File.join(folder_queries,"*.json")).map do |query_file|
       # Each filename contains an ID
       query_id = File.basename(query_file, ".json")
-      Query.new(self, query_id, nil)
+      LegacyQuery.new(self, query_id, nil)
     end
   end
 
@@ -354,7 +353,7 @@ class Project
     @pages = Dir.glob(File.join(folder_pages,"*.json")).map do |page_file|
       # Each filename contains an ID
       page_id = File.basename(page_file, ".json")
-      Page.new(self, page_id, nil)
+      LegacyPage.new(self, page_id, nil)
     end
   end
 
@@ -459,7 +458,7 @@ class Project
     new_path = File.realdirpath(File.join(folder, "..", new_id))
     FileUtils.cp_r folder, new_path
 
-    cloned_project = Project.new new_path, true
+    cloned_project = LegacyProject.new new_path, true
   end
 end
 
@@ -476,7 +475,7 @@ def enumerate_projects(projects_dir, write_access, public_only)
                 .select { |entry| not entry.start_with? "_"  }
                 .map { |entry| File.join projects_dir, entry }
                 .select { |entry| File.directory? entry }
-                .map { |entry| Project.new entry, write_access }
+                .map { |entry| LegacyProject.new entry, write_access }
                 .sort { |lhs,rhs| lhs.id <=> rhs.id }
 
   # Possibly filter out

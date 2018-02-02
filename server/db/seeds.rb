@@ -1,7 +1,7 @@
 # coding: utf-8
-ProjectStructure.destroy_all
+Project.destroy_all
 
-ProjectStructure.create!(
+Project.create!(
   name: "Blog",
   description: "Dein Blog, deine Regeln! Schreibe über Themen die dir am Herzen liegen
       und tausche dich in den Kommentaren mit deinen Lesern aus.",
@@ -12,7 +12,7 @@ ProjectStructure.create!(
   active_database: "default"
 )
 
-ProjectStructure.create!(
+Project.create!(
   name: "Ereignisse",
   description: "Historische Ereignisse & Personen mit ihren jeweiligen zeitlichen Daten.
       Welcher Wissenschaftler hat eigentlich zu Zeiten der ersten olympischen Spiele gelebt?",
@@ -23,7 +23,7 @@ ProjectStructure.create!(
   active_database: "default"
 )
 
-project = ProjectStructure.create!(
+project = Project.create!(
   name: "Adventure",
   description: "Write an adventure story and make your friends face-to-face",
   public: true,
@@ -33,7 +33,7 @@ project = ProjectStructure.create!(
   active_database: "default"
 )
 
-ProjectStructure.create!(
+Project.create!(
   name: "Test: Sequence DB",
   description: "Dieses Projekt wird für automatische Tests benutzt und hat keine inhaltliche  Bedeutung.",
   public: true,
@@ -52,4 +52,4 @@ ProjectStructure.create!(
 #   display: "The sample story comes 1: 1 from the Wikipedia article to Spielbuch"
 # )
 
-p "Created #{ProjectStructure.count} projects"
+p "Created #{Project.count} projects"
