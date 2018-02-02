@@ -1,4 +1,4 @@
-require_dependency 'project'
+require_dependency 'legacy_project'
 
 class ProjectsController < ApplicationController
   include ProjectsHelper
@@ -6,7 +6,7 @@ class ProjectsController < ApplicationController
 
   # Enumerating all available projects
   def index
-    @projects = ProjectStructure.all
+    @projects = Project.all
     # projects = enumerate_projects(projects_dir, false, true)
     #              .map { |project| project.public_description }
 
@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
   # TODO construct sqlite path with project slug and pass it to here: database_describe_schema(sqlite_file_path)
   # TODO Load current proejct and merger schema there.
   def show
-    project = ProjectStructure.find(params[:project_id])
+    project = Project.find(params[:project_id])
 
     to_return = project.serializable_hash
     to_return['schema'] = []

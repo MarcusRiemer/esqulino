@@ -1,6 +1,6 @@
 require 'test_helper'
 
-require_dependency 'project'
+require_dependency 'legacy_project'
 
 class ProjectTest < ActiveSupport::TestCase
 
@@ -67,7 +67,7 @@ class ProjectTest < ActiveSupport::TestCase
 
     create_project test_projects_folder, project_desc
 
-    p = Project.new File.join(test_projects_folder, 'test-id'), false
+    p = LegacyProject.new File.join(test_projects_folder, 'test-id'), false
 
     assert p.exists?
     assert_equal "test-id", p.id
@@ -96,7 +96,7 @@ class ProjectTest < ActiveSupport::TestCase
 
     create_project test_projects_folder, project_desc
 
-    p = Project.new File.join(test_projects_folder, 'test-id'), true
+    p = LegacyProject.new File.join(test_projects_folder, 'test-id'), true
 
     assert p.exists?
     p.delete!

@@ -1,5 +1,3 @@
-require_dependency 'project'
-
 # Allows access to projects and its resources in controllers
 module ProjectsHelper
   include ActionController::HttpAuthentication::Basic
@@ -14,7 +12,7 @@ module ProjectsHelper
     project_id = project_id || params['project_id']
 
     if @current_project.nil? then
-      @current_project = Project.new File.join(projects_dir, project_id), false
+      @current_project = LegacyProject.new File.join(projects_dir, project_id), false
 
       if self.has_basic_credentials? request
         user, pass = self.user_name_and_password request
@@ -28,7 +26,7 @@ module ProjectsHelper
   # Loads the currently requested query of the currently requested project
   def current_query
     if @current_query.nil? then
-      @current_query = Query.new(current_project, params['query_id'])
+      @current_query = LegacyQuery.new(current_project, params['query_id'])
     end
 
     @current_query
@@ -47,11 +45,11 @@ module ProjectsHelper
           @current_page = self.current_project.index_page
         else
           # No, we use an empty page
-          @current_page = Page.new(self.current_project);
+          @current_page = LegacyPage.new(self.current_project);
         end
       elsif is_string_id? page_name_or_id then
         # Specific ID, this could be a page that does not exist yet
-        @current_page = Page.new(self.current_project, page_name_or_id)
+        @current_page = LegacyPage.new(self.current_project, page_name_or_id)
       else
         # User-facing name, this needs to be unescaped to turn
         # things like %20 back into spaces

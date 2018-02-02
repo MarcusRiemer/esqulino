@@ -45,7 +45,7 @@ class ProjectQueriesController < ApplicationController
 
   # Creating a new query
   def create
-    @current_query = Query.new current_project, nil
+    @current_query = LegacyQuery.new current_project, nil
     self.update
   end
 

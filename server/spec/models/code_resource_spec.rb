@@ -3,52 +3,63 @@ require 'rails_helper'
 RSpec.describe CodeResource, type: :model do
   context "name" do
     it "rejects an missing name" do
-      res = FactoryBot.build(:code_resouce, name: nil)
+      res = FactoryBot.build(:code_resource, name: nil)
 
-      expect(res.validate).to be false
+      res.validate
       expect(res.errors["name"].length).to be 1
     end
 
     it "rejects an blank name" do
-      res = FactoryBot.build(:code_resouce, name: " ")
+      res = FactoryBot.build(:code_resource, name: " ")
 
-      expect(res.validate).to be false
+      res.validate
       expect(res.errors["name"].length).to be 1
     end
 
     it "allows very short names" do
-      res = FactoryBot.build(:code_resouce, name: "a")
+      res = FactoryBot.build(:code_resource, name: "a")
 
-      expect(res.validate).to be true
+      res.validate
+      expect(res.errors["name"].length).to be 0
     end
   end
 
   context "ast" do
     it "rejects nodes without a name" do
-      res = FactoryBot.build(:code_resouce)
+      res = FactoryBot.build(:code_resource)
       res.ast = {
         "language" => "specLang"
       }
 
-      expect(res.validate).to be false
+      res.validate
       expect(res.errors["ast"].length).to be 1
     end
 
     it "rejects nodes without a language" do
-      res = FactoryBot.build(:code_resouce)
+      res = FactoryBot.build(:code_resource)
       res.ast = {
         "name" => "specRoot"
       }
 
-      expect(res.validate).to be false
+      res.validate
       expect(res.errors["ast"].length).to be 1
     end
 
     it "accepts a missing root" do
-      res = FactoryBot.build(:code_resouce)
+      res = FactoryBot.build(:code_resource)
       res.ast = nil
 
-      expect(res.validate).to be true
+      res.validate
+      expect(res.errors["ast"].length).to be 0
+    end
+  end
+
+  context "project" do
+    it "can't be created without a project" do
+      res = FactoryBot.build(:code_resource)
+
+      res.validate
+      expect(res.errors[:project].length).to be 1
     end
   end
 end
