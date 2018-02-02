@@ -42,14 +42,10 @@ Project.create!(
   active_database: "default"
 )
 
-# This causes the following error for me:
-# ActiveModel::UnknownAttributeError: unknown attribute 'project_structure_id' for ProjectSource.
-# ~~~~ Marcus
-#
-# project.project_sources.create!(
-#   url: "https://de.wikipedia.org/wiki/Spielbuch",
-#   title: "Wikipedia",
-#   display: "The sample story comes 1: 1 from the Wikipedia article to Spielbuch"
-# )
+project.project_sources.create!(
+  url: "https://de.wikipedia.org/wiki/Spielbuch",
+  title: "Wikipedia",
+  display: "The sample story comes 1: 1 from the Wikipedia article to Spielbuch"
+)
 
 p "Created #{Project.count} projects"
