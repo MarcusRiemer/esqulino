@@ -8,7 +8,7 @@ require_dependency 'version'
 # Represents a esqulino query, which must be part of a project.
 # Attributes of this class are loaded lazily on demand, so there
 # is no harm in creating loads of instances.
-class Query
+class LegacyQuery
   def initialize(project, id, model = nil, sql = nil)
     @project = project
     # Generate a new random ID if no ID is specified

@@ -24,8 +24,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "application/json", @response.content_type
 
     project = JSON.parse(@response.body)
-    assert_equal 'db-sequence', project['name']
-    assert_equal 'db-sequence', project['id']
+    assert_equal 'Test: Sequence DB', project['name']
+    assert_equal 'db-sequence', project['slug']
   end
 
   test "shouldn't have a preview image for db-sequence" do

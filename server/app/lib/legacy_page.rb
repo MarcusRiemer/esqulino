@@ -1,11 +1,10 @@
-require_dependency 'query'
 require_dependency 'render_liquid'
 require_dependency 'version'
 
 # Represents a esqulino page, which must be part of a project.
 # Attributes of this class are loaded lazily on demand, so there
 # is no harm in creating loads of instances.
-class Page
+class LegacyPage
 
   def initialize(project, id = nil, model = nil)
     @project = project

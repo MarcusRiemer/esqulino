@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180201093553) do
+ActiveRecord::Schema.define(version: 20180202080948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20180201093553) do
   create_table "code_resources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.json "ast"
-    t.uuid "project_id"
+    t.uuid "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_code_resources_on_project_id"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20180201093553) do
   end
 
   create_table "project_sources", force: :cascade do |t|
-    t.uuid "project_id"
+    t.uuid "project_id", null: false
     t.string "url"
     t.string "title"
     t.text "display"

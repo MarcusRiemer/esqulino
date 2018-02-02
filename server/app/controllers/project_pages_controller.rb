@@ -4,7 +4,7 @@ class ProjectPagesController < ApplicationController
 
   # Create a new page
   def create
-    @current_page = Page.new current_project, nil
+    @current_page = LegacyPage.new current_project, nil
     self.update
   end
 
@@ -58,7 +58,7 @@ class ProjectPagesController < ApplicationController
     render_engine = render_request['sourceType']
 
     # This page is not stored on the server, we construct it in memory
-    page = Page.new(self.current_project, nil, render_request['page'])
+    page = LegacyPage.new(self.current_project, nil, render_request['page'])
 
     # Enrich parameters with query data
     render :html => page.render(params, render_engine, page_template)
