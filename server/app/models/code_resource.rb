@@ -1,5 +1,5 @@
 class CodeResource < ApplicationRecord
-  belongs_to :project, class_name: "ProjectStructure"
+  belongs_to :project
   
   validates :name, presence: true
   
