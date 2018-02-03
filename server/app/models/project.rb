@@ -3,6 +3,8 @@ class Project < ApplicationRecord
   has_many :code_resources
 
   validates :slug, uniqueness: true
+
+  scope :full, -> { includes(:project_sources, :code_resources) }
   
   def to_param
     "#{slug}"

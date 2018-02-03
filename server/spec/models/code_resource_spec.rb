@@ -54,12 +54,17 @@ RSpec.describe CodeResource, type: :model do
     end
   end
 
-  context "project" do
-    it "can't be created without a project" do
-      res = FactoryBot.build(:code_resource)
+  it "project is required" do
+    res = FactoryBot.build(:code_resource, project: nil)
 
-      res.validate
-      expect(res.errors[:project].length).to be 1
-    end
+    res.validate
+    expect(res.errors[:project].length).to be 1
+  end
+
+  it "block language is required" do
+    res = FactoryBot.build(:code_resource, block_language: nil)
+
+    res.validate
+    expect(res.errors[:block_language].length).to be 1
   end
 end
