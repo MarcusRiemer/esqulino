@@ -2,11 +2,16 @@ require 'rails_helper'
 
 RSpec.describe CodeResourcesController, type: :controller do
   describe "CREATE" do
-    it "works with only a name and a project_id" do
+    it "works with name, project_id and block_language_id" do
       proj = FactoryBot.create(:project)
+      block_lang = FactoryBot.create(:block_language)
       post :create,
            :format => :json,
-           :params => { :name => "Any", :project_id => proj.id }
+           :params => {
+             :name => "Any",
+             :project_id => proj.id,
+             :block_language_id => block_lang.id
+           }
 
       expect(response.status).to eq(200)
       expect(response.content_type).to eq "application/json"
@@ -18,11 +23,13 @@ RSpec.describe CodeResourcesController, type: :controller do
 
     it "stores valid syntaxtrees" do
       proj = FactoryBot.create(:project)
+      block_lang = FactoryBot.create(:block_language)
       post :create,
            :format => :json,
            :params => {
              :name => "Any",
              :project_id => proj.id,
+             :block_language_id => block_lang.id,
              :ast => {
                :language => "specLang",
                :name => "specName",
@@ -41,9 +48,13 @@ RSpec.describe CodeResourcesController, type: :controller do
 
     it "requires a name" do
       proj = FactoryBot.create(:project)
+      block_lang = FactoryBot.create(:block_language)
       post :create,
            :format => :json,
-           :params => { :project_id => proj.id }
+           :params => {
+             :project_id => proj.id,
+             :block_language_id => block_lang.id
+           }
 
       expect(response.status).to eq(400)
       expect(response.content_type).to eq "application/json"
@@ -64,11 +75,13 @@ RSpec.describe CodeResourcesController, type: :controller do
 
     it "rejects invalid syntax trees" do
       proj = FactoryBot.create(:project)
+      block_lang = FactoryBot.create(:block_language)
       post :create,
            :format => :json,
            :params => {
              :name => "invalid tree",
              :project_id => proj.id,
+             :block_language_id => block_lang.id,
              :ast => {
                :foo => "bar"
              }
@@ -89,9 +102,14 @@ RSpec.describe CodeResourcesController, type: :controller do
   describe "UPDATE" do
     it "changes the name" do
       proj = FactoryBot.create(:project)
+      block_lang = FactoryBot.create(:block_language)
       post :create,
            :format => :json,
-           :params => { :name => "Initial", :project_id => proj.id }
+           :params => {
+             :name => "Initial",
+             :project_id => proj.id,
+             :block_language_id => block_lang.id
+           }
 
       expect(response.status).to eq(200)
       expect(response.content_type).to eq "application/json"
@@ -126,10 +144,15 @@ RSpec.describe CodeResourcesController, type: :controller do
     end
 
     it "exists" do
-            proj = FactoryBot.create(:project)
+      proj = FactoryBot.create(:project)
+      block_lang = FactoryBot.create(:block_language)
       post :create,
            :format => :json,
-           :params => { :name => "Initial", :project_id => proj.id }
+           :params => {
+             :name => "Initial",
+             :project_id => proj.id,
+             :block_language_id => block_lang.id
+           }
 
       expect(response.status).to eq(200)
       expect(response.content_type).to eq "application/json"

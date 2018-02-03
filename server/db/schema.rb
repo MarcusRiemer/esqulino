@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180202080948) do
+ActiveRecord::Schema.define(version: 20180203103248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
+
+  create_table "block_languages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "family", null: false
+    t.json "model"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "code_resources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
@@ -22,14 +30,9 @@ ActiveRecord::Schema.define(version: 20180202080948) do
     t.uuid "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "block_language_id", null: false
+    t.index ["block_language_id"], name: "index_code_resources_on_block_language_id"
     t.index ["project_id"], name: "index_code_resources_on_project_id"
-  end
-
-  create_table "language_models", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.json "model"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "project_sources", force: :cascade do |t|
@@ -56,6 +59,7 @@ ActiveRecord::Schema.define(version: 20180202080948) do
     t.index ["slug"], name: "index_projects_on_slug"
   end
 
+  add_foreign_key "code_resources", "block_languages"
   add_foreign_key "code_resources", "projects"
   add_foreign_key "project_sources", "projects"
 end

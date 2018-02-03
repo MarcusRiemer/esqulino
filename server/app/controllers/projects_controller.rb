@@ -33,13 +33,13 @@ class ProjectsController < ApplicationController
   # TODO construct sqlite path with project slug and pass it to here: database_describe_schema(sqlite_file_path)
   # TODO Load current proejct and merger schema there.
   def show
-    project = Project.find(params[:project_id])
+    project = Project.full.find_by(slug: params[:project_id])
 
     to_return = project.serializable_hash
     to_return['schema'] = []
     to_return['apiVersion'] = 4
-    to_return['queries'] = []
-    to_return['pages'] = []
+    to_return['codeResources'] = project.code_resources.map(&:serializable_hash)
+    to_return['sources'] = project.project_sources.map(&:serializable_hash)
 
     render json: to_return
   end

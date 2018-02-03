@@ -1,5 +1,17 @@
 # coding: utf-8
+ProjectSource.destroy_all
+CodeResource.destroy_all
+BlockLanguage.destroy_all
 Project.destroy_all
+
+block_sql = BlockLanguage.create!(
+  name: "SQL",
+  family: "sql",
+  model: {
+    sidebarBlocks: [],
+    editorBlocks: []
+  }
+)
 
 Project.create!(
   name: "Blog",
@@ -23,7 +35,7 @@ Project.create!(
   active_database: "default"
 )
 
-project = Project.create!(
+cyoa = Project.create!(
   name: "Adventure",
   description: "Write an adventure story and make your friends face-to-face",
   public: true,
@@ -33,7 +45,14 @@ project = Project.create!(
   active_database: "default"
 )
 
-Project.create!(
+cyoa.project_sources.create!(
+  url: "https://de.wikipedia.org/wiki/Spielbuch",
+  title: "Wikipedia",
+  display: "The sample story comes 1: 1 from the Wikipedia article to Spielbuch"
+)
+
+
+test_sequence = Project.create!(
   name: "Test: Sequence DB",
   description: "Dieses Projekt wird für automatische Tests benutzt und hat keine inhaltliche  Bedeutung.",
   public: true,
@@ -42,10 +61,60 @@ Project.create!(
   active_database: "default"
 )
 
-project.project_sources.create!(
-  url: "https://de.wikipedia.org/wiki/Spielbuch",
-  title: "Wikipedia",
-  display: "The sample story comes 1: 1 from the Wikipedia article to Spielbuch"
+test_sequence.code_resources.create!(
+  name: "select-test",
+  ast:
+    {
+      "language": "sql",
+     "name": "querySelect",
+     "children":
+       {
+         "select":
+          [
+            {
+              "language": "sql",
+             "name": "select",
+             "children":
+               {
+                 "columns":
+                  [
+                    {
+                      "language": "sql",
+                     "name": "columnName",
+                     "properties":
+                       {
+                         "columnName": "id",
+                        "refTableName": "foo"
+                       }
+                    }
+                  ]
+               }
+            }
+          ],
+        "from":
+          [
+            {
+              "language": "sql",
+             "name": "from",
+             "children":
+               {
+                 "tables":
+                  [
+                    {
+                      "language": "sql",
+                     "name": "tableIntroduction",
+                     "properties":
+                       {
+                         "name": "foo"
+                       }
+                    }
+                  ]
+               }
+            }
+          ]
+       }
+    },
+  block_language: block_sql
 )
 
 p "Created #{Project.count} projects"
