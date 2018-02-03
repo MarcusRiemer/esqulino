@@ -1,4 +1,4 @@
-import { LanguageModelDescription } from '../language-model.description'
+import { BlockLanguageDescription } from '../block-language.description'
 import {
   SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
 } from '../block.description'
@@ -421,7 +421,7 @@ const EDITOR_BLOCKS = [
   },
 ]
 
-export const DYNAMIC_LANGUAGE_MODEL: LanguageModelDescription = {
+export const DYNAMIC_LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "dxml",
   name: "XML (Dynamisch)",
   sidebarBlocks: [
@@ -431,7 +431,7 @@ export const DYNAMIC_LANGUAGE_MODEL: LanguageModelDescription = {
   editorBlocks: EDITOR_BLOCKS
 }
 
-export const LANGUAGE_MODEL: LanguageModelDescription = {
+export const LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "xml",
   name: "XML",
   sidebarBlocks: [

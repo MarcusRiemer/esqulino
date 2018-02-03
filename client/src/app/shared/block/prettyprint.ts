@@ -2,7 +2,7 @@ import { recursiveJoin, NestedString } from '../nested-string'
 
 import { prettyPrintSyntaxTreeNode } from '../syntaxtree/prettyprint'
 
-import { LanguageModelDescription } from './language-model.description'
+import { BlockLanguageDescription } from './block-language.description'
 import {
   VisualBlockDescriptions, EditorBlockDescription, SidebarBlockDescription
 } from './block.description'
@@ -11,7 +11,7 @@ import {
  * Converts the internal structure of a language model into a more readable
  * version.
  */
-export function prettyPrintLanguageModel(desc: LanguageModelDescription): string {
+export function prettyPrintLanguageModel(desc: BlockLanguageDescription): string {
   const head = `language "${desc.name}" {`;
   const tail = `}`;
 

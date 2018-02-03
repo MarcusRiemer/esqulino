@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { Observable } from 'rxjs/Observable'
 
 import { AvailableLanguages, Language } from './syntaxtree'
-import { AvailableLanguageModels, LanguageModel } from './block'
+import { AvailableLanguageModels, BlockLanguage } from './block'
 
 /**
  * Groups together information about available languages.
@@ -21,7 +21,7 @@ export class LanguageService {
   /**
    * @return All languages that are augmented for use with the UI
    */
-  get availableLanguageModels(): ReadonlyArray<LanguageModel> {
+  get availableLanguageModels(): ReadonlyArray<BlockLanguage> {
     return (AvailableLanguageModels);
   }
 

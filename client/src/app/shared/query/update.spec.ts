@@ -44,7 +44,6 @@ describe('UPDATE', () => {
     const m: Model.QueryDescription = {
       name: "update-1",
       id: "update-1",
-      apiVersion: CURRENT_API_VERSION,
       update: {
         table: "person",
         assignments: [
@@ -74,7 +73,6 @@ describe('UPDATE', () => {
     const m: Model.QueryDescription = {
       name: "update-1",
       id: "update-1",
-      apiVersion: CURRENT_API_VERSION,
       update: {
         table: "person",
         assignments: [

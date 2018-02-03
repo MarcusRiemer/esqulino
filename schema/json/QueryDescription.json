@@ -2,16 +2,6 @@
   "$ref": "#/definitions/QueryDescription",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "definitions": {
-    "ApiVersionToken": {
-      "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
-      "enum": [
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
-      "type": "string"
-    },
     "BinaryExpression": {
       "additionalProperties": false,
       "description": "Combines two expressions with a binary operator.",
@@ -227,10 +217,6 @@
       "additionalProperties": false,
       "description": "Outermost description of a query. This contains\nthe whole structure and some identifying properties.",
       "properties": {
-        "apiVersion": {
-          "$ref": "#/definitions/ApiVersionToken",
-          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
-        },
         "delete": {
           "$ref": "#/definitions/Delete"
         },
@@ -262,7 +248,6 @@
         }
       },
       "required": [
-        "apiVersion",
         "name"
       ],
       "type": "object"

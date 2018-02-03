@@ -24,7 +24,6 @@ import {
 const singleRowPage: PageDescription = {
   id: "testpage",
   name: "Serialization test",
-  apiVersion: CURRENT_API_VERSION,
   body: {
     type: "body",
     children:

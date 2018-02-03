@@ -12,6 +12,6 @@ export interface CodeResourceDescription extends ProjectResourceDescription {
   // The language this resource uses.
   languageId: string;
 
-  // The language model this resource uses
-  languageModelId: string;
+  // The blockmodel this resource uses
+  blockModelId: string;
 }

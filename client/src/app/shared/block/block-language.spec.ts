@@ -1,7 +1,7 @@
 import { Tree, LanguageDescription, Language } from 'app/shared/syntaxtree';
 
-import { LanguageModelDescription } from './language-model.description'
-import { LanguageModel } from './language-model'
+import { BlockLanguageDescription } from './block-language.description'
+import { BlockLanguage } from './block-language'
 import { SidebarBlockDescription, VisualBlockDescriptions } from './block.description'
 
 
@@ -32,7 +32,7 @@ const langEmptyBlocks: LanguageDescription = {
   ]
 }
 
-const langModelEmptyBlocks: LanguageModelDescription = {
+const langModelEmptyBlocks: BlockLanguageDescription = {
   id: "emptyblocks",
   name: "Empty Blocks",
   sidebarBlocks: [
@@ -88,7 +88,7 @@ const langModelEmptyBlocks: LanguageModelDescription = {
 
 describe("LanguageModel", () => {
   it("Loads correctly", () => {
-    const lm = new LanguageModel(langModelEmptyBlocks);
+    const lm = new BlockLanguage(langModelEmptyBlocks);
     const l = new Language(langEmptyBlocks);
 
     expect(lm.id).toEqual(langModelEmptyBlocks.id);
@@ -102,7 +102,7 @@ describe("LanguageModel", () => {
   });
 
   it("Constructing default root with children", () => {
-    const lm = new LanguageModel(langModelEmptyBlocks);
+    const lm = new BlockLanguage(langModelEmptyBlocks);
     const l = new Language(langEmptyBlocks);
 
     const n = lm.constructDefaultNode(l, { languageName: "emptyBlocks", typeName: "root" });
@@ -110,7 +110,7 @@ describe("LanguageModel", () => {
   });
 
   it("Rejects to render a tree with only unknown types", () => {
-    const lm = new LanguageModel(langModelEmptyBlocks);
+    const lm = new BlockLanguage(langModelEmptyBlocks);
     const t = new Tree({
       language: "l",
       name: "n1"
@@ -120,7 +120,7 @@ describe("LanguageModel", () => {
   });
 
   it("Rejects to render a tree with only partially known types", () => {
-    const lm = new LanguageModel(langModelEmptyBlocks);
+    const lm = new BlockLanguage(langModelEmptyBlocks);
     const t = new Tree({
       language: "emptyBlocks",
       name: "root",
@@ -135,7 +135,7 @@ describe("LanguageModel", () => {
   });
 
   it("Promises to render a tree with only known types", () => {
-    const lm = new LanguageModel(langModelEmptyBlocks);
+    const lm = new BlockLanguage(langModelEmptyBlocks);
     const t = new Tree({
       language: "emptyBlocks",
       name: "root",
