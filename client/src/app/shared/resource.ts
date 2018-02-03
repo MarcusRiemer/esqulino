@@ -22,7 +22,7 @@ export {
  * always belong to a project and are uniquely identified
  * by an ID.
  */
-export abstract class ProjectResource implements ApiVersion, Saveable {
+export abstract class ProjectResource implements Saveable {
   private _id: string;
   private _name: string;
   private _project: Project;
@@ -44,26 +44,12 @@ export abstract class ProjectResource implements ApiVersion, Saveable {
     this._id = desc.id;
     this._name = desc.name;
     this._project = project;
-
-    // The esqulino client expects exactly matching versions. And because
-    // the JSON serialization may have circumvented the type system, we
-    // need to ensure we are actually loading something valid.
-    if (this.apiVersion != desc.apiVersion as string) {
-      throw new Error(`Attempted to load a resource with version ${desc.apiVersion}, current version is ${this.apiVersion}`);
-    }
   }
 
   /**
    * Convert this resource to it's JSON description
    */
   abstract toModel(): ProjectResourceDescription;
-
-  /**
-   * @return The API version of this resource
-   */
-  get apiVersion(): ApiVersionToken {
-    return (CURRENT_API_VERSION);
-  }
 
   /**
    * @return The project this resource is associated with. Because the tests

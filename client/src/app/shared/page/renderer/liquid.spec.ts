@@ -13,7 +13,6 @@ import {
 const pageModel: PageDescription = {
   id: "1",
   name: "Render Test Page Model",
-  apiVersion: "4",
   body: {
     type: "body",
     children: [

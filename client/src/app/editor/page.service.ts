@@ -106,7 +106,6 @@ export class PageService {
     const page = new Page({
       id: undefined,
       name: name,
-      apiVersion: CURRENT_API_VERSION,
       referencedQueries: [],
       body: Body.emptyDescription
     }, project);

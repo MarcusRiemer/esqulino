@@ -9,7 +9,7 @@ import { GrammarDescription } from './app/shared/syntaxtree/validator.descriptio
 import { LanguageDescription } from './app/shared/syntaxtree/language.description'
 import { Language } from './app/shared/syntaxtree/language'
 
-import { LanguageModelDescription } from './app/shared/block/language-model.description'
+import { BlockLanguageDescription } from './app/shared/block/block-language.description'
 import { prettyPrintLanguageModel } from './app/shared/block/prettyprint'
 
 import { graphvizSyntaxTree } from './app/shared/syntaxtree/prettyprint'
@@ -83,7 +83,7 @@ function findLanguage(id: string) {
 /**
  * All available language models
  */
-function availableLanguageModels(): LanguageModelDescription[] {
+function availableLanguageModels(): BlockLanguageDescription[] {
   return ([
     blocks_dxml.LANGUAGE_MODEL,
     blocks_dxml.DYNAMIC_LANGUAGE_MODEL,
@@ -94,7 +94,7 @@ function availableLanguageModels(): LanguageModelDescription[] {
 /**
  * Retrieves a single language model by name.
  */
-function findLanguageModel(id: string): LanguageModelDescription {
+function findLanguageModel(id: string): BlockLanguageDescription {
   return (availableLanguageModels().find(l => l.id == id));
 }
 

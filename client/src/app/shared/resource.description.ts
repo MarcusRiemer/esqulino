@@ -29,7 +29,7 @@ export interface ApiVersion {
 /**
  * The minimum set of properties any esqulino resources needs.
  */
-export interface ProjectResourceDescription extends ApiVersion {
+export interface ProjectResourceDescription {
   /**
    * An internal ID, possibly a GUID, to uniquely identify a resource.
    * These IDs must *never* change and should be UUIDs, so that they are

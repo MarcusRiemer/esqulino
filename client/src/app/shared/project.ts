@@ -82,14 +82,14 @@ export class Project implements ApiVersion, Saveable {
     this.schema = new Schema(json.schema);
 
     if (json.apiVersion as string != this.apiVersion) {
-      throw new Error(`Attempted to load a project with version ${json.apiVersion}, current version is ${this.apiVersion}`);
+      throw new Error(`Attempted to load a project "${json.slug}" with version ${json.apiVersion}, current version is ${this.apiVersion}`);
     }
 
     // Map all descriptions to their concrete objects
-    this._queries = json.queries
+    this._queries = (json.queries || [])
       .map(val => loadQuery(val, this.schema, this))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
-    this._pages = json.pages
+    this._pages = (json.pages || [])
       .map(val => new Page(val, this))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
     this._codeResources = (json.codeResources || [])
