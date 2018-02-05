@@ -4,11 +4,10 @@ class ProjectsController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
 
-  # Enumerating all available projects
+  before_action :project, only: [:show]
+
   def index
     @projects = Project.all
-    # projects = enumerate_projects(projects_dir, false, true)
-    #              .map { |project| project.public_description }
 
     render json: @projects
   end
@@ -29,9 +28,6 @@ class ProjectsController < ApplicationController
     render :json => { 'id' => creation_params.id }, :status => 200
   end
 
-  # Retrieving a single project
-  # TODO construct sqlite path with project slug and pass it to here: database_describe_schema(sqlite_file_path)
-  # TODO Load current proejct and merger schema there.
   def show
     project = Project.full.find_by(slug: params[:project_id])
 
@@ -69,5 +65,11 @@ class ProjectsController < ApplicationController
     else
       render plain: "Project has no preview image", status: :not_found
     end
+  end
+
+  private
+
+  def project
+    Project.find_by_slug(params[:project_id])
   end
 end
