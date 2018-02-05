@@ -2,7 +2,13 @@
 ProjectSource.destroy_all
 CodeResource.destroy_all
 BlockLanguage.destroy_all
+ProgrammingLanguage.destroy_all
 Project.destroy_all
+
+prog_sql = ProgrammingLanguage.create!(id: "sql", name: "SQL")
+prog_regex = ProgrammingLanguage.create!(id: "regex", name: "Reguläre Ausdrücke")
+prog_dxml = ProgrammingLanguage.create!(id: "dxml", name: "Dynamic XML")
+prog_xml = ProgrammingLanguage.create!(id: "xml", name: "XML")
 
 block_sql = BlockLanguage.create!(
   name: "SQL",
@@ -15,8 +21,7 @@ block_sql = BlockLanguage.create!(
 
 Project.create!(
   name: "Blog",
-  description: "Dein Blog, deine Regeln! Schreibe über Themen die dir am Herzen liegen
-      und tausche dich in den Kommentaren mit deinen Lesern aus.",
+  description: "Dein Blog, deine Regeln! Schreibe über Themen die dir am Herzen liegen und tausche dich in den Kommentaren mit deinen Lesern aus.",
   public: true,
   slug: "blog",
   preview: "a1986d62-0aec-4be4-a4db-cacd48f06453",
@@ -26,8 +31,7 @@ Project.create!(
 
 Project.create!(
   name: "Ereignisse",
-  description: "Historische Ereignisse & Personen mit ihren jeweiligen zeitlichen Daten.
-      Welcher Wissenschaftler hat eigentlich zu Zeiten der ersten olympischen Spiele gelebt?",
+  description: "Historische Ereignisse & Personen mit ihren jeweiligen zeitlichen Daten. Welcher Wissenschaftler hat eigentlich zu Zeiten der ersten olympischen Spiele gelebt?",
   public: true,
   slug: "events",
   preview: "preview.jpg",
@@ -114,7 +118,8 @@ test_sequence.code_resources.create!(
           ]
        }
     },
-  block_language: block_sql
+  block_language: block_sql,
+  programming_language: prog_sql
 )
 
 p "Created #{Project.count} projects"

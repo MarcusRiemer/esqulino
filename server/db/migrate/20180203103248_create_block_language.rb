@@ -1,4 +1,4 @@
-class BlockLanguage < ActiveRecord::Migration[5.1]
+class CreateBlockLanguage < ActiveRecord::Migration[5.1]
   def change
     drop_table(:language_models)
 

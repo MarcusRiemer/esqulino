@@ -5,8 +5,8 @@ export const CODE_RESOURCES: CodeResourceDescription[] = [
     id: "regex-empty",
     name: "RegEx: Leer",
     ast: undefined,
-    languageId: "regex",
-    blockModelId: "regex",
+    programmingLanguageId: "regex",
+    blockLanguageId: "regex",
   },
   {
     id: "regex-1",
@@ -80,21 +80,21 @@ export const CODE_RESOURCES: CodeResourceDescription[] = [
         ]
       }
     },
-    languageId: "regex",
-    blockModelId: "regex",
+    programmingLanguageId: "regex",
+    blockLanguageId: "regex",
   },
   {
     id: "xml-empty",
     name: "XML: Leer",
     ast: undefined,
-    languageId: "dxml-eruby",
-    blockModelId: "xml",
+    programmingLanguageId: "dxml-eruby",
+    blockLanguageId: "xml",
   },
   {
     id: "sql-empty",
     name: "SQL: Leer",
     ast: undefined,
-    languageId: "sql",
-    blockModelId: "sql",
+    programmingLanguageId: "sql",
+    blockLanguageId: "sql",
   }
 ];

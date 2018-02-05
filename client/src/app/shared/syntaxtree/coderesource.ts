@@ -34,8 +34,8 @@ export class CodeResource extends ProjectResource {
     super(desc, project);
 
     this._tree.next(new Tree(desc.ast));
-    this._languageId.next(desc.languageId);
-    this._languageModelId.next(desc.blockModelId);
+    this._languageId.next(desc.programmingLanguageId);
+    this._languageModelId.next(desc.blockLanguageId);
   }
 
   /**
@@ -254,8 +254,8 @@ export class CodeResource extends ProjectResource {
       id: this.id,
       name: this.name,
       ast: this.syntaxTreePeek.toModel(),
-      languageId: this.languageIdPeek,
-      blockModelId: this.languageModelIdPeek,
+      programmingLanguageId: this.languageIdPeek,
+      blockLanguageId: this.languageModelIdPeek,
     });
   }
 

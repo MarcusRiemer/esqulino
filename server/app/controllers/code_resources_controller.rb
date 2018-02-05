@@ -43,6 +43,6 @@ class CodeResourcesController < ApplicationController
 
   # Possible parameters for code resources
   def code_resource_params
-    params.permit(:name, :block_language_id, :ast => {})
+    params.permit(:name, :block_language_id, :programming_language_id, :ast => {})
   end
 end
