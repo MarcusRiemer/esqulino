@@ -47,13 +47,13 @@ This section contains some exemplary configuration files that work well for the 
 Example ``systemd`` configuration
 ---------------------------------
 
-.. literalinclude :: examples/blattwerkzeug.service
+.. literalinclude :: examples/admin/blattwerkzeug.service
   :caption: blattwerkzeug.service
 
-.. literalinclude :: examples/blattwerkzeug-universal.service
+.. literalinclude :: examples/admin/blattwerkzeug-universal.service
   :caption: blattwerkzeug-universal.service
 
 Example ``nginx`` configuration
 -------------------------------
 
-.. literalinclude :: examples/nginx.conf
+.. literalinclude :: examples/admin/nginx.conf

@@ -16,8 +16,8 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
    
    concepts
    ast
-   grammar
-   language-model
+   programming-language
+   block-language
    compilation
    configuration
    glossary
