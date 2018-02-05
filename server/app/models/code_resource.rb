@@ -1,6 +1,7 @@
 class CodeResource < ApplicationRecord
   belongs_to :project
   belongs_to :block_language
+  belongs_to :programming_language
   
   validates :name, presence: true
   # The AST is a single root node or empty

@@ -2,62 +2,55 @@ require 'rails_helper'
 
 RSpec.describe CodeResourcesController, type: :controller do
   describe "CREATE" do
-    it "works with name, project_id and block_language_id" do
-      proj = FactoryBot.create(:project)
-      block_lang = FactoryBot.create(:block_language)
+    it "works with default factory bot object" do
+      creation_attr = FactoryBot.build(:code_resource).attributes
+      
       post :create,
            :format => :json,
-           :params => {
-             :name => "Any",
-             :project_id => proj.id,
-             :block_language_id => block_lang.id
-           }
+           :params => creation_attr
 
       expect(response.status).to eq(200)
       expect(response.content_type).to eq "application/json"
 
       result = JSON.parse response.body
 
-      expect(result['name']).to eq "Any"
+      expect(result['name']).to eq creation_attr['name']
     end
 
     it "stores valid syntaxtrees" do
-      proj = FactoryBot.create(:project)
-      block_lang = FactoryBot.create(:block_language)
+      creation_attr = FactoryBot.build(
+        :code_resource,
+        ast: {
+          :language => "specLang",
+          :name => "specName",    
+        }
+      ).attributes
+            
       post :create,
            :format => :json,
-           :params => {
-             :name => "Any",
-             :project_id => proj.id,
-             :block_language_id => block_lang.id,
-             :ast => {
-               :language => "specLang",
-               :name => "specName",
-             }
-           }
-
+           :params => creation_attr
+      
       expect(response.status).to eq(200)
       expect(response.content_type).to eq "application/json"
 
       result = JSON.parse response.body
 
-      expect(result['name']).to eq "Any"
-      expect(result['ast']['language']).to eq "specLang"
-      expect(result['ast']['name']).to eq "specName"
+      expect(result['name']).to eq creation_attr['name']
+      expect(result['ast']['language']).to eq creation_attr['ast']['language']
+      expect(result['ast']['name']).to eq creation_attr['ast']['name']
     end
 
     it "requires a name" do
-      proj = FactoryBot.create(:project)
-      block_lang = FactoryBot.create(:block_language)
+      creation_attr = FactoryBot.build(:code_resource, name: nil).attributes
       post :create,
            :format => :json,
-           :params => {
-             :project_id => proj.id,
-             :block_language_id => block_lang.id
-           }
-
+           :params => creation_attr
+      
       expect(response.status).to eq(400)
       expect(response.content_type).to eq "application/json"
+
+      result = JSON.parse response.body
+      expect(result['errors']['name'].length).to eq 1
     end
 
     it "requires a project" do
@@ -74,18 +67,11 @@ RSpec.describe CodeResourcesController, type: :controller do
     end
 
     it "rejects invalid syntax trees" do
-      proj = FactoryBot.create(:project)
-      block_lang = FactoryBot.create(:block_language)
+      creation_attr = FactoryBot.build(:code_resource, ast: { :foo => "bar" }).attributes
+
       post :create,
            :format => :json,
-           :params => {
-             :name => "invalid tree",
-             :project_id => proj.id,
-             :block_language_id => block_lang.id,
-             :ast => {
-               :foo => "bar"
-             }
-           }
+           :params => creation_attr
 
       expect(response.status).to eq(400)
       expect(response.content_type).to eq "application/json"
@@ -101,15 +87,10 @@ RSpec.describe CodeResourcesController, type: :controller do
 
   describe "UPDATE" do
     it "changes the name" do
-      proj = FactoryBot.create(:project)
-      block_lang = FactoryBot.create(:block_language)
+      creation_attr = FactoryBot.build(:code_resource, name: "Initial").attributes
       post :create,
            :format => :json,
-           :params => {
-             :name => "Initial",
-             :project_id => proj.id,
-             :block_language_id => block_lang.id
-           }
+           :params => creation_attr
 
       expect(response.status).to eq(200)
       expect(response.content_type).to eq "application/json"
@@ -120,7 +101,7 @@ RSpec.describe CodeResourcesController, type: :controller do
           :format => :json,
           :params => { :name => "Changed",
                        :code_resource_id => resource['id'],
-                       :project_id => proj.id }
+                       :project_id => creation_attr['project_id'] }
 
       expect(response.status).to eq(200)
       expect(response.content_type).to eq "application/json"
@@ -144,15 +125,11 @@ RSpec.describe CodeResourcesController, type: :controller do
     end
 
     it "exists" do
-      proj = FactoryBot.create(:project)
-      block_lang = FactoryBot.create(:block_language)
+      creation_attr = FactoryBot.build(:code_resource, name: "Initial").attributes
+      
       post :create,
            :format => :json,
-           :params => {
-             :name => "Initial",
-             :project_id => proj.id,
-             :block_language_id => block_lang.id
-           }
+           :params => creation_attr
 
       expect(response.status).to eq(200)
       expect(response.content_type).to eq "application/json"
@@ -162,7 +139,7 @@ RSpec.describe CodeResourcesController, type: :controller do
       delete :destroy,
              :format => :json,
              :params => {
-               :project_id => proj.id,
+               :project_id => creation_attr['project_id'],
                :code_resource_id => resource['id']
              }
 
