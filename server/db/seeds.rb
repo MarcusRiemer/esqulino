@@ -19,7 +19,7 @@ block_sql = BlockLanguage.create!(
   }
 )
 
-Project.create!(
+proj_blog = Project.create!(
   name: "Blog",
   description: "Dein Blog, deine Regeln! Schreibe über Themen die dir am Herzen liegen und tausche dich in den Kommentaren mit deinen Lesern aus.",
   public: true,
@@ -29,7 +29,7 @@ Project.create!(
   active_database: "default"
 )
 
-Project.create!(
+proj_events = Project.create!(
   name: "Ereignisse",
   description: "Historische Ereignisse & Personen mit ihren jeweiligen zeitlichen Daten. Welcher Wissenschaftler hat eigentlich zu Zeiten der ersten olympischen Spiele gelebt?",
   public: true,
@@ -39,7 +39,7 @@ Project.create!(
   active_database: "default"
 )
 
-cyoa = Project.create!(
+proj_cyoa = Project.create!(
   name: "Adventure",
   description: "Write an adventure story and make your friends face-to-face",
   public: true,
@@ -49,14 +49,14 @@ cyoa = Project.create!(
   active_database: "default"
 )
 
-cyoa.project_sources.create!(
+proj_cyoa.project_sources.create!(
   url: "https://de.wikipedia.org/wiki/Spielbuch",
   title: "Wikipedia",
   display: "The sample story comes 1: 1 from the Wikipedia article to Spielbuch"
 )
 
 
-test_sequence = Project.create!(
+proj_test_sequence = Project.create!(
   name: "Test: Sequence DB",
   description: "Dieses Projekt wird für automatische Tests benutzt und hat keine inhaltliche  Bedeutung.",
   public: true,
@@ -65,7 +65,7 @@ test_sequence = Project.create!(
   active_database: "default"
 )
 
-test_sequence.code_resources.create!(
+proj_test_sequence.code_resources.create!(
   name: "select-test",
   ast:
     {
@@ -122,4 +122,4 @@ test_sequence.code_resources.create!(
   programming_language: prog_sql
 )
 
-p "Created #{Project.count} projects"
+puts "Created #{Project.count} projects"
