@@ -26,7 +26,7 @@ class CodeResourcesController < ApplicationController
     if resource.update_attributes(code_resource_params)
       render :json => resource, :status => 200
     else
-      render :json => { 'errors' => res.errors }, :status => 400
+      render :json => { 'errors' => resource.errors }, :status => 400
     end
   end
 
@@ -43,6 +43,8 @@ class CodeResourcesController < ApplicationController
 
   # Possible parameters for code resources
   def code_resource_params
-    params.permit(:name, :block_language_id, :programming_language_id, :ast => {})
+    params
+      .permit(:name, :programmingLanguageId, :ast => {})
+      .transform_keys! { |k| k.underscore }
   end
 end

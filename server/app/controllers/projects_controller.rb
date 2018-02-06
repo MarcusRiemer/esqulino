@@ -22,10 +22,10 @@ class ProjectsController < ApplicationController
     create_project projects_dir, creation_params
 
     # Tell people that are interested about this
-    email = ProjectMailer.created_admin(creation_params.id, creation_params.name)
+    email = ProjectMailer.created_admin(creation_params.slug, creation_params.name)
     email.deliver_later
 
-    render :json => { 'id' => creation_params.id }, :status => 200
+    render :json => { 'id' => creation_params.slug }, :status => 200
   end
 
   def show

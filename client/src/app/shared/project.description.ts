@@ -18,7 +18,7 @@ export type ProjectSlug = string;
 /**
  * The name of the project. May only contain more or less friendly
  * characters.
- * @pattern ^[a-zA-Z0-9 \-_\?äöüÄÖÜß]{4,}$
+ * @pattern ^[a-zA-Z0-9 \-_\?äöüÄÖÜß:]{4,}$
  */
 export type ProjectName = string;
 
@@ -58,9 +58,12 @@ export interface ProjectListDescription extends ApiVersion {
   id: string
   slug: ProjectSlug
   name: ProjectName
+  public?: boolean
   description: string
-  preview?: string,
+  preview?: string
   indexPageId?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 /**
@@ -75,7 +78,7 @@ export interface AvailableDatabaseDescription {
  * the data in the databases. These references may be used to
  * correctly acknowledge such sources.
  */
-export interface SourceDescription {
+export interface ProjectSourceDescription {
   type: "data",
   url: string,
   display: string
@@ -94,7 +97,7 @@ export interface ProjectDescription extends ProjectListDescription {
   schema?: TableDescription[]
   availableDatabases?: { [id: string]: AvailableDatabaseDescription }
   activeDatabase?: string
-  sources?: SourceDescription[]
+  sources?: ProjectSourceDescription[]
   queries?: Model.QueryDescription[]
   pages?: PageDescription[]
   codeResources?: CodeResourceDescription[]
@@ -115,7 +118,7 @@ export interface ProjectUpdateDescription extends ApiVersion {
  * These parameters are required to create a new project.
  */
 export interface ProjectCreationDescription extends ApiVersion {
-  id: ProjectSlug
+  slug: ProjectSlug
   name: ProjectName
 
   admin: {

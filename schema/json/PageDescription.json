@@ -33,6 +33,10 @@
           "$ref": "#/definitions/BodyDescription",
           "description": "The host for all widgets that are part of this page."
         },
+        "createdAt": {
+          "description": "Date & time this resource was created",
+          "type": "string"
+        },
         "id": {
           "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
           "type": "string"
@@ -54,6 +58,10 @@
             "$ref": "#/definitions/QueryReferenceDescription"
           },
           "type": "array"
+        },
+        "updatedAt": {
+          "description": "Date & time this resource was updated the last time",
+          "type": "string"
         }
       },
       "required": [

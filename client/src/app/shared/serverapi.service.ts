@@ -48,6 +48,13 @@ export class ServerApiService {
   }
 
   /**
+   * Retrieves the URL to access code resources
+   */
+  getCodeResourceUrl(projectId: string, codeResourceId: string): string {
+    return this.getProjectUrl(projectId) + `/code_resources/${codeResourceId}`
+  }
+
+  /**
    * Retrieves an URL that can be used to run requests
    * where the ID is transfered as part of the body.
    */

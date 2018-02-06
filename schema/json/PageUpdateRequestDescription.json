@@ -2,16 +2,6 @@
   "$ref": "#/definitions/PageUpdateRequestDescription",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "definitions": {
-    "ApiVersionToken": {
-      "description": "It would be nicer if versions could be numbers, but Typescript has no\nconcept of union types for numbers.",
-      "enum": [
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
-      "type": "string"
-    },
     "BodyDescription": {
       "additionalProperties": false,
       "description": "The body of an HTML page, will only appear once in a page.",
@@ -39,13 +29,13 @@
       "additionalProperties": false,
       "description": "Describes a page as a whole",
       "properties": {
-        "apiVersion": {
-          "$ref": "#/definitions/ApiVersionToken",
-          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
-        },
         "body": {
           "$ref": "#/definitions/BodyDescription",
           "description": "The host for all widgets that are part of this page."
+        },
+        "createdAt": {
+          "description": "Date & time this resource was created",
+          "type": "string"
         },
         "id": {
           "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
@@ -68,10 +58,13 @@
             "$ref": "#/definitions/QueryReferenceDescription"
           },
           "type": "array"
+        },
+        "updatedAt": {
+          "description": "Date & time this resource was updated the last time",
+          "type": "string"
         }
       },
       "required": [
-        "apiVersion",
         "name"
       ],
       "type": "object"

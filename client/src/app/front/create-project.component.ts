@@ -22,11 +22,11 @@ export class CreateProjectComponent {
    */
   public params: ProjectCreationDescription = {
     apiVersion: CURRENT_API_VERSION,
-    id: undefined,
+    slug: undefined,
     name: undefined,
     admin: {
-      name: undefined,
-      password: undefined,
+      name: "user",
+      password: "user",
     },
     dbType: "sqlite3",
     basedOn: undefined
@@ -39,7 +39,7 @@ export class CreateProjectComponent {
   ) {
   }
 
-  get regExpId() {
+  get regExpSlug() {
     return (StringValidator.ProjectSlug);
   }
 

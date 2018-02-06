@@ -8,7 +8,7 @@ class ProjectTest < ActiveSupport::TestCase
   def test_projects_folder
     Rails.application.config.sqlino[:projects_dir]
   end
-  
+
   # Tests whether certain strings are IDs
   test 'is_string_id?' do
     assert is_string_id?('00000000-1111-2222-3333-444444444444')
@@ -28,7 +28,7 @@ class ProjectTest < ActiveSupport::TestCase
   # Ensure parameters actually get through
   test 'Project creation parameters' do
     p = ProjectCreationParams.new ({
-                                     'id' => 'test-id',
+                                     'slug' => 'test-id',
                                      'name' => 'test-name',
                                      'dbType' => 'sqlite3',
                                      'admin' => {
@@ -37,7 +37,7 @@ class ProjectTest < ActiveSupport::TestCase
                                      }
                                    })
 
-    assert_equal 'test-id', p.id
+    assert_equal 'test-id', p.slug
     assert_equal 'test-name', p.name
     assert_equal 'sqlite3', p.db_type
     assert_equal 'test-admin', p.admin_name
@@ -56,7 +56,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test 'Actual project creation' do
     project_desc = ProjectCreationParams.new({
-                                               'id' => 'test-id',
+                                               'slug' => 'test-id',
                                                'name' => 'test-name',
                                                'dbType' => 'sqlite3',
                                                'admin' => {
@@ -70,10 +70,10 @@ class ProjectTest < ActiveSupport::TestCase
     p = LegacyProject.new File.join(test_projects_folder, 'test-id'), false
 
     assert p.exists?
-    assert_equal "test-id", p.id
+    assert_equal "test-id", p.slug
     assert_not p.public?
 
-    assert_equal "", p.public_description['description']    
+    assert_equal "", p.public_description['description']
     assert_equal "test-name", p.public_description['name']
 
     # TODO: Passwords are currently hardcoded
@@ -85,7 +85,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test 'Project creation and deletion' do
     project_desc = ProjectCreationParams.new({
-                                               'id' => 'test-id',
+                                               'slug' => 'test-id',
                                                'name' => 'test-name',
                                                'dbType' => 'sqlite3',
                                                'admin' => {
@@ -100,9 +100,8 @@ class ProjectTest < ActiveSupport::TestCase
 
     assert p.exists?
     p.delete!
-    assert_not p.exists?    
+    assert_not p.exists?
 
     rollback_test_filesystem
   end
 end
-

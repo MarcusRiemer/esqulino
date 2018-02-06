@@ -58,7 +58,7 @@ RSpec.describe CodeResource, type: :model do
     end
 
     it "accepts a valid tree" do
-      res = FactoryBot.build(
+      res = FactoryBot.create(
         :code_resource,
         ast: {
           "language" => "specLang",
@@ -67,12 +67,12 @@ RSpec.describe CodeResource, type: :model do
       )
 
       # Tree is valid, no errors expected
-      res.validate
       expect(res.errors["ast"].length).to be 0
 
       # Compiled should be *something* after saving
       res.save!
       expect(res.compiled).not_to be_nil
+      expect(res.to_full_api_response).to validate_against "CodeResourceDescription"
     end
   end
 
@@ -96,6 +96,7 @@ RSpec.describe CodeResource, type: :model do
         ast: ast
       ).to_full_api_response
 
+      # AST must not change
       expect(api_response['ast']).to eq ast
     end
 
@@ -107,13 +108,15 @@ RSpec.describe CodeResource, type: :model do
           "snake_case" => []
         }
       }
-      api_response = FactoryBot.build(
+      
+      api_response = FactoryBot.create(
         :code_resource,
-        project: nil,
         ast: ast
       ).to_full_api_response
 
+      # AST must not change
       expect(api_response['ast']).to eq ast
+      expect(api_response).to validate_against "CodeResourceDescription"
     end
   end
 

@@ -77,33 +77,36 @@
       "additionalProperties": false,
       "description": "A resource that is described by a syntaxtree.",
       "properties": {
-        "apiVersion": {
-          "$ref": "#/definitions/ApiVersionToken",
-          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
-        },
         "ast": {
           "$ref": "#/definitions/NodeDescription"
+        },
+        "blockLanguageId": {
+          "type": "string"
+        },
+        "createdAt": {
+          "description": "Date & time this resource was created",
+          "type": "string"
         },
         "id": {
           "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
           "type": "string"
         },
-        "languageId": {
-          "type": "string"
-        },
-        "languageModelId": {
-          "type": "string"
-        },
         "name": {
           "description": "The user-chosen name of this resource. This property is free to change.",
+          "type": "string"
+        },
+        "programmingLanguageId": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "description": "Date & time this resource was updated the last time",
           "type": "string"
         }
       },
       "required": [
-        "apiVersion",
-        "languageId",
-        "languageModelId",
-        "name"
+        "blockLanguageId",
+        "name",
+        "programmingLanguageId"
       ],
       "type": "object"
     },
@@ -381,13 +384,13 @@
       "additionalProperties": false,
       "description": "Describes a page as a whole",
       "properties": {
-        "apiVersion": {
-          "$ref": "#/definitions/ApiVersionToken",
-          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
-        },
         "body": {
           "$ref": "#/definitions/BodyDescription",
           "description": "The host for all widgets that are part of this page."
+        },
+        "createdAt": {
+          "description": "Date & time this resource was created",
+          "type": "string"
         },
         "id": {
           "description": "An internal ID, possibly a GUID, to uniquely identify a resource.\nThese IDs must *never* change and should be UUIDs, so that they are\nglobally unique.",
@@ -410,10 +413,13 @@
             "$ref": "#/definitions/QueryReferenceDescription"
           },
           "type": "array"
+        },
+        "updatedAt": {
+          "description": "Date & time this resource was updated the last time",
+          "type": "string"
         }
       },
       "required": [
-        "apiVersion",
         "name"
       ],
       "type": "object"
@@ -467,6 +473,9 @@
           },
           "type": "array"
         },
+        "createdAt": {
+          "type": "string"
+        },
         "description": {
           "type": "string"
         },
@@ -488,6 +497,9 @@
         "preview": {
           "type": "string"
         },
+        "public": {
+          "type": "boolean"
+        },
         "queries": {
           "items": {
             "$ref": "#/definitions/QueryDescription"
@@ -505,9 +517,12 @@
         },
         "sources": {
           "items": {
-            "$ref": "#/definitions/SourceDescription"
+            "$ref": "#/definitions/ProjectSourceDescription"
           },
           "type": "array"
+        },
+        "updatedAt": {
+          "type": "string"
         }
       },
       "required": [
@@ -521,7 +536,7 @@
     },
     "ProjectName": {
       "description": "The name of the project. May only contain more or less friendly\ncharacters.",
-      "pattern": "^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß]{4,}$",
+      "pattern": "^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß:]{4,}$",
       "type": "string"
     },
     "ProjectSlug": {
@@ -529,13 +544,41 @@
       "pattern": "^[a-z0-9\\-]{4,}$",
       "type": "string"
     },
+    "ProjectSourceDescription": {
+      "additionalProperties": false,
+      "description": "Some projects are based on external sources, especially regarding\nthe data in the databases. These references may be used to\ncorrectly acknowledge such sources.",
+      "properties": {
+        "display": {
+          "type": "string"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "type": {
+          "enum": [
+            "data"
+          ],
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "display",
+        "readOnly"
+      ],
+      "type": "object"
+    },
     "QueryDescription": {
       "additionalProperties": false,
       "description": "Outermost description of a query. This contains\nthe whole structure and some identifying properties.",
       "properties": {
-        "apiVersion": {
-          "$ref": "#/definitions/ApiVersionToken",
-          "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
+        "createdAt": {
+          "description": "Date & time this resource was created",
+          "type": "string"
         },
         "delete": {
           "$ref": "#/definitions/Delete"
@@ -563,12 +606,15 @@
         "update": {
           "$ref": "#/definitions/Update"
         },
+        "updatedAt": {
+          "description": "Date & time this resource was updated the last time",
+          "type": "string"
+        },
         "where": {
           "$ref": "#/definitions/Where"
         }
       },
       "required": [
-        "apiVersion",
         "name"
       ],
       "type": "object"
@@ -641,34 +687,6 @@
       },
       "required": [
         "column"
-      ],
-      "type": "object"
-    },
-    "SourceDescription": {
-      "additionalProperties": false,
-      "description": "Some projects are based on external sources, especially regarding\nthe data in the databases. These references may be used to\ncorrectly acknowledge such sources.",
-      "properties": {
-        "display": {
-          "type": "string"
-        },
-        "readOnly": {
-          "type": "boolean"
-        },
-        "type": {
-          "enum": [
-            "data"
-          ],
-          "type": "string"
-        },
-        "url": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "url",
-        "display",
-        "readOnly"
       ],
       "type": "object"
     },
