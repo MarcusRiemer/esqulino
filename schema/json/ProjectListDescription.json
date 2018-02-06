@@ -20,6 +20,9 @@
           "$ref": "#/definitions/ApiVersionToken",
           "description": "These API versions are merely a number, no need to overcomplicate things.\nIf versions differ, any implementing the API is free to specify\nversion ranges it works with."
         },
+        "createdAt": {
+          "type": "string"
+        },
         "description": {
           "type": "string"
         },
@@ -35,8 +38,14 @@
         "preview": {
           "type": "string"
         },
+        "public": {
+          "type": "boolean"
+        },
         "slug": {
           "$ref": "#/definitions/ProjectSlug"
+        },
+        "updatedAt": {
+          "type": "string"
         }
       },
       "required": [
