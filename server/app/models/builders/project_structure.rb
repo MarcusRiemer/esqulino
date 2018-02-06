@@ -1,12 +1,14 @@
-module Structure
+module Builders
+  # Builds the structure class with other data sources,as pages, schema, quries
   class ProjectStructure
+    attr_reader :project
 
     API_VERSION = 4
 
     def initialize(project:)
       @project = project
     end
-    
+
     def build
       data['schema'] = schema
       data['apiVersion'] = api_version
@@ -16,11 +18,11 @@ module Structure
       data
     end
 
-    # TODO construct sqlite path with project slug and pass it to here: database_describe_schema(sqlite_file_path)
+    # TODO: construct sqlite path with project slug and pass it to here: database_describe_schema(sqlite_file_path)
     def schema
       []
     end
- 
+
     def api_version
       API_VERSION
     end
@@ -33,12 +35,6 @@ module Structure
       []
     end
 
-    def project
-      raise StandardError, 'Project data has to be fetched first' if @project.blank?
-
-      @project
-    end
-    
     def sources
       project.project_sources
     end
