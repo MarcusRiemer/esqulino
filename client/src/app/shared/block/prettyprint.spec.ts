@@ -1,4 +1,4 @@
-import { LanguageModelDescription } from './language-model.description'
+import { BlockLanguageDescription } from './block-language.description'
 import { VisualBlockDescriptions, EditorBlockDescription } from './block.description'
 
 import { prettyPrintLanguageModel } from './prettyprint'
@@ -23,7 +23,7 @@ export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) 
 
 describe('LanguageModel PrettyPrinter', () => {
   it('Scratch', () => {
-    const l: LanguageModelDescription = {
+    const l: BlockLanguageDescription = {
       "id": "test",
       "name": "test",
       "editorBlocks": [

@@ -5,7 +5,6 @@ import { Button, ButtonDescription } from './button'
 const pageModel: PageDescription = {
   id: "1",
   name: "Button Page Model",
-  apiVersion: "4",
   body: {
     type: "body",
     children: [

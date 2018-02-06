@@ -3,6 +3,8 @@
 
 include ../Makefile.common
 
+RAILS_ENV ?= test
+
 # Install ruby dependencies
 install-deps : msg-pre-install-deps
 	bundle install --path vendor/bundle
@@ -21,8 +23,9 @@ run-dev : msg-pre-run-dev
 
 # Running tests
 test : msg-pre-run-test
-	./bin/rails db:setup RAILS_ENV=test
+	./bin/rails db:setup RAILS_ENV=$(RAILS_ENV)
 	./bin/rails test
+	./bin/rails spec
 
 .PHONY : install-deps run run-dev test clean-deps
 

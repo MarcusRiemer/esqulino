@@ -364,7 +364,6 @@ export class Page extends ProjectResource {
     const toReturn: PageDescription = {
       id: this.id,
       name: this.name,
-      apiVersion: this.apiVersion
     };
 
     if (this._referencedQueries.length > 0) {

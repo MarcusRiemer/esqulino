@@ -18,11 +18,11 @@ help:
 # Generating pretty printed grammar files
 generated/%.grammar: $(CLI_PROG_CLIENT)
 	@mkdir -p generated
-	@echo '{ "type": "printGrammar", "id": "$*" }' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.grammar"
+	@echo '{ "type": "printGrammar", "programmingLanguageId": "$*" }' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.grammar"
 
 generated/%.blocks: $(CLI_PROG_CLIENT)
 	@mkdir -p generated
-	@echo '{ "type": "printLanguageModel", "id": "$*" }' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.blocks"
+	@echo '{ "type": "printBlockLanguage", "blockLanguageId": "$*" }' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.blocks"
 
 generated/%.sql: examples/syntaxtree/%.json $(CLI_PROG_CLIENT)
 	@mkdir -p generated
@@ -40,6 +40,8 @@ pretty-blocks: generated/xml.blocks generated/dxml.blocks generated/sql.blocks
 
 # Default set of graphviz trees
 graphviz-trees: generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz
+
+all-generated: pretty-grammars pretty-blocks graphviz-trees
 
 clean:
 	rm -rf generated _build

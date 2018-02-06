@@ -25,10 +25,12 @@ test:
     default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
     admin: "Marcus@GurXite.de"
   ide_service:
+    mock: true
     exec:
       node_binary: /usr/bin/node
       program: ../client/dist/cli/main.cli.js
-      mode: daemon
+      mode: one-shot
+
   
 production:
   name: "Blattwerkzeug"

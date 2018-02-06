@@ -82,7 +82,6 @@ describe('Valid SELECT Queries', () => {
     let model: Model.QueryDescription = {
       name: 'test-whole',
       id: 'id',
-      apiVersion: CURRENT_API_VERSION,
       select: {
         columns: [
           { expr: { singleColumn: { column: "personId", table: "person" } } },
@@ -145,7 +144,6 @@ describe('Valid SELECT Queries', () => {
     const model: Model.QueryDescription = {
       name: 'select-single-parameter',
       id: 'select-single-parameter',
-      apiVersion: CURRENT_API_VERSION,
       singleRow: true,
       select: {
         columns: [{ expr: { star: {} } }]
@@ -207,7 +205,6 @@ describe('Valid SELECT Queries', () => {
     const model: Model.QueryDescription = {
       name: 'where-simple',
       id: 'where-1',
-      apiVersion: CURRENT_API_VERSION,
       select: {
         columns: [{ expr: { star: {} } }]
       },
@@ -251,7 +248,6 @@ describe('Valid SELECT Queries', () => {
     const model: Model.QueryDescription = {
       name: 'where-compare',
       id: 'where-2',
-      apiVersion: CURRENT_API_VERSION,
       select: {
         columns: [{ expr: { star: {} } }]
       },
@@ -296,7 +292,6 @@ describe('Invalid SELECT Queries', () => {
     const model: Model.QueryDescription = {
       name: 'select-nonexistant-column',
       id: 'invalid-select-1',
-      apiVersion: CURRENT_API_VERSION,
       select: {
         columns: [
           { expr: { singleColumn: { column: "nonexistant", table: "person" } } },
@@ -324,7 +319,6 @@ describe('Invalid SELECT Queries', () => {
     const model: Model.QueryDescription = {
       name: 'select-single-row-no-restrict',
       id: 'invalid-select-2',
-      apiVersion: CURRENT_API_VERSION,
       singleRow: true,
       select: {
         columns: [
@@ -348,7 +342,6 @@ describe('Invalid SELECT Queries', () => {
     const model: Model.QueryDescription = {
       name: 'select-duplicate-column',
       id: 'invalid-select-3',
-      apiVersion: CURRENT_API_VERSION,
       select: {
         columns: [
           { expr: { star: {} } },
@@ -377,7 +370,6 @@ describe('Invalid SELECT Queries', () => {
     const model: Model.QueryDescription = {
       name: 'select-invalid-column',
       id: 'invalid-select-4',
-      apiVersion: CURRENT_API_VERSION,
       select: {
         columns: [
           { expr: { singleColumn: { column: "test", table: "nonexistant" } } },
@@ -410,7 +402,6 @@ describe('Invalid SELECT Queries', () => {
     const model: Model.QueryDescription = {
       name: 'select-invalid-table',
       id: 'invalid-select-5',
-      apiVersion: CURRENT_API_VERSION,
       select: {
         columns: [
           { expr: { singleColumn: { column: "test", table: "nonexistant" } } },
