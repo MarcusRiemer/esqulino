@@ -123,7 +123,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "creating a new project and deleting it afterwards" do
     project_creation_json = {
       "apiVersion" =>"4",
-      "id" => "test-id",
+      "slug" => "test-id",
       "name" => "test-name",
       "admin" => {
         "name" => "test",
@@ -139,7 +139,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal "application/json", @response.content_type
 
-    delete '/api/project/db-sequence',
+    delete '/api/project/test-id',
            headers: auth_headers
 
     rollback_test_filesystem
