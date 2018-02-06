@@ -87,15 +87,8 @@ RSpec.describe CodeResourcesController, type: :controller do
 
   describe "UPDATE" do
     it "changes the name" do
-      creation_attr = FactoryBot.build(:code_resource, name: "Initial").attributes
-      post :create,
-           :format => :json,
-           :params => creation_attr
-
-      expect(response.status).to eq(200)
-      expect(response.content_type).to eq "application/json"
-
-      resource = JSON.parse response.body
+      resource = FactoryBot.create(:code_resource, name: "Initial")
+      creation_attr = resource.attributes
 
       put :update,
           :format => :json,
@@ -103,11 +96,29 @@ RSpec.describe CodeResourcesController, type: :controller do
                        :code_resource_id => resource['id'],
                        :project_id => creation_attr['project_id'] }
 
-      expect(response.status).to eq(200)
+      expect(response.status).to eq 200
       expect(response.content_type).to eq "application/json"
       
       result = JSON.parse response.body
       expect(result['name']).to eq "Changed"
+    end
+
+    it "changes the programming language", :focus do
+      new_lang = FactoryBot.create(:programming_language)
+      resource = FactoryBot.create(:code_resource, name: 'Initial')
+      creation_attr = resource.attributes
+
+      put :update,
+          :format => :json,
+          :params => { :programmingLanguageId => new_lang.id,
+                       :code_resource_id => resource['id'],
+                       :project_id => creation_attr['project_id'] }
+
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "application/json"
+      
+      result = JSON.parse response.body
+      expect(result['programming_language_id']).to eq new_lang.id
     end
   end
 

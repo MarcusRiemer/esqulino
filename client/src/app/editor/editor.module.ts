@@ -17,6 +17,7 @@ import { editorRouting } from './editor.routes'
 import { ProjectExistsGuard } from './project-exists.guard'
 
 import { PageService } from './page.service'
+import { CodeResourceService } from './coderesource.service'
 import { DragService } from './drag.service'
 import { ProjectService, Project } from './project.service'
 import { ToolbarService } from './toolbar.service'
@@ -51,6 +52,7 @@ import { SettingsComponent } from './settings.component'
     SettingsComponent,
   ],
   providers: [
+    CodeResourceService,
     DragService as any,
     SidebarService,
     RegistrationService,

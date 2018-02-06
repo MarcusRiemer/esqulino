@@ -7,6 +7,7 @@ import { ToolbarService } from '../../toolbar.service';
 
 import { TreeEditorService } from '../editor.service';
 import { DragService } from '../../drag.service';
+import { CodeResourceService } from '../../coderesource.service';
 
 /**
  * The "usual" editor folks will interact with. Displays all sorts
@@ -16,12 +17,19 @@ import { DragService } from '../../drag.service';
   templateUrl: 'templates/block-editor.html',
   providers: [TreeEditorService],
 })
-export class BlockEditorComponent implements OnInit {
+export class BlockEditorComponent implements OnInit, OnDestroy {
+
+  /**
+   * Subscriptions that need to be released
+   */
+  private _subscriptionRefs: any[] = [];
+
 
   constructor(
     private _toolbarService: ToolbarService,
     private _dragService: DragService,
     private _treeService: TreeEditorService,
+    private _codeResourceService: CodeResourceService,
     private _router: Router,
     private _route: ActivatedRoute,
   ) {
@@ -36,6 +44,18 @@ export class BlockEditorComponent implements OnInit {
     btnChange.onClick.subscribe(_ => {
       this._router.navigate(["..", "raw"], { relativeTo: this._route });
     });
+
+    // Reacting to saving
+    this._toolbarService.savingEnabled = true;
+    let btnSave = this._toolbarService.saveItem;
+
+    let subRef = btnSave.onClick.subscribe((res) => {
+      btnSave.isInProgress = true;
+      this._codeResourceService.updateCodeResource(this._treeService.peekResource)
+        // Always delay visual feedback by 500ms
+        .delay(500)
+        .subscribe(res => btnSave.isInProgress = false);
+    });
   }
 
   /**
@@ -43,6 +63,14 @@ export class BlockEditorComponent implements OnInit {
    */
   get currentResource() {
     return (this._treeService.currentResource);
+  }
+
+  /**
+   * Cleans up all acquired references
+   */
+  ngOnDestroy() {
+    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
+    this._subscriptionRefs = [];
   }
 
   /**

@@ -108,6 +108,7 @@ RSpec.describe CodeResource, type: :model do
           "snake_case" => []
         }
       }
+      
       api_response = FactoryBot.create(
         :code_resource,
         ast: ast
