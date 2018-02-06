@@ -1,12 +1,9 @@
 FactoryBot.define do
-  factory :project do
-    name "Spec Project"
-    slug "spec-proejct"
-  end
-
-  factory :proejct_source do
-    project
-    title "awesome proejct"
-    display "wow! all the data has be scraped"
+  factory :project, class: Project do
+    sequence(:name) { |n| "Spec Project ##{n}"}
+    slug { name.parameterize }
+    description "Generated on the fly, used for tests"
+    index_page_id nil
+    public true
   end
 end

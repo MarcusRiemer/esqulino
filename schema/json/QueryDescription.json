@@ -217,6 +217,10 @@
       "additionalProperties": false,
       "description": "Outermost description of a query. This contains\nthe whole structure and some identifying properties.",
       "properties": {
+        "createdAt": {
+          "description": "Date & time this resource was created",
+          "type": "string"
+        },
         "delete": {
           "$ref": "#/definitions/Delete"
         },
@@ -242,6 +246,10 @@
         },
         "update": {
           "$ref": "#/definitions/Update"
+        },
+        "updatedAt": {
+          "description": "Date & time this resource was updated the last time",
+          "type": "string"
         },
         "where": {
           "$ref": "#/definitions/Where"

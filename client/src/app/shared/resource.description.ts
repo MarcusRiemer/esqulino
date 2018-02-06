@@ -41,4 +41,14 @@ export interface ProjectResourceDescription {
    * The user-chosen name of this resource. This property is free to change.
    */
   name: string;
+
+  /**
+   * Date & time this resource was created
+   */
+  createdAt?: string;
+
+  /**
+   * Date & time this resource was updated the last time
+   */
+  updatedAt?: string;
 }

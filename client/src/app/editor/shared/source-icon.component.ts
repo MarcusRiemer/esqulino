@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 
-import { SourceDescription } from '../../shared/project.description'
+import { ProjectSourceDescription } from '../../shared/project.description'
 
 /**
  * Renders a matching icon for a source.
@@ -11,7 +11,7 @@ import { SourceDescription } from '../../shared/project.description'
 })
 export class SourceIconComponent {
 
-  @Input() source: SourceDescription;
+  @Input() source: ProjectSourceDescription;
 
   /**
    * @return A FontAwesome icon class that matches the type.

@@ -77,6 +77,10 @@ class LegacyProject
     File.basename @project_folder
   end
 
+  def slug
+    self.id
+  end
+
   # @return True, if at least the project folder and a model file exist
   def exists?
     File.directory? @project_folder and File.exists? self.description_filename
@@ -497,10 +501,10 @@ end
 
 # Available parameters during project creation.
 class ProjectCreationParams
-  attr_reader :id, :name, :db_type, :admin_name, :admin_password
+  attr_reader :slug, :name, :db_type, :admin_name, :admin_password
 
   def initialize(params_hash)
-    @id = params_hash['id']
+    @slug = params_hash['slug']
     @name = params_hash['name']
     @db_type = params_hash['dbType']
 
@@ -531,9 +535,9 @@ end
 # @param paroject_params[ProjectCreationParams] Parameters to use for creation
 def create_project(projects_dir, project_params)
   # Ensure the project hasn't already been created
-  project_path = File.join projects_dir, project_params.id
+  project_path = File.join projects_dir, project_params.slug
   if File.exists? project_path
-    raise EsqulinoError.new("Project \"#{project_params.id}\" can't be created, it already exists")
+    raise EsqulinoError.new("Project \"#{project_params.slug}\" can't be created, it already exists")
   end
 
   project_description = project_params.to_description

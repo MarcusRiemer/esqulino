@@ -148,6 +148,9 @@ export class ProjectService {
 
     // The project ID is part of the request, it must not be sent
     // in the body again
+    delete desc.id;
+
+    // TODO: The slug shouldn't be changed at the moment, but maybe later
     delete desc.slug;
 
     const toReturn = this._http.post(url, JSON.stringify(desc))

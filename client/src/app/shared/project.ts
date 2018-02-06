@@ -10,7 +10,7 @@ import {
 } from './interfaces'
 import { Query, Model, loadQuery } from './query'
 import {
-  ProjectDescription, AvailableDatabaseDescription, SourceDescription,
+  ProjectDescription, AvailableDatabaseDescription, ProjectSourceDescription,
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from './project.description'
 
@@ -58,7 +58,7 @@ export class Project implements ApiVersion, Saveable {
   private _projectImageId: string;
   private _version: ApiVersionToken;
 
-  private _sources: SourceDescription[];
+  private _sources: ProjectSourceDescription[];
 
   private _saveRequired = false;
 
