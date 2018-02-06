@@ -30,14 +30,7 @@ class ProjectsController < ApplicationController
 
   def show
     project = Project.full.find_by(slug: params[:project_id])
-
-    to_return = project.serializable_hash
-    to_return['schema'] = []
-    to_return['apiVersion'] = 4
-    to_return['codeResources'] = project.code_resources.map(&:serializable_hash)
-    to_return['sources'] = project.project_sources.map(&:serializable_hash)
-
-    render json: to_return
+    render json: project.to_full_api_response
   end
 
   # Update an existing project
