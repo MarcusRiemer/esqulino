@@ -38,16 +38,8 @@ ActiveRecord::Schema.define(version: 20180205141013) do
     t.index ["project_id"], name: "index_code_resources_on_project_id"
   end
 
-<<<<<<< HEAD
-  create_table "language_models", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.json "model"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-=======
   create_table "programming_languages", id: :text, force: :cascade do |t|
     t.string "name", null: false
->>>>>>> origin/unified-code-resource
   end
 
   create_table "project_sources", force: :cascade do |t|
