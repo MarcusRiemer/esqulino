@@ -1,0 +1,34 @@
+{
+  "$ref": "#/definitions/ProjectSourceDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "ProjectSourceDescription": {
+      "additionalProperties": false,
+      "description": "Some projects are based on external sources, especially regarding\nthe data in the databases. These references may be used to\ncorrectly acknowledge such sources.",
+      "properties": {
+        "display": {
+          "type": "string"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "type": {
+          "enum": [
+            "data"
+          ],
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "display",
+        "readOnly"
+      ],
+      "type": "object"
+    }
+  }
+}

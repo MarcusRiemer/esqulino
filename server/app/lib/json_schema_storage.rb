@@ -20,8 +20,6 @@ class JsonSchemaStorage
       end
 
       schema_content = File.read(schema_file)
-
-      Rails.logger.info "Loading #{schema_name} at #{schema_file}"
       schema = JSON.load(schema_content, :quirks_mode => true)
 
       @schemas[schema_name] = schema

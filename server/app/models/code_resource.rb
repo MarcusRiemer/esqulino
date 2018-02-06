@@ -67,6 +67,6 @@ class CodeResource < ApplicationRecord
 
   # Computes a hash that may be sent back to the client
   def to_full_api_response
-    self.serializable_hash.transform_keys! { |k| k.camelize(:lower) }
+    super.slice("name", "id", "ast", "createdAt", "updatedAt", "blockLanguageId", "programmingLanguageId")
   end
 end

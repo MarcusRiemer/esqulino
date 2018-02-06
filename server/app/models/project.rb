@@ -13,12 +13,11 @@ class Project < ApplicationRecord
 
   # Computes a hash that may be sent back to the client
   def to_full_api_response
-    to_return = self.serializable_hash
-    
-    to_return.transform_keys! { |k| k.camelize(:lower) }
+    to_return = super
     
     to_return['schema'] = []
-    to_return['apiVersion'] = 4
+    to_return['apiVersion'] = '4'
+    to_return['activeDatabase'] = "default"
     to_return['codeResources'] = self.code_resources.map(&:to_full_api_response)
     to_return['sources'] = self.project_sources.map(&:serializable_hash)
     

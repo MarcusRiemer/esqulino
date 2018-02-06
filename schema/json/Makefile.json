@@ -6,7 +6,7 @@
 TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = PageDescription.json PageUpdateRequestDescription.json PageRenderRequestDescription.json ProjectDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json AlterSchemaRequestDescription.json TableDescription.json BlockLanguageDocument.json NodeDescription.json
+JSON_SCHEMA_FILES = PageDescription.json PageUpdateRequestDescription.json PageRenderRequestDescription.json ProjectDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json AlterSchemaRequestDescription.json TableDescription.json BlockLanguageDocument.json NodeDescription.json CodeResourceDescription.json ProjectSourceDescription.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -31,6 +31,9 @@ ProjectCreationDescription.json : $(SRC_PATH)/shared/project.description.ts
 	$(CONVERT_COMMAND)
 
 ProjectListDescription.json : $(SRC_PATH)/shared/project.description.ts
+	$(CONVERT_COMMAND)
+
+ProjectSourceDescription.json : $(SRC_PATH)/shared/project.description.ts
 	$(CONVERT_COMMAND)
 
 QueryDescription.json : $(SRC_PATH)/shared/query/description.ts
@@ -67,6 +70,9 @@ BlockLanguageDocument.json : $(SRC_PATH)/shared/block/block-language.description
 	$(CONVERT_COMMAND)
 
 NodeDescription.json : $(SRC_PATH)/shared/syntaxtree/syntaxtree.description.ts
+	$(CONVERT_COMMAND)
+
+CodeResourceDescription.json : $(SRC_PATH)/shared/syntaxtree/coderesource.description.ts
 	$(CONVERT_COMMAND)
 
 
