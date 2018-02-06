@@ -28,7 +28,7 @@ test:
     exec:
       node_binary: /usr/bin/node
       program: ../client/dist/cli/main.cli.js
-      mode: daemon
+      mode: one-shot
   
 production:
   name: "Blattwerkzeug"
