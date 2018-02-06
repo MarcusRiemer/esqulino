@@ -29,6 +29,15 @@ class BaseIdeService
     end
   end
 
+  # Checks whether the IDE-service is available
+  def ping
+    begin
+      execute_request({ "type" => "ping"}) == "pong"
+    rescue IdeServiceError => e
+      false
+    end
+  end
+
   # Executes the given request object with the backing server
   #
   # @param request [hash]
@@ -77,11 +86,15 @@ class OneShotExecIdeService < ExecIdeService
   end
 end
 
-# Answers every request with a string representation of the
+# Answers most requests with a string representation of the
 # request. This is obviously only meant for testing.
 class MockIdeService < BaseIdeService
   def execute_request(request)
     request.to_json
+  end
+
+  def ping
+    true
   end
 end
 
