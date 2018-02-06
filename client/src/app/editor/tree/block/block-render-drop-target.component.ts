@@ -3,7 +3,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 
 import { arrayEqual } from '../../../shared/util';
 import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
-import { LanguageModel, VisualBlockDescriptions } from '../../../shared/block';
+import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
 

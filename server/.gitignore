@@ -21,3 +21,4 @@
 
 coverage
 /vendor/bundle
+test-results

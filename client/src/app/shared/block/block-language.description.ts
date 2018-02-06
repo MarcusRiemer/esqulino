@@ -3,7 +3,7 @@ import { SidebarBlockDescription, EditorBlockDescription } from './block.descrip
 /**
  * Augments a language with information about the UI layer.
  */
-export interface LanguageModelDescription extends LanguageModelDocument {
+export interface BlockLanguageDescription extends BlockLanguageDocument {
   /**
    * The internal ID of this language model.
    */
@@ -18,7 +18,7 @@ export interface LanguageModelDescription extends LanguageModelDocument {
 /**
  * The data about a language model that is stored in the database
  */
-export interface LanguageModelDocument {
+export interface BlockLanguageDocument {
   /**
    * All blocks that should be shown in the sidebar.
    */

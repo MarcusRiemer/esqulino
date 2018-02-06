@@ -29,7 +29,12 @@ class ProjectsController < ApplicationController
   end
 
   def show
+<<<<<<< HEAD
     render json: Builders::ProjectStructure.new(project: project).build
+=======
+    project = Project.full.find_by(slug: params[:project_id])
+    render json: project.to_full_api_response
+>>>>>>> origin/unified-code-resource
   end
 
   # Update an existing project

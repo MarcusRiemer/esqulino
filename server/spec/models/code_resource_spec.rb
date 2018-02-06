@@ -2,14 +2,14 @@ require 'rails_helper'
 
 RSpec.describe CodeResource, type: :model do
   context "name" do
-    it "rejects an missing name" do
+    it "rejects a missing name" do
       res = FactoryBot.build(:code_resource, name: nil)
 
       res.validate
       expect(res.errors["name"].length).to be 1
     end
 
-    it "rejects an blank name" do
+    it "rejects a blank name" do
       res = FactoryBot.build(:code_resource, name: " ")
 
       res.validate
@@ -24,42 +24,110 @@ RSpec.describe CodeResource, type: :model do
     end
   end
 
-  context "ast" do
+  context "AST" do
     it "rejects nodes without a name" do
-      res = FactoryBot.build(:code_resource)
-      res.ast = {
-        "language" => "specLang"
-      }
+      res = FactoryBot.build(
+        :code_resource,
+        ast: {
+          "language" => "specLang"
+        }
+      )
 
       res.validate
       expect(res.errors["ast"].length).to be 1
+      expect(res.compiled).to be nil
     end
 
     it "rejects nodes without a language" do
-      res = FactoryBot.build(:code_resource)
-      res.ast = {
-        "name" => "specRoot"
-      }
+      res = FactoryBot.build(
+        :code_resource,
+        ast: {
+          "name" => "specRoot"
+        }
+      )
 
       res.validate
       expect(res.errors["ast"].length).to be 1
+      expect(res.compiled).to be nil
     end
 
     it "accepts a missing root" do
-      res = FactoryBot.build(:code_resource)
-      res.ast = nil
-
+      res = FactoryBot.build(:code_resource, ast: nil)
       res.validate
       expect(res.errors["ast"].length).to be 0
     end
+
+    it "accepts a valid tree" do
+      res = FactoryBot.build(
+        :code_resource,
+        ast: {
+          "language" => "specLang",
+          "name" => "specRoot"
+        }
+      )
+
+      # Tree is valid, no errors expected
+      res.validate
+      expect(res.errors["ast"].length).to be 0
+
+      # Compiled should be *something* after saving
+      res.save!
+      expect(res.compiled).not_to be_nil
+    end
   end
 
-  context "project" do
-    it "can't be created without a project" do
-      res = FactoryBot.build(:code_resource)
+  context "to_full_api_response" do
+    it "without AST" do
+      api_response = FactoryBot.build(:code_resource, project: nil, ast: nil).to_full_api_response
 
-      res.validate
-      expect(res.errors[:project].length).to be 1
+      expect(api_response['name']).to be_a String
+      expect(api_response['programmingLanguageId']).to be_a String
+      expect(api_response['blockLanguageId']).to be_a String
     end
+
+    it "with AST snake_case values" do
+      ast = {
+        "language" => "spec_lang",
+        "name" => "spec_name"
+      }
+      api_response = FactoryBot.build(
+        :code_resource,
+        project: nil,
+        ast: ast
+      ).to_full_api_response
+
+      expect(api_response['ast']).to eq ast
+    end
+
+    it "with AST snake_case keys" do
+      ast = {
+        "language" => "spec_lang",
+        "name" => "spec_name",
+        "children" => {
+          "snake_case" => []
+        }
+      }
+      api_response = FactoryBot.build(
+        :code_resource,
+        project: nil,
+        ast: ast
+      ).to_full_api_response
+
+      expect(api_response['ast']).to eq ast
+    end
+  end
+
+  it "project is required" do
+    res = FactoryBot.build(:code_resource, project: nil)
+
+    res.validate
+    expect(res.errors[:project].length).to be 1
+  end
+
+  it "block language is required" do
+    res = FactoryBot.build(:code_resource, block_language: nil)
+
+    res.validate
+    expect(res.errors[:block_language].length).to be 1
   end
 end

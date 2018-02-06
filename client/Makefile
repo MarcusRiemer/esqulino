@@ -55,7 +55,7 @@ cli-run: dist/cli/main.cli.js
 
 
 ##################################
-# Universal Rendering
+# Universal Rendering Server
 ##################################
 
 dist/server.js: $(CLIENT_ALL_SOURCES)

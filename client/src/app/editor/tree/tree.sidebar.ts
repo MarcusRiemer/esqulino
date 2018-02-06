@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy, Inject } from '@angular/core'
 
 import { LanguageService } from '../../shared/language.service';
 import { QualifiedTypeName, NodeDescription, NodeType, CodeResource } from '../../shared/syntaxtree'
-import { LanguageModel, SidebarBlock } from '../../shared/block'
+import { BlockLanguage, SidebarBlock } from '../../shared/block'
 
 import { SIDEBAR_MODEL_TOKEN } from '../editor.token'
 

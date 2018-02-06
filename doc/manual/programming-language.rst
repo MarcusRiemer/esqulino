@@ -1,5 +1,5 @@
 =======================
- Validation & Grammars
+ Programming Languages
 =======================
 
 As syntaxtrees may define arbitrary tree structures, some kind of validation is necessary to ensure that certain trees conform to certain programming languages. The validation concept is losely based on ``XML Schema`` and ``RelaxNG``, the syntax of the latter is also used to describe the grammars in a user friendly textformat.

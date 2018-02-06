@@ -9,7 +9,7 @@ import { GrammarDescription } from './app/shared/syntaxtree/validator.descriptio
 import { LanguageDescription } from './app/shared/syntaxtree/language.description'
 import { Language } from './app/shared/syntaxtree/language'
 
-import { LanguageModelDescription } from './app/shared/block/language-model.description'
+import { BlockLanguageDescription } from './app/shared/block/block-language.description'
 import { prettyPrintLanguageModel } from './app/shared/block/prettyprint'
 
 import { graphvizSyntaxTree } from './app/shared/syntaxtree/prettyprint'
@@ -22,32 +22,54 @@ import * as sql from './app/shared/syntaxtree/sql/'
 import * as blocks_dxml from './app/shared/block/dxml/language-model'
 import * as blocks_sql from './app/shared/block/sql/language-model'
 
+/**
+ * Can be used to test whether the IDE-service is actually available.
+ */
+interface PingCommand {
+  type: "ping"
+}
+
+/**
+ * Prints the grammar for a specific language.
+ */
 interface PrintGrammarCommand {
-  type: "printGrammar",
-  id: string;
+  type: "printGrammar"
+  programmingLanguageId: string
 }
 
-interface PrintLanguageModelCommand {
-  type: "printLanguageModel",
-  id: string;
+/**
+ * Prints the block language definition for a certain language
+ */
+interface PrintBlockLanguageCommand {
+  type: "printBlockLanguage"
+  blockLanguageId: string
 }
 
+/**
+ * Prints the Graphviz representation of the given model.
+ */
 interface GraphvizSyntaxTreeCommand {
-  type: "graphvizTree",
-  model: NodeDescription;
+  type: "graphvizTree"
+  model: NodeDescription
 }
 
+/**
+ * Prints the compiled version of the given syntaxtree.
+ */
 interface EmitSyntaxTreeCommand {
-  type: "emitTree",
-  model: NodeDescription;
-  languageId: string;
+  type: "emitTree"
+  model: NodeDescription
+  languageId: string
 }
 
-interface AvailableGrammarsCommand {
+/**
+ * Prints a list of all available programming languages.
+ */
+interface AvailableProgrammingLanguagesCommand {
   type: "available"
 }
 
-type Command = PrintGrammarCommand | PrintLanguageModelCommand | AvailableGrammarsCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand;
+type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand;
 
 function availableLanguages(): LanguageDescription[] {
   return ([
@@ -83,7 +105,7 @@ function findLanguage(id: string) {
 /**
  * All available language models
  */
-function availableLanguageModels(): LanguageModelDescription[] {
+function availableLanguageModels(): BlockLanguageDescription[] {
   return ([
     blocks_dxml.LANGUAGE_MODEL,
     blocks_dxml.DYNAMIC_LANGUAGE_MODEL,
@@ -94,7 +116,7 @@ function availableLanguageModels(): LanguageModelDescription[] {
 /**
  * Retrieves a single language model by name.
  */
-function findLanguageModel(id: string): LanguageModelDescription {
+function findLanguageModel(id: string): BlockLanguageDescription {
   return (availableLanguageModels().find(l => l.id == id));
 }
 
@@ -103,11 +125,13 @@ function findLanguageModel(id: string): LanguageModelDescription {
  */
 function executeCommand(command: Command) {
   switch (command.type) {
+    case "ping":
+      return ("pong");
     case "printGrammar":
-      const g = findGrammar(command.id);
+      const g = findGrammar(command.programmingLanguageId);
       return (prettyPrintGrammar(g));
-    case "printLanguageModel": {
-      const l = findLanguageModel(command.id);
+    case "printBlockLanguage": {
+      const l = findLanguageModel(command.blockLanguageId);
       return (prettyPrintLanguageModel(l));
     }
     case "available":

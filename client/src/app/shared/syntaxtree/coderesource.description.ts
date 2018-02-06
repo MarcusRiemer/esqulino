@@ -9,9 +9,9 @@ export interface CodeResourceDescription extends ProjectResourceDescription {
   // The tree that describes the code of this resource.
   ast?: NodeDescription;
 
-  // The language this resource uses.
-  languageId: string;
+  // The actual programming language this resource uses.
+  programmingLanguageId: string;
 
-  // The language model this resource uses
-  languageModelId: string;
+  // The block language this resource uses
+  blockLanguageId: string;
 }

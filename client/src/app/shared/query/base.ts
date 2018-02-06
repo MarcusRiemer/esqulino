@@ -208,8 +208,7 @@ export class Query extends ProjectResource implements SyntaxTree.RemovableHost, 
     // Fill in basic information
     let toReturn: Model.QueryDescription = {
       name: this.name,
-      id: this.id,
-      apiVersion: this.apiVersion
+      id: this.id
     };
 
     // Fill in the optional singleRow annotation

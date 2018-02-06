@@ -2,20 +2,20 @@ import { Tree, NodeDescription, Language, QualifiedTypeName, typenameEquals } fr
 
 import { SidebarBlock } from './sidebar-block'
 import { EditorBlock } from './editor-block'
-import { LanguageModelDescription } from './language-model.description'
+import { BlockLanguageDescription } from './block-language.description'
 import { EditorBlockDescription } from './block.description'
 
 /**
  * Augments an existing language with additional information on how to
  * display elements of that languages using blocks.
  */
-export class LanguageModel {
+export class BlockLanguage {
   private _sidebarBlocks: SidebarBlock[];
   private _editorBlocks: EditorBlockDescription[] = [];
   private _name: string;
   private _id: string;
 
-  constructor(desc: LanguageModelDescription) {
+  constructor(desc: BlockLanguageDescription) {
     this._id = desc.id;
     this._name = desc.name;
 

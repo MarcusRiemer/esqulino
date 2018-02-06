@@ -1,9 +1,9 @@
-import { LanguageModelDescription } from '../language-model.description'
+import { BlockLanguageDescription } from '../block-language.description'
 import {
   SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
 } from '../block.description'
 
-export const LANGUAGE_MODEL: LanguageModelDescription = {
+export const LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "sql",
   name: "SQL",
   editorBlocks: [

@@ -1,4 +1,4 @@
-import { ProjectResourceDescription } from '../resource.description'
+import { ProjectResourceDescription, ApiVersion } from '../resource.description'
 import { TableDescription } from '../schema/schema.description'
 
 /**

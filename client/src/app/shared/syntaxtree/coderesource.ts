@@ -1,10 +1,10 @@
-import { BehaviorSubject, Observable } from 'rxjs'
+import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Project } from '../project'
-import { ProjectResource } from '../resource'
+import { Project } from '../project';
+import { ProjectResource } from '../resource';
 
-import { CodeResourceDescription } from './coderesource.description'
-import { Tree, NodeDescription, NodeLocation } from './syntaxtree'
+import { CodeResourceDescription } from './coderesource.description';
+import { Tree, NodeDescription, NodeLocation } from './syntaxtree';
 import { ValidationResult } from './validator';
 
 /**
@@ -34,8 +34,8 @@ export class CodeResource extends ProjectResource {
     super(desc, project);
 
     this._tree.next(new Tree(desc.ast));
-    this._languageId.next(desc.languageId);
-    this._languageModelId.next(desc.languageModelId);
+    this._languageId.next(desc.programmingLanguageId);
+    this._languageModelId.next("sql"); // TODO: Use actual value from response ...
   }
 
   /**
@@ -253,10 +253,9 @@ export class CodeResource extends ProjectResource {
     return ({
       id: this.id,
       name: this.name,
-      apiVersion: this.apiVersion,
       ast: this.syntaxTreePeek.toModel(),
-      languageId: this.languageIdPeek,
-      languageModelId: this.languageModelIdPeek,
+      programmingLanguageId: this.languageIdPeek,
+      blockLanguageId: this.languageModelIdPeek,
     });
   }
 
