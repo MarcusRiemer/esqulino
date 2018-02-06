@@ -5,7 +5,7 @@ end
 
 # Common functionality for all IDE operations, no matter whether
 # they are routed through the "exec" or the "systemd" supervisor.
-class IdeService
+class BaseIdeService
   # Emits the source code for the given tree in the given language.
   #
   # @param tree_description [Hash]
@@ -34,10 +34,10 @@ end
 
 # This service starts a node program under the control of
 # the server.
-class ExecIdeService < IdeService
+class ExecIdeService < BaseIdeService
   # Pulls the required paths from the Rails configuration
-  def initialize()
-    config = Rails.configuration.sqlino['ide_service']['exec']
+  def initialize(config: nil)
+    config ||= Rails.configuration.sqlino['ide_service']['exec']
     @node_binary = config['node_binary']
     @program = config['program']
   end
@@ -70,6 +70,20 @@ class OneShotExecIdeService < ExecIdeService
   end
 end
 
-def initialise_IDE_service
+module IdeService 
+  def self.instance
+    @@ide_service_instance ||= instantiate
+  end
 
+  # Creates the instance that is responsible for all requests to the ide service
+  def self.instantiate(service_config: nil)
+    service_config ||= Rails.configuration.sqlino.fetch("ide_service", Hash.new)
+    if exec_config = service_config["exec"] then
+      case exec_config_mode = exec_config["mode"]
+      when "one-shot" then return OneShotExecIdeService.new(config: exec_config)
+      else raise IdeServiceError, "Unkown IDE exec mode \"#{exec_config_mode}\""
+      end
+    else raise IdeServiceError, "Unkown general IDE-service configuration"
+    end
+  end
 end
