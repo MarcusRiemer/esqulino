@@ -45,25 +45,25 @@
           ],
           "type": "string"
         },
-        "id": {
-          "$ref": "#/definitions/ProjectSlug"
-        },
         "name": {
           "$ref": "#/definitions/ProjectName"
+        },
+        "slug": {
+          "$ref": "#/definitions/ProjectSlug"
         }
       },
       "required": [
         "admin",
         "apiVersion",
         "dbType",
-        "id",
-        "name"
+        "name",
+        "slug"
       ],
       "type": "object"
     },
     "ProjectName": {
       "description": "The name of the project. May only contain more or less friendly\ncharacters.",
-      "pattern": "^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß]{4,}$",
+      "pattern": "^[a-zA-Z0-9 \\-_\\?äöüÄÖÜß:]{4,}$",
       "type": "string"
     },
     "ProjectSlug": {
