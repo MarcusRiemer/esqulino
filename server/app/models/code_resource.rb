@@ -31,7 +31,11 @@ class CodeResource < ApplicationRecord
   # And on top of that this dependency makes testing quite hard. After
   # all there are possibly quite a few code resources that will be saved
   # during testing, even if we don't care about the details of compilation.
-  # The Ide
+  # The IdeService should not come in to play for each and every of this
+  # testfiles because a) it slows down tests and b) it makes "real"
+  # syntaxtrees a requirement for trees during testing.
+  #
+  # The following options have been considered:
   #
   # Option 1) In the model, immediatly after setting the ast. This was
   # proposed on SO (https://stackoverflow.com/questions/48623312/) but
@@ -49,7 +53,7 @@ class CodeResource < ApplicationRecord
   # so I will leave that out for the moment.
   before_save do
     if self.ast_changed?
-      compiled = emit_ast!
+      self.compiled = emit_ast!
     end
   end
 

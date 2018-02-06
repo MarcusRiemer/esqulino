@@ -53,11 +53,11 @@ RSpec.describe CodeResourcesController, type: :controller do
       expect(result['errors']['name'].length).to eq 1
     end
 
-    it "requires a project" do
+    it "fails with a non-existant project" do
       expect { post :create, :params => { :name => "Foo" } }.to raise_exception ActionController::UrlGenerationError
     end
 
-    it "requires an existing project" do
+    it "works with an existing project" do
       post :create,
            :format => :json,
            :params => { :project_id => "unobtanium" }
@@ -112,7 +112,7 @@ RSpec.describe CodeResourcesController, type: :controller do
   end
 
   describe "DELETE" do
-    it "does not exist" do
+    it "a resource does not exist" do
       proj = FactoryBot.create(:project)
       delete :destroy,
              :format => :json,
@@ -124,7 +124,7 @@ RSpec.describe CodeResourcesController, type: :controller do
       expect(response.status).to eq(404)
     end
 
-    it "exists" do
+    it "a resource that exists" do
       creation_attr = FactoryBot.build(:code_resource, name: "Initial").attributes
       
       post :create,

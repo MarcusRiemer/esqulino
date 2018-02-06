@@ -22,32 +22,54 @@ import * as sql from './app/shared/syntaxtree/sql/'
 import * as blocks_dxml from './app/shared/block/dxml/language-model'
 import * as blocks_sql from './app/shared/block/sql/language-model'
 
+/**
+ * Can be used to test whether the IDE-service is actually available.
+ */
+interface PingCommand {
+  type: "ping"
+}
+
+/**
+ * Prints the grammar for a specific language.
+ */
 interface PrintGrammarCommand {
-  type: "printGrammar",
-  id: string;
+  type: "printGrammar"
+  programmingLanguageId: string
 }
 
-interface PrintLanguageModelCommand {
-  type: "printLanguageModel",
-  id: string;
+/**
+ * Prints the block language definition for a certain language
+ */
+interface PrintBlockLanguageCommand {
+  type: "printBlockLanguage"
+  blockLanguageId: string
 }
 
+/**
+ * Prints the Graphviz representation of the given model.
+ */
 interface GraphvizSyntaxTreeCommand {
-  type: "graphvizTree",
-  model: NodeDescription;
+  type: "graphvizTree"
+  model: NodeDescription
 }
 
+/**
+ * Prints the compiled version of the given syntaxtree.
+ */
 interface EmitSyntaxTreeCommand {
-  type: "emitTree",
-  model: NodeDescription;
-  languageId: string;
+  type: "emitTree"
+  model: NodeDescription
+  languageId: string
 }
 
-interface AvailableGrammarsCommand {
+/**
+ * Prints a list of all available programming languages.
+ */
+interface AvailableProgrammingLanguagesCommand {
   type: "available"
 }
 
-type Command = PrintGrammarCommand | PrintLanguageModelCommand | AvailableGrammarsCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand;
+type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand;
 
 function availableLanguages(): LanguageDescription[] {
   return ([
@@ -103,11 +125,13 @@ function findLanguageModel(id: string): BlockLanguageDescription {
  */
 function executeCommand(command: Command) {
   switch (command.type) {
+    case "ping":
+      return ("pong");
     case "printGrammar":
-      const g = findGrammar(command.id);
+      const g = findGrammar(command.programmingLanguageId);
       return (prettyPrintGrammar(g));
-    case "printLanguageModel": {
-      const l = findLanguageModel(command.id);
+    case "printBlockLanguage": {
+      const l = findLanguageModel(command.blockLanguageId);
       return (prettyPrintLanguageModel(l));
     }
     case "available":
