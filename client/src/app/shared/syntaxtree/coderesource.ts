@@ -35,7 +35,7 @@ export class CodeResource extends ProjectResource {
 
     this._tree.next(new Tree(desc.ast));
     this._languageId.next(desc.programmingLanguageId);
-    this._languageModelId.next(desc.blockLanguageId);
+    this._languageModelId.next("sql"); // TODO: Use actual value from response ...
   }
 
   /**

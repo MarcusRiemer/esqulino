@@ -24,7 +24,7 @@ RSpec.describe CodeResource, type: :model do
     end
   end
 
-  context "ast" do
+  context "AST" do
     it "rejects nodes without a name" do
       res = FactoryBot.build(
         :code_resource,
@@ -73,6 +73,47 @@ RSpec.describe CodeResource, type: :model do
       # Compiled should be *something* after saving
       res.save!
       expect(res.compiled).not_to be_nil
+    end
+  end
+
+  context "to_full_api_response" do
+    it "without AST" do
+      api_response = FactoryBot.build(:code_resource, project: nil, ast: nil).to_full_api_response
+
+      expect(api_response['name']).to be_a String
+      expect(api_response['programmingLanguageId']).to be_a String
+      expect(api_response['blockLanguageId']).to be_a String
+    end
+
+    it "with AST snake_case values" do
+      ast = {
+        "language" => "spec_lang",
+        "name" => "spec_name"
+      }
+      api_response = FactoryBot.build(
+        :code_resource,
+        project: nil,
+        ast: ast
+      ).to_full_api_response
+
+      expect(api_response['ast']).to eq ast
+    end
+
+    it "with AST snake_case keys" do
+      ast = {
+        "language" => "spec_lang",
+        "name" => "spec_name",
+        "children" => {
+          "snake_case" => []
+        }
+      }
+      api_response = FactoryBot.build(
+        :code_resource,
+        project: nil,
+        ast: ast
+      ).to_full_api_response
+
+      expect(api_response['ast']).to eq ast
     end
   end
 
