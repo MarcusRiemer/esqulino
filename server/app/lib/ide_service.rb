@@ -13,12 +13,20 @@ class BaseIdeService
   #
   # @param language_id [string]
   #   The id of the language to use
+  #
+  # @return [string]
+  #   The string representation of the syntaxtree. If the given tree
+  #   is nil, the returned object is also nil.
   def emit_code(tree_description, language_id)
-    execute_request({
-                      "type" => "emitTree",
-                      "model" => tree_description,
-                      "languageId" => language_id
-                    })
+    if (tree_description)
+      execute_request({
+                        "type" => "emitTree",
+                        "model" => tree_description,
+                        "languageId" => language_id
+                      })
+    else
+      nil
+    end
   end
 
   # Executes the given request object with the backing server
@@ -37,13 +45,12 @@ end
 class ExecIdeService < BaseIdeService
   # Pulls the required paths from the Rails configuration
   def initialize(config: nil)
-    config ||= Rails.configuration.sqlino['ide_service']['exec']
     @node_binary = config['node_binary']
     @program = config['program']
   end
 end
 
-# Re-executes the CLI service for every  single request.
+# Re-executes the CLI service for every single request.
 class OneShotExecIdeService < ExecIdeService
   # Executes the request in a service that is started
   # exclusively for this request.
@@ -70,7 +77,15 @@ class OneShotExecIdeService < ExecIdeService
   end
 end
 
-module IdeService 
+# Answers every request with a string representation of the
+# request. This is obviously only meant for testing.
+class MockIdeService < BaseIdeService
+  def execute_request(request)
+    request.to_json
+  end
+end
+
+module IdeService  
   def self.instance
     @@ide_service_instance ||= instantiate
   end
@@ -78,11 +93,20 @@ module IdeService
   # Creates the instance that is responsible for all requests to the ide service
   def self.instantiate(service_config: nil)
     service_config ||= Rails.configuration.sqlino.fetch("ide_service", Hash.new)
-    if exec_config = service_config["exec"] then
+
+    # Mocking currently takes precedence about every other option. This is by
+    # design to "override" the default configuration when running tests, but
+    # its quite an ugly hack.
+    if service_config["mock"] 
+      return MockIdeService.new
+    # Exec mode?
+    elsif exec_config = service_config["exec"] then
+      # Which kind of exec mode?
       case exec_config_mode = exec_config["mode"]
       when "one-shot" then return OneShotExecIdeService.new(config: exec_config)
       else raise IdeServiceError, "Unkown IDE exec mode \"#{exec_config_mode}\""
       end
+    # No known mode
     else raise IdeServiceError, "Unkown general IDE-service configuration"
     end
   end

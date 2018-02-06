@@ -17,6 +17,42 @@ class CodeResource < ApplicationRecord
   # The AST is a single root node or empty
   validates :ast, json_schema: 'NodeDescription', allow_nil: true
 
+  # Okay, this is tricky: We somehow need to keep the compiled version
+  # of the syntaxtree in sync with the "actual" syntaxtree. So we want
+  # to have some action that checks whether the syntaxtree has been
+  # updated and then update the compiled version.
+  #
+  # The main problem is that the compilation requires interaction with
+  # an external process. This is a) slow and b) error prone. So my
+  # gut says that its probably good to be explicit about this (possibly)
+  # fragile operation. And this leads to the actual question: Where
+  # should the "sync" code go?
+  #
+  # And on top of that this dependency makes testing quite hard. After
+  # all there are possibly quite a few code resources that will be saved
+  # during testing, even if we don't care about the details of compilation.
+  # The Ide
+  #
+  # Option 1) In the model, immediatly after setting the ast. This was
+  # proposed on SO (https://stackoverflow.com/questions/48623312/) but
+  # I don't really fancy the idea of running the compiler on every
+  # assignment and making a "simple" assignment possibly raising
+  # exceptions.
+  #
+  # Option 2) In the model, but only on save operations using a callback.
+  # This still means the code resource has a *huge* dependency on an
+  # external process, but at least its encapsulated when touching the
+  # other *huge* dependency (the database).
+  #
+  # Option 3) In every controller that somehow touches this model. This
+  # seems to go against the core idea of "fat models and skinny controllers",
+  # so I will leave that out for the moment.
+  before_save do
+    if self.ast_changed?
+      compiled = emit_ast!
+    end
+  end
+
   # Takes the current syntaxtree and asks the IDE service for the
   # compiled representation.
   #
@@ -24,6 +60,4 @@ class CodeResource < ApplicationRecord
   def emit_ast!
     IdeService.instance.emit_code(self.ast, self.programming_language_id)
   end
-
-  
 end
