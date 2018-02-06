@@ -29,7 +29,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    render json: Structure::ProjectStructure.new(project: project).build
+    render json: Builders::ProjectStructure.new(project: project).build
   end
 
   # Update an existing project
