@@ -5,6 +5,12 @@ import { QualifiedTypeName, NodeDescription } from '../syntaxtree/syntaxtree.des
  * drag & drop UI.
  */
 export namespace VisualBlockDescriptions {
+
+  /**
+   * 
+   */
+  export type BlockStyle = { [k: string]: string }
+
   /**
    * Describes how certain nodes of the syntaxtree should be presented
    * inside the drag and drop editor. As the available blocks are very
@@ -13,7 +19,7 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorBlockBase {
     blockType: string;
-    marginLeft?: string;
+    style?: BlockStyle;
   }
 
   /**
