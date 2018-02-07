@@ -9,7 +9,7 @@ class CodeResourcesController < ApplicationController
     project_slug = params[:project_id]
     proj = Project.find_by slug: project_slug
     if proj
-      res = proj.code_resources.new(code_resource_params)
+      res = proj.code_resources.new(code_resource_create_params)
       if res.save
         render :json => res.to_full_api_response, :status => 200
       else
@@ -23,7 +23,7 @@ class CodeResourcesController < ApplicationController
   # Updates a specific resource
   def update
     resource = CodeResource.find(params[:code_resource_id])
-    if resource.update_attributes(code_resource_params)
+    if resource.update_attributes(code_resource_update_params)
       render :json => resource, :status => 200
     else
       render :json => { 'errors' => resource.errors }, :status => 400
@@ -41,10 +41,17 @@ class CodeResourcesController < ApplicationController
 
   private
 
-  # Possible parameters for code resources
-  def code_resource_params
+  # Possible parameters when creating
+  def code_resource_create_params
     params
       .permit(:name, :programmingLanguageId, :blockLanguageId, :ast => {})
+      .transform_keys { |k| k.underscore }
+  end
+
+  # Possible parameters when updating
+  def code_resource_update_params
+    params
+      .permit(:name, :programmingLanguageId, :ast => {})
       .transform_keys { |k| k.underscore }
   end
 end
