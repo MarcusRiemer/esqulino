@@ -252,7 +252,9 @@ const EDITOR_BLOCKS = [
               } as VisualBlockDescriptions.EditorConstant,
             ],
             direction: "horizontal",
-            marginLeft: "10px",
+            style: {
+              marginLeft: "10px",
+            },
             visibility: ["ifEmpty", "ifLegalDrag"]
           } as VisualBlockDescriptions.EditorDropTarget,
           {
@@ -276,7 +278,9 @@ const EDITOR_BLOCKS = [
               } as VisualBlockDescriptions.EditorConstant,
             ],
             direction: "horizontal",
-            marginLeft: "10px",
+            style: {
+              marginLeft: "10px",
+            },
             visibility: ["ifLegalDrag"]
           } as VisualBlockDescriptions.EditorDropTarget,
         ]
@@ -285,7 +289,9 @@ const EDITOR_BLOCKS = [
         blockType: "iterator",
         childGroupName: "elements",
         direction: "vertical",
-        marginLeft: "10px",
+        style: {
+          marginLeft: "10px",
+        },
       } as VisualBlockDescriptions.EditorIterator,
       {
         blockType: "block",
@@ -316,7 +322,9 @@ const EDITOR_BLOCKS = [
       {
         blockType: "block",
         direction: "horizontal",
-        marginLeft: "10px",
+        style: {
+          marginLeft: "10px",
+        },
         children: [
           {
             blockType: "interpolated",

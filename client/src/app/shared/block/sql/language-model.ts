@@ -33,34 +33,38 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
     {
       describedType: {
         languageName: "sql",
-        typeName: "select",
+        typeName: "select"
       },
       visual: [
         {
-          blockType: "dropTarget",
+          blockType: "block",
+          direction: "horizontal",
           dropTarget: {
             actionParent: "columns"
           },
           children: [
             {
               blockType: "constant",
-              text: "SELECT"
+              text: "SELECT",
+              style: {
+                width: "100px",
+                display: "inline-block",
+                color: "blue"
+              }
             } as VisualBlockDescriptions.EditorConstant,
-          ],
-          direction: "horizontal",
-          visibility: ["always"]
-        } as VisualBlockDescriptions.EditorDropTarget,
-        {
-          blockType: "iterator",
-          childGroupName: "columns",
-          direction: "horizontal",
-          between: [
             {
-              blockType: "constant",
-              text: ", "
-            } as VisualBlockDescriptions.EditorConstant,
+              blockType: "iterator",
+              childGroupName: "columns",
+              direction: "horizontal",
+              between: [
+                {
+                  blockType: "constant",
+                  text: ", "
+                } as VisualBlockDescriptions.EditorConstant,
+              ]
+            } as VisualBlockDescriptions.EditorIterator,
           ]
-        } as VisualBlockDescriptions.EditorIterator,
+        },
       ]
     },
     {
@@ -72,7 +76,21 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
         {
           blockType: "block",
           direction: "horizontal",
+          style: {
+            "paddingLeft": "10px",
+            "paddingRight": "10px",
+            "border": "2px solid black",
+            "borderRadius": "500px",
+          },
           children: [
+            {
+              blockType: "interpolated",
+              property: "refTableName",
+            } as VisualBlockDescriptions.EditorInterpolated,
+            {
+              blockType: "constant",
+              text: "."
+            },
             {
               blockType: "interpolated",
               property: "columnName",
@@ -106,30 +124,34 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
       },
       visual: [
         {
-          blockType: "dropTarget",
+          blockType: "block",
+          direction: "horizontal",
           dropTarget: {
             actionParent: "tables"
           },
           children: [
             {
               blockType: "constant",
-              text: "FROM"
-            } as VisualBlockDescriptions.EditorConstant,
-          ],
-          direction: "horizontal",
-          visibility: ["always"]
-        } as VisualBlockDescriptions.EditorDropTarget,
-        {
-          blockType: "iterator",
-          childGroupName: "tables",
-          direction: "horizontal",
-          between: [
+              text: "FROM",
+              style: {
+                width: "100px",
+                display: "inline-block",
+                color: "blue"
+              }
+            },
             {
-              blockType: "constant",
-              text: ", "
-            } as VisualBlockDescriptions.EditorConstant,
+              blockType: "iterator",
+              childGroupName: "tables",
+              direction: "horizontal",
+              between: [
+                {
+                  blockType: "constant",
+                  text: ", "
+                } as VisualBlockDescriptions.EditorConstant,
+              ]
+            } as VisualBlockDescriptions.EditorIterator,
           ]
-        } as VisualBlockDescriptions.EditorIterator,
+        },
       ]
     },
     {
@@ -139,9 +161,22 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
       },
       visual: [
         {
-          blockType: "interpolated",
-          property: "name",
-        } as VisualBlockDescriptions.EditorInterpolated,
+          blockType: "block",
+          direction: "horizontal",
+          style: {
+            "paddingLeft": "10px",
+            "paddingTop": "2px",
+            "paddingRight": "10px",
+            "border": "2px solid black",
+            "borderRadius": "500px",
+          },
+          children: [
+            {
+              blockType: "interpolated",
+              property: "name",
+            } as VisualBlockDescriptions.EditorInterpolated,
+          ]
+        }
       ]
     },
   ],

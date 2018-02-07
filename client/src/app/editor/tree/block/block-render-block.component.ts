@@ -1,12 +1,14 @@
 import { Observable } from 'rxjs';
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, ElementRef } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
 import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
+
+import { TreeEditorService } from '../editor.service';
 
 // These states are available for animation
 type DropTargetAnimationStates = "available" | "none" | "self" | "taken";
@@ -31,7 +33,7 @@ type DropTargetAnimationStates = "available" | "none" | "self" | "taken";
     ])
   ]
 })
-export class BlockRenderBlockComponent {
+export class BlockRenderBlockComponent implements OnInit {
   @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlock;
@@ -39,9 +41,15 @@ export class BlockRenderBlockComponent {
   // The current state that should be used for the animation
   private _cached_dropTargetAnimationState: Observable<DropTargetAnimationStates>;
 
+
   constructor(
     private _dragService: DragService,
+    private _treeService: TreeEditorService,
   ) {
+  }
+
+  ngOnInit() {
+
   }
 
   get dropTargetAnimationState(): Observable<DropTargetAnimationStates> {
@@ -64,5 +72,63 @@ export class BlockRenderBlockComponent {
     }
 
     return (this._cached_dropTargetAnimationState);
+  }
+
+  /**
+   * @return True, if this drop will be made into a strictly defined category.
+   *
+   * @todo This is redundant, see block-render-drop-target-component.ts
+   */
+  get isParentDrop() {
+    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.actionParent;
+    return (!!action);
+  }
+
+  /**
+   * @return The name of the referenced child group (if there is any)
+   *
+   * @todo This is redundant, see block-render-drop-target-component.ts
+   */
+  get childGroupName() {
+    // Is the category specified explicitly?
+    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.actionParent;
+    if (action) {
+      // Then use that category
+      return (action);
+    } else {
+      // Else use the category of our own node.
+      const loc = this.node.location;
+      return (loc[loc.length - 1][0]);
+    }
+  }
+
+
+  /**
+   * @return The location a drop should occur in. This depends on the configuration in the language model.
+   *
+   * @todo This is redundant, see block-render-drop-target-component.ts
+   */
+  get dropLocation() {
+    if (this.node) {
+      if (this.isParentDrop) {
+        // If there is an explicit group name, this is always the first node
+        return (this.node.location.concat([[this.childGroupName, 0]]));
+      } else {
+        // Otherwise use (more or less) exact the location we are at. The description
+        // may specify some levels that are dropped.
+        const lastLevel = this.node.location.length - this.visual.dropTarget.actionSelf.skipParents;
+        return (this.node.location.slice(0, lastLevel));
+      }
+    } else {
+      return ([]);
+    }
+  }
+
+  /**
+   * Handles the drop events on the empty drop
+   */
+  onDrop(evt: DragEvent) {
+    const desc = this._dragService.peekDragData.draggedDescription;
+    this._treeService.peekResource.insertNode(this.dropLocation, desc);
   }
 }

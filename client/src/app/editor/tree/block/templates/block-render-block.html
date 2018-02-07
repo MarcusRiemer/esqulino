@@ -5,6 +5,7 @@
      [astDraggable]="node"
      [codeResource]="codeResource"
      [@dropTarget]="dropTargetAnimationState | async"
+     (drop)="onDrop($event)"
      class="default">
   <!-- Render all components of this block -->
   <ng-container *ngFor="let childVisualBlock of visual.children">

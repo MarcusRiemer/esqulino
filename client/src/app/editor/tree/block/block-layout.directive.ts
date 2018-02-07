@@ -21,9 +21,6 @@ export class BlockLayoutDirective {
   }
 
   ngOnInit() {
-    if (!this.layout) {
-      debugger;
-    }
     this.hostElement.style.display = "flex";
     this.hostElement.style.flexDirection = this.flexDirection(this.layout.direction);
     this.hostElement.style.flexWrap = "wrap";
