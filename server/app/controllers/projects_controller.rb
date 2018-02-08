@@ -5,7 +5,6 @@ class ProjectsController < ApplicationController
   include JsonSchemaHelper
 
   before_action :project, only: [:show]
-  before_action :parse_request, only: [:create]
   
   def index
     @projects = Project.all
@@ -30,7 +29,8 @@ class ProjectsController < ApplicationController
     # render :json => { 'id' => creation_params.slug }, :status => 200
 
     @project = Project.new
-    @project.assign_attributes({name: @json['name'], slug: @json['slug']})
+  
+    @project.assign_attributes(project_params)
     if @project.save
       render json: @project
     else
@@ -76,7 +76,8 @@ class ProjectsController < ApplicationController
     Project.find_by_slug(params[:project_id])
   end
 
-  def parse_request
-    @json = JSON.parse(request.body.read)
+  def project_params
+    params
+      .permit(:name, :slug, :apiVersion, admin: {})
   end
 end

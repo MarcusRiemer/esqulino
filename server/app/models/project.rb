@@ -6,7 +6,10 @@ class Project < ApplicationRecord
   has_many :code_resources
 
   validates :slug, uniqueness: true
-
+  # Name may not be empty
+  validates :name, presence: true
+  # Name may not be empty
+  validates :slug, presence: true
   # A project with all associated resources that are required for
   # immediate display on the client.
   scope :full, -> { includes(:project_sources, :code_resources) }
