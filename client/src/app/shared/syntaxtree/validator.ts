@@ -128,8 +128,6 @@ export class ValidationResult {
  * Every type can be identified by its fully qualified name (language
  * & name) and has access to the validator instance this concrete
  * type was loaded into.
- *
- * TODO: Possibly this should be handled by a dedicated UI layer?
  */
 export abstract class NodeType {
   private _languageName: string;
@@ -194,6 +192,19 @@ export abstract class NodeType {
    * @return The names of the categories that will be minimally required
    */
   abstract get requiredChildrenCategoryNames(): string[];
+
+  /**
+   * Determines whether the given type would be an *immediate* fit in the
+   * given category. This check does *not* care about any possible errors
+   * that would occur in the node of the given type. This partial check is
+   * useful to determine "sort of" legal drag targets.
+   * 
+   * @param childType The type that is possible added.
+   * @param categoryName The name of the category in question.
+   * 
+   * @return True, if this would be a legal, immediate fit.
+   */
+  abstract allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean;
 }
 
 /**
@@ -292,6 +303,11 @@ class NodeConcreteType extends NodeType {
     });
   }
 
+  allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean {
+    const category = this._allowedChildren[categoryName];
+    return (category && category.allowsChildType(childType));
+  }
+
   /**
    * @return A NodePropertyValidator that validates the correct type.
    */
@@ -354,6 +370,20 @@ class NodeTypeChildren {
   }
 
   /**
+   * Determines whether the given type would be an *immediate* fit in this
+   * category. This check does *not* care about any possible errors that
+   * would occur in the node of the given type. This partial check is
+   * useful to determine "sort of" legal drag targets.
+   * 
+   * @param childType The type that is possible added.
+   * 
+   * @return True, if this would be a legal, immediate fit.
+   */
+  allowsChildType(childType: AST.QualifiedTypeName): boolean {
+    return (this._childValidator.allowsChildType(childType));
+  }
+
+  /**
    * @return True, if this child category is essential for the parent.
    */
   get isRequired() {
@@ -403,6 +433,18 @@ abstract class NodeComplexTypeChildrenValidator {
   get isRequired() {
     return (this.isRequiredImpl);
   }
+
+  /**
+   * Determines whether the given type would be an *immediate* fit for this
+   * validator. This check does *not* care about any possible errors that
+   * would occur in the node of the given type. This partial check is
+   * useful to determine "sort of" legal drag targets.
+   * 
+   * @param childType The type that is possible added.
+   * 
+   * @return True, if this would be a legal, immediate fit.
+   */
+  abstract allowsChildType(childType: AST.QualifiedTypeName): boolean;
 
   /**
    * @return True, if the deriving implementation deems this category necessary.
@@ -571,6 +613,13 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
 
     return (toReturn);
   }
+
+  /**
+   * @return True, if the given type occurs anywhere in the list of possible types.
+   */
+  allowsChildType(childType: AST.QualifiedTypeName): boolean {
+    return (this._nodeTypes.some(t => t.nodeType.matchesType(childType)));
+  }
 }
 
 /**
@@ -644,6 +693,13 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
 
     return (toReturn);
   }
+
+  /**
+   * @return True, if the given type occurs anywhere in the list of possible types.
+   */
+  allowsChildType(childType: AST.QualifiedTypeName): boolean {
+    return (this._nodeTypes.some(t => t.nodeType.matchesType(childType)));
+  }
 }
 
 /**
@@ -696,6 +752,13 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
   }
 
   protected isRequiredImpl: boolean;
+
+  /**
+   * @return True, if the given type occurs anywhere in the list of possible types.
+   */
+  allowsChildType(childType: AST.QualifiedTypeName): boolean {
+    return (this._group.allowsChildType(childType));
+  }
 
 }
 
@@ -802,7 +865,6 @@ class NodePropertyStringValidator extends NodePropertyValidator {
  * in the description.
  */
 class NodeOneOfType extends NodeType {
-
   private _possibilities: TypeReference[] = [];
 
   constructor(validator: Validator, typeDesc: Desc.NodeOneOfTypeDescription, language: string, name: string) {
@@ -848,6 +910,10 @@ class NodeOneOfType extends NodeType {
    */
   matchesType(typeName: AST.QualifiedTypeName) {
     return (this._possibilities.some(t => t.matchesType(typeName)));
+  }
+
+  allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean {
+    return (this.matchesType(childType));
   }
 }
 
