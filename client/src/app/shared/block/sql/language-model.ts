@@ -24,6 +24,20 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           direction: "horizontal",
         } as VisualBlockDescriptions.EditorIterator,
         {
+          blockType: "dropTarget",
+          dropTarget: {
+            actionParent: "where"
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "+WHERE"
+            } as VisualBlockDescriptions.EditorConstant,
+          ],
+          direction: "horizontal",
+          visibility: ["ifLegalChild"]
+        } as VisualBlockDescriptions.EditorDropTarget,
+        {
           blockType: "iterator",
           childGroupName: "where",
           direction: "horizontal",
@@ -175,6 +189,43 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               blockType: "interpolated",
               property: "name",
             } as VisualBlockDescriptions.EditorInterpolated,
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "where"
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          dropTarget: {
+            actionParent: "expressions"
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "WHERE",
+              style: {
+                width: "100px",
+                display: "inline-block",
+                color: "blue"
+              }
+            } as VisualBlockDescriptions.EditorConstant,
+            {
+              blockType: "iterator",
+              childGroupName: "expressions",
+              direction: "horizontal",
+              between: [
+                {
+                  blockType: "constant",
+                  text: ", "
+                } as VisualBlockDescriptions.EditorConstant,
+              ]
+            } as VisualBlockDescriptions.EditorIterator,
           ]
         }
       ]
