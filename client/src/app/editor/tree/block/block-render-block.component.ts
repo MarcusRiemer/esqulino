@@ -74,52 +74,17 @@ export class BlockRenderBlockComponent implements OnInit {
     return (this._cached_dropTargetAnimationState);
   }
 
-  /**
-   * @return True, if this drop will be made into a strictly defined category.
-   *
-   * @todo This is redundant, see block-render-drop-target-component.ts
-   */
-  get isParentDrop() {
-    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.actionParent;
-    return (!!action);
-  }
-
-  /**
-   * @return The name of the referenced child group (if there is any)
-   *
-   * @todo This is redundant, see block-render-drop-target-component.ts
-   */
-  get childGroupName() {
-    // Is the category specified explicitly?
-    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.actionParent;
-    if (action) {
-      // Then use that category
-      return (action);
-    } else {
-      // Else use the category of our own node.
-      const loc = this.node.location;
-      return (loc[loc.length - 1][0]);
-    }
-  }
 
 
   /**
-   * @return The location a drop should occur in. This depends on the configuration in the language model.
-   *
-   * @todo This is redundant, see block-render-drop-target-component.ts
+   * @return The location a drop should occur in.
    */
   get dropLocation() {
+    // Is there any associated node?
     if (this.node) {
-      if (this.isParentDrop) {
-        // If there is an explicit group name, this is always the first node
-        return (this.node.location.concat([[this.childGroupName, 0]]));
-      } else {
-        // Otherwise use (more or less) exact the location we are at. The description
-        // may specify some levels that are dropped.
-        const lastLevel = this.node.location.length - this.visual.dropTarget.actionSelf.skipParents;
-        return (this.node.location.slice(0, lastLevel));
-      }
+      return (this.node.location);
     } else {
+      // No, this must be the root
       return ([]);
     }
   }
