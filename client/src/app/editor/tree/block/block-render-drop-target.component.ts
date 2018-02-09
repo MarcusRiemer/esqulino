@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { arrayEqual } from '../../../shared/util';
-import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
+import { Node, NodeLocation, Tree, CodeResource, QualifiedTypeName } from '../../../shared/syntaxtree';
 import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
@@ -21,7 +21,7 @@ import { TreeEditorService } from '../editor.service';
         display: 'none',
       })),
       state('visible', style({
-        backgroundColor: 'lime',
+        backgroundColor: 'lightgray',
       })),
       state('available', style({
         backgroundColor: 'green',
@@ -119,12 +119,30 @@ export class BlockRenderDropTargetComponent {
           if (flags.some(f => f === "ifAnyDrag")) {
             return ("available");
           } else if (flags.some(f => f === "ifLegalDrag")) {
+            // Would the new tree ba a valid tree?
             const newNode = drag.draggedDescription;
             const oldTree = this._treeService.peekResource.syntaxTreePeek;
             const newTree = oldTree.insertNode(this.dropLocation, newNode);
 
             const result = this._treeService.peekResource.languagePeek.validateTree(newTree);
             if (result.isValid) {
+              return ("available");
+            } else {
+              return ("none");
+            }
+          } else if (flags.some(f => f === "ifLegalChild")) {
+            // Would the immediate child be allowed?
+            const newNodeType: QualifiedTypeName = {
+              languageName: drag.draggedDescription.language,
+              typeName: drag.draggedDescription.name
+            }
+            const currentTree = this._treeService.peekResource.syntaxTreePeek;
+            const currentLanguage = this._treeService.peekResource.languagePeek;
+
+            const parentNode = currentTree.locate(this.dropLocation.slice(0, -1));
+            const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
+
+            if (parentNodeType.allowsChildType(newNodeType, this.childGroupName)) {
               return ("available");
             } else {
               return ("none");

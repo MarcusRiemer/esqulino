@@ -22,7 +22,6 @@ export class BlockBaseDirective {
 
   ngOnInit() {
     Object.entries(this.layout.style || {}).forEach(([key, value]) => {
-      console.log(`(Base) Applying style ${key}: ${value}`);
       this.hostElement.style[key] = value;
     });
   }

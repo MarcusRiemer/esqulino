@@ -61,7 +61,7 @@ export namespace VisualBlockDescriptions {
     blockType: "dropTarget";
     children?: ConcreteBlock[];
     dropTarget?: DropTargetProperties;
-    visibility: ["ifAnyDrag" | "ifLegalDrag" | "ifEmpty" | "always"];
+    visibility: ["ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty" | "always"];
   }
 
   /**

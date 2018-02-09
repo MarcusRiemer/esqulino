@@ -6,7 +6,8 @@ function generateComponents(node: Node, process: CodeGeneratorProcess) {
   const components = componentNames
     .map(n => node.children[n])
     .filter(c => !!c)
-    .map(c => c[0]);
+    .map(c => c[0])
+    .filter(c => !!c)
 
   components.forEach(n => {
     process.generateNode(n)

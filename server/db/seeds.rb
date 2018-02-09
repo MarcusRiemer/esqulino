@@ -115,7 +115,8 @@ proj_test_sequence.code_resources.create!(
                   ]
                }
             }
-          ]
+          ],
+        "where": []
        }
     },
   block_language: block_sql,

@@ -311,7 +311,10 @@ export class Tree {
       if ((children && childIndex < children.length) && childIndex >= 0) {
         current = children[childIndex];
       } else {
-        throw new Error(`SyntaxTree: Could not locate step ${i} of ${JSON.stringify(loc)} `);
+        const currentLevel = Object.entries(current.children)
+          .map(([k, v]) => `${k}[${v.length}]`)
+          .join(', ');
+        throw new Error(`SyntaxTree: Could not locate step ${i} of ${JSON.stringify(loc)} of ${currentLevel}`);
       }
     })
 
