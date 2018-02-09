@@ -122,6 +122,12 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
         {
           blockType: "block",
           direction: "horizontal",
+          style: {
+            "paddingLeft": "10px",
+            "paddingRight": "10px",
+            "border": "2px solid black",
+            "borderRadius": "500px",
+          },
           children: [
             {
               blockType: "constant",
