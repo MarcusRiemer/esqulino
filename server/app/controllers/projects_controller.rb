@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
   include JsonSchemaHelper
 
   before_action :project, only: [:show]
-  
+  before_action :project_params, only: [:create]
   def index
     @projects = Project.all
 
@@ -30,9 +30,13 @@ class ProjectsController < ApplicationController
 
     @project = Project.new
   
-    @project.assign_attributes(project_params)
+    @project.assign_attributes({name: @json['name'], slug: @json['slug']})
+
     if @project.save
-      render json: @project
+      puts @project.inspect
+      puts @project.id
+      Builders::ProjectUtility.new(id: @project.id, db_type: 'sqlite3').generate
+      render json: { 'id' => @project.slug }, :status => 200
     else
       render nothing: true, status: :bad_request
     end
@@ -77,7 +81,9 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params
-      .permit(:name, :slug, :apiVersion, admin: {})
+    # params
+    #   .permit(:name, :slug, :apiVersion, admin: {})
+
+    @json = JSON.parse(request.body.read)
   end
 end

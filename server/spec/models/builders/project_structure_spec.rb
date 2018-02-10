@@ -19,7 +19,6 @@ RSpec.describe Builders::ProjectStructure do
     context 'merged data' do
       it 'should have schema' do
         subject.build
-
         expect(subject.data).to have_key('schema')
       end
 
