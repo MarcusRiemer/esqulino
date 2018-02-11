@@ -14,8 +14,14 @@ module Builders
     end
 
     def project_path
-      @base_path = Rails.application.config.sqlino[:projects_dir]
-      full_path = File.join @base_path, @id
+      begin
+        base_path = Rails.application.config.sqlino[:projects_dir]
+        full_path = File.join(base_path, @id)
+      rescue => e
+        raise EsqulinoError.new("Project directory already exist: #{e}") if File.exist? full_path
+      end
+      
+      
     end
 
     def create_project_directory
