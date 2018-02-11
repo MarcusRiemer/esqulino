@@ -6,35 +6,20 @@ class ProjectsController < ApplicationController
 
   before_action :project, only: [:show]
   before_action :project_params, only: [:create]
+  
   def index
     @projects = Project.all
 
     render json: @projects
   end
 
-  # Creating a new project
-  # TODO: https://www.airpair.com/ruby-on-rails/posts/building-a-restful-api-in-a-rails-application
+  # Creating a new project via clients post call
+  # Setup project directory and sqlite database with project utility class
   def create
-    # Grab parameters to create the project
-    # updated_project = ensure_request("ProjectCreationDescription", request.body.read)
-    # creation_params = ProjectCreationParams.new updated_project
-
-    # # Actually create the project
-    # create_project projects_dir, creation_params
-
-    # # Tell people that are interested about this
-    # email = ProjectMailer.created_admin(creation_params.slug, creation_params.name)
-    # email.deliver_later
-
-    # render :json => { 'id' => creation_params.slug }, :status => 200
-
-    @project = Project.new
-  
+    @project = Project.new 
     @project.assign_attributes({name: @json['name'], slug: @json['slug']})
 
     if @project.save
-      puts @project.inspect
-      puts @project.id
       Builders::ProjectUtility.new(id: @project.id, db_type: 'sqlite3').generate
       render json: { 'id' => @project.slug }, :status => 200
     else

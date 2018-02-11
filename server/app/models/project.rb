@@ -8,7 +8,7 @@ class Project < ApplicationRecord
   validates :slug, uniqueness: true
   # Name may not be empty
   validates :name, presence: true
-  # Name may not be empty
+  # Slug may not be empty
   validates :slug, presence: true
   # A project with all associated resources that are required for
   # immediate display on the client.

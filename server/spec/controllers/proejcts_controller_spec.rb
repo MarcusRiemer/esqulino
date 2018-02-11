@@ -32,4 +32,19 @@ RSpec.describe ProjectsController do
       end
     end
   end
+
+  describe "#edit" do
+    describe 'valid request' do
+      let(:project) { create(:project, name: 'Test', slug: 'test') }
+      let(:update_params) { {id: project.id ,name: 'Hello Test', slug: 'test', description: 'This is a test project'} }
+
+      xit 'updates an exisiting project' do
+        post :edit, params: update_params
+        expect(Project.find_by(project.id).name).to eq('Hello Test')
+      end
+
+      xit 'returns ok' do
+      end
+    end
+  end
 end

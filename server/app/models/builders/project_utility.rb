@@ -1,7 +1,6 @@
 module Builders
 
   # This Utility class is responsible to create project deirectory and sqlite databse for the project
-  # 
   class ProjectUtility
     
     def initialize(id:, db_type:)
