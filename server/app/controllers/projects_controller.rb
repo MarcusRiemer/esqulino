@@ -17,7 +17,7 @@ class ProjectsController < ApplicationController
   # Setup project directory and sqlite database with project utility class
   def create
     @project = Project.new
-    @project.assign_attributes({name: project_params['name'], slug: project_params['slug']})
+    @project.assign_attributes(project_params['project'])
     if @project.save
       Builders::ProjectUtility.new(id: @project.id, db_type: project_params['db_type']).generate
       render json: { 'id' => @project.slug }, :status => 200
@@ -65,6 +65,6 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.permit(:name, :slug, :apiVersion, :dbType, admin: {}).transform_keys! { |k| k.underscore }
+    params.permit(:name, :slug, :apiVersion, :dbType, admin: {}, project: {}).transform_keys! { |k| k.underscore }
   end
 end
