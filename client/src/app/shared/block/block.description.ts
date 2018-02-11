@@ -23,17 +23,28 @@ export namespace VisualBlockDescriptions {
   }
 
   /**
+   * The locations of categories at which insertions may occur.
+   */
+  export type CategoryInsertPosition = "insertFirst" | "insertLast";
+
+  export type CategoryInsert = {
+    order: CategoryInsertPosition;
+    category: string;
+  };
+
+  /**
    * These properties are required to specify drop targets.
    */
   export interface DropTargetProperties {
+    // Drops something into the same category as the relevant node
     self?: {
       order: "insertBefore" | "insertAfter";
       skipParents: number;
     };
-    parent?: {
-      order: "insertFirst" | "insertLast";
-      category: string;
-    }
+
+    children?: CategoryInsert;
+
+    parent?: CategoryInsert;
   }
 
   /**

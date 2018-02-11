@@ -12,6 +12,13 @@ function isParentDrop(dropTarget: DropTargetProperties) {
 }
 
 /**
+ * @return True, if the given drop target drops on children
+ */
+function isChildDrop(dropTarget: DropTargetProperties) {
+  return (dropTarget && dropTarget.children);
+}
+
+/**
  * @return True, if the given drop target drops on itself
  */
 function isSelfDrop(dropTarget: DropTargetProperties) {
@@ -40,15 +47,29 @@ export function calculateDropLocation(node: Node, drop: DropTargetProperties): N
     // Are we dropping at the parent?
     const parentDrop = isParentDrop(drop);
     if (parentDrop) {
-      const calculateParentIndex = () => {
+      const calculateCategoryIndex = () => {
         switch (parentDrop.order) {
           case "insertFirst": return (0);
           case "insertLast": return (node.nodeParent.getChildrenInCategory(parentDrop.category).length);
         }
       };
 
-      const index = calculateParentIndex();
+      const index = calculateCategoryIndex();
       return (node.location.slice(0, -1).concat([[parentDrop.category, index]]));
+    }
+
+    // Are we dropping at the children?
+    const childDrop = isChildDrop(drop);
+    if (childDrop) {
+      const calculateCategoryIndex = () => {
+        switch (childDrop.order) {
+          case "insertFirst": return (0);
+          case "insertLast": return (node.getChildrenInCategory(childDrop.category).length);
+        }
+      };
+
+      const index = calculateCategoryIndex();
+      return (node.location.concat([[childDrop.category, index]]));
     }
 
     // Or are we dropping on the node itself?
