@@ -1,0 +1,3 @@
+SELECT foo.id
+FROM foo
+GROUP BY foo.id

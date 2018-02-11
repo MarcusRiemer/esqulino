@@ -167,6 +167,25 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         }
       }
     },
+    "groupBy": {
+      children: {
+        "expressions": {
+          type: "allowed",
+          nodeTypes: [
+            {
+              languageName: "sql",
+              nodeType: "expression",
+              occurs: "*"
+            },
+            {
+              languageName: "sql",
+              nodeType: "columnName",
+              occurs: "*"
+            }
+          ]
+        }
+      },
+    },
     "querySelect": {
       children: {
         "select": {
@@ -220,6 +239,15 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: [
             {
               nodeType: "where",
+              occurs: "?"
+            },
+          ]
+        },
+        "groupBy": {
+          type: "sequence",
+          nodeTypes: [
+            {
+              nodeType: "groupBy",
               occurs: "?"
             },
           ]
