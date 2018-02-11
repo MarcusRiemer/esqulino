@@ -95,10 +95,109 @@ language "SQL" {
         }
         iterate {
           childGroup "tables"
-          direction horizontal
+          direction vertical
           between {
-            ", "
           }
+        }
+      }
+    }
+    dropTarget {
+      visibility ifLegalChild
+      direction horizontal
+      visual {
+        "+JOIN"
+      }
+    }
+  }
+  type "sql.crossJoin" {
+    block {
+      direction horizontal
+      visual {
+        "JOIN" {
+          style {
+            width: 100px
+            marginLeft: 10px
+            display: inline-block
+            color: blue
+          }
+        }
+        iterate {
+          childGroup "table"
+          direction horizontal
+        }
+      }
+    }
+  }
+  type "sql.innerJoinUsing" {
+    block {
+      direction horizontal
+      visual {
+        "INNER JOIN" {
+          style {
+            width: 100px
+            marginLeft: 10px
+            display: inline-block
+            color: blue
+          }
+        }
+        iterate {
+          childGroup "table"
+          direction horizontal
+        }
+        dropTarget {
+          visibility always
+          direction horizontal
+          visual {
+            "USING" {
+              style {
+                width: 100px
+                marginLeft: 10px
+                display: inline-block
+                color: blue
+              }
+            }
+          }
+        }
+        iterate {
+          childGroup "using"
+          direction horizontal
+        }
+      }
+    }
+  }
+  type "sql.innerJoinOn" {
+    block {
+      direction horizontal
+      visual {
+        "INNER JOIN" {
+          style {
+            width: 100px
+            marginLeft: 10px
+            display: inline-block
+            color: blue
+          }
+        }
+        iterate {
+          childGroup "table"
+          direction horizontal
+        }
+        dropTarget {
+          visibility always
+          direction horizontal
+          visual {
+            "ON" {
+              style {
+                width: 100px
+                marginLeft: 10px
+                display: inline-block
+                color: blue
+              }
+            }
+          }
+        }
+        iterate {
+          childGroup "on"
+          direction horizontal
         }
       }
     }
@@ -107,14 +206,15 @@ language "SQL" {
     block {
       direction horizontal
       visual {
-        {{ name }}
-      }
-      style {
-        paddingLeft: 10px
-        paddingTop: 2px
-        paddingRight: 10px
-        border: 2px solid black
-        borderRadius: 500px
+        {{ name }} {
+          style {
+            paddingLeft: 10px
+            paddingTop: 2px
+            paddingRight: 10px
+            border: 2px solid black
+            borderRadius: 500px
+          }
+        }
       }
     }
   }
@@ -183,6 +283,31 @@ language "SQL" {
     category "SQL"
     node "sql.from" {
       childGroup "tables" {
+      }
+    }
+  }
+  sidebarBlock "JOIN" {
+    category "SQL"
+    node "sql.crossJoin" {
+      childGroup "table" {
+      }
+    }
+  }
+  sidebarBlock "INNER JOIN USING" {
+    category "SQL"
+    node "sql.innerJoinUsing" {
+      childGroup "table" {
+      }
+      childGroup "using" {
+      }
+    }
+  }
+  sidebarBlock "INNER JOIN ON" {
+    category "SQL"
+    node "sql.innerJoinOn" {
+      childGroup "table" {
+      }
+      childGroup "on" {
       }
     }
   }

@@ -37,8 +37,21 @@ grammar "sql" {
   node "crossJoin" {
     children "table" ::= tableIntroduction
   }
+  node "innerJoinOn" {
+    children "table" ::= tableIntroduction
+    children "on" ::= expression
+  }
+  node "innerJoinUsing" {
+    children "table" ::= tableIntroduction
+    children "using" ::= columnName
+  }
+  typedef "join" {
+    "crossJoin"
+    "innerJoinUsing"
+    "innerJoinOn"
+  }
   node "from" {
-    children "tables" ::= tableIntroduction crossJoin*
+    children "tables" ::= tableIntroduction join*
   }
   node "whereAdditional" {
     prop "operator" { string }

@@ -255,23 +255,149 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
     {
       describedType: {
         languageName: "sql",
+        typeName: "innerJoinUsing",
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          dropTarget: {
+            children: {
+              category: "table",
+              order: "insertFirst",
+            }
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "INNER JOIN",
+              style: {
+                width: "100px",
+                marginLeft: "10px",
+                display: "inline-block",
+                color: "blue"
+              }
+            },
+            {
+              blockType: "iterator",
+              childGroupName: "table",
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorIterator,
+            {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "using",
+                  order: "insertFirst"
+                }
+              },
+              direction: "horizontal",
+              visibility: ["always"],
+              children: [
+                {
+                  blockType: "constant",
+                  text: "USING",
+                  style: {
+                    width: "100px",
+                    marginLeft: "10px",
+                    display: "inline-block",
+                    color: "blue"
+                  }
+                },
+              ]
+            },
+            {
+              blockType: "iterator",
+              childGroupName: "using",
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorIterator,
+          ],
+        },
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "innerJoinOn",
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          dropTarget: {
+            children: {
+              category: "table",
+              order: "insertFirst",
+            }
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "INNER JOIN",
+              style: {
+                width: "100px",
+                marginLeft: "10px",
+                display: "inline-block",
+                color: "blue"
+              }
+            },
+            {
+              blockType: "iterator",
+              childGroupName: "table",
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorIterator,
+            {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "on",
+                  order: "insertFirst"
+                }
+              },
+              direction: "horizontal",
+              visibility: ["always"],
+              children: [
+                {
+                  blockType: "constant",
+                  text: "ON",
+                  style: {
+                    width: "100px",
+                    marginLeft: "10px",
+                    display: "inline-block",
+                    color: "blue"
+                  }
+                },
+              ]
+            },
+            {
+              blockType: "iterator",
+              childGroupName: "on",
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorIterator,
+          ],
+        },
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
         typeName: "tableIntroduction",
       },
       visual: [
         {
           blockType: "block",
           direction: "horizontal",
-          style: {
-            "paddingLeft": "10px",
-            "paddingTop": "2px",
-            "paddingRight": "10px",
-            "border": "2px solid black",
-            "borderRadius": "500px",
-          },
           children: [
             {
               blockType: "interpolated",
               property: "name",
+              style: {
+                "paddingLeft": "10px",
+                "paddingTop": "2px",
+                "paddingRight": "10px",
+                "border": "2px solid black",
+                "borderRadius": "500px",
+              },
             } as VisualBlockDescriptions.EditorInterpolated,
           ]
         }
@@ -420,6 +546,34 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
         name: "crossJoin",
         children: {
           "table": []
+        }
+      }
+    },
+    {
+      sidebar: {
+        category: "SQL",
+        displayName: "INNER JOIN USING"
+      },
+      defaultNode: {
+        language: "sql",
+        name: "innerJoinUsing",
+        children: {
+          "table": [],
+          "using": []
+        }
+      }
+    },
+    {
+      sidebar: {
+        category: "SQL",
+        displayName: "INNER JOIN ON"
+      },
+      defaultNode: {
+        language: "sql",
+        name: "innerJoinOn",
+        children: {
+          "table": [],
+          "on": []
         }
       }
     },
