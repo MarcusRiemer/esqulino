@@ -16,14 +16,13 @@ class ProjectsController < ApplicationController
   # Creating a new project via clients post call
   # Setup project directory and sqlite database with project utility class
   def create
-    @project = Project.new 
-    @project.assign_attributes({name: @json['name'], slug: @json['slug']})
-
+    @project = Project.new
+    @project.assign_attributes({name: project_params['name'], slug: project_params['slug']})
     if @project.save
-      Builders::ProjectUtility.new(id: @project.id, db_type: 'sqlite3').generate
+      Builders::ProjectUtility.new(id: @project.id, db_type: project_params['db_type']).generate
       render json: { 'id' => @project.slug }, :status => 200
     else
-      render nothing: true, status: :bad_request
+      render nothing: true, status: 400
     end
   end
 
@@ -66,9 +65,6 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    # params
-    #   .permit(:name, :slug, :apiVersion, admin: {})
-
-    @json = JSON.parse(request.body.read)
+    params.permit(:name, :slug, :apiVersion, :dbType, admin: {}).transform_keys! { |k| k.underscore }
   end
 end
