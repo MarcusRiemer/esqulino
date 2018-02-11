@@ -27,7 +27,8 @@ services:
       - USER_GID=1000
       - TPUT_BIN=true
       - DATABASE_HOST=db
-
+    stdin_open: true
+    tty: true
     depends_on:
       - db
 
