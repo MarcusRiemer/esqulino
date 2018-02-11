@@ -2,7 +2,7 @@ import { NodeConverterRegistration, CodeGeneratorProcess, OutputSeparator } from
 import { Node } from '../syntaxtree'
 
 function generateComponents(node: Node, process: CodeGeneratorProcess) {
-  const componentNames = ["insert", "select", "update", "delete", "from", "where"];
+  const componentNames = ["insert", "select", "update", "delete", "from", "where", "groupBy"];
   const components = componentNames
     .map(n => node.children[n])
     .filter(c => !!c)
@@ -221,6 +221,26 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
 
         process.addConvertedFragment(op.toUpperCase() + ' ', node);
         process.generateNode(expr);
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "sql",
+      typeName: "groupBy"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        process.addConvertedFragment(`GROUP BY `, node)
+
+        node.getChildrenInCategory("expressions").forEach((c, idx, arr) => {
+          process.generateNode(c);
+          if (idx != arr.length - 1) {
+            process.addConvertedFragment(', ', node);
+          }
+        });
 
         return ([]);
       }

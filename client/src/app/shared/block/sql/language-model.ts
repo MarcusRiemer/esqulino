@@ -45,6 +45,28 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           childGroupName: "where",
           direction: "horizontal",
         } as VisualBlockDescriptions.EditorIterator,
+        {
+          blockType: "dropTarget",
+          dropTarget: {
+            parent: {
+              category: "groupBy",
+              order: "insertFirst"
+            }
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "+GROUP BY"
+            } as VisualBlockDescriptions.EditorConstant,
+          ],
+          direction: "horizontal",
+          visibility: ["ifLegalChild"]
+        } as VisualBlockDescriptions.EditorDropTarget,
+        {
+          blockType: "iterator",
+          childGroupName: "groupBy",
+          direction: "horizontal",
+        } as VisualBlockDescriptions.EditorIterator,
       ]
     },
     {
@@ -57,7 +79,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           blockType: "block",
           direction: "horizontal",
           dropTarget: {
-            parent: {
+            children: {
               order: "insertFirst",
               category: "columns"
             }
@@ -153,7 +175,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           blockType: "block",
           direction: "horizontal",
           dropTarget: {
-            parent: {
+            children: {
               category: "tables",
               order: "insertFirst",
             }
@@ -248,6 +270,46 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
         }
       ]
     },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "groupBy"
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          dropTarget: {
+            children: {
+              category: "expressions",
+              order: "insertFirst",
+            }
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "GROUP BY",
+              style: {
+                width: "100px",
+                display: "inline-block",
+                color: "blue"
+              }
+            } as VisualBlockDescriptions.EditorConstant,
+            {
+              blockType: "iterator",
+              childGroupName: "expressions",
+              direction: "horizontal",
+              between: [
+                {
+                  blockType: "constant",
+                  text: ", "
+                } as VisualBlockDescriptions.EditorConstant,
+              ]
+            } as VisualBlockDescriptions.EditorIterator,
+          ]
+        }
+      ]
+    },
   ],
   sidebarBlocks: [
     {
@@ -309,6 +371,19 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
       defaultNode: {
         language: "sql",
         name: "where",
+        children: {
+          "expressions": []
+        }
+      }
+    },
+    {
+      sidebar: {
+        category: "SQL",
+        displayName: "GROUP BY"
+      },
+      defaultNode: {
+        language: "sql",
+        name: "groupBy",
         children: {
           "expressions": []
         }
