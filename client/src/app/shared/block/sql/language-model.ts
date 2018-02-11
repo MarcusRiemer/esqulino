@@ -193,15 +193,62 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             {
               blockType: "iterator",
               childGroupName: "tables",
-              direction: "horizontal",
-              between: [
-                {
-                  blockType: "constant",
-                  text: ", "
-                } as VisualBlockDescriptions.EditorConstant,
-              ]
+              direction: "vertical",
+              between: []
             } as VisualBlockDescriptions.EditorIterator,
-          ]
+          ],
+        },
+        {
+          blockType: "dropTarget",
+          dropTarget: {
+            children: {
+              category: "tables",
+              order: "insertLast"
+            }
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "+JOIN"
+            } as VisualBlockDescriptions.EditorConstant,
+          ],
+          direction: "horizontal",
+          visibility: ["ifLegalChild"]
+        } as VisualBlockDescriptions.EditorDropTarget
+      ],
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "crossJoin",
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          dropTarget: {
+            children: {
+              category: "table",
+              order: "insertFirst",
+            }
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "JOIN",
+              style: {
+                width: "100px",
+                marginLeft: "10px",
+                display: "inline-block",
+                color: "blue"
+              }
+            },
+            {
+              blockType: "iterator",
+              childGroupName: "table",
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorIterator,
+          ],
         },
       ]
     },
@@ -240,7 +287,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           blockType: "block",
           direction: "horizontal",
           dropTarget: {
-            parent: {
+            children: {
               category: "expressions",
               order: "insertFirst",
             }
@@ -360,6 +407,19 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
         name: "from",
         children: {
           "tables": []
+        }
+      }
+    },
+    {
+      sidebar: {
+        category: "SQL",
+        displayName: "JOIN"
+      },
+      defaultNode: {
+        language: "sql",
+        name: "crossJoin",
+        children: {
+          "table": []
         }
       }
     },
