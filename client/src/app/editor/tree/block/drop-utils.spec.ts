@@ -55,4 +55,13 @@ describe("Drop location calculation", () => {
     expect(calculateDropLocation(n1, { parent: { category: "c2", order: "insertFirst" } })).toEqual([["c2", 0]]);
     expect(calculateDropLocation(n1, { parent: { category: "c2", order: "insertLast" } })).toEqual([["c2", 0]]);
   });
+
+  it("on child", () => {
+    const r = defaultTree.locate([]);
+    expect(calculateDropLocation(r, { children: { category: "c1", order: "insertFirst" } })).toEqual([["c1", 0]]);
+    expect(calculateDropLocation(r, { children: { category: "c1", order: "insertLast" } })).toEqual([["c1", 3]]);
+
+    expect(calculateDropLocation(r, { children: { category: "c2", order: "insertFirst" } })).toEqual([["c2", 0]]);
+    expect(calculateDropLocation(r, { children: { category: "c2", order: "insertLast" } })).toEqual([["c2", 0]]);
+  });
 });
