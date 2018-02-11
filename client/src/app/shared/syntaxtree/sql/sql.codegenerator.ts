@@ -167,6 +167,44 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
   {
     type: {
       languageName: "sql",
+      typeName: "innerJoinOn"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        const tableIntro = node.children['table'][0];
+        const onExpr = node.children['on'][0];
+
+        process.addConvertedFragment(`INNER JOIN `, node)
+        process.generateNode(tableIntro);
+        process.addConvertedFragment(` ON `, node)
+        process.generateNode(onExpr);
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "sql",
+      typeName: "innerJoinUsing"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        const tableIntro = node.children['table'][0];
+        const usingExpr = node.children['using'][0];
+
+        process.addConvertedFragment(`INNER JOIN `, node)
+        process.generateNode(tableIntro);
+        process.addConvertedFragment(` USING `, node)
+        process.generateNode(usingExpr);
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "sql",
       typeName: "from"
     },
     converter: {
@@ -202,8 +240,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
           process.addConvertedFragment('\n\t', node);
           process.generateNode(c);
         });
-
-        process.addConvertedFragment('', node, OutputSeparator.NEW_LINE_AFTER);
 
         return ([]);
       }
