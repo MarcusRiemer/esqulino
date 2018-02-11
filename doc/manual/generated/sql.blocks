@@ -8,24 +8,47 @@ language "SQL" {
       childGroup "from"
       direction horizontal
     }
+    dropTarget {
+      visibility ifLegalChild
+      direction horizontal
+      visual {
+        "+WHERE"
+      }
+    }
     iterate {
       childGroup "where"
       direction horizontal
     }
-  }
-  type "sql.select" {
     dropTarget {
-      visibility always
+      visibility ifLegalChild
       direction horizontal
       visual {
-        "SELECT"
+        "+GROUP BY"
       }
     }
     iterate {
-      childGroup "columns"
+      childGroup "groupBy"
       direction horizontal
-      between {
-        ", "
+    }
+  }
+  type "sql.select" {
+    block {
+      direction horizontal
+      visual {
+        "SELECT" {
+          style {
+            width: 100px
+            display: inline-block
+            color: blue
+          }
+        }
+        iterate {
+          childGroup "columns"
+          direction horizontal
+          between {
+            ", "
+          }
+        }
       }
     }
   }
@@ -33,7 +56,15 @@ language "SQL" {
     block {
       direction horizontal
       visual {
+        {{ refTableName }}
+        "."
         {{ columnName }}
+      }
+      style {
+        paddingLeft: 10px
+        paddingRight: 10px
+        border: 2px solid black
+        borderRadius: 500px
       }
     }
   }
@@ -43,26 +74,91 @@ language "SQL" {
       visual {
         "*"
       }
+      style {
+        paddingLeft: 10px
+        paddingRight: 10px
+        border: 2px solid black
+        borderRadius: 500px
+      }
     }
   }
   type "sql.from" {
-    dropTarget {
-      visibility always
+    block {
       direction horizontal
       visual {
-        "FROM"
-      }
-    }
-    iterate {
-      childGroup "tables"
-      direction horizontal
-      between {
-        ", "
+        "FROM" {
+          style {
+            width: 100px
+            display: inline-block
+            color: blue
+          }
+        }
+        iterate {
+          childGroup "tables"
+          direction horizontal
+          between {
+            ", "
+          }
+        }
       }
     }
   }
   type "sql.tableIntroduction" {
-    {{ name }}
+    block {
+      direction horizontal
+      visual {
+        {{ name }}
+      }
+      style {
+        paddingLeft: 10px
+        paddingTop: 2px
+        paddingRight: 10px
+        border: 2px solid black
+        borderRadius: 500px
+      }
+    }
+  }
+  type "sql.where" {
+    block {
+      direction horizontal
+      visual {
+        "WHERE" {
+          style {
+            width: 100px
+            display: inline-block
+            color: blue
+          }
+        }
+        iterate {
+          childGroup "expressions"
+          direction horizontal
+          between {
+            ", "
+          }
+        }
+      }
+    }
+  }
+  type "sql.groupBy" {
+    block {
+      direction horizontal
+      visual {
+        "GROUP BY" {
+          style {
+            width: 100px
+            display: inline-block
+            color: blue
+          }
+        }
+        iterate {
+          childGroup "expressions"
+          direction horizontal
+          between {
+            ", "
+          }
+        }
+      }
+    }
   }
   sidebarBlock "SELECT" {
     category "SQL"
@@ -93,6 +189,13 @@ language "SQL" {
   sidebarBlock "WHERE" {
     category "SQL"
     node "sql.where" {
+      childGroup "expressions" {
+      }
+    }
+  }
+  sidebarBlock "GROUP BY" {
+    category "SQL"
+    node "sql.groupBy" {
       childGroup "expressions" {
       }
     }

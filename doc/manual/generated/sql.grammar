@@ -47,6 +47,9 @@ grammar "sql" {
   node "where" {
     children "expressions" ::= expression whereAdditional*
   }
+  node "groupBy" {
+    children "expressions" ::= expression* & columnName*
+  }
   node "querySelect" {
     children "select" ::= select
     children "from" ::= from
@@ -57,6 +60,7 @@ grammar "sql" {
     children "delete" ::= delete
     children "from" ::= from
     children "where" ::= where?
+    children "groupBy" ::= groupBy?
   }
   typedef "query" {
     "querySelect"

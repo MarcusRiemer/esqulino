@@ -11,6 +11,9 @@ language "XML (Dynamisch)" {
           visual {
             "+Attribute"
           }
+          style {
+            marginLeft: 10px
+          }
         }
         iterate {
           childGroup "attributes"
@@ -23,12 +26,18 @@ language "XML (Dynamisch)" {
           visual {
             "+Element"
           }
+          style {
+            marginLeft: 10px
+          }
         }
       }
     }
     iterate {
       childGroup "elements"
       direction vertical
+      style {
+        marginLeft: 10px
+      }
     }
     block {
       direction horizontal
@@ -51,6 +60,9 @@ language "XML (Dynamisch)" {
           direction horizontal
         }
         "\""
+      }
+      style {
+        marginLeft: 10px
       }
     }
   }
