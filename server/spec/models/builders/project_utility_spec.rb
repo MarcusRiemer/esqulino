@@ -9,11 +9,10 @@ RSpec.describe Builders::ProjectUtility do
     subject { described_class.new(id: uuid, db_type: db_type) }
 
     context "project directory" do
-      it 'with proejct id' do
+      it 'with project id' do
         FakeFS.with_fresh do
-          byebug
           p_dir = subject.create_project_directory
-          # assert File.directory?(uuid)
+          assert File.directory?(uuid)
           expect(p_dir).to include(uuid)
         end 
       end

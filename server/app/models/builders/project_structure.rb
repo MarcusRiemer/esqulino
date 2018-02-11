@@ -1,5 +1,5 @@
 module Builders
-  # Builds the structure class with other data sources,as pages, schema, quries
+  # Builds the structure class with other data sources as pages, schema and quries
   class ProjectStructure
     attr_reader :project
 
