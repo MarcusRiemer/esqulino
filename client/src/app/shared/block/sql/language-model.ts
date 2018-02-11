@@ -26,7 +26,10 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
         {
           blockType: "dropTarget",
           dropTarget: {
-            actionParent: "where"
+            parent: {
+              category: "where",
+              order: "insertFirst"
+            }
           },
           children: [
             {
@@ -54,7 +57,10 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           blockType: "block",
           direction: "horizontal",
           dropTarget: {
-            actionParent: "columns"
+            parent: {
+              order: "insertFirst",
+              category: "columns"
+            }
           },
           children: [
             {
@@ -147,7 +153,10 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           blockType: "block",
           direction: "horizontal",
           dropTarget: {
-            actionParent: "tables"
+            parent: {
+              category: "tables",
+              order: "insertFirst",
+            }
           },
           children: [
             {
@@ -209,7 +218,10 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           blockType: "block",
           direction: "horizontal",
           dropTarget: {
-            actionParent: "expressions"
+            parent: {
+              category: "expressions",
+              order: "insertFirst",
+            }
           },
           children: [
             {
