@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { Http, Response } from '@angular/http'
+import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Router } from '@angular/router'
 
 import { Observable } from 'rxjs/Observable'
@@ -67,10 +67,13 @@ export class CreateProjectComponent {
    * Sends the current state of the the request to the server.
    */
   createProject() {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
     if (!this._currentRequest) {
       this._currentError = undefined;
 
-      this._currentRequest = this._http.post(this._serverApi.createProjectUrl(), JSON.stringify(this.params));
+      this._currentRequest = this._http.post(this._serverApi.createProjectUrl(), JSON.stringify(this.params), options);
       this._currentRequest
         .map(res => res.json() as { id: string })
         .subscribe(
