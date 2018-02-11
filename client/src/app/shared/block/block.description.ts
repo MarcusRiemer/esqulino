@@ -7,7 +7,7 @@ import { QualifiedTypeName, NodeDescription } from '../syntaxtree/syntaxtree.des
 export namespace VisualBlockDescriptions {
 
   /**
-   * 
+   * We currently allow any CSS style to be used.
    */
   export type BlockStyle = { [k: string]: string }
 
