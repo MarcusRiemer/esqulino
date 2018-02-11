@@ -243,7 +243,10 @@ const EDITOR_BLOCKS = [
           {
             blockType: "dropTarget",
             dropTarget: {
-              actionParent: "attributes"
+              parent: {
+                category: "attributes",
+                order: "insertFirst"
+              }
             },
             children: [
               {
@@ -269,7 +272,10 @@ const EDITOR_BLOCKS = [
           {
             blockType: "dropTarget",
             dropTarget: {
-              actionParent: "elements"
+              parent: {
+                category: "attributes",
+                order: "insertFirst"
+              }
             },
             children: [
               {

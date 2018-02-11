@@ -26,11 +26,14 @@ export namespace VisualBlockDescriptions {
    * These properties are required to specify drop targets.
    */
   export interface DropTargetProperties {
-    actionSelf?: {
+    self?: {
       order: "insertBefore" | "insertAfter";
       skipParents: number;
     };
-    actionParent?: string;
+    parent?: {
+      order: "insertFirst" | "insertLast";
+      category: string;
+    }
   }
 
   /**

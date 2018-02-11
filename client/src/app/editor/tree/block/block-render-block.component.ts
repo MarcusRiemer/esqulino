@@ -10,6 +10,8 @@ import { DragService } from '../../drag.service';
 
 import { TreeEditorService } from '../editor.service';
 
+import { calculateDropLocation } from './drop-utils';
+
 // These states are available for animation
 type DropTargetAnimationStates = "available" | "none" | "self" | "taken";
 
@@ -80,13 +82,7 @@ export class BlockRenderBlockComponent implements OnInit {
    * @return The location a drop should occur in.
    */
   get dropLocation() {
-    // Is there any associated node?
-    if (this.node) {
-      return (this.node.location);
-    } else {
-      // No, this must be the root
-      return ([]);
-    }
+    return (calculateDropLocation(this.node, this.visual.dropTarget));
   }
 
   /**

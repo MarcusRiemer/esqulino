@@ -9,6 +9,8 @@ import { DragService } from '../../drag.service';
 
 import { TreeEditorService } from '../editor.service';
 
+import { calculateDropLocation } from './drop-utils';
+
 /**
  * Renders a single and well known visual element of a node.
  */
@@ -47,31 +49,22 @@ export class BlockRenderDropTargetComponent {
    * @return True, if this drop will be made into a strictly defined category.
    */
   get isParentDrop() {
-    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.actionParent;
+    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.parent;
     return (!!action);
   }
 
   /**
    * @return The name of the referenced child group (if there is any)
    */
-  get childGroupName() {
-    // Is the category specified explicitly?
-    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.actionParent;
-    if (action) {
-      // Then use that category
-      return (action);
-    } else {
-      // Else use the category of our own node.
-      const loc = this.node.location;
-      return (loc[loc.length - 1][0]);
-    }
+  get dropLocationChildGroupName(): string {
+    return (this.dropLocation[this.dropLocation.length - 1][0]);
   }
 
   /**
    * @return true, if the targeted child group has any children.
    */
-  get hasChildren() {
-    const childGroupName = this.childGroupName;
+  get dropLocationHasChildren() {
+    const childGroupName = this.dropLocationChildGroupName;
     if (this.isParentDrop) {
       // Count children in that category
       return (this.node.getChildrenInCategory(childGroupName).length > 0);
@@ -85,19 +78,7 @@ export class BlockRenderDropTargetComponent {
    * @return The location a drop should occur in. This depends on the configuration in the language model.
    */
   get dropLocation() {
-    if (this.node) {
-      if (this.isParentDrop) {
-        // If there is an explicit group name, this is always the first node
-        return (this.node.location.concat([[this.childGroupName, 0]]));
-      } else {
-        // Otherwise use (more or less) exact the location we are at. The description
-        // may specify some levels that are dropped.
-        const lastLevel = this.node.location.length - this.visual.dropTarget.actionSelf.skipParents;
-        return (this.node.location.slice(0, lastLevel));
-      }
-    } else {
-      return ([]);
-    }
+    return (calculateDropLocation(this.node, this.visual.dropTarget));
   }
 
   /**
@@ -142,7 +123,7 @@ export class BlockRenderDropTargetComponent {
             const parentNode = currentTree.locate(this.dropLocation.slice(0, -1));
             const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
 
-            if (parentNodeType.allowsChildType(newNodeType, this.childGroupName)) {
+            if (parentNodeType.allowsChildType(newNodeType, this.dropLocationChildGroupName)) {
               return ("available");
             } else {
               return ("none");
@@ -154,7 +135,7 @@ export class BlockRenderDropTargetComponent {
         if (flags.some(f => f === "always")) {
           return ("visible");
         }
-        if (flags.some(f => f === "ifEmpty") && !this.hasChildren) {
+        if (flags.some(f => f === "ifEmpty") && !this.dropLocationHasChildren) {
           return ("visible");
         } else {
           return ("none");
