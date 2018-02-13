@@ -6,8 +6,7 @@ import { Node, NodeLocation } from '../../../shared/syntaxtree';
 import { arrayEqual } from '../../../shared/util';
 
 import { DragService } from '../../drag.service';
-
-import { TreeEditorService } from '../editor.service';
+import { TreeEditorService } from '../../editor.service';
 
 import { DROP_PLACEHOLDER_ANIMATION } from './node.animation';
 

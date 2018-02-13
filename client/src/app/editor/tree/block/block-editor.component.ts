@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 
 import { ToolbarService } from '../../toolbar.service';
 
-import { TreeEditorService } from '../editor.service';
+import { TreeEditorService } from '../../editor.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
 
@@ -15,7 +15,6 @@ import { CodeResourceService } from '../../coderesource.service';
  */
 @Component({
   templateUrl: 'templates/block-editor.html',
-  providers: [TreeEditorService],
 })
 export class BlockEditorComponent implements OnInit, OnDestroy {
 

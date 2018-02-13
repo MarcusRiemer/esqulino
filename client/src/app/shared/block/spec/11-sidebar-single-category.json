@@ -1,0 +1,28 @@
+{
+  "id": "test",
+  "name": "test",
+  "editorBlocks": [],
+  "sidebars": [
+    {
+      "caption": "Sidebar Caption",
+      "categories": [
+        {
+          "categoryCaption": "Category Caption",
+          "blocks": [
+            {
+              "displayName": "Test Block",
+              "defaultNode": {
+                "language": "test",
+                "name": "bar",
+                "properties": {
+                  "p1": "v1"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+

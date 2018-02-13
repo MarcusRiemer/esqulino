@@ -6,112 +6,107 @@ import {
 export const LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "regex",
   name: "Reguläre Ausdrücke",
-  sidebarBlocks: [
+  sidebars: [
     {
-      defaultNode: {
-        language: "regex",
-        name: "root",
-        children: {
-          "expressions": []
-        }
-      },
-      sidebar: {
-        category: "Regulärer Ausdruck",
-        displayName: "Regulärer Ausdruck",
-      },
-    },
-    {
-      defaultNode: {
-        language: "regex",
-        name: "expr",
-        children: {
-          "singleExpression": [
+      caption: "RegEx",
+      categories: [
+        {
+          categoryCaption: "RegEx Group",
+          blocks: [
             {
-              language: "regex",
-              name: "constant",
-              properties: {
-                value: "a"
-              }
+              defaultNode: {
+                language: "regex",
+                name: "root",
+                children: {
+                  "expressions": []
+                }
+              },
+              displayName: "Regulärer Ausdruck",
+            },
+            {
+              defaultNode: {
+                language: "regex",
+                name: "expr",
+                children: {
+                  "singleExpression": [
+                    {
+                      language: "regex",
+                      name: "constant",
+                      properties: {
+                        value: "a"
+                      }
+                    }
+                  ]
+                }
+              },
+              displayName: "Konstante 'a'",
+            },
+            {
+              defaultNode: {
+                language: "regex",
+                name: "expr",
+                children: {
+                  "singleExpression": [
+                    {
+                      language: "regex",
+                      name: "constant",
+                      properties: {
+                        value: "b"
+                      }
+                    }
+                  ]
+                }
+              },
+              displayName: "Konstante 'b'",
+            },
+            {
+              defaultNode: {
+                language: "regex",
+                name: "expr",
+                children: {
+                  "singleExpression": [
+                    {
+                      language: "regex",
+                      name: "constant",
+                      properties: {
+                        value: "c"
+                      }
+                    }
+                  ]
+                }
+              },
+              displayName: "Konstante 'c'",
+            },
+            {
+              defaultNode: {
+                language: "regex",
+                name: "expr",
+                children: {
+                  "singleExpression": [
+                    {
+                      language: "regex",
+                      name: "alternative",
+                      children: {
+                        "expressions": [
+                          {
+                            language: "regex",
+                            name: "expr",
+                          },
+                          {
+                            language: "regex",
+                            name: "expr",
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              displayName: "Alternative"
             }
           ]
         }
-      },
-      sidebar: {
-        category: "Regulärer Ausdruck",
-        displayName: "Konstante 'a'",
-      }
-    },
-    {
-      defaultNode: {
-        language: "regex",
-        name: "expr",
-        children: {
-          "singleExpression": [
-            {
-              language: "regex",
-              name: "constant",
-              properties: {
-                value: "b"
-              }
-            }
-          ]
-        }
-      },
-      sidebar: {
-        category: "Regulärer Ausdruck",
-        displayName: "Konstante 'b'",
-      }
-    },
-    {
-      defaultNode: {
-        language: "regex",
-        name: "expr",
-        children: {
-          "singleExpression": [
-            {
-              language: "regex",
-              name: "constant",
-              properties: {
-                value: "c"
-              }
-            }
-          ]
-        }
-      },
-      sidebar: {
-        category: "Regulärer Ausdruck",
-        displayName: "Konstante 'c'",
-      }
-    },
-    {
-      defaultNode: {
-        language: "regex",
-        name: "expr",
-        children: {
-          "singleExpression": [
-            {
-              language: "regex",
-              name: "alternative",
-              children: {
-                "expressions": [
-                  {
-                    language: "regex",
-                    name: "expr",
-                  },
-                  {
-                    language: "regex",
-                    name: "expr",
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      },
-      sidebar: {
-        category: "Regulärer Ausdruck",
-        displayName: "Alternative"
-      }
+      ]
     }
   ],
   editorBlocks: [

@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { ToolbarService } from '../../toolbar.service';
 import { DragService } from '../../drag.service';
 
-import { TreeEditorService } from '../editor.service';
+import { TreeEditorService } from '../../editor.service';
 
 /**
  * A more or less internal editor that is intended only as a fallback if all

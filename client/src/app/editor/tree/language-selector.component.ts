@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CodeResource } from '../../shared/syntaxtree';
 import { LanguageService } from '../../shared/language.service';
 
-import { TreeEditorService } from './editor.service';
+import { TreeEditorService } from '../editor.service';
 
 /**
  * Provides a convenient way to select languages.

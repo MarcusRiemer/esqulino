@@ -3,7 +3,7 @@ FactoryBot.define do
     name "Spec Block Language"
     model ({
              editorBlocks: [],
-             sidebarBlocks: []
+             sidebars: []
            })
     family "Spec Family"
   end

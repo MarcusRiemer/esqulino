@@ -6,6 +6,165 @@ import {
 export const LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "sql",
   name: "SQL",
+  sidebars: [
+    {
+      caption: "SQL",
+      categories: [
+        {
+          categoryCaption: "SQL",
+          blocks: [
+            {
+              displayName: "SELECT",
+              defaultNode: {
+                language: "sql",
+                name: "querySelect",
+                children: {
+                  "select": [
+                    {
+                      language: "sql",
+                      name: "select",
+                    }
+                  ],
+                  "from": [
+                    {
+                      language: "sql",
+                      name: "from",
+                    }
+                  ],
+                  "where": [
+                  ],
+                  "groupBy": [
+                  ]
+                }
+              }
+            },
+            {
+              displayName: "*",
+              defaultNode: {
+                language: "sql",
+                name: "starOperator",
+              }
+            },
+            {
+              displayName: "FROM",
+              defaultNode: {
+                language: "sql",
+                name: "from",
+                children: {
+                  "tables": []
+                }
+              }
+            },
+            {
+              displayName: "JOIN",
+              defaultNode: {
+                language: "sql",
+                name: "crossJoin",
+                children: {
+                  "table": []
+                }
+              }
+            },
+            {
+              displayName: "INNER JOIN USING",
+              defaultNode: {
+                language: "sql",
+                name: "innerJoinUsing",
+                children: {
+                  "table": [],
+                  "using": []
+                }
+              }
+            },
+            {
+              displayName: "INNER JOIN ON",
+              defaultNode: {
+                language: "sql",
+                name: "innerJoinOn",
+                children: {
+                  "table": [],
+                  "on": []
+                }
+              }
+            },
+            {
+              displayName: "WHERE",
+              defaultNode: {
+                language: "sql",
+                name: "where",
+                children: {
+                  "expressions": []
+                }
+              }
+            },
+            {
+              displayName: "GROUP BY",
+              defaultNode: {
+                language: "sql",
+                name: "groupBy",
+                children: {
+                  "expressions": []
+                }
+              }
+            },
+            {
+              displayName: "Tabelle Person",
+              defaultNode: {
+                language: "sql",
+                name: "tableIntroduction",
+                properties: {
+                  "name": "Person",
+                }
+              }
+            },
+            {
+              displayName: "Spalte Person.Id",
+              defaultNode: {
+                language: "sql",
+                name: "columnName",
+                properties: {
+                  "columnName": "Id",
+                  "refTableName": "Person"
+                }
+              }
+            },
+            {
+              displayName: "Spalte Person.Vorname",
+              defaultNode: {
+                language: "sql",
+                name: "columnName",
+                properties: {
+                  "columnName": "Vorname",
+                  "refTableName": "Person"
+                }
+              }
+            },
+            {
+              displayName: "Spalte Person.Nachname",
+              defaultNode: {
+                language: "sql",
+                name: "columnName",
+                properties: {
+                  "columnName": "Nachname",
+                  "refTableName": "Person"
+                }
+              }
+            },
+            {
+              displayName: "Tabelle Adresse",
+              defaultNode: {
+                language: "sql",
+                name: "tableIntroduction",
+                properties: {
+                  "name": "Adresse",
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
   editorBlocks: [
     {
       describedType: {
@@ -484,192 +643,4 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
       ]
     },
   ],
-  sidebarBlocks: [
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "SELECT"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "querySelect",
-        children: {
-          "select": [
-            {
-              language: "sql",
-              name: "select",
-            }
-          ],
-          "from": [
-            {
-              language: "sql",
-              name: "from",
-            }
-          ],
-          "where": [
-          ],
-          "groupBy": [
-          ]
-        }
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "*"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "starOperator",
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "FROM"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "from",
-        children: {
-          "tables": []
-        }
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "JOIN"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "crossJoin",
-        children: {
-          "table": []
-        }
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "INNER JOIN USING"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "innerJoinUsing",
-        children: {
-          "table": [],
-          "using": []
-        }
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "INNER JOIN ON"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "innerJoinOn",
-        children: {
-          "table": [],
-          "on": []
-        }
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "WHERE"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "where",
-        children: {
-          "expressions": []
-        }
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "GROUP BY"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "groupBy",
-        children: {
-          "expressions": []
-        }
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "Tabelle Person"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "tableIntroduction",
-        properties: {
-          "name": "Person",
-        }
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "Spalte Person.Id"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "columnName",
-        properties: {
-          "columnName": "Id",
-          "refTableName": "Person"
-        }
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "Spalte Person.Vorname"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "columnName",
-        properties: {
-          "columnName": "Vorname",
-          "refTableName": "Person"
-        }
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "Spalte Person.Nachname"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "columnName",
-        properties: {
-          "columnName": "Nachname",
-          "refTableName": "Person"
-        }
-      }
-    },
-    {
-      sidebar: {
-        category: "SQL",
-        displayName: "Tabelle Adresse"
-      },
-      defaultNode: {
-        language: "sql",
-        name: "tableIntroduction",
-        properties: {
-          "name": "Adresse",
-        }
-      }
-    }
-  ]
 }

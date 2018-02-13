@@ -1,0 +1,11 @@
+language "test" {
+  sidebar "Sidebar Caption" {
+    category "Category Caption" {
+      sidebarBlock "Test Block" {
+        node "test.bar" {
+          prop "p1" v1
+        }
+      }
+    }
+  }
+}

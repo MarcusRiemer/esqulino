@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 
+import { SharedAppModule } from '../../shared/shared.module'
+
 import { DatabaseEmptyComponent } from './database-empty.component'
 import { QueryIconComponent } from './query-icon.component'
 import { SidebarItemHost } from './sidebar-item-host.component'
@@ -16,6 +18,7 @@ import { SourceIconComponent } from './source-icon.component'
     CommonModule,
     FormsModule,
     RouterModule,
+    SharedAppModule,
   ],
   declarations: [
     QueryIconComponent,
@@ -29,6 +32,7 @@ import { SourceIconComponent } from './source-icon.component'
     CommonModule,
     FormsModule,
     RouterModule,
+    SharedAppModule,
 
     QueryIconComponent,
     SidebarItemHost,

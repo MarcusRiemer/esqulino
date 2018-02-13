@@ -4,8 +4,9 @@ import { prettyPrintSyntaxTreeNode } from '../syntaxtree/prettyprint'
 
 import { BlockLanguageDescription } from './block-language.description'
 import {
-  VisualBlockDescriptions, EditorBlockDescription, SidebarBlockDescription,
+  VisualBlockDescriptions, EditorBlockDescription, SidebarBlockDescription, FixedBlocksSidebarDescription,
 } from './block.description'
+import { FixedBlocksSidebarCategoryDescription } from 'app/shared/block';
 
 /**
  * Converts the internal structure of a language model into a more readable
@@ -16,7 +17,7 @@ export function prettyPrintLanguageModel(desc: BlockLanguageDescription): string
   const tail = `}`;
 
   const blocks = (desc.editorBlocks || []).map(prettyPrintBlockTypeHeader);
-  const sidebar = (desc.sidebarBlocks || []).map(prettyPrintSidebarBlock);
+  const sidebar = (desc.sidebars || []).map(prettyPrintSidebar);
 
   const toReturn = [head, ...blocks, ...sidebar, tail] as NestedString
 
@@ -145,14 +146,35 @@ function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
 }
 
 /**
+ * Prettyprints a whole sidebar.
+ */
+function prettyPrintSidebar(desc: FixedBlocksSidebarDescription) {
+  return ([
+    `sidebar "${desc.caption}" {`,
+    ...desc.categories.map(prettyPrintFixedBlocksSidebarCategory),
+    `}`
+  ]);
+
+}
+
+/**
+ * Prettyprints the category of a sidebar
+ */
+function prettyPrintFixedBlocksSidebarCategory(desc: FixedBlocksSidebarCategoryDescription) {
+  return ([
+    `category "${desc.categoryCaption}" {`,
+    ...desc.blocks.map(prettyPrintSidebarBlock),
+    `}`
+  ]);
+}
+
+
+
+/**
  * Prettyprints a block in the sidebar
  */
 function prettyPrintSidebarBlock(desc: SidebarBlockDescription) {
-  const head = `sidebarBlock "${desc.sidebar.displayName}" {`
-
-  const props = [
-    `category "${desc.sidebar.category}"`
-  ]
+  const head = `sidebarBlock "${desc.displayName}" {`
 
   const defaultNode = desc.defaultNode
     ? prettyPrintSyntaxTreeNode(desc.defaultNode)
@@ -160,5 +182,5 @@ function prettyPrintSidebarBlock(desc: SidebarBlockDescription) {
 
   const tail = `}`;
 
-  return ([head, [...props, ...defaultNode], tail]);
+  return ([head, [...defaultNode], tail]);
 }

@@ -7,12 +7,21 @@ Project.destroy_all
 
 prog_sql = ProgrammingLanguage.create!(id: "sql", name: "SQL")
 prog_regex = ProgrammingLanguage.create!(id: "regex", name: "Reguläre Ausdrücke")
-prog_dxml = ProgrammingLanguage.create!(id: "dxml", name: "Dynamic XML")
-prog_xml = ProgrammingLanguage.create!(id: "xml", name: "XML")
+prog_dxml_eruby = ProgrammingLanguage.create!(id: "dxml-eruby", name: "Dynamic XML (eRuby)")
+prog_dxml_liquid = ProgrammingLanguage.create!(id: "dxml-liquid", name: "Dynamic XML (Liquid)")
 
 block_sql = BlockLanguage.create!(
   name: "SQL",
   family: "sql",
+  model: {
+    sidebarBlocks: [],
+    editorBlocks: []
+  }
+)
+
+block_xml = BlockLanguage.create!(
+  name: "xml",
+  family: "xml",
   model: {
     sidebarBlocks: [],
     editorBlocks: []
@@ -55,7 +64,6 @@ proj_cyoa.project_sources.create!(
   display: "The sample story comes 1: 1 from the Wikipedia article to Spielbuch"
 )
 
-
 proj_test_sequence = Project.create!(
   name: "Test: Sequence DB",
   description: "Dieses Projekt wird für automatische Tests benutzt und hat keine inhaltliche  Bedeutung.",
@@ -63,6 +71,12 @@ proj_test_sequence = Project.create!(
   slug: "db-sequence",
   index_page_id: "159ba814-445d-4167-a483-e3fc0db85cae",
   active_database: "default"
+)
+
+proj_test_sequence.code_resources.create!(
+  name: "xml-test",    
+  block_language: block_xml,
+  programming_language: prog_dxml_eruby,
 )
 
 proj_test_sequence.code_resources.create!(
@@ -122,5 +136,6 @@ proj_test_sequence.code_resources.create!(
   block_language: block_sql,
   programming_language: prog_sql
 )
+
 
 puts "Created #{Project.count} projects"
