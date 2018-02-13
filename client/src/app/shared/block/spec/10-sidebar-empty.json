@@ -1,0 +1,12 @@
+{
+  "id": "test",
+  "name": "test",
+  "editorBlocks": [],
+  "sidebars": [
+    {
+      "caption": "Empty",
+      "categories": []
+    }
+  ]
+}
+

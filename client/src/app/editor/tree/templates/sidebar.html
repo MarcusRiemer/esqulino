@@ -1,14 +1,3 @@
-<sidebar-item-host>
-  <div *ngIf="(currentLanguage | async); let currentLanguage;"
-       class="ast">
-    <h5>{{ currentLanguage.name }}</h5>
-    <ul>
-      <li *ngFor="let block of currentLanguage.availableSidebarBlocks"
-          (dragstart)="startDrag($event, block)"
-          draggable="true"
-          class="rounded">
-        {{ block.displayName }}
-      </li>
-    </ul>
-  </div>
+<sidebar-item-host *ngFor="let portal of portalInstances">
+  <ng-template [cdkPortalOutlet]="portal"></ng-template>
 </sidebar-item-host>

@@ -108,18 +108,37 @@ export namespace VisualBlockDescriptions {
 }
 
 /**
+ * Defines which blocks to show in a certain category.
+ */
+export interface FixedBlocksSidebarCategoryDescription {
+  categoryCaption: string;
+  blocks: SidebarBlockDescription[];
+}
+
+/**
+ * Defines the overall look of a sidebar. It at least sorts available blocks
+ * into categories.
+ */
+export interface FixedBlocksSidebarDescription {
+
+  /**
+   * The name that should be displayed to the user.
+   */
+  caption: string;
+
+  categories: FixedBlocksSidebarCategoryDescription[];
+}
+
+/**
  * Describes how the available types should be represented in the sidebar.
  * It is perfectly fine to have multiple sidebar descriptions for the
  * same underlying type.
  */
 export interface SidebarBlockDescription {
   /**
-   * How this block should be represented in the sidebar.
+   * The name to be displayed in the sidebar
    */
-  sidebar: {
-    category: string;
-    displayName?: string;
-  };
+  displayName: string;
 
   /**
    * This description will be instanciated every time an "empty" node

@@ -10,7 +10,7 @@ import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
 
 import { DragService } from '../../drag.service';
 
-import { TreeEditorService } from '../editor.service';
+import { TreeEditorService } from '../../editor.service';
 
 import { DROP_TARGET_ANIMATION } from './node.animation';
 

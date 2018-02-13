@@ -3,8 +3,7 @@ import {
   SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
 } from '../block.description'
 
-
-const SIDEBAR_BLOCKS_BASIC = [
+const SIDEBAR_BLOCKS_BASIC: SidebarBlockDescription[] = [
   {
     defaultNode: {
       language: "dxml",
@@ -51,10 +50,7 @@ const SIDEBAR_BLOCKS_BASIC = [
         "name": "parent"
       }
     },
-    sidebar: {
-      category: "Dynamisches XML",
-      displayName: "Element: ~~Complex~~",
-    },
+    displayName: "Element: ~~Complex~~",
   },
   {
     defaultNode: {
@@ -68,10 +64,7 @@ const SIDEBAR_BLOCKS_BASIC = [
         "name": "e1"
       }
     },
-    sidebar: {
-      category: "Dynamisches XML",
-      displayName: "Element: e1",
-    },
+    displayName: "Element: e1",
   },
   {
     defaultNode: {
@@ -85,10 +78,7 @@ const SIDEBAR_BLOCKS_BASIC = [
         "name": "e2"
       }
     },
-    sidebar: {
-      category: "Dynamisches XML",
-      displayName: "Element: e2",
-    },
+    displayName: "Element: e2",
   },
   {
     defaultNode: {
@@ -103,10 +93,7 @@ const SIDEBAR_BLOCKS_BASIC = [
         "name": "a1",
       }
     },
-    sidebar: {
-      category: "Dynamisches XML",
-      displayName: "Attribut: a1",
-    }
+    displayName: "Attribut: a1",
   },
   {
     defaultNode: {
@@ -121,10 +108,7 @@ const SIDEBAR_BLOCKS_BASIC = [
         "name": "a2",
       }
     },
-    sidebar: {
-      category: "Dynamisches XML",
-      displayName: "Attribut: a2",
-    }
+    displayName: "Attribut: a2",
   },
   {
     defaultNode: {
@@ -134,14 +118,11 @@ const SIDEBAR_BLOCKS_BASIC = [
         "value": "Neuer Text",
       }
     },
-    sidebar: {
-      category: "Dynamisches XML",
-      displayName: "Text",
-    }
+    displayName: "Text",
   },
 ];
 
-const SIDEBAR_BLOCKS_DYNAMIC = [
+const SIDEBAR_BLOCKS_DYNAMIC: SidebarBlockDescription[] = [
   {
     defaultNode: {
       language: "dxml",
@@ -166,10 +147,7 @@ const SIDEBAR_BLOCKS_DYNAMIC = [
         ]
       }
     },
-    sidebar: {
-      category: "Dynamisches XML",
-      displayName: "<%= var_a %>",
-    }
+    displayName: "<%= var_a %>",
   },
   {
     defaultNode: {
@@ -179,10 +157,7 @@ const SIDEBAR_BLOCKS_DYNAMIC = [
         "name": "var_a"
       }
     },
-    sidebar: {
-      category: "Dynamisches XML",
-      displayName: "Variable a",
-    }
+    displayName: "Variable a",
   },
   {
     defaultNode: {
@@ -192,10 +167,7 @@ const SIDEBAR_BLOCKS_DYNAMIC = [
         "name": "var_b"
       }
     },
-    sidebar: {
-      category: "Dynamisches XML",
-      displayName: "Variable b",
-    }
+    displayName: "Variable b",
   },
   {
     defaultNode: {
@@ -214,10 +186,7 @@ const SIDEBAR_BLOCKS_DYNAMIC = [
         "body": []
       },
     },
-    sidebar: {
-      category: "Dynamisches XML",
-      displayName: "<% if %>",
-    }
+    displayName: "<% if %>",
   },
 ]
 
@@ -436,20 +405,39 @@ const EDITOR_BLOCKS = [
 ]
 
 export const DYNAMIC_LANGUAGE_MODEL: BlockLanguageDescription = {
-  id: "dxml",
-  name: "XML (Dynamisch)",
-  sidebarBlocks: [
-    ...SIDEBAR_BLOCKS_BASIC,
-    ...SIDEBAR_BLOCKS_DYNAMIC,
+  id: "xml",
+  name: "XML (Statisch)",
+  sidebars: [
+    {
+      caption: "XML (Statisch)",
+      categories: [
+        {
+          categoryCaption: "Kern",
+          blocks: SIDEBAR_BLOCKS_BASIC,
+        }
+      ]
+    }
   ],
   editorBlocks: EDITOR_BLOCKS
 }
 
 export const LANGUAGE_MODEL: BlockLanguageDescription = {
-  id: "xml",
-  name: "XML",
-  sidebarBlocks: [
-    ...SIDEBAR_BLOCKS_BASIC,
+  id: "dxml",
+  name: "XML (Dynamisch)",
+  sidebars: [
+    {
+      caption: "XML (Dynamisch)",
+      categories: [
+        {
+          categoryCaption: "Kern",
+          blocks: SIDEBAR_BLOCKS_BASIC,
+        },
+        {
+          categoryCaption: "Steuerung",
+          blocks: SIDEBAR_BLOCKS_DYNAMIC,
+        }
+      ]
+    }
   ],
   editorBlocks: EDITOR_BLOCKS
 }

@@ -1,16 +1,17 @@
 import { Tree, NodeDescription, Language, QualifiedTypeName, typenameEquals } from '../syntaxtree'
 
-import { SidebarBlock } from './sidebar-block'
+import { FixedBlocksSidebar, FixedBlocksSidebarCategory, FixedSidebarBlock } from './sidebar'
 import { EditorBlock } from './editor-block'
 import { BlockLanguageDescription } from './block-language.description'
 import { EditorBlockDescription } from './block.description'
+import * as Forward from './block-language.forward'
 
 /**
  * Augments an existing language with additional information on how to
  * display elements of that languages using blocks.
  */
-export class BlockLanguage {
-  private _sidebarBlocks: SidebarBlock[];
+export class BlockLanguage implements Forward.BlockLanguage {
+  private _sidebars: FixedBlocksSidebar[];
   private _editorBlocks: EditorBlockDescription[] = [];
   private _name: string;
   private _id: string;
@@ -19,7 +20,7 @@ export class BlockLanguage {
     this._id = desc.id;
     this._name = desc.name;
 
-    this._sidebarBlocks = desc.sidebarBlocks.map(blockDesc => new SidebarBlock(blockDesc));
+    this._sidebars = desc.sidebars.map(sidebarDesc => new FixedBlocksSidebar(this, sidebarDesc));
     this._editorBlocks = desc.editorBlocks;
   }
 
@@ -38,10 +39,17 @@ export class BlockLanguage {
   }
 
   /**
-   * @return All blocks that are available for use in the sidebar.
+   * @return All sidebars that are defined for this block language.
    */
-  get availableSidebarBlocks(): SidebarBlock[] {
-    return (this._sidebarBlocks);
+  get sidebars() {
+    return (this._sidebars);
+  }
+
+  /**
+   * @return True if this block language makes use of multiple sidebars.
+   */
+  get hasMultipleSidebars() {
+    return (this.sidebars.length > 0);
   }
 
   /**

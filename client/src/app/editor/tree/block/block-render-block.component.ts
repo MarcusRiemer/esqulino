@@ -8,7 +8,7 @@ import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
 
-import { TreeEditorService } from '../editor.service';
+import { TreeEditorService } from '../../editor.service';
 
 import { calculateDropLocation } from './drop-utils';
 

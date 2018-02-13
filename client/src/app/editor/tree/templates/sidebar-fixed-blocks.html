@@ -1,0 +1,17 @@
+<div *ngIf="(currentLanguage | async); let currentLanguage;"
+     class="ast">
+  <div *ngFor="let sidebar of currentLanguage.sidebars">
+    <h5>{{ sidebar.displayName }}</h5>
+    <div *ngFor="let category of sidebar.categories">
+      <h6 *ngIf="category.showDisplayName">{{ category.displayName }}</h6>
+      <ul>
+        <li *ngFor="let block of category.blocks"
+            (dragstart)="startDrag($event, block)"
+            draggable="true"
+            class="rounded">
+          {{ block.displayName }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
