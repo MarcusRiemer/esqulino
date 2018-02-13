@@ -13,6 +13,22 @@ export interface BlockLanguageDescription extends BlockLanguageDocument {
    * The name that should be displayed to the user.
    */
   name: string;
+
+  /**
+   * A unique (but possibly empty) id. If this is undefined the language has
+   * no builtin counterpart on the client.
+   */
+  slug?: string;
+
+  /**
+   * Date & time this resource was created
+   */
+  createdAt?: string;
+
+  /**
+   * Date & time this resource was updated the last time
+   */
+  updatedAt?: string;
 }
 
 /**

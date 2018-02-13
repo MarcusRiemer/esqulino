@@ -19,9 +19,35 @@ RSpec.describe BlockLanguage do
     end
   end
 
+  context "slug" do
+    it "allows missing slugs" do
+      res = FactoryBot.build(:block_language, slug: nil)
+      expect(res.valid?).to be true
+    end
+
+    it "rejects duplicate slugs" do
+      res_1 = FactoryBot.create(:block_language, slug: "dup")
+      res_2 = FactoryBot.build(:block_language, slug: "dup")
+
+      res_2.validate
+      expect(res_2.errors["slug"].length).to be 1
+    end
+  end
+
+  context "to_full_api_response" do
+    it "works for empty languages" do
+      b = FactoryBot.create(:block_language)
+      api_response = b.to_full_api_response
+
+      expect(api_response).to validate_against "BlockLanguageDescription"
+      expect(api_response['id']).to eq b.id
+      expect(api_response['name']).to eq b.name
+      expect(api_response['slug']).to eq b.slug
+    end
+  end
+
   it "can be valid" do
     res = FactoryBot.build(:block_language)
-
     expect(res.valid?).to be true
   end
 end

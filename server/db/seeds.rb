@@ -14,7 +14,7 @@ block_sql = BlockLanguage.create!(
   name: "SQL",
   family: "sql",
   model: {
-    sidebarBlocks: [],
+    sidebars: [],
     editorBlocks: []
   }
 )
@@ -23,7 +23,7 @@ block_xml = BlockLanguage.create!(
   name: "xml",
   family: "xml",
   model: {
-    sidebarBlocks: [],
+    sidebars: [],
     editorBlocks: []
   }
 )

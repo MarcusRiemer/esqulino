@@ -26,18 +26,28 @@ module ValidateAgainstMatcher
     end
     
     def matches?(actual)
-      schema = @@json_schema_storage.get_schema @schema_name
+      schema = @@json_schema_storage.schemas[@schema_name]
 
-      @result = JSON::Validator.fully_validate(schema, actual,
-                                               :errors_as_objects => true,
-                                               :parse_data => false)
-      @result.empty?
+      if schema 
+
+        @result = JSON::Validator.fully_validate(schema, actual,
+                                                 :errors_as_objects => true,
+                                                 :parse_data => false)
+        @result.empty?
+      else
+        @error = "Could not find schema #{@schema_name}"
+        false
+      end
     end
 
     def failure_message
-      @result
-        .map{|e| e[:message].sub(e[:schema].to_s, %Q["#{@schema_name}"])}
-        .join "\n"
+      if @error
+        @error
+      else
+        @result
+          .map{|e| e[:message].sub(e[:schema].to_s, %Q["#{@schema_name}"])}
+          .join "\n"
+      end
     end
   end
 

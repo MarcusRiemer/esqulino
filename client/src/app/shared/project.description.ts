@@ -5,6 +5,7 @@ import { CodeResourceDescription } from './syntaxtree/coderesource.description'
 import {
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from "./resource.description"
+import { BlockLanguageDescription } from "./block/block-language.description";
 
 export { ApiVersion, ApiVersionToken, CURRENT_API_VERSION }
 
@@ -101,6 +102,7 @@ export interface ProjectDescription extends ProjectListDescription {
   queries?: Model.QueryDescription[]
   pages?: PageDescription[]
   codeResources?: CodeResourceDescription[]
+  blockLanguages?: BlockLanguageDescription[]
 }
 
 /**
