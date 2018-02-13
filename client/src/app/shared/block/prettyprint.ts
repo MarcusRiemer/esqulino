@@ -4,9 +4,9 @@ import { prettyPrintSyntaxTreeNode } from '../syntaxtree/prettyprint'
 
 import { BlockLanguageDescription } from './block-language.description'
 import {
-  VisualBlockDescriptions, EditorBlockDescription, SidebarBlockDescription, FixedBlocksSidebarDescription,
+  VisualBlockDescriptions, EditorBlockDescription, SidebarBlockDescription,
+  FixedBlocksSidebarDescription, FixedBlocksSidebarCategoryDescription
 } from './block.description'
-import { FixedBlocksSidebarCategoryDescription } from 'app/shared/block';
 
 /**
  * Converts the internal structure of a language model into a more readable
