@@ -5,6 +5,8 @@ require 'json-schema'
 # JSON schemas.
 class JsonSchemaStorage
 
+  attr_reader :schemas
+  
   # Loads all schemas from the given directory
   #
   # @param schema_dir [string] A path containing JSON schema files
