@@ -8,7 +8,7 @@ import { CodeResource } from '../../shared/syntaxtree';
 import { SIDEBAR_MODEL_TOKEN } from '../editor.token';
 
 import { TreeSidebarFixedBlocksComponent } from './tree-sidebar-fixed-blocks.component'
-import { TreeEditorService } from '../editor.service';
+import { CurrentCodeResourceService } from '../current-coderesource.service';
 
 function resolvePortalComponentId(id: string) {
   switch (id) {
@@ -36,20 +36,21 @@ export class TreeSidebarComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription[] = [];
 
   constructor(
-    private _treeEditorService: TreeEditorService
+    private _currentCodeResource: CurrentCodeResourceService
   ) {
 
   }
 
   ngOnInit(): void {
     // Listen for changes of the active resource
-    let outerRef = this._treeEditorService.currentResource.subscribe(res => {
+    let outerRef = this._currentCodeResource.currentResource.subscribe(res => {
       // And then on changes for the active block language
-      let innerRef = res.languageModel.subscribe(languageModel => {
+      let innerRef = res.blockLanguage.subscribe(languageModel => {
 
         const sidebars = languageModel.sidebars;
         if (sidebars && sidebars.length > 0) {
           this._portalInstances = sidebars.map(s => {
+            // TODO: Pass correct instance of sidebar definition
             return (new ComponentPortal(resolvePortalComponentId(s.portalComponentTypeId)));
           });
         }

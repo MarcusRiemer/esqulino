@@ -3,12 +3,15 @@ import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from
 
 import { ProjectService, Project } from '../project.service'
 
-import { TreeEditorService } from '../editor.service'
+import { CurrentCodeResourceService } from '../current-coderesource.service'
 
-
+/**
+ * Listens to changes of the resource ID in the URL and then propagates
+ * the change to the appropriate service.
+ */
 @Injectable()
 export class ResourceChangedGuard implements CanActivate {
-  constructor(private _editorService: TreeEditorService) {
+  constructor(private _editorService: CurrentCodeResourceService) {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {

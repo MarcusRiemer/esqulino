@@ -7,7 +7,7 @@ import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
 
-import { TreeEditorService } from '../../editor.service';
+import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { calculateDropLocation } from './drop-utils';
 
@@ -41,7 +41,7 @@ export class BlockRenderDropTargetComponent {
 
   constructor(
     private _dragService: DragService,
-    private _treeService: TreeEditorService,
+    private _currentCodeResource: CurrentCodeResourceService,
   ) {
   }
 
@@ -102,10 +102,10 @@ export class BlockRenderDropTargetComponent {
           } else if (flags.some(f => f === "ifLegalDrag")) {
             // Would the new tree ba a valid tree?
             const newNode = drag.draggedDescription;
-            const oldTree = this._treeService.peekResource.syntaxTreePeek;
+            const oldTree = this._currentCodeResource.peekResource.syntaxTreePeek;
             const newTree = oldTree.insertNode(this.dropLocation, newNode);
 
-            const result = this._treeService.peekResource.languagePeek.validateTree(newTree);
+            const result = this._currentCodeResource.peekResource.programmingLanguagePeek.validateTree(newTree);
             if (result.isValid) {
               return ("available");
             } else {
@@ -117,8 +117,8 @@ export class BlockRenderDropTargetComponent {
               languageName: drag.draggedDescription.language,
               typeName: drag.draggedDescription.name
             }
-            const currentTree = this._treeService.peekResource.syntaxTreePeek;
-            const currentLanguage = this._treeService.peekResource.languagePeek;
+            const currentTree = this._currentCodeResource.peekResource.syntaxTreePeek;
+            const currentLanguage = this._currentCodeResource.peekResource.programmingLanguagePeek;
 
             const parentNode = currentTree.locate(this.dropLocation.slice(0, -1));
             const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
@@ -148,6 +148,6 @@ export class BlockRenderDropTargetComponent {
    */
   onDrop(evt: DragEvent) {
     const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.peekResource.insertNode(this.dropLocation, desc);
+    this._currentCodeResource.peekResource.insertNode(this.dropLocation, desc);
   }
 }

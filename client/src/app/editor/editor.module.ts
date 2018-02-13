@@ -11,8 +11,7 @@ import { SchemaEditorModule } from './schema/schema.module'
 import { ImageEditorModule } from './image/image.module'
 import { SyntaxTreeEditorModule } from './tree/tree.module'
 
-// TODO: Promote this to a "real" top level service
-import { TreeEditorService } from './editor.service'
+import { CurrentCodeResourceService } from './current-coderesource.service'
 
 import { EditorComponent } from './editor.component'
 import { editorRouting } from './editor.routes'
@@ -65,7 +64,7 @@ import { SettingsComponent } from './settings.component'
     ProjectExistsGuard,
     QueryService,
     ToolbarService,
-    TreeEditorService,
+    CurrentCodeResourceService,
   ],
   exports: [
     SharedEditorModule,
