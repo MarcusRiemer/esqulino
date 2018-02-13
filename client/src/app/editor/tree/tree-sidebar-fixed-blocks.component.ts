@@ -36,6 +36,6 @@ export class TreeSidebarFixedBlocksComponent {
    * @return Relevant languages along with their available types
    */
   get currentLanguage() {
-    return (this._codeResource.languageModel);
+    return (this._codeResource.blockLanguage);
   }
 }

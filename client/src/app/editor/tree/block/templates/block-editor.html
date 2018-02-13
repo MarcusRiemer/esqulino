@@ -25,7 +25,7 @@
         </div>
         
         <!-- Ensuring there is a selected language model -->
-        <ng-container *ngIf="(currentResource.languageModel | async); let currentLanguageModel;">
+        <ng-container *ngIf="(currentResource.blockLanguage | async); let currentBlockLanguage;">
 
           <!-- Ensuring there is a tree -->
           <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
@@ -42,7 +42,7 @@
             <!-- If the tree is not empty, it wants to be rendered -->
             <div *ngIf="!currentTree.isEmpty"
                  class="card-body block-editor">
-              <editor-block-host *ngIf="currentLanguageModel.canRenderTree(currentTree); else noRender;"
+              <editor-block-host *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
                                  [codeResource]="currentResource"
                                  [node]="currentTree.rootNode"></editor-block-host>
               <ng-template #noRender>

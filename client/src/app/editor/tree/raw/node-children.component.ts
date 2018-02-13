@@ -6,8 +6,6 @@ import { Node } from '../../../shared/syntaxtree';
 
 import { DragService } from '../../drag.service';
 
-import { TreeEditorService } from '../../editor.service';
-
 /**
  * Displays a group of nodes with placeholders spread out between them.
  */
@@ -27,8 +25,7 @@ export class NodeChildrenComponent {
   @Input() parent: Node;
 
   constructor(
-    private _dragService: DragService,
-    private _treeService: TreeEditorService
+    private _dragService: DragService
   ) { }
 
   /**

@@ -8,7 +8,7 @@ import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
 
-import { TreeEditorService } from '../../editor.service';
+import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { calculateDropLocation } from './drop-utils';
 
@@ -46,7 +46,7 @@ export class BlockRenderBlockComponent implements OnInit {
 
   constructor(
     private _dragService: DragService,
-    private _treeService: TreeEditorService,
+    private _currentCodeResource: CurrentCodeResourceService,
   ) {
   }
 
@@ -90,6 +90,6 @@ export class BlockRenderBlockComponent implements OnInit {
    */
   onDrop(evt: DragEvent) {
     const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.peekResource.insertNode(this.dropLocation, desc);
+    this._currentCodeResource.peekResource.insertNode(this.dropLocation, desc);
   }
 }

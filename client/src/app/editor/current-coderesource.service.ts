@@ -13,14 +13,12 @@ import { TreeSidebarComponent } from './tree/tree.sidebar'
 
 /**
  * This service represents a single code resource that is currently beeing
- * edited. It is meant to be instanciated by every tree editor
- * to be available in all components of that editor.
- *
- * It glues together the actual resource that is beeing edited and ensures
- * that updates to that resource are validated and compiled.
+ * edited. It glues together the actual resource that is beeing edited and
+ * enables components like the validator and the compiler to automatically
+ * do their work.
  */
 @Injectable()
-export class TreeEditorService {
+export class CurrentCodeResourceService {
   /**
    * The resource that is currently edited.
    */
@@ -68,6 +66,7 @@ export class TreeEditorService {
     if (codeResourceId) {
       // Yes, we resolve the actual resource
       const resource = this._projectService.cachedProject.getCodeResourceById(codeResourceId);
+      console.log(`Set new resource`, resource);
       this._codeResource.next(resource);
     } else {
       // No, we inform everybody that there is no resource

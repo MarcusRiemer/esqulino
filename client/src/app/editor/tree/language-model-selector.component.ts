@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CodeResource } from '../../shared/syntaxtree';
 import { LanguageService } from '../../shared/language.service';
 
-import { TreeEditorService } from '../editor.service';
+import { CurrentCodeResourceService } from '../current-coderesource.service';
 
 /**
  * Provides a convenient way to select language models.
@@ -17,7 +17,7 @@ export class LanguageModelSelectorComponent {
   @Input() codeResource: CodeResource;
 
   constructor(
-    private _treeService: TreeEditorService,
+    private _currentCodeResource: CurrentCodeResourceService,
     private _languageService: LanguageService,
   ) {
   }
@@ -34,14 +34,14 @@ export class LanguageModelSelectorComponent {
    */
   @Input()
   get selectedLanguageModelId() {
-    return (this.codeResource.languageModelIdPeek);
+    return (this.codeResource.blockLanguageIdPeek);
   }
 
   /**
    * Sets the ID of the new language and broadcasts the change.
    */
   set selectedLanguageModelId(id: string) {
-    this.codeResource.setLanguageModelId(id);
+    this.codeResource.setBlockLanguageId(id);
   }
 
 }

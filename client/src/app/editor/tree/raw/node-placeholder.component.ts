@@ -6,7 +6,7 @@ import { Node, NodeLocation } from '../../../shared/syntaxtree';
 import { arrayEqual } from '../../../shared/util';
 
 import { DragService } from '../../drag.service';
-import { TreeEditorService } from '../../editor.service';
+import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { DROP_PLACEHOLDER_ANIMATION } from './node.animation';
 
@@ -30,7 +30,7 @@ export class NodePlaceholderComponent {
 
   constructor(
     private _dragService: DragService,
-    private _treeService: TreeEditorService
+    private _currentCodeResource: CurrentCodeResourceService
   ) { }
 
   /**
@@ -61,6 +61,6 @@ export class NodePlaceholderComponent {
    */
   onDropInsert() {
     const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.peekResource.insertNode(this.location, desc);
+    this._currentCodeResource.peekResource.insertNode(this.location, desc);
   }
 }
