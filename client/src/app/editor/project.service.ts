@@ -156,7 +156,7 @@ export class ProjectService {
     // TODO: The slug shouldn't be changed at the moment, but maybe later
     delete desc.slug;
 
-    const toReturn = this._http.post(url, JSON.stringify(desc), options)
+    const toReturn = this._http.put(url, JSON.stringify(desc), options)
       .do(_ => proj.markSaved())
       .catch(this.passThroughError);
 

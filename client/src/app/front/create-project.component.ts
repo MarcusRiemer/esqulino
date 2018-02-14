@@ -82,7 +82,6 @@ export class CreateProjectComponent {
         options
       );
 
-      debugger;
       this._currentRequest
         .map(res => res.json() as { id: string })
         .subscribe(
