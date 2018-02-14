@@ -23,9 +23,9 @@ export class CodeResource extends ProjectResource {
 
   private _tree = new BehaviorSubject<Tree>(new Tree(undefined));
 
-  private _languageId = new BehaviorSubject<string>(undefined);
+  private _programmingLanguageId = new BehaviorSubject<string>(undefined);
 
-  private _languageModelId = new BehaviorSubject<string>(undefined);
+  private _blockLanguageId = new BehaviorSubject<string>(undefined);
 
   constructor(
     desc: CodeResourceDescription,
@@ -34,76 +34,76 @@ export class CodeResource extends ProjectResource {
     super(desc, project);
 
     this._tree.next(new Tree(desc.ast));
-    this._languageId.next(desc.programmingLanguageId);
-    this._languageModelId.next("sql"); // TODO: Use actual value from response ...
+    this._programmingLanguageId.next(desc.programmingLanguageId);
+    this._blockLanguageId.next("sql"); // TODO: Use actual value from response ...
   }
 
   /**
    * @return The ID of the language this resource uses.
    */
-  get languageIdPeek() {
-    return (this._languageId.value);
+  get programmingLanguageIdPeek() {
+    return (this._programmingLanguageId.value);
   }
 
   /**
    * @return An observable value of the language this id uses.
    */
-  get languageId(): Observable<string> {
-    return (this._languageId);
+  get programmingLanguageId(): Observable<string> {
+    return (this._programmingLanguageId);
   }
 
   /**
    * @return A snapshot of the language that is currently in use.
    */
-  get languagePeek() {
-    return (this.project.getLanguageById(this.languageIdPeek));
+  get programmingLanguagePeek() {
+    return (this.project.getLanguageById(this.programmingLanguageIdPeek));
   }
 
   /**
    * @return The language that is currently in use
    */
-  get language() {
-    return (this._languageId.map(l => this.project.getLanguageById(l)));
+  get programmingLanguage() {
+    return (this._programmingLanguageId.map(l => this.project.getLanguageById(l)));
   }
 
   /**
    * @return The language that is currently in use
    */
-  get languageModel() {
-    return (this._languageModelId.map(l => this.project.getLanguageModelById(l)));
+  get blockLanguage() {
+    return (this._blockLanguageId.map(l => this.project.getLanguageModelById(l)));
   }
 
   /**
    * @param newId The ID of the new language this resource adheres to.
    */
-  setLanguageId(newId: string) {
-    this._languageId.next(newId);
+  setProgrammingLanguageId(newId: string) {
+    this._programmingLanguageId.next(newId);
     this.markSaveRequired();
   }
 
   /**
    * @return The ID of the language this resource uses.
    */
-  get languageModelIdPeek() {
-    return (this._languageModelId.value);
+  get blockLanguageIdPeek() {
+    return (this._blockLanguageId.value);
   }
 
   /**
    * @return An observable value of the language this id uses.
    */
-  get languageModelId(): Observable<string> {
-    return (this._languageModelId);
+  get blockLanguageId(): Observable<string> {
+    return (this._blockLanguageId);
   }
 
-  get languageModelPeek() {
-    return (this.project.getLanguageModelById(this.languageModelIdPeek));
+  get blockLanguagePeek() {
+    return (this.project.getLanguageModelById(this.blockLanguageIdPeek));
   }
 
   /**
    * @param newId The ID of the new language this resource adheres to.
    */
-  setLanguageModelId(newId: string) {
-    this._languageModelId.next(newId);
+  setBlockLanguageId(newId: string) {
+    this._blockLanguageId.next(newId);
     this.markSaveRequired();
   }
 
@@ -222,7 +222,7 @@ export class CodeResource extends ProjectResource {
    * @return The latest validation result for this resource.
    */
   readonly validationResult = Observable
-    .combineLatest(this.syntaxTree, this.language, (tree, lang) => {
+    .combineLatest(this.syntaxTree, this.programmingLanguage, (tree, lang) => {
       if (tree && lang) {
         return (lang.validateTree(tree));
       } else {
@@ -234,7 +234,7 @@ export class CodeResource extends ProjectResource {
    * @return The latest generated code for this resource.
    */
   readonly generatedCode = Observable
-    .combineLatest(this.syntaxTree, this.language, (tree, lang) => {
+    .combineLatest(this.syntaxTree, this.programmingLanguage, (tree, lang) => {
       if (tree && !tree.isEmpty && lang) {
         try {
           return (lang.emitTree(tree));
@@ -254,8 +254,8 @@ export class CodeResource extends ProjectResource {
       id: this.id,
       name: this.name,
       ast: this.syntaxTreePeek.toModel(),
-      programmingLanguageId: this.languageIdPeek,
-      blockLanguageId: this.languageModelIdPeek,
+      programmingLanguageId: this.programmingLanguageIdPeek,
+      blockLanguageId: this.blockLanguageIdPeek,
     });
   }
 

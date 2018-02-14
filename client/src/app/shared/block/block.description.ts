@@ -5,6 +5,12 @@ import { QualifiedTypeName, NodeDescription } from '../syntaxtree/syntaxtree.des
  * drag & drop UI.
  */
 export namespace VisualBlockDescriptions {
+
+  /**
+   * We currently allow any CSS style to be used.
+   */
+  export type BlockStyle = { [k: string]: string }
+
   /**
    * Describes how certain nodes of the syntaxtree should be presented
    * inside the drag and drop editor. As the available blocks are very
@@ -13,18 +19,32 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorBlockBase {
     blockType: string;
-    marginLeft?: string;
+    style?: BlockStyle;
   }
+
+  /**
+   * The locations of categories at which insertions may occur.
+   */
+  export type CategoryInsertPosition = "insertFirst" | "insertLast";
+
+  export type CategoryInsert = {
+    order: CategoryInsertPosition;
+    category: string;
+  };
 
   /**
    * These properties are required to specify drop targets.
    */
   export interface DropTargetProperties {
-    actionSelf?: {
+    // Drops something into the same category as the relevant node
+    self?: {
       order: "insertBefore" | "insertAfter";
       skipParents: number;
     };
-    actionParent?: string;
+
+    children?: CategoryInsert;
+
+    parent?: CategoryInsert;
   }
 
   /**
@@ -55,7 +75,7 @@ export namespace VisualBlockDescriptions {
     blockType: "dropTarget";
     children?: ConcreteBlock[];
     dropTarget?: DropTargetProperties;
-    visibility: ["ifAnyDrag" | "ifLegalDrag" | "ifEmpty" | "always"];
+    visibility: ["ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty" | "always"];
   }
 
   /**
@@ -88,18 +108,37 @@ export namespace VisualBlockDescriptions {
 }
 
 /**
+ * Defines which blocks to show in a certain category.
+ */
+export interface FixedBlocksSidebarCategoryDescription {
+  categoryCaption: string;
+  blocks: SidebarBlockDescription[];
+}
+
+/**
+ * Defines the overall look of a sidebar. It at least sorts available blocks
+ * into categories.
+ */
+export interface FixedBlocksSidebarDescription {
+
+  /**
+   * The name that should be displayed to the user.
+   */
+  caption: string;
+
+  categories: FixedBlocksSidebarCategoryDescription[];
+}
+
+/**
  * Describes how the available types should be represented in the sidebar.
  * It is perfectly fine to have multiple sidebar descriptions for the
  * same underlying type.
  */
 export interface SidebarBlockDescription {
   /**
-   * How this block should be represented in the sidebar.
+   * The name to be displayed in the sidebar
    */
-  sidebar: {
-    category: string;
-    displayName?: string;
-  };
+  displayName: string;
 
   /**
    * This description will be instanciated every time an "empty" node

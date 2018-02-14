@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { arrayEqual } from '../shared/util';
 import { AnalyticsService, TrackCategory } from '../shared/analytics.service';
 import { Node, NodeDescription, NodeLocation, CodeResource } from '../shared/syntaxtree';
-import { SidebarBlock } from '../shared/block';
+import { FixedSidebarBlock } from '../shared/block';
 
 import { TrashService } from './shared/trash.service';
 
@@ -14,7 +14,7 @@ import { TrashService } from './shared/trash.service';
  * the sidebar.
  */
 export interface DragSidebar {
-  sidebarBlockDescription: SidebarBlock
+  sidebarBlockDescription: FixedSidebarBlock
 }
 
 /**

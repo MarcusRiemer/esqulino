@@ -56,9 +56,9 @@ group :development, :test do
   gem "database_cleaner"
   gem "rspec-rails"
   gem "rspec_junit_formatter"
-
   # Mocking calls to FileUtils
   gem "fakefs", require: "fakefs/safe"
+  gem "guard-rspec", require: false
 end
 
 group :development do

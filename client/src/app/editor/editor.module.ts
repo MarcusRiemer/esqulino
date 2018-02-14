@@ -11,6 +11,8 @@ import { SchemaEditorModule } from './schema/schema.module'
 import { ImageEditorModule } from './image/image.module'
 import { SyntaxTreeEditorModule } from './tree/tree.module'
 
+import { CurrentCodeResourceService } from './current-coderesource.service'
+
 import { EditorComponent } from './editor.component'
 import { editorRouting } from './editor.routes'
 
@@ -42,7 +44,7 @@ import { SettingsComponent } from './settings.component'
     PageEditorModule.forRoot(),
     QueryEditorModule.forRoot(),
     SchemaEditorModule.forRoot(),
-    SyntaxTreeEditorModule
+    SyntaxTreeEditorModule.forRoot(),
   ],
   declarations: [
     EditorComponent,
@@ -62,6 +64,7 @@ import { SettingsComponent } from './settings.component'
     ProjectExistsGuard,
     QueryService,
     ToolbarService,
+    CurrentCodeResourceService,
   ],
   exports: [
     SharedEditorModule,

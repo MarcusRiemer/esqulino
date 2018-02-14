@@ -113,4 +113,8 @@ describe('Language: SQL (Codegen)', () => {
   it(`SELECT query: SELECT foo.id FROM foo`, () => {
     verifyFiles("ast-21-select-foo-id-from-foo", emitTree);
   });
+
+  it(`SELECT query: SELECT foo.id FROM foo GROUP BY foo.id`, () => {
+    verifyFiles("ast-22-select-foo-id-from-foo-group-by-foo-id", emitTree);
+  });
 });

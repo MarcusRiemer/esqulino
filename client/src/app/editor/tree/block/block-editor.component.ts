@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 
 import { ToolbarService } from '../../toolbar.service';
 
-import { TreeEditorService } from '../editor.service';
+import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
 
@@ -15,7 +15,6 @@ import { CodeResourceService } from '../../coderesource.service';
  */
 @Component({
   templateUrl: 'templates/block-editor.html',
-  providers: [TreeEditorService],
 })
 export class BlockEditorComponent implements OnInit, OnDestroy {
 
@@ -28,7 +27,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   constructor(
     private _toolbarService: ToolbarService,
     private _dragService: DragService,
-    private _treeService: TreeEditorService,
+    private _currentCodeResource: CurrentCodeResourceService,
     private _codeResourceService: CodeResourceService,
     private _router: Router,
     private _route: ActivatedRoute,
@@ -51,7 +50,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
 
     let subRef = btnSave.onClick.subscribe((res) => {
       btnSave.isInProgress = true;
-      this._codeResourceService.updateCodeResource(this._treeService.peekResource)
+      this._codeResourceService.updateCodeResource(this._currentCodeResource.peekResource)
         // Always delay visual feedback by 500ms
         .delay(500)
         .subscribe(res => btnSave.isInProgress = false);
@@ -62,7 +61,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * @return The resource that is currently edited
    */
   get currentResource() {
-    return (this._treeService.currentResource);
+    return (this._currentCodeResource.currentResource);
   }
 
   /**

@@ -8,7 +8,7 @@ import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
 
-import { TreeEditorService } from '../editor.service';
+import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 /**
  * Renders specific children of a certain child group. Also takes care
@@ -25,7 +25,7 @@ export class BlockRenderIteratorComponent {
 
   constructor(
     private _dragService: DragService,
-    private _treeService: TreeEditorService,
+    private _currentCodeResource: CurrentCodeResourceService,
   ) {
   }
 

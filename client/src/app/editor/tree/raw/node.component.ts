@@ -10,7 +10,7 @@ import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
 
 import { DragService } from '../../drag.service';
 
-import { TreeEditorService } from '../editor.service';
+import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { DROP_TARGET_ANIMATION } from './node.animation';
 
@@ -45,7 +45,7 @@ export class NodeComponent implements OnChanges {
   constructor(
     private _dragService: DragService,
     private _cdRef: ChangeDetectorRef,
-    private _treeService: TreeEditorService,
+    private _currentCodeResource: CurrentCodeResourceService,
   ) { }
 
   /**
@@ -76,7 +76,7 @@ export class NodeComponent implements OnChanges {
    */
   onDropReplace() {
     const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.peekResource.replaceNode(this.node.location, desc);
+    this._currentCodeResource.peekResource.replaceNode(this.node.location, desc);
   }
 
   /**
@@ -84,7 +84,7 @@ export class NodeComponent implements OnChanges {
    */
   onPropertyEdit(key: string, value: string) {
     if (this.node.properties[key] != value) {
-      this._treeService.peekResource.setProperty(this.node.location, key, value);
+      this._currentCodeResource.peekResource.setProperty(this.node.location, key, value);
     }
   }
 
@@ -94,7 +94,7 @@ export class NodeComponent implements OnChanges {
   onPropertyRename(key: string, newKey: string) {
     if (key != newKey) {
       try {
-        this._treeService.peekResource.renameProperty(this.node.location, key, newKey);
+        this._currentCodeResource.peekResource.renameProperty(this.node.location, key, newKey);
       } catch (e) {
         alert(e);
       }
@@ -107,7 +107,7 @@ export class NodeComponent implements OnChanges {
   onPropertyAdd() {
     try {
       const newKey = prompt(`Name des neuen Wertes?`);
-      this._treeService.peekResource.addProperty(this.node.location, newKey);
+      this._currentCodeResource.peekResource.addProperty(this.node.location, newKey);
     } catch (e) {
       alert(e);
     }
@@ -119,7 +119,7 @@ export class NodeComponent implements OnChanges {
   onChildGroupAdd() {
     try {
       const newKey = prompt(`Name der neuen Gruppe?`);
-      this._treeService.peekResource.addChildGroup(this.node.location, newKey);
+      this._currentCodeResource.peekResource.addChildGroup(this.node.location, newKey);
     } catch (e) {
       alert(e);
     }

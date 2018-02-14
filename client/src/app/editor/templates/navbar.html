@@ -17,7 +17,7 @@
       <ul class="nav-code-resource">
         <li *ngFor="let codeResource of project?.codeResources"
             [title]="codeResource.languageIdObs | async">
-          <a [routerLink]="['ast', codeResource.id]"
+          <a [routerLink]="['ast', codeResource.id, 'block']"
              routerLinkActive="router-link-active">
             <span class="fa fa-file-code-o fa-fw"></span> {{ codeResource.name }}
           </a>
