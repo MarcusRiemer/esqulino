@@ -4,10 +4,9 @@ class ProjectsController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
 
+  # Lists all projects
   def index
-    @projects = Project.all
-
-    render json: @projects
+    render json: Project.all
   end
 
   # Apart from creating the database object this action also needs to
