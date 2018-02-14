@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
 
-  before_action :project, only: [:show]
+  before_action :project, only: [:show, :edit]
   before_action :project_params, only: [:create]
   
   def index
@@ -33,14 +33,17 @@ class ProjectsController < ApplicationController
 
   # Update an existing project
   def edit
-    ensure_write_access do
-      updated_project = ensure_request("ProjectUpdateDescription", request.body.read)
+    # ensure_write_access do
+    #   updated_project = ensure_request("ProjectUpdateDescription", request.body.read)
 
-      current_project.update_description! updated_project
-      current_project.save_description
+    #   current_project.update_description! updated_project
+    #   current_project.save_description
 
-      render :status => 200
-    end
+    #   render :status => 200
+    # end
+    # @project = Project.find_by_slug(params[:project_id])
+    project.update(project_params)
+    head :no_content
   end
 
   def destroy
@@ -65,6 +68,7 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.permit(:name, :slug, :apiVersion, :dbType, admin: {}, project: {}).transform_keys! { |k| k.underscore }
+    params.permit(:name, :slug, :apiVersion, :description, :activeDatabase, :dbType, :project_id, admin: {}, project: {}).transform_keys! { |k| k.underscore }
+    # (params.permit!).transform_keys! { |k| k.underscore }
   end
 end
