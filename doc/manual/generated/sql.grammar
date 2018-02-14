@@ -37,8 +37,21 @@ grammar "sql" {
   node "crossJoin" {
     children "table" ::= tableIntroduction
   }
+  node "innerJoinOn" {
+    children "table" ::= tableIntroduction
+    children "on" ::= expression
+  }
+  node "innerJoinUsing" {
+    children "table" ::= tableIntroduction
+    children "using" ::= columnName
+  }
+  typedef "join" {
+    "crossJoin"
+    "innerJoinUsing"
+    "innerJoinOn"
+  }
   node "from" {
-    children "tables" ::= tableIntroduction crossJoin*
+    children "tables" ::= tableIntroduction join*
   }
   node "whereAdditional" {
     prop "operator" { string }
@@ -46,6 +59,9 @@ grammar "sql" {
   }
   node "where" {
     children "expressions" ::= expression whereAdditional*
+  }
+  node "groupBy" {
+    children "expressions" ::= expression* & columnName*
   }
   node "querySelect" {
     children "select" ::= select
@@ -57,6 +73,7 @@ grammar "sql" {
     children "delete" ::= delete
     children "from" ::= from
     children "where" ::= where?
+    children "groupBy" ::= groupBy?
   }
   typedef "query" {
     "querySelect"

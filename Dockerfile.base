@@ -9,7 +9,7 @@ LABEL name="esqulino base image"
 
 # TODO: Remove hardcoded version 6 as soon as rmagick can deal with it
 ENV BUILD_PACKAGES="git" \
-    SERVER_PACKAGES="make ruby ruby-ffi ruby-bundler graphviz file imagemagick6 libmagick6 postgresql" \
+    SERVER_PACKAGES="make nodejs ruby ruby-ffi ruby-bundler graphviz file imagemagick6 libmagick6 postgresql" \
     CLIENT_PACKAGES="make nodejs npm" \
     TEST_PACKAGES="chromium"
 

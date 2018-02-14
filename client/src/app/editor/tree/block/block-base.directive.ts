@@ -21,7 +21,9 @@ export class BlockBaseDirective {
   }
 
   ngOnInit() {
-    this.hostElement.style.marginLeft = this.layout.marginLeft;
+    Object.entries(this.layout.style || {}).forEach(([key, value]) => {
+      this.hostElement.style[key] = value;
+    });
   }
 
 }

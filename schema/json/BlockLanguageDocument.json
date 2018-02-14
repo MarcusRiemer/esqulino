@@ -13,16 +13,16 @@
           },
           "type": "array"
         },
-        "sidebarBlocks": {
-          "description": "All blocks that should be shown in the sidebar.",
+        "sidebars": {
+          "description": "How the available blocks should be represented in the sidebar.",
           "items": {
-            "$ref": "#/definitions/SidebarBlockDescription"
+            "$ref": "#/definitions/FixedBlocksSidebarDescription"
           },
           "type": "array"
         }
       },
       "required": [
-        "sidebarBlocks",
+        "sidebars",
         "editorBlocks"
       ],
       "type": "object"
@@ -46,6 +46,47 @@
       "required": [
         "describedType",
         "visual"
+      ],
+      "type": "object"
+    },
+    "FixedBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "Defines which blocks to show in a certain category.",
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/definitions/SidebarBlockDescription"
+          },
+          "type": "array"
+        },
+        "categoryCaption": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "categoryCaption",
+        "blocks"
+      ],
+      "type": "object"
+    },
+    "FixedBlocksSidebarDescription": {
+      "additionalProperties": false,
+      "description": "Defines the overall look of a sidebar. It at least sorts available blocks\ninto categories.",
+      "properties": {
+        "caption": {
+          "description": "The name that should be displayed to the user.",
+          "type": "string"
+        },
+        "categories": {
+          "items": {
+            "$ref": "#/definitions/FixedBlocksSidebarCategoryDescription"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "caption",
+        "categories"
       ],
       "type": "object"
     },
@@ -107,28 +148,47 @@
           "$ref": "#/definitions/NodeDescription",
           "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
         },
-        "sidebar": {
-          "additionalProperties": false,
-          "description": "How this block should be represented in the sidebar.",
-          "properties": {
-            "category": {
-              "type": "string"
-            },
-            "displayName": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "category"
-          ],
-          "type": "object"
+        "displayName": {
+          "description": "The name to be displayed in the sidebar",
+          "type": "string"
         }
       },
       "required": [
-        "sidebar",
+        "displayName",
         "defaultNode"
       ],
       "type": "object"
+    },
+    "VisualBlockDescriptions.BlockStyle": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "We currently allow any CSS style to be used.",
+      "type": "object"
+    },
+    "VisualBlockDescriptions.CategoryInsert": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "order": {
+          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsertPosition"
+        }
+      },
+      "required": [
+        "order",
+        "category"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.CategoryInsertPosition": {
+      "description": "The locations of categories at which insertions may occur.",
+      "enum": [
+        "insertFirst",
+        "insertLast"
+      ],
+      "type": "string"
     },
     "VisualBlockDescriptions.ConcreteBlock": {
       "anyOf": [
@@ -153,10 +213,13 @@
       "additionalProperties": false,
       "description": "These properties are required to specify drop targets.",
       "properties": {
-        "actionParent": {
-          "type": "string"
+        "children": {
+          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
         },
-        "actionSelf": {
+        "parent": {
+          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
+        },
+        "self": {
           "additionalProperties": false,
           "properties": {
             "order": {
@@ -212,8 +275,8 @@
         "dropTarget": {
           "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
         },
-        "marginLeft": {
-          "type": "string"
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         }
       },
       "required": [
@@ -232,8 +295,8 @@
           ],
           "type": "string"
         },
-        "marginLeft": {
-          "type": "string"
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         },
         "text": {
           "type": "string"
@@ -271,8 +334,8 @@
         "dropTarget": {
           "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
         },
-        "marginLeft": {
-          "type": "string"
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         },
         "visibility": {
           "items": [
@@ -280,6 +343,7 @@
               "enum": [
                 "ifAnyDrag",
                 "ifLegalDrag",
+                "ifLegalChild",
                 "ifEmpty",
                 "always"
               ],
@@ -307,11 +371,11 @@
           ],
           "type": "string"
         },
-        "marginLeft": {
-          "type": "string"
-        },
         "property": {
           "type": "string"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         }
       },
       "required": [
@@ -346,8 +410,8 @@
           ],
           "type": "string"
         },
-        "marginLeft": {
-          "type": "string"
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         }
       },
       "required": [

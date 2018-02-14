@@ -1,12 +1,20 @@
-import { Component, Input, OnInit, OnDestroy, Inject } from '@angular/core'
+import { Component, Input, OnInit, OnDestroy, Inject } from '@angular/core';
+import { ComponentPortal } from '@angular/cdk/portal';
 
-import { LanguageService } from '../../shared/language.service';
-import { QualifiedTypeName, NodeDescription, NodeType, CodeResource } from '../../shared/syntaxtree'
-import { BlockLanguage, SidebarBlock } from '../../shared/block'
+import { Subscription } from 'rxjs/Subscription'
 
-import { SIDEBAR_MODEL_TOKEN } from '../editor.token'
+import { CodeResource } from '../../shared/syntaxtree';
 
-import { DragService } from '../drag.service';
+import { SIDEBAR_MODEL_TOKEN } from '../editor.token';
+
+import { TreeSidebarFixedBlocksComponent } from './tree-sidebar-fixed-blocks.component'
+import { CurrentCodeResourceService } from '../current-coderesource.service';
+
+function resolvePortalComponentId(id: string) {
+  switch (id) {
+    case "fixedBlocks": return (TreeSidebarFixedBlocksComponent);
+  }
+}
 
 /**
  * The sidebar hosts elements that can be dragged onto the currently active
@@ -17,37 +25,50 @@ import { DragService } from '../drag.service';
   templateUrl: 'templates/sidebar.html',
   selector: "tree-sidebar"
 })
-export class TreeSidebarComponent {
+export class TreeSidebarComponent implements OnInit, OnDestroy {
   /**
    * This ID is used to register this sidebar with the sidebar loader
    */
   public static get SIDEBAR_IDENTIFIER() { return "tree" };
 
+  private _portalInstances = [];
+
+  private _subscriptions: Subscription[] = [];
+
   constructor(
-    @Inject(SIDEBAR_MODEL_TOKEN) private _codeResource: CodeResource,
-    private _languageService: LanguageService,
-    private _dragService: DragService
+    private _currentCodeResource: CurrentCodeResourceService
   ) {
+
   }
 
-  /**
-   * The user has decided to start dragging something from the sidebar.
-   */
-  startDrag(evt: DragEvent, block: SidebarBlock) {
-    try {
-      this._dragService.dragStart(evt, block.defaultNode, {
-        sidebarBlockDescription: block
+  ngOnInit(): void {
+    // Listen for changes of the active resource
+    let outerRef = this._currentCodeResource.currentResource.subscribe(res => {
+      // And then on changes for the active block language
+      let innerRef = res.blockLanguage.subscribe(languageModel => {
+
+        const sidebars = languageModel.sidebars;
+        if (sidebars && sidebars.length > 0) {
+          this._portalInstances = sidebars.map(s => {
+            // TODO: Pass correct instance of sidebar definition
+            return (new ComponentPortal(resolvePortalComponentId(s.portalComponentTypeId)));
+          });
+        }
       });
-    } catch (e) {
-      alert(e);
-    }
+
+      this._subscriptions.push(innerRef);
+    });
+
+    this._subscriptions.push(outerRef);
   }
 
-  /**
-   * @return Relevant languages along with their available types
-   */
-  get currentLanguage() {
-    return (this._codeResource.languageModel);
+  ngOnDestroy(): void {
+    this._subscriptions.forEach(s => s.unsubscribe());
+    this._subscriptions = [];
+  }
+
+  get portalInstances() {
+    return (this._portalInstances);
   }
 }
 

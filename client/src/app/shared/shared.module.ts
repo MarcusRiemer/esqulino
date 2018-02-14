@@ -1,16 +1,18 @@
-import { NgModule, ModuleWithProviders } from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { FormsModule } from '@angular/forms'
-import { RouterModule } from '@angular/router'
-import { HttpModule } from '@angular/http'
+import { NgModule, ModuleWithProviders } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { HttpModule } from '@angular/http';
 
-import { AnalyticsService } from './analytics.service'
-import { FlashMessageListComponent } from './flash.component'
-import { FlashService } from './flash.service'
-import { ProjectDescriptionService } from './project.description.service'
-import { LanguageService } from './language.service'
-import { ServerApiService } from './serverapi.service'
-import { VideoService } from './video.service'
+import { PortalModule } from '@angular/cdk/portal';
+
+import { AnalyticsService } from './analytics.service';
+import { FlashMessageListComponent } from './flash.component';
+import { FlashService } from './flash.service';
+import { ProjectDescriptionService } from './project.description.service';
+import { LanguageService } from './language.service';
+import { ServerApiService } from './serverapi.service';
+import { VideoService } from './video.service';
 
 /**
  * Bundles facilities that are used all over esqulino, no matter
@@ -25,6 +27,7 @@ import { VideoService } from './video.service'
     FormsModule,
     RouterModule,
     HttpModule,
+    PortalModule,
   ],
   declarations: [
     FlashMessageListComponent,
@@ -34,6 +37,7 @@ import { VideoService } from './video.service'
     FormsModule,
     RouterModule,
     HttpModule,
+    PortalModule,
 
     FlashMessageListComponent,
   ]

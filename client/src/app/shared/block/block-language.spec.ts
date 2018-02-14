@@ -35,27 +35,33 @@ const langEmptyBlocks: LanguageDescription = {
 const langModelEmptyBlocks: BlockLanguageDescription = {
   id: "emptyblocks",
   name: "Empty Blocks",
-  sidebarBlocks: [
+  sidebars: [
     {
-      sidebar: {
-        category: "Standard",
-      },
-      defaultNode: {
-        language: "emptyBlocks",
-        name: "root",
-        children: {
-          "cat_a": []
+      caption: "Empty Blocks",
+      categories: [
+        {
+          categoryCaption: "Empty Blocks",
+          blocks: [
+            {
+              displayName: "Empty Root",
+              defaultNode: {
+                language: "emptyBlocks",
+                name: "root",
+                children: {
+                  "cat_a": []
+                }
+              }
+            },
+            {
+              displayName: "Empty a",
+              defaultNode: {
+                language: "emptyBlocks",
+                name: "a"
+              }
+            }
+          ]
         }
-      }
-    },
-    {
-      sidebar: {
-        category: "Standard",
-      },
-      defaultNode: {
-        language: "emptyBlocks",
-        name: "a"
-      }
+      ]
     }
   ],
   editorBlocks: [
@@ -98,7 +104,7 @@ describe("LanguageModel", () => {
     expect(missingEditorBlocks.length).toEqual(1);
     expect(missingEditorBlocks[0]).toEqual({ languageName: "emptyBlocks", typeName: "z" });
 
-    expect(lm.availableSidebarBlocks.length).toEqual(2);
+    expect(lm.sidebars.length).toEqual(1);
   });
 
   it("Constructing default root with children", () => {

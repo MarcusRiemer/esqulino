@@ -1,7 +1,7 @@
 <div class="ast"
      (dragenter)="onDragEnter($event)">
   <!-- Ensuring there is a selected resource -->
-  <ng-container *ngIf="(currentResource | async); let currentResource;">
+  <ng-container *ngIf="(currentResource | async); let currentResource;"> 
     <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
       <div class="content">
         <div class="card mb-3">

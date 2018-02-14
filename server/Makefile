@@ -27,6 +27,11 @@ test : msg-pre-run-test
 	./bin/rails test
 	./bin/rails spec
 
+# Helpful during development: Continously watches for changes in the project
+# and re-runs tests that are affected by code changes
+test-watch :
+	bundle exec guard --plugin=RSpec
+
 .PHONY : install-deps run run-dev test clean-deps
 
 ##################################

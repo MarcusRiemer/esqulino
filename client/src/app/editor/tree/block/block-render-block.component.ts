@@ -1,12 +1,16 @@
 import { Observable } from 'rxjs';
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, ElementRef } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
 import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
+
+import { CurrentCodeResourceService } from '../../current-coderesource.service';
+
+import { calculateDropLocation } from './drop-utils';
 
 // These states are available for animation
 type DropTargetAnimationStates = "available" | "none" | "self" | "taken";
@@ -31,7 +35,7 @@ type DropTargetAnimationStates = "available" | "none" | "self" | "taken";
     ])
   ]
 })
-export class BlockRenderBlockComponent {
+export class BlockRenderBlockComponent implements OnInit {
   @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlock;
@@ -39,9 +43,15 @@ export class BlockRenderBlockComponent {
   // The current state that should be used for the animation
   private _cached_dropTargetAnimationState: Observable<DropTargetAnimationStates>;
 
+
   constructor(
     private _dragService: DragService,
+    private _currentCodeResource: CurrentCodeResourceService,
   ) {
+  }
+
+  ngOnInit() {
+
   }
 
   get dropTargetAnimationState(): Observable<DropTargetAnimationStates> {
@@ -64,5 +74,22 @@ export class BlockRenderBlockComponent {
     }
 
     return (this._cached_dropTargetAnimationState);
+  }
+
+
+
+  /**
+   * @return The location a drop should occur in.
+   */
+  get dropLocation() {
+    return (calculateDropLocation(this.node, this.visual.dropTarget));
+  }
+
+  /**
+   * Handles the drop events on the empty drop
+   */
+  onDrop(evt: DragEvent) {
+    const desc = this._dragService.peekDragData.draggedDescription;
+    this._currentCodeResource.peekResource.insertNode(this.dropLocation, desc);
   }
 }

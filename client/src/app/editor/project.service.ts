@@ -43,7 +43,7 @@ export class ProjectService {
     private _server: ServerApiService,
     private _languageService: LanguageService
   ) {
-    // Create a single subject once and for all. This instanc is not
+    // Create a single subject once and for all. This instance is not
     // allowed to changed as it is passed on to every subscriber.
     // TODO: Make this blocking until the first value was loaded
     //       instead of filling it with `undefined`.
@@ -146,6 +146,9 @@ export class ProjectService {
     const desc = proj.toModel();
     const url = this._server.getProjectUrl(proj.slug);
 
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
     // The project ID is part of the request, it must not be sent
     // in the body again
     delete desc.id;
@@ -153,7 +156,7 @@ export class ProjectService {
     // TODO: The slug shouldn't be changed at the moment, but maybe later
     delete desc.slug;
 
-    const toReturn = this._http.post(url, JSON.stringify(desc))
+    const toReturn = this._http.post(url, JSON.stringify(desc), options)
       .do(_ => proj.markSaved())
       .catch(this.passThroughError);
 

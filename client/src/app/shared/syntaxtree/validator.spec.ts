@@ -519,6 +519,41 @@ describe('Language Validator', () => {
     expect(res.errors[0].code).toEqual(ErrorCodes.UnexpectedType);
   });
 
+  it('oneOf: allowsChildType()', () => {
+    const v = new Validator([langOneOfNodes]);
+
+    const vRoot = v.availableTypes[0];
+    const vNodeA = v.availableTypes[1];
+    const vNodeB = v.availableTypes[2];
+    const vNodeC = v.availableTypes[3];
+
+    const tNodeA = { languageName: langOneOfNodes.languageName, typeName: "a" };
+    const tNodeB = { languageName: langOneOfNodes.languageName, typeName: "b" };
+    const tNodeC = { languageName: langOneOfNodes.languageName, typeName: "c" };
+    const tNodeD = { languageName: langOneOfNodes.languageName, typeName: "d" };
+
+    expect(vRoot.allowsChildType(tNodeA, "nodes")).toBeTruthy("a in root");
+    expect(vRoot.allowsChildType(tNodeB, "nodes")).toBeTruthy("b in root");
+    expect(vRoot.allowsChildType(tNodeC, "nodes")).toBeFalsy("c in root");
+    expect(vRoot.allowsChildType(tNodeD, "nodes")).toBeFalsy("d in root");
+
+    expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+
+    expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBeFalsy();
+    expect(vNodeB.allowsChildType(tNodeB, "nodes")).toBeFalsy();
+    expect(vNodeB.allowsChildType(tNodeC, "nodes")).toBeFalsy();
+    expect(vNodeB.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+
+    expect(vNodeC.allowsChildType(tNodeA, "nodes")).toBeFalsy();
+    expect(vNodeC.allowsChildType(tNodeB, "nodes")).toBeFalsy();
+    expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBeFalsy();
+    expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+
+  });
+
   it('"sequence": Required children categories', () => {
     const v = new Validator([langSequenceConstraint]);
 
@@ -529,7 +564,34 @@ describe('Language Validator', () => {
     expect(a.requiredChildrenCategoryNames).toEqual([]);
   });
 
-  it('Invalid "sequence": Completly Empty', () => {
+  it('"sequence": allowsChildType()', () => {
+    const v = new Validator([langSequenceConstraint]);
+    const vNodeA = v.availableTypes[0];
+    const vNodeB = v.availableTypes[1];
+    const vNodeC = v.availableTypes[2];
+
+    const tNodeA = { languageName: langSequenceConstraint.languageName, typeName: "a" };
+    const tNodeB = { languageName: langSequenceConstraint.languageName, typeName: "b" };
+    const tNodeC = { languageName: langSequenceConstraint.languageName, typeName: "c" };
+    const tNodeD = { languageName: langSequenceConstraint.languageName, typeName: "d" };
+
+    expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBeTruthy();
+    expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBeTruthy();
+    expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBeTruthy();
+    expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+
+    expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBeFalsy();
+    expect(vNodeB.allowsChildType(tNodeB, "nodes")).toBeFalsy();
+    expect(vNodeB.allowsChildType(tNodeC, "nodes")).toBeFalsy();
+    expect(vNodeB.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+
+    expect(vNodeC.allowsChildType(tNodeA, "nodes")).toBeFalsy();
+    expect(vNodeC.allowsChildType(tNodeB, "nodes")).toBeFalsy();
+    expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBeFalsy();
+    expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+  });
+
+  it('Invalid "sequence": Completely Empty', () => {
     const v = new Validator([langSequenceConstraint]);
 
     const astDesc: AST.NodeDescription = {
@@ -885,6 +947,39 @@ describe('Language Validator', () => {
 
     const a = v.getType(langAllowedConstraint.languageName, "a");
     expect(a.requiredChildrenCategoryNames).toEqual([]);
+  });
+
+  it('"allowed": allowsChildType', () => {
+    const v = new Validator([langAllowedConstraint]);
+    const vRoot = v.availableTypes[0];
+    const vNodeA = v.availableTypes[1];
+    const vNodeB = v.availableTypes[2];
+    const vNodeC = v.availableTypes[3];
+
+    const tNodeA = { languageName: langAllowedConstraint.languageName, typeName: "a" };
+    const tNodeB = { languageName: langAllowedConstraint.languageName, typeName: "b" };
+    const tNodeC = { languageName: langAllowedConstraint.languageName, typeName: "c" };
+    const tNodeD = { languageName: langAllowedConstraint.languageName, typeName: "d" };
+
+    expect(vRoot.allowsChildType(tNodeA, "nodes")).toBeTruthy("a in root");
+    expect(vRoot.allowsChildType(tNodeB, "nodes")).toBeTruthy("b in root");
+    expect(vRoot.allowsChildType(tNodeC, "nodes")).toBeTruthy("c in root");
+    expect(vRoot.allowsChildType(tNodeD, "nodes")).toBeFalsy("d in root");
+
+    expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+
+    expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBeFalsy();
+    expect(vNodeB.allowsChildType(tNodeB, "nodes")).toBeFalsy();
+    expect(vNodeB.allowsChildType(tNodeC, "nodes")).toBeFalsy();
+    expect(vNodeB.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+
+    expect(vNodeC.allowsChildType(tNodeA, "nodes")).toBeFalsy();
+    expect(vNodeC.allowsChildType(tNodeB, "nodes")).toBeFalsy();
+    expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBeFalsy();
+    expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBeFalsy();
   });
 
   it('Invalid "allowed": Empty', () => {

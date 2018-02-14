@@ -21,4 +21,6 @@ const AppRoutes: Routes = [
   }
 ]
 
-export const routing = RouterModule.forRoot(AppRoutes);
+export const routing = RouterModule.forRoot(AppRoutes, {
+  paramsInheritanceStrategy: "always"
+});

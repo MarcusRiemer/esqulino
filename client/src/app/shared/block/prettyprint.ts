@@ -4,7 +4,8 @@ import { prettyPrintSyntaxTreeNode } from '../syntaxtree/prettyprint'
 
 import { BlockLanguageDescription } from './block-language.description'
 import {
-  VisualBlockDescriptions, EditorBlockDescription, SidebarBlockDescription
+  VisualBlockDescriptions, EditorBlockDescription, SidebarBlockDescription,
+  FixedBlocksSidebarDescription, FixedBlocksSidebarCategoryDescription
 } from './block.description'
 
 /**
@@ -16,11 +17,22 @@ export function prettyPrintLanguageModel(desc: BlockLanguageDescription): string
   const tail = `}`;
 
   const blocks = (desc.editorBlocks || []).map(prettyPrintBlockTypeHeader);
-  const sidebar = (desc.sidebarBlocks || []).map(prettyPrintSidebarBlock);
+  const sidebar = (desc.sidebars || []).map(prettyPrintSidebar);
 
   const toReturn = [head, ...blocks, ...sidebar, tail] as NestedString
 
   return (recursiveJoin('\n', '  ', toReturn));
+}
+
+export function prettyPrintStyle(desc: VisualBlockDescriptions.BlockStyle) {
+  const properties = Object.entries(desc || {})
+    .map(([k, v]) => `${k}: ${v}`)
+
+  if (properties.length > 0) {
+    return ([`style {`, properties, `}`]);
+  } else {
+    return ([]);
+  }
 }
 
 /**
@@ -42,9 +54,9 @@ export function prettyPrintBlockTypeHeader(desc: EditorBlockDescription): Nested
 export function prettyPrintVisual(desc: VisualBlockDescriptions.ConcreteBlock): NestedString {
   switch (desc.blockType) {
     case "constant":
-      return [JSON.stringify(desc.text)]
+      return prettyPrintSingleLine(JSON.stringify(desc.text), desc);
     case "interpolated":
-      return [`{{ ${desc.property} }}`]
+      return prettyPrintSingleLine(`{{ ${desc.property} }}`, desc);
     case "iterator":
       return prettyPrintVisualIterator(desc);
     case "dropTarget":
@@ -53,6 +65,18 @@ export function prettyPrintVisual(desc: VisualBlockDescriptions.ConcreteBlock): 
       return prettyPrintVisualBlock(desc);
     default:
       throw new Error(`Unknow visual block "${(desc as any).blockType}"`);
+  }
+}
+
+/**
+ * Prettyprints a constant. If there is no style it does so in the short form.
+ */
+function prettyPrintSingleLine(single: string, desc: VisualBlockDescriptions.EditorBlockBase) {
+  const style = prettyPrintStyle(desc.style);
+  if (style.length > 0) {
+    return ([`${single} {`, style, `}`]);
+  } else {
+    return ([single]);
   }
 }
 
@@ -75,7 +99,7 @@ function prettyPrintVisualIterator(desc: VisualBlockDescriptions.EditorIterator)
 
   const tail = `}`;
 
-  return ([head, [...props, ...between], tail]);
+  return ([head, [...props, ...between, ...prettyPrintStyle(desc.style)], tail]);
 }
 
 /**
@@ -97,7 +121,7 @@ function prettyPrintVisualDropTarget(desc: VisualBlockDescriptions.EditorDropTar
 
   const tail = `}`;
 
-  return ([head, [...props, ...children], tail]);
+  return ([head, [...props, ...children, ...prettyPrintStyle(desc.style)], tail]);
 }
 
 /**
@@ -118,15 +142,39 @@ function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
 
   const tail = `}`;
 
-  return ([head, [...props, ...children], tail]);
+  return ([head, [...props, ...children, ...prettyPrintStyle(desc.style)], tail]);
 }
 
-function prettyPrintSidebarBlock(desc: SidebarBlockDescription) {
-  const head = `sidebarBlock "${desc.sidebar.displayName}" {`
+/**
+ * Prettyprints a whole sidebar.
+ */
+function prettyPrintSidebar(desc: FixedBlocksSidebarDescription) {
+  return ([
+    `sidebar "${desc.caption}" {`,
+    ...desc.categories.map(prettyPrintFixedBlocksSidebarCategory),
+    `}`
+  ]);
 
-  const props = [
-    `category "${desc.sidebar.category}"`
-  ]
+}
+
+/**
+ * Prettyprints the category of a sidebar
+ */
+function prettyPrintFixedBlocksSidebarCategory(desc: FixedBlocksSidebarCategoryDescription) {
+  return ([
+    `category "${desc.categoryCaption}" {`,
+    ...desc.blocks.map(prettyPrintSidebarBlock),
+    `}`
+  ]);
+}
+
+
+
+/**
+ * Prettyprints a block in the sidebar
+ */
+function prettyPrintSidebarBlock(desc: SidebarBlockDescription) {
+  const head = `sidebarBlock "${desc.displayName}" {`
 
   const defaultNode = desc.defaultNode
     ? prettyPrintSyntaxTreeNode(desc.defaultNode)
@@ -134,5 +182,5 @@ function prettyPrintSidebarBlock(desc: SidebarBlockDescription) {
 
   const tail = `}`;
 
-  return ([head, [...props, ...defaultNode], tail]);
+  return ([head, [...defaultNode], tail]);
 }

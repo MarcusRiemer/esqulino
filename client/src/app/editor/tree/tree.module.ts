@@ -3,6 +3,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core'
 import { SharedEditorModule } from '../shared/shared.module'
 import { RegistrationService } from '../registration.service'
 
+import { ResourceChangedGuard } from './resource-changed.guard'
 import { CodeGeneratorComponent } from './code-generator.component'
 import { DraggableDirective } from './draggable.directive'
 import { DropTargetDirective } from './drop-target.directive'
@@ -10,6 +11,7 @@ import { DropPlaceholderDirective } from './drop-placeholder.directive'
 import { LanguageModelSelectorComponent } from './language-model-selector.component'
 import { LanguageSelectorComponent } from './language-selector.component'
 import { TreeSidebarComponent } from './tree.sidebar'
+import { TreeSidebarFixedBlocksComponent } from './tree-sidebar-fixed-blocks.component'
 import { ValidationComponent } from './validation.component'
 
 import { NodeComponent } from './raw/node.component'
@@ -49,14 +51,26 @@ import { BlockRenderIteratorComponent } from './block/block-render-iterator.comp
     RawTreeEditorComponent,
     ValidationComponent,
     TreeSidebarComponent,
+    TreeSidebarFixedBlocksComponent,
     LanguageModelSelectorComponent,
     LanguageSelectorComponent,
   ],
   entryComponents: [
-    TreeSidebarComponent
+    TreeSidebarComponent,
+    TreeSidebarFixedBlocksComponent
+  ],
+  providers: [
+    ResourceChangedGuard
   ]
 })
 export class SyntaxTreeEditorModule {
+  public static forRoot(): ModuleWithProviders {
+    return ({
+      ngModule: SyntaxTreeEditorModule,
+      providers: []
+    });
+  }
+
   constructor(reg: RegistrationService) {
     console.log("Registering TreeEditor ...");
 

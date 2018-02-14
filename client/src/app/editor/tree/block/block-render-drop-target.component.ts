@@ -2,12 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { arrayEqual } from '../../../shared/util';
-import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
+import { Node, NodeLocation, Tree, CodeResource, QualifiedTypeName } from '../../../shared/syntaxtree';
 import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
 
-import { TreeEditorService } from '../editor.service';
+import { CurrentCodeResourceService } from '../../current-coderesource.service';
+
+import { calculateDropLocation } from './drop-utils';
 
 /**
  * Renders a single and well known visual element of a node.
@@ -21,7 +23,7 @@ import { TreeEditorService } from '../editor.service';
         display: 'none',
       })),
       state('visible', style({
-        backgroundColor: 'lime',
+        backgroundColor: 'lightgray',
       })),
       state('available', style({
         backgroundColor: 'green',
@@ -39,7 +41,7 @@ export class BlockRenderDropTargetComponent {
 
   constructor(
     private _dragService: DragService,
-    private _treeService: TreeEditorService,
+    private _currentCodeResource: CurrentCodeResourceService,
   ) {
   }
 
@@ -47,31 +49,22 @@ export class BlockRenderDropTargetComponent {
    * @return True, if this drop will be made into a strictly defined category.
    */
   get isParentDrop() {
-    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.actionParent;
+    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.parent;
     return (!!action);
   }
 
   /**
    * @return The name of the referenced child group (if there is any)
    */
-  get childGroupName() {
-    // Is the category specified explicitly?
-    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.actionParent;
-    if (action) {
-      // Then use that category
-      return (action);
-    } else {
-      // Else use the category of our own node.
-      const loc = this.node.location;
-      return (loc[loc.length - 1][0]);
-    }
+  get dropLocationChildGroupName(): string {
+    return (this.dropLocation[this.dropLocation.length - 1][0]);
   }
 
   /**
    * @return true, if the targeted child group has any children.
    */
-  get hasChildren() {
-    const childGroupName = this.childGroupName;
+  get dropLocationHasChildren() {
+    const childGroupName = this.dropLocationChildGroupName;
     if (this.isParentDrop) {
       // Count children in that category
       return (this.node.getChildrenInCategory(childGroupName).length > 0);
@@ -85,19 +78,7 @@ export class BlockRenderDropTargetComponent {
    * @return The location a drop should occur in. This depends on the configuration in the language model.
    */
   get dropLocation() {
-    if (this.node) {
-      if (this.isParentDrop) {
-        // If there is an explicit group name, this is always the first node
-        return (this.node.location.concat([[this.childGroupName, 0]]));
-      } else {
-        // Otherwise use (more or less) exact the location we are at. The description
-        // may specify some levels that are dropped.
-        const lastLevel = this.node.location.length - this.visual.dropTarget.actionSelf.skipParents;
-        return (this.node.location.slice(0, lastLevel));
-      }
-    } else {
-      return ([]);
-    }
+    return (calculateDropLocation(this.node, this.visual.dropTarget));
   }
 
   /**
@@ -119,12 +100,30 @@ export class BlockRenderDropTargetComponent {
           if (flags.some(f => f === "ifAnyDrag")) {
             return ("available");
           } else if (flags.some(f => f === "ifLegalDrag")) {
+            // Would the new tree ba a valid tree?
             const newNode = drag.draggedDescription;
-            const oldTree = this._treeService.peekResource.syntaxTreePeek;
+            const oldTree = this._currentCodeResource.peekResource.syntaxTreePeek;
             const newTree = oldTree.insertNode(this.dropLocation, newNode);
 
-            const result = this._treeService.peekResource.languagePeek.validateTree(newTree);
+            const result = this._currentCodeResource.peekResource.programmingLanguagePeek.validateTree(newTree);
             if (result.isValid) {
+              return ("available");
+            } else {
+              return ("none");
+            }
+          } else if (flags.some(f => f === "ifLegalChild")) {
+            // Would the immediate child be allowed?
+            const newNodeType: QualifiedTypeName = {
+              languageName: drag.draggedDescription.language,
+              typeName: drag.draggedDescription.name
+            }
+            const currentTree = this._currentCodeResource.peekResource.syntaxTreePeek;
+            const currentLanguage = this._currentCodeResource.peekResource.programmingLanguagePeek;
+
+            const parentNode = currentTree.locate(this.dropLocation.slice(0, -1));
+            const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
+
+            if (parentNodeType.allowsChildType(newNodeType, this.dropLocationChildGroupName)) {
               return ("available");
             } else {
               return ("none");
@@ -136,7 +135,7 @@ export class BlockRenderDropTargetComponent {
         if (flags.some(f => f === "always")) {
           return ("visible");
         }
-        if (flags.some(f => f === "ifEmpty") && !this.hasChildren) {
+        if (flags.some(f => f === "ifEmpty") && !this.dropLocationHasChildren) {
           return ("visible");
         } else {
           return ("none");
@@ -149,6 +148,6 @@ export class BlockRenderDropTargetComponent {
    */
   onDrop(evt: DragEvent) {
     const desc = this._dragService.peekDragData.draggedDescription;
-    this._treeService.peekResource.insertNode(this.dropLocation, desc);
+    this._currentCodeResource.peekResource.insertNode(this.dropLocation, desc);
   }
 }

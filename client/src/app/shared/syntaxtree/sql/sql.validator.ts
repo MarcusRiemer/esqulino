@@ -124,6 +124,33 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         }
       }
     },
+    "innerJoinOn": {
+      children: {
+        "table": {
+          type: "sequence",
+          nodeTypes: ["tableIntroduction"]
+        },
+        "on": {
+          type: "sequence",
+          nodeTypes: ["expression"]
+        },
+      }
+    },
+    "innerJoinUsing": {
+      children: {
+        "table": {
+          type: "sequence",
+          nodeTypes: ["tableIntroduction"]
+        },
+        "using": {
+          type: "sequence",
+          nodeTypes: ["columnName"]
+        }
+      }
+    },
+    "join": {
+      oneOf: ["crossJoin", "innerJoinUsing", "innerJoinOn"]
+    },
     "from": {
       children: {
         "tables": {
@@ -131,7 +158,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: [
             "tableIntroduction",
             {
-              nodeType: "crossJoin",
+              nodeType: "join",
               occurs: "*"
             }
           ]
@@ -166,6 +193,25 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       }
+    },
+    "groupBy": {
+      children: {
+        "expressions": {
+          type: "allowed",
+          nodeTypes: [
+            {
+              languageName: "sql",
+              nodeType: "expression",
+              occurs: "*"
+            },
+            {
+              languageName: "sql",
+              nodeType: "columnName",
+              occurs: "*"
+            }
+          ]
+        }
+      },
     },
     "querySelect": {
       children: {
@@ -220,6 +266,15 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: [
             {
               nodeType: "where",
+              occurs: "?"
+            },
+          ]
+        },
+        "groupBy": {
+          type: "sequence",
+          nodeTypes: [
+            {
+              nodeType: "groupBy",
               occurs: "?"
             },
           ]

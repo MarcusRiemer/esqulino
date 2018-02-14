@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { ToolbarService } from '../../toolbar.service';
 import { DragService } from '../../drag.service';
 
-import { TreeEditorService } from '../editor.service';
+import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 /**
  * A more or less internal editor that is intended only as a fallback if all
@@ -13,14 +13,13 @@ import { TreeEditorService } from '../editor.service';
  */
 @Component({
   templateUrl: 'templates/raw-tree-editor.html',
-  providers: [TreeEditorService]
 })
 export class RawTreeEditorComponent implements OnInit {
 
   constructor(
     private _toolbarService: ToolbarService,
     private _dragService: DragService,
-    private _treeService: TreeEditorService,
+    private _currentCodeResource: CurrentCodeResourceService,
     private _router: Router,
     private _route: ActivatedRoute,
   ) {
@@ -53,7 +52,10 @@ export class RawTreeEditorComponent implements OnInit {
     return (this._dragService);
   }
 
+  /**
+   * @return The always up-to-date resource to edit.
+   */
   get currentResource() {
-    return (this._treeService.currentResource);
+    return (this._currentCodeResource.currentResource);
   }
 }

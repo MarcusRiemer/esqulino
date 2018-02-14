@@ -22,31 +22,6 @@ export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) 
 }
 
 describe('LanguageModel PrettyPrinter', () => {
-  it('Scratch', () => {
-    const l: BlockLanguageDescription = {
-      "id": "test",
-      "name": "test",
-      "editorBlocks": [
-        {
-          "describedType": {
-            "languageName": "test",
-            "typeName": "root"
-          },
-          "visual": [
-            {
-              "blockType": "block",
-              "direction": "horizontal",
-              "children": [
-
-              ]
-            }
-          ]
-        }
-      ],
-      "sidebarBlocks": []
-    };
-  });
-
   it('01 Empty Language', () => {
     verifyFiles('01-lang-empty', prettyPrintLanguageModel);
   });
@@ -84,6 +59,10 @@ describe('LanguageModel PrettyPrinter', () => {
   });
 
   it('10 Sidebar: Empty Node', () => {
-    verifyFiles('10-sidebar-empty-node', prettyPrintLanguageModel);
+    verifyFiles('10-sidebar-empty', prettyPrintLanguageModel);
+  });
+
+  it('11 Sidebar: Single Category', () => {
+    verifyFiles('11-sidebar-single-category', prettyPrintLanguageModel);
   });
 });
