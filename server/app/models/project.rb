@@ -2,7 +2,7 @@
 # Currently every project is assumed to be somewhat web-centric
 # (using databases and HTML), but this is not set in stone.
 class Project < ApplicationRecord
-  attr_accessor :project_id
+
   has_many :project_sources, dependent: :destroy
   has_many :code_resources
   has_many :block_languages, through: :code_resources
