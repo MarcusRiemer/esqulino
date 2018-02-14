@@ -22,7 +22,7 @@ RSpec.describe Builders::ProjectStructure do
         expect(subject.data).to have_key('schema')
       end
 
-      xit 'should have sources' do
+      it 'should have sources' do
         expect(subject.data).to_not be_empty 
       end
     end

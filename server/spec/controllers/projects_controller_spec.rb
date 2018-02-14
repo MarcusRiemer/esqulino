@@ -1,14 +1,15 @@
 require 'rails_helper'
+require 'fakefs/safe'
 
 RSpec.describe ProjectsController, type: :request do
   
   describe 'POST /api/project' do
   
     describe 'valid request' do
-      let(:project_creation_json) { {"dbType" => "sqlite3", "project" => {"name" => "Some project", "slug" => "test" }} }
+      let(:project_creation_json) { {"name" => "Some project", "slug" => "test" } }
 
       it 'adds new record' do
-        expect{
+        expect {
           post '/api/project', params: project_creation_json
         }.to change(Project, :count).by(1)
       end
@@ -18,7 +19,7 @@ RSpec.describe ProjectsController, type: :request do
 
         expect(response.status).to eq(200)
         expect(response.content_type).to eq "application/json"
-        expect(Project.all.last.slug).to eq("test")
+        expect(Project.find_by(slug: "test").name).to eq "Some project"
       end
 
     end
@@ -46,6 +47,11 @@ RSpec.describe ProjectsController, type: :request do
         "description" => "This is a test proejct"
       }
     }
+
+    it 'denies unauthenticated requests' do
+      put "/api/project/#{project.slug}", params: update_params
+      expect(response).to have_http_status(401)
+    end
 
     describe 'valid request' do      
       before { put "/api/project/#{project.slug}", params: update_params, headers: auth_headers }
