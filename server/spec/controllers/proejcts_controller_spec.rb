@@ -33,7 +33,7 @@ RSpec.describe ProjectsController, type: :request do
     end
   end
 
-  describe 'PUT /api/project/:proejct_id' do
+  describe 'PUT /api/project/:project_id' do
     let(:auth_headers) { {"Authorization" => "Basic #{Base64.encode64('user:user')}"} }
 
     let(:project) { create(:project, name: 'Test', slug: 'test') }
@@ -48,7 +48,7 @@ RSpec.describe ProjectsController, type: :request do
     }
 
     describe 'valid request' do      
-      before { post "/api/project/#{project.slug}", params: update_params, headers: auth_headers }
+      before { put "/api/project/#{project.slug}", params: update_params, headers: auth_headers }
       
       it 'updates the record' do
         expect(response.body).to be_empty

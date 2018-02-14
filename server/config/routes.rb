@@ -42,7 +42,7 @@ Rails.application.routes.draw do
       # Everything that does something in the context of a specific project
       scope ':project_id' do
         root controller: 'projects', action: :show
-        root via: [:post], controller: 'projects', action: :edit
+        root via: [:put], controller: 'projects', action: :update
         root via: [:delete], controller: 'projects', action: :destroy
 
         get 'preview', controller: 'projects', action: :preview_image

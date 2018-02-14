@@ -32,7 +32,7 @@ class ProjectsController < ApplicationController
   end
 
   # Update an existing project
-  def edit
+  def update
 
     # ensure_write_access do
     #   updated_project = ensure_request("ProjectUpdateDescription", request.body.read)
@@ -43,8 +43,8 @@ class ProjectsController < ApplicationController
     #   render :status => 200
     # end
     # @project = Project.find_by_slug(params[:project_id])
-    project = Project.find_by(slug: params[:project_id])
-    project.update(@payloads)
+    project = Project.find_by_slug(params[:project_id])
+    project.update(project_params)
     head :no_content
   end
 
@@ -66,7 +66,7 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.permit(:name, :slug, :apiVersion, :description, :activeDatabase, :dbType, :project_id, admin: {}, project: {}).transform_keys! { |k| k.underscore }
+    params.permit(:name, :slug, :apiVersion, :description, :activeDatabase, :dbType, admin: {}, project: {}).transform_keys! { |k| k.underscore }
   end
 
   def update_params
