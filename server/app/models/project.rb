@@ -15,7 +15,8 @@ class Project < ApplicationRecord
   # A project with all associated resources that are required for
   # immediate display on the client.
   scope :full, -> { includes(:project_sources, :code_resources, :block_languages) }
-
+  # Deafult scope to filter records which are only public
+  default_scope {where(public: true)}
   # Computes a hash that may be sent back to the client
   def to_full_api_response
     to_return = super
@@ -34,6 +35,7 @@ class Project < ApplicationRecord
   # that should be used when searching for this entity. As projects are identified
   # via their slugs in visible places (e.g. URLs) we tell rails to search for slugs.
   def to_param
-    "slug"
+    slug
   end
+
 end
