@@ -138,7 +138,7 @@ RSpec.describe ProjectsController, type: :request do
 
       expect(json_data.length).to eq 1
 
-      # FIXME: need to understand, why we need to run this validation here? and does 'ProjectListDEscription' means? 
+      # FIXME: need to understand, why we need to run this validation here? and how 'ProjectListDescription' schema is defined?
       # expect(json_data[0]).to validate_against "ProjectListDescription"
     end
   end
