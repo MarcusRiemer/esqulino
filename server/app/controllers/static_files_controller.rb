@@ -15,6 +15,8 @@ class StaticFilesController < ApplicationController
       # was requested
       if requested_path.empty? or not File.exists? local_path then
         local_path = basepath.join('index.html')
+
+        raise NoCompiledClientError.new(local_path) if not File.exists? local_path
       end
 
       send_file local_path, disposition: 'inline'

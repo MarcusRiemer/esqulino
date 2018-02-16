@@ -42,6 +42,34 @@ class EsqulinoError < StandardError
   end
 end
 
+# Some errors are not strictly for the API and may be seen by
+# "normal" end users. These errors should inherit from this
+# message error to have a (somehow) nicer UI.
+class EsqulinoMessageError < EsqulinoError
+  def user_message
+    "The programmer has not left a message, sorry!"
+  end
+end
+
+# The server can't do anything if it can't serve a compiled version of
+# the client.
+class NoCompiledClientError < EsqulinoMessageError
+  # @param index_html_path [string] The path the index.html of the client
+  #                                 should reside.
+  def initialize(index_html_path)
+    super(msg = "Could not find compiled version of the client")
+    @index_html_path = index_html_path
+  end
+
+  def user_message
+    "There is no compiled version of the client available."
+  end
+
+  def json_data()
+    { "indexHtmlPath" => @index_html_path  }
+  end
+end
+
 # Some resource unexpectedly has an invalid version
 #
 # @param res_id [UUID] The id with an invalid version
