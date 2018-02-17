@@ -15,10 +15,17 @@ class Project < ApplicationRecord
   # A project with all associated resources that are required for
   # immediate display on the client.
   scope :full, -> { includes(:project_sources, :code_resources, :block_languages) }
-  # Deafult scope to filter records which are only public
-  default_scope {where(public: true)}
+  # scope to filter records which are only public
+  scope :only_public, -> { where(public: true) }
+  # TODO: need to know, do we really need this?
+  # Filter records if preview is null
+  # Where.not fully qualify for the column name with the table name, so will
+  # continue working with complex relations and used as (NOT IN)
+  # default_scope { where.not(preview: nil) }
   # Computes a hash that may be sent back to the client
   def to_full_api_response
+    return [] unless Project.any?
+
     to_return = super
     
     to_return['schema'] = []
@@ -37,5 +44,4 @@ class Project < ApplicationRecord
   def to_param
     slug
   end
-
 end
