@@ -1,3 +1,4 @@
+# Setting up various paths as part of the configuration
 Rails.application.config.to_prepare do
   config = Rails.application.config
   config.sqlino = Rails.application.config_for :sqlino
@@ -9,3 +10,13 @@ Rails.application.config.to_prepare do
   config.sqlino[:projects_dir] = config.sqlino[:data_dir].join 'projects'
 end
 
+# Setting up the IDE service
+Rails.application.config.after_initialize do
+  puts "Configuring IDE Service ..."
+  IdeService.instantiate
+
+  IdeService::LogSubscriber.attach_to :ide_service
+
+  puts "IDE service configured, testing availability ..."
+  IdeService.instance.ping!
+end
