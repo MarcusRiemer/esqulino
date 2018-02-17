@@ -6,7 +6,7 @@ class ProjectsController < ApplicationController
 
   # Lists all projects
   def index
-    render json: Project.all.only_public
+    render json: Project.only_public.map{|p| p.to_list_api_response}
   end
 
   # Apart from creating the database object this action also needs to

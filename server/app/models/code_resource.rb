@@ -67,6 +67,6 @@ class CodeResource < ApplicationRecord
 
   # Computes a hash that may be sent back to the client
   def to_full_api_response
-    super.slice("name", "id", "ast", "createdAt", "updatedAt", "blockLanguageId", "programmingLanguageId")
+    to_json_api_response.slice("name", "id", "ast", "createdAt", "updatedAt", "blockLanguageId", "programmingLanguageId")
   end
 end

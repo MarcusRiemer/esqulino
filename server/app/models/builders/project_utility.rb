@@ -39,5 +39,9 @@ module Builders
         raise EsqulinoError.new "Unknown database type: \"#{db}\" "
       end
     end
+
+    def delete!
+    end
+    
   end
 end
