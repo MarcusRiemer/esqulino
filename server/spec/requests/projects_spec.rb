@@ -121,31 +121,34 @@ RSpec.describe ProjectsController, type: :request do
       json_data = JSON.parse(response.body)
 
       expect(json_data.length).to eq 1
-      formatted_schema_data = json_data[0].transform_keys!{|k| k.camelize(:lower)}.compact!
-      expect(formatted_schema_data).to validate_against "ProjectListDescription"
+
+      expect(json_data[0]).to validate_against "ProjectListDescription"
     end
 
-    it 'does not list private projects' do
-      FactoryBot.create(:project, :private, preview: uuid)
-      FactoryBot.create(:project, api_version: 4, public: true, preview: uuid)
-      
-      get "/api/project/"
+    describe 'does not list private projects' do
+      before do
+        FactoryBot.create(:project, :private)
+        FactoryBot.create(:project, api_version: 4, public: true)
+        get "/api/project/"
+        @json_data = JSON.parse(response.body)
+      end
 
-      expect(response).to have_http_status(200)
+      it 'returns 200' do         
+        expect(response).to have_http_status(200)
+        expect(@json_data.length).to eq 1
+      end
 
-      json_data = JSON.parse(response.body)
-      expect(json_data.length).to eq 1
-      # TODO: temporay solution to pass the validation against schema, need to redefine data structure
-      # Move compact! with real method
-      transformed_data = json_data[0].transform_keys!{|k| k.camelize(:lower)}.compact!
-      expect(transformed_data).to validate_against "ProjectListDescription"
+      it 'validates against json schema' do
+        expect(@json_data[0]).to validate_against "ProjectListDescription"
+      end
     end
   end
+
+
 
   describe 'GET /api/project/:project_id' do
     it 'empty project satisfies the JSON schema' do
       empty_project = FactoryBot.create(:project)
-
       get "/api/project/#{empty_project.slug}"
 
       expect(response).to have_http_status(200)

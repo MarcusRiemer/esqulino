@@ -24,9 +24,9 @@ class Project < ApplicationRecord
   # default_scope { where.not(preview: nil) }
   # Computes a hash that may be sent back to the client
   def to_full_api_response
-    return [] unless Project.any?
+    to_list_api_response
 
-    to_return = super
+    to_return = to_json_api_response
     
     to_return['schema'] = []
     to_return['apiVersion'] = '4'
@@ -38,6 +38,9 @@ class Project < ApplicationRecord
     to_return
   end
 
+  def to_list_api_response
+    to_json_api_response
+  end
   # Rails uses this method to dynamically determine the name of the attribute
   # that should be used when searching for this entity. As projects are identified
   # via their slugs in visible places (e.g. URLs) we tell rails to search for slugs.
