@@ -14,7 +14,7 @@ RSpec.describe "IDE Service" do
   context "OneShot" do
     it "responds to ping" do
       service = OneShotExecIdeService.new(config: exec_configuration)
-      expect(service.ping).to be true
+      expect(service.ping!).to be true
     end
 
     it "emits SQL source code" do

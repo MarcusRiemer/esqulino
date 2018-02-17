@@ -30,21 +30,30 @@ class BaseIdeService
   end
 
   # Checks whether the IDE-service is available
-  def ping
-    begin
-      execute_request({ "type" => "ping"}) == "pong"
-    rescue IdeServiceError => e
-      false
-    end
+  def ping!
+    execute_request({ "type" => "ping"}) == "pong"
   end
 
-  # Executes the given request object with the backing server
+  # Communicates the given request to the IDE service.
   #
   # @param request [hash]
   #  A request object for the CLI, must at least specify the
   #  "type" property.
   # @return Depends on the type of the request
   def execute_request(request)
+    ActiveSupport::Notifications.instrument('request.ide_service', request: request) do
+      self.execute_request_impl(request)
+    end
+  end
+
+  # Actual implementation of call to the IDE service. Needs to be
+  # implemented by the deriving classes.
+  #
+  # @param request [hash]
+  #  A request object for the CLI, must at least specify the
+  #  "type" property.
+  # @return Depends on the type of the request
+  def execute_request_impl(request)
     raise "execute_request not implemented"
   end
 end
@@ -68,7 +77,7 @@ class OneShotExecIdeService < ExecIdeService
   #  A request object for the CLI, must at least specify the
   #  "type" property.
   # @return Depends on the type of the request
-  def execute_request(request)
+  def execute_request_impl(request)
     stdout, stderr, res = Open3.capture3(@node_binary, @program, :stdin_data => request.to_json)
 
     # Lets hope the process exited fine and had no errors
@@ -98,7 +107,7 @@ class MockIdeService < BaseIdeService
   end
 end
 
-module IdeService  
+module IdeService
   def self.instance
     @@ide_service_instance ||= instantiate
   end
@@ -110,7 +119,7 @@ module IdeService
     # Mocking currently takes precedence about every other option. This is by
     # design to "override" the default configuration when running tests, but
     # its quite an ugly hack.
-    if service_config["mock"] 
+    if service_config["mock"]
       return MockIdeService.new
     # Exec mode?
     elsif exec_config = service_config["exec"] then
@@ -121,6 +130,18 @@ module IdeService
       end
     # No known mode
     else raise IdeServiceError, "Unkown general IDE-service configuration"
+    end
+  end
+
+  class LogSubscriber < ActiveSupport::LogSubscriber
+    def initialize
+      super
+    end
+
+    def request(event)
+      head = color("  IDE Request (#{event.duration.round(1)}ms)", MAGENTA, true)
+      payload = color(event.payload[:request].to_json, YELLOW, true)
+      debug "#{head}  #{payload}"
     end
   end
 end
