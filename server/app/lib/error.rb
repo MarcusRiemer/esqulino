@@ -46,9 +46,7 @@ end
 # "normal" end users. These errors should inherit from this
 # message error to have a (somehow) nicer UI.
 class EsqulinoMessageError < EsqulinoError
-  def user_message
-    "The programmer has not left a message, sorry!"
-  end
+
 end
 
 # The server can't do anything if it can't serve a compiled version of
@@ -59,10 +57,6 @@ class NoCompiledClientError < EsqulinoMessageError
   def initialize(index_html_path)
     super(msg = "Could not find compiled version of the client")
     @index_html_path = index_html_path
-  end
-
-  def user_message
-    "There is no compiled version of the client available."
   end
 
   def json_data()

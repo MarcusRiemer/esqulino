@@ -12,12 +12,10 @@ class ApplicationController < ActionController::API
     # Handle errors that might be seen by users with a slightly nicer
     # representation than pure JSON.
     if exception.is_a? EsqulinoMessageError then
-      heading = "# Error"
-      message = exception.user_message
-      diagnostic_header = "The following information might be helpful to fix the error: "
-      data = exception.to_liquid.to_json
-      
-      render status: exception.code, plain: [heading, message, diagnostic_header, data].join("\n")
+      @exception = exception
+      @admin_mail = Rails.configuration.sqlino["mail"]["admin"]
+
+      render template: "static_files/message_error", layout: "application_error"
     else
       # Simply react to internal errors by presenting them in a JSON representation
       render status: exception.code, json: exception.to_liquid
