@@ -12,11 +12,11 @@ end
 
 # Setting up the IDE service
 Rails.application.config.after_initialize do
-  puts "Configuring IDE Service ..."
+  Rails.logger.info "Configuring IDE Service ..."
   IdeService.instantiate
 
   IdeService::LogSubscriber.attach_to :ide_service
 
-  puts "IDE service configured, testing availability ..."
+  Rails.logger.info "IDE service configured, testing availability ..."
   IdeService.instance.ping!
 end

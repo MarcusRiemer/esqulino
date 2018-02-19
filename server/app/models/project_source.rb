@@ -9,4 +9,9 @@ class ProjectSource < ApplicationRecord
 
     to_return
   end
+
+  # Returns a nicely readable representation of id and type
+  def readable_identification
+    "\"#{url}\" (#{id})"
+  end
 end

@@ -18,4 +18,9 @@ class BlockLanguage < ApplicationRecord
     
     to_return
   end
+
+  # Returns a nicely readable representation of id and name
+  def readable_identification
+    "\"#{name}\" (#{slug}, #{id})"
+  end
 end
