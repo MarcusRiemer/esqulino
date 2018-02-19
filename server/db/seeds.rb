@@ -1,9 +1,9 @@
 # coding: utf-8
 ProjectSource.destroy_all
 CodeResource.destroy_all
+Project.destroy_all
 BlockLanguage.destroy_all
 ProgrammingLanguage.destroy_all
-Project.destroy_all
 
 prog_sql = ProgrammingLanguage.create!(id: "sql", name: "SQL")
 prog_regex = ProgrammingLanguage.create!(id: "regex", name: "Reguläre Ausdrücke")
@@ -12,6 +12,7 @@ prog_dxml_liquid = ProgrammingLanguage.create!(id: "dxml-liquid", name: "Dynamic
 
 block_sql = BlockLanguage.create!(
   name: "SQL",
+  slug: "sql",
   family: "sql",
   model: {
     sidebars: [],
@@ -20,7 +21,18 @@ block_sql = BlockLanguage.create!(
 )
 
 block_xml = BlockLanguage.create!(
-  name: "xml",
+  name: "XML (Statisch)",
+  slug: "xml",
+  family: "xml",
+  model: {
+    sidebars: [],
+    editorBlocks: []
+  }
+)
+
+block_dxml = BlockLanguage.create!(
+  name: "XML (Dynamisch)",
+  slug: "dxml",
   family: "xml",
   model: {
     sidebars: [],
@@ -72,6 +84,8 @@ proj_test_sequence = Project.create!(
   index_page_id: "159ba814-445d-4167-a483-e3fc0db85cae",
   active_database: "default"
 )
+
+proj_test_sequence.block_languages << [block_xml, block_dxml, block_sql]
 
 proj_test_sequence.code_resources.create!(
   name: "xml-test",    

@@ -17,6 +17,15 @@ class CodeResource < ApplicationRecord
   # The AST is a single root node or empty
   validates :ast, json_schema: 'NodeDescription', allow_nil: true
 
+  # The associated block language must be permitted by the parent project.
+  # If the project does not reference the block language that this resource
+  # is referencing the reference is not allowed.
+  validate do
+    if (self.block_language and self.project) and not self.project.block_languages.include? self.block_language then
+      errors.add(:block_language, "not allowed by project")
+    end
+  end
+
   # Okay, this is tricky: We somehow need to keep the compiled version
   # of the syntaxtree in sync with the "actual" syntaxtree. So we want
   # to have some action that checks whether the syntaxtree has been

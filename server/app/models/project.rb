@@ -5,7 +5,7 @@ class Project < ApplicationRecord
 
   has_many :project_sources, dependent: :destroy
   has_many :code_resources
-  has_many :block_languages, through: :code_resources
+  has_and_belongs_to_many :block_languages
 
   validates :slug, uniqueness: true
   # Name may not be empty
