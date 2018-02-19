@@ -13,6 +13,8 @@ development:
       node_binary: /usr/bin/node
       program: ../client/dist/cli/main.cli.js
       mode: one-shot
+  seed:
+    data_dir: ../seed
 
 test:
   name: "Blattwerkzeug (Test)"

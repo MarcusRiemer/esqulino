@@ -12,7 +12,7 @@ RSpec.describe Project do
       proj = FactoryBot.create(:project, name: "Test Project")
       b = FactoryBot.create(:block_language, name: "Test Blocklang")
       proj.block_languages << b
-      
+
       p = FactoryBot.create(:programming_language)
       proj.code_resources.create!(name: "Res 1", programming_language: p, block_language: b)
       proj.code_resources.create!(name: "Res 2", programming_language: p, block_language: b)
@@ -20,6 +20,13 @@ RSpec.describe Project do
       api_response = proj.to_full_api_response
 
       expect(api_response).to validate_against "ProjectDescription"
+    end
+  end
+
+  context "directories" do
+    it "end with the UUID" do
+      p = FactoryBot.build(:project, id: SecureRandom.uuid)
+      expect(p.data_directory_path).to end_with(p.id)
     end
   end
 end

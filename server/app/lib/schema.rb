@@ -129,10 +129,15 @@ end
 # Describes the schema of a whole database as a handy dictionary
 # of tables with their columns.
 #
-# @param sqlite_file_path [string] The path to the database
+# @param sqlite_db [string|SQLite3::Database]
+#   Path to the database or an instance of it
 # @return [Hash] A hash of SchemaTable instances
-def database_describe_schema(sqlite_file_path)
-  db = SQLite3::Database.new(sqlite_file_path)
+def database_describe_schema(sqlite_db)
+  db = if sqlite_db.is_a? String then
+         SQLite3::Database.new(sqlite_db)
+       else
+         sqlite_db
+       end
 
   # Find out names of tables
   table_names = db.execute("SELECT name
