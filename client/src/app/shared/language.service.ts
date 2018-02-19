@@ -43,7 +43,7 @@ export class LanguageService {
    * @param id The id of the language model
    * @return The specific LanguageModel that was asked for.
    */
-  getLanguageModel(id: string) {
+  getLocalBlockLanguage(id: string) {
     const toReturn = this.availableLanguageModels.find(l => l.id === id);
     if (!toReturn) {
       const available = this.availableLanguageModelIds.join(', ');

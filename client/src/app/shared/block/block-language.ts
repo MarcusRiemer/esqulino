@@ -15,9 +15,11 @@ export class BlockLanguage implements Forward.BlockLanguage {
   private _editorBlocks: EditorBlockDescription[] = [];
   private _name: string;
   private _id: string;
+  private _slug: string;
 
   constructor(desc: BlockLanguageDescription) {
     this._id = desc.id;
+    this._slug = desc.slug;
     this._name = desc.name;
 
     this._sidebars = desc.sidebars.map(sidebarDesc => new FixedBlocksSidebar(this, sidebarDesc));
@@ -25,14 +27,21 @@ export class BlockLanguage implements Forward.BlockLanguage {
   }
 
   /**
-   * @return The unique id of this language model
+   * @return The unique id of this block language
    */
   get id() {
     return (this._id);
   }
 
   /**
-   * @return The user friendly name of this language model
+   * @return The unique, but readable slug of this block language.
+   */
+  get slug() {
+    return (this._slug);
+  }
+
+  /**
+   * @return The user friendly name of this block language
    */
   get name() {
     return (this._name);

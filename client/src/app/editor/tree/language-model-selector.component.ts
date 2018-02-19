@@ -25,22 +25,22 @@ export class LanguageModelSelectorComponent {
   /**
    * @return All available language models
    */
-  get availableLanguageModels() {
-    return (this._languageService.availableLanguageModels);
+  get availableBlockLanguages() {
+    return (this._currentCodeResource.currentResource.map(c => c.project.projectBlockLanguages));
   }
 
   /**
    * @return The ID of the currently selected language
    */
   @Input()
-  get selectedLanguageModelId() {
+  get selectedBlockLanguageId() {
     return (this.codeResource.blockLanguageIdPeek);
   }
 
   /**
    * Sets the ID of the new language and broadcasts the change.
    */
-  set selectedLanguageModelId(id: string) {
+  set selectedBlockLanguageId(id: string) {
     this.codeResource.setBlockLanguageId(id);
   }
 

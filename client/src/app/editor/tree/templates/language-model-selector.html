@@ -1,6 +1,6 @@
 <select class="form-control custom-select"
-        [(ngModel)]="selectedLanguageModelId">
-  <option *ngFor="let lang of availableLanguageModels"
+        [(ngModel)]="selectedBlockLanguageId">
+  <option *ngFor="let lang of (availableBlockLanguages | async)"
           [value]="lang.id">
     {{ lang.name }} ({{ lang.id }})
   </option>

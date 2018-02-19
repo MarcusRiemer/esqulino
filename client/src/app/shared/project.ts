@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { Observable } from 'rxjs/Observable'
 
 import { LanguageService } from './language.service'
+import { BlockLanguageDescription } from './block/block-language.description'
 
 import { Schema } from './schema/schema'
 import {
@@ -62,6 +63,8 @@ export class Project implements ApiVersion, Saveable {
 
   private _saveRequired = false;
 
+  private _projectBlockLanguages: BlockLanguageDescription[];
+
   /**
    * Construct a new project and a whole slew of other
    * objects based on the JSON wire format.
@@ -79,6 +82,7 @@ export class Project implements ApiVersion, Saveable {
     this._availableDatabases = json.availableDatabases;
     this._projectImageId = json.preview;
     this._sources = json.sources || [] // Sources may be undefined
+    this._projectBlockLanguages = json.blockLanguages;
     this.schema = new Schema(json.schema);
 
     if (json.apiVersion as string != this.apiVersion) {
@@ -224,6 +228,13 @@ export class Project implements ApiVersion, Saveable {
     } else {
       return ([]);
     }
+  }
+
+  /**
+   * @return All block languages that are available as part of this project.
+   */
+  get projectBlockLanguages() {
+    return (this._projectBlockLanguages);
   }
 
   /**
@@ -420,12 +431,16 @@ export class Project implements ApiVersion, Saveable {
   }
 
   /**
-   * @param id The id for a certain languageModel
+   * @param id_or_slug The id or slug for a certain languageModel
    */
-  getLanguageModelById(id: string) {
-    return (this._languageService.getLanguageModel(id));
-  }
+  getBlockLanguage(id_or_slug: string) {
 
+    console.log(`Looking for block language "${id_or_slug}"`, this._projectBlockLanguages);
+
+    const localLanguage = this._projectBlockLanguages.find(l => l.id === id_or_slug || l.slug === id_or_slug);
+
+    return (this._languageService.getLocalBlockLanguage(localLanguage.slug));
+  }
 
   toModel(): ProjectDescription {
     const toReturn: ProjectDescription = {
