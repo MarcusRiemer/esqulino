@@ -113,9 +113,7 @@ RSpec.describe ProjectsController, type: :request do
     end
 
     it 'lists a single public project' do
-      skip "public/private not implemented & returns rails default response"
-      
-      FactoryBot.create(:project, public: true)
+      FactoryBot.create(:project, :public, api_version: "4")
       get "/api/project/"
 
       expect(response).to have_http_status(200)
@@ -123,29 +121,34 @@ RSpec.describe ProjectsController, type: :request do
       json_data = JSON.parse(response.body)
 
       expect(json_data.length).to eq 1
+
       expect(json_data[0]).to validate_against "ProjectListDescription"
     end
 
-    it 'does not list private projects' do
-      skip "public/private not implemented & returns rails default response"
-      
-      FactoryBot.create(:project, public: false)
-      FactoryBot.create(:project, public: true)
-      get "/api/project/"
+    describe 'does not list private projects' do
+      before do
+        FactoryBot.create(:project, :private)
+        FactoryBot.create(:project, api_version: 4, public: true)
+        get "/api/project/"
+        @json_data = JSON.parse(response.body)
+      end
 
-      expect(response).to have_http_status(200)
+      it 'returns 200' do         
+        expect(response).to have_http_status(200)
+        expect(@json_data.length).to eq 1
+      end
 
-      json_data = JSON.parse(response.body)
-
-      expect(json_data.length).to eq 1
-      expect(json_data[0]).to validate_against "ProjectListDescription"
+      it 'validates against json schema' do
+        expect(@json_data[0]).to validate_against "ProjectListDescription"
+      end
     end
   end
+
+
 
   describe 'GET /api/project/:project_id' do
     it 'empty project satisfies the JSON schema' do
       empty_project = FactoryBot.create(:project)
-
       get "/api/project/#{empty_project.slug}"
 
       expect(response).to have_http_status(200)
@@ -164,7 +167,7 @@ RSpec.describe ProjectsController, type: :request do
 
   describe 'DELETE /api/project/:project_id' do
     it 'unauthorized' do
-      skip "not yet implemented"
+      skip "should return 401"
       
       to_delete = FactoryBot.create(:project)
       delete "/api/project/#{to_delete.slug}"
@@ -173,7 +176,7 @@ RSpec.describe ProjectsController, type: :request do
     end
 
     it 'nonexistant' do
-      skip "not yet implemented"
+      pending "should return 400"
       
       delete "/api/project/not_even_a_uuid", headers: auth_headers
 
@@ -181,7 +184,7 @@ RSpec.describe ProjectsController, type: :request do
     end
     
     it 'an empty project' do
-      skip "not yet implemented"
+      pending "should return 204"
       to_delete = FactoryBot.create(:project)
 
       delete "/api/project/#{to_delete.slug}", headers: auth_headers
@@ -191,5 +194,9 @@ RSpec.describe ProjectsController, type: :request do
 
       expect(Project.find_by(slug: to_delete.slug)).not_to exist
     end
+  end
+
+  def uuid
+    SecureRandom.uuid
   end
 end

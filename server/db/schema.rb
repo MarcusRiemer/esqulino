@@ -65,14 +65,14 @@ ActiveRecord::Schema.define(version: 20180219112116) do
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.boolean "public"
+    t.boolean "public", default: true, null: false
     t.uuid "preview"
     t.uuid "index_page_id"
     t.string "active_database"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
-    t.integer "api_version"
+    t.string "api_version"
     t.index ["slug"], name: "index_projects_on_slug"
   end
 

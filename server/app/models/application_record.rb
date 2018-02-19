@@ -14,17 +14,17 @@ class ApplicationRecord < ActiveRecord::Base
   # set of attributes.
   #
   # @return [Hash] All attributes of this model as the client expects it.
-  def to_full_api_response
+  # TODO: Rename to json_response
+  def to_json_api_response
     # Build a hash of all properties that are currently set
     to_return = self.serializable_hash
-                  .delete_if { |k,v| v.nil? }
-
+                  .compact
     # Update the created_at and updated_at fields
     ["created_at", "updated_at"].each do |k|
       to_return[k] = to_return[k].to_s
     end
 
     # All keys should be in "camelCase"
-    to_return.transform_keys! { |k| k.camelize(:lower) }
+    to_return.transform_keys { |k| k.camelize(:lower) }
   end
 end
