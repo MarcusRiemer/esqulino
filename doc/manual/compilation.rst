@@ -15,8 +15,10 @@ I know there are loads of fancy task-runners out there, but a "normal" interface
 
 Most exchange and storage formats are documented using `JSON Schema <http://json-schema.org/>`_. These can be regenerated from the Typescript sources, but as this is quite a fragile process the specification files are also checked in to the repository.
 
-Dependencies
-============
+.. _environment_dependencies:
+
+Environment Dependencies
+========================
 
 At its core the server is a "typical" Ruby on Rails application which relies on the following software:
 
@@ -60,14 +62,17 @@ Running locally
 ---------------
 
 * Ensure you have the "main" dependencies installed (``ruby`` and ``bundle`` for the Server, ``node`` and ``npm`` for the client).
-* ``make install-deps`` will pull all further dependencies that are managed by the respective packet managers.
-* After that, the client needs to be compiled and packaged once: ``make dist`` for a fully optimized version or ``make dist-dev`` for a development version.
+* ``make install-deps`` will pull all further dependencies that are managed by the respective packet managers. If this fails check that your environment meets the requirements: :ref:`environment_dependencies`.
+* After that, the client (and its commandline interface) need to be compiled and packaged once: ``make dist`` for a fully optimized version or ``make dist-dev`` for a development version.
+* Start a PostgreSQL-server that has a user ``esqulino`` who is allowed to create databases.
 * You may now run the server, to do this locally simply use ``make server-run`` and it will spin up a local server instance listening on port ``9292``.
 
 The setup above is helpful to get the whole project running once, but if you want do develop it any further you are better of with the following options:
 
 * Run ``NG_OPTS="--watch" make dist-dev`` in the ``client`` folder. The ``--watch`` option starts a filesystem watcher that rebuilds the client incrementally on any change, which drastically reduces subsequent compile times.
 * Run ``make run-dev`` in the ``server`` folder. This starts Rails in development mode which reloads altered parts of the server before every request.
+
+
 
 Running via Docker
 ------------------
