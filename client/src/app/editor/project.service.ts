@@ -8,10 +8,6 @@ import { Observable } from 'rxjs/Observable'
 import { ServerApiService } from '../shared/serverapi.service'
 import { Project, ProjectDescription } from '../shared/project'
 
-import {
-  Model, Query, QueryResult, QueryRunErrorDescription
-} from '../shared/query/index'
-
 import { CODE_RESOURCES } from '../shared/syntaxtree/examples'
 
 import { LanguageService } from '../shared/language.service'

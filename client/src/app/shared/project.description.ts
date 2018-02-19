@@ -1,6 +1,4 @@
-import * as Model from "./query/description"
 import { TableDescription } from "./schema/schema.description"
-import { PageDescription } from "./page/page.description"
 import { CodeResourceDescription } from './syntaxtree/coderesource.description'
 import {
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
@@ -99,8 +97,6 @@ export interface ProjectDescription extends ProjectListDescription {
   availableDatabases?: { [id: string]: AvailableDatabaseDescription }
   activeDatabase?: string
   sources?: ProjectSourceDescription[]
-  queries?: Model.QueryDescription[]
-  pages?: PageDescription[]
   codeResources?: CodeResourceDescription[]
   blockLanguages?: BlockLanguageDescription[]
 }

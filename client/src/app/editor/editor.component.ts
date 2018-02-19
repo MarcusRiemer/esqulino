@@ -76,21 +76,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * All currently available queries, but possibly an empty list.
-   * Using this property ensures that the template does not throw
-   * any null pointer exceptions.
-   *
-   * @return A possibly empty list of queries
-   */
-  get availableQueries() {
-    if (this._project) {
-      return (this._project.queries);
-    } else {
-      return ([]);
-    }
-  }
-
-  /**
    * @return True, if the sidebar should be visible.
    */
   get isSidebarVisible() {

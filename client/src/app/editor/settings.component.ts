@@ -5,8 +5,6 @@ import { Http, Response, Headers } from '@angular/http'
 import { ProjectService, Project } from './project.service'
 import { SidebarService } from './sidebar.service'
 import { ToolbarService } from './toolbar.service'
-import { QueryService } from './query.service'
-import { PageService } from './page.service'
 import { ServerApiService } from '../shared/serverapi.service'
 
 import { ImageService } from './image/image.service'
@@ -31,8 +29,6 @@ export class SettingsComponent {
    */
   constructor(
     private _projectService: ProjectService,
-    private _queryService: QueryService,
-    private _pageService: PageService,
     private _toolbarService: ToolbarService,
     private _sidebarService: SidebarService,
     private _router: Router,
@@ -85,19 +81,5 @@ export class SettingsComponent {
   ngOnDestroy() {
     this._subscriptionRefs.forEach(ref => ref.unsubscribe());
     this._subscriptionRefs = [];
-  }
-
-  /**
-   * The user has decided to delete a query.
-   */
-  onQueryDelete(queryId: string) {
-    this._queryService.deleteQuery(this.project, queryId);
-  }
-
-  /**
-   * The user has decided to delete a page.
-   */
-  onPageDelete(pageid: string) {
-    this._pageService.deletePage(this.project, pageid);
   }
 }
