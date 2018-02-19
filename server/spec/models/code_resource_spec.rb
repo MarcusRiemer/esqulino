@@ -108,7 +108,7 @@ RSpec.describe CodeResource, type: :model do
           "snake_case" => []
         }
       }
-      
+
       api_response = FactoryBot.create(
         :code_resource,
         ast: ast
@@ -131,6 +131,15 @@ RSpec.describe CodeResource, type: :model do
     res = FactoryBot.build(:code_resource, block_language: nil)
 
     res.validate
+    expect(res.errors[:block_language].length).to be 1
+  end
+
+  it "does not use block languages that are not part of the project" do
+    p = FactoryBot.build(:project)
+    res = FactoryBot.build(:code_resource, project: p)
+    res.block_language = FactoryBot.build(:block_language)
+
+    expect(res.validate).to be false
     expect(res.errors[:block_language].length).to be 1
   end
 end

@@ -51,7 +51,7 @@ class CodeResourcesController < ApplicationController
   # Possible parameters when updating
   def code_resource_update_params
     params
-      .permit(:name, :programmingLanguageId, :ast => {})
+      .permit(:name, :programmingLanguageId, :blockLanguageId, :ast => {})
       .transform_keys { |k| k.underscore }
   end
 end
