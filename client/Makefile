@@ -30,10 +30,10 @@ install-deps : msg-pre-install-deps
 ##################################
 
 dist : msg-pre-build
-	$(NG_BIN) build --prod $(NG_LANG) $(NG_OPTS)
+	$(NG_BIN) build --aot --prod $(NG_LANG) $(NG_OPTS)
 
 dist-dev : msg-pre-build
-	$(NG_BIN) build $(NG_LANG) $(NG_OPTS)
+	$(NG_BIN) build --aot $(NG_LANG) $(NG_OPTS)
 
 test :
 	$(NG_BIN) test --single-run $(TEST_SINGLE_RUN) --browser $(TEST_BROWSERS) --code-coverage true

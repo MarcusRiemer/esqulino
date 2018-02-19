@@ -8,4 +8,6 @@ export GEM_PATH=/srv/esqulino/server/vendor/bundle/ruby/2.5.0
 
 # TODO: Remove PKG_CONFIG_PATH once rmagick works with imagemagick 7
 PKG_CONFIG_PATH=/usr/lib/imagemagick6/pkgconfig make -C server install-deps
-su user -c "make --no-print-directory -C server run-dev"
+
+su user -c "make --no-print-directory -C client cli-compile"
+su user -c "make --no-print-directory -C server setup-database run-dev"

@@ -42,11 +42,11 @@ clean-client :
 # Once these are in place, the client archives are packaged up,
 # ready to be distributed.
 dist :
-	$(SUBDIR_MAKE) client dist
+	$(SUBDIR_MAKE) client dist cli-compile
 
 # One-shot compilation of all things that are required to run esqulino
 dist-dev :
-	$(SUBDIR_MAKE) client dist-dev
+	$(SUBDIR_MAKE) client dist-dev cli-compile
 	$(SUBDIR_MAKE) schema/json all
 
 # Reverts the test project to the most recent state in git

@@ -3,7 +3,7 @@
 
 include ../Makefile.common
 
-RAILS_ENV ?= test
+RAILS_ENV ?= development
 
 # Install ruby dependencies
 install-deps : msg-pre-install-deps
@@ -21,9 +21,11 @@ run : msg-pre-run-prod
 run-dev : msg-pre-run-dev
 	./bin/rails server -b 0.0.0.0 --port 9292
 
+setup-database:
+	./bin/rails db:setup RAILS_ENV=$(RAILS_ENV)
+
 # Running tests
 test : msg-pre-run-test
-	./bin/rails db:setup RAILS_ENV=$(RAILS_ENV)
 	./bin/rails test
 	./bin/rails spec
 
