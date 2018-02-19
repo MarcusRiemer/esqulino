@@ -1,6 +1,3 @@
-import { Model } from "./query"
-import { TableDescription } from "./schema"
-import { PageDescription } from "./page/page.description"
 import {
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from "./resource.description"

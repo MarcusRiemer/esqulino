@@ -5,17 +5,12 @@ import { Observable } from 'rxjs/Observable'
 import { LanguageService } from './language.service'
 import { BlockLanguageDescription } from './block/block-language.description'
 
-import { Schema } from './schema/schema'
-import {
-  Invalidateable, Saveable, SaveStateEvent
-} from './interfaces'
-import { Query, Model, loadQuery } from './query'
 import {
   ProjectDescription, AvailableDatabaseDescription, ProjectSourceDescription,
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from './project.description'
-
-import { Page } from './page/page'
+import { Schema } from './schema/schema'
+import { Invalidateable, Saveable, SaveStateEvent } from './interfaces'
 import { CodeResource } from './syntaxtree'
 
 export { ProjectDescription }
@@ -51,8 +46,6 @@ export class Project implements ApiVersion, Saveable {
   private _currentDatabase: string;
   private _availableDatabases: { [id: string]: AvailableDatabaseDescription };
 
-  private _queries: Query[];
-  private _pages: Page[];
   private _codeResources: CodeResource[];
 
   private _indexPageId: string;
@@ -90,12 +83,6 @@ export class Project implements ApiVersion, Saveable {
     }
 
     // Map all descriptions to their concrete objects
-    this._queries = (json.queries || [])
-      .map(val => loadQuery(val, this.schema, this))
-      .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
-    this._pages = (json.pages || [])
-      .map(val => new Page(val, this))
-      .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
     this._codeResources = (json.codeResources || [])
       .map(val => new CodeResource(val, this))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
@@ -238,20 +225,6 @@ export class Project implements ApiVersion, Saveable {
   }
 
   /**
-   * @return All available queries, no order guaranteed.
-   */
-  get queries() {
-    return (this._queries);
-  }
-
-  /**
-   * @return All available pages, no order guaranteed.
-   */
-  get pages() {
-    return (this._pages);
-  }
-
-  /**
    * @return All available code resources, no order guaranteed.
    */
   get codeResources() {
@@ -287,132 +260,6 @@ export class Project implements ApiVersion, Saveable {
     if (this._projectImageId != newId) {
       this._projectImageId = newId;
       this.markSaveRequired();
-    }
-  }
-
-  /**
-   * Retrieves queries by ID. If any ID does not match exactly
-   * one query an exception is thrown.
-   *
-   * @param ids The requested IDs
-   *
-   * @return One query for each of the given IDs.
-   */
-  getQueriesById(ids: string[]): Query[] {
-    const toReturn = this._queries.filter(q => ids.some(id => q.id === id));
-
-    if (toReturn.length != ids.length) {
-      throw new Error(`Found ${toReturn.length} elements, expected ${ids.length}`);
-    }
-
-    return (toReturn);
-  }
-
-  /**
-   * @return A single query identified by it's ID
-   */
-  getQueryById(id: string): Query {
-    return (this._queries.find(item => (item.id == id)));
-  }
-
-  /**
-   * @return True, if a query with the given name is part of this project.
-   */
-  hasQueryByName(name: string): boolean {
-    return (this._queries.some(query => query.name == name));
-  }
-
-  /**
-   * @return True, if a query with the given id is part of this project.
-   */
-  hasQueryById(id: string): boolean {
-    return (this._queries.some(query => query.id == id));
-  }
-
-  /**
-   * Adds a new query to this project.
-   *
-   * @param query The query to add.
-   */
-  addQuery(query: Query) {
-    this._queries.push(query);
-    this._queries.sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
-  }
-
-  /**
-   * @param id A single query identified by it's ID
-   */
-  removeQueryById(id: string) {
-    const index = this._queries.findIndex(q => q.id === id);
-
-    // Remove at index
-    if (index >= 0) {
-      this.queries.splice(index, 1);
-    } else {
-      throw new Error(`Could not remove query with unknown id "${id}"`);
-    }
-  }
-
-  /**
-   * @return A single page identified by it's ID
-   */
-  getPageById(id: string): Page {
-    return (this._pages.find(item => (item.id == id)));
-  }
-
-  /**
-   * @return True, if a page with this ID is part of this project.
-   */
-  hasPageById(id: string): boolean {
-    return (this._pages.some(item => (item.id == id)));
-  }
-
-  /**
-   * @return True, if the given page id is part of this project.
-   */
-  hasPage(id: string): boolean {
-    return (this._pages.some(page => page.id == id));
-  }
-
-  /**
-   * @return True, if a page with the given name is part of this project.
-   */
-  hasPageByName(name: string): boolean {
-    return (this._pages.some(page => page.name == name));
-  }
-
-  /**
-   * Adds a new page to this project.
-   *
-   * @param page The page to add.
-   */
-  addPage(page: Page) {
-    this._pages.push(page);
-
-    // Is this the only page?
-    if (this._pages.length == 1) {
-      // Then it's the start page
-      this._indexPageId = page.id;
-    }
-
-    this._pages.sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
-  }
-
-  /**
-   * @param id A single page identified by it's ID
-   */
-  removePageById(id: string) {
-    const index = this._pages.findIndex(p => p.id === id);
-
-    // Remove at index
-    if (index >= 0) {
-      this._pages.splice(index, 1);
-    }
-
-    // Was this the last page or the index page?
-    if (this._pages.length == 0 || this._indexPageId == id) {
-      // Then there is no start page anymore
-      this._indexPageId = undefined;
     }
   }
 

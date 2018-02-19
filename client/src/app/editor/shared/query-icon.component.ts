@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core'
 
-import { Query } from '../../shared/query'
+// TODO CLEANUP: Use actual query class
+type Query = any
 
 /**
  * Renders a matching icon for a query.

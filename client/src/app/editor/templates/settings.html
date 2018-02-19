@@ -93,29 +93,6 @@
         </div>
       </div>
 
-      <!-- Selecting a index page -->
-      <div *ngIf="project?.pages.length > 0"
-           class="form-group row">
-        <label for="project-index-page"
-               class="col-sm-2 form-control-label">
-          Startseite
-        </label>
-        <div class="col-sm-10">
-          <select [(ngModel)]="project.indexPageId"
-                  id="project-index-page"
-                  class="form-control custom-select">
-            <option *ngFor="let page of project?.pages"
-                    [value]="page.id">
-              {{page.name}}
-            </option>
-          </select>
-
-          <small class="text-muted">
-            Diese Seite wird der Benutzer sehen, wenn er dein Projekt zum ersten Mal besucht.
-          </small>
-        </div>
-      </div>
-
       <!-- Selecting a project Image -->
       <div class="form-group row">
         <label for="project-image"
@@ -151,90 +128,6 @@
         <div class="col-sm-8">
           {{ source.display }}
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-12 col-lg-6">
-      <div class="card"
-           [class.card-info]="project?.queries?.length == 0">
-        <div *ngIf="project?.queries?.length > 0"
-             class="card-header">
-          Abfragen
-        </div>
-        <div *ngIf="project?.queries?.length == 0"
-             class="card-body">
-          <p>
-            <strong>Dein Projekt hat noch keine Abfragen!</strong>
-            Schau dir am Besten mal das Schema an und überlege dir, welche Daten Besucher wohl interessieren würden.
-          </p>
-
-          <a [routerLink]="['/editor', project.slug , 'query', 'create']"
-             class="btn btn-primary">
-            <span class="fa fa-plus fa-fw"></span>
-            Abfrage erstellen
-          </a>
-        </div>
-        <ul id="project-queries"
-            class="list-group list-group-flush">
-          <li *ngFor="let query of project?.queries"
-              class="list-group-item">
-            <div class="input-group">
-              <input [(ngModel)]="query.name"
-                     name="query-{{query.id}}"
-                     class="form-control"
-                     type="text">
-              <span class="input-group-btn">
-                <button (click)="onQueryDelete(query.id)"
-                        class="btn btn-warning pull-right">
-                  <span class="fa fa-trash"></span>
-                </button>
-              </span>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="col-md-12 col-lg-6">
-      <div class="card"
-           [class.card-info]="project?.pages?.length == 0">
-        <div *ngIf="project?.pages?.length > 0"
-             class="card-header">
-          Seiten
-        </div>
-        <div *ngIf="project?.pages?.length == 0"
-             class="card-body">
-          <p>
-            <strong>Momentan ist dein Projekt für normale Besucher noch nicht sichtbar!</strong>
-            Erstelle eine Startseite, wenn du dieses Projekt gerne mit deinen Bekannten teilen möchtest.
-          </p>
-
-          <a [routerLink]="['/editor', project.slug , 'page', 'create']"
-             class="btn btn-primary">
-            <span class="fa fa-plus fa-fw"></span>
-            Startseite erstellen
-          </a>
-        </div>
-        <ul id="project-pages"
-            class="list-group list-group-flush">
-          <li *ngFor="let page of project?.pages"
-              class="list-group-item">
-            <div class="input-group">
-              <input [(ngModel)]="page.name"
-                     name="page-{{page.id}}"
-                     class="form-control"
-                     type="text">
-              <span class="input-group-btn">
-                <button (click)="onPageDelete(page.id)"
-                        class="btn btn-warning pull-right">
-                  <span class="fa fa-trash"></span>
-                </button>
-              </span>
-            </div>
-          </li>
-        </ul>
       </div>
     </div>
   </div>

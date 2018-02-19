@@ -5,8 +5,6 @@ import { FormsModule } from '@angular/forms'
 import { SharedAppModule } from '../shared/shared.module'
 
 import { SharedEditorModule } from './shared/shared.module'
-import { PageEditorModule } from './page/page-editor.module'
-import { QueryEditorModule } from './query/editor.module'
 import { SchemaEditorModule } from './schema/schema.module'
 import { ImageEditorModule } from './image/image.module'
 import { SyntaxTreeEditorModule } from './tree/tree.module'
@@ -18,7 +16,6 @@ import { editorRouting } from './editor.routes'
 
 import { ProjectExistsGuard } from './project-exists.guard'
 
-import { PageService } from './page.service'
 import { CodeResourceService } from './coderesource.service'
 import { DragService } from './drag.service'
 import { ProjectService, Project } from './project.service'
@@ -28,7 +25,6 @@ import { NavbarComponent } from './navbar.component'
 import { SidebarLoaderComponent } from './sidebar-loader.component'
 import { SidebarService } from './sidebar.service'
 import { PreferencesService } from './preferences.service'
-import { QueryService } from './query.service'
 import { RegistrationService } from './registration.service'
 import { SettingsComponent } from './settings.component'
 
@@ -41,8 +37,6 @@ import { SettingsComponent } from './settings.component'
 
     ImageEditorModule.forRoot(),
     SharedEditorModule.forRoot(),
-    PageEditorModule.forRoot(),
-    QueryEditorModule.forRoot(),
     SchemaEditorModule.forRoot(),
     SyntaxTreeEditorModule.forRoot(),
   ],
@@ -58,18 +52,14 @@ import { SettingsComponent } from './settings.component'
     DragService as any,
     SidebarService,
     RegistrationService,
-    PageService,
     PreferencesService,
     ProjectService,
     ProjectExistsGuard,
-    QueryService,
     ToolbarService,
     CurrentCodeResourceService,
   ],
   exports: [
     SharedEditorModule,
-    QueryEditorModule,
-    PageEditorModule,
     EditorComponent,
     SettingsComponent,
     SchemaEditorModule,

@@ -1,15 +1,6 @@
 import { Component, Input } from '@angular/core'
 
-import {
-  Query
-} from '../shared/query'
-import {
-  Page, QueryReference, QueryReferenceDescription
-} from '../shared/page/page'
-
 import { Project } from './project.service'
-
-import { DragService } from './page/drag.service'
 
 @Component({
   templateUrl: 'templates/navbar.html',
@@ -21,40 +12,12 @@ export class NavbarComponent {
    */
   @Input() project: Project;
 
-  constructor(private _pageDragService: DragService) {
-
-  }
-
   /**
    * @return The name of the database that is currently in use
    */
   get currentDatabaseName() {
     if (this.project) {
       return (this.project.currentDatabaseName);
-    }
-  }
-
-  /**
-   * Starts dragging around a query.
-   */
-  startQueryDrag(evt: DragEvent, query: Query) {
-    this._pageDragService.startQueryRefDrag(evt, "sidebar", {
-      type: "query",
-      name: query.name,
-      queryId: query.id,
-    });
-  }
-
-  /**
-   * @param page The page that needs an icon.
-   *
-   * @return A Font Awesome CSS icon class
-   */
-  iconForPage(page: Page) {
-    if (page.id === this.project.indexPageId) {
-      return ("fa-star-o");
-    } else {
-      return ("fa-file-text-o");
     }
   }
 }
