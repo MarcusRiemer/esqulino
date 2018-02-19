@@ -12,11 +12,15 @@ class Project < ApplicationRecord
   validates :name, presence: true
   # Slug may not be empty
   validates :slug, presence: true
+
+  # Projects that are publicly available
+  scope :only_public, -> { where(public: true) }
   # A project with all associated resources that are required for
   # immediate display on the client.
   scope :full, -> { includes(:project_sources, :code_resources, :block_languages) }
-  # scope to filter records which are only public
-  scope :only_public, -> { where(public: true) }
+  # A project with all associated resources that are used by **only** this
+  # project and no other project.
+  scope :with_exclusive, -> { includes(:project_sources, :code_resources, :block_languages) }
 
   # Packs the project and all of its dependencies into a big blob of data. This blob
   # is meant to be fully self contained as we expect projects to be fairly small in the
@@ -65,12 +69,16 @@ class Project < ApplicationRecord
 
     return !schema(database_id).detect{|table| table.name.eql? table_name}.nil?
   end
-
   
   # Rails uses this method to dynamically determine the name of the attribute
   # that should be used when searching for this entity. As projects are identified
   # via their slugs in visible places (e.g. URLs) we tell rails to search for slugs.
   def to_param
     slug
+  end
+
+  # Returns a nicely readable representation of id, slug and name
+  def readable_identification
+    "\"#{name}\" (#{slug}, #{id})"
   end
 end
