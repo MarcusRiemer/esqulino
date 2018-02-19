@@ -1,0 +1,5 @@
+<h1>Error <%= @exception.code %>: <%= @exception.message %></h1>
+<p>
+  If you are a <b>normal user</b>: There is nothing you can do about this error. Please contact your administrator at "<%= mail_to @admin_mail %>" and include the following information:
+</p>
+<pre><code><%= JSON.pretty_generate(@exception.to_liquid) %></code></pre>
