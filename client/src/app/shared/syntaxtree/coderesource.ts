@@ -35,7 +35,7 @@ export class CodeResource extends ProjectResource {
 
     this._tree.next(new Tree(desc.ast));
     this._programmingLanguageId.next(desc.programmingLanguageId);
-    this._blockLanguageId.next("sql"); // TODO: Use actual value from response ...
+    this._blockLanguageId.next(desc.blockLanguageId);
   }
 
   /**
@@ -70,7 +70,7 @@ export class CodeResource extends ProjectResource {
    * @return The language that is currently in use
    */
   get blockLanguage() {
-    return (this._blockLanguageId.map(l => this.project.getLanguageModelById(l)));
+    return (this._blockLanguageId.map(l => this.project.getBlockLanguage(l)));
   }
 
   /**
@@ -96,7 +96,7 @@ export class CodeResource extends ProjectResource {
   }
 
   get blockLanguagePeek() {
-    return (this.project.getLanguageModelById(this.blockLanguageIdPeek));
+    return (this.project.getBlockLanguage(this.blockLanguageIdPeek));
   }
 
   /**
