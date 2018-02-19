@@ -9,9 +9,9 @@ require 'sqlite3'
 def sqlite_open_augmented(sqlite_file_path, options = {})
   db = SQLite3::Database.open(sqlite_file_path, options)
 
-  #Muss in der Datei stehen wo es auch ausgelöst werden kann?????
+  # Define the regular expressions using ruby
   db.create_function('regexp', 2) do |func, pattern, expression|
-    unless expression.nil? #expression.to_s.empty?
+    unless expression.nil?
       func.result = expression.to_s.match(
         Regexp.new(pattern.to_s, Regexp::IGNORECASE)) ? 1 : 0
     else

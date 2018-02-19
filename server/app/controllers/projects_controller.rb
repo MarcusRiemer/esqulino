@@ -20,7 +20,7 @@ class ProjectsController < ApplicationController
     # If that worked ...
     if project.save
       # ... create the directoy layout
-      Builders::ProjectUtility.new(id: project.id, db_type: 'sqlite3').generate!
+      Processes::project_create!(project)
       render json: { 'id' => project.slug }, :status => 200
     else
       # ... otherwise tell the user where he went wrong

@@ -9,7 +9,6 @@ RSpec.describe ProjectsController, type: :request do
 
     describe 'valid request' do
       it 'creates a project' do
-        skip "public/private not implemented"
         post '/api/project', params: {"name" => "Some project", "slug" => "test" }
 
         expect(response.status).to eq(200)
@@ -18,6 +17,8 @@ RSpec.describe ProjectsController, type: :request do
         created_project = Project.find_by(slug: "test")
         expect(created_project.name).to eq "Some project"
         expect(created_project.slug).to eq "test"
+
+        skip "Projects should not be public by default"
         expect(created_project.public).to eq false
       end
 

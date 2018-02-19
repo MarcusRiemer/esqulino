@@ -17,15 +17,12 @@ class Project < ApplicationRecord
   scope :full, -> { includes(:project_sources, :code_resources, :block_languages) }
   # scope to filter records which are only public
   scope :only_public, -> { where(public: true) }
-  # TODO: need to know, do we really need this?
-  # Filter records if preview is null
-  # Where.not fully qualify for the column name with the table name, so will
-  # continue working with complex relations and used as (NOT IN)
-  # default_scope { where.not(preview: nil) }
-  # Computes a hash that may be sent back to the client
-  def to_full_api_response
-    to_list_api_response
 
+  # Packs the project and all of its dependencies into a big blob of data. This blob
+  # is meant to be fully self contained as we expect projects to be fairly small in the
+  # average case. We may need to rethink this approach if individual projects turn out
+  # to be too big.
+  def to_full_api_response
     to_return = to_json_api_response
     
     to_return['schema'] = []
@@ -38,9 +35,38 @@ class Project < ApplicationRecord
     to_return
   end
 
+  # Hands out just enough data about this project to allow a nice listing of available
+  # projects in the client.
   def to_list_api_response
     to_json_api_response
   end
+
+  # The folder that should contain all assets that are part of this directory.
+  def data_directory_path
+    File.join(Rails.application.config.sqlino[:projects_dir], id)
+  end
+
+  # Retrieves the path to a SQLite database with a specific ID.
+  def sqlite_file_path(db_id)
+    File.join(data_directory_path, "databases", "#{db_id}.sqlite")
+  end
+
+  # TODO: This shouldn't be part of this class but possibly of a helper?
+  #
+  # Determines whether the given name of the table is part of the given database?
+  #
+  # @param table_name [string] The name of the table in question
+  # @param database_id [string] The ID of the schema to search in
+  # @return [Boolean] True if the given table_name is part of the database_schema
+  def has_table(table_name, database_id = nil)
+    database_id = database_id || "default"
+
+    schema = database_describe_schema(self.sqlite_file_path database_id)
+
+    return !schema(database_id).detect{|table| table.name.eql? table_name}.nil?
+  end
+
+  
   # Rails uses this method to dynamically determine the name of the attribute
   # that should be used when searching for this entity. As projects are identified
   # via their slugs in visible places (e.g. URLs) we tell rails to search for slugs.
