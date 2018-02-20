@@ -2,6 +2,7 @@ require 'test_helper'
 
 class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
   test 'db-sequence visual schema (running graphviz)' do
+    skip
     get '/api/project/db-sequence/db/default/visual_schema'
     assert_response :success
     assert_equal "image/svg+xml", @response.content_type
@@ -12,6 +13,7 @@ class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'db-sequence visual schema (without running graphviz)' do
+    skip
     get '/api/project/db-sequence/db/default/visual_schema?format=graphviz'
     assert_response :success
     assert_equal "text", @response.content_type
@@ -77,6 +79,8 @@ class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'db-sequence adding column to key_value' do
+    skip
+    
     commands = {
       "commands" => [
         {
