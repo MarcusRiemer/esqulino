@@ -1,0 +1,38 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 5c8569ae-f318-4e07-8766-6e5902e066d7
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: select-test
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 87af64f2-5cff-42b2-9b8e-691404b2b709
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
+    "from", "children": {"tables": [{"name": "tableIntroduction", "language": "sql",
+    "properties": {"name": "foo"}}]}, "language": "sql"}], "where": [], "select":
+    [{"name": "select", "children": {"columns": [{"name": "columnName", "language":
+    "sql", "properties": {"columnName": "id", "refTableName": "foo"}}]}, "language":
+    "sql"}]}, "language": "sql"}'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-02-20 20:48:21.830298'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-02-20 20:48:21.830298'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: db441c27-6a19-4f2f-95a9-f3bc44675b4f
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: sql
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    SELECT foo.id
+    FROM foo
+new_record: false
+active_record_yaml_version: 2

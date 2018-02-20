@@ -1,0 +1,29 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 5c8569ae-f318-4e07-8766-6e5902e066d7
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: xml-test
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 119cf126-994f-4048-9f8b-ddf9585a78aa
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: ast
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-02-20 20:48:21.746755'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-02-20 20:48:21.746755'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 84ece7cd-8824-4310-a1db-917c29c904c9
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: dxml-eruby
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: compiled
+new_record: false
+active_record_yaml_version: 2

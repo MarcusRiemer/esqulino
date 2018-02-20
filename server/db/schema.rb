@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180219112116) do
+ActiveRecord::Schema.define(version: 20180220195226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,13 +24,6 @@ ActiveRecord::Schema.define(version: 20180219112116) do
     t.datetime "updated_at", null: false
     t.string "slug"
     t.index ["slug"], name: "index_block_languages_on_slug", unique: true
-  end
-
-  create_table "block_languages_projects", id: false, force: :cascade do |t|
-    t.uuid "block_language_id"
-    t.uuid "project_id"
-    t.index ["block_language_id"], name: "index_block_languages_projects_on_block_language_id"
-    t.index ["project_id"], name: "index_block_languages_projects_on_project_id"
   end
 
   create_table "code_resources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -62,6 +55,14 @@ ActiveRecord::Schema.define(version: 20180219112116) do
     t.index ["project_id"], name: "index_project_sources_on_project_id"
   end
 
+  create_table "project_uses_block_languages", id: false, force: :cascade do |t|
+    t.uuid "block_language_id"
+    t.uuid "project_id"
+    t.index ["block_language_id"], name: "index_project_uses_block_languages_on_block_language_id"
+    t.index ["project_id", "block_language_id"], name: "block_languages_projects_unique", unique: true
+    t.index ["project_id"], name: "index_project_uses_block_languages_on_project_id"
+  end
+
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -76,10 +77,10 @@ ActiveRecord::Schema.define(version: 20180219112116) do
     t.index ["slug"], name: "index_projects_on_slug"
   end
 
-  add_foreign_key "block_languages_projects", "block_languages"
-  add_foreign_key "block_languages_projects", "projects"
   add_foreign_key "code_resources", "block_languages"
   add_foreign_key "code_resources", "programming_languages"
   add_foreign_key "code_resources", "projects"
   add_foreign_key "project_sources", "projects"
+  add_foreign_key "project_uses_block_languages", "block_languages"
+  add_foreign_key "project_uses_block_languages", "projects"
 end

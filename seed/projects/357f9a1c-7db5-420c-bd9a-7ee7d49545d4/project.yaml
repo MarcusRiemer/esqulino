@@ -1,0 +1,37 @@
+--- !ruby/object:Project
+concise_attributes:
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 357f9a1c-7db5-420c-bd9a-7ee7d49545d4
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Ereignisse
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: events
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: Historische Ereignisse & Personen mit ihren jeweiligen zeitlichen
+    Daten. Welcher Wissenschaftler hat eigentlich zu Zeiten der ersten olympischen
+    Spiele gelebt?
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: public
+  value_before_type_cast: true
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: preview
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: index_page_id
+  value_before_type_cast: f04bca19-cecd-4996-96a8-0749b4f25311
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: active_database
+  value_before_type_cast: default
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-02-20 20:48:21.693124'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-02-20 20:48:21.693124'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: api_version
+new_record: false
+active_record_yaml_version: 2
