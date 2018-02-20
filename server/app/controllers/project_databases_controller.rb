@@ -98,85 +98,85 @@ class ProjectDatabasesController < ApplicationController
   end
 
 
-  # # Retrieves the actual data for a number of rows in a certain table
-  # def table_row_data
-  #   requested_table = params['tablename']
-  #   database_id = params['database_id']
+  # Retrieves the actual data for a number of rows in a certain table
+  def table_row_data
+    requested_table = params['tablename']
+    database_id = params['database_id']
 
-  #   if(self.current_project.has_table requested_table, database_id)
-  #     result = self.current_project.execute_sql(
-  #       "SELECT * FROM #{requested_table} LIMIT ? OFFSET ?",
-  #       [params['amount'].to_i, params['from'].to_i],
-  #       database_id
-  #     )
-  #     render :json => result['rows']
-  #   else
-  #     render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
-  #   end
-  # end
+    if(self.current_project.has_table requested_table, database_id)
+      result = self.current_project.execute_sql(
+        "SELECT * FROM #{requested_table} LIMIT ? OFFSET ?",
+        [params['amount'].to_i, params['from'].to_i],
+        database_id
+      )
+      render :json => result['rows']
+    else
+      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
+    end
+  end
 
-  # # Retrieves the number of rows in a certain table
-  # def table_row_count
-  #   requested_table = params['tablename']
-  #   database_id = params['database_id']
+  # Retrieves the number of rows in a certain table
+  def table_row_count
+    requested_table = params['tablename']
+    database_id = params['database_id']
 
-  #   if(self.current_project.has_table requested_table, database_id)
-  #     result = self.current_project.execute_sql("SELECT COUNT(*) FROM #{requested_table}", [], database_id)
-  #     render :json => result['rows'].first
-  #   else
-  #     render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
-  #   end
-  # end
+    if(self.current_project.has_table requested_table, database_id)
+      result = self.current_project.execute_sql("SELECT COUNT(*) FROM #{requested_table}", [], database_id)
+      render :json => result['rows'].first
+    else
+      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
+    end
+  end
 
-  # # Alters a certain table of a database
-  # def table_alter
-  #   ensure_write_access do
-  #     project_slug = params['project_id']
-  #     database_id = params['database_id']
+  # Alters a certain table of a database
+  def table_alter
+    ensure_write_access do
+      project_slug = params['project_id']
+      database_id = params['database_id']
       
-  #     current_project = Project.find_by(slug: project_slug)
-  #     sqlite_file_path = current_project.file_path_sqlite_from_id(database_id)
+      current_project = Project.find_by(slug: project_slug)
+      sqlite_file_path = current_project.file_path_sqlite_from_id(database_id)
 
-  #     if(self.current_project.has_table(requested_table)) then
-  #       alter_schema_request = JSON.parse request.body.read
-  #       commandHolder = alter_schema_request['commands']
-  #       error, index, errorCode, errorBody = database_alter_schema(
-  #                                  sqlite_file_path,
-  #                                  requested_table,
-  #                                  commandHolder
-  #                                )
-  #       if(error)
-  #         render(:status => 500, :json => {
-  #                  :index => index.to_s,
-  #                  :errorCode => errorCode.to_s,
-  #                  :errorBody => errorBody
-  #                })
-  #       else
-  #         result_schema = database_describe_schema(sqlite_file_path)
-  #         render :json => { :schema => result_schema }
-  #       end
-  #     else
-  #       render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
-  #     end
-  #   end
-  # end
+      if(self.current_project.has_table(requested_table)) then
+        alter_schema_request = JSON.parse request.body.read
+        commandHolder = alter_schema_request['commands']
+        error, index, errorCode, errorBody = database_alter_schema(
+                                   sqlite_file_path,
+                                   requested_table,
+                                   commandHolder
+                                 )
+        if(error)
+          render(:status => 500, :json => {
+                   :index => index.to_s,
+                   :errorCode => errorCode.to_s,
+                   :errorBody => errorBody
+                 })
+        else
+          result_schema = database_describe_schema(sqlite_file_path)
+          render :json => { :schema => result_schema }
+        end
+      else
+        render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
+      end
+    end
+  end
 
-  # # Drops a single table of the given database.
-  # def table_delete
-  #   ensure_write_access do
-  #     table_name = params['tablename']
-  #     database_id = params['database_id']
+  # Drops a single table of the given database.
+  def table_delete
+    ensure_write_access do
+      table_name = params['tablename']
+      database_id = params['database_id']
 
-  #     if(self.current_project.has_table table_name) then
-  #       error, msg = remove_table(self.current_project.file_path_sqlite_from_id(database_id), table_name)
-  #       if(error == 0) then
-  #         render :status => 200
-  #       else
-  #         render :status => 500, :json => {:errorBody => msg}
-  #       end
-  #     else
-  #       render :plain => "Unknown table \"#{table_name}\"", :status => :not_found
-  #     end
-  #   end
-  # end
+      if(self.current_project.has_table table_name) then
+        error, msg = remove_table(self.current_project.file_path_sqlite_from_id(database_id), table_name)
+        if(error == 0) then
+          render :status => 200
+        else
+          render :status => 500, :json => {:errorBody => msg}
+        end
+      else
+        render :plain => "Unknown table \"#{table_name}\"", :status => :not_found
+      end
+    end
+  end
 end
