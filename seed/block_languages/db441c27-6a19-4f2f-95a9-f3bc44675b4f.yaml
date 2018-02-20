@@ -1,0 +1,25 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: SQL
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: sql
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: db441c27-6a19-4f2f-95a9-f3bc44675b4f
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: family
+  value_before_type_cast: sql
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"sidebars": [], "editorBlocks": []}'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-02-20 20:48:21.609835'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-02-20 20:48:21.609835'
+new_record: false
+active_record_yaml_version: 2

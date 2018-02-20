@@ -3,9 +3,10 @@
 # (using databases and HTML), but this is not set in stone.
 class Project < ApplicationRecord
 
-  has_many :project_sources, dependent: :destroy
+  has_many :project_sources, :dependent => :destroy
   has_many :code_resources
-  has_and_belongs_to_many :block_languages
+  has_many :project_uses_block_languages
+  has_many :block_languages, :through => :project_uses_block_languages
 
   validates :slug, uniqueness: true
   # Name may not be empty
@@ -70,13 +71,6 @@ class Project < ApplicationRecord
     return !schema(database_id).detect{|table| table.name.eql? table_name}.nil?
   end
   
-  # Rails uses this method to dynamically determine the name of the attribute
-  # that should be used when searching for this entity. As projects are identified
-  # via their slugs in visible places (e.g. URLs) we tell rails to search for slugs.
-  def to_param
-    slug
-  end
-
   # Returns a nicely readable representation of id, slug and name
   def readable_identification
     "\"#{name}\" (#{slug}, #{id})"
