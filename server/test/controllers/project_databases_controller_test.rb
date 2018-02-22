@@ -20,6 +20,7 @@ class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'db-sequence rowcount on default database' do
+    skip
     get '/api/project/db-sequence/db/default/count/key_value'
     assert_response :success
     assert_equal "application/json", @response.content_type
@@ -29,6 +30,7 @@ class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'db-sequence first row of default database' do
+    skip
     get '/api/project/db-sequence/db/default/rows/key_value/0/1'
     assert_response :success
     assert_equal "application/json", @response.content_type
@@ -38,6 +40,7 @@ class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'db-sequence second row of default database' do
+    skip
     get '/api/project/db-sequence/db/default/rows/key_value/1/1'
     assert_response :success
     assert_equal "application/json", @response.content_type
@@ -47,6 +50,7 @@ class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'db-sequence rowcount on english database' do
+    skip
     get '/api/project/db-sequence/db/with_english/count/english_numbers'
     assert_response :success
     assert_equal "application/json", @response.content_type
@@ -56,6 +60,7 @@ class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'db-sequence first row of english database' do
+    skip
     get '/api/project/db-sequence/db/with_english/rows/english_numbers/0/1'
     assert_response :success
     assert_equal "application/json", @response.content_type
@@ -65,6 +70,7 @@ class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'db-sequence second row of english database' do
+    skip
     get '/api/project/db-sequence/db/with_english/rows/english_numbers/1/1'
     assert_response :success
     assert_equal "application/json", @response.content_type
@@ -74,6 +80,7 @@ class ProjectDatabasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'db-sequence rowcount for unknown table' do
+    skip
     get '/api/project/db-sequence/db/default/count/foobar'
     assert_response :not_found
   end
