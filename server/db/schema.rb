@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180220195226) do
+ActiveRecord::Schema.define(version: 20180222142045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,15 @@ ActiveRecord::Schema.define(version: 20180220195226) do
     t.string "name", null: false
   end
 
+  create_table "project_databases", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "project_id"
+    t.jsonb "schema"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_project_databases_on_project_id"
+  end
+
   create_table "project_sources", force: :cascade do |t|
     t.uuid "project_id", null: false
     t.string "url"
@@ -69,18 +78,20 @@ ActiveRecord::Schema.define(version: 20180220195226) do
     t.boolean "public", default: true, null: false
     t.uuid "preview"
     t.uuid "index_page_id"
-    t.string "active_database"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
     t.string "api_version"
+    t.uuid "default_database_id"
     t.index ["slug"], name: "index_projects_on_slug"
   end
 
   add_foreign_key "code_resources", "block_languages"
   add_foreign_key "code_resources", "programming_languages"
   add_foreign_key "code_resources", "projects"
+  add_foreign_key "project_databases", "projects"
   add_foreign_key "project_sources", "projects"
   add_foreign_key "project_uses_block_languages", "block_languages"
   add_foreign_key "project_uses_block_languages", "projects"
+  add_foreign_key "projects", "project_databases", column: "default_database_id"
 end

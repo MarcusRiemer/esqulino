@@ -1,3 +1,4 @@
+require_dependency 'project_database' # Rails won't autoload this class properly
 require_dependency 'project_source' # Rails won't autoload this class properly
 require_dependency 'project_uses_block_language' # Rails won't autoload this class properly
 
@@ -81,6 +82,20 @@ class SeedManager
   end
 
   # The general directory for block languages
+  #
+  # @param project_id [UUID] The id of the parent project
+  def seed_project_databases_dir(project_id)
+    File.join seed_projects_dir(project_id), "databases"
+  end
+
+  # The general directory for block languages
+  #
+  # @param project_id [UUID] The id of the parent project
+  def seed_project_databases_file(project_id, database_id)
+    File.join seed_project_databases_dir(project_id), "#{database_id}.yaml"
+  end
+
+  # The general directory for block languages
   def seed_block_languages_dir
     File.join seed_data_dir, "block_languages"
   end
@@ -122,6 +137,21 @@ class SeedManager
     available_seed_project_source_files(p.id).each do |s|
       seed_instance(YAML.load_file(s), ProjectSource, 1)
     end
+
+    # And all of its databases
+    available_seed_project_used_database_files(p.id).each do |db_yaml|
+      db = seed_instance(YAML.load_file(db_yaml), ProjectSource, 1)
+
+      # Ensure there is a target folder
+      database_target_folder = File.join(p.data_directory_path, "databases")
+      FileUtils.mkdir_p database_target_folder
+      
+      # Copy over the actual data, it MUST reside alongside the YAML
+      # file and may only have a differing extension
+      sqlite_filename = Pathname(db_yaml).sub_ext('.sqlite')
+      
+      FileUtils.cp sqlite_filename, database_target_folder
+    end
   end
 
   # Stores a specific project with all of its dependencies
@@ -137,7 +167,6 @@ class SeedManager
           slug_or_id = project_slug_or_id
           Project.with_exclusive.where(id: slug_or_id).or(Project.with_exclusive.where(slug: slug_or_id)).first
         end
-
 
     # Storing the actual project itself
     puts "Storing project #{p.readable_identification} ..."
@@ -171,6 +200,18 @@ class SeedManager
       File.open(seed_project_sources_file(p.id, s.id), 'w') do |file|
         YAML::dump(s, file)
       end
+    end
+
+    # Storing associated databases
+    p.project_databases.each do |db|
+      FileUtils.mkdir_p seed_project_databases_dir(p.id)
+      puts "  Storing project database #{db.readable_identification}"
+      File.open(seed_project_databases_file(p.id, db.id), 'w') do |file|
+        YAML::dump(db, file)
+      end
+
+      puts "  Copying data of project database #{db.readable_identification}"
+      FileUtils.cp(db.sqlite_file_path, seed_project_databases_dir(p.id))
     end
   end
 
@@ -223,14 +264,14 @@ class SeedManager
   # @param instance The instance to persist, loaded from an ActiveRecord YAML file
   # @param instance_type A failsafe to ensure we actually load the expected type
   # @param depth Controls the indentation
-  def seed_instance(instance, instance_type, depth)    
+  def seed_instance(instance, instance_type, depth)
     # Grab a database-connected variant of that instance
     db_instance = instance.class.find_or_initialize_by(instance.attributes)
 
     # Tell the user what we are about to do
-    keyword = db_instance.changed ? "Seeding" : "Skipping"    
+    keyword = db_instance.changed ? "Seeding" : "Skipping"
     puts "#{'  ' * depth}#{keyword} #{db_instance.class.name} #{db_instance.readable_identification}"
-    
+
     # Possibly update it
     if db_instance.changed? then
       db_instance.update_attributes! instance.attributes
@@ -253,9 +294,9 @@ class SeedManager
       YAML.load_file seed_projects_file(path_slug_or_id)
     # Okay, no shortcuts available ... Lets iterate over all existing project seed files
     else
-      available_seed_block_language_files.each do |f|
-        b = YAML.load_file(f)
-        return f if (b.slug == slug_or_id)
+      available_seed_project_files.each do |f|
+        p = YAML.load_file(f)
+        return p if (p.slug == path_slug_or_id)
       end
 
       # This shouldn't happen too often ...
@@ -309,6 +350,11 @@ class SeedManager
   # @return [Iterable] All files that are possibly a seed file for a referenced block language of a project
   def available_seed_project_used_block_languages_files(project_id)
     Dir.glob(File.join(seed_project_used_block_languages_dir(project_id), '*.yaml'))
+  end
+
+  # @return [Iterable] All sqlite-database-files that are part of the given project
+  def available_seed_project_used_database_files(project_id)
+    Dir.glob(File.join(seed_project_databases_dir(project_id), '*.yaml'))
   end
 
   # Singleton instance of the SeedManager
