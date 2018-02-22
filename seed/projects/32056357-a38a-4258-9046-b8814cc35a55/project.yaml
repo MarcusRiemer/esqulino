@@ -23,9 +23,6 @@ concise_attributes:
   name: index_page_id
   value_before_type_cast: 033f059a-ce96-405e-a415-de7575e05dae
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
-  name: active_database
-  value_before_type_cast: default
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-20 20:48:21.690301'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
@@ -33,5 +30,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.690301'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: api_version
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: default_database_id
 new_record: false
 active_record_yaml_version: 2

@@ -24,18 +24,6 @@ module Processes
       Dir.mkdir File.join(directory_path, "images")
     end
 
-    # Creates and initializes the database for the current project
-    def create_database(db_type)
-      if db_type == 'sqlite3'
-        # Creating the SQLite database is a single call. This would be much
-        # more sophisticated with a system like PostgreSQL or MySQL where
-        # we would have to create users and set some priviliges.
-        SQLite3::Database.new @project.sqlite_file_path("default")
-      else
-        raise EsqulinoError.new "Unknown database type: \"#{db_type}\" "
-      end
-    end
-
     def delete!
     end    
   end
