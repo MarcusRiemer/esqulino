@@ -11,11 +11,15 @@ concise_attributes:
   value_before_type_cast: 17d8db6b-4b4b-48e3-8f72-3f8282a04e10
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: schema
+  value_before_type_cast: '[{"name": "key_value", "columns": [{"name": "key", "type":
+    "INTEGER", "index": 0, "primary": true, "not_null": true, "dflt_value": null},
+    {"name": "value", "type": "TEXT", "index": 1, "primary": false, "not_null": true,
+    "dflt_value": null}], "foreign_keys": []}]'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-22 16:02:47.88873'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-02-22 16:02:47.88873'
+  value_before_type_cast: '2018-02-22 21:54:09.155503'
 new_record: false
 active_record_yaml_version: 2

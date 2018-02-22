@@ -4,6 +4,8 @@ concise_attributes:
   name: id
   value_before_type_cast: 357f9a1c-7db5-420c-bd9a-7ee7d49545d4
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: default_database_id
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: name
   value_before_type_cast: Ereignisse
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
@@ -30,7 +32,5 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.693124'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: api_version
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
-  name: default_database_id
 new_record: false
 active_record_yaml_version: 2

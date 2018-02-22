@@ -11,19 +11,14 @@ class ProjectsController < ApplicationController
 
   # Apart from creating the database object this action also needs to
   # set up the directory layout for project assets that are stored
-  # on the disk.
+  # on the disk. Thankfully the Project-model takes care of the whole
+  # filesystem stuff.
   def create
-    # Creating the database object
-    project = Project.new
-    project.assign_attributes(project_creation_params)
+    project = Project.new(project_creation_params)
 
-    # If that worked ...
     if project.save
-      # ... create the directoy layout
-      Processes::project_create!(project)
       render json: { 'id' => project.slug }, :status => 200
     else
-      # ... otherwise tell the user where he went wrong
       render :json => { 'errors' => project.errors }, :status => 400
     end
   end

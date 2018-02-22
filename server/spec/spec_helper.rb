@@ -1,8 +1,13 @@
 require 'database_cleaner'
+require 'fakefs/spec_helpers'
 require 'simplecov'
 
 RSpec.configure do |config|
+  # We want coverage reports
   SimpleCov.start 'rails'
+
+  # And we need fake filesystems
+  config.include FakeFS::SpecHelpers, fakefs: true
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true

@@ -4,6 +4,8 @@ concise_attributes:
   name: id
   value_before_type_cast: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: default_database_id
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: name
   value_before_type_cast: Adventure
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
@@ -29,7 +31,5 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.695552'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: api_version
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
-  name: default_database_id
 new_record: false
 active_record_yaml_version: 2
