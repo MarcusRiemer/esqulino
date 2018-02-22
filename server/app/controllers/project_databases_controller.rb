@@ -7,21 +7,25 @@ class ProjectDatabasesController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
 
-  # Returns a visual representation of the schema, rendered with Graphviz
-  def visual_schema
+  def get_current_database
     project_slug = params['project_id']
-    database_id = params['database_id']
+    database_id = nil # params['database_id']
 
     current_project = Project.find_by(slug: project_slug)
+    current_project.database_by_id_or_default(database_id)
+  end
+
+  # Returns a visual representation of the schema, rendered with Graphviz
+  def visual_schema
+    current_database = get_current_database
 
     # Build the GraphViz description of the database
-    db_path = current_project.file_path_sqlite_from_id(database_id)
+    db_path = current_database.sqlite_file_path
     db_graphviz = database_graphviz_schema(db_path)
 
     # The default renderer currently is svg:cairo, but
     # the user may override it.
     format = params.fetch('format', 'svg')
-
 
     # Per default there is no download, so there is no need
     # for any complex disposition data
@@ -73,14 +77,12 @@ class ProjectDatabasesController < ApplicationController
       ensure_request("TableDescription", whole_body)    # 1st JSON-object
       newTable = createObject(whole_body)               # 2nd JSON-object
 
-      database_id = params['database_id']
-      project_slug = params['project_id']
-
-      current_project = Project.find_by(slug: project_slug)
+      current_database = get_current_database
       
-      if(!current_project.has_table(newTable['name'], database_id)) then
-        error, msg = create_table(current_project.sqlite_file_path(database_id), newTable)
+      if (not current_database.table_exists? newTable['name']) then
+        error, msg = create_table(current_database.sqlite_file_path, newTable)
         if(error == 0)
+          current_database.refresh_schema!
           render :status => 200
         else
           render :status => 500, :json => {
@@ -97,52 +99,21 @@ class ProjectDatabasesController < ApplicationController
     end
   end
 
-
-  # Retrieves the actual data for a number of rows in a certain table
-  def table_row_data
-    requested_table = params['tablename']
-    database_id = params['database_id']
-
-    if(self.current_project.has_table requested_table, database_id)
-      result = self.current_project.execute_sql(
-        "SELECT * FROM #{requested_table} LIMIT ? OFFSET ?",
-        [params['amount'].to_i, params['from'].to_i],
-        database_id
-      )
-      render :json => result['rows']
-    else
-      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
-    end
-  end
-
-  # Retrieves the number of rows in a certain table
-  def table_row_count
-    requested_table = params['tablename']
-    database_id = params['database_id']
-
-    if(self.current_project.has_table requested_table, database_id)
-      result = self.current_project.execute_sql("SELECT COUNT(*) FROM #{requested_table}", [], database_id)
-      render :json => result['rows'].first
-    else
-      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
-    end
-  end
-
+  
   # Alters a certain table of a database
   def table_alter
     ensure_write_access do
-      project_slug = params['project_id']
-      database_id = params['database_id']
+      table_name = params['tablename']
+      current_database = get_current_database
       
-      current_project = Project.find_by(slug: project_slug)
-      sqlite_file_path = current_project.file_path_sqlite_from_id(database_id)
+      sqlite_file_path = current_database.sqlite_file_path
 
-      if(self.current_project.has_table(requested_table)) then
+      if (current_database.table_exists? table_name) then
         alter_schema_request = JSON.parse request.body.read
         commandHolder = alter_schema_request['commands']
         error, index, errorCode, errorBody = database_alter_schema(
                                    sqlite_file_path,
-                                   requested_table,
+                                   table_name,
                                    commandHolder
                                  )
         if(error)
@@ -152,6 +123,7 @@ class ProjectDatabasesController < ApplicationController
                    :errorBody => errorBody
                  })
         else
+          current_database.refresh_schema!
           result_schema = database_describe_schema(sqlite_file_path)
           render :json => { :schema => result_schema }
         end
@@ -161,15 +133,17 @@ class ProjectDatabasesController < ApplicationController
     end
   end
 
+  
   # Drops a single table of the given database.
   def table_delete
     ensure_write_access do
       table_name = params['tablename']
-      database_id = params['database_id']
+      current_database = get_current_database
 
-      if(self.current_project.has_table table_name) then
-        error, msg = remove_table(self.current_project.file_path_sqlite_from_id(database_id), table_name)
+      if (current_database.table_exists? table_name) then
+        error, msg = remove_table(current_database.sqlite_file_path, table_name)
         if(error == 0) then
+          current_database.refresh_schema!
           render :status => 200
         else
           render :status => 500, :json => {:errorBody => msg}
@@ -177,6 +151,35 @@ class ProjectDatabasesController < ApplicationController
       else
         render :plain => "Unknown table \"#{table_name}\"", :status => :not_found
       end
+    end
+  end
+
+  # Retrieves the actual data for a number of rows in a certain table
+  def table_row_data
+    requested_table = params['tablename']
+    current_database = get_current_database
+
+    if (current_database.table_exists? requested_table)
+      result = current_database.execute_sql(
+        "SELECT * FROM #{requested_table} LIMIT ? OFFSET ?",
+        [params['amount'].to_i, params['from'].to_i]
+      )
+      render :json => result['rows']
+    else
+      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
+    end
+  end
+
+  # Retrieves the actual data for a number of rows in a certain table
+  def table_row_count
+    requested_table = params['tablename']
+    current_database = get_current_database
+
+    if (current_database.table_exists? requested_table)
+      result = current_database.execute_sql("SELECT COUNT(*) FROM #{requested_table}", [])
+      render :json => result['rows'].first
+    else
+      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
     end
   end
 end

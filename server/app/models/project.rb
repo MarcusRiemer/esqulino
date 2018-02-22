@@ -106,26 +106,6 @@ class Project < ApplicationRecord
     File.join(Rails.application.config.sqlino[:projects_dir], id)
   end
 
-  # Retrieves the path to a SQLite database with a specific ID.
-  def sqlite_file_path(db_id)
-    File.join(data_directory_path, "databases", "#{db_id}.sqlite")
-  end
-
-  # TODO: This shouldn't be part of this class but possibly of a helper?
-  #
-  # Determines whether the given name of the table is part of the given database?
-  #
-  # @param table_name [string] The name of the table in question
-  # @param database_id [string] The ID of the schema to search in
-  # @return [Boolean] True if the given table_name is part of the database_schema
-  def has_table(table_name, database_id = nil)
-    database_id = database_id || "default"
-
-    schema = database_describe_schema(self.sqlite_file_path database_id)
-
-    return !schema(database_id).detect{|table| table.name.eql? table_name}.nil?
-  end
-  
   # Returns a nicely readable representation of id, slug and name
   def readable_identification
     "\"#{name}\" (#{slug}, #{id})"

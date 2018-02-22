@@ -2,7 +2,16 @@ require 'sqlite3'
 
 # Describes a single column of a SQLite Table
 class SchemaColumn
+  include ActiveModel::Serializers::JSON
+  
   attr_accessor :index, :name, :type, :not_null, :dflt_value, :primary
+
+   def attributes
+     {
+       'index' => nil, 'name' => nil, 'type' => nil,
+       'not_null' => nil, 'dflt_value' => nil, 'primary' => nil
+     }
+  end
 
   def initialize(index, name, type, not_null, dflt_value, pk)
     @index = index
@@ -27,7 +36,13 @@ end
 # Describes how a single column of a certain table references
 # another column in (possibly) another table.
 class SchemaForeignKeyRef
+  include ActiveModel::Serializers::JSON
+  
   attr_accessor :from_column, :to_table, :to_column
+
+  def attributes
+    {'from_column' => nil, 'to_table' => nil, 'to_column' => nil}
+  end
 
   def initialize(from_column, to_table, to_column)
     @from_column = from_column
@@ -47,7 +62,13 @@ class SchemaForeignKeyRef
 end
 
 class SchemaForeignKey
+  include ActiveModel::Serializers::JSON
+  
   attr_accessor :references
+
+  def attributes
+    { 'references' => nil }
+  end
 
   def initialize()
     @references = []
@@ -76,7 +97,13 @@ end
 
 # Describes a SQLite table with its columns
 class SchemaTable
+  include ActiveModel::Serializers::JSON
+  
   attr_accessor :name, :columns, :foreign_keys
+
+  def attributes
+    {'name' => nil, 'columns' => nil, 'foreign_keys' => nil}
+  end
 
   def initialize(name)
     @name = name
