@@ -1,3 +1,5 @@
+require_dependency 'error'
+
 require_dependency 'project_database' # Rails won't autoload this class properly
 require_dependency 'project_source' # Rails won't autoload this class properly
 require_dependency 'project_uses_block_language' # Rails won't autoload this class properly
@@ -7,7 +9,32 @@ def string_is_uuid?(str)
   not /[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}/.match(str).nil?
 end
 
-# Holds together the whole serialization and deserialization process
+# This project on a whole will have some fairly sophisticated default datasets that
+# need to be updated possibly even more frequently than the actual code. The end-goal
+# of this class is to provide a solution to keep the "stock" projects of BlattWerkzeug
+# up to date as easily as possible without any interference in the user data. Any admin
+# should be sure that updating the "stock" data of BlattWerkzeug will never, ever damage
+# the projects of the users.
+#
+# But the way to achieve that vision is not so straight forward:
+#
+# * The fact that  some data is stored "outside" of the normal database (images, SQLite
+#   databases) does not make the import/export process more pleasant. So a simple "just
+#   do a SQL-dump and be happy"-approach is not something we use. So we need a custom
+#   storage format that can hold more then a simple SQL-blob.
+#
+# * What makes things worse is that we have some quite sophisticated dependencies
+#   between models. Using UUIDs as primary keys eliminates a lot of problems (as long as
+#   they don't collide ... Heaven help us if they do ...) because we can assume that
+#   every new ID we bring in with the "stock" data is probably unique.
+#
+# Data migrations as a whole seem to be a very application specific topic, at least I
+# could not find a suitable general-purpose library for our specific use-case. So we do
+# what every programmer loves: We bring out our own solution ...
+#
+# This class holds together the whole serialization and deserialization process.
+# We basicly piggy-back the `to_yaml`-representation of ActiveModel to have a
+# robust (but very verbose) on-disk representation of our models.
 class SeedManager
   # The general directory to save and load the data from
   def seed_data_dir
@@ -120,37 +147,78 @@ class SeedManager
   # @param path_slug_or_id [string]
   #   The path, slug or the ID of the project to load.
   def load_project(path_slug_or_id)
-    # Finding the correct block language
-    p = seed_instance(find_seed_project_file(path_slug_or_id), Project, 0);
+    begin
+      # Construct the "new" instance
+      seed_instance = find_seed_project_file(path_slug_or_id)
 
-    # The used block languages
-    available_seed_project_used_block_languages_files(p.id).each do |b|
-      seed_instance(YAML.load_file(b), ProjectUsesBlockLanguage, 1)
-    end
+      # Breaking circular dependencies (Part 1)
+      # The following referenced resources do not exist while creation is in progress:
+      # * default_database_id
+      default_database_id = seed_instance.default_database_id
+      seed_instance.default_database_id = nil
 
-    # And all of its code resources
-    available_seed_project_code_resource_files(p.id).each do |c|
-      seed_instance(YAML.load_file(c), CodeResource, 1)
-    end
+      # Moving the old data folder out of the way, it will be restored if
+      # anything goes wrong
+      project_folder_path = seed_instance.data_directory_path
+      project_folder_backup_path = project_folder_path + '_bak'
 
-    # And all of its sources
-    available_seed_project_source_files(p.id).each do |s|
-      seed_instance(YAML.load_file(s), ProjectSource, 1)
-    end
+      # Is there an actual older folder?
+      if File.directory? project_folder_path then
+        # Yes, back it up
+        FileUtils.mv project_folder_path, project_folder_backup_path
+      else
+        # No, so there is no need to backup anything
+        project_folder_backup_path = nil # No need for backup
+      end
 
-    # And all of its databases
-    available_seed_project_used_database_files(p.id).each do |db_yaml|
-      db = seed_instance(YAML.load_file(db_yaml), ProjectSource, 1)
+      # Actually kick off project "creation"
+      p = seed_instance(seed_instance, Project, 0);
 
-      # Ensure there is a target folder
-      database_target_folder = File.join(p.data_directory_path, "databases")
-      FileUtils.mkdir_p database_target_folder
-      
-      # Copy over the actual data, it MUST reside alongside the YAML
-      # file and may only have a differing extension
-      sqlite_filename = Pathname(db_yaml).sub_ext('.sqlite')
-      
-      FileUtils.cp sqlite_filename, database_target_folder
+      # Restore the used block languages ...
+      available_seed_project_used_block_languages_files(p.id).each do |b|
+        seed_instance(YAML.load_file(b), ProjectUsesBlockLanguage, 1)
+      end
+
+      # ... and code resources ...
+      available_seed_project_code_resource_files(p.id).each do |c|
+        seed_instance(YAML.load_file(c), CodeResource, 1)
+      end
+
+      # ... and sources ...
+      available_seed_project_source_files(p.id).each do |s|
+        seed_instance(YAML.load_file(s), ProjectSource, 1)
+      end
+
+      # ... and databases.
+      available_seed_project_used_database_files(p.id).each do |db_yaml|
+        db = seed_instance(YAML.load_file(db_yaml), ProjectDatabase, 1)
+
+        # Ensure there is a target folder
+        database_target_folder = File.join(p.data_directory_path, "databases")
+        FileUtils.mkdir_p database_target_folder
+
+        # Copy over the actual data, it MUST reside alongside the YAML
+        # file and may only have a differing extension
+        sqlite_filename = Pathname(db_yaml).sub_ext('.sqlite')
+
+        FileUtils.cp sqlite_filename, database_target_folder
+      end
+
+      # Breaking circular dependencies (Part 2)
+      p.default_database_id = default_database_id
+      p.save!
+
+      # Because everything went fine: No need for a backup
+      FileUtils.rm_rf project_folder_backup_path unless project_folder_backup_path.nil?
+    rescue EsqulinoError => e
+      if not project_folder_backup_path.nil? then
+        # Delete the (possibly) partial data folder
+        FileUtils.rm_rf project_folder_path
+        # And move the original data back
+        FileUtils.mv project_folder_backup_path, project_folder_path
+      end
+
+      raise
     end
   end
 
@@ -262,19 +330,34 @@ class SeedManager
   # updates the connected database accordingly.
   #
   # @param instance The instance to persist, loaded from an ActiveRecord YAML file
-  # @param instance_type A failsafe to ensure we actually load the expected type
+  # @param instance_type
+  #   This parameter must match `instance.class` and is a failsafe to ensure two things:
+  #   1) The instance that has been loaded has the correct type
+  #   2) The call-site triggers Rails auto loading as early as possible
   # @param depth Controls the indentation
   def seed_instance(instance, instance_type, depth)
+    # Ensure we don't have any stupid errors because we try to trigger
+    # Rails auto-loading mechanism early
+    raise RuntimeError.new "Mismatched types, instance: #{instance.class.name}, instance_type: #{instance_type.name}" if instance.class != instance_type
+    
+    keyword = "ERROR" # Used to represent what we did with this instance: CREATE, UPDATE, SKIP
+    
     # Grab a database-connected variant of that instance
-    db_instance = instance.class.find_or_initialize_by(instance.attributes)
+    db_instance = instance.class.find_by(instance.key_search_attributes)
+    if db_instance.nil? then
+    # Nothing here, lets create it
+      db_instance = instance_type.new(instance.attributes)
+      keyword = "CREATE"
+    else
+      db_instance.assign_attributes(instance.attributes)
+      keyword = db_instance.changed? ? "UPDATE" : "SKIP  "
+    end
 
-    # Tell the user what we are about to do
-    keyword = db_instance.changed ? "Seeding" : "Skipping"
     puts "#{'  ' * depth}#{keyword} #{db_instance.class.name} #{db_instance.readable_identification}"
 
     # Possibly update it
-    if db_instance.changed? then
-      db_instance.update_attributes! instance.attributes
+    if keyword == "CREATE" || keyword == "UPDATE" then
+      db_instance.save!
     end
 
     return db_instance

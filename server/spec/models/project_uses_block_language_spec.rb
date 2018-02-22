@@ -1,5 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe ProjectUsesBlockLanguage, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it '#key_search_attributes' do
+    used = ProjectUsesBlockLanguage.new(block_language_id: SecureRandom.uuid,
+                                        project_id: SecureRandom.uuid)
+
+    expect(used.key_search_attributes).to eq({
+                                               "block_language_id" => used.block_language_id,
+                                               "project_id" => used.project_id
+                                             })
+  end
 end

@@ -4,11 +4,14 @@ require 'fakefs/safe'
 RSpec.describe ProjectsController, type: :request do
 
   let(:auth_headers) { {"Authorization" => "Basic #{Base64.encode64('user:user')}"} }
-  
+
   describe 'POST /api/project' do
 
     describe 'valid request' do
-      it 'creates a project' do
+      it 'creates a project', fakefs: true do
+        # TODO CENTRALIZE: Put this call in a central location
+        FakeFS::FileSystem.clone(Rails.application.config.sqlino[:projects_dir])
+        
         post '/api/project', params: {"name" => "Some project", "slug" => "test" }
 
         expect(response.status).to eq(200)
@@ -17,11 +20,12 @@ RSpec.describe ProjectsController, type: :request do
         created_project = Project.find_by(slug: "test")
         expect(created_project.name).to eq "Some project"
         expect(created_project.slug).to eq "test"
+        expect(File.directory?(created_project.data_directory_path)).to eq true
 
         skip "Projects should not be public by default"
         expect(created_project.public).to eq false
-      end
 
+      end
     end
 
     describe 'invalid request' do
@@ -55,7 +59,7 @@ RSpec.describe ProjectsController, type: :request do
     describe 'valid request' do
       it 'updates all attributes at once' do
         put "/api/project/#{project.slug}", params: update_params, headers: auth_headers
-        
+
         expect(response.body).to be_empty
         expect(response).to have_http_status(204)
 
@@ -71,7 +75,7 @@ RSpec.describe ProjectsController, type: :request do
 
         expect(response.body).to be_empty
         expect(response).to have_http_status(204)
-        
+
         updated = Project.find_by(slug: project.slug)
         expect(updated.name).to eq "Only"
         expect(updated.description).to eq project.description
@@ -84,7 +88,7 @@ RSpec.describe ProjectsController, type: :request do
 
         expect(response.body).to be_empty
         expect(response).to have_http_status(204)
-        
+
         updated = Project.find_by(slug: project.slug)
         expect(updated.name).to eq project.name
         expect(updated.description).to eq "Only"
@@ -97,7 +101,7 @@ RSpec.describe ProjectsController, type: :request do
 
         expect(response.body).to be_empty
         expect(response).to have_http_status(204)
-        
+
         updated = Project.find_by(slug: project.slug)
         expect(updated.name).to eq project.name
         expect(updated.description).to eq project.description
@@ -134,7 +138,7 @@ RSpec.describe ProjectsController, type: :request do
         @json_data = JSON.parse(response.body)
       end
 
-      it 'returns 200' do         
+      it 'returns 200' do
         expect(response).to have_http_status(200)
         expect(@json_data.length).to eq 1
       end
@@ -169,7 +173,7 @@ RSpec.describe ProjectsController, type: :request do
   describe 'DELETE /api/project/:project_id' do
     it 'unauthorized' do
       skip "should return 401"
-      
+
       to_delete = FactoryBot.create(:project)
       delete "/api/project/#{to_delete.slug}"
 
@@ -178,12 +182,12 @@ RSpec.describe ProjectsController, type: :request do
 
     it 'nonexistant' do
       pending "should return 400"
-      
+
       delete "/api/project/not_even_a_uuid", headers: auth_headers
 
       expect(response).to have_http_status(404)
     end
-    
+
     it 'an empty project' do
       pending "should return 204"
       to_delete = FactoryBot.create(:project)

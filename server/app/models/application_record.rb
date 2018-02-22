@@ -27,4 +27,20 @@ class ApplicationRecord < ActiveRecord::Base
     # All keys should be in "camelCase"
     to_return.transform_keys { |k| k.camelize(:lower) }
   end
+
+  # This method is a more or less nasty hack to provide identifying
+  # attributes for the SeedManager.
+  #
+  # Models in join-tables would require a composite primary key and Rails
+  # does not support those. Unluckily we currently have a join model without
+  # a singular PK already and sometimes need to identify it on the fly using
+  # #find_by.
+  def key_search_attributes
+    if not self.class.primary_key.nil? then
+      { self.class.primary_key => self.attributes[self.class.primary_key] }
+    else
+      content_column_names = self.class.content_columns.map &:name
+      self.attributes.select { |k,v| not content_column_names.include? k }
+    end
+  end
 end
