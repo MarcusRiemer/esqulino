@@ -7,27 +7,22 @@ require 'json'
 require_dependency './schema'
 require_dependency './schema_utils'
 
-def database_alter_schema(sqlite_file_path, tableName, commandHolder)
+def database_alter_schema(project_database, table_name, commandHolder)
+  sqlite_file_path = project_database.sqlite_file_path
+  
   # Just in case: Making a copy of the whole database
   FileUtils.cp(sqlite_file_path, sqlite_file_path + '.bak')
 
-  index = 0
-
-  # Get Table object out of Database
-  table = database_describe_schema(sqlite_file_path).select{ |table| table.name == tableName}.first
-
-  if table.nil? then
-    raise EsqulinoError.new "Unknown table #{tableName}", 400, true
-  end
-
+  table = database_describe_schema(sqlite_file_path).select{ |table| table.name == table_name}.first
+  
+  # Execute each command one by one
   begin
-    commandHolder.each do |cmd|
-      index = cmd['index']
+    commandHolder.each_with_index do |cmd, index|
       colHash = createColumnHash(table)
       # Rename table can not be expressed via a transformation
       # that is based on the model and is therefore handled seperatly
-      if cmd['type'] != "renameTable"
-        case cmd['type']
+      if cmd["type"] != "renameTable"
+        case cmd["type"]
         when "addColumn"
           addColumn(table)
         when "deleteColumn"
@@ -49,112 +44,64 @@ def database_alter_schema(sqlite_file_path, tableName, commandHolder)
         when "removeForeignKey"
           removeForeignKey(table, cmd['foreignKeyToRemove'])
         end
-        errorCode, errorBody = database_alter_table(sqlite_file_path, table, colHash)
+        
+        table_hash = table.serializable_hash(include: { columns: { }, foreign_keys: {} })
+        database_alter_table(sqlite_file_path, table_hash, colHash)
       else
-        errorCode, errorBody = rename_table(sqlite_file_path, table.name, cmd['newName'])
+        rename_table(sqlite_file_path, table.name, cmd['newName'])
         changeTableName(table, cmd['newName'])
       end
-      if(errorCode != 0)
-        # Swap out the temporary database for the actual database
-        FileUtils.remove_file(sqlite_file_path)
-        File.rename(sqlite_file_path + '.bak', sqlite_file_path)
-
-        return true, index, errorCode, errorBody
-      end
     end
-  end
+  rescue => e
+    # Something went wrong, move the backup back
+    FileUtils.mv(sqlite_file_path + '.bak', sqlite_file_path)
 
-  FileUtils.remove_file(sqlite_file_path + '.bak')
-  return false
+    raise
+    # raise EsqulinoError.new("Internal error altering the database")
+  end
 end
 
 
 def database_alter_table(sqlite_file_path, schema_table, colHash)
-  tempTableName = String.new(schema_table.name)
+  tempTableName = String.new(schema_table['name'])
   tempTableName.concat('_oldTable')
-  begin
-    db = sqlite_open_augmented(sqlite_file_path)
-    db.execute("PRAGMA foreign_keys = OFF;")
 
-    db.transaction
-    db.execute("ALTER TABLE #{schema_table.name} RENAME TO #{tempTableName};")
-    db.execute(table_to_create_statement(schema_table))
-
-
-    colFrom, colTo = create_column_strings(colHash)
-    db.execute("INSERT INTO #{schema_table.name}(#{colTo}) SELECT #{colFrom} FROM #{tempTableName};")
-
-    db.execute("DROP TABLE #{tempTableName};")
-
-    error, consistencyBreaks = check_consistency(db)
-
-    db.execute("PRAGMA foreign_keys = ON;")
-    if error == 0
-      db.commit()
-      db.close()
-      return 0
-    else
-      db.close()
-      return 2, consistencyBreaks
-    end
-  rescue SQLite3::SQLException => e
-    db.close()
-    return 1, e.message
-  rescue SQLite3::ConstraintException => e
-    db.close()
-    return 1, e.message
-  end
-end
-
-def check_consistency(db)
-  begin
-    db.foreign_key_check()
-  rescue SQLite3::SQLException => e
-    return 1, e.message
-  end
-  return 0
-end
-
-def remove_table(sqlite_file_path, tableName)
   db = sqlite_open_augmented(sqlite_file_path)
+  db.execute("PRAGMA foreign_keys = OFF;")
+
+  # Rename the altered table to a temporary name and create a new table
+  # with the correct structure
+  db.transaction
+  db.execute("ALTER TABLE #{schema_table['name']} RENAME TO #{tempTableName};")
+  db.execute(table_to_create_statement(schema_table))
+
+  # Copy over the data by specifying matching column pairs
+  colFrom, colTo = create_column_strings(colHash)
+  db.execute("INSERT INTO #{schema_table['name']}(#{colTo}) SELECT #{colFrom} FROM #{tempTableName};")
+
+  # Drop the previous table
+  db.execute("DROP TABLE #{tempTableName};")
+
+  # And ensure the database is still consistent
+  ensure_consistency!(db)
+
   db.execute("PRAGMA foreign_keys = ON;")
-  begin
-    db.execute("DROP TABLE IF EXISTS #{tableName}")
-  rescue SQLite3::ConstraintException => e
-    db.close
-    return 1, e.message
-  end
-  return 0
+  db.commit()
+  db.close()
 end
 
-def create_table(sqlite_file_path, newTable)
-  db = sqlite_open_augmented(sqlite_file_path)
-  db.execute("PRAGMA foreign_keys = ON;")
-  begin
-    db.execute(table_to_create_statement(newTable))
-  rescue Exception => e
-    puts e.backtrace
-    db.close
-    return 1, e.message
-  end
-  return 0
+def ensure_consistency!(db)
+  raise EsqulinoError.new("Database inconsistent") if db.foreign_key_check().size > 0
 end
 
 def rename_table(sqlite_file_path, from_tableName, to_tableName)
-  begin
-    db = sqlite_open_augmented(sqlite_file_path)
-    db.execute("PRAGMA foreign_keys = ON")
-
-    db.transaction
-    db.execute("ALTER TABLE #{from_tableName} RENAME TO #{to_tableName};")
-    db.commit()
-    db.close()
-
-    return 0
-  rescue Exception => e
-    db.close()
-    return 1, e.message
-  end
+  db = sqlite_open_augmented(sqlite_file_path)
+  db.execute("PRAGMA foreign_keys = ON")
+  
+  db.transaction
+  db.execute("ALTER TABLE #{from_tableName} RENAME TO #{to_tableName};")
+  db.commit()
+  db.close()
 end
 
 # Function to convert the column hash to two strings
@@ -180,20 +127,20 @@ end
 # @param schema_table - Table object to create a CREATE TABLE statement
 # return - The CREATE TABLE statement
 def table_to_create_statement(schema_table)
-  createStatement = String.new("CREATE TABLE IF NOT EXISTS #{schema_table.name} ( ")
-  schema_table.columns.each do |col|
+  createStatement = String.new("CREATE TABLE IF NOT EXISTS #{schema_table['name']} ( ")
+  schema_table['columns'].each do |col|
     createStatement.concat(column_to_create_statement(col))
-    if schema_table.columns.last != col
+    if schema_table['columns'].last != col
       createStatement.concat(", ")
     end
   end
   # create fk constraints
-  schema_table.foreign_keys.each do |fk|
+  schema_table['foreign_keys'].each do |fk|
     createStatement.concat(", ")
     createStatement.concat(tables_foreignKey_to_create_statement(fk))
   end
   # create PK constraints
-  createStatement.concat(tables_primaryKeys_to_create_statement(schema_table.columns))
+  createStatement.concat(tables_primaryKeys_to_create_statement(schema_table['columns']))
 
   createStatement.concat(");")
   return createStatement
@@ -204,11 +151,11 @@ end
 # @param schema_table - Table object to create a CREATE TABLE statement
 # return - The CREATE TABLE statement primary key constraint part
 def tables_primaryKeys_to_create_statement(schema_columns)
-  all_primaryKeys = schema_columns.select { |column| column.primary}
+  all_primaryKeys = schema_columns.select { |column| column['primary']}
   unless all_primaryKeys.empty?
     primKeys = String.new("")
     all_primaryKeys.each do |pk|
-      primKeys.concat(pk.name)
+      primKeys.concat(pk['name'])
       if all_primaryKeys.last != pk
         primKeys.concat(", ")
       end
@@ -226,15 +173,15 @@ end
 def tables_foreignKey_to_create_statement(fk)
   fk_columns = String.new("")
   fk_ref_columns = String.new("")
-  fk.references.each do |ref|
-    fk_columns.concat(ref.from_column)
-    fk_ref_columns.concat(ref.to_column)
-    if ref != fk.references.last
+  fk['references'].each do |ref|
+    fk_columns.concat(ref['from_column'])
+    fk_ref_columns.concat(ref['to_column'])
+    if ref != fk['references'].last
       fk_columns.concat(", ")
       fk_ref_columns.concat(", ")
     end
   end
-  createStatement = String.new("FOREIGN KEY (#{fk_columns}) REFERENCES #{fk.references[0].to_table}(#{fk_ref_columns})")
+  createStatement = String.new("FOREIGN KEY (#{fk_columns}) REFERENCES #{fk['references'][0]['to_table']}(#{fk_ref_columns})")
   return createStatement
 end
 
@@ -243,36 +190,37 @@ end
 # @param schema_table - Table object to create a CREATE TABLE statement
 # return - The CREATE TABLE statement column part
 def column_to_create_statement(schema_column)
-  createStatement = String.new(schema_column.name)
+  createStatement = String.new(schema_column['name'])
   createStatement.concat(" ")
-  if schema_column.type == 'TEXT'
-    createStatement.concat(schema_column.type)
+  if schema_column['type'] == 'TEXT'
+    createStatement.concat(schema_column['type'])
     createStatement.concat(" ")
-  elsif schema_column.type == 'BOOLEAN'
-    createStatement.concat(schema_column.type)
+  elsif schema_column['type'] == 'BOOLEAN'
+    createStatement.concat(schema_column['type'])
     createStatement.concat(" ")
-    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type boolean' CHECK (#{schema_column.name} == 1 OR #{schema_column.name} == 0 OR #{schema_column.name} IS NULL) ")
-  elsif schema_column.type == 'INTEGER'
-    createStatement.concat(schema_column.type)
+    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column['name']})]: Value is not of type boolean' CHECK (#{schema_column['name']} == 1 OR #{schema_column['name']} == 0 OR #{schema_column['name']} IS NULL) ")
+  elsif schema_column['type'] == 'INTEGER'
+    createStatement.concat(schema_column['type'])
     createStatement.concat(" ")
-    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type integer' CHECK (#{schema_column.name} REGEXP '^([+-]?[0-9]+$|)') ")
-  elsif schema_column.type == 'FLOAT'
-    createStatement.concat(schema_column.type)
+    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column['name']})]: Value is not of type integer' CHECK (#{schema_column['name']} REGEXP '^([+-]?[0-9]+$|)') ")
+  elsif schema_column['type'] == 'FLOAT'
+    createStatement.concat(schema_column['type'])
     createStatement.concat(" ")
-    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type float' CHECK (#{schema_column.name} regexp '^[+-]?([0-9]*\.[0-9]+$|[0-9]+$)') ")
-  elsif schema_column.type == 'URL'
-    createStatement.concat(schema_column.type)
+    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column['name']})]: Value is not of type float' CHECK (#{schema_column['name']} regexp '^[+-]?([0-9]*\.[0-9]+$|[0-9]+$)') ")
+  elsif schema_column['type'] == 'URL'
+    createStatement.concat(schema_column['type'])
     createStatement.concat(" ")
-    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column.name})]: Value is not of type url' CHECK (#{schema_column.name} REGEXP '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS') ")
+    createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column['name']})]: Value is not of type url' CHECK (#{schema_column['name']} REGEXP '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS') ")
   else
-    createStatement.concat(schema_column.type)
+    createStatement.concat(schema_column['type'])
     createStatement.concat(" ")
   end
-  if schema_column.not_null || schema_column.primary
+  
+  if schema_column['not_null'] || schema_column['primary']
     createStatement.concat("NOT NULL ")
   end
-  unless schema_column.dflt_value.nil? or schema_column.dflt_value.empty?
-    createStatement.concat("DEFAULT #{schema_column.dflt_value}")
+  unless schema_column['dflt_value'].nil? or schema_column['dflt_value'].empty?
+    createStatement.concat("DEFAULT #{schema_column['dflt_value']}")
   end
   return createStatement
 end
@@ -321,7 +269,8 @@ def changeColumnType(table, columnIndex, newType)
 end
 
 def changeColumnPrimaryKey(table, columnIndex)
-  table.columns.find{|col| col.index == columnIndex}.primary = !table.columns.find{|col| col.index == columnIndex}.primary
+  pk_column = table.columns.find{|col| col.index == columnIndex}
+  pk_column.primary = !pk_column.primary
 end
 
 def changeColumnNotNull(table, columnIndex)

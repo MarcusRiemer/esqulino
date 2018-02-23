@@ -14,7 +14,6 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-
 # Custom matcher to ensure we satisfy existing schemas
 module ValidateAgainstMatcher
   # The actual matcher
@@ -22,11 +21,13 @@ module ValidateAgainstMatcher
     # Providing a single schema storage here to avoid reloads
     # of the same schema over and over again.
     @@json_schema_storage = JsonSchemaStorage.new Rails.configuration.sqlino['schema_dir']
-    
+
+    # Remembers the name of the schema that should be verified
     def initialize(schema_name)
       @schema_name = schema_name
     end
-    
+
+    # Checks whether the given instance is valid in the context of this schema.
     def matches?(actual)
       schema = @@json_schema_storage.schemas[@schema_name]
 
@@ -59,8 +60,15 @@ module ValidateAgainstMatcher
   end
 end
 
-RSpec.configure do |config|
+# Some utility functions that are helpful during testing
+module Helpers
+  # Some tests need the illusion of a writeable projects directory
+  def fakefs_clone_projects_dir!
+    FakeFS::FileSystem.clone(Rails.application.config.sqlino[:projects_dir])
+  end
+end
 
+RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   config.use_transactional_fixtures = true
@@ -68,6 +76,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.filter_rails_from_backtrace!
+
   # Setup database DatabaseCleaner
   # make sure our tests starts with clean slate
   config.before(:suite) do
@@ -82,5 +91,13 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
+  # Ensure we can actually validate stuff
   config.include ValidateAgainstMatcher
+
+  # Ensure we have our helper functions available
+  config.include Helpers
+end
+
+FactoryBot::SyntaxRunner.class_eval do
+  include RSpec::Mocks::ExampleMethods
 end

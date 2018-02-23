@@ -74,6 +74,7 @@
           "items": {
             "$ref": "#/definitions/ColumnDescription"
           },
+          "minItems": 1,
           "type": "array"
         },
         "foreign_keys": {

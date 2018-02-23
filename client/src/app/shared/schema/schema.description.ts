@@ -25,6 +25,9 @@ export interface ForeignKeyDescription {
  */
 export interface TableDescription {
   name: string
+  /**
+   * @minItems 1
+   */
   columns: ColumnDescription[]
   foreign_keys: ForeignKeyDescription[]
   system_table?: boolean

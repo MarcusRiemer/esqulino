@@ -70,32 +70,12 @@ class ProjectDatabasesController < ApplicationController
   # Creates a new table in the given database
   def table_create
     ensure_write_access do
-      # TODO: The schema code makes use of OpenStruct, which the validator does
-      #       not like. So currently two JSON objects are created, this
-      #       is obviously not perfect.
-      whole_body = request.body.read
-      ensure_request("TableDescription", whole_body)    # 1st JSON-object
-      newTable = createObject(whole_body)               # 2nd JSON-object
+      table_description = ensure_request("TableDescription", request.body.read)
 
+      # Grab the database and modify it
       current_database = get_current_database
-      
-      if (not current_database.table_exists? newTable['name']) then
-        error, msg = create_table(current_database.sqlite_file_path, newTable)
-        if(error == 0)
-          current_database.refresh_schema!
-          render :status => 200
-        else
-          render :status => 500, :json => {
-                   :errorCode => '3',
-                   :errorBody => msg
-                 }
-        end
-      else
-        render :status => 400, :json => {
-                 :errorCode => '3',
-                 :errorBody => "Error: table #{newTable.name} already exists"
-               }
-      end
+      current_database.table_create table_description
+      current_database.save!
     end
   end
 
@@ -103,33 +83,17 @@ class ProjectDatabasesController < ApplicationController
   # Alters a certain table of a database
   def table_alter
     ensure_write_access do
+      # Grab parameters
       table_name = params['tablename']
+      alter_schema_request = JSON.parse request.body.read
       current_database = get_current_database
-      
-      sqlite_file_path = current_database.sqlite_file_path
 
-      if (current_database.table_exists? table_name) then
-        alter_schema_request = JSON.parse request.body.read
-        commandHolder = alter_schema_request['commands']
-        error, index, errorCode, errorBody = database_alter_schema(
-                                   sqlite_file_path,
-                                   table_name,
-                                   commandHolder
-                                 )
-        if(error)
-          render(:status => 500, :json => {
-                   :index => index.to_s,
-                   :errorCode => errorCode.to_s,
-                   :errorBody => errorBody
-                 })
-        else
-          current_database.refresh_schema!
-          result_schema = database_describe_schema(sqlite_file_path)
-          render :json => { :schema => result_schema }
-        end
-      else
-        render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
-      end
+      # Alter the database
+      current_database.table_alter table_name, alter_schema_request['commands']
+
+      # And tell the client about the new schema
+      result_schema = database_describe_schema(sqlite_file_path)
+      render :json => { :schema => result_schema }
     end
   end
 
@@ -137,49 +101,24 @@ class ProjectDatabasesController < ApplicationController
   # Drops a single table of the given database.
   def table_delete
     ensure_write_access do
-      table_name = params['tablename']
+      # Grab the database and modify it
       current_database = get_current_database
-
-      if (current_database.table_exists? table_name) then
-        error, msg = remove_table(current_database.sqlite_file_path, table_name)
-        if(error == 0) then
-          current_database.refresh_schema!
-          render :status => 200
-        else
-          render :status => 500, :json => {:errorBody => msg}
-        end
-      else
-        render :plain => "Unknown table \"#{table_name}\"", :status => :not_found
-      end
+      current_database.table_delete params['tablename']
+      current_database.save!
     end
   end
 
   # Retrieves the actual data for a number of rows in a certain table
   def table_row_data
-    requested_table = params['tablename']
-    current_database = get_current_database
-
-    if (current_database.table_exists? requested_table)
-      result = current_database.execute_sql(
-        "SELECT * FROM #{requested_table} LIMIT ? OFFSET ?",
-        [params['amount'].to_i, params['from'].to_i]
-      )
-      render :json => result['rows']
-    else
-      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
-    end
+    amount = params['amount'].to_i
+    from = params['from'].to_i
+    tablename = params['tablename']
+    
+    render :json => get_current_database.table_row_data(tablename, from, amount)
   end
 
   # Retrieves the actual data for a number of rows in a certain table
   def table_row_count
-    requested_table = params['tablename']
-    current_database = get_current_database
-
-    if (current_database.table_exists? requested_table)
-      result = current_database.execute_sql("SELECT COUNT(*) FROM #{requested_table}", [])
-      render :json => result['rows'].first
-    else
-      render :plain => "Unknown table \"#{requested_table}\"", :status => :not_found
-    end
+    render :json => get_current_database.table_row_count(params['tablename'])
   end
 end
