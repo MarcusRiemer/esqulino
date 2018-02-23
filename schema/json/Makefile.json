@@ -6,7 +6,7 @@
 TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = PageDescription.json PageUpdateRequestDescription.json PageRenderRequestDescription.json ProjectDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json QueryResultDescription.json QueryParamsDescription.json ArbitraryQueryRequestDescription.json QueryUpdateRequestDescription.json QueryDescription.json RequestErrorDescription.json AlterSchemaRequestDescription.json TableDescription.json BlockLanguageDocument.json BlockLanguageDescription.json NodeDescription.json CodeResourceDescription.json ProjectSourceDescription.json
+JSON_SCHEMA_FILES = ProjectDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json AlterSchemaRequestDescription.json TableDescription.json BlockLanguageDocument.json BlockLanguageDescription.json NodeDescription.json CodeResourceDescription.json ProjectSourceDescription.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -17,9 +17,6 @@ define CONVERT_COMMAND
 	$(TYPESCRIPT_JSON_SCHEMA_BIN) --path $^ --type $(notdir $(basename $@)) > "$@.tmp"
 	mv "$@.tmp" "$@"
 endef
-
-PageDescription.json : $(SRC_PATH)/shared/page/page.description.ts
-	$(CONVERT_COMMAND)
 
 ProjectDescription.json : $(SRC_PATH)/shared/project.description.ts
 	$(CONVERT_COMMAND)
@@ -34,30 +31,6 @@ ProjectListDescription.json : $(SRC_PATH)/shared/project.description.ts
 	$(CONVERT_COMMAND)
 
 ProjectSourceDescription.json : $(SRC_PATH)/shared/project.description.ts
-	$(CONVERT_COMMAND)
-
-QueryDescription.json : $(SRC_PATH)/shared/query/description.ts
-	$(CONVERT_COMMAND)
-
-QueryUpdateRequestDescription.json : $(SRC_PATH)/editor/query.service.description.ts
-	$(CONVERT_COMMAND)
-
-QueryResultDescription.json : $(SRC_PATH)/shared/query/result.description.ts
-	$(CONVERT_COMMAND)
-
-RequestErrorDescription.json : $(SRC_PATH)/shared/query/result.description.ts
-	$(CONVERT_COMMAND)
-
-QueryParamsDescription.json : $(SRC_PATH)/editor/query.service.description.ts
-	$(CONVERT_COMMAND)
-
-ArbitraryQueryRequestDescription.json : $(SRC_PATH)/editor/query.service.description.ts
-	$(CONVERT_COMMAND)
-
-PageRenderRequestDescription.json : $(SRC_PATH)/editor/page.service.description.ts
-	$(CONVERT_COMMAND)
-
-PageUpdateRequestDescription.json : $(SRC_PATH)/editor/page.service.description.ts
 	$(CONVERT_COMMAND)
 
 AlterSchemaRequestDescription.json : $(SRC_PATH)/shared/schema/table-commands.description.ts
