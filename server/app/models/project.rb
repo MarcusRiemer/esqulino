@@ -51,6 +51,11 @@ class Project < ApplicationRecord
     Dir.mkdir File.join(data_directory_path, "images")
   end
 
+  # Remove the data folder
+  after_destroy do
+    FileUtils.rm_rf data_directory_path if File.directory? data_directory_path
+  end
+
   # Retrieves the database with the given ID or the default database if no specific
   # ID to search for is given. This can't be used to access any database, only
   # databases that are part of this project are considered.

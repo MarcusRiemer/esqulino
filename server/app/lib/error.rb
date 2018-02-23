@@ -111,10 +111,20 @@ end
 
 # Thrown when a whole database is unknown
 class UnknownDatabaseError < EsqulinoError
-  # @param project_id [string] The id of the unknown project
+  # @param project_id [string] The id of the project
   # @param database_name [string] The name of the missing database
   def initialize(project_id, database_name)
     super "Unknown database \"#{database_name}\" in project \"#{project_id}\""
+  end
+end
+
+# Thrown when the table of a database is unknown
+class UnknownDatabaseTableError < EsqulinoError
+  # @param project_database [ProjectDatabase]
+  #   The database the error occured in
+  # @param table_name [string] The name of the missing table
+  def initialize(project_database, table_name)
+    super "Unknown table \"#{table_name}\" in \"#{project_database.id}\" of project \"#{project_database.project_id}\""
   end
 end
 
