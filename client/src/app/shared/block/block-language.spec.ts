@@ -37,6 +37,7 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
   name: "Empty Blocks",
   sidebars: [
     {
+      type: "fixedBlocks",
       caption: "Empty Blocks",
       categories: [
         {

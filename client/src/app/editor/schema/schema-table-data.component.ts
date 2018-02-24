@@ -141,7 +141,7 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
     this._schemaService.getTableRowAmount(this._project, this.table)
       .first()
       .subscribe(
-      res => this._tableRowAmount = res[0],
+      res => this._tableRowAmount = res,
       err => this.showError(err)
       );
   }

@@ -4,15 +4,19 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { Subscription } from 'rxjs/Subscription'
 
 import { CodeResource } from '../../shared/syntaxtree';
+import { Sidebar } from '../../shared/block';
 
 import { SIDEBAR_MODEL_TOKEN } from '../editor.token';
 
 import { TreeSidebarFixedBlocksComponent } from './tree-sidebar-fixed-blocks.component'
 import { CurrentCodeResourceService } from '../current-coderesource.service';
 
-function resolvePortalComponentId(id: string) {
+import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
+
+function resolvePortalComponentId(id: string): any {
   switch (id) {
     case "fixedBlocks": return (TreeSidebarFixedBlocksComponent);
+    case "databaseSchema": return (DatabaseSchemaSidebarComponent);
   }
 }
 
@@ -41,16 +45,18 @@ export class TreeSidebarComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * Initializes the portals for all sidebars
+   */
   ngOnInit(): void {
     // Listen for changes of the active resource
     let outerRef = this._currentCodeResource.currentResource.subscribe(res => {
       // And then on changes for the active block language
       let innerRef = res.blockLanguage.subscribe(languageModel => {
-
+        // And then we are at the language model which knows the sidebars
         const sidebars = languageModel.sidebars;
         if (sidebars && sidebars.length > 0) {
           this._portalInstances = sidebars.map(s => {
-            // TODO: Pass correct instance of sidebar definition
             return (new ComponentPortal(resolvePortalComponentId(s.portalComponentTypeId)));
           });
         }
@@ -62,6 +68,9 @@ export class TreeSidebarComponent implements OnInit, OnDestroy {
     this._subscriptions.push(outerRef);
   }
 
+  /**
+   * Unsubscribes from all subscriptions
+   */
   ngOnDestroy(): void {
     this._subscriptions.forEach(s => s.unsubscribe());
     this._subscriptions = [];

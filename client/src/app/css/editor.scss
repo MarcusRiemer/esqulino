@@ -18,6 +18,7 @@
 
     .content {
         flex: 1 1;
+        min-width: 670px; /* Works for a minimum screen width of 1280 */
     }
 
     editor-navbar {

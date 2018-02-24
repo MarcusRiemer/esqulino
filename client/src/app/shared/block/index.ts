@@ -1,6 +1,7 @@
 export * from './block-language'
 export * from './editor-block'
 export * from './sidebar'
+export * from './fixed-blocks-sidebar'
 export * from './block.description'
 
 import { BlockLanguage } from './block-language'

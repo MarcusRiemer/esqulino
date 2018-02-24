@@ -8,6 +8,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
   name: "Reguläre Ausdrücke",
   sidebars: [
     {
+      type: "fixedBlocks",
       caption: "RegEx",
       categories: [
         {
