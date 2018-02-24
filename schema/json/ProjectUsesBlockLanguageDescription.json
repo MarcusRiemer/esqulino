@@ -1,0 +1,19 @@
+{
+  "$ref": "#/definitions/ProjectUsesBlockLanguageDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "ProjectUsesBlockLanguageDescription": {
+      "additionalProperties": false,
+      "description": "A block language that is used by this project.",
+      "properties": {
+        "blockLanguageId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "blockLanguageId"
+      ],
+      "type": "object"
+    }
+  }
+}

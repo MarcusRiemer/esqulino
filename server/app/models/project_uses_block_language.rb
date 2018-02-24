@@ -6,4 +6,10 @@ class ProjectUsesBlockLanguage < ApplicationRecord
   def readable_identification
     block_language.readable_identification
   end
+
+  # Returns a hash that contains the ID of the referenced block
+  # language and possibly options for the used language.
+  def to_api_response
+    to_json_api_response.slice("blockLanguageId")
+  end
 end

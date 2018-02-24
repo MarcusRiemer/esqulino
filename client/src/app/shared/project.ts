@@ -7,6 +7,7 @@ import { BlockLanguageDescription } from './block/block-language.description'
 
 import {
   ProjectDescription, AvailableDatabaseDescription, ProjectSourceDescription,
+  ProjectUpdateDescription, ProjectUsesBlockLanguageDescription,
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from './project.description'
 import { Schema } from './schema/schema'
@@ -57,6 +58,7 @@ export class Project implements ApiVersion, Saveable {
   private _saveRequired = false;
 
   private _projectBlockLanguages: BlockLanguageDescription[];
+  private _usesBlockLanguages: ProjectUsesBlockLanguageDescription[];
 
   /**
    * Construct a new project and a whole slew of other
@@ -76,6 +78,7 @@ export class Project implements ApiVersion, Saveable {
     this._projectImageId = json.preview;
     this._sources = json.sources || [] // Sources may be undefined
     this._projectBlockLanguages = json.blockLanguages;
+    this._usesBlockLanguages = json.usesBlockLanguages;
     this.schema = new Schema(json.schema);
 
     if (json.apiVersion as string != this.apiVersion) {
@@ -225,6 +228,31 @@ export class Project implements ApiVersion, Saveable {
   }
 
   /**
+   * @return True, if the given block language is used by any resource.
+   */
+  isBlockLanguageReferenced(blockLanguageId: string) {
+    return (this._codeResources.some(c => c.blockLanguageIdPeek == blockLanguageId));
+  }
+
+  /**
+   * Removes the reference to the given block language if it is not in
+   * use by any code resource.
+   */
+  removeUsedBlockLanguage(blockLanguageId: string) {
+    // Is the language referenced?
+    if (this.isBlockLanguageReferenced(blockLanguageId)) {
+      // If it is: Don't change anything
+      return (false);
+    } else {
+      // It isn't: Lets remove it
+      this._usesBlockLanguages = this._usesBlockLanguages.filter(b => b.blockLanguageId !== blockLanguageId);
+      this._projectBlockLanguages = this._projectBlockLanguages.filter(b => b.id !== blockLanguageId);
+      this.markSaveRequired();
+      return (true);
+    }
+  }
+
+  /**
    * @return All available code resources, no order guaranteed.
    */
   get codeResources() {
@@ -281,21 +309,23 @@ export class Project implements ApiVersion, Saveable {
    * @param id_or_slug The id or slug for a certain languageModel
    */
   getBlockLanguage(id_or_slug: string) {
-
-    console.log(`Looking for block language "${id_or_slug}"`, this._projectBlockLanguages);
-
     const localLanguage = this._projectBlockLanguages.find(l => l.id === id_or_slug || l.slug === id_or_slug);
-
-    return (this._languageService.getLocalBlockLanguage(localLanguage.slug));
+    if (localLanguage) {
+      return (this._languageService.getLocalBlockLanguage(localLanguage.slug));
+    } else {
+      return (undefined);
+    }
   }
 
-  toModel(): ProjectDescription {
-    const toReturn: ProjectDescription = {
-      id: this._id,
-      slug: this.slug,
+  /**
+   * @return An object that the server can use to update the stored data.
+   */
+  toUpdateRequest(): ProjectUpdateDescription {
+    const toReturn: ProjectUpdateDescription = {
       name: this.name,
       apiVersion: this.apiVersion,
-      description: this.description
+      description: this.description,
+      activeDatabase: this._currentDatabase
     };
 
     if (this._indexPageId) {
@@ -304,10 +334,6 @@ export class Project implements ApiVersion, Saveable {
 
     if (this._projectImageId) {
       toReturn.preview = this._projectImageId;
-    }
-
-    if (this._currentDatabase) {
-      toReturn.activeDatabase = this._currentDatabase;
     }
 
     return (toReturn);
