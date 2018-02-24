@@ -26,7 +26,6 @@ setup-database:
 
 # Running tests
 test : msg-pre-run-test
-	./bin/rails test
 	./bin/rails spec
 
 # Helpful during development: Continously watches for changes in the project
