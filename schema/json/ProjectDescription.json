@@ -336,14 +336,25 @@
         },
         "updatedAt": {
           "type": "string"
+        },
+        "usesBlockLanguages": {
+          "items": {
+            "$ref": "#/definitions/ProjectUsesBlockLanguageDescription"
+          },
+          "type": "array"
         }
       },
       "required": [
         "apiVersion",
+        "blockLanguages",
+        "codeResources",
         "description",
         "id",
         "name",
-        "slug"
+        "schema",
+        "slug",
+        "sources",
+        "usesBlockLanguages"
       ],
       "type": "object"
     },
@@ -382,6 +393,19 @@
         "url",
         "display",
         "readOnly"
+      ],
+      "type": "object"
+    },
+    "ProjectUsesBlockLanguageDescription": {
+      "additionalProperties": false,
+      "description": "A block language that is used by this project.",
+      "properties": {
+        "blockLanguageId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "blockLanguageId"
       ],
       "type": "object"
     },

@@ -82,17 +82,17 @@ export class CodeResource extends ProjectResource {
   }
 
   /**
-   * @return The ID of the language this resource uses.
-   */
-  get blockLanguageIdPeek() {
-    return (this._blockLanguageId.value);
-  }
-
-  /**
    * @return An observable value of the language this id uses.
    */
   get blockLanguageId(): Observable<string> {
     return (this._blockLanguageId);
+  }
+
+  /**
+   * @return The ID of the language this resource uses.
+   */
+  get blockLanguageIdPeek() {
+    return (this._blockLanguageId.value);
   }
 
   get blockLanguagePeek() {

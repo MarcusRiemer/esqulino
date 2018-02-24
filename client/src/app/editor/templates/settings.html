@@ -106,6 +106,25 @@
     </div>
   </div>
 
+  <div class="card mb-3"
+       id="used-block-languages">
+    <div class="card-header">
+      Genutzte Programmiersprachen
+    </div>
+    <div class="card-body">
+      Hier können die genutzten Programmiersprachen ausgewählt und, sofern die Sprache dies anbietet, möglicherweise genauer eingestellt werden.
+    </div>
+
+    <div *ngFor="let blockLanguage of project.projectBlockLanguages"
+         class="card-body">
+      <h5 class="card-title">{{ blockLanguage.name }}</h5>
+      <a (click)="removeUsedBlockLanguage(blockLanguage.id)"
+         class="btn btn-danger">
+        Sprache entfernen
+      </a>
+    </div>
+  </div>
+
   <div *ngIf="project.hasSources"
        class="card mb-3"
        id="sources">

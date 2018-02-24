@@ -93,12 +93,20 @@ export interface ProjectSourceDescription {
  *
  */
 export interface ProjectDescription extends ProjectListDescription {
-  schema?: TableDescription[]
+  schema: TableDescription[]
   availableDatabases?: { [id: string]: AvailableDatabaseDescription }
   activeDatabase?: string
-  sources?: ProjectSourceDescription[]
-  codeResources?: CodeResourceDescription[]
-  blockLanguages?: BlockLanguageDescription[]
+  sources: ProjectSourceDescription[]
+  codeResources: CodeResourceDescription[]
+  blockLanguages: BlockLanguageDescription[]
+  usesBlockLanguages: ProjectUsesBlockLanguageDescription[]
+}
+
+/**
+ * A block language that is used by this project.
+ */
+export interface ProjectUsesBlockLanguageDescription {
+  blockLanguageId: string;
 }
 
 /**

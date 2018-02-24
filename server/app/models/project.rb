@@ -92,6 +92,7 @@ class Project < ApplicationRecord
     to_return['codeResources'] = self.code_resources.map(&:to_full_api_response)
     to_return['sources'] = self.project_sources.map(&:serializable_hash)
     to_return['blockLanguages'] = self.block_languages.map(&:to_full_api_response)
+    to_return['usesBlockLanguages'] = self.project_uses_block_languages.map(&:to_api_response)
 
     if default_database then
       to_return['schema'] = default_database.schema

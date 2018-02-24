@@ -139,20 +139,14 @@ export class ProjectService {
    * @param proj The project with the relevant description.
    */
   storeProjectDescription(proj: Project) {
-    const desc = proj.toModel();
+    const desc = proj.toUpdateRequest();
     const url = this._server.getProjectUrl(proj.slug);
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    // The project ID is part of the request, it must not be sent
-    // in the body again
-    delete desc.id;
-
-    // TODO: The slug shouldn't be changed at the moment, but maybe later
-    delete desc.slug;
-
     const toReturn = this._http.put(url, JSON.stringify(desc), options)
+      .delay(250)
       .do(_ => proj.markSaved())
       .catch(this.passThroughError);
 

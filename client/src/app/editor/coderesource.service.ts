@@ -29,6 +29,7 @@ export class CodeResourceService {
 
     const body = JSON.stringify(bodyJson);
     const toReturn = this._http.put(url, body, options)
+      .delay(250)
       .map((res) => {
         const resourceId = res.text();
       })

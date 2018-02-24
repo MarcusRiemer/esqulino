@@ -78,8 +78,21 @@ export class SettingsComponent {
     this._subscriptionRefs.push(subRef);
   }
 
+  /**
+   * Free up subscriptions
+   */
   ngOnDestroy() {
     this._subscriptionRefs.forEach(ref => ref.unsubscribe());
     this._subscriptionRefs = [];
+  }
+
+  /**
+   * Remove a block language from this project.
+   */
+  removeUsedBlockLanguage(blockLanguageId: string) {
+    console.log("Removing", blockLanguageId);
+    if (!this.project.removeUsedBlockLanguage(blockLanguageId)) {
+      alert("Benutzte Programmiersprachen können nicht entfernt werden");
+    }
   }
 }
