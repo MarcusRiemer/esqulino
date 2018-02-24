@@ -66,6 +66,7 @@ Running locally
 * After that, the client (and its commandline interface) need to be compiled and packaged once: ``make dist`` for a fully optimized version or ``make dist-dev`` for a development version.
 * Start a PostgreSQL-server that has a user ``esqulino`` who is allowed to create databases.
 * You may now run the server, to do this locally simply use ``make server-run`` and it will spin up a local server instance listening on port ``9292``.
+* You then need to seed the initial data that is part of this instance using ``make load-all-data``. This will setup a pre-configured environment with some programming languages, block languages and projects.
 
 The setup above is helpful to get the whole project running once, but if you want do develop it any further you are better of with the following options:
 
