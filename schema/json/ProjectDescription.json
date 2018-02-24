@@ -316,6 +316,12 @@
         "preview": {
           "type": "string"
         },
+        "projectUsesBlockLanguages": {
+          "items": {
+            "$ref": "#/definitions/ProjectUsesBlockLanguageDescription"
+          },
+          "type": "array"
+        },
         "public": {
           "type": "boolean"
         },
@@ -336,12 +342,6 @@
         },
         "updatedAt": {
           "type": "string"
-        },
-        "usesBlockLanguages": {
-          "items": {
-            "$ref": "#/definitions/ProjectUsesBlockLanguageDescription"
-          },
-          "type": "array"
         }
       },
       "required": [
@@ -351,10 +351,10 @@
         "description",
         "id",
         "name",
+        "projectUsesBlockLanguages",
         "schema",
         "slug",
-        "sources",
-        "usesBlockLanguages"
+        "sources"
       ],
       "type": "object"
     },
@@ -402,9 +402,13 @@
       "properties": {
         "blockLanguageId": {
           "type": "string"
+        },
+        "id": {
+          "type": "string"
         }
       },
       "required": [
+        "id",
         "blockLanguageId"
       ],
       "type": "object"
