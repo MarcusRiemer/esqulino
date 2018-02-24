@@ -39,15 +39,50 @@
         },
         "preview": {
           "type": "string"
+        },
+        "projectUsesBlockLanguages": {
+          "items": {
+            "$ref": "#/definitions/ProjectUpdateUsedBlockLanguage"
+          },
+          "type": "array"
         }
       },
       "required": [
-        "activeDatabase",
-        "apiVersion",
-        "description",
-        "name"
+        "apiVersion"
       ],
       "type": "object"
+    },
+    "ProjectUpdateUsedBlockLanguage": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "blockLanguageId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "blockLanguageId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "_delete": {
+              "type": "boolean"
+            },
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "_delete"
+          ],
+          "type": "object"
+        }
+      ]
     }
   }
 }

@@ -8,7 +8,7 @@ class Project < ApplicationRecord
   has_many :code_resources
 
   # The block languages this project explicitly allows
-  has_many :project_uses_block_languages
+  has_many :project_uses_block_languages, :dependent => :destroy
   accepts_nested_attributes_for :project_uses_block_languages, allow_destroy: true
 
   # The actual allowed languages
@@ -95,7 +95,7 @@ class Project < ApplicationRecord
     to_return['codeResources'] = self.code_resources.map(&:to_full_api_response)
     to_return['sources'] = self.project_sources.map(&:serializable_hash)
     to_return['blockLanguages'] = self.block_languages.map(&:to_full_api_response)
-    to_return['usesBlockLanguages'] = self.project_uses_block_languages.map(&:to_api_response)
+    to_return['projectUsesBlockLanguages'] = self.project_uses_block_languages.map(&:to_api_response)
 
     if default_database then
       to_return['schema'] = default_database.schema

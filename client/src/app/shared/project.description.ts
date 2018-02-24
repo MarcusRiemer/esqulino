@@ -110,6 +110,8 @@ export interface ProjectUsesBlockLanguageDescription {
   blockLanguageId: string
 }
 
+export type ProjectUpdateUsedBlockLanguage = { blockLanguageId: string } | { id: string, _destroy: boolean }
+
 /**
  * These things can be provided when updating the project itself.
  */
@@ -119,11 +121,7 @@ export interface ProjectUpdateDescription extends ApiVersion {
   activeDatabase?: string
   preview?: string
   indexPageId?: string
-  projectUsesBlockLanguages?: {
-    id: string
-    blockLanguageId: string
-    _delete?: boolean
-  }[]
+  projectUsesBlockLanguages?: ProjectUpdateUsedBlockLanguage[]
 }
 
 /**

@@ -48,7 +48,7 @@ describe('Project', () => {
     expect(p.isBlockLanguageReferenced("block_b")).toBeFalsy("BlockLanguage is not referenced");
   })
 
-  it('removeUsedBlockLanguage: Used', () => {
+  it('Removing BlockLanguage: Used', () => {
     const p = new Project(emptyProjectDescription({
       projectUsesBlockLanguages: [
         { id: "irrelevant", blockLanguageId: "block_a" }
@@ -67,9 +67,12 @@ describe('Project', () => {
     }), undefined);
 
     expect(p.removeUsedBlockLanguage("block_a")).toBeFalsy();
+
+    const updateRequest = p.toUpdateRequest();
+    expect(updateRequest.projectUsesBlockLanguages).toEqual([{ id: "irrelevant", blockLanguageId: "block_a" }]);
   })
 
-  it('removeUsedBlockLanguage: Unused', () => {
+  it('Removing BlockLanguage: Unused', () => {
     const p = new Project(emptyProjectDescription({
       projectUsesBlockLanguages: [
         { id: "irrelevant", blockLanguageId: "block_a" }
@@ -89,7 +92,19 @@ describe('Project', () => {
     }), undefined);
 
     expect(p.removeUsedBlockLanguage("block_a")).toBeTruthy();
-    expect(p.getBlockLanguage("block_a")).toBeFalsy();
     expect(p.isSavingRequired).toBeTruthy();
+
+    const updateRequest = p.toUpdateRequest();
+    expect(updateRequest.projectUsesBlockLanguages).toEqual([{ id: "irrelevant", _destroy: true }]);
+  })
+
+  it('Removing BlockLanguage: Unknown', () => {
+    const p = new Project(emptyProjectDescription({}), undefined);
+
+    expect(p.removeUsedBlockLanguage("block_a")).toBeFalsy();
+    expect(p.isSavingRequired).toBeFalsy();
+
+    const updateRequest = p.toUpdateRequest();
+    expect(updateRequest.projectUsesBlockLanguages).toEqual([]);
   })
 });

@@ -107,7 +107,7 @@ RSpec.describe ProjectsController, type: :request do
         expect(updated.description).to eq project.description
       end
 
-      it 'adds new used block languages', :focus do
+      it 'adds new used block languages' do
         added_block_language = FactoryBot.create(:block_language)
         new_block_language = FactoryBot.create(:block_language)
         project.project_uses_block_languages.create(block_language: added_block_language)
@@ -126,7 +126,7 @@ RSpec.describe ProjectsController, type: :request do
         expect(project.block_languages.include? new_block_language).to be true
       end
 
-      it 'removes used block languages', :focus do
+      it 'removes used block languages' do
         added_block_language = FactoryBot.create(:block_language)
         use_added_block_language = project.project_uses_block_languages.create(block_language: added_block_language)
         
@@ -143,7 +143,7 @@ RSpec.describe ProjectsController, type: :request do
         expect(project.project_uses_block_languages.size).to eq 0
       end
 
-      it 'updates used block languages', :focus do
+      it 'updates used block languages' do
         added_block_language = FactoryBot.create(:block_language)
         use_added_block_language = project.project_uses_block_languages.create(block_language: added_block_language)
         new_block_language = FactoryBot.create(:block_language)

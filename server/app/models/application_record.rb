@@ -39,8 +39,7 @@ class ApplicationRecord < ActiveRecord::Base
     if not self.class.primary_key.nil? then
       { self.class.primary_key => self.attributes[self.class.primary_key] }
     else
-      content_column_names = self.class.content_columns.map &:name
-      self.attributes.select { |k,v| not content_column_names.include? k }
+      raise RuntimeError.new ("Searching for keys requires a PK")
     end
   end
 end

@@ -59,6 +59,7 @@ export class Project implements ApiVersion, Saveable {
 
   private _projectBlockLanguages: BlockLanguageDescription[];
   private _usesBlockLanguages: ProjectUsesBlockLanguageDescription[];
+  private _removedBlockLanguages: string[] = [];
 
   /**
    * Construct a new project and a whole slew of other
@@ -244,11 +245,17 @@ export class Project implements ApiVersion, Saveable {
       // If it is: Don't change anything
       return (false);
     } else {
-      // It isn't: Lets remove it
-      this._usesBlockLanguages = this._usesBlockLanguages.filter(b => b.blockLanguageId !== blockLanguageId);
-      this._projectBlockLanguages = this._projectBlockLanguages.filter(b => b.id !== blockLanguageId);
-      this.markSaveRequired();
-      return (true);
+      // It isn't: Lets remove it (if it exists)
+      const used = this._usesBlockLanguages.find(b => b.blockLanguageId === blockLanguageId);
+      if (used) {
+        this._usesBlockLanguages = this._usesBlockLanguages.filter(b => b.blockLanguageId !== blockLanguageId);
+        this._projectBlockLanguages = this._projectBlockLanguages.filter(b => b.id !== blockLanguageId);
+        this._removedBlockLanguages.push(used.id);
+        this.markSaveRequired();
+        return (true);
+      } else {
+        return (false);
+      }
     }
   }
 
@@ -325,8 +332,23 @@ export class Project implements ApiVersion, Saveable {
       name: this.name,
       apiVersion: this.apiVersion,
       description: this.description,
-      activeDatabase: this._currentDatabase
+      activeDatabase: this._currentDatabase,
+      projectUsesBlockLanguages: []
     };
+
+    this._removedBlockLanguages.forEach(removed => {
+      toReturn.projectUsesBlockLanguages.push({
+        id: removed,
+        _destroy: true
+      })
+    });
+
+    this._usesBlockLanguages.forEach(used => {
+      toReturn.projectUsesBlockLanguages.push({
+        id: used.id,
+        blockLanguageId: used.blockLanguageId
+      });
+    });
 
     if (this._indexPageId) {
       toReturn.indexPageId = this.indexPageId;
