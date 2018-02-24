@@ -1,4 +1,4 @@
-import { SidebarBlockDescription, FixedBlocksSidebarDescription, EditorBlockDescription } from './block.description'
+import { SidebarDescription, EditorBlockDescription } from './block.description'
 
 /**
  * Augments a language with information about the UI layer.
@@ -39,7 +39,7 @@ export interface BlockLanguageDocument {
   /**
    * How the available blocks should be represented in the sidebar.
    */
-  sidebars: FixedBlocksSidebarDescription[];
+  sidebars: SidebarDescription[];
 
   /**
    * How blocks should be represented in the drag & drop editor.

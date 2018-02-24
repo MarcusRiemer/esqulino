@@ -8,6 +8,10 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
   name: "SQL",
   sidebars: [
     {
+      type: "databaseSchema",
+    },
+    {
+      type: "fixedBlocks",
       caption: "SQL",
       categories: [
         {
@@ -107,59 +111,6 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 }
               }
             },
-            {
-              displayName: "Tabelle Person",
-              defaultNode: {
-                language: "sql",
-                name: "tableIntroduction",
-                properties: {
-                  "name": "Person",
-                }
-              }
-            },
-            {
-              displayName: "Spalte Person.Id",
-              defaultNode: {
-                language: "sql",
-                name: "columnName",
-                properties: {
-                  "columnName": "Id",
-                  "refTableName": "Person"
-                }
-              }
-            },
-            {
-              displayName: "Spalte Person.Vorname",
-              defaultNode: {
-                language: "sql",
-                name: "columnName",
-                properties: {
-                  "columnName": "Vorname",
-                  "refTableName": "Person"
-                }
-              }
-            },
-            {
-              displayName: "Spalte Person.Nachname",
-              defaultNode: {
-                language: "sql",
-                name: "columnName",
-                properties: {
-                  "columnName": "Nachname",
-                  "refTableName": "Person"
-                }
-              }
-            },
-            {
-              displayName: "Tabelle Adresse",
-              defaultNode: {
-                language: "sql",
-                name: "tableIntroduction",
-                properties: {
-                  "name": "Adresse",
-                }
-              }
-            }
           ]
         }
       ]

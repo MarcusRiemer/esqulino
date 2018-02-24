@@ -12,22 +12,20 @@
 sidebar-item-host .ast {
     ul {
         list-style-type: none;
-        padding-left: 0px;
-
-        li {
-            font-family: monospace;
-            cursor: default;
-            font-size: 1.2rem;
-            border: 2px solid black;
-            white-space: nowrap;
-            padding-left: 1em;
-            padding-right: 1em;
-            margin-bottom: 10px;
-        }
-
-        li.rounded {
-            border-radius: 500px;
-        }
     }
 
+    .block {
+        font-family: monospace;
+        cursor: default;
+        font-size: 1.2rem;
+        border: 2px solid black;
+        white-space: nowrap;
+        padding-left: 1em;
+        padding-right: 1em;
+        margin-bottom: 10px;
+    }
+
+    .rounded {
+        border-radius: 500px;
+    }
 }

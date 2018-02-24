@@ -47,7 +47,7 @@
       <a [routerLink]="['schema', currentDatabaseName]"
          [routerLinkActiveOptions]="{exact: true}"
          routerLinkActive="router-link-active">
-        <span class="fa fa-database fa-fw"></span>Datenbank
+        <span class="fa fa-database fa-fw"></span>Datenbank "{{ currentDatabaseName }}"
       </a>
       <ul class="nav-database">
         <li *ngFor="let table of project?.schema.tables">

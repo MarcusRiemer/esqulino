@@ -409,6 +409,7 @@ export const DYNAMIC_LANGUAGE_MODEL: BlockLanguageDescription = {
   name: "XML (Statisch)",
   sidebars: [
     {
+      type: "fixedBlocks",
       caption: "XML (Statisch)",
       categories: [
         {
@@ -426,6 +427,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
   name: "XML (Dynamisch)",
   sidebars: [
     {
+      type: "fixedBlocks",
       caption: "XML (Dynamisch)",
       categories: [
         {

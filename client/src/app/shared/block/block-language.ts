@@ -1,17 +1,20 @@
 import { Tree, NodeDescription, Language, QualifiedTypeName, typenameEquals } from '../syntaxtree'
 
-import { FixedBlocksSidebar, FixedBlocksSidebarCategory, FixedSidebarBlock } from './sidebar'
+import { FixedBlocksSidebar } from './fixed-blocks-sidebar'
+import { Sidebar } from './sidebar'
 import { EditorBlock } from './editor-block'
 import { BlockLanguageDescription } from './block-language.description'
 import { EditorBlockDescription } from './block.description'
 import * as Forward from './block-language.forward'
+
+import { DatabaseSchemaSidebar } from './sql/database-schema-sidebar'
 
 /**
  * Augments an existing language with additional information on how to
  * display elements of that languages using blocks.
  */
 export class BlockLanguage implements Forward.BlockLanguage {
-  private _sidebars: FixedBlocksSidebar[];
+  private _sidebars: Sidebar[];
   private _editorBlocks: EditorBlockDescription[] = [];
   private _name: string;
   private _id: string;
@@ -22,7 +25,13 @@ export class BlockLanguage implements Forward.BlockLanguage {
     this._slug = desc.slug;
     this._name = desc.name;
 
-    this._sidebars = desc.sidebars.map(sidebarDesc => new FixedBlocksSidebar(this, sidebarDesc));
+    this._sidebars = desc.sidebars.map(sidebarDesc => {
+      switch (sidebarDesc.type) {
+        case "fixedBlocks": return new FixedBlocksSidebar(this, sidebarDesc);
+        case "databaseSchema": return new DatabaseSchemaSidebar();
+        default: throw new Error(`Unknown sidebar type: ${(sidebarDesc as any).type}`);
+      }
+    });
     this._editorBlocks = desc.editorBlocks;
   }
 

@@ -28,6 +28,8 @@ import { BlockRenderBlockComponent } from './block/block-render-block.component'
 import { BlockRenderDropTargetComponent } from './block/block-render-drop-target.component'
 import { BlockRenderIteratorComponent } from './block/block-render-iterator.component'
 
+import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
+
 @NgModule({
   imports: [
     SharedEditorModule,
@@ -42,6 +44,7 @@ import { BlockRenderIteratorComponent } from './block/block-render-iterator.comp
     BlockLayoutDirective,
     BlockBaseDirective,
     CodeGeneratorComponent,
+    DatabaseSchemaSidebarComponent,
     DraggableDirective,
     DropTargetDirective,
     DropPlaceholderDirective,
@@ -56,6 +59,7 @@ import { BlockRenderIteratorComponent } from './block/block-render-iterator.comp
     LanguageSelectorComponent,
   ],
   entryComponents: [
+    DatabaseSchemaSidebarComponent,
     TreeSidebarComponent,
     TreeSidebarFixedBlocksComponent
   ],

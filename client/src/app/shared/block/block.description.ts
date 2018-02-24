@@ -108,28 +108,6 @@ export namespace VisualBlockDescriptions {
 }
 
 /**
- * Defines which blocks to show in a certain category.
- */
-export interface FixedBlocksSidebarCategoryDescription {
-  categoryCaption: string;
-  blocks: SidebarBlockDescription[];
-}
-
-/**
- * Defines the overall look of a sidebar. It at least sorts available blocks
- * into categories.
- */
-export interface FixedBlocksSidebarDescription {
-
-  /**
-   * The name that should be displayed to the user.
-   */
-  caption: string;
-
-  categories: FixedBlocksSidebarCategoryDescription[];
-}
-
-/**
  * Describes how the available types should be represented in the sidebar.
  * It is perfectly fine to have multiple sidebar descriptions for the
  * same underlying type.
@@ -147,6 +125,47 @@ export interface SidebarBlockDescription {
    */
   defaultNode: NodeDescription;
 }
+
+/**
+ * Defines which blocks to show in a certain category.
+ */
+export interface FixedBlocksSidebarCategoryDescription {
+  categoryCaption: string;
+  blocks: SidebarBlockDescription[];
+}
+
+/**
+ * Defines the overall look of a sidebar. It at least sorts available blocks
+ * into categories.
+ */
+export interface FixedBlocksSidebarDescription {
+  /**
+   * Unique identification for this type.
+   */
+  type: "fixedBlocks"
+
+  /**
+   * The name that should be displayed to the user.
+   */
+  caption: string
+
+  /**
+   * The actual blocks are categorized into categories.
+   */
+  categories: FixedBlocksSidebarCategoryDescription[]
+}
+
+export interface DatabaseSchemaSidebarDescription {
+  /**
+   * Unique identification for this type.
+   */
+  type: "databaseSchema"
+}
+
+/**
+ * All possible sidebar types
+ */
+export type SidebarDescription = FixedBlocksSidebarDescription | DatabaseSchemaSidebarDescription;
 
 /**
  * Describes how certain nodes in the syntaxtree should be presented

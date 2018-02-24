@@ -1,0 +1,18 @@
+<h5>Datenbank "{{ databaseName }}"</h5>
+<ng-container *ngFor="let table of possibleTables;">
+  <div class="ast">
+    <div (dragstart)="startTableDrag($event, table)"
+         draggable="true"
+         class="block rounded">
+      {{ table.name }}
+    </div>
+    <ul>
+      <li *ngFor="let tableColumn of table.columns;"
+          (dragstart)="startColumnDrag($event, table, tableColumn)"
+          draggable="true"
+          class="block rounded">
+        {{ tableColumn.name }}
+      </li>
+    </ul>
+  </div>
+</ng-container>
