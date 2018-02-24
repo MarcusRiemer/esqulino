@@ -110,6 +110,11 @@ class Project < ApplicationRecord
     to_json_api_response
   end
 
+  # TODO: This is a legacy holdover
+  def write_access
+    true
+  end
+
   # The folder that should contain all assets that are part of this directory.
   def data_directory_path
     File.join(Rails.application.config.sqlino[:projects_dir], id)
