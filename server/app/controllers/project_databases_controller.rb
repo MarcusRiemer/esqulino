@@ -7,18 +7,17 @@ class ProjectDatabasesController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
 
-  def get_current_database
-    project_slug = params['project_id']
-    database_id = nil # params['database_id']
+  def current_project
+    @current_project ||= Project.find_by(slug: params['project_id'])
+  end
 
-    current_project = Project.find_by(slug: project_slug)
-    current_project.database_by_id_or_default(database_id)
+  def current_database
+    database_id = nil # params['database_id']
+    @current_database = current_project.database_by_id_or_default(database_id)
   end
 
   # Returns a visual representation of the schema, rendered with Graphviz
   def visual_schema
-    current_database = get_current_database
-
     # Build the GraphViz description of the database
     db_path = current_database.sqlite_file_path
     db_graphviz = database_graphviz_schema(db_path)
@@ -73,20 +72,23 @@ class ProjectDatabasesController < ApplicationController
       table_description = ensure_request("TableDescription", request.body.read)
 
       # Grab the database and modify it
-      current_database = get_current_database
+      if (current_database.nil?) then
+        # TODO: Actually throw an error, databases should be added seperatly
+        current_project.create_default_database(name: "default", project_id: current_project.id)
+        current_project.save!
+      end
       current_database.table_create table_description
       current_database.save!
     end
   end
 
-  
+
   # Alters a certain table of a database
   def table_alter
     ensure_write_access do
       # Grab parameters
       table_name = params['tablename']
       alter_schema_request = JSON.parse request.body.read
-      current_database = get_current_database
 
       # Alter the database
       current_database.table_alter table_name, alter_schema_request['commands']
@@ -97,12 +99,11 @@ class ProjectDatabasesController < ApplicationController
     end
   end
 
-  
+
   # Drops a single table of the given database.
   def table_delete
     ensure_write_access do
       # Grab the database and modify it
-      current_database = get_current_database
       current_database.table_delete params['tablename']
       current_database.save!
     end
@@ -113,12 +114,12 @@ class ProjectDatabasesController < ApplicationController
     amount = params['amount'].to_i
     from = params['from'].to_i
     tablename = params['tablename']
-    
-    render :json => get_current_database.table_row_data(tablename, from, amount)
+
+    render :json => current_database.table_row_data(tablename, from, amount)
   end
 
   # Retrieves the actual data for a number of rows in a certain table
   def table_row_count
-    render :json => get_current_database.table_row_count(params['tablename'])
+    render :json => current_database.table_row_count(params['tablename'])
   end
 end
