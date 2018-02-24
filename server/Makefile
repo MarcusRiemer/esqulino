@@ -16,17 +16,26 @@ clean-deps : msg-pre-clean-deps
 run : msg-pre-run-prod
 	RAILS_ENV=production ./bin/rails server --port 9292
 
-# Running in development mode, this mode
-# attempts to reload changed code
+# Running in development mode, this mode attempts to reload changed code
 run-dev : msg-pre-run-dev
 	./bin/rails server -b 0.0.0.0 --port 9292
 
+# Sets up the database
 setup-database:
 	./bin/rails db:setup RAILS_ENV=$(RAILS_ENV)
 
 # Running tests
 test : msg-pre-run-test
 	./bin/rails spec
+
+# Updates (or initially creates) the live data in the system in the system from
+# a dump that has been previously created.
+load-all-data:
+	bin/rails "blattwerkzeug:block_language:load_all" "blattwerkzeug:project:load_all"
+
+# This operation is used to extract all data out of this server instance.
+dump-all-data:
+	bin/rails "blattwerkzeug:block_language:store_all" "blattwerkzeug:project:store_all"
 
 # Helpful during development: Continously watches for changes in the project
 # and re-runs tests that are affected by code changes

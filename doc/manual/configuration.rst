@@ -27,6 +27,16 @@ Server side rendering
 
 You may initially render pages on the server. This drastically speeds up initial load times and provides a partial fallback for users that disable JavaScript.
 
+Backing up and seeding data
+===========================
+
+The ``server/Makefile`` contains two targets that allow to im- or export data to a running server instance: ``load-all-data`` and ``dump-all-data``. The system is *very* basic at the moment and not formally tested, for proper backup purposes.
+
+That said, the following things need to be included in a backup for any environment:
+
+* The Postgres-database as denoted in ``server/config/database.yml``
+* The ``data_dir`` as denoted in ``server/config/sqlino.yml``
+
 Example configuration files
 ===========================
 
