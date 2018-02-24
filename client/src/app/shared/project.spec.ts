@@ -15,7 +15,7 @@ function emptyProjectDescription(override: Partial<ProjectDescription>): Project
     name: "Test 1",
     description: "Dynamically created for client side specs",
     public: true,
-    usesBlockLanguages: [],
+    projectUsesBlockLanguages: [],
     activeDatabase: "default",
     apiVersion: CURRENT_API_VERSION,
     availableDatabases: {},
@@ -31,8 +31,8 @@ function emptyProjectDescription(override: Partial<ProjectDescription>): Project
 describe('Project', () => {
   it('isBlockLanguageReferenced', () => {
     const p = new Project(emptyProjectDescription({
-      usesBlockLanguages: [
-        { blockLanguageId: "block_a" }
+      projectUsesBlockLanguages: [
+        { id: "irrelevant", blockLanguageId: "block_a" }
       ],
       codeResources: [
         {
@@ -50,8 +50,8 @@ describe('Project', () => {
 
   it('removeUsedBlockLanguage: Used', () => {
     const p = new Project(emptyProjectDescription({
-      usesBlockLanguages: [
-        { blockLanguageId: "block_a" }
+      projectUsesBlockLanguages: [
+        { id: "irrelevant", blockLanguageId: "block_a" }
       ],
       blockLanguages: [
         { id: "block_a", slug: "a", name: "Block A", sidebars: [], editorBlocks: [] }
@@ -71,8 +71,8 @@ describe('Project', () => {
 
   it('removeUsedBlockLanguage: Unused', () => {
     const p = new Project(emptyProjectDescription({
-      usesBlockLanguages: [
-        { blockLanguageId: "block_a" }
+      projectUsesBlockLanguages: [
+        { id: "irrelevant", blockLanguageId: "block_a" }
       ],
       blockLanguages: [
         { id: "block_a", slug: "a", name: "Block A", sidebars: [], editorBlocks: [] },

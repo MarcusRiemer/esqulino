@@ -6,8 +6,11 @@ class Project < ApplicationRecord
   has_many :project_sources, :dependent => :destroy
   # The actual code that is part of this project
   has_many :code_resources
+
   # The block languages this project explicitly allows
   has_many :project_uses_block_languages
+  accepts_nested_attributes_for :project_uses_block_languages, allow_destroy: true
+
   # The actual allowed languages
   has_many :block_languages, :through => :project_uses_block_languages
 

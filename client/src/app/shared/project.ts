@@ -78,7 +78,7 @@ export class Project implements ApiVersion, Saveable {
     this._projectImageId = json.preview;
     this._sources = json.sources || [] // Sources may be undefined
     this._projectBlockLanguages = json.blockLanguages;
-    this._usesBlockLanguages = json.usesBlockLanguages;
+    this._usesBlockLanguages = json.projectUsesBlockLanguages;
     this.schema = new Schema(json.schema);
 
     if (json.apiVersion as string != this.apiVersion) {

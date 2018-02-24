@@ -35,7 +35,8 @@ class ProjectsController < ApplicationController
   def update
     ensure_write_access do
       project = Project.find_by_slug(params[:project_id])
-      project.update(project_update_params)
+      project.update project_update_params # Simple properties
+      project.update project_used_block_languages_params # Used block languages
       head :no_content
     end
   end
@@ -67,5 +68,21 @@ class ProjectsController < ApplicationController
   def project_update_params
     params.permit(:name, :description, :indexPageId, :preview)
       .transform_keys { |k| k.underscore }
+  end
+
+  # The used block languages may be updated
+  def project_used_block_languages_params
+    used_block_languages = params[:projectUsesBlockLanguages]
+    if used_block_languages then
+      attributes = used_block_languages
+                     .map { |used| used.transform_keys! { |k| k.underscore } }
+                     .each { |used| used.permit! }
+      to_return = ActionController::Parameters
+                    .new({ "project_uses_block_languages_attributes" => attributes})
+                    .permit!
+      return (to_return)
+    else
+      return ({})
+    end
   end
 end
