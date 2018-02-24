@@ -48,7 +48,7 @@ def database_alter_schema(project_database, table_name, commandHolder)
         table_hash = table.serializable_hash(include: { columns: { }, foreign_keys: {} })
         database_alter_table(sqlite_file_path, table_hash, colHash)
       else
-        rename_table(sqlite_file_path, table.name, cmd['newName'])
+        internal_rename_table(sqlite_file_path, table.name, cmd['newName'])
         changeTableName(table, cmd['newName'])
       end
     end
@@ -94,7 +94,7 @@ def ensure_consistency!(db)
   raise EsqulinoError.new("Database inconsistent") if db.foreign_key_check().size > 0
 end
 
-def rename_table(sqlite_file_path, from_tableName, to_tableName)
+def internal_rename_table(sqlite_file_path, from_tableName, to_tableName)
   db = sqlite_open_augmented(sqlite_file_path)
   db.execute("PRAGMA foreign_keys = ON")
   

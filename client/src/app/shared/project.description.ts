@@ -99,25 +99,31 @@ export interface ProjectDescription extends ProjectListDescription {
   sources: ProjectSourceDescription[]
   codeResources: CodeResourceDescription[]
   blockLanguages: BlockLanguageDescription[]
-  usesBlockLanguages: ProjectUsesBlockLanguageDescription[]
+  projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[]
 }
 
 /**
  * A block language that is used by this project.
  */
 export interface ProjectUsesBlockLanguageDescription {
-  blockLanguageId: string;
+  id: string
+  blockLanguageId: string
 }
 
 /**
  * These things can be provided when updating the project itself.
  */
 export interface ProjectUpdateDescription extends ApiVersion {
-  name: ProjectName
-  description: string
-  activeDatabase: string
+  name?: ProjectName
+  description?: string
+  activeDatabase?: string
   preview?: string
   indexPageId?: string
+  projectUsesBlockLanguages?: {
+    id: string
+    blockLanguageId: string
+    _delete?: boolean
+  }[]
 }
 
 /**

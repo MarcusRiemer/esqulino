@@ -146,6 +146,7 @@ class ProjectDatabase < ApplicationRecord
     end
   end
 
+  # This method is hopefully unnecessary
   def flush!
     if not @db_connection.nil? then
       @db_connection.close
@@ -183,7 +184,7 @@ class ProjectDatabase < ApplicationRecord
       db_connection_readonly
     else
       # Writing connections need to be in synchronous mode so that the readonly
-      # connection can see any changes immediatly.
+      # connection can see any changes immediately.
       @db_connection ||= sqlite_open_augmented(sqlite_file_path, :synchronous => "full")
     end
   end

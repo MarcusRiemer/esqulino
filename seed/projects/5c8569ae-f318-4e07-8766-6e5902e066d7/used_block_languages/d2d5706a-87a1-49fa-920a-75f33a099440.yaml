@@ -6,5 +6,8 @@ concise_attributes:
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: db441c27-6a19-4f2f-95a9-f3bc44675b4f
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: d2d5706a-87a1-49fa-920a-75f33a099440
 new_record: false
 active_record_yaml_version: 2

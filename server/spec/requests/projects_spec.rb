@@ -11,7 +11,7 @@ RSpec.describe ProjectsController, type: :request do
       it 'creates a project', fakefs: true do
         # TODO CENTRALIZE: Put this call in a central location
         FakeFS::FileSystem.clone(Rails.application.config.sqlino[:projects_dir])
-        
+
         post '/api/project', params: {"name" => "Some project", "slug" => "test" }
 
         expect(response.status).to eq(200)
@@ -106,6 +106,61 @@ RSpec.describe ProjectsController, type: :request do
         expect(updated.name).to eq project.name
         expect(updated.description).to eq project.description
       end
+
+      it 'adds new used block languages', :focus do
+        added_block_language = FactoryBot.create(:block_language)
+        new_block_language = FactoryBot.create(:block_language)
+        project.project_uses_block_languages.create(block_language: added_block_language)
+        
+        put "/api/project/#{project.slug}",
+            params: {
+              "apiVersion" => 4,
+              "projectUsesBlockLanguages" => [
+                { "blockLanguageId" => new_block_language.id }
+              ]
+            },
+            headers: auth_headers
+
+        project.reload
+        expect(project.project_uses_block_languages.size).to eq 2
+        expect(project.block_languages.include? new_block_language).to be true
+      end
+
+      it 'removes used block languages', :focus do
+        added_block_language = FactoryBot.create(:block_language)
+        use_added_block_language = project.project_uses_block_languages.create(block_language: added_block_language)
+        
+        put "/api/project/#{project.slug}",
+            params: {
+              "apiVersion" => 4,
+              "projectUsesBlockLanguages" => [
+                { "id" => use_added_block_language.id, "_destroy": true }
+              ]
+            },
+            headers: auth_headers
+
+        project.reload
+        expect(project.project_uses_block_languages.size).to eq 0
+      end
+
+      it 'updates used block languages', :focus do
+        added_block_language = FactoryBot.create(:block_language)
+        use_added_block_language = project.project_uses_block_languages.create(block_language: added_block_language)
+        new_block_language = FactoryBot.create(:block_language)
+        
+        put "/api/project/#{project.slug}",
+            params: {
+              "apiVersion" => 4,
+              "projectUsesBlockLanguages" => [
+                { "id" => use_added_block_language.id, "blockLanguageId": new_block_language.id }
+              ]
+            },
+            headers: auth_headers
+
+        project.reload
+        expect(project.project_uses_block_languages.size).to eq 1
+        expect(project.block_languages.include? new_block_language).to be true
+      end
     end
   end
 
@@ -148,8 +203,6 @@ RSpec.describe ProjectsController, type: :request do
       end
     end
   end
-
-
 
   describe 'GET /api/project/:project_id' do
     it 'empty project satisfies the JSON schema' do

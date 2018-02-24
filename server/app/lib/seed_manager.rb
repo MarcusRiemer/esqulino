@@ -14,7 +14,7 @@ end
 # of this class is to provide a solution to keep the "stock" projects of BlattWerkzeug
 # up to date as easily as possible without any interference in the user data. Any admin
 # should be sure that updating the "stock" data of BlattWerkzeug will never, ever damage
-# the projects of the users.
+# the projects of the users ad.
 #
 # But the way to achieve that vision is not so straight forward:
 #
@@ -33,7 +33,7 @@ end
 # what every programmer loves: We bring out our own solution ...
 #
 # This class holds together the whole serialization and deserialization process.
-# We basicly piggy-back the `to_yaml`-representation of ActiveModel to have a
+# We basically piggy-back the `to_yaml`-representation of ActiveModel to have a
 # robust (but very verbose) on-disk representation of our models.
 class SeedManager
   # The general directory to save and load the data from
@@ -247,7 +247,7 @@ class SeedManager
     p.project_uses_block_languages.each do |u|
       FileUtils.mkdir_p seed_project_used_block_languages_dir(p.id)
       puts "  Storing referenced block language #{u.block_language.readable_identification}"
-      File.open(seed_project_used_block_languages_file(p.id, u.block_language_id), 'w') do |file|
+      File.open(seed_project_used_block_languages_file(p.id, u.id), 'w') do |file|
         YAML::dump(u, file)
       end
     end
