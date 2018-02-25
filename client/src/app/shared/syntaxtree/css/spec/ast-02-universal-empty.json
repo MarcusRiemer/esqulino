@@ -1,0 +1,22 @@
+{
+  "language": "css",
+  "name": "document",
+  "children": {
+    "rules": [
+      {
+        "language": "css",
+        "name": "rule",
+        "children": {
+          "selectors": [
+            {
+              "language": "css",
+              "name": "selectorUniversal"
+            }
+          ],
+          "declarations": [
+          ]
+        }
+      }
+    ]
+  }
+}

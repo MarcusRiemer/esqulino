@@ -1,0 +1,30 @@
+grammar "css" {
+  node "document" {
+    children "rules" ::= rule*
+  }
+  node "rule" {
+    children "selectors" ::= selector*
+    children "declarations" ::= declaration*
+  }
+  typedef "selector" {
+    "selectorType"
+    "selectorClass"
+    "selectorId"
+    "selectorUniversal"
+  }
+  node "selectorType" {
+    prop "value" { string }
+  }
+  node "selectorClass" {
+    prop "value" { string }
+  }
+  node "selectorId" {
+    prop "value" { string }
+  }
+  node "selectorUniversal" {
+  }
+  node "declaration" {
+    prop "key" { string }
+    prop "value" { string }
+  }
+}
