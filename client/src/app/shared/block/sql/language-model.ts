@@ -231,7 +231,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 } as VisualBlockDescriptions.EditorConstant,
               ],
               direction: "horizontal",
-              visibility: ["ifEmpty"]
+              visibility: ["ifEmpty", "ifLegalChild"]
             } as VisualBlockDescriptions.EditorDropTarget,
             {
               blockType: "iterator",
@@ -354,7 +354,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 } as VisualBlockDescriptions.EditorConstant,
               ],
               direction: "horizontal",
-              visibility: ["ifEmpty"]
+              visibility: ["ifEmpty", "ifLegalChild"]
             } as VisualBlockDescriptions.EditorDropTarget,
             {
               blockType: "iterator",
@@ -618,7 +618,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 } as VisualBlockDescriptions.EditorConstant,
               ],
               direction: "horizontal",
-              visibility: ["ifEmpty"]
+              visibility: ["ifEmpty", "ifLegalChild"]
             } as VisualBlockDescriptions.EditorDropTarget,
             {
               blockType: "iterator",
@@ -684,7 +684,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 } as VisualBlockDescriptions.EditorConstant,
               ],
               direction: "horizontal",
-              visibility: ["ifEmpty"]
+              visibility: ["ifEmpty", "ifLegalChild"]
             } as VisualBlockDescriptions.EditorDropTarget,
             {
               blockType: "iterator",

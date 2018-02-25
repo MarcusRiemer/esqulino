@@ -74,7 +74,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 } as VisualBlockDescriptions.EditorConstant,
               ],
               direction: "horizontal",
-              visibility: ["ifEmpty"]
+              visibility: ["ifEmpty", "ifLegalChild"]
             },
             {
               blockType: "iterator",
@@ -103,6 +103,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               blockType: "constant",
               text: "❓",
               style: {
+                "marginLeft": "2ch",
                 "paddingLeft": "10px",
                 "paddingRight": "10px",
                 "border": "2px solid red",
@@ -114,7 +115,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             } as VisualBlockDescriptions.EditorConstant,
           ],
           direction: "horizontal",
-          visibility: ["ifEmpty"]
+          visibility: ["ifEmpty", "ifLegalChild"]
         },
         {
           blockType: "iterator",
@@ -224,6 +225,136 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           ]
         }
       ]
+    },
+    {
+      describedType: {
+        languageName: "css",
+        typeName: "backgroundColor"
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          children: [
+            {
+              blockType: "constant",
+              text: "background-color:",
+              style: {
+                "marginRight": "1ch"
+              }
+            } as VisualBlockDescriptions.EditorConstant,
+            {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "value",
+                  order: "insertFirst"
+                }
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "❓",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
+                    "borderRadius": "500px",
+                    "cursor": "default",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+              visibility: ["ifEmpty", "ifLegalChild"]
+            },
+            {
+              blockType: "iterator",
+              childGroupName: "value",
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorIterator,
+            {
+              blockType: "constant",
+              text: ";"
+            } as VisualBlockDescriptions.EditorConstant,
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "css",
+        typeName: "color"
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          children: [
+            {
+              blockType: "constant",
+              text: "color:",
+              style: {
+                "marginRight": "1ch"
+              }
+            } as VisualBlockDescriptions.EditorConstant,
+            {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "value",
+                  order: "insertFirst"
+                }
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "❓",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
+                    "borderRadius": "500px",
+                    "cursor": "default",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+              visibility: ["ifEmpty", "ifLegalChild"]
+            },
+            {
+              blockType: "iterator",
+              childGroupName: "value",
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorIterator,
+            {
+              blockType: "constant",
+              text: ";"
+            } as VisualBlockDescriptions.EditorConstant,
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "css",
+        typeName: "exprColor"
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          children: [
+            {
+              blockType: "interpolated",
+              property: "value",
+            } as VisualBlockDescriptions.EditorInterpolated
+          ]
+        }
+      ]
     }
   ],
   sidebars: [
@@ -283,38 +414,60 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           ]
         },
         {
-          categoryCaption: "Deklarationen",
+          categoryCaption: "Eigenschaften",
           blocks: [
             {
-              displayName: "color: blue;",
+              displayName: "backgroundColor",
               defaultNode: {
                 language: "css",
-                name: "declaration",
-                properties: {
-                  "key": "color",
-                  "value": "blue"
+                name: "backgroundColor",
+                children: {
+                  "value": []
                 }
               }
             },
             {
-              displayName: "color: red;",
+              displayName: "color",
               defaultNode: {
                 language: "css",
-                name: "declaration",
+                name: "color",
+                children: {
+                  "value": []
+                }
+              }
+            }
+          ]
+        },
+        {
+          categoryCaption: "Werte",
+          blocks: [
+            {
+              displayName: "color: red",
+              defaultNode: {
+                language: "css",
+                name: "exprColor",
                 properties: {
-                  "key": "color",
                   "value": "red"
                 }
               }
             },
             {
-              displayName: "color: green;",
+              displayName: "color: green",
               defaultNode: {
                 language: "css",
-                name: "declaration",
+                name: "exprColor",
                 properties: {
-                  "key": "color",
                   "value": "green"
+                }
+              }
+            },
+            {
+              displayName: "color: blue",
+              defaultNode: {
+                language: "css",
+                name: "exprColor",
+                properties: {
+                  "value": "blue"
                 }
               }
             },

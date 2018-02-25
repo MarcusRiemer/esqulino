@@ -94,14 +94,63 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess) {
-        // El cheap indenting
-        process.addConvertedFragment(' ', node, OutputSeparator.SPACE_AFTER);
+        // El cheapo indenting
+        process.addConvertedFragment('  ', node);
 
         // <key>: <value>;
         process.addConvertedFragment(node.properties['key'], node);
         process.addConvertedFragment(':', node, OutputSeparator.SPACE_AFTER);
         process.addConvertedFragment(node.properties['value'], node);
         process.addConvertedFragment(';', node, OutputSeparator.NEW_LINE_AFTER);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "css",
+      typeName: "backgroundColor",
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        // El cheapo indenting
+        process.addConvertedFragment('  ', node);
+
+        process.addConvertedFragment('background-color', node);
+        process.addConvertedFragment(':', node, OutputSeparator.SPACE_AFTER);
+        node.getChildrenInCategory("value").forEach(c => process.generateNode(c));
+        process.addConvertedFragment(';', node, OutputSeparator.NEW_LINE_AFTER);
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "css",
+      typeName: "color",
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        // El cheapo indenting
+        process.addConvertedFragment('  ', node);
+
+        process.addConvertedFragment('color', node);
+        process.addConvertedFragment(':', node, OutputSeparator.SPACE_AFTER);
+        node.getChildrenInCategory("value").forEach(c => process.generateNode(c));
+        process.addConvertedFragment(';', node, OutputSeparator.NEW_LINE_AFTER);
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "css",
+      typeName: "exprColor",
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        process.addConvertedFragment(node.properties['value'], node);
       }
     }
   }

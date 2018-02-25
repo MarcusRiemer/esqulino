@@ -129,7 +129,7 @@ describe("Language: SQL (Validation)", () => {
     expect(res.errors.length).toEqual(0);
   });
 
-  it("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id", () => {
+  xit("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id", () => {
     const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: AST.NodeDescription = {
@@ -256,7 +256,7 @@ describe("Language: SQL (Validation)", () => {
     expect(res.errors).toEqual([]);
   });
 
-  it("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id AND foo.id = 2", () => {
+  xit("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id AND foo.id = 2", () => {
     const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: AST.NodeDescription = {

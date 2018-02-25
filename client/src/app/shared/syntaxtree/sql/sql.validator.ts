@@ -169,7 +169,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       children: {
         "expression": {
           type: "sequence",
-          nodeTypes: ["expression"]
+          nodeTypes: ["expression", "columnName"]
         }
       },
       properties: {
@@ -184,7 +184,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "expressions": {
           type: "sequence",
           nodeTypes: [
-            "expression",
+            "columnName", // TODO: Convert expression to typedef
             {
               languageName: "sql",
               nodeType: "whereAdditional",

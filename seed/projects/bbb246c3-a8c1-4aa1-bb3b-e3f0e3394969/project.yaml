@@ -19,6 +19,7 @@ concise_attributes:
   value_before_type_cast: true
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: preview
+  value_before_type_cast: '01396eae-a0cc-4147-84b4-60d455254cd1'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: index_page_id
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
@@ -26,7 +27,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-25 19:13:02.563495'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-02-25 19:13:30.700107'
+  value_before_type_cast: '2018-02-25 20:48:02.269305'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: api_version
 new_record: false
