@@ -87,15 +87,21 @@ export function calculateDropLocation(node: Node, drop: DropTargetProperties): N
       // Possibly skip some parents
       const lastLevel = nodeLocation.length - selfDrop.skipParents - 1;
 
-      // Calculate the index at which to insert
-      const lastNodeLocationStep = nodeLocation[lastLevel];
-      const adjustedLastLocationStep: NodeLocation = [
-        [lastNodeLocationStep[0], lastNodeLocationStep[1] + lastIndexOffset()]
-      ];
+      // Skipping too much? Thats the root
+      if (lastLevel < 0) {
+        console.log("Dug too deep while dropping");
+        return ([]);
+      } else {
+        // Calculate the index at which to insert
+        const lastNodeLocationStep = nodeLocation[lastLevel];
+        const adjustedLastLocationStep: NodeLocation = [
+          [lastNodeLocationStep[0], lastNodeLocationStep[1] + lastIndexOffset()]
+        ];
 
-      // And stick together the new location. The last step is always replaced
-      // with the step containing the modified index.
-      return (nodeLocation.slice(0, lastLevel).concat(adjustedLastLocationStep));
+        // And stick together the new location. The last step is always replaced
+        // with the step containing the modified index.
+        return (nodeLocation.slice(0, lastLevel).concat(adjustedLastLocationStep));
+      }
     }
     // There are no other drop options
     else {

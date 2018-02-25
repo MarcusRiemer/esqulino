@@ -200,21 +200,38 @@ const EDITOR_BLOCKS = [
       {
         blockType: "block",
         direction: "horizontal",
+        dropTarget: {
+          children: {
+            category: "elements",
+            order: "insertFirst"
+          }
+        },
         children: [
           {
             blockType: "constant",
-            text: "<"
+            text: "<",
+            style: {
+              color: "blue"
+            }
           } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "interpolated",
-            property: "name"
+            property: "name",
+            style: {
+              color: "#ad0000"
+            }
           } as VisualBlockDescriptions.EditorInterpolated,
+          {
+            blockType: "iterator",
+            childGroupName: "attributes",
+            direction: "horizontal",
+          } as VisualBlockDescriptions.EditorIterator,
           {
             blockType: "dropTarget",
             dropTarget: {
-              parent: {
+              children: {
                 category: "attributes",
-                order: "insertFirst"
+                order: "insertLast"
               }
             },
             children: [
@@ -227,36 +244,34 @@ const EDITOR_BLOCKS = [
             style: {
               marginLeft: "10px",
             },
-            visibility: ["ifEmpty", "ifLegalDrag"]
+            visibility: ["ifLegalChild"]
           } as VisualBlockDescriptions.EditorDropTarget,
           {
-            blockType: "iterator",
-            childGroupName: "attributes",
-            direction: "horizontal",
-          } as VisualBlockDescriptions.EditorIterator,
-          {
             blockType: "constant",
-            text: ">"
+            text: ">",
+            style: {
+              color: "blue"
+            }
           } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "dropTarget",
             dropTarget: {
-              parent: {
-                category: "attributes",
+              children: {
+                category: "elements",
                 order: "insertFirst"
               }
             },
             children: [
               {
                 blockType: "constant",
-                text: "+Element"
+                text: "+Kind"
               } as VisualBlockDescriptions.EditorConstant,
             ],
             direction: "horizontal",
             style: {
               marginLeft: "10px",
             },
-            visibility: ["ifLegalDrag"]
+            visibility: ["ifLegalChild"]
           } as VisualBlockDescriptions.EditorDropTarget,
         ]
       } as VisualBlockDescriptions.EditorBlock,
@@ -274,15 +289,24 @@ const EDITOR_BLOCKS = [
         children: [
           {
             blockType: "constant",
-            text: "</"
+            text: "</",
+            style: {
+              color: "blue"
+            }
           } as VisualBlockDescriptions.EditorConstant,
           {
             blockType: "interpolated",
-            property: "name"
+            property: "name",
+            style: {
+              color: "#ad0000"
+            }
           } as VisualBlockDescriptions.EditorInterpolated,
           {
             blockType: "constant",
-            text: ">"
+            text: ">",
+            style: {
+              color: "blue"
+            }
           } as VisualBlockDescriptions.EditorConstant,
         ]
       } as VisualBlockDescriptions.EditorBlock
@@ -303,7 +327,10 @@ const EDITOR_BLOCKS = [
         children: [
           {
             blockType: "interpolated",
-            property: "name"
+            property: "name",
+            style: {
+              color: "#ef4040"
+            }
           } as VisualBlockDescriptions.EditorInterpolated,
           {
             blockType: "constant",
@@ -317,6 +344,9 @@ const EDITOR_BLOCKS = [
             blockType: "iterator",
             childGroupName: "value",
             direction: "horizontal",
+            style: {
+              color: "blue"
+            }
           } as VisualBlockDescriptions.EditorIterator,
           {
             blockType: "constant",
