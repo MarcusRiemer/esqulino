@@ -49,10 +49,10 @@ export class CurrentCodeResourceService {
    * Things that need to happen every time the resource changes
    */
   private readonly onResourceChange = this._codeResource
-    .distinctUntilChanged()
     .do(r => {
       if (r) {
         // Show the new sidebar
+        console.log("Sidebar change because of current code resource");
         this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, r);
       }
     })
@@ -66,7 +66,7 @@ export class CurrentCodeResourceService {
     if (codeResourceId) {
       // Yes, we resolve the actual resource
       const resource = this._projectService.cachedProject.getCodeResourceById(codeResourceId);
-      console.log(`Set new resource`, resource);
+      console.log(`Set new resource "${resource.name}" (${codeResourceId})`);
       this._codeResource.next(resource);
     } else {
       // No, we inform everybody that there is no resource
