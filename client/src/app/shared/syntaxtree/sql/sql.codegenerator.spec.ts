@@ -117,4 +117,12 @@ describe('Language: SQL (Codegen)', () => {
   it(`SELECT query: SELECT foo.id FROM foo GROUP BY foo.id`, () => {
     verifyFiles("ast-22-select-foo-id-from-foo-group-by-foo-id", emitTree);
   });
+
+  it(`WHERE component: no expression`, () => {
+    verifyFiles("ast-23-where-no-expr", emitTree);
+  });
+
+  it(`SELECT query: SELECT foo.id FROM foo WHERE `, () => {
+    verifyFiles("ast-24-query-select-missing-where-expr", emitTree);
+  });
 });

@@ -23,7 +23,7 @@ import { calculateDropLocation } from './drop-utils';
         display: 'none',
       })),
       state('visible', style({
-        backgroundColor: 'lightgray',
+        backgroundColor: 'transparent',
       })),
       state('available', style({
         backgroundColor: 'green',
@@ -48,9 +48,9 @@ export class BlockRenderDropTargetComponent {
   /**
    * @return True, if this drop will be made into a strictly defined category.
    */
-  get isParentDrop() {
-    const action = this.visual && this.visual.dropTarget && this.visual.dropTarget.parent;
-    return (!!action);
+  get isParentOrChildDrop() {
+    const dropTarget = this.visual && this.visual.dropTarget && this.visual.dropTarget;
+    return (dropTarget.children || dropTarget.parent);
   }
 
   /**
@@ -65,7 +65,7 @@ export class BlockRenderDropTargetComponent {
    */
   get dropLocationHasChildren() {
     const childGroupName = this.dropLocationChildGroupName;
-    if (this.isParentDrop) {
+    if (this.isParentOrChildDrop) {
       // Count children in that category
       return (this.node.getChildrenInCategory(childGroupName).length > 0);
     } else {

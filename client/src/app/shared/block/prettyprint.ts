@@ -5,7 +5,7 @@ import { prettyPrintSyntaxTreeNode } from '../syntaxtree/prettyprint'
 import { BlockLanguageDescription } from './block-language.description'
 import {
   VisualBlockDescriptions, EditorBlockDescription, SidebarBlockDescription,
-  FixedBlocksSidebarDescription, FixedBlocksSidebarCategoryDescription
+  SidebarDescription, FixedBlocksSidebarCategoryDescription
 } from './block.description'
 
 /**
@@ -148,13 +148,15 @@ function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
 /**
  * Prettyprints a whole sidebar.
  */
-function prettyPrintSidebar(desc: FixedBlocksSidebarDescription) {
-  return ([
-    `sidebar "${desc.caption}" {`,
-    ...desc.categories.map(prettyPrintFixedBlocksSidebarCategory),
-    `}`
-  ]);
-
+function prettyPrintSidebar(desc: SidebarDescription) {
+  switch (desc.type) {
+    case "fixedBlocks": return ([
+      `fixedBlocks "${desc.caption}" {`,
+      ...desc.categories.map(prettyPrintFixedBlocksSidebarCategory),
+      `}`
+    ]);
+    case "databaseSchema": return (["databaseSchema"]);
+  }
 }
 
 /**

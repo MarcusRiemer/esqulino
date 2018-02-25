@@ -43,7 +43,14 @@ export class CodeGeneratorProcess {
     });
   }
 
+  /**
+   * Generates code for the given node
+   */
   generateNode(node: Node) {
+    if (!node) {
+      throw new Error("Can't generate node for falsy value");
+    }
+
     const converter = this._generator.getConverter(node.qualifiedName);
     const bodyCategories = converter.init(node, this) || node.childrenCategoryNames;
 
