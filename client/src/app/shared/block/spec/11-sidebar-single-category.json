@@ -4,6 +4,7 @@
   "editorBlocks": [],
   "sidebars": [
     {
+      "type": "fixedBlocks",
       "caption": "Sidebar Caption",
       "categories": [
         {

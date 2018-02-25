@@ -154,11 +154,11 @@ function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
 function prettyPrintSidebar(desc: SidebarDescription) {
   switch (desc.type) {
     case "fixedBlocks": return ([
-      `fixedBlocks "${desc.caption}" {`,
+      `fixedBlocksSidebar "${desc.caption}" {`,
       ...desc.categories.map(prettyPrintFixedBlocksSidebarCategory),
       `}`
     ]);
-    case "databaseSchema": return (["databaseSchema"]);
+    case "databaseSchema": return (["databaseSchemaSidebar"]);
   }
 }
 
