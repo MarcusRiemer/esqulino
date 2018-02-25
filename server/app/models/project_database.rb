@@ -1,3 +1,5 @@
+require 'fileutils'
+
 require_dependency 'error'
 require_dependency 'schema_alter'
 require_dependency 'schema_utils'
@@ -17,9 +19,7 @@ class ProjectDatabase < ApplicationRecord
   # need the id that was assigned.
   after_create do
     Rails.logger.info "Creating a SQLite database at #{sqlite_file_path}"
-    SQLite3::Database.new sqlite_file_path do |db|
-      db.close
-    end
+    FileUtils.touch sqlite_file_path
   end
 
   # The backing "database thing" needs to be destroyed along with this
@@ -230,14 +230,14 @@ end
 class AlterProjectDatabaseError < EsqulinoError
   # @param project_database [ProjectDatabase]
   #   The database the error occured in
-  def initialize(project_database, data)
-    super "Could not alter database \"#{project_database.id}\" of project \"#{project_database.project_id}\""
+  def initialize(project_database, data, code=400)
+    super "Could not alter database \"#{project_database.id}\" of project \"#{project_database.project_id}\"", code
     @data = data
   end
 end
 
 # Attempted to create a table with a name that already exists.
-class CreateDuplicateTableNameDatabaseError < EsqulinoError
+class CreateDuplicateTableNameDatabaseError < AlterProjectDatabaseError
   def initialize(project_database, table_name)
     super(project_database, { "tableName" => table_name })
   end

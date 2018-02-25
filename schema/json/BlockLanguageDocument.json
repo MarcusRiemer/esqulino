@@ -16,7 +16,7 @@
         "sidebars": {
           "description": "How the available blocks should be represented in the sidebar.",
           "items": {
-            "$ref": "#/definitions/FixedBlocksSidebarDescription"
+            "$ref": "#/definitions/SidebarDescription"
           },
           "type": "array"
         }
@@ -24,6 +24,22 @@
       "required": [
         "sidebars",
         "editorBlocks"
+      ],
+      "type": "object"
+    },
+    "DatabaseSchemaSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "databaseSchema"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
       ],
       "type": "object"
     },
@@ -78,13 +94,22 @@
           "type": "string"
         },
         "categories": {
+          "description": "The actual blocks are categorized into categories.",
           "items": {
             "$ref": "#/definitions/FixedBlocksSidebarCategoryDescription"
           },
           "type": "array"
+        },
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "fixedBlocks"
+          ],
+          "type": "string"
         }
       },
       "required": [
+        "type",
         "caption",
         "categories"
       ],
@@ -158,6 +183,17 @@
         "defaultNode"
       ],
       "type": "object"
+    },
+    "SidebarDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/FixedBlocksSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/DatabaseSchemaSidebarDescription"
+        }
+      ],
+      "description": "All possible sidebar types"
     },
     "VisualBlockDescriptions.BlockStyle": {
       "additionalProperties": {

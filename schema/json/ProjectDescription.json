@@ -51,7 +51,7 @@
         "sidebars": {
           "description": "How the available blocks should be represented in the sidebar.",
           "items": {
-            "$ref": "#/definitions/FixedBlocksSidebarDescription"
+            "$ref": "#/definitions/SidebarDescription"
           },
           "type": "array"
         },
@@ -141,6 +141,22 @@
       ],
       "type": "object"
     },
+    "DatabaseSchemaSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "databaseSchema"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
     "EditorBlockDescription": {
       "additionalProperties": false,
       "description": "Describes how certain nodes in the syntaxtree should be presented\nto an end user inside the drag & drop interface.",
@@ -192,13 +208,22 @@
           "type": "string"
         },
         "categories": {
+          "description": "The actual blocks are categorized into categories.",
           "items": {
             "$ref": "#/definitions/FixedBlocksSidebarCategoryDescription"
           },
           "type": "array"
+        },
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "fixedBlocks"
+          ],
+          "type": "string"
         }
       },
       "required": [
+        "type",
         "caption",
         "categories"
       ],
@@ -448,6 +473,17 @@
         "defaultNode"
       ],
       "type": "object"
+    },
+    "SidebarDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/FixedBlocksSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/DatabaseSchemaSidebarDescription"
+        }
+      ],
+      "description": "All possible sidebar types"
     },
     "TableDescription": {
       "additionalProperties": false,

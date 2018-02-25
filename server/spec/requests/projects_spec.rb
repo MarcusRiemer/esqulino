@@ -9,8 +9,7 @@ RSpec.describe ProjectsController, type: :request do
 
     describe 'valid request' do
       it 'creates a project', fakefs: true do
-        # TODO CENTRALIZE: Put this call in a central location
-        FakeFS::FileSystem.clone(Rails.application.config.sqlino[:projects_dir])
+        fakefs_clone_projects_dir!
 
         post '/api/project', params: {"name" => "Some project", "slug" => "test" }
 

@@ -2,106 +2,110 @@ require 'rails_helper'
 
 RSpec.describe ProjectDatabase, type: :model do
   # A database with a single table
-  DATABASE_DESCRIPTION_KEY_VALUE = [
-    {
-      "name" => "key_value",
-      "columns" => [
-        {
-          "name" => "key",
-          "type" => "INTEGER",
-          "index" => 0,
-          "primary" => true,
-          "not_null" => true,
-          "dflt_value" => nil
-        },
-        {
-          "name" => "value",
-          "type" => "TEXT",
-          "index" => 1,
-          "primary" => false,
-          "not_null" => false,
-          "dflt_value" => "value"
-        }
-      ],
-      "foreign_keys" => []
-    }
-  ]
+  def database_description_key_value
+    [
+      {
+        "name" => "key_value",
+        "columns" => [
+          {
+            "name" => "key",
+            "type" => "INTEGER",
+            "index" => 0,
+            "primary" => true,
+            "not_null" => true,
+            "dflt_value" => nil
+          },
+          {
+            "name" => "value",
+            "type" => "TEXT",
+            "index" => 1,
+            "primary" => false,
+            "not_null" => false,
+            "dflt_value" => "value"
+          }
+        ],
+        "foreign_keys" => []
+      }
+    ]
+  end
 
   # A database with loads of types and and two tables
-  DATABASE_DESCRIPTION_TWO_TABLES = [
-    {
-      "name" => "a",
-      "columns" => [
-        {
-          "name" => "a_id",
-          "type" => "INTEGER",
-          "index" => 0,
-          "primary" => true,
-          "not_null" => true,
-          "dflt_value" => nil
-        },
-        {
-          "name" => "a_b",
-          "type" => "TEXT",
-          "index" => 1,
-          "primary" => false,
-          "not_null" => false,
-          "dflt_value" => nil
-        },
-        {
-          "name" => "a_c",
-          "type" => "BOOLEAN",
-          "index" => 1,
-          "primary" => false,
-          "not_null" => false,
-          "dflt_value" => nil
-        },
-        {
-          "name" => "a_d",
-          "type" => "FLOAT",
-          "index" => 1,
-          "primary" => false,
-          "not_null" => false,
-          "dflt_value" => nil
-        },
-        {
-          "name" => "a_e",
-          "type" => "URL",
-          "index" => 1,
-          "primary" => false,
-          "not_null" => false,
-          "dflt_value" => nil
-        },
-      ],
-      "foreign_keys" => [
-        {
-          "references" =>
-           [
-             {
-               "to_table" => "b",
-               "to_column" => "b_id",
-               "from_column" => "a_b"
-             }
-           ]
-        }
-      ]
-    },
-    {
-      "name" => "b",
-      "columns" => [
-        {
-          "name" => "b_id",
-          "type" => "TEXT",
-          "index" => 1,
-          "primary" => false,
-          "not_null" => false,
-          "dflt_value" => nil
-        },
-      ],
-      "foreign_keys" => [
-      ]
-    }
-  ]
+  def database_description_two_tables
+    [
+      {
+        "name" => "a",
+        "columns" => [
+          {
+            "name" => "a_id",
+            "type" => "INTEGER",
+            "index" => 0,
+            "primary" => true,
+            "not_null" => true,
+            "dflt_value" => nil
+          },
+          {
+            "name" => "a_b",
+            "type" => "TEXT",
+            "index" => 1,
+            "primary" => false,
+            "not_null" => false,
+            "dflt_value" => nil
+          },
+          {
+            "name" => "a_c",
+            "type" => "BOOLEAN",
+            "index" => 1,
+            "primary" => false,
+            "not_null" => false,
+            "dflt_value" => nil
+          },
+          {
+            "name" => "a_d",
+            "type" => "FLOAT",
+            "index" => 1,
+            "primary" => false,
+            "not_null" => false,
+            "dflt_value" => nil
+          },
+          {
+            "name" => "a_e",
+            "type" => "URL",
+            "index" => 1,
+            "primary" => false,
+            "not_null" => false,
+            "dflt_value" => nil
+          },
+        ],
+        "foreign_keys" => [
+          {
+            "references" =>
+            [
+              {
+                "to_table" => "b",
+                "to_column" => "b_id",
+                "from_column" => "a_b"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name" => "b",
+        "columns" => [
+          {
+            "name" => "b_id",
+            "type" => "TEXT",
+            "index" => 1,
+            "primary" => false,
+            "not_null" => false,
+            "dflt_value" => nil
+          },
+        ],
+        "foreign_keys" => [
+        ]
+      }
+    ]
+  end
 
   context 'empty database' do
     after(:each) do
@@ -132,11 +136,11 @@ RSpec.describe ProjectDatabase, type: :model do
 
     it 'creating and analyzing a single table' do
       @db = FactoryBot.create(:project_database)
-      @db.table_create(DATABASE_DESCRIPTION_KEY_VALUE[0])
+      @db.table_create(database_description_key_value[0])
 
       # Schema must have been updated
       expect(@db.schema.size).to eq 1
-      expect(@db.schema[0]).to eq DATABASE_DESCRIPTION_KEY_VALUE[0]
+      expect(@db.schema[0]).to eq database_description_key_value[0]
 
       # Table "key_value" must exist
       expect(@db.table_exists? "key_value").to be true
@@ -145,8 +149,8 @@ RSpec.describe ProjectDatabase, type: :model do
       expect(@db.table_schema "value_key").to be_nil
 
       # Table must be empty
-      expect(@db.table_row_data(DATABASE_DESCRIPTION_KEY_VALUE[0]['name'], 0, 1)).to eq []
-      expect(@db.table_row_count(DATABASE_DESCRIPTION_KEY_VALUE[0]['name'])).to eq 0
+      expect(@db.table_row_data(database_description_key_value[0]['name'], 0, 1)).to eq []
+      expect(@db.table_row_count(database_description_key_value[0]['name'])).to eq 0
     end
 
     it 'deleting a nonexistant table' do
@@ -157,25 +161,25 @@ RSpec.describe ProjectDatabase, type: :model do
 
     it 'creating a duplicate table' do
       @db = FactoryBot.build(:tempfile_project_database)
-      @db.table_create(DATABASE_DESCRIPTION_KEY_VALUE[0])
-      expect { @db.table_create(DATABASE_DESCRIPTION_KEY_VALUE[0]) }.to raise_exception(CreateDuplicateTableNameDatabaseError)
+      @db.table_create(database_description_key_value[0])
+      expect { @db.table_create(database_description_key_value[0]) }.to raise_exception(CreateDuplicateTableNameDatabaseError)
     end
 
     it 'creating and deleting a single table' do
       @db = FactoryBot.build(:tempfile_project_database)
-      @db.table_create(DATABASE_DESCRIPTION_KEY_VALUE[0])
+      @db.table_create(database_description_key_value[0])
 
       # Schema must have been updated
       expect(@db.schema.size).to eq 1
 
-      @db.table_delete(DATABASE_DESCRIPTION_KEY_VALUE[0]['name'])
+      @db.table_delete(database_description_key_value[0]['name'])
     end
   end
 
   context 'key_value: alter table' do
     before(:each) do
       @db = FactoryBot.create(:project_database)
-      @db.table_create(DATABASE_DESCRIPTION_KEY_VALUE[0])
+      @db.table_create(database_description_key_value[0])
     end
 
     after(:each) do
@@ -283,8 +287,8 @@ RSpec.describe ProjectDatabase, type: :model do
   context 'key_value: alter table' do
     before(:each) do
       @db = FactoryBot.create(:project_database)
-      @db.table_create(DATABASE_DESCRIPTION_TWO_TABLES[1])
-      @db.table_create(DATABASE_DESCRIPTION_TWO_TABLES[0])
+      @db.table_create(database_description_two_tables[1])
+      @db.table_create(database_description_two_tables[0])
     end
 
     after(:each) do

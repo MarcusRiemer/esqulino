@@ -69,7 +69,7 @@
         {
           "additionalProperties": false,
           "properties": {
-            "_delete": {
+            "_destroy": {
               "type": "boolean"
             },
             "id": {
@@ -78,7 +78,7 @@
           },
           "required": [
             "id",
-            "_delete"
+            "_destroy"
           ],
           "type": "object"
         }
