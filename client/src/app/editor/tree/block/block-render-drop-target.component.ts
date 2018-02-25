@@ -128,6 +128,8 @@ export class BlockRenderDropTargetComponent {
             } else {
               return ("none");
             }
+          } else {
+            return ("none");
           }
         }
       } else {
