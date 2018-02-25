@@ -1,0 +1,41 @@
+{
+  "language": "css",
+  "name": "document",
+  "children": {
+    "rules": [
+      {
+        "language": "css",
+        "name": "rule",
+        "children": {
+          "selectors": [
+            {
+              "language": "css",
+              "name": "selectorType",
+              "properties": {
+                "value": "h1"
+              }
+            }
+          ],
+          "declarations": [
+            {
+              "language": "css",
+              "name": "declaration",
+              "properties": {
+                "key": "color",
+                "value": "red"
+              }
+            },
+            {
+              "language": "css",
+              "name": "declaration",
+              "properties": {
+                "key": "width",
+                "value": "200px"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

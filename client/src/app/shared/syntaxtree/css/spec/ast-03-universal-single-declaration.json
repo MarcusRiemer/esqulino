@@ -1,0 +1,30 @@
+{
+  "language": "css",
+  "name": "document",
+  "children": {
+    "rules": [
+      {
+        "language": "css",
+        "name": "rule",
+        "children": {
+          "selectors": [
+            {
+              "language": "css",
+              "name": "selectorUniversal"
+            }
+          ],
+          "declarations": [
+            {
+              "language": "css",
+              "name": "declaration",
+              "properties": {
+                "key": "color",
+                "value": "red"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

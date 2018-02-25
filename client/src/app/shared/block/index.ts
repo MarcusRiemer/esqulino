@@ -9,10 +9,12 @@ import { BlockLanguage } from './block-language'
 import * as DynamicXml from './dxml/language-model'
 import * as RegEx from './regex/language-model'
 import * as Sql from './sql/language-model'
+import * as Css from './css/language-model'
 
 export const AvailableLanguageModels = [
   new BlockLanguage(RegEx.LANGUAGE_MODEL),
   new BlockLanguage(DynamicXml.DYNAMIC_LANGUAGE_MODEL),
   new BlockLanguage(DynamicXml.LANGUAGE_MODEL),
-  new BlockLanguage(Sql.LANGUAGE_MODEL)
+  new BlockLanguage(Sql.LANGUAGE_MODEL),
+  new BlockLanguage(Css.BLOCK_LANGUAGE_DESCRIPTION)
 ]

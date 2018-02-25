@@ -18,6 +18,7 @@ import { NodeDescription } from './app/shared/syntaxtree/syntaxtree.description'
 import * as dxml from './app/shared/syntaxtree/dxml/'
 import * as regex from './app/shared/syntaxtree/regex/'
 import * as sql from './app/shared/syntaxtree/sql/'
+import * as css from './app/shared/syntaxtree/css/'
 
 import * as blocks_dxml from './app/shared/block/dxml/language-model'
 import * as blocks_sql from './app/shared/block/sql/language-model'
@@ -76,7 +77,8 @@ function availableLanguages(): LanguageDescription[] {
     dxml.LANGUAGE_DESCRIPTION_ERUBY,
     dxml.LANGUAGE_DESCRIPTION_LIQUID,
     regex.LANGUAGE_DESCRIPTION,
-    sql.LANGUAGE_DESCRIPTION
+    sql.LANGUAGE_DESCRIPTION,
+    css.LANGUAGE_DESCRIPTION,
   ]);
 }
 
@@ -91,7 +93,12 @@ function availableGrammars(): GrammarDescription[] {
  * Retrieves a single grammar by name
  */
 function findGrammar(name: string) {
-  return (availableGrammars().find(d => d.languageName === name));
+  const toReturn = availableGrammars().find(d => d.languageName === name);
+  if (toReturn) {
+    return (toReturn);
+  } else {
+    throw new Error(`Unknown language "${name}"`);
+  }
 }
 
 function findLanguage(id: string) {
