@@ -1,4 +1,4 @@
 language "test" {
-  sidebar "Empty" {
+  fixedBlocksSidebar "Empty" {
   }
 }
