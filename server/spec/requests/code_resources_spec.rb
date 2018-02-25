@@ -2,14 +2,14 @@ require "rails_helper"
 
 RSpec.describe "CodeResource request", :type => :request do
 
-  JSON_HEADERS = { "CONTENT_TYPE" => "application/json" }
+  json_headers = { "CONTENT_TYPE" => "application/json" }
   
   describe "CREATE" do
     it "works with default factory bot object" do
       resource = FactoryBot.build(:code_resource)
       
       post "/api/project/#{resource.project.slug}/code_resources/",
-           :headers => JSON_HEADERS,
+           :headers => json_headers,
            :params => {
              "name" => resource.name,
              "blockLanguageId" => resource.block_language_id,
@@ -29,7 +29,7 @@ RSpec.describe "CodeResource request", :type => :request do
       resource = FactoryBot.build(:code_resource)
       
       post "/api/project/#{resource.project.slug}/code_resources/",
-           :headers => JSON_HEADERS,
+           :headers => json_headers,
            :params => {
            }.to_json
 
@@ -52,7 +52,7 @@ RSpec.describe "CodeResource request", :type => :request do
       )
       
       post "/api/project/#{resource.project.slug}/code_resources/",
-           :headers => JSON_HEADERS,
+           :headers => json_headers,
            :params => {
              "name" => resource.name,
              "blockLanguageId" => resource.block_language_id,
@@ -74,7 +74,7 @@ RSpec.describe "CodeResource request", :type => :request do
       resource = FactoryBot.build(:code_resource, ast: { :foo => "bar" })
       
       post "/api/project/#{resource.project.slug}/code_resources/",
-           :headers => JSON_HEADERS,
+           :headers => json_headers,
            :params => {
              "name" => resource.name,
              "blockLanguageId" => resource.block_language_id,
@@ -99,7 +99,7 @@ RSpec.describe "CodeResource request", :type => :request do
       resource = FactoryBot.create(:code_resource, name: "Initial")
     
       put "/api/project/#{resource.project.slug}/code_resources/#{resource.id}",
-          :headers => JSON_HEADERS,
+          :headers => json_headers,
           :params => { "name" => "Changed" }.to_json
 
       expect(response.status).to eq 200
@@ -116,7 +116,7 @@ RSpec.describe "CodeResource request", :type => :request do
       creation_attr = resource.attributes
 
       put "/api/project/#{resource.project.slug}/code_resources/#{resource.id}",
-          :headers => JSON_HEADERS,
+          :headers => json_headers,
           :params => { "programmingLanguageId" => new_lang.id }.to_json
 
       expect(response.status).to eq 200
@@ -131,7 +131,7 @@ RSpec.describe "CodeResource request", :type => :request do
     it "a resource does not exist" do
       project = FactoryBot.create(:project)
       delete "/api/project/#{project.slug}/code_resources/nonexistant",
-             :headers => JSON_HEADERS
+             :headers => json_headers
 
       expect(response.status).to eq(404)
     end
@@ -140,7 +140,7 @@ RSpec.describe "CodeResource request", :type => :request do
     it "a resource that exists" do
       resource = FactoryBot.create(:code_resource)
       delete "/api/project/#{resource.project.slug}/code_resources/#{resource.id}",
-             :headers => JSON_HEADERS
+             :headers => json_headers
 
       expect(response.status).to eq(200)
     end

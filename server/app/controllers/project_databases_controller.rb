@@ -7,15 +7,6 @@ class ProjectDatabasesController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
 
-  def current_project
-    @current_project ||= Project.find_by(slug: params['project_id'])
-  end
-
-  def current_database
-    database_id = nil # params['database_id']
-    @current_database = current_project.database_by_id_or_default(database_id)
-  end
-
   # Returns a visual representation of the schema, rendered with Graphviz
   def visual_schema
     # Build the GraphViz description of the database
@@ -34,7 +25,7 @@ class ProjectDatabasesController < ApplicationController
     # Does the user want to download the file?
     if params.has_key? 'download'
       file_extension = format.split(':').first
-      data_filename = "#{project_id}-db-schema-#{database_id}.#{file_extension}"
+      data_filename = "#{current_project.id}-db-schema-#{current_database.id}.#{file_extension}"
       data_disposition = 'attachment'
     end
 
@@ -92,10 +83,10 @@ class ProjectDatabasesController < ApplicationController
 
       # Alter the database
       current_database.table_alter table_name, alter_schema_request['commands']
+      current_database.save!
 
       # And tell the client about the new schema
-      result_schema = database_describe_schema(sqlite_file_path)
-      render :json => { :schema => result_schema }
+      render :json => { :schema => current_database.schema }
     end
   end
 
@@ -121,5 +112,16 @@ class ProjectDatabasesController < ApplicationController
   # Retrieves the actual data for a number of rows in a certain table
   def table_row_count
     render :json => current_database.table_row_count(params['tablename'])
+  end
+
+  # Access to the current project
+  def current_project
+    @current_project ||= Project.find_by(slug: params['project_id'])
+  end
+
+  # Access to the current database
+  def current_database
+    database_id = nil # params['database_id']
+    @current_database = current_project.database_by_id_or_default(database_id)
   end
 end
