@@ -1,0 +1,24 @@
+{
+  "language": "sql",
+  "name": "groupBy",
+  "children": {
+    "expressions": [
+      {
+        "language": "sql",
+        "name": "columnName",
+        "properties": {
+          "columnName": "id",
+          "refTableName": "foo"
+        }
+      },
+      {
+        "language": "sql",
+        "name": "columnName",
+        "properties": {
+          "columnName": "baz",
+          "refTableName": "bar"
+        }
+      }
+    ]
+  }
+}

@@ -31,7 +31,11 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         const columnName = node.properties["columnName"];
         const refTableName = node.properties["refTableName"];
 
-        process.addConvertedFragment(`${refTableName}.${columnName}`, node)
+        if (refTableName) {
+          process.addConvertedFragment(`${refTableName}.${columnName}`, node)
+        } else {
+          process.addConvertedFragment(columnName, node)
+        }
       }
     }
   },
@@ -101,6 +105,20 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         process.generateNode(operands[1]);
         process.addConvertedFragment(" ", node);
         process.generateNode(operands[2]);
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "sql",
+      typeName: "expression"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        const expr = node.getChildrenInCategory("expression");
+        expr.forEach(e => process.generateNode(e));
 
         return ([]);
       }
