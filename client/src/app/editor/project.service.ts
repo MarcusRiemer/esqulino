@@ -32,7 +32,9 @@ export class ProjectService {
   private _subject: BehaviorSubject<Project>;
 
   /**
-   * @param _http Dependently injected by Angular2
+   * @param _http To make HTTP requests
+   * @param _server To know where the requests should go
+   * @param _languageService Can retrieve languages
    */
   constructor(
     private _http: Http,

@@ -42,8 +42,10 @@ export namespace VisualBlockDescriptions {
       skipParents: number;
     };
 
+    // Drops something into a category
     children?: CategoryInsert;
 
+    // Drops something into a category of the parent
     parent?: CategoryInsert;
   }
 

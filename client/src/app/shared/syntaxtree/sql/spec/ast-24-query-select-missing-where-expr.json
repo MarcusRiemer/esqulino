@@ -1,0 +1,50 @@
+{
+  "name": "querySelect",
+  "language": "sql",
+  "children": {
+    "from": [
+      {
+        "name": "from",
+        "language": "sql",
+        "children": {
+          "tables": [
+            {
+              "name": "tableIntroduction",
+              "language": "sql",
+              "properties": {
+                "name": "foo"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "where": [
+      {
+        "name": "where",
+        "language": "sql",
+        "children": {
+          "expressions": []
+        }
+      }
+    ],
+    "select": [
+      {
+        "name": "select",
+        "language": "sql",
+        "children": {
+          "columns": [
+            {
+              "name": "columnName",
+              "language": "sql",
+              "properties": {
+                "columnName": "id",
+                "refTableName": "foo"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

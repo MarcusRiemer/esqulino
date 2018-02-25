@@ -205,6 +205,29 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               }
             } as VisualBlockDescriptions.EditorConstant,
             {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "columns",
+                  order: "insertFirst"
+                }
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "?",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "borderRadius": "500px",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+              visibility: ["ifEmpty"]
+            } as VisualBlockDescriptions.EditorDropTarget,
+            {
               blockType: "iterator",
               childGroupName: "columns",
               direction: "horizontal",
@@ -300,6 +323,29 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 color: "blue"
               }
             },
+            {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "tables",
+                  order: "insertFirst"
+                }
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "?",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "borderRadius": "500px",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+              visibility: ["ifEmpty"]
+            } as VisualBlockDescriptions.EditorDropTarget,
             {
               blockType: "iterator",
               childGroupName: "tables",
@@ -539,6 +585,29 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               }
             } as VisualBlockDescriptions.EditorConstant,
             {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "expressions",
+                  order: "insertFirst"
+                }
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "?",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "borderRadius": "500px",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+              visibility: ["ifEmpty"]
+            } as VisualBlockDescriptions.EditorDropTarget,
+            {
               blockType: "iterator",
               childGroupName: "expressions",
               direction: "horizontal",
@@ -578,6 +647,29 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 color: "blue"
               }
             } as VisualBlockDescriptions.EditorConstant,
+            {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "expressions",
+                  order: "insertFirst"
+                }
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "?",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "borderRadius": "500px",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+              visibility: ["ifEmpty"]
+            } as VisualBlockDescriptions.EditorDropTarget,
             {
               blockType: "iterator",
               childGroupName: "expressions",

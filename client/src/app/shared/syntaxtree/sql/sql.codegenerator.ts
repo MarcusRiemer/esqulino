@@ -234,7 +234,9 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         const tail = expressions.slice(1);
 
         process.addConvertedFragment(`WHERE `, node)
-        process.generateNode(head);
+        if (head) {
+          process.generateNode(head);
+        }
 
         tail.forEach((c, idx, arr) => {
           process.addConvertedFragment('\n\t', node);

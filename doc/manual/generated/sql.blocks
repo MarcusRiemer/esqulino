@@ -42,6 +42,20 @@ language "SQL" {
             color: blue
           }
         }
+        dropTarget {
+          visibility ifEmpty
+          direction horizontal
+          visual {
+            "?" {
+              style {
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                borderRadius: 500px
+              }
+            }
+          }
+        }
         iterate {
           childGroup "columns"
           direction horizontal
@@ -91,6 +105,20 @@ language "SQL" {
             width: 100px
             display: inline-block
             color: blue
+          }
+        }
+        dropTarget {
+          visibility ifEmpty
+          direction horizontal
+          visual {
+            "?" {
+              style {
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                borderRadius: 500px
+              }
+            }
           }
         }
         iterate {
@@ -229,6 +257,20 @@ language "SQL" {
             color: blue
           }
         }
+        dropTarget {
+          visibility ifEmpty
+          direction horizontal
+          visual {
+            "?" {
+              style {
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                borderRadius: 500px
+              }
+            }
+          }
+        }
         iterate {
           childGroup "expressions"
           direction horizontal
@@ -250,6 +292,20 @@ language "SQL" {
             color: blue
           }
         }
+        dropTarget {
+          visibility ifEmpty
+          direction horizontal
+          visual {
+            "?" {
+              style {
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                borderRadius: 500px
+              }
+            }
+          }
+        }
         iterate {
           childGroup "expressions"
           direction horizontal
@@ -260,102 +316,66 @@ language "SQL" {
       }
     }
   }
-  sidebarBlock "SELECT" {
-    category "SQL"
-    node "sql.querySelect" {
-      childGroup "select" {
-        node "sql.select"
+  databaseSchema
+  fixedBlocks "SQL" {
+    category "SQL" {
+      sidebarBlock "SELECT" {
+        node "sql.querySelect" {
+          childGroup "select" {
+            node "sql.select"
+          }
+          childGroup "from" {
+            node "sql.from"
+          }
+          childGroup "where" {
+          }
+          childGroup "groupBy" {
+          }
+        }
       }
-      childGroup "from" {
-        node "sql.from"
+      sidebarBlock "*" {
+        node "sql.starOperator"
       }
-      childGroup "where" {
+      sidebarBlock "FROM" {
+        node "sql.from" {
+          childGroup "tables" {
+          }
+        }
       }
-      childGroup "groupBy" {
+      sidebarBlock "JOIN" {
+        node "sql.crossJoin" {
+          childGroup "table" {
+          }
+        }
       }
-    }
-  }
-  sidebarBlock "*" {
-    category "SQL"
-    node "sql.starOperator"
-  }
-  sidebarBlock "FROM" {
-    category "SQL"
-    node "sql.from" {
-      childGroup "tables" {
+      sidebarBlock "INNER JOIN USING" {
+        node "sql.innerJoinUsing" {
+          childGroup "table" {
+          }
+          childGroup "using" {
+          }
+        }
       }
-    }
-  }
-  sidebarBlock "JOIN" {
-    category "SQL"
-    node "sql.crossJoin" {
-      childGroup "table" {
+      sidebarBlock "INNER JOIN ON" {
+        node "sql.innerJoinOn" {
+          childGroup "table" {
+          }
+          childGroup "on" {
+          }
+        }
       }
-    }
-  }
-  sidebarBlock "INNER JOIN USING" {
-    category "SQL"
-    node "sql.innerJoinUsing" {
-      childGroup "table" {
+      sidebarBlock "WHERE" {
+        node "sql.where" {
+          childGroup "expressions" {
+          }
+        }
       }
-      childGroup "using" {
+      sidebarBlock "GROUP BY" {
+        node "sql.groupBy" {
+          childGroup "expressions" {
+          }
+        }
       }
-    }
-  }
-  sidebarBlock "INNER JOIN ON" {
-    category "SQL"
-    node "sql.innerJoinOn" {
-      childGroup "table" {
-      }
-      childGroup "on" {
-      }
-    }
-  }
-  sidebarBlock "WHERE" {
-    category "SQL"
-    node "sql.where" {
-      childGroup "expressions" {
-      }
-    }
-  }
-  sidebarBlock "GROUP BY" {
-    category "SQL"
-    node "sql.groupBy" {
-      childGroup "expressions" {
-      }
-    }
-  }
-  sidebarBlock "Tabelle Person" {
-    category "SQL"
-    node "sql.tableIntroduction" {
-      prop "name" Person
-    }
-  }
-  sidebarBlock "Spalte Person.Id" {
-    category "SQL"
-    node "sql.columnName" {
-      prop "columnName" Id
-      prop "refTableName" Person
-    }
-  }
-  sidebarBlock "Spalte Person.Vorname" {
-    category "SQL"
-    node "sql.columnName" {
-      prop "columnName" Vorname
-      prop "refTableName" Person
-    }
-  }
-  sidebarBlock "Spalte Person.Nachname" {
-    category "SQL"
-    node "sql.columnName" {
-      prop "columnName" Nachname
-      prop "refTableName" Person
-    }
-  }
-  sidebarBlock "Tabelle Adresse" {
-    category "SQL"
-    node "sql.tableIntroduction" {
-      prop "name" Adresse
     }
   }
 }
