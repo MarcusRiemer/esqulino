@@ -1,0 +1,2 @@
+FROM foo
+	INNER JOIN bar ON baz

@@ -125,4 +125,16 @@ describe('Language: SQL (Codegen)', () => {
   it(`SELECT query: SELECT foo.id FROM foo WHERE `, () => {
     verifyFiles("ast-24-query-select-missing-where-expr", emitTree);
   });
+
+  it(`FROM foo INNER JOIN bar ON baz`, () => {
+    verifyFiles("ast-25-from-foo-inner-join-bar-on-baz", emitTree);
+  });
+
+  it(`FROM foo INNER JOIN bar USING 1`, () => {
+    verifyFiles("ast-26-from-foo-inner-join-bar-using-1", emitTree);
+  });
+
+  it(`GROUP BY foo.id, bar.baz`, () => {
+    verifyFiles("ast-27-group-by-foo-id-bar-baz", emitTree);
+  });
 });

@@ -1,0 +1,47 @@
+{
+  "language": "sql",
+  "name": "from",
+  "children": {
+    "tables": [
+      {
+        "language": "sql",
+        "name": "tableIntroduction",
+        "properties": {
+          "name": "foo"
+        }
+      },
+      {
+        "language": "sql",
+        "name": "innerJoinUsing",
+        "children": {
+          "table": [
+            {
+              "language": "sql",
+              "name": "tableIntroduction",
+              "properties": {
+                "name": "bar"
+              }
+            }            
+          ],
+          "using": [
+            {
+              "language": "sql",
+              "name": "expression",
+              "children": {
+                "expression": [
+                  {
+                    "language": "sql",
+                    "name": "constant",
+                    "properties": {
+                      "value": "1"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

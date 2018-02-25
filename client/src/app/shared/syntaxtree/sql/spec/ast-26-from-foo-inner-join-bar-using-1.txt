@@ -1,0 +1,2 @@
+FROM foo
+	INNER JOIN bar USING 1

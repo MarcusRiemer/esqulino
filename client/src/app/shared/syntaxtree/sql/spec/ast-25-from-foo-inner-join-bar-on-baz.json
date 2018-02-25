@@ -1,0 +1,47 @@
+{
+  "language": "sql",
+  "name": "from",
+  "children": {
+    "tables": [
+      {
+        "language": "sql",
+        "name": "tableIntroduction",
+        "properties": {
+          "name": "foo"
+        }
+      },
+      {
+        "language": "sql",
+        "name": "innerJoinOn",
+        "children": {
+          "table": [
+            {
+              "language": "sql",
+              "name": "tableIntroduction",
+              "properties": {
+                "name": "bar"
+              }
+            }            
+          ],
+          "on": [
+            {
+              "language": "sql",
+              "name": "expression",
+              "children": {
+                "expression": [
+                  {
+                    "language": "sql",
+                    "name": "columnName",
+                    "properties": {
+                      "columnName": "baz"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
