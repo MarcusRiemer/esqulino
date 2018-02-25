@@ -24,6 +24,9 @@ export function prettyPrintLanguageModel(desc: BlockLanguageDescription): string
   return (recursiveJoin('\n', '  ', toReturn));
 }
 
+/**
+ * Prettyprints style definitions.
+ */
 export function prettyPrintStyle(desc: VisualBlockDescriptions.BlockStyle) {
   const properties = Object.entries(desc || {})
     .map(([k, v]) => `${k}: ${v}`)

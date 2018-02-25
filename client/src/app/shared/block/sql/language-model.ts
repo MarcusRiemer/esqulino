@@ -199,7 +199,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               blockType: "constant",
               text: "SELECT",
               style: {
-                width: "100px",
+                width: "9ch",
                 display: "inline-block",
                 color: "blue"
               }
@@ -318,7 +318,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               blockType: "constant",
               text: "FROM",
               style: {
-                width: "100px",
+                width: "9ch",
                 display: "inline-block",
                 color: "blue"
               }
@@ -393,7 +393,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               blockType: "constant",
               text: "JOIN",
               style: {
-                width: "100px",
+                width: "10ch",
                 marginLeft: "10px",
                 display: "inline-block",
                 color: "blue"
@@ -428,7 +428,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               blockType: "constant",
               text: "INNER JOIN",
               style: {
-                width: "100px",
+                width: "10ch",
                 marginLeft: "10px",
                 display: "inline-block",
                 color: "blue"
@@ -491,7 +491,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               blockType: "constant",
               text: "INNER JOIN",
               style: {
-                width: "100px",
+                width: "10ch",
                 marginLeft: "10px",
                 display: "inline-block",
                 color: "blue"
@@ -579,7 +579,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               blockType: "constant",
               text: "WHERE",
               style: {
-                width: "100px",
+                width: "9ch",
                 display: "inline-block",
                 color: "blue"
               }
@@ -642,7 +642,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               blockType: "constant",
               text: "GROUP BY",
               style: {
-                width: "100px",
+                width: "9ch",
                 display: "inline-block",
                 color: "blue"
               }

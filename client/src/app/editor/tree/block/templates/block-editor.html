@@ -41,7 +41,7 @@
 
             <!-- If the tree is not empty, it wants to be rendered -->
             <div *ngIf="!currentTree.isEmpty"
-                 class="card-body block-editor">
+                 class="card-body block-editor-root">
               <editor-block-host *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
                                  [codeResource]="currentResource"
                                  [node]="currentTree.rootNode"></editor-block-host>
