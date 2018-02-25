@@ -42,6 +42,8 @@ export class SettingsComponent {
    * Load the project to access the schema
    */
   ngOnInit() {
+    console.log("Navigated to settings");
+
     // Ensure sane default state
     this._sidebarService.hideSidebar();
     this._toolbarService.resetItems();

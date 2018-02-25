@@ -1,4 +1,4 @@
-<h5>Datenbank "{{ databaseName }}"</h5>
+<h5>Datenbank <code>{{ databaseName }}</code></h5>
 <ng-container *ngFor="let table of possibleTables;">
   <div class="ast">
     <div (dragstart)="startTableDrag($event, table)"

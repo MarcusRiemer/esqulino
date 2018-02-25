@@ -92,19 +92,18 @@ export class Project implements ApiVersion, Saveable {
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
   }
 
-  /**
-   * @return The unique ID of this project.
-   */
-  get id() {
-    return (this._id);
-  }
-
   // Fired when the save-state has changed
   private _saveStateChangedEvent = new BehaviorSubject<SaveStateEvent<Project>>({
     resource: this,
     saveRequired: this._saveRequired
   });
 
+  /**
+   * @return The unique ID of this project.
+   */
+  get id() {
+    return (this._id);
+  }
 
   /**
    * @return The version of this project
@@ -120,6 +119,9 @@ export class Project implements ApiVersion, Saveable {
     return (this._sources.length > 0);
   }
 
+  /**
+   * @return The sources that are associated with this project.
+   */
   get sources() {
     return (this._sources);
   }
@@ -150,6 +152,11 @@ export class Project implements ApiVersion, Saveable {
    * Signals that this project has been saved.
    */
   markSaved() {
+    // If these languages have been removed there is no
+    // reason to keep track of them any more.
+    this._removedBlockLanguages = [];
+
+    // Required internal bookkeeping
     this._saveRequired = false;
     this.fireCurrentSaveState();
   }
