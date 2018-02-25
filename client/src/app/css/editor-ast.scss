@@ -9,6 +9,11 @@
     }
 }
 
+.block-editor-root * {
+    font-family: monospace;
+    font-size: 1.2rem;
+}
+
 sidebar-item-host .ast {
     ul {
         list-style-type: none;
