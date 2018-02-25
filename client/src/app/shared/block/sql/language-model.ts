@@ -201,7 +201,10 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               style: {
                 width: "9ch",
                 display: "inline-block",
-                color: "blue"
+                color: "blue",
+                "padding-left": "2px",
+                "background": "url(/vendor/icons/block-background.svg) no-repeat",
+                "background-size": "100% 100%",
               }
             } as VisualBlockDescriptions.EditorConstant,
             {
@@ -215,12 +218,15 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               children: [
                 {
                   blockType: "constant",
-                  text: "?",
+                  text: "❓",
                   style: {
                     "paddingLeft": "10px",
                     "paddingRight": "10px",
                     "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
                     "borderRadius": "500px",
+                    "cursor": "default",
                   },
                 } as VisualBlockDescriptions.EditorConstant,
               ],
@@ -256,6 +262,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             "paddingRight": "10px",
             "border": "2px solid black",
             "borderRadius": "500px",
+            "cursor": "grab",
           },
           children: [
             {
@@ -320,7 +327,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               style: {
                 width: "9ch",
                 display: "inline-block",
-                color: "blue"
+                color: "blue",
               }
             },
             {
@@ -334,12 +341,15 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               children: [
                 {
                   blockType: "constant",
-                  text: "?",
+                  text: "❓",
                   style: {
                     "paddingLeft": "10px",
                     "paddingRight": "10px",
                     "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
                     "borderRadius": "500px",
+                    "cursor": "default",
                   },
                 } as VisualBlockDescriptions.EditorConstant,
               ],
@@ -595,12 +605,15 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               children: [
                 {
                   blockType: "constant",
-                  text: "?",
+                  text: "❓",
                   style: {
                     "paddingLeft": "10px",
                     "paddingRight": "10px",
                     "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
                     "borderRadius": "500px",
+                    "cursor": "default",
                   },
                 } as VisualBlockDescriptions.EditorConstant,
               ],
@@ -658,12 +671,15 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               children: [
                 {
                   blockType: "constant",
-                  text: "?",
+                  text: "❓",
                   style: {
                     "paddingLeft": "10px",
                     "paddingRight": "10px",
                     "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
                     "borderRadius": "500px",
+                    "cursor": "default",
                   },
                 } as VisualBlockDescriptions.EditorConstant,
               ],
