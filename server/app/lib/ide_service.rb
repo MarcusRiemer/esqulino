@@ -66,6 +66,23 @@ class ExecIdeService < BaseIdeService
     @node_binary = config['node_binary']
     @program = config['program']
   end
+
+  # The path to the cli program
+  def cli_program_path
+    @program
+  end
+
+  # Checks whether the given program actually exists
+  def cli_program_exists?
+    File.exist? cli_program_path
+  end
+
+  # Ensures the node runtime has something meaningful to start
+  def assert_cli_program_exists!
+    if not cli_program_exists?
+      raise IdeServiceError, "Could not find compiled CLI at \"#{@program}\""
+    end
+  end
 end
 
 # Re-executes the CLI service for every single request.
@@ -78,6 +95,8 @@ class OneShotExecIdeService < ExecIdeService
   #  "type" property.
   # @return Depends on the type of the request
   def execute_request_impl(request)
+    assert_cli_program_exists!
+    
     stdout, stderr, res = Open3.capture3(@node_binary, @program, :stdin_data => request.to_json)
 
     # Lets hope the process exited fine and had no errors

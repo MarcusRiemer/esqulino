@@ -10,6 +10,14 @@ Rails.application.config.to_prepare do
   config.sqlino[:projects_dir] = config.sqlino[:data_dir].join 'projects'
 end
 
+# Ensuring that all relevant folders exist
+Rails.application.config.after_initialize do
+  projects_dir = Rails.application.config.sqlino[:projects_dir]
+  if not File.directory? projects_dir
+    abort("Startup Error: Projects directory at \"#{projects_dir}\" must exist and be writeable")
+  end
+end
+
 # Setting up the IDE service
 Rails.application.config.after_initialize do
   Rails.logger.info "Configuring IDE Service ..."
@@ -18,5 +26,17 @@ Rails.application.config.after_initialize do
   IdeService::LogSubscriber.attach_to :ide_service
 
   Rails.logger.info "IDE service configured, testing availability ..."
-  IdeService.instance.ping!
+  begin
+    if not IdeService.instance.cli_program_exists?
+      abort("Startup Error: No cli program at \"#{IdeService.instance.cli_program_path}\"")
+    end
+    
+    if not IdeService.instance.ping!
+      abort("Startup Error: IDE service did not respond")
+    end
+  rescue IdeServiceError => e
+    puts "##### Exception of type #{e.class.name} #####"
+    puts e.message
+    abort("Startup Exception: See above")
+  end
 end

@@ -50,8 +50,8 @@ class Project < ApplicationRecord
     Rails.logger.info "Creating project data directory at #{data_directory_path}"
     raise EsqulinoError.new("Project directory already exist: #{data_directory_path}") if File.exist? data_directory_path
     Dir.mkdir data_directory_path
-    Dir.mkdir File.join(data_directory_path, "databases")
-    Dir.mkdir File.join(data_directory_path, "images")
+    Dir.mkdir File.join(data_directory_path, "databases/")
+    Dir.mkdir File.join(data_directory_path, "images/")
   end
 
   # Remove the data folder
