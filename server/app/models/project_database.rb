@@ -19,6 +19,7 @@ class ProjectDatabase < ApplicationRecord
   # need the id that was assigned.
   after_create do
     Rails.logger.info "Creating a SQLite database at #{sqlite_file_path}"
+    FileUtils.mkdir_p project.databases_directory_path
     FileUtils.touch sqlite_file_path
   end
 
@@ -31,7 +32,7 @@ class ProjectDatabase < ApplicationRecord
 
   # Retrieves the path to the SQLite file for this database
   def sqlite_file_path
-    File.join(project.data_directory_path, "databases", "#{id}.sqlite")
+    File.join(project.databases_directory_path, "#{id}.sqlite")
   end
 
   # Determines whether the given name of the table is part the schema of this

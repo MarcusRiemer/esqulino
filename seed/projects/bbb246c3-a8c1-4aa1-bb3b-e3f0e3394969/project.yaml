@@ -7,7 +7,7 @@ concise_attributes:
   name: default_database_id
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Testprojekt für Web
+  value_before_type_cast: 'Test: Web'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: slug
   value_before_type_cast: webtest
@@ -27,7 +27,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-25 19:13:02.563495'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-02-25 20:48:02.269305'
+  value_before_type_cast: '2018-02-26 10:47:33.533639'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: api_version
 new_record: false
