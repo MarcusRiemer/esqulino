@@ -1,0 +1,43 @@
+--- !ruby/object:ProjectDatabase
+concise_attributes:
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 867b74ad-9ab3-4402-98ee-cfb43d9de8b6
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: default
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: b2c9f3a4-9400-4442-bace-f9455b4db6d2
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: schema
+  value_before_type_cast: '[{"name": "discipline", "columns": [{"name": "discipline_id",
+    "type": "TEXT", "index": 0, "primary": true, "not_null": true, "dflt_value": null},
+    {"name": "name", "type": "TEXT", "index": 1, "primary": false, "not_null": true,
+    "dflt_value": null}], "foreign_keys": []}, {"name": "event", "columns": [{"name":
+    "event_id", "type": "INTEGER", "index": 0, "primary": true, "not_null": true,
+    "dflt_value": null}, {"name": "type", "type": "TEXT", "index": 1, "primary": false,
+    "not_null": true, "dflt_value": null}, {"name": "year", "type": "INTEGER", "index":
+    2, "primary": false, "not_null": true, "dflt_value": null}, {"name": "city", "type":
+    "TEXT", "index": 3, "primary": false, "not_null": true, "dflt_value": null}],
+    "foreign_keys": []}, {"name": "medal", "columns": [{"name": "event_id", "type":
+    "INTEGER", "index": 0, "primary": false, "not_null": true, "dflt_value": null},
+    {"name": "medal_id", "type": "INTEGER", "index": 1, "primary": true, "not_null":
+    true, "dflt_value": null}, {"name": "discipline_id", "type": "INTEGER", "index":
+    2, "primary": false, "not_null": true, "dflt_value": null}, {"name": "athlete_name",
+    "type": "TEXT", "index": 3, "primary": false, "not_null": true, "dflt_value":
+    null}, {"name": "gender", "type": "TEXT", "index": 4, "primary": false, "not_null":
+    true, "dflt_value": null}, {"name": "for", "type": "TEXT", "index": 5, "primary":
+    false, "not_null": true, "dflt_value": null}, {"name": "place", "type": "INTEGER",
+    "index": 6, "primary": false, "not_null": true, "dflt_value": null}], "foreign_keys":
+    [{"references": [{"to_table": "discipline", "to_column": "discipline_id", "from_column":
+    "discipline_id"}]}, {"references": [{"to_table": "event", "to_column": "event_id",
+    "from_column": "event_id"}]}]}]'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-02-26 10:37:47.05661'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-02-26 10:38:32.426182'
+new_record: false
+active_record_yaml_version: 2

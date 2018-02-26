@@ -1,0 +1,29 @@
+--- !ruby/object:ProjectSource
+concise_attributes:
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 867b74ad-9ab3-4402-98ee-cfb43d9de8b6
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: url
+  value_before_type_cast: https://www.kaggle.com/the-guardian/olympic-games
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 3
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: title
+  value_before_type_cast: The Guardian
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: display
+  value_before_type_cast: Die Daten wurden vom "IOC Research and Reference Service"
+    bereitgestellt und im "The Guardian's Datablog" veröffentlicht.
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: read_only
+  value_before_type_cast: true
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-02-26 10:58:35.795776'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-02-26 10:58:35.795776'
+new_record: false
+active_record_yaml_version: 2

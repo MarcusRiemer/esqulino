@@ -48,4 +48,9 @@ class ProjectImagesController < ApplicationController
   def list_show
     render status => :success, json: Image.metadata_get_from_file(current_project)
   end
+
+  # Access to the current project
+  def current_project
+    @current_project ||= Project.find_by(slug: params['project_id'])
+  end
 end

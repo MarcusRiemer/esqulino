@@ -31,7 +31,7 @@ class Image
   end
 
   def folder
-    File.join(@project.folder, IMAGE_FOLDER, @image_id[0..1], @image_id[2..3])
+    File.join(@project.data_directory_path, IMAGE_FOLDER, @image_id[0..1], @image_id[2..3])
   end
 
   def path
@@ -39,11 +39,11 @@ class Image
   end
 
   def image_json
-    File.join(@project.folder, IMAGE_FOLDER, IMAGES_JSON)
+    File.join(@project.data_directory_path, IMAGE_FOLDER, IMAGES_JSON)
   end
 
   def self.image_json(project)
-    File.join(project.folder, IMAGE_FOLDER, IMAGES_JSON)
+    File.join(project.data_directory_path, IMAGE_FOLDER, IMAGES_JSON)
   end
 
   def exists?
@@ -135,7 +135,7 @@ class Image
   end
 
   def self.uuid_to_filename(project, uuid)
-    folder = File.join(project.folder, IMAGE_FOLDER)
+    folder = File.join(project.data_directory_path, IMAGE_FOLDER)
     File.join(folder, uuid[0..1], uuid[2..3], uuid)
   end
 

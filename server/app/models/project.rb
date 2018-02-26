@@ -120,6 +120,16 @@ class Project < ApplicationRecord
     File.join(Rails.application.config.sqlino[:projects_dir], id)
   end
 
+  # The folder for images
+  def images_directory_path
+    File.join data_directory_path, "images"
+  end
+
+  # The folder for databases
+  def databases_directory_path
+    File.join data_directory_path, "databases"
+  end
+
   # Returns a nicely readable representation of id, slug and name
   def readable_identification
     "\"#{name}\" (#{slug}, #{id})"

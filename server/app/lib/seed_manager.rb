@@ -62,6 +62,13 @@ class SeedManager
     File.join seed_projects_dir(project_id), "project.yaml"
   end
 
+  # The specific directory for a certain project
+  #
+  # @param project_id [UUID] The id for this exact project
+  def seed_project_images_dir(project_id)
+    File.join seed_projects_dir(project_id), "images"
+  end
+
   # The specific directory for code resources of a certain project
   #
   # @param project_id [UUID] The id of the parent project
@@ -189,7 +196,7 @@ class SeedManager
         seed_instance(YAML.load_file(s), ProjectSource, 1)
       end
 
-      # ... and databases.
+      # ... and databases ...
       available_seed_project_used_database_files(p.id).each do |db_yaml|
         db = seed_instance(YAML.load_file(db_yaml), ProjectDatabase, 1)
 
@@ -202,6 +209,13 @@ class SeedManager
         sqlite_filename = Pathname(db_yaml).sub_ext('.sqlite')
 
         FileUtils.cp sqlite_filename, database_target_folder
+      end
+
+      # ... and images.
+      if File.directory? seed_project_images_dir(p.id)
+        puts "  COPY   Images"
+        FileUtils.mkdir_p p.images_directory_path
+        FileUtils.cp_r seed_project_images_dir(p.id), p.data_directory_path
       end
 
       # Breaking circular dependencies (Part 2)
@@ -280,6 +294,12 @@ class SeedManager
 
       puts "  Copying data of project database #{db.readable_identification}"
       FileUtils.cp(db.sqlite_file_path, seed_project_databases_dir(p.id))
+    end
+
+    # Storing images
+    if File.directory? p.images_directory_path then
+      puts "  Storing images"
+      FileUtils.cp_r(p.images_directory_path, seed_project_images_dir(p.id))
     end
   end
 

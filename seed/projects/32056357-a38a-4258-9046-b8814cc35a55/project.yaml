@@ -5,6 +5,7 @@ concise_attributes:
   value_before_type_cast: 32056357-a38a-4258-9046-b8814cc35a55
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: default_database_id
+  value_before_type_cast: ca22b86c-b1a6-4420-a91a-c222110bb0e1
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: name
   value_before_type_cast: Blog
@@ -29,7 +30,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.690301'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-02-20 20:48:21.690301'
+  value_before_type_cast: '2018-02-26 12:21:54.839155'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: api_version
 new_record: false
