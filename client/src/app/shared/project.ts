@@ -313,6 +313,13 @@ export class Project implements ApiVersion, Saveable {
   }
 
   /**
+   * @param code A resource that has been fully created already
+   */
+  addCodeResource(code: CodeResource) {
+    this._codeResources.push(code);
+  }
+
+  /**
    * @param id The id for a certain language
    */
   getLanguageById(id: string) {

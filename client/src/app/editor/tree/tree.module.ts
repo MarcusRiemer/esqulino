@@ -5,6 +5,7 @@ import { RegistrationService } from '../registration.service'
 
 import { ResourceChangedGuard } from './resource-changed.guard'
 import { CodeGeneratorComponent } from './code-generator.component'
+import { CreateCodeResourceComponent } from './create-code-resource.component'
 import { DraggableDirective } from './draggable.directive'
 import { DropTargetDirective } from './drop-target.directive'
 import { DropPlaceholderDirective } from './drop-placeholder.directive'
@@ -44,6 +45,7 @@ import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.
     BlockLayoutDirective,
     BlockBaseDirective,
     CodeGeneratorComponent,
+    CreateCodeResourceComponent,
     DatabaseSchemaSidebarComponent,
     DraggableDirective,
     DropTargetDirective,

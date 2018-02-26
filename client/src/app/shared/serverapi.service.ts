@@ -48,10 +48,17 @@ export class ServerApiService {
   }
 
   /**
+   * The base URL for all operations on code resources
+   */
+  getCodeResourceBaseUrl(projectId: string): string {
+    return this.getProjectUrl(projectId) + '/code_resources';
+  }
+
+  /**
    * Retrieves the URL to access code resources
    */
   getCodeResourceUrl(projectId: string, codeResourceId: string): string {
-    return this.getProjectUrl(projectId) + `/code_resources/${codeResourceId}`
+    return this.getCodeResourceBaseUrl(projectId) + `/${codeResourceId}`
   }
 
   /**
