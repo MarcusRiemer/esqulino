@@ -437,6 +437,7 @@ const EDITOR_BLOCKS = [
 export const DYNAMIC_LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "xml",
   name: "XML (Statisch)",
+  defaultProgrammingLanguage: "dxml",
   sidebars: [
     {
       type: "fixedBlocks",
@@ -455,6 +456,7 @@ export const DYNAMIC_LANGUAGE_MODEL: BlockLanguageDescription = {
 export const LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "dxml",
   name: "XML (Dynamisch)",
+  defaultProgrammingLanguage: "dxml",
   sidebars: [
     {
       type: "fixedBlocks",

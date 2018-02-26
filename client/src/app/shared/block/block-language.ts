@@ -19,11 +19,13 @@ export class BlockLanguage implements Forward.BlockLanguage {
   private _name: string;
   private _id: string;
   private _slug: string;
+  private _defaultProgrammingLanguageId: string;
 
   constructor(desc: BlockLanguageDescription) {
     this._id = desc.id;
     this._slug = desc.slug;
     this._name = desc.name;
+    this._defaultProgrammingLanguageId = desc.defaultProgrammingLanguage;
 
     this._sidebars = desc.sidebars.map(sidebarDesc => {
       switch (sidebarDesc.type) {
@@ -54,6 +56,10 @@ export class BlockLanguage implements Forward.BlockLanguage {
    */
   get name() {
     return (this._name);
+  }
+
+  get defaultProgrammingLanguageId() {
+    return (this._defaultProgrammingLanguageId);
   }
 
   /**

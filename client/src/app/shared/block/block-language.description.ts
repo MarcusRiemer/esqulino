@@ -45,4 +45,9 @@ export interface BlockLanguageDocument {
    * How blocks should be represented in the drag & drop editor.
    */
   editorBlocks: EditorBlockDescription[];
+
+  /**
+   * The programming language this block language uses by default.
+   */
+  defaultProgrammingLanguage: string;
 }

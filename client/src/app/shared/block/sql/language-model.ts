@@ -6,6 +6,7 @@ import {
 export const LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "sql",
   name: "SQL",
+  defaultProgrammingLanguage: "sql",
   sidebars: [
     {
       type: "databaseSchema",

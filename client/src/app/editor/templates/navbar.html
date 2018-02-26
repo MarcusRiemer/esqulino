@@ -11,9 +11,13 @@
       </span>
     </li>
 
-    <!-- Debug: AST Editor -->
-    <li *ngIf="project?.codeResources.length > 0">
-      <span class="fa fa-bug fa-fw"></span>Syntaxbaum
+    <!-- Block Editors -->
+    <li>
+      <a [routerLink]="['ast', 'create']"
+         [routerLinkActiveOptions]="{exact: true}"
+         routerLinkActive="router-link-active">
+        <span class="fa fa-puzzle-piece fa-fw"></span>Code
+      </a>
       <ul class="nav-code-resource">
         <li *ngFor="let codeResource of project?.codeResources"
             [title]="codeResource.languageIdObs | async">
