@@ -215,7 +215,7 @@ class SeedManager
       if File.directory? seed_project_images_dir(p.id)
         puts "  COPY   Images"
         FileUtils.mkdir_p p.images_directory_path
-        FileUtils.cp_r seed_project_images_dir(p.id), p.data_directory_path
+        FileUtils.copy_entry seed_project_images_dir(p.id), p.images_directory_path
       end
 
       # Breaking circular dependencies (Part 2)
@@ -299,7 +299,7 @@ class SeedManager
     # Storing images
     if File.directory? p.images_directory_path then
       puts "  Storing images"
-      FileUtils.cp_r(p.images_directory_path, seed_project_images_dir(p.id))
+      FileUtils.copy_entry(p.images_directory_path, seed_project_images_dir(p.id))
     end
   end
 
