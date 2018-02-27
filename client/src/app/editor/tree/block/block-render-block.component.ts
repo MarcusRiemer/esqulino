@@ -10,10 +10,7 @@ import { DragService } from '../../drag.service';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
-import { calculateDropLocation } from './drop-utils';
-
-// These states are available for animation
-type DropTargetAnimationStates = "available" | "none" | "self" | "taken";
+import { calculateDropLocation, calculateDropTargetState, DropTargetState } from './drop-utils';
 
 /**
  * Renders a single and well known visual element of a node.
@@ -40,10 +37,6 @@ export class BlockRenderBlockComponent implements OnInit {
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlock;
 
-  // The current state that should be used for the animation
-  private _cached_dropTargetAnimationState: Observable<DropTargetAnimationStates>;
-
-
   constructor(
     private _dragService: DragService,
     private _currentCodeResource: CurrentCodeResourceService,
@@ -54,27 +47,30 @@ export class BlockRenderBlockComponent implements OnInit {
 
   }
 
-  get dropTargetAnimationState(): Observable<DropTargetAnimationStates> {
-    if (!this._cached_dropTargetAnimationState) {
-      this._cached_dropTargetAnimationState = this._dragService.currentDrag
-        .map(drag => {
-          if (!drag) {
-            // There is no drag operation
-            return ("none");
-          }
-          else if (drag.hoverNode && drag.hoverNode == this.node) {
-            // There is a drag operation and it targets us
-            return ("self");
-          } else {
-            // There is a drag operation and it targets something else
-            return ("available");
-          }
-        })
-        .distinctUntilChanged()
-    }
+  readonly dropTargetAnimationState: Observable<DropTargetState> = this._dragService.currentDrag
+    .map(drag => calculateDropTargetState(drag, this));
 
-    return (this._cached_dropTargetAnimationState);
-  }
+  /*  get dropTargetAnimationState(): Observable<DropTargetAnimationStates> {
+      if (!this._cached_dropTargetAnimationState) {
+        this._cached_dropTargetAnimationState = this._dragService.currentDrag
+          .map(drag => {
+            if (!drag) {
+              // There is no drag operation
+              return ("none");
+            }
+            else if (drag.hoverNode && drag.hoverNode == this.node) {
+              // There is a drag operation and it targets us
+              return ("self");
+            } else {
+              // There is a drag operation and it targets something else
+              return ("available");
+            }
+          })
+          .distinctUntilChanged()
+      }
+  
+      return (this._cached_dropTargetAnimationState);
+    }*/
 
 
 

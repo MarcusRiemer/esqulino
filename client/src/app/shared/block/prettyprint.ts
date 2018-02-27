@@ -113,7 +113,7 @@ function prettyPrintVisualDropTarget(desc: VisualBlockDescriptions.EditorDropTar
 
   // For the moment the mandatory properties have to be stated verbosely
   const props = [
-    `visibility ${desc.visibility.join(' ')}`,
+    // TOOD: drop target properties `visibility ${desc.visibility.join(' ')}`,
     `direction ${desc.direction}`
   ]
 

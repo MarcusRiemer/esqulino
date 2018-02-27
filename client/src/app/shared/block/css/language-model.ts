@@ -22,7 +22,8 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             children: {
               category: "rules",
               order: "insertFirst"
-            }
+            },
+            visibility: ["ifLegalChild"]
           },
           children: [
             {
@@ -56,8 +57,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               dropTarget: {
                 children: {
                   category: "selectors",
-                  order: "insertFirst"
-                }
+                  order: "insertFirst",
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
               },
               children: [
                 {
@@ -74,8 +76,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   },
                 } as VisualBlockDescriptions.EditorConstant,
               ],
-              direction: "horizontal",
-              visibility: ["ifEmpty", "ifLegalChild"]
+              direction: "horizontal"
             },
             {
               blockType: "iterator",
@@ -96,8 +97,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           dropTarget: {
             children: {
               category: "declarations",
-              order: "insertFirst"
-            }
+              order: "insertFirst",
+            },
+            visibility: ["ifEmpty", "ifLegalChild"]
           },
           children: [
             {
@@ -116,7 +118,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             } as VisualBlockDescriptions.EditorConstant,
           ],
           direction: "horizontal",
-          visibility: ["ifEmpty", "ifLegalChild"]
         },
         {
           blockType: "iterator",
@@ -249,8 +250,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               dropTarget: {
                 children: {
                   category: "value",
-                  order: "insertFirst"
-                }
+                  order: "insertFirst",
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
               },
               children: [
                 {
@@ -268,7 +270,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 } as VisualBlockDescriptions.EditorConstant,
               ],
               direction: "horizontal",
-              visibility: ["ifEmpty", "ifLegalChild"]
             },
             {
               blockType: "iterator",
@@ -305,8 +306,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               dropTarget: {
                 children: {
                   category: "value",
-                  order: "insertFirst"
-                }
+                  order: "insertFirst",
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
               },
               children: [
                 {
@@ -324,7 +326,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 } as VisualBlockDescriptions.EditorConstant,
               ],
               direction: "horizontal",
-              visibility: ["ifEmpty", "ifLegalChild"]
             },
             {
               blockType: "iterator",

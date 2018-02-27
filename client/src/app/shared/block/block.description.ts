@@ -47,6 +47,8 @@ export namespace VisualBlockDescriptions {
 
     // Drops something into a category of the parent
     parent?: CategoryInsert;
+
+    visibility?: ["ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty" | "always"];
   }
 
   /**
@@ -77,7 +79,6 @@ export namespace VisualBlockDescriptions {
     blockType: "dropTarget";
     children?: ConcreteBlock[];
     dropTarget?: DropTargetProperties;
-    visibility: ["ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty" | "always"];
   }
 
   /**
