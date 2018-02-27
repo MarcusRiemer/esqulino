@@ -140,7 +140,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             parent: {
               category: "where",
               order: "insertFirst"
-            }
+            },
+            visibility: ["ifLegalChild"]
           },
           children: [
             {
@@ -149,7 +150,6 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             } as VisualBlockDescriptions.EditorConstant,
           ],
           direction: "horizontal",
-          visibility: ["ifLegalChild"]
         } as VisualBlockDescriptions.EditorDropTarget,
         {
           blockType: "iterator",
@@ -162,7 +162,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             parent: {
               category: "groupBy",
               order: "insertFirst"
-            }
+            },
+            visibility: ["ifLegalChild"]
           },
           children: [
             {
@@ -171,7 +172,6 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             } as VisualBlockDescriptions.EditorConstant,
           ],
           direction: "horizontal",
-          visibility: ["ifLegalChild"]
         } as VisualBlockDescriptions.EditorDropTarget,
         {
           blockType: "iterator",
@@ -193,7 +193,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             children: {
               order: "insertFirst",
               category: "columns"
-            }
+            },
+            visibility: ["ifLegalChild"]
           },
           children: [
             {
@@ -214,7 +215,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 children: {
                   category: "columns",
                   order: "insertFirst"
-                }
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
               },
               children: [
                 {
@@ -232,7 +234,6 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 } as VisualBlockDescriptions.EditorConstant,
               ],
               direction: "horizontal",
-              visibility: ["ifEmpty", "ifLegalChild"]
             } as VisualBlockDescriptions.EditorDropTarget,
             {
               blockType: "iterator",
@@ -319,7 +320,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             children: {
               category: "tables",
               order: "insertFirst",
-            }
+            },
+            visibility: ["ifLegalChild"]
           },
           children: [
             {
@@ -337,7 +339,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 children: {
                   category: "tables",
                   order: "insertFirst"
-                }
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
               },
               children: [
                 {
@@ -355,7 +358,6 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 } as VisualBlockDescriptions.EditorConstant,
               ],
               direction: "horizontal",
-              visibility: ["ifEmpty", "ifLegalChild"]
             } as VisualBlockDescriptions.EditorDropTarget,
             {
               blockType: "iterator",
@@ -371,7 +373,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             children: {
               category: "tables",
               order: "insertLast"
-            }
+            },
+            visibility: ["ifLegalChild"]
           },
           children: [
             {
@@ -380,7 +383,6 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             } as VisualBlockDescriptions.EditorConstant,
           ],
           direction: "horizontal",
-          visibility: ["ifLegalChild"]
         } as VisualBlockDescriptions.EditorDropTarget
       ],
     },
@@ -397,7 +399,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             children: {
               category: "table",
               order: "insertFirst",
-            }
+            },
+            visibility: ["ifLegalChild"]
           },
           children: [
             {
@@ -432,7 +435,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             children: {
               category: "table",
               order: "insertFirst",
-            }
+            },
+            visibility: ["ifLegalChild"]
           },
           children: [
             {
@@ -456,10 +460,10 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 children: {
                   category: "using",
                   order: "insertFirst"
-                }
+                },
+                visibility: ["always"],
               },
               direction: "horizontal",
-              visibility: ["always"],
               children: [
                 {
                   blockType: "constant",
@@ -495,7 +499,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             children: {
               category: "table",
               order: "insertFirst",
-            }
+            },
+            visibility: ["ifLegalChild"],
           },
           children: [
             {
@@ -519,10 +524,10 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 children: {
                   category: "on",
                   order: "insertFirst"
-                }
+                },
+                visibility: ["always"],
               },
               direction: "horizontal",
-              visibility: ["always"],
               children: [
                 {
                   blockType: "constant",
@@ -583,7 +588,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             children: {
               category: "expressions",
               order: "insertFirst",
-            }
+            },
+            visibility: ["ifLegalChild"]
           },
           children: [
             {
@@ -601,7 +607,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 children: {
                   category: "expressions",
                   order: "insertFirst"
-                }
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
               },
               children: [
                 {
@@ -619,7 +626,6 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 } as VisualBlockDescriptions.EditorConstant,
               ],
               direction: "horizontal",
-              visibility: ["ifEmpty", "ifLegalChild"]
             } as VisualBlockDescriptions.EditorDropTarget,
             {
               blockType: "iterator",
@@ -649,7 +655,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             children: {
               category: "expressions",
               order: "insertFirst",
-            }
+            },
+            visibility: ["ifLegalChild"]
           },
           children: [
             {
@@ -667,7 +674,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 children: {
                   category: "expressions",
                   order: "insertFirst"
-                }
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
               },
               children: [
                 {
@@ -685,7 +693,6 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 } as VisualBlockDescriptions.EditorConstant,
               ],
               direction: "horizontal",
-              visibility: ["ifEmpty", "ifLegalChild"]
             } as VisualBlockDescriptions.EditorDropTarget,
             {
               blockType: "iterator",

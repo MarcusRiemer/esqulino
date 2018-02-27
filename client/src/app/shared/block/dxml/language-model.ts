@@ -232,7 +232,8 @@ const EDITOR_BLOCKS = [
               children: {
                 category: "attributes",
                 order: "insertLast"
-              }
+              },
+              visibility: ["ifLegalChild"]
             },
             children: [
               {
@@ -244,7 +245,6 @@ const EDITOR_BLOCKS = [
             style: {
               marginLeft: "10px",
             },
-            visibility: ["ifLegalChild"]
           } as VisualBlockDescriptions.EditorDropTarget,
           {
             blockType: "constant",
@@ -259,7 +259,8 @@ const EDITOR_BLOCKS = [
               children: {
                 category: "elements",
                 order: "insertFirst"
-              }
+              },
+              visibility: ["ifLegalChild"]
             },
             children: [
               {
@@ -271,7 +272,6 @@ const EDITOR_BLOCKS = [
             style: {
               marginLeft: "10px",
             },
-            visibility: ["ifLegalChild"]
           } as VisualBlockDescriptions.EditorDropTarget,
         ]
       } as VisualBlockDescriptions.EditorBlock,

@@ -171,7 +171,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 actionSelf: {
                   order: "insertAfter",
                   skipParents: 1
-                }
+                },
+                visibility: ["ifLegalChild"]
               },
               children: [
                 {
@@ -193,7 +194,8 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                     actionSelf: {
                       order: "insertAfter",
                       skipParents: 1
-                    }
+                    },
+                    visibility: ["ifLegalChild"]
                   },
                   children: [
                     {
