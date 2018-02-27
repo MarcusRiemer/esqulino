@@ -13,3 +13,16 @@
     margin-bottom: 10px;
     cursor: pointer;
 }
+
+.schema-table-header {
+    display: flex;
+
+    a {
+        text-decoration: none;
+    }
+    
+    > *:first-child {
+        font-size: 1.5rem;
+        flex-grow: 1;
+    }
+}
