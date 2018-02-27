@@ -57,11 +57,24 @@ export class CodeResourceService {
 
     const body = JSON.stringify(bodyJson);
     const toReturn = this._http.put(url, body, options)
-      .delay(250)
-      .map((res) => {
-        const resourceId = res.text();
-      })
-      .catch(this.handleError);
+      .catch(this.handleError)
+      .delay(250);
+
+    return (toReturn);
+  }
+
+  /**
+   * Deletes the resource with the given ID from the server.
+   */
+  deleteCodeResource(resource: CodeResource) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    const url = this._server.getCodeResourceUrl(resource.project.slug, resource.id);
+
+    const toReturn = this._http.delete(url, options)
+      .catch(this.handleError)
+      .delay(250);
 
     return (toReturn);
   }

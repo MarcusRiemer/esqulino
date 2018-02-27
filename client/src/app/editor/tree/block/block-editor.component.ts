@@ -44,17 +44,34 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
       this._router.navigate(["..", "raw"], { relativeTo: this._route });
     });
 
+    // Deleting this code resource
+    const btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "w");
+    btnDelete.onClick.subscribe(_ => {
+      this._codeResourceService.deleteCodeResource(this.peekResource)
+        .first()
+        .subscribe(res => {
+          this.peekProject.removedCodeResource(this.peekResource);
+          this._router.navigate(["create"], { relativeTo: this._route.parent })
+        });
+    });
+
     // Reacting to saving
     this._toolbarService.savingEnabled = true;
     let btnSave = this._toolbarService.saveItem;
 
     let subRef = btnSave.onClick.subscribe((res) => {
       btnSave.isInProgress = true;
-      this._codeResourceService.updateCodeResource(this._currentCodeResource.peekResource)
-        // Always delay visual feedback by 500ms
-        .delay(500)
+      this._codeResourceService.updateCodeResource(this.peekResource)
+        .first()
         .subscribe(res => btnSave.isInProgress = false);
     });
+  }
+
+  /**
+   * @return A peek at the currently edited resource.
+   */
+  get peekResource() {
+    return (this._currentCodeResource.peekResource);
   }
 
   /**
@@ -62,6 +79,13 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    */
   get currentResource() {
     return (this._currentCodeResource.currentResource);
+  }
+
+  /**
+   * @return A peek at the project of the currently edited resource
+   */
+  get peekProject() {
+    return (this.peekResource.project);
   }
 
   /**

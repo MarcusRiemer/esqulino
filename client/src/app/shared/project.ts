@@ -320,6 +320,16 @@ export class Project implements ApiVersion, Saveable {
   }
 
   /**
+   * Needs to be called after a code resource has been deleted.
+   */
+  removedCodeResource(code: CodeResource) {
+    const index = this._codeResources.findIndex(c => c.id == code.id);
+    if (index >= 0) {
+      this._codeResources.splice(index, 1);
+    }
+  }
+
+  /**
    * @param id The id for a certain language
    */
   getLanguageById(id: string) {
