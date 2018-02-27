@@ -24,6 +24,7 @@ export class BlockLayoutDirective {
     this.hostElement.style.display = "flex";
     this.hostElement.style.flexDirection = this.flexDirection(this.layout.direction);
     this.hostElement.style.flexWrap = "wrap";
+    this.hostElement.style.alignItems = "flex-start";
   }
 
   /**
