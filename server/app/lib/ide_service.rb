@@ -56,6 +56,13 @@ class BaseIdeService
   def execute_request_impl(request)
     raise "execute_request not implemented"
   end
+
+  # Ensures the node runtime has something meaningful to start
+  def assert_cli_program_exists!
+    if not cli_program_exists?
+      raise IdeServiceError, "Could not find compiled CLI at \"#{@program}\""
+    end
+  end
 end
 
 # This service starts a node program under the control of
@@ -75,13 +82,6 @@ class ExecIdeService < BaseIdeService
   # Checks whether the given program actually exists
   def cli_program_exists?
     File.exist? cli_program_path
-  end
-
-  # Ensures the node runtime has something meaningful to start
-  def assert_cli_program_exists!
-    if not cli_program_exists?
-      raise IdeServiceError, "Could not find compiled CLI at \"#{@program}\""
-    end
   end
 end
 
@@ -121,7 +121,13 @@ class MockIdeService < BaseIdeService
     request.to_json
   end
 
-  def ping
+  # Mocking implementation can't fail
+  def ping!
+    true
+  end
+
+  # Mocking does not actually require an external program
+  def cli_program_exists?
     true
   end
 end
