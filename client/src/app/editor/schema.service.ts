@@ -23,12 +23,21 @@ interface CurrentlyEdited {
 @Injectable()
 export class SchemaService {
 
+  /**
+   * The table that is currently edited.
+   */
   private _currentlyEdited: CurrentlyEdited = undefined;
 
   /**
    * If a HTTP request is in progress, this is it.
    */
   private _httpRequest: Observable<string[][]>;
+
+  /**
+   * Counts the number of changes that have been made to the current
+   * schema in the current session.
+   */
+  private _changeCount = new BehaviorSubject(0);
 
   /**
    * @param _http Used to do HTTP requests
@@ -76,6 +85,21 @@ export class SchemaService {
 
   clearCurrentlyEdited() {
     this._currentlyEdited = undefined;
+  }
+
+  /**
+   * The number of changes that have been made to the schema in the current
+   * session.
+   */
+  get changeCount(): Observable<number> {
+    return (this._changeCount);
+  }
+
+  /**
+   * Should be called after any change to the schema.
+   */
+  private incrementChangeCount() {
+    this._changeCount.next(this._changeCount.value + 1);
   }
 
   /**
@@ -131,6 +155,7 @@ export class SchemaService {
     const body = JSON.stringify(table.toModel());
 
     const toReturn = this._http.post(url, body, options)
+      .do(_ => this.incrementChangeCount())
       .map((res) => {
         this._projectService.setActiveProject(project.slug, true);
         this.clearCurrentlyEdited();
@@ -154,6 +179,7 @@ export class SchemaService {
     const body = JSON.stringify(commandHolder.toModel());
 
     const toReturn = this._http.post(url, body, options)
+      .do(_ => this.incrementChangeCount())
       .map(res => {
         this._projectService.setActiveProject(project.slug, true);
         this.clearCurrentlyEdited();
@@ -174,6 +200,7 @@ export class SchemaService {
     const url = this._server.getDropTableUrl(project.slug, project.currentDatabaseName, table.name);
 
     const toReturn = this._http.delete(url, options)
+      .do(_ => this.incrementChangeCount())
       .map((res) => {
         this._projectService.setActiveProject(project.slug, true);
         return table;

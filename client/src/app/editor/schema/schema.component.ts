@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { ProjectService, Project } from '../project.service'
+import { SchemaService } from '../schema.service'
 import { SidebarService } from '../sidebar.service'
 import { ToolbarService } from '../toolbar.service'
 
@@ -30,7 +31,8 @@ export class SchemaComponent implements OnInit {
     private _toolbarService: ToolbarService,
     private _router: Router,
     private _route: ActivatedRoute,
-    private _sidebarService: SidebarService
+    private _sidebarService: SidebarService,
+    private _schemaService: SchemaService,
   ) {
   }
 
@@ -44,8 +46,8 @@ export class SchemaComponent implements OnInit {
   /**
    * @return A timestamp to ensure the schema-image is reloaded
    */
-  get schemaTimestamp() {
-    return (Math.floor(new Date().getTime() / 1000));
+  get schemaRevision() {
+    return (this._schemaService.changeCount);
   }
 
   /**
