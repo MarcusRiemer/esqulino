@@ -1,63 +1,37 @@
-<div class="card card-body">
-  <h3 class="card-title">
-	  <!--Table name as link to the detail view-->
-	  <a *ngIf="!readOnly" class="nav-link" [routerLink]="['details', table.name]" routerLinkActive="router-link-active">
-	    <span *ngIf="tableIsCurrentlyEdited(table.name)"
-            class="fa fa-pencil-square-o"aria-hidden="true"></span>
-	    {{ table.name }}
+<!-- Header "Toolbar" with name and buttons -->
+<div class="schema-table-header">
+  <div>
+    <!--Table name as link to the detail view-->
+	<a [routerLink]="['details', table.name]">
+	  <span *ngIf="tableIsCurrentlyEdited(table.name)"
+            class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></span>
+      <span class="fa fa-table fa-fw" aria-hidden="true"></span>
+	  {{ table.name }}
     </a>
-	  <a *ngIf="readOnly">{{ table.name }} </a>
-	  <!--Button to the table-editing view-->
-	  <a *ngIf="!readOnly" [routerLink]="['edit', table.name]"
-       routerLinkActive="router-link-active"
-       class="btn btn-primary">
-	    <span class="fa fa-cogs" aria-hidden="true"></span>
-	  </a>
-	  <!--Button to drop table-->
-	  <a *ngIf="!readOnly" (click)="deleteTable()" class="btn btn-primary">
-	    <span class="fa fa-trash" aria-hidden="true"></span>
-	  </a>
-  </h3>
-
-  <!--Card-Deck for all columns(shown as rows)-->
-
-  <!--<div class="card-deck">-->
-  <!--Card-Group for all columns of the table-->
-  <div *ngFor="let column of table.columns" (mouseenter)="onColumnMouseEnter(column.name)" (mouseleave)="onColumnMouseOut()"
-			 class="card-group row" [ngClass]="{'card-info': column.name == columnToHighlight}">
-
-	  <div class="card  col-md-1 tableColumn" [ngClass]="{'card-info': column.name == columnToHighlight}">
-	    <!--Show column primary key as symbol-->
-	    <div *ngIf=column.primary>
-		    <span class="fa fa-key" aria-hidden="true"></span>
-	    </div>
-	    <div *ngIf=!column.primary>
-		    <span> </span>
-	    </div>
-	  </div>
-
-	  <!--Column index and name-->
-	  <div class="card col-md-5 tableColumn" [ngClass]="{'card-info': column.name == columnToHighlight}" [hidden]="readOnly && !(column.name == columnToHighlight)">
-	    <h6 class="card-title" >{{ column.name }}</h6>
-	  </div>
-	  <!--Details only to shown if detail-view is enabled-->
-
-	  <div class="card  col-md-2 tableColumn"  [ngClass]="{'card-info': column.name == columnToHighlight}" [hidden]="readOnly">
-	    <p class="card-text"><span class="badge badge-default">{{ column.type }}</span></p>
-	  </div>
-	  <div class="card  col-md-3 tableColumn" [ngClass]="{'card-info': column.name == columnToHighlight}" [hidden]="readOnly">
-	    <p class="card-text" >
-		    <!--{{ column.not_null }}-->
-		    <span *ngIf=column.not_null>NOT NULL</span>
-		    <span *ngIf=!column.not_null></span>
-	    </p>
-	  </div>
-	  <div *ngIf="column.dflt_value != null">
-	    <div class="card  col-md-1 tableColumn" [ngClass]="{'card-info': column.name == columnToHighlight}" [hidden]="readOnly">
-		    <p class="card-text" >{{ column.dflt_value }}</p>
-	    </div>
-	  </div>
   </div>
-
-  <!--</div>-->
+  <div>
+    <!--Button to the table-editing view-->
+	<a *ngIf="!readOnly"
+       [routerLink]="['edit', table.name]"
+       class="btn btn-primary">
+	  <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Struktur Editieren
+	</a>
+	<!--Button to drop table-->
+	<button *ngIf="!readOnly"
+            (click)="deleteTable()"
+            class="btn btn-danger">
+	  <span class="fa fa-trash" aria-hidden="true"></span> Löschen
+	</button>
+  </div>
 </div>
+
+<!-- Columns -->
+<table class="table table-hover table-sm">
+  <tr *ngFor="let column of table.columns">
+    <td width="10%"><span *ngIf="column.primary" class="fa fa-key" aria-hidden="true"></span></td>
+    <td width="20%">{{ column.name }}</td>
+    <td width="20%"><code>{{ column.type }}</code></td>
+    <td width="10%"><code *ngIf=column.not_null>NOT NULL</code></td>
+    <td width="20%">{{ column.dflt_value }}</td>
+  </tr>
+</table>

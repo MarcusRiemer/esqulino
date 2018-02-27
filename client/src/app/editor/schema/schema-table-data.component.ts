@@ -28,6 +28,8 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
     private _sidebarService: SidebarService) {
   }
 
+  readonly availableRowAmounts = [50, 100, 200];
+
   /**
    * The currently shown table
    */
@@ -51,7 +53,7 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
   /**
    * The amount of rows to show
    */
-  private _showRowAmount: number = 10;
+  private _showRowAmount: number = this.availableRowAmounts[0];
 
   /**
    * The index from where to show the table rows
@@ -85,7 +87,7 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
           if (this.isChild) {
             // Yes, then grab the table that is currently being edited
             this.table = this._schemaService.getCurrentlyEditedTable();
-            this.showAmount = 5;
+            this.showAmount = this.availableRowAmounts[0];
           } else {
             // No, rely on the name of the table from the URL
             this.table = res.schema.getTable(tableName);
