@@ -32,4 +32,11 @@ export class BlockRenderComponent implements OnInit {
   asBlockInterpolated(block: VisualBlockDescriptions.EditorBlockBase) {
     return (block as VisualBlockDescriptions.EditorInterpolated);
   }
+
+  /**
+   * Dirty Hack: Template "Typecast"
+   */
+  asBlockInput(block: VisualBlockDescriptions.EditorInput) {
+    return (block as VisualBlockDescriptions.EditorInput);
+  }
 }

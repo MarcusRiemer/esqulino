@@ -9,9 +9,14 @@
     }
 }
 
-.block-editor-root * {
+.block-editor-root {
     font-family: monospace;
     font-size: 1.2rem;
+
+    input {
+        border: 0px;
+        border-bottom: 1px dashed black;
+    }
 }
 
 sidebar-item-host .ast {

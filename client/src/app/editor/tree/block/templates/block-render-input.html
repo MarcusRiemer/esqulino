@@ -1,0 +1,12 @@
+<div *ngIf="currentlyEditing"
+     (dragstart)="onDragStart($event)"
+     draggable>
+  <input [(ngModel)]="editedValue"
+         [size]="inputSize"
+         type="text">
+  <button (click)="acceptInput()" class="btn btn-sm btn-success">✓</button>
+  <button (click)="cancelInput()" class="btn btn-sm btn-warning">✗</button>
+</div>
+<ng-container *ngIf="!currentlyEditing">
+  <span (click)="currentlyEditing = true;">{{ currentValue }}</span>
+</ng-container>

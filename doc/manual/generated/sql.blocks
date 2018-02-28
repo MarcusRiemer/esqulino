@@ -9,8 +9,11 @@ language "SQL" {
       direction horizontal
     }
     dropTarget {
-      visibility ifLegalChild
       direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        parent "where", insertFirst
+      }
       visual {
         "+WHERE"
       }
@@ -20,8 +23,11 @@ language "SQL" {
       direction horizontal
     }
     dropTarget {
-      visibility ifLegalChild
       direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        parent "groupBy", insertFirst
+      }
       visual {
         "+GROUP BY"
       }
@@ -34,24 +40,37 @@ language "SQL" {
   type "sql.select" {
     block {
       direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        children "columns", insertFirst
+      }
       visual {
         "SELECT" {
           style {
-            width: 100px
+            width: 9ch
             display: inline-block
             color: blue
+            padding-left: 2px
+            background: url(/vendor/icons/block-background.svg) no-repeat
+            background-size: 100% 100%
           }
         }
         dropTarget {
-          visibility ifEmpty
           direction horizontal
+          dropOptions {
+            visible ifEmpty, ifLegalChild
+            children "columns", insertFirst
+          }
           visual {
-            "?" {
+            "❓" {
               style {
                 paddingLeft: 10px
                 paddingRight: 10px
                 border: 2px solid red
+                color: darkred
+                backgroundColor: orange
                 borderRadius: 500px
+                cursor: default
               }
             }
           }
@@ -79,6 +98,7 @@ language "SQL" {
         paddingRight: 10px
         border: 2px solid black
         borderRadius: 500px
+        cursor: grab
       }
     }
   }
@@ -99,24 +119,34 @@ language "SQL" {
   type "sql.from" {
     block {
       direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        children "tables", insertFirst
+      }
       visual {
         "FROM" {
           style {
-            width: 100px
+            width: 9ch
             display: inline-block
             color: blue
           }
         }
         dropTarget {
-          visibility ifEmpty
           direction horizontal
+          dropOptions {
+            visible ifEmpty, ifLegalChild
+            children "tables", insertFirst
+          }
           visual {
-            "?" {
+            "❓" {
               style {
                 paddingLeft: 10px
                 paddingRight: 10px
                 border: 2px solid red
+                color: darkred
+                backgroundColor: orange
                 borderRadius: 500px
+                cursor: default
               }
             }
           }
@@ -130,8 +160,11 @@ language "SQL" {
       }
     }
     dropTarget {
-      visibility ifLegalChild
       direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        children "tables", insertLast
+      }
       visual {
         "+JOIN"
       }
@@ -140,10 +173,14 @@ language "SQL" {
   type "sql.crossJoin" {
     block {
       direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        children "table", insertFirst
+      }
       visual {
         "JOIN" {
           style {
-            width: 100px
+            width: 10ch
             marginLeft: 10px
             display: inline-block
             color: blue
@@ -159,10 +196,14 @@ language "SQL" {
   type "sql.innerJoinUsing" {
     block {
       direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        children "table", insertFirst
+      }
       visual {
         "INNER JOIN" {
           style {
-            width: 100px
+            width: 10ch
             marginLeft: 10px
             display: inline-block
             color: blue
@@ -173,8 +214,11 @@ language "SQL" {
           direction horizontal
         }
         dropTarget {
-          visibility always
           direction horizontal
+          dropOptions {
+            visible always
+            children "using", insertFirst
+          }
           visual {
             "USING" {
               style {
@@ -196,10 +240,14 @@ language "SQL" {
   type "sql.innerJoinOn" {
     block {
       direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        children "table", insertFirst
+      }
       visual {
         "INNER JOIN" {
           style {
-            width: 100px
+            width: 10ch
             marginLeft: 10px
             display: inline-block
             color: blue
@@ -210,8 +258,11 @@ language "SQL" {
           direction horizontal
         }
         dropTarget {
-          visibility always
           direction horizontal
+          dropOptions {
+            visible always
+            children "on", insertFirst
+          }
           visual {
             "ON" {
               style {
@@ -249,24 +300,34 @@ language "SQL" {
   type "sql.where" {
     block {
       direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        children "expressions", insertFirst
+      }
       visual {
         "WHERE" {
           style {
-            width: 100px
+            width: 9ch
             display: inline-block
             color: blue
           }
         }
         dropTarget {
-          visibility ifEmpty
           direction horizontal
+          dropOptions {
+            visible ifEmpty, ifLegalChild
+            children "expressions", insertFirst
+          }
           visual {
-            "?" {
+            "❓" {
               style {
                 paddingLeft: 10px
                 paddingRight: 10px
                 border: 2px solid red
+                color: darkred
+                backgroundColor: orange
                 borderRadius: 500px
+                cursor: default
               }
             }
           }
@@ -284,24 +345,34 @@ language "SQL" {
   type "sql.groupBy" {
     block {
       direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        children "expressions", insertFirst
+      }
       visual {
         "GROUP BY" {
           style {
-            width: 100px
+            width: 9ch
             display: inline-block
             color: blue
           }
         }
         dropTarget {
-          visibility ifEmpty
           direction horizontal
+          dropOptions {
+            visible ifEmpty, ifLegalChild
+            children "expressions", insertFirst
+          }
           visual {
-            "?" {
+            "❓" {
               style {
                 paddingLeft: 10px
                 paddingRight: 10px
                 border: 2px solid red
+                color: darkred
+                backgroundColor: orange
                 borderRadius: 500px
+                cursor: default
               }
             }
           }
@@ -316,8 +387,8 @@ language "SQL" {
       }
     }
   }
-  databaseSchema
-  fixedBlocks "SQL" {
+  databaseSchemaSidebar
+  fixedBlocksSidebar "SQL" {
     category "SQL" {
       sidebarBlock "SELECT" {
         node "sql.querySelect" {
