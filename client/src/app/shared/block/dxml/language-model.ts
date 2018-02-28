@@ -367,9 +367,9 @@ const EDITOR_BLOCKS = [
         direction: "horizontal",
         children: [
           {
-            blockType: "interpolated",
+            blockType: "input",
             property: "value"
-          } as VisualBlockDescriptions.EditorInterpolated,
+          } as VisualBlockDescriptions.EditorInput,
         ]
       } as VisualBlockDescriptions.EditorBlock
     ]

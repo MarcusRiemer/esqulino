@@ -107,7 +107,15 @@ export namespace VisualBlockDescriptions {
     property: string;
   }
 
-  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated;
+  /**
+   * Displays an interpolated value and allows it to be edited.
+   */
+  export interface EditorInput extends EditorBlockBase {
+    blockType: "input";
+    property: string;
+  }
+
+  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput;
 }
 
 /**

@@ -2,12 +2,30 @@ language "XML (Statisch)" {
   type "dxml.element" {
     block {
       direction horizontal
+      dropOptions {
+        children "elements", insertFirst
+      }
       visual {
-        "<"
-        {{ name }}
-        dropTarget {
-          visibility ifEmpty ifLegalDrag
+        "<" {
+          style {
+            color: blue
+          }
+        }
+        {{ name }} {
+          style {
+            color: #ad0000
+          }
+        }
+        iterate {
+          childGroup "attributes"
           direction horizontal
+        }
+        dropTarget {
+          direction horizontal
+          dropOptions {
+            visible ifLegalChild
+            children "attributes", insertLast
+          }
           visual {
             "+Attribute"
           }
@@ -15,16 +33,19 @@ language "XML (Statisch)" {
             marginLeft: 10px
           }
         }
-        iterate {
-          childGroup "attributes"
-          direction horizontal
+        ">" {
+          style {
+            color: blue
+          }
         }
-        ">"
         dropTarget {
-          visibility ifLegalDrag
           direction horizontal
+          dropOptions {
+            visible ifLegalChild
+            children "elements", insertFirst
+          }
           visual {
-            "+Element"
+            "+Kind"
           }
           style {
             marginLeft: 10px
@@ -42,9 +63,21 @@ language "XML (Statisch)" {
     block {
       direction horizontal
       visual {
-        "</"
-        {{ name }}
-        ">"
+        "</" {
+          style {
+            color: blue
+          }
+        }
+        {{ name }} {
+          style {
+            color: #ad0000
+          }
+        }
+        ">" {
+          style {
+            color: blue
+          }
+        }
       }
     }
   }
@@ -52,12 +85,19 @@ language "XML (Statisch)" {
     block {
       direction horizontal
       visual {
-        {{ name }}
+        {{ name }} {
+          style {
+            color: #ef4040
+          }
+        }
         "="
         "\""
         iterate {
           childGroup "value"
           direction horizontal
+          style {
+            color: blue
+          }
         }
         "\""
       }
@@ -70,7 +110,7 @@ language "XML (Statisch)" {
     block {
       direction horizontal
       visual {
-        {{ value }}
+        TODO: input blocks
       }
     }
   }
@@ -101,7 +141,7 @@ language "XML (Statisch)" {
       }
     }
   }
-  fixedBlocks "XML (Statisch)" {
+  fixedBlocksSidebar "XML (Statisch)" {
     category "Kern" {
       sidebarBlock "Element: ~~Complex~~" {
         node "dxml.element" {

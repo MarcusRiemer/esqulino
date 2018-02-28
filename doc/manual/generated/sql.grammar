@@ -55,10 +55,10 @@ grammar "sql" {
   }
   node "whereAdditional" {
     prop "operator" { string }
-    children "expression" ::= expression
+    children "expression" ::= expression columnName
   }
   node "where" {
-    children "expressions" ::= expression whereAdditional*
+    children "expressions" ::= columnName whereAdditional*
   }
   node "groupBy" {
     children "expressions" ::= expression* & columnName*
