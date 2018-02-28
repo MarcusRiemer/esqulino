@@ -73,7 +73,7 @@ export class BlockLanguage implements Forward.BlockLanguage {
    * @return True if this block language makes use of multiple sidebars.
    */
   get hasMultipleSidebars() {
-    return (this.sidebars.length > 0);
+    return (this.sidebars.length > 1);
   }
 
   /**

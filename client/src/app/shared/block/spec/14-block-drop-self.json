@@ -9,17 +9,15 @@
       },
       "visual": [
         {
-          "blockType": "dropTarget",
-          "dropTarget": {
-            "visibility": ["ifEmpty", "ifLegalDrag"]
-          },
+          "blockType": "block",
           "direction": "horizontal",
-          "children": [
-            {
-              "blockType": "constant",
-              "text": "Drop"
+          "dropTarget": {
+            "self": {
+              "order": "insertAfter",
+              "skipParents": 1
             }
-          ]
+          },
+          "children": []
         }
       ]
     }

@@ -65,4 +65,20 @@ describe('LanguageModel PrettyPrinter', () => {
   it('11 Sidebar: Single Category', () => {
     verifyFiles('11-sidebar-single-category', prettyPrintLanguageModel);
   });
+
+  it('12 Block: Drop child category', () => {
+    verifyFiles('12-block-drop-child', prettyPrintLanguageModel);
+  });
+
+  it('13 Block: Drop parent category', () => {
+    verifyFiles('13-block-drop-parent', prettyPrintLanguageModel);
+  });
+
+  it('14 Block: Drop self', () => {
+    verifyFiles('14-block-drop-self', prettyPrintLanguageModel);
+  });
+
+  it('15 Block: Styled constant', () => {
+    verifyFiles('15-block-constant-style', prettyPrintLanguageModel);
+  });
 });

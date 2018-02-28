@@ -1,12 +1,11 @@
 language "test" {
   type "test.root" {
-    dropTarget {
+    block {
       direction horizontal
       dropOptions {
-        visible ifEmpty
+        parent "blacat", insertLast
       }
       visual {
-        "Drop"
       }
     }
   }
