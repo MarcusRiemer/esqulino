@@ -35,6 +35,7 @@ const langEmptyBlocks: LanguageDescription = {
 const langModelEmptyBlocks: BlockLanguageDescription = {
   id: "emptyblocks",
   name: "Empty Blocks",
+  slug: "emptyblocks",
   defaultProgrammingLanguage: "emptyBlocks",
   sidebars: [
     {
@@ -64,6 +65,9 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
           ]
         }
       ]
+    },
+    {
+      type: "databaseSchema"
     }
   ],
   editorBlocks: [
@@ -95,18 +99,24 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
 }
 
 describe("LanguageModel", () => {
-  it("Loads correctly", () => {
+  it("Loads correctly and hands out data", () => {
     const lm = new BlockLanguage(langModelEmptyBlocks);
     const l = new Language(langEmptyBlocks);
 
     expect(lm.id).toEqual(langModelEmptyBlocks.id);
+    expect(lm.slug).toEqual(langModelEmptyBlocks.slug);
     expect(lm.name).toEqual(langModelEmptyBlocks.name);
+    expect(lm.defaultProgrammingLanguageId).toEqual(langModelEmptyBlocks.defaultProgrammingLanguage);
 
     const missingEditorBlocks = lm.getMissingEditorBlocks(l);
     expect(missingEditorBlocks.length).toEqual(1);
     expect(missingEditorBlocks[0]).toEqual({ languageName: "emptyBlocks", typeName: "z" });
 
-    expect(lm.sidebars.length).toEqual(1);
+    expect(lm.sidebars.length).toEqual(2);
+    expect(lm.hasMultipleSidebars).toBeTruthy();
+
+    expect(lm.getEditorBlock({ languageName: "emptyBlocks", typeName: "a" })).toBeTruthy();
+    expect(_ => { lm.getEditorBlock({ languageName: "x", typeName: "x" }) }).toThrowError();
   });
 
   it("Constructing default root with children", () => {

@@ -10,8 +10,10 @@
       "visual": [
         {
           "blockType": "dropTarget",
-          "visibility": ["ifEmpty"],
           "direction": "horizontal",
+          "dropTarget": {
+            "visibility": ["ifEmpty"]
+          },
           "children": [
             {
               "blockType": "constant",

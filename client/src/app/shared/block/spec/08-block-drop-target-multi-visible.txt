@@ -1,8 +1,10 @@
 language "test" {
   type "test.root" {
     dropTarget {
-      visibility ifEmpty ifLegalDrag
       direction horizontal
+      dropOptions {
+        visible ifEmpty, ifLegalDrag
+      }
       visual {
         "Drop"
       }

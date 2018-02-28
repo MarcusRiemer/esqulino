@@ -113,9 +113,12 @@ function prettyPrintVisualDropTarget(desc: VisualBlockDescriptions.EditorDropTar
 
   // For the moment the mandatory properties have to be stated verbosely
   const props = [
-    // TOOD: drop target properties `visibility ${desc.visibility.join(' ')}`,
     `direction ${desc.direction}`
   ]
+
+  const dropTarget = (desc.dropTarget)
+    ? prettyPrintDropTargetProperties(desc.dropTarget)
+    : [];
 
   // The between property is optional
   const children = (desc.children)
@@ -124,7 +127,7 @@ function prettyPrintVisualDropTarget(desc: VisualBlockDescriptions.EditorDropTar
 
   const tail = `}`;
 
-  return ([head, [...props, ...children, ...prettyPrintStyle(desc.style)], tail]);
+  return ([head, [...props, ...dropTarget, ...children, ...prettyPrintStyle(desc.style)], tail]);
 }
 
 /**
@@ -138,6 +141,10 @@ function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
     `direction ${desc.direction}`
   ]
 
+  const dropTarget = (desc.dropTarget)
+    ? prettyPrintDropTargetProperties(desc.dropTarget)
+    : [];
+
   // The between property is optional
   const children = (desc.children)
     ? ["visual {", ...desc.children.map(prettyPrintVisual), "}"]
@@ -145,7 +152,40 @@ function prettyPrintVisualBlock(desc: VisualBlockDescriptions.EditorBlock) {
 
   const tail = `}`;
 
-  return ([head, [...props, ...children, ...prettyPrintStyle(desc.style)], tail]);
+  return ([head, [...props, ...dropTarget, ...children, ...prettyPrintStyle(desc.style)], tail]);
+}
+
+/**
+ * Pretty prints properties for drop operations.
+ */
+function prettyPrintDropTargetProperties(desc: VisualBlockDescriptions.DropTargetProperties): NestedString {
+  function prettyPrintCategoryInsert(catDesc: VisualBlockDescriptions.CategoryInsert) {
+    return (`"${catDesc.category}", ${catDesc.order}`);
+  }
+
+  const head = `dropOptions {`;
+
+  const middle: string[] = [];
+
+  if (desc.visibility) {
+    middle.push(`visible ${desc.visibility.join(', ')}`)
+  }
+
+  if (desc.self) {
+    middle.push(`self ${desc.self.order}, parentSkip: ${desc.self.skipParents}`)
+  }
+
+  if (desc.children) {
+    middle.push(`children ` + prettyPrintCategoryInsert(desc.children));
+  }
+
+  if (desc.parent) {
+    middle.push(`parent ` + prettyPrintCategoryInsert(desc.parent));
+  }
+
+  const tail = `}`;
+
+  return ([head, middle, tail]);
 }
 
 /**

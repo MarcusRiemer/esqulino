@@ -1,0 +1,10 @@
+language "test" {
+  type "test.root" {
+    "root" {
+      style {
+        backgroundColor: blue
+        width: 10
+      }
+    }
+  }
+}
