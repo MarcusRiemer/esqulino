@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
 import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
@@ -21,7 +21,7 @@ export class BlockRenderInputComponent {
   /**
    * True, if this block is currently beeing edited.
    */
-  public currentlyEditing = false;
+  public _currentlyEditing = false;
 
   /**
    * Initializes default values.
@@ -31,15 +31,25 @@ export class BlockRenderInputComponent {
   }
 
   /**
-   * TODO: The dragStart event of the parenting block takes precedence
-   *       over this dragStart. We need to find a way to reliably block
-   *       the dragging operation on the parent.
+   * We don't want to drag anything while it is currently beeing edited.
    */
   onDragStart(evt: DragEvent) {
-    console.log("Dragstart Input")
     evt.stopPropagation();
     evt.preventDefault();
     return (false);
+  }
+
+  /**
+   * React to typical keyboard operations:
+   * * <Enter> accepts the changes
+   * * <ESC> cancels the changes
+   */
+  onInputKeyUp(evt: KeyboardEvent) {
+    if (evt.key === "Enter") {
+      this.acceptInput();
+    } else if (evt.key === "Escape") {
+      this.cancelInput();
+    }
   }
 
   /**
@@ -47,6 +57,20 @@ export class BlockRenderInputComponent {
    */
   get currentValue() {
     return (this.node.properties[this.visual.property]);
+  }
+
+  /**
+   * @return True, if the block is currently in edit mode
+   */
+  get currentlyEditing() {
+    return (this._currentlyEditing);
+  }
+
+  set currentlyEditing(value: boolean) {
+    this._currentlyEditing = value;
+    if (this._currentlyEditing) {
+      //this._renderer.invokeElementMethod(this.input, "focus", []);
+    }
   }
 
   /**

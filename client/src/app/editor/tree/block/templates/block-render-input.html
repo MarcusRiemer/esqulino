@@ -1,9 +1,14 @@
+<!-- Making the parent draggable so we can cancel
+     all draggable events during editing.-->
 <div *ngIf="currentlyEditing"
      (dragstart)="onDragStart($event)"
-     draggable>
+     draggable="true">
   <input [(ngModel)]="editedValue"
+         (keyup)="onInputKeyUp($event)"
          [size]="inputSize"
-         type="text">
+         type="text"
+         draggable="false"
+         #lineInput>
   <button (click)="acceptInput()" class="btn btn-sm btn-success">✓</button>
   <button (click)="cancelInput()" class="btn btn-sm btn-warning">✗</button>
 </div>
