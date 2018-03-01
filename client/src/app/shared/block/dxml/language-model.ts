@@ -215,12 +215,12 @@ const EDITOR_BLOCKS = [
             }
           } as VisualBlockDescriptions.EditorConstant,
           {
-            blockType: "interpolated",
+            blockType: "input",
             property: "name",
             style: {
               color: "#ad0000"
             }
-          } as VisualBlockDescriptions.EditorInterpolated,
+          } as VisualBlockDescriptions.EditorInput,
           {
             blockType: "iterator",
             childGroupName: "attributes",
@@ -326,12 +326,12 @@ const EDITOR_BLOCKS = [
         },
         children: [
           {
-            blockType: "interpolated",
+            blockType: "input",
             property: "name",
             style: {
               color: "#ef4040"
             }
-          } as VisualBlockDescriptions.EditorInterpolated,
+          } as VisualBlockDescriptions.EditorInput,
           {
             blockType: "constant",
             text: "="
@@ -340,6 +340,32 @@ const EDITOR_BLOCKS = [
             blockType: "constant",
             text: "\""
           } as VisualBlockDescriptions.EditorConstant,
+          {
+            blockType: "dropTarget",
+            dropTarget: {
+              children: {
+                category: "value",
+                order: "insertFirst"
+              },
+              visibility: ["ifEmpty", "ifLegalChild"]
+            },
+            children: [
+              {
+                blockType: "constant",
+                text: "❓",
+                style: {
+                  "paddingLeft": "10px",
+                  "paddingRight": "10px",
+                  "border": "2px solid red",
+                  "color": "darkred",
+                  "backgroundColor": "orange",
+                  "borderRadius": "500px",
+                  "cursor": "default",
+                },
+              } as VisualBlockDescriptions.EditorConstant,
+            ],
+            direction: "horizontal",
+          } as VisualBlockDescriptions.EditorDropTarget,
           {
             blockType: "iterator",
             childGroupName: "value",

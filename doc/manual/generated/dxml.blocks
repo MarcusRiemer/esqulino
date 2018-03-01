@@ -11,11 +11,7 @@ language "XML (Dynamisch)" {
             color: blue
           }
         }
-        {{ name }} {
-          style {
-            color: #ad0000
-          }
-        }
+        TODO: input blocks
         iterate {
           childGroup "attributes"
           direction horizontal
@@ -85,13 +81,29 @@ language "XML (Dynamisch)" {
     block {
       direction horizontal
       visual {
-        {{ name }} {
-          style {
-            color: #ef4040
-          }
-        }
+        TODO: input blocks
         "="
         "\""
+        dropTarget {
+          direction horizontal
+          dropOptions {
+            visible ifEmpty, ifLegalChild
+            children "value", insertFirst
+          }
+          visual {
+            "❓" {
+              style {
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                color: darkred
+                backgroundColor: orange
+                borderRadius: 500px
+                cursor: default
+              }
+            }
+          }
+        }
         iterate {
           childGroup "value"
           direction horizontal
