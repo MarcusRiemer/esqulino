@@ -305,7 +305,7 @@ class NodeConcreteType extends NodeType {
 
   allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean {
     const category = this._allowedChildren[categoryName];
-    return (category && category.allowsChildType(childType));
+    return !!(category && category.allowsChildType(childType));
   }
 
   /**
@@ -726,15 +726,8 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
     } else {
       // Check whether the first (and hopefully only) node is a match?
       const hasMatch = this._desc.choices.some(possible => {
-
         // Build fully qualified type for this possibility.
-        const possibleName = typeof possible === "string" ? possible : possible.typeName;
-        const possibleLanguage = typeof possible === "string" ? parent.languageName : possible.languageName;
-
-        const possibleType = {
-          languageName: possibleLanguage,
-          typeName: possibleName
-        } as AST.QualifiedTypeName;
+        const possibleType = this.typeNameFromChoice(possible);
 
         // Check whether the type matches or not
         return (AST.typenameEquals(possibleType, ast[0].qualifiedName));
@@ -751,13 +744,32 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
     }
   }
 
+  /**
+   * @return The name of the language this validator is part of.
+   */
+  protected get ownLanguageName() {
+    return (this._group.parent.languageName)
+  }
+
+  protected typeNameFromChoice(possible: Desc.TypeReference): AST.QualifiedTypeName {
+    const possibleName = typeof possible === "string" ? possible : possible.typeName;
+    const possibleLanguage = typeof possible === "string" ? this.ownLanguageName : possible.languageName;
+
+    return {
+      languageName: possibleLanguage,
+      typeName: possibleName
+    }
+  }
+
   protected isRequiredImpl: boolean;
 
   /**
    * @return True, if the given type occurs anywhere in the list of possible types.
    */
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
-    return (this._group.allowsChildType(childType));
+    return (this._desc.choices
+      .map(choice => this.typeNameFromChoice(choice))
+      .some(choiceType => AST.typenameEquals(childType, choiceType)));
   }
 
 }
@@ -1169,7 +1181,20 @@ export class Validator {
   /**
    * @return The type that has been asked for. Throws if the type does not exist.
    */
-  getType(language: string, typename: string) {
+  getType(qualifiedTypename: AST.QualifiedTypeName);
+  getType(language: string, typename: string);
+  getType(languageOrTypeName: string | AST.QualifiedTypeName, optTypename?: string) {
+    let language: string = undefined;
+    let typename: string = undefined;
+
+    if (typeof (languageOrTypeName) === "object") {
+      language = languageOrTypeName.languageName;
+      typename = languageOrTypeName.typeName;
+    } else {
+      language = languageOrTypeName;
+      typename = optTypename;
+    }
+
     if (!this.isKnownType(language, typename)) {
       throw new Error(`Validator does not know type "${language}.${typename}"`);
     } else {
