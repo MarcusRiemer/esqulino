@@ -4,7 +4,7 @@ grammar "css" {
   }
   node "rule" {
     children "selectors" ::= selector*
-    children "declarations" ::= declaration* & backgroundColor* & color*
+    children "declarations" ::= declaration*
   }
   typedef "selector" {
     "selectorType"
@@ -24,16 +24,16 @@ grammar "css" {
   node "selectorUniversal" {
   }
   node "declaration" {
-    prop "key" { string }
-    prop "value" { string }
-  }
-  node "backgroundColor" {
-    children "value" ::= exprColor
-  }
-  node "color" {
-    children "value" ::= exprColor
+    children "name" ::= propertyName
+    children "value" ::= exprColor | exprAny
   }
   node "exprColor" {
     prop "value" { string }
+  }
+  node "exprAny" {
+    prop "value" { string }
+  }
+  node "propertyName" {
+    prop "name" { string }
   }
 }
