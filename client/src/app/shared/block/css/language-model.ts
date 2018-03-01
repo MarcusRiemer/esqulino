@@ -144,9 +144,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           direction: "horizontal",
           children: [
             {
-              blockType: "interpolated",
+              blockType: "input",
               property: "value",
-            } as VisualBlockDescriptions.EditorInterpolated,
+            }
           ]
         }
       ]
@@ -166,9 +166,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               text: "."
             } as VisualBlockDescriptions.EditorConstant,
             {
-              blockType: "interpolated",
+              blockType: "input",
               property: "value",
-            } as VisualBlockDescriptions.EditorInterpolated,
+            }
           ]
         }
       ]
@@ -188,9 +188,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               text: "#"
             } as VisualBlockDescriptions.EditorConstant,
             {
-              blockType: "interpolated",
+              blockType: "input",
               property: "value",
-            } as VisualBlockDescriptions.EditorInterpolated,
+            }
           ]
         }
       ]
@@ -206,9 +206,36 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           direction: "horizontal",
           children: [
             {
-              blockType: "interpolated",
-              property: "key",
-            } as VisualBlockDescriptions.EditorInterpolated,
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "name",
+                  order: "insertFirst",
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "❓",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
+                    "borderRadius": "500px",
+                    "cursor": "default",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+            },
+            {
+              blockType: "iterator",
+              childGroupName: "name",
+              direction: "horizontal"
+            } as VisualBlockDescriptions.EditorIterator,
             {
               blockType: "constant",
               text: ":",
@@ -217,35 +244,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               }
             } as VisualBlockDescriptions.EditorConstant,
             {
-              blockType: "interpolated",
-              property: "value",
-            } as VisualBlockDescriptions.EditorInterpolated,
-            {
-              blockType: "constant",
-              text: ";"
-            } as VisualBlockDescriptions.EditorConstant,
-          ]
-        }
-      ]
-    },
-    {
-      describedType: {
-        languageName: "css",
-        typeName: "backgroundColor"
-      },
-      visual: [
-        {
-          blockType: "block",
-          direction: "horizontal",
-          children: [
-            {
-              blockType: "constant",
-              text: "background-color:",
-              style: {
-                "marginRight": "1ch"
-              }
-            } as VisualBlockDescriptions.EditorConstant,
-            {
               blockType: "dropTarget",
               dropTarget: {
                 children: {
@@ -274,63 +272,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
             {
               blockType: "iterator",
               childGroupName: "value",
-              direction: "horizontal",
-            } as VisualBlockDescriptions.EditorIterator,
-            {
-              blockType: "constant",
-              text: ";"
-            } as VisualBlockDescriptions.EditorConstant,
-          ]
-        }
-      ]
-    },
-    {
-      describedType: {
-        languageName: "css",
-        typeName: "color"
-      },
-      visual: [
-        {
-          blockType: "block",
-          direction: "horizontal",
-          children: [
-            {
-              blockType: "constant",
-              text: "color:",
-              style: {
-                "marginRight": "1ch"
-              }
-            } as VisualBlockDescriptions.EditorConstant,
-            {
-              blockType: "dropTarget",
-              dropTarget: {
-                children: {
-                  category: "value",
-                  order: "insertFirst",
-                },
-                visibility: ["ifEmpty", "ifLegalChild"]
-              },
-              children: [
-                {
-                  blockType: "constant",
-                  text: "❓",
-                  style: {
-                    "paddingLeft": "10px",
-                    "paddingRight": "10px",
-                    "border": "2px solid red",
-                    "color": "darkred",
-                    "backgroundColor": "orange",
-                    "borderRadius": "500px",
-                    "cursor": "default",
-                  },
-                } as VisualBlockDescriptions.EditorConstant,
-              ],
-              direction: "horizontal",
-            },
-            {
-              blockType: "iterator",
-              childGroupName: "value",
-              direction: "horizontal",
+              direction: "horizontal"
             } as VisualBlockDescriptions.EditorIterator,
             {
               blockType: "constant",
@@ -351,9 +293,45 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
           direction: "horizontal",
           children: [
             {
-              blockType: "interpolated",
+              blockType: "input",
               property: "value",
-            } as VisualBlockDescriptions.EditorInterpolated
+            }
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "css",
+        typeName: "exprAny"
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          children: [
+            {
+              blockType: "input",
+              property: "value",
+            }
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "css",
+        typeName: "propertyName"
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          children: [
+            {
+              blockType: "input",
+              property: "name",
+            }
           ]
         }
       ]
@@ -387,7 +365,18 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   "declarations": [],
                 }
               }
-            }
+            },
+            {
+              displayName: "<eigenschaft>: <wert>",
+              defaultNode: {
+                language: "css",
+                name: "declaration",
+                children: {
+                  "name": [],
+                  "value": []
+                }
+              }
+            },
           ]
         },
         {
@@ -422,9 +411,9 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               displayName: "backgroundColor",
               defaultNode: {
                 language: "css",
-                name: "backgroundColor",
-                children: {
-                  "value": []
+                name: "propertyName",
+                properties: {
+                  "name": "backgroundColor"
                 }
               }
             },
@@ -432,17 +421,27 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               displayName: "color",
               defaultNode: {
                 language: "css",
-                name: "color",
-                children: {
-                  "value": []
+                name: "propertyName",
+                properties: {
+                  "name": "color"
                 }
               }
-            }
+            },
           ]
         },
         {
           categoryCaption: "Werte",
           blocks: [
+            {
+              displayName: "<beliebiger wert>",
+              defaultNode: {
+                language: "css",
+                name: "exprAny",
+                properties: {
+                  "value": "any"
+                }
+              }
+            },
             {
               displayName: "color: red",
               defaultNode: {
