@@ -25,9 +25,6 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           type: "allowed",
           nodeTypes: [
             { nodeType: "declaration", occurs: "*" },
-            { nodeType: "backgroundColor", occurs: "*" },
-            { nodeType: "color", occurs: "*" },
-
           ]
         }
       }
@@ -65,32 +62,32 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
     },
 
     "declaration": {
-      properties: {
-        "key": { base: "string" },
-        "value": { base: "string" },
-      }
-    },
-
-    "backgroundColor": {
       children: {
+        "name": {
+          type: "choice",
+          choices: ["propertyName"]
+        },
         "value": {
-          type: "sequence",
-          nodeTypes: ["exprColor"]
+          type: "choice",
+          choices: ["exprColor", "exprAny"]
         }
       }
     },
-    "color": {
-      children: {
-        "value": {
-          type: "sequence",
-          nodeTypes: ["exprColor"]
-        }
-      }
-    },
-
     "exprColor": {
       properties: {
         "value": { base: "string" }
+      }
+    },
+
+    "exprAny": {
+      properties: {
+        "value": { base: "string" }
+      }
+    },
+
+    "propertyName": {
+      properties: {
+        "name": { base: "string" }
       }
     }
 
