@@ -357,6 +357,39 @@ const langSimpleChoice: Schema.GrammarDescription = {
   root: "root"
 }
 
+const langComplexChoice: Schema.GrammarDescription = {
+  languageName: "complexChoice",
+  types: {
+    "root": {
+      children: {
+        "choice": {
+          type: "choice",
+          choices: ["a", "b"]
+        }
+      }
+    },
+    "a": {
+      children: {
+        "sequence": {
+          type: "sequence",
+          nodeTypes: ["c", "c"]
+        }
+      }
+    },
+    "b": {
+      children: {
+        "allowed": {
+          type: "allowed",
+          nodeTypes: ["d", "c"]
+        }
+      }
+    },
+    "c": {},
+    "d": {}
+  },
+  root: "root"
+}
+
 describe('Language Validator', () => {
   it('Empty Tree', () => {
     const v = new Validator([langStringConstraint]);
@@ -537,20 +570,20 @@ describe('Language Validator', () => {
     expect(vRoot.allowsChildType(tNodeC, "nodes")).toBeFalsy("c in root");
     expect(vRoot.allowsChildType(tNodeD, "nodes")).toBeFalsy("d in root");
 
-    expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBeFalsy();
-    expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBeFalsy();
-    expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBeFalsy();
-    expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBe(false);
+    expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBe(false);
+    expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBe(false);
+    expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBe(false);
 
-    expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBeFalsy();
-    expect(vNodeB.allowsChildType(tNodeB, "nodes")).toBeFalsy();
-    expect(vNodeB.allowsChildType(tNodeC, "nodes")).toBeFalsy();
-    expect(vNodeB.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+    expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBe(false);
+    expect(vNodeB.allowsChildType(tNodeB, "nodes")).toBe(false);
+    expect(vNodeB.allowsChildType(tNodeC, "nodes")).toBe(false);
+    expect(vNodeB.allowsChildType(tNodeD, "nodes")).toBe(false);
 
-    expect(vNodeC.allowsChildType(tNodeA, "nodes")).toBeFalsy();
-    expect(vNodeC.allowsChildType(tNodeB, "nodes")).toBeFalsy();
-    expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBeFalsy();
-    expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+    expect(vNodeC.allowsChildType(tNodeA, "nodes")).toBe(false);
+    expect(vNodeC.allowsChildType(tNodeB, "nodes")).toBe(false);
+    expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBe(false);
+    expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBe(false);
 
   });
 
@@ -966,20 +999,20 @@ describe('Language Validator', () => {
     expect(vRoot.allowsChildType(tNodeC, "nodes")).toBeTruthy("c in root");
     expect(vRoot.allowsChildType(tNodeD, "nodes")).toBeFalsy("d in root");
 
-    expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBeFalsy();
-    expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBeFalsy();
-    expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBeFalsy();
-    expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+    expect(vNodeA.allowsChildType(tNodeA, "nodes")).toBe(false);
+    expect(vNodeA.allowsChildType(tNodeB, "nodes")).toBe(false);
+    expect(vNodeA.allowsChildType(tNodeC, "nodes")).toBe(false);
+    expect(vNodeA.allowsChildType(tNodeD, "nodes")).toBe(false);
 
-    expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBeFalsy();
-    expect(vNodeB.allowsChildType(tNodeB, "nodes")).toBeFalsy();
-    expect(vNodeB.allowsChildType(tNodeC, "nodes")).toBeFalsy();
-    expect(vNodeB.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+    expect(vNodeB.allowsChildType(tNodeA, "nodes")).toBe(false);
+    expect(vNodeB.allowsChildType(tNodeB, "nodes")).toBe(false);
+    expect(vNodeB.allowsChildType(tNodeC, "nodes")).toBe(false);
+    expect(vNodeB.allowsChildType(tNodeD, "nodes")).toBe(false);
 
-    expect(vNodeC.allowsChildType(tNodeA, "nodes")).toBeFalsy();
-    expect(vNodeC.allowsChildType(tNodeB, "nodes")).toBeFalsy();
-    expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBeFalsy();
-    expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBeFalsy();
+    expect(vNodeC.allowsChildType(tNodeA, "nodes")).toBe(false);
+    expect(vNodeC.allowsChildType(tNodeB, "nodes")).toBe(false);
+    expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBe(false);
+    expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBe(false);
   });
 
   it('Invalid "allowed": Empty', () => {
@@ -1176,6 +1209,52 @@ describe('Language Validator', () => {
 
     expect(res.errors.length).toEqual(1);
     expect(res.errors[0].code).toEqual(ErrorCodes.SuperflousChildCategory);
+  });
+
+  it('Valid Choice (complex): allowsChildType', () => {
+    const v = new Validator([langComplexChoice]);
+
+    const type_root = { languageName: "complexChoice", typeName: "root" };
+    const type_a = { languageName: "complexChoice", typeName: "a" };
+    const type_b = { languageName: "complexChoice", typeName: "b" };
+    const type_c = { languageName: "complexChoice", typeName: "c" };
+    const type_d = { languageName: "complexChoice", typeName: "d" };
+
+    expect(v.getType(type_root).allowsChildType(type_a, "choice")).toBe(true, "root => a");
+    expect(v.getType(type_root).allowsChildType(type_b, "choice")).toBe(true, "root => b");
+    expect(v.getType(type_root).allowsChildType(type_c, "choice")).toBe(false, "root => c");
+    expect(v.getType(type_root).allowsChildType(type_d, "choice")).toBe(false, "root => d");
+
+    expect(v.getType(type_a).allowsChildType(type_a, "sequence")).toBe(false, "a => a");
+    expect(v.getType(type_a).allowsChildType(type_b, "sequence")).toBe(false, "a => b");
+    expect(v.getType(type_a).allowsChildType(type_c, "sequence")).toBe(true, "a => c");
+    expect(v.getType(type_a).allowsChildType(type_d, "sequence")).toBe(false, "a => d");
+
+    expect(v.getType(type_b).allowsChildType(type_a, "allowed")).toBe(false, "b => a");
+    expect(v.getType(type_b).allowsChildType(type_b, "allowed")).toBe(false, "b => b");
+    expect(v.getType(type_b).allowsChildType(type_c, "allowed")).toBe(true, "b => c");
+    expect(v.getType(type_b).allowsChildType(type_d, "allowed")).toBe(true, "b => d");
+  });
+
+  it('Valid Choice (complex): sequence in a is too short', () => {
+    const v = new Validator([langComplexChoice]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "complexChoice",
+      name: "root",
+      children: {
+        "choice": [
+          {
+            language: "complexChoice",
+            name: "c"
+          }
+        ]
+      }
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+    expect(res.errors.length).toEqual(1);
   });
 
   it('Validating tree of unknown language', () => {
