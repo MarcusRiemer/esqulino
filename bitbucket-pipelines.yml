@@ -12,7 +12,7 @@ pipelines:
         script:
           - make -C client install-deps
           - make -C client dist
-          - TEST_SINGLE_RUN=true make -C client test
+          - make -C client test
           - make -C client universal-compile
           - make -C client cli-compile
         services:
