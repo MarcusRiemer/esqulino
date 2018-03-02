@@ -4,16 +4,9 @@
 
 This part of the documentation is aimed at people want to compile the project. As there are currently no pre-compiled distributions available, it is also relevant for administrators wanting to run their own server.
 
-Currently it is assumed that this project will built on a UNIX-like environment. Although building it on Windows should be possible, all helper scripts (and Makefiles) make a lot of `UNIX`-centric assumptions.
+.. note:: Currently it is assumed that this project will built on a UNIX-like environment. Although building it on Windows should be possible, all helper scripts (and Makefiles) make a lot of `UNIX`-centric assumptions.
 
-Project folder structure
-========================
-
-This project consists of two main executable components: A Ruby-webserver and a Angular-client. Take a look at the ``README.md`` in the respective folders to find out how to work with these components in detail.
-
-I know there are loads of fancy task-runners out there, but a "normal" interface to all programming-related tasks is still a ``Makefile``. Most tasks you will need to do regulary are therefore available via ``make``. Apart from that there are folders for schemas, documentation, example projects and helper scripts.
-
-Most exchange and storage formats are documented using `JSON Schema <http://json-schema.org/>`_. These can be regenerated from the Typescript sources, but as this is quite a fragile process the specification files are also checked in to the repository.
+There are loads of fancy task-runners out there, but a "normal" interface to all programming-related tasks is still a ``Makefile``. Most tasks you will need to do regulary are therefore available via ``make``. Apart from that there are folders for schemas, documentation, example projects and helper scripts.
 
 .. _environment_dependencies:
 
@@ -62,18 +55,43 @@ Running locally
 ---------------
 
 * Ensure you have the "main" dependencies installed (``ruby`` and ``bundle`` for the Server, ``node`` and ``npm`` for the client).
-* ``make install-deps`` will pull all further dependencies that are managed by the respective packet managers. If this fails check that your environment meets the requirements: :ref:`environment_dependencies`.
-* After that, the client (and its commandline interface) need to be compiled and packaged once: ``make dist`` for a fully optimized version or ``make dist-dev`` for a development version.
-* Start a PostgreSQL-server that has a user ``esqulino`` who is allowed to create databases.
-* You may now run the server, to do this locally simply use ``make server-run`` and it will spin up a local server instance listening on port ``9292``.
-* You then need to seed the initial data that is part of this instance using ``make load-all-data``. This will setup a pre-configured environment with some programming languages, block languages and projects.
+
+1. Compiling all variants of the client requires can be done by navigating to the ``client`` folder and executing the following steps.
+   
+  1. ``make install-deps`` will pull all further dependencies that are managed by the respective packet managers. If this fails check that your environment meets the requirements: :ref:`environment_dependencies`.
+  2. After that, the web application need to be compiled and packaged once: ``make dist`` for a fully optimized version or ``make dist-dev`` for a development version.
+  3. The server requires the special "IDE Service" variant of the client to function correctly. It can be created via ``make cli-compile``.
+
+2. Running the server requires the following steps in the ``server`` folder:
+   
+   1. ``make install-deps`` will pull all further dependencies that are managed by the respective packet managers. If this fails check that your environment meets the requirements: :ref:`environment_dependencies`.
+   2. Start a PostgreSQL-server that has a user ``esqulino`` who is allowed to create databases.
+   3. You may now run the server, to do this locally simply use ``make run-dev`` and it will spin up a local server instance listening on port ``9292``. You can alternatively run a production server using ``make run``.
+      
+3. You then need to seed the initial data that is part of this instance using ``make load-all-data``. This will setup a pre-configured environment with some programming languages, block languages and projects.
 
 The setup above is helpful to get the whole project running once, but if you want do develop it any further you are better of with the following options:
 
 * Run ``NG_OPTS="--watch" make dist-dev`` in the ``client`` folder. The ``--watch`` option starts a filesystem watcher that rebuilds the client incrementally on any change, which drastically reduces subsequent compile times.
-* Run ``make run-dev`` in the ``server`` folder. This starts Rails in development mode which reloads altered parts of the server before every request.
 
+Testing and code coverage
+-------------------------
 
+Calling ``make test`` in the ``client`` folder will run the tests once against a headless version of Google Chrome and Firefox.
+  
+* ``make test-watch`` will run the tests continously after every change to the clients code.
+* The environment variable ``TEST_BROWSERS`` controls which browsers will run the test, multiple browsers may be specified using a ``,`` and spaces are not allowed. The following values should be valid:
+  
+  * ``Firefox`` and ``Chrome`` for the non-headless variants that open dedicated browser windows.
+  * ``FirefoxHeadless`` and ``ChromeHeadless`` that run in the background without any visible window.
+
+After running tests the folder ``coverage`` will contain a navigateable code coverage report:
+
+.. image :: screenshots/dev-coverage-client.png
+
+Tests for the server are run in the same fashion: Call ``make test`` in the ``server`` folder to run them once, ``make test-watch`` run them continously. And again the folder ``coverage`` will contain a code coverage report:
+
+.. image :: screenshots/dev-coverage-server.png
 
 Running via Docker
 ------------------
