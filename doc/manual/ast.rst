@@ -1,7 +1,9 @@
 The Abstract Syntax Tree
 ========================
 
-The syntax tree itself is purely a data structure and has no concept of being "valid" or "invalid" on its own. It also has no idea how to it should "look like" in its compiled form. All additional functionality is provided by specialized tools that take the tree as an input.
+In order to allow the creation of easy to use block editors, BlattWerkzeug needs to define its own compilation primitives (syntaxtrees, grammars & validators). The main reason for this re-invention the wheel is the focus of existing software: Usually compilers are focused on speed and correctness, not necessarily a friendly representation for drag & drop mutations. BlattWerkzeug instead focuses exclusively on working with a syntaxtree that lends itself well to be (more or less) directly presented to the end user. Typical compiler tasks that have to do with lexical analysis or parsing are not relevant for BlattWerkzeug.
+
+The syntax tree itself is purely a data structure and has no concept of being "valid" or "invalid" on its own (this is the task of validators). It also has no idea how to it should "look like" in its compiled form (this is the task of block languages).
 
 A single node in the syntaxtree has at least a **type** that consists of two parts: A local ``typeName`` and a ``languageName``. This type is the premier way for different tools to decide how the node in question should be treated.
 
@@ -16,10 +18,3 @@ Additionally nodes may define so called **properties** which hold atomic values 
 
 Syntaxtrees may be stored as ``JSON``-documents conforming to the following schema: :doc:`../schema/index`.
 
-Validating a tree
------------------
-
-Emitting a tree
----------------
-
-A valid syntax tree may be emitted in its "natural" representation. This has to be done by writing "real" TypeScript code and can not be expressed via the grammar.
