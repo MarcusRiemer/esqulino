@@ -13,7 +13,7 @@ BUNDLE_FILES_GZIP = $(addsuffix .gz, $(BUNDLE_FILES))
 CLIENT_ALL_SOURCES = $(shell find src 2> /dev/null) server.ts webpack.server.config.js package.json package-lock.json
 
 TEST_SINGLE_RUN ?= true
-TEST_BROWSERS   ?= ChromeHeadless
+TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
 
 NG_LANG = --locale de
 
@@ -37,6 +37,9 @@ dist-dev : msg-pre-build
 
 test :
 	$(NG_BIN) test --single-run $(TEST_SINGLE_RUN) --browser $(TEST_BROWSERS) --code-coverage true
+
+test-watch:
+	$(NG_BIN) test --single-run false --browser $(TEST_BROWSERS) --code-coverage true
 
 clean-deps : msg-pre-clean-deps
 	rm -rf "node_modules"

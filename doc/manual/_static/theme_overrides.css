@@ -14,3 +14,7 @@
       overflow: visible !important;
    }
 }
+
+.wy-menu .caption .caption-text {
+    color: white;
+}
