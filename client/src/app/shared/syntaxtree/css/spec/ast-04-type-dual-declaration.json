@@ -20,17 +20,49 @@
             {
               "language": "css",
               "name": "declaration",
-              "properties": {
-                "key": "color",
-                "value": "red"
+              "children": {
+                "name": [
+                  {
+                    "language": "css",
+                    "name": "propertyName",
+                    "properties": {
+                      "name": "color"
+                    }
+                  }
+                ],
+                "value": [
+                  {
+                    "language": "css",
+                    "name": "exprColor",
+                    "properties": {
+                      "value": "red"
+                    }
+                  }
+                ]
               }
             },
             {
               "language": "css",
               "name": "declaration",
-              "properties": {
-                "key": "width",
-                "value": "200px"
+              "children": {
+                "name": [
+                  {
+                    "language": "css",
+                    "name": "propertyName",
+                    "properties": {
+                      "name": "width"
+                    }
+                  }
+                ],
+                "value": [
+                  {
+                    "language": "css",
+                    "name": "exprAny",
+                    "properties": {
+                      "value": "200px"
+                    }
+                  }
+                ]
               }
             }
           ]
