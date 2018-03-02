@@ -41,6 +41,7 @@ pretty-blocks: generated/xml.blocks generated/dxml.blocks generated/sql.blocks
 # Default set of graphviz trees
 graphviz-trees: generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz
 
+# Re-generate everything that can be created dynamically
 all-generated: pretty-grammars pretty-blocks graphviz-trees
 
 clean:
@@ -49,8 +50,6 @@ clean:
 livehtml:
 	sphinx-autobuild -b html "$(SOURCEDIR)" $(BUILDDIR)/html $(SPHINXOPTS)
 
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 html: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 

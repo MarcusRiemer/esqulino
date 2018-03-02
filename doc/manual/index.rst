@@ -13,12 +13,26 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
 
 
 .. toctree::
-   
+   :caption: For Users
+              
    concepts
+
+.. toctree::
+   :caption: For Language Creators
+             
    ast
    programming-language
    block-language
+
+.. toctree::
+   :caption: For Programmers
+
+   project-structure
    compilation
    configuration
-   glossary
+
+.. toctree::
+   :caption: Appendix
+      
    schema/index
+   glossary
