@@ -17,9 +17,25 @@
             {
               "language": "css",
               "name": "declaration",
-              "properties": {
-                "key": "color",
-                "value": "red"
+              "children": {
+                "name": [
+                  {
+                    "language": "css",
+                    "name": "propertyName",
+                    "properties": {
+                      "name": "color"
+                    }
+                  }
+                ],
+                "value": [
+                  {
+                    "language": "css",
+                    "name": "exprColor",
+                    "properties": {
+                      "value": "red"
+                    }
+                  }
+                ]
               }
             }
           ]
