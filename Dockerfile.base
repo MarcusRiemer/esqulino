@@ -11,7 +11,7 @@ LABEL name="esqulino base image"
 ENV BUILD_PACKAGES="git" \
     SERVER_PACKAGES="make nodejs ruby ruby-ffi ruby-bundler graphviz file imagemagick6 libmagick6 postgresql" \
     CLIENT_PACKAGES="make nodejs npm" \
-    TEST_PACKAGES="chromium"
+    TEST_PACKAGES="chromium firefox"
 
 WORKDIR /srv/esqulino
 
