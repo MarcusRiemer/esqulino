@@ -13,17 +13,16 @@ concise_attributes:
   name: ast
   value_before_type_cast: '{"name": "document", "children": {"rules": [{"name": "rule",
     "children": {"selectors": [{"name": "selectorType", "language": "css", "properties":
-    {"value": "h1"}}], "declarations": [{"name": "color", "children": {"value": [{"name":
-    "exprColor", "language": "css", "properties": {"value": "blue"}}]}, "language":
-    "css"}, {"name": "backgroundColor", "children": {"value": [{"name": "exprColor",
-    "language": "css", "properties": {"value": "red"}}]}, "language": "css"}]}, "language":
-    "css"}]}, "language": "css"}'
+    {"value": "h1"}}], "declarations": [{"name": "declaration", "children": {"name":
+    [{"name": "propertyName", "language": "css", "properties": {"name": "backgroundColor"}}],
+    "value": [{"name": "exprColor", "language": "css", "properties": {"value": "red"}}]},
+    "language": "css"}]}, "language": "css"}]}, "language": "css"}'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-25 19:32:06.001426'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-02-25 21:47:01.127966'
+  value_before_type_cast: '2018-03-02 18:15:37.503067'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: af3a4b65-738c-4563-9632-2c65d3da6762
@@ -34,8 +33,7 @@ concise_attributes:
   name: compiled
   value_before_type_cast: |-
     h1 {
-      color: blue;
-      background-color: red;
+      backgroundColor: red;
     }
 new_record: false
 active_record_yaml_version: 2
