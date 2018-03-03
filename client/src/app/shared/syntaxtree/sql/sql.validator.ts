@@ -4,18 +4,13 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   languageName: "sql",
   types: {
     "expression": {
-      children: {
-        "expression": {
-          type: "choice",
-          choices: [
-            "columnName",
-            "binaryExpression",
-            "constant",
-            "parameter",
-            "functionCall"
-          ]
-        }
-      }
+      oneOf: [
+        "columnName",
+        "binaryExpression",
+        "constant",
+        "parameter",
+        "functionCall"
+      ]
     },
     "columnName": {
       properties: {
@@ -87,7 +82,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           type: "allowed",
           nodeTypes: [
             {
-              nodeType: "columnName",
+              nodeType: "expression",
               occurs: "*"
             },
             {
@@ -184,7 +179,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "expressions": {
           type: "sequence",
           nodeTypes: [
-            "columnName", // TODO: Convert expression to typedef
+            "expression",
             {
               languageName: "sql",
               nodeType: "whereAdditional",

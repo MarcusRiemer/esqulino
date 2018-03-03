@@ -1,6 +1,10 @@
 grammar "sql" {
-  node "expression" {
-    children "expression" ::= columnName | binaryExpression | constant | parameter | functionCall
+  typedef "expression" {
+    "columnName"
+    "binaryExpression"
+    "constant"
+    "parameter"
+    "functionCall"
   }
   node "columnName" {
     prop "columnName" { string }
@@ -26,7 +30,7 @@ grammar "sql" {
   }
   node "select" {
     prop? "distinct" { boolean }
-    children "columns" ::= columnName* & starOperator?
+    children "columns" ::= expression* & starOperator?
   }
   node "delete" {
   }
@@ -58,7 +62,7 @@ grammar "sql" {
     children "expression" ::= expression columnName
   }
   node "where" {
-    children "expressions" ::= columnName whereAdditional*
+    children "expressions" ::= expression whereAdditional*
   }
   node "groupBy" {
     children "expressions" ::= expression* & columnName*

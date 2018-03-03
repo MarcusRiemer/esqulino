@@ -54,6 +54,26 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               }
             },
             {
+              displayName: ":parameter",
+              defaultNode: {
+                language: "sql",
+                name: "parameter",
+                properties: {
+                  name: "param"
+                }
+              }
+            },
+            {
+              displayName: "Konstante",
+              defaultNode: {
+                language: "sql",
+                name: "constant",
+                properties: {
+                  value: "wert"
+                }
+              }
+            },
+            {
               displayName: "FROM",
               defaultNode: {
                 language: "sql",
@@ -305,6 +325,66 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             {
               blockType: "constant",
               text: "*",
+            } as VisualBlockDescriptions.EditorConstant,
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "parameter",
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          style: {
+            "paddingLeft": "10px",
+            "paddingRight": "10px",
+            "border": "2px solid black",
+            "borderRadius": "500px",
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: ":",
+            } as VisualBlockDescriptions.EditorConstant,
+            {
+              blockType: "input",
+              property: "name",
+            } as VisualBlockDescriptions.EditorInput,
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "constant",
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          style: {
+            "paddingLeft": "10px",
+            "paddingRight": "10px",
+            "border": "2px solid black",
+            "borderRadius": "500px",
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "\"",
+            } as VisualBlockDescriptions.EditorConstant,
+            {
+              blockType: "input",
+              property: "value",
+            } as VisualBlockDescriptions.EditorInput,
+            {
+              blockType: "constant",
+              text: "\"",
             } as VisualBlockDescriptions.EditorConstant,
           ]
         }
