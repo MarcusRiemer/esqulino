@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180303153959) do
+ActiveRecord::Schema.define(version: 20180303160805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20180303153959) do
     t.string "slug"
     t.string "api_version"
     t.uuid "default_database_id"
+    t.index ["default_database_id"], name: "index_projects_on_default_database_id"
     t.index ["slug"], name: "index_projects_on_slug"
   end
 
