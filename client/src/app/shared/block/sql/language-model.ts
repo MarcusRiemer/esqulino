@@ -7,6 +7,9 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "sql",
   name: "SQL",
   defaultProgrammingLanguageId: "sql",
+  editorComponents: [
+    { componentType: "query-preview" }
+  ],
   sidebars: [
     {
       type: "databaseSchema",

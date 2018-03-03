@@ -147,6 +147,19 @@ export class ToolbarService {
   }
 
   /**
+   * Removes something that has been added before.
+   */
+  removeItem(id: string): boolean {
+    const index = this._items.findIndex(item => item.id == id);
+    if (index >= 0) {
+      this._items.splice(index, 1);
+      return (true);
+    } else {
+      return (false);
+    }
+  }
+
+  /**
    * Removes any non-native items from the toolbar and resets
    * the state of any known button.
    */

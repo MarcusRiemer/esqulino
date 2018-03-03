@@ -7,6 +7,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "regex",
   name: "Reguläre Ausdrücke",
   defaultProgrammingLanguageId: "regex",
+  editorComponents: [],
   sidebars: [
     {
       type: "fixedBlocks",

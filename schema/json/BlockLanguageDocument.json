@@ -13,6 +13,13 @@
           },
           "type": "array"
         },
+        "editorComponents": {
+          "description": "Specialised components that should be shown for this block\nlanguage.",
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
+          },
+          "type": "array"
+        },
         "sidebars": {
           "description": "How the available blocks should be represented in the sidebar.",
           "items": {
@@ -23,7 +30,8 @@
       },
       "required": [
         "sidebars",
-        "editorBlocks"
+        "editorBlocks",
+        "editorComponents"
       ],
       "type": "object"
     },
@@ -64,6 +72,10 @@
         "visual"
       ],
       "type": "object"
+    },
+    "EditorComponentDescription": {
+      "$ref": "#/definitions/QueryPreviewComponentDescription",
+      "description": "Any component that could be displayed in the actual editor view."
     },
     "FixedBlocksSidebarCategoryDescription": {
       "additionalProperties": false,
@@ -162,6 +174,21 @@
       "required": [
         "typeName",
         "languageName"
+      ],
+      "type": "object"
+    },
+    "QueryPreviewComponentDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "componentType": {
+          "enum": [
+            "query-preview"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
       ],
       "type": "object"
     },

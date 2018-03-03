@@ -37,6 +37,7 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
   name: "Empty Blocks",
   slug: "emptyblocks",
   defaultProgrammingLanguageId: "emptyBlocks",
+  editorComponents: [],
   sidebars: [
     {
       type: "fixedBlocks",

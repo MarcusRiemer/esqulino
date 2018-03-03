@@ -6,7 +6,7 @@
 TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = ProjectDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json ProjectUsesBlockLanguageDescription.json ProjectSourceDescription.json AlterSchemaRequestDescription.json TableDescription.json BlockLanguageDocument.json BlockLanguageDescription.json NodeDescription.json CodeResourceDescription.json
+JSON_SCHEMA_FILES = ArbitraryQueryRequestDescription.json ProjectDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json ProjectUsesBlockLanguageDescription.json ProjectSourceDescription.json AlterSchemaRequestDescription.json TableDescription.json BlockLanguageDocument.json BlockLanguageDescription.json NodeDescription.json CodeResourceDescription.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -17,6 +17,9 @@ define CONVERT_COMMAND
 	$(TYPESCRIPT_JSON_SCHEMA_BIN) --path $^ --type $(notdir $(basename $@)) > "$@.tmp"
 	mv "$@.tmp" "$@"
 endef
+
+ArbitraryQueryRequestDescription.json : $(SRC_PATH)/shared/syntaxtree/sql/query.description.ts
+	$(CONVERT_COMMAND)
 
 ProjectDescription.json : $(SRC_PATH)/shared/project.description.ts
 	$(CONVERT_COMMAND)

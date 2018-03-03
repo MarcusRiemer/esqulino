@@ -139,11 +139,21 @@ class ProjectDatabase < ApplicationRecord
     # The SQLite driver returns the names of the columns in the first row. But we want
     # those to go in a hash with explicit names.
     execute_sql_raw(read_only) do |db|
-      result = db.execute2(sql, params)
-      return {
-        'columns' => result.first,
-        'rows' => result.drop(1)
-      }
+      begin
+        result = db.execute2(sql, params)
+        return {
+          'columns' => result.first,
+          'rows' => result.drop(1)
+        }
+      rescue SQLite3::ConstraintException, SQLite3::SQLException => e
+        # Something anticipated went wrong. This is probably the fault
+        # of the caller in some way.
+        raise DatabaseQueryError.new(self, sql, params, e, false)
+      rescue SQLite3::Exception => e
+        # Something unanticipated went wrong. We assume this is an error in our
+        # implementation (either server or client).
+        raise DatabaseQueryError.new(self, sql, params, e, true)
+      end
     end
   end
 
@@ -204,25 +214,11 @@ class ProjectDatabase < ApplicationRecord
 
   private
 
-  # Prepares a properly constructed database object and deals with
-  # exceptions that occur during query execution.
+  # Prepares a properly constructed database object.
   def execute_sql_raw(read_only = true)
     db = db_connection(read_only)
     db.execute("PRAGMA foreign_keys = ON")
-
-    # Exceptions that could occur fall in one of two categories
-    begin
-      yield db
-    rescue SQLite3::ConstraintException, SQLite3::SQLException => e
-      # Something anticipated went wrong. This is probably the fault
-      # of the caller in some way.
-      raise DatabaseQueryError.new(self, sql, params, e, false)
-    rescue SQLite3::Exception => e
-      # Something unanticipated went wrong. We assume this is an error in our
-      # implementation (either server or client).
-      raise DatabaseQueryError.new(self, sql, params, e, true)
-    end
-
+    yield db
     db.execute("PRAGMA foreign_keys = OFF")
   end
 end

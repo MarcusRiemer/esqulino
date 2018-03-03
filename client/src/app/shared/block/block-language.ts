@@ -3,7 +3,7 @@ import { Tree, NodeDescription, Language, QualifiedTypeName, typenameEquals } fr
 import { FixedBlocksSidebar } from './fixed-blocks-sidebar'
 import { Sidebar } from './sidebar'
 import { EditorBlock } from './editor-block'
-import { BlockLanguageDescription } from './block-language.description'
+import { BlockLanguageDescription, EditorComponentDescription } from './block-language.description'
 import { EditorBlockDescription } from './block.description'
 import * as Forward from './block-language.forward'
 
@@ -16,6 +16,7 @@ import { DatabaseSchemaSidebar } from './sql/database-schema-sidebar'
 export class BlockLanguage implements Forward.BlockLanguage {
   private _sidebars: Sidebar[];
   private _editorBlocks: EditorBlockDescription[] = [];
+  private _editorComponents: EditorComponentDescription[] = [];
   private _name: string;
   private _id: string;
   private _slug: string;
@@ -26,6 +27,8 @@ export class BlockLanguage implements Forward.BlockLanguage {
     this._slug = desc.slug;
     this._name = desc.name;
     this._defaultProgrammingLanguageId = desc.defaultProgrammingLanguageId;
+    this._editorBlocks = desc.editorBlocks;
+    this._editorComponents = desc.editorComponents;
 
     this._sidebars = desc.sidebars.map(sidebarDesc => {
       switch (sidebarDesc.type) {
@@ -34,7 +37,6 @@ export class BlockLanguage implements Forward.BlockLanguage {
         default: throw new Error(`Unknown sidebar type: ${(sidebarDesc as any).type}`);
       }
     });
-    this._editorBlocks = desc.editorBlocks;
   }
 
   /**
@@ -58,14 +60,24 @@ export class BlockLanguage implements Forward.BlockLanguage {
     return (this._name);
   }
 
+  /**
+   * @return The ID of the default programming language.
+   */
   get defaultProgrammingLanguageId() {
     return (this._defaultProgrammingLanguageId);
   }
 
   /**
+   * @return The editor components this block language demands.
+   */
+  get editorComponents(): ReadonlyArray<EditorComponentDescription> {
+    return (this._editorComponents);
+  }
+
+  /**
    * @return All sidebars that are defined for this block language.
    */
-  get sidebars() {
+  get sidebars(): ReadonlyArray<Sidebar> {
     return (this._sidebars);
   }
 

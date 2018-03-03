@@ -4,7 +4,7 @@
   "definitions": {
     "BlockLanguageDescription": {
       "additionalProperties": false,
-      "description": "Augments a language with information about the UI layer.",
+      "description": "Augments a language with information about the UI layer. This definition is\nused by the editors, especially the block editor, to show customized editors\nfor different languages. These customizations include:\n\n* The blocks that are shown in the sidebar.\n* Possibly language specific sidebars.\n* Definitions of the actual blocks.\n* Possibly language specific editor components.",
       "properties": {
         "createdAt": {
           "description": "Date & time this resource was created",
@@ -18,6 +18,13 @@
           "description": "How blocks should be represented in the drag & drop editor.",
           "items": {
             "$ref": "#/definitions/EditorBlockDescription"
+          },
+          "type": "array"
+        },
+        "editorComponents": {
+          "description": "Specialised components that should be shown for this block\nlanguage.",
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
           },
           "type": "array"
         },
@@ -48,6 +55,7 @@
       "required": [
         "defaultProgrammingLanguageId",
         "editorBlocks",
+        "editorComponents",
         "id",
         "name",
         "sidebars"
@@ -91,6 +99,10 @@
         "visual"
       ],
       "type": "object"
+    },
+    "EditorComponentDescription": {
+      "$ref": "#/definitions/QueryPreviewComponentDescription",
+      "description": "Any component that could be displayed in the actual editor view."
     },
     "FixedBlocksSidebarCategoryDescription": {
       "additionalProperties": false,
@@ -189,6 +201,21 @@
       "required": [
         "typeName",
         "languageName"
+      ],
+      "type": "object"
+    },
+    "QueryPreviewComponentDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "componentType": {
+          "enum": [
+            "query-preview"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
       ],
       "type": "object"
     },
