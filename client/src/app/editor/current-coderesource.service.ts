@@ -9,7 +9,7 @@ import { ProjectService, Project } from './project.service';
 import { SidebarService } from './sidebar.service';
 
 // TODO: Promote the new sidebar system
-import { TreeSidebarComponent } from './tree/tree.sidebar'
+import { CodeSidebarComponent } from './code/code.sidebar'
 
 /**
  * This service represents a single code resource that is currently beeing
@@ -53,7 +53,7 @@ export class CurrentCodeResourceService {
       if (r) {
         // Show the new sidebar
         console.log("Sidebar change because of current code resource");
-        this._sidebarService.showSingleSidebar(TreeSidebarComponent.SIDEBAR_IDENTIFIER, r);
+        this._sidebarService.showSingleSidebar(CodeSidebarComponent.SIDEBAR_IDENTIFIER, r);
       }
     })
     .subscribe();

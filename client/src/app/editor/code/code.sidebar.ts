@@ -8,14 +8,14 @@ import { Sidebar } from '../../shared/block';
 
 import { SIDEBAR_MODEL_TOKEN } from '../editor.token';
 
-import { TreeSidebarFixedBlocksComponent } from './tree-sidebar-fixed-blocks.component'
+import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
 import { CurrentCodeResourceService } from '../current-coderesource.service';
 
 import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
 
 function resolvePortalComponentId(id: string): any {
   switch (id) {
-    case "fixedBlocks": return (TreeSidebarFixedBlocksComponent);
+    case "fixedBlocks": return (CodeSidebarFixedBlocksComponent);
     case "databaseSchema": return (DatabaseSchemaSidebarComponent);
   }
 }
@@ -29,7 +29,7 @@ function resolvePortalComponentId(id: string): any {
   templateUrl: 'templates/sidebar.html',
   selector: "tree-sidebar"
 })
-export class TreeSidebarComponent implements OnInit, OnDestroy {
+export class CodeSidebarComponent implements OnInit, OnDestroy {
   /**
    * This ID is used to register this sidebar with the sidebar loader
    */

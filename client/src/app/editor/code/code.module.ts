@@ -11,8 +11,8 @@ import { DropTargetDirective } from './drop-target.directive'
 import { DropPlaceholderDirective } from './drop-placeholder.directive'
 import { LanguageModelSelectorComponent } from './language-model-selector.component'
 import { LanguageSelectorComponent } from './language-selector.component'
-import { TreeSidebarComponent } from './tree.sidebar'
-import { TreeSidebarFixedBlocksComponent } from './tree-sidebar-fixed-blocks.component'
+import { CodeSidebarComponent } from './code.sidebar'
+import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
 import { ValidationComponent } from './validation.component'
 
 import { NodeComponent } from './raw/node.component'
@@ -57,24 +57,24 @@ import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.
     NodePlaceholderComponent,
     RawTreeEditorComponent,
     ValidationComponent,
-    TreeSidebarComponent,
-    TreeSidebarFixedBlocksComponent,
+    CodeSidebarComponent,
+    CodeSidebarFixedBlocksComponent,
     LanguageModelSelectorComponent,
     LanguageSelectorComponent,
   ],
   entryComponents: [
     DatabaseSchemaSidebarComponent,
-    TreeSidebarComponent,
-    TreeSidebarFixedBlocksComponent
+    CodeSidebarComponent,
+    CodeSidebarFixedBlocksComponent
   ],
   providers: [
     ResourceChangedGuard
   ]
 })
-export class SyntaxTreeEditorModule {
+export class CodeEditorModule {
   public static forRoot(): ModuleWithProviders {
     return ({
-      ngModule: SyntaxTreeEditorModule,
+      ngModule: CodeEditorModule,
       providers: []
     });
   }
@@ -83,8 +83,8 @@ export class SyntaxTreeEditorModule {
     console.log("Registering TreeEditor ...");
 
     reg.registerSidebarType({
-      componentType: TreeSidebarComponent,
-      typeId: TreeSidebarComponent.SIDEBAR_IDENTIFIER
+      componentType: CodeSidebarComponent,
+      typeId: CodeSidebarComponent.SIDEBAR_IDENTIFIER
     });
 
     console.log("Registered TreeEditor!");

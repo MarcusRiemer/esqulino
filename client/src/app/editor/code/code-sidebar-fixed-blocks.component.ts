@@ -12,7 +12,7 @@ import { DragService } from '../drag.service';
   templateUrl: 'templates/sidebar-fixed-blocks.html',
   selector: "tree-sidebar"
 })
-export class TreeSidebarFixedBlocksComponent {
+export class CodeSidebarFixedBlocksComponent {
   constructor(
     @Inject(SIDEBAR_MODEL_TOKEN) private _codeResource: CodeResource,
     private _dragService: DragService
