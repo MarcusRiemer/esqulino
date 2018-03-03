@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180224151342) do
+ActiveRecord::Schema.define(version: 20180303153959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 20180224151342) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
+    t.text "default_programming_language_id"
+    t.index ["default_programming_language_id"], name: "index_block_languages_on_default_programming_language_id"
     t.index ["slug"], name: "index_block_languages_on_slug", unique: true
   end
 
@@ -86,6 +88,7 @@ ActiveRecord::Schema.define(version: 20180224151342) do
     t.index ["slug"], name: "index_projects_on_slug"
   end
 
+  add_foreign_key "block_languages", "programming_languages", column: "default_programming_language_id"
   add_foreign_key "code_resources", "block_languages"
   add_foreign_key "code_resources", "programming_languages"
   add_foreign_key "code_resources", "projects"

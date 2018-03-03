@@ -25,7 +25,7 @@ export class BlockLanguage implements Forward.BlockLanguage {
     this._id = desc.id;
     this._slug = desc.slug;
     this._name = desc.name;
-    this._defaultProgrammingLanguageId = desc.defaultProgrammingLanguage;
+    this._defaultProgrammingLanguageId = desc.defaultProgrammingLanguageId;
 
     this._sidebars = desc.sidebars.map(sidebarDesc => {
       switch (sidebarDesc.type) {

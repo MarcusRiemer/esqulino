@@ -36,7 +36,7 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
   id: "emptyblocks",
   name: "Empty Blocks",
   slug: "emptyblocks",
-  defaultProgrammingLanguage: "emptyBlocks",
+  defaultProgrammingLanguageId: "emptyBlocks",
   sidebars: [
     {
       type: "fixedBlocks",
@@ -106,7 +106,7 @@ describe("LanguageModel", () => {
     expect(lm.id).toEqual(langModelEmptyBlocks.id);
     expect(lm.slug).toEqual(langModelEmptyBlocks.slug);
     expect(lm.name).toEqual(langModelEmptyBlocks.name);
-    expect(lm.defaultProgrammingLanguageId).toEqual(langModelEmptyBlocks.defaultProgrammingLanguage);
+    expect(lm.defaultProgrammingLanguageId).toEqual(langModelEmptyBlocks.defaultProgrammingLanguageId);
 
     const missingEditorBlocks = lm.getMissingEditorBlocks(l);
     expect(missingEditorBlocks.length).toEqual(1);

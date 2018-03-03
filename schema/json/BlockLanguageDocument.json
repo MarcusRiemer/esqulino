@@ -242,6 +242,9 @@
         },
         {
           "$ref": "#/definitions/VisualBlockDescriptions.EditorInterpolated"
+        },
+        {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorInput"
         }
       ]
     },
@@ -274,6 +277,22 @@
             "skipParents"
           ],
           "type": "object"
+        },
+        "visibility": {
+          "items": [
+            {
+              "enum": [
+                "ifAnyDrag",
+                "ifLegalDrag",
+                "ifLegalChild",
+                "ifEmpty",
+                "always"
+              ],
+              "type": "string"
+            }
+          ],
+          "minItems": 1,
+          "type": "array"
         }
       },
       "type": "object"
@@ -372,28 +391,34 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
-        },
-        "visibility": {
-          "items": [
-            {
-              "enum": [
-                "ifAnyDrag",
-                "ifLegalDrag",
-                "ifLegalChild",
-                "ifEmpty",
-                "always"
-              ],
-              "type": "string"
-            }
-          ],
-          "minItems": 1,
-          "type": "array"
         }
       },
       "required": [
         "blockType",
-        "direction",
-        "visibility"
+        "direction"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorInput": {
+      "additionalProperties": false,
+      "description": "Displays an interpolated value and allows it to be edited.",
+      "properties": {
+        "blockType": {
+          "enum": [
+            "input"
+          ],
+          "type": "string"
+        },
+        "property": {
+          "type": "string"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        }
+      },
+      "required": [
+        "blockType",
+        "property"
       ],
       "type": "object"
     },

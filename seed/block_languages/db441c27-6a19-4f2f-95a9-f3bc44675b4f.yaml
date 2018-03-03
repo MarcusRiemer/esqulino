@@ -21,5 +21,8 @@ concise_attributes:
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2018-02-20 20:48:21.609835'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: sql
 new_record: false
 active_record_yaml_version: 2
