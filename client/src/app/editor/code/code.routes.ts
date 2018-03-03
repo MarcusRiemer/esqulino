@@ -6,7 +6,7 @@ import { BlockEditorComponent } from './block/block-editor.component'
 
 import { ResourceChangedGuard } from './resource-changed.guard'
 
-export const syntaxTreeEditorRoutes: Routes = [
+export const codeEditorRoutes: Routes = [
   {
     path: 'create',
     pathMatch: 'full',

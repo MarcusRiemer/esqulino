@@ -7,7 +7,7 @@ import { SharedAppModule } from '../shared/shared.module'
 import { SharedEditorModule } from './shared/shared.module'
 import { SchemaEditorModule } from './schema/schema.module'
 import { ImageEditorModule } from './image/image.module'
-import { SyntaxTreeEditorModule } from './tree/tree.module'
+import { CodeEditorModule } from './code/code.module'
 
 import { CurrentCodeResourceService } from './current-coderesource.service'
 
@@ -38,7 +38,7 @@ import { SettingsComponent } from './settings.component'
     ImageEditorModule.forRoot(),
     SharedEditorModule.forRoot(),
     SchemaEditorModule.forRoot(),
-    SyntaxTreeEditorModule.forRoot(),
+    CodeEditorModule.forRoot(),
   ],
   declarations: [
     EditorComponent,

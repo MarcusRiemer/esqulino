@@ -7,7 +7,7 @@ import { ProjectExistsGuard } from './project-exists.guard'
 
 import { schemaEditorRoutes } from './schema/schema.routes'
 import { imageEditorRoutes } from './image/image.routes'
-import { syntaxTreeEditorRoutes } from './tree/tree.routes'
+import { codeEditorRoutes } from './code/code.routes'
 
 export const editorRoutes: Routes = [
   {
@@ -30,7 +30,7 @@ export const editorRoutes: Routes = [
       },
       {
         path: 'ast',
-        children: [...syntaxTreeEditorRoutes]
+        children: [...codeEditorRoutes]
       },
       {
         path: 'image',
