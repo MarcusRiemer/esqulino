@@ -54,7 +54,7 @@ describe('Project', () => {
         { id: "irrelevant", blockLanguageId: "block_a" }
       ],
       blockLanguages: [
-        { id: "block_a", slug: "a", name: "Block A", sidebars: [], editorBlocks: [], defaultProgrammingLanguage: "" }
+        { id: "block_a", slug: "a", name: "Block A", sidebars: [], editorBlocks: [], defaultProgrammingLanguageId: "" }
       ],
       codeResources: [
         {
@@ -78,8 +78,8 @@ describe('Project', () => {
         { id: "irrelevant", blockLanguageId: "block_a" }
       ],
       blockLanguages: [
-        { id: "block_a", slug: "a", name: "Block A", sidebars: [], editorBlocks: [], defaultProgrammingLanguage: "" },
-        { id: "block_b", slug: "b", name: "Block B", sidebars: [], editorBlocks: [], defaultProgrammingLanguage: "" }
+        { id: "block_a", slug: "a", name: "Block A", sidebars: [], editorBlocks: [], defaultProgrammingLanguageId: "" },
+        { id: "block_b", slug: "b", name: "Block B", sidebars: [], editorBlocks: [], defaultProgrammingLanguageId: "" }
       ],
       codeResources: [
         {

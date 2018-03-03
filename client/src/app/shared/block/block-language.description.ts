@@ -21,6 +21,11 @@ export interface BlockLanguageDescription extends BlockLanguageDocument {
   slug?: string;
 
   /**
+   * The programming language this block language uses by default.
+   */
+  defaultProgrammingLanguageId: string;
+
+  /**
    * Date & time this resource was created
    */
   createdAt?: string;
@@ -45,9 +50,4 @@ export interface BlockLanguageDocument {
    * How blocks should be represented in the drag & drop editor.
    */
   editorBlocks: EditorBlockDescription[];
-
-  /**
-   * The programming language this block language uses by default.
-   */
-  defaultProgrammingLanguage: string;
 }

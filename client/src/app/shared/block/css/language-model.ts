@@ -7,7 +7,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
   id: "css",
   name: "CSS",
   slug: "css",
-  defaultProgrammingLanguage: "css",
+  defaultProgrammingLanguageId: "css",
   editorBlocks: [
     {
       describedType: {
