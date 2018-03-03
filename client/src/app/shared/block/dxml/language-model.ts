@@ -476,6 +476,7 @@ export const DYNAMIC_LANGUAGE_MODEL: BlockLanguageDescription = {
       ]
     }
   ],
+  editorComponents: [],
   editorBlocks: EDITOR_BLOCKS
 }
 
@@ -499,6 +500,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
       ]
     }
   ],
+  editorComponents: [],
   editorBlocks: EDITOR_BLOCKS
 }
 

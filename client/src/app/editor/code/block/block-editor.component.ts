@@ -3,8 +3,11 @@ import { Observable } from 'rxjs/Observable'
 import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
-import { ToolbarService } from '../../toolbar.service';
+import { EditorComponentDescription } from '../../../shared/block/block-language.description';
 
+import { EditorComponentsService } from '../editor-components.service';
+
+import { ToolbarService } from '../../toolbar.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
@@ -23,7 +26,6 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    */
   private _subscriptionRefs: any[] = [];
 
-
   constructor(
     private _toolbarService: ToolbarService,
     private _dragService: DragService,
@@ -31,6 +33,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _codeResourceService: CodeResourceService,
     private _router: Router,
     private _route: ActivatedRoute,
+    private _editorComponentsService: EditorComponentsService,
   ) {
   }
 
@@ -68,6 +71,14 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Cleans up all acquired references
+   */
+  ngOnDestroy() {
+    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
+    this._subscriptionRefs = [];
+  }
+
+  /**
    * @return A peek at the currently edited resource.
    */
   get peekResource() {
@@ -89,12 +100,16 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Cleans up all acquired references
+   * @return The resolved portal for the given description
    */
-  ngOnDestroy() {
-    this._subscriptionRefs.forEach(ref => ref.unsubscribe());
-    this._subscriptionRefs = [];
+  getEditorComponentPortal(desc: EditorComponentDescription) {
+    return (this._editorComponentsService.createComponent(desc));
   }
+
+  readonly editorComponents = this.currentResource
+    .switchMap(codeResource => codeResource.blockLanguage)
+    .map(blockLanguage => blockLanguage.editorComponents)
+    .map(components => components.map(c => this.getEditorComponentPortal(c)));
 
   /**
    * When something draggable enters the editor area itself there is no

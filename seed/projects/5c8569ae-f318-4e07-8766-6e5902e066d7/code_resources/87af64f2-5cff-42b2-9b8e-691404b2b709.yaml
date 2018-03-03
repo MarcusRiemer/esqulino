@@ -13,19 +13,17 @@ concise_attributes:
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
     "from", "children": {"tables": [{"name": "tableIntroduction", "language": "sql",
-    "properties": {"name": "foo"}}]}, "language": "sql"}], "where": [{"name": "where",
-    "children": {"expressions": []}, "language": "sql"}], "select": [{"name": "select",
-    "children": {"columns": [{"name": "columnName", "language": "sql", "properties":
-    {"columnName": "id", "refTableName": "foo"}}]}, "language": "sql"}], "groupBy":
-    [{"name": "groupBy", "children": {"expressions": [{"name": "columnName", "language":
-    "sql", "properties": {"columnName": "key", "refTableName": "key_value"}}]}, "language":
-    "sql"}]}, "language": "sql"}'
+    "properties": {"name": "key_value"}}]}, "language": "sql"}], "where": [], "select":
+    [{"name": "select", "children": {"columns": [{"name": "columnName", "language":
+    "sql", "properties": {"columnName": "key", "refTableName": "key_value"}}, {"name":
+    "columnName", "language": "sql", "properties": {"columnName": "value", "refTableName":
+    "key_value"}}]}, "language": "sql"}], "groupBy": []}, "language": "sql"}'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-20 20:48:21.830298'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-02-25 21:50:11.111622'
+  value_before_type_cast: '2018-03-03 20:09:40.060253'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: db441c27-6a19-4f2f-95a9-f3bc44675b4f
@@ -34,6 +32,8 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT foo.id\nFROM foo\nWHERE \nGROUP BY key_value.key"
+  value_before_type_cast: |-
+    SELECT key_value.key, key_value.value
+    FROM key_value
 new_record: false
 active_record_yaml_version: 2

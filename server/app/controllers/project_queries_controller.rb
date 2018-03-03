@@ -4,19 +4,20 @@ class ProjectQueriesController < ApplicationController
   include JsonSchemaHelper
 
   # Allows the execution of arbitrary SQL, which might be a little
-  # dangerous ;) 
-  def run_arbitrary   
+  # dangerous ;)   
+  def run_arbitrary
     request_data = ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
-    sql_query = request_data['sql']
+    project = Project.find_by(slug: params['project_id'])
+    database_id = nil # params['database_id']
+    database = project.database_by_id_or_default(database_id)
     
-    # TODO: Remove this ugly hack to limit the maximum number of rows
-    if sql_query.start_with?('SELECT') then
-      sql_query = sql_query + "\nLIMIT 100" # Double quotes to interpret \n
+    sql_ast = request_data['ast']
+    begin
+      sql = IdeService.instance.emit_code(sql_ast, sql_ast['language'])
+      
+      render json: database.execute_sql(sql, request_data['params'])
     end
-    
-    result = self.current_project.execute_sql(sql_query, request_data['params'])
-    render json: result
   end
 
   # Running a query that has already been stored on the server

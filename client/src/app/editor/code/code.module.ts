@@ -9,6 +9,7 @@ import { CreateCodeResourceComponent } from './create-code-resource.component'
 import { DraggableDirective } from './draggable.directive'
 import { DropTargetDirective } from './drop-target.directive'
 import { DropPlaceholderDirective } from './drop-placeholder.directive'
+import { EditorComponentsService } from './editor-components.service'
 import { LanguageModelSelectorComponent } from './language-model-selector.component'
 import { LanguageSelectorComponent } from './language-selector.component'
 import { CodeSidebarComponent } from './code.sidebar'
@@ -31,6 +32,9 @@ import { BlockRenderIteratorComponent } from './block/block-render-iterator.comp
 import { BlockRenderInputComponent } from './block/block-render-input.component'
 
 import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
+import { QueryPreviewComponent } from './query/query-preview.component'
+import { QueryService } from './query/query.service'
+
 
 @NgModule({
   imports: [
@@ -61,11 +65,13 @@ import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.
     CodeSidebarFixedBlocksComponent,
     LanguageModelSelectorComponent,
     LanguageSelectorComponent,
+    QueryPreviewComponent,
   ],
   entryComponents: [
     DatabaseSchemaSidebarComponent,
     CodeSidebarComponent,
-    CodeSidebarFixedBlocksComponent
+    CodeSidebarFixedBlocksComponent,
+    QueryPreviewComponent,
   ],
   providers: [
     ResourceChangedGuard
@@ -75,18 +81,18 @@ export class CodeEditorModule {
   public static forRoot(): ModuleWithProviders {
     return ({
       ngModule: CodeEditorModule,
-      providers: []
+      providers: [EditorComponentsService, QueryService]
     });
   }
 
   constructor(reg: RegistrationService) {
-    console.log("Registering TreeEditor ...");
+    console.log("Registering CodeEditor ...");
 
     reg.registerSidebarType({
       componentType: CodeSidebarComponent,
       typeId: CodeSidebarComponent.SIDEBAR_IDENTIFIER
     });
 
-    console.log("Registered TreeEditor!");
+    console.log("Registered CodeEditor!");
   }
 }
