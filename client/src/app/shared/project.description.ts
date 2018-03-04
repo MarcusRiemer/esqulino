@@ -78,10 +78,22 @@ export interface AvailableDatabaseDescription {
  * correctly acknowledge such sources.
  */
 export interface ProjectSourceDescription {
+  id: string,
+  title: string,
   type: "data",
   url: string,
   display: string
   readOnly: boolean;
+
+  /**
+   * Date & time this resource was created
+   */
+  createdAt?: string;
+
+  /**
+   * Date & time this resource was updated the last time
+   */
+  updatedAt?: string;
 }
 
 /**

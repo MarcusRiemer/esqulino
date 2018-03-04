@@ -10,7 +10,15 @@ import { SidebarDescription, EditorBlockDescription } from './block.description'
  * * Definitions of the actual blocks.
  * * Possibly language specific editor components.
  */
-export interface BlockLanguageDescription extends BlockLanguageDocument {
+export interface BlockLanguageDescription extends BlockLanguageDocument, BlockLanguageListDescription {
+
+}
+
+/**
+ * Superficial information about a block language, usually used when loads of
+ * block languages are queried together.
+ */
+export interface BlockLanguageListDescription {
   /**
    * The internal ID of this language model.
    */
