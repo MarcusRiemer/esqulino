@@ -46,26 +46,6 @@ export const StringValidator = {
 };
 
 /**
- * The properties of a project that can be queried from the
- * server when asking for all available projecs.
- * 
- * This is a stripped down version of all possibly
- * existing project properties that is used to list available
- * projects.
- */
-export interface ProjectListDescription extends ApiVersion {
-  id: string
-  slug: ProjectSlug
-  name: ProjectName
-  public?: boolean
-  description: string
-  preview?: string
-  indexPageId?: string
-  createdAt?: string
-  updatedAt?: string
-}
-
-/**
  * Describes a database that could possibly be used.
  */
 export interface AvailableDatabaseDescription {
@@ -98,20 +78,44 @@ export interface ProjectSourceDescription {
 
 /**
  * The properties of a project that can be queried from the
- * server when asking for a specific project.
- *
- * Only contains publically visible data, not the
- * password or other private information.
- *
+ * server when asking for all available projecs.
+ * 
+ * This is a stripped down version of all possibly
+ * existing project properties that is used to list available
+ * projects.
+ */
+export interface ProjectListDescription extends ApiVersion {
+  id: string
+  slug: ProjectSlug
+  name: ProjectName
+  public?: boolean
+  description: string
+  preview?: string
+  indexPageId?: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+/**
+ * The "shallow" properties of a project that do not contain any
+ * complicated standalone resources.
  */
 export interface ProjectDescription extends ProjectListDescription {
-  schema: TableDescription[]
   availableDatabases?: { [id: string]: AvailableDatabaseDescription }
   activeDatabase?: string
+  projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[]
   sources: ProjectSourceDescription[]
+}
+
+/**
+ * The properties of a project that can be queried from the
+ * server when asking for a specific project. This description contains
+ * everything that is needed in the normal editor workflow.
+ */
+export interface ProjectFullDescription extends ProjectDescription {
+  schema: TableDescription[]
   codeResources: CodeResourceDescription[]
   blockLanguages: BlockLanguageDescription[]
-  projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[]
 }
 
 /**

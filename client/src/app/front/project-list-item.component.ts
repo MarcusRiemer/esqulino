@@ -2,7 +2,7 @@ import { Component, Input, PLATFORM_ID, Inject } from '@angular/core'
 import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 import {
-  ProjectDescriptionService, ProjectDescription
+  ProjectDescriptionService, ProjectFullDescription
 } from '../shared/project.description.service'
 import { ServerApiService } from '../shared/serverapi.service'
 
@@ -14,7 +14,7 @@ import { ServerApiService } from '../shared/serverapi.service'
   templateUrl: 'templates/project-list-item.html',
 })
 export class ProjectListItemComponent {
-  @Input() project: ProjectDescription;
+  @Input() project: ProjectFullDescription;
 
   /**
    * TODO: Make this configurable

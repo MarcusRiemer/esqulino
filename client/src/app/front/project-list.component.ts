@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core'
 
-import { ProjectDescription } from '../shared/project.description'
+import { ProjectFullDescription } from '../shared/project.description'
 import { ProjectDescriptionService } from '../shared/project.description.service'
 
 /**
@@ -11,7 +11,7 @@ import { ProjectDescriptionService } from '../shared/project.description.service
   templateUrl: 'templates/project-list.html',
 })
 export class ProjectListComponent implements OnInit {
-  public projects: ProjectDescription[]
+  public projects: ProjectFullDescription[]
 
   /**
    * Used for dependency injection.

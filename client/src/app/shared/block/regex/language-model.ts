@@ -4,7 +4,8 @@ import {
 } from '../block.description'
 
 export const LANGUAGE_MODEL: BlockLanguageDescription = {
-  id: "regex",
+  id: "9e529caa-aa86-48eb-9a12-83889377195e",
+  slug: "regex",
   name: "Reguläre Ausdrücke",
   defaultProgrammingLanguageId: "regex",
   editorComponents: [],

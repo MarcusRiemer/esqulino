@@ -3,6 +3,7 @@ import { Router } from '@angular/router'
 import { Http, Response, Headers } from '@angular/http'
 
 import { ServerApiService } from '../../shared/serverapi.service'
+import { LanguageService } from '../../shared/language.service'
 
 import { ProjectService, Project } from '../project.service'
 import { SidebarService } from '../sidebar.service'
@@ -35,7 +36,8 @@ export class SettingsComponent {
     private _router: Router,
     private _serverApi: ServerApiService,
     private _http: Http,
-    private _imageService: ImageService
+    private _imageService: ImageService,
+    private _languageService: LanguageService,
   ) {
   }
 
@@ -90,6 +92,20 @@ export class SettingsComponent {
   }
 
   /**
+   * @return All block languages that could currently be used.
+   */
+  get availableBlockLanguages() {
+    return (this._languageService.availableLanguageModels);
+  }
+
+  /**
+   * Reference a block language from this project.
+   */
+  addUsedBlockLanguage(blockLanguageId: string) {
+    this.project.addUsedBlockLanguage(blockLanguageId);
+  }
+
+  /**
    * Remove a block language from this project.
    */
   removeUsedBlockLanguage(blockLanguageId: string) {
@@ -97,5 +113,9 @@ export class SettingsComponent {
     if (!this.project.removeUsedBlockLanguage(blockLanguageId)) {
       alert("Benutzte Programmiersprachen können nicht entfernt werden");
     }
+  }
+
+  resolveBlockLanguage(blockLanguageId: string) {
+    return (this._languageService.getLocalBlockLanguage(blockLanguageId));
   }
 }

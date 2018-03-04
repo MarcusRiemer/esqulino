@@ -4,7 +4,7 @@ import {
 } from '../block.description'
 
 export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
-  id: "css",
+  id: "af3a4b65-738c-4563-9632-2c65d3da6762",
   name: "CSS",
   slug: "css",
   defaultProgrammingLanguageId: "css",
