@@ -1,0 +1,42 @@
+{
+  "$ref": "#/definitions/BlockLanguageListDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "BlockLanguageListDescription": {
+      "additionalProperties": false,
+      "description": "Superficial information about a block language, usually used when loads of\nblock languages are queried together.",
+      "properties": {
+        "createdAt": {
+          "description": "Date & time this resource was created",
+          "type": "string"
+        },
+        "defaultProgrammingLanguageId": {
+          "description": "The programming language this block language uses by default.",
+          "type": "string"
+        },
+        "id": {
+          "description": "The internal ID of this language model.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name that should be displayed to the user.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "A unique (but possibly empty) id. If this is undefined the language has\nno builtin counterpart on the client.",
+          "type": "string"
+        },
+        "updatedAt": {
+          "description": "Date & time this resource was updated the last time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "defaultProgrammingLanguageId"
+      ],
+      "type": "object"
+    }
+  }
+}

@@ -34,6 +34,7 @@ Rails.application.routes.draw do
 
   # Second stop: The API for the editor
   scope '/api' do
+    # Everything in the context of projects
     scope 'project' do
       root via: [:get], controller: 'projects', action: :index
       root via: [:post], controller: 'projects', action: :create
@@ -108,6 +109,11 @@ Rails.application.routes.draw do
           post 'create', controller: 'project_databases', action: :table_create
         end
       end
+    end
+
+    # Everything about block languages
+    scope 'block-language' do
+      root via: [:get], controller: 'block_languages', action: :index
     end
 
     # Fallback for unknown API endpoints

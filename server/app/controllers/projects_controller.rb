@@ -1,5 +1,6 @@
 require_dependency 'legacy_project'
 
+# All operations that occur on a project level.
 class ProjectsController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper

@@ -14,11 +14,21 @@ class BlockLanguage < ApplicationRecord
   # creating code resources.
   belongs_to :default_programming_language, :class_name => "ProgrammingLanguage", optional: true
 
-  # Computes a hash that may be sent back to the client
+  # Computes a hash that may be sent back to the client if it requires
+  # full access to the block language. This is usually happens if the
+  # client is working with the editor.
   def to_full_api_response
     to_json_api_response
       .slice("id", "slug", "name", "defaultProgrammingLanguageId")
       .merge(self.model)
+  end
+
+  # Computes a hash that may be sent back to the client if only superficial
+  # information is required. This usually happens when the client attempts
+  # to list available block languages.
+  def to_list_api_response
+    to_json_api_response
+      .slice("id", "slug", "name", "defaultProgrammingLanguageId")
   end
 
   # Returns a nicely readable representation of id and name
