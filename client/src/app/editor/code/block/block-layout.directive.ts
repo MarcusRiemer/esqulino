@@ -22,9 +22,9 @@ export class BlockLayoutDirective {
 
   ngOnInit() {
     this.hostElement.style.display = "flex";
-    this.hostElement.style.flexDirection = this.flexDirection(this.layout.direction);
     this.hostElement.style.flexWrap = "wrap";
-    this.hostElement.style.alignItems = "flex-start";
+    this.hostElement.style.flexDirection = this.flexDirection(this.layout.direction);
+    this.hostElement.style.alignItems = this.flexAlign(this.layout.direction);
   }
 
   /**
@@ -34,6 +34,16 @@ export class BlockLayoutDirective {
     switch (dir) {
       case "horizontal": return "row";
       case "vertical": return "column";
+    }
+  }
+
+  /**
+   * @return Horizontal containers align to their center, vertical to their flex-start
+   */
+  private flexAlign(dir: string) {
+    switch (dir) {
+      case "horizontal": return ("center");
+      case "vertical": return ("flex-start");
     }
   }
 

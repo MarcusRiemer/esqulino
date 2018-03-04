@@ -99,12 +99,13 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess) {
-        const operands = node.getChildrenInCategory("operands");
-        process.generateNode(operands[0]);
+        process.addConvertedFragment("(", node);
+        node.getChildrenInCategory("lhs").forEach(c => process.generateNode(c))
         process.addConvertedFragment(" ", node);
-        process.generateNode(operands[1]);
+        node.getChildrenInCategory("operator").forEach(c => process.generateNode(c))
         process.addConvertedFragment(" ", node);
-        process.generateNode(operands[2]);
+        node.getChildrenInCategory("rhs").forEach(c => process.generateNode(c))
+        process.addConvertedFragment(")", node);
 
         return ([]);
       }

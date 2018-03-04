@@ -10,10 +10,7 @@
           "$ref": "#/definitions/NodeDescription"
         },
         "params": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "type": "object"
+          "$ref": "#/definitions/QueryParamsDescription"
         }
       },
       "required": [
@@ -53,6 +50,16 @@
         "name",
         "language"
       ],
+      "type": "object"
+    },
+    "QueryParamsDescription": {
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number"
+        ]
+      },
+      "description": "Parameters for queries (for the moment) may be primitive values.",
       "type": "object"
     }
   }

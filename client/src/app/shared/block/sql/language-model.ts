@@ -19,7 +19,59 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
       caption: "SQL",
       categories: [
         {
-          categoryCaption: "SQL",
+          categoryCaption: "Ausdrücke",
+          blocks: [
+            {
+              displayName: "★",
+              defaultNode: {
+                language: "sql",
+                name: "starOperator",
+              }
+            },
+            {
+              displayName: ":parameter",
+              defaultNode: {
+                language: "sql",
+                name: "parameter",
+                properties: {
+                  name: "param"
+                }
+              }
+            },
+            {
+              displayName: "Konstante",
+              defaultNode: {
+                language: "sql",
+                name: "constant",
+                properties: {
+                  value: "wert"
+                }
+              }
+            },
+            {
+              displayName: "Binärer Ausdruck",
+              defaultNode: {
+                language: "sql",
+                name: "binaryExpression",
+                children: {
+                  lhs: [],
+                  operator: [
+                    {
+                      language: "sql",
+                      name: "relationalOperator",
+                      properties: {
+                        operator: "="
+                      }
+                    }
+                  ],
+                  rhs: []
+                }
+              }
+            },
+          ]
+        },
+        {
+          categoryCaption: "Komponenten",
           blocks: [
             {
               displayName: "SELECT",
@@ -43,33 +95,6 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                   ],
                   "groupBy": [
                   ]
-                }
-              }
-            },
-            {
-              displayName: "*",
-              defaultNode: {
-                language: "sql",
-                name: "starOperator",
-              }
-            },
-            {
-              displayName: ":parameter",
-              defaultNode: {
-                language: "sql",
-                name: "parameter",
-                properties: {
-                  name: "param"
-                }
-              }
-            },
-            {
-              displayName: "Konstante",
-              defaultNode: {
-                language: "sql",
-                name: "constant",
-                properties: {
-                  value: "wert"
                 }
               }
             },
@@ -285,7 +310,10 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           style: {
             "paddingLeft": "10px",
             "paddingRight": "10px",
-            "border": "2px solid black",
+            "margin-top": "2px",
+            "margin-bottom": "2px",
+            "background-color": "rgba(0, 255, 0, 0.15)",
+            "border": "2px solid rgba(0, 255, 0, 0.6)",
             "borderRadius": "500px",
             "cursor": "grab",
           },
@@ -318,13 +346,17 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           style: {
             "paddingLeft": "10px",
             "paddingRight": "10px",
-            "border": "2px solid black",
-            "borderRadius": "500px",
+            "margin-top": "2px",
+            "margin-bottom": "2px",
+            "background-color": "rgba(0, 255, 0, 0.15)",
+            "border": "2px solid rgba(0, 255, 0, 0.6)",
+            "border-radius": "500px",
+            "cursor": "grab",
           },
           children: [
             {
               blockType: "constant",
-              text: "*",
+              text: "★",
             } as VisualBlockDescriptions.EditorConstant,
           ]
         }
@@ -342,8 +374,12 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           style: {
             "paddingLeft": "10px",
             "paddingRight": "10px",
-            "border": "2px solid black",
+            "margin-top": "2px",
+            "margin-bottom": "2px",
+            "border": "2px solid rgba(129, 129, 247, 1)",
+            "background-color": "rgba(129, 129, 247, 0.4)",
             "borderRadius": "500px",
+            "cursor": "grab",
           },
           children: [
             {
@@ -353,6 +389,10 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             {
               blockType: "input",
               property: "name",
+              style: {
+                "cursor": "text",
+                "text-decoration": "underline black dotted",
+              }
             } as VisualBlockDescriptions.EditorInput,
           ]
         }
@@ -370,22 +410,164 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           style: {
             "paddingLeft": "10px",
             "paddingRight": "10px",
-            "border": "2px solid black",
+            "margin-top": "2px",
+            "margin-bottom": "2px",
+            "background-color": "rgba(0, 255, 0, 0.15)",
+            "border": "2px solid rgba(0, 255, 0, 0.6)",
             "borderRadius": "500px",
+            "text-decoration": "underline black dotted",
           },
           children: [
             {
-              blockType: "constant",
-              text: "\"",
-            } as VisualBlockDescriptions.EditorConstant,
-            {
+              style: {
+                "cursor": "text",
+              },
               blockType: "input",
               property: "value",
             } as VisualBlockDescriptions.EditorInput,
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "binaryExpression",
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          style: {
+            "paddingLeft": "10px",
+            "paddingRight": "10px",
+            "margin-top": "2px",
+            "margin-bottom": "2px",
+            "border": "2px solid rgba(255, 165, 0, 0.6)",
+            "backgroundColor": "rgba(255, 165, 0, 0.3)",
+            "borderRadius": "500px",
+            "cursor": "grab",
+          },
+          children: [
             {
-              blockType: "constant",
-              text: "\"",
-            } as VisualBlockDescriptions.EditorConstant,
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "lhs",
+                  order: "insertFirst"
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "❓",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
+                    "borderRadius": "500px",
+                    "cursor": "default",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorDropTarget,
+            {
+              blockType: "iterator",
+              childGroupName: "lhs",
+              direction: "horizontal",
+            },
+            {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "operator",
+                  order: "insertFirst"
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "❓",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
+                    "borderRadius": "500px",
+                    "cursor": "default",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorDropTarget,
+            {
+              blockType: "iterator",
+              childGroupName: "operator",
+              direction: "horizontal",
+            },
+            {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "rhs",
+                  order: "insertFirst"
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "❓",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
+                    "borderRadius": "500px",
+                    "cursor": "default",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorDropTarget,
+            {
+              blockType: "iterator",
+              childGroupName: "rhs",
+              direction: "horizontal",
+            }
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "relationalOperator",
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          children: [
+            {
+              blockType: "input",
+              property: "operator",
+              style: {
+                "padding": "0 3px",
+                "margin": "1px 1ch",
+                "border": "2px solid transparent",
+                "borderRadius": "500px",
+                "backgroundColor": "gray",
+                "cursor": "text",
+              },
+            } as VisualBlockDescriptions.EditorInput,
           ]
         }
       ]
@@ -642,17 +824,20 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
         {
           blockType: "block",
           direction: "horizontal",
+          style: {
+            "paddingLeft": "10px",
+            "paddingRight": "10px",
+            "margin-top": "2px",
+            "margin-bottom": "2px",
+            "background-color": "rgba(255, 255, 0, 0.2)",
+            "border": "2px solid rgba(255, 255, 0, 0.9)",
+            "borderRadius": "500px",
+            "cursor": "grab",
+          },
           children: [
             {
               blockType: "interpolated",
               property: "name",
-              style: {
-                "paddingLeft": "10px",
-                "paddingTop": "2px",
-                "paddingRight": "10px",
-                "border": "2px solid black",
-                "borderRadius": "500px",
-              },
             } as VisualBlockDescriptions.EditorInterpolated,
           ]
         }

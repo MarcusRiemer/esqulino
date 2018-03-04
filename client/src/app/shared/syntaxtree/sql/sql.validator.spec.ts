@@ -129,7 +129,7 @@ describe("Language: SQL (Validation)", () => {
     expect(res.errors.length).toEqual(0);
   });
 
-  xit("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id", () => {
+  it("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id", () => {
     const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: AST.NodeDescription = {
@@ -190,54 +190,34 @@ describe("Language: SQL (Validation)", () => {
               "expressions": [
                 {
                   language: "sql",
-                  name: "expression",
+                  name: "binaryExpression",
                   children: {
-                    "expression": [
+                    "lhs": [
                       {
                         language: "sql",
-                        name: "binaryExpression",
-                        children: {
-                          "operands": [
-                            {
-                              language: "sql",
-                              name: "expression",
-                              children: {
-                                "expression": [
-                                  {
-                                    language: "sql",
-                                    name: "columnName",
-                                    properties: {
-                                      "columnName": "id",
-                                      "refTableName": "foo"
-                                    }
-                                  },
-                                ]
-                              }
-                            },
-                            {
-                              language: "sql",
-                              name: "relationalOperator",
-                              properties: {
-                                "operator": "="
-                              }
-                            },
-                            {
-                              language: "sql",
-                              name: "expression",
-                              children: {
-                                "expression": [
-                                  {
-                                    language: "sql",
-                                    name: "columnName",
-                                    properties: {
-                                      "columnName": "id",
-                                      "refTableName": "bar"
-                                    }
-                                  }
-                                ]
-                              }
-                            }
-                          ]
+                        name: "columnName",
+                        properties: {
+                          "columnName": "id",
+                          "refTableName": "foo"
+                        }
+                      },
+                    ],
+                    "operator": [
+                      {
+                        language: "sql",
+                        name: "relationalOperator",
+                        properties: {
+                          "operator": "="
+                        }
+                      },
+                    ],
+                    "rhs": [
+                      {
+                        language: "sql",
+                        name: "columnName",
+                        properties: {
+                          "columnName": "id",
+                          "refTableName": "bar"
                         }
                       }
                     ]
@@ -256,7 +236,7 @@ describe("Language: SQL (Validation)", () => {
     expect(res.errors).toEqual([]);
   });
 
-  xit("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id AND foo.id = 2", () => {
+  it("Valid: SELECT * FROM foo, bar WHERE foo.id = bar.id AND foo.id = 2", () => {
     const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: AST.NodeDescription = {
@@ -317,56 +297,36 @@ describe("Language: SQL (Validation)", () => {
               "expressions": [
                 {
                   language: "sql",
-                  name: "expression",
+                  name: "binaryExpression",
                   children: {
-                    "expression": [
+                    "lhs": [
                       {
                         language: "sql",
-                        name: "binaryExpression",
-                        children: {
-                          "operands": [
-                            {
-                              language: "sql",
-                              name: "expression",
-                              children: {
-                                "expression": [
-                                  {
-                                    language: "sql",
-                                    name: "columnName",
-                                    properties: {
-                                      "columnName": "id",
-                                      "refTableName": "foo"
-                                    }
-                                  },
-                                ]
-                              }
-                            },
-                            {
-                              language: "sql",
-                              name: "relationalOperator",
-                              properties: {
-                                "operator": "="
-                              }
-                            },
-                            {
-                              language: "sql",
-                              name: "expression",
-                              children: {
-                                "expression": [
-                                  {
-                                    language: "sql",
-                                    name: "columnName",
-                                    properties: {
-                                      "columnName": "id",
-                                      "refTableName": "bar"
-                                    }
-                                  },
-                                ]
-                              }
-                            },
-                          ]
+                        name: "columnName",
+                        properties: {
+                          "columnName": "id",
+                          "refTableName": "foo"
                         }
                       },
+                    ],
+                    "operator": [
+                      {
+                        language: "sql",
+                        name: "relationalOperator",
+                        properties: {
+                          "operator": "="
+                        }
+                      },
+                    ],
+                    "rhs": [
+                      {
+                        language: "sql",
+                        name: "columnName",
+                        properties: {
+                          "columnName": "id",
+                          "refTableName": "bar"
+                        }
+                      }
                     ]
                   }
                 },
@@ -377,58 +337,38 @@ describe("Language: SQL (Validation)", () => {
                     "expression": [
                       {
                         language: "sql",
-                        name: "expression",
+                        name: "binaryExpression",
                         children: {
-                          "expression": [
+                          "lhs": [
                             {
                               language: "sql",
-                              name: "binaryExpression",
-                              children: {
-                                "operands": [
-                                  {
-                                    language: "sql",
-                                    name: "expression",
-                                    children: {
-                                      "expression": [
-                                        {
-                                          language: "sql",
-                                          name: "columnName",
-                                          properties: {
-                                            "columnName": "id",
-                                            "refTableName": "foo"
-                                          }
-                                        },
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    language: "sql",
-                                    name: "relationalOperator",
-                                    properties: {
-                                      "operator": "="
-                                    }
-                                  },
-                                  {
-                                    language: "sql",
-                                    name: "expression",
-                                    children: {
-                                      "expression": [
-                                        {
-                                          language: "sql",
-                                          name: "constant",
-                                          properties: {
-                                            "value": "2"
-                                          }
-                                        }
-                                      ]
-                                    }
-                                  },
-                                ]
+                              name: "columnName",
+                              properties: {
+                                "columnName": "id",
+                                "refTableName": "foo"
+                              }
+                            },
+                          ],
+                          "operator": [
+                            {
+                              language: "sql",
+                              name: "relationalOperator",
+                              properties: {
+                                "operator": "="
+                              }
+                            },
+                          ],
+                          "rhs": [
+                            {
+                              language: "sql",
+                              name: "constant",
+                              properties: {
+                                "value": "2",
                               }
                             }
                           ]
                         }
-                      },
+                      }
                     ]
                   },
                   properties: {
