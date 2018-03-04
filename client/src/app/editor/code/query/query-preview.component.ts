@@ -27,23 +27,58 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
 
   private _btnRun: ToolbarItem = undefined;
 
+  /**
+   * Register the "run"-button and automatic query execution.
+   */
   ngOnInit() {
+    // The "run" button
     this._btnRun = this._toolbarService.addButton("run", "Ausführen", "play", "r");
     this._btnRun.onClick.subscribe(_ => {
+      this.queryInProgress = true;
       this._queryService.runArbitraryQuery(this._currentCodeResource.peekResource, {})
         .first()
+        .finally(() => this.queryInProgress = false)
         .subscribe(
         res => {
+          // Succesful query, store it and remove the error
           this.result = res;
           this.error = undefined;
         },
         err => {
+          // Error in the query, display it "as is" for now.
           this.result = undefined;
           this.error = err.json();
         });
     });
+
+    // Fire the query every time the ast changes into a valid tree.
+    this._currentCodeResource.currentResource
+      .filter(c => c.programmingLanguageIdPeek == "sql")
+      .flatMap(c => c.validationResult)
+      .subscribe(res => {
+        if (res.isValid) {
+          this._btnRun.fire();
+        }
+      });
   }
 
+  /**
+   * @return True, if a query is currently in progress.
+   */
+  get queryInProgress() {
+    return (this._btnRun.isInProgress);
+  }
+
+  /**
+   * @param value True, if currently a query is in progress.
+   */
+  set queryInProgress(value: boolean) {
+    this._btnRun.isInProgress = value;
+  }
+
+  /**
+   * Remove registered buttons
+   */
   ngOnDestroy() {
     this._toolbarService.removeItem(this._btnRun.id);
   }

@@ -58,7 +58,7 @@ export class QueryService {
 
     const toReturn = this._http.post(url, JSON.stringify(body), options)
       .catch(this.handleError)
-      .delay(250)
+      .delay(500)
       .map(res => new QueryResult(res.json()))
 
     return (toReturn);
