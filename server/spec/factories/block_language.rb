@@ -4,8 +4,10 @@ FactoryBot.define do
     sequence (:slug) { |n| "block_lang_#{n}" }
     model ({
              editorBlocks: [],
-             sidebars: []
+             sidebars: [],
+             editorComponents: [],
            })
     family "Spec Family"
+    association :default_programming_language, factory: :programming_language
   end
 end

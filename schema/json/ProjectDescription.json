@@ -27,16 +27,27 @@
     },
     "BlockLanguageDescription": {
       "additionalProperties": false,
-      "description": "Augments a language with information about the UI layer.",
+      "description": "Augments a language with information about the UI layer. This definition is\nused by the editors, especially the block editor, to show customized editors\nfor different languages. These customizations include:\n\n* The blocks that are shown in the sidebar.\n* Possibly language specific sidebars.\n* Definitions of the actual blocks.\n* Possibly language specific editor components.",
       "properties": {
         "createdAt": {
           "description": "Date & time this resource was created",
+          "type": "string"
+        },
+        "defaultProgrammingLanguageId": {
+          "description": "The programming language this block language uses by default.",
           "type": "string"
         },
         "editorBlocks": {
           "description": "How blocks should be represented in the drag & drop editor.",
           "items": {
             "$ref": "#/definitions/EditorBlockDescription"
+          },
+          "type": "array"
+        },
+        "editorComponents": {
+          "description": "Specialised components that should be shown for this block\nlanguage.",
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
           },
           "type": "array"
         },
@@ -65,7 +76,9 @@
         }
       },
       "required": [
+        "defaultProgrammingLanguageId",
         "editorBlocks",
+        "editorComponents",
         "id",
         "name",
         "sidebars"
@@ -178,6 +191,10 @@
         "visual"
       ],
       "type": "object"
+    },
+    "EditorComponentDescription": {
+      "$ref": "#/definitions/QueryPreviewComponentDescription",
+      "description": "Any component that could be displayed in the actual editor view."
     },
     "FixedBlocksSidebarCategoryDescription": {
       "additionalProperties": false,
@@ -455,6 +472,21 @@
       ],
       "type": "object"
     },
+    "QueryPreviewComponentDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "componentType": {
+          "enum": [
+            "query-preview"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
     "SidebarBlockDescription": {
       "additionalProperties": false,
       "description": "Describes how the available types should be represented in the sidebar.\nIt is perfectly fine to have multiple sidebar descriptions for the\nsame underlying type.",
@@ -563,6 +595,9 @@
         },
         {
           "$ref": "#/definitions/VisualBlockDescriptions.EditorInterpolated"
+        },
+        {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorInput"
         }
       ]
     },
@@ -595,6 +630,22 @@
             "skipParents"
           ],
           "type": "object"
+        },
+        "visibility": {
+          "items": [
+            {
+              "enum": [
+                "ifAnyDrag",
+                "ifLegalDrag",
+                "ifLegalChild",
+                "ifEmpty",
+                "always"
+              ],
+              "type": "string"
+            }
+          ],
+          "minItems": 1,
+          "type": "array"
         }
       },
       "type": "object"
@@ -693,28 +744,34 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
-        },
-        "visibility": {
-          "items": [
-            {
-              "enum": [
-                "ifAnyDrag",
-                "ifLegalDrag",
-                "ifLegalChild",
-                "ifEmpty",
-                "always"
-              ],
-              "type": "string"
-            }
-          ],
-          "minItems": 1,
-          "type": "array"
         }
       },
       "required": [
         "blockType",
-        "direction",
-        "visibility"
+        "direction"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorInput": {
+      "additionalProperties": false,
+      "description": "Displays an interpolated value and allows it to be edited.",
+      "properties": {
+        "blockType": {
+          "enum": [
+            "input"
+          ],
+          "type": "string"
+        },
+        "property": {
+          "type": "string"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        }
+      },
+      "required": [
+        "blockType",
+        "property"
       ],
       "type": "object"
     },
