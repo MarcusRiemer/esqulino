@@ -87,19 +87,28 @@ class Project < ApplicationRecord
   # average case. We may need to rethink this approach if individual projects turn out
   # to be too big.
   def to_full_api_response
-    to_return = to_json_api_response
+    to_return = to_project_api_response
 
     to_return['schema'] = []
-    to_return['apiVersion'] = '4'
-    to_return['activeDatabase'] = "default"
     to_return['codeResources'] = self.code_resources.map(&:to_full_api_response)
-    to_return['sources'] = self.project_sources.map(&:to_full_api_response)
     to_return['blockLanguages'] = self.block_languages.map(&:to_full_api_response)
-    to_return['projectUsesBlockLanguages'] = self.project_uses_block_languages.map(&:to_api_response)
 
     if default_database then
       to_return['schema'] = default_database.schema
     end
+
+    to_return
+  end
+
+  # Hands out "settings data" that concerns the project itself but no complicated
+  # things like block languages, resources or schemas.
+  def to_project_api_response
+    to_return = to_json_api_response
+
+    to_return['apiVersion'] = '4'
+    to_return['activeDatabase'] = "default"
+    to_return['sources'] = self.project_sources.map(&:to_full_api_response)
+    to_return['projectUsesBlockLanguages'] = self.project_uses_block_languages.map(&:to_api_response)
 
     to_return
   end

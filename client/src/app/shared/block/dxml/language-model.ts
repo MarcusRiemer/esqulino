@@ -461,7 +461,8 @@ const EDITOR_BLOCKS = [
 ]
 
 export const DYNAMIC_LANGUAGE_MODEL: BlockLanguageDescription = {
-  id: "xml",
+  id: "84ece7cd-8824-4310-a1db-917c29c904c9",
+  slug: "xml",
   name: "XML (Statisch)",
   defaultProgrammingLanguageId: "dxml",
   sidebars: [
@@ -481,7 +482,8 @@ export const DYNAMIC_LANGUAGE_MODEL: BlockLanguageDescription = {
 }
 
 export const LANGUAGE_MODEL: BlockLanguageDescription = {
-  id: "dxml",
+  id: "c851d3be-3129-4fb3-ae37-99f40bce3dd0",
+  slug: "dxml",
   name: "XML (Dynamisch)",
   defaultProgrammingLanguageId: "dxml",
   sidebars: [

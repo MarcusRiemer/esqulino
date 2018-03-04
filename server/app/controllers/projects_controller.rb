@@ -38,7 +38,8 @@ class ProjectsController < ApplicationController
       project = Project.find_by_slug(params[:project_id])
       project.update project_update_params # Simple properties
       project.update project_used_block_languages_params # Used block languages
-      head :no_content
+
+      render json: project.to_project_api_response
     end
   end
 

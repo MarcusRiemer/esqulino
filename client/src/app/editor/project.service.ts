@@ -6,13 +6,13 @@ import { AsyncSubject } from 'rxjs/AsyncSubject'
 import { Observable } from 'rxjs/Observable'
 
 import { ServerApiService } from '../shared/serverapi.service'
-import { Project, ProjectDescription } from '../shared/project'
+import { Project, ProjectFullDescription } from '../shared/project'
 
 import { CODE_RESOURCES } from '../shared/syntaxtree/examples'
 
 import { LanguageService } from '../shared/language.service'
 
-export { Project, ProjectDescription }
+export { Project, ProjectFullDescription }
 
 /**
  * Wraps access to a single project, which is deemed to be "active"
@@ -78,7 +78,7 @@ export class ProjectService {
     const url = this._server.getProjectUrl(id);
     this._httpRequest = this._http.get(url)
       .map(res => {
-        const desc: ProjectDescription = res.json();
+        const desc: ProjectFullDescription = res.json();
 
         // TODO: This is a dirty hack to stuff the same resources
         //       into every project. This of course needs to be

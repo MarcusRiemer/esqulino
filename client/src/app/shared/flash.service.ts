@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core'
 
+/**
+ * A message that should be displayed.
+ */
 export interface FlashMessage {
   caption: string
   text: string

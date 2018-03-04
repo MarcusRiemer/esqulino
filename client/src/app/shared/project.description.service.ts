@@ -7,10 +7,10 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
 import { ServerApiService } from './serverapi.service'
-import { ProjectDescription } from './project.description'
+import { ProjectFullDescription } from './project.description'
 import { FlashService } from './flash.service'
 
-export { ProjectDescription }
+export { ProjectFullDescription }
 
 /**
  * Wraps access to project descriptions.
@@ -20,10 +20,10 @@ export class ProjectDescriptionService {
   /**
    * If a HTTP request is in progress, this is it.
    */
-  private _httpRequest: Observable<ProjectDescription[]>;
+  private _httpRequest: Observable<ProjectFullDescription[]>;
 
   // The project cache
-  private _cache: BehaviorSubject<ProjectDescription[]>;
+  private _cache: BehaviorSubject<ProjectFullDescription[]>;
 
   /**
    * @param _http Dependently injected
@@ -31,25 +31,25 @@ export class ProjectDescriptionService {
   constructor(private _http: Http,
     private _serverApi: ServerApiService,
     private _flashService: FlashService) {
-    this._cache = new BehaviorSubject<ProjectDescription[]>([]);
+    this._cache = new BehaviorSubject<ProjectFullDescription[]>([]);
   }
 
   /**
    * Immediatly retrieve cached projects or, if no projects are present,
    * fire up a requests for those projects.
    */
-  getProjects(): Observable<ProjectDescription[]> {
+  getProjects(): Observable<ProjectFullDescription[]> {
     return (this._cache);
   }
 
   /**
    * Fetch a new set of projects and also place them in the cache.
    */
-  fetchProjects(): Observable<ProjectDescription[]> {
+  fetchProjects(): Observable<ProjectFullDescription[]> {
     // Ask the server for available projects
     const uri = this._serverApi.getProjectListUrl();
     this._httpRequest = this._http.get(uri)
-      .map(res => <ProjectDescription[]>res.json())
+      .map(res => <ProjectFullDescription[]>res.json())
       .catch(err => {
         this._flashService.addMessage({
           caption: "Fehler beim Laden der Projekte: ",

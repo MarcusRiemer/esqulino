@@ -5,7 +5,7 @@ RSpec.describe Project do
     it "without resources" do
       api_response = FactoryBot.create(:project, name: "Test").to_full_api_response
 
-      expect(api_response).to validate_against "ProjectDescription"
+      expect(api_response).to validate_against "ProjectFullDescription"
     end
 
     it "with resources that use the same block language" do
@@ -19,7 +19,28 @@ RSpec.describe Project do
 
       api_response = proj.to_full_api_response
 
+      expect(api_response).to validate_against "ProjectFullDescription"
+    end
+  end
+
+  context "to_project_api_response" do
+    it "empty project" do
+      api_response = FactoryBot.create(:project, name: "Test").to_project_api_response
+
       expect(api_response).to validate_against "ProjectDescription"
+    end
+
+    it "project with source and used block language" do
+      proj = FactoryBot.create(:project, name: "Test")
+      proj.project_sources << FactoryBot.create(:project_source, project: proj)
+      
+      b = FactoryBot.create(:block_language, name: "Test Blocklang")
+      proj.project_uses_block_languages.create!(block_language: b)
+      
+      api_response = proj.to_project_api_response
+      expect(api_response).to validate_against "ProjectDescription"
+      expect(api_response['sources'][0]).to eq proj.project_sources[0].to_full_api_response
+      expect(api_response['projectUsesBlockLanguages'][0]).to eq proj.project_uses_block_languages[0].to_api_response
     end
   end
 

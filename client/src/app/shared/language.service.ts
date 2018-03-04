@@ -40,14 +40,14 @@ export class LanguageService {
   }
 
   /**
-   * @param id The id of the language model
+   * @param slug_or_id The slug of the language model
    * @return The specific LanguageModel that was asked for.
    */
-  getLocalBlockLanguage(id: string) {
-    const toReturn = this.availableLanguageModels.find(l => l.id === id);
+  getLocalBlockLanguage(slug_or_id: string) {
+    const toReturn = this.availableLanguageModels.find(l => l.id === slug_or_id || l.slug === slug_or_id);
     if (!toReturn) {
       const available = this.availableLanguageModelIds.join(', ');
-      throw new Error(`Unknown language model "${id}", known models are: ${available}`);
+      throw new Error(`Unknown language model "${slug_or_id}", known models are: ${available}`);
     }
 
     return (toReturn);

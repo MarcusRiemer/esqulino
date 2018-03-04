@@ -59,9 +59,12 @@ RSpec.describe ProjectsController, type: :request do
       it 'updates all attributes at once' do
         put "/api/project/#{project.slug}", params: update_params, headers: auth_headers
 
-        expect(response.body).to be_empty
-        expect(response).to have_http_status(204)
+        # Ensure the response is well formed
+        expect(response).to have_http_status(200)
+        json_data = JSON.parse(response.body)
+        expect(json_data).to validate_against "ProjectDescription"
 
+        # Ensure the database has actually changed
         updated = Project.find_by(slug: project.slug)
         expect(updated.name).to eq update_params['name']
         expect(updated.description).to eq update_params['description']
@@ -72,9 +75,12 @@ RSpec.describe ProjectsController, type: :request do
             params: { "apiVersion" => 4, "name" => "Only" },
             headers: auth_headers
 
-        expect(response.body).to be_empty
-        expect(response).to have_http_status(204)
+        # Ensure the response is well formed
+        expect(response).to have_http_status(200)
+        json_data = JSON.parse(response.body)
+        expect(json_data).to validate_against "ProjectDescription"
 
+        # Ensure the database has actually changed
         updated = Project.find_by(slug: project.slug)
         expect(updated.name).to eq "Only"
         expect(updated.description).to eq project.description
@@ -85,9 +91,12 @@ RSpec.describe ProjectsController, type: :request do
             params: { "apiVersion" => 4, "description" => "Only" },
             headers: auth_headers
 
-        expect(response.body).to be_empty
-        expect(response).to have_http_status(204)
+        # Ensure the response is well formed
+        expect(response).to have_http_status(200)
+        json_data = JSON.parse(response.body)
+        expect(json_data).to validate_against "ProjectDescription"
 
+        # Ensure the database has actually changed
         updated = Project.find_by(slug: project.slug)
         expect(updated.name).to eq project.name
         expect(updated.description).to eq "Only"
@@ -98,9 +107,12 @@ RSpec.describe ProjectsController, type: :request do
             params: { "apiVersion" => 4, "will_never_exist" => "Only" },
             headers: auth_headers
 
-        expect(response.body).to be_empty
-        expect(response).to have_http_status(204)
+        # Ensure the response is well formed
+        expect(response).to have_http_status(200)
+        json_data = JSON.parse(response.body)
+        expect(json_data).to validate_against "ProjectDescription"
 
+        # Ensure the database has actually changed
         updated = Project.find_by(slug: project.slug)
         expect(updated.name).to eq project.name
         expect(updated.description).to eq project.description
@@ -120,6 +132,12 @@ RSpec.describe ProjectsController, type: :request do
             },
             headers: auth_headers
 
+        # Ensure the response is well formed
+        expect(response).to have_http_status(200)
+        json_data = JSON.parse(response.body)
+        expect(json_data).to validate_against "ProjectDescription"
+
+        # Ensure the database has actually changed
         project.reload
         expect(project.project_uses_block_languages.size).to eq 2
         expect(project.block_languages.include? new_block_language).to be true
@@ -138,6 +156,12 @@ RSpec.describe ProjectsController, type: :request do
             },
             headers: auth_headers
 
+        # Ensure the response is well formed
+        expect(response).to have_http_status(200)
+        json_data = JSON.parse(response.body)
+        expect(json_data).to validate_against "ProjectDescription"
+
+        # Ensure the database has actually changed
         project.reload
         expect(project.project_uses_block_languages.size).to eq 0
       end
@@ -156,6 +180,12 @@ RSpec.describe ProjectsController, type: :request do
             },
             headers: auth_headers
 
+        # Ensure the response is well formed
+        expect(response).to have_http_status(200)
+        json_data = JSON.parse(response.body)
+        expect(json_data).to validate_against "ProjectDescription"
+
+        # Ensure the database has actually changed
         project.reload
         expect(project.project_uses_block_languages.size).to eq 1
         expect(project.block_languages.include? new_block_language).to be true
@@ -209,7 +239,7 @@ RSpec.describe ProjectsController, type: :request do
       get "/api/project/#{empty_project.slug}"
 
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body)).to validate_against "ProjectDescription"
+      expect(JSON.parse(response.body)).to validate_against "ProjectFullDescription"
     end
   end
 

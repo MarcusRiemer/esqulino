@@ -1,4 +1,4 @@
-import { Project, ProjectDescription } from './project'
+import { Project, ProjectFullDescription } from './project'
 import { BlockLanguageDescription } from './block/block-language.description'
 import { CURRENT_API_VERSION } from './resource.description'
 
@@ -9,8 +9,8 @@ import { CURRENT_API_VERSION } from './resource.description'
  * @param override A partial project that overrides the default description.
  * @return A schematically correct description of a project.
  */
-export function emptyProject(override: Partial<ProjectDescription>): ProjectDescription {
-  const defaultDescription: ProjectDescription = {
+export function emptyProject(override: Partial<ProjectFullDescription>): ProjectFullDescription {
+  const defaultDescription: ProjectFullDescription = {
     id: "test",
     slug: "test",
     name: "Test",

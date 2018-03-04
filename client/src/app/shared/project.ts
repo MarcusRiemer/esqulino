@@ -6,7 +6,7 @@ import { LanguageService } from './language.service'
 import { BlockLanguageDescription } from './block/block-language.description'
 
 import {
-  ProjectDescription, AvailableDatabaseDescription, ProjectSourceDescription,
+  ProjectFullDescription, AvailableDatabaseDescription, ProjectSourceDescription,
   ProjectUpdateDescription, ProjectUsesBlockLanguageDescription,
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from './project.description'
@@ -14,7 +14,7 @@ import { Schema } from './schema/schema'
 import { Invalidateable, Saveable, SaveStateEvent } from './interfaces'
 import { CodeResource } from './syntaxtree'
 
-export { ProjectDescription }
+export { ProjectFullDescription }
 
 /**
  * Compares two named things in a case-insensitive manner.
@@ -59,14 +59,17 @@ export class Project implements ApiVersion, Saveable {
 
   private _projectBlockLanguages: BlockLanguageDescription[];
   private _usesBlockLanguages: ProjectUsesBlockLanguageDescription[];
+
+  // Tracking added and removed block languages
   private _removedBlockLanguages: string[] = [];
+  private _addedBlockLanguages: string[] = [];
 
   /**
    * Construct a new project and a whole slew of other
    * objects based on the JSON wire format.
    */
   constructor(
-    json: ProjectDescription,
+    json: ProjectFullDescription,
     private _languageService: LanguageService
   ) {
     this.slug = json.slug;
@@ -240,6 +243,24 @@ export class Project implements ApiVersion, Saveable {
    */
   isBlockLanguageReferenced(blockLanguageId: string) {
     return (this._codeResources.some(c => c.blockLanguageIdPeek == blockLanguageId));
+  }
+
+  /**
+   * @return All block languages as they are used by this project.
+   */
+  get usesBlockLanguages(): ReadonlyArray<ProjectUsesBlockLanguageDescription> {
+    return (this._usesBlockLanguages);
+  }
+
+  /**
+   *
+   */
+  addUsedBlockLanguage(blockLanguageId: string) {
+    console.log(blockLanguageId);
+    this._usesBlockLanguages.push({
+      id: undefined,
+      blockLanguageId: blockLanguageId
+    });
   }
 
   /**

@@ -14,7 +14,8 @@ concise_attributes:
   value_before_type_cast: xml
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: model
-  value_before_type_cast: '{"sidebars": [], "editorBlocks": []}'
+  value_before_type_cast: '{"sidebars": [], "editorBlocks": [], "editorComponents":
+    []}'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-20 20:48:21.678604'

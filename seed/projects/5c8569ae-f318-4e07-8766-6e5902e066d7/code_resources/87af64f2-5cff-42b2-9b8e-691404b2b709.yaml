@@ -13,17 +13,23 @@ concise_attributes:
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
     "from", "children": {"tables": [{"name": "tableIntroduction", "language": "sql",
-    "properties": {"name": "key_value"}}]}, "language": "sql"}], "where": [], "select":
-    [{"name": "select", "children": {"columns": [{"name": "columnName", "language":
-    "sql", "properties": {"columnName": "key", "refTableName": "key_value"}}, {"name":
-    "columnName", "language": "sql", "properties": {"columnName": "value", "refTableName":
-    "key_value"}}]}, "language": "sql"}], "groupBy": []}, "language": "sql"}'
+    "properties": {"name": "key_value"}}]}, "language": "sql"}], "where": [{"name":
+    "where", "children": {"expressions": [{"name": "binaryExpression", "children":
+    {"lhs": [{"name": "columnName", "language": "sql", "properties": {"columnName":
+    "key", "refTableName": "key_value"}}], "rhs": [{"name": "constant", "language":
+    "sql", "properties": {"value": "3"}}], "operator": [{"name": "relationalOperator",
+    "language": "sql", "properties": {"operator": ">="}}]}, "language": "sql"}]},
+    "language": "sql"}], "select": [{"name": "select", "children": {"columns": [{"name":
+    "columnName", "language": "sql", "properties": {"columnName": "key", "refTableName":
+    "key_value"}}, {"name": "columnName", "language": "sql", "properties": {"columnName":
+    "value", "refTableName": "key_value"}}, {"name": "starOperator", "language": "sql"}]},
+    "language": "sql"}], "groupBy": []}, "language": "sql"}'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-20 20:48:21.830298'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-03-03 20:09:40.060253'
+  value_before_type_cast: '2018-03-04 17:30:53.510072'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: db441c27-6a19-4f2f-95a9-f3bc44675b4f
@@ -33,7 +39,8 @@ concise_attributes:
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT key_value.key, key_value.value
+    SELECT key_value.key, key_value.value, *
     FROM key_value
+    WHERE key_value.key >= 3
 new_record: false
 active_record_yaml_version: 2
