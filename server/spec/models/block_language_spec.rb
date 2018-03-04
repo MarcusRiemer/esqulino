@@ -11,11 +11,11 @@ RSpec.describe BlockLanguage do
   end
 
   context "model" do
-    it "rejects missing block lists" do
+    it "rejects missing block, sidebar and component lists" do
       res = FactoryBot.build(:block_language, model: Hash.new)
 
       res.validate
-      expect(res.errors["model"].length).to be 2
+      expect(res.errors["model"].length).to be 3
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe BlockLanguage do
 
   context "to_full_api_response" do
     it "works for empty languages" do
-      b = FactoryBot.create(:block_language)
+      b = FactoryBot.build(:block_language, id: SecureRandom.uuid)
       api_response = b.to_full_api_response
 
       expect(api_response).to validate_against "BlockLanguageDescription"

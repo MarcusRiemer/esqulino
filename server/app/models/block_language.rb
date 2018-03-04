@@ -10,13 +10,15 @@ class BlockLanguage < ApplicationRecord
   # The JSON document needs to follow the LanguageModelDescription
   validates :model, json_schema: 'BlockLanguageDocument'
 
+  # The programming language that should be chosen as a default when
+  # creating code resources.
+  belongs_to :default_programming_language, :class_name => "ProgrammingLanguage", optional: true
+
   # Computes a hash that may be sent back to the client
   def to_full_api_response
-    to_return = to_json_api_response.slice("id", "slug", "name")
-    to_return['editorBlocks'] = self.model['editorBlocks']
-    to_return['sidebars'] = self.model['sidebars']
-    
-    to_return
+    to_json_api_response
+      .slice("id", "slug", "name", "defaultProgrammingLanguageId")
+      .merge(self.model)
   end
 
   # Returns a nicely readable representation of id and name
