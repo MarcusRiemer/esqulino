@@ -2,13 +2,14 @@ import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 import { Http, Response, Headers } from '@angular/http'
 
-import { ProjectService, Project } from './project.service'
-import { SidebarService } from './sidebar.service'
-import { ToolbarService } from './toolbar.service'
-import { ServerApiService } from '../shared/serverapi.service'
+import { ServerApiService } from '../../shared/serverapi.service'
 
-import { ImageService } from './image/image.service'
-import { AvailableImage } from './image/available-image.class'
+import { ProjectService, Project } from '../project.service'
+import { SidebarService } from '../sidebar.service'
+import { ToolbarService } from '../toolbar.service'
+
+import { ImageService } from '../image/image.service'
+import { AvailableImage } from '../image/available-image.class'
 
 @Component({
   templateUrl: 'templates/settings.html'

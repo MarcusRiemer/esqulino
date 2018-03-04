@@ -135,19 +135,21 @@
       In diesem Abschnitt solltest du kenntlich machen, auf welchen Werken dein Projekt basiert und welche Personen daran mitgearbeitet haben.
     </div>
 
-    <div *ngFor="let source of project.sources"
-         class="card-body">
-      <div class="row">
-        <div class="col-sm-2">
-          <source-icon [source]="source"></source-icon> Datenquelle
+    <ul class="list-group list-group-flush">
+      <li *ngFor="let source of project.sources"
+          class="list-group-item">
+        <div class="row">
+          <div class="col-sm-2">
+            <source-icon [source]="source"></source-icon> Datenquelle
+          </div>
+          <div class="col-sm-2">
+            <a [href]="source.url">{{ source.title }}</a>
+          </div>
+          <div class="col-sm-8">
+            {{ source.display }}
+          </div>
         </div>
-        <div class="col-sm-2">
-          <a [href]="source.url">{{ source.title }}</a>
-        </div>
-        <div class="col-sm-8">
-          {{ source.display }}
-        </div>
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </div>

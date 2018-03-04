@@ -1,7 +1,8 @@
 import { Routes, RouterModule } from '@angular/router'
 
 import { EditorComponent } from './editor.component'
-import { SettingsComponent } from './settings.component'
+
+import { SettingsComponent } from './project-settings/settings.component'
 
 import { ProjectExistsGuard } from './project-exists.guard'
 
