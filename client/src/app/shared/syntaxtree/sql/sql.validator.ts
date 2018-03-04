@@ -66,11 +66,21 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
     },
     "binaryExpression": {
       children: {
-        "operands": {
+        "lhs": {
           type: "sequence",
           nodeTypes: [
-            "expression",
-            "relationalOperator",
+            "expression"
+          ]
+        },
+        "operator": {
+          type: "sequence",
+          nodeTypes: [
+            "relationalOperator"
+          ]
+        },
+        "rhs": {
+          type: "sequence",
+          nodeTypes: [
             "expression"
           ]
         }
@@ -164,7 +174,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       children: {
         "expression": {
           type: "sequence",
-          nodeTypes: ["expression", "columnName"]
+          nodeTypes: ["expression"]
         }
       },
       properties: {

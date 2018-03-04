@@ -2,6 +2,7 @@
      all draggable events during editing.-->
 <div *ngIf="currentlyEditing"
      (dragstart)="onDragStart($event)"
+     [blockBase]="visual"
      draggable="true">
   <input [(ngModel)]="editedValue"
          (keyup)="onInputKeyUp($event)"
@@ -13,5 +14,5 @@
   <button (click)="cancelInput()" class="btn btn-sm btn-warning">✗</button>
 </div>
 <ng-container *ngIf="!currentlyEditing">
-  <span (click)="currentlyEditing = true;">{{ currentValue }}</span>
+  <span [blockBase]="visual" (click)="currentlyEditing = true;">{{ currentValue }}</span>
 </ng-container>

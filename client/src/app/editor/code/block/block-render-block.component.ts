@@ -21,13 +21,10 @@ import { calculateDropLocation, calculateDropTargetState, DropTargetState } from
   animations: [
     trigger('dropTarget', [
       state('none', style({
-        backgroundColor: 'white',
       })),
       state('available', style({
-        backgroundColor: 'lime',
       })),
       state('self', style({
-        backgroundColor: 'yellow',
       })),
     ])
   ]
