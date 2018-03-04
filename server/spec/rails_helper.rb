@@ -91,6 +91,10 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
+  config.after(:suite) do
+    `make -C #{File.join ::Rails.root, ".."} test-reset`
+  end
+
   # Ensure we can actually validate stuff
   config.include ValidateAgainstMatcher
 
