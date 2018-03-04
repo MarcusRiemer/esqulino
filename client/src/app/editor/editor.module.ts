@@ -26,7 +26,8 @@ import { SidebarLoaderComponent } from './sidebar-loader.component'
 import { SidebarService } from './sidebar.service'
 import { PreferencesService } from './preferences.service'
 import { RegistrationService } from './registration.service'
-import { SettingsComponent } from './settings.component'
+
+import { SettingsComponent } from './project-settings/settings.component'
 
 @NgModule({
   imports: [
