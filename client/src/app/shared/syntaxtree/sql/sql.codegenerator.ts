@@ -83,6 +83,27 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
   {
     type: {
       languageName: "sql",
+      typeName: "functionCall"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        process.addConvertedFragment(node.properties["name"], node);
+        process.addConvertedFragment("(", node);
+        node.getChildrenInCategory("arguments").forEach((a, idx, arr) => {
+          process.generateNode(a);
+          if (idx != arr.length - 1) {
+            process.addConvertedFragment(', ', node);
+          }
+        });
+        process.addConvertedFragment(")", node);
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "sql",
       typeName: "relationalOperator"
     },
     converter: {
