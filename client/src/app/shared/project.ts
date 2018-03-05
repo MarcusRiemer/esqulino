@@ -6,7 +6,7 @@ import { LanguageService } from './language.service'
 import { BlockLanguageDescription } from './block/block-language.description'
 
 import {
-  ProjectFullDescription, AvailableDatabaseDescription, ProjectSourceDescription,
+  ProjectFullDescription, ProjectDescription, AvailableDatabaseDescription, ProjectSourceDescription,
   ProjectUpdateDescription, ProjectUsesBlockLanguageDescription,
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from './project.description'
@@ -14,7 +14,7 @@ import { Schema } from './schema/schema'
 import { Invalidateable, Saveable, SaveStateEvent } from './interfaces'
 import { CodeResource } from './syntaxtree'
 
-export { ProjectFullDescription }
+export { ProjectDescription, ProjectFullDescription }
 
 /**
  * Compares two named things in a case-insensitive manner.
@@ -57,12 +57,10 @@ export class Project implements ApiVersion, Saveable {
 
   private _saveRequired = false;
 
-  private _projectBlockLanguages: BlockLanguageDescription[];
   private _usesBlockLanguages: ProjectUsesBlockLanguageDescription[];
 
   // Tracking added and removed block languages
   private _removedBlockLanguages: string[] = [];
-  private _addedBlockLanguages: string[] = [];
 
   /**
    * Construct a new project and a whole slew of other
@@ -81,7 +79,6 @@ export class Project implements ApiVersion, Saveable {
     this._availableDatabases = json.availableDatabases;
     this._projectImageId = json.preview;
     this._sources = json.sources || [] // Sources may be undefined
-    this._projectBlockLanguages = json.blockLanguages;
     this._usesBlockLanguages = json.projectUsesBlockLanguages;
     this.schema = new Schema(json.schema);
 
@@ -94,6 +91,17 @@ export class Project implements ApiVersion, Saveable {
       .map(val => new CodeResource(val, this))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
   }
+
+  /**
+   * Called when partial updates are beeing made to the project,
+   * this is required to get hold of IDs that have been assigned
+   * by the server.
+   */
+  updateDescription(desc: ProjectDescription) {
+    console.log("Updated:", desc);
+    this._usesBlockLanguages = desc.projectUsesBlockLanguages;
+  }
+
 
   // Fired when the save-state has changed
   private _saveStateChangedEvent = new BehaviorSubject<SaveStateEvent<Project>>({
@@ -235,13 +243,18 @@ export class Project implements ApiVersion, Saveable {
    * @return All block languages that are available as part of this project.
    */
   get projectBlockLanguages() {
-    return (this._projectBlockLanguages);
+    return (
+      this._usesBlockLanguages
+        .map(uses => this._languageService.getLocalBlockLanguage(uses.blockLanguageId))
+    );
   }
 
   /**
    * @return True, if the given block language is used by any resource.
    */
   isBlockLanguageReferenced(blockLanguageId: string) {
+    console.log("Used", this._codeResources.filter(c => c.blockLanguageIdPeek == blockLanguageId));
+    console.log("Used", this._codeResources.some(c => c.blockLanguageIdPeek == blockLanguageId));
     return (this._codeResources.some(c => c.blockLanguageIdPeek == blockLanguageId));
   }
 
@@ -267,23 +280,20 @@ export class Project implements ApiVersion, Saveable {
    * Removes the reference to the given block language if it is not in
    * use by any code resource.
    */
-  removeUsedBlockLanguage(blockLanguageId: string) {
-    // Is the language referenced?
-    if (this.isBlockLanguageReferenced(blockLanguageId)) {
+  removeUsedBlockLanguage(usedId: string) {
+    const used = this._usesBlockLanguages.find(u => u.id === usedId);
+
+    // Is the language unknown or referenced?
+    if (!used || this.isBlockLanguageReferenced(used.blockLanguageId)) {
       // If it is: Don't change anything
       return (false);
     } else {
-      // It isn't: Lets remove it (if it exists)
-      const used = this._usesBlockLanguages.find(b => b.blockLanguageId === blockLanguageId);
-      if (used) {
-        this._usesBlockLanguages = this._usesBlockLanguages.filter(b => b.blockLanguageId !== blockLanguageId);
-        this._projectBlockLanguages = this._projectBlockLanguages.filter(b => b.id !== blockLanguageId);
-        this._removedBlockLanguages.push(used.id);
-        this.markSaveRequired();
-        return (true);
-      } else {
-        return (false);
-      }
+      // It isn't: Lets remove it
+      this._usesBlockLanguages = this._usesBlockLanguages.filter(b => b.id !== usedId);
+      this._removedBlockLanguages.push(used.id);
+      this.markSaveRequired();
+
+      return (true);
     }
   }
 
@@ -358,12 +368,12 @@ export class Project implements ApiVersion, Saveable {
   }
 
   /**
-   * @param id_or_slug The id or slug for a certain languageModel
+   * @param id_or_slug The id or slug for a certain block language
    */
   getBlockLanguage(id_or_slug: string) {
-    const localLanguage = this._projectBlockLanguages.find(l => l.id === id_or_slug || l.slug === id_or_slug);
-    if (localLanguage) {
-      return (this._languageService.getLocalBlockLanguage(localLanguage.slug));
+    const globalLanguage = this._languageService.getLocalBlockLanguage(id_or_slug);
+    if (globalLanguage && this._usesBlockLanguages.some(u => u.blockLanguageId == globalLanguage.id)) {
+      return (globalLanguage);
     } else {
       return (undefined);
     }

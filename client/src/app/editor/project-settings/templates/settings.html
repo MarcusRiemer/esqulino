@@ -134,7 +134,8 @@
     <li *ngFor="let used of project.usesBlockLanguages;"
         class="list-group-item">
       <h5 class="card-title">{{ resolveBlockLanguage(used.blockLanguageId).name }}</h5>
-      <button (click)="removeUsedBlockLanguage(used.id)"
+      <button *ngIf="used.id"
+              (click)="removeUsedBlockLanguage(used.id)"
               class="btn btn-danger">
         <span class="fa fa-chain-broken fa-fw" aria-hidden="true"></span>
         Sprache entfernen

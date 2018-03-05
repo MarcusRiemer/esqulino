@@ -74,7 +74,7 @@ export class SettingsComponent {
         this._projectService.deleteProject(this.project.slug)
           .subscribe(res => {
             // Go back to title after deleting
-            if (res.ok) {
+            if (res) {
               this._router.navigateByUrl("/");
             }
           });

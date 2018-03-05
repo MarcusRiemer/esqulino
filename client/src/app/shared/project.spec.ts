@@ -24,7 +24,7 @@ describe('Project', () => {
   it('Removing BlockLanguage: Used', () => {
     const p = new Project(Factory.emptyProject({
       projectUsesBlockLanguages: [
-        { id: "irrelevant", blockLanguageId: "block_a" }
+        { id: "u1", blockLanguageId: "block_a" }
       ],
       blockLanguages: [
         Factory.emptyBlockLanguage({ id: "block_a", slug: "a", name: "Block A" })
@@ -39,16 +39,17 @@ describe('Project', () => {
       ]
     }), undefined);
 
-    expect(p.removeUsedBlockLanguage("block_a")).toBeFalsy();
+    expect(p.removeUsedBlockLanguage("u1")).toBeFalsy();
 
     const updateRequest = p.toUpdateRequest();
-    expect(updateRequest.projectUsesBlockLanguages).toEqual([{ id: "irrelevant", blockLanguageId: "block_a" }]);
+    expect(updateRequest.projectUsesBlockLanguages).toEqual([{ id: "u1", blockLanguageId: "block_a" }]);
   })
 
   it('Removing BlockLanguage: Unused', () => {
     const p = new Project(Factory.emptyProject({
       projectUsesBlockLanguages: [
-        { id: "irrelevant", blockLanguageId: "block_a" }
+        { id: "u1", blockLanguageId: "block_a" },
+        { id: "u2", blockLanguageId: "block_b" }
       ],
       blockLanguages: [
         Factory.emptyBlockLanguage({ id: "block_a", slug: "a", name: "Block A" }),
@@ -57,18 +58,21 @@ describe('Project', () => {
       codeResources: [
         {
           id: "foo",
-          blockLanguageId: "block_b",
+          blockLanguageId: "block_a",
           name: "Foo",
           programmingLanguageId: "prog_a"
         }
       ]
     }), undefined);
 
-    expect(p.removeUsedBlockLanguage("block_a")).toBeTruthy();
+    expect(p.removeUsedBlockLanguage("u2")).toBeTruthy();
     expect(p.isSavingRequired).toBeTruthy();
 
     const updateRequest = p.toUpdateRequest();
-    expect(updateRequest.projectUsesBlockLanguages).toEqual([{ id: "irrelevant", _destroy: true }]);
+    expect(updateRequest.projectUsesBlockLanguages).toEqual([
+      { id: "u2", _destroy: true },
+      { id: "u1", blockLanguageId: "block_a" },
+    ]);
   })
 
   it('Removing BlockLanguage: Unknown', () => {
