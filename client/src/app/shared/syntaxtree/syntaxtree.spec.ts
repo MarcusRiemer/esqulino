@@ -784,4 +784,60 @@ describe('AST: Basic Operations', () => {
     expect(collected.has(JSON.stringify(t.rootNode.children["cat"][0].qualifiedName))).toBeTruthy();
     expect(collected.has(JSON.stringify(t.rootNode.children["cat2"][0].qualifiedName))).toBeTruthy();
   });
+
+  it('Finds nodes of specific types in empty trees (hint: there are none)', () => {
+    const t = new Tree(undefined);
+    const found = t.getNodesOfType({ languageName: "foo", typeName: "bar" });
+
+    expect(found).toEqual([]);
+  });
+
+  it('Finds node of specific types in a uniform tree', () => {
+    const t = new Tree({
+      language: "l1",
+      name: "n1",
+      children: {
+        "cat": [
+          {
+            language: "l1",
+            name: "n1"
+          }
+        ],
+        "cat2": [
+          {
+            language: "l1",
+            name: "n1"
+          }
+        ]
+      }
+    });
+
+    expect(t.getNodesOfType({ languageName: "l1", typeName: "n1" }).length).toEqual(3);
+    expect(t.getNodesOfType({ languageName: "l1", typeName: "n2" }).length).toEqual(0);
+  });
+
+  it('Finds node of specific types in a mixed tree', () => {
+    const t = new Tree({
+      language: "l1",
+      name: "n1",
+      children: {
+        "cat": [
+          {
+            language: "l1",
+            name: "n2"
+          }
+        ],
+        "cat2": [
+          {
+            language: "l1",
+            name: "n3"
+          }
+        ]
+      }
+    });
+
+    expect(t.getNodesOfType({ languageName: "l1", typeName: "n1" }).length).toEqual(1);
+    expect(t.getNodesOfType({ languageName: "l1", typeName: "n2" }).length).toEqual(1);
+    expect(t.getNodesOfType({ languageName: "l1", typeName: "n2" }).length).toEqual(1);
+  });
 });
