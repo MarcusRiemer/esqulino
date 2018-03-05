@@ -28,10 +28,6 @@ test:
     admin: "Marcus@GurXite.de"
   ide_service:
     mock: true
-    exec:
-      node_binary: /usr/bin/node
-      program: ../client/dist/cli/main.cli.js
-      mode: one-shot
 
   
 production:
@@ -48,4 +44,4 @@ production:
     exec:
       node_binary: /usr/bin/node
       program: ../client/dist/cli/main.cli.js
-      mode: daemon
+      mode: one-shot
