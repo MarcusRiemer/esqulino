@@ -174,10 +174,8 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess) {
-        const tableIntro = node.children['table'][0];
-
-        process.addConvertedFragment(`JOIN `, node)
-        process.generateNode(tableIntro);
+        process.addConvertedFragment(`JOIN `, node);
+        node.getChildrenInCategory("table").forEach(c => process.generateNode(c))
 
         return ([]);
       }
@@ -190,13 +188,10 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess) {
-        const tableIntro = node.children['table'][0];
-        const onExpr = node.children['on'][0];
-
         process.addConvertedFragment(`INNER JOIN `, node)
-        process.generateNode(tableIntro);
+        node.getChildrenInCategory("table").forEach(c => process.generateNode(c))
         process.addConvertedFragment(` ON `, node)
-        process.generateNode(onExpr);
+        node.getChildrenInCategory("on").forEach(c => process.generateNode(c))
 
         return ([]);
       }
