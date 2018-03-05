@@ -30,12 +30,18 @@ test : msg-pre-run-test
 
 # Updates (or initially creates) the live data in the system in the system from
 # a dump that has been previously created.
-load-all-data:
+load-live-data:
 	bin/rails "blattwerkzeug:block_language:load_all" "blattwerkzeug:project:load_all"
 
 # This operation is used to extract all data out of this server instance.
-dump-all-data:
+store-live-data:
 	bin/rails "blattwerkzeug:block_language:store_all" "blattwerkzeug:project:store_all"
+
+# Removes every trace of data from the live system
+delete-live-data: msg-pre-reset-live-data
+	bin/rails blattwerkzeug:file_storage:delete_all db:reset
+
+reset-live-data: delete-live-data load-live-data
 
 # Helpful during development: Continously watches for changes in the project
 # and re-runs tests that are affected by code changes
@@ -47,6 +53,9 @@ test-watch :
 ##################################
 # Messaging targets
 ##################################
+
+msg-pre-reset-live-data:
+	-@$(TPUT_BIN) setaf 2; echo "## Server : Deleting live data ..."; $(TPUT_BIN) sgr0
 
 msg-pre-install-deps :
 	-@$(TPUT_BIN) setaf 2; echo "## Server : Installing dependencies ..."; $(TPUT_BIN) sgr0

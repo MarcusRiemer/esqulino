@@ -9,6 +9,15 @@ end
 
 # Actual definitions of rake tasks
 namespace :blattwerkzeug do
+  namespace :file_storage do
+    task :delete_all => :environment do |t, args|
+      data_dir = Rails.configuration.sqlino["data_dir"]
+      data_project_glob = File.join data_dir, "projects", '*'
+      puts "Deleting project data at \"#{data_project_glob}\""
+      FileUtils.rm_rf(Dir.glob(data_project_glob))
+    end
+  end
+  
   namespace :project do
     desc '(Re)load all projects from their seed representation'
     task :load_all => :environment do |t, args|
