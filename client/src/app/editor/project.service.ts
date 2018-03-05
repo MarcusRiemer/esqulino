@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http'
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { AsyncSubject } from 'rxjs/AsyncSubject'
 import { Observable } from 'rxjs/Observable'
 
 import { ServerApiService } from '../shared/serverapi.service'
-import { Project, ProjectFullDescription } from '../shared/project'
+import { Project, ProjectDescription, ProjectFullDescription } from '../shared/project'
 
 import { CODE_RESOURCES } from '../shared/syntaxtree/examples'
 
@@ -37,7 +37,7 @@ export class ProjectService {
    * @param _languageService Can retrieve languages
    */
   constructor(
-    private _http: Http,
+    private _http: HttpClient,
     private _server: ServerApiService,
     private _languageService: LanguageService
   ) {
@@ -76,18 +76,9 @@ export class ProjectService {
 
     // Build the HTTP-request
     const url = this._server.getProjectUrl(id);
-    this._httpRequest = this._http.get(url)
+    this._httpRequest = this._http.get<ProjectFullDescription>(url)
       .map(res => {
-        const desc: ProjectFullDescription = res.json();
-
-        // TODO: This is a dirty hack to stuff the same resources
-        //       into every project. This of course needs to be
-        //       moved into the server.
-        if (desc.slug.toLocaleLowerCase().indexOf("ast") >= 0) {
-          desc.codeResources = CODE_RESOURCES;
-        }
-
-        return (new Project(desc, this._languageService));
+        return (new Project(res, this._languageService));
       });
 
     // And execute it by subscribing to it.
@@ -144,13 +135,11 @@ export class ProjectService {
     const desc = proj.toUpdateRequest();
     const url = this._server.getProjectUrl(proj.slug);
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
-    const toReturn = this._http.put(url, JSON.stringify(desc), options)
+    const toReturn = this._http.put<ProjectDescription>(url, desc)
+      .catch(this.passThroughError)
       .delay(250)
-      .do(_ => proj.markSaved())
-      .catch(this.passThroughError);
+      .do(desc => proj.updateDescription(desc))
+      .do(_ => proj.markSaved());
 
     return (toReturn);
   }
