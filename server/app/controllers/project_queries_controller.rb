@@ -3,6 +3,11 @@ class ProjectQueriesController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
 
+  # The maximum number of rows a preview may contain
+  def preview_max_rows
+    100
+  end
+
   # Allows the execution of arbitrary SQL, which might be a little
   # dangerous ;)   
   def run_arbitrary
@@ -15,8 +20,13 @@ class ProjectQueriesController < ApplicationController
     sql_ast = request_data['ast']
     begin
       sql = IdeService.instance.emit_code(sql_ast, sql_ast['language'])
+      result = database.execute_sql(sql, request_data['params'])
+
+      if result['rows'].length > preview_max_rows then
+        result['rows'] = result['rows'].first preview_max_rows
+      end
       
-      render json: database.execute_sql(sql, request_data['params'])
+      render json: result
     end
   end
 

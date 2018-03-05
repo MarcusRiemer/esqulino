@@ -13,12 +13,35 @@ import { Node, CodeResource } from '../../../shared/syntaxtree';
  * A nicely wrapped result of a query.
  */
 export class QueryResult {
-  public columns: string[];
-  public rows: string[][];
+  public readonly columns: string[];
+  public readonly rows: string[][];
+  public readonly totalCount: number | "unknown";
 
   constructor(desc: QueryResponseDescription) {
     this.columns = desc.columns;
     this.rows = desc.rows;
+    this.totalCount = desc.totalCount;
+  }
+
+  /**
+   * @return The number of rows in this result.
+   */
+  get rowCount() {
+    return (this.rows.length);
+  }
+
+  /**
+   * @return True, if the result is only a partial result.
+   */
+  get isPartial() {
+    return (!this.hasKnownCount || this.rows.length < this.totalCount);
+  }
+
+  /**
+   * @return True, if the size of the result set is known.
+   */
+  get hasKnownCount() {
+    return (this.totalCount !== "unknown");
   }
 }
 
