@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
+import { Subscription } from 'rxjs/Subscription'
+
 import { CodeResource } from '../../../shared/syntaxtree';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
@@ -27,6 +29,8 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
 
   private _btnRun: ToolbarItem = undefined;
 
+  private _subscriptions: Subscription[] = [];
+
   /**
    * Register the "run"-button and automatic query execution.
    */
@@ -52,7 +56,7 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
     });
 
     // Fire the query every time the ast changes into a valid tree.
-    this._currentCodeResource.currentResource
+    const subResource = this._currentCodeResource.currentResource
       .filter(c => c.programmingLanguageIdPeek == "sql")
       .flatMap(c => c.validationResult)
       .subscribe(res => {
@@ -60,6 +64,8 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
           this._btnRun.fire();
         }
       });
+
+    this._subscriptions.push(subResource);
   }
 
   /**
@@ -81,5 +87,7 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy() {
     this._toolbarService.removeItem(this._btnRun.id);
+    this._subscriptions.forEach(s => s.unsubscribe());
+    this._subscriptions = [];
   }
 }
