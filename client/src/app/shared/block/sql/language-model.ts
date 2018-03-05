@@ -69,6 +69,19 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 }
               }
             },
+            {
+              displayName: "Funktionsaufruf",
+              defaultNode: {
+                language: "sql",
+                name: "functionCall",
+                properties: {
+                  name: "COUNT"
+                },
+                children: {
+                  "arguments": []
+                }
+              }
+            },
           ]
         },
         {
@@ -444,6 +457,76 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               blockType: "input",
               property: "value",
             } as VisualBlockDescriptions.EditorInput,
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "functionCall",
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          style: {
+            "paddingLeft": "10px",
+            "paddingRight": "10px",
+            "margin-top": "2px",
+            "margin-bottom": "2px",
+            "border": "2px solid rgba(255, 165, 0, 0.6)",
+            "backgroundColor": "rgba(255, 165, 0, 0.3)",
+            "borderRadius": "500px",
+          },
+          children: [
+            {
+              style: {
+                "cursor": "text",
+                "text-decoration": "underline black dotted",
+              },
+              blockType: "input",
+              property: "name",
+            } as VisualBlockDescriptions.EditorInput,
+            {
+              blockType: "constant",
+              text: "("
+            },
+            {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "arguments",
+                  order: "insertFirst"
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "❓",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
+                    "borderRadius": "500px",
+                    "cursor": "default",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorDropTarget,
+            {
+              blockType: "iterator",
+              childGroupName: "arguments",
+              direction: "horizontal",
+            },
+            {
+              blockType: "constant",
+              text: ")"
+            }
           ]
         }
       ]

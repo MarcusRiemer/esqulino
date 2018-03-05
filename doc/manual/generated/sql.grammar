@@ -23,7 +23,7 @@ grammar "sql" {
   node "starOperator" {
   }
   node "relationalOperator" {
-    prop "operator" { string { enum "<" "<=" "=" ">=" ">" } }
+    prop "operator" { string { enum "<" "<=" "=" ">=" ">" "LIKE" "NOT LIKE" } }
   }
   node "binaryExpression" {
     children "lhs" ::= expression
@@ -57,7 +57,7 @@ grammar "sql" {
     "innerJoinOn"
   }
   node "from" {
-    children "tables" ::= tableIntroduction*
+    children "tables" ::= tableIntroduction+
     children "joins" ::= join*
   }
   node "whereAdditional" {

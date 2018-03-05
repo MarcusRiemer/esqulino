@@ -1,0 +1,64 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Sprecher_Von
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 4691271d-9f0c-418b-8ae2-dcd218e41858
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
+    "from", "children": {"joins": [{"name": "innerJoinOn", "children": {"on": [{"name":
+    "binaryExpression", "children": {"lhs": [{"name": "columnName", "language": "sql",
+    "properties": {"columnName": "Charakter_ID", "refTableName": "Charakter"}}], "rhs":
+    [{"name": "columnName", "language": "sql", "properties": {"columnName": "Charakter_ID",
+    "refTableName": "Auftritt"}}], "operator": [{"name": "relationalOperator", "language":
+    "sql", "properties": {"operator": "="}}]}, "language": "sql"}], "table": [{"name":
+    "tableIntroduction", "language": "sql", "properties": {"name": "Auftritt"}}]},
+    "language": "sql"}, {"name": "innerJoinOn", "children": {"on": [{"name": "binaryExpression",
+    "children": {"lhs": [{"name": "columnName", "language": "sql", "properties": {"columnName":
+    "Geschichte_ID", "refTableName": "Geschichte"}}], "rhs": [{"name": "columnName",
+    "language": "sql", "properties": {"columnName": "Geschichte_ID", "refTableName":
+    "Auftritt"}}], "operator": [{"name": "relationalOperator", "language": "sql",
+    "properties": {"operator": "="}}]}, "language": "sql"}], "table": [{"name": "tableIntroduction",
+    "language": "sql", "properties": {"name": "Geschichte"}}]}, "language": "sql"}],
+    "tables": [{"name": "tableIntroduction", "language": "sql", "properties": {"name":
+    "Charakter"}}]}, "language": "sql"}], "where": [{"name": "where", "children":
+    {"expressions": [{"name": "binaryExpression", "children": {"lhs": [{"name": "columnName",
+    "language": "sql", "properties": {"columnName": "Charakter_Name", "refTableName":
+    "Charakter"}}], "rhs": [{"name": "parameter", "language": "sql", "properties":
+    {"name": "name"}}], "operator": [{"name": "relationalOperator", "language": "sql",
+    "properties": {"operator": "LIKE"}}]}, "language": "sql"}]}, "language": "sql"}],
+    "select": [{"name": "select", "children": {"columns": [{"name": "columnName",
+    "language": "sql", "properties": {"columnName": "Charakter_Name", "refTableName":
+    "Charakter"}}, {"name": "columnName", "language": "sql", "properties": {"columnName":
+    "Geschichte_Name", "refTableName": "Geschichte"}}, {"name": "columnName", "language":
+    "sql", "properties": {"columnName": "Geschichte_Nr_Europa", "refTableName": "Geschichte"}},
+    {"name": "columnName", "language": "sql", "properties": {"columnName": "Geschichte_Nr_Kosmos",
+    "refTableName": "Geschichte"}}]}, "language": "sql"}], "groupBy": []}, "language":
+    "sql"}'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-03-05 20:04:05.290702'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-03-05 20:50:38.968234'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: db441c27-6a19-4f2f-95a9-f3bc44675b4f
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: sql
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: "SELECT Charakter.Charakter_Name, Geschichte.Geschichte_Name,
+    Geschichte.Geschichte_Nr_Europa, Geschichte.Geschichte_Nr_Kosmos\nFROM Charakter\n\tINNER
+    JOIN Auftritt ON (Charakter.Charakter_ID = Auftritt.Charakter_ID)\n\tINNER JOIN
+    Geschichte ON (Geschichte.Geschichte_ID = Auftritt.Geschichte_ID)\nWHERE (Charakter.Charakter_Name
+    LIKE :name)"
+new_record: false
+active_record_yaml_version: 2
