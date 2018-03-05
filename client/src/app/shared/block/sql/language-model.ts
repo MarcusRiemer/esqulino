@@ -599,75 +599,92 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
       visual: [
         {
           blockType: "block",
-          direction: "horizontal",
-          dropTarget: {
-            children: {
-              category: "tables",
-              order: "insertFirst",
-            },
-            visibility: ["ifLegalChild"]
-          },
+          direction: "vertical",
           children: [
             {
-              blockType: "constant",
-              text: "FROM",
-              style: {
-                width: "9ch",
-                display: "inline-block",
-                color: "blue",
-              }
-            },
-            {
-              blockType: "dropTarget",
+              blockType: "block",
+              direction: "horizontal",
               dropTarget: {
                 children: {
                   category: "tables",
-                  order: "insertFirst"
+                  order: "insertFirst",
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: ["ifLegalChild"]
               },
               children: [
                 {
                   blockType: "constant",
-                  text: "❓",
+                  text: "FROM",
                   style: {
-                    "paddingLeft": "10px",
-                    "paddingRight": "10px",
-                    "border": "2px solid red",
-                    "color": "darkred",
-                    "backgroundColor": "orange",
-                    "borderRadius": "500px",
-                    "cursor": "default",
+                    width: "9ch",
+                    display: "inline-block",
+                    color: "blue",
+                  }
+                },
+                {
+                  blockType: "dropTarget",
+                  dropTarget: {
+                    children: {
+                      category: "tables",
+                      order: "insertFirst"
+                    },
+                    visibility: ["ifEmpty", "ifLegalChild"]
                   },
-                } as VisualBlockDescriptions.EditorConstant,
+                  children: [
+                    {
+                      blockType: "constant",
+                      text: "❓",
+                      style: {
+                        "paddingLeft": "10px",
+                        "paddingRight": "10px",
+                        "border": "2px solid red",
+                        "color": "darkred",
+                        "backgroundColor": "orange",
+                        "borderRadius": "500px",
+                        "cursor": "default",
+                      },
+                    } as VisualBlockDescriptions.EditorConstant,
+                  ],
+                  direction: "horizontal",
+                } as VisualBlockDescriptions.EditorDropTarget,
+                {
+                  blockType: "iterator",
+                  childGroupName: "tables",
+                  direction: "horizontal",
+                  between: [
+                    {
+                      blockType: "constant",
+                      text: ","
+                    }
+                  ]
+                } as VisualBlockDescriptions.EditorIterator,
               ],
-              direction: "horizontal",
-            } as VisualBlockDescriptions.EditorDropTarget,
+            },
             {
               blockType: "iterator",
-              childGroupName: "tables",
+              childGroupName: "joins",
               direction: "vertical",
               between: []
             } as VisualBlockDescriptions.EditorIterator,
-          ],
-        },
-        {
-          blockType: "dropTarget",
-          dropTarget: {
-            children: {
-              category: "tables",
-              order: "insertLast"
-            },
-            visibility: ["ifLegalChild"]
-          },
-          children: [
             {
-              blockType: "constant",
-              text: "+JOIN"
-            } as VisualBlockDescriptions.EditorConstant,
-          ],
-          direction: "horizontal",
-        } as VisualBlockDescriptions.EditorDropTarget
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "joins",
+                  order: "insertLast"
+                },
+                visibility: ["ifLegalChild"]
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "+JOIN"
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorDropTarget
+          ]
+        }
       ],
     },
     {
@@ -729,6 +746,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               style: {
                 width: "10ch",
                 marginRight: "1ch",
+                marginLeft: "2ch",
                 display: "inline-block",
                 color: "blue",
                 cursor: "grab",
@@ -834,6 +852,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               style: {
                 width: "10ch",
                 marginRight: "1ch",
+                marginLeft: "2ch",
                 display: "inline-block",
                 color: "blue",
                 cursor: "grab",

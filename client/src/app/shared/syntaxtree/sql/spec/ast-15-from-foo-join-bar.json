@@ -9,7 +9,10 @@
         "properties": {
           "name": "foo"
         }
-      }, {
+      }
+    ],
+    "joins": [
+      {
         "language": "sql",
         "name": "crossJoin",
         "children": {

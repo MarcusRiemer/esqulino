@@ -228,8 +228,14 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         node.getChildrenInCategory("tables").forEach((c, idx, arr) => {
           process.generateNode(c);
           if (idx != arr.length - 1) {
-            process.addConvertedFragment('\n\t', node);
+            process.addConvertedFragment(', ', node);
           }
+        });
+
+
+        node.getChildrenInCategory("joins").forEach((c, idx, arr) => {
+          process.addConvertedFragment('\n\t', node);
+          process.generateNode(c);
         });
 
         return ([]);

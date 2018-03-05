@@ -101,6 +101,8 @@ describe("Language: SQL (Validation)", () => {
                     "name": "foo"
                   }
                 },
+              ],
+              "joins": [
                 {
                   language: "sql",
                   name: "crossJoin",
@@ -163,6 +165,8 @@ describe("Language: SQL (Validation)", () => {
                     "name": "foo"
                   }
                 },
+              ],
+              "joins": [
                 {
                   language: "sql",
                   name: "crossJoin",
@@ -270,6 +274,8 @@ describe("Language: SQL (Validation)", () => {
                     "name": "foo"
                   }
                 },
+              ],
+              "joins": [
                 {
                   language: "sql",
                   name: "crossJoin",

@@ -57,7 +57,8 @@ grammar "sql" {
     "innerJoinOn"
   }
   node "from" {
-    children "tables" ::= tableIntroduction join*
+    children "tables" ::= tableIntroduction*
+    children "joins" ::= join*
   }
   node "whereAdditional" {
     prop "operator" { string }

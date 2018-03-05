@@ -58,7 +58,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           restrictions: [
             {
               type: "enum",
-              value: ["<", "<=", "=", ">=", ">"]
+              value: ["<", "<=", "=", ">=", ">", "LIKE", "NOT LIKE"]
             }
           ]
         }
@@ -161,7 +161,15 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "tables": {
           type: "sequence",
           nodeTypes: [
-            "tableIntroduction",
+            {
+              nodeType: "tableIntroduction",
+              occurs: "+"
+            }
+          ]
+        },
+        "joins": {
+          type: "sequence",
+          nodeTypes: [
             {
               nodeType: "join",
               occurs: "*"
