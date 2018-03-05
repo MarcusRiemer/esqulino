@@ -143,7 +143,8 @@ class ProjectDatabase < ApplicationRecord
         result = db.execute2(sql, params)
         return {
           'columns' => result.first,
-          'rows' => result.drop(1)
+          'rows' => result.drop(1),
+          'totalCount' => result.length - 1
         }
       rescue SQLite3::ConstraintException, SQLite3::SQLException => e
         # Something anticipated went wrong. This is probably the fault

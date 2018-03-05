@@ -2,34 +2,32 @@
 concise_attributes:
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: project_id
-  value_before_type_cast: 5c8569ae-f318-4e07-8766-6e5902e066d7
+  value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: name
-  value_before_type_cast: select-test
+  value_before_type_cast: Sprecher_Mehrere_Charaktere
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: id
-  value_before_type_cast: 87af64f2-5cff-42b2-9b8e-691404b2b709
+  value_before_type_cast: d84aaf05-03ee-4a4b-8640-a1d3ff295c67
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
     "from", "children": {"tables": [{"name": "tableIntroduction", "language": "sql",
-    "properties": {"name": "key_value"}}]}, "language": "sql"}], "where": [{"name":
+    "properties": {"name": "Sprecher"}}]}, "language": "sql"}], "where": [{"name":
     "where", "children": {"expressions": [{"name": "binaryExpression", "children":
     {"lhs": [{"name": "columnName", "language": "sql", "properties": {"columnName":
-    "key", "refTableName": "key_value"}}], "rhs": [{"name": "constant", "language":
-    "sql", "properties": {"value": "3"}}], "operator": [{"name": "relationalOperator",
-    "language": "sql", "properties": {"operator": ">="}}]}, "language": "sql"}]},
+    "Sprecher_ID", "refTableName": "Sprecher"}}], "rhs": [{"name": "constant", "language":
+    "sql", "properties": {"value": "50"}}], "operator": [{"name": "relationalOperator",
+    "language": "sql", "properties": {"operator": "<="}}]}, "language": "sql"}]},
     "language": "sql"}], "select": [{"name": "select", "children": {"columns": [{"name":
-    "columnName", "language": "sql", "properties": {"columnName": "key", "refTableName":
-    "key_value"}}, {"name": "columnName", "language": "sql", "properties": {"columnName":
-    "value", "refTableName": "key_value"}}, {"name": "starOperator", "language": "sql"}]},
-    "language": "sql"}], "groupBy": []}, "language": "sql"}'
+    "starOperator", "language": "sql"}]}, "language": "sql"}], "groupBy": []}, "language":
+    "sql"}'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-02-20 20:48:21.830298'
+  value_before_type_cast: '2018-03-05 12:17:49.771123'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-03-04 17:30:53.510072'
+  value_before_type_cast: '2018-03-05 12:51:38.986915'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: db441c27-6a19-4f2f-95a9-f3bc44675b4f
@@ -39,8 +37,8 @@ concise_attributes:
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT key_value.key, key_value.value, *
-    FROM key_value
-    WHERE (key_value.key >= 3)
+    SELECT *
+    FROM Sprecher
+    WHERE (Sprecher.Sprecher_ID <= 50)
 new_record: false
 active_record_yaml_version: 2

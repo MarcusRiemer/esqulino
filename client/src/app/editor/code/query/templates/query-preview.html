@@ -1,7 +1,17 @@
 <div [class.query-preview]="queryInProgress">
   <h4 class="card-title">
     <i *ngIf="queryInProgress" class="fa fa-refresh fa-spin fa-fw"></i>
-    Ergebnis
+    Ergebnisvorschau
+    <ng-container *ngIf="result">
+      <span *ngIf="result.isPartial"
+            class="float-right badge badge-warning">
+        {{ result.rowCount }} von {{ result.totalCount }} Zeilen
+      </span>
+      <span *ngIf="!result.isPartial"
+            class="float-right badge badge-success">
+        {{ result.rowCount }} Zeilen
+      </span>
+    </ng-container>
   </h4>
   <table *ngIf="result"
          class="table">

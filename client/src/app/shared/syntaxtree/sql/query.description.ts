@@ -12,6 +12,7 @@ export type QueryParamsDescription = { [key: string]: string | number };
 export interface QueryResponseDescription {
   columns: string[];
   rows: string[][];
+  totalCount: number | "unknown";
 }
 
 /**
