@@ -13,6 +13,21 @@
       </span>
     </ng-container>
   </h4>
+
+  <!-- If the query has parameters, these need to be filled in -->
+  <ng-container *ngIf="(queryParameterNames | async); let queryParameterNames;">
+    <div *ngFor="let name of queryParameterNames"
+         class="input-group mb-2 mr-sm-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text">{{ name }}</span>
+      </div>
+      <input [(ngModel)]="queryParameters[name]"
+             placeholder="Wert einsetzen ..."
+             type="text"
+             class="form-control">
+    </div>
+  </ng-container>
+
   <table *ngIf="result"
          class="table">
     <thead>

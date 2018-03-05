@@ -229,6 +229,30 @@ export class Node {
   }
 
   /**
+   * Searches for all nodes of a specific type that are part of this subtree.
+   *
+   * @return An array of with nodes that match the given type.
+   */
+  getNodesOfType(typename: QualifiedTypeName): Node[] {
+    // Initial assumption: No matching node
+    let toReturn: Node[] = [];
+
+    // Is this node of a matching type?
+    if (typenameEquals(this.qualifiedName, typename)) {
+      toReturn.push(this);
+    }
+
+    // Does any child node match?
+    Object.values(this._nodeChildren).forEach(children => {
+      children.forEach(child => {
+        toReturn.push(...child.getNodesOfType(typename));
+      });
+    });
+
+    return (toReturn);
+  }
+
+  /**
    * Collects all typenames that exist as part of this tree. Because JavaScript Sets
    * compare things by reference we have to serialize all qualified names to JSON-strings
    * and rework them later ...
@@ -504,5 +528,18 @@ export class Tree {
     node.children[key] = [];
 
     return (new Tree(newDescription));
+  }
+
+  /**
+   * Searches for all nodes of a specific type that are part of this tree.
+   *
+   * @return An array of nodes that match the given type.
+   */
+  getNodesOfType(typename: QualifiedTypeName): Node[] {
+    if (this.isEmpty) {
+      return ([]);
+    } else {
+      return (this._root.getNodesOfType(typename));
+    }
   }
 }

@@ -9,6 +9,8 @@ import {
 import { ServerApiService } from '../../../shared/serverapi.service';
 import { Node, CodeResource } from '../../../shared/syntaxtree';
 
+export { QueryParamsDescription }
+
 /**
  * A nicely wrapped result of a query.
  */
