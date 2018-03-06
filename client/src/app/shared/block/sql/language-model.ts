@@ -313,12 +313,13 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               blockType: "constant",
               text: "SELECT",
               style: {
-                width: "9ch",
-                display: "inline-block",
-                color: "blue",
+                "width": "9ch",
+                "display": "inline-block",
+                "color": "blue",
                 "padding-left": "2px",
                 "background": "url(/vendor/icons/block-background.svg) no-repeat",
                 "background-size": "100% 100%",
+                "cursor": "grab",
               }
             } as VisualBlockDescriptions.EditorConstant,
             {
@@ -715,6 +716,9 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
         {
           blockType: "block",
           direction: "vertical",
+          style: {
+            "cursor": "grab",
+          },
           children: [
             {
               blockType: "block",
@@ -1154,6 +1158,9 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
         {
           blockType: "block",
           direction: "horizontal",
+          style: {
+            "cursor": "grab",
+          },
           dropTarget: {
             children: {
               category: "expressions",
@@ -1221,6 +1228,9 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
         {
           blockType: "block",
           direction: "horizontal",
+          style: {
+            "cursor": "grab",
+          },
           dropTarget: {
             children: {
               category: "expressions",
