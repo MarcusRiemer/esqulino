@@ -44,7 +44,7 @@
               "language": "lang",
               "name": "expConst",
               "properties": {
-                "value": "'bar'"
+                "value": "'foo'"
               }
             }
           ]
@@ -71,7 +71,7 @@
               "language": "lang",
               "name": "expConst",
               "properties": {
-                "value": "'foo'"
+                "value": "'bar'"
               }
             }
           ]

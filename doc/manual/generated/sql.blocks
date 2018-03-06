@@ -36,6 +36,20 @@ language "SQL" {
       childGroup "groupBy"
       direction horizontal
     }
+    dropTarget {
+      direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        parent "orderBy", insertFirst
+      }
+      visual {
+        "+ORDER BY"
+      }
+    }
+    iterate {
+      childGroup "orderBy"
+      direction horizontal
+    }
   }
   type "sql.select" {
     block {
@@ -53,6 +67,7 @@ language "SQL" {
             padding-left: 2px
             background: url(/vendor/icons/block-background.svg) no-repeat
             background-size: 100% 100%
+            cursor: grab
           }
         }
         dropTarget {
@@ -96,7 +111,10 @@ language "SQL" {
       style {
         paddingLeft: 10px
         paddingRight: 10px
-        border: 2px solid black
+        margin-top: 2px
+        margin-bottom: 2px
+        background-color: rgba(0, 255, 0, 0.15)
+        border: 2px solid rgba(0, 255, 0, 0.6)
         borderRadius: 500px
         cursor: grab
       }
@@ -106,36 +124,68 @@ language "SQL" {
     block {
       direction horizontal
       visual {
-        "*"
+        "★"
       }
       style {
         paddingLeft: 10px
         paddingRight: 10px
-        border: 2px solid black
-        borderRadius: 500px
+        margin-top: 2px
+        margin-bottom: 2px
+        background-color: rgba(0, 255, 0, 0.15)
+        border: 2px solid rgba(0, 255, 0, 0.6)
+        border-radius: 500px
+        cursor: grab
       }
     }
   }
-  type "sql.from" {
+  type "sql.parameter" {
     block {
       direction horizontal
-      dropOptions {
-        visible ifLegalChild
-        children "tables", insertFirst
-      }
       visual {
-        "FROM" {
-          style {
-            width: 9ch
-            display: inline-block
-            color: blue
-          }
-        }
+        ":"
+        TODO: input blocks
+      }
+      style {
+        paddingLeft: 10px
+        paddingRight: 10px
+        margin-top: 2px
+        margin-bottom: 2px
+        border: 2px solid rgba(129, 129, 247, 1)
+        background-color: rgba(129, 129, 247, 0.4)
+        borderRadius: 500px
+        cursor: grab
+      }
+    }
+  }
+  type "sql.constant" {
+    block {
+      direction horizontal
+      visual {
+        TODO: input blocks
+      }
+      style {
+        paddingLeft: 10px
+        paddingRight: 10px
+        margin-top: 2px
+        margin-bottom: 2px
+        background-color: rgba(0, 255, 0, 0.15)
+        border: 2px solid rgba(0, 255, 0, 0.6)
+        borderRadius: 500px
+        text-decoration: underline black dotted
+      }
+    }
+  }
+  type "sql.functionCall" {
+    block {
+      direction horizontal
+      visual {
+        TODO: input blocks
+        "("
         dropTarget {
           direction horizontal
           dropOptions {
             visible ifEmpty, ifLegalChild
-            children "tables", insertFirst
+            children "arguments", insertFirst
           }
           visual {
             "❓" {
@@ -152,21 +202,185 @@ language "SQL" {
           }
         }
         iterate {
-          childGroup "tables"
+          childGroup "arguments"
+          direction horizontal
+        }
+        ")"
+      }
+      style {
+        paddingLeft: 10px
+        paddingRight: 10px
+        margin-top: 2px
+        margin-bottom: 2px
+        border: 2px solid rgba(255, 165, 0, 0.6)
+        backgroundColor: rgba(255, 165, 0, 0.3)
+        borderRadius: 500px
+      }
+    }
+  }
+  type "sql.binaryExpression" {
+    block {
+      direction horizontal
+      visual {
+        dropTarget {
+          direction horizontal
+          dropOptions {
+            visible ifEmpty, ifLegalChild
+            children "lhs", insertFirst
+          }
+          visual {
+            "❓" {
+              style {
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                color: darkred
+                backgroundColor: orange
+                borderRadius: 500px
+                cursor: default
+              }
+            }
+          }
+        }
+        iterate {
+          childGroup "lhs"
+          direction horizontal
+        }
+        dropTarget {
+          direction horizontal
+          dropOptions {
+            visible ifEmpty, ifLegalChild
+            children "operator", insertFirst
+          }
+          visual {
+            "❓" {
+              style {
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                color: darkred
+                backgroundColor: orange
+                borderRadius: 500px
+                cursor: default
+              }
+            }
+          }
+        }
+        iterate {
+          childGroup "operator"
+          direction horizontal
+        }
+        dropTarget {
+          direction horizontal
+          dropOptions {
+            visible ifEmpty, ifLegalChild
+            children "rhs", insertFirst
+          }
+          visual {
+            "❓" {
+              style {
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                color: darkred
+                backgroundColor: orange
+                borderRadius: 500px
+                cursor: default
+              }
+            }
+          }
+        }
+        iterate {
+          childGroup "rhs"
+          direction horizontal
+        }
+      }
+      style {
+        paddingLeft: 5px
+        paddingRight: 5px
+        margin-top: 2px
+        margin-bottom: 2px
+        border: 2px solid rgba(255, 165, 0, 0.6)
+        backgroundColor: rgba(255, 165, 0, 0.3)
+        borderRadius: 500px
+        cursor: grab
+      }
+    }
+  }
+  type "sql.relationalOperator" {
+    block {
+      direction horizontal
+      visual {
+        TODO: input blocks
+      }
+    }
+  }
+  type "sql.from" {
+    block {
+      direction vertical
+      visual {
+        block {
+          direction horizontal
+          dropOptions {
+            visible ifLegalChild
+            children "tables", insertFirst
+          }
+          visual {
+            "FROM" {
+              style {
+                width: 9ch
+                display: inline-block
+                color: blue
+              }
+            }
+            dropTarget {
+              direction horizontal
+              dropOptions {
+                visible ifEmpty, ifLegalChild
+                children "tables", insertFirst
+              }
+              visual {
+                "❓" {
+                  style {
+                    paddingLeft: 10px
+                    paddingRight: 10px
+                    border: 2px solid red
+                    color: darkred
+                    backgroundColor: orange
+                    borderRadius: 500px
+                    cursor: default
+                  }
+                }
+              }
+            }
+            iterate {
+              childGroup "tables"
+              direction horizontal
+              between {
+                ","
+              }
+            }
+          }
+        }
+        iterate {
+          childGroup "joins"
           direction vertical
           between {
           }
         }
+        dropTarget {
+          direction horizontal
+          dropOptions {
+            visible ifLegalChild
+            children "joins", insertLast
+          }
+          visual {
+            "+JOIN"
+          }
+        }
       }
-    }
-    dropTarget {
-      direction horizontal
-      dropOptions {
-        visible ifLegalChild
-        children "tables", insertLast
-      }
-      visual {
-        "+JOIN"
+      style {
+        cursor: grab
       }
     }
   }
@@ -204,28 +418,62 @@ language "SQL" {
         "INNER JOIN" {
           style {
             width: 10ch
-            marginLeft: 10px
+            marginRight: 1ch
+            marginLeft: 2ch
             display: inline-block
             color: blue
+            cursor: grab
+          }
+        }
+        dropTarget {
+          direction horizontal
+          dropOptions {
+            visible ifEmpty, ifLegalChild
+            children "table", insertFirst
+          }
+          visual {
+            "❓" {
+              style {
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                color: darkred
+                backgroundColor: orange
+                borderRadius: 500px
+                cursor: default
+              }
+            }
           }
         }
         iterate {
           childGroup "table"
           direction horizontal
         }
+        "USING" {
+          style {
+            marginLeft: 1ch
+            marginRight: 1ch
+            display: inline-block
+            color: blue
+            cursor: grab
+          }
+        }
         dropTarget {
           direction horizontal
           dropOptions {
-            visible always
+            visible ifEmpty, ifLegalChild
             children "using", insertFirst
           }
           visual {
-            "USING" {
+            "❓" {
               style {
-                width: 100px
-                marginLeft: 10px
-                display: inline-block
-                color: blue
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                color: darkred
+                backgroundColor: orange
+                borderRadius: 500px
+                cursor: default
               }
             }
           }
@@ -248,28 +496,62 @@ language "SQL" {
         "INNER JOIN" {
           style {
             width: 10ch
-            marginLeft: 10px
+            marginRight: 1ch
+            marginLeft: 2ch
             display: inline-block
             color: blue
+            cursor: grab
+          }
+        }
+        dropTarget {
+          direction horizontal
+          dropOptions {
+            visible ifEmpty, ifLegalChild
+            children "table", insertFirst
+          }
+          visual {
+            "❓" {
+              style {
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                color: darkred
+                backgroundColor: orange
+                borderRadius: 500px
+                cursor: default
+              }
+            }
           }
         }
         iterate {
           childGroup "table"
           direction horizontal
         }
+        "ON" {
+          style {
+            marginLeft: 1ch
+            marginRight: 1ch
+            display: inline-block
+            color: blue
+            cursor: grab
+          }
+        }
         dropTarget {
           direction horizontal
           dropOptions {
-            visible always
+            visible ifEmpty, ifLegalChild
             children "on", insertFirst
           }
           visual {
-            "ON" {
+            "❓" {
               style {
-                width: 100px
-                marginLeft: 10px
-                display: inline-block
-                color: blue
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                color: darkred
+                backgroundColor: orange
+                borderRadius: 500px
+                cursor: default
               }
             }
           }
@@ -285,15 +567,17 @@ language "SQL" {
     block {
       direction horizontal
       visual {
-        {{ name }} {
-          style {
-            paddingLeft: 10px
-            paddingTop: 2px
-            paddingRight: 10px
-            border: 2px solid black
-            borderRadius: 500px
-          }
-        }
+        {{ name }}
+      }
+      style {
+        paddingLeft: 10px
+        paddingRight: 10px
+        margin-top: 2px
+        margin-bottom: 2px
+        background-color: rgba(255, 255, 0, 0.2)
+        border: 2px solid rgba(255, 255, 0, 0.9)
+        borderRadius: 500px
+        cursor: grab
       }
     }
   }
@@ -385,11 +669,97 @@ language "SQL" {
           }
         }
       }
+      style {
+        cursor: grab
+      }
+    }
+  }
+  type "sql.orderBy" {
+    block {
+      direction horizontal
+      dropOptions {
+        visible ifLegalChild
+        children "expressions", insertFirst
+      }
+      visual {
+        "ORDER BY" {
+          style {
+            width: 9ch
+            display: inline-block
+            color: blue
+          }
+        }
+        dropTarget {
+          direction horizontal
+          dropOptions {
+            visible ifEmpty, ifLegalChild
+            children "expressions", insertFirst
+          }
+          visual {
+            "❓" {
+              style {
+                paddingLeft: 10px
+                paddingRight: 10px
+                border: 2px solid red
+                color: darkred
+                backgroundColor: orange
+                borderRadius: 500px
+                cursor: default
+              }
+            }
+          }
+        }
+        iterate {
+          childGroup "expressions"
+          direction horizontal
+          between {
+            ", "
+          }
+        }
+      }
+      style {
+        cursor: grab
+      }
     }
   }
   databaseSchemaSidebar
   fixedBlocksSidebar "SQL" {
-    category "SQL" {
+    category "Ausdrücke" {
+      sidebarBlock "★" {
+        node "sql.starOperator"
+      }
+      sidebarBlock ":parameter" {
+        node "sql.parameter" {
+          prop "name" param
+        }
+      }
+      sidebarBlock "Konstante" {
+        node "sql.constant" {
+          prop "value" wert
+        }
+      }
+      sidebarBlock "Binärer Ausdruck" {
+        node "sql.binaryExpression" {
+          childGroup "lhs" {
+          }
+          childGroup "operator" {
+            node "sql.relationalOperator" {
+              prop "operator" =
+            }
+          }
+          childGroup "rhs" {
+          }
+        }
+      }
+      sidebarBlock "Funktionsaufruf" {
+        node "sql.functionCall" {
+          prop "name" COUNT
+          childGroup "arguments" {
+          }
+        }
+      }
+    }
+    category "Komponenten" {
       sidebarBlock "SELECT" {
         node "sql.querySelect" {
           childGroup "select" {
@@ -403,9 +773,6 @@ language "SQL" {
           childGroup "groupBy" {
           }
         }
-      }
-      sidebarBlock "*" {
-        node "sql.starOperator"
       }
       sidebarBlock "FROM" {
         node "sql.from" {
@@ -432,6 +799,17 @@ language "SQL" {
           childGroup "table" {
           }
           childGroup "on" {
+            node "sql.binaryExpression" {
+              childGroup "lhs" {
+              }
+              childGroup "operator" {
+                node "sql.relationalOperator" {
+                  prop "operator" =
+                }
+              }
+              childGroup "rhs" {
+              }
+            }
           }
         }
       }
@@ -443,6 +821,12 @@ language "SQL" {
       }
       sidebarBlock "GROUP BY" {
         node "sql.groupBy" {
+          childGroup "expressions" {
+          }
+        }
+      }
+      sidebarBlock "ORDER BY" {
+        node "sql.orderBy" {
           childGroup "expressions" {
           }
         }

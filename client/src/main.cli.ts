@@ -123,8 +123,8 @@ function availableLanguageModels(): BlockLanguageDescription[] {
 /**
  * Retrieves a single language model by name.
  */
-function findLanguageModel(id: string): BlockLanguageDescription {
-  return (availableLanguageModels().find(l => l.id == id));
+function findLanguageModel(slug_or_id: string): BlockLanguageDescription {
+  return (availableLanguageModels().find(l => l.id == slug_or_id || l.slug == slug_or_id));
 }
 
 /**
