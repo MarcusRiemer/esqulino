@@ -1,8 +1,11 @@
 import { NodeConverterRegistration, CodeGeneratorProcess, OutputSeparator } from '../codegenerator'
 import { Node } from '../syntaxtree'
 
+/**
+ * Helper function to generate all SQL components of a node
+ */
 function generateComponents(node: Node, process: CodeGeneratorProcess) {
-  const componentNames = ["insert", "select", "update", "delete", "from", "where", "groupBy"];
+  const componentNames = ["insert", "select", "update", "delete", "from", "where", "groupBy", "orderBy"];
   const components = componentNames
     .map(n => node.children[n])
     .filter(c => !!c)
@@ -316,6 +319,27 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
 
         node.getChildrenInCategory("expressions").forEach((c, idx, arr) => {
           process.generateNode(c);
+          if (idx != arr.length - 1) {
+            process.addConvertedFragment(', ', node);
+          }
+        });
+
+        return ([]);
+      }
+    }
+  },
+  {
+    type: {
+      languageName: "sql",
+      typeName: "orderBy"
+    },
+    converter: {
+      init: function(node: Node, process: CodeGeneratorProcess) {
+        process.addConvertedFragment(`ORDER BY `, node)
+
+        node.getChildrenInCategory("expressions").forEach((c, idx, arr) => {
+          process.generateNode(c);
+          process.addConvertedFragment("DESC", c, OutputSeparator.SPACE_BEFORE);
           if (idx != arr.length - 1) {
             process.addConvertedFragment(', ', node);
           }

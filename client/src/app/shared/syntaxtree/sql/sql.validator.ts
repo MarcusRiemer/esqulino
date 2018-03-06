@@ -216,10 +216,19 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
               languageName: "sql",
               nodeType: "expression",
               occurs: "*"
-            },
+            }
+          ]
+        }
+      },
+    },
+    "orderBy": {
+      children: {
+        "expressions": {
+          type: "allowed",
+          nodeTypes: [
             {
               languageName: "sql",
-              nodeType: "columnName",
+              nodeType: "expression",
               occurs: "*"
             }
           ]
@@ -258,6 +267,15 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             }
           ]
         },
+        "orderBy": {
+          type: "sequence",
+          nodeTypes: [
+            {
+              nodeType: "orderBy",
+              occurs: "?"
+            }
+          ]
+        },
       }
     },
     "queryDelete": {
@@ -282,16 +300,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
               occurs: "?"
             },
           ]
-        },
-        "groupBy": {
-          type: "sequence",
-          nodeTypes: [
-            {
-              nodeType: "groupBy",
-              occurs: "?"
-            },
-          ]
-        },
+        }
       }
     },
     "query": {

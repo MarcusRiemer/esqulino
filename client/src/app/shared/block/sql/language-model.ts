@@ -192,6 +192,16 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 }
               }
             },
+            {
+              displayName: "ORDER BY",
+              defaultNode: {
+                language: "sql",
+                name: "orderBy",
+                children: {
+                  "expressions": []
+                }
+              }
+            },
           ]
         }
       ]
@@ -256,6 +266,28 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
         {
           blockType: "iterator",
           childGroupName: "groupBy",
+          direction: "horizontal",
+        } as VisualBlockDescriptions.EditorIterator,
+        {
+          blockType: "dropTarget",
+          dropTarget: {
+            parent: {
+              category: "orderBy",
+              order: "insertFirst"
+            },
+            visibility: ["ifLegalChild"]
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "+ORDER BY"
+            } as VisualBlockDescriptions.EditorConstant,
+          ],
+          direction: "horizontal",
+        } as VisualBlockDescriptions.EditorDropTarget,
+        {
+          blockType: "iterator",
+          childGroupName: "orderBy",
           direction: "horizontal",
         } as VisualBlockDescriptions.EditorIterator,
       ]
@@ -1133,6 +1165,73 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
             {
               blockType: "constant",
               text: "GROUP BY",
+              style: {
+                width: "9ch",
+                display: "inline-block",
+                color: "blue"
+              }
+            } as VisualBlockDescriptions.EditorConstant,
+            {
+              blockType: "dropTarget",
+              dropTarget: {
+                children: {
+                  category: "expressions",
+                  order: "insertFirst"
+                },
+                visibility: ["ifEmpty", "ifLegalChild"]
+              },
+              children: [
+                {
+                  blockType: "constant",
+                  text: "❓",
+                  style: {
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "border": "2px solid red",
+                    "color": "darkred",
+                    "backgroundColor": "orange",
+                    "borderRadius": "500px",
+                    "cursor": "default",
+                  },
+                } as VisualBlockDescriptions.EditorConstant,
+              ],
+              direction: "horizontal",
+            } as VisualBlockDescriptions.EditorDropTarget,
+            {
+              blockType: "iterator",
+              childGroupName: "expressions",
+              direction: "horizontal",
+              between: [
+                {
+                  blockType: "constant",
+                  text: ", "
+                } as VisualBlockDescriptions.EditorConstant,
+              ]
+            } as VisualBlockDescriptions.EditorIterator,
+          ]
+        }
+      ]
+    },
+    {
+      describedType: {
+        languageName: "sql",
+        typeName: "orderBy"
+      },
+      visual: [
+        {
+          blockType: "block",
+          direction: "horizontal",
+          dropTarget: {
+            children: {
+              category: "expressions",
+              order: "insertFirst",
+            },
+            visibility: ["ifLegalChild"]
+          },
+          children: [
+            {
+              blockType: "constant",
+              text: "ORDER BY",
               style: {
                 width: "9ch",
                 display: "inline-block",
