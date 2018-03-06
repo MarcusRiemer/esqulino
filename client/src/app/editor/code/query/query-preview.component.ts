@@ -91,6 +91,23 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * The user has deselected the input element.
+   */
+  onInputBlur() {
+    this._btnRun.fire();
+  }
+
+  /**
+   * React to typical keyboard operations:
+   * * <Enter> sends the query
+   */
+  onInputKeyUp(evt: KeyboardEvent) {
+    if (evt.key === "Enter") {
+      this._btnRun.fire();
+    }
+  }
+
+  /**
    * SQLite does not like it if unneeded query parameters are handed in.
    * @return The minimal set of required query parameters.
    */

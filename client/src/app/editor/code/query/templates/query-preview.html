@@ -22,6 +22,8 @@
         <span class="input-group-text">{{ name }}</span>
       </div>
       <input [(ngModel)]="queryParameters[name]"
+             (blur)="onInputBlur"
+             (keyup)="onInputKeyUp($event)"
              placeholder="Wert einsetzen ..."
              type="text"
              class="form-control">
