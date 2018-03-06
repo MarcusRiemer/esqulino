@@ -28,6 +28,9 @@ function extractQueryParameterNames(tree: Tree) {
 })
 export class QueryPreviewComponent implements OnInit, OnDestroy {
 
+  // This key is used to access the query parameters stored in local storage
+  private static readonly LOCAL_STORAGE_PARAMS_KEY = "queryParameters";
+
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
     private _toolbarService: ToolbarService,
@@ -57,10 +60,16 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
    * Register the "run"-button and automatic query execution.
    */
   ngOnInit() {
+    // Restore query parameters that have been set previously
+    this.queryParameters = this.loadQueryParameters();
+
     // The "run" button
     this._btnRun = this._toolbarService.addButton("run", "Ausführen", "play", "r");
     this._btnRun.onClick.subscribe(_ => {
+      // Visual feedback that the query is in progress
       this.queryInProgress = true;
+      // Store query parameters after every execution
+      this.persistQueryParameters();
 
       this._queryService.runArbitraryQuery(this._currentCodeResource.peekResource, this.requiredQueryParameters)
         .first()
@@ -88,6 +97,37 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
       });
 
     this._subscriptions.push(subResource);
+  }
+
+  /*get queryParameters(): QueryParamsDescription {
+    return (JSON.parse(window.localStorage.getItem("queryParameters")) as QueryParamsDescription);
+    }*/
+
+  /**
+   * Saves the current state of the query parameters in the browsers local storage.
+   */
+  private persistQueryParameters() {
+    window.localStorage.setItem(
+      QueryPreviewComponent.LOCAL_STORAGE_PARAMS_KEY,
+      JSON.stringify(this.queryParameters)
+    );
+  }
+
+  /**
+   * Loads the previos state of the query parameters from local storage.
+   */
+  private loadQueryParameters(): QueryParamsDescription {
+    if (window.localStorage) {
+      const stored = window.localStorage.getItem(QueryPreviewComponent.LOCAL_STORAGE_PARAMS_KEY);
+      try {
+        return (JSON.parse(stored) || {});
+      } catch (e) {
+        return ({});
+      }
+
+    } else {
+      return ({});
+    }
   }
 
   /**
