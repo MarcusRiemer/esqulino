@@ -1,8 +1,10 @@
 /**
- * A possibly infinitely nested list of strings.
+ * A possibly infinitely nested list of strings. Practically this should have far
+ * fewer nested types as "infinity" and is used to represent the indentation of
+ * strings.
  */
 export interface NestedString extends Array<NestedString | string> {
-  [key: number]: Array<NestedString | string> | string;
+
 }
 
 /**
@@ -15,13 +17,12 @@ export interface NestedString extends Array<NestedString | string> {
  * @param n The nested string
  */
 export function recursiveJoin(sep: string, indent: string, n: NestedString): string {
-  const impl = (sep: string, n: NestedString, depth: number): string => {
+  const impl = (sep: string, n: NestedString | string, depth: number): string => {
     if (typeof n === 'string') {
       return (indent.repeat(depth) + n);
     } else {
       return (
-        Object.values(n)
-          .map(v => impl(sep, v, depth + 1))
+        n.map(v => impl(sep, v, depth + 1))
           .join(sep)
       );
     }
