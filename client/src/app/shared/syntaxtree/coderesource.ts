@@ -5,7 +5,7 @@ import { ProjectResource } from '../resource';
 
 import { CodeResourceDescription } from './coderesource.description';
 import { Tree, NodeDescription, NodeLocation } from './syntaxtree';
-import { ValidationResult } from './validator';
+import { ValidationResult } from './validation-result';
 
 /**
  * A resource that is described by a syntaxtree.

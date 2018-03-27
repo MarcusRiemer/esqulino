@@ -1,7 +1,8 @@
 import { LanguageDescription } from './language.description'
 
 import { Tree, NodeDescription, QualifiedTypeName } from './syntaxtree'
-import { Validator, ValidationResult } from './validator'
+import { Validator } from './validator'
+import { ValidationResult } from './validation-result'
 import { CodeGenerator } from './codegenerator'
 
 /**

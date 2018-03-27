@@ -1,5 +1,7 @@
 import * as AST from '../syntaxtree'
-import { Validator, ErrorCodes } from '../validator'
+import { Validator } from '../validator'
+import { ErrorCodes } from '../validation-result'
+
 
 import { GRAMMAR_DESCRIPTION } from './sql.validator'
 
