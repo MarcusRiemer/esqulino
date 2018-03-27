@@ -1,9 +1,12 @@
 export * from './syntaxtree'
 export * from './coderesource'
+export * from './grammar'
 export * from './language'
 export * from './language.description'
 export * from './validator'
 export * from './validator.description'
+export * from './validation-result'
+
 
 import { prettyPrintGrammar } from './prettyprint'
 

@@ -1,6 +1,7 @@
 import * as Schema from './validator.description'
 import * as AST from './syntaxtree'
-import { Validator, ErrorCodes } from './validator'
+import { Validator } from './validator'
+import { ErrorCodes, ValidationResult } from './validation-result'
 
 /**
  * Describes a language where each document would be the equivalent

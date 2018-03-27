@@ -1,6 +1,7 @@
 import { CodeGenerator, NodeConverterRegistration, CodeGeneratorProcess } from '../codegenerator'
 import { Node, NodeDescription } from '../syntaxtree'
-import { Validator, ErrorCodes } from '../validator'
+import { Validator } from '../validator'
+import { ErrorCodes } from '../validation-result'
 
 import { NODE_CONVERTER } from './regex.codegenerator'
 import { GRAMMAR_DESCRIPTION } from './regex.validator'
