@@ -32,6 +32,11 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
    configuration
 
 .. toctree::
+   :caption: Design Documents
+             
+   online-platform
+
+.. toctree::
    :caption: Appendix
       
    schema/index
