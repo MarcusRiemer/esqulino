@@ -11,10 +11,10 @@ pipelines:
           - client/dist/**
         script:
           - make -C client install-deps
-          - make -C client dist
-          - make -C client test
-          - make -C client universal-compile
+          - make -C client client-compile
           - make -C client cli-compile
+          - make -C client universal-compile
+          - make -C client client-test
         services:
           - db
     - step:
