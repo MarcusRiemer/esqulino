@@ -22,33 +22,28 @@ all : dist
 clean : msg-pre-clean
 	rm -rf dist
 
-install-deps : msg-pre-install-deps
-	npm install
+dist: client-compile cli-compile universal-compile
 
 ##################################
 # Webclient
 ##################################
-
-dist : msg-pre-build
+client-compile : msg-pre-build
 	$(NG_BIN) build --aot --prod $(NG_LANG) $(NG_OPTS)
 
-dist-dev : msg-pre-build
+client-compile-dev : msg-pre-build
 	$(NG_BIN) build --aot $(NG_LANG) $(NG_OPTS)
 
-test :
+client-test :
 	$(NG_BIN) test --single-run $(TEST_SINGLE_RUN) --browser $(TEST_BROWSERS) --code-coverage true
 
-test-watch:
+client-test-watch:
 	$(NG_BIN) test --single-run false --browser $(TEST_BROWSERS) --code-coverage true
-
-clean-deps : msg-pre-clean-deps
-	rm -rf "node_modules"
 
 ##################################
 # Commandline Client
 ##################################
-
 dist/cli/main.cli.js : $(CLIENT_ALL_SOURCES)
+	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Commandline Build) ..."; $(TPUT_BIN) sgr0
 	$(TSC_BIN) --target ES5 --lib ES2017 --outDir dist/cli src/main.cli.ts		
 
 cli-compile: dist/cli/main.cli.js
@@ -60,9 +55,8 @@ cli-run: dist/cli/main.cli.js
 ##################################
 # Universal Rendering Server
 ##################################
-
 dist/server.js: $(CLIENT_ALL_SOURCES)
-	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Server Build) ..."; $(TPUT_BIN) sgr0
+	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Universal Build) ..."; $(TPUT_BIN) sgr0
 	node_modules/.bin/ng build --prod --app 1 --output-hashing=false
 	node_modules/.bin/webpack --config webpack.server.config.js --progress
 
@@ -79,6 +73,15 @@ gzipped-bundles : $(BUNDLE_FILES_GZIP)
 
 gzipped-clean :
 	rm -f $(BUNDLE_FILES_GZIP)
+
+##################################
+# Dependencies
+##################################
+install-deps : msg-pre-install-deps
+	npm install
+
+clean-deps : msg-pre-clean-deps
+	rm -rf "node_modules"
 
 ##################################
 # Messaging targets
