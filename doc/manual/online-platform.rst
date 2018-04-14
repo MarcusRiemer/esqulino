@@ -42,22 +42,37 @@ Visitors
 Inspiration
 ===========
 
-With the rise of decentralized version control systems like Git and Mercurial came quite a few online platforms that offer some mixture of repository hosting and "social" features that ease collaboration. As BlattWerkzeug strives to be a learning environment it should be as easy as possible (and encouraged) to learn from other peoples code.
+With the rise of decentralized version control systems like Git and Mercurial came quite a few online platforms that offer some mixture of repository hosting and "social" features that ease collaboration (`GitHub <https://github.com/>`_, `BitBucket <https://bitbucket.com>`_, `GitLab <https://gitlab.com>`_, ...). As BlattWerkzeug strives to be a learning environment it should be as easy as possible (and encouraged) to learn from other peoples code.
 
 The following questions may be helpful when thinking about the community and online platform aspects:
 
-* How do users discover content that is relevant to them?
+* How does the user registration process work?
+
+  * Classic email registration seems to be a must, but what about different providers (school accounts, social media accounts, ...)?
+  * Should a teacher be able to sign up (and manage?) his students?
+  * Is the registration process different depending on the role?
+  * How is the registration process secured against bots?
 
 * What information should a user page contain?
   
-  * Should there be different user pages depending on the role?
   * How can a user give a spotlight to her or his most relevant projects?
+  * Should there be different user pages depending on the role?
+  * How (should?) a user show his expertise?
+  * How (should?) a user link to his profile on other places?
 
 * How or where do users communicate?
 
+  * This does not only mean "social" communication but also feedback from teachers.
   * Should there be a possibility to comment on users, projects, databases, ...?
   * Should there be any form of free-form discussion [#f2]_?
+  * Should there be any form of private discussion?
 
+* How do users discover content that is relevant to them?
+
+  * Some kind of tagging or categorization system?
+  * Some kind of course system?
+  * Some kind of referal system?
+    
 * How can projects be shared among multiple users?
 
   * Is "cloning" or "forking" a viable concept?
@@ -66,13 +81,12 @@ The following questions may be helpful when thinking about the community and onl
 Technical Requirements
 ======================
 
-BlattWerkzeug technically consists of two different codebases: A Ruby on Rails application for the server and an Angular 2 application for the client. See :doc:`project-structure` for the general overview.
+BlattWerkzeug technically consists of two different codebases: A `Ruby on Rails <http://rubyonrails.org/>`_ application for the server and an `Angular <https://angular.io/>`_ application for the client. See :doc:`project-structure` for the general overview.
 
-As the server uses the so called ``API``-mode of Rails quite a few of the "standard" gems for user authentication won't work without some degree of customization. The model & controller functionality of gems like `devise <https://github.com/plataformatec/devise>`_ may be helpful, but due to the Angular Client there is no view rendering available.
+As the server uses the so called ``API``-mode of Rails quite a few of the "standard" gems for user authentication won't work without some degree of customization. The model & controller functionality of gems like `devise <https://github.com/plataformatec/devise>`_ *may* be helpful, but due to the Angular Client there is no view rendering available. A standard like `JSON Web Tokens (RFC 7519) <https://jwt.io/>`_ seems like the most viable solution to bridge the gap between the ruby code on the server and the client.
 
 
 .. rubric:: Footnotes
 
 .. [#f1] Note to self: Is there a distinction between "creators" and "learners" in established didactic concepts?
-
 .. [#f2] Technical detail: Maybe an existing application like `Discourse <https://www.discourse.org/>`_ would be a good fit?
