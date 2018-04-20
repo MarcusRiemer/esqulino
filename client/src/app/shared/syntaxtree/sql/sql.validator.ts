@@ -11,36 +11,49 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "parameter",
         "functionCall"
       ]
-    },
+    } as Schema.NodeTypeDescription,
     "columnName": {
-      properties: {
-        "columnName": { base: "string" },
-        "refTableName": { base: "string" },
-      }
-    },
+      attributes: [
+        {
+          type: "property",
+          name: "columnName",
+          base: "string"
+        },
+        {
+          type: "property",
+          name: "refTableName",
+          base: "string"
+        }
+      ]
+    } as Schema.NodeTypeDescription,
     "constant": {
-      properties: {
-        "value": {
+      attributes: [
+        {
+          type: "property",
+          name: "value",
           base: "string"
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "parameter": {
-      properties: {
-        "name": {
+      attributes: [
+        {
+          type: "property",
+          name: "name",
           base: "string"
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "functionCall": {
-      properties: {
-        "name": {
+      attributes: [
+        {
+          type: "property",
+          name: "name",
           base: "string"
-        }
-      },
-      children: {
-        "arguments": {
+        },
+        {
           type: "sequence",
+          name: "arguments",
           nodeTypes: [
             {
               nodeType: "expression",
@@ -48,12 +61,16 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             }
           ]
         }
-      }
-    },
-    "starOperator": {},
+      ]
+    } as Schema.NodeTypeDescription,
+    "starOperator": {
+      attributes: []
+    } as Schema.NodeTypeDescription,
     "relationalOperator": {
-      properties: {
-        "operator": {
+      attributes: [
+        {
+          type: "property",
+          name: "operator",
           base: "string",
           restrictions: [
             {
@@ -62,34 +79,43 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             }
           ]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "binaryExpression": {
-      children: {
-        "lhs": {
+      attributes: [
+        {
           type: "sequence",
+          name: "lhs",
           nodeTypes: [
             "expression"
           ]
         },
-        "operator": {
+        {
           type: "sequence",
+          name: "operator",
           nodeTypes: [
             "relationalOperator"
           ]
-        },
-        "rhs": {
+        }, {
           type: "sequence",
+          name: "rhs",
           nodeTypes: [
             "expression"
           ]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "select": {
-      children: {
-        "columns": {
+      attributes: [
+        {
+          type: "property",
+          name: "distinct",
+          base: "boolean",
+          isOptional: true
+        },
+        {
           type: "allowed",
+          name: "columns",
           nodeTypes: [
             {
               nodeType: "expression",
@@ -101,65 +127,71 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             }
           ]
         }
-      },
-      properties: {
-        "distinct": {
-          base: "boolean",
-          isOptional: true
-        }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "delete": {
-
-    },
+      attributes: []
+    } as Schema.NodeTypeDescription,
     "tableIntroduction": {
-      properties: {
-        "name": { base: "string" },
-        "alias": {
+      attributes: [
+        {
+          type: "property",
+          name: "name",
+          base: "string"
+        },
+        {
+          type: "property",
+          name: "alias",
           base: "string",
           isOptional: true
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "crossJoin": {
-      children: {
-        "table": {
+      attributes: [
+        {
           type: "sequence",
+          name: "table",
           nodeTypes: ["tableIntroduction"]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "innerJoinOn": {
-      children: {
-        "table": {
+      attributes: [
+        {
           type: "sequence",
+          name: "table",
           nodeTypes: ["tableIntroduction"]
         },
-        "on": {
+        {
           type: "sequence",
+          name: "on",
           nodeTypes: ["expression"]
-        },
-      }
-    },
+        }
+      ]
+    } as Schema.NodeTypeDescription,
     "innerJoinUsing": {
-      children: {
-        "table": {
+      attributes: [
+        {
           type: "sequence",
+          name: "table",
           nodeTypes: ["tableIntroduction"]
         },
-        "using": {
+        {
           type: "sequence",
-          nodeTypes: ["columnName"]
+          name: "using",
+          nodeTypes: ["expression"]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "join": {
       oneOf: ["crossJoin", "innerJoinUsing", "innerJoinOn"]
-    },
+    } as Schema.NodeTypeDescription,
     "from": {
-      children: {
-        "tables": {
+      attributes: [
+        {
           type: "sequence",
+          name: "tables",
           nodeTypes: [
             {
               nodeType: "tableIntroduction",
@@ -167,8 +199,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             }
           ]
         },
-        "joins": {
+        {
           type: "sequence",
+          name: "joins",
           nodeTypes: [
             {
               nodeType: "join",
@@ -176,26 +209,28 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             }
           ]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "whereAdditional": {
-      children: {
-        "expression": {
-          type: "sequence",
-          nodeTypes: ["expression"]
-        }
-      },
-      properties: {
-        "operator": {
+      attributes: [
+        {
+          type: "property",
+          name: "operator",
           base: "string",
           value: ["and", "or"]
-        }
-      }
-    },
-    "where": {
-      children: {
-        "expressions": {
+        },
+        {
           type: "sequence",
+          name: "expression",
+          nodeTypes: ["expression"]
+        }
+      ]
+    } as Schema.NodeTypeDescription,
+    "where": {
+      attributes: [
+        {
+          type: "sequence",
+          name: "expressions",
           nodeTypes: [
             "expression",
             {
@@ -205,12 +240,13 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             }
           ]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "groupBy": {
-      children: {
-        "expressions": {
+      attributes: [
+        {
           type: "allowed",
+          name: "expressions",
           nodeTypes: [
             {
               languageName: "sql",
@@ -219,12 +255,13 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             }
           ]
         }
-      },
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "orderBy": {
-      children: {
-        "expressions": {
+      attributes: [
+        {
           type: "allowed",
+          name: "expressions",
           nodeTypes: [
             {
               languageName: "sql",
@@ -233,24 +270,27 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             }
           ]
         }
-      },
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "querySelect": {
-      children: {
-        "select": {
+      attributes: [
+        {
           type: "sequence",
+          name: "select",
           nodeTypes: [
             "select",
           ]
         },
-        "from": {
+        {
           type: "sequence",
+          name: "from",
           nodeTypes: [
             "from",
           ]
         },
-        "where": {
+        {
           type: "sequence",
+          name: "where",
           nodeTypes: [
             {
               nodeType: "where",
@@ -258,42 +298,47 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             },
           ]
         },
-        "groupBy": {
+        {
           type: "sequence",
+          name: "groupBy",
           nodeTypes: [
             {
               nodeType: "groupBy",
               occurs: "?"
-            }
+            },
           ]
         },
-        "orderBy": {
+        {
           type: "sequence",
+          name: "orderBy",
           nodeTypes: [
             {
               nodeType: "orderBy",
               occurs: "?"
-            }
+            },
           ]
         },
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "queryDelete": {
-      children: {
-        "delete": {
+      attributes: [
+        {
           type: "sequence",
+          name: "delete",
           nodeTypes: [
             "delete",
           ]
         },
-        "from": {
+        {
           type: "sequence",
+          name: "from",
           nodeTypes: [
             "from",
           ]
         },
-        "where": {
+        {
           type: "sequence",
+          name: "where",
           nodeTypes: [
             {
               nodeType: "where",
@@ -301,11 +346,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             },
           ]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "query": {
       oneOf: ["querySelect", "queryDelete"]
-    }
+    } as Schema.NodeTypeDescription
   },
-  root: "querySelect"
+  root: "query"
 }
