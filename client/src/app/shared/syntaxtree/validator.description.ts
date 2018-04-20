@@ -29,19 +29,24 @@ export type NodeTypeDescription = NodeConcreteTypeDescription | NodeOneOfTypeDes
  * means that a single node can be parent to two unrelated sub-trees.
  * XML schema in contrast allows exactly nodes and attributes as
  * sub-trees.
+ *
+ * The actual attributes of this node (properties or children) are stored
+ * as a list because the order does matter during string serialization
+ * or automatic UI generation.
  */
 export interface NodeConcreteTypeDescription {
-  children?: { [name: string]: NodeChildrenGroupDescription }
-  properties?: { [name: string]: NodePropertyTypeDescription }
+  attributes: NodeAttributeDescription[];
 }
+
+export type NodeAttributeDescription = NodePropertyTypeDescription | NodeChildrenGroupDescription;
 
 /**
  * Properties are used for atomic values and may be optional.
  */
-export interface NodePropertyTypeDescription {
-  base: "boolean" | "integer" | "string"
-  isOptional?: boolean
-}
+export type NodePropertyTypeDescription =
+  NodePropertyBooleanDescription |
+  NodePropertyIntegerDescription |
+  NodePropertyStringDescription;
 
 /**
  * Creates a possibility to define multiple NodeTypes as alternatives
@@ -62,6 +67,8 @@ export type TypeReference = QualifiedTypeName | string
  * Denotes a "boolean" type.
  */
 export interface NodePropertyBooleanDescription {
+  type: "property"
+  name: string
   base: "boolean"
 }
 
@@ -69,6 +76,8 @@ export interface NodePropertyBooleanDescription {
  * Denotes the "string" type and describes ways it can be further restricted.
  */
 export interface NodePropertyStringDescription {
+  type: "property"
+  name: string
   base: "string"
   restrictions?: NodeStringTypeRestrictions[]
 }
@@ -124,6 +133,8 @@ type NodeIntegerTypeRestrictions = MinInclusiveRestriction
  * Describes the "Integer" type and describes how it can be restricted.
  */
 export interface NodePropertyIntegerDescription {
+  type: "property"
+  name: string
   base: "integer"
 }
 
@@ -176,6 +187,7 @@ export type NodeTypesChildReference = (TypeReference | ChildCardinalityDescripti
  */
 export interface NodeTypesSequenceDescription {
   type: "sequence"
+  name: string
   nodeTypes: NodeTypesChildReference[]
 }
 
@@ -185,6 +197,7 @@ export interface NodeTypesSequenceDescription {
  */
 export interface NodeTypesAllowedDescription {
   type: "allowed"
+  name: string
   nodeTypes: NodeTypesChildReference[]
 }
 
@@ -194,6 +207,7 @@ export interface NodeTypesAllowedDescription {
  */
 export interface NodeTypesChoiceDescription {
   type: "choice",
+  name: string
   choices: TypeReference[]
 }
 
