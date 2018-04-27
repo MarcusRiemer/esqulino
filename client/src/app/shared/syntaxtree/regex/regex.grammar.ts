@@ -4,37 +4,43 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   languageName: "regex",
   types: {
     "constant": {
-      properties: {
-        "value": { base: "string" }
-      }
-    },
+      attributes: [
+        {
+          name: "value",
+          base: "string"
+        }
+      ]
+    } as Schema.NodeTypeDescription,
     "alternative": {
-      children: {
-        "expressions": {
+      attributes: [
+        {
+          name: "expressions",
           type: "allowed",
           nodeTypes: [
             { nodeType: "expr", occurs: "+" }
           ]
         }
-      }
+      ]
     },
     "expr": {
-      children: {
-        "singleExpression": {
+      attributes: [
+        {
+          name: "singleExpression",
           type: "choice",
           choices: ["constant", "alternative"]
         }
-      }
+      ]
     },
     "root": {
-      children: {
-        "expressions": {
+      attributes: [
+        {
+          name: "expressions",
           type: "allowed",
           nodeTypes: [
             { nodeType: "expr", occurs: "+" }
           ]
         }
-      }
+      ]
     },
   },
   root: "root"

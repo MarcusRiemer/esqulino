@@ -3,7 +3,7 @@ import { Node, NodeDescription } from '../syntaxtree'
 import { Validator } from '../validator'
 import { ValidationResult, ErrorCodes } from '../validation-result'
 
-import { GRAMMAR_DESCRIPTION } from './css.validator'
+import { GRAMMAR_DESCRIPTION } from './css.grammar'
 import { NODE_CONVERTER } from './css.codegenerator'
 
 /**

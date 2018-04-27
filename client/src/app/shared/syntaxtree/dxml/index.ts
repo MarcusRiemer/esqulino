@@ -1,7 +1,7 @@
 import { LanguageDescription } from '../language.description'
 
 import { NODE_CONVERTER_ERUBY, NODE_CONVERTER_LIQUID } from './dxml.codegenerator'
-import { GRAMMAR_DESCRIPTION } from './dxml.validator'
+import { GRAMMAR_DESCRIPTION } from './dxml.grammar'
 
 export const LANGUAGE_DESCRIPTION_LIQUID: LanguageDescription = {
   id: "dxml-liquid",

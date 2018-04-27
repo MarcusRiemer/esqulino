@@ -1,7 +1,7 @@
 import { LanguageDescription } from '../language.description'
 
 import { NODE_CONVERTER } from './sql.codegenerator'
-import { GRAMMAR_DESCRIPTION } from './sql.validator'
+import { GRAMMAR_DESCRIPTION } from './sql.grammar'
 
 export const LANGUAGE_DESCRIPTION: LanguageDescription = {
   id: "sql",

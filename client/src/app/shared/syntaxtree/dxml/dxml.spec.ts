@@ -4,7 +4,7 @@ import { Validator } from '../validator'
 import { ValidationResult, ErrorCodes } from '../validation-result'
 
 import { NODE_CONVERTER_ERUBY, NODE_CONVERTER_LIQUID } from './dxml.codegenerator'
-import { GRAMMAR_DESCRIPTION } from './dxml.validator'
+import { GRAMMAR_DESCRIPTION } from './dxml.grammar'
 
 function parseDom(input: string) {
   const parser = new DOMParser();

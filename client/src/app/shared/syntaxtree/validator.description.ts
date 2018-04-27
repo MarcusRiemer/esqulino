@@ -70,6 +70,7 @@ export interface NodePropertyBooleanDescription {
   type: "property"
   name: string
   base: "boolean"
+  isOptional?: boolean
 }
 
 /**
@@ -79,6 +80,7 @@ export interface NodePropertyStringDescription {
   type: "property"
   name: string
   base: "string"
+  isOptional?: boolean
   restrictions?: NodeStringTypeRestrictions[]
 }
 
@@ -136,6 +138,7 @@ export interface NodePropertyIntegerDescription {
   type: "property"
   name: string
   base: "integer"
+  isOptional?: boolean
 }
 
 /**
