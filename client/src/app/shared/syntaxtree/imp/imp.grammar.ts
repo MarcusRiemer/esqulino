@@ -4,43 +4,47 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   languageName: "imp",
   types: {
     "program": {
-      children: {
-        "statements": {
+      attributes: [
+        {
+          name: "statements",
           type: "sequence",
-          childCount: {
-            maxOccurs: Infinity,
-            minOccurs: 0,
-          },
           nodeTypes: ["statement"]
         }
-      }
-    },
+      ],
+    } as Schema.NodeTypeDescription,
+
     "statement": {
-      children: {
-        "statement": {
+      attributes: [
+        {
+          name: "children",
           type: "allowed",
-          nodeTypes: ["statementAssign"],
+          nodeTypes: ["statementAssign"]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
+
     "statementAssign": {
-      children: {
-        "variable": {
+      attributes: [
+        {
+          name: "children",
           type: "sequence",
           nodeTypes: ["variable"]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
+
     "variable": {
-      properties: {
-        "name": {
+      attributes: [
+        {
+          name: "name",
           base: "string"
         }
-      }
-    },
+      ],
+    } as Schema.NodeTypeDescription,
+
     "expression": {
 
-    }
+    } as Schema.NodeTypeDescription
   },
 
   root: "program"

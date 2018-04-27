@@ -4,7 +4,7 @@ import { Validator } from '../validator'
 import { ErrorCodes } from '../validation-result'
 
 import { NODE_CONVERTER } from './regex.codegenerator'
-import { GRAMMAR_DESCRIPTION } from './regex.validator'
+import { GRAMMAR_DESCRIPTION } from './regex.grammar'
 
 describe('Language: RegEx', () => {
   it("Invalid: Empty RegEx", () => {

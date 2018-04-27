@@ -3,7 +3,7 @@ import { Validator } from '../validator'
 import { ErrorCodes } from '../validation-result'
 
 
-import { GRAMMAR_DESCRIPTION } from './sql.validator'
+import { GRAMMAR_DESCRIPTION } from './sql.grammar'
 
 describe("Language: SQL (Validation)", () => {
   it("Invalid: Empty SELECT-query", () => {
