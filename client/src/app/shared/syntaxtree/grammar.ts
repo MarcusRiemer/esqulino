@@ -102,17 +102,19 @@ class NodeConcreteType extends NodeType {
   constructor(validator: Validator, typeDesc: Desc.NodeConcreteTypeDescription, language: string, name: string) {
     super(validator, language, name);
 
-    // Construct validators for all children
-    const childrenCategories = typeDesc.children || {};
-    Object.entries(childrenCategories).forEach(([groupName, groupDesc]) => {
-      this._allowedChildren[groupName] = new NodeTypeChildren(this, groupDesc, groupName);
-    });
-
-    // Construct validators for all properties
-    const properties = typeDesc.properties || {};
-    Object.entries(properties).forEach(([propName, propDesc]) => {
-      this._allowedProperties[propName] = this.instanciatePropertyValidator(propDesc)
-    });
+    if (typeDesc.attributes) {
+      // Put the existing attributes into their respective buckets
+      typeDesc.attributes.forEach(a => {
+        if ((a as any).base && !a.type) {
+          debugger;
+        }
+        else if (a.type === "property") {
+          this._allowedProperties[a.name] = this.instanciatePropertyValidator(a);
+        } else {
+          this._allowedChildren[a.name] = new NodeTypeChildren(this, a, a.name);
+        }
+      });
+    }
   }
 
   /**
@@ -512,10 +514,12 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
  */
 class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
   private _nodeTypes: ChildCardinality[];
+  private _categoryName: string;
 
   constructor(group: NodeTypeChildren, desc: Desc.NodeTypesAllowedDescription) {
     super();
 
+    this._categoryName = group.categoryName;
     this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group));
   }
 
@@ -561,6 +565,8 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
       if (num < cardinalityRef.minOccurs) {
         // A specific type appeared not often enough
         context.addError(ErrorCodes.InvalidMinOccurences, parent, {
+          category: this._categoryName,
+          type: this._nodeTypes[index].nodeType.description,
           minOccurs: cardinalityRef.minOccurs,
           actual: num
         });
@@ -569,6 +575,8 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
       if (num > cardinalityRef.maxOccurs) {
         // A specific type appeared too often
         context.addError(ErrorCodes.InvalidMaxOccurences, parent, {
+          category: this._categoryName,
+          type: this._nodeTypes[index].nodeType.description,
           maxOccurs: cardinalityRef.maxOccurs,
           actual: num
         });

@@ -7,6 +7,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           name: "value",
+          type: "property",
           base: "string"
         }
       ]

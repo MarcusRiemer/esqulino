@@ -42,6 +42,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           name: "value",
+          type: "property",
           base: "string"
         }
       ]
@@ -51,6 +52,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           name: "value",
+          type: "property",
           base: "string"
         }
       ]
@@ -60,6 +62,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           name: "value",
+          type: "property",
           base: "string"
         }
       ]
@@ -88,6 +91,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           name: "value",
+          type: "property",
           base: "string"
         }
       ]
@@ -97,6 +101,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           name: "value",
+          type: "property",
           base: "string"
         }
       ]
@@ -105,7 +110,8 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
     "propertyName": {
       attributes: [
         {
-          name: "value",
+          name: "name",
+          type: "property",
           base: "string"
         }
       ]

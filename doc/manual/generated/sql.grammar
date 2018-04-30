@@ -49,7 +49,7 @@ grammar "sql" {
   }
   node "innerJoinUsing" {
     children "table" ::= tableIntroduction
-    children "using" ::= columnName
+    children "using" ::= expression
   }
   typedef "join" {
     "crossJoin"

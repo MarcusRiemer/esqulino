@@ -1,8 +1,8 @@
 grammar "dxml" {
   node "element" {
     prop "name" { string }
-    children "elements" ::= element* & text* & interpolate* & if*
     children "attributes" ::= attribute*
+    children "elements" ::= element* & text* & interpolate* & if*
   }
   node "attribute" {
     prop "name" { string }
@@ -18,8 +18,10 @@ grammar "dxml" {
     children "condition" ::= expr
     children "body" ::= element* & text* & interpolate* & if*
   }
-  node "expr" {
-    children "concreteExpr" ::= exprVar | exprConst | exprBinary
+  typedef "expr" {
+    "exprVar"
+    "exprConst"
+    "exprBinary"
   }
   node "exprVar" {
     prop "name" { string }
@@ -28,7 +30,9 @@ grammar "dxml" {
     prop "name" { string }
   }
   node "exprBinary" {
-    children "exprBinary" ::= expr binaryOperator expr
+    children "lhs" ::= expr
+    children "operator" ::= binaryOperator
+    children "rhs" ::= expr
   }
   node "binaryOperator" {
     prop "operator" { string }

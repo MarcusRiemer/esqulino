@@ -38,6 +38,9 @@ export interface NodeConcreteTypeDescription {
   attributes: NodeAttributeDescription[];
 }
 
+/**
+ * Attributes of a node are either properties or children.
+ */
 export type NodeAttributeDescription = NodePropertyTypeDescription | NodeChildrenGroupDescription;
 
 /**

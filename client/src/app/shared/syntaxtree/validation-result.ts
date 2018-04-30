@@ -88,6 +88,43 @@ interface ValidationError {
 }
 
 /**
+ * A view of an actual error that does not contain any circular references.
+ */
+interface PrintableError {
+  code: string
+  data?: ErrorData
+  offendingNode?: {
+    qualifiedName: AST.QualifiedTypeName
+    location?: AST.NodeLocation
+  }
+}
+
+/**
+ * Removes all cyclic dependencies from an error.
+ */
+export function printableError(e: ValidationError) {
+  const toReturn: PrintableError = {
+    code: e.code,
+    data: e.data,
+    offendingNode: undefined
+  };
+
+  if (e.node) {
+    toReturn.offendingNode = {
+      qualifiedName: e.node.qualifiedName
+    };
+
+    try {
+      toReturn.offendingNode.location = e.node.location;
+    } catch {
+
+    }
+  }
+
+  return (toReturn);
+}
+
+/**
  * Used during validation to accumulate validation results.
  */
 export class ValidationContext {

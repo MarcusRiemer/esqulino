@@ -19,23 +19,27 @@ const langMiniHtml: Schema.GrammarDescription = {
   languageName: "mini-html",
   types: {
     "text": {
-      properties: {
-        "text": {
-          base: "string"
+      attributes: [
+        {
+          name: "text",
+          type: "property",
+          base: "string",
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "html": {
-      children: {
-        "children": {
+      attributes: [
+        {
+          name: "children",
           type: "sequence",
           nodeTypes: ["head", "body"]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "head": {
-      children: {
-        "children": {
+      attributes: [
+        {
+          name: "children",
           type: "allowed",
           nodeTypes: [
             {
@@ -44,11 +48,12 @@ const langMiniHtml: Schema.GrammarDescription = {
             }
           ]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "body": {
-      children: {
-        "children": {
+      attributes: [
+        {
+          name: "children",
           type: "allowed",
           nodeTypes: [
             {
@@ -61,11 +66,12 @@ const langMiniHtml: Schema.GrammarDescription = {
             }
           ]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "paragraph": {
-      children: {
-        "attributes": {
+      attributes: [
+        {
+          name: "attributes",
           type: "allowed",
           nodeTypes: [
             {
@@ -74,7 +80,8 @@ const langMiniHtml: Schema.GrammarDescription = {
             }
           ]
         },
-        "children": {
+        {
+          name: "children",
           type: "allowed",
           nodeTypes: [
             {
@@ -82,12 +89,14 @@ const langMiniHtml: Schema.GrammarDescription = {
               occurs: "*"
             }
           ]
+
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "heading": {
-      children: {
-        "attributes": {
+      attributes: [
+        {
+          name: "attributes",
           type: "allowed",
           nodeTypes: [
             {
@@ -96,7 +105,8 @@ const langMiniHtml: Schema.GrammarDescription = {
             }
           ]
         },
-        "children": {
+        {
+          name: "children",
           type: "allowed",
           nodeTypes: [
             {
@@ -104,12 +114,14 @@ const langMiniHtml: Schema.GrammarDescription = {
               occurs: "*"
             }
           ]
+
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "attr-class": {
-      children: {
-        "classes": {
+      attributes: [
+        {
+          name: "classes",
           type: "allowed",
           nodeTypes: [
             {
@@ -118,15 +130,17 @@ const langMiniHtml: Schema.GrammarDescription = {
             }
           ]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "attr-id": {
-      properties: {
-        "id": {
+      attributes: [
+        {
+          name: "id",
+          type: "property",
           base: "string"
         }
-      }
-    }
+      ]
+    } as Schema.NodeTypeDescription
   },
   root: "html"
 };
@@ -150,27 +164,29 @@ const langMiniSql: Schema.GrammarDescription = {
   types: {
     "root": {
       oneOf: ["query-select", "query-delete"]
-    },
-    "select": {},
-    "delete": {},
-    "from": {},
-    "where": {},
+    } as Schema.NodeTypeDescription,
+    "select": {} as Schema.NodeTypeDescription,
+    "delete": {} as Schema.NodeTypeDescription,
+    "from": {} as Schema.NodeTypeDescription,
+    "where": {} as Schema.NodeTypeDescription,
     "query-select": {
-      children: {
-        "components": {
+      attributes: [
+        {
+          name: "children",
           type: "sequence",
           nodeTypes: ["select", "from", "where"]
         }
-      }
-    },
+      ]
+    } as Schema.NodeTypeDescription,
     "query-delete": {
-      children: {
-        "components": {
+      attributes: [
+        {
+          name: "children",
           type: "sequence",
           nodeTypes: ["delete", "from", "where"]
         }
-      }
-    }
+      ]
+    } as Schema.NodeTypeDescription
   },
   root: "root"
 }
@@ -182,26 +198,34 @@ const langStringConstraint: Schema.GrammarDescription = {
   languageName: "string-constraint",
   types: {
     root: {
-      properties: {
-        "len": {
+      attributes: [
+        {
+          name: "len",
+          type: "property",
           base: "string",
           restrictions: [
             { type: "length", value: 1 }
           ]
         },
-        "min": {
+        {
+          name: "min",
+          type: "property",
           base: "string",
           restrictions: [
             { type: "minLength", value: 2 }
           ]
         },
-        "max": {
+        {
+          name: "max",
+          type: "property",
           base: "string",
           restrictions: [
             { type: "maxLength", value: 2 }
           ]
         },
-        "enum": {
+        {
+          name: "enum",
+          type: "property",
           base: "string",
           restrictions: [
             {
@@ -210,8 +234,8 @@ const langStringConstraint: Schema.GrammarDescription = {
             }
           ]
         }
-      }
-    }
+      ]
+    } as Schema.NodeTypeDescription
   },
   root: "root"
 }
@@ -223,8 +247,9 @@ const langAllowedConstraint: Schema.GrammarDescription = {
   languageName: "allowed-constraint",
   types: {
     "root": {
-      children: {
-        "nodes": {
+      attributes: [
+        {
+          name: "nodes",
           type: "allowed",
           nodeTypes: [
             {
@@ -244,11 +269,11 @@ const langAllowedConstraint: Schema.GrammarDescription = {
             }
           ]
         }
-      }
-    },
-    "a": {},
-    "b": {},
-    "c": {}
+      ],
+    } as Schema.NodeTypeDescription,
+    "a": {} as Schema.NodeTypeDescription,
+    "b": {} as Schema.NodeTypeDescription,
+    "c": {} as Schema.NodeTypeDescription
   },
   root: "root"
 }
@@ -260,8 +285,9 @@ const langSequenceConstraint: Schema.GrammarDescription = {
   languageName: "sequence-constraint",
   types: {
     "root": {
-      children: {
-        "nodes": {
+      attributes: [
+        {
+          name: "nodes",
           type: "sequence",
           nodeTypes: [
             "a",
@@ -282,11 +308,11 @@ const langSequenceConstraint: Schema.GrammarDescription = {
             }
           ]
         }
-      }
-    },
-    "a": {},
-    "b": {},
-    "c": {}
+      ],
+    } as Schema.NodeTypeDescription,
+    "a": {} as Schema.NodeTypeDescription,
+    "b": {} as Schema.NodeTypeDescription,
+    "c": {} as Schema.NodeTypeDescription
   },
   root: "root"
 };
@@ -299,10 +325,10 @@ const langOneOfNodes: Schema.GrammarDescription = {
   types: {
     "root": {
       oneOf: ["a", "b"]
-    },
-    "a": {},
-    "b": {},
-    "c": {}
+    } as Schema.NodeTypeDescription,
+    "a": {} as Schema.NodeTypeDescription,
+    "b": {} as Schema.NodeTypeDescription,
+    "c": {} as Schema.NodeTypeDescription
   },
   root: "root"
 }
@@ -314,10 +340,14 @@ const langBooleanConstraint: Schema.GrammarDescription = {
   languageName: "boolean-constraint",
   types: {
     "root": {
-      properties: {
-        "foo": { base: "boolean" }
-      }
-    }
+      attributes: [
+        {
+          name: "foo",
+          type: "property",
+          base: "boolean",
+        }
+      ]
+    } as Schema.NodeTypeDescription
   },
   root: "root"
 }
@@ -329,14 +359,20 @@ const langOptionalProperty: Schema.GrammarDescription = {
   languageName: "optionalProperty",
   types: {
     "root": {
-      properties: {
-        "required": { base: "string" },
-        "optional": {
+      attributes: [
+        {
+          name: "required",
+          type: "property",
+          base: "string",
+        },
+        {
+          name: "optional",
+          type: "property",
           base: "string",
           isOptional: true
         }
-      }
-    }
+      ]
+    } as Schema.NodeTypeDescription
   },
   root: "root"
 }
@@ -345,15 +381,22 @@ const langSimpleChoice: Schema.GrammarDescription = {
   languageName: "simpleChoice",
   types: {
     "root": {
+      attributes: [
+        {
+          name: "nodes",
+          type: "choice",
+          choices: ["a", "b"]
+        }
+      ],
       children: {
         "nodes": {
           type: "choice",
           choices: ["a", "b"]
         }
       }
-    },
-    "a": {},
-    "b": {}
+    } as Schema.NodeTypeDescription,
+    "a": {} as Schema.NodeTypeDescription,
+    "b": {} as Schema.NodeTypeDescription
   },
   root: "root"
 }
@@ -362,31 +405,34 @@ const langComplexChoice: Schema.GrammarDescription = {
   languageName: "complexChoice",
   types: {
     "root": {
-      children: {
-        "choice": {
+      attributes: [
+        {
+          name: "choice",
           type: "choice",
           choices: ["a", "b"]
         }
-      }
+      ]
     },
     "a": {
-      children: {
-        "sequence": {
+      attributes: [
+        {
+          name: "sequence",
           type: "sequence",
           nodeTypes: ["c", "c"]
         }
-      }
+      ]
     },
     "b": {
-      children: {
-        "allowed": {
+      attributes: [
+        {
+          name: "allowed",
           type: "allowed",
           nodeTypes: ["d", "c"]
         }
-      }
+      ]
     },
-    "c": {},
-    "d": {}
+    "c": {} as Schema.NodeTypeDescription,
+    "d": {} as Schema.NodeTypeDescription
   },
   root: "root"
 }

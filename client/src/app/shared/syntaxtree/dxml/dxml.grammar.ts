@@ -7,6 +7,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           name: "name",
+          type: "property",
           base: "string"
         },
         {
@@ -32,6 +33,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           name: "name",
+          type: "property",
           base: "string"
         },
         {
@@ -48,6 +50,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           name: "value",
+          type: "property",
           base: "string"
         }
       ]
@@ -55,7 +58,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
     "interpolate": {
       attributes: [
         {
-          name: "children",
+          name: "expr",
           type: "allowed",
           nodeTypes: ["expr"]
         },
@@ -80,13 +83,16 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         }
       ]
     } as Schema.NodeTypeDescription,
+
     "expr": {
       oneOf: ["exprVar", "exprConst", "exprBinary"]
     } as Schema.NodeTypeDescription,
+
     "exprVar": {
       attributes: [
         {
           name: "name",
+          type: "property",
           base: "string"
         }
       ]
@@ -95,6 +101,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           name: "name",
+          type: "property",
           base: "string"
         }
       ]
@@ -109,7 +116,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         {
           name: "operator",
           type: "allowed",
-          nodeTypes: ["expr"]
+          nodeTypes: ["binaryOperator"]
         },
         {
           name: "rhs",
@@ -122,6 +129,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           name: "operator",
+          type: "property",
           base: "string"
         }
       ]

@@ -38,18 +38,16 @@ export function prettyPrintType(name: string, t: Desc.NodeTypeDescription): Nest
 export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTypeDescription): NestedString {
   const head = `node "${name}" {`;
 
-  // Add all properties (if there are any)
-  const props = t.properties
-    ? Object.entries(t.properties).map(([propName, prop]) => prettyPrintProperty(propName, prop))
-    : [];
+  const attributes = (t.attributes ? t.attributes : []).map(a => {
+    if (a.type === "property") {
+      return (prettyPrintProperty(a));
+    } else {
+      return (prettyPrintChildGroup(a));
+    }
+  });
 
-  // Add all children (if there are any)
-  const children = t.children
-    ? Object.entries(t.children).map(([groupName, group]) => prettyPrintChildGroup(groupName, group))
-    : [];
-
-  if (props.length > 0 || children.length > 0) {
-    return ([head, ...props, ...children, `}`]);
+  if (attributes.length > 0) {
+    return ([head, ...attributes, `}`]);
   } else {
     return ([head, `}`]);
   }
@@ -66,9 +64,9 @@ export function prettyPrintOneOfType(name: string, t: Desc.NodeOneOfTypeDescript
 /**
  * Prints the grammar for a property
  */
-export function prettyPrintProperty(name: string, p: Desc.NodePropertyTypeDescription): NestedString {
+export function prettyPrintProperty(p: Desc.NodePropertyTypeDescription): NestedString {
   const optional = p.isOptional ? '?' : '';
-  const head = `prop${optional} "${name}"`;
+  const head = `prop${optional} "${p.name}"`;
 
   let restrictions: string[] = [];
   if (Desc.isNodePropertyStringDesciption(p) && p.restrictions) {
@@ -135,8 +133,8 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
 /**
  * Prints the grammar of a single child group.
  */
-export function prettyPrintChildGroup(name: string, p: Desc.NodeChildrenGroupDescription): NestedString {
-  return ([`children "${name}" ::= ` + prettyPrintChildGroupElements(p)]);
+export function prettyPrintChildGroup(p: Desc.NodeChildrenGroupDescription): NestedString {
+  return ([`children "${p.name}" ::= ` + prettyPrintChildGroupElements(p)]);
 }
 
 /**

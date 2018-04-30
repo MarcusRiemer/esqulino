@@ -3,8 +3,9 @@
   "root": "n1",
   "types": {
     "n1": {
-      "children": {
-        "c": {
+      "attributes": [
+        {
+          "name": "c",
           "type": "allowed",
           "nodeTypes": [
             {
@@ -21,7 +22,7 @@
             }
           ]
         }
-      }
+      ]
     },
     "n2": {
     },

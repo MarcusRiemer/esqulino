@@ -1,4 +1,4 @@
-import { Tree, LanguageDescription, Language } from 'app/shared/syntaxtree';
+import { Tree, LanguageDescription, Language, NodeTypeDescription } from 'app/shared/syntaxtree';
 
 import { BlockLanguageDescription } from './block-language.description'
 import { BlockLanguage } from './block-language'
@@ -14,18 +14,21 @@ const langEmptyBlocks: LanguageDescription = {
       languageName: "emptyBlocks",
       types: {
         "root": {
-          children: {
-            "cat_a": {
+          attributes: [
+            {
+              name: "cat_a",
               type: "allowed",
-              nodeTypes: [{
-                nodeType: "a",
-                occurs: "+"
-              }]
+              nodeTypes: [
+                {
+                  nodeType: "a",
+                  occurs: "+"
+                }
+              ]
             }
-          }
-        },
-        "a": {},
-        "z": {}
+          ]
+        } as NodeTypeDescription,
+        "a": {} as NodeTypeDescription,
+        "z": {} as NodeTypeDescription
       },
       root: "root"
     }
