@@ -4,7 +4,7 @@ export * from './grammar'
 export * from './language'
 export * from './language.description'
 export * from './validator'
-export * from './validator.description'
+export * from './grammar.description'
 export * from './validation-result'
 
 

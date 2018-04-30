@@ -1,4 +1,4 @@
-import * as Desc from './validator.description'
+import * as Desc from './grammar.description'
 import * as AST from './syntaxtree'
 
 import { Validator } from './validator'

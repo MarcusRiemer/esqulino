@@ -1,4 +1,4 @@
-import * as d from './validator.description'
+import * as d from './grammar.description'
 import * as p from './prettyprint'
 
 /**

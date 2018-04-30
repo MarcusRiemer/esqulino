@@ -1,4 +1,4 @@
-import * as Schema from '../validator.description'
+import * as Schema from '../grammar.description'
 
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   languageName: "sql",

@@ -1,4 +1,4 @@
-import * as Schema from './validator.description'
+import * as Schema from './grammar.description'
 import * as AST from './syntaxtree'
 import { Validator } from './validator'
 import { ErrorCodes, ValidationResult } from './validation-result'
@@ -26,7 +26,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           base: "string",
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "html": {
       attributes: [
         {
@@ -35,7 +35,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           nodeTypes: ["head", "body"]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "head": {
       attributes: [
         {
@@ -49,7 +49,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "body": {
       attributes: [
         {
@@ -67,7 +67,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "paragraph": {
       attributes: [
         {
@@ -92,7 +92,7 @@ const langMiniHtml: Schema.GrammarDescription = {
 
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "heading": {
       attributes: [
         {
@@ -117,7 +117,7 @@ const langMiniHtml: Schema.GrammarDescription = {
 
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "attr-class": {
       attributes: [
         {
@@ -131,7 +131,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "attr-id": {
       attributes: [
         {
@@ -140,7 +140,7 @@ const langMiniHtml: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription
+    }
   },
   root: "html"
 };
@@ -164,11 +164,11 @@ const langMiniSql: Schema.GrammarDescription = {
   types: {
     "root": {
       oneOf: ["query-select", "query-delete"]
-    } as Schema.NodeTypeDescription,
-    "select": {} as Schema.NodeTypeDescription,
-    "delete": {} as Schema.NodeTypeDescription,
-    "from": {} as Schema.NodeTypeDescription,
-    "where": {} as Schema.NodeTypeDescription,
+    },
+    "select": {},
+    "delete": {},
+    "from": {},
+    "where": {},
     "query-select": {
       attributes: [
         {
@@ -177,7 +177,7 @@ const langMiniSql: Schema.GrammarDescription = {
           nodeTypes: ["select", "from", "where"]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "query-delete": {
       attributes: [
         {
@@ -186,7 +186,7 @@ const langMiniSql: Schema.GrammarDescription = {
           nodeTypes: ["delete", "from", "where"]
         }
       ]
-    } as Schema.NodeTypeDescription
+    }
   },
   root: "root"
 }
@@ -235,7 +235,7 @@ const langStringConstraint: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription
+    }
   },
   root: "root"
 }
@@ -270,10 +270,10 @@ const langAllowedConstraint: Schema.GrammarDescription = {
           ]
         }
       ],
-    } as Schema.NodeTypeDescription,
-    "a": {} as Schema.NodeTypeDescription,
-    "b": {} as Schema.NodeTypeDescription,
-    "c": {} as Schema.NodeTypeDescription
+    },
+    "a": {},
+    "b": {},
+    "c": {}
   },
   root: "root"
 }
@@ -309,10 +309,10 @@ const langSequenceConstraint: Schema.GrammarDescription = {
           ]
         }
       ],
-    } as Schema.NodeTypeDescription,
-    "a": {} as Schema.NodeTypeDescription,
-    "b": {} as Schema.NodeTypeDescription,
-    "c": {} as Schema.NodeTypeDescription
+    },
+    "a": {},
+    "b": {},
+    "c": {}
   },
   root: "root"
 };
@@ -326,9 +326,9 @@ const langOneOfNodes: Schema.GrammarDescription = {
     "root": {
       oneOf: ["a", "b"]
     } as Schema.NodeTypeDescription,
-    "a": {} as Schema.NodeTypeDescription,
-    "b": {} as Schema.NodeTypeDescription,
-    "c": {} as Schema.NodeTypeDescription
+    "a": {},
+    "b": {},
+    "c": {}
   },
   root: "root"
 }
@@ -347,7 +347,7 @@ const langBooleanConstraint: Schema.GrammarDescription = {
           base: "boolean",
         }
       ]
-    } as Schema.NodeTypeDescription
+    }
   },
   root: "root"
 }
@@ -372,7 +372,7 @@ const langOptionalProperty: Schema.GrammarDescription = {
           isOptional: true
         }
       ]
-    } as Schema.NodeTypeDescription
+    }
   },
   root: "root"
 }
@@ -387,16 +387,10 @@ const langSimpleChoice: Schema.GrammarDescription = {
           type: "choice",
           choices: ["a", "b"]
         }
-      ],
-      children: {
-        "nodes": {
-          type: "choice",
-          choices: ["a", "b"]
-        }
-      }
-    } as Schema.NodeTypeDescription,
-    "a": {} as Schema.NodeTypeDescription,
-    "b": {} as Schema.NodeTypeDescription
+      ]
+    },
+    "a": {},
+    "b": {}
   },
   root: "root"
 }
@@ -431,13 +425,38 @@ const langComplexChoice: Schema.GrammarDescription = {
         }
       ]
     },
-    "c": {} as Schema.NodeTypeDescription,
-    "d": {} as Schema.NodeTypeDescription
+    "c": {},
+    "d": {}
   },
   root: "root"
 }
 
-describe('Language Validator', () => {
+describe('Grammar Validation', () => {
+  /*
+   * This is more a compile time testcase. It ensures that the grammar
+   * definition allows the definition of "empty types" without having a
+   * clash between oneOf and complex types.
+   */
+  it('Grammar Empty Nodes', () => {
+    const g: Schema.GrammarDescription = {
+      languageName: "emptyNodes",
+      root: "r",
+      types: {
+        "r": {}
+      }
+    };
+
+    const v = new Validator([g]);
+
+    const ast = new AST.Tree({
+      language: "emptyNodes",
+      name: "r"
+    });
+
+    expect(v.validateFromRoot(ast).isValid).toBe(true);
+  });
+
+
   it('Empty Tree', () => {
     const v = new Validator([langStringConstraint]);
 

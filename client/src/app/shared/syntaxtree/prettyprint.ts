@@ -1,7 +1,7 @@
 import { recursiveJoin, NestedString } from '../nested-string'
 
 import { NodeDescription } from './syntaxtree.description'
-import * as Desc from './validator.description'
+import * as Desc from './grammar.description'
 
 /**
  * Converts the internal structure of a grammar into a more readable
