@@ -35,7 +35,7 @@ export type NodeTypeDescription = NodeConcreteTypeDescription | NodeOneOfTypeDes
  * or automatic UI generation.
  */
 export interface NodeConcreteTypeDescription {
-  attributes: NodeAttributeDescription[];
+  attributes?: NodeAttributeDescription[];
 }
 
 /**

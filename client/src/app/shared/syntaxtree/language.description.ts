@@ -1,4 +1,4 @@
-import { GrammarDescription } from './validator.description'
+import { GrammarDescription } from './grammar.description'
 import { NodeConverterRegistration } from './codegenerator'
 
 /**

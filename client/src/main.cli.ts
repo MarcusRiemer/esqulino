@@ -4,7 +4,7 @@ import * as process from 'process'
 import { Tree } from './app/shared/syntaxtree/syntaxtree'
 
 import { prettyPrintGrammar } from './app/shared/syntaxtree/prettyprint'
-import { GrammarDescription } from './app/shared/syntaxtree/validator.description'
+import { GrammarDescription } from './app/shared/syntaxtree/grammar.description'
 
 import { LanguageDescription } from './app/shared/syntaxtree/language.description'
 import { Language } from './app/shared/syntaxtree/language'
