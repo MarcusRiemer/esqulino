@@ -141,7 +141,9 @@ export const NODE_CONVERTER_ERUBY = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess) {
-        const children = node.children['exprBinary'];
+        const children = node.getChildrenInCategory("lhs")
+          .concat(node.getChildrenInCategory("operator"))
+          .concat(node.getChildrenInCategory("rhs"));
 
         // The binary expression needs spaces around all nodes
         children.forEach(c => {
@@ -240,7 +242,9 @@ export const NODE_CONVERTER_LIQUID = [
     },
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess) {
-        const children = node.children['exprBinary'];
+        const children = node.getChildrenInCategory("lhs")
+          .concat(node.getChildrenInCategory("operator"))
+          .concat(node.getChildrenInCategory("rhs"));
 
         // The binary expression needs spaces around all nodes
         children.forEach(c => {

@@ -3,11 +3,13 @@
   "root": "s1",
   "types": {
     "s1": {
-      "properties": {
-        "value": {
+      "attributes": [
+        {
+          "name": "value",
+          "type": "property",
           "base": "string"
         }
-      }
+      ]
     }
   }
 }

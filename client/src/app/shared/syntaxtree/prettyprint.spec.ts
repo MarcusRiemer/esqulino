@@ -21,19 +21,20 @@ export function verifyFiles<T>(fileName: string, expExt: string, transform: (obj
 
 describe('Grammar PrettyPrinter', () => {
   it('prop "s1" { string }', () => {
-    const r = p.prettyPrintProperty("s1", { base: "string" });
+    const r = p.prettyPrintProperty({ type: "property", name: "s1", base: "string" });
 
     expect(r).toEqual([`prop "s1" { string }`]);
   });
 
   it('prop? "s2" { string }', () => {
-    const r = p.prettyPrintProperty("s1", { base: "string", isOptional: true });
+    const r = p.prettyPrintProperty({ type: "property", name: "s2", base: "string", isOptional: true });
 
-    expect(r).toEqual([`prop? "s1" { string }`]);
+    expect(r).toEqual([`prop? "s2" { string }`]);
   });
 
   it('prop "s3" { string { length=4 } }', () => {
-    const r = p.prettyPrintProperty("s3", {
+    const r = p.prettyPrintProperty({
+      name: "s3",
       base: "string",
       restrictions: [
         {
@@ -47,7 +48,8 @@ describe('Grammar PrettyPrinter', () => {
   });
 
   it('prop "s4" { string { minLength 2 maxLength 4 } }', () => {
-    const r = p.prettyPrintProperty("s4", {
+    const r = p.prettyPrintProperty({
+      name: "s4",
       base: "string",
       restrictions: [
         {
@@ -74,7 +76,8 @@ describe('Grammar PrettyPrinter', () => {
   });
 
   it('prop "i1" { integer }', () => {
-    const r = p.prettyPrintProperty("i1", {
+    const r = p.prettyPrintProperty({
+      name: "i1",
       base: "integer",
     } as d.NodePropertyIntegerDescription);
 
@@ -129,12 +132,33 @@ describe('Grammar PrettyPrinter', () => {
   });
 
   it('foo ::= bar baz', () => {
-    const r = p.prettyPrintChildGroup('foo', {
+    const r = p.prettyPrintChildGroup({
+      name: "foo",
       nodeTypes: ["bar", "baz"],
       type: "sequence"
     });
 
     expect(r).toEqual(['children "foo" ::= bar baz']);
+  });
+
+  it('node "s1" { prop "value" { string } }', () => {
+    debugger;
+    const r = p.prettyPrintConcreteNodeType("s1", {
+      attributes: [
+        {
+          name: "value",
+          type: "property",
+          base: "string"
+        }
+      ]
+    });
+
+    expect(r).toEqual([
+      'node "s1" {', [
+        'prop "value" { string }'
+      ],
+      '}'
+    ]);
   });
 
   it('Grammar g0: empty', () => {

@@ -1,7 +1,7 @@
 import { CodeGenerator, NodeConverterRegistration, CodeGeneratorProcess } from '../codegenerator'
-import { Node, NodeDescription } from '../syntaxtree'
+import { Node, NodeDescription, Tree } from '../syntaxtree'
 import { Validator } from '../validator'
-import { ValidationResult, ErrorCodes } from '../validation-result'
+import { ValidationResult, ErrorCodes, printableError } from '../validation-result'
 
 import { GRAMMAR_DESCRIPTION } from './css.grammar'
 import { NODE_CONVERTER } from './css.codegenerator'
@@ -33,12 +33,17 @@ function emitTree(astDesc: NodeDescription) {
 
 function validate(fileName: string, isValid: boolean) {
   const astDesc = require(`json-loader!./spec/${fileName}.json`);
-  const ast = new Node(astDesc, undefined);
+  const ast = new Tree(astDesc);
 
   const validator = new Validator([GRAMMAR_DESCRIPTION]);
   const result = validator.validateFromRoot(ast);
 
-  expect(result.isValid).toBe(isValid, `${fileName} should be ${isValid ? 'valid' : 'invalid'}`);
+  /*if (!result.isValid) {
+    const printable = result.errors.map(e => printableError(e));
+    debugger;
+  }*/
+
+  expect(result.errors.map(e => printableError(e))).toEqual([], `${fileName} should be ${isValid ? 'valid' : 'invalid'}`);
 
   return (result);
 }
