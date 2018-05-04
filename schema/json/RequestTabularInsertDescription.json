@@ -1,0 +1,37 @@
+{
+  "$ref": "#/definitions/RequestTabularInsertDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "RawTableDataDescription": {
+      "description": "At the lowest level all tabular data is simply represented by\na string array for each row.",
+      "items": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "type": "array"
+    },
+    "RequestTabularInsertDescription": {
+      "additionalProperties": false,
+      "description": "Allows bulk insertion of tabular data like from CSV files. The order\nof the data in the actual columns must match the order of the given\ncolumn names.",
+      "properties": {
+        "columnNames": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "data": {
+          "$ref": "#/definitions/RawTableDataDescription"
+        }
+      },
+      "required": [
+        "columnNames",
+        "data"
+      ],
+      "type": "object"
+    }
+  }
+}

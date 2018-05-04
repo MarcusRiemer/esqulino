@@ -8,7 +8,6 @@ import { Column, ColumnStatus } from './column'
  * This will replace the TableDescribtion used in the original design, but it
  * includes all variables for downwards compatibility. 
  */
-
 export class Table {
   private _name: string;
   private _columns: Column[];
