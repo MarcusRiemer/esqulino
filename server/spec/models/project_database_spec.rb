@@ -176,7 +176,7 @@ RSpec.describe ProjectDatabase, type: :model do
     end
   end
 
-  context 'key_value: alter table' do
+  context 'key_value: alter single table' do
     before(:each) do
       @db = FactoryBot.create(:project_database)
       @db.table_create(database_description_key_value[0])
@@ -284,7 +284,7 @@ RSpec.describe ProjectDatabase, type: :model do
     end
   end
 
-  context 'key_value: alter table' do
+  context 'key_value: alter multiple tables' do
     before(:each) do
       @db = FactoryBot.create(:project_database)
       @db.table_create(database_description_two_tables[1])
@@ -316,7 +316,93 @@ RSpec.describe ProjectDatabase, type: :model do
       expect(new_schema[0]['name']).to eq "value_key"
     end
   end
-    
+
+  context 'bulk insert' do
+    before(:each) do
+      @table_name = database_description_key_value[0]['name']
+      @db = FactoryBot.create(:project_database)
+      @db.table_create(database_description_key_value[0])
+    end
+
+    after(:each) do
+      @db.destroy!
+      @db.project.destroy! if @db.project
+    end
+
+    it 'single row' do
+      @db.table_bulk_insert(
+        @table_name,
+        ['key', 'value'],
+        [
+          ['1', 'eins']
+        ]
+      )
+
+      expect(@db.table_row_count @table_name).to be 1
+    end
+
+    it 'two rows' do
+      @db.table_bulk_insert(
+        @table_name,
+        ['key', 'value'],
+        [
+          ['1', 'eins'],
+          ['2', 'zwei']
+        ]
+      )
+
+      expect(@db.table_row_count @table_name).to be 2
+    end
+
+    it 'missing keys' do
+      @db.table_bulk_insert(
+        @table_name,
+        ['value'],
+        [
+          ['eins'],
+          ['zwei']
+        ]
+      )
+
+      expect(@db.table_row_count @table_name).to be 2
+    end
+
+    it 'unknown table' do
+      expect do
+        @db.table_bulk_insert(
+          @table_name + '_nonexistant',
+          ['key', 'value'],
+          [
+            ['1', 'eins'],
+          ]
+        )
+      end.to raise_exception UnknownDatabaseTableError
+    end
+
+    it 'more data columns then actual columns' do
+      expect do
+        @db.table_bulk_insert(
+          @table_name,
+          ['key', 'value'],
+          [
+            ['1', 'eins', 'error_too_much'],
+          ]
+        )
+      end.to raise_exception DatabaseQueryError
+    end
+
+    it 'less data columns then actual columns' do
+      expect do
+        @db.table_bulk_insert(
+          @table_name,
+          ['key', 'value'],
+          [
+            ['error_not_enough'],
+          ]
+        )
+      end.to raise_exception DatabaseQueryError
+    end
+  end
 
   # This spec can't be run with FakeFS as the C-bindings of SQLite
   # don't know anything about the faking that goes on in the background.
@@ -326,12 +412,12 @@ RSpec.describe ProjectDatabase, type: :model do
     expect(File.directory? project.data_directory_path).to be true
     expect(File.directory? File.join(project.data_directory_path, "databases")).to be true
 
-    @db = project.default_database = FactoryBot.build(:tempfile_project_database, project_id: project.id)
+    db = project.default_database = FactoryBot.build(:tempfile_project_database, project_id: project.id)
 
-    @db.save!
-    expect(File.exist? @db.sqlite_file_path).to be true
+    db.save!
+    expect(File.exist? db.sqlite_file_path).to be true
 
-    @db.destroy!
+    db.destroy!
     project.destroy!
   end
 end

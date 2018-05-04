@@ -115,13 +115,34 @@ class ProjectDatabase < ApplicationRecord
     end
   end
 
+  # Inserts tabular data into a table.
+  #
+  # @param table_name [string] The name of the table.
+  # @param column_names [Array<string>] The name of the columns
+  def table_bulk_insert(table_name, column_names, rows)
+    if table_exists? table_name then
+      sql_column_names = column_names
+                           .map {|n| "'#{n}'" }
+                           .join(',')
+      sql_data = rows
+                   .map { |r| "(" + r.map {|n| "'#{n}'" }.join(',') + ")" }
+                   .join(",\n")
+      
+      sql = "INSERT INTO '#{table_name}' (#{sql_column_names}) VALUES\n#{sql_data}"
+
+      execute_sql(sql, [], false)
+    else
+      raise UnknownDatabaseTableError.new(self, table_name)
+    end
+  end
+
   # Refreshes the cached schema.
   def refresh_schema
     # Not so nice: Explicitly calling this complicated version of serializable_hash here
     self.schema = database_describe_schema(db_connection_admin)
                     .map { |t| t.serializable_hash(include: { columns: { }, foreign_keys: {} }) }
   end
-  
+
   # Refreshes and persists a possibly changed schema.
   def refresh_schema!
     refresh_schema

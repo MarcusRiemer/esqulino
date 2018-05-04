@@ -188,6 +188,77 @@ RSpec.describe ProjectDatabasesController, type: :request do
     end
   end
 
+  describe 'POST /api/project/:project_id/db/:database_id/data/:tablename/bulk-insert' do
+    it 'Inserting a single row' do
+      project = FactoryBot.create(:project_with_default_database)
+      project.default_database.table_create(database_description_key_value[0])
+      project.default_database.save
+
+      post "#{default_db_api_url project}/data/key_value/bulk-insert",
+           :headers => json_headers,
+           :params => {
+             "columnNames" => ['key', 'value'],
+             "data" => [
+               ['1', 'eins'],
+             ]
+           }.to_json
+
+      expect(response.status).to eq 204
+    end
+
+    it 'Inserting multiple rows' do
+      project = FactoryBot.create(:project_with_default_database)
+      project.default_database.table_create(database_description_key_value[0])
+      project.default_database.save
+
+      post "#{default_db_api_url project}/data/key_value/bulk-insert",
+           :headers => json_headers,
+           :params => {
+             "columnNames" => ['key', 'value'],
+             "data" => [
+               ['1', 'eins'],
+               ['2', 'eins'],
+               ['3', 'eins'],
+             ]
+           }.to_json
+
+      expect(response.status).to eq 204
+    end
+
+    it 'Malformed: No column names' do
+      project = FactoryBot.create(:project_with_default_database)
+      project.default_database.table_create(database_description_key_value[0])
+      project.default_database.save
+
+      post "#{default_db_api_url project}/data/key_value/bulk-insert",
+           :headers => json_headers,
+           :params => {
+             "data" => [
+               ['1', 'eins'],
+             ]
+           }.to_json
+
+      expect(response.status).to eq 400
+    end
+
+    it 'Malformed: Empty column names' do
+      project = FactoryBot.create(:project_with_default_database)
+      project.default_database.table_create(database_description_key_value[0])
+      project.default_database.save
+
+      post "#{default_db_api_url project}/data/key_value/bulk-insert",
+           :headers => json_headers,
+           :params => {
+             "columnNames" => [],
+             "data" => [
+               ['1', 'eins'],
+             ]
+           }.to_json
+
+      expect(response.status).to eq 400
+    end
+  end
+
   private
 
   def default_db_api_url(project)

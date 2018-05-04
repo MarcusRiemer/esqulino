@@ -90,6 +90,19 @@ class ProjectDatabasesController < ApplicationController
     end
   end
 
+  # Bulk insertion of larger amounts of data
+  def table_tabular_insert
+    ensure_write_access do
+      table_name = params['tablename']
+      tabular_data = ensure_request("RequestTabularInsertDescription", request.body.read)
+
+      current_database.table_bulk_insert(table_name, tabular_data['columnNames'], tabular_data['data'])
+
+      render status: :no_content
+      
+    end
+  end
+
 
   # Drops a single table of the given database.
   def table_delete

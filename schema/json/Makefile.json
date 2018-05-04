@@ -6,7 +6,7 @@
 TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = ArbitraryQueryRequestDescription.json ProjectDescription.json ProjectFullDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json ProjectUsesBlockLanguageDescription.json ProjectSourceDescription.json AlterSchemaRequestDescription.json TableDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageDescription.json NodeDescription.json CodeResourceDescription.json
+JSON_SCHEMA_FILES = ArbitraryQueryRequestDescription.json ProjectDescription.json ProjectFullDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json ProjectUsesBlockLanguageDescription.json ProjectSourceDescription.json AlterSchemaRequestDescription.json TableDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageDescription.json NodeDescription.json CodeResourceDescription.json RequestTabularInsertDescription.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -61,6 +61,9 @@ NodeDescription.json : $(SRC_PATH)/shared/syntaxtree/syntaxtree.description.ts
 	$(CONVERT_COMMAND)
 
 CodeResourceDescription.json : $(SRC_PATH)/shared/syntaxtree/coderesource.description.ts
+	$(CONVERT_COMMAND)
+
+RequestTabularInsertDescription.json : $(SRC_PATH)/shared/schema/schema.description.ts
 	$(CONVERT_COMMAND)
 
 

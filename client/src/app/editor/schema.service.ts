@@ -10,6 +10,7 @@ import { KeyValuePairs, encodeUriParameters } from '../shared/util'
 
 import { Project, ProjectService } from './project.service'
 import { Table, Column } from '../shared/schema/'
+import { RawTableDataDescription } from '../shared/schema/schema.description'
 import { TableCommandHolder } from '../shared/schema/table-commands'
 
 interface CurrentlyEdited {
@@ -31,7 +32,7 @@ export class SchemaService {
   /**
    * If a HTTP request is in progress, this is it.
    */
-  private _httpRequest: Observable<string[][]>;
+  private _httpRequest: Observable<RawTableDataDescription>;
 
   /**
    * Counts the number of changes that have been made to the current
@@ -96,7 +97,9 @@ export class SchemaService {
   }
 
   /**
-   * Should be called after any change to the schema.
+   * Should be called after any change to the schema. This number is used
+   * as a "sort of" version to decide whether the server should be asked
+   * again for a updated representation of the schema.
    */
   private incrementChangeCount() {
     this._changeCount.next(this._changeCount.value + 1);
@@ -109,7 +112,7 @@ export class SchemaService {
    * @param from - the index to start getting the entries from
    * @param amount - the amount of entries to get
    */
-  getTableData(project: Project, table: Table, from: number, amount: number) {
+  getTableData(project: Project, table: Table, from: number, amount: number): Observable<RawTableDataDescription> {
     const url = this._server.getTableEntriesUrl(project.slug, project.currentDatabaseName, table.name, from, amount);
 
     let headers = new Headers({ 'Content-Type': 'application/json' });

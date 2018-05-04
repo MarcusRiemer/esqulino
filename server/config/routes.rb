@@ -99,6 +99,9 @@ Rails.application.routes.draw do
         scope 'db/:database_id' do
           get 'visual_schema', controller: 'project_databases', action: :visual_schema
 
+          # Manipulation via tabular data (like CSV files)
+          post 'data/:tablename/bulk-insert', controller: 'project_databases', action: :table_tabular_insert
+
           # Querying table data
           get 'count/:tablename', controller: 'project_databases', action: :table_row_count
           get 'rows/:tablename/:from/:amount', controller: 'project_databases', action: :table_row_data

@@ -11,11 +11,15 @@ export interface ColumnDescription {
   primary: boolean
 }
 
+/**
+ * A reference from the column of one table to a specific
+ * column of another table.
+ */
 export interface ForeignKeyDescription {
   references: {
     to_table: string
-    from_column: string
     to_column: string
+    from_column: string
   }[];
 }
 
@@ -31,5 +35,24 @@ export interface TableDescription {
   columns: ColumnDescription[]
   foreign_keys: ForeignKeyDescription[]
   system_table?: boolean
+}
+
+/**
+ * At the lowest level all tabular data is simply represented by
+ * a string array for each row.
+ */
+export type RawTableDataDescription = string[][];
+
+/**
+ * Allows bulk insertion of tabular data like from CSV files. The order
+ * of the data in the actual columns must match the order of the given
+ * column names.
+ */
+export interface RequestTabularInsertDescription {
+  /**
+   * @minItems 1
+   */
+  columnNames: string[];
+  data: RawTableDataDescription;
 }
 
