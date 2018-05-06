@@ -1,10 +1,8 @@
-import 'rxjs/Rx';
-
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
-import { Observable } from 'rxjs/Observable'
-
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
+
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { ServerApiService } from './serverapi.service'
 import { ProjectFullDescription } from './project.description'
@@ -49,16 +47,18 @@ export class ProjectDescriptionService {
     // Ask the server for available projects
     const uri = this._serverApi.getProjectListUrl();
     this._httpRequest = this._http.get(uri)
-      .map(res => <ProjectFullDescription[]>res.json())
-      .catch(err => {
-        this._flashService.addMessage({
-          caption: "Fehler beim Laden der Projekte: ",
-          text: err.toString(),
-          type: "danger"
-        });
+      .pipe(
+        map(res => <ProjectFullDescription[]>res.json()),
+        catchError(err => {
+          this._flashService.addMessage({
+            caption: "Fehler beim Laden der Projekte: ",
+            text: err.toString(),
+            type: "danger"
+          });
 
-        return ([]);
-      });
+          return ([]);
+        })
+      );
 
     this._httpRequest.subscribe(projects => {
       this._cache.next(projects)

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs';
+import { catchError, delay, map } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared/serverapi.service'
 import { CodeResource } from '../shared/syntaxtree'
@@ -35,9 +36,11 @@ export class CodeResourceService {
     }
 
     const toReturn = this._http.post(url, JSON.stringify(body), options)
-      .catch(this.handleError)
-      .delay(250)
-      .map(res => new CodeResource(res.json(), project));
+      .pipe(
+        catchError(this.handleError),
+        delay(250),
+        map(res => new CodeResource(res.json(), project))
+      );
 
 
     return (toReturn);
@@ -57,8 +60,10 @@ export class CodeResourceService {
 
     const body = JSON.stringify(bodyJson);
     const toReturn = this._http.put(url, body, options)
-      .catch(this.handleError)
-      .delay(250);
+      .pipe(
+        catchError(this.handleError),
+        delay(250)
+      );
 
     return (toReturn);
   }
@@ -73,8 +78,10 @@ export class CodeResourceService {
     const url = this._server.getCodeResourceUrl(resource.project.slug, resource.id);
 
     const toReturn = this._http.delete(url, options)
-      .catch(this.handleError)
-      .delay(250);
+      .pipe(
+        catchError(this.handleError),
+        delay(250)
+      );
 
     return (toReturn);
   }

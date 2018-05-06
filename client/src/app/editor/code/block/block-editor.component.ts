@@ -1,7 +1,10 @@
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
+
+import { first } from 'rxjs/operators';
 
 import { EditorComponentDescription } from '../../../shared/block/block-language.description';
 
@@ -11,6 +14,8 @@ import { ToolbarService } from '../../toolbar.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
+import { CodeResource } from '../../../shared/syntaxtree';
+import { BlockLanguage } from '../../../shared/block';
 
 /**
  * The "usual" editor folks will interact with. Displays all sorts
@@ -51,7 +56,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     const btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "w");
     btnDelete.onClick.subscribe(_ => {
       this._codeResourceService.deleteCodeResource(this.peekResource)
-        .first()
+        .pipe(first())
         .subscribe(res => {
           this.peekProject.removedCodeResource(this.peekResource);
           this._router.navigate(["create"], { relativeTo: this._route.parent })
@@ -65,7 +70,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     let subRef = btnSave.onClick.subscribe((res) => {
       btnSave.isInProgress = true;
       this._codeResourceService.updateCodeResource(this.peekResource)
-        .first()
+        .pipe(first())
         .subscribe(res => btnSave.isInProgress = false);
     });
   }
@@ -107,9 +112,11 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   }
 
   readonly editorComponents = this.currentResource
-    .switchMap(codeResource => codeResource.blockLanguage)
-    .map(blockLanguage => blockLanguage.editorComponents)
-    .map(components => components.map(c => this.getEditorComponentPortal(c)));
+    .pipe(
+      switchMap(codeResource => codeResource.blockLanguage),
+      map((blockLanguage: BlockLanguage) => blockLanguage.editorComponents),
+      map(components => components.map(c => this.getEditorComponentPortal(c)))
+    );
 
   /**
    * When something draggable enters the editor area itself there is no

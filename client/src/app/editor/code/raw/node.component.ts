@@ -1,9 +1,10 @@
-import { Observable } from 'rxjs';
-
 import {
   Component, Input, OnInit, OnChanges, SimpleChanges,
   ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
+
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import { arrayEqual } from '../../../shared/util'
 import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
@@ -131,20 +132,22 @@ export class NodeComponent implements OnChanges {
   get dropTargetAnimationState(): Observable<DropTargetAnimationStates> {
     if (!this._cached_dropTargetAnimationState) {
       this._cached_dropTargetAnimationState = this._dragService.currentDrag
-        .map(drag => {
-          if (!drag) {
-            // There is no drag operation
-            return ("none");
-          }
-          else if (drag.hoverNode && drag.hoverNode == this.node) {
-            // There is a drag operation and it targets us
-            return ("self");
-          } else {
-            // There is a drag operation and it targets something else
-            return ("available");
-          }
-        })
-        .distinctUntilChanged()
+        .pipe(
+          map(drag => {
+            if (!drag) {
+              // There is no drag operation
+              return ("none" as DropTargetAnimationStates);
+            }
+            else if (drag.hoverNode && drag.hoverNode == this.node) {
+              // There is a drag operation and it targets us
+              return ("self" as DropTargetAnimationStates);
+            } else {
+              // There is a drag operation and it targets something else
+              return ("available" as DropTargetAnimationStates);
+            }
+          }),
+          distinctUntilChanged()
+        )
     }
 
     return (this._cached_dropTargetAnimationState);

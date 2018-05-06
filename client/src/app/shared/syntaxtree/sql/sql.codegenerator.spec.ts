@@ -11,8 +11,8 @@ import { NODE_CONVERTER } from './sql.codegenerator'
  * So for the moment this function is copy and pasted into some spec files :(
  */
 export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) {
-  const input = require(`json-loader!./spec/${fileName}.json`);
-  let expected = require(`raw-loader!./spec/${fileName}.txt`) as string;
+  const input = require(`./spec/${fileName}.json`);
+  let expected = require(`./spec/${fileName}.txt`) as string;
 
   if (expected.endsWith("\n")) {
     expected = expected.substr(0, expected.length - 1);

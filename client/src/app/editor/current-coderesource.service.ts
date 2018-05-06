@@ -1,7 +1,8 @@
-import { BehaviorSubject, Observable } from 'rxjs'
-
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+
+import { BehaviorSubject, Observable } from 'rxjs'
+import { tap } from 'rxjs/operators';
 
 import { CodeResource } from '../shared/syntaxtree';
 
@@ -41,7 +42,6 @@ export class CurrentCodeResourceService {
 
     correctRoute.params.subscribe(params => {
       const codeResourceId = params['resourceId'];
-
     });
   }
 
@@ -49,13 +49,15 @@ export class CurrentCodeResourceService {
    * Things that need to happen every time the resource changes
    */
   private readonly onResourceChange = this._codeResource
-    .do(r => {
-      if (r) {
-        // Show the new sidebar
-        console.log("Sidebar change because of current code resource");
-        this._sidebarService.showSingleSidebar(CodeSidebarComponent.SIDEBAR_IDENTIFIER, r);
-      }
-    })
+    .pipe(
+      tap(r => {
+        if (r) {
+          // Show the new sidebar
+          console.log("Sidebar change because of current code resource");
+          this._sidebarService.showSingleSidebar(CodeSidebarComponent.SIDEBAR_IDENTIFIER, r);
+        }
+      })
+    )
     .subscribe();
 
   currentResourceChanged(codeResourceId: string) {

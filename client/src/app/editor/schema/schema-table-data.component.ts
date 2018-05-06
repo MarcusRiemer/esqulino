@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
+import { first } from 'rxjs/operators';
+
 import { Table } from '../../shared/schema'
 
 import { SchemaService } from '../schema.service'
@@ -132,19 +134,19 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
 
   private refreshData() {
     this._schemaService.getTableData(this._project, this.table, this._showRowFrom, this._showRowAmount)
-      .first()
+      .pipe(first())
       .subscribe(
-      res => this.tableData = res,
-      err => this.showError(err)
+        res => this.tableData = res,
+        err => this.showError(err)
       );
   }
 
   private refreshRowCount() {
     this._schemaService.getTableRowAmount(this._project, this.table)
-      .first()
+      .pipe(first())
       .subscribe(
-      res => this._tableRowAmount = res,
-      err => this.showError(err)
+        res => this._tableRowAmount = res,
+        err => this.showError(err)
       );
   }
 

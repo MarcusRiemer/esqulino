@@ -1,4 +1,5 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Project } from '../project';
 import { ProjectResource } from '../resource';
@@ -6,6 +7,7 @@ import { ProjectResource } from '../resource';
 import { CodeResourceDescription } from './coderesource.description';
 import { Tree, NodeDescription, NodeLocation } from './syntaxtree';
 import { ValidationResult } from './validation-result';
+import { Language } from './language'
 
 /**
  * A resource that is described by a syntaxtree.
@@ -63,14 +65,14 @@ export class CodeResource extends ProjectResource {
    * @return The language that is currently in use
    */
   get programmingLanguage() {
-    return (this._programmingLanguageId.map(l => this.project.getLanguageById(l)));
+    return (this._programmingLanguageId.pipe(map(l => this.project.getLanguageById(l))));
   }
 
   /**
    * @return The language that is currently in use
    */
   get blockLanguage() {
-    return (this._blockLanguageId.map(l => this.project.getBlockLanguage(l)));
+    return (this._blockLanguageId.pipe(map(l => this.project.getBlockLanguage(l))));
   }
 
   /**
@@ -221,30 +223,34 @@ export class CodeResource extends ProjectResource {
   /**
    * @return The latest validation result for this resource.
    */
-  readonly validationResult = Observable
-    .combineLatest(this.syntaxTree, this.programmingLanguage, (tree, lang) => {
-      if (tree && lang) {
-        return (lang.validateTree(tree));
-      } else {
-        return (ValidationResult.EMPTY);
-      }
-    });
+  readonly validationResult = combineLatest(this.syntaxTree, this.programmingLanguage)
+    .pipe(
+      map(([tree, lang]) => {
+        if (tree && lang) {
+          return (lang.validateTree(tree));
+        } else {
+          return (ValidationResult.EMPTY);
+        }
+      })
+    );
 
   /**
    * @return The latest generated code for this resource.
    */
-  readonly generatedCode = Observable
-    .combineLatest(this.syntaxTree, this.programmingLanguage, (tree, lang) => {
-      if (tree && !tree.isEmpty && lang) {
-        try {
-          return (lang.emitTree(tree));
-        } catch (e) {
-          return (e.toString());
+  readonly generatedCode = combineLatest(this.syntaxTree, this.programmingLanguage)
+    .pipe(
+      map(([tree, lang]) => {
+        if (tree && !tree.isEmpty && lang) {
+          try {
+            return (lang.emitTree(tree));
+          } catch (e) {
+            return (e.toString());
+          }
+        } else {
+          return ("");
         }
-      } else {
-        return ("");
-      }
-    })
+      })
+    );
 
   /**
    * @return Serialized description of this code resource.
