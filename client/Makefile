@@ -15,8 +15,6 @@ CLIENT_ALL_SOURCES = $(shell find src 2> /dev/null) server.ts webpack.server.con
 TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
 
-NG_LANG = --locale de
-
 all : dist
 
 clean : msg-pre-clean
@@ -28,16 +26,16 @@ dist: client-compile cli-compile universal-compile
 # Webclient
 ##################################
 client-compile : msg-pre-build
-	$(NG_BIN) build --aot --prod $(NG_LANG) $(NG_OPTS)
+	$(NG_BIN) build --aot --prod $(NG_OPTS)
 
 client-compile-dev : msg-pre-build
-	$(NG_BIN) build --aot $(NG_LANG) $(NG_OPTS)
+	$(NG_BIN) build --aot $(NG_OPTS)
 
 client-test :
-	$(NG_BIN) test --single-run $(TEST_SINGLE_RUN) --browser $(TEST_BROWSERS) --code-coverage true
+	$(NG_BIN) test --browsers $(TEST_BROWSERS) --code-coverage true
 
 client-test-watch:
-	$(NG_BIN) test --single-run false --browser $(TEST_BROWSERS) --code-coverage true
+	$(NG_BIN) test --watch --browsers $(TEST_BROWSERS) --code-coverage true
 
 ##################################
 # Commandline Client
@@ -57,7 +55,7 @@ cli-run: dist/cli/main.cli.js
 ##################################
 dist/server.js: $(CLIENT_ALL_SOURCES)
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Universal Build) ..."; $(TPUT_BIN) sgr0
-	node_modules/.bin/ng build --prod --app 1 --output-hashing=false
+	$(NG_BIN) run blattwerkzeug-client:server
 	node_modules/.bin/webpack --config webpack.server.config.js --progress
 
 universal-run: dist/server.js

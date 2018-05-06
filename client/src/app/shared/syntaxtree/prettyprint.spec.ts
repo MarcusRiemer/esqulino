@@ -9,8 +9,8 @@ import * as p from './prettyprint'
  * So for the moment this function is copy and pasted into spec files :(
  */
 export function verifyFiles<T>(fileName: string, expExt: string, transform: (obj: T) => string) {
-  const input = require(`json-loader!./spec/${fileName}.json`);
-  let expected = require(`raw-loader!./spec/${fileName}.${expExt}`) as string;
+  const input = require(`./spec/${fileName}.json`);
+  let expected = require(`./spec/${fileName}.${expExt}`) as string;
 
   if (expected.endsWith("\n")) {
     expected = expected.substr(0, expected.length - 1);

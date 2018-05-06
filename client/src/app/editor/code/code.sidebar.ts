@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy, Inject } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
 
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
 
 import { CodeResource } from '../../shared/syntaxtree';
 import { Sidebar } from '../../shared/block';

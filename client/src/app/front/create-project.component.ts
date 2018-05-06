@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core'
 import { Http, Response, RequestOptions, Headers } from '@angular/http'
 import { Router } from '@angular/router'
 
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ProjectCreationDescription, StringValidator } from '../shared/project.description'
 import { ServerApiService } from '../shared/serverapi.service'
@@ -83,16 +84,16 @@ export class CreateProjectComponent {
       );
 
       this._currentRequest
-        .map(res => res.json() as { id: string })
+        .pipe(map(res => res.json() as { id: string }))
         .subscribe(
-        res => {
-          this._router.navigateByUrl(`/editor/${res.id}`);
-          this._currentRequest = undefined;
-        },
-        err => {
-          this._currentError = err;
-          this._currentRequest = undefined;
-        }
+          res => {
+            this._router.navigateByUrl(`/editor/${res.id}`);
+            this._currentRequest = undefined;
+          },
+          err => {
+            this._currentError = err;
+            this._currentRequest = undefined;
+          }
         );
     }
   }

@@ -2,6 +2,8 @@ import { Observable, BehaviorSubject } from 'rxjs';
 
 import { Injectable } from '@angular/core';
 
+import { map, distinctUntilChanged } from 'rxjs/operators';
+
 import { arrayEqual } from '../shared/util';
 import { AnalyticsService, TrackCategory } from '../shared/analytics.service';
 import { Node, NodeDescription, NodeLocation, CodeResource } from '../shared/syntaxtree';
@@ -55,7 +57,7 @@ export class DragService {
   private _currentDrag = new BehaviorSubject<CurrentDrag>(undefined);
 
   // Shortcut to get the gist of the current drag process
-  private _currentDragInProgress = this._currentDrag.map(d => !!d);
+  private _currentDragInProgress = this._currentDrag.pipe(map(d => !!d));
 
   /**
    * This service is involved  with *every* part of the UI and must therefore
@@ -208,7 +210,7 @@ export class DragService {
    * @return Observable to always know the current (very general) state of drag affairs.
    */
   get isDragInProgress() {
-    return (this._currentDragInProgress.distinctUntilChanged());
+    return (this._currentDragInProgress.pipe(distinctUntilChanged()));
   }
 
   /**

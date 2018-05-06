@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http'
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
-import { AsyncSubject } from 'rxjs/AsyncSubject'
-import { Observable } from 'rxjs/Observable'
+import { AsyncSubject, BehaviorSubject, Observable } from 'rxjs';
+import { catchError, delay, first, filter, tap, map } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared/serverapi.service'
 import { Project, ProjectDescription, ProjectFullDescription } from '../shared/project'
@@ -77,13 +76,13 @@ export class ProjectService {
     // Build the HTTP-request
     const url = this._server.getProjectUrl(id);
     this._httpRequest = this._http.get<ProjectFullDescription>(url)
-      .map(res => {
+      .pipe(map(res => {
         return (new Project(res, this._languageService));
-      });
+      }));
 
     // And execute it by subscribing to it.
     const subscription = this._httpRequest
-      .first()
+      .pipe(first())
       .subscribe(res => {
         // There is a new project, Inform subscribers
         console.log(`Project Service: HTTP request for specific project ("${url}") finished`);
@@ -91,20 +90,20 @@ export class ProjectService {
 
         this._httpRequest = undefined
       },
-      (error: Response) => {
-        if (error instanceof Error) {
-          console.log(error);
-        }
+        (error: Response) => {
+          if (error instanceof Error) {
+            console.log(error);
+          }
 
-        // Something has gone wrong, pass the error on to the subscribers
-        // of the project and hope they know what to do about it.
-        console.log(`Project Service: HTTP error with request for specific project ("${url}") => "${error.status}: ${error.statusText}"`);
-        this._subject.error(error);
+          // Something has gone wrong, pass the error on to the subscribers
+          // of the project and hope they know what to do about it.
+          console.log(`Project Service: HTTP error with request for specific project ("${url}") => "${error.status}: ${error.statusText}"`);
+          this._subject.error(error);
 
-        // Reset the internal to be as blank as possible
-        this._subject = new BehaviorSubject<Project>(undefined);
-        this._httpRequest = undefined;
-      })
+          // Reset the internal to be as blank as possible
+          this._subject = new BehaviorSubject<Project>(undefined);
+          this._httpRequest = undefined;
+        })
   }
 
   /**
@@ -113,7 +112,7 @@ export class ProjectService {
    */
   get activeProject(): Observable<Project> {
     return (this._subject
-      .filter(v => !!v));
+      .pipe(filter(v => !!v)));
   }
 
   /**
@@ -136,10 +135,12 @@ export class ProjectService {
     const url = this._server.getProjectUrl(proj.slug);
 
     const toReturn = this._http.put<ProjectDescription>(url, desc)
-      .catch(this.passThroughError)
-      .delay(250)
-      .do(desc => proj.updateDescription(desc))
-      .do(_ => proj.markSaved());
+      .pipe(
+        catchError(this.passThroughError),
+        delay(250),
+        tap(desc => proj.updateDescription(desc)),
+        tap(_ => proj.markSaved())
+      );
 
     return (toReturn);
   }

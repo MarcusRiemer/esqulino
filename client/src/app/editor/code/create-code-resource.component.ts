@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { first } from 'rxjs/operators';
+
 import { ToolbarService } from '../toolbar.service';
 import { SidebarService } from '../sidebar.service';
 import { ProjectService } from '../project.service';
@@ -52,7 +54,7 @@ export class CreateCodeResourceComponent {
     console.log("Block", b);
 
     this._codeResourceService.createCodeResource(p, this.resourceName, this.blockLanguageId, b.defaultProgrammingLanguageId)
-      .first()
+      .pipe(first())
       .subscribe(res => {
         p.addCodeResource(res);
         console.log("Hurra!")

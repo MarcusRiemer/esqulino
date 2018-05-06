@@ -1,7 +1,6 @@
 import { Injectable, Type } from '@angular/core'
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
-import { Observable } from 'rxjs/Observable'
+import { BehaviorSubject, Observable } from 'rxjs'
 
 import { AvailableLanguages, Language } from './syntaxtree'
 import { AvailableLanguageModels, BlockLanguage } from './block'

@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
+import { first, filter, finalize, flatMap, map } from 'rxjs/operators';
 
-import { CodeResource, Tree } from '../../../shared/syntaxtree';
+import { CodeResource, Tree, ValidationResult } from '../../../shared/syntaxtree';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { ToolbarService, ToolbarItem } from '../../toolbar.service';
@@ -49,12 +50,14 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
 
   // A code resource that is guaranteed to be a SQL query
   private _currentQuery = this._currentCodeResource.currentResource
-    .filter(c => c.programmingLanguageIdPeek == "sql");
+    .pipe(filter(c => c.programmingLanguageIdPeek == "sql"));
 
   // All parameters that are part of the current tree
   readonly queryParameterNames = this._currentQuery
-    .flatMap(c => c.syntaxTree)
-    .map(extractQueryParameterNames);
+    .pipe(
+      flatMap(c => c.syntaxTree),
+      map(extractQueryParameterNames)
+    );
 
   /**
    * Register the "run"-button and automatic query execution.
@@ -72,24 +75,26 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
       this.persistQueryParameters();
 
       this._queryService.runArbitraryQuery(this._currentCodeResource.peekResource, this.requiredQueryParameters)
-        .first()
-        .finally(() => this.queryInProgress = false)
+        .pipe(
+          first(),
+          finalize(() => this.queryInProgress = false)
+        )
         .subscribe(
-        res => {
-          // Succesful query, store it and remove the error
-          this.result = res;
-          this.error = undefined;
-        },
-        err => {
-          // Error in the query, display it "as is" for now.
-          this.result = undefined;
-          this.error = err.json();
-        });
+          res => {
+            // Succesful query, store it and remove the error
+            this.result = res;
+            this.error = undefined;
+          },
+          err => {
+            // Error in the query, display it "as is" for now.
+            this.result = undefined;
+            this.error = err.json();
+          });
     });
 
     // Fire the query every time the ast changes into a valid tree.
     const subResource = this._currentQuery
-      .flatMap(c => c.validationResult)
+      .pipe(flatMap(c => c.validationResult))
       .subscribe(res => {
         if (res.isValid) {
           this._btnRun.fire();

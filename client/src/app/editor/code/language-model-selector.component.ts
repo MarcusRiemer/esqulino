@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { map } from 'rxjs/operators';
+
 import { CodeResource } from '../../shared/syntaxtree';
 import { LanguageService } from '../../shared/language.service';
 
@@ -26,7 +28,7 @@ export class LanguageModelSelectorComponent {
    * @return All available language models
    */
   get availableBlockLanguages() {
-    return (this._currentCodeResource.currentResource.map(c => c.project.projectBlockLanguages));
+    return (this._currentCodeResource.currentResource.pipe(map(c => c.project.projectBlockLanguages)));
   }
 
   /**

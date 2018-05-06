@@ -1,6 +1,4 @@
-import { Subject } from 'rxjs/Subject'
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
-import { Observable } from 'rxjs/Observable'
+import { BehaviorSubject, Subject, Observable } from 'rxjs'
 
 import { LanguageService } from './language.service'
 import { BlockLanguageDescription } from './block/block-language.description'
