@@ -3,11 +3,11 @@
  * (for example "Religion (ev, kath)" belongs together)
  * Returns an array for the row with String values as columns
  * 
- * @param row The row to split
+ * @param row the row to split
  * @param delimiter the delimiter by which the row will be splittet (for example , or ;)
  * @param textMarker the textMarker to keep Strings together (for example " or ')
  */
-export function splitRow(row: string, delimiter: string, textMarker: string): string[] {
+export function splitRowToCols(row: string, delimiter: string, textMarker: string): string[] {
 	let res = [];
 	if (!row.includes(textMarker)) {
 		// Split rows without text Marker directly
@@ -35,4 +35,41 @@ export function splitRow(row: string, delimiter: string, textMarker: string): st
 		res = res.concat.apply([], res)
 	}						
 	return res;
+}
+
+/**  
+ * Splits a String into an array of strings by its linebreaks
+ * The linebreaks have to be equal for the whole string 
+ * (for example (only \n or only \r and not one line \n and the other \r))
+ * Return an array with string values as rows
+ * @param dataString the String to split
+ */
+export function splitStringToRows(dataString: string) {
+	let splitter = "";
+	let rows = [];
+	
+	// identify line breaks
+	if (dataString.includes("\r\n")) {
+		// split by both
+		splitter = "\r\n";
+	}
+	else if (dataString.includes("\n")) {
+		// split only by carriage return
+		splitter = "\n";
+	}
+	else if (dataString.includes("\r")) {
+		// split only by line feed
+		splitter = "\r";
+	}
+    
+    // split only when splitter available
+    if (splitter) {
+        rows = dataString.split(splitter);
+    }
+    else {
+        rows.push(dataString);
+    }
+    
+    // get Columns for each row and save Data global
+    return rows;        			
 }
