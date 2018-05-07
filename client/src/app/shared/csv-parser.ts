@@ -44,7 +44,7 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
  * Return an array with string values as rows
  * @param dataString the String to split
  */
-export function splitStringToRows(dataString: string) {
+export function splitStringToRows(dataString: string): string[] {
 	let splitter = "";
 	let rows = [];
 	
@@ -72,4 +72,47 @@ export function splitStringToRows(dataString: string) {
     
     // get Columns for each row and save Data global
     return rows;        			
+}
+
+/**
+ * Converts the data of rows and cols into a JSON Object.
+ * The header will be used as the key for each data and the other
+ * rows as according values.
+ * @param data the data as a two dymensional array of rows and cols
+ * @param header the header row if available, otherwise an empty array
+ * @param useHeader true, if the header data should be used,
+ *                  false, if the first data row should be used as header
+ */
+export function convertArraysToJSON(data: string[][], header: string[], useHeader:boolean) {
+    let resultObject = {};
+    let currentDataObject = {};
+	let arrayOfDataObjects = [];	
+    let headerData = [];    
+	let rowIndex = 0;
+	let colIndex = 0;
+
+	if (useHeader) {
+		headerData = header;
+	}
+	else {
+        // use first row as header
+        headerData = data[0];
+        // start reading data at second row
+		rowIndex = 1;
+	}
+    
+    // iterate through each row
+	for(rowIndex; rowIndex < data.length; rowIndex++) {
+        // new object for every row
+        currentDataObject = {};
+        // iterate through each col
+		for(colIndex = 0; colIndex < data[rowIndex].length; colIndex++){
+			currentDataObject[headerData[colIndex]] = data[rowIndex][colIndex];
+		}
+		arrayOfDataObjects.push(currentDataObject);
+	}
+
+    resultObject['rows'] = arrayOfDataObjects;
+
+	return resultObject;
 }
