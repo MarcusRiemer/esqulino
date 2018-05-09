@@ -115,6 +115,26 @@ export function convertArraysToJSON(data: string[][], header: string[], useHeade
 	return resultObject;
 }
 
+
+/**  
+ * Splits a CSV String into a two dimensional Array that consists of Rows and Columns.
+ * There is no additional dealing with the Header yet.
+ * @param csvString the whole string as CSV data
+ * @param delimiter the delimiter by which each row will be splittet into cols (for example , or ;)
+ * @param textMarker the textMarker to keep Strings together (for example " or ')
+ */
+export function convertCSVStringToArray(csvString: string, delimiter: string, textMarker: string) : string[][] {
+	// Split CSV Data Rows
+	let plainRows = splitStringToRows(csvString);
+	// Split Columns for each Row
+	let wholeDataArray = plainRows.map(row => splitRowToCols(row, delimiter, textMarker));
+	return wholeDataArray;
+}
+
+// ---------------------------------------------------------------
+// TODO
+
+
 /**
  * Converts the data of rows and cols into a CSV String and returns it.
  * @param data the data as a two dymensional array of rows and cols
@@ -122,19 +142,14 @@ export function convertArraysToJSON(data: string[][], header: string[], useHeade
  * @param useHeader true, if the header data should be used,
  *                  false, if the first data row should be used as header
  */
-export function convertArraysToCSV(data: string[][], header: string[], useHeader:boolean, delimiter: string, textMarker: string): string[] {
+export function convertArrayToCSV(data: string[][], header: string[], useHeader:boolean, delimiter: string, textMarker: string): string[] {
 	return [];
 }
 
+// FileRead?
 
-
-// CSV String To Data Array komplett (splitString und splitRow benutzen)
-// Ersmal als data zurückgeben?!
-export function convertCSVToArrays(delimiter: string, textMarker: string) : string[][] {
-	return [[]];
-}
-// FileRead
-
-// FileWrite
+// FileWrite?
 
 // Converter in 2 Funktionen splitten (mit und ohne Header)?
+
+// Spread für concat.apply nutzen
