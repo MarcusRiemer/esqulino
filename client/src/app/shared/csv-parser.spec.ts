@@ -44,4 +44,25 @@ describe('Util: CSV Parser', () => {
                          '3,Sport,"Religion (ev, kath)",Kunst,,Kunst']);
   });
 
+  it('Convert Arrays To JSON Easy', () => {
+    const data = [['1'],
+                  ['2'],
+                  ['3']];
+    const header = ['Stunde'];
+    const JSONData = c.convertArraysToJSON(data, header, true);
+    expect(JSONData).toEqual();
+  });
+
+  /*
+  it('Convert Arrays To JSON Easy', () => {
+    const data = [['1'], ['Mathematik'], ['Deutsch'],Englisch,Mathematik,Kunst'],
+                  ['2,Sport,Französisch,Geschichte,Sport,Geschichte'],
+                  ['3,Sport,"Religion (ev, kath)",Kunst,,Kunst']];
+    const header = ['Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag'];
+    const JSONData = c.convertArraysToJSON(data, header, true);
+    expect(JSONData).toEqual();
+  });
+  */
+    
+
 });
