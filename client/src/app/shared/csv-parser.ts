@@ -2,7 +2,6 @@
  * Splits a String as the Row with text Markers by the delimiter
  * (for example "Religion (ev, kath)" belongs together)
  * Returns an array for the row with String values as columns
- * 
  * @param row the row to split
  * @param delimiter the delimiter by which the row will be splittet (for example , or ;)
  * @param textMarker the textMarker to keep Strings together (for example " or ')
@@ -115,3 +114,27 @@ export function convertArraysToJSON(data: string[][], header: string[], useHeade
     resultObject['rows'] = arrayOfDataObjects;
 	return resultObject;
 }
+
+/**
+ * Converts the data of rows and cols into a CSV String and returns it.
+ * @param data the data as a two dymensional array of rows and cols
+ * @param header the header row if available, otherwise an empty array
+ * @param useHeader true, if the header data should be used,
+ *                  false, if the first data row should be used as header
+ */
+export function convertArraysToCSV(data: string[][], header: string[], useHeader:boolean, delimiter: string, textMarker: string): string[] {
+	return [];
+}
+
+
+
+// CSV String To Data Array komplett (splitString und splitRow benutzen)
+// Ersmal als data zurückgeben?!
+export function convertCSVToArrays(delimiter: string, textMarker: string) : string[][] {
+	return [[]];
+}
+// FileRead
+
+// FileWrite
+
+// Converter in 2 Funktionen splitten (mit und ohne Header)?
