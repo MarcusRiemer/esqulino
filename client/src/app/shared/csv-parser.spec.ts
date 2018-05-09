@@ -2,6 +2,51 @@ import * as c from './csv-parser'
 
 describe('Util: CSV Parser', () => {
 
+  const CSV_STRING = ('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
+                    + '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst\r\n'
+                    + '2,Sport,Französisch,Geschichte,Sport,Geschichte\r\n'
+                    + '3,Sport,"Religion (ev, kath)",Kunst,,Kunst');
+
+  const ROWS_ONLY = ['Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', 
+                     '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst',
+                     '2,Sport,Französisch,Geschichte,Sport,Geschichte',
+                     '3,Sport,"Religion (ev, kath)",Kunst,,Kunst'];
+
+  const CSV_TO_ARRAY = [['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'],
+                        ['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
+                        ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
+                        ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']];
+
+  const CSV_AS_JSON = { 
+    'rows':
+      [
+        {
+          'Stunde': '1',
+          'Montag': 'Mathematik',
+          'Dienstag': 'Deutsch',
+          'Mittwoch': 'Englisch',
+          'Donnerstag': 'Mathematik',
+          'Freitag': 'Kunst'
+        },
+        {
+          'Stunde': '2',
+          'Montag': 'Sport',
+          'Dienstag': 'Französisch',
+          'Mittwoch': 'Geschichte',
+          'Donnerstag': 'Sport',
+          'Freitag': 'Geschichte'
+        },
+        {
+          'Stunde': '3',
+          'Montag': 'Sport',
+          'Dienstag': 'Religion (ev, kath)',
+          'Mittwoch': 'Kunst',
+          'Donnerstag': '',
+          'Freitag': 'Kunst'
+        }
+      ]
+  }
+
   it('Split Row To Columns Easy', () => {
     const row = c.splitRowToCols('a', ',', '"');
     expect(row).toEqual(['a']);
@@ -23,25 +68,13 @@ describe('Util: CSV Parser', () => {
   });
 
   it('Split String To Rows Medium', () => {
-    const row = c.splitStringToRows('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\n'
-                                    + '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst\n'
-                                    + '2,Sport,Französisch,Geschichte,Sport,Geschichte\n'
-                                    + '3,Sport,"Religion (ev, kath)",Kunst,,Kunst');
-    expect(row).toEqual(['Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', 
-                         '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst',
-                         '2,Sport,Französisch,Geschichte,Sport,Geschichte',
-                         '3,Sport,"Religion (ev, kath)",Kunst,,Kunst']);
+    const row = c.splitStringToRows(CSV_STRING);
+    expect(row).toEqual(ROWS_ONLY);
   });
 
   it('Split String To Rows Hard', () => {
-    const row = c.splitStringToRows('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
-                                    + '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst\r\n'
-                                    + '2,Sport,Französisch,Geschichte,Sport,Geschichte\r\n'
-                                    + '3,Sport,"Religion (ev, kath)",Kunst,,Kunst');
-    expect(row).toEqual(['Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', 
-                         '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst',
-                         '2,Sport,Französisch,Geschichte,Sport,Geschichte',
-                         '3,Sport,"Religion (ev, kath)",Kunst,,Kunst']);
+    const row = c.splitStringToRows(CSV_STRING);
+    expect(row).toEqual(ROWS_ONLY);
   });
 
   it('Convert Arrays To JSON Easy', () => {
@@ -72,75 +105,13 @@ describe('Util: CSV Parser', () => {
                   ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
                   ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']];
     const header = ['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
-    const result = { 
-                      'rows':
-                        [
-                          {
-                            'Stunde': '1',
-                            'Montag': 'Mathematik',
-                            'Dienstag': 'Deutsch',
-                            'Mittwoch': 'Englisch',
-                            'Donnerstag': 'Mathematik',
-                            'Freitag': 'Kunst'
-                          },
-                          {
-                            'Stunde': '2',
-                            'Montag': 'Sport',
-                            'Dienstag': 'Französisch',
-                            'Mittwoch': 'Geschichte',
-                            'Donnerstag': 'Sport',
-                            'Freitag': 'Geschichte'
-                          },
-                          {
-                            'Stunde': '3',
-                            'Montag': 'Sport',
-                            'Dienstag': 'Religion (ev, kath)',
-                            'Mittwoch': 'Kunst',
-                            'Donnerstag': '',
-                            'Freitag': 'Kunst'
-                          }
-                        ]
-    }
     const JSONData = c.convertArraysToJSON(data, header, true);
-    expect(JSONData).toEqual(result);
+    expect(JSONData).toEqual(CSV_AS_JSON);
   });
   
   it('Convert Arrays To JSON Hard', () => {
-    const data = [['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'],
-                  ['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
-                  ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
-                  ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']];
-    const result = { 
-                      'rows':
-                        [
-                          {
-                            'Stunde': '1',
-                            'Montag': 'Mathematik',
-                            'Dienstag': 'Deutsch',
-                            'Mittwoch': 'Englisch',
-                            'Donnerstag': 'Mathematik',
-                            'Freitag': 'Kunst'
-                          },
-                          {
-                            'Stunde': '2',
-                            'Montag': 'Sport',
-                            'Dienstag': 'Französisch',
-                            'Mittwoch': 'Geschichte',
-                            'Donnerstag': 'Sport',
-                            'Freitag': 'Geschichte'
-                          },
-                          {
-                            'Stunde': '3',
-                            'Montag': 'Sport',
-                            'Dienstag': 'Religion (ev, kath)',
-                            'Mittwoch': 'Kunst',
-                            'Donnerstag': '',
-                            'Freitag': 'Kunst'
-                          }
-                        ]
-    }
-    const JSONData = c.convertArraysToJSON(data, [], false);
-    expect(JSONData).toEqual(result);
+    const JSONData = c.convertArraysToJSON(CSV_TO_ARRAY, [], false);
+    expect(JSONData).toEqual(CSV_AS_JSON);
   }); 
 
 });
