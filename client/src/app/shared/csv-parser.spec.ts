@@ -112,6 +112,11 @@ describe('Util: CSV Parser', () => {
   it('Convert Arrays To JSON Hard', () => {
     const JSONData = c.convertArraysToJSON(CSV_TO_ARRAY, [], false);
     expect(JSONData).toEqual(CSV_AS_JSON);
-  }); 
+  });
+
+  it('Convert CSV String to Array', () => {
+    const result = c.convertCSVStringToArray(CSV_STRING, ',', '"');
+    expect(result).toEqual(CSV_TO_ARRAY);
+  });
 
 });
