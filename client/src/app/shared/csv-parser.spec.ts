@@ -121,6 +121,8 @@ describe('Util: CSV Parser', () => {
 
   /* ---------- Tests with corrupted CSV files ---------- */
 
+  // TODO: THROW ERRORS
+
   // CSV String with different Column Counts
   const DIFFERENT_COL_COUNTS = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
                               + '1,Mathematik,Kunst\r\n' // 3 Cols
@@ -152,13 +154,20 @@ describe('Util: CSV Parser', () => {
       Whitespace
       , ;
       Marker
-      CR in unexpeted places
+      CR in unexpected places
 
     -------------------
     To Fix:
 
       No Content before and after Marker
       Fill lesser Cols?!
+      Escaping (write \") out instead of using it as marker
+      Start and don't end smth (Maker for example)
+
+      Return Interface Error OR Interface RequestTabularInsertDescription
+      => always use first line as header
+
+      or only array of errors and alway first line for data
   */
 
 
