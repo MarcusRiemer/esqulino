@@ -75,7 +75,7 @@ export function splitStringToRows(dataString: string): string[] {
 }
 
 /**
- * Converts the data of rows and cols into a JSON Object.
+ * Converts the data of rows and cols into a JSON Object and returns it.
  * The header will be used as the key for each data and the other
  * rows as according values.
  * @param data the data as a two dymensional array of rows and cols
@@ -112,8 +112,6 @@ export function convertArraysToJSON(data: string[][], header: string[], useHeade
 		arrayOfDataObjects.push(currentDataObject);
 	}
 
-    //resultObject['rows'] = arrayOfDataObjects;
-	//return resultObject;
-
-	return arrayOfDataObjects;
+    resultObject['rows'] = arrayOfDataObjects;
+	return resultObject;
 }
