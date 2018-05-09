@@ -112,7 +112,8 @@ export function convertArraysToJSON(data: string[][], header: string[], useHeade
 		arrayOfDataObjects.push(currentDataObject);
 	}
 
-    resultObject['rows'] = arrayOfDataObjects;
+    //resultObject['rows'] = arrayOfDataObjects;
+	//return resultObject;
 
-	return resultObject;
+	return arrayOfDataObjects;
 }
