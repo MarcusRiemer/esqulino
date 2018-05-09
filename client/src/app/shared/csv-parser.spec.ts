@@ -119,4 +119,47 @@ describe('Util: CSV Parser', () => {
     expect(result).toEqual(CSV_TO_ARRAY);
   });
 
+  /* ---------- Tests with corrupted CSV files ---------- */
+
+  // CSV String with different Column Counts
+  const DIFFERENT_COL_COUNTS = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
+                              + '1,Mathematik,Kunst\r\n' // 3 Cols
+                              + '2,Sport,Geschichte,Sport,Geschichte,Sport\r\n' // 6 Cols
+                              + 'x,"Religion (ev, kath)", x'); // 2 Cols
+
+  /*                              
+  // Expect Result to have the max Count of Columns and 
+  // use empty Cols if Row has less Cols as Max
+  const DIFFERENT_COL_COUNTS_RESULT = [['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', ''],
+                                       ['1', 'Mathematik', 'Kunst', '', '', ''],
+                                       ['2', 'Sport', 'Geschichte', 'Sport', 'Geschichte', 'Sport'],
+                                       ['Religion (ev, kath)', '', '', '', '', '']];
+  */
+
+  const DIFFERENT_COL_COUNTS_RESULT = [['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'],
+                                       ['1', 'Mathematik', 'Kunst'],
+                                       ['2', 'Sport', 'Geschichte', 'Sport', 'Geschichte', 'Sport'],
+                                       ['x', 'Religion (ev, kath)', ' x']];
+  
+  it('Different Column Counts', () => {
+    const result = c.convertCSVStringToArray(DIFFERENT_COL_COUNTS, ',', '"');
+    expect(result).toEqual(DIFFERENT_COL_COUNTS_RESULT);
+  });
+
+  /*
+    To Test :
+  
+      Whitespace
+      , ;
+      Marker
+      CR in unexpeted places
+
+    -------------------
+    To Fix:
+
+      No Content before and after Marker
+      Fill lesser Cols?!
+  */
+
+
 });
