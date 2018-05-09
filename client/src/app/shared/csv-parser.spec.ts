@@ -67,7 +67,7 @@ describe('Util: CSV Parser', () => {
     expect(JSONData).toEqual(result);
   });
 
-    it('Convert Arrays To JSON Hard', () => {
+    it('Convert Arrays To JSON Medium', () => {
     const data = [['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
                   ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
                   ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']];
@@ -103,6 +103,44 @@ describe('Util: CSV Parser', () => {
     }
     const JSONData = c.convertArraysToJSON(data, header, true);
     expect(JSONData).toEqual(result);
-  });    
+  });
+  
+  it('Convert Arrays To JSON Hard', () => {
+    const data = [['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'],
+                  ['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
+                  ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
+                  ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']];
+    const result = { 
+                      'rows':
+                        [
+                          {
+                            'Stunde': '1',
+                            'Montag': 'Mathematik',
+                            'Dienstag': 'Deutsch',
+                            'Mittwoch': 'Englisch',
+                            'Donnerstag': 'Mathematik',
+                            'Freitag': 'Kunst'
+                          },
+                          {
+                            'Stunde': '2',
+                            'Montag': 'Sport',
+                            'Dienstag': 'Französisch',
+                            'Mittwoch': 'Geschichte',
+                            'Donnerstag': 'Sport',
+                            'Freitag': 'Geschichte'
+                          },
+                          {
+                            'Stunde': '3',
+                            'Montag': 'Sport',
+                            'Dienstag': 'Religion (ev, kath)',
+                            'Mittwoch': 'Kunst',
+                            'Donnerstag': '',
+                            'Freitag': 'Kunst'
+                          }
+                        ]
+    }
+    const JSONData = c.convertArraysToJSON(data, [], false);
+    expect(JSONData).toEqual(result);
+  }); 
 
 });
