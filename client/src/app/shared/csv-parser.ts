@@ -31,7 +31,14 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 		// Concat the subArrays back into one Array
 		// (apply concats empty array as "this" param
 		// with all values in the array param)
-		res = res.concat.apply([], res)
+		// res = res.concat.apply([], res);
+
+		// Alternative 1 with reduce and spread operators
+		// res = res.reduce((acc, val) => [...acc, ...val]);
+
+		// Alternative 2 with spread operator instead of apply
+		res = [].concat(...res);
+		
 	}						
 	return res;
 }
@@ -152,4 +159,4 @@ export function convertArrayToCSV(data: string[][], header: string[], useHeader:
 
 // Converter in 2 Funktionen splitten (mit und ohne Header)?
 
-// Spread für concat.apply nutzen
+// exclude header / include header
