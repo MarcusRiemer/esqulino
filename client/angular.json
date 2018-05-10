@@ -68,13 +68,6 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.test.json",
-            "scripts": [],
-            "styles": [
-              "src/app/css/style.scss"
-            ],
-            "assets": [
-              "src/vendor"
-            ]
           }
         },
         "lint": {
