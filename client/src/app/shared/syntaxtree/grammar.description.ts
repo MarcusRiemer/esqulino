@@ -1,4 +1,4 @@
-import { QualifiedTypeName } from './syntaxtree'
+import { QualifiedTypeName } from './syntaxtree.description'
 
 /**
  * Types of nodes may either be concrete new type or an alias
@@ -225,19 +225,27 @@ export type NodeChildrenGroupDescription =
   | NodeTypesAllowedDescription
   | NodeTypesChoiceDescription;
 
+/**
+ * Listing data about grammars
+ */
+export interface GrammarListDescription {
+  // The name of the language
+  languageName: string
+}
 
 /**
  * Describes a grammar that may describe the syntactic structure of a language.
  */
-export class GrammarDescription {
-  // The unique name of the language
-  languageName: string
-
+export interface GrammarDocument {
   // All types that exist in this language
   types: { [nodeName: string]: NodeTypeDescription }
 
   // The type that needs to be at the root of the language.
   root: TypeReference
+}
+
+export interface GrammarDescription extends GrammarDocument, GrammarListDescription {
+
 }
 
 /**

@@ -1,0 +1,22 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: XML (Dynamic)
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: dxml
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 7e333dff-6d1c-4042-aaa5-0cdf2cfeed7e
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-05-15 18:48:12.004676'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-05-15 18:48:12.004676'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: dxml-eruby
+new_record: false
+active_record_yaml_version: 2

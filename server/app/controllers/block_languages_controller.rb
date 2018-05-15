@@ -40,7 +40,7 @@ class BlockLanguagesController < ApplicationController
   # These parameters are "normal" table attributes
   def basic_params
     params
-      .permit([:name, :slug, :defaultProgrammingLanguageId, :family])
+      .permit([:name, :slug, :defaultProgrammingLanguageId, :family, :grammarId])
       .transform_keys { |k| k.underscore }
   end
 
