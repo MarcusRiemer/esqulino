@@ -2,7 +2,7 @@
 # closely rely on the grammars of their corresponding programming language.
 class BlockLanguage < ApplicationRecord
   # Every language must have a name
-  validates :name, presence: true
+  validates :name, :family, presence: true
 
   # Some special languages may get a slug assigned
   validates :slug, uniqueness: true, allow_nil: true
