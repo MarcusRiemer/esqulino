@@ -48,6 +48,8 @@ This section contains some exemplary configuration files that work well for the 
 .. literalinclude :: ../../server/config/sqlino.yml
    :language: yaml
 
+.. _database_configuration:
+              
 ``database.yml`` at ``server/conf``
 -----------------------------------
 

@@ -22,6 +22,8 @@ clean : msg-pre-clean
 
 dist: client-compile cli-compile universal-compile
 
+dist-dev: client-compile cli-compile universal-compile
+
 ##################################
 # Webclient
 ##################################
@@ -48,7 +50,6 @@ cli-compile: dist/cli/main.cli.js
 
 cli-run: dist/cli/main.cli.js
 	@$(NODE_BIN) $^
-
 
 ##################################
 # Universal Rendering Server
