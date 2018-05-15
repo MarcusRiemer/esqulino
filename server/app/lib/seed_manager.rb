@@ -1,8 +1,10 @@
 require_dependency 'error'
 
+require_dependency 'grammar' # Rails won't autoload this class properly
 require_dependency 'project_database' # Rails won't autoload this class properly
 require_dependency 'project_source' # Rails won't autoload this class properly
 require_dependency 'project_uses_block_language' # Rails won't autoload this class properly
+
 
 # @return True if the given string is a valid UUID
 def string_is_uuid?(str)
@@ -137,6 +139,16 @@ class SeedManager
   # Path to a specific block language
   def seed_block_languages_file(block_language_id)
     File.join seed_block_languages_dir, "#{block_language_id}.yaml"
+  end
+
+  # The general directory for grammars
+  def seed_grammars_dir
+    File.join seed_data_dir, "grammars"
+  end
+
+  # Path to a specific grammar
+  def seed_grammar_file(grammar_id)
+    File.join seed_grammars_dir, "#{grammar_id}.yaml"
   end
 
   # Writes all projects to their seed representation
@@ -344,6 +356,59 @@ class SeedManager
     seed_instance(find_seed_block_language(path_slug_or_id), BlockLanguage, 0)
   end
 
+  ###########################################
+
+
+
+
+  # Stores all grammars
+  def store_all_grammars
+    Grammar.all.each { |g| store_grammar g }
+  end
+
+  # Loads all block languages that are available as seeds
+  def load_all_grammars
+    available_seed_grammar_files.each { |g| load_grammar(g) }
+  end
+
+  # Stores a specific block language
+  #
+  # @param slug_or_id [string] The slug or the ID of the project to store.
+  def store_grammar(grammar_slug_or_id)
+    g = if grammar_slug_or_id.is_a? BlockLanguage then
+          grammar_slug_or_id
+        else
+          # Finding the correct project
+          slug_or_id = grammar_slug_or_id
+          Grammar.where(id: slug_or_id).or(Grammar.where(slug: slug_or_id)).first
+        end
+
+    puts "Storing Grammar #{g.readable_identification}"
+
+    # Ensuring all directories are available
+    FileUtils.mkdir_p seed_grammars_dir
+
+    # Storing the language
+    File.open(seed_grammar_file(g.id), 'w') do |file|
+      YAML::dump(g, file)
+    end
+  end
+
+  # Loads a grammar
+  #
+  # @param path_slug_or_id [string]
+  #   The path, slug or the ID of the block language to load.
+  def load_grammar(path_slug_or_id)
+    seed_instance(find_seed_grammar(path_slug_or_id), Grammar, 0)
+  end
+
+
+
+
+
+
+  ###########################################
+
   private
 
   # Takes the given instance that has been loaded from a YAML-file and
@@ -420,7 +485,7 @@ class SeedManager
       YAML.load_file(seed_block_languages_file(path_slug_or_id))
     # Okay, no shortcuts available ... Lets iterate over all existing block language seed files
     else
-      available_seed_project_files.each do |f|
+      available_seed_block_language_files.each do |f|
         b = YAML.load_file(f)
         return b if (b.slug == path_slug_or_id)
       end
@@ -430,9 +495,38 @@ class SeedManager
     end
   end
 
+  # Searches for a specific seeded grammar using either path, the ID or the slug
+  #
+  # TODO: This is structurally redundant, see #find_seed_block_language
+  def find_seed_grammar(path_slug_or_id)
+    # Does the file exist immediatly?
+    if File.exists? path_slug_or_id then
+      # Yes, we are done
+      YAML.load_file(path_slug_or_id)
+    # Is is it UUID?
+    elsif string_is_uuid? path_slug_or_id then
+      # Yes, we are done
+      YAML.load_file(seed_grammar_file(path_slug_or_id))
+    # Okay, no shortcuts available ... Lets iterate over all existing block language seed files
+    else
+      available_seed_grammar_files.each do |f|
+        b = YAML.load_file(f)
+        return b if (b.slug == path_slug_or_id)
+      end
+
+      # This shouldn't happen too often ...
+      raise "Could not find grammar with slug or ID \"#{slug_or_id}\""
+    end
+  end
+
   # @return [Iterable] All files that are possibly a seed file for a block language
   def available_seed_block_language_files
     Dir.glob(File.join(seed_block_languages_dir, '*.yaml'))
+  end
+
+  # @return [Iterable] All files that are possibly a seed file for a grammar
+  def available_seed_grammar_files
+    Dir.glob(File.join(seed_grammars_dir, '*.yaml'))
   end
 
   # @return [Iterable] All files that are possibly a seed file for a project
