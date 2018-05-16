@@ -1,3 +1,4 @@
+# Manages operations on block languages
 class BlockLanguagesController < ApplicationController
   # List all existing block languages
   def index

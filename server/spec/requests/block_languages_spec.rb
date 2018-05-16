@@ -25,7 +25,7 @@ RSpec.describe BlockLanguagesController, type: :request do
     end
   end
 
-  describe 'POST /api/block_language' do
+  describe 'POST /api/grammars' do
     it 'Creates a new, empty block language' do
       g = FactoryBot.create(:grammar)
       
