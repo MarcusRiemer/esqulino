@@ -23,8 +23,9 @@ pipelines:
           - bundler-local
         script:
           - make -C server install-deps
-          - make -C server setup-database
+          - make -C server setup-database-schema
           - make -C server test
+          - make -C server load-live-data
         services:
           - db
 
