@@ -3,10 +3,10 @@ FactoryBot.define do
     name "Spec Grammar"
     sequence (:slug) { |n| "grammar_#{n}" }
     model ({
-             types: {
-               spec: { }
+             "types": {
+               "spec": { }
              },
-             root: "spec"
+             "root": "spec"
            })
   end
 end

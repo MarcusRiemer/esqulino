@@ -10,6 +10,9 @@ concise_attributes:
   name: id
   value_before_type_cast: 37719773-5893-46d5-b1ec-0b63f1ef9099
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"root": "tmp", "types": {"tmp": {}}}'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-05-15 18:48:24.782086'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase

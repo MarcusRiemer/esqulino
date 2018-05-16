@@ -356,11 +356,6 @@ class SeedManager
     seed_instance(find_seed_block_language(path_slug_or_id), BlockLanguage, 0)
   end
 
-  ###########################################
-
-
-
-
   # Stores all grammars
   def store_all_grammars
     Grammar.all.each { |g| store_grammar g }
@@ -401,13 +396,6 @@ class SeedManager
   def load_grammar(path_slug_or_id)
     seed_instance(find_seed_grammar(path_slug_or_id), Grammar, 0)
   end
-
-
-
-
-
-
-  ###########################################
 
   private
 
