@@ -1,7 +1,8 @@
 import * as Schema from '../grammar.description'
 
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
-  languageName: "regex",
+  id: "f28a9a42-73c7-4214-9aba-17443acfc5ce",
+  name: "regex",
   types: {
     "constant": {
       attributes: [
