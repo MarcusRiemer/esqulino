@@ -12,6 +12,22 @@ class Grammar < ApplicationRecord
   # The JSON document needs to be a valid grammer
   validates :model, json_schema: 'GrammarDocument'
 
+  # Computes a hash that may be sent back to the client if it requires
+  # full access to grammar.
+  def to_full_api_response
+    to_json_api_response
+      .slice("id", "slug", "name")
+      .merge(self.model)
+  end
+
+  # Computes a hash that may be sent back to the client if only superficial
+  # information is required. This usually happens when the client attempts
+  # to list available grammars.
+  def to_list_api_response
+    to_json_api_response
+      .slice("id", "slug", "name")
+  end
+
   # Returns a nicely readable representation of id and name
   def readable_identification
     "\"#{name}\" (#{slug}, #{id})"
