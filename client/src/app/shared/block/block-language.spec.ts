@@ -11,7 +11,8 @@ const langEmptyBlocks: LanguageDescription = {
   generators: [],
   validators: [
     {
-      languageName: "emptyBlocks",
+      id: "e848d752-c1c7-49f8-9c8d-ba67555b27ab",
+      name: "emptyBlocks",
       types: {
         "root": {
           attributes: [

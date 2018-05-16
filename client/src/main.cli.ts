@@ -93,7 +93,7 @@ function availableGrammars(): GrammarDescription[] {
  * Retrieves a single grammar by name
  */
 function findGrammar(name: string) {
-  const toReturn = availableGrammars().find(d => d.languageName === name);
+  const toReturn = availableGrammars().find(d => d.name === name);
   if (toReturn) {
     return (toReturn);
   } else {
@@ -142,7 +142,7 @@ function executeCommand(command: Command) {
       return (prettyPrintLanguageModel(l));
     }
     case "available":
-      return (availableGrammars().map(g => g.languageName));
+      return (availableGrammars().map(g => g.name));
     case "graphvizTree":
       return (graphvizSyntaxTree(command.model));
     case "emitTree": {

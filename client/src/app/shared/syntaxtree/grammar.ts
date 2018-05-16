@@ -905,7 +905,7 @@ export class GrammarValidator {
 
   constructor(validator: Validator, desc: Desc.GrammarDescription) {
     this._validator = validator;
-    this._languageName = desc.languageName;
+    this._languageName = desc.name;
 
     Object.entries(desc.types).forEach(([typeName, typeDesc]) => {
       this.registerTypeValidator(typeName, typeDesc)

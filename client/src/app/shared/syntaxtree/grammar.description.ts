@@ -229,8 +229,14 @@ export type NodeChildrenGroupDescription =
  * Listing data about grammars
  */
 export interface GrammarListDescription {
+  // The unique ID of this language
+  id: string
+
   // The name of the language
-  languageName: string
+  name: string
+
+  // The possible slug for URL usage
+  slug?: string
 }
 
 /**
