@@ -21,7 +21,7 @@ run-dev : msg-pre-run-dev
 	./bin/rails server -b 0.0.0.0 --port 9292
 
 # Sets up the database
-setup-database:
+setup-database-schema:
 	./bin/rails db:setup RAILS_ENV=$(RAILS_ENV)
 
 # Running tests
