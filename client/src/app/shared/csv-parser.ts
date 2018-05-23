@@ -39,6 +39,7 @@
  * No additional Header Independence yet
  */
 export interface CsvParseResult {
+	type: "parseResult",
 	table: string[][];
 }
 
@@ -47,7 +48,18 @@ export interface CsvParseResult {
  * Consist of only one String Array which contains all Error Messages
  */
 export interface CsvParseError {
+	type: "parseError",
 	errors: ValidationError[];
+}
+
+/* --- Helper --- */
+
+/**
+ * A row consists of an array of columns as strings
+ */
+export interface RowData {
+	type: "row",
+	data: string[];
 }
 
 /* --- Error --- */
@@ -89,56 +101,11 @@ export type ErrorData =
  */
 interface ValidationError {
 	line: number;
-	column?: number;
+	column?: number; // Really needed? Marker is alway last col
 	data: ErrorData;
 }
 
 /* ----- Functions ----- */
-
-/**  
- * Splits a String as the Row with text Markers by the delimiter
- * (for example "Religion (ev, kath)" belongs together)
- * Returns an array for the row with String values as columns
- * @param row the row to split
- * @param delimiter the delimiter by which the row will be splittet (for example , or ;)
- * @param textMarker the textMarker to keep Strings together (for example " or ')
- */
-export function splitRowToCols(row: string, delimiter: string, textMarker: string): string[] {
-	let res = [];
-	if (!row.includes(textMarker)) {
-		// Split rows without text Marker directly
-		res = row.split(delimiter);
-	} 
-	else {
-		// Split by text Marker
-		res = row.split(textMarker);
-		// Split by seperator only without text Marker
-		res = res.map(splitter => {
-			// Remove delimiter at the end and split
-			if (splitter.endsWith(delimiter)) {
-			 splitter = splitter.slice(0, -1).split(delimiter);
-			}
-			// Remove delimiter at the start and split
-			else if (splitter.startsWith(delimiter)){
-				splitter = splitter.replace(delimiter, "").split(delimiter);
-			}
-			// Otherwise don't split
-			return splitter;
-		});
-		// Concat the subArrays back into one Array
-		// (apply concats empty array as "this" param
-		// with all values in the array param)
-		// res = res.concat.apply([], res);
-
-		// Alternative 1 with reduce and spread operators
-		// res = res.reduce((acc, val) => [...acc, ...val]);
-
-		// Alternative 2 with spread operator instead of apply
-		res = [].concat(...res);
-		
-	}						
-	return res;
-}
 
 /**  
  * Splits a String into an array of strings by its linebreaks
@@ -178,7 +145,56 @@ export function splitStringToRows(dataString: string): string[] {
 }
 
 /**  
+ * Splits a String as the Row with text Markers by the delimiter
+ * (for example "Religion (ev, kath)" belongs together)
+ * Returns an array for the row with String values as columns as RowData
+ * or the corresponding ErrorData
+ * @param row the row to split
+ * @param delimiter the delimiter by which the row will be splittet (for example , or ;)
+ * @param textMarker the textMarker to keep Strings together (for example " or ')
+ * @param expectedColCount col Count of the Header which is expected to fit
+ * 						   0 = this is the header	
+ */
+export function splitRowToCols(row: string, delimiter: string, textMarker: string, expectedColCount: number): RowData | ErrorData {
+	let res = [];
+	if (!row.includes(textMarker)) {
+		// Split rows without text Marker directly
+		res = row.split(delimiter);
+	} 
+	else {
+		// Split by text Marker
+		res = row.split(textMarker);
+		// Split by seperator only without text Marker
+		res = res.map(splitter => {
+			// Remove delimiter at the end and split
+			if (splitter.endsWith(delimiter)) {
+			 splitter = splitter.slice(0, -1).split(delimiter);
+			}
+			// Remove delimiter at the start and split
+			else if (splitter.startsWith(delimiter)){
+				splitter = splitter.replace(delimiter, "").split(delimiter);
+			}
+			// Otherwise don't split
+			return splitter;
+		});
+		// Concat the subArrays back into one Array
+		// (apply concats empty array as "this" param
+		// with all values in the array param)
+		// res = res.concat.apply([], res);
+
+		// Alternative 1 with reduce and spread operators
+		// res = res.reduce((acc, val) => [...acc, ...val]);
+
+		// Alternative 2 with spread operator instead of apply
+		res = [].concat(...res);
+		
+	}						
+	return res;
+}
+
+/**  
  * Splits a CSV String into a two dimensional Array that consists of Rows and Columns.
+ * Returns the CsvParseResult or the CsvParseError.
  * There is no additional dealing with the Header yet.
  * @param csvString the whole string as CSV data
  * @param delimiter the delimiter by which each row will be splittet into cols (for example , or ;)
@@ -187,8 +203,26 @@ export function splitStringToRows(dataString: string): string[] {
 export function convertCSVStringToArray(csvString: string, delimiter: string, textMarker: string) : CsvParseResult | CsvParseError {
 	// Split CSV Data Rows
 	let plainRows = splitStringToRows(csvString);
+
+	// Todo: create Header (To use as parameter for row expected column count)
+
 	// Split Columns for each Row
 	let wholeDataArray = plainRows.map(row => splitRowToCols(row, delimiter, textMarker));
+
+	/* Todo
+	for(let i=0; i < plainRows.length; i++) {
+		let currentRow = splitRowToCols(plainRows[i], delimiter, textMarker);
+		if (currentRow.type == "row") {
+			// add...
+		}
+		// else if error
+		// add validation error
+	}
+
+	// if no errors return result
+	// else return errors
+	*/
+
 	return { table: wholeDataArray };
 }
 
