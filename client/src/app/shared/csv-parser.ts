@@ -47,10 +47,53 @@ export interface CsvParseResult {
  * Consist of only one String Array which contains all Error Messages
  */
 export interface CsvParseError {
-	errrors: string[];
+	errors: ValidationError[];
 }
 
-/* ----- Function ----- */
+/* --- Error --- */
+
+/**
+ * Error Interface for wrong column count.
+ * Used when the column count of a row 
+ * doesn't match the column count of the first line
+ * (as described in information)
+ * Contains column count of the faulty row as count and
+ * column count of the first row as expected
+ */
+export interface ErrorWrongColumnCount {
+	type: "wrongColumnCount",
+	information: "Expected column count to match with first line",
+	count: number,
+	expected: number
+}
+
+/**
+ * Error Interface for not closed Markers.
+ * Used when a Marker like " or ' gets opened in a row but not closed
+ * Contains the string fragment beginning at the open tag till the end of the row
+ */
+export interface ErrorMarkerNotClosed {
+	type: "markerNotClosed",
+	information: "The selected marker was opened but not closed in line",
+	fragment: string
+}
+
+export type ErrorData =
+	ErrorWrongColumnCount |
+	ErrorMarkerNotClosed;
+
+/**
+ * Core data about the error. In every case the user will be confronted
+ * with the error code as well as the line of the error.
+ * The column of the error can be added optionally.
+ */
+interface ValidationError {
+	line: number;
+	column?: number;
+	data: ErrorData;
+}
+
+/* ----- Functions ----- */
 
 /**  
  * Splits a String as the Row with text Markers by the delimiter
