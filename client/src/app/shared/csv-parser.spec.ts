@@ -148,27 +148,4 @@ describe('Util: CSV Parser', () => {
     expect(result).toEqual(DIFFERENT_COL_COUNTS_RESULT);
   });
 
-  /*
-    To Test :
-  
-      Whitespace
-      , ;
-      Marker
-      CR in unexpected places
-
-    -------------------
-    To Fix:
-
-      No Content before and after Marker
-      Fill lesser Cols?!
-      Escaping (write \") out instead of using it as marker
-      Start and don't end smth (Maker for example)
-
-      Return Interface Error OR Interface RequestTabularInsertDescription
-      => always use first line as header
-
-      or only array of errors and alway first line for data
-  */
-
-
 });
