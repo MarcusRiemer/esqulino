@@ -1,3 +1,57 @@
+/*
+	To Fix:
+
+	  Bug: No Content before and after Marker
+
+	  Escaping: (write \") out instead of using it as marker
+	  f.e. 1, Montag, “Religion (\”ev\”, \”kath\”)”
+
+	Error Handling:
+
+	  error if col count does not match for every row
+
+	  Start and don't end smth (like ")
+	  f.e. 1, Montag, “Religion (end of Line without closing ")
+
+	Use Interface:
+
+	  Return Interface Error OR Interface RequestTabularInsertDescription
+	  OR-type ( CsvResult \| CsvParseError)
+
+	  Only useable in typscript
+	  => use advanced types for js translation
+	  https://www.typescriptlang.org/docs/handbook/advanced-types.html
+
+	  Error Interface: Array of Strings with ErrorMessages
+	  Data Interface: Two Dimensional Array of String with Rows and Cols
+					  (Header independentent as first Line)
+
+	Unclear:
+
+	  To much whitespace between cols = error?
+*/
+
+/* ----- Interfaces ----- */
+
+/**
+ * The Parse Result of the CSV File
+ * Conists of only one Table Structure for now
+ * No additional Header Independence yet
+ */
+export interface CsvParseResult {
+	table: string[][];
+}
+
+/**
+ * The Parse Errors of the CSV File
+ * Consist of only one String Array which contains all Error Messages
+ */
+export interface CsvParseError {
+	errrors: string[];
+}
+
+/* ----- Function ----- */
+
 /**  
  * Splits a String as the Row with text Markers by the delimiter
  * (for example "Religion (ev, kath)" belongs together)
