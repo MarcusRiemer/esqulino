@@ -184,12 +184,12 @@ export function splitStringToRows(dataString: string): string[] {
  * @param delimiter the delimiter by which each row will be splittet into cols (for example , or ;)
  * @param textMarker the textMarker to keep Strings together (for example " or ')
  */
-export function convertCSVStringToArray(csvString: string, delimiter: string, textMarker: string) : string[][] {
+export function convertCSVStringToArray(csvString: string, delimiter: string, textMarker: string) : CsvParseResult | CsvParseError {
 	// Split CSV Data Rows
 	let plainRows = splitStringToRows(csvString);
 	// Split Columns for each Row
 	let wholeDataArray = plainRows.map(row => splitRowToCols(row, delimiter, textMarker));
-	return wholeDataArray;
+	return { table: wholeDataArray };
 }
 
 /**
