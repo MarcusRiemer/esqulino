@@ -6,8 +6,9 @@
     "types": []
   },
   "exclude": [
-    "**/*.cli.ts",
     "src/test.ts",
+    "main.cli.ts",
+    "cli/**",
     "**/*.spec.ts"
   ]
 }
