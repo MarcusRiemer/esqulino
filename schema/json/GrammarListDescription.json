@@ -1,0 +1,26 @@
+{
+  "$ref": "#/definitions/GrammarListDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "GrammarListDescription": {
+      "additionalProperties": false,
+      "description": "Listing data about grammars",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "type": "object"
+    }
+  }
+}

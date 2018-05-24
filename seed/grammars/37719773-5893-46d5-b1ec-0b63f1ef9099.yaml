@@ -1,4 +1,4 @@
---- !ruby/object:BlockLanguage
+--- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: name
@@ -8,25 +8,18 @@ concise_attributes:
   value_before_type_cast: css
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: id
-  value_before_type_cast: af3a4b65-738c-4563-9632-2c65d3da6762
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
-  name: family
-  value_before_type_cast: css
+  value_before_type_cast: 37719773-5893-46d5-b1ec-0b63f1ef9099
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: model
-  value_before_type_cast: '{"sidebars": [], "editorBlocks": [], "editorComponents":
-    []}'
+  value_before_type_cast: '{"root": "tmp", "types": {"tmp": {}}}'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: '2018-02-25 19:20:34.965559'
+  value_before_type_cast: '2018-05-15 18:48:24.782086'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-02-25 19:20:34.965559'
+  value_before_type_cast: '2018-05-15 18:48:24.782086'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
-  name: default_programming_language_id
+  name: programming_language_id
   value_before_type_cast: css
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
-  name: grammar_id
-  value_before_type_cast: 37719773-5893-46d5-b1ec-0b63f1ef9099
 new_record: false
 active_record_yaml_version: 2

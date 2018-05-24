@@ -1,7 +1,8 @@
 import * as Schema from '../grammar.description'
 
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
-  languageName: "sql",
+  id: "7ec93f8a-5a01-4d4d-90b4-27c3f0ae4700",
+  name: "sql",
   types: {
     "expression": {
       oneOf: [

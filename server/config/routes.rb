@@ -114,11 +114,9 @@ Rails.application.routes.draw do
       end
     end
 
-    # Everything about block languages
-    scope 'block-language' do
-      root via: [:get], controller: 'block_languages', action: :index
-    end
-
+    resources :block_languages, only: [:index, :create, :update]
+    resources :grammars, only: [:index, :create, :update]
+    
     # Fallback for unknown API endpoints
     match '*path', via: :all, to: proc { [404, {}, ["Unknown API endpoint"]] }
   end

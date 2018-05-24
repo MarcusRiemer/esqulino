@@ -35,7 +35,7 @@ class ProjectsController < ApplicationController
   # Update an existing project.
   def update
     ensure_write_access do
-      project = Project.find_by_slug(params[:project_id])
+      project = Project.find_by(slug: params[:project_id])
       project.update project_update_params # Simple properties
       project.update project_used_block_languages_params # Used block languages
 
@@ -43,6 +43,7 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # Destroy an existing project and all of its associated data
   def destroy
     ensure_write_access do
       current_project.delete!
@@ -72,7 +73,8 @@ class ProjectsController < ApplicationController
       .transform_keys { |k| k.underscore }
   end
 
-  # The used block languages may be updated
+  # The references to block languages that are part of this project.
+  # All of these references may be updated.
   def project_used_block_languages_params
     used_block_languages = params[:projectUsesBlockLanguages]
     if used_block_languages then

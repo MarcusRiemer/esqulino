@@ -8,7 +8,7 @@ import * as Desc from './grammar.description'
  * version that reads similar to RelaxNG.
  */
 export function prettyPrintGrammar(g: Desc.GrammarDescription): string {
-  const head = `grammar "${g.languageName}" {`;
+  const head = `grammar "${g.name}" {`;
   const tail = `}`;
 
   const nodes = Object.entries(g.types)
