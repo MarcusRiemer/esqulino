@@ -35,11 +35,11 @@
 
 /**
  * The Parse Result of the CSV File
- * Conists of only one Table Structure for now
- * No additional Header Independence yet
+ * First Line will always be handled as header
  */
 export interface CsvParseResult {
 	type: "parseResult",
+	header: string[],
 	table: string[][];
 }
 
@@ -193,19 +193,39 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 }
 
 /**  
- * Splits a CSV String into a two dimensional Array that consists of Rows and Columns.
- * Returns the CsvParseResult or the CsvParseError.
- * There is no additional dealing with the Header yet.
+ * If the parse process was successful:
+ * Return the CsvParseResult with header and table that consists of Rows and Columns
+ * If the parse process has at least one error:
+ * Return the CsvParseError which contains every lines with error
+ * Special Case: 
+ * If error already in header only this error will be returned
  * @param csvString the whole string as CSV data
  * @param delimiter the delimiter by which each row will be splittet into cols (for example , or ;)
  * @param textMarker the textMarker to keep Strings together (for example " or ')
  */
 export function convertCSVStringToArray(csvString: string, delimiter: string, textMarker: string) : CsvParseResult | CsvParseError {
+	// The result if parse process is successful
+	let parseResult;
+	// The error if at least one error occurs
+	let parseError;
+
 	// Split CSV Data Rows
 	let plainRows = splitStringToRows(csvString);
 
-	// Todo: create Header (To use as parameter for row expected column count)
+	// Parse first row for header data
+	let tryHeaderParsing = splitRowToCols(plainRows[0], delimiter, textMarker, 0);
 
+	// Parse successful?
+	if (tryHeaderParsing.type === "row") {
+		parseResult.header = tryHeaderParsing;
+	}
+	// In case of parse error return the error directly
+	else if ((tryHeaderParsing.type === "wrongColumnCount") ||
+			 (tryHeaderParsing.type === "markerNotClosed")) {
+		parseError.errors.push(tryHeaderParsing);
+		return parseError;
+	}
+			
 	// Split Columns for each Row
 	let wholeDataArray = plainRows.map(row => splitRowToCols(row, delimiter, textMarker));
 
