@@ -90,6 +90,9 @@ export interface ErrorMarkerNotClosed {
 	fragment: string
 }
 
+/**
+ * Error Data Type consisting of all errors
+ */
 export type ErrorData =
 	ErrorWrongColumnCount |
 	ErrorMarkerNotClosed;
@@ -101,7 +104,7 @@ export type ErrorData =
  */
 interface ValidationError {
 	line: number;
-	column?: number; // Really needed? Marker is alway last col
+	column?: number; // Really needed? Marker is always last col
 	data: ErrorData;
 }
 
@@ -156,16 +159,30 @@ export function splitStringToRows(dataString: string): string[] {
  * 						   0 = this is the header	
  */
 export function splitRowToCols(row: string, delimiter: string, textMarker: string, expectedColCount: number): RowData | ErrorData {
-	let res = [];
+	let splitResult = [];
+	let result;
+	let error;
+
+	// Important TODO: Enable escaping of text markers
+
+	// Count not escaped markers
+	// let markerCount = (row.match(new RegExp(textMarker + '?<!\\', 'g')) || []).length;
+	
+	// Error if uneven unescaped number of text markers 
+	// if (markerCount % 2 === 0) {}
+
+	// note: (count specific char in string javascript)
+	// note: (js regex ignore escaped)
+
 	if (!row.includes(textMarker)) {
 		// Split rows without text Marker directly
-		res = row.split(delimiter);
+		splitResult = row.split(delimiter);
 	} 
 	else {
 		// Split by text Marker
-		res = row.split(textMarker);
+		splitResult = row.split(textMarker);
 		// Split by seperator only without text Marker
-		res = res.map(splitter => {
+		splitResult = splitResult.map(splitter => {
 			// Remove delimiter at the end and split
 			if (splitter.endsWith(delimiter)) {
 			 splitter = splitter.slice(0, -1).split(delimiter);
@@ -178,18 +195,29 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 			return splitter;
 		});
 		// Concat the subArrays back into one Array
-		// (apply concats empty array as "this" param
-		// with all values in the array param)
-		// res = res.concat.apply([], res);
-
-		// Alternative 1 with reduce and spread operators
-		// res = res.reduce((acc, val) => [...acc, ...val]);
-
-		// Alternative 2 with spread operator instead of apply
-		res = [].concat(...res);
-		
-	}						
-	return res;
+		splitResult = [].concat(...splitResult);		
+	}		
+	
+	if (error === undefined) {
+		// Not closed marker is a better hint, 
+		// therefore only test for other error if no error was detected yet
+		if (splitResult.length !== expectedColCount) {
+			error.type = "wrongColumnCount";
+			error.information = "Expected column count to match with first line";
+			error.count = splitResult.length;
+			error.expected = expectedColCount;
+			return error;
+		}
+		// No error therefore return result
+		else {
+			result.type = "row";
+			result.data = splitResult;
+			return result;
+		}
+	}
+	else {
+		return error;
+	}
 }
 
 /**  
