@@ -226,24 +226,27 @@ export function convertCSVStringToArray(csvString: string, delimiter: string, te
 		return parseError;
 	}
 			
-	// Split Columns for each Row
-	let wholeDataArray = plainRows.map(row => splitRowToCols(row, delimiter, textMarker));
-
-	/* Todo
-	for(let i=0; i < plainRows.length; i++) {
-		let currentRow = splitRowToCols(plainRows[i], delimiter, textMarker);
+	// Iterate through every row starting from the second
+	for(let i=1; i < plainRows.length; i++) {
+		// Parse next row
+		let currentRow = splitRowToCols(plainRows[i], delimiter, textMarker, parseResult.header.length);
+		// Push to result or errors
 		if (currentRow.type == "row") {
-			// add...
+			parseResult.data.push(currentRow);
 		}
-		// else if error
-		// add validation error
+		else if ((currentRow.type === "wrongColumnCount") ||
+				 (currentRow.type === "markerNotClosed")) {
+			parseError.errors.push(currentRow);			
+		}
 	}
 
-	// if no errors return result
-	// else return errors
-	*/
-
-	return { table: wholeDataArray };
+	// Return parse result or errors
+	if (parseError.empty) {
+		return parseResult;
+	}
+	else {
+		return parseError;
+	}
 }
 
 /**
