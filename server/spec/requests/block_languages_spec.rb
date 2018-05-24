@@ -25,8 +25,10 @@ RSpec.describe BlockLanguagesController, type: :request do
     end
   end
 
-  describe 'POST /api/block_language' do
+  describe 'POST /api/grammars' do
     it 'Creates a new, empty block language' do
+      g = FactoryBot.create(:grammar)
+      
       post "/api/block_languages",
            :headers => json_headers,
            :params => {
@@ -34,7 +36,8 @@ RSpec.describe BlockLanguagesController, type: :request do
              "family" => "spec",
              "sidebars" => [],
              "editorComponents" => [],
-             "editorBlocks" => []
+             "editorBlocks" => [],
+             "grammarId" => g.id
            }.to_json
 
       expect(response.content_type).to eq "application/json"
@@ -46,6 +49,8 @@ RSpec.describe BlockLanguagesController, type: :request do
     end
 
     it 'Creates a new block language with model properties' do
+      g = FactoryBot.create(:grammar)
+      
       post "/api/block_languages",
            :headers => json_headers,
            :params => {
@@ -80,7 +85,8 @@ RSpec.describe BlockLanguagesController, type: :request do
                  },
                  "visual" => []
                }
-             ]
+             ],
+             "grammarId" => g.id
            }.to_json
 
       expect(response.content_type).to eq "application/json"

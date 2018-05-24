@@ -25,5 +25,8 @@ concise_attributes:
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: regex
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: f28a9a42-73c7-4214-9aba-17443acfc5ce
 new_record: false
 active_record_yaml_version: 2
