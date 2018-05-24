@@ -46,6 +46,11 @@ BlattWerkzeug makes use of subdomains to render the public representation of a p
 
 In a production environment you should run the server on a dedicated domain and route all subdomains to the same server instance.
 
+PostgreSQL
+----------
+
+The actual project code is stored in a PostgreSQL database. You will need to provide a user who is able to create databases.
+
 Compiling and Running
 =====================
 
@@ -59,20 +64,26 @@ Running locally
 1. Compiling all variants of the client requires can be done by navigating to the ``client`` folder and executing the following steps.
    
   1. ``make install-deps`` will pull all further dependencies that are managed by the respective packet managers. If this fails check that your environment meets the requirements: :ref:`environment_dependencies`.
-  2. After that, the web application need to be compiled and packaged once: ``make dist`` for a fully optimized version or ``make dist-dev`` for a development version.
+  2. After that, the web application need to be compiled and packaged once: ``make client-compile`` for a fully optimized version or ``make client-compile-dev`` for a development version.
   3. The server requires the special "IDE Service" variant of the client to function correctly. It can be created via ``make cli-compile``.
 
 2. Running the server requires the following steps in the ``server`` folder:
    
    1. ``make install-deps`` will pull all further dependencies that are managed by the respective packet managers. If this fails check that your environment meets the requirements: :ref:`environment_dependencies`.
-   2. Start a PostgreSQL-server that has a user ``esqulino`` who is allowed to create databases.
-   3. You may now run the server, to do this locally simply use ``make run-dev`` and it will spin up a local server instance listening on port ``9292``. You can alternatively run a production server using ``make run``.
+   2. Start a PostgreSQL-server that has a user ``esqulino`` who is allowed to create databases. You can alternatively specify your own user (see :ref:`database_configuration`).
+   3. Setup the database (`make setup-database`). This will create all required tables.
+   4. You may now run the server, to do this locally simply use ``make run-dev`` and it will spin up a local server instance listening on port ``9292``. You can alternatively run a production server using ``make run``.
       
 3. You then need to seed the initial data that is part of this instance using ``make load-all-data``. This will setup a pre-configured environment with some programming languages, block languages and projects.
 
 The setup above is helpful to get the whole project running once, but if you want do develop it any further you are better of with the following options:
 
-* Run ``NG_OPTS="--watch" make dist-dev`` in the ``client`` folder. The ``--watch`` option starts a filesystem watcher that rebuilds the client incrementally on any change, which drastically reduces subsequent compile times.
+* Relevant targets in the ``client`` folder:
+  * Run ``NG_OPTS="--watch" make client-compile-dev`` in the ``client`` folder. The ``--watch`` option starts a filesystem watcher that rebuilds the client incrementally on any change, which drastically reduces subsequent compile times.
+  * Run ``make client-test-watch`` to continously run the client testcases in the background.
+* Relevant targets in the ``server`` folder:
+  * Run ``make test-watch`` to continously run the server testcases in the background. This requires a running PostgreSQL database server.
+  
 
 Testing and code coverage
 -------------------------

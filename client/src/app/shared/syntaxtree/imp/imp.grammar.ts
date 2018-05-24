@@ -1,7 +1,8 @@
 import * as Schema from '../grammar.description'
 
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
-  languageName: "imp",
+  id: "3889526b-3b6a-4e54-8b29-95b3526f8c5a",
+  name: "imp",
   types: {
     "program": {
       attributes: [

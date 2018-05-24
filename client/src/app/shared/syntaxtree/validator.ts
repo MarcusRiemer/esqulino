@@ -42,11 +42,11 @@ export class Validator {
    * Registers a new language with this validator
    */
   private register(desc: Desc.GrammarDescription) {
-    if (this.isKnownLanguage(desc.languageName)) {
-      throw new Error(`Attempted to register language "${desc.languageName}" twice`);
+    if (this.isKnownLanguage(desc.name)) {
+      throw new Error(`Attempted to register language "${desc.name}" twice`);
     }
 
-    this._registeredGrammars[desc.languageName] = new GrammarValidator(this, desc);
+    this._registeredGrammars[desc.name] = new GrammarValidator(this, desc);
   }
 
   /**

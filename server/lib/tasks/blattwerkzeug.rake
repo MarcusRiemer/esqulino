@@ -40,20 +40,22 @@ namespace :blattwerkzeug do
     end
   end
 
-  namespace :block_language do
-    desc '(Re)load all block languages from their seed representation'
+  namespace :programming_language do
+    desc '(Re)load all block languages and grammars from their seed representation'
     task :load_all => :environment do |t, args|
+      m.load_all_grammars
       m.load_all_block_languages
     end
-    
+
+    desc 'Serialize all block languages and grammars to their seed representation'
+    task :store_all => :environment do |t, args|
+      m.store_all_grammars
+      m.store_all_block_languages
+    end
+
     desc 'Load a block language from it on-disk representation'
     task :load, [:block_language_id] => :environment do |t, args|
       m.load_block_language(args[:block_language_id])
-    end
-
-    desc 'Serialize all block language to their seed representation'
-    task :store_all => :environment do |t, args|
-      m.store_all_block_languages
     end
 
     desc 'Serialize a block language to its seed representation'

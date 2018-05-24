@@ -1,5 +1,8 @@
 import * as readline from 'readline'
 import * as process from 'process'
+import { URL } from 'url'
+
+import { httpRequest } from './cli/request-promise'
 
 import { Tree } from './app/shared/syntaxtree/syntaxtree'
 
@@ -63,6 +66,11 @@ interface EmitSyntaxTreeCommand {
   languageId: string
 }
 
+interface UpdateGrammarsCommand {
+  type: "updateGrammars"
+  serverBaseUrl: string
+}
+
 /**
  * Prints a list of all available programming languages.
  */
@@ -70,7 +78,7 @@ interface AvailableProgrammingLanguagesCommand {
   type: "available"
 }
 
-type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand;
+type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand | UpdateGrammarsCommand;
 
 function availableLanguages(): LanguageDescription[] {
   return ([
@@ -93,7 +101,7 @@ function availableGrammars(): GrammarDescription[] {
  * Retrieves a single grammar by name
  */
 function findGrammar(name: string) {
-  const toReturn = availableGrammars().find(d => d.languageName === name);
+  const toReturn = availableGrammars().find(d => d.name === name);
   if (toReturn) {
     return (toReturn);
   } else {
@@ -101,6 +109,9 @@ function findGrammar(name: string) {
   }
 }
 
+/**
+ * Retrieves a single Language by its name
+ */
 function findLanguage(id: string) {
   const desc = availableLanguages().find(l => l.id == id);
   if (desc)
@@ -112,7 +123,7 @@ function findLanguage(id: string) {
 /**
  * All available language models
  */
-function availableLanguageModels(): BlockLanguageDescription[] {
+function availableBlockLanguages(): BlockLanguageDescription[] {
   return ([
     blocks_dxml.LANGUAGE_MODEL,
     blocks_dxml.DYNAMIC_LANGUAGE_MODEL,
@@ -124,13 +135,13 @@ function availableLanguageModels(): BlockLanguageDescription[] {
  * Retrieves a single language model by name.
  */
 function findLanguageModel(slug_or_id: string): BlockLanguageDescription {
-  return (availableLanguageModels().find(l => l.id == slug_or_id || l.slug == slug_or_id));
+  return (availableBlockLanguages().find(l => l.id == slug_or_id || l.slug == slug_or_id));
 }
 
 /**
  * Executes the given command
  */
-function executeCommand(command: Command) {
+function executeCommand(command: Command): Promise<string> | any {
   switch (command.type) {
     case "ping":
       return ("pong");
@@ -142,13 +153,31 @@ function executeCommand(command: Command) {
       return (prettyPrintLanguageModel(l));
     }
     case "available":
-      return (availableGrammars().map(g => g.languageName));
+      return (availableGrammars().map(g => g.name));
     case "graphvizTree":
       return (graphvizSyntaxTree(command.model));
     case "emitTree": {
       const l = findLanguage(command.languageId);
       const t = new Tree(command.model);
       return (l.emitTree(t));
+    }
+    case "updateGrammars": {
+      // Ensure that every grammar is sent only once
+      const grammarIds = new Set(availableGrammars().map(g => g.id));
+
+      const requests = availableGrammars()
+        .filter(g => {
+          const toReturn = grammarIds.has(g.id);
+          grammarIds.delete(g.id);
+
+          return (toReturn);
+        })
+        .map(g => {
+          const updateUrl = new URL("/api/grammars/" + g.id, command.serverBaseUrl);
+          return (httpRequest<any>(updateUrl, "PUT", g));
+        });
+
+      return (Promise.all(requests));
     }
   }
 }
@@ -166,7 +195,19 @@ rl.on('line', function(line) {
     let result = executeCommand(command);
 
     if (result !== undefined) {
-      console.log(JSON.stringify(result));
+      if (result instanceof Promise) {
+        Promise.resolve(result)
+          .catch(err => console.error(err))
+          .then(res => {
+            console.log(`Finished ${res.length} operations`);
+            res.forEach((v, i) => {
+              console.log(`Operation ${i + 1}: ${JSON.stringify(v)}`);
+            });
+            //console.log(JSON.stringify(res))
+          });
+      } else {
+        console.log(JSON.stringify(result));
+      }
     }
   } catch (e) {
     console.error(e);
