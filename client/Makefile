@@ -51,6 +51,10 @@ cli-compile: dist/cli/main.cli.js
 cli-run: dist/cli/main.cli.js
 	@$(NODE_BIN) $^
 
+cli-upload-grammar: cli-compile
+	# echo '{ "type": "updateGrammars", "serverBaseUrl": "http://httpbin.org/anything" }' | $(NODE_BIN) dist/cli/main.cli.js
+	echo '{ "type": "updateGrammars", "serverBaseUrl": "http://localhost:9292" }' | $(NODE_BIN) dist/cli/main.cli.js
+
 ##################################
 # Universal Rendering Server
 ##################################

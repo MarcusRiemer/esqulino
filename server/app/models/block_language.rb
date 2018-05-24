@@ -1,18 +1,21 @@
 # A user defined view on a programming language that uses blocks. These block models
 # closely rely on the grammars of their corresponding programming language.
 class BlockLanguage < ApplicationRecord
-  # Every language must have a name
+  # Every language must have a name and a family assigned
   validates :name, :family, presence: true
 
   # Some special languages may get a slug assigned
   validates :slug, uniqueness: true, allow_nil: true
   
-  # The JSON document needs to follow the LanguageModelDescription
+  # The JSON document needs to be a valid block language
   validates :model, json_schema: 'BlockLanguageDocument'
 
   # The programming language that should be chosen as a default when
   # creating code resources.
   belongs_to :default_programming_language, :class_name => "ProgrammingLanguage", optional: true
+
+  # The grammar that this block language may describe
+  belongs_to :grammar
 
   # Computes a hash that may be sent back to the client if it requires
   # full access to the block language. This is usually happens if the

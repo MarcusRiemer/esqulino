@@ -1,0 +1,78 @@
+require 'rails_helper'
+
+RSpec.describe BlockLanguagesController, type: :request do
+  json_headers = { "CONTENT_TYPE" => "application/json" }
+
+  describe 'GET /api/grammars' do
+    it 'lists nothing if nothing is there' do
+      get "/api/grammars"
+
+      expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body).length).to eq 0
+    end
+
+    it 'lists a grammar' do
+      FactoryBot.create(:grammar)
+      get "/api/grammars"
+
+      expect(response).to have_http_status(200)
+
+      json_data = JSON.parse(response.body)
+
+      expect(json_data.length).to eq 1
+      expect(json_data[0]).to validate_against "GrammarListDescription"
+    end
+  end
+
+  describe 'POST /api/grammars' do
+    it 'Creates a new, empty grammar' do
+      post "/api/grammars",
+           :headers => json_headers,
+           :params => {
+             "slug" => "spec",
+             "name" => "Spec Grammar",
+             "types" => { "spec" => { } },
+             "root" => "spec"
+           }.to_json
+
+      expect(response.content_type).to eq "application/json"
+
+      json_data = JSON.parse(response.body)
+      expect(json_data.fetch('errors', [])).to eq []
+
+      g = Grammar.find(json_data['id'])
+      expect(g.name).to eq "Spec Grammar"
+      expect(g.slug).to eq "spec"
+      expect(g.model["root"]).to eq "spec"
+      expect(g.model["types"]["spec"]).to eq Hash.new
+
+      expect(response.status).to eq(200)
+    end
+  end
+
+  describe 'PUT /api/grammars/:id' do
+    it 'Updating basic properties' do
+      orig_grammar = FactoryBot.create(:grammar)
+      upda_grammar = {
+        "name" => "Upda",
+        "family" => "Upda",
+        "types" => {},
+        "root" => "empty"
+      }
+
+      put "/api/grammars/#{orig_grammar.id}",
+          :headers => json_headers,
+          :params => upda_grammar.to_json
+      
+      if (not response.body.blank?) then
+        json_data = JSON.parse(response.body)
+        expect(json_data.fetch('errors', [])).to eq []
+      end
+
+      orig_grammar.reload
+      expect(orig_grammar.name).to eq upda_grammar['name']
+      expect(orig_grammar.model["types"]).to eq Hash.new
+      expect(orig_grammar.model["root"]).to eq "empty"
+    end
+  end
+end
