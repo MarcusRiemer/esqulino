@@ -18,11 +18,11 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js'
   },
-  module: {
+  /*module: {
     rules: [
       { test: /\.ts$/, loader: 'ts-loader' }
     ]
-  },
+  },*/
   plugins: [
     new webpack.ContextReplacementPlugin(
       // fixes WARNING Critical dependency: the request of a dependency is an expression
