@@ -208,22 +208,20 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 		splitResult = [].concat(...splitResult);		
 	}		
 	
-	// Not closed marker is a better hint, 
-	// therefore only test for other error if no error was detected yet
-	if (splitResult.length !== expectedColCount) {
+	// Check if column count matches with header or if this is the header	
+	if ((expectedColCount === splitResult.length) || (expectedColCount === 0)) {
+		return ({
+			type: "row",
+			data: splitResult
+		});				
+	}
+	else {
 		return ({
 			type: "wrongColumnCount",
 			information: "Expected column count to match with first line",
 			count: splitResult.length,
 			expected: expectedColCount
-		});
-	}
-	// No error therefore return result
-	else {
-		return ({
-			type: "row",
-			data: splitResult
-		});			
+		});	
 	}
 }
 
@@ -240,9 +238,10 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
  */
 export function convertCSVStringToArray(csvString: string, delimiter: string, textMarker: string) : CsvParseResult | CsvParseError {
 	// The result if parse process is successful
-	let parseResult;
+	let headerData: string[] = [];
+	let tableData: string[][] = [[]];
 	// The error if at least one error occurs
-	let parseError;
+	let errors: ValidationError[] = []; 
 
 	// Split CSV Data Rows
 	let plainRows = splitStringToRows(csvString);
@@ -252,35 +251,51 @@ export function convertCSVStringToArray(csvString: string, delimiter: string, te
 
 	// Parse successful?
 	if (tryHeaderParsing.type === "row") {
-		parseResult.header = tryHeaderParsing;
+		headerData = tryHeaderParsing.data;
 	}
 	// In case of parse error return the error directly
 	else if ((tryHeaderParsing.type === "wrongColumnCount") ||
 			 (tryHeaderParsing.type === "markerNotClosed")) {
-		parseError.errors.push(tryHeaderParsing);
-		return parseError;
+		return ({
+			type: "parseError",
+			errors: [{
+				line: 1,				
+				data: tryHeaderParsing
+			}]
+		});
 	}
 			
 	// Iterate through every row starting from the second
 	for(let i=1; i < plainRows.length; i++) {
 		// Parse next row
-		let currentRow = splitRowToCols(plainRows[i], delimiter, textMarker, parseResult.header.length);
+		let currentRow = splitRowToCols(plainRows[i], delimiter, textMarker, headerData.length);
+
 		// Push to result or errors
 		if (currentRow.type === "row") {
-			parseResult.data.push(currentRow);
+			tableData[i-1] = currentRow.data;
 		}
 		else if ((currentRow.type === "wrongColumnCount") ||
 				 (currentRow.type === "markerNotClosed")) {
-			parseError.errors.push(currentRow);			
+			errors.push({ // TODO: Problem first line empty
+				line: i,				
+				data: currentRow
+			});			
 		}
 	}
 
 	// Return parse result or errors
-	if (parseError.empty) {
-		return parseResult;
+	if (errors.length) {
+		return ({
+			type: "parseError",
+			errors: errors
+		});
 	}
 	else {
-		return parseError;
+		return ({
+			type: "parseResult",
+			header: headerData,
+			table: tableData
+		}) ;
 	}
 }
 
