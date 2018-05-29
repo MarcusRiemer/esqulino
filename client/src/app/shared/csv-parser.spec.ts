@@ -66,21 +66,33 @@ describe('Util: CSV Parser', () => {
     expect(row).toEqual(ROWS_ONLY);
   });
 
-/*
+  /* ----- splitRowToCols Function ----- */
+
   it('Split Row To Columns Easy', () => {
-    const row = c.splitRowToCols('a', ',', '"');
-    expect(row).toEqual(['a']);
+    const result = c.splitRowToCols('a', ',', '"', 1);
+    expect(result).toEqual({
+      type: "row",
+      data: ['a']
+    });
   });
 
   it('Split Row To Columns Medium', () => {
-    const row = c.splitRowToCols('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', ',', '"');
-    expect(row).toEqual(['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag']);
+    const result = c.splitRowToCols('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', ',', '"', 6);
+    expect(result).toEqual({
+      type: "row",
+      data: ['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag']
+    });
   });
 
   it('Split Row To Columns Hard', () => {
-    const row = c.splitRowToCols('3,Sport,"Religion (ev, kath)",Kunst,,Kunst', ',', '"');
-    expect(row).toEqual(['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']);
+    const row = c.splitRowToCols('3,Sport,"Religion (ev, kath)",Kunst,,Kunst', ',', '"', 6);
+    expect(row).toEqual({
+      type: "row",
+      data: ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']
+    });
   });
+
+  /* ----- convertArraysToJSON Function ----- */
 
   it('Convert Arrays To JSON Easy', () => {
     const data = [['1'],
@@ -118,6 +130,8 @@ describe('Util: CSV Parser', () => {
     const JSONData = c.convertArraysToJSON(CSV_TO_ARRAY, [], false);
     expect(JSONData).toEqual(CSV_AS_JSON);
   });
+
+  /* ----- convertCSVStringToArray Function -----  
 
   it('Convert CSV String to Array', () => {
     const result = c.convertCSVStringToArray(CSV_STRING, ',', '"');
