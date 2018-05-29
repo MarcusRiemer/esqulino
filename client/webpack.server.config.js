@@ -11,11 +11,11 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js'
   },
-  module: {
+  /*module: {
     rules: [
       { test: /\.ts$/, loader: 'ts-loader' }
     ]
-  },
+  },*/
   plugins: [
     // Temporary Fix for issue: https://github.com/angular/angular/issues/11580
     // for "WARNING Critical dependency: the request of a dependency is an expression"
