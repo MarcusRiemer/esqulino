@@ -17,6 +17,12 @@ describe('Util: CSV Parser', () => {
                         ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
                         ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']];
 
+  const HEADER = ['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
+
+  const TABLE = [['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
+                 ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
+                 ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']];
+
   const CSV_AS_JSON = { 
     'rows':
       [
@@ -131,14 +137,16 @@ describe('Util: CSV Parser', () => {
     expect(JSONData).toEqual(CSV_AS_JSON);
   });
 
-  /* ----- convertCSVStringToArray Function -----  
+  /* ----- convertCSVStringToArray Function ----- */
 
   it('Convert CSV String to Array', () => {
     const result = c.convertCSVStringToArray(CSV_STRING, ',', '"');
-    expect(result).toEqual({ table: CSV_TO_ARRAY });
+    expect(result).toEqual({
+      type: "parseResult",
+      header: HEADER,
+      table: TABLE
+    });
   });
-
-  */
 
   /* ---------- Tests with corrupted CSV files ---------- 
 
