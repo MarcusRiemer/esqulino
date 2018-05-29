@@ -1,17 +1,19 @@
+import { SplitInterpolation } from "@angular/compiler";
+
 /*
 	To Fix:
 
 	  Bug: No Content before and after Marker
 
 	  Escaping: (write \") out instead of using it as marker
-	  f.e. 1, Montag, “Religion (\”ev\”, \”kath\”)”
+	  e.g. 1, Montag, “Religion (\”ev\”, \”kath\”)”
 
 	Error Handling:
 
 	  error if col count does not match for every row
 
 	  Start and don't end smth (like ")
-	  f.e. 1, Montag, “Religion (end of Line without closing ")
+	  e.g. 1, Montag, “Religion (end of Line without closing ")
 
 	Use Interface:
 
@@ -160,19 +162,27 @@ export function splitStringToRows(dataString: string): string[] {
  */
 export function splitRowToCols(row: string, delimiter: string, textMarker: string, expectedColCount: number): RowData | ErrorData {
 	let splitResult = [];
-	let result;
-	let error;
+	let markerCount = 0;
 
-	// Important TODO: Enable escaping of text markers
-
-	// Count not escaped markers
-	// let markerCount = (row.match(new RegExp(textMarker + '?<!\\', 'g')) || []).length;
+	// Count not escaped markers with global Regex
+	// and negative lookbehind: e.g. (?<!Y)X matches X that is not preceded by a Y
+	// use replace to use the variable in the regex
+	// pass an increment function to the replace function to count the occurrence
+	// TODO
+	// first try: markerCount = (row.match(new RegExp('?<!/\\//textMarker/', 'g')) || []).length;
 	
 	// Error if uneven unescaped number of text markers 
-	// if (markerCount % 2 === 0) {}
-
-	// note: (count specific char in string javascript)
-	// note: (js regex ignore escaped)
+	/* TODO after markerCount is set
+	if (markerCount % 2 === 0) {
+		let fragments = row.split(textMarker);
+		let fragment = fragments[fragments.length-1];
+		return ({
+			type: "markerNotClosed",
+			information: "The selected marker was opened but not closed in line",
+			fragment: fragment
+		});
+	}
+	*/
 
 	if (!row.includes(textMarker)) {
 		// Split rows without text Marker directly
@@ -198,25 +208,22 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 		splitResult = [].concat(...splitResult);		
 	}		
 	
-	if (error === undefined) {
-		// Not closed marker is a better hint, 
-		// therefore only test for other error if no error was detected yet
-		if (splitResult.length !== expectedColCount) {
-			error.type = "wrongColumnCount";
-			error.information = "Expected column count to match with first line";
-			error.count = splitResult.length;
-			error.expected = expectedColCount;
-			return error;
-		}
-		// No error therefore return result
-		else {
-			result.type = "row";
-			result.data = splitResult;
-			return result;
-		}
+	// Not closed marker is a better hint, 
+	// therefore only test for other error if no error was detected yet
+	if (splitResult.length !== expectedColCount) {
+		return ({
+			type: "wrongColumnCount",
+			information: "Expected column count to match with first line",
+			count: splitResult.length,
+			expected: expectedColCount
+		});
 	}
+	// No error therefore return result
 	else {
-		return error;
+		return ({
+			type: "row",
+			data: splitResult
+		});			
 	}
 }
 
@@ -259,7 +266,7 @@ export function convertCSVStringToArray(csvString: string, delimiter: string, te
 		// Parse next row
 		let currentRow = splitRowToCols(plainRows[i], delimiter, textMarker, parseResult.header.length);
 		// Push to result or errors
-		if (currentRow.type == "row") {
+		if (currentRow.type === "row") {
 			parseResult.data.push(currentRow);
 		}
 		else if ((currentRow.type === "wrongColumnCount") ||
