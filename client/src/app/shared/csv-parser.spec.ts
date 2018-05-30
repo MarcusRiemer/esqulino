@@ -153,15 +153,15 @@ describe('Util: CSV Parser', () => {
   // TO TEST:
 
   // Line Break at the end of the File
+  // One Column before or after marker
 
 
-  // CSV String with different Column Counts
-  const DIFFERENT_COL_COUNTS = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
-                              + '1,Mathematik,Kunst'); // 3 Cols
-                              // + '2,Sport,Geschichte,Sport,Geschichte,Sport\r\n' // 6 Cols
-                              // + 'x,"Religion (ev, kath)", x'); // 2 Cols
+  /* ----- One Different Column Count ----- */
 
-  const Errors = 
+  let Table = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
+             + '1,Mathematik,Kunst'); // 3 Cols
+
+  let Errors = 
   [
     {
       line: 2,
@@ -176,13 +176,102 @@ describe('Util: CSV Parser', () => {
   ]
 
   
-  it('Different Column Counts', () => {
-    const result = c.convertCSVStringToArray(DIFFERENT_COL_COUNTS, ',', '"');
+  it('One Different Column Count', () => {
+    const result = c.convertCSVStringToArray(Table, ',', '"');
     expect(result).toEqual({
       type: "parseError",
 	    errors: Errors
     });
   });
+
+
+  /* ----- Multiple Different Column Counts ----- */
+
+  Table = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
+         + '1,Mathematik,Kunst\r\n' // 3 Cols
+         + '2,Sport,Geschichte,Sport,Geschichte,Sport\r\n' // 6 Cols
+         + 'x,"Religion (ev, kath)",x'); // 3 Cols
+
+  Errors = 
+  [
+    {
+      line: 2,
+      data: 
+      {
+        type: "wrongColumnCount",
+        information: "Expected column count to match with first line",
+        count: 3,
+        expected: 5
+      }
+    },
+    {
+      line: 3,
+      data: 
+      {
+        type: "wrongColumnCount",
+        information: "Expected column count to match with first line",
+        count: 6,
+        expected: 5
+      }
+    },
+    {
+      line: 4,
+      data: 
+      {
+        type: "wrongColumnCount",
+        information: "Expected column count to match with first line",
+        count: 3,
+        expected: 5
+      }
+    }
+  ]
+
+
+  it('Multiple Different Column Counts', () => {
+    const result = c.convertCSVStringToArray(Table, ',', '"');
+    expect(result).toEqual({
+      type: "parseError",
+      errors: Errors
+    });
+  });
+
+  /* ----- Different And Same Column Counts ----- */
+
+  Table = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
+         + '1,Mathematik,Kunst, Sport, Englisch, Sport\r\n' // 6 Cols
+         + '2,Sport,Geschichte,Sport,Geschichte\r\n' // 5 Cols
+         + 'x,"Religion (ev, kath)",x'); // 3 Cols
+
+  Errors = 
+  [
+    {
+      line: 2,
+      data: 
+      {
+        type: "wrongColumnCount",
+        information: "Expected column count to match with first line",
+        count: 6,
+        expected: 5
+      }
+    },
+    {
+      line: 4,
+      data: 
+      {
+        type: "wrongColumnCount",
+        information: "Expected column count to match with first line",
+        count: 3,
+        expected: 5
+      }
+    }
+  ]
   
+  it('Different And Same Column Counts', () => {
+    const result = c.convertCSVStringToArray(Table, ',', '"');
+    expect(result).toEqual({
+      type: "parseError",
+      errors: Errors
+    });
+  });
 
 });
