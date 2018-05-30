@@ -148,21 +148,41 @@ describe('Util: CSV Parser', () => {
     });
   });
 
-  /* ---------- Tests with corrupted CSV files ---------- 
+  /* ---------- Tests with corrupted CSV files ---------- */
 
-  // TODO: THROW ERRORS
+  // TO TEST:
+
+  // Line Break at the end of the File
+
 
   // CSV String with different Column Counts
   const DIFFERENT_COL_COUNTS = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
-                              + '1,Mathematik,Kunst\r\n' // 3 Cols
-                              + '2,Sport,Geschichte,Sport,Geschichte,Sport\r\n' // 6 Cols
-                              + 'x,"Religion (ev, kath)", x'); // 2 Cols
+                              + '1,Mathematik,Kunst'); // 3 Cols
+                              // + '2,Sport,Geschichte,Sport,Geschichte,Sport\r\n' // 6 Cols
+                              // + 'x,"Religion (ev, kath)", x'); // 2 Cols
+
+  const Errors = 
+  [
+    {
+      line: 2,
+      data: 
+      {
+        type: "wrongColumnCount",
+        information: "Expected column count to match with first line",
+        count: 3,
+        expected: 5
+      }
+    }
+  ]
 
   
   it('Different Column Counts', () => {
     const result = c.convertCSVStringToArray(DIFFERENT_COL_COUNTS, ',', '"');
-    expect(result).toEqual();
+    expect(result).toEqual({
+      type: "parseError",
+	    errors: Errors
+    });
   });
-  */
+  
 
 });
