@@ -239,7 +239,7 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 export function convertCSVStringToArray(csvString: string, delimiter: string, textMarker: string) : CsvParseResult | CsvParseError {
 	// The result if parse process is successful
 	let headerData: string[] = [];
-	let tableData: string[][] = [[]];
+	let tableData: string[][] = [];
 	// The error if at least one error occurs
 	let errors: ValidationError[] = []; 
 
@@ -272,11 +272,13 @@ export function convertCSVStringToArray(csvString: string, delimiter: string, te
 
 		// Push to result or errors
 		if (currentRow.type === "row") {
-			tableData[i-1] = currentRow.data;
+			tableData.push(currentRow.data);
 		}
 		else if ((currentRow.type === "wrongColumnCount") ||
-				 (currentRow.type === "markerNotClosed")) {
-			errors.push({ // TODO: Problem first line empty
+				 (currentRow.type === "markerNotClosed")) {					
+			// console.log('i = ' + i);
+			// console.log('length = ' + errors.length);
+			errors.push({ // TODO: Problem first line empty??? To Test
 				line: i,				
 				data: currentRow
 			});			
