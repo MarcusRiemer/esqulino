@@ -53,6 +53,7 @@ describe('Util: CSV Parser', () => {
       ]
   }
 
+
   /* ---------- Successful Parse Tests ---------- */ 
 
   /* ----- splitStringToRows Function ----- */ 
@@ -148,13 +149,8 @@ describe('Util: CSV Parser', () => {
     });
   });
 
+
   /* ---------- Tests with corrupted CSV files ---------- */
-
-  // TO TEST:
-
-  // Line Break at the end of the File
-  // One Column before or after marker
-
 
   /* ----- One Different Column Count ----- */
 
@@ -273,5 +269,18 @@ describe('Util: CSV Parser', () => {
       errors: Errors
     });
   });
+
+  /* ----- Marker Not Closed In One Line ----- */
+
+  /* ----- Marker Not Closed In Mutliple Lines ----- */
+
+  /* ----- Marker Not Closed With Escaped Markers ----- */
+
+  /* ---------- Special Cases ---------- */
+
+  // Line Break at the end of the File
+  // Ignore empty lines
+  // One Column before or after marker
+  // Escaped Markers
 
 });

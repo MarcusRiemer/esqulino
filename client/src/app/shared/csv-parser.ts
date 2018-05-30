@@ -8,12 +8,6 @@ import { SplitInterpolation } from "@angular/compiler";
 	  Escaping: write for \"  only " out instead of using it as marker
 	  e.g. 1, Montag, “Religion (\”ev\”, \”kath\”)”
 
-	Error Handling:
-
-	  error if col count does not match for every row
-
-	  Start and don't end smth (like ")
-	  e.g. 1, Montag, “Religion (end of Line without closing ")
 */
 
 /* ----- Interfaces ----- */
@@ -153,6 +147,21 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 	// pass an increment function to the replace function to count the occurrence
 	// TODO
 	// first try: markerCount = (row.match(new RegExp('?<!/\\//textMarker/', 'g')) || []).length;
+
+	debugger;
+
+	let test = '"bl\"bla"la';
+	let test2 = 'sdas"""""""';
+
+	let re = /(?<!\\)\+\"/g;
+
+	console.log("false = " + test.match(re));
+	console.log("true = " + test2.match(re));
+
+	// Count without escaped dafür mit variable
+	markerCount = (row.match(re) || []).length;
+
+	console.log(markerCount);
 	
 	// Error if uneven unescaped number of text markers 
 	/* TODO after markerCount is set
@@ -166,6 +175,9 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 		});
 	}
 	*/
+
+	// Todo ignore escaped textMarker (use them)
+	// fix One Column before or after marker issue
 
 	if (!row.includes(textMarker)) {
 		// Split rows without text Marker directly
