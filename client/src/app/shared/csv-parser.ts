@@ -5,7 +5,7 @@ import { SplitInterpolation } from "@angular/compiler";
 
 	  Bug: No Content before and after Marker
 
-	  Escaping: (write \") out instead of using it as marker
+	  Escaping: write for \"  only " out instead of using it as marker
 	  e.g. 1, Montag, “Religion (\”ev\”, \”kath\”)”
 
 	Error Handling:
@@ -14,23 +14,6 @@ import { SplitInterpolation } from "@angular/compiler";
 
 	  Start and don't end smth (like ")
 	  e.g. 1, Montag, “Religion (end of Line without closing ")
-
-	Use Interface:
-
-	  Return Interface Error OR Interface RequestTabularInsertDescription
-	  OR-type ( CsvResult \| CsvParseError)
-
-	  Only useable in typscript
-	  => use advanced types for js translation
-	  https://www.typescriptlang.org/docs/handbook/advanced-types.html
-
-	  Error Interface: Array of Strings with ErrorMessages
-	  Data Interface: Two Dimensional Array of String with Rows and Cols
-					  (Header independentent as first Line)
-
-	Unclear:
-
-	  To much whitespace between cols = error?
 */
 
 /* ----- Interfaces ----- */
@@ -276,10 +259,8 @@ export function convertCSVStringToArray(csvString: string, delimiter: string, te
 		}
 		else if ((currentRow.type === "wrongColumnCount") ||
 				 (currentRow.type === "markerNotClosed")) {					
-			// console.log('i = ' + i);
-			// console.log('length = ' + errors.length);
-			errors.push({ // TODO: Problem first line empty??? To Test
-				line: i,				
+			errors.push({
+				line: i + 1, // The first line is the header				
 				data: currentRow
 			});			
 		}
