@@ -148,7 +148,8 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 
 	// Global regex for unescaped markers
 	// uses negative lookbehind: e.g. (?<!Y)X matches X that is not preceded by a Y
-	let re = /(?<!\\)"/g; // TODO Use the marker
+	// 4 x backslash = 2 x for standard backslash escaping + 2 x for the RegExp Object
+	let re = new RegExp("(?<!\\\\)" + textMarker, "g");
 	let markerCollector = row.match(re);
 
 	// If row contains textMarkers, count them
