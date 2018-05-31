@@ -141,16 +141,11 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 	let splitResult = [];
 	let markerCount = 0;
 
-	// Detect single backslash in string not possible ?!
-	// let testUri = encodeURIComponent(test);
-	// let testUri = String.raw`${test}`;
-	// console.log(testUri);
-
 	// Global regex for unescaped markers
 	// uses negative lookbehind: e.g. (?<!Y)X matches X that is not preceded by a Y
 	// 4 x backslash = 2 x for standard backslash escaping + 2 x for the RegExp Object
-	let re = new RegExp("(?<!\\\\)" + textMarker, "g");
-	let markerCollector = row.match(re);
+	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
+	let markerCollector = row.match(unescapedMarkerRegex);
 
 	// If row contains textMarkers, count them
 	if (markerCollector) {
@@ -168,16 +163,17 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 		});
 	}
 
-	// Todo ignore escaped textMarker (use them)
-	// fix One Column before or after marker issue
-
-	if (!row.includes(textMarker)) {
-		// Split rows without text Marker directly
+	// If row doesn't contain unescaped text Markers
+	if (markerCount === 0) {
+		// Split row directly by the delimiter
 		splitResult = row.split(delimiter);
 	} 
 	else {
-		// Split by text Marker
-		splitResult = row.split(textMarker);
+		// TODO: Ignore delimiter inside unescaped text markers
+		// let delOutsideMarkerRegex =
+
+		// Split by unescaped text Marker
+		splitResult = row.split(unescapedMarkerRegex);
 		// Split by seperator only without text Marker
 		splitResult = splitResult.map(splitter => {
 			// Remove delimiter at the end and split
@@ -191,6 +187,13 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 			// Otherwise don't split
 			return splitter;
 		});
+		// Special Case: No Content before first or after last unescaped textMarker
+
+		// Write out escaped textMarkers
+		// uses positive lookbehind: e.g. (?<=Y)X matches X that is preceded by a Y
+		let escapedMarkerRegex = new RegExp("(?<=\\\\)" + textMarker, "g");
+		// .replace(escapedMarkerRegex, textMarker);
+
 		// Concat the subArrays back into one Array
 		splitResult = [].concat(...splitResult);		
 	}		
