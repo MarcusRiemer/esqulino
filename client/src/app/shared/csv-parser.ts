@@ -252,9 +252,9 @@ export function convertCSVStringToArray(csvString: string, delimiter: string, te
 	}
 			
 	// Iterate through every row starting from the second
-	for(let i=1; i < plainRows.length; i++) {
+	for(var i=1; i < plainRows.length; i++) {
 		// Parse next row
-		let currentRow = splitRowToCols(plainRows[i], delimiter, textMarker, headerData.length);
+		var currentRow = splitRowToCols(plainRows[i], delimiter, textMarker, headerData.length);
 
 		// Push to result or errors
 		if (currentRow.type === "row") {
@@ -267,6 +267,11 @@ export function convertCSVStringToArray(csvString: string, delimiter: string, te
 				data: currentRow
 			});			
 		}
+	}
+
+	// Ignore error for the last row if empty
+	if (plainRows[plainRows.length-1] === "") {
+		errors.pop();	
 	}
 
 	// Return parse result or errors
