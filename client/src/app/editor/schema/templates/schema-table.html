@@ -2,30 +2,30 @@
 <div class="schema-table-header">
   <div>
     <!--Table name as link to the detail view-->
-	<a [routerLink]="['details', table.name]">
-	  <span *ngIf="tableIsCurrentlyEdited(table.name)"
+    <a [routerLink]="['details', table.name]">
+      <span *ngIf="tableIsCurrentlyEdited(table.name)"
             class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></span>
       <span class="fa fa-table fa-fw" aria-hidden="true"></span>
-	  {{ table.name }}
+      {{ table.name }}
     </a>
   </div>
   <div>
-    <!--Button to the table-editing view-->
-	<a *ngIf="!readOnly"
+    <!-- Button to the table-editing view -->
+    <a *ngIf="!readOnly"
        [routerLink]="['edit', table.name]"
-       class="btn btn-primary">
-	  <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Struktur Editieren
-	</a>
-	<!--Button to drop table-->
-	<button *ngIf="!readOnly"
+       class="btn btn-sm btn-primary">
+      <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Struktur Editieren
+    </a>
+    <!-- Button to drop table -->
+    <button *ngIf="!readOnly"
             (click)="deleteTable()"
-            class="btn btn-danger">
-	  <span class="fa fa-trash" aria-hidden="true"></span> Löschen
-	</button>
+            class="btn btn-sm btn-danger">
+      <span class="fa fa-trash" aria-hidden="true"></span> Löschen
+    </button>
   </div>
 </div>
 
-<!-- Columns -->
+<!-- Columns of this table -->
 <table class="table table-hover table-sm">
   <tr *ngFor="let column of table.columns">
     <td width="10%"><span *ngIf="column.primary" class="fa fa-key" aria-hidden="true"></span></td>
