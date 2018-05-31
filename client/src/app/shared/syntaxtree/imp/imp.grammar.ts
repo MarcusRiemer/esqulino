@@ -5,6 +5,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   name: "imp",
   types: {
     "program": {
+      type: "concrete",
       attributes: [
         {
           name: "statements",
@@ -12,9 +13,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: ["statement"]
         }
       ],
-    } as Schema.NodeTypeDescription,
+    },
 
     "statement": {
+      type: "concrete",
       attributes: [
         {
           name: "children",
@@ -22,9 +24,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: ["statementAssign"]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
 
     "statementAssign": {
+      type: "concrete",
       attributes: [
         {
           name: "children",
@@ -32,20 +35,22 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: ["variable"]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
 
     "variable": {
+      type: "concrete",
       attributes: [
         {
           name: "name",
+          type: "property",
           base: "string"
         }
       ],
-    } as Schema.NodeTypeDescription,
+    },
 
     "expression": {
-
-    } as Schema.NodeTypeDescription
+      type: "concrete",
+    }
   },
 
   root: "program"

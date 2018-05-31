@@ -144,6 +144,7 @@ describe('Grammar PrettyPrinter', () => {
   it('node "s1" { prop "value" { string } }', () => {
     debugger;
     const r = p.prettyPrintConcreteNodeType("s1", {
+      type: "concrete",
       attributes: [
         {
           name: "value",
