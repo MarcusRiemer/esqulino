@@ -439,9 +439,27 @@ describe('Util: CSV Parser', () => {
     });
   });
 
-  /* ---------- Special Cases ---------- */
+  /* ---------- Special Cases ---------- 
 
-  /* ----- Ignore Last Line if empty ----- */
+  it('No Content Before First Or After Last Marker', () => {
+    const line = '"Stunde,Montag",y\r\n'
+    const result = c.convertCSVStringToArray(line, ',', '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['Stunde,Montag', 'y'],
+      table: []
+    });
+  });
+
+  it('Write Out Escaped Markers', () => {
+    const line = '"Stunde,Montag",y\r\n'
+    const result = c.convertCSVStringToArray(line, ',', '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['Stunde,Montag', 'y'],
+      table: []
+    });
+  });*/
 
   it('Ignore Last Line if empty', () => {
     const line = 'Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
@@ -453,9 +471,15 @@ describe('Util: CSV Parser', () => {
     });
   });
 
-  // One Column before or after marker
-  // Write out Escaped Markers
-  // Use semicolon and single quotes
+  it('Write Out Not Used Delimiter And Textmarkers', () => {
+    const line = 'Mo,n,tag;Di"e"ns"ta"g\r\n'
+    const result = c.convertCSVStringToArray(line, ';', "'");
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['Mo,n,tag', 'Di"e"ns"ta"g'],
+      table: []
+    });
+  });
 
   /* ----- Frontend ----- */
   
