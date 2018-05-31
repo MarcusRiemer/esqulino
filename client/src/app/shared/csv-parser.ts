@@ -141,31 +141,23 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 	let splitResult = [];
 	let markerCount = 0;
 
-	// Count not escaped markers with global Regex
-	// and negative lookbehind: e.g. (?<!Y)X matches X that is not preceded by a Y
-	// use replace to use the variable in the regex
-	// pass an increment function to the replace function to count the occurrence
-	// TODO
-	// first try: markerCount = (row.match(new RegExp('?<!/\\//textMarker/', 'g')) || []).length;
+	// Detect single backslash in string not possible ?!
+	// let testUri = encodeURIComponent(test);
+	// let testUri = String.raw`${test}`;
+	// console.log(testUri);
 
-	debugger;
+	// Global regex for unescaped markers
+	// uses negative lookbehind: e.g. (?<!Y)X matches X that is not preceded by a Y
+	let re = /(?<!\\)"/g; // TODO Use the marker
+	let markerCollector = row.match(re);
 
-	let test = '"bl\"bla"la';
-	let test2 = 'sdas"""""""';
-
-	let re = /(?<!\\)\+\"/g;
-
-	console.log("false = " + test.match(re));
-	console.log("true = " + test2.match(re));
-
-	// Count without escaped dafür mit variable
-	markerCount = (row.match(re) || []).length;
-
-	console.log(markerCount);
-	
+	// If row contains textMarkers, count them
+	if (markerCollector) {
+		markerCount = markerCollector.length;
+	}
+		
 	// Error if uneven unescaped number of text markers 
-	/* TODO after markerCount is set
-	if (markerCount % 2 === 0) {
+	if (markerCount % 2 === 1) {
 		let fragments = row.split(textMarker);
 		let fragment = fragments[fragments.length-1];
 		return ({
@@ -174,7 +166,6 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 			fragment: fragment
 		});
 	}
-	*/
 
 	// Todo ignore escaped textMarker (use them)
 	// fix One Column before or after marker issue
