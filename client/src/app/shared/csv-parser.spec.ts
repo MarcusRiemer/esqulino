@@ -170,7 +170,6 @@ describe('Util: CSV Parser', () => {
       }
     }
   ]
-
   
   it('One Different Column Count', () => {
     const result = c.convertCSVStringToArray(Table, ',', '"');
@@ -179,7 +178,6 @@ describe('Util: CSV Parser', () => {
 	    errors: Errors
     });
   });
-
 
   /* ----- Multiple Different Column Counts ----- */
 
@@ -221,7 +219,6 @@ describe('Util: CSV Parser', () => {
       }
     }
   ]
-
 
   it('Multiple Different Column Counts', () => {
     const result = c.convertCSVStringToArray(Table, ',', '"');
@@ -270,7 +267,47 @@ describe('Util: CSV Parser', () => {
     });
   });
 
+  /* ----- Empty Lines ----- */
+
+  Table = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
+         + '\r\n' // 1 Cols
+         + '2,Sport,Geschichte,Sport,Geschichte\r\n' // 5 Cols
+         + '   '); // 1 Col
+
+  Errors = 
+  [
+    {
+      line: 2,
+      data: 
+      {
+        type: "wrongColumnCount",
+        information: "Expected column count to match with first line",
+        count: 1,
+        expected: 5
+      }
+    },
+    {
+      line: 4,
+      data: 
+      {
+        type: "wrongColumnCount",
+        information: "Expected column count to match with first line",
+        count: 1,
+        expected: 5
+      }
+    }
+  ]
+  
+  it('Empty Lines', () => {
+    const result = c.convertCSVStringToArray(Table, ',', '"');
+    expect(result).toEqual({
+      type: "parseError",
+      errors: Errors
+    });
+  });
+
   /* ----- Marker Not Closed In One Line ----- */
+
   it('Marker Not Closed In One Line', () => {
     const line = 'Montag,"Dienstag,Mittwoch",Donnerstag,"Freitag'
     const result = c.splitRowToCols(line, ',', '"', 4);
@@ -289,9 +326,21 @@ describe('Util: CSV Parser', () => {
 
   /* ---------- Special Cases ---------- */
 
-  // Line Break at the end of the File
-  // Ignore empty lines
+  // Ignore Line Break at the end of the File
   // One Column before or after marker
   // Escaped Markers
+
+  /* ----- Frontend ----- */
+  
+  // Route in schema
+  // Add to Module
+  // Write Component
+
+  // Upload Button
+  // Settings
+  // Preview Below
+
+  // Bootstrap error line for Error with information
+  // Show only the first 20 lines if file to large and no parsing error occured
 
 });
