@@ -320,11 +320,124 @@ describe('Util: CSV Parser', () => {
 
   /* ----- Marker Not Closed In Mutliple Lines ----- */
 
-  // Use convertCSVStringToArray function
+  it('Marker Not Closed In Mutliple Lines', () => {
+    const table = ('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
+                    + '1,Mathematik,"Deutsch,Englisch",Mathematik,Kunst, Kunst\r\n'
+                    + '2,Sport,Französisch",Geschichte,Sport,Geschichte\r\n'
+                    + '3,S"po"rt,"Religion (ev, kath),Kunst,,Kunst');
+
+    const errors = 
+    [
+      {
+        line: 3,
+        data: 
+        {
+          type: "markerNotClosed",
+          information: "The selected marker was opened but not closed in line",
+          fragment: ",Geschichte,Sport,Geschichte"
+        }
+      },
+      {
+        line: 4,
+        data: 
+        {
+          type: "markerNotClosed",
+          information: "The selected marker was opened but not closed in line",
+          fragment: "Religion (ev, kath),Kunst,,Kunst"
+        }
+      }
+    ]
+
+    const result = c.convertCSVStringToArray(table, ',', '"');
+    expect(result).toEqual({
+      type: "parseError",
+      errors: errors
+    });
+  });
 
   /* ----- Marker Not Closed With Escaped Markers ----- */
 
+  it('Marker Not Closed With Escaped Markers', () => {
+    const table = ('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
+                    + '1,Mathematik,\\"Deutsch,Englisch",Mathematik,Kunst, Kunst\r\n'
+                    + '2,Sport,Französisch,Geschichte,Sport,Geschichte\r\n'
+                    + '3,S"p\\"o"rt,"Religion (ev, kath)",\\"Kunst",,Kunst');
+
+    const errors = 
+    [
+      {
+        line: 2,
+        data: 
+        {
+          type: "markerNotClosed",
+          information: "The selected marker was opened but not closed in line",
+          fragment: ",Mathematik,Kunst, Kunst"
+        }
+      },
+      {
+        line: 4,
+        data: 
+        {
+          type: "markerNotClosed",
+          information: "The selected marker was opened but not closed in line",
+          fragment: ",,Kunst"
+        }
+      }
+    ]
+
+    const result = c.convertCSVStringToArray(table, ',', '"');
+    expect(result).toEqual({
+      type: "parseError",
+      errors: errors
+    });
+  });
+
   /* ----- Marker Not Closed And Wrong Column Counts ----- */
+
+  it('Marker Not Closed And Wrong Column Counts', () => {
+    const table = ('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
+                    + '1,Mathematik,\\"Deutsch,Englisch",Mathematik,Kunst, Kunst\r\n'
+                    + '2,Sport,Sport,Geschichte\r\n'
+                    + '3,S"p\\"o"rt,"Religion (ev, kath)",\\"Kunst",,Kunst');
+
+    const errors = 
+    [
+      {
+        line: 2,
+        data: 
+        {
+          type: "markerNotClosed",
+          information: "The selected marker was opened but not closed in line",
+          fragment: ",Mathematik,Kunst, Kunst"
+        }
+      },
+      {
+        line: 3,
+        data: 
+        {
+          type: "wrongColumnCount",
+          information: "Expected column count to match with first line",
+          count: 4,
+          expected: 6
+        }
+      },
+      {
+        line: 4,
+        data: 
+        {
+          type: "markerNotClosed",
+          information: "The selected marker was opened but not closed in line",
+          fragment: ",,Kunst"
+        }
+      }
+    ]
+
+    const result = c.convertCSVStringToArray(table, ',', '"');
+    expect(result).toEqual({
+      type: "parseError",
+      errors: errors
+    });
+  });
 
   /* ---------- Special Cases ---------- */
 
@@ -341,7 +454,7 @@ describe('Util: CSV Parser', () => {
   });
 
   // One Column before or after marker
-  // Escaped Markers
+  // Write out Escaped Markers
 
   /* ----- Frontend ----- */
   
