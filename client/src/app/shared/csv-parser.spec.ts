@@ -271,10 +271,21 @@ describe('Util: CSV Parser', () => {
   });
 
   /* ----- Marker Not Closed In One Line ----- */
+  it('Marker Not Closed In One Line', () => {
+    const line = 'Montag,"Dienstag,Mittwoch",Donnerstag,"Freitag'
+    const result = c.splitRowToCols(line, ',', '"', 4);
+    expect(result).toEqual({
+      type: "markerNotClosed",
+			information: "The selected marker was opened but not closed in line",
+			fragment: "Freitag"
+    });
+  });
 
   /* ----- Marker Not Closed In Mutliple Lines ----- */
 
   /* ----- Marker Not Closed With Escaped Markers ----- */
+
+  /* ----- Marker Not Closed And Wrong Column Counts ----- */
 
   /* ---------- Special Cases ---------- */
 
