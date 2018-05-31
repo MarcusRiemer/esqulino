@@ -5,6 +5,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   name: "sql",
   types: {
     "expression": {
+      type: "oneOf",
       oneOf: [
         "columnName",
         "binaryExpression",
@@ -12,8 +13,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         "parameter",
         "functionCall"
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "columnName": {
+      type: "concrete",
       attributes: [
         {
           type: "property",
@@ -26,8 +28,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "constant": {
+      type: "concrete",
       attributes: [
         {
           type: "property",
@@ -35,8 +38,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "parameter": {
+      type: "concrete",
       attributes: [
         {
           type: "property",
@@ -44,8 +48,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "functionCall": {
+      type: "concrete",
       attributes: [
         {
           type: "property",
@@ -63,11 +68,13 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "starOperator": {
+      type: "concrete",
       attributes: []
-    } as Schema.NodeTypeDescription,
+    },
     "relationalOperator": {
+      type: "concrete",
       attributes: [
         {
           type: "property",
@@ -81,8 +88,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "binaryExpression": {
+      type: "concrete",
       attributes: [
         {
           type: "sequence",
@@ -105,8 +113,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "select": {
+      type: "concrete",
       attributes: [
         {
           type: "property",
@@ -129,11 +138,13 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "delete": {
+      type: "concrete",
       attributes: []
-    } as Schema.NodeTypeDescription,
+    },
     "tableIntroduction": {
+      type: "concrete",
       attributes: [
         {
           type: "property",
@@ -147,8 +158,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           isOptional: true
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "crossJoin": {
+      type: "concrete",
       attributes: [
         {
           type: "sequence",
@@ -156,8 +168,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: ["tableIntroduction"]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "innerJoinOn": {
+      type: "concrete",
       attributes: [
         {
           type: "sequence",
@@ -170,8 +183,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: ["expression"]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "innerJoinUsing": {
+      type: "concrete",
       attributes: [
         {
           type: "sequence",
@@ -184,11 +198,13 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: ["expression"]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "join": {
+      type: "oneOf",
       oneOf: ["crossJoin", "innerJoinUsing", "innerJoinOn"]
-    } as Schema.NodeTypeDescription,
+    },
     "from": {
+      type: "concrete",
       attributes: [
         {
           type: "sequence",
@@ -211,14 +227,17 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "whereAdditional": {
+      type: "concrete",
       attributes: [
         {
           type: "property",
           name: "operator",
           base: "string",
-          value: ["and", "or"]
+          restrictions: [
+            { type: "enum", value: ["and", "or"] }
+          ]
         },
         {
           type: "sequence",
@@ -226,8 +245,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: ["expression"]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "where": {
+      type: "concrete",
       attributes: [
         {
           type: "sequence",
@@ -242,8 +262,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "groupBy": {
+      type: "concrete",
       attributes: [
         {
           type: "allowed",
@@ -257,8 +278,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "orderBy": {
+      type: "concrete",
       attributes: [
         {
           type: "allowed",
@@ -272,8 +294,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "querySelect": {
+      type: "concrete",
       attributes: [
         {
           type: "sequence",
@@ -320,8 +343,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         },
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "queryDelete": {
+      type: "concrete",
       attributes: [
         {
           type: "sequence",
@@ -348,10 +372,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "query": {
+      type: "oneOf",
       oneOf: ["querySelect", "queryDelete"]
-    } as Schema.NodeTypeDescription
+    },
   },
   root: "query"
 }
