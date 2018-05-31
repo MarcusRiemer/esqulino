@@ -320,13 +320,26 @@ describe('Util: CSV Parser', () => {
 
   /* ----- Marker Not Closed In Mutliple Lines ----- */
 
+  // Use convertCSVStringToArray function
+
   /* ----- Marker Not Closed With Escaped Markers ----- */
 
   /* ----- Marker Not Closed And Wrong Column Counts ----- */
 
   /* ---------- Special Cases ---------- */
 
-  // Ignore Line Break at the end of the File
+  /* ----- Ignore Last Line if empty ----- */
+
+  it('Ignore Last Line if empty', () => {
+    const line = 'Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
+    const result = c.convertCSVStringToArray(line, ',', '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: HEADER,
+      table: []
+    });
+  });
+
   // One Column before or after marker
   // Escaped Markers
 
