@@ -1,7 +1,7 @@
 import { QualifiedTypeName } from './syntaxtree.description'
 
 /**
- * Types of nodes may either be concrete new type or an alias
+ * Types may either be concrete new type or an alias
  * grouping together multiple other types.
  */
 export type NodeTypeDescription = NodeConcreteTypeDescription | NodeOneOfTypeDescription;

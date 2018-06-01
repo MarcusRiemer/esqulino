@@ -253,10 +253,18 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           type: "sequence",
           name: "expressions",
           nodeTypes: [
-            "expression",
             {
-              languageName: "sql",
-              nodeType: "whereAdditional",
+              nodeType: {
+                languageName: "sql",
+                typeName: "expression"
+              },
+              occurs: "1"
+            },
+            {
+              nodeType: {
+                languageName: "sql",
+                typeName: "whereAdditional"
+              },
               occurs: "*"
             }
           ]
@@ -271,10 +279,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           name: "expressions",
           nodeTypes: [
             {
-              languageName: "sql",
-              nodeType: "expression",
+              nodeType: {
+                languageName: "sql",
+                typeName: "expression"
+              },
               occurs: "*"
-            }
+            },
           ]
         }
       ]
@@ -287,10 +297,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           name: "expressions",
           nodeTypes: [
             {
-              languageName: "sql",
-              nodeType: "expression",
+              nodeType: {
+                languageName: "sql",
+                typeName: "expression"
+              },
               occurs: "*"
-            }
+            },
           ]
         }
       ]
