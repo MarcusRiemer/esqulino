@@ -2,7 +2,7 @@
 concise_attributes:
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: name
-  value_before_type_cast: XML (Dynamic)
+  value_before_type_cast: dxml
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: slug
   value_before_type_cast: dxml
@@ -11,13 +11,35 @@ concise_attributes:
   value_before_type_cast: 7e333dff-6d1c-4042-aaa5-0cdf2cfeed7e
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: model
-  value_before_type_cast: '{"root": "tmp", "types": {"tmp": {}}}'
+  value_before_type_cast: '{"root": "element", "types": {"if": {"type": "concrete",
+    "attributes": [{"name": "condition", "type": "allowed", "nodeTypes": ["expr"]},
+    {"name": "body", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType":
+    "element"}, {"occurs": "*", "nodeType": "text"}, {"occurs": "*", "nodeType": "interpolate"},
+    {"occurs": "*", "nodeType": "if"}]}]}, "expr": {"type": "oneOf", "oneOf": ["exprVar",
+    "exprConst", "exprBinary"]}, "text": {"type": "concrete", "attributes": [{"base":
+    "string", "name": "value", "type": "property"}]}, "element": {"type": "concrete",
+    "attributes": [{"base": "string", "name": "name", "type": "property"}, {"name":
+    "attributes", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "attribute"}]},
+    {"name": "elements", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType":
+    "element"}, {"occurs": "*", "nodeType": "text"}, {"occurs": "*", "nodeType": "interpolate"},
+    {"occurs": "*", "nodeType": "if"}]}]}, "exprVar": {"type": "concrete", "attributes":
+    [{"base": "string", "name": "name", "type": "property"}]}, "attribute": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"},
+    {"name": "value", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType":
+    "text"}, {"occurs": "*", "nodeType": "interpolate"}]}]}, "exprConst": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"}]},
+    "exprBinary": {"type": "concrete", "attributes": [{"name": "lhs", "type": "allowed",
+    "nodeTypes": ["expr"]}, {"name": "operator", "type": "allowed", "nodeTypes": ["binaryOperator"]},
+    {"name": "rhs", "type": "allowed", "nodeTypes": ["expr"]}]}, "interpolate": {"type":
+    "concrete", "attributes": [{"name": "expr", "type": "allowed", "nodeTypes": ["expr"]}]},
+    "binaryOperator": {"type": "concrete", "attributes": [{"base": "string", "name":
+    "operator", "type": "property"}]}}}'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-05-15 18:48:12.004676'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-05-15 18:48:12.004676'
+  value_before_type_cast: '2018-05-31 13:55:12.948462'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: dxml-eruby
