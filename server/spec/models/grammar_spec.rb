@@ -15,14 +15,14 @@ RSpec.describe Grammar, type: :model do
       res = FactoryBot.build(:grammar, model: Hash.new)
 
       res.validate
-      expect(res.errors["model"].length).to be 2
+      expect(res.errors["model"]).not_to be_empty
     end
 
     it "factory created" do
       res = FactoryBot.build(:grammar)
 
       res.validate
-      expect(res.errors["model"].length).to be 0
+      expect(res.errors["model"]).to be_empty
     end
   end
 end
