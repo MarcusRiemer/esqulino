@@ -169,7 +169,6 @@ function executeCommand(command: Command): Promise<string> | any {
         .filter(g => {
           const toReturn = grammarIds.has(g.id);
           grammarIds.delete(g.id);
-
           return (toReturn);
         })
         .map(g => {
@@ -197,13 +196,15 @@ rl.on('line', function(line) {
     if (result !== undefined) {
       if (result instanceof Promise) {
         Promise.resolve(result)
-          .catch(err => console.error(err))
+          .catch(err => {
+            console.error("Error during operation");
+            console.error(JSON.stringify(err, undefined, 2));
+          })
           .then(res => {
             console.log(`Finished ${res.length} operations`);
             res.forEach((v, i) => {
               console.log(`Operation ${i + 1}: ${JSON.stringify(v)}`);
             });
-            //console.log(JSON.stringify(res))
           });
       } else {
         console.log(JSON.stringify(result));
