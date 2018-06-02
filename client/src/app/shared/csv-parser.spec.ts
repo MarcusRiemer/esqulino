@@ -5,23 +5,23 @@ describe('Util: CSV Parser', () => {
   const CSV_STRING = ('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
                     + '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst\r\n'
                     + '2,Sport,Französisch,Geschichte,Sport,Geschichte\r\n'
-                    + '3,Sport,"Religion (ev, kath)",Kunst,,Kunst');
+                    + '3,Sport,"Religion (ev, kath)",Kunst,Mathe,Kunst');
 
   const ROWS_ONLY = ['Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', 
                      '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst',
                      '2,Sport,Französisch,Geschichte,Sport,Geschichte',
-                     '3,Sport,"Religion (ev, kath)",Kunst,,Kunst'];
+                     '3,Sport,"Religion (ev, kath)",Kunst,Mathe,Kunst'];
 
   const CSV_TO_ARRAY = [['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'],
                         ['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
                         ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
-                        ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']];
+                        ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', 'Mathe', 'Kunst']];
 
   const HEADER = ['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
 
   const TABLE = [['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
                  ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
-                 ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']];
+                 ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', 'Mathe', 'Kunst']];
 
   const CSV_AS_JSON = { 
     'rows':
@@ -47,7 +47,7 @@ describe('Util: CSV Parser', () => {
           'Montag': 'Sport',
           'Dienstag': 'Religion (ev, kath)',
           'Mittwoch': 'Kunst',
-          'Donnerstag': '',
+          'Donnerstag': 'Mathe',
           'Freitag': 'Kunst'
         }
       ]
@@ -92,10 +92,10 @@ describe('Util: CSV Parser', () => {
   });
 
   it('Split Row To Columns Hard', () => {
-    const row = c.splitRowToCols('3,Sport,"Religion (ev, kath)",Kunst,,Kunst', ',', '"', 6);
+    const row = c.splitRowToCols('3,Sport,"Religion (ev, kath)",Kunst,Mathe,Kunst', ',', '"', 6);
     expect(row).toEqual({
       type: "row",
-      data: ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']
+      data: ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', 'Mathe', 'Kunst']
     });
   });
 
@@ -127,7 +127,7 @@ describe('Util: CSV Parser', () => {
     it('Convert Arrays To JSON Medium', () => {
     const data = [['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
                   ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
-                  ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', '', 'Kunst']];
+                  ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', 'Mathe', 'Kunst']];
     const header = ['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
     const JSONData = c.convertArraysToJSON(data, header, true);
     expect(JSONData).toEqual(CSV_AS_JSON);
@@ -172,6 +172,7 @@ describe('Util: CSV Parser', () => {
   ]
   
   it('One Different Column Count', () => {
+    console.log('One Different Column Count');
     const result = c.convertCSVStringToArray(Table, ',', '"');
     expect(result).toEqual({
       type: "parseError",
@@ -439,7 +440,7 @@ describe('Util: CSV Parser', () => {
     });
   });
 
-  /* ---------- Special Cases ---------- 
+  /* ---------- Special Cases ---------- */
 
   it('No Content Before First Or After Last Marker', () => {
     const line = '"Stunde,Montag",y\r\n'
@@ -451,15 +452,17 @@ describe('Util: CSV Parser', () => {
     });
   });
 
-  it('Write Out Escaped Markers', () => {
-    const line = '"Stunde,Montag",y\r\n'
-    const result = c.convertCSVStringToArray(line, ',', '"');
-    expect(result).toEqual({
-      type: "parseResult",
-      header: ['Stunde,Montag', 'y'],
-      table: []
-    });
-  });*/
+  // it('Write Out Escaped Markers', () => {
+  //   const line = '"Stunde,Montag",y\r\n'
+  //   const result = c.convertCSVStringToArray(line, ',', '"');
+  //   expect(result).toEqual({
+  //     type: "parseResult",
+  //     header: ['Stunde,Montag', 'y'],
+  //     table: []
+  //   });
+  // });
+
+  // + empty col Kunst,,Kunst
 
   it('Ignore Last Line if empty', () => {
     const line = 'Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'

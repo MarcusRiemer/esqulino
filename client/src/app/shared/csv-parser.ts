@@ -140,6 +140,7 @@ export function splitStringToRows(dataString: string): string[] {
 export function splitRowToCols(row: string, delimiter: string, textMarker: string, expectedColCount: number): RowData | ErrorData {
 	let splitResult = [];
 	let markerCount = 0;
+	let colCount = 1;
 
 	// Global regex for unescaped markers
 	// uses negative lookbehind: e.g. (?<!Y)X matches X that is not preceded by a Y
@@ -163,53 +164,36 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 		});
 	}
 
-	// If row doesn't contain unescaped text Markers
-	if (markerCount === 0) {
-		// Split row directly by the delimiter
-		splitResult = row.split(delimiter);
-	} 
-	else {
-		// TODO: Ignore delimiter inside unescaped text markers
-		// let delOutsideMarkerRegex =
-
-		// Split by unescaped text Marker
-		splitResult = row.split(unescapedMarkerRegex);
-		// Split by seperator only without text Marker
-		splitResult = splitResult.map(splitter => {
-			// Remove delimiter at the end and split
-			if (splitter.endsWith(delimiter)) {
-			 splitter = splitter.slice(0, -1).split(delimiter);
-			}
-			// Remove delimiter at the start and split
-			else if (splitter.startsWith(delimiter)){
-				splitter = splitter.replace(delimiter, "").split(delimiter);
-			}
-			// Otherwise don't split
-			return splitter;
-		});
-		// Special Case: No Content before first or after last unescaped textMarker
-
-		// Write out escaped textMarkers
-		// uses positive lookbehind: e.g. (?<=Y)X matches X that is preceded by a Y
-		let escapedMarkerRegex = new RegExp("(?<=\\\\)" + textMarker, "g");
-		// .replace(escapedMarkerRegex, textMarker);
-
-		// Concat the subArrays back into one Array
-		splitResult = [].concat(...splitResult);		
-	}		
+	// Ignore delimiter inside unescaped text markers
+	// use variables in /"[^"]+"|[^,]+/g;
+	// TODO: Consider only unescaped
+	let delOutsideMarkerRegex = new RegExp(textMarker + "[^" + textMarker + "]+" + textMarker + "|[^" + delimiter + "]+" , "g");
 	
+	splitResult = row.match(delOutsideMarkerRegex);
+
+	if (splitResult) {
+		colCount = splitResult.length;
+	}
+
 	// Check if column count matches with header or if this is the header	
-	if ((expectedColCount === splitResult.length) || (expectedColCount === 0)) {
+	if ((expectedColCount === colCount) || (expectedColCount === 0)) {
+		// clean up the result
+		splitResult = splitResult.map(col => {
+			// Get rid of unescaped Marker
+			col = col.replace(unescapedMarkerRegex, '');
+			// The escaped markers are written out automatically
+			return col;
+		})
 		return ({
 			type: "row",
 			data: splitResult
 		});				
-	}
+	}	
 	else {
 		return ({
 			type: "wrongColumnCount",
 			information: "Expected column count to match with first line",
-			count: splitResult.length,
+			count: colCount,
 			expected: expectedColCount
 		});	
 	}
