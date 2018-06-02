@@ -167,11 +167,49 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 	// Ignore delimiter inside unescaped text markers
 	// use variables in /"[^"]+"|[^,]+/g;
 	// TODO: Consider only unescaped
-	let delOutsideMarkerRegex = new RegExp(textMarker + "[^" + textMarker + "]+" + textMarker + "|[^" + delimiter + "]+" , "g");
+	let delOutsideMarkerRegex = new RegExp(textMarker + 
+									"[^" + textMarker + "]+" 
+										 + textMarker + 
+								   "|[^" + delimiter + "]+" , "g");
 	
 	splitResult = row.match(delOutsideMarkerRegex);
 
+	// splitResult = row.split(delimiter);
+
+	// console.log(splitResult);
+
+	// let newResult = [];
+
 	if (splitResult) {
+
+	// 	let newIndex = 0;
+		
+	// 	let colBundle = "";
+
+	// 	while (newIndex < splitResult.length) {
+	// 		if (splitResult[newIndex].match(unescapedMarkerRegex)) {
+	// 			colBundle = splitResult[newIndex];
+	// 			newIndex++;
+	// 			while ((newIndex < splitResult.length) &&(!splitResult[newIndex].match(unescapedMarkerRegex))) {
+	// 				colBundle += splitResult[newIndex];
+	// 				newIndex++;
+	// 			}
+	// 			if (newIndex < splitResult.length) {
+	// 				colBundle += splitResult[newIndex].substring(0, splitResult[newIndex].indexOf(unescapedMarkerRegex));
+	// 				splitResult[newIndex] = splitResult[newIndex].substring(splitResult[newIndex].indexOf(unescapedMarkerRegex), splitResult[newIndex].length);
+	// 			}
+	// 			console.log("colBunde: " + colBundle);
+	// 			newResult.push(colBundle);
+	// 			colBundle = "";
+	// 		}
+	// 		else {
+	// 			console.log("newPush: " + splitResult[newIndex]);
+	// 			newResult.push(splitResult[newIndex]);
+	// 			newIndex++;
+	// 		}
+			
+	// 	}
+
 		colCount = splitResult.length;
 	}
 

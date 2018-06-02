@@ -481,7 +481,35 @@ describe('Util: CSV Parser', () => {
     });
   });
 
-  // + empty col Kunst,,Kunst
+  it('Write Out Escaped And Use Unescaped Markers', () => {
+    const line = '\\"Stunde,Montag\\","x,y"\r\n'
+    const result = c.convertCSVStringToArray(line, ',', '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['"Stunde' ,'Montag"', 'x,y'],
+      table: []
+    });
+  });
+
+  it('Write Out Escaped Inside Unescaped Markers', () => {
+    const line = '\\"Stunde,"Montag\\",x,y"\r\n'
+    const result = c.convertCSVStringToArray(line, ',', '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['"Stunde' ,'Montag",x,y'],
+      table: []
+    });
+  });
+
+  it('Take Over Empty Columns', () => {
+    const line = 'Stunde,Montag,,y\r\n'
+    const result = c.convertCSVStringToArray(line, ',', '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['Stunde', 'Montag', '', 'y'],
+      table: []
+    });
+  });
 
   /* ----- Frontend ----- */
   
