@@ -181,7 +181,8 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 		splitResult = splitResult.map(col => {
 			// Get rid of unescaped Marker
 			col = col.replace(unescapedMarkerRegex, '');
-			// The escaped markers are written out automatically
+			// Write out escaped Markers
+			col = col.replace('\\' + textMarker, textMarker);
 			return col;
 		})
 		return ({

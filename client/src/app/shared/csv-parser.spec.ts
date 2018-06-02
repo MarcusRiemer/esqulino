@@ -172,7 +172,6 @@ describe('Util: CSV Parser', () => {
   ]
   
   it('One Different Column Count', () => {
-    console.log('One Different Column Count');
     const result = c.convertCSVStringToArray(Table, ',', '"');
     expect(result).toEqual({
       type: "parseError",
@@ -452,18 +451,6 @@ describe('Util: CSV Parser', () => {
     });
   });
 
-  // it('Write Out Escaped Markers', () => {
-  //   const line = '"Stunde,Montag",y\r\n'
-  //   const result = c.convertCSVStringToArray(line, ',', '"');
-  //   expect(result).toEqual({
-  //     type: "parseResult",
-  //     header: ['Stunde,Montag', 'y'],
-  //     table: []
-  //   });
-  // });
-
-  // + empty col Kunst,,Kunst
-
   it('Ignore Last Line if empty', () => {
     const line = 'Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
     const result = c.convertCSVStringToArray(line, ',', '"');
@@ -483,6 +470,18 @@ describe('Util: CSV Parser', () => {
       table: []
     });
   });
+
+  it('Write Out Escaped Markers', () => {
+    const line = '\\"Stunde,Montag\\",y\r\n'
+    const result = c.convertCSVStringToArray(line, ',', '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['"Stunde', 'Montag"', 'y'],
+      table: []
+    });
+  });
+
+  // + empty col Kunst,,Kunst
 
   /* ----- Frontend ----- */
   
