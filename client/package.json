@@ -25,7 +25,9 @@
     "@angular/router": "5.2.9",
     "@nguniversal/module-map-ngfactory-loader": "^5.0.0-beta.5",
     "angulartics2": "^5.0.1",
+    "bootstrap": "^4.1.1",
     "core-js": "^2.5.1",
+    "font-awesome": "^4.7.0",
     "rxjs": "^5.5.7",
     "ts-loader": "^3.3.1",
     "zone.js": "^0.8.20"
