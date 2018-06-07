@@ -464,7 +464,7 @@ export const DYNAMIC_LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "84ece7cd-8824-4310-a1db-917c29c904c9",
   slug: "xml",
   name: "XML (Statisch)",
-  defaultProgrammingLanguageId: "dxml",
+  defaultProgrammingLanguageId: "dxml-eruby",
   sidebars: [
     {
       type: "fixedBlocks",
@@ -485,7 +485,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
   id: "c851d3be-3129-4fb3-ae37-99f40bce3dd0",
   slug: "dxml",
   name: "XML (Dynamisch)",
-  defaultProgrammingLanguageId: "dxml",
+  defaultProgrammingLanguageId: "dxml-eruby",
   sidebars: [
     {
       type: "fixedBlocks",

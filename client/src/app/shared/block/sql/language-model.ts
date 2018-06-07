@@ -3,7 +3,7 @@ import {
   SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
 } from '../block.description'
 
-export const LANGUAGE_MODEL: BlockLanguageDescription = {
+export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
   id: "db441c27-6a19-4f2f-95a9-f3bc44675b4f",
   slug: "sql",
   name: "SQL",

@@ -54,7 +54,7 @@ BlockLanguageDescription.json : $(SRC_PATH)/shared/block/block-language.descript
 BlockLanguageListDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
 
-BlockLanguageDocument.json : $(SRC_PATH)/shared/block/block-language.description.ts
+BlockLanguageDocument.json : $(SRC_PATH)/shared/block/block-language.description.ts $(SRC_PATH)/shared/block/block.description.ts
 	$(CONVERT_COMMAND)
 
 NodeDescription.json : $(SRC_PATH)/shared/syntaxtree/syntaxtree.description.ts

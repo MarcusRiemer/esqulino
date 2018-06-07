@@ -48,7 +48,7 @@ export namespace VisualBlockDescriptions {
     // Drops something into a category of the parent
     parent?: CategoryInsert;
 
-    visibility?: ["ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty" | "always"];
+    visibility?: ("ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty" | "always")[];
   }
 
   /**
