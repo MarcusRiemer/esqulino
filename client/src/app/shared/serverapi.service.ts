@@ -21,6 +21,12 @@ export class ServerApiService {
 
   public constructor( @Inject(PLATFORM_ID) private _platformId: Object) {
     this._apiBaseUrl = "/api";
+
+    // If we are running the universal server, there is no "parenting"
+    // base URL that would contain the protocol and the hostname. In that
+    // case the official server is used as a fallback.
+    //
+    // Beware: This may not be what you expect during development.
     if (isPlatformServer(this._platformId)) {
       this._apiBaseUrl = ServerApiService.BASE_HOST + this._apiBaseUrl;
     }

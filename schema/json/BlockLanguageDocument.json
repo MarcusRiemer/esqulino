@@ -306,19 +306,16 @@
           "type": "object"
         },
         "visibility": {
-          "items": [
-            {
-              "enum": [
-                "ifAnyDrag",
-                "ifLegalDrag",
-                "ifLegalChild",
-                "ifEmpty",
-                "always"
-              ],
-              "type": "string"
-            }
-          ],
-          "minItems": 1,
+          "items": {
+            "enum": [
+              "ifAnyDrag",
+              "ifLegalDrag",
+              "ifLegalChild",
+              "ifEmpty",
+              "always"
+            ],
+            "type": "string"
+          },
           "type": "array"
         }
       },
