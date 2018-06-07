@@ -95,7 +95,7 @@ export class SettingsComponent {
    * @return All block languages that could currently be used.
    */
   get availableBlockLanguages() {
-    return (this._languageService.availableLanguageModels);
+    return (this._languageService.availableBlockLanguages);
   }
 
   /**
@@ -115,7 +115,10 @@ export class SettingsComponent {
     }
   }
 
-  resolveBlockLanguage(blockLanguageId: string) {
-    return (this._languageService.getLocalBlockLanguage(blockLanguageId));
+  /**
+   * Retrieves the name of the given block language
+   */
+  resolveBlockLanguageName(blockLanguageId: string) {
+    return (this._languageService.getLocalBlockLanguage(blockLanguageId).name);
   }
 }

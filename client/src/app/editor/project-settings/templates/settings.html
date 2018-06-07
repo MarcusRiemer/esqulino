@@ -113,6 +113,7 @@
   <div class="card-body">
     <p>In einem Projekt können viele unterschiedliche Blocksprachen zum Einsatz kommen.</p>
 
+    <!-- Allows to add new block languages -->
     <form class="form-inline">
       <label class="mr-sm-2" for="block-language-select">Neue Blocksprache</label>
       <select class="custom-select mr-sm-2"
@@ -130,10 +131,11 @@
     </form>
   </div>
 
+  <!-- Lists all used block languages -->
   <ul class="list-group list-group-flush">
     <li *ngFor="let used of project.usesBlockLanguages;"
         class="list-group-item">
-      <h5 class="card-title">{{ resolveBlockLanguage(used.blockLanguageId).name }}</h5>
+      <h5 class="card-title">{{ resolveBlockLanguageName(used.blockLanguageId) }}</h5>
       <button *ngIf="used.id"
               (click)="removeUsedBlockLanguage(used.id)"
               class="btn btn-danger">

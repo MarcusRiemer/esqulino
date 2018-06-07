@@ -21,7 +21,7 @@ export class LanguageService {
   /**
    * @return All languages that are augmented for use with the UI
    */
-  get availableLanguageModels(): ReadonlyArray<BlockLanguage> {
+  get availableBlockLanguages(): ReadonlyArray<BlockLanguage> {
     return (AvailableLanguageModels);
   }
 
@@ -29,7 +29,7 @@ export class LanguageService {
    * @return IDs of all available language models.
    */
   get availableLanguageModelIds() {
-    return (this.availableLanguageModels.map(m => m.id));
+    return (this.availableBlockLanguages.map(m => m.id));
   }
 
   /**
@@ -44,7 +44,7 @@ export class LanguageService {
    * @return The specific LanguageModel that was asked for.
    */
   getLocalBlockLanguage(slug_or_id: string) {
-    const toReturn = this.availableLanguageModels.find(l => l.id === slug_or_id || l.slug === slug_or_id);
+    const toReturn = this.availableBlockLanguages.find(l => l.id === slug_or_id || l.slug === slug_or_id);
     if (!toReturn) {
       const available = this.availableLanguageModelIds.join(', ');
       throw new Error(`Unknown language model "${slug_or_id}", known models are: ${available}`);

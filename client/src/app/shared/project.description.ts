@@ -104,6 +104,7 @@ export interface ProjectDescription extends ProjectListDescription {
   availableDatabases?: { [id: string]: AvailableDatabaseDescription }
   activeDatabase?: string
   projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[]
+  blockLanguages: BlockLanguageDescription[]
   sources: ProjectSourceDescription[]
 }
 
@@ -115,7 +116,6 @@ export interface ProjectDescription extends ProjectListDescription {
 export interface ProjectFullDescription extends ProjectDescription {
   schema: TableDescription[]
   codeResources: CodeResourceDescription[]
-  blockLanguages: BlockLanguageDescription[]
 }
 
 /**
