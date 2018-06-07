@@ -13,6 +13,7 @@ import {
 import { Schema } from './schema/schema'
 import { Invalidateable, Saveable, SaveStateEvent } from './interfaces'
 import { CodeResource } from './syntaxtree'
+import { BlockLanguage } from 'app/shared/block';
 
 export { ProjectDescription, ProjectFullDescription }
 
@@ -59,6 +60,8 @@ export class Project implements ApiVersion, Saveable {
 
   private _usesBlockLanguages: ProjectUsesBlockLanguageDescription[];
 
+  private _blockLanguages: BlockLanguage[];
+
   // Tracking added and removed block languages
   private _removedBlockLanguages: string[] = [];
 
@@ -90,6 +93,9 @@ export class Project implements ApiVersion, Saveable {
     this._codeResources = (json.codeResources || [])
       .map(val => new CodeResource(val, this))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
+
+    this._blockLanguages = (json.blockLanguages || [])
+      .map(val => new BlockLanguage(val));
   }
 
   /**
@@ -98,8 +104,10 @@ export class Project implements ApiVersion, Saveable {
    * by the server.
    */
   updateDescription(desc: ProjectDescription) {
-    console.log("Updated:", desc);
+    console.log("Updated Project:", desc);
+    // Simply take the now used languages for granted
     this._usesBlockLanguages = desc.projectUsesBlockLanguages;
+    this._blockLanguages = desc.blockLanguages.map(blockDesc => new BlockLanguage(blockDesc));
   }
 
 
@@ -243,10 +251,7 @@ export class Project implements ApiVersion, Saveable {
    * @return All block languages that are available as part of this project.
    */
   get projectBlockLanguages() {
-    return (
-      this._usesBlockLanguages
-        .map(uses => this._languageService.getLocalBlockLanguage(uses.blockLanguageId))
-    );
+    return (this._blockLanguages);
   }
 
   /**
@@ -371,12 +376,7 @@ export class Project implements ApiVersion, Saveable {
    * @param id_or_slug The id or slug for a certain block language
    */
   getBlockLanguage(id_or_slug: string) {
-    const globalLanguage = this._languageService.getLocalBlockLanguage(id_or_slug);
-    if (globalLanguage && this._usesBlockLanguages.some(u => u.blockLanguageId == globalLanguage.id)) {
-      return (globalLanguage);
-    } else {
-      return (undefined);
-    }
+    return (this._blockLanguages.find(l => l.id === id_or_slug || l.slug === id_or_slug));
   }
 
   /**
