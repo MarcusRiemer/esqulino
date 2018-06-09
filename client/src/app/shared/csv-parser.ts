@@ -146,6 +146,7 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 	// uses negative lookbehind: e.g. (?<!Y)X matches X that is not preceded by a Y
 	// 4 x backslash = 2 x for standard backslash escaping + 2 x for the RegExp Object
 	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
+	let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiter, "g");
 	let markerCollector = row.match(unescapedMarkerRegex);
 
 	// If row contains textMarkers, count them
@@ -164,52 +165,31 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 		});
 	}
 
-	// Ignore delimiter inside unescaped text markers
-	// use variables in /"[^"]+"|[^,]+/g;
-	// TODO: Consider only unescaped
-	let delOutsideMarkerRegex = new RegExp(textMarker + 
-									"[^" + textMarker + "]+" 
-										 + textMarker + 
-								   "|[^" + delimiter + "]+" , "g");
-	
-	splitResult = row.match(delOutsideMarkerRegex);
+	// Escape Delimiters inside unescaped Markers
+	if (markerCount) {
+		let substring = row;
+		let nextStartPos = 0;
+		let nextEndPos = 0;
+		let escapeDelimiterString = "";
 
-	// splitResult = row.split(delimiter);
+		while (substring && substring.match(unescapedMarkerRegex)) {
+			nextStartPos = substring.search(unescapedMarkerRegex);			
+			escapeDelimiterString = substring.substring(nextStartPos);
+			nextEndPos = escapeDelimiterString.search(unescapedMarkerRegex);
+			escapeDelimiterString = escapeDelimiterString.substring(0, nextEndPos);
 
-	// console.log(splitResult);
+			// Replace the substring in the row with the escaped substring
+			row.replace(escapeDelimiterString, 
+						escapeDelimiterString.replace(delimiter, "\\" + delimiter));
 
-	// let newResult = [];
+			substring = substring.substring(nextEndPos);
+		}
+	} 
+
+	// Split rows by unescaped Delimiter
+	splitResult = row.split(unescapedDelimiterRegex);
 
 	if (splitResult) {
-
-	// 	let newIndex = 0;
-		
-	// 	let colBundle = "";
-
-	// 	while (newIndex < splitResult.length) {
-	// 		if (splitResult[newIndex].match(unescapedMarkerRegex)) {
-	// 			colBundle = splitResult[newIndex];
-	// 			newIndex++;
-	// 			while ((newIndex < splitResult.length) &&(!splitResult[newIndex].match(unescapedMarkerRegex))) {
-	// 				colBundle += splitResult[newIndex];
-	// 				newIndex++;
-	// 			}
-	// 			if (newIndex < splitResult.length) {
-	// 				colBundle += splitResult[newIndex].substring(0, splitResult[newIndex].indexOf(unescapedMarkerRegex));
-	// 				splitResult[newIndex] = splitResult[newIndex].substring(splitResult[newIndex].indexOf(unescapedMarkerRegex), splitResult[newIndex].length);
-	// 			}
-	// 			console.log("colBunde: " + colBundle);
-	// 			newResult.push(colBundle);
-	// 			colBundle = "";
-	// 		}
-	// 		else {
-	// 			console.log("newPush: " + splitResult[newIndex]);
-	// 			newResult.push(splitResult[newIndex]);
-	// 			newIndex++;
-	// 		}
-			
-	// 	}
-
 		colCount = splitResult.length;
 	}
 
@@ -220,7 +200,9 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 			// Get rid of unescaped Marker
 			col = col.replace(unescapedMarkerRegex, '');
 			// Write out escaped Markers
-			col = col.replace('\\' + textMarker, textMarker);
+			col = col.replace("\\" + textMarker, textMarker);
+			// Write out escaped Delimiters
+			col = col.replace("\\" + delimiter, delimiter);
 			return col;
 		})
 		return ({
