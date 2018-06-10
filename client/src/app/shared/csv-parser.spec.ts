@@ -73,6 +73,24 @@ describe('Util: CSV Parser', () => {
     expect(row).toEqual(ROWS_ONLY);
   });
 
+  /* ----- escapeDelimitersBetweenMarkers Function ----- */
+
+  it('Escape Delimiters Between Markers Easy', () => {
+    const row = c.escapeDelimitersBetweenMarkers('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', ',', '"');
+    expect(row).toEqual('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag');
+  });
+
+  it('Escape Delimiters Between Markers Medium', () => {
+    const row = c.escapeDelimitersBetweenMarkers('Stunde,"Montag,Dienstag",Mittwoch,Donnerstag,Freitag', ',', '"');
+    expect(row).toEqual('Stunde,Montag\\,Dienstag,Mittwoch,Donnerstag,Freitag');
+  });
+
+  it('Escape Delimiters Between Markers Hard', () => {
+    const row = c.escapeDelimitersBetweenMarkers('Stunde,"Montag,Dienstag"",Mittwoch,"Donnerstag,Freitag', ',', '"');
+    expect(row).toEqual('Stunde,Montag\\,Dienstag\\,Mittwoch\\,Donnerstag,Freitag');
+  });
+
+
   /* ----- splitRowToCols Function ----- */
 
   it('Split Row To Columns Easy', () => {
@@ -492,14 +510,16 @@ describe('Util: CSV Parser', () => {
   });
 
   it('Write Out Escaped Inside Unescaped Markers', () => {
-    const line = '\\"Stunde,"Montag\\",x,y"\r\n'
+    const line = '\\"Stunde,"Montag\\"x,y"\r\n'
     const result = c.convertCSVStringToArray(line, ',', '"');
     expect(result).toEqual({
       type: "parseResult",
-      header: ['"Stunde' ,'Montag",x,y'],
+      header: ['"Stunde' ,'Montag"x,y'],
       table: []
     });
   });
+
+  // Todo: Multiple Delimiters inside Markers
 
   it('Take Over Empty Columns', () => {
     const line = 'Stunde,Montag,,y\r\n'
