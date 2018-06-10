@@ -79,6 +79,102 @@ interface ValidationError {
 
 /* ----- Functions ----- */
 
+/* --- Helper Functions --- */
+
+/**
+ * Returns a combined regular expression of all unescaped delimiters
+ * @param delimiters array of delimiters to combine inside a regex
+ */
+function getCombinedDelimiterRegex(delimiters: string[]) : RegExp {
+	let regexContainer = [];
+
+	// Collect unescaped regexes of all Delimiters
+	delimiters.forEach(delimiter => {
+		regexContainer.push(new RegExp("(?<!\\\\)" + delimiter, "g"));
+	});
+
+	// Concatenate regexes directly into one regex to access the source attributes of the container
+	return new RegExp	(regexContainer[0].source
+					+  ((regexContainer.length >= 2) ? "|" + regexContainer[1].source : "")
+					+  ((regexContainer.length >= 3) ? "|" + regexContainer[2].source : "")
+					+  ((regexContainer.length >= 4) ? "|" + regexContainer[3].source : "")
+					+  ((regexContainer.length >= 5) ? "|" + regexContainer[4].source : "")
+					+  ((regexContainer.length >= 6) ? "|" + regexContainer[5].source : ""));
+}
+
+/**
+ * Removes unescaped markers and writes out escaped markers and delimiters
+ * Returns the final parse result column
+ * @param col the column for the end result
+ * @param delimiters array of all delimiter
+ * @param textMarker the marker
+ */
+function getResultColumn(col: string, delimiters: string[], textMarker: string): string {
+	// Use Regex for global replaces
+	let escapedMarkerRegex = new RegExp("\\\\" + textMarker, "g");
+	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
+	
+	// Get rid of unescaped Marker
+	col = col.replace(unescapedMarkerRegex, '');
+	// Write out escaped Markers
+	col = col.replace(escapedMarkerRegex, textMarker);
+	// Write out all escaped Delimiters
+	delimiters.forEach(delimiter => {
+		// Global regex for the specific delimiter
+		let escapedDelimiterRegex = new RegExp("\\\\" + delimiter, "g");
+		col = col.replace(escapedDelimiterRegex, delimiter);
+	});
+	return col;
+}
+
+/** Escapes all Delimiters between two unescaped Markers
+ *  Returns a string with the escaped Delimiters
+ * @param row the row with unescaped Delimiters between Markers
+ * @param delimiter the delimiter to escape (for example , or ;)
+ * @param textMarker the marker where the delimiters will be escaped (for example " or ')
+ */
+export function escapeDelimitersBetweenMarkers(row: string, delimiters: string[], textMarker: string): string {
+	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
+	let nextStartPos = row.search(unescapedMarkerRegex);
+	let nextEndPos = 0;
+	let nextPart = "";
+	
+	// Markers left?
+	if (nextStartPos >= 0) {		
+		// Marker at beginning?
+		if (nextStartPos === 0) {
+			// Start after the Marker
+			nextPart = row.substring(1);
+			// End at the next Marker
+			nextEndPos = nextPart.search(unescapedMarkerRegex);			
+			nextPart = nextPart.substring(0, nextEndPos);
+
+			// Escape all unescaped Delimiters between markers
+			delimiters.forEach(delimiter => {
+				// Global regex for each delimiter
+				let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiter, "g");
+				nextPart = nextPart.replace(unescapedDelimiterRegex, "\\" + delimiter);
+			});
+
+			// Skip the first and second Marker for next Step
+			nextEndPos += 2;
+		} 
+		else {
+			// Unedited next Part
+			nextPart = row.substring(0, nextStartPos);
+			// Start next step with marker
+			nextEndPos = nextStartPos;
+		}
+		// return the next Part + next Step
+		return nextPart +
+			   escapeDelimitersBetweenMarkers(row.substring(nextEndPos), delimiters, textMarker);
+	}
+	else {
+		// return the rest
+		return row;
+	}
+}
+
 /**  
  * Splits a String into an array of strings by its linebreaks
  * The linebreaks have to be equal for the whole string 
@@ -114,75 +210,6 @@ export function splitStringToRows(dataString: string): string[] {
     
     // get Columns for each row and save Data global
     return rows;        			
-}
-
-/** Escapes all Delimiters between two unescaped Markers
- *  Returns a string with the escaped Delimiters
- * @param row the row with unescaped Delimiters between Markers
- * @param delimiter the delimiter to escape (for example , or ;)
- * @param textMarker the marker where the delimiters will be escaped (for example " or ')
- */
-export function escapeDelimitersBetweenMarkers(row: string, delimiters: string[], textMarker: string): string {
-	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
-	let nextStartPos = row.search(unescapedMarkerRegex);
-	let nextEndPos = 0;
-	let nextPart = "";
-	
-	// Markers left?
-	if (nextStartPos >= 0) {		
-		// Marker at beginning?
-		if (nextStartPos === 0) {
-			// Start after the Marker
-			nextPart = row.substring(1);
-			// End at the Marker after
-			nextEndPos = nextPart.search(unescapedMarkerRegex);			
-			nextPart = nextPart.substring(0, nextEndPos);
-
-			// Escape all unescaped Delimiters between markers
-			delimiters.forEach(delimiter => {
-				// Global regex for each delimiter
-				let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiter, "g");
-				nextPart = nextPart.replace(unescapedDelimiterRegex, "\\" + delimiter);
-			});
-
-			// Skip the first and second Marker for next Step
-			nextEndPos += 2;
-		} 
-		else {
-			// Unedited next Part
-			nextPart = row.substring(0, nextStartPos);
-			// Start next step with marker
-			nextEndPos = nextStartPos;
-		}
-		// return the next Part + next Step
-		return nextPart +
-			   escapeDelimitersBetweenMarkers(row.substring(nextEndPos), delimiters, textMarker);
-	}
-	else {
-		// return the rest
-		return row;
-	}
-}
-
-/**
- * Return a combined regular expression of all unescaped delimiters
- * @param delimiters array of delimiters to combine inside a regex
- */
-export function getCombinedDelimiterRegex(delimiters: string[]) : RegExp {
-	let regexContainer = [];
-
-	// Collect unescaped regexes of all Delimiters
-	delimiters.forEach(delimiter => {
-		regexContainer.push(new RegExp("(?<!\\\\)" + delimiter, "g"));
-	});
-
-	// Concatenate regexes directly into one regex to access the source attributes of the container
-	return new RegExp	(regexContainer[0].source
-					+  ((regexContainer.length >= 2) ? "|" + regexContainer[1].source : "")
-					+  ((regexContainer.length >= 3) ? "|" + regexContainer[2].source : "")
-					+  ((regexContainer.length >= 4) ? "|" + regexContainer[3].source : "")
-					+  ((regexContainer.length >= 5) ? "|" + regexContainer[4].source : "")
-					+  ((regexContainer.length >= 6) ? "|" + regexContainer[5].source : ""));
 }
 
 /**  
@@ -238,21 +265,9 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 
 	// Check if column count matches with header or if this is the header	
 	if ((expectedColCount === colCount) || (expectedColCount === 0)) {
-		// Use Regex for global replaces
-		let escapedMarkerRegex = new RegExp("\\\\" + textMarker, "g");
-
 		// clean up the result
 		splitResult = splitResult.map(col => {
-			// Get rid of unescaped Marker
-			col = col.replace(unescapedMarkerRegex, '');
-			// Write out escaped Markers
-			col = col.replace(escapedMarkerRegex, textMarker);
-			// Write out all escaped Delimiters
-			delimiters.forEach(delimiter => {
-				let escapedDelimiterRegex = new RegExp("\\\\" + delimiter, "g");
-				col = col.replace(escapedDelimiterRegex, delimiter);
-			});
-			return col;
+			return getResultColumn(col, delimiters, textMarker);			
 		})
 		return ({
 			type: "row",
