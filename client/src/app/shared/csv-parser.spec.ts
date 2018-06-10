@@ -581,6 +581,16 @@ describe('Util: CSV Parser', () => {
     });
   });
 
+  it('Mulitple Delimiters Inside Markers', () => {
+    const line = '"a;b,c d" e\r\n'
+    const result = c.convertCSVStringToArray(line, [' ', ',', ';'], '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['a;b,c d', 'e'],
+      table: []
+    });
+  });
+
   /* ----- Frontend ----- */
   
   // Route in schema
