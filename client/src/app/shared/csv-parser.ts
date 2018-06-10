@@ -122,9 +122,9 @@ export function splitStringToRows(dataString: string): string[] {
  * @param delimiter the delimiter to escape (for example , or ;)
  * @param textMarker the marker where the delimiters will be escaped (for example " or ')
  */
-export function escapeDelimitersBetweenMarkers(row: string, delimiter: string, textMarker: string): string {
+export function escapeDelimitersBetweenMarkers(row: string, delimiters: string[], textMarker: string): string {
 	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
-	let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiter, "g");
+	let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiters[0], "g");
 	let nextStartPos = row.search(unescapedMarkerRegex);
 	let nextEndPos = 0;
 	let nextPart = "";
@@ -140,7 +140,7 @@ export function escapeDelimitersBetweenMarkers(row: string, delimiter: string, t
 		
 			// Escape unescaped Delimiters between markers
 			nextPart = nextPart.substring(0, nextEndPos);
-			nextPart = nextPart.replace(unescapedDelimiterRegex, "\\" + delimiter);
+			nextPart = nextPart.replace(unescapedDelimiterRegex, "\\" + delimiters[0]);
 
 			// Skip the first and second Marker for next Step
 			nextEndPos += 2;
@@ -153,7 +153,7 @@ export function escapeDelimitersBetweenMarkers(row: string, delimiter: string, t
 		}
 		// return the next Part + next Step
 		return nextPart +
-			   escapeDelimitersBetweenMarkers(row.substring(nextEndPos), delimiter, textMarker);
+			   escapeDelimitersBetweenMarkers(row.substring(nextEndPos), delimiters, textMarker);
 	}
 	else {
 		// return the rest
@@ -172,7 +172,7 @@ export function escapeDelimitersBetweenMarkers(row: string, delimiter: string, t
  * @param expectedColCount col Count of the Header which is expected to fit
  * 						   0 = this is the header	
  */
-export function splitRowToCols(row: string, delimiter: string, textMarker: string, expectedColCount: number): RowData | ErrorData {
+export function splitRowToCols(row: string, delimiters: string[], textMarker: string, expectedColCount: number): RowData | ErrorData {
 	let splitResult = [];
 	let markerCount = 0;
 	let colCount = 1;
@@ -181,7 +181,7 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 	// uses negative lookbehind: e.g. (?<!Y)X matches X that is not preceded by a Y
 	// 4 x backslash = 2 x for standard backslash escaping + 2 x for the RegExp Object
 	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
-	let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiter, "g");
+	let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiters[0], "g");
 	let markerCollector = row.match(unescapedMarkerRegex);
 
 	// If row contains textMarkers, count them
@@ -202,7 +202,7 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 
 	// Escape Delimiters inside unescaped Markers
 	if (markerCount) {
-		row = escapeDelimitersBetweenMarkers(row, delimiter, textMarker);
+		row = escapeDelimitersBetweenMarkers(row, delimiters, textMarker);
 	} 
 
 	// Split rows by unescaped Delimiter
@@ -217,7 +217,7 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 	if ((expectedColCount === colCount) || (expectedColCount === 0)) {
 		// Use Regex for global replaces
 		let escapedMarkerRegex = new RegExp("\\\\" + textMarker, "g");
-		let escapedDelimiterRegex = new RegExp("\\\\" + delimiter, "g");
+		let escapedDelimiterRegex = new RegExp("\\\\" + delimiters[0], "g");
 
 		// clean up the result
 		splitResult = splitResult.map(col => {
@@ -226,7 +226,7 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 			// Write out escaped Markers
 			col = col.replace(escapedMarkerRegex, textMarker);
 			// Write out escaped Delimiters
-			col = col.replace(escapedDelimiterRegex, delimiter);
+			col = col.replace(escapedDelimiterRegex, delimiters[0]);
 			return col;
 		})
 		return ({
@@ -255,7 +255,7 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
  * @param delimiter the delimiter by which each row will be splittet into cols (for example , or ;)
  * @param textMarker the textMarker to keep Strings together (for example " or ')
  */
-export function convertCSVStringToArray(csvString: string, delimiter: string, textMarker: string) : CsvParseResult | CsvParseError {
+export function convertCSVStringToArray(csvString: string, delimiters: string[], textMarker: string) : CsvParseResult | CsvParseError {
 	// The result if parse process is successful
 	let headerData: string[] = [];
 	let tableData: string[][] = [];
@@ -266,7 +266,7 @@ export function convertCSVStringToArray(csvString: string, delimiter: string, te
 	let plainRows = splitStringToRows(csvString);
 
 	// Parse first row for header data
-	let tryHeaderParsing = splitRowToCols(plainRows[0], delimiter, textMarker, 0);
+	let tryHeaderParsing = splitRowToCols(plainRows[0], delimiters, textMarker, 0);
 
 	// Parse successful?
 	if (tryHeaderParsing.type === "row") {
@@ -287,7 +287,7 @@ export function convertCSVStringToArray(csvString: string, delimiter: string, te
 	// Iterate through every row starting from the second
 	for(var i=1; i < plainRows.length; i++) {
 		// Parse next row
-		var currentRow = splitRowToCols(plainRows[i], delimiter, textMarker, headerData.length);
+		var currentRow = splitRowToCols(plainRows[i], delimiters, textMarker, headerData.length);
 
 		// Push to result or errors
 		if (currentRow.type === "row") {
