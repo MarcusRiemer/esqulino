@@ -529,6 +529,16 @@ describe('Util: CSV Parser', () => {
     });
   });
 
+  it('Multiple Escaped Markers Inside Col', () => {
+    const line = '\\"S\\"t\\"u\\"nde,"Montag,x,y"\r\n'
+    const result = c.convertCSVStringToArray(line, ',', '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['"S"t"u"nde' ,'Montag,x,y'],
+      table: []
+    });
+  });
+
   it('Take Over Empty Columns', () => {
     const line = 'Stunde,Montag,,y\r\n'
     const result = c.convertCSVStringToArray(line, ',', '"');
