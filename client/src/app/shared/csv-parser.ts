@@ -205,13 +205,35 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 	// Escape Delimiters inside unescaped Markers
 	if (markerCount) {
 		row = escapeDelimitersBetweenMarkers(row, delimiters, textMarker);
-	} 
+	}
+	
+	let regexContainer = [];
 
 	// Split rows by all unescaped Delimiter
 	delimiters.forEach(delimiter => {
-		let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiter, "g");
-		splitResult = row.split(unescapedDelimiterRegex);
+		regexContainer.push(new RegExp("(?<!\\\\)" + delimiter, "g"));
 	});
+
+	let combinedRegex = /g/;
+
+	// Very Bad approach. TODO: use sources dynamically if possible
+	if (regexContainer.length === 1) {
+		combinedRegex = new RegExp(regexContainer[0].source);
+	}
+	else if (regexContainer.length === 2) {
+		combinedRegex = new RegExp(regexContainer[0].source + "|" + regexContainer[1].source);
+	}
+	else if (regexContainer.length === 3) {
+		combinedRegex = new RegExp(regexContainer[0].source + "|" + regexContainer[1].source + "|" + regexContainer[2].source);
+	}
+	else if (regexContainer.length === 4) {
+		combinedRegex = new RegExp(regexContainer[0].source + "|" + regexContainer[1].source + "|" + regexContainer[2].source + "|" + regexContainer[3].source);
+	}
+	else if (regexContainer.length === 5) {
+		combinedRegex = new RegExp(regexContainer[0].source + "|" + regexContainer[1].source + "|" + regexContainer[2].source + "|" + regexContainer[3].source + "|" + regexContainer[4].source);
+	}
+
+	splitResult = row.split(combinedRegex);
 
 	// Count length only if split was successful
 	if (splitResult) {

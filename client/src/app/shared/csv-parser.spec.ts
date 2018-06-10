@@ -549,6 +549,38 @@ describe('Util: CSV Parser', () => {
     });
   });
 
+  /* --- Mutliple Delimiters --- */
+
+  it('Mutliple Delimiters', () => {
+    const line = 'Stunde,Montag;Dienstag,Mittwoch;Donnerstag,Freitag\r\n'
+    const result = c.convertCSVStringToArray(line, [',', ';'], '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: HEADER,
+      table: []
+    });
+  });
+
+  it('Mutliple Delimiters Side By Side', () => {
+    const line = ',;,\r\n'
+    const result = c.convertCSVStringToArray(line, [',', ';'], '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['', '', '', ''],
+      table: []
+    });
+  });
+
+  it('All Possible Mutliple Delimiters', () => {
+    const line = 'a b,c;dxe\tf\r\n'
+    const result = c.convertCSVStringToArray(line, [' ', 'x', ',', ';', '\t'], '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['a', 'b', 'c', 'd', 'e', 'f'],
+      table: []
+    });
+  });
+
   /* ----- Frontend ----- */
   
   // Route in schema
