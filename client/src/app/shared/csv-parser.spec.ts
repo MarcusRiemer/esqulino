@@ -76,17 +76,17 @@ describe('Util: CSV Parser', () => {
   /* ----- escapeDelimitersBetweenMarkers Function ----- */
 
   it('Escape Delimiters Between Markers Easy', () => {
-    const row = c.escapeDelimitersBetweenMarkers('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', ',', '"');
+    const row = c.escapeDelimitersBetweenMarkers('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', [','], '"');
     expect(row).toEqual('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag');
   });
 
   it('Escape Delimiters Between Markers Medium', () => {
-    const row = c.escapeDelimitersBetweenMarkers('Stunde,"Montag,Dienstag",Mittwoch,Donnerstag,Freitag', ',', '"');
+    const row = c.escapeDelimitersBetweenMarkers('Stunde,"Montag,Dienstag",Mittwoch,Donnerstag,Freitag', [','], '"');
     expect(row).toEqual('Stunde,Montag\\,Dienstag,Mittwoch,Donnerstag,Freitag');
   });
 
   it('Escape Delimiters Between Markers Hard', () => {
-    const row = c.escapeDelimitersBetweenMarkers('Stunde,"Montag,Dienstag"",Mittwoch,"Donnerstag,Freitag', ',', '"');
+    const row = c.escapeDelimitersBetweenMarkers('Stunde,"Montag,Dienstag"",Mittwoch,"Donnerstag,Freitag', [','], '"');
     expect(row).toEqual('Stunde,Montag\\,Dienstag\\,Mittwoch\\,Donnerstag,Freitag');
   });
 
@@ -94,7 +94,7 @@ describe('Util: CSV Parser', () => {
   /* ----- splitRowToCols Function ----- */
 
   it('Split Row To Columns Easy', () => {
-    const result = c.splitRowToCols('a', ',', '"', 1);
+    const result = c.splitRowToCols('a', [','], '"', 1);
     expect(result).toEqual({
       type: "row",
       data: ['a']
@@ -102,7 +102,7 @@ describe('Util: CSV Parser', () => {
   });
 
   it('Split Row To Columns Medium', () => {
-    const result = c.splitRowToCols('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', ',', '"', 6);
+    const result = c.splitRowToCols('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', [','], '"', 6);
     expect(result).toEqual({
       type: "row",
       data: ['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag']
@@ -110,7 +110,7 @@ describe('Util: CSV Parser', () => {
   });
 
   it('Split Row To Columns Hard', () => {
-    const row = c.splitRowToCols('3,Sport,"Religion (ev, kath)",Kunst,Mathe,Kunst', ',', '"', 6);
+    const row = c.splitRowToCols('3,Sport,"Religion (ev, kath)",Kunst,Mathe,Kunst', [','], '"', 6);
     expect(row).toEqual({
       type: "row",
       data: ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', 'Mathe', 'Kunst']
@@ -159,7 +159,7 @@ describe('Util: CSV Parser', () => {
   /* ----- convertCSVStringToArray Function ----- */
 
   it('Convert CSV String to Array', () => {
-    const result = c.convertCSVStringToArray(CSV_STRING, ',', '"');
+    const result = c.convertCSVStringToArray(CSV_STRING, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
       header: HEADER,
@@ -190,7 +190,7 @@ describe('Util: CSV Parser', () => {
   ]
   
   it('One Different Column Count', () => {
-    const result = c.convertCSVStringToArray(Table, ',', '"');
+    const result = c.convertCSVStringToArray(Table, [','], '"');
     expect(result).toEqual({
       type: "parseError",
 	    errors: Errors
@@ -239,7 +239,7 @@ describe('Util: CSV Parser', () => {
   ]
 
   it('Multiple Different Column Counts', () => {
-    const result = c.convertCSVStringToArray(Table, ',', '"');
+    const result = c.convertCSVStringToArray(Table, [','], '"');
     expect(result).toEqual({
       type: "parseError",
       errors: Errors
@@ -278,7 +278,7 @@ describe('Util: CSV Parser', () => {
   ]
   
   it('Different And Same Column Counts', () => {
-    const result = c.convertCSVStringToArray(Table, ',', '"');
+    const result = c.convertCSVStringToArray(Table, [','], '"');
     expect(result).toEqual({
       type: "parseError",
       errors: Errors
@@ -317,7 +317,7 @@ describe('Util: CSV Parser', () => {
   ]
   
   it('Empty Lines', () => {
-    const result = c.convertCSVStringToArray(Table, ',', '"');
+    const result = c.convertCSVStringToArray(Table, [','], '"');
     expect(result).toEqual({
       type: "parseError",
       errors: Errors
@@ -328,7 +328,7 @@ describe('Util: CSV Parser', () => {
 
   it('Marker Not Closed In One Line', () => {
     const line = 'Montag,"Dienstag,Mittwoch",Donnerstag,"Freitag'
-    const result = c.splitRowToCols(line, ',', '"', 4);
+    const result = c.splitRowToCols(line, [','], '"', 4);
     expect(result).toEqual({
       type: "markerNotClosed",
 			information: "The selected marker was opened but not closed in line",
@@ -366,7 +366,7 @@ describe('Util: CSV Parser', () => {
       }
     ]
 
-    const result = c.convertCSVStringToArray(table, ',', '"');
+    const result = c.convertCSVStringToArray(table, [','], '"');
     expect(result).toEqual({
       type: "parseError",
       errors: errors
@@ -403,7 +403,7 @@ describe('Util: CSV Parser', () => {
       }
     ]
 
-    const result = c.convertCSVStringToArray(table, ',', '"');
+    const result = c.convertCSVStringToArray(table, [','], '"');
     expect(result).toEqual({
       type: "parseError",
       errors: errors
@@ -450,7 +450,7 @@ describe('Util: CSV Parser', () => {
       }
     ]
 
-    const result = c.convertCSVStringToArray(table, ',', '"');
+    const result = c.convertCSVStringToArray(table, [','], '"');
     expect(result).toEqual({
       type: "parseError",
       errors: errors
@@ -461,7 +461,7 @@ describe('Util: CSV Parser', () => {
 
   it('No Content Before First Or After Last Marker', () => {
     const line = '"Stunde,Montag",y\r\n'
-    const result = c.convertCSVStringToArray(line, ',', '"');
+    const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
       header: ['Stunde,Montag', 'y'],
@@ -471,7 +471,7 @@ describe('Util: CSV Parser', () => {
 
   it('Ignore Last Line if empty', () => {
     const line = 'Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
-    const result = c.convertCSVStringToArray(line, ',', '"');
+    const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
       header: HEADER,
@@ -481,7 +481,7 @@ describe('Util: CSV Parser', () => {
 
   it('Write Out Not Used Delimiter And Textmarkers', () => {
     const line = 'Mo,n,tag;Di"e"ns"ta"g\r\n'
-    const result = c.convertCSVStringToArray(line, ';', "'");
+    const result = c.convertCSVStringToArray(line, [';'], "'");
     expect(result).toEqual({
       type: "parseResult",
       header: ['Mo,n,tag', 'Di"e"ns"ta"g'],
@@ -491,7 +491,7 @@ describe('Util: CSV Parser', () => {
 
   it('Write Out Escaped Markers', () => {
     const line = '\\"Stunde,Montag\\",y\r\n'
-    const result = c.convertCSVStringToArray(line, ',', '"');
+    const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
       header: ['"Stunde', 'Montag"', 'y'],
@@ -501,7 +501,7 @@ describe('Util: CSV Parser', () => {
 
   it('Write Out Escaped And Use Unescaped Markers', () => {
     const line = '\\"Stunde,Montag\\","x,y"\r\n'
-    const result = c.convertCSVStringToArray(line, ',', '"');
+    const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
       header: ['"Stunde' ,'Montag"', 'x,y'],
@@ -511,7 +511,7 @@ describe('Util: CSV Parser', () => {
 
   it('Write Out Escaped Inside Unescaped Markers', () => {
     const line = '\\"Stunde,"Montag\\"x,y"\r\n'
-    const result = c.convertCSVStringToArray(line, ',', '"');
+    const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
       header: ['"Stunde' ,'Montag"x,y'],
@@ -521,7 +521,7 @@ describe('Util: CSV Parser', () => {
 
   it('Multiple Delimiters Inside Markers', () => {
     const line = 'Stunde,"Montag,x,y"\r\n'
-    const result = c.convertCSVStringToArray(line, ',', '"');
+    const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
       header: ['Stunde' ,'Montag,x,y'],
@@ -531,7 +531,7 @@ describe('Util: CSV Parser', () => {
 
   it('Multiple Escaped Markers Inside Col', () => {
     const line = '\\"S\\"t\\"u\\"nde,"Montag,x,y"\r\n'
-    const result = c.convertCSVStringToArray(line, ',', '"');
+    const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
       header: ['"S"t"u"nde' ,'Montag,x,y'],
@@ -541,7 +541,7 @@ describe('Util: CSV Parser', () => {
 
   it('Take Over Empty Columns', () => {
     const line = 'Stunde,Montag,,y\r\n'
-    const result = c.convertCSVStringToArray(line, ',', '"');
+    const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
       header: ['Stunde', 'Montag', '', 'y'],
