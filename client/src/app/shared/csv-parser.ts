@@ -125,25 +125,40 @@ export function splitStringToRows(dataString: string): string[] {
 export function escapeDelimitersBetweenMarkers(row: string, delimiter: string, textMarker: string): string {
 	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
 	let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiter, "g");
-	let substring = row;
-	let nextStartPos = 0;
+	let nextStartPos = row.search(unescapedMarkerRegex);
 	let nextEndPos = 0;
-	let escapeDelimiterString = "";
+	let nextPart = "";
+	
+	// Markers left?
+	if (nextStartPos >= 0) {		
+		// Marker at beginning?
+		if (nextStartPos === 0) {
+			// Start after the Marker
+			nextPart = row.substring(1);
+			// End at the Marker after
+			nextEndPos = nextPart.search(unescapedMarkerRegex);
+		
+			// Escape unescaped Delimiters between markers
+			nextPart = nextPart.substring(0, nextEndPos - 1);
+			nextPart.replace(unescapedDelimiterRegex, "\\" + delimiter);
 
-	while (substring && substring.match(unescapedMarkerRegex)) {
-		nextStartPos = substring.search(unescapedMarkerRegex);			
-		escapeDelimiterString = substring.substring(nextStartPos);
-		nextEndPos = escapeDelimiterString.search(unescapedMarkerRegex);
-		escapeDelimiterString = escapeDelimiterString.substring(0, nextEndPos);
-
-		// Replace the substring in the row with the escaped substring
-		row.replace(escapeDelimiterString, 
-					escapeDelimiterString.replace(delimiter, "\\" + delimiter));
-
-		substring = substring.substring(nextEndPos);
+			// Skip the second Marker for next Step
+			nextEndPos++;
+		} 
+		else {
+			// Unedited next Part
+			nextPart = row.substring(0, nextStartPos - 1);
+			// Start next step with marker
+			nextEndPos = nextStartPos;
+		}
+		// return the next Part + next Step
+		return nextPart +
+			   escapeDelimitersBetweenMarkers(row.substring(nextEndPos), delimiter, textMarker);
 	}
-
-	return substring;
+	else {
+		// return the rest
+		return row;
+	}
 }
 
 /**  
