@@ -164,6 +164,27 @@ export function escapeDelimitersBetweenMarkers(row: string, delimiters: string[]
 	}
 }
 
+/**
+ * Return a combined regular expression of all unescaped delimiters
+ * @param delimiters array of delimiters to combine inside a regex
+ */
+export function getCombinedDelimiterRegex(delimiters: string[]) : RegExp {
+	let regexContainer = [];
+
+	// Collect unescaped regexes of all Delimiters
+	delimiters.forEach(delimiter => {
+		regexContainer.push(new RegExp("(?<!\\\\)" + delimiter, "g"));
+	});
+
+	// Concatenate regexes directly into one regex to access the source attributes of the container
+	return new RegExp	(regexContainer[0].source
+					+  ((regexContainer.length >= 2) ? "|" + regexContainer[1].source : "")
+					+  ((regexContainer.length >= 3) ? "|" + regexContainer[2].source : "")
+					+  ((regexContainer.length >= 4) ? "|" + regexContainer[3].source : "")
+					+  ((regexContainer.length >= 5) ? "|" + regexContainer[4].source : "")
+					+  ((regexContainer.length >= 6) ? "|" + regexContainer[5].source : ""));
+}
+
 /**  
  * Splits a String as the Row with text Markers by the delimiter
  * (for example "Religion (ev, kath)" belongs together)
@@ -205,35 +226,10 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 	// Escape Delimiters inside unescaped Markers
 	if (markerCount) {
 		row = escapeDelimitersBetweenMarkers(row, delimiters, textMarker);
-	}
-	
-	let regexContainer = [];
+	}		
 
-	// Split rows by all unescaped Delimiter
-	delimiters.forEach(delimiter => {
-		regexContainer.push(new RegExp("(?<!\\\\)" + delimiter, "g"));
-	});
-
-	let combinedRegex = /g/;
-
-	// Very Bad approach. TODO: use sources dynamically if possible
-	if (regexContainer.length === 1) {
-		combinedRegex = new RegExp(regexContainer[0].source);
-	}
-	else if (regexContainer.length === 2) {
-		combinedRegex = new RegExp(regexContainer[0].source + "|" + regexContainer[1].source);
-	}
-	else if (regexContainer.length === 3) {
-		combinedRegex = new RegExp(regexContainer[0].source + "|" + regexContainer[1].source + "|" + regexContainer[2].source);
-	}
-	else if (regexContainer.length === 4) {
-		combinedRegex = new RegExp(regexContainer[0].source + "|" + regexContainer[1].source + "|" + regexContainer[2].source + "|" + regexContainer[3].source);
-	}
-	else if (regexContainer.length === 5) {
-		combinedRegex = new RegExp(regexContainer[0].source + "|" + regexContainer[1].source + "|" + regexContainer[2].source + "|" + regexContainer[3].source + "|" + regexContainer[4].source);
-	}
-
-	splitResult = row.split(combinedRegex);
+	// Split the Row by all unescaped Delimiters
+	splitResult = row.split(getCombinedDelimiterRegex(delimiters));
 
 	// Count length only if split was successful
 	if (splitResult) {
