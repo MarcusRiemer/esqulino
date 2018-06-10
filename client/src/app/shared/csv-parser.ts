@@ -139,15 +139,15 @@ export function escapeDelimitersBetweenMarkers(row: string, delimiter: string, t
 			nextEndPos = nextPart.search(unescapedMarkerRegex);
 		
 			// Escape unescaped Delimiters between markers
-			nextPart = nextPart.substring(0, nextEndPos - 1);
-			nextPart.replace(unescapedDelimiterRegex, "\\" + delimiter);
+			nextPart = nextPart.substring(0, nextEndPos);
+			nextPart = nextPart.replace(unescapedDelimiterRegex, "\\" + delimiter);
 
-			// Skip the second Marker for next Step
-			nextEndPos++;
+			// Skip the first and second Marker for next Step
+			nextEndPos += 2;
 		} 
 		else {
 			// Unedited next Part
-			nextPart = row.substring(0, nextStartPos - 1);
+			nextPart = row.substring(0, nextStartPos);
 			// Start next step with marker
 			nextEndPos = nextStartPos;
 		}
@@ -202,7 +202,7 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 
 	// Escape Delimiters inside unescaped Markers
 	if (markerCount) {
-		//row = escapeDelimitersBetweenMarkers(row, delimiter, textMarker);
+		row = escapeDelimitersBetweenMarkers(row, delimiter, textMarker);
 	} 
 
 	// Split rows by unescaped Delimiter
