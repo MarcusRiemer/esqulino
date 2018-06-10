@@ -519,7 +519,15 @@ describe('Util: CSV Parser', () => {
     });
   });
 
-  // Todo: Multiple Delimiters inside Markers
+  it('Multiple Delimiters Inside Markers', () => {
+    const line = 'Stunde,"Montag,x,y"\r\n'
+    const result = c.convertCSVStringToArray(line, ',', '"');
+    expect(result).toEqual({
+      type: "parseResult",
+      header: ['Stunde' ,'Montag,x,y'],
+      table: []
+    });
+  });
 
   it('Take Over Empty Columns', () => {
     const line = 'Stunde,Montag,,y\r\n'
