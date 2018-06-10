@@ -215,7 +215,8 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 
 	// Check if column count matches with header or if this is the header	
 	if ((expectedColCount === colCount) || (expectedColCount === 0)) {
-		let escapedMarkerRegex = new RegExp("(?<=\\\\)" + textMarker, "g");
+		// Use Regex for global replaces
+		let escapedMarkerRegex = new RegExp("\\\\" + textMarker, "g");
 		let escapedDelimiterRegex = new RegExp("\\\\" + delimiter, "g");
 
 		// clean up the result
@@ -223,7 +224,7 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 			// Get rid of unescaped Marker
 			col = col.replace(unescapedMarkerRegex, '');
 			// Write out escaped Markers
-			col = col.replace("\\" + textMarker, textMarker);
+			col = col.replace(escapedMarkerRegex, textMarker);
 			// Write out escaped Delimiters
 			col = col.replace(escapedDelimiterRegex, delimiter);
 			return col;
