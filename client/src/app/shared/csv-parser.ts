@@ -124,7 +124,6 @@ export function splitStringToRows(dataString: string): string[] {
  */
 export function escapeDelimitersBetweenMarkers(row: string, delimiters: string[], textMarker: string): string {
 	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
-	let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiters[0], "g");
 	let nextStartPos = row.search(unescapedMarkerRegex);
 	let nextEndPos = 0;
 	let nextPart = "";
@@ -136,11 +135,15 @@ export function escapeDelimitersBetweenMarkers(row: string, delimiters: string[]
 			// Start after the Marker
 			nextPart = row.substring(1);
 			// End at the Marker after
-			nextEndPos = nextPart.search(unescapedMarkerRegex);
-		
-			// Escape unescaped Delimiters between markers
+			nextEndPos = nextPart.search(unescapedMarkerRegex);			
 			nextPart = nextPart.substring(0, nextEndPos);
-			nextPart = nextPart.replace(unescapedDelimiterRegex, "\\" + delimiters[0]);
+
+			// Escape all unescaped Delimiters between markers
+			delimiters.forEach(delimiter => {
+				// Global regex for each delimiter
+				let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiter, "g");
+				nextPart = nextPart.replace(unescapedDelimiterRegex, "\\" + delimiter);
+			});
 
 			// Skip the first and second Marker for next Step
 			nextEndPos += 2;
@@ -181,7 +184,6 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 	// uses negative lookbehind: e.g. (?<!Y)X matches X that is not preceded by a Y
 	// 4 x backslash = 2 x for standard backslash escaping + 2 x for the RegExp Object
 	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
-	let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiters[0], "g");
 	let markerCollector = row.match(unescapedMarkerRegex);
 
 	// If row contains textMarkers, count them
@@ -205,8 +207,11 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 		row = escapeDelimitersBetweenMarkers(row, delimiters, textMarker);
 	} 
 
-	// Split rows by unescaped Delimiter
-	splitResult = row.split(unescapedDelimiterRegex);
+	// Split rows by all unescaped Delimiter
+	delimiters.forEach(delimiter => {
+		let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiter, "g");
+		splitResult = row.split(unescapedDelimiterRegex);
+	});
 
 	// Count length only if split was successful
 	if (splitResult) {
@@ -217,7 +222,6 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 	if ((expectedColCount === colCount) || (expectedColCount === 0)) {
 		// Use Regex for global replaces
 		let escapedMarkerRegex = new RegExp("\\\\" + textMarker, "g");
-		let escapedDelimiterRegex = new RegExp("\\\\" + delimiters[0], "g");
 
 		// clean up the result
 		splitResult = splitResult.map(col => {
@@ -225,8 +229,11 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 			col = col.replace(unescapedMarkerRegex, '');
 			// Write out escaped Markers
 			col = col.replace(escapedMarkerRegex, textMarker);
-			// Write out escaped Delimiters
-			col = col.replace(escapedDelimiterRegex, delimiters[0]);
+			// Write out all escaped Delimiters
+			delimiters.forEach(delimiter => {
+				let escapedDelimiterRegex = new RegExp("\\\\" + delimiter, "g");
+				col = col.replace(escapedDelimiterRegex, delimiter);
+			});
 			return col;
 		})
 		return ({
