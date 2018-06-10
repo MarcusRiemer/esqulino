@@ -1,15 +1,5 @@
 import { SplitInterpolation } from "@angular/compiler";
 
-/*
-	To Fix:
-
-	  Bug: No Content before and after Marker
-
-	  Escaping: write for \"  only " out instead of using it as marker
-	  e.g. 1, Montag, “Religion (\”ev\”, \”kath\”)”
-
-*/
-
 /* ----- Interfaces ----- */
 
 /**
@@ -126,6 +116,36 @@ export function splitStringToRows(dataString: string): string[] {
     return rows;        			
 }
 
+/** Escapes all Delimiters between two unescaped Markers
+ *  Returns a string with the escaped Delimiters
+ * @param row the row with unescaped Delimiters between Markers
+ * @param delimiter the delimiter to escape (for example , or ;)
+ * @param textMarker the marker where the delimiters will be escaped (for example " or ')
+ */
+export function escapeDelimitersBetweenMarkers(row: string, delimiter: string, textMarker: string): string {
+	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
+	let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiter, "g");
+	let substring = row;
+	let nextStartPos = 0;
+	let nextEndPos = 0;
+	let escapeDelimiterString = "";
+
+	while (substring && substring.match(unescapedMarkerRegex)) {
+		nextStartPos = substring.search(unescapedMarkerRegex);			
+		escapeDelimiterString = substring.substring(nextStartPos);
+		nextEndPos = escapeDelimiterString.search(unescapedMarkerRegex);
+		escapeDelimiterString = escapeDelimiterString.substring(0, nextEndPos);
+
+		// Replace the substring in the row with the escaped substring
+		row.replace(escapeDelimiterString, 
+					escapeDelimiterString.replace(delimiter, "\\" + delimiter));
+
+		substring = substring.substring(nextEndPos);
+	}
+
+	return substring;
+}
+
 /**  
  * Splits a String as the Row with text Markers by the delimiter
  * (for example "Religion (ev, kath)" belongs together)
@@ -154,7 +174,7 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 		markerCount = markerCollector.length;
 	}
 		
-	// Error if uneven unescaped number of text markers 
+	// Error if uneven number of unescaped Markers 
 	if (markerCount % 2 === 1) {
 		let fragments = row.split(textMarker);
 		let fragment = fragments[fragments.length-1];
@@ -167,28 +187,13 @@ export function splitRowToCols(row: string, delimiter: string, textMarker: strin
 
 	// Escape Delimiters inside unescaped Markers
 	if (markerCount) {
-		let substring = row;
-		let nextStartPos = 0;
-		let nextEndPos = 0;
-		let escapeDelimiterString = "";
-
-		while (substring && substring.match(unescapedMarkerRegex)) {
-			nextStartPos = substring.search(unescapedMarkerRegex);			
-			escapeDelimiterString = substring.substring(nextStartPos);
-			nextEndPos = escapeDelimiterString.search(unescapedMarkerRegex);
-			escapeDelimiterString = escapeDelimiterString.substring(0, nextEndPos);
-
-			// Replace the substring in the row with the escaped substring
-			row.replace(escapeDelimiterString, 
-						escapeDelimiterString.replace(delimiter, "\\" + delimiter));
-
-			substring = substring.substring(nextEndPos);
-		}
+		//row = escapeDelimitersBetweenMarkers(row, delimiter, textMarker);
 	} 
 
 	// Split rows by unescaped Delimiter
 	splitResult = row.split(unescapedDelimiterRegex);
 
+	// Count length only if split was successful
 	if (splitResult) {
 		colCount = splitResult.length;
 	}
