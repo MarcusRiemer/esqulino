@@ -317,8 +317,6 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                 "display": "inline-block",
                 "color": "blue",
                 "padding-left": "2px",
-                "background": "url(/vendor/icons/block-background.svg) no-repeat",
-                "background-size": "100% 100%",
                 "cursor": "grab",
               }
             } as VisualBlockDescriptions.EditorConstant,
