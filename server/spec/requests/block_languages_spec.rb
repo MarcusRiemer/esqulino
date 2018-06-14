@@ -25,7 +25,20 @@ RSpec.describe BlockLanguagesController, type: :request do
     end
   end
 
-  describe 'POST /api/grammars' do
+  describe 'GET /api/block_language/:blockLanguageId' do
+    it 'shows a single block language' do
+      b = FactoryBot.create(:block_language)
+      get "/api/block_languages/#{b.id}"
+
+      expect(response).to have_http_status(200)
+
+      json_data = JSON.parse(response.body)
+
+      expect(json_data).to validate_against "BlockLanguageDescription"
+    end
+  end
+
+  describe 'POST /api/block_language' do
     it 'Creates a new, empty block language' do
       g = FactoryBot.create(:grammar)
       

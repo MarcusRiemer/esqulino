@@ -1,0 +1,35 @@
+<div class="container-fluid">
+  <h1>Administration</h1>
+
+  <h2>Grammatiken</h2>
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Slug</th>
+      <th>ID</th>
+    </tr>
+    <tr *ngFor="let grammar of availableGrammars | async">
+      <td>
+        <a [routerLink]="['grammar', grammar.id]">{{ grammar.name }}</a>
+      </td>
+      <td><code>{{ grammar.slug }}</code></td>
+      <td><code>{{ grammar.id }}</code></td>
+    </tr>
+  </table>
+
+  <h2>Blocksprachen</h2>
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Slug</th>
+      <th>ID</th>
+    </tr>
+    <tr *ngFor="let blockLanguage of availableBlockLanguages | async">
+      <td>
+        <a [routerLink]="['block-language', blockLanguage.id]">{{ blockLanguage.name }}</a>
+      </td>
+      <td><code>{{ blockLanguage.slug }}</code></td>
+      <td><code>{{ blockLanguage.id }}</code></td>
+    </tr>
+  </table>
+</div>

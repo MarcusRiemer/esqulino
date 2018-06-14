@@ -6,7 +6,7 @@
 TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = ArbitraryQueryRequestDescription.json ProjectDescription.json ProjectFullDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json ProjectUsesBlockLanguageDescription.json ProjectSourceDescription.json AlterSchemaRequestDescription.json TableDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageDescription.json NodeDescription.json CodeResourceDescription.json RequestTabularInsertDescription.json GrammarDocument.json GrammarListDescription.json
+JSON_SCHEMA_FILES = ArbitraryQueryRequestDescription.json ProjectDescription.json ProjectFullDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json ProjectUsesBlockLanguageDescription.json ProjectSourceDescription.json AlterSchemaRequestDescription.json TableDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageDescription.json NodeDescription.json CodeResourceDescription.json RequestTabularInsertDescription.json GrammarDocument.json GrammarListDescription.json GrammarDescription.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -67,6 +67,9 @@ RequestTabularInsertDescription.json : $(SRC_PATH)/shared/schema/schema.descript
 	$(CONVERT_COMMAND)
 
 GrammarDocument.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
+	$(CONVERT_COMMAND)
+
+GrammarDescription.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
 	$(CONVERT_COMMAND)
 
 GrammarListDescription.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
