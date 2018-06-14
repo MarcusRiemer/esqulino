@@ -29,20 +29,6 @@ export class CurrentCodeResourceService {
     private _activatedRoute: ActivatedRoute,
     private _projectService: ProjectService,
   ) {
-    // Listen for changes in the current route to extract the resource
-    // As this service is injected at the root of the editor hierarchy,
-    // the URL segments at this level do not contain the resource id.
-    // So we have to dig a little deeper to extract the ID we actually want.
-    // The "correct route" is most probably two levels under the
-    // current level.
-    //
-    // On a totally unrelated note: I totally know what I am doing ...
-    const correctRoute = this._activatedRoute;
-
-    correctRoute.params.subscribe(params => {
-      const codeResourceId = params['resourceId'];
-
-    });
   }
 
   /**

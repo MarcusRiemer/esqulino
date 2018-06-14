@@ -5,6 +5,12 @@ class GrammarsController < ApplicationController
     render :json => Grammar.all.map{|g| g.to_list_api_response}
   end
 
+  # Find a single grammar
+  def show
+    grammar = Grammar.find(id_params[:id])
+    render json: grammar.to_full_api_response
+  end
+
   # Creates a new grammar
   def create
     grammar = Grammar.new(basic_params)

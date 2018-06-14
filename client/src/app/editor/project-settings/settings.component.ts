@@ -3,6 +3,7 @@ import { Router } from '@angular/router'
 import { Http, Response, Headers } from '@angular/http'
 
 import { ServerApiService } from '../../shared/serverapi.service'
+import { ServerDataService } from '../../shared/server-data.service'
 import { LanguageService } from '../../shared/language.service'
 
 import { ProjectService, Project } from '../project.service'
@@ -35,6 +36,7 @@ export class SettingsComponent {
     private _sidebarService: SidebarService,
     private _router: Router,
     private _serverApi: ServerApiService,
+    private _serverData: ServerDataService,
     private _http: Http,
     private _imageService: ImageService,
     private _languageService: LanguageService,
@@ -95,7 +97,7 @@ export class SettingsComponent {
    * @return All block languages that could currently be used.
    */
   get availableBlockLanguages() {
-    return (this._languageService.availableBlockLanguages);
+    return (this._serverData.availableBlockLanguages);
   }
 
   /**
