@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 
-import { ServerDataService } from 'app/shared/server-data.service';
+import { ServerDataService } from '../shared/server-data.service';
 
 @Component({
   templateUrl: 'templates/admin.html'

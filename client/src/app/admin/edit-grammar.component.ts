@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router'
 
-import { ServerDataService } from 'app/shared/server-data.service';
 import { switchMap, map, tap } from 'rxjs/operators';
+
+import { ServerDataService } from '../shared/server-data.service';
+
 
 @Component({
   templateUrl: 'templates/edit-grammar.html'
@@ -14,6 +16,9 @@ export class EditGrammarComponent {
   ) {
   }
 
+  /**
+   * Mapping the URL parameter to an actual grammar
+   */
   readonly grammar = this._activatedRoute.paramMap.pipe(
     map((params: ParamMap) => params.get('grammarId')),
     switchMap((id: string) => this._serverData.getGrammar(id)),
