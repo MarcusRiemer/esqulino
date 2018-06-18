@@ -47,7 +47,7 @@ export class ServerDataService {
   /**
    * @return The details of the specified grammar.
    */
-  getGrammar(id: string): Observable<GrammarDescription> {
+  getGrammarDescription(id: string): Observable<GrammarDescription> {
     if (!this.grammars[id]) {
       this.grammars[id] = this.http.get<GrammarDescription>(this._serverApi.getGrammarUrl(id))
         .pipe(shareReplay(1));

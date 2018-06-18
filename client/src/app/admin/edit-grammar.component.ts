@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router'
 import { switchMap, map, tap } from 'rxjs/operators';
 
 import { ServerDataService } from '../shared/server-data.service';
+import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint';
 
 
 @Component({
@@ -21,7 +22,13 @@ export class EditGrammarComponent {
    */
   readonly grammar = this._activatedRoute.paramMap.pipe(
     map((params: ParamMap) => params.get('grammarId')),
-    switchMap((id: string) => this._serverData.getGrammar(id)),
+    switchMap((id: string) => this._serverData.getGrammarDescription(id)),
   );
 
+  /**
+   * The compiled version of the grammar
+   */
+  readonly prettyPrintedGrammar = this.grammar.pipe(
+    map(g => prettyPrintGrammar(g))
+  );
 }
