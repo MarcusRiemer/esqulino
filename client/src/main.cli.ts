@@ -13,7 +13,7 @@ import { LanguageDescription } from './app/shared/syntaxtree/language.descriptio
 import { Language } from './app/shared/syntaxtree/language'
 
 import { BlockLanguageDescription } from './app/shared/block/block-language.description'
-import { prettyPrintLanguageModel } from './app/shared/block/prettyprint'
+import { prettyPrintBlockLanguage } from './app/shared/block/prettyprint'
 
 import { graphvizSyntaxTree } from './app/shared/syntaxtree/prettyprint'
 import { NodeDescription } from './app/shared/syntaxtree/syntaxtree.description'
@@ -159,7 +159,7 @@ function executeCommand(command: Command): Promise<string> | any {
       return (prettyPrintGrammar(g));
     case "printBlockLanguage": {
       const l = findLanguageModel(command.blockLanguageId);
-      return (prettyPrintLanguageModel(l));
+      return (prettyPrintBlockLanguage(l));
     }
     case "available":
       return (availableGrammars().map(g => g.name));
