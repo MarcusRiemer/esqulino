@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router'
 
-import { ServerDataService } from 'app/shared/server-data.service';
 import { switchMap, map, tap } from 'rxjs/operators';
+
+import { ServerDataService } from '../shared/server-data.service';
 
 @Component({
   templateUrl: 'templates/edit-block-language.html'
@@ -14,8 +15,10 @@ export class EditBlockLanguageComponent {
   ) {
   }
 
+  /**
+   * Mapping the URL parameter to a actual block language
+   */
   readonly blockLanguage = this._activatedRoute.paramMap.pipe(
-    tap((params: ParamMap) => console.log(params)),
     map((params: ParamMap) => params.get('blockLanguageId')),
     switchMap((id: string) => this._serverData.getBlockLanguage(id)),
   );

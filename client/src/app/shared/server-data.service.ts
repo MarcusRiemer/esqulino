@@ -4,14 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { shareReplay } from 'rxjs/operators/shareReplay';
 
-import { ServerApiService } from 'app/shared';
+import { ServerApiService } from '../shared/serverapi.service';
 
 import {
   BlockLanguageDescription, BlockLanguageListDescription
-} from 'app/shared/block/block-language.description';
+} from '../shared/block/block-language.description';
 import {
   GrammarDescription, GrammarListDescription
-} from 'app/shared/syntaxtree/grammar.description';
+} from '../shared/syntaxtree/grammar.description';
 
 /**
  * Convenient and cached access to server side descriptions.

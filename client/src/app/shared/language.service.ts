@@ -6,8 +6,8 @@ import { Observable } from 'rxjs/Observable'
 
 import { AvailableLanguages, Language } from './syntaxtree'
 import { AvailableLanguageModels, BlockLanguage } from './block'
-import { ServerApiService } from 'app/shared';
-import { BlockLanguageListDescription } from 'app/shared/block/block-language.description';
+import { ServerApiService } from './serverapi.service'
+import { BlockLanguageListDescription } from './block/block-language.description'
 
 /**
  * Groups together information about languages that are available

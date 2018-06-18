@@ -13,7 +13,7 @@ import {
 import { Schema } from './schema/schema'
 import { Invalidateable, Saveable, SaveStateEvent } from './interfaces'
 import { CodeResource } from './syntaxtree'
-import { BlockLanguage } from 'app/shared/block';
+import { BlockLanguage } from '../shared/block';
 
 export { ProjectDescription, ProjectFullDescription }
 
