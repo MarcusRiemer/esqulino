@@ -28,7 +28,18 @@ Compiling the client requires the following dependencies (`taken from here <http
 * npm >= 3.0.0
 
 Alternatively you may use Docker to run the server and compile the client.
-  
+
+Ubuntu Packages
+---------------
+
+Execute this command (works with Ubuntu 18.04)::
+
+   sudo apt install ruby ruby-bundler ruby-dev postgresql-10 libpq-dev \
+   imagemagick libmagickcore-dev libmagickwand-dev \
+   magic libmagic-dev graphviz sqlite libsqlite3-dev \
+   nodejs npm   
+   
+
 SQLite and PCRE
 ---------------
 
