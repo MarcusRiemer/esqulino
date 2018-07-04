@@ -350,6 +350,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               blockType: "iterator",
               childGroupName: "columns",
               direction: "horizontal",
+              wrapChildren: true,
               between: [
                 {
                   blockType: "constant",

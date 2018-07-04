@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
 import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
@@ -10,14 +10,10 @@ import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
   templateUrl: 'templates/block-render.html',
   selector: `editor-block-render`
 })
-export class BlockRenderComponent implements OnInit {
+export class BlockRenderComponent {
   @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorBlockBase;
-
-  ngOnInit() {
-
-  }
 
   /**
    * Dirty Hack: Template "Typecast"

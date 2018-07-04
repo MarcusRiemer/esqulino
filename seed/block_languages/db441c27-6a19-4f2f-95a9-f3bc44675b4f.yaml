@@ -62,32 +62,32 @@ concise_attributes:
     "dropTarget", "direction": "horizontal", "dropTarget": {"children": {"order":
     "insertFirst", "category": "columns"}, "visibility": ["ifEmpty", "ifLegalChild"]}},
     {"between": [{"text": ", ", "blockType": "constant"}], "blockType": "iterator",
-    "direction": "horizontal", "childGroupName": "columns"}], "blockType": "block",
-    "direction": "horizontal", "dropTarget": {"children": {"order": "insertFirst",
-    "category": "columns"}, "visibility": ["ifLegalChild"]}}], "describedType": {"typeName":
-    "select", "languageName": "sql"}}, {"visual": [{"style": {"border": "2px solid
-    rgba(0, 255, 0, 0.6)", "cursor": "grab", "margin-top": "2px", "paddingLeft": "10px",
-    "borderRadius": "500px", "paddingRight": "10px", "margin-bottom": "2px", "background-color":
-    "rgba(0, 255, 0, 0.15)"}, "children": [{"property": "refTableName", "blockType":
-    "interpolated"}, {"text": ".", "blockType": "constant"}, {"property": "columnName",
-    "blockType": "interpolated"}], "blockType": "block", "direction": "horizontal"}],
-    "describedType": {"typeName": "columnName", "languageName": "sql"}}, {"visual":
-    [{"style": {"border": "2px solid rgba(0, 255, 0, 0.6)", "cursor": "grab", "margin-top":
-    "2px", "paddingLeft": "10px", "paddingRight": "10px", "border-radius": "500px",
-    "margin-bottom": "2px", "background-color": "rgba(0, 255, 0, 0.15)"}, "children":
-    [{"text": "★", "blockType": "constant"}], "blockType": "block", "direction": "horizontal"}],
-    "describedType": {"typeName": "starOperator", "languageName": "sql"}}, {"visual":
-    [{"style": {"border": "2px solid rgba(129, 129, 247, 1)", "cursor": "grab", "margin-top":
-    "2px", "paddingLeft": "10px", "borderRadius": "500px", "paddingRight": "10px",
-    "margin-bottom": "2px", "background-color": "rgba(129, 129, 247, 0.4)"}, "children":
-    [{"text": ":", "blockType": "constant"}, {"style": {"cursor": "text", "text-decoration":
-    "underline black dotted"}, "property": "name", "blockType": "input"}], "blockType":
-    "block", "direction": "horizontal"}], "describedType": {"typeName": "parameter",
-    "languageName": "sql"}}, {"visual": [{"style": {"border": "2px solid rgba(0, 255,
-    0, 0.6)", "margin-top": "2px", "paddingLeft": "10px", "borderRadius": "500px",
-    "paddingRight": "10px", "margin-bottom": "2px", "text-decoration": "underline
-    black dotted", "background-color": "rgba(0, 255, 0, 0.15)"}, "children": [{"style":
-    {"cursor": "text"}, "property": "value", "blockType": "input"}], "blockType":
+    "direction": "horizontal", "wrapChildren": true, "childGroupName": "columns"}],
+    "blockType": "block", "direction": "horizontal", "dropTarget": {"children": {"order":
+    "insertFirst", "category": "columns"}, "visibility": ["ifLegalChild"]}}], "describedType":
+    {"typeName": "select", "languageName": "sql"}}, {"visual": [{"style": {"border":
+    "2px solid rgba(0, 255, 0, 0.6)", "cursor": "grab", "margin-top": "2px", "paddingLeft":
+    "10px", "borderRadius": "500px", "paddingRight": "10px", "margin-bottom": "2px",
+    "background-color": "rgba(0, 255, 0, 0.15)"}, "children": [{"property": "refTableName",
+    "blockType": "interpolated"}, {"text": ".", "blockType": "constant"}, {"property":
+    "columnName", "blockType": "interpolated"}], "blockType": "block", "direction":
+    "horizontal"}], "describedType": {"typeName": "columnName", "languageName": "sql"}},
+    {"visual": [{"style": {"border": "2px solid rgba(0, 255, 0, 0.6)", "cursor": "grab",
+    "margin-top": "2px", "paddingLeft": "10px", "paddingRight": "10px", "border-radius":
+    "500px", "margin-bottom": "2px", "background-color": "rgba(0, 255, 0, 0.15)"},
+    "children": [{"text": "★", "blockType": "constant"}], "blockType": "block", "direction":
+    "horizontal"}], "describedType": {"typeName": "starOperator", "languageName":
+    "sql"}}, {"visual": [{"style": {"border": "2px solid rgba(129, 129, 247, 1)",
+    "cursor": "grab", "margin-top": "2px", "paddingLeft": "10px", "borderRadius":
+    "500px", "paddingRight": "10px", "margin-bottom": "2px", "background-color": "rgba(129,
+    129, 247, 0.4)"}, "children": [{"text": ":", "blockType": "constant"}, {"style":
+    {"cursor": "text", "text-decoration": "underline black dotted"}, "property": "name",
+    "blockType": "input"}], "blockType": "block", "direction": "horizontal"}], "describedType":
+    {"typeName": "parameter", "languageName": "sql"}}, {"visual": [{"style": {"border":
+    "2px solid rgba(0, 255, 0, 0.6)", "margin-top": "2px", "paddingLeft": "10px",
+    "borderRadius": "500px", "paddingRight": "10px", "margin-bottom": "2px", "text-decoration":
+    "underline black dotted", "background-color": "rgba(0, 255, 0, 0.15)"}, "children":
+    [{"style": {"cursor": "text"}, "property": "value", "blockType": "input"}], "blockType":
     "block", "direction": "horizontal"}], "describedType": {"typeName": "constant",
     "languageName": "sql"}}, {"visual": [{"style": {"border": "2px solid rgba(255,
     165, 0, 0.6)", "margin-top": "2px", "paddingLeft": "10px", "borderRadius": "500px",
@@ -234,7 +234,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.609835'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-06-14 10:30:23.872542'
+  value_before_type_cast: '2018-07-04 16:36:19.056671'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql

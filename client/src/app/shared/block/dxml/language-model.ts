@@ -225,6 +225,7 @@ const EDITOR_BLOCKS = [
             blockType: "iterator",
             childGroupName: "attributes",
             direction: "horizontal",
+            wrapChildren: true,
           } as VisualBlockDescriptions.EditorIterator,
           {
             blockType: "dropTarget",

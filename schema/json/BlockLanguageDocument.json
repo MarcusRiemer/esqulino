@@ -356,6 +356,9 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        },
+        "wrapChildren": {
+          "type": "boolean"
         }
       },
       "required": [
@@ -415,6 +418,9 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        },
+        "wrapChildren": {
+          "type": "boolean"
         }
       },
       "required": [
@@ -497,6 +503,9 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        },
+        "wrapChildren": {
+          "type": "boolean"
         }
       },
       "required": [
