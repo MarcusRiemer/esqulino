@@ -1,0 +1,41 @@
+{
+  "$ref": "#/definitions/BlockLanguageGeneratorDocument",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "BlockLanguageGeneratorDocument": {
+      "additionalProperties": false,
+      "description": "The nested parts of the generator description that must be stored\nas a JSON \"blob\".",
+      "properties": {
+        "editorComponents": {
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "editorComponents"
+      ],
+      "type": "object"
+    },
+    "EditorComponentDescription": {
+      "$ref": "#/definitions/QueryPreviewComponentDescription",
+      "description": "Any component that could be displayed in the actual editor view."
+    },
+    "QueryPreviewComponentDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "componentType": {
+          "enum": [
+            "query-preview"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    }
+  }
+}
