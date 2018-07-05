@@ -28,7 +28,9 @@
     "angulartics2": "6.1.0",
     "core-js": "2.5.6",
     "rxjs": "6.2.1",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "bootstrap": "^4.1.1",
+    "font-awesome": "^4.7.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.6.3",

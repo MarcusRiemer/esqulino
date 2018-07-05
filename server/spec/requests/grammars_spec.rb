@@ -24,6 +24,19 @@ RSpec.describe BlockLanguagesController, type: :request do
     end
   end
 
+  describe 'GET /api/grammars/:grammarId' do
+    it 'shows a single grammar' do
+      g = FactoryBot.create(:grammar)
+      get "/api/grammars/#{g.id}"
+
+      expect(response).to have_http_status(200)
+
+      json_data = JSON.parse(response.body)
+
+      expect(json_data).to validate_against "GrammarDescription"
+    end
+  end
+
   describe 'POST /api/grammars' do
     it 'Creates a new, empty grammar' do
       post "/api/grammars",
@@ -31,7 +44,7 @@ RSpec.describe BlockLanguagesController, type: :request do
            :params => {
              "slug" => "spec",
              "name" => "Spec Grammar",
-             "types" => { "spec" => { } },
+             "types" => { "spec" => { "type" => "concrete" } },
              "root" => "spec"
            }.to_json
 
@@ -44,7 +57,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(g.name).to eq "Spec Grammar"
       expect(g.slug).to eq "spec"
       expect(g.model["root"]).to eq "spec"
-      expect(g.model["types"]["spec"]).to eq Hash.new
+      expect(g.model["types"]["spec"]).to eq({ "type" => "concrete" })
 
       expect(response.status).to eq(200)
     end

@@ -1,5 +1,4 @@
 require 'json'
-require 'json-schema'
 
 # Validates JSON requests and responses against pre-loaded
 # JSON schemas.

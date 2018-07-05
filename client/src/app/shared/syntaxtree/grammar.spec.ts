@@ -20,6 +20,7 @@ const langMiniHtml: Schema.GrammarDescription = {
   name: "mini-html",
   types: {
     "text": {
+      type: "concrete",
       attributes: [
         {
           name: "text",
@@ -29,6 +30,7 @@ const langMiniHtml: Schema.GrammarDescription = {
       ]
     },
     "html": {
+      type: "concrete",
       attributes: [
         {
           name: "children",
@@ -38,6 +40,7 @@ const langMiniHtml: Schema.GrammarDescription = {
       ]
     },
     "head": {
+      type: "concrete",
       attributes: [
         {
           name: "children",
@@ -52,6 +55,7 @@ const langMiniHtml: Schema.GrammarDescription = {
       ]
     },
     "body": {
+      type: "concrete",
       attributes: [
         {
           name: "children",
@@ -70,6 +74,7 @@ const langMiniHtml: Schema.GrammarDescription = {
       ]
     },
     "paragraph": {
+      type: "concrete",
       attributes: [
         {
           name: "attributes",
@@ -95,6 +100,7 @@ const langMiniHtml: Schema.GrammarDescription = {
       ]
     },
     "heading": {
+      type: "concrete",
       attributes: [
         {
           name: "attributes",
@@ -120,6 +126,7 @@ const langMiniHtml: Schema.GrammarDescription = {
       ]
     },
     "attr-class": {
+      type: "concrete",
       attributes: [
         {
           name: "classes",
@@ -134,6 +141,7 @@ const langMiniHtml: Schema.GrammarDescription = {
       ]
     },
     "attr-id": {
+      type: "concrete",
       attributes: [
         {
           name: "id",
@@ -165,13 +173,15 @@ const langMiniSql: Schema.GrammarDescription = {
   name: "mini-sql",
   types: {
     "root": {
+      type: "oneOf",
       oneOf: ["query-select", "query-delete"]
     },
-    "select": {},
-    "delete": {},
-    "from": {},
-    "where": {},
+    "select": { type: "concrete" },
+    "delete": { type: "concrete" },
+    "from": { type: "concrete" },
+    "where": { type: "concrete" },
     "query-select": {
+      type: "concrete",
       attributes: [
         {
           name: "children",
@@ -181,6 +191,7 @@ const langMiniSql: Schema.GrammarDescription = {
       ]
     },
     "query-delete": {
+      type: "concrete",
       attributes: [
         {
           name: "children",
@@ -201,6 +212,7 @@ const langStringConstraint: Schema.GrammarDescription = {
   name: "string-constraint",
   types: {
     root: {
+      type: "concrete",
       attributes: [
         {
           name: "len",
@@ -251,6 +263,7 @@ const langAllowedConstraint: Schema.GrammarDescription = {
   name: "allowed-constraint",
   types: {
     "root": {
+      type: "concrete",
       attributes: [
         {
           name: "nodes",
@@ -275,9 +288,9 @@ const langAllowedConstraint: Schema.GrammarDescription = {
         }
       ],
     },
-    "a": {},
-    "b": {},
-    "c": {}
+    "a": { type: "concrete" },
+    "b": { type: "concrete" },
+    "c": { type: "concrete" }
   },
   root: "root"
 }
@@ -290,6 +303,7 @@ const langSequenceConstraint: Schema.GrammarDescription = {
   name: "sequence-constraint",
   types: {
     "root": {
+      type: "concrete",
       attributes: [
         {
           name: "nodes",
@@ -315,9 +329,9 @@ const langSequenceConstraint: Schema.GrammarDescription = {
         }
       ],
     },
-    "a": {},
-    "b": {},
-    "c": {}
+    "a": { type: "concrete" },
+    "b": { type: "concrete" },
+    "c": { type: "concrete" }
   },
   root: "root"
 };
@@ -332,9 +346,9 @@ const langOneOfNodes: Schema.GrammarDescription = {
     "root": {
       oneOf: ["a", "b"]
     } as Schema.NodeTypeDescription,
-    "a": {},
-    "b": {},
-    "c": {}
+    "a": { type: "concrete" },
+    "b": { type: "concrete" },
+    "c": { type: "concrete" }
   },
   root: "root"
 }
@@ -347,6 +361,7 @@ const langBooleanConstraint: Schema.GrammarDescription = {
   name: "boolean-constraint",
   types: {
     "root": {
+      type: "concrete",
       attributes: [
         {
           name: "foo",
@@ -367,6 +382,7 @@ const langOptionalProperty: Schema.GrammarDescription = {
   name: "optionalProperty",
   types: {
     "root": {
+      type: "concrete",
       attributes: [
         {
           name: "required",
@@ -390,6 +406,7 @@ const langSimpleChoice: Schema.GrammarDescription = {
   name: "simpleChoice",
   types: {
     "root": {
+      type: "concrete",
       attributes: [
         {
           name: "nodes",
@@ -398,8 +415,8 @@ const langSimpleChoice: Schema.GrammarDescription = {
         }
       ]
     },
-    "a": {},
-    "b": {}
+    "a": { type: "concrete" },
+    "b": { type: "concrete" }
   },
   root: "root"
 }
@@ -409,6 +426,7 @@ const langComplexChoice: Schema.GrammarDescription = {
   name: "complexChoice",
   types: {
     "root": {
+      type: "concrete",
       attributes: [
         {
           name: "choice",
@@ -418,6 +436,7 @@ const langComplexChoice: Schema.GrammarDescription = {
       ]
     },
     "a": {
+      type: "concrete",
       attributes: [
         {
           name: "sequence",
@@ -427,6 +446,7 @@ const langComplexChoice: Schema.GrammarDescription = {
       ]
     },
     "b": {
+      type: "concrete",
       attributes: [
         {
           name: "allowed",
@@ -435,8 +455,8 @@ const langComplexChoice: Schema.GrammarDescription = {
         }
       ]
     },
-    "c": {},
-    "d": {}
+    "c": { type: "concrete" },
+    "d": { type: "concrete" }
   },
   root: "root"
 }
@@ -453,7 +473,7 @@ describe('Grammar Validation', () => {
       name: "emptyNodes",
       root: "r",
       types: {
-        "r": {}
+        "r": { type: "concrete" }
       }
     };
 

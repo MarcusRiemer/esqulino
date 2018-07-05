@@ -20,8 +20,14 @@
               "src/vendor"
             ],
             "styles": [
-              "src/app/css/style.scss"
+              "src/app/css/style.scss",
+              "node_modules/font-awesome/css/font-awesome.css"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules/bootstrap/scss"
+              ]
+            },
             "scripts": []
           },
           "configurations": {

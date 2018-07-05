@@ -1,7 +1,7 @@
 import { QualifiedTypeName } from './syntaxtree.description'
 
 /**
- * Types of nodes may either be concrete new type or an alias
+ * Types may either be concrete new type or an alias
  * grouping together multiple other types.
  */
 export type NodeTypeDescription = NodeConcreteTypeDescription | NodeOneOfTypeDescription;
@@ -35,6 +35,7 @@ export type NodeTypeDescription = NodeConcreteTypeDescription | NodeOneOfTypeDes
  * or automatic UI generation.
  */
 export interface NodeConcreteTypeDescription {
+  type: "concrete";
   attributes?: NodeAttributeDescription[];
 }
 
@@ -57,6 +58,7 @@ export type NodePropertyTypeDescription =
  * is helpful for e.g. the root node or when using recursive definitions.
  */
 export interface NodeOneOfTypeDescription {
+  type: "oneOf";
   oneOf: TypeReference[];
 }
 
