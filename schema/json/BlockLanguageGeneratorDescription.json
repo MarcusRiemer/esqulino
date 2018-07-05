@@ -12,9 +12,6 @@
           },
           "type": "array"
         },
-        "targetId": {
-          "type": "string"
-        },
         "targetName": {
           "type": "string"
         },
@@ -24,7 +21,6 @@
       },
       "required": [
         "editorComponents",
-        "targetId",
         "targetName",
         "targetProgrammingLanguage"
       ],

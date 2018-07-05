@@ -18,7 +18,6 @@ describe("BlockLanguage Generator", () => {
     };
 
     const generator: BlockLanguageGeneratorDescription = {
-      targetId: "74e4fbc4-123e-485f-932a-4a92efece516",
       editorComponents: [],
       targetName: "b1",
       targetProgrammingLanguage: "sql",
@@ -52,7 +51,6 @@ describe("BlockLanguage Generator", () => {
     };
 
     const generator: BlockLanguageGeneratorDescription = {
-      targetId: "74e4fbc4-123e-485f-932a-4a92efece516",
       editorComponents: [],
       targetName: "b1",
       targetProgrammingLanguage: "sql",
