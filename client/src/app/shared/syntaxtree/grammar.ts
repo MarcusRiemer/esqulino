@@ -105,13 +105,15 @@ class NodeConcreteType extends NodeType {
     if (typeDesc.attributes) {
       // Put the existing attributes into their respective buckets
       typeDesc.attributes.forEach(a => {
-        if ((a as any).base && !a.type) {
-          debugger;
-        }
-        else if (a.type === "property") {
-          this._allowedProperties[a.name] = this.instanciatePropertyValidator(a);
-        } else {
-          this._allowedChildren[a.name] = new NodeTypeChildren(this, a, a.name);
+        switch (a.type) {
+          case "property":
+            this._allowedProperties[a.name] = this.instanciatePropertyValidator(a);
+            break;
+          case "allowed":
+          case "sequence":
+          case "choice":
+            this._allowedChildren[a.name] = new NodeTypeChildren(this, a, a.name);
+            break;
         }
       });
     }

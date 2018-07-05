@@ -1,0 +1,5 @@
+grammar "g9" {
+  node "n1" {
+    terminal "i am required"
+  }
+}

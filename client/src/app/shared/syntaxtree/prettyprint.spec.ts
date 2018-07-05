@@ -216,6 +216,18 @@ describe('Grammar PrettyPrinter', () => {
   it('Grammar g8: choice between two sequences', () => {
     verifyFilesTxt('g008-node-child-choice-sequence', p.prettyPrintGrammar);
   });
+
+  it('Grammar g9: single terminal node', () => {
+    verifyFilesTxt('g009-terminal-only', p.prettyPrintGrammar);
+  });
+
+  it('Grammar g10: terminal first and last', () => {
+    verifyFilesTxt('g010-terminal-first-last', p.prettyPrintGrammar);
+  });
+
+  it('Grammar g11: one of for root', () => {
+    verifyFilesTxt('g011-one-of-root', p.prettyPrintGrammar);
+  });
 });
 
 describe('SyntaxTree PrettyPrinter', () => {

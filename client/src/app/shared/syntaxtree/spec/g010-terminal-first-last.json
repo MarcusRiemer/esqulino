@@ -1,0 +1,31 @@
+{
+  "name": "g10",
+  "root": "n1",
+  "types": {
+    "n1": {
+      "attributes": [
+        {
+          "type": "terminal",
+          "symbol": "first"
+        },
+        {
+          "name": "c",
+          "type": "sequence",
+          "nodeTypes": [
+            {
+              "nodeType": {
+                "languageName": "g10",
+                "typeName": "n1"
+              },
+              "occurs": "?"
+            }
+          ]
+        },
+        {
+          "type": "terminal",
+          "symbol": "last"
+        }
+      ]
+    }
+  }
+}
