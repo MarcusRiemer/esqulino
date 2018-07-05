@@ -333,19 +333,16 @@
           "type": "object"
         },
         "visibility": {
-          "items": [
-            {
-              "enum": [
-                "ifAnyDrag",
-                "ifLegalDrag",
-                "ifLegalChild",
-                "ifEmpty",
-                "always"
-              ],
-              "type": "string"
-            }
-          ],
-          "minItems": 1,
+          "items": {
+            "enum": [
+              "ifAnyDrag",
+              "ifLegalDrag",
+              "ifLegalChild",
+              "ifEmpty",
+              "always"
+            ],
+            "type": "string"
+          },
           "type": "array"
         }
       },
@@ -386,6 +383,9 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        },
+        "wrapChildren": {
+          "type": "boolean"
         }
       },
       "required": [
@@ -445,6 +445,9 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        },
+        "wrapChildren": {
+          "type": "boolean"
         }
       },
       "required": [
@@ -527,6 +530,9 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        },
+        "wrapChildren": {
+          "type": "boolean"
         }
       },
       "required": [

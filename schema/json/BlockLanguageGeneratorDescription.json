@@ -1,0 +1,53 @@
+{
+  "$ref": "#/definitions/BlockLanguageGeneratorDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "BlockLanguageGeneratorDescription": {
+      "additionalProperties": false,
+      "description": "Describes how a grammar might be converted to a block language",
+      "properties": {
+        "editorComponents": {
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
+          },
+          "type": "array"
+        },
+        "targetId": {
+          "type": "string"
+        },
+        "targetName": {
+          "type": "string"
+        },
+        "targetProgrammingLanguage": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "editorComponents",
+        "targetId",
+        "targetName",
+        "targetProgrammingLanguage"
+      ],
+      "type": "object"
+    },
+    "EditorComponentDescription": {
+      "$ref": "#/definitions/QueryPreviewComponentDescription",
+      "description": "Any component that could be displayed in the actual editor view."
+    },
+    "QueryPreviewComponentDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "componentType": {
+          "enum": [
+            "query-preview"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    }
+  }
+}
