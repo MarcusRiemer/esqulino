@@ -5,6 +5,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   name: "dxml",
   types: {
     "element": {
+      type: "concrete",
       attributes: [
         {
           name: "name",
@@ -29,8 +30,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "attribute": {
+      type: "concrete",
       attributes: [
         {
           name: "name",
@@ -46,8 +48,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         },
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "text": {
+      type: "concrete",
       attributes: [
         {
           name: "value",
@@ -55,8 +58,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "interpolate": {
+      type: "concrete",
       attributes: [
         {
           name: "expr",
@@ -64,8 +68,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: ["expr"]
         },
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "if": {
+      type: "concrete",
       attributes: [
         {
           name: "condition",
@@ -83,13 +88,15 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ],
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
 
     "expr": {
+      type: "oneOf",
       oneOf: ["exprVar", "exprConst", "exprBinary"]
-    } as Schema.NodeTypeDescription,
+    },
 
     "exprVar": {
+      type: "concrete",
       attributes: [
         {
           name: "name",
@@ -97,8 +104,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "exprConst": {
+      type: "concrete",
       attributes: [
         {
           name: "name",
@@ -106,8 +114,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "exprBinary": {
+      type: "concrete",
       attributes: [
         {
           name: "lhs",
@@ -125,8 +134,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           nodeTypes: ["expr"]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "binaryOperator": {
+      type: "concrete",
       attributes: [
         {
           name: "operator",
@@ -134,7 +144,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription
+    }
   },
 
   root: "element"

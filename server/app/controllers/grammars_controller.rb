@@ -5,6 +5,12 @@ class GrammarsController < ApplicationController
     render :json => Grammar.all.map{|g| g.to_list_api_response}
   end
 
+  # Find a single grammar
+  def show
+    grammar = Grammar.find(id_params[:id])
+    render json: grammar.to_full_api_response
+  end
+
   # Creates a new grammar
   def create
     grammar = Grammar.new(basic_params)
@@ -13,7 +19,7 @@ class GrammarsController < ApplicationController
     if grammar.save
       render :json => { 'id' => grammar.id }
     else
-      render :json => { 'errors' => block_lang.errors }, status: 400
+      render :json => { 'errors' => grammar.errors.as_json }, status: 400
     end
   end
 
@@ -26,7 +32,8 @@ class GrammarsController < ApplicationController
     if grammar.save
       render status: 204
     else
-      render json: { 'errors' => grammar.errors }, :status => 400
+      byebug
+      render json: { 'errors' => grammar.errors.as_json }, :status => 400
     end
   end
 

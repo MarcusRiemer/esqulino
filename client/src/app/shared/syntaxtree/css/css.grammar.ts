@@ -5,6 +5,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   name: "css",
   types: {
     "document": {
+      type: "concrete",
       attributes: [
         {
           name: "rules",
@@ -14,9 +15,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
 
     "rule": {
+      type: "concrete",
       attributes: [
         {
           name: "selectors",
@@ -33,13 +35,15 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
 
     "selector": {
+      type: "oneOf",
       oneOf: ["selectorType", "selectorClass", "selectorId", "selectorUniversal"]
-    } as Schema.NodeTypeDescription,
+    },
 
     "selectorType": {
+      type: "concrete",
       attributes: [
         {
           name: "value",
@@ -47,9 +51,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
 
     "selectorClass": {
+      type: "concrete",
       attributes: [
         {
           name: "value",
@@ -57,9 +62,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
 
     "selectorId": {
+      type: "concrete",
       attributes: [
         {
           name: "value",
@@ -67,13 +73,14 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
 
     "selectorUniversal": {
-
-    } as Schema.NodeTypeDescription,
+      type: "concrete",
+    },
 
     "declaration": {
+      type: "concrete",
       attributes: [
         {
           name: "name",
@@ -86,9 +93,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           choices: ["exprColor", "exprAny"]
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
 
     "exprColor": {
+      type: "concrete",
       attributes: [
         {
           name: "value",
@@ -96,9 +104,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
 
     "exprAny": {
+      type: "concrete",
       attributes: [
         {
           name: "value",
@@ -106,9 +115,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
 
     "propertyName": {
+      type: "concrete",
       attributes: [
         {
           name: "name",
@@ -116,9 +126,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription
-
+    }
   },
-
   root: "document"
 }

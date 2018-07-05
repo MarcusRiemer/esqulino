@@ -58,6 +58,7 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorLayout extends EditorBlockBase {
     direction: "horizontal" | "vertical";
+    wrapChildren?: boolean;
   }
 
   /**

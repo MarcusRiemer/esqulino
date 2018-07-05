@@ -11,6 +11,7 @@ import { environment } from '../environments/environment';
 import { SharedAppModule } from './shared/shared.module';
 import { FrontModule } from './front/front.module';
 import { EditorModule } from './editor/editor.module';
+import { AdminModule } from './admin/admin.module';
 
 import { SqlScratchComponent } from './app.component';
 import { routing } from './app.routes';
@@ -24,24 +25,22 @@ if (typeof window !== "undefined") {
   (window as any)._paq = _paq;
 }
 
-
 @NgModule({
   imports: [
-    // Angular Core
+    // Angular Core, universal rendering enabled
     BrowserModule.withServerTransition({
       appId: 'scratch-sql'
     }),
     BrowserAnimationsModule,
 
     // Tracking with Piwik
-    Angulartics2Module.forRoot([Angulartics2Piwik], {
-
-    }),
+    Angulartics2Module.forRoot([Angulartics2Piwik], {}),
 
     // Application    
     SharedAppModule.forRoot(),
     FrontModule,
     EditorModule,
+    AdminModule,
     routing,
   ],
   declarations: [

@@ -38,11 +38,6 @@ function validate(fileName: string, isValid: boolean) {
   const validator = new Validator([GRAMMAR_DESCRIPTION]);
   const result = validator.validateFromRoot(ast);
 
-  /*if (!result.isValid) {
-    const printable = result.errors.map(e => printableError(e));
-    debugger;
-  }*/
-
   expect(result.errors.map(e => printableError(e))).toEqual([], `${fileName} should be ${isValid ? 'valid' : 'invalid'}`);
 
   return (result);
