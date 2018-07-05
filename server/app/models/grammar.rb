@@ -9,7 +9,7 @@ class Grammar < ApplicationRecord
   # Some special languages may get a slug assigned
   validates :slug, uniqueness: true, allow_nil: true
 
-  # The JSON document needs to be a valid grammer
+  # The JSON document needs to be a valid grammar
   validates :model, json_schema: 'GrammarDocument'
 
   # Computes a hash that may be sent back to the client if it requires

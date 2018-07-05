@@ -17,8 +17,8 @@ export function convert(
   // Some information is provided 1:1 by the generation instructions,
   // these can be copied over without further ado
   const toReturn: BlockLanguageDescription = {
-    name: d.targetName,
     id: undefined,
+    name: d.targetName,
     defaultProgrammingLanguageId: d.targetProgrammingLanguage,
     editorBlocks: [],
     editorComponents: d.editorComponents,
