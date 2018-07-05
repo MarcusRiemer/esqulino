@@ -6,12 +6,7 @@ grammar "css" {
     children "selectors" ::= selector*
     children "declarations" ::= declaration*
   }
-  typedef "selector" {
-    "selectorType"
-    "selectorClass"
-    "selectorId"
-    "selectorUniversal"
-  }
+  typedef "selector" ::= selectorType | selectorClass | selectorId | selectorUniversal
   node "selectorType" {
     prop "value" { string }
   }

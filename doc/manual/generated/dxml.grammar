@@ -18,11 +18,7 @@ grammar "dxml" {
     children "condition" ::= expr
     children "body" ::= element* & text* & interpolate* & if*
   }
-  typedef "expr" {
-    "exprVar"
-    "exprConst"
-    "exprBinary"
-  }
+  typedef "expr" ::= exprVar | exprConst | exprBinary
   node "exprVar" {
     prop "name" { string }
   }

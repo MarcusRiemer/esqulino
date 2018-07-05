@@ -1,11 +1,5 @@
 grammar "sql" {
-  typedef "expression" {
-    "columnName"
-    "binaryExpression"
-    "constant"
-    "parameter"
-    "functionCall"
-  }
+  typedef "expression" ::= columnName | binaryExpression | constant | parameter | functionCall
   node "columnName" {
     prop "columnName" { string }
     prop "refTableName" { string }
@@ -51,27 +45,23 @@ grammar "sql" {
     children "table" ::= tableIntroduction
     children "using" ::= expression
   }
-  typedef "join" {
-    "crossJoin"
-    "innerJoinUsing"
-    "innerJoinOn"
-  }
+  typedef "join" ::= crossJoin | innerJoinUsing | innerJoinOn
   node "from" {
     children "tables" ::= tableIntroduction+
     children "joins" ::= join*
   }
   node "whereAdditional" {
-    prop "operator" { string }
+    prop "operator" { string { enum "and" "or" } }
     children "expression" ::= expression
   }
   node "where" {
-    children "expressions" ::= expression whereAdditional*
+    children "expressions" ::= sql.expression1 sql.whereAdditional*
   }
   node "groupBy" {
-    children "expressions" ::= expression*
+    children "expressions" ::= sql.expression*
   }
   node "orderBy" {
-    children "expressions" ::= expression*
+    children "expressions" ::= sql.expression*
   }
   node "querySelect" {
     children "select" ::= select
@@ -85,8 +75,5 @@ grammar "sql" {
     children "from" ::= from
     children "where" ::= where?
   }
-  typedef "query" {
-    "querySelect"
-    "queryDelete"
-  }
+  typedef "query" ::= querySelect | queryDelete
 }

@@ -129,6 +129,9 @@
         },
         {
           "$ref": "#/definitions/NodeChildrenGroupDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
         }
       ],
       "description": "Attributes of a node are either properties or children."
@@ -149,7 +152,7 @@
     },
     "NodeConcreteTypeDescription": {
       "additionalProperties": false,
-      "description": "This is the basic description to introduce a new type for\nany kind of node. If you are familiar with schema languages\nlike XML-Schema, JSON-Schema, NG-Relax, ... this will be\n(hopefully) nothing too surprising for you.\n\nThis schema language is modeled losely after XML-Schema,\nbut enhanced with various UI-related features.\n\nThe restriction system for simple properties is modelled after\nfacets in XML-Schema: https://www.w3.org/TR/xmlschema-2/#defn-coss\n\nBuiltin types are:\n- String\n- Integer\n- Boolean\n\nThe restriction system for child nodes is also modelled losely\nafter XML schemas complex element types. An important deviation\nis that child nodes can be distribibuted in multiple groups. This\nmeans that a single node can be parent to two unrelated sub-trees.\nXML schema in contrast allows exactly nodes and attributes as\nsub-trees.\n\nThe actual attributes of this node (properties or children) are stored\nas a list because the order does matter during string serialization\nor automatic UI generation.",
+      "description": "This is the basic description to introduce a new type for\nany kind of node. If you are familiar with schema languages\nlike XML-Schema, JSON-Schema, NG-Relax, ... this will be\n(hopefully) nothing too surprising for you.\n\nThis schema language is modeled losely after XML-Schema,\nbut enhanced with various UI-related features.\n\nThe restriction system for simple properties is modelled after\nfacets in XML-Schema: https://www.w3.org/TR/xmlschema-2/#defn-coss\n\nBuiltin types are:\n- String\n- Integer\n- Boolean\n\nThe restriction system for child nodes is also modelled losely\nafter XML schemas complex element types. An important deviation\nis that child nodes can be distribibuted in multiple groups. This\nmeans that a single node can be parent to two unrelated sub-trees.\nXML schema in contrast allows exactly nodes and attributes as\nsub-trees.\n\nThe actual attributes of this node (properties or children) are stored\nas a list because the order does matter during string serialization\nor automatic UI generation. And whilst syntactic terminal symbols are\nnot actually required at all when validating a tree, they are meaningful\nfor the automation process.",
       "properties": {
         "attributes": {
           "items": {
@@ -318,6 +321,26 @@
         }
       ],
       "description": "The restrictions that are applicable to strings"
+    },
+    "NodeTerminalSymbolDescription": {
+      "additionalProperties": false,
+      "description": "A terminal symbol that would be expected.",
+      "properties": {
+        "symbol": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "terminal"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "symbol"
+      ],
+      "type": "object"
     },
     "NodeTypeDescription": {
       "anyOf": [

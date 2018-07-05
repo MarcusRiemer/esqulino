@@ -39,10 +39,15 @@ export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTy
   const head = `node "${name}" {`;
 
   const attributes = (t.attributes ? t.attributes : []).map(a => {
-    if (a.type === "property") {
-      return (prettyPrintProperty(a));
-    } else {
-      return (prettyPrintChildGroup(a));
+    switch (a.type) {
+      case "property":
+        return (prettyPrintProperty(a));
+      case "terminal":
+        return (prettyPrintTerminal(a));
+      case "allowed":
+      case "sequence":
+      case "choice":
+        return (prettyPrintChildGroup(a));
     }
   });
 
@@ -58,7 +63,14 @@ export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTy
  * Prints the grammar for a placeholder node.
  */
 export function prettyPrintOneOfType(name: string, t: Desc.NodeOneOfTypeDescription): NestedString {
-  return ([`typedef "${name}" {`, t.oneOf.map(t => `"${t}"`), `}`]);
+  return ([`typedef "${name}" ::= ${t.oneOf.join(" | ")}`]);
+}
+
+/**
+ * Prints the grammar for a terminal symbol
+ */
+export function prettyPrintTerminal(p: Desc.NodeTerminalSymbolDescription) {
+  return ([`terminal "${p.symbol}"`]);
 }
 
 /**
@@ -252,7 +264,7 @@ export function graphvizSyntaxTreeNode(desc: NodeDescription, path: string): Nes
         // last seems to be rendered first.
         ...v.map((v, i) => graphvizSyntaxTreeNode(v, `${path}_${k}_${i}`)).reverse(),
         `}`,
-        // Create the connectio from the parent
+        // Create the connection from the parent
         ...v.map((v, i) => `${path} -> ${path}_${k}_${i};`),
       ]);
     });
