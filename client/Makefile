@@ -7,7 +7,7 @@ NG_BIN = node_modules/.bin/ng
 TSC_BIN = node_modules/.bin/tsc
 NODE_BIN = node
 
-BUNDLE_FILES = $(shell find dist/browser -iname "*bundle*.js" 2> /dev/null)
+BUNDLE_FILES = $(shell find dist/browser -iregex ".*\.\(js\|css\|svg\|eot\|ttf\)" 2> /dev/null)
 BUNDLE_FILES_GZIP = $(addsuffix .gz, $(BUNDLE_FILES))
 
 CLIENT_ALL_SOURCES = $(shell find src 2> /dev/null) server.ts webpack.server.config.js package.json package-lock.json
@@ -52,11 +52,9 @@ cli-run: dist/cli/main.cli.js
 	@$(NODE_BIN) $^
 
 cli-upload-grammars: cli-compile
-	# echo '{ "type": "updateGrammars", "serverBaseUrl": "http://httpbin.org/anything" }' | $(NODE_BIN) dist/cli/main.cli.js
 	echo '{ "type": "updateGrammars", "serverBaseUrl": "http://localhost:9292" }' | $(NODE_BIN) dist/cli/main.cli.js
 
 cli-upload-block-languages: cli-compile
-	# echo '{ "type": "updateGrammars", "serverBaseUrl": "http://httpbin.org/anything" }' | $(NODE_BIN) dist/cli/main.cli.js
 	echo '{ "type": "updateBlockLanguages", "serverBaseUrl": "http://localhost:9292" }' | $(NODE_BIN) dist/cli/main.cli.js
 
 ##################################
