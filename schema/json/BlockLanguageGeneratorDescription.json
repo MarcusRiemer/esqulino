@@ -12,17 +12,21 @@
           },
           "type": "array"
         },
-        "targetName": {
+        "id": {
           "type": "string"
         },
-        "targetProgrammingLanguage": {
+        "name": {
+          "type": "string"
+        },
+        "targetName": {
           "type": "string"
         }
       },
       "required": [
         "editorComponents",
-        "targetName",
-        "targetProgrammingLanguage"
+        "id",
+        "name",
+        "targetName"
       ],
       "type": "object"
     },

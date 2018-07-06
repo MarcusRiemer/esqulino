@@ -15,11 +15,15 @@ export function convert(
   g: GrammarDescription
 ): BlockLanguageDescription {
   // Some information is provided 1:1 by the generation instructions,
-  // these can be copied over without further ado
+  // these can be copied over without further ado. And some properties
+  // are not filled by the generator on purpose:
+  // 
+  // * The `id` of the new language
+  // * The default programming language
   const toReturn: BlockLanguageDescription = {
     id: undefined,
+    defaultProgrammingLanguageId: undefined,
     name: d.targetName,
-    defaultProgrammingLanguageId: d.targetProgrammingLanguage,
     editorBlocks: [],
     editorComponents: d.editorComponents,
     sidebars: []

@@ -18,12 +18,10 @@ class BlockLanguage < ApplicationRecord
   belongs_to :grammar
 
   # Computes a hash that may be sent back to the client if it requires
-  # full access to the block language. This is usually happens if the
+  # full access to the block language. This usually happens when the
   # client is working with the editor.
   def to_full_api_response
-    to_json_api_response
-      .slice("id", "slug", "name", "defaultProgrammingLanguageId")
-      .merge(self.model)
+    to_list_api_response.merge(self.model)
   end
 
   # Computes a hash that may be sent back to the client if only superficial

@@ -115,6 +115,7 @@ Rails.application.routes.draw do
     end
 
     resources :block_languages, only: [:index, :create, :update, :show]
+    resources :block_language_generators, only: [:index, :show]
     resources :grammars, only: [:index, :create, :update, :show]
     
     # Fallback for unknown API endpoints

@@ -21,4 +21,13 @@ RSpec.describe BlockLanguageGenerator, type: :model do
       expect(res.errors["target_name"].length).to be 1
     end
   end
+
+  context "model" do
+    it "rejects an empty model" do
+      res = FactoryBot.build(:block_language_generator, model: Hash.new)
+
+      res.validate
+      expect(res.errors["model"]).not_to be_empty
+    end
+  end
 end
