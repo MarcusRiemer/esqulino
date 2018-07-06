@@ -41,5 +41,117 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response).to have_http_status(404)
     end
   end
-  
+
+  describe 'POST /api/block_language_generators' do
+    it 'Creates a new, empty block language generator' do
+      params_generator = FactoryBot
+                           .attributes_for(:block_language_generator)
+                           .transform_keys { |k| k.to_s.camelize(:lower) }
+      params_generator_req = params_generator.merge(params_generator["model"])
+
+      post "/api/block_language_generators",
+           :headers => json_headers,
+           :params => params_generator_req.to_json
+
+      expect(response.content_type).to eq "application/json"
+
+      json_data = JSON.parse(response.body)
+      expect(json_data.fetch('errors', [])).to eq []
+
+      expect(response.status).to eq(200)
+
+      # Check what exactly has been saved
+      generator = BlockLanguageGenerator.find(json_data["id"])
+
+      expect(params_generator["name"]).to eq generator.name
+      expect(params_generator["model"].to_json).to eq generator.model.to_json
+    end
+
+    it 'passing no parameters for creation' do
+      post "/api/block_language_generators",
+           :headers => json_headers,
+           :params => "{}"
+
+      expect(response.content_type).to eq "application/json"
+
+      json_data = JSON.parse(response.body)
+      expect(response.status).to eq(400)
+
+      expect(json_data["errors"].fetch("name", [])).not_to be []
+      expect(json_data["errors"].fetch("targetName", [])).not_to be []
+      expect(json_data["errors"].fetch("model", [])).not_to be []
+    end
+  end
+
+  describe 'PUT /api/block_language_generators' do
+    it 'Update all properties' do
+      original = FactoryBot.create(:block_language_generator)
+
+      params_update = FactoryBot
+                        .attributes_for(:block_language_generator,
+                                        name: "Upda",
+                                        target_name: "Upda",
+                                        model: {
+                                          "editorComponents":
+                                                  [
+                                                    { "componentType": "query-preview" }
+                                                  ]
+                                        })
+                           .transform_keys { |k| k.to_s.camelize(:lower) }
+      params_update_req = params_update.merge(params_update["model"])
+
+      put "/api/block_language_generators/#{original.id}",
+           :headers => json_headers,
+           :params => params_update_req.to_json
+
+      expect(response.status).to eq(204)
+
+      original.reload
+      expect(params_update["name"]).to eq original.name
+      expect(params_update["targetName"]).to eq original.target_name
+      expect(params_update["model"].to_json).to eq original.model.to_json
+    end
+
+    it 'Update with empty model' do
+      original = FactoryBot.create(:block_language_generator)
+
+      params_update = FactoryBot
+                        .attributes_for(:block_language_generator,
+                                        name: "Updated empty",
+                                        target_name: "Updated empty",
+                                        model: Hash.new)
+                           .transform_keys { |k| k.to_s.camelize(:lower) }
+      params_update_req = params_update
+
+      put "/api/block_language_generators/#{original.id}",
+           :headers => json_headers,
+           :params => params_update_req.to_json
+      
+      expect(response.status).to eq(400)
+      refreshed = BlockLanguageGenerator.find(original.id)
+      expect(original.name).to eq refreshed.name
+      expect(original.target_name).to eq refreshed.target_name
+    end
+
+    it 'Update without model' do
+      original = FactoryBot.create(:block_language_generator)
+
+      params_update = FactoryBot
+                        .attributes_for(:block_language_generator,
+                                        name: "Updated without",
+                                        target_name: "Updated without",
+                                        model: nil)
+                           .transform_keys { |k| k.to_s.camelize(:lower) }
+      params_update_req = params_update
+
+      put "/api/block_language_generators/#{original.id}",
+           :headers => json_headers,
+           :params => params_update_req.to_json
+      
+      expect(response.status).to eq(400)
+      refreshed = BlockLanguageGenerator.find(original.id)
+      expect(original.name).to eq refreshed.name
+      expect(original.target_name).to eq refreshed.target_name
+    end
+  end
 end
