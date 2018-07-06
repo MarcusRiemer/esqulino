@@ -26,13 +26,12 @@ class GrammarsController < ApplicationController
   # Updates an existing grammar
   def update
     grammar = Grammar.find(id_params['id'])
-    grammar.update basic_params
+    grammar.assign_attributes basic_params
     grammar.model = model_params
 
     if grammar.save
       render status: 204
     else
-      byebug
       render json: { 'errors' => grammar.errors.as_json }, :status => 400
     end
   end

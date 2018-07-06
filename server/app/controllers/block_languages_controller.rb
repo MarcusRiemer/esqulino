@@ -26,7 +26,7 @@ class BlockLanguagesController < ApplicationController
   # Updates an existing block language
   def update
     block_lang = BlockLanguage.find(id_params[:id])
-    block_lang.update basic_params
+    block_lang.assign_attributes basic_params
     block_lang.model = model_params
 
     if block_lang.save

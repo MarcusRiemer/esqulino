@@ -175,7 +175,28 @@ RSpec.describe BlockLanguagesController, type: :request do
         expect(orig_block_lang.model["sidebars"][0]["blocks"]).to eq upda_block_lang["sidebars"][0]["blocks"]
         expect(orig_block_lang.model["editorBlocks"][0]).to eq upda_block_lang["editorBlocks"][0]
       end
-    end
 
+      it 'Update with empty model' do
+        original = FactoryBot.create(:block_language)
+
+        params_update = FactoryBot
+                          .attributes_for(:block_language,
+                                          name: "Updated empty",
+                                          family: "Updated empty",
+                                          model: Hash.new)
+                          .transform_keys { |k| k.to_s.camelize(:lower) }
+        params_update_req = params_update.merge(params_update["model"])
+        params_update_req.delete("model")
+
+        put "/api/block_languages/#{original.id}",
+            :headers => json_headers,
+            :params => params_update_req.to_json
+        
+        expect(response.status).to eq(400)
+        refreshed = BlockLanguage.find(original.id)
+        expect(original.name).to eq refreshed.name
+        expect(original.family).to eq refreshed.family
+      end
+    end
   end
 end
