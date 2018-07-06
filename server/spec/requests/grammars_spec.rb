@@ -35,6 +35,11 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       expect(json_data).to validate_against "GrammarDescription"
     end
+
+    it 'responds with 404 for non existing grammars' do
+      get "/api/grammars/0"
+      expect(response).to have_http_status(404)
+    end
   end
 
   describe 'POST /api/grammars' do
