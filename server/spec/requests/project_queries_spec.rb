@@ -1,0 +1,136 @@
+require 'rails_helper'
+
+RSpec.describe ProjectQueriesController, type: :request do
+  let(:default_headers) {
+    {
+      "Authorization" => "Basic #{Base64.encode64('user:user')}",
+      "CONTENT_TYPE" => "application/json"
+    }
+  }
+  
+  describe '/api/project/:project_id/query/run' do
+    after(:each) do
+      if @db.project && @db.project.default_database_id == @db.id then
+        @db.project.update!(default_database: nil)
+      end
+      @db.destroy!
+      @db.project.destroy! if @db.project
+    end
+    
+    it 'Arbitrary: SELECT key_value.key, key_value.value, * FROM key_value WHERE (key_value.key >= 3)' do
+      @db = FactoryBot.create(:project_database, :table_key_value)
+      
+      post "/api/project/#{@db.project.slug}/query/run",
+           :headers => default_headers,
+           params: 
+             {
+               "ast"=> {
+                 "name"=> "querySelect",
+                 "language"=> "sql",
+                 "children"=> {
+                   "from"=> [
+                     {
+                       "name"=> "from",
+                       "language"=> "sql",
+                       "children"=> {
+                         "tables"=> [
+                           {
+                             "name"=> "tableIntroduction",
+                             "language"=> "sql",
+                             "properties"=> {
+                               "name"=> "key_value"
+                             }
+                           }
+                         ]
+                       }
+                     }
+                   ],
+                   "where"=> [
+                     {
+                       "name"=> "where",
+                       "language"=> "sql",
+                       "children"=> {
+                         "expressions"=> [
+                           {
+                             "name"=> "binaryExpression",
+                             "language"=> "sql",
+                             "children"=> {
+                               "lhs"=> [
+                                 {
+                                   "name"=> "columnName",
+                                   "language"=> "sql",
+                                   "properties"=> {
+                                     "columnName"=> "key",
+                                     "refTableName"=> "key_value"
+                                   }
+                                 }
+                               ],
+                               "rhs"=> [
+                                 {
+                                   "name"=> "constant",
+                                   "language"=> "sql",
+                                   "properties"=> {
+                                     "value"=> "3"
+                                   }
+                                 }
+                               ],
+                               "operator"=> [
+                                 {
+                                   "name"=> "relationalOperator",
+                                   "language"=> "sql",
+                                   "properties"=> {
+                                     "operator"=> ">="
+                                   }
+                                 }
+                               ]
+                             }
+                           }
+                         ]
+                       }
+                     }
+                   ],
+                   "select"=> [
+                     {
+                       "name"=> "select",
+                       "language"=> "sql",
+                       "children"=> {
+                         "columns"=> [
+                           {
+                             "name"=> "columnName",
+                             "language"=> "sql",
+                             "properties"=> {
+                               "columnName"=> "key",
+                               "refTableName"=> "key_value"
+                             }
+                           },
+                           {
+                             "name"=> "columnName",
+                             "language"=> "sql",
+                             "properties"=> {
+                               "columnName"=> "value",
+                               "refTableName"=> "key_value"
+                             }
+                           },
+                           {
+                             "name"=> "starOperator",
+                             "language"=> "sql"
+                           }
+                         ]
+                       }
+                     }
+                   ],
+                   "groupBy"=> []
+                 }
+               },
+               "params"=> {}
+             }.to_json
+      expect(response.status).to eq 200
+
+      json_data = JSON.parse(response.body)
+      expect(json_data.fetch('errors', [])).to eq []
+      expect(json_data["columns"]).to eq ["key", "value", "key", "value"]
+      expect(json_data["rows"][0]).to eq [3, "drei", 3, "drei"]
+      expect(json_data["totalCount"]).to eq 7
+    end
+  end
+end

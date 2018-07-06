@@ -1,8 +1,59 @@
+# coding: utf-8
 require 'tempfile'
 
 FactoryBot.define do
   factory :project_database do
     association :project, factory: :project
+
+    after(:create) do |db|
+      db.project.update!(default_database: db)
+    end
+    
+    trait :table_key_value do
+      after(:create) do |db|
+        db.table_create(
+          {
+            "name" => "key_value",
+            "columns" => [
+              {
+                "name" => "key",
+                "type" => "INTEGER",
+                "index" => 0,
+                "primary" => true,
+                "not_null" => true,
+                "dflt_value" => nil
+              },
+              {
+                "name" => "value",
+                "type" => "TEXT",
+                "index" => 1,
+                "primary" => false,
+                "not_null" => false,
+                "dflt_value" => "value"
+              }
+            ],
+            "foreign_keys" => []
+          }
+        )
+
+        db.table_bulk_insert(
+          "key_value",
+          ['key', 'value'],
+          [
+            ['0', 'null'],
+            ['1', 'eins'],
+            ['2', 'zwei'],
+            ['3', 'drei'],
+            ['4', 'vier'],
+            ['5', 'fünf'],
+            ['6', 'secs'],
+            ['7', 'sibn'],
+            ['8', 'acht'],
+            ['9', 'neun'],
+          ]
+        )
+      end
+    end
   end
 
   # A database instance that stores all its data in a temporary file
