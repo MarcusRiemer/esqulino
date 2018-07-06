@@ -1,0 +1,27 @@
+{
+  "$ref": "#/definitions/BlockLanguageGeneratorListDescription",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "BlockLanguageGeneratorListDescription": {
+      "additionalProperties": false,
+      "description": "\"Superficial\" attribues of a block language generator",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "targetName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "targetName"
+      ],
+      "type": "object"
+    }
+  }
+}

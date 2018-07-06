@@ -18,9 +18,10 @@ describe("BlockLanguage Generator", () => {
     };
 
     const generator: BlockLanguageGeneratorDescription = {
+      id: "4d67a9d5-c47a-418a-a16c-5764fb20fab5",
+      name: "Generating b1",
       editorComponents: [],
-      targetName: "b1",
-      targetProgrammingLanguage: "sql",
+      targetName: "b1"
     };
 
     const r = convert(generator, grammar);
@@ -51,9 +52,10 @@ describe("BlockLanguage Generator", () => {
     };
 
     const generator: BlockLanguageGeneratorDescription = {
+      id: "cb90746a-887b-40a9-a53b-8a742b5436f3",
+      name: "Generating b1",
       editorComponents: [],
-      targetName: "b1",
-      targetProgrammingLanguage: "sql",
+      targetName: "b1"
     };
 
     const r = convert(generator, grammar);
