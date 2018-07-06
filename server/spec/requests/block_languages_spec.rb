@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe BlockLanguagesController, type: :request do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
-  describe 'GET /api/block_language' do
+  describe 'GET /api/block_languages' do
     it 'lists nothing if nothing is there' do
       get "/api/block_languages"
 
@@ -36,9 +36,14 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       expect(json_data).to validate_against "BlockLanguageDescription"
     end
+
+    it 'responds with 404 for non existing languages' do
+      get "/api/block_languages/0"
+      expect(response).to have_http_status(404)
+    end
   end
 
-  describe 'POST /api/block_language' do
+  describe 'POST /api/block_languages' do
     it 'Creates a new, empty block language' do
       g = FactoryBot.create(:grammar)
       
@@ -110,7 +115,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response.status).to eq(200)
     end
 
-    describe 'PUT /api/block_language/:id' do
+    describe 'PUT /api/block_languages/:id' do
       it 'Updating basic properties' do
         orig_block_lang = FactoryBot.create(:block_language)
         upda_block_lang = {
