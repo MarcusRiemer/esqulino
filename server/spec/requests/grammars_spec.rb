@@ -73,7 +73,6 @@ RSpec.describe BlockLanguagesController, type: :request do
       orig_grammar = FactoryBot.create(:grammar)
       upda_grammar = {
         "name" => "Upda",
-        "family" => "Upda",
         "types" => {},
         "root" => "empty"
       }
@@ -92,5 +91,25 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(orig_grammar.model["types"]).to eq Hash.new
       expect(orig_grammar.model["root"]).to eq "empty"
     end
+
+    it 'Update with empty model' do
+        original = FactoryBot.create(:grammar)
+
+        params_update = FactoryBot
+                          .attributes_for(:grammar,
+                                          name: "Updated empty",
+                                          model: Hash.new)
+                          .transform_keys { |k| k.to_s.camelize(:lower) }
+        params_update_req = params_update.merge(params_update["model"])
+        params_update_req.delete("model")
+
+        put "/api/grammars/#{original.id}",
+            :headers => json_headers,
+            :params => params_update_req.to_json
+        
+        expect(response.status).to eq(400)
+        refreshed = Grammar.find(original.id)
+        expect(original.name).to eq refreshed.name
+      end
   end
 end

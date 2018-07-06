@@ -121,28 +121,8 @@ RSpec.describe BlockLanguagesController, type: :request do
                                         target_name: "Updated empty",
                                         model: Hash.new)
                            .transform_keys { |k| k.to_s.camelize(:lower) }
-      params_update_req = params_update
-
-      put "/api/block_language_generators/#{original.id}",
-           :headers => json_headers,
-           :params => params_update_req.to_json
-      
-      expect(response.status).to eq(400)
-      refreshed = BlockLanguageGenerator.find(original.id)
-      expect(original.name).to eq refreshed.name
-      expect(original.target_name).to eq refreshed.target_name
-    end
-
-    it 'Update without model' do
-      original = FactoryBot.create(:block_language_generator)
-
-      params_update = FactoryBot
-                        .attributes_for(:block_language_generator,
-                                        name: "Updated without",
-                                        target_name: "Updated without",
-                                        model: nil)
-                           .transform_keys { |k| k.to_s.camelize(:lower) }
-      params_update_req = params_update
+      params_update_req = params_update.merge(params_update["model"])
+      params_update_req.delete("model")
 
       put "/api/block_language_generators/#{original.id}",
            :headers => json_headers,
