@@ -19,111 +19,14 @@ RSpec.describe ProjectQueriesController, type: :request do
     
     it 'Arbitrary: SELECT key_value.key, key_value.value, * FROM key_value WHERE (key_value.key >= 3)' do
       @db = FactoryBot.create(:project_database, :table_key_value)
+      query = FactoryBot.build(:code_resource, :sql_key_value_select_double)
       
       post "/api/project/#{@db.project.slug}/query/run",
            :headers => default_headers,
-           params: 
-             {
-               "ast"=> {
-                 "name"=> "querySelect",
-                 "language"=> "sql",
-                 "children"=> {
-                   "from"=> [
-                     {
-                       "name"=> "from",
-                       "language"=> "sql",
-                       "children"=> {
-                         "tables"=> [
-                           {
-                             "name"=> "tableIntroduction",
-                             "language"=> "sql",
-                             "properties"=> {
-                               "name"=> "key_value"
-                             }
-                           }
-                         ]
-                       }
-                     }
-                   ],
-                   "where"=> [
-                     {
-                       "name"=> "where",
-                       "language"=> "sql",
-                       "children"=> {
-                         "expressions"=> [
-                           {
-                             "name"=> "binaryExpression",
-                             "language"=> "sql",
-                             "children"=> {
-                               "lhs"=> [
-                                 {
-                                   "name"=> "columnName",
-                                   "language"=> "sql",
-                                   "properties"=> {
-                                     "columnName"=> "key",
-                                     "refTableName"=> "key_value"
-                                   }
-                                 }
-                               ],
-                               "rhs"=> [
-                                 {
-                                   "name"=> "constant",
-                                   "language"=> "sql",
-                                   "properties"=> {
-                                     "value"=> "3"
-                                   }
-                                 }
-                               ],
-                               "operator"=> [
-                                 {
-                                   "name"=> "relationalOperator",
-                                   "language"=> "sql",
-                                   "properties"=> {
-                                     "operator"=> ">="
-                                   }
-                                 }
-                               ]
-                             }
-                           }
-                         ]
-                       }
-                     }
-                   ],
-                   "select"=> [
-                     {
-                       "name"=> "select",
-                       "language"=> "sql",
-                       "children"=> {
-                         "columns"=> [
-                           {
-                             "name"=> "columnName",
-                             "language"=> "sql",
-                             "properties"=> {
-                               "columnName"=> "key",
-                               "refTableName"=> "key_value"
-                             }
-                           },
-                           {
-                             "name"=> "columnName",
-                             "language"=> "sql",
-                             "properties"=> {
-                               "columnName"=> "value",
-                               "refTableName"=> "key_value"
-                             }
-                           },
-                           {
-                             "name"=> "starOperator",
-                             "language"=> "sql"
-                           }
-                         ]
-                       }
-                     }
-                   ],
-                   "groupBy"=> []
-                 }
-               },
-               "params"=> {}
-             }.to_json
+           params: {
+             "ast" => query.ast,
+             "params" => {}
+           }.to_json
       expect(response.status).to eq 200
 
       json_data = JSON.parse(response.body)
@@ -132,5 +35,11 @@ RSpec.describe ProjectQueriesController, type: :request do
       expect(json_data["rows"][0]).to eq [3, "drei", 3, "drei"]
       expect(json_data["totalCount"]).to eq 7
     end
+  end
+
+  describe '/api/project/:project_id/query/simulate/insert' do
+  end
+
+  describe '/api/project/:project_id/query/simulate/delete' do
   end
 end
