@@ -3,6 +3,7 @@ import * as Schema from '../grammar.description'
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   id: "7e333dff-6d1c-4042-aaa5-0cdf2cfeed7e",
   name: "dxml",
+  programmingLanguageId: "dxml-eruby",
   types: {
     "element": {
       type: "concrete",

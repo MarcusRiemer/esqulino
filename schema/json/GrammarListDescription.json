@@ -12,13 +12,17 @@
         "name": {
           "type": "string"
         },
+        "programmingLanguageId": {
+          "type": "string"
+        },
         "slug": {
           "type": "string"
         }
       },
       "required": [
         "id",
-        "name"
+        "name",
+        "programmingLanguageId"
       ],
       "type": "object"
     }

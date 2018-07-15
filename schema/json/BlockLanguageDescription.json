@@ -32,6 +32,10 @@
           },
           "type": "array"
         },
+        "grammarId": {
+          "description": "The grammar that this block language may visualize.",
+          "type": "string"
+        },
         "id": {
           "description": "The internal ID of this language model.",
           "type": "string"

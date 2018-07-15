@@ -47,6 +47,11 @@ export interface BlockLanguageListDescription {
   blockLanguageGeneratorId?: string;
 
   /**
+   * The grammar that this block language may visualize.
+   */
+  grammarId?: string;
+
+  /**
    * Date & time this resource was created
    */
   createdAt?: string;

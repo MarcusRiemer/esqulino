@@ -7,6 +7,7 @@ describe("BlockLanguage Generator", () => {
   it("Almost empty grammar with almost no generation instructions", () => {
     const grammar: GrammarDescription = {
       id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
+      programmingLanguageId: "spec",
       name: "g1",
       root: "t1",
       types: {
@@ -31,6 +32,7 @@ describe("BlockLanguage Generator", () => {
   it("No blocks for 'oneOf'-types", () => {
     const grammar: GrammarDescription = {
       id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
+      programmingLanguageId: "spec",
       name: "g1",
       root: "t1",
       types: {

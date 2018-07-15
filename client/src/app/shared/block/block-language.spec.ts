@@ -4,7 +4,6 @@ import { BlockLanguageDescription } from './block-language.description'
 import { BlockLanguage } from './block-language'
 import { SidebarBlockDescription, VisualBlockDescriptions } from './block.description'
 
-
 const langEmptyBlocks: LanguageDescription = {
   id: "emptyBlocks",
   name: "emptyBlocks",
@@ -12,6 +11,7 @@ const langEmptyBlocks: LanguageDescription = {
   validators: [
     {
       id: "e848d752-c1c7-49f8-9c8d-ba67555b27ab",
+      programmingLanguageId: "spec",
       name: "emptyBlocks",
       types: {
         "root": {
