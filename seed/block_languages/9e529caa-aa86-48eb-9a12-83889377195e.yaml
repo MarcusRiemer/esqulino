@@ -10,9 +10,6 @@ concise_attributes:
   name: id
   value_before_type_cast: 9e529caa-aa86-48eb-9a12-83889377195e
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
-  name: family
-  value_before_type_cast: regex
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [{"type": "fixedBlocks", "caption": "RegEx",
     "categories": [{"blocks": [{"defaultNode": {"name": "root", "children": {"expressions":
