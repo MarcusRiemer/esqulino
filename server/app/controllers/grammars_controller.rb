@@ -12,7 +12,7 @@ class GrammarsController < ApplicationController
   end
 
   # Creates a new grammar
-  def create
+  def create    
     grammar = Grammar.new(basic_params)
     grammar.model = model_params
 
@@ -48,7 +48,7 @@ class GrammarsController < ApplicationController
   # These parameters are "normal" table attributes
   def basic_params
     params
-      .permit([:name, :slug])
+      .permit([:name, :slug, :programmingLanguageId])
       .transform_keys { |k| k.underscore }
   end
 

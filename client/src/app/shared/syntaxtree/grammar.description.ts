@@ -250,6 +250,9 @@ export interface GrammarListDescription {
   // The name of the language
   name: string
 
+  // The name of the programming language this grammar implements
+  programmingLanguageId: string
+
   // The possible slug for URL usage
   slug?: string
 }

@@ -20,12 +20,25 @@
     <th>Name</th>
     <th>Slug</th>
     <th>ID</th>
+    <th>Grammatik</th>
+    <th>Generator</th>
   </tr>
+  <!-- Each row represents a block language -->
   <tr *ngFor="let blockLanguage of availableBlockLanguages | async">
     <td>
       <a [routerLink]="['block-language', blockLanguage.id]">{{ blockLanguage.name }}</a>
     </td>
     <td><code>{{ blockLanguage.slug }}</code></td>
     <td><code>{{ blockLanguage.id }}</code></td>
+    <td><link-grammar [grammarId]="blockLanguage.grammarId"></link-grammar></td>
+    <td>
+      <ng-container *ngIf="!blockLanguage.blockLanguageGeneratorId; else generator;">
+        Manuell
+      </ng-container>
+      <ng-template #generator>
+        Generiert
+      </ng-template>
+    </td>
   </tr>
 </table>
+<create-block-language></create-block-language>

@@ -9,6 +9,9 @@ import { RequestErrorDescription } from './serverapi.service.description'
  * capatabilities to respond to the request, abstracts away the concrete
  * URL to call and can do some basic parameter checks.
  *
+ * This file is manually kept in sync with the rails route definitions 
+ * at `server/config/routes.rb`.
+ *
  * TODO: Cleanup code so that these methods rely on each other instead
  *       of constructing the same base-url over and over again.
  */
@@ -18,7 +21,7 @@ export class ServerApiService {
 
   private static BASE_HOST = "http://www.blattwerkzeug.de";
 
-  public constructor( @Inject(PLATFORM_ID) private _platformId: Object) {
+  public constructor(@Inject(PLATFORM_ID) private _platformId: Object) {
     this._apiBaseUrl = "/api";
 
     // If we are running the universal server, there is no "parenting"
@@ -46,6 +49,13 @@ export class ServerApiService {
   }
 
   /**
+   * Allows creation of new block languages
+   */
+  createBlockLanguageUrl(): string {
+    return (`${this._apiBaseUrl}/block_languages`);
+  }
+
+  /**
    * Retrieves the URL that is used to list all public grammars
    */
   getGrammarListUrl(): string {
@@ -57,6 +67,13 @@ export class ServerApiService {
    */
   getGrammarUrl(id: string) {
     return (`${this._apiBaseUrl}/grammars/${id}`)
+  }
+
+  /**
+   * Retrieves the URL that is used to list all public block language generators.
+   */
+  getBlockLanguageGeneratorListUrl(): string {
+    return (`${this._apiBaseUrl}/block_language_generators`)
   }
 
   /**

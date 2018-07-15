@@ -51,6 +51,9 @@
         "name": {
           "type": "string"
         },
+        "programmingLanguageId": {
+          "type": "string"
+        },
         "root": {
           "$ref": "#/definitions/TypeReference"
         },
@@ -67,6 +70,7 @@
       "required": [
         "id",
         "name",
+        "programmingLanguageId",
         "root",
         "types"
       ],

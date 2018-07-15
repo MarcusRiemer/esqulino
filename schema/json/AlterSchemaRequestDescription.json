@@ -270,6 +270,7 @@
     },
     "ForeignKeyDescription": {
       "additionalProperties": false,
+      "description": "A reference from the column of one table to a specific\ncolumn of another table.",
       "properties": {
         "references": {
           "items": {
@@ -287,8 +288,8 @@
             },
             "required": [
               "to_table",
-              "from_column",
-              "to_column"
+              "to_column",
+              "from_column"
             ],
             "type": "object"
           },

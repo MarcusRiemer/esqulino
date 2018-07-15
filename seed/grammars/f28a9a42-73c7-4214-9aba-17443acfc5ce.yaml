@@ -26,5 +26,6 @@ concise_attributes:
   value_before_type_cast: '2018-05-31 13:55:26.753111'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: programming_language_id
+  value_before_type_cast: regex
 new_record: false
 active_record_yaml_version: 2

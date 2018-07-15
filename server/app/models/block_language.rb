@@ -32,7 +32,7 @@ class BlockLanguage < ApplicationRecord
   # to list available block languages.
   def to_list_api_response
     to_json_api_response
-      .slice("id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId")
+      .slice("id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId", "grammarId")
   end
 
   # Returns a nicely readable representation of name, id and slug

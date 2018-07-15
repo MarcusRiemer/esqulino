@@ -29,6 +29,10 @@
       "additionalProperties": false,
       "description": "Augments a language with information about the UI layer. This definition is\nused by the editors, especially the block editor, to show customized editors\nfor different languages. These customizations include:\n\n* The blocks that are shown in the sidebar.\n* Possibly language specific sidebars.\n* Definitions of the actual blocks.\n* Possibly language specific editor components.",
       "properties": {
+        "blockLanguageGeneratorId": {
+          "description": "The ID of the block language that may have been used to generate this\nblock language.",
+          "type": "string"
+        },
         "createdAt": {
           "description": "Date & time this resource was created",
           "type": "string"
@@ -50,6 +54,10 @@
             "$ref": "#/definitions/EditorComponentDescription"
           },
           "type": "array"
+        },
+        "grammarId": {
+          "description": "The grammar that this block language may visualize.",
+          "type": "string"
         },
         "id": {
           "description": "The internal ID of this language model.",
@@ -699,6 +707,9 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        },
+        "wrapChildren": {
+          "type": "boolean"
         }
       },
       "required": [
@@ -758,6 +769,9 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        },
+        "wrapChildren": {
+          "type": "boolean"
         }
       },
       "required": [
@@ -840,6 +854,9 @@
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        },
+        "wrapChildren": {
+          "type": "boolean"
         }
       },
       "required": [

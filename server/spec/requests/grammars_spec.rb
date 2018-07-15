@@ -42,13 +42,16 @@ RSpec.describe BlockLanguagesController, type: :request do
     end
   end
 
-  describe 'POST /api/grammars' do
+  describe 'POST /api/grammars' do    
     it 'Creates a new, empty grammar' do
+      prog_lang = FactoryBot.create(:programming_language)
+      
       post "/api/grammars",
            :headers => json_headers,
            :params => {
              "slug" => "spec",
              "name" => "Spec Grammar",
+             "programmingLanguageId" => prog_lang.id,
              "types" => { "spec" => { "type" => "concrete" } },
              "root" => "spec"
            }.to_json
