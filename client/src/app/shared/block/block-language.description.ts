@@ -41,6 +41,12 @@ export interface BlockLanguageListDescription {
   defaultProgrammingLanguageId: string;
 
   /**
+   * The ID of the block language that may have been used to generate this
+   * block language.
+   */
+  blockLanguageGeneratorId?: string;
+
+  /**
    * Date & time this resource was created
    */
   createdAt?: string;

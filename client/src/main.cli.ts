@@ -13,6 +13,7 @@ import { LanguageDescription } from './app/shared/syntaxtree/language.descriptio
 import { Language } from './app/shared/syntaxtree/language'
 
 import { BlockLanguageDescription } from './app/shared/block/block-language.description'
+import { BlockLanguageGeneratorDescription } from './app/shared/block/generator.description'
 import { prettyPrintBlockLanguage } from './app/shared/block/prettyprint'
 
 import { graphvizSyntaxTree } from './app/shared/syntaxtree/prettyprint'
@@ -23,7 +24,7 @@ import * as regex from './app/shared/syntaxtree/regex/'
 import * as sql from './app/shared/syntaxtree/sql/'
 import * as css from './app/shared/syntaxtree/css/'
 
-import * as blocks_dxml from './app/shared/block/dxml/language-model'
+import * as blocks_dxml from './app/shared/block/dxml/'
 import * as blocks_sql from './app/shared/block/sql/language-model'
 import * as blocks_css from './app/shared/block/css/language-model'
 import * as blocks_regex from './app/shared/block/regex/language-model'
@@ -78,6 +79,11 @@ interface UpdateBlockLanguagesCommand {
   serverBaseUrl: string
 }
 
+interface UpdateBlockLanguageGeneratorsCommand {
+  type: "updateBlockLanguageGenerators"
+  serverBaseUrl: string
+}
+
 /**
  * Prints a list of all available programming languages.
  */
@@ -85,7 +91,7 @@ interface AvailableProgrammingLanguagesCommand {
   type: "available"
 }
 
-type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand | UpdateGrammarsCommand | UpdateBlockLanguagesCommand;
+type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand | UpdateGrammarsCommand | UpdateBlockLanguagesCommand | UpdateBlockLanguageGeneratorsCommand;
 
 function availableLanguages(): LanguageDescription[] {
   return ([
@@ -132,11 +138,18 @@ function findLanguage(id: string) {
  */
 function availableBlockLanguages(): BlockLanguageDescription[] {
   return ([
-    blocks_dxml.LANGUAGE_MODEL,
-    blocks_dxml.DYNAMIC_LANGUAGE_MODEL,
+    blocks_dxml.BLOCK_LANGUAGE_DYNAMIC,
+    blocks_dxml.BLOCK_LANGUAGE_STATIC,
+    blocks_dxml.GENERATED_BLOCK_LANGUAGE_STATIC,
     blocks_sql.BLOCK_LANGUAGE_DESCRIPTION,
     blocks_css.BLOCK_LANGUAGE_DESCRIPTION,
     blocks_regex.BLOCK_LANGUAGE_DESCRIPTION
+  ]);
+}
+
+function availableBlockLanguageGenerators(): BlockLanguageGeneratorDescription[] {
+  return ([
+    blocks_dxml.GENERATOR_STATIC,
   ]);
 }
 
@@ -171,10 +184,11 @@ function executeCommand(command: Command): Promise<string> | any {
       return (l.emitTree(t));
     }
     case "updateGrammars": {
-      // Ensure that every grammar is sent only once
+      // Quick lookup of existing grammar ids
       const grammarIds = new Set(availableGrammars().map(g => g.id));
 
       const requests = availableGrammars()
+        // Ensure that every grammar is sent only once
         .filter(g => {
           const toReturn = grammarIds.has(g.id);
           grammarIds.delete(g.id);
@@ -184,6 +198,17 @@ function executeCommand(command: Command): Promise<string> | any {
           const updateUrl = new URL("/api/grammars/" + g.id, command.serverBaseUrl);
           return (httpRequest<any>(updateUrl, "PUT", g));
         });
+
+      return (Promise.all(requests));
+    }
+    case "updateBlockLanguageGenerators": {
+      const requests = availableBlockLanguageGenerators()
+        .map(gen => {
+          const updateUrl = new URL("/api/block_language_generators/" + gen.id, command.serverBaseUrl);
+          return (httpRequest<any>(updateUrl, "PUT", gen));
+        });
+
+      console.log(`${requests.length} requests`);
 
       return (Promise.all(requests));
     }
@@ -227,8 +252,11 @@ rl.on('line', function(line) {
       } else {
         console.log(JSON.stringify(result));
       }
+    } else {
+      console.error("Unknown operation");
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error(e);
   }
 });

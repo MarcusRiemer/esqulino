@@ -90,7 +90,6 @@ RSpec.describe BlockLanguagesController, type: :request do
       params_update = FactoryBot
                         .attributes_for(:block_language_generator,
                                         name: "Upda",
-                                        target_name: "Upda",
                                         model: {
                                           "editorComponents":
                                                   [
@@ -108,7 +107,6 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       original.reload
       expect(params_update["name"]).to eq original.name
-      expect(params_update["targetName"]).to eq original.target_name
       expect(params_update["model"].to_json).to eq original.model.to_json
     end
 
@@ -118,7 +116,6 @@ RSpec.describe BlockLanguagesController, type: :request do
       params_update = FactoryBot
                         .attributes_for(:block_language_generator,
                                         name: "Updated empty",
-                                        target_name: "Updated empty",
                                         model: Hash.new)
                            .transform_keys { |k| k.to_s.camelize(:lower) }
       params_update_req = params_update.merge(params_update["model"])
@@ -131,7 +128,6 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response.status).to eq(400)
       refreshed = BlockLanguageGenerator.find(original.id)
       expect(original.name).to eq refreshed.name
-      expect(original.target_name).to eq refreshed.target_name
     end
   end
 end

@@ -11,15 +11,11 @@
         },
         "name": {
           "type": "string"
-        },
-        "targetName": {
-          "type": "string"
         }
       },
       "required": [
         "id",
-        "name",
-        "targetName"
+        "name"
       ],
       "type": "object"
     }

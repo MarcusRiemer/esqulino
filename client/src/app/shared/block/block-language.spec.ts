@@ -8,7 +8,7 @@ import { SidebarBlockDescription, VisualBlockDescriptions } from './block.descri
 const langEmptyBlocks: LanguageDescription = {
   id: "emptyBlocks",
   name: "emptyBlocks",
-  generators: [],
+  emitters: [],
   validators: [
     {
       id: "e848d752-c1c7-49f8-9c8d-ba67555b27ab",

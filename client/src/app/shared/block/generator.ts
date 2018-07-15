@@ -2,28 +2,28 @@ import {
   GrammarDescription, NodeConcreteTypeDescription
 } from '../syntaxtree/grammar.description'
 
+
+import {
+  BlockLanguageDocument, BlockLanguageListDescription, BlockLanguageDescription
+} from './block-language.description'
 import { BlockLanguageGeneratorDescription } from './generator.description'
-import { BlockLanguageDescription } from './block-language.description'
 import { EditorBlockDescription } from './block.description'
 
 /**
  * Takes a grammar description and a description how to transform it and
  * generates the corresponding block language.
  */
-export function convert(
+export function convertGrammar(
   d: BlockLanguageGeneratorDescription,
   g: GrammarDescription
-): BlockLanguageDescription {
+): BlockLanguageDocument {
   // Some information is provided 1:1 by the generation instructions,
   // these can be copied over without further ado. And some properties
   // are not filled by the generator on purpose:
   // 
   // * The `id` of the new language
   // * The default programming language
-  const toReturn: BlockLanguageDescription = {
-    id: undefined,
-    defaultProgrammingLanguageId: undefined,
-    name: d.targetName,
+  const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
     editorComponents: d.editorComponents,
     sidebars: []
@@ -50,6 +50,19 @@ export function convert(
       ]
     });
   });
+
+  return (toReturn);
+}
+
+export function generateLanguage(
+  l: BlockLanguageListDescription,
+  d: BlockLanguageGeneratorDescription,
+  g: GrammarDescription
+): BlockLanguageDescription {
+  const generated = convertGrammar(d, g);
+
+  const toReturn = Object.assign({}, l, generated);
+  toReturn.blockLanguageGeneratorId = d.id;
 
   return (toReturn);
 }

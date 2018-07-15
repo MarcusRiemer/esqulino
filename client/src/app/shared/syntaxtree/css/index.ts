@@ -6,6 +6,6 @@ import { GRAMMAR_DESCRIPTION } from './css.grammar'
 export const LANGUAGE_DESCRIPTION: LanguageDescription = {
   id: "css",
   name: "CSS",
-  generators: NODE_CONVERTER,
+  emitters: NODE_CONVERTER,
   validators: [GRAMMAR_DESCRIPTION]
 }

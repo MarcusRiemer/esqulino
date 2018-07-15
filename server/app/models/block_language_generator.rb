@@ -1,7 +1,7 @@
 # Instructions on how to generate block languages from a grammar.
 class BlockLanguageGenerator < ApplicationRecord
   # User defined names
-  validates :name, :target_name, presence: true
+  validates :name, presence: true
 
   # The JSON document needs to be a valid grammar
   validates :model, json_schema: 'BlockLanguageGeneratorDocument'
@@ -11,7 +11,7 @@ class BlockLanguageGenerator < ApplicationRecord
   # to list available block language generators.
   def to_list_api_response
     to_json_api_response
-      .slice("id", "name", "targetName")
+      .slice("id", "name")
   end
 
   # Computes a hash that may be sent back to the client if it requires
@@ -19,5 +19,10 @@ class BlockLanguageGenerator < ApplicationRecord
   # some kind of administrator works on a particular language.
   def to_full_api_response
     to_list_api_response.merge(self.model)
+  end
+
+  # Returns a nicely readable representation of name and id
+  def readable_identification
+    "\"#{name}\" (#{id})"
   end
 end

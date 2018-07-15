@@ -6,6 +6,6 @@ import { GRAMMAR_DESCRIPTION } from './sql.grammar'
 export const LANGUAGE_DESCRIPTION: LanguageDescription = {
   id: "sql",
   name: "SQL",
-  generators: NODE_CONVERTER,
+  emitters: NODE_CONVERTER,
   validators: [GRAMMAR_DESCRIPTION]
 }
