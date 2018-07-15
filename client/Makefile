@@ -82,9 +82,13 @@ gzipped-clean :
 ##################################
 # Dependencies
 ##################################
-install-deps : msg-pre-install-deps
-	npm install
 
+# Uses the `package.json` file to grab all dependencies according to the
+# `package-lock.json`.
+install-deps : msg-pre-install-deps
+	npm ci
+
+# Remove currently cached dependencies.
 clean-deps : msg-pre-clean-deps
 	rm -rf "node_modules"
 
