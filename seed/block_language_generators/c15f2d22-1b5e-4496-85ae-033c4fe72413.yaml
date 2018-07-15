@@ -1,0 +1,19 @@
+--- !ruby/object:BlockLanguageGenerator
+concise_attributes:
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Static XML (Core)
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: c15f2d22-1b5e-4496-85ae-033c4fe72413
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"editorComponents": []}'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-07-15 12:04:10.658336'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-07-15 12:04:10.658336'
+new_record: false
+active_record_yaml_version: 2

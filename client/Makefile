@@ -51,11 +51,14 @@ cli-compile: dist/cli/main.cli.js
 cli-run: dist/cli/main.cli.js
 	@$(NODE_BIN) $^
 
-cli-upload-grammars: cli-compile
+cli-update-grammars: cli-compile
 	echo '{ "type": "updateGrammars", "serverBaseUrl": "http://localhost:9292" }' | $(NODE_BIN) dist/cli/main.cli.js
 
-cli-upload-block-languages: cli-compile
+cli-update-block-languages: cli-compile
 	echo '{ "type": "updateBlockLanguages", "serverBaseUrl": "http://localhost:9292" }' | $(NODE_BIN) dist/cli/main.cli.js
+
+cli-update-block-language-generators: cli-compile
+	echo '{ "type": "updateBlockLanguageGenerators", "serverBaseUrl": "http://localhost:9292" }' | $(NODE_BIN) dist/cli/main.cli.js
 
 ##################################
 # Universal Rendering Server

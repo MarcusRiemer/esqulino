@@ -1,7 +1,7 @@
 import { GrammarDescription } from '../syntaxtree/grammar.description'
 
 import { BlockLanguageGeneratorDescription } from './generator.description'
-import { convert } from './generator'
+import { convertGrammar } from './generator'
 
 describe("BlockLanguage Generator", () => {
   it("Almost empty grammar with almost no generation instructions", () => {
@@ -20,13 +20,11 @@ describe("BlockLanguage Generator", () => {
     const generator: BlockLanguageGeneratorDescription = {
       id: "4d67a9d5-c47a-418a-a16c-5764fb20fab5",
       name: "Generating b1",
-      editorComponents: [],
-      targetName: "b1"
+      editorComponents: []
     };
 
-    const r = convert(generator, grammar);
+    const r = convertGrammar(generator, grammar);
 
-    expect(r.name).toEqual(generator.targetName);
     expect(r.editorBlocks.length).toEqual(1);
   });
 
@@ -55,12 +53,10 @@ describe("BlockLanguage Generator", () => {
       id: "cb90746a-887b-40a9-a53b-8a742b5436f3",
       name: "Generating b1",
       editorComponents: [],
-      targetName: "b1"
     };
 
-    const r = convert(generator, grammar);
+    const r = convertGrammar(generator, grammar);
 
-    expect(r.name).toEqual(generator.targetName);
     expect(r.editorBlocks.length).toEqual(2);
   });
 });

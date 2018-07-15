@@ -6,6 +6,10 @@
       "additionalProperties": false,
       "description": "Superficial information about a block language, usually used when loads of\nblock languages are queried together.",
       "properties": {
+        "blockLanguageGeneratorId": {
+          "description": "The ID of the block language that may have been used to generate this\nblock language.",
+          "type": "string"
+        },
         "createdAt": {
           "description": "Date & time this resource was created",
           "type": "string"

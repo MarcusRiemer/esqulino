@@ -9,5 +9,5 @@ export interface LanguageDescription {
   id: string,
   name: string,
   validators: GrammarDescription[],
-  generators: NodeConverterRegistration[],
+  emitters: NodeConverterRegistration[],
 }

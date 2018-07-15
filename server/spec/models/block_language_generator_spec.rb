@@ -13,13 +13,6 @@ RSpec.describe BlockLanguageGenerator, type: :model do
       res.validate
       expect(res.errors["name"].length).to be 1
     end
-
-    it "rejects a missing target name" do
-      res = FactoryBot.build(:block_language_generator, target_name: nil)
-
-      res.validate
-      expect(res.errors["target_name"].length).to be 1
-    end
   end
 
   context "model" do

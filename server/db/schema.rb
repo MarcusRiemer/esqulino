@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180705194813) do
+ActiveRecord::Schema.define(version: 20180715111225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,6 @@ ActiveRecord::Schema.define(version: 20180705194813) do
 
   create_table "block_language_generators", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
-    t.string "target_name", null: false
     t.jsonb "model", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

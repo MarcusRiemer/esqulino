@@ -6,13 +6,13 @@ import { GRAMMAR_DESCRIPTION } from './dxml.grammar'
 export const LANGUAGE_DESCRIPTION_LIQUID: LanguageDescription = {
   id: "dxml-liquid",
   name: "Dynamic XML (Liquid)",
-  generators: NODE_CONVERTER_LIQUID,
+  emitters: NODE_CONVERTER_LIQUID,
   validators: [GRAMMAR_DESCRIPTION]
 }
 
 export const LANGUAGE_DESCRIPTION_ERUBY: LanguageDescription = {
   id: "dxml-eruby",
   name: "Dynamic XML (eRuby)",
-  generators: NODE_CONVERTER_ERUBY,
+  emitters: NODE_CONVERTER_ERUBY,
   validators: [GRAMMAR_DESCRIPTION]
 }

@@ -16,7 +16,6 @@ export interface BlockLanguageGeneratorDocument {
 export interface BlockLanguageGeneratorListDescription {
   id: string;
   name: string;
-  targetName: string;
 }
 
 /**

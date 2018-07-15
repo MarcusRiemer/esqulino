@@ -17,16 +17,12 @@
         },
         "name": {
           "type": "string"
-        },
-        "targetName": {
-          "type": "string"
         }
       },
       "required": [
         "editorComponents",
         "id",
-        "name",
-        "targetName"
+        "name"
       ],
       "type": "object"
     },

@@ -17,6 +17,9 @@ class BlockLanguage < ApplicationRecord
   # The grammar that this block language may describe
   belongs_to :grammar
 
+  # The generator that may have been used to generate this block language
+  belongs_to :block_language_generator, optional: true
+
   # Computes a hash that may be sent back to the client if it requires
   # full access to the block language. This usually happens when the
   # client is working with the editor.
@@ -29,10 +32,10 @@ class BlockLanguage < ApplicationRecord
   # to list available block languages.
   def to_list_api_response
     to_json_api_response
-      .slice("id", "slug", "name", "defaultProgrammingLanguageId")
+      .slice("id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId")
   end
 
-  # Returns a nicely readable representation of id and name
+  # Returns a nicely readable representation of name, id and slug
   def readable_identification
     "\"#{name}\" (#{slug}, #{id})"
   end
