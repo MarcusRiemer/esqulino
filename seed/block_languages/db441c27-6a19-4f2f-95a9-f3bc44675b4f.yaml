@@ -10,9 +10,6 @@ concise_attributes:
   name: id
   value_before_type_cast: db441c27-6a19-4f2f-95a9-f3bc44675b4f
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
-  name: family
-  value_before_type_cast: sql
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [{"type": "databaseSchema"}, {"type": "fixedBlocks",
     "caption": "SQL", "categories": [{"blocks": [{"defaultNode": {"name": "starOperator",

@@ -10,9 +10,6 @@ concise_attributes:
   name: id
   value_before_type_cast: 84ece7cd-8824-4310-a1db-917c29c904c9
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
-  name: family
-  value_before_type_cast: xml
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [{"type": "fixedBlocks", "caption": "XML (Statisch)",
     "categories": [{"blocks": [{"defaultNode": {"name": "element", "children": {"elements":

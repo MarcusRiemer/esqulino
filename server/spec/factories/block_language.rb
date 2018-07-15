@@ -7,7 +7,6 @@ FactoryBot.define do
              sidebars: [],
              editorComponents: [],
            })
-    family "Spec Family"
     association :default_programming_language, factory: :programming_language
     association :grammar, factory: :grammar
   end

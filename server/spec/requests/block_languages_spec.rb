@@ -51,7 +51,6 @@ RSpec.describe BlockLanguagesController, type: :request do
            :headers => json_headers,
            :params => {
              "name" => "Spec Lang",
-             "family" => "spec",
              "sidebars" => [],
              "editorComponents" => [],
              "editorBlocks" => [],
@@ -73,7 +72,6 @@ RSpec.describe BlockLanguagesController, type: :request do
            :headers => json_headers,
            :params => {
              "name" => "Spec Lang",
-             "family" => "spec",
              "sidebars" => [
                {
                  "type" => "fixedBlocks",
@@ -121,7 +119,6 @@ RSpec.describe BlockLanguagesController, type: :request do
         upda_block_lang = {
           "id" => orig_block_lang.id,
           "name" => "Upda",
-          "family" => "Upda",
           "sidebars" => [
             {
               "type" => "fixedBlocks",
@@ -167,7 +164,6 @@ RSpec.describe BlockLanguagesController, type: :request do
 
         orig_block_lang.reload
         expect(orig_block_lang.name).to eq upda_block_lang['name']
-        expect(orig_block_lang.family).to eq upda_block_lang['family']
 
         # For whatever reason the order of things changes somewhere and RSpec
         # freaks out because the order of things in a hash changes. We do some very
@@ -182,7 +178,6 @@ RSpec.describe BlockLanguagesController, type: :request do
         params_update = FactoryBot
                           .attributes_for(:block_language,
                                           name: "Updated empty",
-                                          family: "Updated empty",
                                           model: Hash.new)
                           .transform_keys { |k| k.to_s.camelize(:lower) }
         params_update_req = params_update.merge(params_update["model"])
@@ -195,7 +190,6 @@ RSpec.describe BlockLanguagesController, type: :request do
         expect(response.status).to eq(400)
         refreshed = BlockLanguage.find(original.id)
         expect(original.name).to eq refreshed.name
-        expect(original.family).to eq refreshed.family
       end
     end
   end
