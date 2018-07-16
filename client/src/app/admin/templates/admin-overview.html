@@ -1,5 +1,5 @@
 <h2>Grammatiken</h2>
-<table class="table">
+<table class="table table-sm">
   <tr>
     <th>Name</th>
     <th>Slug</th>
@@ -15,13 +15,15 @@
 </table>
 
 <h2>Blocksprachen</h2>
-<table class="table">
+<button (click)="refreshBlockLanguages()">Refresh</button>
+<table class="table table-sm">
   <tr>
     <th>Name</th>
     <th>Slug</th>
     <th>ID</th>
     <th>Grammatik</th>
     <th>Generator</th>
+    <th>Aktionen</th>
   </tr>
   <!-- Each row represents a block language -->
   <tr *ngFor="let blockLanguage of availableBlockLanguages | async">
@@ -38,6 +40,13 @@
       <ng-template #generator>
         Generiert
       </ng-template>
+    </td>
+    <td>
+      <button (click)="deleteBlockLanguage(blockLanguage.id)"
+              type="button"
+              class="btn btn-outline-danger btn-sm">
+        <span class="fa fa-trash-o" aria-hidden="true"></span>
+      </button>
     </td>
   </tr>
 </table>
