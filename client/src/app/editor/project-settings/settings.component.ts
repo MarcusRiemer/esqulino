@@ -97,7 +97,7 @@ export class SettingsComponent {
    * @return All block languages that could currently be used.
    */
   get availableBlockLanguages() {
-    return (this._serverData.availableBlockLanguages);
+    return (this._serverData.listBlockLanguages.value);
   }
 
   /**

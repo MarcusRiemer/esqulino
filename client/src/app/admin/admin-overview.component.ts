@@ -9,24 +9,21 @@ import { ServerDataService } from '../shared/server-data.service';
 @Component({
   templateUrl: 'templates/admin-overview.html'
 })
-export class AdminOverviewComponent {
+export class AdminOverviewComponent implements OnInit {
   constructor(private _serverData: ServerDataService) {
   }
 
   ngOnInit() {
-    this.availableBlockLanguages.subscribe(r => console.log("New cached foos"));
+    this.availableGrammars.refresh();
+    this.availableBlockLanguages.refresh();
   }
 
   public get availableBlockLanguages() {
-    return (this._serverData.availableBlockLanguages);
+    return (this._serverData.listBlockLanguages);
   }
 
   public get availableGrammars() {
-    return (this._serverData.availableGrammars);
-  }
-
-  public refreshBlockLanguages() {
-    this._serverData.refreshBlockLanguages();
+    return (this._serverData.listGrammars);
   }
 
   public deleteBlockLanguage(id: string) {

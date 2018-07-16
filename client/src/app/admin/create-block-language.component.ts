@@ -20,8 +20,8 @@ export class CreateBlockLanguageComponent {
   // Synced with form
   public blockLanguage: BlockLanguageDescription = {
     id: undefined,
-    name: "A",
-    slug: "B",
+    name: "",
+    slug: "",
     blockLanguageGeneratorId: "",
     defaultProgrammingLanguageId: "",
     grammarId: "",
@@ -42,7 +42,7 @@ export class CreateBlockLanguageComponent {
    * Grammars that may be used for creation
    */
   public get availableGrammars() {
-    return (this._serverData.availableGrammars);
+    return (this._serverData.listGrammars.value);
   }
 
   /**
