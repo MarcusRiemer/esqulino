@@ -1,11 +1,14 @@
-<h2>Grammatiken</h2>
+<h2>
+  <span *ngIf="(availableGrammars.inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>
+  Grammatiken
+</h2>
 <table class="table table-sm">
   <tr>
     <th>Name</th>
     <th>Slug</th>
     <th>ID</th>
   </tr>
-  <tr *ngFor="let grammar of availableGrammars | async">
+  <tr *ngFor="let grammar of availableGrammars.value | async">
     <td>
       <a [routerLink]="['grammar', grammar.id]">{{ grammar.name }}</a>
     </td>
@@ -14,8 +17,10 @@
   </tr>
 </table>
 
-<h2>Blocksprachen</h2>
-<button (click)="refreshBlockLanguages()">Refresh</button>
+<h2>
+  <span *ngIf="(availableBlockLanguages.inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>
+  Blocksprachen
+</h2>
 <table class="table table-sm">
   <tr>
     <th>Name</th>
@@ -26,7 +31,7 @@
     <th>Aktionen</th>
   </tr>
   <!-- Each row represents a block language -->
-  <tr *ngFor="let blockLanguage of availableBlockLanguages | async">
+  <tr *ngFor="let blockLanguage of availableBlockLanguages.value | async">
     <td>
       <a [routerLink]="['block-language', blockLanguage.id]">{{ blockLanguage.name }}</a>
     </td>

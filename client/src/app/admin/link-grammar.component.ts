@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 
 import { ServerDataService } from '../shared/server-data.service';
 import { GrammarListDescription } from '../shared/syntaxtree/grammar.description';
@@ -30,7 +30,8 @@ export class LinkGrammarComponent {
   /**
    * (Possibly) the description of the grammar
    */
-  readonly description = this._serverData.availableGrammars.pipe(
+  readonly description = this._serverData.listGrammars.value.pipe(
+    filter(grammars => !!grammars),
     map(grammars => grammars.find(g => g.id == this.grammarId))
   );
 }

@@ -1,6 +1,6 @@
 <div [class.query-preview]="queryInProgress">
   <h4 class="card-title">
-    <i *ngIf="queryInProgress" class="fa fa-refresh fa-spin fa-fw"></i>
+    <span *ngIf="queryInProgress" class="fa fa-refresh fa-spin fa-fw"></span>
     Ergebnisvorschau
     <ng-container *ngIf="result">
       <span *ngIf="result.isPartial"
