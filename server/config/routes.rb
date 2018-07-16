@@ -114,7 +114,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :block_languages, only: [:create, :index, :show, :update]
+    resources :block_languages, only: [:create, :index, :show, :update, :destroy]
     resources :block_language_generators, only: [:create, :index, :show, :update]
     resources :grammars, only: [:create, :index, :show, :update]
     
