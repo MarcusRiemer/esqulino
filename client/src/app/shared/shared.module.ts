@@ -8,6 +8,7 @@ import { HttpModule } from '@angular/http';
 import { PortalModule } from '@angular/cdk/portal';
 
 import { AnalyticsService } from './analytics.service';
+import { DefaultValuePipe } from './default-value.pipe'
 import { FlashMessageListComponent } from './flash.component';
 import { FlashService } from './flash.service';
 import { ProjectDescriptionService } from './project.description.service';
@@ -22,6 +23,7 @@ import { VideoService } from './video.service';
  * 
  * - User specific data and authentication
  * - Logging and error handling 
+ * - Helper utilities
  */
 @NgModule({
   imports: [
@@ -33,6 +35,7 @@ import { VideoService } from './video.service';
     PortalModule,
   ],
   declarations: [
+    DefaultValuePipe,
     FlashMessageListComponent,
   ],
   exports: [
@@ -42,6 +45,7 @@ import { VideoService } from './video.service';
     HttpModule,
     PortalModule,
 
+    DefaultValuePipe,
     FlashMessageListComponent,
   ]
 })
