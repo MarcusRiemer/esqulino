@@ -9,13 +9,8 @@ import { ServerDataService } from '../shared/server-data.service';
 @Component({
   templateUrl: 'templates/admin-overview.html'
 })
-export class AdminOverviewComponent implements OnInit {
+export class AdminOverviewComponent {
   constructor(private _serverData: ServerDataService) {
-  }
-
-  ngOnInit() {
-    this.availableGrammars.refresh();
-    this.availableBlockLanguages.refresh();
   }
 
   public get availableBlockLanguages() {
