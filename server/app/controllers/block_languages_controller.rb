@@ -17,7 +17,7 @@ class BlockLanguagesController < ApplicationController
     block_lang.model = model_params
 
     if block_lang.save
-      render :json => { 'id' => block_lang.slug }
+      render :json => block_lang.to_full_api_response
     else
       render :json => { 'errors' => block_lang.errors }, status: 400
     end

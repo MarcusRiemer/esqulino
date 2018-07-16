@@ -54,13 +54,15 @@ RSpec.describe BlockLanguagesController, type: :request do
              "sidebars" => [],
              "editorComponents" => [],
              "editorBlocks" => [],
-             "grammarId" => g.id
+             "grammarId" => g.id,
+             "defaultProgrammingLanguageId" => g.programming_language_id
            }.to_json
 
       expect(response.content_type).to eq "application/json"
 
       json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).to eq []
+      expect(json_data).to validate_against "BlockLanguageDescription"
 
       expect(response.status).to eq(200)
     end
@@ -102,15 +104,17 @@ RSpec.describe BlockLanguagesController, type: :request do
                  "visual" => []
                }
              ],
-             "grammarId" => g.id
+             "grammarId" => g.id,
+             "defaultProgrammingLanguageId" => g.programming_language_id
            }.to_json
 
       expect(response.content_type).to eq "application/json"
 
       json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).to eq []
-
       expect(response.status).to eq(200)
+
+      expect(json_data).to validate_against "BlockLanguageDescription"
     end
 
     describe 'PUT /api/block_languages/:id' do

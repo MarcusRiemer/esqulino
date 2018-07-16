@@ -12,7 +12,7 @@ class BlockLanguage < ApplicationRecord
 
   # The programming language that should be chosen as a default when
   # creating code resources.
-  belongs_to :default_programming_language, :class_name => "ProgrammingLanguage", optional: true
+  belongs_to :default_programming_language, :class_name => "ProgrammingLanguage"
 
   # The grammar that this block language may describe
   belongs_to :grammar
