@@ -36,6 +36,7 @@
               class="custom-select"
               required
               [(ngModel)]="blockLanguage.grammarId">
+        <option value="">-- Grammatik Wählen --</option>
         <option *ngFor="let grammar of availableGrammars | async"
                 [value]="grammar.id">
           {{ grammar.name }}

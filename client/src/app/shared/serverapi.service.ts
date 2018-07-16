@@ -44,7 +44,7 @@ export class ServerApiService {
   /**
    * Retrieves the full description of a specific block language.
    */
-  getBlockLanguageUrl(id: string): string {
+  individualBlockLanguageUrl(id: string): string {
     return (`${this._apiBaseUrl}/block_languages/${id}`);
   }
 

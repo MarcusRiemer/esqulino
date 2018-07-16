@@ -57,7 +57,6 @@ export class CreateCodeResourceComponent {
       .pipe(first())
       .subscribe(res => {
         p.addCodeResource(res);
-        console.log("Hurra!")
       });
   }
 }

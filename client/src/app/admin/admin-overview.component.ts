@@ -13,11 +13,23 @@ export class AdminOverviewComponent {
   constructor(private _serverData: ServerDataService) {
   }
 
+  ngOnInit() {
+    this.availableBlockLanguages.subscribe(r => console.log("New cached foos"));
+  }
+
   public get availableBlockLanguages() {
     return (this._serverData.availableBlockLanguages);
   }
 
   public get availableGrammars() {
     return (this._serverData.availableGrammars);
+  }
+
+  public refreshBlockLanguages() {
+    this._serverData.refreshBlockLanguages();
+  }
+
+  public deleteBlockLanguage(id: string) {
+    this._serverData.deleteBlockLanguage(id);
   }
 }

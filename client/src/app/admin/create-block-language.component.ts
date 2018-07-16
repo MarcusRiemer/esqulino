@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 import { first } from 'rxjs/operators';
 
@@ -19,8 +20,8 @@ export class CreateBlockLanguageComponent {
   // Synced with form
   public blockLanguage: BlockLanguageDescription = {
     id: undefined,
-    name: "",
-    slug: "",
+    name: "A",
+    slug: "B",
     blockLanguageGeneratorId: "",
     defaultProgrammingLanguageId: "",
     grammarId: "",
@@ -33,6 +34,7 @@ export class CreateBlockLanguageComponent {
     private _serverData: ServerDataService,
     private _serverApi: ServerApiService,
     private _http: HttpClient,
+    private _router: Router,
   ) {
   }
 
@@ -56,9 +58,9 @@ export class CreateBlockLanguageComponent {
       const toCreate = Object.assign({}, this.blockLanguage);
       toCreate.defaultProgrammingLanguageId = g.programmingLanguageId;
       this._http
-        .post(this._serverApi.createBlockLanguageUrl(), toCreate)
+        .post<{ id: string }>(this._serverApi.createBlockLanguageUrl(), toCreate)
         .subscribe(res => {
-          console.log(res);
+          this._router.navigateByUrl(`/admin/block-language/${res.id}`);
         }, err => {
           console.log(err);
         });
