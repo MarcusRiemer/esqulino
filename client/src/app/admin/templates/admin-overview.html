@@ -21,6 +21,7 @@
   <span *ngIf="(availableBlockLanguages.inProgress | async)" class="fa fa-refresh fa-spin fa-fw"></span>
   Blocksprachen
 </h2>
+<button (click)="availableBlockLanguages.refresh()">Refresh</button>
 <table class="table table-sm">
   <tr>
     <th>Name</th>
