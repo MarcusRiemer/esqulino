@@ -36,6 +36,18 @@ class BlockLanguagesController < ApplicationController
     end
   end
 
+  # Deletes an existing block language. If the language still has references,
+  # the deletion process fails.
+  def destroy
+    block_lang = BlockLanguage.find(id_params[:id])
+    begin
+      block_lang.destroy!
+      render status: 204
+    rescue ActiveRecord::InvalidForeignKey
+      render json: { 'errors' => ['EXISTING_REFERENCES'] }, :status => 400
+    end
+  end
+
   private
 
   # These parameters may be used to identify a block language

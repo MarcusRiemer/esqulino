@@ -193,4 +193,26 @@ RSpec.describe BlockLanguagesController, type: :request do
       end
     end
   end
+
+  describe 'DELETE /api/block_language/:blockLanguageId' do
+    it 'removes unreferenced language' do
+      b = FactoryBot.create(:block_language)
+
+      delete "/api/block_languages/#{b.id}",
+             :headers => json_headers
+
+      expect(response.status).to eq(204)
+    end
+
+    it 'keeps referenced language' do
+      b = FactoryBot.create(:block_language)
+      FactoryBot.build(:code_resource, block_language: b)
+
+      delete "/api/block_languages/#{b.id}",
+             :headers => json_headers
+
+      expect(response.status).to eq(400)
+    end
+  end
+  
 end
