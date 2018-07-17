@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 import { BlockLanguageDescription } from '../shared/block/block-language.description';
-import { BlockLanguageGeneratorDescription } from '../shared/block/generator.description'
+import {
+  BlockLanguageGeneratorDescription, DEFAULT_GENERATOR
+} from '../shared/block/generator.description'
 import { generateBlockLanguage } from '../shared/block/generator'
 
 import { ServerDataService } from '../shared/server-data.service';
@@ -57,14 +59,8 @@ export class CreateBlockLanguageComponent {
       .getGrammarDescription(this.blockLanguage.grammarId)
       .pipe(first())
       .subscribe(g => {
-        const defaultGenerator: BlockLanguageGeneratorDescription = {
-          editorComponents: [],
-          id: undefined,
-          name: undefined
-        };
-
         // Generate some default blocks
-        const toCreate = generateBlockLanguage(this.blockLanguage, defaultGenerator, g);
+        const toCreate = generateBlockLanguage(this.blockLanguage, DEFAULT_GENERATOR, g);
 
         // Default the default programming language to use the same value as
         // the grammar.
