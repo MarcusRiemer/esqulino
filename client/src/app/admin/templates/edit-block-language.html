@@ -13,31 +13,51 @@
     </div>
   </div>
 
-  <!-- Editable sidebar entries -->
-  <div class="form-group row">
-    <label for="block-language-sidebar"
-           class="col-sm-2 col-form-label">Seitenleisten</label>
-    <div class="col-sm-10">
-      <textarea id="block-language-sidebar"
-                class="form-control"
-                rows="20"
-                [textContent]="blockLanguage.sidebars | json"
-                disabled>
-      </textarea>
+  <!-- Showing model and pretty printed representation side by side -->
+  <div class="row">
+    <div class="col-xl-6">
+      <!-- Pretty printed blockLanguage -->
+      <div class="form-group row">
+        <label for="block-language-pretty"
+               class="col-sm-2 col-form-label">Pretty Printed</label>
+        <div class="col-sm-10">
+          <textarea id="block-language-pretty"
+                    readonly
+                    class="form-control"
+                    rows="20"
+                    [value]="prettyPrintedBlockLanguage | async"></textarea>
+        </div>
+      </div>
     </div>
-  </div>
+    <div class="col-xl-6">
 
-  <!-- Editable block entries -->
-  <div class="form-group row">
-    <label for="block-language-block"
-           class="col-sm-2 col-form-label">Blöcke</label>
-    <div class="col-sm-10">
-      <textarea id="block-language-block"
-                class="form-control"
-                rows="20"
-                [textContent]="blockLanguage.editorBlocks | json"
-                disabled>
-      </textarea>
+      <!-- Editable sidebar entries -->
+      <div class="form-group row">
+        <label for="block-language-sidebar"
+               class="col-sm-2 col-form-label">Seitenleisten</label>
+        <div class="col-sm-10">
+          <textarea id="block-language-sidebar"
+                    class="form-control"
+                    rows="20"
+                    [textContent]="blockLanguage.sidebars | json"
+                    readonly>
+          </textarea>
+        </div>
+      </div>
+
+      <!-- Editable block entries -->
+      <div class="form-group row">
+        <label for="block-language-block"
+               class="col-sm-2 col-form-label">Blöcke</label>
+        <div class="col-sm-10">
+          <textarea id="block-language-block"
+                    class="form-control"
+                    rows="20"
+                    [textContent]="blockLanguage.editorBlocks | json"
+                    readonly>
+          </textarea>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -46,7 +66,4 @@
       <button type="submit" class="btn btn-primary" disabled>Speichern</button>
     </div>
   </div>
-
-  <!-- Pretty printed blockLanguage -->
-  <pre><code [textContent]="prettyPrintedBlockLanguage | async"></code></pre>
 </form>
