@@ -109,7 +109,7 @@ class CachedRequest<T> {
  * Caches descriptions that may be requested from the server.
  */
 class IndividualDescriptionCache<T> {
-  private cache: { [id: string]: Observable<T> } = {};
+  private cache: { [id: string]: CachedRequest<T> } = {};
 
   public constructor(
     private http: HttpClient,
@@ -118,15 +118,25 @@ class IndividualDescriptionCache<T> {
   }
 
   /**
-   * Request an object with a specific ID of type T.
+   * Request an object with a specific ID.
    */
   public getDescription(id: string): Observable<T> {
     if (!this.cache[id]) {
-      this.cache[id] = this.http.get<T>(this.idCallback(id))
-        .pipe(shareReplay(1));
+      this.cache[id] = new CachedRequest<T>(this.http.get<T>(this.idCallback(id)))
+
     }
 
-    return (this.cache[id]);
+    return (this.cache[id].value);
+  }
+
+  /**
+   * Updates the cached item with the given ID.
+   */
+  refreshDescription(id: string) {
+    const toRefresh = this.cache[id];
+    if (toRefresh) {
+      toRefresh.refresh();
+    }
   }
 }
 
@@ -137,43 +147,53 @@ class IndividualDescriptionCache<T> {
 export class ServerDataService {
   public constructor(
     private _serverApi: ServerApiService,
-    private http: HttpClient
+    private _http: HttpClient
   ) {
   }
 
   // Caching individual grammars
   private readonly individualGrammars = new IndividualDescriptionCache<GrammarDescription>(
-    this.http,
+    this._http,
     id => this._serverApi.getGrammarUrl(id)
   );
 
   // Caching individual block languages
   private readonly individualBlockLanguages = new IndividualDescriptionCache<BlockLanguageDescription>(
-    this.http,
+    this._http,
     id => this._serverApi.individualBlockLanguageUrl(id)
   );
 
   // Backing cache for listing of all block languages
   readonly listBlockLanguages = new CachedRequest<BlockLanguageListDescription[]>(
-    this.http.get<BlockLanguageListDescription[]>(this._serverApi.getBlockLanguageListUrl())
+    this._http.get<BlockLanguageListDescription[]>(this._serverApi.getBlockLanguageListUrl())
   );
 
   /**
    * @return All block language generators that are known on the server.
    */
   readonly listBlockLanguageGenerators = new CachedRequest<BlockLanguageGeneratorListDescription[]>(
-    this.http.get<BlockLanguageGeneratorListDescription[]>(this._serverApi.getBlockLanguageGeneratorListUrl())
+    this._http.get<BlockLanguageGeneratorListDescription[]>(this._serverApi.getBlockLanguageGeneratorListUrl())
   );
 
   /**
    * @return All grammars that are known on the server
    */
   readonly listGrammars = new CachedRequest<GrammarListDescription[]>(
-    this.http.get<GrammarListDescription[]>(this._serverApi.getGrammarListUrl())
+    this._http.get<GrammarListDescription[]>(this._serverApi.getGrammarListUrl())
   );
 
+  /**
+   * @return The details of the specified grammar.
+   */
+  getBlockLanguage(id: string): Observable<BlockLanguageDescription> {
+    return (this.individualBlockLanguages.getDescription(id));
+  }
+
+  /**
+   * Deletes the block language with the given ID.
+   */
   deleteBlockLanguage(id: string) {
-    this.http.delete(this._serverApi.individualBlockLanguageUrl(id))
+    this._http.delete(this._serverApi.individualBlockLanguageUrl(id))
       .pipe(first())
       .subscribe(r => {
         console.log(`Deleted BlockLanguage "${id}"`);
@@ -182,16 +202,22 @@ export class ServerDataService {
   }
 
   /**
-   * @return The details of the specified grammar.
+   * Updates the given block language
    */
-  getGrammarDescription(id: string): Observable<GrammarDescription> {
-    return (this.individualGrammars.getDescription(id));
+  updateBlockLanguage(desc: BlockLanguageDescription) {
+    const url = this._serverApi.individualBlockLanguageUrl(desc.id);
+    this._http.put(url, desc)
+      .subscribe(result => {
+        console.log(`Updated BlockLanguage "${desc.id}"`);
+        this.listBlockLanguages.refresh();
+        this.individualBlockLanguages.refreshDescription(desc.id);
+      });
   }
 
   /**
    * @return The details of the specified grammar.
    */
-  getBlockLanguage(id: string): Observable<BlockLanguageDescription> {
-    return (this.individualBlockLanguages.getDescription(id));
+  getGrammarDescription(id: string): Observable<GrammarDescription> {
+    return (this.individualGrammars.getDescription(id));
   }
 }

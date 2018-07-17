@@ -1,5 +1,15 @@
-<form *ngIf="(blockLanguage | async); let blockLanguage">
-  <h1>Block Sprache <q>{{ blockLanguage.name }}</q></h1>
+<form *ngIf="editedSubject">
+  <h1>Block Sprache <q>{{ editedSubject.name }}</q></h1>
+
+  <div class="form-group row">
+    <div class="col-sm-2">
+      <button (click)="save()"
+              class="btn btn-primary btn-block">Speichern</button>
+    </div>
+    <div class="col-sm-2">
+      <button type="submit" class="btn btn-primary btn-block">Neu Generieren</button>
+    </div>
+  </div>
 
   <!-- Editable name of the blockLanguage -->
   <div class="form-group row">
@@ -8,8 +18,8 @@
     <div class="col-sm-10">
       <input id="block-language-name"
              class="form-control"
-             [value]="blockLanguage.name"
-             disabled>
+             name="name"
+             [(ngModel)]="editedSubject.name">
     </div>
   </div>
 
@@ -25,7 +35,7 @@
                     readonly
                     class="form-control"
                     rows="20"
-                    [value]="prettyPrintedBlockLanguage | async"></textarea>
+                    [value]="prettyPrintBlockLanguage(editedSubject)"></textarea>
         </div>
       </div>
     </div>
@@ -39,7 +49,7 @@
           <textarea id="block-language-sidebar"
                     class="form-control"
                     rows="20"
-                    [textContent]="blockLanguage.sidebars | json"
+                    [textContent]="editedSubject.sidebars | json"
                     readonly>
           </textarea>
         </div>
@@ -53,17 +63,11 @@
           <textarea id="block-language-block"
                     class="form-control"
                     rows="20"
-                    [textContent]="blockLanguage.editorBlocks | json"
+                    [textContent]="editedSubject.editorBlocks | json"
                     readonly>
           </textarea>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary" disabled>Speichern</button>
     </div>
   </div>
 </form>
