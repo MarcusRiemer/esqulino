@@ -1,8 +1,9 @@
 grammar "sql" {
   typedef "expression" ::= columnName | binaryExpression | constant | parameter | functionCall
   node "columnName" {
-    prop "columnName" { string }
     prop "refTableName" { string }
+    terminal "."
+    prop "columnName" { string }
   }
   node "constant" {
     prop "value" { string }
@@ -15,6 +16,7 @@ grammar "sql" {
     children "arguments" ::= expression*
   }
   node "starOperator" {
+    terminal "*"
   }
   node "relationalOperator" {
     prop "operator" { string { enum "<" "<=" "=" ">=" ">" "LIKE" "NOT LIKE" } }
@@ -25,10 +27,12 @@ grammar "sql" {
     children "rhs" ::= expression
   }
   node "select" {
+    terminal "SELECT"
     prop? "distinct" { boolean }
     children "columns" ::= expression* & starOperator?
   }
   node "delete" {
+    terminal "SELECT"
   }
   node "tableIntroduction" {
     prop "name" { string }
@@ -38,15 +42,20 @@ grammar "sql" {
     children "table" ::= tableIntroduction
   }
   node "innerJoinOn" {
+    terminal "INNER JOIN"
     children "table" ::= tableIntroduction
+    terminal "ON"
     children "on" ::= expression
   }
   node "innerJoinUsing" {
+    terminal "INNER JOIN"
     children "table" ::= tableIntroduction
+    terminal "USING"
     children "using" ::= expression
   }
   typedef "join" ::= crossJoin | innerJoinUsing | innerJoinOn
   node "from" {
+    terminal "FROM"
     children "tables" ::= tableIntroduction+
     children "joins" ::= join*
   }
@@ -55,12 +64,15 @@ grammar "sql" {
     children "expression" ::= expression
   }
   node "where" {
+    terminal "WHERE"
     children "expressions" ::= sql.expression1 sql.whereAdditional*
   }
   node "groupBy" {
+    terminal "GROUP BY"
     children "expressions" ::= sql.expression*
   }
   node "orderBy" {
+    terminal "ORDER BY"
     children "expressions" ::= sql.expression*
   }
   node "querySelect" {

@@ -1,12 +1,17 @@
 grammar "dxml" {
   node "element" {
+    terminal "<"
     prop "name" { string }
     children "attributes" ::= attribute*
+    terminal ">"
     children "elements" ::= element* & text* & interpolate* & if*
+    terminal "<ende/>"
   }
   node "attribute" {
     prop "name" { string }
+    terminal "=""
     children "value" ::= text* & interpolate*
+    terminal """
   }
   node "text" {
     prop "value" { string }

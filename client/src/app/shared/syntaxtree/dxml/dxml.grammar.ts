@@ -9,6 +9,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          symbol: "<",
+        },
+        {
           name: "name",
           type: "property",
           base: "string"
@@ -21,6 +25,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         },
         {
+          type: "terminal",
+          symbol: ">",
+        },
+        {
           name: "elements",
           type: "allowed",
           nodeTypes: [
@@ -29,7 +37,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             { nodeType: "interpolate", occurs: "*" },
             { nodeType: "if", occurs: "*" },
           ]
-        }
+        },
+        {
+          type: "terminal",
+          symbol: "<ende/>",
+        },
       ]
     },
     "attribute": {
@@ -41,12 +53,20 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         },
         {
+          type: "terminal",
+          symbol: "=\"",
+        },
+        {
           name: "value",
           type: "allowed",
           nodeTypes: [
             { nodeType: "text", occurs: "*" },
             { nodeType: "interpolate", occurs: "*" },
           ]
+        },
+        {
+          type: "terminal",
+          symbol: "\"",
         },
       ]
     },
