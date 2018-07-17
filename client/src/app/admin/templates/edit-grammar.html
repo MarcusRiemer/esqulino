@@ -1,6 +1,5 @@
 <form *ngIf="(grammar | async); let grammar">
   <h2>Grammar <q>{{ grammar.name }}</q></h2>
-
   <!-- Editable name of the grammar -->
   <div class="form-group row">
     <label for="grammar-name"
@@ -13,17 +12,37 @@
     </div>
   </div>
 
-  <!-- Editable model -->
-  <div class="form-group row">
-    <label for="grammar-model"
-           class="col-sm-2 col-form-label">Types</label>
-    <div class="col-sm-10">
-      <textarea id="grammar-model"
-                class="form-control"
-                rows="20"
-                [textContent]="grammar.types | json"
-                disabled>
-      </textarea>
+  <!-- Showing model and pretty printed representation side by side -->
+  <div class="row">
+    <div class="col-xl-6">
+      <!-- Pretty printed grammar (not editable) -->
+      <div class="form-group row">
+        <label for="grammar-pretty"
+               class="col-form-label col-sm-2">Pretty Printed</label>
+        <div class="col-sm-10">
+          <textarea id="grammar-pretty"
+                    readonly
+                    class="form-control"
+                    rows="20"
+                    [value]="prettyPrintedGrammar | async"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Editable model -->
+    <div class="col-xl-6">
+      <div class="form-group row">
+        <label for="grammar-model"
+               class="col-form-label col-sm-2">Types</label>
+        <div class="col-sm-10">
+          <textarea id="grammar-model"
+                    class="form-control"
+                    rows="20"
+                    [textContent]="grammar.types | json"
+                    disabled>
+          </textarea>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -32,7 +51,4 @@
       <button type="submit" class="btn btn-primary" disabled>Speichern</button>
     </div>
   </div>
-
-  <!-- Pretty printed grammar -->
-  <pre><code [textContent]="prettyPrintedGrammar | async"></code></pre>
 </form>
