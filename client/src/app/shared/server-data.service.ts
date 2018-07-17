@@ -2,7 +2,7 @@ import { Injectable, Type } from '@angular/core'
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, BehaviorSubject, Subject, of } from 'rxjs';
-import { shareReplay, first, map, switchMap, tap } from 'rxjs/operators';
+import { shareReplay, first, map, switchMap, tap, scan, delay } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared/serverapi.service';
 
@@ -15,6 +15,7 @@ import {
 import {
   GrammarDescription, GrammarListDescription
 } from '../shared/syntaxtree/grammar.description';
+import { transition } from '@angular/animations';
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
@@ -26,7 +27,7 @@ class CachedRequest<T> {
   // is not of interest, so a single valued type seems appropriate.
   private _trigger = new BehaviorSubject<"trigger">("trigger");
 
-  // Counts the number of requests that are currently in progress.
+  // Signals the number of requests that are currently in progress.
   // This counter must be initialized with 1, even though there is technically
   // no request in progress unless `value` has been accessed at least
   // once. Take a comfortable seat for a lengthy explanation:
@@ -63,7 +64,7 @@ class CachedRequest<T> {
   //    the very first time.
   //
   // For the moment, I went with option 1.
-  private _inProgress = new BehaviorSubject<number>(1);
+  private _inProgress = new BehaviorSubject<1 | -1>(1);
 
   constructor(
     private _httpRequest: Observable<T>
@@ -74,9 +75,9 @@ class CachedRequest<T> {
    * exists and there is no other request in progress.
    */
   readonly value: Observable<T> = this._trigger.pipe(
-    // tap(_ => this._inProgress.next(this._inProgress.value + 1)),
+    // tap(_ => this.changeRequestCount(1)),
     switchMap(_ => this._httpRequest),
-    tap(_ => this._inProgress.next(this._inProgress.value - 1)),
+    tap(_ => this.changeRequestCount(-1)),
     shareReplay(1)
   );
 
@@ -84,6 +85,7 @@ class CachedRequest<T> {
    * Reports whether there is currently a request in progress.
    */
   readonly inProgress = this._inProgress.pipe(
+    scan((count, current) => count + current, 0),
     map(count => count > 0)
   );
 
@@ -91,8 +93,15 @@ class CachedRequest<T> {
    * Unconditionally triggers a new request.
    */
   refresh() {
-    this._inProgress.next(this._inProgress.value + 1);
+    this.changeRequestCount(1);
     this._trigger.next("trigger");
+  }
+
+  /**
+   * Signals that a change to the counter has been made.
+   */
+  private changeRequestCount(change: 1 | -1) {
+    this._inProgress.next(change);
   }
 }
 
@@ -164,11 +173,11 @@ export class ServerDataService {
   );
 
   deleteBlockLanguage(id: string) {
-    let sub = this.http.delete(this._serverApi.individualBlockLanguageUrl(id))
+    this.http.delete(this._serverApi.individualBlockLanguageUrl(id))
+      .pipe(first())
       .subscribe(r => {
         console.log(`Deleted BlockLanguage "${id}"`);
         this.listBlockLanguages.refresh();
-        sub.unsubscribe();
       });
   }
 
