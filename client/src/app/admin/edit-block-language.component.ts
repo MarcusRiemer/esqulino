@@ -6,6 +6,8 @@ import { switchMap, map, tap, first } from 'rxjs/operators';
 import { ServerDataService } from '../shared/server-data.service';
 
 import { BlockLanguageDescription } from '../shared/block/block-language.description';
+import { DEFAULT_GENERATOR } from '../shared/block/generator.description'
+import { generateBlockLanguage } from '../shared/block/generator'
 import { prettyPrintBlockLanguage } from '../shared/block/prettyprint';
 
 @Component({
@@ -20,6 +22,8 @@ export class EditBlockLanguageComponent implements OnInit {
   ) {
   }
 
+  readonly availableGrammars = this._serverData.listGrammars.value;
+
   ngOnInit() {
     this._activatedRoute.paramMap
       .pipe(
@@ -31,12 +35,24 @@ export class EditBlockLanguageComponent implements OnInit {
   }
 
   /**
-   * Compile the block language
+   * Prettyprints the given block language
    */
   prettyPrintBlockLanguage(blockLang: BlockLanguageDescription) {
     return (prettyPrintBlockLanguage(blockLang));
   }
 
+  regenerate() {
+    this._serverData
+      .getGrammarDescription(this.editedSubject.grammarId)
+      .pipe(first())
+      .subscribe(g => {
+        this.editedSubject = generateBlockLanguage(this.editedSubject, DEFAULT_GENERATOR, g);
+      });
+  }
+
+  /**
+   * Saves the current state of the block language
+   */
   save() {
     this._serverData.updateBlockLanguage(this.editedSubject);
   }

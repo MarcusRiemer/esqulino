@@ -22,5 +22,14 @@ export interface BlockLanguageGeneratorListDescription {
  * Describes how a grammar might be converted to a block language
  */
 export interface BlockLanguageGeneratorDescription extends BlockLanguageGeneratorDocument, BlockLanguageGeneratorListDescription {
-
 }
+
+/**
+ * No idea how parameters for generators will work in the future. In the meantime
+ * we will use this handy default object.
+ */
+export const DEFAULT_GENERATOR: BlockLanguageGeneratorDescription = {
+  editorComponents: [],
+  id: undefined,
+  name: undefined
+};
