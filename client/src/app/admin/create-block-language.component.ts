@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 import { BlockLanguageDescription } from '../shared/block/block-language.description';
+import { BlockLanguageGeneratorDescription } from '../shared/block/generator.description'
+import { generateBlockLanguage } from '../shared/block/generator'
 
 import { ServerDataService } from '../shared/server-data.service';
 import { ServerApiService } from '../shared/serverapi.service';
@@ -51,19 +53,31 @@ export class CreateBlockLanguageComponent {
   public submitForm() {
     // We need to give the new language a default programming language
     // and only the grammar knows which language that may be.
-    this._serverData.getGrammarDescription(this.blockLanguage.grammarId).pipe(
-      first()
-    ).subscribe(g => {
-      // Make a copy of the language we are trying to create
-      const toCreate = Object.assign({}, this.blockLanguage);
-      toCreate.defaultProgrammingLanguageId = g.programmingLanguageId;
-      this._http
-        .post<{ id: string }>(this._serverApi.createBlockLanguageUrl(), toCreate)
-        .subscribe(res => {
-          this._router.navigateByUrl(`/admin/block-language/${res.id}`);
-        }, err => {
-          console.log(err);
-        });
-    });
+    this._serverData
+      .getGrammarDescription(this.blockLanguage.grammarId)
+      .pipe(first())
+      .subscribe(g => {
+        const defaultGenerator: BlockLanguageGeneratorDescription = {
+          editorComponents: [],
+          id: undefined,
+          name: undefined
+        };
+
+        // Generate some default blocks
+        const toCreate = generateBlockLanguage(this.blockLanguage, defaultGenerator, g);
+
+        // Default the default programming language to use the same value as
+        // the grammar.
+        toCreate.defaultProgrammingLanguageId = g.programmingLanguageId;
+
+        this._http
+          .post<{ id: string }>(this._serverApi.createBlockLanguageUrl(), toCreate)
+          .subscribe(res => {
+            this._serverData.listBlockLanguages.refresh();
+            this._router.navigateByUrl(`/admin/block-language/${res.id}`);
+          }, err => {
+            console.log(err);
+          });
+      });
   }
 }
