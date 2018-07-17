@@ -1,5 +1,7 @@
 import {
-  GrammarDescription, NodeConcreteTypeDescription
+  GrammarDescription, NodeConcreteTypeDescription, NodeAttributeDescription,
+  NodeTerminalSymbolDescription, NodePropertyTypeDescription,
+  NodeChildrenGroupDescription
 } from '../syntaxtree/grammar.description'
 
 
@@ -7,9 +9,69 @@ import {
   BlockLanguageDocument, BlockLanguageListDescription, BlockLanguageDescription
 } from './block-language.description'
 import {
+  VisualBlockDescriptions
+} from './block.description'
+import {
   BlockLanguageGeneratorDescription, BlockLanguageGeneratorDocument
 } from './generator.description'
 import { EditorBlockDescription } from './block.description'
+
+/**
+ * Maps terminal symbols to visual blocks
+ */
+function mapTerminal(attr: NodeTerminalSymbolDescription): VisualBlockDescriptions.EditorConstant {
+  return ({
+    blockType: "constant",
+    text: attr.symbol
+  });
+}
+
+function mapProperty(attr: NodePropertyTypeDescription): VisualBlockDescriptions.EditorInput {
+  return ({
+    blockType: "input",
+    property: attr.name
+  });
+};
+
+function mapChildren(attr: NodeChildrenGroupDescription): VisualBlockDescriptions.EditorIterator {
+  return ({
+    blockType: "iterator",
+    childGroupName: attr.name,
+    direction: "horizontal"
+  });
+}
+
+/**
+ * Calculates a bare bones, but hopefully useful, series of visual blocks for the
+ * given attributes.
+ */
+function mapAttributes(attributes: NodeAttributeDescription[]): VisualBlockDescriptions.ConcreteBlock[] {
+  return (
+    attributes
+      .map(attr => {
+        switch (attr.type) {
+          case "allowed":
+          case "sequence":
+            return mapChildren(attr);
+          case "terminal":
+            return mapTerminal(attr);
+          case "property":
+            return mapProperty(attr);
+          default:
+            return (undefined);
+        }
+      })
+      .filter(visual => !!visual)
+  );
+}
+
+function mapType(typeDesc: NodeConcreteTypeDescription): VisualBlockDescriptions.EditorBlock {
+  return ({
+    blockType: "block",
+    direction: "horizontal",
+    children: mapAttributes(typeDesc.attributes)
+  });
+}
 
 /**
  * Takes a grammar description and a description how to transform it and
@@ -44,12 +106,7 @@ export function convertGrammar(
         languageName: g.name,
         typeName: tName
       },
-      visual: [
-        {
-          blockType: "constant",
-          text: tName
-        }
-      ]
+      visual: [mapType(tDesc)]
     });
   });
 

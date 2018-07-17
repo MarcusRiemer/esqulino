@@ -20,14 +20,18 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "property",
-          name: "columnName",
+          name: "refTableName",
           base: "string"
         },
         {
+          type: "terminal",
+          symbol: "."
+        },
+        {
           type: "property",
-          name: "refTableName",
+          name: "columnName",
           base: "string"
-        }
+        },
       ]
     },
     "constant": {
@@ -72,7 +76,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
     },
     "starOperator": {
       type: "concrete",
-      attributes: []
+      attributes: [
+        {
+          type: "terminal",
+          symbol: "*"
+        }
+      ]
     },
     "relationalOperator": {
       type: "concrete",
@@ -119,6 +128,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          symbol: "SELECT"
+        },
+        {
           type: "property",
           name: "distinct",
           base: "boolean",
@@ -142,7 +155,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
     },
     "delete": {
       type: "concrete",
-      attributes: []
+      attributes: [
+        {
+          type: "terminal",
+          symbol: "SELECT"
+        },
+      ]
     },
     "tableIntroduction": {
       type: "concrete",
@@ -174,9 +192,17 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          symbol: "INNER JOIN"
+        },
+        {
           type: "sequence",
           name: "table",
           nodeTypes: ["tableIntroduction"]
+        },
+        {
+          type: "terminal",
+          symbol: "ON"
         },
         {
           type: "sequence",
@@ -189,9 +215,17 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          symbol: "INNER JOIN"
+        },
+        {
           type: "sequence",
           name: "table",
           nodeTypes: ["tableIntroduction"]
+        },
+        {
+          type: "terminal",
+          symbol: "USING"
         },
         {
           type: "sequence",
@@ -207,6 +241,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
     "from": {
       type: "concrete",
       attributes: [
+        {
+          type: "terminal",
+          symbol: "FROM"
+        },
         {
           type: "sequence",
           name: "tables",
@@ -251,6 +289,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          symbol: "WHERE"
+        },
+        {
           type: "sequence",
           name: "expressions",
           nodeTypes: [
@@ -276,6 +318,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          symbol: "GROUP BY"
+        },
+        {
           type: "allowed",
           name: "expressions",
           nodeTypes: [
@@ -293,6 +339,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
     "orderBy": {
       type: "concrete",
       attributes: [
+        {
+          type: "terminal",
+          symbol: "ORDER BY"
+        },
         {
           type: "allowed",
           name: "expressions",
