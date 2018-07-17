@@ -1,0 +1,61 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Simple SQL
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: sql-level-1
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"sidebars": [], "editorBlocks": [{"visual": [{"text":
+    "from", "blockType": "constant"}], "describedType": {"typeName": "from", "languageName":
+    "sql"}}, {"visual": [{"text": "where", "blockType": "constant"}], "describedType":
+    {"typeName": "where", "languageName": "sql"}}, {"visual": [{"text": "delete",
+    "blockType": "constant"}], "describedType": {"typeName": "delete", "languageName":
+    "sql"}}, {"visual": [{"text": "select", "blockType": "constant"}], "describedType":
+    {"typeName": "select", "languageName": "sql"}}, {"visual": [{"text": "groupBy",
+    "blockType": "constant"}], "describedType": {"typeName": "groupBy", "languageName":
+    "sql"}}, {"visual": [{"text": "orderBy", "blockType": "constant"}], "describedType":
+    {"typeName": "orderBy", "languageName": "sql"}}, {"visual": [{"text": "constant",
+    "blockType": "constant"}], "describedType": {"typeName": "constant", "languageName":
+    "sql"}}, {"visual": [{"text": "crossJoin", "blockType": "constant"}], "describedType":
+    {"typeName": "crossJoin", "languageName": "sql"}}, {"visual": [{"text": "parameter",
+    "blockType": "constant"}], "describedType": {"typeName": "parameter", "languageName":
+    "sql"}}, {"visual": [{"text": "columnName", "blockType": "constant"}], "describedType":
+    {"typeName": "columnName", "languageName": "sql"}}, {"visual": [{"text": "innerJoinOn",
+    "blockType": "constant"}], "describedType": {"typeName": "innerJoinOn", "languageName":
+    "sql"}}, {"visual": [{"text": "queryDelete", "blockType": "constant"}], "describedType":
+    {"typeName": "queryDelete", "languageName": "sql"}}, {"visual": [{"text": "querySelect",
+    "blockType": "constant"}], "describedType": {"typeName": "querySelect", "languageName":
+    "sql"}}, {"visual": [{"text": "functionCall", "blockType": "constant"}], "describedType":
+    {"typeName": "functionCall", "languageName": "sql"}}, {"visual": [{"text": "starOperator",
+    "blockType": "constant"}], "describedType": {"typeName": "starOperator", "languageName":
+    "sql"}}, {"visual": [{"text": "innerJoinUsing", "blockType": "constant"}], "describedType":
+    {"typeName": "innerJoinUsing", "languageName": "sql"}}, {"visual": [{"text": "whereAdditional",
+    "blockType": "constant"}], "describedType": {"typeName": "whereAdditional", "languageName":
+    "sql"}}, {"visual": [{"text": "binaryExpression", "blockType": "constant"}], "describedType":
+    {"typeName": "binaryExpression", "languageName": "sql"}}, {"visual": [{"text":
+    "tableIntroduction", "blockType": "constant"}], "describedType": {"typeName":
+    "tableIntroduction", "languageName": "sql"}}, {"visual": [{"text": "relationalOperator",
+    "blockType": "constant"}], "describedType": {"typeName": "relationalOperator",
+    "languageName": "sql"}}], "editorComponents": []}'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-07-17 11:08:14.302566'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-07-17 11:08:14.302566'
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: sql
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: 7ec93f8a-5a01-4d4d-90b4-27c3f0ae4700
+- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  name: block_language_generator_id
+new_record: false
+active_record_yaml_version: 2
