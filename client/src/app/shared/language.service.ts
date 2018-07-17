@@ -30,19 +30,6 @@ export class LanguageService {
   }
 
   /**
-   * @param slug_or_id The slug of the language model
-   * @return The specific LanguageModel that was asked for.
-   */
-  getLocalBlockLanguage(slug_or_id: string) {
-    const toReturn = AvailableLanguageModels.find(l => l.id === slug_or_id || l.slug === slug_or_id);
-    if (!toReturn) {
-      throw new Error(`Unknown local block language "${slug_or_id}"`);
-    }
-
-    return (toReturn);
-  }
-
-  /**
    * @param id The id of the language
    * @return The specific Language that was asked for.
    */

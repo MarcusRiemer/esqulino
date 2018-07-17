@@ -121,6 +121,6 @@ export class SettingsComponent {
    * Retrieves the name of the given block language
    */
   resolveBlockLanguageName(blockLanguageId: string) {
-    return (this._languageService.getLocalBlockLanguage(blockLanguageId).name);
+    return (this._serverData.getBlockLanguage(blockLanguageId));
   }
 }
