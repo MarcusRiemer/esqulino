@@ -25,7 +25,7 @@ gem 'json_schemer'
 gem 'ruby-filemagic'
 
 # Used to resize images on the fly
-gem 'rmagick'
+gem 'mini_magick'
 
 ############################
 # Rails dependencies
