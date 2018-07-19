@@ -1,6 +1,6 @@
 {
   "$ref": "#/definitions/BlockLanguageDescription",
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
     "BlockLanguageDescription": {
       "additionalProperties": false,
@@ -195,6 +195,13 @@
       ],
       "type": "object"
     },
+    "Orientation": {
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "type": "string"
+    },
     "QualifiedTypeName": {
       "additionalProperties": false,
       "description": "Used when refererring to types that are defined other languages.",
@@ -373,11 +380,7 @@
           "type": "array"
         },
         "direction": {
-          "enum": [
-            "horizontal",
-            "vertical"
-          ],
-          "type": "string"
+          "$ref": "#/definitions/Orientation"
         },
         "dropAction": {
           "enum": [
@@ -442,11 +445,7 @@
           "type": "array"
         },
         "direction": {
-          "enum": [
-            "horizontal",
-            "vertical"
-          ],
-          "type": "string"
+          "$ref": "#/definitions/Orientation"
         },
         "dropTarget": {
           "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
@@ -530,11 +529,7 @@
           "type": "string"
         },
         "direction": {
-          "enum": [
-            "horizontal",
-            "vertical"
-          ],
-          "type": "string"
+          "$ref": "#/definitions/Orientation"
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"

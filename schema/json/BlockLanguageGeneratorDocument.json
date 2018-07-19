@@ -1,6 +1,6 @@
 {
   "$ref": "#/definitions/BlockLanguageGeneratorDocument",
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
     "BlockLanguageGeneratorDocument": {
       "additionalProperties": false,
@@ -11,6 +11,9 @@
             "$ref": "#/definitions/EditorComponentDescription"
           },
           "type": "array"
+        },
+        "typeInstructions": {
+          "$ref": "#/definitions/TypeInstructions"
         }
       },
       "required": [
@@ -21,6 +24,13 @@
     "EditorComponentDescription": {
       "$ref": "#/definitions/QueryPreviewComponentDescription",
       "description": "Any component that could be displayed in the actual editor view."
+    },
+    "Orientation": {
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "type": "string"
     },
     "QueryPreviewComponentDescription": {
       "additionalProperties": false,
@@ -35,6 +45,29 @@
       "required": [
         "componentType"
       ],
+      "type": "object"
+    },
+    "TypeInstructions": {
+      "additionalProperties": {
+        "additionalProperties": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "description": "Make all properties in T optional",
+            "properties": {
+              "between": {
+                "type": "string"
+              },
+              "orientation": {
+                "$ref": "#/definitions/Orientation"
+              }
+            },
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "type": "object"
+      },
+      "description": "Supplementary generation instructions for a specific type.",
       "type": "object"
     }
   }

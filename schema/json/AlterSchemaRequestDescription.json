@@ -1,6 +1,6 @@
 {
   "$ref": "#/definitions/AlterSchemaRequestDescription",
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
     "AddColumnDescription": {
       "additionalProperties": false,
