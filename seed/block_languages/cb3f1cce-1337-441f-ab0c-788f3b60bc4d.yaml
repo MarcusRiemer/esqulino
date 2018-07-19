@@ -1,15 +1,15 @@
 --- !ruby/object:BlockLanguage
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Generated SQL (Level 1)
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: sql-level-1
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [], "editorBlocks": [{"visual": [{"children":
     [{"text": "FROM", "blockType": "constant"}, {"blockType": "iterator", "direction":
@@ -84,19 +84,19 @@ concise_attributes:
     "input"}], "blockType": "block", "direction": "horizontal"}], "describedType":
     {"typeName": "relationalOperator", "languageName": "sql"}}], "editorComponents":
     []}'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-17 11:08:14.302566'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2018-07-17 14:32:22.070229'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: grammar_id
   value_before_type_cast: 7ec93f8a-5a01-4d4d-90b4-27c3f0ae4700
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_generator_id
 new_record: false
 active_record_yaml_version: 2

@@ -1,28 +1,36 @@
 --- !ruby/object:ProjectSource
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromUser
   name: project_id
   value_before_type_cast: '0583e928-3c8a-4f5a-9587-9fd69fe55534'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: '0583e928-3c8a-4f5a-9587-9fd69fe55534'
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: '0583e928-3c8a-4f5a-9587-9fd69fe55534'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: url
   value_before_type_cast: https://www.pokewiki.de/
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 4
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: title
   value_before_type_cast: PokéWiki
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: display
   value_before_type_cast: Die Daten für den Pokédex von den Mitarbeitern von pokewiki.de
     zusammengetragen und dann automatisiert in dieses Projekt importiert.
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: read_only
   value_before_type_cast: true
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-26 11:15:42.295647'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2018-02-26 11:15:42.295647'
 new_record: false

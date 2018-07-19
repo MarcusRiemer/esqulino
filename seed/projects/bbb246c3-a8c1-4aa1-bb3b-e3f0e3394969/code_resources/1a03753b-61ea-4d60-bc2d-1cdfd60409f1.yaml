@@ -1,15 +1,23 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromUser
   name: project_id
   value_before_type_cast: bbb246c3-a8c1-4aa1-bb3b-e3f0e3394969
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: bbb246c3-a8c1-4aa1-bb3b-e3f0e3394969
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: bbb246c3-a8c1-4aa1-bb3b-e3f0e3394969
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Style 1
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 1a03753b-61ea-4d60-bc2d-1cdfd60409f1
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "document", "children": {"rules": [{"name": "rule",
     "children": {"selectors": [{"name": "selectorType", "language": "css", "properties":
@@ -17,19 +25,19 @@ concise_attributes:
     [{"name": "propertyName", "language": "css", "properties": {"name": "backgroundColor"}}],
     "value": [{"name": "exprColor", "language": "css", "properties": {"value": "red"}}]},
     "language": "css"}]}, "language": "css"}]}, "language": "css"}'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-25 19:32:06.001426'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2018-03-02 18:15:37.503067'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: af3a4b65-738c-4563-9632-2c65d3da6762
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: css
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
     h1 {
