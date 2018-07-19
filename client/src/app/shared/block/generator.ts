@@ -12,12 +12,73 @@ import {
   VisualBlockDescriptions
 } from './block.description'
 import {
-  BlockLanguageGeneratorDescription, BlockLanguageGeneratorDocument
+  BlockLanguageGeneratorDescription, BlockLanguageGeneratorDocument,
+  DefaultInstructions, Instructions, TypeInstructions, LayoutInstructions, BlockInstructions
 } from './generator.description'
 import { EditorBlockDescription } from './block.description'
 
 /**
- * Maps terminal symbols to visual blocks
+ * A safe way to access generation instructions. Silently returns empty
+ * instructions for all paths without specific instructions.
+ */
+class SafeGeneratorInstructions {
+  constructor(
+    private _all: TypeInstructions
+  ) { }
+
+  scope(g?: string, t?: string, s?: string): Partial<Instructions> {
+    let gi = g && this._all[g];
+    if (!gi) {
+      return ({});
+    }
+
+    let ti = t && gi[t];
+    if (!ti) {
+      return ({});
+    }
+
+    let si = s && ti[s];
+    if (!si) {
+      return ({});
+    }
+
+    return si;
+  }
+
+  type(grammarName: string, typeName: string) {
+    return (new SafeTypeInstructions(this, grammarName, typeName));
+  }
+}
+
+/**
+ * A safe way to access generation instructions that are part of a specific type.
+ */
+class SafeTypeInstructions {
+  constructor(
+    private _all: SafeGeneratorInstructions,
+    private _grammarName: string,
+    private _typeName: string,
+  ) { }
+
+  scope(s?: string): Partial<Instructions> {
+    return (this._all.scope(this._grammarName, this._typeName, s));
+  }
+
+  scopeLayout(s: string): LayoutInstructions {
+    const current = this.scope(s);
+    return (Object.assign({}, DefaultInstructions.layoutInstructions, current));
+  }
+
+  scopeBlock(): BlockInstructions {
+    const current = this.scope("this");
+    return (Object.assign({}, DefaultInstructions.blockInstructions, current));
+  }
+}
+
+
+/**
+ * Maps terminal symbols to constant blocks. The exact value of the terminal
+ * symbol will appear as the text.
  */
 function mapTerminal(attr: NodeTerminalSymbolDescription): VisualBlockDescriptions.EditorConstant {
   return ({
@@ -26,6 +87,9 @@ function mapTerminal(attr: NodeTerminalSymbolDescription): VisualBlockDescriptio
   });
 }
 
+/**
+ * Maps properties to editable input fields.
+ */
 function mapProperty(attr: NodePropertyTypeDescription): VisualBlockDescriptions.EditorInput {
   return ({
     blockType: "input",
@@ -33,26 +97,42 @@ function mapProperty(attr: NodePropertyTypeDescription): VisualBlockDescriptions
   });
 };
 
-function mapChildren(attr: NodeChildrenGroupDescription): VisualBlockDescriptions.EditorIterator {
+/**
+ *
+ */
+function mapChildren(
+  attr: NodeChildrenGroupDescription,
+  instructions: LayoutInstructions
+): VisualBlockDescriptions.EditorIterator {
+  let between = [];
+  if (typeof instructions.between === "string") {
+    between = [mapTerminal({ type: "terminal", symbol: instructions.between })];
+  }
+
   return ({
     blockType: "iterator",
     childGroupName: attr.name,
-    direction: "horizontal"
+    direction: instructions.orientation,
+    between: between
   });
 }
 
 /**
- * Calculates a bare bones, but hopefully useful, series of visual blocks for the
- * given attributes.
+ * Applies the given generation instructions to each attribute
+ * of the given type.
  */
-function mapAttributes(attributes: NodeAttributeDescription[]): VisualBlockDescriptions.ConcreteBlock[] {
+function mapAttributes(
+  typeDesc: NodeConcreteTypeDescription,
+  instructions: SafeTypeInstructions,
+): VisualBlockDescriptions.ConcreteBlock[] {
   return (
-    attributes
+    typeDesc.attributes
       .map(attr => {
         switch (attr.type) {
           case "allowed":
           case "sequence":
-            return mapChildren(attr);
+          case "choice":
+            return mapChildren(attr, instructions.scopeLayout(attr.name));
           case "terminal":
             return mapTerminal(attr);
           case "property":
@@ -65,11 +145,18 @@ function mapAttributes(attributes: NodeAttributeDescription[]): VisualBlockDescr
   );
 }
 
-function mapType(typeDesc: NodeConcreteTypeDescription): VisualBlockDescriptions.EditorBlock {
+/**
+ * Concrete types are mapped to draggable blocks.
+ */
+function mapType(
+  typeDesc: NodeConcreteTypeDescription,
+  instructions: SafeTypeInstructions,
+): VisualBlockDescriptions.EditorBlock {
+  // Create a 
   return ({
     blockType: "block",
-    direction: "horizontal",
-    children: mapAttributes(typeDesc.attributes)
+    direction: instructions.scopeBlock().orientation,
+    children: mapAttributes(typeDesc, instructions)
   });
 }
 
@@ -99,6 +186,9 @@ export function convertGrammar(
   const concreteTypes = Object.entries(g.types)
     .filter(([k, v]) => v.type !== "oneOf") as [string, NodeConcreteTypeDescription][];
 
+  // Wrap generation instructions in something that is safe to use
+  const instructions = new SafeGeneratorInstructions(d.typeInstructions);
+
   // Dummy mode on: Lets create a single constant block for every type
   toReturn.editorBlocks = concreteTypes.map(([tName, tDesc]): EditorBlockDescription => {
     return ({
@@ -106,7 +196,7 @@ export function convertGrammar(
         languageName: g.name,
         typeName: tName
       },
-      visual: [mapType(tDesc)]
+      visual: [mapType(tDesc, instructions.type(g.name, tName))]
     });
   });
 
