@@ -901,26 +901,26 @@ class TypeReference {
  */
 export class GrammarValidator {
   private _validator: Validator;
-  private _languageName: string;
+  private _grammarName: string;
   private _registeredTypes: { [name: string]: NodeType } = {};
   private _rootType: TypeReference;
 
   constructor(validator: Validator, desc: Desc.GrammarDescription) {
     this._validator = validator;
-    this._languageName = desc.name;
+    this._grammarName = desc.name;
 
     Object.entries(desc.types).forEach(([typeName, typeDesc]) => {
       this.registerTypeValidator(typeName, typeDesc)
     });
 
-    this._rootType = new TypeReference(validator, desc.root, this._languageName);
+    this._rootType = new TypeReference(validator, desc.root, this._grammarName);
   }
 
   /**
-   * @return The name of the language this grammar defines.
+   * @return The technical name of this grammar
    */
-  get languageName() {
-    return (this._languageName);
+  get grammarName() {
+    return (this._grammarName);
   }
 
   /**
@@ -957,7 +957,7 @@ export class GrammarValidator {
    */
   getType(typename: string) {
     if (!this.isKnownType(typename)) {
-      throw new Error(`Language "${this._languageName}" does not have type "${typename}"`);
+      throw new Error(`Language "${this._grammarName}" does not have type "${typename}"`);
     } else {
       return (this._registeredTypes[typename]);
     }
@@ -968,13 +968,13 @@ export class GrammarValidator {
    */
   private registerTypeValidator(nodeName: string, desc: Desc.NodeTypeDescription) {
     if (this.isKnownType(nodeName)) {
-      throw new Error(`Attempted to register node "${nodeName}" twice for "${this._languageName}. Previous definition: ${JSON.stringify(this._registeredTypes[nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
+      throw new Error(`Attempted to register node "${nodeName}" twice for "${this._grammarName}. Previous definition: ${JSON.stringify(this._registeredTypes[nodeName])}, Conflicting Definition: ${JSON.stringify(desc)}`);
     }
 
     if (Desc.isNodeConcreteTypeDescription(desc)) {
-      this._registeredTypes[nodeName] = new NodeConcreteType(this._validator, desc, this._languageName, nodeName);
+      this._registeredTypes[nodeName] = new NodeConcreteType(this._validator, desc, this._grammarName, nodeName);
     } else if (Desc.isNodeOneOfTypeDescription(desc)) {
-      this._registeredTypes[nodeName] = new NodeOneOfType(this._validator, desc, this._languageName, nodeName);
+      this._registeredTypes[nodeName] = new NodeOneOfType(this._validator, desc, this._grammarName, nodeName);
     }
   }
 }

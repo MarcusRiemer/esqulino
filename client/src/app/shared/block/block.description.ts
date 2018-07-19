@@ -1,5 +1,7 @@
 import { QualifiedTypeName, NodeDescription } from '../syntaxtree/syntaxtree.description'
 
+export type Orientation = "horizontal" | "vertical";
+
 /**
  * Groups together all available options to describe a block in the
  * drag & drop UI.
@@ -57,7 +59,7 @@ export namespace VisualBlockDescriptions {
    * involving actual design.
    */
   export interface EditorLayout extends EditorBlockBase {
-    direction: "horizontal" | "vertical";
+    direction: Orientation;
     wrapChildren?: boolean;
   }
 

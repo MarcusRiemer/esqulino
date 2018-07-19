@@ -20,23 +20,20 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "element", "children": {"elements": [{"name":
-    "interpolate", "children": {"expr": [{"name": "expr", "children": {"concreteExpr":
-    [{"name": "exprVar", "language": "dxml", "properties": {"name": "var_a"}}]}, "language":
-    "dxml"}]}, "language": "dxml"}, {"name": "text", "language": "dxml", "properties":
-    {"value": "before ..."}}, {"name": "element", "language": "dxml", "properties":
-    {"name": "child"}}, {"name": "text", "language": "dxml", "properties": {"value":
-    "after ..."}}], "attributes": [{"name": "attribute", "children": {"value": []},
-    "language": "dxml", "properties": {"name": "att1"}}]}, "language": "dxml", "properties":
-    {"name": "parent"}}'
+    "text", "language": "dxml", "properties": {"value": "before ..."}}, {"name": "element",
+    "language": "dxml", "properties": {"name": "child"}}, {"name": "text", "language":
+    "dxml", "properties": {"value": "after ..."}}], "attributes": [{"name": "attribute",
+    "children": {"value": []}, "language": "dxml", "properties": {"name": "att1"}}]},
+    "language": "dxml", "properties": {"name": "parent"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-20 20:48:21.746755'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-02-25 21:24:14.761951'
+  value_before_type_cast: '2018-07-19 16:56:04.715505'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
-  value_before_type_cast: c851d3be-3129-4fb3-ae37-99f40bce3dd0
+  value_before_type_cast: d549570a-7ce3-4f72-86a2-37a78887f8b5
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: dxml-eruby
@@ -44,7 +41,7 @@ concise_attributes:
   name: compiled
   value_before_type_cast: |-
     <parent att1="">
-    <%= var_a %>before ...
+    before ...
     <child></child>after ...
     </parent>
 new_record: false

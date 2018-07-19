@@ -12,43 +12,49 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [], "editorBlocks": [{"visual": [{"children":
-    [{"blockType": "iterator", "direction": "horizontal", "childGroupName": "condition"},
-    {"blockType": "iterator", "direction": "horizontal", "childGroupName": "body"}],
+    [{"between": [{"text": ",", "blockType": "constant"}], "blockType": "iterator",
+    "direction": "horizontal", "childGroupName": "condition"}, {"between": [{"text":
+    ",", "blockType": "constant"}], "blockType": "iterator", "direction": "horizontal",
+    "childGroupName": "body"}], "blockType": "block", "direction": "horizontal"}],
+    "describedType": {"typeName": "if", "languageName": "dxml"}}, {"visual": [{"children":
+    [{"property": "value", "blockType": "input"}], "blockType": "block", "direction":
+    "horizontal"}], "describedType": {"typeName": "text", "languageName": "dxml"}},
+    {"visual": [{"children": [{"text": "<", "blockType": "constant"}, {"property":
+    "name", "blockType": "input"}, {"between": [{"text": ",", "blockType": "constant"}],
+    "blockType": "iterator", "direction": "horizontal", "childGroupName": "attributes"},
+    {"text": ">", "blockType": "constant"}, {"between": [{"text": ",", "blockType":
+    "constant"}], "blockType": "iterator", "direction": "horizontal", "childGroupName":
+    "elements"}, {"text": "<ende/>", "blockType": "constant"}], "blockType": "block",
+    "direction": "horizontal"}], "describedType": {"typeName": "element", "languageName":
+    "dxml"}}, {"visual": [{"children": [{"property": "name", "blockType": "input"}],
     "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
-    "if", "languageName": "dxml"}}, {"visual": [{"children": [{"property": "value",
-    "blockType": "input"}], "blockType": "block", "direction": "horizontal"}], "describedType":
-    {"typeName": "text", "languageName": "dxml"}}, {"visual": [{"children": [{"text":
-    "<", "blockType": "constant"}, {"property": "name", "blockType": "input"}, {"blockType":
-    "iterator", "direction": "horizontal", "childGroupName": "attributes"}, {"text":
-    ">", "blockType": "constant"}, {"blockType": "iterator", "direction": "horizontal",
-    "childGroupName": "elements"}, {"text": "<ende/>", "blockType": "constant"}],
-    "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
-    "element", "languageName": "dxml"}}, {"visual": [{"children": [{"property": "name",
-    "blockType": "input"}], "blockType": "block", "direction": "horizontal"}], "describedType":
-    {"typeName": "exprVar", "languageName": "dxml"}}, {"visual": [{"children": [{"property":
-    "name", "blockType": "input"}, {"text": "=\"", "blockType": "constant"}, {"blockType":
-    "iterator", "direction": "horizontal", "childGroupName": "value"}, {"text": "\"",
-    "blockType": "constant"}], "blockType": "block", "direction": "horizontal"}],
-    "describedType": {"typeName": "attribute", "languageName": "dxml"}}, {"visual":
-    [{"children": [{"property": "name", "blockType": "input"}], "blockType": "block",
-    "direction": "horizontal"}], "describedType": {"typeName": "exprConst", "languageName":
-    "dxml"}}, {"visual": [{"children": [{"blockType": "iterator", "direction": "horizontal",
-    "childGroupName": "lhs"}, {"blockType": "iterator", "direction": "horizontal",
-    "childGroupName": "operator"}, {"blockType": "iterator", "direction": "horizontal",
-    "childGroupName": "rhs"}], "blockType": "block", "direction": "horizontal"}],
-    "describedType": {"typeName": "exprBinary", "languageName": "dxml"}}, {"visual":
-    [{"children": [{"blockType": "iterator", "direction": "horizontal", "childGroupName":
-    "expr"}], "blockType": "block", "direction": "horizontal"}], "describedType":
-    {"typeName": "interpolate", "languageName": "dxml"}}, {"visual": [{"children":
-    [{"property": "operator", "blockType": "input"}], "blockType": "block", "direction":
-    "horizontal"}], "describedType": {"typeName": "binaryOperator", "languageName":
+    "exprVar", "languageName": "dxml"}}, {"visual": [{"children": [{"property": "name",
+    "blockType": "input"}, {"text": "=\"", "blockType": "constant"}, {"between": [{"text":
+    ",", "blockType": "constant"}], "blockType": "iterator", "direction": "horizontal",
+    "childGroupName": "value"}, {"text": "\"", "blockType": "constant"}], "blockType":
+    "block", "direction": "horizontal"}], "describedType": {"typeName": "attribute",
+    "languageName": "dxml"}}, {"visual": [{"children": [{"property": "name", "blockType":
+    "input"}], "blockType": "block", "direction": "horizontal"}], "describedType":
+    {"typeName": "exprConst", "languageName": "dxml"}}, {"visual": [{"children": [{"between":
+    [{"text": ",", "blockType": "constant"}], "blockType": "iterator", "direction":
+    "horizontal", "childGroupName": "lhs"}, {"between": [{"text": ",", "blockType":
+    "constant"}], "blockType": "iterator", "direction": "horizontal", "childGroupName":
+    "operator"}, {"between": [{"text": ",", "blockType": "constant"}], "blockType":
+    "iterator", "direction": "horizontal", "childGroupName": "rhs"}], "blockType":
+    "block", "direction": "horizontal"}], "describedType": {"typeName": "exprBinary",
+    "languageName": "dxml"}}, {"visual": [{"children": [{"between": [{"text": ",",
+    "blockType": "constant"}], "blockType": "iterator", "direction": "horizontal",
+    "childGroupName": "expr"}], "blockType": "block", "direction": "horizontal"}],
+    "describedType": {"typeName": "interpolate", "languageName": "dxml"}}, {"visual":
+    [{"children": [{"property": "operator", "blockType": "input"}], "blockType": "block",
+    "direction": "horizontal"}], "describedType": {"typeName": "binaryOperator", "languageName":
     "dxml"}}], "editorComponents": []}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-17 13:24:27.882035'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-17 14:10:32.39723'
+  value_before_type_cast: '2018-07-19 16:46:58.742943'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: dxml-eruby

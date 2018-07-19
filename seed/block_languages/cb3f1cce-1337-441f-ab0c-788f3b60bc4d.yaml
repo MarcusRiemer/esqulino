@@ -12,29 +12,34 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [], "editorBlocks": [{"visual": [{"children":
-    [{"text": "FROM", "blockType": "constant"}, {"blockType": "iterator", "direction":
-    "horizontal", "childGroupName": "tables"}, {"blockType": "iterator", "direction":
-    "horizontal", "childGroupName": "joins"}], "blockType": "block", "direction":
-    "horizontal"}], "describedType": {"typeName": "from", "languageName": "sql"}},
-    {"visual": [{"children": [{"text": "WHERE", "blockType": "constant"}, {"blockType":
-    "iterator", "direction": "horizontal", "childGroupName": "expressions"}], "blockType":
-    "block", "direction": "horizontal"}], "describedType": {"typeName": "where", "languageName":
+    [{"text": "FROM", "blockType": "constant"}, {"between": [{"text": ",", "blockType":
+    "constant"}], "blockType": "iterator", "direction": "horizontal", "childGroupName":
+    "tables"}, {"between": [{"text": ",", "blockType": "constant"}], "blockType":
+    "iterator", "direction": "horizontal", "childGroupName": "joins"}], "blockType":
+    "block", "direction": "horizontal"}], "describedType": {"typeName": "from", "languageName":
+    "sql"}}, {"visual": [{"children": [{"text": "WHERE", "blockType": "constant"},
+    {"between": [{"text": ",", "blockType": "constant"}], "blockType": "iterator",
+    "direction": "horizontal", "childGroupName": "expressions"}], "blockType": "block",
+    "direction": "horizontal"}], "describedType": {"typeName": "where", "languageName":
     "sql"}}, {"visual": [{"children": [{"text": "SELECT", "blockType": "constant"}],
     "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
     "delete", "languageName": "sql"}}, {"visual": [{"children": [{"text": "SELECT",
-    "blockType": "constant"}, {"property": "distinct", "blockType": "input"}, {"blockType":
-    "iterator", "direction": "horizontal", "childGroupName": "columns"}], "blockType":
-    "block", "direction": "horizontal"}], "describedType": {"typeName": "select",
-    "languageName": "sql"}}, {"visual": [{"children": [{"text": "GROUP BY", "blockType":
-    "constant"}, {"blockType": "iterator", "direction": "horizontal", "childGroupName":
-    "expressions"}], "blockType": "block", "direction": "horizontal"}], "describedType":
-    {"typeName": "groupBy", "languageName": "sql"}}, {"visual": [{"children": [{"text":
-    "ORDER BY", "blockType": "constant"}, {"blockType": "iterator", "direction": "horizontal",
-    "childGroupName": "expressions"}], "blockType": "block", "direction": "horizontal"}],
-    "describedType": {"typeName": "orderBy", "languageName": "sql"}}, {"visual": [{"children":
-    [{"property": "value", "blockType": "input"}], "blockType": "block", "direction":
-    "horizontal"}], "describedType": {"typeName": "constant", "languageName": "sql"}},
-    {"visual": [{"children": [{"blockType": "iterator", "direction": "horizontal",
+    "blockType": "constant"}, {"property": "distinct", "blockType": "input"}, {"between":
+    [{"text": ", ", "blockType": "constant"}], "blockType": "iterator", "direction":
+    "horizontal", "childGroupName": "columns"}], "blockType": "block", "direction":
+    "horizontal"}], "describedType": {"typeName": "select", "languageName": "sql"}},
+    {"visual": [{"children": [{"text": "GROUP BY", "blockType": "constant"}, {"between":
+    [{"text": ",", "blockType": "constant"}], "blockType": "iterator", "direction":
+    "horizontal", "childGroupName": "expressions"}], "blockType": "block", "direction":
+    "horizontal"}], "describedType": {"typeName": "groupBy", "languageName": "sql"}},
+    {"visual": [{"children": [{"text": "ORDER BY", "blockType": "constant"}, {"between":
+    [{"text": ",", "blockType": "constant"}], "blockType": "iterator", "direction":
+    "horizontal", "childGroupName": "expressions"}], "blockType": "block", "direction":
+    "horizontal"}], "describedType": {"typeName": "orderBy", "languageName": "sql"}},
+    {"visual": [{"children": [{"property": "value", "blockType": "input"}], "blockType":
+    "block", "direction": "horizontal"}], "describedType": {"typeName": "constant",
+    "languageName": "sql"}}, {"visual": [{"children": [{"between": [{"text": ",",
+    "blockType": "constant"}], "blockType": "iterator", "direction": "horizontal",
     "childGroupName": "table"}], "blockType": "block", "direction": "horizontal"}],
     "describedType": {"typeName": "crossJoin", "languageName": "sql"}}, {"visual":
     [{"children": [{"property": "name", "blockType": "input"}], "blockType": "block",
@@ -43,53 +48,64 @@ concise_attributes:
     {"text": ".", "blockType": "constant"}, {"property": "columnName", "blockType":
     "input"}], "blockType": "block", "direction": "horizontal"}], "describedType":
     {"typeName": "columnName", "languageName": "sql"}}, {"visual": [{"children": [{"text":
-    "INNER JOIN", "blockType": "constant"}, {"blockType": "iterator", "direction":
-    "horizontal", "childGroupName": "table"}, {"text": "ON", "blockType": "constant"},
-    {"blockType": "iterator", "direction": "horizontal", "childGroupName": "on"}],
+    "INNER JOIN", "blockType": "constant"}, {"between": [{"text": ",", "blockType":
+    "constant"}], "blockType": "iterator", "direction": "horizontal", "childGroupName":
+    "table"}, {"text": "ON", "blockType": "constant"}, {"between": [{"text": ",",
+    "blockType": "constant"}], "blockType": "iterator", "direction": "horizontal",
+    "childGroupName": "on"}], "blockType": "block", "direction": "horizontal"}], "describedType":
+    {"typeName": "innerJoinOn", "languageName": "sql"}}, {"visual": [{"children":
+    [{"between": [{"text": ",", "blockType": "constant"}], "blockType": "iterator",
+    "direction": "horizontal", "childGroupName": "delete"}, {"between": [{"text":
+    ",", "blockType": "constant"}], "blockType": "iterator", "direction": "horizontal",
+    "childGroupName": "from"}, {"between": [{"text": ",", "blockType": "constant"}],
+    "blockType": "iterator", "direction": "horizontal", "childGroupName": "where"}],
     "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
-    "innerJoinOn", "languageName": "sql"}}, {"visual": [{"children": [{"blockType":
-    "iterator", "direction": "horizontal", "childGroupName": "delete"}, {"blockType":
-    "iterator", "direction": "horizontal", "childGroupName": "from"}, {"blockType":
-    "iterator", "direction": "horizontal", "childGroupName": "where"}], "blockType":
-    "block", "direction": "horizontal"}], "describedType": {"typeName": "queryDelete",
-    "languageName": "sql"}}, {"visual": [{"children": [{"blockType": "iterator", "direction":
-    "horizontal", "childGroupName": "select"}, {"blockType": "iterator", "direction":
-    "horizontal", "childGroupName": "from"}, {"blockType": "iterator", "direction":
-    "horizontal", "childGroupName": "where"}, {"blockType": "iterator", "direction":
-    "horizontal", "childGroupName": "groupBy"}, {"blockType": "iterator", "direction":
-    "horizontal", "childGroupName": "orderBy"}], "blockType": "block", "direction":
-    "horizontal"}], "describedType": {"typeName": "querySelect", "languageName": "sql"}},
-    {"visual": [{"children": [{"property": "name", "blockType": "input"}, {"blockType":
-    "iterator", "direction": "horizontal", "childGroupName": "arguments"}], "blockType":
-    "block", "direction": "horizontal"}], "describedType": {"typeName": "functionCall",
-    "languageName": "sql"}}, {"visual": [{"children": [{"text": "*", "blockType":
-    "constant"}], "blockType": "block", "direction": "horizontal"}], "describedType":
-    {"typeName": "starOperator", "languageName": "sql"}}, {"visual": [{"children":
-    [{"text": "INNER JOIN", "blockType": "constant"}, {"blockType": "iterator", "direction":
-    "horizontal", "childGroupName": "table"}, {"text": "USING", "blockType": "constant"},
-    {"blockType": "iterator", "direction": "horizontal", "childGroupName": "using"}],
+    "queryDelete", "languageName": "sql"}}, {"visual": [{"children": [{"between":
+    [{"text": ",", "blockType": "constant"}], "blockType": "iterator", "direction":
+    "horizontal", "childGroupName": "select"}, {"between": [{"text": ",", "blockType":
+    "constant"}], "blockType": "iterator", "direction": "horizontal", "childGroupName":
+    "from"}, {"between": [{"text": ",", "blockType": "constant"}], "blockType": "iterator",
+    "direction": "horizontal", "childGroupName": "where"}, {"between": [{"text": ",",
+    "blockType": "constant"}], "blockType": "iterator", "direction": "horizontal",
+    "childGroupName": "groupBy"}, {"between": [{"text": ",", "blockType": "constant"}],
+    "blockType": "iterator", "direction": "horizontal", "childGroupName": "orderBy"}],
+    "blockType": "block", "direction": "vertical"}], "describedType": {"typeName":
+    "querySelect", "languageName": "sql"}}, {"visual": [{"children": [{"property":
+    "name", "blockType": "input"}, {"between": [{"text": ",", "blockType": "constant"}],
+    "blockType": "iterator", "direction": "horizontal", "childGroupName": "arguments"}],
     "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
-    "innerJoinUsing", "languageName": "sql"}}, {"visual": [{"children": [{"property":
-    "operator", "blockType": "input"}, {"blockType": "iterator", "direction": "horizontal",
-    "childGroupName": "expression"}], "blockType": "block", "direction": "horizontal"}],
-    "describedType": {"typeName": "whereAdditional", "languageName": "sql"}}, {"visual":
-    [{"children": [{"blockType": "iterator", "direction": "horizontal", "childGroupName":
-    "lhs"}, {"blockType": "iterator", "direction": "horizontal", "childGroupName":
-    "operator"}, {"blockType": "iterator", "direction": "horizontal", "childGroupName":
-    "rhs"}], "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
-    "binaryExpression", "languageName": "sql"}}, {"visual": [{"children": [{"property":
-    "name", "blockType": "input"}, {"property": "alias", "blockType": "input"}], "blockType":
-    "block", "direction": "horizontal"}], "describedType": {"typeName": "tableIntroduction",
-    "languageName": "sql"}}, {"visual": [{"children": [{"property": "operator", "blockType":
-    "input"}], "blockType": "block", "direction": "horizontal"}], "describedType":
-    {"typeName": "relationalOperator", "languageName": "sql"}}], "editorComponents":
-    []}'
+    "functionCall", "languageName": "sql"}}, {"visual": [{"children": [{"text": "*",
+    "blockType": "constant"}], "blockType": "block", "direction": "horizontal"}],
+    "describedType": {"typeName": "starOperator", "languageName": "sql"}}, {"visual":
+    [{"children": [{"text": "INNER JOIN", "blockType": "constant"}, {"between": [{"text":
+    ",", "blockType": "constant"}], "blockType": "iterator", "direction": "horizontal",
+    "childGroupName": "table"}, {"text": "USING", "blockType": "constant"}, {"between":
+    [{"text": ",", "blockType": "constant"}], "blockType": "iterator", "direction":
+    "horizontal", "childGroupName": "using"}], "blockType": "block", "direction":
+    "horizontal"}], "describedType": {"typeName": "innerJoinUsing", "languageName":
+    "sql"}}, {"visual": [{"children": [{"property": "operator", "blockType": "input"},
+    {"between": [{"text": ",", "blockType": "constant"}], "blockType": "iterator",
+    "direction": "horizontal", "childGroupName": "expression"}], "blockType": "block",
+    "direction": "horizontal"}], "describedType": {"typeName": "whereAdditional",
+    "languageName": "sql"}}, {"visual": [{"children": [{"between": [{"text": ",",
+    "blockType": "constant"}], "blockType": "iterator", "direction": "horizontal",
+    "childGroupName": "lhs"}, {"between": [{"text": ",", "blockType": "constant"}],
+    "blockType": "iterator", "direction": "horizontal", "childGroupName": "operator"},
+    {"between": [{"text": ",", "blockType": "constant"}], "blockType": "iterator",
+    "direction": "horizontal", "childGroupName": "rhs"}], "blockType": "block", "direction":
+    "horizontal"}], "describedType": {"typeName": "binaryExpression", "languageName":
+    "sql"}}, {"visual": [{"children": [{"property": "name", "blockType": "input"},
+    {"property": "alias", "blockType": "input"}], "blockType": "block", "direction":
+    "horizontal"}], "describedType": {"typeName": "tableIntroduction", "languageName":
+    "sql"}}, {"visual": [{"children": [{"property": "operator", "blockType": "input"}],
+    "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
+    "relationalOperator", "languageName": "sql"}}], "editorComponents": []}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-17 11:08:14.302566'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-17 14:32:22.070229'
+  value_before_type_cast: '2018-07-19 16:46:48.28306'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql
