@@ -108,6 +108,10 @@ describe('Grammar PrettyPrinter', () => {
     expect(p.prettyPrintTypeReference({ languageName: "bar", typeName: "foo" })).toEqual("bar.foo");
     expect(p.prettyPrintTypeReference({
       nodeType: { languageName: "bar", typeName: "foo" },
+      occurs: "1"
+    })).toEqual("bar.foo");
+    expect(p.prettyPrintTypeReference({
+      nodeType: { languageName: "bar", typeName: "foo" },
       occurs: {
         minOccurs: 0,
         maxOccurs: 1,

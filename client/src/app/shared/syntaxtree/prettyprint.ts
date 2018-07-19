@@ -115,7 +115,11 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
   } else if (Desc.isChildCardinalityDescription(t)) {
     const printCardinality = (t: Desc.OccursDescription) => {
       if (typeof t === "string") {
-        return (t);
+        if (t !== "1") {
+          return (t);
+        } else {
+          return ("");
+        }
       } else {
         if (t.minOccurs === 0 && t.maxOccurs === 1) {
           return ("?");

@@ -63,6 +63,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         },
         {
+          type: "terminal",
+          symbol: "("
+        },
+        {
           type: "sequence",
           name: "arguments",
           nodeTypes: [
@@ -71,6 +75,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
               occurs: "*"
             }
           ]
+        },
+        {
+          type: "terminal",
+          symbol: ")"
         }
       ]
     },
@@ -129,6 +137,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "terminal",
+          name: "select",
           symbol: "SELECT"
         },
         {
@@ -158,7 +167,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "terminal",
-          symbol: "SELECT"
+          symbol: "DELETE"
         },
       ]
     },
