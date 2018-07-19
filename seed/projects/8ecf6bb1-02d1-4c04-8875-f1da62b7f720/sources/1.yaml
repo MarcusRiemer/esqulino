@@ -1,28 +1,36 @@
 --- !ruby/object:ProjectSource
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromUser
   name: project_id
   value_before_type_cast: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: url
   value_before_type_cast: https://de.wikipedia.org/wiki/Spielbuch
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 1
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: title
   value_before_type_cast: Wikipedia
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: display
   value_before_type_cast: 'The sample story comes 1: 1 from the Wikipedia article
     to Spielbuch'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: read_only
   value_before_type_cast: true
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-20 20:48:21.712977'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2018-02-20 20:48:21.712977'
 new_record: false

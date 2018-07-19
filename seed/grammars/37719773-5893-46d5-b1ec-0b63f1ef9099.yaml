@@ -1,15 +1,15 @@
 --- !ruby/object:Grammar
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: css
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: css
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 37719773-5893-46d5-b1ec-0b63f1ef9099
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"root": "document", "types": {"rule": {"type": "concrete",
     "attributes": [{"name": "selectors", "type": "sequence", "nodeTypes": [{"occurs":
@@ -29,13 +29,13 @@ concise_attributes:
     "value", "type": "property"}]}, "selectorClass": {"type": "concrete", "attributes":
     [{"base": "string", "name": "value", "type": "property"}]}, "selectorUniversal":
     {"type": "concrete"}}}'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-05-15 18:48:24.782086'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2018-05-31 14:04:05.320022'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: css
 new_record: false

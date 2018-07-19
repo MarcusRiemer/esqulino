@@ -1,15 +1,15 @@
 --- !ruby/object:Grammar
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: sql
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: sql
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 7ec93f8a-5a01-4d4d-90b4-27c3f0ae4700
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"root": "query", "types": {"from": {"type": "concrete",
     "attributes": [{"type": "terminal", "symbol": "FROM"}, {"name": "tables", "type":
@@ -70,13 +70,13 @@ concise_attributes:
     {"type": "concrete", "attributes": [{"base": "string", "name": "operator", "type":
     "property", "restrictions": [{"type": "enum", "value": ["<", "<=", "=", ">=",
     ">", "LIKE", "NOT LIKE"]}]}]}}}'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-05-15 18:24:27.264702'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2018-07-17 14:32:03.579112'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: sql
 new_record: false

@@ -1,15 +1,15 @@
 --- !ruby/object:BlockLanguage
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: XML (Dynamisch)
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: dxml
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: c851d3be-3129-4fb3-ae37-99f40bce3dd0
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [{"type": "fixedBlocks", "caption": "XML (Dynamisch)",
     "categories": [{"blocks": [{"defaultNode": {"name": "element", "children": {"elements":
@@ -77,19 +77,19 @@ concise_attributes:
     [{"property": "name", "blockType": "interpolated"}], "blockType": "block", "direction":
     "horizontal"}], "describedType": {"typeName": "exprVar", "languageName": "dxml"}}],
     "editorComponents": []}'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-20 20:48:21.678604'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2018-07-04 17:02:42.527349'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: dxml-eruby
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: grammar_id
   value_before_type_cast: 7e333dff-6d1c-4042-aaa5-0cdf2cfeed7e
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_generator_id
 new_record: false
 active_record_yaml_version: 2

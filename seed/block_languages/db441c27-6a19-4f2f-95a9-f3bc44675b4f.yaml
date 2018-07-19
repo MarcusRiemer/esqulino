@@ -1,15 +1,15 @@
 --- !ruby/object:BlockLanguage
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: SQL
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: sql
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: db441c27-6a19-4f2f-95a9-f3bc44675b4f
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
   value_before_type_cast: '{"sidebars": [{"type": "databaseSchema"}, {"type": "fixedBlocks",
     "caption": "SQL", "categories": [{"blocks": [{"defaultNode": {"name": "starOperator",
@@ -226,19 +226,19 @@ concise_attributes:
     "dropTarget": {"children": {"order": "insertFirst", "category": "expressions"},
     "visibility": ["ifLegalChild"]}}], "describedType": {"typeName": "orderBy", "languageName":
     "sql"}}], "editorComponents": [{"componentType": "query-preview"}]}'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-20 20:48:21.609835'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2018-07-04 16:36:19.056671'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: grammar_id
   value_before_type_cast: 7ec93f8a-5a01-4d4d-90b4-27c3f0ae4700
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_generator_id
 new_record: false
 active_record_yaml_version: 2
