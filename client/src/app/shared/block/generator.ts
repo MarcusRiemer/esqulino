@@ -13,7 +13,7 @@ import {
 } from './block.description'
 import {
   BlockLanguageGeneratorDescription, BlockLanguageGeneratorDocument,
-  DefaultInstructions, Instructions, TypeInstructions, LayoutInstructions, BlockInstructions
+  DefaultInstructions, Instructions, TypeInstructions, LayoutInstructions, BlockInstructions, TerminalInstructions
 } from './generator.description'
 import { EditorBlockDescription } from './block.description'
 
@@ -24,7 +24,11 @@ import { EditorBlockDescription } from './block.description'
 class SafeGeneratorInstructions {
   constructor(
     private _all: TypeInstructions
-  ) { }
+  ) {
+    if (!this._all) {
+      this._all = {};
+    }
+  }
 
   scope(g?: string, t?: string, s?: string): Partial<Instructions> {
     let gi = g && this._all[g];
@@ -51,7 +55,9 @@ class SafeGeneratorInstructions {
 }
 
 /**
- * A safe way to access generation instructions that are part of a specific type.
+ * A safe way to access generation instructions that are part of a specific type. 
+ * Returned instructions include default properties if no specific properties
+ * have been set.
  */
 class SafeTypeInstructions {
   constructor(
@@ -60,18 +66,46 @@ class SafeTypeInstructions {
     private _typeName: string,
   ) { }
 
-  scope(s?: string): Partial<Instructions> {
-    return (this._all.scope(this._grammarName, this._typeName, s));
-  }
 
+  /**
+   * @return Layout specific instructions.
+   */
   scopeLayout(s: string): LayoutInstructions {
-    const current = this.scope(s);
-    return (Object.assign({}, DefaultInstructions.layoutInstructions, current));
+    return (this.cloneWithStyle(this.scope(s), DefaultInstructions.layoutInstructions));
   }
 
+  /**
+   * @return Block specific instructions
+   */
   scopeBlock(): BlockInstructions {
-    const current = this.scope("this");
-    return (Object.assign({}, DefaultInstructions.blockInstructions, current));
+    return (this.cloneWithStyle(this.scope("this"), DefaultInstructions.blockInstructions));
+  }
+
+  scopeTerminal(name?: string): TerminalInstructions {
+    return (this.cloneWithStyle(this.scope(name), DefaultInstructions.terminalInstructions));
+  }
+
+  /**
+   * When cloning the generator instructions the "style"-properties need to
+   * be merged carefully. A simple `assign` would not do a deep merge, so we
+   * need to take care of that manually.
+   *
+   * @param current The instructions that need to be extended with the default
+   *                values.
+   * @param def Default values that **must** speficy a style.
+   */
+  private cloneWithStyle<T extends Pick<Instructions, "style">>(current: Partial<Instructions>, def: T) {
+    const mergedStyle = Object.assign({}, def.style, current.style);
+    // *Exactly* the merged style comes last to overwrite the styles
+    // that have been incorrectly assigned before.
+    return (Object.assign({}, def, current, { style: mergedStyle }));
+  }
+
+  /**
+   * @return Instructions for the given scope
+   */
+  private scope(s?: string): Partial<Instructions> {
+    return (this._all.scope(this._grammarName, this._typeName, s));
   }
 }
 
@@ -80,11 +114,20 @@ class SafeTypeInstructions {
  * Maps terminal symbols to constant blocks. The exact value of the terminal
  * symbol will appear as the text.
  */
-function mapTerminal(attr: NodeTerminalSymbolDescription): VisualBlockDescriptions.EditorConstant {
-  return ({
+function mapTerminal(
+  attr: NodeTerminalSymbolDescription,
+  instructions: TerminalInstructions
+): VisualBlockDescriptions.EditorConstant {
+  const toReturn: VisualBlockDescriptions.EditorConstant = {
     blockType: "constant",
-    text: attr.symbol
-  });
+    text: attr.symbol,
+  };
+
+  if (Object.keys(instructions.style).length > 0) {
+    toReturn.style = instructions.style;
+  }
+
+  return (toReturn);
 }
 
 /**
@@ -104,17 +147,22 @@ function mapChildren(
   attr: NodeChildrenGroupDescription,
   instructions: LayoutInstructions
 ): VisualBlockDescriptions.EditorIterator {
-  let between = [];
-  if (typeof instructions.between === "string") {
-    between = [mapTerminal({ type: "terminal", symbol: instructions.between })];
+  let between: VisualBlockDescriptions.ConcreteBlock[] = undefined;
+  if (typeof instructions.between === "string" && instructions.between.length > 0) {
+    between = [mapTerminal({ type: "terminal", symbol: instructions.between }, DefaultInstructions.terminalInstructions)];
   }
 
-  return ({
+  const toReturn: VisualBlockDescriptions.EditorIterator = {
     blockType: "iterator",
     childGroupName: attr.name,
     direction: instructions.orientation,
-    between: between
-  });
+  }
+
+  if (between) {
+    toReturn.between = between;
+  }
+
+  return (toReturn);
 }
 
 /**
@@ -134,7 +182,7 @@ function mapAttributes(
           case "choice":
             return mapChildren(attr, instructions.scopeLayout(attr.name));
           case "terminal":
-            return mapTerminal(attr);
+            return mapTerminal(attr, instructions.scopeTerminal(attr.name));
           case "property":
             return mapProperty(attr);
           default:

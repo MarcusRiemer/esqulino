@@ -59,6 +59,12 @@
               },
               "orientation": {
                 "$ref": "#/definitions/Orientation"
+              },
+              "style": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
               }
             },
             "type": "object"

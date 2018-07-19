@@ -8,19 +8,29 @@ import { VisualBlockDescriptions, Orientation } from './block.description'
 export interface Instructions {
   orientation: Orientation;
   between: string;
+  style: { [attribute: string]: string }
 }
 
-export type LayoutInstructions = Pick<Instructions, "orientation" | "between">;
-export type BlockInstructions = Pick<Instructions, "orientation">
+export type LayoutInstructions = Pick<Instructions, "orientation" | "between" | "style">;
+export type BlockInstructions = Pick<Instructions, "orientation" | "style">;
+export type TerminalInstructions = Pick<Instructions, "style">;
 
 export module DefaultInstructions {
   export const layoutInstructions: LayoutInstructions = {
     orientation: "horizontal",
-    between: ","
+    between: "",
+    style: {}
   }
 
   export const blockInstructions: BlockInstructions = {
     orientation: "horizontal",
+    style: {}
+  }
+
+  export const terminalInstructions: TerminalInstructions = {
+    style: {
+      "display": "inline-block"
+    }
   }
 }
 
@@ -60,16 +70,29 @@ export interface BlockLanguageGeneratorDescription extends BlockLanguageGenerato
 
 /**
  * No idea how parameters for generators will work in the future. In the meantime
- * we will use this handy default object.
+ * we will use this handy default object instead of loading data from the server.
  */
 export const DEFAULT_GENERATOR: BlockLanguageGeneratorDescription = {
   editorComponents: [],
   typeInstructions: {
     "sql": {
       "select": {
+        "select": {
+          "style": {
+            "width": "9ch"
+          }
+        },
         "columns": {
           "orientation": "horizontal",
           "between": ", "
+        }
+      },
+      "from": {
+        "this": {
+          "orientation": "vertical",
+        },
+        "joins": {
+          "orientation": "vertical",
         }
       },
       "querySelect": {
@@ -79,7 +102,11 @@ export const DEFAULT_GENERATOR: BlockLanguageGeneratorDescription = {
       }
     },
     "dxml": {
-
+      "element": {
+        "attributes": {
+          "between": " ",
+        }
+      }
     }
   },
   id: undefined,
