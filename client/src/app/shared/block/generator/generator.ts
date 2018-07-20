@@ -13,18 +13,21 @@ import {
 
 import {
   BlockLanguageGeneratorDescription, BlockLanguageGeneratorDocument,
-  DefaultInstructions, Instructions, TypeInstructions, LayoutInstructions, BlockInstructions, TerminalInstructions
 } from './generator.description'
 
 import {
+  DefaultInstructions, Instructions, TypeInstructions, LayoutInstructions, BlockInstructions, TerminalInstructions
+} from './instructions.description'
+
+import {
   SafeGeneratorInstructions, SafeTypeInstructions
-} from './generator-instructions'
+} from './instructions'
 
 /**
  * Maps terminal symbols to constant blocks. The exact value of the terminal
  * symbol will appear as the text.
  */
-function mapTerminal(
+export function mapTerminal(
   attr: NodeTerminalSymbolDescription,
   instructions: TerminalInstructions
 ): VisualBlockDescriptions.EditorConstant {
@@ -45,7 +48,10 @@ function mapTerminal(
 /**
  * Maps properties to editable input fields.
  */
-function mapProperty(attr: NodePropertyTypeDescription): VisualBlockDescriptions.EditorInput {
+export function mapProperty(
+  attr: NodePropertyTypeDescription,
+  instructions: Partial<Instructions>
+): VisualBlockDescriptions.EditorInput {
   return ({
     blockType: "input",
     property: attr.name
@@ -55,7 +61,7 @@ function mapProperty(attr: NodePropertyTypeDescription): VisualBlockDescriptions
 /**
  *
  */
-function mapChildren(
+export function mapChildren(
   attr: NodeChildrenGroupDescription,
   instructions: LayoutInstructions
 ): VisualBlockDescriptions.EditorIterator {
@@ -95,7 +101,7 @@ function mapChildren(
  * Applies the given generation instructions to each attribute
  * of the given type.
  */
-function mapAttributes(
+export function mapAttributes(
   typeDesc: NodeConcreteTypeDescription,
   instructions: SafeTypeInstructions,
 ): VisualBlockDescriptions.ConcreteBlock[] {
@@ -106,11 +112,11 @@ function mapAttributes(
           case "allowed":
           case "sequence":
           case "choice":
-            return mapChildren(attr, instructions.scopeLayout(attr.name));
+            return mapChildren(attr, instructions.scopeIterator(attr.name));
           case "terminal":
             return mapTerminal(attr, instructions.scopeTerminal(attr.name));
           case "property":
-            return mapProperty(attr);
+            return mapProperty(attr, {});
           default:
             return (undefined);
         }
@@ -123,7 +129,7 @@ function mapAttributes(
 /**
  * Concrete types are mapped to draggable blocks.
  */
-function mapType(
+export function mapType(
   typeDesc: NodeConcreteTypeDescription,
   instructions: SafeTypeInstructions,
 ): VisualBlockDescriptions.EditorBlock {

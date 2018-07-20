@@ -2,47 +2,11 @@ import { GrammarDescription } from '../../syntaxtree/grammar.description'
 import { QualifiedTypeName } from '../../syntaxtree/syntaxtree.description'
 
 import { EditorComponentDescription } from '../block-language.description'
-import { VisualBlockDescriptions, Orientation } from '../block.description'
+import { VisualBlockDescriptions } from '../block.description'
 
-export interface Instructions {
-  orientation: Orientation;
-  between: string;
-  style: { [attribute: string]: string }
-}
-
-export type LayoutInstructions = Pick<Instructions, "orientation" | "between" | "style">;
-export type BlockInstructions = Pick<Instructions, "orientation" | "style">;
-export type TerminalInstructions = Pick<Instructions, "style">;
-
-export module DefaultInstructions {
-  export const layoutInstructions: LayoutInstructions = {
-    orientation: "horizontal",
-    between: "",
-    style: {}
-  }
-
-  export const blockInstructions: BlockInstructions = {
-    orientation: "horizontal",
-    style: {}
-  }
-
-  export const terminalInstructions: TerminalInstructions = {
-    style: {
-      "display": "inline-block"
-    }
-  }
-}
-
-/**
- * Supplementary generation instructions for a specific type.
- */
-export type TypeInstructions = {
-  [language: string]: {
-    [type: string]: {
-      [scope: string]: Partial<Instructions>
-    }
-  }
-}
+import {
+  TypeInstructions
+} from './instructions.description'
 
 /**
  * The nested parts of the generator description that must be stored
