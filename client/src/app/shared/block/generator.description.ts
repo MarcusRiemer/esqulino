@@ -76,24 +76,47 @@ export const DEFAULT_GENERATOR: BlockLanguageGeneratorDescription = {
   editorComponents: [],
   typeInstructions: {
     "sql": {
-      "select": {
-        "select": {
+      "binaryExpression": {
+        "operator": {
           "style": {
-            "width": "9ch"
+            "margin-left": "1ch",
+            "margin-right": "1ch",
+          }
+        }
+      },
+      "select": {
+        "keyword": {
+          "style": {
+            "width": "9ch",
+            "color": "blue",
           }
         },
         "columns": {
           "orientation": "horizontal",
-          "between": ", "
+          "between": ","
         }
       },
       "from": {
         "this": {
-          "orientation": "vertical",
+          "orientation": "horizontal",
+        },
+        "keyword": {
+          "style": {
+            "width": "9ch",
+            "color": "blue",
+          }
         },
         "joins": {
           "orientation": "vertical",
         }
+      },
+      "where": {
+        "keyword": {
+          "style": {
+            "width": "9ch",
+            "color": "blue",
+          }
+        },
       },
       "querySelect": {
         "this": {
