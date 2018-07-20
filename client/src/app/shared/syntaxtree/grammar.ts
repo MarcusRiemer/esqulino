@@ -204,6 +204,8 @@ class NodeConcreteType extends NodeType {
       return (new NodePropertyStringValidator(desc));
     } else if (Desc.isNodePropertyBooleanDesciption(desc)) {
       return (new NodePropertyBooleanValidator(desc));
+    } else if (Desc.isNodePropertyIntegerDesciption(desc)) {
+      return (new NodePropertyIntegerValidator(desc));
     } else {
       throw new Error(`Unknown property validator for base "${desc.base}"`);
     }
@@ -700,7 +702,7 @@ abstract class NodePropertyValidator {
 /**
  * Validates boolean properties
  */
-class NodePropertyBooleanValidator extends NodePropertyValidator {
+export class NodePropertyBooleanValidator extends NodePropertyValidator {
 
   constructor(desc: Desc.NodePropertyBooleanDescription) {
     super(desc);
@@ -716,9 +718,31 @@ class NodePropertyBooleanValidator extends NodePropertyValidator {
 }
 
 /**
+ * Validates integer properties
+ */
+export class NodePropertyIntegerValidator extends NodePropertyValidator {
+
+  constructor(desc: Desc.NodePropertyIntegerDescription) {
+    super(desc);
+  }
+
+  validValue(value: string): boolean {
+    return (/^-?[0-9]+$/.test(value));
+  }
+
+  validate(node: AST.Node, value: string, context: ValidationContext): void {
+    if (this.validValue(value)) {
+      context.addError(ErrorCodes.IllegalPropertyType, node, {
+        condition: `"${value}" must be an integer`
+      });
+    }
+  }
+}
+
+/**
  * Validates properties that are meant to be strings.
  */
-class NodePropertyStringValidator extends NodePropertyValidator {
+export class NodePropertyStringValidator extends NodePropertyValidator {
   private _restrictions: Desc.NodeStringTypeRestrictions[] = [];
 
   constructor(desc: Desc.NodePropertyStringDescription) {

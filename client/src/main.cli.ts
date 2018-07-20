@@ -23,6 +23,7 @@ import * as dxml from './app/shared/syntaxtree/dxml/'
 import * as regex from './app/shared/syntaxtree/regex/'
 import * as sql from './app/shared/syntaxtree/sql/'
 import * as css from './app/shared/syntaxtree/css/'
+import * as json from './app/shared/syntaxtree/json/'
 
 import * as blocks_dxml from './app/shared/block/dxml/'
 import * as blocks_sql from './app/shared/block/sql/language-model'
@@ -100,6 +101,7 @@ function availableLanguages(): LanguageDescription[] {
     regex.LANGUAGE_DESCRIPTION,
     sql.LANGUAGE_DESCRIPTION,
     css.LANGUAGE_DESCRIPTION,
+    json.LANGUAGE_DESCRIPTION
   ]);
 }
 

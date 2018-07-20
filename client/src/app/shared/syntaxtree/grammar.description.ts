@@ -335,3 +335,10 @@ export function isNodePropertyStringDesciption(obj: any): obj is NodePropertyStr
 export function isNodePropertyBooleanDesciption(obj: any): obj is NodePropertyBooleanDescription {
   return (obj instanceof Object && obj.base === "boolean");
 }
+
+/**
+ * @return True, if the given instance probably satisfies "NodePropertyIntegerDescription"
+ */
+export function isNodePropertyIntegerDesciption(obj: any): obj is NodePropertyBooleanDescription {
+  return (obj instanceof Object && obj.base === "integer");
+}

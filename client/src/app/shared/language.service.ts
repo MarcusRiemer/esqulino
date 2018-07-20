@@ -1,12 +1,6 @@
-import { Injectable, Type } from '@angular/core'
-import { HttpClient } from '@angular/common/http';
-
-import { BehaviorSubject, Observable } from 'rxjs'
+import { Injectable } from '@angular/core'
 
 import { AvailableLanguages, Language } from './syntaxtree'
-import { AvailableLanguageModels, BlockLanguage } from './block'
-import { ServerApiService } from './serverapi.service'
-import { BlockLanguageListDescription } from './block/block-language.description'
 
 /**
  * Groups together information about languages that are available
@@ -37,7 +31,7 @@ export class LanguageService {
     const toReturn = this.availableLanguages.find(l => l.id === id);
     if (!toReturn) {
       const available = this.availableLanguageIds.join(', ');
-      throw new Error(`Unknown language "${id}", known models are: ${available}`);
+      throw new Error(`Unknown language "${id}", known languages are: ${available}`);
     }
 
     return (toReturn);
