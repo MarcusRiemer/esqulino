@@ -52,10 +52,16 @@ export function mapProperty(
   attr: NodePropertyTypeDescription,
   instructions: Partial<Instructions>
 ): VisualBlockDescriptions.EditorInput {
-  return ({
+  const toReturn: VisualBlockDescriptions.EditorInput = {
     blockType: "input",
     property: attr.name
-  });
+  };
+
+  if (Object.keys(instructions.style).length > 0) {
+    toReturn.style = instructions.style;
+  }
+
+  return (toReturn);
 };
 
 /**
@@ -82,6 +88,7 @@ export function mapChildren(
     blockType: "iterator",
     childGroupName: attr.name,
     direction: instructions.orientation,
+    wrapChildren: true
   }
 
   // And only add between instructions if there are any
@@ -109,7 +116,7 @@ export function mapAttribute(
     case "terminal":
       return mapTerminal(attr, instructions.scopeTerminal(attr.name));
     case "property":
-      return mapProperty(attr, {});
+      return mapProperty(attr, instructions.scopeProperty(attr.name));
     default:
       throw new Error(`Unknown attribute type "${(attr as any).type}"`);
   }
@@ -165,12 +172,18 @@ export function mapType(
     const blockInstructions = instructions.scopeBlock();
     const mapFunc = attrMappers[blockInstructions.attributeMappingMode];
 
-    // A single block
-    return ([{
+    const toReturn: VisualBlockDescriptions.ConcreteBlock = {
       blockType: "block",
       direction: blockInstructions.orientation,
       children: mapFunc(typeDesc, instructions)
-    }]);
+    };
+
+    if (Object.keys(blockInstructions.style).length > 0) {
+      toReturn.style = blockInstructions.style;
+    }
+
+    // A single block
+    return ([toReturn]);
   } else if (instructions instanceof MultiBlockInstructions) {
     // Multiple blocks
     const arrayOfArray = instructions.blocks.map(single => mapType(typeDesc, single));

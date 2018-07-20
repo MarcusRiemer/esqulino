@@ -9,6 +9,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          name: "tag-open-begin",
           type: "terminal",
           symbol: "<",
         },
@@ -25,6 +26,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         },
         {
+          name: "tag-open-end",
           type: "terminal",
           symbol: ">",
         },
@@ -39,6 +41,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         },
         {
+          name: "tag-close",
           type: "terminal",
           symbol: "<ende/>",
         },

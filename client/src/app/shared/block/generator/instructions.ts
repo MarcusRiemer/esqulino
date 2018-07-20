@@ -1,7 +1,7 @@
 import {
   AllTypeInstructions, Instructions, IteratorInstructions, BlockInstructions,
   TerminalInstructions, DefaultInstructions, TypeInstructions, isMultiBlockInstructions,
-  SingleBlockInstructionsDescription, MultiBlockInstructionsDescription
+  SingleBlockInstructionsDescription, MultiBlockInstructionsDescription, PropertyInstructions
 } from './instructions.description'
 
 /**
@@ -102,6 +102,13 @@ export class SingleBlockInstructions {
    */
   scopeTerminal(name?: string): TerminalInstructions {
     return (this.cloneWithStyle(this.scope(name), DefaultInstructions.terminalInstructions));
+  }
+
+  /**
+   * @return Property specific instructions.
+   */
+  scopeProperty(name?: string): PropertyInstructions {
+    return (this.cloneWithStyle(this.scope(name), DefaultInstructions.propertyInstructions));
   }
 
   /**
