@@ -137,7 +137,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "terminal",
-          name: "select",
+          name: "keyword",
           symbol: "SELECT"
         },
         {
@@ -167,6 +167,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "terminal",
+          name: "keyword",
           symbol: "DELETE"
         },
       ]
@@ -202,6 +203,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "terminal",
+          name: "keyword",
           symbol: "INNER JOIN"
         },
         {
@@ -225,6 +227,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "terminal",
+          name: "keyword",
           symbol: "INNER JOIN"
         },
         {
@@ -252,6 +255,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "terminal",
+          name: "keyword",
           symbol: "FROM"
         },
         {
@@ -299,7 +303,8 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "terminal",
-          symbol: "WHERE"
+          symbol: "WHERE",
+          name: "keyword",
         },
         {
           type: "sequence",

@@ -327,9 +327,6 @@
       "description": "A terminal symbol that would be expected.",
       "properties": {
         "name": {
-          "enum": [
-            "select"
-          ],
           "type": "string"
         },
         "symbol": {

@@ -25,23 +25,31 @@ class SafeGeneratorInstructions {
   constructor(
     private _all: TypeInstructions
   ) {
+    // Ensure that at least an empty object is avaiable
     if (!this._all) {
       this._all = {};
     }
   }
 
-  scope(g?: string, t?: string, s?: string): Partial<Instructions> {
-    let gi = g && this._all[g];
+  /**
+   * Retrieves the exact instructions at the given path.
+   *
+   * @param grammarName The name of the grammar
+   * @param typeName The type that is requested
+   * @param scope The exact scope that is requested
+   */
+  scope(grammarName?: string, typeName?: string, scope?: string): Partial<Instructions> {
+    let gi = grammarName && this._all[grammarName];
     if (!gi) {
       return ({});
     }
 
-    let ti = t && gi[t];
+    let ti = typeName && gi[typeName];
     if (!ti) {
       return ({});
     }
 
-    let si = s && ti[s];
+    let si = scope && ti[scope];
     if (!si) {
       return ({});
     }
@@ -49,6 +57,12 @@ class SafeGeneratorInstructions {
     return si;
   }
 
+
+  /**
+   * The type-level is where most of the action happens. This method provides sort of
+   * el-cheapo late binding: The grammar and type are remembered for later invocations.
+   
+   */
   type(grammarName: string, typeName: string) {
     return (new SafeTypeInstructions(this, grammarName, typeName));
   }
@@ -81,6 +95,9 @@ class SafeTypeInstructions {
     return (this.cloneWithStyle(this.scope("this"), DefaultInstructions.blockInstructions));
   }
 
+  /**
+   * @return Terminal specific instructions.
+   */
   scopeTerminal(name?: string): TerminalInstructions {
     return (this.cloneWithStyle(this.scope(name), DefaultInstructions.terminalInstructions));
   }
@@ -102,7 +119,7 @@ class SafeTypeInstructions {
   }
 
   /**
-   * @return Instructions for the given scope
+   * @return Exact instructions for the given scope, no default values applied.
    */
   private scope(s?: string): Partial<Instructions> {
     return (this._all.scope(this._grammarName, this._typeName, s));
@@ -118,11 +135,13 @@ function mapTerminal(
   attr: NodeTerminalSymbolDescription,
   instructions: TerminalInstructions
 ): VisualBlockDescriptions.EditorConstant {
+  // Build the basic block
   const toReturn: VisualBlockDescriptions.EditorConstant = {
     blockType: "constant",
     text: attr.symbol,
   };
 
+  // Possibly add some style
   if (Object.keys(instructions.style).length > 0) {
     toReturn.style = instructions.style;
   }
@@ -147,19 +166,33 @@ function mapChildren(
   attr: NodeChildrenGroupDescription,
   instructions: LayoutInstructions
 ): VisualBlockDescriptions.EditorIterator {
+  // Find out what goes between the elements
   let between: VisualBlockDescriptions.ConcreteBlock[] = undefined;
+
+  // A simple seperation character?
   if (typeof instructions.between === "string" && instructions.between.length > 0) {
-    between = [mapTerminal({ type: "terminal", symbol: instructions.between }, DefaultInstructions.terminalInstructions)];
+    // Create a single terminal character to go in between
+    between = [mapTerminal(
+      { type: "terminal", symbol: instructions.between },
+      DefaultInstructions.terminalInstructions
+    )];
   }
 
+  // Build the actual iterator block
   const toReturn: VisualBlockDescriptions.EditorIterator = {
     blockType: "iterator",
     childGroupName: attr.name,
     direction: instructions.orientation,
   }
 
+  // And only add between instructions if there are any
   if (between) {
     toReturn.between = between;
+  }
+
+  // Possibly add some style
+  if (Object.keys(instructions.style).length > 0) {
+    toReturn.style = instructions.style;
   }
 
   return (toReturn);
@@ -189,6 +222,7 @@ function mapAttributes(
             return (undefined);
         }
       })
+      // Scrub everything that couldn't be created
       .filter(visual => !!visual)
   );
 }
