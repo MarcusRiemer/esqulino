@@ -60,18 +60,31 @@ export const DEFAULT_GENERATOR: BlockLanguageGeneratorDescription = {
         }
       },
       "from": {
-        "this": {
-          "orientation": "horizontal",
-        },
-        "keyword": {
-          "style": {
-            "width": "9ch",
-            "color": "blue",
+        type: "multi",
+        blocks: [
+          {
+            "this": {
+              "attributeMappingMode": "mentioned",
+            },
+            "keyword": {
+              "style": {
+                "width": "9ch",
+                "color": "blue",
+              }
+            },
+            "tables": {
+              "between": ","
+            }
+          },
+          {
+            "this": {
+              "attributeMappingMode": "mentioned",
+            },
+            "joins": {
+              "orientation": "vertical"
+            }
           }
-        },
-        "joins": {
-          "orientation": "vertical",
-        }
+        ]
       },
       "where": {
         "keyword": {
@@ -81,6 +94,38 @@ export const DEFAULT_GENERATOR: BlockLanguageGeneratorDescription = {
           }
         },
       },
+      "groupBy": {
+        "keyword": {
+          "style": {
+            "width": "9ch",
+            "color": "blue",
+          }
+        },
+      },
+      "orderBy": {
+        "keyword": {
+          "style": {
+            "width": "9ch",
+            "color": "blue",
+          }
+        },
+      },
+      "innerJoinOn": {
+        "keyword": {
+          "style": {
+            "margin-left": "2ch",
+            "margin-right": "1ch",
+            "color": "blue",
+          }
+        },
+        "keywordOn": {
+          "style": {
+            "margin-left": "1ch",
+            "margin-right": "1ch",
+            "color": "blue",
+          }
+        }
+      },
       "querySelect": {
         "this": {
           "orientation": "vertical",
@@ -89,8 +134,56 @@ export const DEFAULT_GENERATOR: BlockLanguageGeneratorDescription = {
     },
     "dxml": {
       "element": {
-        "attributes": {
-          "between": " ",
+        type: "multi",
+        blocks: [
+          {
+            "this": {
+              "attributeMappingMode": "mentioned"
+            },
+            "tag-open-begin": {
+              style: {
+                color: "blue"
+              }
+            },
+            "name": {
+              style: {
+                color: "#ad0000"
+              }
+            },
+            "attributes": {
+              "between": " ",
+            },
+            "tag-open-end": {
+              style: {
+                color: "blue"
+              }
+            },
+          },
+          {
+            "this": {
+              "attributeMappingMode": "mentioned",
+              "style": {
+                "margin-left": "2ch"
+              }
+            },
+            "elements": {
+              "orientation": "vertical",
+            }
+          },
+          {
+            "this": {
+              "attributeMappingMode": "mentioned"
+            },
+            "tag-close": {}
+          }
+        ]
+      },
+      "attribute": {
+        "name": {
+          "style": {
+            "margin-left": "1ch",
+            "color": "#ef4040"
+          }
         }
       }
     }

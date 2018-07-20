@@ -25,9 +25,14 @@ export type IteratorInstructions = Readonly<Pick<Instructions, "orientation" | "
 export type BlockInstructions = Readonly<Pick<Instructions, "attributeMappingMode" | "orientation" | "style">>;
 
 /**
- * Instructions that are useful on an terminal visual.
+ * Instructions that are useful on a terminal visual.
  */
 export type TerminalInstructions = Readonly<Pick<Instructions, "style">>;
+
+/**
+ * Instructions that are useful on a property.
+ */
+export type PropertyInstructions = Readonly<Pick<Instructions, "style">>;
 
 /**
  * Default options for the various types of blocks
@@ -46,6 +51,12 @@ export module DefaultInstructions {
   }
 
   export const terminalInstructions: TerminalInstructions = {
+    style: {
+      "display": "inline-block"
+    }
+  }
+
+  export const propertyInstructions: PropertyInstructions = {
     style: {
       "display": "inline-block"
     }

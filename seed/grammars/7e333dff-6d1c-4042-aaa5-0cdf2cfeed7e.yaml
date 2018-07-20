@@ -18,12 +18,13 @@ concise_attributes:
     {"occurs": "*", "nodeType": "if"}]}]}, "expr": {"type": "oneOf", "oneOf": ["exprVar",
     "exprConst", "exprBinary"]}, "text": {"type": "concrete", "attributes": [{"base":
     "string", "name": "value", "type": "property"}]}, "element": {"type": "concrete",
-    "attributes": [{"type": "terminal", "symbol": "<"}, {"base": "string", "name":
-    "name", "type": "property"}, {"name": "attributes", "type": "allowed", "nodeTypes":
-    [{"occurs": "*", "nodeType": "attribute"}]}, {"type": "terminal", "symbol": ">"},
-    {"name": "elements", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType":
-    "element"}, {"occurs": "*", "nodeType": "text"}, {"occurs": "*", "nodeType": "interpolate"},
-    {"occurs": "*", "nodeType": "if"}]}, {"type": "terminal", "symbol": "<ende/>"}]},
+    "attributes": [{"name": "tag-open-begin", "type": "terminal", "symbol": "<"},
+    {"base": "string", "name": "name", "type": "property"}, {"name": "attributes",
+    "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "attribute"}]}, {"name":
+    "tag-open-end", "type": "terminal", "symbol": ">"}, {"name": "elements", "type":
+    "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "element"}, {"occurs": "*",
+    "nodeType": "text"}, {"occurs": "*", "nodeType": "interpolate"}, {"occurs": "*",
+    "nodeType": "if"}]}, {"name": "tag-close", "type": "terminal", "symbol": "<ende/>"}]},
     "exprVar": {"type": "concrete", "attributes": [{"base": "string", "name": "name",
     "type": "property"}]}, "attribute": {"type": "concrete", "attributes": [{"base":
     "string", "name": "name", "type": "property"}, {"type": "terminal", "symbol":
@@ -41,7 +42,7 @@ concise_attributes:
   value_before_type_cast: '2018-05-15 18:48:12.004676'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-17 13:54:39.319039'
+  value_before_type_cast: '2018-07-20 19:12:40.713343'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: dxml-eruby

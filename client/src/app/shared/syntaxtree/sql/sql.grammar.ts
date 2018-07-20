@@ -213,6 +213,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         },
         {
           type: "terminal",
+          name: "keywordOn",
           symbol: "ON"
         },
         {
@@ -333,6 +334,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "terminal",
+          name: "keyword",
           symbol: "GROUP BY"
         },
         {
@@ -355,6 +357,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "terminal",
+          name: "keyword",
           symbol: "ORDER BY"
         },
         {
