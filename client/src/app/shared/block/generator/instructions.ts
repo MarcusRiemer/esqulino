@@ -1,7 +1,7 @@
 import {
   TypeInstructions, Instructions, LayoutInstructions, BlockInstructions,
   TerminalInstructions, DefaultInstructions
-} from './generator.description'
+} from './instructions.description'
 
 /**
  * A safe way to access generation instructions. Silently returns empty
@@ -24,7 +24,7 @@ export class SafeGeneratorInstructions {
    * @param typeName The type that is requested
    * @param scope The exact scope that is requested
    */
-  scope(grammarName?: string, typeName?: string, scope?: string): Partial<Instructions> {
+  scope(grammarName?: string, typeName?: string, scope?: string): Readonly<Partial<Instructions>> {
     let gi = grammarName && this._all[grammarName];
     if (!gi) {
       return ({});
@@ -40,7 +40,7 @@ export class SafeGeneratorInstructions {
       return ({});
     }
 
-    return si;
+    return (si);
   }
 
 
@@ -69,8 +69,8 @@ export class SafeTypeInstructions {
   /**
    * @return Layout specific instructions.
    */
-  scopeLayout(s: string): LayoutInstructions {
-    return (this.cloneWithStyle(this.scope(s), DefaultInstructions.layoutInstructions));
+  scopeIterator(s: string): LayoutInstructions {
+    return (this.cloneWithStyle(this.scope(s), DefaultInstructions.iteratorInstructions));
   }
 
   /**
