@@ -1,9 +1,8 @@
-import { GrammarDescription } from '../syntaxtree/grammar.description'
-import { QualifiedTypeName } from '../syntaxtree/syntaxtree.description'
+import { GrammarDescription } from '../../syntaxtree/grammar.description'
+import { QualifiedTypeName } from '../../syntaxtree/syntaxtree.description'
 
-import { EditorComponentDescription } from './block-language.description'
-import { VisualBlockDescriptions, Orientation } from './block.description'
-
+import { EditorComponentDescription } from '../block-language.description'
+import { VisualBlockDescriptions, Orientation } from '../block.description'
 
 export interface Instructions {
   orientation: Orientation;

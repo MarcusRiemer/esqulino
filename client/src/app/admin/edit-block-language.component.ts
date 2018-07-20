@@ -6,8 +6,8 @@ import { switchMap, map, tap, first } from 'rxjs/operators';
 import { ServerDataService } from '../shared/server-data.service';
 
 import { BlockLanguageDescription } from '../shared/block/block-language.description';
-import { DEFAULT_GENERATOR } from '../shared/block/generator.description'
-import { generateBlockLanguage } from '../shared/block/generator'
+import { DEFAULT_GENERATOR } from '../shared/block/generator/generator.description'
+import { generateBlockLanguage } from '../shared/block/generator/generator'
 import { prettyPrintBlockLanguage } from '../shared/block/prettyprint';
 
 @Component({

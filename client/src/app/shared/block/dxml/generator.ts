@@ -1,4 +1,4 @@
-import { BlockLanguageGeneratorDescription } from '../generator.description'
+import { BlockLanguageGeneratorDescription } from '../generator/generator.description'
 
 import { BLOCK_LANGUAGE_DYNAMIC } from './language-model'
 

@@ -1,5 +1,5 @@
 import { BlockLanguageDescription } from '../block-language.description'
-import { generateBlockLanguage } from '../generator'
+import { generateBlockLanguage } from '../generator/generator'
 
 import { GRAMMAR_DESCRIPTION } from '../../syntaxtree/dxml/dxml.grammar'
 import { GENERATOR_STATIC } from './generator'

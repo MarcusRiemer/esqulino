@@ -11,7 +11,7 @@ import {
 } from '../shared/block/block-language.description';
 import {
   BlockLanguageGeneratorDescription, BlockLanguageGeneratorListDescription
-} from '../shared/block/generator.description'
+} from '../shared/block/generator/generator.description'
 import {
   GrammarDescription, GrammarListDescription
 } from '../shared/syntaxtree/grammar.description';
