@@ -1,0 +1,56 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Generated JSON
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: json
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: c23d43d7-56f5-4605-bec1-644c240cc003
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"sidebars": [], "editorBlocks": [{"visual": [{"children":
+    [{"text": "null", "style": {"display": "inline-block"}, "blockType": "constant"}],
+    "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
+    "null", "languageName": "json"}}, {"visual": [{"children": [{"text": "[", "style":
+    {"display": "inline-block"}, "blockType": "constant"}, {"blockType": "iterator",
+    "direction": "horizontal", "wrapChildren": true, "childGroupName": "values"},
+    {"text": "]", "style": {"display": "inline-block"}, "blockType": "constant"}],
+    "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
+    "array", "languageName": "json"}}, {"visual": [{"children": [{"style": {"display":
+    "inline-block"}, "property": "value", "blockType": "input"}], "blockType": "block",
+    "direction": "horizontal"}], "describedType": {"typeName": "number", "languageName":
+    "json"}}, {"visual": [{"children": [{"text": "{", "style": {"display": "inline-block"},
+    "blockType": "constant"}, {"blockType": "iterator", "direction": "horizontal",
+    "wrapChildren": true, "childGroupName": "values"}, {"text": "}", "style": {"display":
+    "inline-block"}, "blockType": "constant"}], "blockType": "block", "direction":
+    "horizontal"}], "describedType": {"typeName": "object", "languageName": "json"}},
+    {"visual": [{"children": [{"style": {"display": "inline-block"}, "property": "value",
+    "blockType": "input"}], "blockType": "block", "direction": "horizontal"}], "describedType":
+    {"typeName": "string", "languageName": "json"}}, {"visual": [{"children": [{"style":
+    {"display": "inline-block"}, "property": "boolean", "blockType": "input"}], "blockType":
+    "block", "direction": "horizontal"}], "describedType": {"typeName": "boolean",
+    "languageName": "json"}}, {"visual": [{"children": [{"style": {"display": "inline-block"},
+    "property": "key", "blockType": "input"}, {"text": ":", "style": {"display": "inline-block"},
+    "blockType": "constant"}, {"blockType": "iterator", "direction": "horizontal",
+    "wrapChildren": true, "childGroupName": "value"}], "blockType": "block", "direction":
+    "horizontal"}], "describedType": {"typeName": "key-value", "languageName": "json"}}],
+    "editorComponents": []}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-07-20 20:43:34.641628'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-07-20 20:43:34.641628'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: json
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: 33e4959f-cf2d-481b-bb0c-06211e2ab0b3
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_generator_id
+new_record: false
+active_record_yaml_version: 2

@@ -38,7 +38,8 @@ describe("BlockLanguage Generator", () => {
       expect(res).toEqual({
         blockType: "iterator",
         childGroupName: "c1",
-        direction: DefaultInstructions.iteratorInstructions.orientation
+        direction: DefaultInstructions.iteratorInstructions.orientation,
+        wrapChildren: true
       });
     });
 
@@ -60,6 +61,7 @@ describe("BlockLanguage Generator", () => {
         blockType: "iterator",
         childGroupName: "c1",
         direction: "horizontal",
+        wrapChildren: true,
         between: [
           {
             blockType: "constant",

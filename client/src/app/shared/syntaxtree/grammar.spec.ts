@@ -2,6 +2,7 @@ import * as Schema from './grammar.description'
 import * as AST from './syntaxtree'
 import { Validator } from './validator'
 import { ErrorCodes, ValidationResult } from './validation-result'
+import { NodePropertyIntegerValidator } from '.';
 
 /**
  * Describes a language where each document would be the equivalent
@@ -472,6 +473,34 @@ const langComplexChoice: Schema.GrammarDescription = {
 }
 
 describe('Grammar Validation', () => {
+
+  describe('Property Validators', () => {
+    it('Integer', () => {
+      const validator = new NodePropertyIntegerValidator({
+        type: "property",
+        name: "int",
+        base: "integer",
+      });
+
+      expect(validator.validValue("1")).toBe(true);
+      expect(validator.validValue("-1")).toBe(true);
+      expect(validator.validValue("0")).toBe(true);
+      expect(validator.validValue("-12")).toBe(true);
+      expect(validator.validValue("12")).toBe(true);
+
+      expect(validator.validValue("")).toBe(false);
+      expect(validator.validValue("-")).toBe(false);
+      expect(validator.validValue("+0")).toBe(false);
+      expect(validator.validValue("+0.1")).toBe(false);
+      expect(validator.validValue("-0.1")).toBe(false);
+      expect(validator.validValue(" 0.1")).toBe(false);
+      expect(validator.validValue(" 0.1 ")).toBe(false);
+      expect(validator.validValue("1 ")).toBe(false);
+      expect(validator.validValue(" 1")).toBe(false);
+      expect(validator.validValue(" 1 ")).toBe(false);
+    });
+  });
+
   /*
    * This is more a compile time testcase. It ensures that the grammar
    * definition allows the definition of "empty types" without having a
