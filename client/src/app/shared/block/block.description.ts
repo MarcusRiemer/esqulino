@@ -11,7 +11,7 @@ export namespace VisualBlockDescriptions {
   /**
    * We currently allow any CSS style to be used.
    */
-  export type BlockStyle = { [k: string]: string }
+  export type BlockStyle = Readonly<{ [k: string]: string }>;
 
   /**
    * Describes how certain nodes of the syntaxtree should be presented

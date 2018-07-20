@@ -1,106 +1,126 @@
 import { GrammarDescription } from '../../syntaxtree/grammar.description'
 
 import { Instructions, DefaultInstructions } from './instructions.description'
-import { SafeGeneratorInstructions, SafeTypeInstructions } from './instructions'
+import { GeneratorInstructions, SingleBlockInstructions, MultiBlockInstructions } from './instructions'
 import { Orientation } from '../block.description';
 
-describe("BlockLanguage Generator Instructions", () => {
-  it("does not crash on undefined instructions", () => {
-    const inst = new SafeGeneratorInstructions(undefined);
+describe("BlockLanguage GeneratorInstructions", () => {
 
-    expect(inst.scope()).toEqual({});
-    expect(inst.scope("g")).toEqual({});
-    expect(inst.scope("g", "t")).toEqual({});
-    expect(inst.scope("g", "t", "s")).toEqual({});
-  });
-
-  it("does not crash on empty instructions", () => {
-    const inst = new SafeGeneratorInstructions({});
-
-    expect(inst.scope()).toEqual({});
-    expect(inst.scope("g")).toEqual({});
-    expect(inst.scope("g", "t")).toEqual({});
-    expect(inst.scope("g", "t", "s")).toEqual({});
-  });
-
-  it("delivers instructions exactly as given", () => {
-    const specific: Partial<Instructions> = {
-      orientation: "horizontal"
-    };
-    const inst = new SafeGeneratorInstructions({
+  it("Hands out matching instruction types", () => {
+    const inst = new GeneratorInstructions({
       "g": {
-        "t": {
-          "s": specific
+        "tSingle": {},
+        "tMulti": {
+          type: "multi",
+          blocks: []
         }
       }
     });
 
-    expect(inst.scope("g", "t", "s")).toEqual(specific);
+    expect(inst.typeInstructions("g", "tSingle") instanceof SingleBlockInstructions).toBe(true);
+    expect(inst.typeInstructions("g", "tMulti") instanceof MultiBlockInstructions).toBe(true);
   });
 
-  it("delivers empty instructions on missing paths", () => {
-    const inst = new SafeGeneratorInstructions({
-      "g": {
-        "t": {
-        }
-      }
+  it("Hands out empty SingleBlockInstructions as a default", () => {
+    const inst = new GeneratorInstructions({
+      "g": {}
     });
 
-    expect(inst.scope("missing", "t", "s")).toEqual({});
-    expect(inst.scope("g", "missing", "s")).toEqual({});
-    expect(inst.scope("g", "t", "missing")).toEqual({});
+    expect(inst.typeInstructions("missing", "irrelevant") instanceof SingleBlockInstructions).toBe(true);
+    expect(inst.typeInstructions("g", "missing") instanceof SingleBlockInstructions).toBe(true);
   });
 
-  it("bounded instructions for non-existing types give default values", () => {
-    const inst = new SafeGeneratorInstructions({
-      "g": {
-        "t": {
-        }
-      }
+  describe("SingleBlockInstructions", () => {
+    it("Exact and missing scope", () => {
+      const specific: Partial<Instructions> = {
+        orientation: "horizontal"
+      };
+      const inst = new SingleBlockInstructions({
+        "s": specific
+      });
+
+      expect(inst.scope("s")).toEqual(specific);
+      expect(inst.scope("missing")).toEqual({});
     });
 
-    const bound = inst.type("g", "t");
-    expect(bound.scopeBlock()).toEqual(DefaultInstructions.blockInstructions, "Block");
-    expect(bound.scopeIterator("missing")).toEqual(DefaultInstructions.iteratorInstructions, "Layout");
-    expect(bound.scopeTerminal("missing")).toEqual(DefaultInstructions.terminalInstructions, "Terminal");
-  });
+    it("undefined instructions", () => {
+      const bound = new SingleBlockInstructions(undefined);
+      expect(bound.scope("irrelevant")).toEqual({});
+    });
 
-  it("bounded instructions existing types prefer specific values", () => {
-    const inst = new SafeGeneratorInstructions({
-      "g": {
-        "t": {
-          "this": {
-            "between": "ä",
-            "style": {
-              "display": "block",
-              "color": "red"
-            }
+    it("Default values for missing scopes", () => {
+      const bound = new SingleBlockInstructions({});
+
+      expect(bound.scopeBlock()).toEqual(DefaultInstructions.blockInstructions, "Block");
+      expect(bound.scopeIterator("missing")).toEqual(DefaultInstructions.iteratorInstructions, "Layout");
+      expect(bound.scopeTerminal("missing")).toEqual(DefaultInstructions.terminalInstructions, "Terminal");
+    });
+
+    it("Mixing specific and default values", () => {
+      const bound = new SingleBlockInstructions({
+        "this": {
+          "between": "ä",
+          "style": {
+            "display": "block",
+            "color": "red"
           }
         }
-      }
+      });
+
+      expect(bound.scopeBlock()).toEqual(jasmine.objectContaining({
+        "orientation": "horizontal" as Orientation,
+        "style": {
+          "display": "block",
+          "color": "red"
+        }
+      }));
+      expect(bound.scopeIterator("this")).toEqual({
+        "between": "ä",
+        "orientation": "horizontal",
+        "style": {
+          "display": "block",
+          "color": "red"
+        }
+      });
+      expect(bound.scopeTerminal("this")).toEqual(jasmine.objectContaining({
+        "style": {
+          "display": "block",
+          "color": "red"
+        }
+      }));
     });
 
-    const bound = inst.type("g", "t");
-    expect(bound.scopeBlock()).toEqual(jasmine.objectContaining({
-      "orientation": "horizontal" as Orientation,
-      "style": {
-        "display": "block",
-        "color": "red"
-      }
-    }));
-    expect(bound.scopeIterator("this")).toEqual({
-      "between": "ä",
-      "orientation": "horizontal",
-      "style": {
-        "display": "block",
-        "color": "red"
-      }
+    it("Knows that `this` is a reserved name and not an actual type", () => {
+      const inst = new SingleBlockInstructions({ "this": {}, "that": {} });
+      expect(inst.specifiedTypes).toEqual(["that"]);
     });
-    expect(bound.scopeTerminal("this")).toEqual(jasmine.objectContaining({
-      "style": {
-        "display": "block",
-        "color": "red"
-      }
-    }));
+  });
+
+  describe("MultiBlockInstructions", () => {
+    it("Properly constructs SingleBlockInstructions", () => {
+      const inst = new MultiBlockInstructions({
+        type: "multi",
+        blocks: [
+          {
+            "t1": {
+              orientation: "horizontal"
+            }
+          },
+          {
+            "t1": {
+              orientation: "vertical"
+            }
+          }
+        ]
+      });
+
+      expect(inst.blocks.length).toEqual(2);
+
+      const fst = inst.blocks[0];
+      expect(fst.scope("t1")).toEqual({ orientation: "horizontal" });
+
+      const snd = inst.blocks[1];
+      expect(snd.scope("t1")).toEqual({ orientation: "vertical" });
+    });
   });
 });

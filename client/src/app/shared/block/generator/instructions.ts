@@ -1,15 +1,16 @@
 import {
-  TypeInstructions, Instructions, LayoutInstructions, BlockInstructions,
-  TerminalInstructions, DefaultInstructions
+  AllTypeInstructions, Instructions, IteratorInstructions, BlockInstructions,
+  TerminalInstructions, DefaultInstructions, TypeInstructions, isMultiBlockInstructions,
+  SingleBlockInstructionsDescription, MultiBlockInstructionsDescription
 } from './instructions.description'
 
 /**
  * A safe way to access generation instructions. Silently returns empty
  * instructions for all paths without specific instructions.
  */
-export class SafeGeneratorInstructions {
+export class GeneratorInstructions {
   constructor(
-    private _all: TypeInstructions
+    private _all: AllTypeInstructions
   ) {
     // Ensure that at least an empty object is avaiable
     if (!this._all) {
@@ -18,58 +19,74 @@ export class SafeGeneratorInstructions {
   }
 
   /**
-   * Retrieves the exact instructions at the given path.
+   * The type-level is where most of the action happens. This method provides sort of
+   * el-cheapo late binding: The grammar and type are remembered for later invocations.
    *
-   * @param grammarName The name of the grammar
-   * @param typeName The type that is requested
-   * @param scope The exact scope that is requested
+   * If the desired type instructions do not exist, purely default
+   * SingleBlockInstructions are returned. This means that every block that has no
+   * specific instructions will fall back to a single block.
    */
-  scope(grammarName?: string, typeName?: string, scope?: string): Readonly<Partial<Instructions>> {
+  typeInstructions(grammarName: string, typeName: string) {
     let gi = grammarName && this._all[grammarName];
     if (!gi) {
-      return ({});
+      return (DEFAULT_INSTRUCTIONS);
     }
 
     let ti = typeName && gi[typeName];
     if (!ti) {
-      return ({});
+      return (DEFAULT_INSTRUCTIONS);
     }
 
-    let si = scope && ti[scope];
-    if (!si) {
-      return ({});
+    if (isMultiBlockInstructions(ti)) {
+      return (new MultiBlockInstructions(ti));
+    } else {
+      return (new SingleBlockInstructions(ti));
     }
-
-    return (si);
-  }
-
-
-  /**
-   * The type-level is where most of the action happens. This method provides sort of
-   * el-cheapo late binding: The grammar and type are remembered for later invocations.
-   */
-  type(grammarName: string, typeName: string) {
-    return (new SafeTypeInstructions(this, grammarName, typeName));
   }
 }
 
 /**
- * A safe way to access generation instructions that are part of a specific type. 
+ * Accessing descriptions for multiple blocks.
+ */
+export class MultiBlockInstructions {
+  constructor(
+    private _desc: MultiBlockInstructionsDescription
+  ) { }
+
+  readonly blocks: ReadonlyArray<SingleBlockInstructions> = this._desc.blocks.map(b => new SingleBlockInstructions(b));
+}
+
+/**
+ * Nasty hack: Block styling options need to be accessible under some specific
+ * name too.
+ */
+const BLOCK_INSTRUCTIONS_NAME = "this";
+
+/**
+ * A safe way to access generation instructions that are part of a specific block. 
  * Returned instructions include default properties if no specific properties
  * have been set.
  */
-export class SafeTypeInstructions {
+export class SingleBlockInstructions {
   constructor(
-    private _all: SafeGeneratorInstructions,
-    private _grammarName: string,
-    private _typeName: string,
-  ) { }
+    private _type: SingleBlockInstructionsDescription
+  ) {
+    if (!this._type) {
+      this._type = {};
+    }
+  }
 
+  /**
+   * The types for that specific instructions exist.
+   */
+  get specifiedTypes() {
+    return (Object.keys(this._type).filter(name => name !== BLOCK_INSTRUCTIONS_NAME));
+  }
 
   /**
    * @return Layout specific instructions.
    */
-  scopeIterator(s: string): LayoutInstructions {
+  scopeIterator(s: string): IteratorInstructions {
     return (this.cloneWithStyle(this.scope(s), DefaultInstructions.iteratorInstructions));
   }
 
@@ -77,7 +94,7 @@ export class SafeTypeInstructions {
    * @return Block specific instructions
    */
   scopeBlock(): BlockInstructions {
-    return (this.cloneWithStyle(this.scope("this"), DefaultInstructions.blockInstructions));
+    return (this.cloneWithStyle(this.scope(BLOCK_INSTRUCTIONS_NAME), DefaultInstructions.blockInstructions));
   }
 
   /**
@@ -85,6 +102,18 @@ export class SafeTypeInstructions {
    */
   scopeTerminal(name?: string): TerminalInstructions {
     return (this.cloneWithStyle(this.scope(name), DefaultInstructions.terminalInstructions));
+  }
+
+  /**
+   * @return Exact instructions for the given scope, no default values applied.
+   */
+  scope(s?: string): Partial<Instructions> {
+    let toReturn = this._type[s];
+    if (!toReturn) {
+      toReturn = {};
+    }
+
+    return toReturn;
   }
 
   /**
@@ -102,11 +131,6 @@ export class SafeTypeInstructions {
     // that have been incorrectly assigned before.
     return (Object.assign({}, def, current, { style: mergedStyle }));
   }
-
-  /**
-   * @return Exact instructions for the given scope, no default values applied.
-   */
-  private scope(s?: string): Partial<Instructions> {
-    return (this._all.scope(this._grammarName, this._typeName, s));
-  }
 }
+
+export const DEFAULT_INSTRUCTIONS = new SingleBlockInstructions({});
