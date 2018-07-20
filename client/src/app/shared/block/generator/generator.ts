@@ -16,11 +16,11 @@ import {
 } from './generator.description'
 
 import {
-  DefaultInstructions, Instructions, TypeInstructions, LayoutInstructions, BlockInstructions, TerminalInstructions
+  DefaultInstructions, Instructions, AllTypeInstructions, IteratorInstructions, BlockInstructions, TerminalInstructions, AttributeMappingMode
 } from './instructions.description'
 
 import {
-  SafeGeneratorInstructions, SafeTypeInstructions
+  GeneratorInstructions, SingleBlockInstructions, MultiBlockInstructions
 } from './instructions'
 
 /**
@@ -63,7 +63,7 @@ export function mapProperty(
  */
 export function mapChildren(
   attr: NodeChildrenGroupDescription,
-  instructions: LayoutInstructions
+  instructions: IteratorInstructions
 ): VisualBlockDescriptions.EditorIterator {
   // Find out what goes between the elements
   let between: VisualBlockDescriptions.ConcreteBlock[] = undefined;
@@ -97,48 +97,90 @@ export function mapChildren(
   return (toReturn);
 }
 
-/**
- * Applies the given generation instructions to each attribute
- * of the given type.
- */
-export function mapAttributes(
-  typeDesc: NodeConcreteTypeDescription,
-  instructions: SafeTypeInstructions,
-): VisualBlockDescriptions.ConcreteBlock[] {
-  return (
-    typeDesc.attributes
-      .map(attr => {
-        switch (attr.type) {
-          case "allowed":
-          case "sequence":
-          case "choice":
-            return mapChildren(attr, instructions.scopeIterator(attr.name));
-          case "terminal":
-            return mapTerminal(attr, instructions.scopeTerminal(attr.name));
-          case "property":
-            return mapProperty(attr, {});
-          default:
-            return (undefined);
-        }
-      })
-      // Scrub everything that couldn't be created
-      .filter(visual => !!visual)
-  );
+export function mapAttribute(
+  attr: NodeAttributeDescription,
+  instructions: SingleBlockInstructions,
+): VisualBlockDescriptions.ConcreteBlock {
+  switch (attr.type) {
+    case "allowed":
+    case "sequence":
+    case "choice":
+      return mapChildren(attr, instructions.scopeIterator(attr.name));
+    case "terminal":
+      return mapTerminal(attr, instructions.scopeTerminal(attr.name));
+    case "property":
+      return mapProperty(attr, {});
+    default:
+      throw new Error(`Unknown attribute type "${(attr as any).type}"`);
+  }
+
 }
 
 /**
- * Concrete types are mapped to draggable blocks.
+ * Applies the given generation instructions to each attribute
+ * of the given type. If no specific instructions are available,
+ * default instructions will be used.
+ */
+export function mapAllAttributes(
+  typeDesc: NodeConcreteTypeDescription,
+  instructions: SingleBlockInstructions,
+): VisualBlockDescriptions.ConcreteBlock[] {
+  return (typeDesc.attributes.map(attr => mapAttribute(attr, instructions)));
+}
+
+/**
+ * Only generates visual blocks for types that are explicitly mentioned in the
+ * instructions. No construction of blocks that haven't been mentioned.
+ */
+export function mapMentionedAttributes(
+  typeDesc: NodeConcreteTypeDescription,
+  instructions: SingleBlockInstructions,
+): VisualBlockDescriptions.ConcreteBlock[] {
+  return (instructions.specifiedTypes.map(t => {
+    const mappedType = typeDesc.attributes.find(a => a.name === t);
+    if (mappedType) {
+      return (mapAttribute(mappedType, instructions));
+    } else {
+      throw new Error(`Could not find property "${t}" mentioned by generating instructions for "${typeDesc.type}"`);
+    }
+  }));
+}
+
+const attrMappers = {
+  all: mapAllAttributes,
+  mentioned: mapMentionedAttributes
+}
+
+/**
+ * Concrete types are mapped to draggable blocks. Per default a single
+ * block is created, but specific instructions may mandate the use
+ * of multiple blocks.
  */
 export function mapType(
   typeDesc: NodeConcreteTypeDescription,
-  instructions: SafeTypeInstructions,
-): VisualBlockDescriptions.EditorBlock {
-  // Create a 
-  return ({
-    blockType: "block",
-    direction: instructions.scopeBlock().orientation,
-    children: mapAttributes(typeDesc, instructions)
-  });
+  instructions: SingleBlockInstructions | MultiBlockInstructions,
+): VisualBlockDescriptions.ConcreteBlock[] {
+  // How many blocks should be created?
+  if (instructions instanceof SingleBlockInstructions) {
+    const blockInstructions = instructions.scopeBlock();
+    const mapFunc = attrMappers[blockInstructions.attributeMappingMode];
+
+    // A single block
+    return ([{
+      blockType: "block",
+      direction: blockInstructions.orientation,
+      children: mapFunc(typeDesc, instructions)
+    }]);
+  } else if (instructions instanceof MultiBlockInstructions) {
+    // Multiple blocks
+    const arrayOfArray = instructions.blocks.map(single => mapType(typeDesc, single));
+    return ([].concat(...arrayOfArray));
+
+  } else {
+    // Shouldn't ever happen
+    throw new Error(`Neither single nor multiple block instructions`);
+  }
+
 }
 
 /**
@@ -168,7 +210,7 @@ export function convertGrammar(
     .filter(([k, v]) => v.type !== "oneOf") as [string, NodeConcreteTypeDescription][];
 
   // Wrap generation instructions in something that is safe to use
-  const instructions = new SafeGeneratorInstructions(d.typeInstructions);
+  const instructions = new GeneratorInstructions(d.typeInstructions);
 
   // Dummy mode on: Lets create a single constant block for every type
   toReturn.editorBlocks = concreteTypes.map(([tName, tDesc]): EditorBlockDescription => {
@@ -177,7 +219,7 @@ export function convertGrammar(
         languageName: g.name,
         typeName: tName
       },
-      visual: [mapType(tDesc, instructions.type(g.name, tName))]
+      visual: mapType(tDesc, instructions.typeInstructions(g.name, tName))
     });
   });
 

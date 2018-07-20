@@ -5,7 +5,7 @@ import { EditorComponentDescription } from '../block-language.description'
 import { VisualBlockDescriptions } from '../block.description'
 
 import {
-  TypeInstructions
+  AllTypeInstructions
 } from './instructions.description'
 
 /**
@@ -14,7 +14,7 @@ import {
  */
 export interface BlockLanguageGeneratorDocument {
   editorComponents: EditorComponentDescription[];
-  typeInstructions?: TypeInstructions;
+  typeInstructions?: AllTypeInstructions;
 }
 
 /**

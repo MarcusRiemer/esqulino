@@ -1,10 +1,11 @@
-import { GrammarDescription } from '../../syntaxtree/grammar.description'
+import { GrammarDescription, NodeConcreteTypeDescription } from '../../syntaxtree/grammar.description'
 
 import { VisualBlockDescriptions } from '../block.description';
 
 import { BlockLanguageGeneratorDescription } from './generator.description'
-import { convertGrammar, mapTerminal, mapProperty, mapChildren } from './generator'
+import { convertGrammar, mapTerminal, mapProperty, mapChildren, mapType, mapMentionedAttributes } from './generator'
 import { DefaultInstructions } from './instructions.description';
+import { MultiBlockInstructions, SingleBlockInstructions } from './instructions';
 
 describe("BlockLanguage Generator", () => {
   describe("Single Types", () => {
@@ -68,6 +69,84 @@ describe("BlockLanguage Generator", () => {
         ]
       });
     });
+
+    it("Mentioned attributes only", () => {
+      const instr = new SingleBlockInstructions({
+        "this": { attributeMappingMode: "mentioned" },
+        "p1": {}
+      });
+
+      const concreteType: NodeConcreteTypeDescription = {
+        type: "concrete",
+        attributes: [
+          { type: "property", name: "ignored", base: "string" },
+          { type: "terminal", name: "p1", symbol: "p1Text", },
+        ]
+      };
+      const res = mapMentionedAttributes(concreteType, instr);
+      expect(res.length).toEqual(1);
+    });
+
+    it("Mentioning an unknown attribute", () => {
+      const instr = new SingleBlockInstructions({
+        "this": { attributeMappingMode: "mentioned" },
+        "missing": {}
+      });
+
+      const concreteType: NodeConcreteTypeDescription = {
+        type: "concrete",
+        attributes: [
+          { type: "property", name: "ignored", base: "string" },
+          { type: "terminal", name: "p1", symbol: "p1Text", },
+        ]
+      };
+      expect(() => mapMentionedAttributes(concreteType, instr)).toThrowError();
+    });
+  });
+
+  describe("Multi Block Types", () => {
+    it("Identical relevant terminals with ignored property", () => {
+      const instructions = new MultiBlockInstructions({
+        type: "multi",
+        blocks: [
+          { "this": { attributeMappingMode: "mentioned" }, "p1": {} },
+          { "this": { attributeMappingMode: "mentioned" }, "p1": {} },
+        ]
+      });
+
+      const concreteType: NodeConcreteTypeDescription = {
+        type: "concrete",
+        attributes: [
+          {
+            type: "property",
+            name: "ignored",
+            base: "string"
+          },
+          {
+            type: "terminal",
+            name: "p1",
+            symbol: "p1Text",
+          },
+        ]
+      }
+      const res = mapType(concreteType, instructions) as VisualBlockDescriptions.EditorBlock[];
+      expect(res.length).toEqual(2);
+
+      const expBlock = jasmine.objectContaining({
+        blockType: "block",
+      } as Partial<VisualBlockDescriptions.EditorBlock>);
+
+      const expConstant = jasmine.objectContaining({
+        blockType: "constant",
+        text: "p1Text"
+      } as Partial<VisualBlockDescriptions.EditorConstant>);
+
+      res.forEach(b => {
+        expect(b).toEqual(expBlock);
+        expect(b.children.length).toEqual(1);
+        expect(b.children[0]).toEqual(expConstant);
+      });
+    });
   });
 
   describe("Whole Grammars", () => {
@@ -129,7 +208,7 @@ describe("BlockLanguage Generator", () => {
       expect(r.editorBlocks.length).toEqual(2);
     });
 
-    it("Terminal symbols to constants", () => {
+    it("All iterators, a constant and a property", () => {
       const grammar: GrammarDescription = {
         id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
         programmingLanguageId: "spec",
@@ -142,9 +221,39 @@ describe("BlockLanguage Generator", () => {
               {
                 type: "terminal",
                 symbol: "t"
+              },
+              {
+                type: "allowed",
+                name: "c1",
+                nodeTypes: [
+                  {
+                    nodeType: "t1",
+                    occurs: "1"
+                  }
+                ]
+              },
+              {
+                type: "sequence",
+                name: "c2",
+                nodeTypes: [
+                  {
+                    nodeType: "t1",
+                    occurs: "1"
+                  }
+                ]
+              },
+              {
+                type: "choice",
+                name: "c3",
+                choices: ["t1"]
+              },
+              {
+                type: "property",
+                name: "p1",
+                base: "string"
               }
             ]
-          }
+          },
         }
       };
 
@@ -156,11 +265,38 @@ describe("BlockLanguage Generator", () => {
 
       const r = convertGrammar(generator, grammar);
 
+      // There should be exactly 1 block
       expect(r.editorBlocks.length).toEqual(1);
       const b = r.editorBlocks[0].visual[0] as VisualBlockDescriptions.EditorBlock;
-      const v = b.children[0] as VisualBlockDescriptions.EditorConstant;
-      expect(v.blockType).toEqual("constant");
-      expect(v.text).toEqual("t");
+      expect(b).toEqual(jasmine.objectContaining({
+        "blockType": "block"
+      } as Partial<VisualBlockDescriptions.EditorBlock>));
+
+      // First block is the constant
+      expect(b.children[0]).toEqual(jasmine.objectContaining({
+        blockType: "constant",
+        text: "t"
+      } as Partial<VisualBlockDescriptions.EditorConstant>));
+
+      // The next three blocks are iterators
+      expect(b.children[1]).toEqual(jasmine.objectContaining({
+        blockType: "iterator",
+        childGroupName: "c1"
+      } as Partial<VisualBlockDescriptions.EditorIterator>));
+      expect(b.children[2]).toEqual(jasmine.objectContaining({
+        blockType: "iterator",
+        childGroupName: "c2"
+      } as Partial<VisualBlockDescriptions.EditorIterator>));
+      expect(b.children[3]).toEqual(jasmine.objectContaining({
+        blockType: "iterator",
+        childGroupName: "c3"
+      } as Partial<VisualBlockDescriptions.EditorIterator>));
+
+      // And then we have a property
+      expect(b.children[4]).toEqual(jasmine.objectContaining({
+        blockType: "input",
+        property: "p1"
+      } as Partial<VisualBlockDescriptions.EditorInput>));
     });
   });
 });
