@@ -70,6 +70,13 @@ export class ServerApiService {
   }
 
   /**
+   * Retrieves block languages that are related to this grammar
+   */
+  individualGrammarRelatedBlockLanguagesUrl(id: string) {
+    return (`${this.individualGrammarUrl(id)}/related_block_languages`)
+  }
+
+  /**
    * Retrieves the URL that is used to list all public block language generators.
    */
   getBlockLanguageGeneratorListUrl(): string {

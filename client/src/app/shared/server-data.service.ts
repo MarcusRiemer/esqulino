@@ -22,7 +22,7 @@ import { transition } from '@angular/animations';
  * HTTP request) and provides an option to explicitly refresh the value by re-subscribing
  * to the inital Observable.
  */
-class CachedRequest<T> {
+export class CachedRequest<T> {
   // Every new value triggers another request. The exact value
   // is not of interest, so a single valued type seems appropriate.
   private _trigger = new BehaviorSubject<"trigger">("trigger");
