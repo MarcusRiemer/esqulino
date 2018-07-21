@@ -11,7 +11,6 @@ import { environment } from '../environments/environment';
 import { SharedAppModule } from './shared/shared.module';
 import { FrontModule } from './front/front.module';
 import { EditorModule } from './editor/editor.module';
-import { AdminModule } from './admin/admin.module';
 
 import { SqlScratchComponent } from './app.component';
 import { routing } from './app.routes';
@@ -40,7 +39,6 @@ if (typeof window !== "undefined") {
     SharedAppModule.forRoot(),
     FrontModule,
     EditorModule,
-    AdminModule,
     routing,
   ],
   declarations: [
