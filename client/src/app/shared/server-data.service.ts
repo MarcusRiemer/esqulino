@@ -154,7 +154,7 @@ export class ServerDataService {
   // Caching individual grammars
   private readonly individualGrammars = new IndividualDescriptionCache<GrammarDescription>(
     this._http,
-    id => this._serverApi.getGrammarUrl(id)
+    id => this._serverApi.individualGrammarUrl(id)
   );
 
   // Caching individual block languages
@@ -211,6 +211,19 @@ export class ServerDataService {
         console.log(`Updated BlockLanguage "${desc.id}"`);
         this.listBlockLanguages.refresh();
         this.individualBlockLanguages.refreshDescription(desc.id);
+      });
+  }
+
+  /**
+   * Updates the given grammar
+   */
+  updateGrammar(desc: GrammarDescription) {
+    const url = this._serverApi.individualGrammarUrl(desc.id);
+    this._http.put(url, desc)
+      .subscribe(result => {
+        console.log(`Updated Grammar "${desc.id}"`);
+        this.listGrammars.refresh();
+        this.individualGrammars.refreshDescription(desc.id);
       });
   }
 
