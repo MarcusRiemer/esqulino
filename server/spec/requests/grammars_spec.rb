@@ -115,4 +115,51 @@ RSpec.describe BlockLanguagesController, type: :request do
         expect(original.name).to eq refreshed.name
       end
   end
+
+  describe 'GET /api/grammars/:grammarId/related_block_languages' do
+    it 'Finds nothing for an unused grammar' do
+      original = FactoryBot.create(:grammar)
+
+      get "/api/grammars/#{original.id}/related_block_languages",
+          :headers => json_headers
+
+      expect(response.status).to eq(200)
+
+      json_data = JSON.parse(response.body)
+      expect(json_data.length).to eq 0
+    end
+
+    it 'Finds the single related block language' do
+      original = FactoryBot.create(:grammar)
+      related = FactoryBot.create(:block_language, grammar: original)
+
+      get "/api/grammars/#{original.id}/related_block_languages",
+          :headers => json_headers
+
+      expect(response.status).to eq(200)
+
+      json_data = JSON.parse(response.body)
+      
+      expect(json_data.length).to eq 1
+      expect(json_data[0]).to validate_against "BlockLanguageListDescription"
+      expect(json_data[0]['name']).to eq related.name
+    end
+
+    it 'Ignores unrelated block languages' do
+      original = FactoryBot.create(:grammar)
+      related = FactoryBot.create(:block_language, grammar: original)
+      unrelated = FactoryBot.create(:block_language)
+
+      get "/api/grammars/#{original.id}/related_block_languages",
+          :headers => json_headers
+
+      expect(response.status).to eq(200)
+
+      json_data = JSON.parse(response.body)
+      
+      expect(json_data.length).to eq 1
+      expect(json_data[0]).to validate_against "BlockLanguageListDescription"
+      expect(json_data[0]['name']).to eq related.name
+    end
+  end
 end

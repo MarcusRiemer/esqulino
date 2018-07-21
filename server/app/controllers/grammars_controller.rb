@@ -2,7 +2,7 @@
 class GrammarsController < ApplicationController
   # List all existing grammars
   def index
-    render :json => Grammar.all.map{|g| g.to_list_api_response}
+    render :json => Grammar.scope_list.map{|g| g.to_list_api_response}
   end
 
   # Find a single grammar
@@ -34,6 +34,13 @@ class GrammarsController < ApplicationController
     else
       render json: { 'errors' => grammar.errors.as_json }, :status => 400
     end
+  end
+
+  # Finds block languages that are related to this grammar
+  def related_block_languages
+    render :json => BlockLanguage.scope_list
+                      .where(grammar_id: id_params[:id])
+                      .map{|b| b.to_list_api_response}
   end
 
   private

@@ -116,7 +116,9 @@ Rails.application.routes.draw do
 
     resources :block_languages, only: [:create, :index, :show, :update, :destroy]
     resources :block_language_generators, only: [:create, :index, :show, :update]
+
     resources :grammars, only: [:create, :index, :show, :update]
+    get 'grammars/:id/related_block_languages', controller: 'grammars', action: :related_block_languages
     
     # Fallback for unknown API endpoints
     match '*path', via: :all, to: proc { [404, {}, ["Unknown API endpoint"]] }
