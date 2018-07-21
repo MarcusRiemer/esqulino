@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 
+import { NgJsonEditorModule } from 'ang-jsoneditor'
+
 import { SharedAppModule } from '../shared/shared.module'
 
 import { adminRouting } from './admin.routes'
@@ -14,6 +16,7 @@ import { LinkGrammarComponent } from './link-grammar.component'
 
 @NgModule({
   imports: [
+    NgJsonEditorModule,
     CommonModule,
     SharedAppModule,
     adminRouting,
