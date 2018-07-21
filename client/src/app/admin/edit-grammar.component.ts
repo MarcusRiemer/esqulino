@@ -5,16 +5,23 @@ import { switchMap, map, tap } from 'rxjs/operators';
 
 import { ServerDataService } from '../shared/server-data.service';
 import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint';
+import { JsonEditorOptions } from 'ang-jsoneditor';
 
 
 @Component({
   templateUrl: 'templates/edit-grammar.html'
 })
-export class EditGrammarComponent {
+export class EditGrammarComponent implements OnInit {
   constructor(
     private _serverData: ServerDataService,
     private _activatedRoute: ActivatedRoute
   ) {
+  }
+
+  readonly editorOptions = new JsonEditorOptions();
+
+  ngOnInit() {
+
   }
 
   /**
