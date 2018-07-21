@@ -29,7 +29,8 @@
       <ul class="list-inline">
         <li *ngFor="let related of relatedBlockLanguages?.value | async"
             class="list-inline-item">
-          <a [routerLink]="['/admin/block-language', related.id]">
+          <a [routerLink]="['/admin/block-language', related.id]"
+             class="badge badge-light">
             {{ related.name }}
           </a>
         </li> 
@@ -47,7 +48,7 @@
         <div class="col-sm-10">
           <textarea id="grammar-pretty"
                     readonly
-                    class="form-control"
+                    class="form-control full-height"
                     rows="20"
                     [textContent]="prettyPrintedGrammar"></textarea>
         </div>
@@ -68,7 +69,9 @@
         <div class="col-sm-10">
           <json-editor #typesEditor
                        [data]="grammar.types"
-                       [options]="editorOptions"></json-editor>
+                       [options]="editorOptions"
+                       id="grammar-model"
+                       class="full-height"></json-editor>
         </div>
       </div>
     </div>

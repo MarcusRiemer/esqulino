@@ -12,9 +12,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
     { componentType: "query-preview" }
   ],
   sidebars: [
-    {
-      type: "databaseSchema",
-    },
+    { type: "databaseSchema" },
     {
       type: "fixedBlocks",
       caption: "SQL",

@@ -12,6 +12,8 @@ import { GrammarDescription } from '../shared/syntaxtree';
 import { BlockLanguageListDescription } from '../shared/block/block-language.description';
 import { ServerApiService } from '../shared/serverapi.service';
 
+import { defaultJsonEditorOptions } from './json-editor'
+
 @Component({
   templateUrl: 'templates/edit-grammar.html'
 })
@@ -19,7 +21,7 @@ export class EditGrammarComponent implements OnInit {
 
   @ViewChild('typesEditor') editor: JsonEditorComponent;
 
-  readonly editorOptions = new JsonEditorOptions();
+  readonly editorOptions = defaultJsonEditorOptions();
 
   // The grammar that is beeing edited
   grammar: GrammarDescription;
@@ -51,11 +53,6 @@ export class EditGrammarComponent implements OnInit {
       const request = this._http.get<BlockLanguageListDescription[]>(relatedUrl);
       this.relatedBlockLanguages = new CachedRequest<BlockLanguageListDescription[]>(request);
     });
-
-    // Options for the type editor
-    this.editorOptions.sortObjectKeys = false;
-    this.editorOptions.modes = ["tree", "text", "code"];
-    this.editorOptions.mode = "code";
   }
 
   onTypeDataUpdate() {

@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router'
 
 import { switchMap, map, tap, first } from 'rxjs/operators';
+
+import { JsonEditorComponent } from 'ang-jsoneditor';
 
 import { ServerDataService } from '../shared/server-data.service';
 
@@ -10,11 +12,18 @@ import { DEFAULT_GENERATOR } from '../shared/block/generator/generator.descripti
 import { generateBlockLanguage } from '../shared/block/generator/generator'
 import { prettyPrintBlockLanguage } from '../shared/block/prettyprint';
 
+import { defaultJsonEditorOptions } from './json-editor'
+
 @Component({
   templateUrl: 'templates/edit-block-language.html'
 })
 export class EditBlockLanguageComponent implements OnInit {
+  // The block language that is beeing edited.
   public editedSubject: BlockLanguageDescription;
+
+
+  @ViewChild('sidebarsEditor') sidebarsEditor: JsonEditorComponent;
+  readonly editorOptions = defaultJsonEditorOptions();
 
   constructor(
     private _serverData: ServerDataService,
@@ -24,6 +33,9 @@ export class EditBlockLanguageComponent implements OnInit {
 
   readonly availableGrammars = this._serverData.listGrammars.value;
 
+  /**
+   * Ensures that a block language that matches the URL is loaded.
+   */
   ngOnInit() {
     this._activatedRoute.paramMap
       .pipe(
@@ -41,7 +53,10 @@ export class EditBlockLanguageComponent implements OnInit {
     return (prettyPrintBlockLanguage(blockLang));
   }
 
-  regenerate() {
+  /**
+   * Reruns the block language generator.
+   */
+  onRegenerate() {
     this._serverData
       .getGrammarDescription(this.editedSubject.grammarId)
       .pipe(first())
@@ -55,5 +70,9 @@ export class EditBlockLanguageComponent implements OnInit {
    */
   onSave() {
     this._serverData.updateBlockLanguage(this.editedSubject);
+  }
+
+  onSidebarDataUpdate() {
+    this.editedSubject.sidebars = JSON.parse(this.sidebarsEditor.getText());
   }
 }
