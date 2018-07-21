@@ -22,6 +22,21 @@
     </div>
   </div>
 
+  <!-- Related block languages -->
+  <div class="form-group row">
+    <div class="col-sm-2">Related Block Languages</div>
+    <div class="col-sm-10">
+      <ul class="list-inline">
+        <li *ngFor="let related of relatedBlockLanguages?.value | async"
+            class="list-inline-item">
+          <a [routerLink]="['/admin/block-language', related.id]">
+            {{ related.name }}
+          </a>
+        </li> 
+      </ul>
+    </div>
+  </div>
+
   <!-- Showing model and pretty printed representation side by side -->
   <div class="row">
     <div class="col-xl-6">
@@ -39,13 +54,16 @@
       </div>
     </div>
 
-    <!-- Editable model -->
+    <!-- Editable types -->
     <div class="col-xl-6">
       <div class="form-group row">
         <div class="col-sm-2">
           <label for="grammar-model"
                  class="col-form-label">Types</label>
-          <button (click)="onTypeDataUpdate()">Sync Type Data</button>
+          <button (click)="onTypeDataUpdate()"
+                  class="btn btn-warning btn-block">
+            Apply JSON
+          </button>
         </div>
         <div class="col-sm-10">
           <json-editor #typesEditor
@@ -53,12 +71,6 @@
                        [options]="editorOptions"></json-editor>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary" disabled>Speichern</button>
     </div>
   </div>
 </form>
