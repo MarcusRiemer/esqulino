@@ -9,7 +9,7 @@
       </button>
     </div>
     <div class="col-sm-2">
-      <button (click)="regenerate()"
+      <button (click)="onRegenerate()"
               class="btn btn-primary btn-block">
         Neu Generieren
       </button>
@@ -52,13 +52,13 @@
     <div class="col-xl-6">
       <!-- Pretty printed blockLanguage -->
       <div class="form-group row">
+
         <label for="block-language-pretty"
                class="col-sm-2 col-form-label">Pretty Printed</label>
         <div class="col-sm-10">
           <textarea id="block-language-pretty"
                     readonly
-                    class="form-control"
-                    rows="20"
+                    class="form-control full-height"
                     [value]="prettyPrintBlockLanguage(editedSubject)"></textarea>
         </div>
       </div>
@@ -67,15 +67,19 @@
 
       <!-- Editable sidebar entries -->
       <div class="form-group row">
-        <label for="block-language-sidebar"
-               class="col-sm-2 col-form-label">Seitenleisten</label>
+        <div class="col-sm-2">
+          <label for="block-language-sidebar"
+                 class="col-form-label">Seitenleisten</label>
+          <button (click)="onSidebarDataUpdate()"
+                  class="btn btn-warning btn-block">
+            Apply JSON
+          </button>
+        </div>
         <div class="col-sm-10">
-          <textarea id="block-language-sidebar"
-                    class="form-control"
-                    rows="20"
-                    [textContent]="editedSubject.sidebars | json"
-                    readonly>
-          </textarea>
+          <json-editor #sidebarsEditor
+                       [data]="editedSubject.sidebars"
+                       [options]="editorOptions"
+                       class="half-height"></json-editor>
         </div>
       </div>
 
