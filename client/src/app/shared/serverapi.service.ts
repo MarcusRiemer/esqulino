@@ -65,7 +65,7 @@ export class ServerApiService {
   /**
    * Retrieves the full description of a specific grammar.
    */
-  getGrammarUrl(id: string) {
+  individualGrammarUrl(id: string) {
     return (`${this._apiBaseUrl}/grammars/${id}`)
   }
 

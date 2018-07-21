@@ -53,7 +53,7 @@ export class EditBlockLanguageComponent implements OnInit {
   /**
    * Saves the current state of the block language
    */
-  save() {
+  onSave() {
     this._serverData.updateBlockLanguage(this.editedSubject);
   }
 }

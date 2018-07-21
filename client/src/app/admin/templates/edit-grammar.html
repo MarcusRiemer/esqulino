@@ -1,5 +1,15 @@
-<form *ngIf="(grammar | async); let grammar">
+<form *ngIf="grammar">
   <h2>Grammar <q>{{ grammar.name }}</q></h2>
+
+  <div class="form-group row">
+    <div class="col-sm-2">
+      <button (click)="onSave()"
+              class="btn btn-primary btn-block">
+        Speichern
+      </button>
+    </div>
+  </div>
+  
   <!-- Editable name of the grammar -->
   <div class="form-group row">
     <label for="grammar-name"
@@ -24,7 +34,7 @@
                     readonly
                     class="form-control"
                     rows="20"
-                    [value]="prettyPrintedGrammar | async"></textarea>
+                    [textContent]="prettyPrintedGrammar"></textarea>
         </div>
       </div>
     </div>
@@ -32,10 +42,14 @@
     <!-- Editable model -->
     <div class="col-xl-6">
       <div class="form-group row">
-        <label for="grammar-model"
-               class="col-form-label col-sm-2">Types</label>
+        <div class="col-sm-2">
+          <label for="grammar-model"
+                 class="col-form-label">Types</label>
+          <button (click)="onTypeDataUpdate()">Sync Type Data</button>
+        </div>
         <div class="col-sm-10">
-          <json-editor [data]="grammar.types"
+          <json-editor #typesEditor
+                       [data]="grammar.types"
                        [options]="editorOptions"></json-editor>
         </div>
       </div>
