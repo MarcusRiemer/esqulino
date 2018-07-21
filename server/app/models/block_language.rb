@@ -20,6 +20,13 @@ class BlockLanguage < ApplicationRecord
   # The generator that may have been used to generate this block language
   belongs_to :block_language_generator, optional: true
 
+  # A block language with only the information that is relevant when listing it
+  scope :scope_list, -> {
+    select(:id, :slug, :name, :default_programming_language_id,
+           :block_language_generator_id, :grammar_id,
+           :created_at, :updated_at)
+  }
+
   # Computes a hash that may be sent back to the client if it requires
   # full access to the block language. This usually happens when the
   # client is working with the editor.

@@ -18,9 +18,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response).to have_http_status(200)
 
       json_data = JSON.parse(response.body)
-
       expect(json_data.length).to eq 1
-
       expect(json_data[0]).to validate_against "BlockLanguageListDescription"
     end
   end
