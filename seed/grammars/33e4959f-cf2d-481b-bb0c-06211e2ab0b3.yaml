@@ -24,16 +24,16 @@ concise_attributes:
     "object-close", "type": "terminal", "symbol": "}"}]}, "string": {"type": "concrete",
     "attributes": [{"base": "string", "name": "value", "type": "property"}]}, "boolean":
     {"type": "concrete", "attributes": [{"base": "boolean", "name": "boolean", "type":
-    "property"}]}, "key-value": {"type": "concrete", "attributes": [{"base": "string",
-    "name": "key", "type": "property"}, {"name": "colon", "type": "terminal", "symbol":
-    ":"}, {"name": "value", "type": "allowed", "nodeTypes": [{"occurs": "1", "nodeType":
-    "value"}]}]}}}'
+    "property"}]}, "key-value": {"type": "concrete", "attributes": [{"name": "key",
+    "type": "allowed", "nodeTypes": [{"occurs": "1", "nodeType": "string"}]}, {"name":
+    "colon", "type": "terminal", "symbol": ":"}, {"name": "value", "type": "allowed",
+    "nodeTypes": [{"occurs": "1", "nodeType": "value"}]}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-20 20:33:04.813374'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-20 20:33:04.813374'
+  value_before_type_cast: '2018-07-22 10:53:41.037333'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: json
