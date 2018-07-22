@@ -10,8 +10,13 @@ export namespace VisualBlockDescriptions {
 
   /**
    * We currently allow any CSS style to be used.
+   *
+   * TODO: This could be a Readonly<> type but that causes the JSON-
+   * schema generator to (sort of rightfully) emit false for
+   * "additionalProperties" and that in turn makes this type rather
+   * pointless.
    */
-  export type BlockStyle = Readonly<{ [k: string]: string }>;
+  export type BlockStyle = { [k: string]: string };
 
   /**
    * Describes how certain nodes of the syntaxtree should be presented
@@ -60,6 +65,7 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorLayout extends EditorBlockBase {
     direction: Orientation;
+    children?: ConcreteBlock[];
     wrapChildren?: boolean;
   }
 
@@ -69,7 +75,6 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorBlock extends EditorLayout {
     blockType: "block";
-    children?: ConcreteBlock[];
     dropTarget?: DropTargetProperties;
     dropAction?: "append" | "replace";
   }

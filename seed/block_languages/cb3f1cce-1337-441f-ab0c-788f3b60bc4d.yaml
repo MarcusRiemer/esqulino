@@ -108,13 +108,25 @@ concise_attributes:
     [{"children": [{"style": {"display": "inline-block"}, "property": "operator",
     "blockType": "input"}], "blockType": "block", "direction": "horizontal"}], "describedType":
     {"typeName": "relationalOperator", "languageName": "sql"}}], "editorComponents":
-    []}'
+    [], "localGeneratorInstructions": {"typeInstructions": {"sql": {"from": {"type":
+    "multi", "blocks": [{"this": {"attributeMappingMode": "mentioned"}, "tables":
+    {"between": ","}, "keyword": {"style": {"color": "blue", "width": "9ch"}}}, {"this":
+    {"attributeMappingMode": "mentioned"}, "joins": {"orientation": "vertical"}}]},
+    "where": {"keyword": {"style": {"color": "blue", "width": "9ch"}}}, "select":
+    {"columns": {"between": ",", "orientation": "horizontal"}, "keyword": {"style":
+    {"color": "blue", "width": "9ch"}}}, "groupBy": {"keyword": {"style": {"color":
+    "blue", "width": "9ch"}}}, "orderBy": {"keyword": {"style": {"color": "blue",
+    "width": "9ch"}}}, "innerJoinOn": {"keyword": {"style": {"color": "blue", "margin-left":
+    "2ch", "margin-right": "1ch"}}, "keywordOn": {"style": {"color": "blue", "margin-left":
+    "1ch", "margin-right": "1ch"}}}, "querySelect": {"this": {"orientation": "vertical"}},
+    "functionCall": {"name": {"readOnly": true}}, "binaryExpression": {"operator":
+    {"style": {"margin-left": "1ch", "margin-right": "1ch"}}}}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-17 11:08:14.302566'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-22 11:37:15.02838'
+  value_before_type_cast: '2018-07-22 13:36:52.668888'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql

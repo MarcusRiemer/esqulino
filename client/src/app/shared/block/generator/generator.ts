@@ -235,7 +235,7 @@ export function convertGrammar(
   // * The default programming language
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
-    editorComponents: d.editorComponents,
+    editorComponents: d.editorComponents || [],
     sidebars: []
   };
 
@@ -268,13 +268,12 @@ export function convertGrammar(
  */
 export function generateBlockLanguage(
   l: BlockLanguageListDescription,
-  d: BlockLanguageGeneratorDescription,
+  d: BlockLanguageGeneratorDocument,
   g: GrammarDescription
 ): BlockLanguageDescription {
   const generated = convertGrammar(d, g);
 
   const toReturn = Object.assign({}, l, generated);
-  toReturn.blockLanguageGeneratorId = d.id;
 
   return (toReturn);
 }

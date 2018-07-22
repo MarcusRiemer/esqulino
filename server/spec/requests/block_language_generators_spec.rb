@@ -125,9 +125,11 @@ RSpec.describe BlockLanguagesController, type: :request do
            :headers => json_headers,
            :params => params_update_req.to_json
       
-      expect(response.status).to eq(400)
-      refreshed = BlockLanguageGenerator.find(original.id)
-      expect(original.name).to eq refreshed.name
+      expect(response.status).to eq(204)
+
+      original.reload
+      expect(original.name).to eq "Updated empty"
+      expect(original.model).to eq Hash.new
     end
   end
 end
