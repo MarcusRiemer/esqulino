@@ -32,9 +32,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
-          type: "property",
+          type: "allowed",
           name: "key",
-          base: "string"
+          nodeTypes: [
+            { nodeType: "string", occurs: "1" }
+          ]
         },
         {
           type: "terminal",
