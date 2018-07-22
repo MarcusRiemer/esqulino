@@ -31,8 +31,10 @@ const NODE_CONVERTER_BASE: NodeConverterRegistration[] = [
         attributes.forEach(attr => process.generateNode(attr));
         process.addConvertedFragment(`>`, node, closeEndSep);
 
-        // Let the possible children render themselves. 
-        childElements.forEach(c => process.generateNode(c));
+        // Let the possible children render themselves.
+        process.indent(() => {
+          childElements.forEach(c => process.generateNode(c));
+        });
 
         process.addConvertedFragment(`</${name}>`, node, openEndSep);
         return ([]);
