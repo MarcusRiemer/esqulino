@@ -53,13 +53,20 @@ concise_attributes:
     {"typeName": "interpolate", "languageName": "dxml"}}, {"visual": [{"children":
     [{"style": {"display": "inline-block"}, "property": "operator", "blockType": "input"}],
     "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
-    "binaryOperator", "languageName": "dxml"}}], "editorComponents": []}'
+    "binaryOperator", "languageName": "dxml"}}], "editorComponents": [], "localGeneratorInstructions":
+    {"editorComponents": [], "typeInstructions": {"dxml": {"element": {"type": "multi",
+    "blocks": [{"name": {"style": {"color": "#ad0000"}}, "this": {"attributeMappingMode":
+    "mentioned"}, "attributes": {"between": " "}, "tag-open-end": {"style": {"color":
+    "blue"}}, "tag-open-begin": {"style": {"color": "blue"}}}, {"this": {"style":
+    {"margin-left": "2ch"}, "attributeMappingMode": "mentioned"}, "elements": {"orientation":
+    "vertical"}}, {"this": {"attributeMappingMode": "mentioned"}, "tag-close": {}}]},
+    "attribute": {"name": {"style": {"color": "#ef4040", "margin-left": "1ch"}}}}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-17 13:24:27.882035'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-20 19:37:50.776182'
+  value_before_type_cast: '2018-07-22 13:23:31.088968'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: dxml-eruby

@@ -8,7 +8,7 @@ import { JsonEditorComponent } from 'ang-jsoneditor';
 import { ServerDataService } from '../shared/server-data.service';
 
 import { BlockLanguageDescription } from '../shared/block/block-language.description';
-import { DEFAULT_GENERATOR } from '../shared/block/generator/generator.description'
+import { DEFAULT_GENERATOR, BlockLanguageGeneratorDocument } from '../shared/block/generator/generator.description'
 import { generateBlockLanguage } from '../shared/block/generator/generator'
 import { prettyPrintBlockLanguage } from '../shared/block/prettyprint';
 
@@ -23,6 +23,7 @@ export class EditBlockLanguageComponent implements OnInit {
 
 
   @ViewChild('sidebarsEditor') sidebarsEditor: JsonEditorComponent;
+  @ViewChild('generatorEditor') generatorEditor: JsonEditorComponent;
   readonly editorOptions = defaultJsonEditorOptions();
 
   constructor(
@@ -58,10 +59,13 @@ export class EditBlockLanguageComponent implements OnInit {
    */
   onRegenerate() {
     this._serverData
+      // Fetch the grammar 
       .getGrammarDescription(this.editedSubject.grammarId)
+      // That is never required to be updated
       .pipe(first())
       .subscribe(g => {
-        this.editedSubject = generateBlockLanguage(this.editedSubject, DEFAULT_GENERATOR, g);
+        const instructions = this.editedSubject.localGeneratorInstructions || {};
+        this.editedSubject = generateBlockLanguage(this.editedSubject, instructions, g);
       });
   }
 
@@ -70,6 +74,13 @@ export class EditBlockLanguageComponent implements OnInit {
    */
   onSave() {
     this._serverData.updateBlockLanguage(this.editedSubject);
+  }
+
+  /**
+   * The data for the generator has been updated.
+   */
+  onGeneratorDataUpdate() {
+    this.editedSubject.localGeneratorInstructions = JSON.parse(this.generatorEditor.getText());
   }
 
   onSidebarDataUpdate() {

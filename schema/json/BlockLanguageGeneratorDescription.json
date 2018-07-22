@@ -2,6 +2,23 @@
   "$ref": "#/definitions/BlockLanguageGeneratorDescription",
   "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
+    "AllTypeInstructions": {
+      "additionalProperties": {
+        "additionalProperties": {
+          "$ref": "#/definitions/TypeInstructions"
+        },
+        "type": "object"
+      },
+      "description": "Supplementary generation instructions for all types.",
+      "type": "object"
+    },
+    "AttributeMappingMode": {
+      "enum": [
+        "all",
+        "mentioned"
+      ],
+      "type": "string"
+    },
     "BlockLanguageGeneratorDescription": {
       "additionalProperties": false,
       "description": "Describes how a grammar might be converted to a block language",
@@ -19,11 +36,10 @@
           "type": "string"
         },
         "typeInstructions": {
-          "$ref": "#/definitions/TypeInstructions"
+          "$ref": "#/definitions/AllTypeInstructions"
         }
       },
       "required": [
-        "editorComponents",
         "id",
         "name"
       ],
@@ -32,6 +48,28 @@
     "EditorComponentDescription": {
       "$ref": "#/definitions/QueryPreviewComponentDescription",
       "description": "Any component that could be displayed in the actual editor view."
+    },
+    "MultiBlockInstructionsDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/definitions/SingleBlockInstructionsDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "multi"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "blocks"
+      ],
+      "type": "object"
     },
     "Orientation": {
       "enum": [
@@ -55,34 +93,43 @@
       ],
       "type": "object"
     },
-    "TypeInstructions": {
+    "SingleBlockInstructionsDescription": {
       "additionalProperties": {
-        "additionalProperties": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "description": "Make all properties in T optional",
-            "properties": {
-              "between": {
-                "type": "string"
-              },
-              "orientation": {
-                "$ref": "#/definitions/Orientation"
-              },
-              "style": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "type": "object"
-              }
+        "additionalProperties": false,
+        "description": "Make all properties in T optional",
+        "properties": {
+          "attributeMappingMode": {
+            "$ref": "#/definitions/AttributeMappingMode"
+          },
+          "between": {
+            "type": "string"
+          },
+          "orientation": {
+            "$ref": "#/definitions/Orientation"
+          },
+          "readOnly": {
+            "type": "boolean"
+          },
+          "style": {
+            "additionalProperties": {
+              "type": "string"
             },
             "type": "object"
-          },
-          "type": "object"
+          }
         },
         "type": "object"
       },
-      "description": "Supplementary generation instructions for a specific type.",
       "type": "object"
+    },
+    "TypeInstructions": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SingleBlockInstructionsDescription"
+        },
+        {
+          "$ref": "#/definitions/MultiBlockInstructionsDescription"
+        }
+      ]
     }
   }
 }

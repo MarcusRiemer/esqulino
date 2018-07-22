@@ -59,12 +59,12 @@ concise_attributes:
   name: compiled
   value_before_type_cast: |-
     <parent att1="Neuer Text" a1="" a2="" a1="" a1="" a1="" a1="" a1="" a1="" a1="" a1="" a1="">
-    before ...
-    <child>
-    <e1>
-    <e2></e2>
-    </e1>
-    </child>after ...
+      before ...
+      <child>
+        <e1>
+          <e2></e2>
+        </e1>
+      </child>after ...
     </parent>
 new_record: false
 active_record_yaml_version: 2

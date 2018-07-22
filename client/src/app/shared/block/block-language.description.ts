@@ -1,4 +1,6 @@
 import { SidebarDescription, EditorBlockDescription } from './block.description'
+import { Instructions, AllTypeInstructions } from './generator/instructions.description'
+import { BlockLanguageGeneratorDocument } from './generator/generator.description';
 
 /**
  * Augments a language with information about the UI layer. This definition is
@@ -100,4 +102,9 @@ export interface BlockLanguageDocument {
    * language.
    */
   editorComponents: EditorComponentDescription[];
+
+  /**
+   * Information on how to (re)-generate this block language.
+   */
+  localGeneratorInstructions?: BlockLanguageGeneratorDocument
 }
