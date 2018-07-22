@@ -16,7 +16,7 @@ import {
 } from './generator.description'
 
 import {
-  DefaultInstructions, Instructions, AllTypeInstructions, IteratorInstructions, BlockInstructions, TerminalInstructions, AttributeMappingMode
+  DefaultInstructions, Instructions, AllTypeInstructions, IteratorInstructions, BlockInstructions, TerminalInstructions, PropertyInstructions, AttributeMappingMode
 } from './instructions.description'
 
 import {
@@ -46,14 +46,14 @@ export function mapTerminal(
 }
 
 /**
- * Maps properties to editable input fields.
+ * Maps properties to read-only interpolated values.
  */
-export function mapProperty(
+export function mapInterpolated(
   attr: NodePropertyTypeDescription,
-  instructions: Partial<Instructions>
-): VisualBlockDescriptions.EditorInput {
-  const toReturn: VisualBlockDescriptions.EditorInput = {
-    blockType: "input",
+  instructions: PropertyInstructions
+): VisualBlockDescriptions.EditorInterpolated {
+  const toReturn: VisualBlockDescriptions.EditorInterpolated = {
+    blockType: "interpolated",
     property: attr.name
   };
 
@@ -62,6 +62,29 @@ export function mapProperty(
   }
 
   return (toReturn);
+}
+
+/**
+ * Maps properties to editable input fields.
+ */
+export function mapProperty(
+  attr: NodePropertyTypeDescription,
+  instructions: PropertyInstructions
+): VisualBlockDescriptions.EditorInput | VisualBlockDescriptions.EditorInterpolated {
+  if (instructions.readOnly) {
+    return (mapInterpolated(attr, instructions));
+  } else {
+    const toReturn: VisualBlockDescriptions.EditorInput = {
+      blockType: "input",
+      property: attr.name
+    };
+
+    if (Object.keys(instructions.style).length > 0) {
+      toReturn.style = instructions.style;
+    }
+
+    return (toReturn);
+  }
 };
 
 /**

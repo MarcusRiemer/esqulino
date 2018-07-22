@@ -20,9 +20,20 @@ describe("BlockLanguage Generator", () => {
       expect(res).toEqual({ blockType: "constant", text: "t", style: { color: "green" } });
     });
 
-    it("Property => Input", () => {
-      const res = mapProperty({ type: "property", name: "prop", base: "string" }, { style: {} });
+    it("Writeable Property => Input", () => {
+      const res = mapProperty(
+        { type: "property", name: "prop", base: "string" },
+        { readOnly: false, style: {} }
+      );
       expect(res).toEqual({ blockType: "input", property: "prop" });
+    });
+
+    it("Readonly Property => Interpolated", () => {
+      const res = mapProperty(
+        { type: "property", name: "prop", base: "string" },
+        { readOnly: true, style: {} }
+      );
+      expect(res).toEqual({ blockType: "interpolated", property: "prop" });
     });
 
     it("Sequence => Iterator", () => {

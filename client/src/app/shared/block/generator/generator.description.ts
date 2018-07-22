@@ -47,6 +47,11 @@ export const DEFAULT_GENERATOR: BlockLanguageGeneratorDescription = {
           }
         }
       },
+      "functionCall": {
+        "name": {
+          "readOnly": true
+        }
+      },
       "select": {
         "keyword": {
           "style": {
