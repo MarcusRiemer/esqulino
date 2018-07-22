@@ -21,6 +21,9 @@ export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) 
   expect(transform(input)).toEqual(expected);
 }
 
+/**
+ * Calculates the string representation of the given AST
+ */
 function emitTree(astDesc: NodeDescription) {
   const ast = new Node(astDesc, undefined);
   const codeGen = new CodeGenerator(NODE_CONVERTER);
