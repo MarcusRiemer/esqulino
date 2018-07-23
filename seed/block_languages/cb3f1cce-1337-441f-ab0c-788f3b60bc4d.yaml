@@ -79,7 +79,7 @@ concise_attributes:
     [{"style": {"display": "inline-block"}, "property": "name", "blockType": "interpolated"},
     {"text": "(", "style": {"display": "inline-block"}, "blockType": "constant"},
     {"blockType": "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
-    "arguments"}, {"text": ")", "style": {"display": "inline-block"}, "blockType":
+    "arguments"}, {"text": "(", "style": {"display": "inline-block"}, "blockType":
     "constant"}], "blockType": "block", "direction": "horizontal"}], "describedType":
     {"typeName": "functionCall", "languageName": "sql"}}, {"visual": [{"children":
     [{"text": "*", "style": {"display": "inline-block"}, "blockType": "constant"}],
@@ -109,24 +109,28 @@ concise_attributes:
     "blockType": "input"}], "blockType": "block", "direction": "horizontal"}], "describedType":
     {"typeName": "relationalOperator", "languageName": "sql"}}], "editorComponents":
     [], "localGeneratorInstructions": {"typeInstructions": {"sql": {"from": {"type":
-    "multi", "blocks": [{"this": {"attributeMappingMode": "mentioned"}, "tables":
-    {"between": ","}, "keyword": {"style": {"color": "blue", "width": "9ch"}}}, {"this":
-    {"attributeMappingMode": "mentioned"}, "joins": {"orientation": "vertical"}}]},
-    "where": {"keyword": {"style": {"color": "blue", "width": "9ch"}}}, "select":
-    {"columns": {"between": ",", "orientation": "horizontal"}, "keyword": {"style":
-    {"color": "blue", "width": "9ch"}}}, "groupBy": {"keyword": {"style": {"color":
-    "blue", "width": "9ch"}}}, "orderBy": {"keyword": {"style": {"color": "blue",
-    "width": "9ch"}}}, "innerJoinOn": {"keyword": {"style": {"color": "blue", "margin-left":
-    "2ch", "margin-right": "1ch"}}, "keywordOn": {"style": {"color": "blue", "margin-left":
-    "1ch", "margin-right": "1ch"}}}, "querySelect": {"this": {"orientation": "vertical"}},
-    "functionCall": {"name": {"readOnly": true}}, "binaryExpression": {"operator":
-    {"style": {"margin-left": "1ch", "margin-right": "1ch"}}}}}}}'
+    "multi", "blocks": [{"type": "single", "block": {"attributeMapping": ["keyword",
+    "tables"]}, "attributes": {"tables": {"between": ","}, "keyword": {"style": {"color":
+    "blue", "width": "9ch"}}}}, {"type": "single", "block": {"attributeMapping": ["joins"]},
+    "attributes": {"joins": {"orientation": "vertical"}}}]}, "where": {"type": "single",
+    "attributes": {"keyword": {"style": {"color": "blue", "width": "9ch"}}}}, "select":
+    {"type": "single", "attributes": {"columns": {"between": ",", "orientation": "horizontal"},
+    "keyword": {"style": {"color": "blue", "width": "9ch"}}}}, "groupBy": {"type":
+    "single", "attributes": {"keyword": {"style": {"color": "blue", "width": "9ch"}}}},
+    "orderBy": {"type": "single", "attributes": {"keyword": {"style": {"color": "blue",
+    "width": "9ch"}}}}, "innerJoinOn": {"type": "single", "attributes": {"keyword":
+    {"style": {"color": "blue", "margin-left": "2ch", "margin-right": "1ch"}}, "keywordOn":
+    {"style": {"color": "blue", "margin-left": "1ch", "margin-right": "1ch"}}}}, "querySelect":
+    {"type": "single", "block": {"orientation": "vertical"}, "attributes": {}}, "functionCall":
+    {"type": "single", "attributes": {"name": {"readOnly": true}}}, "binaryExpression":
+    {"type": "single", "attributes": {"operator": {"style": {"margin-left": "1ch",
+    "margin-right": "1ch"}}}}}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-17 11:08:14.302566'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-22 13:36:52.668888'
+  value_before_type_cast: '2018-07-23 09:57:08.324382'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql

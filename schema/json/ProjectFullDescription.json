@@ -22,12 +22,21 @@
       ],
       "type": "string"
     },
-    "AttributeMappingMode": {
-      "enum": [
-        "all",
-        "mentioned"
-      ],
-      "type": "string"
+    "AttributeMappingOrder": {
+      "anyOf": [
+        {
+          "enum": [
+            "grammar"
+          ],
+          "type": "string"
+        },
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      ]
     },
     "AvailableDatabaseDescription": {
       "additionalProperties": false,
@@ -609,31 +618,67 @@
       "description": "All possible sidebar types"
     },
     "SingleBlockInstructionsDescription": {
-      "additionalProperties": {
-        "additionalProperties": false,
-        "description": "Make all properties in T optional",
-        "properties": {
-          "attributeMappingMode": {
-            "$ref": "#/definitions/AttributeMappingMode"
-          },
-          "between": {
-            "type": "string"
-          },
-          "orientation": {
-            "$ref": "#/definitions/Orientation"
-          },
-          "readOnly": {
-            "type": "boolean"
-          },
-          "style": {
-            "additionalProperties": {
-              "type": "string"
+      "additionalProperties": false,
+      "description": "Instructions on how to generate a single block.",
+      "properties": {
+        "attributes": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "description": "Make all properties in T optional",
+            "properties": {
+              "attributeMapping": {
+                "$ref": "#/definitions/AttributeMappingOrder"
+              },
+              "between": {
+                "type": "string"
+              },
+              "orientation": {
+                "$ref": "#/definitions/Orientation"
+              },
+              "readOnly": {
+                "type": "boolean"
+              },
+              "style": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              }
             },
             "type": "object"
-          }
+          },
+          "type": "object"
         },
-        "type": "object"
+        "block": {
+          "additionalProperties": false,
+          "description": "Make all properties in T optional",
+          "properties": {
+            "attributeMapping": {
+              "$ref": "#/definitions/AttributeMappingOrder"
+            },
+            "orientation": {
+              "$ref": "#/definitions/Orientation"
+            },
+            "style": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "type": {
+          "enum": [
+            "single"
+          ],
+          "type": "string"
+        }
       },
+      "required": [
+        "type",
+        "attributes"
+      ],
       "type": "object"
     },
     "TableDescription": {

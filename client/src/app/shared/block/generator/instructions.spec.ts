@@ -9,7 +9,7 @@ describe("BlockLanguage GeneratorInstructions", () => {
   it("Hands out matching instruction types", () => {
     const inst = new GeneratorInstructions({
       "g": {
-        "tSingle": {},
+        "tSingle": { type: "single", attributes: {} },
         "tMulti": {
           type: "multi",
           blocks: []
@@ -36,7 +36,10 @@ describe("BlockLanguage GeneratorInstructions", () => {
         orientation: "horizontal"
       };
       const inst = new SingleBlockInstructions({
-        "s": specific
+        type: "single",
+        attributes: {
+          "s": specific
+        }
       });
 
       expect(inst.scope("s")).toEqual(specific);
@@ -49,7 +52,7 @@ describe("BlockLanguage GeneratorInstructions", () => {
     });
 
     it("Default values for missing scopes", () => {
-      const bound = new SingleBlockInstructions({});
+      const bound = new SingleBlockInstructions({ type: "single", attributes: {} });
 
       expect(bound.scopeBlock()).toEqual(DefaultInstructions.blockInstructions, "Block");
       expect(bound.scopeIterator("missing")).toEqual(DefaultInstructions.iteratorInstructions, "Layout");
@@ -58,11 +61,20 @@ describe("BlockLanguage GeneratorInstructions", () => {
 
     it("Mixing specific and default values", () => {
       const bound = new SingleBlockInstructions({
-        "this": {
-          "between": "ä",
+        type: "single",
+        block: {
           "style": {
             "display": "block",
             "color": "red"
+          }
+        },
+        attributes: {
+          "this": {
+            "between": "ä",
+            "style": {
+              "display": "block",
+              "color": "red"
+            }
           }
         }
       });
@@ -89,11 +101,6 @@ describe("BlockLanguage GeneratorInstructions", () => {
         }
       }));
     });
-
-    it("Knows that `this` is a reserved name and not an actual type", () => {
-      const inst = new SingleBlockInstructions({ "this": {}, "that": {} });
-      expect(inst.specifiedTypes).toEqual(["that"]);
-    });
   });
 
   describe("MultiBlockInstructions", () => {
@@ -102,13 +109,19 @@ describe("BlockLanguage GeneratorInstructions", () => {
         type: "multi",
         blocks: [
           {
-            "t1": {
-              orientation: "horizontal"
+            type: "single",
+            attributes: {
+              "t1": {
+                orientation: "horizontal"
+              }
             }
           },
           {
-            "t1": {
-              orientation: "vertical"
+            type: "single",
+            attributes: {
+              "t1": {
+                orientation: "vertical"
+              }
             }
           }
         ]
