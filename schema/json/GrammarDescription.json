@@ -375,6 +375,9 @@
       "additionalProperties": false,
       "description": "Every immediate child must be part of this list of allowed types. The order\nin which these children appear in is not relevant.",
       "properties": {
+        "between": {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
         "name": {
           "type": "string"
         },
@@ -440,6 +443,9 @@
       "additionalProperties": false,
       "description": "In a sequence every child must occur in exact the order and cardinality\nthat is specified by this description.",
       "properties": {
+        "between": {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
         "name": {
           "type": "string"
         },

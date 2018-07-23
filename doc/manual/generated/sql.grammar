@@ -14,7 +14,7 @@ grammar "sql" {
   node "functionCall" {
     prop "name" { string }
     terminal "("
-    children "arguments" ::= expression*
+    children sequence, "arguments"  ::= expression*
     terminal ")"
   }
   node "starOperator" {
@@ -24,14 +24,14 @@ grammar "sql" {
     prop "operator" { string { enum "<" "<=" "=" ">=" ">" "LIKE" "NOT LIKE" } }
   }
   node "binaryExpression" {
-    children "lhs" ::= expression
-    children "operator" ::= relationalOperator
-    children "rhs" ::= expression
+    children sequence, "lhs"  ::= expression
+    children sequence, "operator"  ::= relationalOperator
+    children sequence, "rhs"  ::= expression
   }
   node "select" {
     terminal "SELECT"
     prop? "distinct" { boolean }
-    children "columns" ::= expression* & starOperator?
+    children allowed, "columns", sep: "," ::= expression* & starOperator?
   }
   node "delete" {
     terminal "DELETE"
@@ -41,53 +41,53 @@ grammar "sql" {
     prop? "alias" { string }
   }
   node "crossJoin" {
-    children "table" ::= tableIntroduction
+    children sequence, "table"  ::= tableIntroduction
   }
   node "innerJoinOn" {
     terminal "INNER JOIN"
-    children "table" ::= tableIntroduction
+    children sequence, "table"  ::= tableIntroduction
     terminal "ON"
-    children "on" ::= expression
+    children sequence, "on"  ::= expression
   }
   node "innerJoinUsing" {
     terminal "INNER JOIN"
-    children "table" ::= tableIntroduction
+    children sequence, "table"  ::= tableIntroduction
     terminal "USING"
-    children "using" ::= expression
+    children sequence, "using"  ::= expression
   }
   typedef "join" ::= crossJoin | innerJoinUsing | innerJoinOn
   node "from" {
     terminal "FROM"
-    children "tables" ::= tableIntroduction+
-    children "joins" ::= join*
+    children sequence, "tables", sep: "," ::= tableIntroduction+
+    children sequence, "joins"  ::= join*
   }
   node "whereAdditional" {
     prop "operator" { string { enum "and" "or" } }
-    children "expression" ::= expression
+    children sequence, "expression"  ::= expression
   }
   node "where" {
     terminal "WHERE"
-    children "expressions" ::= sql.expression sql.whereAdditional*
+    children sequence, "expressions"  ::= sql.expression sql.whereAdditional*
   }
   node "groupBy" {
     terminal "GROUP BY"
-    children "expressions" ::= sql.expression*
+    children allowed, "expressions", sep: "," ::= sql.expression*
   }
   node "orderBy" {
     terminal "ORDER BY"
-    children "expressions" ::= sql.expression*
+    children allowed, "expressions", sep: "," ::= sql.expression*
   }
   node "querySelect" {
-    children "select" ::= select
-    children "from" ::= from
-    children "where" ::= where?
-    children "groupBy" ::= groupBy?
-    children "orderBy" ::= orderBy?
+    children sequence, "select"  ::= select
+    children sequence, "from"  ::= from
+    children sequence, "where"  ::= where?
+    children sequence, "groupBy"  ::= groupBy?
+    children sequence, "orderBy"  ::= orderBy?
   }
   node "queryDelete" {
-    children "delete" ::= delete
-    children "from" ::= from
-    children "where" ::= where?
+    children sequence, "delete"  ::= delete
+    children sequence, "from"  ::= from
+    children sequence, "where"  ::= where?
   }
   typedef "query" ::= querySelect | queryDelete
 }

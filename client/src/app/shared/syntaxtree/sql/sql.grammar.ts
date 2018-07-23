@@ -162,7 +162,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
               nodeType: "starOperator",
               occurs: "?"
             }
-          ]
+          ],
+          between: {
+            type: "terminal",
+            name: "columnSeparator",
+            symbol: ","
+          }
         }
       ]
     },
@@ -272,7 +277,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
               nodeType: "tableIntroduction",
               occurs: "+"
             }
-          ]
+          ],
+          between: {
+            type: "terminal",
+            name: "columnSeparator",
+            symbol: ","
+          }
         },
         {
           type: "sequence",
@@ -353,7 +363,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
               },
               occurs: "*"
             },
-          ]
+          ],
+          between: {
+            type: "terminal",
+            name: "columnSeparator",
+            symbol: ","
+          }
         }
       ]
     },
@@ -376,7 +391,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
               },
               occurs: "*"
             },
-          ]
+          ],
+          between: {
+            type: "terminal",
+            name: "columnSeparator",
+            symbol: ","
+          }
         }
       ]
     },

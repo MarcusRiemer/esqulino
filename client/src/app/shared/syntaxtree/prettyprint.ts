@@ -151,7 +151,11 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
  * Prints the grammar of a single child group.
  */
 export function prettyPrintChildGroup(p: Desc.NodeChildrenGroupDescription): NestedString {
-  return ([`children "${p.name}" ::= ` + prettyPrintChildGroupElements(p)]);
+  let sep = "";
+  if ((p.type === "allowed" || p.type === "sequence") && p.between) {
+    sep = `, between: "${p.between.symbol}"`
+  }
+  return ([`children ${p.type} "${p.name}"${sep} ::= ` + prettyPrintChildGroupElements(p)]);
 }
 
 /**

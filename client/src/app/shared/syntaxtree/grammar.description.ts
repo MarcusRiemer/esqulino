@@ -211,6 +211,7 @@ export interface NodeTypesSequenceDescription {
   type: "sequence"
   name: string
   nodeTypes: NodeTypesChildReference[]
+  between?: NodeTerminalSymbolDescription
 }
 
 /**
@@ -221,6 +222,7 @@ export interface NodeTypesAllowedDescription {
   type: "allowed"
   name: string
   nodeTypes: NodeTypesChildReference[]
+  between?: NodeTerminalSymbolDescription
 }
 
 /**
