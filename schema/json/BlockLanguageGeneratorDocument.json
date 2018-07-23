@@ -120,6 +120,14 @@
       ],
       "type": "object"
     },
+    "IterationDropTarget": {
+      "enum": [
+        "start",
+        "end",
+        "none"
+      ],
+      "type": "string"
+    },
     "MultiBlockInstructionsDescription": {
       "additionalProperties": false,
       "description": "Instructions on how to generate a type that is composed of multiple\nblocks.",
@@ -243,7 +251,10 @@
               "between": {
                 "type": "string"
               },
-              "dropTarget": {
+              "generateDropTargets": {
+                "$ref": "#/definitions/IterationDropTarget"
+              },
+              "onDrop": {
                 "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
               },
               "orientation": {
@@ -270,7 +281,7 @@
             "attributeMapping": {
               "$ref": "#/definitions/AttributeMappingOrder"
             },
-            "dropTarget": {
+            "onDrop": {
               "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
             },
             "orientation": {

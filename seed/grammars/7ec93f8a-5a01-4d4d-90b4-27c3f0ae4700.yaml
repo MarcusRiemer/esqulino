@@ -13,7 +13,8 @@ concise_attributes:
   name: model
   value_before_type_cast: '{"root": "query", "types": {"from": {"type": "concrete",
     "attributes": [{"name": "keyword", "type": "terminal", "symbol": "FROM"}, {"name":
-    "tables", "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": "tableIntroduction"}]},
+    "tables", "type": "sequence", "between": {"name": "columnSeparator", "type": "terminal",
+    "symbol": ","}, "nodeTypes": [{"occurs": "+", "nodeType": "tableIntroduction"}]},
     {"name": "joins", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
     "join"}]}]}, "join": {"type": "oneOf", "oneOf": ["crossJoin", "innerJoinUsing",
     "innerJoinOn"]}, "query": {"type": "oneOf", "oneOf": ["querySelect", "queryDelete"]},
@@ -25,13 +26,16 @@ concise_attributes:
     "symbol": "DELETE"}]}, "select": {"type": "concrete", "attributes": [{"name":
     "keyword", "type": "terminal", "symbol": "SELECT"}, {"base": "boolean", "name":
     "distinct", "type": "property", "isOptional": true}, {"name": "columns", "type":
-    "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "expression"}, {"occurs":
-    "?", "nodeType": "starOperator"}]}]}, "groupBy": {"type": "concrete", "attributes":
+    "allowed", "between": {"name": "columnSeparator", "type": "terminal", "symbol":
+    ","}, "nodeTypes": [{"occurs": "*", "nodeType": "expression"}, {"occurs": "?",
+    "nodeType": "starOperator"}]}]}, "groupBy": {"type": "concrete", "attributes":
     [{"name": "keyword", "type": "terminal", "symbol": "GROUP BY"}, {"name": "expressions",
-    "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "expression",
+    "type": "allowed", "between": {"name": "columnSeparator", "type": "terminal",
+    "symbol": ","}, "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "expression",
     "languageName": "sql"}}]}]}, "orderBy": {"type": "concrete", "attributes": [{"name":
     "keyword", "type": "terminal", "symbol": "ORDER BY"}, {"name": "expressions",
-    "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "expression",
+    "type": "allowed", "between": {"name": "columnSeparator", "type": "terminal",
+    "symbol": ","}, "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "expression",
     "languageName": "sql"}}]}]}, "constant": {"type": "concrete", "attributes": [{"base":
     "string", "name": "value", "type": "property"}]}, "crossJoin": {"type": "concrete",
     "attributes": [{"name": "table", "type": "sequence", "nodeTypes": ["tableIntroduction"]}]},
@@ -79,7 +83,7 @@ concise_attributes:
   value_before_type_cast: '2018-05-15 18:24:27.264702'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-23 10:18:45.786194'
+  value_before_type_cast: '2018-07-23 19:35:51.526113'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: sql

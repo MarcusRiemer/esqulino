@@ -89,6 +89,7 @@ describe("BlockLanguage GeneratorInstructions", () => {
       expect(bound.scopeIterator("this")).toEqual({
         "between": "ä",
         "orientation": "horizontal",
+        "generateDropTargets": "none",
         "style": {
           "display": "block",
           "color": "red"
