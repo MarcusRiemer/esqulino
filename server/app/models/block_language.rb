@@ -5,7 +5,7 @@ class BlockLanguage < ApplicationRecord
   validates :name, presence: true
 
   # Some special languages may get a slug assigned
-  validates :slug, uniqueness: true, allow_nil: true
+  validates :slug, uniqueness: true, allow_nil: true, length: { minimum: 1 }
   
   # The JSON document needs to be a valid block language
   validates :model, json_schema: 'BlockLanguageDocument'
