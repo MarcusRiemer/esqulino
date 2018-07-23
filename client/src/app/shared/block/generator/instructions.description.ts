@@ -3,11 +3,11 @@ import { Orientation, VisualBlockDescriptions } from '../block.description'
 // Alias to shorten some typing
 type DropTargetProperties = VisualBlockDescriptions.DropTargetProperties;
 
-// Describes which attributes of a certain type are used
-// in the block that is being created.
-export type AttributeMappingMode = "all" | "mentioned";
-
+// The attributes of a type that should be turned into visual blocks.
 export type AttributeMappingOrder = "grammar" | string[];
+
+// For iterations: Where should drop targets be displayed?
+export type IterationDropTarget = "start" | "end" | "none";
 
 /**
  * Customization instructions for a specific visual that may be specified by a user.
@@ -23,19 +23,21 @@ export interface Instructions {
   style: { [attribute: string]: string };
   // Controls whether the user may interactively change this attribute
   readOnly: boolean;
-  // Controls how things dropped on here will be treated
-  dropTarget: DropTargetProperties
+  // Controls how things dropped on this block will be treated
+  onDrop: DropTargetProperties;
+  // Where (and if) drop targets should be created
+  generateDropTargets: IterationDropTarget;
 }
 
 /**
  * Instructions that are useful on an iterating visual.
  */
-export type IteratorInstructions = Readonly<Pick<Instructions, "orientation" | "between" | "style">>;
+export type IteratorInstructions = Readonly<Pick<Instructions, "orientation" | "between" | "style" | "generateDropTargets">>;
 
 /**
  * Instructions that are useful on a block visual.
  */
-export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "orientation" | "style" | "dropTarget">>;
+export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "orientation" | "style" | "onDrop">>;
 
 /**
  * Instructions that are useful on a terminal visual.
@@ -54,14 +56,15 @@ export module DefaultInstructions {
   export const iteratorInstructions: IteratorInstructions = {
     orientation: "horizontal",
     between: "",
-    style: {}
+    style: {},
+    generateDropTargets: "none",
   }
 
   export const blockInstructions: BlockInstructions = {
     orientation: "horizontal",
     attributeMapping: "grammar",
     style: {},
-    dropTarget: VisualBlockDescriptions.DefaultDropTargetProperties
+    onDrop: VisualBlockDescriptions.DefaultDropTargetProperties
   }
 
   export const terminalInstructions: TerminalInstructions = {

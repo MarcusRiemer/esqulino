@@ -16,7 +16,7 @@ import {
 } from './generator.description'
 
 import {
-  DefaultInstructions, Instructions, AllTypeInstructions, IteratorInstructions, BlockInstructions, TerminalInstructions, PropertyInstructions, AttributeMappingMode
+  DefaultInstructions, Instructions, AllTypeInstructions, IteratorInstructions, BlockInstructions, TerminalInstructions, PropertyInstructions
 } from './instructions.description'
 
 import {
@@ -93,9 +93,10 @@ export function mapProperty(
 export function mapChildren(
   attr: NodeChildrenGroupDescription,
   instructions: IteratorInstructions
-): VisualBlockDescriptions.EditorIterator {
+): VisualBlockDescriptions.ConcreteBlock[] {
   // Find out what goes between the elements
   let between: VisualBlockDescriptions.ConcreteBlock[] = undefined;
+  let dropTarget: VisualBlockDescriptions.ConcreteBlock = undefined;
 
   // A simple seperation character?
   if (typeof instructions.between === "string" && instructions.between.length > 0) {
@@ -114,8 +115,37 @@ export function mapChildren(
     }
   }
 
+  if (instructions.generateDropTargets !== "none") {
+    dropTarget = {
+      blockType: "dropTarget",
+      dropTarget: {
+        children: {
+          category: attr.name,
+          order: "insertFirst"
+        },
+        visibility: ["ifEmpty", "ifLegalChild"]
+      },
+      children: [
+        {
+          blockType: "constant",
+          text: "❓",
+          style: {
+            "paddingLeft": "10px",
+            "paddingRight": "10px",
+            "border": "2px solid red",
+            "color": "darkred",
+            "backgroundColor": "orange",
+            "borderRadius": "500px",
+            "cursor": "default",
+          },
+        } as VisualBlockDescriptions.EditorConstant,
+      ],
+      direction: "horizontal",
+    };
+  }
+
   // Build the actual iterator block
-  const toReturn: VisualBlockDescriptions.EditorIterator = {
+  const iteratorBlock: VisualBlockDescriptions.EditorIterator = {
     blockType: "iterator",
     childGroupName: attr.name,
     direction: instructions.orientation,
@@ -124,30 +154,35 @@ export function mapChildren(
 
   // And only add between instructions if there are any
   if (between) {
-    toReturn.between = between;
+    iteratorBlock.between = between;
   }
 
   // Possibly add some style
   if (Object.keys(instructions.style).length > 0) {
-    toReturn.style = instructions.style;
+    iteratorBlock.style = instructions.style;
   }
 
-  return (toReturn);
+  // At least the iteration block should go back
+  switch (instructions.generateDropTargets) {
+    case "start": return ([dropTarget, iteratorBlock]);
+    case "end": return ([iteratorBlock, dropTarget]);
+    case "none": return ([iteratorBlock]);
+  }
 }
 
 export function mapAttribute(
   attr: NodeAttributeDescription,
   instructions: SingleBlockInstructions,
-): VisualBlockDescriptions.ConcreteBlock {
+): VisualBlockDescriptions.ConcreteBlock[] {
   switch (attr.type) {
     case "allowed":
     case "sequence":
     case "choice":
       return mapChildren(attr, instructions.scopeIterator(attr.name));
     case "terminal":
-      return mapTerminal(attr, instructions.scopeTerminal(attr.name));
+      return [mapTerminal(attr, instructions.scopeTerminal(attr.name))];
     case "property":
-      return mapProperty(attr, instructions.scopeProperty(attr.name));
+      return [mapProperty(attr, instructions.scopeProperty(attr.name))];
     default:
       throw new Error(`Unknown attribute type "${(attr as any).type}"`);
   }
@@ -163,14 +198,19 @@ export function mapAttributes(
   typeDesc: NodeConcreteTypeDescription,
   instructions: SingleBlockInstructions,
 ): VisualBlockDescriptions.ConcreteBlock[] {
-  return (instructions.relevantAttributes(typeDesc).map(t => {
+  // For every relevant attribute ...
+  const generatedBlocks = instructions.relevantAttributes(typeDesc).map(t => {
+    // ... find its type ...
     const mappedType = typeDesc.attributes.find(a => a.name === t);
     if (mappedType) {
+      // ... and map that to one (or multiple) blocks
       return (mapAttribute(mappedType, instructions));
     } else {
       throw new Error(`Could not find property "${t}" mentioned by generating instructions for "${typeDesc.type}"`);
     }
-  }));
+  });
+  // Flatten the list of lists that we got
+  return (([] as VisualBlockDescriptions.ConcreteBlock[]).concat(...generatedBlocks));
 }
 
 /**
@@ -189,7 +229,7 @@ export function mapType(
       blockType: "block",
       direction: blockInstructions.orientation,
       children: mapAttributes(typeDesc, instructions),
-      dropTarget: blockInstructions.dropTarget,
+      dropTarget: blockInstructions.onDrop,
     };
 
     if (Object.keys(blockInstructions.style).length > 0) {

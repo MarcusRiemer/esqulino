@@ -57,19 +57,26 @@ concise_attributes:
     "delete", "languageName": "sql"}}, {"visual": [{"children": [{"text": "SELECT",
     "style": {"color": "blue", "width": "9ch", "display": "inline-block"}, "blockType":
     "constant"}, {"style": {"display": "inline-block"}, "property": "distinct", "blockType":
-    "input"}, {"between": [{"text": ",", "style": {"display": "inline-block"}, "blockType":
+    "input"}, {"children": [{"text": "❓", "style": {"color": "darkred", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius": "500px",
+    "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
+    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
+    {"order": "insertFirst", "category": "columns"}, "visibility": ["ifEmpty", "ifLegalChild"]}},
+    {"between": [{"text": ",", "style": {"display": "inline-block"}, "blockType":
     "constant"}], "blockType": "iterator", "direction": "horizontal", "wrapChildren":
     true, "childGroupName": "columns"}], "blockType": "block", "direction": "horizontal",
     "dropTarget": {"children": {"order": "insertFirst", "category": "columns"}}}],
     "describedType": {"typeName": "select", "languageName": "sql"}}, {"visual": [{"children":
     [{"text": "GROUP BY", "style": {"color": "blue", "width": "9ch", "display": "inline-block"},
-    "blockType": "constant"}, {"blockType": "iterator", "direction": "horizontal",
+    "blockType": "constant"}, {"between": [{"text": ",", "style": {"display": "inline-block"},
+    "blockType": "constant"}], "blockType": "iterator", "direction": "horizontal",
     "wrapChildren": true, "childGroupName": "expressions"}], "blockType": "block",
     "direction": "horizontal", "dropTarget": {"children": {"order": "insertFirst",
     "category": "expressions"}}}], "describedType": {"typeName": "groupBy", "languageName":
     "sql"}}, {"visual": [{"children": [{"text": "ORDER BY", "style": {"color": "blue",
-    "width": "9ch", "display": "inline-block"}, "blockType": "constant"}, {"blockType":
-    "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
+    "width": "9ch", "display": "inline-block"}, "blockType": "constant"}, {"between":
+    [{"text": ",", "style": {"display": "inline-block"}, "blockType": "constant"}],
+    "blockType": "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
     "expressions"}], "blockType": "block", "direction": "horizontal", "dropTarget":
     {"children": {"order": "insertFirst", "category": "expressions"}}}], "describedType":
     {"typeName": "orderBy", "languageName": "sql"}}, {"visual": [{"children": [{"style":
@@ -179,30 +186,29 @@ concise_attributes:
     "sql"}, "displayName": "ORDER BY"}], "categoryCaption": "Komponenten"}]}], "editorComponents":
     [{"componentType": "query-preview"}], "typeInstructions": {"sql": {"from": {"type":
     "multi", "blocks": [{"type": "single", "block": {"attributeMapping": ["keyword",
-    "tables"]}, "attributes": {"tables": {"between": ","}, "keyword": {"style": {"color":
-    "blue", "width": "9ch"}}}}, {"type": "single", "block": {"attributeMapping": ["joins"]},
-    "attributes": {"joins": {"orientation": "vertical"}}}]}, "where": {"type": "single",
-    "attributes": {"keyword": {"style": {"color": "blue", "width": "9ch"}}}}, "select":
-    {"type": "single", "block": {"dropTarget": {"children": {"order": "insertFirst",
-    "category": "columns"}}}, "attributes": {"columns": {"between": ",", "orientation":
-    "horizontal"}, "keyword": {"style": {"color": "blue", "width": "9ch"}}}}, "groupBy":
-    {"type": "single", "block": {"dropTarget": {"children": {"order": "insertFirst",
-    "category": "expressions"}}}, "attributes": {"keyword": {"style": {"color": "blue",
-    "width": "9ch"}}}}, "orderBy": {"type": "single", "block": {"dropTarget": {"children":
+    "tables"]}, "attributes": {"keyword": {"style": {"color": "blue", "width": "9ch"}}}},
+    {"type": "single", "block": {"attributeMapping": ["joins"]}, "attributes": {"joins":
+    {"orientation": "vertical"}}}]}, "where": {"type": "single", "attributes": {"keyword":
+    {"style": {"color": "blue", "width": "9ch"}}}}, "select": {"type": "single", "block":
+    {"onDrop": {"children": {"order": "insertFirst", "category": "columns"}}}, "attributes":
+    {"columns": {"generateDropTargets": "start"}, "keyword": {"style": {"color": "blue",
+    "width": "9ch"}}}}, "groupBy": {"type": "single", "block": {"onDrop": {"children":
     {"order": "insertFirst", "category": "expressions"}}}, "attributes": {"keyword":
-    {"style": {"color": "blue", "width": "9ch"}}}}, "innerJoinOn": {"type": "single",
-    "attributes": {"keyword": {"style": {"color": "blue", "margin-left": "2ch", "margin-right":
-    "1ch"}}, "keywordOn": {"style": {"color": "blue", "margin-left": "1ch", "margin-right":
-    "1ch"}}}}, "querySelect": {"type": "single", "block": {"orientation": "vertical"},
-    "attributes": {}}, "functionCall": {"type": "single", "attributes": {"name": {"readOnly":
-    true}}}, "binaryExpression": {"type": "single", "attributes": {"operator": {"style":
-    {"margin-left": "1ch", "margin-right": "1ch"}}}}}}}}'
+    {"style": {"color": "blue", "width": "9ch"}}}}, "orderBy": {"type": "single",
+    "block": {"onDrop": {"children": {"order": "insertFirst", "category": "expressions"}}},
+    "attributes": {"keyword": {"style": {"color": "blue", "width": "9ch"}}}}, "innerJoinOn":
+    {"type": "single", "attributes": {"keyword": {"style": {"color": "blue", "margin-left":
+    "2ch", "margin-right": "1ch"}}, "keywordOn": {"style": {"color": "blue", "margin-left":
+    "1ch", "margin-right": "1ch"}}}}, "querySelect": {"type": "single", "block": {"orientation":
+    "vertical"}, "attributes": {}}, "functionCall": {"type": "single", "attributes":
+    {"name": {"readOnly": true}}}, "binaryExpression": {"type": "single", "attributes":
+    {"operator": {"style": {"margin-left": "1ch", "margin-right": "1ch"}}}}}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-17 11:08:14.302566'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-23 18:42:46.022419'
+  value_before_type_cast: '2018-07-23 19:37:32.441979'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql

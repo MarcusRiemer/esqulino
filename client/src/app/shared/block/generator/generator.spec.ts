@@ -46,12 +46,14 @@ describe("BlockLanguage Generator", () => {
         DefaultInstructions.iteratorInstructions
       );
 
-      expect(res).toEqual({
-        blockType: "iterator",
-        childGroupName: "c1",
-        direction: DefaultInstructions.iteratorInstructions.orientation,
-        wrapChildren: true
-      });
+      expect(res).toEqual([
+        {
+          blockType: "iterator",
+          childGroupName: "c1",
+          direction: DefaultInstructions.iteratorInstructions.orientation,
+          wrapChildren: true
+        }
+      ]);
     });
 
     it("Sequence (+Between) => Iterator", () => {
@@ -64,23 +66,26 @@ describe("BlockLanguage Generator", () => {
         {
           orientation: "horizontal",
           between: "ä",
-          style: {}
+          style: {},
+          generateDropTargets: "none"
         }
       );
 
-      expect(res).toEqual({
-        blockType: "iterator",
-        childGroupName: "c1",
-        direction: "horizontal",
-        wrapChildren: true,
-        between: [
-          {
-            blockType: "constant",
-            text: "ä",
-            style: DefaultInstructions.terminalInstructions.style
-          }
-        ]
-      });
+      expect(res).toEqual([
+        {
+          blockType: "iterator",
+          childGroupName: "c1",
+          direction: "horizontal",
+          wrapChildren: true,
+          between: [
+            {
+              blockType: "constant",
+              text: "ä",
+              style: DefaultInstructions.terminalInstructions.style
+            }
+          ]
+        }
+      ]);
     });
 
     it("Mentioned attributes only", () => {
