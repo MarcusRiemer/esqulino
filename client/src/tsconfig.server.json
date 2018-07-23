@@ -12,6 +12,8 @@
     "test.ts",
     "main.cli.ts",
     "cli/**",
+    "admin/**",
+    "editor/**",
     "**/*.spec.ts"
   ],
   "angularCompilerOptions": {
