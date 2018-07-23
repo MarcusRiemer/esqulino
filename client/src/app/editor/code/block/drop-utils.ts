@@ -38,15 +38,9 @@ export function calculateDropLocation(node: Node, drop: DropTargetProperties): N
   if (!node) {
     return;
   } else {
-    // No drop information available? Default to inserting after the given
-    // node. This should be a meaningful default ...
+    // No drop information available? Go for the standard
     if (!drop) {
-      drop = {
-        self: {
-          order: "insertAfter",
-          skipParents: 0
-        }
-      }
+      drop = VisualBlockDescriptions.DefaultDropTargetProperties;
     }
 
     // Are we dropping at the parent?

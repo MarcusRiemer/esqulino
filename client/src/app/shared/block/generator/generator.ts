@@ -188,7 +188,8 @@ export function mapType(
     const toReturn: VisualBlockDescriptions.ConcreteBlock = {
       blockType: "block",
       direction: blockInstructions.orientation,
-      children: mapAttributes(typeDesc, instructions)
+      children: mapAttributes(typeDesc, instructions),
+      dropTarget: blockInstructions.dropTarget,
     };
 
     if (Object.keys(blockInstructions.style).length > 0) {
@@ -198,10 +199,9 @@ export function mapType(
     // A single block
     return ([toReturn]);
   } else if (instructions instanceof MultiBlockInstructions) {
-    // Multiple blocks
+    // Multiple blocks can be treated as a series of single blocks
     const arrayOfArray = instructions.blocks.map(single => mapType(typeDesc, single));
     return ([].concat(...arrayOfArray));
-
   } else {
     // Shouldn't ever happen
     throw new Error(`Neither single nor multiple block instructions`);

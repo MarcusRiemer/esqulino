@@ -1,4 +1,7 @@
-import { Orientation } from '../block.description'
+import { Orientation, VisualBlockDescriptions } from '../block.description'
+
+// Alias to shorten some typing
+type DropTargetProperties = VisualBlockDescriptions.DropTargetProperties;
 
 // Describes which attributes of a certain type are used
 // in the block that is being created.
@@ -20,6 +23,8 @@ export interface Instructions {
   style: { [attribute: string]: string };
   // Controls whether the user may interactively change this attribute
   readOnly: boolean;
+  // Controls how things dropped on here will be treated
+  dropTarget: DropTargetProperties
 }
 
 /**
@@ -30,7 +35,7 @@ export type IteratorInstructions = Readonly<Pick<Instructions, "orientation" | "
 /**
  * Instructions that are useful on a block visual.
  */
-export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "orientation" | "style">>;
+export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "orientation" | "style" | "dropTarget">>;
 
 /**
  * Instructions that are useful on a terminal visual.
@@ -55,7 +60,8 @@ export module DefaultInstructions {
   export const blockInstructions: BlockInstructions = {
     orientation: "horizontal",
     attributeMapping: "grammar",
-    style: {}
+    style: {},
+    dropTarget: VisualBlockDescriptions.DefaultDropTargetProperties
   }
 
   export const terminalInstructions: TerminalInstructions = {
