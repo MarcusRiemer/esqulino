@@ -70,7 +70,8 @@ export function prettyPrintOneOfType(name: string, t: Desc.NodeOneOfTypeDescript
  * Prints the grammar for a terminal symbol
  */
 export function prettyPrintTerminal(p: Desc.NodeTerminalSymbolDescription) {
-  return ([`terminal "${p.symbol}"`]);
+  const escapedSymbol = JSON.stringify(p.symbol).slice(1, -1);
+  return ([`terminal "${escapedSymbol}"`]);
 }
 
 /**

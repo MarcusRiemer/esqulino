@@ -27,11 +27,12 @@ concise_attributes:
     "nodeType": "if"}]}, {"name": "tag-close", "type": "terminal", "symbol": "<ende/>"}]},
     "exprVar": {"type": "concrete", "attributes": [{"base": "string", "name": "name",
     "type": "property"}]}, "attribute": {"type": "concrete", "attributes": [{"base":
-    "string", "name": "name", "type": "property"}, {"type": "terminal", "symbol":
-    "=\""}, {"name": "value", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType":
-    "text"}, {"occurs": "*", "nodeType": "interpolate"}]}, {"type": "terminal", "symbol":
-    "\""}]}, "exprConst": {"type": "concrete", "attributes": [{"base": "string", "name":
-    "name", "type": "property"}]}, "exprBinary": {"type": "concrete", "attributes":
+    "string", "name": "name", "type": "property"}, {"name": "equals", "type": "terminal",
+    "symbol": "="}, {"name": "quot-begin", "type": "terminal", "symbol": "\""}, {"name":
+    "value", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "text"},
+    {"occurs": "*", "nodeType": "interpolate"}]}, {"name": "quot-end", "type": "terminal",
+    "symbol": "\""}]}, "exprConst": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "name", "type": "property"}]}, "exprBinary": {"type": "concrete", "attributes":
     [{"name": "lhs", "type": "allowed", "nodeTypes": ["expr"]}, {"name": "operator",
     "type": "allowed", "nodeTypes": ["binaryOperator"]}, {"name": "rhs", "type": "allowed",
     "nodeTypes": ["expr"]}]}, "interpolate": {"type": "concrete", "attributes": [{"name":
@@ -42,7 +43,7 @@ concise_attributes:
   value_before_type_cast: '2018-05-15 18:48:12.004676'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-20 19:12:40.713343'
+  value_before_type_cast: '2018-07-23 10:18:45.636846'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: dxml-eruby

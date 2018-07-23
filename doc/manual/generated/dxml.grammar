@@ -9,9 +9,10 @@ grammar "dxml" {
   }
   node "attribute" {
     prop "name" { string }
-    terminal "=""
+    terminal "="
+    terminal "\""
     children "value" ::= text* & interpolate*
-    terminal """
+    terminal "\""
   }
   node "text" {
     prop "value" { string }

@@ -101,7 +101,7 @@ export function mapChildren(
   if (typeof instructions.between === "string" && instructions.between.length > 0) {
     // Create a single terminal character to go in between
     between = [mapTerminal(
-      { type: "terminal", symbol: instructions.between },
+      { type: "terminal", name: "t", symbol: instructions.between },
       DefaultInstructions.terminalInstructions
     )];
   }

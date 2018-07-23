@@ -25,6 +25,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         },
         {
           type: "terminal",
+          name: "dot",
           symbol: "."
         },
         {
@@ -64,6 +65,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         },
         {
           type: "terminal",
+          name: "paren-open",
           symbol: "("
         },
         {
@@ -78,6 +80,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         },
         {
           type: "terminal",
+          name: "paren-close",
           symbol: ")"
         }
       ]
@@ -87,6 +90,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "terminal",
+          name: "star",
           symbol: "*"
         }
       ]
@@ -238,6 +242,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         },
         {
           type: "terminal",
+          name: "keywordUsing",
           symbol: "USING"
         },
         {
