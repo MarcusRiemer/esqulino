@@ -1,11 +1,3 @@
-import { JsonEditorOptions } from 'ang-jsoneditor';
-
-export function defaultJsonEditorOptions() {
-  const toReturn = new JsonEditorOptions();
-
-  toReturn.sortObjectKeys = false;
-  toReturn.modes = ["tree", "text", "code"];
-  toReturn.mode = "code";
-
-  return (toReturn);
-}
+// Pre-load relevant ace themes and modes
+import 'brace/theme/sqlserver'
+import 'brace/mode/json'

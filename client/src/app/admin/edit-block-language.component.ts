@@ -3,16 +3,12 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router'
 
 import { switchMap, map, tap, first } from 'rxjs/operators';
 
-import { JsonEditorComponent } from 'ang-jsoneditor';
-
 import { ServerDataService } from '../shared/server-data.service';
 
 import { BlockLanguageDescription } from '../shared/block/block-language.description';
 import { DEFAULT_GENERATOR, BlockLanguageGeneratorDocument } from '../shared/block/generator/generator.description'
 import { generateBlockLanguage } from '../shared/block/generator/generator'
 import { prettyPrintBlockLanguage } from '../shared/block/prettyprint';
-
-import { defaultJsonEditorOptions } from './json-editor'
 
 @Component({
   templateUrl: 'templates/edit-block-language.html'
@@ -21,10 +17,12 @@ export class EditBlockLanguageComponent implements OnInit {
   // The block language that is beeing edited.
   public editedSubject: BlockLanguageDescription;
 
+  // Indicates whether the state of the editor is synchronized
+  // with the rendered grammar.
+  typesSynced = true;
 
-  @ViewChild('sidebarsEditor') sidebarsEditor: JsonEditorComponent;
-  @ViewChild('generatorEditor') generatorEditor: JsonEditorComponent;
-  readonly editorOptions = defaultJsonEditorOptions();
+  // The prettyprinted version of the block language
+  prettyPrintedBlockLanguage = "";
 
   constructor(
     private _serverData: ServerDataService,
@@ -44,14 +42,8 @@ export class EditBlockLanguageComponent implements OnInit {
         switchMap((id: string) => this._serverData.getBlockLanguage(id).pipe(first())),
     ).subscribe(blockLanguage => {
       this.editedSubject = blockLanguage;
+      this.doPrettyPrint();
     });
-  }
-
-  /**
-   * Prettyprints the given block language
-   */
-  prettyPrintBlockLanguage(blockLang: BlockLanguageDescription) {
-    return (prettyPrintBlockLanguage(blockLang));
   }
 
   /**
@@ -66,6 +58,7 @@ export class EditBlockLanguageComponent implements OnInit {
       .subscribe(g => {
         const instructions = this.editedSubject.localGeneratorInstructions || {};
         this.editedSubject = generateBlockLanguage(this.editedSubject, instructions, g);
+        this.doPrettyPrint();
       });
   }
 
@@ -79,11 +72,17 @@ export class EditBlockLanguageComponent implements OnInit {
   /**
    * The data for the generator has been updated.
    */
-  onGeneratorDataUpdate() {
-    this.editedSubject.localGeneratorInstructions = JSON.parse(this.generatorEditor.getText());
+  onGeneratorDataUpdate(text: string) {
+    try {
+      this.editedSubject.localGeneratorInstructions = JSON.parse(text);
+      this.onRegenerate();
+      this.typesSynced = true;
+    } catch (e) {
+      this.typesSynced = false;
+    }
   }
 
-  onSidebarDataUpdate() {
-    this.editedSubject.sidebars = JSON.parse(this.sidebarsEditor.getText());
+  private doPrettyPrint() {
+    this.prettyPrintedBlockLanguage = prettyPrintBlockLanguage(this.editedSubject);
   }
 }
