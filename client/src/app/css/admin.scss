@@ -1,7 +1,15 @@
-json-editor.full-height > div, textarea.full-height {
-    height: 100vh;
+textarea.full-height, ace-editor.full-height {
+    height: 95vh;
 }
 
-json-editor.half-height > div, textarea.half-height {
+textarea.half-height, ace-editor.half-height {
     height: 50vh;
+}
+
+ace-editor {
+    min-height: 200px;
+    width:100%;
+    overflow: auto;
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
 }

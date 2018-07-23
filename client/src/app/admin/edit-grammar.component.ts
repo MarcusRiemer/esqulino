@@ -3,31 +3,28 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router'
 import { HttpClient } from '@angular/common/http';
 
 import { switchMap, map, tap, first } from 'rxjs/operators';
-
-import { JsonEditorOptions, JsonEditorComponent } from 'ang-jsoneditor';
-
 import { ServerDataService, CachedRequest } from '../shared/server-data.service';
 import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint';
 import { GrammarDescription } from '../shared/syntaxtree';
 import { BlockLanguageListDescription } from '../shared/block/block-language.description';
 import { ServerApiService } from '../shared/serverapi.service';
 
-import { defaultJsonEditorOptions } from './json-editor'
+import './json-editor'
 
 @Component({
   templateUrl: 'templates/edit-grammar.html'
 })
 export class EditGrammarComponent implements OnInit {
 
-  @ViewChild('typesEditor') editor: JsonEditorComponent;
-
-  readonly editorOptions = defaultJsonEditorOptions();
-
   // The grammar that is beeing edited
   grammar: GrammarDescription;
 
   // Block languages that are related to this grammar
   relatedBlockLanguages: CachedRequest<BlockLanguageListDescription[]>;
+
+  // Indicates whether the state of the editor is synchronized
+  // with the rendered grammar.
+  typesSynced = true;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -55,12 +52,13 @@ export class EditGrammarComponent implements OnInit {
     });
   }
 
-  onTypeDataUpdate() {
+  onTypeDataUpdate(text: string) {
     try {
-      const newTypes = JSON.parse(this.editor.getText());
+      const newTypes = JSON.parse(text);
       this.grammar.types = newTypes;
+      this.typesSynced = true;
     } catch (e) {
-      alert("Konnte neue Typen nicht setzen");
+      this.typesSynced = false;
     }
   }
 

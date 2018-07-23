@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 
-import { NgJsonEditorModule } from 'ang-jsoneditor'
+import { AceEditorModule } from 'ng2-ace-editor';
 
 import { SharedAppModule } from '../shared/shared.module'
 
@@ -16,7 +16,7 @@ import { LinkGrammarComponent } from './link-grammar.component'
 
 @NgModule({
   imports: [
-    NgJsonEditorModule,
+    AceEditorModule,
     CommonModule,
     SharedAppModule,
     adminRouting,
