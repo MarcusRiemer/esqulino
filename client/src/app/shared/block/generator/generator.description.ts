@@ -2,7 +2,7 @@ import { GrammarDescription } from '../../syntaxtree/grammar.description'
 import { QualifiedTypeName } from '../../syntaxtree/syntaxtree.description'
 
 import { EditorComponentDescription } from '../block-language.description'
-import { VisualBlockDescriptions } from '../block.description'
+import { VisualBlockDescriptions, SidebarDescription } from '../block.description'
 
 import {
   AllTypeInstructions
@@ -13,7 +13,17 @@ import {
  * as a JSON "blob".
  */
 export interface BlockLanguageGeneratorDocument {
+  // The sidebars that are available in the editor. It would
+  // be great to somehow generate those automatically, but for
+  // moment these descriptions are simply copied.
+  staticSidebars?: SidebarDescription[];
+
+  // Extra editor components that are shown, currently these
+  // are simply copied because there is not much to generate
+  // here.
   editorComponents?: EditorComponentDescription[];
+
+  // Define how to generate blocks for the mentioned types
   typeInstructions?: AllTypeInstructions;
 }
 

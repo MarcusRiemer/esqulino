@@ -226,7 +226,7 @@ export function convertGrammar(
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
     editorComponents: d.editorComponents || [],
-    sidebars: []
+    sidebars: d.staticSidebars || []
   };
 
   // The blocks of the editor are based on the types of the grammar,
