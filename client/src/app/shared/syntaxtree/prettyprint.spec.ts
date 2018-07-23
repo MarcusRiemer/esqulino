@@ -161,7 +161,7 @@ describe('Grammar PrettyPrinter', () => {
       type: "sequence"
     });
 
-    expect(r).toEqual(['children "foo" ::= bar baz']);
+    expect(r).toEqual(['children sequence "foo" ::= bar baz']);
   });
 
   it('node "s1" { prop "value" { string } }', () => {
@@ -230,6 +230,10 @@ describe('Grammar PrettyPrinter', () => {
 
   it('Grammar g11: one of for root', () => {
     verifyFilesTxt('g011-one-of-root', p.prettyPrintGrammar);
+  });
+
+  it('Grammar g12: sequence separator', () => {
+    verifyFilesTxt('g012-sequence-separator', p.prettyPrintGrammar);
   });
 });
 

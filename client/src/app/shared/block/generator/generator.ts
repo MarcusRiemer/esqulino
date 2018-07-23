@@ -105,6 +105,14 @@ export function mapChildren(
       DefaultInstructions.terminalInstructions
     )];
   }
+  // "allowed" and "sequence" may provide fallbacks in the grammar
+  else if (attr.type === "allowed" || attr.type === "sequence") {
+    if (attr.between) {
+      between = [
+        mapTerminal(attr.between, DefaultInstructions.terminalInstructions)
+      ];
+    }
+  }
 
   // Build the actual iterator block
   const toReturn: VisualBlockDescriptions.EditorIterator = {

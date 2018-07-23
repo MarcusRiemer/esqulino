@@ -2,27 +2,27 @@ grammar "dxml" {
   node "element" {
     terminal "<"
     prop "name" { string }
-    children "attributes" ::= attribute*
+    children allowed, "attributes"  ::= attribute*
     terminal ">"
-    children "elements" ::= element* & text* & interpolate* & if*
+    children allowed, "elements"  ::= element* & text* & interpolate* & if*
     terminal "<ende/>"
   }
   node "attribute" {
     prop "name" { string }
     terminal "="
     terminal "\""
-    children "value" ::= text* & interpolate*
+    children allowed, "value"  ::= text* & interpolate*
     terminal "\""
   }
   node "text" {
     prop "value" { string }
   }
   node "interpolate" {
-    children "expr" ::= expr
+    children allowed, "expr"  ::= expr
   }
   node "if" {
-    children "condition" ::= expr
-    children "body" ::= element* & text* & interpolate* & if*
+    children allowed, "condition"  ::= expr
+    children allowed, "body"  ::= element* & text* & interpolate* & if*
   }
   typedef "expr" ::= exprVar | exprConst | exprBinary
   node "exprVar" {
@@ -32,9 +32,9 @@ grammar "dxml" {
     prop "name" { string }
   }
   node "exprBinary" {
-    children "lhs" ::= expr
-    children "operator" ::= binaryOperator
-    children "rhs" ::= expr
+    children allowed, "lhs"  ::= expr
+    children allowed, "operator"  ::= binaryOperator
+    children allowed, "rhs"  ::= expr
   }
   node "binaryOperator" {
     prop "operator" { string }
