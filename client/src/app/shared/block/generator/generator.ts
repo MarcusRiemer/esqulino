@@ -147,26 +147,15 @@ export function mapAttribute(
 }
 
 /**
- * Applies the given generation instructions to each attribute
- * of the given type. If no specific instructions are available,
- * default instructions will be used.
+ * Maps attributes according to the generation instructions. This may be
+ * either according to the order in the grammar or the order that is
+ * given explicitly.
  */
-export function mapAllAttributes(
+export function mapAttributes(
   typeDesc: NodeConcreteTypeDescription,
   instructions: SingleBlockInstructions,
 ): VisualBlockDescriptions.ConcreteBlock[] {
-  return (typeDesc.attributes.map(attr => mapAttribute(attr, instructions)));
-}
-
-/**
- * Only generates visual blocks for types that are explicitly mentioned in the
- * instructions. No construction of blocks that haven't been mentioned.
- */
-export function mapMentionedAttributes(
-  typeDesc: NodeConcreteTypeDescription,
-  instructions: SingleBlockInstructions,
-): VisualBlockDescriptions.ConcreteBlock[] {
-  return (instructions.specifiedTypes.map(t => {
+  return (instructions.relevantAttributes(typeDesc).map(t => {
     const mappedType = typeDesc.attributes.find(a => a.name === t);
     if (mappedType) {
       return (mapAttribute(mappedType, instructions));
@@ -174,11 +163,6 @@ export function mapMentionedAttributes(
       throw new Error(`Could not find property "${t}" mentioned by generating instructions for "${typeDesc.type}"`);
     }
   }));
-}
-
-const attrMappers = {
-  all: mapAllAttributes,
-  mentioned: mapMentionedAttributes
 }
 
 /**
@@ -193,12 +177,10 @@ export function mapType(
   // How many blocks should be created?
   if (instructions instanceof SingleBlockInstructions) {
     const blockInstructions = instructions.scopeBlock();
-    const mapFunc = attrMappers[blockInstructions.attributeMappingMode];
-
     const toReturn: VisualBlockDescriptions.ConcreteBlock = {
       blockType: "block",
       direction: blockInstructions.orientation,
-      children: mapFunc(typeDesc, instructions)
+      children: mapAttributes(typeDesc, instructions)
     };
 
     if (Object.keys(blockInstructions.style).length > 0) {

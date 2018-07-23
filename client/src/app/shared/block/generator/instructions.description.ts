@@ -4,14 +4,21 @@ import { Orientation } from '../block.description'
 // in the block that is being created.
 export type AttributeMappingMode = "all" | "mentioned";
 
+export type AttributeMappingOrder = "grammar" | string[];
+
 /**
  * Customization instructions for a specific visual that may be specified by a user.
  */
 export interface Instructions {
-  orientation: Orientation; // Whether children should be layed out vertically or horizontally
-  between: string; // Separetes iterated elements
-  attributeMappingMode: AttributeMappingMode;
+  // Controls whether children should be layed out vertically or horizontally
+  orientation: Orientation;
+  // Separetes iterated elements
+  between: string;
+  // Defines the order in which the attributes appear
+  attributeMapping: AttributeMappingOrder;
+  // General CSS styling instructions
   style: { [attribute: string]: string };
+  // Controls whether the user may interactively change this attribute
   readOnly: boolean;
 }
 
@@ -23,7 +30,7 @@ export type IteratorInstructions = Readonly<Pick<Instructions, "orientation" | "
 /**
  * Instructions that are useful on a block visual.
  */
-export type BlockInstructions = Readonly<Pick<Instructions, "attributeMappingMode" | "orientation" | "style">>;
+export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "orientation" | "style">>;
 
 /**
  * Instructions that are useful on a terminal visual.
@@ -47,7 +54,7 @@ export module DefaultInstructions {
 
   export const blockInstructions: BlockInstructions = {
     orientation: "horizontal",
-    attributeMappingMode: "all",
+    attributeMapping: "grammar",
     style: {}
   }
 
@@ -65,8 +72,15 @@ export module DefaultInstructions {
   }
 }
 
+/**
+ * Instructions on how to generate a single block.
+ */
 export type SingleBlockInstructionsDescription = {
-  [scope: string]: Partial<Instructions>
+  type: "single";
+  block?: Partial<BlockInstructions>;
+  attributes: {
+    [scope: string]: Partial<Instructions>
+  }
 };
 
 export type MultiBlockInstructionsDescription = {
@@ -75,7 +89,7 @@ export type MultiBlockInstructionsDescription = {
 }
 
 export function isMultiBlockInstructions(x: any): x is MultiBlockInstructionsDescription {
-  return (typeof (x) === "object" && x.type === "multi" && typeof (x.blocks) === "object");
+  return (typeof (x) === "object" && x.type === "multi");
 }
 
 /**

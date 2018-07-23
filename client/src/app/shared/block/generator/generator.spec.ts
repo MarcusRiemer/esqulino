@@ -3,7 +3,7 @@ import { GrammarDescription, NodeConcreteTypeDescription } from '../../syntaxtre
 import { VisualBlockDescriptions } from '../block.description';
 
 import { BlockLanguageGeneratorDescription } from './generator.description'
-import { convertGrammar, mapTerminal, mapProperty, mapChildren, mapType, mapMentionedAttributes } from './generator'
+import { convertGrammar, mapTerminal, mapProperty, mapChildren, mapType, mapAttributes } from './generator'
 import { DefaultInstructions } from './instructions.description';
 import { MultiBlockInstructions, SingleBlockInstructions } from './instructions';
 
@@ -85,8 +85,13 @@ describe("BlockLanguage Generator", () => {
 
     it("Mentioned attributes only", () => {
       const instr = new SingleBlockInstructions({
-        "this": { attributeMappingMode: "mentioned" },
-        "p1": {}
+        type: "single",
+        block: {
+          attributeMapping: ["p1"]
+        },
+        attributes: {
+          "p1": {}
+        }
       });
 
       const concreteType: NodeConcreteTypeDescription = {
@@ -96,14 +101,17 @@ describe("BlockLanguage Generator", () => {
           { type: "terminal", name: "p1", symbol: "p1Text", },
         ]
       };
-      const res = mapMentionedAttributes(concreteType, instr);
+      const res = mapAttributes(concreteType, instr);
       expect(res.length).toEqual(1);
     });
 
     it("Mentioning an unknown attribute", () => {
       const instr = new SingleBlockInstructions({
-        "this": { attributeMappingMode: "mentioned" },
-        "missing": {}
+        type: "single",
+        block: { attributeMapping: ["missing"] },
+        attributes: {
+          "missing": {}
+        }
       });
 
       const concreteType: NodeConcreteTypeDescription = {
@@ -113,7 +121,7 @@ describe("BlockLanguage Generator", () => {
           { type: "terminal", name: "p1", symbol: "p1Text", },
         ]
       };
-      expect(() => mapMentionedAttributes(concreteType, instr)).toThrowError();
+      expect(() => mapAttributes(concreteType, instr)).toThrowError();
     });
   });
 
@@ -122,8 +130,16 @@ describe("BlockLanguage Generator", () => {
       const instructions = new MultiBlockInstructions({
         type: "multi",
         blocks: [
-          { "this": { attributeMappingMode: "mentioned" }, "p1": {} },
-          { "this": { attributeMappingMode: "mentioned" }, "p1": {} },
+          {
+            type: "single",
+            block: { attributeMapping: ["p1"] },
+            attributes: { "p1": {} }
+          },
+          {
+            type: "single",
+            block: { attributeMapping: ["p1"] },
+            attributes: { "p1": {} }
+          },
         ]
       });
 
@@ -143,7 +159,7 @@ describe("BlockLanguage Generator", () => {
         ]
       }
       const res = mapType(concreteType, instructions) as VisualBlockDescriptions.EditorBlock[];
-      expect(res.length).toEqual(2);
+      expect(res.length).toEqual(2, "Two generated blocks");
 
       const expBlock = jasmine.objectContaining({
         blockType: "block",
@@ -156,7 +172,7 @@ describe("BlockLanguage Generator", () => {
 
       res.forEach(b => {
         expect(b).toEqual(expBlock);
-        expect(b.children.length).toEqual(1);
+        expect(b.children.length).toEqual(1, "A single child");
         expect(b.children[0]).toEqual(expConstant);
       });
     });

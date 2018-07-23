@@ -26,7 +26,7 @@ concise_attributes:
     true, "childGroupName": "attributes"}, {"text": ">", "style": {"color": "blue",
     "display": "inline-block"}, "blockType": "constant"}], "blockType": "block", "direction":
     "horizontal"}, {"style": {"margin-left": "2ch"}, "children": [{"blockType": "iterator",
-    "direction": "vertical", "wrapChildren": true, "childGroupName": "elements"}],
+    "direction": "horizontal", "wrapChildren": true, "childGroupName": "attributes"}],
     "blockType": "block", "direction": "horizontal"}, {"children": [{"text": "<ende/>",
     "style": {"display": "inline-block"}, "blockType": "constant"}], "blockType":
     "block", "direction": "horizontal"}], "describedType": {"typeName": "element",
@@ -37,7 +37,7 @@ concise_attributes:
     "margin-left": "1ch"}, "property": "name", "blockType": "input"}, {"text": "=\"",
     "style": {"display": "inline-block"}, "blockType": "constant"}, {"blockType":
     "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
-    "value"}, {"text": "\"", "style": {"display": "inline-block"}, "blockType": "constant"}],
+    "value"}, {"text": "=\"", "style": {"display": "inline-block"}, "blockType": "constant"}],
     "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
     "attribute", "languageName": "dxml"}}, {"visual": [{"children": [{"style": {"display":
     "inline-block"}, "property": "name", "blockType": "input"}], "blockType": "block",
@@ -55,18 +55,21 @@ concise_attributes:
     "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
     "binaryOperator", "languageName": "dxml"}}], "editorComponents": [], "localGeneratorInstructions":
     {"editorComponents": [], "typeInstructions": {"dxml": {"element": {"type": "multi",
-    "blocks": [{"name": {"style": {"color": "#ad0000"}}, "this": {"attributeMappingMode":
-    "mentioned"}, "attributes": {"between": " "}, "tag-open-end": {"style": {"color":
-    "blue"}}, "tag-open-begin": {"style": {"color": "blue"}}}, {"this": {"style":
-    {"margin-left": "2ch"}, "attributeMappingMode": "mentioned"}, "elements": {"orientation":
-    "vertical"}}, {"this": {"attributeMappingMode": "mentioned"}, "tag-close": {}}]},
-    "attribute": {"name": {"style": {"color": "#ef4040", "margin-left": "1ch"}}}}}}}'
+    "blocks": [{"type": "single", "block": {"attributeMapping": ["tag-open-begin",
+    "name", "attributes", "tag-open-end"]}, "attributes": {"name": {"style": {"color":
+    "#ad0000"}}, "attributes": {"between": " "}, "tag-open-end": {"style": {"color":
+    "blue"}}, "tag-open-begin": {"style": {"color": "blue"}}}}, {"type": "single",
+    "block": {"style": {"margin-left": "2ch"}, "attributeMapping": ["attributes"]},
+    "attributes": {"elements": {"orientation": "vertical"}}}, {"type": "single", "block":
+    {"attributeMapping": ["tag-close"]}, "attributes": {"tag-close": {}}}]}, "attribute":
+    {"type": "single", "attributes": {"name": {"style": {"color": "#ef4040", "margin-left":
+    "1ch"}}}}}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-17 13:24:27.882035'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-22 13:23:31.088968'
+  value_before_type_cast: '2018-07-23 10:00:27.383281'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: dxml-eruby

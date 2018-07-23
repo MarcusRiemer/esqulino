@@ -3,6 +3,7 @@ import {
   TerminalInstructions, DefaultInstructions, TypeInstructions, isMultiBlockInstructions,
   SingleBlockInstructionsDescription, MultiBlockInstructionsDescription, PropertyInstructions
 } from './instructions.description'
+import { NodeConcreteTypeDescription } from '../../syntaxtree';
 
 /**
  * A safe way to access generation instructions. Silently returns empty
@@ -57,12 +58,6 @@ export class MultiBlockInstructions {
 }
 
 /**
- * Nasty hack: Block styling options need to be accessible under some specific
- * name too.
- */
-const BLOCK_INSTRUCTIONS_NAME = "this";
-
-/**
  * A safe way to access generation instructions that are part of a specific block. 
  * Returned instructions include default properties if no specific properties
  * have been set.
@@ -71,16 +66,27 @@ export class SingleBlockInstructions {
   constructor(
     private _type: SingleBlockInstructionsDescription
   ) {
+    // If no valid instructions are passed in: Assume a single block without any
+    // special qualities
     if (!this._type) {
-      this._type = {};
+      this._type = {
+        type: "single",
+        attributes: {}
+      };
     }
   }
 
   /**
    * The types for that specific instructions exist.
    */
-  get specifiedTypes() {
-    return (Object.keys(this._type).filter(name => name !== BLOCK_INSTRUCTIONS_NAME));
+  relevantAttributes(typeDesc: NodeConcreteTypeDescription) {
+    const order = (this._type.block && this._type.block.attributeMapping);
+
+    if (!order || order === "grammar") {
+      return (typeDesc.attributes.map(a => a.name));
+    } else {
+      return (order);
+    }
   }
 
   /**
@@ -94,7 +100,7 @@ export class SingleBlockInstructions {
    * @return Block specific instructions
    */
   scopeBlock(): BlockInstructions {
-    return (this.cloneWithStyle(this.scope(BLOCK_INSTRUCTIONS_NAME), DefaultInstructions.blockInstructions));
+    return (this.cloneWithStyle(this._type.block || {}, DefaultInstructions.blockInstructions));
   }
 
   /**
@@ -115,7 +121,7 @@ export class SingleBlockInstructions {
    * @return Exact instructions for the given scope, no default values applied.
    */
   scope(s?: string): Partial<Instructions> {
-    let toReturn = this._type[s];
+    let toReturn = this._type.attributes[s];
     if (!toReturn) {
       toReturn = {};
     }
@@ -140,4 +146,4 @@ export class SingleBlockInstructions {
   }
 }
 
-export const DEFAULT_INSTRUCTIONS = new SingleBlockInstructions({});
+export const DEFAULT_INSTRUCTIONS = new SingleBlockInstructions(undefined);
