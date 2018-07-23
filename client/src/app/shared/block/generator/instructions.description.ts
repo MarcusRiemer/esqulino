@@ -73,7 +73,7 @@ export module DefaultInstructions {
 }
 
 /**
- * Instructions on how to generate a single block.
+ * Instructions on how to generate a single block for a type.
  */
 export type SingleBlockInstructionsDescription = {
   type: "single";
@@ -83,19 +83,23 @@ export type SingleBlockInstructionsDescription = {
   }
 };
 
+/**
+ * Instructions on how to generate a type that is composed of multiple
+ * blocks.
+ */
 export type MultiBlockInstructionsDescription = {
   type: "multi",
   blocks: SingleBlockInstructionsDescription[]
 }
 
+/**
+ * Any kind of instruction on how to create one or more blocks for a type.
+ */
+export type TypeInstructions = SingleBlockInstructionsDescription | MultiBlockInstructionsDescription
+
 export function isMultiBlockInstructions(x: any): x is MultiBlockInstructionsDescription {
   return (typeof (x) === "object" && x.type === "multi");
 }
-
-/**
- *
- */
-export type TypeInstructions = SingleBlockInstructionsDescription | MultiBlockInstructionsDescription
 
 /**
  * Supplementary generation instructions for all types.

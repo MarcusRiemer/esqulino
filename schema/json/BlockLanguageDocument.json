@@ -75,6 +75,12 @@
           },
           "type": "array"
         },
+        "staticSidebars": {
+          "items": {
+            "$ref": "#/definitions/SidebarDescription"
+          },
+          "type": "array"
+        },
         "typeInstructions": {
           "$ref": "#/definitions/AllTypeInstructions"
         }
@@ -175,6 +181,7 @@
     },
     "MultiBlockInstructionsDescription": {
       "additionalProperties": false,
+      "description": "Instructions on how to generate a type that is composed of multiple\nblocks.",
       "properties": {
         "blocks": {
           "items": {
@@ -299,7 +306,7 @@
     },
     "SingleBlockInstructionsDescription": {
       "additionalProperties": false,
-      "description": "Instructions on how to generate a single block.",
+      "description": "Instructions on how to generate a single block for a type.",
       "properties": {
         "attributes": {
           "additionalProperties": {
@@ -369,7 +376,8 @@
         {
           "$ref": "#/definitions/MultiBlockInstructionsDescription"
         }
-      ]
+      ],
+      "description": "Any kind of instruction on how to create one or more blocks for a type."
     },
     "VisualBlockDescriptions.BlockStyle": {
       "additionalProperties": {
