@@ -10,6 +10,7 @@
     </div>
     <div class="col-sm-2">
       <button (click)="onRegenerate()"
+              [disabled]="!editedSubject.localGeneratorInstructions"
               class="btn btn-primary btn-block">
         Neu Generieren
       </button>
