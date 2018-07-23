@@ -57,7 +57,13 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         },
         {
           type: "terminal",
-          symbol: "=\"",
+          name: "equals",
+          symbol: "=",
+        },
+        {
+          type: "terminal",
+          name: "quot-begin",
+          symbol: "\"",
         },
         {
           name: "value",
@@ -69,6 +75,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
         },
         {
           type: "terminal",
+          name: "quot-end",
           symbol: "\"",
         },
       ]

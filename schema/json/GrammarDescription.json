@@ -355,6 +355,7 @@
       },
       "required": [
         "type",
+        "name",
         "symbol"
       ],
       "type": "object"

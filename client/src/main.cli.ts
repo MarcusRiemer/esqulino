@@ -142,16 +142,9 @@ function availableBlockLanguages(): BlockLanguageDescription[] {
   return ([
     blocks_dxml.BLOCK_LANGUAGE_DYNAMIC,
     blocks_dxml.BLOCK_LANGUAGE_STATIC,
-    blocks_dxml.GENERATED_BLOCK_LANGUAGE_STATIC,
     blocks_sql.BLOCK_LANGUAGE_DESCRIPTION,
     blocks_css.BLOCK_LANGUAGE_DESCRIPTION,
     blocks_regex.BLOCK_LANGUAGE_DESCRIPTION
-  ]);
-}
-
-function availableBlockLanguageGenerators(): BlockLanguageGeneratorDescription[] {
-  return ([
-    blocks_dxml.GENERATOR_STATIC,
   ]);
 }
 
@@ -200,17 +193,6 @@ function executeCommand(command: Command): Promise<string> | any {
           const updateUrl = new URL("/api/grammars/" + g.id, command.serverBaseUrl);
           return (httpRequest<any>(updateUrl, "PUT", g));
         });
-
-      return (Promise.all(requests));
-    }
-    case "updateBlockLanguageGenerators": {
-      const requests = availableBlockLanguageGenerators()
-        .map(gen => {
-          const updateUrl = new URL("/api/block_language_generators/" + gen.id, command.serverBaseUrl);
-          return (httpRequest<any>(updateUrl, "PUT", gen));
-        });
-
-      console.log(`${requests.length} requests`);
 
       return (Promise.all(requests));
     }

@@ -64,7 +64,7 @@ export type NodeAttributeDescription =
  */
 export interface NodeTerminalSymbolDescription {
   type: "terminal";
-  name?: string;
+  name: string;
   symbol: string;
 }
 

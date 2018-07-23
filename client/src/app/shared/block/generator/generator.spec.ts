@@ -11,12 +11,12 @@ describe("BlockLanguage Generator", () => {
   describe("Single Types", () => {
 
     it("Terminal => Constant", () => {
-      const res = mapTerminal({ type: "terminal", symbol: "t" }, { style: {} });
+      const res = mapTerminal({ type: "terminal", name: "t", symbol: "t" }, { style: {} });
       expect(res).toEqual({ blockType: "constant", text: "t" });
     });
 
     it("Styled Terminal => Styled Constant", () => {
-      const res = mapTerminal({ type: "terminal", symbol: "t" }, { style: { color: "green" } });
+      const res = mapTerminal({ type: "terminal", name: "t", symbol: "t" }, { style: { color: "green" } });
       expect(res).toEqual({ blockType: "constant", text: "t", style: { color: "green" } });
     });
 
@@ -249,6 +249,7 @@ describe("BlockLanguage Generator", () => {
             attributes: [
               {
                 type: "terminal",
+                name: "t",
                 symbol: "t"
               },
               {
