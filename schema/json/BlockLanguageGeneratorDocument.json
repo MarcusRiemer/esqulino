@@ -243,6 +243,9 @@
               "between": {
                 "type": "string"
               },
+              "dropTarget": {
+                "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+              },
               "orientation": {
                 "$ref": "#/definitions/Orientation"
               },
@@ -266,6 +269,9 @@
           "properties": {
             "attributeMapping": {
               "$ref": "#/definitions/AttributeMappingOrder"
+            },
+            "dropTarget": {
+              "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
             },
             "orientation": {
               "$ref": "#/definitions/Orientation"
@@ -302,6 +308,76 @@
         }
       ],
       "description": "Any kind of instruction on how to create one or more blocks for a type."
+    },
+    "VisualBlockDescriptions.CategoryInsert": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "order": {
+          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsertPosition"
+        }
+      },
+      "required": [
+        "order",
+        "category"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.CategoryInsertPosition": {
+      "description": "The locations of categories at which insertions may occur.",
+      "enum": [
+        "insertFirst",
+        "insertLast"
+      ],
+      "type": "string"
+    },
+    "VisualBlockDescriptions.DropTargetProperties": {
+      "additionalProperties": false,
+      "description": "These properties are required to specify drop targets.",
+      "properties": {
+        "children": {
+          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
+        },
+        "parent": {
+          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
+        },
+        "self": {
+          "additionalProperties": false,
+          "properties": {
+            "order": {
+              "enum": [
+                "insertBefore",
+                "insertAfter"
+              ],
+              "type": "string"
+            },
+            "skipParents": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "order",
+            "skipParents"
+          ],
+          "type": "object"
+        },
+        "visibility": {
+          "items": {
+            "enum": [
+              "ifAnyDrag",
+              "ifLegalDrag",
+              "ifLegalChild",
+              "ifEmpty",
+              "always"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
     }
   }
 }

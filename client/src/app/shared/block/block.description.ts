@@ -34,6 +34,7 @@ export namespace VisualBlockDescriptions {
    */
   export type CategoryInsertPosition = "insertFirst" | "insertLast";
 
+
   export type CategoryInsert = {
     order: CategoryInsertPosition;
     category: string;
@@ -124,6 +125,14 @@ export namespace VisualBlockDescriptions {
   }
 
   export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput;
+
+  // Default to inserting after the given node. This should be a meaningful default ...
+  export const DefaultDropTargetProperties: DropTargetProperties = {
+    self: {
+      order: "insertAfter",
+      skipParents: 0
+    }
+  }
 }
 
 /**

@@ -639,6 +639,9 @@
               "between": {
                 "type": "string"
               },
+              "dropTarget": {
+                "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+              },
               "orientation": {
                 "$ref": "#/definitions/Orientation"
               },
@@ -662,6 +665,9 @@
           "properties": {
             "attributeMapping": {
               "$ref": "#/definitions/AttributeMappingOrder"
+            },
+            "dropTarget": {
+              "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
             },
             "orientation": {
               "$ref": "#/definitions/Orientation"
