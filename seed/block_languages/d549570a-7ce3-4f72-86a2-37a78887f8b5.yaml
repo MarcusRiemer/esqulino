@@ -5,7 +5,6 @@ concise_attributes:
   value_before_type_cast: Generated XML
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
-  value_before_type_cast: ''
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: d549570a-7ce3-4f72-86a2-37a78887f8b5
@@ -70,7 +69,7 @@ concise_attributes:
   value_before_type_cast: '2018-07-17 13:24:27.882035'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-23 10:30:46.63651'
+  value_before_type_cast: '2018-07-23 10:50:43.482578'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: dxml-eruby

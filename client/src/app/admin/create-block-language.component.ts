@@ -22,7 +22,7 @@ import { ServerApiService } from '../shared/serverapi.service';
 })
 export class CreateBlockLanguageComponent {
   // Synced with form
-  public blockLanguage: BlockLanguageDescription = {
+  blockLanguage: BlockLanguageDescription = {
     id: undefined,
     name: "",
     slug: "",
@@ -33,6 +33,9 @@ export class CreateBlockLanguageComponent {
     editorComponents: [],
     sidebars: []
   };
+
+  // Enables usage of slugs
+  useSlug = false;
 
   constructor(
     private _serverData: ServerDataService,
@@ -65,6 +68,11 @@ export class CreateBlockLanguageComponent {
         // Default the default programming language to use the same value as
         // the grammar.
         toCreate.defaultProgrammingLanguageId = g.programmingLanguageId;
+
+        // Possibly forcefully remove a slug (instead of sending an empty string)
+        if (!this.useSlug) {
+          delete toCreate.slug;
+        }
 
         this._http
           .post<{ id: string }>(this._serverApi.createBlockLanguageUrl(), toCreate)

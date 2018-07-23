@@ -26,6 +26,11 @@ RSpec.describe BlockLanguage do
       expect(res.valid?).to be true
     end
 
+    it "rejects blank slugs" do
+      res = FactoryBot.build(:block_language, slug: "")
+      expect(res.valid?).to be false
+    end
+
     it "rejects duplicate slugs" do
       res_1 = FactoryBot.create(:block_language, slug: "dup")
       res_2 = FactoryBot.build(:block_language, slug: "dup")

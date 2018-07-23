@@ -18,11 +18,20 @@
     <label for="block-language-slug"
            class="col-sm-2 col-form-label">Slug</label>
     <div class="col-sm-10">
-      <input id="block-language-slug"
-             name="slug"
-             class="form-control"
-             required
-             [(ngModel)]="blockLanguage.slug">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input type="checkbox"
+                   name="use-slug"
+                   [(ngModel)]="useSlug">
+          </div>
+        </div>
+        <input id="block-language-slug"
+               name="slug"
+               class="form-control"
+               [readonly]="!useSlug"
+               [(ngModel)]="blockLanguage.slug">
+      </div>
     </div>
   </div>
 
