@@ -3,6 +3,7 @@ import {
   TerminalInstructions, DefaultInstructions, TypeInstructions, isMultiBlockInstructions,
   SingleBlockInstructionsDescription, MultiBlockInstructionsDescription, PropertyInstructions
 } from './instructions.description'
+
 import { NodeConcreteTypeDescription } from '../../syntaxtree';
 
 /**
@@ -11,7 +12,7 @@ import { NodeConcreteTypeDescription } from '../../syntaxtree';
  */
 export class GeneratorInstructions {
   constructor(
-    private _all: AllTypeInstructions
+    private _all: AllTypeInstructions,
   ) {
     // Ensure that at least an empty object is avaiable
     if (!this._all) {
@@ -51,10 +52,12 @@ export class GeneratorInstructions {
  */
 export class MultiBlockInstructions {
   constructor(
-    private _desc: MultiBlockInstructionsDescription
+    private _desc: MultiBlockInstructionsDescription,
   ) { }
 
-  readonly blocks: ReadonlyArray<SingleBlockInstructions> = this._desc.blocks.map(b => new SingleBlockInstructions(b));
+  readonly blocks: ReadonlyArray<SingleBlockInstructions> = this._desc.blocks.map(
+    b => new SingleBlockInstructions(b)
+  );
 }
 
 /**
@@ -64,7 +67,7 @@ export class MultiBlockInstructions {
  */
 export class SingleBlockInstructions {
   constructor(
-    private _type: SingleBlockInstructionsDescription
+    private _type: SingleBlockInstructionsDescription,
   ) {
     // If no valid instructions are passed in: Assume a single block without any
     // special qualities

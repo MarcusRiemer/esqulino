@@ -1,5 +1,11 @@
 import * as Desc from './parameters.description'
-import { ParameterValue } from './parameters.description';
+import { ParameterValue, isParameterReference } from './parameters.description';
+import {
+  AllTypeInstructions, Instructions, AllReferenceableTypeInstructions,
+  ReferenceableInstructions, TypeInstructions, SingleBlockInstructionsDescription,
+  MultiBlockInstructionsDescription, InternalMultiBlockInstructionsDescription,
+  InternalSingleBlockInstructionsDescription
+} from './instructions.description';
 
 // Function with this signature may be used
 export type ValidationFunction = (
@@ -94,9 +100,94 @@ export class ParameterMap {
   }
 
   /**
+   * Takes instructions that may have parameters and resolves all of those
+   * parameters.
+   */
+  resolve(instructions: AllReferenceableTypeInstructions): AllTypeInstructions {
+    const toReturn: AllTypeInstructions = {};
+
+    Object.entries(instructions || {}).forEach(([grammarName, types]) => {
+      const currentGrammar = {};
+      toReturn[grammarName] = currentGrammar;
+      Object.entries(types).forEach(([typeName, typeInstructions]) => {
+        currentGrammar[typeName] = this.resolveTypeInstructions(typeInstructions);
+      });
+    });
+
+
+    return (toReturn);
+  }
+
+  /**
+   * Resolves the attributes of a type that will generate a single block.
+   */
+  private resolveTypeSingleBlockInstructions(
+    referenceable: InternalSingleBlockInstructionsDescription<ReferenceableInstructions>
+  ): InternalSingleBlockInstructionsDescription<Instructions> {
+    const singleBlock: SingleBlockInstructionsDescription = {
+      "type": "single",
+      "attributes": this.mapAttributes(referenceable.attributes)
+    };
+
+    if (referenceable.block) {
+      singleBlock.block = referenceable.block;
+    }
+
+    return (singleBlock);
+  }
+
+  /**
+   * Resolves attributes of type that may generate one or multiple blocks.
+   */
+  private resolveTypeInstructions(referenceable: TypeInstructions<ReferenceableInstructions>): TypeInstructions<Instructions> {
+    if (referenceable.type === "single") {
+      return (this.resolveTypeSingleBlockInstructions(referenceable));
+    } else {
+      const multiBlock: InternalMultiBlockInstructionsDescription<Instructions> = {
+        "type": "multi",
+        "blocks": referenceable.blocks.map(b => this.resolveTypeSingleBlockInstructions(b))
+      };
+
+      return (multiBlock);
+    }
+  }
+
+  /**
+   * Mapping the attributes that are present.
+   */
+  private mapAttributes(
+    referenceable: { [type: string]: ReferenceableInstructions }
+  ): { [type: string]: Partial<Instructions> } {
+    const toReturn: { [type: string]: Partial<Instructions> } = {};
+
+    Object.entries(referenceable).forEach(([attributeName, instructions]) => {
+      toReturn[attributeName] = this.resolveInstructions(instructions);
+    });
+
+    return (toReturn);
+  }
+
+  /**
+   * This is the only function that actually does something interesting.
+   * If the given instructions contain any references, these are resolved.
+   */
+  private resolveInstructions(referenceable: ReferenceableInstructions): Partial<Instructions> {
+    const toReturn: Partial<Instructions> = {};
+    Object.entries(referenceable).forEach(([name, value]) => {
+      if (isParameterReference(value)) {
+        toReturn[name] = this.getValue(value["$ref"]);
+      } else {
+        toReturn[name] = value;
+      }
+    });
+
+    return (toReturn);
+  }
+
+  /**
    * @return The value that is saved under the given name.
    */
-  getValue(name: string): ParameterValue {
+  getValue(name: string): any {
     if (name in this._currentValues) {
       return (this._currentValues[name]);
     }
