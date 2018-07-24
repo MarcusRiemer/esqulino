@@ -146,4 +146,5 @@ export class SingleBlockInstructions {
   }
 }
 
+// These instructions are used when no specific instructions are available
 export const DEFAULT_INSTRUCTIONS = new SingleBlockInstructions(undefined);
