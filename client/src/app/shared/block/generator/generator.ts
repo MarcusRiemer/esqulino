@@ -274,10 +274,22 @@ export function convertGrammar(
 
   // Grab the parameters and the values this generator defines
   const parameters = new ParameterMap();
+  parameters.addParameters(d.parameterDeclarations || {});
+  parameters.addValues(d.parameterValues || {});
+
+  // Ensure we have a valid set of parameters
+  const parameterErrors = parameters.validate();
+  if (parameterErrors.length > 0) {
+    throw (new Error(`Error building parameter map: ${JSON.stringify(parameterErrors)}`));
+  }
 
   // The type instructions may contain references. The parameter map from the
   // previous step contains all values that these references may be resolved to.
-  const resolvedTypeInstructions = parameters.resolve(d.typeInstructions);
+
+  // TODO: Referenced style values in d.typeInstructions are replaced with
+  //       with resolved version.
+  //       So lets see what happens if we make a deep copy first
+  const resolvedTypeInstructions = parameters.resolve(JSON.parse(JSON.stringify(d.typeInstructions)));
 
   // Wrap self contained instruction description in something that allows safe
   // access no matter whether the seeked value exists or not.

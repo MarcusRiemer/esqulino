@@ -2,14 +2,14 @@
   "$ref": "#/definitions/BlockLanguageGeneratorDocument",
   "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
-    "AllTypeInstructions": {
+    "AllReferenceableTypeInstructions": {
       "additionalProperties": {
         "additionalProperties": {
-          "$ref": "#/definitions/TypeInstructions"
+          "$ref": "#/definitions/TypeInstructions_ReferenceableInstructions_"
         },
         "type": "object"
       },
-      "description": "Supplementary generation instructions for all types.",
+      "description": "Supplementary generation instructions for all types. In this variant\nthere may be references to exact values instead of the exact values\nthemselves.",
       "type": "object"
     },
     "AttributeMappingOrder": {
@@ -38,6 +38,12 @@
           },
           "type": "array"
         },
+        "parameterDeclarations": {
+          "$ref": "#/definitions/ParameterDeclarations"
+        },
+        "parameterValues": {
+          "$ref": "#/definitions/ParameterValues"
+        },
         "staticSidebars": {
           "items": {
             "$ref": "#/definitions/SidebarDescription"
@@ -45,7 +51,7 @@
           "type": "array"
         },
         "typeInstructions": {
-          "$ref": "#/definitions/AllTypeInstructions"
+          "$ref": "#/definitions/AllReferenceableTypeInstructions"
         }
       },
       "type": "object"
@@ -120,21 +126,13 @@
       ],
       "type": "object"
     },
-    "IterationDropTarget": {
-      "enum": [
-        "start",
-        "end",
-        "none"
-      ],
-      "type": "string"
-    },
-    "MultiBlockInstructionsDescription": {
+    "InternalMultiBlockInstructionsDescription_ReferenceableInstructions_": {
       "additionalProperties": false,
       "description": "Instructions on how to generate a type that is composed of multiple\nblocks.",
       "properties": {
         "blocks": {
           "items": {
-            "$ref": "#/definitions/SingleBlockInstructionsDescription"
+            "$ref": "#/definitions/InternalSingleBlockInstructionsDescription_ReferenceableInstructions_"
           },
           "type": "array"
         },
@@ -150,6 +148,148 @@
         "blocks"
       ],
       "type": "object"
+    },
+    "InternalSingleBlockInstructionsDescription_ReferenceableInstructions_": {
+      "additionalProperties": false,
+      "description": "Instructions on how to generate a single block for a type.",
+      "properties": {
+        "attributes": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "description": "Make all properties in T optional",
+            "properties": {
+              "attributeMapping": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/AttributeMappingOrder"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "between": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "generateDropTargets": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/IterationDropTarget"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "onDrop": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "orientation": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/Orientation"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "readOnly": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              },
+              "style": {
+                "anyOf": [
+                  {
+                    "additionalProperties": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                        }
+                      ]
+                    },
+                    "type": "object"
+                  },
+                  {
+                    "$ref": "#/definitions/ParameterReference"
+                  }
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "block": {
+          "additionalProperties": false,
+          "description": "Make all properties in T optional",
+          "properties": {
+            "attributeMapping": {
+              "$ref": "#/definitions/AttributeMappingOrder"
+            },
+            "onDrop": {
+              "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+            },
+            "orientation": {
+              "$ref": "#/definitions/Orientation"
+            },
+            "style": {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                  }
+                ]
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "type": {
+          "enum": [
+            "single"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "attributes"
+      ],
+      "type": "object"
+    },
+    "IterationDropTarget": {
+      "enum": [
+        "start",
+        "end",
+        "none"
+      ],
+      "type": "string"
     },
     "NodeDescription": {
       "additionalProperties": false,
@@ -190,6 +330,91 @@
         "vertical"
       ],
       "type": "string"
+    },
+    "ParameterBoolean": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "boolean"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ParameterDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "defaultValue": {
+          "$ref": "#/definitions/ParameterValue"
+        },
+        "type": {
+          "$ref": "#/definitions/ParameterType"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ParameterDeclarations": {
+      "additionalProperties": {
+        "$ref": "#/definitions/ParameterDeclaration"
+      },
+      "type": "object"
+    },
+    "ParameterReference": {
+      "additionalProperties": false,
+      "properties": {
+        "$ref": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "$ref"
+      ],
+      "type": "object"
+    },
+    "ParameterType": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ParameterTypeString"
+        },
+        {
+          "$ref": "#/definitions/ParameterBoolean"
+        }
+      ]
+    },
+    "ParameterTypeString": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "string"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ParameterValue": {
+      "type": [
+        "string",
+        "boolean"
+      ]
+    },
+    "ParameterValues": {
+      "additionalProperties": {
+        "$ref": "#/definitions/ParameterValue"
+      },
+      "type": "object"
     },
     "QueryPreviewComponentDescription": {
       "additionalProperties": false,
@@ -236,86 +461,13 @@
       ],
       "description": "All possible sidebar types"
     },
-    "SingleBlockInstructionsDescription": {
-      "additionalProperties": false,
-      "description": "Instructions on how to generate a single block for a type.",
-      "properties": {
-        "attributes": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "description": "Make all properties in T optional",
-            "properties": {
-              "attributeMapping": {
-                "$ref": "#/definitions/AttributeMappingOrder"
-              },
-              "between": {
-                "type": "string"
-              },
-              "generateDropTargets": {
-                "$ref": "#/definitions/IterationDropTarget"
-              },
-              "onDrop": {
-                "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
-              },
-              "orientation": {
-                "$ref": "#/definitions/Orientation"
-              },
-              "readOnly": {
-                "type": "boolean"
-              },
-              "style": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "type": "object"
-              }
-            },
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "block": {
-          "additionalProperties": false,
-          "description": "Make all properties in T optional",
-          "properties": {
-            "attributeMapping": {
-              "$ref": "#/definitions/AttributeMappingOrder"
-            },
-            "onDrop": {
-              "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
-            },
-            "orientation": {
-              "$ref": "#/definitions/Orientation"
-            },
-            "style": {
-              "additionalProperties": {
-                "type": "string"
-              },
-              "type": "object"
-            }
-          },
-          "type": "object"
-        },
-        "type": {
-          "enum": [
-            "single"
-          ],
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "attributes"
-      ],
-      "type": "object"
-    },
-    "TypeInstructions": {
+    "TypeInstructions_ReferenceableInstructions_": {
       "anyOf": [
         {
-          "$ref": "#/definitions/SingleBlockInstructionsDescription"
+          "$ref": "#/definitions/InternalSingleBlockInstructionsDescription_ReferenceableInstructions_"
         },
         {
-          "$ref": "#/definitions/MultiBlockInstructionsDescription"
+          "$ref": "#/definitions/InternalMultiBlockInstructionsDescription_ReferenceableInstructions_"
         }
       ],
       "description": "Any kind of instruction on how to create one or more blocks for a type."

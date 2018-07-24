@@ -39,6 +39,37 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
     ]);
   });
 
+  it("Adding only an (unsatisfied) parameter with a default value", () => {
+    const m = new ParameterMap();
+    m.addParameters({
+      "foo": {
+        "type": { "type": "string" },
+        "defaultValue": "default"
+      }
+    });
+
+    expect(m.validate()).toEqual([]);
+    expect(m.getValue("foo")).toEqual("default");
+  });
+
+  it("Adding matching parameter (with ignored default) and value", () => {
+    const m = new ParameterMap();
+    m.addParameters({
+      "foo": {
+        "type": { "type": "string" },
+        "defaultValue": "irrelevant"
+      }
+    });
+
+    m.addValues({
+      "foo": "matchingString"
+    });
+
+    expect(m.validate()).toEqual([]);
+    expect(m.getValue("foo")).toEqual("matchingString");
+  });
+
+
   it("Adding a parameter twice", () => {
     const p: Desc.ParameterDeclarations = {
       "foo": {

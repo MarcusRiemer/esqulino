@@ -209,6 +209,100 @@ describe("BlockLanguage Generator", () => {
       expect(r.editorBlocks.length).toEqual(1);
     });
 
+    it("Almost empty grammar with parametrized instructions and missing values", () => {
+      const grammar: GrammarDescription = {
+        id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
+        programmingLanguageId: "spec",
+        name: "g1",
+        root: "t1",
+        types: {
+          "t1": {
+            type: "concrete",
+            attributes: [
+              { type: "property", name: "p1", base: "string" },
+              { type: "terminal", name: "t1", symbol: "t1" }
+            ]
+          }
+        }
+      };
+
+      const generator: BlockLanguageGeneratorDescription = {
+        id: "4d67a9d5-c47a-418a-a16c-5764fb20fab5",
+        name: "Generating b1",
+        editorComponents: [],
+        parameterDeclarations: {
+          "allowModifications": { "type": { "type": "boolean" } }
+        },
+        typeInstructions: {
+          "g1": {
+            "t1": {
+              type: "single",
+              attributes: {
+                "p1": {
+                  readOnly: { "$ref": "allowMod" }
+                }
+              }
+            }
+          }
+        }
+      };
+
+      expect(() => convertGrammar(generator, grammar)).toThrowError();
+    });
+
+    it("Almost empty grammar with parametrized instructions and supplied values", () => {
+      const grammar: GrammarDescription = {
+        id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
+        programmingLanguageId: "spec",
+        name: "g1",
+        root: "t1",
+        types: {
+          "t1": {
+            type: "concrete",
+            attributes: [
+              { type: "property", name: "p1", base: "string" },
+              { type: "terminal", name: "t1", symbol: "t1" }
+            ]
+          }
+        }
+      };
+
+      const generator: BlockLanguageGeneratorDescription = {
+        id: "4d67a9d5-c47a-418a-a16c-5764fb20fab5",
+        name: "Generating b1",
+        editorComponents: [],
+        parameterDeclarations: {
+          "allowModifications": { "type": { "type": "boolean" } }
+        },
+        parameterValues: {
+          "allowModifications": true
+        },
+        typeInstructions: {
+          "g1": {
+            "t1": {
+              type: "single",
+              attributes: {
+                "p1": {
+                  readOnly: { "$ref": "allowModifications" }
+                }
+              }
+            }
+          }
+        }
+      };
+
+      const b = convertGrammar(generator, grammar);
+      expect(b.editorBlocks.length).toEqual(1);
+
+      type Interpoloated = VisualBlockDescriptions.EditorInterpolated;
+      const t1Block = b.editorBlocks[0].visual[0] as VisualBlockDescriptions.EditorBlock;
+      expect(t1Block.blockType).toEqual("block");
+      expect(t1Block.children[0]).toEqual(jasmine.objectContaining<Interpoloated>({
+        "blockType": "interpolated",
+        "property": "p1"
+      }));
+    });
+
     it("No blocks for 'oneOf'-types", () => {
       const grammar: GrammarDescription = {
         id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",

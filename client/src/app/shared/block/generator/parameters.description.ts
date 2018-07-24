@@ -2,12 +2,17 @@ export interface ParameterTypeString {
   "type": "string"
 }
 
+export interface ParameterBoolean {
+  "type": "boolean"
+}
+
 // Defines the possible types for parameters
-export type ParameterType = ParameterTypeString
+export type ParameterType = ParameterTypeString | ParameterBoolean
 
 // Definition of a single parameter
 export interface ParameterDeclaration {
   type: ParameterType;
+  defaultValue?: ParameterValue;
 }
 
 // Declares that a certain names should be available to be referenced
@@ -32,7 +37,7 @@ export function isParameterReference(obj: any): obj is ParameterReference {
 }
 
 // A value that is available under a certain name.
-export type ParameterValue = string;
+export type ParameterValue = string | boolean;
 
 // A set of declared values
 export interface ParameterValues {

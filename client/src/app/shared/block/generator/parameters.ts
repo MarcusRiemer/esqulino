@@ -15,7 +15,10 @@ export type ValidationFunction = (
 
 export const ValidatorFunctions: { [name: string]: ValidationFunction } = {
   "string": (expectedType, value) => {
-    return (true)
+    return (true);
+  },
+  "boolean": (expectedType, value) => {
+    return (true);
   }
 }
 
@@ -74,7 +77,7 @@ export class ParameterMap {
     // Go through every parameter to ensure its satisfied
     Object.entries(this._knownParameters).forEach(([name, param]) => {
       // Is there a value for this parameter?
-      if (!this._currentValues[name]) {
+      if (!(name in this._currentValues) && !("defaultValue" in param)) {
         // No, that is a problem
         toReturn.push({
           type: "MissingValue",
@@ -181,6 +184,15 @@ export class ParameterMap {
       }
     });
 
+    // Style attributes are a more complicated matter and require separate intervention
+    if (toReturn.style) {
+      Object.entries(toReturn.style).forEach(([key, value]) => {
+        if (isParameterReference(value)) {
+          toReturn.style[key] = this.getValue(value["$ref"]);
+        }
+      });
+    }
+
     return (toReturn);
   }
 
@@ -188,8 +200,15 @@ export class ParameterMap {
    * @return The value that is saved under the given name.
    */
   getValue(name: string): any {
+    let toReturn = undefined;
     if (name in this._currentValues) {
-      return (this._currentValues[name]);
+      toReturn = this._currentValues[name];
+    } else if (this._knownParameters[name] && "defaultValue" in this._knownParameters[name]) {
+      toReturn = this._knownParameters[name].defaultValue;
+    } else {
+      throw new Error(`Value "${name}" not known in paramMap`);
     }
+
+    return (toReturn);
   }
 }
