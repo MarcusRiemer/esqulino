@@ -5,12 +5,19 @@ import { EditorComponentDescription } from '../block-language.description'
 import { VisualBlockDescriptions, SidebarDescription } from '../block.description'
 
 import { AllReferenceableTypeInstructions } from './instructions.description'
+import { ParameterDeclarations, ParameterValues } from './parameters.description'
 
 /**
  * The nested parts of the generator description that must be stored
  * as a JSON "blob".
  */
 export interface BlockLanguageGeneratorDocument {
+  // These parameters are required to generate the language
+  parameterDeclarations?: ParameterDeclarations;
+
+  // These values should match the parameters that are required
+  parameterValues?: ParameterValues;
+
   // The sidebars that are available in the editor. It would
   // be great to somehow generate those automatically, but for
   // moment these descriptions are simply copied.

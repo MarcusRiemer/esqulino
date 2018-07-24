@@ -21,7 +21,7 @@ export interface Instructions {
   // Defines the order in which the attributes appear
   attributeMapping: AttributeMappingOrder;
   // General CSS styling instructions
-  style: { [attribute: string]: string };
+  style: { [attribute: string]: string | any }; // TODO: `any` is a hack to counter references
   // Controls whether the user may interactively change this attribute
   readOnly: boolean;
   // Controls how things dropped on this block will be treated

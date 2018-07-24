@@ -3,7 +3,11 @@
 ##################################
 
 # Full path of typescript-json-schema
-TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
+# TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
+# Using a bleeding edge version for the moment
+# https://github.com/vega/ts-json-schema-generator/issues/38
+TYPESCRIPT_JSON_SCHEMA_BIN = /home/marcus/projects/ts-json-schema-generator/bin/ts-json-schema-generator
+
 
 # Names of the schema files to generate
 JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageGeneratorDescription.json BlockLanguageGeneratorDocument.json BlockLanguageGeneratorListDescription.json BlockLanguageListDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarListDescription.json NodeDescription.json ProjectCreationDescription.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json TableDescription.json
@@ -15,6 +19,8 @@ JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDesc
 define CONVERT_COMMAND
 	@echo "Creating $(notdir $(basename $@)).json"
 	$(TYPESCRIPT_JSON_SCHEMA_BIN) --path $^ --type $(notdir $(basename $@)) > "$@.tmp"
+	sed -i -- 's/</_/g' "$@.tmp"
+	sed -i -- 's/>/_/g' "$@.tmp"
 	mv "$@.tmp" "$@"
 endef
 
