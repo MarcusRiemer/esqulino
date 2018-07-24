@@ -16,12 +16,14 @@ import {
 } from './generator.description'
 
 import {
-  DefaultInstructions, Instructions, AllTypeInstructions, IteratorInstructions, BlockInstructions, TerminalInstructions, PropertyInstructions
+  DefaultInstructions, Instructions, AllTypeInstructions, IteratorInstructions,
+  BlockInstructions, TerminalInstructions, PropertyInstructions
 } from './instructions.description'
 
 import {
   GeneratorInstructions, SingleBlockInstructions, MultiBlockInstructions
 } from './instructions'
+import { ParameterMap } from './parameters';
 
 /**
  * Maps terminal symbols to constant blocks. The exact value of the terminal
@@ -258,27 +260,30 @@ export function convertGrammar(
   g: GrammarDescription
 ): BlockLanguageDocument {
   // Some information is provided 1:1 by the generation instructions,
-  // these can be copied over without further ado. And some properties
-  // are not filled by the generator on purpose:
-  // 
-  // * The `id` of the new language
-  // * The default programming language
+  // these can be copied over without further ado.
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
     editorComponents: d.editorComponents || [],
     sidebars: d.staticSidebars || []
   };
 
-  // The blocks of the editor are based on the types of the grammar,
-  // "oneOf" types are not of interest here because they can never
-  // be nodes.
+  // The blocks of the editor are based on the concrete types of the grammar,
+  // "oneOf" types are not of interest here because they can never be nodes.
   const concreteTypes = Object.entries(g.types)
     .filter(([k, v]) => v.type !== "oneOf") as [string, NodeConcreteTypeDescription][];
 
-  // Wrap generation instructions in something that is safe to use
-  const instructions = new GeneratorInstructions(d.typeInstructions);
+  // Grab the parameters and the values this generator defines
+  const parameters = new ParameterMap();
 
-  // Dummy mode on: Lets create a single constant block for every type
+  // The type instructions may contain references. The parameter map from the
+  // previous step contains all values that these references may be resolved to.
+  const resolvedTypeInstructions = parameters.resolve(d.typeInstructions);
+
+  // Wrap self contained instruction description in something that allows safe
+  // access no matter whether the seeked value exists or not.
+  const instructions = new GeneratorInstructions(resolvedTypeInstructions);
+
+  // Look over every type that exists and see how it should be created
   toReturn.editorBlocks = concreteTypes.map(([tName, tDesc]): EditorBlockDescription => {
     return ({
       describedType: {

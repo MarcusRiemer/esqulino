@@ -4,9 +4,7 @@ import { QualifiedTypeName } from '../../syntaxtree/syntaxtree.description'
 import { EditorComponentDescription } from '../block-language.description'
 import { VisualBlockDescriptions, SidebarDescription } from '../block.description'
 
-import {
-  AllTypeInstructions
-} from './instructions.description'
+import { AllReferenceableTypeInstructions } from './instructions.description'
 
 /**
  * The nested parts of the generator description that must be stored
@@ -24,7 +22,7 @@ export interface BlockLanguageGeneratorDocument {
   editorComponents?: EditorComponentDescription[];
 
   // Define how to generate blocks for the mentioned types
-  typeInstructions?: AllTypeInstructions;
+  typeInstructions?: AllReferenceableTypeInstructions;
 }
 
 /**
