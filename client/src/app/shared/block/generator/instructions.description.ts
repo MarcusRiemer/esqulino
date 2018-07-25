@@ -16,12 +16,12 @@ export type IterationDropTarget = "start" | "end" | "none";
 export interface Instructions {
   // Controls whether children should be layed out vertically or horizontally
   orientation: Orientation;
-  // Separetes iterated elements
+  // Used to separate iterated elements
   between: string;
   // Defines the order in which the attributes appear
   attributeMapping: AttributeMappingOrder;
   // General CSS styling instructions
-  style: { [attribute: string]: string | any }; // TODO: `any` is a hack to counter references
+  style: { [attribute: string]: string };
   // Controls whether the user may interactively change this attribute
   readOnly: boolean;
   // Controls how things dropped on this block will be treated
@@ -36,7 +36,7 @@ export interface Instructions {
  * can be transformed into "proper" `Instructions` by passing them through
  * `ParameterMap.resolve`.
  */
-export type ReferenceableInstructions = ParameterReferenceable<Instructions>
+export type ReferenceableInstructions = ParameterReferenceable<Instructions>;
 
 /**
  * Instructions that are useful on an iterating visual.

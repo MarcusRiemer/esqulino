@@ -29,7 +29,9 @@ export interface ParameterReference {
 // Allows properties of an object to be optional and to be
 // a reference that can be resolved to an actual value later.
 export type ParameterReferenceable<T> = {
-  [P in keyof T]?: T[P] | ParameterReference;
+  [P in keyof T]?: T[P] extends Object
+  ? ParameterReferenceable<T[P]> | ParameterReference
+  : T[P] | ParameterReference
 }
 
 export function isParameterReference(obj: any): obj is ParameterReference {

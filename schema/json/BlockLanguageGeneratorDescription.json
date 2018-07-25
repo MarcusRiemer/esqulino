@@ -169,83 +169,18 @@
             "description": "Make all properties in T optional",
             "properties": {
               "attributeMapping": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/AttributeMappingOrder"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "between": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "generateDropTargets": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/IterationDropTarget"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "onDrop": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "orientation": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Orientation"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "readOnly": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               },
               "style": {
-                "anyOf": [
-                  {
-                    "additionalProperties": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                        }
-                      ]
-                    },
-                    "type": "object"
-                  },
-                  {
-                    "$ref": "#/definitions/ParameterReference"
-                  }
-                ]
               }
             },
             "type": "object"
@@ -267,13 +202,7 @@
             },
             "style": {
               "additionalProperties": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                  }
-                ]
+                "type": "string"
               },
               "type": "object"
             }
@@ -292,14 +221,6 @@
         "attributes"
       ],
       "type": "object"
-    },
-    "IterationDropTarget": {
-      "enum": [
-        "start",
-        "end",
-        "none"
-      ],
-      "type": "string"
     },
     "NodeDescription": {
       "additionalProperties": false,
@@ -375,18 +296,6 @@
       "additionalProperties": {
         "$ref": "#/definitions/ParameterDeclaration"
       },
-      "type": "object"
-    },
-    "ParameterReference": {
-      "additionalProperties": false,
-      "properties": {
-        "$ref": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "$ref"
-      ],
       "type": "object"
     },
     "ParameterType": {
