@@ -498,6 +498,7 @@ describe('Grammar Validation', () => {
       expect(validator.validValue("1 ")).toBe(false);
       expect(validator.validValue(" 1")).toBe(false);
       expect(validator.validValue(" 1 ")).toBe(false);
+      expect(validator.validValue(0 as any)).toBe(false, `typeof "number"`);
     });
   });
 

@@ -19,12 +19,63 @@ concise_attributes:
   value_before_type_cast: b5ee1f72-2e59-4d48-b064-8a187ee1f237
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
+  value_before_type_cast: '{"name": "array", "children": {"values": [{"name": "object",
+    "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
+    "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
+    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
+    {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "object",
+    "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
+    "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
+    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
+    {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "object",
+    "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
+    "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
+    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
+    {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "object",
+    "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
+    "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
+    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
+    {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "object",
+    "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
+    "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
+    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
+    {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "object",
+    "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
+    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
+    "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
+    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
+    {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "null",
+    "language": "json"}, {"name": "null", "language": "json"}, {"name": "null", "language":
+    "json"}, {"name": "object", "children": {"values": [{"name": "key-value", "children":
+    {"key": [{"name": "string", "language": "json", "properties": {"value": "--"}}],
+    "value": [{"name": "null", "language": "json"}]}, "language": "json"}]}, "language":
+    "json"}, {"name": "object", "children": {"values": [{"name": "key-value", "children":
+    {"key": [{"name": "string", "language": "json", "properties": {"value": "--"}}],
+    "value": [{"name": "number", "language": "json", "properties": {"value": "0"}}]},
+    "language": "json"}]}, "language": "json"}, {"name": "object", "children": {"values":
+    [{"name": "key-value", "children": {"key": [{"name": "string", "language": "json",
+    "properties": {"value": "--"}}], "value": [{"name": "string", "language": "json",
+    "properties": {"value": "--"}}]}, "language": "json"}, {"name": "key-value", "children":
+    {"key": [{"name": "string", "language": "json", "properties": {"value": "--"}}],
+    "value": [{"name": "boolean", "language": "json", "properties": {"value": "true"}}]},
+    "language": "json"}]}, "language": "json"}]}, "language": "json"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-20 20:45:48.864334'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-20 20:45:48.864334'
+  value_before_type_cast: '2018-07-25 16:20:58.982868'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: c23d43d7-56f5-4605-bec1-644c240cc003
@@ -33,5 +84,45 @@ concise_attributes:
   value_before_type_cast: json
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
+  value_before_type_cast: |-
+    [
+      {
+        "--": "--",
+        "--": true
+      },
+      {
+        "--": "--",
+        "--": true
+      },
+      {
+        "--": "--",
+        "--": true
+      },
+      {
+        "--": "--",
+        "--": true
+      },
+      {
+        "--": "--",
+        "--": true
+      },
+      {
+        "--": "--",
+        "--": true
+      },
+      null,
+      null,
+      null,
+      {
+        "--": null
+      },
+      {
+        "--": 0
+      },
+      {
+        "--": "--",
+        "--": true
+      }
+    ]
 new_record: false
 active_record_yaml_version: 2
