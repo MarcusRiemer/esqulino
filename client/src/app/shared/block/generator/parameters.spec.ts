@@ -206,4 +206,55 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
     const r = m.resolve(i);
     expect(r).toEqual(i as AllTypeInstructions);
   });
+
+  it("resolve-result does not hav any shared references", () => {
+    const m = new ParameterMap();
+    m.addParameters({
+      "between": {
+        "type": { "type": "string" },
+        "defaultValue": ","
+      },
+      "color": {
+        "type": { "type": "string" },
+        "defaultValue": "green"
+      }
+    });
+    const i: AllReferenceableTypeInstructions = {
+      "g1": {
+        "t1": {
+          "type": "multi",
+          "blocks": [
+            {
+              "type": "single",
+              "attributes": {
+                "t1_a1": {
+                  "between": { "$ref": "between" },
+                  "style": {
+                    "color": { "$ref": "color" }
+                  }
+                }
+              }
+            },
+            { "type": "single", "attributes": {} }
+          ]
+        },
+        "t2": {
+          "type": "single",
+          "attributes": {
+            "a1": {
+              "between": { "$ref": "between" },
+              "style": {
+                "color": { "$ref": "color" }
+              }
+            }
+          }
+        }
+      }
+    };
+
+    const iCopy: AllReferenceableTypeInstructions = JSON.parse(JSON.stringify(i));
+
+    const res = m.resolve(i);
+    expect(i).toEqual(iCopy);
+  });
 });
