@@ -55,9 +55,26 @@ export class EditBlockLanguageComponent implements OnInit {
       // That is never required to be updated
       .pipe(first())
       .subscribe(g => {
+        // Grab the instructions or assume default instructions
         const instructions = this.editedSubject.localGeneratorInstructions || {};
-        this.editedSubject = generateBlockLanguage(this.editedSubject, instructions, g);
-        this.doPrettyPrint();
+
+        // Try to generate the block language itself. If this fails something is
+        // seriously wrong and we should probably do something smart about it.
+        try {
+          this.editedSubject = generateBlockLanguage(this.editedSubject, instructions, g);
+        } catch (e) {
+          alert("Could not generate block language: " + JSON.stringify(e));
+          return;
+        }
+
+        // Update the nicer, visual representation of the block language. If this fails
+        // the user has no idea that the generation was actually succesfull because
+        // this is the only feedback he gets.
+        try {
+          this.doPrettyPrint();
+        } catch (e) {
+          alert("Could not pretty print block language: " + JSON.stringify(e));
+        }
       });
   }
 
