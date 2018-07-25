@@ -4,6 +4,6 @@
   "license": "AGPL",
   "private": true,
   "devDependencies": {
-    "ts-json-schema-generator": "^0.29.0"
+    "ts-json-schema-generator": "0.30.0"
   }
 }
