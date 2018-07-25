@@ -6,7 +6,7 @@ import { first } from 'rxjs/operators';
 
 import { BlockLanguageDescription } from '../shared/block/block-language.description';
 import {
-  BlockLanguageGeneratorDescription, DEFAULT_GENERATOR
+  DEFAULT_GENERATOR
 } from '../shared/block/generator/generator.description'
 import { generateBlockLanguage } from '../shared/block/generator/generator'
 

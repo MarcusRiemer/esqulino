@@ -1,5 +1,5 @@
 import { Orientation, VisualBlockDescriptions } from '../block.description'
-import { ParameterReference, ParameterReferenceable } from './parameters.description';
+import { ParameterReferenceable } from './parameters.description';
 
 // Alias to shorten some typing
 type DropTargetProperties = VisualBlockDescriptions.DropTargetProperties;
@@ -143,33 +143,5 @@ export type AllTypeInstructions = {
 export type AllReferenceableTypeInstructions = {
   [language: string]: {
     [type: string]: TypeInstructions<ReferenceableInstructions>
-  }
-}
-
-// Used to find compilation issues
-const allType: AllTypeInstructions = {
-  "lang": {
-    "t1": {
-      type: "single",
-      attributes: {
-        "scope1": {
-          "between": "s"
-        }
-      }
-    }
-  }
-}
-
-// Used to find compilation issues
-const refType: AllReferenceableTypeInstructions = {
-  "lang": {
-    "t1": {
-      type: "single",
-      attributes: {
-        "scope1": {
-          between: { "$ref": "s" },
-        }
-      }
-    }
   }
 }

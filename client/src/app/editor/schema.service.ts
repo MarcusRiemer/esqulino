@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 
-import { AsyncSubject, BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, map, catchError } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared/serverapi.service'
-import { KeyValuePairs, encodeUriParameters } from '../shared/util'
 
 import { Project, ProjectService } from './project.service'
-import { Table, Column } from '../shared/schema/'
+import { Table } from '../shared/schema/'
 import { RawTableDataDescription } from '../shared/schema/schema.description'
 import { TableCommandHolder } from '../shared/schema/table-commands'
 
@@ -159,7 +158,7 @@ export class SchemaService {
     const toReturn = this._http.post(url, body, options)
       .pipe(
         tap(_ => this.incrementChangeCount()),
-        map((res) => {
+        map(_ => {
           this._projectService.setActiveProject(project.slug, true);
           this.clearCurrentlyEdited();
           return table;
@@ -186,7 +185,7 @@ export class SchemaService {
       .pipe(
         catchError(this.handleError),
         tap(_ => this.incrementChangeCount()),
-        map(res => {
+        map(_ => {
           this._projectService.setActiveProject(project.slug, true);
           this.clearCurrentlyEdited();
         })
@@ -208,7 +207,7 @@ export class SchemaService {
     const toReturn = this._http.delete(url, options)
       .pipe(
         tap(_ => this.incrementChangeCount()),
-        map((res) => {
+        map(_ => {
           this._projectService.setActiveProject(project.slug, true);
           return table;
         }),

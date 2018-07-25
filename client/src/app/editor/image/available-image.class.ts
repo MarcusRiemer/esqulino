@@ -17,7 +17,6 @@ export class AvailableImage extends ProjectResource {
   private _authorUrl: string
   private _licenceName: string
   private _licenceUrl: string
-  private _urlTimestamp: number
 
   constructor(
     private _serverApi: ServerApiService,
@@ -30,8 +29,6 @@ export class AvailableImage extends ProjectResource {
     this._authorName = desc["author-name"];
     this._licenceName = desc["licence-name"];
     this._licenceUrl = desc["licence-url"];
-
-    this._urlTimestamp = new Date().getTime();
   }
 
   get url() {

@@ -256,5 +256,8 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
 
     const res = m.resolve(i);
     expect(i).toEqual(iCopy);
+
+    expect("t1" in res.g1).toBe(true);
+    expect("t2" in res.g1).toBe(true);
   });
 });

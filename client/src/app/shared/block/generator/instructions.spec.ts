@@ -1,5 +1,3 @@
-import { GrammarDescription } from '../../syntaxtree/grammar.description'
-
 import { Instructions, DefaultInstructions } from './instructions.description'
 import { GeneratorInstructions, SingleBlockInstructions, MultiBlockInstructions } from './instructions'
 import { Orientation } from '../block.description';

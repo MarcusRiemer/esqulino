@@ -1,5 +1,4 @@
 import { SidebarDescription, EditorBlockDescription } from './block.description'
-import { Instructions, AllTypeInstructions } from './generator/instructions.description'
 import { BlockLanguageGeneratorDocument } from './generator/generator.description';
 
 /**

@@ -1,4 +1,4 @@
-import { QualifiedTypeName, NodeDescription } from '../syntaxtree'
+import { NodeDescription } from '../syntaxtree'
 
 import {
   FixedBlocksSidebarDescription, FixedBlocksSidebarCategoryDescription, SidebarBlockDescription
@@ -75,10 +75,8 @@ export class FixedBlocksSidebar implements Sidebar {
 
   private _categories: FixedBlocksSidebarCategory[] = [];
   private _caption: string;
-  private _blockLanguage: BlockLanguage;
 
-  constructor(parent: BlockLanguage, desc: FixedBlocksSidebarDescription) {
-    this._blockLanguage = parent;
+  constructor(_parent: BlockLanguage, desc: FixedBlocksSidebarDescription) {
     this._caption = desc.caption;
     this._categories = desc.categories.map(catDesc => new FixedBlocksSidebarCategory(this, catDesc));
   }

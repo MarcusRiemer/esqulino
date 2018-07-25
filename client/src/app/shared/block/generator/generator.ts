@@ -11,13 +11,11 @@ import {
   VisualBlockDescriptions, EditorBlockDescription
 } from '../block.description'
 
-import {
-  BlockLanguageGeneratorDescription, BlockLanguageGeneratorDocument,
-} from './generator.description'
+import { BlockLanguageGeneratorDocument } from './generator.description'
 
 import {
-  DefaultInstructions, Instructions, AllTypeInstructions, IteratorInstructions,
-  BlockInstructions, TerminalInstructions, PropertyInstructions
+  DefaultInstructions, IteratorInstructions,
+  TerminalInstructions, PropertyInstructions
 } from './instructions.description'
 
 import {
@@ -270,7 +268,7 @@ export function convertGrammar(
   // The blocks of the editor are based on the concrete types of the grammar,
   // "oneOf" types are not of interest here because they can never be nodes.
   const concreteTypes = Object.entries(g.types)
-    .filter(([k, v]) => v.type !== "oneOf") as [string, NodeConcreteTypeDescription][];
+    .filter(([_, v]) => v.type !== "oneOf") as [string, NodeConcreteTypeDescription][];
 
   // Grab the parameters and the values this generator defines
   const parameters = new ParameterMap();

@@ -1,10 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, Input } from '@angular/core';
 
 import { map, filter } from 'rxjs/operators';
 
 import { ServerDataService } from '../shared/server-data.service';
-import { GrammarListDescription } from '../shared/syntaxtree/grammar.description';
 
 /**
  * Creates a link to the grammar with the specified ID. Will attempt to
@@ -23,7 +21,6 @@ export class LinkGrammarComponent {
 
   constructor(
     private _serverData: ServerDataService,
-    private http: HttpClient
   ) {
   }
 

@@ -1,7 +1,5 @@
 import { BlockLanguageDescription } from '../block-language.description'
-import {
-  SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
-} from '../block.description'
+import { VisualBlockDescriptions } from '../block.description'
 
 export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
   id: "af3a4b65-738c-4563-9632-2c65d3da6762",

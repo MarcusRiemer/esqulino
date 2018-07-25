@@ -1,7 +1,7 @@
-import { CodeGenerator, NodeConverterRegistration, CodeGeneratorProcess } from '../codegenerator'
+import { CodeGenerator } from '../codegenerator'
 import { Tree, Node, NodeDescription } from '../syntaxtree'
 import { Validator } from '../validator'
-import { ValidationResult, ErrorCodes, printableError } from '../validation-result'
+import { printableError } from '../validation-result'
 
 import { NODE_CONVERTER_ERUBY, NODE_CONVERTER_LIQUID } from './dxml.codegenerator'
 import { GRAMMAR_DESCRIPTION } from './dxml.grammar'

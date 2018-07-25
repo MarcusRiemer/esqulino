@@ -1,4 +1,4 @@
-import { Node, NodeLocation, Tree, QualifiedTypeName } from '../../../shared/syntaxtree';
+import { Node, NodeLocation, QualifiedTypeName } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
 import { arrayEqual } from '../../../shared/util';
 
@@ -128,7 +128,7 @@ function isParentOrChildDrop(block: BlockDropProperties) {
 /**
  * @return The name of the referenced child group (if there is any)
  */
-function dropLocationChildGroupName(drag: CurrentDrag, block: BlockDropProperties): string {
+function dropLocationChildGroupName(_drag: CurrentDrag, block: BlockDropProperties): string {
   const dropLocation = calculateDropLocation(block.node, block.visual.dropTarget);
   return (dropLocation[dropLocation.length - 1][0]);
 }

@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { Router, ActivatedRoute, ParamMap } from '@angular/router'
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute, ParamMap } from '@angular/router'
 import { HttpClient } from '@angular/common/http';
 
-import { switchMap, map, tap, first } from 'rxjs/operators';
+import { switchMap, map, first } from 'rxjs/operators';
 import { ServerDataService, CachedRequest } from '../shared/server-data.service';
 import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint';
 import { GrammarDescription } from '../shared/syntaxtree';

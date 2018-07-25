@@ -1,11 +1,11 @@
-import { Component, Input, OnInit, ElementRef } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
+import { trigger, state, style } from '@angular/animations';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
-import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
+import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { VisualBlockDescriptions } from '../../../shared/block';
 
 import { DragService } from '../../drag.service';
 
@@ -58,7 +58,7 @@ export class BlockRenderBlockComponent implements OnInit {
   /**
    * Handles the drop events on the empty drop
    */
-  onDrop(evt: DragEvent) {
+  onDrop() {
     const desc = this._dragService.peekDragData.draggedDescription;
     this._currentCodeResource.peekResource.insertNode(this.dropLocation, desc);
   }

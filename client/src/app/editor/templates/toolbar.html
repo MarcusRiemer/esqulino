@@ -19,9 +19,9 @@
     <span class="fa fa-fw fa-spinner fa-pulse"
           [hidden]="!item.isInProgress">
     </span>
-    <span class="fa fa-fw fa-{{ item._icon }}"
+    <span class="fa fa-fw fa-{{ item.icon }}"
           [hidden]="item.isInProgress">
-    </span> {{ item._caption }}
+    </span> {{ item.caption }}
   </button>
 
   <trash></trash>

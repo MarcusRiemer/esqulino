@@ -96,7 +96,7 @@ export const NODE_CONVERTER_ERUBY = [
       typeName: "expr"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(_node: Node, _process: CodeGeneratorProcess) {
       }
     }
   },
@@ -197,7 +197,7 @@ export const NODE_CONVERTER_LIQUID = [
       typeName: "expr"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(_node: Node, _process: CodeGeneratorProcess) {
       }
     }
   },

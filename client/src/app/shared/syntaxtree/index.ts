@@ -7,10 +7,7 @@ export * from './validator'
 export * from './grammar.description'
 export * from './validation-result'
 
-
-import { prettyPrintGrammar } from './prettyprint'
-
-export { prettyPrintGrammar }
+export { prettyPrintGrammar } from './prettyprint'
 
 import { Language } from './language'
 import * as Sql from './sql'
