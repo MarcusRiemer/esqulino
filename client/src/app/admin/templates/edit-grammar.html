@@ -68,12 +68,9 @@
                role="alert">
             <code>JSON</code>-Struktur ist ungültig und kann daher nicht gespeichert werden.
           </div>
-          <ace-editor [text]="grammar.types | json"
-                      (textChanged)="onTypeDataUpdate($event)"
-                      class="full-height"
-                      theme="sqlserver"
-                      mode="json"
-          ></ace-editor>
+          <json-editor [(jsonValue)]="grammar.types"
+                       class="full-height">
+          </json-editor>
         </div>
       </div>
     </div>

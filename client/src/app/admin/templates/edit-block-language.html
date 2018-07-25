@@ -77,12 +77,10 @@
                role="alert">
             <code>JSON</code>-Struktur ist ungültig und kann daher nicht gespeichert werden.
           </div>
-          <ace-editor [text]="editedSubject.localGeneratorInstructions | json"
-                      (textChanged)="onGeneratorDataUpdate($event)"
-                      class="full-height"
-                      theme="sqlserver"
-                      mode="json"></ace-editor>
-
+          <json-editor [jsonValue]="editedSubject.localGeneratorInstructions"
+                       (jsonValueChange)="onGeneratorDataUpdate($event)"
+                       class="full-height">
+          </json-editor>
         </div>
       </div>
     </div>

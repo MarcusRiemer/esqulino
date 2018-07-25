@@ -9,8 +9,6 @@ import { GrammarDescription } from '../shared/syntaxtree';
 import { BlockLanguageListDescription } from '../shared/block/block-language.description';
 import { ServerApiService } from '../shared/serverapi.service';
 
-import './json-editor'
-
 @Component({
   templateUrl: 'templates/edit-grammar.html'
 })
@@ -40,7 +38,9 @@ export class EditGrammarComponent implements OnInit {
     this._activatedRoute.paramMap.pipe(
       map((params: ParamMap) => params.get('grammarId')),
       switchMap((id: string) => this._serverData.getGrammarDescription(id).pipe(first())),
-    ).subscribe(g => this.grammar = g);
+    ).subscribe(g => {
+      this.grammar = g;
+    });
 
     // Always grab fresh related block languages
     this._activatedRoute.paramMap.pipe(

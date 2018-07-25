@@ -71,9 +71,9 @@ export class EditBlockLanguageComponent implements OnInit {
   /**
    * The data for the generator has been updated.
    */
-  onGeneratorDataUpdate(text: string) {
+  onGeneratorDataUpdate(json: any) {
     try {
-      this.editedSubject.localGeneratorInstructions = JSON.parse(text);
+      this.editedSubject.localGeneratorInstructions = json;
       this.onRegenerate();
       this.typesSynced = true;
     } catch (e) {
