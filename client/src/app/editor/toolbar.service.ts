@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core'
+import { Injectable } from '@angular/core'
 
 import { Observable, Subject } from 'rxjs'
 
@@ -57,6 +57,13 @@ export class ToolbarItem {
    */
   get id() {
     return (this._id);
+  }
+
+  /**
+   * @return The name of the icon that should be used
+   */
+  get icon() {
+    return (this._icon);
   }
 
   get caption() {

@@ -1,12 +1,9 @@
-import { Component, Input, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router'
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { Table } from '../../shared/schema'
 
 import { SchemaService } from '../schema.service'
 import { ProjectService, Project } from '../project.service'
-import { ToolbarService } from '../toolbar.service'
-
 
 /**
  * Displays the schema for a list of tables.
@@ -41,10 +38,7 @@ export class SchemaTableComponent {
 
   constructor(
     private _schemaService: SchemaService,
-    private _projectService: ProjectService,
-    private _routeParams: ActivatedRoute,
-    private _toolbarService: ToolbarService) {
-
+    private _projectService: ProjectService) {
   }
 
   ngOnInit() {

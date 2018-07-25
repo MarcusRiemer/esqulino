@@ -1,14 +1,7 @@
-import { Observable } from 'rxjs';
-
 import { Component, Input } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
-import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
-
-import { DragService } from '../../drag.service';
-
-import { CurrentCodeResourceService } from '../../current-coderesource.service';
+import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { VisualBlockDescriptions } from '../../../shared/block';
 
 /**
  * Renders specific children of a certain child group. Also takes care
@@ -22,12 +15,6 @@ export class BlockRenderIteratorComponent {
   @Input() public codeResource: CodeResource;
   @Input() public node: Node;
   @Input() public visual: VisualBlockDescriptions.EditorIterator;
-
-  constructor(
-    private _dragService: DragService,
-    private _currentCodeResource: CurrentCodeResourceService,
-  ) {
-  }
 
   /**
    * @return The blocks that should be rendered between iterated blocks

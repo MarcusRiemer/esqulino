@@ -274,7 +274,7 @@ export function graphvizSyntaxTreeNode(desc: NodeDescription, path: string): Nes
         ...v.map((v, i) => graphvizSyntaxTreeNode(v, `${path}_${k}_${i}`)).reverse(),
         `}`,
         // Create the connection from the parent
-        ...v.map((v, i) => `${path} -> ${path}_${k}_${i};`),
+        ...v.map((_, i) => `${path} -> ${path}_${k}_${i};`),
       ]);
     });
 

@@ -1,6 +1,5 @@
 import {
-  Directive, ElementRef, Input, Output, EventEmitter,
-  OnChanges, SimpleChanges, OnInit
+  Directive, ElementRef, Input, Output, EventEmitter, OnInit
 } from "@angular/core"
 
 /**

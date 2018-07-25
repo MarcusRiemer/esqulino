@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 
 import { first } from 'rxjs/operators';
 
@@ -24,7 +23,6 @@ export class CreateCodeResourceComponent {
     private _sidebarService: SidebarService,
     private _projectService: ProjectService,
     private _codeResourceService: CodeResourceService,
-    private _router: Router,
   ) { }
 
   /**

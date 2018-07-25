@@ -1,4 +1,4 @@
-import { CodeGenerator, NodeConverterRegistration, CodeGeneratorProcess } from '../codegenerator'
+import { CodeGenerator } from '../codegenerator'
 import { Node, NodeDescription } from '../syntaxtree'
 
 import { NODE_CONVERTER } from './sql.codegenerator'

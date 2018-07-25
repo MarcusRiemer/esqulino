@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { CodeResource } from '../../shared/syntaxtree';
 import { LanguageService } from '../../shared/language.service';
@@ -13,9 +13,6 @@ import { LanguageService } from '../../shared/language.service';
 export class LanguageSelectorComponent {
 
   @Input() codeResource: CodeResource;
-
-  // Backing field for the selected language
-  private _selectedLanguageId: string;
 
   constructor(
     private _languageService: LanguageService,

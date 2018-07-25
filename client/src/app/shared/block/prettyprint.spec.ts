@@ -1,6 +1,3 @@
-import { BlockLanguageDescription } from './block-language.description'
-import { VisualBlockDescriptions, EditorBlockDescription } from './block.description'
-
 import { prettyPrintBlockLanguage } from './prettyprint'
 
 /**

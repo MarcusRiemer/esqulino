@@ -1,7 +1,4 @@
-import {
-  TableDescription, ColumnDescription,
-  ForeignKeyDescription
-} from './schema.description'
+import { ForeignKeyDescription } from './schema.description'
 
 /**
  * "Over-the-wire" format to describe a command. This is interpreted

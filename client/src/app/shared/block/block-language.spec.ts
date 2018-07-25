@@ -2,7 +2,7 @@ import { Tree, LanguageDescription, Language, NodeTypeDescription } from '../syn
 
 import { BlockLanguageDescription } from './block-language.description'
 import { BlockLanguage } from './block-language'
-import { SidebarBlockDescription, VisualBlockDescriptions } from './block.description'
+import { VisualBlockDescriptions } from './block.description'
 
 const langEmptyBlocks: LanguageDescription = {
   id: "emptyBlocks",

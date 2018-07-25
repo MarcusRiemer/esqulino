@@ -3,9 +3,8 @@ import * as AST from './syntaxtree'
 
 import { Validator } from './validator'
 import {
-  ErrorCodes, ValidationContext,
-  ErrorData, ErrorIllegalChildType, ErrorMissingChild, ErrorMissingProperty,
-  ErrorUnexpectedType, ErrorUnknownChildCategory
+  ErrorCodes, ValidationContext, ErrorMissingChild, ErrorMissingProperty,
+  ErrorUnexpectedType
 } from './validation-result'
 
 /**
@@ -842,7 +841,7 @@ class NodeOneOfType extends NodeType {
     return (this._possibilities.some(t => t.matchesType(typeName)));
   }
 
-  allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean {
+  allowsChildType(childType: AST.QualifiedTypeName, _categoryName: string): boolean {
     return (this.matchesType(childType));
   }
 }

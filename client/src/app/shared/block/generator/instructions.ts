@@ -1,6 +1,6 @@
 import {
   AllTypeInstructions, Instructions, IteratorInstructions, BlockInstructions,
-  TerminalInstructions, DefaultInstructions, TypeInstructions, isMultiBlockInstructions,
+  TerminalInstructions, DefaultInstructions, isMultiBlockInstructions,
   SingleBlockInstructionsDescription, MultiBlockInstructionsDescription, PropertyInstructions
 } from './instructions.description'
 

@@ -13,7 +13,6 @@ import { LanguageDescription } from './app/shared/syntaxtree/language.descriptio
 import { Language } from './app/shared/syntaxtree/language'
 
 import { BlockLanguageDescription } from './app/shared/block/block-language.description'
-import { BlockLanguageGeneratorDescription } from './app/shared/block/generator/generator.description'
 import { prettyPrintBlockLanguage } from './app/shared/block/prettyprint'
 
 import { graphvizSyntaxTree } from './app/shared/syntaxtree/prettyprint'

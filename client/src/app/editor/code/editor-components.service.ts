@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
 
 import { EditorComponentDescription } from '../../shared/block/block-language.description';

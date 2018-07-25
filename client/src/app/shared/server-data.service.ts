@@ -1,8 +1,8 @@
-import { Injectable, Type } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, BehaviorSubject, Subject, of } from 'rxjs';
-import { shareReplay, first, map, switchMap, tap, scan, delay } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { shareReplay, first, map, switchMap, tap, scan } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared/serverapi.service';
 
@@ -10,12 +10,11 @@ import {
   BlockLanguageDescription, BlockLanguageListDescription
 } from '../shared/block/block-language.description';
 import {
-  BlockLanguageGeneratorDescription, BlockLanguageGeneratorListDescription
+  BlockLanguageGeneratorListDescription
 } from '../shared/block/generator/generator.description'
 import {
   GrammarDescription, GrammarListDescription
 } from '../shared/syntaxtree/grammar.description';
-import { transition } from '@angular/animations';
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
@@ -195,7 +194,7 @@ export class ServerDataService {
   deleteBlockLanguage(id: string) {
     this._http.delete(this._serverApi.individualBlockLanguageUrl(id))
       .pipe(first())
-      .subscribe(r => {
+      .subscribe(_ => {
         console.log(`Deleted BlockLanguage "${id}"`);
         this.listBlockLanguages.refresh();
       });
@@ -207,7 +206,7 @@ export class ServerDataService {
   updateBlockLanguage(desc: BlockLanguageDescription) {
     const url = this._serverApi.individualBlockLanguageUrl(desc.id);
     this._http.put(url, desc)
-      .subscribe(result => {
+      .subscribe(_ => {
         console.log(`Updated BlockLanguage "${desc.id}"`);
         this.listBlockLanguages.refresh();
         this.individualBlockLanguages.refreshDescription(desc.id);
@@ -220,7 +219,7 @@ export class ServerDataService {
   updateGrammar(desc: GrammarDescription) {
     const url = this._serverApi.individualGrammarUrl(desc.id);
     this._http.put(url, desc)
-      .subscribe(result => {
+      .subscribe(_ => {
         console.log(`Updated Grammar "${desc.id}"`);
         this.listGrammars.refresh();
         this.individualGrammars.refreshDescription(desc.id);

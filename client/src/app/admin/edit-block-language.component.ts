@@ -1,12 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { Router, ActivatedRoute, ParamMap } from '@angular/router'
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute, ParamMap } from '@angular/router'
 
-import { switchMap, map, tap, first } from 'rxjs/operators';
+import { switchMap, map, first } from 'rxjs/operators';
 
 import { ServerDataService } from '../shared/server-data.service';
 
 import { BlockLanguageDescription } from '../shared/block/block-language.description';
-import { DEFAULT_GENERATOR, BlockLanguageGeneratorDocument } from '../shared/block/generator/generator.description'
 import { generateBlockLanguage } from '../shared/block/generator/generator'
 import { prettyPrintBlockLanguage } from '../shared/block/prettyprint';
 

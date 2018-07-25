@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 
 import { map, distinctUntilChanged } from 'rxjs/operators';
 
-import { arrayEqual } from '../shared/util';
 import { AnalyticsService, TrackCategory } from '../shared/analytics.service';
 import { Node, NodeDescription, NodeLocation, CodeResource } from '../shared/syntaxtree';
 import { FixedSidebarBlock } from '../shared/block';

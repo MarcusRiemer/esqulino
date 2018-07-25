@@ -1,7 +1,7 @@
 import * as Schema from './grammar.description'
 import * as AST from './syntaxtree'
 import { Validator } from './validator'
-import { ErrorCodes, ValidationResult } from './validation-result'
+import { ErrorCodes } from './validation-result'
 import { NodePropertyIntegerValidator } from '.';
 
 /**

@@ -1,4 +1,4 @@
-import { Project, ProjectFullDescription } from './project'
+import { ProjectFullDescription } from './project'
 import { BlockLanguageDescription } from './block/block-language.description'
 import { CURRENT_API_VERSION } from './resource.description'
 

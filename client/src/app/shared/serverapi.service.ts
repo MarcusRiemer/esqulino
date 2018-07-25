@@ -1,7 +1,5 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core'
-import { isPlatformBrowser, isPlatformServer } from '@angular/common'
-
-import { RequestErrorDescription } from './serverapi.service.description'
+import { isPlatformServer } from '@angular/common'
 
 /**
  * Instead of constructing URLs on the fly, they should be created using

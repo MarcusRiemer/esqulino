@@ -1,10 +1,9 @@
 import * as Desc from './parameters.description'
-import { ParameterValue, isParameterReference } from './parameters.description';
+import { isParameterReference } from './parameters.description';
 import {
   AllTypeInstructions, Instructions, AllReferenceableTypeInstructions,
   ReferenceableInstructions, TypeInstructions, SingleBlockInstructionsDescription,
-  MultiBlockInstructionsDescription, InternalMultiBlockInstructionsDescription,
-  InternalSingleBlockInstructionsDescription
+  InternalMultiBlockInstructionsDescription, InternalSingleBlockInstructionsDescription
 } from './instructions.description';
 
 // Function with this signature may be used
@@ -14,10 +13,10 @@ export type ValidationFunction = (
 ) => boolean;
 
 export const ValidatorFunctions: { [name: string]: ValidationFunction } = {
-  "string": (expectedType, value) => {
+  "string": (_expectedType, _value) => {
     return (true);
   },
-  "boolean": (expectedType, value) => {
+  "boolean": (_expectedType, _value) => {
     return (true);
   }
 }
@@ -86,7 +85,7 @@ export class ParameterMap {
     });
 
     // Go through every value to ensure there is a corresponding parameter
-    Object.entries(this._currentValues).forEach(([name, value]) => {
+    Object.entries(this._currentValues).forEach(([name, _value]) => {
       if (!this._knownParameters[name]) {
         toReturn.push({
           type: "UnknownParameter",

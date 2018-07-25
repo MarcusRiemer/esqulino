@@ -1,6 +1,6 @@
 import { BlockLanguageDescription } from '../block-language.description'
 import {
-  SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
+  SidebarBlockDescription, VisualBlockDescriptions
 } from '../block.description'
 
 const SIDEBAR_BLOCKS_BASIC: SidebarBlockDescription[] = [

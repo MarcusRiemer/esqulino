@@ -1,4 +1,4 @@
-import { Routes, RouterModule } from '@angular/router'
+import { Routes } from '@angular/router'
 
 import { CreateCodeResourceComponent } from './create-code-resource.component'
 import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'

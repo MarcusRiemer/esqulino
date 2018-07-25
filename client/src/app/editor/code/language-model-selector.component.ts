@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
 import { CodeResource } from '../../shared/syntaxtree';
-import { LanguageService } from '../../shared/language.service';
 
 import { CurrentCodeResourceService } from '../current-coderesource.service';
 
@@ -20,7 +19,6 @@ export class LanguageModelSelectorComponent {
 
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
-    private _languageService: LanguageService,
   ) {
   }
 

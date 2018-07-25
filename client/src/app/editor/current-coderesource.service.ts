@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 
 import { BehaviorSubject, Observable } from 'rxjs'
 import { tap } from 'rxjs/operators';
 
 import { CodeResource } from '../shared/syntaxtree';
 
-import { ProjectService, Project } from './project.service';
+import { ProjectService } from './project.service';
 import { SidebarService } from './sidebar.service';
 
 // TODO: Promote the new sidebar system
@@ -27,25 +26,21 @@ export class CurrentCodeResourceService {
 
   constructor(
     private _sidebarService: SidebarService,
-    private _activatedRoute: ActivatedRoute,
     private _projectService: ProjectService,
   ) {
+    // Things that need to happen every time the resource changes
+    this._codeResource
+      .pipe(
+        tap(r => {
+          if (r) {
+            // Show the new sidebar
+            console.log("Sidebar change because of current code resource");
+            this._sidebarService.showSingleSidebar(CodeSidebarComponent.SIDEBAR_IDENTIFIER, r);
+          }
+        })
+      )
+      .subscribe();
   }
-
-  /**
-   * Things that need to happen every time the resource changes
-   */
-  private readonly onResourceChange = this._codeResource
-    .pipe(
-      tap(r => {
-        if (r) {
-          // Show the new sidebar
-          console.log("Sidebar change because of current code resource");
-          this._sidebarService.showSingleSidebar(CodeSidebarComponent.SIDEBAR_IDENTIFIER, r);
-        }
-      })
-    )
-    .subscribe();
 
   currentResourceChanged(codeResourceId: string) {
     // Knowing when resources change is handy for debugging

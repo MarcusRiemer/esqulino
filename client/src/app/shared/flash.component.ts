@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 
-import { FlashService, FlashMessage } from './flash.service'
+import { FlashService } from './flash.service'
 
 @Component({
   selector: 'flash-message-list',

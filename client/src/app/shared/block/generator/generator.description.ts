@@ -1,8 +1,5 @@
-import { GrammarDescription } from '../../syntaxtree/grammar.description'
-import { QualifiedTypeName } from '../../syntaxtree/syntaxtree.description'
-
 import { EditorComponentDescription } from '../block-language.description'
-import { VisualBlockDescriptions, SidebarDescription } from '../block.description'
+import { SidebarDescription } from '../block.description'
 
 import { AllReferenceableTypeInstructions } from './instructions.description'
 import { ParameterDeclarations, ParameterValues } from './parameters.description'

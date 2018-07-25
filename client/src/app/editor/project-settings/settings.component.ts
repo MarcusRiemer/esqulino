@@ -1,17 +1,11 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
-import { Http, Response, Headers } from '@angular/http'
 
-import { ServerApiService } from '../../shared/serverapi.service'
 import { ServerDataService } from '../../shared/server-data.service'
-import { LanguageService } from '../../shared/language.service'
 
 import { ProjectService, Project } from '../project.service'
 import { SidebarService } from '../sidebar.service'
 import { ToolbarService } from '../toolbar.service'
-
-import { ImageService } from '../image/image.service'
-import { AvailableImage } from '../image/available-image.class'
 
 @Component({
   templateUrl: 'templates/settings.html'
@@ -35,11 +29,7 @@ export class SettingsComponent {
     private _toolbarService: ToolbarService,
     private _sidebarService: SidebarService,
     private _router: Router,
-    private _serverApi: ServerApiService,
     private _serverData: ServerDataService,
-    private _http: Http,
-    private _imageService: ImageService,
-    private _languageService: LanguageService,
   ) {
   }
 
@@ -61,16 +51,16 @@ export class SettingsComponent {
     // Wiring up the save button
     this._toolbarService.savingEnabled = true;
     let saveItem = this._toolbarService.saveItem;
-    subRef = saveItem.onClick.subscribe((res) => {
+    subRef = saveItem.onClick.subscribe(_ => {
       saveItem.isInProgress = true;
       this._projectService.storeProjectDescription(this.project)
-        .subscribe(res => saveItem.isInProgress = false);
+        .subscribe(_ => saveItem.isInProgress = false);
     });
     this._subscriptionRefs.push(subRef);
 
     // Wiring up the delete button
     let btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "d");
-    subRef = btnDelete.onClick.subscribe(res => {
+    subRef = btnDelete.onClick.subscribe(_ => {
       // Don't delete without asking the user
       if (confirm("Dieses Projekt löschen?")) {
         this._projectService.deleteProject(this.project.slug)

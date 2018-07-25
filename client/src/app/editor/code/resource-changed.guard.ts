@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router'
-
-import { ProjectService, Project } from '../project.service'
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router'
 
 import { CurrentCodeResourceService } from '../current-coderesource.service'
 
@@ -14,7 +12,7 @@ export class ResourceChangedGuard implements CanActivate {
   constructor(private _editorService: CurrentCodeResourceService) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) {
     const resourceId = route.params["resourceId"];
     this._editorService.currentResourceChanged(resourceId);
     return (true);

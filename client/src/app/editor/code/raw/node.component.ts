@@ -1,13 +1,12 @@
 import {
-  Component, Input, OnInit, OnChanges, SimpleChanges,
-  ChangeDetectionStrategy, ChangeDetectorRef
+  Component, Input, OnChanges, SimpleChanges,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
-import { arrayEqual } from '../../../shared/util'
-import { Node, NodeLocation, Tree } from '../../../shared/syntaxtree';
+import { Node } from '../../../shared/syntaxtree';
 
 import { DragService } from '../../drag.service';
 
@@ -41,18 +40,16 @@ export class NodeComponent implements OnChanges {
   // The observables that determine the current animation state. As this
   // Observables will be subscribed to multiple times, the need to be cached.
   private _cached_dropTargetAnimationState: Observable<DropTargetAnimationStates>;
-  private _cached_dropPlaceholderAnimationState: Observable<DropTargetAnimationStates>;
 
   constructor(
     private _dragService: DragService,
-    private _cdRef: ChangeDetectorRef,
     private _currentCodeResource: CurrentCodeResourceService,
   ) { }
 
   /**
    * Sets up display friendly caches of properties and children categories.
    */
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(_changes: SimpleChanges) {
     // Read and cache all properties
     this._properties = Object.entries(this.node.properties).map(([key, value]) => {
       return ({ key: key, value: value });
