@@ -11,39 +11,93 @@ concise_attributes:
   value_before_type_cast: c23d43d7-56f5-4605-bec1-644c240cc003
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: model
-  value_before_type_cast: '{"sidebars": [], "editorBlocks": [{"visual": [{"children":
-    [{"text": "null", "style": {"display": "inline-block"}, "blockType": "constant"}],
-    "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
-    "null", "languageName": "json"}}, {"visual": [{"children": [{"text": "[", "style":
-    {"display": "inline-block"}, "blockType": "constant"}, {"blockType": "iterator",
-    "direction": "horizontal", "wrapChildren": true, "childGroupName": "values"},
-    {"text": "]", "style": {"display": "inline-block"}, "blockType": "constant"}],
-    "blockType": "block", "direction": "horizontal"}], "describedType": {"typeName":
+  value_before_type_cast: '{"sidebars": [{"type": "fixedBlocks", "caption": "JSON",
+    "categories": [{"blocks": [{"defaultNode": {"name": "null", "language": "json"},
+    "displayName": "null"}, {"defaultNode": {"name": "number", "language": "json",
+    "properties": {"value": "0"}}, "displayName": "number"}, {"defaultNode": {"name":
+    "string", "language": "json", "properties": {"value": "--"}}, "displayName": "string"},
+    {"defaultNode": {"name": "boolean", "language": "json", "properties": {"value":
+    "true"}}, "displayName": "boolean"}], "categoryCaption": "Werte"}, {"blocks":
+    [{"defaultNode": {"name": "array", "children": {"values": []}, "language": "json"},
+    "displayName": "array"}, {"defaultNode": {"name": "object", "children": {"values":
+    []}, "language": "json"}, "displayName": "object"}, {"defaultNode": {"name": "key-value",
+    "children": {"key": [], "value": []}, "language": "json"}, "displayName": "key-value"}],
+    "categoryCaption": "Struktur"}]}], "editorBlocks": [{"visual": [{"children": [{"text":
+    "null", "style": {"display": "inline-block"}, "blockType": "constant"}], "blockType":
+    "block", "direction": "horizontal", "dropTarget": {"self": {"order": "insertAfter",
+    "skipParents": 0}}}], "describedType": {"typeName": "null", "languageName": "json"}},
+    {"visual": [{"children": [{"text": "[", "style": {"display": "inline-block"},
+    "blockType": "constant"}, {"children": [{"text": "❓", "style": {"color": "darkred",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius":
+    "500px", "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
+    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
+    {"order": "insertFirst", "category": "values"}, "visibility": ["ifEmpty", "ifLegalChild"]}},
+    {"between": [{"text": ",", "style": {"display": "inline-block"}, "blockType":
+    "constant"}], "blockType": "iterator", "direction": "horizontal", "wrapChildren":
+    true, "childGroupName": "values"}, {"text": "]", "style": {"display": "inline-block"},
+    "blockType": "constant"}], "blockType": "block", "direction": "horizontal", "dropTarget":
+    {"self": {"order": "insertAfter", "skipParents": 0}}}], "describedType": {"typeName":
     "array", "languageName": "json"}}, {"visual": [{"children": [{"style": {"display":
     "inline-block"}, "property": "value", "blockType": "input"}], "blockType": "block",
-    "direction": "horizontal"}], "describedType": {"typeName": "number", "languageName":
-    "json"}}, {"visual": [{"children": [{"text": "{", "style": {"display": "inline-block"},
-    "blockType": "constant"}, {"blockType": "iterator", "direction": "horizontal",
-    "wrapChildren": true, "childGroupName": "values"}, {"text": "}", "style": {"display":
-    "inline-block"}, "blockType": "constant"}], "blockType": "block", "direction":
-    "horizontal"}], "describedType": {"typeName": "object", "languageName": "json"}},
-    {"visual": [{"children": [{"style": {"display": "inline-block"}, "property": "value",
-    "blockType": "input"}], "blockType": "block", "direction": "horizontal"}], "describedType":
-    {"typeName": "string", "languageName": "json"}}, {"visual": [{"children": [{"style":
-    {"display": "inline-block"}, "property": "boolean", "blockType": "input"}], "blockType":
-    "block", "direction": "horizontal"}], "describedType": {"typeName": "boolean",
+    "direction": "horizontal", "dropTarget": {"self": {"order": "insertAfter", "skipParents":
+    0}}}], "describedType": {"typeName": "number", "languageName": "json"}}, {"visual":
+    [{"children": [{"text": "{", "style": {"display": "inline-block"}, "blockType":
+    "constant"}, {"children": [{"text": "❓", "style": {"color": "darkred", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius": "500px",
+    "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
+    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
+    {"order": "insertFirst", "category": "values"}, "visibility": ["ifEmpty", "ifLegalChild"]}},
+    {"blockType": "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
+    "values"}, {"text": "}", "style": {"display": "inline-block"}, "blockType": "constant"}],
+    "blockType": "block", "direction": "horizontal", "dropTarget": {"self": {"order":
+    "insertAfter", "skipParents": 0}}}], "describedType": {"typeName": "object", "languageName":
+    "json"}}, {"visual": [{"children": [{"text": "\"", "style": {"display": "inline-block"},
+    "blockType": "constant"}, {"style": {"display": "inline-block"}, "property": "value",
+    "blockType": "input"}, {"text": "\"", "style": {"display": "inline-block"}, "blockType":
+    "constant"}], "blockType": "block", "direction": "horizontal", "dropTarget": {"self":
+    {"order": "insertAfter", "skipParents": 0}}}], "describedType": {"typeName": "string",
     "languageName": "json"}}, {"visual": [{"children": [{"style": {"display": "inline-block"},
-    "property": "key", "blockType": "input"}, {"text": ":", "style": {"display": "inline-block"},
-    "blockType": "constant"}, {"blockType": "iterator", "direction": "horizontal",
-    "wrapChildren": true, "childGroupName": "value"}], "blockType": "block", "direction":
-    "horizontal"}], "describedType": {"typeName": "key-value", "languageName": "json"}}],
-    "editorComponents": []}'
+    "property": "value", "blockType": "input"}], "blockType": "block", "direction":
+    "horizontal", "dropTarget": {"self": {"order": "insertAfter", "skipParents": 0}}}],
+    "describedType": {"typeName": "boolean", "languageName": "json"}}, {"visual":
+    [{"children": [{"children": [{"text": "❓", "style": {"color": "darkred", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius": "500px",
+    "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
+    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
+    {"order": "insertFirst", "category": "key"}, "visibility": ["ifEmpty", "ifLegalChild"]}},
+    {"blockType": "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
+    "key"}, {"text": ":", "style": {"display": "inline-block"}, "blockType": "constant"},
+    {"children": [{"text": "❓", "style": {"color": "darkred", "border": "2px solid
+    red", "cursor": "default", "paddingLeft": "10px", "borderRadius": "500px", "paddingRight":
+    "10px", "backgroundColor": "orange"}, "blockType": "constant"}], "blockType":
+    "dropTarget", "direction": "horizontal", "dropTarget": {"children": {"order":
+    "insertFirst", "category": "value"}, "visibility": ["ifEmpty", "ifLegalChild"]}},
+    {"blockType": "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
+    "value"}], "blockType": "block", "direction": "horizontal", "dropTarget": {"self":
+    {"order": "insertAfter", "skipParents": 0}}}], "describedType": {"typeName": "key-value",
+    "languageName": "json"}}], "editorComponents": [], "localGeneratorInstructions":
+    {"staticSidebars": [{"type": "fixedBlocks", "caption": "JSON", "categories": [{"blocks":
+    [{"defaultNode": {"name": "null", "language": "json"}, "displayName": "null"},
+    {"defaultNode": {"name": "number", "language": "json", "properties": {"value":
+    "0"}}, "displayName": "number"}, {"defaultNode": {"name": "string", "language":
+    "json", "properties": {"value": "--"}}, "displayName": "string"}, {"defaultNode":
+    {"name": "boolean", "language": "json", "properties": {"value": "true"}}, "displayName":
+    "boolean"}], "categoryCaption": "Werte"}, {"blocks": [{"defaultNode": {"name":
+    "array", "children": {"values": []}, "language": "json"}, "displayName": "array"},
+    {"defaultNode": {"name": "object", "children": {"values": []}, "language": "json"},
+    "displayName": "object"}, {"defaultNode": {"name": "key-value", "children": {"key":
+    [], "value": []}, "language": "json"}, "displayName": "key-value"}], "categoryCaption":
+    "Struktur"}]}], "typeInstructions": {"json": {"array": {"type": "single", "attributes":
+    {"values": {"generateDropTargets": "start"}}}, "object": {"type": "single", "attributes":
+    {"values": {"generateDropTargets": "start"}}}, "key-value": {"type": "single",
+    "attributes": {"key": {"generateDropTargets": "start"}, "value": {"generateDropTargets":
+    "start"}}}}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-20 20:43:34.641628'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-20 20:43:34.641628'
+  value_before_type_cast: '2018-07-25 16:10:17.889715'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: json

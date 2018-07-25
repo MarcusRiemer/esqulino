@@ -105,7 +105,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "property",
-          name: "boolean",
+          name: "value",
           base: "boolean"
         }
       ]

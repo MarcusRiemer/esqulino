@@ -726,11 +726,13 @@ export class NodePropertyIntegerValidator extends NodePropertyValidator {
   }
 
   validValue(value: string): boolean {
-    return (/^-?[0-9]+$/.test(value));
+    // The typescript type system forbids other values then strings, but
+    // they occasionally happen anyway.
+    return (typeof value === "string" && /^-?[0-9]+$/.test(value));
   }
 
   validate(node: AST.Node, value: string, context: ValidationContext): void {
-    if (this.validValue(value)) {
+    if (!this.validValue(value)) {
       context.addError(ErrorCodes.IllegalPropertyType, node, {
         condition: `"${value}" must be an integer`
       });
