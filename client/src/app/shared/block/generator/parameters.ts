@@ -42,10 +42,6 @@ export class ParameterMap {
   // All values that are currently stored
   private _currentValues: { [name: string]: Desc.ParameterValue } = {};
 
-  constructor() {
-
-  }
-
   /**
    * Make the given parameters known to this map.
    */
@@ -178,14 +174,20 @@ export class ParameterMap {
     const toReturn: Partial<Instructions> = {};
     Object.entries(referenceable).forEach(([name, value]) => {
       if (isParameterReference(value)) {
+        // Resolve the value
         toReturn[name] = this.getValue(value["$ref"]);
+      } else if (value instanceof Object) {
+        // We have a reference type that needs to be deep copied
+        toReturn[name] = JSON.parse(JSON.stringify(value));
       } else {
+        // We have a primitive type that may simply be copied
         toReturn[name] = value;
       }
     });
 
     // Style attributes are a more complicated matter and require separate intervention
     if (toReturn.style) {
+      // Style values may warrant own replacements
       Object.entries(toReturn.style).forEach(([key, value]) => {
         if (isParameterReference(value)) {
           toReturn.style[key] = this.getValue(value["$ref"]);

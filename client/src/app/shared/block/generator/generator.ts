@@ -289,7 +289,7 @@ export function convertGrammar(
   // TODO: Referenced style values in d.typeInstructions are replaced with
   //       with resolved version.
   //       So lets see what happens if we make a deep copy first
-  const resolvedTypeInstructions = parameters.resolve(JSON.parse(JSON.stringify(d.typeInstructions)));
+  const resolvedTypeInstructions = parameters.resolve(d.typeInstructions);
 
   // Wrap self contained instruction description in something that allows safe
   // access no matter whether the seeked value exists or not.
