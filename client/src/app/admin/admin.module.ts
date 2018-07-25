@@ -13,6 +13,7 @@ import { CreateBlockLanguageComponent } from './create-block-language.component'
 import { EditBlockLanguageComponent } from './edit-block-language.component'
 import { EditGrammarComponent } from './edit-grammar.component'
 import { LinkGrammarComponent } from './link-grammar.component'
+import { JsonEditor } from './json-editor.component'
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { LinkGrammarComponent } from './link-grammar.component'
     EditBlockLanguageComponent,
     EditGrammarComponent,
     LinkGrammarComponent,
+    JsonEditor
   ],
   exports: [
   ]
