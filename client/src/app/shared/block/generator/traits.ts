@@ -2,6 +2,7 @@ import { ScopeTraitAdd, ReferenceableTraits } from './traits.description'
 import {
   AllReferenceableTypeInstructions, ReferenceableInstructions
 } from './instructions.description';
+import { mergeTypeInstructions } from './merge';
 
 /**
  * Collects traits which may be assigned to instructions.
@@ -26,9 +27,21 @@ export class TraitMap {
   }
 
   /**
-   * 
+   * Takes the given instructions and "enriches" them with the traits
+   * as they are defined here. The original values take precedence
+   * over the values that would be brought in by the traits.
    */
   public applyTraits(instructions: AllReferenceableTypeInstructions) {
+    const traitsOnly = this.applyTraitsImpl({});
+    return (mergeTypeInstructions(traitsOnly, instructions));
+  }
+
+  /**
+   * Goes through all scopes that are defined and applies them to the given
+   * instructions. If the types that are mentioned by the scopes do not yet exist,
+   * default types are created on the fly.
+   */
+  public applyTraitsImpl(instructions: AllReferenceableTypeInstructions) {
     instructions = JSON.parse(JSON.stringify(instructions)); // Don't mutate the input
     this._knownScopes.forEach(scope => {
       // Apply rules in this scope to all specified attributes
