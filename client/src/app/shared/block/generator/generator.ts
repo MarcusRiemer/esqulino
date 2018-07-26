@@ -20,6 +20,7 @@ import {
 
 import { GeneratorInstructions, TypeInstructions } from './instructions'
 import { ParameterMap } from './parameters';
+import { TraitMap } from './traits';
 
 /**
  * Maps terminal symbols to constant blocks. The exact value of the terminal
@@ -263,6 +264,12 @@ export function convertGrammar(
   const concreteTypes = Object.entries(g.types)
     .filter(([_, v]) => v.type !== "oneOf") as [string, NodeConcreteTypeDescription][];
 
+  // Apply traits
+  const traitMap = new TraitMap();
+  traitMap.addKnownTraits(d.traits || {});
+  traitMap.addScopes(d.traitScopes || []);
+  const traitTypeInstructions = traitMap.applyTraits(d.typeInstructions || {});
+
   // Grab the parameters and the values this generator defines
   const parameters = new ParameterMap();
   parameters.addParameters(d.parameterDeclarations || {});
@@ -276,11 +283,7 @@ export function convertGrammar(
 
   // The type instructions may contain references. The parameter map from the
   // previous step contains all values that these references may be resolved to.
-
-  // TODO: Referenced style values in d.typeInstructions are replaced with
-  //       with resolved version.
-  //       So lets see what happens if we make a deep copy first
-  const resolvedTypeInstructions = parameters.resolve(d.typeInstructions);
+  const resolvedTypeInstructions = parameters.resolve(traitTypeInstructions);
 
   // Wrap self contained instruction description in something that allows safe
   // access no matter whether the seeked value exists or not.

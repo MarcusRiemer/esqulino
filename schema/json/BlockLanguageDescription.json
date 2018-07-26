@@ -122,6 +122,15 @@
           },
           "type": "array"
         },
+        "traitScopes": {
+          "items": {
+            "$ref": "#/definitions/ScopeTraitAdd"
+          },
+          "type": "array"
+        },
+        "traits": {
+          "$ref": "#/definitions/ReferenceableTraits"
+        },
         "typeInstructions": {
           "$ref": "#/definitions/AllReferenceableTypeInstructions"
         }
@@ -421,8 +430,89 @@
       ],
       "type": "object"
     },
+    "ReferenceableTraits": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "applyMode": {
+            "enum": [
+              "shallowMerge",
+              "deepMerge",
+              "replace"
+            ],
+            "type": "string"
+          },
+          "instructions": {
+            "additionalProperties": false,
+            "description": "Make all properties in T optional",
+            "properties": {
+              "attributeMapping": {
+              },
+              "between": {
+              },
+              "generateDropTargets": {
+              },
+              "onDrop": {
+              },
+              "orientation": {
+              },
+              "readOnly": {
+              },
+              "style": {
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "instructions",
+          "applyMode"
+        ],
+        "type": "object"
+      },
+      "type": "object"
+    },
     "ReferenceableTypeInstructionsDescription": {
       "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions_"
+    },
+    "ScopeTraitAdd": {
+      "additionalProperties": false,
+      "properties": {
+        "attributes": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "blocks": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "traits": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "traits"
+      ],
+      "type": "object"
     },
     "SidebarBlockDescription": {
       "additionalProperties": false,
