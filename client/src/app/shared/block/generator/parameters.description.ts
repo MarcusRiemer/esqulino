@@ -26,16 +26,21 @@ export interface ParameterReference {
   "$ref": string
 }
 
-// Allows properties of an object to be optional and to be
-// a reference that can be resolved to an actual value later.
-export type ParameterReferenceable<T> = {
-  [P in keyof T]?: T[P] extends Object
-  ? ParameterReferenceable<T[P]> | ParameterReference
-  : T[P] | ParameterReference
-}
-
+// Checks for the "$ref" property
 export function isParameterReference(obj: any): obj is ParameterReference {
   return (typeof (obj) === "object" && "$ref" in obj);
+}
+
+// All types that are considered primitive in Javascript.
+// It seems that there is no builtin for this kind of distinction.
+type PrimitiveType = string | number | boolean | undefined | null | symbol;
+
+// Allows properties of an object to be a reference that can be resolved to
+// an actual value later.
+export type ParameterReferenceable<T> = {
+  [P in keyof T]: T[P] extends PrimitiveType
+  ? (T[P] | ParameterReference)
+  : T[P] | ParameterReferenceable<T[P]>
 }
 
 // A value that is available under a certain name.

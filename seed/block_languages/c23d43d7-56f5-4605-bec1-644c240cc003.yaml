@@ -87,17 +87,16 @@ concise_attributes:
     {"defaultNode": {"name": "object", "children": {"values": []}, "language": "json"},
     "displayName": "object"}, {"defaultNode": {"name": "key-value", "children": {"key":
     [], "value": []}, "language": "json"}, "displayName": "key-value"}], "categoryCaption":
-    "Struktur"}]}], "typeInstructions": {"json": {"array": {"type": "single", "attributes":
-    {"values": {"generateDropTargets": "start"}}}, "object": {"type": "single", "attributes":
-    {"values": {"generateDropTargets": "start"}}}, "key-value": {"type": "single",
-    "attributes": {"key": {"generateDropTargets": "start"}, "value": {"generateDropTargets":
-    "start"}}}}}}}'
+    "Struktur"}]}], "typeInstructions": {"json": {"array": {"attributes": {"values":
+    {"generateDropTargets": "start"}}}, "object": {"attributes": {"values": {"generateDropTargets":
+    "start"}}}, "key-value": {"attributes": {"key": {"generateDropTargets": "start"},
+    "value": {"generateDropTargets": "start"}}}}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-20 20:43:34.641628'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-25 16:10:17.889715'
+  value_before_type_cast: '2018-07-26 12:51:13.415823'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: json

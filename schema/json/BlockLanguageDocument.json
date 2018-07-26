@@ -5,7 +5,7 @@
     "AllReferenceableTypeInstructions": {
       "additionalProperties": {
         "additionalProperties": {
-          "$ref": "#/definitions/TypeInstructions_ReferenceableInstructions_"
+          "$ref": "#/definitions/ReferenceableTypeInstructionsDescription"
         },
         "type": "object"
       },
@@ -185,30 +185,7 @@
       ],
       "type": "object"
     },
-    "InternalMultiBlockInstructionsDescription_ReferenceableInstructions_": {
-      "additionalProperties": false,
-      "description": "Instructions on how to generate a type that is composed of multiple\nblocks.",
-      "properties": {
-        "blocks": {
-          "items": {
-            "$ref": "#/definitions/InternalSingleBlockInstructionsDescription_ReferenceableInstructions_"
-          },
-          "type": "array"
-        },
-        "type": {
-          "enum": [
-            "multi"
-          ],
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "blocks"
-      ],
-      "type": "object"
-    },
-    "InternalSingleBlockInstructionsDescription_ReferenceableInstructions_": {
+    "InternalTypeInstructionsDescription_ReferenceableInstructions_": {
       "additionalProperties": false,
       "description": "Instructions on how to generate a single block for a type.",
       "properties": {
@@ -236,37 +213,33 @@
           },
           "type": "object"
         },
-        "block": {
-          "additionalProperties": false,
-          "description": "Make all properties in T optional",
-          "properties": {
-            "attributeMapping": {
-              "$ref": "#/definitions/AttributeMappingOrder"
-            },
-            "onDrop": {
-              "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
-            },
-            "orientation": {
-              "$ref": "#/definitions/Orientation"
-            },
-            "style": {
-              "additionalProperties": {
-                "type": "string"
+        "blocks": {
+          "items": {
+            "additionalProperties": false,
+            "description": "Make all properties in T optional",
+            "properties": {
+              "attributeMapping": {
+                "$ref": "#/definitions/AttributeMappingOrder"
               },
-              "type": "object"
-            }
+              "onDrop": {
+                "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
+              },
+              "orientation": {
+                "$ref": "#/definitions/Orientation"
+              },
+              "style": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
           },
-          "type": "object"
-        },
-        "type": {
-          "enum": [
-            "single"
-          ],
-          "type": "string"
+          "type": "array"
         }
       },
       "required": [
-        "type",
         "attributes"
       ],
       "type": "object"
@@ -416,6 +389,9 @@
       ],
       "type": "object"
     },
+    "ReferenceableTypeInstructionsDescription": {
+      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions_"
+    },
     "SidebarBlockDescription": {
       "additionalProperties": false,
       "description": "Describes how the available types should be represented in the sidebar.\nIt is perfectly fine to have multiple sidebar descriptions for the\nsame underlying type.",
@@ -445,17 +421,6 @@
         }
       ],
       "description": "All possible sidebar types"
-    },
-    "TypeInstructions_ReferenceableInstructions_": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/InternalSingleBlockInstructionsDescription_ReferenceableInstructions_"
-        },
-        {
-          "$ref": "#/definitions/InternalMultiBlockInstructionsDescription_ReferenceableInstructions_"
-        }
-      ],
-      "description": "Any kind of instruction on how to create one or more blocks for a type."
     },
     "VisualBlockDescriptions.BlockStyle": {
       "additionalProperties": {

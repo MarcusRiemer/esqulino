@@ -115,7 +115,6 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
     const i: AllReferenceableTypeInstructions = {
       "g1": {
         "t1": {
-          type: "single",
           attributes: {}
         }
       }
@@ -130,7 +129,6 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
     const i: AllReferenceableTypeInstructions = {
       "g1": {
         "t1": {
-          type: "single",
           attributes: {
             "a1": {
               "between": ",",
@@ -160,7 +158,6 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
     const i: AllReferenceableTypeInstructions = {
       "g1": {
         "t1": {
-          type: "single",
           attributes: {
             "a1": {
               "between": { "$ref": "myBetween" }
@@ -179,8 +176,8 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
     const i: AllReferenceableTypeInstructions = {
       "g1": {
         "t1": {
-          type: "multi",
-          blocks: []
+          blocks: [],
+          attributes: {}
         }
       }
     };
@@ -194,11 +191,11 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
     const i: AllReferenceableTypeInstructions = {
       "g1": {
         "t1": {
-          type: "multi",
           blocks: [
-            { "type": "single", attributes: {} },
-            { "type": "single", attributes: {} }
-          ]
+            {},
+            {}
+          ],
+          attributes: {}
         }
       }
     };
@@ -222,24 +219,20 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
     const i: AllReferenceableTypeInstructions = {
       "g1": {
         "t1": {
-          "type": "multi",
-          "blocks": [
-            {
-              "type": "single",
-              "attributes": {
-                "t1_a1": {
-                  "between": { "$ref": "between" },
-                  "style": {
-                    "color": { "$ref": "color" }
-                  }
-                }
+          "attributes": {
+            "t1_a1": {
+              "between": { "$ref": "between" },
+              "style": {
+                "color": { "$ref": "color" }
               }
-            },
-            { "type": "single", "attributes": {} }
+            }
+          },
+          "blocks": [
+            {},
+            {}
           ]
         },
         "t2": {
-          "type": "single",
           "attributes": {
             "a1": {
               "between": { "$ref": "between" },

@@ -28,7 +28,7 @@ export interface Instructions {
   onDrop: DropTargetProperties;
   // Where (and if) drop targets should be created
   generateDropTargets: IterationDropTarget;
-}
+};
 
 /**
  * Instructions where instead of a value a reference may occur. These
@@ -93,36 +93,16 @@ export module DefaultInstructions {
 /**
  * Instructions on how to generate a single block for a type.
  */
-export type InternalSingleBlockInstructionsDescription<T extends ReferenceableInstructions> = {
-  type: "single";
-  block?: Partial<BlockInstructions>;
+export interface InternalTypeInstructionsDescription<T extends ReferenceableInstructions> {
+  // TODO: Should also be referenceable
+  blocks?: Partial<BlockInstructions>[];
   attributes: {
     [scope: string]: Partial<T>
   }
 };
 
-export type SingleBlockInstructionsDescription = InternalSingleBlockInstructionsDescription<Instructions>
-
-/**
- * Instructions on how to generate a type that is composed of multiple
- * blocks.
- */
-export type InternalMultiBlockInstructionsDescription<T extends ReferenceableInstructions> = {
-  type: "multi",
-  blocks: InternalSingleBlockInstructionsDescription<T>[]
-}
-
-export type MultiBlockInstructionsDescription = InternalMultiBlockInstructionsDescription<Instructions>
-
-/**
- * Any kind of instruction on how to create one or more blocks for a type.
- */
-export type TypeInstructions<T extends ReferenceableInstructions> =
-  InternalSingleBlockInstructionsDescription<T> | InternalMultiBlockInstructionsDescription<T>
-
-export function isMultiBlockInstructions(x: any): x is MultiBlockInstructionsDescription {
-  return (typeof (x) === "object" && x.type === "multi");
-}
+export type TypeInstructionsDescription = InternalTypeInstructionsDescription<Instructions>;
+export type ReferenceableTypeInstructionsDescription = InternalTypeInstructionsDescription<ReferenceableInstructions>;
 
 /**
  * Supplementary generation instructions for all types. In this variant
@@ -131,7 +111,7 @@ export function isMultiBlockInstructions(x: any): x is MultiBlockInstructionsDes
  */
 export type AllTypeInstructions = {
   [language: string]: {
-    [type: string]: TypeInstructions<Instructions>
+    [type: string]: TypeInstructionsDescription
   }
 }
 
@@ -142,6 +122,6 @@ export type AllTypeInstructions = {
  */
 export type AllReferenceableTypeInstructions = {
   [language: string]: {
-    [type: string]: TypeInstructions<ReferenceableInstructions>
+    [type: string]: ReferenceableTypeInstructionsDescription
   }
 }

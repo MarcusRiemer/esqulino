@@ -18,9 +18,7 @@ import {
   TerminalInstructions, PropertyInstructions
 } from './instructions.description'
 
-import {
-  GeneratorInstructions, SingleBlockInstructions, MultiBlockInstructions
-} from './instructions'
+import { GeneratorInstructions, TypeInstructions } from './instructions'
 import { ParameterMap } from './parameters';
 
 /**
@@ -172,7 +170,7 @@ export function mapChildren(
 
 export function mapAttribute(
   attr: NodeAttributeDescription,
-  instructions: SingleBlockInstructions,
+  instructions: TypeInstructions,
 ): VisualBlockDescriptions.ConcreteBlock[] {
   switch (attr.type) {
     case "allowed":
@@ -196,10 +194,11 @@ export function mapAttribute(
  */
 export function mapAttributes(
   typeDesc: NodeConcreteTypeDescription,
-  instructions: SingleBlockInstructions,
+  instructions: TypeInstructions,
+  blockNumber: number,
 ): VisualBlockDescriptions.ConcreteBlock[] {
   // For every relevant attribute ...
-  const generatedBlocks = instructions.relevantAttributes(typeDesc).map(t => {
+  const generatedBlocks = instructions.relevantAttributes(blockNumber, typeDesc).map(t => {
     // ... find its type ...
     const mappedType = typeDesc.attributes.find(a => a.name === t);
     if (mappedType) {
@@ -220,33 +219,27 @@ export function mapAttributes(
  */
 export function mapType(
   typeDesc: NodeConcreteTypeDescription,
-  instructions: SingleBlockInstructions | MultiBlockInstructions,
+  instructions: TypeInstructions,
 ): VisualBlockDescriptions.ConcreteBlock[] {
-  // How many blocks should be created?
-  if (instructions instanceof SingleBlockInstructions) {
-    const blockInstructions = instructions.scopeBlock();
-    const toReturn: VisualBlockDescriptions.ConcreteBlock = {
+  const toReturn: VisualBlockDescriptions.ConcreteBlock[] = [];
+
+  for (let i = 0; i < instructions.numberOfBlocks; ++i) {
+    const blockInstructions = instructions.scopeBlock(i);
+    const thisBlock: VisualBlockDescriptions.ConcreteBlock = {
       blockType: "block",
       direction: blockInstructions.orientation,
-      children: mapAttributes(typeDesc, instructions),
+      children: mapAttributes(typeDesc, instructions, i),
       dropTarget: blockInstructions.onDrop,
     };
 
     if (Object.keys(blockInstructions.style).length > 0) {
-      toReturn.style = blockInstructions.style;
+      thisBlock.style = blockInstructions.style;
     }
 
-    // A single block
-    return ([toReturn]);
-  } else if (instructions instanceof MultiBlockInstructions) {
-    // Multiple blocks can be treated as a series of single blocks
-    const arrayOfArray = instructions.blocks.map(single => mapType(typeDesc, single));
-    return ([].concat(...arrayOfArray));
-  } else {
-    // Shouldn't ever happen
-    throw new Error(`Neither single nor multiple block instructions`);
+    toReturn.push(thisBlock);
   }
 
+  return (toReturn);
 }
 
 /**
