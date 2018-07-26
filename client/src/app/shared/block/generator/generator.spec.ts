@@ -94,10 +94,7 @@ describe("BlockLanguage Generator", () => {
           {
             attributeMapping: ["p1"]
           }
-        ],
-        attributes: {
-          "p1": {}
-        }
+        ]
       });
 
       const concreteType: NodeConcreteTypeDescription = {
@@ -117,10 +114,7 @@ describe("BlockLanguage Generator", () => {
           {
             attributeMapping: ["missing"]
           }
-        ],
-        attributes: {
-          "missing": {}
-        }
+        ]
       });
 
       const concreteType: NodeConcreteTypeDescription = {
@@ -140,8 +134,7 @@ describe("BlockLanguage Generator", () => {
         blocks: [
           { attributeMapping: ["p1"] },
           { attributeMapping: ["p1"] }
-        ],
-        attributes: { "p1": {} }
+        ]
       });
 
       const concreteType: NodeConcreteTypeDescription = {

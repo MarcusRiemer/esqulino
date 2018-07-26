@@ -114,7 +114,7 @@ export class TypeInstructions {
    * @return Exact instructions for the given scope, no default values applied.
    */
   scope(s?: string): Partial<Instructions> {
-    let toReturn = this._type.attributes[s];
+    let toReturn = this._type.attributes && this._type.attributes[s];
     if (!toReturn) {
       toReturn = {};
     }
