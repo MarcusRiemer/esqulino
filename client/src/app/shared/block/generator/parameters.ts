@@ -125,9 +125,11 @@ export class ParameterMap {
   private resolveTypeInstructions(
     referenceable: ReferenceableTypeInstructionsDescription
   ): TypeInstructionsDescription {
-    const singleBlock: TypeInstructionsDescription = {
-      "attributes": this.mapAttributes(referenceable.attributes)
-    };
+    const singleBlock: TypeInstructionsDescription = {};
+
+    if (referenceable.attributes) {
+      singleBlock.attributes = this.mapAttributes(referenceable.attributes)
+    }
 
     if (referenceable.blocks) {
       singleBlock.blocks = referenceable.blocks;

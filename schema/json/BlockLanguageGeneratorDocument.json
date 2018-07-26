@@ -180,9 +180,6 @@
           "type": "array"
         }
       },
-      "required": [
-        "attributes"
-      ],
       "type": "object"
     },
     "NodeDescription": {

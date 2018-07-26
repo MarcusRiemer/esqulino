@@ -96,7 +96,7 @@ export module DefaultInstructions {
 export interface InternalTypeInstructionsDescription<T extends ReferenceableInstructions> {
   // TODO: Should also be referenceable
   blocks?: Partial<BlockInstructions>[];
-  attributes: {
+  attributes?: {
     [scope: string]: Partial<T>
   }
 };
