@@ -101,8 +101,7 @@ describe("Traits", () => {
 
     const res = m.applyTraits(instructions);
 
-    expect(res).not.toEqual(instructions);
-    expect(res["g1"]["t1"].attributes["a1"].style["color"]).toEqual("fuchsia");
+    expect(res).toEqual(instructions);
   });
 
   it("Apply a single trait two existing attributes on the same type", () => {
