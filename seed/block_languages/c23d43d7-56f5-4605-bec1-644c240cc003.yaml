@@ -76,7 +76,10 @@ concise_attributes:
     "value"}], "blockType": "block", "direction": "horizontal", "dropTarget": {"self":
     {"order": "insertAfter", "skipParents": 0}}}], "describedType": {"typeName": "key-value",
     "languageName": "json"}}], "editorComponents": [], "localGeneratorInstructions":
-    {"staticSidebars": [{"type": "fixedBlocks", "caption": "JSON", "categories": [{"blocks":
+    {"traits": {"defaultDropTargets": {"applyMode": "deepMerge", "instructions": {"generateDropTargets":
+    "start"}}}, "traitScopes": [{"traits": ["defaultDropTargets"], "attributes": {"json":
+    {"array": ["values"], "object": ["values"], "key-value": ["key", "value"]}}}],
+    "staticSidebars": [{"type": "fixedBlocks", "caption": "JSON", "categories": [{"blocks":
     [{"defaultNode": {"name": "null", "language": "json"}, "displayName": "null"},
     {"defaultNode": {"name": "number", "language": "json", "properties": {"value":
     "0"}}, "displayName": "number"}, {"defaultNode": {"name": "string", "language":
@@ -87,16 +90,13 @@ concise_attributes:
     {"defaultNode": {"name": "object", "children": {"values": []}, "language": "json"},
     "displayName": "object"}, {"defaultNode": {"name": "key-value", "children": {"key":
     [], "value": []}, "language": "json"}, "displayName": "key-value"}], "categoryCaption":
-    "Struktur"}]}], "typeInstructions": {"json": {"array": {"attributes": {"values":
-    {"generateDropTargets": "start"}}}, "object": {"attributes": {"values": {"generateDropTargets":
-    "start"}}}, "key-value": {"attributes": {"key": {"generateDropTargets": "start"},
-    "value": {"generateDropTargets": "start"}}}}}}}'
+    "Struktur"}]}]}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-20 20:43:34.641628'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-26 12:51:13.415823'
+  value_before_type_cast: '2018-07-26 18:26:21.481443'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: json

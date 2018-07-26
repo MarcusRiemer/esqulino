@@ -3,6 +3,7 @@ import { SidebarDescription } from '../block.description'
 
 import { AllReferenceableTypeInstructions } from './instructions.description'
 import { ParameterDeclarations, ParameterValues } from './parameters.description'
+import { ReferenceableTraits, ScopeTraitAdd } from './traits.description'
 
 /**
  * The nested parts of the generator description that must be stored
@@ -17,6 +18,12 @@ export interface BlockLanguageGeneratorDocument {
 
   // Define how to generate blocks for the mentioned types
   typeInstructions?: AllReferenceableTypeInstructions;
+
+  // Groups together instructions for various types
+  traits?: ReferenceableTraits;
+
+  // Controls how traits are applied
+  traitScopes?: ScopeTraitAdd[];
 
   // The sidebars that are available in the editor. It would
   // be great to somehow generate those automatically, but for

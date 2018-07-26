@@ -63,6 +63,7 @@ export class EditBlockLanguageComponent implements OnInit {
         try {
           this.editedSubject = generateBlockLanguage(this.editedSubject, instructions, g);
         } catch (e) {
+          debugger;
           alert("Could not generate block language: " + JSON.stringify(e));
           return;
         }

@@ -1,18 +1,5 @@
 import { Instructions, ReferenceableInstructions } from './instructions.description';
 
-export interface ScopeTraitAddSpecific {
-  "type": "specific",
-  "grammar": {
-    // Name of the grammar
-    [grammar: string]: {
-      blocks?: string[]
-      attributes?: {
-        [type: string]: string[]
-      }
-    }
-  }
-}
-
 // Allows traits to be added from afar
 export interface ScopeTraitAdd {
   // The names of the traits that should be added
