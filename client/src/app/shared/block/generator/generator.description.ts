@@ -15,6 +15,9 @@ export interface BlockLanguageGeneratorDocument {
   // These values should match the parameters that are required
   parameterValues?: ParameterValues;
 
+  // Define how to generate blocks for the mentioned types
+  typeInstructions?: AllReferenceableTypeInstructions;
+
   // The sidebars that are available in the editor. It would
   // be great to somehow generate those automatically, but for
   // moment these descriptions are simply copied.
@@ -24,9 +27,6 @@ export interface BlockLanguageGeneratorDocument {
   // are simply copied because there is not much to generate
   // here.
   editorComponents?: EditorComponentDescription[];
-
-  // Define how to generate blocks for the mentioned types
-  typeInstructions?: AllReferenceableTypeInstructions;
 }
 
 /**

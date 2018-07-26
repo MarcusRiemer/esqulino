@@ -1,7 +1,6 @@
 import {
   AllTypeInstructions, Instructions, IteratorInstructions, BlockInstructions,
-  TerminalInstructions, DefaultInstructions, isMultiBlockInstructions,
-  SingleBlockInstructionsDescription, MultiBlockInstructionsDescription, PropertyInstructions
+  TerminalInstructions, DefaultInstructions, PropertyInstructions, TypeInstructionsDescription
 } from './instructions.description'
 
 import { NodeConcreteTypeDescription } from '../../syntaxtree';
@@ -39,25 +38,8 @@ export class GeneratorInstructions {
       return (DEFAULT_INSTRUCTIONS);
     }
 
-    if (isMultiBlockInstructions(ti)) {
-      return (new MultiBlockInstructions(ti));
-    } else {
-      return (new SingleBlockInstructions(ti));
-    }
+    return (new TypeInstructions(ti));
   }
-}
-
-/**
- * Accessing descriptions for multiple blocks.
- */
-export class MultiBlockInstructions {
-  constructor(
-    private _desc: MultiBlockInstructionsDescription,
-  ) { }
-
-  readonly blocks: ReadonlyArray<SingleBlockInstructions> = this._desc.blocks.map(
-    b => new SingleBlockInstructions(b)
-  );
 }
 
 /**
@@ -65,26 +47,34 @@ export class MultiBlockInstructions {
  * Returned instructions include default properties if no specific properties
  * have been set.
  */
-export class SingleBlockInstructions {
+export class TypeInstructions {
   constructor(
-    private _type: SingleBlockInstructionsDescription,
+    private _type: TypeInstructionsDescription,
   ) {
-    // If no valid instructions are passed in: Assume a single block without any
-    // special qualities
+    // If no valid instructions are passed in: Assume there are no special
+    // instructions for any attribute
     if (!this._type) {
       this._type = {
-        type: "single",
         attributes: {}
       };
     }
+
+    // If no block is specified a single default block is assumed
+    if (!this._type.blocks) {
+      this._type.blocks = [{}];
+    }
+  }
+
+  get numberOfBlocks() {
+    return (this._type.blocks.length);
   }
 
   /**
    * The types for that specific instructions exist.
    */
-  relevantAttributes(typeDesc: NodeConcreteTypeDescription) {
-    const order = (this._type.block && this._type.block.attributeMapping);
-
+  relevantAttributes(i: number, typeDesc: NodeConcreteTypeDescription) {
+    const block = this._type.blocks[i];
+    const order = (block && block.attributeMapping);
     if (!order || order === "grammar") {
       return (typeDesc.attributes.map(a => a.name));
     } else {
@@ -102,8 +92,8 @@ export class SingleBlockInstructions {
   /**
    * @return Block specific instructions
    */
-  scopeBlock(): BlockInstructions {
-    return (this.cloneWithStyle(this._type.block || {}, DefaultInstructions.blockInstructions));
+  scopeBlock(i: number): BlockInstructions {
+    return (this.cloneWithStyle(this._type.blocks[i] || {}, DefaultInstructions.blockInstructions));
   }
 
   /**
@@ -150,4 +140,4 @@ export class SingleBlockInstructions {
 }
 
 // These instructions are used when no specific instructions are available
-export const DEFAULT_INSTRUCTIONS = new SingleBlockInstructions(undefined);
+export const DEFAULT_INSTRUCTIONS = new TypeInstructions(undefined);

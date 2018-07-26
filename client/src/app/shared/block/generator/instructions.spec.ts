@@ -1,40 +1,24 @@
 import { Instructions, DefaultInstructions } from './instructions.description'
-import { GeneratorInstructions, SingleBlockInstructions, MultiBlockInstructions } from './instructions'
+import { GeneratorInstructions, TypeInstructions } from './instructions'
 import { Orientation } from '../block.description';
 
 describe("BlockLanguage GeneratorInstructions", () => {
 
-  it("Hands out matching instruction types", () => {
-    const inst = new GeneratorInstructions({
-      "g": {
-        "tSingle": { type: "single", attributes: {} },
-        "tMulti": {
-          type: "multi",
-          blocks: []
-        }
-      }
-    });
-
-    expect(inst.typeInstructions("g", "tSingle") instanceof SingleBlockInstructions).toBe(true);
-    expect(inst.typeInstructions("g", "tMulti") instanceof MultiBlockInstructions).toBe(true);
-  });
-
-  it("Hands out empty SingleBlockInstructions as a default", () => {
+  it("Hands out empty TypeInstructions as a default", () => {
     const inst = new GeneratorInstructions({
       "g": {}
     });
 
-    expect(inst.typeInstructions("missing", "irrelevant") instanceof SingleBlockInstructions).toBe(true);
-    expect(inst.typeInstructions("g", "missing") instanceof SingleBlockInstructions).toBe(true);
+    expect(inst.typeInstructions("missing", "irrelevant") instanceof TypeInstructions).toBe(true);
+    expect(inst.typeInstructions("g", "missing") instanceof TypeInstructions).toBe(true);
   });
 
-  describe("SingleBlockInstructions", () => {
+  describe("Instructions for single blocks", () => {
     it("Exact and missing scope", () => {
       const specific: Partial<Instructions> = {
         orientation: "horizontal"
       };
-      const inst = new SingleBlockInstructions({
-        type: "single",
+      const inst = new TypeInstructions({
         attributes: {
           "s": specific
         }
@@ -45,27 +29,28 @@ describe("BlockLanguage GeneratorInstructions", () => {
     });
 
     it("undefined instructions", () => {
-      const bound = new SingleBlockInstructions(undefined);
+      const bound = new TypeInstructions(undefined);
       expect(bound.scope("irrelevant")).toEqual({});
     });
 
     it("Default values for missing scopes", () => {
-      const bound = new SingleBlockInstructions({ type: "single", attributes: {} });
+      const bound = new TypeInstructions({ attributes: {} });
 
-      expect(bound.scopeBlock()).toEqual(DefaultInstructions.blockInstructions, "Block");
+      expect(bound.scopeBlock(0)).toEqual(DefaultInstructions.blockInstructions, "Block");
       expect(bound.scopeIterator("missing")).toEqual(DefaultInstructions.iteratorInstructions, "Layout");
       expect(bound.scopeTerminal("missing")).toEqual(DefaultInstructions.terminalInstructions, "Terminal");
     });
 
     it("Mixing specific and default values", () => {
-      const bound = new SingleBlockInstructions({
-        type: "single",
-        block: {
-          "style": {
-            "display": "block",
-            "color": "red"
+      const bound = new TypeInstructions({
+        blocks: [
+          {
+            "style": {
+              "display": "block",
+              "color": "red"
+            }
           }
-        },
+        ],
         attributes: {
           "this": {
             "between": "ä",
@@ -77,7 +62,7 @@ describe("BlockLanguage GeneratorInstructions", () => {
         }
       });
 
-      expect(bound.scopeBlock()).toEqual(jasmine.objectContaining({
+      expect(bound.scopeBlock(0)).toEqual(jasmine.objectContaining({
         "orientation": "horizontal" as Orientation,
         "style": {
           "display": "block",
@@ -103,36 +88,27 @@ describe("BlockLanguage GeneratorInstructions", () => {
   });
 
   describe("MultiBlockInstructions", () => {
-    it("Properly constructs SingleBlockInstructions", () => {
-      const inst = new MultiBlockInstructions({
-        type: "multi",
+    it("Uses the same attributes for multiple block", () => {
+      const inst = new TypeInstructions({
         blocks: [
           {
-            type: "single",
-            attributes: {
-              "t1": {
-                orientation: "horizontal"
-              }
-            }
+            attributeMapping: ["t1"]
           },
           {
-            type: "single",
-            attributes: {
-              "t1": {
-                orientation: "vertical"
-              }
-            }
+            attributeMapping: ["t2"]
           }
-        ]
+        ],
+        attributes: {
+          "t1": {
+            orientation: "horizontal"
+          },
+          "t2": {
+            orientation: "horizontal"
+          }
+        }
       });
 
-      expect(inst.blocks.length).toEqual(2);
-
-      const fst = inst.blocks[0];
-      expect(fst.scope("t1")).toEqual({ orientation: "horizontal" });
-
-      const snd = inst.blocks[1];
-      expect(snd.scope("t1")).toEqual({ orientation: "vertical" });
+      expect(inst.numberOfBlocks).toEqual(2);
     });
   });
 });

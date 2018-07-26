@@ -5,7 +5,7 @@ import { VisualBlockDescriptions } from '../block.description';
 import { BlockLanguageGeneratorDescription } from './generator.description'
 import { convertGrammar, mapTerminal, mapProperty, mapChildren, mapType, mapAttributes } from './generator'
 import { DefaultInstructions } from './instructions.description';
-import { MultiBlockInstructions, SingleBlockInstructions } from './instructions';
+import { TypeInstructions } from './instructions';
 
 describe("BlockLanguage Generator", () => {
   describe("Single Types", () => {
@@ -89,11 +89,12 @@ describe("BlockLanguage Generator", () => {
     });
 
     it("Mentioned attributes only", () => {
-      const instr = new SingleBlockInstructions({
-        type: "single",
-        block: {
-          attributeMapping: ["p1"]
-        },
+      const instr = new TypeInstructions({
+        blocks: [
+          {
+            attributeMapping: ["p1"]
+          }
+        ],
         attributes: {
           "p1": {}
         }
@@ -106,14 +107,17 @@ describe("BlockLanguage Generator", () => {
           { type: "terminal", name: "p1", symbol: "p1Text", },
         ]
       };
-      const res = mapAttributes(concreteType, instr);
+      const res = mapAttributes(concreteType, instr, 0);
       expect(res.length).toEqual(1);
     });
 
     it("Mentioning an unknown attribute", () => {
-      const instr = new SingleBlockInstructions({
-        type: "single",
-        block: { attributeMapping: ["missing"] },
+      const instr = new TypeInstructions({
+        blocks: [
+          {
+            attributeMapping: ["missing"]
+          }
+        ],
         attributes: {
           "missing": {}
         }
@@ -126,26 +130,18 @@ describe("BlockLanguage Generator", () => {
           { type: "terminal", name: "p1", symbol: "p1Text", },
         ]
       };
-      expect(() => mapAttributes(concreteType, instr)).toThrowError();
+      expect(() => mapAttributes(concreteType, instr, 0)).toThrowError();
     });
   });
 
   describe("Multi Block Types", () => {
     it("Identical relevant terminals with ignored property", () => {
-      const instructions = new MultiBlockInstructions({
-        type: "multi",
+      const instructions = new TypeInstructions({
         blocks: [
-          {
-            type: "single",
-            block: { attributeMapping: ["p1"] },
-            attributes: { "p1": {} }
-          },
-          {
-            type: "single",
-            block: { attributeMapping: ["p1"] },
-            attributes: { "p1": {} }
-          },
-        ]
+          { attributeMapping: ["p1"] },
+          { attributeMapping: ["p1"] }
+        ],
+        attributes: { "p1": {} }
       });
 
       const concreteType: NodeConcreteTypeDescription = {
@@ -236,10 +232,9 @@ describe("BlockLanguage Generator", () => {
         typeInstructions: {
           "g1": {
             "t1": {
-              type: "single",
               attributes: {
                 "p1": {
-                  readOnly: { "$ref": "allowMod" }
+                  readOnly: { "$ref": "missing" }
                 }
               }
             }
@@ -280,7 +275,6 @@ describe("BlockLanguage Generator", () => {
         typeInstructions: {
           "g1": {
             "t1": {
-              type: "single",
               attributes: {
                 "p1": {
                   readOnly: { "$ref": "allowModifications" }

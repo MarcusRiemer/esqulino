@@ -2,8 +2,7 @@ import * as Desc from './parameters.description'
 import { isParameterReference } from './parameters.description';
 import {
   AllTypeInstructions, Instructions, AllReferenceableTypeInstructions,
-  ReferenceableInstructions, TypeInstructions, SingleBlockInstructionsDescription,
-  InternalMultiBlockInstructionsDescription, InternalSingleBlockInstructionsDescription
+  ReferenceableInstructions, TypeInstructionsDescription, ReferenceableTypeInstructionsDescription
 } from './instructions.description';
 
 // Function with this signature may be used
@@ -33,7 +32,10 @@ export interface ParameterErrorMissingValue {
 
 export type ParameterError = ParameterErrorUnknown | ParameterErrorMissingValue
 
-// Manages the state of parameters
+/**
+ * Controls parameter state by receiving declarations and values. Additionally
+ * may resolve parameters according to the given state.
+ */
 export class ParameterMap {
   // All parameters that would be meaningful in this context
   private _knownParameters: Desc.ParameterDeclarations = {};
@@ -81,6 +83,7 @@ export class ParameterMap {
       } else {
         // Yes, lets see whether it is valid
         const value = this._currentValues[name];
+        // TODO: Yeah, lets see this!
       }
     });
 
@@ -117,44 +120,27 @@ export class ParameterMap {
   }
 
   /**
-   * Resolves the attributes of a type that will generate a single block.
+   * Resolves attributes of type that may generate one or multiple blocks.
    */
-  private resolveTypeSingleBlockInstructions(
-    referenceable: InternalSingleBlockInstructionsDescription<ReferenceableInstructions>
-  ): InternalSingleBlockInstructionsDescription<Instructions> {
-    const singleBlock: SingleBlockInstructionsDescription = {
-      "type": "single",
+  private resolveTypeInstructions(
+    referenceable: ReferenceableTypeInstructionsDescription
+  ): TypeInstructionsDescription {
+    const singleBlock: TypeInstructionsDescription = {
       "attributes": this.mapAttributes(referenceable.attributes)
     };
 
-    if (referenceable.block) {
-      singleBlock.block = referenceable.block;
+    if (referenceable.blocks) {
+      singleBlock.blocks = referenceable.blocks;
     }
 
     return (singleBlock);
   }
 
   /**
-   * Resolves attributes of type that may generate one or multiple blocks.
-   */
-  private resolveTypeInstructions(referenceable: TypeInstructions<ReferenceableInstructions>): TypeInstructions<Instructions> {
-    if (referenceable.type === "single") {
-      return (this.resolveTypeSingleBlockInstructions(referenceable));
-    } else {
-      const multiBlock: InternalMultiBlockInstructionsDescription<Instructions> = {
-        "type": "multi",
-        "blocks": referenceable.blocks.map(b => this.resolveTypeSingleBlockInstructions(b))
-      };
-
-      return (multiBlock);
-    }
-  }
-
-  /**
    * Mapping the attributes that are present.
    */
   private mapAttributes(
-    referenceable: { [type: string]: ReferenceableInstructions }
+    referenceable: { [type: string]: Partial<ReferenceableInstructions> }
   ): { [type: string]: Partial<Instructions> } {
     const toReturn: { [type: string]: Partial<Instructions> } = {};
 
@@ -169,7 +155,7 @@ export class ParameterMap {
    * This is the only function that actually does something interesting.
    * If the given instructions contain any references, these are resolved.
    */
-  private resolveInstructions(referenceable: ReferenceableInstructions): Partial<Instructions> {
+  private resolveInstructions(referenceable: Partial<ReferenceableInstructions>): Partial<Instructions> {
     const toReturn: Partial<Instructions> = {};
     Object.entries(referenceable).forEach(([name, value]) => {
       if (isParameterReference(value)) {
