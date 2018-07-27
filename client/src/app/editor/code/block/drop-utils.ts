@@ -152,6 +152,7 @@ function dropLocationHasChildren(drag: CurrentDrag, block: BlockDropProperties) 
  */
 export function calculateDropTargetState(drag: CurrentDrag, block: BlockDropProperties): DropTargetState {
   let flags = [];
+  // Does the description come with a visibility expression?
   if (block.visual && block.visual.dropTarget && block.visual.dropTarget.visibility) {
     flags = block.visual.dropTarget.visibility;
   }

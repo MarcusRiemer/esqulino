@@ -93,7 +93,7 @@ export abstract class NodeType {
 /**
  * Describes a complex node that may have any kind of children.
  */
-class NodeConcreteType extends NodeType {
+export class NodeConcreteType extends NodeType {
 
   private _allowedChildren: { [category: string]: NodeTypeChildren } = {};
   private _allowedProperties: { [propName: string]: NodePropertyValidator } = {};
@@ -710,7 +710,7 @@ export class NodePropertyBooleanValidator extends NodePropertyValidator {
   validate(node: AST.Node, value: string, context: ValidationContext): void {
     if (value != "true" && value != "false") {
       context.addError(ErrorCodes.IllegalPropertyType, node, {
-        condition: `"${value}" must be either "true" nor "false"`
+        condition: `"${value}" must be either "true" or "false"`
       });
     }
   }
