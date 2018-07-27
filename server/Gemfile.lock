@@ -152,7 +152,6 @@ GEM
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     regexp_parser (0.5.0)
-    rmagick (2.16.0)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
@@ -224,7 +223,6 @@ DEPENDENCIES
   pg
   puma
   rails
-  rmagick
   rspec-rails
   rspec_junit_formatter
   ruby-filemagic
