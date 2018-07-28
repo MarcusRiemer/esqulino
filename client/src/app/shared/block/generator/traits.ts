@@ -3,6 +3,7 @@ import {
   AllReferenceableTypeInstructions, ReferenceableInstructions
 } from './instructions.description';
 import { mergeTypeInstructions } from './merge';
+import { deepAssign } from './merge-util';
 
 /**
  * Collects traits which may be assigned to instructions.
@@ -41,8 +42,9 @@ export class TraitMap {
    * instructions. If the types that are mentioned by the scopes do not yet exist,
    * default types are created on the fly.
    */
-  public applyTraitsImpl(instructions: AllReferenceableTypeInstructions) {
-    instructions = JSON.parse(JSON.stringify(instructions)); // Don't mutate the input
+  public applyTraitsImpl(givenInstructions: AllReferenceableTypeInstructions) {
+    givenInstructions = JSON.parse(JSON.stringify(givenInstructions)); // Don't mutate the input
+
     this._knownScopes.forEach(scope => {
       // Apply rules in this scope to all specified attributes
       Object.entries(scope.attributes || {}).forEach(([grammarName, types]) => {
@@ -50,7 +52,7 @@ export class TraitMap {
           (attributeNames || []).forEach(attributeName => {
             // Now we know which instructions we should manipulate
             const attributeInstructions = this.generatingInstructionAccess(
-              instructions, grammarName, typeName, attributeName
+              givenInstructions, grammarName, typeName, attributeName
             );
             // Apply all traits that have been given
             (scope.traits || []).forEach(trait => {
@@ -65,7 +67,7 @@ export class TraitMap {
           (blockIndices || []).forEach(blockIndex => {
             // Now we know which blocks we should manipulate
             const blockInstructions = this.generatingBlockAccess(
-              instructions, grammarName, typeName, blockIndex
+              givenInstructions, grammarName, typeName, blockIndex
             );
             // Apply all traits that have been given
             (scope.traits || []).forEach(trait => {
@@ -76,7 +78,7 @@ export class TraitMap {
       });
     });
 
-    return (instructions);
+    return (givenInstructions);
   }
 
   /**
@@ -145,7 +147,7 @@ export class TraitMap {
     if (traitInstructions) {
       switch (traitInstructions.applyMode) {
         case "deepMerge":
-          this.deepMergeInstructions(instructions, traitInstructions.instructions);
+          deepAssign(instructions, traitInstructions.instructions);
           break;
         case "replace":
           // Delete everything and then use a shallow merge (no break)
@@ -153,31 +155,12 @@ export class TraitMap {
         case "shallowMerge":
           this.shallowMerge(instructions, traitInstructions);
           break;
+        default:
+          throw new Error(`Unknown "applyMode" for trait: "${traitInstructions.applyMode}"`);
       }
     } else {
       throw new Error(`Unknown trait "${traitName}"`);
     }
-  }
-
-  /**
-   * Recursively merges
-   */
-  private deepMergeInstructions(target: any, toMerge: any) {
-    Object.entries(toMerge).forEach(([name, value]) => {
-      const targetHasKey = name in target;
-
-      if (Array.isArray(value)) {
-        throw new Error("Array merging is currently not supported");
-      } else if (value instanceof Object) {
-        if (!targetHasKey) {
-          target[name] = value;
-        } else {
-          this.deepMergeInstructions(target[name], value);
-        }
-      } else {
-        target[name] = value;
-      }
-    });
   }
 
   private shallowMerge(target: any, toMerge: any) {

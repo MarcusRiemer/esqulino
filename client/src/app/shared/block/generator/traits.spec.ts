@@ -2,6 +2,10 @@ import { ScopeTraitAdd, ReferenceableTraits } from './traits.description'
 import { TraitMap } from './traits'
 import { AllReferenceableTypeInstructions } from './instructions.description';
 
+
+/**
+ * Introduces a new trait that precisely sets `style.color`.
+ */
 function traitColor(
   { name = "keyword", color = "blue" }
     : { name?: string, color?: string }
@@ -177,13 +181,40 @@ describe("Traits", () => {
     expect(res["g1"]["t1"].attributes["a2"].style["color"]).toEqual("blue");
   });
 
+  it("Apply traits on existing block #0", () => {
+    const toAdd: ScopeTraitAdd = {
+      traits: ["keyword"],
+      blocks: {
+        "g1": { "t1": [0] }
+      }
+    };
+
+    const m = new TraitMap();
+    m.addKnownTraits(traitColor());
+    m.addScopes([toAdd]);
+
+    const instructions: AllReferenceableTypeInstructions = {
+      "g1": {
+        "t1": {
+          "blocks": [{ "style": { "width": "20px" } }]
+        }
+      }
+    };
+
+    const res = m.applyTraits(instructions);
+
+    expect(res).not.toEqual(instructions);
+    expect(res["g1"]["t1"].blocks[0].style).toEqual({
+      "color": "blue",
+      "width": "20px"
+    });
+  });
+
   it("Apply traits on non-existant block #0", () => {
     const toAdd: ScopeTraitAdd = {
       traits: ["keyword"],
       blocks: {
-        "g1": {
-          "t1": [0]
-        }
+        "g1": { "t1": [0] }
       }
     };
 

@@ -69,12 +69,66 @@ describe(`Merging TypeInstructions`, () => {
     });
   });
 
-  it(`Differing blocks`, () => {
+  it(`Merging blocks, first empty`, () => {
+    expect(mergeTypeInstructions(
+      { "g1": { "t1": { blocks: [{}, {}] } } },
+      { "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] } } }
+    )).toEqual({
+      "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] }, },
+    });
+  });
+
+  it(`Merging blocks, second empty`, () => {
     expect(mergeTypeInstructions(
       { "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] } } },
       { "g1": { "t1": { blocks: [{}, {}] } } }
     )).toEqual({
-      "g1": { "t1": { blocks: [{}, {}] }, },
+      "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] }, },
+    });
+  });
+
+  it(`Merging blocks, same value`, () => {
+    expect(mergeTypeInstructions(
+      { "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] } } },
+      { "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] } } }
+    )).toEqual({
+      "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] }, },
+    });
+  });
+
+  it(`Merging blocks, differing value`, () => {
+    expect(mergeTypeInstructions(
+      { "g1": { "t1": { blocks: [{ orientation: "horizontal" }, {}] } } },
+      { "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] } } }
+    )).toEqual({
+      "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] }, },
+    });
+  });
+
+  it(`Merging blocks, different length (first empty)`, () => {
+    expect(mergeTypeInstructions(
+      { "g1": { "t1": { blocks: [] } } },
+      { "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] } } }
+    )).toEqual({
+      "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] }, },
+    });
+  });
+
+  it(`Merging blocks, different length (second empty)`, () => {
+    expect(mergeTypeInstructions(
+      { "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] } } },
+      { "g1": { "t1": { blocks: [] } } }
+    )).toEqual({
+      "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] }, },
+    });
+  });
+
+  it(`Merging blocks, same length but differing indices`, () => {
+    expect(mergeTypeInstructions(
+      { "g1": { "t1": { blocks: [{ orientation: "vertical" }, {}] } } },
+      { "g1": { "t1": { blocks: [{}, { orientation: "vertical" }] } } }
+    )).toEqual({
+      "g1": { "t1": { blocks: [{ orientation: "vertical" }, { orientation: "vertical" }] }, },
     });
   });
 });
