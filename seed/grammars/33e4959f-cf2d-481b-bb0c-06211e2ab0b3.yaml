@@ -14,17 +14,18 @@ concise_attributes:
   value_before_type_cast: '{"root": "value", "types": {"null": {"type": "concrete",
     "attributes": [{"name": "value", "type": "terminal", "symbol": "null"}]}, "array":
     {"type": "concrete", "attributes": [{"name": "array-open", "type": "terminal",
-    "symbol": "["}, {"name": "values", "type": "allowed", "between": {"name": "arraySeparator",
+    "symbol": "["}, {"name": "values", "type": "allowed", "between": {"name": "array-sep",
     "type": "terminal", "symbol": ","}, "nodeTypes": [{"occurs": "*", "nodeType":
     "value"}]}, {"name": "array-close", "type": "terminal", "symbol": "]"}]}, "value":
     {"type": "oneOf", "oneOf": ["string", "number", "boolean", "object", "array",
     "null"]}, "number": {"type": "concrete", "attributes": [{"base": "integer", "name":
     "value", "type": "property"}]}, "object": {"type": "concrete", "attributes": [{"name":
     "object-open", "type": "terminal", "symbol": "{"}, {"name": "values", "type":
-    "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "key-value"}]}, {"name":
-    "object-close", "type": "terminal", "symbol": "}"}]}, "string": {"type": "concrete",
-    "attributes": [{"name": "quot-begin", "type": "terminal", "symbol": "\""}, {"base":
-    "string", "name": "value", "type": "property"}, {"name": "quot-end", "type": "terminal",
+    "allowed", "between": {"name": "object-sep", "type": "terminal", "symbol": ","},
+    "nodeTypes": [{"occurs": "*", "nodeType": "key-value"}]}, {"name": "object-close",
+    "type": "terminal", "symbol": "}"}]}, "string": {"type": "concrete", "attributes":
+    [{"name": "quot-begin", "type": "terminal", "symbol": "\""}, {"base": "string",
+    "name": "value", "type": "property"}, {"name": "quot-end", "type": "terminal",
     "symbol": "\""}]}, "boolean": {"type": "concrete", "attributes": [{"base": "boolean",
     "name": "value", "type": "property"}]}, "key-value": {"type": "concrete", "attributes":
     [{"name": "key", "type": "allowed", "nodeTypes": [{"occurs": "1", "nodeType":
@@ -35,7 +36,7 @@ concise_attributes:
   value_before_type_cast: '2018-07-20 20:33:04.813374'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-25 16:04:51.400669'
+  value_before_type_cast: '2018-07-28 16:36:37.454168'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: json
