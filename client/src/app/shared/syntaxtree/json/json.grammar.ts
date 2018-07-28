@@ -19,7 +19,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           name: "values",
           nodeTypes: [
             { nodeType: "key-value", occurs: "*" }
-          ]
+          ],
+          between: {
+            type: "terminal",
+            symbol: ",",
+            name: "object-sep"
+          }
         },
         {
           type: "terminal",
@@ -65,7 +70,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           name: "values",
           nodeTypes: [
             { nodeType: "value", occurs: "*" }
-          ]
+          ],
+          between: {
+            type: "terminal",
+            symbol: ",",
+            name: "array-sep"
+          }
         },
         {
           type: "terminal",
@@ -84,10 +94,20 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          symbol: "\"",
+          name: "quot-begin"
+        },
+        {
           type: "property",
           name: "value",
           base: "string"
-        }
+        },
+        {
+          type: "terminal",
+          symbol: "\"",
+          name: "quot-end"
+        },
       ]
     },
     "number": {

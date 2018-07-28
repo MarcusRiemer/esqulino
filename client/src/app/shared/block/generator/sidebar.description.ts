@@ -1,5 +1,5 @@
 import * as Constant from '../block.description'
-import { QualifiedTypeName } from '../../syntaxtree'
+import { QualifiedTypeName } from '../../syntaxtree/syntaxtree.description'
 
 /**
  * A block that is given statically
@@ -28,10 +28,22 @@ export interface ConstantBlocksSidebarCategoryDescription extends Constant.Fixed
  * A category description that may use partly generated blocks and
  * partly constant blocks.
  */
+export interface MixedBlocksSidebarCategoryDescription {
+  type: "mixed";
+  categoryCaption: string;
+  blocks: AnySidebarBlockDescription[];
+}
+
+/**
+ * A category that uses only generated blocks. This allows for a syntax
+ * that is a little more compact.
+ */
 export interface GeneratedBlocksSidebarCategoryDescription {
   type: "generated",
   categoryCaption: string;
-  blocks: AnySidebarBlockDescription[];
+  grammar: {
+    [grammarName: string]: string[]
+  }
 }
 
 /**
@@ -48,6 +60,8 @@ export interface GeneratedBlocksSidebarDescription {
 export type AnySidebarBlockDescription =
   ConstantSidebarBlockDescription | GeneratedSidebarBlockDescription;
 export type AnySidebarCategoryDescription =
-  ConstantBlocksSidebarCategoryDescription | GeneratedBlocksSidebarCategoryDescription;
+  ConstantBlocksSidebarCategoryDescription
+  | MixedBlocksSidebarCategoryDescription
+  | GeneratedBlocksSidebarCategoryDescription;
 export type AnySidebarDescription =
   Constant.SidebarDescription | GeneratedBlocksSidebarDescription;

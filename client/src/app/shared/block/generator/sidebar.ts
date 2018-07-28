@@ -8,7 +8,7 @@ import {
 } from '../block.description'
 import {
   AnySidebarDescription, AnySidebarBlockDescription, ConstantSidebarBlockDescription,
-  AnySidebarCategoryDescription, ConstantBlocksSidebarCategoryDescription
+  AnySidebarCategoryDescription, ConstantBlocksSidebarCategoryDescription, MixedBlocksSidebarCategoryDescription
 } from './sidebar.description';
 import { fullNodeDescription } from '../../syntaxtree/grammar-util';
 
@@ -104,21 +104,47 @@ export function generateSidebarCategory(
   grammar: GrammarDocument,
   category: AnySidebarCategoryDescription
 ): FixedBlocksSidebarCategoryDescription {
-  // Pass through or generate?
-  if (category.type === "constant") {
-    // Ensure that there is no superflous "type" property on the description
-    // that we return.
-    const toReturn: ConstantBlocksSidebarCategoryDescription = JSON.parse(JSON.stringify(category));
-    delete toReturn.type;
-    return (toReturn);
-  } else {
-    // Generate relevant blocks
-    const toReturn: FixedBlocksSidebarCategoryDescription = {
-      categoryCaption: category.categoryCaption,
-      blocks: category.blocks.map(b => generateSidebarBlock(grammar, b))
-    };
+  switch (category.type) {
+    case "constant": {
+      // Ensure that there is no superflous "type" property on the description
+      // that we return.
+      const toReturn: ConstantBlocksSidebarCategoryDescription = JSON.parse(JSON.stringify(category));
+      delete toReturn.type;
+      return (toReturn);
+    }
+    case "mixed": {
+      // Generate relevant blocks
+      const toReturn: FixedBlocksSidebarCategoryDescription = {
+        categoryCaption: category.categoryCaption,
+        blocks: category.blocks.map(b => generateSidebarBlock(grammar, b))
+      };
 
-    return (toReturn);
+      return (toReturn);
+    }
+    case "generated": {
+      // Generate the relevant description, we simply treat this
+      // as a mixed description that only contains generated blocks
+      const toGenerate: MixedBlocksSidebarCategoryDescription = {
+        type: "mixed",
+        categoryCaption: category.categoryCaption,
+        blocks: []
+      }
+
+      // "Translate" every type that has been mentioned
+      Object.entries(category.grammar).forEach(([grammarName, typeNames]) => {
+        typeNames.forEach(typeName => {
+          toGenerate.blocks.push({
+            type: "generated",
+            nodeType: {
+              languageName: grammarName,
+              typeName: typeName
+            }
+          });
+        });
+      });
+
+      return (generateSidebarCategory(grammar, toGenerate));
+    }
   }
 }
 

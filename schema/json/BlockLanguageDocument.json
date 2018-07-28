@@ -12,6 +12,39 @@
       "description": "Supplementary generation instructions for all types. In this variant\nthere may be references to exact values instead of the exact values\nthemselves.",
       "type": "object"
     },
+    "AnySidebarBlockDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ConstantSidebarBlockDescription"
+        },
+        {
+          "$ref": "#/definitions/GeneratedSidebarBlockDescription"
+        }
+      ]
+    },
+    "AnySidebarCategoryDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ConstantBlocksSidebarCategoryDescription"
+        },
+        {
+          "$ref": "#/definitions/MixedBlocksSidebarCategoryDescription"
+        },
+        {
+          "$ref": "#/definitions/GeneratedBlocksSidebarCategoryDescription"
+        }
+      ]
+    },
+    "AnySidebarDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/GeneratedBlocksSidebarDescription"
+        }
+      ]
+    },
     "AttributeMappingOrder": {
       "anyOf": [
         {
@@ -83,7 +116,7 @@
         },
         "staticSidebars": {
           "items": {
-            "$ref": "#/definitions/SidebarDescription"
+            "$ref": "#/definitions/AnySidebarDescription"
           },
           "type": "array"
         },
@@ -100,6 +133,59 @@
           "$ref": "#/definitions/AllReferenceableTypeInstructions"
         }
       },
+      "type": "object"
+    },
+    "ConstantBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "A category that is defined statically",
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/definitions/SidebarBlockDescription"
+          },
+          "type": "array"
+        },
+        "categoryCaption": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "constant"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "blocks",
+        "categoryCaption",
+        "type"
+      ],
+      "type": "object"
+    },
+    "ConstantSidebarBlockDescription": {
+      "additionalProperties": false,
+      "description": "A block that is given statically",
+      "properties": {
+        "defaultNode": {
+          "$ref": "#/definitions/NodeDescription",
+          "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
+        },
+        "displayName": {
+          "description": "The name to be displayed in the sidebar",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "constant"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "defaultNode",
+        "displayName",
+        "type"
+      ],
       "type": "object"
     },
     "DatabaseSchemaSidebarDescription": {
@@ -194,6 +280,86 @@
       ],
       "type": "object"
     },
+    "GeneratedBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "A category that uses only generated blocks. This allows for a syntax\nthat is a little more compact.",
+      "properties": {
+        "categoryCaption": {
+          "type": "string"
+        },
+        "grammar": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "type": {
+          "enum": [
+            "generated"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "categoryCaption",
+        "grammar"
+      ],
+      "type": "object"
+    },
+    "GeneratedBlocksSidebarDescription": {
+      "additionalProperties": false,
+      "description": "A sidebar description that may use partly generated blocks and partly\nconstant categories.",
+      "properties": {
+        "caption": {
+          "type": "string"
+        },
+        "categories": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarCategoryDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "generatedBlocks"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "caption",
+        "categories"
+      ],
+      "type": "object"
+    },
+    "GeneratedSidebarBlockDescription": {
+      "additionalProperties": false,
+      "description": "A block that has its block generated.",
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "nodeType": {
+          "$ref": "#/definitions/QualifiedTypeName"
+        },
+        "type": {
+          "enum": [
+            "generated"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "nodeType"
+      ],
+      "type": "object"
+    },
     "InternalTypeInstructionsDescription_ReferenceableInstructions_": {
       "additionalProperties": false,
       "description": "Instructions on how to generate a single block for a type.",
@@ -250,6 +416,33 @@
       },
       "type": "object"
     },
+    "MixedBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "A category description that may use partly generated blocks and\npartly constant blocks.",
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarBlockDescription"
+          },
+          "type": "array"
+        },
+        "categoryCaption": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "mixed"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "categoryCaption",
+        "blocks"
+      ],
+      "type": "object"
+    },
     "NodeDescription": {
       "additionalProperties": false,
       "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
@@ -273,6 +466,9 @@
           "type": "string"
         },
         "properties": {
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
           "type": "object"
         }

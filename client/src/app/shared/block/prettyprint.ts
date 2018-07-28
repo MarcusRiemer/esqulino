@@ -4,8 +4,8 @@ import { prettyPrintSyntaxTreeNode } from '../syntaxtree/prettyprint'
 
 import { BlockLanguageDescription } from './block-language.description'
 import {
-  VisualBlockDescriptions, EditorBlockDescription, SidebarBlockDescription,
-  SidebarDescription, FixedBlocksSidebarCategoryDescription
+  VisualBlockDescriptions, EditorBlockDescription,
+  SidebarDescription, SidebarBlockDescription, FixedBlocksSidebarCategoryDescription
 } from './block.description'
 
 /**
@@ -195,12 +195,14 @@ function prettyPrintDropTargetProperties(desc: VisualBlockDescriptions.DropTarge
  */
 function prettyPrintSidebar(desc: SidebarDescription) {
   switch (desc.type) {
-    case "fixedBlocks": return ([
-      `fixedBlocksSidebar "${desc.caption}" {`,
-      ...desc.categories.map(prettyPrintFixedBlocksSidebarCategory),
-      `}`
-    ]);
-    case "databaseSchema": return (["databaseSchemaSidebar"]);
+    case "fixedBlocks":
+      return ([
+        `fixedBlocksSidebar "${desc.caption}" {`,
+        ...desc.categories.map(prettyPrintFixedBlocksSidebarCategory),
+        `}`
+      ]);
+    case "databaseSchema":
+      return (["databaseSchemaSidebar"]);
   }
 }
 

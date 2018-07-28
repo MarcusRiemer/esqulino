@@ -1,6 +1,6 @@
 import { EditorComponentDescription } from '../block-language.description'
-import { SidebarDescription } from '../block.description'
 
+import { AnySidebarDescription } from './sidebar.description'
 import { AllReferenceableTypeInstructions } from './instructions.description'
 import { ParameterDeclarations, ParameterValues } from './parameters.description'
 import { ReferenceableTraits, ScopeTraitAdd } from './traits.description'
@@ -28,7 +28,7 @@ export interface BlockLanguageGeneratorDocument {
   // The sidebars that are available in the editor. It would
   // be great to somehow generate those automatically, but for
   // moment these descriptions are simply copied.
-  staticSidebars?: SidebarDescription[];
+  staticSidebars?: AnySidebarDescription[];
 
   // Extra editor components that are shown, currently these
   // are simply copied because there is not much to generate
@@ -47,7 +47,8 @@ export interface BlockLanguageGeneratorListDescription {
 /**
  * Describes how a grammar might be converted to a block language
  */
-export interface BlockLanguageGeneratorDescription extends BlockLanguageGeneratorDocument, BlockLanguageGeneratorListDescription {
+export interface BlockLanguageGeneratorDescription
+  extends BlockLanguageGeneratorDocument, BlockLanguageGeneratorListDescription {
 }
 
 /**

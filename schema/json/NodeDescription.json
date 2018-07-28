@@ -25,6 +25,9 @@
           "type": "string"
         },
         "properties": {
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
           "type": "object"
         }
