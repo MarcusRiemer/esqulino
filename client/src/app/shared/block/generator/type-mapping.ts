@@ -214,7 +214,8 @@ export function mapType(
   instructions: TypeInstructions,
 ): VisualBlockDescriptions.ConcreteBlock[] {
   const toReturn: VisualBlockDescriptions.ConcreteBlock[] = [];
-
+  // Most types will resolve to a single block, but technically each type
+  // may produce a list of blocks.
   for (let i = 0; i < instructions.numberOfBlocks; ++i) {
     const blockInstructions = instructions.scopeBlock(i);
     const thisBlock: VisualBlockDescriptions.ConcreteBlock = {
