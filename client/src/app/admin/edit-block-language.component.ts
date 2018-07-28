@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, ParamMap } from '@angular/router'
+import { Title } from '@angular/platform-browser'
 
-import { switchMap, map, first } from 'rxjs/operators';
+import { switchMap, map, first } from 'rxjs/operators'
 
-import { ServerDataService } from '../shared/server-data.service';
+import { ServerDataService } from '../shared/server-data.service'
 
-import { BlockLanguageDescription } from '../shared/block/block-language.description';
+import { BlockLanguageDescription } from '../shared/block/block-language.description'
 import { generateBlockLanguage } from '../shared/block/generator/generator'
-import { prettyPrintBlockLanguage } from '../shared/block/prettyprint';
+import { prettyPrintBlockLanguage } from '../shared/block/prettyprint'
 
 @Component({
   templateUrl: 'templates/edit-block-language.html'
@@ -26,6 +27,7 @@ export class EditBlockLanguageComponent implements OnInit {
   constructor(
     private _serverData: ServerDataService,
     private _activatedRoute: ActivatedRoute,
+    private _title: Title,
   ) {
   }
 
@@ -40,6 +42,7 @@ export class EditBlockLanguageComponent implements OnInit {
         map((params: ParamMap) => params.get('blockLanguageId')),
         switchMap((id: string) => this._serverData.getBlockLanguage(id).pipe(first())),
     ).subscribe(blockLanguage => {
+      this._title.setTitle(`BlockLang "${blockLanguage.name}" - Admin - BlattWerkzeug`)
       this.editedSubject = blockLanguage;
       this.doPrettyPrint();
     });

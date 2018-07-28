@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, ParamMap } from '@angular/router'
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http'
+import { Title } from '@angular/platform-browser'
 
-import { switchMap, map, first } from 'rxjs/operators';
-import { ServerDataService, CachedRequest } from '../shared/server-data.service';
-import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint';
-import { GrammarDescription } from '../shared/syntaxtree';
-import { BlockLanguageListDescription } from '../shared/block/block-language.description';
-import { ServerApiService } from '../shared/serverapi.service';
+import { switchMap, map, first } from 'rxjs/operators'
+import { ServerDataService, CachedRequest } from '../shared/server-data.service'
+import { prettyPrintGrammar } from '../shared/syntaxtree/prettyprint'
+import { GrammarDescription } from '../shared/syntaxtree'
+import { BlockLanguageListDescription } from '../shared/block/block-language.description'
+import { ServerApiService } from '../shared/serverapi.service'
 
 @Component({
   templateUrl: 'templates/edit-grammar.html'
@@ -29,6 +30,7 @@ export class EditGrammarComponent implements OnInit {
     private _http: HttpClient,
     private _serverApi: ServerApiService,
     private _serverData: ServerDataService,
+    private _title: Title,
   ) {
   }
 
@@ -40,6 +42,7 @@ export class EditGrammarComponent implements OnInit {
       switchMap((id: string) => this._serverData.getGrammarDescription(id).pipe(first())),
     ).subscribe(g => {
       this.grammar = g;
+      this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`)
     });
 
     // Always grab fresh related block languages
