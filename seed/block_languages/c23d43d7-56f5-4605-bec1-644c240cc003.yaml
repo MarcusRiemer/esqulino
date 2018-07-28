@@ -13,41 +13,41 @@ concise_attributes:
   name: model
   value_before_type_cast: '{"sidebars": [{"type": "fixedBlocks", "caption": "JSON",
     "categories": [{"blocks": [{"defaultNode": {"name": "null", "language": "json"},
-    "displayName": "null"}, {"defaultNode": {"name": "number", "language": "json",
-    "properties": {"value": "0"}}, "displayName": "number"}, {"defaultNode": {"name":
-    "string", "language": "json", "properties": {"value": "--"}}, "displayName": "string"},
-    {"defaultNode": {"name": "boolean", "language": "json", "properties": {"value":
-    "true"}}, "displayName": "boolean"}], "categoryCaption": "Werte"}, {"blocks":
-    [{"defaultNode": {"name": "array", "children": {"values": []}, "language": "json"},
-    "displayName": "array"}, {"defaultNode": {"name": "object", "children": {"values":
-    []}, "language": "json"}, "displayName": "object"}, {"defaultNode": {"name": "key-value",
-    "children": {"key": [], "value": []}, "language": "json"}, "displayName": "key-value"}],
-    "categoryCaption": "Struktur"}]}], "editorBlocks": [{"visual": [{"children": [{"text":
-    "null", "style": {"display": "inline-block"}, "blockType": "constant"}], "blockType":
+    "displayName": "null"}, {"defaultNode": {"name": "boolean", "language": "json",
+    "properties": {"value": "false"}}, "displayName": "boolean"}, {"defaultNode":
+    {"name": "string", "language": "json", "properties": {"value": ""}}, "displayName":
+    "string"}, {"defaultNode": {"name": "key-value", "children": {"key": [], "value":
+    []}, "language": "json"}, "displayName": "key-value"}, {"defaultNode": {"name":
+    "object", "children": {"values": []}, "language": "json"}, "displayName": "object"},
+    {"defaultNode": {"name": "array", "children": {"values": []}, "language": "json"},
+    "displayName": "array"}], "categoryCaption": "JSON"}]}], "editorBlocks": [{"visual":
+    [{"children": [{"text": "null", "style": {"display": "inline-block"}, "blockType":
+    "constant"}], "blockType": "block", "direction": "horizontal", "dropTarget": {"self":
+    {"order": "insertAfter", "skipParents": 0}}}], "describedType": {"typeName": "null",
+    "languageName": "json"}}, {"visual": [{"children": [{"text": "[", "style": {"display":
+    "inline-block"}, "blockType": "constant"}, {"children": [{"text": "❓", "style":
+    {"color": "darkred", "border": "2px solid red", "cursor": "default", "paddingLeft":
+    "10px", "borderRadius": "500px", "paddingRight": "10px", "backgroundColor": "orange"},
+    "blockType": "constant"}], "blockType": "dropTarget", "direction": "horizontal",
+    "dropTarget": {"children": {"order": "insertFirst", "category": "values"}, "visibility":
+    ["ifEmpty", "ifLegalChild"]}}, {"between": [{"text": ",", "style": {"display":
+    "inline-block"}, "blockType": "constant"}], "blockType": "iterator", "direction":
+    "horizontal", "wrapChildren": true, "childGroupName": "values"}, {"text": "]",
+    "style": {"display": "inline-block"}, "blockType": "constant"}], "blockType":
     "block", "direction": "horizontal", "dropTarget": {"self": {"order": "insertAfter",
-    "skipParents": 0}}}], "describedType": {"typeName": "null", "languageName": "json"}},
-    {"visual": [{"children": [{"text": "[", "style": {"display": "inline-block"},
-    "blockType": "constant"}, {"children": [{"text": "❓", "style": {"color": "darkred",
-    "border": "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius":
-    "500px", "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
-    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
-    {"order": "insertFirst", "category": "values"}, "visibility": ["ifEmpty", "ifLegalChild"]}},
-    {"between": [{"text": ",", "style": {"display": "inline-block"}, "blockType":
-    "constant"}], "blockType": "iterator", "direction": "horizontal", "wrapChildren":
-    true, "childGroupName": "values"}, {"text": "]", "style": {"display": "inline-block"},
-    "blockType": "constant"}], "blockType": "block", "direction": "horizontal", "dropTarget":
+    "skipParents": 0}}}], "describedType": {"typeName": "array", "languageName": "json"}},
+    {"visual": [{"children": [{"style": {"display": "inline-block"}, "property": "value",
+    "blockType": "input"}], "blockType": "block", "direction": "horizontal", "dropTarget":
     {"self": {"order": "insertAfter", "skipParents": 0}}}], "describedType": {"typeName":
-    "array", "languageName": "json"}}, {"visual": [{"children": [{"style": {"display":
-    "inline-block"}, "property": "value", "blockType": "input"}], "blockType": "block",
-    "direction": "horizontal", "dropTarget": {"self": {"order": "insertAfter", "skipParents":
-    0}}}], "describedType": {"typeName": "number", "languageName": "json"}}, {"visual":
-    [{"children": [{"text": "{", "style": {"display": "inline-block"}, "blockType":
-    "constant"}, {"children": [{"text": "❓", "style": {"color": "darkred", "border":
-    "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius": "500px",
-    "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
-    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
-    {"order": "insertFirst", "category": "values"}, "visibility": ["ifEmpty", "ifLegalChild"]}},
-    {"blockType": "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
+    "number", "languageName": "json"}}, {"visual": [{"children": [{"text": "{", "style":
+    {"display": "inline-block"}, "blockType": "constant"}, {"children": [{"text":
+    "❓", "style": {"color": "darkred", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "10px", "borderRadius": "500px", "paddingRight": "10px", "backgroundColor":
+    "orange"}, "blockType": "constant"}], "blockType": "dropTarget", "direction":
+    "horizontal", "dropTarget": {"children": {"order": "insertFirst", "category":
+    "values"}, "visibility": ["ifEmpty", "ifLegalChild"]}}, {"between": [{"text":
+    ",", "style": {"display": "inline-block"}, "blockType": "constant"}], "blockType":
+    "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
     "values"}, {"text": "}", "style": {"display": "inline-block"}, "blockType": "constant"}],
     "blockType": "block", "direction": "horizontal", "dropTarget": {"self": {"order":
     "insertAfter", "skipParents": 0}}}], "describedType": {"typeName": "object", "languageName":
@@ -79,24 +79,15 @@ concise_attributes:
     {"traits": {"defaultDropTargets": {"applyMode": "deepMerge", "instructions": {"generateDropTargets":
     "start"}}}, "traitScopes": [{"traits": ["defaultDropTargets"], "attributes": {"json":
     {"array": ["values"], "object": ["values"], "key-value": ["key", "value"]}}}],
-    "staticSidebars": [{"type": "fixedBlocks", "caption": "JSON", "categories": [{"blocks":
-    [{"defaultNode": {"name": "null", "language": "json"}, "displayName": "null"},
-    {"defaultNode": {"name": "number", "language": "json", "properties": {"value":
-    "0"}}, "displayName": "number"}, {"defaultNode": {"name": "string", "language":
-    "json", "properties": {"value": "--"}}, "displayName": "string"}, {"defaultNode":
-    {"name": "boolean", "language": "json", "properties": {"value": "true"}}, "displayName":
-    "boolean"}], "categoryCaption": "Werte"}, {"blocks": [{"defaultNode": {"name":
-    "array", "children": {"values": []}, "language": "json"}, "displayName": "array"},
-    {"defaultNode": {"name": "object", "children": {"values": []}, "language": "json"},
-    "displayName": "object"}, {"defaultNode": {"name": "key-value", "children": {"key":
-    [], "value": []}, "language": "json"}, "displayName": "key-value"}], "categoryCaption":
-    "Struktur"}]}]}}'
+    "staticSidebars": [{"type": "generatedBlocks", "caption": "JSON", "categories":
+    [{"type": "generated", "grammar": {"json": ["null", "boolean", "string", "key-value",
+    "object", "array"]}, "categoryCaption": "JSON"}]}]}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-20 20:43:34.641628'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-26 18:26:21.481443'
+  value_before_type_cast: '2018-07-28 17:59:59.597223'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: json

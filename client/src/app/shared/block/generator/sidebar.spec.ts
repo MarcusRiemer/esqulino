@@ -144,7 +144,7 @@ describe("Sidebar Default Node Generator", () => {
       caption: "Fixed",
       categories: [
         {
-          type: "generated",
+          type: "mixed",
           categoryCaption: "Category",
           blocks: [
             {
@@ -194,7 +194,7 @@ describe("Sidebar Default Node Generator", () => {
       caption: "Generated Sidebar",
       categories: [
         {
-          type: "generated",
+          type: "mixed",
           categoryCaption: "Generated Category",
           blocks: [
             { type: "generated", nodeType: { languageName: "g1", typeName: "t1" } },
@@ -213,6 +213,43 @@ describe("Sidebar Default Node Generator", () => {
           blocks: [
             { displayName: "t1", defaultNode: { language: "g1", name: "t1" } },
             { displayName: "constant", defaultNode: { language: "g1", name: "t1" } }
+          ]
+        }
+      ]
+    }
+
+    const res = generateSidebar(grammar, sidebar);
+    expect(res).toEqual(exp);
+  });
+
+  it(`Sidebar generation for purely generated categories`, () => {
+    const grammar: GrammarDocument = {
+      root: "foo",
+      types: { "t1": { type: "concrete" } }
+    };
+
+    const sidebar: AnySidebarDescription = {
+      type: "generatedBlocks",
+      caption: "Generated Sidebar",
+      categories: [
+        {
+          type: "generated",
+          categoryCaption: "Generated Category",
+          grammar: {
+            "g1": ["t1"]
+          }
+        }
+      ]
+    };
+
+    const exp: SidebarDescription = {
+      type: "fixedBlocks",
+      caption: "Generated Sidebar",
+      categories: [
+        {
+          categoryCaption: "Generated Category",
+          blocks: [
+            { displayName: "t1", defaultNode: { language: "g1", name: "t1" } },
           ]
         }
       ]

@@ -10,6 +10,7 @@ import { TraitMap } from "./traits";
 import { ParameterMap } from "./parameters";
 import { GeneratorInstructions } from "./instructions";
 import { mapType } from "./type-mapping";
+import { generateSidebar } from './sidebar'
 
 /**
  * Takes a grammar description and a description how to transform it and
@@ -24,7 +25,7 @@ export function convertGrammar(
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
     editorComponents: d.editorComponents || [],
-    sidebars: d.staticSidebars || []
+    sidebars: (d.staticSidebars || []).map(sidebar => generateSidebar(g, sidebar))
   };
 
   // The blocks of the editor are based on the concrete types of the grammar,
