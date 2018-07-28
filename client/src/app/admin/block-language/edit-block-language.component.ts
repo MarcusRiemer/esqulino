@@ -4,11 +4,11 @@ import { Title } from '@angular/platform-browser'
 
 import { switchMap, map, first } from 'rxjs/operators'
 
-import { ServerDataService } from '../shared/server-data.service'
+import { ServerDataService } from '../../shared/server-data.service'
 
-import { BlockLanguageDescription } from '../shared/block/block-language.description'
-import { generateBlockLanguage } from '../shared/block/generator/generator'
-import { prettyPrintBlockLanguage } from '../shared/block/prettyprint'
+import { BlockLanguageDescription } from '../../shared/block/block-language.description'
+import { generateBlockLanguage } from '../../shared/block/generator/generator'
+import { prettyPrintBlockLanguage } from '../../shared/block/prettyprint'
 
 @Component({
   templateUrl: 'templates/edit-block-language.html'
