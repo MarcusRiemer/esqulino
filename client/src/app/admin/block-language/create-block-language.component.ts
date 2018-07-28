@@ -4,12 +4,12 @@ import { Router } from '@angular/router';
 
 import { first } from 'rxjs/operators';
 
-import { BlockLanguageDescription } from '../shared/block/block-language.description';
-import { DEFAULT_GENERATOR } from '../shared/block/generator/generator.description'
-import { generateBlockLanguage } from '../shared/block/generator/generator'
+import { BlockLanguageDescription } from '../../shared/block/block-language.description';
+import { DEFAULT_GENERATOR } from '../../shared/block/generator/generator.description'
+import { generateBlockLanguage } from '../../shared/block/generator/generator'
 
-import { ServerDataService } from '../shared/server-data.service';
-import { ServerApiService } from '../shared/serverapi.service';
+import { ServerDataService } from '../../shared/server-data.service';
+import { ServerApiService } from '../../shared/serverapi.service';
 
 /**
  * A comprehensive way to create new block languages

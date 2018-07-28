@@ -9,11 +9,13 @@ import { adminRouting } from './admin.routes'
 
 import { AdminComponent } from './admin.component'
 import { AdminOverviewComponent } from './admin-overview.component'
-import { CreateBlockLanguageComponent } from './create-block-language.component'
-import { EditBlockLanguageComponent } from './edit-block-language.component'
 import { EditGrammarComponent } from './edit-grammar.component'
 import { LinkGrammarComponent } from './link-grammar.component'
 import { JsonEditor } from './json-editor.component'
+
+import { CreateBlockLanguageComponent } from './block-language/create-block-language.component'
+import { EditBlockLanguageComponent } from './block-language/edit-block-language.component'
+import { EditActualParameters } from './block-language/edit-actual-parameters.component'
 
 @NgModule({
   imports: [
@@ -27,6 +29,7 @@ import { JsonEditor } from './json-editor.component'
     AdminOverviewComponent,
     CreateBlockLanguageComponent,
     EditBlockLanguageComponent,
+    EditActualParameters,
     EditGrammarComponent,
     LinkGrammarComponent,
     JsonEditor

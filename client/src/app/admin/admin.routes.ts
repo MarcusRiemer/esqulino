@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router'
 import { AdminComponent } from './admin.component'
 import { AdminOverviewComponent } from './admin-overview.component'
 import { EditGrammarComponent } from './edit-grammar.component'
-import { EditBlockLanguageComponent } from './edit-block-language.component'
+import { EditBlockLanguageComponent } from './block-language/edit-block-language.component'
 
 export const adminRoutes: Routes = [
   {

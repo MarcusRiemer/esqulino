@@ -1,0 +1,17 @@
+<ng-container *ngIf="hasFormalParameters; else noFormalParameters">
+  <div *ngFor="let formal of formalParameters"
+       class="input-group mb-3">
+    <div class="input-group-prepend">
+      <div class="input-group-text">
+        <input type="checkbox">
+      </div>
+    </div>
+    <div class="input-group-prepend">
+      <span class="input-group-text"><code>{{ formal.name }}</code></span>
+    </div>
+    <input type="text" class="form-control" placeholder="{{ formal.defaultValue }}">
+  </div>
+</ng-container>
+<ng-template #noFormalParameters>
+  <input type="text" readonly class="form-control-plaintext" value="Keine Parameter definiert">
+</ng-template>
