@@ -54,9 +54,7 @@ export interface BlockLanguageGeneratorDescription extends BlockLanguageGenerato
  * No idea how parameters for generators will work in the future. In the meantime
  * we will use this handy default object instead of loading data from the server.
  */
-export const DEFAULT_GENERATOR: BlockLanguageGeneratorDescription = {
+export const DEFAULT_GENERATOR: BlockLanguageGeneratorDocument = {
   editorComponents: [],
-  typeInstructions: {},
-  id: undefined,
-  name: undefined
+  typeInstructions: {}
 };

@@ -5,9 +5,7 @@ import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 import { BlockLanguageDescription } from '../shared/block/block-language.description';
-import {
-  DEFAULT_GENERATOR
-} from '../shared/block/generator/generator.description'
+import { DEFAULT_GENERATOR } from '../shared/block/generator/generator.description'
 import { generateBlockLanguage } from '../shared/block/generator/generator'
 
 import { ServerDataService } from '../shared/server-data.service';
