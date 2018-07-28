@@ -76,7 +76,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
               nodeType: "expression",
               occurs: "*"
             }
-          ]
+          ],
+          between: {
+            type: "terminal",
+            name: "param-separator",
+            symbol: ","
+          }
         },
         {
           type: "terminal",

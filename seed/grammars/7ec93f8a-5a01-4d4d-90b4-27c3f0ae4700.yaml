@@ -59,7 +59,8 @@ concise_attributes:
     {"name": "orderBy", "type": "sequence", "nodeTypes": [{"occurs": "?", "nodeType":
     "orderBy"}]}]}, "functionCall": {"type": "concrete", "attributes": [{"base": "string",
     "name": "name", "type": "property"}, {"name": "paren-open", "type": "terminal",
-    "symbol": "("}, {"name": "arguments", "type": "sequence", "nodeTypes": [{"occurs":
+    "symbol": "("}, {"name": "arguments", "type": "sequence", "between": {"name":
+    "param-separator", "type": "terminal", "symbol": ","}, "nodeTypes": [{"occurs":
     "*", "nodeType": "expression"}]}, {"name": "paren-close", "type": "terminal",
     "symbol": ")"}]}, "starOperator": {"type": "concrete", "attributes": [{"name":
     "star", "type": "terminal", "symbol": "*"}]}, "innerJoinUsing": {"type": "concrete",
@@ -83,7 +84,7 @@ concise_attributes:
   value_before_type_cast: '2018-05-15 18:24:27.264702'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-23 19:35:51.526113'
+  value_before_type_cast: '2018-07-28 15:01:44.738681'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: sql
