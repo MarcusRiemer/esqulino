@@ -1,7 +1,6 @@
 import { Component, OnChanges, Input, SimpleChanges } from '@angular/core'
 
 import { BlockLanguageDescription } from '../../shared/block/block-language.description'
-import { ParameterDeclaration } from '../../shared/block/generator/parameters.description';
 
 /**
  * Allows editing the actual parameters that are used during block language generation.
@@ -26,6 +25,9 @@ export class EditActualParameters implements OnChanges {
     ));
   }
 
+  /**
+   * React to changes in the given block language.
+   */
   ngOnChanges(changes: SimpleChanges) {
     const cbl = changes.blockLanguage;
     if (cbl) {
@@ -34,5 +36,12 @@ export class EditActualParameters implements OnChanges {
       this.formalParameterNames = Object.keys(declarations);
       this.maximumParamNameLength = Math.max(...this.formalParameterNames.map(s => s.length));
     }
+  }
+
+  /**
+   * Debug output
+   */
+  onParameterValueChanged(paramName: string, paramValue: string) {
+    console.log(`${paramName} = ${paramValue}`);
   }
 }

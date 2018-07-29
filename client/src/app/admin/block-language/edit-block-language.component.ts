@@ -17,10 +17,6 @@ export class EditBlockLanguageComponent implements OnInit {
   // The block language that is beeing edited.
   public editedSubject: BlockLanguageDescription;
 
-  // Indicates whether the state of the editor is synchronized
-  // with the rendered grammar.
-  typesSynced = true;
-
   // The prettyprinted version of the block language
   prettyPrintedBlockLanguage = "";
 
@@ -95,9 +91,8 @@ export class EditBlockLanguageComponent implements OnInit {
     try {
       this.editedSubject.localGeneratorInstructions = json;
       this.onRegenerate();
-      this.typesSynced = true;
     } catch (e) {
-      this.typesSynced = false;
+      console.log("Regeneration failed", e);
     }
   }
 

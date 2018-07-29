@@ -1,3 +1,7 @@
+<div *ngIf="!isSynchronised"
+     class="alert alert-danger" role="alert">
+  Dieses <code>JSON</code>-Dokument ist nicht mit der restlichen Anwendung synchronisiert.
+</div>
 <ace-editor [text]="jsonString"
             (textChanged)="onTextChanged($event)"
             class="full-height"
