@@ -1,9 +1,10 @@
 import * as Desc from './parameters.description'
-import { isParameterReference } from './parameters.description';
+import { isParameterReference, ParameterReference } from './parameters.description';
 import {
   AllTypeInstructions, Instructions, AllReferenceableTypeInstructions,
   ReferenceableInstructions, TypeInstructionsDescription, ReferenceableTypeInstructionsDescription
 } from './instructions.description';
+import { GeneratorError } from './error.description';
 
 // Function with this signature may be used
 export type ValidationFunction = (
@@ -20,17 +21,20 @@ export const ValidatorFunctions: { [name: string]: ValidationFunction } = {
   }
 }
 
-export interface ParameterErrorUnknown {
-  "type": "UnknownParameter"
-  "name": string
+/**
+ * Finds all references in the given object and its children.
+ */
+export function* allReferences(values: any): Iterable<ParameterReference> {
+  if (typeof values === "object" && !!values) {
+    if (isParameterReference(values)) {
+      yield values;
+    } else {
+      for (let sub of Object.values(values)) {
+        yield* allReferences(sub)
+      }
+    }
+  }
 }
-
-export interface ParameterErrorMissingValue {
-  "type": "MissingValue"
-  "name": string
-}
-
-export type ParameterError = ParameterErrorUnknown | ParameterErrorMissingValue
 
 /**
  * Controls parameter state by receiving declarations and values. Additionally
@@ -68,8 +72,11 @@ export class ParameterMap {
     this._currentValues = Object.assign(this._currentValues, values);
   }
 
-  validate(): ParameterError[] {
-    const toReturn: ParameterError[] = [];
+  /**
+   * Check whether the given instructions could be meaningfully resoloved.
+   */
+  validate(instructions: AllReferenceableTypeInstructions): GeneratorError[] {
+    const toReturn: GeneratorError[] = [];
 
     // Go through every parameter to ensure its satisfied
     Object.entries(this._knownParameters).forEach(([name, param]) => {
@@ -77,7 +84,7 @@ export class ParameterMap {
       if (!(name in this._currentValues) && !("defaultValue" in param)) {
         // No, that is a problem
         toReturn.push({
-          type: "MissingValue",
+          type: "ParameterMissingValue",
           name: name
         });
       } else {
@@ -87,12 +94,22 @@ export class ParameterMap {
       }
     });
 
-    // Go through every value to ensure there is a corresponding parameter
+    // Go through every provided value to ensure there is a corresponding parameter
     Object.entries(this._currentValues).forEach(([name, _value]) => {
       if (!this._knownParameters[name]) {
         toReturn.push({
-          type: "UnknownParameter",
+          type: "ValueForUnknownParameter",
           name: name
+        });
+      }
+    });
+
+    // Check every value that should be resolved
+    Array.from(allReferences(instructions)).forEach(ref => {
+      if (!(ref.$ref in this._knownParameters)) {
+        toReturn.push({
+          type: "ReferenceToUnknownParameter",
+          name: ref.$ref
         });
       }
     });

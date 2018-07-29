@@ -5,12 +5,37 @@ import {
 } from "../block-language.description";
 import { EditorBlockDescription } from "../block.description";
 
+import { GeneratorError } from './error.description'
 import { BlockLanguageGeneratorDocument } from "./generator.description";
 import { TraitMap } from "./traits";
 import { ParameterMap } from "./parameters";
 import { GeneratorInstructions } from "./instructions";
 import { mapType } from "./type-mapping";
 import { generateSidebar } from './sidebar'
+
+/**
+ * Ensures that there should be no errors during generation.
+ */
+export function validateGenerator(
+  d: BlockLanguageGeneratorDocument,
+  g: GrammarDescription
+): GeneratorError[] {
+  const toReturn: GeneratorError[] = [];
+
+  // Apply traits
+  const traitMap = new TraitMap();
+  traitMap.addKnownTraits(d.traits || {});
+  traitMap.addScopes(d.traitScopes || []);
+  const traitTypeInstructions = traitMap.applyTraits(d.typeInstructions || {});
+
+  // Check whether something goes wrong during parameter resolving
+  const parameters = new ParameterMap();
+  parameters.addParameters(d.parameterDeclarations || {});
+  parameters.addValues(d.parameterValues || {});
+  toReturn.push(...parameters.validate(traitTypeInstructions));
+
+  return (toReturn);
+}
 
 /**
  * Takes a grammar description and a description how to transform it and
@@ -43,12 +68,6 @@ export function convertGrammar(
   const parameters = new ParameterMap();
   parameters.addParameters(d.parameterDeclarations || {});
   parameters.addValues(d.parameterValues || {});
-
-  // Ensure we have a valid set of parameters
-  const parameterErrors = parameters.validate();
-  if (parameterErrors.length > 0) {
-    throw (new Error(`Error building parameter map: ${JSON.stringify(parameterErrors)}`));
-  }
 
   // The type instructions may contain references. The parameter map from the
   // previous step contains all values that these references may be resolved to.

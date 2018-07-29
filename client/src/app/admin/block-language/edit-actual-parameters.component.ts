@@ -30,7 +30,7 @@ export class EditActualParameters implements OnChanges {
    */
   ngOnChanges(changes: SimpleChanges) {
     const cbl = changes.blockLanguage;
-    if (cbl) {
+    if (cbl && cbl.currentValue && cbl.currentValue.localGeneratorInstructions) {
       const newBlockLanguage: BlockLanguageDescription = cbl.currentValue;
       const declarations = newBlockLanguage.localGeneratorInstructions.parameterDeclarations || {};
       this.formalParameterNames = Object.keys(declarations);

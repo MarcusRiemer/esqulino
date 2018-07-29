@@ -1,0 +1,16 @@
+<table *ngIf="errors.length > 0; else noErrors;"
+       class="table table-danger">
+  <tr>
+    <th>Typ</th>
+    <th>Meldung</th>
+  </tr>
+  <tr *ngFor="let err of errors">
+    <td>{{ err.type }}</td>
+    <td>{{ errorMessage(err) }}</td>
+  </tr>
+</table>
+<ng-template #noErrors>
+  <div class="alert alert-success">
+    Keine Fehler, hier ist alles super!
+  </div>
+</ng-template>
