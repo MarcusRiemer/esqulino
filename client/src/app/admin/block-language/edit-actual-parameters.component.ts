@@ -15,6 +15,8 @@ export class EditActualParameters implements OnChanges {
 
   public formalParameterNames: string[] = [];
 
+  public maximumParamNameLength = 12;
+
   get hasFormalParameters() {
     return (!!(
       this.blockLanguage
@@ -30,6 +32,7 @@ export class EditActualParameters implements OnChanges {
       const newBlockLanguage: BlockLanguageDescription = cbl.currentValue;
       const declarations = newBlockLanguage.localGeneratorInstructions.parameterDeclarations || {};
       this.formalParameterNames = Object.keys(declarations);
+      this.maximumParamNameLength = Math.max(...this.formalParameterNames.map(s => s.length));
     }
   }
 }

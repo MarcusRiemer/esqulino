@@ -11,13 +11,25 @@ import { ParameterDeclaration } from '../../shared/block/generator/parameters.de
   selector: 'edit-input-parameter-value'
 })
 export class EditInputParameterValueComponent implements OnInit {
+  /**
+   * The name of the parameter whose values is going to be edited
+   */
   @Input() public name: string;
 
+  /**
+   * The block language the parameter is part of.
+   */
   @Input() public blockLanguage: BlockLanguageDescription;
+
+  /**
+   * The width to use for the parameter name display
+   */
+  @Input() public labelWidth: number = 10;
 
   private _currentValue: string = "";
 
   ngOnInit() {
+    // Restoring a previously assigned value
     if (this.edited && this.assignedValues && this.name in this.assignedValues) {
       this._currentValue = this.assignedValues[this.name].toString();
     }
@@ -73,6 +85,9 @@ export class EditInputParameterValueComponent implements OnInit {
     );
   }
 
+  /**
+   * Updating the value for this parameter on the block language.
+   */
   set currentValue(newValue: string) {
     this._currentValue = newValue;
     this.ensureAssignedValues();
