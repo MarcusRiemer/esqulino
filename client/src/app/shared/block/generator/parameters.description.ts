@@ -2,12 +2,16 @@ export interface ParameterTypeString {
   "type": "string"
 }
 
+export interface ParameterTypeColor {
+  "type": "color"
+}
+
 export interface ParameterBoolean {
   "type": "boolean"
 }
 
 // Defines the possible types for parameters
-export type ParameterType = ParameterTypeString | ParameterBoolean
+export type ParameterType = ParameterTypeString | ParameterBoolean | ParameterTypeColor
 
 // Definition of a single parameter
 export interface ParameterDeclaration {

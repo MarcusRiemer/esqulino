@@ -689,8 +689,26 @@
         },
         {
           "$ref": "#/definitions/ParameterBoolean"
+        },
+        {
+          "$ref": "#/definitions/ParameterTypeColor"
         }
       ]
+    },
+    "ParameterTypeColor": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "color"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
     },
     "ParameterTypeString": {
       "additionalProperties": false,
