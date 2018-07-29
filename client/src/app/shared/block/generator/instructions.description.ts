@@ -91,18 +91,33 @@ export module DefaultInstructions {
 }
 
 /**
- * Instructions on how to generate a single block for a type.
+ * Instructions on how to generate a single block for a type. This type
+ * is not intended to be used directly, please use `TypeInstructionsDescription`
+ * or `ReferenceableTypeInstructionsDescription` instead.
  */
-export interface InternalTypeInstructionsDescription<T extends ReferenceableInstructions> {
-  // TODO: Should also be referenceable
-  blocks?: Partial<BlockInstructions>[];
+export interface InternalTypeInstructionsDescription<
+  TAttr extends ReferenceableInstructions,
+  TBlock extends ParameterReferenceable<BlockInstructions>
+  > {
+  blocks?: Partial<TBlock>[];
   attributes?: {
-    [scope: string]: Partial<T>
+    [scope: string]: Partial<TAttr>
   }
 };
 
-export type TypeInstructionsDescription = InternalTypeInstructionsDescription<Instructions>;
-export type ReferenceableTypeInstructionsDescription = InternalTypeInstructionsDescription<ReferenceableInstructions>;
+/**
+ * Fully resolved type instructions.
+ */
+export type TypeInstructionsDescription = InternalTypeInstructionsDescription<
+  Instructions, BlockInstructions>;
+
+/**
+ * Type instructions that may contain references.
+ */
+export type ReferenceableTypeInstructionsDescription =
+  InternalTypeInstructionsDescription<ReferenceableInstructions, ParameterReferenceable<BlockInstructions>>;
+
+type TempType = ParameterReferenceable<BlockInstructions>;
 
 /**
  * Supplementary generation instructions for all types. In this variant

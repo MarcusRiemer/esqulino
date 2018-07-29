@@ -45,22 +45,6 @@
         }
       ]
     },
-    "AttributeMappingOrder": {
-      "anyOf": [
-        {
-          "enum": [
-            "grammar"
-          ],
-          "type": "string"
-        },
-        {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      ]
-    },
     "BlockLanguageDocument": {
       "additionalProperties": false,
       "description": "The data about a language model that is stored in the database",
@@ -360,9 +344,9 @@
       ],
       "type": "object"
     },
-    "InternalTypeInstructionsDescription_ReferenceableInstructions_": {
+    "InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__": {
       "additionalProperties": false,
-      "description": "Instructions on how to generate a single block for a type.",
+      "description": "Instructions on how to generate a single block for a type. This type\nis not intended to be used directly, please use `TypeInstructionsDescription`\nor `ReferenceableTypeInstructionsDescription` instead.",
       "properties": {
         "attributes": {
           "additionalProperties": {
@@ -394,19 +378,12 @@
             "description": "Make all properties in T optional",
             "properties": {
               "attributeMapping": {
-                "$ref": "#/definitions/AttributeMappingOrder"
               },
               "onDrop": {
-                "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
               },
               "orientation": {
-                "$ref": "#/definitions/Orientation"
               },
               "style": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "type": "object"
               }
             },
             "type": "object"
@@ -652,7 +629,8 @@
       "type": "object"
     },
     "ReferenceableTypeInstructionsDescription": {
-      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions_"
+      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__",
+      "description": "Type instructions that may contain references."
     },
     "ScopeTraitAdd": {
       "additionalProperties": false,

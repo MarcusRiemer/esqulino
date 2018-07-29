@@ -45,22 +45,6 @@
         }
       ]
     },
-    "AttributeMappingOrder": {
-      "anyOf": [
-        {
-          "enum": [
-            "grammar"
-          ],
-          "type": "string"
-        },
-        {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      ]
-    },
     "BlockLanguageGeneratorDescription": {
       "additionalProperties": false,
       "description": "Describes how a grammar might be converted to a block language",
@@ -311,9 +295,9 @@
       ],
       "type": "object"
     },
-    "InternalTypeInstructionsDescription_ReferenceableInstructions_": {
+    "InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__": {
       "additionalProperties": false,
-      "description": "Instructions on how to generate a single block for a type.",
+      "description": "Instructions on how to generate a single block for a type. This type\nis not intended to be used directly, please use `TypeInstructionsDescription`\nor `ReferenceableTypeInstructionsDescription` instead.",
       "properties": {
         "attributes": {
           "additionalProperties": {
@@ -345,19 +329,12 @@
             "description": "Make all properties in T optional",
             "properties": {
               "attributeMapping": {
-                "$ref": "#/definitions/AttributeMappingOrder"
               },
               "onDrop": {
-                "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
               },
               "orientation": {
-                "$ref": "#/definitions/Orientation"
               },
               "style": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "type": "object"
               }
             },
             "type": "object"
@@ -429,13 +406,6 @@
         "language"
       ],
       "type": "object"
-    },
-    "Orientation": {
-      "enum": [
-        "horizontal",
-        "vertical"
-      ],
-      "type": "string"
     },
     "ParameterBoolean": {
       "additionalProperties": false,
@@ -603,7 +573,8 @@
       "type": "object"
     },
     "ReferenceableTypeInstructionsDescription": {
-      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions_"
+      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__",
+      "description": "Type instructions that may contain references."
     },
     "ScopeTraitAdd": {
       "additionalProperties": false,
@@ -673,76 +644,6 @@
         }
       ],
       "description": "All possible sidebar types"
-    },
-    "VisualBlockDescriptions.CategoryInsert": {
-      "additionalProperties": false,
-      "properties": {
-        "category": {
-          "type": "string"
-        },
-        "order": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsertPosition"
-        }
-      },
-      "required": [
-        "order",
-        "category"
-      ],
-      "type": "object"
-    },
-    "VisualBlockDescriptions.CategoryInsertPosition": {
-      "description": "The locations of categories at which insertions may occur.",
-      "enum": [
-        "insertFirst",
-        "insertLast"
-      ],
-      "type": "string"
-    },
-    "VisualBlockDescriptions.DropTargetProperties": {
-      "additionalProperties": false,
-      "description": "These properties are required to specify drop targets.",
-      "properties": {
-        "children": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
-        },
-        "parent": {
-          "$ref": "#/definitions/VisualBlockDescriptions.CategoryInsert"
-        },
-        "self": {
-          "additionalProperties": false,
-          "properties": {
-            "order": {
-              "enum": [
-                "insertBefore",
-                "insertAfter"
-              ],
-              "type": "string"
-            },
-            "skipParents": {
-              "type": "number"
-            }
-          },
-          "required": [
-            "order",
-            "skipParents"
-          ],
-          "type": "object"
-        },
-        "visibility": {
-          "items": {
-            "enum": [
-              "ifAnyDrag",
-              "ifLegalDrag",
-              "ifLegalChild",
-              "ifEmpty",
-              "always"
-            ],
-            "type": "string"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
     }
   }
 }

@@ -132,7 +132,7 @@ export class ParameterMap {
     }
 
     if (referenceable.blocks) {
-      singleBlock.blocks = referenceable.blocks;
+      singleBlock.blocks = referenceable.blocks.map(b => this.resolveInstructions(b));
     }
 
     return (singleBlock);

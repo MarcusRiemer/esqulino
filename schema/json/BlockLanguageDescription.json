@@ -45,22 +45,6 @@
         }
       ]
     },
-    "AttributeMappingOrder": {
-      "anyOf": [
-        {
-          "enum": [
-            "grammar"
-          ],
-          "type": "string"
-        },
-        {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      ]
-    },
     "BlockLanguageDescription": {
       "additionalProperties": false,
       "description": "Augments a language with information about the UI layer. This definition is\nused by the editors, especially the block editor, to show customized editors\nfor different languages. These customizations include:\n\n* The blocks that are shown in the sidebar.\n* Possibly language specific sidebars.\n* Definitions of the actual blocks.\n* Possibly language specific editor components.",
@@ -395,9 +379,9 @@
       ],
       "type": "object"
     },
-    "InternalTypeInstructionsDescription_ReferenceableInstructions_": {
+    "InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__": {
       "additionalProperties": false,
-      "description": "Instructions on how to generate a single block for a type.",
+      "description": "Instructions on how to generate a single block for a type. This type\nis not intended to be used directly, please use `TypeInstructionsDescription`\nor `ReferenceableTypeInstructionsDescription` instead.",
       "properties": {
         "attributes": {
           "additionalProperties": {
@@ -429,19 +413,12 @@
             "description": "Make all properties in T optional",
             "properties": {
               "attributeMapping": {
-                "$ref": "#/definitions/AttributeMappingOrder"
               },
               "onDrop": {
-                "$ref": "#/definitions/VisualBlockDescriptions.DropTargetProperties"
               },
               "orientation": {
-                "$ref": "#/definitions/Orientation"
               },
               "style": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "type": "object"
               }
             },
             "type": "object"
@@ -687,7 +664,8 @@
       "type": "object"
     },
     "ReferenceableTypeInstructionsDescription": {
-      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions_"
+      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__",
+      "description": "Type instructions that may contain references."
     },
     "ScopeTraitAdd": {
       "additionalProperties": false,
