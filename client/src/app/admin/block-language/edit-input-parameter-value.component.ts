@@ -1,7 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 import { BlockLanguageDescription } from '../../shared/block/block-language.description'
-import { ParameterDeclaration } from '../../shared/block/generator/parameters.description'
 
 /**
  * Used to synchronize changes to the edited block language
@@ -25,6 +24,11 @@ export class EditInputParameterValueComponent implements OnInit {
    * The width to use for the parameter name display
    */
   @Input() public labelWidth: number = 10;
+
+  /**
+   * Emitted if the value provided by the user has changed
+   */
+  @Output() currentValueChange = new EventEmitter<string>();
 
   private _currentValue: string = "";
 
@@ -92,6 +96,9 @@ export class EditInputParameterValueComponent implements OnInit {
     this._currentValue = newValue;
     this.ensureAssignedValues();
     this.assignedValues[this.name] = newValue;
+
+    // Inform surroundings about the change
+    this.currentValueChange.emit(newValue);
   }
 
   /**
@@ -107,15 +114,14 @@ export class EditInputParameterValueComponent implements OnInit {
   set edited(newValue: boolean) {
     // Is there a default value that needs to be set?
     if (newValue && !this.edited) {
-      // Assign the last value we had for this parameter
-      this.ensureAssignedValues();
-      this.assignedValues[this.name] = this._currentValue;
-      console.log(`"edited" introduced`);
+      this.currentValue = this._currentValue || this.defaultValue.toString();
     }
     // Is there a current value that needs to be removed?
     else if (!newValue && this.edited) {
       delete this.assignedValues[this.name];
-      console.log(`"edited" removed`);
+
+      // Inform surroundings about the change
+      this.currentValueChange.emit(undefined);
     }
   }
 
