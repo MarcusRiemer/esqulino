@@ -26,7 +26,7 @@ concise_attributes:
     "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
     "attributes"}, {"text": ">", "style": {"color": "blue", "display": "inline-block"},
     "blockType": "constant"}], "blockType": "block", "direction": "horizontal", "dropTarget":
-    {"self": {"order": "insertAfter", "skipParents": 0}}}, {"style": {"margin-left":
+    {"self": {"order": "insertAfter", "skipParents": 0}}}, {"style": {"marginLeft":
     "2ch"}, "children": [{"blockType": "iterator", "direction": "vertical", "wrapChildren":
     true, "childGroupName": "elements"}], "blockType": "block", "direction": "horizontal",
     "dropTarget": {"self": {"order": "insertAfter", "skipParents": 0}}}, {"children":
@@ -63,23 +63,24 @@ concise_attributes:
     "blockType": "block", "direction": "horizontal", "dropTarget": {"self": {"order":
     "insertAfter", "skipParents": 0}}}], "describedType": {"typeName": "binaryOperator",
     "languageName": "dxml"}}], "editorComponents": [], "localGeneratorInstructions":
-    {"editorComponents": [], "typeInstructions": {"dxml": {"element": {"blocks": [{"attributeMapping":
-    ["tag-open-begin", "name", "attributes", "tag-open-end"]}, {"style": {"margin-left":
-    "2ch"}, "attributeMapping": ["elements"]}, {"attributeMapping": ["tag-close"]}],
-    "attributes": {"name": {"style": {"color": {"$ref": "elementNameColor"}}}, "elements":
-    {"orientation": "vertical"}, "attributes": {"between": " "}, "tag-open-end": {"style":
-    {"color": {"$ref": "angleBracketsColor"}}}, "tag-open-begin": {"style": {"color":
-    {"$ref": "angleBracketsColor"}}}}}, "attribute": {"attributes": {"name": {"style":
-    {"color": {"$ref": "attributeNameColor"}, "margin-left": "1ch"}}}}}}, "parameterDeclarations":
-    {"elementNameColor": {"type": {"type": "string"}, "defaultValue": "#ad0000"},
-    "angleBracketsColor": {"type": {"type": "string"}, "defaultValue": "blue"}, "attributeNameColor":
-    {"type": {"type": "string"}, "defaultValue": "#ef4040"}}}}'
+    {"parameterValues": {}, "editorComponents": [], "typeInstructions": {"dxml": {"element":
+    {"blocks": [{"attributeMapping": ["tag-open-begin", "name", "attributes", "tag-open-end"]},
+    {"style": {"marginLeft": {"$ref": "indentWidth"}}, "attributeMapping": ["elements"]},
+    {"attributeMapping": ["tag-close"]}], "attributes": {"name": {"style": {"color":
+    {"$ref": "elementNameColor"}}}, "elements": {"orientation": "vertical"}, "attributes":
+    {"between": " "}, "tag-open-end": {"style": {"color": {"$ref": "angleBracketsColor"}}},
+    "tag-open-begin": {"style": {"color": {"$ref": "angleBracketsColor"}}}}}, "attribute":
+    {"attributes": {"name": {"style": {"color": {"$ref": "attributeNameColor"}, "margin-left":
+    "1ch"}}}}}}, "parameterDeclarations": {"indentWidth": {"type": {"type": "string"},
+    "defaultValue": "2ch"}, "elementNameColor": {"type": {"type": "color"}, "defaultValue":
+    "#ad0000"}, "angleBracketsColor": {"type": {"type": "color"}, "defaultValue":
+    "blue"}, "attributeNameColor": {"type": {"type": "color"}, "defaultValue": "#ef4040"}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-17 13:24:27.882035'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-26 12:49:11.072787'
+  value_before_type_cast: '2018-07-29 11:21:53.440841'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: dxml-eruby
