@@ -1,13 +1,54 @@
 import * as Desc from './parameters.description'
 import {
-  ParameterMap
+  ParameterMap, allReferences
 } from './parameters'
 import { AllReferenceableTypeInstructions, AllTypeInstructions } from './instructions.description';
+
+describe("BlockLanguage GeneratorInstructions allReferences()", () => {
+  it("Empty object", () => {
+    expect(Array.from(allReferences({}))).toEqual([]);
+  });
+
+  it("Reference object", () => {
+    const ref = { "$ref": "foo" };
+    expect(Array.from(allReferences(ref))).toEqual([ref]);
+  });
+
+  it("Other objects", () => {
+    expect(Array.from(allReferences({ a: {}, b: {} }))).toEqual([]);
+    expect(Array.from(allReferences({ a: [], b: "" }))).toEqual([]);
+    expect(Array.from(allReferences({ a: 123, b: true }))).toEqual([]);
+    expect(Array.from(allReferences({ a: undefined, b: null }))).toEqual([]);
+  });
+
+  it("Nested", () => {
+    const ref1 = { "$ref": "foo" };
+    const ref2 = { "$ref": "bar" };
+
+    expect(Array.from(allReferences({ a: ref1, b: { c: ref2 } }))).toEqual([ref1, ref2]);
+  });
+
+  it("Actual instructions", () => {
+    const inst: AllReferenceableTypeInstructions = {
+      "g1": {
+        "t1": {
+          attributes: {
+            "a1": {
+              between: { "$ref": "nonexistant" }
+            }
+          }
+        }
+      }
+    };
+
+    expect(Array.from(allReferences(inst))).toEqual([{ "$ref": "nonexistant" }]);
+  });
+});
 
 describe("BlockLanguage GeneratorInstructions Parameters", () => {
   it("Empty Parameter map is valid", () => {
     const m = new ParameterMap();
-    expect(m.validate()).toEqual([]);
+    expect(m.validate({})).toEqual([]);
   });
 
   it("Adding matching parameter and value", () => {
@@ -22,7 +63,7 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
       "foo": "matchingString"
     });
 
-    expect(m.validate()).toEqual([]);
+    expect(m.validate({})).toEqual([]);
     expect(m.getValue("foo")).toEqual("matchingString");
   });
 
@@ -34,8 +75,8 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
       }
     });
 
-    expect(m.validate()).toEqual([
-      { "type": "MissingValue", "name": "foo" }
+    expect(m.validate({})).toEqual([
+      { "type": "ParameterMissingValue", "name": "foo" }
     ]);
   });
 
@@ -48,7 +89,7 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
       }
     });
 
-    expect(m.validate()).toEqual([]);
+    expect(m.validate({})).toEqual([]);
     expect(m.getValue("foo")).toEqual("default");
   });
 
@@ -65,7 +106,7 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
       "foo": "matchingString"
     });
 
-    expect(m.validate()).toEqual([]);
+    expect(m.validate({})).toEqual([]);
     expect(m.getValue("foo")).toEqual("matchingString");
   });
 
@@ -88,10 +129,29 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
       "foo": "unwantedString"
     });
 
-    expect(m.validate()).toEqual([
-      { "type": "UnknownParameter", "name": "foo" }
+    expect(m.validate({})).toEqual([
+      { "type": "ValueForUnknownParameter", "name": "foo" }
     ]);
     expect(m.getValue("foo")).toEqual("unwantedString");
+  });
+
+  fit("Reference to an unknown parameter", () => {
+    const m = new ParameterMap();
+    const i: AllReferenceableTypeInstructions = {
+      "g1": {
+        "t1": {
+          attributes: {
+            "a1": {
+              between: { "$ref": "nonexistant" }
+            }
+          }
+        }
+      }
+    }
+
+    expect(m.validate(i)).toEqual([
+      { "type": "ReferenceToUnknownParameter", "name": "nonexistant" }
+    ]);
   });
 
   it("resolves empty instructions (noop)", () => {
