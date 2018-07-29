@@ -81,13 +81,15 @@ concise_attributes:
     {"array": ["values"], "object": ["values"], "key-value": ["key", "value"]}}}],
     "staticSidebars": [{"type": "generatedBlocks", "caption": "JSON", "categories":
     [{"type": "generated", "grammar": {"json": ["null", "boolean", "string", "key-value",
-    "object", "array"]}, "categoryCaption": "JSON"}]}]}}'
+    "object", "array"]}, "categoryCaption": "JSON"}]}], "parameterDeclarations": {"indentWidth":
+    {"type": {"type": "string"}, "defaultValue": "2ch"}, "stringColor": {"type": {"type":
+    "color"}, "defaultValue": "#0000ff"}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-20 20:43:34.641628'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-28 17:59:59.597223'
+  value_before_type_cast: '2018-07-29 13:37:46.812113'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: json
