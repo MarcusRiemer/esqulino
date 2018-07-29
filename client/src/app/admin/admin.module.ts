@@ -16,6 +16,7 @@ import { JsonEditor } from './json-editor.component'
 import { CreateBlockLanguageComponent } from './block-language/create-block-language.component'
 import { EditBlockLanguageComponent } from './block-language/edit-block-language.component'
 import { EditActualParameters } from './block-language/edit-actual-parameters.component'
+import { EditInputParameterValueComponent } from './block-language/edit-input-parameter-value.component'
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { EditActualParameters } from './block-language/edit-actual-parameters.co
     CreateBlockLanguageComponent,
     EditBlockLanguageComponent,
     EditActualParameters,
+    EditInputParameterValueComponent,
     EditGrammarComponent,
     LinkGrammarComponent,
     JsonEditor

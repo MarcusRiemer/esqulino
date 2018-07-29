@@ -1,10 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, OnChanges, Input, SimpleChanges } from '@angular/core'
 
 import { BlockLanguageDescription } from '../../shared/block/block-language.description'
 import { ParameterDeclaration } from '../../shared/block/generator/parameters.description';
-
-
-type FormalParameter = ParameterDeclaration & { name: string };
 
 /**
  * Allows editing the actual parameters that are used during block language generation.
@@ -13,8 +10,10 @@ type FormalParameter = ParameterDeclaration & { name: string };
   templateUrl: 'templates/edit-actual-parameters.html',
   selector: 'edit-actual-parameters'
 })
-export class EditActualParameters {
+export class EditActualParameters implements OnChanges {
   @Input() blockLanguage: BlockLanguageDescription;
+
+  public formalParameterNames: string[] = [];
 
   get hasFormalParameters() {
     return (!!(
@@ -25,14 +24,12 @@ export class EditActualParameters {
     ));
   }
 
-  get formalParameters(): FormalParameter[] {
-    const declarations = this.blockLanguage.localGeneratorInstructions.parameterDeclarations || {};
-    return (Object.entries(declarations).map(([name, declaration]) => {
-      return ({
-        name: name,
-        type: declaration.type,
-        defaultValue: declaration.defaultValue,
-      });
-    }));
+  ngOnChanges(changes: SimpleChanges) {
+    const cbl = changes.blockLanguage;
+    if (cbl) {
+      const newBlockLanguage: BlockLanguageDescription = cbl.currentValue;
+      const declarations = newBlockLanguage.localGeneratorInstructions.parameterDeclarations || {};
+      this.formalParameterNames = Object.keys(declarations);
+    }
   }
 }
