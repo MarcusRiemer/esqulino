@@ -21,10 +21,17 @@ export class JsonEditor implements OnInit, OnChanges {
 
   public isSynchronised = true;
 
-  jsonString = "";
+  // This string is bound to the editor. It is initialized once, any further
+  // updates requires explicit consent from the user as that would mean to
+  // overwrite the current state of the editor.
+  public jsonString = "";
+
+  // This is the "live" version of the text. It should always be exactly
+  // as represented in the editor.
+  private _currentText: string;
 
   ngOnInit(): void {
-    this.jsonString = JSON.stringify(this.jsonValue, undefined, 4);
+    this.onUiOverwriteEditor();
   }
 
   /**
@@ -41,14 +48,38 @@ export class JsonEditor implements OnInit, OnChanges {
    * JSON data.
    */
   onTextChanged(newText: string) {
+    this._currentText = newText;
+    if (this.isSynchronised) {
+      this.onEditorOverwriteUi();
+    }
+  }
+
+  /**
+   * Take the external state and make it our state.
+   */
+  onUiOverwriteEditor() {
+    this.jsonString = JSON.stringify(this.jsonValue, undefined, 4);
+    this._currentText = this.jsonString;
+    this.checkSynchronisation();
+  }
+
+  /**
+   * Take the internal state and force it onto the external state
+   */
+  onEditorOverwriteUi() {
     try {
-      this.jsonValueChange.emit(JSON.parse(newText));
+      this.jsonValue = JSON.parse(this._currentText);
+      this.jsonValueChange.emit(this.jsonValue);
+      this.checkSynchronisation();
     } catch {
     }
   }
 
+  /**
+   *
+   */
   private checkSynchronisation() {
-    const ourValue = JSON.stringify(JSON.parse(this.jsonString));
+    const ourValue = JSON.stringify(JSON.parse(this._currentText));
     const theirValue = JSON.stringify(this.jsonValue);
     this.isSynchronised = ourValue === theirValue;
   }

@@ -65,21 +65,6 @@
   <!-- Showing model and pretty printed representation side by side -->
   <div class="row">
     <div class="col-xl-6">
-      <!-- Pretty printed blockLanguage -->
-      <div class="form-group row">
-
-        <label for="block-language-pretty"
-               class="col-sm-2 col-form-label">Pretty Printed</label>
-        <div class="col-sm-10">
-          <textarea id="block-language-pretty"
-                    readonly
-                    class="form-control full-height"
-                    [value]="prettyPrintedBlockLanguage"></textarea>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-xl-6">
       <div class="form-group row">
         <div class="col-sm-2">
           <label for="block-language-sidebar"
@@ -90,6 +75,20 @@
                        (jsonValueChange)="onGeneratorDataUpdate($event)"
                        class="full-height">
           </json-editor>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <!-- Pretty printed blockLanguage -->
+      <div class="form-group row">
+
+        <label for="block-language-pretty"
+               class="col-sm-2 col-form-label">Pretty Printed</label>
+        <div class="col-sm-10">
+          <textarea id="block-language-pretty"
+                    readonly
+                    class="form-control full-height"
+                    [value]="prettyPrintedBlockLanguage"></textarea>
         </div>
       </div>
     </div>

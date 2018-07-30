@@ -11,7 +11,7 @@ import { EditBlockLanguageService } from './edit-block-language.service'
   templateUrl: 'templates/edit-input-parameter-value.html',
   selector: 'edit-input-parameter-value'
 })
-export class EditInputParameterValueComponent implements OnInit {
+export class EditInputParameterValueComponent {
   /**
    * The name of the parameter whose values is going to be edited
    */
@@ -34,15 +34,6 @@ export class EditInputParameterValueComponent implements OnInit {
 
   constructor(private _editedBlockLanguage: EditBlockLanguageService) {
 
-  }
-
-  private _currentValue: string = "";
-
-  ngOnInit() {
-    // Restoring a previously assigned value
-    if (this.edited && this.assignedValues && this.name in this.assignedValues) {
-      this._currentValue = this.assignedValues[this.name].toString();
-    }
   }
 
   /**
@@ -88,19 +79,17 @@ export class EditInputParameterValueComponent implements OnInit {
    * if no meaningful input has taken place.
    */
   get currentValue() {
-    return (
-      this.edited && this._currentValue.length > 0
-        ? this._currentValue
-        : (this.defaultValue || "").toString()
-    );
+    if (this.edited && this.assignedValues && this.name in this.assignedValues) {
+      return (this.assignedValues[this.name].toString());
+    } else {
+      return ((this.defaultValue || "").toString());
+    }
   }
 
   /**
    * Updating the value for this parameter on the block language.
    */
   set currentValue(newValue: string) {
-    this._currentValue = newValue;
-
     this._editedBlockLanguage.doUpdate(bl => {
       if (!bl.localGeneratorInstructions.parameterValues) {
         bl.localGeneratorInstructions.parameterValues = {};
@@ -126,7 +115,7 @@ export class EditInputParameterValueComponent implements OnInit {
   set edited(newValue: boolean) {
     // Is there a default value that needs to be set?
     if (newValue && !this.edited) {
-      this.currentValue = this._currentValue || this.defaultValue.toString();
+      this.currentValue = this.defaultValue.toString();
     }
     // Is there a current value that needs to be removed?
     else if (!newValue && this.edited) {

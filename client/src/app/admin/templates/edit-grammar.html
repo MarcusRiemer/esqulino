@@ -40,21 +40,6 @@
 
   <!-- Showing model and pretty printed representation side by side -->
   <div class="row">
-    <div class="col-xl-6">
-      <!-- Pretty printed grammar (not editable) -->
-      <div class="form-group row">
-        <label for="grammar-pretty"
-               class="col-form-label col-sm-2">Pretty Printed</label>
-        <div class="col-sm-10">
-          <textarea id="grammar-pretty"
-                    readonly
-                    class="form-control full-height"
-                    rows="20"
-                    [textContent]="prettyPrintedGrammar"></textarea>
-        </div>
-      </div>
-    </div>
-
     <!-- Editable types -->
     <div class="col-xl-6">
       <div class="form-group row">
@@ -71,6 +56,21 @@
           <json-editor [(jsonValue)]="grammar.types"
                        class="full-height">
           </json-editor>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Pretty printed grammar (not editable) -->
+    <div class="col-xl-6">
+      <div class="form-group row">
+        <label for="grammar-pretty"
+               class="col-form-label col-sm-2">Pretty Printed</label>
+        <div class="col-sm-10">
+          <textarea id="grammar-pretty"
+                    readonly
+                    class="form-control full-height"
+                    rows="20"
+                    [textContent]="prettyPrintedGrammar"></textarea>
         </div>
       </div>
     </div>
