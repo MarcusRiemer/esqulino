@@ -1,0 +1,21 @@
+mat-toolbar {
+    /* Fixed to the top */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    
+    /* Underlined links look silly with material design */
+    a, a:hover {
+        text-decoration: none;
+    }
+
+    /* Allows to align the following items on the right */
+    .fill-space {
+        flex: 1 1 auto;
+    }
+}
+
+/* Underlined links look silly with material design */
+a.mat-menu-item, a.mat-menu-item:hover {
+    text-decoration: none;
+}

@@ -1,3 +1,5 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 @import 'bootstrap-subset';
 @import 'definitions';
 
@@ -71,6 +73,8 @@
 @import 'editor-ast';
 @import 'editor-images';
 @import 'editor-sql';
+
+@import 'toolbar';
 
 @import 'schema';
 @import 'sidebar';
