@@ -1,4 +1,11 @@
-<app-toolbar></app-toolbar>
+<app-toolbar>
+  <ng-container position="start">
+    <!-- Big backlink -->
+    <a mat-raised-button [routerLink]="'/admin'">
+      Administration
+    </a>
+  </ng-container>
+</app-toolbar>
 <div class="container-fluid">
   <main>
     <router-outlet></router-outlet>

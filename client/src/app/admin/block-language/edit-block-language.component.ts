@@ -1,8 +1,7 @@
 import { Component, ViewChild, TemplateRef, AfterViewInit } from '@angular/core'
 
 import { ServerDataService } from '../../shared/server-data.service'
-
-import { ToolbarService } from '../toolbar.service'
+import { ToolbarService } from '../../shared/toolbar.service'
 
 import { EditBlockLanguageService } from './edit-block-language.service'
 
