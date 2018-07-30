@@ -9,6 +9,7 @@ import { PortalModule } from '@angular/cdk/portal';
 import {
   MatToolbarModule, MatButtonModule, MatMenuModule
 } from '@angular/material'
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AnalyticsService } from './analytics.service';
 import { DefaultValuePipe } from './default-value.pipe'
@@ -43,6 +44,7 @@ const materialModules = [
     HttpModule,
     HttpClientModule,
     PortalModule,
+    FlexLayoutModule,
     ...materialModules
   ],
   declarations: [
@@ -56,6 +58,7 @@ const materialModules = [
     RouterModule,
     HttpModule,
     PortalModule,
+    FlexLayoutModule,
     ...materialModules,
 
     ToolbarComponent,
