@@ -1,20 +1,18 @@
-<div class="toolbar" fxLayout="row" fxLayout.xs="column" fxLayoutGap="5px">
-  <!-- Static contentent at the beginning of this toolbar -->
-  <ng-content select="[position=start]"></ng-content>
+<!-- Static contentent at the beginning of this toolbar -->
+<ng-content select="[position=start]"></ng-content>
 
-  <!-- Things the user might do here -->
-  <ng-container *ngIf="itemsPortal$ | async as itemsPortal"
-                [cdkPortalOutlet]="itemsPortal"></ng-container>
+<!-- Things the user might do here -->
+<ng-container *ngIf="itemsPortal$ | async as itemsPortal"
+              [cdkPortalOutlet]="itemsPortal"></ng-container>
 
-  <!-- Filling out the space in the middle -->
-  <span class="fill-space"></span>
+<!-- Filling out the space in the middle -->
+<span class="fill-space"></span>
 
-  <!-- Static contentent at the end of this toolbar -->
-  <ng-content select="[position=end]"></ng-content>
+<!-- Static contentent at the end of this toolbar -->
+<ng-content select="[position=end]"></ng-content>
 
-  <!-- Navigation -->
-  <button mat-flat-button [matMenuTriggerFor]="menu">Navigation</button>
-</div>
+<!-- Navigation -->
+<button mat-flat-button [matMenuTriggerFor]="menu">Navigation</button>
 
 <!-- The generic navigation menu -->
 <mat-menu #menu="matMenu" yPosition="below">

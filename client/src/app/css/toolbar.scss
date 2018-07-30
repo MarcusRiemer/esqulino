@@ -1,14 +1,21 @@
 app-toolbar {
+    /* Basic styling options for the whole toolbar */
     width: 100%;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    padding: 5px;
+    background-color: #3f51b5;
+    display: flex;
 
-    div.toolbar {
-        padding: 5px;
-        background-color: #3f51b5;
-        display: flex;
-        width: 100%;
+    /* Column layout on mobile */
+    @media (max-width: 840px) {
+        flex-direction: column;
+    }
+
+    /* Single row on desktop */
+    @media (min-width: 841px) {
+        flex-direction: row;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
     }
     
     /* Underlined links look silly with material design */
