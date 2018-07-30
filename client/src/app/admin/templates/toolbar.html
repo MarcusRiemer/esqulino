@@ -1,0 +1,25 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <!-- Big backlink -->
+    <a mat-raised-button [routerLink]="'/admin'">
+      Administration
+    </a>
+    <!-- Things the user might do here -->
+    <ng-container *ngIf="itemsPortal$ | async as itemsPortal"
+                  [cdkPortalOutlet]="itemsPortal"></ng-container>
+
+    <span class="fill-space"></span>
+
+    <!-- Navigation -->
+    <button mat-button [matMenuTriggerFor]="menu">Navigation</button>
+    <mat-menu #menu="matMenu" yPosition="below">
+
+      <a  mat-menu-item [routerLink]="'/'">
+        Hauptseite
+      </a>
+      <a  mat-menu-item [routerLink]="'/admin'">
+        Administration
+      </a> 
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>

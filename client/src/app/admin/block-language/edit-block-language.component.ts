@@ -1,6 +1,8 @@
-import { Component } from '@angular/core'
+import { Component, ViewChild, TemplateRef, AfterViewInit } from '@angular/core'
 
 import { ServerDataService } from '../../shared/server-data.service'
+
+import { ToolbarService } from '../toolbar.service'
 
 import { EditBlockLanguageService } from './edit-block-language.service'
 
@@ -8,14 +10,22 @@ import { EditBlockLanguageService } from './edit-block-language.service'
   templateUrl: 'templates/edit-block-language.html',
   providers: [EditBlockLanguageService]
 })
-export class EditBlockLanguageComponent {
+export class EditBlockLanguageComponent implements AfterViewInit {
+
+  @ViewChild("toolbarButtons") toolbarButtons: TemplateRef<any>;
+
   constructor(
     private _serverData: ServerDataService,
     private _current: EditBlockLanguageService,
+    private _toolbarService: ToolbarService
   ) {
   }
 
   readonly availableGrammars = this._serverData.listGrammars.value;
+
+  ngAfterViewInit() {
+    this._toolbarService.setItems(this.toolbarButtons);
+  }
 
   // The block language that is currently beeing edited.
   get editedSubject() {

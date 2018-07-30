@@ -79,8 +79,13 @@ export class JsonEditor implements OnInit, OnChanges {
    *
    */
   private checkSynchronisation() {
-    const ourValue = JSON.stringify(JSON.parse(this._currentText));
-    const theirValue = JSON.stringify(this.jsonValue);
-    this.isSynchronised = ourValue === theirValue;
+    // Is there something that could be synchronized?
+    if (this._currentText || this.jsonValue) {
+      const ourValue = JSON.stringify(JSON.parse(this._currentText || null));
+      const theirValue = JSON.stringify(this.jsonValue);
+      this.isSynchronised = ourValue === theirValue;
+    } else {
+      this.isSynchronised = true;
+    }
   }
 }

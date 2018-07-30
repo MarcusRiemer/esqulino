@@ -1,21 +1,18 @@
+<ng-template cdkPortal #toolbarButtons>
+  <button (click)="onSave()"
+          mat-button>
+    Speichern
+  </button>
+
+  <button (click)="onRegenerate()"
+          [disabled]="!editedSubject?.localGeneratorInstructions"
+          mat-button>
+    Blocksprache Regenerieren
+  </button>
+</ng-template>
+
 <form *ngIf="editedSubject">
   <h2>Block Sprache <q>{{ editedSubject.name }}</q></h2>
-
-  <div class="form-group row">
-    <div class="col-sm-2">
-      <button (click)="onSave()"
-              class="btn btn-primary btn-block">
-        Speichern
-      </button>
-    </div>
-    <div class="col-sm-2">
-      <button (click)="onRegenerate()"
-              [disabled]="!editedSubject.localGeneratorInstructions"
-              class="btn btn-primary btn-block">
-        Blocksprache Regenerieren
-      </button>
-    </div>
-  </div>
 
   <!-- Editable name of the blockLanguage -->
   <div class="form-group row">
