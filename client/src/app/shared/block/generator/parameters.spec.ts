@@ -135,7 +135,7 @@ describe("BlockLanguage GeneratorInstructions Parameters", () => {
     expect(m.getValue("foo")).toEqual("unwantedString");
   });
 
-  fit("Reference to an unknown parameter", () => {
+  it("Reference to an unknown parameter", () => {
     const m = new ParameterMap();
     const i: AllReferenceableTypeInstructions = {
       "g1": {
