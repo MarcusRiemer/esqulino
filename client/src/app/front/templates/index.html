@@ -1,25 +1,27 @@
-<div class="container front">
-  <nav id="toolbar">
-    <a [routerLink]="'/'"
-       id="navbar-navigate-home"
-       class="brand">
+<app-toolbar>
+  <ng-container position="start">
+    <a mat-raised-button [routerLink]="'/about'">
       <img src="/vendor/logos/blattwerkzeug-logo.svg"
-           class="d-inline-block align-top"
-           height="30px"
+           height="20px"
            title="BlattWerkzeug">
       <img src="/vendor/logos/blattwerkzeug-caption.svg"
-           class="hidden-sm-down"
-           height="30px"
+           height="20px"
            title="BlattWerkzeug">
     </a>
-
-    <a [routerLink]="['/about','projects']"
-       id="navbar-navigate-projects"
-       class="nav-link">
+    <a mat-flat-button [routerLink]="'/about/projects'">
+      <i class="fa fa-cubes" aria-hidden="true"></i>
       Verfügbare Projekte
     </a>
-  </nav>
+  </ng-container>
 
+  <ng-container position="end">
+    <a mat-flat-button [routerLink]="['/about','academia']">
+      Forschung
+    </a>
+  </ng-container>
+</app-toolbar>
+
+<div class="container front">
   <flash-message-list></flash-message-list>
   <router-outlet></router-outlet>
   <nav class="footer">

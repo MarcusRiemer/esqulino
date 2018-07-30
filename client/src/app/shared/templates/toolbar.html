@@ -1,0 +1,33 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <!-- Static contentent at the beginning of this toolbar -->
+    <ng-content select="[position=start]"></ng-content>
+    
+    <!-- Things the user might do here -->
+    <ng-container *ngIf="itemsPortal$ | async as itemsPortal"
+                  [cdkPortalOutlet]="itemsPortal"></ng-container>
+
+    <!-- Filling out the space in the middle -->
+    <span class="fill-space"></span>
+
+    <!-- Static contentent at the end of this toolbar -->
+    <ng-content select="[position=end]"></ng-content>
+
+    <!-- Navigation -->
+    <button mat-stroked-button [matMenuTriggerFor]="menu">Navigation</button>
+    <mat-menu #menu="matMenu" yPosition="below">
+
+      <a  mat-menu-item [routerLink]="'/'">
+        <img src="/vendor/logos/blattwerkzeug-logo.svg"
+             height="20px"
+             title="BlattWerkzeug">
+        <img src="/vendor/logos/blattwerkzeug-caption.svg"
+             height="20px"
+             title="BlattWerkzeug">
+      </a>
+      <a  mat-menu-item [routerLink]="'/admin'">
+        Administration
+      </a> 
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
