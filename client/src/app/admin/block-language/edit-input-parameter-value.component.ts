@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 import { BlockLanguageDescription } from '../../shared/block/block-language.description'
 
+import { EditBlockLanguageService } from './edit-block-language.service'
+
 /**
  * Used to synchronize changes to the edited block language
  */
@@ -29,6 +31,10 @@ export class EditInputParameterValueComponent implements OnInit {
    * Emitted if the value provided by the user has changed
    */
   @Output() currentValueChange = new EventEmitter<string>();
+
+  constructor(private _editedBlockLanguage: EditBlockLanguageService) {
+
+  }
 
   private _currentValue: string = "";
 
@@ -85,7 +91,7 @@ export class EditInputParameterValueComponent implements OnInit {
     return (
       this.edited && this._currentValue.length > 0
         ? this._currentValue
-        : this.defaultValue.toString()
+        : (this.defaultValue || "").toString()
     );
   }
 
@@ -94,8 +100,14 @@ export class EditInputParameterValueComponent implements OnInit {
    */
   set currentValue(newValue: string) {
     this._currentValue = newValue;
-    this.ensureAssignedValues();
-    this.assignedValues[this.name] = newValue;
+
+    this._editedBlockLanguage.doUpdate(bl => {
+      if (!bl.localGeneratorInstructions.parameterValues) {
+        bl.localGeneratorInstructions.parameterValues = {};
+      }
+
+      bl.localGeneratorInstructions.parameterValues[this.name] = newValue;
+    });
 
     // Inform surroundings about the change
     this.currentValueChange.emit(newValue);
@@ -118,19 +130,12 @@ export class EditInputParameterValueComponent implements OnInit {
     }
     // Is there a current value that needs to be removed?
     else if (!newValue && this.edited) {
-      delete this.assignedValues[this.name];
+      this._editedBlockLanguage.doUpdate(bl => {
+        delete bl.localGeneratorInstructions.parameterValues[this.name];
+      });
 
       // Inform surroundings about the change
       this.currentValueChange.emit(undefined);
-    }
-  }
-
-  /**
-   * Generates assigned values if they haven't been generated so far
-   */
-  private ensureAssignedValues() {
-    if (!this.assignedValues) {
-      this.blockLanguage.localGeneratorInstructions.parameterValues = {};
     }
   }
 }
