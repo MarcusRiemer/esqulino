@@ -1,9 +1,7 @@
 .editor {
     display: flex;
     overflow: hidden;
-    height: calc(100vh - #{$toolbar-height} - 5px);
-    margin-top: calc(#{$toolbar-height} + 5px);
-    padding-top: calc(-(#{$toolbar-height} + 5px));
+    margin-top: 5px;
     position: relative;
     width: 100%;
     backface-visibility: hidden;
