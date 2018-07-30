@@ -1,8 +1,15 @@
-mat-toolbar {
-    /* Fixed to the top */
+app-toolbar {
+    width: 100%;
     position: sticky;
     top: 0;
     z-index: 1000;
+
+    div.toolbar {
+        padding: 5px;
+        background-color: #3f51b5;
+        display: flex;
+        width: 100%;
+    }
     
     /* Underlined links look silly with material design */
     a, a:hover {

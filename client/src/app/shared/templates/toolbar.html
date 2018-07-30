@@ -1,33 +1,32 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <!-- Static contentent at the beginning of this toolbar -->
-    <ng-content select="[position=start]"></ng-content>
-    
-    <!-- Things the user might do here -->
-    <ng-container *ngIf="itemsPortal$ | async as itemsPortal"
-                  [cdkPortalOutlet]="itemsPortal"></ng-container>
+<div class="toolbar" fxLayout="row" fxLayout.xs="column" fxLayoutGap="5px">
+  <!-- Static contentent at the beginning of this toolbar -->
+  <ng-content select="[position=start]"></ng-content>
 
-    <!-- Filling out the space in the middle -->
-    <span class="fill-space"></span>
+  <!-- Things the user might do here -->
+  <ng-container *ngIf="itemsPortal$ | async as itemsPortal"
+                [cdkPortalOutlet]="itemsPortal"></ng-container>
 
-    <!-- Static contentent at the end of this toolbar -->
-    <ng-content select="[position=end]"></ng-content>
+  <!-- Filling out the space in the middle -->
+  <span class="fill-space"></span>
 
-    <!-- Navigation -->
-    <button mat-stroked-button [matMenuTriggerFor]="menu">Navigation</button>
-    <mat-menu #menu="matMenu" yPosition="below">
+  <!-- Static contentent at the end of this toolbar -->
+  <ng-content select="[position=end]"></ng-content>
 
-      <a  mat-menu-item [routerLink]="'/'">
-        <img src="/vendor/logos/blattwerkzeug-logo.svg"
-             height="20px"
-             title="BlattWerkzeug">
-        <img src="/vendor/logos/blattwerkzeug-caption.svg"
-             height="20px"
-             title="BlattWerkzeug">
-      </a>
-      <a  mat-menu-item [routerLink]="'/admin'">
-        Administration
-      </a> 
-    </mat-menu>
-  </mat-toolbar-row>
-</mat-toolbar>
+  <!-- Navigation -->
+  <button mat-flat-button [matMenuTriggerFor]="menu">Navigation</button>
+</div>
+
+<!-- The generic navigation menu -->
+<mat-menu #menu="matMenu" yPosition="below">
+  <a  mat-menu-item [routerLink]="'/'">
+    <img src="/vendor/logos/blattwerkzeug-logo.svg"
+         height="20px"
+         title="BlattWerkzeug">
+    <img src="/vendor/logos/blattwerkzeug-caption.svg"
+         height="20px"
+         title="BlattWerkzeug">
+  </a>
+  <a  mat-menu-item [routerLink]="'/admin'">
+    Administration
+  </a>
+</mat-menu>

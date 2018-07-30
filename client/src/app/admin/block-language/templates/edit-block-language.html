@@ -1,12 +1,14 @@
 <ng-template cdkPortal #toolbarButtons>
   <button (click)="onSave()"
-          mat-button>
+          mat-flat-button>
+    <span class="fa fa-floppy-o" aria-hidden="t"></span>
     Speichern
   </button>
 
   <button (click)="onRegenerate()"
           [disabled]="!editedSubject?.localGeneratorInstructions"
-          mat-button>
+          mat-flat-button>
+    <span class="fa fa-cogs" aria-hidden="true"></span>
     Blocksprache Regenerieren
   </button>
 </ng-template>
