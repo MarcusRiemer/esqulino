@@ -1,12 +1,13 @@
 .editor {
     display: flex;
     overflow: hidden;
-    margin-top: 5px;
     position: relative;
     width: 100%;
     backface-visibility: hidden;
     will-change: overflow;
+    height: $sidebar-height;
 
+    /* Every pane may use a scrollbar */
     .navbar, .content, .sidebar {
         overflow: auto;
         height: auto;
@@ -14,86 +15,72 @@
         margin-right: 5px;
     }
 
+    /* Things on the sides should always have their own scrollbars */
+    .navbar, .sidebar {
+        height: $sidebar-height;
+    }
+
+    .navbar {
+        flex: 0 0 $navbar-width;
+    }
+
+    .sidebar {
+        flex: 0 0 $sidebar-width;
+    }
+
     .content {
         flex: 1 1;
     }
 
-    editor-navbar {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
+    /* Navigation inside a project, typically on the left hand side */
+    .navbar {        
+        editor-navbar {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
 
-    }
+            nav {
+                a {
+                    text-decoration: none;
+                    white-space: nowrap;
+                }
+            }
+            
+            .label.dirty {
+                cursor: pointer;
+            }
 
-    .navbar {
-        nav {
-            a {
-                text-decoration: none;
-                white-space: nowrap;
+            ul {
+                padding-left: 0px;
+                list-style: none;
+            }
+
+            .sources-host {
+                margin-top: auto;
+
+                * {
+                    hyphens: auto;
+                }
+            }
+            
+            .router-link-active {
+                font-weight: bold;
+                border-radius: 500px;
+                padding-left: 0.5em;
+                padding-right: 0.5em;
+                color: black;
+                transition: background-color, padding, border-radius;
+                transition-duration: 200ms;
+                transition-timing-function: ease-in-out;
+                background-color: cornflowerblue;
+            }
+            
+            .nav-query, .nav-page, .nav-database, .nav-image, .nav-code-resource {
+                margin-left: 15px;
             }
         }
-        
-        .label.dirty {
-            cursor: pointer;
-        }
-
-        ul {
-            padding-left: 0px;
-            list-style: none;
-        }
-
-        .sources-host {
-            margin-top: auto;
-
-            * {
-                hyphens: auto;
-            }
-        }
-        
-        .router-link-active {
-            font-weight: bold;
-            border-radius: 500px;
-            padding-left: 0.5em;
-            padding-right: 0.5em;
-            color: black;
-            transition: background-color, padding, border-radius;
-            transition-duration: 200ms;
-            transition-timing-function: ease-in-out;
-            background-color: cornflowerblue;
-        }
-        
-        .nav-query, .nav-page, .nav-database, .nav-image, .nav-code-resource {
-            margin-left: 15px;
-        }
     }
-}
-
-editor-toolbar #toolbar {
-    position: fixed;
-    top: 0px;
-    width: calc(100% - 10px);
-    margin-left: 5px;
-    margin-right: 5px;
-    
-    .brand {
-        margin-left: 10px;
-        min-width: $navbar-width + 10px;
-    }
-    
-    /* Align trash item to the right */
-    trash {
-        margin-left: auto;
-        margin-right: 10px;
-    }
-}
-
-.editor .navbar {
-    flex: 0 0 $navbar-width;
-}
-
-.editor .sidebar {
-    flex: 0 0 $sidebar-width;
 }
 
 .sidebar textarea {
@@ -108,37 +95,3 @@ editor-toolbar #toolbar {
     flex-wrap: wrap;
 }
 
-.page-preview {
-    /**
-     * A border stripe that indicates the given element is in the
-     * "layout" category.
-     */
-    .row, .border-layout-preview {
-        border-left: 5px solid blue !important;
-    }
-
-    /**
-     * A border stripe that indicates the given element is in the
-     * "widget" category.
-     */
-    .row, .border-widget-preview {
-        border-left: 5px solid green !important;
-    }
-
-    /**
-     * A border stripe that indicates the given element is in the
-     * "structural" category.
-     */
-    .row, .border-structural-preview {
-        border-left: 5px solid orange !important;
-    }
-
-    .widget-row-preview > div {
-	    padding-left: 5px;
-    }
-
-    .row > [class^="col-"], .column-preview, .widget, .widget-close {
-        background-color: rgba(86,61,124,.15);
-        border: 1px solid rgba(86,61,124,.2);
-    }
-}

@@ -1,7 +1,9 @@
 app-toolbar {
     /* Basic styling options for the whole toolbar */
     width: 100%;
-    padding: 5px;
+    height: $toolbar-height;
+    padding: $toolbar-padding;
+    margin-bottom: $toolbar-margin-bottom;
     background-color: #3f51b5;
     display: flex;
 
