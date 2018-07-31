@@ -119,6 +119,8 @@ Rails.application.routes.draw do
 
     resources :grammars, only: [:create, :index, :show, :update]
     get 'grammars/:id/related_block_languages', controller: 'grammars', action: :related_block_languages
+
+    get 'schema/:schema_name', controller: 'static_files', action: :schema
     
     # Fallback for unknown API endpoints
     match '*path', via: :all, to: proc { [404, {}, ["Unknown API endpoint"]] }
