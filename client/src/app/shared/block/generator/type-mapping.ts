@@ -232,7 +232,16 @@ export function mapType(
     if (blockInstructions.generateErrorIndicator !== "none") {
       let position = blockInstructions.generateErrorIndicator === "start" ? 0 : thisBlock.children.length;
       thisBlock.children.splice(position, 0, {
-        blockType: "error"
+        blockType: "error",
+        style: {
+          "paddingLeft": "1ch",
+          "paddingRight": "1ch",
+          "background-color": "red",
+          "border": "2px solid red",
+          "border-radius": "500px",
+          "color": "white",
+          "cursor": "default",
+        },
       });
     }
 

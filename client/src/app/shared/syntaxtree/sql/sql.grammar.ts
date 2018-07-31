@@ -49,6 +49,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          name: "colon",
+          symbol: ":"
+        },
+        {
           type: "property",
           name: "name",
           base: "string"

@@ -17,7 +17,7 @@ export abstract class SpecializedValidator {
 
 }
 
-type SpecializedValidatorConstructor = typeof SpecializedValidator;
+export type SpecializedValidatorConstructor = typeof SpecializedValidator;
 
 export type SubValidator = SpecializedValidatorConstructor | Desc.GrammarDescription;
 

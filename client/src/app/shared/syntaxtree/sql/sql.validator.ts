@@ -28,6 +28,9 @@ export class SqlValidator extends SpecializedValidator {
     } else {
       const schema = context.additional.databaseSchema;
 
+      // Collects all names that seem to be available
+      const fromAvailableNames = new Set<string>();
+
       // There should obviously only be a single `FROM`, but because there may be
       // as well no `FROM` at all we simply roll with whatever bizarre structure
       // we need to validate.
@@ -39,6 +42,9 @@ export class SqlValidator extends SpecializedValidator {
         allIntroduced.forEach(introduced => {
           const introducedTableName = introduced.properties["name"];
 
+          // This name counts as available from now on
+          fromAvailableNames.add(introducedTableName);
+
           // Does that table exist in our schema?
           if (!schema.hasTable(introducedTableName)) {
             context.addError("UNKNOWN_TABLE", introduced)
@@ -49,6 +55,27 @@ export class SqlValidator extends SpecializedValidator {
             context.addError("DUPLICATE_TABLE_NAME", introduced);
           } else {
             takenNames.add(introducedTableName);
+          }
+        });
+      });
+
+      const allSelects = ast.getNodesOfType({ languageName: "sql", typeName: "select" });
+      allSelects.forEach(select => {
+        const columns = select.getChildrenInCategory("columns");
+
+        if (columns.length === 0) {
+          context.addError("EMPTY_SELECT", select);
+        }
+
+        columns.forEach(column => {
+          const referencedTable = column.properties["refTableName"];
+          const columnName = column.properties["columnName"];
+          if (!fromAvailableNames.has(referencedTable)) {
+            context.addError("TABLE_NOT_IN_FROM", column);
+          } else {
+            if (!schema.hasColumn(referencedTable, columnName)) {
+              context.addError("UNKNOWN_COLUMN", column);
+            }
           }
         });
       });
