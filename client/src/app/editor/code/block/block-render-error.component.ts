@@ -3,7 +3,6 @@ import { Component, Input } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import { Node, CodeResource } from '../../../shared/syntaxtree';
-import { ValidationError, printableError } from '../../../shared/syntaxtree/validation-result';
 import { VisualBlockDescriptions } from '../../../shared/block';
 
 /**

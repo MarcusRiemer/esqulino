@@ -106,6 +106,7 @@ export class ParameterMap {
 
     // Check every value that should be resolved
     Array.from(allReferences(instructions)).forEach(ref => {
+      ref;
       if (!(ref.$ref in this._knownParameters)) {
         toReturn.push({
           type: "ReferenceToUnknownParameter",

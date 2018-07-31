@@ -1,5 +1,7 @@
 import { Node, NodeLocation, QualifiedTypeName } from '../../../shared/syntaxtree';
 import { VisualBlockDescriptions } from '../../../shared/block';
+import { Restricted } from '../../../shared/block/bool-mini-expression.description'
+import { evalExpression } from '../../../shared/block/bool-mini-expression'
 import { arrayEqual } from '../../../shared/util';
 
 import { CurrentDrag } from '../../drag.service';
@@ -137,10 +139,14 @@ function dropLocationChildGroupName(_drag: CurrentDrag, block: BlockDropProperti
  * @return true, if the targeted child group has any children.
  */
 function dropLocationHasChildren(drag: CurrentDrag, block: BlockDropProperties) {
-  const childGroupName = dropLocationChildGroupName(drag, block);
   if (isParentOrChildDrop(block)) {
-    // Count children in that category
-    return (block.node.getChildrenInCategory(childGroupName).length > 0);
+    if (drag) {
+      // Count children in that category
+      const childGroupName = dropLocationChildGroupName(drag, block);
+      return (block.node.getChildrenInCategory(childGroupName).length > 0);
+    } else {
+      return (false);
+    }
   } else {
     // At least the given node is in the category
     return (true);
@@ -151,11 +157,54 @@ function dropLocationHasChildren(drag: CurrentDrag, block: BlockDropProperties) 
  * Calculates how the given block should react to the given drag.
  */
 export function calculateDropTargetState(drag: CurrentDrag, block: BlockDropProperties): DropTargetState {
-  let flags = [];
-  // Does the description come with a visibility expression?
+  // Does the description come with a visibility expression? If not simply assume false
+  let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = { $value: false };
   if (block.visual && block.visual.dropTarget && block.visual.dropTarget.visibility) {
-    flags = block.visual.dropTarget.visibility;
+    visibilityExpr = block.visual.dropTarget.visibility;
   }
+
+  // Would the new tree ba a valid tree?
+  const isLegalChild = () => {
+    if (!drag || block.dropLocation.length === 0) {
+      return false;
+    }
+
+    const newNode = drag.draggedDescription;
+    const oldTree = block.codeResource.syntaxTreePeek;
+
+    const newTree = oldTree.insertNode(block.dropLocation, newNode);
+    const result = block.codeResource.programmingLanguagePeek.validateTree(newTree);
+    return (result.isValid);
+  }
+
+  // Would the immediate child be allowed?
+  const isLegalDrag = () => {
+    if (!drag || block.dropLocation.length === 0) {
+      return false;
+    }
+
+    const newNodeType: QualifiedTypeName = {
+      languageName: drag.draggedDescription.language,
+      typeName: drag.draggedDescription.name
+    }
+    const currentTree = block.codeResource.syntaxTreePeek;
+    const currentLanguage = block.codeResource.programmingLanguagePeek;
+
+    const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
+    const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
+
+    return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(drag, block)));
+  }
+
+  // 
+  const map: Restricted.VariableMap<VisualBlockDescriptions.VisibilityVars> = {
+    ifAnyDrag: !!drag,
+    ifEmpty: !dropLocationHasChildren(drag, block),
+    ifLegalChild: isLegalChild(),
+    ifLegalDrag: isLegalDrag()
+  };
+
+  const visibilityRes = evalExpression.bind(this, visibilityExpr, map);
 
   // Ongoing drags trump almost any other possibility
   if (drag) {
@@ -165,48 +214,14 @@ export function calculateDropTargetState(drag: CurrentDrag, block: BlockDropProp
     if (onThis) {
       return ("self");
     } else {
-      // Some flags indicate that they want to show this placeholder if a drag is going on
-      if (flags.some(f => f === "ifAnyDrag")) {
+      if (visibilityRes()) {
         return ("available");
-      } else if (flags.some(f => f === "ifLegalDrag")) {
-        // Would the new tree ba a valid tree?
-        const newNode = drag.draggedDescription;
-        const oldTree = block.codeResource.syntaxTreePeek;
-        const newTree = oldTree.insertNode(block.dropLocation, newNode);
-
-        const result = block.codeResource.programmingLanguagePeek.validateTree(newTree);
-        if (result.isValid) {
-          return ("available");
-        } else {
-          return ("none");
-        }
-      } else if (flags.some(f => f === "ifLegalChild")) {
-        // Would the immediate child be allowed?
-        const newNodeType: QualifiedTypeName = {
-          languageName: drag.draggedDescription.language,
-          typeName: drag.draggedDescription.name
-        }
-        const currentTree = block.codeResource.syntaxTreePeek;
-        const currentLanguage = block.codeResource.programmingLanguagePeek;
-
-        const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
-        const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
-
-        if (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(drag, block))) {
-          return ("available");
-        } else {
-          return ("none");
-        }
       } else {
         return ("none");
       }
     }
   } else {
-    // There is no drag, but some placeholders want to be visible anyway
-    if (flags.some(f => f === "always")) {
-      return ("visible");
-    }
-    if (flags.some(f => f === "ifEmpty") && !dropLocationHasChildren(drag, block)) {
+    if (visibilityRes()) {
       return ("visible");
     } else {
       return ("none");

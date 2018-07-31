@@ -27,7 +27,7 @@ export interface ParameterDeclarations {
 // Resolves a value at runtime. The value must be the name of a parameter
 // that has been formally introduced before.
 export interface ParameterReference {
-  "$ref": string
+  $ref: string
 }
 
 // Checks for the "$ref" property

@@ -1,7 +1,5 @@
 import { SqlValidator, DatabaseSchemaAdditionalContext } from './sql.validator'
 
-import { ValidationContext } from '../validation-result'
-
 import { SPEC_TABLES } from '../../schema/schema.spec'
 import { Schema } from '../../schema/schema'
 

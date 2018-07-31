@@ -10,7 +10,7 @@ describe("BlockLanguage GeneratorInstructions allReferences()", () => {
   });
 
   it("Reference object", () => {
-    const ref = { "$ref": "foo" };
+    const ref = { $ref: "foo" };
     expect(Array.from(allReferences(ref))).toEqual([ref]);
   });
 

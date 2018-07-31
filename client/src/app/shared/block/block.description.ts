@@ -1,4 +1,5 @@
 import { QualifiedTypeName, NodeDescription } from '../syntaxtree/syntaxtree.description'
+import { Restricted } from './bool-mini-expression.description'
 
 export type Orientation = "horizontal" | "vertical";
 
@@ -7,6 +8,16 @@ export type Orientation = "horizontal" | "vertical";
  * drag & drop UI.
  */
 export namespace VisualBlockDescriptions {
+
+  /**
+   * These variables are available when evaluating drop target visibility.
+   */
+  export type VisibilityVars = "ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty";
+
+  /**
+   * This expression is evaluated to determine whether a drop target should be shown.
+   */
+  export type VisibilityExpression = Restricted.Expression<VisibilityVars>;
 
   /**
    * We currently allow any CSS style to be used.
@@ -56,7 +67,7 @@ export namespace VisualBlockDescriptions {
     // Drops something into a category of the parent
     parent?: CategoryInsert;
 
-    visibility?: ("ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty" | "always")[];
+    visibility?: VisibilityExpression;
   }
 
   /**

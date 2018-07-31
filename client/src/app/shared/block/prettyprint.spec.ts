@@ -18,7 +18,7 @@ export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) 
   expect(transform(input)).toEqual(expected);
 }
 
-describe('LanguageModel PrettyPrinter', () => {
+describe('BlockLanguage PrettyPrinter', () => {
   it('001 Empty Language', () => {
     verifyFiles('001-lang-empty', prettyPrintBlockLanguage);
   });

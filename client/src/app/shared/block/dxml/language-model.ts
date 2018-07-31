@@ -234,7 +234,7 @@ const EDITOR_BLOCKS = [
                 category: "attributes",
                 order: "insertLast"
               },
-              visibility: ["ifLegalChild"]
+              visibility: { $var: "ifLegalChild" }
             },
             children: [
               {
@@ -261,7 +261,7 @@ const EDITOR_BLOCKS = [
                 category: "elements",
                 order: "insertFirst"
               },
-              visibility: ["ifLegalChild"]
+              visibility: { $var: "ifLegalChild" }
             },
             children: [
               {
@@ -348,7 +348,7 @@ const EDITOR_BLOCKS = [
                 category: "value",
                 order: "insertFirst"
               },
-              visibility: ["ifEmpty", "ifLegalChild"]
+              visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
             },
             children: [
               {

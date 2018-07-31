@@ -958,6 +958,98 @@
       "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__",
       "description": "Type instructions that may contain references."
     },
+    "Restricted.Expression_VisualBlockDescriptions.VisibilityVars_": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Restricted.Value"
+        },
+        {
+          "$ref": "#/definitions/Restricted.Variable_VisualBlockDescriptions.VisibilityVars_"
+        },
+        {
+          "$ref": "#/definitions/Restricted.Operation_VisualBlockDescriptions.VisibilityVars_"
+        }
+      ]
+    },
+    "Restricted.Operation_VisualBlockDescriptions.VisibilityVars_": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Restricted.OperationEvery_VisualBlockDescriptions.VisibilityVars_"
+        },
+        {
+          "$ref": "#/definitions/Restricted.OperationSome_VisualBlockDescriptions.VisibilityVars_"
+        },
+        {
+          "$ref": "#/definitions/Restricted.OperationNot_VisualBlockDescriptions.VisibilityVars_"
+        }
+      ]
+    },
+    "Restricted.OperationEvery_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$every": {
+          "items": {
+            "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "$every"
+      ],
+      "type": "object"
+    },
+    "Restricted.OperationNot_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$not": {
+          "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+        }
+      },
+      "required": [
+        "$not"
+      ],
+      "type": "object"
+    },
+    "Restricted.OperationSome_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$some": {
+          "items": {
+            "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "$some"
+      ],
+      "type": "object"
+    },
+    "Restricted.Value": {
+      "additionalProperties": false,
+      "properties": {
+        "$value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "$value"
+      ],
+      "type": "object"
+    },
+    "Restricted.Variable_VisualBlockDescriptions.VisibilityVars_": {
+      "additionalProperties": false,
+      "properties": {
+        "$var": {
+          "$ref": "#/definitions/VisualBlockDescriptions.VisibilityVars"
+        }
+      },
+      "required": [
+        "$var"
+      ],
+      "type": "object"
+    },
     "ScopeTraitAdd": {
       "additionalProperties": false,
       "properties": {
@@ -1145,17 +1237,7 @@
           "type": "object"
         },
         "visibility": {
-          "items": {
-            "enum": [
-              "ifAnyDrag",
-              "ifLegalDrag",
-              "ifLegalChild",
-              "ifEmpty",
-              "always"
-            ],
-            "type": "string"
-          },
-          "type": "array"
+          "$ref": "#/definitions/VisualBlockDescriptions.VisibilityExpression"
         }
       },
       "type": "object"
@@ -1366,6 +1448,20 @@
         "direction"
       ],
       "type": "object"
+    },
+    "VisualBlockDescriptions.VisibilityExpression": {
+      "$ref": "#/definitions/Restricted.Expression_VisualBlockDescriptions.VisibilityVars_",
+      "description": "This expression is evaluated to determine whether a drop target should be shown."
+    },
+    "VisualBlockDescriptions.VisibilityVars": {
+      "description": "These variables are available when evaluating drop target visibility.",
+      "enum": [
+        "ifAnyDrag",
+        "ifLegalDrag",
+        "ifLegalChild",
+        "ifEmpty"
+      ],
+      "type": "string"
     }
   }
 }
