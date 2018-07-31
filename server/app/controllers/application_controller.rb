@@ -28,6 +28,6 @@ class ApplicationController < ActionController::API
 
   # Active record couldn't find a specific record
   def handle_record_not_found
-    render status: 404
+    render status: 404, plain: ""
   end
 end
