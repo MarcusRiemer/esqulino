@@ -12,6 +12,7 @@ import { AdminOverviewComponent } from './admin-overview.component'
 import { EditGrammarComponent } from './edit-grammar.component'
 import { LinkGrammarComponent } from './link-grammar.component'
 import { JsonEditor } from './json-editor.component'
+import { JsonSchemaValidationService } from './json-schema-validation.service'
 
 import { CreateBlockLanguageComponent } from './block-language/create-block-language.component'
 import { EditBlockLanguageComponent } from './block-language/edit-block-language.component'
@@ -37,6 +38,9 @@ import { ErrorListComponent } from './block-language/error-list.component'
     ErrorListComponent,
     LinkGrammarComponent,
     JsonEditor,
+  ],
+  providers: [
+    JsonSchemaValidationService
   ],
   exports: [
   ]
