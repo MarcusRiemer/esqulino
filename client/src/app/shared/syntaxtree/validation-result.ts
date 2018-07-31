@@ -81,7 +81,7 @@ export type ErrorData =
  * error code and the node location. The attached data may be used to to display
  * some helpful hints.
  */
-interface ValidationError {
+export interface ValidationError {
   code: string;
   node: AST.Node;
   data?: ErrorData;
@@ -155,6 +155,15 @@ export class ValidationResult {
 
   constructor(context: ValidationContext) {
     this._errors = context.errors;
+  }
+
+  /**
+   * @return All errors that happened on the given node.
+   */
+  getErrorsOn(node: AST.Node) {
+    return (
+      this._errors.filter(e => e.node === node)
+    );
   }
 
   get isValid() {

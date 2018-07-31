@@ -106,6 +106,48 @@ describe("BlockLanguage Generator Type Mapping", () => {
     expect(res.length).toEqual(1);
   });
 
+  it("Error Indicator (start)", () => {
+    const instr = new TypeInstructions({
+      blocks: [
+        { generateErrorIndicator: "start" }
+      ]
+    });
+
+    const concreteType: NodeConcreteTypeDescription = {
+      type: "concrete",
+      attributes: [
+        { type: "terminal", name: "p1", symbol: "p1Text", },
+      ]
+    };
+    const res = mapType(concreteType, instr) as VisualBlockDescriptions.EditorBlock[];
+    expect(res.length).toEqual(1);
+    expect(res[0].blockType).toEqual("block");
+    expect(res[0].children.length).toEqual(2);
+    expect(res[0].children[0].blockType).toEqual("error");
+    expect(res[0].children[1].blockType).toEqual("constant");
+  });
+
+  it("Error Indicator (end)", () => {
+    const instr = new TypeInstructions({
+      blocks: [
+        { generateErrorIndicator: "end" }
+      ]
+    });
+
+    const concreteType: NodeConcreteTypeDescription = {
+      type: "concrete",
+      attributes: [
+        { type: "terminal", name: "p1", symbol: "p1Text", },
+      ]
+    };
+    const res = mapType(concreteType, instr) as VisualBlockDescriptions.EditorBlock[];
+    expect(res.length).toEqual(1);
+    expect(res[0].blockType).toEqual("block");
+    expect(res[0].children.length).toEqual(2);
+    expect(res[0].children[0].blockType).toEqual("constant");
+    expect(res[0].children[1].blockType).toEqual("error");
+  });
+
   it("Mentioning an unknown attribute", () => {
     const instr = new TypeInstructions({
       blocks: [

@@ -30,6 +30,7 @@ import { BlockRenderBlockComponent } from './block/block-render-block.component'
 import { BlockRenderDropTargetComponent } from './block/block-render-drop-target.component'
 import { BlockRenderIteratorComponent } from './block/block-render-iterator.component'
 import { BlockRenderInputComponent } from './block/block-render-input.component'
+import { BlockRenderErrorComponent } from './block/block-render-error.component'
 
 import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
 import { QueryPreviewComponent } from './query/query-preview.component'
@@ -45,6 +46,7 @@ import { QueryService } from './query/query.service'
     BlockRenderComponent,
     BlockRenderBlockComponent,
     BlockRenderDropTargetComponent,
+    BlockRenderErrorComponent,
     BlockRenderIteratorComponent,
     BlockRenderInputComponent,
     BlockHostComponent,

@@ -7,7 +7,7 @@ import { HttpModule } from '@angular/http';
 
 import { PortalModule } from '@angular/cdk/portal';
 import {
-  MatToolbarModule, MatButtonModule, MatMenuModule
+  MatToolbarModule, MatButtonModule, MatMenuModule, MatTooltipModule
 } from '@angular/material'
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -24,7 +24,7 @@ import { ToolbarComponent } from './toolbar.component'
 import { ToolbarService } from './toolbar.service'
 
 const materialModules = [
-  MatToolbarModule, MatButtonModule, MatMenuModule
+  MatToolbarModule, MatButtonModule, MatMenuModule, MatTooltipModule
 ]
 
 /**

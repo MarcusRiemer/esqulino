@@ -8,7 +8,7 @@ type DropTargetProperties = VisualBlockDescriptions.DropTargetProperties;
 export type AttributeMappingOrder = "grammar" | string[];
 
 // For iterations: Where should drop targets be displayed?
-export type IterationDropTarget = "start" | "end" | "none";
+export type Position = "start" | "end" | "none";
 
 /**
  * Customization instructions for a specific visual that may be specified by a user.
@@ -27,7 +27,9 @@ export interface Instructions {
   // Controls how things dropped on this block will be treated
   onDrop: DropTargetProperties;
   // Where (and if) drop targets should be created
-  generateDropTargets: IterationDropTarget;
+  generateDropTargets: Position;
+  // Where (and if) to generate error indicators
+  generateErrorIndicator: Position;
 };
 
 /**
@@ -46,7 +48,7 @@ export type IteratorInstructions = Readonly<Pick<Instructions, "orientation" | "
 /**
  * Instructions that are useful on a block visual.
  */
-export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "orientation" | "style" | "onDrop">>;
+export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "orientation" | "style" | "onDrop" | "generateErrorIndicator">>;
 
 /**
  * Instructions that are useful on a terminal visual.
@@ -73,7 +75,8 @@ export module DefaultInstructions {
     orientation: "horizontal",
     attributeMapping: "grammar",
     style: {},
-    onDrop: VisualBlockDescriptions.DefaultDropTargetProperties
+    onDrop: VisualBlockDescriptions.DefaultDropTargetProperties,
+    generateErrorIndicator: "none"
   }
 
   export const terminalInstructions: TerminalInstructions = {

@@ -124,7 +124,14 @@ export namespace VisualBlockDescriptions {
     property: string;
   }
 
-  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput;
+  /**
+   * Shows a marker if there is some kind of error
+   */
+  export interface EditorErrorMarker extends EditorBlockBase {
+    blockType: "error";
+  }
+
+  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput | EditorErrorMarker;
 
   // Default to inserting after the given node. This should be a meaningful default ...
   export const DefaultDropTargetProperties: DropTargetProperties = {

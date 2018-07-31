@@ -51,15 +51,15 @@
           </ng-container>
         </div>
 
-        <!-- Render the editor components the block language demands -->
-        <div class="card card-body mb-3" *ngFor="let editorComponent of (editorComponents | async)">
-          <ng-template [cdkPortalOutlet]="editorComponent"></ng-template>
-        </div>
-
         <div class="card card-body mb-3">
           <h4 class="card-title">Validierung</h4>
           <ast-validation [codeResource]="currentResource">
           </ast-validation>
+        </div>
+
+        <!-- Render the editor components the block language demands -->
+        <div class="card card-body mb-3" *ngFor="let editorComponent of (editorComponents | async)">
+          <ng-template [cdkPortalOutlet]="editorComponent"></ng-template>
         </div>
 
         <div class="card card-body mb-3">
