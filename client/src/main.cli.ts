@@ -9,7 +9,7 @@ import { Tree } from './app/shared/syntaxtree/syntaxtree'
 import { prettyPrintGrammar } from './app/shared/syntaxtree/prettyprint'
 import { GrammarDescription } from './app/shared/syntaxtree/grammar.description'
 
-import { LanguageDefinition } from './app/shared/syntaxtree/language.description'
+import { LanguageDefinition } from './app/shared/syntaxtree/language'
 import { Language } from './app/shared/syntaxtree/language'
 
 import { BlockLanguageDescription } from './app/shared/block/block-language.description'
@@ -108,7 +108,10 @@ function availableLanguages(): LanguageDefinition[] {
  * Retrieves all grammars that are known to this instance.
  */
 function availableGrammars(): GrammarDescription[] {
-  return (availableLanguages().map(l => l.validators[0]));
+  const allGrammars = availableLanguages().map(
+    l => l.validators.filter(v => !(v instanceof Function)) as GrammarDescription[]
+  )
+  return ([].concat(...allGrammars));
 }
 
 /**
