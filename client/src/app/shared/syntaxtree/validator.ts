@@ -17,7 +17,9 @@ export abstract class SpecializedValidator {
 
 }
 
-export type SubValidator = SpecializedValidator | Desc.GrammarDescription;
+type SpecializedValidatorConstructor = typeof SpecializedValidator;
+
+export type SubValidator = SpecializedValidatorConstructor | Desc.GrammarDescription;
 
 /**
  * A validator receives instances of one or multiple schemas and will
@@ -25,11 +27,11 @@ export type SubValidator = SpecializedValidator | Desc.GrammarDescription;
  */
 export class Validator {
   private _registeredGrammars: { [langName: string]: GrammarValidator } = {};
-  private _registeredSpecialized: SpecializedValidator[] = [];
+  private _registeredSpecialized: SpecializedValidatorConstructor[] = [];
 
   constructor(subValidators: SubValidator[]) {
     subValidators.forEach(sub => {
-      if (sub instanceof SpecializedValidator) {
+      if (sub instanceof Function) {
         this._registeredSpecialized.push(sub);
       } else {
         this.registerGrammar(sub)
@@ -92,8 +94,14 @@ export class Validator {
         const lang = this.getGrammarValidator(rootNode.languageName);
         lang.validateFromRoot(rootNode, context);
 
-        // Run more specialized validators
-        this._registeredSpecialized.forEach(specialized => specialized.validateFromRoot(rootNode, context));
+        // Run more specialized validators.
+        this._registeredSpecialized.forEach((specialized: any) => {
+          // We need to cast `specialized` to "any" because it refers to an abstract
+          // class. We of course know that we are smart enough to only pass in classes
+          // that may be instantiated.
+          const instance = new specialized();
+          instance.validateFromRoot(rootNode, context)
+        });
 
       } else {
         // Not knowing the language is a single error
