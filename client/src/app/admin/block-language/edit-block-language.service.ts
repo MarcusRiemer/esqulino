@@ -5,12 +5,13 @@ import { Title } from '@angular/platform-browser'
 import { BehaviorSubject } from 'rxjs'
 import { switchMap, map, first, filter } from 'rxjs/operators'
 
-import { ServerDataService } from '../../shared/server-data.service'
+import { JsonSchemaValidationService } from '../json-schema-validation.service'
 
+import { ServerDataService } from '../../shared/server-data.service'
 import { BlockLanguageDescription } from '../../shared/block/block-language.description'
 import { generateBlockLanguage, validateGenerator } from '../../shared/block/generator/generator'
 import { prettyPrintBlockLanguage } from '../../shared/block/prettyprint'
-import { GeneratorError } from '../../shared/block/generator/error.description';
+import { GeneratorError } from '../../shared/block/generator/error.description'
 
 @Injectable()
 export class EditBlockLanguageService {
@@ -27,6 +28,7 @@ export class EditBlockLanguageService {
     private _serverData: ServerDataService,
     private _activatedRoute: ActivatedRoute,
     private _title: Title,
+    private _schemaValidator: JsonSchemaValidationService,
   ) {
     // Ensures that a block language that matches the URL is loaded.
     this._activatedRoute.paramMap
@@ -75,35 +77,40 @@ export class EditBlockLanguageService {
   /**
    * Reruns the block language generator.
    */
-  regenerate() {
-    this._serverData
-      // Fetch the grammar 
-      .getGrammarDescription(this.editedSubject.grammarId)
-      // That is never required to be updated
-      .pipe(first())
-      .subscribe(g => {
-        // Grab the instructions or assume default instructions
-        const instructions = this.editedSubject.localGeneratorInstructions || {};
+  async regenerate() {
+    // Grab the instructions or assume default instructions
+    const instructions = this.editedSubject.localGeneratorInstructions || {};
 
-        this.generatorErrors = validateGenerator(instructions, g);
+    // Ensure the instructions are valid
+    this.generatorErrors = await this._schemaValidator.validate("BlockLanguageGeneratorDocument", instructions);
 
-        if (this.generatorErrors.length === 0) {
-          this.doUpdate(blockLanguage => {
-            // Try to generate the block language itself. If this fails something is
-            // seriously wrong and we should probably do something smart about it.          
-            try {
-              return (generateBlockLanguage(blockLanguage, instructions, g));
-            } catch (e) {
-              this.generatorErrors.push({
-                type: "Unexpected",
-                message: "Could not generate block language",
-                exception: e
-              });
-              return (blockLanguage);
-            }
-          });
-        }
-      });
+    // And do something meaningful if they are
+    if (this.generatorErrors.length === 0) {
+      // Fetch the 
+      this._serverData
+        .getGrammarDescription(this.editedSubject.grammarId)
+        .pipe(first())
+        .subscribe(g => {
+          this.generatorErrors.push(...validateGenerator(instructions, g));
+
+          if (this.generatorErrors.length === 0) {
+            this.doUpdate(blockLanguage => {
+              // Try to generate the block language itself. If this fails something is
+              // seriously wrong and we should probably do something smart about it.          
+              try {
+                return (generateBlockLanguage(blockLanguage, instructions, g));
+              } catch (e) {
+                this.generatorErrors.push({
+                  type: "Unexpected",
+                  message: "Could not generate block language",
+                  exception: e
+                });
+                return (blockLanguage);
+              }
+            });
+          }
+        });
+    }
   }
 
   /**

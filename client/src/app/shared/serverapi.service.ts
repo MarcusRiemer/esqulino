@@ -33,6 +33,13 @@ export class ServerApiService {
   }
 
   /**
+   * Retrieves a specific schema
+   */
+  individualJsonSchemaUrl(name: string): string {
+    return (`${this._apiBaseUrl}/schema/${name}`)
+  }
+
+  /**
    * Retrieves the URL that is used to list all public block languages.
    */
   getBlockLanguageListUrl(): string {
