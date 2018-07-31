@@ -226,7 +226,7 @@ export class CodeResource extends ProjectResource {
     .pipe(
       map(([tree, lang]) => {
         if (tree && lang) {
-          return (lang.validateTree(tree));
+          return (lang.validateTree(tree, this.project.additionalValidationContext));
         } else {
           return (ValidationResult.EMPTY);
         }

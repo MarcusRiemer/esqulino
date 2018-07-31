@@ -125,10 +125,16 @@ export function printableError(e: ValidationError) {
 }
 
 /**
- * Used during validation to accumulate validation results.
+ * Used during validation to accumulate validation results. Additionaly
+ * provides some extra data that may be relevant during validation.
  */
 export class ValidationContext {
   private _errors: ValidationError[] = [];
+
+  constructor(
+    public additional: Readonly<any> = {}
+  ) {
+  }
 
   addError(code: ErrorCodes | string, node: AST.Node, data: ErrorData = undefined) {
     this._errors.push({ code: code, node: node, data: data });

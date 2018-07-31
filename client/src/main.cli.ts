@@ -9,7 +9,7 @@ import { Tree } from './app/shared/syntaxtree/syntaxtree'
 import { prettyPrintGrammar } from './app/shared/syntaxtree/prettyprint'
 import { GrammarDescription } from './app/shared/syntaxtree/grammar.description'
 
-import { LanguageDescription } from './app/shared/syntaxtree/language.description'
+import { LanguageDefinition } from './app/shared/syntaxtree/language.description'
 import { Language } from './app/shared/syntaxtree/language'
 
 import { BlockLanguageDescription } from './app/shared/block/block-language.description'
@@ -93,7 +93,7 @@ interface AvailableProgrammingLanguagesCommand {
 
 type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand | UpdateGrammarsCommand | UpdateBlockLanguagesCommand | UpdateBlockLanguageGeneratorsCommand;
 
-function availableLanguages(): LanguageDescription[] {
+function availableLanguages(): LanguageDefinition[] {
   return ([
     dxml.LANGUAGE_DESCRIPTION_ERUBY,
     dxml.LANGUAGE_DESCRIPTION_LIQUID,

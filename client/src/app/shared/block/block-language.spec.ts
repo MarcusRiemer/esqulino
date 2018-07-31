@@ -1,10 +1,10 @@
-import { Tree, LanguageDescription, Language, NodeTypeDescription } from '../syntaxtree';
+import { Tree, LanguageDefinition, Language, NodeTypeDescription } from '../syntaxtree';
 
 import { BlockLanguageDescription } from './block-language.description'
 import { BlockLanguage } from './block-language'
 import { VisualBlockDescriptions } from './block.description'
 
-const langEmptyBlocks: LanguageDescription = {
+const langEmptyBlocks: LanguageDefinition = {
   id: "emptyBlocks",
   name: "emptyBlocks",
   emitters: [],
