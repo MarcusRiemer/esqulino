@@ -12,7 +12,7 @@
           "blockType": "dropTarget",
           "direction": "horizontal",
           "dropTarget": {
-            "visibility": ["ifEmpty"]
+            "visibility": { "$var": "ifEmpty" }
           },
           "children": [
             {

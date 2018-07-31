@@ -1,4 +1,3 @@
-import { Unrestricted } from './bool-mini-expression.description'
 import { evalExpression } from './bool-mini-expression'
 
 describe("Boolean Mini Expressions", () => {

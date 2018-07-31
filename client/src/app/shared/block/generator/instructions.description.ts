@@ -120,8 +120,6 @@ export type TypeInstructionsDescription = InternalTypeInstructionsDescription<
 export type ReferenceableTypeInstructionsDescription =
   InternalTypeInstructionsDescription<ReferenceableInstructions, ParameterReferenceable<BlockInstructions>>;
 
-type TempType = ParameterReferenceable<BlockInstructions>;
-
 /**
  * Supplementary generation instructions for all types. In this variant
  * all instructions are guarenteed to be resolved, there are no references

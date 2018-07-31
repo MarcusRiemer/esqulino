@@ -3,7 +3,7 @@ language "test" {
     dropTarget {
       direction horizontal
       dropOptions {
-        visible ifEmpty, ifLegalDrag
+        visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
       }
       visual {
         "Drop"

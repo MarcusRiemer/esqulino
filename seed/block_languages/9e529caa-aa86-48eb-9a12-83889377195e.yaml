@@ -33,21 +33,21 @@ concise_attributes:
     "constant", "languageName": "regex"}}, {"visual": [{"children": [{"children":
     [{"text": "(", "blockType": "constant"}], "blockType": "dropTarget", "direction":
     "horizontal", "dropTarget": {"self": {"order": "insertAfter", "skipParents": 1},
-    "visibility": ["ifLegalChild"]}}, {"between": [{"children": [{"text": "|", "blockType":
-    "constant"}], "blockType": "dropTarget", "direction": "horizontal", "dropTarget":
-    {"self": {"order": "insertAfter", "skipParents": 1}, "visibility": ["ifLegalChild"]}}],
-    "blockType": "iterator", "direction": "horizontal", "childGroupName": "expressions"},
-    {"text": ")", "blockType": "constant"}], "blockType": "block", "direction": "horizontal"}],
-    "describedType": {"typeName": "alternative", "languageName": "regex"}}, {"visual":
-    [{"blockType": "iterator", "direction": "horizontal", "childGroupName": "singleExpression"}],
-    "describedType": {"typeName": "expr", "languageName": "regex"}}], "editorComponents":
-    []}'
+    "visibility": {"$var": "ifLegalChild"}}}, {"between": [{"children": [{"text":
+    "|", "blockType": "constant"}], "blockType": "dropTarget", "direction": "horizontal",
+    "dropTarget": {"self": {"order": "insertAfter", "skipParents": 1}, "visibility":
+    {"$var": "ifLegalChild"}}}], "blockType": "iterator", "direction": "horizontal",
+    "childGroupName": "expressions"}, {"text": ")", "blockType": "constant"}], "blockType":
+    "block", "direction": "horizontal"}], "describedType": {"typeName": "alternative",
+    "languageName": "regex"}}, {"visual": [{"blockType": "iterator", "direction":
+    "horizontal", "childGroupName": "singleExpression"}], "describedType": {"typeName":
+    "expr", "languageName": "regex"}}], "editorComponents": []}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-03-04 21:02:49.790808'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-06-07 07:46:20.494582'
+  value_before_type_cast: '2018-07-31 22:02:52.068146'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: regex

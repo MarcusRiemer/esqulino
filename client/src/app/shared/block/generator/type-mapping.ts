@@ -113,9 +113,22 @@ export function mapChildren(
           category: attr.name,
           order: "insertFirst"
         },
-        visibility: ["ifEmpty", "ifLegalChild"]
+        visibility: { $every: [{ $var: "ifEmpty" }, { $var: "ifLegalDrag" }] }
+
       },
       children: [
+        {
+          blockType: "error",
+          style: {
+            "paddingLeft": "1ch",
+            "paddingRight": "1ch",
+            "background-color": "red",
+            "border": "2px solid red",
+            "border-radius": "500px",
+            "color": "white",
+            "cursor": "default",
+          },
+        },
         {
           blockType: "constant",
           text: "❓",

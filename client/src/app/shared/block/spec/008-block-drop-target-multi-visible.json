@@ -11,7 +11,7 @@
         {
           "blockType": "dropTarget",
           "dropTarget": {
-            "visibility": ["ifEmpty", "ifLegalDrag"]
+            "visibility": { "$some": [{ "$var": "ifEmpty" }, { "$var": "ifLegalChild" }] }
           },
           "direction": "horizontal",
           "children": [

@@ -172,7 +172,7 @@ function prettyPrintDropTargetProperties(desc: VisualBlockDescriptions.DropTarge
   const middle: string[] = [];
 
   if (desc.visibility) {
-    middle.push(`visible ${desc.visibility.join(', ')}`)
+    middle.push(`visible ${JSON.stringify(desc.visibility)}`)
   }
 
   if (desc.self) {

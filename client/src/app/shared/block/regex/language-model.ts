@@ -171,7 +171,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   order: "insertAfter",
                   skipParents: 1
                 },
-                visibility: ["ifLegalChild"]
+                visibility: { $var: "ifLegalChild" }
               },
               children: [
                 {
@@ -193,7 +193,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                       order: "insertAfter",
                       skipParents: 1
                     },
-                    visibility: ["ifLegalChild"]
+                    visibility: { $var: "ifLegalChild" }
                   },
                   children: [
                     {

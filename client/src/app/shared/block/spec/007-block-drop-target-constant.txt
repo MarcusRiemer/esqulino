@@ -3,7 +3,7 @@ language "test" {
     dropTarget {
       direction horizontal
       dropOptions {
-        visible ifEmpty
+        visible {"$var":"ifEmpty"}
       }
       visual {
         "Drop"

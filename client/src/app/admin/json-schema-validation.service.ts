@@ -43,8 +43,11 @@ export class JsonSchemaValidationService {
     return (toReturn);
   }
 
+  /**
+   * Validates the given object against the given schema.
+   */
   public async validate(schemaName: SchemaName, obj: any): Promise<GeneratorError[]> {
-    const validator = await this.getValidator("BlockLanguageGeneratorDocument");
+    const validator = await this.getValidator(schemaName);
     const result = await validator(obj);
 
     if (result) {
