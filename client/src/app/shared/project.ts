@@ -11,6 +11,7 @@ import { Schema } from './schema/schema'
 import { Saveable, SaveStateEvent } from './interfaces'
 import { CodeResource } from './syntaxtree'
 import { BlockLanguage } from '../shared/block';
+import { DatabaseSchemaAdditionalContext } from './syntaxtree/sql/sql.validator';
 
 export { ProjectDescription, ProjectFullDescription }
 
@@ -125,6 +126,15 @@ export class Project implements ApiVersion, Saveable {
    */
   get apiVersion(): ApiVersionToken {
     return (CURRENT_API_VERSION);
+  }
+
+  /**
+   * @return Project wide data that may or may not be relevant during validation.
+   */
+  get additionalValidationContext(): DatabaseSchemaAdditionalContext {
+    return ({
+      databaseSchema: this.schema
+    });
   }
 
   /**
