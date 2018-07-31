@@ -8,5 +8,5 @@ export const LANGUAGE_DESCRIPTION: LanguageDefinition = {
   id: "sql",
   name: "SQL",
   emitters: NODE_CONVERTER,
-  validators: [GRAMMAR_DESCRIPTION, new SqlValidator()]
+  validators: [GRAMMAR_DESCRIPTION, SqlValidator]
 }
