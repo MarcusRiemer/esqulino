@@ -519,6 +519,8 @@
               },
               "generateDropTargets": {
               },
+              "generateErrorIndicator": {
+              },
               "onDrop": {
               },
               "orientation": {
@@ -538,6 +540,8 @@
             "description": "Make all properties in T optional",
             "properties": {
               "attributeMapping": {
+              },
+              "generateErrorIndicator": {
               },
               "onDrop": {
               },
@@ -928,6 +932,8 @@
               },
               "generateDropTargets": {
               },
+              "generateErrorIndicator": {
+              },
               "onDrop": {
               },
               "orientation": {
@@ -1102,6 +1108,9 @@
         },
         {
           "$ref": "#/definitions/VisualBlockDescriptions.EditorInput"
+        },
+        {
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorErrorMarker"
         }
       ]
     },
@@ -1248,6 +1257,25 @@
       "required": [
         "blockType",
         "direction"
+      ],
+      "type": "object"
+    },
+    "VisualBlockDescriptions.EditorErrorMarker": {
+      "additionalProperties": false,
+      "description": "Shows a marker if there is some kind of error",
+      "properties": {
+        "blockType": {
+          "enum": [
+            "error"
+          ],
+          "type": "string"
+        },
+        "style": {
+          "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
+        }
+      },
+      "required": [
+        "blockType"
       ],
       "type": "object"
     },

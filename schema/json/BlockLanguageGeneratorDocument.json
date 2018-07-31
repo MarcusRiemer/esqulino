@@ -300,6 +300,8 @@
               },
               "generateDropTargets": {
               },
+              "generateErrorIndicator": {
+              },
               "onDrop": {
               },
               "orientation": {
@@ -319,6 +321,8 @@
             "description": "Make all properties in T optional",
             "properties": {
               "attributeMapping": {
+              },
+              "generateErrorIndicator": {
               },
               "onDrop": {
               },
@@ -541,6 +545,8 @@
               "between": {
               },
               "generateDropTargets": {
+              },
+              "generateErrorIndicator": {
               },
               "onDrop": {
               },

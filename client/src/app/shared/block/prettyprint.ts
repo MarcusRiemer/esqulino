@@ -68,6 +68,8 @@ export function prettyPrintVisual(desc: VisualBlockDescriptions.ConcreteBlock): 
       return prettyPrintVisualBlock(desc);
     case "input":
       return [`TODO: input blocks`];
+    case "error":
+      return [`TODO: error blocks`];
     default:
       throw new Error(`Unknow visual block "${(desc as any).blockType}"`);
   }

@@ -229,6 +229,13 @@ export function mapType(
       thisBlock.style = blockInstructions.style;
     }
 
+    if (blockInstructions.generateErrorIndicator !== "none") {
+      let position = blockInstructions.generateErrorIndicator === "start" ? 0 : thisBlock.children.length;
+      thisBlock.children.splice(position, 0, {
+        blockType: "error"
+      });
+    }
+
     toReturn.push(thisBlock);
   }
 
