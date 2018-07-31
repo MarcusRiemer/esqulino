@@ -1,11 +1,14 @@
+/* Typical height: Almost full screen */
 textarea.full-height, json-editor.full-height ace-editor {
     height: 95vh;
 }
 
+/* Typical height: Half a screen */
 textarea.half-height, json-editor.half-height ace-editor {
     height: 50vh;
 }
 
+/* Make the ace-editor look a little like the surrounding components */
 ace-editor {
     min-height: 200px;
     width:100%;

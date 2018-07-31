@@ -1,16 +1,21 @@
+/* The "raw" AST editor */
 .ast {
+    /* Basic outline for each node */
     .node {
         border: 1px solid black;
         padding: 5px;
     }
 
+    /* Indent each node after the first */
     .node .node {
         margin: 10px;
     }
 }
 
+/* The "block" AST editor */
 .block-editor-root {
-    font-family: monospace;
+    /* Default font settings */
+    font-family: $monospace-font;
     font-size: 1.2rem;
 
     input {
@@ -26,7 +31,7 @@ sidebar-item-host .ast {
     }
 
     .block {
-        font-family: monospace;
+        font-family: $monospace-font;
         cursor: default;
         font-size: 1.2rem;
         border: 2px solid black;
