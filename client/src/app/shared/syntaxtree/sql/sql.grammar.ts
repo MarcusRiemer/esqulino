@@ -371,7 +371,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
                 languageName: "sql",
                 typeName: "expression"
               },
-              occurs: "*"
+              occurs: "+"
             },
           ],
           between: {
@@ -399,7 +399,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
                 languageName: "sql",
                 typeName: "expression"
               },
-              occurs: "*"
+              occurs: "+"
             },
           ],
           between: {

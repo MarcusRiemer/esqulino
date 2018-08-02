@@ -1,6 +1,6 @@
 import {
   GrammarDocument, NodeChildrenGroupDescription,
-  NodeTypesChildReference, OccursSpecificDescription, isQualifiedTypeName, isOccursSpecificDescription
+  NodeTypesChildReference, OccursSpecificDescription, isQualifiedTypeName, isOccursSpecificDescription, NodeAttributeDescription, isNodeConcreteTypeDescription, GrammarDescription
 } from "./grammar.description";
 import { FullNodeConcreteTypeDescription } from "./grammar-util.description";
 import { QualifiedTypeName } from "./syntaxtree.description";
@@ -76,4 +76,51 @@ export function isHoleIfEmpty(attrDescription: NodeChildrenGroupDescription) {
     default:
       return (false);
   }
+}
+
+/**
+ * A NodeAttributeDescription that knows the name of its hosting grammar and
+ * the type it is placed on.
+ */
+export type FullNodeAttributeDescription = NodeAttributeDescription & {
+  grammarName: string
+  typeName: string
+}
+
+/**
+ * @return All attributes of the given grammar in the form of a handy list.
+ */
+export function getFullAttributes(g: GrammarDescription): FullNodeAttributeDescription[] {
+  const toReturn: FullNodeAttributeDescription[] = [];
+
+  Object.entries(g.types || {}).forEach(([typeName, type]) => {
+    if (isNodeConcreteTypeDescription(type)) {
+      (type.attributes || []).forEach(attribute => {
+        toReturn.push(Object.assign({}, attribute, {
+          grammarName: g.name,
+          typeName: typeName
+        }));
+      });
+    }
+  });
+
+  return (toReturn);
+}
+
+/**
+ * @return Names of all blocks of the given grammar in the form of a handy list
+ */
+export function getFullBlocks(g: GrammarDescription): QualifiedTypeName[] {
+  const toReturn: QualifiedTypeName[] = [];
+
+  Object.entries(g.types || {}).forEach(([typeName, type]) => {
+    if (isNodeConcreteTypeDescription(type)) {
+      toReturn.push({
+        languageName: g.name,
+        typeName: typeName
+      });
+    }
+  });
+
+  return (toReturn);
 }

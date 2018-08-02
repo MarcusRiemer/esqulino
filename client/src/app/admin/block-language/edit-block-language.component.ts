@@ -20,6 +20,9 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   ) {
   }
 
+  /**
+   * All grammars that may be selected for the edited block language.
+   */
   readonly availableGrammars = this._serverData.listGrammars.value;
 
   ngAfterViewInit() {
@@ -50,13 +53,13 @@ export class EditBlockLanguageComponent implements AfterViewInit {
    * Saves the current state of the block language
    */
   onSave() {
-    this._current.onSave();
+    this._current.save();
   }
 
   /**
    * The data for the generator has been updated.
    */
   onGeneratorDataUpdate(json: any) {
-    this._current.onGeneratorDataUpdate(json);
+    this._current.updateGeneratorData(json);
   }
 }

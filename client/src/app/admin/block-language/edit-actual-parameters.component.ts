@@ -9,7 +9,7 @@ import { BlockLanguageDescription } from '../../shared/block/block-language.desc
   templateUrl: 'templates/edit-actual-parameters.html',
   selector: 'edit-actual-parameters'
 })
-export class EditActualParameters implements OnChanges {
+export class EditActualParametersComponent implements OnChanges {
   @Input() blockLanguage: BlockLanguageDescription;
 
   public formalParameterNames: string[] = [];
@@ -36,12 +36,5 @@ export class EditActualParameters implements OnChanges {
       this.formalParameterNames = Object.keys(declarations);
       this.maximumParamNameLength = Math.max(...this.formalParameterNames.map(s => s.length));
     }
-  }
-
-  /**
-   * Debug output
-   */
-  onParameterValueChanged(paramName: string, paramValue: string) {
-    console.log(`${paramName} = ${paramValue}`);
   }
 }
