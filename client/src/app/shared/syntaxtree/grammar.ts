@@ -6,6 +6,8 @@ import {
   ErrorCodes, ValidationContext, ErrorMissingChild, ErrorMissingProperty,
   ErrorUnexpectedType
 } from './validation-result'
+import { OccursSpecificDescription } from './grammar.description';
+import { resolveOccurs } from './grammar-util';
 
 /**
  * Every type can be identified by its fully qualified name (language
@@ -72,11 +74,6 @@ export abstract class NodeType {
   }
 
   /**
-   * @return The names of the categories that will be minimally required
-   */
-  abstract get requiredChildrenCategoryNames(): string[];
-
-  /**
    * Determines whether the given type would be an *immediate* fit in the
    * given category. This check does *not* care about any possible errors
    * that would occur in the node of the given type. This partial check is
@@ -123,17 +120,6 @@ export class NodeConcreteType extends NodeType {
    */
   get allowedChildrenCategoryNames() {
     return (Object.keys(this._allowedChildren));
-  }
-
-  /**
-   * @return The names of the categories that will be minimally required
-   */
-  get requiredChildrenCategoryNames() {
-    return (
-      Object.values(this._allowedChildren)
-        .filter(c => c.isRequired)
-        .map(c => c.categoryName)
-    );
   }
 
   /**
@@ -273,13 +259,6 @@ class NodeTypeChildren {
   }
 
   /**
-   * @return True, if this child category is essential for the parent.
-   */
-  get isRequired() {
-    return (this._childValidator.isRequired);
-  }
-
-  /**
    * @return The node that is the parent to all of these node.
    */
   get parent() {
@@ -317,13 +296,6 @@ abstract class NodeComplexTypeChildrenValidator {
   protected abstract validateChildrenImpl(parent: AST.Node, ast: AST.Node[], context: ValidationContext): AST.Node[];
 
   /**
-   * @return True, if this category will be required to be present on the node.
-   */
-  get isRequired() {
-    return (this.isRequiredImpl);
-  }
-
-  /**
    * Determines whether the given type would be an *immediate* fit for this
    * validator. This check does *not* care about any possible errors that
    * would occur in the node of the given type. This partial check is
@@ -334,11 +306,6 @@ abstract class NodeComplexTypeChildrenValidator {
    * @return True, if this would be a legal, immediate fit.
    */
   abstract allowsChildType(childType: AST.QualifiedTypeName): boolean;
-
-  /**
-   * @return True, if the deriving implementation deems this category necessary.
-   */
-  protected abstract readonly isRequiredImpl: boolean;
 }
 
 /**
@@ -346,40 +313,20 @@ abstract class NodeComplexTypeChildrenValidator {
  */
 class ChildCardinality {
   private _nodeType: TypeReference;
-  private _minOccurs: number;
-  private _maxOccurs: number;
+  private _occurs: OccursSpecificDescription;
 
   constructor(typeDesc: Desc.NodeTypesChildReference, group: NodeTypeChildren) {
     const parent = group.parent;
+    this._occurs = resolveOccurs(typeDesc);
+
     if (typeof (typeDesc) === "string") {
-      // Simple strings per default occur exactly once
+      // Simple strings always refer to the language of the parent.
       this._nodeType = new TypeReference(parent.validator, typeDesc, parent.languageName);
-      this._minOccurs = 1;
-      this._maxOccurs = 1;
     } else if (Desc.isChildCardinalityDescription(typeDesc)) {
-      // Complex descriptions may provide different cardinalities
+      // Complex descriptions may refer to a different language
       this._nodeType = new TypeReference(parent.validator, typeDesc.nodeType, parent.languageName);
-
-      const normalized = this.normalizeOccursDescription(typeDesc.occurs);
-
-      this._minOccurs = normalized.minOccurs;
-      this._maxOccurs = normalized.maxOccurs;
     } else {
       throw new Error(`Unknown child cardinality: "${JSON.stringify(typeDesc)}"`);
-    }
-  }
-
-  private normalizeOccursDescription(desc: Desc.OccursDescription): Desc.OccursSpecificDescription {
-    if (Desc.isOccursSpecificDescription(desc)) {
-      return desc;
-    } else {
-      switch (desc) {
-        case "*": return ({ minOccurs: 0, maxOccurs: +Infinity });
-        case "?": return ({ minOccurs: 0, maxOccurs: 1 });
-        case "+": return ({ minOccurs: 1, maxOccurs: +Infinity });
-        case "1": return ({ minOccurs: 1, maxOccurs: 1 });
-        default: throw new Error(`Unknown occurences: "${JSON.stringify(desc)}"`);
-      }
     }
   }
 
@@ -394,14 +341,14 @@ class ChildCardinality {
    * @return The minimum number of occurences that are expected
    */
   get minOccurs() {
-    return (this._minOccurs);
+    return (this._occurs.minOccurs);
   }
 
   /**
    * @return The maximum number of occurences that are expected
    */
   get maxOccurs() {
-    return (this._maxOccurs);
+    return (this._occurs.maxOccurs);
   }
 }
 
@@ -417,13 +364,6 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
 
     this._group = group;
     this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group));
-  }
-
-  /**
-   * @return True, if any of the children in this group need to occur at least once.
-   */
-  get isRequiredImpl() {
-    return (this._nodeTypes.some(c => c.minOccurs > 0));
   }
 
   /**
@@ -524,13 +464,6 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
 
     this._categoryName = group.categoryName;
     this._nodeTypes = desc.nodeTypes.map(typeDesc => new ChildCardinality(typeDesc, group));
-  }
-
-  /**
-   * @return True, if any of the children in this group need to occur at least once.
-   */
-  get isRequiredImpl() {
-    return (this._nodeTypes.some(c => c.minOccurs > 0));
   }
 
   /**
@@ -655,8 +588,6 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
       typeName: possibleName
     }
   }
-
-  protected isRequiredImpl: boolean;
 
   /**
    * @return True, if the given type occurs anywhere in the list of possible types.

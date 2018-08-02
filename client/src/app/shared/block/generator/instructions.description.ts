@@ -68,7 +68,7 @@ export module DefaultInstructions {
     orientation: "horizontal",
     between: "",
     style: {},
-    generateDropTargets: "none",
+    generateDropTargets: "none"
   }
 
   export const blockInstructions: BlockInstructions = {

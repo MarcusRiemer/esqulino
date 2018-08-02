@@ -851,7 +851,7 @@
           "$ref": "#/definitions/VisualBlockDescriptions.EditorInput"
         },
         {
-          "$ref": "#/definitions/VisualBlockDescriptions.EditorErrorMarker"
+          "$ref": "#/definitions/VisualBlockDescriptions.EditorErrorIndicator"
         }
       ]
     },
@@ -991,7 +991,7 @@
       ],
       "type": "object"
     },
-    "VisualBlockDescriptions.EditorErrorMarker": {
+    "VisualBlockDescriptions.EditorErrorIndicator": {
       "additionalProperties": false,
       "description": "Shows a marker if there is some kind of error",
       "properties": {
@@ -1000,6 +1000,12 @@
             "error"
           ],
           "type": "string"
+        },
+        "excludedErrors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"

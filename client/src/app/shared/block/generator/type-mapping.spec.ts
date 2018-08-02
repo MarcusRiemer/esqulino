@@ -1,4 +1,4 @@
-import { NodeConcreteTypeDescription } from '../../syntaxtree/grammar.description'
+import { NodeConcreteTypeDescription, NodeAttributeDescription } from '../../syntaxtree/grammar.description'
 
 import { VisualBlockDescriptions } from '../block.description';
 
@@ -35,14 +35,18 @@ describe("BlockLanguage Generator Type Mapping", () => {
   });
 
   it("Sequence => Iterator", () => {
-    const res = mapChildren(
-      {
-        type: "sequence",
-        name: "c1",
-        nodeTypes: []
-      },
-      DefaultInstructions.iteratorInstructions
-    );
+    const attrType: NodeAttributeDescription = {
+      type: "sequence",
+      name: "c1",
+      nodeTypes: []
+    };
+    const nodeType: NodeConcreteTypeDescription = {
+      type: "concrete",
+      attributes: [
+        attrType
+      ]
+    };
+    const res = mapChildren(nodeType, attrType, DefaultInstructions.iteratorInstructions);
 
     expect(res).toEqual([
       {
@@ -55,12 +59,19 @@ describe("BlockLanguage Generator Type Mapping", () => {
   });
 
   it("Sequence (+Between) => Iterator", () => {
+    const attrType: NodeAttributeDescription = {
+      type: "sequence",
+      name: "c1",
+      nodeTypes: []
+    };
+    const nodeType: NodeConcreteTypeDescription = {
+      type: "concrete",
+      attributes: [
+        attrType
+      ]
+    };
     const res = mapChildren(
-      {
-        type: "sequence",
-        name: "c1",
-        nodeTypes: []
-      },
+      nodeType, attrType,
       {
         orientation: "horizontal",
         between: "ä",

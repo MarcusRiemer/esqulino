@@ -725,16 +725,6 @@ describe('Grammar Validation', () => {
 
   });
 
-  it('"sequence": Required children categories', () => {
-    const v = new Validator([langSequenceConstraint]);
-
-    const root = v.getType(langSequenceConstraint.name, "root");
-    expect(root.requiredChildrenCategoryNames).toEqual(["nodes"]);
-
-    const a = v.getType(langSequenceConstraint.name, "a");
-    expect(a.requiredChildrenCategoryNames).toEqual([]);
-  });
-
   it('"sequence": allowsChildType()', () => {
     const v = new Validator([langSequenceConstraint]);
     const vNodeA = v.availableTypes[0];
@@ -1108,16 +1098,6 @@ describe('Grammar Validation', () => {
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(2);
-  });
-
-  it('"allowed": Required children categories', () => {
-    const v = new Validator([langAllowedConstraint]);
-
-    const root = v.getType(langAllowedConstraint.name, "root");
-    expect(root.requiredChildrenCategoryNames).toEqual(["nodes"]);
-
-    const a = v.getType(langAllowedConstraint.name, "a");
-    expect(a.requiredChildrenCategoryNames).toEqual([]);
   });
 
   it('"allowed": allowsChildType', () => {

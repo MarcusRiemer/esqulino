@@ -12,6 +12,7 @@ import {
 } from './instructions.description'
 
 import { TypeInstructions } from './instructions'
+import { isHoleIfEmpty } from '../../syntaxtree/grammar-util';
 
 /**
  * Maps terminal symbols to constant blocks. The exact value of the terminal
@@ -78,9 +79,10 @@ export function mapProperty(
 };
 
 /**
- *
+ * Maps children of a specific child group to an iterable block.
  */
 export function mapChildren(
+  typeDesc: NodeConcreteTypeDescription,
   attr: NodeChildrenGroupDescription,
   instructions: IteratorInstructions
 ): VisualBlockDescriptions.ConcreteBlock[] {
@@ -88,7 +90,7 @@ export function mapChildren(
   let between: VisualBlockDescriptions.ConcreteBlock[] = undefined;
   let dropTarget: VisualBlockDescriptions.ConcreteBlock = undefined;
 
-  // A simple seperation character?
+  // A simple seperation character that is explicitly specified by the instructions?
   if (typeof instructions.between === "string" && instructions.between.length > 0) {
     // Create a single terminal character to go in between
     between = [mapTerminal(
@@ -105,7 +107,13 @@ export function mapChildren(
     }
   }
 
+  // Find out whether to show a drop target
   if (instructions.generateDropTargets !== "none") {
+    const calculatedVisibility: VisualBlockDescriptions.VisibilityExpression =
+      isHoleIfEmpty(attr)
+        ? { $var: "ifEmpty" }
+        : { $every: [{ $var: "ifEmpty" }, { $var: "ifLegalDrag" }] };
+
     dropTarget = {
       blockType: "dropTarget",
       dropTarget: {
@@ -113,22 +121,10 @@ export function mapChildren(
           category: attr.name,
           order: "insertFirst"
         },
-        visibility: { $every: [{ $var: "ifEmpty" }, { $var: "ifLegalDrag" }] }
+        visibility: calculatedVisibility
 
       },
       children: [
-        {
-          blockType: "error",
-          style: {
-            "paddingLeft": "1ch",
-            "paddingRight": "1ch",
-            "background-color": "red",
-            "border": "2px solid red",
-            "border-radius": "500px",
-            "color": "white",
-            "cursor": "default",
-          },
-        },
         {
           blockType: "constant",
           text: "❓",
@@ -174,6 +170,7 @@ export function mapChildren(
 }
 
 export function mapAttribute(
+  typeDesc: NodeConcreteTypeDescription,
   attr: NodeAttributeDescription,
   instructions: TypeInstructions,
 ): VisualBlockDescriptions.ConcreteBlock[] {
@@ -181,7 +178,7 @@ export function mapAttribute(
     case "allowed":
     case "sequence":
     case "choice":
-      return mapChildren(attr, instructions.scopeIterator(attr.name));
+      return mapChildren(typeDesc, attr, instructions.scopeIterator(attr.name));
     case "terminal":
       return [mapTerminal(attr, instructions.scopeTerminal(attr.name))];
     case "property":
@@ -208,7 +205,7 @@ export function mapAttributes(
     const mappedType = typeDesc.attributes.find(a => a.name === t);
     if (mappedType) {
       // ... and map that to one (or multiple) blocks
-      return (mapAttribute(mappedType, instructions));
+      return (mapAttribute(typeDesc, mappedType, instructions));
     } else {
       throw new Error(`Could not find property "${t}" mentioned by generating instructions for "${typeDesc.type}"`);
     }
@@ -255,6 +252,7 @@ export function mapType(
           "color": "white",
           "cursor": "default",
         },
+        excludedErrors: ["MISSING_CHILD"]
       });
     }
 

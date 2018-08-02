@@ -103,7 +103,7 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
   ]
 }
 
-describe("LanguageModel", () => {
+describe("Block Language", () => {
   it("Loads correctly and hands out data", () => {
     const lm = new BlockLanguage(langModelEmptyBlocks);
     const l = new Language(langEmptyBlocks);
@@ -122,14 +122,6 @@ describe("LanguageModel", () => {
 
     expect(lm.getEditorBlock({ languageName: "emptyBlocks", typeName: "a" })).toBeTruthy();
     expect(_ => { lm.getEditorBlock({ languageName: "x", typeName: "x" }) }).toThrowError();
-  });
-
-  it("Constructing default root with children", () => {
-    const lm = new BlockLanguage(langModelEmptyBlocks);
-    const l = new Language(langEmptyBlocks);
-
-    const n = lm.constructDefaultNode(l, { languageName: "emptyBlocks", typeName: "root" });
-    expect(Object.keys(n.children)).toEqual(["cat_a"]);
   });
 
   it("Rejects to render a tree with only unknown types", () => {

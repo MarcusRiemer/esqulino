@@ -15,18 +15,40 @@ import { VisualBlockDescriptions } from '../../../shared/block';
 export class BlockRenderErrorComponent {
   @Input() public codeResource: CodeResource;
   @Input() public node: Node;
-  @Input() public visual: VisualBlockDescriptions.EditorInput;
+  @Input() public visual: VisualBlockDescriptions.EditorErrorIndicator;
 
+  /**
+   * These error codes should not trigger this indicator.
+   */
+  private get excludedErrorCodes() {
+    return (this.visual.excludedErrors || []);
+  }
+
+  /**
+   * @return True, if the given error code should trigger this indicator.
+   */
+  private showErrorFor(code: string) {
+    return (this.excludedErrorCodes.indexOf(code) < 0);
+  }
+
+  /**
+   * All errors that occur on this block
+   */
   public get nodeErrors() {
     return (this.codeResource.validationResult.pipe(
       map(validationResult => validationResult.getErrorsOn(this.node))
     ));
   }
 
-  public get hasError() {
-    return (this.nodeErrors.pipe(
-      map(validationResult => validationResult.length > 0)
-    ));
+  /**
+   * True, if the error indicator should be shown.
+   */
+  public get showIndicator() {
+    return (
+      this.nodeErrors.pipe(
+        map(validationResult => validationResult.filter(e => this.showErrorFor(e.code)).length > 0)
+      )
+    );
   }
 
   public get message() {
