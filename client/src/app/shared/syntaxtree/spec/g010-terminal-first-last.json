@@ -6,6 +6,7 @@
       "attributes": [
         {
           "type": "terminal",
+          "name": "fst",
           "symbol": "first"
         },
         {
@@ -23,6 +24,7 @@
         },
         {
           "type": "terminal",
+          "name": "lst",
           "symbol": "last"
         }
       ]
