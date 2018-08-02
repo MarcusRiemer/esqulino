@@ -1,4 +1,10 @@
 /**
+ * A function that takes no parameter and and calculates a boolean value. 
+ * May be used instead of an actual boolean value for late binding.
+ */
+export type ValueFunction = () => boolean;
+
+/**
  * Boolean expressions on a set of known variable names.
  */
 export namespace Restricted {
@@ -12,7 +18,7 @@ export namespace Restricted {
 
   export type Expression<TKey> = Value | Variable<TKey> | Operation<TKey>;
 
-  export type VariableMap<TKey extends string> = { [P in TKey]: boolean }
+  export type VariableMap<TKey extends string> = { [P in TKey]: boolean | ValueFunction }
 
   export function isValue(obj: any): obj is Value {
     return (typeof obj === "object" && "$value" in obj);
