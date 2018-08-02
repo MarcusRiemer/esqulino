@@ -1,28 +1,28 @@
 grammar "dxml" {
   node "element" {
-    terminal "<"
+    terminal "tag-open-begin" "<"
     prop "name" { string }
-    children allowed, "attributes"  ::= attribute*
-    terminal ">"
-    children allowed, "elements"  ::= element* & text* & interpolate* & if*
-    terminal "<ende/>"
+    children allowed "attributes" ::= attribute*
+    terminal "tag-open-end" ">"
+    children allowed "elements" ::= element* & text* & interpolate* & if*
+    terminal "tag-close" "<ende/>"
   }
   node "attribute" {
     prop "name" { string }
-    terminal "="
-    terminal "\""
-    children allowed, "value"  ::= text* & interpolate*
-    terminal "\""
+    terminal "equals" "="
+    terminal "quot-begin" "\""
+    children allowed "value" ::= text* & interpolate*
+    terminal "quot-end" "\""
   }
   node "text" {
     prop "value" { string }
   }
   node "interpolate" {
-    children allowed, "expr"  ::= expr
+    children allowed "expr" ::= expr
   }
   node "if" {
-    children allowed, "condition"  ::= expr
-    children allowed, "body"  ::= element* & text* & interpolate* & if*
+    children allowed "condition" ::= expr
+    children allowed "body" ::= element* & text* & interpolate* & if*
   }
   typedef "expr" ::= exprVar | exprConst | exprBinary
   node "exprVar" {
@@ -32,9 +32,9 @@ grammar "dxml" {
     prop "name" { string }
   }
   node "exprBinary" {
-    children allowed, "lhs"  ::= expr
-    children allowed, "operator"  ::= binaryOperator
-    children allowed, "rhs"  ::= expr
+    children allowed "lhs" ::= expr
+    children allowed "operator" ::= binaryOperator
+    children allowed "rhs" ::= expr
   }
   node "binaryOperator" {
     prop "operator" { string }

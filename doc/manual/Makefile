@@ -39,7 +39,7 @@ pretty-grammars: generated/sql.grammar generated/dxml.grammar generated/regex.gr
 pretty-blocks: generated/xml.blocks generated/dxml.blocks generated/sql.blocks
 
 # Default set of graphviz trees
-graphviz-trees: generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz
+graphviz-trees: generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz generated/ast-example-null.graphviz generated/ast-example-expr-variable.graphviz generated/ast-example-expr-binary.graphviz
 
 # Re-generate everything that can be created dynamically
 all-generated: pretty-grammars pretty-blocks graphviz-trees
@@ -51,6 +51,9 @@ livehtml:
 	sphinx-autobuild -b html "$(SOURCEDIR)" "$(BUILDDIR)/html" $(SPHINXOPTS)
 
 html: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+latexpdf: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 .PHONY: help Makefile livehtml pretty-grammars pretty-blocks clean

@@ -2,92 +2,93 @@ grammar "sql" {
   typedef "expression" ::= columnName | binaryExpression | constant | parameter | functionCall
   node "columnName" {
     prop "refTableName" { string }
-    terminal "."
+    terminal "dot" "."
     prop "columnName" { string }
   }
   node "constant" {
     prop "value" { string }
   }
   node "parameter" {
+    terminal "colon" ":"
     prop "name" { string }
   }
   node "functionCall" {
     prop "name" { string }
-    terminal "("
-    children sequence, "arguments"  ::= expression*
-    terminal ")"
+    terminal "paren-open" "("
+    children sequence "arguments", between: "," ::= expression*
+    terminal "paren-close" ")"
   }
   node "starOperator" {
-    terminal "*"
+    terminal "star" "*"
   }
   node "relationalOperator" {
     prop "operator" { string { enum "<" "<=" "=" ">=" ">" "LIKE" "NOT LIKE" } }
   }
   node "binaryExpression" {
-    children sequence, "lhs"  ::= expression
-    children sequence, "operator"  ::= relationalOperator
-    children sequence, "rhs"  ::= expression
+    children sequence "lhs" ::= expression
+    children sequence "operator" ::= relationalOperator
+    children sequence "rhs" ::= expression
   }
   node "select" {
-    terminal "SELECT"
+    terminal "keyword" "SELECT"
     prop? "distinct" { boolean }
-    children allowed, "columns", sep: "," ::= expression* & starOperator?
+    children allowed "columns", between: "," ::= expression* & starOperator?
   }
   node "delete" {
-    terminal "DELETE"
+    terminal "keyword" "DELETE"
   }
   node "tableIntroduction" {
     prop "name" { string }
     prop? "alias" { string }
   }
   node "crossJoin" {
-    children sequence, "table"  ::= tableIntroduction
+    children sequence "table" ::= tableIntroduction
   }
   node "innerJoinOn" {
-    terminal "INNER JOIN"
-    children sequence, "table"  ::= tableIntroduction
-    terminal "ON"
-    children sequence, "on"  ::= expression
+    terminal "keyword" "INNER JOIN"
+    children sequence "table" ::= tableIntroduction
+    terminal "keywordOn" "ON"
+    children sequence "on" ::= expression
   }
   node "innerJoinUsing" {
-    terminal "INNER JOIN"
-    children sequence, "table"  ::= tableIntroduction
-    terminal "USING"
-    children sequence, "using"  ::= expression
+    terminal "keyword" "INNER JOIN"
+    children sequence "table" ::= tableIntroduction
+    terminal "keywordUsing" "USING"
+    children sequence "using" ::= expression
   }
   typedef "join" ::= crossJoin | innerJoinUsing | innerJoinOn
   node "from" {
-    terminal "FROM"
-    children sequence, "tables", sep: "," ::= tableIntroduction+
-    children sequence, "joins"  ::= join*
+    terminal "keyword" "FROM"
+    children sequence "tables", between: "," ::= tableIntroduction+
+    children sequence "joins" ::= join*
   }
   node "whereAdditional" {
     prop "operator" { string { enum "and" "or" } }
-    children sequence, "expression"  ::= expression
+    children sequence "expression" ::= expression
   }
   node "where" {
-    terminal "WHERE"
-    children sequence, "expressions"  ::= sql.expression sql.whereAdditional*
+    terminal "keyword" "WHERE"
+    children sequence "expressions" ::= sql.expression sql.whereAdditional*
   }
   node "groupBy" {
-    terminal "GROUP BY"
-    children allowed, "expressions", sep: "," ::= sql.expression*
+    terminal "keyword" "GROUP BY"
+    children allowed "expressions", between: "," ::= sql.expression*
   }
   node "orderBy" {
-    terminal "ORDER BY"
-    children allowed, "expressions", sep: "," ::= sql.expression*
+    terminal "keyword" "ORDER BY"
+    children allowed "expressions", between: "," ::= sql.expression*
   }
   node "querySelect" {
-    children sequence, "select"  ::= select
-    children sequence, "from"  ::= from
-    children sequence, "where"  ::= where?
-    children sequence, "groupBy"  ::= groupBy?
-    children sequence, "orderBy"  ::= orderBy?
+    children sequence "select" ::= select
+    children sequence "from" ::= from
+    children sequence "where" ::= where?
+    children sequence "groupBy" ::= groupBy?
+    children sequence "orderBy" ::= orderBy?
   }
   node "queryDelete" {
-    children sequence, "delete"  ::= delete
-    children sequence, "from"  ::= from
-    children sequence, "where"  ::= where?
+    children sequence "delete" ::= delete
+    children sequence "from" ::= from
+    children sequence "where" ::= where?
   }
   typedef "query" ::= querySelect | queryDelete
 }

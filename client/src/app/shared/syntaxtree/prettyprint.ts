@@ -71,7 +71,7 @@ export function prettyPrintOneOfType(name: string, t: Desc.NodeOneOfTypeDescript
  */
 export function prettyPrintTerminal(p: Desc.NodeTerminalSymbolDescription) {
   const escapedSymbol = JSON.stringify(p.symbol).slice(1, -1);
-  return ([`terminal "${escapedSymbol}"`]);
+  return ([`terminal "${p.name}" "${escapedSymbol}"`]);
 }
 
 /**
@@ -234,7 +234,7 @@ export function graphvizSyntaxTree(desc: NodeDescription): string {
   const tree = [
     `digraph SyntaxTree {`,
     [
-      `graph [fontsize=10 fontname="Verdana"];`,
+      `graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];`,
       `node [fontsize=10 fontname="Verdana" shape=Mrecord];`,
       `edge [fontsize=10 fontname="Verdana"];`,
     ],
