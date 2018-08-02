@@ -1,6 +1,9 @@
 require_dependency 'error'
 
+require_dependency 'block_language' # Rails won't autoload this class properly
+require_dependency 'code_resource' # Rails won't autoload this class properly
 require_dependency 'grammar' # Rails won't autoload this class properly
+require_dependency 'project' # Rails won't autoload this class properly
 require_dependency 'project_database' # Rails won't autoload this class properly
 require_dependency 'project_source' # Rails won't autoload this class properly
 require_dependency 'project_uses_block_language' # Rails won't autoload this class properly
