@@ -37,7 +37,9 @@ test:
       node_binary: /usr/bin/node
       program: ../client/dist/cli/main.cli.js
       mode: one-shot
-  
+  seed:
+    data_dir: ../seed
+
 production:
   name: "Blattwerkzeug"
   data_dir: ../data/dev
@@ -53,3 +55,5 @@ production:
       node_binary: /usr/bin/node
       program: ../client/dist/cli/main.cli.js
       mode: one-shot
+  seed:
+    data_dir: ../seed
