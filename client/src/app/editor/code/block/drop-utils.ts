@@ -130,7 +130,7 @@ function isParentOrChildDrop(block: BlockDropProperties) {
 /**
  * @return The name of the referenced child group (if there is any)
  */
-function dropLocationChildGroupName(_drag: CurrentDrag, block: BlockDropProperties): string {
+function dropLocationChildGroupName(block: BlockDropProperties): string {
   const dropLocation = calculateDropLocation(block.node, block.visual.dropTarget);
   return (dropLocation[dropLocation.length - 1][0]);
 }
@@ -138,15 +138,11 @@ function dropLocationChildGroupName(_drag: CurrentDrag, block: BlockDropProperti
 /**
  * @return true, if the targeted child group has any children.
  */
-function dropLocationHasChildren(drag: CurrentDrag, block: BlockDropProperties) {
-  if (isParentOrChildDrop(block)) {
-    if (drag) {
-      // Count children in that category
-      const childGroupName = dropLocationChildGroupName(drag, block);
-      return (block.node.getChildrenInCategory(childGroupName).length > 0);
-    } else {
-      return (false);
-    }
+function dropLocationHasChildren(blockDropProperties: BlockDropProperties) {
+  if (isParentOrChildDrop(blockDropProperties)) {
+    // Count children in that category
+    const childGroupName = dropLocationChildGroupName(blockDropProperties);
+    return (blockDropProperties.node.getChildrenInCategory(childGroupName).length > 0);
   } else {
     // At least the given node is in the category
     return (true);
@@ -193,18 +189,20 @@ export function calculateDropTargetState(drag: CurrentDrag, block: BlockDropProp
     const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
     const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
 
-    return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(drag, block)));
+    return (parentNodeType.allowsChildType(newNodeType, dropLocationChildGroupName(block)));
   }
 
-  // 
+  // Build the value map that corresponds to the state for the current block
   const map: Restricted.VariableMap<VisualBlockDescriptions.VisibilityVars> = {
     ifAnyDrag: !!drag,
-    ifEmpty: !dropLocationHasChildren(drag, block),
-    ifLegalChild: isLegalChild(),
-    ifLegalDrag: isLegalDrag()
+    ifEmpty: () => !dropLocationHasChildren(block),
+    ifLegalChild: isLegalChild.bind(this),
+    ifLegalDrag: isLegalDrag.bind(this)
   };
 
-  const visibilityRes = evalExpression.bind(this, visibilityExpr, map);
+  // Evaluation of the expression function may be costly. So we postpone it until
+  // it is actually required.
+  const visibilityEvalFunc = evalExpression.bind(this, visibilityExpr, map);
 
   // Ongoing drags trump almost any other possibility
   if (drag) {
@@ -214,14 +212,14 @@ export function calculateDropTargetState(drag: CurrentDrag, block: BlockDropProp
     if (onThis) {
       return ("self");
     } else {
-      if (visibilityRes()) {
+      if (visibilityEvalFunc()) {
         return ("available");
       } else {
         return ("none");
       }
     }
   } else {
-    if (visibilityRes()) {
+    if (visibilityEvalFunc()) {
       return ("visible");
     } else {
       return ("none");

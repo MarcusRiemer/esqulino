@@ -132,17 +132,20 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorInput extends EditorBlockBase {
     blockType: "input";
+    // The property that is going to be edited
     property: string;
   }
 
   /**
    * Shows a marker if there is some kind of error
    */
-  export interface EditorErrorMarker extends EditorBlockBase {
+  export interface EditorErrorIndicator extends EditorBlockBase {
     blockType: "error";
+    // Do not show the error marker for these errors
+    excludedErrors?: string[];
   }
 
-  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput | EditorErrorMarker;
+  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput | EditorErrorIndicator;
 
   // Default to inserting after the given node. This should be a meaningful default ...
   export const DefaultDropTargetProperties: DropTargetProperties = {

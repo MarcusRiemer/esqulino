@@ -1,18 +1,25 @@
-/* Typical height: Almost full screen */
-textarea.full-height, json-editor.full-height ace-editor {
-    height: 95vh;
-}
+.admin {
+    /* Typical height: Almost full screen */
+    textarea.full-height, json-editor.full-height ace-editor {
+        height: 95vh;
+    }
 
-/* Typical height: Half a screen */
-textarea.half-height, json-editor.half-height ace-editor {
-    height: 50vh;
-}
+    /* Typical height: Half a screen */
+    textarea.half-height, json-editor.half-height ace-editor {
+        height: 50vh;
+    }
 
-/* Make the ace-editor look a little like the surrounding components */
-ace-editor {
-    min-height: 200px;
-    width:100%;
-    overflow: auto;
-    border-radius: 0.25rem;
-    border: 1px solid #ced4da;
+    /* Make the ace-editor look a little like the surrounding components */
+    ace-editor {
+        min-height: 200px;
+        width:100%;
+        overflow: auto;
+        border-radius: 0.25rem;
+        border: 1px solid #ced4da;
+    }
+
+    /* Bootstrap aligns texts in the center, this looks odd for the parameter names */
+    edit-input-parameter-value .input-group-text {
+        text-align: left;
+    }
 }
