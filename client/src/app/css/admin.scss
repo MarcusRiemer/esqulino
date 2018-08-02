@@ -22,4 +22,19 @@
     edit-input-parameter-value .input-group-text {
         text-align: left;
     }
+
+    /* Some minor optical grouping of items in every trait scope */
+    edit-single-trait-scope {
+        display: block;
+        padding: 5px;
+        border-radius: 0.25rem;
+        border: 1px solid #ced4da;
+        margin-bottom: 5px;
+    }
+
+    /* Chip lists prefer to stack their items vertically, lets only do this if there
+       really is not enough space. */
+    .full-width-chip-list {
+        width: 100%;
+    }
 }

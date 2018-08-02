@@ -31,11 +31,11 @@ concise_attributes:
     "nodeType": "starOperator"}]}]}, "groupBy": {"type": "concrete", "attributes":
     [{"name": "keyword", "type": "terminal", "symbol": "GROUP BY"}, {"name": "expressions",
     "type": "allowed", "between": {"name": "columnSeparator", "type": "terminal",
-    "symbol": ","}, "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "expression",
+    "symbol": ","}, "nodeTypes": [{"occurs": "+", "nodeType": {"typeName": "expression",
     "languageName": "sql"}}]}]}, "orderBy": {"type": "concrete", "attributes": [{"name":
     "keyword", "type": "terminal", "symbol": "ORDER BY"}, {"name": "expressions",
     "type": "allowed", "between": {"name": "columnSeparator", "type": "terminal",
-    "symbol": ","}, "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "expression",
+    "symbol": ","}, "nodeTypes": [{"occurs": "+", "nodeType": {"typeName": "expression",
     "languageName": "sql"}}]}]}, "constant": {"type": "concrete", "attributes": [{"base":
     "string", "name": "value", "type": "property"}]}, "crossJoin": {"type": "concrete",
     "attributes": [{"name": "table", "type": "sequence", "nodeTypes": ["tableIntroduction"]}]},
@@ -84,7 +84,7 @@ concise_attributes:
   value_before_type_cast: '2018-05-15 18:24:27.264702'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-31 18:56:52.936562'
+  value_before_type_cast: '2018-08-02 21:39:39.731948'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: sql

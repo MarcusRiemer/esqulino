@@ -43,7 +43,7 @@ export class EditBlockLanguageService {
       .pipe(filter(bl => !!bl))
       .subscribe(blockLanguage => {
         this._title.setTitle(`BlockLang "${blockLanguage.name}" - Admin - BlattWerkzeug`)
-        this.doPrettyPrint();
+        this.prettyPrintedBlockLanguage = prettyPrintBlockLanguage(this.editedSubject);
       });
   }
 
@@ -116,20 +116,16 @@ export class EditBlockLanguageService {
   /**
    * Saves the current state of the block language
    */
-  onSave() {
+  save() {
     this._serverData.updateBlockLanguage(this.editedSubject);
   }
 
   /**
    * The data for the generator has been updated.
    */
-  onGeneratorDataUpdate(json: any) {
+  updateGeneratorData(json: any) {
     this.doUpdate(blockLanguage => {
       blockLanguage.localGeneratorInstructions = json;
     })
-  }
-
-  private doPrettyPrint() {
-    this.prettyPrintedBlockLanguage = prettyPrintBlockLanguage(this.editedSubject);
   }
 }
