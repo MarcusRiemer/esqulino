@@ -16,7 +16,7 @@
 
 <!-- The generic navigation menu -->
 <mat-menu #menu="matMenu" yPosition="below">
-  <a  mat-menu-item [routerLink]="'/'">
+  <a mat-menu-item [routerLink]="'/'">
     <img src="/vendor/logos/blattwerkzeug-logo.svg"
          height="20px"
          title="BlattWerkzeug">
@@ -24,7 +24,13 @@
          height="20px"
          title="BlattWerkzeug">
   </a>
-  <a  mat-menu-item [routerLink]="'/admin'">
+  <a mat-menu-item [routerLink]="'/admin'">
+    <span class="fa fa-fw fa-puzzle-piece" aria-hidden="true"></span>
     Administration
+  </a>
+  
+  <a mat-menu-item href="http://manual.blattwerkzeug.de/">
+    <span class="fa fa-fw fa-book" aria-hidden="true"></span>
+    Manual 🇬🇧
   </a>
 </mat-menu>

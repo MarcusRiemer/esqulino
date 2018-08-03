@@ -69,16 +69,9 @@ export interface BlockLanguageListDescription {
 export type EditorComponentDescription = QueryPreviewComponentDescription;
 
 /**
- * Basic properties for all editor components
+ * Displays (limited) results of SQL-queries
  */
-export interface BaseEditorComponentDescription {
-
-}
-
-/**
- * 
- */
-export interface QueryPreviewComponentDescription extends BaseEditorComponentDescription {
+export interface QueryPreviewComponentDescription {
   componentType: "query-preview"
 }
 
@@ -106,4 +99,11 @@ export interface BlockLanguageDocument {
    * Information on how to (re)-generate this block language.
    */
   localGeneratorInstructions?: BlockLanguageGeneratorDocument
+}
+
+/**
+ * The server hands out additional information that is only used for display purposes.
+ */
+export interface BlockLanguageListResponseDescription extends BlockLanguageListDescription {
+  generated: boolean
 }
