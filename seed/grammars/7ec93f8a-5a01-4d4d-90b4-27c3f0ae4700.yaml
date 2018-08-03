@@ -84,7 +84,7 @@ concise_attributes:
   value_before_type_cast: '2018-05-15 18:24:27.264702'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-08-02 21:39:39.731948'
+  value_before_type_cast: '2018-08-03 12:47:24.369896'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: sql

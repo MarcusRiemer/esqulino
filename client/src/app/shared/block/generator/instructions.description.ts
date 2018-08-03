@@ -68,7 +68,7 @@ export module DefaultInstructions {
     orientation: "horizontal",
     between: "",
     style: {},
-    generateDropTargets: "none"
+    generateDropTargets: "end"
   }
 
   export const blockInstructions: BlockInstructions = {
@@ -76,7 +76,7 @@ export module DefaultInstructions {
     attributeMapping: "grammar",
     style: {},
     onDrop: VisualBlockDescriptions.DefaultDropTargetProperties,
-    generateErrorIndicator: "none"
+    generateErrorIndicator: "start"
   }
 
   export const terminalInstructions: TerminalInstructions = {
