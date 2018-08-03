@@ -7,7 +7,7 @@ import { shareReplay, first, map, switchMap, tap, scan } from 'rxjs/operators';
 import { ServerApiService } from '../shared/serverapi.service';
 
 import {
-  BlockLanguageDescription, BlockLanguageListDescription
+  BlockLanguageDescription, BlockLanguageListResponseDescription
 } from '../shared/block/block-language.description';
 import {
   BlockLanguageGeneratorListDescription
@@ -163,8 +163,8 @@ export class ServerDataService {
   );
 
   // Backing cache for listing of all block languages
-  readonly listBlockLanguages = new CachedRequest<BlockLanguageListDescription[]>(
-    this._http.get<BlockLanguageListDescription[]>(this._serverApi.getBlockLanguageListUrl())
+  readonly listBlockLanguages = new CachedRequest<BlockLanguageListResponseDescription[]>(
+    this._http.get<BlockLanguageListResponseDescription[]>(this._serverApi.getBlockLanguageListUrl())
   );
 
   /**

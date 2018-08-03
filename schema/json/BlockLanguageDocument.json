@@ -577,6 +577,7 @@
     },
     "QueryPreviewComponentDescription": {
       "additionalProperties": false,
+      "description": "Displays (limited) results of SQL-queries",
       "properties": {
         "componentType": {
           "enum": [

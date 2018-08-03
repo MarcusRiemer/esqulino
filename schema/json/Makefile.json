@@ -13,7 +13,7 @@ TYPESCRIPT_JSON_SCHEMA_BIN = /home/marcus/projects/ts-json-schema-generator/bin/
 
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageGeneratorDescription.json BlockLanguageGeneratorDocument.json BlockLanguageGeneratorListDescription.json BlockLanguageListDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarListDescription.json NodeDescription.json ProjectCreationDescription.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json TableDescription.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageGeneratorDescription.json BlockLanguageGeneratorDocument.json BlockLanguageGeneratorListDescription.json BlockLanguageListDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarListDescription.json NodeDescription.json ProjectCreationDescription.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json TableDescription.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -61,6 +61,9 @@ BlockLanguageDescription.json : $(SRC_PATH)/shared/block/block-language.descript
 	$(CONVERT_COMMAND)
 
 BlockLanguageListDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
+	$(CONVERT_COMMAND)
+
+BlockLanguageListResponseDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
 
 BlockLanguageDocument.json : $(SRC_PATH)/shared/block/block-language.description.ts $(SRC_PATH)/shared/block/block.description.ts

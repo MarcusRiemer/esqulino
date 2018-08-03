@@ -52,6 +52,35 @@ RSpec.describe BlockLanguage do
     end
   end
 
+  context "scope_list" do
+    it "For generated block language" do
+      b = FactoryBot.create(:generated_block_language, id: SecureRandom.uuid)
+      scoped_b = BlockLanguage.scope_list.first
+
+      expect(scoped_b['generated']).to equal true
+    end
+
+    it "For manual block language" do
+      b = FactoryBot.create(:block_language, id: SecureRandom.uuid)
+      scoped_b = BlockLanguage.scope_list.first
+
+      expect(scoped_b['generated']).to equal false
+    end
+  end
+
+  context "to_list_api_response" do
+    it "with 'generated' field" do
+      b = FactoryBot.create(:generated_block_language, id: SecureRandom.uuid)
+      
+      api_response = BlockLanguage.scope_list.first.to_list_api_response(true)
+
+      expect(api_response).to validate_against "BlockLanguageListResponseDescription"
+      expect(api_response['id']).to eq b.id
+      expect(api_response['name']).to eq b.name
+      expect(api_response['slug']).to eq b.slug
+    end
+  end
+
   it "can be valid" do
     res = FactoryBot.build(:block_language)
     expect(res.valid?).to be true

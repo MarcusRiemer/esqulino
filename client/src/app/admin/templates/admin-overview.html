@@ -40,11 +40,11 @@
     <td><code>{{ blockLanguage.id }}</code></td>
     <td><link-grammar [grammarId]="blockLanguage.grammarId"></link-grammar></td>
     <td>
-      <ng-container *ngIf="blockLanguage.localGeneratorInstructions; else manual;">
-        Generiert
+      <ng-container *ngIf="blockLanguage.generated; else manual;">
+        ✔
       </ng-container>
       <ng-template #manual>
-        Manuell?
+        ✗
       </ng-template>
     </td>
     <td>

@@ -20,11 +20,14 @@ class BlockLanguage < ApplicationRecord
   # The generator that may have been used to generate this block language
   belongs_to :block_language_generator, optional: true
 
-  # A block language with only the information that is relevant when listing it
+  # A block language with only the information that is relevant when listing it.
+  # Adds the following calculated fields:
+  #   generated: Indicates whether this language can be generated automatically
   scope :scope_list, -> {
     select(:id, :slug, :name, :default_programming_language_id,
            :block_language_generator_id, :grammar_id,
-           :created_at, :updated_at)
+           :created_at, :updated_at,
+          "(model->'localGeneratorInstructions') IS NOT NULL AS generated")
   }
 
   # Computes a hash that may be sent back to the client if it requires
@@ -37,9 +40,24 @@ class BlockLanguage < ApplicationRecord
   # Computes a hash that may be sent back to the client if only superficial
   # information is required. This usually happens when the client attempts
   # to list available block languages.
-  def to_list_api_response
-    to_json_api_response
-      .slice("id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId", "grammarId")
+  #
+  # @param include_list_calculations [boolean]
+  #   True, if certain calculated values should be part of the response
+  def to_list_api_response(include_list_calculations = false)
+    if include_list_calculations then
+      to_json_api_response
+        .slice("id", "slug", "name", "defaultProgrammingLanguageId",
+               "blockLanguageGeneratorId", "grammarId", "generated")
+    else
+      to_json_api_response
+        .slice("id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId", "grammarId")
+    end
+    
+    # basic_fields = ["id", "slug", "name", "defaultProgrammingLanguageId", "blockLanguageGeneratorId", "grammarId"]
+    # calculatedFields = basic_fields + ["automaticallyGenerated"]
+    
+    # to_json_api_response
+    #  .slice(include_list_calculations ? *calculatedFields : basic_fields)
   end
 
   # Returns a nicely readable representation of name, id and slug
