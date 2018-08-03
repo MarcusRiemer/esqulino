@@ -76,7 +76,7 @@ export class TypeInstructions {
     const block = this._type.blocks[i];
     const order = (block && block.attributeMapping);
     if (!order || order === "grammar") {
-      return (typeDesc.attributes.map(a => a.name));
+      return ((typeDesc.attributes || []).map(a => a.name));
     } else {
       return (order);
     }

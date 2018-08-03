@@ -30,10 +30,10 @@ concise_attributes:
   value_before_type_cast: '2018-02-25 19:32:06.001426'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-03-02 18:15:37.503067'
+  value_before_type_cast: '2018-08-03 15:45:17.163396'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
-  value_before_type_cast: af3a4b65-738c-4563-9632-2c65d3da6762
+  value_before_type_cast: eeee8d17-a9e1-4578-b9b1-76f7b8c02f99
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: css

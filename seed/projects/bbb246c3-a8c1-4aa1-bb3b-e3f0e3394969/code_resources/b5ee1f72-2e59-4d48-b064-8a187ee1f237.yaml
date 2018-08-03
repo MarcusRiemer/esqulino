@@ -21,61 +21,19 @@ concise_attributes:
   name: ast
   value_before_type_cast: '{"name": "array", "children": {"values": [{"name": "object",
     "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
+    "language": "json", "properties": {"value": "Typ"}}], "value": [{"name": "string",
+    "language": "json", "properties": {"value": "Hund"}}]}, "language": "json"}, {"name":
     "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
-    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
+    {"value": "Stubenrein"}}], "value": [{"name": "boolean", "language": "json", "properties":
     {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "object",
-    "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
-    "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
-    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
-    {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "object",
-    "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
-    "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
-    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
-    {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "object",
-    "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
-    "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
-    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
-    {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "object",
-    "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
-    "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
-    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
-    {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "object",
-    "children": {"values": [{"name": "key-value", "children": {"key": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}], "value": [{"name": "string",
-    "language": "json", "properties": {"value": "--"}}]}, "language": "json"}, {"name":
-    "key-value", "children": {"key": [{"name": "string", "language": "json", "properties":
-    {"value": "--"}}], "value": [{"name": "boolean", "language": "json", "properties":
-    {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "null",
-    "language": "json"}, {"name": "null", "language": "json"}, {"name": "null", "language":
-    "json"}, {"name": "object", "children": {"values": [{"name": "key-value", "children":
-    {"key": [{"name": "string", "language": "json", "properties": {"value": "--"}}],
-    "value": [{"name": "null", "language": "json"}]}, "language": "json"}]}, "language":
-    "json"}, {"name": "object", "children": {"values": [{"name": "key-value", "children":
-    {"key": [{"name": "string", "language": "json", "properties": {"value": "--"}}],
-    "value": [{"name": "number", "language": "json", "properties": {"value": "0"}}]},
-    "language": "json"}]}, "language": "json"}, {"name": "object", "children": {"values":
-    [{"name": "key-value", "children": {"key": [{"name": "string", "language": "json",
-    "properties": {"value": "--"}}], "value": [{"name": "string", "language": "json",
-    "properties": {"value": "--"}}]}, "language": "json"}, {"name": "key-value", "children":
-    {"key": [{"name": "string", "language": "json", "properties": {"value": "--"}}],
-    "value": [{"name": "boolean", "language": "json", "properties": {"value": "true"}}]},
-    "language": "json"}]}, "language": "json"}]}, "language": "json"}'
+    "children": {"values": []}, "language": "json"}, {"name": "object", "children":
+    {"values": []}, "language": "json"}]}, "language": "json"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-20 20:45:48.864334'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-25 16:20:58.982868'
+  value_before_type_cast: '2018-08-03 15:30:01.774546'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: c23d43d7-56f5-4605-bec1-644c240cc003
@@ -87,42 +45,11 @@ concise_attributes:
   value_before_type_cast: |-
     [
       {
-        "--": "--",
-        "--": true
+        "Typ": "Hund",
+        "Stubenrein": true
       },
-      {
-        "--": "--",
-        "--": true
-      },
-      {
-        "--": "--",
-        "--": true
-      },
-      {
-        "--": "--",
-        "--": true
-      },
-      {
-        "--": "--",
-        "--": true
-      },
-      {
-        "--": "--",
-        "--": true
-      },
-      null,
-      null,
-      null,
-      {
-        "--": null
-      },
-      {
-        "--": 0
-      },
-      {
-        "--": "--",
-        "--": true
-      }
+      {},
+      {}
     ]
 new_record: false
 active_record_yaml_version: 2
