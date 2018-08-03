@@ -6,10 +6,11 @@ import { first, startWith, map, tap } from 'rxjs/operators';
 
 import { ServerDataService } from '../../shared/server-data.service';
 import { ScopeTraitAdd } from '../../shared/block/generator/traits.description';
-import { FullNodeAttributeDescription, getFullAttributes } from '../../shared/syntaxtree/grammar-util';
+import { FullNodeAttributeDescription, getFullAttributes, getFullBlocks } from '../../shared/syntaxtree/grammar-util';
 import { QualifiedTypeName } from '../../shared/syntaxtree';
 
 import { EditBlockLanguageService } from './edit-block-language.service';
+import { of } from 'rxjs';
 
 
 
@@ -67,6 +68,9 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
   // All attributes that could possibly occur
   allPossibleAttributes: FullNodeAttributeDescription[] = [];
 
+  // All blocks that could possibly occur
+  allPossibleBlocks: TargetBlock[] = [];
+
   /**
    * Used to get hold of the grammar that is used by this block language.
    */
@@ -75,6 +79,13 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
       .pipe(first())
       .subscribe(g => {
         this.allPossibleAttributes = getFullAttributes(g);
+        this.allPossibleBlocks = getFullBlocks(g).map(b => {
+          return ({
+            grammar: b.languageName,
+            type: b.typeName,
+            index: 0
+          });
+        });
       });
   }
 
@@ -197,6 +208,51 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
       const targetList = this.scope.attributes[a.grammar][a.type];
       const targetIndex = targetList.indexOf(a.attribute);
       targetList.splice(targetIndex, 1);
+    });
+  }
+
+  removeTargetBlock(b: TargetBlock) {
+    this._editedBlockLanguageService.doUpdate(_ => {
+      const targetList = this.scope.blocks[b.grammar][b.type];
+      const targetIndex = targetList.indexOf(b.index);
+      targetList.splice(targetIndex, 1);
+    });
+  }
+
+  readonly filteredAvailableBlocks = this.formControlBlock.valueChanges
+    .pipe(
+      map(
+        value => this.allPossibleBlocks.filter(
+          option =>
+            option.grammar.includes(value)
+            || option.type.includes(value)
+            || option.index === value
+        )
+      ),
+      tap(console.log)
+    );
+
+  /**
+   * The user has decided to add a new attribute that this scope will be applied to.
+   */
+  selectedBlock(event: MatAutocompleteSelectedEvent) {
+    this._editedBlockLanguageService.doUpdate(_bl => {
+      const block: TargetBlock = event.option.value;
+      if (!this.scope.blocks) {
+        this.scope.blocks = {};
+      }
+
+      if (!this.scope.blocks[block.grammar]) {
+        this.scope.blocks[block.grammar] = {};
+      }
+
+      if (!this.scope.blocks[block.grammar][block.type]) {
+        this.scope.blocks[block.grammar][block.type] = [];
+      }
+
+      if (this.scope.blocks[block.grammar][block.type].indexOf(block.index) < 0) {
+        this.scope.blocks[block.grammar][block.type].push(block.index);
+      }
     });
   }
 }
