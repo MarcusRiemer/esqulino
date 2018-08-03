@@ -2,8 +2,7 @@
   <edit-input-parameter-value *ngFor="let paramName of formalParameterNames"
                               [name]="paramName"
                               [blockLanguage]="blockLanguage"
-                              [labelWidth]="maximumParamNameLength"
-                              (currentValueChange)="onParameterValueChanged(paramName, $event)">
+                              [labelWidth]="maximumParamNameLength">
   </edit-input-parameter-value>
 </ng-container>
 <ng-template #noFormalParameters>

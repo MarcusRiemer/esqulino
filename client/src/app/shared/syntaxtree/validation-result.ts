@@ -12,7 +12,7 @@ export enum ErrorCodes {
   UnexpectedType = "UNEXPECTED_TYPE",
   // A node with a transient type was detected
   TransientNode = "TRANSIENT_NODE",
-  // A specifi child was expected, but simply did not exist
+  // A specified child was expected, but simply did not exist
   MissingChild = "MISSING_CHILD",
   // A specific child was entirely unexpected
   SuperflousChild = "SUPERFLOUS_CHILD",

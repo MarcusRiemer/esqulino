@@ -252,7 +252,8 @@ export function mapType(
           "color": "white",
           "cursor": "default",
         },
-        excludedErrors: ["MISSING_CHILD"]
+        // These errors are typically indicated by drop locations
+        excludedErrors: ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]
       });
     }
 
