@@ -3,7 +3,7 @@
   <mat-label>Angewendete Merkmale</mat-label>
   <mat-hint>Die obigen Merkmale werden den unten angegebenen Attributen und Blöcke hinzugefügt.</mat-hint>
   <mat-chip-list #chipListTraits>
-    <mat-chip *ngFor="let traitName of scope.traits"
+    <mat-chip *ngFor="let traitName of scope?.traits"
               (removed)="removeTrait(traitName)">
       {{ traitName }}
       <span matChipRemove class="fa fa-minus-circle" aria-hidden="true"></span>
@@ -45,11 +45,19 @@
 <mat-form-field class="full-width-chip-list" appearance="fill">
   <mat-label>Ziel-Blöcke</mat-label>
   <mat-chip-list #chipListBlockTargets>
-    <mat-chip *ngFor="let block of blockTargetList">
+    <mat-chip *ngFor="let block of blockTargetList"
+              (removed)="removeTargetBlock(block)">
       {{ block.grammar }}.{{ block.type }}[{{ block.index }}]
       <span matChipRemove class="fa fa-minus-circle" aria-hidden="true"></span>
     </mat-chip>
     <input [formControl]="formControlBlock"
-           [matChipInputFor]="chipListBlockTargets">
+           [matChipInputFor]="chipListBlockTargets"
+           [matAutocomplete]="autoBlocks">
   </mat-chip-list>
+  <mat-autocomplete #autoBlocks="matAutocomplete"
+                    (optionSelected)="selectedBlock($event)">
+    <mat-option *ngFor="let block of filteredAvailableBlocks | async" [value]="block">
+      {{ block.grammar }}.{{ block.type }}[{{ block.index }}]
+    </mat-option>
+  </mat-autocomplete>
 </mat-form-field>
