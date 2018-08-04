@@ -13,7 +13,7 @@ concise_attributes:
     value: 9b4716e7-9c02-4af2-8457-5965f58fff70
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Test
+  value_before_type_cast: Auftritte pro Charakter
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: f9d02244-ddd0-4924-867f-5b1bb2cfe384
@@ -47,7 +47,7 @@ concise_attributes:
   value_before_type_cast: '2018-07-31 19:23:15.879559'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-08-03 11:24:57.398296'
+  value_before_type_cast: '2018-08-04 17:06:42.208905'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
