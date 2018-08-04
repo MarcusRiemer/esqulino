@@ -12,12 +12,23 @@
     }
 }
 
+trash {
+    font-size: 6rem;
+    position: fixed;
+    padding: 5px;
+    right: 350px;
+    top: 45px;
+    z-index: 1;
+}
+
 /* The "block" AST editor */
 .block-editor-root {
     /* Default font settings */
     font-family: $monospace-font;
     font-size: 1.2rem;
 
+    // Input fields for users need to somehow "blend in" with the rest of the
+    // blocks but also be recognizable.
     input {
         border: 0px;
         border-bottom: 1px dashed black;

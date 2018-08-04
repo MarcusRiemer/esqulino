@@ -22,7 +22,7 @@ export class BlockFlexChildDirective {
 
   ngOnInit() {
     if (this.layout.breakAfter) {
-      console.log("blockFlexChild breakAfter", this.layout, this.hostElement);
+      // Set CSS 3 and CSS 2.1 properties for better compatability
       this.hostElement.style.breakAfter = "always";
       this.hostElement.style.pageBreakAfter = "always";
     }
