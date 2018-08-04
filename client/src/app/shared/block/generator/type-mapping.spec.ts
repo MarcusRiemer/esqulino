@@ -48,14 +48,17 @@ describe("BlockLanguage Generator Type Mapping", () => {
     };
     const res = mapChildren(nodeType, attrType, DefaultInstructions.iteratorInstructions);
 
-    expect(res).toEqual([
-      {
-        blockType: "iterator",
-        childGroupName: "c1",
-        direction: DefaultInstructions.iteratorInstructions.orientation,
-        wrapChildren: true
-      }
-    ]);
+    expect(res.length).toEqual(2);
+    expect(res[0]).toEqual({
+      blockType: "iterator",
+      childGroupName: "c1",
+      direction: DefaultInstructions.iteratorInstructions.orientation,
+      wrapChildren: true,
+      breakAfter: false
+    });
+    expect(res[1]).toEqual(jasmine.objectContaining({
+      blockType: "dropTarget"
+    }));
   });
 
   it("Sequence (+Between) => Iterator", () => {
@@ -76,7 +79,9 @@ describe("BlockLanguage Generator Type Mapping", () => {
         orientation: "horizontal",
         between: "ä",
         style: {},
-        generateDropTargets: "none"
+        generateDropTargets: "none",
+        allowWrap: true,
+        breakAfter: false
       }
     );
 
@@ -86,6 +91,7 @@ describe("BlockLanguage Generator Type Mapping", () => {
         childGroupName: "c1",
         direction: "horizontal",
         wrapChildren: true,
+        breakAfter: false,
         between: [
           {
             blockType: "constant",
@@ -217,8 +223,9 @@ describe("Multi Block Types", () => {
 
     res.forEach(b => {
       expect(b).toEqual(expBlock);
-      expect(b.children.length).toEqual(1, "A single child");
-      expect(b.children[0]).toEqual(expConstant);
+      expect(b.children.length).toEqual(2, "Error and a single child");
+      expect(b.children[0]).toEqual(jasmine.objectContaining({ blockType: "error" }));
+      expect(b.children[1]).toEqual(expConstant);
     });
   });
 });

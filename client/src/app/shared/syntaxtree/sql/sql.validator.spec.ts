@@ -12,7 +12,7 @@ function specContext(schemaDescription = SPEC_TABLES): DatabaseSchemaAdditionalC
   });
 }
 
-fdescribe(`Specialized SQL Validator`, () => {
+describe(`Specialized SQL Validator`, () => {
   it(`Error: EMPTY_SELECT`, () => {
     const context = new ValidationContext(specContext());
     const sqlValidator = new SqlValidator();
