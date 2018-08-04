@@ -148,7 +148,8 @@ export function mapChildren(
     blockType: "iterator",
     childGroupName: attr.name,
     direction: instructions.orientation,
-    wrapChildren: true
+    wrapChildren: instructions.allowWrap,
+    breakAfter: instructions.breakAfter
   }
 
   // And only add between instructions if there are any
@@ -233,6 +234,8 @@ export function mapType(
       direction: blockInstructions.orientation,
       children: mapAttributes(typeDesc, instructions, i),
       dropTarget: blockInstructions.onDrop,
+      breakAfter: blockInstructions.breakAfter,
+      wrapChildren: blockInstructions.allowWrap
     };
 
     if (Object.keys(blockInstructions.style).length > 0) {

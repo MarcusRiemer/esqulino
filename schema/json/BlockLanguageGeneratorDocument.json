@@ -294,9 +294,13 @@
             "additionalProperties": false,
             "description": "Make all properties in T optional",
             "properties": {
+              "allowWrap": {
+              },
               "attributeMapping": {
               },
               "between": {
+              },
+              "breakAfter": {
               },
               "generateDropTargets": {
               },
@@ -320,7 +324,11 @@
             "additionalProperties": false,
             "description": "Make all properties in T optional",
             "properties": {
+              "allowWrap": {
+              },
               "attributeMapping": {
+              },
+              "breakAfter": {
               },
               "generateErrorIndicator": {
               },
@@ -511,6 +519,7 @@
     },
     "QueryPreviewComponentDescription": {
       "additionalProperties": false,
+      "description": "Displays (limited) results of SQL-queries",
       "properties": {
         "componentType": {
           "enum": [
@@ -540,9 +549,13 @@
             "additionalProperties": false,
             "description": "Make all properties in T optional",
             "properties": {
+              "allowWrap": {
+              },
               "attributeMapping": {
               },
               "between": {
+              },
+              "breakAfter": {
               },
               "generateDropTargets": {
               },

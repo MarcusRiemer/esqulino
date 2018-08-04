@@ -32,12 +32,13 @@ export namespace VisualBlockDescriptions {
   /**
    * Describes how certain nodes of the syntaxtree should be presented
    * inside the drag and drop editor. As the available blocks are very
-   * different, this "base" interface consists of nothing but the
-   * discriminator value.
+   * different, this "base" interface consists of the discriminator value
+   * and some properties that are applicable everywhere.
    */
   export interface EditorBlockBase {
     blockType: string;
     style?: BlockStyle;
+    breakAfter?: boolean;
   }
 
   /**
