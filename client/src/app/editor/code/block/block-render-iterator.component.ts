@@ -29,4 +29,11 @@ export class BlockRenderIteratorComponent {
   get childNodes() {
     return (this.node.getChildrenInCategory(this.visual.childGroupName));
   }
+
+  /**
+   * @return The visual editor block that should be used to represent the given node.
+   */
+  getEditorBlock(node: Node) {
+    return (this.codeResource.blockLanguagePeek.getEditorBlock(node.qualifiedName));
+  }
 }

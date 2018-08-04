@@ -513,9 +513,13 @@
             "additionalProperties": false,
             "description": "Make all properties in T optional",
             "properties": {
+              "allowWrap": {
+              },
               "attributeMapping": {
               },
               "between": {
+              },
+              "breakAfter": {
               },
               "generateDropTargets": {
               },
@@ -539,7 +543,11 @@
             "additionalProperties": false,
             "description": "Make all properties in T optional",
             "properties": {
+              "allowWrap": {
+              },
               "attributeMapping": {
+              },
+              "breakAfter": {
               },
               "generateErrorIndicator": {
               },
@@ -897,6 +905,7 @@
     },
     "QueryPreviewComponentDescription": {
       "additionalProperties": false,
+      "description": "Displays (limited) results of SQL-queries",
       "properties": {
         "componentType": {
           "enum": [
@@ -926,9 +935,13 @@
             "additionalProperties": false,
             "description": "Make all properties in T optional",
             "properties": {
+              "allowWrap": {
+              },
               "attributeMapping": {
               },
               "between": {
+              },
+              "breakAfter": {
               },
               "generateDropTargets": {
               },
@@ -1252,6 +1265,9 @@
           ],
           "type": "string"
         },
+        "breakAfter": {
+          "type": "boolean"
+        },
         "children": {
           "items": {
             "$ref": "#/definitions/VisualBlockDescriptions.ConcreteBlock"
@@ -1294,6 +1310,9 @@
           ],
           "type": "string"
         },
+        "breakAfter": {
+          "type": "boolean"
+        },
         "style": {
           "$ref": "#/definitions/VisualBlockDescriptions.BlockStyle"
         },
@@ -1316,6 +1335,9 @@
             "dropTarget"
           ],
           "type": "string"
+        },
+        "breakAfter": {
+          "type": "boolean"
         },
         "children": {
           "items": {
@@ -1352,6 +1374,9 @@
           ],
           "type": "string"
         },
+        "breakAfter": {
+          "type": "boolean"
+        },
         "excludedErrors": {
           "items": {
             "type": "string"
@@ -1377,6 +1402,9 @@
           ],
           "type": "string"
         },
+        "breakAfter": {
+          "type": "boolean"
+        },
         "property": {
           "type": "string"
         },
@@ -1399,6 +1427,9 @@
             "interpolated"
           ],
           "type": "string"
+        },
+        "breakAfter": {
+          "type": "boolean"
         },
         "property": {
           "type": "string"
@@ -1428,6 +1459,9 @@
             "iterator"
           ],
           "type": "string"
+        },
+        "breakAfter": {
+          "type": "boolean"
         },
         "childGroupName": {
           "type": "string"

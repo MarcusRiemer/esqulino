@@ -8,7 +8,11 @@
      (drop)="onDrop()">
   <!-- Render all components of this block -->
   <ng-container *ngFor="let childVisualBlock of visual.children">
-    <editor-block-render [codeResource]="codeResource"
+    <!-- This element is an immediate child of the flex-element above. It is therefore
+         the only place where flex-children specific properties can be applied.-->
+    <editor-block-render class="from-block"
+                         [blockFlexChild]="childVisualBlock"
+                         [codeResource]="codeResource"
                          [visual]="childVisualBlock"
                          [node]="node"></editor-block-render>
   </ng-container>

@@ -24,6 +24,7 @@ import { RawTreeEditorComponent } from './raw/raw-tree-editor.component'
 import { BlockEditorComponent } from './block/block-editor.component'
 import { BlockLayoutDirective } from './block/block-layout.directive'
 import { BlockBaseDirective } from './block/block-base.directive'
+import { BlockFlexChildDirective } from './block/block-flex-child.directive'
 import { BlockHostComponent } from './block/block-host.component'
 import { BlockRenderComponent } from './block/block-render.component'
 import { BlockRenderBlockComponent } from './block/block-render-block.component'
@@ -52,6 +53,7 @@ import { QueryService } from './query/query.service'
     BlockHostComponent,
     BlockLayoutDirective,
     BlockBaseDirective,
+    BlockFlexChildDirective,
     CodeGeneratorComponent,
     CreateCodeResourceComponent,
     DatabaseSchemaSidebarComponent,

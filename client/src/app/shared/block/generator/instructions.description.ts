@@ -16,6 +16,8 @@ export type Position = "start" | "end" | "none";
 export interface Instructions {
   // Controls whether children should be layed out vertically or horizontally
   orientation: Orientation;
+  // Allow wrapping of elements if the space is not enough
+  allowWrap: boolean;
   // Used to separate iterated elements
   between: string;
   // Defines the order in which the attributes appear
@@ -30,6 +32,8 @@ export interface Instructions {
   generateDropTargets: Position;
   // Where (and if) to generate error indicators
   generateErrorIndicator: Position;
+  // Should a break be inserted after this element?
+  breakAfter: boolean;
 };
 
 /**
@@ -43,12 +47,12 @@ export type ReferenceableInstructions = ParameterReferenceable<Instructions>;
 /**
  * Instructions that are useful on an iterating visual.
  */
-export type IteratorInstructions = Readonly<Pick<Instructions, "orientation" | "between" | "style" | "generateDropTargets">>;
+export type IteratorInstructions = Readonly<Pick<Instructions, "orientation" | "between" | "style" | "generateDropTargets" | "breakAfter" | "allowWrap">>;
 
 /**
  * Instructions that are useful on a block visual.
  */
-export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "orientation" | "style" | "onDrop" | "generateErrorIndicator">>;
+export type BlockInstructions = Readonly<Pick<Instructions, "attributeMapping" | "orientation" | "style" | "onDrop" | "generateErrorIndicator" | "breakAfter" | "allowWrap">>;
 
 /**
  * Instructions that are useful on a terminal visual.
@@ -68,7 +72,9 @@ export module DefaultInstructions {
     orientation: "horizontal",
     between: "",
     style: {},
-    generateDropTargets: "end"
+    generateDropTargets: "end",
+    breakAfter: false,
+    allowWrap: true
   }
 
   export const blockInstructions: BlockInstructions = {
@@ -76,7 +82,9 @@ export module DefaultInstructions {
     attributeMapping: "grammar",
     style: {},
     onDrop: VisualBlockDescriptions.DefaultDropTargetProperties,
-    generateErrorIndicator: "start"
+    generateErrorIndicator: "start",
+    breakAfter: false,
+    allowWrap: true
   }
 
   export const terminalInstructions: TerminalInstructions = {
