@@ -69,11 +69,9 @@ export type ErrorData =
 /**
  * Core data about the error. In every case the user will be confronted
  * with the error code as well as the line of the error.
- * The column of the error can be added optionally.
  */
 interface ValidationError {
 	line: number;
-	column?: number; // Really needed? Marker is always last col
 	data: ErrorData;
 }
 
@@ -129,27 +127,6 @@ function lookbehindModifications(row: string, delimiters: string[], removeOption
 }
 
 /**
- * Returns a combined regular expression of all unescaped delimiters
- * @param delimiters array of delimiters to combine inside a regex
- */
-function getCombinedDelimiterRegex(delimiters: string[]) : RegExp {
-	let regexContainer = [];
-
-	// Collect unescaped regexes of all Delimiters
-	delimiters.forEach(delimiter => {
-		regexContainer.push(new RegExp("(?<!\\\\)" + delimiter, "g"));
-	});
-
-	// Concatenate regexes directly into one regex to access the source attributes of the container
-	return new RegExp	(regexContainer[0].source
-					+  ((regexContainer.length >= 2) ? "|" + regexContainer[1].source : "")
-					+  ((regexContainer.length >= 3) ? "|" + regexContainer[2].source : "")
-					+  ((regexContainer.length >= 4) ? "|" + regexContainer[3].source : "")
-					+  ((regexContainer.length >= 5) ? "|" + regexContainer[4].source : "")
-					+  ((regexContainer.length >= 6) ? "|" + regexContainer[5].source : ""));
-}
-
-/**
  * Removes unescaped markers and writes out escaped markers and delimiters
  * Returns the final parse result column
  * @param col the column for the end result
@@ -159,9 +136,6 @@ function getCombinedDelimiterRegex(delimiters: string[]) : RegExp {
 function getResultColumn(col: string, delimiters: string[], textMarker: string): string {
 	// Use Regex for global replaces
 	let escapedMarkerRegex = new RegExp("\\\\" + textMarker, "g");
-	
-	// let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
-	// col = col.replace(unescapedMarkerRegex, '');
 
 	// Get rid of unescaped Marker
 	col = lookbehindModifications(col, [textMarker], true, false);
@@ -271,25 +245,12 @@ export function splitStringToRows(dataString: string): string[] {
  */
 export function splitRowToCols(row: string, delimiters: string[], textMarker: string, expectedColCount: number): RowData | ErrorData {
 	let splitResult = [];
-	let markerCount = 0;
 	let colCount = 1;
 
-	// Global regex for unescaped markers
-	// uses negative lookbehind: e.g. (?<!Y)X matches X that is not preceded by a Y
-	// 4 x backslash = 2 x for standard backslash escaping + 2 x for the RegExp Object
-
-	// let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
-	// let markerCollector = row.match(unescapedMarkerRegex);
-
-	// Use Regex workaround
-	let markerCollector = lookbehindPositions(row, [textMarker]);
-
-	// If row contains textMarkers, count them
-	if (markerCollector) {
-		markerCount = markerCollector.length;
-	}
+	// Count unescaped Markers
+	let markerCount = lookbehindPositions(row, [textMarker]).length;
 		
-	// Error if uneven number of unescaped Markers 
+	// Error if uneven number of unescaped Markers (marker not closed)
 	if (markerCount % 2 === 1) {
 		let fragments = row.split(textMarker);
 		let fragment = fragments[fragments.length-1];
@@ -303,7 +264,7 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 	// Escape Delimiters inside unescaped Markers
 	if (markerCount) {
 		row = escapeDelimitersBetweenMarkers(row, delimiters, textMarker);
-	}		
+	}	
 
 	// get positions of all delimiters
 	let splitPositions = lookbehindPositions(row, delimiters);
@@ -314,11 +275,6 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 	for (let i = 0; i < splitPositions.length; i++) {
 		splitResult.push(row.substring(splitPositions[i]+1, splitPositions[i+1]));
 	}
-	// NO LAST NEEDED???
-	//splitResult.push(row.substring(splitPositions[splitPositions.length], row.length));
-
-	// Split the Row by all unescaped Delimiters
-	// splitResult = row.split(getCombinedDelimiterRegex(delimiters));
 
 	// Count length only if split was successful
 	if (splitResult) {
