@@ -81,6 +81,36 @@ interface ValidationError {
 
 /* --- Helper Functions --- */
 
+/*  The following 2 functions serve as workaround 
+	for the lookbehind regex which is not yet supported by firefox */
+
+/**
+ * Returns all positions of unescaped delimiters or markers as array of numbers
+ * @param row the row to search for unescaped delimiters or markers
+ * @param delimiters array of delimiters or markers
+ */
+function lookbehindPositions(row: string, delimiters: string[], ): number[] {
+	let result = [];
+	for (let i = 0; i < row.length; i++) {
+		if ((delimiters.includes(row[i])) &&
+		(i !== 0) && (row[i-1] !== "\\")) {
+			result.push(i);
+		}
+	}
+	return result;
+}
+
+/**
+ * Returns a modified string with escaped or removed unescaped delimiters or markers
+ * @param row the row to search for unescaped delimiters or markers
+ * @param delimiters array of delimiters or markers
+ * @param removeOption remove all unescaped delimiters
+ * @param escapeOption escape all unescaped delimiters
+ */
+function lookbehindModifications(row: string, delimiters: string[], removeOption: boolean, escapeOption: boolean): string {
+	return "";
+}
+
 /**
  * Returns a combined regular expression of all unescaped delimiters
  * @param delimiters array of delimiters to combine inside a regex
