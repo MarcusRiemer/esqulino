@@ -305,8 +305,20 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 		row = escapeDelimitersBetweenMarkers(row, delimiters, textMarker);
 	}		
 
+	// get positions of all delimiters
+	let splitPositions = lookbehindPositions(row, delimiters);
+
+	// split from row begin to first delimiter
+	splitResult.push(row.substring(0, splitPositions[0]));
+	// all other splits
+	for (let i = 0; i < splitPositions.length; i++) {
+		splitResult.push(row.substring(splitPositions[i]+1, splitPositions[i+1]));
+	}
+	// NO LAST NEEDED???
+	//splitResult.push(row.substring(splitPositions[splitPositions.length], row.length));
+
 	// Split the Row by all unescaped Delimiters
-	splitResult = row.split(getCombinedDelimiterRegex(delimiters));
+	// splitResult = row.split(getCombinedDelimiterRegex(delimiters));
 
 	// Count length only if split was successful
 	if (splitResult) {
