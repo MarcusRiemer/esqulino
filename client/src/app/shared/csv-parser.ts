@@ -106,9 +106,26 @@ function lookbehindPositions(row: string, delimiters: string[], ): number[] {
  * @param delimiters array of delimiters or markers
  * @param removeOption remove all unescaped delimiters
  * @param escapeOption escape all unescaped delimiters
+ * @pre only one option allowed
  */
 function lookbehindModifications(row: string, delimiters: string[], removeOption: boolean, escapeOption: boolean): string {
-	return "";
+	let result = "";
+	for (let i = 0; i < row.length; i++) {
+		// unescaped char found
+		if ((delimiters.includes(row[i])) &&
+		(i !== 0) && (row[i-1] !== "\\")) {
+			if (escapeOption) {
+				result += "\\" + row[i];
+			}
+			else if (!escapeOption) {
+				result += row[i];
+			}			
+		} 
+		else {
+			result += row[i];
+		} 
+	}
+	return row;
 }
 
 /**
