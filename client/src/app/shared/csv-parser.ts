@@ -113,11 +113,11 @@ function lookbehindModifications(row: string, delimiters: string[], removeOption
 	for (let i = 0; i < row.length; i++) {
 		// unescaped char found
 		if ((delimiters.includes(row[i])) &&
-		(i !== 0) && (row[i-1] !== "\\")) {
+			(row[i-1] !== "\\")) {
 			if (escapeOption) {
 				result += "\\" + row[i];
 			}
-			else if (!escapeOption) {
+			else if (!removeOption) {
 				result += row[i];
 			}			
 		} 
@@ -125,7 +125,7 @@ function lookbehindModifications(row: string, delimiters: string[], removeOption
 			result += row[i];
 		} 
 	}
-	return row;
+	return result;
 }
 
 /**
@@ -183,30 +183,27 @@ function getResultColumn(col: string, delimiters: string[], textMarker: string):
  * @param textMarker the marker where the delimiters will be escaped (for example " or ')
  */
 export function escapeDelimitersBetweenMarkers(row: string, delimiters: string[], textMarker: string): string {
-	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
-	let nextStartPos = row.search(unescapedMarkerRegex);
-	let nextEndPos = 0;
-	let nextPart = "";
-	
+	let positions = lookbehindPositions(row, [textMarker]);
+
 	// Markers left?
-	if (nextStartPos >= 0) {		
+	if (positions.length) {	
+		// Hint: Markers are included in the positions
+		let nextStartPos = positions[0];
+		let nextEndPos = positions[1];
+		let nextPart = "";
+	
 		// Marker at beginning?
-		if (nextStartPos === 0) {
-			// Start after the Marker
-			nextPart = row.substring(1);
-			// End at the next Marker
-			nextEndPos = nextPart.search(unescapedMarkerRegex);			
-			nextPart = nextPart.substring(0, nextEndPos);
+		if (nextStartPos === 0) {			
+			// Substring from the first character after the first marker
+			// to the char before the next Marker 
+			// (2nd param not included in substring function)
+			nextPart = row.substring(nextStartPos+1, nextEndPos);
 
-			// Escape all unescaped Delimiters between markers
-			delimiters.forEach(delimiter => {
-				// Global regex for each delimiter
-				let unescapedDelimiterRegex = new RegExp("(?<!\\\\)" + delimiter, "g");
-				nextPart = nextPart.replace(unescapedDelimiterRegex, "\\" + delimiter);
-			});
+			// escape delimiters inside nextPart
+			nextPart = lookbehindModifications(nextPart, delimiters, false, true);
 
-			// Skip the first and second Marker for next Step
-			nextEndPos += 2;
+			// Skip the Marker for the next Step
+			nextEndPos++;
 		} 
 		else {
 			// Unedited next Part
