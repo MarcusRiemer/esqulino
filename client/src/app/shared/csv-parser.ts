@@ -89,11 +89,11 @@ interface ValidationError {
  * @param row the row to search for unescaped delimiters or markers
  * @param delimiters array of delimiters or markers
  */
-function lookbehindPositions(row: string, delimiters: string[], ): number[] {
+function lookbehindPositions(row: string, delimiters: string[]): number[] {
 	let result = [];
 	for (let i = 0; i < row.length; i++) {
 		if ((delimiters.includes(row[i])) &&
-		(i !== 0) && (row[i-1] !== "\\")) {
+		(row[i-1] !== "\\")) {
 			result.push(i);
 		}
 	}
@@ -278,8 +278,11 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 	// Global regex for unescaped markers
 	// uses negative lookbehind: e.g. (?<!Y)X matches X that is not preceded by a Y
 	// 4 x backslash = 2 x for standard backslash escaping + 2 x for the RegExp Object
-	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
-	let markerCollector = row.match(unescapedMarkerRegex);
+
+	// let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
+	// let markerCollector = row.match(unescapedMarkerRegex);
+
+	let markerCollector = lookbehindPositions(row, [textMarker]);
 
 	// If row contains textMarkers, count them
 	if (markerCollector) {
