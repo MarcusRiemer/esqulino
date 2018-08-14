@@ -93,7 +93,7 @@ function lookbehindPositions(row: string, delimiters: string[]): number[] {
 	let result = [];
 	for (let i = 0; i < row.length; i++) {
 		if ((delimiters.includes(row[i])) &&
-		(row[i-1] !== "\\")) {
+			(row[i-1] !== "\\")) {
 			result.push(i);
 		}
 	}
@@ -159,10 +159,12 @@ function getCombinedDelimiterRegex(delimiters: string[]) : RegExp {
 function getResultColumn(col: string, delimiters: string[], textMarker: string): string {
 	// Use Regex for global replaces
 	let escapedMarkerRegex = new RegExp("\\\\" + textMarker, "g");
-	let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
 	
+	// let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
+	// col = col.replace(unescapedMarkerRegex, '');
+
 	// Get rid of unescaped Marker
-	col = col.replace(unescapedMarkerRegex, '');
+	col = lookbehindModifications(col, [textMarker], true, false);
 	// Write out escaped Markers
 	col = col.replace(escapedMarkerRegex, textMarker);
 	// Write out all escaped Delimiters
@@ -282,6 +284,7 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 	// let unescapedMarkerRegex = new RegExp("(?<!\\\\)" + textMarker, "g");
 	// let markerCollector = row.match(unescapedMarkerRegex);
 
+	// Use Regex workaround
 	let markerCollector = lookbehindPositions(row, [textMarker]);
 
 	// If row contains textMarkers, count them
