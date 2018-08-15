@@ -99,26 +99,19 @@ function lookbehindPositions(row: string, delimiters: string[]): number[] {
 }
 
 /**
- * Returns a modified string with escaped or removed unescaped delimiters or markers
+ * Returns a modified string with escaped unescaped delimiters or markers
  * @param row the row to search for unescaped delimiters or markers
  * @param delimiters array of delimiters or markers
- * @param removeOption remove all unescaped delimiters
- * @param escapeOption escape all unescaped delimiters
  * @pre only one option allowed
  */
-function lookbehindModifications(row: string, delimiters: string[], removeOption: boolean, escapeOption: boolean): string {
+function lookbehindModifications(row: string, delimiters: string[]): string {
 	let result = "";
 	for (let i = 0; i < row.length; i++) {
 		// unescaped char found
 		if ((delimiters.includes(row[i])) &&
 			(row[i-1] !== "\\")) {
-			if (escapeOption) {
 				result += "\\" + row[i];
-			}
-			else if (!removeOption) {
-				result += row[i];
-			}			
-		} 
+		}		 
 		else {
 			result += row[i];
 		} 
@@ -136,9 +129,6 @@ function lookbehindModifications(row: string, delimiters: string[], removeOption
 function getResultColumn(col: string, delimiters: string[], textMarker: string): string {
 	// Use Regex for global replaces
 	let escapedMarkerRegex = new RegExp("\\\\" + textMarker, "g");
-
-	// Get rid of unescaped Marker
-	col = lookbehindModifications(col, [textMarker], true, false);
 	// Write out escaped Markers
 	col = col.replace(escapedMarkerRegex, textMarker);
 	// Write out all escaped Delimiters
@@ -174,7 +164,7 @@ export function escapeDelimitersBetweenMarkers(row: string, delimiters: string[]
 			nextPart = row.substring(nextStartPos+1, nextEndPos);
 
 			// escape delimiters inside nextPart
-			nextPart = lookbehindModifications(nextPart, delimiters, false, true);
+			nextPart = lookbehindModifications(nextPart, delimiters);
 
 			// Skip the Marker for the next Step
 			nextEndPos++;
