@@ -90,8 +90,10 @@ interface ValidationError {
 function lookbehindPositions(row: string, delimiters: string[]): number[] {
 	let result = [];
 	for (let i = 0; i < row.length; i++) {
+		// unescaped char found
 		if ((delimiters.includes(row[i])) &&
 			(row[i-1] !== "\\")) {
+			// add index to result
 			result.push(i);
 		}
 	}
@@ -110,6 +112,7 @@ function lookbehindModifications(row: string, delimiters: string[]): string {
 		// unescaped char found
 		if ((delimiters.includes(row[i])) &&
 			(row[i-1] !== "\\")) {
+				// escape the char for the new result string
 				result += "\\" + row[i];
 		}		 
 		else {
@@ -138,6 +141,34 @@ function getResultColumn(col: string, delimiters: string[], textMarker: string):
 		col = col.replace(escapedDelimiterRegex, delimiter);
 	});
 	return col;
+}
+
+/** 
+ * Splits row into colums by all delimiters and returns columns as an array of strings
+ * @param row the row to split
+ * @param delimiters the delimiters for the splits
+ */
+function splitByDelimiters(row: string, delimiters: string[]): string[] {
+	let splitResult = [];
+	// get positions of all delimiters
+	let splitPositions = lookbehindPositions(row, delimiters);
+
+	// delimiters available?
+	if (splitPositions.length){	
+		// split from row begin to first delimiter
+		splitResult.push(row.substring(0, splitPositions[0]));
+		// delimiter splits
+		for (let i = 0; i < splitPositions.length-1; i++) {
+			splitResult.push(row.substring(splitPositions[i]+1, splitPositions[i+1]));
+		}
+		// split from last delimiter to the end of the row
+		splitResult.push(row.substring(splitPositions[splitPositions.length-1]+1, row.length));
+	}
+	else {
+		// No splits necessary > use complete row
+		splitResult.push(row);
+	}
+	return splitResult;
 }
 
 /** Escapes all Delimiters between two unescaped Markers
@@ -256,20 +287,9 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 		row = escapeDelimitersBetweenMarkers(row, delimiters, textMarker);
 	}	
 
-	// get positions of all delimiters
-	let splitPositions = lookbehindPositions(row, delimiters);
-
-	// split from row begin to first delimiter
-	splitResult.push(row.substring(0, splitPositions[0]));
-	// all other splits
-	for (let i = 0; i < splitPositions.length; i++) {
-		splitResult.push(row.substring(splitPositions[i]+1, splitPositions[i+1]));
-	}
-
-	// Count length only if split was successful
-	if (splitResult) {
-		colCount = splitResult.length;
-	}
+	// Split row to columns by delimiters
+	splitResult = splitByDelimiters(row, delimiters);
+	colCount = splitResult.length;
 
 	// Check if column count matches with header or if this is the header	
 	if ((expectedColCount === colCount) || (expectedColCount === 0)) {
