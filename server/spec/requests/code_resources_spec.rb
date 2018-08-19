@@ -87,10 +87,9 @@ RSpec.describe "CodeResource request", :type => :request do
 
       result = JSON.parse response.body
 
-      # 1) No name
-      # 2) No language
-      # 3) Unnecessary field "foo"
-      expect(result['errors']['ast'].length).to eq 3
+      # 1) No name and no language
+      # 2) Unnecessary field "foo"
+      expect(result['errors']['ast'].length).to eq 2
     end
   end
 

@@ -1,7 +1,8 @@
-import { Observable } from 'rxjs';
-
 import { Component, Input, OnInit, ElementRef } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
 import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
@@ -45,31 +46,7 @@ export class BlockRenderBlockComponent implements OnInit {
   }
 
   readonly dropTargetAnimationState: Observable<DropTargetState> = this._dragService.currentDrag
-    .map(drag => calculateDropTargetState(drag, this));
-
-  /*  get dropTargetAnimationState(): Observable<DropTargetAnimationStates> {
-      if (!this._cached_dropTargetAnimationState) {
-        this._cached_dropTargetAnimationState = this._dragService.currentDrag
-          .map(drag => {
-            if (!drag) {
-              // There is no drag operation
-              return ("none");
-            }
-            else if (drag.hoverNode && drag.hoverNode == this.node) {
-              // There is a drag operation and it targets us
-              return ("self");
-            } else {
-              // There is a drag operation and it targets something else
-              return ("available");
-            }
-          })
-          .distinctUntilChanged()
-      }
-  
-      return (this._cached_dropTargetAnimationState);
-    }*/
-
-
+    .pipe(map(drag => calculateDropTargetState(drag, this)));
 
   /**
    * @return The location a drop should occur in.

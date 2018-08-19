@@ -5,6 +5,12 @@ class BlockLanguagesController < ApplicationController
     render :json => BlockLanguage.all.map{|b| b.to_list_api_response}
   end
 
+  # Find a single block language
+  def show
+    block_lang = BlockLanguage.find(id_params[:id])
+    render json: block_lang.to_full_api_response
+  end
+
   # Create a new block language
   def create
     block_lang = BlockLanguage.new(basic_params)

@@ -1,20 +1,12 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "skipLibCheck": true,
-    "target": "es5",
-    "lib": [
-      "es2017.object",
-      "es2016",
-      "dom"
-    ],
     "outDir": "../out-tsc/app",
+    "baseUrl": "./",
     "module": "commonjs",
-    "types": []
+    "types": [
+      "node"
+    ]
   },
   "exclude": [
     "test.ts",
@@ -23,6 +15,6 @@
     "**/*.spec.ts"
   ],
   "angularCompilerOptions": {
-    "entryModule": "./app/app.server.module#AppServerModule"
+    "entryModule": "app/app.server.module#AppServerModule"
   }
 }

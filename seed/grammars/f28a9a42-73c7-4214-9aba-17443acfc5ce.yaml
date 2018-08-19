@@ -2,7 +2,7 @@
 concise_attributes:
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Regular Expression
+  value_before_type_cast: regex
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: slug
   value_before_type_cast: regex
@@ -11,13 +11,19 @@ concise_attributes:
   value_before_type_cast: f28a9a42-73c7-4214-9aba-17443acfc5ce
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: model
-  value_before_type_cast: '{"root": "tmp", "types": {"tmp": {}}}'
+  value_before_type_cast: '{"root": "root", "types": {"expr": {"type": "concrete",
+    "attributes": [{"name": "singleExpression", "type": "choice", "choices": ["constant",
+    "alternative"]}]}, "root": {"type": "concrete", "attributes": [{"name": "expressions",
+    "type": "allowed", "nodeTypes": [{"occurs": "+", "nodeType": "expr"}]}]}, "constant":
+    {"type": "concrete", "attributes": [{"base": "string", "name": "value", "type":
+    "property"}]}, "alternative": {"type": "concrete", "attributes": [{"name": "expressions",
+    "type": "allowed", "nodeTypes": [{"occurs": "+", "nodeType": "expr"}]}]}}}'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-05-15 18:53:19.032293'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-05-15 18:53:19.032293'
+  value_before_type_cast: '2018-05-31 13:55:26.753111'
 - !ruby/object:ActiveRecord::Attribute::FromDatabase
   name: programming_language_id
 new_record: false

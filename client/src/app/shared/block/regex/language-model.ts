@@ -3,7 +3,7 @@ import {
   SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
 } from '../block.description'
 
-export const LANGUAGE_MODEL: BlockLanguageDescription = {
+export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
   id: "9e529caa-aa86-48eb-9a12-83889377195e",
   slug: "regex",
   name: "Reguläre Ausdrücke",
@@ -167,10 +167,9 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           children: [
             {
               blockType: "dropTarget",
-              visibility: ["always"],
               direction: "horizontal",
               dropTarget: {
-                actionSelf: {
+                self: {
                   order: "insertAfter",
                   skipParents: 1
                 },
@@ -180,9 +179,9 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 {
                   blockType: "constant",
                   text: "("
-                } as VisualBlockDescriptions.EditorConstant
+                }
               ],
-            } as VisualBlockDescriptions.EditorDropTarget,
+            },
             {
               blockType: "iterator",
               childGroupName: "expressions",
@@ -190,10 +189,9 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               between: [
                 {
                   blockType: "dropTarget",
-                  visibility: ["always"],
                   direction: "horizontal",
                   dropTarget: {
-                    actionSelf: {
+                    self: {
                       order: "insertAfter",
                       skipParents: 1
                     },
@@ -203,17 +201,17 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                     {
                       blockType: "constant",
                       text: "|"
-                    } as VisualBlockDescriptions.EditorConstant
+                    }
                   ],
-                } as VisualBlockDescriptions.EditorDropTarget,
+                },
               ]
-            } as VisualBlockDescriptions.EditorIterator,
+            },
             {
               blockType: "constant",
               text: ")"
-            } as VisualBlockDescriptions.EditorConstant,
+            },
           ]
-        } as VisualBlockDescriptions.EditorBlock
+        }
       ]
     },
     {
@@ -226,7 +224,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
           blockType: "iterator",
           childGroupName: "singleExpression",
           direction: "horizontal",
-        } as VisualBlockDescriptions.EditorIterator,
+        },
       ]
     }
   ]

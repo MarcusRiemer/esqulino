@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers } from '@angular/http'
 
+import { map } from 'rxjs/operators';
+
 import { ServerApiService } from '../../shared/serverapi.service'
 
 import { ProjectService } from '../project.service'
 
 import { AvailableImage, AvailableImageDescription } from './available-image.class'
-
-//export { AvailableImage }
 
 @Injectable()
 export class ImageService {
@@ -24,8 +24,10 @@ export class ImageService {
     let project = this._projectService.cachedProject
 
     this._http.get(this._serverApi.getImageListUrl(project.slug))
-      .map(res => res.json() as AvailableImageDescription[])
-      .map(res => res.map(img => new AvailableImage(this._serverApi, project, img)))
+      .pipe(
+        map(res => res.json() as AvailableImageDescription[]),
+        map(res => res.map(img => new AvailableImage(this._serverApi, project, img)))
+      )
       .subscribe(res => this._imageList = res);
   }
 

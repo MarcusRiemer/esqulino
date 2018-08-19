@@ -1,9 +1,6 @@
-import 'rxjs/Rx'
-
 import { Injectable, OnInit } from '@angular/core'
 
-import { Observable } from 'rxjs/Observable'
-import { Subject } from 'rxjs/Subject'
+import { Observable, Subject } from 'rxjs'
 
 /**
  * Used to subscribe to click events.

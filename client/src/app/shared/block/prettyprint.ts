@@ -12,7 +12,7 @@ import {
  * Converts the internal structure of a language model into a more readable
  * version.
  */
-export function prettyPrintLanguageModel(desc: BlockLanguageDescription): string {
+export function prettyPrintBlockLanguage(desc: BlockLanguageDescription): string {
   const head = `language "${desc.name}" {`;
   const tail = `}`;
 

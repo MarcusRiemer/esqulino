@@ -1,7 +1,8 @@
-import { BehaviorSubject, Observable } from 'rxjs'
-
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+
+import { BehaviorSubject, Observable } from 'rxjs'
+import { tap } from 'rxjs/operators';
 
 import { CodeResource } from '../shared/syntaxtree';
 
@@ -29,33 +30,21 @@ export class CurrentCodeResourceService {
     private _activatedRoute: ActivatedRoute,
     private _projectService: ProjectService,
   ) {
-    // Listen for changes in the current route to extract the resource
-    // As this service is injected at the root of the editor hierarchy,
-    // the URL segments at this level do not contain the resource id.
-    // So we have to dig a little deeper to extract the ID we actually want.
-    // The "correct route" is most probably two levels under the
-    // current level.
-    //
-    // On a totally unrelated note: I totally know what I am doing ...
-    const correctRoute = this._activatedRoute;
-
-    correctRoute.params.subscribe(params => {
-      const codeResourceId = params['resourceId'];
-
-    });
   }
 
   /**
    * Things that need to happen every time the resource changes
    */
   private readonly onResourceChange = this._codeResource
-    .do(r => {
-      if (r) {
-        // Show the new sidebar
-        console.log("Sidebar change because of current code resource");
-        this._sidebarService.showSingleSidebar(CodeSidebarComponent.SIDEBAR_IDENTIFIER, r);
-      }
-    })
+    .pipe(
+      tap(r => {
+        if (r) {
+          // Show the new sidebar
+          console.log("Sidebar change because of current code resource");
+          this._sidebarService.showSingleSidebar(CodeSidebarComponent.SIDEBAR_IDENTIFIER, r);
+        }
+      })
+    )
     .subscribe();
 
   currentResourceChanged(codeResourceId: string) {

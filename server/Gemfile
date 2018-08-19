@@ -19,7 +19,7 @@ gem 'sqlite3'
 gem 'liquid'
 
 # Validating requests against a schema
-gem "json-schema", "~> 2.8"
+gem 'json_schemer'
 
 # Used to check the filetypes of uploaded files
 gem 'ruby-filemagic', '~> 0.7.2'

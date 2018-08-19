@@ -3,7 +3,7 @@ import {
   SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
 } from '../block.description'
 
-export const LANGUAGE_MODEL: BlockLanguageDescription = {
+export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
   id: "db441c27-6a19-4f2f-95a9-f3bc44675b4f",
   slug: "sql",
   name: "SQL",
@@ -317,8 +317,6 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
                 "display": "inline-block",
                 "color": "blue",
                 "padding-left": "2px",
-                "background": "url(/vendor/icons/block-background.svg) no-repeat",
-                "background-size": "100% 100%",
                 "cursor": "grab",
               }
             } as VisualBlockDescriptions.EditorConstant,
@@ -352,6 +350,7 @@ export const LANGUAGE_MODEL: BlockLanguageDescription = {
               blockType: "iterator",
               childGroupName: "columns",
               direction: "horizontal",
+              wrapChildren: true,
               between: [
                 {
                   blockType: "constant",

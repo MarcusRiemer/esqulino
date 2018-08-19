@@ -1,4 +1,4 @@
-import { Observable, BehaviorSubject } from 'rxjs'
+import { Observable, BehaviorSubject, of } from 'rxjs'
 
 import { Injectable, OnInit } from '@angular/core'
 
@@ -46,6 +46,6 @@ export class PreferencesService {
    * @return Whether developer debug information should be visible.
    */
   get showJsonModel(): Observable<boolean> {
-    return (Observable.of(false));
+    return (of(false));
   }
 }

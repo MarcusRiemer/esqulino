@@ -31,11 +31,9 @@ module ValidateAgainstMatcher
     def matches?(actual)
       schema = @@json_schema_storage.schemas[@schema_name]
 
-      if schema 
-
-        @result = JSON::Validator.fully_validate(schema, actual,
-                                                 :errors_as_objects => true,
-                                                 :parse_data => false)
+      if schema
+        schemer = JSONSchemer.schema(schema)
+        @result = schemer.validate(actual).to_a
         @result.empty?
       else
         @error = "Could not find schema #{@schema_name}"

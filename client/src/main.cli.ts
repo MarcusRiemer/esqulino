@@ -13,7 +13,7 @@ import { LanguageDescription } from './app/shared/syntaxtree/language.descriptio
 import { Language } from './app/shared/syntaxtree/language'
 
 import { BlockLanguageDescription } from './app/shared/block/block-language.description'
-import { prettyPrintLanguageModel } from './app/shared/block/prettyprint'
+import { prettyPrintBlockLanguage } from './app/shared/block/prettyprint'
 
 import { graphvizSyntaxTree } from './app/shared/syntaxtree/prettyprint'
 import { NodeDescription } from './app/shared/syntaxtree/syntaxtree.description'
@@ -25,6 +25,8 @@ import * as css from './app/shared/syntaxtree/css/'
 
 import * as blocks_dxml from './app/shared/block/dxml/language-model'
 import * as blocks_sql from './app/shared/block/sql/language-model'
+import * as blocks_css from './app/shared/block/css/language-model'
+import * as blocks_regex from './app/shared/block/regex/language-model'
 
 /**
  * Can be used to test whether the IDE-service is actually available.
@@ -71,6 +73,11 @@ interface UpdateGrammarsCommand {
   serverBaseUrl: string
 }
 
+interface UpdateBlockLanguagesCommand {
+  type: "updateBlockLanguages"
+  serverBaseUrl: string
+}
+
 /**
  * Prints a list of all available programming languages.
  */
@@ -78,7 +85,7 @@ interface AvailableProgrammingLanguagesCommand {
   type: "available"
 }
 
-type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand | UpdateGrammarsCommand;
+type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand | UpdateGrammarsCommand | UpdateBlockLanguagesCommand;
 
 function availableLanguages(): LanguageDescription[] {
   return ([
@@ -127,7 +134,9 @@ function availableBlockLanguages(): BlockLanguageDescription[] {
   return ([
     blocks_dxml.LANGUAGE_MODEL,
     blocks_dxml.DYNAMIC_LANGUAGE_MODEL,
-    blocks_sql.LANGUAGE_MODEL
+    blocks_sql.BLOCK_LANGUAGE_DESCRIPTION,
+    blocks_css.BLOCK_LANGUAGE_DESCRIPTION,
+    blocks_regex.BLOCK_LANGUAGE_DESCRIPTION
   ]);
 }
 
@@ -150,7 +159,7 @@ function executeCommand(command: Command): Promise<string> | any {
       return (prettyPrintGrammar(g));
     case "printBlockLanguage": {
       const l = findLanguageModel(command.blockLanguageId);
-      return (prettyPrintLanguageModel(l));
+      return (prettyPrintBlockLanguage(l));
     }
     case "available":
       return (availableGrammars().map(g => g.name));
@@ -169,12 +178,20 @@ function executeCommand(command: Command): Promise<string> | any {
         .filter(g => {
           const toReturn = grammarIds.has(g.id);
           grammarIds.delete(g.id);
-
           return (toReturn);
         })
         .map(g => {
           const updateUrl = new URL("/api/grammars/" + g.id, command.serverBaseUrl);
           return (httpRequest<any>(updateUrl, "PUT", g));
+        });
+
+      return (Promise.all(requests));
+    }
+    case "updateBlockLanguages": {
+      const requests = availableBlockLanguages()
+        .map(b => {
+          const updateUrl = new URL("/api/block_languages/" + b.id, command.serverBaseUrl);
+          return (httpRequest<any>(updateUrl, "PUT", b));
         });
 
       return (Promise.all(requests));
@@ -197,13 +214,15 @@ rl.on('line', function(line) {
     if (result !== undefined) {
       if (result instanceof Promise) {
         Promise.resolve(result)
-          .catch(err => console.error(err))
           .then(res => {
             console.log(`Finished ${res.length} operations`);
             res.forEach((v, i) => {
               console.log(`Operation ${i + 1}: ${JSON.stringify(v)}`);
             });
-            //console.log(JSON.stringify(res))
+          })
+          .catch(err => {
+            console.error("Error during operation");
+            console.error(JSON.stringify(err, undefined, 2));
           });
       } else {
         console.log(JSON.stringify(result));

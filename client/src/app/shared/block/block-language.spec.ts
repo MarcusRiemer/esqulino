@@ -1,4 +1,4 @@
-import { Tree, LanguageDescription, Language, NodeTypeDescription } from 'app/shared/syntaxtree';
+import { Tree, LanguageDescription, Language, NodeTypeDescription } from '../syntaxtree';
 
 import { BlockLanguageDescription } from './block-language.description'
 import { BlockLanguage } from './block-language'

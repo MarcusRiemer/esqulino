@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { Observable } from 'rxjs/Observable'
+import { Observable, of } from 'rxjs'
 
 interface Thesis {
   id: string
@@ -95,6 +95,6 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
   ]
 
   public get theses(): Observable<Thesis[]> {
-    return (Observable.of(this._theses));
+    return (of(this._theses));
   }
 }

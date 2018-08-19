@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
-import { AsyncSubject } from 'rxjs/AsyncSubject'
-import { Observable } from 'rxjs/Observable'
+import { AsyncSubject, BehaviorSubject, Observable } from 'rxjs';
+import { tap, map, catchError } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared/serverapi.service'
 import { KeyValuePairs, encodeUriParameters } from '../shared/util'
@@ -119,7 +118,7 @@ export class SchemaService {
     let options = new RequestOptions({ headers: headers });
 
     this._httpRequest = this._http.get(url, options)
-      .map((res) => res.json())
+      .pipe(map((res) => res.json()))
 
     return (this._httpRequest);
   }
@@ -136,10 +135,10 @@ export class SchemaService {
     let options = new RequestOptions({ headers: headers });
 
     const toReturn = this._http.get(url, options)
-      .map((res) => {
-        return res.json();
-      })
-      .catch((res) => this.handleError(res));
+      .pipe(
+        map(res => res.json()),
+        catchError(res => this.handleError(res))
+      );
 
     return (toReturn);
   }
@@ -158,13 +157,15 @@ export class SchemaService {
     const body = JSON.stringify(table.toModel());
 
     const toReturn = this._http.post(url, body, options)
-      .do(_ => this.incrementChangeCount())
-      .map((res) => {
-        this._projectService.setActiveProject(project.slug, true);
-        this.clearCurrentlyEdited();
-        return table;
-      })
-      .catch(this.handleError);
+      .pipe(
+        tap(_ => this.incrementChangeCount()),
+        map((res) => {
+          this._projectService.setActiveProject(project.slug, true);
+          this.clearCurrentlyEdited();
+          return table;
+        }),
+        catchError(this.handleError)
+      );;
     return (toReturn);
   }
 
@@ -173,7 +174,7 @@ export class SchemaService {
    * @param project - the current project
    * @param table - the table alter
    */
-  sendAlterTableCommands(project: Project, tableName: string, commandHolder: TableCommandHolder): Observable<Table> {
+  sendAlterTableCommands(project: Project, tableName: string, commandHolder: TableCommandHolder): Observable<void> {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
@@ -182,12 +183,14 @@ export class SchemaService {
     const body = JSON.stringify(commandHolder.toModel());
 
     const toReturn = this._http.post(url, body, options)
-      .do(_ => this.incrementChangeCount())
-      .map(res => {
-        this._projectService.setActiveProject(project.slug, true);
-        this.clearCurrentlyEdited();
-      })
-      .catch(this.handleError);
+      .pipe(
+        catchError(this.handleError),
+        tap(_ => this.incrementChangeCount()),
+        map(res => {
+          this._projectService.setActiveProject(project.slug, true);
+          this.clearCurrentlyEdited();
+        })
+      );
     return (toReturn);
   }
 
@@ -203,12 +206,14 @@ export class SchemaService {
     const url = this._server.getDropTableUrl(project.slug, project.currentDatabaseName, table.name);
 
     const toReturn = this._http.delete(url, options)
-      .do(_ => this.incrementChangeCount())
-      .map((res) => {
-        this._projectService.setActiveProject(project.slug, true);
-        return table;
-      })
-      .catch(this.handleError);
+      .pipe(
+        tap(_ => this.incrementChangeCount()),
+        map((res) => {
+          this._projectService.setActiveProject(project.slug, true);
+          return table;
+        }),
+        catchError(this.handleError)
+      )
     return (toReturn);
   }
 

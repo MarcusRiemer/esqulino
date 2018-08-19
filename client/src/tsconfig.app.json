@@ -1,29 +1,14 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "skipLibCheck": true,
-    "target": "es5",
-    "lib": [
-      "es2017.object",
-      "es2016",
-      "dom"
-    ],
     "outDir": "../out-tsc/app",
     "module": "es2015",
-    "baseUrl": "",
+    "types": []
   },
   "exclude": [
-    "test.ts",
-    "server.ts",
+    "src/test.ts",
+    "main.cli.ts",
+    "cli/**",
     "**/*.spec.ts"
-  ],
-  "angularCompilerOptions": {
-    "genDir": "./dist/ngfactory",
-    "entryModule": "./app/app.module#AppModule",
-    "fullTemplateTypeCheck": true
-  }
+  ]
 }

@@ -1,7 +1,7 @@
 import { Injectable, Type } from '@angular/core'
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
-import { Observable } from 'rxjs/Observable'
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { SIDEBAR_MODEL_TOKEN } from './editor.token'
 import { RegistrationService } from './registration.service'
@@ -27,7 +27,7 @@ export class SidebarService {
    */
   private _model = new BehaviorSubject<InternalSidebarModel[]>([]);
 
-  private _visibilityObs = this._model.map(s => s.length > 0);
+  private _visibilityObs = this._model.pipe(map(s => s.length > 0));
 
   /**
    * Valid types for sidebars.
