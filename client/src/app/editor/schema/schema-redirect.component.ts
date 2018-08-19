@@ -5,6 +5,8 @@ import { ProjectService, Project } from '../project.service'
 import { SidebarService } from '../sidebar.service'
 import { ToolbarService } from '../toolbar.service'
 
+import { first } from 'rxjs/operators';
+
 /**
  * A class as entry-point for the representation of a schema
  */
@@ -31,7 +33,7 @@ export class SchemaRedirectComponent implements OnInit {
    */
   ngOnInit() {
     this._projectService.activeProject
-      .first()
+      .pipe(first())
       .subscribe(res => {
         this.project = res
         this._router.navigate([this.project.currentDatabaseName], { relativeTo: this._route })

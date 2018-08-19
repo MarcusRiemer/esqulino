@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 
-import { Observable } from 'rxjs/Observable'
+import { Observable, of } from 'rxjs'
 
 interface Video {
   id: string
@@ -43,6 +43,6 @@ export class VideoService {
    * @return All videos known to the system.
    */
   public get videos(): Observable<Video[]> {
-    return (Observable.of(this._videos));
+    return (of(this._videos));
   }
 }

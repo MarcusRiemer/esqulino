@@ -12,7 +12,7 @@ import { codeEditorRoutes } from './code/code.routes'
 
 export const editorRoutes: Routes = [
   {
-    path: "",
+    path: '',
     component: EditorComponent,
     canActivate: [ProjectExistsGuard],
     children: [

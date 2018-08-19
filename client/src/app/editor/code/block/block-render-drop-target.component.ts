@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
+import { map } from 'rxjs/operators';
+
 import { Node, NodeLocation, Tree, CodeResource, QualifiedTypeName } from '../../../shared/syntaxtree';
 import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
 
@@ -56,7 +58,7 @@ export class BlockRenderDropTargetComponent implements BlockDropProperties {
    * @return The current animation state
    */
   readonly currentAvailability = this._dragService.currentDrag
-    .map(drag => calculateDropTargetState(drag, this));
+    .pipe(map(drag => calculateDropTargetState(drag, this)));
 
   /**
    * Handles the drop events on the empty drop

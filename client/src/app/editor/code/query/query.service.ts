@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs'
+import { catchError, delay, map } from 'rxjs/operators';
 
 import {
   ArbitraryQueryRequestDescription, QueryParamsDescription, QueryResponseDescription
@@ -82,9 +83,11 @@ export class QueryService {
     };
 
     const toReturn = this._http.post(url, JSON.stringify(body), options)
-      .catch(this.handleError)
-      .delay(500)
-      .map(res => new QueryResult(res.json()))
+      .pipe(
+        catchError(this.handleError),
+        delay(500),
+        map(res => new QueryResult(res.json()))
+      );
 
     return (toReturn);
   }

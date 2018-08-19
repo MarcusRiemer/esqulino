@@ -13,6 +13,7 @@ import { FlashService } from './flash.service';
 import { ProjectDescriptionService } from './project.description.service';
 import { LanguageService } from './language.service';
 import { ServerApiService } from './serverapi.service';
+import { ServerDataService } from './server-data.service'
 import { VideoService } from './video.service';
 
 /**
@@ -52,6 +53,7 @@ export class SharedAppModule {
         AnalyticsService,
         FlashService,
         ServerApiService,
+        ServerDataService,
         ProjectDescriptionService,
         VideoService,
         LanguageService,

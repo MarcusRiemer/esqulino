@@ -12,9 +12,9 @@ import * as Sql from './sql/language-model'
 import * as Css from './css/language-model'
 
 export const AvailableLanguageModels = [
-  new BlockLanguage(RegEx.LANGUAGE_MODEL),
+  new BlockLanguage(RegEx.BLOCK_LANGUAGE_DESCRIPTION),
   new BlockLanguage(DynamicXml.DYNAMIC_LANGUAGE_MODEL),
   new BlockLanguage(DynamicXml.LANGUAGE_MODEL),
-  new BlockLanguage(Sql.LANGUAGE_MODEL),
+  new BlockLanguage(Sql.BLOCK_LANGUAGE_DESCRIPTION),
   new BlockLanguage(Css.BLOCK_LANGUAGE_DESCRIPTION)
 ]

@@ -156,8 +156,17 @@
             "$ref": "#/definitions/NodeAttributeDescription"
           },
           "type": "array"
+        },
+        "type": {
+          "enum": [
+            "concrete"
+          ],
+          "type": "string"
         }
       },
+      "required": [
+        "type"
+      ],
       "type": "object"
     },
     "NodeOneOfTypeDescription": {
@@ -169,9 +178,16 @@
             "$ref": "#/definitions/TypeReference"
           },
           "type": "array"
+        },
+        "type": {
+          "enum": [
+            "oneOf"
+          ],
+          "type": "string"
         }
       },
       "required": [
+        "type",
         "oneOf"
       ],
       "type": "object"
@@ -312,7 +328,7 @@
           "$ref": "#/definitions/NodeOneOfTypeDescription"
         }
       ],
-      "description": "Types of nodes may either be concrete new type or an alias\ngrouping together multiple other types."
+      "description": "Types may either be concrete new type or an alias\ngrouping together multiple other types."
     },
     "NodeTypesAllowedDescription": {
       "additionalProperties": false,

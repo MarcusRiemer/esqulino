@@ -8,9 +8,9 @@ import * as p from './prettyprint'
  * to `require` are relative to the file the function is defined in.
  * So for the moment this function is copy and pasted into spec files :(
  */
-export function verifyFiles<T>(fileName: string, expExt: string, transform: (obj: T) => string) {
-  const input = require(`json-loader!./spec/${fileName}.json`);
-  let expected = require(`raw-loader!./spec/${fileName}.${expExt}`) as string;
+export function verifyFilesTxt<T>(fileName: string, transform: (obj: T) => string) {
+  const input = require(`./spec/${fileName}.json`);
+  let expected = require(`raw-loader!./spec/${fileName}.txt`) as string;
 
   if (expected.endsWith("\n")) {
     expected = expected.substr(0, expected.length - 1);
@@ -18,6 +18,25 @@ export function verifyFiles<T>(fileName: string, expExt: string, transform: (obj
 
   expect(transform(input)).toEqual(expected);
 }
+
+/**
+ * Ensures that the given in and output files do match correctly.
+ *
+ * This function can not be exported from a different module because the calls
+ * to `require` are relative to the file the function is defined in.
+ * So for the moment this function is copy and pasted into spec files :(
+ */
+export function verifyFilesGraphviz<T>(fileName: string, transform: (obj: T) => string) {
+  const input = require(`./spec/${fileName}.json`);
+  let expected = require(`raw-loader!./spec/${fileName}.graphviz`) as string;
+
+  if (expected.endsWith("\n")) {
+    expected = expected.substr(0, expected.length - 1);
+  }
+
+  expect(transform(input)).toEqual(expected);
+}
+
 
 describe('Grammar PrettyPrinter', () => {
   it('prop "s1" { string }', () => {
@@ -143,6 +162,7 @@ describe('Grammar PrettyPrinter', () => {
 
   it('node "s1" { prop "value" { string } }', () => {
     const r = p.prettyPrintConcreteNodeType("s1", {
+      type: "concrete",
       attributes: [
         {
           name: "value",
@@ -161,75 +181,75 @@ describe('Grammar PrettyPrinter', () => {
   });
 
   it('Grammar g0: empty', () => {
-    verifyFiles('g0-empty', 'txt', p.prettyPrintGrammar);
+    verifyFilesTxt('g0-empty', p.prettyPrintGrammar);
   });
 
   it('Grammar g1: empty nodes', () => {
-    verifyFiles('g1-empty-nodes', 'txt', p.prettyPrintGrammar);
+    verifyFilesTxt('g1-empty-nodes', p.prettyPrintGrammar);
   });
 
   it('Grammar g2: string node', () => {
-    verifyFiles('g2-string-node', 'txt', p.prettyPrintGrammar);
+    verifyFilesTxt('g2-string-node', p.prettyPrintGrammar);
   });
 
   it('Grammar g3: string node with length = 4', () => {
-    verifyFiles('g3-string-node-length', 'txt', p.prettyPrintGrammar);
+    verifyFilesTxt('g3-string-node-length', p.prettyPrintGrammar);
   });
 
   it('Grammar g4: string node with minimum and maximum length', () => {
-    verifyFiles('g4-string-node-length-min-max', 'txt', p.prettyPrintGrammar);
+    verifyFilesTxt('g4-string-node-length-min-max', p.prettyPrintGrammar);
   });
 
   it('Grammar g5: single node that is its own child', () => {
-    verifyFiles('g5-node-child-self', 'txt', p.prettyPrintGrammar);
+    verifyFilesTxt('g5-node-child-self', p.prettyPrintGrammar);
   });
 
   it('Grammar g6: single node that is optionally its own child', () => {
-    verifyFiles('g6-node-child-self-optional', 'txt', p.prettyPrintGrammar);
+    verifyFilesTxt('g6-node-child-self-optional', p.prettyPrintGrammar);
   });
 
   it('Grammar g7: mixed cardinality for allowed children', () => {
-    verifyFiles('g7-node-child-allowed-mix', 'txt', p.prettyPrintGrammar);
+    verifyFilesTxt('g7-node-child-allowed-mix', p.prettyPrintGrammar);
   });
 
   it('Grammar g8: choice between two sequences', () => {
-    verifyFiles('g8-node-child-choice-sequence', 'txt', p.prettyPrintGrammar);
+    verifyFilesTxt('g8-node-child-choice-sequence', p.prettyPrintGrammar);
   });
 });
 
 describe('SyntaxTree PrettyPrinter', () => {
   it('Tree t0: Empty root', () => {
-    verifyFiles('t0-empty-root', 'txt', p.prettyPrintSyntaxTree);
-    verifyFiles('t0-empty-root', 'graphviz', p.graphvizSyntaxTree);
+    verifyFilesTxt('t0-empty-root', p.prettyPrintSyntaxTree);
+    verifyFilesGraphviz('t0-empty-root', p.graphvizSyntaxTree);
   });
 
   it('Tree t1: Root with single prop', () => {
-    verifyFiles('t1-root-single-prop', 'txt', p.prettyPrintSyntaxTree);
-    verifyFiles('t1-root-single-prop', 'graphviz', p.graphvizSyntaxTree);
+    verifyFilesTxt('t1-root-single-prop', p.prettyPrintSyntaxTree);
+    verifyFilesGraphviz('t1-root-single-prop', p.graphvizSyntaxTree);
   });
 
   it('Tree t2: Root with single child', () => {
-    verifyFiles('t2-root-single-child', 'txt', p.prettyPrintSyntaxTree);
-    verifyFiles('t2-root-single-child', 'graphviz', p.graphvizSyntaxTree);
+    verifyFilesTxt('t2-root-single-child', p.prettyPrintSyntaxTree);
+    verifyFilesGraphviz('t2-root-single-child', p.graphvizSyntaxTree);
   });
 
   it('Tree t3: Root with two childgroups', () => {
-    verifyFiles('t3-root-two-childgroups', 'txt', p.prettyPrintSyntaxTree);
-    verifyFiles('t3-root-two-childgroups', 'graphviz', p.graphvizSyntaxTree);
+    verifyFilesTxt('t3-root-two-childgroups', p.prettyPrintSyntaxTree);
+    verifyFilesGraphviz('t3-root-two-childgroups', p.graphvizSyntaxTree);
   });
 
   it('Tree t4: Root with three children', () => {
-    verifyFiles('t4-root-three-children', 'txt', p.prettyPrintSyntaxTree);
-    verifyFiles('t4-root-three-children', 'graphviz', p.graphvizSyntaxTree);
+    verifyFilesTxt('t4-root-three-children', p.prettyPrintSyntaxTree);
+    verifyFilesGraphviz('t4-root-three-children', p.graphvizSyntaxTree);
   });
 
   it('Tree t5: Root with three complex children', () => {
-    verifyFiles('t5-root-complex-children', 'txt', p.prettyPrintSyntaxTree);
-    verifyFiles('t5-root-complex-children', 'graphviz', p.graphvizSyntaxTree);
+    verifyFilesTxt('t5-root-complex-children', p.prettyPrintSyntaxTree);
+    verifyFilesGraphviz('t5-root-complex-children', p.graphvizSyntaxTree);
   });
 
   it('Tree t6: Manual example (if)', () => {
-    verifyFiles('t6-manual-if-example', 'txt', p.prettyPrintSyntaxTree);
-    verifyFiles('t6-manual-if-example', 'graphviz', p.graphvizSyntaxTree);
+    verifyFilesTxt('t6-manual-if-example', p.prettyPrintSyntaxTree);
+    verifyFilesGraphviz('t6-manual-if-example', p.graphvizSyntaxTree);
   });
 });

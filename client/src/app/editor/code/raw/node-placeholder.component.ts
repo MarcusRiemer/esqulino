@@ -1,6 +1,7 @@
-import { Observable } from 'rxjs';
-
 import { Component, Input } from '@angular/core';
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Node, NodeLocation } from '../../../shared/syntaxtree';
 import { arrayEqual } from '../../../shared/util';
@@ -39,19 +40,19 @@ export class NodePlaceholderComponent {
   get animationState(): Observable<string> {
     if (!this._cached_animationState) {
       this._cached_animationState = this._dragService.currentDrag
-        .map(curr => {
-          if (!curr) {
-            // There is no drag operation
-            return (this.alwaysVisible ? "available" : "none");
-          }
-          else if (arrayEqual(curr.hoverPlaceholder, this.location)) {
-            // There is a drag operation and it targets us
-            return ("self");
-          } else {
-            // There is a drag operation and it targets something else
-            return ("available");
-          }
-        });
+        .pipe(
+          map(curr => {
+            if (!curr)
+              // There is no drag operation
+              return (this.alwaysVisible ? "available" : "none");
+            else if (arrayEqual(curr.hoverPlaceholder, this.location))
+              // There is a drag operation and it targets us
+              return ("self");
+            else
+              // There is a drag operation and it targets something else
+              return ("available");
+          })
+        );
     }
     return (this._cached_animationState);
   }

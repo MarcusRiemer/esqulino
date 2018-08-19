@@ -5,6 +5,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   name: "regex",
   types: {
     "constant": {
+      type: "concrete",
       attributes: [
         {
           name: "value",
@@ -12,8 +13,9 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         }
       ]
-    } as Schema.NodeTypeDescription,
+    },
     "alternative": {
+      type: "concrete",
       attributes: [
         {
           name: "expressions",
@@ -25,6 +27,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       ]
     },
     "expr": {
+      type: "concrete",
       attributes: [
         {
           name: "singleExpression",
@@ -34,6 +37,7 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       ]
     },
     "root": {
+      type: "concrete",
       attributes: [
         {
           name: "expressions",

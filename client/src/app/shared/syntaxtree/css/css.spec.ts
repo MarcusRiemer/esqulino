@@ -14,7 +14,7 @@ import { NODE_CONVERTER } from './css.codegenerator'
  * So for the moment this function is copy and pasted into some spec files :(
  */
 function verifyEmitted<T>(fileName: string, transform: (obj: T) => string) {
-  const input = require(`json-loader!./spec/${fileName}.json`);
+  const input = require(`./spec/${fileName}.json`);
   let expected = require(`raw-loader!./spec/${fileName}.txt`) as string;
 
   if (expected.endsWith("\n")) {
@@ -32,16 +32,11 @@ function emitTree(astDesc: NodeDescription) {
 }
 
 function validate(fileName: string, isValid: boolean) {
-  const astDesc = require(`json-loader!./spec/${fileName}.json`);
+  const astDesc = require(`./spec/${fileName}.json`);
   const ast = new Tree(astDesc);
 
   const validator = new Validator([GRAMMAR_DESCRIPTION]);
   const result = validator.validateFromRoot(ast);
-
-  /*if (!result.isValid) {
-    const printable = result.errors.map(e => printableError(e));
-    debugger;
-  }*/
 
   expect(result.errors.map(e => printableError(e))).toEqual([], `${fileName} should be ${isValid ? 'valid' : 'invalid'}`);
 

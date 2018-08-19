@@ -15,7 +15,8 @@ RSpec.describe BlockLanguage do
       res = FactoryBot.build(:block_language, model: Hash.new)
 
       res.validate
-      expect(res.errors["model"].length).to be 3
+
+      expect(res.errors["model"]).not_to be_empty
     end
   end
 

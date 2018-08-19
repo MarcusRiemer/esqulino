@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
+import { first } from 'rxjs/operators';
+
 import { Table, ColumnStatus } from '../../shared/schema'
 import {
   AddNewColumn, DeleteColumn,
@@ -251,13 +253,15 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
           }
         }
         console.log(tableToSend);
-        let schemaref = this._schemaService.saveNewTable(this._project, tableToSend).first().subscribe(
-          table => {
-            window.alert("Änderungen gespeichert!");
-            this._schemaService.clearCurrentlyEdited();
-            this._router.navigate(["../../"], { relativeTo: this._routeParams });
-          },
-          error => this.showError(error));
+        let schemaref = this._schemaService.saveNewTable(this._project, tableToSend)
+          .pipe(first())
+          .subscribe(
+            table => {
+              window.alert("Änderungen gespeichert!");
+              this._schemaService.clearCurrentlyEdited();
+              this._router.navigate(["../../"], { relativeTo: this._routeParams });
+            },
+            error => this.showError(error));
         this._subscriptionRefs.push(schemaref);
       } else {
         alert("Tabellenname ist leer!");
@@ -267,14 +271,14 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
       this.dbErrorCode = -1;
       this.commandsHolder.prepareToSend();
       let schemaref = this._schemaService.sendAlterTableCommands(this._project, this._originalTableName, this.commandsHolder)
-        .first()
+        .pipe(first())
         .subscribe(
-        table => {
-          window.alert("Änderungen gespeichert!");
-          this._schemaService.clearCurrentlyEdited();
-          this._router.navigate(["../../"], { relativeTo: this._routeParams });
-        },
-        error => this.showError(error));
+          _ => {
+            window.alert("Änderungen gespeichert!");
+            this._schemaService.clearCurrentlyEdited();
+            this._router.navigate(["../../"], { relativeTo: this._routeParams });
+          },
+          error => this.showError(error));
       this._subscriptionRefs.push(schemaref);
     }
   }

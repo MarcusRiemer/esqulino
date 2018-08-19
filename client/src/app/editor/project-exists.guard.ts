@@ -6,7 +6,8 @@ import {
 } from '@angular/router'
 import { Response } from '@angular/http'
 
-import { Observable } from 'rxjs/Observable'
+import { Observable, of } from 'rxjs';
+import { catchError, first, map, tap } from 'rxjs/operators';
 
 import { FlashService } from '../shared/flash.service'
 
@@ -35,28 +36,30 @@ export class ProjectExistsGuard implements CanActivate {
 
     // And check whether it actually exists
     const toReturn = this._projectService.activeProject
-      .first()
-      .catch((response: any) => {
-        let message = `Unknown Error: ${JSON.stringify(response)}`;
+      .pipe(
+        first(),
+        catchError((response: any) => {
+          let message = `Unknown Error: ${JSON.stringify(response)}`;
 
-        if (response instanceof Response) {
-          message = `Server responded "${response.status}: ${response.statusText}"`;
-        } else if (response instanceof Error) {
-          message = `Error: ${response.message}`;
-        }
+          if (response instanceof Response) {
+            message = `Server responded "${response.status}: ${response.statusText}"`;
+          } else if (response instanceof Error) {
+            message = `Error: ${response.message}`;
+          }
 
-        this._flashService.addMessage({
-          caption: `Project with slug "${projectSlug}" couldn't be loaded!`,
-          text: message,
-          type: "danger"
-        });
+          this._flashService.addMessage({
+            caption: `Project with slug "${projectSlug}" couldn't be loaded!`,
+            text: message,
+            type: "danger"
+          });
 
-        this._router.navigate(["/about/projects"]);
+          this._router.navigate(["/about/projects"]);
 
-        return (Observable.of(undefined));
-      })
-      .map(project => !!project)
-      .do(res => console.log(`ProjectExistsGuard: "${projectSlug}" => ${res}`));
+          return (of(undefined));
+        }),
+        map(project => !!project),
+        tap(res => console.log(`ProjectExistsGuard: "${projectSlug}" => ${res}`))
+      );
 
     return (toReturn);
   }

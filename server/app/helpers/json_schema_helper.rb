@@ -8,12 +8,9 @@ module JsonSchemaHelper
   # @param schema_name [string] The name of the schema
   def json_schema_validate(schema_name, document)
     schema = @@json_schema_storage.get_schema schema_name
-    
-    JSON::Validator.fully_validate(schema, document,
-                                   :strict => false,
-                                   :errors_as_objects => true,
-                                   :validate_schema => true,
-                                   :parse_data => false)
+
+    schemer = JSONSchemer.schema(schema)
+    schemer.validate(document).to_a
   end
   
   # Ensures that the given body of a request matches the given schema

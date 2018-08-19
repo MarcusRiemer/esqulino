@@ -1,6 +1,5 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core'
 import { isPlatformBrowser, isPlatformServer } from '@angular/common'
-import { Http, Response } from '@angular/http';
 
 import { RequestErrorDescription } from './serverapi.service.description'
 
@@ -21,9 +20,43 @@ export class ServerApiService {
 
   public constructor( @Inject(PLATFORM_ID) private _platformId: Object) {
     this._apiBaseUrl = "/api";
+
+    // If we are running the universal server, there is no "parenting"
+    // base URL that would contain the protocol and the hostname. In that
+    // case the official server is used as a fallback.
+    //
+    // Beware: This may not be what you expect during development.
     if (isPlatformServer(this._platformId)) {
       this._apiBaseUrl = ServerApiService.BASE_HOST + this._apiBaseUrl;
     }
+  }
+
+  /**
+   * Retrieves the URL that is used to list all public block languages.
+   */
+  getBlockLanguageListUrl(): string {
+    return (`${this._apiBaseUrl}/block_languages`)
+  }
+
+  /**
+   * Retrieves the full description of a specific block language.
+   */
+  getBlockLanguageUrl(id: string): string {
+    return (`${this._apiBaseUrl}/block_languages/${id}`);
+  }
+
+  /**
+   * Retrieves the URL that is used to list all public grammars
+   */
+  getGrammarListUrl(): string {
+    return (`${this._apiBaseUrl}/grammars`)
+  }
+
+  /**
+   * Retrieves the full description of a specific grammar.
+   */
+  getGrammarUrl(id: string) {
+    return (`${this._apiBaseUrl}/grammars/${id}`)
   }
 
   /**

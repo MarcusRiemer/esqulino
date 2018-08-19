@@ -4,7 +4,7 @@ FactoryBot.define do
     sequence (:slug) { |n| "grammar_#{n}" }
     model ({
              "types": {
-               "spec": { }
+               "spec": { "type": "concrete" }
              },
              "root": "spec"
            })

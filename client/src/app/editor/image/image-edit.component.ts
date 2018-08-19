@@ -2,6 +2,8 @@ import { Component } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Http, Response, Headers } from '@angular/http'
 
+import { map } from 'rxjs/operators';
+
 import { ServerApiService } from '../../shared/serverapi.service'
 import { ProjectService } from '../../editor/project.service'
 import { ToolbarService } from '../toolbar.service'
@@ -74,7 +76,7 @@ export class ImageEditComponent {
       const projectId = this._projectService.cachedProject.slug;
       console.log("imageId: " + params['imageId']);
       this._http.get(this._serverApi.getImageMetadataUrl(projectId, params['imageId']))
-        .map(res => res.json() as AvailableImageDescription)
+        .pipe(map(res => res.json() as AvailableImageDescription))
         .subscribe(res => {
           console.log("res: " + JSON.stringify(res));
           this.reloadToolbar();

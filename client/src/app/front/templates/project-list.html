@@ -3,10 +3,14 @@
   Die auf dieser Seite vorgestellten Projekte eignen sich, um erste Schritte mit Datenbanken oder der Entwicklung von Webseiten zu machen. Wenn du eines dieser Projekte als Grundlage nehmen möchtest musst du dich zunächst registrieren und kannst es dann klonen.
 </p>
 
+<div class="alert alert-warning" role="alert">
+  <strong>Die Web-Funktionalität ist aktuell leider deaktiviert 😕</strong> Mit einem früheren Stand des Projektes konnte man auch Webseiten bearbeiten, aktuell ist diese Funktionalität aber größeren Umbauten zum Opfer gefallen.
+</div>
+
 <div id="available-projects"
      class="card-columns">
   <project-list-item
-    *ngFor="let project of projects"
-    [project]="project">
+      *ngFor="let project of projects"
+      [project]="project">
   </project-list-item>
 </div>
