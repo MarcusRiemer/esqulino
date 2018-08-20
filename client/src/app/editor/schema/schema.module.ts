@@ -11,6 +11,7 @@ import { SchemaTableComponent } from './schema-table.component'
 import { SchemaTableCompositionComponent } from './schema-table-composition.component'
 import { SchemaTableEditorComponent } from './schema-table-editor.component'
 import { SchemaTableDataComponent } from './schema-table-data.component'
+import { SchemaTableImportComponent } from './schema-table-import.component'
 import { TableEditorSidebarStackComponent } from './table-editor-stack.sidebar'
 import { TableEditorSidebarControlsComponent } from './table-editor-controls.sidebar'
 
@@ -26,6 +27,7 @@ import { TableEditorSidebarControlsComponent } from './table-editor-controls.sid
     SchemaTableCompositionComponent,
     SchemaTableEditorComponent,
     SchemaTableDataComponent,
+    SchemaTableImportComponent,
     TableEditorSidebarStackComponent,
     TableEditorSidebarControlsComponent
   ],
