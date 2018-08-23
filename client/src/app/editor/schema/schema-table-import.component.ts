@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
  * Displays the schema for a list of tables.
  */
 @Component({
-  template: `<h1>Hello World</h1>`,
+  templateUrl: 'templates/schema-table-import.html',
   selector: "sql-table-import"
 })
 export class SchemaTableImportComponent {
