@@ -591,17 +591,4 @@ describe('Util: CSV Parser', () => {
     });
   });
 
-  /* ----- Frontend ----- */
-  
-  // Route in schema
-  // Add to Module
-  // Write Component
-
-  // Upload Button
-  // Settings
-  // Preview Below
-
-  // Bootstrap error line for Error with information
-  // Show only the first 20 lines if file to large and no parsing error occured
-
 });
