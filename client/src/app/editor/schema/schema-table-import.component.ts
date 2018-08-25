@@ -9,7 +9,7 @@ import * as Parser from '../../shared/csv-parser';
   selector: "sql-table-import"
 })
 export class SchemaTableImportComponent implements OnInit {
-  row:string[];
+  fileData:any; // object as a string
 
   constructor() {
     console.log("constructor ran");
@@ -19,9 +19,40 @@ export class SchemaTableImportComponent implements OnInit {
   ngOnInit() {
     console.log("ngOnInit ran");
 
-    this.row = Parser.splitStringToRows('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag');
+  }
 
-    console.log(this.row);
+  changeListener($event): void {
+    this.handleDataUpload($event.target);    
+  }
+
+  readUploadedFileAsText = (inputFile) => {
+    const temporaryFileReader = new FileReader();
+  
+    return new Promise((resolve, reject) => {
+      temporaryFileReader.onerror = () => {
+        temporaryFileReader.abort();
+        reject(new DOMException("Problem parsing input file."));
+      };
+  
+      temporaryFileReader.onload = () => {
+        resolve(temporaryFileReader.result);   
+      };
+      temporaryFileReader.readAsText(inputFile);
+      
+    });
+  };
+
+  handleDataUpload = async (event) => {
+    const file = event.files[0];
+  
+    try {
+      // Wait until the File is read
+      this.fileData = await this.readUploadedFileAsText(file);
+      
+      console.log(this.fileData);
+    } catch (e) {
+      console.warn(e.message)
+    }
   }
 }
 
