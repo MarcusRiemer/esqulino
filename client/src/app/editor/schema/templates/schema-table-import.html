@@ -31,7 +31,7 @@
 
     <div class="form-group">
         <label for="fileInput">CSV Datei: </label>
-        <input type="file" id="fileInput">
+        <input type="file" id="fileInput" (change)="changeListener($event)">
     </div>
 
 
