@@ -42,10 +42,10 @@ export interface RowData {
  * column count of the first row as expected
  */
 export interface ErrorWrongColumnCount {
-	type: "wrongColumnCount",
-	information: "Expected column count to match with first line",
-	count: number,
-	expected: number
+	type: string; // "wrongColumnCount",
+	information: string; // "Expected column count to match with first line",
+	count?: number,
+	expected?: number
 }
 
 /**
@@ -54,9 +54,9 @@ export interface ErrorWrongColumnCount {
  * Contains the string fragment beginning at the open tag till the end of the row
  */
 export interface ErrorMarkerNotClosed {
-	type: "markerNotClosed",
-	information: "The selected marker was opened but not closed in line",
-	fragment: string
+	type: string; // "markerNotClosed",
+	information: string; // "The selected marker was opened but not closed in line",
+	fragment?: string
 }
 
 /**
