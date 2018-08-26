@@ -10,6 +10,10 @@ import * as Parser from '../../shared/csv-parser';
 })
 export class SchemaTableImportComponent implements OnInit {
   fileData:any; // object as a string
+  parse:Parser.CsvParseResult | Parser.CsvParseError;
+  header:string[];
+  table:string[][];
+  errors:Parser.ValidationError[];
 
   constructor() {
     console.log("constructor ran");
@@ -48,12 +52,28 @@ export class SchemaTableImportComponent implements OnInit {
     try {
       // Wait until the File is read
       this.fileData = await this.readUploadedFileAsText(file);
+      this.parseProcess();
       
-      console.log(this.fileData);
     } catch (e) {
       console.warn(e.message)
     }
   }
+
+
+  parseProcess = () => {
+    this.parse = Parser.convertCSVStringToArray(this.fileData, [','], '"');
+
+    if (this.parse.type === 'parseResult') {      
+      this.header = this.parse.header;
+      this.table = this.parse.table;
+      console.log('header: ', this.header);
+      console.log('table: ', this.table);
+    } else {
+      // TODO: Error handling
+    }
+
+  }
+
 }
 
   /* ----- Frontend ----- */

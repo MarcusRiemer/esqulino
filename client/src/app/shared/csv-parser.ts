@@ -70,7 +70,7 @@ export type ErrorData =
  * Core data about the error. In every case the user will be confronted
  * with the error code as well as the line of the error.
  */
-interface ValidationError {
+export interface ValidationError {
 	line: number;
 	data: ErrorData;
 }
