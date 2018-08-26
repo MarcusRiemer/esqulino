@@ -17,7 +17,7 @@ export interface CsvParseResult {
  * Consist of only one String Array which contains all Error Messages
  */
 export interface CsvParseError {
-	type: "parseError",
+	type: string; // "parseError"
 	errors: ValidationError[];
 }
 
@@ -27,8 +27,8 @@ export interface CsvParseError {
  * A row consists of an array of columns as strings
  */
 export interface RowData {
-	type: "row",
-	data: string[];
+	type: string; // "row"
+	data?: string[];
 }
 
 /* --- Error --- */
@@ -42,8 +42,8 @@ export interface RowData {
  * column count of the first row as expected
  */
 export interface ErrorWrongColumnCount {
-	type: string; // "wrongColumnCount",
-	information: string; // "Expected column count to match with first line",
+	type: string; // "wrongColumnCount"
+	information?: string; // "Expected column count to match with first line"
 	count?: number,
 	expected?: number
 }
@@ -55,7 +55,7 @@ export interface ErrorWrongColumnCount {
  */
 export interface ErrorMarkerNotClosed {
 	type: string; // "markerNotClosed",
-	information: string; // "The selected marker was opened but not closed in line",
+	information?: string; // "The selected marker was opened but not closed in line",
 	fragment?: string
 }
 
@@ -338,7 +338,7 @@ export function convertCSVStringToArray(csvString: string, delimiters: string[],
 
 	// Parse successful?
 	if (tryHeaderParsing.type === "row") {
-		headerData = tryHeaderParsing.data;
+		headerData = (<RowData> tryHeaderParsing).data;
 	}
 	// In case of parse error return the error directly
 	else if ((tryHeaderParsing.type === "wrongColumnCount") ||
@@ -359,7 +359,7 @@ export function convertCSVStringToArray(csvString: string, delimiters: string[],
 
 		// Push to result or errors
 		if (currentRow.type === "row") {
-			tableData.push(currentRow.data);
+			tableData.push((<RowData> currentRow).data);
 		}
 		else if ((currentRow.type === "wrongColumnCount") ||
 				 (currentRow.type === "markerNotClosed")) {					
