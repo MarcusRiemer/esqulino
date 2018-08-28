@@ -10,18 +10,23 @@ import * as Parser from '../../shared/csv-parser';
 })
 export class SchemaTableImportComponent implements OnInit {
   fileData:any; // object as a string
+
   parse:Parser.CsvParseResult | Parser.CsvParseError;
-  header:string[];
-  table:string[][];
   errors:Parser.ValidationError[];
 
+  header:string[];
+  table:string[][];
+
+  markers: string[];
+  selectedMarker: string;
+  
   constructor() {
-    console.log("constructor ran");
 
   }
 
   ngOnInit() {
-    console.log("ngOnInit ran");
+    this.markers = ['"', "'"];
+    this.selectedMarker = this.markers[0];
 
   }
 
@@ -61,7 +66,9 @@ export class SchemaTableImportComponent implements OnInit {
 
 
   parseProcess = () => {
-    this.parse = Parser.convertCSVStringToArray(this.fileData, [','], '"');
+    this.parse = Parser.convertCSVStringToArray(this.fileData, [','], this.selectedMarker);
+    
+    console.log('textMarker: ', this.selectedMarker);
 
     if (this.parse.type === 'parseResult') {      
       this.header = (<Parser.CsvParseResult> this.parse).header;
