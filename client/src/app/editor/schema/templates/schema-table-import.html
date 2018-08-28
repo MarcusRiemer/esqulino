@@ -22,12 +22,12 @@
     </div>
 
     <div class="form-group">
-        Text Markierung:
-        <select id="text-marker">
-            <option value="&#34;">"</option>
-            <option value="&#39;">'</option>						
+        <label for="text-marker">Text Markierung:</label>
+        <select class="form-control" id="text-marker" required
+                [(ngModel)]="selectedMarker">
+          <option *ngFor="let marker of markers" [value]="marker">{{marker}}</option>
         </select>
-    </div>
+      </div>
 
     <div class="form-group">
         <label for="fileInput">CSV Datei: </label>
