@@ -9,21 +9,20 @@ import * as Parser from '../../shared/csv-parser';
   selector: "sql-table-import"
 })
 export class SchemaTableImportComponent implements OnInit {
-  fileData:any; // object as a string
+  // File Object as a string
+  fileData: any;
 
-  parse:Parser.CsvParseResult | Parser.CsvParseError;
-  errors:Parser.ValidationError[];
+  parse: Parser.CsvParseResult | Parser.CsvParseError;
+  errors: Parser.ValidationError[];
 
-  header:string[];
-  table:string[][];
+  header: string[];
+  table: string[][];
 
-  markers: string[];
-  selectedMarker: string;
-
-  // The user defined Delimiter
-  otherDelimiter: string;
   // Contains all currently used Delimiters
   currentDelimiters: string[];
+  // Contains all possible Markers
+  markers: string[];
+  selectedMarker: string;
 
   
   constructor() {
@@ -35,12 +34,11 @@ export class SchemaTableImportComponent implements OnInit {
     this.selectedMarker = this.markers[0];
 
     this.currentDelimiters = [];
-
   }
 
 
-  changeListener($event): void {
-    this.handleDataUpload($event.target);    
+  changeListener(event): void {
+    this.handleDataUpload(event.target);    
   }
 
   readUploadedFileAsText = (inputFile) => {
@@ -60,7 +58,7 @@ export class SchemaTableImportComponent implements OnInit {
     });
   };
 
-  handleDataUpload = async (event) => {
+  handleDataUpload = async(event) => {
     const file = event.files[0];
   
     try {
@@ -68,7 +66,7 @@ export class SchemaTableImportComponent implements OnInit {
       this.fileData = await this.readUploadedFileAsText(file);
       this.parseProcess();
       
-    } catch (e) {
+    } catch(e) {
       console.warn(e.message)
     }
   }
@@ -80,8 +78,6 @@ export class SchemaTableImportComponent implements OnInit {
     if (this.parse.type === 'parseResult') {      
       this.header = (<Parser.CsvParseResult> this.parse).header;
       this.table = (<Parser.CsvParseResult> this.parse).table;
-      console.log('header: ', this.header);
-      console.log('table: ', this.table);
     } else {
       console.log(this.parse);      
       // TODO: Error handling
@@ -96,7 +92,7 @@ export class SchemaTableImportComponent implements OnInit {
       this.currentDelimiters.push(delimiter);
 
     }  
-    if (this.fileData) {
+    if(this.fileData) {
       this.parseProcess();
     }      
   }
@@ -118,17 +114,8 @@ export class SchemaTableImportComponent implements OnInit {
   }
 
   changeMarker() {
-    if (this.fileData) {
+    if(this.fileData) {
       this.parseProcess();
     }  
   }
-
-
 }
-
-  /* ----- Frontend ----- */
-  
-  // Preview Below
-
-  // Bootstrap style error line for Error with information
-  // Show only the first 20 lines if file to large and no parsing error occured

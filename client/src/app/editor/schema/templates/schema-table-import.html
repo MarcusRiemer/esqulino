@@ -50,8 +50,9 @@
                 [(ngModel)]="selectedMarker" (change)="changeMarker()">
           <option *ngFor="let marker of markers" [value]="marker">{{marker}}</option>
         </select>
-      </div>
+    </div>
 
+    <br/>
 
     <!-- File Import -->
 
@@ -60,7 +61,22 @@
         <input type="file" id="fileInput" (change)="changeListener($event)">
     </div>
 
+    <br/>
 
-    <table id="result-table" class="table table-bordered"></table>
+    <!-- Table Preview -->
+
+    <table>
+        <tr>
+            <th *ngFor="let col of header">
+            {{col}}
+            </th>
+        </tr>
+        <tr *ngFor="let row of table">            
+            <td *ngFor="let col of row; let i = index">
+            {{row[i]}}
+            </td>
+        </tr>
+    </table>
+          
 
 </div>
