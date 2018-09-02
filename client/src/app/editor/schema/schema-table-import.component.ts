@@ -65,7 +65,7 @@ export class SchemaTableImportComponent implements OnInit {
   toggleTab() {
     this.toggleDelimiter('  ');
   }
-
+  
 
   changeListener($event): void {
     this.handleDataUpload($event.target);    
