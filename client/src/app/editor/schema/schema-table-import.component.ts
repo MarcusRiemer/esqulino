@@ -19,6 +19,12 @@ export class SchemaTableImportComponent implements OnInit {
 
   markers: string[];
   selectedMarker: string;
+
+  // The user defined Delimiter
+  otherDelimiter: string;
+  // Contains all currently used Delimiters
+  currentDelimiters: string[];
+
   
   constructor() {
 
@@ -28,7 +34,38 @@ export class SchemaTableImportComponent implements OnInit {
     this.markers = ['"', "'"];
     this.selectedMarker = this.markers[0];
 
+    this.currentDelimiters = [];
+
   }
+
+  toggleDelimiter(delimiter: string) {
+    if(this.currentDelimiters.includes(delimiter)) {
+      this.currentDelimiters.splice(this.currentDelimiters.indexOf(delimiter), 1);
+    } else {
+      this.currentDelimiters.push(delimiter);
+
+    }  
+    console.log(this.currentDelimiters);
+    // TODO anwenden
+  }
+
+  
+  toggleSemicolon() {
+    this.toggleDelimiter(';');
+  }
+
+  toggleComma() {
+    this.toggleDelimiter(',');
+  }
+
+  toggleSpace() {
+    this.toggleDelimiter(' ');
+  }
+
+  toggleTab() {
+    this.toggleDelimiter('  ');
+  }
+
 
   changeListener($event): void {
     this.handleDataUpload($event.target);    
