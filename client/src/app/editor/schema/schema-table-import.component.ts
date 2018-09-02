@@ -38,34 +38,6 @@ export class SchemaTableImportComponent implements OnInit {
 
   }
 
-  toggleDelimiter(delimiter: string) {
-    if(this.currentDelimiters.includes(delimiter)) {
-      this.currentDelimiters.splice(this.currentDelimiters.indexOf(delimiter), 1);
-    } else {
-      this.currentDelimiters.push(delimiter);
-
-    }  
-    console.log(this.currentDelimiters);
-    // TODO anwenden
-  }
-
-  
-  toggleSemicolon() {
-    this.toggleDelimiter(';');
-  }
-
-  toggleComma() {
-    this.toggleDelimiter(',');
-  }
-
-  toggleSpace() {
-    this.toggleDelimiter(' ');
-  }
-
-  toggleTab() {
-    this.toggleDelimiter('  ');
-  }
-  
 
   changeListener($event): void {
     this.handleDataUpload($event.target);    
@@ -103,31 +75,59 @@ export class SchemaTableImportComponent implements OnInit {
 
 
   parseProcess = () => {
-    this.parse = Parser.convertCSVStringToArray(this.fileData, [','], this.selectedMarker);
+    this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.selectedMarker);
     
-    console.log('textMarker: ', this.selectedMarker);
-
     if (this.parse.type === 'parseResult') {      
       this.header = (<Parser.CsvParseResult> this.parse).header;
       this.table = (<Parser.CsvParseResult> this.parse).table;
       console.log('header: ', this.header);
       console.log('table: ', this.table);
     } else {
+      console.log(this.parse);      
       // TODO: Error handling
     }
-
   }
+
+
+  toggleDelimiter(delimiter: string) {
+    if(this.currentDelimiters.includes(delimiter)) {
+      this.currentDelimiters.splice(this.currentDelimiters.indexOf(delimiter), 1);
+    } else {
+      this.currentDelimiters.push(delimiter);
+
+    }  
+    if (this.fileData) {
+      this.parseProcess();
+    }      
+  }
+
+  toggleSemicolon() {
+    this.toggleDelimiter(';');
+  }
+
+  toggleComma() {
+    this.toggleDelimiter(',');
+  }
+
+  toggleSpace() {
+    this.toggleDelimiter(' ');
+  }
+
+  toggleTab() {
+    this.toggleDelimiter('  ');
+  }
+
+  changeMarker() {
+    if (this.fileData) {
+      this.parseProcess();
+    }  
+  }
+
 
 }
 
   /* ----- Frontend ----- */
   
-  // Route in schema
-  // Add to Module
-  // Write Component
-
-  // Upload Button
-  // Settings
   // Preview Below
 
   // Bootstrap style error line for Error with information

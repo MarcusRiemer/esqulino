@@ -47,7 +47,7 @@
     <div class="form-group">
         <label for="text-marker">Text Markierung:</label>
         <select class="form-control" id="text-marker" required
-                [(ngModel)]="selectedMarker">
+                [(ngModel)]="selectedMarker" (change)="changeMarker()">
           <option *ngFor="let marker of markers" [value]="marker">{{marker}}</option>
         </select>
       </div>
@@ -56,7 +56,7 @@
     <!-- File Import -->
 
     <div class="form-group">
-        <label for="fileInput">CSV Datei: </label>
+        <label for="fileInput">CSV Datei:&nbsp;</label>
         <input type="file" id="fileInput" (change)="changeListener($event)">
     </div>
 
