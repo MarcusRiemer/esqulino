@@ -17,6 +17,8 @@ export class SchemaTableImportComponent implements OnInit {
 
   header: string[];
   table: string[][];
+  useOwnHeader: Boolean;
+  headerLength: number;
 
   // Contains all currently used Delimiters
   currentDelimiters: string[];
@@ -71,16 +73,30 @@ export class SchemaTableImportComponent implements OnInit {
     }
   }
 
-
   parseProcess = () => {
     this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.selectedMarker);
     
     if (this.parse.type === 'parseResult') {      
       this.header = (<Parser.CsvParseResult> this.parse).header;
       this.table = (<Parser.CsvParseResult> this.parse).table;
+      this.headerLength = this.header.length;
     } else {
       console.log(this.parse);      
       // TODO: Error handling
+    }
+  }
+
+  trackByFn(index: any, item: any) {
+    return index;
+ }
+
+  toggleHeadlineUsage() {
+    this.useOwnHeader = !this.useOwnHeader;
+
+    if(this.useOwnHeader) {
+      this.table.unshift(this.header);
+    } else {
+      this.header = this.table.shift();
     }
   }
 
