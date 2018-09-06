@@ -1,19 +1,15 @@
 <div class="container">
 
     <div id="headline-usage">
-        Erste Zeile:
-        <label for="use-headline">Überschrift</label>
-        <input type="radio" id="use-headline" name="first-line" value="use-headline" checked>
-
-        <label for="use-own-header">Daten</label>
-        <input type="radio" id="use-own-header" name="first-line" value="use-data">
+        <label for="use-headline">Eigene Headline definieren&nbsp;</label>
+        <input type="checkbox" id="use-headline" (change)="toggleHeadlineUsage()">
     </div>
 
-    <div id="show-headline-fields">
-        Überschriften zuweisen:
-        <div id="headline-fields">
+    <div id="show-headline-fields" *ngIf="useOwnHeader">
+        <div class="form-group" *ngFor="let headline of header; let i = index; trackBy:trackByFn">            
+            <label for="headline{{i}}">Headline {{i+1}}: </label>    
+            <input type="text" id="headline{{i}}" [(ngModel)]="header[i]"/>
         </div>
-        <button id="apply-changes">anwenden</button>
     </div>
 
     <br/>
