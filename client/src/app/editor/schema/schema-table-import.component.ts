@@ -90,12 +90,20 @@ export class SchemaTableImportComponent implements OnInit {
     return index;
  }
 
-  toggleHeadlineUsage() {
+  toggleHeadlineUsage() {    
     this.useOwnHeader = !this.useOwnHeader;
 
     if(this.useOwnHeader) {
-      this.table.unshift(this.header);
+      // copy header instead of reference
+      let headerCopy = this.header.slice();
+      // set header copy as first table line  
+      this.table.unshift(headerCopy);
+      // empty current header
+      this.header = []; 
+      // use length of first table row
+      this.header.length = this.table[0].length;    
     } else {
+      // set first table row as header
       this.header = this.table.shift();
     }
   }
