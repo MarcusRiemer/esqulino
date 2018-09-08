@@ -7,7 +7,7 @@
 
     <div id="show-headline-fields" *ngIf="useOwnHeader">
         <div class="form-group" *ngFor="let headline of header; let i = index; trackBy:trackByFn">            
-            <label for="headline{{i}}">Headline {{i+1}}: </label>    
+            <label for="headline{{i}}">Headline {{i+1}}:&nbsp;</label>    
             <input type="text" id="headline{{i}}" [(ngModel)]="header[i]"/>
         </div>
     </div>
