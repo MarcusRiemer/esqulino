@@ -1,14 +1,14 @@
-<div class="container">
+<div class="card card-body mb-3">
 
-    <div id="headline-usage">
+    <div id="headline-usage" class="row">
         <label for="use-headline">Eigene Headline definieren&nbsp;</label>
         <input type="checkbox" id="use-headline" (change)="toggleHeadlineUsage()">
     </div>
 
     <div id="show-headline-fields" *ngIf="useOwnHeader">
         <div class="form-group" *ngFor="let headline of header; let i = index; trackBy:trackByFn">            
-            <label for="headline{{i}}">Headline {{i+1}}:&nbsp;</label>    
-            <input type="text" id="headline{{i}}" [(ngModel)]="header[i]"/>
+            <label class="col-sm-2 form-control-label" for="headline{{i}}">Headline {{i+1}}:&nbsp;</label>    
+            <input class="col-sm-10" type="text" id="headline{{i}}" [(ngModel)]="header[i]"/>
         </div>
     </div>
 
@@ -61,17 +61,21 @@
 
     <!-- Table Preview -->
 
-    <table>
-        <tr>
-            <th *ngFor="let col of header">
-            {{col}}
-            </th>
-        </tr>
-        <tr *ngFor="let row of table">            
-            <td *ngFor="let col of row; let i = index">
-            {{row[i]}}
-            </td>
-        </tr>
+    <table class="table">
+        <thead>
+            <tr>
+                <th *ngFor="let col of header">
+                {{col}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of table">            
+                <td *ngFor="let col of row; let i = index">
+                {{row[i]}}
+                </td>
+            </tr>
+        </tbody>
     </table>
           
 
