@@ -1,43 +1,47 @@
-<div class="card card-body mb-3">
+<div class="card card-body mb-3 disabled">
 
-    
-        <div class="form-group">    
-            <input type="checkbox" id="use-headline" [(ngModel)]="useFirstLineAsHeader" (change)="toggleHeadlineUsage()">
-            <label for="use-headline">&nbsp;Verwende erste Zeile als Headline</label>
+    <div class="headline row">
+        <div class="form-group col-sm-6">    
+            <input id="use-file-headline" type="radio" value="file" name="headline-usage" [(ngModel)]="headlineUsage" (change)="toggleHeadlineUsage()" [disabled]="disableSelection"/>
+            <label for="use-file-headline">&nbsp;Verwende erste Zeile als Headline</label>
         </div>
-    
 
-    <div id="show-headline-fields" *ngIf="this.useFirstLineAsHeader==false">
-        <div class="form-group" *ngFor="let headline of header; let i = index; trackBy:trackByFn">            
-            <label class="col-sm-2 form-control-label" for="headline{{i}}">Headline {{i+1}}:&nbsp;</label>    
-            <input class="col-sm-10" type="text" id="headline{{i}}" [(ngModel)]="header[i]"/>
+        <div class="form-group col-sm-6">    
+            <input id="use-own-headline" type="radio" value="own" name="headline-usage" [(ngModel)]="headlineUsage" (change)="toggleHeadlineUsage()" [disabled]="disableSelection"/>
+            <label for="use-own-headline">&nbsp;Definiere eigene Headline</label>
         </div>
     </div>
 
+    <div id="show-headline-fields" *ngIf="this.headlineUsage=='own'">
+        <div class="form-group" *ngFor="let headline of header; let i = index; trackBy:trackByFn">            
+            <label class="col-sm-2" for="headline{{i}}">Headline {{i+1}}</label>    
+            <input class="col-sm-10" type="text" id="headline{{i}}" [(ngModel)]="header[i]" [disabled]="disableSelection"/>
+        </div>
+    </div>
 
     <br/>
     
     <!-- Delimiters -->   
 
-    <div class="row">
+    <div class="delimiter row">
 
         <div class="form-group col-sm-3">        
-            <input type="checkbox" id="comma" (change)="toggleComma()" checked/>
+            <input type="checkbox" id="comma" (change)="toggleComma()" [disabled]="disableSelection" checked/>
             <label for="comma">&nbsp;Komma</label>
         </div>
 
         <div class="form-group col-sm-3">    
-            <input type="checkbox" id="semicolon" (change)="toggleSemicolon()"/>
+            <input type="checkbox" id="semicolon" (change)="toggleSemicolon()" [disabled]="disableSelection"/>
             <label for="semicolon">&nbsp;Semikolon</label>
         </div>   
 
         <div class="form-group col-sm-3">        
-            <input type="checkbox" id="space" (change)="toggleSpace()"/>
+            <input type="checkbox" id="space" (change)="toggleSpace()" [disabled]="disableSelection"/>
             <label for="space">&nbsp;Leerzeichen</label>
         </div>
 
         <div class="form-group col-sm-3">        
-            <input type="checkbox" id="tab" (change)="toggleTab()"/>
+            <input type="checkbox" id="tab" (change)="toggleTab()" [disabled]="disableSelection"/>
             <label for="tab">&nbsp;Tabstopp</label>
         </div>
     
@@ -49,7 +53,7 @@
    
     <div class="form-group row">
         <label class="col-sm-2" for="text-marker">Text Markierung:</label>
-        <select class="form-control col-sm-4" id="text-marker" required
+        <select class="form-control col-sm-4" id="text-marker" [disabled]="disableSelection" required
                 [(ngModel)]="selectedMarker" (change)="changeMarker()">
           <option *ngFor="let marker of markers" [value]="marker">{{marker}}</option>
         </select>
@@ -83,7 +87,6 @@
                 </td>
             </tr>
         </tbody>
-    </table>
-          
+    </table>       
 
 </div>

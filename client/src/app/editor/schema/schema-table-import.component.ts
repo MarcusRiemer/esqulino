@@ -17,7 +17,7 @@ export class SchemaTableImportComponent implements OnInit {
 
   header: string[];
   table: string[][];
-  useFirstLineAsHeader: Boolean;
+  headlineUsage: "file" | "own"
   headerLength: number;
 
   // Contains all currently used Delimiters
@@ -25,6 +25,8 @@ export class SchemaTableImportComponent implements OnInit {
   // Contains all possible Markers
   markers: string[];
   selectedMarker: string;
+
+  disableSelection: boolean;
 
   
   constructor() {
@@ -38,7 +40,8 @@ export class SchemaTableImportComponent implements OnInit {
     this.currentDelimiters = [];
     this.toggleDelimiter(',');
 
-    this.useFirstLineAsHeader = true;
+    this.headlineUsage = "file";
+    this.disableSelection = true;
   }
 
 
@@ -87,6 +90,8 @@ export class SchemaTableImportComponent implements OnInit {
       console.log(this.parse);      
       // TODO: Error handling
     }
+
+    this.disableSelection = false;
   }
 
   trackByFn(index: any, item: any) {
@@ -94,9 +99,7 @@ export class SchemaTableImportComponent implements OnInit {
  }
 
   toggleHeadlineUsage() {    
-    console.log("use first Line as Header: ", this.useFirstLineAsHeader);
-
-    if(!this.useFirstLineAsHeader) {
+    if (this.headlineUsage == "own") {
       // copy header instead of reference
       let headerCopy = this.header.slice();
       // set header copy as first table line  
@@ -105,7 +108,7 @@ export class SchemaTableImportComponent implements OnInit {
       this.header = []; 
       // use length of first table row
       this.header.length = this.table[0].length;    
-    } else {
+    } else if (this.headlineUsage === "file") {
       // set first table row as header
       this.header = this.table.shift();
     }
