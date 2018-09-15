@@ -17,7 +17,7 @@ export class SchemaTableImportComponent implements OnInit {
 
   header: string[];
   table: string[][];
-  useOwnHeader: Boolean;
+  useFirstLineAsHeader: Boolean;
   headerLength: number;
 
   // Contains all currently used Delimiters
@@ -36,6 +36,9 @@ export class SchemaTableImportComponent implements OnInit {
     this.selectedMarker = this.markers[0];
 
     this.currentDelimiters = [];
+    this.toggleDelimiter(',');
+
+    this.useFirstLineAsHeader = true;
   }
 
 
@@ -91,9 +94,9 @@ export class SchemaTableImportComponent implements OnInit {
  }
 
   toggleHeadlineUsage() {    
-    this.useOwnHeader = !this.useOwnHeader;
+    console.log("use first Line as Header: ", this.useFirstLineAsHeader);
 
-    if(this.useOwnHeader) {
+    if(!this.useFirstLineAsHeader) {
       // copy header instead of reference
       let headerCopy = this.header.slice();
       // set header copy as first table line  
