@@ -70,23 +70,53 @@
 
     <br/>
 
-    <!-- Table Preview -->
+    <div class="result" *ngIf="parse !== undefined">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th *ngFor="let col of header">
-                {{col}}
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let row of table">            
-                <td *ngFor="let col of row; let i = index">
-                {{row[i]}}
-                </td>
-            </tr>
-        </tbody>
-    </table>       
+        <!-- Table Preview -->    
+
+        <table class="table" *ngIf="parse.type === 'parseResult'">
+            <thead>
+                <tr>
+                    <th *ngFor="let col of header">
+                    {{ col }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of table">            
+                    <td *ngFor="let col of row; let i = index">
+                    {{ row[i] }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>      
+        
+        <!-- Error -->
+
+        <div class="errors" *ngIf="parse.type === 'parseError'">
+            <h4>Beim Parsen sind folgende Fehler aufgetreten:</h4>
+            <div class="error card text-white bg-danger mb-3" *ngFor="let error of errors">
+                <div class="card-header">Line: {{ error.line }}</div>
+
+                <div class="card-body">
+
+                    <h5 class="card-title">Information: {{ error.data.information }}</h5>
+                    
+                    <div class="card-text">
+                        <div class="wrongColumnCount" *ngIf="error.data.type === 'wrongColumnCount'">
+                            Count: {{ error.data.count }} <br/>
+                            Expected: {{ error.data.expected }} <br/><br/>
+                        </div>
+                        
+                        <div class="markerNotClosed" *ngIf="error.data.type === 'markerNotClosed'">
+                            Fragment: {{ error.data.fragment }} <br/><br/>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 </div>
