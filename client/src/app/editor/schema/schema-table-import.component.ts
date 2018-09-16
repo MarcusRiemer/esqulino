@@ -27,6 +27,7 @@ export class SchemaTableImportComponent implements OnInit {
   selectedMarker: string;
 
   disableSelection: boolean;
+  disableHeadlineSelection: boolean;
 
   
   constructor() {
@@ -42,6 +43,7 @@ export class SchemaTableImportComponent implements OnInit {
 
     this.headlineUsage = "file";
     this.disableSelection = true;
+    this.disableHeadlineSelection = true;
   }
 
 
@@ -86,10 +88,12 @@ export class SchemaTableImportComponent implements OnInit {
       this.header = (<Parser.CsvParseResult> this.parse).header;
       this.table = (<Parser.CsvParseResult> this.parse).table;
       this.headerLength = this.header.length;
+      this.disableHeadlineSelection = false;
     } else if (this.parse.type === 'parseError') {
-      this.errors = (<Parser.CsvParseError> this.parse).errors;      
+      this.errors = (<Parser.CsvParseError> this.parse).errors;    
+      this.disableHeadlineSelection = true;  
     }
-
+    
     this.disableSelection = false;
   }
 

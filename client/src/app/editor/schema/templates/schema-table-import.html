@@ -2,12 +2,12 @@
 
     <div class="headline row">
         <div class="form-group col-sm-6">    
-            <input id="use-file-headline" type="radio" value="file" name="headline-usage" [(ngModel)]="headlineUsage" (change)="toggleHeadlineUsage()" [disabled]="disableSelection"/>
+            <input id="use-file-headline" type="radio" value="file" name="headline-usage" [(ngModel)]="headlineUsage" (change)="toggleHeadlineUsage()" [disabled]="disableHeadlineSelection"/>
             <label for="use-file-headline">&nbsp;Verwende erste Zeile als Headline</label>
         </div>
 
         <div class="form-group col-sm-6">    
-            <input id="use-own-headline" type="radio" value="own" name="headline-usage" [(ngModel)]="headlineUsage" (change)="toggleHeadlineUsage()" [disabled]="disableSelection"/>
+            <input id="use-own-headline" type="radio" value="own" name="headline-usage" [(ngModel)]="headlineUsage" (change)="toggleHeadlineUsage()" [disabled]="disableHeadlineSelection"/>
             <label for="use-own-headline">&nbsp;Definiere eigene Headline</label>
         </div>
     </div>
