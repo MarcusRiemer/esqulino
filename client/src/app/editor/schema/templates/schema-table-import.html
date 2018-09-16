@@ -29,7 +29,7 @@
 
     <div id="show-headline-fields" *ngIf="this.headlineUsage=='own'">
         <div class="form-group row" *ngFor="let headline of header; let i = index; trackBy:trackByFn">            
-            <label class="col-md-auto" for="headline{{i}}">Headline {{i+1}}:&nbsp;</label>    
+            <label class="col-sm-auto" for="headline{{i}}">Headline {{i+1}}:&nbsp;</label>    
             <input class="col" type="text" id="headline{{i}}" [(ngModel)]="header[i]" [disabled]="disableSelection"/>
         </div>
     </div>
@@ -65,13 +65,13 @@
     </div>
 
     <hr />
-        
+
     <!-- Text Markers -->
 
     <h5 class="mb-3">Text Markierung</h5>
    
     <div class="form-group row">
-        <label class="col-md-auto" for="text-marker">Marker:</label>
+        <label class="col-sm-auto" for="text-marker">Marker:</label>
         <select class="form-control col" id="text-marker" [disabled]="disableSelection" required
                 [(ngModel)]="selectedMarker" (change)="changeMarker()">
           <option *ngFor="let marker of markers" [value]="marker">{{marker}}</option>
@@ -137,6 +137,14 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Save Button -->
+
+    <br />
+
+    <div class="save-button">
+        <button type="button" class="btn btn-success" (click)="save()" [disabled]="disableHeadlineSelection">Tabelle importieren</button>
     </div>
 
 </div>
