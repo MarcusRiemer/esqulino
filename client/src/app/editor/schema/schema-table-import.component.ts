@@ -82,13 +82,12 @@ export class SchemaTableImportComponent implements OnInit {
   parseProcess = () => {
     this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.selectedMarker);
     
-    if (this.parse.type === 'parseResult') {      
+    if (this.parse.type === 'parseResult') {   
       this.header = (<Parser.CsvParseResult> this.parse).header;
       this.table = (<Parser.CsvParseResult> this.parse).table;
       this.headerLength = this.header.length;
-    } else {
-      console.log(this.parse);      
-      // TODO: Error handling
+    } else if (this.parse.type === 'parseError') {
+      this.errors = (<Parser.CsvParseError> this.parse).errors;      
     }
 
     this.disableSelection = false;

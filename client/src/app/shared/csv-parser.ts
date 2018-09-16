@@ -277,7 +277,7 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 		let fragment = fragments[fragments.length-1];
 		return ({
 			type: "markerNotClosed",
-			information: "The selected marker was opened but not closed in line",
+			information: "The selected marker was opened but not closed",
 			fragment: fragment
 		});
 	}
@@ -305,7 +305,7 @@ export function splitRowToCols(row: string, delimiters: string[], textMarker: st
 	else {
 		return ({
 			type: "wrongColumnCount",
-			information: "Expected column count to match with first line",
+			information: "Expected column count to match with first line in file",
 			count: colCount,
 			expected: expectedColCount
 		});	
