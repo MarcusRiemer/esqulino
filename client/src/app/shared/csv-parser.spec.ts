@@ -182,7 +182,7 @@ describe('Util: CSV Parser', () => {
       data: 
       {
         type: "wrongColumnCount",
-        information: "Expected column count to match with first line",
+        information: "Expected column count to match with first line in file",
         count: 3,
         expected: 5
       }
@@ -211,7 +211,7 @@ describe('Util: CSV Parser', () => {
       data: 
       {
         type: "wrongColumnCount",
-        information: "Expected column count to match with first line",
+        information: "Expected column count to match with first line in file",
         count: 3,
         expected: 5
       }
@@ -221,7 +221,7 @@ describe('Util: CSV Parser', () => {
       data: 
       {
         type: "wrongColumnCount",
-        information: "Expected column count to match with first line",
+        information: "Expected column count to match with first line in file",
         count: 6,
         expected: 5
       }
@@ -231,7 +231,7 @@ describe('Util: CSV Parser', () => {
       data: 
       {
         type: "wrongColumnCount",
-        information: "Expected column count to match with first line",
+        information: "Expected column count to match with first line in file",
         count: 3,
         expected: 5
       }
@@ -260,7 +260,7 @@ describe('Util: CSV Parser', () => {
       data: 
       {
         type: "wrongColumnCount",
-        information: "Expected column count to match with first line",
+        information: "Expected column count to match with first line in file",
         count: 6,
         expected: 5
       }
@@ -270,7 +270,7 @@ describe('Util: CSV Parser', () => {
       data: 
       {
         type: "wrongColumnCount",
-        information: "Expected column count to match with first line",
+        information: "Expected column count to match with first line in file",
         count: 3,
         expected: 5
       }
@@ -299,7 +299,7 @@ describe('Util: CSV Parser', () => {
       data: 
       {
         type: "wrongColumnCount",
-        information: "Expected column count to match with first line",
+        information: "Expected column count to match with first line in file",
         count: 1,
         expected: 5
       }
@@ -309,7 +309,7 @@ describe('Util: CSV Parser', () => {
       data: 
       {
         type: "wrongColumnCount",
-        information: "Expected column count to match with first line",
+        information: "Expected column count to match with first line in file",
         count: 1,
         expected: 5
       }
@@ -331,7 +331,7 @@ describe('Util: CSV Parser', () => {
     const result = c.splitRowToCols(line, [','], '"', 4);
     expect(result).toEqual({
       type: "markerNotClosed",
-			information: "The selected marker was opened but not closed in line",
+			information: "The selected marker was opened but not closed",
 			fragment: "Freitag"
     });
   });
@@ -351,7 +351,7 @@ describe('Util: CSV Parser', () => {
         data: 
         {
           type: "markerNotClosed",
-          information: "The selected marker was opened but not closed in line",
+          information: "The selected marker was opened but not closed",
           fragment: ",Geschichte,Sport,Geschichte"
         }
       },
@@ -360,7 +360,7 @@ describe('Util: CSV Parser', () => {
         data: 
         {
           type: "markerNotClosed",
-          information: "The selected marker was opened but not closed in line",
+          information: "The selected marker was opened but not closed",
           fragment: "Religion (ev, kath),Kunst,,Kunst"
         }
       }
@@ -388,7 +388,7 @@ describe('Util: CSV Parser', () => {
         data: 
         {
           type: "markerNotClosed",
-          information: "The selected marker was opened but not closed in line",
+          information: "The selected marker was opened but not closed",
           fragment: ",Mathematik,Kunst, Kunst"
         }
       },
@@ -397,7 +397,7 @@ describe('Util: CSV Parser', () => {
         data: 
         {
           type: "markerNotClosed",
-          information: "The selected marker was opened but not closed in line",
+          information: "The selected marker was opened but not closed",
           fragment: ",,Kunst"
         }
       }
@@ -425,7 +425,7 @@ describe('Util: CSV Parser', () => {
         data: 
         {
           type: "markerNotClosed",
-          information: "The selected marker was opened but not closed in line",
+          information: "The selected marker was opened but not closed",
           fragment: ",Mathematik,Kunst, Kunst"
         }
       },
@@ -434,7 +434,7 @@ describe('Util: CSV Parser', () => {
         data: 
         {
           type: "wrongColumnCount",
-          information: "Expected column count to match with first line",
+          information: "Expected column count to match with first line in file",
           count: 4,
           expected: 6
         }
@@ -444,7 +444,7 @@ describe('Util: CSV Parser', () => {
         data: 
         {
           type: "markerNotClosed",
-          information: "The selected marker was opened but not closed in line",
+          information: "The selected marker was opened but not closed",
           fragment: ",,Kunst"
         }
       }
