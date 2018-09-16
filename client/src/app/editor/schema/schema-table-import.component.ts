@@ -93,7 +93,7 @@ export class SchemaTableImportComponent implements OnInit {
       this.errors = (<Parser.CsvParseError> this.parse).errors;    
       this.disableHeadlineSelection = true;  
     }
-    
+
     this.disableSelection = false;
   }
 
@@ -150,5 +150,9 @@ export class SchemaTableImportComponent implements OnInit {
     if(this.fileData) {
       this.parseProcess();
     }  
+  }
+
+  save() {
+    // TODO
   }
 }
