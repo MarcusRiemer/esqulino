@@ -1,4 +1,19 @@
-<div class="card card-body mb-3 disabled">
+<div class="card card-body mb-3">
+
+    <!-- File Import -->
+
+    <h5 class="mb-3">Datei Import</h5>
+
+    <div class="form-group">
+        <label for="fileInput">CSV Datei:&nbsp;</label>
+        <input type="file" id="fileInput" (change)="changeListener($event)">
+    </div>
+
+    <hr />
+
+    <!-- Healine Usage -->
+
+    <h5 class="mb-3">Headline Verwendung</h5>
 
     <div class="headline row">
         <div class="form-group col-sm-6">    
@@ -19,9 +34,11 @@
         </div>
     </div>
 
-    <br/>
+    <hr />
     
-    <!-- Delimiters -->   
+    <!-- Delimiters -->
+    
+    <h5 class="mb-3">Trennsymbole</h5>
 
     <div class="delimiter row">
 
@@ -47,54 +64,57 @@
     
     </div>
 
-    <br/>
+    <hr />
         
     <!-- Text Markers -->
+
+    <h5 class="mb-3">Text Markierung</h5>
    
     <div class="form-group row">
-        <label class="col-sm-2" for="text-marker">Text Markierung:</label>
+        <label class="col-sm-2" for="text-marker">Marker:</label>
         <select class="form-control col-sm-4" id="text-marker" [disabled]="disableSelection" required
                 [(ngModel)]="selectedMarker" (change)="changeMarker()">
           <option *ngFor="let marker of markers" [value]="marker">{{marker}}</option>
         </select>
     </div>
 
-    <br/>
-
-    <!-- File Import -->
-
-    <div class="form-group">
-        <label for="fileInput">CSV Datei:&nbsp;</label>
-        <input type="file" id="fileInput" (change)="changeListener($event)">
-    </div>
-
-    <br/>
+    <!-- Parse Result or Error -->
 
     <div class="result" *ngIf="parse !== undefined">
 
-        <!-- Table Preview -->    
+        <hr />
 
-        <table class="table" *ngIf="parse.type === 'parseResult'">
-            <thead>
-                <tr>
-                    <th *ngFor="let col of header">
-                    {{ col }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let row of table">            
-                    <td *ngFor="let col of row; let i = index">
-                    {{ row[i] }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>      
+        <!-- Table Preview -->
+
+        <div class="table" *ngIf="parse.type === 'parseResult'">
+        
+            <h5 class="mb-3">Vorschau</h5>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th *ngFor="let col of header">
+                        {{ col }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of table">            
+                        <td *ngFor="let col of row; let i = index">
+                        {{ row[i] }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
         
         <!-- Error -->
 
         <div class="errors" *ngIf="parse.type === 'parseError'">
-            <h4>Beim Parsen sind folgende Fehler aufgetreten:</h4>
+
+            <h5 class="mb-3">Beim Parsen sind folgende Fehler aufgetreten:</h5>
+
             <div class="error card text-white bg-danger mb-3" *ngFor="let error of errors">
                 <div class="card-header">Line: {{ error.line }}</div>
 
