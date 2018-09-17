@@ -27,13 +27,16 @@ concise_attributes:
     {"value": "Stubenrein"}}], "value": [{"name": "boolean", "language": "json", "properties":
     {"value": "true"}}]}, "language": "json"}]}, "language": "json"}, {"name": "object",
     "children": {"values": []}, "language": "json"}, {"name": "object", "children":
-    {"values": []}, "language": "json"}]}, "language": "json"}'
+    {"values": []}, "language": "json"}, {"name": "array", "children": {"values":
+    [{"name": "boolean", "language": "json", "properties": {"value": "false"}}, {"name":
+    "string", "language": "json", "properties": {"value": ""}}]}, "language": "json"}]},
+    "language": "json"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-20 20:45:48.864334'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-08-03 15:30:01.774546'
+  value_before_type_cast: '2018-09-17 15:51:30.376698'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: c23d43d7-56f5-4605-bec1-644c240cc003
@@ -49,7 +52,11 @@ concise_attributes:
         "Stubenrein": true
       },
       {},
-      {}
+      {},
+      [
+        false,
+        ""
+      ]
     ]
 new_record: false
 active_record_yaml_version: 2
