@@ -22,12 +22,19 @@ concise_attributes:
     {"defaultNode": {"name": "array", "children": {"values": []}, "language": "json"},
     "displayName": "array"}], "categoryCaption": "JSON"}]}], "editorBlocks": [{"visual":
     [{"style": {"border": "1px solid black", "cursor": "grab", "margin": "2px", "padding":
-    "2px", "border-radius": "5px"}, "children": [{"text": "null", "style": {"display":
+    "2px", "border-radius": "5px"}, "children": [{"style": {"color": "white", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "null", "style": {"display":
     "inline-block"}, "blockType": "constant"}], "blockType": "block", "direction":
-    "horizontal", "dropTarget": {"self": {"order": "insertAfter", "skipParents": 0}}}],
-    "describedType": {"typeName": "null", "languageName": "json"}}, {"visual": [{"style":
-    {"border": "1px solid black", "cursor": "grab", "margin": "2px", "padding": "2px",
-    "border-radius": "5px"}, "children": [{"text": "[", "style": {"display": "inline-block"},
+    "horizontal", "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter",
+    "skipParents": 0}}, "wrapChildren": true}], "describedType": {"typeName": "null",
+    "languageName": "json"}}, {"visual": [{"style": {"border": "1px solid black",
+    "cursor": "grab", "margin": "2px", "padding": "2px", "border-radius": "5px"},
+    "children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"text": "[", "style": {"display": "inline-block"},
     "blockType": "constant"}, {"children": [{"text": "❓", "style": {"color": "darkred",
     "border": "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius":
     "500px", "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
@@ -35,62 +42,82 @@ concise_attributes:
     {"order": "insertFirst", "category": "values"}, "visibility": {"$every": [{"$var":
     "ifEmpty"}, {"$var": "ifLegalDrag"}]}}}, {"style": {"margin-left": "2ch"}, "between":
     [{"text": ",", "style": {"display": "inline-block"}, "blockType": "constant"}],
-    "blockType": "iterator", "direction": "vertical", "wrapChildren": true, "childGroupName":
-    "values"}, {"text": "]", "style": {"display": "inline-block"}, "blockType": "constant"}],
-    "blockType": "block", "direction": "vertical", "dropTarget": {"self": {"order":
-    "insertAfter", "skipParents": 0}}}], "describedType": {"typeName": "array", "languageName":
-    "json"}}, {"visual": [{"style": {"border": "1px solid black", "cursor": "grab",
-    "margin": "2px", "padding": "2px", "border-radius": "5px"}, "children": [{"style":
-    {"display": "inline-block"}, "property": "value", "blockType": "input"}], "blockType":
-    "block", "direction": "horizontal", "dropTarget": {"self": {"order": "insertAfter",
-    "skipParents": 0}}}], "describedType": {"typeName": "number", "languageName":
-    "json"}}, {"visual": [{"style": {"border": "1px solid black", "cursor": "grab",
-    "margin": "2px", "padding": "2px", "border-radius": "5px"}, "children": [{"text":
-    "{", "style": {"display": "inline-block"}, "blockType": "constant"}, {"children":
-    [{"text": "❓", "style": {"color": "darkred", "border": "2px solid red", "cursor":
-    "default", "paddingLeft": "10px", "borderRadius": "500px", "paddingRight": "10px",
-    "backgroundColor": "orange"}, "blockType": "constant"}], "blockType": "dropTarget",
-    "direction": "horizontal", "dropTarget": {"children": {"order": "insertFirst",
-    "category": "values"}, "visibility": {"$every": [{"$var": "ifEmpty"}, {"$var":
-    "ifLegalDrag"}]}}}, {"between": [{"text": ",", "style": {"display": "inline-block"},
-    "blockType": "constant"}], "blockType": "iterator", "direction": "horizontal",
-    "wrapChildren": true, "childGroupName": "values"}, {"text": "}", "style": {"display":
-    "inline-block"}, "blockType": "constant"}], "blockType": "block", "direction":
-    "horizontal", "dropTarget": {"self": {"order": "insertAfter", "skipParents": 0}}}],
+    "blockType": "iterator", "direction": "vertical", "breakAfter": false, "wrapChildren":
+    true, "childGroupName": "values"}, {"text": "]", "style": {"display": "inline-block"},
+    "blockType": "constant"}], "blockType": "block", "direction": "vertical", "breakAfter":
+    false, "dropTarget": {"self": {"order": "insertAfter", "skipParents": 0}}, "wrapChildren":
+    true}], "describedType": {"typeName": "array", "languageName": "json"}}, {"visual":
+    [{"style": {"border": "1px solid black", "cursor": "grab", "margin": "2px", "padding":
+    "2px", "border-radius": "5px"}, "children": [{"style": {"color": "white", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-block"},
+    "property": "value", "blockType": "input"}], "blockType": "block", "direction":
+    "horizontal", "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter",
+    "skipParents": 0}}, "wrapChildren": true}], "describedType": {"typeName": "number",
+    "languageName": "json"}}, {"visual": [{"style": {"border": "1px solid black",
+    "cursor": "grab", "margin": "2px", "padding": "2px", "border-radius": "5px"},
+    "children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"text": "{", "style": {"display": "inline-block"},
+    "blockType": "constant"}, {"children": [{"text": "❓", "style": {"color": "darkred",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius":
+    "500px", "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
+    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
+    {"order": "insertFirst", "category": "values"}, "visibility": {"$every": [{"$var":
+    "ifEmpty"}, {"$var": "ifLegalDrag"}]}}}, {"between": [{"text": ",", "style": {"display":
+    "inline-block"}, "blockType": "constant"}], "blockType": "iterator", "direction":
+    "horizontal", "breakAfter": false, "wrapChildren": true, "childGroupName": "values"},
+    {"text": "}", "style": {"display": "inline-block"}, "blockType": "constant"}],
+    "blockType": "block", "direction": "horizontal", "breakAfter": false, "dropTarget":
+    {"self": {"order": "insertAfter", "skipParents": 0}}, "wrapChildren": true}],
     "describedType": {"typeName": "object", "languageName": "json"}}, {"visual": [{"style":
     {"border": "1px solid black", "cursor": "grab", "margin": "2px", "padding": "2px",
-    "border-radius": "5px"}, "children": [{"text": "\"", "style": {"display": "inline-block"},
-    "blockType": "constant"}, {"style": {"display": "inline-block"}, "property": "value",
-    "blockType": "input"}, {"text": "\"", "style": {"display": "inline-block"}, "blockType":
-    "constant"}], "blockType": "block", "direction": "horizontal", "dropTarget": {"self":
-    {"order": "insertAfter", "skipParents": 0}}}], "describedType": {"typeName": "string",
+    "border-radius": "5px"}, "children": [{"style": {"color": "white", "border": "2px
+    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"text": "\"", "style": {"display":
+    "inline-block"}, "blockType": "constant"}, {"style": {"display": "inline-block"},
+    "property": "value", "blockType": "input"}, {"text": "\"", "style": {"display":
+    "inline-block"}, "blockType": "constant"}], "blockType": "block", "direction":
+    "horizontal", "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter",
+    "skipParents": 0}}, "wrapChildren": true}], "describedType": {"typeName": "string",
     "languageName": "json"}}, {"visual": [{"style": {"border": "1px solid black",
     "cursor": "grab", "margin": "2px", "padding": "2px", "border-radius": "5px"},
-    "children": [{"style": {"display": "inline-block"}, "property": "value", "blockType":
-    "input"}], "blockType": "block", "direction": "horizontal", "dropTarget": {"self":
-    {"order": "insertAfter", "skipParents": 0}}}], "describedType": {"typeName": "boolean",
-    "languageName": "json"}}, {"visual": [{"style": {"border": "1px solid black",
-    "cursor": "grab", "margin": "2px", "padding": "2px", "border-radius": "5px"},
-    "children": [{"children": [{"text": "❓", "style": {"color": "darkred", "border":
-    "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius": "500px",
-    "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
-    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
-    {"order": "insertFirst", "category": "key"}, "visibility": {"$var": "ifEmpty"}}},
-    {"blockType": "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
-    "key"}, {"text": ":", "style": {"display": "inline-block"}, "blockType": "constant"},
+    "children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-block"}, "property":
+    "value", "blockType": "input"}], "blockType": "block", "direction": "horizontal",
+    "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter", "skipParents":
+    0}}, "wrapChildren": true}], "describedType": {"typeName": "boolean", "languageName":
+    "json"}}, {"visual": [{"style": {"border": "1px solid black", "cursor": "grab",
+    "margin": "2px", "padding": "2px", "border-radius": "5px"}, "children": [{"style":
+    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
+    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
+    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
     {"children": [{"text": "❓", "style": {"color": "darkred", "border": "2px solid
     red", "cursor": "default", "paddingLeft": "10px", "borderRadius": "500px", "paddingRight":
     "10px", "backgroundColor": "orange"}, "blockType": "constant"}], "blockType":
     "dropTarget", "direction": "horizontal", "dropTarget": {"children": {"order":
-    "insertFirst", "category": "value"}, "visibility": {"$var": "ifEmpty"}}}, {"blockType":
-    "iterator", "direction": "horizontal", "wrapChildren": true, "childGroupName":
-    "value"}], "blockType": "block", "direction": "horizontal", "dropTarget": {"self":
-    {"order": "insertAfter", "skipParents": 0}}}], "describedType": {"typeName": "key-value",
-    "languageName": "json"}}], "editorComponents": [], "localGeneratorInstructions":
-    {"traits": {"break": {"applyMode": "deepMerge", "instructions": {"style": {"width":
-    "100%"}}}, "border": {"applyMode": "deepMerge", "instructions": {"style": {"border":
-    "1px solid black", "cursor": "grab", "margin": "2px", "padding": "2px", "border-radius":
-    "5px"}}}, "indent": {"applyMode": "deepMerge", "instructions": {"style": {"margin-left":
+    "insertFirst", "category": "key"}, "visibility": {"$var": "ifEmpty"}}}, {"blockType":
+    "iterator", "direction": "horizontal", "breakAfter": false, "wrapChildren": true,
+    "childGroupName": "key"}, {"text": ":", "style": {"display": "inline-block"},
+    "blockType": "constant"}, {"children": [{"text": "❓", "style": {"color": "darkred",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius":
+    "500px", "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
+    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
+    {"order": "insertFirst", "category": "value"}, "visibility": {"$var": "ifEmpty"}}},
+    {"blockType": "iterator", "direction": "horizontal", "breakAfter": false, "wrapChildren":
+    true, "childGroupName": "value"}], "blockType": "block", "direction": "horizontal",
+    "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter", "skipParents":
+    0}}, "wrapChildren": true}], "describedType": {"typeName": "key-value", "languageName":
+    "json"}}], "editorComponents": [], "localGeneratorInstructions": {"traits": {"break":
+    {"applyMode": "deepMerge", "instructions": {"style": {"width": "100%"}}}, "border":
+    {"applyMode": "deepMerge", "instructions": {"style": {"border": "1px solid black",
+    "cursor": "grab", "margin": "2px", "padding": "2px", "border-radius": "5px"}}},
+    "indent": {"applyMode": "deepMerge", "instructions": {"style": {"margin-left":
     "2ch"}}}, "vertical": {"applyMode": "deepMerge", "instructions": {"orientation":
     "vertical"}}, "defaultDropTargets": {"applyMode": "deepMerge", "instructions":
     {"generateDropTargets": "start"}}}, "traitScopes": [{"blocks": {"json": {"array":
@@ -110,7 +137,7 @@ concise_attributes:
   value_before_type_cast: '2018-07-20 20:43:34.641628'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-08-03 15:40:03.65582'
+  value_before_type_cast: '2018-09-17 18:45:47.751914'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: json
