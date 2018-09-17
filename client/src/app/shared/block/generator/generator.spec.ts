@@ -249,7 +249,7 @@ describe("BlockLanguage Generator", () => {
       } as Partial<VisualBlockDescriptions.EditorIterator>));
       expect(b.children[3]).toEqual(jasmine.objectContaining({
         blockType: "dropTarget"
-      }));
+      } as Partial<VisualBlockDescriptions.EditorDropTarget>));
 
       // #2
       expect(b.children[4]).toEqual(jasmine.objectContaining({
@@ -258,7 +258,7 @@ describe("BlockLanguage Generator", () => {
       } as Partial<VisualBlockDescriptions.EditorIterator>));
       expect(b.children[5]).toEqual(jasmine.objectContaining({
         blockType: "dropTarget"
-      }));
+      } as Partial<VisualBlockDescriptions.EditorDropTarget>));
 
       // #3
       expect(b.children[6]).toEqual(jasmine.objectContaining({
@@ -267,7 +267,7 @@ describe("BlockLanguage Generator", () => {
       } as Partial<VisualBlockDescriptions.EditorIterator>));
       expect(b.children[7]).toEqual(jasmine.objectContaining({
         blockType: "dropTarget"
-      }));
+      } as Partial<VisualBlockDescriptions.EditorDropTarget>));
 
       // And then we have a property
       expect(b.children[8]).toEqual(jasmine.objectContaining({
