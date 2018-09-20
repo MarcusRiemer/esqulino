@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as Parser from '../../shared/csv-parser';
+import { ProjectService, Project } from '../project.service'
+
 
 /**
  * Displays the schema for a list of tables.
@@ -11,6 +13,8 @@ import * as Parser from '../../shared/csv-parser';
 export class SchemaTableImportComponent implements OnInit {
   // File Object as a string
   fileData: any;
+  // Schema with the available tables
+  schema: {};
 
   parse: Parser.CsvParseResult | Parser.CsvParseError;
   errors: Parser.ValidationError[];
@@ -29,9 +33,14 @@ export class SchemaTableImportComponent implements OnInit {
   currentDelimiters: string[];
 
   
-  constructor() {
-
+  /**
+   * Used for dependency injection.
+   */
+  constructor(
+    private _projectService: ProjectService,
+  ) {
   }
+
 
   ngOnInit() { 
     this.disableSelection = true;
@@ -42,8 +51,11 @@ export class SchemaTableImportComponent implements OnInit {
 
     this.currentDelimiters = [];
     this.toggleDelimiter(',');
+
+    this.schema = this._projectService.cachedProject.schema;
+    console.log("project service: ", this.schema);
   }
-  
+
 
   changeListener(event): void {
     this.handleDataUpload(event.target);    
@@ -85,6 +97,7 @@ export class SchemaTableImportComponent implements OnInit {
     if (this.parse.type === 'parseResult') {   
       this.header = (<Parser.CsvParseResult> this.parse).header;
       this.table = (<Parser.CsvParseResult> this.parse).table;
+
       this.headerLength = this.header.length;
       this.disableHeadlineSelection = false;
     } else if (this.parse.type === 'parseError') {
@@ -92,7 +105,7 @@ export class SchemaTableImportComponent implements OnInit {
       this.disableHeadlineSelection = true;  
     }
 
-    this.disableSelection = false;
+    this.disableSelection = false;  
   }
 
   trackByFn(index: any, item: any) {
