@@ -15,37 +15,35 @@ export class SchemaTableImportComponent implements OnInit {
   parse: Parser.CsvParseResult | Parser.CsvParseError;
   errors: Parser.ValidationError[];
 
+  disableSelection: boolean;
+  disableHeadlineSelection: boolean;
+
   header: string[];
   table: string[][];
-  headlineUsage: "file" | "own"
   headerLength: number;
+
+  headlineUsage: "file" | "own";  
+  textMarker: '"' | "'";
 
   // Contains all currently used Delimiters
   currentDelimiters: string[];
-  // Contains all possible Markers
-  markers: string[];
-  selectedMarker: string;
-
-  disableSelection: boolean;
-  disableHeadlineSelection: boolean;
 
   
   constructor() {
 
   }
 
-  ngOnInit() {
-    this.markers = ['"', "'"];
-    this.selectedMarker = this.markers[0];
+  ngOnInit() { 
+    this.disableSelection = true;
+    this.disableHeadlineSelection = true;
+
+    this.headlineUsage = "file";
+    this.textMarker = '"';
 
     this.currentDelimiters = [];
     this.toggleDelimiter(',');
-
-    this.headlineUsage = "file";
-    this.disableSelection = true;
-    this.disableHeadlineSelection = true;
   }
-
+  
 
   changeListener(event): void {
     this.handleDataUpload(event.target);    
@@ -82,7 +80,7 @@ export class SchemaTableImportComponent implements OnInit {
   }
 
   parseProcess = () => {
-    this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.selectedMarker);
+    this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.textMarker);
     
     if (this.parse.type === 'parseResult') {   
       this.header = (<Parser.CsvParseResult> this.parse).header;
