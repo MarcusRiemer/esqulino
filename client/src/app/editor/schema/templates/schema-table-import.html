@@ -99,9 +99,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of table">            
-                        <td *ngFor="let col of row; let i = index">
-                        {{ row[i] }}
+                    <tr *ngFor="let row of table | slice:0:20; let i = index">   
+                        <td *ngFor="let col of row; let j = index">
+                            {{ row[j] }}
                         </td>
                     </tr>
                 </tbody>
