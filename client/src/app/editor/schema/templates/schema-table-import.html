@@ -35,6 +35,26 @@
     </div>
 
     <hr />
+
+    <!-- Text Markers -->
+
+    <h5 class="mb-3">Text Markierung</h5>
+
+    <div class="marker row">
+        <div class="form-group col">    
+            <input id="double-quotes" type="radio" value='"' name="text-marker" 
+                    [(ngModel)]="textMarker" (change)="changeMarker()" [disabled]="disableSelection"/>
+            <label for="double-quotes">&nbsp;"</label>
+        </div>
+
+        <div class="form-group col">    
+            <input id="single-quotes" type="radio" value="'" name="text-marker" 
+                    [(ngModel)]="textMarker" (change)="changeMarker()" [disabled]="disableSelection"/>
+            <label for="single-quotes">&nbsp;'</label>
+        </div>
+    </div>
+    
+    <hr />
     
     <!-- Delimiters -->
     
@@ -62,20 +82,6 @@
             <label for="tab">&nbsp;Tabstopp</label>
         </div>
     
-    </div>
-
-    <hr />
-
-    <!-- Text Markers -->
-
-    <h5 class="mb-3">Text Markierung</h5>
-   
-    <div class="form-group row">
-        <label class="col-sm-auto" for="text-marker">Marker:</label>
-        <select class="form-control col" id="text-marker" [disabled]="disableSelection" required
-                [(ngModel)]="selectedMarker" (change)="changeMarker()">
-          <option *ngFor="let marker of markers" [value]="marker">{{marker}}</option>
-        </select>
     </div>
 
     <!-- Parse Result or Error -->
