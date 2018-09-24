@@ -90,9 +90,40 @@
 
         <hr />
 
+        <div class="mapping">
+
+            <h5 class="mb-3">Zuweisungen</h5>
+
+            <!-- Choose Table to import to -->
+            <div class="table-selection">
+
+                <label for="select-table">Tabelle auswählen&nbsp;</label>
+                <select id="select-table" [(ngModel)]="selectedTableName" (change)="changeTable()">
+                    <option *ngFor="let table of schemaTables" value="{{table.name}}">{{ table.name }}</option>
+                </select>
+
+            </div>
+        </div>
+
+
+        <!-- Mapping for the selected table -->
+
+        <div class="selected-table-mapping" *ngIf="header.length >= selectedTableColumns.length; then mappingPossible else mappingError"></div>
+
+            <ng-template #mappingPossible>
+                SUCCESS!
+            </ng-template>
+
+            <ng-template #mappingError>
+                ERROR!
+            </ng-template>
+        
+
+        <hr />
+
         <!-- Table Preview -->
 
-        <div class="table" *ngIf="parse.type === 'parseResult'">
+        <div class="table-preview" *ngIf="parse.type === 'parseResult'">
         
             <h5 class="mb-3">Vorschau</h5>
 
