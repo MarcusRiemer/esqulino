@@ -35,8 +35,6 @@ export class SchemaTableImportComponent implements OnInit {
 
   // Contains all currently used Delimiters
   currentDelimiters: string[];
-
-  theTest: boolean = true;
   
   /**
    * Used for dependency injection.
@@ -153,9 +151,6 @@ export class SchemaTableImportComponent implements OnInit {
     console.log("LengthFilter: ", lengthFilter);
 
     return lengthFilter;
-
-    // wenn zu viele Zeilen in Headline, wähle aus, schmeiße weg
-    // zu wenig Zeilen in Headline nicht möglich für spalten mit mehr
   }
 
 

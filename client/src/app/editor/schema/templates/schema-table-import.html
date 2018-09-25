@@ -90,32 +90,68 @@
 
         <hr />
 
-        <div class="mapping">
+        <h5 class="mb-3">Zuweisungen</h5>
 
-            <h5 class="mb-3">Zuweisungen</h5>
+        <!-- Choose Table to import to -->
+        <div class="table-selection">
 
-            <!-- Choose Table to import to -->
-            <div class="table-selection">
+            <label for="select-table">Tabelle auswählen&nbsp;</label>
+            <select id="select-table" class="form-control" [(ngModel)]="selectedTableName" (change)="changeTable()">
+                <option *ngFor="let table of schemaTables" value="{{table.name}}">{{ table.name }}</option>
+            </select>
 
-                <label for="select-table">Tabelle auswählen&nbsp;</label>
-                <select id="select-table" [(ngModel)]="selectedTableName" (change)="changeTable()">
-                    <option *ngFor="let table of schemaTables" value="{{table.name}}">{{ table.name }}</option>
-                </select>
-
-            </div>
         </div>
 
+        <br />
 
         <!-- Mapping for the selected table -->
 
         <div class="selected-table-mapping" *ngIf="header.length >= selectedTableColumns.length; then mappingPossible else mappingError"></div>
 
             <ng-template #mappingPossible>
-                SUCCESS!
+                <div class="mapping row" *ngFor="let headerCol of header; let i = index">
+                    <div class="col">
+                        <input type="checkbox" id="{{ headerCol }}" [disabled]="header.length === selectedTableColumns.length" [checked]="i < selectedTableColumns.length"/> <!-- todo (change) -->
+                        <label for="header-{{ headerCol }}">&nbsp;{{ headerCol }}</label>
+                    </div>
+
+                    <div class="col">
+                        <div *ngIf="true"> <!-- TODO show only when checked -->
+                            <span style="font-size: 3em; color: #00C851">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                        </div>
+
+                        <div *ngIf="false">                         
+                            <span style="font-size: 3em; color: #ff4444">
+                                <i class="fa fa-ban"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <select id="table-{{ tableCol }}" class="form-control">
+                            <option *ngFor="let tableCol of selectedTableColumns; let j = index" value="{{tableCol.name}}" [selected]="j === i">{{ tableCol.name }}</option>
+                        </select>        
+                    </div>            
+                </div>
             </ng-template>
 
             <ng-template #mappingError>
-                ERROR!
+                <div class="error card text-white bg-danger mb-3">
+                    <div class="card-header">Invalid Table</div>
+    
+                    <div class="card-body">
+    
+                        <h5 class="card-title">Information: Headline enthält zu wenig Spalten für ausgewählte Tabelle</h5>
+                        
+                        <div class="card-text">
+                                Count: {{ header.length }} <br/>
+                                Expected: min. {{ selectedTableColumns.length }} <br/><br/>
+                        </div>
+    
+                    </div>
+                </div>            
             </ng-template>
         
 
