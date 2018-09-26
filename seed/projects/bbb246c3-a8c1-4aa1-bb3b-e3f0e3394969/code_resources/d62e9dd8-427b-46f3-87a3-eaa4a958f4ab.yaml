@@ -1,27 +1,37 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromUser
   name: project_id
   value_before_type_cast: bbb246c3-a8c1-4aa1-bb3b-e3f0e3394969
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: bbb246c3-a8c1-4aa1-bb3b-e3f0e3394969
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: bbb246c3-a8c1-4aa1-bb3b-e3f0e3394969
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: XML 1
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: d62e9dd8-427b-46f3-87a3-eaa4a958f4ab
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "element", "children": {"elements": [{"name":
     "text", "language": "dxml", "properties": {"value": "before ..."}}, {"name": "element",
-    "language": "dxml", "properties": {"name": "child"}}, {"name": "text", "language":
-    "dxml", "properties": {"value": "after ..."}}], "attributes": [{"name": "attribute",
-    "children": {"value": [{"name": "text", "language": "dxml", "properties": {"value":
-    "Neuer Text"}}]}, "language": "dxml", "properties": {"name": "att1"}}, {"name":
-    "attribute", "children": {"value": []}, "language": "dxml", "properties": {"name":
-    "a1"}}, {"name": "attribute", "children": {"value": []}, "language": "dxml", "properties":
-    {"name": "a2"}}, {"name": "attribute", "children": {"value": []}, "language":
-    "dxml", "properties": {"name": "a1"}}, {"name": "attribute", "children": {"value":
-    []}, "language": "dxml", "properties": {"name": "a1"}}, {"name": "attribute",
+    "children": {"elements": [{"name": "element", "children": {"elements": [{"name":
+    "element", "children": {"elements": [], "attributes": []}, "language": "dxml",
+    "properties": {"name": "e2"}}], "attributes": []}, "language": "dxml", "properties":
+    {"name": "e1"}}]}, "language": "dxml", "properties": {"name": "child"}}, {"name":
+    "text", "language": "dxml", "properties": {"value": "after ..."}}], "attributes":
+    [{"name": "attribute", "children": {"value": [{"name": "text", "language": "dxml",
+    "properties": {"value": "Neuer Text"}}]}, "language": "dxml", "properties": {"name":
+    "att1"}}, {"name": "attribute", "children": {"value": []}, "language": "dxml",
+    "properties": {"name": "a1"}}, {"name": "attribute", "children": {"value": []},
+    "language": "dxml", "properties": {"name": "a2"}}, {"name": "attribute", "children":
+    {"value": []}, "language": "dxml", "properties": {"name": "a1"}}, {"name": "attribute",
     "children": {"value": []}, "language": "dxml", "properties": {"name": "a1"}},
     {"name": "attribute", "children": {"value": []}, "language": "dxml", "properties":
     {"name": "a1"}}, {"name": "attribute", "children": {"value": []}, "language":
@@ -30,26 +40,31 @@ concise_attributes:
     "children": {"value": []}, "language": "dxml", "properties": {"name": "a1"}},
     {"name": "attribute", "children": {"value": []}, "language": "dxml", "properties":
     {"name": "a1"}}, {"name": "attribute", "children": {"value": []}, "language":
-    "dxml", "properties": {"name": "a1"}}]}, "language": "dxml", "properties": {"name":
-    "parent"}}'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+    "dxml", "properties": {"name": "a1"}}, {"name": "attribute", "children": {"value":
+    []}, "language": "dxml", "properties": {"name": "a1"}}]}, "language": "dxml",
+    "properties": {"name": "parent"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-04 14:00:11.251405'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-04 15:30:40.235391'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  value_before_type_cast: '2018-07-20 19:33:27.272441'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
-  value_before_type_cast: 84ece7cd-8824-4310-a1db-917c29c904c9
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  value_before_type_cast: d549570a-7ce3-4f72-86a2-37a78887f8b5
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: dxml-eruby
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
     <parent att1="Neuer Text" a1="" a2="" a1="" a1="" a1="" a1="" a1="" a1="" a1="" a1="" a1="">
-    before ...
-    <child></child>after ...
+      before ...
+      <child>
+        <e1>
+          <e2></e2>
+        </e1>
+      </child>after ...
     </parent>
 new_record: false
 active_record_yaml_version: 2

@@ -14,7 +14,6 @@ class ApplicationRecord < ActiveRecord::Base
   # set of attributes.
   #
   # @return [Hash] All attributes of this model as the client expects it.
-  # TODO: Rename to json_response
   def to_json_api_response
     # Build a hash of all properties that are currently set
     to_return = self.serializable_hash
@@ -34,7 +33,7 @@ class ApplicationRecord < ActiveRecord::Base
   # Models in join-tables would require a composite primary key and Rails
   # does not support those. Unluckily we currently have a join model without
   # a singular PK already and sometimes need to identify it on the fly using
-  # #find_by.
+  # find_by.
   def key_search_attributes
     if not self.class.primary_key.nil? then
       { self.class.primary_key => self.attributes[self.class.primary_key] }

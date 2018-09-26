@@ -1,38 +1,46 @@
 --- !ruby/object:Project
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 357f9a1c-7db5-420c-bd9a-7ee7d49545d4
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromUser
   name: default_database_id
   value_before_type_cast: 86b19b97-1009-4020-be79-3585c7d332c4
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: default_database_id
+    value_before_type_cast: 86b19b97-1009-4020-be79-3585c7d332c4
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: 86b19b97-1009-4020-be79-3585c7d332c4
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Ereignisse
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: events
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: Historische Ereignisse & Personen mit ihren jeweiligen zeitlichen
     Daten. Welcher Wissenschaftler hat eigentlich zu Zeiten der ersten olympischen
     Spiele gelebt?
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: preview
   value_before_type_cast: dfd3f9d5-8a62-42c2-b0a7-232f370c0297
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: index_page_id
   value_before_type_cast: f04bca19-cecd-4996-96a8-0749b4f25311
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-20 20:48:21.693124'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-05-15 18:43:22.127192'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  value_before_type_cast: '2018-07-19 16:32:54.135219'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 new_record: false
 active_record_yaml_version: 2

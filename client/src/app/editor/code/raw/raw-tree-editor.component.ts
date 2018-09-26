@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { ToolbarService } from '../../toolbar.service';
@@ -41,7 +41,7 @@ export class RawTreeEditorComponent implements OnInit {
    * possibility anything is currently dragged over a node. So we inform the
    * drag service about that.
    */
-  public onDragEnter(evt: DragEvent) {
+  public onDragEnter(_: DragEvent) {
     this._dragService.informDraggedOverEditor();
   }
 

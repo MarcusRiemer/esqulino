@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core'
-import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 
-import { AsyncSubject, BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, delay, first, filter, tap, map } from 'rxjs/operators';
 
 import { ServerApiService } from '../shared/serverapi.service'
 import { Project, ProjectDescription, ProjectFullDescription } from '../shared/project'
-
-import { CODE_RESOURCES } from '../shared/syntaxtree/examples'
 
 import { LanguageService } from '../shared/language.service'
 
@@ -81,7 +79,7 @@ export class ProjectService {
       }));
 
     // And execute it by subscribing to it.
-    const subscription = this._httpRequest
+    this._httpRequest
       .pipe(first())
       .subscribe(res => {
         // There is a new project, Inform subscribers

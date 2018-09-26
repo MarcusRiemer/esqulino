@@ -1,5 +1,3 @@
-import { Project } from '../project'
-import { ProjectResource } from '../resource'
 import { ColumnDescription, TableDescription, ForeignKeyDescription } from './schema.description'
 import { Column, ColumnStatus } from './column'
 

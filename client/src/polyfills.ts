@@ -63,6 +63,10 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 
 import 'core-js/es7/object';
 
+// Add global to window, assigning the value of window itself.
+// This hack is currently required for ACE, see https://github.com/fxmontigny/ng2-ace-editor/issues/87
+(window as any).global = window;
+
 /**
  * Date, currency, decimal and percent pipes.
  * Needed for: All but Chrome, Firefox, Edge, IE11 and Safari 10

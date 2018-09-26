@@ -1,6 +1,6 @@
 {
   "$ref": "#/definitions/CodeResourceDescription",
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
     "CodeResourceDescription": {
       "additionalProperties": false,
@@ -62,6 +62,9 @@
           "type": "string"
         },
         "properties": {
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
           "type": "object"
         }

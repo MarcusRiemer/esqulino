@@ -1,10 +1,8 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Table } from '../../shared/schema'
 
 import { ProjectService, Project } from '../project.service'
-import { ToolbarService } from '../toolbar.service'
-
 
 /**
  * Displays the schema for a list of tables.

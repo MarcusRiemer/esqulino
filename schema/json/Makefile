@@ -7,9 +7,10 @@ include Makefile.json
 # Generating all schemas
 all : msg-pre-schema $(JSON_SCHEMA_FILES)
 
-# Uses the `package.json` file to grab all dependencies
+# Uses the `package.json` file to grab all dependencies according to the
+# `package-lock.json`.
 install-deps :
-	npm install
+	npm ci
 
 # Remove everything that has been downloaded by `install-deps`
 clean-deps : msg-pre-clean-deps

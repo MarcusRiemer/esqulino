@@ -10,21 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180515175526) do
+ActiveRecord::Schema.define(version: 2018_07_15_141850) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "pgcrypto"
+  enable_extension "plpgsql"
+
+  create_table "block_language_generators", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.jsonb "model", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "block_languages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
-    t.string "family", null: false
     t.jsonb "model"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
     t.text "default_programming_language_id"
     t.uuid "grammar_id"
+    t.uuid "block_language_generator_id"
+    t.index ["block_language_generator_id"], name: "index_block_languages_on_block_language_generator_id"
     t.index ["default_programming_language_id"], name: "index_block_languages_on_default_programming_language_id"
     t.index ["grammar_id"], name: "index_block_languages_on_grammar_id"
     t.index ["slug"], name: "index_block_languages_on_slug", unique: true
@@ -101,6 +109,7 @@ ActiveRecord::Schema.define(version: 20180515175526) do
     t.index ["slug"], name: "index_projects_on_slug"
   end
 
+  add_foreign_key "block_languages", "block_language_generators"
   add_foreign_key "block_languages", "grammars"
   add_foreign_key "block_languages", "programming_languages", column: "default_programming_language_id"
   add_foreign_key "code_resources", "block_languages"

@@ -1,9 +1,19 @@
-import { LanguageDescription } from './language.description'
-
+import { NodeConverterRegistration } from './codegenerator'
 import { Tree, NodeDescription, QualifiedTypeName } from './syntaxtree'
-import { Validator } from './validator'
+import { Validator, SubValidator } from './validator'
 import { ValidationResult } from './validation-result'
 import { CodeGenerator } from './codegenerator'
+
+/**
+ * Ties together descriptions of everything the editor needs to work
+ * with a language.
+ */
+export interface LanguageDefinition {
+  id: string,
+  name: string,
+  validators: SubValidator[],
+  emitters: NodeConverterRegistration[],
+}
 
 /**
  * A facade that ties together everything the editor needs to work with a language.
@@ -15,10 +25,10 @@ export class Language {
   private _validator: Validator;
   private _codeGenerator: CodeGenerator;
 
-  constructor(desc: LanguageDescription) {
+  constructor(desc: LanguageDefinition) {
     this._id = desc.id;
     this._name = desc.name;
-    this._codeGenerator = new CodeGenerator(desc.generators);
+    this._codeGenerator = new CodeGenerator(desc.emitters);
     this._validator = new Validator(desc.validators);
   }
 
@@ -57,10 +67,13 @@ export class Language {
    * Validates a syntax tree against this language.
    *
    * @param ast The root of the tree to validate
+   * @param additionalContext 
+   *   Additional data that may be required by specialized validators. Prime example
+   *   is the SQL validator which requires knowledge about the schema.
    * @return A result object containing all errors
    */
-  validateTree(ast: Tree): ValidationResult {
-    return (this._validator.validateFromRoot(ast));
+  validateTree(ast: Tree, additionalContext: any = {}): ValidationResult {
+    return (this._validator.validateFromRoot(ast, additionalContext));
   }
 
   /**

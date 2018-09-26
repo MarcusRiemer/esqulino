@@ -1,0 +1,668 @@
+{
+  "$ref": "#/definitions/BlockLanguageGeneratorDescription",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {
+    "AllReferenceableTypeInstructions": {
+      "additionalProperties": {
+        "additionalProperties": {
+          "$ref": "#/definitions/ReferenceableTypeInstructionsDescription"
+        },
+        "type": "object"
+      },
+      "description": "Supplementary generation instructions for all types. In this variant\nthere may be references to exact values instead of the exact values\nthemselves.",
+      "type": "object"
+    },
+    "AnySidebarBlockDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ConstantSidebarBlockDescription"
+        },
+        {
+          "$ref": "#/definitions/GeneratedSidebarBlockDescription"
+        }
+      ]
+    },
+    "AnySidebarCategoryDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ConstantBlocksSidebarCategoryDescription"
+        },
+        {
+          "$ref": "#/definitions/MixedBlocksSidebarCategoryDescription"
+        },
+        {
+          "$ref": "#/definitions/GeneratedBlocksSidebarCategoryDescription"
+        }
+      ]
+    },
+    "AnySidebarDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/GeneratedBlocksSidebarDescription"
+        }
+      ]
+    },
+    "BlockLanguageGeneratorDescription": {
+      "additionalProperties": false,
+      "description": "Describes how a grammar might be converted to a block language",
+      "properties": {
+        "editorComponents": {
+          "items": {
+            "$ref": "#/definitions/EditorComponentDescription"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parameterDeclarations": {
+          "$ref": "#/definitions/ParameterDeclarations"
+        },
+        "parameterValues": {
+          "$ref": "#/definitions/ParameterValues"
+        },
+        "staticSidebars": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarDescription"
+          },
+          "type": "array"
+        },
+        "traitScopes": {
+          "items": {
+            "$ref": "#/definitions/ScopeTraitAdd"
+          },
+          "type": "array"
+        },
+        "traits": {
+          "$ref": "#/definitions/ReferenceableTraits"
+        },
+        "typeInstructions": {
+          "$ref": "#/definitions/AllReferenceableTypeInstructions"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "type": "object"
+    },
+    "ConstantBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "A category that is defined statically",
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/definitions/SidebarBlockDescription"
+          },
+          "type": "array"
+        },
+        "categoryCaption": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "constant"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "blocks",
+        "categoryCaption",
+        "type"
+      ],
+      "type": "object"
+    },
+    "ConstantSidebarBlockDescription": {
+      "additionalProperties": false,
+      "description": "A block that is given statically",
+      "properties": {
+        "defaultNode": {
+          "$ref": "#/definitions/NodeDescription",
+          "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
+        },
+        "displayName": {
+          "description": "The name to be displayed in the sidebar",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "constant"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "defaultNode",
+        "displayName",
+        "type"
+      ],
+      "type": "object"
+    },
+    "DatabaseSchemaSidebarDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "databaseSchema"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "EditorComponentDescription": {
+      "$ref": "#/definitions/QueryPreviewComponentDescription",
+      "description": "Any component that could be displayed in the actual editor view."
+    },
+    "FixedBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "Defines which blocks to show in a certain category.",
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/definitions/SidebarBlockDescription"
+          },
+          "type": "array"
+        },
+        "categoryCaption": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "categoryCaption",
+        "blocks"
+      ],
+      "type": "object"
+    },
+    "FixedBlocksSidebarDescription": {
+      "additionalProperties": false,
+      "description": "Defines the overall look of a sidebar. It at least sorts available blocks\ninto categories.",
+      "properties": {
+        "caption": {
+          "description": "The name that should be displayed to the user.",
+          "type": "string"
+        },
+        "categories": {
+          "description": "The actual blocks are categorized into categories.",
+          "items": {
+            "$ref": "#/definitions/FixedBlocksSidebarCategoryDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "description": "Unique identification for this type.",
+          "enum": [
+            "fixedBlocks"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "caption",
+        "categories"
+      ],
+      "type": "object"
+    },
+    "GeneratedBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "A category that uses only generated blocks. This allows for a syntax\nthat is a little more compact.",
+      "properties": {
+        "categoryCaption": {
+          "type": "string"
+        },
+        "grammar": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "type": {
+          "enum": [
+            "generated"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "categoryCaption",
+        "grammar"
+      ],
+      "type": "object"
+    },
+    "GeneratedBlocksSidebarDescription": {
+      "additionalProperties": false,
+      "description": "A sidebar description that may use partly generated blocks and partly\nconstant categories.",
+      "properties": {
+        "caption": {
+          "type": "string"
+        },
+        "categories": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarCategoryDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "generatedBlocks"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "caption",
+        "categories"
+      ],
+      "type": "object"
+    },
+    "GeneratedSidebarBlockDescription": {
+      "additionalProperties": false,
+      "description": "A block that has its block generated.",
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "nodeType": {
+          "$ref": "#/definitions/QualifiedTypeName"
+        },
+        "type": {
+          "enum": [
+            "generated"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "nodeType"
+      ],
+      "type": "object"
+    },
+    "InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__": {
+      "additionalProperties": false,
+      "description": "Instructions on how to generate a single block for a type. This type\nis not intended to be used directly, please use `TypeInstructionsDescription`\nor `ReferenceableTypeInstructionsDescription` instead.",
+      "properties": {
+        "attributes": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "description": "Make all properties in T optional",
+            "properties": {
+              "allowWrap": {
+              },
+              "attributeMapping": {
+              },
+              "between": {
+              },
+              "breakAfter": {
+              },
+              "generateDropTargets": {
+              },
+              "generateErrorIndicator": {
+              },
+              "onDrop": {
+              },
+              "orientation": {
+              },
+              "readOnly": {
+              },
+              "style": {
+              }
+            },
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "blocks": {
+          "items": {
+            "additionalProperties": false,
+            "description": "Make all properties in T optional",
+            "properties": {
+              "allowWrap": {
+              },
+              "attributeMapping": {
+              },
+              "breakAfter": {
+              },
+              "generateErrorIndicator": {
+              },
+              "onDrop": {
+              },
+              "orientation": {
+              },
+              "style": {
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "MixedBlocksSidebarCategoryDescription": {
+      "additionalProperties": false,
+      "description": "A category description that may use partly generated blocks and\npartly constant blocks.",
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/definitions/AnySidebarBlockDescription"
+          },
+          "type": "array"
+        },
+        "categoryCaption": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "mixed"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "categoryCaption",
+        "blocks"
+      ],
+      "type": "object"
+    },
+    "NodeDescription": {
+      "additionalProperties": false,
+      "description": "This description regulates how all ASTs should be stored when\nwritten to disk or sent over the wire. It requires every\nnode to at least tell its name and some hint how a node can be\nconstructed at runtime.\n\nThe data of a node is split up in two broader categories:\nChildren, which may be nested and properties, which should\nnot allow any nesting.",
+      "properties": {
+        "children": {
+          "additionalProperties": {
+            "items": {
+              "$ref": "#/definitions/NodeDescription"
+            },
+            "type": "array"
+          },
+          "description": "Nodes may have children in various categories. This base class\nmakes no assumptions about the names of children. Examples for\nchildren in multiple categories would be things like \"attributes\"\nand generic \"children\" in a specialization for XML.",
+          "type": "object"
+        },
+        "language": {
+          "description": "This is effectively a namespace, allowing identical\nnames for nodes in different languages.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of this not, this is used to lookup the name of a\ncorresponding type.",
+          "type": "string"
+        },
+        "properties": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Nodes may have all kinds of properties that are specific to their\nconcrete use.",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "language"
+      ],
+      "type": "object"
+    },
+    "ParameterBoolean": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "boolean"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ParameterDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "defaultValue": {
+          "$ref": "#/definitions/ParameterValue"
+        },
+        "type": {
+          "$ref": "#/definitions/ParameterType"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ParameterDeclarations": {
+      "additionalProperties": {
+        "$ref": "#/definitions/ParameterDeclaration"
+      },
+      "type": "object"
+    },
+    "ParameterType": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ParameterTypeString"
+        },
+        {
+          "$ref": "#/definitions/ParameterBoolean"
+        },
+        {
+          "$ref": "#/definitions/ParameterTypeColor"
+        }
+      ]
+    },
+    "ParameterTypeColor": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "color"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ParameterTypeString": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "string"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ParameterValue": {
+      "type": [
+        "string",
+        "boolean"
+      ]
+    },
+    "ParameterValues": {
+      "additionalProperties": {
+        "$ref": "#/definitions/ParameterValue"
+      },
+      "type": "object"
+    },
+    "QualifiedTypeName": {
+      "additionalProperties": false,
+      "description": "Used when refererring to types that are defined other languages.",
+      "properties": {
+        "languageName": {
+          "type": "string"
+        },
+        "typeName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "typeName",
+        "languageName"
+      ],
+      "type": "object"
+    },
+    "QueryPreviewComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays (limited) results of SQL-queries",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "query-preview"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "ReferenceableTraits": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "applyMode": {
+            "enum": [
+              "shallowMerge",
+              "deepMerge",
+              "replace"
+            ],
+            "type": "string"
+          },
+          "instructions": {
+            "additionalProperties": false,
+            "description": "Make all properties in T optional",
+            "properties": {
+              "allowWrap": {
+              },
+              "attributeMapping": {
+              },
+              "between": {
+              },
+              "breakAfter": {
+              },
+              "generateDropTargets": {
+              },
+              "generateErrorIndicator": {
+              },
+              "onDrop": {
+              },
+              "orientation": {
+              },
+              "readOnly": {
+              },
+              "style": {
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "instructions",
+          "applyMode"
+        ],
+        "type": "object"
+      },
+      "type": "object"
+    },
+    "ReferenceableTypeInstructionsDescription": {
+      "$ref": "#/definitions/InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__",
+      "description": "Type instructions that may contain references."
+    },
+    "ScopeTraitAdd": {
+      "additionalProperties": false,
+      "properties": {
+        "attributes": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "blocks": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "traits": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "traits"
+      ],
+      "type": "object"
+    },
+    "SidebarBlockDescription": {
+      "additionalProperties": false,
+      "description": "Describes how the available types should be represented in the sidebar.\nIt is perfectly fine to have multiple sidebar descriptions for the\nsame underlying type.",
+      "properties": {
+        "defaultNode": {
+          "$ref": "#/definitions/NodeDescription",
+          "description": "This description will be instanciated every time an \"empty\" node\nis needed. This happens e.g. when the user starts dragging this\nblock from the sidebar."
+        },
+        "displayName": {
+          "description": "The name to be displayed in the sidebar",
+          "type": "string"
+        }
+      },
+      "required": [
+        "displayName",
+        "defaultNode"
+      ],
+      "type": "object"
+    },
+    "SidebarDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/FixedBlocksSidebarDescription"
+        },
+        {
+          "$ref": "#/definitions/DatabaseSchemaSidebarDescription"
+        }
+      ],
+      "description": "All possible sidebar types"
+    }
+  }
+}

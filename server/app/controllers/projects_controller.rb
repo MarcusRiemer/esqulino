@@ -10,6 +10,14 @@ class ProjectsController < ApplicationController
     render json: Project.only_public.map{|p| p.to_list_api_response}
   end
 
+  # Retrieves all information about a single project. This is the only
+  # request the client will make to retrieve the *whole* project with
+  # *everything* that is required to render it properly.
+  def show
+    project = Project.full.find_by!(slug: params[:project_id])
+    render json: project.to_full_api_response
+  end
+
   # Apart from creating the database object this action also needs to
   # set up the directory layout for project assets that are stored
   # on the disk. Thankfully the Project-model takes care of the whole
@@ -22,14 +30,6 @@ class ProjectsController < ApplicationController
     else
       render :json => { 'errors' => project.errors }, :status => 400
     end
-  end
-
-  # Retrieves all information about a single project. This is the only
-  # request the client will make to retrieve the *whole* project with
-  # *everything* that is required to render it properly.
-  def show
-    project = Project.full.find_by(slug: params[:project_id])
-    render json: project.to_full_api_response
   end
 
   # Update an existing project.

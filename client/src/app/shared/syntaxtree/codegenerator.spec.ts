@@ -1,5 +1,5 @@
-import { CodeGenerator, NodeConverterRegistration, CodeGeneratorProcess } from './codegenerator'
-import { Node, NodeDescription, Tree } from './syntaxtree'
+import { CodeGenerator } from './codegenerator'
+import { Tree } from './syntaxtree'
 
 describe('Codegeneration', () => {
   it('Converters are registered correctly', () => {

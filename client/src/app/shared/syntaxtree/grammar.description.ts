@@ -7,6 +7,16 @@ import { QualifiedTypeName } from './syntaxtree.description'
 export type NodeTypeDescription = NodeConcreteTypeDescription | NodeOneOfTypeDescription;
 
 /**
+ * Creates a possibility to define multiple NodeTypes as alternatives
+ * to each other *without* introducing an artificial node type. This
+ * is helpful for e.g. the root node or when using recursive definitions.
+ */
+export interface NodeOneOfTypeDescription {
+  type: "oneOf";
+  oneOf: TypeReference[];
+}
+
+/**
  * This is the basic description to introduce a new type for
  * any kind of node. If you are familiar with schema languages
  * like XML-Schema, JSON-Schema, NG-Relax, ... this will be
@@ -32,7 +42,9 @@ export type NodeTypeDescription = NodeConcreteTypeDescription | NodeOneOfTypeDes
  *
  * The actual attributes of this node (properties or children) are stored
  * as a list because the order does matter during string serialization
- * or automatic UI generation.
+ * or automatic UI generation. And whilst syntactic terminal symbols are
+ * not actually required at all when validating a tree, they are meaningful
+ * for the automation process.
  */
 export interface NodeConcreteTypeDescription {
   type: "concrete";
@@ -42,7 +54,19 @@ export interface NodeConcreteTypeDescription {
 /**
  * Attributes of a node are either properties or children.
  */
-export type NodeAttributeDescription = NodePropertyTypeDescription | NodeChildrenGroupDescription;
+export type NodeAttributeDescription =
+  NodePropertyTypeDescription
+  | NodeChildrenGroupDescription
+  | NodeTerminalSymbolDescription;
+
+/**
+ * A terminal symbol that would be expected.
+ */
+export interface NodeTerminalSymbolDescription {
+  type: "terminal";
+  name: string;
+  symbol: string;
+}
 
 /**
  * Properties are used for atomic values and may be optional.
@@ -51,16 +75,6 @@ export type NodePropertyTypeDescription =
   NodePropertyBooleanDescription |
   NodePropertyIntegerDescription |
   NodePropertyStringDescription;
-
-/**
- * Creates a possibility to define multiple NodeTypes as alternatives
- * to each other *without* introducing an artificial node type. This
- * is helpful for e.g. the root node or when using recursive definitions.
- */
-export interface NodeOneOfTypeDescription {
-  type: "oneOf";
-  oneOf: TypeReference[];
-}
 
 /**
  * Simple strings are used to refer to local types that share the
@@ -197,6 +211,7 @@ export interface NodeTypesSequenceDescription {
   type: "sequence"
   name: string
   nodeTypes: NodeTypesChildReference[]
+  between?: NodeTerminalSymbolDescription
 }
 
 /**
@@ -207,6 +222,7 @@ export interface NodeTypesAllowedDescription {
   type: "allowed"
   name: string
   nodeTypes: NodeTypesChildReference[]
+  between?: NodeTerminalSymbolDescription
 }
 
 /**
@@ -236,6 +252,9 @@ export interface GrammarListDescription {
 
   // The name of the language
   name: string
+
+  // The name of the programming language this grammar implements
+  programmingLanguageId: string
 
   // The possible slug for URL usage
   slug?: string
@@ -317,4 +336,11 @@ export function isNodePropertyStringDesciption(obj: any): obj is NodePropertyStr
  */
 export function isNodePropertyBooleanDesciption(obj: any): obj is NodePropertyBooleanDescription {
   return (obj instanceof Object && obj.base === "boolean");
+}
+
+/**
+ * @return True, if the given instance probably satisfies "NodePropertyIntegerDescription"
+ */
+export function isNodePropertyIntegerDesciption(obj: any): obj is NodePropertyBooleanDescription {
+  return (obj instanceof Object && obj.base === "integer");
 }

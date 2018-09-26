@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Grammar, type: :model do
   context "name" do
-    it "rejects an missing name" do
+    it "rejects a missing name" do
       res = FactoryBot.build(:grammar, name: nil)
 
       res.validate

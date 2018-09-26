@@ -1,15 +1,23 @@
 --- !ruby/object:ProjectDatabase
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromUser
   name: project_id
   value_before_type_cast: 32056357-a38a-4258-9046-b8814cc35a55
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 32056357-a38a-4258-9046-b8814cc35a55
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: 32056357-a38a-4258-9046-b8814cc35a55
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: default
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: ca22b86c-b1a6-4420-a91a-c222110bb0e1
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "article", "columns": [{"name": "article_id",
     "type": "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value":
@@ -26,10 +34,10 @@ concise_attributes:
     "date", "type": "INTEGER", "index": 4, "primary": false, "not_null": true, "dflt_value":
     null}], "foreign_keys": [{"references": [{"to_table": "article", "to_column":
     "article_id", "from_column": "article_id"}]}]}]'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-26 10:26:54.527608'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2018-02-26 10:27:29.1439'
 new_record: false

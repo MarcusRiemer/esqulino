@@ -1,0 +1,15 @@
+{
+  "name": "g9",
+  "root": "n1",
+  "types": {
+    "n1": {
+      "attributes": [
+        {
+          "type": "terminal",
+          "name": "req",
+          "symbol": "i am required"          
+        }
+      ]
+    }
+  }
+}

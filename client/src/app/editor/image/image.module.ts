@@ -33,7 +33,7 @@ export class ImageEditorModule {
     });
   }
 
-  constructor(reg: RegistrationService) {
+  constructor(_: RegistrationService) {
     console.log("Registering ImageEditor ...");
 
     console.log("Registered ImageEditor!");

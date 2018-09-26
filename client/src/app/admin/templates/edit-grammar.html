@@ -1,6 +1,15 @@
-<form *ngIf="(grammar | async); let grammar">
-  <h2>Grammar <q>{{ grammar.name }}</q></h2>
+<form *ngIf="grammar">
+  <h2>Grammatik <q>{{ grammar.name }}</q></h2>
 
+  <div class="form-group row">
+    <div class="col-sm-2">
+      <button (click)="onSave()"
+              class="btn btn-primary btn-block">
+        Speichern
+      </button>
+    </div>
+  </div>
+  
   <!-- Editable name of the grammar -->
   <div class="form-group row">
     <label for="grammar-name"
@@ -13,26 +22,57 @@
     </div>
   </div>
 
-  <!-- Editable model -->
+  <!-- Related block languages -->
   <div class="form-group row">
-    <label for="grammar-model"
-           class="col-sm-2 col-form-label">Types</label>
+    <div class="col-sm-2">Related Block Languages</div>
     <div class="col-sm-10">
-      <textarea id="grammar-model"
-                class="form-control"
-                rows="20"
-                [textContent]="grammar.types | json"
-                disabled>
-      </textarea>
+      <ul class="list-inline">
+        <li *ngFor="let related of relatedBlockLanguages?.value | async"
+            class="list-inline-item">
+          <a [routerLink]="['/admin/block-language', related.id]"
+             class="badge badge-light">
+            {{ related.name }}
+          </a>
+        </li> 
+      </ul>
     </div>
   </div>
 
-  <div class="form-group row">
-    <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary" disabled>Speichern</button>
+  <!-- Showing model and pretty printed representation side by side -->
+  <div class="row">
+    <!-- Editable types -->
+    <div class="col-xl-6">
+      <div class="form-group row">
+        <div class="col-sm-2">
+          <label for="grammar-model"
+                 class="col-form-label">Types</label>
+        </div>
+        <div class="col-sm-10">
+          <div *ngIf="!typesSynced"
+               class="alert alert-danger"
+               role="alert">
+            <code>JSON</code>-Struktur ist ungültig und kann daher nicht gespeichert werden.
+          </div>
+          <json-editor [(jsonValue)]="grammar.types"
+                       class="full-height">
+          </json-editor>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Pretty printed grammar (not editable) -->
+    <div class="col-xl-6">
+      <div class="form-group row">
+        <label for="grammar-pretty"
+               class="col-form-label col-sm-2">Pretty Printed</label>
+        <div class="col-sm-10">
+          <textarea id="grammar-pretty"
+                    readonly
+                    class="form-control full-height"
+                    rows="20"
+                    [textContent]="prettyPrintedGrammar"></textarea>
+        </div>
+      </div>
     </div>
   </div>
-
-  <!-- Pretty printed grammar -->
-  <pre><code [textContent]="prettyPrintedGrammar | async"></code></pre>
 </form>

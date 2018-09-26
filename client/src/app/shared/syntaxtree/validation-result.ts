@@ -12,7 +12,7 @@ export enum ErrorCodes {
   UnexpectedType = "UNEXPECTED_TYPE",
   // A node with a transient type was detected
   TransientNode = "TRANSIENT_NODE",
-  // A specifi child was expected, but simply did not exist
+  // A specified child was expected, but simply did not exist
   MissingChild = "MISSING_CHILD",
   // A specific child was entirely unexpected
   SuperflousChild = "SUPERFLOUS_CHILD",
@@ -81,7 +81,7 @@ export type ErrorData =
  * error code and the node location. The attached data may be used to to display
  * some helpful hints.
  */
-interface ValidationError {
+export interface ValidationError {
   code: string;
   node: AST.Node;
   data?: ErrorData;
@@ -125,10 +125,16 @@ export function printableError(e: ValidationError) {
 }
 
 /**
- * Used during validation to accumulate validation results.
+ * Used during validation to accumulate validation results. Additionaly
+ * provides some extra data that may be relevant during validation.
  */
 export class ValidationContext {
   private _errors: ValidationError[] = [];
+
+  constructor(
+    public additional: Readonly<any> = {}
+  ) {
+  }
 
   addError(code: ErrorCodes | string, node: AST.Node, data: ErrorData = undefined) {
     this._errors.push({ code: code, node: node, data: data });
@@ -149,6 +155,15 @@ export class ValidationResult {
 
   constructor(context: ValidationContext) {
     this._errors = context.errors;
+  }
+
+  /**
+   * @return All errors that happened on the given node.
+   */
+  getErrorsOn(node: AST.Node) {
+    return (
+      this._errors.filter(e => e.node === node)
+    );
   }
 
   get isValid() {

@@ -1,7 +1,7 @@
-import { CodeGenerator, NodeConverterRegistration, CodeGeneratorProcess } from '../codegenerator'
+import { CodeGenerator } from '../codegenerator'
 import { Tree, Node, NodeDescription } from '../syntaxtree'
 import { Validator } from '../validator'
-import { ValidationResult, ErrorCodes, printableError } from '../validation-result'
+import { printableError } from '../validation-result'
 
 import { NODE_CONVERTER_ERUBY, NODE_CONVERTER_LIQUID } from './dxml.codegenerator'
 import { GRAMMAR_DESCRIPTION } from './dxml.grammar'
@@ -249,11 +249,11 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
 
     const codeGen = new CodeGenerator(NODE_CONVERTER_ERUBY);
     const result = codeGen.emit(ast);
-    expect(result).toEqual(`<root>\nRoot-Text\n</root>`);
+    expect(result).toEqual(`<root>\n  Root-Text\n</root>`);
 
     const dom = parseDom(result);
     expect(dom.documentElement.localName).toEqual(astDesc.properties['name']);
-    expect(dom.documentElement.textContent).toEqual("\nRoot-Text\n");
+    expect(dom.documentElement.textContent).toEqual("\n  Root-Text\n");
   });
 
   it(`<root><%= var_name %></root>`, () => {
@@ -294,12 +294,12 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_ERUBY);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n<%= var_name %>\n</root>`);
+      expect(result).toEqual(`<root>\n  <%= var_name %>\n</root>`);
     }
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_LIQUID);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n{{ var_name }}\n</root>`);
+      expect(result).toEqual(`<root>\n  {{ var_name }}\n</root>`);
     }
   });
 
@@ -351,12 +351,12 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_ERUBY);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n<% if var_name %>\nRoot-Text\n<% end %>\n</root>`);
+      expect(result).toEqual(`<root>\n  <% if var_name %>\n  Root-Text\n  <% end %>\n</root>`);
     }
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_LIQUID);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n{% if var_name %}\nRoot-Text\n{% end %}\n</root>`);
+      expect(result).toEqual(`<root>\n  {% if var_name %}\n  Root-Text\n  {% end %}\n</root>`);
     }
   });
 
@@ -414,12 +414,12 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_ERUBY);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n<% if var_name %>\n<c1></c1>\n<c2></c2>\n<% end %>\n</root>`);
+      expect(result).toEqual(`<root>\n  <% if var_name %>\n  <c1></c1>\n  <c2></c2>\n  <% end %>\n</root>`);
     }
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_LIQUID);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n{% if var_name %}\n<c1></c1>\n<c2></c2>\n{% end %}\n</root>`);
+      expect(result).toEqual(`<root>\n  {% if var_name %}\n  <c1></c1>\n  <c2></c2>\n  {% end %}\n</root>`);
     }
   });
 
@@ -487,12 +487,12 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_ERUBY);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n<% if var_name == var_name %>\n<% end %>\n</root>`);
+      expect(result).toEqual(`<root>\n  <% if var_name == var_name %>\n  <% end %>\n</root>`);
     }
     {
       const codeGen = new CodeGenerator(NODE_CONVERTER_LIQUID);
       const result = codeGen.emit(ast);
-      expect(result).toEqual(`<root>\n{% if var_name == var_name %}\n{% end %}\n</root>`);
+      expect(result).toEqual(`<root>\n  {% if var_name == var_name %}\n  {% end %}\n</root>`);
     }
   });
 });

@@ -1,7 +1,7 @@
-import { CodeGenerator, NodeConverterRegistration, CodeGeneratorProcess } from '../codegenerator'
+import { CodeGenerator } from '../codegenerator'
 import { Node, NodeDescription, Tree } from '../syntaxtree'
 import { Validator } from '../validator'
-import { ValidationResult, ErrorCodes, printableError } from '../validation-result'
+import { printableError } from '../validation-result'
 
 import { GRAMMAR_DESCRIPTION } from './css.grammar'
 import { NODE_CONVERTER } from './css.codegenerator'

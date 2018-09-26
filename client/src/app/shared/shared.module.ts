@@ -6,8 +6,13 @@ import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 
 import { PortalModule } from '@angular/cdk/portal';
+import {
+  MatToolbarModule, MatButtonModule, MatMenuModule, MatTooltipModule
+} from '@angular/material'
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AnalyticsService } from './analytics.service';
+import { DefaultValuePipe } from './default-value.pipe'
 import { FlashMessageListComponent } from './flash.component';
 import { FlashService } from './flash.service';
 import { ProjectDescriptionService } from './project.description.service';
@@ -15,13 +20,21 @@ import { LanguageService } from './language.service';
 import { ServerApiService } from './serverapi.service';
 import { ServerDataService } from './server-data.service'
 import { VideoService } from './video.service';
+import { ToolbarComponent } from './toolbar.component'
+import { ToolbarService } from './toolbar.service'
+
+const materialModules = [
+  MatToolbarModule, MatButtonModule, MatMenuModule, MatTooltipModule
+]
 
 /**
- * Bundles facilities that are used all over esqulino, no matter
+ * Bundles facilities that are used all over the app, no matter
  * what the exact domain is. This basically boils down to:
  * 
  * - User specific data and authentication
  * - Logging and error handling 
+ * - Helper utilities
+ * - General Components (own and third party)
  */
 @NgModule({
   imports: [
@@ -31,9 +44,13 @@ import { VideoService } from './video.service';
     HttpModule,
     HttpClientModule,
     PortalModule,
+    FlexLayoutModule,
+    ...materialModules
   ],
   declarations: [
+    DefaultValuePipe,
     FlashMessageListComponent,
+    ToolbarComponent,
   ],
   exports: [
     CommonModule,
@@ -41,8 +58,12 @@ import { VideoService } from './video.service';
     RouterModule,
     HttpModule,
     PortalModule,
+    FlexLayoutModule,
+    ...materialModules,
 
+    ToolbarComponent,
     FlashMessageListComponent,
+    DefaultValuePipe,
   ]
 })
 export class SharedAppModule {
@@ -57,6 +78,7 @@ export class SharedAppModule {
         ProjectDescriptionService,
         VideoService,
         LanguageService,
+        ToolbarService,
       ]
     });
   }

@@ -1,9 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { ProjectService, Project } from '../project.service'
-import { SidebarService } from '../sidebar.service'
-import { ToolbarService } from '../toolbar.service'
 
 import { first } from 'rxjs/operators';
 

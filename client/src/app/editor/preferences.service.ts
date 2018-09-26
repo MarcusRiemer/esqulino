@@ -1,6 +1,6 @@
 import { Observable, BehaviorSubject, of } from 'rxjs'
 
-import { Injectable, OnInit } from '@angular/core'
+import { Injectable } from '@angular/core'
 
 /**
  * The order the sidepanes should appear in.

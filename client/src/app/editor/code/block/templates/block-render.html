@@ -3,6 +3,16 @@
   <span *ngSwitchCase="'constant'" [blockBase]="visual">{{ asBlockConstant(visual).text }}</span>
   <!-- Show a value that is derived from the property of a node -->
   <span *ngSwitchCase="'interpolated'" [blockBase]="visual">{{ node.properties[asBlockInterpolated(visual).property] }}</span>
+
+  <!-- Allowing the user to edit a value -->
+  <ng-container *ngSwitchCase="'error'">
+    <editor-block-render-error [codeResource]="codeResource"
+                               [node]="node"
+                               [visual]="visual">
+    </editor-block-render-error>
+  </ng-container>
+  
+  <!-- Allowing the user to edit a value -->
   <ng-container *ngSwitchCase="'input'">
     <editor-block-render-input [codeResource]="codeResource"
                                [node]="node"

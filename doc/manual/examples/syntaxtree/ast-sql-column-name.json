@@ -1,0 +1,8 @@
+{
+  "name":"columnName",
+  "language":"sql",
+  "properties": {
+    "columnName":"Geschichte_ID",
+    "refTableName":"Geschichte"
+  }
+}

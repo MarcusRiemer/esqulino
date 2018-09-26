@@ -1,6 +1,8 @@
-<span class="block-container center delete"
+<div [@animationState]="animationState | async"
+      (dragenter)="mouseEnter()"
+      (dragleave)="mouseLeave()"
       (dragover)="onTrashDrag($event)"
-      (drop)="onTrashDrop($event)"
-      [hidden]="!(isTrashShown | async)">
-  <span class="fa fa-trash fa-2x"></span>
-</span>
+      (drop)="onTrashDrop($event)">
+  <!-- <span class="fa fa-trash"></span> -->
+  🗑️
+</div>

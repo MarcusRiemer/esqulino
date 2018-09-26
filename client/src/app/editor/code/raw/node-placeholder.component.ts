@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Node, NodeLocation } from '../../../shared/syntaxtree';
+import { NodeLocation } from '../../../shared/syntaxtree';
 import { arrayEqual } from '../../../shared/util';
 
 import { DragService } from '../../drag.service';

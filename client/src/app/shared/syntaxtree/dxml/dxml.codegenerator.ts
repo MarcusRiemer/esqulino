@@ -31,8 +31,10 @@ const NODE_CONVERTER_BASE: NodeConverterRegistration[] = [
         attributes.forEach(attr => process.generateNode(attr));
         process.addConvertedFragment(`>`, node, closeEndSep);
 
-        // Let the possible children render themselves. 
-        childElements.forEach(c => process.generateNode(c));
+        // Let the possible children render themselves.
+        process.indent(() => {
+          childElements.forEach(c => process.generateNode(c));
+        });
 
         process.addConvertedFragment(`</${name}>`, node, openEndSep);
         return ([]);
@@ -94,7 +96,7 @@ export const NODE_CONVERTER_ERUBY = [
       typeName: "expr"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(_node: Node, _process: CodeGeneratorProcess) {
       }
     }
   },
@@ -195,7 +197,7 @@ export const NODE_CONVERTER_LIQUID = [
       typeName: "expr"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(_node: Node, _process: CodeGeneratorProcess) {
       }
     }
   },
