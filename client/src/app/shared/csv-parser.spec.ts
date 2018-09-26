@@ -3,27 +3,27 @@ import * as c from './csv-parser'
 describe('Util: CSV Parser', () => {
 
   const CSV_STRING = ('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
-                    + '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst\r\n'
-                    + '2,Sport,Französisch,Geschichte,Sport,Geschichte\r\n'
-                    + '3,Sport,"Religion (ev, kath)",Kunst,Mathe,Kunst');
+    + '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst\r\n'
+    + '2,Sport,Französisch,Geschichte,Sport,Geschichte\r\n'
+    + '3,Sport,"Religion (ev, kath)",Kunst,Mathe,Kunst');
 
-  const ROWS_ONLY = ['Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag', 
-                     '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst',
-                     '2,Sport,Französisch,Geschichte,Sport,Geschichte',
-                     '3,Sport,"Religion (ev, kath)",Kunst,Mathe,Kunst'];
+  const ROWS_ONLY = ['Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag',
+    '1,Mathematik,Deutsch,Englisch,Mathematik,Kunst',
+    '2,Sport,Französisch,Geschichte,Sport,Geschichte',
+    '3,Sport,"Religion (ev, kath)",Kunst,Mathe,Kunst'];
 
   const CSV_TO_ARRAY = [['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'],
-                        ['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
-                        ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
-                        ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', 'Mathe', 'Kunst']];
+  ['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
+  ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
+  ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', 'Mathe', 'Kunst']];
 
   const HEADER = ['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
 
   const TABLE = [['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
-                 ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
-                 ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', 'Mathe', 'Kunst']];
+  ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
+  ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', 'Mathe', 'Kunst']];
 
-  const CSV_AS_JSON = { 
+  const CSV_AS_JSON = {
     'rows':
       [
         {
@@ -54,9 +54,9 @@ describe('Util: CSV Parser', () => {
   }
 
 
-  /* ---------- Successful Parse Tests ---------- */ 
+  /* ---------- Successful Parse Tests ---------- */
 
-  /* ----- splitStringToRows Function ----- */ 
+  /* ----- splitStringToRows Function ----- */
 
   it('Split String To Rows Easy', () => {
     const row = c.splitStringToRows('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag');
@@ -121,36 +121,36 @@ describe('Util: CSV Parser', () => {
 
   it('Convert Arrays To JSON Easy', () => {
     const data = [['1'],
-                  ['2'],
-                  ['3']];
+    ['2'],
+    ['3']];
     const header = ['Stunde'];
-    const result = { 
-                      'rows':
-                        [
-                          {
-                            'Stunde': '1'
-                          },
-                          {
-                            'Stunde': '2'
-                          },
-                          {
-                            'Stunde': '3'
-                          }
-                        ]
+    const result = {
+      'rows':
+        [
+          {
+            'Stunde': '1'
+          },
+          {
+            'Stunde': '2'
+          },
+          {
+            'Stunde': '3'
+          }
+        ]
     }
     const JSONData = c.convertArraysToJSON(data, header, true);
     expect(JSONData).toEqual(result);
   });
 
-    it('Convert Arrays To JSON Medium', () => {
+  it('Convert Arrays To JSON Medium', () => {
     const data = [['1', 'Mathematik', 'Deutsch', 'Englisch', 'Mathematik', 'Kunst'],
-                  ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
-                  ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', 'Mathe', 'Kunst']];
+    ['2', 'Sport', 'Französisch', 'Geschichte', 'Sport', 'Geschichte'],
+    ['3', 'Sport', 'Religion (ev, kath)', 'Kunst', 'Mathe', 'Kunst']];
     const header = ['Stunde', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
     const JSONData = c.convertArraysToJSON(data, header, true);
     expect(JSONData).toEqual(CSV_AS_JSON);
   });
-  
+
   it('Convert Arrays To JSON Hard', () => {
     const JSONData = c.convertArraysToJSON(CSV_TO_ARRAY, [], false);
     expect(JSONData).toEqual(CSV_AS_JSON);
@@ -173,70 +173,70 @@ describe('Util: CSV Parser', () => {
   /* ----- One Different Column Count ----- */
 
   let Table = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
-             + '1,Mathematik,Kunst'); // 3 Cols
+    + '1,Mathematik,Kunst'); // 3 Cols
 
-  let Errors = 
-  [
-    {
-      line: 2,
-      data: 
+  let Errors: c.ValidationError[] =
+    [
       {
-        type: "wrongColumnCount",
-        information: "Expected column count to match with first line in file",
-        count: 3,
-        expected: 5
+        line: 2,
+        data:
+        {
+          type: "wrongColumnCount",
+          information: "Expected column count to match with first line in file",
+          count: 3,
+          expected: 5
+        }
       }
-    }
-  ]
-  
+    ]
+
   it('One Different Column Count', () => {
     const result = c.convertCSVStringToArray(Table, [','], '"');
     expect(result).toEqual({
       type: "parseError",
-	    errors: Errors
+      errors: Errors
     });
   });
 
   /* ----- Multiple Different Column Counts ----- */
 
   Table = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
-         + '1,Mathematik,Kunst\r\n' // 3 Cols
-         + '2,Sport,Geschichte,Sport,Geschichte,Sport\r\n' // 6 Cols
-         + 'x,"Religion (ev, kath)",x'); // 3 Cols
+    + '1,Mathematik,Kunst\r\n' // 3 Cols
+    + '2,Sport,Geschichte,Sport,Geschichte,Sport\r\n' // 6 Cols
+    + 'x,"Religion (ev, kath)",x'); // 3 Cols
 
-  Errors = 
-  [
-    {
-      line: 2,
-      data: 
+  Errors =
+    [
       {
-        type: "wrongColumnCount",
-        information: "Expected column count to match with first line in file",
-        count: 3,
-        expected: 5
-      }
-    },
-    {
-      line: 3,
-      data: 
+        line: 2,
+        data:
+        {
+          type: "wrongColumnCount",
+          information: "Expected column count to match with first line in file",
+          count: 3,
+          expected: 5
+        }
+      },
       {
-        type: "wrongColumnCount",
-        information: "Expected column count to match with first line in file",
-        count: 6,
-        expected: 5
-      }
-    },
-    {
-      line: 4,
-      data: 
+        line: 3,
+        data:
+        {
+          type: "wrongColumnCount",
+          information: "Expected column count to match with first line in file",
+          count: 6,
+          expected: 5
+        }
+      },
       {
-        type: "wrongColumnCount",
-        information: "Expected column count to match with first line in file",
-        count: 3,
-        expected: 5
+        line: 4,
+        data:
+        {
+          type: "wrongColumnCount",
+          information: "Expected column count to match with first line in file",
+          count: 3,
+          expected: 5
+        }
       }
-    }
-  ]
+    ]
 
   it('Multiple Different Column Counts', () => {
     const result = c.convertCSVStringToArray(Table, [','], '"');
@@ -249,34 +249,34 @@ describe('Util: CSV Parser', () => {
   /* ----- Different And Same Column Counts ----- */
 
   Table = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
-         + '1,Mathematik,Kunst, Sport, Englisch, Sport\r\n' // 6 Cols
-         + '2,Sport,Geschichte,Sport,Geschichte\r\n' // 5 Cols
-         + 'x,"Religion (ev, kath)",x'); // 3 Cols
+    + '1,Mathematik,Kunst, Sport, Englisch, Sport\r\n' // 6 Cols
+    + '2,Sport,Geschichte,Sport,Geschichte\r\n' // 5 Cols
+    + 'x,"Religion (ev, kath)",x'); // 3 Cols
 
-  Errors = 
-  [
-    {
-      line: 2,
-      data: 
+  Errors =
+    [
       {
-        type: "wrongColumnCount",
-        information: "Expected column count to match with first line in file",
-        count: 6,
-        expected: 5
-      }
-    },
-    {
-      line: 4,
-      data: 
+        line: 2,
+        data:
+        {
+          type: "wrongColumnCount",
+          information: "Expected column count to match with first line in file",
+          count: 6,
+          expected: 5
+        }
+      },
       {
-        type: "wrongColumnCount",
-        information: "Expected column count to match with first line in file",
-        count: 3,
-        expected: 5
+        line: 4,
+        data:
+        {
+          type: "wrongColumnCount",
+          information: "Expected column count to match with first line in file",
+          count: 3,
+          expected: 5
+        }
       }
-    }
-  ]
-  
+    ]
+
   it('Different And Same Column Counts', () => {
     const result = c.convertCSVStringToArray(Table, [','], '"');
     expect(result).toEqual({
@@ -288,34 +288,34 @@ describe('Util: CSV Parser', () => {
   /* ----- Empty Lines ----- */
 
   Table = ('Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n' // 5 Cols
-         + '\r\n' // 1 Cols
-         + '2,Sport,Geschichte,Sport,Geschichte\r\n' // 5 Cols
-         + '   '); // 1 Col
+    + '\r\n' // 1 Cols
+    + '2,Sport,Geschichte,Sport,Geschichte\r\n' // 5 Cols
+    + '   '); // 1 Col
 
-  Errors = 
-  [
-    {
-      line: 2,
-      data: 
+  Errors =
+    [
       {
-        type: "wrongColumnCount",
-        information: "Expected column count to match with first line in file",
-        count: 1,
-        expected: 5
-      }
-    },
-    {
-      line: 4,
-      data: 
+        line: 2,
+        data:
+        {
+          type: "wrongColumnCount",
+          information: "Expected column count to match with first line in file",
+          count: 1,
+          expected: 5
+        }
+      },
       {
-        type: "wrongColumnCount",
-        information: "Expected column count to match with first line in file",
-        count: 1,
-        expected: 5
+        line: 4,
+        data:
+        {
+          type: "wrongColumnCount",
+          information: "Expected column count to match with first line in file",
+          count: 1,
+          expected: 5
+        }
       }
-    }
-  ]
-  
+    ]
+
   it('Empty Lines', () => {
     const result = c.convertCSVStringToArray(Table, [','], '"');
     expect(result).toEqual({
@@ -331,8 +331,8 @@ describe('Util: CSV Parser', () => {
     const result = c.splitRowToCols(line, [','], '"', 4);
     expect(result).toEqual({
       type: "markerNotClosed",
-			information: "The selected marker was opened but not closed",
-			fragment: "Freitag"
+      information: "The selected marker was opened but not closed",
+      fragment: "Freitag"
     });
   });
 
@@ -340,31 +340,31 @@ describe('Util: CSV Parser', () => {
 
   it('Marker Not Closed In Mutliple Lines', () => {
     const table = ('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
-                    + '1,Mathematik,"Deutsch,Englisch",Mathematik,Kunst, Kunst\r\n'
-                    + '2,Sport,Französisch",Geschichte,Sport,Geschichte\r\n'
-                    + '3,S"po"rt,"Religion (ev, kath),Kunst,,Kunst');
+      + '1,Mathematik,"Deutsch,Englisch",Mathematik,Kunst, Kunst\r\n'
+      + '2,Sport,Französisch",Geschichte,Sport,Geschichte\r\n'
+      + '3,S"po"rt,"Religion (ev, kath),Kunst,,Kunst');
 
-    const errors = 
-    [
-      {
-        line: 3,
-        data: 
+    const errors: c.ValidationError[] =
+      [
         {
-          type: "markerNotClosed",
-          information: "The selected marker was opened but not closed",
-          fragment: ",Geschichte,Sport,Geschichte"
-        }
-      },
-      {
-        line: 4,
-        data: 
+          line: 3,
+          data:
+          {
+            type: "markerNotClosed",
+            information: "The selected marker was opened but not closed",
+            fragment: ",Geschichte,Sport,Geschichte"
+          }
+        },
         {
-          type: "markerNotClosed",
-          information: "The selected marker was opened but not closed",
-          fragment: "Religion (ev, kath),Kunst,,Kunst"
+          line: 4,
+          data:
+          {
+            type: "markerNotClosed",
+            information: "The selected marker was opened but not closed",
+            fragment: "Religion (ev, kath),Kunst,,Kunst"
+          }
         }
-      }
-    ]
+      ]
 
     const result = c.convertCSVStringToArray(table, [','], '"');
     expect(result).toEqual({
@@ -377,31 +377,31 @@ describe('Util: CSV Parser', () => {
 
   it('Marker Not Closed With Escaped Markers', () => {
     const table = ('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
-                    + '1,Mathematik,\\"Deutsch,Englisch",Mathematik,Kunst, Kunst\r\n'
-                    + '2,Sport,Französisch,Geschichte,Sport,Geschichte\r\n'
-                    + '3,S"p\\"o"rt,"Religion (ev, kath)",\\"Kunst",,Kunst');
+      + '1,Mathematik,\\"Deutsch,Englisch",Mathematik,Kunst, Kunst\r\n'
+      + '2,Sport,Französisch,Geschichte,Sport,Geschichte\r\n'
+      + '3,S"p\\"o"rt,"Religion (ev, kath)",\\"Kunst",,Kunst');
 
-    const errors = 
-    [
-      {
-        line: 2,
-        data: 
+    const errors: c.ValidationError[] =
+      [
         {
-          type: "markerNotClosed",
-          information: "The selected marker was opened but not closed",
-          fragment: ",Mathematik,Kunst, Kunst"
-        }
-      },
-      {
-        line: 4,
-        data: 
+          line: 2,
+          data:
+          {
+            type: "markerNotClosed",
+            information: "The selected marker was opened but not closed",
+            fragment: ",Mathematik,Kunst, Kunst"
+          }
+        },
         {
-          type: "markerNotClosed",
-          information: "The selected marker was opened but not closed",
-          fragment: ",,Kunst"
+          line: 4,
+          data:
+          {
+            type: "markerNotClosed",
+            information: "The selected marker was opened but not closed",
+            fragment: ",,Kunst"
+          }
         }
-      }
-    ]
+      ]
 
     const result = c.convertCSVStringToArray(table, [','], '"');
     expect(result).toEqual({
@@ -414,41 +414,41 @@ describe('Util: CSV Parser', () => {
 
   it('Marker Not Closed And Wrong Column Counts', () => {
     const table = ('Stunde,Montag,Dienstag,Mittwoch,Donnerstag,Freitag\r\n'
-                    + '1,Mathematik,\\"Deutsch,Englisch",Mathematik,Kunst, Kunst\r\n'
-                    + '2,Sport,Sport,Geschichte\r\n'
-                    + '3,S"p\\"o"rt,"Religion (ev, kath)",\\"Kunst",,Kunst');
+      + '1,Mathematik,\\"Deutsch,Englisch",Mathematik,Kunst, Kunst\r\n'
+      + '2,Sport,Sport,Geschichte\r\n'
+      + '3,S"p\\"o"rt,"Religion (ev, kath)",\\"Kunst",,Kunst');
 
-    const errors = 
-    [
-      {
-        line: 2,
-        data: 
+    const errors: c.ValidationError[] =
+      [
         {
-          type: "markerNotClosed",
-          information: "The selected marker was opened but not closed",
-          fragment: ",Mathematik,Kunst, Kunst"
-        }
-      },
-      {
-        line: 3,
-        data: 
+          line: 2,
+          data:
+          {
+            type: "markerNotClosed",
+            information: "The selected marker was opened but not closed",
+            fragment: ",Mathematik,Kunst, Kunst"
+          }
+        },
         {
-          type: "wrongColumnCount",
-          information: "Expected column count to match with first line in file",
-          count: 4,
-          expected: 6
-        }
-      },
-      {
-        line: 4,
-        data: 
+          line: 3,
+          data:
+          {
+            type: "wrongColumnCount",
+            information: "Expected column count to match with first line in file",
+            count: 4,
+            expected: 6
+          }
+        },
         {
-          type: "markerNotClosed",
-          information: "The selected marker was opened but not closed",
-          fragment: ",,Kunst"
+          line: 4,
+          data:
+          {
+            type: "markerNotClosed",
+            information: "The selected marker was opened but not closed",
+            fragment: ",,Kunst"
+          }
         }
-      }
-    ]
+      ]
 
     const result = c.convertCSVStringToArray(table, [','], '"');
     expect(result).toEqual({
@@ -504,7 +504,7 @@ describe('Util: CSV Parser', () => {
     const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
-      header: ['"Stunde' ,'Montag"', 'x,y'],
+      header: ['"Stunde', 'Montag"', 'x,y'],
       table: []
     });
   });
@@ -514,7 +514,7 @@ describe('Util: CSV Parser', () => {
     const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
-      header: ['"Stunde' ,'Montag"x,y'],
+      header: ['"Stunde', 'Montag"x,y'],
       table: []
     });
   });
@@ -524,7 +524,7 @@ describe('Util: CSV Parser', () => {
     const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
-      header: ['Stunde' ,'Montag,x,y'],
+      header: ['Stunde', 'Montag,x,y'],
       table: []
     });
   });
@@ -534,7 +534,7 @@ describe('Util: CSV Parser', () => {
     const result = c.convertCSVStringToArray(line, [','], '"');
     expect(result).toEqual({
       type: "parseResult",
-      header: ['"S"t"u"nde' ,'Montag,x,y'],
+      header: ['"S"t"u"nde', 'Montag,x,y'],
       table: []
     });
   });

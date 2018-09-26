@@ -30,12 +30,12 @@ export class SchemaTableImportComponent implements OnInit {
   header: string[];
   table: string[][];
 
-  headlineUsage: "file" | "own";  
+  headlineUsage: "file" | "own";
   textMarker: '"' | "'";
 
   // Contains all currently used Delimiters
   currentDelimiters: string[];
-  
+
   /**
    * Used for dependency injection.
    */
@@ -45,7 +45,7 @@ export class SchemaTableImportComponent implements OnInit {
   }
 
 
-  ngOnInit() { 
+  ngOnInit() {
     this.disableSelection = true;
     this.disableHeadlineSelection = true;
 
@@ -65,67 +65,67 @@ export class SchemaTableImportComponent implements OnInit {
 
     this.schemaTables.forEach(function(table) {
       console.log(table['_columns'].length);
-    }); 
-      
+    });
+
   }
 
 
   changeListener(event): void {
-    this.handleDataUpload(event.target);    
+    this.handleDataUpload(event.target);
   }
 
   readUploadedFileAsText = (inputFile) => {
     const temporaryFileReader = new FileReader();
-  
+
     return new Promise((resolve, reject) => {
       temporaryFileReader.onerror = () => {
         temporaryFileReader.abort();
         reject(new DOMException("Problem parsing input file."));
       };
-  
+
       temporaryFileReader.onload = () => {
-        resolve(temporaryFileReader.result);   
+        resolve(temporaryFileReader.result);
       };
       temporaryFileReader.readAsText(inputFile);
-      
+
     });
   };
 
-  handleDataUpload = async(event) => {
+  handleDataUpload = async (event) => {
     const file = event.files[0];
-  
+
     try {
       // Wait until the File is read
       this.fileData = await this.readUploadedFileAsText(file);
       this.parseProcess();
-      
-    } catch(e) {      
-      console.warn(e.message);      
+
+    } catch (e) {
+      console.warn(e.message);
     }
   }
 
   parseProcess = () => {
     this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.textMarker);
-    
-    if (this.parse.type === 'parseResult') {   
-      this.header = (<Parser.CsvParseResult> this.parse).header;
-      this.table = (<Parser.CsvParseResult> this.parse).table;
+
+    if (this.parse.type === 'parseResult') {
+      this.header = (<Parser.CsvParseResult>this.parse).header;
+      this.table = (<Parser.CsvParseResult>this.parse).table;
 
       this.disableHeadlineSelection = false;
 
       this.mapColumns(this.header, this.getMostSuitableTable(this.header, this.schemaTables));
     } else if (this.parse.type === 'parseError') {
-      this.errors = (<Parser.CsvParseError> this.parse).errors;    
-      this.disableHeadlineSelection = true;  
+      this.errors = (<Parser.CsvParseError>this.parse).errors;
+      this.disableHeadlineSelection = true;
     }
 
-    this.disableSelection = false;  
+    this.disableSelection = false;
   }
 
   mapColumns(headline: string[], table) {
     this.selectedTableName = table._name;
     this.selectedTableColumns = table._columns;
-    
+
   }
 
   // Returns the most suitable table columns for a given headline
@@ -134,13 +134,13 @@ export class SchemaTableImportComponent implements OnInit {
 
     // Use the first with identical length
     lengthFilter = tables.filter(table => table['columns'].length === headline.length)[0];
-    
+
     // When no identical length availabe 
-    if (!lengthFilter.length) {      
-       //check for anything with lesser length
+    if (!lengthFilter.length) {
+      //check for anything with lesser length
       lengthFilter = tables.filter(table => table['columns'].length < headline.length);
       console.log("kleinere: ", lengthFilter);
-      
+
       // when more then one with lesser length
       if (lengthFilter.length > 1) {
         // use the max value
@@ -165,18 +165,18 @@ export class SchemaTableImportComponent implements OnInit {
 
   trackByFn(index: any, item: any) {
     return index;
- }
+  }
 
-  toggleHeadlineUsage() {    
+  toggleHeadlineUsage() {
     if (this.headlineUsage == "own") {
       // copy header instead of reference
       let headerCopy = this.header.slice();
       // set header copy as first table line  
       this.table.unshift(headerCopy);
       // empty current header
-      this.header = []; 
+      this.header = [];
       // use length of first table row
-      this.header.length = this.table[0].length;    
+      this.header.length = this.table[0].length;
     } else if (this.headlineUsage === "file") {
       // set first table row as header
       this.header = this.table.shift();
@@ -185,15 +185,15 @@ export class SchemaTableImportComponent implements OnInit {
 
 
   toggleDelimiter(delimiter: string) {
-    if(this.currentDelimiters.includes(delimiter)) {
+    if (this.currentDelimiters.includes(delimiter)) {
       this.currentDelimiters.splice(this.currentDelimiters.indexOf(delimiter), 1);
     } else {
       this.currentDelimiters.push(delimiter);
 
-    }  
-    if(this.fileData) {
+    }
+    if (this.fileData) {
       this.parseProcess();
-    }      
+    }
   }
 
   toggleSemicolon() {
@@ -213,9 +213,9 @@ export class SchemaTableImportComponent implements OnInit {
   }
 
   changeMarker() {
-    if(this.fileData) {
+    if (this.fileData) {
       this.parseProcess();
-    }  
+    }
   }
 
   save() {
