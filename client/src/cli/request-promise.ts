@@ -1,5 +1,4 @@
 import * as http from 'http'
-import * as https from 'https'
 import { URL } from 'url'
 
 /**
@@ -38,8 +37,6 @@ export function httpRequest<T>(url: URL, method: "GET" | "POST" | "PUT", body: a
     // at the exact same time, we introduce some kind of delay. This
     // function contains the code that is actually executed, but with delay.
     const impl = () => {
-      const lib = url.protocol === "https" ? https : http;
-
       // Build the complicated request options object
       // This is basicly the same as the URL + required headers + the method
       const options: http.RequestOptions = {

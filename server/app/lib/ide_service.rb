@@ -132,20 +132,47 @@ class MockIdeService < BaseIdeService
   end
 end
 
+# Wraps access to "the one" ide service instance (and does a bit of magic
+# because that instance may or may not be a mocked instance :/ Lets hope
+# this leaky mock abstraction does not interfere with more ...)
+#
+# If you want to mock ("haha") me: I am very aware that this is essentially
+# a singleton that does not always provide the exact same instance.
 module IdeService
+  @@mock_instance = MockIdeService.new
+
+  # The configuration that is currently in use
+  def self.live_config
+    Rails.configuration.sqlino.fetch("ide_service", Hash.new)
+  end
+  
+  # Retrieves an instance that may be mocked. Use this if the result
+  # of an IDE-service operation is not relevant for a testcase.
   def self.instance
-    @@ide_service_instance ||= instantiate
+    # The @@ide_service_instance may never be a MockIdeService, so
+    # we need to take special care to not assign it by accident
+    if live_config["mock"]
+      @@mock_instance
+    else
+      @@ide_service_instance ||= instantiate
+    end
+  end
+
+  # Retrieves an instance that may not be mocked. Use this **only** if the
+  # result of an IDE-service operation is relevant during a testcase.
+  def self.guaranteed_instance
+    @@ide_service_instance ||= instantiate(allow_mock: false)
   end
 
   # Creates the instance that is responsible for all requests to the ide service
-  def self.instantiate(service_config: nil)
-    service_config ||= Rails.configuration.sqlino.fetch("ide_service", Hash.new)
+  def self.instantiate(service_config: nil, allow_mock: true)
+    service_config ||= live_config
 
     # Mocking currently takes precedence about every other option. This is by
     # design to "override" the default configuration when running tests, but
     # its quite an ugly hack.
-    if service_config["mock"]
-      return MockIdeService.new
+    if allow_mock && service_config["mock"]
+      return @@mock_instance
     # Exec mode?
     elsif exec_config = service_config["exec"] then
       # Which kind of exec mode?

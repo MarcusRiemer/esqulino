@@ -31,4 +31,9 @@ module JsonSchemaHelper
       return body
     end
   end
+
+  # Returns the path the given schema would be found under
+  def schema_path(name)
+    @@json_schema_storage.schema_path(name)
+  end
 end

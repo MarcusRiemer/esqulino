@@ -1,0 +1,9 @@
+grammar "g12" {
+  node "n1" {
+    children sequence "c", between: "," ::= g12.n2* g12.n3*
+  }
+  node "n2" {
+  }
+  node "n3" {
+  }
+}

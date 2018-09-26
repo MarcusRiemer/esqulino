@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { Http, Response, RequestOptions, Headers } from '@angular/http'
 import { Router } from '@angular/router'
 
@@ -68,9 +68,6 @@ export class CreateProjectComponent {
    * Sends the current state of the the request to the server.
    */
   createProject() {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
     if (!this._currentRequest) {
       this._currentError = undefined;
 

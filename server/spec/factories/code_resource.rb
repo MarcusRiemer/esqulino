@@ -12,5 +12,106 @@ FactoryBot.define do
         code_resource.project.block_languages << code_resource.block_language
       end
     end
+
+    trait :sql_key_value_select_double do |query|
+      query.ast ({
+                   "name"=> "querySelect",
+                   "language"=> "sql",
+                   "children"=> {
+                     "from"=> [
+                       {
+                         "name"=> "from",
+                         "language"=> "sql",
+                         "children"=> {
+                           "tables"=> [
+                             {
+                               "name"=> "tableIntroduction",
+                               "language"=> "sql",
+                               "properties"=> {
+                                 "name"=> "key_value"
+                               }
+                             }
+                           ]
+                         }
+                       }
+                     ],
+                     "where"=> [
+                       {
+                         "name"=> "where",
+                         "language"=> "sql",
+                         "children"=> {
+                           "expressions"=> [
+                             {
+                               "name"=> "binaryExpression",
+                               "language"=> "sql",
+                               "children"=> {
+                                 "lhs"=> [
+                                   {
+                                     "name"=> "columnName",
+                                     "language"=> "sql",
+                                     "properties"=> {
+                                       "columnName"=> "key",
+                                       "refTableName"=> "key_value"
+                                     }
+                                   }
+                                 ],
+                                 "rhs"=> [
+                                   {
+                                     "name"=> "constant",
+                                     "language"=> "sql",
+                                     "properties"=> {
+                                       "value"=> "3"
+                                     }
+                                   }
+                                 ],
+                                 "operator"=> [
+                                   {
+                                     "name"=> "relationalOperator",
+                                     "language"=> "sql",
+                                     "properties"=> {
+                                       "operator"=> ">="
+                                     }
+                                   }
+                                 ]
+                               }
+                             }
+                           ]
+                         }
+                       }
+                     ],
+                     "select"=> [
+                       {
+                         "name"=> "select",
+                         "language"=> "sql",
+                         "children"=> {
+                           "columns"=> [
+                             {
+                               "name"=> "columnName",
+                               "language"=> "sql",
+                               "properties"=> {
+                                 "columnName"=> "key",
+                                 "refTableName"=> "key_value"
+                               }
+                             },
+                             {
+                               "name"=> "columnName",
+                               "language"=> "sql",
+                               "properties"=> {
+                                 "columnName"=> "value",
+                                 "refTableName"=> "key_value"
+                               }
+                             },
+                             {
+                               "name"=> "starOperator",
+                               "language"=> "sql"
+                             }
+                           ]
+                         }
+                       }
+                     ],
+                     "groupBy"=> []
+                   }
+                 })
+    end
   end
 end

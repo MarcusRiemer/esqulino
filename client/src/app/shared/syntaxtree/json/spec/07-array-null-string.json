@@ -1,0 +1,19 @@
+{
+  "language": "json",
+  "name": "array",
+  "children": {
+    "values": [
+      {
+        "language": "json",
+        "name": "null"
+      },
+      {
+        "language": "json",
+        "name": "string",
+        "properties": {
+          "value": "string"
+        }
+      }
+    ]
+  }
+}

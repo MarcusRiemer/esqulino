@@ -1,75 +1,19 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 @import 'bootstrap-subset';
 @import 'definitions';
+@import 'font';
 
-.footer {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    border: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-
-    
-    display: flex;
-    justify-content: space-between;
-
-    > div {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-
-        > * {
-            margin: 10px;
-        }
-
-        a {
-            color: rgba(0,0,0,.5);
-        }
-
-        a:hover {
-            color: rgba(0,0,0,.7);
-        }
-
-        a:visited {
-            color: rgba(0,0,0,.5);
-        }
-    }
-
-
-
-    .logos {
-        
-    }
-}
-
-/**
- * General toolbar options, later specialised for the editor
- * or the frontpage.
- */
-#toolbar {
-    height: $toolbar-height;
-    display: flex;
-    background-color: #f7f7f7;
-    border: 1px solid rgba(0,0,0,.125);
-    border-radius: 0 0 .25rem .25rem;
-
-    a {
-        text-decoration: none;
-        color: rgba(0,0,0,.7)
-    }
-
-    > * {
-        align-self: center;
-    }
-
-    button {
-        margin-right: 10px;
-    }
-}
-
+@import 'admin';
 @import 'front';
+@import 'footer';
 @import 'editor';
 @import 'editor-ast';
 @import 'editor-images';
 @import 'editor-sql';
 
+@import 'toolbar';
+
 @import 'schema';
 @import 'sidebar';
+

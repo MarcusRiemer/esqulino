@@ -1,4 +1,4 @@
-import { Project, ProjectFullDescription } from './project'
+import { Project } from './project'
 import * as Factory from './helper.spec'
 
 describe('Project', () => {

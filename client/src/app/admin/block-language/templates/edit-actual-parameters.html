@@ -1,0 +1,10 @@
+<ng-container *ngIf="hasFormalParameters; else noFormalParameters">
+  <edit-input-parameter-value *ngFor="let paramName of formalParameterNames"
+                              [name]="paramName"
+                              [blockLanguage]="blockLanguage"
+                              [labelWidth]="maximumParamNameLength">
+  </edit-input-parameter-value>
+</ng-container>
+<ng-template #noFormalParameters>
+  <input type="text" readonly class="form-control-plaintext" value="Keine Parameter definiert">
+</ng-template>

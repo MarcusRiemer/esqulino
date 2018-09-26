@@ -1,7 +1,6 @@
-import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { first } from 'rxjs/operators';
@@ -14,7 +13,6 @@ import { ToolbarService } from '../../toolbar.service';
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { DragService } from '../../drag.service';
 import { CodeResourceService } from '../../coderesource.service';
-import { CodeResource } from '../../../shared/syntaxtree';
 import { BlockLanguage } from '../../../shared/block';
 
 /**
@@ -57,7 +55,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     btnDelete.onClick.subscribe(_ => {
       this._codeResourceService.deleteCodeResource(this.peekResource)
         .pipe(first())
-        .subscribe(res => {
+        .subscribe(_ => {
           this.peekProject.removedCodeResource(this.peekResource);
           this._router.navigate(["create"], { relativeTo: this._route.parent })
         });
@@ -67,11 +65,11 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     this._toolbarService.savingEnabled = true;
     let btnSave = this._toolbarService.saveItem;
 
-    let subRef = btnSave.onClick.subscribe((res) => {
+    btnSave.onClick.subscribe(_ => {
       btnSave.isInProgress = true;
       this._codeResourceService.updateCodeResource(this.peekResource)
         .pipe(first())
-        .subscribe(res => btnSave.isInProgress = false);
+        .subscribe(_ => btnSave.isInProgress = false);
     });
   }
 
@@ -123,7 +121,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * possibility anything is currently dragged over a node. So we inform the
    * drag service about that.
    */
-  public onDragEnter(evt: DragEvent) {
+  public onDragEnter(_: DragEvent) {
     this._dragService.informDraggedOverEditor();
   }
 }

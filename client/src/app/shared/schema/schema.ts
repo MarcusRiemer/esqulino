@@ -1,4 +1,4 @@
-import { TableDescription, ColumnDescription } from './schema.description'
+import { TableDescription } from './schema.description'
 import { Table } from './table'
 
 /**

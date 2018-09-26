@@ -1,7 +1,6 @@
 import {
-  Component, Input, OnInit,
-  ViewContainerRef, ComponentFactoryResolver,
-  Type, Injector, ReflectiveInjector
+  Component, OnInit, ViewContainerRef, ComponentFactoryResolver,
+  Injector, ReflectiveInjector
 } from '@angular/core'
 
 import {

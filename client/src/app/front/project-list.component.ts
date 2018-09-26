@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 
 import { ProjectFullDescription } from '../shared/project.description'
 import { ProjectDescriptionService } from '../shared/project.description.service'

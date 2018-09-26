@@ -27,16 +27,19 @@ test:
     default_sender: "BlattWerkzeug <blattwerkzeug@gurxite.de>"
     admin: "Marcus@GurXite.de"
   # The IDE service will, under most circumstances, honor the
-  # mock: true setting to save some time during testing.
+  # "mock: true" setting. This allows testcases to specify arbitrary
+  # languages (and speeds up the whole ordeal).
   # But some tests verify that the actual code runs correctly,
-  # so the configuration here may not be removed.
+  # so the "exec" configuration here may not be removed.
   ide_service:
     mock: true
     exec:
       node_binary: /usr/bin/node
       program: ../client/dist/cli/main.cli.js
       mode: one-shot
-  
+  seed:
+    data_dir: ../seed
+
 production:
   name: "Blattwerkzeug"
   data_dir: ../data/dev
@@ -52,3 +55,5 @@ production:
       node_binary: /usr/bin/node
       program: ../client/dist/cli/main.cli.js
       mode: one-shot
+  seed:
+    data_dir: ../seed

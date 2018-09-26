@@ -175,7 +175,16 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
-# Fix for scrolling tables in the RTD-theme
-# https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
+# -- Options specifically for this documentation --------------------------
+
+
 def setup(app):
+    # Fix for scrolling tables in the RTD-theme
+    # https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
     app.add_stylesheet('theme_overrides.css')
+
+    # SVG graphs are not restricted to the width of the column by default
+    app.add_stylesheet('graphviz_width.css')
+
+# Prefer SVG output for graphs
+graphviz_output_format = 'svg'    

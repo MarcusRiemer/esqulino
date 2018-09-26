@@ -1,7 +1,5 @@
 import { BlockLanguageDescription } from '../block-language.description'
-import {
-  SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
-} from '../block.description'
+import { VisualBlockDescriptions } from '../block.description'
 
 export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
   id: "9e529caa-aa86-48eb-9a12-83889377195e",
@@ -173,7 +171,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   order: "insertAfter",
                   skipParents: 1
                 },
-                visibility: ["ifLegalChild"]
+                visibility: { $var: "ifLegalChild" }
               },
               children: [
                 {
@@ -195,7 +193,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                       order: "insertAfter",
                       skipParents: 1
                     },
-                    visibility: ["ifLegalChild"]
+                    visibility: { $var: "ifLegalChild" }
                   },
                   children: [
                     {

@@ -1,10 +1,13 @@
 require_dependency 'error'
 
+require_dependency 'block_language' # Rails won't autoload this class properly
+require_dependency 'code_resource' # Rails won't autoload this class properly
 require_dependency 'grammar' # Rails won't autoload this class properly
+require_dependency 'project' # Rails won't autoload this class properly
 require_dependency 'project_database' # Rails won't autoload this class properly
 require_dependency 'project_source' # Rails won't autoload this class properly
 require_dependency 'project_uses_block_language' # Rails won't autoload this class properly
-
+require_dependency 'block_language_generator' # Rails won't autoload this class properly
 
 # @return True if the given string is a valid UUID
 def string_is_uuid?(str)
@@ -22,8 +25,8 @@ end
 #
 # * The fact that  some data is stored "outside" of the normal database (images, SQLite
 #   databases) does not make the import/export process more pleasant. So a simple "just
-#   do a SQL-dump and be happy"-approach is not something we use. So we need a custom
-#   storage format that can hold more then a simple SQL-blob.
+#   do a SQL-dump and be happy"-approach is not something we can use. Therefore a custom
+#   storage format that can hold more then a simple SQL-blob is required.
 #
 # * What makes things worse is that we have some quite sophisticated dependencies
 #   between models. Using UUIDs as primary keys eliminates a lot of problems (as long as
@@ -139,6 +142,16 @@ class SeedManager
   # Path to a specific block language
   def seed_block_languages_file(block_language_id)
     File.join seed_block_languages_dir, "#{block_language_id}.yaml"
+  end
+
+  # The general directory for block language generators
+  def seed_block_language_generators_dir
+    File.join seed_data_dir, "block_language_generators"
+  end
+
+  # Path to a specific block language
+  def seed_block_language_generators_file(id)
+    File.join seed_block_language_generators_dir, "#{id}.yaml"
   end
 
   # The general directory for grammars
@@ -315,6 +328,10 @@ class SeedManager
     end
   end
 
+  #############################################
+  # Redudant code for block languages ahead
+  #############################################
+
   # Stores all block languages
   def store_all_block_languages
     BlockLanguage.all.each { |b| store_block_language b }
@@ -356,6 +373,57 @@ class SeedManager
     seed_instance(find_seed_block_language(path_slug_or_id), BlockLanguage, 0)
   end
 
+  #############################################
+  # Redudant code for block language generators ahead
+  #############################################
+
+  # Stores all block language generators
+  def store_all_block_language_generators
+    BlockLanguageGenerator.all.each { |b| store_block_language_generator b }
+  end
+
+  # Loads all block language generators that are available as seeds
+  def load_all_block_language_generators
+    available_seed_block_language_generator_files.each { |b| load_block_language_generator(b) }
+  end
+
+  # Stores a specific block language generator
+  #
+  # @param slug_or_id [string, BlockLanguageGenerator]
+  #   The slug or the ID of the generator to store.
+  #   May alternatively be a BlockLanguageGenerator directly.
+  def store_block_language_generator(slug_or_id)
+    b = if slug_or_id.is_a? BlockLanguageGenerator then
+          slug_or_id
+        else
+          # Finding the correct resource
+          # BEWARE: There is no slug here!
+          BlockLanguageGenerator.find(id: slug_or_id)
+        end
+
+    puts "Storing block language generator #{b.readable_identification}"
+
+    # Ensuring all directories are available
+    FileUtils.mkdir_p seed_block_language_generators_dir
+
+    # Storing the language
+    File.open(seed_block_language_generators_file(b.id), 'w') do |file|
+      YAML::dump(b, file)
+    end
+  end
+
+  # Loads a specific block language generator
+  #
+  # @param path_slug_or_id [string]
+  #   The path, slug or the ID of the block language to load.
+  def load_block_language_generator(path_slug_or_id)
+    seed_instance(find_seed_block_language_generator(path_slug_or_id), BlockLanguageGenerator, 0)
+  end
+
+  #############################################
+  # Redudant code for grammars ahead
+  #############################################
+  
   # Stores all grammars
   def store_all_grammars
     Grammar.all.each { |g| store_grammar g }
@@ -483,6 +551,30 @@ class SeedManager
     end
   end
 
+  # Searches for a specific seeded block language using either path, the ID or the slug
+  #
+  # TODO: This is structurally redundant, see #find_seed_block_language
+  def find_seed_block_language_generator(path_slug_or_id)
+    # Does the file exist immediatly?
+    if File.exists? path_slug_or_id then
+      # Yes, we are done
+      YAML.load_file(path_slug_or_id)
+    # Is is it UUID?
+    elsif string_is_uuid? path_slug_or_id then
+      # Yes, we are done
+      YAML.load_file(seed_block_language_generators_file(path_slug_or_id))
+    # Okay, no shortcuts available ... Lets iterate over all existing block language generator seed files
+    else
+      available_seed_block_language_generator_files.each do |f|
+        b = YAML.load_file(f)
+        return b if (b.slug == path_slug_or_id)
+      end
+
+      # This shouldn't happen too often ...
+      raise "Could not find block language generator with slug or ID \"#{slug_or_id}\""
+    end
+  end
+
   # Searches for a specific seeded grammar using either path, the ID or the slug
   #
   # TODO: This is structurally redundant, see #find_seed_block_language
@@ -510,6 +602,11 @@ class SeedManager
   # @return [Iterable] All files that are possibly a seed file for a block language
   def available_seed_block_language_files
     Dir.glob(File.join(seed_block_languages_dir, '*.yaml'))
+  end
+
+  # @return [Iterable] All files that are possibly a seed file for a block language generator
+  def available_seed_block_language_generator_files
+    Dir.glob(File.join(seed_block_language_generators_dir, '*.yaml'))
   end
 
   # @return [Iterable] All files that are possibly a seed file for a grammar

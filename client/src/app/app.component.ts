@@ -7,8 +7,9 @@ import { Angulartics2Piwik } from 'angulartics2/piwik';
   template: `<router-outlet></router-outlet>`
 })
 export class SqlScratchComponent {
-  // The piwik service needs to be required at least once
-  constructor(piwik: Angulartics2Piwik) {
+  // The piwik service needs to be required somewhere at least once,
+  // otherwise it wont be loaded.
+  constructor(_piwik: Angulartics2Piwik) {
 
   }
 }

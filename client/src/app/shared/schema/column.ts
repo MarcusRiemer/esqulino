@@ -1,6 +1,4 @@
-import { Project } from '../project'
-import { ProjectResource } from '../resource'
-import { ColumnDescription, TableDescription } from './schema.description'
+import { ColumnDescription } from './schema.description'
 
 /**
  * Enum to set the status of a column 

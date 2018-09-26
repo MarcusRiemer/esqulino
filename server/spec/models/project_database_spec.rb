@@ -107,8 +107,11 @@ RSpec.describe ProjectDatabase, type: :model do
     ]
   end
 
-  context 'empty database' do
+  describe 'empty database' do
     after(:each) do
+      if @db.project && @db.project.default_database_id == @db.id then
+        @db.project.update!(default_database: nil)
+      end
       @db.destroy!
       @db.project.destroy! if @db.project
     end
@@ -183,6 +186,9 @@ RSpec.describe ProjectDatabase, type: :model do
     end
 
     after(:each) do
+      if @db.project && @db.project.default_database_id == @db.id then
+        @db.project.update!(default_database: nil)
+      end
       @db.destroy!
       @db.project.destroy! if @db.project
     end
@@ -325,6 +331,9 @@ RSpec.describe ProjectDatabase, type: :model do
     end
 
     after(:each) do
+      if @db.project && @db.project.default_database_id == @db.id then
+        @db.project.update!(default_database: nil)
+      end
       @db.destroy!
       @db.project.destroy! if @db.project
     end

@@ -3,10 +3,17 @@
 ##################################
 
 # Full path of typescript-json-schema
-TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
+# TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
+
+# Once more: Hacking along with a custom version of the schema generator.
+# This time due to conditional types, see the github repo for details
+# https://github.com/vega/ts-json-schema-generator/pull/39
+TYPESCRIPT_JSON_SCHEMA_BIN = /home/marcus/projects/ts-json-schema-generator/bin/ts-json-schema-generator
+
+
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = ArbitraryQueryRequestDescription.json ProjectDescription.json ProjectFullDescription.json ProjectUpdateDescription.json ProjectCreationDescription.json ProjectListDescription.json ProjectUsesBlockLanguageDescription.json ProjectSourceDescription.json AlterSchemaRequestDescription.json TableDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageDescription.json NodeDescription.json CodeResourceDescription.json RequestTabularInsertDescription.json GrammarDocument.json GrammarListDescription.json GrammarDescription.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageGeneratorDescription.json BlockLanguageGeneratorDocument.json BlockLanguageGeneratorListDescription.json BlockLanguageListDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarListDescription.json NodeDescription.json ProjectCreationDescription.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json TableDescription.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -15,6 +22,8 @@ JSON_SCHEMA_FILES = ArbitraryQueryRequestDescription.json ProjectDescription.jso
 define CONVERT_COMMAND
 	@echo "Creating $(notdir $(basename $@)).json"
 	$(TYPESCRIPT_JSON_SCHEMA_BIN) --path $^ --type $(notdir $(basename $@)) > "$@.tmp"
+	sed -i -- 's/</_/g' "$@.tmp"
+	sed -i -- 's/>/_/g' "$@.tmp"
 	mv "$@.tmp" "$@"
 endef
 
@@ -54,7 +63,19 @@ BlockLanguageDescription.json : $(SRC_PATH)/shared/block/block-language.descript
 BlockLanguageListDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
 
+BlockLanguageListResponseDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
+	$(CONVERT_COMMAND)
+
 BlockLanguageDocument.json : $(SRC_PATH)/shared/block/block-language.description.ts $(SRC_PATH)/shared/block/block.description.ts
+	$(CONVERT_COMMAND)
+
+BlockLanguageGeneratorDescription.json: $(SRC_PATH)/shared/block/generator/generator.description.ts
+	$(CONVERT_COMMAND)
+
+BlockLanguageGeneratorListDescription.json: $(SRC_PATH)/shared/block/generator/generator.description.ts
+	$(CONVERT_COMMAND)
+
+BlockLanguageGeneratorDocument.json: $(SRC_PATH)/shared/block/generator/generator.description.ts
 	$(CONVERT_COMMAND)
 
 NodeDescription.json : $(SRC_PATH)/shared/syntaxtree/syntaxtree.description.ts

@@ -1,6 +1,6 @@
 {
   "$ref": "#/definitions/GrammarListDescription",
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
     "GrammarListDescription": {
       "additionalProperties": false,
@@ -12,13 +12,17 @@
         "name": {
           "type": "string"
         },
+        "programmingLanguageId": {
+          "type": "string"
+        },
         "slug": {
           "type": "string"
         }
       },
       "required": [
         "id",
-        "name"
+        "name",
+        "programmingLanguageId"
       ],
       "type": "object"
     }

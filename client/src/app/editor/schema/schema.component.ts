@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { ProjectService, Project } from '../project.service'
@@ -61,7 +61,7 @@ export class SchemaComponent implements OnInit {
 
     // Button to show the preview of the currently editing table
     let btnCreate = this._toolbarService.addButton("createTable", "Neue Tabelle", "table", "n");
-    let subRef = btnCreate.onClick.subscribe((res) => {
+    let subRef = btnCreate.onClick.subscribe(_ => {
       this._router.navigate(["./create"], { relativeTo: this._route });
     })
     this._subscriptionRefs.push(subRef);

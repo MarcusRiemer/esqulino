@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core'
-
-import { ServerDataService } from '../shared/server-data.service';
+import { Component } from '@angular/core'
 
 /**
  * Hosts general menus and layout.

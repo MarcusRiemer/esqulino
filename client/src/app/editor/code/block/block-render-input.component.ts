@@ -1,7 +1,7 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
-import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
+import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { VisualBlockDescriptions } from '../../../shared/block';
 
 /**
  * Allows editing of atomic values. These are cached inside this component

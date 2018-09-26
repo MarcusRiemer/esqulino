@@ -6,12 +6,12 @@ import {
 } from '@angular/router'
 import { Response } from '@angular/http'
 
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { catchError, first, map, tap } from 'rxjs/operators';
 
 import { FlashService } from '../shared/flash.service'
 
-import { ProjectService, Project } from './project.service'
+import { ProjectService } from './project.service'
 
 /**
  * Ensures there is a project at the target of the navigation.
@@ -27,7 +27,7 @@ export class ProjectExistsGuard implements CanActivate {
 
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) {
     const projectSlug = route.params['projectId'];
     console.log(`ProjectExistsGuard: "${projectSlug}" => ???`);
 

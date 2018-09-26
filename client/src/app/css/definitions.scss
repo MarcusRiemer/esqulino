@@ -1,11 +1,11 @@
+/* Toolbar dimensions */
+$toolbar-padding: 5px;
+$toolbar-height: 44px;
+$toolbar-margin-bottom: 5px;
+
 /* Editor layout */
 $sidebar-width:  300px;
+$sidebar-height: calc(100vh - (#{$toolbar-padding} * 2 + #{$toolbar-height} + #{$toolbar-margin-bottom});
 $navbar-width:   270px;
-$toolbar-height:  3rem;
 
-/* SQL components */
-$component-width:  90px;
-$component-indent: 15px;
-
-/* This colour is used for the navigational parts of the UI */
-$background-nav: #f7f7f9;
+$monospace-font: "Roboto Mono", monospace;

@@ -11,7 +11,7 @@ language "SQL" {
     dropTarget {
       direction horizontal
       dropOptions {
-        visible ifLegalChild
+        visible {"$var":"ifLegalChild"}
         parent "where", insertFirst
       }
       visual {
@@ -25,7 +25,7 @@ language "SQL" {
     dropTarget {
       direction horizontal
       dropOptions {
-        visible ifLegalChild
+        visible {"$var":"ifLegalChild"}
         parent "groupBy", insertFirst
       }
       visual {
@@ -39,7 +39,7 @@ language "SQL" {
     dropTarget {
       direction horizontal
       dropOptions {
-        visible ifLegalChild
+        visible {"$var":"ifLegalChild"}
         parent "orderBy", insertFirst
       }
       visual {
@@ -55,7 +55,7 @@ language "SQL" {
     block {
       direction horizontal
       dropOptions {
-        visible ifLegalChild
+        visible {"$var":"ifLegalChild"}
         children "columns", insertFirst
       }
       visual {
@@ -65,15 +65,13 @@ language "SQL" {
             display: inline-block
             color: blue
             padding-left: 2px
-            background: url(/vendor/icons/block-background.svg) no-repeat
-            background-size: 100% 100%
             cursor: grab
           }
         }
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "columns", insertFirst
           }
           visual {
@@ -184,7 +182,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "arguments", insertFirst
           }
           visual {
@@ -225,7 +223,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "lhs", insertFirst
           }
           visual {
@@ -249,7 +247,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "operator", insertFirst
           }
           visual {
@@ -273,7 +271,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "rhs", insertFirst
           }
           visual {
@@ -322,7 +320,7 @@ language "SQL" {
         block {
           direction horizontal
           dropOptions {
-            visible ifLegalChild
+            visible {"$var":"ifLegalChild"}
             children "tables", insertFirst
           }
           visual {
@@ -336,7 +334,7 @@ language "SQL" {
             dropTarget {
               direction horizontal
               dropOptions {
-                visible ifEmpty, ifLegalChild
+                visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
                 children "tables", insertFirst
               }
               visual {
@@ -371,7 +369,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifLegalChild
+            visible {"$var":"ifLegalChild"}
             children "joins", insertLast
           }
           visual {
@@ -388,7 +386,7 @@ language "SQL" {
     block {
       direction horizontal
       dropOptions {
-        visible ifLegalChild
+        visible {"$var":"ifLegalChild"}
         children "table", insertFirst
       }
       visual {
@@ -411,7 +409,7 @@ language "SQL" {
     block {
       direction horizontal
       dropOptions {
-        visible ifLegalChild
+        visible {"$var":"ifLegalChild"}
         children "table", insertFirst
       }
       visual {
@@ -428,7 +426,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "table", insertFirst
           }
           visual {
@@ -461,7 +459,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "using", insertFirst
           }
           visual {
@@ -489,7 +487,7 @@ language "SQL" {
     block {
       direction horizontal
       dropOptions {
-        visible ifLegalChild
+        visible {"$var":"ifLegalChild"}
         children "table", insertFirst
       }
       visual {
@@ -506,7 +504,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "table", insertFirst
           }
           visual {
@@ -539,7 +537,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "on", insertFirst
           }
           visual {
@@ -585,7 +583,7 @@ language "SQL" {
     block {
       direction horizontal
       dropOptions {
-        visible ifLegalChild
+        visible {"$var":"ifLegalChild"}
         children "expressions", insertFirst
       }
       visual {
@@ -599,7 +597,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "expressions", insertFirst
           }
           visual {
@@ -630,7 +628,7 @@ language "SQL" {
     block {
       direction horizontal
       dropOptions {
-        visible ifLegalChild
+        visible {"$var":"ifLegalChild"}
         children "expressions", insertFirst
       }
       visual {
@@ -644,7 +642,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "expressions", insertFirst
           }
           visual {
@@ -678,7 +676,7 @@ language "SQL" {
     block {
       direction horizontal
       dropOptions {
-        visible ifLegalChild
+        visible {"$var":"ifLegalChild"}
         children "expressions", insertFirst
       }
       visual {
@@ -692,7 +690,7 @@ language "SQL" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "expressions", insertFirst
           }
           visual {

@@ -1,12 +1,6 @@
-import { Injectable, Type } from '@angular/core'
-import { HttpClient } from '@angular/common/http';
-
-import { BehaviorSubject, Observable } from 'rxjs'
+import { Injectable } from '@angular/core'
 
 import { AvailableLanguages, Language } from './syntaxtree'
-import { AvailableLanguageModels, BlockLanguage } from './block'
-import { ServerApiService } from './serverapi.service'
-import { BlockLanguageListDescription } from './block/block-language.description'
 
 /**
  * Groups together information about languages that are available
@@ -30,19 +24,6 @@ export class LanguageService {
   }
 
   /**
-   * @param slug_or_id The slug of the language model
-   * @return The specific LanguageModel that was asked for.
-   */
-  getLocalBlockLanguage(slug_or_id: string) {
-    const toReturn = AvailableLanguageModels.find(l => l.id === slug_or_id || l.slug === slug_or_id);
-    if (!toReturn) {
-      throw new Error(`Unknown local block language "${slug_or_id}"`);
-    }
-
-    return (toReturn);
-  }
-
-  /**
    * @param id The id of the language
    * @return The specific Language that was asked for.
    */
@@ -50,7 +31,7 @@ export class LanguageService {
     const toReturn = this.availableLanguages.find(l => l.id === id);
     if (!toReturn) {
       const available = this.availableLanguageIds.join(', ');
-      throw new Error(`Unknown language "${id}", known models are: ${available}`);
+      throw new Error(`Unknown language "${id}", known languages are: ${available}`);
     }
 
     return (toReturn);

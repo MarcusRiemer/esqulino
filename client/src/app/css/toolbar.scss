@@ -1,0 +1,37 @@
+app-toolbar {
+    /* Basic styling options for the whole toolbar */
+    width: 100%;
+    min-height: $toolbar-height;
+    padding: $toolbar-padding;
+    margin-bottom: $toolbar-margin-bottom;
+    background-color: #3f51b5;
+    display: flex;
+
+    /* Column layout on mobile */
+    @media (max-width: 840px) {
+        flex-direction: column;
+    }
+
+    /* Single row on desktop */
+    @media (min-width: 841px) {
+        flex-direction: row;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    
+    /* Underlined links look silly with material design */
+    a, a:hover {
+        text-decoration: none;
+    }
+
+    /* Allows to align the following items on the right */
+    .fill-space {
+        flex: 1 1 auto;
+    }
+}
+
+/* Underlined links look silly with material design */
+a.mat-menu-item, a.mat-menu-item:hover {
+    text-decoration: none;
+}

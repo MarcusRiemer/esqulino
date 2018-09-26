@@ -3,6 +3,7 @@ import * as Schema from '../grammar.description'
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   id: "7ec93f8a-5a01-4d4d-90b4-27c3f0ae4700",
   name: "sql",
+  programmingLanguageId: "sql",
   types: {
     "expression": {
       type: "oneOf",
@@ -19,14 +20,19 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       attributes: [
         {
           type: "property",
-          name: "columnName",
+          name: "refTableName",
           base: "string"
         },
         {
+          type: "terminal",
+          name: "dot",
+          symbol: "."
+        },
+        {
           type: "property",
-          name: "refTableName",
+          name: "columnName",
           base: "string"
-        }
+        },
       ]
     },
     "constant": {
@@ -43,6 +49,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          name: "colon",
+          symbol: ":"
+        },
+        {
           type: "property",
           name: "name",
           base: "string"
@@ -58,6 +69,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         },
         {
+          type: "terminal",
+          name: "paren-open",
+          symbol: "("
+        },
+        {
           type: "sequence",
           name: "arguments",
           nodeTypes: [
@@ -65,13 +81,29 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
               nodeType: "expression",
               occurs: "*"
             }
-          ]
+          ],
+          between: {
+            type: "terminal",
+            name: "param-separator",
+            symbol: ","
+          }
+        },
+        {
+          type: "terminal",
+          name: "paren-close",
+          symbol: ")"
         }
       ]
     },
     "starOperator": {
       type: "concrete",
-      attributes: []
+      attributes: [
+        {
+          type: "terminal",
+          name: "star",
+          symbol: "*"
+        }
+      ]
     },
     "relationalOperator": {
       type: "concrete",
@@ -118,6 +150,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          name: "keyword",
+          symbol: "SELECT"
+        },
+        {
           type: "property",
           name: "distinct",
           base: "boolean",
@@ -135,13 +172,24 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
               nodeType: "starOperator",
               occurs: "?"
             }
-          ]
+          ],
+          between: {
+            type: "terminal",
+            name: "columnSeparator",
+            symbol: ","
+          }
         }
       ]
     },
     "delete": {
       type: "concrete",
-      attributes: []
+      attributes: [
+        {
+          type: "terminal",
+          name: "keyword",
+          symbol: "DELETE"
+        },
+      ]
     },
     "tableIntroduction": {
       type: "concrete",
@@ -173,9 +221,19 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          name: "keyword",
+          symbol: "INNER JOIN"
+        },
+        {
           type: "sequence",
           name: "table",
           nodeTypes: ["tableIntroduction"]
+        },
+        {
+          type: "terminal",
+          name: "keywordOn",
+          symbol: "ON"
         },
         {
           type: "sequence",
@@ -188,9 +246,19 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          name: "keyword",
+          symbol: "INNER JOIN"
+        },
+        {
           type: "sequence",
           name: "table",
           nodeTypes: ["tableIntroduction"]
+        },
+        {
+          type: "terminal",
+          name: "keywordUsing",
+          symbol: "USING"
         },
         {
           type: "sequence",
@@ -207,6 +275,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          name: "keyword",
+          symbol: "FROM"
+        },
+        {
           type: "sequence",
           name: "tables",
           nodeTypes: [
@@ -214,7 +287,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
               nodeType: "tableIntroduction",
               occurs: "+"
             }
-          ]
+          ],
+          between: {
+            type: "terminal",
+            name: "columnSeparator",
+            symbol: ","
+          }
         },
         {
           type: "sequence",
@@ -250,6 +328,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
+          type: "terminal",
+          symbol: "WHERE",
+          name: "keyword",
+        },
+        {
           type: "sequence",
           name: "expressions",
           nodeTypes: [
@@ -275,23 +358,10 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
       type: "concrete",
       attributes: [
         {
-          type: "allowed",
-          name: "expressions",
-          nodeTypes: [
-            {
-              nodeType: {
-                languageName: "sql",
-                typeName: "expression"
-              },
-              occurs: "*"
-            },
-          ]
-        }
-      ]
-    },
-    "orderBy": {
-      type: "concrete",
-      attributes: [
+          type: "terminal",
+          name: "keyword",
+          symbol: "GROUP BY"
+        },
         {
           type: "allowed",
           name: "expressions",
@@ -301,9 +371,42 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
                 languageName: "sql",
                 typeName: "expression"
               },
-              occurs: "*"
+              occurs: "+"
             },
-          ]
+          ],
+          between: {
+            type: "terminal",
+            name: "columnSeparator",
+            symbol: ","
+          }
+        }
+      ]
+    },
+    "orderBy": {
+      type: "concrete",
+      attributes: [
+        {
+          type: "terminal",
+          name: "keyword",
+          symbol: "ORDER BY"
+        },
+        {
+          type: "allowed",
+          name: "expressions",
+          nodeTypes: [
+            {
+              nodeType: {
+                languageName: "sql",
+                typeName: "expression"
+              },
+              occurs: "+"
+            },
+          ],
+          between: {
+            type: "terminal",
+            name: "columnSeparator",
+            symbol: ","
+          }
         }
       ]
     },

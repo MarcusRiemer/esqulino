@@ -10,6 +10,13 @@
             <h4 class="card-title">Block-Editor</h4>
             <div class="row">
               <div class="col-sm-6">
+                Name:
+              </div>
+              <div class="col-sm-6">
+                <input [(ngModel)]="currentResource.name"
+                       class="form-control">
+              </div>
+              <div class="col-sm-6">
                 Programmiersprache:
               </div>
               <div class="col-sm-6">
@@ -29,7 +36,7 @@
           <!-- Ensuring there is a tree -->
           <ng-container *ngIf="(currentResource.syntaxTree | async); let currentTree;">
             <!-- If the tree is empty, allow the user to populate it -->
-            <div *ngIf="currentTree.isEmpty"
+            <div *ngIf="currentTree.isEmpty; else renderTree;"
                  class="card-body">
               Noch ist kein Code da! Ziehe einen Block aus der Seitenleiste auf den freien Platz um mit der Programmierung zu beginnen!
               <ast-node-placeholder [alwaysVisible]="true"
@@ -39,27 +46,28 @@
             </div>
 
             <!-- If the tree is not empty, it wants to be rendered -->
-            <div *ngIf="!currentTree.isEmpty"
-                 class="card-body block-editor-root">
-              <editor-block-host *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
-                                 [codeResource]="currentResource"
-                                 [node]="currentTree.rootNode"></editor-block-host>
+            <ng-template #renderTree>
+              <div class="card-body block-editor-root">
+                <editor-block-host *ngIf="currentBlockLanguage.canRenderTree(currentTree); else noRender;"
+                                   [codeResource]="currentResource"
+                                   [node]="currentTree.rootNode"></editor-block-host>
+              </div>
               <ng-template #noRender>
                 Darstellung nicht möglich
               </ng-template>
-            </div>
+            </ng-template>
           </ng-container>
-        </div>
-
-        <!-- Render the editor components the block language demands -->
-        <div class="card card-body mb-3" *ngFor="let editorComponent of (editorComponents | async)">
-          <ng-template [cdkPortalOutlet]="editorComponent"></ng-template>
         </div>
 
         <div class="card card-body mb-3">
           <h4 class="card-title">Validierung</h4>
           <ast-validation [codeResource]="currentResource">
           </ast-validation>
+        </div>
+
+        <!-- Render the editor components the block language demands -->
+        <div class="card card-body mb-3" *ngFor="let editorComponent of (editorComponents | async)">
+          <ng-template [cdkPortalOutlet]="editorComponent"></ng-template>
         </div>
 
         <div class="card card-body mb-3">

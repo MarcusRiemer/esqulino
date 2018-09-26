@@ -4,8 +4,8 @@ import { prettyPrintSyntaxTreeNode } from '../syntaxtree/prettyprint'
 
 import { BlockLanguageDescription } from './block-language.description'
 import {
-  VisualBlockDescriptions, EditorBlockDescription, SidebarBlockDescription,
-  SidebarDescription, FixedBlocksSidebarCategoryDescription
+  VisualBlockDescriptions, EditorBlockDescription,
+  SidebarDescription, SidebarBlockDescription, FixedBlocksSidebarCategoryDescription
 } from './block.description'
 
 /**
@@ -68,6 +68,8 @@ export function prettyPrintVisual(desc: VisualBlockDescriptions.ConcreteBlock): 
       return prettyPrintVisualBlock(desc);
     case "input":
       return [`TODO: input blocks`];
+    case "error":
+      return [`TODO: error blocks`];
     default:
       throw new Error(`Unknow visual block "${(desc as any).blockType}"`);
   }
@@ -170,7 +172,7 @@ function prettyPrintDropTargetProperties(desc: VisualBlockDescriptions.DropTarge
   const middle: string[] = [];
 
   if (desc.visibility) {
-    middle.push(`visible ${desc.visibility.join(', ')}`)
+    middle.push(`visible ${JSON.stringify(desc.visibility)}`)
   }
 
   if (desc.self) {
@@ -195,12 +197,14 @@ function prettyPrintDropTargetProperties(desc: VisualBlockDescriptions.DropTarge
  */
 function prettyPrintSidebar(desc: SidebarDescription) {
   switch (desc.type) {
-    case "fixedBlocks": return ([
-      `fixedBlocksSidebar "${desc.caption}" {`,
-      ...desc.categories.map(prettyPrintFixedBlocksSidebarCategory),
-      `}`
-    ]);
-    case "databaseSchema": return (["databaseSchemaSidebar"]);
+    case "fixedBlocks":
+      return ([
+        `fixedBlocksSidebar "${desc.caption}" {`,
+        ...desc.categories.map(prettyPrintFixedBlocksSidebarCategory),
+        `}`
+      ]);
+    case "databaseSchema":
+      return (["databaseSchemaSidebar"]);
   }
 }
 

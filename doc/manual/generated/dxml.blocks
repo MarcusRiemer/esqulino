@@ -19,7 +19,7 @@ language "XML (Dynamisch)" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifLegalChild
+            visible {"$var":"ifLegalChild"}
             children "attributes", insertLast
           }
           visual {
@@ -37,7 +37,7 @@ language "XML (Dynamisch)" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifLegalChild
+            visible {"$var":"ifLegalChild"}
             children "elements", insertFirst
           }
           visual {
@@ -87,7 +87,7 @@ language "XML (Dynamisch)" {
         dropTarget {
           direction horizontal
           dropOptions {
-            visible ifEmpty, ifLegalChild
+            visible {"$some":[{"$var":"ifEmpty"},{"$var":"ifLegalChild"}]}
             children "value", insertFirst
           }
           visual {

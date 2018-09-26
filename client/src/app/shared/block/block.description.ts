@@ -1,4 +1,7 @@
 import { QualifiedTypeName, NodeDescription } from '../syntaxtree/syntaxtree.description'
+import { Restricted } from './bool-mini-expression.description'
+
+export type Orientation = "horizontal" | "vertical";
 
 /**
  * Groups together all available options to describe a block in the
@@ -7,25 +10,42 @@ import { QualifiedTypeName, NodeDescription } from '../syntaxtree/syntaxtree.des
 export namespace VisualBlockDescriptions {
 
   /**
-   * We currently allow any CSS style to be used.
+   * These variables are available when evaluating drop target visibility.
    */
-  export type BlockStyle = { [k: string]: string }
+  export type VisibilityVars = "ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty";
+
+  /**
+   * This expression is evaluated to determine whether a drop target should be shown.
+   */
+  export type VisibilityExpression = Restricted.Expression<VisibilityVars>;
+
+  /**
+   * We currently allow any CSS style to be used.
+   *
+   * TODO: This could be a Readonly<> type but that causes the JSON-
+   * schema generator to (sort of rightfully) emit false for
+   * "additionalProperties" and that in turn makes this type rather
+   * pointless.
+   */
+  export type BlockStyle = { [k: string]: string };
 
   /**
    * Describes how certain nodes of the syntaxtree should be presented
    * inside the drag and drop editor. As the available blocks are very
-   * different, this "base" interface consists of nothing but the
-   * discriminator value.
+   * different, this "base" interface consists of the discriminator value
+   * and some properties that are applicable everywhere.
    */
   export interface EditorBlockBase {
     blockType: string;
     style?: BlockStyle;
+    breakAfter?: boolean;
   }
 
   /**
    * The locations of categories at which insertions may occur.
    */
   export type CategoryInsertPosition = "insertFirst" | "insertLast";
+
 
   export type CategoryInsert = {
     order: CategoryInsertPosition;
@@ -48,7 +68,7 @@ export namespace VisualBlockDescriptions {
     // Drops something into a category of the parent
     parent?: CategoryInsert;
 
-    visibility?: ("ifAnyDrag" | "ifLegalDrag" | "ifLegalChild" | "ifEmpty" | "always")[];
+    visibility?: VisibilityExpression;
   }
 
   /**
@@ -57,7 +77,8 @@ export namespace VisualBlockDescriptions {
    * involving actual design.
    */
   export interface EditorLayout extends EditorBlockBase {
-    direction: "horizontal" | "vertical";
+    direction: Orientation;
+    children?: ConcreteBlock[];
     wrapChildren?: boolean;
   }
 
@@ -67,7 +88,6 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorBlock extends EditorLayout {
     blockType: "block";
-    children?: ConcreteBlock[];
     dropTarget?: DropTargetProperties;
     dropAction?: "append" | "replace";
   }
@@ -113,10 +133,28 @@ export namespace VisualBlockDescriptions {
    */
   export interface EditorInput extends EditorBlockBase {
     blockType: "input";
+    // The property that is going to be edited
     property: string;
   }
 
-  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput;
+  /**
+   * Shows a marker if there is some kind of error
+   */
+  export interface EditorErrorIndicator extends EditorBlockBase {
+    blockType: "error";
+    // Do not show the error marker for these errors
+    excludedErrors?: string[];
+  }
+
+  export type ConcreteBlock = EditorBlock | EditorDropTarget | EditorIterator | EditorConstant | EditorInterpolated | EditorInput | EditorErrorIndicator;
+
+  // Default to inserting after the given node. This should be a meaningful default ...
+  export const DefaultDropTargetProperties: DropTargetProperties = {
+    self: {
+      order: "insertAfter",
+      skipParents: 0
+    }
+  }
 }
 
 /**

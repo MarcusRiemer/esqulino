@@ -2,7 +2,7 @@
 class GrammarsController < ApplicationController
   # List all existing grammars
   def index
-    render :json => Grammar.all.map{|g| g.to_list_api_response}
+    render :json => Grammar.scope_list.map{|g| g.to_list_api_response}
   end
 
   # Find a single grammar
@@ -12,7 +12,7 @@ class GrammarsController < ApplicationController
   end
 
   # Creates a new grammar
-  def create
+  def create    
     grammar = Grammar.new(basic_params)
     grammar.model = model_params
 
@@ -26,15 +26,21 @@ class GrammarsController < ApplicationController
   # Updates an existing grammar
   def update
     grammar = Grammar.find(id_params['id'])
-    grammar.update basic_params
+    grammar.assign_attributes basic_params
     grammar.model = model_params
 
     if grammar.save
       render status: 204
     else
-      byebug
       render json: { 'errors' => grammar.errors.as_json }, :status => 400
     end
+  end
+
+  # Finds block languages that are related to this grammar
+  def related_block_languages
+    render :json => BlockLanguage.scope_list
+                      .where(grammar_id: id_params[:id])
+                      .map{|b| b.to_list_api_response}
   end
 
   private
@@ -49,7 +55,7 @@ class GrammarsController < ApplicationController
   # These parameters are "normal" table attributes
   def basic_params
     params
-      .permit([:name, :slug])
+      .permit([:name, :slug, :programmingLanguageId])
       .transform_keys { |k| k.underscore }
   end
 

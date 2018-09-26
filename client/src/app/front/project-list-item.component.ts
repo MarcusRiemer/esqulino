@@ -1,9 +1,7 @@
 import { Component, Input, PLATFORM_ID, Inject } from '@angular/core'
-import { isPlatformBrowser, isPlatformServer } from '@angular/common'
+import { isPlatformBrowser } from '@angular/common'
 
-import {
-  ProjectDescriptionService, ProjectFullDescription
-} from '../shared/project.description.service'
+import { ProjectFullDescription } from '../shared/project.description.service'
 import { ServerApiService } from '../shared/serverapi.service'
 
 /**

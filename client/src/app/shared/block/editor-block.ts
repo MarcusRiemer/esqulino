@@ -1,5 +1,3 @@
-import { QualifiedTypeName, NodeDescription } from '../syntaxtree'
-
 import { EditorBlockDescription } from './block.description'
 
 /**
