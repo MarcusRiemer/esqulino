@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as Parser from '../../shared/csv-parser';
+import { ProjectService, Project } from '../project.service'
+import { Table } from '../../shared/schema';
+import { Column } from '../../shared/schema/column';
+
+
 
 /**
  * Displays the schema for a list of tables.
@@ -11,39 +16,57 @@ import * as Parser from '../../shared/csv-parser';
 export class SchemaTableImportComponent implements OnInit {
   // File Object as a string
   fileData: any;
+  // Schema with the available tables
+  schemaTables: Table[];
+  selectedTableColumns: Column[];
+  selectedTableName: string;
 
   parse: Parser.CsvParseResult | Parser.CsvParseError;
   errors: Parser.ValidationError[];
 
-  header: string[];
-  table: string[][];
-  headlineUsage: "file" | "own"
-  headerLength: number;
-
-  // Contains all currently used Delimiters
-  currentDelimiters: string[];
-  // Contains all possible Markers
-  markers: string[];
-  selectedMarker: string;
-
   disableSelection: boolean;
   disableHeadlineSelection: boolean;
 
-  
-  constructor() {
+  header: string[];
+  table: string[][];
 
+  headlineUsage: "file" | "own";  
+  textMarker: '"' | "'";
+
+  // Contains all currently used Delimiters
+  currentDelimiters: string[];
+  
+  /**
+   * Used for dependency injection.
+   */
+  constructor(
+    private _projectService: ProjectService,
+  ) {
   }
 
-  ngOnInit() {
-    this.markers = ['"', "'"];
-    this.selectedMarker = this.markers[0];
+
+  ngOnInit() { 
+    this.disableSelection = true;
+    this.disableHeadlineSelection = true;
+
+    this.headlineUsage = "file";
+    this.textMarker = '"';
 
     this.currentDelimiters = [];
     this.toggleDelimiter(',');
 
-    this.headlineUsage = "file";
-    this.disableSelection = true;
-    this.disableHeadlineSelection = true;
+    this.selectedTableColumns = [];
+    this.selectedTableName = "";
+    this.schemaTables = this._projectService.cachedProject.schema['tables'];
+
+    console.log("length of empty: ", [].length);
+
+    console.log("schema Tables: ", this.schemaTables);
+
+    this.schemaTables.forEach(function(table) {
+      console.log(table['_columns'].length);
+    }); 
+      
   }
 
 
@@ -76,26 +99,69 @@ export class SchemaTableImportComponent implements OnInit {
       this.fileData = await this.readUploadedFileAsText(file);
       this.parseProcess();
       
-    } catch(e) {
-      console.warn(e.message)
+    } catch(e) {      
+      console.warn(e.message);      
     }
   }
 
   parseProcess = () => {
-    this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.selectedMarker);
+    this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.textMarker);
     
     if (this.parse.type === 'parseResult') {   
       this.header = (<Parser.CsvParseResult> this.parse).header;
       this.table = (<Parser.CsvParseResult> this.parse).table;
-      this.headerLength = this.header.length;
+
       this.disableHeadlineSelection = false;
+
+      this.mapColumns(this.header, this.getMostSuitableTable(this.header, this.schemaTables));
     } else if (this.parse.type === 'parseError') {
       this.errors = (<Parser.CsvParseError> this.parse).errors;    
       this.disableHeadlineSelection = true;  
     }
 
-    this.disableSelection = false;
+    this.disableSelection = false;  
   }
+
+  mapColumns(headline: string[], table) {
+    this.selectedTableName = table._name;
+    this.selectedTableColumns = table._columns;
+    
+  }
+
+  // Returns the most suitable table columns for a given headline
+  getMostSuitableTable(headline: string[], tables) {
+    let lengthFilter;
+
+    // Use the first with identical length
+    lengthFilter = tables.filter(table => table['columns'].length === headline.length)[0];
+    
+    // When no identical length availabe 
+    if (!lengthFilter.length) {      
+       //check for anything with lesser length
+      lengthFilter = tables.filter(table => table['columns'].length < headline.length);
+      console.log("kleinere: ", lengthFilter);
+      
+      // when more then one with lesser length
+      if (lengthFilter.length > 1) {
+        // use the max value
+        lengthFilter = lengthFilter.reduce((prev, current) => (prev['columns'].length > current['columns'].length) ? prev : current);
+      }
+    } // else return empty
+
+    console.log("LengthFilter: ", lengthFilter);
+
+    return lengthFilter;
+  }
+
+
+  changeTable() {
+    // Filter the columns of the wanted table (not multiple tables)
+    this.selectedTableColumns = (this.schemaTables.filter(table => this.selectedTableName === table['_name']))[0]['_columns'];
+
+    console.log("selected table cols: ", this.selectedTableColumns);
+    console.log("selected table length: ", this.selectedTableColumns.length);
+  }
+
 
   trackByFn(index: any, item: any) {
     return index;
