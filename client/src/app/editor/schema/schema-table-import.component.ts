@@ -16,25 +16,33 @@ import { Column } from '../../shared/schema/column';
 export class SchemaTableImportComponent implements OnInit {
   // File Object as a string
   fileData: any;
+    
+  // parsed Data from file
+  parse: Parser.CsvParseResult | Parser.CsvParseError;
+  errors: Parser.ValidationError[];
+  
   // Schema with the available tables
   schemaTables: Table[];
   selectedTableColumns: Column[];
   selectedTableName: string;
 
-  parse: Parser.CsvParseResult | Parser.CsvParseError;
-  errors: Parser.ValidationError[];
+  // parse result or own definition
+  header: string[];  
+  // parse result
+  table: string[][];
+
+  // use index for mapping
+  // (init when header length available)
+  useHeaderIndex: boolean[];
+
+  // Contains all currently used Delimiters
+  currentDelimiters: string[];
 
   disableSelection: boolean;
   disableHeadlineSelection: boolean;
 
-  header: string[];
-  table: string[][];
-
   headlineUsage: "file" | "own";
   textMarker: '"' | "'";
-
-  // Contains all currently used Delimiters
-  currentDelimiters: string[];
 
   /**
    * Used for dependency injection.
@@ -52,15 +60,15 @@ export class SchemaTableImportComponent implements OnInit {
     this.headlineUsage = "file";
     this.textMarker = '"';
 
+    this.useHeaderIndex = [];
+
     this.currentDelimiters = [];
     this.toggleDelimiter(',');
 
     this.selectedTableColumns = [];
     this.selectedTableName = "";
     this.schemaTables = this._projectService.cachedProject.schema['tables'];
-
-    console.log("length of empty: ", [].length);
-
+    
     console.log("schema Tables: ", this.schemaTables);
 
     this.schemaTables.forEach(function(table) {
@@ -112,6 +120,11 @@ export class SchemaTableImportComponent implements OnInit {
       this.table = (<Parser.CsvParseResult>this.parse).table;
 
       this.disableHeadlineSelection = false;
+
+      // Init use header Index      
+      for(let i = 0; i < this.header.length; i++) {
+        this.useHeaderIndex.push(false);
+      }
 
       this.mapColumns(this.header, this.getMostSuitableTable(this.header, this.schemaTables));
     } else if (this.parse.type === 'parseError') {
