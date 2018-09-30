@@ -109,17 +109,19 @@
             <ng-template #mappingPossible>
                 <div class="mapping row mt-3" *ngFor="let headerCol of header; let i = index">
                     <div class="col-sm-6 col-md-5 w-100 d-flex align-items-center">
-                        <input type="checkbox" id="header-{{ headerCol }}" [(ngModel)]="TODO" [disabled]="header.length === selectedTableColumns.length" [checked]="i < selectedTableColumns.length"/> <!-- todo (change) -->
+                        <input type="checkbox" id="header-{{ headerCol }}" [checked]="i < selectedTableColumns.length" 
+                                [(ngModel)]="useHeaderIndex[i]" 
+                               [disabled]="header.length === selectedTableColumns.length" />
                         <label class="mb-0 text-truncate" for="header-{{ headerCol }}">&nbsp;{{ headerCol }}</label>
                     </div>
 
-                    <div class="d-none d-md-block col-md-1" *ngIf="TODO">
+                    <div class="d-none d-md-block col-md-1" *ngIf="useHeaderIndex[i]">
                         <div style="font-size: 3em; line-height: 0; color: #00C851;">
                             <i class="fa fa-arrow-circle-right"></i>
                         </div>
                     </div>
 
-                    <div class="d-none d-md-block col-md-1" *ngIf="!TODO">
+                    <div class="d-none d-md-block col-md-1" *ngIf="!useHeaderIndex[i]">
                         <span style="font-size: 3em; line-height: 0; color: #ff4444;">
                             <i class="fa fa-ban"></i>
                         </span>
@@ -127,7 +129,10 @@
 
                     <div class="col-sm-6 col-md-6">
                         <select id="table-{{ tableCol }}" class="form-control h-100">
-                            <option *ngFor="let tableCol of selectedTableColumns; let j = index" value="{{tableCol.name}}" [selected]="j === i">{{ tableCol.name }}</option>
+                            <option *ngFor="let tableCol of selectedTableColumns; let j = index" 
+                                    value="{{tableCol.name}}" [selected]="j === i" [disabled]="useHeaderIndex[i]">
+                                {{ tableCol.name }}
+                            </option>
                         </select>        
                     </div>            
                 </div>
