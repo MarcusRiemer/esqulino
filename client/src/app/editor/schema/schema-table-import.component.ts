@@ -126,7 +126,7 @@ export class SchemaTableImportComponent implements OnInit {
         this.useHeaderIndex.push(false);
       }
 
-      //this.mapColumns(this.header, this.getMostSuitableTable(this.header, this.schemaTables));      
+      this.mapColumns(this.header, this.getMostSuitableTable(this.header, this.schemaTables));      
 
       this.changeTable();
     } 
@@ -139,32 +139,38 @@ export class SchemaTableImportComponent implements OnInit {
   }
 
   mapColumns(headline: string[], table) {
+    console.log("map Columns table ", table);
     this.selectedTableName = table._name;
-    this.selectedTableColumns = table._columns;
+    this.selectedTableColumns = table['_columns'];
 
+    console.log("this.selectedTableName: ",this.selectedTableName);
+    console.log("this.selectedTableColumns ", this.selectedTableColumns);
   }
 
-  // Returns the most suitable table columns for a given headline
+  // Get the most suitable table for a given headline
+  // (only measured by the length)
+  // returns the first identical length or the closest lesser length
   getMostSuitableTable(headline: string[], tables) {
-    let lengthFilter;
+    let lengthFilter = [];
 
     // Use the first with identical length
     lengthFilter = tables.filter(table => table['columns'].length === headline.length)[0];
-
+ 
     // When no identical length availabe 
-    if (!lengthFilter.length) {
+    if (!lengthFilter) {
       //check for anything with lesser length
       lengthFilter = tables.filter(table => table['columns'].length < headline.length);
-      console.log("kleinere: ", lengthFilter);
 
       // when more then one with lesser length
       if (lengthFilter.length > 1) {
-        // use the max value
+        // use the max value (the closest length)
         lengthFilter = lengthFilter.reduce((prev, current) => (prev['columns'].length > current['columns'].length) ? prev : current);
       }
+      else {
+        // use the one lesser result
+        lengthFilter = lengthFilter[0];
+      }
     } // else return empty
-
-    console.log("LengthFilter: ", lengthFilter);
 
     return lengthFilter;
   }
@@ -183,11 +189,6 @@ export class SchemaTableImportComponent implements OnInit {
         this.useHeaderIndex[i] = false;
       }      
     }    
-
-    console.log("use header:", this.useHeaderIndex);
-
-    console.log("selected table cols: ", this.selectedTableColumns);
-    console.log("selected table length: ", this.selectedTableColumns.length);
   }
 
 
