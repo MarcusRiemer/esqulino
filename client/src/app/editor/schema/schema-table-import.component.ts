@@ -249,5 +249,26 @@ export class SchemaTableImportComponent implements OnInit {
 
   save() {
     // TODO
+    console.log("selected cols: ", this.selectedTableColumns);
+    console.log("header: ", this.header);
+    console.log("table: ", this.table);
+
+    // "columnNames" => ['key', 'value'],
+    // "data" => [
+    // ['1', 'eins'],
+
+
+    // gehe alle selectedTableColumns durch
+    this.selectedTableColumns.forEach(col => console.log(col.name));
+      // prüfen, ob name jeweils in used index Zeile vorhanden
+      // next TODO: greife dafür aufs select zu
+
+      // Wenn doppelte oder fehlende
+        // direkt Fehlermeldung
+
+        // sonst push namen in columnNames array
+        // hole die spalte anhand der gemappten headline und pushe auf data array
+
+    // gebe objekt mit columnNames und data aus
   }
 }
