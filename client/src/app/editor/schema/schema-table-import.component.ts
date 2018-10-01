@@ -121,13 +121,16 @@ export class SchemaTableImportComponent implements OnInit {
 
       this.disableHeadlineSelection = false;
 
-      // Init use header Index      
+      // Init use header Index for the length of the header      
       for(let i = 0; i < this.header.length; i++) {
         this.useHeaderIndex.push(false);
       }
 
-      this.mapColumns(this.header, this.getMostSuitableTable(this.header, this.schemaTables));
-    } else if (this.parse.type === 'parseError') {
+      //this.mapColumns(this.header, this.getMostSuitableTable(this.header, this.schemaTables));      
+
+      this.changeTable();
+    } 
+    else if (this.parse.type === 'parseError') {
       this.errors = (<Parser.CsvParseError>this.parse).errors;
       this.disableHeadlineSelection = true;
     }
@@ -170,6 +173,18 @@ export class SchemaTableImportComponent implements OnInit {
   changeTable() {
     // Filter the columns of the wanted table (not multiple tables)
     this.selectedTableColumns = (this.schemaTables.filter(table => this.selectedTableName === table['_name']))[0]['_columns'];
+
+    //Activate the count of table columns
+    for (let i = 0; i < this.useHeaderIndex.length; i++) {
+      if (i < this.selectedTableColumns.length){
+        this.useHeaderIndex[i] = true;
+      }
+      else {
+        this.useHeaderIndex[i] = false;
+      }      
+    }    
+
+    console.log("use header:", this.useHeaderIndex);
 
     console.log("selected table cols: ", this.selectedTableColumns);
     console.log("selected table length: ", this.selectedTableColumns.length);

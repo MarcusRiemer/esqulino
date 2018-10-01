@@ -109,9 +109,7 @@
             <ng-template #mappingPossible>
                 <div class="mapping row mt-3" *ngFor="let headerCol of header; let i = index">
                     <div class="col-sm-6 col-md-5 w-100 d-flex align-items-center">
-                        <input type="checkbox" id="header-{{ headerCol }}" [checked]="i < selectedTableColumns.length" 
-                                [(ngModel)]="useHeaderIndex[i]" 
-                               [disabled]="header.length === selectedTableColumns.length" />
+                        <input type="checkbox" id="header-{{ headerCol }}" [(ngModel)]="useHeaderIndex[i]" />
                         <label class="mb-0 text-truncate" for="header-{{ headerCol }}">&nbsp;{{ headerCol }}</label>
                     </div>
 
