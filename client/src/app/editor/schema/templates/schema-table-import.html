@@ -159,54 +159,49 @@
 
         <!-- Mapping for the selected table -->
 
-        <div class="selected-table-mapping" *ngIf="header.length >= selectedTableColumns.length; then mappingPossible else mappingError"></div>
 
-            <ng-template #mappingPossible>
-                <div class="mapping row mt-3" *ngFor="let headerCol of header; let i = index">
-                    <div class="col-sm-6 col-md-5 w-100 d-flex align-items-center">
-                        <input type="checkbox" id="header-{{ headerCol }}" [(ngModel)]="useHeaderIndex[i]" />
-                        <label class="mb-0 text-truncate" for="header-{{ headerCol }}">&nbsp;{{ headerCol }}</label>
-                    </div>
+        <div class="mapping row mt-3" *ngFor="let tableCol of selectedTableColumns; let i = index">
+            
+            <div class="col-md-6 col-lg-4">
+                <select id="header-{{ headerCol }}" class="form-control h-100">
+                    <option *ngFor="let headerCol of header; let j = index" 
+                            value="{{ headerCol }}">
+                        {{ headerCol }}
+                    </option>
+                </select>        
+            </div>      
 
-                    <div class="d-none d-md-block col-md-1" *ngIf="useHeaderIndex[i]">
-                        <div style="font-size: 3em; line-height: 0; color: #00C851;">
-                            <i class="fa fa-arrow-circle-right"></i>
-                        </div>
-                    </div>
+            <!-- <div class="col-sm-6 col-md-5 w-100 d-flex align-items-center">
+                <input type="checkbox" id="header-{{ headerCol }}" [(ngModel)]="useHeaderIndex[i]" />
+                <label class="mb-0 text-truncate" for="header-{{ headerCol }}">&nbsp;{{ headerCol }}</label>
+            </div> -->
 
-                    <div class="d-none d-md-block col-md-1" *ngIf="!useHeaderIndex[i]">
-                        <span style="font-size: 3em; line-height: 0; color: #ff4444;">
-                            <i class="fa fa-ban"></i>
-                        </span>
-                    </div>
-
-                    <div class="col-sm-6 col-md-6">
-                        <select id="table-{{ tableCol }}" class="form-control h-100">
-                            <option *ngFor="let tableCol of selectedTableColumns; let j = index" 
-                                    value="{{tableCol.name}}" [selected]="j === i">
-                                {{ tableCol.name }}
-                            </option>
-                        </select>        
-                    </div>            
+            <div class="col-md-1" *ngIf="useHeaderIndex[i]">
+                <div style="font-size: 2em; line-height: 0; color: #00C851;">
+                    <i class="fa fa-arrow-circle-right"></i>
                 </div>
-            </ng-template>
+            </div>
 
-            <ng-template #mappingError>
-                <div class="error card text-white bg-danger mb-3">
-                    <div class="card-header">Invalid Table</div>
-    
-                    <div class="card-body">
-    
-                        <h5 class="card-title">Information: Headline enthält zu wenig Spalten für ausgewählte Tabelle</h5>
-                        
-                        <div class="card-text">
-                                Count: {{ header.length }} <br/>
-                                Expected: min. {{ selectedTableColumns.length }} <br/><br/>
-                        </div>
-    
-                    </div>
-                </div>            
-            </ng-template>
+            <div class="col-md-1" *ngIf="!useHeaderIndex[i]">
+                <span style="font-size: 2em; line-height: 0; color: #ff4444;">
+                    <i class="fa fa-ban"></i>
+                </span>
+            </div>
+
+
+            <div class="col-md-5 col-lg-3 d-flex align-items-center" id="table-{{ tableCol }}">&nbsp;{{ tableCol.name }}</div>
+
+
+            <!-- <div class="col-sm-6 col-md-6">
+                <select id="table-{{ tableCol }}" class="form-control h-100">
+                    <option *ngFor="let tableCol of selectedTableColumns; let j = index" 
+                            value="{{tableCol.name}}" [selected]="j === i">
+                        {{ tableCol.name }}
+                    </option>
+                </select>        
+            </div>        -->
+
+        </div>
         
     </div>
 
