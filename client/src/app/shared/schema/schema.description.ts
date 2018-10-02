@@ -24,7 +24,7 @@ export interface ForeignKeyDescription {
 }
 
 /**
- * The "over-the-wire" description of a single table 
+ * The "over-the-wire" description of a single table
  * with all of its columns.
  */
 export interface TableDescription {
@@ -44,15 +44,22 @@ export interface TableDescription {
 export type RawTableDataDescription = string[][];
 
 /**
- * Allows bulk insertion of tabular data like from CSV files. The order
- * of the data in the actual columns must match the order of the given
- * column names.
+ * Allows bulk insertion of tabular data like from CSV files or other
+ * bulky sources.
  */
 export interface RequestTabularInsertDescription {
   /**
+   * The names of the columns to insert the data in.
+   *
    * @minItems 1
    */
   columnNames: string[];
+
+  /**
+   * The rows to insert. The order of the data inside the columns must
+   * match the order of `columnNames`.
+   *
+   * @minItems 1
+   */
   data: RawTableDataDescription;
 }
-
