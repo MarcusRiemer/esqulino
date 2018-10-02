@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+
 import * as Parser from '../../shared/csv-parser';
-import { ProjectService } from '../project.service'
-import { Table } from '../../shared/schema';
-import { RawTableDataDescription } from '../../shared/schema/schema.description';
+import {
+  Table, Column, RawTableDataDescription
+} from '../../shared/schema';
+
+import { ProjectService, Project } from '../project.service'
+import { ToolbarService } from '../toolbar.service'
 
 /**
  * Displays the schema for a list of tables.
@@ -14,11 +18,11 @@ import { RawTableDataDescription } from '../../shared/schema/schema.description'
 export class SchemaTableImportComponent implements OnInit {
   // File Object as a string
   fileData: any;
-    
+
   // parsed Data from file
   parse: Parser.CsvParseResult | Parser.CsvParseError;
   errors: Parser.ValidationError[];
-  
+
   // Schema with the available tables
   schemaTables: Table[];
   selectedTable: Table;
@@ -26,7 +30,7 @@ export class SchemaTableImportComponent implements OnInit {
   selectedTableName: string;
 
   // parse result or own definition
-  csvHeader: string[];  
+  csvHeader: string[];
   // parse result
   csvTable: RawTableDataDescription;
 
@@ -46,19 +50,24 @@ export class SchemaTableImportComponent implements OnInit {
 
 
   /* ----- Initializations ----- */
-  
-  
-  // used for dependency injection   
+
+
+  // used for dependency injection
   constructor(
     private _projectService: ProjectService,
+    private _toolbarService: ToolbarService,
   ) {
   }
 
   // used for inits
   ngOnInit() {
+    // There are no toolbar items associated with this wizard-like component
+    this._toolbarService.resetItems();
+    this._toolbarService.savingEnabled = false;
+
     this.disableSelection = true;
     this.disableHeadlineSelection = true;
-    this.disableButton = true;    
+    this.disableButton = true;
 
     this.headlineUsage = "file";
     this.textMarker = '"';
@@ -70,9 +79,17 @@ export class SchemaTableImportComponent implements OnInit {
 
     // Get tables for schema
     this.schemaTables = this._projectService.cachedProject.schema['tables'];
+
     // Init first table
     this.selectedTable = this.schemaTables[0];
     this.selectedTableName = this.selectedTable['name'];
+
+
+    console.log("schema Tables: ", this.schemaTables);
+
+    this.schemaTables.forEach(function(table) {
+      console.log(table['_columns'].length);
+    });
   }
 
   /* ----- Component behaviour ----- */
@@ -97,7 +114,7 @@ export class SchemaTableImportComponent implements OnInit {
 
   // returns true if no mapping value is selected (for button disabling)
   noMappingValueSelected(values: number[]): boolean {
-    return values.filter(index => index !== -1).length === 0; 
+    return values.filter(index => index !== -1).length === 0;
   }
 
   // returns true if the col index (of the csv parse result) is currently selected for mapping
@@ -111,7 +128,7 @@ export class SchemaTableImportComponent implements OnInit {
   }
 
   // needed for defining independent own headlines
-  // tracks which items are added or removed 
+  // tracks which items are added or removed
   // by returning the unique identifier (index) for this item
   trackByFn(index: any) {
     return index;
@@ -124,7 +141,7 @@ export class SchemaTableImportComponent implements OnInit {
     if (this.headlineUsage == "own") {
       // copy header instead of reference
       let headerCopy = this.csvHeader.slice();
-      // set header copy as first table line  
+      // set header copy as first table line
       this.csvTable.unshift(headerCopy);
       // empty current header
       this.csvHeader = [];
@@ -233,12 +250,12 @@ export class SchemaTableImportComponent implements OnInit {
 
       this.disableHeadlineSelection = false;
 
-      this.selectedTable = Parser.getMostSuitableTable(this.csvHeader, this.schemaTables);      
+      this.selectedTable = Parser.getMostSuitableTable(this.csvHeader, this.schemaTables);
       this.selectedTableName = this.selectedTable['name'];
 
       // use change table function for selected Header Index and disable Button status
       this.changeTable(this.selectedTableName);
-    } 
+    }
     else if (this.parse.type === 'parseError') {
       this.errors = (<Parser.CsvParseError>this.parse).errors;
       this.disableHeadlineSelection = true;

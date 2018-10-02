@@ -66,7 +66,7 @@ export class SchemaComponent implements OnInit {
     })
     this._subscriptionRefs.push(subRef);
 
-    let btnImport = this._toolbarService.addButton("importTable", "Importiere Tabelle", "table", "i");
+    let btnImport = this._toolbarService.addButton("importTable", "Daten Importieren", "file-text", "i");
     subRef = btnImport.onClick.subscribe((res) => {
       this._router.navigate(["./import"], { relativeTo: this._route });
     })
