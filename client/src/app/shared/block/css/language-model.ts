@@ -1,7 +1,5 @@
 import { BlockLanguageDescription } from '../block-language.description'
-import {
-  SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
-} from '../block.description'
+import { VisualBlockDescriptions } from '../block.description'
 
 export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
   id: "af3a4b65-738c-4563-9632-2c65d3da6762",
@@ -24,7 +22,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               category: "rules",
               order: "insertFirst"
             },
-            visibility: ["ifLegalChild"]
+            visibility: { $var: "ifLegalChild" }
           },
           children: [
             {
@@ -60,7 +58,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "selectors",
                   order: "insertFirst",
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -100,7 +98,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               category: "declarations",
               order: "insertFirst",
             },
-            visibility: ["ifEmpty", "ifLegalChild"]
+            visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
           },
           children: [
             {
@@ -213,7 +211,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "name",
                   order: "insertFirst",
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -251,7 +249,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "value",
                   order: "insertFirst",
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {

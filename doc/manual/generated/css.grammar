@@ -1,17 +1,12 @@
 grammar "css" {
   node "document" {
-    children "rules" ::= rule*
+    children allowed "rules" ::= rule*
   }
   node "rule" {
-    children "selectors" ::= selector*
-    children "declarations" ::= declaration*
+    children sequence "selectors" ::= selector*
+    children allowed "declarations" ::= declaration*
   }
-  typedef "selector" {
-    "selectorType"
-    "selectorClass"
-    "selectorId"
-    "selectorUniversal"
-  }
+  typedef "selector" ::= selectorType | selectorClass | selectorId | selectorUniversal
   node "selectorType" {
     prop "value" { string }
   }
@@ -24,8 +19,8 @@ grammar "css" {
   node "selectorUniversal" {
   }
   node "declaration" {
-    children "name" ::= propertyName
-    children "value" ::= exprColor | exprAny
+    children choice "name" ::= propertyName
+    children choice "value" ::= exprColor | exprAny
   }
   node "exprColor" {
     prop "value" { string }

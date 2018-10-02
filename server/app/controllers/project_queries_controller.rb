@@ -13,13 +13,13 @@ class ProjectQueriesController < ApplicationController
   def run_arbitrary
     request_data = ensure_request("ArbitraryQueryRequestDescription", request.body.read)
 
-    project = Project.find_by(slug: params['project_id'])
+    project = Project.find_by!(slug: params['project_id'])
     database_id = nil # params['database_id']
     database = project.database_by_id_or_default(database_id)
     
     sql_ast = request_data['ast']
     begin
-      sql = IdeService.instance.emit_code(sql_ast, sql_ast['language'])
+      sql = IdeService.guaranteed_instance.emit_code(sql_ast, sql_ast['language'])
       result = database.execute_sql(sql, request_data['params'])
 
       if result['rows'].length > preview_max_rows then

@@ -11,7 +11,6 @@ import { environment } from '../environments/environment';
 import { SharedAppModule } from './shared/shared.module';
 import { FrontModule } from './front/front.module';
 import { EditorModule } from './editor/editor.module';
-import { AdminModule } from './admin/admin.module';
 
 import { SqlScratchComponent } from './app.component';
 import { routing } from './app.routes';
@@ -36,11 +35,10 @@ if (typeof window !== "undefined") {
     // Tracking with Piwik
     Angulartics2Module.forRoot([Angulartics2Piwik], {}),
 
-    // Application    
+    // Actual Application    
     SharedAppModule.forRoot(),
     FrontModule,
     EditorModule,
-    AdminModule,
     routing,
   ],
   declarations: [
@@ -58,7 +56,7 @@ if (typeof window !== "undefined") {
   ]
 })
 export class AppModule {
-  constructor( @Inject(PLATFORM_ID) platformId: string) {
+  constructor(@Inject(PLATFORM_ID) platformId: string) {
     // Setting up Piwik if there is a configuration and we are running in the browser
     const piwikConf = environment.piwik;
     if (piwikConf && isPlatformBrowser(platformId)) {

@@ -1,12 +1,12 @@
-import { browser, element, by, protractor } from 'protractor'
-import { Key, promise } from 'selenium-webdriver'
+import { browser, element, by } from 'protractor'
+import { Key } from 'selenium-webdriver'
 
 describe('Test Project: Settings', () => {
   const testProjectId = "test";
   const settingsUrl = `/editor/${testProjectId}/settings`;
 
   const saveBtn = element(by.id('toolbar-btn-save'));
-  
+
   it('can be edited & saved', () => {
     browser.get(settingsUrl);
 
@@ -18,11 +18,11 @@ describe('Test Project: Settings', () => {
 
     // Setting it
     nameEle.clear()
-      .then( () => nameEle.sendKeys(Key.chord(Key.CONTROL, "a"), nameVal))
-      .then( () => descEle.sendKeys(Key.chord(Key.CONTROL, "a"), descVal))
-      .then( () => saveBtn.click())
-      .then( () => browser.waitForAngular())
-      .then( () => {
+      .then(() => nameEle.sendKeys(Key.chord(Key.CONTROL, "a"), nameVal))
+      .then(() => descEle.sendKeys(Key.chord(Key.CONTROL, "a"), descVal))
+      .then(() => saveBtn.click())
+      .then(() => browser.waitForAngular())
+      .then(() => {
         // And reload the page, asserting that everything has been saved
         browser.get(settingsUrl);
 
@@ -39,14 +39,14 @@ describe('Test Project: Settings', () => {
     const nameVal = Math.random().toString(36).substr(2);
 
     someQuery.clear()
-      .then( () => someQuery.sendKeys(nameVal))
-      .then( () => browser.waitForAngular())
-      .then( () => {
+      .then(() => someQuery.sendKeys(nameVal))
+      .then(() => browser.waitForAngular())
+      .then(() => {
         // Make sure the sidebar is updated correctly
         const navQueries = element(by.css(".nav-query")).all(by.css("a.nav-link"));
         navQueries
-          .filter((n) => n.getText().then((t : any) => t.includes(nameVal)))
-          .then(  (res) => expect(res.length).toEqual(1, "Exactly 1 item should have the new name") as any);
+          .filter((n) => n.getText().then((t: any) => t.includes(nameVal)))
+          .then((res) => expect(res.length).toEqual(1, "Exactly 1 item should have the new name") as any);
       })
   });
 
@@ -57,17 +57,17 @@ describe('Test Project: Settings', () => {
     const nameVal = Math.random().toString(36).substr(2);
 
     someQuery.clear()
-      .then( () => someQuery.sendKeys(nameVal))
-      .then( () => browser.waitForAngular())
-      .then( () => {
+      .then(() => someQuery.sendKeys(nameVal))
+      .then(() => browser.waitForAngular())
+      .then(() => {
         // Make sure the sidebar is updated correctly
         const navQueries = element(by.css(".nav-page")).all(by.css("a.nav-link"));
         navQueries
-          .filter((n) => n.getText().then((t : any) => t.includes(nameVal)))
-          .then((res) => expect(res.length).toEqual(1, "Exactly 1 item should have the new name")  as any);
+          .filter((n) => n.getText().then((t: any) => t.includes(nameVal)))
+          .then((res) => expect(res.length).toEqual(1, "Exactly 1 item should have the new name") as any);
       })
   });
-  
+
   it('can delete all queries', () => {
     browser.get(settingsUrl);
 
@@ -75,9 +75,9 @@ describe('Test Project: Settings', () => {
       .all(by.css("button"));
 
     querBtnDelete
-      .map( e => {e.click(), browser.waitForAngular() })
-      .then( () => browser.waitForAngular() )
-      .then( () => {
+      .map(e => { e.click(), browser.waitForAngular() })
+      .then(() => browser.waitForAngular())
+      .then(() => {
         // Reload page and assure there are no queries left
         browser.get(settingsUrl);
         expect(querBtnDelete.count()).toEqual(0);
@@ -91,9 +91,9 @@ describe('Test Project: Settings', () => {
       .all(by.css("button"));
 
     pageBtnDelete
-      .map( e => e.click())
-      .then( () => browser.waitForAngular() )
-      .then( () => {
+      .map(e => e.click())
+      .then(() => browser.waitForAngular())
+      .then(() => {
         // Reload page and assure there are no queries left
         browser.get(settingsUrl);
         expect(pageBtnDelete.count()).toEqual(0);

@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 
-import { QualifiedTypeName, NodeDescription, NodeType, CodeResource } from '../../shared/syntaxtree';
-import { BlockLanguage, FixedSidebarBlock } from '../../shared/block';
+import { CodeResource } from '../../shared/syntaxtree';
+import { FixedSidebarBlock } from '../../shared/block';
 
 import { SIDEBAR_MODEL_TOKEN } from '../editor.token';
 

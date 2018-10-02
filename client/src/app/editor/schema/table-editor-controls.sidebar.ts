@@ -1,7 +1,6 @@
 import { Component } from '@angular/core'
 
 import { ProjectService } from '../project.service'
-import { Table } from '../../shared/schema'
 
 /**
  * Shows available drag-operations for the table editor.

@@ -21,9 +21,17 @@ export class BlockLayoutDirective {
   }
 
   ngOnInit() {
+    // "flex" for easy layouting
     this.hostElement.style.display = "flex";
+
+    // Its the decision of the language designer whether a row that is
+    // too long should wrap around.
     this.hostElement.style.flexWrap = this.flexWrap(!!this.layout.wrapChildren);
+
+    // Translate given direction to flex direction
     this.hostElement.style.flexDirection = this.flexDirection(this.layout.direction);
+
+    // Alignment depends on the direction
     this.hostElement.style.alignItems = this.flexAlign(this.layout.direction);
   }
 

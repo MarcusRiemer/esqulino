@@ -1,15 +1,23 @@
 --- !ruby/object:ProjectDatabase
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromUser
   name: project_id
   value_before_type_cast: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: default
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 9ba2daa8-d66a-4e95-b52b-535edac64f58
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "chapter", "columns": [{"name": "chapter_id",
     "type": "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value":
@@ -25,10 +33,10 @@ concise_attributes:
     [{"to_table": "chapter", "to_column": "chapter_id", "from_column": "chapter_to"}]},
     {"references": [{"to_table": "chapter", "to_column": "chapter_id", "from_column":
     "chapter_from"}]}]}]'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-02-26 10:22:36.331336'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
   value_before_type_cast: '2018-02-26 10:24:43.034854'
 new_record: false

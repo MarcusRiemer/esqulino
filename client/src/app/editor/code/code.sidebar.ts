@@ -1,13 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
 
-import { Subscription } from 'rxjs'
 import { map, flatMap } from 'rxjs/operators'
-
-import { CodeResource } from '../../shared/syntaxtree';
-import { Sidebar } from '../../shared/block';
-
-import { SIDEBAR_MODEL_TOKEN } from '../editor.token';
 
 import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
 import { CurrentCodeResourceService } from '../current-coderesource.service';

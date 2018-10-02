@@ -1,22 +1,52 @@
+/* The "raw" AST editor */
 .ast {
+    /* Basic outline for each node */
     .node {
         border: 1px solid black;
         padding: 5px;
     }
 
+    /* Indent each node after the first */
     .node .node {
         margin: 10px;
     }
 }
 
+trash {
+    font-size: 6rem;
+    position: fixed;
+    padding: 5px;
+    right: 350px;
+    top: 45px;
+    z-index: 1;
+}
+
+/* The "block" AST editor */
 .block-editor-root {
-    font-family: monospace;
+    /* Default font settings */
+    font-family: $monospace-font;
     font-size: 1.2rem;
 
+    // Input fields for users need to somehow "blend in" with the rest of the
+    // blocks but also be recognizable.
     input {
         border: 0px;
         border-bottom: 1px dashed black;
+        background-color: transparent;
     }
+
+    .from-iterator {
+        //border: 5px solid blue;
+    }
+
+    .from-block {
+        //border: 5px solid red;
+    }
+}
+
+/* This class is applied to the error tooltip itself */
+.error-marker-tooltip {
+    background-color: #b71c1c;
 }
 
 sidebar-item-host .ast {
@@ -25,7 +55,7 @@ sidebar-item-host .ast {
     }
 
     .block {
-        font-family: monospace;
+        font-family: $monospace-font;
         cursor: default;
         font-size: 1.2rem;
         border: 2px solid black;

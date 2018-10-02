@@ -7,7 +7,7 @@
         "language": "sql",
         "name": "constant",
         "properties": {
-          "value": 1
+          "value": "1"
         }
       }
     ]

@@ -23,6 +23,7 @@ Block & Programming Languages
 
 At the very core, there are three different structures involved when a program is edited with a block editor:
 
+* The **grammar** defines the basic structure of an abstract syntax tree that may be edited. It may be used to automatically generate block languages and validators.
 * The **abstract syntax tree** represents the structure of the code that is via the **block editor**. In a conventional system this can be thought of as a "file".
 * The block editor know how to represent the "file" because it uses a **block language** which controls how the syntaxtree is layouted and which blocks are available in the sidebar.
 * The actual compilation and validation is done by a **programming language**.

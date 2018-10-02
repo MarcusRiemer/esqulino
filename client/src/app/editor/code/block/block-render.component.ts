@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
-import { Node, NodeLocation, Tree, CodeResource } from '../../../shared/syntaxtree';
-import { BlockLanguage, VisualBlockDescriptions } from '../../../shared/block';
+import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { VisualBlockDescriptions } from '../../../shared/block';
 
 /**
  * Renders a single and well known visual element of a node.

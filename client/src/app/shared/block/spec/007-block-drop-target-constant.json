@@ -1,0 +1,29 @@
+{
+  "id": "test",
+  "name": "test",
+  "editorBlocks": [
+    {
+      "describedType": {
+        "languageName": "test",
+        "typeName": "root"
+      },
+      "visual": [
+        {
+          "blockType": "dropTarget",
+          "direction": "horizontal",
+          "dropTarget": {
+            "visibility": { "$var": "ifEmpty" }
+          },
+          "children": [
+            {
+              "blockType": "constant",
+              "text": "Drop"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sidebarBlocks": []
+}
+

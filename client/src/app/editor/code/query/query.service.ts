@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs'
@@ -8,7 +7,7 @@ import {
   ArbitraryQueryRequestDescription, QueryParamsDescription, QueryResponseDescription
 } from '../../../shared/syntaxtree/sql/query.description';
 import { ServerApiService } from '../../../shared/serverapi.service';
-import { Node, CodeResource } from '../../../shared/syntaxtree';
+import { CodeResource } from '../../../shared/syntaxtree';
 
 export { QueryParamsDescription }
 

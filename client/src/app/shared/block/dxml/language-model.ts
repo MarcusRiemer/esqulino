@@ -1,6 +1,6 @@
 import { BlockLanguageDescription } from '../block-language.description'
 import {
-  SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
+  SidebarBlockDescription, VisualBlockDescriptions
 } from '../block.description'
 
 const SIDEBAR_BLOCKS_BASIC: SidebarBlockDescription[] = [
@@ -234,7 +234,7 @@ const EDITOR_BLOCKS = [
                 category: "attributes",
                 order: "insertLast"
               },
-              visibility: ["ifLegalChild"]
+              visibility: { $var: "ifLegalChild" }
             },
             children: [
               {
@@ -261,7 +261,7 @@ const EDITOR_BLOCKS = [
                 category: "elements",
                 order: "insertFirst"
               },
-              visibility: ["ifLegalChild"]
+              visibility: { $var: "ifLegalChild" }
             },
             children: [
               {
@@ -348,7 +348,7 @@ const EDITOR_BLOCKS = [
                 category: "value",
                 order: "insertFirst"
               },
-              visibility: ["ifEmpty", "ifLegalChild"]
+              visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
             },
             children: [
               {
@@ -461,7 +461,7 @@ const EDITOR_BLOCKS = [
   },
 ]
 
-export const DYNAMIC_LANGUAGE_MODEL: BlockLanguageDescription = {
+export const BLOCK_LANGUAGE_STATIC: BlockLanguageDescription = {
   id: "84ece7cd-8824-4310-a1db-917c29c904c9",
   slug: "xml",
   name: "XML (Statisch)",
@@ -482,7 +482,7 @@ export const DYNAMIC_LANGUAGE_MODEL: BlockLanguageDescription = {
   editorBlocks: EDITOR_BLOCKS
 }
 
-export const LANGUAGE_MODEL: BlockLanguageDescription = {
+export const BLOCK_LANGUAGE_DYNAMIC: BlockLanguageDescription = {
   id: "c851d3be-3129-4fb3-ae37-99f40bce3dd0",
   slug: "dxml",
   name: "XML (Dynamisch)",

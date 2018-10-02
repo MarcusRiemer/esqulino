@@ -46,7 +46,6 @@ module ValidateAgainstMatcher
         @error
       else
         @result
-          .map{|e| e[:message].sub(e[:schema].to_s, %Q["#{@schema_name}"])}
           .join "\n"
       end
     end

@@ -1,7 +1,5 @@
 import { BlockLanguageDescription } from '../block-language.description'
-import {
-  SidebarBlockDescription, EditorBlockDescription, VisualBlockDescriptions
-} from '../block.description'
+import { VisualBlockDescriptions } from '../block.description'
 
 export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
   id: "db441c27-6a19-4f2f-95a9-f3bc44675b4f",
@@ -12,9 +10,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
     { componentType: "query-preview" }
   ],
   sidebars: [
-    {
-      type: "databaseSchema",
-    },
+    { type: "databaseSchema" },
     {
       type: "fixedBlocks",
       caption: "SQL",
@@ -231,7 +227,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               category: "where",
               order: "insertFirst"
             },
-            visibility: ["ifLegalChild"]
+            visibility: { $var: "ifLegalChild" }
           },
           children: [
             {
@@ -253,7 +249,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               category: "groupBy",
               order: "insertFirst"
             },
-            visibility: ["ifLegalChild"]
+            visibility: { $var: "ifLegalChild" }
           },
           children: [
             {
@@ -275,7 +271,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               category: "orderBy",
               order: "insertFirst"
             },
-            visibility: ["ifLegalChild"]
+            visibility: { $var: "ifLegalChild" }
           },
           children: [
             {
@@ -306,7 +302,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               order: "insertFirst",
               category: "columns"
             },
-            visibility: ["ifLegalChild"]
+            visibility: { $var: "ifLegalChild" }
           },
           children: [
             {
@@ -327,7 +323,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "columns",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -531,7 +527,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "arguments",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -590,7 +586,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "lhs",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -621,7 +617,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "operator",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -652,7 +648,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "rhs",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -727,7 +723,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "tables",
                   order: "insertFirst",
                 },
-                visibility: ["ifLegalChild"]
+                visibility: { $var: "ifLegalChild" }
               },
               children: [
                 {
@@ -746,7 +742,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                       category: "tables",
                       order: "insertFirst"
                     },
-                    visibility: ["ifEmpty", "ifLegalChild"]
+                    visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
                   },
                   children: [
                     {
@@ -791,7 +787,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "joins",
                   order: "insertLast"
                 },
-                visibility: ["ifLegalChild"]
+                visibility: { $var: "ifLegalChild" }
               },
               children: [
                 {
@@ -819,7 +815,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               category: "table",
               order: "insertFirst",
             },
-            visibility: ["ifLegalChild"]
+            visibility: { $var: "ifLegalChild" }
           },
           children: [
             {
@@ -855,7 +851,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               category: "table",
               order: "insertFirst",
             },
-            visibility: ["ifLegalChild"]
+            visibility: { $var: "ifLegalChild" }
           },
           children: [
             {
@@ -877,7 +873,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "table",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -919,7 +915,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "using",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -961,7 +957,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               category: "table",
               order: "insertFirst",
             },
-            visibility: ["ifLegalChild"],
+            visibility: { $var: "ifLegalChild" }
           },
           children: [
             {
@@ -983,7 +979,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "table",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -1025,7 +1021,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "on",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -1095,7 +1091,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               category: "expressions",
               order: "insertFirst",
             },
-            visibility: ["ifLegalChild"]
+            visibility: { $var: "ifLegalChild" }
           },
           children: [
             {
@@ -1114,7 +1110,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "expressions",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -1165,7 +1161,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               category: "expressions",
               order: "insertFirst",
             },
-            visibility: ["ifLegalChild"]
+            visibility: { $var: "ifLegalChild" }
           },
           children: [
             {
@@ -1184,7 +1180,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "expressions",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {
@@ -1235,7 +1231,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
               category: "expressions",
               order: "insertFirst",
             },
-            visibility: ["ifLegalChild"]
+            visibility: { $var: "ifLegalChild" }
           },
           children: [
             {
@@ -1254,7 +1250,7 @@ export const BLOCK_LANGUAGE_DESCRIPTION: BlockLanguageDescription = {
                   category: "expressions",
                   order: "insertFirst"
                 },
-                visibility: ["ifEmpty", "ifLegalChild"]
+                visibility: { $some: [{ $var: "ifEmpty" }, { $var: "ifLegalChild" }] }
               },
               children: [
                 {

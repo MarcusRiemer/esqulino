@@ -257,7 +257,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         });
 
 
-        node.getChildrenInCategory("joins").forEach((c, idx, arr) => {
+        node.getChildrenInCategory("joins").forEach((c) => {
           process.addConvertedFragment('\n\t', node);
           process.generateNode(c);
         });
@@ -282,7 +282,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
           process.generateNode(head);
         }
 
-        tail.forEach((c, idx, arr) => {
+        tail.forEach((c) => {
           process.addConvertedFragment('\n\t', node);
           process.generateNode(c);
         });

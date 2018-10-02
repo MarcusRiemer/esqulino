@@ -1,9 +1,13 @@
-# Serves known static files or falls back to the index.html if the
-# file that is asked for is not known
+# Various files for that no processing is required
 class StaticFilesController < ApplicationController
   # Required to make use of rails templates
   include ActionView::Rendering
 
+  # Allows access to schema files
+  include JsonSchemaHelper
+
+  # Serves known static files or falls back to the index.html if the
+  # file that is asked for is not known
   def index
     requested_path = URI.parse(request.original_url).path[1..-1]
     if requested_path.start_with? 'api' then
@@ -23,6 +27,16 @@ class StaticFilesController < ApplicationController
       end
 
       send_file local_path, disposition: 'inline'
+    end
+  end
+
+  def schema
+    schema_name = params[:schema_name]
+    schema_file = schema_path(schema_name)
+    if File.exists? schema_file then
+      send_file schema_file, disposition: 'inline'
+    else
+      render status: 404, plain: ""
     end
   end
 end

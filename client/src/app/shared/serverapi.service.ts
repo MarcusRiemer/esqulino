@@ -1,13 +1,14 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core'
-import { isPlatformBrowser, isPlatformServer } from '@angular/common'
-
-import { RequestErrorDescription } from './serverapi.service.description'
+import { isPlatformServer } from '@angular/common'
 
 /**
  * Instead of constructing URLs on the fly, they should be created using
  * this service. It ensures that the server actually provides the
  * capatabilities to respond to the request, abstracts away the concrete
  * URL to call and can do some basic parameter checks.
+ *
+ * This file is manually kept in sync with the rails route definitions 
+ * at `server/config/routes.rb`.
  *
  * TODO: Cleanup code so that these methods rely on each other instead
  *       of constructing the same base-url over and over again.
@@ -18,7 +19,7 @@ export class ServerApiService {
 
   private static BASE_HOST = "http://www.blattwerkzeug.de";
 
-  public constructor( @Inject(PLATFORM_ID) private _platformId: Object) {
+  public constructor(@Inject(PLATFORM_ID) private _platformId: Object) {
     this._apiBaseUrl = "/api";
 
     // If we are running the universal server, there is no "parenting"
@@ -32,6 +33,13 @@ export class ServerApiService {
   }
 
   /**
+   * Retrieves a specific schema
+   */
+  individualJsonSchemaUrl(name: string): string {
+    return (`${this._apiBaseUrl}/schema/${name}`)
+  }
+
+  /**
    * Retrieves the URL that is used to list all public block languages.
    */
   getBlockLanguageListUrl(): string {
@@ -41,8 +49,15 @@ export class ServerApiService {
   /**
    * Retrieves the full description of a specific block language.
    */
-  getBlockLanguageUrl(id: string): string {
+  individualBlockLanguageUrl(id: string): string {
     return (`${this._apiBaseUrl}/block_languages/${id}`);
+  }
+
+  /**
+   * Allows creation of new block languages
+   */
+  createBlockLanguageUrl(): string {
+    return (`${this._apiBaseUrl}/block_languages`);
   }
 
   /**
@@ -55,8 +70,22 @@ export class ServerApiService {
   /**
    * Retrieves the full description of a specific grammar.
    */
-  getGrammarUrl(id: string) {
+  individualGrammarUrl(id: string) {
     return (`${this._apiBaseUrl}/grammars/${id}`)
+  }
+
+  /**
+   * Retrieves block languages that are related to this grammar
+   */
+  individualGrammarRelatedBlockLanguagesUrl(id: string) {
+    return (`${this.individualGrammarUrl(id)}/related_block_languages`)
+  }
+
+  /**
+   * Retrieves the URL that is used to list all public block language generators.
+   */
+  getBlockLanguageGeneratorListUrl(): string {
+    return (`${this._apiBaseUrl}/block_language_generators`)
   }
 
   /**

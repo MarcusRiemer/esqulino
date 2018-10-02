@@ -1,7 +1,7 @@
 import { TableDescription } from './schema.description'
 import { Schema } from './schema'
 
-const schemaModel: TableDescription[] = [
+export const SPEC_TABLES: TableDescription[] = [
   {
     "name": "ereignis",
     "foreign_keys": [],
@@ -73,7 +73,7 @@ const schemaModel: TableDescription[] = [
 
 describe('Schema', () => {
   it('Accessing an existing table', () => {
-    let s = new Schema(schemaModel);
+    let s = new Schema(SPEC_TABLES);
 
     expect(s.getTable("person")).toBeTruthy();
     expect(s.getTable("ereignis")).toBeTruthy();

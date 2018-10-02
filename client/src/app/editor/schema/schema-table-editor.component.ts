@@ -9,7 +9,7 @@ import {
   SwitchColumnOrder, RenameColumn,
   ChangeColumnType, ChangeColumnPrimaryKey,
   ChangeColumnNotNull, ChangeColumnStandardValue,
-  ChangeTableName, TableCommandHolder, AddForeignKey, RemoveForeignKey
+  ChangeTableName, AddForeignKey, RemoveForeignKey
 } from '../../shared/schema/table-commands'
 
 import { SchemaService } from '../schema.service'
@@ -109,7 +109,6 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
    * Load the project to access the schema
    */
   ngOnInit() {
-    let goBack = false;
     console.log("Editor loading!");
     let subRef = this._routeParams.params.subscribe(params => {
       this._originalTableName = params['tableName'];
@@ -161,7 +160,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     // Button to show the preview of the currently editing table
     if (!this.isNewTable) {
       let btnCreate = this._toolbarService.addButton("preview", "Vorschau", "search", "p");
-      subRef = btnCreate.onClick.subscribe((res) => {
+      subRef = btnCreate.onClick.subscribe(_ => {
         this.previewBtn();
       })
       this._subscriptionRefs.push(subRef);
@@ -169,14 +168,14 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
 
     // Button to undo the last change
     let btnCreate = this._toolbarService.addButton("undo", "Undo", "undo", "z");
-    subRef = btnCreate.onClick.subscribe((res) => {
+    subRef = btnCreate.onClick.subscribe(_ => {
       this.undoBtn();
     })
     this._subscriptionRefs.push(subRef);
 
     // Button to redo the last undone change
     btnCreate = this._toolbarService.addButton("redo", "Redo", "repeat", "y");
-    subRef = btnCreate.onClick.subscribe((res) => {
+    subRef = btnCreate.onClick.subscribe(_ => {
       this.redoBtn();
     })
     this._subscriptionRefs.push(subRef);
@@ -184,14 +183,14 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
     // Button to save all changes on the Server
     this._toolbarService.savingEnabled = false;
     btnCreate = this._toolbarService.addButton("save", "Speichern", "floppy-o", "s");
-    subRef = btnCreate.onClick.subscribe((res) => {
+    subRef = btnCreate.onClick.subscribe(_ => {
       this.saveBtn();
     })
     this._subscriptionRefs.push(subRef);
 
     // Button to cancle the editing without saving
     btnCreate = this._toolbarService.addButton("cancel", "Abbrechen", "times", "x");
-    subRef = btnCreate.onClick.subscribe((res) => {
+    subRef = btnCreate.onClick.subscribe(_ => {
       this.cancelBtn();
     })
     this._subscriptionRefs.push(subRef);
@@ -256,7 +255,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         let schemaref = this._schemaService.saveNewTable(this._project, tableToSend)
           .pipe(first())
           .subscribe(
-            table => {
+            _ => {
               window.alert("Änderungen gespeichert!");
               this._schemaService.clearCurrentlyEdited();
               this._router.navigate(["../../"], { relativeTo: this._routeParams });

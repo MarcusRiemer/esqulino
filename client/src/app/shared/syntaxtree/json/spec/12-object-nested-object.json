@@ -1,0 +1,54 @@
+{
+  "language": "json",
+  "name": "object",
+  "children": {
+    "values": [
+      {
+        "language": "json",
+        "name": "key-value",
+        "children": {
+          "key": [
+            {
+              "language": "json",
+              "name": "string",
+              "properties": {
+                "value": "key"
+              }
+            }
+          ],
+          "value": [
+            {
+              "language": "json",
+              "name": "object",
+              "children": {
+                "values": [
+                  {
+                    "language": "json",
+                    "name": "key-value",
+                    "children": {
+                      "key": [
+                        {
+                          "language": "json",
+                          "name": "string",
+                          "properties": {
+                            "value": "key"
+                          }
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "json",
+                          "name": "null"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 <!-- Making the parent draggable so we can cancel
      all draggable events during editing.-->
-<div *ngIf="currentlyEditing"
+<div *ngIf="currentlyEditing; else notEditing"
      (dragstart)="onDragStart($event)"
      [blockBase]="visual"
      draggable="true">
@@ -13,6 +13,6 @@
   <button (click)="acceptInput()" class="btn btn-sm btn-success">✓</button>
   <button (click)="cancelInput()" class="btn btn-sm btn-warning">✗</button>
 </div>
-<ng-container *ngIf="!currentlyEditing">
+<ng-template #notEditing>
   <span [blockBase]="visual" (click)="currentlyEditing = true;">{{ currentValue }}</span>
-</ng-container>
+</ng-template>

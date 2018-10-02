@@ -1,15 +1,23 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromUser
   name: project_id
   value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: 9b4716e7-9c02-4af2-8457-5965f58fff70
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Sprecher_Mehrere_Charaktere
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: d84aaf05-03ee-4a4b-8640-a1d3ff295c67
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
     "from", "children": {"joins": [{"name": "innerJoinOn", "children": {"on": [{"name":
@@ -42,19 +50,19 @@ concise_attributes:
     [{"name": "columnName", "language": "sql", "properties": {"columnName": "Charakter_ID",
     "refTableName": "Charakter"}}]}, "language": "sql", "properties": {"name": "COUNT"}}]},
     "language": "sql"}]}, "language": "sql"}'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-03-05 12:17:49.771123'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-03-06 06:59:43.478027'
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  value_before_type_cast: '2018-08-04 17:08:02.476123'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
-  value_before_type_cast: db441c27-6a19-4f2f-95a9-f3bc44675b4f
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+  value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: sql
-- !ruby/object:ActiveRecord::Attribute::FromDatabase
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: "SELECT Sprecher.Sprecher_Name, COUNT(Charakter.Charakter_ID),
     GROUP_CONCAT(Charakter.Charakter_Name)\nFROM Sprecher\n\tINNER JOIN Charakter_Sprecher

@@ -2,7 +2,6 @@ import { Tree, NodeDescription, Language, QualifiedTypeName, typenameEquals } fr
 
 import { FixedBlocksSidebar } from './fixed-blocks-sidebar'
 import { Sidebar } from './sidebar'
-import { EditorBlock } from './editor-block'
 import { BlockLanguageDescription, EditorComponentDescription } from './block-language.description'
 import { EditorBlockDescription } from './block.description'
 import * as Forward from './block-language.forward'

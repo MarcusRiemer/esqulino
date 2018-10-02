@@ -1,10 +1,6 @@
-import { Observable } from 'rxjs';
-
 import { Component, Input } from '@angular/core';
 
 import { Node } from '../../../shared/syntaxtree';
-
-import { DragService } from '../../drag.service';
 
 /**
  * Displays a group of nodes with placeholders spread out between them.
@@ -23,10 +19,6 @@ export class NodeChildrenComponent {
 
   // The node that is the parenting node for all of these nodes
   @Input() parent: Node;
-
-  constructor(
-    private _dragService: DragService
-  ) { }
 
   /**
    * @return The number of nodes this group has.

@@ -1,4 +1,5 @@
 import { SidebarDescription, EditorBlockDescription } from './block.description'
+import { BlockLanguageGeneratorDocument } from './generator/generator.description';
 
 /**
  * Augments a language with information about the UI layer. This definition is
@@ -41,6 +42,17 @@ export interface BlockLanguageListDescription {
   defaultProgrammingLanguageId: string;
 
   /**
+   * The ID of the block language that may have been used to generate this
+   * block language.
+   */
+  blockLanguageGeneratorId?: string;
+
+  /**
+   * The grammar that this block language may visualize.
+   */
+  grammarId?: string;
+
+  /**
    * Date & time this resource was created
    */
   createdAt?: string;
@@ -57,16 +69,9 @@ export interface BlockLanguageListDescription {
 export type EditorComponentDescription = QueryPreviewComponentDescription;
 
 /**
- * Basic properties for all editor components
+ * Displays (limited) results of SQL-queries
  */
-export interface BaseEditorComponentDescription {
-
-}
-
-/**
- * 
- */
-export interface QueryPreviewComponentDescription extends BaseEditorComponentDescription {
+export interface QueryPreviewComponentDescription {
   componentType: "query-preview"
 }
 
@@ -89,4 +94,16 @@ export interface BlockLanguageDocument {
    * language.
    */
   editorComponents: EditorComponentDescription[];
+
+  /**
+   * Information on how to (re)-generate this block language.
+   */
+  localGeneratorInstructions?: BlockLanguageGeneratorDocument
+}
+
+/**
+ * The server hands out additional information that is only used for display purposes.
+ */
+export interface BlockLanguageListResponseDescription extends BlockLanguageListDescription {
+  generated: boolean
 }

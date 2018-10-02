@@ -1,6 +1,5 @@
 import { Routes, RouterModule } from '@angular/router'
 
-import { adminRoutes } from './admin/admin.routes'
 import { editorRoutes } from './editor/editor.routes'
 import { frontRoutes } from './front/front.routes'
 
@@ -13,19 +12,19 @@ const AppRoutes: Routes = [
   {
     path: 'editor/:projectId',
     children: editorRoutes
-    //loadChildren: '/app/editor/editor.module'
   },
   {
     path: 'about',
     children: frontRoutes
-    //loadChildren: '/app/front/front.module'
   },
   {
+    // The admin module has a few heavyweight dependencies and is
+    // therefore not bundled with the main application.
     path: 'admin',
-    children: adminRoutes
+    loadChildren: './admin/admin.module#AdminModule'
   }
 ]
 
 export const routing = RouterModule.forRoot(AppRoutes, {
-  paramsInheritanceStrategy: "always"
+  paramsInheritanceStrategy: "always",
 });

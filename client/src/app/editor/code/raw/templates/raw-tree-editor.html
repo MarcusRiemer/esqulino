@@ -54,8 +54,10 @@
         <div class="card mb-3">
           <div class="card-body">
             <h4 class="card-title">Datenmodell</h4>
-            <pre *ngIf="!currentTree.isEmpty"
-                 [innerText]="currentTree.toModel() | json"></pre>
+            <textarea *ngIf="!currentTree.isEmpty"
+                      rows="60"
+                      [value]="currentTree.toModel() | json"
+                      class="form-control"></textarea>
           </div>
         </div>
       </div>

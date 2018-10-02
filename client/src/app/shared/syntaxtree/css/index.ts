@@ -1,11 +1,11 @@
-import { LanguageDescription } from '../language.description'
+import { LanguageDefinition } from '../language'
 
 import { NODE_CONVERTER } from './css.codegenerator'
 import { GRAMMAR_DESCRIPTION } from './css.grammar'
 
-export const LANGUAGE_DESCRIPTION: LanguageDescription = {
+export const LANGUAGE_DESCRIPTION: LanguageDefinition = {
   id: "css",
   name: "CSS",
-  generators: NODE_CONVERTER,
+  emitters: NODE_CONVERTER,
   validators: [GRAMMAR_DESCRIPTION]
 }

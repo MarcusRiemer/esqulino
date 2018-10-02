@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { Http, Response, Headers } from '@angular/http'
+import { Http } from '@angular/http'
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { ServerApiService } from '../../shared/serverapi.service'
