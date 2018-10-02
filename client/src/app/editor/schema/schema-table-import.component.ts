@@ -165,14 +165,18 @@ export class SchemaTableImportComponent implements OnInit {
       if (lengthFilter.length > 1) {
         // use the max value (the closest length)
         lengthFilter = lengthFilter.reduce((prev, current) => (prev['columns'].length > current['columns'].length) ? prev : current);
+        // TODO: get only reduce value and then all with the length of value
       }
       else {
         // use the one lesser result
         lengthFilter = lengthFilter[0];
+        // TODO: weglassen
       }
     } // else return empty
 
+    // TODO nameFilter
     return lengthFilter;
+    // TODO direkte zuweisung statt return
   }
 
 
@@ -267,7 +271,10 @@ export class SchemaTableImportComponent implements OnInit {
         // direkt Fehlermeldung
 
         // sonst push namen in columnNames array
-        // hole die spalte anhand der gemappten headline und pushe auf data array
+
+        // WENN die typen der spalte stimmen
+          // hole die spalte anhand der gemappten headline und pushe auf data array 
+          //  sonst Fehlermeldung
 
     // gebe objekt mit columnNames und data aus
   }
