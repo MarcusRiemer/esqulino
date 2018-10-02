@@ -4,9 +4,7 @@ require_dependency 'ide_service'
 
 RSpec.describe "IDE Service" do
 
-  # Retrieves the "actual" test configuration for the "exec" mode.
-  # This will normally be ignored during testing but is relevant if
-  # we want to test the *actual* communication.
+  # Retrieves the test configuration for the "exec" mode.
   def exec_configuration
     Rails.configuration.sqlino['ide_service']['exec']
   end
@@ -39,6 +37,15 @@ RSpec.describe "IDE Service" do
       service = IdeService.instantiate(service_config: { "mock" => true, "exec" => { "mode" => "one-shot" } })
       expect(service.class).to be MockIdeService
     end
+
+    it "mocking has precedence (unless forbidden)" do
+      service = IdeService.instantiate(
+        service_config: { "mock" => true, "exec" => { "mode" => "one-shot" } },
+        allow_mock: false
+      )
+      expect(service.class).to be OneShotExecIdeService
+    end
+
 
     it "missing modes are an error" do
       expect { IdeService.instantiate(service_config: { }) }.to raise_exception IdeServiceError

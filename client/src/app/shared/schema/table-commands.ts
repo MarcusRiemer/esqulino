@@ -1,7 +1,4 @@
-import {
-  TableDescription, ColumnDescription,
-  ForeignKeyDescription
-} from './schema.description'
+import { ForeignKeyDescription } from './schema.description'
 import { Table } from './table'
 import { Column, ColumnStatus } from './column'
 
@@ -457,7 +454,7 @@ export class ChangeTableName extends TableCommand {
   private _oldName: string;
   private _newName: string;
 
-  constructor(table: Table, oldName: string, newName: string) {
+  constructor(_table: Table, oldName: string, newName: string) {
     super();
     this._newName = newName;
     this._oldName = oldName;

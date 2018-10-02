@@ -1,4 +1,4 @@
-import { CodeGenerator, NodeConverterRegistration, CodeGeneratorProcess } from '../codegenerator'
+import { CodeGenerator } from '../codegenerator'
 import { Node, NodeDescription } from '../syntaxtree'
 
 import { NODE_CONVERTER } from './sql.codegenerator'
@@ -21,6 +21,9 @@ export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) 
   expect(transform(input)).toEqual(expected);
 }
 
+/**
+ * Calculates the string representation of the given AST
+ */
 function emitTree(astDesc: NodeDescription) {
   const ast = new Node(astDesc, undefined);
   const codeGen = new CodeGenerator(NODE_CONVERTER);

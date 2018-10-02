@@ -1,5 +1,4 @@
 import * as AST from '../../../shared/syntaxtree';
-import { VisualBlockDescriptions } from '../../../shared/block';
 
 import { calculateDropLocation } from './drop-utils'
 

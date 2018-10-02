@@ -1,7 +1,6 @@
-import { BehaviorSubject, Subject, Observable } from 'rxjs'
+import { BehaviorSubject, Observable } from 'rxjs'
 
 import { LanguageService } from './language.service'
-import { BlockLanguageDescription } from './block/block-language.description'
 
 import {
   ProjectFullDescription, ProjectDescription, AvailableDatabaseDescription, ProjectSourceDescription,
@@ -9,9 +8,10 @@ import {
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
 } from './project.description'
 import { Schema } from './schema/schema'
-import { Invalidateable, Saveable, SaveStateEvent } from './interfaces'
+import { Saveable, SaveStateEvent } from './interfaces'
 import { CodeResource } from './syntaxtree'
 import { BlockLanguage } from '../shared/block';
+import { DatabaseSchemaAdditionalContext } from './syntaxtree/sql/sql.validator';
 
 export { ProjectDescription, ProjectFullDescription }
 
@@ -50,7 +50,6 @@ export class Project implements ApiVersion, Saveable {
 
   private _indexPageId: string;
   private _projectImageId: string;
-  private _version: ApiVersionToken;
 
   private _sources: ProjectSourceDescription[];
 
@@ -127,6 +126,15 @@ export class Project implements ApiVersion, Saveable {
    */
   get apiVersion(): ApiVersionToken {
     return (CURRENT_API_VERSION);
+  }
+
+  /**
+   * @return Project wide data that may or may not be relevant during validation.
+   */
+  get additionalValidationContext(): DatabaseSchemaAdditionalContext {
+    return ({
+      databaseSchema: this.schema
+    });
   }
 
   /**

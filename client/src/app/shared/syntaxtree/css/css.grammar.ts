@@ -3,6 +3,7 @@ import * as Schema from '../grammar.description'
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   id: "37719773-5893-46d5-b1ec-0b63f1ef9099",
   name: "css",
+  programmingLanguageId: "css",
   types: {
     "document": {
       type: "concrete",

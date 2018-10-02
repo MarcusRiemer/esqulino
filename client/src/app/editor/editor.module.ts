@@ -12,13 +12,12 @@ import { CodeEditorModule } from './code/code.module'
 import { CurrentCodeResourceService } from './current-coderesource.service'
 
 import { EditorComponent } from './editor.component'
-import { editorRouting } from './editor.routes'
 
 import { ProjectExistsGuard } from './project-exists.guard'
 
 import { CodeResourceService } from './coderesource.service'
 import { DragService } from './drag.service'
-import { ProjectService, Project } from './project.service'
+import { ProjectService } from './project.service'
 import { ToolbarService } from './toolbar.service'
 import { ToolbarComponent } from './toolbar.component'
 import { NavbarComponent } from './navbar.component'

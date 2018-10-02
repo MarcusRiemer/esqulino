@@ -7,7 +7,6 @@ import { ProjectResource } from '../resource';
 import { CodeResourceDescription } from './coderesource.description';
 import { Tree, NodeDescription, NodeLocation } from './syntaxtree';
 import { ValidationResult } from './validation-result';
-import { Language } from './language'
 
 /**
  * A resource that is described by a syntaxtree.
@@ -227,7 +226,7 @@ export class CodeResource extends ProjectResource {
     .pipe(
       map(([tree, lang]) => {
         if (tree && lang) {
-          return (lang.validateTree(tree));
+          return (lang.validateTree(tree, this.project.additionalValidationContext));
         } else {
           return (ValidationResult.EMPTY);
         }

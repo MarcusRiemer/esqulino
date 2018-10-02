@@ -39,10 +39,15 @@ export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTy
   const head = `node "${name}" {`;
 
   const attributes = (t.attributes ? t.attributes : []).map(a => {
-    if (a.type === "property") {
-      return (prettyPrintProperty(a));
-    } else {
-      return (prettyPrintChildGroup(a));
+    switch (a.type) {
+      case "property":
+        return (prettyPrintProperty(a));
+      case "terminal":
+        return (prettyPrintTerminal(a));
+      case "allowed":
+      case "sequence":
+      case "choice":
+        return (prettyPrintChildGroup(a));
     }
   });
 
@@ -58,7 +63,15 @@ export function prettyPrintConcreteNodeType(name: string, t: Desc.NodeConcreteTy
  * Prints the grammar for a placeholder node.
  */
 export function prettyPrintOneOfType(name: string, t: Desc.NodeOneOfTypeDescription): NestedString {
-  return ([`typedef "${name}" {`, t.oneOf.map(t => `"${t}"`), `}`]);
+  return ([`typedef "${name}" ::= ${t.oneOf.join(" | ")}`]);
+}
+
+/**
+ * Prints the grammar for a terminal symbol
+ */
+export function prettyPrintTerminal(p: Desc.NodeTerminalSymbolDescription) {
+  const escapedSymbol = JSON.stringify(p.symbol).slice(1, -1);
+  return ([`terminal "${p.name}" "${escapedSymbol}"`]);
 }
 
 /**
@@ -103,7 +116,11 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
   } else if (Desc.isChildCardinalityDescription(t)) {
     const printCardinality = (t: Desc.OccursDescription) => {
       if (typeof t === "string") {
-        return (t);
+        if (t !== "1") {
+          return (t);
+        } else {
+          return ("");
+        }
       } else {
         if (t.minOccurs === 0 && t.maxOccurs === 1) {
           return ("?");
@@ -134,7 +151,11 @@ export function prettyPrintTypeReference(t: Desc.NodeTypesChildReference) {
  * Prints the grammar of a single child group.
  */
 export function prettyPrintChildGroup(p: Desc.NodeChildrenGroupDescription): NestedString {
-  return ([`children "${p.name}" ::= ` + prettyPrintChildGroupElements(p)]);
+  let sep = "";
+  if ((p.type === "allowed" || p.type === "sequence") && p.between) {
+    sep = `, between: "${p.between.symbol}"`
+  }
+  return ([`children ${p.type} "${p.name}"${sep} ::= ` + prettyPrintChildGroupElements(p)]);
 }
 
 /**
@@ -213,7 +234,7 @@ export function graphvizSyntaxTree(desc: NodeDescription): string {
   const tree = [
     `digraph SyntaxTree {`,
     [
-      `graph [fontsize=10 fontname="Verdana"];`,
+      `graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];`,
       `node [fontsize=10 fontname="Verdana" shape=Mrecord];`,
       `edge [fontsize=10 fontname="Verdana"];`,
     ],
@@ -252,8 +273,8 @@ export function graphvizSyntaxTreeNode(desc: NodeDescription, path: string): Nes
         // last seems to be rendered first.
         ...v.map((v, i) => graphvizSyntaxTreeNode(v, `${path}_${k}_${i}`)).reverse(),
         `}`,
-        // Create the connectio from the parent
-        ...v.map((v, i) => `${path} -> ${path}_${k}_${i};`),
+        // Create the connection from the parent
+        ...v.map((_, i) => `${path} -> ${path}_${k}_${i};`),
       ]);
     });
 

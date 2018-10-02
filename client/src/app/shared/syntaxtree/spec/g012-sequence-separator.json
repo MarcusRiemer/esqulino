@@ -1,0 +1,44 @@
+{
+  "name": "g12",
+  "root": "n1",
+  "types": {
+    "n1": {
+      "type": "concrete",
+      "attributes": [
+        {
+          "name": "c",
+          "type": "sequence",
+          "nodeTypes": [
+            {
+              "nodeType": {
+                "languageName": "g12",
+                "typeName": "n2"
+              },
+              "occurs": "*"
+            },
+            {
+              "nodeType": {
+                "languageName": "g12",
+                "typeName": "n3"
+              },
+              "occurs": "*"
+            }
+          ],
+          "between": {
+            "type": "terminal",
+            "name": "cSep",
+            "symbol": ","
+          }
+        }
+      ]
+    },
+    "n2": {
+      "type": "concrete",
+      "attribues": []
+    },
+    "n3": {
+      "type": "concrete",
+      "attribues": []
+    }
+  }
+}

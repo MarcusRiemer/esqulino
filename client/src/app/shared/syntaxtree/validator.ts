@@ -5,14 +5,38 @@ import { ErrorCodes, ValidationContext, ValidationResult } from './validation-re
 import { GrammarValidator, NodeType } from './grammar'
 
 /**
+ * A validator that uses custom code to generate errors.
+ */
+export abstract class SpecializedValidator {
+
+  /**
+   * @param ast The root node where the validation should start.
+   * @param context Main point of interaction during validation.
+   */
+  abstract validateFromRoot(ast: AST.Node, context: ValidationContext);
+
+}
+
+export type SpecializedValidatorConstructor = typeof SpecializedValidator;
+
+export type SubValidator = SpecializedValidatorConstructor | Desc.GrammarDescription;
+
+/**
  * A validator receives instances of one or multiple schemas and will
  * check any AST against those languages.
  */
 export class Validator {
   private _registeredGrammars: { [langName: string]: GrammarValidator } = {};
+  private _registeredSpecialized: SpecializedValidatorConstructor[] = [];
 
-  constructor(langs: Desc.GrammarDescription[]) {
-    langs.forEach(langDesc => this.register(langDesc));
+  constructor(subValidators: SubValidator[]) {
+    subValidators.forEach(sub => {
+      if (sub instanceof Function) {
+        this._registeredSpecialized.push(sub);
+      } else {
+        this.registerGrammar(sub)
+      }
+    });
   }
 
   /**
@@ -41,7 +65,7 @@ export class Validator {
   /**
    * Registers a new language with this validator
    */
-  private register(desc: Desc.GrammarDescription) {
+  private registerGrammar(desc: Desc.GrammarDescription) {
     if (this.isKnownLanguage(desc.name)) {
       throw new Error(`Attempted to register language "${desc.name}" twice`);
     }
@@ -53,7 +77,7 @@ export class Validator {
    * @param ast The root of the AST to validate
    * @return All errors that occured during evaluation
    */
-  validateFromRoot(ast: AST.Node | AST.Tree) {
+  validateFromRoot(ast: AST.Node | AST.Tree, additionalContext: any = {}) {
     // Grab the actual root
     let rootNode: AST.Node = undefined;
     if (ast instanceof AST.Tree && !ast.isEmpty) {
@@ -62,13 +86,23 @@ export class Validator {
       rootNode = ast;
     }
 
-    const context = new ValidationContext();
+    const context = new ValidationContext(additionalContext);
 
     if (rootNode) {
       if (this.isKnownLanguage(rootNode.languageName)) {
-        // Pass validation to the appropriate language
-        const lang = this.getLanguageGrammar(rootNode.languageName);
+        // Use the appropriate grammar for the root node
+        const lang = this.getGrammarValidator(rootNode.languageName);
         lang.validateFromRoot(rootNode, context);
+
+        // Run more specialized validators.
+        this._registeredSpecialized.forEach((specialized: any) => {
+          // We need to cast `specialized` to "any" because it refers to an abstract
+          // class. We of course know that we are smart enough to only pass in classes
+          // that may be instantiated.
+          const instance = new specialized();
+          instance.validateFromRoot(rootNode, context)
+        });
+
       } else {
         // Not knowing the language is a single error
         const available = Array.from(new Set(this.availableTypes.map(t => t.languageName)));
@@ -88,7 +122,7 @@ export class Validator {
   /**
    * @return The language that has been asked for. Throws if the language does not exist.
    */
-  getLanguageGrammar(language: string) {
+  getGrammarValidator(language: string) {
     if (!this.isKnownLanguage(language)) {
       const available = Object.keys(this._registeredGrammars).join(', ');
       throw new Error(`Validator does not know language "${language}", known are: ${available}`);

@@ -3,7 +3,6 @@ import { Injectable, Type } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { SIDEBAR_MODEL_TOKEN } from './editor.token'
 import { RegistrationService } from './registration.service'
 
 /**
@@ -160,7 +159,7 @@ export class SidebarService {
     }
 
     // Don't splice here, we need a fresh reference
-    this._model.next(model.filter((v, i) => i != index));
+    this._model.next(model.filter((_, i) => i != index));
   }
 
   /**

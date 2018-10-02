@@ -241,6 +241,11 @@ RSpec.describe ProjectsController, type: :request do
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)).to validate_against "ProjectFullDescription"
     end
+
+    it 'responds with 404 for non existing projects' do
+      get "/api/project/0"
+      expect(response).to have_http_status(404)
+    end
   end
 
   describe 'GET /api/project/:project_id/preview' do

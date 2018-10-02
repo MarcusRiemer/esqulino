@@ -1,6 +1,6 @@
-import { Directive, ElementRef, Input } from '@angular/core';
+import { Directive, ElementRef, Input } from '@angular/core'
 
-import { VisualBlockDescriptions } from '../../../shared/block';
+import { VisualBlockDescriptions } from '../../../shared/block'
 
 /**
  * Controls basic styling aspects of blocks.

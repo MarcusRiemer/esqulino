@@ -1,0 +1,7 @@
+{
+  "language": "json",
+  "name": "number",
+  "properties": {
+    "value": "123"
+  }
+}

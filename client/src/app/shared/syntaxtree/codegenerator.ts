@@ -44,6 +44,16 @@ export class CodeGeneratorProcess {
   }
 
   /**
+   * Executes the given function in a context where every call to `addConvertedFragment`
+   * is done at an extra level of indentation.
+   */
+  indent(indentedCalls: () => void) {
+    this._currentDepth++;
+    indentedCalls();
+    this._currentDepth--;
+  }
+
+  /**
    * Generates code for the given node
    */
   generateNode(node: Node) {
@@ -90,14 +100,18 @@ export class CodeGeneratorProcess {
       // Does the seperator match the previous separator?
       if (i > 0 && finalSep != OutputSeparator.NONE) {
         let prevSep = this._generated[i - 1].sep;
+        // Would this loead to two newlines?
         const doubleNewline = prevSep == OutputSeparator.NEW_LINE_AFTER && finalSep == OutputSeparator.NEW_LINE_BEFORE;
+        // Or to two spaces?
         const doubleSpace = prevSep == OutputSeparator.SPACE_AFTER && finalSep == OutputSeparator.SPACE_BEFORE;
 
+        // In that case we disregard this separator
         if (doubleNewline || doubleSpace) {
           finalSep = OutputSeparator.NONE;
         }
       }
 
+      // Applying the separator and possibly indentation (for newlines)
       switch (finalSep) {
         case OutputSeparator.NEW_LINE_BEFORE: return "\n" + gen.compilation;
         case OutputSeparator.NEW_LINE_AFTER: return gen.compilation + "\n";
@@ -107,7 +121,26 @@ export class CodeGeneratorProcess {
       }
     }
 
-    return (this._generated.map(sepChar).join(""));
+    const INDENT = '  '; // The string that is used to indent stuff
+    const indent = (fragment: string, i: number, all: string[]) => {
+      if (fragment.startsWith("\n")) {
+        // Insert indentation characters after newline
+        return ("\n" + INDENT.repeat(this._generated[i].depth) + fragment.substring(1));
+      }
+      else if (fragment.endsWith("\n") && (i + 1 < all.length)) {
+        // Insert indentation characters for the next element after newline
+        return (fragment + INDENT.repeat(this._generated[i + 1].depth));
+      } else {
+        return (fragment);
+      }
+    };
+
+    return (
+      this._generated
+        .map(sepChar)
+        .map(indent)
+        .join("")
+    );
   }
 }
 

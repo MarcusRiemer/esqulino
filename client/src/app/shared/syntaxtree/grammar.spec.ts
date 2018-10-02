@@ -1,7 +1,8 @@
 import * as Schema from './grammar.description'
 import * as AST from './syntaxtree'
 import { Validator } from './validator'
-import { ErrorCodes, ValidationResult } from './validation-result'
+import { ErrorCodes } from './validation-result'
+import { NodePropertyIntegerValidator } from '.';
 
 /**
  * Describes a language where each document would be the equivalent
@@ -17,6 +18,7 @@ import { ErrorCodes, ValidationResult } from './validation-result'
  */
 const langMiniHtml: Schema.GrammarDescription = {
   id: "39e9249c-0807-489c-9ba0-48df9be23d65",
+  programmingLanguageId: "spec",
   name: "mini-html",
   types: {
     "text": {
@@ -170,6 +172,7 @@ const langMiniHtml: Schema.GrammarDescription = {
  */
 const langMiniSql: Schema.GrammarDescription = {
   id: "1315c639-9662-4812-8ea2-fc86334211e3",
+  programmingLanguageId: "spec",
   name: "mini-sql",
   types: {
     "root": {
@@ -209,6 +212,7 @@ const langMiniSql: Schema.GrammarDescription = {
  */
 const langStringConstraint: Schema.GrammarDescription = {
   id: "26cb7725-1d99-4619-8610-5ede65d3de2c",
+  programmingLanguageId: "spec",
   name: "string-constraint",
   types: {
     root: {
@@ -260,6 +264,7 @@ const langStringConstraint: Schema.GrammarDescription = {
  */
 const langAllowedConstraint: Schema.GrammarDescription = {
   id: "f9acff60-cf3e-471e-b058-8c0d7e296386",
+  programmingLanguageId: "spec",
   name: "allowed-constraint",
   types: {
     "root": {
@@ -300,6 +305,7 @@ const langAllowedConstraint: Schema.GrammarDescription = {
  */
 const langSequenceConstraint: Schema.GrammarDescription = {
   id: "51a1230d-38d1-41a3-ad2e-16f2b3253b8f",
+  programmingLanguageId: "spec",
   name: "sequence-constraint",
   types: {
     "root": {
@@ -341,6 +347,7 @@ const langSequenceConstraint: Schema.GrammarDescription = {
  */
 const langOneOfNodes: Schema.GrammarDescription = {
   id: "6eb2981d-005b-43cf-918b-eced74757416",
+  programmingLanguageId: "spec",
   name: "oneof-nodes",
   types: {
     "root": {
@@ -358,6 +365,7 @@ const langOneOfNodes: Schema.GrammarDescription = {
  */
 const langBooleanConstraint: Schema.GrammarDescription = {
   id: "bff6b785-72c7-4a31-b08a-5855605dbb94",
+  programmingLanguageId: "spec",
   name: "boolean-constraint",
   types: {
     "root": {
@@ -379,6 +387,7 @@ const langBooleanConstraint: Schema.GrammarDescription = {
  */
 const langOptionalProperty: Schema.GrammarDescription = {
   id: "caad8d21-de02-4a68-af57-75ef400ae20a",
+  programmingLanguageId: "spec",
   name: "optionalProperty",
   types: {
     "root": {
@@ -403,6 +412,7 @@ const langOptionalProperty: Schema.GrammarDescription = {
 
 const langSimpleChoice: Schema.GrammarDescription = {
   id: "044b031e-beee-4966-8487-f67b9d1d5a77",
+  programmingLanguageId: "spec",
   name: "simpleChoice",
   types: {
     "root": {
@@ -423,6 +433,7 @@ const langSimpleChoice: Schema.GrammarDescription = {
 
 const langComplexChoice: Schema.GrammarDescription = {
   id: "dc7f51dc-6207-427b-b8c1-b277d0b0b478",
+  programmingLanguageId: "spec",
   name: "complexChoice",
   types: {
     "root": {
@@ -462,6 +473,35 @@ const langComplexChoice: Schema.GrammarDescription = {
 }
 
 describe('Grammar Validation', () => {
+
+  describe('Property Validators', () => {
+    it('Integer', () => {
+      const validator = new NodePropertyIntegerValidator({
+        type: "property",
+        name: "int",
+        base: "integer",
+      });
+
+      expect(validator.validValue("1")).toBe(true);
+      expect(validator.validValue("-1")).toBe(true);
+      expect(validator.validValue("0")).toBe(true);
+      expect(validator.validValue("-12")).toBe(true);
+      expect(validator.validValue("12")).toBe(true);
+
+      expect(validator.validValue("")).toBe(false);
+      expect(validator.validValue("-")).toBe(false);
+      expect(validator.validValue("+0")).toBe(false);
+      expect(validator.validValue("+0.1")).toBe(false);
+      expect(validator.validValue("-0.1")).toBe(false);
+      expect(validator.validValue(" 0.1")).toBe(false);
+      expect(validator.validValue(" 0.1 ")).toBe(false);
+      expect(validator.validValue("1 ")).toBe(false);
+      expect(validator.validValue(" 1")).toBe(false);
+      expect(validator.validValue(" 1 ")).toBe(false);
+      expect(validator.validValue(0 as any)).toBe(false, `typeof "number"`);
+    });
+  });
+
   /*
    * This is more a compile time testcase. It ensures that the grammar
    * definition allows the definition of "empty types" without having a
@@ -470,6 +510,7 @@ describe('Grammar Validation', () => {
   it('Grammar Empty Nodes', () => {
     const g: Schema.GrammarDescription = {
       id: "54e44b21-a7cb-470b-af96-19a4f5c06277",
+      programmingLanguageId: "spec",
       name: "emptyNodes",
       root: "r",
       types: {
@@ -682,16 +723,6 @@ describe('Grammar Validation', () => {
     expect(vNodeC.allowsChildType(tNodeC, "nodes")).toBe(false);
     expect(vNodeC.allowsChildType(tNodeD, "nodes")).toBe(false);
 
-  });
-
-  it('"sequence": Required children categories', () => {
-    const v = new Validator([langSequenceConstraint]);
-
-    const root = v.getType(langSequenceConstraint.name, "root");
-    expect(root.requiredChildrenCategoryNames).toEqual(["nodes"]);
-
-    const a = v.getType(langSequenceConstraint.name, "a");
-    expect(a.requiredChildrenCategoryNames).toEqual([]);
   });
 
   it('"sequence": allowsChildType()', () => {
@@ -1067,16 +1098,6 @@ describe('Grammar Validation', () => {
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(2);
-  });
-
-  it('"allowed": Required children categories', () => {
-    const v = new Validator([langAllowedConstraint]);
-
-    const root = v.getType(langAllowedConstraint.name, "root");
-    expect(root.requiredChildrenCategoryNames).toEqual(["nodes"]);
-
-    const a = v.getType(langAllowedConstraint.name, "a");
-    expect(a.requiredChildrenCategoryNames).toEqual([]);
   });
 
   it('"allowed": allowsChildType', () => {

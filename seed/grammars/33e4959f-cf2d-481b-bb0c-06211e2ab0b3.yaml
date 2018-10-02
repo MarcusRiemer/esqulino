@@ -1,0 +1,44 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: json
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: json
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 33e4959f-cf2d-481b-bb0c-06211e2ab0b3
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"root": "value", "types": {"null": {"type": "concrete",
+    "attributes": [{"name": "value", "type": "terminal", "symbol": "null"}]}, "array":
+    {"type": "concrete", "attributes": [{"name": "array-open", "type": "terminal",
+    "symbol": "["}, {"name": "values", "type": "allowed", "between": {"name": "array-sep",
+    "type": "terminal", "symbol": ","}, "nodeTypes": [{"occurs": "*", "nodeType":
+    "value"}]}, {"name": "array-close", "type": "terminal", "symbol": "]"}]}, "value":
+    {"type": "oneOf", "oneOf": ["string", "number", "boolean", "object", "array",
+    "null"]}, "number": {"type": "concrete", "attributes": [{"base": "integer", "name":
+    "value", "type": "property"}]}, "object": {"type": "concrete", "attributes": [{"name":
+    "object-open", "type": "terminal", "symbol": "{"}, {"name": "values", "type":
+    "allowed", "between": {"name": "object-sep", "type": "terminal", "symbol": ","},
+    "nodeTypes": [{"occurs": "*", "nodeType": "key-value"}]}, {"name": "object-close",
+    "type": "terminal", "symbol": "}"}]}, "string": {"type": "concrete", "attributes":
+    [{"name": "quot-begin", "type": "terminal", "symbol": "\""}, {"base": "string",
+    "name": "value", "type": "property"}, {"name": "quot-end", "type": "terminal",
+    "symbol": "\""}]}, "boolean": {"type": "concrete", "attributes": [{"base": "boolean",
+    "name": "value", "type": "property"}]}, "key-value": {"type": "concrete", "attributes":
+    [{"name": "key", "type": "allowed", "nodeTypes": [{"occurs": "1", "nodeType":
+    "string"}]}, {"name": "colon", "type": "terminal", "symbol": ":"}, {"name": "value",
+    "type": "allowed", "nodeTypes": [{"occurs": "1", "nodeType": "value"}]}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-07-20 20:33:04.813374'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-07-28 16:36:37.454168'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: json
+new_record: false
+active_record_yaml_version: 2

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Http, Response, Headers } from '@angular/http'
+import { Http } from '@angular/http'
 
 import { map } from 'rxjs/operators';
 
@@ -58,7 +58,7 @@ export class ImageEditComponent {
     this._toolbarService.savingEnabled = false;
 
     let btnDelete = this._toolbarService.addButton("delete", "Löschen", "trash", "d")
-    let subRef = btnDelete.onClick.subscribe(res => {
+    let subRef = btnDelete.onClick.subscribe(_ => {
       if (confirm("Dieses Bild löschen?")) {
         this._http.delete(this._serverApi.getImageDeleteUrl(this._projectService.cachedProject.slug, this._imageMetadata.id))
           .subscribe(res => {

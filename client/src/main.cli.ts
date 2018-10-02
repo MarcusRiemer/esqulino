@@ -9,7 +9,7 @@ import { Tree } from './app/shared/syntaxtree/syntaxtree'
 import { prettyPrintGrammar } from './app/shared/syntaxtree/prettyprint'
 import { GrammarDescription } from './app/shared/syntaxtree/grammar.description'
 
-import { LanguageDescription } from './app/shared/syntaxtree/language.description'
+import { LanguageDefinition } from './app/shared/syntaxtree/language'
 import { Language } from './app/shared/syntaxtree/language'
 
 import { BlockLanguageDescription } from './app/shared/block/block-language.description'
@@ -22,8 +22,9 @@ import * as dxml from './app/shared/syntaxtree/dxml/'
 import * as regex from './app/shared/syntaxtree/regex/'
 import * as sql from './app/shared/syntaxtree/sql/'
 import * as css from './app/shared/syntaxtree/css/'
+import * as json from './app/shared/syntaxtree/json/'
 
-import * as blocks_dxml from './app/shared/block/dxml/language-model'
+import * as blocks_dxml from './app/shared/block/dxml/'
 import * as blocks_sql from './app/shared/block/sql/language-model'
 import * as blocks_css from './app/shared/block/css/language-model'
 import * as blocks_regex from './app/shared/block/regex/language-model'
@@ -78,6 +79,11 @@ interface UpdateBlockLanguagesCommand {
   serverBaseUrl: string
 }
 
+interface UpdateBlockLanguageGeneratorsCommand {
+  type: "updateBlockLanguageGenerators"
+  serverBaseUrl: string
+}
+
 /**
  * Prints a list of all available programming languages.
  */
@@ -85,15 +91,16 @@ interface AvailableProgrammingLanguagesCommand {
   type: "available"
 }
 
-type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand | UpdateGrammarsCommand | UpdateBlockLanguagesCommand;
+type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand | UpdateGrammarsCommand | UpdateBlockLanguagesCommand | UpdateBlockLanguageGeneratorsCommand;
 
-function availableLanguages(): LanguageDescription[] {
+function availableLanguages(): LanguageDefinition[] {
   return ([
     dxml.LANGUAGE_DESCRIPTION_ERUBY,
     dxml.LANGUAGE_DESCRIPTION_LIQUID,
     regex.LANGUAGE_DESCRIPTION,
     sql.LANGUAGE_DESCRIPTION,
     css.LANGUAGE_DESCRIPTION,
+    json.LANGUAGE_DESCRIPTION
   ]);
 }
 
@@ -101,7 +108,10 @@ function availableLanguages(): LanguageDescription[] {
  * Retrieves all grammars that are known to this instance.
  */
 function availableGrammars(): GrammarDescription[] {
-  return (availableLanguages().map(l => l.validators[0]));
+  const allGrammars = availableLanguages().map(
+    l => l.validators.filter(v => !(v instanceof Function)) as GrammarDescription[]
+  )
+  return ([].concat(...allGrammars));
 }
 
 /**
@@ -132,8 +142,8 @@ function findLanguage(id: string) {
  */
 function availableBlockLanguages(): BlockLanguageDescription[] {
   return ([
-    blocks_dxml.LANGUAGE_MODEL,
-    blocks_dxml.DYNAMIC_LANGUAGE_MODEL,
+    blocks_dxml.BLOCK_LANGUAGE_DYNAMIC,
+    blocks_dxml.BLOCK_LANGUAGE_STATIC,
     blocks_sql.BLOCK_LANGUAGE_DESCRIPTION,
     blocks_css.BLOCK_LANGUAGE_DESCRIPTION,
     blocks_regex.BLOCK_LANGUAGE_DESCRIPTION
@@ -171,10 +181,11 @@ function executeCommand(command: Command): Promise<string> | any {
       return (l.emitTree(t));
     }
     case "updateGrammars": {
-      // Ensure that every grammar is sent only once
+      // Quick lookup of existing grammar ids
       const grammarIds = new Set(availableGrammars().map(g => g.id));
 
       const requests = availableGrammars()
+        // Ensure that every grammar is sent only once
         .filter(g => {
           const toReturn = grammarIds.has(g.id);
           grammarIds.delete(g.id);
@@ -227,8 +238,11 @@ rl.on('line', function(line) {
       } else {
         console.log(JSON.stringify(result));
       }
+    } else {
+      console.error("Unknown operation");
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error(e);
   }
 });

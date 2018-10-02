@@ -1,9 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs'
 import { first, filter, finalize, flatMap, map } from 'rxjs/operators';
 
-import { CodeResource, Tree, ValidationResult } from '../../../shared/syntaxtree';
+import { Tree } from '../../../shared/syntaxtree';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 import { ToolbarService, ToolbarItem } from '../../toolbar.service';

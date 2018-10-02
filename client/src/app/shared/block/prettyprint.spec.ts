@@ -1,6 +1,3 @@
-import { BlockLanguageDescription } from './block-language.description'
-import { VisualBlockDescriptions, EditorBlockDescription } from './block.description'
-
 import { prettyPrintBlockLanguage } from './prettyprint'
 
 /**
@@ -21,64 +18,64 @@ export function verifyFiles<T>(fileName: string, transform: (obj: T) => string) 
   expect(transform(input)).toEqual(expected);
 }
 
-describe('LanguageModel PrettyPrinter', () => {
-  it('01 Empty Language', () => {
-    verifyFiles('01-lang-empty', prettyPrintBlockLanguage);
+describe('BlockLanguage PrettyPrinter', () => {
+  it('001 Empty Language', () => {
+    verifyFiles('001-lang-empty', prettyPrintBlockLanguage);
   });
 
-  it('02 Block: Single Constant', () => {
-    verifyFiles('02-block-single-constant', prettyPrintBlockLanguage);
+  it('002 Block: Single Constant', () => {
+    verifyFiles('002-block-single-constant', prettyPrintBlockLanguage);
   });
 
-  it('03 Block: Single Interpolated', () => {
-    verifyFiles('03-block-single-interpolated', prettyPrintBlockLanguage);
+  it('003 Block: Single Interpolated', () => {
+    verifyFiles('003-block-single-interpolated', prettyPrintBlockLanguage);
   });
 
-  it('04 Block: Mixing constants and interpolation', () => {
-    verifyFiles('04-block-mix-constant-interpolated', prettyPrintBlockLanguage);
+  it('004 Block: Mixing constants and interpolation', () => {
+    verifyFiles('004-block-mix-constant-interpolated', prettyPrintBlockLanguage);
   });
 
-  it('05 Block: Iterator', () => {
-    verifyFiles('05-block-iterator', prettyPrintBlockLanguage);
+  it('005 Block: Iterator', () => {
+    verifyFiles('005-block-iterator', prettyPrintBlockLanguage);
   });
 
-  it('06 Block: Iterator with between', () => {
-    verifyFiles('06-block-iterator-between', prettyPrintBlockLanguage);
+  it('006 Block: Iterator with between', () => {
+    verifyFiles('006-block-iterator-between', prettyPrintBlockLanguage);
   });
 
-  it('07 Block: Drop Target with constant', () => {
-    verifyFiles('07-block-drop-target-constant', prettyPrintBlockLanguage);
+  it('007 Block: Drop Target with constant', () => {
+    verifyFiles('007-block-drop-target-constant', prettyPrintBlockLanguage);
   });
 
-  it('08 Block: Drop Target with constant', () => {
-    verifyFiles('08-block-drop-target-multi-visible', prettyPrintBlockLanguage);
+  it('008 Block: Drop Target with constant', () => {
+    verifyFiles('008-block-drop-target-multi-visible', prettyPrintBlockLanguage);
   });
 
-  it('09 Block: empty', () => {
-    verifyFiles('09-block-empty', prettyPrintBlockLanguage);
+  it('009 Block: empty', () => {
+    verifyFiles('009-block-empty', prettyPrintBlockLanguage);
   });
 
-  it('10 Sidebar: Empty Node', () => {
-    verifyFiles('10-sidebar-empty', prettyPrintBlockLanguage);
+  it('010 Sidebar: Empty Node', () => {
+    verifyFiles('010-sidebar-empty', prettyPrintBlockLanguage);
   });
 
-  it('11 Sidebar: Single Category', () => {
-    verifyFiles('11-sidebar-single-category', prettyPrintBlockLanguage);
+  it('011 Sidebar: Single Category', () => {
+    verifyFiles('011-sidebar-single-category', prettyPrintBlockLanguage);
   });
 
-  it('12 Block: Drop child category', () => {
-    verifyFiles('12-block-drop-child', prettyPrintBlockLanguage);
+  it('012 Block: Drop child category', () => {
+    verifyFiles('012-block-drop-child', prettyPrintBlockLanguage);
   });
 
-  it('13 Block: Drop parent category', () => {
-    verifyFiles('13-block-drop-parent', prettyPrintBlockLanguage);
+  it('013 Block: Drop parent category', () => {
+    verifyFiles('013-block-drop-parent', prettyPrintBlockLanguage);
   });
 
-  it('14 Block: Drop self', () => {
-    verifyFiles('14-block-drop-self', prettyPrintBlockLanguage);
+  it('014 Block: Drop self', () => {
+    verifyFiles('014-block-drop-self', prettyPrintBlockLanguage);
   });
 
-  it('15 Block: Styled constant', () => {
-    verifyFiles('15-block-constant-style', prettyPrintBlockLanguage);
+  it('015 Block: Styled constant', () => {
+    verifyFiles('015-block-constant-style', prettyPrintBlockLanguage);
   });
 });

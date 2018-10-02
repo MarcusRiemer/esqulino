@@ -1,0 +1,6 @@
+digraph SyntaxTree {
+  graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];
+  node [fontsize=10 fontname="Verdana" shape=Mrecord];
+  edge [fontsize=10 fontname="Verdana"];
+  r [label="{lang.null}"];
+}

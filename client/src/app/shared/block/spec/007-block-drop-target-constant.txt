@@ -1,0 +1,13 @@
+language "test" {
+  type "test.root" {
+    dropTarget {
+      direction horizontal
+      dropOptions {
+        visible {"$var":"ifEmpty"}
+      }
+      visual {
+        "Drop"
+      }
+    }
+  }
+}

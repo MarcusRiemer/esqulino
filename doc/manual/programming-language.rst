@@ -23,7 +23,7 @@ A somewhat typical grammar to represent an ``if`` statement with an optional ``e
 This approach works fine for typical compilers: They need to derive a syntax tree from any stream of tokens. It is therefore important to keep an eye on all sorts of syntactical elements. This comes with its very own set of problems:
 
 1) The role of whitespace has to be specified.
-2) Some eeparating language constructs have to be introduced very carefully. This is usually done using distinctive syntactic elements that are not allowed in variable names (typically all sorts of brackets and punctuation).
+2) Some separating characters have to be introduced very carefully. This is usually done using distinctive syntactic elements that are not allowed in variable names (typically all sorts of brackets and punctuation).
 3) Handing out proper error messages for syntactically incorrect documents is hard. A single missing character may change the semantics of the whole document. This implies that semantic analysis is usually only possible on a syntactically correct document.
 
 
@@ -50,9 +50,10 @@ This is a possible syntaxtree for an ``if`` statement in some nondescript langua
   else
     err(2, 'bar')
 
-In BlattWerkzeug, an if statement would be represented by using three child groups that could be called ``predicate``, ``positive`` and ``negative``. Each of these child groups may then hast their own list of children. Note how the names of the variables and and the values are stored in properties alongside the node.
+In BlattWerkzeug, an if statement could be represented by using three child groups that could be called ``predicate``, ``positive`` and ``negative``. Each of these child groups may then have their own list of children.
 
 .. graphviz:: generated/ast-example-if.graphviz
+   :align: center
 
 Now lets see what happens if the source is invalidated by omitting the ``predicate`` and the ``then``::
 
@@ -61,11 +62,12 @@ Now lets see what happens if the source is invalidated by omitting the ``predica
   else
     err(2, 'bar')
 
-In a typical language (tm) the most probable error would be something like "Invalid predicate: expression ``writeln('foo')`` is not of type ``boolean``" and ``Missing "then"``. The chosen indentation somehow hints that using the call to `writeln` as a predicate was not what the author intended.
+In a typical language (tm) the most probable error would be something like "Invalid predicate: expression ``writeln('foo')`` is not of type ``boolean``" and "Missing keyword ``then``". But the chosen indentation somehow hints that using the call to `writeln` as a predicate was not what the author intended to do.
 
 In BlattWerkzeug the predicate may be omitted without touching the ``positive`` or ``negative`` branch. It is therefore trivial to tell the user that he has forgotten to supply a predicate.
 
 .. graphviz:: generated/ast-example-if-no-pred.graphviz
+   :align: center
 
 Grammar Validation
 ==================

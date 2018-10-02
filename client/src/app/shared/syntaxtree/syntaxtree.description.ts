@@ -56,7 +56,7 @@ export interface NodeDescription {
    * concrete use.
    */
   properties?: {
-    [propertyName: string]: any;
+    [propertyName: string]: string;
   }
 }
 

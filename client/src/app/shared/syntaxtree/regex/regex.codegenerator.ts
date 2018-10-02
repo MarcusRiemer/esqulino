@@ -1,4 +1,4 @@
-import { NodeConverterRegistration, CodeGeneratorProcess, OutputSeparator } from '../codegenerator'
+import { NodeConverterRegistration, CodeGeneratorProcess } from '../codegenerator'
 import { Node } from '../syntaxtree'
 
 /**

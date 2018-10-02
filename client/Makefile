@@ -51,10 +51,10 @@ cli-compile: dist/cli/main.cli.js
 cli-run: dist/cli/main.cli.js
 	@$(NODE_BIN) $^
 
-cli-upload-grammars: cli-compile
+cli-update-grammars: cli-compile
 	echo '{ "type": "updateGrammars", "serverBaseUrl": "http://localhost:9292" }' | $(NODE_BIN) dist/cli/main.cli.js
 
-cli-upload-block-languages: cli-compile
+cli-update-block-languages: cli-compile
 	echo '{ "type": "updateBlockLanguages", "serverBaseUrl": "http://localhost:9292" }' | $(NODE_BIN) dist/cli/main.cli.js
 
 ##################################
@@ -82,9 +82,13 @@ gzipped-clean :
 ##################################
 # Dependencies
 ##################################
-install-deps : msg-pre-install-deps
-	npm install
 
+# Uses the `package.json` file to grab all dependencies according to the
+# `package-lock.json`.
+install-deps : msg-pre-install-deps
+	npm ci
+
+# Remove currently cached dependencies.
 clean-deps : msg-pre-clean-deps
 	rm -rf "node_modules"
 

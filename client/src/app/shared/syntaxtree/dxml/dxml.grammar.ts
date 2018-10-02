@@ -3,10 +3,16 @@ import * as Schema from '../grammar.description'
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   id: "7e333dff-6d1c-4042-aaa5-0cdf2cfeed7e",
   name: "dxml",
+  programmingLanguageId: "dxml-eruby",
   types: {
     "element": {
       type: "concrete",
       attributes: [
+        {
+          name: "tag-open-begin",
+          type: "terminal",
+          symbol: "<",
+        },
         {
           name: "name",
           type: "property",
@@ -20,6 +26,11 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           ]
         },
         {
+          name: "tag-open-end",
+          type: "terminal",
+          symbol: ">",
+        },
+        {
           name: "elements",
           type: "allowed",
           nodeTypes: [
@@ -28,7 +39,12 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
             { nodeType: "interpolate", occurs: "*" },
             { nodeType: "if", occurs: "*" },
           ]
-        }
+        },
+        {
+          name: "tag-close",
+          type: "terminal",
+          symbol: "<ende/>",
+        },
       ]
     },
     "attribute": {
@@ -40,12 +56,27 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
           base: "string"
         },
         {
+          type: "terminal",
+          name: "equals",
+          symbol: "=",
+        },
+        {
+          type: "terminal",
+          name: "quot-begin",
+          symbol: "\"",
+        },
+        {
           name: "value",
           type: "allowed",
           nodeTypes: [
             { nodeType: "text", occurs: "*" },
             { nodeType: "interpolate", occurs: "*" },
           ]
+        },
+        {
+          type: "terminal",
+          name: "quot-end",
+          symbol: "\"",
         },
       ]
     },

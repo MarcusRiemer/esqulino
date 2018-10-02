@@ -1,17 +1,17 @@
-import { Tree, LanguageDescription, Language, NodeTypeDescription } from '../syntaxtree';
+import { Tree, LanguageDefinition, Language, NodeTypeDescription } from '../syntaxtree';
 
 import { BlockLanguageDescription } from './block-language.description'
 import { BlockLanguage } from './block-language'
-import { SidebarBlockDescription, VisualBlockDescriptions } from './block.description'
+import { VisualBlockDescriptions } from './block.description'
 
-
-const langEmptyBlocks: LanguageDescription = {
+const langEmptyBlocks: LanguageDefinition = {
   id: "emptyBlocks",
   name: "emptyBlocks",
-  generators: [],
+  emitters: [],
   validators: [
     {
       id: "e848d752-c1c7-49f8-9c8d-ba67555b27ab",
+      programmingLanguageId: "spec",
       name: "emptyBlocks",
       types: {
         "root": {
@@ -103,7 +103,7 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
   ]
 }
 
-describe("LanguageModel", () => {
+describe("Block Language", () => {
   it("Loads correctly and hands out data", () => {
     const lm = new BlockLanguage(langModelEmptyBlocks);
     const l = new Language(langEmptyBlocks);
@@ -122,14 +122,6 @@ describe("LanguageModel", () => {
 
     expect(lm.getEditorBlock({ languageName: "emptyBlocks", typeName: "a" })).toBeTruthy();
     expect(_ => { lm.getEditorBlock({ languageName: "x", typeName: "x" }) }).toThrowError();
-  });
-
-  it("Constructing default root with children", () => {
-    const lm = new BlockLanguage(langModelEmptyBlocks);
-    const l = new Language(langEmptyBlocks);
-
-    const n = lm.constructDefaultNode(l, { languageName: "emptyBlocks", typeName: "root" });
-    expect(Object.keys(n.children)).toEqual(["cat_a"]);
   });
 
   it("Rejects to render a tree with only unknown types", () => {

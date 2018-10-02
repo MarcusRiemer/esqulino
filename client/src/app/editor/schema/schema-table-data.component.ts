@@ -109,13 +109,13 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
       this._toolbarService.resetItems();
       this._toolbarService.savingEnabled = false;
       let btnCreate = this._toolbarService.addButton("back", "Zurück", "arrow-left", "b");
-      subRef = btnCreate.onClick.subscribe((res) => {
+      subRef = btnCreate.onClick.subscribe(_ => {
         this.backBtn();
       })
       this._subscriptionRefs.push(subRef);
 
       let btnEdit = this._toolbarService.addButton("edit", "Struktur Editieren", "edit", "e");
-      subRef = btnEdit.onClick.subscribe(res => {
+      subRef = btnEdit.onClick.subscribe(_ => {
         this._router.navigate(["../../edit", this.table.name], {
           relativeTo: this._route
         });

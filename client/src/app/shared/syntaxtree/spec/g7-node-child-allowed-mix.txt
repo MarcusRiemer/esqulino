@@ -1,9 +1,0 @@
-grammar "g7" {
-  node "n1" {
-    children "c" ::= n1? & n2+ & n3*
-  }
-  node "n2" {
-  }
-  node "n3" {
-  }
-}
