@@ -31,9 +31,9 @@ export class SchemaTableImportComponent implements OnInit {
   // parse result
   table: string[][];
 
-  // use index for mapping
-  // (init when header length available)
-  useHeaderIndex: boolean[];
+  // contains the selected header to map 
+  // from the file for every table column
+  selectedHeader: string[];
 
   // Contains all currently used Delimiters
   currentDelimiters: string[];
@@ -60,7 +60,7 @@ export class SchemaTableImportComponent implements OnInit {
     this.headlineUsage = "file";
     this.textMarker = '"';
 
-    this.useHeaderIndex = [];
+    this.selectedHeader = [];
 
     this.currentDelimiters = [];
     this.toggleDelimiter(',');
@@ -121,14 +121,14 @@ export class SchemaTableImportComponent implements OnInit {
 
       this.disableHeadlineSelection = false;
 
-      // Init use header Index for the length of the header      
-      for(let i = 0; i < this.header.length; i++) {
-        this.useHeaderIndex.push(false);
-      }
-
       this.mapColumns(this.header, this.getMostSuitableTable(this.header, this.schemaTables));      
 
       this.changeTable();
+
+      // init selected header for each table column (pre select empty)
+      for(let i = 0; i < this.selectedTableColumns.length; i++) {
+        this.selectedHeader.push("empty");
+      }
     } 
     else if (this.parse.type === 'parseError') {
       this.errors = (<Parser.CsvParseError>this.parse).errors;
@@ -184,17 +184,14 @@ export class SchemaTableImportComponent implements OnInit {
     // Filter the columns of the wanted table (not multiple tables)
     this.selectedTableColumns = (this.schemaTables.filter(table => this.selectedTableName === table['_name']))[0]['_columns'];
 
-    //Activate the count of table columns
-    for (let i = 0; i < this.useHeaderIndex.length; i++) {
-      if (i < this.selectedTableColumns.length){
-        this.useHeaderIndex[i] = true;
-      }
-      else {
-        this.useHeaderIndex[i] = false;
-      }      
-    }    
+    // Pre select the fitting names or empty
+    for(let i = 0; i < this.selectedTableColumns.length; i++) {      
+      this.selectedHeader[i] = this.header.filter(col => col === this.selectedTableColumns[i].name)[0];
+      if(!this.selectedHeader[i]) {
+        this.selectedHeader[i] = "empty";
+      }          
+    }
   }
-
 
   trackByFn(index: any, item: any) {
     return index;

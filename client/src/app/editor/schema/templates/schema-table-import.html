@@ -79,7 +79,7 @@
 
     <div id="show-headline-fields" *ngIf="this.headlineUsage=='own'">
         <div class="form-group row" *ngFor="let headline of header; let i = index; trackBy:trackByFn">            
-            <label class="col-sm-auto" for="headline{{i}}">Headline {{i+1}}:&nbsp;</label>    
+            <label class="col-sm-auto" for="headline{{i}}">Spaltenüberschrift {{i+1}}:&nbsp;</label>    
             <input class="col" type="text" id="headline{{i}}" [(ngModel)]="header[i]" [disabled]="disableHeadlineSelection"/>
         </div>
     </div>
@@ -163,7 +163,8 @@
         <div class="mapping row mt-3" *ngFor="let tableCol of selectedTableColumns; let i = index">
             
             <div class="col-md-6 col-lg-4">
-                <select id="header-{{ headerCol }}" class="form-control h-100">
+                <select id="header-selection" class="form-control h-100" [(ngModel)]="selectedHeader[i]">
+                    <option value="empty"></option>
                     <option *ngFor="let headerCol of header; let j = index" 
                             value="{{ headerCol }}">
                         {{ headerCol }}
@@ -171,18 +172,13 @@
                 </select>        
             </div>      
 
-            <!-- <div class="col-sm-6 col-md-5 w-100 d-flex align-items-center">
-                <input type="checkbox" id="header-{{ headerCol }}" [(ngModel)]="useHeaderIndex[i]" />
-                <label class="mb-0 text-truncate" for="header-{{ headerCol }}">&nbsp;{{ headerCol }}</label>
-            </div> -->
-
-            <div class="col-md-1" *ngIf="useHeaderIndex[i]">
+            <div class="col-md-1" *ngIf="selectedHeader[i] !== 'empty'">
                 <div style="font-size: 2em; line-height: 0; color: #00C851;">
                     <i class="fa fa-arrow-circle-right"></i>
                 </div>
             </div>
 
-            <div class="col-md-1" *ngIf="!useHeaderIndex[i]">
+            <div class="col-md-1" *ngIf="selectedHeader[i] === 'empty'">
                 <span style="font-size: 2em; line-height: 0; color: #ff4444;">
                     <i class="fa fa-ban"></i>
                 </span>
@@ -190,16 +186,6 @@
 
 
             <div class="col-md-5 col-lg-3 d-flex align-items-center" id="table-{{ tableCol }}">&nbsp;{{ tableCol.name }}</div>
-
-
-            <!-- <div class="col-sm-6 col-md-6">
-                <select id="table-{{ tableCol }}" class="form-control h-100">
-                    <option *ngFor="let tableCol of selectedTableColumns; let j = index" 
-                            value="{{tableCol.name}}" [selected]="j === i">
-                        {{ tableCol.name }}
-                    </option>
-                </select>        
-            </div>        -->
 
         </div>
         
