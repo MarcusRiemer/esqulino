@@ -99,15 +99,27 @@
             <table class="w-100">
                 <thead>
                     <tr>
-                        <th *ngFor="let col of header">
-                        {{ col }}
+                        <th *ngFor="let col of header; let i = index">
+                            <!-- grey out if not selected -->
+                            <div *ngIf="!colSelected(i) else normalHeader" style="color: grey">
+                                {{ col }}
+                            </div>
+                            <ng-template #normalHeader>
+                                {{ col }}
+                            </ng-template>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let row of table | slice:0:20; let i = index">   
                         <td *ngFor="let col of row; let j = index">
-                            {{ row[j] }}
+                            <!-- grey out if not selected -->
+                            <div *ngIf="!colSelected(j) else normalCol" style="color: grey">
+                                {{ row[j] }}
+                            </div>
+                            <ng-template #normalCol>
+                                {{ row[j] }}
+                            </ng-template>
                         </td>
                     </tr>
                 </tbody>
