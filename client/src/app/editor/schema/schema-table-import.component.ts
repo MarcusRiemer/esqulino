@@ -147,39 +147,40 @@ export class SchemaTableImportComponent implements OnInit {
     console.log("this.selectedTableColumns ", this.selectedTableColumns);
   }
 
-  // Get the most suitable table for a given headline
-  // (only measured by the length)
-  // returns the first identical length or the closest lesser length
-  getMostSuitableTable(headline: string[], tables) {
-    let lengthFilter = [];
-
-    // Use the first with identical length
-    lengthFilter = tables.filter(table => table['columns'].length === headline.length)[0];
- 
-    // When no identical length availabe 
-    if (!lengthFilter) {
-      //check for anything with lesser length
-      lengthFilter = tables.filter(table => table['columns'].length < headline.length);
-
-      // when more then one with lesser length
-      if (lengthFilter.length > 1) {
-        // use the max value (the closest length)
-        lengthFilter = lengthFilter.reduce((prev, current) => (prev['columns'].length > current['columns'].length) ? prev : current);
-        // TODO: get only reduce value and then all with the length of value
-      }
-      else {
-        // use the one lesser result
-        lengthFilter = lengthFilter[0];
-        // TODO: weglassen
-      }
-    } // else return empty
-
-    // TODO nameFilter
-    return lengthFilter;
-    // TODO direkte zuweisung statt return
+  // count the matching column names from a table and a headline
+  countMatchingNames(headline: string[], table: Table): number {
+    let counter = 0;
+    // iterate through table columns
+    for(let i = 0; i < table['columns'].length; i++) {      
+      // filter matching headline col names with table col
+      let matchingNames = headline.filter(col => col === table['columns'][i].name);
+      // at least one match found
+      if(matchingNames.length) {
+        counter++;
+      }          
+    } 
+    return counter;
   }
 
+  // Get the most suitable table for a given headline
+  // returns the table with the most identical names
+  getMostSuitableTable(headline: string[], tables) {
+    let resultTable = [];
+    let maxMatches = 0;
 
+    // check each table for more matches than current max
+    tables.forEach(table => {
+      let matches = this.countMatchingNames(headline, table);      
+      if (matches > maxMatches) {
+        resultTable = table;
+        maxMatches = matches;
+      }
+    });
+
+    return resultTable;
+  }
+
+  // TODO referenz param for outsourcing
   changeTable() {
     // Filter the columns of the wanted table (not multiple tables)
     this.selectedTableColumns = (this.schemaTables.filter(table => this.selectedTableName === table['_name']))[0]['_columns'];
