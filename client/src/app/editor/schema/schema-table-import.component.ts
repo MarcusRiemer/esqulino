@@ -29,8 +29,8 @@ export class SchemaTableImportComponent implements OnInit {
   // parse result
   table: string[][];
 
-  // contains the selected header to map 
-  // from the file for every table column
+  // contains the selected header to map from the file
+  // for every table column (empty =  don't map)
   selectedHeader: string[];
 
   // Contains all currently used Delimiters
@@ -140,6 +140,11 @@ export class SchemaTableImportComponent implements OnInit {
     this.selectedTable = (this.schemaTables.filter(table => this.selectedTableName === table['name']))[0];
     // Select the matching headline col for each table col or empty
     this.selectMatchingCols();
+  }
+
+  // returns true if the col is currently selected for mapping
+  colSelected(index: number) {
+    return this.selectedHeader.includes(this.header[index]);
   }
 
   save() {
