@@ -21,6 +21,8 @@ export class SchemaTableImportComponent implements OnInit {
   // Schema with the available tables
   schemaTables: Table[];
   selectedTable: Table;
+  // Name needed for ngModel in select
+  selectedTableName: string;
 
   // parse result or own definition
   header: string[];  
@@ -48,7 +50,6 @@ export class SchemaTableImportComponent implements OnInit {
   ) {
   }
 
-
   ngOnInit() {
     this.disableSelection = true;
     this.disableHeadlineSelection = true;
@@ -65,8 +66,8 @@ export class SchemaTableImportComponent implements OnInit {
     this.schemaTables = this._projectService.cachedProject.schema['tables'];
     // Init first table
     this.selectedTable = this.schemaTables[0];
+    this.selectedTableName = this.selectedTable['name'];
   }
-
 
   changeListener(event): void {
     this.handleDataUpload(event.target);
@@ -112,13 +113,8 @@ export class SchemaTableImportComponent implements OnInit {
       this.disableHeadlineSelection = false;
 
       this.selectedTable = this.getMostSuitableTable(this.header, this.schemaTables);      
-
-      this.changeTable();
-
-      // init selected header for each table column (pre select empty)
-      for(let i = 0; i < this.selectedTable['columns'].length; i++) {
-        this.selectedHeader.push("empty");
-      }
+      this.selectedTableName = this.selectedTable['name'];
+      this.selectMatchingCols();
     } 
     else if (this.parse.type === 'parseError') {
       this.errors = (<Parser.CsvParseError>this.parse).errors;
@@ -128,57 +124,57 @@ export class SchemaTableImportComponent implements OnInit {
     this.disableSelection = false;
   }
 
-  // count the matching column names from a table and a headline
-  countMatchingNames(headline: string[], table: Table): number {
-    let counter = 0;
-    // iterate through table columns
-    for(let i = 0; i < table['columns'].length; i++) {      
-      // filter matching headline col names with table col
-      let matchingNames = headline.filter(col => col === table['columns'][i].name);
-      // at least one match found
-      if(matchingNames.length) {
-        counter++;
-      }          
-    } 
-    return counter;
-  }
-
-  // Get the most suitable table for a given headline
-  // returns the table with the most count of matching names
-  // return the first table if no matching name
-  getMostSuitableTable(headline: string[], tables: Table[]) : Table {
-    let resultTable: Table = tables[0];
-    let maxMatches: number = 0;
-
-    // check each table for more matches than current max
-    tables.forEach(table => {
-      let matches = this.countMatchingNames(headline, table);      
-      if (matches > maxMatches) {
-        resultTable = table;
-        maxMatches = matches;
+  // Select the matching headline col for each table col or empty
+  selectMatchingCols() {
+      for(let i = 0; i < this.selectedTable['columns'].length; i++) {      
+        this.selectedHeader[i] = this.header.filter(col => col === this.selectedTable['columns'][i].name)[0];
+        if(!this.selectedHeader[i]) {
+          this.selectedHeader[i] = "empty";
+        }          
       }
-    });
-
-    return resultTable;
   }
 
-  // TODO referenz param for outsourcing
+  // change selected table and selected headline cols
   changeTable() {
-    // Filter the columns of the wanted table (not multiple tables)
-    this.selectedTable = (this.schemaTables.filter(table => this.selectedTable['name'] === table['name']))[0];
+    // Filter the wanted table by the name from ngModel in select
+    this.selectedTable = (this.schemaTables.filter(table => this.selectedTableName === table['name']))[0];
+    // Select the matching headline col for each table col or empty
+    this.selectMatchingCols();
+  }
 
-    // Pre select the fitting names or empty
-    for(let i = 0; i < this.selectedTable['columns'].length; i++) {      
-      this.selectedHeader[i] = this.header.filter(col => col === this.selectedTable['columns'][i].name)[0];
-      if(!this.selectedHeader[i]) {
-        this.selectedHeader[i] = "empty";
-      }          
-    }
+  save() {
+    // TODO
+    console.log("selected table: ", this.selectedTable);
+    console.log("header: ", this.header);
+    console.log("table: ", this.table);
+
+    // "columnNames" => ['key', 'value'],
+    // "data" => [
+    // ['1', 'eins'],
+
+
+    // gehe alle selectedTableColumns durch
+    this.selectedTable['columns'].forEach(col => console.log(col.name));
+      // prüfen, ob name jeweils in used index Zeile vorhanden
+      // next TODO: greife dafür aufs select zu
+
+      // Wenn doppelte oder fehlende
+        // direkt Fehlermeldung
+
+        // sonst push namen in columnNames array
+
+        // WENN die typen der spalte stimmen
+          // hole die spalte anhand der gemappten headline und pushe auf data array 
+          //  sonst Fehlermeldung
+
+    // gebe objekt mit columnNames und data aus
   }
 
   trackByFn(index: any, item: any) {
     return index;
   }
+
+  /* ----- Toggles ----- */
 
   toggleHeadlineUsage() {
     if (this.headlineUsage == "own") {
@@ -195,7 +191,6 @@ export class SchemaTableImportComponent implements OnInit {
       this.header = this.table.shift();
     }
   }
-
 
   toggleDelimiter(delimiter: string) {
     if (this.currentDelimiters.includes(delimiter)) {
@@ -231,32 +226,42 @@ export class SchemaTableImportComponent implements OnInit {
     }
   }
 
-  save() {
-    // TODO
-    console.log("selected table: ", this.selectedTable);
-    console.log("header: ", this.header);
-    console.log("table: ", this.table);
+  /* ----- To outsource ----- */
 
-    // "columnNames" => ['key', 'value'],
-    // "data" => [
-    // ['1', 'eins'],
+  // count the matching column names from a table and a headline
+  countMatchingNames(headline: string[], table: Table): number {
+    let counter = 0;
 
+    // iterate through table columns
+    for(let i = 0; i < table['columns'].length; i++) {      
+      // filter matching headline col names with table col
+      let matchingNames = headline.filter(col => col === table['columns'][i].name);
+      // at least one match found
+      if(matchingNames.length) {
+        counter++;
+      }          
+    } 
 
-    // gehe alle selectedTableColumns durch
-    this.selectedTable['columns'].forEach(col => console.log(col.name));
-      // prüfen, ob name jeweils in used index Zeile vorhanden
-      // next TODO: greife dafür aufs select zu
+    return counter;
+  }
 
-      // Wenn doppelte oder fehlende
-        // direkt Fehlermeldung
+  // Get the most suitable table for a given headline
+  // returns the table with the most count of matching names
+  // return the first table if no matching name
+  getMostSuitableTable(headline: string[], tables: Table[]) : Table {
+    let resultTable: Table = tables[0];
+    let maxMatches: number = 0;
 
-        // sonst push namen in columnNames array
+    // check each table for more matches than current max
+    tables.forEach(table => {
+      let matches = this.countMatchingNames(headline, table);      
+      if (matches > maxMatches) {
+        resultTable = table;
+        maxMatches = matches;
+      }
+    });
 
-        // WENN die typen der spalte stimmen
-          // hole die spalte anhand der gemappten headline und pushe auf data array 
-          //  sonst Fehlermeldung
-
-    // gebe objekt mit columnNames und data aus
+    return resultTable;
   }
 
 }
