@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import * as Parser from '../../shared/csv-parser';
 import { ProjectService, Project } from '../project.service'
 import { Table } from '../../shared/schema';
-import { Column } from '../../shared/schema/column';
-
-
 
 /**
  * Displays the schema for a list of tables.
@@ -23,8 +20,7 @@ export class SchemaTableImportComponent implements OnInit {
   
   // Schema with the available tables
   schemaTables: Table[];
-  selectedTableColumns: Column[];
-  selectedTableName: string;
+  selectedTable: Table;
 
   // parse result or own definition
   header: string[];  
@@ -65,16 +61,10 @@ export class SchemaTableImportComponent implements OnInit {
     this.currentDelimiters = [];
     this.toggleDelimiter(',');
 
-    this.selectedTableColumns = [];
-    this.selectedTableName = "";
+    // Get tables for schema
     this.schemaTables = this._projectService.cachedProject.schema['tables'];
-    
-    console.log("schema Tables: ", this.schemaTables);
-
-    this.schemaTables.forEach(function(table) {
-      console.log(table['_columns'].length);
-    });
-
+    // Init first table
+    this.selectedTable = this.schemaTables[0];
   }
 
 
@@ -121,12 +111,12 @@ export class SchemaTableImportComponent implements OnInit {
 
       this.disableHeadlineSelection = false;
 
-      this.mapColumns(this.header, this.getMostSuitableTable(this.header, this.schemaTables));      
+      this.selectedTable = this.getMostSuitableTable(this.header, this.schemaTables);      
 
       this.changeTable();
 
       // init selected header for each table column (pre select empty)
-      for(let i = 0; i < this.selectedTableColumns.length; i++) {
+      for(let i = 0; i < this.selectedTable['columns'].length; i++) {
         this.selectedHeader.push("empty");
       }
     } 
@@ -136,15 +126,6 @@ export class SchemaTableImportComponent implements OnInit {
     }
 
     this.disableSelection = false;
-  }
-
-  mapColumns(headline: string[], table) {
-    console.log("map Columns table ", table);
-    this.selectedTableName = table._name;
-    this.selectedTableColumns = table['_columns'];
-
-    console.log("this.selectedTableName: ",this.selectedTableName);
-    console.log("this.selectedTableColumns ", this.selectedTableColumns);
   }
 
   // count the matching column names from a table and a headline
@@ -163,10 +144,11 @@ export class SchemaTableImportComponent implements OnInit {
   }
 
   // Get the most suitable table for a given headline
-  // returns the table with the most identical names
-  getMostSuitableTable(headline: string[], tables) {
-    let resultTable = [];
-    let maxMatches = 0;
+  // returns the table with the most count of matching names
+  // return the first table if no matching name
+  getMostSuitableTable(headline: string[], tables: Table[]) : Table {
+    let resultTable: Table = tables[0];
+    let maxMatches: number = 0;
 
     // check each table for more matches than current max
     tables.forEach(table => {
@@ -183,11 +165,11 @@ export class SchemaTableImportComponent implements OnInit {
   // TODO referenz param for outsourcing
   changeTable() {
     // Filter the columns of the wanted table (not multiple tables)
-    this.selectedTableColumns = (this.schemaTables.filter(table => this.selectedTableName === table['_name']))[0]['_columns'];
+    this.selectedTable = (this.schemaTables.filter(table => this.selectedTable['name'] === table['name']))[0];
 
     // Pre select the fitting names or empty
-    for(let i = 0; i < this.selectedTableColumns.length; i++) {      
-      this.selectedHeader[i] = this.header.filter(col => col === this.selectedTableColumns[i].name)[0];
+    for(let i = 0; i < this.selectedTable['columns'].length; i++) {      
+      this.selectedHeader[i] = this.header.filter(col => col === this.selectedTable['columns'][i].name)[0];
       if(!this.selectedHeader[i]) {
         this.selectedHeader[i] = "empty";
       }          
@@ -251,7 +233,7 @@ export class SchemaTableImportComponent implements OnInit {
 
   save() {
     // TODO
-    console.log("selected cols: ", this.selectedTableColumns);
+    console.log("selected table: ", this.selectedTable);
     console.log("header: ", this.header);
     console.log("table: ", this.table);
 
@@ -261,7 +243,7 @@ export class SchemaTableImportComponent implements OnInit {
 
 
     // gehe alle selectedTableColumns durch
-    this.selectedTableColumns.forEach(col => console.log(col.name));
+    this.selectedTable['columns'].forEach(col => console.log(col.name));
       // prüfen, ob name jeweils in used index Zeile vorhanden
       // next TODO: greife dafür aufs select zu
 
@@ -276,4 +258,5 @@ export class SchemaTableImportComponent implements OnInit {
 
     // gebe objekt mit columnNames und data aus
   }
+
 }

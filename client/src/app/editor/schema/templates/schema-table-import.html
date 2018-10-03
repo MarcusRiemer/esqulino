@@ -150,7 +150,7 @@
         <!-- Choose Table to import to -->
         <div class="table-selection">
             <label class="p-0" for="select-table">Tabelle auswählen</label>
-            <select id="select-table" class="form-control" [(ngModel)]="selectedTableName" (change)="changeTable()">
+            <select id="select-table" class="form-control" [(ngModel)]="selectedTable['name']" (change)="changeTable()">
                 <option *ngFor="let table of schemaTables" value="{{table.name}}">{{ table.name }}</option>
             </select>
         </div>
@@ -160,7 +160,7 @@
         <!-- Mapping for the selected table -->
 
 
-        <div class="mapping row mt-3" *ngFor="let tableCol of selectedTableColumns; let i = index">
+        <div class="mapping row mt-3" *ngFor="let tableCol of selectedTable['columns']; let i = index">
             
             <div class="col-md-6 col-lg-4">
                 <select id="header-selection" class="form-control h-100" [(ngModel)]="selectedHeader[i]">
