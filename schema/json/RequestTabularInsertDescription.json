@@ -14,9 +14,10 @@
     },
     "RequestTabularInsertDescription": {
       "additionalProperties": false,
-      "description": "Allows bulk insertion of tabular data like from CSV files. The order\nof the data in the actual columns must match the order of the given\ncolumn names.",
+      "description": "Allows bulk insertion of tabular data like from CSV files or other \nbulky sources.",
       "properties": {
         "columnNames": {
+          "description": "The names of the columns to insert the data in.",
           "items": {
             "type": "string"
           },
@@ -24,7 +25,9 @@
           "type": "array"
         },
         "data": {
-          "$ref": "#/definitions/RawTableDataDescription"
+          "$ref": "#/definitions/RawTableDataDescription",
+          "description": "The rows to insert. The order of the data inside the columns must\nmatch the order of `columnNames`.",
+          "minItems": 1
         }
       },
       "required": [
