@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as Parser from '../../shared/csv-parser';
 import { ProjectService, Project } from '../project.service'
-import { Table } from '../../shared/schema';
+import { Table, Column } from '../../shared/schema';
 
 /**
  * Displays the schema for a list of tables.
@@ -114,7 +114,7 @@ export class SchemaTableImportComponent implements OnInit {
 
       this.selectedTable = this.getMostSuitableTable(this.header, this.schemaTables);      
       this.selectedTableName = this.selectedTable['name'];
-      this.selectMatchingCols();
+      this.selectedHeader = this.getMatchingCols(this.selectedTable['columns'], this.header);
     } 
     else if (this.parse.type === 'parseError') {
       this.errors = (<Parser.CsvParseError>this.parse).errors;
@@ -124,22 +124,12 @@ export class SchemaTableImportComponent implements OnInit {
     this.disableSelection = false;
   }
 
-  // Select the matching headline col for each table col or empty
-  selectMatchingCols() {
-      for(let i = 0; i < this.selectedTable['columns'].length; i++) {      
-        this.selectedHeader[i] = this.header.filter(col => col === this.selectedTable['columns'][i].name)[0];
-        if(!this.selectedHeader[i]) {
-          this.selectedHeader[i] = "empty";
-        }          
-      }
-  }
-
   // change selected table and selected headline cols
   changeTable() {
     // Filter the wanted table by the name from ngModel in select
     this.selectedTable = (this.schemaTables.filter(table => this.selectedTableName === table['name']))[0];
     // Select the matching headline col for each table col or empty
-    this.selectMatchingCols();
+    this.selectedHeader = this.getMatchingCols(this.selectedTable['columns'], this.header);
   }
 
   // returns true if the col is currently selected for mapping
@@ -282,8 +272,20 @@ export class SchemaTableImportComponent implements OnInit {
         maxMatches = matches;
       }
     });
-
     return resultTable;
+  }
+
+  // returns the selected Header array 
+  // with the matching headline col for each table col or empty
+  getMatchingCols(tableCols: Column[], headline: string[]) : string[] {
+    let result: string[] = [];
+      for(let i = 0; i < tableCols.length; i++) {      
+        result[i] = headline.filter(col => col === tableCols[i].name)[0];
+        if(!result[i]) {
+          result[i] = "empty";
+        }          
+      }
+    return result;
   }
 
 }
