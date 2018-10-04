@@ -140,46 +140,31 @@ export class SchemaTableImportComponent implements OnInit {
   save() {
     let columnNames: string[] = [];
     let data: string[][] = [];
-
-    console.log("empty data? ", data);
-
-
-    // "columnNames" => ['key', 'value'],
-    // "data" => [
-    // ['1', 'eins'],
-
-    // init data array with same length as table
-    //this.table.forEach(() => data.push([]));
-
-    data = [...Array(this.table.length)].map(e => Array());
-
-    console.log("table length? ", this.table.length);
-    console.log("empty data? ", data);
-    console.log("length? ", data.length);
+    let neededIndex: number[] = [];  
 
     for (let i = 0; i < this.selectedTable['_columns'].length; i++) {
-      // console.log(this.selectedTable['_columns'][i]['name']);
-      // console.log(this.selectedHeader[i]);
-      // console.log("-------------");
-
       if (this.selectedHeader[i] !== "empty") {              
-        let newData: string[] = [];
-        // this.table.forEach(row => newData.push(row[i]));
-        // data.push(newData);
-        
-        // get the data col for each table row
-        for(let j = 0; j < this.table.length; j++) {
-          data[i].push(this.table[j][i]);
-        }
-
         columnNames.push(this.selectedTable['_columns'][i]['name']);
+        neededIndex.push(i);
       }
+    }
+
+    console.log("needed Index: ", neededIndex);
+
+    for (let i = 0; i < this.table.length; i++) {
+      let newRow: string[] = [];
+      neededIndex.forEach(index => newRow.push(this.table[i][index]));
+      data.push(newRow);      
+    }
+
+    let resultObject = {
+      'columnNames': columnNames,
+      'data': data
     }
 
     console.log("columnNames: ", columnNames);
     console.log("data: ", data);
-
-    // gebe objekt mit columnNames und data aus
+    console.log("result Object: ", resultObject);
   }
 
   trackByFn(index: any, item: any) {
