@@ -134,8 +134,14 @@ export class SchemaTableImportComponent implements OnInit {
 
   // returns true if the col is currently selected for mapping
   colSelected(index: number) {
-    //console.log("colSelected for index ", index, " = ", this.selectedHeaderIndex.includes(index))
-    return this.selectedHeaderIndex.includes(Number(index));
+    return this.selectedHeaderIndex.includes(+index);
+  }
+
+  // ng Model for selected Header Index uses strings for the indices
+  // this functions casts the string directly to a number
+  // (needed for comparison)
+  castNumber(index: number) {
+    this.selectedHeaderIndex[index] = +this.selectedHeaderIndex[index];
   }
 
   save() {
