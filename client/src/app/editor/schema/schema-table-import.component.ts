@@ -29,9 +29,9 @@ export class SchemaTableImportComponent implements OnInit {
   // parse result
   table: string[][];
 
-  // contains the selected header to map from the file
-  // for every table column (empty =  don't map)
-  selectedHeader: string[];
+  // contains the header index for each column of the table
+  // when nothing is selected the index will be -1
+  selectedHeaderIndex: number[];
 
   // Contains all currently used Delimiters
   currentDelimiters: string[];
@@ -57,7 +57,7 @@ export class SchemaTableImportComponent implements OnInit {
     this.headlineUsage = "file";
     this.textMarker = '"';
 
-    this.selectedHeader = [];
+    this.selectedHeaderIndex = [];
 
     this.currentDelimiters = [];
     this.toggleDelimiter(',');
@@ -114,7 +114,7 @@ export class SchemaTableImportComponent implements OnInit {
 
       this.selectedTable = this.getMostSuitableTable(this.header, this.schemaTables);      
       this.selectedTableName = this.selectedTable['name'];
-      this.selectedHeader = this.getMatchingCols(this.selectedTable['columns'], this.header);
+      this.selectedHeaderIndex = this.getMatchingCols(this.selectedTable['columns'], this.header);
     } 
     else if (this.parse.type === 'parseError') {
       this.errors = (<Parser.CsvParseError>this.parse).errors;
@@ -129,12 +129,13 @@ export class SchemaTableImportComponent implements OnInit {
     // Filter the wanted table by the name from ngModel in select
     this.selectedTable = (this.schemaTables.filter(table => this.selectedTableName === table['name']))[0];
     // Select the matching headline col for each table col or empty
-    this.selectedHeader = this.getMatchingCols(this.selectedTable['columns'], this.header);
+    this.selectedHeaderIndex = this.getMatchingCols(this.selectedTable['columns'], this.header);
   }
 
   // returns true if the col is currently selected for mapping
   colSelected(index: number) {
-    return this.selectedHeader.includes(this.header[index]);
+    //console.log("colSelected for index ", index, " = ", this.selectedHeaderIndex.includes(index))
+    return this.selectedHeaderIndex.includes(Number(index));
   }
 
   save() {
@@ -143,17 +144,19 @@ export class SchemaTableImportComponent implements OnInit {
     let neededIndex: number[] = [];    
 
     for (let i = 0; i < this.selectedTable['_columns'].length; i++) {
-      if (this.selectedHeader[i] !== "empty") { 
-        let columnName = this.selectedHeader[i];        
+      if (this.selectedHeaderIndex[i] != -1) { 
+        let columnName = this.header[this.selectedHeaderIndex[i]];        
         columnNames.push(columnName);
-        neededIndex.push(this.header.indexOf(columnName));
+        neededIndex.push(this.selectedHeaderIndex[i]);
       }
     }
 
-    for (let i = 0; i < this.table.length; i++) {
-      let newRow: string[] = [];
-      neededIndex.forEach(index => newRow.push(this.table[i][index]));
-      data.push(newRow);      
+    if (columnNames.length) {
+      for (let i = 0; i < this.table.length; i++) {
+        let newRow: string[] = [];
+        neededIndex.forEach(index => newRow.push(this.table[i][index]));
+        data.push(newRow);      
+      }
     }
 
     let resultObject = {
@@ -257,17 +260,22 @@ export class SchemaTableImportComponent implements OnInit {
     return resultTable;
   }
 
-  // returns the selected Header array 
-  // with the matching headline col for each table col or empty
-  getMatchingCols(tableCols: Column[], headline: string[]) : string[] {
-    let result: string[] = [];
-      for(let i = 0; i < tableCols.length; i++) {      
-        result[i] = headline.filter(col => col === tableCols[i].name)[0];
-        if(!result[i]) {
-          result[i] = "empty";
-        }          
-      }
+  /**
+   * Returns the best matching selected Header array
+   * which contains the header index for each column of the table
+   * when nothing is selected the index will be -1
+   * chooses the first appearance for name duplicates
+   * @param tableCol the column array of the result table
+   * @param headline the parsed headline cols to map
+   */  
+  getMatchingCols(tableCols: Column[], headline: string[]) : number[] {
+    let result: number[] = [];
+
+    for(let i = 0; i < tableCols.length; i++) {  
+      // save index of the first occurance or -1 when no occurance    
+      result[i] = headline.indexOf(headline.filter(col => col === tableCols[i].name)[0]);        
+    }
+
     return result;
   }
-
 }
