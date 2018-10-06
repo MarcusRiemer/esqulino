@@ -140,16 +140,15 @@ export class SchemaTableImportComponent implements OnInit {
   save() {
     let columnNames: string[] = [];
     let data: string[][] = [];
-    let neededIndex: number[] = [];  
+    let neededIndex: number[] = [];    
 
     for (let i = 0; i < this.selectedTable['_columns'].length; i++) {
-      if (this.selectedHeader[i] !== "empty") {              
-        columnNames.push(this.selectedTable['_columns'][i]['name']);
-        neededIndex.push(i);
+      if (this.selectedHeader[i] !== "empty") { 
+        let columnName = this.selectedHeader[i];        
+        columnNames.push(columnName);
+        neededIndex.push(this.header.indexOf(columnName));
       }
     }
-
-    console.log("needed Index: ", neededIndex);
 
     for (let i = 0; i < this.table.length; i++) {
       let newRow: string[] = [];
@@ -162,8 +161,6 @@ export class SchemaTableImportComponent implements OnInit {
       'data': data
     }
 
-    console.log("columnNames: ", columnNames);
-    console.log("data: ", data);
     console.log("result Object: ", resultObject);
   }
 
