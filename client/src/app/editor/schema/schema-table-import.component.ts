@@ -150,7 +150,7 @@ export class SchemaTableImportComponent implements OnInit {
     let neededIndex: number[] = [];    
 
     for (let i = 0; i < this.selectedTable['_columns'].length; i++) {
-      if (this.selectedHeaderIndex[i] != -1) { 
+      if (this.selectedHeaderIndex[i] !== -1) { 
         let columnName = this.selectedTable['columns'][i]['name'];        
         columnNames.push(columnName);
         neededIndex.push(this.selectedHeaderIndex[i]);

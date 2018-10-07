@@ -125,8 +125,63 @@
                 </tbody>
             </table>
 
+            <hr />
+
+            <h5 class="mb-3">Zuweisungen</h5>
+
+            <!-- Choose Table to import to -->
+            <div class="table-selection">
+                <label class="p-0" for="select-table">Tabelle auswählen</label>
+                <select id="select-table" class="form-control" [(ngModel)]="selectedTableName" (change)="changeTable()">
+                    <option *ngFor="let table of schemaTables" value="{{table.name}}">{{ table.name }}</option>
+                </select>
+            </div>
+
+            <br />
+
+            <!-- Mapping for the selected table -->
+
+            <div class="mapping row mt-3" *ngFor="let tableCol of selectedTable['columns']; let i = index">
+                
+                <div class="col-md-6 col-lg-4">
+                    <select id="header-selection" class="form-control h-100" [(ngModel)]="selectedHeaderIndex[i]" (change)="castNumber(i)">
+                        <option value="-1"></option>
+                        <option *ngFor="let headerCol of header; let j = index" 
+                                value="{{ j }}">
+                            {{ headerCol }}
+                        </option>
+                    </select>        
+                </div>      
+
+                <div class="col-md-1" *ngIf="selectedHeaderIndex[i] != '-1'">
+                    <div style="font-size: 2em; line-height: 0; color: #00C851;">
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </div>
+                </div>
+
+                <div class="col-md-1" *ngIf="selectedHeaderIndex[i] == '-1'">
+                    <span style="font-size: 2em; line-height: 0; color: #ff4444;">
+                        <i class="fa fa-ban"></i>
+                    </span>
+                </div>
+
+
+                <div class="col-md-5 col-lg-3 d-flex align-items-center" id="table-{{ tableCol }}">&nbsp;{{ tableCol.name }}</div>
+
+            </div>
+                
+            <br />
+
+            <!-- Save Button -->
+
+            <div class="save-button">
+                <button type="button" class="btn btn-success" (click)="save()" [disabled]="disableHeadlineSelection">Tabelle importieren</button>
+            </div>
+
         </div>
-        
+
+    
+
         <!-- Error -->
 
         <div class="errors" *ngIf="parse.type === 'parseError'">
@@ -155,59 +210,6 @@
             </div>
         </div>
 
-        <hr />
-
-        <h5 class="mb-3">Zuweisungen</h5>
-
-        <!-- Choose Table to import to -->
-        <div class="table-selection">
-            <label class="p-0" for="select-table">Tabelle auswählen</label>
-            <select id="select-table" class="form-control" [(ngModel)]="selectedTableName" (change)="changeTable()">
-                <option *ngFor="let table of schemaTables" value="{{table.name}}">{{ table.name }}</option>
-            </select>
-        </div>
-
-        <br />
-
-        <!-- Mapping for the selected table -->
-
-        <div class="mapping row mt-3" *ngFor="let tableCol of selectedTable['columns']; let i = index">
-            
-            <div class="col-md-6 col-lg-4">
-                <select id="header-selection" class="form-control h-100" [(ngModel)]="selectedHeaderIndex[i]" (change)="castNumber(i)">
-                    <option value="-1"></option>
-                    <option *ngFor="let headerCol of header; let j = index" 
-                            value="{{ j }}">
-                        {{ headerCol }}
-                    </option>
-                </select>        
-            </div>      
-
-            <div class="col-md-1" *ngIf="selectedHeaderIndex[i] != '-1'">
-                <div style="font-size: 2em; line-height: 0; color: #00C851;">
-                    <i class="fa fa-arrow-circle-right"></i>
-                </div>
-            </div>
-
-            <div class="col-md-1" *ngIf="selectedHeaderIndex[i] == '-1'">
-                <span style="font-size: 2em; line-height: 0; color: #ff4444;">
-                    <i class="fa fa-ban"></i>
-                </span>
-            </div>
-
-
-            <div class="col-md-5 col-lg-3 d-flex align-items-center" id="table-{{ tableCol }}">&nbsp;{{ tableCol.name }}</div>
-
-        </div>
-        
-    </div>
-
-    <br />
-
-    <!-- Save Button -->
-
-    <div class="save-button">
-        <button type="button" class="btn btn-success" (click)="save()" [disabled]="disableHeadlineSelection">Tabelle importieren</button>
     </div>
 
 </div>
