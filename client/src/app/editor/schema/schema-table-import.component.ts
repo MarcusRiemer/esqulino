@@ -48,13 +48,13 @@ export class SchemaTableImportComponent implements OnInit {
   /* ----- Initializations ----- */
   
   
-  // Used for dependency injection.   
+  // used for dependency injection   
   constructor(
     private _projectService: ProjectService,
   ) {
   }
 
-  // inits
+  // used for inits
   ngOnInit() {
     this.disableSelection = true;
     this.disableHeadlineSelection = true;
@@ -113,12 +113,13 @@ export class SchemaTableImportComponent implements OnInit {
   // needed for defining independent own headlines
   // tracks which items are added or removed 
   // by returning the unique identifier (index) for this item
-  trackByFn(index: any, item: any) {
+  trackByFn(index: any) {
     return index;
   }
 
   /* ----- Toggles ----- */
 
+  // use own headline definitions or the first row from the file
   toggleHeadlineUsage() {
     if (this.headlineUsage == "own") {
       // copy header instead of reference
@@ -142,6 +143,8 @@ export class SchemaTableImportComponent implements OnInit {
     this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
   }
 
+  // add or remove a given delimiter to the current delimiter selections
+  // and restart the parse process
   toggleDelimiter(delimiter: string) {
     if (this.currentDelimiters.includes(delimiter)) {
       this.currentDelimiters.splice(this.currentDelimiters.indexOf(delimiter), 1);
@@ -154,22 +157,27 @@ export class SchemaTableImportComponent implements OnInit {
     }
   }
 
+  // add or remove semicolon delimiter
   toggleSemicolon() {
     this.toggleDelimiter(';');
   }
 
+  // add or remove comma delimiter
   toggleComma() {
     this.toggleDelimiter(',');
   }
 
+  // add or remove space delimiter
   toggleSpace() {
     this.toggleDelimiter(' ');
   }
 
+  // add or remove tab delimiter
   toggleTab() {
     this.toggleDelimiter('  ');
   }
 
+  // restart the parse process after markers changed
   changeMarker() {
     if (this.fileData) {
       this.parseProcess();
@@ -178,10 +186,26 @@ export class SchemaTableImportComponent implements OnInit {
 
   /* ----- File Handling ----- */
 
+  // listen for file change
   changeListener(event): void {
     this.handleDataUpload(event.target);
   }
 
+  // start file reading process
+  handleDataUpload = async (event) => {
+    const file = event.files[0];
+
+    try {
+      // Wait until the File is read
+      this.fileData = await this.readUploadedFileAsText(file);
+      this.parseProcess();
+
+    } catch (e) {
+      console.warn(e.message);
+    }
+  }
+
+  // file reading process
   readUploadedFileAsText = (inputFile) => {
     const temporaryFileReader = new FileReader();
 
@@ -199,19 +223,7 @@ export class SchemaTableImportComponent implements OnInit {
     });
   };
 
-  handleDataUpload = async (event) => {
-    const file = event.files[0];
-
-    try {
-      // Wait until the File is read
-      this.fileData = await this.readUploadedFileAsText(file);
-      this.parseProcess();
-
-    } catch (e) {
-      console.warn(e.message);
-    }
-  }
-
+  // parse process when file is read or delimiters or markers have changed
   parseProcess = () => {
     this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.textMarker);
 
