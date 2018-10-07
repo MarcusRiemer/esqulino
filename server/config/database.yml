@@ -3,7 +3,6 @@ default: &default
   database: esqulino
   host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
   username: esqulino
-  password: password
   encoding: unicode
 
 development:
