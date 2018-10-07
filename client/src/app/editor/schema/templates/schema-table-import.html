@@ -132,7 +132,7 @@
             <!-- Choose Table to import to -->
             <div class="table-selection">
                 <label class="p-0" for="select-table">Tabelle auswählen</label>
-                <select id="select-table" class="form-control" [(ngModel)]="selectedTableName" (change)="changeTable()">
+                <select id="select-table" class="form-control" [(ngModel)]="selectedTableName" (change)="changeTable(selectedTableName)">
                     <option *ngFor="let table of schemaTables" value="{{table.name}}">{{ table.name }}</option>
                 </select>
             </div>

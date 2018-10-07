@@ -115,8 +115,9 @@ export class SchemaTableImportComponent implements OnInit {
 
       this.selectedTable = this.getMostSuitableTable(this.header, this.schemaTables);      
       this.selectedTableName = this.selectedTable['name'];
-      this.selectedHeaderIndex = this.getMatchingCols(this.selectedTable['columns'], this.header);
-      this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
+
+      // use change table function for selected Header Index and disable Button status
+      this.changeTable(this.selectedTableName);
     } 
     else if (this.parse.type === 'parseError') {
       this.errors = (<Parser.CsvParseError>this.parse).errors;
@@ -128,9 +129,9 @@ export class SchemaTableImportComponent implements OnInit {
 
   // change selected table and selected headline cols
   // and handles button enabling table is selected
-  changeTable() {
+  changeTable(name: string) {
     // Filter the wanted table by the name from ngModel in select
-    this.selectedTable = (this.schemaTables.filter(table => this.selectedTableName === table['name']))[0];
+    this.selectedTable = (this.schemaTables.filter(table => name === table['name']))[0];
     // Select the matching headline col for each table col or empty
     this.selectedHeaderIndex = this.getMatchingCols(this.selectedTable['columns'], this.header);
     this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
