@@ -26,9 +26,9 @@ export class SchemaTableImportComponent implements OnInit {
   selectedTableName: string;
 
   // parse result or own definition
-  header: string[];  
+  csvHeader: string[];  
   // parse result
-  table: RawTableDataDescription;
+  csvTable: RawTableDataDescription;
 
   // contains the header index for each column of the table
   // when nothing is selected the index will be -1
@@ -44,6 +44,9 @@ export class SchemaTableImportComponent implements OnInit {
   headlineUsage: "file" | "own";
   textMarker: '"' | "'";
 
+
+  /* ----- Initializations ----- */
+  
   /**
    * Used for dependency injection.
    */
@@ -71,6 +74,99 @@ export class SchemaTableImportComponent implements OnInit {
     this.selectedTable = this.schemaTables[0];
     this.selectedTableName = this.selectedTable['name'];
   }
+
+  /* ----- Component behaviour ----- */
+
+  // change selected table and selected headline cols
+  // and handles button enabling table is selected
+  changeTable(name: string) {
+    // Filter the wanted table by the name from ngModel in select
+    this.selectedTable = (this.schemaTables.filter(table => name === table['name']))[0];
+    // Select the matching headline col for each table col or empty
+    this.selectedHeaderIndex = this.getMatchingCols(this.selectedTable['columns'], this.csvHeader);
+    this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
+  }
+
+  // ng Model for selected Header Index uses strings for the indices
+  // this functions casts the string directly to a number (needed for comparison)
+  // and handles button enabling after mapping col is selected
+  changeColumn(index: number) {
+    this.selectedHeaderIndex[index] = +this.selectedHeaderIndex[index];
+    this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
+  }
+
+  // returns true if no mapping value is selected (for button disabling)
+  noMappingValueSelected(values: number[]) :boolean {
+    return values.filter(index => index !== -1).length === 0; 
+  }
+
+  // returns true if the col index (of the csv parse result) is currently selected for mapping
+  colSelected(index: number) {
+    return this.selectedHeaderIndex.includes(+index);
+  }
+
+  // logs the mapping result in the console
+  importTable() {
+    console.log(this.getMappingResult(this.selectedTable['_columns'], this.selectedHeaderIndex, this.csvTable));
+  }
+
+  trackByFn(index: any, item: any) {
+    return index;
+  }
+
+  /* ----- Toggles ----- */
+
+  toggleHeadlineUsage() {
+    if (this.headlineUsage == "own") {
+      // copy header instead of reference
+      let headerCopy = this.csvHeader.slice();
+      // set header copy as first table line  
+      this.csvTable.unshift(headerCopy);
+      // empty current header
+      this.csvHeader = [];
+      // use length of first table row
+      this.csvHeader.length = this.csvTable[0].length;
+    } else if (this.headlineUsage === "file") {
+      // set first table row as header
+      this.csvHeader = this.csvTable.shift();
+    }
+  }
+
+  toggleDelimiter(delimiter: string) {
+    if (this.currentDelimiters.includes(delimiter)) {
+      this.currentDelimiters.splice(this.currentDelimiters.indexOf(delimiter), 1);
+    } else {
+      this.currentDelimiters.push(delimiter);
+
+    }
+    if (this.fileData) {
+      this.parseProcess();
+    }
+  }
+
+  toggleSemicolon() {
+    this.toggleDelimiter(';');
+  }
+
+  toggleComma() {
+    this.toggleDelimiter(',');
+  }
+
+  toggleSpace() {
+    this.toggleDelimiter(' ');
+  }
+
+  toggleTab() {
+    this.toggleDelimiter('  ');
+  }
+
+  changeMarker() {
+    if (this.fileData) {
+      this.parseProcess();
+    }
+  }
+
+  /* ----- File Handling ----- */
 
   changeListener(event): void {
     this.handleDataUpload(event.target);
@@ -110,12 +206,12 @@ export class SchemaTableImportComponent implements OnInit {
     this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.textMarker);
 
     if (this.parse.type === 'parseResult') {
-      this.header = (<Parser.CsvParseResult>this.parse).header;
-      this.table = (<Parser.CsvParseResult>this.parse).table;
+      this.csvHeader = (<Parser.CsvParseResult>this.parse).header;
+      this.csvTable = (<Parser.CsvParseResult>this.parse).table;
 
       this.disableHeadlineSelection = false;
 
-      this.selectedTable = this.getMostSuitableTable(this.header, this.schemaTables);      
+      this.selectedTable = this.getMostSuitableTable(this.csvHeader, this.schemaTables);      
       this.selectedTableName = this.selectedTable['name'];
 
       // use change table function for selected Header Index and disable Button status
@@ -127,95 +223,6 @@ export class SchemaTableImportComponent implements OnInit {
     }
 
     this.disableSelection = false;
-  }
-
-  // change selected table and selected headline cols
-  // and handles button enabling table is selected
-  changeTable(name: string) {
-    // Filter the wanted table by the name from ngModel in select
-    this.selectedTable = (this.schemaTables.filter(table => name === table['name']))[0];
-    // Select the matching headline col for each table col or empty
-    this.selectedHeaderIndex = this.getMatchingCols(this.selectedTable['columns'], this.header);
-    this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
-  }
-
-  // ng Model for selected Header Index uses strings for the indices
-  // this functions casts the string directly to a number (needed for comparison)
-  // and handles button enabling after mapping col is selected
-  changeColumn(index: number) {
-    this.selectedHeaderIndex[index] = +this.selectedHeaderIndex[index];
-    this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
-  }
-
-  // returns true if no mapping value is selected (for button disabling)
-  noMappingValueSelected(values: number[]) :boolean {
-    return values.filter(index => index !== -1).length === 0; 
-  }
-
-  // returns true if the col index (of the csv parse result) is currently selected for mapping
-  colSelected(index: number) {
-    return this.selectedHeaderIndex.includes(+index);
-  }
-
-  // logs the mapping result in the console
-  importTable() {
-    console.log(this.getMappingResult(this.selectedTable['_columns'], this.selectedHeaderIndex, this.table));
-  }
-
-  trackByFn(index: any, item: any) {
-    return index;
-  }
-
-  /* ----- Toggles ----- */
-
-  toggleHeadlineUsage() {
-    if (this.headlineUsage == "own") {
-      // copy header instead of reference
-      let headerCopy = this.header.slice();
-      // set header copy as first table line  
-      this.table.unshift(headerCopy);
-      // empty current header
-      this.header = [];
-      // use length of first table row
-      this.header.length = this.table[0].length;
-    } else if (this.headlineUsage === "file") {
-      // set first table row as header
-      this.header = this.table.shift();
-    }
-  }
-
-  toggleDelimiter(delimiter: string) {
-    if (this.currentDelimiters.includes(delimiter)) {
-      this.currentDelimiters.splice(this.currentDelimiters.indexOf(delimiter), 1);
-    } else {
-      this.currentDelimiters.push(delimiter);
-
-    }
-    if (this.fileData) {
-      this.parseProcess();
-    }
-  }
-
-  toggleSemicolon() {
-    this.toggleDelimiter(';');
-  }
-
-  toggleComma() {
-    this.toggleDelimiter(',');
-  }
-
-  toggleSpace() {
-    this.toggleDelimiter(' ');
-  }
-
-  toggleTab() {
-    this.toggleDelimiter('  ');
-  }
-
-  changeMarker() {
-    if (this.fileData) {
-      this.parseProcess();
-    }
   }
 
   /* ----- To outsource ----- */
