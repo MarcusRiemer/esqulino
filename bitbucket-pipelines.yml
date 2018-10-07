@@ -1,6 +1,5 @@
 image: marcusriemer/sqlino:test
 
-
 pipelines:
   default:
     - step:
