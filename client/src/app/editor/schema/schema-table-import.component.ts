@@ -38,6 +38,7 @@ export class SchemaTableImportComponent implements OnInit {
 
   disableSelection: boolean;
   disableHeadlineSelection: boolean;
+  disableButton: boolean;
 
   headlineUsage: "file" | "own";
   textMarker: '"' | "'";
@@ -115,6 +116,7 @@ export class SchemaTableImportComponent implements OnInit {
       this.selectedTable = this.getMostSuitableTable(this.header, this.schemaTables);      
       this.selectedTableName = this.selectedTable['name'];
       this.selectedHeaderIndex = this.getMatchingCols(this.selectedTable['columns'], this.header);
+      this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
     } 
     else if (this.parse.type === 'parseError') {
       this.errors = (<Parser.CsvParseError>this.parse).errors;
@@ -125,24 +127,34 @@ export class SchemaTableImportComponent implements OnInit {
   }
 
   // change selected table and selected headline cols
+  // and handles button enabling table is selected
   changeTable() {
     // Filter the wanted table by the name from ngModel in select
     this.selectedTable = (this.schemaTables.filter(table => this.selectedTableName === table['name']))[0];
     // Select the matching headline col for each table col or empty
     this.selectedHeaderIndex = this.getMatchingCols(this.selectedTable['columns'], this.header);
+    this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
   }
 
-  // returns true if the col is currently selected for mapping
+  // ng Model for selected Header Index uses strings for the indices
+  // this functions casts the string directly to a number (needed for comparison)
+  // and handles button enabling after mapping col is selected
+  changeColumn(index: number) {
+    this.selectedHeaderIndex[index] = +this.selectedHeaderIndex[index];
+    this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
+  }
+
+  // returns true if no mapping value is selected (for button disabling)
+  noMappingValueSelected(values: number[]) :boolean {
+    return values.filter(index => index !== -1).length === 0; 
+  }
+
+  // returns true if the col index (of the csv parse result) is currently selected for mapping
   colSelected(index: number) {
     return this.selectedHeaderIndex.includes(+index);
   }
 
-  // ng Model for selected Header Index uses strings for the indices
-  // this functions casts the string directly to a number
-  // (needed for comparison)
-  castNumber(index: number) {
-    this.selectedHeaderIndex[index] = +this.selectedHeaderIndex[index];
-  }
+
 
   save() {
     let columnNames: string[] = [];
