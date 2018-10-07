@@ -1,4 +1,5 @@
-import { SplitInterpolation } from "@angular/compiler";
+import { Table, Column } from './schema';
+import { RequestTabularInsertDescription, RawTableDataDescription } from './schema/schema.description';
 
 /* ----- Interfaces ----- */
 
@@ -431,4 +432,102 @@ export function convertArraysToJSON(data: string[][], header: string[], useHeade
 
   resultObject['rows'] = arrayOfDataObjects;
   return resultObject;
+}
+
+/* ----- Component Helper Functions ----- */
+
+/**
+ * Counts the matching column names from a table and a headline
+ * @param headline the parsed or self defined headline
+ * @param tableCols the columns of the table
+ */
+export function countMatchingNames(headline: string[], tableCols: Column[]): number {
+  let counter = 0;
+
+  // iterate through table columns
+  for(let i = 0; i < tableCols.length; i++) {      
+    // filter matching headline col names with table col
+    let matchingNames = headline.filter(col => col === tableCols[i].name);
+    // at least one match found
+    if(matchingNames.length) {
+      counter++;
+    }          
+  } 
+
+  return counter;
+}
+
+/**
+ * Returns the most suitable table for a given headline
+ * which is the table with the most count of matching names
+ * or the first table if no matching name
+ * @param headline the parsed or self defined headline
+ * @param tables all tables of the current schema
+ */
+export function getMostSuitableTable(headline: string[], tables: Table[]): Table {
+  let resultTable: Table = tables[0];
+  let maxMatches: number = 0;
+
+  // check each table for more matches than current max
+  tables.forEach(table => {
+    let matches = this.countMatchingNames(headline, table['columns']);      
+    if (matches > maxMatches) {
+      resultTable = table;
+      maxMatches = matches;
+    }
+  });
+  return resultTable;
+}
+
+/**
+ * Returns the best matching selected Header array
+ * which contains the header index for each column of the table
+ * when nothing is selected the index will be -1
+ * chooses the first appearance for name duplicates
+ * @param tableCol the column array of the result table
+ * @param headline the parsed headline cols to map
+ */  
+export function getMatchingCols(tableCols: Column[], headline: string[]): number[] {
+  let result: number[] = [];
+
+  for(let i = 0; i < tableCols.length; i++) {  
+    // save index of the first occurance or -1 when no occurance    
+    result[i] = headline.indexOf(headline.filter(col => col === tableCols[i].name)[0]);        
+  }
+
+  return result;
+}
+
+/**
+ * Returns the mapping result as RequestTabularInsertDescription
+ * @param tableCols the columns of the selected schema table
+ * @param headerIndex the header index for each column of the table
+ * @param table the table data from the csv file
+ */
+export function getMappingResult(tableCols: Column[], headerIndex: number[], table: RawTableDataDescription): RequestTabularInsertDescription {
+  let result: RequestTabularInsertDescription = { columnNames: [], data: [[]] };
+  let columnNames: string[] = [];
+  let data: string[][] = [];
+  let neededIndex: number[] = [];    
+
+  for (let i = 0; i < tableCols.length; i++) {
+    if (headerIndex[i] !== -1) { 
+      let columnName = tableCols[i]['name'];        
+      columnNames.push(columnName);
+      neededIndex.push(headerIndex[i]);
+    }
+  }
+
+  if (columnNames.length) {
+    for (let i = 0; i < table.length; i++) {
+      let newRow: string[] = [];
+      neededIndex.forEach(index => newRow.push(table[i][index]));
+      data.push(newRow);      
+    }
+  }
+
+  result.columnNames = columnNames;
+  result.data = data;
+
+  return result;
 }
