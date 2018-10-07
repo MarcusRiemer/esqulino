@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as Parser from '../../shared/csv-parser';
-import { ProjectService, Project } from '../project.service'
+import { ProjectService } from '../project.service'
 import { Table, Column } from '../../shared/schema';
+import { RequestTabularInsertDescription, RawTableDataDescription } from '../../shared/schema/schema.description';
 
 /**
  * Displays the schema for a list of tables.
@@ -27,7 +28,7 @@ export class SchemaTableImportComponent implements OnInit {
   // parse result or own definition
   header: string[];  
   // parse result
-  table: string[][];
+  table: RawTableDataDescription;
 
   // contains the header index for each column of the table
   // when nothing is selected the index will be -1
@@ -54,6 +55,7 @@ export class SchemaTableImportComponent implements OnInit {
   ngOnInit() {
     this.disableSelection = true;
     this.disableHeadlineSelection = true;
+    this.disableButton = true;    
 
     this.headlineUsage = "file";
     this.textMarker = '"';
@@ -155,35 +157,9 @@ export class SchemaTableImportComponent implements OnInit {
     return this.selectedHeaderIndex.includes(+index);
   }
 
-
-
-  save() {
-    let columnNames: string[] = [];
-    let data: string[][] = [];
-    let neededIndex: number[] = [];    
-
-    for (let i = 0; i < this.selectedTable['_columns'].length; i++) {
-      if (this.selectedHeaderIndex[i] !== -1) { 
-        let columnName = this.selectedTable['columns'][i]['name'];        
-        columnNames.push(columnName);
-        neededIndex.push(this.selectedHeaderIndex[i]);
-      }
-    }
-
-    if (columnNames.length) {
-      for (let i = 0; i < this.table.length; i++) {
-        let newRow: string[] = [];
-        neededIndex.forEach(index => newRow.push(this.table[i][index]));
-        data.push(newRow);      
-      }
-    }
-
-    let resultObject = {
-      'columnNames': columnNames,
-      'data': data
-    }
-
-    console.log("result Object: ", resultObject);
+  // logs the mapping result in the console
+  importTable() {
+    console.log(this.getMappingResult(this.selectedTable['_columns'], this.selectedHeaderIndex, this.table));
   }
 
   trackByFn(index: any, item: any) {
@@ -294,6 +270,40 @@ export class SchemaTableImportComponent implements OnInit {
       // save index of the first occurance or -1 when no occurance    
       result[i] = headline.indexOf(headline.filter(col => col === tableCols[i].name)[0]);        
     }
+
+    return result;
+  }
+
+  /**
+   * Returns the mapping result as RequestTabularInsertDescription
+   * @param tableCols the columns of the selected schema table
+   * @param headerIndex the header index for each column of the table
+   * @param table the table data from the csv file
+   */
+  getMappingResult(tableCols: Column[], headerIndex: number[], table: RawTableDataDescription): RequestTabularInsertDescription {
+    let result: RequestTabularInsertDescription = { columnNames: [], data: [[]] };
+    let columnNames: string[] = [];
+    let data: string[][] = [];
+    let neededIndex: number[] = [];    
+
+    for (let i = 0; i < tableCols.length; i++) {
+      if (headerIndex[i] !== -1) { 
+        let columnName = tableCols[i]['name'];        
+        columnNames.push(columnName);
+        neededIndex.push(headerIndex[i]);
+      }
+    }
+
+    if (columnNames.length) {
+      for (let i = 0; i < table.length; i++) {
+        let newRow: string[] = [];
+        neededIndex.forEach(index => newRow.push(table[i][index]));
+        data.push(newRow);      
+      }
+    }
+
+    result.columnNames = columnNames;
+    result.data = data;
 
     return result;
   }
