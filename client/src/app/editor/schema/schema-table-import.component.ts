@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as Parser from '../../shared/csv-parser';
 import { ProjectService } from '../project.service'
-import { Table, Column } from '../../shared/schema';
-import { RequestTabularInsertDescription, RawTableDataDescription } from '../../shared/schema/schema.description';
+import { Table } from '../../shared/schema';
+import { RawTableDataDescription } from '../../shared/schema/schema.description';
 
 /**
  * Displays the schema for a list of tables.
@@ -83,7 +83,7 @@ export class SchemaTableImportComponent implements OnInit {
     // Filter the wanted table by the name from ngModel in select
     this.selectedTable = (this.schemaTables.filter(table => name === table['name']))[0];
     // Select the matching headline col for each table col or empty
-    this.selectedHeaderIndex = this.getMatchingCols(this.selectedTable['columns'], this.csvHeader);
+    this.selectedHeaderIndex = Parser.getMatchingCols(this.selectedTable['columns'], this.csvHeader);
     this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
   }
 
@@ -105,9 +105,9 @@ export class SchemaTableImportComponent implements OnInit {
     return this.selectedHeaderIndex.includes(+index);
   }
 
-  // logs the mapping result in the console
+  // logs the mapping result to the console
   importTable() {
-    console.log(this.getMappingResult(this.selectedTable['_columns'], this.selectedHeaderIndex, this.csvTable));
+    console.log(Parser.getMappingResult(this.selectedTable['_columns'], this.selectedHeaderIndex, this.csvTable));
   }
 
   // needed for defining independent own headlines
@@ -139,7 +139,7 @@ export class SchemaTableImportComponent implements OnInit {
       this.disableSelection = false;
     }
     // reset selected mapping values and enable / disable import button
-    this.selectedHeaderIndex = this.getMatchingCols(this.selectedTable['columns'], this.csvHeader);
+    this.selectedHeaderIndex = Parser.getMatchingCols(this.selectedTable['columns'], this.csvHeader);
     this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
   }
 
@@ -233,7 +233,7 @@ export class SchemaTableImportComponent implements OnInit {
 
       this.disableHeadlineSelection = false;
 
-      this.selectedTable = this.getMostSuitableTable(this.csvHeader, this.schemaTables);      
+      this.selectedTable = Parser.getMostSuitableTable(this.csvHeader, this.schemaTables);      
       this.selectedTableName = this.selectedTable['name'];
 
       // use change table function for selected Header Index and disable Button status
@@ -245,95 +245,5 @@ export class SchemaTableImportComponent implements OnInit {
     }
 
     this.disableSelection = false;
-  }
-
-  /* ----- To outsource ----- */
-
-  // count the matching column names from a table and a headline
-  countMatchingNames(headline: string[], table: Table): number {
-    let counter = 0;
-
-    // iterate through table columns
-    for(let i = 0; i < table['columns'].length; i++) {      
-      // filter matching headline col names with table col
-      let matchingNames = headline.filter(col => col === table['columns'][i].name);
-      // at least one match found
-      if(matchingNames.length) {
-        counter++;
-      }          
-    } 
-
-    return counter;
-  }
-
-  // Get the most suitable table for a given headline
-  // returns the table with the most count of matching names
-  // return the first table if no matching name
-  getMostSuitableTable(headline: string[], tables: Table[]): Table {
-    let resultTable: Table = tables[0];
-    let maxMatches: number = 0;
-
-    // check each table for more matches than current max
-    tables.forEach(table => {
-      let matches = this.countMatchingNames(headline, table);      
-      if (matches > maxMatches) {
-        resultTable = table;
-        maxMatches = matches;
-      }
-    });
-    return resultTable;
-  }
-
-  /**
-   * Returns the best matching selected Header array
-   * which contains the header index for each column of the table
-   * when nothing is selected the index will be -1
-   * chooses the first appearance for name duplicates
-   * @param tableCol the column array of the result table
-   * @param headline the parsed headline cols to map
-   */  
-  getMatchingCols(tableCols: Column[], headline: string[]): number[] {
-    let result: number[] = [];
-
-    for(let i = 0; i < tableCols.length; i++) {  
-      // save index of the first occurance or -1 when no occurance    
-      result[i] = headline.indexOf(headline.filter(col => col === tableCols[i].name)[0]);        
-    }
-
-    return result;
-  }
-
-  /**
-   * Returns the mapping result as RequestTabularInsertDescription
-   * @param tableCols the columns of the selected schema table
-   * @param headerIndex the header index for each column of the table
-   * @param table the table data from the csv file
-   */
-  getMappingResult(tableCols: Column[], headerIndex: number[], table: RawTableDataDescription): RequestTabularInsertDescription {
-    let result: RequestTabularInsertDescription = { columnNames: [], data: [[]] };
-    let columnNames: string[] = [];
-    let data: string[][] = [];
-    let neededIndex: number[] = [];    
-
-    for (let i = 0; i < tableCols.length; i++) {
-      if (headerIndex[i] !== -1) { 
-        let columnName = tableCols[i]['name'];        
-        columnNames.push(columnName);
-        neededIndex.push(headerIndex[i]);
-      }
-    }
-
-    if (columnNames.length) {
-      for (let i = 0; i < table.length; i++) {
-        let newRow: string[] = [];
-        neededIndex.forEach(index => newRow.push(table[i][index]));
-        data.push(newRow);      
-      }
-    }
-
-    result.columnNames = columnNames;
-    result.data = data;
-
-    return result;
   }
 }
