@@ -144,7 +144,7 @@
             <div class="mapping row mt-3" *ngFor="let tableCol of selectedTable['columns']; let i = index">
                 
                 <div class="col-md-6 col-lg-4">
-                    <select id="header-selection" class="form-control h-100" [(ngModel)]="selectedHeaderIndex[i]" (change)="castNumber(i)">
+                    <select id="header-selection" class="form-control h-100" [(ngModel)]="selectedHeaderIndex[i]" (change)="changeColumn(i)">
                         <option value="-1"></option>
                         <option *ngFor="let headerCol of header; let j = index" 
                                 value="{{ j }}">
@@ -175,7 +175,7 @@
             <!-- Save Button -->
 
             <div class="save-button">
-                <button type="button" class="btn btn-success" (click)="save()" [disabled]="disableHeadlineSelection">Tabelle importieren</button>
+                <button type="button" class="btn btn-success" (click)="save()" [disabled]="disableButton">Tabelle importieren</button>
             </div>
 
         </div>
