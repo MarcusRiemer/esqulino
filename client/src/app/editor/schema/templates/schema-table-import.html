@@ -78,9 +78,9 @@
     </div>
 
     <div id="show-headline-fields" *ngIf="this.headlineUsage=='own'">
-        <div class="form-group row" *ngFor="let headline of header; let i = index; trackBy:trackByFn">            
+        <div class="form-group row" *ngFor="let headline of csvHeader; let i = index; trackBy:trackByFn">            
             <label class="col-sm-auto" for="headline{{i}}">Spaltenüberschrift {{i+1}}:&nbsp;</label>    
-            <input class="col" type="text" id="headline{{i}}" [(ngModel)]="header[i]" [disabled]="disableHeadlineSelection"/>
+            <input class="col" type="text" id="headline{{i}}" [(ngModel)]="csvHeader[i]" [disabled]="disableHeadlineSelection"/>
         </div>
     </div>
 
@@ -99,7 +99,7 @@
             <table class="w-100">
                 <thead>
                     <tr>
-                        <th *ngFor="let col of header; let i = index">
+                        <th *ngFor="let col of csvHeader; let i = index">
                             <!-- grey out if not selected -->
                             <div *ngIf="!colSelected(i) else normalHeader" style="color: grey">
                                 {{ col }}
@@ -111,7 +111,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of table | slice:0:20; let i = index">   
+                    <tr *ngFor="let row of csvTable | slice:0:20; let i = index">   
                         <td *ngFor="let col of row; let j = index">
                             <!-- grey out if not selected -->
                             <div *ngIf="!colSelected(j) else normalCol" style="color: grey">
@@ -146,7 +146,7 @@
                 <div class="col-md-6 col-lg-4">
                     <select id="header-selection" class="form-control h-100" [(ngModel)]="selectedHeaderIndex[i]" (change)="changeColumn(i)">
                         <option value="-1"></option>
-                        <option *ngFor="let headerCol of header; let j = index" 
+                        <option *ngFor="let headerCol of csvHeader; let j = index" 
                                 value="{{ j }}">
                             {{ headerCol }}
                         </option>
