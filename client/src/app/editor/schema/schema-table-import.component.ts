@@ -47,14 +47,14 @@ export class SchemaTableImportComponent implements OnInit {
 
   /* ----- Initializations ----- */
   
-  /**
-   * Used for dependency injection.
-   */
+  
+  // Used for dependency injection.   
   constructor(
     private _projectService: ProjectService,
   ) {
   }
 
+  // inits
   ngOnInit() {
     this.disableSelection = true;
     this.disableHeadlineSelection = true;
@@ -96,12 +96,12 @@ export class SchemaTableImportComponent implements OnInit {
   }
 
   // returns true if no mapping value is selected (for button disabling)
-  noMappingValueSelected(values: number[]) :boolean {
+  noMappingValueSelected(values: number[]): boolean {
     return values.filter(index => index !== -1).length === 0; 
   }
 
   // returns true if the col index (of the csv parse result) is currently selected for mapping
-  colSelected(index: number) {
+  colSelected(index: number): boolean {
     return this.selectedHeaderIndex.includes(+index);
   }
 
@@ -110,6 +110,9 @@ export class SchemaTableImportComponent implements OnInit {
     console.log(this.getMappingResult(this.selectedTable['_columns'], this.selectedHeaderIndex, this.csvTable));
   }
 
+  // needed for defining independent own headlines
+  // tracks which items are added or removed 
+  // by returning the unique identifier (index) for this item
   trackByFn(index: any, item: any) {
     return index;
   }
@@ -126,10 +129,17 @@ export class SchemaTableImportComponent implements OnInit {
       this.csvHeader = [];
       // use length of first table row
       this.csvHeader.length = this.csvTable[0].length;
+      // disable other selections
+      this.disableSelection = true;
     } else if (this.headlineUsage === "file") {
       // set first table row as header
       this.csvHeader = this.csvTable.shift();
+      // enable other selections
+      this.disableSelection = false;
     }
+    // reset selected mapping values and enable / disable import button
+    this.selectedHeaderIndex = this.getMatchingCols(this.selectedTable['columns'], this.csvHeader);
+    this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
   }
 
   toggleDelimiter(delimiter: string) {
@@ -247,7 +257,7 @@ export class SchemaTableImportComponent implements OnInit {
   // Get the most suitable table for a given headline
   // returns the table with the most count of matching names
   // return the first table if no matching name
-  getMostSuitableTable(headline: string[], tables: Table[]) : Table {
+  getMostSuitableTable(headline: string[], tables: Table[]): Table {
     let resultTable: Table = tables[0];
     let maxMatches: number = 0;
 
@@ -270,7 +280,7 @@ export class SchemaTableImportComponent implements OnInit {
    * @param tableCol the column array of the result table
    * @param headline the parsed headline cols to map
    */  
-  getMatchingCols(tableCols: Column[], headline: string[]) : number[] {
+  getMatchingCols(tableCols: Column[], headline: string[]): number[] {
     let result: number[] = [];
 
     for(let i = 0; i < tableCols.length; i++) {  
