@@ -101,7 +101,7 @@
                     <tr>
                         <th *ngFor="let col of csvHeader; let i = index">
                             <!-- grey out if not selected -->
-                            <div *ngIf="!colSelected(i) else normalHeader" style="color: grey">
+                            <div class="text-muted" *ngIf="!colSelected(i) else normalHeader">
                                 {{ col }}
                             </div>
                             <ng-template #normalHeader>
@@ -114,7 +114,7 @@
                     <tr *ngFor="let row of csvTable | slice:0:20; let i = index">   
                         <td *ngFor="let col of row; let j = index">
                             <!-- grey out if not selected -->
-                            <div *ngIf="!colSelected(j) else normalCol" style="color: grey">
+                            <div class="text-muted" *ngIf="!colSelected(j) else normalCol">
                                 {{ row[j] }}
                             </div>
                             <ng-template #normalCol>
@@ -154,13 +154,13 @@
                 </div>      
 
                 <div class="col-md-1" *ngIf="selectedHeaderIndex[i] != '-1'">
-                    <div style="font-size: 2em; line-height: 0; color: #00C851;">
+                    <div class="schema-mapping-sign text-success">
                         <i class="fa fa-arrow-circle-right"></i>
                     </div>
                 </div>
 
                 <div class="col-md-1" *ngIf="selectedHeaderIndex[i] == '-1'">
-                    <span style="font-size: 2em; line-height: 0; color: #ff4444;">
+                    <span class="schema-mapping-sign text-danger">
                         <i class="fa fa-ban"></i>
                     </span>
                 </div>

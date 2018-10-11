@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 import * as Parser from '../../shared/csv-parser';
-import {
-  Table, Column, RawTableDataDescription
-} from '../../shared/schema';
+import { Table } from '../../shared/schema';
 
-import { ProjectService, Project } from '../project.service'
-import { ToolbarService } from '../toolbar.service'
+import { ProjectService } from '../project.service';
+import { ToolbarService } from '../toolbar.service';
 
 /**
  * Displays the schema for a list of tables.
@@ -32,7 +30,7 @@ export class SchemaTableImportComponent implements OnInit {
   // parse result or own definition
   csvHeader: string[];
   // parse result
-  csvTable: RawTableDataDescription;
+  csvTable: string[][];
 
   // contains the header index for each column of the table
   // when nothing is selected the index will be -1
@@ -83,13 +81,6 @@ export class SchemaTableImportComponent implements OnInit {
     // Init first table
     this.selectedTable = this.schemaTables[0];
     this.selectedTableName = this.selectedTable['name'];
-
-
-    console.log("schema Tables: ", this.schemaTables);
-
-    this.schemaTables.forEach(function(table) {
-      console.log(table['_columns'].length);
-    });
   }
 
   /* ----- Component behaviour ----- */
@@ -204,12 +195,12 @@ export class SchemaTableImportComponent implements OnInit {
   /* ----- File Handling ----- */
 
   // listen for file change
-  changeListener(event): void {
+  changeListener(event) {
     this.handleDataUpload(event.target);
   }
 
   // start file reading process
-  handleDataUpload = async (event) => {
+  async handleDataUpload(event) {
     const file = event.files[0];
 
     try {
@@ -223,7 +214,7 @@ export class SchemaTableImportComponent implements OnInit {
   }
 
   // file reading process
-  readUploadedFileAsText = (inputFile) => {
+  readUploadedFileAsText(inputFile) {
     const temporaryFileReader = new FileReader();
 
     return new Promise((resolve, reject) => {
@@ -241,7 +232,7 @@ export class SchemaTableImportComponent implements OnInit {
   };
 
   // parse process when file is read or delimiters or markers have changed
-  parseProcess = () => {
+  parseProcess() {
     this.parse = Parser.convertCSVStringToArray(this.fileData, this.currentDelimiters, this.textMarker);
 
     if (this.parse.type === 'parseResult') {
