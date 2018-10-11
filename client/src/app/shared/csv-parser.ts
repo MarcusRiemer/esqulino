@@ -439,15 +439,15 @@ export function convertArraysToJSON(data: string[][], header: string[], useHeade
 /**
  * Counts the matching column names from a table and a headline
  * @param headline the parsed or self defined headline
- * @param tableCols the columns of the table
+ * @param colNames the names of the cols of a table
  */
-export function countMatchingNames(headline: string[], tableCols: Column[]): number {
+export function countMatchingNames(headline: string[], colNames: string[]): number {
   let counter = 0;
 
   // iterate through table columns
-  for(let i = 0; i < tableCols.length; i++) {      
+  for(let i = 0; i < colNames.length; i++) {      
     // filter matching headline col names with table col
-    let matchingNames = headline.filter(col => col === tableCols[i].name);
+    let matchingNames = headline.filter(col => col === colNames[i]);
     // at least one match found
     if(matchingNames.length) {
       counter++;
@@ -458,25 +458,27 @@ export function countMatchingNames(headline: string[], tableCols: Column[]): num
 }
 
 /**
- * Returns the most suitable table for a given headline
+ * Returns the name of the most suitable table for a given headline
  * which is the table with the most count of matching names
  * or the first table if no matching name
  * @param headline the parsed or self defined headline
- * @param tables all tables of the current schema
+ * @param tableNames all table names of the current schema
+ * @param colNamesForTables all colNames for all tables
  */
-export function getMostSuitableTable(headline: string[], tables: Table[]): Table {
-  let resultTable: Table = tables[0];
+export function getMostSuitableTableName(headline: string[], tableNames: string[], colNamesForTables: string[][]): string {
+  let result: string = tableNames[0];
   let maxMatches: number = 0;
 
   // check each table for more matches than current max
-  tables.forEach(table => {
-    let matches = this.countMatchingNames(headline, table['columns']);      
-    if (matches > maxMatches) {
-      resultTable = table;
-      maxMatches = matches;
+  for(let i = 0; i < tableNames.length; i++) {
+    let matchCount = this.countMatchingNames(headline, colNamesForTables[i]);
+    if (matchCount > maxMatches) {
+      result = tableNames[i];
+      maxMatches = matchCount;
     }
-  });
-  return resultTable;
+  }
+  
+  return result;
 }
 
 /**
@@ -484,15 +486,15 @@ export function getMostSuitableTable(headline: string[], tables: Table[]): Table
  * which contains the header index for each column of the table
  * when nothing is selected the index will be -1
  * chooses the first appearance for name duplicates
- * @param tableCol the column array of the result table
+ * @param colNames the names of the cols of a table
  * @param headline the parsed headline cols to map
  */  
-export function getMatchingCols(tableCols: Column[], headline: string[]): number[] {
+export function getMatchingCols(colNames: string[], headline: string[]): number[] {
   let result: number[] = [];
 
-  for(let i = 0; i < tableCols.length; i++) {  
+  for(let i = 0; i < colNames.length; i++) {  
     // save index of the first occurance or -1 when no occurance    
-    result[i] = headline.indexOf(headline.filter(col => col === tableCols[i].name)[0]);        
+    result[i] = headline.indexOf(headline.filter(col => col === colNames[i])[0]);        
   }
 
   return result;
@@ -500,19 +502,19 @@ export function getMatchingCols(tableCols: Column[], headline: string[]): number
 
 /**
  * Returns the mapping result as RequestTabularInsertDescription
- * @param tableCols the columns of the selected schema table
+ * @param colNames the names of the cols of a table
  * @param headerIndex the header index for each column of the table
  * @param table the table data from the csv file
  */
-export function getMappingResult(tableCols: Column[], headerIndex: number[], table: string[][]): RequestTabularInsertDescription {
+export function getMappingResult(colNames: string[], headerIndex: number[], table: string[][]): RequestTabularInsertDescription {
   let result: RequestTabularInsertDescription = { columnNames: [], data: [[]] };
   let columnNames: string[] = [];
   let data: string[][] = [];
   let neededIndex: number[] = [];    
 
-  for (let i = 0; i < tableCols.length; i++) {
+  for (let i = 0; i < colNames.length; i++) {
     if (headerIndex[i] !== -1) { 
-      let columnName = tableCols[i]['name'];        
+      let columnName = colNames[i];        
       columnNames.push(columnName);
       neededIndex.push(headerIndex[i]);
     }

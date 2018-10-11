@@ -14,17 +14,22 @@ import { ToolbarService } from '../toolbar.service';
   selector: "sql-table-import"
 })
 export class SchemaTableImportComponent implements OnInit {
-  // File Object as a string
+  // file object as a string
   fileData: any;
 
-  // parsed Data from file
+  // parsed data from file
   parse: Parser.CsvParseResult | Parser.CsvParseError;
   errors: Parser.ValidationError[];
 
-  // Schema with the available tables
+  // schema with the available tables
   schemaTables: Table[];
+  // extracted table and col names of the schema
+  tableNames: string[];
+  colNamesForTables: string[][];
+
+  // the currently selected Table
   selectedTable: Table;
-  // Name needed for ngModel in select
+  // name needed for ngModel in select
   selectedTableName: string;
 
   // parse result or own definition
@@ -36,7 +41,7 @@ export class SchemaTableImportComponent implements OnInit {
   // when nothing is selected the index will be -1
   selectedHeaderIndex: number[];
 
-  // Contains all currently used Delimiters
+  // contains all currently used Delimiters
   currentDelimiters: string[];
 
   disableSelection: boolean;
@@ -81,6 +86,19 @@ export class SchemaTableImportComponent implements OnInit {
     // Init first table
     this.selectedTable = this.schemaTables[0];
     this.selectedTableName = this.selectedTable['name'];
+
+    // Extract table and col names of the schema
+    this.tableNames = this.schemaTables.map(table => table['name']);
+    this.colNamesForTables = [];
+    this.schemaTables.forEach(table => { this.colNamesForTables.push(this.extractColNames(table)) });  
+  }
+
+  /* ----- Helper Function ----- */
+
+  // returns an array that contains 
+  // only the column names of a given table
+  extractColNames(table: Table): string[] {
+    return table['columns'].map(col => col['name']);
   }
 
   /* ----- Component behaviour ----- */
@@ -91,7 +109,7 @@ export class SchemaTableImportComponent implements OnInit {
     // Filter the wanted table by the name from ngModel in select
     this.selectedTable = (this.schemaTables.filter(table => name === table['name']))[0];
     // Select the matching headline col for each table col or empty
-    this.selectedHeaderIndex = Parser.getMatchingCols(this.selectedTable['columns'], this.csvHeader);
+    this.selectedHeaderIndex = Parser.getMatchingCols(this.extractColNames(this.selectedTable), this.csvHeader);
     this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
   }
 
@@ -115,7 +133,7 @@ export class SchemaTableImportComponent implements OnInit {
 
   // logs the mapping result to the console
   importTable() {
-    console.log(Parser.getMappingResult(this.selectedTable['_columns'], this.selectedHeaderIndex, this.csvTable));
+    console.log(Parser.getMappingResult(this.extractColNames(this.selectedTable), this.selectedHeaderIndex, this.csvTable));
   }
 
   // needed for defining independent own headlines
@@ -147,7 +165,7 @@ export class SchemaTableImportComponent implements OnInit {
       this.disableSelection = false;
     }
     // reset selected mapping values and enable / disable import button
-    this.selectedHeaderIndex = Parser.getMatchingCols(this.selectedTable['columns'], this.csvHeader);
+    this.selectedHeaderIndex = Parser.getMatchingCols(this.extractColNames(this.selectedTable), this.csvHeader);
     this.disableButton = this.noMappingValueSelected(this.selectedHeaderIndex);
   }
 
@@ -239,10 +257,10 @@ export class SchemaTableImportComponent implements OnInit {
       this.csvHeader = (<Parser.CsvParseResult>this.parse).header;
       this.csvTable = (<Parser.CsvParseResult>this.parse).table;
 
-      this.disableHeadlineSelection = false;
+      this.disableHeadlineSelection = false;    
 
-      this.selectedTable = Parser.getMostSuitableTable(this.csvHeader, this.schemaTables);
-      this.selectedTableName = this.selectedTable['name'];
+      this.selectedTableName = Parser.getMostSuitableTableName(this.csvHeader, this.tableNames, this.colNamesForTables);
+      this.selectedTable = this.schemaTables.filter(table => table['name'] === this.selectedTableName)[0];
 
       // use change table function for selected Header Index and disable Button status
       this.changeTable(this.selectedTableName);
