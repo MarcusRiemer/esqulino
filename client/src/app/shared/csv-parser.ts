@@ -1,4 +1,3 @@
-import { Table, Column } from './schema';
 import { RequestTabularInsertDescription } from './schema/schema.description';
 
 /* ----- Interfaces ----- */
