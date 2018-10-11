@@ -1,5 +1,5 @@
 import { Table, Column } from './schema';
-import { RequestTabularInsertDescription, RawTableDataDescription } from './schema/schema.description';
+import { RequestTabularInsertDescription } from './schema/schema.description';
 
 /* ----- Interfaces ----- */
 
@@ -504,7 +504,7 @@ export function getMatchingCols(tableCols: Column[], headline: string[]): number
  * @param headerIndex the header index for each column of the table
  * @param table the table data from the csv file
  */
-export function getMappingResult(tableCols: Column[], headerIndex: number[], table: RawTableDataDescription): RequestTabularInsertDescription {
+export function getMappingResult(tableCols: Column[], headerIndex: number[], table: string[][]): RequestTabularInsertDescription {
   let result: RequestTabularInsertDescription = { columnNames: [], data: [[]] };
   let columnNames: string[] = [];
   let data: string[][] = [];
