@@ -593,7 +593,121 @@ describe('Util: CSV Parser', () => {
 
   /* --- Component Functions --- */
 
-  
+  it('Count Matching Names 1', () => {
+    const headline = ["nummer", "name", "name", "typ1", "typ2", "lvl_up"];
+    const colNames = ["nummer", "name", "name_en", "typ1", "typ2", "entwickelt_aus", "bild"];    
+    const result = c.countMatchingNames(headline, colNames);
+    expect(result).toEqual(4);
+  });
 
+  it('Count Matching Names 2', () => {
+    const headline = ["typ_name", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "typ_id"];
+    const colNames = ["typ_id", "typ_name"];    
+    const result = c.countMatchingNames(headline, colNames);
+    expect(result).toEqual(2);
+  });
+
+  it('Count Matching Names 3', () => {
+    const headline = ["Stunde", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
+    const colNames = ["typ_id", "typ_name"];    
+    const result = c.countMatchingNames(headline, colNames);
+    expect(result).toEqual(0);
+  });
+
+  it('Get Most Suitable Table Name 1', () => {
+    const headline = ["nummer", "name", "name", "typ1", "typ2", "lvl_up"];
+    const tableNames = ["gefangen", "pokedex", "typ"];
+    const colNamesForTables = [["gefangen_id", "pokedex_nummer", "spitzname", "staerke"],
+                               ["nummer", "name", "name_en", "typ1", "typ2", "entwickelt_aus", "bild"],
+                               ["typ_id", "typ_name"]];  
+    const result = c.getMostSuitableTableName(headline, tableNames, colNamesForTables);
+    expect(result).toEqual("pokedex");
+  });
+
+  it('Get Most Suitable Table Name 2', () => {
+    const headline = ["typ_name", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "typ_id"];
+    const tableNames = ["gefangen", "pokedex", "typ"];
+    const colNamesForTables = [["gefangen_id", "pokedex_nummer", "spitzname", "staerke"],
+                               ["nummer", "name", "name_en", "typ1", "typ2", "entwickelt_aus", "bild"],
+                               ["typ_id", "typ_name"]];  
+    const result = c.getMostSuitableTableName(headline, tableNames, colNamesForTables);
+    expect(result).toEqual("typ");
+  });
+
+  it('Get Most Suitable Table Name 3', () => {
+    const headline = ["Stunde", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
+    const tableNames = ["gefangen", "pokedex", "typ"];
+    const colNamesForTables = [["gefangen_id", "pokedex_nummer", "spitzname", "staerke"],
+                               ["nummer", "name", "name_en", "typ1", "typ2", "entwickelt_aus", "bild"],
+                               ["typ_id", "typ_name"]];  
+    const result = c.getMostSuitableTableName(headline, tableNames, colNamesForTables);
+    expect(result).toEqual("gefangen"); // First index when nothing matches
+  });
+
+  it('Get Matching Cols 1', () => {
+    const colNames = ["nummer", "name", "name_en", "typ1", "typ2", "entwickelt_aus", "bild"];
+    const headline = ["nummer", "name", "name", "typ1", "typ2", "lvl_up"];
+    const result = c.getMatchingCols(colNames, headline);
+    expect(result).toEqual([0, 1, -1, 3, 4, -1, -1]); 
+  });
+
+  it('Get Matching Cols 2', () => {
+    const colNames = ["typ_id", "typ_name"];
+    const headline = ["typ_name", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "typ_id"];
+    const result = c.getMatchingCols(colNames, headline);
+    expect(result).toEqual([5, 0]); 
+  });
+
+  it('Get Matching Cols 3', () => {
+    const colNames = ["gefangen_id", "pokedex_nummer", "spitzname", "staerke"];
+    const headline = ["Stunde", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
+    const result = c.getMatchingCols(colNames, headline);
+    expect(result).toEqual([-1, -1, -1, -1]); 
+  });
+
+  it('Get Mapping Result 1', () => {
+    const colNames = ["nummer", "name", "name_en", "typ1", "typ2", "entwickelt_aus", "bild"];
+    const headerIndex = [0, 1, -1, 3, 4, -1, -1];
+    const table = [["#001", "Bulbasaur", "-----", "Grass", "Poison", "Level Up - 16"],
+                   ["#002", "Ivysaur", "-----", "Grass", "Poison", "Level Up - 32"],
+                   ["#003", "Venusaur", "-----", "Grass", "Poison", "-----"]];
+    const result = c.getMappingResult(colNames, headerIndex, table);
+    expect(result).toEqual({
+      columnNames: ["nummer", "name", "typ1", "typ2"],
+      data: [["#001", "Bulbasaur", "Grass", "Poison"],
+             ["#002", "Ivysaur", "Grass", "Poison"],
+             ["#003", "Venusaur", "Grass", "Poison"]]
+    }); 
+  });
+
+  it('Get Mapping Result 2', () => {
+    const colNames = ["typ_id", "typ_name"];
+    const headerIndex = [0, 5];
+    const table = [["1", "Mathematik", "Deutsch", "Englisch", "Mathematik", "Kunst"],
+                   ["2", "Sport", "Französisch", "Geschichte", "Sport", "Geschichte"],
+                   ["3", "Sport", "Religion (ev, kath)", "Kunst", "", "Kunst"]];
+    const result = c.getMappingResult(colNames, headerIndex, table);
+    expect(result).toEqual({
+      columnNames: ["typ_id", "typ_name"],
+      data: [["1", "Kunst"],
+             ["2", "Geschichte"],
+             ["3", "Kunst"]]
+    }); 
+  });
+
+  it('Get Mapping Result 3', () => {
+    const colNames = ["gefangen_id", "pokedex_nummer", "spitzname", "staerke"];
+    const headerIndex = [0, 1, 3, -1];
+    const table = [["1", "Mathematik", "Deutsch", "Englisch", "Mathematik", "Kunst"],
+                   ["2", "Sport", "Französisch", "Geschichte", "Sport", "Geschichte"],
+                   ["3", "Sport", "Religion (ev, kath)", "Kunst", "", "Kunst"]];
+    const result = c.getMappingResult(colNames, headerIndex, table);
+    expect(result).toEqual({
+      columnNames: ["gefangen_id", "pokedex_nummer", "spitzname"],
+      data: [["1", "Mathematik", "Englisch"],
+             ["2", "Sport", "Geschichte"],
+             ["3", "Sport", "Kunst"]]
+    }); 
+  });
 
 });
