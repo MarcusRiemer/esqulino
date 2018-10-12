@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Optional } from '@angular/core';
 
 import { Angulartics2Piwik } from 'angulartics2/piwik';
 
@@ -9,7 +9,7 @@ import { Angulartics2Piwik } from 'angulartics2/piwik';
 export class SqlScratchComponent {
   // The piwik service needs to be required somewhere at least once,
   // otherwise it wont be loaded.
-  constructor(_piwik: Angulartics2Piwik) {
+  constructor(@Optional() _piwik: Angulartics2Piwik) {
 
   }
 }

@@ -9,6 +9,16 @@ import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
 import { join } from 'path';
 
+/**
+ * Some library we load doesn't understand its in a node-environment
+ * and attempts to register callbacks. What a dumb idea ...
+ */
+if (!global.window) {
+  global.window = {
+    addEventListener: function() { }
+  };
+}
+
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
 
