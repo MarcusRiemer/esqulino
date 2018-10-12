@@ -1,3 +1,5 @@
+require_dependency 'util'
+
 # Manages operations on block languages
 class BlockLanguagesController < ApplicationController
   # List all existing block languages and embed additional information
@@ -7,9 +9,15 @@ class BlockLanguagesController < ApplicationController
                       .map{|b| b.to_list_api_response(true)}
   end
 
-  # Find a single block language
+  # Find a single block language by ID or by slug
   def show
-    block_lang = BlockLanguage.find(id_params[:id])
+    needle = id_params[:id]
+    block_lang = if (string_is_uuid? needle) then
+                   BlockLanguage.find needle
+                 else
+                   BlockLanguage.find_by! slug: needle
+                 end
+
     render json: block_lang.to_full_api_response
   end
 

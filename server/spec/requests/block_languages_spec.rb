@@ -24,9 +24,20 @@ RSpec.describe BlockLanguagesController, type: :request do
   end
 
   describe 'GET /api/block_language/:blockLanguageId' do
-    it 'shows a single block language' do
+    it 'finds a single block language by ID' do
       b = FactoryBot.create(:block_language)
       get "/api/block_languages/#{b.id}"
+
+      expect(response).to have_http_status(200)
+
+      json_data = JSON.parse(response.body)
+
+      expect(json_data).to validate_against "BlockLanguageDescription"
+    end
+    
+    it 'finds a single block language by slug' do
+      b = FactoryBot.create(:block_language)
+      get "/api/block_languages/#{b.slug}"
 
       expect(response).to have_http_status(200)
 

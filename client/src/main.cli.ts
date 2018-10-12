@@ -153,7 +153,7 @@ function availableBlockLanguages(): BlockLanguageDescription[] {
 /**
  * Retrieves a single language model by name.
  */
-function findLanguageModel(slug_or_id: string): BlockLanguageDescription {
+function findBlockLanguage(slug_or_id: string): BlockLanguageDescription {
   return (availableBlockLanguages().find(l => l.id == slug_or_id || l.slug == slug_or_id));
 }
 
@@ -168,7 +168,7 @@ function executeCommand(command: Command): Promise<string> | any {
       const g = findGrammar(command.programmingLanguageId);
       return (prettyPrintGrammar(g));
     case "printBlockLanguage": {
-      const l = findLanguageModel(command.blockLanguageId);
+      const l = findBlockLanguage(command.blockLanguageId);
       return (prettyPrintBlockLanguage(l));
     }
     case "available":
