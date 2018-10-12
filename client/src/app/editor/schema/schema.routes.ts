@@ -4,6 +4,7 @@ import { SchemaHostComponent } from './host.component'
 import { SchemaComponent } from './schema.component'
 import { SchemaTableEditorComponent } from './schema-table-editor.component'
 import { SchemaTableDataComponent } from './schema-table-data.component'
+import { SchemaTableImportComponent } from './schema-table-import.component'
 import { SchemaRedirectComponent } from './schema-redirect.component'
 
 export const schemaEditorRoutes: Routes = [
@@ -17,6 +18,7 @@ export const schemaEditorRoutes: Routes = [
       { path: ':schemaName/edit/:tableName', component: SchemaTableEditorComponent },
       { path: ':schemaName/create', component: SchemaTableEditorComponent },
       { path: ':schemaName/details/:tableName', component: SchemaTableDataComponent },
+      { path: ':schemaName/import', component: SchemaTableImportComponent }
     ]
   }
 ]
