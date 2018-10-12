@@ -1,4 +1,5 @@
 require_dependency 'error'
+require_dependency 'util'
 
 require_dependency 'block_language' # Rails won't autoload this class properly
 require_dependency 'code_resource' # Rails won't autoload this class properly
@@ -8,11 +9,6 @@ require_dependency 'project_database' # Rails won't autoload this class properly
 require_dependency 'project_source' # Rails won't autoload this class properly
 require_dependency 'project_uses_block_language' # Rails won't autoload this class properly
 require_dependency 'block_language_generator' # Rails won't autoload this class properly
-
-# @return True if the given string is a valid UUID
-def string_is_uuid?(str)
-  not /[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}/.match(str).nil?
-end
 
 # This project on a whole will have some fairly sophisticated default datasets that
 # need to be updated possibly even more frequently than the actual code. The end-goal
