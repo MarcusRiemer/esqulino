@@ -25,9 +25,20 @@ RSpec.describe BlockLanguagesController, type: :request do
   end
 
   describe 'GET /api/grammars/:grammarId' do
-    it 'shows a single grammar' do
+    it 'finds a single grammar by ID' do
       g = FactoryBot.create(:grammar)
       get "/api/grammars/#{g.id}"
+
+      expect(response).to have_http_status(200)
+
+      json_data = JSON.parse(response.body)
+
+      expect(json_data).to validate_against "GrammarDescription"
+    end
+
+    it 'finds a single grammar by slug' do
+      g = FactoryBot.create(:grammar)
+      get "/api/grammars/#{g.slug}"
 
       expect(response).to have_http_status(200)
 
@@ -42,10 +53,10 @@ RSpec.describe BlockLanguagesController, type: :request do
     end
   end
 
-  describe 'POST /api/grammars' do    
+  describe 'POST /api/grammars' do
     it 'Creates a new, empty grammar' do
       prog_lang = FactoryBot.create(:programming_language)
-      
+
       post "/api/grammars",
            :headers => json_headers,
            :params => {
@@ -69,6 +80,24 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       expect(response.status).to eq(200)
     end
+
+    it 'Attempts to creates a new, invalid grammar' do
+      prog_lang = FactoryBot.create(:programming_language)
+
+      post "/api/grammars",
+           :headers => json_headers,
+           :params => {
+             "slug" => "spec",
+             "name" => "Spec Grammar"
+           }.to_json
+
+      expect(response.content_type).to eq "application/json"
+      expect(response.status).to eq(400)
+
+      json_data = JSON.parse(response.body)
+      # Missing programming language
+      expect(json_data['errors']['model'].length).to eq 1
+    end
   end
 
   describe 'PUT /api/grammars/:id' do
@@ -83,7 +112,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       put "/api/grammars/#{orig_grammar.id}",
           :headers => json_headers,
           :params => upda_grammar.to_json
-      
+
       if (not response.body.blank?) then
         json_data = JSON.parse(response.body)
         expect(json_data.fetch('errors', [])).to eq []
@@ -109,7 +138,7 @@ RSpec.describe BlockLanguagesController, type: :request do
         put "/api/grammars/#{original.id}",
             :headers => json_headers,
             :params => params_update_req.to_json
-        
+
         expect(response.status).to eq(400)
         refreshed = Grammar.find(original.id)
         expect(original.name).to eq refreshed.name
@@ -139,7 +168,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response.status).to eq(200)
 
       json_data = JSON.parse(response.body)
-      
+
       expect(json_data.length).to eq 1
       expect(json_data[0]).to validate_against "BlockLanguageListDescription"
       expect(json_data[0]['name']).to eq related.name
@@ -156,7 +185,7 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response.status).to eq(200)
 
       json_data = JSON.parse(response.body)
-      
+
       expect(json_data.length).to eq 1
       expect(json_data[0]).to validate_against "BlockLanguageListDescription"
       expect(json_data[0]['name']).to eq related.name
