@@ -1,3 +1,5 @@
+require_dependency 'util'
+
 # Manages operations on grammars
 class GrammarsController < ApplicationController
   # List all existing grammars
@@ -7,12 +9,19 @@ class GrammarsController < ApplicationController
 
   # Find a single grammar
   def show
-    grammar = Grammar.find(id_params[:id])
+    needle = id_params[:id]
+
+    grammar = if (string_is_uuid? needle) then
+                Grammar.find(needle)
+              else
+                Grammar.find_by! slug: needle
+              end
+
     render json: grammar.to_full_api_response
   end
 
   # Creates a new grammar
-  def create    
+  def create
     grammar = Grammar.new(basic_params)
     grammar.model = model_params
 
@@ -51,7 +60,7 @@ class GrammarsController < ApplicationController
       permit(:id, :slug)
   end
 
-  
+
   # These parameters are "normal" table attributes
   def basic_params
     params
