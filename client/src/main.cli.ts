@@ -6,6 +6,8 @@ import { httpRequest } from './cli/request-promise'
 
 import { Tree } from './app/shared/syntaxtree/syntaxtree'
 
+import { ServerApi } from './app/shared/serverapi';
+
 import { prettyPrintGrammar } from './app/shared/syntaxtree/prettyprint'
 import { GrammarDescription } from './app/shared/syntaxtree/grammar.description'
 
@@ -69,21 +71,6 @@ interface EmitSyntaxTreeCommand {
   languageId: string
 }
 
-interface UpdateGrammarsCommand {
-  type: "updateGrammars"
-  serverBaseUrl: string
-}
-
-interface UpdateBlockLanguagesCommand {
-  type: "updateBlockLanguages"
-  serverBaseUrl: string
-}
-
-interface UpdateBlockLanguageGeneratorsCommand {
-  type: "updateBlockLanguageGenerators"
-  serverBaseUrl: string
-}
-
 /**
  * Prints a list of all available programming languages.
  */
@@ -91,7 +78,10 @@ interface AvailableProgrammingLanguagesCommand {
   type: "available"
 }
 
-type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand | UpdateGrammarsCommand | UpdateBlockLanguagesCommand | UpdateBlockLanguageGeneratorsCommand;
+type Command = PingCommand | PrintGrammarCommand | PrintBlockLanguageCommand | AvailableProgrammingLanguagesCommand | GraphvizSyntaxTreeCommand | EmitSyntaxTreeCommand;
+
+// Knows all URLs that are avaiable to the API
+const serverApi: ServerApi = new ServerApi("http://localhost:9292/api")
 
 function availableLanguages(): LanguageDefinition[] {
   return ([
@@ -117,13 +107,9 @@ function availableGrammars(): GrammarDescription[] {
 /**
  * Retrieves a single grammar by name
  */
-function findGrammar(name: string) {
-  const toReturn = availableGrammars().find(d => d.name === name);
-  if (toReturn) {
-    return (toReturn);
-  } else {
-    throw new Error(`Unknown language "${name}"`);
-  }
+async function findGrammar(slug: string) {
+  const url = new URL(serverApi.individualGrammarUrl(slug));
+  return httpRequest<GrammarDescription>(url, "GET");
 }
 
 /**
@@ -153,22 +139,23 @@ function availableBlockLanguages(): BlockLanguageDescription[] {
 /**
  * Retrieves a single language model by name.
  */
-function findBlockLanguage(slug_or_id: string): BlockLanguageDescription {
-  return (availableBlockLanguages().find(l => l.id == slug_or_id || l.slug == slug_or_id));
+async function findBlockLanguage(slug: string) {
+  const url = new URL(serverApi.individualBlockLanguageUrl(slug));
+  return httpRequest<BlockLanguageDescription>(url, "GET");
 }
 
 /**
  * Executes the given command
  */
-function executeCommand(command: Command): Promise<string> | any {
+async function executeCommand(command: Command): Promise<string | any[]> {
   switch (command.type) {
     case "ping":
       return ("pong");
     case "printGrammar":
-      const g = findGrammar(command.programmingLanguageId);
+      const g = await findGrammar(command.programmingLanguageId);
       return (prettyPrintGrammar(g));
     case "printBlockLanguage": {
-      const l = findBlockLanguage(command.blockLanguageId);
+      const l = await findBlockLanguage(command.blockLanguageId);
       return (prettyPrintBlockLanguage(l));
     }
     case "available":
@@ -179,33 +166,6 @@ function executeCommand(command: Command): Promise<string> | any {
       const l = findLanguage(command.languageId);
       const t = new Tree(command.model);
       return (l.emitTree(t));
-    }
-    case "updateGrammars": {
-      // Quick lookup of existing grammar ids
-      const grammarIds = new Set(availableGrammars().map(g => g.id));
-
-      const requests = availableGrammars()
-        // Ensure that every grammar is sent only once
-        .filter(g => {
-          const toReturn = grammarIds.has(g.id);
-          grammarIds.delete(g.id);
-          return (toReturn);
-        })
-        .map(g => {
-          const updateUrl = new URL("/api/grammars/" + g.id, command.serverBaseUrl);
-          return (httpRequest<any>(updateUrl, "PUT", g));
-        });
-
-      return (Promise.all(requests));
-    }
-    case "updateBlockLanguages": {
-      const requests = availableBlockLanguages()
-        .map(b => {
-          const updateUrl = new URL("/api/block_languages/" + b.id, command.serverBaseUrl);
-          return (httpRequest<any>(updateUrl, "PUT", b));
-        });
-
-      return (Promise.all(requests));
     }
   }
 }
@@ -222,27 +182,32 @@ rl.on('line', function(line) {
     const command = JSON.parse(line) as Command;
     let result = executeCommand(command);
 
+    // Did we get something meaningful back?
     if (result !== undefined) {
-      if (result instanceof Promise) {
-        Promise.resolve(result)
-          .then(res => {
+      Promise.resolve(result)
+        .then(res => {
+          // One or multiple results?
+          if (typeof (res) === "string") {
+            // Exactly on, so no trailing newline please
+            console.log(JSON.stringify(res));
+          } else {
+            // Multiple results
             console.log(`Finished ${res.length} operations`);
             res.forEach((v, i) => {
               console.log(`Operation ${i + 1}: ${JSON.stringify(v)}`);
             });
-          })
-          .catch(err => {
-            console.error("Error during operation");
-            console.error(JSON.stringify(err, undefined, 2));
-          });
-      } else {
-        console.log(JSON.stringify(result));
-      }
+          }
+        })
+        .catch(err => {
+          console.error("Error during operation");
+          console.error(JSON.stringify(err, undefined, 2));
+        });
     } else {
       console.error("Unknown operation");
     }
   }
   catch (e) {
+    console.error("Invalid command");
     console.error(e);
   }
 });

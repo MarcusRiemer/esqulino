@@ -1,14 +1,14 @@
 grammar "regex" {
-  node "constant" {
-    prop "value" { string }
-  }
-  node "alternative" {
-    children allowed "expressions" ::= expr+
-  }
   node "expr" {
     children choice "singleExpression" ::= constant | alternative
   }
   node "root" {
+    children allowed "expressions" ::= expr+
+  }
+  node "constant" {
+    prop "value" { string }
+  }
+  node "alternative" {
     children allowed "expressions" ::= expr+
   }
 }

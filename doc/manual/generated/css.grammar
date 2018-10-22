@@ -1,34 +1,37 @@
 grammar "css" {
-  node "document" {
-    children allowed "rules" ::= rule*
-  }
   node "rule" {
-    children sequence "selectors" ::= selector*
-    children allowed "declarations" ::= declaration*
+    children sequence "selectors" ::= selector+
+    terminal "rule-open" "{"
+    children allowed "declarations" ::= declaration+
+    terminal "rule-close" "}"
+  }
+  node "exprAny" {
+    prop "value" { string }
+  }
+  node "document" {
+    children allowed "rules" ::= rule+
   }
   typedef "selector" ::= selectorType | selectorClass | selectorId | selectorUniversal
+  node "exprColor" {
+    prop "value" { string }
+  }
+  node "selectorId" {
+    prop "value" { string }
+  }
+  node "declaration" {
+    children choice "name" ::= propertyName
+    terminal "colon" ":"
+    children choice "value" ::= exprColor | exprAny
+  }
+  node "propertyName" {
+    prop "name" { string }
+  }
   node "selectorType" {
     prop "value" { string }
   }
   node "selectorClass" {
     prop "value" { string }
   }
-  node "selectorId" {
-    prop "value" { string }
-  }
   node "selectorUniversal" {
-  }
-  node "declaration" {
-    children choice "name" ::= propertyName
-    children choice "value" ::= exprColor | exprAny
-  }
-  node "exprColor" {
-    prop "value" { string }
-  }
-  node "exprAny" {
-    prop "value" { string }
-  }
-  node "propertyName" {
-    prop "name" { string }
   }
 }

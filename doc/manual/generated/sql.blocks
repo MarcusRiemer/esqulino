@@ -61,11 +61,11 @@ language "SQL" {
       visual {
         "SELECT" {
           style {
-            width: 9ch
-            display: inline-block
             color: blue
-            padding-left: 2px
+            width: 9ch
             cursor: grab
+            display: inline-block
+            padding-left: 2px
           }
         }
         dropTarget {
@@ -77,13 +77,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -107,14 +107,14 @@ language "SQL" {
         {{ columnName }}
       }
       style {
-        paddingLeft: 10px
-        paddingRight: 10px
+        border: 2px solid rgba(0, 255, 0, 0.6)
+        cursor: grab
         margin-top: 2px
+        paddingLeft: 10px
+        borderRadius: 500px
+        paddingRight: 10px
         margin-bottom: 2px
         background-color: rgba(0, 255, 0, 0.15)
-        border: 2px solid rgba(0, 255, 0, 0.6)
-        borderRadius: 500px
-        cursor: grab
       }
     }
   }
@@ -125,14 +125,14 @@ language "SQL" {
         "★"
       }
       style {
+        border: 2px solid rgba(0, 255, 0, 0.6)
+        cursor: grab
+        margin-top: 2px
         paddingLeft: 10px
         paddingRight: 10px
-        margin-top: 2px
+        border-radius: 500px
         margin-bottom: 2px
         background-color: rgba(0, 255, 0, 0.15)
-        border: 2px solid rgba(0, 255, 0, 0.6)
-        border-radius: 500px
-        cursor: grab
       }
     }
   }
@@ -144,14 +144,14 @@ language "SQL" {
         TODO: input blocks
       }
       style {
-        paddingLeft: 10px
-        paddingRight: 10px
-        margin-top: 2px
-        margin-bottom: 2px
         border: 2px solid rgba(129, 129, 247, 1)
-        background-color: rgba(129, 129, 247, 0.4)
-        borderRadius: 500px
         cursor: grab
+        margin-top: 2px
+        paddingLeft: 10px
+        borderRadius: 500px
+        paddingRight: 10px
+        margin-bottom: 2px
+        background-color: rgba(129, 129, 247, 0.4)
       }
     }
   }
@@ -162,14 +162,14 @@ language "SQL" {
         TODO: input blocks
       }
       style {
-        paddingLeft: 10px
-        paddingRight: 10px
-        margin-top: 2px
-        margin-bottom: 2px
-        background-color: rgba(0, 255, 0, 0.15)
         border: 2px solid rgba(0, 255, 0, 0.6)
+        margin-top: 2px
+        paddingLeft: 10px
         borderRadius: 500px
+        paddingRight: 10px
+        margin-bottom: 2px
         text-decoration: underline black dotted
+        background-color: rgba(0, 255, 0, 0.15)
       }
     }
   }
@@ -188,13 +188,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -206,13 +206,13 @@ language "SQL" {
         ")"
       }
       style {
-        paddingLeft: 10px
-        paddingRight: 10px
-        margin-top: 2px
-        margin-bottom: 2px
         border: 2px solid rgba(255, 165, 0, 0.6)
-        backgroundColor: rgba(255, 165, 0, 0.3)
+        margin-top: 2px
+        paddingLeft: 10px
         borderRadius: 500px
+        paddingRight: 10px
+        margin-bottom: 2px
+        backgroundColor: rgba(255, 165, 0, 0.3)
       }
     }
   }
@@ -229,13 +229,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -253,13 +253,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -277,13 +277,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -294,14 +294,14 @@ language "SQL" {
         }
       }
       style {
-        paddingLeft: 5px
-        paddingRight: 5px
-        margin-top: 2px
-        margin-bottom: 2px
         border: 2px solid rgba(255, 165, 0, 0.6)
-        backgroundColor: rgba(255, 165, 0, 0.3)
-        borderRadius: 500px
         cursor: grab
+        margin-top: 2px
+        paddingLeft: 5px
+        borderRadius: 500px
+        paddingRight: 5px
+        margin-bottom: 2px
+        backgroundColor: rgba(255, 165, 0, 0.3)
       }
     }
   }
@@ -326,9 +326,9 @@ language "SQL" {
           visual {
             "FROM" {
               style {
+                color: blue
                 width: 9ch
                 display: inline-block
-                color: blue
               }
             }
             dropTarget {
@@ -340,13 +340,13 @@ language "SQL" {
               visual {
                 "❓" {
                   style {
-                    paddingLeft: 10px
-                    paddingRight: 10px
-                    border: 2px solid red
                     color: darkred
-                    backgroundColor: orange
-                    borderRadius: 500px
+                    border: 2px solid red
                     cursor: default
+                    paddingLeft: 10px
+                    borderRadius: 500px
+                    paddingRight: 10px
+                    backgroundColor: orange
                   }
                 }
               }
@@ -392,10 +392,10 @@ language "SQL" {
       visual {
         "JOIN" {
           style {
-            width: 10ch
-            marginLeft: 10px
-            display: inline-block
             color: blue
+            width: 10ch
+            display: inline-block
+            marginLeft: 10px
           }
         }
         iterate {
@@ -415,12 +415,12 @@ language "SQL" {
       visual {
         "INNER JOIN" {
           style {
-            width: 10ch
-            marginRight: 1ch
-            marginLeft: 2ch
-            display: inline-block
             color: blue
+            width: 10ch
             cursor: grab
+            display: inline-block
+            marginLeft: 2ch
+            marginRight: 1ch
           }
         }
         dropTarget {
@@ -432,13 +432,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -449,11 +449,11 @@ language "SQL" {
         }
         "USING" {
           style {
-            marginLeft: 1ch
-            marginRight: 1ch
-            display: inline-block
             color: blue
             cursor: grab
+            display: inline-block
+            marginLeft: 1ch
+            marginRight: 1ch
           }
         }
         dropTarget {
@@ -465,13 +465,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -493,12 +493,12 @@ language "SQL" {
       visual {
         "INNER JOIN" {
           style {
-            width: 10ch
-            marginRight: 1ch
-            marginLeft: 2ch
-            display: inline-block
             color: blue
+            width: 10ch
             cursor: grab
+            display: inline-block
+            marginLeft: 2ch
+            marginRight: 1ch
           }
         }
         dropTarget {
@@ -510,13 +510,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -527,11 +527,11 @@ language "SQL" {
         }
         "ON" {
           style {
-            marginLeft: 1ch
-            marginRight: 1ch
-            display: inline-block
             color: blue
             cursor: grab
+            display: inline-block
+            marginLeft: 1ch
+            marginRight: 1ch
           }
         }
         dropTarget {
@@ -543,13 +543,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -568,14 +568,14 @@ language "SQL" {
         {{ name }}
       }
       style {
-        paddingLeft: 10px
-        paddingRight: 10px
+        border: 2px solid rgba(255, 255, 0, 0.9)
+        cursor: grab
         margin-top: 2px
+        paddingLeft: 10px
+        borderRadius: 500px
+        paddingRight: 10px
         margin-bottom: 2px
         background-color: rgba(255, 255, 0, 0.2)
-        border: 2px solid rgba(255, 255, 0, 0.9)
-        borderRadius: 500px
-        cursor: grab
       }
     }
   }
@@ -589,9 +589,9 @@ language "SQL" {
       visual {
         "WHERE" {
           style {
+            color: blue
             width: 9ch
             display: inline-block
-            color: blue
           }
         }
         dropTarget {
@@ -603,13 +603,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -634,9 +634,9 @@ language "SQL" {
       visual {
         "GROUP BY" {
           style {
+            color: blue
             width: 9ch
             display: inline-block
-            color: blue
           }
         }
         dropTarget {
@@ -648,13 +648,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -682,9 +682,9 @@ language "SQL" {
       visual {
         "ORDER BY" {
           style {
+            color: blue
             width: 9ch
             display: inline-block
-            color: blue
           }
         }
         dropTarget {
@@ -696,13 +696,13 @@ language "SQL" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -740,12 +740,12 @@ language "SQL" {
         node "sql.binaryExpression" {
           childGroup "lhs" {
           }
+          childGroup "rhs" {
+          }
           childGroup "operator" {
             node "sql.relationalOperator" {
               prop "operator" =
             }
-          }
-          childGroup "rhs" {
           }
         }
       }
@@ -760,13 +760,13 @@ language "SQL" {
     category "Komponenten" {
       sidebarBlock "SELECT" {
         node "sql.querySelect" {
-          childGroup "select" {
-            node "sql.select"
-          }
           childGroup "from" {
             node "sql.from"
           }
           childGroup "where" {
+          }
+          childGroup "select" {
+            node "sql.select"
           }
           childGroup "groupBy" {
           }
@@ -794,20 +794,20 @@ language "SQL" {
       }
       sidebarBlock "INNER JOIN ON" {
         node "sql.innerJoinOn" {
-          childGroup "table" {
-          }
           childGroup "on" {
             node "sql.binaryExpression" {
               childGroup "lhs" {
+              }
+              childGroup "rhs" {
               }
               childGroup "operator" {
                 node "sql.relationalOperator" {
                   prop "operator" =
                 }
               }
-              childGroup "rhs" {
-              }
             }
+          }
+          childGroup "table" {
           }
         }
       }
