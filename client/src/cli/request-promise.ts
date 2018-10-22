@@ -30,7 +30,7 @@ function getRandomInt(min: number, max: number): number {
  * @param method The HTTP verb to use
  * @param body Will be JSON-serialized and sent
  */
-export function httpRequest<T>(url: URL, method: "GET" | "POST" | "PUT", body: any) {
+export function httpRequest<T>(url: URL, method: "GET" | "POST" | "PUT", body: any = "") {
   const p = new Promise<T>((resolve, reject) => {
     // Warning: Hack ahead!
     // Because we do not want to hammer the server with all requests
@@ -56,16 +56,16 @@ export function httpRequest<T>(url: URL, method: "GET" | "POST" | "PUT", body: a
       // Build the request object
       const request = http.request(options, response => {
         // temporary data holder
-        const body = [];
+        const responseBody = [];
 
         // on every content chunk, push it to the data array
         response.on('data', (chunk) => {
-          body.push(chunk);
+          responseBody.push(chunk);
         });
 
         // We are done, resolve promise with those joined chunks
         response.on('end', () => {
-          const result = tryParseJson(body.join(''));
+          const result = tryParseJson(responseBody.join(''));
 
           if (response.statusCode < 200 || response.statusCode > 299) {
             reject({
@@ -86,15 +86,15 @@ export function httpRequest<T>(url: URL, method: "GET" | "POST" | "PUT", body: a
         request.write(buffer);
       }
 
-      console.log(`${method}: ${url.toString()} (${buffer.length} byte)`);
+      console.error(`${method}: ${url.toString()} (${buffer.length} byte request body)`);
 
       // And hit off the request for good
       request.end();
     }
 
+    // Don't hammer the server with all requests simultaneously
     setTimeout(impl, getRandomInt(200, 1000));
   });
 
   return (p);
 }
-

@@ -93,13 +93,13 @@ language "XML (Dynamisch)" {
           visual {
             "❓" {
               style {
-                paddingLeft: 10px
-                paddingRight: 10px
-                border: 2px solid red
                 color: darkred
-                backgroundColor: orange
-                borderRadius: 500px
+                border: 2px solid red
                 cursor: default
+                paddingLeft: 10px
+                borderRadius: 500px
+                paddingRight: 10px
+                backgroundColor: orange
               }
             }
           }
@@ -242,13 +242,13 @@ language "XML (Dynamisch)" {
       }
       sidebarBlock "<% if %>" {
         node "dxml.if" {
+          childGroup "body" {
+          }
           childGroup "condition" {
             node "dxml.expr" {
               childGroup "concreteExpr" {
               }
             }
-          }
-          childGroup "body" {
           }
         }
       }

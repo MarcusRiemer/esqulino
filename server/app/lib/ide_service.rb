@@ -96,7 +96,7 @@ class OneShotExecIdeService < ExecIdeService
   # @return Depends on the type of the request
   def execute_request_impl(request)
     assert_cli_program_exists!
-    
+
     stdout, stderr, res = Open3.capture3(@node_binary, @program, :stdin_data => request.to_json)
 
     # Lets hope the process exited fine and had no errors
@@ -109,7 +109,7 @@ class OneShotExecIdeService < ExecIdeService
       end
     else
       # Nope, thats a defect
-      raise IdeServiceError, stderr
+      raise IdeServiceError, "Received stderr output: #{stderr}, stdout: #{stdout}"
     end
   end
 end
@@ -145,7 +145,7 @@ module IdeService
   def self.live_config
     Rails.configuration.sqlino.fetch("ide_service", Hash.new)
   end
-  
+
   # Retrieves an instance that may be mocked. Use this if the result
   # of an IDE-service operation is not relevant for a testcase.
   def self.instance
