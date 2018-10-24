@@ -1,0 +1,58 @@
+\documentclass[paper=a4,fontsize=12pt,parskip=half]{scrartcl}
+
+%% packages
+\usepackage[ngerman]{babel}
+\usepackage{fontspec}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage[autostyle=true,german=quotes]{csquotes}
+\usepackage[hidelinks=true,colorlinks=false]{hyperref}
+\usepackage{minted}
+
+\hypersetup{
+  pdftitle={Generierung von syntaxfreien Programmierumgebungen für beliebige Programmiersprachen},
+  pdfsubject={Bewerbung um einen Stipendienplatz},
+  pdfauthor={Marcus Riemer},
+  linkcolor=blue,
+  urlcolor=blue,
+}
+
+\usepackage[backend=biber,defernumbers=true,sorting=none]{biblatex}
+\addbibresource[datatype=bibtex]{diss.bib}
+
+\begin{document}
+
+\section*{Generierung von syntaxfreien Programmierumgebungen für beliebige Programmiersprachen}
+
+Konventionelle Entwicklungsumgebungen sind speziell auf die Bedürfnisse von professionellen Anwendern zugeschnittene Programme. Aufgrund der damit verbundenen Komplexität sind sie aus didaktischer Sicht nicht für die Einführung in die Programmierung geeignet. Im Rahmen der Promotion soll erforscht und praktisch demonstriert werden, wie sich aus formalen Beschreibung von Programmiersprachen benutzerfreundliche Programmierumgebungen erzeugen lassen können. Abbildung~\ref{fig:example-sql-ide} zeigt ein Beispiel für eine solche automatisch generierte Oberfläche. Die Konzeption dieser generierten Umgebungen orientiert sich an den Erfahrungen, welche die Forscher hinter Projekten wie Scratch \cite{resnick_scratch:_2009} oder Googles Blockly gemacht haben \cite{fraser_ten_2015}.
+
+Bei diesen formalen Beschreibungen handelt es sich um eine noch nicht endgültig spezifizierte Abwandlung \enquote{typischer} Grammatiken wie sie zur Definition der Syntax in fast jedem Compiler von Quelltexten zum Einsatz kommen \cite[S. 42ff]{aho_compilers:_2007}. Diese Abwandlung ist notwendig, da die sehr syntax-orientierte Sichtweise für die Übersetzung in eine grafische Oberfläche keinerlei Informationen über die Darstellung enthält. Listing~\ref{lst:partial-sql-grammar} zeigt einen Auszug aus der Grammatik, aus welcher mit der zusätzlichen Angabe von Farbstilen der Editor in Abbildung~\ref{fig:example-sql-ide} generiert werden könnte.
+
+Darüber hinaus kann durch die Speicherung eines abstrakten Syntaxbaumes der für andere Compiler typische Parsing-Vorgang entfallen. Anwender sollen Programme mit der Promotionsbegleitenden Software erstellen und editieren, nicht in einem Texteditor. Die eigentliche Aufgabe der generierten Oberfläche ist somit die Bearbeitung von Syntaxbäumen.
+
+Im Rahmen der Promotion soll erforscht und demonstriert werden, welche zusätzlichen Annotationen für Grammatiken sinnvoll und notwendig sind, um Lernenden einen möglichst intuitiven Zugang zur Programmierung zu ermöglichen.
+
+\begin{listing}[p]
+\inputminted{bnf}{sql.grammar}
+\caption{Auszug aus der Grammatik für SQL}
+\label{lst:partial-sql-grammar}
+\end{listing}
+
+\begin{figure}[p]
+  \includegraphics[width=\linewidth]{screenshot-drag-drop-ide.png}
+  \caption{Generierte Umgebung für die Programmiersprache \texttt{SQL}}
+  \label{fig:example-sql-ide}
+\end{figure}
+
+
+\section*{Literaturverzeichnis}
+\printbibliography[heading=none]
+
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-engine: xetex
+%%% TeX-master: t
+%%% TeX-command-extra-options: "-shell-escape"
+%%% End:

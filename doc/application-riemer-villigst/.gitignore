@@ -1,0 +1,13 @@
+_minted*
+auto
+
+application.pdf
+*.aux
+*.log
+*.out
+*.tdo
+*.toc
+*.bbl
+*.bcf
+*.blg
+*.run.xml

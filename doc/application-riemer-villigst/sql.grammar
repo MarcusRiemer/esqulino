@@ -1,0 +1,20 @@
+grammar "sql" {
+  typedef "expression" ::= columnName | binaryExpression
+                            | constant | parameter | functionCall
+  node "columnName" {
+    prop "refTableName" { string }
+    terminal "dot" "."
+    prop "columnName" { string }
+  }
+  node "functionCall" {
+    prop "name" { string }
+    terminal "paren-open" "("
+    children sequence "arguments", between: "," ::= expression*
+    terminal "paren-close" ")"
+  }
+  node "select" {
+    terminal "keyword" "SELECT"
+    prop? "distinct" { boolean }
+    children allowed "columns", between: "," ::= expression* & starOperator?
+  }
+}
