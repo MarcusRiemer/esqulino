@@ -9,12 +9,12 @@ grammar "sql" {
   node "functionCall" {
     prop "name" { string }
     terminal "paren-open" "("
-    children sequence "arguments", between: "," ::= expression*
+    children "arguments", between: "," ::= expression*
     terminal "paren-close" ")"
   }
   node "select" {
     terminal "keyword" "SELECT"
     prop? "distinct" { boolean }
-    children allowed "columns", between: "," ::= expression* & starOperator?
+    children "columns", between: "," ::= expression* & starOperator?
   }
 }
