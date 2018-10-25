@@ -1,11 +1,5 @@
-.. BlattWerkzeug documentation master file, created by
-   sphinx-quickstart on Fri Dec  1 09:01:54 2017.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-   
 BlattWerkzeug Manual
-=========================================
+====================
 
 This guide is mainly technical documentation for developers, system administrators or advanced users that want to develop their own language flavors inside BlattWerkzeug. It is *not* a guide for pupils or other end users that want to know how to program *using* BlattWerkzeug.
 
@@ -14,12 +8,12 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
 
 .. toctree::
    :caption: For Users
-              
+
    concepts
 
 .. toctree::
    :caption: For Language Creators
-             
+
    ast
    programming-language
    block-language
@@ -33,11 +27,11 @@ Contrary to "normal" compilers, BlattWerkzeug only operates on abstract syntax t
 
 .. toctree::
    :caption: Design Documents
-             
+
    online-platform
 
 .. toctree::
    :caption: Appendix
-      
+
    schema/index
    glossary
