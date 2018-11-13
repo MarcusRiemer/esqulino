@@ -13,12 +13,14 @@ clean-deps : msg-pre-clean-deps
 	rm -rf "./vendor"
 
 # Running in production mode
+# `RACK_HANDLER=falcon` because of https://github.com/rack/rack/pull/1181
 run : msg-pre-run-prod
-	RAILS_ENV=production ./bin/rails server --port 9292
+	RAILS_ENV=production RACK_HANDLER=falcon ./bin/rails server --port 9292
 
 # Running in development mode, this mode attempts to reload changed code
+# `RACK_HANDLER=falcon` because of https://github.com/rack/rack/pull/1181
 run-dev : msg-pre-run-dev
-	./bin/rails server -b 0.0.0.0 --port 9292
+	RACK_HANDLER=falcon ./bin/rails server -b 0.0.0.0 --port 9292
 
 # Sets up the database
 setup-database-schema:
