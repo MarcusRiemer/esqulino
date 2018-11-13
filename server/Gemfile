@@ -37,8 +37,9 @@ gem 'rails'
 # Connecting to postgres databases
 gem 'pg'
 
-# Use Puma as the app server
-gem 'puma'
+# Use falcon as the server, puma has shown to hang under certain
+# hard to reproduce load scenarios.
+gem 'falcon'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
