@@ -34,7 +34,7 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       expect(json_data).to validate_against "BlockLanguageDescription"
     end
-    
+
     it 'finds a single block language by slug' do
       b = FactoryBot.create(:block_language)
       get "/api/block_languages/#{b.slug}"
@@ -55,7 +55,7 @@ RSpec.describe BlockLanguagesController, type: :request do
   describe 'POST /api/block_languages' do
     it 'Creates a new, empty block language' do
       g = FactoryBot.create(:grammar)
-      
+
       post "/api/block_languages",
            :headers => json_headers,
            :params => {
@@ -78,7 +78,7 @@ RSpec.describe BlockLanguagesController, type: :request do
 
     it 'Creates a new block language with model properties' do
       g = FactoryBot.create(:grammar)
-      
+
       post "/api/block_languages",
            :headers => json_headers,
            :params => {
@@ -163,7 +163,7 @@ RSpec.describe BlockLanguagesController, type: :request do
             }
           ]
         }
-        
+
         put "/api/block_languages/#{orig_block_lang.id}",
            :headers => json_headers,
            :params => upda_block_lang.to_json
@@ -199,7 +199,7 @@ RSpec.describe BlockLanguagesController, type: :request do
         put "/api/block_languages/#{original.id}",
             :headers => json_headers,
             :params => params_update_req.to_json
-        
+
         expect(response.status).to eq(400)
         refreshed = BlockLanguage.find(original.id)
         expect(original.name).to eq refreshed.name
@@ -225,7 +225,15 @@ RSpec.describe BlockLanguagesController, type: :request do
              :headers => json_headers
 
       expect(response.status).to eq(400)
+      json_data = JSON.parse(response.body)
+      expect(json_data.fetch('errors', []).length).to eq 1
+      expect(json_data['errors'][0]).to eq "EXISTING_REFERENCES"
+
+      get "/api/block_languages/#{b.id}",
+          :headers => json_headers
+
+      expect(response.status).to eq(200)
     end
   end
-  
+
 end

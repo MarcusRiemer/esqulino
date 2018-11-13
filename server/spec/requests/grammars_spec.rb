@@ -145,6 +145,37 @@ RSpec.describe BlockLanguagesController, type: :request do
       end
   end
 
+  describe 'DELETE /api/grammars/:grammarId' do
+    it 'removes unreferenced grammar' do
+      g = FactoryBot.create(:grammar)
+
+      delete "/api/grammars/#{g.id}",
+             :headers => json_headers
+
+      expect(response.status).to eq(204)
+
+      get "/api/grammars/#{g.id}"
+
+      expect(response.status).to eq(404)
+    end
+
+    it 'keeps referenced grammars' do
+      b = FactoryBot.create(:block_language)
+
+      delete "/api/grammars/#{b.grammar_id}",
+             :headers => json_headers
+
+      expect(response.status).to eq(400)
+      json_data = JSON.parse(response.body)
+      expect(json_data.fetch('errors', []).length).to eq 1
+      expect(json_data['errors'][0]).to eq "EXISTING_REFERENCES"
+
+      get "/api/grammars/#{b.grammar_id}"
+
+      expect(response.status).to eq(200)
+    end
+  end
+
   describe 'GET /api/grammars/:grammarId/related_block_languages' do
     it 'Finds nothing for an unused grammar' do
       original = FactoryBot.create(:grammar)

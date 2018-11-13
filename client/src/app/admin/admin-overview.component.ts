@@ -33,4 +33,8 @@ export class AdminOverviewComponent implements OnInit {
   public deleteBlockLanguage(id: string) {
     this._serverData.deleteBlockLanguage(id);
   }
+
+  public deleteGrammar(id: string) {
+    this._serverData.deleteGrammar(id);
+  }
 }

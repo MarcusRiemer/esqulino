@@ -7,13 +7,21 @@
     <th>Name</th>
     <th>Slug</th>
     <th>ID</th>
+    <th>Aktionen</th>
   </tr>
   <tr *ngFor="let grammar of availableGrammars.value | async">
     <td>
       <a [routerLink]="['grammar', grammar.id]">{{ grammar.name }}</a>
     </td>
-    <td><code>{{ grammar.slug }}</code></td>
+    <td><code>{{ grammar.slug | defaultValue }}</code></td>
     <td><code>{{ grammar.id }}</code></td>
+    <td>
+      <button (click)="deleteGrammar(grammar.id)"
+              type="button"
+              class="btn btn-outline-danger btn-sm">
+        <span class="fa fa-trash-o" aria-hidden="true"></span>
+      </button>
+    </td>
   </tr>
 </table>
 
@@ -56,4 +64,6 @@
     </td>
   </tr>
 </table>
-<create-block-language></create-block-language>
+<!-- Classes hack in some visual spacing between creation forms -->
+<create-block-language class="mb-5 d-block"></create-block-language>
+<create-grammar></create-grammar>

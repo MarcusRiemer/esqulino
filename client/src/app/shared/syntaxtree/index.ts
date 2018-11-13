@@ -24,10 +24,7 @@ export const AvailableLanguages = {
   DXmlERuby: new Language(DynamicXml.LANGUAGE_DESCRIPTION_ERUBY),
   RegEx: new Language(RegEx.LANGUAGE_DESCRIPTION),
   Css: new Language(Css.LANGUAGE_DESCRIPTION),
-  Json: new Language(Json.LANGUAGE_DESCRIPTION)
+  Json: new Language(Json.LANGUAGE_DESCRIPTION),
+  SebWorld: new Language({ id: "seb-world", name: "Seb World", validators: [], emitters: [] }),
+  SebLang: new Language({ id: "seb-lang", name: "Seb Lang", validators: [], emitters: [] })
 };
-
-
-
-
-
