@@ -30,6 +30,7 @@ class StaticFilesController < ApplicationController
     end
   end
 
+  # Serves JSON schema files from the path this is specified in the configuration
   def schema
     schema_name = params[:schema_name]
     schema_file = schema_path(schema_name)

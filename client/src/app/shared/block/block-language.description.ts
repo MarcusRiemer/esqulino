@@ -64,16 +64,33 @@ export interface BlockLanguageListDescription {
 }
 
 /**
- * Any component that could be displayed in the actual editor view.
- */
-export type EditorComponentDescription = QueryPreviewComponentDescription;
-
-/**
  * Displays (limited) results of SQL-queries
  */
 export interface QueryPreviewComponentDescription {
   componentType: "query-preview"
 }
+
+/**
+ * Displays validation results
+ */
+export interface ValidatorComponentDescription {
+  componentType: "validator"
+}
+
+/**
+ * Displays the compiled program
+ */
+export interface CodeGeneratorComponentDescription {
+  componentType: "generated-code"
+}
+
+/**
+ * Any component that could be displayed in the actual editor view.
+ */
+export type EditorComponentDescription =
+  QueryPreviewComponentDescription
+  | ValidatorComponentDescription
+  | CodeGeneratorComponentDescription;
 
 /**
  * The data about a language model that is stored in the database

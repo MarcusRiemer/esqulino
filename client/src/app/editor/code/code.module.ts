@@ -76,6 +76,8 @@ import { QueryService } from './query/query.service'
     CodeSidebarComponent,
     CodeSidebarFixedBlocksComponent,
     QueryPreviewComponent,
+    ValidationComponent,
+    CodeGeneratorComponent
   ],
   providers: [
     ResourceChangedGuard

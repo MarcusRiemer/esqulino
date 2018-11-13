@@ -69,13 +69,13 @@ BlockLanguageListResponseDescription.json : $(SRC_PATH)/shared/block/block-langu
 BlockLanguageDocument.json : $(SRC_PATH)/shared/block/block-language.description.ts $(SRC_PATH)/shared/block/block.description.ts
 	$(CONVERT_COMMAND)
 
-BlockLanguageGeneratorDescription.json: $(SRC_PATH)/shared/block/generator/generator.description.ts
+BlockLanguageGeneratorDescription.json: $(SRC_PATH)/shared/block/generator/generator.description.ts $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
 
-BlockLanguageGeneratorListDescription.json: $(SRC_PATH)/shared/block/generator/generator.description.ts
+BlockLanguageGeneratorListDescription.json: $(SRC_PATH)/shared/block/generator/generator.description.ts $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
 
-BlockLanguageGeneratorDocument.json: $(SRC_PATH)/shared/block/generator/generator.description.ts
+BlockLanguageGeneratorDocument.json: $(SRC_PATH)/shared/block/generator/generator.description.ts $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
 
 NodeDescription.json : $(SRC_PATH)/shared/syntaxtree/syntaxtree.description.ts

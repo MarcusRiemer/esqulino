@@ -82,6 +82,22 @@
       },
       "type": "object"
     },
+    "CodeGeneratorComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays the compiled program",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "generated-code"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
     "ConstantBlocksSidebarCategoryDescription": {
       "additionalProperties": false,
       "description": "A category that is defined statically",
@@ -152,7 +168,17 @@
       "type": "object"
     },
     "EditorComponentDescription": {
-      "$ref": "#/definitions/QueryPreviewComponentDescription",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/QueryPreviewComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/ValidatorComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/CodeGeneratorComponentDescription"
+        }
+      ],
       "description": "Any component that could be displayed in the actual editor view."
     },
     "FixedBlocksSidebarCategoryDescription": {
@@ -653,6 +679,22 @@
         }
       ],
       "description": "All possible sidebar types"
+    },
+    "ValidatorComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays validation results",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "validator"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
     }
   }
 }
