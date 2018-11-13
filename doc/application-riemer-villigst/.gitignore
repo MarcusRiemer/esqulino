@@ -11,3 +11,6 @@ application.pdf
 *.bcf
 *.blg
 *.run.xml
+*.xdv
+*.fls
+*.fdb_latexmk

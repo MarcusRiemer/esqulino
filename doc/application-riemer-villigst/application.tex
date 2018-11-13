@@ -61,7 +61,7 @@ Die automatisch generierten Editoren sollen zudem kontextsensitive Unterstützun
 Zusammengefasst sollen also folgende Aspekte erforscht und demonstriert werden, ...
 
 \begin{itemize}
-\item wie auf Basis der beschriebenen Verfahren Editoren für unterschiedliche Klassen von Programmiersprachen generieren lassen.
+\item wie auf Basis der beschriebenen Verfahren Editoren für unterschiedliche Klassen von Programmiersprachen (z.B. \texttt{SQL}, \texttt{HTML}, \texttt{CSS}, JavaScript, ...) generieren lassen.
 \item welche zusätzlichen Annotationen für Grammatiken sinnvoll und notwendig sind, um mit den generierten Oberflächen Lernenden einen möglichst intuitiven Zugang zur Programmierung zu ermöglichen.
 \item wie sich für Lernende automatisiert kontextabhängige Hinweise zur korrekten Vervollständigung der Programme geben lassen können.
 \end{itemize}
@@ -69,9 +69,9 @@ Zusammengefasst sollen also folgende Aspekte erforscht und demonstriert werden, 
 
 \section{Detaillierte Konzeption}
 
-Ein zentraler Aspekt des Vorhabens liegt in der Aufteilung auf theoretische und praktische Anteile: Die im Rahmen der Arbeit zu treffenden Annahmen sollen durch die praktische Implementierung bestmöglich verifiziert werden. Das Projekt befindet sich damit in einem etwas ungewöhnlichen Spannungsfeld zwischen der klassischen Informatik-Kerndisziplin \enquote{Übersetzerkonstruktion} (\enquote{Compilerbau}) und der Informatik-Didaktik. Darüber hinaus spielen auch Aspekte der Mensch-Computer-Interaktion eine Rolle, schließlich geht es neben der Verifikation der Programme auch um die Konstruktion benutzerfreundlicher Schnittstellen.
+Ein zentraler Aspekt des Vorhabens liegt in der ausgewogenen Berücksichtigung von theoretischen und praktische Anteilen: Die im Rahmen der Arbeit zu treffenden Annahmen sollen durch die praktische Implementierung bestmöglich verifiziert werden. Das Projekt befindet sich damit in einem etwas ungewöhnlichen Spannungsfeld zwischen der klassischen Informatik-Kerndisziplin \enquote{Übersetzerkonstruktion} (\enquote{Compilerbau}) und der Informatik-Didaktik. Darüber hinaus spielen auch Aspekte der Mensch-Computer-Interaktion eine Rolle, schließlich geht es neben der Verifikation der Programme auch um die Konstruktion benutzerfreundlicher Schnittstellen.
 
-Um die einfachste Verwendung der Software für Lernende zu gewährleisten, wird das Projekt als Webanwendung entwickelt. Für die ersten Schritte der Softwareentwicklung reicht auf Seiten der Lernenden dann ein beliebiger, aktueller Browser. Mit diesem Ansatz in guter Gesellschaft: Das \enquote{große Vorbild} Scratch ist ebenfalls über den Browser erreichbar, genau so wie auch die Blockly-Umgebung \cite[vgl. S. 28]{riemer_blattwerkzeug_2016}.
+Um die einfachste Verwendung der Software für Lernende zu gewährleisten, wird das Projekt als Webanwendung entwickelt. Für die ersten Schritte der Softwareentwicklung reicht auf Seiten der Lernenden dann ein beliebiger, aktueller Browser. Mit diesem Ansatz in guter Gesellschaft: Das \enquote{große Vorbild} Scratch ist ebenfalls über den Browser erreichbar, genau so wie auch mit Blockly erzeugte Umgebungen \cite[vgl. S. 28]{riemer_blattwerkzeug_2016}.
 
 \subsection{Prior Art: Master-Thesis}
 
@@ -101,6 +101,11 @@ Für normale Nutzer, also vornehmlich Lernende, ist diese Unterscheidung nicht v
 
 Darüber hinaus kann durch die Speicherung eines abstrakten Syntaxbaumes der für andere Compiler typische Parsing-Vorgang entfallen. Anwender sollen Programme mit der Promotionsbegleitenden Software erstellen und editieren, nicht in einem Texteditor. Die eigentliche Aufgabe der generierten Oberfläche ist somit die Bearbeitung von Syntaxbäumen.
 
+\subsection{Der abstrakte Syntaxbaum}
+
+\subsection{Die Grammatiken}
+
+\subsection{Die Blocksprachen}
 
 \section{Literaturverzeichnis}
 \printbibliography[heading=none]
