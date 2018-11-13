@@ -6,4 +6,5 @@ ProgrammingLanguage.create!(id: "regex", name: "Reguläre Ausdrücke")
 ProgrammingLanguage.create!(id: "dxml-eruby", name: "Dynamic XML (eRuby)")
 ProgrammingLanguage.create!(id: "dxml-liquid", name: "Dynamic XML (Liquid)")
 ProgrammingLanguage.create!(id: "json", name: "JSON")
-
+ProgrammingLanguage.create!(id: "seb-world", name: "Seb World")
+ProgrammingLanguage.create!(id: "seb-lang", name: "Seb Lang")

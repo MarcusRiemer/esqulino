@@ -54,6 +54,13 @@ export class ServerApi {
   }
 
   /**
+   * Retrieves the URL that is used to create a new grammar
+   */
+  createGrammarUrl(): string {
+    return (`${this._apiBaseUrl}/grammars`)
+  }
+
+  /**
    * Retrieves the full description of a specific grammar.
    *
    * @param idOrSlug The slug or the ID of the grammar in question.

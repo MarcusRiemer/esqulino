@@ -45,6 +45,18 @@ class GrammarsController < ApplicationController
     end
   end
 
+  # Deletes an existing grammar. If the grammar still has references,
+  # the deletion process fails.
+  def destroy
+    grammar = Grammar.find(id_params['id'])
+    begin
+      grammar.destroy!
+      render status: 204
+    rescue ActiveRecord::InvalidForeignKey
+      render json: { 'errors' => ['EXISTING_REFERENCES'] }, :status => 400
+    end
+  end
+
   # Finds block languages that are related to this grammar
   def related_block_languages
     render :json => BlockLanguage.scope_list

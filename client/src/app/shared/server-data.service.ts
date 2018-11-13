@@ -227,6 +227,18 @@ export class ServerDataService {
   }
 
   /**
+   * Deletes the grammar with the given ID.
+   */
+  deleteGrammar(id: string) {
+    this._http.delete(this._serverApi.individualGrammarUrl(id))
+      .pipe(first())
+      .subscribe(_ => {
+        console.log(`Deleted Grammar "${id}"`);
+        this.listGrammars.refresh();
+      });
+  }
+
+  /**
    * @return The details of the specified grammar.
    */
   getGrammarDescription(id: string): Observable<GrammarDescription> {

@@ -28,6 +28,8 @@ import { EditTraitScopesComponent } from './block-language/edit-trait-scopes.com
 import { EditSingleTraitScopeComponent } from './block-language/edit-single-trait-scope.component'
 import { ErrorListComponent } from './block-language/error-list.component'
 
+import { CreateGrammarComponent } from './grammar/create-grammar.component'
+
 const materialModules = [
   MatAutocompleteModule, MatChipsModule, MatFormFieldModule, ReactiveFormsModule
 ]
@@ -44,6 +46,7 @@ const materialModules = [
     AdminComponent,
     AdminOverviewComponent,
     CreateBlockLanguageComponent,
+    CreateGrammarComponent,
     EditBlockLanguageComponent,
     EditActualParametersComponent,
     EditInputParameterValueComponent,
