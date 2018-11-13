@@ -113,31 +113,32 @@ concise_attributes:
     true, "childGroupName": "value"}], "blockType": "block", "direction": "horizontal",
     "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter", "skipParents":
     0}}, "wrapChildren": true}], "describedType": {"typeName": "key-value", "languageName":
-    "json"}}], "editorComponents": [], "localGeneratorInstructions": {"traits": {"break":
-    {"applyMode": "deepMerge", "instructions": {"style": {"width": "100%"}}}, "border":
-    {"applyMode": "deepMerge", "instructions": {"style": {"border": "1px solid black",
-    "cursor": "grab", "margin": "2px", "padding": "2px", "border-radius": "5px"}}},
-    "indent": {"applyMode": "deepMerge", "instructions": {"style": {"margin-left":
-    "2ch"}}}, "vertical": {"applyMode": "deepMerge", "instructions": {"orientation":
-    "vertical"}}, "defaultDropTargets": {"applyMode": "deepMerge", "instructions":
-    {"generateDropTargets": "start"}}}, "traitScopes": [{"blocks": {"json": {"array":
-    [0], "object": []}}, "traits": ["vertical"], "attributes": {"json": {"array":
-    ["values"], "object": []}}}, {"blocks": {"json": {"array": [], "object": []}},
-    "traits": ["indent"], "attributes": {"json": {"array": ["values"], "object": []}}},
-    {"blocks": {"json": {"null": [0], "array": [0], "number": [0], "object": [0],
-    "string": [0], "boolean": [0], "key-value": [0]}}, "traits": ["border"]}, {"traits":
-    ["defaultDropTargets"], "attributes": {"json": {"array": ["values"], "object":
-    ["values"], "key-value": ["key", "value"]}}}], "staticSidebars": [{"type": "generatedBlocks",
-    "caption": "JSON", "categories": [{"type": "generated", "grammar": {"json": ["null",
-    "boolean", "string", "key-value", "object", "array"]}, "categoryCaption": "JSON"}]}],
-    "parameterDeclarations": {"indentWidth": {"type": {"type": "string"}, "defaultValue":
-    "2ch"}, "stringColor": {"type": {"type": "color"}, "defaultValue": "#0000ff"}}}}'
+    "json"}}], "editorComponents": [{"componentType": "validator"}, {"componentType":
+    "generated-code"}], "localGeneratorInstructions": {"traits": {"break": {"applyMode":
+    "deepMerge", "instructions": {"style": {"width": "100%"}}}, "border": {"applyMode":
+    "deepMerge", "instructions": {"style": {"border": "1px solid black", "cursor":
+    "grab", "margin": "2px", "padding": "2px", "border-radius": "5px"}}}, "indent":
+    {"applyMode": "deepMerge", "instructions": {"style": {"margin-left": "2ch"}}},
+    "vertical": {"applyMode": "deepMerge", "instructions": {"orientation": "vertical"}},
+    "defaultDropTargets": {"applyMode": "deepMerge", "instructions": {"generateDropTargets":
+    "start"}}}, "traitScopes": [{"blocks": {"json": {"array": [0], "object": []}},
+    "traits": ["vertical"], "attributes": {"json": {"array": ["values"], "object":
+    []}}}, {"blocks": {"json": {"array": [], "object": []}}, "traits": ["indent"],
+    "attributes": {"json": {"array": ["values"], "object": []}}}, {"blocks": {"json":
+    {"null": [0], "array": [0], "number": [0], "object": [0], "string": [0], "boolean":
+    [0], "key-value": [0]}}, "traits": ["border"]}, {"traits": ["defaultDropTargets"],
+    "attributes": {"json": {"array": ["values"], "object": ["values"], "key-value":
+    ["key", "value"]}}}], "staticSidebars": [{"type": "generatedBlocks", "caption":
+    "JSON", "categories": [{"type": "generated", "grammar": {"json": ["null", "boolean",
+    "string", "key-value", "object", "array"]}, "categoryCaption": "JSON"}]}], "parameterDeclarations":
+    {"indentWidth": {"type": {"type": "string"}, "defaultValue": "2ch"}, "stringColor":
+    {"type": {"type": "color"}, "defaultValue": "#0000ff"}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-07-20 20:43:34.641628'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-09-17 18:45:47.751914'
+  value_before_type_cast: '2018-11-13 18:21:08.538778'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: json

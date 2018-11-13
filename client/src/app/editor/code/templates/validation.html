@@ -1,4 +1,6 @@
-<ng-container *ngIf="codeResource?.validationResult | async; let result;">
+<h4 class="card-title">Validierung</h4>
+<span *ngIf="!codeResource">Bug: Missing Code Resource</span>
+<ng-container *ngIf="(codeResource | async)?.validationResult | async; let result;">
   <table *ngIf="!result.isValid"
          class="table">
     <thead>

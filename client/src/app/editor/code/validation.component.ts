@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { CodeResource } from '../../shared/syntaxtree'
+import { CurrentCodeResourceService } from '../current-coderesource.service';
+
+import { CodeResource } from '../../shared/syntaxtree';
 
 /**
  * Informs the user about possible errors in his trees,
@@ -10,5 +12,10 @@ import { CodeResource } from '../../shared/syntaxtree'
   selector: 'ast-validation'
 })
 export class ValidationComponent {
-  @Input() codeResource: CodeResource;
+
+  constructor(
+    private _currentCodeResource: CurrentCodeResourceService
+  ) { }
+
+  readonly codeResource = this._currentCodeResource.currentResource
 }

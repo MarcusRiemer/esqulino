@@ -1,7 +1,8 @@
 import { GrammarDescription, NodeConcreteTypeDescription } from "../../syntaxtree/grammar.description";
 
 import {
-  BlockLanguageDocument, BlockLanguageListDescription, BlockLanguageDescription
+  BlockLanguageDocument, BlockLanguageListDescription, BlockLanguageDescription,
+  EditorComponentDescription
 } from "../block-language.description";
 import { EditorBlockDescription } from "../block.description";
 
@@ -12,6 +13,15 @@ import { ParameterMap } from "./parameters";
 import { GeneratorInstructions } from "./instructions";
 import { mapType } from "./type-mapping";
 import { generateSidebar } from './sidebar'
+
+const defaultEditorComponents: EditorComponentDescription[] = [
+  {
+    "componentType": "validator"
+  },
+  {
+    "componentType": "generated-code"
+  }
+]
 
 /**
  * Ensures that there should be no errors during generation.
@@ -49,7 +59,7 @@ export function convertGrammar(
   // these can be copied over without further ado.
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
-    editorComponents: d.editorComponents || [],
+    editorComponents: d.editorComponents || defaultEditorComponents,
     sidebars: (d.staticSidebars || []).map(sidebar => generateSidebar(g, sidebar))
   };
 

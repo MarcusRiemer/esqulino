@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { CodeResource } from '../../shared/syntaxtree'
+import { CurrentCodeResourceService } from '../current-coderesource.service';
+
+import { CodeResource } from '../../shared/syntaxtree';
 
 /**
  * Shows a compiled AST.
@@ -10,5 +12,9 @@ import { CodeResource } from '../../shared/syntaxtree'
   selector: 'ast-code-generator'
 })
 export class CodeGeneratorComponent {
-  @Input() codeResource: CodeResource;
+  constructor(
+    private _currentCodeResource: CurrentCodeResourceService
+  ) { }
+
+  readonly codeResource = this._currentCodeResource.currentResource
 }

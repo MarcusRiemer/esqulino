@@ -319,14 +319,14 @@ concise_attributes:
     "operator", "blockType": "input"}], "blockType": "block", "direction": "horizontal",
     "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter", "skipParents":
     0}}, "wrapChildren": true}], "describedType": {"typeName": "relationalOperator",
-    "languageName": "sql"}}], "editorComponents": [], "localGeneratorInstructions":
-    {}}'
+    "languageName": "sql"}}], "editorComponents": [{"componentType": "validator"},
+    {"componentType": "generated-code"}], "localGeneratorInstructions": {}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-09-17 18:47:09.629377'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-09-17 18:47:20.1459'
+  value_before_type_cast: '2018-11-13 18:23:25.04648'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: sql

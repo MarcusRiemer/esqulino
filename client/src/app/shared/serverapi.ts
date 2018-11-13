@@ -22,7 +22,7 @@ export class ServerApi {
    * Retrieves a specific schema
    */
   individualJsonSchemaUrl(name: string): string {
-    return (`${this._apiBaseUrl}/schema/${name}`)
+    return (`${this._apiBaseUrl}/json_schema/${name}`)
   }
 
   /**
