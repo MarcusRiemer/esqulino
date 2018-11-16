@@ -1,13 +1,13 @@
 <ng-template cdkPortal #toolbarButtons>
   <button (click)="onSave()"
-          mat-flat-button>
+          mat-button>
     <span class="fa fa-floppy-o" aria-hidden="t"></span>
     Speichern
   </button>
 
   <button (click)="onRegenerate()"
           [disabled]="!editedSubject?.localGeneratorInstructions"
-          mat-flat-button>
+          mat-button>
     <span class="fa fa-cogs" aria-hidden="true"></span>
     Blocksprache Regenerieren
   </button>
@@ -62,7 +62,7 @@
       <edit-trait-scopes [blockLanguage]="editedSubject"></edit-trait-scopes>
     </div>
   </div>
-  
+
   <!-- Show up any errors that might be there -->
   <div class="row">
     <label class="col-sm-2 col-form-label">{{ generatorErrors.length }} Fehler</label>

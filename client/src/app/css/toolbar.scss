@@ -7,6 +7,8 @@ app-toolbar {
     background-color: #3f51b5;
     display: flex;
 
+    color: white;
+
     /* Column layout on mobile */
     @media (max-width: 840px) {
         flex-direction: column;
@@ -19,10 +21,11 @@ app-toolbar {
         top: 0;
         z-index: 1000;
     }
-    
+
     /* Underlined links look silly with material design */
     a, a:hover {
         text-decoration: none;
+        color: inherit;
     }
 
     /* Allows to align the following items on the right */

@@ -33,9 +33,9 @@ if (typeof window !== "undefined") {
     BrowserAnimationsModule,
 
     // Tracking with Piwik
-    Angulartics2Module.forRoot([Angulartics2Piwik], {}),
+    Angulartics2Module.forRoot(),
 
-    // Actual Application    
+    // Actual Application
     SharedAppModule.forRoot(),
     FrontModule,
     EditorModule,
