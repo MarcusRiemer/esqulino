@@ -10,6 +10,8 @@ export class SqlScratchComponent {
   // The piwik service needs to be required somewhere at least once,
   // otherwise it wont be loaded.
   constructor(@Optional() _piwik: Angulartics2Piwik) {
-
+    if (_piwik) {
+      _piwik.startTracking();
+    }
   }
 }

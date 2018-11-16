@@ -11,7 +11,7 @@
 
     <button *ngFor="let item of toolbarService.items"
             (click)="item.fire()"
-            mat-flat-button
+            mat-button
             id="toolbar-btn-{{item.id}}">
       <span class="fa fa-fw fa-spinner fa-pulse"
             [hidden]="!item.isInProgress">
