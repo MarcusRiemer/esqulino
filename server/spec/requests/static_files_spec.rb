@@ -48,7 +48,7 @@ RSpec.describe StaticFilesController, type: :request do
     end
 
     it '/api/schema/GrammarDocument' do
-      get '/api/schema/GrammarDocument'
+      get '/api/json_schema/GrammarDocument'
 
       expect(response).to have_http_status(200)
       expect(response.content_type).to eq "application/json"
