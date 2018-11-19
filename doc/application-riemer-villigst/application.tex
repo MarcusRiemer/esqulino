@@ -12,6 +12,8 @@
 \usepackage[export]{adjustbox} % For frames with includegraphics
 \usepackage{pgfgantt}
 
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+    \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
 \definecolor{darkgray}{rgb}{.2,.2,.2}
 
 \lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
@@ -42,7 +44,7 @@
 
 \section*{Generierung von syntaxfreien Editoren für beliebige Programmiersprachen}
 
-Konventionelle Entwicklungsumgebungen sind speziell auf die Bedürfnisse von professionellen Anwendern zugeschnittene Programme welche sich, aufgrund der damit verbundenen Komplexität, aus didaktischer Sicht nur eingeschränkt für die Einführung in die Programmierung eignen. Im Rahmen der Promotion soll erforscht und praktisch demonstriert werden, wie sich aus formalen Beschreibung von Programmiersprachen benutzerfreundliche, syntaxfreie Editoren speziell für Lernende erzeugen lassen können.
+Konventionelle Entwicklungsumgebungen sind speziell auf die Bedürfnisse von professionellen Anwendern zugeschnittene Programme welche sich, aufgrund der damit verbundenen Komplexität, aus didaktischer Sicht nur eingeschränkt für die Einführung in die Programmierung eignen. Im Rahmen der Promotion soll erforscht und praktisch demonstriert werden, wie sich aus formalen Beschreibungen von Programmiersprachen benutzerfreundliche, syntaxfreie Editoren speziell für Lernende erzeugen lassen können.
 
 Abbildung~\ref{fig:example-sql-ide} zeigt ein prototypisches Beispiel für einen solchen generierten Editor. Die Konzeption dieser generierten Editoren orientiert sich an den Erfahrungen, welche die Forscher hinter Projekten wie Scratch \cite{resnick_scratch:_2009} oder Googles Blockly gemacht haben \cite{fraser_ten_2015}.
 
@@ -54,9 +56,9 @@ Abbildung~\ref{fig:example-sql-ide} zeigt ein prototypisches Beispiel für einen
 
 \lstinputlisting[float=p,label={lst:partial-sql-grammar},caption={Auszug aus der Grammatik für SQL},captionpos=b,language={Grammar}]{sql.grammar}
 
-Bei den als Eingabe fungierenden formalen Beschreibungen handelt es sich um eine noch nicht endgültig spezifizierte Abwandlung \enquote{typischer} Grammatiken wie sie zur Definition der Syntax in fast jedem Compiler zum Einsatz kommen \cite[S. 42ff]{aho_compilers:_2007}. Dabei sind Ergänzungen und Abwandlungen notwendig, da die gängige rein syntax-orientierte Sichtweise für die Übersetzung in eine grafische Oberfläche keinerlei Informationen über die Darstellung enthält. Listing~\ref{lst:partial-sql-grammar} illustriert die Struktur dieser Grammatiken anhand eines Auszuges aus einer Grammatik für \texttt{SQL}. Die in Abbildung~\ref{fig:example-sql-ide} zu sehenden Farbstile wurden auf Basis von Eigenschaften wie \texttt{"keyword"} vergeben.
+Bei den als Eingabe fungierenden formalen Beschreibungen handelt es sich um eine Abwandlung \enquote{typischer} Grammatiken wie sie zur Definition der Syntax in fast jedem Compiler zum Einsatz kommen \cite[S. 42ff]{aho_compilers:_2007}. Dabei sind Ergänzungen und Abwandlungen notwendig, da die gängige rein syntax-orientierte Sichtweise für die Übersetzung in eine grafische Oberfläche keinerlei Informationen über die Darstellung enthält. Listing~\ref{lst:partial-sql-grammar} illustriert die Struktur dieser Grammatiken anhand eines Auszuges aus einer Grammatik für \texttt{SQL}. Die in Abbildung~\ref{fig:example-sql-ide} zu sehenden Farbstile wurden auf Basis von Eigenschaften wie \texttt{"keyword"} vergeben.
 
-Die automatisierte Übersetzung der Grammatiken ermöglicht es erfahrenen Anwendern, zum Beispiel Lehrkräften, gegebene Programmiersprachen didaktisch motiviert einzuschränken. So wäre es zum Beispiel mögliche eine \texttt{SQL}-Variante zu erstellen, bei welcher die \texttt{GROUP BY}-Komponente nicht zur Verfügung steht. In Anlehnung an die bei \cite{klaeren_macht_2007} beschriebenen \enquote{Sprachebenen} soll sich so der Funktionsumfang der generierten Entwicklungsumgebungen an den Lernfortschritt der Klassengemeinschaft anpassen lassen.
+Die automatisierte Übersetzung der Grammatiken ermöglicht es erfahrenen Anwendern, zum Beispiel Lehrkräften, gegebene Programmiersprachen didaktisch motiviert einzuschränken. So wäre es zum Beispiel möglich, eine \texttt{SQL}-Variante zu erstellen, bei welcher die \texttt{GROUP BY}-Komponente nicht zur Verfügung steht. In Anlehnung an die bei \cite{klaeren_macht_2007} beschriebenen \enquote{Sprachebenen} soll sich so der Funktionsumfang der generierten Entwicklungsumgebungen an den Lernfortschritt der Klassengemeinschaft anpassen lassen.
 
 Die automatisch generierten Editoren sollen zudem kontextsensitive Unterstützung beim Programmieren anbieten. Da alle Manipulationen durch den Benutzer immer auf einem Syntaxbaum stattfinden, können auch bei unvollständigen (Teil-)Programmen typisierte Löcher (entlehnt aus Sprachen wie Haskell \cite{jones_haskell_2014}) genutzt werden, um die Menge an verfügbaren Operationen zu limitieren oder bestimmte Operationen hervorzuheben.
 
@@ -81,7 +83,7 @@ In der Praxis handelt es sich bei solchen syntaxfreien Sprachen de facto immer u
 
 \subsection{Prior Art: Master-Thesis}
 
-Die Masterthesis \enquote{BlattWerkzeug} \cite{riemer_blattwerkzeug_2016}  wurde im Oktober 2016 vom Bewerber Marcus Riemer fertiggestellt und beschreibt zwei konkrete syntaxfreie Editoren für \texttt{SQL} und \texttt{HTML}. Diese Arbeit legt in ideeller Weise den Grundstein für das Promotionsvorhaben und demonstrierte, dass sich eine Entwicklungsumgebung für Schüler prinzipiell auch von nur einem Entwickler umsetzen ließe. Im Februar 2018 wurde jedoch der gesamte Code für diese konkreten Editoren entfernt und durch einen Prototypen des hier beschriebenen neuen, generativen Ansatzes ersetzt \cite{riemer_commit_2018}.
+Die Masterthesis \enquote{BlattWerkzeug} \cite{riemer_blattwerkzeug_2016}  wurde im Oktober 2016 vom Bewerber Marcus Riemer fertiggestellt und beschreibt zwei konkrete syntaxfreie Editoren für \texttt{SQL} und \texttt{HTML}. Diese Master-Thesis legte in ideeller Weise den Grundstein für das Promotionsvorhaben und demonstrierte, dass sich eine Entwicklungsumgebung für Schüler prinzipiell auch von nur einem Entwickler umsetzen ließe. Im Februar 2018 wurde jedoch der gesamte Code für diese konkreten Editoren entfernt und durch einen Prototypen des hier beschriebenen neuen, generativen Ansatzes ersetzt \cite{riemer_commit_2018}.
 
 Von der ursprünglichen Thesis bleibt damit die Idee und die grundlegende Konzeption einer einsteigerfreundlichen Entwicklungsumgebung, sowie einige generelle Erkenntnisse über mögliche Strategien zur Umsetzung. Dieses Promotionsvorhaben versteht sich als eine Iteration des ursprünglichen Ansatzes: Anstatt jede weitere zu unterstützende Programmiersprache mühsam von Grund auf neu zu entwerfen, soll die Integration weiterer Sprachen mit etablierten Techniken und Vorgehensweisen aus der normalen Übersetzerkonstruktion vorgenommen werden können.
 
@@ -278,7 +280,8 @@ Teil dieser Generator-Anweisungen sind auch mögliche Parametrisierungen, welche
 Um tatsächlich benutzerfreundliche Editoren zu erzeugen, müssen für die generierten Editoren noch  unter anderem die folgenden praktischen Aspekte untersucht werden:
 
 \begin{itemize}
-\item Wenn ein Block gezogen und an anderer Stelle fallen gelassen wird, sind grundsätzlich zwei verschiedene Intentionen denkbar: Der gezogene Block soll an die angegebene Stelle kopiert oder verschoben werden. Die \enquote{richtige} Antwort kann dabei durchaus kontextabhängig sein: Eine deklarierte Variable soll, wenn Sie in einem Ausdruck fallen gelassen wird, dort vermutlich eingesetzt (also kopiert) werden. Eine konkrete Anweisung in einer imperativen Programmiersprache, z.B. eine Textausgabe, soll vermutlich hingegen an ihren neuen Ort verschoben werden. Diese korrekte Auswahl aus diesen Alternativen lässt sich vermutlich nicht allgemein beantworten und muss daher vermutlich in den Generatoranweisungen abgebildet werden.
+\item Wenn ein Block gezogen und an anderer Stelle fallen gelassen wird, sind grundsätzlich zwei verschiedene Intentionen denkbar: Der gezogene Block soll an die angegebene Stelle kopiert oder verschoben werden. Die \enquote{richtige} Antwort kann dabei durchaus kontextabhängig sein: Eine deklarierte Variable soll, wenn Sie in einem Ausdruck fallen gelassen wird, dort vermutlich eingesetzt (also kopiert) werden. Eine konkrete Anweisung in einer imperativen Programmiersprache, z.B. eine Textausgabe, soll vermutlich hingegen an ihren neuen Ort verschoben werden. Diese korrekte Auswahl aus diesen Alternativen lässt sich nicht allgemein beantworten sondern hängt vom Kontext und der aktuellen Programmiersprache ab und muss daher vermutlich in den Generatoranweisungen definiert werden.
+\item Ebenfalls stellt sich bei platzierten Blöcken die Frage, ob diese als Kind ihres Zielblocks platziert werden oder diesen möglicherweise \enquote{umschließen} sollten. Dieses Problem stellt sich z.B. bei der Platzierung von Klammern in Ausdrücken: Der Anwender merkt erst im Laufe der Entwicklung, dass er einen Teilausdruck mit Klammern umschließen möchte und zieht diese dann auf den entsprechenden Teilausdruck. An dieser Stelle sollte der Editor in der Lage sein zu erkennen, dass die Klammern nicht \enquote{unter} dem Ausdruck eingefügt werden sollten, sondern im Baum darüber.
 \item Die Verwendung von Syntaxbäumen als grundlegende Datenstruktur erlaubt wesentlich genauere Fehlermeldungen als in textbasierten Sprachen. Dies liegt zum einen schlichtweg daran, dass rein syntaktische Fehler nicht vorkommen können: Fehlende Semikoli oder Klammern sind konstruktiv ausgeschlossen. Im Falle von fehlenden Teilbäumen (Löchern) können den Anwendern sogar kontextabhängig recht präzise Vorschläge gemacht werden: Wenn z.B. in einem Vergleichsausdruck der rechte Operand noch unbekannt ist, könnten dem Anwender sehr präzise mögliche Inhalte vorgeschlagen werden.
 \end{itemize}
 
@@ -296,26 +299,39 @@ Diese Umgebungen können nicht aus den Grammatiken erzeugt werden und müssen gr
 
 \subsection{Zeitplan}
 
-Der aktuelle Stand des Prototypen ist in gewisser Weise (mehr oder minder) geschicktes Marketing: Er ist durchaus funktionsfähig, die wirklich ansprechenden Editoren wurden aber noch mühsam von Hand generiert oder mit Hilfe umfangreicher Generatoranweisungen generiert. Die eigentliche Forschung, also die Frage wie an dieser Stelle tatsächlich auf möglichst viele manuelle Handgriffe verzichtet werden kann, steht noch ganz am Anfang.
+Der aktuelle Stand des Prototypen ist vor allem ein Test für die Anzeige von Blocksprachen: Die dargestellten Editoren werden aktuell noch mühsam von Hand beschrieben oder mit Hilfe umfangreicher Generatoranweisungen generiert. Die eigentliche Forschung, also der Verzicht auf möglichst viele manuelle Handgriffe, steht noch ganz am Anfang.
 
 Grundsätzlich ist geplant die Promotion auch ohne eine Förderung durch das Evangelische Stipendienwerk durchzuführen. Aktuell ist das Forschungsvorhaben das \enquote{Privatvergnügen} von Marcus Riemer, welcher aktuell auf einer 80\%-Stelle als wissenschaftlicher Mitarbeiter an der Fachhochschule Wedel beschäftigt. Diese Tätigkeit wird zum kommenden Semester jedoch auf Maximal 60\% reduziert. Darüber hinaus ist im August Clara Adele Riemer (mein erstes Kind) zur Welt gekommen. Der aktuelle Zeitplan sieht auf Grundlage dieser äußeren Umstände einen Abschluss der Promotion um das Jahr 2021 herum vor.
 
 Die Förderung durch das evangelische Studienwerk würde es erlauben die Stelle an der Fachhochschule auf 25\% zu reduzieren, ganz soll die Stelle dort nicht aufgeben werden. Die Lehrtätigkeit dort bereitet große Freude, der fachliche Austausch mit den Kollegen ist förderlich und schlussendlich ist auch das Gehalt für den Unterhalt der Familie schlicht notwendig. Natürlich würde die Reduktion der Tätigkeit an der Hochschule das Promotionsvorhaben dennoch deutlich beschleunigen.
 
-Der Fortschritt des Promotionsvorhabens wird in drei Kategorien gemessen, welche alle mehr oder minder parallel bearbeitet werden:
+Der Fortschritt des Promotionsvorhabens lässt sich gut in drei Kategorien erfassen, welche allerdings untereinander vielfältige Bezüge haben:
 
 \begin{description}
+\item[Implementierung unterschiedlicher Programmierspachen] \hfill\\
+  Dieses Projekt hat den Anspruch Editoren für unterschiedlichste Programmier- und auch Daten- oder Textauszeichnungssprachen erzeugen zu können. Um zu demonstrieren, dass es diesen Ansprüchen gerecht wird, sollen unterschiedlichste Sprachen bereitgestellt werden.
+
 \item[Stabile Grammatiken und Generator-Anweisungen] \hfill\\
-  Aktuell sind für die Erzeugung von Block-Editoren noch zwei Parameter nötig: Eine Grammatik und dezidierte Generatoranweisungen. Beide Strukturen sind grundsätzlich auch notwendig, da reine Stilvorgaben wie z.B. Farben keinesfalls Bestandteil der Grammatik sein sollten. In verschiedenen Details ist aber nicht im gleichen Maße eindeutig, in welcher der beiden Strukturen Informationen am passenderen Platz wären. Dies betrifft insbesondere Layoutvorgaben (aus Sicht der Blöcke) bzw. die Formatierung des Quelltextes mit Leerraum und Zeilenumbrüchen (aus Sicht der Grammatik).
+  Aktuell sind für die Erzeugung von Block-Editoren noch zwei Parameter nötig: Eine Grammatik und separate Generatoranweisungen. Beide Strukturen sind grundsätzlich auch notwendig, da reine Stilvorgaben wie z.B. Farben keinesfalls Bestandteil der Grammatik sein sollten. In verschiedenen Details ist aber nicht im gleichen Maße eindeutig, in welcher der beiden Strukturen Informationen am passenderen Platz wären. Dies betrifft insbesondere Layoutvorgaben (aus Sicht der Blöcke) bzw. die Formatierung des Quelltextes mit Leerraum und Zeilenumbrüchen (aus Sicht der Grammatik).
 
 \item[Benutzerfreundliche syntaxfreie Editoren] \hfill\\
   Der aktuelle Prototyp der Editoren ist zwar vollumfänglich nutzbar, jedoch noch nicht besonders benutzerfreundlich. Es fehlen dringend notwendige Komfortfunktionen wie eine intelligente Hervorhebung von möglichen Zielen und eine Vorschau von Veränderungen. Außerdem muss untersucht werden, wie sich die möglichen Inhalte für Löcher des Baums angemessen präsentieren lassen.
-
-\item[Implementierung unterschiedlicher Programmierspachen] \hfill\\
-  Dieses Projekt hat den Anspruch Editoren für unterschiedlichste Programmier- und auch Daten- oder Textauszeichnungssprachen erzeugen zu können. Um zu demonstrieren, dass es diesen Ansprüchen gerecht wird, sollen unterschiedlichste Sprachen bereitgestellt werden.
 \end{description}
 
-\input{gantt-chart}
+Die Messung des Projektfortschritts erfolgt dabei anhand folgender Meilensteine:
+
+\begin{description}
+\item[\circled{1} Identischer Editor-Funktionsumfang zum Prototypen der Master-Thesis]\hfill\\
+  Die Entwicklungsumgebung erlaubt zusätzlich zu Datenbanken wieder die Programmierung von Webseiten. Zusätzlich soll zum Funktionsumfang von \enquote{damals} soll es außerdem möglich sein, das Aussehen der Seite über \texttt{CSS}-Dokumente zu bestimmen. Die Grammatikdefinitionen müssen zu diesem Zeitpunkt dann schon drei grundverschiedene Sprachen abbilden.
+\item[\circled{2} Unterstützung einer imperativen Skriptsprache (vermutlich JavaScript)]\hfill\\
+  Mit diesem Meilenstein wird nebenbei die Definitionen der Grammatiken und Generatoren \enquote{eingefroren}. Das Projekt ist dann in der Lage Editoren für \enquote{klassische} Programmiersprachen, deklarative Programmiersprachen, Textauszeichnungssprachen und Stylesheet-Sprachen zu erzeugen
+\item[\circled{3} Optimierte Benutzerführung]\hfill\\
+  Nachdem die Schnittstelle für die Erzeugung der Editoren nun stabil ist, sollen diese in Tests mit Lehrkräften und Schülern erprobt werden. Für diesen Meilenstein wird dann ausschließlich die Benutzerführung optimiert. Konkret bedeutet das die Erprobung unterschiedlicher Implementierungen für Vorschläge zu Löchern im Syntaxbaum aber auch wesentlich profanere Aspekte
+\end{description}
+
+Zum aktuellen Zeitpunkt ist für jeden Meilenstein etwa ein Jahr eingeplant, mit der Förderung durch das Stipendienwerk würde sich das auf acht Monate je Meilenstein reduzieren.
+
+% \input{gantt-chart}
 
 % Meilensteine
 
@@ -332,6 +348,8 @@ Der Fortschritt des Promotionsvorhabens wird in drei Kategorien gemessen, welche
 % \item Optimierung des tatsächlichen Editors, insbesondere im Hinblick auf Vorschläge durch typisierte Löcher
 % \item Finale Implementierung von unterschiedlichen Programmiersprachen und Rücksprache mit Lehrkräften
 % \end{enumerate}
+
+\newpage
 
 \section{Literaturverzeichnis}
 \printbibliography[heading=none]
