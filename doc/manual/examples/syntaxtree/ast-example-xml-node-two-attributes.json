@@ -1,0 +1,27 @@
+{
+  "language": "xml",
+  "name": "element",
+  "properties": {
+    "name": "parent"
+  },
+  "children": {
+    "attributes": [
+      {
+        "language": "xml",
+        "name": "attribute",
+        "properties": {
+          "name": "att1",
+          "value": "Neuer Text"
+        }
+      },
+      {
+        "language": "xml",
+        "name": "attribute",
+        "properties": {
+          "name": "a2",
+          "value": ""
+        }
+      }
+    ]
+  }
+}

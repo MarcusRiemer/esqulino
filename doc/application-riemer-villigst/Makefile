@@ -1,4 +1,4 @@
-figures : core-concepts.pdf ast-example-null.pdf ast-example-if.pdf ast-example-expr-variable.pdf ast-example-expr-binary.pdf
+figures : core-concepts.pdf ast-example-null.pdf ast-example-if.pdf ast-example-expr-variable.pdf ast-example-expr-binary.pdf ast-example-xml-node-two-attributes.pdf
 
 application.pdf: application.tex
 	latexmk -xelatex application.tex
@@ -9,6 +9,7 @@ ast-example-null.pdf: ../manual/generated/ast-example-null.graphviz
 ast-example-if.pdf: ../manual/generated/ast-example-if.graphviz
 ast-example-expr-variable.pdf: ../manual/generated/ast-example-expr-variable.graphviz
 ast-example-expr-binary.pdf: ../manual/generated/ast-example-expr-binary.graphviz
+ast-example-xml-node-two-attributes.pdf: ../manual/generated/ast-example-xml-node-two-attributes.graphviz
 
 %.pdf : ../manual/generated/%.graphviz
 	dot -T pdf < $< > $@
