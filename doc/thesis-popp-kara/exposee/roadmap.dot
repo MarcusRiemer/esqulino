@@ -1,0 +1,62 @@
+digraph {
+    graph [fontname = "DaxlinePro"];
+    node [fontname="DaxlinePro" shape=record];
+
+    rankdir=TB;
+    // splines=line;
+    newrank=true;
+    nodesep=1.0;
+
+    start[label="Start"];
+    submission[label="Abgabe"];
+
+    subgraph cluster_coding {
+        label="Programmierung";
+
+        grammar_world[label="Welt-Grammatik"];
+        grammar_program[label="Programm-Grammatik"];
+        interpreter_compiler[label="Interpreter/Compiler"];
+        visualization[label="Visualisierung"];
+        execution[label="Ausführung"];
+    }
+
+    subgraph cluster_writing {
+        label="Ausarbeitung";
+
+        { rank=same requirement_analysis comparable_works}
+
+        outline[label="Gliederung"];
+        introduction_conclusion [label="Einleitung / Fazit"];
+        comparable_works[label="Vergleichbare Arbeiten"];
+        requirement_analysis[label="Anforderungsanalyse"];
+        implementation[label="Implementierung"];
+        examples[label="Beispielaufgaben"];
+    }
+
+    start -> outline
+
+    outline -> comparable_works;
+    outline -> requirement_analysis;
+
+    comparable_works -> introduction_conclusion;
+    requirement_analysis -> implementation;
+
+    requirement_analysis -> comparable_works;
+    comparable_works -> requirement_analysis;
+
+    requirement_analysis -> visualization;
+    requirement_analysis -> grammar_world;
+    requirement_analysis -> grammar_program;
+
+    grammar_world -> interpreter_compiler;
+    grammar_program -> interpreter_compiler;
+
+    interpreter_compiler -> execution;
+    visualization -> execution;
+
+    execution -> implementation;
+
+    implementation -> examples;
+    examples -> introduction_conclusion;
+    introduction_conclusion -> submission;
+}
