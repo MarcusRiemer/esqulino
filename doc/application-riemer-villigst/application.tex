@@ -33,6 +33,8 @@
   morestring=[b]"
 }
 
+\title{Generierung von syntaxfreien Editoren für beliebige Programmiersprachen}
+
 \hypersetup{
   pdftitle={Generierung von syntaxfreien Programmierumgebungen für beliebige Programmiersprachen},
   pdfsubject={Bewerbung um einen Stipendienplatz},
@@ -43,10 +45,9 @@
 \addbibresource[datatype=bibtex]{diss.bib}
 
 \begin{document}
+\subsection*{Generierung von syntaxfreien Editoren für beliebige Programmiersprachen}
 
-\section*{Generierung von syntaxfreien Editoren für beliebige Programmiersprachen}
-
-Konventionelle Entwicklungsumgebungen sind speziell auf die Bedürfnisse von professionellen Anwendern zugeschnittene Programme welche sich, aufgrund der damit verbundenen Komplexität, aus didaktischer Sicht nur eingeschränkt für die Einführung in die Programmierung eignen. Im Rahmen der Promotion soll erforscht und praktisch demonstriert werden, wie sich aus formalen Beschreibungen von Programmiersprachen benutzerfreundliche, syntaxfreie Editoren speziell für Lernende erzeugen lassen können.
+Konventionelle Entwicklungsumgebungen sind speziell auf die Bedürfnisse von professionellen Anwendern zugeschnittene Programme, welche sich - aufgrund der damit verbundenen Komplexität - aus didaktischer Sicht nur eingeschränkt für die Einführung in die Programmierung eignen. Im Rahmen der Promotion soll erforscht und praktisch demonstriert werden, wie sich aus formalen Beschreibungen von Programmiersprachen benutzerfreundliche, syntaxfreie Editoren speziell für Lernende erzeugen lassen können.
 
 Abbildung~\ref{fig:example-sql-ide} zeigt ein prototypisches Beispiel für einen solchen generierten Editor. Die Konzeption dieser generierten Editoren orientiert sich an den Erfahrungen, welche die Forscher hinter Projekten wie Scratch \cite{resnick_scratch:_2009} oder Googles Blockly gemacht haben \cite{fraser_ten_2015}.
 
@@ -58,18 +59,18 @@ Abbildung~\ref{fig:example-sql-ide} zeigt ein prototypisches Beispiel für einen
 
 \lstinputlisting[float=p,label={lst:partial-sql-grammar},caption={Auszug aus der Grammatik für \texttt{SQL}, die gezeigten Regeln definieren die \texttt{SELECT}-Komponente. Aus der vollständigen Grammatik (und zusätzlichen Stylingangaben) ist der Editor in Abbildung~\ref{fig:example-sql-ide} erzeugt worden.},captionpos=b,language={Grammar}]{sql.grammar}
 
-Bei den als Eingabe fungierenden formalen Beschreibungen handelt es sich um eine Abwandlung \enquote{typischer} Grammatiken wie sie zur Definition der Syntax in fast jedem Compiler zum Einsatz kommen \cite[S. 42ff]{aho_compilers:_2007}. Dabei sind Ergänzungen und Abwandlungen notwendig, da die gängige rein syntax-orientierte Sichtweise für die Übersetzung in eine grafische Oberfläche keinerlei Informationen über die Darstellung enthält. Listing~\ref{lst:partial-sql-grammar} illustriert die Struktur dieser Grammatiken anhand eines Auszuges aus einer Grammatik für \texttt{SQL}. Die in Abbildung~\ref{fig:example-sql-ide} zu sehenden Farbstile wurden auf Basis von Eigenschaften wie \texttt{"keyword"} vergeben.
+Bei den als Eingabe fungierenden formalen Beschreibungen handelt es sich um eine Abwandlung \enquote{typischer} Grammatiken, wie sie zur Definition der Syntax in fast jedem Compiler zum Einsatz kommen \cite[S. 42ff]{aho_compilers:_2007}. Dabei sind Ergänzungen und Abwandlungen notwendig, da die gängige rein syntax-orientierte Sichtweise für die Übersetzung in eine grafische Oberfläche keinerlei Informationen über die Darstellung enthält. Listing~\ref{lst:partial-sql-grammar} illustriert die Struktur dieser Grammatiken anhand eines Auszuges aus einer Grammatik für \texttt{SQL}. Die in Abbildung~\ref{fig:example-sql-ide} zu sehenden Farbstile wurden auf Basis von Eigenschaften wie \texttt{"keyword"} vergeben.
 
-Die automatisierte Übersetzung der Grammatiken ermöglicht es erfahrenen Anwendern, zum Beispiel Lehrkräften, gegebene Programmiersprachen didaktisch motiviert einzuschränken. So wäre es zum Beispiel möglich, eine \texttt{SQL}-Variante zu erstellen, bei welcher die \texttt{GROUP BY}-Komponente nicht zur Verfügung steht. In Anlehnung an die bei \cite{klaeren_macht_2007} beschriebenen \enquote{Sprachebenen} soll sich so der Funktionsumfang der generierten Entwicklungsumgebungen an den Lernfortschritt der Klassengemeinschaft anpassen lassen.
+Die automatisierte Übersetzung der Grammatiken ermöglicht es erfahrenen Anwendern (zum Beispiel Lehrkräften) gegebene Programmiersprachen didaktisch motiviert einzuschränken. So wäre es zum Beispiel möglich, eine \texttt{SQL}-Variante zu erstellen, bei welcher die \texttt{GROUP BY}-Komponente nicht zur Verfügung steht. In Anlehnung an die bei \cite{klaeren_macht_2007} beschriebenen \enquote{Sprachebenen} soll sich so der Funktionsumfang der generierten Entwicklungsumgebungen an den Lernfortschritt der Klassengemeinschaft anpassen lassen.
 
 Die automatisch generierten Editoren sollen zudem kontextsensitive Unterstützung beim Programmieren anbieten. Da alle Manipulationen durch den Benutzer immer auf einem Syntaxbaum stattfinden, können auch bei unvollständigen (Teil-)Programmen typisierte Löcher (entlehnt aus Sprachen wie Haskell \cite{jones_haskell_2014}) genutzt werden, um die Menge an verfügbaren Operationen zu limitieren oder bestimmte Operationen hervorzuheben.
 
-Zusammengefasst sollen also folgende Aspekte erforscht und demonstriert werden, ...
+Zusammengefasst sollen also folgende Aspekte erforscht und demonstriert werden:
 
 \begin{itemize}
-\item wie sich, auf Basis von Grammatiken, Editoren für unterschiedliche Klassen von Programmiersprachen (z.B. \texttt{SQL}, \texttt{HTML}, \texttt{CSS}, \texttt{JavaScript}, ...) generieren lassen.
-\item welche zusätzlichen Annotationen für Grammatiken sinnvoll und notwendig sind, um mit den generierten Oberflächen Lernenden einen möglichst intuitiven Zugang zur Programmierung zu ermöglichen.
-\item wie sich für Lernende automatisiert kontextabhängige Hinweise zur korrekten Vervollständigung der Programme geben lassen können.
+\item Wie sich, auf Basis von Grammatiken, Editoren für unterschiedliche Klassen von Programmiersprachen (z.B. \texttt{SQL}, \texttt{HTML}, \texttt{CSS}, \texttt{JavaScript}, ...) generieren lassen.
+\item Welche zusätzlichen Annotationen für Grammatiken sinnvoll und notwendig sind, um mit den generierten Oberflächen Lernenden einen möglichst intuitiven Zugang zur Programmierung zu ermöglichen.
+\item Wie sich für Lernende automatisiert kontextabhängige Hinweise zur korrekten Vervollständigung der Programme geben lassen können.
 \end{itemize}
 
 
@@ -83,19 +84,19 @@ Ein zentraler Aspekt dieses Promotionsvorhabens liegt in der ausgewogenen Berüc
 
 \subsection{Syntaxfreie Programmiersprachen}
 
-Bei syntaxfreien Programmiersprachen muss der Programmierer sich nicht mit den syntaktischen Details der verwendeten Programmiersprache beschäftigen. Aus seiner Sicht spielt es keine Rolle ob z.B. Anweisungen durch Semicoli getrennt werden, Blöcke mit geschweiften Klammer, \texttt{begin} und \texttt{end} oder durch Leerraum definiert werden oder welche Klammern notwendig sind.
+Bei syntaxfreien Programmiersprachen muss der Programmierer sich nicht mit den syntaktischen Details der verwendeten Programmiersprache beschäftigen. Man muss sich nicht damit beschäftigen, ob zum Beispiel Anweisungen durch Semikola getrennt werden, Blöcke mit geschweiften Klammer, \texttt{begin} und \texttt{end} oder durch Leerraum definiert werden oder welche Klammern wo notwendig sind.
 
 In der Praxis handelt es sich bei solchen syntaxfreien Sprachen de facto immer um visuelle Programmiersprachen. Auch die schon erwähnten Umgebungen Scratch und Blockly fallen in diese Kategorie. In diesen Umgebungen arbeitet der Programmierer mit der Maus um die verschiedenen zur Verfügung stehenden Blöcke an semantisch sinnvollen Orten zu platzieren. Diese Art der Programmierung ist für erfahrene Programmierer oder umfangreiche Softwareprojekte erfahrungsgemäß hinderlich \cite[S. 262f]{schiffer_visuelle_2001}, eignet sich aber zur Einführung in die Programmierung \cite{resnick_scratch:_2009}.
 
-\subsection{Prior Art: Master-Thesis}
+\subsection{Verwandte Arbeit: Master-Thesis}
 
 Die Masterthesis \enquote{BlattWerkzeug} \cite{riemer_blattwerkzeug_2016}  wurde im Oktober 2016 vom Bewerber Marcus Riemer fertiggestellt und beschreibt zwei konkrete syntaxfreie Editoren für \texttt{SQL} und \texttt{HTML}. Diese Master-Thesis legte in ideeller Weise den Grundstein für das Promotionsvorhaben und demonstrierte, dass sich eine Entwicklungsumgebung für Schüler prinzipiell auch von nur einem Entwickler umsetzen ließe. Im Februar 2018 wurde jedoch der gesamte Code für diese konkreten Editoren entfernt und durch einen Prototypen des hier beschriebenen neuen, generativen Ansatzes ersetzt \cite{riemer_commit_2018}.
 
-Von der ursprünglichen Thesis bleibt damit die Idee und die grundlegende Konzeption einer einsteigerfreundlichen Entwicklungsumgebung, sowie einige generelle Erkenntnisse über mögliche Strategien zur Umsetzung. Dieses Promotionsvorhaben versteht sich als eine Iteration des ursprünglichen Ansatzes: Anstatt jede weitere zu unterstützende Programmiersprache mühsam von Grund auf neu zu entwerfen, soll die Integration weiterer Sprachen mit etablierten Techniken und Vorgehensweisen aus der normalen Übersetzerkonstruktion vorgenommen werden können.
+Von der ursprünglichen Thesis bleiben damit die Idee und die grundlegende Konzeption einer einsteigerfreundlichen Entwicklungsumgebung, sowie einige generelle Erkenntnisse über mögliche Strategien zur Umsetzung. Dieses Promotionsvorhaben versteht sich als eine Iteration des ursprünglichen Ansatzes: Anstatt jede weitere zu unterstützende Programmiersprache mühsam von Grund auf neu zu entwerfen, soll die Integration weiterer Sprachen mit etablierten Techniken und Vorgehensweisen aus der normalen Übersetzerkonstruktion vorgenommen werden können.
 
 \subsection{Eingrenzung und Wahl des Forschungsvorhabens}
 
-Es handelt sich bei diesem Promotionsvorhaben, trotz der möglichen praktischen Anwendungen in der Informatik-Lehre, ausdrücklich nicht um eine didaktische Arbeit. Es findet folglich keine didaktische fundierte Konzeption von möglichen Lehrinhalten oder Unterrichtsstunden statt.
+Es handelt sich bei diesem Promotionsvorhaben - trotz der möglichen praktischen Anwendungen in der Informatik-Lehre - ausdrücklich nicht um eine didaktische Arbeit. Es findet folglich keine didaktisch fundierte Konzeption von möglichen Lehrinhalten oder Unterrichtsstunden statt.
 
 Diese Einschränkung ist zum Einen durch den fachlichen Hintergrund der Beteiligten bedingt: Dr. Frank Huch als Erstgutachter und Betreuer ist Informatiker und arbeitet an der CAU Kiel im Fachbereich \enquote{Übersetzerkonstruktion}. Der Promotionsstudent Marcus Riemer ist ebenfalls Informatiker und arbeitet als wissenschaftlicher Mitarbeiter an der Fachhochschule Wedel. Beiden gemein ist das Anliegen, eine möglichst frühe und effektive Vermittlung von Informatik-Kenntnissen an Schulen möglich zu machen:
 
@@ -104,7 +105,7 @@ Diese Einschränkung ist zum Einen durch den fachlichen Hintergrund der Beteilig
 \item Herr Riemer ist seit seiner eigenen Schulzeit auf freiwilliger Basis für unterschiedlichste Informatik-Lehrprojekte tätig geworden.
 \end{itemize}
 
-Auch wenn es Ihrer Einschätzung nach möglich wäre, aufbauend auf der Masterthesis eine vornehmlich didaktische Arbeit zu schreiben, würde dies eine umfangreiche Einarbeitung in die entsprechenden didaktischen Hintergründe und Methoden voraussetzen. Diese Einarbeitungzeit entfällt durch die Fokussierung auf Fragestellungen und Themen aus der Informatik.
+Auch wenn es ihrer Einschätzung nach möglich wäre, aufbauend auf der Masterthesis eine vornehmlich didaktische Arbeit zu schreiben, würde dies eine umfangreiche Einarbeitung in die entsprechenden didaktischen Hintergründe und Methoden voraussetzen. Diese Einarbeitungzeit entfällt durch die Fokussierung auf Fragestellungen und Themen aus der Informatik.
 
 Zum Anderen halten Dr. Huch und Herr Riemer die grundlegendere Arbeit, also die automatische Erzeugung von benutzerfreundlichen Editoren, für wissenschaftlich und praktisch relevanter. Unserem Wissensstand nach existiert noch keine Software, welche die Vorgehensweise aus der Übersetzerkonstruktion zur Generierung von syntaxfreien Editoren verwendet. Und auch diese Software könnte natürlich von Leuten mit didaktischem Hintergrund erforscht werden. Es ist geplant, die zu erstellende Software von z.B. Lehramtsstudierenden der CAU Kiel oder im Rahmen von Lehrerfortbildungen auf ihre Eignung für den Unterrichtsgebrauch zu prüfen.
 
@@ -112,35 +113,43 @@ Zum Anderen halten Dr. Huch und Herr Riemer die grundlegendere Arbeit, also die 
 
 Um einen möglichst einfachen Zugang zur Software für Lernende zu gewährleisten, wird der praktische Teil des Projekts als Webanwendung entwickelt. Für die ersten Schritte der Softwareentwicklung reicht auf Seiten der Lernenden dann ein aktueller Browser. Mit diesem Ansatz ist das Vorhaben in guter Gesellschaft: Das \enquote{große Vorbild} Scratch ist ebenfalls über den Browser erreichbar, genau so wie auch mit Blockly erzeugte Umgebungen \cite[vgl. S. 28]{riemer_blattwerkzeug_2016}.
 
+Abbildung~\ref{fig:core-relations} veranschaulicht zentrale Begriffe des Vorhabens und deren Zusammenhänge. Auf der obersten Ebene sind beim Editieren eines Programms mit einem syntaxfreien Block-Editor (siehe Abbildung~\ref{fig:example-sql-ide} für ein Beispiel) vier grundlegende Datenstrukturen involviert:
+
+\begin{itemize}
+\item Die \textbf{Grammatik} (Grammar) definiert die grundsätzlich zulässigen Strukturen eines abstrakten Syntaxbaums. Aus dieser Beschreibung lassen sich Blocksprachen und Validatoren erzeugen.
+\item Der \textbf{abstrakte Syntaxbaum} (Syntaxtree, AST) repräsentiert die Struktur eines Quelltextes der mit einem Blockeditor bearbeitet wird. In einer konventionellen Entwicklungsumgebung würde man an dieser Stelle von einer \enquote{Datei} sprechen.
+\item Der Blockeditor weiß wie die zu bearbeitende \enquote{Datei} (also ein Syntaxbaum) darzustellen ist, weil er auf die Angaben in einer \textbf{Blocksprache} (Block Language) zurückgreifen kann. Diese definiert wie die einzelnen Teile des Syntaxbaumes visualisiert und editiert werden sollen und welche Blöcke dem Benutzer angeboten werden.
+\item Die tatsächliche Kompilierung und Validierung erfolgt anhand einer \textbf{Programmiersprache} (Programming Language).
+\end{itemize}
+
+Für normale Nutzer, also vornehmlich Lernende, sind diese Unterscheidungen nicht von Bedeutung. Aus ihrer Sicht interagieren sie im Browser mit einer Art Dateibaum und bekommen automatisch, passend zum Typ der \enquote{Datei}, entsprechende Editoren präsentiert.
+
+Darüber hinaus kann durch die konsequente Verwendung eines abstrakten Syntaxbaumes der für andere Compiler typische Parsing-Vorgang entfallen. Anwender sollen Programme mit den generierten syntaxfreien Editoren erstellen und editieren, nicht in einem Texteditor. Die eigentliche Aufgabe der generierten Oberfläche ist somit die Bearbeitung von Syntaxbäumen.
+
 \begin{figure}
   \includegraphics[width=\linewidth]{core-concepts.pdf}
   \caption{Zusammenhänge der zentralen Begrifflichkeiten}
   \label{fig:core-relations}
 \end{figure}
 
-Abbildung~\ref{fig:core-relations} veranschaulicht zentrale Begriffe des Vorhabens und deren Zusammenhänge. Auf der obersten Ebene sind beim Editieren eines Programms mit einem syntaxfreien Block-Editor (siehe Abbildung~\ref{fig:example-sql-ide} für ein Beispiel) vier grundlegende Datenstrukturen involviert:
-
-\begin{itemize}
-\item Die \textbf{Grammatik} (Grammar) definiert die grundsätzlich zulässigen Strukturen eines abstrakten Syntaxbaums. Aus dieser Beschreibung lassen sich Blocksprachen und Validatoren erzeugen.
-\item Der \textbf{abstrakte Syntaxbaum} (Syntaxtree, AST) repräsentiert die Struktur eines Quelltextes der mit einem Blockeditor bearbeitet wird. In einer konventionellen Entwicklungsumgebung würde man an dieser Stelle von einer \enquote{Datei} sprechen.
-\item Der Blockeditor weiß wie die zu bearbeitende \enquote{Datei}, also ein Syntaxbaum, darzustellen ist, weil er auf die Angaben in einer \textbf{Blocksprache} (Block Language) zurückgreifen kann. Diese definiert wie die einzelnen Teile des Syntaxbaumes visualisiert und editiert werden sollen und welche Blöcke verfügbar sein sollten.
-\item Die tatsächliche Kompilierung und Validierung erfolgt anhand einer \textbf{Programmiersprache} (Programming Language).
-\end{itemize}
-
-Für normale Nutzer, also vornehmlich Lernende, sind diese Unterscheidungen nicht von Bedeutung. Aus Ihrer Sicht interagieren Sie im Browser mit einer Art Dateibaum und bekommen automatisch, passend zum Typ der \enquote{Datei}, entsprechende Editoren präsentiert.
-
-Darüber hinaus kann durch die konsequente Verwendung eines abstrakten Syntaxbaumes der für andere Compiler typische Parsing-Vorgang entfallen. Anwender sollen Programme mit den generierten syntaxfreien Editoren erstellen und editieren, nicht in einem Texteditor. Die eigentliche Aufgabe der generierten Oberfläche ist somit die Bearbeitung von Syntaxbäumen.
-
 \subsubsection{Der abstrakte Syntaxbaum}
 
-Der Syntaxbaum als solcher ist nichts weiter als eine Datenstruktur auf der Operationen zur Veränderung (einfügen, löschen, tauschen, ...) definiert sind. Der Baum verfügt explizit über keinerlei Funktionalität zur eigenen Validierung oder zur Erzeugung von Programmcode. Er fungiert stattdessen als Eingabe für andere Module, welche diese Funktionalität bereitstellen.
+Der Syntaxbaum als solcher ist nichts weiter als eine Datenstruktur, auf der Operationen zur Veränderung (einfügen, löschen, tauschen, ...) definiert sind. Der Baum verfügt explizit über keinerlei Funktionalität zur eigenen Validierung oder zur Erzeugung von Programmcode. Er fungiert stattdessen als Eingabe für andere Module, welche diese Funktionalität bereitstellen.
 
-Jeder Knoten eines Baums entspricht mindestens einem Typen, welcher sich aus den Strings \texttt{language} (im Sinne einer Programmiersprache) und \texttt{name} zusammensetzt. Anhand dieses Typs entscheiden alle anderen Module wie genau mit dem Knoten zu verfahren ist. Durch die Aufteilung des Typen in einen lokalen Namen und einen Namensraum (die Programmiersprache) lassen sich Namenskollisionen vermeiden:
+Jeder Knoten eines Baums entspricht mindestens einem Typen, welcher sich aus den Zeichenketten \texttt{language} (im Sinne einer Programmiersprache) und \texttt{name} zusammensetzt. Anhand dieses Typs entscheiden alle anderen Module wie genau mit dem Knoten zu verfahren ist. Durch die Aufteilung des Typen in einen lokalen Namen und einen Namensraum (die Programmiersprache) lassen sich Namenskollisionen vermeiden:
 
 \begin{itemize}
 \item Programmiersprachen ermöglichen die Wahl von alternativen Ausführungspfaden  über bedingte Verzweigungen, welche typischerweise über das Schlüsselwort \texttt{if} zur Verfügung gestellt werden. Anhand des Sprachnamensraums können unterschiedliche Sprachen wie z.B. Ruby (in welcher \texttt{if} ein Ausdruck ist) und C (in welcher \texttt{if} eine Anweisung ist) ihr jeweiliges Konzept von Verzweigungen unter dem gleichen Bezeichner \texttt{if} definieren (\texttt{c.if} und \texttt{ruby.if}).
-\item Textauszeichnungssprachen haben üblicherweise eine Möglichkeit \enquote{Überschriften} auszuzeichnen. Durch den Namensraum können alle diese Sprachen (z.B. \texttt{HTML}, Markdown oder \LaTeX) problemlos den Typnamen \texttt{Heading} verwenden ohne das es zu Mehrdeutigkeiten kommt.
+\item Textauszeichnungssprachen haben üblicherweise eine Möglichkeit, Überschriften auszuzeichnen. Durch den Namensraum können alle diese Sprachen (z.B. \texttt{HTML}, Markdown oder \LaTeX) problemlos den Typnamen \texttt{Heading} verwenden, ohne das es zu Mehrdeutigkeiten kommt.
 \end{itemize}
+
+Der einfachste denkbare Baum definiert sich über einen Knoten mit nichts als einer Typangabe. Abbildung~\ref{fig:ast-example-null} zeigt wie sich ein Ausdruck, welcher aus nichts weiter als dem symbolischen Wert \texttt{null} besteht, für eine nicht näher benannte Sprache als Syntaxbaum ausdrücken ließe.
+
+Die Speicherung von atomaren Daten erfolgt im Syntaxbaum durch die Verwendung so genannter \enquote{Eigenschaften} (engl. \enquote{Properties}). Dabei handelt es sich um Zeichenketten, Zahlen oder Wahrheitswerte welche über einen Schlüssel zugreifbar sind. Die Abbildungen~\ref{fig:ast-example-variable}, \ref{fig:ast-example-binary} und \ref{fig:ast-example-if} zeigen wie solche Eigenschaften in Knoten zum Einsatz kommen können.
+
+Kinder von Knoten werden in benannten \enquote{Kindgruppen} organisiert. Dabei handelt es sich um eine Verallgemeinerung der von \texttt{XML} bekannten Aufteilung in Attribut-Kinder und Element-Kinder. Mit diesen Syntaxbäumen lassen sich die Kinder folglich beliebig in Unterbäumen organisieren. Die Abbildungen~\ref{fig:ast-example-binary} und \ref{fig:ast-example-if} illustrieren, wie Unterbäume genutzt werden können um binäre Ausdrücke oder eine \texttt{if}-Anweisung darzustellen.
+
+Die Einführung dieser eher ungewöhnlichen Konstrukte dient der Vermeidung von künstlichen Knoten. Theoretisch wäre es problemlos möglich die Organisation von Unterbäumen durch z.B. speziell benannte künstliche Knoten vorzunehmen. Und auch atomare Werte könnten stattdessen in \enquote{typischeren} Blattknoten gespeichert werden. Die Aufgabe dieses speziellen Syntaxbaums ist jedoch nicht nur die Persistierung: Der Baum ist auch die Datenstruktur welche die generierten Editoren anzeigen und auf denen die Anwender ihre Veränderungen vornehmen. Dabei hat es sich als hilfreich erwiesen auf Knoten zu verzichten, für die sich keine eigene Darstellung im Editor finden lässt.
 
 \begin{figure}[p]
   \centering\includegraphics{ast-example-null.pdf}
@@ -156,7 +165,7 @@ Jeder Knoten eines Baums entspricht mindestens einem Typen, welcher sich aus den
 
 \begin{figure}[p]
   \centering\includegraphics{ast-example-expr-binary.pdf}
-  \caption{Baum für den Vergleich einer Variablen \texttt{numRattles} mit \texttt{null}. Die Art des Vergleichs ergib sich aus der Eigenschaft \texttt{op} des Wurzelknotens. Die Reihenfolge der Operanden ergibt sich aus den Namen der Kindgruppen (\texttt{rhs} = right hand side, \texttt{lhs} = left hand side).}
+  \caption{Baum für den Vergleich einer Variablen \texttt{numRattles} mit \texttt{null}. Die Art des Vergleichs ergibt sich aus der Eigenschaft \texttt{op} des Wurzelknotens. Die Reihenfolge der Operanden folgt aus den Namen der Kindgruppen (\texttt{rhs} = right hand side, \texttt{lhs} = left hand side).}
   \label{fig:ast-example-binary}
 \end{figure}
 
@@ -166,21 +175,13 @@ Jeder Knoten eines Baums entspricht mindestens einem Typen, welcher sich aus den
   \label{fig:ast-example-if}
 \end{figure}
 
-Der einfachste denkbare Baum definiert sich über einen Knoten mit nichts als einer Typangabe. Abbildung~\ref{fig:ast-example-null} zeigt wie sich ein Ausdruck, welcher aus nichts weiter als dem symbolischen Wert \texttt{null} besteht, für eine nicht näher benannte Sprache als Syntaxbaum ausdrücken ließe.
-
-Die Speicherung von atomaren Daten erfolgt im Syntaxbaum durch die Verwendung so genannter \enquote{Eigenschaften} (engl. \enquote{Properties}). Dabei handelt es sich um Strings, Zahlen oder Wahrheitswerte welche über einen Schlüssel zugreifbar sind. Die Abbildungen~\ref{fig:ast-example-variable}, \ref{fig:ast-example-binary} und \ref{fig:ast-example-if} zeigen wie solche Eigenschaften in Knoten zum Einsatz kommen können.
-
-Kinder von Knoten werden in benannten \enquote{Kindgruppen} organisiert. Dabei handelt es sich um eine Verallgemeinerung der von \texttt{XML} bekannten Aufteilung in Attribut-Kinder und Element-Kinder. Mit diesen Syntaxbäumen lassen sich die Kinder folglich beliebig in Unterbäumen organisieren. Die Abbildungen~\ref{fig:ast-example-binary} und \ref{fig:ast-example-if} illustrieren, wie Unterbäume genutzt werden können um binäre Ausdrücke oder eine \texttt{if}-Anweisung darzustellen.
-
-Die Einführung dieser eher ungewöhnlichen Konstrukte dient der Vermeidung von künstlichen Knoten. Theoretisch wäre es problemlos möglich die Organisation von Unterbäumen durch z.B. speziell benannte künstliche Knoten vorzunehmen. Und auch atomare Werte könnten stattdessen in \enquote{typischeren} Blattknoten gespeichert werden. Die Aufgabe dieses speziellen Syntaxbaums ist jedoch nicht nur die Persistierung: Der Baum ist auch die Datenstruktur welche die generierten Editoren anzeigen und auf denen die Anwender ihre Veränderungen vornehmen. Und dabei hat es sich als hilfreich erwiesen auf Knoten zu verzichten, für die sich keine eigene Darstellung im Editor finden lässt.
-
 \subsubsection{Die Grammatiken}
 
-Die für dieses Promotionsvorhaben notwendigen Grammatiken unterscheiden sich in zwei wesentlichen Aspekten von den gängigen Grammatiken wie sie in der Übersetzerkonstruktion zum Einsatz kommen:
+Die für dieses Promotionsvorhaben notwendigen Grammatiken unterscheiden sich in zwei wesentlichen Aspekten von den gängigen Grammatiken, wie sie in der Übersetzerkonstruktion zum Einsatz kommen:
 
 \begin{enumerate}
-\item Die zu verarbeitende Eingabe ist kein \texttt{String}, sondern ein bestehender Syntaxbaum. Da alle Operationen grundsätzlich auf Syntaxbäumen stattfinden, orientiert sich die Arbeitsweise der Grammatik an bestehenden Schemasprachen zur Validierung von Bäumen, konkret an RELAX NG \cite{clark_relax_2001}. Aufgabe einer Grammatik im Rahmen dieses Vorhabens ist folglich nicht die Unterstützung des Parsing-Vorgangs, sondern die Validierung bestehender Syntaxbäume.
-\item Aus der Grammatik heraus sollen Oberflächen generiert werden, allerdings sind die für die Validierung Informationen alleine nicht ausreichend um daraus sinnvolle Oberflächen zu generieren. Welche Annotationen notwendig oder hilfreich sind und wo diese Annotation vermerkt werden sollen ist Bestandteil der zu untersuchenden Fragestellungen.
+\item Die zu verarbeitende Eingabe ist keine Zeichenkette, sondern ein bestehender Syntaxbaum. Da alle Operationen grundsätzlich auf Syntaxbäumen stattfinden, orientiert sich die Arbeitsweise der Grammatik an bestehenden Schemasprachen zur Validierung von Bäumen, konkret an RELAX NG \cite{clark_relax_2001}. Aufgabe einer Grammatik im Rahmen dieses Vorhabens ist folglich nicht die Unterstützung des Parsing-Vorgangs, sondern die Validierung bestehender Syntaxbäume.
+\item Aus der Grammatik heraus sollen Oberflächen generiert werden, allerdings sind die für die Validierung bereitgestellten Informationen alleine nicht ausreichend, um daraus sinnvolle Oberflächen zu generieren. Welche Annotationen notwendig oder hilfreich sind und wo diese Annotation vermerkt werden sollen, ist Bestandteil der zu untersuchenden Fragestellungen.
 \end{enumerate}
 
 Das folgende Beispiel leitet eine Grammatik her, welche sich zunächst zur Validierung von \texttt{XML}-artigen Sprachen eignen würde. Wir beginnen dafür in Listing~\ref{lst:xml-grammar-1} mit der Definition einer Grammatik, welche lediglich Bäume mit einem benannten Element als valide auffassen würde.
@@ -193,7 +194,7 @@ grammar "xml" {
 }
 \end{lstlisting}
 
-Die Definition eines erlaubten Knotens wird mit \texttt{node} eingeleitet, der im Syntaxbaum zu verwendende Typname ergibt sich aus dem Namen der Grammatik (\texttt{xml}) und dem Namen des Knotens (\texttt{element}). In diesem konkreten Fall darf ein valider Knoten lediglich eine einzige Eigenschaft (\texttt{prop(erty)}) \texttt{name} verfügen, nicht jedoch über Kinder oder Attribute. Die mit \texttt{prop} definierte Eigenschaft wird für den Moment nicht weiter eingeschränkt, sondern darf eine beliebige Zeichenkette sein. Ein im Sinne dieser Grammatik valider Baum hätte also einen einzigen Knoten vom Typ \texttt{xml.element} mit einer Eigenschaft \texttt{name}.
+Die Definition eines erlaubten Knotens wird mit \texttt{node} eingeleitet, der im Syntaxbaum zu verwendende Typname ergibt sich aus dem Namen der Grammatik (\texttt{xml}) und dem Namen des Knotens (\texttt{element}). In diesem konkreten Fall darf ein valider Knoten lediglich über eine einzige Eigenschaft (\texttt{prop(erty)}) \texttt{name} verfügen, nicht jedoch über Kinder oder Attribute. Die mit \texttt{prop} definierte Eigenschaft wird für den Moment nicht weiter eingeschränkt, sondern darf eine beliebige Zeichenkette sein. Ein im Sinne dieser Grammatik valider Baum hätte also einen einzigen Knoten vom Typ \texttt{xml.element} mit einer Eigenschaft \texttt{name}.
 
 Die Definition der Attribut-Knoten kann analog zu dem Elementknoten erfolgen (Listing~\ref{lst:xml-grammar-2}). Da es sich bei Attributen um Name-Wert-Paare handelt, kommen an dieser Stelle zwei Eigenschaften zum Einsatz.
 
@@ -211,7 +212,7 @@ grammar "xml" {
 
 Schlussendlich müssen dann noch die zulässigen Beziehungen zwischen Elementen und Attributen definiert werden: Ein Element darf sowohl Elemente als auch Attribute als Kinder haben, allerdings in verschiedenen Kindgruppen (Listing~\ref{lst:xml-grammar-3}). Die Anweisung \texttt{children} innerhalb einer \texttt{node}-Definition erwartet zunächst die Angabe eines Namens und dann folgt mit \texttt{::=} getrennt eine an Produktionsregeln angelehnte Aufzählung der zulässigen Typen in dieser Kindgruppe.
 
-Innerhalb dieser \enquote{Produktionsregeln} können die Typen mit den bekannten Quantifizierern \texttt{*} (beliebig häufig), \texttt{+} (mindestens ein Mal), \texttt{?} (optional) versehen werden. Exakte Häufigkeitsangaben sind ebenfalls möglich, die Syntax lehnt sich dabei an die erweiterte Backus-Naur-Form an.
+Innerhalb dieser \enquote{Produktionsregeln} können die Typen mit den bekannten Quantifizierern \texttt{*} (beliebig häufig), \texttt{+} (mindestens ein Mal) und \texttt{?} (optional) versehen werden. Exakte Häufigkeitsangaben sind ebenfalls möglich, die Syntax lehnt sich dabei an die erweiterte Backus-Naur-Form an.
 
 Im konkreten Beispiel (Listing~\ref{lst:xml-grammar-3}) dürfen also beliebig viele andere Elemente oder Attribte als Kindknoten eines \texttt{xml.element}-Knotens auftreten. Es ist dabei allerdings unzulässig einen \texttt{xml.attribut}-Knoten in der Kindgruppe \texttt{elements} zu verwenden und umgekehrt.
 
@@ -232,17 +233,15 @@ grammar "xml" {
 Die so definierte Grammatik hat in Bezug auf die Validierung allerdings noch folgende Schwächen:
 
 \begin{enumerate}
-\item Die Namen eines Elementes oder die Attributwerte könnten \texttt{XML}-Steuerzeichen wie \texttt{"}, \texttt{<} oder \texttt{>} enthalten. Daher ist es auch möglich die zulässigen Strings mittels eines regulären Ausdrucks einzuschränken. Probleme mit diesen Zeichen würden allerdings \enquote{nur} in den generierten \texttt{XML}-Dokumenten auftreten, der Syntaxbaum als solcher hat damit keinerlei Probleme.
+\item Die Namen eines Elementes oder die Attributwerte könnten \texttt{XML}-Steuerzeichen wie \texttt{"}, \texttt{<} oder \texttt{>} enthalten. Daher ist es auch möglich die zulässigen Zeichenketten mittels eines regulären Ausdrucks einzuschränken. Probleme mit diesen Zeichen würden allerdings \enquote{nur} in den generierten \texttt{XML}-Dokumenten auftreten, der Syntaxbaum als solcher hat damit keinerlei Probleme.
 \item Es wäre möglich in der \texttt{attributes}-Kindgruppe eines \texttt{element} zwei \texttt{attribute}-Knoten mit identischen \texttt{name}-Eigenschaften anzugeben. Das entspräche z.B. dem folgenden (illegalen) \texttt{XML}-Knoten: \texttt{<elem key='1' key='2'/>}. Dieser inhaltliche Fehler lässt sich nicht alleine durch die Grammatik bereinigen.
 \end{enumerate}
-
-Semantische Fehler wie z.B. Namenskollisionen, die Verwendung von nicht deklarierten Variablen oder Typfehler in Ausdrücken können nicht alleine durch die Grammatik validiert werden und müssen stattdessen mit eigens geschriebenen Validatoren geprüft werden. Diese operieren ebenfalls auf den Syntaxbäumen, lassen sich aber nicht automatisch aus der Grammatik erzeugen.
 
 \subsubsection{Die Blocksprachen}
 
 Die aus den Grammatiken erzeugten Blocksprachen folgen im aktuellen Prototypen einem festen Übersetzungsschema, um Grammatiken in einen Satz von Bedienelementen umzuwandeln. Die Details dieser Übersetzung sind Teil der Promotion, der aktuelle Stand benötigt noch recht detaillierte manuelle Angaben um Aspekte wie die Einrückung oder die Orientierung von Blöcken sinnvoll zu wählen.
 
-Grundsätzlich werden die Angaben in der Grammatik in der dort definierten Reihenfolge in Blockdefinitionen übersetzt. Allerdings entstehen nur auf Basis der \texttt{prop}- und \texttt{children}-Angaben keine Editoren, welche einigermaßen nah an der textuellen Repräsentation der jeweiligen Sprache wären. Deswegen lassen sich die Grammatiken um die Angabe von Terminalsymbolen erweitern. Aus Sicht der Validierung sind diese Daten schlichtweg unnötig, der Syntaxbaum enthält ja keine reinen Syntaxbestandteile, und werden dort daher nicht weiter berücksichtigt. Listing~\ref{lst:xml-grammar-terminals} demonstriert wie die Definition der Elemente und Attribute aus dem \texttt{XML}-Beispiel dennoch um Terminalsymbole erweitert werden könnte. Mit diesen zusätzlichen Angaben kann dann eine Blocksprache erzeugt werden, welche sich sehr nah an die textuelle Repräsentation von XML hält.
+Grundsätzlich werden die Angaben in der Grammatik in der dort definierten Reihenfolge in Blockdefinitionen übersetzt. Allerdings entstehen nur auf Basis der \texttt{prop}- und \texttt{children}-Angaben keine Editoren, welche einigermaßen nah an der textuellen Repräsentation der jeweiligen Sprache wären. Deswegen lassen sich die Grammatiken um die Angabe von Terminalsymbolen erweitern. Aus Sicht der Validierung sind diese Daten schlichtweg unnötig -- der Syntaxbaum enthält ja keine reinen Syntaxbestandteile -- und werden dort daher nicht weiter berücksichtigt. Listing~\ref{lst:xml-grammar-terminals} demonstriert, wie die Definition der Elemente und Attribute aus dem \texttt{XML}-Beispiel dennoch um Terminalsymbole erweitert werden könnte. Mit diesen zusätzlichen Angaben kann dann eine Blocksprache erzeugt werden, welche sich sehr nah an die textuelle Repräsentation von XML hält.
 
 \begin{lstlisting}[float=h, label={lst:xml-grammar-terminals},caption={Terminalsymbole für Attribute und Elemente in \texttt{XML} },captionpos=b,language={Grammar}]
 grammar "xml" {
@@ -265,7 +264,7 @@ grammar "xml" {
 }
 \end{lstlisting}
 
-Um den einfacheren \texttt{attribute}-Typen in einen Block zu übersetzen, kommen vor allem zwei Bausteine zum Einsatz: Eigenschaften werden in editierbare Eingabefelder umgewandelt und Terminalsymbole in einfach Texte. Anhand der vergebenen Namen für die Terminalsymbole lassen sich diese auch in der Gestaltung farblich anpassen. Abbildung~\ref{fig:ast-example-xml-node-two-attributes} zeigt einen konkreten Syntaxbaum, der von einem generierten Editor in Abbildung~\ref{fig:example-xml-generated} dargestellt wird. Im gezeigten Zustand hat der Benutzer den Attribut-Schlüssel \texttt{att1} angeklickt und kann nun den \texttt{name}-Eigenschaftswert eines \texttt{xml.attribute}-Knotens bearbeiten. Die Terminalsymbole wurden für die Darstellung exakt aus der Grammatik (Listing~\ref{lst:xml-grammar-terminals}) übernommen.
+Um den einfacheren \texttt{attribute}-Typen in einen Block zu übersetzen, kommen vor allem zwei Bausteine zum Einsatz: Eigenschaften werden in editierbare Eingabefelder umgewandelt und Terminalsymbole in schlichte Texte. Anhand der vergebenen Namen für die Terminalsymbole lassen sich diese auch in der Gestaltung farblich anpassen. Abbildung~\ref{fig:ast-example-xml-node-two-attributes} zeigt einen konkreten Syntaxbaum, der von einem generierten Editor in Abbildung~\ref{fig:example-xml-generated} dargestellt wird. Im gezeigten Zustand hat der Benutzer den Attribut-Schlüssel \texttt{att1} angeklickt und kann nun den \texttt{name}-Eigenschaftswert eines \texttt{xml.attribute}-Knotens bearbeiten. Die Terminalsymbole wurden für die Darstellung exakt aus der Grammatik (Listing~\ref{lst:xml-grammar-terminals}) übernommen.
 
 \begin{figure}[p]
   \centering\includegraphics{ast-example-xml-node-two-attributes.pdf}
@@ -281,7 +280,7 @@ Um den einfacheren \texttt{attribute}-Typen in einen Block zu übersetzen, komme
 
 Für den \texttt{element}-Typen ist es notwendig über die Kindgruppen \texttt{attributes} und \texttt{elements} zu iterieren. Dabei stellt sich die vor allem die Frage nach der Orientierung und der Einrückung der Kindelemente. Diese Angaben werden aktuell \enquote{neben} der Grammatik in einer speziellen Struktur für Generator-Anweisungen gepflegt.
 
-Teil dieser Generator-Anweisungen sind auch mögliche Parametrisierungen, welche auch von Personen ohne tiefergehenden Hintergrund in der Informatik vorgenommen werden können sollen. Abbildung~\ref{fig:block-lang-generation-parameters} zeigt wie sich bei der Generierung der \texttt{XML}-Blocksprache einzelne Farben oder die Einrückungstiefe steuern lässt.
+Teil dieser Generator-Anweisungen sind auch mögliche Parametrisierungen, welche auch von Personen ohne tiefergehenden Hintergrund in der Informatik vorgenommen werden können sollen. Abbildung~\ref{fig:block-lang-generation-parameters} zeigt, wie sich bei der Generierung der \texttt{XML}-Blocksprache einzelne Farben oder die Einrückungstiefe steuern lassen.
 
 \begin{figure}[p]
   \centering\includegraphics[width=\linewidth]{screenshot-generation-parameters.png}
@@ -292,9 +291,9 @@ Teil dieser Generator-Anweisungen sind auch mögliche Parametrisierungen, welche
 Um tatsächlich benutzerfreundliche Editoren zu erzeugen, müssen für die generierten Editoren noch  unter anderem die folgenden praktischen Aspekte untersucht werden:
 
 \begin{itemize}
-\item Wenn ein Block gezogen und an anderer Stelle fallen gelassen wird, sind grundsätzlich zwei verschiedene Intentionen denkbar: Der gezogene Block soll an die angegebene Stelle kopiert oder verschoben werden. Die \enquote{richtige} Antwort kann dabei durchaus kontextabhängig sein: Eine deklarierte Variable soll, wenn Sie in einem Ausdruck fallen gelassen wird, dort vermutlich eingesetzt (also kopiert) werden. Eine konkrete Anweisung in einer imperativen Programmiersprache, z.B. eine Textausgabe, soll vermutlich hingegen an ihren neuen Ort verschoben werden. Diese korrekte Auswahl aus diesen Alternativen lässt sich nicht allgemein beantworten sondern hängt vom Kontext und der aktuellen Programmiersprache ab und muss daher vermutlich in den Generatoranweisungen definiert werden.
+\item Wenn ein Block gezogen und an anderer Stelle fallen gelassen wird, sind grundsätzlich zwei verschiedene Intentionen denkbar: der gezogene Block soll entweder an die angegebene Stelle kopiert oder dort hin verschoben werden. Die \enquote{richtige} Antwort kann dabei durchaus kontextabhängig sein: Eine deklarierte Variable soll, wenn sie in einem Ausdruck fallen gelassen wird, dort vermutlich eingesetzt (also kopiert) werden. Eine konkrete Anweisung in einer imperativen Programmiersprache, z.B. eine Textausgabe, soll vermutlich hingegen an ihren neuen Ort verschoben werden. Diese korrekte Auswahl aus diesen Alternativen lässt sich nicht allgemein beantworten, sondern hängt vom Kontext und der aktuellen Programmiersprache ab und muss daher vermutlich in den Generatoranweisungen definiert werden.
 \item Ebenfalls stellt sich bei platzierten Blöcken die Frage, ob diese als Kind ihres Zielblocks platziert werden oder diesen möglicherweise \enquote{umschließen} sollten. Dieses Problem stellt sich z.B. bei der Platzierung von Klammern in Ausdrücken: Der Anwender merkt erst im Laufe der Entwicklung, dass er einen Teilausdruck mit Klammern umschließen möchte und zieht diese dann auf den entsprechenden Teilausdruck. An dieser Stelle sollte der Editor in der Lage sein zu erkennen, dass die Klammern nicht \enquote{unter} dem Ausdruck eingefügt werden sollten, sondern im Baum darüber.
-\item Die Verwendung von Syntaxbäumen als grundlegende Datenstruktur erlaubt wesentlich genauere Fehlermeldungen als in textbasierten Sprachen. Dies liegt zum einen schlichtweg daran, dass rein syntaktische Fehler nicht vorkommen können: Fehlende Semikoli oder Klammern sind konstruktiv ausgeschlossen. Im Falle von fehlenden Teilbäumen (Löchern) können den Anwendern sogar kontextabhängig recht präzise Vorschläge gemacht werden: Wenn z.B. in einem Vergleichsausdruck der rechte Operand noch unbekannt ist, könnten dem Anwender mögliche Inhalte vorgeschlagen werden.
+\item Die Verwendung von Syntaxbäumen als grundlegende Datenstruktur erlaubt wesentlich genauere Fehlermeldungen als in textbasierten Sprachen. Dies liegt zum einen schlichtweg daran, dass rein syntaktische Fehler nicht vorkommen können: Fehlende Semikola oder Klammern sind konstruktiv ausgeschlossen. Im Falle von fehlenden Teilbäumen (Löchern) können den Anwendern sogar kontextabhängig recht präzise Vorschläge gemacht werden: Wenn z.B. in einem Vergleichsausdruck der rechte Operand noch unbekannt ist, könnten dem Anwender mögliche Inhalte vorgeschlagen werden.
 \end{itemize}
 
 \subsubsection{Laufzeitumgebungen}
@@ -311,7 +310,7 @@ Diese Umgebungen können nicht aus den Grammatiken erzeugt werden und müssen gr
 
 \subsection{Zeitplan}
 
-Aktuell ist das Forschungsvorhaben ein \enquote{Privatvergnügen} von Marcus Riemer, welcher aktuell auf einer 80\%-Stelle als wissenschaftlicher Mitarbeiter an der Fachhochschule Wedel beschäftigt. Im August 2018 ist neben diesen beiden Tätigkeiten noch sein erstes Kind zur Welt gekommen. Daher wird diese Stelle wird zum Sommersemester 2019 auf Maximal 60\% reduziert um damit (hoffentlich) sowohl der Promotion als auch dem Nachwuchs gerecht werden zu können. Der aktuelle Zeitplan sieht auf Grundlage dieser zeitlichen Randbedingungen einen Abschluss der Promotion um das Jahr 2021 herum vor.
+Aktuell ist das Forschungsvorhaben ein in seiner Freizeit vorangetriebenes von Marcus Riemer, welcher aktuell auf einer 80\%-Stelle als wissenschaftlicher Mitarbeiter an der Fachhochschule Wedel beschäftigt ist. Im August 2018 ist neben diesen beiden Tätigkeiten noch sein erstes Kind zur Welt gekommen. Daher wird diese Stelle zum Sommersemester 2019 auf Maximal 60\% reduziert, um damit (hoffentlich) sowohl der Promotion als auch dem Nachwuchs gerecht werden zu können. Der aktuelle Zeitplan sieht auf Grundlage dieser zeitlichen Randbedingungen einen Abschluss der Promotion um das Jahr 2021 herum vor.
 
 Die Förderung durch das evangelische Studienwerk würde es erlauben, die Stelle an der Fachhochschule auf 25\% zu reduzieren, eine komplette Aufgabe der Stelle wäre nicht vorgesehen: Die Lehrtätigkeit dort bereitet große Freude, der fachliche Austausch mit den Kollegen ist förderlich und schlussendlich ist auch das Gehalt für den Unterhalt der Familie schlicht notwendig. Natürlich würde die Reduktion der Tätigkeit an der Hochschule das Promotionsvorhaben dennoch deutlich beschleunigen.
 
@@ -319,10 +318,10 @@ Der Fortschritt des Promotionsvorhabens lässt sich allgemein gut anhand der dre
 
 \begin{description}
 \item[Implementierung unterschiedlicher Programmierspachen] \hfill\\
-  Dieses Projekt hat den Anspruch Editoren für unterschiedlichste Programmier- und auch Daten- oder Textauszeichnungssprachen erzeugen zu können. Um zu demonstrieren, dass es diesen Ansprüchen gerecht wird, sollen unterschiedlichste Sprachen bereitgestellt werden.
+  Dieses Projekt hat den Anspruch, Editoren für unterschiedlichste Programmier- und auch Daten- oder Textauszeichnungssprachen erzeugen zu können. Um zu demonstrieren, dass es diesen Ansprüchen gerecht wird, sollen unterschiedlichste Sprachen bereitgestellt werden.
 
 \item[Stabile Grammatiken und Generator-Anweisungen] \hfill\\
-  Aktuell sind für die Erzeugung von Block-Editoren noch zwei Parameter nötig: Eine Grammatik und separate Generatoranweisungen. Beide Strukturen sind grundsätzlich auch notwendig, da reine Stilvorgaben wie z.B. Farben keinesfalls Bestandteil der Grammatik sein sollten. In verschiedenen Details ist aber nicht im gleichen Maße eindeutig, in welcher der beiden Strukturen Informationen am passenderen Platz wären. Dies betrifft insbesondere Layoutvorgaben (aus Sicht der Blöcke) bzw. die Formatierung des Quelltextes mit Leerraum und Zeilenumbrüchen (aus Sicht der Grammatik).
+  Aktuell sind für die Erzeugung von Block-Editoren noch zwei Parameter nötig: eine Grammatik und separate Generatoranweisungen. Beide Strukturen sind grundsätzlich auch notwendig, da reine Stilvorgaben wie z.B. Farben keinesfalls Bestandteil der Grammatik sein sollten. In verschiedenen Details ist aber nicht im gleichen Maße eindeutig, in welcher der beiden Strukturen Informationen am passenderen Platz wären. Dies betrifft insbesondere Layoutvorgaben (aus Sicht der Blöcke) bzw. die Formatierung des Quelltextes mit Leerraum und Zeilenumbrüchen (aus Sicht der Grammatik).
 
 \item[Benutzerfreundliche syntaxfreie Editoren] \hfill\\
   Der aktuelle Prototyp der Editoren ist zwar vollumfänglich nutzbar, jedoch noch nicht besonders benutzerfreundlich. Es fehlen dringend notwendige Komfortfunktionen wie eine intelligente Hervorhebung von möglichen Zielen und eine Vorschau von Veränderungen. Außerdem muss untersucht werden, wie sich die möglichen Inhalte für Löcher des Baums angemessen präsentieren lassen.
@@ -332,14 +331,14 @@ Diese Aspekte haben untereinander allerdings vielfältige Querbezüge: So könnt
 
 \begin{description}
 \item[\circled{1} Identischer Editor-Funktionsumfang zum Prototypen der Master-Thesis]\hfill\\
-  Die Entwicklungsumgebung erlaubt zusätzlich zu Datenbanken wieder die Programmierung von Webseiten. Zusätzlich soll zum Funktionsumfang von \enquote{damals} soll es außerdem möglich sein, das Aussehen der Seite über \texttt{CSS}-Dokumente zu bestimmen. Die Grammatikdefinitionen müssen zu diesem Zeitpunkt dann schon drei grundverschiedene Sprachen abbilden.
+  Die Entwicklungsumgebung erlaubt zusätzlich zu Datenbanken wieder die Programmierung von Webseiten. Zusätzlich zum Funktionsumfang von \enquote{damals} soll es außerdem möglich sein, das Aussehen der Seite über \texttt{CSS}-Dokumente zu bestimmen. Die Grammatikdefinitionen müssen zu diesem Zeitpunkt dann schon drei grundverschiedene Sprachen abbilden.
 \item[\circled{2} Unterstützung einer imperativen Skriptsprache (vermutlich \texttt{JavaScript})]\hfill\\
-  Mit diesem Meilenstein wird nebenbei die Definitionen der Grammatiken und Generatoren \enquote{eingefroren}. Das Projekt ist dann in der Lage Editoren für \enquote{klassische} Programmiersprachen, deklarative Programmiersprachen, Textauszeichnungssprachen und Stylesheet-Sprachen zu erzeugen
+  Mit diesem Meilenstein wird nebenbei die Definitionen der Grammatiken und Generatoren \enquote{eingefroren}. Das Projekt ist dann in der Lage, Editoren für \enquote{klassische} Programmiersprachen, deklarative Programmiersprachen, Textauszeichnungssprachen und Stylesheet-Sprachen zu erzeugen.
 \item[\circled{3} Optimierte Benutzerführung]\hfill\\
-  Nachdem die Schnittstelle für die Erzeugung der Editoren nun stabil ist, sollen diese in Tests mit Lehrkräften und Schülern erprobt werden. Für diesen Meilenstein wird dann ausschließlich die Benutzerführung optimiert. Konkret bedeutet das die Erprobung unterschiedlicher Implementierungen für Vorschläge zu Löchern im Syntaxbaum aber auch wesentlich profanere Aspekte
+  Nachdem die Schnittstelle für die Erzeugung der Editoren nun stabil ist, sollen diese in Tests mit Lehrkräften und Schülern erprobt werden. Für diesen Meilenstein wird dann ausschließlich die Benutzerführung optimiert. Konkret bedeutet das die Erprobung unterschiedlicher Implementierungen für Vorschläge zu Löchern im Syntaxbaum. Abgesehen davon ist aber zu erwarten, dass die Rückmeldungen der Anwender auch generelle (und teils sehr profane) Schwächen in der Bedienung aufdecken wird. Auch diese noch unbekannten Aspekte sollen benannt und möglichst behoben werden.
 \end{description}
 
-Zum aktuellen Zeitpunkt ist für jeden Meilenstein etwa ein Jahr eingeplant, mit der Förderung durch das Stipendienwerk würde sich das auf acht Monate je Meilenstein reduzieren.
+Zum aktuellen Zeitpunkt ist für jeden Meilenstein etwa ein Jahr eingeplant, mit der Förderung durch das Stipendienwerk würde sich dies auf acht Monate je Meilenstein reduzieren.
 
 % \input{gantt-chart}
 
