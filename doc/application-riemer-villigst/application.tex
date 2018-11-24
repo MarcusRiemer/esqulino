@@ -1,4 +1,4 @@
-\documentclass[paper=a4,fontsize=12pt,parskip=half]{scrartcl}
+\documentclass[paper=a4,fontsize=11pt,parskip=half]{scrartcl}
 
 %% packages
 \usepackage[ngerman]{babel}
@@ -12,6 +12,7 @@
 \usepackage[export]{adjustbox} % For frames with includegraphics
 \usepackage{pgfgantt}
 \usepackage{framed}
+\usepackage[a4paper, top=1in]{geometry}
 
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
     \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
@@ -45,34 +46,30 @@
 \addbibresource[datatype=bibtex]{diss.bib}
 
 \begin{document}
-\subsection*{Generierung von syntaxfreien Editoren für beliebige Programmiersprachen}
 
-Konventionelle Entwicklungsumgebungen sind speziell auf die Bedürfnisse von professionellen Anwendern zugeschnittene Programme, welche sich - aufgrund der damit verbundenen Komplexität - aus didaktischer Sicht nur eingeschränkt für die Einführung in die Programmierung eignen. Im Rahmen der Promotion soll erforscht und praktisch demonstriert werden, wie sich aus formalen Beschreibungen von Programmiersprachen benutzerfreundliche, syntaxfreie Editoren speziell für Lernende erzeugen lassen können.
+\newgeometry{bottom=0.9in, top=1in}
+\pagestyle{empty}
+\section{Generierung von syntaxfreien Editoren für beliebige Programmiersprachen}
 
-Abbildung~\ref{fig:example-sql-ide} zeigt ein prototypisches Beispiel für einen solchen generierten Editor. Die Konzeption dieser generierten Editoren orientiert sich an den Erfahrungen, welche die Forscher hinter Projekten wie Scratch \cite{resnick_scratch:_2009} oder Googles Blockly gemacht haben \cite{fraser_ten_2015}.
+Konventionelle Programmierwerkzeuge sind speziell auf die Bedürfnisse von professionellen Anwendern zugeschnitten. Aufgrund der damit verbundenen Komplexität eignen sich diese Programme daher aus didaktischer Sicht nur eingeschränkt für die Einführung in die Programmierung. Außerdem haben Studien gezeigt, dass die strengen syntaktischen Anforderungen von gängigen Programmiersprachen eine frustrierende Einstiegshürde darstellen. Trotzdem kommen die professionellen Werkzeuge, in der Regel aus Mangel an Alternativen, häufig im Unterricht zum Einsatz. Und darüber hinaus sind typische Einstiegsaufgaben häufig sehr künstlich und weit von der Lebenswirklichkeit der Lernenden entfernt, was sich ebenfalls negativ auf deren Motivation auswirkt\cite{resnick_scratch:_2009}.
 
-\begin{figure}[p]
-  \includegraphics[width=\linewidth]{screenshot-drag-drop-ide.png}
-  \caption{Generierte Umgebung für die Programmiersprache \texttt{SQL}, die gezeigte Abfrage sucht nach auftretenden Charakteren in den Geschichten der Jugendbuchserie \enquote{Die drei Fragezeichen}.}
+Im Rahmen der Promotion soll daher erforscht und demonstriert werden, wie sich aus formalen Beschreibungen von Programmiersprachen benutzerfreundliche, syntaxfreie Editoren speziell für Lernende erzeugen lassen. Damit soll Lehrern ein Werkzeug an die Hand gegeben werden, die Einführung in die Programmierung (zum Beispiel mit \texttt{SQL}, \texttt{HTML}, \texttt{CSS} und \texttt{JavaScript}) anhand praktischer relevanter Projekte zu vermitteln.
+
+Die erzeugten Editoren sollen im Regelfall existierende Sprachen augmentieren, deren Gestalt aber nicht verstecken. Obwohl die Anmutung eines generierten Editors also große Nähe zur textuellen Darstellung haben kann, erfolgt die Programmierung per Maus durch das Verschieben der dargestellten Blöcke. Abbildung~\ref{fig:example-sql-ide} zeigt ein prototypisches Beispiel für einen generierten \texttt{SQL}-Editor\footnote{Dieser und weitere Prototypen lassen sich unter \url{https://blattwerkzeug.de/villigst} ausprobieren.}. Die Konzeption dieser Editoren orientiert sich an den Erfahrungen, welche die Forscher hinter Projekten wie Scratch \cite{maloney_scratch:_2004} oder Googles Blockly \cite{fraser_ten_2015} gemacht haben.
+
+Bei den als Eingabe fungierenden formalen Beschreibungen handelt es sich um eine Abwandlung typischer Grammatiken, wie sie zur Definition der Syntax in fast jedem Compiler zum Einsatz kommen \cite[S. 42ff]{aho_compilers:_2007}. Die automatisierte Generierung der Oberflächen aus den Grammatiken ermöglicht es erfahrenen Anwendern (zum Beispiel Lehrkräften) gegebene Programmiersprachen didaktisch motiviert einzuschränken. So wäre es zum Beispiel möglich, eine \texttt{SQL}-Variante zu erstellen, bei welcher die \texttt{GROUP BY}-Komponente nicht zur Verfügung steht. In Anlehnung an die bei \cite{klaeren_macht_2007} beschriebenen \enquote{Sprachebenen} soll sich so der Funktionsumfang der generierten Editoren an den Lernfortschritt der Klassengemeinschaft anpassen lassen.
+
+\begin{figure}[h]
+  \centering\includegraphics[width=\linewidth]{screenshot-drag-drop-ide.png}
+  \caption{Generierter Editor für die Programmiersprache \texttt{SQL}, die gezeigte Abfrage sucht Charaktere aus der Buchserie \enquote{Die drei Fragezeichen}.}
   \label{fig:example-sql-ide}
 \end{figure}
 
-\lstinputlisting[float=p,label={lst:partial-sql-grammar},caption={Auszug aus der Grammatik für \texttt{SQL}, die gezeigten Regeln definieren die \texttt{SELECT}-Komponente. Aus der vollständigen Grammatik (und zusätzlichen Stylingangaben) ist der Editor in Abbildung~\ref{fig:example-sql-ide} erzeugt worden.},captionpos=b,language={Grammar}]{sql.grammar}
+\clearpage
 
-Bei den als Eingabe fungierenden formalen Beschreibungen handelt es sich um eine Abwandlung \enquote{typischer} Grammatiken, wie sie zur Definition der Syntax in fast jedem Compiler zum Einsatz kommen \cite[S. 42ff]{aho_compilers:_2007}. Dabei sind Ergänzungen und Abwandlungen notwendig, da die gängige rein syntax-orientierte Sichtweise für die Übersetzung in eine grafische Oberfläche keinerlei Informationen über die Darstellung enthält. Listing~\ref{lst:partial-sql-grammar} illustriert die Struktur dieser Grammatiken anhand eines Auszuges aus einer Grammatik für \texttt{SQL}. Die in Abbildung~\ref{fig:example-sql-ide} zu sehenden Farbstile wurden auf Basis von Eigenschaften wie \texttt{"keyword"} vergeben.
-
-Die automatisierte Übersetzung der Grammatiken ermöglicht es erfahrenen Anwendern (zum Beispiel Lehrkräften) gegebene Programmiersprachen didaktisch motiviert einzuschränken. So wäre es zum Beispiel möglich, eine \texttt{SQL}-Variante zu erstellen, bei welcher die \texttt{GROUP BY}-Komponente nicht zur Verfügung steht. In Anlehnung an die bei \cite{klaeren_macht_2007} beschriebenen \enquote{Sprachebenen} soll sich so der Funktionsumfang der generierten Entwicklungsumgebungen an den Lernfortschritt der Klassengemeinschaft anpassen lassen.
-
-Die automatisch generierten Editoren sollen zudem kontextsensitive Unterstützung beim Programmieren anbieten. Da alle Manipulationen durch den Benutzer immer auf einem Syntaxbaum stattfinden, können auch bei unvollständigen (Teil-)Programmen typisierte Löcher (entlehnt aus Sprachen wie Haskell \cite{jones_haskell_2014}) genutzt werden, um die Menge an verfügbaren Operationen zu limitieren oder bestimmte Operationen hervorzuheben.
-
-Zusammengefasst sollen also folgende Aspekte erforscht und demonstriert werden:
-
-\begin{itemize}
-\item Wie sich, auf Basis von Grammatiken, Editoren für unterschiedliche Klassen von Programmiersprachen (z.B. \texttt{SQL}, \texttt{HTML}, \texttt{CSS}, \texttt{JavaScript}, ...) generieren lassen.
-\item Welche zusätzlichen Annotationen für Grammatiken sinnvoll und notwendig sind, um mit den generierten Oberflächen Lernenden einen möglichst intuitiven Zugang zur Programmierung zu ermöglichen.
-\item Wie sich für Lernende automatisiert kontextabhängige Hinweise zur korrekten Vervollständigung der Programme geben lassen können.
-\end{itemize}
-
+\restoregeometry
+\pagenumbering{arabic}
+\pagestyle{plain}
 
 \section{Detaillierte Konzeption}
 
@@ -84,7 +81,7 @@ Ein zentraler Aspekt dieses Promotionsvorhabens liegt in der ausgewogenen Berüc
 
 \subsection{Syntaxfreie Programmiersprachen}
 
-Bei syntaxfreien Programmiersprachen muss der Programmierer sich nicht mit den syntaktischen Details der verwendeten Programmiersprache beschäftigen. Man muss sich nicht damit beschäftigen, ob zum Beispiel Anweisungen durch Semikola getrennt werden, Blöcke mit geschweiften Klammer, \texttt{begin} und \texttt{end} oder durch Leerraum definiert werden oder welche Klammern wo notwendig sind.
+Bei syntaxfreien Programmiersprachen muss der Programmierer sich nicht mit den syntaktischen Details der verwendeten Programmiersprache beschäftigen. Bei einer solchen Programmiersprache ist es irrelevant, ob zum Beispiel Anweisungen durch Semikola getrennt werden, Blöcke mit geschweiften Klammer, \texttt{begin} und \texttt{end} oder durch Leerraum definiert werden oder welche Klammern wo notwendig sind.
 
 In der Praxis handelt es sich bei solchen syntaxfreien Sprachen de facto immer um visuelle Programmiersprachen. Auch die schon erwähnten Umgebungen Scratch und Blockly fallen in diese Kategorie. In diesen Umgebungen arbeitet der Programmierer mit der Maus um die verschiedenen zur Verfügung stehenden Blöcke an semantisch sinnvollen Orten zu platzieren. Diese Art der Programmierung ist für erfahrene Programmierer oder umfangreiche Softwareprojekte erfahrungsgemäß hinderlich \cite[S. 262f]{schiffer_visuelle_2001}, eignet sich aber zur Einführung in die Programmierung \cite{resnick_scratch:_2009}.
 
@@ -126,7 +123,7 @@ Für normale Nutzer, also vornehmlich Lernende, sind diese Unterscheidungen nich
 
 Darüber hinaus kann durch die konsequente Verwendung eines abstrakten Syntaxbaumes der für andere Compiler typische Parsing-Vorgang entfallen. Anwender sollen Programme mit den generierten syntaxfreien Editoren erstellen und editieren, nicht in einem Texteditor. Die eigentliche Aufgabe der generierten Oberfläche ist somit die Bearbeitung von Syntaxbäumen.
 
-\begin{figure}
+\begin{figure}[h]
   \includegraphics[width=\linewidth]{core-concepts.pdf}
   \caption{Zusammenhänge der zentralen Begrifflichkeiten}
   \label{fig:core-relations}
@@ -369,5 +366,4 @@ Zum aktuellen Zeitpunkt ist für jeden Meilenstein etwa ein Jahr eingeplant, mit
 %%% mode: latex
 %%% TeX-engine: xetex
 %%% TeX-master: t
-%%% TeX-command-extra-options: "-shell-escape"
 %%% End:
