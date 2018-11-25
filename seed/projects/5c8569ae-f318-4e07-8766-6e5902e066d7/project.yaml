@@ -3,17 +3,9 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 5c8569ae-f318-4e07-8766-6e5902e066d7
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: 17d8db6b-4b4b-48e3-8f72-3f8282a04e10
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: default_database_id
-    value_before_type_cast: 17d8db6b-4b4b-48e3-8f72-3f8282a04e10
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-    value: 17d8db6b-4b4b-48e3-8f72-3f8282a04e10
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: 'Test: Sequence DB'
@@ -37,7 +29,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.717254'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-19 16:32:54.43143'
+  value_before_type_cast: '2018-11-24 16:27:49.498458'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 new_record: false
