@@ -3,17 +3,9 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 867b74ad-9ab3-4402-98ee-cfb43d9de8b6
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: b2c9f3a4-9400-4442-bace-f9455b4db6d2
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: default_database_id
-    value_before_type_cast: b2c9f3a4-9400-4442-bace-f9455b4db6d2
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-    value: b2c9f3a4-9400-4442-bace-f9455b4db6d2
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Olympia
@@ -36,7 +28,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-26 10:35:11.345867'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-19 16:32:54.534062'
+  value_before_type_cast: '2018-11-24 16:27:48.996255'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 new_record: false
