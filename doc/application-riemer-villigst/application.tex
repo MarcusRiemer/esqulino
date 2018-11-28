@@ -36,6 +36,7 @@
 }
 
 \title{Generierung von syntaxfreien Editoren für beliebige Programmiersprachen}
+\author{Marcus Riemer}
 
 \hypersetup{
   pdftitle={Generierung von syntaxfreien Programmierumgebungen für beliebige Programmiersprachen},
@@ -46,23 +47,29 @@
 \usepackage[backend=biber,defernumbers=true,sorting=none]{biblatex}
 \addbibresource[datatype=bibtex]{diss.bib}
 
+\AtEveryBibitem{
+    \clearfield{urlyear}
+    \clearfield{urlmonth}
+}
+
 \begin{document}
 \pagestyle{empty}
 
+\maketitle
 \tableofcontents
 
 \clearpage
 \pagenumbering{roman}
 \newgeometry{bottom=0.9in, top=1in}
-\section{Generierung von syntaxfreien Editoren für beliebige Programmiersprachen}
+\section{Einseitige Kurzfassung}
 
-Konventionelle Programmierwerkzeuge sind speziell auf die Bedürfnisse von professionellen Anwendern zugeschnitten. Aufgrund der damit verbundenen Komplexität eignen sich diese Programme aus didaktischer Sicht nur eingeschränkt für die Einführung in die Programmierung. Außerdem haben Studien gezeigt, dass die strengen syntaktischen Anforderungen von gängigen Programmiersprachen eine hohe Einstiegshürde darstellen können\cite{resnick_scratch:_2009}. Trotzdem kommen die professionellen Werkzeuge, in der Regel aus Mangel an Alternativen, häufig im Unterricht zum Einsatz. Darüber hinaus sind viele der ersten Aufgaben weit von der Lebenswirklichkeit der Lernenden entfernt (\texttt{Hello World}, Primzahlen, ...), was sich negativ auf die Motivation auswirken kann\cite{resnick_scratch:_2009}.
+Bildungs-Politiker und -Forscher sehen grundlegende Programmierkenntnissen als Teil der Allgemeinbildung und wollen entsprechenden Unterricht an Schulen zum verpflichtenden Inhalt machen\cite{noauthor_designierte_2018}. Die Lehrkräfte welche diese Anforderungen umzusetzen haben, stehen aber vor einem Problem: Konventionelle Programmierwerkzeuge sind speziell auf die Bedürfnisse von professionellen Anwendern zugeschnitten. Aufgrund der damit verbundenen Komplexität eignen sich diese Programmierwerkzeuge aus didaktischer Sicht nur eingeschränkt für die Einführung in die Programmierung. Außerdem haben Studien gezeigt, dass die strengen syntaktischen Anforderungen von gängigen Programmiersprachen eine hohe Einstiegshürde darstellen können\cite{resnick_scratch:_2009}. Trotzdem kommen die professionellen Werkzeuge, in der Regel aus Mangel an Alternativen, häufig im Unterricht zum Einsatz. Darüber hinaus sind viele der ersten Aufgaben weit von der Lebenswirklichkeit der Lernenden entfernt, was sich negativ auf die Motivation auswirken kann\cite{resnick_scratch:_2009}.
 
-Im Rahmen der Promotion soll erforscht und demonstriert werden, wie sich aus formalen Beschreibungen von Programmiersprachen benutzerfreundliche syntaxfreie Editoren erzeugen lassen. Schlussendlich soll Lehrkräften ein Werkzeug an die Hand gegeben werden, welche die erwähnte Einstiegshürde in die Programmierung mit zum Beispiel \texttt{SQL}, \texttt{HTML}, \texttt{CSS} oder \texttt{JavaScript} senkt und praktische sowie motivierende Projekte ermöglicht. So sollen sich unter fachkundiger Anleitung schnell motivierende Projekte wie interaktive Webseiten erstellen lassen.
+Im Rahmen dieser Promotion soll erforscht und demonstriert werden, wie sich aus formalen Beschreibungen von Programmiersprachen benutzerfreundliche syntaxfreie Editoren erzeugen lassen. Letzendlich soll Lehrkräften ein Werkzeug an die Hand gegeben werden, welche die erwähnte Einstiegshürde in die Programmierung mit konventionellen Programmiersprachen wie zum Beispiel \texttt{SQL}, \texttt{HTML}, \texttt{CSS} oder \texttt{JavaScript} senkt. Und Lernende sollen unter Anleitung schnell motivierende Projekte wie interaktive Webseiten umsetzen und letztlich den Schritt zu konventionellen Werkzeugen machen können.
 
 Die erzeugten Editoren sollen im Regelfall das Erscheinungsbild existierender Sprachen imitieren. Obwohl die Darstellung eines im Editor bearbeiteten Programms also große Nähe zur textuellen Darstellung haben kann, erfolgt die Programmierung per Maus durch das Verschieben der dargestellten Blöcke. Das Bedienkonzept orientiert sich an den Erfahrungen, welche die Forscher hinter Projekten wie \textit{Scratch}~\cite{maloney_scratch:_2004} oder Googles \textit{Blockly}~\cite{fraser_ten_2015} gemacht haben. Abbildung~\ref{fig:example-sql-ide} zeigt ein prototypisches Beispiel für einen generierten \texttt{SQL}-Editor\footnote{Dieser und weitere Prototypen lassen sich unter \url{https://blattwerkzeug.de/villigst} ausprobieren.}. Die reale Programmiersprache lässt sich eindeutig erkennen, obwohl deren Syntaxanteile vom Anwender nicht geschrieben werden musste. Anders als in \textit{Scratch} oder \textit{Blockly} könnten die Programme 1:1 abgetippt werden und würden funktionieren.
 
-Der gewählte Ansatz, also die Generierung von Editoren, ermöglicht es Lehrkräften außerdem die im Rahmen der Promotion erarbeiteten und möglicherweise für die Lerngruppe zu umfangreichen Editoren didaktisch einzuschränken. In Anlehnung an die bei \cite{klaeren_macht_2007} beschriebenen \enquote{Sprachebenen} lässt sich also der Funktionsumfang der von Lehrkräften generierten Editoren an den Lernfortschritt der Klassengemeinschaft anpassen.
+Der gewählte Ansatz, also die Generierung von Editoren, ermöglicht es Lehrkräften außerdem die im Rahmen der Promotion erarbeiteten (und möglicherweise für die Lernziele zu umfangreichen) Editoren didaktisch einzuschränken. In Anlehnung an die bei \cite{klaeren_macht_2007} beschriebenen \enquote{Sprachebenen} lässt sich also der Funktionsumfang der von Lehrkräften generierten Editoren an den Lernfortschritt der Klassengemeinschaft anpassen.
 
 \begin{figure}[h]
   \centering\includegraphics[width=\linewidth]{screenshot-drag-drop-ide.png}
@@ -78,7 +85,7 @@ Der gewählte Ansatz, also die Generierung von Editoren, ermöglicht es Lehrkrä
 
 \section{Detaillierte Konzeption}
 
-Die im Rahmen der Arbeit erstellten Ergebnisse sind sowohl theoretischer als auch praktischer Natur. Dadurch sollen die theoretisch getroffenen Annahmen durch die praktische Implementierung verifiziert werden können. Das Projekt befindet sich damit in einem etwas ungewöhnlichen Spannungsfeld zwischen der klassischen Informatik-Kerndisziplin \enquote{Übersetzerkonstruktion} (\enquote{Compilerbau}) und der Informatik-Didaktik. Darüber hinaus spielen auch Aspekte der Mensch-Computer-Interaktion eine Rolle, schließlich geht es neben der Verifikation der Programme auch um die Konstruktion benutzerfreundlicher Schnittstellen.
+Die im Rahmen der Arbeit erstellten Ergebnisse sind sowohl theoretischer als auch praktischer Natur. Dadurch sollen die theoretisch getroffenen Annahmen durch die praktische Implementierung verifiziert werden können. Das Projekt befindet sich damit in einem etwas ungewöhnlichen Spannungsfeld zwischen der klassischen Informatik-Kerndisziplin Übersetzerkonstruktion (Compilerbau) und der Informatik-Didaktik. Darüber hinaus spielen auch Aspekte der Mensch-Computer-Interaktion eine Rolle, schließlich geht es neben der Verifikation der Programme auch um die Konstruktion benutzerfreundlicher Schnittstellen.
 
 \begin{framed}
   \textbf{Hinweis}: Der Prototyp kann unter \href{https://blattwerkzeug.de}{\texttt{blattwerkzeug.de}} ausprobiert werden.
@@ -92,24 +99,17 @@ In der Praxis handelt es sich bei solchen syntaxfreien Sprachen de facto immer u
 
 \subsection{Verwandte Arbeit: Master-Thesis}
 
-Die Masterthesis \enquote{BlattWerkzeug} \cite{riemer_blattwerkzeug_2016}  wurde im Oktober 2016 vom Bewerber Marcus Riemer fertiggestellt und beschreibt zwei konkrete syntaxfreie Editoren für \texttt{SQL} und \texttt{HTML}. Diese Master-Thesis legte in ideeller Weise den Grundstein für das Promotionsvorhaben und demonstrierte, dass sich eine Entwicklungsumgebung für Schüler prinzipiell auch von nur einem Entwickler umsetzen ließe. Im Februar 2018 wurde jedoch der gesamte Code für diese konkreten Editoren neu erstellt und durch einen Prototypen des hier beschriebenen neuen, generativen Ansatzes ersetzt \cite{riemer_commit_2018}.
+Die Masterthesis \enquote{BlattWerkzeug} \cite{riemer_blattwerkzeug_2016}  wurde im Oktober 2016 vom Bewerber Marcus Riemer fertiggestellt und beschreibt zwei konkrete syntaxfreie Editoren für \texttt{SQL} und \texttt{HTML}. Diese Master-Thesis legte in ideeller Weise den Grundstein für das Promotionsvorhaben und demonstrierte, dass sich eine Entwicklungsumgebung für Schüler prinzipiell auch von nur einem Entwickler umsetzen ließe. Aus technischer Sicht handelte es sich aber um eine sehr spezifische und eher unflexible Lösung. Im Februar 2018 wurde daher der gesamte Code für diese konkreten Editoren neu erstellt und durch einen ersten Prototypen des im folgenden beschriebenen neuen, generativen Ansatzes ersetzt \cite{riemer_commit_2018}.
 
-Dieses Promotionsvorhaben versteht sich als eine Iteration des ursprünglichen Ansatzes: Anstatt jede weitere zu unterstützende Programmiersprache mühsam von Grund auf neu zu entwerfen, soll die Integration weiterer Sprachen mit etablierten Techniken und Vorgehensweisen aus der normalen Übersetzerkonstruktion vorgenommen werden können. Diese veränderte Herangehensweise eröffnet völlig neue Möglichkeiten in Bezug auf die Anpassung der dargestellten Editoren. Der Ansatz der Thesis erfordert für jede Veränderung der bereitgestellten Editoren einen fachlichen Experten mit konkreter Erfahrung in dieser sehr speziellen Software. Der neue Ansatz erlaubt es auch erfahrenen Anwendern (zum Beispiel Lehrkräften) Variationen von bestehenden Sprachen vorzunehmen.
+Dieses Promotionsvorhaben versteht sich damit als eine Iteration des ursprünglichen Ansatzes: Anstatt jede weitere zu unterstützende Programmiersprache mühsam von Grund auf neu zu entwickeln, soll die Integration weiterer Sprachen mit etablierten Techniken und Vorgehensweisen aus der normalen Übersetzerkonstruktion vorgenommen werden können. Der Ansatz der Thesis erfordert für jede Veränderung der bereitgestellten Editoren einen fachlichen Experten mit Erfahrung in dieser sehr speziellen Software (konkret: Marcus Riemer). Der neue Ansatz hingegen ermöglicht es erfahrenen Anwendern (zum Beispiel Lehrkräften) Variationen von bestehenden Editoren zu erzeugen.
 
 \subsection{Eingrenzung und Wahl des Forschungsvorhabens}
 
-Es handelt sich bei diesem Promotionsvorhaben - trotz der möglichen praktischen Anwendungen in der Informatik-Lehre - ausdrücklich nicht um eine didaktische Arbeit. Es findet folglich keine didaktisch fundierte Konzeption von möglichen Lehrinhalten oder Unterrichtsstunden statt.
+Es handelt sich bei diesem Promotionsvorhaben -- trotz der möglichen praktischen Anwendungen in der Informatik-Lehre -- ausdrücklich nicht um eine didaktische Arbeit. Es findet folglich keine didaktisch fundierte Konzeption von möglichen Lehrinhalten oder Unterrichtsstunden statt.
 
-Diese Einschränkung ist zum Einen durch den fachlichen Hintergrund der Beteiligten bedingt: Dr. Frank Huch als Erstgutachter und Betreuer ist Informatiker und arbeitet an der CAU Kiel im Fachbereich \enquote{Übersetzerkonstruktion}. Der Promotionsstudent Marcus Riemer ist ebenfalls Informatiker und arbeitet als wissenschaftlicher Mitarbeiter an der Fachhochschule Wedel. Beiden gemein ist das Anliegen, eine möglichst frühe und effektive Vermittlung von Informatik-Kenntnissen an Schulen möglich zu machen:
+Diese Einschränkung ist zum Einen durch den fachlichen Hintergrund der Beteiligten bedingt: Dr. Frank Huch als Erstgutachter und Betreuer ist Informatiker und arbeitet an der CAU Kiel im Fachbereich Übersetzerkonstruktion. Der Promotionsstudent Marcus Riemer ist ebenfalls Informatiker und arbeitet als wissenschaftlicher Mitarbeiter an der Fachhochschule Wedel. Beiden gemein ist das Anliegen, eine möglichst frühe und effektive Vermittlung von Informatik-Kenntnissen an Schulen möglich zu machen. Auch wenn es ihrer Einschätzung nach möglich wäre, aufbauend auf der Masterthesis eine vornehmlich didaktische Arbeit zu schreiben, würde dies eine umfangreiche Einarbeitung in die entsprechenden didaktischen Hintergründe und Methoden voraussetzen. Diese Einarbeitungzeit entfällt durch die Fokussierung auf Fragestellungen und Themen aus der Informatik.
 
-\begin{itemize}
-\item Dr. Huch ist an der CAU Kiel in die Ausbildung der Lehramtsstudierenden mit Fachrichtung Informatik involviert.
-\item Herr Riemer ist seit seiner eigenen Schulzeit auf freiwilliger Basis für unterschiedlichste Informatik-Lehrprojekte tätig geworden.
-\end{itemize}
-
-Auch wenn es ihrer Einschätzung nach möglich wäre, aufbauend auf der Masterthesis eine vornehmlich didaktische Arbeit zu schreiben, würde dies eine umfangreiche Einarbeitung in die entsprechenden didaktischen Hintergründe und Methoden voraussetzen. Diese Einarbeitungzeit entfällt durch die Fokussierung auf Fragestellungen und Themen aus der Informatik.
-
-Zum Anderen halten Dr. Huch und Herr Riemer die grundlegendere Arbeit, also die automatische Erzeugung von benutzerfreundlichen Editoren, für wissenschaftlich und praktisch relevanter. Unserem Wissensstand nach existiert noch keine Software, welche die Vorgehensweise aus der Übersetzerkonstruktion zur Generierung von syntaxfreien Editoren verwendet. Und auch diese Software könnte natürlich von Leuten mit didaktischem Hintergrund erforscht werden. Es ist vorgesehen, die zu erstellende Software von Lehramtsstudierenden der CAU Kiel, im Rahmen von Lehrerfortbildungen oder auch direkt an Schulen im Informatikunterricht auf ihre Eignung für den Unterrichtsgebrauch zu prüfen.
+Zum Anderen halten Dr. Huch und Herr Riemer den gewählten Schwerpunkt, also die automatische Erzeugung von benutzerfreundlichen Editoren, für wissenschaftlich und praktisch grundlegender. Unserem Wissensstand nach existiert noch keine Software, welche die Vorgehensweise aus der Übersetzerkonstruktion zur automatisierten Generierung von syntaxfreien Editoren verwendet. Und auch die im Rahmen der Promotion erstellte Software soll selbstverständlich von Experten und Forschern mit didaktischem Hintergrund untersucht und begleitet werden. Es ist vorgesehen, die zu erstellende Software von Lehramtsstudierenden der CAU Kiel, von den Kollegen der Kieler Arbeitsgruppe \textit{Didaktik der Informatik}, im Rahmen von Lehrerfortbildungen oder auch direkt an Schulen im Informatikunterricht auf ihre Eignung für den Unterrichtsgebrauch zu prüfen.
 
 \subsection{Technische Konzeption}
 
@@ -118,10 +118,10 @@ Um einen möglichst einfachen Zugang zur Software für Lernende zu gewährleiste
 Abbildung~\ref{fig:core-relations} veranschaulicht zentrale Begriffe des Vorhabens und deren Zusammenhänge. Auf der obersten Ebene sind beim Editieren eines Programms mit einem syntaxfreien Block-Editor (siehe Abbildung~\ref{fig:example-sql-ide} für ein Beispiel) vier grundlegende Datenstrukturen involviert:
 
 \begin{itemize}
-\item Die \textbf{Grammatik} (Grammar) definiert die grundsätzlich zulässigen Strukturen eines abstrakten Syntaxbaums. Aus dieser Beschreibung lassen sich Blocksprachen und Validatoren erzeugen.
-\item Der \textbf{abstrakte Syntaxbaum} (Syntaxtree, AST) repräsentiert die Struktur eines Quelltextes der mit einem Blockeditor bearbeitet wird. In einer konventionellen Entwicklungsumgebung würde man an dieser Stelle von einer \enquote{Datei} sprechen.
-\item Der Blockeditor weiß wie die zu bearbeitende \enquote{Datei} (also ein Syntaxbaum) darzustellen ist, weil er auf die Angaben in einer \textbf{Blocksprache} (Block Language) zurückgreifen kann. Diese definiert wie die einzelnen Teile des Syntaxbaumes visualisiert und editiert werden sollen und welche Blöcke dem Benutzer angeboten werden.
-\item Die tatsächliche Kompilierung und Validierung erfolgt anhand einer \textbf{Programmiersprache} (Programming Language).
+\item Die \textbf{Grammatik} (Grammar) definiert die grundsätzlich zulässigen Strukturen eines abstrakten Syntaxbaums. Aus dieser Beschreibung lassen sich unmittelbar Validatoren zur Überprüfung von Syntaxbäumen erzeugen. Nimmt man zu dieser Beschreibung noch spezielle \textbf{Generator-Anweisungen} (Generator Instructions) dazu, können aus einer Grammatik auch Blocksprachen erzeugt werden.
+\item Der \textbf{abstrakte Syntaxbaum} (Syntaxtree, AST) repräsentiert die Struktur eines Quelltextes der mit einem Blockeditor bearbeitet wird. In einer konventionellen Entwicklungsumgebung würde man an dieser Stelle von einer \textit{Datei} sprechen.
+\item Die \textbf{Blocksprache} (Block Language) weiß wie die zu bearbeitende \textit{Datei} (also ein Syntaxbaum) darzustellen ist. Hier wird definiert wie die einzelnen Teile des Syntaxbaumes visualisiert und editiert werden sollen (also den konkreten Editor) und welche Blöcke dem Benutzer angeboten werden.
+\item Die tatsächliche Kompilierung, Validierung und Ausführung erfolgt anhand einer \textbf{Programmiersprache} (Programming Language). Im Regelfall wird letztendlich Quelltext für real existierende Zielsprachen wie \texttt{SQL} oder \texttt{JavaScript} erzeugt.
 \end{itemize}
 
 Für normale Nutzer, also vornehmlich Lernende, sind diese Unterscheidungen nicht von Bedeutung. Aus ihrer Sicht interagieren sie im Browser mit einer Art Dateibaum und bekommen automatisch, passend zum Typ der \enquote{Datei}, entsprechende Editoren präsentiert.
@@ -145,7 +145,7 @@ Jeder Knoten eines Baums entspricht mindestens einem Typen, welcher sich aus den
 \item Textauszeichnungssprachen haben üblicherweise eine Möglichkeit, Überschriften auszuzeichnen. Durch den Namensraum können alle diese Sprachen (zum Beispiel \texttt{HTML} oder \texttt{Markdown}) problemlos den Typnamen \texttt{Heading} verwenden, ohne das es zu Mehrdeutigkeiten kommt.
 \end{itemize}
 
-Der einfachste denkbare Baum definiert sich über einen Knoten mit nichts als einer Typangabe. Abbildung~\ref{fig:ast-example-null} zeigt wie sich ein Ausdruck, welcher aus nichts weiter als dem symbolischen Wert \texttt{null} besteht, für eine nicht näher benannte Sprache als Syntaxbaum ausdrücken ließe.
+Der einfachste denkbare Baum besteht aus einem einzigen Knoten mit einer Typangabe. Abbildung~\ref{fig:ast-example-null} zeigt wie sich ein Ausdruck, welcher aus nichts weiter als dem symbolischen Wert \texttt{null} besteht, für eine nicht näher benannte Sprache als Syntaxbaum ausdrücken ließe.
 
 Die Speicherung von atomaren Daten erfolgt im Syntaxbaum durch die Verwendung so genannter \enquote{Eigenschaften} (engl. \enquote{Properties}). Dabei handelt es sich um Zeichenketten, Zahlen oder Wahrheitswerte welche über einen Schlüssel zugreifbar sind. Die Abbildungen~\ref{fig:ast-example-variable}, \ref{fig:ast-example-binary} und \ref{fig:ast-example-if} zeigen wie solche Eigenschaften in Knoten zum Einsatz kommen können.
 
@@ -276,8 +276,14 @@ Um den einfacheren \texttt{attribute}-Typen in einen Block zu übersetzen, komme
 \end{figure}
 
 \begin{figure}[p]
+  \centering\includegraphics[width=\linewidth]{screenshot-generation-parameters.png}
+  \caption{Generator-Anweisungen: Parametrisierung bei der Erzeugung von Blocksprachen. Im Bild können verschiedene Farbangaben und die Einrückungstiefe verändert werden.}
+  \label{fig:block-lang-generation-parameters}
+\end{figure}
+
+\begin{figure}[p]
   \centering\includegraphics[width=\linewidth]{screenshot-generated-xml.png}
-  \caption{Visualisierter Syntaxbaum (Abbildung~\ref{fig:ast-example-xml-node-two-attributes}) auf Basis der gezeigten Grammatik (Listing~\ref{lst:xml-grammar-terminals}) und zusätzlicher Farbangaben (Abbildung~\ref{fig:block-lang-generation-parameters}).}
+  \caption{Visualisierter Syntaxbaum (Abbildung~\ref{fig:ast-example-xml-node-two-attributes}) auf Basis der gezeigten Grammatik (Listing~\ref{lst:xml-grammar-terminals}) und zusätzlicher Farbangaben aus den Generator-Anweisungen (Abbildung~\ref{fig:block-lang-generation-parameters}).}
   \label{fig:example-xml-generated}
 \end{figure}
 
@@ -285,19 +291,13 @@ Für den \texttt{element}-Typen ist es notwendig über die Kindgruppen \texttt{a
 
 Teil dieser Generator-Anweisungen sind auch mögliche Parametrisierungen, welche von Personen ohne tiefergehenden Hintergrund in der Informatik vorgenommen werden können sollen. Abbildung~\ref{fig:block-lang-generation-parameters} zeigt, wie sich bei der Generierung der \texttt{XML}-Blocksprache einzelne Farben oder die Einrückungstiefe steuern lassen.
 
-\begin{figure}[p]
-  \centering\includegraphics[width=\linewidth]{screenshot-generation-parameters.png}
-  \caption{Parametrisierung bei der Erzeugung von Blocksprachen}
-  \label{fig:block-lang-generation-parameters}
-\end{figure}
-
 \subsubsection{Laufzeitumgebungen}
 
 Die auf Basis der Grammatik erzeugten Editoren sind zwar unverzichtbar, für eine praktisch einsetzbare Entwicklungsumgebung jedoch nicht ausreichend. Je nach Art der umgesetzten Sprache sind unterschiedliche Laufzeitumgebungen erforderlich. Im Rahmen des Promotionsvorhabens werden mindestens die folgenden Umgebungen für die jeweiligen Sprachen benötigt werden:
 
 \begin{itemize}
 \item Im Falle von \texttt{SQL} müssen die erzeugten Abfragen im Kontext einer konkreten Datenbank ausgeführt werden können.
-\item Programme in \enquote{typischen} Programmiersprachen müssen kompiliert oder interpretiert, aber auf jeden Fall ausgeführt werden. Es muss mindestens eine konsolenartige Umgebungen mit Ein- und Ausgaben zur Verfügung gestellt werden.
+\item Eigens erstellte Programme müssen kompiliert oder interpretiert, auf jeden Fall aber ausgeführt werden können. Es muss mindestens eine konsolenartige Umgebungen mit Ein- und Ausgaben zur Verfügung gestellt werden.
 \item Erstellte Webseiten müssen gerendert und dargestellt werden können.
 \end{itemize}
 
@@ -305,13 +305,21 @@ Diese Umgebungen können nicht aus den Grammatiken erzeugt werden und müssen gr
 
 \subsection{Forschung}
 
-Der bis hier beschriebene Stand des Prototypen ist die Erste von weiteren notwendigen Iterationen und lediglich geeignet um die technische Machbarkeit zu erproben beziehungsweise zu demonstrieren.
+Der bis hier beschriebene Stand des Prototypen ist die Erste von weiteren notwendigen Iterationen und lediglich geeignet um die technische Machbarkeit eines zunächst noch unflexiblen Generators zu erproben beziehungsweise zu demonstrieren. Insbesondere die angestrebte Flexibilität der Erzeugung unterschiedlicher Editorvarianten und auch die Qualität der erzeugten Editoren sind noch weit von einem nützlichen Stand entfernt und bedürfen weiterer Forschung.
 
-Der wesentliche offene Aufgabe liegt in der Ausgestaltung der Generatoranweisungen und der technischen Konzeption der daraus generierten Blockeditoren. Es ist kein Zufall, dass das technische Fundament aus Syntaxbaum und Grammatiken im Rahmen dieses Dokuments gut beschrieben werden konnte, gleichzeitig aber nur wenige Aussagen über die technischen Details zu Generatoranweisungen oder die generierten Strukturen getroffen wurden. Die Definition von Syntaxbäumen und Grammatiken ist ein weitgehend gelöstes Problem und lies sich mit wenigen Anpassungen aus der Literatur (für Syntaxbäume \cite{aho_compilers:_2007}) oder bestehenden Spezifikationen (RELAX NG\cite{clark_relax_2001}) übernehmen. Und die Gestaltung der erzeugenden Editoren konnte sich in erster Näherung an \textit{Scratch} \cite{maloney_scratch:_2004} und \textit{Blockly} \cite{fraser_ten_2015} orientieren.
+\subsubsection{Generatoranweisungen}
 
-\todo[inline]{Hier fehlt die genaue Beschreibung warum an diesem Zwischenschritt Forschung nötig ist.}
+Die konkrete Ausgestaltung der Generatoranweisungen und der technischen Konzeption der daraus generierten Blockeditoren ist noch offen. Es ist kein Zufall, dass das technische Fundament aus Syntaxbaum und Grammatiken im Rahmen dieses Dokuments gut beschrieben werden konnte, gleichzeitig aber nur wenige Aussagen über die technischen Details zu Generatoranweisungen oder die generierten Strukturen gemacht wurden. Die Definition von Syntaxbäumen und Grammatiken ist ein weitgehend gelöstes Problem und lies sich mit wenigen Anpassungen aus der Literatur (für Syntaxbäume \cite{aho_compilers:_2007}) oder bestehenden Spezifikationen (RELAX NG\cite{clark_relax_2001}) übernehmen. Und die Gestaltung der erzeugenden Editoren konnte sich in erster Näherung an \textit{Scratch} \cite{maloney_scratch:_2004} und \textit{Blockly} \cite{fraser_ten_2015} orientieren.
 
-Darüber hinaus sind die generierten Editoren technisch gesehen lauffähig, jedoch aktuell noch ungeeignet für den Unterrichtseinsatz. Die Verbesserung der Qualität dieser Editoren ist ein weiterer der notwendigen Forschungsaspekte und unerläßlich um einen produktiven Einsatz in Schulen zu ermöglichen. Um tatsächlich benutzerfreundliche Editoren zu erzeugen, müssen für die generierten Editoren noch  unter anderem die folgenden praktischen Aspekte untersucht werden:
+Bei der Ausgestaltung der Generatoranweisungen gibt es hingegen keine etablierten Lösungen, diese sollen daher im Rahmen der Promotion erforscht werden. Werden zu viele Angaben als Teil der Grammatik kodiert werden diese Grammatiken notwendigerweise sehr speziell. Da sich theoretisch auf Basis einer einzigen Grammatik auch unterschiedliche (aber verwandte) Programmiersprachen beschreiben lassen würden, stellt sich die Frage welche Informationen sich sinnvoll in der Grammatik abbilden lassen. Und die als \enquote{zu spezifisch} eingestuften Informationen müssen dann notwendigerweise in den Generatoranweisungen hinterlegt werden.
+
+\subsubsection{Definition von Editorvarianten}
+
+Auf Basis eines einzigen Syntaxbaumes sollen sich durch unterschiedliche Generatoranweisungen auch unterschiedliche Editoren erzeugen lassen. Diese Variationen sollen dabei von Lehrkräften vorgenommen werden können, um die zu deren Anforderungen passenden Möglichkeiten bereitzustellen. Und aufgrund dieser Zielgruppe stellt sich die Frage, welche Konfigurationsoptionen überhaupt angeboten werden sollten. Nicht jedes verfügbare Detail ist notwendigerweise relevant, es gilt viel mehr exakt jene Optionen anzubieten mit denen Lehrkräfte sinnvoll arbeiten können. Darüber hinaus stellt sich die Frage nach einer angemessenen Form der Darstellung für diese noch nicht näher definierten Optionen.
+
+\subsubsection{Mehrdeutige Editoroperationen}
+
+Darüber hinaus sind die generierten Editoren technisch gesehen lauffähig, jedoch aktuell noch ungeeignet für den Unterrichtseinsatz. Die Verbesserung der Qualität dieser Editoren ist ein weiterer der notwendigen Forschungsaspekte und unerläßlich um einen produktiven Einsatz in Schulen zu ermöglichen. Um tatsächlich benutzerfreundliche Editoren zu erzeugen, müssen für die generierten Editoren noch unter anderem die folgenden praktischen Aspekte untersucht werden:
 
 \begin{description}
 \item[Kopie oder Verschiebung von Blöcken] \hfill\\
@@ -322,16 +330,13 @@ Darüber hinaus sind die generierten Editoren technisch gesehen lauffähig, jedo
 
 Bei \textit{Scratch} stellen sich diese Probleme grundsätzlich auch, lassen sich aber durch die Fokussierung auf exakt eine Programmiersprache sehr spezifisch lösen. Da das Verhalten aller in Scratch enthaltenen Blöcke von Hand definiert wird, können die notwendigen Angaben einfach für jede Blockkombination vorgenommen werden.
 
-\textit{Blockly} bi
-
-
 \subsubsection{Fehlermeldungen und Lösungsvorschläge}
 
 Die Verwendung von Syntaxbäumen als grundlegende Datenstruktur erlaubt wesentlich genauere Fehlermeldungen als in textbasierten Sprachen. Dies liegt zum einen schlichtweg daran, dass rein syntaktische Fehler nicht vorkommen können: Fehlende Semikola oder Klammern sind konstruktiv ausgeschlossen. Im Falle von fehlenden Teilbäumen (Löchern) können den Anwendern sogar kontextabhängig recht präzise Vorschläge gemacht werden: Wenn zum Beispiel in einem Vergleichsausdruck der rechte Operand noch unbekannt ist, könnten dem Anwender mögliche Inhalte vorgeschlagen werden. Diese Vorschläge lassen sich vermutlich allein auf Grundlage der Syntaxbäume und der Grammatiken generieren, stünden also potenziell automatisch und ohne jede Konfiguration in jedem generierten Editor zur Verfügung.
 
 \subsection{Zeitplan}
 
-Aktuell ist das Forschungsvorhaben ein in seiner Freizeit vorangetriebenes Projekt von Marcus Riemer, welcher aktuell auf einer 80\%-Stelle als wissenschaftlicher Mitarbeiter an der Fachhochschule Wedel beschäftigt ist. Im August 2018 ist neben diesen beiden Tätigkeiten noch sein erstes Kind zur Welt gekommen. Daher wird diese Stelle zum Sommersemester 2019 auf Maximal 60\% reduziert, um damit (hoffentlich) sowohl der Promotion als auch dem Nachwuchs gerecht werden zu können. Der aktuelle Zeitplan sieht auf Grundlage dieser zeitlichen Randbedingungen einen Abschluss der Promotion um das Jahr 2021 herum vor.
+Aktuell ist das Forschungsvorhaben ein in seiner Freizeit vorangetriebenes Projekt von Marcus Riemer, welcher aktuell auf einer 80\%-Stelle als wissenschaftlicher Mitarbeiter an der Fachhochschule Wedel beschäftigt ist. Im August 2018 ist neben diesen beiden Tätigkeiten noch sein erstes Kind zur Welt gekommen. Daher wird diese Stelle zum Sommersemester 2019 auf Maximal 60\% reduziert, um damit (hoffentlich) sowohl der Promotion als auch dem Nachwuchs gerecht werden zu können. Der aktuelle Zeitplan sieht auf Grundlage dieser zeitlichen Randbedingungen einen Abschluss der Promotion um das Jahr 2022 herum vor.
 
 Die Förderung durch das evangelische Studienwerk würde es erlauben, die Stelle an der Fachhochschule auf 25\% zu reduzieren, eine komplette Aufgabe der Stelle wäre nicht vorgesehen: Die Lehrtätigkeit dort bereitet große Freude, der fachliche Austausch mit den Kollegen ist förderlich und schlussendlich ist auch das Gehalt für den Unterhalt der Familie schlicht notwendig. Natürlich würde die Reduktion der Tätigkeit an der Hochschule das Promotionsvorhaben dennoch deutlich beschleunigen.
 
@@ -342,7 +347,7 @@ Der Fortschritt des Promotionsvorhabens lässt sich allgemein gut anhand der fol
   Dieses Projekt hat den Anspruch, Editoren für unterschiedlichste Programmier- und auch Daten- oder Textauszeichnungssprachen erzeugen zu können. Um zu demonstrieren, dass es diesen Ansprüchen gerecht wird, sollen unterschiedlichste Sprachen bereitgestellt werden.
 
 \item[Stabile Grammatiken und Generator-Anweisungen] \hfill\\
-  Aktuell sind für die Erzeugung von Block-Editoren noch zwei Parameter nötig: eine Grammatik und separate Generatoranweisungen. Beide Strukturen sind grundsätzlich auch notwendig, da reine Stilvorgaben wie zum Beispiel Farben keinesfalls Bestandteil der Grammatik sein sollten. In verschiedenen Details ist aber nicht im gleichen Maße eindeutig, in welcher der beiden Strukturen Informationen am passenderen Platz wären. Dies betrifft insbesondere Layoutvorgaben (aus Sicht der Blöcke) bzw. die Formatierung des Quelltextes mit Leerraum und Zeilenumbrüchen (aus Sicht der Grammatik).
+  Für die Erzeugung von Blocksprachen sind aktuell zwei Parameter erforderlich: eine Grammatik und separate Generatoranweisungen. Zwei unterschiedliche Strukturen sind grundsätzlich auch notwendig, da reine Stilvorgaben wie zum Beispiel Farben keinesfalls Bestandteil der Grammatik sein sollten. In verschiedenen Details ist aber nicht im gleichen Maße eindeutig, in welcher der beiden Strukturen Informationen am passenderen Platz wären. Dies betrifft insbesondere Layoutvorgaben (aus Sicht der Blöcke) bzw. die Formatierung des Quelltextes mit Leerraum und Zeilenumbrüchen (aus Sicht der Grammatik).
 
 \item[Benutzerfreundliche syntaxfreie Editoren] \hfill\\
   Der aktuelle Prototyp der Editoren ist zwar vollumfänglich nutzbar, jedoch noch nicht benutzerfreundlich. Es fehlen notwendige Komfortfunktionen wie eine intelligente Hervorhebung von möglichen Zielen und eine Vorschau von Veränderungen. Außerdem muss untersucht werden, wie sich die möglichen Inhalte für Löcher des Baums angemessen präsentieren lassen.
@@ -351,17 +356,17 @@ Der Fortschritt des Promotionsvorhabens lässt sich allgemein gut anhand der fol
 Diese Aspekte haben untereinander allerdings vielfältige Querbezüge: So könnten erst bei der Integration einer neuen Sprache Schwächen oder Fehler in den generierten Editoren oder in den Grammatikstrukturen auffallen. Darüber hinaus beeinflussen Änderungen an diesen grundlegenden Strukturen alle schon vorhandenen Sprachbeschreibungen und möglicherweise auch wieder die generierten Editoren. Folglich lassen sich diese Aspekte nicht unabhängig voneinander bearbeiten, die Messung des Projektfortschritts erfolgt daher anhand der im folgenden beschriebenen Meilensteine.
 
 \begin{description}
-\item[\circled{1} Identischer Editor-Funktionsumfang zum Prototypen der Master-Thesis]\hfill\\
+\item[\circled{1} Editoren für Webentwicklung]\hfill\\
   Die Entwicklungsumgebung erlaubt zusätzlich zur Programmierung mit Datenbanken noch die Programmierung von Webseiten. Diese lassen sich auf Basis von \texttt{HTML}, \texttt{CSS} und einer Templating-Sprache dynamisch erzeugen und mit Inhalten aus einer Datenbank kombinieren. Die Grammatikdefinitionen und Generatoranweisungen müssen dann drei unterschiedliche Programmiersprachen unterstützen.
 
   \textbf{Geplante Fertigstellung:} Dezember 2019
 \item[\circled{2} Unterstützung von imperativen Programmiersprachen]\hfill\\
   Mit diesem Meilenstein wird nebenbei die Definitionen der Grammatiken und Generatoren eingefroren. Das Projekt ist dann in der Lage, Editoren für \enquote{klassische} Programmiersprachen, deklarative Programmiersprachen, Textauszeichnungssprachen und Stylesheet-Sprachen zu erzeugen.
 
-  \textbf{Geplante Fertigstellung:} Juni 2019
+  \textbf{Geplante Fertigstellung:} Juni 2020
 
 \item[\circled{3} Erzeugung von Editoren durch Lehrkräfte]\hfill\\
-  Die im vorherigen Schritt eingefrorenen Schnittstellen ermöglichen nun die Einbindung von ausgewählten Lehrkräften in die Gestaltung der Anpassungsmöglichkeiten für didaktisch eingeschränkte Editoren. Bis zu diesem Schritt konnten diese Varianten nur von Marcus Riemer bereitgestellt werden, nun soll diese Möglichkeit auch für die Allgemeinheit geschaffen werden.
+  Die im vorherigen Schritt eingefrorenen Schnittstellen ermöglichen nun die Einbindung von ausgewählten Lehrkräften in die Gestaltung der Anpassungsmöglichkeiten für didaktisch eingeschränkte Editoren. Bis zu diesem Schritt konnten diese Varianten realistisch betrachtet nur von Marcus Riemer bereitgestellt werden, nun soll diese Möglichkeit auch für die Allgemeinheit geschaffen werden.
 
   \textbf{Geplante Fertigstellung:} Dezember 2020
 \item[\circled{4} Optimierte Benutzerführung]\hfill\\
@@ -380,9 +385,9 @@ Diese Aspekte haben untereinander allerdings vielfältige Querbezüge: So könnt
 
 \section{Dissertation in englischer Sprache}
 
-Für Informatiker ist englisch eindeutig Verkehrssprache und kommt in nahezu allen Bereich zum Einsatz. So werden Quelltexte üblicherweise auf englisch verfasst und ein beträchtlicher Teil der Fachliteratur ist ausschließlich auf englisch verfügbar. Um die erstellte Arbeit einem möglichst großen Personenkreis zugänglich zu machen, sollen die Dissertation und etwaige Veröffentlichungen daher auf englisch verfasst werden. Selbiges gilt für den geschrieben Quelltext und die Kommentierung dieses Quelltextes.
+Für Informatiker ist englisch Verkehrssprache und kommt in allen Bereich routinemäßig zum Einsatz. So werden Quelltexte üblicherweise auf englisch verfasst und ein beträchtlicher Teil der Fachliteratur ist ausschließlich auf englisch verfügbar. Um die erstellte Arbeit einem möglichst großen Personenkreis zugänglich zu machen, sollen die Dissertation und etwaige Veröffentlichungen daher ebenfalls  auf englisch verfasst werden. Selbiges gilt für den geschrieben Quelltext und die Kommentierung dieses Quelltextes.
 
-Die im Rahmen der Promotion erstellte Software wird hingegen auf jeden Fall auf deutsch verfügbar sein. Ein normaler Endanwender soll bei der normalen Nutzung der Software nichts von dem englischsprachigen Unterbau erfahren.
+Die im Rahmen der Promotion erstellte Software wird hingegen auf jeden Fall auf deutsch verfügbar sein. Ein normaler Endanwender soll bei der normalen Nutzung der Software nichts von dem englischsprachigen Unterbau merken.
 
 \end{document}
 %%% Local Variables:
