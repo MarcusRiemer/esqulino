@@ -1,0 +1,137 @@
+%************************************************
+% Vergleichbare Arbeiten
+%************************************************
+\chapter{Vergleichbare Arbeiten}
+\label{sec:related}
+
+In diesem Abschnitt werden Programme hervorgehoben, die einen spielerischen Ansatz zum lernen von Programmieren bieten.
+
+%************************************************
+% Turtle Grafiken
+%************************************************
+\section{Turtle Grafiken}
+\label{sec:related:turtle}
+
+Seymour Papert beschreibt 1980 in seinem Buch \textit{Mindstorms: Children, Computers, and Powerful Ideas} seine Idee von Turtle Grafiken. Sein Ziel war die Gestaltung von Objekten, die Kinder für sich selbst und auf ihre eigene Art herstellen können. Dabei Hift die Konstruierung eines Objektes oder einer Figur \TODO{"object-to-think-with"}, in das sich die Kinder hineinversetzten können \cite{papert1980}.
+
+Die Schildkröte kann bewegt werden indem Befehle über die Tastatur eingegeben werden. Die dafür entwickelte Programmiersprache heißt LOGO. \inlinec{FORWARD 100} bewegt die Schildkröte in einer geraden Linie über eine Strecke von 100 Schritten von je etwas einem Millimeter. Durch die Eingabe von \inlinec{RIGHT 90} wird die Schildkröte um 90 Grad gedreht. \inlinec{PENDOWN} lässt die Schildkröte einen Stift senken, um eine sichtbare Spur des Pfads zu hinterlassen, während \inlinec{PENUP} sie anweist, den Stift anzuheben.
+
+Die Idee des Programmierens wird durch die Metapher eingeführt, in der der Schildkröte ein neues Wort beigebracht wird. So können \inlinec{TRIANGLE} \fref{fig:related:turtle:square:code} und \inlinec{SQUARE} \fref{fig:related:turtle:triangle:code} als Prozeduren definiert werden, die die Schildkröte ein Dreieck, bzw. ein Quadrat zeichnen lassen. Diese neuen Wörter können nun verwendet werden um Programme und neue Wörter zu definieren. Es lässt sich zum Beispiel durch Kombination eines Quadrates und eines Dreiecks ein Haus zeichnen \fref{fig:related:turtle:house:code}.
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{0.3\textwidth}
+        \begin{lstlisting}
+            TO SQUARE
+            FORWARD 100
+            RIGHT 90
+            FORWARD 100
+            RIGHT 90
+            FORWARD 100
+            RIGHT 90
+            FORWARD 100
+            RIGHT 90
+            END
+            \end{lstlisting}
+        \caption{Code für ein Quadrat}
+        \label{fig:related:turtle:square:code}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \begin{lstlisting}
+            TO TRIANGLE
+            FORWARD 100
+            RIGHT 120
+            FORWARD 100
+            RIGHT 120
+            FORWARD 100
+            RIGHT 120
+            END
+            \end{lstlisting}
+        \caption{Code für ein Dreieck}
+        \label{fig:related:turtle:triangle:code}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \begin{lstlisting}
+            TO HOUSE
+            RIGHT 90
+            SQUARE
+            RIGHT 300
+            TRIANGLE
+            END
+            \end{lstlisting}
+        \caption{Code für ein Haus}
+        \label{fig:related:turtle:house:code}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{gfx/2-related-turtle-square.pdf}
+        \caption{Ergebnis des Quadrat}
+        \label{fig:related:turtle:square:result}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{gfx/2-related-turtle-triangle.pdf}
+        \caption{Ergebnis des Dreieck}
+        \label{fig:related:turtle:triangle:result}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{gfx/2-related-turtle-house.pdf}
+        \caption{Ergebnis des Haus}
+        \label{fig:related:turtle:house:result}
+    \end{subfigure}
+    \caption{Zeichnen eines Hauses in LOGO}
+    \label{fig:related:turtle:square}
+\end{figure}
+
+%************************************************
+% Karel the Robot
+%************************************************
+\section{Karel the Robot}
+\label{sec:related:karel}
+
+\TODO{Karel the Robot} \cite{pattis1981}
+
+%************************************************
+% Kara
+%************************************************
+\section{Kara}
+\label{sec:related:kara}
+
+Reichert et al. beschreiben Kara wie folgt:
+
+\begin{quote}
+    "Kara ist eine Mini-Umgebung basierend auf der Idee der endlichen Automaten. Kara, der Marienkäfer, lebt in einer einfachen grafischen Welt auf dem Bildschirm. Der Marienkäfer kann programmiert werden, um in seiner Welt verschiedene Aufgaben zu erledigen. Kleeblätter sammeln, einer Spur von Kleeblättern folgen oder Labyrinthe durchquären sind einige Beispiele. Die Programme werden grafisch mit der Maus als endliche Automaten erstellt."~\cite[S. 28]{reichert2004}
+\end{quote}
+
+Neben der ursprünglichen Idee von Kara mit endlichen Automaten, gibt es weitere Versionen, die den Übergang zu realen Programmiersprachen erleichtern sollen \cite{kara2017}. So lässt sich der Marinenkäfer in der bekannten Welt auch mit Java, JavaScript, Python oder Ruby steuern. Durch die Konstrukte die diese Sprachen mitbringen in Verbindung mit den speziellen Methoden, die die Kara-Umgebung zur Verfügung stellt, sind nun auch kompliziertere Programme möglich.
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{0.5\textwidth}
+        \includegraphics[width=\textwidth]{gfx/2-related-kara-code.png}
+        \caption{Suchen eines Blattes in einem Wald}
+        \label{fig:related:kara:code}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.5\textwidth}
+        \includegraphics[width=\textwidth]{gfx/2-related-kara-world.png}
+        \caption{Kara-Welt}
+        \label{fig:related:kara:world}
+    \end{subfigure}
+    \caption{Bildschirmfoto aus der JavaScriptKara-Anwendung}
+    \label{fig:related:kara}
+\end{figure}
+
+%************************************************
+% Lightbot
+%************************************************
+\section{Lightbot}
+\label{sec:related:lightbot}
+
+Danny Yaroslavski, der Hauptentwickler von Lightbot beschreibt in einem PDF-Dokument sein Programm als ein Denkspiel, welches seine Mechhaniken die Konzepten des Programmierens abbildet. Das Ziel von Lightbot ist es, in jedem Level einen Roboter dazu zu bringen, alle blauen Kacheln zu beleuchten. Dazu muss der Roboter mit einer Reihe von Anweisungen "programmiert" werden~\cite{yaroslavski2014}.
+
+Lightbot kommt dabei gänzlich ohne klassische geschriebene Programmieranweisungen aus. Stattdessen werden quadratische Bausteine von einer Toolbox in dafür vorgesehene Bereiche gezogen. Jeder Baustein deutet mit einem Icon den dahinterliegenden Befehl an. Prozeduren müssen verwendet werden, wenn im Bereich für das Hauptprogramm nicht ausreichend Platz vorhanden ist. Für jede Prozedur ist ein zusätzlicher Bereich vorgegeben, der mit einem entsprechenden Baustein aufgerufen werden kann. Neben atomaren Befehlen zum vorwärts gehen, links und rechts drehen, springen und Lich an- und aus-schalten, sind mit Lightbot Schleifen lediglich durch rekursive Aufrufe der Prozeduren möglich. Eine Abbruchbedingung kann nicht definiert werden. Auch auf Variablen und Verzweigungen wird verzichtet. Das bedeutet auch, dass der Roboter über keine Sensoren verfügt und blind durch seine Miniwelt läuft. Abbildung~\ref{fig:related:lightbot:screenshot} zeigt ein Bildschirmfoto aus der Lightbot App für iOS\footnote{\url{https://itunes.apple.com/de/app/lightbot-code-hour/id873943739?mt=8}}.
+
+Die Level in der App sind in drei Gruppen aufgeteilt. Im ersten Bereich "Basics" werden die atomaren Befehle eingeführt. Dabei erhöht sich der Schwierigkeitsgrad im Laufe der 8 Level. Im zweiten bereich "Procedures" werden dann Prozeduren eingeführt und im dritten Teil "Loops" können die Level nur durch den geschickten Einsatz von Rekursion gelöst werden.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{gfx/2-related-lightbot-screenshot.png}
+    \caption{Bildschirmfoto aus der Lightbot App für iOS}
+    \label{fig:related:lightbot:screenshot}
+\end{figure}
