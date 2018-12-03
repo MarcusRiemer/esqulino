@@ -1,0 +1,187 @@
+% **************************************************
+% Information and Commands for Reuse
+% **************************************************
+\newcommand{\thesisTitle}{Kara-Umgebung (working title)}
+\newcommand{\thesisSubtitle}{Bachelor-Thesis im Fachbereich Informatik}
+\newcommand{\thesisDate}{13. Februar 2019}
+\newcommand{\thesisVersion}{\input{GIT_REV}}
+
+\newcommand{\thesisAuthor}{Sebastian Popp}
+\newcommand{\thesisAuthorStudentNumber}{Medieninformatik 101588}
+\newcommand{\thesisAuthorEmail}{minf101588@fh-wedel.de}
+
+\newcommand{\thesisFirstReviewer}{Dr. Michael Predeschly}
+\newcommand{\thesisFirstReviewerEmail}{\protect{mpr@fh-wedel.de}}
+
+\newcommand{\thesisSecondReviewer}{Marcus Riemer}
+\newcommand{\thesisSecondReviewerEmail}{\protect{mri@fh-wedel.de}}
+
+\newcommand{\thesisUniversity}{\protect{Fachhochschule Wedel}}
+\newcommand{\thesisUniversityCity}{Wedel}
+\newcommand{\thesisUniversityStreetAddress}{Feldstra{\ss}e 143}
+\newcommand{\thesisUniversityPostalCode}{22880}
+
+% **************************************************
+% Load and Configure Packages
+% **************************************************
+\usepackage[utf8]{inputenc}       % defines file's character encoding
+\usepackage[ngerman]{babel}       % babel system, adjust the language of the content
+\usepackage[                      % clean thesis style
+	figuresep=colon,%
+	sansserif=false,%
+	hangfigurecaption=false,%
+	hangsection=true,%
+	hangsubsection=true,%
+	colorize=full,%
+	colortheme=bluemagenta,%
+	bibsys=bibtex,%
+	bibfile=bib-refs,%
+	bibstyle=alphabetic,%
+]{sty/cleanthesis}
+
+\hypersetup{                      % setup the hyperref-package options
+	pdftitle={\thesisTitle},      %   - title (PDF meta)
+	pdfsubject={\thesisSubtitle}, %   - subject (PDF meta)
+	pdfauthor={\thesisAuthor},    %   - author (PDF meta)
+	plainpages=false,             %   -
+	colorlinks=false,             %   - colorize links?
+	pdfborder={0 0 0},            %   -
+	breaklinks=true,              %   - allow line break inside links
+	bookmarksnumbered=true,       %
+	bookmarksopen=true            %
+}
+
+% Font and Color
+\cthesissetcolor{cmyk}{1, .87, .27, .12}{1, .87, .27, .12}
+\usepackage{fontspec}
+
+\setmainfont{Dax Pro}
+\renewcommand{\helv}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
+\renewcommand{\book}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
+\renewcommand{\tgherosfont}{\fontspec{Dax Pro}}
+\renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Dax Pro}}
+
+% \setmainfont{Futura PT}
+% \renewcommand{\helv}{\fontspec{Futura PT}\fontsize{9}{11}\selectfont}
+% \renewcommand{\book}{\fontspec{Futura PT}\fontsize{11}{13}\selectfont}
+% \renewcommand{\tgherosfont}{\fontspec{Futura PT}}
+% \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Futura PT}}
+
+% \setmainfont{Neue Haas Grotesk Text Pro}
+% \renewcommand{\helv}{\fontspec{Neue Haas Grotesk Text Pro}\fontsize{9}{11}\selectfont}
+% \renewcommand{\book}{\fontspec{Neue Haas Grotesk Text Pro}\fontsize{11}{13}\selectfont}
+% \renewcommand{\tgherosfont}{\fontspec{Neue Haas Grotesk Text Pro}}
+% \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Neue Haas Grotesk Text Pro}}
+
+\renewcommand{\ttfamily}{\fontspec{Source Code Pro}}
+\renewcommand{\cftchapfont}{\normalfont\bfseries}
+\renewcommand{\cftchappagefont}{\normalfont\bfseries}
+\usepackage{multicol}
+\addtokomafont{caption}{\normalfont}
+\addtokomafont{captionlabel}{\normalfont}
+% \usepackage{url}
+\urlstyle{rm}
+% \renewcommand{\UrlBreaks}{\do\/\do\-\do\_\do\.\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z}
+% \setcounter{biburllcpenalty}{9000}% Kleinbuchstaben
+% \setcounter{biburlucpenalty}{9000}% Großbuchstaben
+% \DeclareFieldFormat{url}{\url{#1}}
+\makeatletter
+\def\blx@maxline{77}
+\makeatother
+
+% **************************************************
+% Additional Utilities
+% **************************************************
+
+% \inlinec for inline code
+\NewDocumentCommand{\inlinec}{v}{%
+\texttt{#1}%
+}
+
+% Fix quotes
+\usepackage{csquotes}
+\MakeOuterQuote{"}
+
+% Code
+\usepackage{listings,lstautogobble}
+\lstset{
+   backgroundcolor=\color{white},
+   extendedchars=true,
+   basicstyle=\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   stepnumber=1,
+   numberstyle=\tiny\ttfamily,
+   numbersep=9pt,
+   tabsize=4,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b,
+   autogobble=true
+}
+
+% **************************************************
+% Document CONTENT
+% **************************************************
+\begin{document}
+
+% --------------------------
+% rename document parts
+% --------------------------
+\renewcaptionname{ngerman}{\figurename}{Abb.}
+\renewcaptionname{ngerman}{\tablename}{Tab.}
+
+% --------------------------
+% Front matter
+% --------------------------
+\pagenumbering{roman}             % roman page numbing (invisible for empty page style)
+\pagestyle{empty}                 % no header or footers
+\input{content/titlepages}        % INCLUDE: all titlepages
+\cleardoublepage
+%
+\pagestyle{plain}                 % display just page numbers
+\input{content/abstract}          % INCLUDE: the abstracts (english and german)
+\cleardoublepage
+%
+\pdfbookmark[0]{Inhaltsverzeichnis}{Inhaltsverzeichnis}
+\setcounter{tocdepth}{3}          % define depth of toc
+\tableofcontents                  % display table of contents
+\cleardoublepage
+
+% --------------------------
+% Body matter
+% --------------------------
+\pagenumbering{arabic}            % arabic page numbering
+\setcounter{page}{1}              % set page counter
+\pagestyle{maincontentstyle}      % fancy header and footer
+
+\input{content/chapter-1-introduction} % INCLUDE: introduction
+\input{content/chapter-2-related-work} % INCLUDE: related work
+\input{content/chapter-3-requirement-analysis} % INCLUDE: system
+\input{content/chapter-4-implementation} % INCLUDE: concepts
+\input{content/chapter-5-conclusion} % INCLUDE: conclusion
+\cleardoublepage
+
+% --------------------------
+% Back matter
+% --------------------------
+{%
+\setstretch{1.1}
+\renewcommand{\bibfont}{\normalfont\small}
+\setlength{\biblabelsep}{0pt}
+\setlength{\bibitemsep}{0.5\baselineskip plus 0.5\baselineskip}
+% \printbibliography
+\printbibliography[title=Literaturverzeichnis,nottype=online]
+\printbibliography[heading=subbibliography,title={Quellen im Internet},type=online,prefixnumbers={@}]
+}
+\cleardoublepage
+
+% \listoffigures
+% \cleardoublepage
+
+% \listoftables
+% \cleardoublepage
+
+\input{content/declaration}
+\cleardoublepage
