@@ -123,11 +123,12 @@
 	\colorlet{ctcolortitle}{ctcolormain}
 	\colorlet{ctcolorpartnum}{ctcolormain}
 	\colorlet{ctcolorpartline}{ctcolorblack}
-	\colorlet{ctcolorparttext}{ctcolorblack}
+	\colorlet{ctcolorparttext}{ctcolormain}
+	\colorlet{ctcolorchapter}{ctcolorblack}
 	\colorlet{ctcolorchapternum}{ctcolormain}
 	\colorlet{ctcolorchapterline}{ctcolormain}
-	\colorlet{ctcolorsection}{ctcolormain}
-	\colorlet{ctcolorsubsection}{ctcolormain}
+	\colorlet{ctcolorsection}{ctcolorblack}
+	\colorlet{ctcolorsubsection}{ctcolorblack}
 	\colorlet{ctcolorparagraph}{ctcolorblack}
 	% --> text colors
 	\colorlet{ctcolorfloatlabel}{ctcoloraccessory}
@@ -154,6 +155,7 @@
 		% --> sectioning colors
 		\colorlet{ctcolortitle}{ctcolorblack}
 		\colorlet{ctcolorpartnum}{ctcolorblack}
+		\colorlet{ctcolorchapter}{ctcolorblack}
 		\colorlet{ctcolorchapternum}{ctcolorblack}
 		\colorlet{ctcolorchapterline}{ctcolorblack}
 		\colorlet{ctcolorsection}{ctcolorblack}
@@ -491,7 +493,7 @@
 
 \newcommand{\thesispartlabelfont}{\color{ctcolorpartnum}\book\fontsize{60}{60}\selectfont}
 \newcommand{\thesispartfont}{\color{ctcolorparttext}\huge \tgherosfont\selectfont}
-\newcommand{\thesischapterfont}{\color{ctcolorblack}\huge \fontfamily{phv}\selectfont}
+\newcommand{\thesischapterfont}{\color{ctcolorchapter}\huge \fontfamily{phv}\selectfont}
 %\newcommand{\thesissectionfont}{\color{ctcolormain}\LARGE\bfseries \tgherosfont}
 \newcommand{\thesissectionfont}{\color{ctcolorsection}\LARGE \tgherosfont}
 \newcommand{\thesissubsectionfont}{\color{ctcolorsubsection}\Large \tgherosfont}
@@ -572,7 +574,7 @@
 %	{%
 		\titleformat{\section}[hang]%
 			{\usekomafont{section}}%
-			{\color{ctcolorblack}\thesection\hspace*{10pt}}%
+			{\thesection\hspace*{10pt}}%
 			{0pt}%
 			{\raggedright}%
 			[\phantomsection]
@@ -580,7 +582,7 @@
 \else
 		\titleformat{\section}[block]%
 			{\usekomafont{section}}%
-			{\color{ctcolorblack}\thesection\hspace*{10pt}}%
+			{\thesection\hspace*{10pt}}%
 			{0pt}%
 			{\raggedright}%
 			[\phantomsection]
@@ -594,7 +596,7 @@
 %	{%
 		\titleformat{\subsection}[hang]%
 			{\usekomafont{subsection}}%
-			{\color{ctcolorblack}\thesubsection\hspace*{10pt}}%
+			{\thesubsection\hspace*{10pt}}%
 			{0pt}%
 			{\raggedright}%
 			[\phantomsection]
@@ -602,7 +604,7 @@
 \else
 		\titleformat{\subsection}[block]%
 			{\usekomafont{subsection}}%
-			{\color{ctcolorblack}\thesubsection\hspace*{10pt}}%
+			{\thesubsection\hspace*{10pt}}%
 			{0pt}%
 			{\raggedright}%
 			[\phantomsection]
@@ -630,7 +632,7 @@
 % The tocloft package enables us to control the typographic design of the
 % table of contents, list of figures and list of tables
 \RequirePackage{tocloft}
-\renewcommand{\cftchapfont}{\usefont{T1}{bch}{b}{n}\selectfont}
+\renewcommand{\cftchapfont}{\thesischapterfont}
 \renewcommand{\cfttoctitlefont}{\thesischapterfont}
 %
 % > adjusts the indention for figure and table entries (lof and lot)

@@ -4,7 +4,7 @@
 \chapter{Vergleichbare Arbeiten}
 \label{sec:related}
 
-In diesem Abschnitt werden Programme hervorgehoben, die einen spielerischen Ansatz zum lernen von Programmieren bieten.
+Es gab bereits viele Versuche Neulinge bei ihren ersten Schritten in der Welt der Programmierung zu unterstützen. Dazu wurden verschiedene Umgebungen und Sprachen entwickelt, die einen besonders einfachen und schnellen Einstieg -- gerade für Kinder im Schulalter -- bieten sollen. In diesem Abschnitt werden Programme hervorgehoben, die einen spielerischen Ansatz zum Lernen von Programmieren bieten.
 
 %************************************************
 % Turtle Grafiken
@@ -12,11 +12,9 @@ In diesem Abschnitt werden Programme hervorgehoben, die einen spielerischen Ansa
 \section{Turtle Grafiken}
 \label{sec:related:turtle}
 
-Seymour Papert beschreibt 1980 in seinem Buch \textit{Mindstorms: Children, Computers, and Powerful Ideas} seine Idee von Turtle Grafiken. Sein Ziel war die Gestaltung von Objekten, die Kinder für sich selbst und auf ihre eigene Art herstellen können. Dabei Hift die Konstruierung eines Objektes oder einer Figur \TODO{"object-to-think-with"}, in das sich die Kinder hineinversetzten können \cite{papert1980}.
+Seymour Papert beschreibt 1980 in dem Buch \textit{Mindstorms: Children, Computers, and Powerful Ideas} seine Idee von Turtle Grafiken. Sein Ziel war die Gestaltung von Objekten, die Kinder für sich selbst und auf ihre eigene Art herstellen können. Dabei hilft ein Objekt oder eine Figur, in das sich die Kinder hineinversetzten können. Papert nennt dies das "object-to-think-with"~\cite[S. 11]{papert1980}.
 
-Die Schildkröte kann bewegt werden indem Befehle über die Tastatur eingegeben werden. Die dafür entwickelte Programmiersprache heißt LOGO. \inlinec{FORWARD 100} bewegt die Schildkröte in einer geraden Linie über eine Strecke von 100 Schritten von je etwas einem Millimeter. Durch die Eingabe von \inlinec{RIGHT 90} wird die Schildkröte um 90 Grad gedreht. \inlinec{PENDOWN} lässt die Schildkröte einen Stift senken, um eine sichtbare Spur des Pfads zu hinterlassen, während \inlinec{PENUP} sie anweist, den Stift anzuheben.
-
-Die Idee des Programmierens wird durch die Metapher eingeführt, in der der Schildkröte ein neues Wort beigebracht wird. So können \inlinec{TRIANGLE} \fref{fig:related:turtle:square:code} und \inlinec{SQUARE} \fref{fig:related:turtle:triangle:code} als Prozeduren definiert werden, die die Schildkröte ein Dreieck, bzw. ein Quadrat zeichnen lassen. Diese neuen Wörter können nun verwendet werden um Programme und neue Wörter zu definieren. Es lässt sich zum Beispiel durch Kombination eines Quadrates und eines Dreiecks ein Haus zeichnen \fref{fig:related:turtle:house:code}.
+Die Schildkröte kann bewegt werden, indem Befehle über die Tastatur eingegeben werden. Die dafür entwickelte Programmiersprache heißt LOGO. \inlinec{FORWARD 100} bewegt die Schildkröte in einer geraden Linie über eine Strecke von 100 Schritten von je etwas einem Millimeter. Durch die Eingabe von \inlinec{RIGHT 90} wird die Schildkröte um 90 Grad gedreht. \inlinec{PENDOWN} lässt die Schildkröte einen Stift senken, um eine sichtbare Spur des Pfads zu hinterlassen, während \inlinec{PENUP} sie anweist, den Stift anzuheben. Die Idee des Programmierens wird durch die Metapher eingeführt, in der der Schildkröte ein neues Wort beigebracht wird. So können \inlinec{TRIANGLE} \fref{fig:related:turtle:square:code} und \inlinec{SQUARE} \fref{fig:related:turtle:triangle:code} als Prozeduren definiert werden, die die Schildkröte ein Dreieck, bzw. ein Quadrat zeichnen lassen. Diese neuen Wörter können nun verwendet werden, um Programme und neue Wörter zu definieren. Es lässt sich zum Beispiel durch Kombination eines Quadrates und eines Dreiecks ein Haus zeichnen \fref{fig:related:turtle:house:code}~\cite[S. 12]{papert1980}.
 
 \begin{figure}[h]
     \begin{subfigure}[b]{0.3\textwidth}
@@ -86,7 +84,14 @@ Die Idee des Programmierens wird durch die Metapher eingeführt, in der der Schi
 \section{Karel the Robot}
 \label{sec:related:karel}
 
-\TODO{Karel the Robot} \cite{pattis1981}
+Pattis geht mit \textit{Karel the Robot} einen ähnlichen Weg wie die Turtle Grafiken. Aber statt einer Schildkröte wird der Roboter Karel über das Spielfeld bewegt. Karel bewegt sich nicht frei, sondern auf einem Netz von horizontalen (Avenue) und vertikalen Straßen (Street) auf denen sich Wände (Wall) befinden können und den direkten Weg blockieren. Karel bewegt sich immer von Kreuzung zu Kreuzung (Corner). Außerdem können Gegenstände -- sogenannte Beeper -- auf Kreuzungen platziert sein. Diese können von Karel aufgenommen, bewegt und abgesetzt werden. Einige Aufgaben beinhalten das Aufsammeln oder Ablegen von Mustern aus Gegenständen~\cite[S. 1-3]{pattis1981}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{gfx/2-related-karel.png}
+    \caption{Die Struktur aus Karels Welt aus~\cite[S. 3]{pattis1981}}
+    \label{fig:related:karel}
+\end{figure}
 
 %************************************************
 % Kara
@@ -94,13 +99,13 @@ Die Idee des Programmierens wird durch die Metapher eingeführt, in der der Schi
 \section{Kara}
 \label{sec:related:kara}
 
-Reichert et al. beschreiben Kara wie folgt:
+Kara weicht in seiner ursprünglichen Version von den vorhergenannten Programmen ab, indem auf getippte Programmierbefehle zugunsten einer grafischen Oberfläche verzichtet wird. Kara setzt hier auf das Konzept der endlichen Automaten. Reichert et al. beschreiben Kara wie folgt:
 
 \begin{quote}
-    "Kara ist eine Mini-Umgebung basierend auf der Idee der endlichen Automaten. Kara, der Marienkäfer, lebt in einer einfachen grafischen Welt auf dem Bildschirm. Der Marienkäfer kann programmiert werden, um in seiner Welt verschiedene Aufgaben zu erledigen. Kleeblätter sammeln, einer Spur von Kleeblättern folgen oder Labyrinthe durchquären sind einige Beispiele. Die Programme werden grafisch mit der Maus als endliche Automaten erstellt."~\cite[S. 28]{reichert2004}
+    "Kara ist eine Mini-Umgebung basierend auf der Idee der endlichen Automaten. Kara, der Marienkäfer, lebt in einer einfachen grafischen Welt auf dem Bildschirm. Der Marienkäfer kann programmiert werden, um in seiner Welt verschiedene Aufgaben zu erledigen. Kleeblätter sammeln, einer Spur von Kleeblättern folgen oder Labyrinthe durchqueren sind einige Beispiele. Die Programme werden grafisch mit der Maus als endliche Automaten erstellt."~\cite[S. 28]{reichert2004}
 \end{quote}
 
-Neben der ursprünglichen Idee von Kara mit endlichen Automaten, gibt es weitere Versionen, die den Übergang zu realen Programmiersprachen erleichtern sollen \cite{kara2017}. So lässt sich der Marinenkäfer in der bekannten Welt auch mit Java, JavaScript, Python oder Ruby steuern. Durch die Konstrukte die diese Sprachen mitbringen in Verbindung mit den speziellen Methoden, die die Kara-Umgebung zur Verfügung stellt, sind nun auch kompliziertere Programme möglich.
+Neben der ursprünglichen Idee von Kara mit endlichen Automaten, gibt es weitere Versionen, die den Übergang zu realen Programmiersprachen erleichtern sollen \cite{kara2017}. So lässt sich der Marienkäfer in der bekannten Welt auch mit Java, JavaScript, Python oder Ruby steuern. Durch die Konstrukte die diese Sprachen mitbringen in Verbindung mit den speziellen Methoden, die die Kara-Umgebung zur Verfügung stellt, sind nun auch kompliziertere Programme möglich.
 
 \begin{figure}[h]
     \begin{subfigure}[b]{0.5\textwidth}
@@ -123,11 +128,11 @@ Neben der ursprünglichen Idee von Kara mit endlichen Automaten, gibt es weitere
 \section{Lightbot}
 \label{sec:related:lightbot}
 
-Danny Yaroslavski, der Hauptentwickler von Lightbot beschreibt in einem PDF-Dokument sein Programm als ein Denkspiel, welches seine Mechhaniken die Konzepten des Programmierens abbildet. Das Ziel von Lightbot ist es, in jedem Level einen Roboter dazu zu bringen, alle blauen Kacheln zu beleuchten. Dazu muss der Roboter mit einer Reihe von Anweisungen "programmiert" werden~\cite{yaroslavski2014}.
+Danny Yaroslavski, der Hauptentwickler von Lightbot beschreibt in einem PDF-Dokument sein Programm als ein Denkspiel, welches seine Mechaniken die Konzepten des Programmierens abbildet. Das Ziel von Lightbot ist es, in jedem Level einen Roboter dazu zu bringen, alle blauen Kacheln zu beleuchten. Dazu muss der Roboter mit einer Reihe von Anweisungen "programmiert" werden~\cite{yaroslavski2014}.
 
-Lightbot kommt dabei gänzlich ohne klassische geschriebene Programmieranweisungen aus. Stattdessen werden quadratische Bausteine von einer Toolbox in dafür vorgesehene Bereiche gezogen. Jeder Baustein deutet mit einem Icon den dahinterliegenden Befehl an. Prozeduren müssen verwendet werden, wenn im Bereich für das Hauptprogramm nicht ausreichend Platz vorhanden ist. Für jede Prozedur ist ein zusätzlicher Bereich vorgegeben, der mit einem entsprechenden Baustein aufgerufen werden kann. Neben atomaren Befehlen zum vorwärts gehen, links und rechts drehen, springen und Lich an- und aus-schalten, sind mit Lightbot Schleifen lediglich durch rekursive Aufrufe der Prozeduren möglich. Eine Abbruchbedingung kann nicht definiert werden. Auch auf Variablen und Verzweigungen wird verzichtet. Das bedeutet auch, dass der Roboter über keine Sensoren verfügt und blind durch seine Miniwelt läuft. Abbildung~\ref{fig:related:lightbot:screenshot} zeigt ein Bildschirmfoto aus der Lightbot App für iOS\footnote{\url{https://itunes.apple.com/de/app/lightbot-code-hour/id873943739?mt=8}}.
+Lightbot kommt dabei gänzlich ohne klassische geschriebene Programmieranweisungen aus. Stattdessen werden quadratische Bausteine von einer Toolbox in dafür vorgesehene Bereiche gezogen. Jeder Baustein deutet mit einem Icon den dahinterliegenden Befehl an. Prozeduren müssen verwendet werden, wenn im Bereich für das Hauptprogramm nicht ausreichend Platz vorhanden ist. Für jede Prozedur ist ein zusätzlicher Bereich vorgegeben, der mit einem entsprechenden Baustein aufgerufen werden kann. Neben atomaren Befehlen zum Vorwärtsgehen, Links- und Rechtsdrehen, Springen und Lich An- und Ausschalten, sind mit Lightbot Schleifen lediglich durch rekursive Aufrufe der Prozeduren möglich. Eine Abbruchbedingung kann nicht definiert werden. Auch auf Variablen und Verzweigungen wird verzichtet. Das bedeutet auch, dass der Roboter über keine Sensoren verfügt und blind durch seine Miniwelt läuft. Abbildung~\ref{fig:related:lightbot:screenshot} zeigt ein Bildschirmfoto aus der Lightbot App für iOS\footnote{\url{https://itunes.apple.com/de/app/lightbot-code-hour/id873943739?mt=8}}.
 
-Die Level in der App sind in drei Gruppen aufgeteilt. Im ersten Bereich "Basics" werden die atomaren Befehle eingeführt. Dabei erhöht sich der Schwierigkeitsgrad im Laufe der 8 Level. Im zweiten bereich "Procedures" werden dann Prozeduren eingeführt und im dritten Teil "Loops" können die Level nur durch den geschickten Einsatz von Rekursion gelöst werden.
+Die Level in der App sind in drei Gruppen aufgeteilt. Im ersten Bereich "Basics" werden die atomaren Befehle eingeführt. Dabei erhöht sich der Schwierigkeitsgrad im Laufe der 8 Level. Im zweiten Bereich "Procedures" werden dann Prozeduren eingeführt und im dritten Teil "Loops" können die Level nur durch den geschickten Einsatz von Rekursion gelöst werden.
 
 \begin{figure}[h]
     \centering
