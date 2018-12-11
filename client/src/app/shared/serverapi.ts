@@ -61,6 +61,13 @@ export class ServerApi {
   }
 
   /**
+   * Retrieves the URL that accepts uploaded databases
+   */
+  uploadDatabase(projectId: string, dbId: string) {
+    return (`${this._apiBaseUrl}/project/${projectId}/db/${dbId}/upload`);
+  }
+
+  /**
    * Retrieves the full description of a specific grammar.
    *
    * @param idOrSlug The slug or the ID of the grammar in question.

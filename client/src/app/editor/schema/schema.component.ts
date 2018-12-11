@@ -66,13 +66,25 @@ export class SchemaComponent implements OnInit {
     })
     this._subscriptionRefs.push(subRef);
 
-    let btnImport = this._toolbarService.addButton("importTable", "Daten Importieren", "file-text", "i");
-    subRef = btnImport.onClick.subscribe((res) => {
-      this._router.navigate(["./import"], { relativeTo: this._route });
+    // Button to switch to data import, only shown if there is
+    // a table the data could be imported to
+    if (!this.isEmpty) {
+      let btnImport = this._toolbarService.addButton("importTable", "Daten Importieren", "file-text", "i");
+      subRef = btnImport.onClick.subscribe((res) => {
+        this._router.navigate(["./import"], { relativeTo: this._route });
+      })
+      this._subscriptionRefs.push(subRef);
+    }
+
+    // Butto to switch to database import
+    let btnUpload = this._toolbarService.addButton("uploadDatabase", "Datenbank hochladen", "upload", "d");
+    subRef = btnUpload.onClick.subscribe((res) => {
+      this._router.navigate(["./upload"], { relativeTo: this._route });
     })
     this._subscriptionRefs.push(subRef);
 
 
+    // Ensure that the active project is always available
     subRef = this._projectService.activeProject
       .subscribe(res => {
         this.project = res
