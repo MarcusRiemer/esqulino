@@ -11,9 +11,10 @@
 \usepackage{listings}
 \usepackage[export]{adjustbox} % For frames with includegraphics
 \usepackage{pgfgantt}
-\usepackage{framed}
 \usepackage[a4paper, top=1in]{geometry}
 \usepackage{todonotes}
+\usepackage{enumitem}
+\usepackage{framed}
 
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
     \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
@@ -372,11 +373,70 @@ Diese Aspekte haben untereinander allerdings vielfältige Querbezüge: So könnt
   Nachdem die Schnittstelle für die Erzeugung der Editoren nun stabil ist, sollen diese in Tests mit Lehrkräften und Schülern erprobt werden. Für diesen Meilenstein wird dann ausschließlich die Benutzerführung optimiert. Konkret bedeutet das die Erprobung unterschiedlicher Implementierungen für Vorschläge zu Löchern im Syntaxbaum. Abgesehen davon ist aber zu erwarten, dass die Rückmeldungen der Anwender auch generelle (und teils sehr profane) Schwächen in der Bedienung aufdecken wird. Auch diese noch unbekannten Aspekte sollen benannt und möglichst behoben werden.
 \end{description}
 
-\section{Gliederung der Dissertation}
+\newpage
 
-\begin{framed}
-  Wird nach Absprache mit Frau Würzbach \textbf{bis zum 15.12.2018 nachgereicht}.
-\end{framed}
+\section{Vorläufige Gliederung der Dissertation}
+
+\begin{enumerate}[noitemsep]
+  \setlist{nolistsep}
+\item \textbf{Introduction}
+  \begin{enumerate}[noitemsep]
+  \item \textbf{Syntaxfree Programming} \\
+    Introduction to the user-facing core concept
+  \item \textbf{IDE Generation} \\
+    Introduction to the technical core concept
+  \item \textbf{Hypotheses and Goals}
+  \end{enumerate}
+\item \textbf{Related Work}
+  \begin{enumerate}[noitemsep]
+  \item \textbf{Blockly}\\
+    A toolkit for the creation syntaxfree programming languages
+  \item \textbf{Scratch}\\
+    The most popular syntaxfree programming environment
+  \item \textbf{Compiler Construction}\\
+    Overview of related approaches in compiler construction
+  \item \textbf{XText} \\
+    Framework for developing programming languages and domain-specific languages that are automatically integrated into Eclipse
+  \end{enumerate}
+\item \textbf{Core Concept}\\
+  Presents and explains the core concepts, targeted at tech-savvy teachers
+  \begin{enumerate}
+  \item \textbf{Programming Languages}\\
+    Augmentation of existing languages
+  \item \textbf{Block Languages}\\
+    Block definitions and available blocks
+  \item \textbf{User Interface}\\
+    Drag \& Drop, Sidebar, Runtime Environments
+  \item \textbf{Variations}\\
+    How to create and maintain variations of languages
+  \end{enumerate}
+\item \textbf{Technical Concept}\\
+  Software design aspects of the implementation, targeted at computer scientists
+  \begin{enumerate}
+  \item \textbf{Grammar}\\
+    Specification and implementation of grammars
+  \item \textbf{Block Language}\\
+    Specification and implementation of block languages
+  \item \textbf{Generator Instructions}\\
+    Specification and implementation of generator instructions
+  \item \textbf{Tests}
+  \end{enumerate}
+\item \textbf{Showcase}\\
+  Presents specific languages that have been implemented and discusses their design
+  \begin{enumerate}
+  \item \textbf{\texttt{SQL}}
+  \item \textbf{\texttt{HTML}}
+  \item \textbf{Templating for \texttt{HTML}}
+  \item \textbf{\texttt{CSS}}
+  \item \textbf{\texttt{JavaScript}}
+  \end{enumerate}
+\item \textbf{Evaluation}
+  \begin{enumerate}
+  \item \textbf{Testing with Teachers}
+  \item \textbf{Testing with Pupils}
+  \end{enumerate}
+\item \textbf{Results}
+\end{enumerate}
 
 \newpage
 
