@@ -60,7 +60,29 @@ class ProjectDatabasesController < ApplicationController
   # Replaces the whole database with the given database
   def database_upload
     ensure_write_access do
-      db_path = current_database.sqlite_file_path
+      # An ActionDispatch::Http::UploadedFile object that encapsulates access
+      # to the uploaded file
+      uploaded = params['database']
+
+      if uploaded and uploaded.size > 0 then
+        # The path of the currently loaded database
+        db_path = current_database.sqlite_file_path
+
+        # Overwrite the previously stored database
+        File.open(db_path, 'wb') do |file|
+          file.write(uploaded.read)
+        end
+
+        # The JSON representation of the schema is stored in the databases and
+        # requires an explicit refresh after external changes.
+        current_database.refresh_schema!
+
+        # Tell the client about the new schema
+        render :json => { :schema => current_database.schema }
+      else
+        render :status => 400,
+               :json => { :errors => [ { :status => 400, :title => "Given database is 0 byte large" }] }
+      end
     end
   end
 
