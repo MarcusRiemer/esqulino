@@ -57,6 +57,13 @@ class ProjectDatabasesController < ApplicationController
     end
   end
 
+  # Replaces the whole database with the given database
+  def database_upload
+    ensure_write_access do
+      db_path = current_database.sqlite_file_path
+    end
+  end
+
   # Creates a new table in the given database
   def table_create
     ensure_write_access do
@@ -72,7 +79,6 @@ class ProjectDatabasesController < ApplicationController
       current_database.save!
     end
   end
-
 
   # Alters a certain table of a database
   def table_alter
@@ -99,10 +105,9 @@ class ProjectDatabasesController < ApplicationController
       current_database.table_bulk_insert(table_name, tabular_data['columnNames'], tabular_data['data'])
 
       render status: :no_content
-      
+
     end
   end
-
 
   # Drops a single table of the given database.
   def table_delete
@@ -129,7 +134,7 @@ class ProjectDatabasesController < ApplicationController
 
   # Access to the current project
   def current_project
-    @current_project ||= Project.find_by(slug: params['project_id'])
+    @current_project ||= Project.find_by_slug_or_id!(params['project_id'])
   end
 
   # Access to the current database

@@ -1,3 +1,5 @@
+require_dependency 'util' # Checking whether Strings are UUIDs
+
 # A project is a group of resources that logically belong together.
 # Currently every project is assumed to be somewhat web-centric
 # (using databases and HTML), but this is not set in stone.
@@ -44,6 +46,16 @@ class Project < ApplicationRecord
   scope :with_exclusive, -> {
     includes(:code_resources, :default_database, :project_databases, :project_sources, :project_uses_block_languages)
   }
+
+  # Looks up a project by checking the given string against IDs or
+  # slugs.
+  def self.find_by_slug_or_id!(slug_or_id)
+    if string_is_uuid? slug_or_id
+      return Project.find slug_or_id
+    else
+      return Project.find_by! slug: slug_or_id
+    end
+  end
 
   # Create the required folders in the projects data storage folder
   after_create do
