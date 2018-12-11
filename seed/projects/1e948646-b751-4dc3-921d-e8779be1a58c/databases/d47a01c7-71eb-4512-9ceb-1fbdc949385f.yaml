@@ -1,0 +1,222 @@
+--- !ruby/object:ProjectDatabase
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 1e948646-b751-4dc3-921d-e8779be1a58c
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 1e948646-b751-4dc3-921d-e8779be1a58c
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: 1e948646-b751-4dc3-921d-e8779be1a58c
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: default
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: d47a01c7-71eb-4512-9ceb-1fbdc949385f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: schema
+  value_before_type_cast: '[{"name": "adresse", "columns": [{"name": "ADRESSE_ID",
+    "type": "INT(11)", "index": 0, "primary": true, "not_null": true, "dflt_value":
+    null}, {"name": "PIN", "type": "INT(4)", "index": 1, "primary": false, "not_null":
+    true, "dflt_value": null}, {"name": "LKZ", "type": "VARCHAR(3)", "index": 2, "primary":
+    false, "not_null": true, "dflt_value": null}, {"name": "CO", "type": "VARCHAR(30)",
+    "index": 3, "primary": false, "not_null": false, "dflt_value": "NULL"}, {"name":
+    "STRASSE", "type": "VARCHAR(40)", "index": 4, "primary": false, "not_null": true,
+    "dflt_value": null}, {"name": "PLZ", "type": "VARCHAR(10)", "index": 5, "primary":
+    false, "not_null": true, "dflt_value": null}, {"name": "ORT", "type": "VARCHAR(40)",
+    "index": 6, "primary": false, "not_null": true, "dflt_value": null}], "foreign_keys":
+    [{"references": [{"to_table": "lkz", "to_column": "LKZ", "from_column": "LKZ"}]},
+    {"references": [{"to_table": "person", "to_column": "PIN", "from_column": "PIN"}]}]},
+    {"name": "assistent", "columns": [{"name": "PIN", "type": "INT(4)", "index": 0,
+    "primary": true, "not_null": true, "dflt_value": null}, {"name": "AUFGABE_ID",
+    "type": "INT(11)", "index": 1, "primary": false, "not_null": false, "dflt_value":
+    "NULL"}, {"name": "BEFRISTUNG", "type": "INT(4)", "index": 2, "primary": false,
+    "not_null": false, "dflt_value": "NULL"}], "foreign_keys": [{"references": [{"to_table":
+    "mitarbeiter", "to_column": "PIN", "from_column": "PIN"}]}, {"references": [{"to_table":
+    "aufgabe", "to_column": "AUFGABE_ID", "from_column": "AUFGABE_ID"}]}]}, {"name":
+    "aufgabe", "columns": [{"name": "AUFGABE_ID", "type": "INT(11)", "index": 0, "primary":
+    true, "not_null": true, "dflt_value": null}, {"name": "AUFGABE_BEZ", "type": "VARCHAR(40)",
+    "index": 1, "primary": false, "not_null": true, "dflt_value": null}], "foreign_keys":
+    []}, {"name": "betreut", "columns": [{"name": "PIN", "type": "INT(4)", "index":
+    0, "primary": true, "not_null": true, "dflt_value": null}, {"name": "VERANSTALTUNG_ID",
+    "type": "INT(11)", "index": 1, "primary": true, "not_null": true, "dflt_value":
+    null}], "foreign_keys": [{"references": [{"to_table": "veranstaltung", "to_column":
+    "VERANSTALTUNG_ID", "from_column": "VERANSTALTUNG_ID"}]}, {"references": [{"to_table":
+    "assistent", "to_column": "PIN", "from_column": "PIN"}]}]}, {"name": "block",
+    "columns": [{"name": "BLOCK", "type": "INT(11)", "index": 0, "primary": true,
+    "not_null": true, "dflt_value": null}, {"name": "STARTZEIT", "type": "VARCHAR(5)",
+    "index": 1, "primary": false, "not_null": true, "dflt_value": null}, {"name":
+    "ENDZEIT", "type": "VARCHAR(5)", "index": 2, "primary": false, "not_null": true,
+    "dflt_value": null}], "foreign_keys": []}, {"name": "dozent", "columns": [{"name":
+    "PIN", "type": "INT(4)", "index": 0, "primary": true, "not_null": true, "dflt_value":
+    null}, {"name": "FACHSCHAFT_ID", "type": "INT(11)", "index": 1, "primary": false,
+    "not_null": false, "dflt_value": "NULL"}], "foreign_keys": [{"references": [{"to_table":
+    "mitarbeiter", "to_column": "PIN", "from_column": "PIN"}]}, {"references": [{"to_table":
+    "fachschaft", "to_column": "FACHSCHAFT_ID", "from_column": "FACHSCHAFT_ID"}]}]},
+    {"name": "fachrichtung", "columns": [{"name": "FACHRICHTUNG_ID", "type": "INT(11)",
+    "index": 0, "primary": true, "not_null": true, "dflt_value": null}, {"name": "FR_KUERZEL",
+    "type": "VARCHAR(6)", "index": 1, "primary": false, "not_null": true, "dflt_value":
+    null}, {"name": "FR_BEZ", "type": "VARCHAR(100)", "index": 2, "primary": false,
+    "not_null": false, "dflt_value": "NULL"}, {"name": "ANZFACHSEM", "type": "INT(11)",
+    "index": 3, "primary": false, "not_null": true, "dflt_value": null}], "foreign_keys":
+    []}, {"name": "fachschaft", "columns": [{"name": "FACHSCHAFT_ID", "type": "INT(11)",
+    "index": 0, "primary": true, "not_null": true, "dflt_value": null}, {"name": "FACHSCHAFT_BEZ",
+    "type": "VARCHAR(30)", "index": 1, "primary": false, "not_null": true, "dflt_value":
+    null}], "foreign_keys": []}, {"name": "gehaltsstufe", "columns": [{"name": "GEHALTSSTUFE_ID",
+    "type": "INT(11)", "index": 0, "primary": true, "not_null": true, "dflt_value":
+    null}, {"name": "GS_KUERZEL", "type": "VARCHAR(5)", "index": 1, "primary": false,
+    "not_null": true, "dflt_value": null}, {"name": "GEHALT", "type": "INT(5)", "index":
+    2, "primary": false, "not_null": true, "dflt_value": null}, {"name": "WEIHNACHTSGELD",
+    "type": "INT(5)", "index": 3, "primary": false, "not_null": false, "dflt_value":
+    "NULL"}], "foreign_keys": []}, {"name": "geschlecht", "columns": [{"name": "GESCHLECHT",
+    "type": "CHAR(1)", "index": 0, "primary": true, "not_null": true, "dflt_value":
+    null}, {"name": "KLARTEXT", "type": "VARCHAR(10)", "index": 1, "primary": false,
+    "not_null": true, "dflt_value": null}, {"name": "ANREDE", "type": "VARCHAR(10)",
+    "index": 2, "primary": false, "not_null": true, "dflt_value": null}, {"name":
+    "BRIEFANREDE", "type": "VARCHAR(25)", "index": 3, "primary": false, "not_null":
+    true, "dflt_value": null}], "foreign_keys": []}, {"name": "krankenkasse", "columns":
+    [{"name": "KRANKENKASSE_ID", "type": "INT(11)", "index": 0, "primary": true, "not_null":
+    true, "dflt_value": null}, {"name": "KK_NAME", "type": "VARCHAR(50)", "index":
+    1, "primary": false, "not_null": false, "dflt_value": "NULL"}], "foreign_keys":
+    []}, {"name": "liest", "columns": [{"name": "PIN", "type": "INT(4)", "index":
+    0, "primary": true, "not_null": true, "dflt_value": null}, {"name": "VERANSTALTUNG_ID",
+    "type": "INT(11)", "index": 1, "primary": true, "not_null": true, "dflt_value":
+    null}, {"name": "AKTUELL", "type": "SMALLINT(6)", "index": 2, "primary": false,
+    "not_null": false, "dflt_value": "NULL"}], "foreign_keys": [{"references": [{"to_table":
+    "veranstaltung", "to_column": "VERANSTALTUNG_ID", "from_column": "VERANSTALTUNG_ID"}]},
+    {"references": [{"to_table": "dozent", "to_column": "PIN", "from_column": "PIN"}]}]},
+    {"name": "lkz", "columns": [{"name": "LKZ", "type": "VARCHAR(3)", "index": 0,
+    "primary": true, "not_null": true, "dflt_value": null}, {"name": "LAND", "type":
+    "VARCHAR(50)", "index": 1, "primary": false, "not_null": true, "dflt_value": null},
+    {"name": "STAATSANG", "type": "VARCHAR(80)", "index": 2, "primary": false, "not_null":
+    false, "dflt_value": "NULL"}], "foreign_keys": []}, {"name": "mitarbeiter", "columns":
+    [{"name": "PIN", "type": "INT(4)", "index": 0, "primary": true, "not_null": true,
+    "dflt_value": null}, {"name": "GEHALTSSTUFE_ID", "type": "INT(11)", "index": 1,
+    "primary": false, "not_null": true, "dflt_value": null}, {"name": "KUERZEL", "type":
+    "CHAR(4)", "index": 2, "primary": false, "not_null": true, "dflt_value": null},
+    {"name": "TITEL", "type": "VARCHAR(40)", "index": 3, "primary": false, "not_null":
+    false, "dflt_value": "NULL"}], "foreign_keys": [{"references": [{"to_table": "gehaltsstufe",
+    "to_column": "GEHALTSSTUFE_ID", "from_column": "GEHALTSSTUFE_ID"}]}, {"references":
+    [{"to_table": "person", "to_column": "PIN", "from_column": "PIN"}]}]}, {"name":
+    "person", "columns": [{"name": "PIN", "type": "INT(4)", "index": 0, "primary":
+    true, "not_null": true, "dflt_value": null}, {"name": "GESCHLECHT", "type": "CHAR(1)",
+    "index": 1, "primary": false, "not_null": true, "dflt_value": null}, {"name":
+    "KRANKENKASSE_ID", "type": "INT(11)", "index": 2, "primary": false, "not_null":
+    false, "dflt_value": "NULL"}, {"name": "VNAME", "type": "VARCHAR(40)", "index":
+    3, "primary": false, "not_null": false, "dflt_value": "NULL"}, {"name": "NNAME",
+    "type": "VARCHAR(40)", "index": 4, "primary": false, "not_null": true, "dflt_value":
+    null}, {"name": "GEBDAT", "type": "DATE", "index": 5, "primary": false, "not_null":
+    false, "dflt_value": "NULL"}], "foreign_keys": [{"references": [{"to_table": "krankenkasse",
+    "to_column": "KRANKENKASSE_ID", "from_column": "KRANKENKASSE_ID"}]}, {"references":
+    [{"to_table": "geschlecht", "to_column": "GESCHLECHT", "from_column": "GESCHLECHT"}]}]},
+    {"name": "pruefung", "columns": [{"name": "STUDIENLEISTUNG_ID", "type": "INT(11)",
+    "index": 0, "primary": true, "not_null": true, "dflt_value": null}, {"name": "PIN",
+    "type": "INT(4)", "index": 1, "primary": true, "not_null": true, "dflt_value":
+    null}, {"name": "SEMESTER", "type": "INT(11)", "index": 2, "primary": true, "not_null":
+    true, "dflt_value": null}, {"name": "MIT_PIN", "type": "INT(4)", "index": 3, "primary":
+    false, "not_null": true, "dflt_value": null}, {"name": "TEILNAHME", "type": "CHAR(1)",
+    "index": 4, "primary": false, "not_null": true, "dflt_value": null}, {"name":
+    "NOTE", "type": "DECIMAL(2,1)", "index": 5, "primary": false, "not_null": false,
+    "dflt_value": "NULL"}], "foreign_keys": [{"references": [{"to_table": "student",
+    "to_column": "PIN", "from_column": "PIN"}]}, {"references": [{"to_table": "studienleistung",
+    "to_column": "STUDIENLEISTUNG_ID", "from_column": "STUDIENLEISTUNG_ID"}]}, {"references":
+    [{"to_table": "mitarbeiter", "to_column": "PIN", "from_column": "MIT_PIN"}]},
+    {"references": [{"to_table": "teilnahme", "to_column": "TEILNAHME", "from_column":
+    "TEILNAHME"}]}]}, {"name": "raum", "columns": [{"name": "RAUM_ID", "type": "INT(11)",
+    "index": 0, "primary": true, "not_null": true, "dflt_value": null}, {"name": "RAUMART",
+    "type": "CHAR(2)", "index": 1, "primary": false, "not_null": true, "dflt_value":
+    null}, {"name": "RAUM_NR", "type": "VARCHAR(4)", "index": 2, "primary": false,
+    "not_null": true, "dflt_value": null}, {"name": "RAUM_BEZ", "type": "VARCHAR(50)",
+    "index": 3, "primary": false, "not_null": true, "dflt_value": null}, {"name":
+    "PLAETZE", "type": "INT(11)", "index": 4, "primary": false, "not_null": true,
+    "dflt_value": null}], "foreign_keys": [{"references": [{"to_table": "raumart",
+    "to_column": "RAUMART", "from_column": "RAUMART"}]}]}, {"name": "raumart", "columns":
+    [{"name": "RAUMART", "type": "CHAR(2)", "index": 0, "primary": true, "not_null":
+    true, "dflt_value": null}, {"name": "RAUMART_BEZ", "type": "VARCHAR(30)", "index":
+    1, "primary": false, "not_null": true, "dflt_value": null}], "foreign_keys": []},
+    {"name": "sonst_mit", "columns": [{"name": "PIN", "type": "INT(4)", "index": 0,
+    "primary": true, "not_null": true, "dflt_value": null}, {"name": "AUFGABE_ID",
+    "type": "INT(11)", "index": 1, "primary": false, "not_null": true, "dflt_value":
+    null}], "foreign_keys": [{"references": [{"to_table": "aufgabe", "to_column":
+    "AUFGABE_ID", "from_column": "AUFGABE_ID"}]}, {"references": [{"to_table": "mitarbeiter",
+    "to_column": "PIN", "from_column": "PIN"}]}]}, {"name": "student", "columns":
+    [{"name": "PIN", "type": "INT(4)", "index": 0, "primary": true, "not_null": true,
+    "dflt_value": null}, {"name": "FACHRICHTUNG_ID", "type": "INT(11)", "index": 1,
+    "primary": false, "not_null": true, "dflt_value": null}, {"name": "FACHSEM", "type":
+    "INT(11)", "index": 2, "primary": false, "not_null": true, "dflt_value": null},
+    {"name": "VERWSEM", "type": "INT(11)", "index": 3, "primary": false, "not_null":
+    true, "dflt_value": null}, {"name": "BAFOEG", "type": "DECIMAL(6,2)", "index":
+    4, "primary": false, "not_null": false, "dflt_value": "NULL"}], "foreign_keys":
+    [{"references": [{"to_table": "fachrichtung", "to_column": "FACHRICHTUNG_ID",
+    "from_column": "FACHRICHTUNG_ID"}]}, {"references": [{"to_table": "person", "to_column":
+    "PIN", "from_column": "PIN"}]}]}, {"name": "studienleistung", "columns": [{"name":
+    "STUDIENLEISTUNG_ID", "type": "INT(11)", "index": 0, "primary": true, "not_null":
+    true, "dflt_value": null}, {"name": "FACHRICHTUNG_ID", "type": "INT(11)", "index":
+    1, "primary": false, "not_null": true, "dflt_value": null}, {"name": "SL_NR",
+    "type": "VARCHAR(5)", "index": 2, "primary": false, "not_null": true, "dflt_value":
+    null}, {"name": "SL_NAME", "type": "VARCHAR(200)", "index": 3, "primary": false,
+    "not_null": true, "dflt_value": null}], "foreign_keys": [{"references": [{"to_table":
+    "fachrichtung", "to_column": "FACHRICHTUNG_ID", "from_column": "FACHRICHTUNG_ID"}]}]},
+    {"name": "tag", "columns": [{"name": "TAG", "type": "INT(11)", "index": 0, "primary":
+    true, "not_null": true, "dflt_value": null}, {"name": "WOCHENTAG", "type": "VARCHAR(20)",
+    "index": 1, "primary": false, "not_null": true, "dflt_value": null}], "foreign_keys":
+    []}, {"name": "teilnahme", "columns": [{"name": "TEILNAHME", "type": "CHAR(1)",
+    "index": 0, "primary": true, "not_null": true, "dflt_value": null}, {"name": "TEILNAHME_BEZ",
+    "type": "VARCHAR(25)", "index": 1, "primary": false, "not_null": false, "dflt_value":
+    "NULL"}], "foreign_keys": []}, {"name": "termin", "columns": [{"name": "TERMIN_ID",
+    "type": "INT(11)", "index": 0, "primary": true, "not_null": true, "dflt_value":
+    null}, {"name": "TAG", "type": "INT(11)", "index": 1, "primary": false, "not_null":
+    true, "dflt_value": null}, {"name": "BLOCK", "type": "INT(11)", "index": 2, "primary":
+    false, "not_null": true, "dflt_value": null}], "foreign_keys": [{"references":
+    [{"to_table": "tag", "to_column": "TAG", "from_column": "TAG"}]}, {"references":
+    [{"to_table": "block", "to_column": "BLOCK", "from_column": "BLOCK"}]}]}, {"name":
+    "veranst_termin", "columns": [{"name": "RAUM_ID", "type": "INT(11)", "index":
+    0, "primary": true, "not_null": true, "dflt_value": null}, {"name": "VERANSTALTUNG_ID",
+    "type": "INT(11)", "index": 1, "primary": true, "not_null": true, "dflt_value":
+    null}, {"name": "TERMIN_ID", "type": "INT(11)", "index": 2, "primary": true, "not_null":
+    true, "dflt_value": null}], "foreign_keys": [{"references": [{"to_table": "veranstaltung",
+    "to_column": "VERANSTALTUNG_ID", "from_column": "VERANSTALTUNG_ID"}]}, {"references":
+    [{"to_table": "raum", "to_column": "RAUM_ID", "from_column": "RAUM_ID"}]}, {"references":
+    [{"to_table": "termin", "to_column": "TERMIN_ID", "from_column": "TERMIN_ID"}]}]},
+    {"name": "veranstaltung", "columns": [{"name": "VERANSTALTUNG_ID", "type": "INT(11)",
+    "index": 0, "primary": true, "not_null": true, "dflt_value": null}, {"name": "VERANSTTYP_ID",
+    "type": "INT(11)", "index": 1, "primary": false, "not_null": true, "dflt_value":
+    null}, {"name": "VERANSTALTUNG_BEZ", "type": "VARCHAR(70)", "index": 2, "primary":
+    false, "not_null": true, "dflt_value": null}], "foreign_keys": [{"references":
+    [{"to_table": "veransttyp", "to_column": "VERANSTTYP_ID", "from_column": "VERANSTTYP_ID"}]}]},
+    {"name": "veranstaltung_studienleistung", "columns": [{"name": "VERANSTALTUNG_ID",
+    "type": "INT(11)", "index": 0, "primary": true, "not_null": true, "dflt_value":
+    null}, {"name": "STUDIENLEISTUNG_ID", "type": "INT(11)", "index": 1, "primary":
+    true, "not_null": true, "dflt_value": null}, {"name": "FACHSEMESTER", "type":
+    "INT(11)", "index": 2, "primary": false, "not_null": false, "dflt_value": "NULL"},
+    {"name": "ECTS", "type": "DECIMAL(3,1)", "index": 3, "primary": false, "not_null":
+    false, "dflt_value": "NULL"}], "foreign_keys": [{"references": [{"to_table": "veranstaltung",
+    "to_column": "VERANSTALTUNG_ID", "from_column": "VERANSTALTUNG_ID"}]}, {"references":
+    [{"to_table": "studienleistung", "to_column": "STUDIENLEISTUNG_ID", "from_column":
+    "STUDIENLEISTUNG_ID"}]}]}, {"name": "veransttyp", "columns": [{"name": "VERANSTTYP_ID",
+    "type": "INT(11)", "index": 0, "primary": true, "not_null": true, "dflt_value":
+    null}, {"name": "VERANSTTYP_BEZ", "type": "VARCHAR(50)", "index": 1, "primary":
+    false, "not_null": true, "dflt_value": null}, {"name": "NOTEJN", "type": "SMALLINT(6)",
+    "index": 2, "primary": false, "not_null": true, "dflt_value": null}, {"name":
+    "ANZWDHLGERLAUBT", "type": "INT(11)", "index": 3, "primary": false, "not_null":
+    false, "dflt_value": "NULL"}], "foreign_keys": []}, {"name": "veroeffentlichung",
+    "columns": [{"name": "VEROEFFENTLICHUNG_ID", "type": "INT(11)", "index": 0, "primary":
+    true, "not_null": true, "dflt_value": null}, {"name": "PIN", "type": "INT(4)",
+    "index": 1, "primary": false, "not_null": false, "dflt_value": "NULL"}, {"name":
+    "BUCHTITEL", "type": "VARCHAR(250)", "index": 2, "primary": false, "not_null":
+    true, "dflt_value": null}, {"name": "JAHR", "type": "INT(4)", "index": 3, "primary":
+    false, "not_null": true, "dflt_value": null}, {"name": "VERLAG", "type": "VARCHAR(80)",
+    "index": 4, "primary": false, "not_null": true, "dflt_value": null}], "foreign_keys":
+    [{"references": [{"to_table": "dozent", "to_column": "PIN", "from_column": "PIN"}]}]}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-12-11 13:10:12.060064'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-12-11 14:04:30.164586'
+new_record: false
+active_record_yaml_version: 2
