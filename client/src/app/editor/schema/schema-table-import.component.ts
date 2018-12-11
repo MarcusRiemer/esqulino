@@ -11,7 +11,6 @@ import { ToolbarService } from '../toolbar.service';
  */
 @Component({
   templateUrl: 'templates/schema-table-import.html',
-  selector: "sql-table-import"
 })
 export class SchemaTableImportComponent implements OnInit {
   // file object as a string
@@ -90,12 +89,12 @@ export class SchemaTableImportComponent implements OnInit {
     // Extract table and col names of the schema
     this.tableNames = this.schemaTables.map(table => table['name']);
     this.colNamesForTables = [];
-    this.schemaTables.forEach(table => { this.colNamesForTables.push(this.extractColNames(table)) });  
+    this.schemaTables.forEach(table => { this.colNamesForTables.push(this.extractColNames(table)) });
   }
 
   /* ----- Helper Function ----- */
 
-  // returns an array that contains 
+  // returns an array that contains
   // only the column names of a given table
   extractColNames(table: Table): string[] {
     return table['columns'].map(col => col['name']);
@@ -257,7 +256,7 @@ export class SchemaTableImportComponent implements OnInit {
       this.csvHeader = (<Parser.CsvParseResult>this.parse).header;
       this.csvTable = (<Parser.CsvParseResult>this.parse).table;
 
-      this.disableHeadlineSelection = false;    
+      this.disableHeadlineSelection = false;
 
       this.selectedTableName = Parser.getMostSuitableTableName(this.csvHeader, this.tableNames, this.colNamesForTables);
       this.selectedTable = this.schemaTables.filter(table => table['name'] === this.selectedTableName)[0];

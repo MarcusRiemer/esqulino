@@ -7,6 +7,7 @@ import { SchemaService } from '../schema.service'
 import { SchemaHostComponent } from './host.component'
 import { SchemaRedirectComponent } from './schema-redirect.component'
 import { SchemaComponent } from './schema.component'
+import { SchemaUploadComponent } from './schema-upload.component'
 import { SchemaTableComponent } from './schema-table.component'
 import { SchemaTableCompositionComponent } from './schema-table-composition.component'
 import { SchemaTableEditorComponent } from './schema-table-editor.component'
@@ -23,6 +24,7 @@ import { TableEditorSidebarControlsComponent } from './table-editor-controls.sid
     SchemaHostComponent,
     SchemaRedirectComponent,
     SchemaComponent,
+    SchemaUploadComponent,
     SchemaTableComponent,
     SchemaTableCompositionComponent,
     SchemaTableEditorComponent,
