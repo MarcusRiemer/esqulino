@@ -7,10 +7,10 @@
     <div class="card-body">
       <h4 class="card-title">Schema-Übersicht</h4>
       <p>Diese graphische Übersicht ist hilfreich, um die Beziehungen der Tabellen besser verstehen zu können.</p>
-
-      <img *ngIf="project"
-           class="img-fluid"
-           src="/api/project/{{project.slug}}/db/default/visual_schema?format=png&revision={{ schemaRevision | async }}">
+      <div *ngIf="project"
+           class="db-schema-display"
+           [innerHtml]="visualSchemaDom | async">
+      </div>
     </div>
   </div>
 
