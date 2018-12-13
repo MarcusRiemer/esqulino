@@ -1,7 +1,8 @@
 <div *ngIf="tableData"
      class="card card-body">
   <div class="schema-table-header">
-    <h3>
+    <!-- These badges are deliberatly spaced out -->
+    <h3 ngPreserveWhitespaces>
       Tabelle <code>{{table.name}}</code>
       <span class="badge"
             [class.badge-warning]="!(rowCount > 0)"
