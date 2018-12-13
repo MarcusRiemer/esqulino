@@ -1,0 +1,13 @@
+.db-schema-display {
+    svg {
+        max-width: 100%;
+
+        .edge {
+            transition: stroke-width 0.5s;
+        }
+
+        .edge:hover {
+            stroke-width: 10px;
+        }
+    }
+}

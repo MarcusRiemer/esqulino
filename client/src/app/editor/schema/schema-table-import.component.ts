@@ -7,7 +7,7 @@ import { ProjectService } from '../project.service';
 import { ToolbarService } from '../toolbar.service';
 
 /**
- * Displays the schema for a list of tables.
+ * Wizard-like UI to import CSV data into a table.
  */
 @Component({
   templateUrl: 'templates/schema-table-import.html',

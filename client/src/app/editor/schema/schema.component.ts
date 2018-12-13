@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router'
+import { HttpClient } from '@angular/common/http'
+
+import { map, flatMap, first, tap, share } from 'rxjs/operators'
 
 import { ProjectService, Project } from '../project.service'
 import { SchemaService } from '../schema.service'
@@ -27,6 +31,8 @@ export class SchemaComponent implements OnInit {
    * Used for dependency injection.
    */
   constructor(
+    private _sanitizer: DomSanitizer,
+    private _http: HttpClient,
     private _projectService: ProjectService,
     private _toolbarService: ToolbarService,
     private _router: Router,
@@ -49,6 +55,23 @@ export class SchemaComponent implements OnInit {
   get schemaRevision() {
     return (this._schemaService.changeCount);
   }
+
+  /**
+   * The URL that may be used to request a schema
+   */
+  readonly visualSchemaUrl =
+    this.schemaRevision.pipe(
+      map(rev => `/api/project/${this.project.slug}/db/default/visual_schema?format=svg&revision=${rev}`),
+    );
+
+  readonly visualSchemaDom =
+    this.visualSchemaUrl.pipe(
+      flatMap(url => this._http.get(url, { responseType: 'text' })),
+      first(),
+      share(),
+      map(svg => svg.replace(/<svg width="(\d+pt)" height="\d+pt"/, '<svg width="$1"')),
+      map(svg => this._sanitizer.bypassSecurityTrustHtml(svg)),
+    );
 
   /**
    * Load the project to access the schema
