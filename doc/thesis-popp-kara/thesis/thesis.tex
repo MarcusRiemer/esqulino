@@ -1,0 +1,34 @@
+% **************************************************
+% Document Class Definition
+% **************************************************
+\documentclass[%
+    paper=A4,              % paper size --> A4 is default in Germany
+    twoside=false,         % onesite or twoside printing
+    openright,             % doublepage cleaning ends up right side
+    parskip=full,          % spacing value / method for paragraphs
+    chapterprefix=true,    % prefix for chapter marks
+    11pt,                  % font size
+    headings=normal,       % size of headings
+    bibliography=totoc,    % include bib in toc
+    listof=totoc,          % include listof entries in toc
+    titlepage=on,          % own page for each title page
+    captions=tableabove,   % display table captions above the float env
+    draft=false,           % value for draft version
+]{scrreprt}%
+
+\usepackage[                % page layout modifications
+	paper=a4paper,          %   - use A4 paper size
+	nohead,                 %   - no header
+	includefoot,            %   - include footer space
+	top=2.25cm,             %   - total body: top margin
+	left=3.125cm,           %   - total body: left margin (odd pages)
+	bottom=1.5cm,           %   - total body: bottom margin
+    footskip=2cm,           %   - footer skip size
+]{geometry}
+
+\input{main}
+
+% **************************************************
+% End of Document CONTENT
+% **************************************************
+\end{document}
