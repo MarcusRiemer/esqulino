@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 import * as Parser from '../../shared/csv-parser';
 import { Table } from '../../shared/schema';
+import { ServerApiService } from '../../shared/serverapi.service';
 
 import { ProjectService } from '../project.service';
 import { ToolbarService } from '../toolbar.service';
+
+import { first } from 'rxjs/operators';
 
 /**
  * Wizard-like UI to import CSV data into a table.
@@ -50,6 +55,8 @@ export class SchemaTableImportComponent implements OnInit {
   headlineUsage: "file" | "own";
   textMarker: '"' | "'";
 
+  uploadError: any = "";
+
 
   /* ----- Initializations ----- */
 
@@ -58,6 +65,9 @@ export class SchemaTableImportComponent implements OnInit {
   constructor(
     private _projectService: ProjectService,
     private _toolbarService: ToolbarService,
+    private _serverApi: ServerApiService,
+    private _http: HttpClient,
+    private _route: ActivatedRoute,
   ) {
   }
 
@@ -131,8 +141,23 @@ export class SchemaTableImportComponent implements OnInit {
   }
 
   // logs the mapping result to the console
-  importTable() {
-    console.log(Parser.getMappingResult(this.extractColNames(this.selectedTable), this.selectedHeaderIndex, this.csvTable));
+  async importTable() {
+    const uploadData = Parser.getMappingResult(
+      this.extractColNames(this.selectedTable),
+      this.selectedHeaderIndex,
+      this.csvTable
+    );
+
+    const projectId = this._projectService.cachedProject.id;
+    const schemaName = this._route.snapshot.paramMap.get("schemaName");
+    const url = this._serverApi.uploadTabularData(projectId, schemaName, this.selectedTableName);
+
+    this._http.post(url, uploadData).pipe(
+      first()
+    ).subscribe(
+      res => console.log("Erfolgreich eingefügt", res),
+      err => alert(JSON.stringify(err))
+    );
   }
 
   // needed for defining independent own headlines

@@ -1,4 +1,7 @@
-import { Routes, RouterModule } from '@angular/router'
+import { Routes, RouterModule, ParamMap } from '@angular/router'
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { SchemaHostComponent } from './host.component'
 import { SchemaComponent } from './schema.component'
