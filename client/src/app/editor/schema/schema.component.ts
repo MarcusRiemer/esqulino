@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { HttpClient } from '@angular/common/http'
 
 import { map, flatMap, first, tap, share } from 'rxjs/operators'
+import { zip } from 'rxjs'
 
 import { ProjectService, Project } from '../project.service'
 import { SchemaService } from '../schema.service'
@@ -50,20 +51,29 @@ export class SchemaComponent implements OnInit {
   }
 
   /**
-   * @return A timestamp to ensure the schema-image is reloaded
+   * @return A number that is unique for each state of the database
+   *         over the course of the current session.
    */
-  get schemaRevision() {
-    return (this._schemaService.changeCount);
-  }
+  readonly schemaRevision = this._schemaService.changeCount;
+
+  /**
+   * The name of the schema that is currently edited.
+   */
+  readonly schemaName = this._route.paramMap.pipe(
+    map(p => p.get("schemaName"))
+  );
 
   /**
    * The URL that may be used to request a schema
    */
   readonly visualSchemaUrl =
-    this.schemaRevision.pipe(
-      map(rev => `/api/project/${this.project.slug}/db/default/visual_schema?format=svg&revision=${rev}`),
+    zip(this.schemaRevision, this.schemaName).pipe(
+      map(([rev, name]) => `/api/project/${this.project.slug}/db/${name}/visual_schema?format=svg&revision=${rev}`),
     );
 
+  /**
+   * The SVG DOM of the currently edited schema.
+   */
   readonly visualSchemaDom =
     this.visualSchemaUrl.pipe(
       flatMap(url => this._http.get(url, { responseType: 'text' })),
@@ -93,7 +103,7 @@ export class SchemaComponent implements OnInit {
     // a table the data could be imported to
     if (!this.isEmpty) {
       let btnImport = this._toolbarService.addButton("importTable", "Daten Importieren", "file-text", "i");
-      subRef = btnImport.onClick.subscribe((res) => {
+      subRef = btnImport.onClick.subscribe(_ => {
         this._router.navigate(["./import"], { relativeTo: this._route });
       })
       this._subscriptionRefs.push(subRef);
@@ -101,7 +111,7 @@ export class SchemaComponent implements OnInit {
 
     // Butto to switch to database import
     let btnUpload = this._toolbarService.addButton("uploadDatabase", "Datenbank hochladen", "upload", "d");
-    subRef = btnUpload.onClick.subscribe((res) => {
+    subRef = btnUpload.onClick.subscribe(_ => {
       this._router.navigate(["./upload"], { relativeTo: this._route });
     })
     this._subscriptionRefs.push(subRef);

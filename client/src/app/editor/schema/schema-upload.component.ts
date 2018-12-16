@@ -1,5 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { Component } from '@angular/core';
+import { Http } from '@angular/http'
+import { ActivatedRoute } from '@angular/router';
 
 import { ServerApiService } from '../../shared/serverapi.service'
 
@@ -21,6 +22,7 @@ export class SchemaUploadComponent {
     private _sidebarService: SidebarService,
     private _server: ServerApiService,
     private _http: Http,
+    private _route: ActivatedRoute,
   ) {
     this._sidebarService.hideSidebar();
 
@@ -32,13 +34,14 @@ export class SchemaUploadComponent {
    * The user has decided to send the selected blob to the
    * server.
    */
-  onFileSelected(evt: Event) {
+  async onFileSelected(evt: Event) {
     console.log(evt);
     const uploadInput = evt.srcElement as HTMLInputElement
     const uploadForm = uploadInput.form;
-    console.log(uploadForm);
 
-    const url = this._server.uploadDatabase(this._projectService.cachedProject.id, "default")
+    const schemaName = this._route.snapshot.paramMap.get("schemaName");
+
+    const url = this._server.uploadDatabase(this._projectService.cachedProject.id, schemaName)
     const data = new FormData(uploadForm);
 
     this._http.post(url, data)
