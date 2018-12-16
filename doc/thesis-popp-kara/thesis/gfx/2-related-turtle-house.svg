@@ -1,0 +1,5 @@
+<svg height="250" width="250">
+  <path d="M5 5 l0 240 l240 0 l0 -240 Z" stroke="none" fill="#eee" />
+  <path d="M125 125 l100 0 l0 100 l-100 0 l0 -100 l50 -87 l50 87 l-100 0" stroke="black" fill="none" />
+  <path d="M130 130 l-10 0 l5 -20 Z" stroke="black" fill="none" transform="rotate(30 125 125)" />
+</svg>
