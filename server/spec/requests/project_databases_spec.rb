@@ -1,8 +1,5 @@
 require 'rails_helper'
 
-include Rack::Test::Methods
-include ActionDispatch::TestProcess
-
 RSpec.describe ProjectDatabasesController, type: :request do
 
   # A database with a single table
