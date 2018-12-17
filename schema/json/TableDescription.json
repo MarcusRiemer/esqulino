@@ -69,7 +69,7 @@
     },
     "TableDescription": {
       "additionalProperties": false,
-      "description": "The \"over-the-wire\" description of a single table \nwith all of its columns.",
+      "description": "The \"over-the-wire\" description of a single table\nwith all of its columns.",
       "properties": {
         "columns": {
           "items": {

@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
+import { MatSnackBar } from '@angular/material';
+
 import * as Parser from '../../shared/csv-parser';
 import { Table } from '../../shared/schema';
 import { ServerApiService } from '../../shared/serverapi.service';
+import { ResponseTabularInsertDescription } from '../../shared/schema/schema.description';
 
 import { ProjectService } from '../project.service';
 import { ToolbarService } from '../toolbar.service';
@@ -68,6 +71,7 @@ export class SchemaTableImportComponent implements OnInit {
     private _serverApi: ServerApiService,
     private _http: HttpClient,
     private _route: ActivatedRoute,
+    private _snackbar: MatSnackBar,
   ) {
   }
 
@@ -140,8 +144,8 @@ export class SchemaTableImportComponent implements OnInit {
     return this.selectedHeaderIndex.includes(+index);
   }
 
-  // logs the mapping result to the console
-  async importTable() {
+  // Does the actual mapping and sends a request to the server
+  importTable() {
     const uploadData = Parser.getMappingResult(
       this.extractColNames(this.selectedTable),
       this.selectedHeaderIndex,
@@ -150,12 +154,16 @@ export class SchemaTableImportComponent implements OnInit {
 
     const projectId = this._projectService.cachedProject.id;
     const schemaName = this._route.snapshot.paramMap.get("schemaName");
-    const url = this._serverApi.uploadTabularData(projectId, schemaName, this.selectedTableName);
+    const tableName = this.selectedTableName;
+    const url = this._serverApi.uploadTabularData(projectId, schemaName, tableName);
 
     this._http.post(url, uploadData).pipe(
       first()
     ).subscribe(
-      res => console.log("Erfolgreich eingefügt", res),
+      (res: ResponseTabularInsertDescription) =>
+        this._snackbar.open(`Tabelle "${tableName}": ${res.numInsertedRows} Zeilen eingefügt, ${res.numTotalRows} Zeilen insgesamt.`, null, {
+          duration: 5000
+        }),
       err => alert(JSON.stringify(err))
     );
   }

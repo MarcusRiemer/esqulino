@@ -115,7 +115,7 @@ RSpec.describe ProjectDatabase, type: :model do
       @db.destroy!
       @db.project.destroy! if @db.project
     end
-    
+
     it 'has the correct sqlite_file_path' do
       @db = FactoryBot.create(:project_database)
 
@@ -339,7 +339,7 @@ RSpec.describe ProjectDatabase, type: :model do
     end
 
     it 'single row' do
-      @db.table_bulk_insert(
+      res = @db.table_bulk_insert(
         @table_name,
         ['key', 'value'],
         [
@@ -347,11 +347,12 @@ RSpec.describe ProjectDatabase, type: :model do
         ]
       )
 
+      expect(res['changes']).to be 1
       expect(@db.table_row_count @table_name).to be 1
     end
 
     it 'two rows' do
-      @db.table_bulk_insert(
+      res = @db.table_bulk_insert(
         @table_name,
         ['key', 'value'],
         [
@@ -360,11 +361,32 @@ RSpec.describe ProjectDatabase, type: :model do
         ]
       )
 
+      expect(res['changes']).to be 2
+      expect(@db.table_row_count @table_name).to be 2
+    end
+
+    it 'twice' do
+      res = @db.table_bulk_insert(
+        @table_name,
+        ['key', 'value'],
+        [ ['1', 'eins'] ]
+      )
+
+      expect(res['changes']).to be 1
+      expect(@db.table_row_count @table_name).to be 1
+
+      res = @db.table_bulk_insert(
+        @table_name,
+        ['key', 'value'],
+        [ ['2', 'zwei'] ]
+      )
+
+      expect(res['changes']).to be 1
       expect(@db.table_row_count @table_name).to be 2
     end
 
     it 'missing keys' do
-      @db.table_bulk_insert(
+      res = @db.table_bulk_insert(
         @table_name,
         ['value'],
         [
@@ -373,6 +395,7 @@ RSpec.describe ProjectDatabase, type: :model do
         ]
       )
 
+      expect(res['changes']).to be 2
       expect(@db.table_row_count @table_name).to be 2
     end
 

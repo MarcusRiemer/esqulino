@@ -48,7 +48,7 @@ class ProjectDatabase < ApplicationRecord
   def table_schema(table_name)
     schema.find{ |table| table['name'] == table_name} unless schema.nil?
   end
-  
+
   # Creates a new table in the schema of this database
   #
   # @param table_description
@@ -127,7 +127,7 @@ class ProjectDatabase < ApplicationRecord
       sql_data = rows
                    .map { |r| "(" + r.map {|n| "'#{n}'" }.join(',') + ")" }
                    .join(",\n")
-      
+
       sql = "INSERT INTO '#{table_name}' (#{sql_column_names}) VALUES\n#{sql_data}"
 
       execute_sql(sql, [], false)
@@ -165,7 +165,8 @@ class ProjectDatabase < ApplicationRecord
         return {
           'columns' => result.first,
           'rows' => result.drop(1),
-          'totalCount' => result.length - 1
+          'totalCount' => result.length - 1,
+          'changes' => db.changes
         }
       rescue SQLite3::ConstraintException, SQLite3::SQLException => e
         # Something anticipated went wrong. This is probably the fault
