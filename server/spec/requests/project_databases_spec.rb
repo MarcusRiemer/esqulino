@@ -206,7 +206,17 @@ RSpec.describe ProjectDatabasesController, type: :request do
              ]
            }.to_json
 
-      expect(response.status).to eq 204
+      # Ensure the response is well formed
+      expect(response).to have_http_status(200)
+      json_data = JSON.parse(response.body)
+      expect(json_data).to validate_against "ResponseTabularInsertDescription"
+      expect(json_data).to eq({
+                                "numInsertedRows" => 1,
+                                "numTotalRows" => 1,
+                              })
+
+      # Ensure that the data has actually changed
+      expect(project.default_database.table_row_count("key_value")).to eq 1
     end
 
     it 'Inserting multiple rows' do
@@ -225,7 +235,17 @@ RSpec.describe ProjectDatabasesController, type: :request do
              ]
            }.to_json
 
-      expect(response.status).to eq 204
+      # Ensure the response is well formed
+      expect(response).to have_http_status(200)
+      json_data = JSON.parse(response.body)
+      expect(json_data).to validate_against "ResponseTabularInsertDescription"
+      expect(json_data).to eq({
+                                "numInsertedRows" => 3,
+                                "numTotalRows" => 3,
+                              })
+
+      # Ensure that the data has actually changed
+      expect(project.default_database.table_row_count("key_value")).to eq 3
     end
 
     it 'Malformed: No column names' do

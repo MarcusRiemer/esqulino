@@ -124,10 +124,16 @@ class ProjectDatabasesController < ApplicationController
       table_name = params['tablename']
       tabular_data = ensure_request("RequestTabularInsertDescription", request.body.read)
 
-      current_database.table_bulk_insert(table_name, tabular_data['columnNames'], tabular_data['data'])
+      result = current_database.table_bulk_insert(
+        table_name,
+        tabular_data['columnNames'],
+        tabular_data['data']
+      )
 
-      render status: :no_content
-
+      render status: 200, :json => {
+               :numInsertedRows => result['changes'],
+               :numTotalRows => current_database.table_row_count(table_name)
+             }
     end
   end
 
