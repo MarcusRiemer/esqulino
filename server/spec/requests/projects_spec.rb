@@ -21,7 +21,6 @@ RSpec.describe ProjectsController, type: :request do
         expect(created_project.slug).to eq "test"
         expect(File.directory?(created_project.data_directory_path)).to eq true
 
-        skip "Projects should not be public by default"
         expect(created_project.public).to eq false
       end
     end
