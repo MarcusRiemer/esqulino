@@ -160,11 +160,6 @@ class ProjectDatabasesController < ApplicationController
     render :json => current_database.table_row_count(params['tablename'])
   end
 
-  # Access to the current project
-  def current_project
-    @current_project ||= Project.find_by_slug_or_id!(params['project_id'])
-  end
-
   # Access to the current database
   def current_database
     database_id = nil # params['database_id']

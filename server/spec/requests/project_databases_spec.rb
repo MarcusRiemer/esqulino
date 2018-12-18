@@ -30,10 +30,11 @@ RSpec.describe ProjectDatabasesController, type: :request do
   end
 
   def json_headers
-    { "CONTENT_TYPE" => "application/json" }
+    {
+      "CONTENT_TYPE" => "application/json",
+      "Authorization" => "Basic #{Base64.encode64('user:user')}"
+    }
   end
-
-  let(:auth_headers) { {"Authorization" => "Basic #{Base64.encode64('user:user')}"} }
 
   describe 'GET /api/project/:project_id/db/:database_id/visual_schema' do
     it 'works for empty databases' do
@@ -150,7 +151,9 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
 
-      delete "#{default_db_api_url project}/drop/key_value"
+      delete "#{default_db_api_url project}/drop/key_value",
+             :headers => json_headers
+
       expect(response.status).to eq 204
     end
 
@@ -159,7 +162,9 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
 
-      delete "#{default_db_api_url project}/drop/doesntexist"
+      delete "#{default_db_api_url project}/drop/doesntexist",
+             :headers => json_headers
+
       expect(response.status).to eq 404
     end
   end
