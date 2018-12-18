@@ -298,12 +298,14 @@ RSpec.describe ProjectDatabase, type: :model do
     end
 
     after(:each) do
+      if @db.project && @db.project.default_database_id == @db.id then
+        @db.project.update!(default_database: nil)
+      end
       @db.destroy!
       @db.project.destroy! if @db.project
     end
 
     it 'remove foreign keys' do
-      skip "Currently broken"
       new_schema = @db.table_alter "a", [
                                      {
                                        "index" => 0,
@@ -313,13 +315,14 @@ RSpec.describe ProjectDatabase, type: :model do
                                            {
                                              "to_table" => "b",
                                              "to_column" => "b_id",
-                                             "from_column" => "b"
+                                             "from_column" => "a_b"
                                            }
                                          ]
                                        }
                                      }
                                    ]
-      expect(new_schema[0]['name']).to eq "value_key"
+      expect(new_schema[0]['name']).to eq "a"
+      expect(new_schema[0]['foreign_keys']).to eq []
     end
   end
 
