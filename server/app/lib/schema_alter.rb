@@ -9,12 +9,12 @@ require_dependency './schema_utils'
 
 def database_alter_schema(project_database, table_name, commandHolder)
   sqlite_file_path = project_database.sqlite_file_path
-  
+
   # Just in case: Making a copy of the whole database
   FileUtils.cp(sqlite_file_path, sqlite_file_path + '.bak')
 
   table = database_describe_schema(sqlite_file_path).select{ |table| table.name == table_name}.first
-  
+
   # Execute each command one by one
   begin
     commandHolder.each_with_index do |cmd, index|
@@ -44,7 +44,7 @@ def database_alter_schema(project_database, table_name, commandHolder)
         when "removeForeignKey"
           removeForeignKey(table, cmd['foreignKeyToRemove'])
         end
-        
+
         table_hash = table.serializable_hash(include: { columns: { }, foreign_keys: {} })
         database_alter_table(sqlite_file_path, table_hash, colHash)
       else
@@ -97,7 +97,7 @@ end
 def internal_rename_table(sqlite_file_path, from_tableName, to_tableName)
   db = sqlite_open_augmented(sqlite_file_path)
   db.execute("PRAGMA foreign_keys = ON")
-  
+
   db.transaction
   db.execute("ALTER TABLE #{from_tableName} RENAME TO #{to_tableName};")
   db.commit()
@@ -171,18 +171,34 @@ end
 # @param schema_table - Table object to create a CREATE TABLE statement
 # return - The CREATE TABLE statement foreign key constraint part
 def tables_foreignKey_to_create_statement(fk)
-  fk_columns = String.new("")
-  fk_ref_columns = String.new("")
-  fk['references'].each do |ref|
-    fk_columns.concat(ref['from_column'])
-    fk_ref_columns.concat(ref['to_column'])
-    if ref != fk['references'].last
+  # The given references may be "intelligent" instances, but we do
+  # expect "dumb" hashes. I am not quite sure where this happens exactly,
+  # but thankfully the conversion is simple
+  fk_references = fk['references'].map do |ref|
+    if ref.is_a? SchemaForeignKeyRef
+      ref.instance_values
+    else
+      ref
+    end
+  end
+
+  # Collecting the columns and the things they are referencing
+  fk_columns = ""
+  fk_ref_columns = ""
+
+  fk_references.each_with_index do |ref, i|
+    if i > 0
       fk_columns.concat(", ")
       fk_ref_columns.concat(", ")
     end
+
+    fk_columns.concat(ref['from_column'])
+    fk_ref_columns.concat(ref['to_column'])
   end
-  createStatement = String.new("FOREIGN KEY (#{fk_columns}) REFERENCES #{fk['references'][0]['to_table']}(#{fk_ref_columns})")
-  return createStatement
+
+  target_table = fk_references[0]['to_table']
+  to_return = "FOREIGN KEY (#{fk_columns}) REFERENCES #{target_table}(#{fk_ref_columns})"
+  return to_return
 end
 
 # Function to create a CREATE TABLE statement part of a column
@@ -215,7 +231,7 @@ def column_to_create_statement(schema_column)
     createStatement.concat(schema_column['type'])
     createStatement.concat(" ")
   end
-  
+
   if schema_column['not_null'] || schema_column['primary']
     createStatement.concat("NOT NULL ")
   end
