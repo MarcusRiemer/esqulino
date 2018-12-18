@@ -23,7 +23,6 @@ RSpec.describe ProjectsController, type: :request do
 
         skip "Projects should not be public by default"
         expect(created_project.public).to eq false
-
       end
     end
 
@@ -122,7 +121,7 @@ RSpec.describe ProjectsController, type: :request do
         added_block_language = FactoryBot.create(:block_language)
         new_block_language = FactoryBot.create(:block_language)
         project.project_uses_block_languages.create(block_language: added_block_language)
-        
+
         put "/api/project/#{project.slug}",
             params: {
               "apiVersion" => 4,
@@ -146,7 +145,7 @@ RSpec.describe ProjectsController, type: :request do
       it 'removes used block languages' do
         added_block_language = FactoryBot.create(:block_language)
         use_added_block_language = project.project_uses_block_languages.create(block_language: added_block_language)
-        
+
         put "/api/project/#{project.slug}",
             params: {
               "apiVersion" => 4,
@@ -170,7 +169,7 @@ RSpec.describe ProjectsController, type: :request do
         added_block_language = FactoryBot.create(:block_language)
         use_added_block_language = project.project_uses_block_languages.create(block_language: added_block_language)
         new_block_language = FactoryBot.create(:block_language)
-        
+
         put "/api/project/#{project.slug}",
             params: {
               "apiVersion" => 4,
@@ -259,24 +258,21 @@ RSpec.describe ProjectsController, type: :request do
 
   describe 'DELETE /api/project/:project_id' do
     it 'unauthorized' do
-      skip "should return 401"
-
       to_delete = FactoryBot.create(:project)
       delete "/api/project/#{to_delete.slug}"
 
       expect(response).to have_http_status(401)
+
+      expect(Project.exists?(to_delete.id)).to be true
     end
 
     it 'nonexistant' do
-      pending "should return 400"
-
       delete "/api/project/not_even_a_uuid", headers: auth_headers
 
       expect(response).to have_http_status(404)
     end
 
     it 'an empty project' do
-      pending "should return 204"
       to_delete = FactoryBot.create(:project)
 
       delete "/api/project/#{to_delete.slug}", headers: auth_headers
@@ -284,7 +280,7 @@ RSpec.describe ProjectsController, type: :request do
       expect(response.body).to be_empty
       expect(response).to have_http_status(204)
 
-      expect(Project.find_by(slug: to_delete.slug)).not_to exist
+      expect(Project.exists?(to_delete.id)).to be false
     end
   end
 

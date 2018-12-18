@@ -132,8 +132,8 @@ class Project < ApplicationRecord
   end
 
   # TODO: This is a legacy holdover
-  def write_access
-    true
+  def verify_write_access(user, pass)
+    user == "user" and pass == "user"
   end
 
   # The folder that should contain all assets that are part of this directory.
@@ -144,6 +144,16 @@ class Project < ApplicationRecord
   # The folder for images
   def images_directory_path
     File.join data_directory_path, "images"
+  end
+
+  # The path to the preview image
+  def preview_image_path
+    File.join image_directory_path, preview
+  end
+
+  # True if the preview image exists
+  def preview_image_exists?
+    preview and File.exists? preview_image_path
   end
 
   # The folder for databases
