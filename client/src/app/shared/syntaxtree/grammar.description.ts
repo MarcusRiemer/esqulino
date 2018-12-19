@@ -147,7 +147,7 @@ export interface EnumRestrictionDescription {
 /**
  * The restrictions that are applicable to integers
  */
-type NodeIntegerTypeRestrictions = MinInclusiveRestriction
+export type NodeIntegerTypeRestrictions = MinInclusiveRestriction
   | MaxInclusiveRestriction
 
 /**
@@ -157,7 +157,8 @@ export interface NodePropertyIntegerDescription {
   type: "property"
   name: string
   base: "integer"
-  isOptional?: boolean
+  isOptional?: boolean,
+  restrictions?: NodeIntegerTypeRestrictions[]
 }
 
 /**
@@ -276,21 +277,21 @@ export interface GrammarDescription extends GrammarDocument, GrammarListDescript
 }
 
 /**
- * @return True if the given instance satisfies "QualifiedTypeName" 
+ * @return True if the given instance satisfies "QualifiedTypeName"
  */
 export function isQualifiedTypeName(arg: any): arg is QualifiedTypeName {
   return (arg instanceof Object && arg.typeName && arg.languageName);
 }
 
 /**
- * @return True if the given instance satisfies "NodeConcreteTypeDescription" 
+ * @return True if the given instance satisfies "NodeConcreteTypeDescription"
  */
 export function isNodeConcreteTypeDescription(arg: any): arg is NodeConcreteTypeDescription {
   return (arg instanceof Object && !arg.oneOf);
 }
 
 /**
- * @return True if the given instance satisfies "NodeConcreteTypeDescription" 
+ * @return True if the given instance satisfies "NodeConcreteTypeDescription"
  */
 export function isNodeOneOfTypeDescription(arg: any): arg is NodeOneOfTypeDescription {
   return (arg instanceof Object && arg.oneOf instanceof Array);

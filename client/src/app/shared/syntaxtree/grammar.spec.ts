@@ -260,6 +260,39 @@ const langStringConstraint: Schema.GrammarDescription = {
 }
 
 /**
+ * A single node that uses every possible integer constraint.
+ */
+const langIntegerConstraint: Schema.GrammarDescription = {
+  id: "72d22bc7-22eb-4df3-a2de-1d3f601cd469",
+  programmingLanguageId: "spec",
+  name: "integer-constraint",
+  types: {
+    root: {
+      type: "concrete",
+      attributes: [
+        {
+          name: "minInclusive",
+          type: "property",
+          base: "integer",
+          restrictions: [
+            { type: "minInclusive", value: 1 }
+          ]
+        },
+        {
+          name: "maxInclusive",
+          type: "property",
+          base: "integer",
+          restrictions: [
+            { type: "maxInclusive", value: 1 }
+          ]
+        }
+      ]
+    }
+  },
+  root: "root"
+}
+
+/**
  * A single root node that uses some children with the "allowed" constraint
  */
 const langAllowedConstraint: Schema.GrammarDescription = {
@@ -585,6 +618,63 @@ describe('Grammar Validation', () => {
     expect(res.errors[2].data.condition).toEqual("3 > 2");
     expect(res.errors[3].code).toEqual(ErrorCodes.IllegalPropertyType)
     expect(res.errors[3].data.condition).toEqual(`"d" in ["a","b","c"]`);
+  });
+
+  it('Integer value wrongly integer', () => {
+    const v = new Validator([langIntegerConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "integer-constraint",
+      name: "root",
+      properties: {
+        "minInclusive": "1",
+        "maxInclusive": "1"
+      }
+    };
+
+    astDesc.properties["minInclusive"] = (1 as any);
+    astDesc.properties["maxInclusive"] = ("asdf" as any);
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(2);
+  });
+
+  it('Integer Constraints (Valid)', () => {
+    const v = new Validator([langIntegerConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "integer-constraint",
+      name: "root",
+      properties: {
+        "minInclusive": "1",
+        "maxInclusive": "1"
+      }
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors).toEqual([]);
+  });
+
+  it('Integer Constraints (Invalid)', () => {
+    const v = new Validator([langIntegerConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "integer-constraint",
+      name: "root",
+      properties: {
+        "minInclusive": "0",
+        "maxInclusive": "2"
+      }
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(2);
   });
 
   it('Boolean Constraint', () => {

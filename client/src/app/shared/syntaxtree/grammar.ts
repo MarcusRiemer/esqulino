@@ -78,10 +78,10 @@ export abstract class NodeType {
    * given category. This check does *not* care about any possible errors
    * that would occur in the node of the given type. This partial check is
    * useful to determine "sort of" legal drag targets.
-   * 
+   *
    * @param childType The type that is possible added.
    * @param categoryName The name of the category in question.
-   * 
+   *
    * @return True, if this would be a legal, immediate fit.
    */
   abstract allowsChildType(childType: AST.QualifiedTypeName, categoryName: string): boolean;
@@ -249,9 +249,9 @@ class NodeTypeChildren {
    * category. This check does *not* care about any possible errors that
    * would occur in the node of the given type. This partial check is
    * useful to determine "sort of" legal drag targets.
-   * 
+   *
    * @param childType The type that is possible added.
-   * 
+   *
    * @return True, if this would be a legal, immediate fit.
    */
   allowsChildType(childType: AST.QualifiedTypeName): boolean {
@@ -300,9 +300,9 @@ abstract class NodeComplexTypeChildrenValidator {
    * validator. This check does *not* care about any possible errors that
    * would occur in the node of the given type. This partial check is
    * useful to determine "sort of" legal drag targets.
-   * 
+   *
    * @param childType The type that is possible added.
-   * 
+   *
    * @return True, if this would be a legal, immediate fit.
    */
   abstract allowsChildType(childType: AST.QualifiedTypeName): boolean;
@@ -651,9 +651,11 @@ export class NodePropertyBooleanValidator extends NodePropertyValidator {
  * Validates integer properties
  */
 export class NodePropertyIntegerValidator extends NodePropertyValidator {
+  private _restrictions: Desc.NodeIntegerTypeRestrictions[];
 
   constructor(desc: Desc.NodePropertyIntegerDescription) {
     super(desc);
+    this._restrictions = desc.restrictions;
   }
 
   validValue(value: string): boolean {
@@ -665,7 +667,26 @@ export class NodePropertyIntegerValidator extends NodePropertyValidator {
   validate(node: AST.Node, value: string, context: ValidationContext): void {
     if (!this.validValue(value)) {
       context.addError(ErrorCodes.IllegalPropertyType, node, {
-        condition: `"${value}" must be an integer`
+        condition: `"${value}" must be a string that looks like an integer`
+      });
+    } else {
+      this._restrictions.forEach(r => {
+        switch (r.type) {
+          case "minInclusive":
+            if (+value < r.value) {
+              context.addError(ErrorCodes.IllegalPropertyType, node, {
+                condition: `Failed: ${value} ≥ ${r.value}`
+              });
+            }
+            break;
+          case "maxInclusive":
+            if (+value > r.value) {
+              context.addError(ErrorCodes.IllegalPropertyType, node, {
+                condition: `Failed: ${value} ≤ ${r.value}`
+              });
+            }
+            break;
+        }
       });
     }
   }

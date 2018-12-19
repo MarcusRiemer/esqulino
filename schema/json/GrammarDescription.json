@@ -96,6 +96,26 @@
       ],
       "type": "object"
     },
+    "MaxInclusiveRestriction": {
+      "additionalProperties": false,
+      "description": "Restricts the maximum numerical value.",
+      "properties": {
+        "type": {
+          "enum": [
+            "maxInclusive"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
     "MaximumLengthRestrictionDescription": {
       "additionalProperties": false,
       "description": "Restricts the maximum length of things.",
@@ -103,6 +123,26 @@
         "type": {
           "enum": [
             "maxLength"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
+    "MinInclusiveRestriction": {
+      "additionalProperties": false,
+      "description": "Restricts the minimum numerical value.",
+      "properties": {
+        "type": {
+          "enum": [
+            "minInclusive"
           ],
           "type": "string"
         },
@@ -186,6 +226,17 @@
       ],
       "type": "object"
     },
+    "NodeIntegerTypeRestrictions": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/MinInclusiveRestriction"
+        },
+        {
+          "$ref": "#/definitions/MaxInclusiveRestriction"
+        }
+      ],
+      "description": "The restrictions that are applicable to integers"
+    },
     "NodeOneOfTypeDescription": {
       "additionalProperties": false,
       "description": "Creates a possibility to define multiple NodeTypes as alternatives\nto each other *without* introducing an artificial node type. This\nis helpful for e.g. the root node or when using recursive definitions.",
@@ -254,6 +305,12 @@
         },
         "name": {
           "type": "string"
+        },
+        "restrictions": {
+          "items": {
+            "$ref": "#/definitions/NodeIntegerTypeRestrictions"
+          },
+          "type": "array"
         },
         "type": {
           "enum": [
