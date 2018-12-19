@@ -2,7 +2,8 @@ import {
   NodeDescription, NodeAttributeDescription,
   NodePropertyTypeDescription, NodeChildrenGroupDescription, GrammarDocument
 } from '../../syntaxtree/'
-import { FullNodeConcreteTypeDescription } from '../../syntaxtree/grammar-util.description'
+import { FullNodeConcreteTypeDescription } from '../../syntaxtree/grammar-type-util.description';
+import { fullNodeDescription } from '../../syntaxtree/grammar-type-util';
 import {
   SidebarDescription, SidebarBlockDescription, FixedBlocksSidebarCategoryDescription
 } from '../block.description'
@@ -10,7 +11,6 @@ import {
   AnySidebarDescription, AnySidebarBlockDescription, ConstantSidebarBlockDescription,
   AnySidebarCategoryDescription, ConstantBlocksSidebarCategoryDescription, MixedBlocksSidebarCategoryDescription
 } from './sidebar.description';
-import { fullNodeDescription } from '../../syntaxtree/grammar-util';
 
 // These values for "type" refer to a child group
 const CHILD_GROUP_TYPES = new Set<NodeAttributeDescription["type"]>(
