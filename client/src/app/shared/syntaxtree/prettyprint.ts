@@ -2,6 +2,7 @@ import { recursiveJoin, NestedString } from '../nested-string'
 
 import { NodeDescription } from './syntaxtree.description'
 import * as Desc from './grammar.description'
+import { orderTypes } from './grammar-type-util';
 
 /**
  * Converts the internal structure of a grammar into a more readable
@@ -11,7 +12,11 @@ export function prettyPrintGrammar(g: Desc.GrammarDescription): string {
   const head = `grammar "${g.name}" {`;
   const tail = `}`;
 
-  const nodes = Object.entries(g.types)
+  const orderedTypes = orderTypes(g);
+  const existingTypes = orderedTypes.filter(t => t.typeName in g.types);
+
+  const nodes = existingTypes
+    .map((name): [string, Desc.NodeTypeDescription] => [name.typeName, g.types[name.typeName]])
     .map(([name, t]) => prettyPrintType(name, t))
 
   const toReturn = [head, ...nodes, tail] as NestedString
