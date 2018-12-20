@@ -82,7 +82,7 @@ export function orderTypes(g: Desc.GrammarDescription): OrderedTypes {
           switch (def.type) {
             // For concrete types: Add all types mentioned in childgroups
             case "concrete":
-              def.attributes.forEach(a => {
+              (def.attributes || []).forEach(a => {
                 switch (a.type) {
                   case "allowed":
                   case "sequence":
@@ -99,7 +99,7 @@ export function orderTypes(g: Desc.GrammarDescription): OrderedTypes {
               });
               break;
             case "oneOf":
-              def.oneOf.forEach(t => impl(ensureTypename(t, g.name)));
+              (def.oneOf || []).forEach(t => impl(ensureTypename(t, g.name)));
               break;
           }
         }
