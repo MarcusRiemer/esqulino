@@ -1,0 +1,47 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Trucklino Program
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: ef57a1ef-810c-4133-839d-2c02763a8504
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"root": "program", "types": {"if": {"type": "concrete",
+    "attributes": [{"name": "pred", "type": "sequence", "nodeTypes": ["expression"]},
+    {"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
+    "statement"}]}]}, "loopFor": {"type": "concrete", "attributes": [{"base": "integer",
+    "name": "times", "type": "property", "restrictions": [{"type": "minInclusive",
+    "value": 0}]}, {"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "*",
+    "nodeType": "statement"}]}]}, "program": {"type": "concrete", "attributes": [{"name":
+    "main", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "statement"}]},
+    {"name": "main", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
+    "functionDeclaration"}]}]}, "loopWhile": {"type": "concrete", "attributes": [{"name":
+    "pred", "type": "sequence", "nodeTypes": ["expression"]}, {"name": "body", "type":
+    "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "statement"}]}]}, "statement":
+    {"type": "oneOf", "oneOf": ["procedureCall", "if", "loopFor", "loopWhile"]}, "expression":
+    {"type": "oneOf", "oneOf": ["functionCall"]}, "functionCall": {"type": "concrete",
+    "attributes": [{"base": "string", "name": "name", "type": "property"}, {"name":
+    "arguments", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "expression"}]}]},
+    "procedureCall": {"type": "concrete", "attributes": [{"base": "string", "name":
+    "name", "type": "property"}, {"name": "arguments", "type": "sequence", "nodeTypes":
+    [{"occurs": "*", "nodeType": "expression"}]}]}, "functionParameter": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "name", "type": "property"}]},
+    "functionDeclaration": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "name", "type": "property"}, {"name": "arguments", "type": "sequence",
+    "nodeTypes": [{"occurs": "*", "nodeType": "functionParameter"}]}, {"name": "body",
+    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "statement"}]}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-12-19 11:24:42.99628'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-12-20 14:24:41.216598'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: seb-lang
+new_record: false
+active_record_yaml_version: 2
