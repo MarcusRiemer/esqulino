@@ -1,9 +1,9 @@
 grammar "regex" {
-  node "expr" {
-    children choice "singleExpression" ::= constant | alternative
-  }
   node "root" {
     children allowed "expressions" ::= expr+
+  }
+  node "expr" {
+    children choice "singleExpression" ::= constant | alternative
   }
   node "constant" {
     prop "value" { string }
