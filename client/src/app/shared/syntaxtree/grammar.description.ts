@@ -254,6 +254,9 @@ export interface GrammarListDescription {
   // The name of the language
   name: string
 
+  // This name is used when a grammer is referred to by another grammar
+  technicalName: string
+
   // The name of the programming language this grammar implements
   programmingLanguageId: string
 
@@ -262,9 +265,9 @@ export interface GrammarListDescription {
 }
 
 /**
- * Describes a grammar that may describe the syntactic structure of a language.
+ * This part of the grammar is stored as a JSON blob in the database.
  */
-export interface GrammarDocument {
+export interface GrammarDatabaseBlob {
   // All types that exist in this language
   types: { [nodeName: string]: NodeTypeDescription }
 
@@ -272,6 +275,18 @@ export interface GrammarDocument {
   root: TypeReference
 }
 
+/**
+ * The technical aspects of a grammar that are used for actual validation
+ * or generation.
+ */
+export interface GrammarDocument extends GrammarDatabaseBlob {
+  // This name is used when a grammer is referred to by another grammar
+  technicalName: string
+}
+
+/**
+ * A whole grammar with all user-facing documentation.
+ */
 export interface GrammarDescription extends GrammarDocument, GrammarListDescription {
 
 }

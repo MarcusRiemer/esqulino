@@ -177,6 +177,22 @@
       },
       "type": "object"
     },
+    "CodeGeneratorComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays the compiled program",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "generated-code"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
     "CodeResourceDescription": {
       "additionalProperties": false,
       "description": "A resource that is described by a syntaxtree.",
@@ -338,7 +354,17 @@
       "type": "object"
     },
     "EditorComponentDescription": {
-      "$ref": "#/definitions/QueryPreviewComponentDescription",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/QueryPreviewComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/ValidatorComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/CodeGeneratorComponentDescription"
+        }
+      ],
       "description": "Any component that could be displayed in the actual editor view."
     },
     "FixedBlocksSidebarCategoryDescription": {
@@ -1134,7 +1160,7 @@
     },
     "TableDescription": {
       "additionalProperties": false,
-      "description": "The \"over-the-wire\" description of a single table \nwith all of its columns.",
+      "description": "The \"over-the-wire\" description of a single table\nwith all of its columns.",
       "properties": {
         "columns": {
           "items": {
@@ -1160,6 +1186,22 @@
         "name",
         "columns",
         "foreign_keys"
+      ],
+      "type": "object"
+    },
+    "ValidatorComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays validation results",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "validator"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
       ],
       "type": "object"
     },

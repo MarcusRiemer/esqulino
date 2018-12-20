@@ -1,5 +1,5 @@
 {
-  "$ref": "#/definitions/GrammarDocument",
+  "$ref": "#/definitions/GrammarDatabaseBlob",
   "$schema": "http://json-schema.org/draft-06/schema#",
   "definitions": {
     "ChildCardinalityDescription": {
@@ -42,15 +42,12 @@
       ],
       "type": "object"
     },
-    "GrammarDocument": {
+    "GrammarDatabaseBlob": {
       "additionalProperties": false,
-      "description": "The technical aspects of a grammar that are used for actual validation\nor generation.",
+      "description": "This part of the grammar is stored as a JSON blob in the database.",
       "properties": {
         "root": {
           "$ref": "#/definitions/TypeReference"
-        },
-        "technicalName": {
-          "type": "string"
         },
         "types": {
           "additionalProperties": {
@@ -60,9 +57,8 @@
         }
       },
       "required": [
-        "root",
-        "technicalName",
-        "types"
+        "types",
+        "root"
       ],
       "type": "object"
     },

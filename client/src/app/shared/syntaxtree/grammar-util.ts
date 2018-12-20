@@ -3,7 +3,7 @@ import {
   NodeTypesChildReference, OccursSpecificDescription,
   isQualifiedTypeName, isOccursSpecificDescription,
   NodeAttributeDescription, isNodeConcreteTypeDescription,
-  GrammarDescription
+  GrammarDocument
 } from "./grammar.description";
 import { QualifiedTypeName } from "./syntaxtree.description";
 
@@ -58,14 +58,14 @@ export type FullNodeAttributeDescription = NodeAttributeDescription & {
 /**
  * @return All attributes of the given grammar in the form of a handy list.
  */
-export function getFullAttributes(g: GrammarDescription): FullNodeAttributeDescription[] {
+export function getFullAttributes(g: GrammarDocument): FullNodeAttributeDescription[] {
   const toReturn: FullNodeAttributeDescription[] = [];
 
   Object.entries(g.types || {}).forEach(([typeName, type]) => {
     if (isNodeConcreteTypeDescription(type)) {
       (type.attributes || []).forEach(attribute => {
         toReturn.push(Object.assign({}, attribute, {
-          grammarName: g.name,
+          grammarName: g.technicalName,
           typeName: typeName
         }));
       });
@@ -78,13 +78,13 @@ export function getFullAttributes(g: GrammarDescription): FullNodeAttributeDescr
 /**
  * @return Names of all blocks of the given grammar in the form of a handy list
  */
-export function getFullBlocks(g: GrammarDescription): QualifiedTypeName[] {
+export function getFullBlocks(g: GrammarDocument): QualifiedTypeName[] {
   const toReturn: QualifiedTypeName[] = [];
 
   Object.entries(g.types || {}).forEach(([typeName, type]) => {
     if (isNodeConcreteTypeDescription(type)) {
       toReturn.push({
-        languageName: g.name,
+        languageName: g.technicalName,
         typeName: typeName
       });
     }

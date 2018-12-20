@@ -55,15 +55,15 @@ export type OrderedTypes = QualifiedTypeName[];
 /**
  * @return A meaningful order of the types in the given grammar
  */
-export function orderTypes(g: Desc.GrammarDescription): OrderedTypes {
-  const rootType: QualifiedTypeName = ensureTypename(g.root, g.name);
+export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
+  const rootType: QualifiedTypeName = ensureTypename(g.root, g.technicalName);
 
   // No root available? We just return the order that we got
-  if (rootType.languageName != g.name || !(rootType.typeName in g.types)) {
+  if (rootType.languageName != g.technicalName || !(rootType.typeName in g.types)) {
     return (
       Object
         .keys(g.types)
-        .map(k => ensureTypename(k, g.name))
+        .map(k => ensureTypename(k, g.technicalName))
     );
   } else {
     const usedTypes = new Set<string>();
@@ -87,19 +87,19 @@ export function orderTypes(g: Desc.GrammarDescription): OrderedTypes {
                   case "allowed":
                   case "sequence":
                     a.nodeTypes.forEach(t => {
-                      impl(ensureTypename(t, g.name));
+                      impl(ensureTypename(t, g.technicalName));
                     });
                     break;
                   case "choice":
                     a.choices.forEach(t => {
-                      impl(ensureTypename(t, g.name));
+                      impl(ensureTypename(t, g.technicalName));
                     });
                     break;
                 }
               });
               break;
             case "oneOf":
-              (def.oneOf || []).forEach(t => impl(ensureTypename(t, g.name)));
+              (def.oneOf || []).forEach(t => impl(ensureTypename(t, g.technicalName)));
               break;
           }
         }
@@ -110,7 +110,7 @@ export function orderTypes(g: Desc.GrammarDescription): OrderedTypes {
 
     // Add all unreferenced types
     const unreferenced = Object.keys(g.types)
-      .map(k => ensureTypename(k, g.name))
+      .map(k => ensureTypename(k, g.technicalName))
       .filter(k => !usedTypes.has(JSON.stringify(k)));
     order.push(...unreferenced);
 

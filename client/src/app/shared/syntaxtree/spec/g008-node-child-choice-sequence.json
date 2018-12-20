@@ -1,5 +1,5 @@
 {
-  "name": "g8",
+  "technicalName": "g8",
   "root": "n1",
   "types": {
     "n1": {
@@ -7,7 +7,7 @@
         {
           "name": "c",
           "type": "choice",
-          "choices": ["n2", "n3"]   
+          "choices": ["n2", "n3"]
         }
       ]
     },

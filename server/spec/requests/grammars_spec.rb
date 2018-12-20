@@ -62,6 +62,7 @@ RSpec.describe BlockLanguagesController, type: :request do
            :params => {
              "slug" => "spec",
              "name" => "Spec Grammar",
+             "technicalName" => "spec",
              "programmingLanguageId" => prog_lang.id,
              "types" => { "spec" => { "type" => "concrete" } },
              "root" => "spec"
@@ -74,6 +75,7 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       g = Grammar.find(json_data['id'])
       expect(g.name).to eq "Spec Grammar"
+      expect(g.technical_name).to eq "spec"
       expect(g.slug).to eq "spec"
       expect(g.model["root"]).to eq "spec"
       expect(g.model["types"]["spec"]).to eq({ "type" => "concrete" })

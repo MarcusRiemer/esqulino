@@ -2,7 +2,7 @@
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: sql
+  value_before_type_cast: SQL
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: sql
@@ -84,9 +84,12 @@ concise_attributes:
   value_before_type_cast: '2018-05-15 18:24:27.264702'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-08-03 12:47:24.369896'
+  value_before_type_cast: '2018-12-20 15:39:25.782051'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
+  value_before_type_cast: sql
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: technical_name
   value_before_type_cast: sql
 new_record: false
 active_record_yaml_version: 2

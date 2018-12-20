@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { first } from 'rxjs/operators';
-
 import { ServerDataService } from '../../shared/server-data.service';
 import { ServerApiService } from '../../shared/serverapi.service';
 import { GrammarDescription } from '../../shared/syntaxtree';
@@ -21,6 +19,7 @@ export class CreateGrammarComponent {
   grammar: GrammarDescription = {
     id: undefined,
     name: "",
+    technicalName: "",
     slug: undefined,
     programmingLanguageId: "",
     root: "",

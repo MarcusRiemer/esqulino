@@ -1,4 +1,4 @@
-import { GrammarDescription } from "./grammar.description";
+import { GrammarDocument } from "./grammar.description";
 import { orderTypes, ensureTypename } from "./grammar-type-util";
 
 describe(`Grammar Type Utilities`, () => {
@@ -20,10 +20,8 @@ describe(`Grammar Type Utilities`, () => {
 
   describe(`orderTypes`, () => {
     it(`Unknown Root`, () => {
-      const g: GrammarDescription = {
-        id: undefined,
-        name: "foo",
-        programmingLanguageId: undefined,
+      const g: GrammarDocument = {
+        technicalName: "foo",
         root: "r",
         types: {
           "t1": {
@@ -40,10 +38,8 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Only Root`, () => {
-      const g: GrammarDescription = {
-        id: undefined,
-        name: "foo",
-        programmingLanguageId: undefined,
+      const g: GrammarDocument = {
+        technicalName: "foo",
         root: "r",
         types: {
           "r": {
@@ -60,10 +56,8 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and one unreferenced type`, () => {
-      const g: GrammarDescription = {
-        id: undefined,
-        name: "foo",
-        programmingLanguageId: undefined,
+      const g: GrammarDocument = {
+        technicalName: "foo",
         root: "r",
         types: {
           "r": {
@@ -85,10 +79,8 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and one unreferenced type (order flipped)`, () => {
-      const g: GrammarDescription = {
-        id: undefined,
-        name: "foo",
-        programmingLanguageId: undefined,
+      const g: GrammarDocument = {
+        technicalName: "foo",
         root: "r",
         types: {
           "t1": {
@@ -111,10 +103,8 @@ describe(`Grammar Type Utilities`, () => {
 
 
     it(`Root and one illegal reference`, () => {
-      const g: GrammarDescription = {
-        id: undefined,
-        name: "foo",
-        programmingLanguageId: undefined,
+      const g: GrammarDocument = {
+        technicalName: "foo",
         root: "r",
         types: {
           "r": {
@@ -139,10 +129,8 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and multiple references to the same thing`, () => {
-      const g: GrammarDescription = {
-        id: undefined,
-        name: "foo",
-        programmingLanguageId: undefined,
+      const g: GrammarDocument = {
+        technicalName: "foo",
         root: "r",
         types: {
           "r": {
@@ -167,10 +155,8 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and recursive reference to self`, () => {
-      const g: GrammarDescription = {
-        id: undefined,
-        name: "foo",
-        programmingLanguageId: undefined,
+      const g: GrammarDocument = {
+        technicalName: "foo",
         root: "r",
         types: {
           "r": {
@@ -196,10 +182,8 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and typedef`, () => {
-      const g: GrammarDescription = {
-        id: undefined,
-        name: "foo",
-        programmingLanguageId: undefined,
+      const g: GrammarDocument = {
+        technicalName: "foo",
         root: "r",
         types: {
           "t1": {
@@ -233,10 +217,8 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and recursive typedef`, () => {
-      const g: GrammarDescription = {
-        id: undefined,
-        name: "foo",
-        programmingLanguageId: undefined,
+      const g: GrammarDocument = {
+        technicalName: "foo",
         root: "r",
         types: {
           "t1": {
@@ -270,10 +252,8 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root typedef with bizarre order`, () => {
-      const g: GrammarDescription = {
-        id: undefined,
-        name: "foo",
-        programmingLanguageId: undefined,
+      const g: GrammarDocument = {
+        technicalName: "foo",
         root: "r",
         types: {
           "r": {
@@ -306,10 +286,8 @@ describe(`Grammar Type Utilities`, () => {
 
 
     it(`Root, one chain and unreferenced item`, () => {
-      const g: GrammarDescription = {
-        id: undefined,
-        name: "foo",
-        programmingLanguageId: undefined,
+      const g: GrammarDocument = {
+        technicalName: "foo",
         root: "r",
         types: {
           "b4": {

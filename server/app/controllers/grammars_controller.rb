@@ -76,7 +76,7 @@ class GrammarsController < ApplicationController
   # These parameters are "normal" table attributes
   def basic_params
     params
-      .permit([:name, :slug, :programmingLanguageId])
+      .permit([:name, :technicalName, :slug, :programmingLanguageId])
       .transform_keys { |k| k.underscore }
   end
 

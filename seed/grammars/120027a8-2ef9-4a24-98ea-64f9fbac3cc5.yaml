@@ -36,9 +36,12 @@ concise_attributes:
   value_before_type_cast: '2018-12-19 11:24:22.059637'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-12-20 14:18:17.901348'
+  value_before_type_cast: '2018-12-20 15:37:41.961401'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: seb-world
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: technical_name
+  value_before_type_cast: trucklino_world
 new_record: false
 active_record_yaml_version: 2

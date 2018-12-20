@@ -87,6 +87,7 @@ describe("Sidebar Default Node Generator", () => {
   it(`Sidebar generation passes fixed sidebars through`, () => {
     const grammar: GrammarDocument = {
       root: "foo",
+      technicalName: "g",
       types: {}
     };
 
@@ -103,6 +104,7 @@ describe("Sidebar Default Node Generator", () => {
   it(`Sidebar generation passes fixed sidebar categories through`, () => {
     const grammar: GrammarDocument = {
       root: "foo",
+      technicalName: "g",
       types: {}
     };
 
@@ -136,6 +138,7 @@ describe("Sidebar Default Node Generator", () => {
   it(`Sidebar generation passes fixed blocks through`, () => {
     const grammar: GrammarDocument = {
       root: "foo",
+      technicalName: "g",
       types: {}
     };
 
@@ -186,6 +189,7 @@ describe("Sidebar Default Node Generator", () => {
   it(`Sidebar generation creates a mixture of fixed and generated blocks`, () => {
     const grammar: GrammarDocument = {
       root: "foo",
+      technicalName: "g",
       types: { "t1": { type: "concrete" } }
     };
 
@@ -225,6 +229,7 @@ describe("Sidebar Default Node Generator", () => {
   it(`Sidebar generation for purely generated categories`, () => {
     const grammar: GrammarDocument = {
       root: "foo",
+      technicalName: "g",
       types: { "t1": { type: "concrete" } }
     };
 
