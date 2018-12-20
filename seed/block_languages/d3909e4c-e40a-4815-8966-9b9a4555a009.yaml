@@ -1,0 +1,146 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Trucklino World
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: d3909e4c-e40a-4815-8966-9b9a4555a009
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: model
+  value_before_type_cast: '{"sidebars": [{"type": "fixedBlocks", "caption": "Trucklino
+    World", "categories": [{"blocks": [{"defaultNode": {"name": "starOperator", "language":
+    "sql"}, "displayName": "Empty 5x5"}], "categoryCaption": "Empty Worlds"}]}], "editorBlocks":
+    [{"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "direction": "horizontal",
+    "breakAfter": false, "wrapChildren": true, "childGroupName": "position"}, {"children":
+    [{"text": "❓", "style": {"color": "darkred", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "10px", "borderRadius": "500px", "paddingRight": "10px",
+    "backgroundColor": "orange"}, "blockType": "constant"}], "blockType": "dropTarget",
+    "direction": "horizontal", "dropTarget": {"children": {"order": "insertFirst",
+    "category": "position"}, "visibility": {"$var": "ifEmpty"}}}, {"blockType": "iterator",
+    "direction": "horizontal", "breakAfter": false, "wrapChildren": true, "childGroupName":
+    "openings"}, {"children": [{"text": "❓", "style": {"color": "darkred", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius": "500px",
+    "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
+    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
+    {"order": "insertFirst", "category": "openings"}, "visibility": {"$var": "ifEmpty"}}},
+    {"blockType": "iterator", "direction": "horizontal", "breakAfter": false, "wrapChildren":
+    true, "childGroupName": "trafficLights"}, {"children": [{"text": "❓", "style":
+    {"color": "darkred", "border": "2px solid red", "cursor": "default", "paddingLeft":
+    "10px", "borderRadius": "500px", "paddingRight": "10px", "backgroundColor": "orange"},
+    "blockType": "constant"}], "blockType": "dropTarget", "direction": "horizontal",
+    "dropTarget": {"children": {"order": "insertFirst", "category": "trafficLights"},
+    "visibility": {"$every": [{"$var": "ifEmpty"}, {"$var": "ifLegalDrag"}]}}}, {"blockType":
+    "iterator", "direction": "horizontal", "breakAfter": false, "wrapChildren": true,
+    "childGroupName": "freight"}, {"children": [{"text": "❓", "style": {"color": "darkred",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius":
+    "500px", "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
+    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
+    {"order": "insertFirst", "category": "freight"}, "visibility": {"$every": [{"$var":
+    "ifEmpty"}, {"$var": "ifLegalDrag"}]}}}], "blockType": "block", "direction": "horizontal",
+    "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter", "skipParents":
+    0}}, "wrapChildren": true}], "describedType": {"typeName": "road", "languageName":
+    "Trucklino World"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-block"},
+    "property": "x", "blockType": "input"}, {"style": {"display": "inline-block"},
+    "property": "y", "blockType": "input"}], "blockType": "block", "direction": "horizontal",
+    "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter", "skipParents":
+    0}}, "wrapChildren": true}], "describedType": {"typeName": "vec2", "languageName":
+    "Trucklino World"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "direction":
+    "horizontal", "breakAfter": false, "wrapChildren": true, "childGroupName": "position"},
+    {"children": [{"text": "❓", "style": {"color": "darkred", "border": "2px solid
+    red", "cursor": "default", "paddingLeft": "10px", "borderRadius": "500px", "paddingRight":
+    "10px", "backgroundColor": "orange"}, "blockType": "constant"}], "blockType":
+    "dropTarget", "direction": "horizontal", "dropTarget": {"children": {"order":
+    "insertFirst", "category": "position"}, "visibility": {"$var": "ifEmpty"}}}, {"blockType":
+    "iterator", "direction": "horizontal", "breakAfter": false, "wrapChildren": true,
+    "childGroupName": "orientation"}, {"children": [{"text": "❓", "style": {"color":
+    "darkred", "border": "2px solid red", "cursor": "default", "paddingLeft": "10px",
+    "borderRadius": "500px", "paddingRight": "10px", "backgroundColor": "orange"},
+    "blockType": "constant"}], "blockType": "dropTarget", "direction": "horizontal",
+    "dropTarget": {"children": {"order": "insertFirst", "category": "orientation"},
+    "visibility": {"$var": "ifEmpty"}}}], "blockType": "block", "direction": "horizontal",
+    "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter", "skipParents":
+    0}}, "wrapChildren": true}], "describedType": {"typeName": "truck", "languageName":
+    "Trucklino World"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "direction":
+    "horizontal", "breakAfter": false, "wrapChildren": true, "childGroupName": "size"},
+    {"children": [{"text": "❓", "style": {"color": "darkred", "border": "2px solid
+    red", "cursor": "default", "paddingLeft": "10px", "borderRadius": "500px", "paddingRight":
+    "10px", "backgroundColor": "orange"}, "blockType": "constant"}], "blockType":
+    "dropTarget", "direction": "horizontal", "dropTarget": {"children": {"order":
+    "insertFirst", "category": "size"}, "visibility": {"$var": "ifEmpty"}}}, {"blockType":
+    "iterator", "direction": "horizontal", "breakAfter": false, "wrapChildren": true,
+    "childGroupName": "trucks"}, {"children": [{"text": "❓", "style": {"color": "darkred",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius":
+    "500px", "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
+    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
+    {"order": "insertFirst", "category": "trucks"}, "visibility": {"$var": "ifEmpty"}}},
+    {"blockType": "iterator", "direction": "horizontal", "breakAfter": false, "wrapChildren":
+    true, "childGroupName": "roads"}, {"children": [{"text": "❓", "style": {"color":
+    "darkred", "border": "2px solid red", "cursor": "default", "paddingLeft": "10px",
+    "borderRadius": "500px", "paddingRight": "10px", "backgroundColor": "orange"},
+    "blockType": "constant"}], "blockType": "dropTarget", "direction": "horizontal",
+    "dropTarget": {"children": {"order": "insertFirst", "category": "roads"}, "visibility":
+    {"$var": "ifEmpty"}}}], "blockType": "block", "direction": "horizontal", "breakAfter":
+    false, "dropTarget": {"self": {"order": "insertAfter", "skipParents": 0}}, "wrapChildren":
+    true}], "describedType": {"typeName": "world", "languageName": "Trucklino World"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-block"}, "property":
+    "direction", "blockType": "input"}], "blockType": "block", "direction": "horizontal",
+    "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter", "skipParents":
+    0}}, "wrapChildren": true}], "describedType": {"typeName": "freight", "languageName":
+    "Trucklino World"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-block"},
+    "property": "direction", "blockType": "input"}], "blockType": "block", "direction":
+    "horizontal", "breakAfter": false, "dropTarget": {"self": {"order": "insertAfter",
+    "skipParents": 0}}, "wrapChildren": true}], "describedType": {"typeName": "direction",
+    "languageName": "Trucklino World"}}, {"visual": [{"children": [{"style": {"color":
+    "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
+    "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
+    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"blockType":
+    "iterator", "direction": "horizontal", "breakAfter": false, "wrapChildren": true,
+    "childGroupName": "side"}, {"children": [{"text": "❓", "style": {"color": "darkred",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius":
+    "500px", "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
+    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
+    {"order": "insertFirst", "category": "side"}, "visibility": {"$var": "ifEmpty"}}}],
+    "blockType": "block", "direction": "horizontal", "breakAfter": false, "dropTarget":
+    {"self": {"order": "insertAfter", "skipParents": 0}}, "wrapChildren": true}],
+    "describedType": {"typeName": "trafficLight", "languageName": "Trucklino World"}}],
+    "editorComponents": [{"componentType": "validator"}, {"componentType": "generated-code"}],
+    "localGeneratorInstructions": {"staticSidebars": [{"type": "fixedBlocks", "caption":
+    "Trucklino World", "categories": [{"blocks": [{"defaultNode": {"name": "starOperator",
+    "language": "sql"}, "displayName": "Empty 5x5"}], "categoryCaption": "Empty Worlds"}]}]}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-12-20 14:25:50.522385'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-12-20 14:30:14.238052'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: seb-world
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: 120027a8-2ef9-4a24-98ea-64f9fbac3cc5
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_generator_id
+new_record: false
+active_record_yaml_version: 2
