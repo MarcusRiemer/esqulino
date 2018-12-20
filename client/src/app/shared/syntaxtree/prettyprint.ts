@@ -8,8 +8,8 @@ import { orderTypes } from './grammar-type-util';
  * Converts the internal structure of a grammar into a more readable
  * version that reads similar to RelaxNG.
  */
-export function prettyPrintGrammar(g: Desc.GrammarDescription): string {
-  const head = `grammar "${g.name}" {`;
+export function prettyPrintGrammar(g: Desc.GrammarDocument): string {
+  const head = `grammar "${g.technicalName}" {`;
   const tail = `}`;
 
   const orderedTypes = orderTypes(g);

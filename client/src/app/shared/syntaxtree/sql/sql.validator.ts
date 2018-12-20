@@ -40,7 +40,7 @@ export class SqlValidator extends SpecializedValidator {
    * Currently the grammar can't express that (Star* & Column*)+, the problem is the
    * outer "+".
    */
-  private validateFilledSelect(ast: AST.Node, schema: Schema, context: ValidationContext) {
+  private validateFilledSelect(ast: AST.Node, _: Schema, context: ValidationContext) {
     // No SELECT may be completly empty
     const allSelects = ast.getNodesOfType({ languageName: "sql", typeName: "select" });
     allSelects.forEach(select => {
@@ -53,7 +53,7 @@ export class SqlValidator extends SpecializedValidator {
   }
 
   /**
-   * Checks all occuring names. Specifically ensures that 
+   * Checks all occuring names. Specifically ensures that
    * - All mentioned tables exist
    * - All columns only mention existing columns on existing tables
    */
@@ -104,7 +104,7 @@ export class SqlValidator extends SpecializedValidator {
     });
   }
 
-  private validateAggregationGroupBy(ast: AST.Node, schema: Schema, context: ValidationContext) {
+  private validateAggregationGroupBy(ast: AST.Node, _: Schema, context: ValidationContext) {
     // Are there any calls to aggregation functions without GROUP BY?
     const allFunctions = ast.getNodesOfType({ languageName: "sql", typeName: "functionCall" });
 

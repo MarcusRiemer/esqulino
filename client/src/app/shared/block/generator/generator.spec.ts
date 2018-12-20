@@ -12,6 +12,7 @@ describe("BlockLanguage Generator", () => {
         id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
         programmingLanguageId: "spec",
         name: "g1",
+        technicalName: "g1",
         root: "t1",
         types: {
           "t1": {
@@ -37,6 +38,7 @@ describe("BlockLanguage Generator", () => {
         id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
         programmingLanguageId: "spec",
         name: "g1",
+        technicalName: "g1",
         root: "t1",
         types: {
           "t1": {
@@ -77,6 +79,7 @@ describe("BlockLanguage Generator", () => {
         id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
         programmingLanguageId: "spec",
         name: "g1",
+        technicalName: "g1",
         root: "t1",
         types: {
           "t1": {
@@ -136,6 +139,7 @@ describe("BlockLanguage Generator", () => {
         id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
         programmingLanguageId: "spec",
         name: "g1",
+        technicalName: "g1",
         root: "t1",
         types: {
           "t1": {
@@ -169,6 +173,7 @@ describe("BlockLanguage Generator", () => {
         id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
         programmingLanguageId: "spec",
         name: "g1",
+        technicalName: "g1",
         root: "t1",
         types: {
           "t1": {

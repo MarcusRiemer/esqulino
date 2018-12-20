@@ -17,11 +17,15 @@
         },
         "slug": {
           "type": "string"
+        },
+        "technicalName": {
+          "type": "string"
         }
       },
       "required": [
         "id",
         "name",
+        "technicalName",
         "programmingLanguageId"
       ],
       "type": "object"

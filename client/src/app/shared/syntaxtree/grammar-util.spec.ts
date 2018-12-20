@@ -62,11 +62,9 @@ describe(`Grammar Utilities`, () => {
     // Shorthand to generate a grammar with the relevant properties
     const testGrammar = (name: string, types: { [nodeName: string]: NodeTypeDescription }) => {
       return ({
-        id: undefined,
-        name: name,
+        technicalName: name,
         programmingLanguageId: "lang",
         root: undefined,
-        slug: undefined,
         types: types
       });
     }

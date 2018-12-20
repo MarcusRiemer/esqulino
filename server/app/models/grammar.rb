@@ -6,19 +6,24 @@ class Grammar < ApplicationRecord
   # A user defined name
   validates :name, presence: true
 
+  # The name used in "inter grammar" communication must be given
+  validates :technical_name, presence: true
+  validates :technical_name, format: { with: /\A[a-zA-Z]\w*\z/,
+                                       message: "Starts with a letter, allows letters, digits and _" }
+
   # Some special languages may get a slug assigned
   validates :slug, uniqueness: true, allow_nil: true
   # But if there is a slug it must have at least two characters
   validates :slug, length: { minimum: 2 }, allow_nil: true
 
   # The JSON document needs to be a valid grammar
-  validates :model, json_schema: 'GrammarDocument'
+  validates :model, json_schema: 'GrammarDatabaseBlob'
 
   belongs_to :programming_language
 
   # Grammar with properties that are relevant when listing
   scope :scope_list, -> {
-    select(:id, :slug, :name, :created_at, :updated_at, :programming_language_id)
+    select(:id, :slug, :name, :technical_name, :created_at, :updated_at, :programming_language_id)
   }
 
   # Computes a hash that may be sent back to the client if it requires
@@ -33,7 +38,7 @@ class Grammar < ApplicationRecord
   # to list available grammars.
   def to_list_api_response
     to_json_api_response
-      .slice("id", "slug", "name", "programmingLanguageId")
+      .slice("id", "slug", "name", "technicalName", "programmingLanguageId")
   end
 
   # Returns a nicely readable representation of id and name

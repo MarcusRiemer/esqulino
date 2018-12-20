@@ -26,11 +26,6 @@ import * as sql from './app/shared/syntaxtree/sql/'
 import * as css from './app/shared/syntaxtree/css/'
 import * as json from './app/shared/syntaxtree/json/'
 
-import * as blocks_dxml from './app/shared/block/dxml/'
-import * as blocks_sql from './app/shared/block/sql/language-model'
-import * as blocks_css from './app/shared/block/css/language-model'
-import * as blocks_regex from './app/shared/block/regex/language-model'
-
 /**
  * Can be used to test whether the IDE-service is actually available.
  */
@@ -121,19 +116,6 @@ function findLanguage(id: string) {
     return (new Language(desc));
   else
     throw new Error(`Unknown language ${id}`);
-}
-
-/**
- * All available language models
- */
-function availableBlockLanguages(): BlockLanguageDescription[] {
-  return ([
-    blocks_dxml.BLOCK_LANGUAGE_DYNAMIC,
-    blocks_dxml.BLOCK_LANGUAGE_STATIC,
-    blocks_sql.BLOCK_LANGUAGE_DESCRIPTION,
-    blocks_css.BLOCK_LANGUAGE_DESCRIPTION,
-    blocks_regex.BLOCK_LANGUAGE_DESCRIPTION
-  ]);
 }
 
 /**

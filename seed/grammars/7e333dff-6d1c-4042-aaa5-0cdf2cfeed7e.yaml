@@ -2,7 +2,7 @@
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: dxml
+  value_before_type_cast: Dynamisches XML
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: dxml
@@ -43,9 +43,12 @@ concise_attributes:
   value_before_type_cast: '2018-05-15 18:48:12.004676'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-23 10:18:45.636846'
+  value_before_type_cast: '2018-12-20 15:39:19.237639'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: dxml-eruby
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: technical_name
+  value_before_type_cast: dxml
 new_record: false
 active_record_yaml_version: 2
