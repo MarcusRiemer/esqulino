@@ -3,12 +3,17 @@ class ProjectImagesController < ApplicationController
   include JsonSchemaHelper
   include ImageHelper
 
+  # Uploads a new image
   def create
     ensure_write_access do
-      metadata = Image.metadata_create(params['image-name'], params['author-name'], params['author-url'], params['licence-name'], params['licence-url'])
-      img = Image.file_new!(params['image-file'].tempfile, current_project, metadata)
+      if (creation_params['image-name'].nil? or creation_params['image-file'].nil?)
+        render :status => 400
+      else
+        metadata = Image.metadata_create(creation_params['image-name'], params['author-name'], params['author-url'], params['licence-name'], params['licence-url'])
+        img = Image.file_new!(params['image-file'].tempfile, current_project, metadata)
 
-      render plain: img.id
+        render plain: img.id
+      end
     end
   end
 
@@ -49,8 +54,10 @@ class ProjectImagesController < ApplicationController
     render status => :success, json: Image.metadata_get_from_file(current_project)
   end
 
-  # Access to the current project
-  def current_project
-    @current_project ||= Project.find_by(slug: params['project_id'])
+  private
+
+  # These attributes are mandatory when an image is created
+  def creation_params
+    params.permit("image-name", "image-file")
   end
 end
