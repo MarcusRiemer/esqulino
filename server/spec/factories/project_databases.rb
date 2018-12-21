@@ -8,7 +8,7 @@ FactoryBot.define do
     after(:create) do |db|
       db.project.update!(default_database: db)
     end
-    
+
     trait :table_key_value do
       after(:create) do |db|
         db.table_create(
@@ -52,6 +52,8 @@ FactoryBot.define do
             ['9', 'neun'],
           ]
         )
+
+        db.refresh_schema!
       end
     end
   end

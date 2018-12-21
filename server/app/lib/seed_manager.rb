@@ -116,18 +116,25 @@ class SeedManager
     File.join seed_project_used_block_languages_dir(project_id), "#{block_language_id}.yaml"
   end
 
-  # The general directory for block languages
+  # The general directory for databases
   #
   # @param project_id [UUID] The id of the parent project
   def seed_project_databases_dir(project_id)
     File.join seed_projects_dir(project_id), "databases"
   end
 
-  # The general directory for block languages
+  # The persisted model of a database
   #
   # @param project_id [UUID] The id of the parent project
   def seed_project_databases_file(project_id, database_id)
     File.join seed_project_databases_dir(project_id), "#{database_id}.yaml"
+  end
+
+  # The actual database
+  #
+  # @param project_id [UUID] The id of the parent project
+  def seed_project_databases_sqlite_file(project_id, database_id)
+    File.join seed_project_databases_dir(project_id), "#{database_id}.sqlite"
   end
 
   # The general directory for block languages
@@ -245,7 +252,9 @@ class SeedManager
 
       # Because everything went fine: No need for a backup
       FileUtils.rm_rf project_folder_backup_path unless project_folder_backup_path.nil?
-    rescue EsqulinoError => e
+
+      return p
+    rescue RuntimeError => e
       if not project_folder_backup_path.nil? then
         # Delete the (possibly) partial data folder
         FileUtils.rm_rf project_folder_path
@@ -386,15 +395,15 @@ class SeedManager
   # Stores a specific block language generator
   #
   # @param slug_or_id [string, BlockLanguageGenerator]
-  #   The slug or the ID of the generator to store.
-  #   May alternatively be a BlockLanguageGenerator directly.
-  def store_block_language_generator(slug_or_id)
-    b = if slug_or_id.is_a? BlockLanguageGenerator then
-          slug_or_id
+  #   The ID of the generator to store. May alternatively directly be
+  #   a BlockLanguageGenerator.
+  def store_block_language_generator(id)
+    b = if id.is_a? BlockLanguageGenerator then
+          id
         else
           # Finding the correct resource
           # BEWARE: There is no slug here!
-          BlockLanguageGenerator.find(id: slug_or_id)
+          BlockLanguageGenerator.find(id)
         end
 
     puts "Storing block language generator #{b.readable_identification}"
@@ -419,7 +428,7 @@ class SeedManager
   #############################################
   # Redudant code for grammars ahead
   #############################################
-  
+
   # Stores all grammars
   def store_all_grammars
     Grammar.all.each { |g| store_grammar g }
@@ -434,7 +443,7 @@ class SeedManager
   #
   # @param slug_or_id [string] The slug or the ID of the project to store.
   def store_grammar(grammar_slug_or_id)
-    g = if grammar_slug_or_id.is_a? BlockLanguage then
+    g = if grammar_slug_or_id.is_a? Grammar then
           grammar_slug_or_id
         else
           # Finding the correct project
@@ -476,9 +485,9 @@ class SeedManager
     # Ensure we don't have any stupid errors because we try to trigger
     # Rails auto-loading mechanism early
     raise RuntimeError.new "Mismatched types, instance: #{instance.class.name}, instance_type: #{instance_type.name}" if instance.class != instance_type
-    
+
     keyword = "ERROR" # Used to represent what we did with this instance: CREATE, UPDATE, SKIP
-    
+
     # Grab a database-connected variant of that instance
     db_instance = instance.class.find_by(instance.key_search_attributes)
     if db_instance.nil? then
@@ -490,12 +499,12 @@ class SeedManager
       keyword = db_instance.changed? ? "UPDATE" : "SKIP  "
     end
 
-    puts "#{'  ' * depth}#{keyword} #{db_instance.class.name} #{db_instance.readable_identification}"
-
     # Possibly update it
     if keyword == "CREATE" || keyword == "UPDATE" then
       db_instance.save!
     end
+
+    puts "#{'  ' * depth}#{keyword} #{db_instance.class.name} #{db_instance.readable_identification}"
 
     return db_instance
   end
@@ -638,5 +647,14 @@ class SeedManager
   # Singleton instance of the SeedManager
   def self.instance
     @@instance ||= SeedManager.new
+  end
+
+  private
+
+  # We probably don't want to output during testing, so this is configurable
+  def puts(*args)
+    if Rails.configuration.sqlino["seed"]["output"]
+      super(args)
+    end
   end
 end
