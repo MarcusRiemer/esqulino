@@ -52,7 +52,6 @@ Rails.application.routes.draw do
 
         # Everything that does something with the database content via a query
         scope 'query' do
-          root via: [:post], controller: 'project_queries', action: :create
           post 'run', controller: 'project_queries', action: :run_arbitrary
 
           scope 'simulate' do
@@ -61,23 +60,13 @@ Rails.application.routes.draw do
           end
 
           scope ':query_id' do
-            root via: [:post], controller: 'project_queries', action: :update
-            root via: [:delete], controller: 'project_queries', action: :destroy
             post 'run', controller: 'project_queries', action: :run_stored
           end
         end
 
         # Everything that does something with the pages
         scope 'page' do
-          root via: [:post], controller: 'project_pages', action: :create
-          post 'render', controller: 'project_pages', action: :render_arbitrary
-
-          scope ':page_id' do
-            root via: [:post], controller: 'project_pages', action: :update
-            root via: [:delete], controller: 'project_pages', action: :destroy
-
-            get 'render', controller: 'project_pages', action: :render_known
-          end
+          # TODO: Have HTML support again
         end
 
         # Everything that has something to do with images
