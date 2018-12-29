@@ -42,7 +42,7 @@ concise_attributes:
   value_before_type_cast: '2018-12-20 15:35:52.946618'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
-  value_before_type_cast: seb-lang
+  value_before_type_cast: truck-lang
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: technical_name
   value_before_type_cast: trucklino_program

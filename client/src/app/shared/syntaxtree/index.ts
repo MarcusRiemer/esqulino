@@ -14,6 +14,7 @@ import * as DynamicXml from './dxml'
 import * as RegEx from './regex'
 import * as Css from './css'
 import * as Json from './json'
+import * as Truck from './truck'
 
 /**
  * All languages that are statically known to the system.
@@ -25,6 +26,6 @@ export const AvailableLanguages = {
   RegEx: new Language(RegEx.LANGUAGE_DESCRIPTION),
   Css: new Language(Css.LANGUAGE_DESCRIPTION),
   Json: new Language(Json.LANGUAGE_DESCRIPTION),
-  SebWorld: new Language({ id: "seb-world", name: "Seb World", validators: [], emitters: [] }),
-  SebLang: new Language({ id: "seb-lang", name: "Seb Lang", validators: [], emitters: [] })
+  TruckWorld: new Language(Truck.WORLD_LANGUAGE_DESCRIPTION),
+  TruckLanguage: new Language(Truck.PROG_LANGUAGE_DESCRIPTION)
 };
