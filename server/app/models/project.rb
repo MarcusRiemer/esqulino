@@ -26,13 +26,14 @@ class Project < ApplicationRecord
   # updating logic.
   belongs_to :default_database, :class_name => "ProjectDatabase", optional: true
 
-  # Slugs must be unique across the whole database
-  validates :slug, uniqueness: true
-
   # Name may not be empty
   validates :name, presence: true
-  # Slug may not be empty
-  validates :slug, presence: true
+
+  # Some special projects may get a slug assigned
+  validates :slug, uniqueness: true, allow_nil: true
+  validates :slug, format: { with: /\A[a-zA-Z][a-zA-Z0-9\-]+\z/,
+                             message: "Starts with a letter, allows letters, digits and -" },
+            allow_nil: true
 
   # Projects that are publicly available
   scope :only_public, -> { where(public: true) }

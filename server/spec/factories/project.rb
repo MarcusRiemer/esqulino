@@ -1,7 +1,7 @@
 FactoryBot.define do
-  factory :project, class: Project do
+  factory :project do
     sequence(:name) { |n| "Spec Project #{n}"}
-    slug { name.parameterize }
+    sequence(:slug) { |n| "project-#{n}" }
     description { "Generated on the fly, used for tests" }
     index_page_id { nil }
     public { false }

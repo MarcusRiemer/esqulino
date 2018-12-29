@@ -19,6 +19,7 @@ RSpec.describe Grammar, type: :model do
       FactoryBot.create(:grammar, slug: nil)
 
       expect(Grammar.all.count).to be 2
+      expect(Grammar.where(slug: nil).count).to be 2
     end
   end
 

@@ -11,10 +11,11 @@ class Grammar < ApplicationRecord
   validates :technical_name, format: { with: /\A[a-zA-Z]\w*\z/,
                                        message: "Starts with a letter, allows letters, digits and _" }
 
-  # Some special languages may get a slug assigned
+  # Some special grammars may get a slug assigned
   validates :slug, uniqueness: true, allow_nil: true
-  # But if there is a slug it must have at least two characters
-  validates :slug, length: { minimum: 2 }, allow_nil: true
+  validates :slug, format: { with: /\A[a-zA-Z][a-zA-Z0-9\-]+\z/,
+                             message: "Starts with a letter, allows letters, digits and -" },
+            allow_nil: true
 
   # The JSON document needs to be a valid grammar
   validates :model, json_schema: 'GrammarDatabaseBlob'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_20_143916) do
+ActiveRecord::Schema.define(version: 2018_12_29_150559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 2018_12_20_143916) do
     t.text "programming_language_id"
     t.string "technical_name"
     t.index ["programming_language_id"], name: "index_grammars_on_programming_language_id"
+    t.index ["slug"], name: "index_grammars_on_slug", unique: true
   end
 
   create_table "programming_languages", id: :text, force: :cascade do |t|
@@ -107,7 +108,7 @@ ActiveRecord::Schema.define(version: 2018_12_20_143916) do
     t.string "api_version"
     t.uuid "default_database_id"
     t.index ["default_database_id"], name: "index_projects_on_default_database_id"
-    t.index ["slug"], name: "index_projects_on_slug"
+    t.index ["slug"], name: "index_projects_on_slug", unique: true
   end
 
   add_foreign_key "block_languages", "block_language_generators"
