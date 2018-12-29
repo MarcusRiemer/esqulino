@@ -23,16 +23,18 @@ RSpec.describe ProjectsController, type: :request do
 
         expect(created_project.public).to eq false
       end
+
+      it 'missing the slug' do
+        post '/api/project', params: { "name": "foof" }
+        expect(response).to have_http_status(200)
+
+        expect(Project.all.length).to eq 1
+      end
     end
 
     describe 'invalid request' do
       it 'missing a name' do
         post '/api/project', params: { "slug": "foof" }
-        expect(response).to have_http_status(400)
-      end
-
-      it 'missing the slug' do
-        post '/api/project', params: { "name": "foof" }
         expect(response).to have_http_status(400)
       end
     end

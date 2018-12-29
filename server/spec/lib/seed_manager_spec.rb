@@ -182,7 +182,7 @@ RSpec.describe "Seed Manager" do
       # We avoid this by using unique slugs in exactly these tests.
       #
       # TODO: Maybe using FakeFS would mitigate this better?
-      pOrig = FactoryBot.create(:project, name: "Test", slug: SecureRandom.hex)
+      pOrig = FactoryBot.create(:project, name: "Test", slug: "a" + SecureRandom.hex)
 
       seedManager.store_project(pOrig)
 
