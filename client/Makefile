@@ -44,7 +44,7 @@ client-test-watch:
 ##################################
 dist/cli/main.cli.js : $(CLIENT_ALL_SOURCES)
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Commandline Build) ..."; $(TPUT_BIN) sgr0
-	$(TSC_BIN) --target ES5 --lib ES2017 --outDir dist/cli src/main.cli.ts
+	$(TSC_BIN) -p src/tsconfig.cli.json
 
 cli-compile: dist/cli/main.cli.js
 

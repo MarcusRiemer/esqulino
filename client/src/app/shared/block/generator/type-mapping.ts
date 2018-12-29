@@ -63,8 +63,10 @@ export function mapProperty(
   instructions: PropertyInstructions
 ): VisualBlockDescriptions.EditorInput | VisualBlockDescriptions.EditorInterpolated {
   if (instructions.readOnly) {
+    // If the instructions demand this value to be read only: Treat it as an interpolated value
     return (mapInterpolated(attr, instructions));
   } else {
+    // Otherwise generate an input field
     const toReturn: VisualBlockDescriptions.EditorInput = {
       blockType: "input",
       property: attr.name

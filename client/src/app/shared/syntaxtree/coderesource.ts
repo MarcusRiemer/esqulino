@@ -11,8 +11,8 @@ import { ValidationResult } from './validation-result';
 /**
  * A resource that is described by a syntaxtree.
  *
- * While the tree instance itself is also available via the nodes 
- * of the tree, the immutable nature makes it difficult to 
+ * While the tree instance itself is also available via the nodes
+ * of the tree, the immutable nature makes it difficult to
  * communicate changes upwards. The resource allows to replace
  * the whole tree and therefore enables mutating operations. So
  * this is additionaly a facade that hides the immutability of the

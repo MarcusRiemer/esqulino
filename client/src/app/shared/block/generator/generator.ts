@@ -91,7 +91,7 @@ export function convertGrammar(
   toReturn.editorBlocks = concreteTypes.map(([tName, tDesc]): EditorBlockDescription => {
     return ({
       describedType: {
-        languageName: g.name,
+        languageName: g.technicalName,
         typeName: tName
       },
       visual: mapType(tDesc, instructions.typeInstructions(g.name, tName))

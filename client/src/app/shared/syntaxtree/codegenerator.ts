@@ -146,7 +146,7 @@ export class CodeGeneratorProcess {
 
 /**
  * Controls how a node is converted to text and what the children
- * have to do with it. 
+ * have to do with it.
  */
 export interface NodeConverter {
   /*
@@ -247,7 +247,7 @@ export class CodeGenerator {
    */
   getConverter(t: QualifiedTypeName) {
     if (!this._callbacks[t.languageName]) {
-      throw new Error(`Language "${t.languageName}" is unknown to CodeGenerator`);
+      throw new Error(`Language "${t.languageName}" is unknown to CodeGenerator, available languages are: [${Object.keys(this._callbacks).join(", ")}]`);
     }
 
     if (!this._callbacks[t.languageName][t.typeName]) {

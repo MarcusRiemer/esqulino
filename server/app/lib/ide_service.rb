@@ -1,5 +1,7 @@
 require 'open3'
 
+# Something went wrong inside the IDE service or in the communication
+# with it
 class IdeServiceError < RuntimeError
 end
 
@@ -109,7 +111,7 @@ class OneShotExecIdeService < ExecIdeService
       end
     else
       # Nope, thats a defect
-      raise IdeServiceError, "Received stderr output: #{stderr}, stdout: #{stdout}"
+      raise IdeServiceError, "Received stderr output: #{stderr}, stdout: #{stdout}, request: #{request.to_json}"
     end
   end
 end
