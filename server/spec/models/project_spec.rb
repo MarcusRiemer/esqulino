@@ -88,7 +88,33 @@ RSpec.describe Project do
       expect(api_response).to validate_against "ProjectDescription"
       expect(api_response['sources'][0]).to eq proj.project_sources[0].to_full_api_response
       expect(api_response['projectUsesBlockLanguages'][0]).to eq proj.project_uses_block_languages[0].to_api_response
+      expect(api_response['grammars'][0]).to eq proj.grammars[0].to_full_api_response
     end
+
+    it "doesn't list grammars or block languages multiple times" do
+      proj = FactoryBot.create(:project, name: "Test")
+
+      g = FactoryBot.create(:grammar)
+
+      # Two block languages with the same grammar
+      b1 = FactoryBot.create(:block_language, name: "Test Blocklang 1", grammar: g)
+      proj.project_uses_block_languages.create!(block_language: b1)
+
+      b2 = FactoryBot.create(:block_language, name: "Test Blocklang 2", grammar: g)
+      proj.project_uses_block_languages.create!(block_language: b2)
+
+      # Multiple resources that use these block languages
+      FactoryBot.create(:code_resource, project: proj, block_language: b1)
+      FactoryBot.create(:code_resource, project: proj, block_language: b1)
+      FactoryBot.create(:code_resource, project: proj, block_language: b2)
+      FactoryBot.create(:code_resource, project: proj, block_language: b2)
+
+      api_response = proj.to_project_api_response
+      expect(api_response).to validate_against "ProjectDescription"
+      expect(api_response['grammars'].length).to eq 1
+      expect(api_response['blockLanguages'].length).to eq 2
+    end
+
   end
 
   context "directories" do

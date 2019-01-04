@@ -1,4 +1,5 @@
 import { TableDescription } from "./schema/schema.description"
+import { GrammarDescription } from './syntaxtree/grammar.description';
 import { CodeResourceDescription } from './syntaxtree/coderesource.description'
 import {
   ApiVersion, ApiVersionToken, CURRENT_API_VERSION
@@ -105,6 +106,7 @@ export interface ProjectDescription extends ProjectListDescription {
   activeDatabase?: string
   projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[]
   blockLanguages: BlockLanguageDescription[]
+  grammars: GrammarDescription[]
   sources: ProjectSourceDescription[]
 }
 
