@@ -21,6 +21,7 @@ export function emptyProject(override: Partial<ProjectFullDescription>): Project
     apiVersion: CURRENT_API_VERSION,
     availableDatabases: {},
     blockLanguages: [],
+    grammars: [],
     codeResources: [],
     schema: [],
     sources: [],

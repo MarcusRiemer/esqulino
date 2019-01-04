@@ -14,7 +14,10 @@ class Project < ApplicationRecord
   accepts_nested_attributes_for :project_uses_block_languages, allow_destroy: true
 
   # The actual allowed languages
-  has_many :block_languages, :through => :project_uses_block_languages
+  has_many :block_languages, -> { distinct }, :through => :project_uses_block_languages
+
+  # The grammars that are used by the block languages
+  has_many :grammars, -> { distinct }, :through => :block_languages
 
   # All databases that are available for a project
   has_many :project_databases
@@ -40,12 +43,18 @@ class Project < ApplicationRecord
   # A project with all associated resources that are required for
   # immediate display on the client.
   scope :full, -> {
-    includes(:block_languages, :code_resources, :default_database, :project_databases, :project_sources)
+    includes(
+      :block_languages, :code_resources, :default_database, :project_databases, :grammars,
+      :project_sources
+    )
   }
   # A project with all associated resources that are used by **only** this
-  # project and no other project.
+  # project and are not shared among projects.
   scope :with_exclusive, -> {
-    includes(:code_resources, :default_database, :project_databases, :project_sources, :project_uses_block_languages)
+    includes(
+      :default_database, :project_databases,
+      :code_resources, :project_sources, :project_uses_block_languages
+    )
   }
 
   # Looks up a project by checking the given string against IDs or
@@ -122,6 +131,7 @@ class Project < ApplicationRecord
     to_return['sources'] = self.project_sources.map(&:to_full_api_response)
     to_return['projectUsesBlockLanguages'] = self.project_uses_block_languages.map(&:to_api_response)
     to_return['blockLanguages'] = self.block_languages.map(&:to_full_api_response)
+    to_return['grammars'] = self.grammars.map(&:to_full_api_response)
 
     to_return
   end

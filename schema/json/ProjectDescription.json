@@ -177,6 +177,23 @@
       },
       "type": "object"
     },
+    "ChildCardinalityDescription": {
+      "additionalProperties": false,
+      "description": "Describes how often a certain type may appear in a sequence.",
+      "properties": {
+        "nodeType": {
+          "$ref": "#/definitions/TypeReference"
+        },
+        "occurs": {
+          "$ref": "#/definitions/OccursDescription"
+        }
+      },
+      "required": [
+        "nodeType",
+        "occurs"
+      ],
+      "type": "object"
+    },
     "CodeGeneratorComponentDescription": {
       "additionalProperties": false,
       "description": "Displays the compiled program",
@@ -297,6 +314,29 @@
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
+    },
+    "EnumRestrictionDescription": {
+      "additionalProperties": false,
+      "description": "Restricts a string to be one of a given set of values",
+      "properties": {
+        "type": {
+          "enum": [
+            "enum"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
     },
     "FixedBlocksSidebarCategoryDescription": {
       "additionalProperties": false,
@@ -428,6 +468,45 @@
       ],
       "type": "object"
     },
+    "GrammarDescription": {
+      "additionalProperties": false,
+      "description": "A whole grammar with all user-facing documentation.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "programmingLanguageId": {
+          "type": "string"
+        },
+        "root": {
+          "$ref": "#/definitions/TypeReference"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "technicalName": {
+          "type": "string"
+        },
+        "types": {
+          "additionalProperties": {
+            "$ref": "#/definitions/NodeTypeDescription"
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "programmingLanguageId",
+        "root",
+        "technicalName",
+        "types"
+      ],
+      "type": "object"
+    },
     "InternalTypeInstructionsDescription_ReferenceableInstructions,ParameterReferenceable_BlockInstructions__": {
       "additionalProperties": false,
       "description": "Instructions on how to generate a single block for a type. This type\nis not intended to be used directly, please use `TypeInstructionsDescription`\nor `ReferenceableTypeInstructionsDescription` instead.",
@@ -489,6 +568,106 @@
       },
       "type": "object"
     },
+    "LengthRestrictionDescription": {
+      "additionalProperties": false,
+      "description": "Restricts the maximum length of things.",
+      "properties": {
+        "type": {
+          "enum": [
+            "length"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
+    "MaxInclusiveRestriction": {
+      "additionalProperties": false,
+      "description": "Restricts the maximum numerical value.",
+      "properties": {
+        "type": {
+          "enum": [
+            "maxInclusive"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
+    "MaximumLengthRestrictionDescription": {
+      "additionalProperties": false,
+      "description": "Restricts the maximum length of things.",
+      "properties": {
+        "type": {
+          "enum": [
+            "maxLength"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
+    "MinInclusiveRestriction": {
+      "additionalProperties": false,
+      "description": "Restricts the minimum numerical value.",
+      "properties": {
+        "type": {
+          "enum": [
+            "minInclusive"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
+    "MinimumLengthRestrictionDescription": {
+      "additionalProperties": false,
+      "description": "Restricts the minimum length of things.",
+      "properties": {
+        "type": {
+          "enum": [
+            "minLength"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
     "MixedBlocksSidebarCategoryDescription": {
       "additionalProperties": false,
       "description": "A category description that may use partly generated blocks and\npartly constant blocks.",
@@ -513,6 +692,56 @@
         "type",
         "categoryCaption",
         "blocks"
+      ],
+      "type": "object"
+    },
+    "NodeAttributeDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NodePropertyTypeDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeChildrenGroupDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        }
+      ],
+      "description": "Attributes of a node are either properties or children."
+    },
+    "NodeChildrenGroupDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NodeTypesSequenceDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeTypesAllowedDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeTypesChoiceDescription"
+        }
+      ],
+      "description": "All children group types that are available"
+    },
+    "NodeConcreteTypeDescription": {
+      "additionalProperties": false,
+      "description": "This is the basic description to introduce a new type for\nany kind of node. If you are familiar with schema languages\nlike XML-Schema, JSON-Schema, NG-Relax, ... this will be\n(hopefully) nothing too surprising for you.\n\nThis schema language is modeled losely after XML-Schema,\nbut enhanced with various UI-related features.\n\nThe restriction system for simple properties is modelled after\nfacets in XML-Schema: https://www.w3.org/TR/xmlschema-2/#defn-coss\n\nBuiltin types are:\n- String\n- Integer\n- Boolean\n\nThe restriction system for child nodes is also modelled losely\nafter XML schemas complex element types. An important deviation\nis that child nodes can be distribibuted in multiple groups. This\nmeans that a single node can be parent to two unrelated sub-trees.\nXML schema in contrast allows exactly nodes and attributes as\nsub-trees.\n\nThe actual attributes of this node (properties or children) are stored\nas a list because the order does matter during string serialization\nor automatic UI generation. And whilst syntactic terminal symbols are\nnot actually required at all when validating a tree, they are meaningful\nfor the automation process.",
+      "properties": {
+        "attributes": {
+          "items": {
+            "$ref": "#/definitions/NodeAttributeDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "concrete"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
       ],
       "type": "object"
     },
@@ -549,6 +778,355 @@
       "required": [
         "name",
         "language"
+      ],
+      "type": "object"
+    },
+    "NodeIntegerTypeRestrictions": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/MinInclusiveRestriction"
+        },
+        {
+          "$ref": "#/definitions/MaxInclusiveRestriction"
+        }
+      ],
+      "description": "The restrictions that are applicable to integers"
+    },
+    "NodeOneOfTypeDescription": {
+      "additionalProperties": false,
+      "description": "Creates a possibility to define multiple NodeTypes as alternatives\nto each other *without* introducing an artificial node type. This\nis helpful for e.g. the root node or when using recursive definitions.",
+      "properties": {
+        "oneOf": {
+          "items": {
+            "$ref": "#/definitions/TypeReference"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "oneOf"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "oneOf"
+      ],
+      "type": "object"
+    },
+    "NodePropertyBooleanDescription": {
+      "additionalProperties": false,
+      "description": "Denotes a \"boolean\" type.",
+      "properties": {
+        "base": {
+          "enum": [
+            "boolean"
+          ],
+          "type": "string"
+        },
+        "isOptional": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "property"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "base"
+      ],
+      "type": "object"
+    },
+    "NodePropertyIntegerDescription": {
+      "additionalProperties": false,
+      "description": "Describes the \"Integer\" type and describes how it can be restricted.",
+      "properties": {
+        "base": {
+          "enum": [
+            "integer"
+          ],
+          "type": "string"
+        },
+        "isOptional": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "restrictions": {
+          "items": {
+            "$ref": "#/definitions/NodeIntegerTypeRestrictions"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "property"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "base"
+      ],
+      "type": "object"
+    },
+    "NodePropertyStringDescription": {
+      "additionalProperties": false,
+      "description": "Denotes the \"string\" type and describes ways it can be further restricted.",
+      "properties": {
+        "base": {
+          "enum": [
+            "string"
+          ],
+          "type": "string"
+        },
+        "isOptional": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "restrictions": {
+          "items": {
+            "$ref": "#/definitions/NodeStringTypeRestrictions"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "property"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "base"
+      ],
+      "type": "object"
+    },
+    "NodePropertyTypeDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NodePropertyBooleanDescription"
+        },
+        {
+          "$ref": "#/definitions/NodePropertyIntegerDescription"
+        },
+        {
+          "$ref": "#/definitions/NodePropertyStringDescription"
+        }
+      ],
+      "description": "Properties are used for atomic values and may be optional."
+    },
+    "NodeStringTypeRestrictions": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/LengthRestrictionDescription"
+        },
+        {
+          "$ref": "#/definitions/MinimumLengthRestrictionDescription"
+        },
+        {
+          "$ref": "#/definitions/MaximumLengthRestrictionDescription"
+        },
+        {
+          "$ref": "#/definitions/EnumRestrictionDescription"
+        }
+      ],
+      "description": "The restrictions that are applicable to strings"
+    },
+    "NodeTerminalSymbolDescription": {
+      "additionalProperties": false,
+      "description": "A terminal symbol that would be expected.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "symbol": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "terminal"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "symbol"
+      ],
+      "type": "object"
+    },
+    "NodeTypeDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NodeConcreteTypeDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeOneOfTypeDescription"
+        }
+      ],
+      "description": "Types may either be concrete new type or an alias\ngrouping together multiple other types."
+    },
+    "NodeTypesAllowedDescription": {
+      "additionalProperties": false,
+      "description": "Every immediate child must be part of this list of allowed types. The order\nin which these children appear in is not relevant.",
+      "properties": {
+        "between": {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nodeTypes": {
+          "items": {
+            "$ref": "#/definitions/NodeTypesChildReference"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "allowed"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "nodeTypes"
+      ],
+      "type": "object"
+    },
+    "NodeTypesChildReference": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/TypeReference"
+        },
+        {
+          "$ref": "#/definitions/ChildCardinalityDescription"
+        }
+      ],
+      "description": "A simple type reference is a shortcut for an element with\nminOccurs = 1 and maxOccurs = 1;"
+    },
+    "NodeTypesChoiceDescription": {
+      "additionalProperties": false,
+      "description": "Tries the given operators in the order they appear in. If any of them is\nsatisfied, the child group is considered valid.",
+      "properties": {
+        "choices": {
+          "items": {
+            "$ref": "#/definitions/TypeReference"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "choice"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "choices"
+      ],
+      "type": "object"
+    },
+    "NodeTypesSequenceDescription": {
+      "additionalProperties": false,
+      "description": "In a sequence every child must occur in exact the order and cardinality\nthat is specified by this description.",
+      "properties": {
+        "between": {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nodeTypes": {
+          "items": {
+            "$ref": "#/definitions/NodeTypesChildReference"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "sequence"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "nodeTypes"
+      ],
+      "type": "object"
+    },
+    "OccursDescription": {
+      "anyOf": [
+        {
+          "enum": [
+            "1"
+          ],
+          "type": "string"
+        },
+        {
+          "enum": [
+            "?"
+          ],
+          "type": "string"
+        },
+        {
+          "enum": [
+            "+"
+          ],
+          "type": "string"
+        },
+        {
+          "enum": [
+            "*"
+          ],
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/OccursSpecificDescription"
+        }
+      ],
+      "description": "Describes limits for occurences."
+    },
+    "OccursSpecificDescription": {
+      "additionalProperties": false,
+      "description": "A verbos definition of minimum and maximum occurences.",
+      "properties": {
+        "maxOccurs": {
+          "type": "number"
+        },
+        "minOccurs": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "minOccurs",
+        "maxOccurs"
       ],
       "type": "object"
     },
@@ -679,6 +1257,12 @@
         "description": {
           "type": "string"
         },
+        "grammars": {
+          "items": {
+            "$ref": "#/definitions/GrammarDescription"
+          },
+          "type": "array"
+        },
         "id": {
           "type": "string"
         },
@@ -717,6 +1301,7 @@
         "apiVersion",
         "blockLanguages",
         "description",
+        "grammars",
         "id",
         "name",
         "projectUsesBlockLanguages",
@@ -1041,6 +1626,17 @@
         }
       ],
       "description": "All possible sidebar types"
+    },
+    "TypeReference": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/QualifiedTypeName"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "description": "Simple strings are used to refer to local types that share the\nsame language name."
     },
     "ValidatorComponentDescription": {
       "additionalProperties": false,

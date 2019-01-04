@@ -5,11 +5,14 @@ FactoryBot.define do
     association :block_language, factory: :block_language
     association :programming_language, factory: :programming_language
 
-    # Projects allow or disallow block languages. We need to ensure
-    # that the created block language is allowed by the project
+    # Projects may allow or disallow block languages. We need to ensure
+    # that created code resource is valid in the context of the given
+    # project and block language (if the are given).
     after(:build) do |code_resource|
-      if (code_resource.project and code_resource.block_language) then
-        code_resource.project.block_languages << code_resource.block_language
+      project = code_resource.project
+      block_language = code_resource.block_language 
+      if (project and block_language and not project.block_languages.include? block_language) then
+        project.block_languages << block_language
       end
     end
 
