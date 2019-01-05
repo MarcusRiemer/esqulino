@@ -100,6 +100,7 @@ Rails.application.routes.draw do
           delete 'drop/:tablename', controller: 'project_databases', action: :table_delete
           post 'create', controller: 'project_databases', action: :table_create
           post 'upload', controller: 'project_databases', action: :database_upload
+          get 'download', controller: 'project_databases', action: :database_download
         end
       end
     end

@@ -68,6 +68,13 @@ export class ServerApi {
   }
 
   /**
+   * Retrieves the URL that allows database download
+   */
+  downloadDatabase(projectId: string, dbId: string) {
+    return (`${this._apiBaseUrl}/project/${projectId}/db/${dbId}/download`);
+  }
+
+  /**
    * Retrieves the URL that accepts data that is uploaded to databases
    */
   uploadTabularData(projectId: string, dbId: string, dbTable: string) {

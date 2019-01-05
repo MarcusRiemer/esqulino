@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http'
 import { map, flatMap, first, tap, share } from 'rxjs/operators'
 import { zip } from 'rxjs'
 
+import { ServerApiService } from '../../shared';
+
 import { ProjectService, Project } from '../project.service'
 import { SchemaService } from '../schema.service'
 import { SidebarService } from '../sidebar.service'
@@ -40,6 +42,7 @@ export class SchemaComponent implements OnInit {
     private _route: ActivatedRoute,
     private _sidebarService: SidebarService,
     private _schemaService: SchemaService,
+    private _serverApi: ServerApiService
   ) {
   }
 
@@ -110,9 +113,16 @@ export class SchemaComponent implements OnInit {
     }
 
     // Butto to switch to database import
-    let btnUpload = this._toolbarService.addButton("uploadDatabase", "Datenbank hochladen", "upload", "d");
+    let btnUpload = this._toolbarService.addButton("uploadDatabase", "Datenbank hochladen", "upload", "u");
     subRef = btnUpload.onClick.subscribe(_ => {
       this._router.navigate(["./upload"], { relativeTo: this._route });
+    })
+    this._subscriptionRefs.push(subRef);
+
+    // Butto to switch to database import
+    let btnDownload = this._toolbarService.addButton("downloadDatabase", "Datenbank herunterladen", "download", "d");
+    subRef = btnDownload.onClick.subscribe(_ => {
+      window.location.href = this._serverApi.downloadDatabase(this.project.id, this.project.currentDatabaseName);
     })
     this._subscriptionRefs.push(subRef);
 
