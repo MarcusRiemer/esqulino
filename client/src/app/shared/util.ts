@@ -55,6 +55,20 @@ export function encodeUriParameters(params: KeyValuePairs) {
 }
 
 /**
+ * Returns a function that may be used as input for `Array.prototype.sort`
+ * on objects.
+ * 
+ * Code is adapted from Ege Özcan on StackOverflow: https://stackoverflow.com/a/4760279/431715
+ */
+export function fieldCompare<T>(property: keyof T, reverse = false) {
+  const sortOrder = reverse ? -1 : 1;
+  return function(a: T, b: T) {
+    var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+    return result * sortOrder;
+  }
+}
+
+/**
  * Recursively compares arrays nested arrays. Code is adapted from
  * Tomáš Zato on StackOverflow: https://stackoverflow.com/a/14853974/431715
  */
