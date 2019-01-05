@@ -284,7 +284,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
     end
   end
 
-  describe '/api/project/:projectId/db/:dbId/upload' do
+  describe '/api/project/:projectId/db/:dbId/{upload,download}' do
     it 'Rejects missing files' do
       project = FactoryBot.create(:project_with_default_database)
       db = project.default_database
@@ -325,6 +325,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
 
       db.execute "create table numbers (name varchar(30),val int);"
 
+      # Upload the file
       post "#{default_db_api_url project}/upload",
            :headers => json_headers,
            :params => {
@@ -333,6 +334,11 @@ RSpec.describe ProjectDatabasesController, type: :request do
 
       expect(response.status).to eq 200
       json_data = JSON.parse(response.body)
+
+      # And retrieve it again
+      get "#{default_db_api_url project}/download"
+      expect(response.status).to eq 200
+      expect(response.body).to eq File.open(dbFile, "rb") { |f| f.read }
     end
   end
 
