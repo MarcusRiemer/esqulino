@@ -31,7 +31,7 @@ export class LanguageService {
     const toReturn = this.availableLanguages.find(l => l.id === id);
     if (!toReturn) {
       const available = this.availableLanguageIds.join(', ');
-      throw new Error(`Unknown language "${id}", known languages are: ${available}`);
+      throw new Error(`Language with ID "${id}" is unknown to the LanguageService, known languages are: ${available}`);
     }
 
     return (toReturn);

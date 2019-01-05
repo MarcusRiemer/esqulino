@@ -169,7 +169,7 @@ export function calculateDropTargetState(drag: CurrentDrag, block: BlockDropProp
     const oldTree = block.codeResource.syntaxTreePeek;
 
     const newTree = oldTree.insertNode(block.dropLocation, newNode);
-    const result = block.codeResource.programmingLanguagePeek.validateTree(newTree);
+    const result = block.codeResource.emittedLanguagePeek.validateTree(newTree);
     return (result.isValid);
   }
 
@@ -184,7 +184,7 @@ export function calculateDropTargetState(drag: CurrentDrag, block: BlockDropProp
       typeName: drag.draggedDescription.name
     }
     const currentTree = block.codeResource.syntaxTreePeek;
-    const currentLanguage = block.codeResource.programmingLanguagePeek;
+    const currentLanguage = block.codeResource.emittedLanguagePeek;
 
     const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
     const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);

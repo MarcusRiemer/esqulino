@@ -20,11 +20,13 @@ export class BlockLanguage implements Forward.BlockLanguage {
   private _id: string;
   private _slug: string;
   private _defaultProgrammingLanguageId: string;
+  private _grammarId: string;
 
   constructor(desc: BlockLanguageDescription) {
     this._id = desc.id;
     this._slug = desc.slug;
     this._name = desc.name;
+    this._grammarId = desc.grammarId;
     this._defaultProgrammingLanguageId = desc.defaultProgrammingLanguageId;
     this._editorBlocks = desc.editorBlocks;
     this._editorComponents = desc.editorComponents;
@@ -57,6 +59,13 @@ export class BlockLanguage implements Forward.BlockLanguage {
    */
   get name() {
     return (this._name);
+  }
+
+  /**
+   * @return The grammar that must be used to validate the visualized syntaxtree.
+   */
+  get grammarId() {
+    return (this._grammarId);
   }
 
   /**

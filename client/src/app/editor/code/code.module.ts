@@ -11,7 +11,7 @@ import { DropTargetDirective } from './drop-target.directive'
 import { DropPlaceholderDirective } from './drop-placeholder.directive'
 import { EditorComponentsService } from './editor-components.service'
 import { LanguageModelSelectorComponent } from './language-model-selector.component'
-import { LanguageSelectorComponent } from './language-selector.component'
+import { LanguageEmittedSelectorComponent } from './language-emitted-selector.component'
 import { CodeSidebarComponent } from './code.sidebar'
 import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
 import { ValidationComponent } from './validation.component'
@@ -68,7 +68,7 @@ import { QueryService } from './query/query.service'
     CodeSidebarComponent,
     CodeSidebarFixedBlocksComponent,
     LanguageModelSelectorComponent,
-    LanguageSelectorComponent,
+    LanguageEmittedSelectorComponent,
     QueryPreviewComponent,
   ],
   entryComponents: [

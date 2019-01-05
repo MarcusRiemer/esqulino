@@ -9,7 +9,7 @@ import {
 } from './project.description'
 import { Schema } from './schema/schema'
 import { Saveable, SaveStateEvent } from './interfaces'
-import { CodeResource } from './syntaxtree'
+import { CodeResource, Language } from './syntaxtree'
 import { BlockLanguage } from '../shared/block';
 import { DatabaseSchemaAdditionalContext } from './syntaxtree/sql/sql.validator';
 
@@ -59,6 +59,8 @@ export class Project implements ApiVersion, Saveable {
 
   private _blockLanguages: BlockLanguage[];
 
+  private _validationLanguages: Language[];
+
   // Tracking added and removed block languages
   private _removedBlockLanguages: string[] = [];
 
@@ -91,8 +93,16 @@ export class Project implements ApiVersion, Saveable {
       .map(val => new CodeResource(val, this))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
 
+    // Construct relevant block languages
     this._blockLanguages = (json.blockLanguages || [])
       .map(val => new BlockLanguage(val));
+
+    // Construct relevant validation languages
+    this._validationLanguages = (json.grammars || [])
+      .map(g => {
+        const baseLanguage = this._languageService.getLanguage(g.programmingLanguageId);
+        return (baseLanguage.cloneWithAlternateGrammar(g));
+      });
   }
 
   /**
@@ -373,9 +383,20 @@ export class Project implements ApiVersion, Saveable {
 
   /**
    * @param id The id for a certain language
+   * @todo Use enum
    */
-  getLanguageById(id: string) {
+  getProgrammingLanguageByCoreLanguageId(id: string) {
     return (this._languageService.getLanguage(id));
+  }
+
+  getLocalProgrammingLanguage(id: string) {
+    const lang = this._validationLanguages.find(candidate => candidate.id === id);
+    if (lang) {
+      return (lang);
+    } else {
+      const knownLanguages = this._validationLanguages.map(l => `"${l.id}"`).join(", ");
+      throw new Error(`Language with ID "${id}" is unknown to the Project, known IDs are: ${knownLanguages}`);
+    }
   }
 
   /**

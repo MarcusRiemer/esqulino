@@ -202,7 +202,7 @@ export class CodeGenerator {
    * duplicate converters are not allowed, so it is not possible
    * to unintentionally overwrite already registered convertes.
    */
-  registerConverter(t: QualifiedTypeName, converter: NodeConverter) {
+  private registerConverter(t: QualifiedTypeName, converter: NodeConverter) {
     if (this.hasConverter(t)) {
       throw new Error(`There is already a converter for "${t.languageName}.${t.typeName}"`);
     } else {
