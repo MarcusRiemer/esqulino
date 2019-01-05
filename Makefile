@@ -54,13 +54,6 @@ test-reset: msg-pre-test-reset
 	git checkout -- $(shell git rev-parse --show-toplevel)/data/test
 	cd $(shell git rev-parse --show-toplevel)/data/test && git clean -fdx
 
-# Runs end to end tests. This relies on two other servers that must be
-# running already:
-# * The esqulino webserver
-# * The Selenium testdriver
-test-e2e : dist
-	$(SUBDIR_MAKE) client test-e2e
-
 # Runs the server. Although this target will also serve static files, it is
 # strongly encouraged to run a more sophisticated server for static files
 # as a reverse proxy.
@@ -73,21 +66,9 @@ server-run :
 server-run-dev :
 	$(SUBDIR_MAKE) server run-dev
 
-# Attempts to migrate all projects to a newer API version
-server-migrate-projects:
-	$(SUBDIR_MAKE) server migrate-projects
-
-
-# Compile every part of the documentation
-doc :
-	$(SUBDIR_MAKE) server doc
-	$(SUBDIR_MAKE) doc/swagger all
-
-# Remove every bit of generated documentation
-clean-doc:
-	$(SUBDIR_MAKE) server doc-clean
-	$(SUBDIR_MAKE) doc/thesis-riemer-concept clean
-	$(SUBDIR_MAKE) doc/swagger clean
+# Regenerate alle json schemas
+json-schema-all:
+	$(SUBDIR_MAKE) schema/json all
 
 ##################################
 # Development targets
