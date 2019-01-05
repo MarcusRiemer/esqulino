@@ -66,11 +66,11 @@ export class Validator {
    * Registers a new language with this validator
    */
   private registerGrammar(desc: Desc.GrammarDescription) {
-    if (this.isKnownLanguage(desc.name)) {
-      throw new Error(`Attempted to register language "${desc.name}" twice`);
+    if (this.isKnownLanguage(desc.technicalName)) {
+      throw new Error(`Attempted to register language "${desc.technicalName}" twice`);
     }
 
-    this._registeredGrammars[desc.name] = new GrammarValidator(this, desc);
+    this._registeredGrammars[desc.technicalName] = new GrammarValidator(this, desc);
   }
 
   /**
@@ -129,6 +129,20 @@ export class Validator {
     } else {
       return (this._registeredGrammars[language]);
     }
+  }
+
+  /**
+   * @return All grammar validators known to this general validator
+   */
+  get grammarValidators(): Readonly<GrammarValidator[]> {
+    return (Object.values(this._registeredGrammars));
+  }
+
+  /**
+   * @return All specialized validators known to this general validator
+   */
+  get specializedValidators(): Readonly<SpecializedValidatorConstructor[]> {
+    return (this._registeredSpecialized);
   }
 
   /**

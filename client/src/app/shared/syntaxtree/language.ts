@@ -3,6 +3,7 @@ import { Tree, NodeDescription, QualifiedTypeName } from './syntaxtree'
 import { Validator, SubValidator } from './validator'
 import { ValidationResult } from './validation-result'
 import { CodeGenerator } from './codegenerator'
+import { GrammarDescription } from './grammar.description';
 
 /**
  * Ties together descriptions of everything the editor needs to work
@@ -44,6 +45,25 @@ export class Language {
    */
   get name() {
     return (this._name);
+  }
+
+  /**
+   * A new language that uses the exact same custom code assets (code
+   * generator, additional validators) but a different grammar.
+   */
+  cloneWithAlternateGrammar(g: GrammarDescription) {
+    // Construct a new language (without the emitters, they need to be patched in later)
+    const clone = new Language({
+      id: g.id,
+      name: this.name,
+      emitters: [],
+      validators: [...this._validator.specializedValidators, g]
+    });
+
+    // Patch in the emitters
+    clone._codeGenerator = this._codeGenerator;
+
+    return (clone);
   }
 
   /**

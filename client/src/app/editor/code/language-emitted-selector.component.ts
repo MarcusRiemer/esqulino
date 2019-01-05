@@ -8,9 +8,9 @@ import { LanguageService } from '../../shared/language.service';
  */
 @Component({
   templateUrl: 'templates/language-selector.html',
-  selector: 'language-selector'
+  selector: 'language-emitted-selector'
 })
-export class LanguageSelectorComponent {
+export class LanguageEmittedSelectorComponent {
 
   @Input() codeResource: CodeResource;
 
@@ -30,14 +30,14 @@ export class LanguageSelectorComponent {
    * @return The ID of the currently selected language
    */
   get selectedLanguageId() {
-    return (this.codeResource.programmingLanguageIdPeek);
+    return (this.codeResource.emittedLanguageIdPeek);
   }
 
   /**
    * Sets the ID of the new language and broadcasts the change.
    */
   set selectedLanguageId(id: string) {
-    this.codeResource.setProgrammingLanguageId(id);
+    this.codeResource.setEmittedLanguageId(id);
   }
 
 }

@@ -882,9 +882,9 @@ export class GrammarValidator {
   private _registeredTypes: { [name: string]: NodeType } = {};
   private _rootType: TypeReference;
 
-  constructor(validator: Validator, desc: Desc.GrammarDescription) {
+  constructor(validator: Validator, desc: Desc.GrammarDocument) {
     this._validator = validator;
-    this._grammarName = desc.name;
+    this._grammarName = desc.technicalName;
 
     Object.entries(desc.types).forEach(([typeName, typeDesc]) => {
       this.registerTypeValidator(typeName, typeDesc)
@@ -914,6 +914,10 @@ export class GrammarValidator {
     return (Object.values(this._registeredTypes));
   }
 
+  /**
+   * Validates the given tree in the given context. Ensures that a valid
+   * type is used as the root.
+   */
   validateFromRoot(ast: AST.Node, context: ValidationContext) {
     if (!this._rootType.isResolveable) {
       context.addError(ErrorCodes.UnknownRoot, ast);
