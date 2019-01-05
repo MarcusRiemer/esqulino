@@ -4,4 +4,70 @@
 \chapter{Implementierung}
 \label{sec:implementation}
 
-\TODO{Implementierung}
+\section{Objektstruktur}
+
+- World, WorldState, Truck, Tile, TrafficLight
+- UML-Diagramm
+
+\section{Programmiersprache}
+
+- Befehle auf Deutsch
+- Zwei Arten von Schleifen
+- Definition von Funktionen und Schleifenvariablen
+- Befehle werden auf einer Welt ausgeführt
+- Kompilieren in JS-Code mit async await
+- new AsyncFunction (TypeScript-Compiler-Problem, Anforderung an den Browser)
+
+\section{Darstellung}
+
+\subsection{Technologie}
+
+- Darstellung mit SVG und deren Animationen gut in Angular integriert
+- Angular-Animationen nutzen ein State-System, mit dem sich nur sehr umständlich
+  die benötigten Animationen umsetzten lassen (keine festen Zustände, sondern
+  variable Positionen)
+- Erster Prototyp mit Canvas, dann Umstieg auf Canvas
+- Canvas keine direkte Integration in Angular
+- Canvas-Renderer läuft außerhalb der Angular-Zone
+- WebGL raus weil Nutzen-Aufand nicht gerechtfertigt
+
+\subsection{Lastwagen-Position}
+
+- Möglichkeit A: Lastwagen halten auf Mitte der Kachel und drehen sich auf der
+                 Stelle => Lastwagen können auch wenden, aber das Verhalten
+                 sieht unnatürlich aus.
+- Möglichkeit B: Lastwagen halten auf dem Rand der Kachel und es kann ein
+                 Blinker nach links oder rechts gesetzt werden, der die
+                 Fahrtrichtung beim nächsten Vorwärtsfahren beeinflusst
+                 => Verhalten sieht deutlich natürlicher aus und ist näher am
+                 Vorbild. Allerdings kann der Lastwagen nun nicht mehr auf der
+                 Stelle wenden und muss eventuell längere Strecken fahren.
+                 => Erste Idee: Pfeil davor anzeigen, Zweite Idee: Blinker
+                 => Rückwärts fahren?
+
+\subsection{Animationsschritte}
+
+- Neuer Zustand für jede Operation
+- Zustände haben unterschiedliche Zeitwerte: Blinker setzen kostet keine Zeit,
+  geradeaus fahren oder warten kostet einen Zeitschritt
+- Zeitschritte sind besonders für die Berechnung der Ampelstellung relevant
+- Position des Lastwagen wird schrittweise interpoliert
+
+- Schitte haben eine feste Zeit, die aber übersprungen wird, wenn ein neuer
+  Schritt vor ablauf der Zeit dazu kommt. Dadurch kann ein Programm auch im
+  "Schnelldurchlauf" abgespielt werden.
+
+Ansätze "absolute" vs "relative" Bewegung gegenüberstellen
+
+\section{Integration}
+
+- Zunächst Prototypenentwicklung auf "Grüner Wiese", dann Integration in das
+  bestehende Projekt
+
+\subsection{Angular-Service}
+
+- Auslagerung der Welt in einen Service
+
+\subsection{Fortschrittsmeldungen}
+
+- Rückmeldung über den Fortschritt des Programm zur Anzeige im Drag \& Drop-Editor
