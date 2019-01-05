@@ -15,6 +15,7 @@ import {
 import {
   GrammarDescription, GrammarListDescription
 } from '../shared/syntaxtree/grammar.description';
+import { fieldCompare } from './util';
 
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
@@ -165,6 +166,9 @@ export class ServerDataService {
   // Backing cache for listing of all block languages
   readonly listBlockLanguages = new CachedRequest<BlockLanguageListResponseDescription[]>(
     this._http.get<BlockLanguageListResponseDescription[]>(this._serverApi.getBlockLanguageListUrl())
+      .pipe(
+        map(list => list.sort(fieldCompare<BlockLanguageListResponseDescription>("name")))
+      )
   );
 
   /**
@@ -179,6 +183,9 @@ export class ServerDataService {
    */
   readonly listGrammars = new CachedRequest<GrammarListDescription[]>(
     this._http.get<GrammarListDescription[]>(this._serverApi.getGrammarListUrl())
+      .pipe(
+        map(list => list.sort(fieldCompare<GrammarListDescription>("name")))
+      )
   );
 
   /**
