@@ -20,14 +20,16 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "world", "children": {"size": [{"name": "vec2",
-    "language": "truck_world", "properties": {"x": "5", "y": "5"}}]}, "language":
+    "language": "truck_world", "properties": {"x": "5", "y": "5"}}], "trucks": [{"name":
+    "truck", "children": {"position": [{"name": "vec2", "language": "truck_world",
+    "properties": {"x": "5", "y": "5"}}]}, "language": "truck_world"}]}, "language":
     "truck_world"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-12-20 14:29:38.037846'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-12-29 16:52:29.486562'
+  value_before_type_cast: '2018-12-29 17:08:54.058079'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: d3909e4c-e40a-4815-8966-9b9a4555a009
@@ -36,6 +38,6 @@ concise_attributes:
   value_before_type_cast: truck-world
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: '{"name":"world","language":"truck_world","children":{"size":[{"name":"vec2","language":"truck_world","properties":{"x":"5","y":"5"}}]}}'
+  value_before_type_cast: '{"name":"world","language":"truck_world","children":{"size":[{"name":"vec2","language":"truck_world","properties":{"x":"5","y":"5"}}],"trucks":[{"name":"truck","language":"truck_world","children":{"position":[{"name":"vec2","language":"truck_world","properties":{"x":"5","y":"5"}}]}}]}}'
 new_record: false
 active_record_yaml_version: 2
