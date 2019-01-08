@@ -17,30 +17,32 @@ concise_attributes:
     "sequence", "nodeTypes": [{"occurs": {"maxOccurs": 4, "minOccurs": 0}, "nodeType":
     "trafficLight"}]}, {"name": "freight", "type": "sequence", "nodeTypes": [{"occurs":
     "*", "nodeType": "freight"}]}]}, "vec2": {"type": "concrete", "attributes": [{"name":
-    "prop_x", "type": "terminal", "symbol": "x"}, {"base": "integer", "name": "x",
-    "type": "property", "restrictions": [{"type": "minInclusive", "value": 0}]}, {"name":
-    "prop_y", "type": "terminal", "symbol": "y"}, {"base": "integer", "name": "y",
-    "type": "property", "restrictions": [{"type": "minInclusive", "value": 0}]}]},
-    "truck": {"type": "concrete", "attributes": [{"name": "position", "type": "sequence",
-    "nodeTypes": ["vec2"]}, {"name": "orientation", "type": "sequence", "nodeTypes":
-    ["direction"]}]}, "world": {"type": "concrete", "attributes": [{"name": "seq_size",
-    "type": "terminal", "symbol": "size"}, {"name": "size", "type": "sequence", "nodeTypes":
-    ["vec2"]}, {"name": "seq_trucks", "type": "terminal", "symbol": "trucks"}, {"name":
-    "trucks", "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": "truck"}]},
-    {"name": "seq_roads", "type": "terminal", "symbol": "roads"}, {"name": "roads",
-    "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": "road"}]}]}, "freight":
-    {"type": "concrete", "attributes": [{"base": "string", "name": "direction", "type":
-    "property", "restrictions": [{"type": "enum", "value": ["Red", "Green", "Blue"]}]}]},
-    "direction": {"type": "concrete", "attributes": [{"base": "string", "name": "direction",
-    "type": "property", "restrictions": [{"type": "enum", "value": ["N", "E", "S",
-    "W"]}]}]}, "trafficLight": {"type": "concrete", "attributes": [{"name": "side",
-    "type": "sequence", "nodeTypes": ["direction"]}]}}}'
+    "vec_open", "type": "terminal", "symbol": "Vec2 {"}, {"name": "prop_x", "type":
+    "terminal", "symbol": "x:"}, {"base": "integer", "name": "x", "type": "property",
+    "restrictions": [{"type": "minInclusive", "value": 0}]}, {"name": "sep_x", "type":
+    "terminal", "symbol": ", "}, {"name": "prop_y", "type": "terminal", "symbol":
+    "y:"}, {"base": "integer", "name": "y", "type": "property", "restrictions": [{"type":
+    "minInclusive", "value": 0}]}, {"name": "vec_close", "type": "terminal", "symbol":
+    "}"}]}, "truck": {"type": "concrete", "attributes": [{"name": "position", "type":
+    "sequence", "nodeTypes": ["vec2"]}, {"name": "orientation", "type": "sequence",
+    "nodeTypes": ["direction"]}]}, "world": {"type": "concrete", "attributes": [{"name":
+    "seq_size", "type": "terminal", "symbol": "size:"}, {"name": "size", "type": "sequence",
+    "nodeTypes": ["vec2"]}, {"name": "seq_trucks", "type": "terminal", "symbol": "trucks:"},
+    {"name": "trucks", "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType":
+    "truck"}]}, {"name": "seq_roads", "type": "terminal", "symbol": "roads:"}, {"name":
+    "roads", "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": "road"}]}]},
+    "freight": {"type": "concrete", "attributes": [{"base": "string", "name": "direction",
+    "type": "property", "restrictions": [{"type": "enum", "value": ["Red", "Green",
+    "Blue"]}]}]}, "direction": {"type": "concrete", "attributes": [{"base": "string",
+    "name": "direction", "type": "property", "restrictions": [{"type": "enum", "value":
+    ["N", "E", "S", "W"]}]}]}, "trafficLight": {"type": "concrete", "attributes":
+    [{"name": "side", "type": "sequence", "nodeTypes": ["direction"]}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-12-19 11:24:22.059637'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-12-29 16:52:53.732233'
+  value_before_type_cast: '2019-01-08 10:42:35.810264'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: truck-world
