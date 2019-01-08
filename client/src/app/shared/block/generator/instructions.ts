@@ -43,7 +43,7 @@ export class GeneratorInstructions {
 }
 
 /**
- * A safe way to access generation instructions that are part of a specific block. 
+ * A safe way to access generation instructions that are part of a specific block.
  * Returned instructions include default properties if no specific properties
  * have been set.
  */
@@ -76,8 +76,10 @@ export class TypeInstructions {
     const block = this._type.blocks[i];
     const order = (block && block.attributeMapping);
     if (!order || order === "grammar") {
+      // Hand out the attributes as ordered in the grammar
       return ((typeDesc.attributes || []).map(a => a.name));
     } else {
+      // Hand out the attributes as they have been defined
       return (order);
     }
   }

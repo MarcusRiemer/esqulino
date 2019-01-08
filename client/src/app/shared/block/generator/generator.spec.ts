@@ -1,17 +1,14 @@
-import { GrammarDescription } from '../../syntaxtree/grammar.description'
+import { GrammarDocument } from '../../syntaxtree/grammar.description'
 
 import { VisualBlockDescriptions } from '../block.description';
 
-import { BlockLanguageGeneratorDescription } from './generator.description'
+import { BlockLanguageGeneratorDocument } from './generator.description'
 import { convertGrammar } from './generator'
 
 describe("BlockLanguage Generator", () => {
   describe("Whole Grammars", () => {
     it("Almost empty grammar with no generation instructions", () => {
-      const grammar: GrammarDescription = {
-        id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
-        programmingLanguageId: "spec",
-        name: "g1",
+      const grammar: GrammarDocument = {
         technicalName: "g1",
         root: "t1",
         types: {
@@ -22,9 +19,7 @@ describe("BlockLanguage Generator", () => {
         }
       };
 
-      const generator: BlockLanguageGeneratorDescription = {
-        id: "4d67a9d5-c47a-418a-a16c-5764fb20fab5",
-        name: "Generating b1",
+      const generator: BlockLanguageGeneratorDocument = {
         editorComponents: []
       };
 
@@ -34,10 +29,7 @@ describe("BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with parametrized instructions and missing values", () => {
-      const grammar: GrammarDescription = {
-        id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
-        programmingLanguageId: "spec",
-        name: "g1",
+      const grammar: GrammarDocument = {
         technicalName: "g1",
         root: "t1",
         types: {
@@ -51,9 +43,7 @@ describe("BlockLanguage Generator", () => {
         }
       };
 
-      const generator: BlockLanguageGeneratorDescription = {
-        id: "4d67a9d5-c47a-418a-a16c-5764fb20fab5",
-        name: "Generating b1",
+      const generator: BlockLanguageGeneratorDocument = {
         editorComponents: [],
         parameterDeclarations: {
           "allowModifications": { "type": { "type": "boolean" } }
@@ -74,11 +64,8 @@ describe("BlockLanguage Generator", () => {
       expect(() => convertGrammar(generator, grammar)).toThrowError();
     });
 
-    it("Almost empty grammar with parametrized instructions and supplied values", () => {
-      const grammar: GrammarDescription = {
-        id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
-        programmingLanguageId: "spec",
-        name: "g1",
+    it("Almost empty grammar with two blocks for a single type", () => {
+      const grammar: GrammarDocument = {
         technicalName: "g1",
         root: "t1",
         types: {
@@ -92,9 +79,91 @@ describe("BlockLanguage Generator", () => {
         }
       };
 
-      const generator: BlockLanguageGeneratorDescription = {
-        id: "4d67a9d5-c47a-418a-a16c-5764fb20fab5",
-        name: "Generating b1",
+      const generator: BlockLanguageGeneratorDocument = {
+        editorComponents: [],
+        typeInstructions: {
+          "g1": {
+            "t1": {
+              "blocks": [
+                { attributeMapping: ["t1"] },
+                { attributeMapping: ["p1"] }
+              ]
+            }
+          }
+        }
+      };
+
+      const blockLang = convertGrammar(generator, grammar);
+      expect(blockLang.editorBlocks.length).toEqual(1);
+
+      const visualBlock = blockLang.editorBlocks[0];
+      expect(visualBlock.visual.length).toEqual(2);
+      expect(visualBlock.visual[0].blockType).toEqual("block");
+      expect(visualBlock.visual[1].blockType).toEqual("block");
+
+      const blockTerminal = visualBlock.visual[0] as VisualBlockDescriptions.EditorBlock;
+      expect(blockTerminal.children.length).toEqual(2);
+      expect(blockTerminal.children[0].blockType).toEqual("error");
+      expect(blockTerminal.children[1].blockType).toEqual("constant");
+    });
+
+    it("Almost empty grammar with one partial block for a single type", () => {
+      const grammar: GrammarDocument = {
+        technicalName: "g1",
+        root: "t1",
+        types: {
+          "t1": {
+            type: "concrete",
+            attributes: [
+              { type: "property", name: "p1", base: "string" },
+              { type: "terminal", name: "t1", symbol: "t1" }
+            ]
+          }
+        }
+      };
+
+      const generator: BlockLanguageGeneratorDocument = {
+        editorComponents: [],
+        typeInstructions: {
+          "g1": {
+            "t1": {
+              "blocks": [
+                { attributeMapping: ["t1"] }
+              ]
+            }
+          }
+        }
+      };
+
+      const blockLang = convertGrammar(generator, grammar);
+      expect(blockLang.editorBlocks.length).toEqual(1);
+
+      const visualBlock = blockLang.editorBlocks[0];
+      expect(visualBlock.visual.length).toEqual(1);
+      expect(visualBlock.visual[0].blockType).toEqual("block");
+
+      const blockTerminal = visualBlock.visual[0] as VisualBlockDescriptions.EditorBlock;
+      expect(blockTerminal.children.length).toEqual(2);
+      expect(blockTerminal.children[0].blockType).toEqual("error");
+      expect(blockTerminal.children[1].blockType).toEqual("constant");
+    });
+
+    it("Almost empty grammar with parametrized instructions and supplied values", () => {
+      const grammar: GrammarDocument = {
+        technicalName: "g1",
+        root: "t1",
+        types: {
+          "t1": {
+            type: "concrete",
+            attributes: [
+              { type: "property", name: "p1", base: "string" },
+              { type: "terminal", name: "t1", symbol: "t1" }
+            ]
+          }
+        }
+      };
+
+      const generator: BlockLanguageGeneratorDocument = {
         editorComponents: [],
         parameterDeclarations: {
           "allowModifications": { "type": { "type": "boolean" } }
@@ -135,10 +204,7 @@ describe("BlockLanguage Generator", () => {
     });
 
     it("No blocks for 'oneOf'-types", () => {
-      const grammar: GrammarDescription = {
-        id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
-        programmingLanguageId: "spec",
-        name: "g1",
+      const grammar: GrammarDocument = {
         technicalName: "g1",
         root: "t1",
         types: {
@@ -157,9 +223,7 @@ describe("BlockLanguage Generator", () => {
         }
       };
 
-      const generator: BlockLanguageGeneratorDescription = {
-        id: "cb90746a-887b-40a9-a53b-8a742b5436f3",
-        name: "Generating b1",
+      const generator: BlockLanguageGeneratorDocument = {
         editorComponents: [],
       };
 
@@ -169,10 +233,7 @@ describe("BlockLanguage Generator", () => {
     });
 
     it("All iterators, a constant and a property", () => {
-      const grammar: GrammarDescription = {
-        id: "008f7fc3-f9a9-4ba3-932d-e7563ef7b31a",
-        programmingLanguageId: "spec",
-        name: "g1",
+      const grammar: GrammarDocument = {
         technicalName: "g1",
         root: "t1",
         types: {
@@ -219,9 +280,7 @@ describe("BlockLanguage Generator", () => {
         }
       };
 
-      const generator: BlockLanguageGeneratorDescription = {
-        id: "4d67a9d5-c47a-418a-a16c-5764fb20fab5",
-        name: "Generating b1",
+      const generator: BlockLanguageGeneratorDocument = {
         editorComponents: []
       };
 
