@@ -14,12 +14,28 @@ concise_attributes:
     World", "categories": [{"blocks": [{"defaultNode": {"name": "world", "children":
     {"size": [{"name": "vec2", "language": "truck_world", "properties": {"x": "5",
     "y": "5"}}], "trucks": [{"name": "truck", "children": {"position": [{"name": "vec2",
-    "language": "truck_world", "properties": {"x": "5", "y": "5"}}]}, "language":
-    "truck_world"}]}, "language": "truck_world"}, "displayName": "Empty 5x5"}], "categoryCaption":
-    "Empty Worlds"}]}], "editorBlocks": [{"visual": [{"children": [{"style": {"color":
-    "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
-    "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
-    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"blockType":
+    "language": "truck_world", "properties": {"x": "5", "y": "5"}}], "orientation":
+    [{"name": "direction", "language": "truck_world", "properties": {"direction":
+    "S"}}]}, "language": "truck_world"}]}, "language": "truck_world"}, "displayName":
+    "Empty 5x5"}, {"defaultNode": {"name": "truck", "children": {"position": [{"name":
+    "vec2", "language": "truck_world", "properties": {"x": "5", "y": "5"}}], "orientation":
+    [{"name": "direction", "language": "truck_world", "properties": {"direction":
+    "S"}}]}, "language": "truck_world"}, "displayName": "Truck"}, {"defaultNode":
+    {"name": "road", "children": {"openings": [{"name": "direction", "language": "truck_world",
+    "properties": {"direction": "N"}}, {"name": "direction", "language": "truck_world",
+    "properties": {"direction": "S"}}], "position": [{"name": "vec2", "language":
+    "truck_world", "properties": {"x": "1", "y": "1"}}]}, "language": "truck_world"},
+    "displayName": "Road"}, {"defaultNode": {"name": "direction", "language": "truck_world",
+    "properties": {"direction": "N"}}, "displayName": "Direction: N"}, {"defaultNode":
+    {"name": "direction", "language": "truck_world", "properties": {"direction": "E"}},
+    "displayName": "Direction: E"}, {"defaultNode": {"name": "direction", "language":
+    "truck_world", "properties": {"direction": "S"}}, "displayName": "Direction: S"},
+    {"defaultNode": {"name": "direction", "language": "truck_world", "properties":
+    {"direction": "W"}}, "displayName": "Direction: W"}], "categoryCaption": "Empty
+    Worlds"}]}], "editorBlocks": [{"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"blockType":
     "iterator", "direction": "horizontal", "breakAfter": false, "wrapChildren": true,
     "childGroupName": "position"}, {"children": [{"text": "❓", "style": {"color":
     "darkred", "border": "2px solid red", "cursor": "default", "paddingLeft": "10px",
@@ -65,25 +81,30 @@ concise_attributes:
     {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
     "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
     "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "direction": "horizontal",
+    "INVALID_MIN_OCCURENCES"]}, {"text": "Truck {", "style": {"display": "inline-block"},
+    "blockType": "constant"}, {"text": "position:", "style": {"display": "inline-block"},
+    "blockType": "constant"}, {"blockType": "iterator", "direction": "horizontal",
     "breakAfter": false, "wrapChildren": true, "childGroupName": "position"}, {"children":
     [{"text": "❓", "style": {"color": "darkred", "border": "2px solid red", "cursor":
     "default", "paddingLeft": "10px", "borderRadius": "500px", "paddingRight": "10px",
     "backgroundColor": "orange"}, "blockType": "constant"}], "blockType": "dropTarget",
     "direction": "horizontal", "dropTarget": {"children": {"order": "insertFirst",
-    "category": "position"}, "visibility": {"$var": "ifEmpty"}}}, {"blockType": "iterator",
-    "direction": "horizontal", "breakAfter": false, "wrapChildren": true, "childGroupName":
-    "orientation"}, {"children": [{"text": "❓", "style": {"color": "darkred", "border":
-    "2px solid red", "cursor": "default", "paddingLeft": "10px", "borderRadius": "500px",
-    "paddingRight": "10px", "backgroundColor": "orange"}, "blockType": "constant"}],
-    "blockType": "dropTarget", "direction": "horizontal", "dropTarget": {"children":
-    {"order": "insertFirst", "category": "orientation"}, "visibility": {"$var": "ifEmpty"}}}],
-    "blockType": "block", "direction": "horizontal", "breakAfter": false, "dropTarget":
-    {"self": {"order": "insertAfter", "skipParents": 0}}, "wrapChildren": true}],
-    "describedType": {"typeName": "truck", "languageName": "truck_world"}}, {"visual":
-    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
-    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
-    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "category": "position"}, "visibility": {"$var": "ifEmpty"}}}, {"text": ", ", "style":
+    {"display": "inline-block"}, "blockType": "constant"}, {"text": "orientation:",
+    "style": {"display": "inline-block"}, "blockType": "constant"}, {"blockType":
+    "iterator", "direction": "horizontal", "breakAfter": false, "wrapChildren": true,
+    "childGroupName": "orientation"}, {"children": [{"text": "❓", "style": {"color":
+    "darkred", "border": "2px solid red", "cursor": "default", "paddingLeft": "10px",
+    "borderRadius": "500px", "paddingRight": "10px", "backgroundColor": "orange"},
+    "blockType": "constant"}], "blockType": "dropTarget", "direction": "horizontal",
+    "dropTarget": {"children": {"order": "insertFirst", "category": "orientation"},
+    "visibility": {"$var": "ifEmpty"}}}, {"text": "}", "style": {"display": "inline-block"},
+    "blockType": "constant"}], "blockType": "block", "direction": "horizontal", "breakAfter":
+    false, "dropTarget": {"self": {"order": "insertAfter", "skipParents": 0}}, "wrapChildren":
+    true}], "describedType": {"typeName": "truck", "languageName": "truck_world"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
     "INVALID_MIN_OCCURENCES"]}, {"text": "size:", "style": {"display": "inline-block"},
     "blockType": "constant"}, {"blockType": "iterator", "direction": "horizontal",
     "breakAfter": false, "wrapChildren": true, "childGroupName": "size"}, {"children":
@@ -145,17 +166,32 @@ concise_attributes:
     "Trucklino World", "categories": [{"blocks": [{"defaultNode": {"name": "world",
     "children": {"size": [{"name": "vec2", "language": "truck_world", "properties":
     {"x": "5", "y": "5"}}], "trucks": [{"name": "truck", "children": {"position":
-    [{"name": "vec2", "language": "truck_world", "properties": {"x": "5", "y": "5"}}]},
-    "language": "truck_world"}]}, "language": "truck_world"}, "displayName": "Empty
-    5x5"}], "categoryCaption": "Empty Worlds"}]}], "typeInstructions": {"trucklino_world":
-    {"world": {"blocks": [{"attributeMapping": ["seq_size", "size"]}, {"attributeMapping":
-    ["seq_trucks", "trucks"]}]}}}}}'
+    [{"name": "vec2", "language": "truck_world", "properties": {"x": "5", "y": "5"}}],
+    "orientation": [{"name": "direction", "language": "truck_world", "properties":
+    {"direction": "S"}}]}, "language": "truck_world"}]}, "language": "truck_world"},
+    "displayName": "Empty 5x5"}, {"defaultNode": {"name": "truck", "children": {"position":
+    [{"name": "vec2", "language": "truck_world", "properties": {"x": "5", "y": "5"}}],
+    "orientation": [{"name": "direction", "language": "truck_world", "properties":
+    {"direction": "S"}}]}, "language": "truck_world"}, "displayName": "Truck"}, {"defaultNode":
+    {"name": "road", "children": {"openings": [{"name": "direction", "language": "truck_world",
+    "properties": {"direction": "N"}}, {"name": "direction", "language": "truck_world",
+    "properties": {"direction": "S"}}], "position": [{"name": "vec2", "language":
+    "truck_world", "properties": {"x": "1", "y": "1"}}]}, "language": "truck_world"},
+    "displayName": "Road"}, {"defaultNode": {"name": "direction", "language": "truck_world",
+    "properties": {"direction": "N"}}, "displayName": "Direction: N"}, {"defaultNode":
+    {"name": "direction", "language": "truck_world", "properties": {"direction": "E"}},
+    "displayName": "Direction: E"}, {"defaultNode": {"name": "direction", "language":
+    "truck_world", "properties": {"direction": "S"}}, "displayName": "Direction: S"},
+    {"defaultNode": {"name": "direction", "language": "truck_world", "properties":
+    {"direction": "W"}}, "displayName": "Direction: W"}], "categoryCaption": "Empty
+    Worlds"}]}], "typeInstructions": {"trucklino_world": {"world": {"blocks": [{"attributeMapping":
+    ["seq_size", "size"]}, {"attributeMapping": ["seq_trucks", "trucks"]}]}}}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-12-20 14:25:50.522385'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2019-01-08 11:56:15.808751'
+  value_before_type_cast: '2019-01-09 08:50:30.000811'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: truck-world
