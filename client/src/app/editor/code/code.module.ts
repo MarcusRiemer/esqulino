@@ -37,6 +37,9 @@ import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.
 import { QueryPreviewComponent } from './query/query-preview.component'
 import { QueryService } from './query/query.service'
 
+import { WorldRenderComponent } from './truck/world-render.component';
+import { TruckWorldService } from './truck/truck-world.service';
+
 
 @NgModule({
   imports: [
@@ -70,6 +73,7 @@ import { QueryService } from './query/query.service'
     LanguageModelSelectorComponent,
     LanguageEmittedSelectorComponent,
     QueryPreviewComponent,
+    WorldRenderComponent
   ],
   entryComponents: [
     DatabaseSchemaSidebarComponent,
@@ -77,7 +81,8 @@ import { QueryService } from './query/query.service'
     CodeSidebarFixedBlocksComponent,
     QueryPreviewComponent,
     ValidationComponent,
-    CodeGeneratorComponent
+    CodeGeneratorComponent,
+    WorldRenderComponent
   ],
   providers: [
     ResourceChangedGuard
@@ -87,7 +92,7 @@ export class CodeEditorModule {
   public static forRoot(): ModuleWithProviders {
     return ({
       ngModule: CodeEditorModule,
-      providers: [EditorComponentsService, QueryService]
+      providers: [EditorComponentsService, QueryService, TruckWorldService]
     });
   }
 

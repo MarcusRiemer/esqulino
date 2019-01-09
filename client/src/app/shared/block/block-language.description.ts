@@ -85,12 +85,20 @@ export interface CodeGeneratorComponentDescription {
 }
 
 /**
+ * Displays a truck world
+ */
+export interface TruckWorldComponentDescription {
+  componentType: "truck-world"
+}
+
+/**
  * Any component that could be displayed in the actual editor view.
  */
 export type EditorComponentDescription =
   QueryPreviewComponentDescription
   | ValidatorComponentDescription
-  | CodeGeneratorComponentDescription;
+  | CodeGeneratorComponentDescription
+  | TruckWorldComponentDescription;
 
 /**
  * The data about a language model that is stored in the database

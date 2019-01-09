@@ -1,6 +1,7 @@
-import { LanguageDefinition } from '../language'
+import { LanguageDefinition } from '../language';
 
-import { WORLD_NODE_CONVERTER } from './truck-world.codegenerator'
+import { WORLD_NODE_CONVERTER } from './truck-world.codegenerator';
+import { PROGRAM_NODE_CONVERTER } from './truck-program.codegenerator'
 
 export const WORLD_LANGUAGE_DESCRIPTION: LanguageDefinition = {
   id: "truck-world",
@@ -12,6 +13,6 @@ export const WORLD_LANGUAGE_DESCRIPTION: LanguageDefinition = {
 export const PROG_LANGUAGE_DESCRIPTION: LanguageDefinition = {
   id: "truck-lang",
   name: "Truck Programming Language",
-  emitters: [],
+  emitters: PROGRAM_NODE_CONVERTER,
   validators: []
 }
