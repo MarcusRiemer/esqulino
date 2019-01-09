@@ -184,7 +184,7 @@ export function calculateDropTargetState(drag: CurrentDrag, block: BlockDropProp
       typeName: drag.draggedDescription.name
     }
     const currentTree = block.codeResource.syntaxTreePeek;
-    const currentLanguage = block.codeResource.emittedLanguagePeek;
+    const currentLanguage = block.codeResource.validationLanguagePeek;
 
     const parentNode = currentTree.locate(block.dropLocation.slice(0, -1));
     const parentNodeType = currentLanguage.getType(parentNode.qualifiedName);
