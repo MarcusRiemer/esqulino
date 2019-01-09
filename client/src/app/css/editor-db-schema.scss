@@ -1,13 +1,20 @@
+/* Visual enhancements of the displayed schema */
 .db-schema-display {
     svg {
+        /* Shrink schemas that are too big*/
         max-width: 100%;
 
-        .edge {
-            transition: stroke-width 0.5s;
+        .active {
+            transition: stroke-width 1.5s;
         }
 
-        .edge:hover {
+        .active.node {
+            stroke-width: 5px;
+        }
+        .active.edge {
             stroke-width: 10px;
         }
+
+        /* Array.from(document.querySelector(".db-schema-display > svg:nth-child(1)").querySelectorAll(".aufgabe")).forEach(elem => elem.classList.add("active")) */
     }
 }
