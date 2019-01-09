@@ -228,6 +228,13 @@ export class CodeResource extends ProjectResource {
   );
 
   /**
+   * The language that is used for validation.
+   */
+  get validationLanguagePeek() {
+    return (this.project.getLocalProgrammingLanguage(this.blockLanguagePeek.grammarId));
+  }
+
+  /**
    * @return The latest validation result for this resource.
    */
   readonly validationResult = combineLatest(this.syntaxTree, this.validationLanguage)
