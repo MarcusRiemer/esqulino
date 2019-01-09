@@ -3,6 +3,7 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { EditorComponentDescription } from '../../shared/block/block-language.description';
 
 import { QueryPreviewComponent } from './query/query-preview.component';
+import { WorldRenderComponent } from './truck/world-render.component';
 import { ValidationComponent } from './validation.component';
 import { CodeGeneratorComponent } from './code-generator.component';
 
@@ -16,6 +17,7 @@ export class EditorComponentsService {
       case "query-preview": return (new ComponentPortal(QueryPreviewComponent));
       case "validator": return (new ComponentPortal(ValidationComponent));
       case "generated-code": return (new ComponentPortal(CodeGeneratorComponent));
+      case "truck-world": return (new ComponentPortal(WorldRenderComponent));
     }
   }
 }
