@@ -27,6 +27,10 @@ gem 'ruby-filemagic'
 # Used to resize images on the fly
 gem 'mini_magick'
 
+# Sending Mails via AWS SES, maintaining a custom SMTP server
+# doesn't seem to be worth the hassle.
+gem 'aws-ses', '~> 0.4.4', require: 'aws/ses'
+
 ############################
 # Rails dependencies
 ###########################
