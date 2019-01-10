@@ -24,6 +24,8 @@ class ProjectsController < ApplicationController
     project = Project.new(project_creation_params)
 
     if project.save
+      ProjectMailer.with(project: project).created_admin.deliver_later
+
       render json: { 'id' => project.slug }, :status => 200
     else
       render :json => { 'errors' => project.errors }, :status => 400
