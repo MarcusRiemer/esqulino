@@ -29,14 +29,11 @@ Der Client wurde als eine Single-Page Application mit rein clientseitiger Visual
 Durch die direkte Einbindung des im Rahmen dieser Arbeit erstellten Programms, ist die Implementierung in Angular und TypeScript fest vorgegeben.
 
 \subsection{Drag \& Drop-Editor}
+\label{sec:requirements:existing:structure:drag-drop}
 
-Besonders hervorgehoben werden soll an dieser Stelle der Drag \& Drop-Editor von BlattWerkzeug. Auch wenn er nicht direkt Teil dieser Arbeit ist, spielt er doch eine entscheidende Rolle, da über ihn der Großteil der Interaktion abläuft. Programmcode wird nicht getippt sondern aus unterschiedlichen Bausteinen mit der Maus zusammengesetzt.
+Besonders hervorgehoben werden soll an dieser Stelle der Drag \& Drop-Editor von BlattWerkzeug. Auch wenn er nicht direkt Teil dieser Arbeit ist, spielt er doch eine entscheidende Rolle, da über ihn der Großteil der Interaktion abläuft. Programmcode wird zur Ausführung in der Mikrowelt nicht getippt, sondern aus unterschiedlichen Bausteinen mit der Maus zusammengesetzt.
 
-\begin{quote}
-    "So nutzt auch BlattWerkzeug einen Drag \& Drop-Editor um Syntaxfehler von vornherein auszuschließen und kontextsensitiv mögliche Operationen hervorzuheben."~\cite[6]{riemer2016}
-\end{quote}
-
-Die Bausteine des Drag \& Drop-Editor und deren Kombinationsmöglichkeiten werden durch die Grammatik festgelegt, die in \treft{sec:requirements:program} näher beschrieben wird. Ergebnis des Drag \& Drop-Editor ist nach dem Bearbeiten durch den Nutzer dann ein Syntaxbaum, der alle Operationen enthält und vom Programm weiterverarbeitet werden kann. \figreft{fig:requirements:existing:draganddrop} zeigt ein Bildschirmfoto des Drag \& Drop-Editor mit einem vollständigen Programm.
+Die Bausteine des Drag \& Drop-Editor und deren Kombinationsmöglichkeiten werden durch die Grammatik festgelegt, die in \treft{sec:requirements:program} näher beschrieben wird. Ergebnis des Drag \& Drop-Editor ist nach dem Bearbeiten durch den Nutzer dann ein Syntaxbaum, der alle Operationen enthält und vom Programm weiterverarbeitet werden kann. Auf den Syntaxbaum, sowie die Anforderungen an die Weiterverarbeitung wird im Kapitel \ref{sec:requirements:world:compile-interpret} näher eingegangen. \figreft{fig:requirements:existing:draganddrop} zeigt ein Bildschirmfoto des Drag \& Drop-Editor mit einem vollständigen Programm.
 
 \begin{figure}[h]
     \centering
@@ -55,11 +52,9 @@ Die Zielgruppe wird zum Teil natürlich auch über die Zielgruppe von BlattWerkz
 
 BlattWerkzeug definiert die Zielgruppe auf Schüler und Schülerinnen ab der Mittelstufe mit grundlegenden PC-Anwenderkenntnissen. Kenntnisse über den Umgang mit Tabellenkalkulationsprogrammen werden nicht als zwingende Voraussetzung, aber als eine sinnvolle Vorstufe, um die Strukturierungsmöglichkeiten von Datenbeständen zu verstehen, angesehen. Für die Entwicklung von Oberflächen werden grundlegende Vorstellungen über die Funktionsweise und Parameter einiger Bedienelemente benötigt. Außerdem wird das Wissen über einzelne englische Vokabeln vorrausgesetzt~\cite[22-23]{riemer2016}.
 
-Bei den Schülern sollten grundlegende PC-Anwenderkenntnisse zur Bedienung des Tools vorhanden sein. Dazu gehört das starten und Bedienen eines Webbrowsers, was bei den meisten Schülern allerdings vorrausgesetzt werden können sollte. Kenntnisse über den Umgang mit Tabellenkalkulationsprogrammen und Vorstellungen über die Funktionsweise und Parameter einiger Bedienelemente ist für die Benutzung nicht notwendig. Schüler, die noch nie mit dem Thema Programmierung in Berührung gekommen sind, sollten bei den ersten Schritten von einer Lehrkraft begleitet werden. Nachdem erste Erfahrungen gesammelt wurden, sollten Schüler dann auch selbstständig in der Lage sein neue Möglichkeiten zu entdecken und neue Aufgaben zu lösen. Eine Begleitung in Form einer Schritt für Schritt Anleitung durch die Software ist zunächst nicht geplant.
+Bei den Schülern sollten grundlegende PC-Anwenderkenntnisse zur Bedienung des Tools vorhanden sein. Dazu gehört das starten und Bedienen eines Webbrowsers, was bei den meisten Schülern allerdings vorrausgesetzt werden kann. Kenntnisse über den Umgang mit Tabellenkalkulationsprogrammen und Vorstellungen über die Funktionsweise und Parameter einiger Bedienelemente ist für die Benutzung nicht notwendig. Schüler, die noch nie mit dem Thema Programmierung in Berührung gekommen sind, sollten bei den ersten Schritten von einer Lehrkraft begleitet werden. Nachdem erste Erfahrungen gesammelt wurden, sollten Schüler dann auch selbstständig in der Lage sein neue Möglichkeiten zu entdecken und neue Aufgaben zu lösen. Eine Begleitung in Form einer Schritt für Schritt Anleitung durch die Software ist zunächst nicht geplant.
 
 Außerdem sollen auch Lehrer in die Zielgruppe mit aufgenommen werden, denen die Möglichkeit gegeben werden soll Welten und damit Aufgaben für Ihre Schüler zu erstellen und vorzubereiten \tref{sec:requirements:world} und ihre Schüler bei der Lösung der Aufgaben zu unterstützen.
-
-% \TODO{Evtl. grafische Darstellung der Akteure}
 
 %************************************************
 % Welt
@@ -69,41 +64,40 @@ Außerdem sollen auch Lehrer in die Zielgruppe mit aufgenommen werden, denen die
 
 Die im vorherigen Abschnitt beschriebenen Anforderungen lassen sich sehr gut mit den Lernzielen vereinbaren. Ein Objekt wird mit programmierten Befehlen durch eine virtuelle Welt geführt. Der Spieler löst so eine Art Puzzelrätsel.
 
-\subsection{Handlungsgerüst}
-\label{sec:requirements:world:metaphor}
+\subsection{Rahmenhandlung}
+\label{sec:requirements:world:background-story}
 
-Um nachfolgend die Definition der Anforderungen zu erleichern, wird bereits an dieser Stelle die Metapher beschrieben. Ziel des Spiels soll es sein mit Hilfe eines Lastwagen, welcher vom Spieler über Programmbefehle steuerbar ist \tref{sec:requirements:program}, über ein Netz von Straßen, verschiedenfarbige Container an ihre vorgesehenen Ziele zu bringen. Dabei ist die Ladefläche des Lastwagen begrenzt, womit unter Umständen mehrfache Fahrten notwendig sind. Zusätzlich kann der Tank des Lastwagen begrenzt werden, wodurch es für die Lehrkraft denkbar wäre eine effiziente Routenführung Teil der Aufgabe zu machen.
+Um nachfolgend die Definition der Anforderungen zu erleichern, wird bereits an dieser Stelle die Rahmenhandlung beschrieben. Ziel des Spiels soll es sein mit Hilfe eines Lastwagen, welcher vom Spieler über Programmbefehle steuerbar ist \tref{sec:requirements:program}, über ein Netz von Straßen, verschiedenfarbige Container an ihre vorgesehenen Ziele zu bringen. Dabei ist die Ladefläche des Lastwagen begrenzt, womit unter Umständen mehrfache Fahrten notwendig sind. Zusätzlich kann der Tank des Lastwagen begrenzt werden, wodurch es für die Lehrkraft denkbar wäre eine effiziente Routenführung Teil der Aufgabe zu machen.
 
-Diese Metapher wurde gewählt, da der Transport von Waren in dieser vereinfachten Darstellung jedem bekant sein sollte. Außerdem bietet die Metapher verschiedene Erweiterungsmöglichkeiten und ermöglicht eine schrittweise Erhöhung der Komplexität. So ist z.B. die Einführung von Verkehrsampeln zur Vermittlung des Konzeptes der Verzweigungen denkbar.
+Diese Rahmenhandlung wurde gewählt, da der Transport von Waren in dieser vereinfachten Darstellung jedem bekant sein sollte. Außerdem bietet die Rahmenhandlung verschiedene Erweiterungsmöglichkeiten und ermöglicht eine schrittweise Erhöhung der Komplexität. So ist z.B. die Einführung von Verkehrsampeln zur Vermittlung des Konzeptes der Verzweigungen denkbar.
 
 \subsection{Datenstruktur}
 \label{sec:requirements:world:structure}
 
 In Anlehnung an Kara soll die Möglichkeit gegeben werden neue Level, bzw. Aufgaben zu entwerfen. Jede Aufgabe besteht dabei aus einer Welt, wobei sowohl Lehrer, als auch Schüler in der Lage sein sollen neue Welten zu erstellen. Die Funktion richtet sich jedoch primär an die Lehrkraft. In Anlehnung an Lightbot ist das Ziel der Aufgabe jedoch immer dadurch definiert, dass alle Container -- die sich zu Beginn des Level bereits auf der Ladefläche oder an einer beliebigen Straße im Spielfeld befinden können -- an ihr vorgesehenes Ziel gebracht werden.
 
-Es kann davon ausgegangen werden, dass ein Lehrer für das Fach Informatik über Erfahrung in der Bedienung auch von komplexeren Programmen verfügt. Daher kann die Umgebung zur Gestaltung der Level eher zweckmäßig sein und setzt keinen Fokus auf eine leichte Bedienung.
+Es kann davon ausgegangen werden, dass ein Lehrer für das Fach Informatik über Erfahrung in der Bedienung auch von komplexeren Programmen verfügt. Daher kann die Umgebung zur Gestaltung der Level eher zweckmäßig sein.
 
-Um diese Funktionalität zu ermöglichen, muss für BlattWerkzeug eine Datenstruktur entwickelt werden, durch die sich mit dem Drag \& Drop-Editor eine Welt bauen lässt.
+Um diese Funktionalität zu ermöglichen, stellt BlattWerkzeug eine Datenstruktur bereit, die in eine visuell darstellbare, objektorientierte Repräsentation der Welt umgewandelt wird. Ein Konverter erhält die Welt in einer von BlattWerkzeug vorgegebene Struktur und generiert daraus den Objektbaum, auf welche im weiteren Verlauf der Anwendung auch die vorgesehenen Befehle \tref{sec:requirements:program} ausgeführt werden können.
 
 %************************************************
 % Programm
 %************************************************
-\section{Programm}
+\section{Minisprache}
 \label{sec:requirements:program}
 
-Die Bewegungsabläufe wie z.B. "geradeaus fahren", "links abbiegen", "rechts abbiegen" oder "warten" werden vom Nutzer mithilfe des Drag \& Drop-Editor programmiert. Dafür wird eine Minisprache eingeführt, die über einen reduzierten Funktionsumfang verfügt und dadurch den Nutzer behutsam an das Thema heranführen soll und ihn nicht wie Universalsprachen mit einem großen Sprachumfang und der damit verbundennen steileren Lernkurve überfordern soll.
+Die Bewegungsabläufe wie z.B. "geradeaus fahren", "links abbiegen", "rechts abbiegen" oder "warten" werden vom Nutzer mithilfe des Drag \& Drop-Editor programmiert. Dafür wird eine Minisprache eingeführt, die über einen reduzierten Funktionsumfang verfügt und dadurch den Nutzer behutsam an die Programmierung heranführen soll und ihn nicht wie Universalsprachen mit einem großen Sprachumfang und der damit verbundennen steileren Lernkurve überfordern soll. Anforderungen an Minisprachen, sowie deren Vorteile wurden im Grundlagenkapitel \ref{sec:basics:mini-languages} genannt.
 
-\subsection{Datenstruktur}
-\label{sec:requirements:program:structure}
-
-\TODO{Datenstruktur}
-
-\subsection{Kompilieren / Interpretieren}
+\subsection{Auswertung}
 \label{sec:requirements:world:compile-interpret}
 
-\TODO{Kompilieren / Interpretieren}
+Der Drag \& Drop-Editor von Blattwerkzeug \tref{sec:requirements:existing:structure:drag-drop} erzeugt aus den Eingaben des Nutzers einen Syntaxbaum \TDOD{geneauere Beschreibung Syntaxbaum}.
+
+Dieser Syntaxbaum muss von der Software in einer Form ausgewertet werden können, die die im folgenden Punkt beschriebene Darstellung steuern kann. \TODO{}
 
 \subsection{Darstellung der Ausführung}
 \label{sec:requirements:world:display}
 
-\TODO{Darstellung der Ausführung}
+Eine wichtige Anforderung ergibt sich durch den im Grundlagenkapitel \ref{sec:basics:mini-languages} genanten Punkt, dass die Operationen der Minisprache sichtbare Änderungen in der auf dem Bildschirm dargestellten Mikrowelt vornehmen sollten. Diese Mikrowelt benötigt also eine ansprechende Darstellung. Auf einem Netz von Straßen soll in einer Überkopf-Ansicht ein Lastwagen von Kachel zu Kachel bewegt werden. Auf diesem Straßennetz werden die aufzusammelnden Container so wie die vorgesehenen Ablageorte dargestellt. Für Bewegungen des Lastwagen sind Animationen vorgesehen.
+
+In der Darstellung soll es die Möglichkeit geben über Buttons alle Befehle auch direkt auszuführung um so zusätzlich zum eigentlichen Ausführen des Programms auch ein spielerisches Entdecken der Welt zu ermöglichen. \TODO{Screenshot}

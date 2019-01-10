@@ -18,6 +18,16 @@
 - Kompilieren in JS-Code mit async await
 - new AsyncFunction (TypeScript-Compiler-Problem, Anforderung an den Browser)
 
+\subsection{Kompilieren}
+Für die Auswertung und Ausführung des durch den Syntaxbaum beschriebenen Code kommen zwei Vorgehensweisen infrage. Im Grundlagenkapitel \ref{sec:basics:compile-interpret} wurde der Unterschied zwischen Kompilieren und Interpretieren im klassischen Sinne bereits erklärt. Da im Browser jedoch nicht direkt Maschienencode ausgeführt werden kann ist der Unterschied in diesem Zusammenhang etwas anders zu verstehen.
+
+Beim Interpretieren wird der Syntaxbaum nach und nach abgearbeitet und die entsprechenden Befehle direkt ausgeführt. Im Unterschied dazu ist "Kompilieren" in diesem Zusammenhang so zu vertehen, dass der SyntaxBaum zunächst in einen vollständigen JavaScript-Code umgewandelt wird, der anschließend als ganzes in eine Art Sandkasten ausgeführt wird.
+
+Im Verlauf der Arbeit wurde die Vorgehensweise "Kompilieren" an dieser Stelle als Anforderung festgelegt.
+
+- Vorteil: Man kann auch direkt JS Code reingeben
+- Vorteil: Man kann Code ausgeben lassen und bearbeiten
+
 \section{Darstellung}
 
 \subsection{Technologie}
