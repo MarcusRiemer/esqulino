@@ -42,7 +42,7 @@ pretty-grammars: generated/sql.grammar generated/dxml.grammar generated/regex.gr
 pretty-blocks: generated/xml.blocks generated/dxml.blocks generated/sql.blocks
 
 # Default set of graphviz trees
-graphviz-trees: generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz generated/ast-example-null.graphviz generated/ast-example-expr-variable.graphviz generated/ast-example-expr-binary.graphviz generated/ast-sql-column-name.graphviz
+graphviz-trees: generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz generated/ast-example-null.graphviz generated/ast-example-expr-variable.graphviz generated/ast-example-expr-binary.graphviz generated/ast-sql-column-name.graphviz generated/ast-example-xml-node-two-attributes.graphviz
 
 # Re-generate everything that can be created dynamically
 all-generated: pretty-grammars pretty-blocks graphviz-trees

@@ -146,7 +146,7 @@ export class CodeGeneratorProcess {
 
 /**
  * Controls how a node is converted to text and what the children
- * have to do with it. 
+ * have to do with it.
  */
 export interface NodeConverter {
   /*
@@ -202,7 +202,7 @@ export class CodeGenerator {
    * duplicate converters are not allowed, so it is not possible
    * to unintentionally overwrite already registered convertes.
    */
-  registerConverter(t: QualifiedTypeName, converter: NodeConverter) {
+  private registerConverter(t: QualifiedTypeName, converter: NodeConverter) {
     if (this.hasConverter(t)) {
       throw new Error(`There is already a converter for "${t.languageName}.${t.typeName}"`);
     } else {
@@ -247,7 +247,7 @@ export class CodeGenerator {
    */
   getConverter(t: QualifiedTypeName) {
     if (!this._callbacks[t.languageName]) {
-      throw new Error(`Language "${t.languageName}" is unknown to CodeGenerator`);
+      throw new Error(`Language "${t.languageName}" is unknown to CodeGenerator, available languages are: [${Object.keys(this._callbacks).join(", ")}]`);
     }
 
     if (!this._callbacks[t.languageName][t.typeName]) {

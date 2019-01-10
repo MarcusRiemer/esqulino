@@ -68,15 +68,13 @@ class Image
 
   def file_destroy!
     if self.exists? then
+      # Remove the image from the "database"
       metadata = JSON.parse(File.read(image_json))
-
       metadata.except!(@image_id)
-
       File.write(image_json, (JSON.dump(metadata)))
 
+      # Delete the file for the image
       File.delete(path)
-
-      #self.freeze
     else
       raise UnknownImageError.new(@project_id, @image_id)
     end

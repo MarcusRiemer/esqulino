@@ -236,6 +236,9 @@
         },
         {
           "$ref": "#/definitions/CodeGeneratorComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/TruckWorldComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
@@ -837,6 +840,22 @@
         }
       ],
       "description": "All possible sidebar types"
+    },
+    "TruckWorldComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a truck world",
+      "properties": {
+        "componentType": {
+          "enum": [
+            "truck-world"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
     },
     "ValidatorComponentDescription": {
       "additionalProperties": false,

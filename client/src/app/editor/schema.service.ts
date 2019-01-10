@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -45,7 +45,7 @@ export class SchemaService {
   constructor(
     private _http: Http,
     private _projectService: ProjectService,
-    private _server: ServerApiService
+    private _server: ServerApiService,
   ) {
   }
 
@@ -128,7 +128,7 @@ export class SchemaService {
    * @param table - the table to get the entries from
    */
   getTableRowAmount(project: Project, table: Table) {
-    const url = this._server.getTableEntriesCountUrl(project.slug, project.currentDatabaseName, table.name, );
+    const url = this._server.getTableEntriesCountUrl(project.slug, project.currentDatabaseName, table.name);
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });

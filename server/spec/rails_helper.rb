@@ -88,6 +88,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
+  # Reset changes to the filesystem after the tests have run
   config.after(:suite) do
     `make -C #{File.join ::Rails.root, ".."} test-reset`
   end

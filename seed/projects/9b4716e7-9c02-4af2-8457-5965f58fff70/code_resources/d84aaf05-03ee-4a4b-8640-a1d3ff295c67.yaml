@@ -13,7 +13,7 @@ concise_attributes:
     value: 9b4716e7-9c02-4af2-8457-5965f58fff70
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: Sprecher_Mehrere_Charaktere
+  value_before_type_cast: Sprecher Mehrere Charaktere
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: d84aaf05-03ee-4a4b-8640-a1d3ff295c67
@@ -55,7 +55,7 @@ concise_attributes:
   value_before_type_cast: '2018-03-05 12:17:49.771123'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-08-04 17:08:02.476123'
+  value_before_type_cast: '2018-11-25 11:33:50.873138'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: cb3f1cce-1337-441f-ab0c-788f3b60bc4d

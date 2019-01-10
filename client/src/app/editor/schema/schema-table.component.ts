@@ -42,7 +42,6 @@ export class SchemaTableComponent {
   }
 
   ngOnInit() {
-    console.log("Editor loading!");
     let subRef = this._projectService.activeProject
       .subscribe(res => {
         this._project = res;
@@ -94,8 +93,6 @@ export class SchemaTableComponent {
     } else {
       return false;
     }
-
-    //return this._schemaService.getCurrentlyEdited != undefined ? this._schemaService.getCurrentlyEditedTable().name == tableName : false;
   }
 
   /**
@@ -109,6 +106,6 @@ export class SchemaTableComponent {
    * Function to show an alert [TODO: Make it look good]
    */
   showError(error: any) {
-    window.alert(`Ein Fehler ist aufgetretten! \n mit Nachricht: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
+    window.alert(`Ein Fehler ist aufgetreten!\nNachricht: ${error.json().errorBody.toString().replace(new RegExp("\\\\", 'g'), '')}`);
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "g9",
+  "technicalName": "g9",
   "root": "n1",
   "types": {
     "n1": {
@@ -7,7 +7,7 @@
         {
           "type": "terminal",
           "name": "req",
-          "symbol": "i am required"          
+          "symbol": "i am required"
         }
       ]
     }

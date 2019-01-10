@@ -49,8 +49,6 @@ export class CreateCodeResourceComponent {
     const p = this._projectService.cachedProject;
     const b = p.getBlockLanguage(this.blockLanguageId);
 
-    console.log("Block", b);
-
     this._codeResourceService.createCodeResource(p, this.resourceName, this.blockLanguageId, b.defaultProgrammingLanguageId)
       .pipe(first())
       .subscribe(res => {

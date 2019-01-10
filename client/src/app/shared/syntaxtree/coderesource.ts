@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 
 import { Project } from '../project';
 import { ProjectResource } from '../resource';
@@ -11,8 +11,8 @@ import { ValidationResult } from './validation-result';
 /**
  * A resource that is described by a syntaxtree.
  *
- * While the tree instance itself is also available via the nodes 
- * of the tree, the immutable nature makes it difficult to 
+ * While the tree instance itself is also available via the nodes
+ * of the tree, the immutable nature makes it difficult to
  * communicate changes upwards. The resource allows to replace
  * the whole tree and therefore enables mutating operations. So
  * this is additionaly a facade that hides the immutability of the
@@ -24,7 +24,7 @@ export class CodeResource extends ProjectResource {
 
   private _tree = new BehaviorSubject<Tree>(new Tree(undefined));
 
-  private _programmingLanguageId = new BehaviorSubject<string>(undefined);
+  private _emittedLanguageId = new BehaviorSubject<string>(undefined);
 
   private _blockLanguageId = new BehaviorSubject<string>(undefined);
 
@@ -35,36 +35,36 @@ export class CodeResource extends ProjectResource {
     super(desc, project);
 
     this._tree.next(new Tree(desc.ast));
-    this._programmingLanguageId.next(desc.programmingLanguageId);
+    this._emittedLanguageId.next(desc.programmingLanguageId);
     this._blockLanguageId.next(desc.blockLanguageId);
   }
 
   /**
    * @return The ID of the language this resource uses.
    */
-  get programmingLanguageIdPeek() {
-    return (this._programmingLanguageId.value);
+  get emittedLanguageIdPeek() {
+    return (this._emittedLanguageId.value);
   }
 
   /**
    * @return An observable value of the language this id uses.
    */
-  get programmingLanguageId(): Observable<string> {
-    return (this._programmingLanguageId);
+  get emittedLanguageId(): Observable<string> {
+    return (this._emittedLanguageId);
   }
 
   /**
    * @return A snapshot of the language that is currently in use.
    */
-  get programmingLanguagePeek() {
-    return (this.project.getLanguageById(this.programmingLanguageIdPeek));
+  get emittedLanguagePeek() {
+    return (this.project.getProgrammingLanguageByCoreLanguageId(this.emittedLanguageIdPeek));
   }
 
   /**
    * @return The language that is currently in use
    */
-  get programmingLanguage() {
-    return (this._programmingLanguageId.pipe(map(l => this.project.getLanguageById(l))));
+  get emittedLanguage() {
+    return (this._emittedLanguageId.pipe(map(l => this.project.getProgrammingLanguageByCoreLanguageId(l))));
   }
 
   /**
@@ -75,10 +75,11 @@ export class CodeResource extends ProjectResource {
   }
 
   /**
-   * @param newId The ID of the new language this resource adheres to.
+   * @param newId The ID of the new emitted language this resource adheres to.
+   * @todo Use enum
    */
-  setProgrammingLanguageId(newId: string) {
-    this._programmingLanguageId.next(newId);
+  setEmittedLanguageId(newId: string) {
+    this._emittedLanguageId.next(newId);
     this.markSaveRequired();
   }
 
@@ -220,9 +221,23 @@ export class CodeResource extends ProjectResource {
   }
 
   /**
+   * The language that is used for validation.
+   */
+  readonly validationLanguage = this.blockLanguage.pipe(
+    map(b => this.project.getLocalProgrammingLanguage(b.grammarId))
+  );
+
+  /**
+   * The language that is used for validation.
+   */
+  get validationLanguagePeek() {
+    return (this.project.getLocalProgrammingLanguage(this.blockLanguagePeek.grammarId));
+  }
+
+  /**
    * @return The latest validation result for this resource.
    */
-  readonly validationResult = combineLatest(this.syntaxTree, this.programmingLanguage)
+  readonly validationResult = combineLatest(this.syntaxTree, this.validationLanguage)
     .pipe(
       map(([tree, lang]) => {
         if (tree && lang) {
@@ -236,7 +251,7 @@ export class CodeResource extends ProjectResource {
   /**
    * @return The latest generated code for this resource.
    */
-  readonly generatedCode = combineLatest(this.syntaxTree, this.programmingLanguage)
+  readonly generatedCode = combineLatest(this.syntaxTree, this.emittedLanguage)
     .pipe(
       map(([tree, lang]) => {
         if (tree && !tree.isEmpty && lang) {
@@ -259,7 +274,7 @@ export class CodeResource extends ProjectResource {
       id: this.id,
       name: this.name,
       ast: this.syntaxTreePeek.toModel(),
-      programmingLanguageId: this.programmingLanguageIdPeek,
+      programmingLanguageId: this.emittedLanguageIdPeek,
       blockLanguageId: this.blockLanguageIdPeek,
     });
   }

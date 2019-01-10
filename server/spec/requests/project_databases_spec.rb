@@ -30,15 +30,16 @@ RSpec.describe ProjectDatabasesController, type: :request do
   end
 
   def json_headers
-    { "CONTENT_TYPE" => "application/json" }
+    {
+      "CONTENT_TYPE" => "application/json",
+      "Authorization" => "Basic #{Base64.encode64('user:user')}"
+    }
   end
-
-  let(:auth_headers) { {"Authorization" => "Basic #{Base64.encode64('user:user')}"} }
 
   describe 'GET /api/project/:project_id/db/:database_id/visual_schema' do
     it 'works for empty databases' do
       project = FactoryBot.create(:project_with_default_database)
-      
+
       get "#{default_db_api_url project}/visual_schema?format=graphviz"
       expect(response.status).to eq 200
       expect(response.body).to include("digraph")
@@ -58,7 +59,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
     it 'works for databases with a single table' do
       project = FactoryBot.create(:project_with_default_database)
       project.default_database.table_create(database_description_key_value[0])
-      
+
       get "#{default_db_api_url project}/visual_schema?format=graphviz"
       expect(response.status).to eq 200
       expect(response.body).to include("key_value")
@@ -150,7 +151,9 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
 
-      delete "#{default_db_api_url project}/drop/key_value"
+      delete "#{default_db_api_url project}/drop/key_value",
+             :headers => json_headers
+
       expect(response.status).to eq 204
     end
 
@@ -159,8 +162,10 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
 
-      delete "#{default_db_api_url project}/drop/doesntexist"
-      expect(response.status).to eq 404 
+      delete "#{default_db_api_url project}/drop/doesntexist",
+             :headers => json_headers
+
+      expect(response.status).to eq 404
     end
   end
 
@@ -203,7 +208,17 @@ RSpec.describe ProjectDatabasesController, type: :request do
              ]
            }.to_json
 
-      expect(response.status).to eq 204
+      # Ensure the response is well formed
+      expect(response).to have_http_status(200)
+      json_data = JSON.parse(response.body)
+      expect(json_data).to validate_against "ResponseTabularInsertDescription"
+      expect(json_data).to eq({
+                                "numInsertedRows" => 1,
+                                "numTotalRows" => 1,
+                              })
+
+      # Ensure that the data has actually changed
+      expect(project.default_database.table_row_count("key_value")).to eq 1
     end
 
     it 'Inserting multiple rows' do
@@ -222,7 +237,17 @@ RSpec.describe ProjectDatabasesController, type: :request do
              ]
            }.to_json
 
-      expect(response.status).to eq 204
+      # Ensure the response is well formed
+      expect(response).to have_http_status(200)
+      json_data = JSON.parse(response.body)
+      expect(json_data).to validate_against "ResponseTabularInsertDescription"
+      expect(json_data).to eq({
+                                "numInsertedRows" => 3,
+                                "numTotalRows" => 3,
+                              })
+
+      # Ensure that the data has actually changed
+      expect(project.default_database.table_row_count("key_value")).to eq 3
     end
 
     it 'Malformed: No column names' do
@@ -256,6 +281,64 @@ RSpec.describe ProjectDatabasesController, type: :request do
            }.to_json
 
       expect(response.status).to eq 400
+    end
+  end
+
+  describe '/api/project/:projectId/db/:dbId/{upload,download}' do
+    it 'Rejects missing files' do
+      project = FactoryBot.create(:project_with_default_database)
+      db = project.default_database
+
+      post "#{default_db_api_url project}/upload",
+           :headers => json_headers,
+           :params => { }.to_json
+
+      expect(response.status).to eq 400
+
+      json_data = JSON.parse(response.body)
+      expect(json_data['errors'].length).to eq 1
+    end
+
+    it 'Rejects empty files' do
+      project = FactoryBot.create(:project_with_default_database)
+      db = project.default_database
+
+      emptyFile = Tempfile.new('empty.sqlite')
+
+      post "#{default_db_api_url project}/upload",
+           :headers => json_headers,
+           :params => {
+             "database" => Rack::Test::UploadedFile.new(emptyFile.path)
+           }
+
+      expect(response.status).to eq 400
+
+      json_data = JSON.parse(response.body)
+      expect(json_data['errors'].length).to eq 1
+    end
+
+    it 'Accepts valid databases' do
+      project = FactoryBot.create(:project_with_default_database)
+
+      dbFile = Tempfile.new('db.sqlite')
+      db = SQLite3::Database.new dbFile.path
+
+      db.execute "create table numbers (name varchar(30),val int);"
+
+      # Upload the file
+      post "#{default_db_api_url project}/upload",
+           :headers => json_headers,
+           :params => {
+             "database" => Rack::Test::UploadedFile.new(dbFile.path)
+           }
+
+      expect(response.status).to eq 200
+      json_data = JSON.parse(response.body)
+
+      # And retrieve it again
+      get "#{default_db_api_url project}/download"
+      expect(response.status).to eq 200
+      expect(response.body).to eq File.open(dbFile, "rb") { |f| f.read }
     end
   end
 

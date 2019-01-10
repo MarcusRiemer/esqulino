@@ -1,12 +1,17 @@
-import { Routes, RouterModule } from '@angular/router'
+import { Routes, RouterModule, ParamMap } from '@angular/router'
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { SchemaHostComponent } from './host.component'
 import { SchemaComponent } from './schema.component'
+import { SchemaUploadComponent } from './schema-upload.component'
 import { SchemaTableEditorComponent } from './schema-table-editor.component'
 import { SchemaTableDataComponent } from './schema-table-data.component'
 import { SchemaTableImportComponent } from './schema-table-import.component'
 import { SchemaRedirectComponent } from './schema-redirect.component'
 
+// TODO: Guard to restrict some routes for databases without tables.
 export const schemaEditorRoutes: Routes = [
   {
     path: "",
@@ -18,7 +23,8 @@ export const schemaEditorRoutes: Routes = [
       { path: ':schemaName/edit/:tableName', component: SchemaTableEditorComponent },
       { path: ':schemaName/create', component: SchemaTableEditorComponent },
       { path: ':schemaName/details/:tableName', component: SchemaTableDataComponent },
-      { path: ':schemaName/import', component: SchemaTableImportComponent }
+      { path: ':schemaName/import', component: SchemaTableImportComponent },
+      { path: ':schemaName/upload', component: SchemaUploadComponent },
     ]
   }
 ]

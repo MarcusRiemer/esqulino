@@ -1,0 +1,23 @@
+{
+  "$ref": "#/definitions/ResponseTabularInsertDescription",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {
+    "ResponseTabularInsertDescription": {
+      "additionalProperties": false,
+      "description": "Answer of the server after a bulk insertion",
+      "properties": {
+        "numInsertedRows": {
+          "type": "number"
+        },
+        "numTotalRows": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "numInsertedRows",
+        "numTotalRows"
+      ],
+      "type": "object"
+    }
+  }
+}

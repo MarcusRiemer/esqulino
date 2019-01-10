@@ -1,17 +1,24 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+
+import { MatSnackBar } from '@angular/material';
 
 import * as Parser from '../../shared/csv-parser';
 import { Table } from '../../shared/schema';
+import { ServerApiService } from '../../shared/serverapi.service';
+import { ResponseTabularInsertDescription } from '../../shared/schema/schema.description';
 
 import { ProjectService } from '../project.service';
 import { ToolbarService } from '../toolbar.service';
 
+import { first } from 'rxjs/operators';
+
 /**
- * Displays the schema for a list of tables.
+ * Wizard-like UI to import CSV data into a table.
  */
 @Component({
   templateUrl: 'templates/schema-table-import.html',
-  selector: "sql-table-import"
 })
 export class SchemaTableImportComponent implements OnInit {
   // file object as a string
@@ -51,6 +58,8 @@ export class SchemaTableImportComponent implements OnInit {
   headlineUsage: "file" | "own";
   textMarker: '"' | "'";
 
+  uploadError: any = "";
+
 
   /* ----- Initializations ----- */
 
@@ -59,6 +68,10 @@ export class SchemaTableImportComponent implements OnInit {
   constructor(
     private _projectService: ProjectService,
     private _toolbarService: ToolbarService,
+    private _serverApi: ServerApiService,
+    private _http: HttpClient,
+    private _route: ActivatedRoute,
+    private _snackbar: MatSnackBar,
   ) {
   }
 
@@ -90,12 +103,12 @@ export class SchemaTableImportComponent implements OnInit {
     // Extract table and col names of the schema
     this.tableNames = this.schemaTables.map(table => table['name']);
     this.colNamesForTables = [];
-    this.schemaTables.forEach(table => { this.colNamesForTables.push(this.extractColNames(table)) });  
+    this.schemaTables.forEach(table => { this.colNamesForTables.push(this.extractColNames(table)) });
   }
 
   /* ----- Helper Function ----- */
 
-  // returns an array that contains 
+  // returns an array that contains
   // only the column names of a given table
   extractColNames(table: Table): string[] {
     return table['columns'].map(col => col['name']);
@@ -131,9 +144,28 @@ export class SchemaTableImportComponent implements OnInit {
     return this.selectedHeaderIndex.includes(+index);
   }
 
-  // logs the mapping result to the console
+  // Does the actual mapping and sends a request to the server
   importTable() {
-    console.log(Parser.getMappingResult(this.extractColNames(this.selectedTable), this.selectedHeaderIndex, this.csvTable));
+    const uploadData = Parser.getMappingResult(
+      this.extractColNames(this.selectedTable),
+      this.selectedHeaderIndex,
+      this.csvTable
+    );
+
+    const projectId = this._projectService.cachedProject.id;
+    const schemaName = this._route.snapshot.paramMap.get("schemaName");
+    const tableName = this.selectedTableName;
+    const url = this._serverApi.uploadTabularData(projectId, schemaName, tableName);
+
+    this._http.post(url, uploadData).pipe(
+      first()
+    ).subscribe(
+      (res: ResponseTabularInsertDescription) =>
+        this._snackbar.open(`Tabelle "${tableName}": ${res.numInsertedRows} Zeilen eingefügt, ${res.numTotalRows} Zeilen insgesamt.`, null, {
+          duration: 5000
+        }),
+      err => alert(JSON.stringify(err))
+    );
   }
 
   // needed for defining independent own headlines
@@ -257,7 +289,7 @@ export class SchemaTableImportComponent implements OnInit {
       this.csvHeader = (<Parser.CsvParseResult>this.parse).header;
       this.csvTable = (<Parser.CsvParseResult>this.parse).table;
 
-      this.disableHeadlineSelection = false;    
+      this.disableHeadlineSelection = false;
 
       this.selectedTableName = Parser.getMostSuitableTableName(this.csvHeader, this.tableNames, this.colNamesForTables);
       this.selectedTable = this.schemaTables.filter(table => table['name'] === this.selectedTableName)[0];

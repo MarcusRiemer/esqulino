@@ -63,3 +63,11 @@ export interface RequestTabularInsertDescription {
    */
   data: RawTableDataDescription;
 }
+
+/**
+ * Answer of the server after a bulk insertion
+ */
+export interface ResponseTabularInsertDescription {
+  numInsertedRows: number;
+  numTotalRows: number;
+}

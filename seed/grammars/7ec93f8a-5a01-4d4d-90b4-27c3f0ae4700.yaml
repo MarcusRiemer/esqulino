@@ -2,7 +2,7 @@
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: sql
+  value_before_type_cast: SQL
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: sql
@@ -78,15 +78,18 @@ concise_attributes:
     "string", "name": "name", "type": "property"}, {"base": "string", "name": "alias",
     "type": "property", "isOptional": true}]}, "relationalOperator": {"type": "concrete",
     "attributes": [{"base": "string", "name": "operator", "type": "property", "restrictions":
-    [{"type": "enum", "value": ["<", "<=", "=", ">=", ">", "LIKE", "NOT LIKE"]}]}]}}}'
+    [{"type": "enum", "value": ["<", "<=", "=", "<>", ">=", ">", "LIKE", "NOT LIKE"]}]}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: '2018-05-15 18:24:27.264702'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-08-03 12:47:24.369896'
+  value_before_type_cast: '2019-01-05 10:41:43.376004'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
+  value_before_type_cast: sql
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: technical_name
   value_before_type_cast: sql
 new_record: false
 active_record_yaml_version: 2

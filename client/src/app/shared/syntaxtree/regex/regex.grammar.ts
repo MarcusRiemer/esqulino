@@ -3,6 +3,7 @@ import * as Schema from '../grammar.description'
 export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   id: "f28a9a42-73c7-4214-9aba-17443acfc5ce",
   name: "regex",
+  technicalName: "regex",
   programmingLanguageId: "regex",
   types: {
     "constant": {

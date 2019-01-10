@@ -20,6 +20,7 @@ const langMiniHtml: Schema.GrammarDescription = {
   id: "39e9249c-0807-489c-9ba0-48df9be23d65",
   programmingLanguageId: "spec",
   name: "mini-html",
+  technicalName: "mini-html",
   types: {
     "text": {
       type: "concrete",
@@ -174,6 +175,7 @@ const langMiniSql: Schema.GrammarDescription = {
   id: "1315c639-9662-4812-8ea2-fc86334211e3",
   programmingLanguageId: "spec",
   name: "mini-sql",
+  technicalName: "mini-sql",
   types: {
     "root": {
       type: "oneOf",
@@ -214,6 +216,7 @@ const langStringConstraint: Schema.GrammarDescription = {
   id: "26cb7725-1d99-4619-8610-5ede65d3de2c",
   programmingLanguageId: "spec",
   name: "string-constraint",
+  technicalName: "string-constraint",
   types: {
     root: {
       type: "concrete",
@@ -260,12 +263,47 @@ const langStringConstraint: Schema.GrammarDescription = {
 }
 
 /**
+ * A single node that uses every possible integer constraint.
+ */
+const langIntegerConstraint: Schema.GrammarDescription = {
+  id: "72d22bc7-22eb-4df3-a2de-1d3f601cd469",
+  programmingLanguageId: "spec",
+  name: "integer-constraint",
+  technicalName: "integer-constraint",
+  types: {
+    root: {
+      type: "concrete",
+      attributes: [
+        {
+          name: "minInclusive",
+          type: "property",
+          base: "integer",
+          restrictions: [
+            { type: "minInclusive", value: 1 }
+          ]
+        },
+        {
+          name: "maxInclusive",
+          type: "property",
+          base: "integer",
+          restrictions: [
+            { type: "maxInclusive", value: 1 }
+          ]
+        }
+      ]
+    }
+  },
+  root: "root"
+}
+
+/**
  * A single root node that uses some children with the "allowed" constraint
  */
 const langAllowedConstraint: Schema.GrammarDescription = {
   id: "f9acff60-cf3e-471e-b058-8c0d7e296386",
   programmingLanguageId: "spec",
   name: "allowed-constraint",
+  technicalName: "allowed-constraint",
   types: {
     "root": {
       type: "concrete",
@@ -307,6 +345,7 @@ const langSequenceConstraint: Schema.GrammarDescription = {
   id: "51a1230d-38d1-41a3-ad2e-16f2b3253b8f",
   programmingLanguageId: "spec",
   name: "sequence-constraint",
+  technicalName: "sequence-constraint",
   types: {
     "root": {
       type: "concrete",
@@ -349,6 +388,7 @@ const langOneOfNodes: Schema.GrammarDescription = {
   id: "6eb2981d-005b-43cf-918b-eced74757416",
   programmingLanguageId: "spec",
   name: "oneof-nodes",
+  technicalName: "oneof-nodes",
   types: {
     "root": {
       oneOf: ["a", "b"]
@@ -367,6 +407,7 @@ const langBooleanConstraint: Schema.GrammarDescription = {
   id: "bff6b785-72c7-4a31-b08a-5855605dbb94",
   programmingLanguageId: "spec",
   name: "boolean-constraint",
+  technicalName: "boolean-constraint",
   types: {
     "root": {
       type: "concrete",
@@ -389,6 +430,7 @@ const langOptionalProperty: Schema.GrammarDescription = {
   id: "caad8d21-de02-4a68-af57-75ef400ae20a",
   programmingLanguageId: "spec",
   name: "optionalProperty",
+  technicalName: "optionalProperty",
   types: {
     "root": {
       type: "concrete",
@@ -414,6 +456,7 @@ const langSimpleChoice: Schema.GrammarDescription = {
   id: "044b031e-beee-4966-8487-f67b9d1d5a77",
   programmingLanguageId: "spec",
   name: "simpleChoice",
+  technicalName: "simpleChoice",
   types: {
     "root": {
       type: "concrete",
@@ -435,6 +478,7 @@ const langComplexChoice: Schema.GrammarDescription = {
   id: "dc7f51dc-6207-427b-b8c1-b277d0b0b478",
   programmingLanguageId: "spec",
   name: "complexChoice",
+  technicalName: "complexChoice",
   types: {
     "root": {
       type: "concrete",
@@ -512,6 +556,7 @@ describe('Grammar Validation', () => {
       id: "54e44b21-a7cb-470b-af96-19a4f5c06277",
       programmingLanguageId: "spec",
       name: "emptyNodes",
+      technicalName: "emptyNodes",
       root: "r",
       types: {
         "r": { type: "concrete" }
@@ -585,6 +630,63 @@ describe('Grammar Validation', () => {
     expect(res.errors[2].data.condition).toEqual("3 > 2");
     expect(res.errors[3].code).toEqual(ErrorCodes.IllegalPropertyType)
     expect(res.errors[3].data.condition).toEqual(`"d" in ["a","b","c"]`);
+  });
+
+  it('Integer value wrongly integer', () => {
+    const v = new Validator([langIntegerConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "integer-constraint",
+      name: "root",
+      properties: {
+        "minInclusive": "1",
+        "maxInclusive": "1"
+      }
+    };
+
+    astDesc.properties["minInclusive"] = (1 as any);
+    astDesc.properties["maxInclusive"] = ("asdf" as any);
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(2);
+  });
+
+  it('Integer Constraints (Valid)', () => {
+    const v = new Validator([langIntegerConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "integer-constraint",
+      name: "root",
+      properties: {
+        "minInclusive": "1",
+        "maxInclusive": "1"
+      }
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors).toEqual([]);
+  });
+
+  it('Integer Constraints (Invalid)', () => {
+    const v = new Validator([langIntegerConstraint]);
+
+    const astDesc: AST.NodeDescription = {
+      language: "integer-constraint",
+      name: "root",
+      properties: {
+        "minInclusive": "0",
+        "maxInclusive": "2"
+      }
+    };
+
+    const ast = new AST.Node(astDesc, undefined);
+    const res = v.validateFromRoot(ast);
+
+    expect(res.errors.length).toEqual(2);
   });
 
   it('Boolean Constraint', () => {

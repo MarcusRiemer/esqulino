@@ -2,7 +2,7 @@
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: regex
+  value_before_type_cast: Reguläre Ausdrücke
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: regex
@@ -23,9 +23,12 @@ concise_attributes:
   value_before_type_cast: '2018-05-15 18:53:19.032293'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-05-31 13:55:26.753111'
+  value_before_type_cast: '2018-12-20 15:39:00.353847'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
+  value_before_type_cast: regex
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: technical_name
   value_before_type_cast: regex
 new_record: false
 active_record_yaml_version: 2

@@ -1,1 +1,5 @@
-football
+# Ignore everything
+*
+
+# Except this gitignore
+!.gitignore

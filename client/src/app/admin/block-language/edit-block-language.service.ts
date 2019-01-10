@@ -35,9 +35,9 @@ export class EditBlockLanguageService {
       .pipe(
         map((params: ParamMap) => params.get('blockLanguageId')),
         switchMap((id: string) => this._serverData.getBlockLanguage(id).pipe(first())),
-    ).subscribe(blockLanguage => {
-      this._editedSubject.next(blockLanguage);
-    });
+      ).subscribe(blockLanguage => {
+        this._editedSubject.next(blockLanguage);
+      });
 
     this._editedSubject
       .pipe(filter(bl => !!bl))
@@ -86,17 +86,17 @@ export class EditBlockLanguageService {
 
     // And do something meaningful if they are
     if (this.generatorErrors.length === 0) {
-      // Fetch the 
+      // Fetch the actual grammar that should be used
       this._serverData
         .getGrammarDescription(this.editedSubject.grammarId)
         .pipe(first())
         .subscribe(g => {
-          this.generatorErrors.push(...validateGenerator(instructions, g));
+          this.generatorErrors.push(...validateGenerator(instructions));
 
           if (this.generatorErrors.length === 0) {
             this.doUpdate(blockLanguage => {
               // Try to generate the block language itself. If this fails something is
-              // seriously wrong and we should probably do something smart about it.          
+              // seriously wrong and we should probably do something smart about it.
               try {
                 return (generateBlockLanguage(blockLanguage, instructions, g));
               } catch (e) {

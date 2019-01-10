@@ -1,5 +1,3 @@
-require_dependency 'legacy_project'
-
 # All operations that occur on a project level.
 class ProjectsController < ApplicationController
   include ProjectsHelper
@@ -35,18 +33,17 @@ class ProjectsController < ApplicationController
   # Update an existing project.
   def update
     ensure_write_access do
-      project = Project.find_by(slug: params[:project_id])
-      project.update project_update_params # Simple properties
-      project.update project_used_block_languages_params # Used block languages
+      current_project.update project_update_params # Simple properties
+      current_project.update project_used_block_languages_params # Used block languages
 
-      render json: project.to_project_api_response
+      render json: current_project.to_project_api_response
     end
   end
 
   # Destroy an existing project and all of its associated data
   def destroy
     ensure_write_access do
-      current_project.delete!
+      current_project.destroy
     end
   end
 

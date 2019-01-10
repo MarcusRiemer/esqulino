@@ -9,16 +9,47 @@
       </button>
     </div>
   </div>
-  
-  <!-- Editable name of the grammar -->
+
+  <!-- Editable user defined name of the grammar -->
   <div class="form-group row">
     <label for="grammar-name"
            class="col-sm-2 col-form-label">Name</label>
     <div class="col-sm-10">
       <input id="grammar-name"
              class="form-control"
-             [value]="grammar.name"
-             disabled>
+             name="name"
+             [(ngModel)]="grammar.name">
+    </div>
+  </div>
+
+  <!-- Technical name of the grammar -->
+  <div class="form-group row">
+    <label for="grammar-technical-name"
+           class="col-sm-2 col-form-label">Technischer Name</label>
+    <div class="col-sm-10">
+      <input id="grammar-technical-name"
+             class="form-control"
+             name="technical-name"
+             [(ngModel)]="grammar.technicalName">
+    </div>
+  </div>
+
+  <!-- The type that should be trated as the root -->
+  <div class="form-group row">
+    <label for="grammar-root"
+           class="col-sm-2 col-form-label">Wurzel</label>
+    <div class="col-sm-10">
+      <select id="grammar-root"
+              class="custom-select"
+              required
+              name="grammar-root"
+              [(ngModel)]="grammar.root">
+        <option value="">-- Wurzeltyp wählen --</option>
+        <option *ngFor="let typename of availableTypes"
+                [value]="typename">
+          {{ typename }}
+        </option>
+      </select>
     </div>
   </div>
 
@@ -33,7 +64,7 @@
              class="badge badge-light">
             {{ related.name }}
           </a>
-        </li> 
+        </li>
       </ul>
     </div>
   </div>
@@ -59,7 +90,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Pretty printed grammar (not editable) -->
     <div class="col-xl-6">
       <div class="form-group row">
