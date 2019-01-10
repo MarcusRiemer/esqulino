@@ -25,11 +25,7 @@ import * as regex from './app/shared/syntaxtree/regex/'
 import * as sql from './app/shared/syntaxtree/sql/'
 import * as css from './app/shared/syntaxtree/css/'
 import * as json from './app/shared/syntaxtree/json/'
-
-import * as blocks_dxml from './app/shared/block/dxml/'
-import * as blocks_sql from './app/shared/block/sql/language-model'
-import * as blocks_css from './app/shared/block/css/language-model'
-import * as blocks_regex from './app/shared/block/regex/language-model'
+import * as truck from './app/shared/syntaxtree/truck'
 
 /**
  * Can be used to test whether the IDE-service is actually available.
@@ -90,7 +86,9 @@ function availableLanguages(): LanguageDefinition[] {
     regex.LANGUAGE_DESCRIPTION,
     sql.LANGUAGE_DESCRIPTION,
     css.LANGUAGE_DESCRIPTION,
-    json.LANGUAGE_DESCRIPTION
+    json.LANGUAGE_DESCRIPTION,
+    truck.WORLD_LANGUAGE_DESCRIPTION,
+    truck.PROG_LANGUAGE_DESCRIPTION
   ]);
 }
 
@@ -119,21 +117,9 @@ function findLanguage(id: string) {
   const desc = availableLanguages().find(l => l.id == id);
   if (desc)
     return (new Language(desc));
-  else
+  else {
     throw new Error(`Unknown language ${id}`);
-}
-
-/**
- * All available language models
- */
-function availableBlockLanguages(): BlockLanguageDescription[] {
-  return ([
-    blocks_dxml.BLOCK_LANGUAGE_DYNAMIC,
-    blocks_dxml.BLOCK_LANGUAGE_STATIC,
-    blocks_sql.BLOCK_LANGUAGE_DESCRIPTION,
-    blocks_css.BLOCK_LANGUAGE_DESCRIPTION,
-    blocks_regex.BLOCK_LANGUAGE_DESCRIPTION
-  ]);
+  }
 }
 
 /**
@@ -199,8 +185,8 @@ rl.on('line', function(line) {
           }
         })
         .catch(err => {
-          console.error("Error during operation");
-          console.error(JSON.stringify(err, undefined, 2));
+          console.error(`Error during operation "${command.type}"`);
+          console.error(err);
         });
     } else {
       console.error("Unknown operation");

@@ -1,10 +1,10 @@
 FactoryBot.define do
-  factory :project, class: Project do
+  factory :project do
     sequence(:name) { |n| "Spec Project #{n}"}
-    slug { name.parameterize }
-    description "Generated on the fly, used for tests"
-    index_page_id nil
-    public false
+    sequence(:slug) { |n| "project-#{n}" }
+    description { "Generated on the fly, used for tests" }
+    index_page_id { nil }
+    public { false }
 
     factory :project_with_default_database do
       after :create do |project|
@@ -16,9 +16,9 @@ FactoryBot.define do
   end
 
   trait :public do
-    public true
+    public { true }
   end
   trait :private do
-    public false
+    public { false }
   end
 end

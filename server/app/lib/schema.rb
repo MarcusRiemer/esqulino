@@ -3,7 +3,7 @@ require 'sqlite3'
 # Describes a single column of a SQLite Table
 class SchemaColumn
   include ActiveModel::Serializers::JSON
-  
+
   attr_accessor :index, :name, :type, :not_null, :dflt_value, :primary
 
    def attributes
@@ -37,7 +37,7 @@ end
 # another column in (possibly) another table.
 class SchemaForeignKeyRef
   include ActiveModel::Serializers::JSON
-  
+
   attr_accessor :from_column, :to_table, :to_column
 
   def attributes
@@ -63,7 +63,7 @@ end
 
 class SchemaForeignKey
   include ActiveModel::Serializers::JSON
-  
+
   attr_accessor :references
 
   def attributes
@@ -98,7 +98,7 @@ end
 # Describes a SQLite table with its columns
 class SchemaTable
   include ActiveModel::Serializers::JSON
-  
+
   attr_accessor :name, :columns, :foreign_keys
 
   def attributes

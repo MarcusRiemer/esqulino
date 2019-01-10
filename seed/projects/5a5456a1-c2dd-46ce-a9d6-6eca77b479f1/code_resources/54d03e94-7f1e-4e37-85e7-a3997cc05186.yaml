@@ -1,0 +1,37 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision: 
+      scale: 
+      limit: 
+    value: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: BlieBlubb
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 54d03e94-7f1e-4e37-85e7-a3997cc05186
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2019-01-09 12:47:52.812753'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2019-01-09 12:47:52.812753'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: truck-lang
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+new_record: false
+active_record_yaml_version: 2

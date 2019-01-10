@@ -6,10 +6,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "target": "es5",
+    "target": "ES5",
     "lib": [
-      "es2017.object",
-      "es2016",
+      "ES2017",
+      "ES2016",
     ],
     "outDir": "../dist/cli/"
   },

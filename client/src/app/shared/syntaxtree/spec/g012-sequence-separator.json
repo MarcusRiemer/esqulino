@@ -1,5 +1,5 @@
 {
-  "name": "g12",
+  "technicalName": "g12",
   "root": "n1",
   "types": {
     "n1": {
@@ -34,11 +34,11 @@
     },
     "n2": {
       "type": "concrete",
-      "attribues": []
+      "attributes": []
     },
     "n3": {
       "type": "concrete",
-      "attribues": []
+      "attributes": []
     }
   }
 }

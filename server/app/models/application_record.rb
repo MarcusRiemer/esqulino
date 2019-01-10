@@ -4,7 +4,7 @@ class ApplicationRecord < ActiveRecord::Base
   # There are some key differences between the way Rails serializes
   # models and the expectations of the client (or to be more exact:
   # The corresponding JSON-schema specification).
-  # 
+  #
   # * All keys must be in "camelCase" instead of "snake_case"
   # * The "created_at" and "updated_at" fields must be strings
   # * "Empty" values should be omitted
@@ -29,11 +29,6 @@ class ApplicationRecord < ActiveRecord::Base
 
   # This method is a more or less nasty hack to provide identifying
   # attributes for the SeedManager.
-  #
-  # Models in join-tables would require a composite primary key and Rails
-  # does not support those. Unluckily we currently have a join model without
-  # a singular PK already and sometimes need to identify it on the fly using
-  # find_by.
   def key_search_attributes
     if not self.class.primary_key.nil? then
       { self.class.primary_key => self.attributes[self.class.primary_key] }

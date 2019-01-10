@@ -1,4 +1,4 @@
-import { GrammarDescription, NodeConcreteTypeDescription } from "../../syntaxtree/grammar.description";
+import { NodeConcreteTypeDescription, GrammarDocument } from "../../syntaxtree/grammar.description";
 
 import {
   BlockLanguageDocument, BlockLanguageListDescription, BlockLanguageDescription,
@@ -27,8 +27,7 @@ const defaultEditorComponents: EditorComponentDescription[] = [
  * Ensures that there should be no errors during generation.
  */
 export function validateGenerator(
-  d: BlockLanguageGeneratorDocument,
-  g: GrammarDescription
+  d: BlockLanguageGeneratorDocument
 ): GeneratorError[] {
   const toReturn: GeneratorError[] = [];
 
@@ -53,7 +52,7 @@ export function validateGenerator(
  */
 export function convertGrammar(
   d: BlockLanguageGeneratorDocument,
-  g: GrammarDescription
+  g: GrammarDocument
 ): BlockLanguageDocument {
   // Some information is provided 1:1 by the generation instructions,
   // these can be copied over without further ado.
@@ -91,10 +90,10 @@ export function convertGrammar(
   toReturn.editorBlocks = concreteTypes.map(([tName, tDesc]): EditorBlockDescription => {
     return ({
       describedType: {
-        languageName: g.name,
+        languageName: g.technicalName,
         typeName: tName
       },
-      visual: mapType(tDesc, instructions.typeInstructions(g.name, tName))
+      visual: mapType(tDesc, instructions.typeInstructions(g.technicalName, tName))
     });
   });
 
@@ -108,7 +107,7 @@ export function convertGrammar(
 export function generateBlockLanguage(
   l: BlockLanguageListDescription,
   d: BlockLanguageGeneratorDocument,
-  g: GrammarDescription
+  g: GrammarDocument
 ): BlockLanguageDescription {
   const generated = convertGrammar(d, g);
 

@@ -1,9 +1,7 @@
-import { map, switchMap } from 'rxjs/operators';
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 
-import { first } from 'rxjs/operators';
+import { map, switchMap, first } from 'rxjs/operators';
 
 import { EditorComponentDescription } from '../../../shared/block/block-language.description';
 

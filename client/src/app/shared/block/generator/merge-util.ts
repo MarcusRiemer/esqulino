@@ -1,5 +1,5 @@
 /**
- * I would believe a function like this should be part of the 
+ * I would believe a function like this should be part of the
  * standard library but apparently it isn't.
  */
 function isPrimitive(val: any) {
@@ -23,7 +23,7 @@ export function deepAssign(target: any, toMerge: any) {
     if (Array.isArray(toMerge) && Array.isArray(target)) {
       // Ensure that the target array is as least as long as the array that
       // is merged in
-      toMerge.forEach((v, i) => {
+      toMerge.forEach((_, i) => {
         if (i < toMerge.length) {
           // Valid indices need to be merged
           target[i] = deepAssign(target[i], toMerge[i]);
@@ -53,6 +53,4 @@ export function deepAssign(target: any, toMerge: any) {
     });
     return (target);
   }
-
-  throw new Error(`Impossibru`);
 }

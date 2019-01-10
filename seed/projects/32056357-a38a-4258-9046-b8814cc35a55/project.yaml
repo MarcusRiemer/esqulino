@@ -3,17 +3,9 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 32056357-a38a-4258-9046-b8814cc35a55
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
   value_before_type_cast: ca22b86c-b1a6-4420-a91a-c222110bb0e1
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: default_database_id
-    value_before_type_cast: ca22b86c-b1a6-4420-a91a-c222110bb0e1
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-    value: ca22b86c-b1a6-4420-a91a-c222110bb0e1
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Blog
@@ -38,7 +30,7 @@ concise_attributes:
   value_before_type_cast: '2018-02-20 20:48:21.690301'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: '2018-07-19 16:32:54.154054'
+  value_before_type_cast: '2018-11-24 16:27:49.075287'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: api_version
 new_record: false

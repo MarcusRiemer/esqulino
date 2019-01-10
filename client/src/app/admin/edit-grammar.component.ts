@@ -75,4 +75,8 @@ export class EditGrammarComponent implements OnInit {
   get prettyPrintedGrammar() {
     return (prettyPrintGrammar(this.grammar));
   }
+
+  get availableTypes() {
+    return (Object.keys(this.grammar.types))
+  }
 }

@@ -1,0 +1,32 @@
+--- !ruby/object:Project
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_database_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Trucklino
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: trucklino
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: public
+  value_before_type_cast: false
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: preview
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: index_page_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-12-20 14:29:04.862138'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-12-29 15:24:19.253'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: api_version
+new_record: false
+active_record_yaml_version: 2

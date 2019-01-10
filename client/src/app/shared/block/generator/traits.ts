@@ -164,7 +164,7 @@ export class TraitMap {
   }
 
   private shallowMerge(target: any, toMerge: any) {
-    Object.entries(toMerge || {}).forEach(([key, value]) => {
+    Object.entries(toMerge || {}).forEach(([key, _]) => {
       if (!(key in target)) {
         target[key] = toMerge[key];
       }

@@ -1,3 +1,5 @@
+require_dependency 'util' # Checking whether Strings are UUIDs
+
 # A project is a group of resources that logically belong together.
 # Currently every project is assumed to be somewhat web-centric
 # (using databases and HTML), but this is not set in stone.
@@ -12,7 +14,10 @@ class Project < ApplicationRecord
   accepts_nested_attributes_for :project_uses_block_languages, allow_destroy: true
 
   # The actual allowed languages
-  has_many :block_languages, :through => :project_uses_block_languages
+  has_many :block_languages, -> { distinct }, :through => :project_uses_block_languages
+
+  # The grammars that are used by the block languages
+  has_many :grammars, -> { distinct }, :through => :block_languages
 
   # All databases that are available for a project
   has_many :project_databases
@@ -24,26 +29,43 @@ class Project < ApplicationRecord
   # updating logic.
   belongs_to :default_database, :class_name => "ProjectDatabase", optional: true
 
-  # Slugs must be unique across the whole database
-  validates :slug, uniqueness: true
-
   # Name may not be empty
   validates :name, presence: true
-  # Slug may not be empty
-  validates :slug, presence: true
+
+  # Some special projects may get a slug assigned
+  validates :slug, uniqueness: true, allow_nil: true
+  validates :slug, format: { with: /\A[a-zA-Z][a-zA-Z0-9\-]+\z/,
+                             message: "Starts with a letter, allows letters, digits and -" },
+            allow_nil: true
 
   # Projects that are publicly available
   scope :only_public, -> { where(public: true) }
   # A project with all associated resources that are required for
   # immediate display on the client.
   scope :full, -> {
-    includes(:block_languages, :code_resources, :default_database, :project_databases, :project_sources)
+    includes(
+      :block_languages, :code_resources, :default_database, :project_databases, :grammars,
+      :project_sources
+    )
   }
   # A project with all associated resources that are used by **only** this
-  # project and no other project.
+  # project and are not shared among projects.
   scope :with_exclusive, -> {
-    includes(:code_resources, :default_database, :project_databases, :project_sources, :project_uses_block_languages)
+    includes(
+      :default_database, :project_databases,
+      :code_resources, :project_sources, :project_uses_block_languages
+    )
   }
+
+  # Looks up a project by checking the given string against IDs or
+  # slugs.
+  def self.find_by_slug_or_id!(slug_or_id)
+    if string_is_uuid? slug_or_id
+      return Project.find slug_or_id
+    else
+      return Project.find_by! slug: slug_or_id
+    end
+  end
 
   # Create the required folders in the projects data storage folder
   after_create do
@@ -109,6 +131,7 @@ class Project < ApplicationRecord
     to_return['sources'] = self.project_sources.map(&:to_full_api_response)
     to_return['projectUsesBlockLanguages'] = self.project_uses_block_languages.map(&:to_api_response)
     to_return['blockLanguages'] = self.block_languages.map(&:to_full_api_response)
+    to_return['grammars'] = self.grammars.map(&:to_full_api_response)
 
     to_return
   end
@@ -120,8 +143,8 @@ class Project < ApplicationRecord
   end
 
   # TODO: This is a legacy holdover
-  def write_access
-    true
+  def verify_write_access(user, pass)
+    user == "user" and pass == "user"
   end
 
   # The folder that should contain all assets that are part of this directory.
@@ -132,6 +155,16 @@ class Project < ApplicationRecord
   # The folder for images
   def images_directory_path
     File.join data_directory_path, "images"
+  end
+
+  # The path to the preview image
+  def preview_image_path
+    File.join image_directory_path, preview
+  end
+
+  # True if the preview image exists
+  def preview_image_exists?
+    preview and File.exists? preview_image_path
   end
 
   # The folder for databases

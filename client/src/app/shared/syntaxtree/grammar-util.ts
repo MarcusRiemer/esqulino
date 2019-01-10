@@ -1,43 +1,11 @@
 import {
-  GrammarDocument, NodeChildrenGroupDescription,
-  NodeTypesChildReference, OccursSpecificDescription, isQualifiedTypeName, isOccursSpecificDescription, NodeAttributeDescription, isNodeConcreteTypeDescription, GrammarDescription
+  NodeChildrenGroupDescription,
+  NodeTypesChildReference, OccursSpecificDescription,
+  isQualifiedTypeName, isOccursSpecificDescription,
+  NodeAttributeDescription, isNodeConcreteTypeDescription,
+  GrammarDocument
 } from "./grammar.description";
-import { FullNodeConcreteTypeDescription } from "./grammar-util.description";
 import { QualifiedTypeName } from "./syntaxtree.description";
-
-/**
- * Calculates the self contained, full description for a certain node type.
- */
-export function fullNodeDescription(
-  grammar: GrammarDocument, typeName: QualifiedTypeName
-): FullNodeConcreteTypeDescription;
-export function fullNodeDescription(
-  grammar: GrammarDocument, typeName: string, languageName: string
-): FullNodeConcreteTypeDescription
-export function fullNodeDescription(
-  grammar: GrammarDocument, typeName: string | QualifiedTypeName, languageName?: string
-): FullNodeConcreteTypeDescription {
-  if (typeof typeName === "object") {
-    languageName = typeName.languageName;
-    typeName = typeName.typeName;
-  }
-
-  const actualType = grammar.types[typeName];
-  if (!actualType) {
-    throw new Error(`Type "${typeName}" does not exist on grammar`);
-  }
-
-  if (actualType.type !== "concrete") {
-    throw new Error(`Type "${typeName}" is not a concrete type`);
-  }
-
-  return ({
-    type: actualType.type,
-    attributes: actualType.attributes,
-    languageName: languageName,
-    typeName: typeName
-  });
-}
 
 /**
  * Takes any kind of reference and returns the number of occurences this reference
@@ -90,14 +58,14 @@ export type FullNodeAttributeDescription = NodeAttributeDescription & {
 /**
  * @return All attributes of the given grammar in the form of a handy list.
  */
-export function getFullAttributes(g: GrammarDescription): FullNodeAttributeDescription[] {
+export function getFullAttributes(g: GrammarDocument): FullNodeAttributeDescription[] {
   const toReturn: FullNodeAttributeDescription[] = [];
 
   Object.entries(g.types || {}).forEach(([typeName, type]) => {
     if (isNodeConcreteTypeDescription(type)) {
       (type.attributes || []).forEach(attribute => {
         toReturn.push(Object.assign({}, attribute, {
-          grammarName: g.name,
+          grammarName: g.technicalName,
           typeName: typeName
         }));
       });
@@ -110,13 +78,13 @@ export function getFullAttributes(g: GrammarDescription): FullNodeAttributeDescr
 /**
  * @return Names of all blocks of the given grammar in the form of a handy list
  */
-export function getFullBlocks(g: GrammarDescription): QualifiedTypeName[] {
+export function getFullBlocks(g: GrammarDocument): QualifiedTypeName[] {
   const toReturn: QualifiedTypeName[] = [];
 
   Object.entries(g.types || {}).forEach(([typeName, type]) => {
     if (isNodeConcreteTypeDescription(type)) {
       toReturn.push({
-        languageName: g.name,
+        languageName: g.technicalName,
         typeName: typeName
       });
     }

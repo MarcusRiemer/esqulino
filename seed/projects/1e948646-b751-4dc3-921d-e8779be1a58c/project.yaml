@@ -1,0 +1,33 @@
+--- !ruby/object:Project
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 1e948646-b751-4dc3-921d-e8779be1a58c
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_database_id
+  value_before_type_cast: d47a01c7-71eb-4512-9ceb-1fbdc949385f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: FH Abbild
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: fhw-abbild
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: public
+  value_before_type_cast: true
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: preview
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: index_page_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: '2018-12-11 10:07:21.942602'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: '2018-12-11 13:10:12.066323'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: api_version
+new_record: false
+active_record_yaml_version: 2

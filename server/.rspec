@@ -2,3 +2,4 @@
 --format progress
 --format RspecJunitFormatter
 --out test-results/rspec.xml
+--profile 3

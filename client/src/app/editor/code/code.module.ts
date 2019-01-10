@@ -11,7 +11,7 @@ import { DropTargetDirective } from './drop-target.directive'
 import { DropPlaceholderDirective } from './drop-placeholder.directive'
 import { EditorComponentsService } from './editor-components.service'
 import { LanguageModelSelectorComponent } from './language-model-selector.component'
-import { LanguageSelectorComponent } from './language-selector.component'
+import { LanguageEmittedSelectorComponent } from './language-emitted-selector.component'
 import { CodeSidebarComponent } from './code.sidebar'
 import { CodeSidebarFixedBlocksComponent } from './code-sidebar-fixed-blocks.component'
 import { ValidationComponent } from './validation.component'
@@ -36,6 +36,9 @@ import { BlockRenderErrorComponent } from './block/block-render-error.component'
 import { DatabaseSchemaSidebarComponent } from './query/database-schema-sidebar.component'
 import { QueryPreviewComponent } from './query/query-preview.component'
 import { QueryService } from './query/query.service'
+
+import { WorldRenderComponent } from './truck/world-render.component';
+import { TruckWorldService } from './truck/truck-world.service';
 
 
 @NgModule({
@@ -68,8 +71,9 @@ import { QueryService } from './query/query.service'
     CodeSidebarComponent,
     CodeSidebarFixedBlocksComponent,
     LanguageModelSelectorComponent,
-    LanguageSelectorComponent,
+    LanguageEmittedSelectorComponent,
     QueryPreviewComponent,
+    WorldRenderComponent
   ],
   entryComponents: [
     DatabaseSchemaSidebarComponent,
@@ -77,7 +81,8 @@ import { QueryService } from './query/query.service'
     CodeSidebarFixedBlocksComponent,
     QueryPreviewComponent,
     ValidationComponent,
-    CodeGeneratorComponent
+    CodeGeneratorComponent,
+    WorldRenderComponent
   ],
   providers: [
     ResourceChangedGuard
@@ -87,7 +92,7 @@ export class CodeEditorModule {
   public static forRoot(): ModuleWithProviders {
     return ({
       ngModule: CodeEditorModule,
-      providers: [EditorComponentsService, QueryService]
+      providers: [EditorComponentsService, QueryService, TruckWorldService]
     });
   }
 

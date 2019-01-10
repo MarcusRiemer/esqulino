@@ -115,7 +115,7 @@ RSpec.describe ProjectDatabase, type: :model do
       @db.destroy!
       @db.project.destroy! if @db.project
     end
-    
+
     it 'has the correct sqlite_file_path' do
       @db = FactoryBot.create(:project_database)
 
@@ -298,12 +298,14 @@ RSpec.describe ProjectDatabase, type: :model do
     end
 
     after(:each) do
+      if @db.project && @db.project.default_database_id == @db.id then
+        @db.project.update!(default_database: nil)
+      end
       @db.destroy!
       @db.project.destroy! if @db.project
     end
 
     it 'remove foreign keys' do
-      skip "Currently broken"
       new_schema = @db.table_alter "a", [
                                      {
                                        "index" => 0,
@@ -313,13 +315,14 @@ RSpec.describe ProjectDatabase, type: :model do
                                            {
                                              "to_table" => "b",
                                              "to_column" => "b_id",
-                                             "from_column" => "b"
+                                             "from_column" => "a_b"
                                            }
                                          ]
                                        }
                                      }
                                    ]
-      expect(new_schema[0]['name']).to eq "value_key"
+      expect(new_schema[0]['name']).to eq "a"
+      expect(new_schema[0]['foreign_keys']).to eq []
     end
   end
 
@@ -339,7 +342,7 @@ RSpec.describe ProjectDatabase, type: :model do
     end
 
     it 'single row' do
-      @db.table_bulk_insert(
+      res = @db.table_bulk_insert(
         @table_name,
         ['key', 'value'],
         [
@@ -347,11 +350,12 @@ RSpec.describe ProjectDatabase, type: :model do
         ]
       )
 
+      expect(res['changes']).to be 1
       expect(@db.table_row_count @table_name).to be 1
     end
 
     it 'two rows' do
-      @db.table_bulk_insert(
+      res = @db.table_bulk_insert(
         @table_name,
         ['key', 'value'],
         [
@@ -360,11 +364,32 @@ RSpec.describe ProjectDatabase, type: :model do
         ]
       )
 
+      expect(res['changes']).to be 2
+      expect(@db.table_row_count @table_name).to be 2
+    end
+
+    it 'twice' do
+      res = @db.table_bulk_insert(
+        @table_name,
+        ['key', 'value'],
+        [ ['1', 'eins'] ]
+      )
+
+      expect(res['changes']).to be 1
+      expect(@db.table_row_count @table_name).to be 1
+
+      res = @db.table_bulk_insert(
+        @table_name,
+        ['key', 'value'],
+        [ ['2', 'zwei'] ]
+      )
+
+      expect(res['changes']).to be 1
       expect(@db.table_row_count @table_name).to be 2
     end
 
     it 'missing keys' do
-      @db.table_bulk_insert(
+      res = @db.table_bulk_insert(
         @table_name,
         ['value'],
         [
@@ -373,6 +398,7 @@ RSpec.describe ProjectDatabase, type: :model do
         ]
       )
 
+      expect(res['changes']).to be 2
       expect(@db.table_row_count @table_name).to be 2
     end
 

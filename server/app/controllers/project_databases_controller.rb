@@ -57,6 +57,43 @@ class ProjectDatabasesController < ApplicationController
     end
   end
 
+  # Replaces the whole database with the given database
+  def database_upload
+    ensure_write_access do
+      # An ActionDispatch::Http::UploadedFile object that encapsulates access
+      # to the uploaded file
+      uploaded = params['database']
+
+      if uploaded and uploaded.size > 0 then
+        # The path of the currently loaded database
+        db_path = current_database.sqlite_file_path
+
+        # Overwrite the previously stored database
+        File.open(db_path, 'wb') do |file|
+          file.write(uploaded.read)
+        end
+
+        # The JSON representation of the schema is stored in the databases and
+        # requires an explicit refresh after external changes.
+        current_database.refresh_schema!
+
+        # Tell the client about the new schema
+        render :json => { :schema => current_database.schema }
+      else
+        render :status => 400,
+               :json => { :errors => [ { :status => 400, :title => "Given database is 0 byte large" }] }
+      end
+    end
+  end
+
+  # Downloads the requested database
+  def database_download
+    send_file current_database.sqlite_file_path,
+              type: "application/x-sqlite3",
+              disposition: "attachment",
+              filename: "#{current_database.project.name}-#{current_database.name}.sqlite"
+  end
+
   # Creates a new table in the given database
   def table_create
     ensure_write_access do
@@ -72,7 +109,6 @@ class ProjectDatabasesController < ApplicationController
       current_database.save!
     end
   end
-
 
   # Alters a certain table of a database
   def table_alter
@@ -96,13 +132,18 @@ class ProjectDatabasesController < ApplicationController
       table_name = params['tablename']
       tabular_data = ensure_request("RequestTabularInsertDescription", request.body.read)
 
-      current_database.table_bulk_insert(table_name, tabular_data['columnNames'], tabular_data['data'])
+      result = current_database.table_bulk_insert(
+        table_name,
+        tabular_data['columnNames'],
+        tabular_data['data']
+      )
 
-      render status: :no_content
-      
+      render status: 200, :json => {
+               :numInsertedRows => result['changes'],
+               :numTotalRows => current_database.table_row_count(table_name)
+             }
     end
   end
-
 
   # Drops a single table of the given database.
   def table_delete
@@ -125,11 +166,6 @@ class ProjectDatabasesController < ApplicationController
   # Retrieves the actual data for a number of rows in a certain table
   def table_row_count
     render :json => current_database.table_row_count(params['tablename'])
-  end
-
-  # Access to the current project
-  def current_project
-    @current_project ||= Project.find_by(slug: params['project_id'])
   end
 
   # Access to the current database

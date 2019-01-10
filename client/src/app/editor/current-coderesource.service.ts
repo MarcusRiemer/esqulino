@@ -44,7 +44,7 @@ export class CurrentCodeResourceService {
 
   currentResourceChanged(codeResourceId: string) {
     // Knowing when resources change is handy for debugging
-    console.log(`New resource ID: ${codeResourceId}`);
+    console.log(`Current resource ID changed to: ${codeResourceId}`);
 
     // Check whether the referenced resource exists
     if (codeResourceId) {

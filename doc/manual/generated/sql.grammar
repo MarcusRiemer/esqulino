@@ -1,64 +1,37 @@
 grammar "sql" {
-  node "from" {
-    terminal "keyword" "FROM"
-    children sequence "tables", between: "," ::= tableIntroduction+
-    children sequence "joins" ::= join*
-  }
-  typedef "join" ::= crossJoin | innerJoinUsing | innerJoinOn
   typedef "query" ::= querySelect | queryDelete
-  node "where" {
-    terminal "keyword" "WHERE"
-    children sequence "expressions" ::= sql.expression sql.whereAdditional*
-  }
-  node "delete" {
-    terminal "keyword" "DELETE"
-  }
-  node "select" {
-    terminal "keyword" "SELECT"
-    prop? "distinct" { boolean }
-    children allowed "columns", between: "," ::= expression* & starOperator?
-  }
-  node "groupBy" {
-    terminal "keyword" "GROUP BY"
-    children allowed "expressions", between: "," ::= sql.expression+
-  }
-  node "orderBy" {
-    terminal "keyword" "ORDER BY"
-    children allowed "expressions", between: "," ::= sql.expression+
-  }
-  node "constant" {
-    prop "value" { string }
-  }
-  node "crossJoin" {
-    children sequence "table" ::= tableIntroduction
-  }
-  node "parameter" {
-    terminal "colon" ":"
-    prop "name" { string }
-  }
-  node "columnName" {
-    prop "refTableName" { string }
-    terminal "dot" "."
-    prop "columnName" { string }
-  }
-  typedef "expression" ::= columnName | binaryExpression | constant | parameter | functionCall
-  node "innerJoinOn" {
-    terminal "keyword" "INNER JOIN"
-    children sequence "table" ::= tableIntroduction
-    terminal "keywordOn" "ON"
-    children sequence "on" ::= expression
-  }
-  node "queryDelete" {
-    children sequence "delete" ::= delete
-    children sequence "from" ::= from
-    children sequence "where" ::= where?
-  }
   node "querySelect" {
     children sequence "select" ::= select
     children sequence "from" ::= from
     children sequence "where" ::= where?
     children sequence "groupBy" ::= groupBy?
     children sequence "orderBy" ::= orderBy?
+  }
+  node "select" {
+    terminal "keyword" "SELECT"
+    prop? "distinct" { boolean }
+    children allowed "columns", between: "," ::= expression* & starOperator?
+  }
+  typedef "expression" ::= columnName | binaryExpression | constant | parameter | functionCall
+  node "columnName" {
+    prop "refTableName" { string }
+    terminal "dot" "."
+    prop "columnName" { string }
+  }
+  node "binaryExpression" {
+    children sequence "lhs" ::= expression
+    children sequence "operator" ::= relationalOperator
+    children sequence "rhs" ::= expression
+  }
+  node "relationalOperator" {
+    prop "operator" { string { enum "<" "<=" "=" ">=" ">" "LIKE" "NOT LIKE" } }
+  }
+  node "constant" {
+    prop "value" { string }
+  }
+  node "parameter" {
+    terminal "colon" ":"
+    prop "name" { string }
   }
   node "functionCall" {
     prop "name" { string }
@@ -69,26 +42,58 @@ grammar "sql" {
   node "starOperator" {
     terminal "star" "*"
   }
+  node "from" {
+    terminal "keyword" "FROM"
+    children sequence "tables", between: "," ::= tableIntroduction+
+    children sequence "joins" ::= join*
+  }
+  node "tableIntroduction" {
+    prop "name" { string }
+    prop? "alias" { string }
+  }
+  typedef "join" ::= crossJoin | innerJoinUsing | innerJoinOn
+  node "crossJoin" {
+    children sequence "table" ::= tableIntroduction
+  }
   node "innerJoinUsing" {
     terminal "keyword" "INNER JOIN"
     children sequence "table" ::= tableIntroduction
     terminal "keywordUsing" "USING"
     children sequence "using" ::= expression
   }
+  node "innerJoinOn" {
+    terminal "keyword" "INNER JOIN"
+    children sequence "table" ::= tableIntroduction
+    terminal "keywordOn" "ON"
+    children sequence "on" ::= expression
+  }
+  node "where" {
+    terminal "keyword" "WHERE"
+    children sequence "expressions" ::= sql.expression sql.whereAdditional*
+  }
+  typedef "expression" ::= columnName | binaryExpression | constant | parameter | functionCall
   node "whereAdditional" {
     prop "operator" { string { enum "and" "or" } }
     children sequence "expression" ::= expression
   }
-  node "binaryExpression" {
-    children sequence "lhs" ::= expression
-    children sequence "operator" ::= relationalOperator
-    children sequence "rhs" ::= expression
+  node "groupBy" {
+    terminal "keyword" "GROUP BY"
+    children allowed "expressions", between: "," ::= sql.expression+
   }
-  node "tableIntroduction" {
-    prop "name" { string }
-    prop? "alias" { string }
+  node "orderBy" {
+    terminal "keyword" "ORDER BY"
+    children allowed "expressions", between: "," ::= sql.expression+
   }
-  node "relationalOperator" {
-    prop "operator" { string { enum "<" "<=" "=" ">=" ">" "LIKE" "NOT LIKE" } }
+  node "queryDelete" {
+    children sequence "delete" ::= delete
+    children sequence "from" ::= from
+    children sequence "where" ::= where?
+  }
+  node "delete" {
+    terminal "keyword" "DELETE"
+  }
+  node "whereAdditional" {
+    prop "operator" { string { enum "and" "or" } }
+    children sequence "expression" ::= expression
   }
 }

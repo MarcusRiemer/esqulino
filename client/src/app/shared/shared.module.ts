@@ -7,7 +7,7 @@ import { HttpModule } from '@angular/http';
 
 import { PortalModule } from '@angular/cdk/portal';
 import {
-  MatToolbarModule, MatButtonModule, MatMenuModule, MatTooltipModule
+  MatToolbarModule, MatButtonModule, MatMenuModule, MatTooltipModule, MatSnackBarModule
 } from '@angular/material'
 
 import { AnalyticsService } from './analytics.service';
@@ -23,15 +23,15 @@ import { ToolbarComponent } from './toolbar.component'
 import { ToolbarService } from './toolbar.service'
 
 const materialModules = [
-  MatToolbarModule, MatButtonModule, MatMenuModule, MatTooltipModule
+  MatToolbarModule, MatButtonModule, MatMenuModule, MatTooltipModule, MatSnackBarModule
 ]
 
 /**
  * Bundles facilities that are used all over the app, no matter
  * what the exact domain is. This basically boils down to:
- * 
+ *
  * - User specific data and authentication
- * - Logging and error handling 
+ * - Logging and error handling
  * - Helper utilities
  * - General Components (own and third party)
  */

@@ -10,10 +10,8 @@
 # https://github.com/vega/ts-json-schema-generator/pull/39
 TYPESCRIPT_JSON_SCHEMA_BIN = /home/marcus/projects/ts-json-schema-generator/bin/ts-json-schema-generator
 
-
-
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageGeneratorDescription.json BlockLanguageGeneratorDocument.json BlockLanguageGeneratorListDescription.json BlockLanguageListDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarListDescription.json NodeDescription.json ProjectCreationDescription.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json TableDescription.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageGeneratorDescription.json BlockLanguageGeneratorDocument.json BlockLanguageGeneratorListDescription.json BlockLanguageListDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json GrammarDescription.json GrammarDocument.json GrammarDatabaseBlob.json GrammarListDescription.json NodeDescription.json ProjectCreationDescription.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json TableDescription.json
 
 ##################################
 # Not so nice: Repeated rules
@@ -87,6 +85,12 @@ CodeResourceDescription.json : $(SRC_PATH)/shared/syntaxtree/coderesource.descri
 RequestTabularInsertDescription.json : $(SRC_PATH)/shared/schema/schema.description.ts
 	$(CONVERT_COMMAND)
 
+ResponseTabularInsertDescription.json : $(SRC_PATH)/shared/schema/schema.description.ts
+	$(CONVERT_COMMAND)
+
+GrammarDatabaseBlob.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
+	$(CONVERT_COMMAND)
+
 GrammarDocument.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
 	$(CONVERT_COMMAND)
 
@@ -95,5 +99,3 @@ GrammarDescription.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
 
 GrammarListDescription.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
 	$(CONVERT_COMMAND)
-
-
