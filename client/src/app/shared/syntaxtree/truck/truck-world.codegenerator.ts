@@ -10,8 +10,6 @@ export const WORLD_NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(JSON.stringify(node.toModel()), node, OutputSeparator.NEW_LINE_AFTER);
-
-        return ([]);
       }
     }
   },

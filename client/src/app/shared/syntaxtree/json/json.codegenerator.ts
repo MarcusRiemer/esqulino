@@ -68,8 +68,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
           });
           process.addConvertedFragment(`]`, node, OutputSeparator.NEW_LINE_BEFORE);
         }
-
-        return ([]);
       }
     }
   },
@@ -95,8 +93,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
           });
           process.addConvertedFragment(`}`, node, OutputSeparator.NEW_LINE_BEFORE);
         }
-
-        return ([]);
       }
     }
   },
@@ -113,8 +109,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         process.generateNode(key);
         process.addConvertedFragment(`:`, node, OutputSeparator.SPACE_AFTER);
         process.generateNode(value);
-
-        return ([]);
       }
     }
   },
