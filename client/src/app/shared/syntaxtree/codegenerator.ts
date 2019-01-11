@@ -197,8 +197,9 @@ export class CodeGenerator {
   private _callbacks: RegisteredCallbacks = {};
   private _state?: any;
 
-  constructor(converters: NodeConverterRegistration[], state?: any) {
-    this._state = state || {};
+  constructor(converters: NodeConverterRegistration[], state: any[] = []) {
+    // Merge all the given states into a single object
+    this._state = Object.assign({}, ...state);
 
     converters.forEach(c => this.registerConverter(c.type, c.converter));
   }
