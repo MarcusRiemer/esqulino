@@ -11,7 +11,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "document",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         node.getChildrenInCategory("rules").forEach(c => {
           process.generateNode(c);
         });
@@ -26,7 +26,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "rule",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         // Selector in a single line
         node.getChildrenInCategory("selectors").forEach(c => {
           process.generateNode(c);
@@ -49,7 +49,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "selectorType",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties['value'], node, OutputSeparator.SPACE_AFTER);
       }
     }
@@ -60,7 +60,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "selectorClass",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment('.' + node.properties['value'], node, OutputSeparator.SPACE_AFTER);
       }
     }
@@ -71,7 +71,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "selectorId",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment('#' + node.properties['value'], node, OutputSeparator.SPACE_AFTER);
       }
     }
@@ -82,7 +82,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "selectorUniversal",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment('*', node, OutputSeparator.SPACE_AFTER);
       }
     }
@@ -93,7 +93,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "declaration",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         // El cheapo indenting
         process.addConvertedFragment('  ', node);
 
@@ -113,7 +113,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "propertyName",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties['name'], node);
       }
     }
@@ -124,7 +124,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "exprColor",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties['value'], node);
       }
     }
@@ -135,7 +135,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "exprAny",
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties['value'], node);
       }
     }
