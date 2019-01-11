@@ -1,16 +1,14 @@
 import { Component, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core'
 import { FormControl } from '@angular/forms';
-import { MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatAutocompleteSelectedEvent } from '@angular/material';
 
-import { first, startWith, map, tap } from 'rxjs/operators';
+import { first, map, tap } from 'rxjs/operators';
 
 import { ServerDataService } from '../../shared/server-data.service';
 import { ScopeTraitAdd } from '../../shared/block/generator/traits.description';
 import { FullNodeAttributeDescription, getFullAttributes, getFullBlocks } from '../../shared/syntaxtree/grammar-util';
-import { QualifiedTypeName } from '../../shared/syntaxtree';
 
 import { EditBlockLanguageService } from './edit-block-language.service';
-import { of } from 'rxjs';
 
 
 
