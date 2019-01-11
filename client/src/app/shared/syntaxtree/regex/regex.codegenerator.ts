@@ -35,8 +35,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         });
 
         process.addConvertedFragment(")", node);
-
-        return ([]);
       }
     }
   },
@@ -48,8 +46,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.generateNode(node.children["singleExpression"][0]);
-
-        return ([]);
       }
     }
   },
@@ -62,8 +58,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         const expressions = node.children["expressions"];
         expressions.forEach(expr => process.generateNode(expr));
-
-        return ([]);
       }
     }
   }

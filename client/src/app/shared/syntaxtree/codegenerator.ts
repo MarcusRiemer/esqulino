@@ -70,14 +70,7 @@ export class CodeGeneratorProcess<TState extends {}> {
     }
 
     const converter = this._generator.getConverter(node.qualifiedName);
-    const bodyCategories = converter.init(node, this) || node.childrenCategoryNames;
-
-    // Iterate over all children that should be emitted
-    bodyCategories.forEach(categoryName => {
-      node.getChildrenInCategory(categoryName).forEach(child => {
-        this.generateNode(child)
-      });
-    });
+    converter.init(node, this);
 
     // Possibly finish generation
     if (converter.finish) {
@@ -171,7 +164,7 @@ export interface NodeConverter<T extends {}> {
    *         If the return value is `undefined` all children
    *         will be processed as part of the body.
    */
-  init(node: Node, process: CodeGeneratorProcess<T>): (string[] | void);
+  init(node: Node, process: CodeGeneratorProcess<T>): void;
 
   /**
    * A possibility to close any unfinished business from the
@@ -202,6 +195,10 @@ type RegisteredCallbacks = {
 export class CodeGenerator {
 
   private _callbacks: RegisteredCallbacks = {};
+  private _state?: any;
+
+  constructor(converters: NodeConverterRegistration[], state?: any) {
+    this._state = state || {};
 
     converters.forEach(c => this.registerConverter(c.type, c.converter));
   }

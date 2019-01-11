@@ -37,7 +37,6 @@ const NODE_CONVERTER_BASE: NodeConverterRegistration[] = [
         });
 
         process.addConvertedFragment(`</${name}>`, node, openEndSep);
-        return ([]);
       },
     }
   },
@@ -54,7 +53,6 @@ const NODE_CONVERTER_BASE: NodeConverterRegistration[] = [
         node.children['value'].forEach(child => process.generateNode(child));
 
         process.addConvertedFragment(`"`, node, OutputSeparator.NONE);
-        return ([]);
       }
     }
   },
@@ -86,7 +84,6 @@ export const NODE_CONVERTER_ERUBY = [
         process.addConvertedFragment(`<%=`, node, OutputSeparator.SPACE_AFTER);
         process.generateNode(node.children['expr'][0])
         process.addConvertedFragment(`%>`, node, OutputSeparator.SPACE_BEFORE);
-        return ([]);
       }
     }
   },
@@ -130,9 +127,6 @@ export const NODE_CONVERTER_ERUBY = [
         body.forEach(e => process.generateNode(e));
 
         process.addConvertedFragment(`<% end %>`, node, OutputSeparator.NEW_LINE_BEFORE);
-
-
-        return ([]);
       }
     }
   },
@@ -154,8 +148,6 @@ export const NODE_CONVERTER_ERUBY = [
         });
 
         process.addConvertedFragment(``, node, OutputSeparator.SPACE_AFTER);
-
-        return ([]);
       }
     }
   },
@@ -187,7 +179,6 @@ export const NODE_CONVERTER_LIQUID = [
         process.addConvertedFragment(`{{`, node, OutputSeparator.SPACE_AFTER);
         process.generateNode(node.children['expr'][0])
         process.addConvertedFragment(`}}`, node, OutputSeparator.SPACE_BEFORE);
-        return ([]);
       }
     }
   },
@@ -231,9 +222,6 @@ export const NODE_CONVERTER_LIQUID = [
         body.forEach(e => process.generateNode(e));
 
         process.addConvertedFragment(`{% end %}`, node, OutputSeparator.NEW_LINE_BEFORE);
-
-
-        return ([]);
       }
     }
   },
@@ -255,8 +243,6 @@ export const NODE_CONVERTER_LIQUID = [
         });
 
         process.addConvertedFragment(``, node, OutputSeparator.SPACE_AFTER);
-
-        return ([]);
       }
     }
   },

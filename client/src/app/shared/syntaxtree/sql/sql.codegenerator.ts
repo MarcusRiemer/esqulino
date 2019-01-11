@@ -16,8 +16,6 @@ function generateComponents(node: Node, process: CodeGeneratorProcess<{}>) {
     process.generateNode(n)
     process.addConvertedFragment("", node, OutputSeparator.NEW_LINE_AFTER);
   });
-
-  return ([]);
 }
 
 /**
@@ -99,8 +97,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
           }
         });
         process.addConvertedFragment(")", node);
-
-        return ([]);
       }
     }
   },
@@ -130,8 +126,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         process.addConvertedFragment(" ", node);
         node.getChildrenInCategory("rhs").forEach(c => process.generateNode(c))
         process.addConvertedFragment(")", node);
-
-        return ([]);
       }
     }
   },
@@ -144,8 +138,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         const expr = node.getChildrenInCategory("expression");
         expr.forEach(e => process.generateNode(e));
-
-        return ([]);
       }
     }
   },
@@ -169,8 +161,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
             process.addConvertedFragment(', ', node);
           }
         });
-
-        return ([]);
       }
     }
   },
@@ -200,8 +190,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`JOIN `, node);
         node.getChildrenInCategory("table").forEach(c => process.generateNode(c))
-
-        return ([]);
       }
     }
   },
@@ -216,8 +204,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         node.getChildrenInCategory("table").forEach(c => process.generateNode(c))
         process.addConvertedFragment(` ON `, node)
         node.getChildrenInCategory("on").forEach(c => process.generateNode(c))
-
-        return ([]);
       }
     }
   },
@@ -261,8 +247,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
           process.addConvertedFragment('\n\t', node);
           process.generateNode(c);
         });
-
-        return ([]);
       }
     }
   },
@@ -286,8 +270,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
           process.addConvertedFragment('\n\t', node);
           process.generateNode(c);
         });
-
-        return ([]);
       }
     }
   },
@@ -303,8 +285,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
 
         process.addConvertedFragment(op.toUpperCase() + ' ', node);
         process.generateNode(expr);
-
-        return ([]);
       }
     }
   },
@@ -323,8 +303,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
             process.addConvertedFragment(', ', node);
           }
         });
-
-        return ([]);
       }
     }
   },
@@ -344,8 +322,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
             process.addConvertedFragment(', ', node);
           }
         });
-
-        return ([]);
       }
     }
   },

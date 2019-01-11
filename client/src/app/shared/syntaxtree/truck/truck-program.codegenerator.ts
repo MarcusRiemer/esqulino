@@ -22,8 +22,6 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function(node: Node, process: CodeGeneratorProcess<State>) {
         process.addConvertedFragment("TODO!", node, OutputSeparator.NEW_LINE_AFTER);
-
-        return ([]);
       }
     }
   },

@@ -15,8 +15,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         node.getChildrenInCategory("rules").forEach(c => {
           process.generateNode(c);
         });
-
-        return ([]);
       }
     }
   },
@@ -38,8 +36,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
           process.generateNode(c);
         });
         process.addConvertedFragment("}", node);
-
-        return ([]);
       }
     }
   },
@@ -102,8 +98,6 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
         process.addConvertedFragment(':', node, OutputSeparator.SPACE_AFTER);
         node.getChildrenInCategory("value").forEach(n => process.generateNode(n))
         process.addConvertedFragment(';', node, OutputSeparator.NEW_LINE_AFTER);
-
-        return ([]);
       }
     }
   },
