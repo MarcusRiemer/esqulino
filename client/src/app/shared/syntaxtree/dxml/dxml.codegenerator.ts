@@ -11,7 +11,7 @@ const NODE_CONVERTER_BASE: NodeConverterRegistration[] = [
       typeName: "element"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         const name = node.properties['name'];
         const attributes = node.getChildrenInCategory("attributes");
 
@@ -47,7 +47,7 @@ const NODE_CONVERTER_BASE: NodeConverterRegistration[] = [
       typeName: "attribute"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         const key = node.properties['name'];
         process.addConvertedFragment(`${key}="`, node, OutputSeparator.SPACE_BEFORE);
 
@@ -64,7 +64,7 @@ const NODE_CONVERTER_BASE: NodeConverterRegistration[] = [
       typeName: "text"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties['value'], node, OutputSeparator.NONE);
       }
     }
@@ -82,7 +82,7 @@ export const NODE_CONVERTER_ERUBY = [
       typeName: "interpolate"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`<%=`, node, OutputSeparator.SPACE_AFTER);
         process.generateNode(node.children['expr'][0])
         process.addConvertedFragment(`%>`, node, OutputSeparator.SPACE_BEFORE);
@@ -96,7 +96,7 @@ export const NODE_CONVERTER_ERUBY = [
       typeName: "expr"
     },
     converter: {
-      init: function(_node: Node, _process: CodeGeneratorProcess) {
+      init: function(_node: Node, _process: CodeGeneratorProcess<{}>) {
       }
     }
   },
@@ -106,7 +106,7 @@ export const NODE_CONVERTER_ERUBY = [
       typeName: "exprVar"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties['name'], node, OutputSeparator.NONE);
       }
     }
@@ -117,7 +117,7 @@ export const NODE_CONVERTER_ERUBY = [
       typeName: "if"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
 
         const condition = node.children['condition'][0];
         const body = node.getChildrenInCategory('body');
@@ -142,7 +142,7 @@ export const NODE_CONVERTER_ERUBY = [
       typeName: "exprBinary"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         const children = node.getChildrenInCategory("lhs")
           .concat(node.getChildrenInCategory("operator"))
           .concat(node.getChildrenInCategory("rhs"));
@@ -165,7 +165,7 @@ export const NODE_CONVERTER_ERUBY = [
       typeName: "binaryOperator"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties['operator'], node, OutputSeparator.NONE);
       }
     }
@@ -183,7 +183,7 @@ export const NODE_CONVERTER_LIQUID = [
       typeName: "interpolate"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`{{`, node, OutputSeparator.SPACE_AFTER);
         process.generateNode(node.children['expr'][0])
         process.addConvertedFragment(`}}`, node, OutputSeparator.SPACE_BEFORE);
@@ -197,7 +197,7 @@ export const NODE_CONVERTER_LIQUID = [
       typeName: "expr"
     },
     converter: {
-      init: function(_node: Node, _process: CodeGeneratorProcess) {
+      init: function(_node: Node, _process: CodeGeneratorProcess<{}>) {
       }
     }
   },
@@ -207,7 +207,7 @@ export const NODE_CONVERTER_LIQUID = [
       typeName: "exprVar"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties['name'], node, OutputSeparator.NONE);
       }
     }
@@ -218,7 +218,7 @@ export const NODE_CONVERTER_LIQUID = [
       typeName: "if"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
 
         const condition = node.children['condition'][0];
         const body = node.getChildrenInCategory('body');
@@ -243,7 +243,7 @@ export const NODE_CONVERTER_LIQUID = [
       typeName: "exprBinary"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         const children = node.getChildrenInCategory("lhs")
           .concat(node.getChildrenInCategory("operator"))
           .concat(node.getChildrenInCategory("rhs"));
@@ -266,7 +266,7 @@ export const NODE_CONVERTER_LIQUID = [
       typeName: "binaryOperator"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties['operator'], node, OutputSeparator.NONE);
       }
     }

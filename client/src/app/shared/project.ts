@@ -274,8 +274,6 @@ export class Project implements ApiVersion, Saveable {
    * @return True, if the given block language is used by any resource.
    */
   isBlockLanguageReferenced(blockLanguageId: string) {
-    console.log("Used", this._codeResources.filter(c => c.blockLanguageIdPeek == blockLanguageId));
-    console.log("Used", this._codeResources.some(c => c.blockLanguageIdPeek == blockLanguageId));
     return (this._codeResources.some(c => c.blockLanguageIdPeek == blockLanguageId));
   }
 

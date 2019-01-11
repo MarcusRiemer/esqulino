@@ -11,7 +11,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "constant"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         // TODO: Escaping
         process.addConvertedFragment(node.properties["value"], node);
       }
@@ -23,7 +23,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "alternative"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment("(", node);
 
         const alternatives = node.children["expressions"];
@@ -46,7 +46,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "expr"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.generateNode(node.children["singleExpression"][0]);
 
         return ([]);
@@ -59,7 +59,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "root"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         const expressions = node.children["expressions"];
         expressions.forEach(expr => process.generateNode(expr));
 

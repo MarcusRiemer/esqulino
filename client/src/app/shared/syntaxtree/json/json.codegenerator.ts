@@ -8,7 +8,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "null"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`null`, node);
       }
     }
@@ -19,7 +19,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "string"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`"${node.properties['value']}"`, node);
       }
     }
@@ -30,7 +30,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "number"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`${+node.properties['value']}`, node);
       }
     }
@@ -41,7 +41,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "boolean"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties['value'], node);
       }
     }
@@ -52,7 +52,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "array"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         const children = node.getChildrenInCategory("values");
         if (children.length === 0) {
           process.addConvertedFragment(`[]`, node);
@@ -79,7 +79,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "object"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         const children = node.getChildrenInCategory("values");
         if (children.length === 0) {
           process.addConvertedFragment(`{}`, node);
@@ -106,7 +106,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "key-value"
     },
     converter: {
-      init: function(node: Node, process: CodeGeneratorProcess) {
+      init: function(node: Node, process: CodeGeneratorProcess<{}>) {
         const key = node.getChildrenInCategory("key")[0];
         const value = node.getChildrenInCategory("value")[0];
 
