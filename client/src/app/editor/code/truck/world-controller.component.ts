@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ApplicationRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { TruckWorldService } from './truck-world.service'
-import { World, Command } from 'src/app/shared/syntaxtree/truck/world';
+import { World, Command, Sensor } from 'src/app/shared/syntaxtree/truck/world';
 
 @Component({
   templateUrl: 'templates/world-controller.html',
@@ -19,7 +19,8 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
 
   constructor(
     private _truckWorld: TruckWorldService,
-    private _currentCodeResource: CurrentCodeResourceService
+    private _currentCodeResource: CurrentCodeResourceService,
+    private _app: ApplicationRef
   ) {
   }
 
@@ -56,8 +57,54 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
     }
   }
 
+  get generatedCode() {
+    return new Promise((resolve) => {
+      // TODO: best way to get the code?
+      this._currentCodeResource.peekResource.generatedCode.subscribe((code) => {
+        resolve(code);
+      });
+    })
+  }
+
   runSequence() {
-    // TODO: Get and run code
+    this.generatedCode.then((generatedCode) => {
+      if (!this.blocked) {
+        this.blocked = true;
+
+        // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
+        // TODO: Get rid of `eval`
+        const AsyncFunction = eval('Object.getPrototypeOf(async function() {}).constructor');
+
+        const cmd = (c: Command) => this.world.commandAsync(c).then(() => this._app.tick());
+        const sensor = (s: Sensor) => this.world.sensor(s);
+
+        // Generate and execute asynchronous function
+        const f = new AsyncFunction(generatedCode);
+        f.call({
+          goForward: async () => { await cmd(Command.goForward); },
+          turnLeft: async () => { await cmd(Command.turnLeft); },
+          turnRight: async () => { await cmd(Command.turnRight); },
+          noTurn: async () => { await cmd(Command.noTurn); },
+          wait: async () => { await cmd(Command.wait); },
+          load: async () => { await cmd(Command.load); },
+          unload: async () => { await cmd(Command.unload); },
+
+          lightIsRed: () => sensor(Sensor.lightIsRed),
+          lightIsGreen: () => sensor(Sensor.lightIsGreen),
+          canGoStraight: () => sensor(Sensor.canGoStraight),
+          canTurnLeft: () => sensor(Sensor.canTurnLeft),
+          canTurnRight: () => sensor(Sensor.canTurnRight),
+          isSolved: () => sensor(Sensor.isSolved),
+        }).then(() => {
+          // success, nothing to do
+        }).catch((error) => {
+          console.error(error);
+          alert(error.msg);
+        }).finally(() => {
+          this.blocked = false;
+        });
+      }
+    });
   }
 
   undo() { this.world.undo(); }
