@@ -4,21 +4,13 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
-
-interface World {
-  name: string;
-  size: { x: number, y: number };
-}
+import { World } from 'src/app/shared/syntaxtree/truck/world';
 
 @Injectable()
 export class TruckWorldService implements OnInit {
   private readonly _worlds: { [id: string]: World } = {};
 
-  constructor(private _currentCodeResource: CurrentCodeResourceService) {
-
-  }
-
-  private _selectedWorldId = new BehaviorSubject("ee006a2d-501a-42b0-9c19-9f7bb4df45ba");
+  private _selectedWorldId = new BehaviorSubject('ee006a2d-501a-42b0-9c19-9f7bb4df45ba');
 
   readonly currentWorld = this._selectedWorldId
     .pipe(
@@ -31,17 +23,17 @@ export class TruckWorldService implements OnInit {
 
         // TODO: Move this translation somewhere else
         // TODO: Decide when to replace the old world and when to simply return it
-        this._worlds[currentProgram.id] = {
-          name: worldResource.name,
-          size: {
-            x: +worldTree.children["size"][0].properties["x"],
-            y: +worldTree.children["size"][0].properties["y"]
-          }
+        if (!this._worlds[currentProgram.id]) {
+          this._worlds[currentProgram.id] = new World();
         }
 
         return (this._worlds[currentProgram.id]);
       })
     );
+
+  constructor(private _currentCodeResource: CurrentCodeResourceService) {
+
+  }
 
   ngOnInit(): void {
     this._currentCodeResource.currentResource.subscribe(program => {

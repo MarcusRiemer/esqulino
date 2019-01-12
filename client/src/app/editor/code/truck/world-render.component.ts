@@ -1,36 +1,61 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { CurrentCodeResourceService } from '../../current-coderesource.service';
 
 import { TruckWorldService } from './truck-world.service'
-
+import { Renderer } from './renderer';
 
 @Component({
   templateUrl: 'templates/world-render.html',
 })
 export class WorldRenderComponent implements OnInit, OnDestroy {
-  private _renderSubscription: Subscription;
+  @ViewChild('canvas') canvasRef: ElementRef;
 
-  constructor(
-    private _truckState: TruckWorldService,
-    private _currentCodeResource: CurrentCodeResourceService
-  ) {
-  }
+  readonly canvasWidth = 500;
+  readonly canvasHeight = 500;
 
-  readonly currentWorld = this._truckState.currentWorld;
+  private _worldSubscription: Subscription;
+
+  readonly currentWorld = this._truckWorld.currentWorld;
 
   readonly currentProgram = this._currentCodeResource.currentResource;
 
-  ngOnDestroy(): void {
-    if (this._renderSubscription) {
-      this._renderSubscription.unsubscribe();
-    }
+  private _renderer: Renderer;
+
+  constructor(
+    private _truckWorld: TruckWorldService,
+    private _currentCodeResource: CurrentCodeResourceService,
+    private _ngZone: NgZone
+  ) {
   }
+
   ngOnInit(): void {
-    this._renderSubscription = this._truckState.currentWorld.subscribe(state => {
-      //replaceState(state);
+    // Get canvas context
+    const ctx: CanvasRenderingContext2D = this.canvasRef.nativeElement.getContext('2d');
+
+    this._worldSubscription = this._truckWorld.currentWorld.subscribe(world => {
+      // If there's already a renderer, stop it
+      if (this._renderer) {
+        this._renderer.stop();
+      }
+
+      // Initialize renderer with canvas context
+      this._renderer = new Renderer(world, ctx, this.canvasWidth, this.canvasHeight);
+
+      // Calling the `render` function outside of the Angular zone, as it calls
+      // itself recursively over and over again and should not make any changes to
+      // the state of the world.
+      this._ngZone.runOutsideAngular(() => this._renderer.render());
     });
   }
 
+  ngOnDestroy(): void {
+    if (this._worldSubscription) {
+      this._worldSubscription.unsubscribe();
+    }
+    if (this._renderer) {
+      this._renderer.stop();
+    }
+  }
 }
