@@ -92,13 +92,21 @@ export interface TruckWorldComponentDescription {
 }
 
 /**
+ * Displays a truck controller
+ */
+export interface TruckControllerComponentDescription {
+  componentType: "truck-controller"
+}
+
+/**
  * Any component that could be displayed in the actual editor view.
  */
 export type EditorComponentDescription =
   QueryPreviewComponentDescription
   | ValidatorComponentDescription
   | CodeGeneratorComponentDescription
-  | TruckWorldComponentDescription;
+  | TruckWorldComponentDescription
+  | TruckControllerComponentDescription;
 
 /**
  * The data about a language model that is stored in the database

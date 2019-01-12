@@ -6,6 +6,7 @@ import { QueryPreviewComponent } from './query/query-preview.component';
 import { WorldRenderComponent } from './truck/world-render.component';
 import { ValidationComponent } from './validation.component';
 import { CodeGeneratorComponent } from './code-generator.component';
+import { WorldControllerComponent } from './truck/world-controller.component';
 
 /**
  * Allows registration of available editor components and hands them
@@ -18,6 +19,7 @@ export class EditorComponentsService {
       case "validator": return (new ComponentPortal(ValidationComponent));
       case "generated-code": return (new ComponentPortal(CodeGeneratorComponent));
       case "truck-world": return (new ComponentPortal(WorldRenderComponent));
+      case "truck-controller": return (new ComponentPortal(WorldControllerComponent));
     }
   }
 }
